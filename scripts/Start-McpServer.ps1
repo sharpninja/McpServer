@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
-    Builds and starts the MCP Support server (FWH.Support.Mcp) for Cursor/Copilot context.
+    Builds and starts the MCP Support server (McpServer.Support.Mcp) for Cursor/Copilot context.
 .DESCRIPTION
-    Builds FWH.Support.Mcp with the specified configuration (default Staging), then runs the server.
+    Builds McpServer.Support.Mcp with the specified configuration (default Staging), then runs the server.
     The MCP server is excluded from solution build configs and must be built/run via this script or
-    directly: dotnet build src\FWH.Support.Mcp\FWH.Support.Mcp.csproj -c <Config>
-    dotnet run --project src\FWH.Support.Mcp\FWH.Support.Mcp.csproj -c <Config>
+    directly: dotnet build src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj -c <Config>
+    dotnet run --project src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj -c <Config>
     Listens on http://localhost:7147 by default (Development). See docs/api/mcp-client-config.md.
 .PARAMETER Configuration
     Build configuration: Debug, Release, or Staging (default).
@@ -30,7 +30,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $repoRoot = Split-Path $PSScriptRoot -Parent
-$projectPath = Join-Path $repoRoot "src\FWH.Support.Mcp\FWH.Support.Mcp.csproj"
+$projectPath = Join-Path $repoRoot "src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj"
 
 if (-not (Test-Path $projectPath)) {
     Write-Error "Project not found: $projectPath"
@@ -38,7 +38,7 @@ if (-not (Test-Path $projectPath)) {
 }
 
 if (-not $NoBuild) {
-    Write-Host "Building FWH.Support.Mcp (-c $Configuration) ..."
+    Write-Host "Building McpServer.Support.Mcp (-c $Configuration) ..."
     & dotnet build $projectPath -c $Configuration
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Build failed."

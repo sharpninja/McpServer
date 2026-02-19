@@ -1,19 +1,19 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{ACFF16D9-C460-4DAF-8806-E9FD58069B7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FWH.Common.Copilot", "src\FWH.Common.Copilot\FWH.Common.Copilot.csproj", "{63EC6997-5B85-4503-9678-8ECE52B65973}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.Common.Copilot", "src\McpServer.Common.Copilot\McpServer.Common.Copilot.csproj", "{63EC6997-5B85-4503-9678-8ECE52B65973}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FWH.ServiceDefaults", "src\FWH.ServiceDefaults\FWH.ServiceDefaults.csproj", "{FFB8537F-C019-4A5E-9981-C8EC82224737}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.ServiceDefaults", "src\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj", "{FFB8537F-C019-4A5E-9981-C8EC82224737}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FWH.Support.Mcp", "src\FWH.Support.Mcp\FWH.Support.Mcp.csproj", "{4062533C-8E08-459E-B11E-CA0AD5EA367E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.Support.Mcp", "src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj", "{4062533C-8E08-459E-B11E-CA0AD5EA367E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{75E852DF-4CB3-4318-9A92-82F84CD3DFA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FWH.Support.Mcp.Tests", "tests\FWH.Support.Mcp.Tests\FWH.Support.Mcp.Tests.csproj", "{66EAF0AA-B2F5-4E16-900A-4D7DF1C463A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.Support.Mcp.Tests", "tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj", "{66EAF0AA-B2F5-4E16-900A-4D7DF1C463A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

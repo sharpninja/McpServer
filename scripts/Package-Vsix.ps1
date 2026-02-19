@@ -1,7 +1,7 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-  Packages the already-built FWH MCP Todo extension into a VSIX (OPC/ZIP). Call after MSBuild Build.
+  Packages the already-built McpServer MCP Todo extension into a VSIX (OPC/ZIP). Call after MSBuild Build.
 .DESCRIPTION
   Assumes the extension DLL has been built. Runs CreatePkgDef, builds extension.vsixmanifest,
   [Content_Types].xml, _rels/.rels, and creates the .vsix ZIP. Used by the CreateVsixContainer MSBuild target.
@@ -15,13 +15,13 @@ param(
 $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = Split-Path -Parent $scriptDir
-$extDir = Join-Path $repoRoot "src\FWH.VsExtension.McpTodo"
+$extDir = Join-Path $repoRoot "src\McpServer.VsExtension.McpTodo"
 $outDir = Join-Path $extDir "bin\$Configuration\net472"
 $objDir = Join-Path $extDir "obj"
 $stagingDir = Join-Path $objDir "vsixstaging"
-$vsixName = "FWH.VsExtension.McpTodo.vsix"
+$vsixName = "McpServer.VsExtension.McpTodo.vsix"
 $vsixPath = Join-Path $outDir $vsixName
-$dll = Join-Path $outDir "FWH.VsExtension.McpTodo.dll"
+$dll = Join-Path $outDir "McpServer.VsExtension.McpTodo.dll"
 
 if (-not (Test-Path $dll)) { throw "DLL not found. Build the project first: $dll" }
 
@@ -41,13 +41,13 @@ if (-not (Test-Path $createPkgDef)) {
 }
 
 New-Item -ItemType Directory -Force -Path $objDir | Out-Null
-& $createPkgDef /out="$objDir\FWH.VsExtension.McpTodo.pkgdef" $dll 2>&1 | Out-Null
+& $createPkgDef /out="$objDir\McpServer.VsExtension.McpTodo.pkgdef" $dll 2>&1 | Out-Null
 if ($LASTEXITCODE -ne 0) { throw "CreatePkgDef failed." }
 
 New-Item -ItemType Directory -Force -Path $stagingDir | Out-Null
 Remove-Item (Join-Path $stagingDir "*") -Recurse -Force -ErrorAction SilentlyContinue
 Copy-Item $dll -Destination $stagingDir
-Copy-Item "$objDir\FWH.VsExtension.McpTodo.pkgdef" -Destination $stagingDir
+Copy-Item "$objDir\McpServer.VsExtension.McpTodo.pkgdef" -Destination $stagingDir
 
 # extension.vsixmanifest: resolve Asset paths, remove ALL design-time (d:) attributes and xmlns:d
 $manifestSource = Join-Path $extDir "source.extension.vsixmanifest"
@@ -61,8 +61,8 @@ $nsmgr.AddNamespace("v", "http://schemas.microsoft.com/developer/vsx-schema/2011
 $assets = $manifest.SelectNodes("//v:Asset", $nsmgr)
 foreach ($asset in $assets) {
     $type = $asset.Type
-    if ($type -eq "Microsoft.VisualStudio.VsPackage") { $asset.Path = "FWH.VsExtension.McpTodo.pkgdef" }
-    elseif ($type -eq "Microsoft.VisualStudio.MefComponent") { $asset.Path = "FWH.VsExtension.McpTodo.dll" }
+    if ($type -eq "Microsoft.VisualStudio.VsPackage") { $asset.Path = "McpServer.VsExtension.McpTodo.pkgdef" }
+    elseif ($type -eq "Microsoft.VisualStudio.MefComponent") { $asset.Path = "McpServer.VsExtension.McpTodo.dll" }
 }
 # Remove every attribute in the design namespace (d:Source, d:ProjectName, etc.)
 foreach ($node in $manifest.SelectNodes("//*")) {
@@ -108,8 +108,8 @@ try {
     [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, (Join-Path $stagingFullPath "[Content_Types].xml"), "[Content_Types].xml") | Out-Null
     [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, (Join-Path $stagingFullPath "_rels\.rels"), "_rels/.rels") | Out-Null
     [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, (Join-Path $stagingFullPath "extension.vsixmanifest"), "extension.vsixmanifest") | Out-Null
-    [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, (Join-Path $stagingFullPath "FWH.VsExtension.McpTodo.dll"), "FWH.VsExtension.McpTodo.dll") | Out-Null
-    [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, (Join-Path $stagingFullPath "FWH.VsExtension.McpTodo.pkgdef"), "FWH.VsExtension.McpTodo.pkgdef") | Out-Null
+    [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, (Join-Path $stagingFullPath "McpServer.VsExtension.McpTodo.dll"), "McpServer.VsExtension.McpTodo.dll") | Out-Null
+    [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, (Join-Path $stagingFullPath "McpServer.VsExtension.McpTodo.pkgdef"), "McpServer.VsExtension.McpTodo.pkgdef") | Out-Null
 } finally { $zip.Dispose() }
 
 Write-Output $vsixPath

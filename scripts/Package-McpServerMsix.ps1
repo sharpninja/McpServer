@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Builds and packages FWH.Support.Mcp as an MSIX package.
+    Builds and packages McpServer.Support.Mcp as an MSIX package.
 .DESCRIPTION
     Publishes the MCP server, generates a minimal AppxManifest.xml, then creates an
     MSIX package using makeappx.exe. Optionally signs with signtool.exe if cert path
@@ -12,7 +12,7 @@ param(
     [string]$Configuration = "Release",
     [string]$Version = "1.0.0.0",
     [string]$Publisher = "CN=FunWasHad",
-    [string]$PackageName = "FWH.Support.Mcp",
+    [string]$PackageName = "McpServer.Support.Mcp",
     [string]$OutputDirectory = "artifacts\\msix",
     [string]$CertificatePath,
     [string]$CertificatePassword
@@ -20,7 +20,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $repoRoot = Split-Path $PSScriptRoot -Parent
-$projectPath = Join-Path $repoRoot "src\\FWH.Support.Mcp\\FWH.Support.Mcp.csproj"
+$projectPath = Join-Path $repoRoot "src\\McpServer.Support.Mcp\\McpServer.Support.Mcp.csproj"
 $publishDir = Join-Path $repoRoot "artifacts\\mcp-msix-publish"
 $stagingDir = Join-Path $repoRoot "artifacts\\mcp-msix-staging"
 $outputDir = Join-Path $repoRoot $OutputDirectory
@@ -59,7 +59,7 @@ $manifest = @"
     <Resource Language="en-us" />
   </Resources>
   <Applications>
-    <Application Id="McpServer" Executable="FWH.Support.Mcp.exe" EntryPoint="Windows.FullTrustApplication">
+    <Application Id="McpServer" Executable="McpServer.Support.Mcp.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements DisplayName="$PackageName" Square44x44Logo="Square44x44Logo.png" Description="FunWasHad MCP Server" BackgroundColor="transparent" />
     </Application>
   </Applications>

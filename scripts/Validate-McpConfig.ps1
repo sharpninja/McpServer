@@ -4,7 +4,7 @@
 #>
 [CmdletBinding()]
 param(
-    [string]$ConfigPath = "src/FWH.Support.Mcp/appsettings.json"
+    [string]$ConfigPath = "src/McpServer.Support.Mcp/appsettings.json"
 )
 
 $ErrorActionPreference = "Stop"
