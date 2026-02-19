@@ -250,14 +250,22 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
 
     private async Task<TodoFile?> ReadFileAsync(CancellationToken cancellationToken)
     {
-        if (!File.Exists(_todoFilePath))
+        try
         {
-            _logger.LogWarning("TODO file not found at {Path}", _todoFilePath);
+            if (!File.Exists(_todoFilePath))
+            {
+                _logger.LogWarning("TODO file not found at {Path}", _todoFilePath);
+                return null;
+            }
+
+            var yaml = await File.ReadAllTextAsync(_todoFilePath, cancellationToken).ConfigureAwait(false);
+            return Deserializer.Deserialize<TodoFile>(yaml);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to read/deserialize TODO file at {Path}", _todoFilePath);
             return null;
         }
-
-        var yaml = await File.ReadAllTextAsync(_todoFilePath, cancellationToken).ConfigureAwait(false);
-        return Deserializer.Deserialize<TodoFile>(yaml);
     }
 
     private async Task WriteFileAsync(TodoFile file, CancellationToken cancellationToken)
@@ -294,7 +302,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
         if (items is null) return;
         foreach (var item in items)
         {
-            if (item.Id is null) continue;
+            if (item is null || item.Id is null) continue;
             result.Add(ToFlat(item, section, priority));
         }
     }
@@ -304,7 +312,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
         if (section?.Phases is null) return;
         foreach (var phase in section.Phases)
         {
-            if (phase.Id is null) continue;
+            if (phase is null || phase.Id is null) continue;
             result.Add(new TodoFlatItem
             {
                 Id = phase.Id,
@@ -313,7 +321,10 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
                 Priority = "high",
                 Done = phase.Done,
                 Estimate = phase.Estimate,
-                ImplementationTasks = phase.ImplementationTasks?.Select(t => new TodoFlatTask(t.Task ?? "", t.Done)).ToList()
+                ImplementationTasks = phase.ImplementationTasks?
+                    .Where(t => t is not null)
+                    .Select(t => new TodoFlatTask(t.Task ?? "", t.Done))
+                    .ToList()
             });
         }
     }
@@ -337,7 +348,10 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
         DependsOn = item.DependsOn,
         FunctionalRequirements = item.FunctionalRequirements,
         TechnicalRequirements = item.TechnicalRequirements,
-        ImplementationTasks = item.ImplementationTasks?.Select(t => new TodoFlatTask(t.Task ?? "", t.Done)).ToList()
+        ImplementationTasks = item.ImplementationTasks?
+            .Where(t => t is not null)
+            .Select(t => new TodoFlatTask(t.Task ?? "", t.Done))
+            .ToList()
     };
 
     private static List<TodoFlatItem> ApplyFilters(List<TodoFlatItem> items, TodoQueryRequest request)
@@ -400,7 +414,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
             };
             foreach (var (list, pName) in priorities)
             {
-                var found = list?.FirstOrDefault(i => string.Equals(i.Id, id, StringComparison.OrdinalIgnoreCase));
+                var found = list?.FirstOrDefault(i => i is not null && string.Equals(i.Id, id, StringComparison.OrdinalIgnoreCase));
                 if (found is not null)
                     return (found, key, pName);
             }
@@ -442,7 +456,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
             var lists = new[] { section.HighPriority, section.MediumPriority, section.LowPriority };
             foreach (var list in lists)
             {
-                var item = list?.FirstOrDefault(i => string.Equals(i.Id, id, StringComparison.OrdinalIgnoreCase));
+                var item = list?.FirstOrDefault(i => i is not null && string.Equals(i.Id, id, StringComparison.OrdinalIgnoreCase));
                 if (item is not null)
                 {
                     list!.Remove(item);
@@ -486,7 +500,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
     private static void RemoveFromPriorityList(TodoSection section, string priority, string id)
     {
         var list = GetPriorityList(section, priority);
-        var item = list?.FirstOrDefault(i => string.Equals(i.Id, id, StringComparison.OrdinalIgnoreCase));
+        var item = list?.FirstOrDefault(i => i is not null && string.Equals(i.Id, id, StringComparison.OrdinalIgnoreCase));
         if (item is not null) list!.Remove(item);
     }
 
