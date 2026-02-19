@@ -63,9 +63,9 @@ function Wait-Healthy {
 }
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
-$projectPath = Join-Path $repoRoot "src\FWH.Support.Mcp\FWH.Support.Mcp.csproj"
-$dllPath = Join-Path $repoRoot "src\FWH.Support.Mcp\bin\$Configuration\net9.0\FWH.Support.Mcp.dll"
-$settingsPath = Join-Path $repoRoot "src\FWH.Support.Mcp\appsettings.$Configuration.json"
+$projectPath = Join-Path $repoRoot "src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj"
+$dllPath = Join-Path $repoRoot "src\McpServer.Support.Mcp\bin\$Configuration\net9.0\McpServer.Support.Mcp.dll"
+$settingsPath = Join-Path $repoRoot "src\McpServer.Support.Mcp\appsettings.$Configuration.json"
 
 if (-not (Test-Path $settingsPath)) {
     throw "Settings file '$settingsPath' does not exist."

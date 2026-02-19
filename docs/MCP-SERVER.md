@@ -1,7 +1,7 @@
 # MCP Server Guide
 
 ## Overview
-`FWH.Support.Mcp` is the local MCP context server for Todo, session log, context search, repo file ops, and GitHub issue sync.
+`McpServer.Support.Mcp` is the local MCP context server for Todo, session log, context search, repo file ops, and GitHub issue sync.
 
 Transports:
 - HTTP REST + Swagger
@@ -20,7 +20,7 @@ Run a named instance from `appsettings`:
 
 Run STDIO mode:
 ```powershell
-dotnet run --project src\FWH.Support.Mcp\FWH.Support.Mcp.csproj -c Staging -- --transport stdio --instance default
+dotnet run --project src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj -c Staging -- --transport stdio --instance default
 ```
 
 ## Configuration

@@ -21,13 +21,13 @@ if ($devenv) {
 }
 
 $instDir = "C:\Users\kingd\AppData\Local\Microsoft\VisualStudio\18.0_3667cb05\Extensions\5aepmlfh.rpt"
-$srcDir  = "E:\github\FunWasHad\src\FWH.VsExtension.McpTodo.Vsix\bin\Debug"
+$srcDir  = "E:\github\FunWasHad\src\McpServer.VsExtension.McpTodo.Vsix\bin\Debug"
 
 Write-Host "Copying DLL..."
-Copy-Item "$srcDir\FWH.VsExtension.McpTodo.dll" "$instDir\FWH.VsExtension.McpTodo.dll" -Force
+Copy-Item "$srcDir\McpServer.VsExtension.McpTodo.dll" "$instDir\McpServer.VsExtension.McpTodo.dll" -Force
 
 Write-Host "Copying pkgdef..."
-Copy-Item "$srcDir\FWH.VsExtension.McpTodo.pkgdef" "$instDir\FWH.VsExtension.McpTodo.pkgdef" -Force
+Copy-Item "$srcDir\McpServer.VsExtension.McpTodo.pkgdef" "$instDir\McpServer.VsExtension.McpTodo.pkgdef" -Force
 
 Write-Host "Copying all runtime dependency DLLs..."
 Get-ChildItem "$srcDir\*.dll" | ForEach-Object {

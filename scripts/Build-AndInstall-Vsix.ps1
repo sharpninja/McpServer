@@ -1,11 +1,11 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-  Builds the FWH MCP Todo Visual Studio extension (VSIX) with MSBuild and optionally installs it.
+  Builds the McpServer MCP Todo Visual Studio extension (VSIX) with MSBuild and optionally installs it.
 .DESCRIPTION
-  Builds the legacy VSIX project (FWH.VsExtension.McpTodo.Vsix) with Visual Studio MSBuild.
+  Builds the legacy VSIX project (McpServer.VsExtension.McpTodo.Vsix) with Visual Studio MSBuild.
   Restore + Build produces the VSIX in bin\<Configuration>\. You can also build from Visual Studio:
-  open the solution, build the FWH.VsExtension.McpTodo.Vsix project, then install the .vsix from bin\Debug or bin\Release.
+  open the solution, build the McpServer.VsExtension.McpTodo.Vsix project, then install the .vsix from bin\Debug or bin\Release.
 .EXAMPLE
   .\Build-AndInstall-Vsix.ps1
   .\Build-AndInstall-Vsix.ps1 -Configuration Release
@@ -21,11 +21,11 @@ param(
 $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = Split-Path -Parent $scriptDir
-$extDir = Join-Path $repoRoot "src\FWH.VsExtension.McpTodo.Vsix"
+$extDir = Join-Path $repoRoot "src\McpServer.VsExtension.McpTodo.Vsix"
 $outDir = Join-Path $extDir "bin\$Configuration"
-$vsixName = "FWH.VsExtension.McpTodo.vsix"
+$vsixName = "McpServer.VsExtension.McpTodo.vsix"
 $vsixPath = Join-Path $outDir $vsixName
-$csproj = Join-Path $extDir "FWH.VsExtension.McpTodo.Vsix.csproj"
+$csproj = Join-Path $extDir "McpServer.VsExtension.McpTodo.Vsix.csproj"
 
 # Find MSBuild via vswhere (Visual Studio 2022)
 $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
@@ -47,7 +47,7 @@ try {
 } finally { Pop-Location }
 
 if (-not (Test-Path $vsixPath)) {
-    throw "MSBuild did not produce VSIX at $vsixPath. Build the project in Visual Studio (FWH.VsExtension.McpTodo.Vsix) to produce the VSIX."
+    throw "MSBuild did not produce VSIX at $vsixPath. Build the project in Visual Studio (McpServer.VsExtension.McpTodo.Vsix) to produce the VSIX."
 }
 Write-Host "VSIX created: $vsixPath" -ForegroundColor Green
 

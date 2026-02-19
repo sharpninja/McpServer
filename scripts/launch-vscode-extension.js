@@ -1,7 +1,7 @@
 /**
  * Launches VS Code with an extension development path and workspace.
  * Usage: node launch-vscode-extension.js <workspaceFolder> <extensionDevelopmentPath>
- * Used by launch config "FWH MCP Todo (Launch in VS Code)" so the Run dropdown opens VS Code.
+ * Used by launch config "McpServer MCP Todo (Launch in VS Code)" so the Run dropdown opens VS Code.
  */
 const path = require('path');
 const { spawn } = require('child_process');

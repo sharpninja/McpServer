@@ -1,6 +1,6 @@
 # MCP Server (Standalone)
 
-Standalone extraction of `FWH.Support.Mcp` from the FunWasHad monorepo.
+Standalone extraction of `McpServer.Support.Mcp` from the FunWasHad monorepo.
 
 ## Project root
 `E:\github\McpServer`
@@ -12,5 +12,5 @@ dotnet build McpServer.sln -c Staging
 
 ## Test
 ```powershell
-dotnet test tests\FWH.Support.Mcp.Tests\FWH.Support.Mcp.Tests.csproj -c Debug
+dotnet test tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj -c Debug
 ```
