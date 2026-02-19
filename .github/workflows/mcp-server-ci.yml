@@ -1,5 +1,9 @@
 name: mcp-server-ci
 
+permissions:
+  contents: read
+  actions: write
+
 on:
   push:
     branches: [ main, develop ]
