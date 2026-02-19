@@ -35,6 +35,11 @@ bool IsStdioTransportRequested(string[] a)
 }
 
 var builder = WebApplication.CreateBuilder(args);
+if (OperatingSystem.IsWindows())
+{
+    builder.Host.UseWindowsService();
+}
+
 var instanceName = McpInstanceResolver.GetRequestedInstanceName(args);
 McpInstanceResolver.ValidateInstances(builder.Configuration);
 

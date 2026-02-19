@@ -25,6 +25,34 @@ $publishDir = Join-Path $repoRoot "artifacts\\mcp-msix-publish"
 $stagingDir = Join-Path $repoRoot "artifacts\\mcp-msix-staging"
 $outputDir = Join-Path $repoRoot $OutputDirectory
 
+function Find-SdkTool {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$ToolName
+    )
+
+    $onPath = Get-Command $ToolName -ErrorAction SilentlyContinue
+    if ($onPath) {
+        return $onPath.Source
+    }
+
+    $kitsRoot = "C:\Program Files (x86)\Windows Kits\10\bin"
+    if (-not (Test-Path $kitsRoot)) {
+        return $null
+    }
+
+    $candidates = Get-ChildItem -Path $kitsRoot -Recurse -File -Filter $ToolName `
+        -ErrorAction SilentlyContinue |
+        Where-Object { $_.FullName -match "\\x64\\" } |
+        Sort-Object FullName -Descending
+
+    if ($candidates.Count -gt 0) {
+        return $candidates[0].FullName
+    }
+
+    return $null
+}
+
 if (-not (Test-Path $projectPath)) {
     throw "Project not found: $projectPath"
 }
@@ -45,7 +73,9 @@ $manifestPath = Join-Path $stagingDir "AppxManifest.xml"
 $manifest = @"
 <?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
-         xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10">
+         xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+         xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+         IgnorableNamespaces="uap rescap">
   <Identity Name="$PackageName" Publisher="$Publisher" Version="$Version" />
   <Properties>
     <DisplayName>$PackageName</DisplayName>
@@ -58,9 +88,12 @@ $manifest = @"
   <Resources>
     <Resource Language="en-us" />
   </Resources>
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
   <Applications>
     <Application Id="McpServer" Executable="McpServer.Support.Mcp.exe" EntryPoint="Windows.FullTrustApplication">
-      <uap:VisualElements DisplayName="$PackageName" Square44x44Logo="Square44x44Logo.png" Description="FunWasHad MCP Server" BackgroundColor="transparent" />
+      <uap:VisualElements DisplayName="$PackageName" Square44x44Logo="Square44x44Logo.png" Square150x150Logo="Square150x150Logo.png" Description="FunWasHad MCP Server" BackgroundColor="transparent" />
     </Application>
   </Applications>
 </Package>
@@ -68,40 +101,38 @@ $manifest = @"
 Set-Content -Path $manifestPath -Value $manifest -Encoding UTF8
 
 # Required by manifest visual elements.
-$logoPath = Join-Path $stagingDir "Square44x44Logo.png"
-if (-not (Test-Path $logoPath)) {
-    # 1x1 transparent PNG
+$logo44Path = Join-Path $stagingDir "Square44x44Logo.png"
+$logo150Path = Join-Path $stagingDir "Square150x150Logo.png"
+if (-not (Test-Path $logo44Path) -or -not (Test-Path $logo150Path)) {
+    # 1x1 transparent PNG placeholder used for both required logo assets.
     $png = [Convert]::FromBase64String("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO5oY0QAAAAASUVORK5CYII=")
-    [IO.File]::WriteAllBytes($logoPath, $png)
-}
-
-$makeAppx = Get-Command makeappx.exe -ErrorAction SilentlyContinue
-if (-not $makeAppx) {
-    $fallbackMakeAppx = "C:\Program Files (x86)\Windows Kits\10\bin\x64\makeappx.exe"
-    if (Test-Path $fallbackMakeAppx) {
-        $makeAppx = @{ Source = $fallbackMakeAppx }
+    if (-not (Test-Path $logo44Path)) {
+        [IO.File]::WriteAllBytes($logo44Path, $png)
+    }
+    if (-not (Test-Path $logo150Path)) {
+        [IO.File]::WriteAllBytes($logo150Path, $png)
     }
 }
-if (-not $makeAppx) { throw "makeappx.exe not found. Install Windows SDK and retry." }
+
+$makeAppxPath = Find-SdkTool -ToolName "makeappx.exe"
+if (-not $makeAppxPath) {
+    throw "makeappx.exe not found. Install Windows SDK and retry."
+}
 
 $msixPath = Join-Path $outputDir "$PackageName-$Version.msix"
 Write-Host "Creating MSIX: $msixPath"
-& $makeAppx.Source pack /d $stagingDir /p $msixPath /o
+& $makeAppxPath pack /d $stagingDir /p $msixPath /o
 if ($LASTEXITCODE -ne 0) { throw "makeappx pack failed." }
 
 if ($CertificatePath) {
-    $signtool = Get-Command signtool.exe -ErrorAction SilentlyContinue
-    if (-not $signtool) {
-        $fallbackSignTool = "C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe"
-        if (Test-Path $fallbackSignTool) {
-            $signtool = @{ Source = $fallbackSignTool }
-        }
+    $signtoolPath = Find-SdkTool -ToolName "signtool.exe"
+    if (-not $signtoolPath) {
+        throw "signtool.exe not found. Install Windows SDK and retry."
     }
-    if (-not $signtool) { throw "signtool.exe not found. Install Windows SDK and retry." }
     if (-not $CertificatePassword) { throw "CertificatePassword is required when CertificatePath is provided." }
 
     Write-Host "Signing MSIX..."
-    & $signtool.Source sign /fd SHA256 /f $CertificatePath /p $CertificatePassword $msixPath
+    & $signtoolPath sign /fd SHA256 /f $CertificatePath /p $CertificatePassword $msixPath
     if ($LASTEXITCODE -ne 0) { throw "signtool sign failed." }
 }
 

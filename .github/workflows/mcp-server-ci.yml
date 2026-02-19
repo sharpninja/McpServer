@@ -1,5 +1,9 @@
 name: mcp-server-ci
 
+permissions:
+  contents: read
+  actions: write
+
 on:
   push:
     branches: [ main, develop ]
@@ -81,6 +85,7 @@ jobs:
 
       - name: Upload test results
         if: always()
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: mcp-server-test-results
@@ -124,3 +129,4 @@ jobs:
         with:
           args: --verbose --no-progress docs/MCP-SERVER.md
           fail: true
+          failIfEmpty: false
