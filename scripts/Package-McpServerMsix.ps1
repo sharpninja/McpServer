@@ -88,7 +88,7 @@ $manifest = @"
   </Resources>
   <Applications>
     <Application Id="McpServer" Executable="McpServer.Support.Mcp.exe" EntryPoint="Windows.FullTrustApplication">
-      <uap:VisualElements DisplayName="$PackageName" Square44x44Logo="Square44x44Logo.png" Description="FunWasHad MCP Server" BackgroundColor="transparent" />
+      <uap:VisualElements DisplayName="$PackageName" Square44x44Logo="Square44x44Logo.png" Square150x150Logo="Square150x150Logo.png" Description="FunWasHad MCP Server" BackgroundColor="transparent" />
     </Application>
   </Applications>
 </Package>
@@ -96,11 +96,17 @@ $manifest = @"
 Set-Content -Path $manifestPath -Value $manifest -Encoding UTF8
 
 # Required by manifest visual elements.
-$logoPath = Join-Path $stagingDir "Square44x44Logo.png"
-if (-not (Test-Path $logoPath)) {
-    # 1x1 transparent PNG
+$logo44Path = Join-Path $stagingDir "Square44x44Logo.png"
+$logo150Path = Join-Path $stagingDir "Square150x150Logo.png"
+if (-not (Test-Path $logo44Path) -or -not (Test-Path $logo150Path)) {
+    # 1x1 transparent PNG placeholder used for both required logo assets.
     $png = [Convert]::FromBase64String("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO5oY0QAAAAASUVORK5CYII=")
-    [IO.File]::WriteAllBytes($logoPath, $png)
+    if (-not (Test-Path $logo44Path)) {
+        [IO.File]::WriteAllBytes($logo44Path, $png)
+    }
+    if (-not (Test-Path $logo150Path)) {
+        [IO.File]::WriteAllBytes($logo150Path, $png)
+    }
 }
 
 $makeAppxPath = Find-SdkTool -ToolName "makeappx.exe"
