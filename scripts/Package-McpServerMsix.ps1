@@ -25,6 +25,34 @@ $publishDir = Join-Path $repoRoot "artifacts\\mcp-msix-publish"
 $stagingDir = Join-Path $repoRoot "artifacts\\mcp-msix-staging"
 $outputDir = Join-Path $repoRoot $OutputDirectory
 
+function Find-SdkTool {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$ToolName
+    )
+
+    $onPath = Get-Command $ToolName -ErrorAction SilentlyContinue
+    if ($onPath) {
+        return $onPath.Source
+    }
+
+    $kitsRoot = "C:\Program Files (x86)\Windows Kits\10\bin"
+    if (-not (Test-Path $kitsRoot)) {
+        return $null
+    }
+
+    $candidates = Get-ChildItem -Path $kitsRoot -Recurse -File -Filter $ToolName `
+        -ErrorAction SilentlyContinue |
+        Where-Object { $_.FullName -match "\\x64\\" } |
+        Sort-Object FullName -Descending
+
+    if ($candidates.Count -gt 0) {
+        return $candidates[0].FullName
+    }
+
+    return $null
+}
+
 if (-not (Test-Path $projectPath)) {
     throw "Project not found: $projectPath"
 }
@@ -75,33 +103,25 @@ if (-not (Test-Path $logoPath)) {
     [IO.File]::WriteAllBytes($logoPath, $png)
 }
 
-$makeAppx = Get-Command makeappx.exe -ErrorAction SilentlyContinue
-if (-not $makeAppx) {
-    $fallbackMakeAppx = "C:\Program Files (x86)\Windows Kits\10\bin\x64\makeappx.exe"
-    if (Test-Path $fallbackMakeAppx) {
-        $makeAppx = @{ Source = $fallbackMakeAppx }
-    }
+$makeAppxPath = Find-SdkTool -ToolName "makeappx.exe"
+if (-not $makeAppxPath) {
+    throw "makeappx.exe not found. Install Windows SDK and retry."
 }
-if (-not $makeAppx) { throw "makeappx.exe not found. Install Windows SDK and retry." }
 
 $msixPath = Join-Path $outputDir "$PackageName-$Version.msix"
 Write-Host "Creating MSIX: $msixPath"
-& $makeAppx.Source pack /d $stagingDir /p $msixPath /o
+& $makeAppxPath pack /d $stagingDir /p $msixPath /o
 if ($LASTEXITCODE -ne 0) { throw "makeappx pack failed." }
 
 if ($CertificatePath) {
-    $signtool = Get-Command signtool.exe -ErrorAction SilentlyContinue
-    if (-not $signtool) {
-        $fallbackSignTool = "C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe"
-        if (Test-Path $fallbackSignTool) {
-            $signtool = @{ Source = $fallbackSignTool }
-        }
+    $signtoolPath = Find-SdkTool -ToolName "signtool.exe"
+    if (-not $signtoolPath) {
+        throw "signtool.exe not found. Install Windows SDK and retry."
     }
-    if (-not $signtool) { throw "signtool.exe not found. Install Windows SDK and retry." }
     if (-not $CertificatePassword) { throw "CertificatePassword is required when CertificatePath is provided." }
 
     Write-Host "Signing MSIX..."
-    & $signtool.Source sign /fd SHA256 /f $CertificatePath /p $CertificatePassword $msixPath
+    & $signtoolPath sign /fd SHA256 /f $CertificatePath /p $CertificatePassword $msixPath
     if ($LASTEXITCODE -ne 0) { throw "signtool sign failed." }
 }
 
