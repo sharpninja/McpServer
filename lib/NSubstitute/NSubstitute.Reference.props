@@ -1,0 +1,17 @@
+<!-- Import this in any project that references lib/NSubstitute for compile-time NSubstitute types and runtime deps. -->
+<Project>
+  <ItemGroup>
+    <PackageReference Include="Castle.Core" />
+  </ItemGroup>
+  <PropertyGroup>
+    <_NSubRefBase>$(MSBuildThisFileDirectory)..\NSubstitute.6.0.0\lib</_NSubRefBase>
+    <_NSubRefDll Condition="Exists('$(_NSubRefBase)\net9.0\NSubstitute.dll')">$(_NSubRefBase)\net9.0\NSubstitute.dll</_NSubRefDll>
+    <_NSubRefDll Condition="'$(_NSubRefDll)' == '' and Exists('$(_NSubRefBase)\net8.0\NSubstitute.dll')">$(_NSubRefBase)\net8.0\NSubstitute.dll</_NSubRefDll>
+    <_NSubRefDll Condition="'$(_NSubRefDll)' == ''">$(_NSubRefBase)\netstandard2.0\NSubstitute.dll</_NSubRefDll>
+  </PropertyGroup>
+  <ItemGroup Condition="Exists('$(_NSubRefDll)')">
+    <Reference Include="NSubstitute">
+      <HintPath>$(_NSubRefDll)</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

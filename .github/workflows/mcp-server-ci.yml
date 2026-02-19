@@ -1,0 +1,126 @@
+name: mcp-server-ci
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - "src/FWH.Support.Mcp/**"
+      - "tests/FWH.Support.Mcp.Tests/**"
+      - "docs/guides/MCP-SERVER.md"
+      - "scripts/Start-McpServer.ps1"
+      - "scripts/Package-McpServerMsix.ps1"
+      - "scripts/Migrate-McpTodoStorage.ps1"
+      - "scripts/Validate-McpConfig.ps1"
+      - ".github/workflows/mcp-server-ci.yml"
+  pull_request:
+    paths:
+      - "src/FWH.Support.Mcp/**"
+      - "tests/FWH.Support.Mcp.Tests/**"
+      - "docs/guides/MCP-SERVER.md"
+      - "scripts/Start-McpServer.ps1"
+      - "scripts/Package-McpServerMsix.ps1"
+      - "scripts/Migrate-McpTodoStorage.ps1"
+      - "scripts/Validate-McpConfig.ps1"
+      - ".github/workflows/mcp-server-ci.yml"
+
+jobs:
+  build-test-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        global-json-file: global.json
+
+      - name: Restore
+      run: dotnet restore tests/FWH.Support.Mcp.Tests/FWH.Support.Mcp.Tests.csproj
+
+      - name: Validate MCP config
+      shell: pwsh
+      run: ./scripts/Validate-McpConfig.ps1
+
+      - name: Build
+      run: dotnet build tests/FWH.Support.Mcp.Tests/FWH.Support.Mcp.Tests.csproj -c Release --no-restore
+
+      - name: Test
+      run: dotnet test tests/FWH.Support.Mcp.Tests/FWH.Support.Mcp.Tests.csproj -c Release --no-build --logger trx --results-directory TestResults
+
+      - name: Publish MCP Server
+      run: dotnet publish src/FWH.Support.Mcp/FWH.Support.Mcp.csproj -c Release -o artifacts/mcp-server
+
+      - name: Generate OpenAPI artifact
+      shell: bash
+      run: |
+        set -euo pipefail
+        export ASPNETCORE_ENVIRONMENT=Development
+        dotnet artifacts/mcp-server/FWH.Support.Mcp.dll > artifacts/mcp-server.log 2>&1 &
+        MCP_PID=$!
+        for i in {1..30}; do
+          if curl -fsS http://localhost:7147/swagger/v1/swagger.json -o artifacts/swagger-v1.json; then
+            break
+          fi
+          sleep 1
+        done
+        kill $MCP_PID || true
+        wait $MCP_PID || true
+        test -f artifacts/swagger-v1.json
+
+      - name: Upload MCP publish artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mcp-server-publish
+        path: artifacts/mcp-server
+
+      - name: Upload OpenAPI artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mcp-server-openapi
+        path: artifacts/swagger-v1.json
+
+      - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: mcp-server-test-results
+        path: TestResults
+
+  windows-msix:
+    runs-on: windows-latest
+    needs: build-test-publish
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        global-json-file: global.json
+
+      - name: Package MSIX
+      shell: pwsh
+      run: |
+        ./scripts/Package-McpServerMsix.ps1 -Configuration Release -Version 1.0.${{ github.run_number }}.0
+
+      - name: Upload MSIX artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: mcp-server-msix
+        path: artifacts/msix/*.msix
+
+  docs-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Markdown lint
+      uses: DavidAnson/markdownlint-cli2-action@v18
+      with:
+        globs: |
+          docs/guides/MCP-SERVER.md
+
+      - name: Link check
+      uses: lycheeverse/lychee-action@v2
+      with:
+        args: --verbose --no-progress docs/guides/MCP-SERVER.md
+        fail: true

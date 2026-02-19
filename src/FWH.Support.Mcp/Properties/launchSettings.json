@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "FWH.Support.Mcp": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:36366;http://localhost:36368"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configurations>Debug;Release;Staging</Configurations>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>10.0</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyVersion>6.0.0.0</AssemblyVersion>
+    <PackageId>NSubstitute.Reference</PackageId>
+    <Description>Local reference to NSubstitute 6.0.0 from lib/NSubstitute.6.0.0. Populate via scripts\Copy-NSubstituteFromCache.ps1.</Description>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <NSubstituteLibBase>$(MSBuildThisFileDirectory)..\NSubstitute.6.0.0\lib</NSubstituteLibBase>
+    <_NSubstituteDll Condition="Exists('$(NSubstituteLibBase)\net9.0\NSubstitute.dll')">$(NSubstituteLibBase)\net9.0\NSubstitute.dll</_NSubstituteDll>
+    <_NSubstituteDll Condition="'$(_NSubstituteDll)' == ''">$(NSubstituteLibBase)\netstandard2.0\NSubstitute.dll</_NSubstituteDll>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NSubstitute">
+      <HintPath>$(_NSubstituteDll)</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

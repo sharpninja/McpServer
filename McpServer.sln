@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{ACFF16D9-C460-4DAF-8806-E9FD58069B7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FWH.Common.Copilot", "src\FWH.Common.Copilot\FWH.Common.Copilot.csproj", "{63EC6997-5B85-4503-9678-8ECE52B65973}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FWH.ServiceDefaults", "src\FWH.ServiceDefaults\FWH.ServiceDefaults.csproj", "{FFB8537F-C019-4A5E-9981-C8EC82224737}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FWH.Support.Mcp", "src\FWH.Support.Mcp\FWH.Support.Mcp.csproj", "{4062533C-8E08-459E-B11E-CA0AD5EA367E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{75E852DF-4CB3-4318-9A92-82F84CD3DFA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FWH.Support.Mcp.Tests", "tests\FWH.Support.Mcp.Tests\FWH.Support.Mcp.Tests.csproj", "{66EAF0AA-B2F5-4E16-900A-4D7DF1C463A2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{63EC6997-5B85-4503-9678-8ECE52B65973}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63EC6997-5B85-4503-9678-8ECE52B65973}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63EC6997-5B85-4503-9678-8ECE52B65973}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63EC6997-5B85-4503-9678-8ECE52B65973}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFB8537F-C019-4A5E-9981-C8EC82224737}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFB8537F-C019-4A5E-9981-C8EC82224737}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFB8537F-C019-4A5E-9981-C8EC82224737}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFB8537F-C019-4A5E-9981-C8EC82224737}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4062533C-8E08-459E-B11E-CA0AD5EA367E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4062533C-8E08-459E-B11E-CA0AD5EA367E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4062533C-8E08-459E-B11E-CA0AD5EA367E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4062533C-8E08-459E-B11E-CA0AD5EA367E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66EAF0AA-B2F5-4E16-900A-4D7DF1C463A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66EAF0AA-B2F5-4E16-900A-4D7DF1C463A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66EAF0AA-B2F5-4E16-900A-4D7DF1C463A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66EAF0AA-B2F5-4E16-900A-4D7DF1C463A2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{63EC6997-5B85-4503-9678-8ECE52B65973} = {ACFF16D9-C460-4DAF-8806-E9FD58069B7B}
+		{FFB8537F-C019-4A5E-9981-C8EC82224737} = {ACFF16D9-C460-4DAF-8806-E9FD58069B7B}
+		{4062533C-8E08-459E-B11E-CA0AD5EA367E} = {ACFF16D9-C460-4DAF-8806-E9FD58069B7B}
+		{66EAF0AA-B2F5-4E16-900A-4D7DF1C463A2} = {75E852DF-4CB3-4318-9A92-82F84CD3DFA7}
+	EndGlobalSection
+EndGlobal
