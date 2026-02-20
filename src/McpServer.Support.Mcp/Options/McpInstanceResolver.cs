@@ -78,6 +78,9 @@ public static class McpInstanceResolver
             var repoRoot = instance["RepoRoot"];
             if (string.IsNullOrWhiteSpace(repoRoot))
                 throw new InvalidOperationException($"Mcp:Instances:{name}:RepoRoot is required.");
+            var resolvedRoot = ResolveFullPath(repoRoot);
+            if (Path.IsPathRooted(repoRoot) && !Directory.Exists(resolvedRoot))
+                throw new InvalidOperationException($"Mcp:Instances:{name}:RepoRoot '{repoRoot}' does not exist. Create the folder or update configuration.");
 
             var rawPort = instance["Port"];
             if (!int.TryParse(rawPort, out var port))
@@ -87,6 +90,39 @@ public static class McpInstanceResolver
                 throw new InvalidOperationException($"Duplicate MCP instance port {port} found in instances '{existing}' and '{name}'.");
 
             usedPorts[port] = name;
+        }
+    }
+
+    /// <summary>
+    /// Validates TODO storage provider and provider-specific settings for the selected effective instance.
+    /// </summary>
+    public static void ValidateTodoStorage(IConfiguration configuration, string? instanceName)
+    {
+        ArgumentNullException.ThrowIfNull(configuration);
+
+        var provider = (GetEffectiveMcpValue(configuration, instanceName, "TodoStorage:Provider") ?? "yaml")
+            .Trim()
+            .ToUpperInvariant();
+        if (provider is not ("YAML" or "SQLITE"))
+            throw new InvalidOperationException($"Unsupported TODO storage provider '{provider}'. Allowed values: yaml, sqlite.");
+
+        if (provider == "SQLITE")
+        {
+            var sqliteDataSource = GetEffectiveMcpValue(configuration, instanceName, "TodoStorage:SqliteDataSource");
+            if (string.IsNullOrWhiteSpace(sqliteDataSource))
+                throw new InvalidOperationException("Mcp:TodoStorage:SqliteDataSource is required when TodoStorage:Provider is sqlite.");
+        }
+    }
+
+    private static string ResolveFullPath(string path)
+    {
+        try
+        {
+            return Path.GetFullPath(path);
+        }
+        catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
+        {
+            throw new InvalidOperationException($"Invalid path '{path}'.", ex);
         }
     }
 

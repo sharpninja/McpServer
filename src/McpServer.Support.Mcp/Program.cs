@@ -42,6 +42,7 @@ if (OperatingSystem.IsWindows())
 
 var instanceName = McpInstanceResolver.GetRequestedInstanceName(args);
 McpInstanceResolver.ValidateInstances(builder.Configuration);
+McpInstanceResolver.ValidateTodoStorage(builder.Configuration, instanceName);
 
 // TR-PLANNED-013: Serilog with optional Parseable (local Docker) sink.
 builder.Host.UseSerilog((context, _, config) =>

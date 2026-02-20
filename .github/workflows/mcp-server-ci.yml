@@ -10,21 +10,23 @@ on:
     paths:
       - "src/McpServer.Support.Mcp/**"
       - "tests/McpServer.Support.Mcp.Tests/**"
-      - "docs/MCP-SERVER.md"
+      - "docs/**"
       - "scripts/Start-McpServer.ps1"
       - "scripts/Package-McpServerMsix.ps1"
       - "scripts/Migrate-McpTodoStorage.ps1"
       - "scripts/Validate-McpConfig.ps1"
+      - "scripts/Test-McpMultiInstance.ps1"
       - ".github/workflows/mcp-server-ci.yml"
   pull_request:
     paths:
       - "src/McpServer.Support.Mcp/**"
       - "tests/McpServer.Support.Mcp.Tests/**"
-      - "docs/MCP-SERVER.md"
+      - "docs/**"
       - "scripts/Start-McpServer.ps1"
       - "scripts/Package-McpServerMsix.ps1"
       - "scripts/Migrate-McpTodoStorage.ps1"
       - "scripts/Validate-McpConfig.ps1"
+      - "scripts/Test-McpMultiInstance.ps1"
       - ".github/workflows/mcp-server-ci.yml"
 
 jobs:
@@ -113,9 +115,25 @@ jobs:
           name: mcp-server-msix
           path: artifacts/msix/*.msix
 
+  multi-instance-smoke:
+    runs-on: windows-latest
+    needs: build-test-publish
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Run multi-instance smoke test
+        shell: pwsh
+        run: |
+          ./scripts/Test-McpMultiInstance.ps1 -Configuration Staging -FirstInstance default -SecondInstance alt-local -TimeoutSeconds 180
+
   release-main:
     runs-on: ubuntu-latest
-    needs: windows-msix
+    needs: [windows-msix, multi-instance-smoke]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - name: Download MSIX artifact
@@ -141,11 +159,12 @@ jobs:
         uses: DavidAnson/markdownlint-cli2-action@v18
         with:
           globs: |
-            docs/MCP-SERVER.md
+            docs/**/*.md
+            README.md
 
       - name: Link check
         uses: lycheeverse/lychee-action@v2
         with:
-          args: --verbose --no-progress docs/MCP-SERVER.md
+          args: --verbose --no-progress docs README.md
           fail: true
           failIfEmpty: false

@@ -48,4 +48,44 @@ public sealed class McpInstanceResolverTests
 
         Assert.Throws<InvalidOperationException>(() => McpInstanceResolver.ValidateInstances(configuration));
     }
+
+    [Fact]
+    public void ValidateInstances_ThrowsWhenRepoRootMissingOnDisk()
+    {
+        var missingRoot = Path.Combine(Path.GetTempPath(), $"mcp-missing-{Guid.NewGuid():N}");
+        var data = new Dictionary<string, string?>
+        {
+            ["Mcp:Instances:a:RepoRoot"] = missingRoot,
+            ["Mcp:Instances:a:Port"] = "7147",
+        };
+        var configuration = new ConfigurationBuilder().AddInMemoryCollection(data).Build();
+
+        var ex = Assert.Throws<InvalidOperationException>(() => McpInstanceResolver.ValidateInstances(configuration));
+        Assert.Contains("does not exist", ex.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void ValidateTodoStorage_ThrowsOnUnsupportedProvider()
+    {
+        var data = new Dictionary<string, string?>
+        {
+            ["Mcp:TodoStorage:Provider"] = "memory",
+        };
+        var configuration = new ConfigurationBuilder().AddInMemoryCollection(data).Build();
+
+        Assert.Throws<InvalidOperationException>(() => McpInstanceResolver.ValidateTodoStorage(configuration, null));
+    }
+
+    [Fact]
+    public void ValidateTodoStorage_ThrowsWhenSqliteDataSourceMissing()
+    {
+        var data = new Dictionary<string, string?>
+        {
+            ["Mcp:TodoStorage:Provider"] = "sqlite",
+            ["Mcp:TodoStorage:SqliteDataSource"] = "",
+        };
+        var configuration = new ConfigurationBuilder().AddInMemoryCollection(data).Build();
+
+        Assert.Throws<InvalidOperationException>(() => McpInstanceResolver.ValidateTodoStorage(configuration, null));
+    }
 }

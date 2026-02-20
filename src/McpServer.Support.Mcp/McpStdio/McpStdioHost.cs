@@ -26,6 +26,7 @@ public static class McpStdioHost
         var builder = Host.CreateApplicationBuilder(args);
         var instanceName = McpInstanceResolver.GetRequestedInstanceName(args);
         McpInstanceResolver.ValidateInstances(builder.Configuration);
+        McpInstanceResolver.ValidateTodoStorage(builder.Configuration, instanceName);
         builder.Logging.ClearProviders();
         builder.Logging.AddConsole(consoleOptions =>
         {
