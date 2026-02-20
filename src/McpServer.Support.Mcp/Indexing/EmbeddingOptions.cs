@@ -6,6 +6,9 @@ namespace McpServer.Support.Mcp.Indexing;
 /// </summary>
 public sealed class EmbeddingOptions
 {
+    /// <summary>TR-PLANNED-013: Whether embedding generation is enabled (default true). Set false for CI or lightweight deployments.</summary>
+    public bool Enabled { get; set; } = true;
+
     /// <summary>TR-PLANNED-013: Path to the ONNX model file. If null, uses auto-download to LocalAppData.</summary>
     public string? ModelPath { get; set; }
 

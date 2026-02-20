@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MCP Server STDIO Tool Contract",
+  "description": "Machine-readable manifest of all STDIO tools exposed by McpServer.Support.Mcp via ModelContextProtocol.",
+  "version": "1.0.0",
+  "generatedFrom": "src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs",
+  "tools": [
+    {
+      "name": "context_search",
+      "description": "Search indexed context chunks by query text. Optional sourceType filter and limit (1-100).",
+      "parameters": {
+        "query": { "type": "string", "required": true, "description": "Search query text" },
+        "limit": { "type": "integer", "default": 20, "description": "Max chunks to return (default 20)" },
+        "sourceType": { "type": "string", "required": false, "description": "Optional source type filter" }
+      },
+      "httpEquivalent": "POST /mcp/context/search"
+    },
+    {
+      "name": "context_pack",
+      "description": "Get a deterministic context pack by query. Optional queryId and limit (1-100).",
+      "parameters": {
+        "query": { "type": "string", "required": true, "description": "Search query text" },
+        "limit": { "type": "integer", "default": 20, "description": "Max chunks in pack (default 20)" },
+        "queryId": { "type": "string", "required": false, "description": "Optional query id for reproducibility" }
+      },
+      "httpEquivalent": "POST /mcp/context/pack"
+    },
+    {
+      "name": "context_sources",
+      "description": "List indexed document sources (sourceKey, sourceType, ingestedAt).",
+      "parameters": {},
+      "httpEquivalent": "GET /mcp/context/sources"
+    },
+    {
+      "name": "repo_read",
+      "description": "Read file content by relative path from repo root. Path must be allowed.",
+      "parameters": {
+        "path": { "type": "string", "required": true, "description": "Relative path from repo root" }
+      },
+      "httpEquivalent": "GET /mcp/repo/{path}"
+    },
+    {
+      "name": "repo_list",
+      "description": "List files and directories under a relative path. Empty path = repo root.",
+      "parameters": {
+        "path": { "type": "string", "required": false, "description": "Relative path (optional, default repo root)" }
+      },
+      "httpEquivalent": "GET /mcp/repo"
+    },
+    {
+      "name": "repo_write",
+      "description": "Write content to a path. Path must be allowed; audit logged.",
+      "parameters": {
+        "path": { "type": "string", "required": true, "description": "Relative path from repo root" },
+        "content": { "type": "string", "required": true, "description": "File content to write" }
+      },
+      "httpEquivalent": "PUT /mcp/repo/{path}"
+    },
+    {
+      "name": "sync_run",
+      "description": "Trigger full ingestion (repo, session logs, external docs). Returns run result.",
+      "parameters": {},
+      "httpEquivalent": "POST /mcp/sync/ingest"
+    },
+    {
+      "name": "sync_status",
+      "description": "Get last sync run status (lastRun, status, error, counts).",
+      "parameters": {},
+      "httpEquivalent": "GET /mcp/sync/status"
+    },
+    {
+      "name": "todo_list",
+      "description": "Query TODO items. Optional filters: section, priority, done.",
+      "parameters": {
+        "section": { "type": "string", "required": false, "description": "Section filter (e.g. mvp-app)" },
+        "priority": { "type": "string", "required": false, "description": "Priority filter (high/medium/low)" },
+        "done": { "type": "boolean", "required": false, "description": "Done filter (true/false)" }
+      },
+      "httpEquivalent": "GET /mcp/todo"
+    },
+    {
+      "name": "todo_get",
+      "description": "Get a single TODO item by its id (e.g. MVP-APP-001).",
+      "parameters": {
+        "id": { "type": "string", "required": true, "description": "TODO item id" }
+      },
+      "httpEquivalent": "GET /mcp/todo/{id}"
+    },
+    {
+      "name": "todo_create",
+      "description": "Create a new TODO item. Requires id, title, section, priority.",
+      "parameters": {
+        "id": { "type": "string", "required": true, "description": "Item id (e.g. MVP-APP-006)" },
+        "title": { "type": "string", "required": true, "description": "Item title" },
+        "section": { "type": "string", "required": true, "description": "Section (e.g. mvp-app)" },
+        "priority": { "type": "string", "required": true, "description": "Priority (high/medium/low)" },
+        "estimate": { "type": "string", "required": false, "description": "Estimate string" },
+        "description": { "type": "string", "required": false, "description": "Description text" }
+      },
+      "httpEquivalent": "POST /mcp/todo"
+    },
+    {
+      "name": "todo_update",
+      "description": "Update a TODO item by id. Only provided fields are changed.",
+      "parameters": {
+        "id": { "type": "string", "required": true, "description": "TODO item id" },
+        "title": { "type": "string", "required": false, "description": "Updated title" },
+        "priority": { "type": "string", "required": false, "description": "Updated priority" },
+        "done": { "type": "boolean", "required": false, "description": "Mark as done" },
+        "note": { "type": "string", "required": false, "description": "Updated note" }
+      },
+      "httpEquivalent": "PUT /mcp/todo/{id}"
+    },
+    {
+      "name": "todo_delete",
+      "description": "Delete a TODO item by id.",
+      "parameters": {
+        "id": { "type": "string", "required": true, "description": "TODO item id" }
+      },
+      "httpEquivalent": "DELETE /mcp/todo/{id}"
+    },
+    {
+      "name": "sessionlog_submit",
+      "description": "Submit (upsert) a session log. Body is JSON string conforming to UnifiedSessionLogDto.",
+      "parameters": {
+        "json": { "type": "string", "required": true, "description": "JSON string of the session log payload" }
+      },
+      "httpEquivalent": "POST /mcp/sessionlog"
+    },
+    {
+      "name": "sessionlog_query",
+      "description": "Query session logs with optional filters: agent, model, text, from, to, limit.",
+      "parameters": {
+        "agent": { "type": "string", "required": false, "description": "Agent filter (e.g. cursor, copilot)" },
+        "model": { "type": "string", "required": false, "description": "Model filter" },
+        "text": { "type": "string", "required": false, "description": "Text search" },
+        "from": { "type": "string", "required": false, "description": "From date (ISO 8601)" },
+        "to": { "type": "string", "required": false, "description": "To date (ISO 8601)" },
+        "limit": { "type": "integer", "required": false, "description": "Max results (default 100)" }
+      },
+      "httpEquivalent": "GET /mcp/sessionlog"
+    },
+    {
+      "name": "sessionlog_dialog",
+      "description": "Append processing dialog items to a session log entry.",
+      "parameters": {
+        "agent": { "type": "string", "required": true, "description": "Agent source type" },
+        "sessionId": { "type": "string", "required": true, "description": "Session id" },
+        "requestId": { "type": "string", "required": true, "description": "Request id" },
+        "itemsJson": { "type": "string", "required": true, "description": "JSON array of dialog items" }
+      },
+      "httpEquivalent": "POST /mcp/sessionlog/{agent}/{sessionId}/{requestId}/dialog"
+    },
+    {
+      "name": "github_list_issues",
+      "description": "List GitHub issues. Optional state filter and limit.",
+      "parameters": {
+        "state": { "type": "string", "required": false, "description": "State filter (open/closed/all)" },
+        "limit": { "type": "integer", "default": 30, "description": "Max issues to return (default 30)" }
+      },
+      "httpEquivalent": "GET /mcp/gh/issues"
+    },
+    {
+      "name": "github_list_pulls",
+      "description": "List GitHub pull requests. Optional state filter and limit.",
+      "parameters": {
+        "state": { "type": "string", "required": false, "description": "State filter (open/closed/all)" },
+        "limit": { "type": "integer", "default": 30, "description": "Max PRs to return (default 30)" }
+      },
+      "httpEquivalent": "GET /mcp/gh/pulls"
+    },
+    {
+      "name": "github_create_issue",
+      "description": "Create a GitHub issue with title and optional body.",
+      "parameters": {
+        "title": { "type": "string", "required": true, "description": "Issue title" },
+        "body": { "type": "string", "required": false, "description": "Issue body" }
+      },
+      "httpEquivalent": "POST /mcp/gh/issues"
+    },
+    {
+      "name": "github_comment_issue",
+      "description": "Add a comment to a GitHub issue.",
+      "parameters": {
+        "issueId": { "type": "string", "required": true, "description": "Issue number or id" },
+        "body": { "type": "string", "required": true, "description": "Comment body" }
+      },
+      "httpEquivalent": "POST /mcp/gh/issues/{issueId}/comments"
+    },
+    {
+      "name": "github_comment_pull",
+      "description": "Add a comment to a GitHub pull request.",
+      "parameters": {
+        "prId": { "type": "string", "required": true, "description": "PR number or id" },
+        "body": { "type": "string", "required": true, "description": "Comment body" }
+      },
+      "httpEquivalent": "POST /mcp/gh/pulls/{prId}/comments"
+    }
+  ]
+}

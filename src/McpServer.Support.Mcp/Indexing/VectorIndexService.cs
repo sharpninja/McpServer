@@ -256,6 +256,12 @@ internal sealed class VectorIndexService : IVectorIndexService, IDisposable
 
     private void InitializeIndex()
     {
+        if (!_options.Enabled)
+        {
+            _logger.LogInformation("VectorIndexService: disabled via configuration.");
+            return;
+        }
+
         try
         {
             var parameters = new HNSWParameters<float>

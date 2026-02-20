@@ -135,6 +135,12 @@ internal sealed class EmbeddingService : IEmbeddingService, IDisposable
 
     private void TryLoadModel()
     {
+        if (!_options.Enabled)
+        {
+            _logger.LogInformation("EmbeddingService: disabled via configuration, running in stub mode.");
+            return;
+        }
+
         var modelPath = ResolveModelPath();
         var vocabPath = ResolveVocabPath();
 
