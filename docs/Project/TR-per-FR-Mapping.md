@@ -1,7 +1,7 @@
 # TR per FR Mapping (MCP Server)
 
 | FR | Primary TRs |
-|---|---|
+| --- | --- |
 | FR-MCP-001 | TR-MCP-CFG-001, TR-MCP-CFG-002 |
 | FR-MCP-002 | TR-MCP-API-001, TR-MCP-DATA-001 |
 | FR-MCP-003 | TR-MCP-INGEST-001, TR-MCP-DATA-001 |
