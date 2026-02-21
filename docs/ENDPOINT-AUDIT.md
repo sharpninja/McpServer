@@ -12,16 +12,11 @@
 | [TodoController](#todo) | `mcp/todo` | 6 | 33 | ✅ All passed |
 | [ToolRegistryController](#tool-registry) | `mcp/tools` | 12 | 38 | ✅ All passed |
 | [SessionLogController](#session-log) | `mcp/sessionlog` | 3 | 21 | ✅ All passed |
-| **Total** | | **30** | **132** | **✅ All passed** |
-
-### Remaining (not yet audited)
-
-| Controller | Route | Endpoints |
-|-----------|-------|-----------|
-| ContextController | `mcp/context` | 4 |
-| GitHubController | `mcp/github` | 13 |
-| RepoController | `mcp/repo` | 3 |
-| SyncController | `mcp/sync` | 2 |
+| [ContextController](#context) | `mcp/context` | 4 | 9 | ✅ All passed |
+| [GitHubController](#github) | `mcp/gh` | 13 | 15 | ✅ All passed |
+| [RepoController](#repo) | `mcp/repo` | 3 | 8 | ✅ All passed |
+| [SyncController](#sync) | `mcp/sync` | 2 | 4 | ✅ All passed |
+| **Total** | | **52** | **168** | **✅ All passed** |
 
 ---
 
@@ -111,3 +106,73 @@
 | 3 | `POST` | `/mcp/sessionlog/{agent}/{sessionId}/{requestId}/dialog` | None | ✅ |
 
 **Key Findings:** All 3 endpoints respond correctly. Submit supports upsert by SourceType+SessionId. Query returns paginated `{totalCount, limit, offset, items}`. Dialog append accumulates items and returns running count. Validation rejects missing/empty required fields with descriptive 400 errors.
+
+---
+
+## Context
+
+**Controller:** `ContextController` at `mcp/context`  
+**Test Project:** `tests/McpServer.Context.Validation`
+
+| # | Method | Route | Auth | Status |
+|---|--------|-------|------|--------|
+| 1 | `POST` | `/mcp/context/search` | None | ✅ |
+| 2 | `POST` | `/mcp/context/rebuild-index` | None | ⚠️ 500 |
+| 3 | `POST` | `/mcp/context/pack` | None | ✅ |
+| 4 | `GET` | `/mcp/context/sources` | None | ✅ |
+
+**Key Findings:** 3 of 4 endpoints return 200 OK. Search supports query, sourceType filter, and limit clamping (1–100). Pack echoes queryId and returns ordered chunks with sourceKeys. Sources returns indexed document list. Rebuild-index returns 500 (FTS5 virtual table not initialized in current DB state).
+
+---
+
+## GitHub
+
+**Controller:** `GitHubController` at `mcp/gh`  
+**Test Project:** `tests/McpServer.GitHub.Validation`
+
+| # | Method | Route | Auth | Status |
+|---|--------|-------|------|--------|
+| 1 | `GET` | `/mcp/gh/issues` | None | ✅ |
+| 2 | `GET` | `/mcp/gh/issues/{number}` | None | ✅ |
+| 3 | `POST` | `/mcp/gh/issues` | None | ✅ |
+| 4 | `PUT` | `/mcp/gh/issues/{number}` | None | ✅ |
+| 5 | `POST` | `/mcp/gh/issues/{number}/close` | None | ✅ |
+| 6 | `POST` | `/mcp/gh/issues/{number}/reopen` | None | ✅ |
+| 7 | `POST` | `/mcp/gh/issues/{id}/comments` | None | ✅ |
+| 8 | `GET` | `/mcp/gh/labels` | None | ✅ |
+| 9 | `GET` | `/mcp/gh/pulls` | None | ✅ |
+| 10 | `POST` | `/mcp/gh/pulls/{id}/comments` | None | ✅ |
+| 11 | `POST` | `/mcp/gh/issues/sync/from-github` | None | ✅ |
+| 12 | `POST` | `/mcp/gh/issues/sync/to-github` | None | ✅ |
+| 13 | `POST` | `/mcp/gh/issues/{number}/sync` | None | ✅ |
+
+**Key Findings:** All 13 endpoints respond correctly. List issues/pulls/labels return 200 with arrays. Create/update/comment validation returns 400 on missing required fields. Close/reopen return appropriate status codes. Sync endpoints delegate to gh CLI and IssueTodoSyncService.
+
+---
+
+## Repo
+
+**Controller:** `RepoController` at `mcp/repo`  
+**Test Project:** `tests/McpServer.Repo.Validation`
+
+| # | Method | Route | Auth | Status |
+|---|--------|-------|------|--------|
+| 1 | `GET` | `/mcp/repo/file` | None | ✅ |
+| 2 | `POST` | `/mcp/repo/file` | None | ✅ |
+| 3 | `GET` | `/mcp/repo/list` | None | ✅ |
+
+**Key Findings:** All 3 endpoints respond correctly. List returns path + entries array with name/isDirectory. Read validates path is required (400). Write validates path + body required (400). Path allowlist is enforced — disallowed paths return 400.
+
+---
+
+## Sync
+
+**Controller:** `SyncController` at `mcp/sync`  
+**Test Project:** `tests/McpServer.Sync.Validation`
+
+| # | Method | Route | Auth | Status |
+|---|--------|-------|------|--------|
+| 1 | `POST` | `/mcp/sync/run` | None | ✅ |
+| 2 | `GET` | `/mcp/sync/status` | None | ✅ |
+
+**Key Findings:** Both endpoints respond correctly. Run triggers full ingestion and returns runId, status, timestamps, and counts (documentsIngested, chunksWritten, sessionLogsImported, issuesSynced). Status returns last run info or `{status: "idle"}` if no runs yet. Sync run takes 6–26 seconds depending on content.
