@@ -1,0 +1,645 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity
+  id: ContextChunkEntity
+  parent: McpServer.Support.Mcp.Storage.Entities
+  children:
+  - McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.ChunkIndex
+  - McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Content
+  - McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Document
+  - McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.DocumentId
+  - McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Embedding
+  - McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Id
+  - McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.TokenCount
+  langs:
+  - csharp
+  - vb
+  name: ContextChunkEntity
+  nameWithType: ContextChunkEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity
+  type: Class
+  source:
+    id: ContextChunkEntity
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ContextChunkEntity.cs
+    startLine: 8
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Persisted chunk for full-text and vector retrieval.'
+  example: []
+  syntax:
+    content: public sealed class ContextChunkEntity
+    content.vb: Public NotInheritable Class ContextChunkEntity
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Id
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Id
+  id: Id
+  parent: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity
+  langs:
+  - csharp
+  - vb
+  name: Id
+  nameWithType: ContextChunkEntity.Id
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Id
+  type: Property
+  source:
+    id: Id
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ContextChunkEntity.cs
+    startLine: 11
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Unique chunk identifier.'
+  example: []
+  syntax:
+    content: >-
+      [Key]
+
+      [MaxLength(256)]
+
+      public required string Id { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Key>
+
+      <MaxLength(256)>
+
+      Public Property Id As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Id*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.KeyAttribute
+    ctor: System.ComponentModel.DataAnnotations.KeyAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 256
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.DocumentId
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.DocumentId
+  id: DocumentId
+  parent: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity
+  langs:
+  - csharp
+  - vb
+  name: DocumentId
+  nameWithType: ContextChunkEntity.DocumentId
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.DocumentId
+  type: Property
+  source:
+    id: DocumentId
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ContextChunkEntity.cs
+    startLine: 16
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Parent document identifier.'
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(256)]
+
+      public required string DocumentId { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(256)>
+
+      Public Property DocumentId As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.DocumentId*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 256
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Content
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Content
+  id: Content
+  parent: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity
+  langs:
+  - csharp
+  - vb
+  name: Content
+  nameWithType: ContextChunkEntity.Content
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Content
+  type: Property
+  source:
+    id: Content
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ContextChunkEntity.cs
+    startLine: 21
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Chunk text content.'
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      public required string Content { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      Public Property Content As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Content*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.TokenCount
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.TokenCount
+  id: TokenCount
+  parent: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity
+  langs:
+  - csharp
+  - vb
+  name: TokenCount
+  nameWithType: ContextChunkEntity.TokenCount
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.TokenCount
+  type: Property
+  source:
+    id: TokenCount
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ContextChunkEntity.cs
+    startLine: 25
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Estimated token count.'
+  example: []
+  syntax:
+    content: public int TokenCount { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property TokenCount As Integer
+  overload: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.TokenCount*
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.ChunkIndex
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.ChunkIndex
+  id: ChunkIndex
+  parent: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity
+  langs:
+  - csharp
+  - vb
+  name: ChunkIndex
+  nameWithType: ContextChunkEntity.ChunkIndex
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.ChunkIndex
+  type: Property
+  source:
+    id: ChunkIndex
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ContextChunkEntity.cs
+    startLine: 28
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Zero-based index within document.'
+  example: []
+  syntax:
+    content: public int ChunkIndex { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property ChunkIndex As Integer
+  overload: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.ChunkIndex*
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Embedding
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Embedding
+  id: Embedding
+  parent: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity
+  langs:
+  - csharp
+  - vb
+  name: Embedding
+  nameWithType: ContextChunkEntity.Embedding
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Embedding
+  type: Property
+  source:
+    id: Embedding
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ContextChunkEntity.cs
+    startLine: 31
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Embedding vector stored as BLOB (nullable, populated during ingestion).'
+  example: []
+  syntax:
+    content: public byte[]? Embedding { get; set; }
+    parameters: []
+    return:
+      type: System.Byte[]
+    content.vb: Public Property Embedding As Byte()
+  overload: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Embedding*
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Document
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Document
+  id: Document
+  parent: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity
+  langs:
+  - csharp
+  - vb
+  name: Document
+  nameWithType: ContextChunkEntity.Document
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Document
+  type: Property
+  source:
+    id: Document
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ContextChunkEntity.cs
+    startLine: 35
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: Navigation to document.
+  example: []
+  syntax:
+    content: >-
+      [ForeignKey("DocumentId")]
+
+      public ContextDocumentEntity? Document { get; set; }
+    parameters: []
+    return:
+      type: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity
+    content.vb: >-
+      <ForeignKey("DocumentId")>
+
+      Public Property Document As ContextDocumentEntity
+  overload: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Document*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.Schema.ForeignKeyAttribute
+    ctor: System.ComponentModel.DataAnnotations.Schema.ForeignKeyAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: DocumentId
+references:
+- uid: McpServer.Support.Mcp.Storage.Entities
+  commentId: N:McpServer.Support.Mcp.Storage.Entities
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Storage.Entities
+  nameWithType: McpServer.Support.Mcp.Storage.Entities
+  fullName: McpServer.Support.Mcp.Storage.Entities
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage.Entities
+    name: Entities
+    href: McpServer.Support.Mcp.Storage.Entities.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage.Entities
+    name: Entities
+    href: McpServer.Support.Mcp.Storage.Entities.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Id*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Id
+  href: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.html#McpServer_Support_Mcp_Storage_Entities_ContextChunkEntity_Id
+  name: Id
+  nameWithType: ContextChunkEntity.Id
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Id
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.DocumentId*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.DocumentId
+  href: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.html#McpServer_Support_Mcp_Storage_Entities_ContextChunkEntity_DocumentId
+  name: DocumentId
+  nameWithType: ContextChunkEntity.DocumentId
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.DocumentId
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Content*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Content
+  href: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.html#McpServer_Support_Mcp_Storage_Entities_ContextChunkEntity_Content
+  name: Content
+  nameWithType: ContextChunkEntity.Content
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Content
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.TokenCount*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.TokenCount
+  href: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.html#McpServer_Support_Mcp_Storage_Entities_ContextChunkEntity_TokenCount
+  name: TokenCount
+  nameWithType: ContextChunkEntity.TokenCount
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.TokenCount
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.ChunkIndex*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.ChunkIndex
+  href: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.html#McpServer_Support_Mcp_Storage_Entities_ContextChunkEntity_ChunkIndex
+  name: ChunkIndex
+  nameWithType: ContextChunkEntity.ChunkIndex
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.ChunkIndex
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Embedding*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Embedding
+  href: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.html#McpServer_Support_Mcp_Storage_Entities_ContextChunkEntity_Embedding
+  name: Embedding
+  nameWithType: ContextChunkEntity.Embedding
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Embedding
+- uid: System.Byte[]
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.byte
+  name: byte[]
+  nameWithType: byte[]
+  fullName: byte[]
+  nameWithType.vb: Byte()
+  fullName.vb: Byte()
+  name.vb: Byte()
+  spec.csharp:
+  - uid: System.Byte
+    name: byte
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.byte
+  - name: '['
+  - name: ']'
+  spec.vb:
+  - uid: System.Byte
+    name: Byte
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.byte
+  - name: (
+  - name: )
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Document*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Document
+  href: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.html#McpServer_Support_Mcp_Storage_Entities_ContextChunkEntity_Document
+  name: Document
+  nameWithType: ContextChunkEntity.Document
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.Document
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity
+  parent: McpServer.Support.Mcp.Storage.Entities
+  href: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.html
+  name: ContextDocumentEntity
+  nameWithType: ContextDocumentEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity

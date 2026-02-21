@@ -1,0 +1,420 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.IRepoFileService
+  commentId: T:McpServer.Support.Mcp.Services.IRepoFileService
+  id: IRepoFileService
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.IRepoFileService.ListAsync(System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IRepoFileService.ReadAsync(System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IRepoFileService.WriteAsync(System.String,System.String,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: IRepoFileService
+  nameWithType: IRepoFileService
+  fullName: McpServer.Support.Mcp.Services.IRepoFileService
+  type: Interface
+  source:
+    id: IRepoFileService
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IRepoFileService.cs
+    startLine: 6
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: >-
+    TR-PLANNED-013: Repository file read/list/write with path allowlist.
+
+    FR-SUPPORT-010: Path allowlist enforced; write audit log.
+  example: []
+  syntax:
+    content: public interface IRepoFileService
+    content.vb: Public Interface IRepoFileService
+- uid: McpServer.Support.Mcp.Services.IRepoFileService.ReadAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IRepoFileService.ReadAsync(System.String,System.Threading.CancellationToken)
+  id: ReadAsync(System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IRepoFileService
+  langs:
+  - csharp
+  - vb
+  name: ReadAsync(string, CancellationToken)
+  nameWithType: IRepoFileService.ReadAsync(string, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IRepoFileService.ReadAsync(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: ReadAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IRepoFileService.cs
+    startLine: 12
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Read file content by relative path. Returns null if not found or not allowed.
+  example: []
+  syntax:
+    content: Task<RepoFileReadResult?> ReadAsync(string relativePath, CancellationToken cancellationToken = default)
+    parameters:
+    - id: relativePath
+      type: System.String
+      description: Relative path from repo root.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel the operation.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.RepoFileReadResult}
+      description: The file read result, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> if not found or not allowed.
+    content.vb: Function ReadAsync(relativePath As String, cancellationToken As CancellationToken = Nothing) As Task(Of RepoFileReadResult)
+  overload: McpServer.Support.Mcp.Services.IRepoFileService.ReadAsync*
+  nameWithType.vb: IRepoFileService.ReadAsync(String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IRepoFileService.ReadAsync(String, System.Threading.CancellationToken)
+  name.vb: ReadAsync(String, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IRepoFileService.ListAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IRepoFileService.ListAsync(System.String,System.Threading.CancellationToken)
+  id: ListAsync(System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IRepoFileService
+  langs:
+  - csharp
+  - vb
+  name: ListAsync(string?, CancellationToken)
+  nameWithType: IRepoFileService.ListAsync(string?, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IRepoFileService.ListAsync(string?, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: ListAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IRepoFileService.cs
+    startLine: 18
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: List directory entries (files and dirs) under relative path. Empty if not allowed.
+  example: []
+  syntax:
+    content: Task<RepoListResult> ListAsync(string? relativePath, CancellationToken cancellationToken = default)
+    parameters:
+    - id: relativePath
+      type: System.String
+      description: Relative path from repo root, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> for root.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel the operation.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.RepoListResult}
+      description: Directory listing result.
+    content.vb: Function ListAsync(relativePath As String, cancellationToken As CancellationToken = Nothing) As Task(Of RepoListResult)
+  overload: McpServer.Support.Mcp.Services.IRepoFileService.ListAsync*
+  nameWithType.vb: IRepoFileService.ListAsync(String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IRepoFileService.ListAsync(String, System.Threading.CancellationToken)
+  name.vb: ListAsync(String, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IRepoFileService.WriteAsync(System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IRepoFileService.WriteAsync(System.String,System.String,System.Threading.CancellationToken)
+  id: WriteAsync(System.String,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IRepoFileService
+  langs:
+  - csharp
+  - vb
+  name: WriteAsync(string, string, CancellationToken)
+  nameWithType: IRepoFileService.WriteAsync(string, string, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IRepoFileService.WriteAsync(string, string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: WriteAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IRepoFileService.cs
+    startLine: 25
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Write content to path. Returns success and records audit. Fails if path not allowed.
+  example: []
+  syntax:
+    content: Task<RepoWriteResult> WriteAsync(string relativePath, string content, CancellationToken cancellationToken = default)
+    parameters:
+    - id: relativePath
+      type: System.String
+      description: Relative path from repo root.
+    - id: content
+      type: System.String
+      description: File content to write.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel the operation.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.RepoWriteResult}
+      description: Write result indicating success or failure with an error message.
+    content.vb: Function WriteAsync(relativePath As String, content As String, cancellationToken As CancellationToken = Nothing) As Task(Of RepoWriteResult)
+  overload: McpServer.Support.Mcp.Services.IRepoFileService.WriteAsync*
+  nameWithType.vb: IRepoFileService.WriteAsync(String, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IRepoFileService.WriteAsync(String, String, System.Threading.CancellationToken)
+  name.vb: WriteAsync(String, String, CancellationToken)
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: McpServer.Support.Mcp.Services.IRepoFileService.ReadAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IRepoFileService.ReadAsync
+  href: McpServer.Support.Mcp.Services.IRepoFileService.html#McpServer_Support_Mcp_Services_IRepoFileService_ReadAsync_System_String_System_Threading_CancellationToken_
+  name: ReadAsync
+  nameWithType: IRepoFileService.ReadAsync
+  fullName: McpServer.Support.Mcp.Services.IRepoFileService.ReadAsync
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.RepoFileReadResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.RepoFileReadResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<RepoFileReadResult>
+  nameWithType: Task<RepoFileReadResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.RepoFileReadResult>
+  nameWithType.vb: Task(Of RepoFileReadResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.RepoFileReadResult)
+  name.vb: Task(Of RepoFileReadResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.RepoFileReadResult
+    name: RepoFileReadResult
+    href: McpServer.Support.Mcp.Services.RepoFileReadResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.RepoFileReadResult
+    name: RepoFileReadResult
+    href: McpServer.Support.Mcp.Services.RepoFileReadResult.html
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: McpServer.Support.Mcp.Services.IRepoFileService.ListAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IRepoFileService.ListAsync
+  href: McpServer.Support.Mcp.Services.IRepoFileService.html#McpServer_Support_Mcp_Services_IRepoFileService_ListAsync_System_String_System_Threading_CancellationToken_
+  name: ListAsync
+  nameWithType: IRepoFileService.ListAsync
+  fullName: McpServer.Support.Mcp.Services.IRepoFileService.ListAsync
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.RepoListResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.RepoListResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<RepoListResult>
+  nameWithType: Task<RepoListResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.RepoListResult>
+  nameWithType.vb: Task(Of RepoListResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.RepoListResult)
+  name.vb: Task(Of RepoListResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.RepoListResult
+    name: RepoListResult
+    href: McpServer.Support.Mcp.Services.RepoListResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.RepoListResult
+    name: RepoListResult
+    href: McpServer.Support.Mcp.Services.RepoListResult.html
+  - name: )
+- uid: McpServer.Support.Mcp.Services.IRepoFileService.WriteAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IRepoFileService.WriteAsync
+  href: McpServer.Support.Mcp.Services.IRepoFileService.html#McpServer_Support_Mcp_Services_IRepoFileService_WriteAsync_System_String_System_String_System_Threading_CancellationToken_
+  name: WriteAsync
+  nameWithType: IRepoFileService.WriteAsync
+  fullName: McpServer.Support.Mcp.Services.IRepoFileService.WriteAsync
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.RepoWriteResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.RepoWriteResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<RepoWriteResult>
+  nameWithType: Task<RepoWriteResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.RepoWriteResult>
+  nameWithType.vb: Task(Of RepoWriteResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.RepoWriteResult)
+  name.vb: Task(Of RepoWriteResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.RepoWriteResult
+    name: RepoWriteResult
+    href: McpServer.Support.Mcp.Services.RepoWriteResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.RepoWriteResult
+    name: RepoWriteResult
+    href: McpServer.Support.Mcp.Services.RepoWriteResult.html
+  - name: )

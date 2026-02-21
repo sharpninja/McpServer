@@ -1,0 +1,146 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Ingestion
+  commentId: N:McpServer.Support.Mcp.Ingestion
+  id: McpServer.Support.Mcp.Ingestion
+  children:
+  - McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor
+  - McpServer.Support.Mcp.Ingestion.GitHubIngestor
+  - McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+  - McpServer.Support.Mcp.Ingestion.IngestionCoordinator
+  - McpServer.Support.Mcp.Ingestion.IngestionOptions
+  - McpServer.Support.Mcp.Ingestion.IssueIngestor
+  - McpServer.Support.Mcp.Ingestion.RepoIngestor
+  - McpServer.Support.Mcp.Ingestion.SessionLogFileWatcher
+  - McpServer.Support.Mcp.Ingestion.SessionLogImportResult
+  - McpServer.Support.Mcp.Ingestion.SessionLogIngestor
+  - McpServer.Support.Mcp.Ingestion.SyncRunResult
+  - McpServer.Support.Mcp.Ingestion.SyncStatusStore
+  langs:
+  - csharp
+  - vb
+  name: McpServer.Support.Mcp.Ingestion
+  nameWithType: McpServer.Support.Mcp.Ingestion
+  fullName: McpServer.Support.Mcp.Ingestion
+  type: Namespace
+  assemblies:
+  - McpServer.Support.Mcp
+references:
+- uid: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor
+  commentId: T:McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor
+  parent: McpServer.Support.Mcp.Ingestion
+  href: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.html
+  name: ExternalDocsIngestor
+  nameWithType: ExternalDocsIngestor
+  fullName: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor
+- uid: McpServer.Support.Mcp.Ingestion.GitHubIngestor
+  commentId: T:McpServer.Support.Mcp.Ingestion.GitHubIngestor
+  parent: McpServer.Support.Mcp.Ingestion
+  href: McpServer.Support.Mcp.Ingestion.GitHubIngestor.html
+  name: GitHubIngestor
+  nameWithType: GitHubIngestor
+  fullName: McpServer.Support.Mcp.Ingestion.GitHubIngestor
+- uid: McpServer.Support.Mcp.Ingestion.IngestionCoordinator
+  commentId: T:McpServer.Support.Mcp.Ingestion.IngestionCoordinator
+  parent: McpServer.Support.Mcp.Ingestion
+  href: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.html
+  name: IngestionCoordinator
+  nameWithType: IngestionCoordinator
+  fullName: McpServer.Support.Mcp.Ingestion.IngestionCoordinator
+- uid: McpServer.Support.Mcp.Ingestion.IngestionOptions
+  commentId: T:McpServer.Support.Mcp.Ingestion.IngestionOptions
+  href: McpServer.Support.Mcp.Ingestion.IngestionOptions.html
+  name: IngestionOptions
+  nameWithType: IngestionOptions
+  fullName: McpServer.Support.Mcp.Ingestion.IngestionOptions
+- uid: McpServer.Support.Mcp.Ingestion.IssueIngestor
+  commentId: T:McpServer.Support.Mcp.Ingestion.IssueIngestor
+  parent: McpServer.Support.Mcp.Ingestion
+  href: McpServer.Support.Mcp.Ingestion.IssueIngestor.html
+  name: IssueIngestor
+  nameWithType: IssueIngestor
+  fullName: McpServer.Support.Mcp.Ingestion.IssueIngestor
+- uid: McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+  commentId: T:McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+  parent: McpServer.Support.Mcp.Ingestion
+  href: McpServer.Support.Mcp.Ingestion.ISyncStatusStore.html
+  name: ISyncStatusStore
+  nameWithType: ISyncStatusStore
+  fullName: McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+- uid: McpServer.Support.Mcp.Ingestion.RepoIngestor
+  commentId: T:McpServer.Support.Mcp.Ingestion.RepoIngestor
+  parent: McpServer.Support.Mcp.Ingestion
+  href: McpServer.Support.Mcp.Ingestion.RepoIngestor.html
+  name: RepoIngestor
+  nameWithType: RepoIngestor
+  fullName: McpServer.Support.Mcp.Ingestion.RepoIngestor
+- uid: McpServer.Support.Mcp.Ingestion.SessionLogFileWatcher
+  commentId: T:McpServer.Support.Mcp.Ingestion.SessionLogFileWatcher
+  href: McpServer.Support.Mcp.Ingestion.SessionLogFileWatcher.html
+  name: SessionLogFileWatcher
+  nameWithType: SessionLogFileWatcher
+  fullName: McpServer.Support.Mcp.Ingestion.SessionLogFileWatcher
+- uid: McpServer.Support.Mcp.Ingestion.SessionLogImportResult
+  commentId: T:McpServer.Support.Mcp.Ingestion.SessionLogImportResult
+  href: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.html
+  name: SessionLogImportResult
+  nameWithType: SessionLogImportResult
+  fullName: McpServer.Support.Mcp.Ingestion.SessionLogImportResult
+- uid: McpServer.Support.Mcp.Ingestion.SessionLogIngestor
+  commentId: T:McpServer.Support.Mcp.Ingestion.SessionLogIngestor
+  parent: McpServer.Support.Mcp.Ingestion
+  href: McpServer.Support.Mcp.Ingestion.SessionLogIngestor.html
+  name: SessionLogIngestor
+  nameWithType: SessionLogIngestor
+  fullName: McpServer.Support.Mcp.Ingestion.SessionLogIngestor
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult
+  commentId: T:McpServer.Support.Mcp.Ingestion.SyncRunResult
+  parent: McpServer.Support.Mcp.Ingestion
+  href: McpServer.Support.Mcp.Ingestion.SyncRunResult.html
+  name: SyncRunResult
+  nameWithType: SyncRunResult
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult
+- uid: McpServer.Support.Mcp.Ingestion.SyncStatusStore
+  commentId: T:McpServer.Support.Mcp.Ingestion.SyncStatusStore
+  href: McpServer.Support.Mcp.Ingestion.SyncStatusStore.html
+  name: SyncStatusStore
+  nameWithType: SyncStatusStore
+  fullName: McpServer.Support.Mcp.Ingestion.SyncStatusStore
+- uid: McpServer.Support.Mcp.Ingestion
+  commentId: N:McpServer.Support.Mcp.Ingestion
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Ingestion
+  nameWithType: McpServer.Support.Mcp.Ingestion
+  fullName: McpServer.Support.Mcp.Ingestion
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Ingestion
+    name: Ingestion
+    href: McpServer.Support.Mcp.Ingestion.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Ingestion
+    name: Ingestion
+    href: McpServer.Support.Mcp.Ingestion.html

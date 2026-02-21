@@ -1,0 +1,1210 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Models.TodoItem
+  commentId: T:McpServer.Support.Mcp.Models.TodoItem
+  id: TodoItem
+  parent: McpServer.Support.Mcp.Models
+  children:
+  - McpServer.Support.Mcp.Models.TodoItem.CompletedDate
+  - McpServer.Support.Mcp.Models.TodoItem.DependsOn
+  - McpServer.Support.Mcp.Models.TodoItem.Description
+  - McpServer.Support.Mcp.Models.TodoItem.Done
+  - McpServer.Support.Mcp.Models.TodoItem.DoneSummary
+  - McpServer.Support.Mcp.Models.TodoItem.Estimate
+  - McpServer.Support.Mcp.Models.TodoItem.FunctionalRequirements
+  - McpServer.Support.Mcp.Models.TodoItem.Id
+  - McpServer.Support.Mcp.Models.TodoItem.ImplementationTasks
+  - McpServer.Support.Mcp.Models.TodoItem.Note
+  - McpServer.Support.Mcp.Models.TodoItem.PriorityNote
+  - McpServer.Support.Mcp.Models.TodoItem.Reference
+  - McpServer.Support.Mcp.Models.TodoItem.Remaining
+  - McpServer.Support.Mcp.Models.TodoItem.TechnicalDetails
+  - McpServer.Support.Mcp.Models.TodoItem.TechnicalRequirements
+  - McpServer.Support.Mcp.Models.TodoItem.Title
+  langs:
+  - csharp
+  - vb
+  name: TodoItem
+  nameWithType: TodoItem
+  fullName: McpServer.Support.Mcp.Models.TodoItem
+  type: Class
+  source:
+    id: TodoItem
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 61
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: 'TR-PLANNED-013: A single TODO item with metadata and implementation tasks.'
+  example: []
+  syntax:
+    content: public sealed class TodoItem
+    content.vb: Public NotInheritable Class TodoItem
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Models.TodoItem.Id
+  commentId: P:McpServer.Support.Mcp.Models.TodoItem.Id
+  id: Id
+  parent: McpServer.Support.Mcp.Models.TodoItem
+  langs:
+  - csharp
+  - vb
+  name: Id
+  nameWithType: TodoItem.Id
+  fullName: McpServer.Support.Mcp.Models.TodoItem.Id
+  type: Property
+  source:
+    id: Id
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 64
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Unique identifier for the TODO item (e.g. <code>APP-001</code>).
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "id")]
+
+      public string? Id { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <YamlMember(Alias:="id")>
+
+      Public Property Id As String
+  overload: McpServer.Support.Mcp.Models.TodoItem.Id*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: id
+- uid: McpServer.Support.Mcp.Models.TodoItem.Title
+  commentId: P:McpServer.Support.Mcp.Models.TodoItem.Title
+  id: Title
+  parent: McpServer.Support.Mcp.Models.TodoItem
+  langs:
+  - csharp
+  - vb
+  name: Title
+  nameWithType: TodoItem.Title
+  fullName: McpServer.Support.Mcp.Models.TodoItem.Title
+  type: Property
+  source:
+    id: Title
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 68
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Short title of the TODO item.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "title")]
+
+      public string? Title { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <YamlMember(Alias:="title")>
+
+      Public Property Title As String
+  overload: McpServer.Support.Mcp.Models.TodoItem.Title*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: title
+- uid: McpServer.Support.Mcp.Models.TodoItem.Estimate
+  commentId: P:McpServer.Support.Mcp.Models.TodoItem.Estimate
+  id: Estimate
+  parent: McpServer.Support.Mcp.Models.TodoItem
+  langs:
+  - csharp
+  - vb
+  name: Estimate
+  nameWithType: TodoItem.Estimate
+  fullName: McpServer.Support.Mcp.Models.TodoItem.Estimate
+  type: Property
+  source:
+    id: Estimate
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 72
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Time estimate for completing the item.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "estimate")]
+
+      public string? Estimate { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <YamlMember(Alias:="estimate")>
+
+      Public Property Estimate As String
+  overload: McpServer.Support.Mcp.Models.TodoItem.Estimate*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: estimate
+- uid: McpServer.Support.Mcp.Models.TodoItem.Note
+  commentId: P:McpServer.Support.Mcp.Models.TodoItem.Note
+  id: Note
+  parent: McpServer.Support.Mcp.Models.TodoItem
+  langs:
+  - csharp
+  - vb
+  name: Note
+  nameWithType: TodoItem.Note
+  fullName: McpServer.Support.Mcp.Models.TodoItem.Note
+  type: Property
+  source:
+    id: Note
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 76
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Optional note or comment on the item.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "note")]
+
+      public string? Note { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <YamlMember(Alias:="note")>
+
+      Public Property Note As String
+  overload: McpServer.Support.Mcp.Models.TodoItem.Note*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: note
+- uid: McpServer.Support.Mcp.Models.TodoItem.Done
+  commentId: P:McpServer.Support.Mcp.Models.TodoItem.Done
+  id: Done
+  parent: McpServer.Support.Mcp.Models.TodoItem
+  langs:
+  - csharp
+  - vb
+  name: Done
+  nameWithType: TodoItem.Done
+  fullName: McpServer.Support.Mcp.Models.TodoItem.Done
+  type: Property
+  source:
+    id: Done
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 80
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Whether the item is completed.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "done")]
+
+      public bool Done { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: >-
+      <YamlMember(Alias:="done")>
+
+      Public Property Done As Boolean
+  overload: McpServer.Support.Mcp.Models.TodoItem.Done*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: done
+- uid: McpServer.Support.Mcp.Models.TodoItem.CompletedDate
+  commentId: P:McpServer.Support.Mcp.Models.TodoItem.CompletedDate
+  id: CompletedDate
+  parent: McpServer.Support.Mcp.Models.TodoItem
+  langs:
+  - csharp
+  - vb
+  name: CompletedDate
+  nameWithType: TodoItem.CompletedDate
+  fullName: McpServer.Support.Mcp.Models.TodoItem.CompletedDate
+  type: Property
+  source:
+    id: CompletedDate
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 84
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Date the item was completed.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "completed")]
+
+      public string? CompletedDate { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <YamlMember(Alias:="completed")>
+
+      Public Property CompletedDate As String
+  overload: McpServer.Support.Mcp.Models.TodoItem.CompletedDate*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: completed
+- uid: McpServer.Support.Mcp.Models.TodoItem.Description
+  commentId: P:McpServer.Support.Mcp.Models.TodoItem.Description
+  id: Description
+  parent: McpServer.Support.Mcp.Models.TodoItem
+  langs:
+  - csharp
+  - vb
+  name: Description
+  nameWithType: TodoItem.Description
+  fullName: McpServer.Support.Mcp.Models.TodoItem.Description
+  type: Property
+  source:
+    id: Description
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 88
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Multi-line description of the item.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "description")]
+
+      public List<string>? Description { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.List{System.String}
+    content.vb: >-
+      <YamlMember(Alias:="description")>
+
+      Public Property Description As List(Of String)
+  overload: McpServer.Support.Mcp.Models.TodoItem.Description*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: description
+- uid: McpServer.Support.Mcp.Models.TodoItem.DoneSummary
+  commentId: P:McpServer.Support.Mcp.Models.TodoItem.DoneSummary
+  id: DoneSummary
+  parent: McpServer.Support.Mcp.Models.TodoItem
+  langs:
+  - csharp
+  - vb
+  name: DoneSummary
+  nameWithType: TodoItem.DoneSummary
+  fullName: McpServer.Support.Mcp.Models.TodoItem.DoneSummary
+  type: Property
+  source:
+    id: DoneSummary
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 92
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Summary of what was done when the item was completed.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "done-summary")]
+
+      public string? DoneSummary { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <YamlMember(Alias:="done-summary")>
+
+      Public Property DoneSummary As String
+  overload: McpServer.Support.Mcp.Models.TodoItem.DoneSummary*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: done-summary
+- uid: McpServer.Support.Mcp.Models.TodoItem.Remaining
+  commentId: P:McpServer.Support.Mcp.Models.TodoItem.Remaining
+  id: Remaining
+  parent: McpServer.Support.Mcp.Models.TodoItem
+  langs:
+  - csharp
+  - vb
+  name: Remaining
+  nameWithType: TodoItem.Remaining
+  fullName: McpServer.Support.Mcp.Models.TodoItem.Remaining
+  type: Property
+  source:
+    id: Remaining
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 96
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Description of remaining work.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "remaining")]
+
+      public string? Remaining { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <YamlMember(Alias:="remaining")>
+
+      Public Property Remaining As String
+  overload: McpServer.Support.Mcp.Models.TodoItem.Remaining*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: remaining
+- uid: McpServer.Support.Mcp.Models.TodoItem.TechnicalDetails
+  commentId: P:McpServer.Support.Mcp.Models.TodoItem.TechnicalDetails
+  id: TechnicalDetails
+  parent: McpServer.Support.Mcp.Models.TodoItem
+  langs:
+  - csharp
+  - vb
+  name: TechnicalDetails
+  nameWithType: TodoItem.TechnicalDetails
+  fullName: McpServer.Support.Mcp.Models.TodoItem.TechnicalDetails
+  type: Property
+  source:
+    id: TechnicalDetails
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 100
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Technical details or implementation notes.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "technical-details")]
+
+      public List<string>? TechnicalDetails { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.List{System.String}
+    content.vb: >-
+      <YamlMember(Alias:="technical-details")>
+
+      Public Property TechnicalDetails As List(Of String)
+  overload: McpServer.Support.Mcp.Models.TodoItem.TechnicalDetails*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: technical-details
+- uid: McpServer.Support.Mcp.Models.TodoItem.PriorityNote
+  commentId: P:McpServer.Support.Mcp.Models.TodoItem.PriorityNote
+  id: PriorityNote
+  parent: McpServer.Support.Mcp.Models.TodoItem
+  langs:
+  - csharp
+  - vb
+  name: PriorityNote
+  nameWithType: TodoItem.PriorityNote
+  fullName: McpServer.Support.Mcp.Models.TodoItem.PriorityNote
+  type: Property
+  source:
+    id: PriorityNote
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 104
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Note explaining the priority level.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "priority-note")]
+
+      public string? PriorityNote { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <YamlMember(Alias:="priority-note")>
+
+      Public Property PriorityNote As String
+  overload: McpServer.Support.Mcp.Models.TodoItem.PriorityNote*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: priority-note
+- uid: McpServer.Support.Mcp.Models.TodoItem.Reference
+  commentId: P:McpServer.Support.Mcp.Models.TodoItem.Reference
+  id: Reference
+  parent: McpServer.Support.Mcp.Models.TodoItem
+  langs:
+  - csharp
+  - vb
+  name: Reference
+  nameWithType: TodoItem.Reference
+  fullName: McpServer.Support.Mcp.Models.TodoItem.Reference
+  type: Property
+  source:
+    id: Reference
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 108
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Reference link or identifier (e.g. a GitHub issue).
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "reference")]
+
+      public string? Reference { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <YamlMember(Alias:="reference")>
+
+      Public Property Reference As String
+  overload: McpServer.Support.Mcp.Models.TodoItem.Reference*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: reference
+- uid: McpServer.Support.Mcp.Models.TodoItem.DependsOn
+  commentId: P:McpServer.Support.Mcp.Models.TodoItem.DependsOn
+  id: DependsOn
+  parent: McpServer.Support.Mcp.Models.TodoItem
+  langs:
+  - csharp
+  - vb
+  name: DependsOn
+  nameWithType: TodoItem.DependsOn
+  fullName: McpServer.Support.Mcp.Models.TodoItem.DependsOn
+  type: Property
+  source:
+    id: DependsOn
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 112
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: IDs of TODO items this item depends on.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "depends-on")]
+
+      public List<string>? DependsOn { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.List{System.String}
+    content.vb: >-
+      <YamlMember(Alias:="depends-on")>
+
+      Public Property DependsOn As List(Of String)
+  overload: McpServer.Support.Mcp.Models.TodoItem.DependsOn*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: depends-on
+- uid: McpServer.Support.Mcp.Models.TodoItem.FunctionalRequirements
+  commentId: P:McpServer.Support.Mcp.Models.TodoItem.FunctionalRequirements
+  id: FunctionalRequirements
+  parent: McpServer.Support.Mcp.Models.TodoItem
+  langs:
+  - csharp
+  - vb
+  name: FunctionalRequirements
+  nameWithType: TodoItem.FunctionalRequirements
+  fullName: McpServer.Support.Mcp.Models.TodoItem.FunctionalRequirements
+  type: Property
+  source:
+    id: FunctionalRequirements
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 116
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Associated functional requirement IDs (e.g. FR-LOC-001).
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "functional-requirements")]
+
+      public List<string>? FunctionalRequirements { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.List{System.String}
+    content.vb: >-
+      <YamlMember(Alias:="functional-requirements")>
+
+      Public Property FunctionalRequirements As List(Of String)
+  overload: McpServer.Support.Mcp.Models.TodoItem.FunctionalRequirements*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: functional-requirements
+- uid: McpServer.Support.Mcp.Models.TodoItem.TechnicalRequirements
+  commentId: P:McpServer.Support.Mcp.Models.TodoItem.TechnicalRequirements
+  id: TechnicalRequirements
+  parent: McpServer.Support.Mcp.Models.TodoItem
+  langs:
+  - csharp
+  - vb
+  name: TechnicalRequirements
+  nameWithType: TodoItem.TechnicalRequirements
+  fullName: McpServer.Support.Mcp.Models.TodoItem.TechnicalRequirements
+  type: Property
+  source:
+    id: TechnicalRequirements
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 120
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Associated technical requirement IDs (e.g. TR-LOC-001).
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "technical-requirements")]
+
+      public List<string>? TechnicalRequirements { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.List{System.String}
+    content.vb: >-
+      <YamlMember(Alias:="technical-requirements")>
+
+      Public Property TechnicalRequirements As List(Of String)
+  overload: McpServer.Support.Mcp.Models.TodoItem.TechnicalRequirements*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: technical-requirements
+- uid: McpServer.Support.Mcp.Models.TodoItem.ImplementationTasks
+  commentId: P:McpServer.Support.Mcp.Models.TodoItem.ImplementationTasks
+  id: ImplementationTasks
+  parent: McpServer.Support.Mcp.Models.TodoItem
+  langs:
+  - csharp
+  - vb
+  name: ImplementationTasks
+  nameWithType: TodoItem.ImplementationTasks
+  fullName: McpServer.Support.Mcp.Models.TodoItem.ImplementationTasks
+  type: Property
+  source:
+    id: ImplementationTasks
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 124
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Sub-tasks for implementing this item.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "implementation-tasks")]
+
+      public List<ImplementationTask>? ImplementationTasks { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.List{McpServer.Support.Mcp.Models.ImplementationTask}
+    content.vb: >-
+      <YamlMember(Alias:="implementation-tasks")>
+
+      Public Property ImplementationTasks As List(Of ImplementationTask)
+  overload: McpServer.Support.Mcp.Models.TodoItem.ImplementationTasks*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: implementation-tasks
+references:
+- uid: McpServer.Support.Mcp.Models
+  commentId: N:McpServer.Support.Mcp.Models
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Models
+  nameWithType: McpServer.Support.Mcp.Models
+  fullName: McpServer.Support.Mcp.Models
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Models.TodoItem.Id*
+  commentId: Overload:McpServer.Support.Mcp.Models.TodoItem.Id
+  href: McpServer.Support.Mcp.Models.TodoItem.html#McpServer_Support_Mcp_Models_TodoItem_Id
+  name: Id
+  nameWithType: TodoItem.Id
+  fullName: McpServer.Support.Mcp.Models.TodoItem.Id
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Models.TodoItem.Title*
+  commentId: Overload:McpServer.Support.Mcp.Models.TodoItem.Title
+  href: McpServer.Support.Mcp.Models.TodoItem.html#McpServer_Support_Mcp_Models_TodoItem_Title
+  name: Title
+  nameWithType: TodoItem.Title
+  fullName: McpServer.Support.Mcp.Models.TodoItem.Title
+- uid: McpServer.Support.Mcp.Models.TodoItem.Estimate*
+  commentId: Overload:McpServer.Support.Mcp.Models.TodoItem.Estimate
+  href: McpServer.Support.Mcp.Models.TodoItem.html#McpServer_Support_Mcp_Models_TodoItem_Estimate
+  name: Estimate
+  nameWithType: TodoItem.Estimate
+  fullName: McpServer.Support.Mcp.Models.TodoItem.Estimate
+- uid: McpServer.Support.Mcp.Models.TodoItem.Note*
+  commentId: Overload:McpServer.Support.Mcp.Models.TodoItem.Note
+  href: McpServer.Support.Mcp.Models.TodoItem.html#McpServer_Support_Mcp_Models_TodoItem_Note
+  name: Note
+  nameWithType: TodoItem.Note
+  fullName: McpServer.Support.Mcp.Models.TodoItem.Note
+- uid: McpServer.Support.Mcp.Models.TodoItem.Done*
+  commentId: Overload:McpServer.Support.Mcp.Models.TodoItem.Done
+  href: McpServer.Support.Mcp.Models.TodoItem.html#McpServer_Support_Mcp_Models_TodoItem_Done
+  name: Done
+  nameWithType: TodoItem.Done
+  fullName: McpServer.Support.Mcp.Models.TodoItem.Done
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: McpServer.Support.Mcp.Models.TodoItem.CompletedDate*
+  commentId: Overload:McpServer.Support.Mcp.Models.TodoItem.CompletedDate
+  href: McpServer.Support.Mcp.Models.TodoItem.html#McpServer_Support_Mcp_Models_TodoItem_CompletedDate
+  name: CompletedDate
+  nameWithType: TodoItem.CompletedDate
+  fullName: McpServer.Support.Mcp.Models.TodoItem.CompletedDate
+- uid: McpServer.Support.Mcp.Models.TodoItem.Description*
+  commentId: Overload:McpServer.Support.Mcp.Models.TodoItem.Description
+  href: McpServer.Support.Mcp.Models.TodoItem.html#McpServer_Support_Mcp_Models_TodoItem_Description
+  name: Description
+  nameWithType: TodoItem.Description
+  fullName: McpServer.Support.Mcp.Models.TodoItem.Description
+- uid: System.Collections.Generic.List{System.String}
+  commentId: T:System.Collections.Generic.List{System.String}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<string>
+  nameWithType: List<string>
+  fullName: System.Collections.Generic.List<string>
+  nameWithType.vb: List(Of String)
+  fullName.vb: System.Collections.Generic.List(Of String)
+  name.vb: List(Of String)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: McpServer.Support.Mcp.Models.TodoItem.DoneSummary*
+  commentId: Overload:McpServer.Support.Mcp.Models.TodoItem.DoneSummary
+  href: McpServer.Support.Mcp.Models.TodoItem.html#McpServer_Support_Mcp_Models_TodoItem_DoneSummary
+  name: DoneSummary
+  nameWithType: TodoItem.DoneSummary
+  fullName: McpServer.Support.Mcp.Models.TodoItem.DoneSummary
+- uid: McpServer.Support.Mcp.Models.TodoItem.Remaining*
+  commentId: Overload:McpServer.Support.Mcp.Models.TodoItem.Remaining
+  href: McpServer.Support.Mcp.Models.TodoItem.html#McpServer_Support_Mcp_Models_TodoItem_Remaining
+  name: Remaining
+  nameWithType: TodoItem.Remaining
+  fullName: McpServer.Support.Mcp.Models.TodoItem.Remaining
+- uid: McpServer.Support.Mcp.Models.TodoItem.TechnicalDetails*
+  commentId: Overload:McpServer.Support.Mcp.Models.TodoItem.TechnicalDetails
+  href: McpServer.Support.Mcp.Models.TodoItem.html#McpServer_Support_Mcp_Models_TodoItem_TechnicalDetails
+  name: TechnicalDetails
+  nameWithType: TodoItem.TechnicalDetails
+  fullName: McpServer.Support.Mcp.Models.TodoItem.TechnicalDetails
+- uid: McpServer.Support.Mcp.Models.TodoItem.PriorityNote*
+  commentId: Overload:McpServer.Support.Mcp.Models.TodoItem.PriorityNote
+  href: McpServer.Support.Mcp.Models.TodoItem.html#McpServer_Support_Mcp_Models_TodoItem_PriorityNote
+  name: PriorityNote
+  nameWithType: TodoItem.PriorityNote
+  fullName: McpServer.Support.Mcp.Models.TodoItem.PriorityNote
+- uid: McpServer.Support.Mcp.Models.TodoItem.Reference*
+  commentId: Overload:McpServer.Support.Mcp.Models.TodoItem.Reference
+  href: McpServer.Support.Mcp.Models.TodoItem.html#McpServer_Support_Mcp_Models_TodoItem_Reference
+  name: Reference
+  nameWithType: TodoItem.Reference
+  fullName: McpServer.Support.Mcp.Models.TodoItem.Reference
+- uid: McpServer.Support.Mcp.Models.TodoItem.DependsOn*
+  commentId: Overload:McpServer.Support.Mcp.Models.TodoItem.DependsOn
+  href: McpServer.Support.Mcp.Models.TodoItem.html#McpServer_Support_Mcp_Models_TodoItem_DependsOn
+  name: DependsOn
+  nameWithType: TodoItem.DependsOn
+  fullName: McpServer.Support.Mcp.Models.TodoItem.DependsOn
+- uid: McpServer.Support.Mcp.Models.TodoItem.FunctionalRequirements*
+  commentId: Overload:McpServer.Support.Mcp.Models.TodoItem.FunctionalRequirements
+  href: McpServer.Support.Mcp.Models.TodoItem.html#McpServer_Support_Mcp_Models_TodoItem_FunctionalRequirements
+  name: FunctionalRequirements
+  nameWithType: TodoItem.FunctionalRequirements
+  fullName: McpServer.Support.Mcp.Models.TodoItem.FunctionalRequirements
+- uid: McpServer.Support.Mcp.Models.TodoItem.TechnicalRequirements*
+  commentId: Overload:McpServer.Support.Mcp.Models.TodoItem.TechnicalRequirements
+  href: McpServer.Support.Mcp.Models.TodoItem.html#McpServer_Support_Mcp_Models_TodoItem_TechnicalRequirements
+  name: TechnicalRequirements
+  nameWithType: TodoItem.TechnicalRequirements
+  fullName: McpServer.Support.Mcp.Models.TodoItem.TechnicalRequirements
+- uid: McpServer.Support.Mcp.Models.TodoItem.ImplementationTasks*
+  commentId: Overload:McpServer.Support.Mcp.Models.TodoItem.ImplementationTasks
+  href: McpServer.Support.Mcp.Models.TodoItem.html#McpServer_Support_Mcp_Models_TodoItem_ImplementationTasks
+  name: ImplementationTasks
+  nameWithType: TodoItem.ImplementationTasks
+  fullName: McpServer.Support.Mcp.Models.TodoItem.ImplementationTasks
+- uid: System.Collections.Generic.List{McpServer.Support.Mcp.Models.ImplementationTask}
+  commentId: T:System.Collections.Generic.List{McpServer.Support.Mcp.Models.ImplementationTask}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<ImplementationTask>
+  nameWithType: List<ImplementationTask>
+  fullName: System.Collections.Generic.List<McpServer.Support.Mcp.Models.ImplementationTask>
+  nameWithType.vb: List(Of ImplementationTask)
+  fullName.vb: System.Collections.Generic.List(Of McpServer.Support.Mcp.Models.ImplementationTask)
+  name.vb: List(Of ImplementationTask)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Models.ImplementationTask
+    name: ImplementationTask
+    href: McpServer.Support.Mcp.Models.ImplementationTask.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Models.ImplementationTask
+    name: ImplementationTask
+    href: McpServer.Support.Mcp.Models.ImplementationTask.html
+  - name: )

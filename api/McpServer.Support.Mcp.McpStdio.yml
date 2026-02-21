@@ -1,0 +1,30 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.McpStdio
+  commentId: N:McpServer.Support.Mcp.McpStdio
+  id: McpServer.Support.Mcp.McpStdio
+  children:
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  - McpServer.Support.Mcp.McpStdio.McpStdioHost
+  langs:
+  - csharp
+  - vb
+  name: McpServer.Support.Mcp.McpStdio
+  nameWithType: McpServer.Support.Mcp.McpStdio
+  fullName: McpServer.Support.Mcp.McpStdio
+  type: Namespace
+  assemblies:
+  - McpServer.Support.Mcp
+references:
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  commentId: T:McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html
+  name: FwhMcpTools
+  nameWithType: FwhMcpTools
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+- uid: McpServer.Support.Mcp.McpStdio.McpStdioHost
+  commentId: T:McpServer.Support.Mcp.McpStdio.McpStdioHost
+  href: McpServer.Support.Mcp.McpStdio.McpStdioHost.html
+  name: McpStdioHost
+  nameWithType: McpStdioHost
+  fullName: McpServer.Support.Mcp.McpStdio.McpStdioHost

@@ -1,0 +1,680 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult
+  commentId: T:McpServer.Support.Mcp.Ingestion.SyncRunResult
+  id: SyncRunResult
+  parent: McpServer.Support.Mcp.Ingestion
+  children:
+  - McpServer.Support.Mcp.Ingestion.SyncRunResult.ChunksWritten
+  - McpServer.Support.Mcp.Ingestion.SyncRunResult.CompletedAt
+  - McpServer.Support.Mcp.Ingestion.SyncRunResult.DocumentsIngested
+  - McpServer.Support.Mcp.Ingestion.SyncRunResult.Error
+  - McpServer.Support.Mcp.Ingestion.SyncRunResult.IssuesSynced
+  - McpServer.Support.Mcp.Ingestion.SyncRunResult.RunId
+  - McpServer.Support.Mcp.Ingestion.SyncRunResult.SessionLogsImported
+  - McpServer.Support.Mcp.Ingestion.SyncRunResult.StartedAt
+  - McpServer.Support.Mcp.Ingestion.SyncRunResult.Status
+  langs:
+  - csharp
+  - vb
+  name: SyncRunResult
+  nameWithType: SyncRunResult
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult
+  type: Class
+  source:
+    id: SyncRunResult
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\SyncRunResult.cs
+    startLine: 6
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: >-
+    TR-PLANNED-013: Result of a single sync (ingestion) run.
+
+    FR-SUPPORT-010: Status for sync.status endpoint.
+  example: []
+  syntax:
+    content: public sealed class SyncRunResult
+    content.vb: Public NotInheritable Class SyncRunResult
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.RunId
+  commentId: P:McpServer.Support.Mcp.Ingestion.SyncRunResult.RunId
+  id: RunId
+  parent: McpServer.Support.Mcp.Ingestion.SyncRunResult
+  langs:
+  - csharp
+  - vb
+  name: RunId
+  nameWithType: SyncRunResult.RunId
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.RunId
+  type: Property
+  source:
+    id: RunId
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\SyncRunResult.cs
+    startLine: 9
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: Unique run identifier.
+  example: []
+  syntax:
+    content: public required string RunId { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property RunId As String
+  overload: McpServer.Support.Mcp.Ingestion.SyncRunResult.RunId*
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.StartedAt
+  commentId: P:McpServer.Support.Mcp.Ingestion.SyncRunResult.StartedAt
+  id: StartedAt
+  parent: McpServer.Support.Mcp.Ingestion.SyncRunResult
+  langs:
+  - csharp
+  - vb
+  name: StartedAt
+  nameWithType: SyncRunResult.StartedAt
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.StartedAt
+  type: Property
+  source:
+    id: StartedAt
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\SyncRunResult.cs
+    startLine: 12
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: When the run started (UTC).
+  example: []
+  syntax:
+    content: public DateTime StartedAt { get; init; }
+    parameters: []
+    return:
+      type: System.DateTime
+    content.vb: Public Property StartedAt As Date
+  overload: McpServer.Support.Mcp.Ingestion.SyncRunResult.StartedAt*
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.CompletedAt
+  commentId: P:McpServer.Support.Mcp.Ingestion.SyncRunResult.CompletedAt
+  id: CompletedAt
+  parent: McpServer.Support.Mcp.Ingestion.SyncRunResult
+  langs:
+  - csharp
+  - vb
+  name: CompletedAt
+  nameWithType: SyncRunResult.CompletedAt
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.CompletedAt
+  type: Property
+  source:
+    id: CompletedAt
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\SyncRunResult.cs
+    startLine: 15
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: When the run completed (UTC); null if still running or failed before completion.
+  example: []
+  syntax:
+    content: public DateTime? CompletedAt { get; init; }
+    parameters: []
+    return:
+      type: System.Nullable{System.DateTime}
+    content.vb: Public Property CompletedAt As Date?
+  overload: McpServer.Support.Mcp.Ingestion.SyncRunResult.CompletedAt*
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.Status
+  commentId: P:McpServer.Support.Mcp.Ingestion.SyncRunResult.Status
+  id: Status
+  parent: McpServer.Support.Mcp.Ingestion.SyncRunResult
+  langs:
+  - csharp
+  - vb
+  name: Status
+  nameWithType: SyncRunResult.Status
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.Status
+  type: Property
+  source:
+    id: Status
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\SyncRunResult.cs
+    startLine: 18
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: 'Status: Idle, Running, Completed, Failed.'
+  example: []
+  syntax:
+    content: public required string Status { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Status As String
+  overload: McpServer.Support.Mcp.Ingestion.SyncRunResult.Status*
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.Error
+  commentId: P:McpServer.Support.Mcp.Ingestion.SyncRunResult.Error
+  id: Error
+  parent: McpServer.Support.Mcp.Ingestion.SyncRunResult
+  langs:
+  - csharp
+  - vb
+  name: Error
+  nameWithType: SyncRunResult.Error
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.Error
+  type: Property
+  source:
+    id: Error
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\SyncRunResult.cs
+    startLine: 21
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: Error message if Status == Failed.
+  example: []
+  syntax:
+    content: public string? Error { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property [Error] As String
+  overload: McpServer.Support.Mcp.Ingestion.SyncRunResult.Error*
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.DocumentsIngested
+  commentId: P:McpServer.Support.Mcp.Ingestion.SyncRunResult.DocumentsIngested
+  id: DocumentsIngested
+  parent: McpServer.Support.Mcp.Ingestion.SyncRunResult
+  langs:
+  - csharp
+  - vb
+  name: DocumentsIngested
+  nameWithType: SyncRunResult.DocumentsIngested
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.DocumentsIngested
+  type: Property
+  source:
+    id: DocumentsIngested
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\SyncRunResult.cs
+    startLine: 24
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: Documents ingested in this run.
+  example: []
+  syntax:
+    content: public int DocumentsIngested { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property DocumentsIngested As Integer
+  overload: McpServer.Support.Mcp.Ingestion.SyncRunResult.DocumentsIngested*
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.ChunksWritten
+  commentId: P:McpServer.Support.Mcp.Ingestion.SyncRunResult.ChunksWritten
+  id: ChunksWritten
+  parent: McpServer.Support.Mcp.Ingestion.SyncRunResult
+  langs:
+  - csharp
+  - vb
+  name: ChunksWritten
+  nameWithType: SyncRunResult.ChunksWritten
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.ChunksWritten
+  type: Property
+  source:
+    id: ChunksWritten
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\SyncRunResult.cs
+    startLine: 27
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: Chunks written in this run.
+  example: []
+  syntax:
+    content: public int ChunksWritten { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property ChunksWritten As Integer
+  overload: McpServer.Support.Mcp.Ingestion.SyncRunResult.ChunksWritten*
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.SessionLogsImported
+  commentId: P:McpServer.Support.Mcp.Ingestion.SyncRunResult.SessionLogsImported
+  id: SessionLogsImported
+  parent: McpServer.Support.Mcp.Ingestion.SyncRunResult
+  langs:
+  - csharp
+  - vb
+  name: SessionLogsImported
+  nameWithType: SyncRunResult.SessionLogsImported
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.SessionLogsImported
+  type: Property
+  source:
+    id: SessionLogsImported
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\SyncRunResult.cs
+    startLine: 30
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: 'TR-PLANNED-013: Session logs imported into 4NF tables (MVP-SUPPORT-011).'
+  example: []
+  syntax:
+    content: public int SessionLogsImported { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property SessionLogsImported As Integer
+  overload: McpServer.Support.Mcp.Ingestion.SyncRunResult.SessionLogsImported*
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.IssuesSynced
+  commentId: P:McpServer.Support.Mcp.Ingestion.SyncRunResult.IssuesSynced
+  id: IssuesSynced
+  parent: McpServer.Support.Mcp.Ingestion.SyncRunResult
+  langs:
+  - csharp
+  - vb
+  name: IssuesSynced
+  nameWithType: SyncRunResult.IssuesSynced
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.IssuesSynced
+  type: Property
+  source:
+    id: IssuesSynced
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\SyncRunResult.cs
+    startLine: 33
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: 'TR-GH-013-004: Issues synced during ingestion.'
+  example: []
+  syntax:
+    content: public int IssuesSynced { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property IssuesSynced As Integer
+  overload: McpServer.Support.Mcp.Ingestion.SyncRunResult.IssuesSynced*
+references:
+- uid: McpServer.Support.Mcp.Ingestion
+  commentId: N:McpServer.Support.Mcp.Ingestion
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Ingestion
+  nameWithType: McpServer.Support.Mcp.Ingestion
+  fullName: McpServer.Support.Mcp.Ingestion
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Ingestion
+    name: Ingestion
+    href: McpServer.Support.Mcp.Ingestion.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Ingestion
+    name: Ingestion
+    href: McpServer.Support.Mcp.Ingestion.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.RunId*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.SyncRunResult.RunId
+  href: McpServer.Support.Mcp.Ingestion.SyncRunResult.html#McpServer_Support_Mcp_Ingestion_SyncRunResult_RunId
+  name: RunId
+  nameWithType: SyncRunResult.RunId
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.RunId
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.StartedAt*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.SyncRunResult.StartedAt
+  href: McpServer.Support.Mcp.Ingestion.SyncRunResult.html#McpServer_Support_Mcp_Ingestion_SyncRunResult_StartedAt
+  name: StartedAt
+  nameWithType: SyncRunResult.StartedAt
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.StartedAt
+- uid: System.DateTime
+  commentId: T:System.DateTime
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetime
+  name: DateTime
+  nameWithType: DateTime
+  fullName: System.DateTime
+  nameWithType.vb: Date
+  fullName.vb: Date
+  name.vb: Date
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.CompletedAt*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.SyncRunResult.CompletedAt
+  href: McpServer.Support.Mcp.Ingestion.SyncRunResult.html#McpServer_Support_Mcp_Ingestion_SyncRunResult_CompletedAt
+  name: CompletedAt
+  nameWithType: SyncRunResult.CompletedAt
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.CompletedAt
+- uid: System.Nullable{System.DateTime}
+  commentId: T:System.Nullable{System.DateTime}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.datetime
+  name: DateTime?
+  nameWithType: DateTime?
+  fullName: System.DateTime?
+  nameWithType.vb: Date?
+  fullName.vb: Date?
+  name.vb: Date?
+  spec.csharp:
+  - uid: System.DateTime
+    name: DateTime
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.datetime
+  - name: '?'
+  spec.vb:
+  - uid: System.DateTime
+    name: Date
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.datetime
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.Status*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.SyncRunResult.Status
+  href: McpServer.Support.Mcp.Ingestion.SyncRunResult.html#McpServer_Support_Mcp_Ingestion_SyncRunResult_Status
+  name: Status
+  nameWithType: SyncRunResult.Status
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.Status
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.Error*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.SyncRunResult.Error
+  href: McpServer.Support.Mcp.Ingestion.SyncRunResult.html#McpServer_Support_Mcp_Ingestion_SyncRunResult_Error
+  name: Error
+  nameWithType: SyncRunResult.Error
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.Error
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.DocumentsIngested*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.SyncRunResult.DocumentsIngested
+  href: McpServer.Support.Mcp.Ingestion.SyncRunResult.html#McpServer_Support_Mcp_Ingestion_SyncRunResult_DocumentsIngested
+  name: DocumentsIngested
+  nameWithType: SyncRunResult.DocumentsIngested
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.DocumentsIngested
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.ChunksWritten*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.SyncRunResult.ChunksWritten
+  href: McpServer.Support.Mcp.Ingestion.SyncRunResult.html#McpServer_Support_Mcp_Ingestion_SyncRunResult_ChunksWritten
+  name: ChunksWritten
+  nameWithType: SyncRunResult.ChunksWritten
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.ChunksWritten
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.SessionLogsImported*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.SyncRunResult.SessionLogsImported
+  href: McpServer.Support.Mcp.Ingestion.SyncRunResult.html#McpServer_Support_Mcp_Ingestion_SyncRunResult_SessionLogsImported
+  name: SessionLogsImported
+  nameWithType: SyncRunResult.SessionLogsImported
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.SessionLogsImported
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult.IssuesSynced*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.SyncRunResult.IssuesSynced
+  href: McpServer.Support.Mcp.Ingestion.SyncRunResult.html#McpServer_Support_Mcp_Ingestion_SyncRunResult_IssuesSynced
+  name: IssuesSynced
+  nameWithType: SyncRunResult.IssuesSynced
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult.IssuesSynced

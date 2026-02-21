@@ -1,0 +1,571 @@
+### YamlMime:TableOfContent
+items:
+- uid: McpServer.Support.Mcp
+  name: McpServer.Support.Mcp
+  type: Namespace
+  items:
+  - uid: McpServer.Support.Mcp.McpApiEntryPoint
+    name: McpApiEntryPoint
+    type: Class
+- uid: McpServer.Support.Mcp.Controllers
+  name: McpServer.Support.Mcp.Controllers
+  type: Namespace
+  items:
+  - uid: McpServer.Support.Mcp.Controllers.ContextController
+    name: ContextController
+    type: Class
+  - uid: McpServer.Support.Mcp.Controllers.ContextPackRequest
+    name: ContextPackRequest
+    type: Class
+  - uid: McpServer.Support.Mcp.Controllers.ContextSearchRequest
+    name: ContextSearchRequest
+    type: Class
+  - uid: McpServer.Support.Mcp.Controllers.GitHubCommentRequest
+    name: GitHubCommentRequest
+    type: Class
+  - uid: McpServer.Support.Mcp.Controllers.GitHubController
+    name: GitHubController
+    type: Class
+  - uid: McpServer.Support.Mcp.Controllers.GitHubIssueRequest
+    name: GitHubIssueRequest
+    type: Class
+  - uid: McpServer.Support.Mcp.Controllers.RepoController
+    name: RepoController
+    type: Class
+  - uid: McpServer.Support.Mcp.Controllers.RepoWriteRequest
+    name: RepoWriteRequest
+    type: Class
+  - uid: McpServer.Support.Mcp.Controllers.SessionLogController
+    name: SessionLogController
+    type: Class
+  - uid: McpServer.Support.Mcp.Controllers.SyncController
+    name: SyncController
+    type: Class
+  - uid: McpServer.Support.Mcp.Controllers.TodoController
+    name: TodoController
+    type: Class
+  - uid: McpServer.Support.Mcp.Controllers.ToolRegistryController
+    name: ToolRegistryController
+    type: Class
+  - uid: McpServer.Support.Mcp.Controllers.WorkspaceController
+    name: WorkspaceController
+    type: Class
+- uid: McpServer.Support.Mcp.Indexing
+  name: McpServer.Support.Mcp.Indexing
+  type: Namespace
+  items:
+  - uid: McpServer.Support.Mcp.Indexing.Chunker
+    name: Chunker
+    type: Class
+  - uid: McpServer.Support.Mcp.Indexing.EmbeddingOptions
+    name: EmbeddingOptions
+    type: Class
+  - uid: McpServer.Support.Mcp.Indexing.IEmbeddingService
+    name: IEmbeddingService
+    type: Interface
+  - uid: McpServer.Support.Mcp.Indexing.IVectorIndexService
+    name: IVectorIndexService
+    type: Interface
+  - uid: McpServer.Support.Mcp.Indexing.VectorIndexOptions
+    name: VectorIndexOptions
+    type: Class
+- uid: McpServer.Support.Mcp.Ingestion
+  name: McpServer.Support.Mcp.Ingestion
+  type: Namespace
+  items:
+  - uid: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor
+    name: ExternalDocsIngestor
+    type: Class
+  - uid: McpServer.Support.Mcp.Ingestion.GitHubIngestor
+    name: GitHubIngestor
+    type: Class
+  - uid: McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+    name: ISyncStatusStore
+    type: Interface
+  - uid: McpServer.Support.Mcp.Ingestion.IngestionCoordinator
+    name: IngestionCoordinator
+    type: Class
+  - uid: McpServer.Support.Mcp.Ingestion.IngestionOptions
+    name: IngestionOptions
+    type: Class
+  - uid: McpServer.Support.Mcp.Ingestion.IssueIngestor
+    name: IssueIngestor
+    type: Class
+  - uid: McpServer.Support.Mcp.Ingestion.RepoIngestor
+    name: RepoIngestor
+    type: Class
+  - uid: McpServer.Support.Mcp.Ingestion.SessionLogFileWatcher
+    name: SessionLogFileWatcher
+    type: Class
+  - uid: McpServer.Support.Mcp.Ingestion.SessionLogImportResult
+    name: SessionLogImportResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Ingestion.SessionLogIngestor
+    name: SessionLogIngestor
+    type: Class
+  - uid: McpServer.Support.Mcp.Ingestion.SyncRunResult
+    name: SyncRunResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Ingestion.SyncStatusStore
+    name: SyncStatusStore
+    type: Class
+- uid: McpServer.Support.Mcp.Logging
+  name: McpServer.Support.Mcp.Logging
+  type: Namespace
+  items:
+  - uid: McpServer.Support.Mcp.Logging.ParseableBatchFormatter
+    name: ParseableBatchFormatter
+    type: Class
+  - uid: McpServer.Support.Mcp.Logging.ParseableEventFormatter
+    name: ParseableEventFormatter
+    type: Class
+  - uid: McpServer.Support.Mcp.Logging.ParseableHttpClient
+    name: ParseableHttpClient
+    type: Class
+- uid: McpServer.Support.Mcp.McpStdio
+  name: McpServer.Support.Mcp.McpStdio
+  type: Namespace
+  items:
+  - uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+    name: FwhMcpTools
+    type: Class
+  - uid: McpServer.Support.Mcp.McpStdio.McpStdioHost
+    name: McpStdioHost
+    type: Class
+- uid: McpServer.Support.Mcp.Middleware
+  name: McpServer.Support.Mcp.Middleware
+  type: Namespace
+  items:
+  - uid: McpServer.Support.Mcp.Middleware.ApiKeyAuthFilter
+    name: ApiKeyAuthFilter
+    type: Class
+  - uid: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+    name: InteractionLoggingMiddleware
+    type: Class
+  - uid: McpServer.Support.Mcp.Middleware.SkipApiKeyAuthAttribute
+    name: SkipApiKeyAuthAttribute
+    type: Class
+- uid: McpServer.Support.Mcp.Models
+  name: McpServer.Support.Mcp.Models
+  type: Namespace
+  items:
+  - uid: McpServer.Support.Mcp.Models.CodeReviewPhase
+    name: CodeReviewPhase
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.CodeReviewSection
+    name: CodeReviewSection
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.CompletedGroup
+    name: CompletedGroup
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.CompletedItem
+    name: CompletedItem
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.ContextChunk
+    name: ContextChunk
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.ContextDocument
+    name: ContextDocument
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.ContextPack
+    name: ContextPack
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.CopilotStatisticsDto
+    name: CopilotStatisticsDto
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.GitHubIssueComment
+    name: GitHubIssueComment
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.GitHubIssueDetail
+    name: GitHubIssueDetail
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.GitHubIssueDetailResult
+    name: GitHubIssueDetailResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest
+    name: GitHubIssueUpdateRequest
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.GitHubLabel
+    name: GitHubLabel
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.GitHubLabelsResult
+    name: GitHubLabelsResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.GitHubMutationResult
+    name: GitHubMutationResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.ImplementationTask
+    name: ImplementationTask
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.InteractionLogEntry
+    name: InteractionLogEntry
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.IssueNoteFrontmatter
+    name: IssueNoteFrontmatter
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.ProcessingDialogItemDto
+    name: ProcessingDialogItemDto
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.TodoFile
+    name: TodoFile
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.TodoItem
+    name: TodoItem
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.TodoSection
+    name: TodoSection
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.UnifiedActionDto
+    name: UnifiedActionDto
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.UnifiedRequestEntryDto
+    name: UnifiedRequestEntryDto
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+    name: UnifiedSessionLogDto
+    type: Class
+  - uid: McpServer.Support.Mcp.Models.WorkspaceInfoDto
+    name: WorkspaceInfoDto
+    type: Class
+- uid: McpServer.Support.Mcp.Options
+  name: McpServer.Support.Mcp.Options
+  type: Namespace
+  items:
+  - uid: McpServer.Support.Mcp.Options.CloudflareTunnelOptions
+    name: CloudflareTunnelOptions
+    type: Class
+  - uid: McpServer.Support.Mcp.Options.FrpTunnelOptions
+    name: FrpTunnelOptions
+    type: Class
+  - uid: McpServer.Support.Mcp.Options.McpInstanceResolver
+    name: McpInstanceResolver
+    type: Class
+  - uid: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions
+    name: McpInteractionLoggingOptions
+    type: Class
+  - uid: McpServer.Support.Mcp.Options.McpParseableOptions
+    name: McpParseableOptions
+    type: Class
+  - uid: McpServer.Support.Mcp.Options.NgrokTunnelOptions
+    name: NgrokTunnelOptions
+    type: Class
+  - uid: McpServer.Support.Mcp.Options.PairingOptions
+    name: PairingOptions
+    type: Class
+  - uid: McpServer.Support.Mcp.Options.PairingUser
+    name: PairingUser
+    type: Class
+  - uid: McpServer.Support.Mcp.Options.TodoStorageOptions
+    name: TodoStorageOptions
+    type: Class
+  - uid: McpServer.Support.Mcp.Options.TunnelOptions
+    name: TunnelOptions
+    type: Class
+- uid: McpServer.Support.Mcp.Services
+  name: McpServer.Support.Mcp.Services
+  type: Namespace
+  items:
+  - uid: McpServer.Support.Mcp.Services.BucketAddRequest
+    name: BucketAddRequest
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.BucketBrowseResult
+    name: BucketBrowseResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.BucketDto
+    name: BucketDto
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.BucketListResult
+    name: BucketListResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.BucketMutationResult
+    name: BucketMutationResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.BucketSyncResult
+    name: BucketSyncResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.CloudflareTunnelProvider
+    name: CloudflareTunnelProvider
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.ContextSearchResult
+    name: ContextSearchResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.FrpTunnelProvider
+    name: FrpTunnelProvider
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.GitHubCliService
+    name: GitHubCliService
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.GitHubCommentResult
+    name: GitHubCommentResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.GitHubCreateIssueResult
+    name: GitHubCreateIssueResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.GitHubIssueItem
+    name: GitHubIssueItem
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.GitHubIssueListResult
+    name: GitHubIssueListResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.GitHubPullItem
+    name: GitHubPullItem
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.GitHubPullListResult
+    name: GitHubPullListResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.IContextSearchService
+    name: IContextSearchService
+    type: Interface
+  - uid: McpServer.Support.Mcp.Services.IGitHubCliService
+    name: IGitHubCliService
+    type: Interface
+  - uid: McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel
+    name: IInteractionLogSubmissionChannel
+    type: Interface
+  - uid: McpServer.Support.Mcp.Services.IIssueTodoSyncService
+    name: IIssueTodoSyncService
+    type: Interface
+  - uid: McpServer.Support.Mcp.Services.IProcessRunner
+    name: IProcessRunner
+    type: Interface
+  - uid: McpServer.Support.Mcp.Services.IRepoFileService
+    name: IRepoFileService
+    type: Interface
+  - uid: McpServer.Support.Mcp.Services.IRequirementsService
+    name: IRequirementsService
+    type: Interface
+  - uid: McpServer.Support.Mcp.Services.ISessionLogService
+    name: ISessionLogService
+    type: Interface
+  - uid: McpServer.Support.Mcp.Services.ITodoService
+    name: ITodoService
+    type: Interface
+  - uid: McpServer.Support.Mcp.Services.IToolBucketService
+    name: IToolBucketService
+    type: Interface
+  - uid: McpServer.Support.Mcp.Services.IToolRegistryService
+    name: IToolRegistryService
+    type: Interface
+  - uid: McpServer.Support.Mcp.Services.ITunnelProvider
+    name: ITunnelProvider
+    type: Interface
+  - uid: McpServer.Support.Mcp.Services.IWorkspaceProcessManager
+    name: IWorkspaceProcessManager
+    type: Interface
+  - uid: McpServer.Support.Mcp.Services.IWorkspaceService
+    name: IWorkspaceService
+    type: Interface
+  - uid: McpServer.Support.Mcp.Services.IWriteAuditLog
+    name: IWriteAuditLog
+    type: Interface
+  - uid: McpServer.Support.Mcp.Services.InteractionLogSubmissionChannel
+    name: InteractionLogSubmissionChannel
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.InteractionLogSubmissionService
+    name: InteractionLogSubmissionService
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.IssueSyncResult
+    name: IssueSyncResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.IssueTodoSyncService
+    name: IssueTodoSyncService
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.NgrokTunnelProvider
+    name: NgrokTunnelProvider
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.ProcessRunResult
+    name: ProcessRunResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.ProcessRunner
+    name: ProcessRunner
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.RepoFileReadResult
+    name: RepoFileReadResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.RepoFileService
+    name: RepoFileService
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.RepoListEntry
+    name: RepoListEntry
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.RepoListResult
+    name: RepoListResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.RepoWriteResult
+    name: RepoWriteResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.RequirementsAnalysisResult
+    name: RequirementsAnalysisResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.ScoredChunk
+    name: ScoredChunk
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.SessionLogQueryRequest
+    name: SessionLogQueryRequest
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.SessionLogQueryResult
+    name: SessionLogQueryResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.SessionLogService
+    name: SessionLogService
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.TodoCreateRequest
+    name: TodoCreateRequest
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.TodoFlatItem
+    name: TodoFlatItem
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.TodoFlatTask
+    name: TodoFlatTask
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.TodoMutationResult
+    name: TodoMutationResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.TodoQueryRequest
+    name: TodoQueryRequest
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.TodoQueryResult
+    name: TodoQueryResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.TodoUpdateRequest
+    name: TodoUpdateRequest
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.ToolBucketService
+    name: ToolBucketService
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.ToolCreateRequest
+    name: ToolCreateRequest
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.ToolDto
+    name: ToolDto
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.ToolManifest
+    name: ToolManifest
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.ToolMutationResult
+    name: ToolMutationResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.ToolRegistryService
+    name: ToolRegistryService
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.ToolSearchResult
+    name: ToolSearchResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.ToolUpdateRequest
+    name: ToolUpdateRequest
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.TunnelStatus
+    name: TunnelStatus
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.WorkspaceCreateRequest
+    name: WorkspaceCreateRequest
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.WorkspaceDto
+    name: WorkspaceDto
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.WorkspaceInitResult
+    name: WorkspaceInitResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.WorkspaceListResult
+    name: WorkspaceListResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.WorkspaceMutationResult
+    name: WorkspaceMutationResult
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.WorkspaceProcessManager
+    name: WorkspaceProcessManager
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.WorkspaceProcessStatus
+    name: WorkspaceProcessStatus
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.WorkspaceService
+    name: WorkspaceService
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest
+    name: WorkspaceUpdateRequest
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.WriteAuditEntry
+    name: WriteAuditEntry
+    type: Class
+  - uid: McpServer.Support.Mcp.Services.WriteAuditLog
+    name: WriteAuditLog
+    type: Class
+- uid: McpServer.Support.Mcp.Storage
+  name: McpServer.Support.Mcp.Storage
+  type: Namespace
+  items:
+  - uid: McpServer.Support.Mcp.Storage.McpDbContext
+    name: McpDbContext
+    type: Class
+- uid: McpServer.Support.Mcp.Storage.Entities
+  name: McpServer.Support.Mcp.Storage.Entities
+  type: Namespace
+  items:
+  - uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity
+    name: ContextChunkEntity
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity
+    name: ContextDocumentEntity
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Entities.SessionLogActionEntity
+    name: SessionLogActionEntity
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+    name: SessionLogEntity
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryContextEntity
+    name: SessionLogEntryContextEntity
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity
+    name: SessionLogEntryEntity
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryTagEntity
+    name: SessionLogEntryTagEntity
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+    name: SessionLogProcessingDialogEntity
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity
+    name: ToolBucketEntity
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+    name: ToolDefinitionEntity
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity
+    name: ToolDefinitionTagEntity
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+    name: WorkspaceEntity
+    type: Class
+- uid: McpServer.Support.Mcp.Storage.Migrations
+  name: McpServer.Support.Mcp.Storage.Migrations
+  type: Namespace
+  items:
+  - uid: McpServer.Support.Mcp.Storage.Migrations.AddEmbeddingColumn
+    name: AddEmbeddingColumn
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Migrations.AddFts5FullTextIndex
+    name: AddFts5FullTextIndex
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Migrations.AddProcessingDialog
+    name: AddProcessingDialog
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Migrations.AddSessionLogContentHash
+    name: AddSessionLogContentHash
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Migrations.AddSessionLogSourceFilePath
+    name: AddSessionLogSourceFilePath
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Migrations.AddSessionLogTables
+    name: AddSessionLogTables
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Migrations.AddToolRegistryAndBuckets
+    name: AddToolRegistryAndBuckets
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Migrations.AddWorkspaceEntity
+    name: AddWorkspaceEntity
+    type: Class
+  - uid: McpServer.Support.Mcp.Storage.Migrations.InitialCreate
+    name: InitialCreate
+    type: Class
+memberLayout: SamePage

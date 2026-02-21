@@ -1,0 +1,738 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.BucketDto
+  commentId: T:McpServer.Support.Mcp.Services.BucketDto
+  id: BucketDto
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.BucketDto.#ctor(System.Int32,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,System.Nullable{System.DateTimeOffset})
+  - McpServer.Support.Mcp.Services.BucketDto.Branch
+  - McpServer.Support.Mcp.Services.BucketDto.DateTimeCreated
+  - McpServer.Support.Mcp.Services.BucketDto.DateTimeLastSynced
+  - McpServer.Support.Mcp.Services.BucketDto.Id
+  - McpServer.Support.Mcp.Services.BucketDto.ManifestPath
+  - McpServer.Support.Mcp.Services.BucketDto.Name
+  - McpServer.Support.Mcp.Services.BucketDto.Owner
+  - McpServer.Support.Mcp.Services.BucketDto.Repo
+  langs:
+  - csharp
+  - vb
+  name: BucketDto
+  nameWithType: BucketDto
+  fullName: McpServer.Support.Mcp.Services.BucketDto
+  type: Class
+  source:
+    id: BucketDto
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 42
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Read model for a bucket.
+  example: []
+  syntax:
+    content: 'public sealed record BucketDto : IEquatable<BucketDto>'
+    content.vb: Public NotInheritable Class BucketDto Implements IEquatable(Of BucketDto)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{McpServer.Support.Mcp.Services.BucketDto}
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Services.BucketDto.#ctor(System.Int32,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,System.Nullable{System.DateTimeOffset})
+  commentId: M:McpServer.Support.Mcp.Services.BucketDto.#ctor(System.Int32,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,System.Nullable{System.DateTimeOffset})
+  id: '#ctor(System.Int32,System.String,System.String,System.String,System.String,System.String,System.DateTimeOffset,System.Nullable{System.DateTimeOffset})'
+  parent: McpServer.Support.Mcp.Services.BucketDto
+  langs:
+  - csharp
+  - vb
+  name: BucketDto(int, string, string, string, string, string, DateTimeOffset, DateTimeOffset?)
+  nameWithType: BucketDto.BucketDto(int, string, string, string, string, string, DateTimeOffset, DateTimeOffset?)
+  fullName: McpServer.Support.Mcp.Services.BucketDto.BucketDto(int, string, string, string, string, string, System.DateTimeOffset, System.DateTimeOffset?)
+  type: Constructor
+  source:
+    id: .ctor
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 42
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Read model for a bucket.
+  example: []
+  syntax:
+    content: public BucketDto(int Id, string Name, string Owner, string Repo, string Branch, string ManifestPath, DateTimeOffset DateTimeCreated, DateTimeOffset? DateTimeLastSynced)
+    parameters:
+    - id: Id
+      type: System.Int32
+    - id: Name
+      type: System.String
+    - id: Owner
+      type: System.String
+    - id: Repo
+      type: System.String
+    - id: Branch
+      type: System.String
+    - id: ManifestPath
+      type: System.String
+    - id: DateTimeCreated
+      type: System.DateTimeOffset
+    - id: DateTimeLastSynced
+      type: System.Nullable{System.DateTimeOffset}
+    content.vb: Public Sub New(Id As Integer, Name As String, Owner As String, Repo As String, Branch As String, ManifestPath As String, DateTimeCreated As DateTimeOffset, DateTimeLastSynced As DateTimeOffset?)
+  overload: McpServer.Support.Mcp.Services.BucketDto.#ctor*
+  nameWithType.vb: BucketDto.New(Integer, String, String, String, String, String, DateTimeOffset, DateTimeOffset?)
+  fullName.vb: McpServer.Support.Mcp.Services.BucketDto.New(Integer, String, String, String, String, String, System.DateTimeOffset, System.DateTimeOffset?)
+  name.vb: New(Integer, String, String, String, String, String, DateTimeOffset, DateTimeOffset?)
+- uid: McpServer.Support.Mcp.Services.BucketDto.Id
+  commentId: P:McpServer.Support.Mcp.Services.BucketDto.Id
+  id: Id
+  parent: McpServer.Support.Mcp.Services.BucketDto
+  langs:
+  - csharp
+  - vb
+  name: Id
+  nameWithType: BucketDto.Id
+  fullName: McpServer.Support.Mcp.Services.BucketDto.Id
+  type: Property
+  source:
+    id: Id
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 43
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  syntax:
+    content: public int Id { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property Id As Integer
+  overload: McpServer.Support.Mcp.Services.BucketDto.Id*
+- uid: McpServer.Support.Mcp.Services.BucketDto.Name
+  commentId: P:McpServer.Support.Mcp.Services.BucketDto.Name
+  id: Name
+  parent: McpServer.Support.Mcp.Services.BucketDto
+  langs:
+  - csharp
+  - vb
+  name: Name
+  nameWithType: BucketDto.Name
+  fullName: McpServer.Support.Mcp.Services.BucketDto.Name
+  type: Property
+  source:
+    id: Name
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 44
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  syntax:
+    content: public string Name { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Name As String
+  overload: McpServer.Support.Mcp.Services.BucketDto.Name*
+- uid: McpServer.Support.Mcp.Services.BucketDto.Owner
+  commentId: P:McpServer.Support.Mcp.Services.BucketDto.Owner
+  id: Owner
+  parent: McpServer.Support.Mcp.Services.BucketDto
+  langs:
+  - csharp
+  - vb
+  name: Owner
+  nameWithType: BucketDto.Owner
+  fullName: McpServer.Support.Mcp.Services.BucketDto.Owner
+  type: Property
+  source:
+    id: Owner
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 45
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  syntax:
+    content: public string Owner { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Owner As String
+  overload: McpServer.Support.Mcp.Services.BucketDto.Owner*
+- uid: McpServer.Support.Mcp.Services.BucketDto.Repo
+  commentId: P:McpServer.Support.Mcp.Services.BucketDto.Repo
+  id: Repo
+  parent: McpServer.Support.Mcp.Services.BucketDto
+  langs:
+  - csharp
+  - vb
+  name: Repo
+  nameWithType: BucketDto.Repo
+  fullName: McpServer.Support.Mcp.Services.BucketDto.Repo
+  type: Property
+  source:
+    id: Repo
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 46
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  syntax:
+    content: public string Repo { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Repo As String
+  overload: McpServer.Support.Mcp.Services.BucketDto.Repo*
+- uid: McpServer.Support.Mcp.Services.BucketDto.Branch
+  commentId: P:McpServer.Support.Mcp.Services.BucketDto.Branch
+  id: Branch
+  parent: McpServer.Support.Mcp.Services.BucketDto
+  langs:
+  - csharp
+  - vb
+  name: Branch
+  nameWithType: BucketDto.Branch
+  fullName: McpServer.Support.Mcp.Services.BucketDto.Branch
+  type: Property
+  source:
+    id: Branch
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 47
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  syntax:
+    content: public string Branch { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Branch As String
+  overload: McpServer.Support.Mcp.Services.BucketDto.Branch*
+- uid: McpServer.Support.Mcp.Services.BucketDto.ManifestPath
+  commentId: P:McpServer.Support.Mcp.Services.BucketDto.ManifestPath
+  id: ManifestPath
+  parent: McpServer.Support.Mcp.Services.BucketDto
+  langs:
+  - csharp
+  - vb
+  name: ManifestPath
+  nameWithType: BucketDto.ManifestPath
+  fullName: McpServer.Support.Mcp.Services.BucketDto.ManifestPath
+  type: Property
+  source:
+    id: ManifestPath
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 48
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  syntax:
+    content: public string ManifestPath { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property ManifestPath As String
+  overload: McpServer.Support.Mcp.Services.BucketDto.ManifestPath*
+- uid: McpServer.Support.Mcp.Services.BucketDto.DateTimeCreated
+  commentId: P:McpServer.Support.Mcp.Services.BucketDto.DateTimeCreated
+  id: DateTimeCreated
+  parent: McpServer.Support.Mcp.Services.BucketDto
+  langs:
+  - csharp
+  - vb
+  name: DateTimeCreated
+  nameWithType: BucketDto.DateTimeCreated
+  fullName: McpServer.Support.Mcp.Services.BucketDto.DateTimeCreated
+  type: Property
+  source:
+    id: DateTimeCreated
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 49
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  syntax:
+    content: public DateTimeOffset DateTimeCreated { get; init; }
+    parameters: []
+    return:
+      type: System.DateTimeOffset
+    content.vb: Public Property DateTimeCreated As DateTimeOffset
+  overload: McpServer.Support.Mcp.Services.BucketDto.DateTimeCreated*
+- uid: McpServer.Support.Mcp.Services.BucketDto.DateTimeLastSynced
+  commentId: P:McpServer.Support.Mcp.Services.BucketDto.DateTimeLastSynced
+  id: DateTimeLastSynced
+  parent: McpServer.Support.Mcp.Services.BucketDto
+  langs:
+  - csharp
+  - vb
+  name: DateTimeLastSynced
+  nameWithType: BucketDto.DateTimeLastSynced
+  fullName: McpServer.Support.Mcp.Services.BucketDto.DateTimeLastSynced
+  type: Property
+  source:
+    id: DateTimeLastSynced
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 50
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  syntax:
+    content: public DateTimeOffset? DateTimeLastSynced { get; init; }
+    parameters: []
+    return:
+      type: System.Nullable{System.DateTimeOffset}
+    content.vb: Public Property DateTimeLastSynced As DateTimeOffset?
+  overload: McpServer.Support.Mcp.Services.BucketDto.DateTimeLastSynced*
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.IEquatable{McpServer.Support.Mcp.Services.BucketDto}
+  commentId: T:System.IEquatable{McpServer.Support.Mcp.Services.BucketDto}
+  parent: System
+  definition: System.IEquatable`1
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<BucketDto>
+  nameWithType: IEquatable<BucketDto>
+  fullName: System.IEquatable<McpServer.Support.Mcp.Services.BucketDto>
+  nameWithType.vb: IEquatable(Of BucketDto)
+  fullName.vb: System.IEquatable(Of McpServer.Support.Mcp.Services.BucketDto)
+  name.vb: IEquatable(Of BucketDto)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.BucketDto
+    name: BucketDto
+    href: McpServer.Support.Mcp.Services.BucketDto.html
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.BucketDto
+    name: BucketDto
+    href: McpServer.Support.Mcp.Services.BucketDto.html
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Services.BucketDto.#ctor*
+  commentId: Overload:McpServer.Support.Mcp.Services.BucketDto.#ctor
+  href: McpServer.Support.Mcp.Services.BucketDto.html#McpServer_Support_Mcp_Services_BucketDto__ctor_System_Int32_System_String_System_String_System_String_System_String_System_String_System_DateTimeOffset_System_Nullable_System_DateTimeOffset__
+  name: BucketDto
+  nameWithType: BucketDto.BucketDto
+  fullName: McpServer.Support.Mcp.Services.BucketDto.BucketDto
+  nameWithType.vb: BucketDto.New
+  fullName.vb: McpServer.Support.Mcp.Services.BucketDto.New
+  name.vb: New
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.DateTimeOffset
+  commentId: T:System.DateTimeOffset
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  name: DateTimeOffset
+  nameWithType: DateTimeOffset
+  fullName: System.DateTimeOffset
+- uid: System.Nullable{System.DateTimeOffset}
+  commentId: T:System.Nullable{System.DateTimeOffset}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  name: DateTimeOffset?
+  nameWithType: DateTimeOffset?
+  fullName: System.DateTimeOffset?
+  spec.csharp:
+  - uid: System.DateTimeOffset
+    name: DateTimeOffset
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  - name: '?'
+  spec.vb:
+  - uid: System.DateTimeOffset
+    name: DateTimeOffset
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Services.BucketDto.Id*
+  commentId: Overload:McpServer.Support.Mcp.Services.BucketDto.Id
+  href: McpServer.Support.Mcp.Services.BucketDto.html#McpServer_Support_Mcp_Services_BucketDto_Id
+  name: Id
+  nameWithType: BucketDto.Id
+  fullName: McpServer.Support.Mcp.Services.BucketDto.Id
+- uid: McpServer.Support.Mcp.Services.BucketDto.Name*
+  commentId: Overload:McpServer.Support.Mcp.Services.BucketDto.Name
+  href: McpServer.Support.Mcp.Services.BucketDto.html#McpServer_Support_Mcp_Services_BucketDto_Name
+  name: Name
+  nameWithType: BucketDto.Name
+  fullName: McpServer.Support.Mcp.Services.BucketDto.Name
+- uid: McpServer.Support.Mcp.Services.BucketDto.Owner*
+  commentId: Overload:McpServer.Support.Mcp.Services.BucketDto.Owner
+  href: McpServer.Support.Mcp.Services.BucketDto.html#McpServer_Support_Mcp_Services_BucketDto_Owner
+  name: Owner
+  nameWithType: BucketDto.Owner
+  fullName: McpServer.Support.Mcp.Services.BucketDto.Owner
+- uid: McpServer.Support.Mcp.Services.BucketDto.Repo*
+  commentId: Overload:McpServer.Support.Mcp.Services.BucketDto.Repo
+  href: McpServer.Support.Mcp.Services.BucketDto.html#McpServer_Support_Mcp_Services_BucketDto_Repo
+  name: Repo
+  nameWithType: BucketDto.Repo
+  fullName: McpServer.Support.Mcp.Services.BucketDto.Repo
+- uid: McpServer.Support.Mcp.Services.BucketDto.Branch*
+  commentId: Overload:McpServer.Support.Mcp.Services.BucketDto.Branch
+  href: McpServer.Support.Mcp.Services.BucketDto.html#McpServer_Support_Mcp_Services_BucketDto_Branch
+  name: Branch
+  nameWithType: BucketDto.Branch
+  fullName: McpServer.Support.Mcp.Services.BucketDto.Branch
+- uid: McpServer.Support.Mcp.Services.BucketDto.ManifestPath*
+  commentId: Overload:McpServer.Support.Mcp.Services.BucketDto.ManifestPath
+  href: McpServer.Support.Mcp.Services.BucketDto.html#McpServer_Support_Mcp_Services_BucketDto_ManifestPath
+  name: ManifestPath
+  nameWithType: BucketDto.ManifestPath
+  fullName: McpServer.Support.Mcp.Services.BucketDto.ManifestPath
+- uid: McpServer.Support.Mcp.Services.BucketDto.DateTimeCreated*
+  commentId: Overload:McpServer.Support.Mcp.Services.BucketDto.DateTimeCreated
+  href: McpServer.Support.Mcp.Services.BucketDto.html#McpServer_Support_Mcp_Services_BucketDto_DateTimeCreated
+  name: DateTimeCreated
+  nameWithType: BucketDto.DateTimeCreated
+  fullName: McpServer.Support.Mcp.Services.BucketDto.DateTimeCreated
+- uid: McpServer.Support.Mcp.Services.BucketDto.DateTimeLastSynced*
+  commentId: Overload:McpServer.Support.Mcp.Services.BucketDto.DateTimeLastSynced
+  href: McpServer.Support.Mcp.Services.BucketDto.html#McpServer_Support_Mcp_Services_BucketDto_DateTimeLastSynced
+  name: DateTimeLastSynced
+  nameWithType: BucketDto.DateTimeLastSynced
+  fullName: McpServer.Support.Mcp.Services.BucketDto.DateTimeLastSynced

@@ -1,0 +1,151 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Storage.Entities
+  commentId: N:McpServer.Support.Mcp.Storage.Entities
+  id: McpServer.Support.Mcp.Storage.Entities
+  children:
+  - McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity
+  - McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogActionEntity
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntryContextEntity
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntryTagEntity
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+  - McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity
+  - McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  - McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity
+  - McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+  langs:
+  - csharp
+  - vb
+  name: McpServer.Support.Mcp.Storage.Entities
+  nameWithType: McpServer.Support.Mcp.Storage.Entities
+  fullName: McpServer.Support.Mcp.Storage.Entities
+  type: Namespace
+  assemblies:
+  - McpServer.Support.Mcp
+references:
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity
+  href: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.html
+  name: ContextChunkEntity
+  nameWithType: ContextChunkEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity
+  parent: McpServer.Support.Mcp.Storage.Entities
+  href: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.html
+  name: ContextDocumentEntity
+  nameWithType: ContextDocumentEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogActionEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.SessionLogActionEntity
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogActionEntity.html
+  name: SessionLogActionEntity
+  nameWithType: SessionLogActionEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogActionEntity
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  parent: McpServer.Support.Mcp.Storage.Entities
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html
+  name: SessionLogEntity
+  nameWithType: SessionLogEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryContextEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.SessionLogEntryContextEntity
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryContextEntity.html
+  name: SessionLogEntryContextEntity
+  nameWithType: SessionLogEntryContextEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryContextEntity
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity
+  parent: McpServer.Support.Mcp.Storage.Entities
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity.html
+  name: SessionLogEntryEntity
+  nameWithType: SessionLogEntryEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryTagEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.SessionLogEntryTagEntity
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryTagEntity.html
+  name: SessionLogEntryTagEntity
+  nameWithType: SessionLogEntryTagEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryTagEntity
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.html
+  name: SessionLogProcessingDialogEntity
+  nameWithType: SessionLogProcessingDialogEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity
+  href: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.html
+  name: ToolBucketEntity
+  nameWithType: ToolBucketEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  parent: McpServer.Support.Mcp.Storage.Entities
+  href: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.html
+  name: ToolDefinitionEntity
+  nameWithType: ToolDefinitionEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity
+  href: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity.html
+  name: ToolDefinitionTagEntity
+  nameWithType: ToolDefinitionTagEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+  parent: McpServer.Support.Mcp.Storage.Entities
+  href: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.html
+  name: WorkspaceEntity
+  nameWithType: WorkspaceEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+- uid: McpServer.Support.Mcp.Storage.Entities
+  commentId: N:McpServer.Support.Mcp.Storage.Entities
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Storage.Entities
+  nameWithType: McpServer.Support.Mcp.Storage.Entities
+  fullName: McpServer.Support.Mcp.Storage.Entities
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage.Entities
+    name: Entities
+    href: McpServer.Support.Mcp.Storage.Entities.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage.Entities
+    name: Entities
+    href: McpServer.Support.Mcp.Storage.Entities.html

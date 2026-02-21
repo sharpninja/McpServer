@@ -1,0 +1,37 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Middleware
+  commentId: N:McpServer.Support.Mcp.Middleware
+  id: McpServer.Support.Mcp.Middleware
+  children:
+  - McpServer.Support.Mcp.Middleware.ApiKeyAuthFilter
+  - McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+  - McpServer.Support.Mcp.Middleware.SkipApiKeyAuthAttribute
+  langs:
+  - csharp
+  - vb
+  name: McpServer.Support.Mcp.Middleware
+  nameWithType: McpServer.Support.Mcp.Middleware
+  fullName: McpServer.Support.Mcp.Middleware
+  type: Namespace
+  assemblies:
+  - McpServer.Support.Mcp
+references:
+- uid: McpServer.Support.Mcp.Middleware.ApiKeyAuthFilter
+  commentId: T:McpServer.Support.Mcp.Middleware.ApiKeyAuthFilter
+  href: McpServer.Support.Mcp.Middleware.ApiKeyAuthFilter.html
+  name: ApiKeyAuthFilter
+  nameWithType: ApiKeyAuthFilter
+  fullName: McpServer.Support.Mcp.Middleware.ApiKeyAuthFilter
+- uid: McpServer.Support.Mcp.Middleware.SkipApiKeyAuthAttribute
+  commentId: T:McpServer.Support.Mcp.Middleware.SkipApiKeyAuthAttribute
+  href: McpServer.Support.Mcp.Middleware.SkipApiKeyAuthAttribute.html
+  name: SkipApiKeyAuthAttribute
+  nameWithType: SkipApiKeyAuthAttribute
+  fullName: McpServer.Support.Mcp.Middleware.SkipApiKeyAuthAttribute
+- uid: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+  commentId: T:McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware
+  href: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware.html
+  name: InteractionLoggingMiddleware
+  nameWithType: InteractionLoggingMiddleware
+  fullName: McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware

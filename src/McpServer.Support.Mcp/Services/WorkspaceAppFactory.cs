@@ -34,6 +34,9 @@ public static class WorkspaceAppFactory
 
         var builder = WebApplication.CreateSlimBuilder();
 
+        // Set the content root to the workspace directory so relative paths resolve correctly.
+        builder.Environment.ContentRootPath = workspacePath;
+
         // Kestrel listens on the workspace port only.
         builder.WebHost.ConfigureKestrel(options =>
         {

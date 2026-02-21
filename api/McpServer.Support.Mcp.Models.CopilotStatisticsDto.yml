@@ -1,0 +1,591 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Models.CopilotStatisticsDto
+  commentId: T:McpServer.Support.Mcp.Models.CopilotStatisticsDto
+  id: CopilotStatisticsDto
+  parent: McpServer.Support.Mcp.Models
+  children:
+  - McpServer.Support.Mcp.Models.CopilotStatisticsDto.AverageSuccessScore
+  - McpServer.Support.Mcp.Models.CopilotStatisticsDto.CompletedCount
+  - McpServer.Support.Mcp.Models.CopilotStatisticsDto.InProgressCount
+  - McpServer.Support.Mcp.Models.CopilotStatisticsDto.TotalNetPremiumRequests
+  - McpServer.Support.Mcp.Models.CopilotStatisticsDto.TotalNetTokens
+  langs:
+  - csharp
+  - vb
+  name: CopilotStatisticsDto
+  nameWithType: CopilotStatisticsDto
+  fullName: McpServer.Support.Mcp.Models.CopilotStatisticsDto
+  type: Class
+  source:
+    id: CopilotStatisticsDto
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 66
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: 'TR-PLANNED-013: Copilot aggregate statistics for a session.'
+  example: []
+  syntax:
+    content: public sealed class CopilotStatisticsDto
+    content.vb: Public NotInheritable Class CopilotStatisticsDto
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Models.CopilotStatisticsDto.AverageSuccessScore
+  commentId: P:McpServer.Support.Mcp.Models.CopilotStatisticsDto.AverageSuccessScore
+  id: AverageSuccessScore
+  parent: McpServer.Support.Mcp.Models.CopilotStatisticsDto
+  langs:
+  - csharp
+  - vb
+  name: AverageSuccessScore
+  nameWithType: CopilotStatisticsDto.AverageSuccessScore
+  fullName: McpServer.Support.Mcp.Models.CopilotStatisticsDto.AverageSuccessScore
+  type: Property
+  source:
+    id: AverageSuccessScore
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 69
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Average success score across entries.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("averageSuccessScore")]
+
+      public double? AverageSuccessScore { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Double}
+    content.vb: >-
+      <JsonPropertyName("averageSuccessScore")>
+
+      Public Property AverageSuccessScore As Double?
+  overload: McpServer.Support.Mcp.Models.CopilotStatisticsDto.AverageSuccessScore*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: averageSuccessScore
+- uid: McpServer.Support.Mcp.Models.CopilotStatisticsDto.TotalNetTokens
+  commentId: P:McpServer.Support.Mcp.Models.CopilotStatisticsDto.TotalNetTokens
+  id: TotalNetTokens
+  parent: McpServer.Support.Mcp.Models.CopilotStatisticsDto
+  langs:
+  - csharp
+  - vb
+  name: TotalNetTokens
+  nameWithType: CopilotStatisticsDto.TotalNetTokens
+  fullName: McpServer.Support.Mcp.Models.CopilotStatisticsDto.TotalNetTokens
+  type: Property
+  source:
+    id: TotalNetTokens
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 73
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Total net tokens used.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("totalNetTokens")]
+
+      public int? TotalNetTokens { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: >-
+      <JsonPropertyName("totalNetTokens")>
+
+      Public Property TotalNetTokens As Integer?
+  overload: McpServer.Support.Mcp.Models.CopilotStatisticsDto.TotalNetTokens*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: totalNetTokens
+- uid: McpServer.Support.Mcp.Models.CopilotStatisticsDto.TotalNetPremiumRequests
+  commentId: P:McpServer.Support.Mcp.Models.CopilotStatisticsDto.TotalNetPremiumRequests
+  id: TotalNetPremiumRequests
+  parent: McpServer.Support.Mcp.Models.CopilotStatisticsDto
+  langs:
+  - csharp
+  - vb
+  name: TotalNetPremiumRequests
+  nameWithType: CopilotStatisticsDto.TotalNetPremiumRequests
+  fullName: McpServer.Support.Mcp.Models.CopilotStatisticsDto.TotalNetPremiumRequests
+  type: Property
+  source:
+    id: TotalNetPremiumRequests
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 77
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Total net premium requests.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("totalNetPremiumRequests")]
+
+      public int? TotalNetPremiumRequests { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: >-
+      <JsonPropertyName("totalNetPremiumRequests")>
+
+      Public Property TotalNetPremiumRequests As Integer?
+  overload: McpServer.Support.Mcp.Models.CopilotStatisticsDto.TotalNetPremiumRequests*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: totalNetPremiumRequests
+- uid: McpServer.Support.Mcp.Models.CopilotStatisticsDto.CompletedCount
+  commentId: P:McpServer.Support.Mcp.Models.CopilotStatisticsDto.CompletedCount
+  id: CompletedCount
+  parent: McpServer.Support.Mcp.Models.CopilotStatisticsDto
+  langs:
+  - csharp
+  - vb
+  name: CompletedCount
+  nameWithType: CopilotStatisticsDto.CompletedCount
+  fullName: McpServer.Support.Mcp.Models.CopilotStatisticsDto.CompletedCount
+  type: Property
+  source:
+    id: CompletedCount
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 81
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Number of completed entries.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("completedCount")]
+
+      public int? CompletedCount { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: >-
+      <JsonPropertyName("completedCount")>
+
+      Public Property CompletedCount As Integer?
+  overload: McpServer.Support.Mcp.Models.CopilotStatisticsDto.CompletedCount*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: completedCount
+- uid: McpServer.Support.Mcp.Models.CopilotStatisticsDto.InProgressCount
+  commentId: P:McpServer.Support.Mcp.Models.CopilotStatisticsDto.InProgressCount
+  id: InProgressCount
+  parent: McpServer.Support.Mcp.Models.CopilotStatisticsDto
+  langs:
+  - csharp
+  - vb
+  name: InProgressCount
+  nameWithType: CopilotStatisticsDto.InProgressCount
+  fullName: McpServer.Support.Mcp.Models.CopilotStatisticsDto.InProgressCount
+  type: Property
+  source:
+    id: InProgressCount
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 85
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Number of in-progress entries.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("inProgressCount")]
+
+      public int? InProgressCount { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: >-
+      <JsonPropertyName("inProgressCount")>
+
+      Public Property InProgressCount As Integer?
+  overload: McpServer.Support.Mcp.Models.CopilotStatisticsDto.InProgressCount*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: inProgressCount
+references:
+- uid: McpServer.Support.Mcp.Models
+  commentId: N:McpServer.Support.Mcp.Models
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Models
+  nameWithType: McpServer.Support.Mcp.Models
+  fullName: McpServer.Support.Mcp.Models
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Models.CopilotStatisticsDto.AverageSuccessScore*
+  commentId: Overload:McpServer.Support.Mcp.Models.CopilotStatisticsDto.AverageSuccessScore
+  href: McpServer.Support.Mcp.Models.CopilotStatisticsDto.html#McpServer_Support_Mcp_Models_CopilotStatisticsDto_AverageSuccessScore
+  name: AverageSuccessScore
+  nameWithType: CopilotStatisticsDto.AverageSuccessScore
+  fullName: McpServer.Support.Mcp.Models.CopilotStatisticsDto.AverageSuccessScore
+- uid: System.Nullable{System.Double}
+  commentId: T:System.Nullable{System.Double}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.double
+  name: double?
+  nameWithType: double?
+  fullName: double?
+  nameWithType.vb: Double?
+  fullName.vb: Double?
+  name.vb: Double?
+  spec.csharp:
+  - uid: System.Double
+    name: double
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.double
+  - name: '?'
+  spec.vb:
+  - uid: System.Double
+    name: Double
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.double
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Models.CopilotStatisticsDto.TotalNetTokens*
+  commentId: Overload:McpServer.Support.Mcp.Models.CopilotStatisticsDto.TotalNetTokens
+  href: McpServer.Support.Mcp.Models.CopilotStatisticsDto.html#McpServer_Support_Mcp_Models_CopilotStatisticsDto_TotalNetTokens
+  name: TotalNetTokens
+  nameWithType: CopilotStatisticsDto.TotalNetTokens
+  fullName: McpServer.Support.Mcp.Models.CopilotStatisticsDto.TotalNetTokens
+- uid: System.Nullable{System.Int32}
+  commentId: T:System.Nullable{System.Int32}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int?
+  nameWithType: int?
+  fullName: int?
+  nameWithType.vb: Integer?
+  fullName.vb: Integer?
+  name.vb: Integer?
+  spec.csharp:
+  - uid: System.Int32
+    name: int
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: '?'
+  spec.vb:
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: '?'
+- uid: McpServer.Support.Mcp.Models.CopilotStatisticsDto.TotalNetPremiumRequests*
+  commentId: Overload:McpServer.Support.Mcp.Models.CopilotStatisticsDto.TotalNetPremiumRequests
+  href: McpServer.Support.Mcp.Models.CopilotStatisticsDto.html#McpServer_Support_Mcp_Models_CopilotStatisticsDto_TotalNetPremiumRequests
+  name: TotalNetPremiumRequests
+  nameWithType: CopilotStatisticsDto.TotalNetPremiumRequests
+  fullName: McpServer.Support.Mcp.Models.CopilotStatisticsDto.TotalNetPremiumRequests
+- uid: McpServer.Support.Mcp.Models.CopilotStatisticsDto.CompletedCount*
+  commentId: Overload:McpServer.Support.Mcp.Models.CopilotStatisticsDto.CompletedCount
+  href: McpServer.Support.Mcp.Models.CopilotStatisticsDto.html#McpServer_Support_Mcp_Models_CopilotStatisticsDto_CompletedCount
+  name: CompletedCount
+  nameWithType: CopilotStatisticsDto.CompletedCount
+  fullName: McpServer.Support.Mcp.Models.CopilotStatisticsDto.CompletedCount
+- uid: McpServer.Support.Mcp.Models.CopilotStatisticsDto.InProgressCount*
+  commentId: Overload:McpServer.Support.Mcp.Models.CopilotStatisticsDto.InProgressCount
+  href: McpServer.Support.Mcp.Models.CopilotStatisticsDto.html#McpServer_Support_Mcp_Models_CopilotStatisticsDto_InProgressCount
+  name: InProgressCount
+  nameWithType: CopilotStatisticsDto.InProgressCount
+  fullName: McpServer.Support.Mcp.Models.CopilotStatisticsDto.InProgressCount

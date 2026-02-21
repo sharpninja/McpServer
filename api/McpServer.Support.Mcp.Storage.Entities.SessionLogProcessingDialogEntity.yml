@@ -1,0 +1,671 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+  id: SessionLogProcessingDialogEntity
+  parent: McpServer.Support.Mcp.Storage.Entities
+  children:
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Category
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Content
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Id
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Ordinal
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Role
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.SessionLogEntry
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.SessionLogEntryId
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Timestamp
+  langs:
+  - csharp
+  - vb
+  name: SessionLogProcessingDialogEntity
+  nameWithType: SessionLogProcessingDialogEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+  type: Class
+  source:
+    id: SessionLogProcessingDialogEntity
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogProcessingDialogEntity.cs
+    startLine: 9
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: >-
+    TR-PLANNED-013: 4NF processing dialog entity. One row per model reasoning/processing note
+
+    appended during request execution. The AI model can independently append entries
+
+    to capture its internal reasoning, tool-use decisions, and execution trace.
+  example: []
+  syntax:
+    content: public sealed class SessionLogProcessingDialogEntity
+    content.vb: Public NotInheritable Class SessionLogProcessingDialogEntity
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Id
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Id
+  id: Id
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+  langs:
+  - csharp
+  - vb
+  name: Id
+  nameWithType: SessionLogProcessingDialogEntity.Id
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Id
+  type: Property
+  source:
+    id: Id
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogProcessingDialogEntity.cs
+    startLine: 12
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Auto-generated primary key.'
+  example: []
+  syntax:
+    content: >-
+      [Key]
+
+      public long Id { get; set; }
+    parameters: []
+    return:
+      type: System.Int64
+    content.vb: >-
+      <Key>
+
+      Public Property Id As Long
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Id*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.KeyAttribute
+    ctor: System.ComponentModel.DataAnnotations.KeyAttribute.#ctor
+    arguments: []
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.SessionLogEntryId
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.SessionLogEntryId
+  id: SessionLogEntryId
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+  langs:
+  - csharp
+  - vb
+  name: SessionLogEntryId
+  nameWithType: SessionLogProcessingDialogEntity.SessionLogEntryId
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.SessionLogEntryId
+  type: Property
+  source:
+    id: SessionLogEntryId
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogProcessingDialogEntity.cs
+    startLine: 16
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Foreign key to parent entry.'
+  example: []
+  syntax:
+    content: public long SessionLogEntryId { get; set; }
+    parameters: []
+    return:
+      type: System.Int64
+    content.vb: Public Property SessionLogEntryId As Long
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.SessionLogEntryId*
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Ordinal
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Ordinal
+  id: Ordinal
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+  langs:
+  - csharp
+  - vb
+  name: Ordinal
+  nameWithType: SessionLogProcessingDialogEntity.Ordinal
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Ordinal
+  type: Property
+  source:
+    id: Ordinal
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogProcessingDialogEntity.cs
+    startLine: 19
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Ordinal position within the dialog sequence.'
+  example: []
+  syntax:
+    content: public int Ordinal { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property Ordinal As Integer
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Ordinal*
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Timestamp
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Timestamp
+  id: Timestamp
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+  langs:
+  - csharp
+  - vb
+  name: Timestamp
+  nameWithType: SessionLogProcessingDialogEntity.Timestamp
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Timestamp
+  type: Property
+  source:
+    id: Timestamp
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogProcessingDialogEntity.cs
+    startLine: 22
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: ISO 8601 timestamp when this dialog item was recorded.'
+  example: []
+  syntax:
+    content: public DateTimeOffset Timestamp { get; set; }
+    parameters: []
+    return:
+      type: System.DateTimeOffset
+    content.vb: Public Property Timestamp As DateTimeOffset
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Timestamp*
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Role
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Role
+  id: Role
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+  langs:
+  - csharp
+  - vb
+  name: Role
+  nameWithType: SessionLogProcessingDialogEntity.Role
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Role
+  type: Property
+  source:
+    id: Role
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogProcessingDialogEntity.cs
+    startLine: 25
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Role of the speaker (e.g. model, tool, system, user).'
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(64)]
+
+      public required string Role { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(64)>
+
+      Public Property Role As String
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Role*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 64
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Content
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Content
+  id: Content
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+  langs:
+  - csharp
+  - vb
+  name: Content
+  nameWithType: SessionLogProcessingDialogEntity.Content
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Content
+  type: Property
+  source:
+    id: Content
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogProcessingDialogEntity.cs
+    startLine: 30
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Content of the processing dialog entry.'
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      public required string Content { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      Public Property Content As String
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Content*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Category
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Category
+  id: Category
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+  langs:
+  - csharp
+  - vb
+  name: Category
+  nameWithType: SessionLogProcessingDialogEntity.Category
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Category
+  type: Property
+  source:
+    id: Category
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogProcessingDialogEntity.cs
+    startLine: 34
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Optional category (e.g. reasoning, tool_call, tool_result, observation, decision).'
+  example: []
+  syntax:
+    content: >-
+      [MaxLength(128)]
+
+      public string? Category { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <MaxLength(128)>
+
+      Public Property Category As String
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Category*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 128
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.SessionLogEntry
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.SessionLogEntry
+  id: SessionLogEntry
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity
+  langs:
+  - csharp
+  - vb
+  name: SessionLogEntry
+  nameWithType: SessionLogProcessingDialogEntity.SessionLogEntry
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.SessionLogEntry
+  type: Property
+  source:
+    id: SessionLogEntry
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogProcessingDialogEntity.cs
+    startLine: 38
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Navigation to parent entry.'
+  example: []
+  syntax:
+    content: public SessionLogEntryEntity? SessionLogEntry { get; set; }
+    parameters: []
+    return:
+      type: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity
+    content.vb: Public Property SessionLogEntry As SessionLogEntryEntity
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.SessionLogEntry*
+references:
+- uid: McpServer.Support.Mcp.Storage.Entities
+  commentId: N:McpServer.Support.Mcp.Storage.Entities
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Storage.Entities
+  nameWithType: McpServer.Support.Mcp.Storage.Entities
+  fullName: McpServer.Support.Mcp.Storage.Entities
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage.Entities
+    name: Entities
+    href: McpServer.Support.Mcp.Storage.Entities.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage.Entities
+    name: Entities
+    href: McpServer.Support.Mcp.Storage.Entities.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Id*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Id
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogProcessingDialogEntity_Id
+  name: Id
+  nameWithType: SessionLogProcessingDialogEntity.Id
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Id
+- uid: System.Int64
+  commentId: T:System.Int64
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int64
+  name: long
+  nameWithType: long
+  fullName: long
+  nameWithType.vb: Long
+  fullName.vb: Long
+  name.vb: Long
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.SessionLogEntryId*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.SessionLogEntryId
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogProcessingDialogEntity_SessionLogEntryId
+  name: SessionLogEntryId
+  nameWithType: SessionLogProcessingDialogEntity.SessionLogEntryId
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.SessionLogEntryId
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Ordinal*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Ordinal
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogProcessingDialogEntity_Ordinal
+  name: Ordinal
+  nameWithType: SessionLogProcessingDialogEntity.Ordinal
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Ordinal
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Timestamp*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Timestamp
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogProcessingDialogEntity_Timestamp
+  name: Timestamp
+  nameWithType: SessionLogProcessingDialogEntity.Timestamp
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Timestamp
+- uid: System.DateTimeOffset
+  commentId: T:System.DateTimeOffset
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  name: DateTimeOffset
+  nameWithType: DateTimeOffset
+  fullName: System.DateTimeOffset
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Role*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Role
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogProcessingDialogEntity_Role
+  name: Role
+  nameWithType: SessionLogProcessingDialogEntity.Role
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Role
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Content*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Content
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogProcessingDialogEntity_Content
+  name: Content
+  nameWithType: SessionLogProcessingDialogEntity.Content
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Content
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Category*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Category
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogProcessingDialogEntity_Category
+  name: Category
+  nameWithType: SessionLogProcessingDialogEntity.Category
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.Category
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.SessionLogEntry*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.SessionLogEntry
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogProcessingDialogEntity_SessionLogEntry
+  name: SessionLogEntry
+  nameWithType: SessionLogProcessingDialogEntity.SessionLogEntry
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity.SessionLogEntry
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity
+  parent: McpServer.Support.Mcp.Storage.Entities
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity.html
+  name: SessionLogEntryEntity
+  nameWithType: SessionLogEntryEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity

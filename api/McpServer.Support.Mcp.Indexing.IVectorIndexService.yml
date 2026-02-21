@@ -1,0 +1,573 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Indexing.IVectorIndexService
+  commentId: T:McpServer.Support.Mcp.Indexing.IVectorIndexService
+  id: IVectorIndexService
+  parent: McpServer.Support.Mcp.Indexing
+  children:
+  - McpServer.Support.Mcp.Indexing.IVectorIndexService.AddVector(System.String,System.Single[])
+  - McpServer.Support.Mcp.Indexing.IVectorIndexService.Count
+  - McpServer.Support.Mcp.Indexing.IVectorIndexService.LoadAsync(System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Indexing.IVectorIndexService.RebuildAsync(System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Indexing.IVectorIndexService.SaveAsync(System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Indexing.IVectorIndexService.Search(System.Single[],System.Int32)
+  langs:
+  - csharp
+  - vb
+  name: IVectorIndexService
+  nameWithType: IVectorIndexService
+  fullName: McpServer.Support.Mcp.Indexing.IVectorIndexService
+  type: Interface
+  source:
+    id: IVectorIndexService
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Indexing\IVectorIndexService.cs
+    startLine: 6
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Indexing
+  summary: >-
+    TR-PLANNED-013: Abstraction for HNSW vector index operations.
+
+    FR-SUPPORT-010: Supports nearest-neighbor search for embedding-based retrieval.
+  example: []
+  syntax:
+    content: public interface IVectorIndexService
+    content.vb: Public Interface IVectorIndexService
+- uid: McpServer.Support.Mcp.Indexing.IVectorIndexService.AddVector(System.String,System.Single[])
+  commentId: M:McpServer.Support.Mcp.Indexing.IVectorIndexService.AddVector(System.String,System.Single[])
+  id: AddVector(System.String,System.Single[])
+  parent: McpServer.Support.Mcp.Indexing.IVectorIndexService
+  langs:
+  - csharp
+  - vb
+  name: AddVector(string, float[])
+  nameWithType: IVectorIndexService.AddVector(string, float[])
+  fullName: McpServer.Support.Mcp.Indexing.IVectorIndexService.AddVector(string, float[])
+  type: Method
+  source:
+    id: AddVector
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Indexing\IVectorIndexService.cs
+    startLine: 11
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Indexing
+  summary: 'TR-PLANNED-013: Add a vector to the index.'
+  example: []
+  syntax:
+    content: void AddVector(string chunkId, float[] embedding)
+    parameters:
+    - id: chunkId
+      type: System.String
+      description: Chunk identifier.
+    - id: embedding
+      type: System.Single[]
+      description: Embedding vector.
+    content.vb: Sub AddVector(chunkId As String, embedding As Single())
+  overload: McpServer.Support.Mcp.Indexing.IVectorIndexService.AddVector*
+  nameWithType.vb: IVectorIndexService.AddVector(String, Single())
+  fullName.vb: McpServer.Support.Mcp.Indexing.IVectorIndexService.AddVector(String, Single())
+  name.vb: AddVector(String, Single())
+- uid: McpServer.Support.Mcp.Indexing.IVectorIndexService.Search(System.Single[],System.Int32)
+  commentId: M:McpServer.Support.Mcp.Indexing.IVectorIndexService.Search(System.Single[],System.Int32)
+  id: Search(System.Single[],System.Int32)
+  parent: McpServer.Support.Mcp.Indexing.IVectorIndexService
+  langs:
+  - csharp
+  - vb
+  name: Search(float[], int)
+  nameWithType: IVectorIndexService.Search(float[], int)
+  fullName: McpServer.Support.Mcp.Indexing.IVectorIndexService.Search(float[], int)
+  type: Method
+  source:
+    id: Search
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Indexing\IVectorIndexService.cs
+    startLine: 17
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Indexing
+  summary: 'TR-PLANNED-013: Search for nearest neighbors.'
+  example: []
+  syntax:
+    content: IReadOnlyList<(string ChunkId, float Distance)> Search(float[] queryEmbedding, int k = 20)
+    parameters:
+    - id: queryEmbedding
+      type: System.Single[]
+      description: Query embedding vector.
+    - id: k
+      type: System.Int32
+      description: Number of nearest neighbors to return.
+    return:
+      type: System.Collections.Generic.IReadOnlyList{System.ValueTuple{System.String,System.Single}}
+      description: List of (ChunkId, Distance) pairs sorted by distance.
+    content.vb: Function Search(queryEmbedding As Single(), k As Integer = 20) As IReadOnlyList(Of (ChunkId As String, Distance As Single))
+  overload: McpServer.Support.Mcp.Indexing.IVectorIndexService.Search*
+  nameWithType.vb: IVectorIndexService.Search(Single(), Integer)
+  fullName.vb: McpServer.Support.Mcp.Indexing.IVectorIndexService.Search(Single(), Integer)
+  name.vb: Search(Single(), Integer)
+- uid: McpServer.Support.Mcp.Indexing.IVectorIndexService.SaveAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Indexing.IVectorIndexService.SaveAsync(System.String,System.Threading.CancellationToken)
+  id: SaveAsync(System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Indexing.IVectorIndexService
+  langs:
+  - csharp
+  - vb
+  name: SaveAsync(string, CancellationToken)
+  nameWithType: IVectorIndexService.SaveAsync(string, CancellationToken)
+  fullName: McpServer.Support.Mcp.Indexing.IVectorIndexService.SaveAsync(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: SaveAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Indexing\IVectorIndexService.cs
+    startLine: 20
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Indexing
+  summary: 'TR-PLANNED-013: Persist the index to disk.'
+  example: []
+  syntax:
+    content: Task SaveAsync(string path, CancellationToken ct = default)
+    parameters:
+    - id: path
+      type: System.String
+    - id: ct
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task
+    content.vb: Function SaveAsync(path As String, ct As CancellationToken = Nothing) As Task
+  overload: McpServer.Support.Mcp.Indexing.IVectorIndexService.SaveAsync*
+  nameWithType.vb: IVectorIndexService.SaveAsync(String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Indexing.IVectorIndexService.SaveAsync(String, System.Threading.CancellationToken)
+  name.vb: SaveAsync(String, CancellationToken)
+- uid: McpServer.Support.Mcp.Indexing.IVectorIndexService.LoadAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Indexing.IVectorIndexService.LoadAsync(System.String,System.Threading.CancellationToken)
+  id: LoadAsync(System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Indexing.IVectorIndexService
+  langs:
+  - csharp
+  - vb
+  name: LoadAsync(string, CancellationToken)
+  nameWithType: IVectorIndexService.LoadAsync(string, CancellationToken)
+  fullName: McpServer.Support.Mcp.Indexing.IVectorIndexService.LoadAsync(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: LoadAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Indexing\IVectorIndexService.cs
+    startLine: 23
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Indexing
+  summary: 'TR-PLANNED-013: Load the index from disk.'
+  example: []
+  syntax:
+    content: Task LoadAsync(string path, CancellationToken ct = default)
+    parameters:
+    - id: path
+      type: System.String
+    - id: ct
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task
+    content.vb: Function LoadAsync(path As String, ct As CancellationToken = Nothing) As Task
+  overload: McpServer.Support.Mcp.Indexing.IVectorIndexService.LoadAsync*
+  nameWithType.vb: IVectorIndexService.LoadAsync(String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Indexing.IVectorIndexService.LoadAsync(String, System.Threading.CancellationToken)
+  name.vb: LoadAsync(String, CancellationToken)
+- uid: McpServer.Support.Mcp.Indexing.IVectorIndexService.RebuildAsync(System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Indexing.IVectorIndexService.RebuildAsync(System.Threading.CancellationToken)
+  id: RebuildAsync(System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Indexing.IVectorIndexService
+  langs:
+  - csharp
+  - vb
+  name: RebuildAsync(CancellationToken)
+  nameWithType: IVectorIndexService.RebuildAsync(CancellationToken)
+  fullName: McpServer.Support.Mcp.Indexing.IVectorIndexService.RebuildAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: RebuildAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Indexing\IVectorIndexService.cs
+    startLine: 26
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Indexing
+  summary: 'TR-PLANNED-013: Rebuild the index from scratch.'
+  example: []
+  syntax:
+    content: Task RebuildAsync(CancellationToken ct = default)
+    parameters:
+    - id: ct
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task
+    content.vb: Function RebuildAsync(ct As CancellationToken = Nothing) As Task
+  overload: McpServer.Support.Mcp.Indexing.IVectorIndexService.RebuildAsync*
+- uid: McpServer.Support.Mcp.Indexing.IVectorIndexService.Count
+  commentId: P:McpServer.Support.Mcp.Indexing.IVectorIndexService.Count
+  id: Count
+  parent: McpServer.Support.Mcp.Indexing.IVectorIndexService
+  langs:
+  - csharp
+  - vb
+  name: Count
+  nameWithType: IVectorIndexService.Count
+  fullName: McpServer.Support.Mcp.Indexing.IVectorIndexService.Count
+  type: Property
+  source:
+    id: Count
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Indexing\IVectorIndexService.cs
+    startLine: 29
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Indexing
+  summary: 'TR-PLANNED-013: Number of vectors in the index.'
+  example: []
+  syntax:
+    content: int Count { get; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: ReadOnly Property Count As Integer
+  overload: McpServer.Support.Mcp.Indexing.IVectorIndexService.Count*
+references:
+- uid: McpServer.Support.Mcp.Indexing
+  commentId: N:McpServer.Support.Mcp.Indexing
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Indexing
+  nameWithType: McpServer.Support.Mcp.Indexing
+  fullName: McpServer.Support.Mcp.Indexing
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Indexing
+    name: Indexing
+    href: McpServer.Support.Mcp.Indexing.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Indexing
+    name: Indexing
+    href: McpServer.Support.Mcp.Indexing.html
+- uid: McpServer.Support.Mcp.Indexing.IVectorIndexService.AddVector*
+  commentId: Overload:McpServer.Support.Mcp.Indexing.IVectorIndexService.AddVector
+  href: McpServer.Support.Mcp.Indexing.IVectorIndexService.html#McpServer_Support_Mcp_Indexing_IVectorIndexService_AddVector_System_String_System_Single___
+  name: AddVector
+  nameWithType: IVectorIndexService.AddVector
+  fullName: McpServer.Support.Mcp.Indexing.IVectorIndexService.AddVector
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Single[]
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.single
+  name: float[]
+  nameWithType: float[]
+  fullName: float[]
+  nameWithType.vb: Single()
+  fullName.vb: Single()
+  name.vb: Single()
+  spec.csharp:
+  - uid: System.Single
+    name: float
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.single
+  - name: '['
+  - name: ']'
+  spec.vb:
+  - uid: System.Single
+    name: Single
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.single
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Indexing.IVectorIndexService.Search*
+  commentId: Overload:McpServer.Support.Mcp.Indexing.IVectorIndexService.Search
+  href: McpServer.Support.Mcp.Indexing.IVectorIndexService.html#McpServer_Support_Mcp_Indexing_IVectorIndexService_Search_System_Single___System_Int32_
+  name: Search
+  nameWithType: IVectorIndexService.Search
+  fullName: McpServer.Support.Mcp.Indexing.IVectorIndexService.Search
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: System.Collections.Generic.IReadOnlyList{System.ValueTuple{System.String,System.Single}}
+  commentId: T:System.Collections.Generic.IReadOnlyList{System.ValueTuple{System.String,System.Single}}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IReadOnlyList`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<(string ChunkId, float Distance)>
+  nameWithType: IReadOnlyList<(string ChunkId, float Distance)>
+  fullName: System.Collections.Generic.IReadOnlyList<(string ChunkId, float Distance)>
+  nameWithType.vb: IReadOnlyList(Of (ChunkId As String, Distance As Single))
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of (ChunkId As String, Distance As Single))
+  name.vb: IReadOnlyList(Of (ChunkId As String, Distance As Single))
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - name: (
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: " "
+  - uid: System.ValueTuple{System.String,System.Single}.ChunkId
+    name: ChunkId
+    href: https://learn.microsoft.com/dotnet/api/system.valuetuple-system.string,system.single-.chunkid
+  - name: ','
+  - name: " "
+  - uid: System.Single
+    name: float
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.single
+  - name: " "
+  - uid: System.ValueTuple{System.String,System.Single}.Distance
+    name: Distance
+    href: https://learn.microsoft.com/dotnet/api/system.valuetuple-system.string,system.single-.distance
+  - name: )
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: (
+  - uid: System.ValueTuple{System.String,System.Single}.ChunkId
+    name: ChunkId
+    href: https://learn.microsoft.com/dotnet/api/system.valuetuple-system.string,system.single-.chunkid
+  - name: " "
+  - name: As
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.ValueTuple{System.String,System.Single}.Distance
+    name: Distance
+    href: https://learn.microsoft.com/dotnet/api/system.valuetuple-system.string,system.single-.distance
+  - name: " "
+  - name: As
+  - name: " "
+  - uid: System.Single
+    name: Single
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.single
+  - name: )
+  - name: )
+- uid: System.Collections.Generic.IReadOnlyList`1
+  commentId: T:System.Collections.Generic.IReadOnlyList`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<T>
+  nameWithType: IReadOnlyList<T>
+  fullName: System.Collections.Generic.IReadOnlyList<T>
+  nameWithType.vb: IReadOnlyList(Of T)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of T)
+  name.vb: IReadOnlyList(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: McpServer.Support.Mcp.Indexing.IVectorIndexService.SaveAsync*
+  commentId: Overload:McpServer.Support.Mcp.Indexing.IVectorIndexService.SaveAsync
+  href: McpServer.Support.Mcp.Indexing.IVectorIndexService.html#McpServer_Support_Mcp_Indexing_IVectorIndexService_SaveAsync_System_String_System_Threading_CancellationToken_
+  name: SaveAsync
+  nameWithType: IVectorIndexService.SaveAsync
+  fullName: McpServer.Support.Mcp.Indexing.IVectorIndexService.SaveAsync
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task
+  commentId: T:System.Threading.Tasks.Task
+  parent: System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task
+  name: Task
+  nameWithType: Task
+  fullName: System.Threading.Tasks.Task
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: McpServer.Support.Mcp.Indexing.IVectorIndexService.LoadAsync*
+  commentId: Overload:McpServer.Support.Mcp.Indexing.IVectorIndexService.LoadAsync
+  href: McpServer.Support.Mcp.Indexing.IVectorIndexService.html#McpServer_Support_Mcp_Indexing_IVectorIndexService_LoadAsync_System_String_System_Threading_CancellationToken_
+  name: LoadAsync
+  nameWithType: IVectorIndexService.LoadAsync
+  fullName: McpServer.Support.Mcp.Indexing.IVectorIndexService.LoadAsync
+- uid: McpServer.Support.Mcp.Indexing.IVectorIndexService.RebuildAsync*
+  commentId: Overload:McpServer.Support.Mcp.Indexing.IVectorIndexService.RebuildAsync
+  href: McpServer.Support.Mcp.Indexing.IVectorIndexService.html#McpServer_Support_Mcp_Indexing_IVectorIndexService_RebuildAsync_System_Threading_CancellationToken_
+  name: RebuildAsync
+  nameWithType: IVectorIndexService.RebuildAsync
+  fullName: McpServer.Support.Mcp.Indexing.IVectorIndexService.RebuildAsync
+- uid: McpServer.Support.Mcp.Indexing.IVectorIndexService.Count*
+  commentId: Overload:McpServer.Support.Mcp.Indexing.IVectorIndexService.Count
+  href: McpServer.Support.Mcp.Indexing.IVectorIndexService.html#McpServer_Support_Mcp_Indexing_IVectorIndexService_Count
+  name: Count
+  nameWithType: IVectorIndexService.Count
+  fullName: McpServer.Support.Mcp.Indexing.IVectorIndexService.Count

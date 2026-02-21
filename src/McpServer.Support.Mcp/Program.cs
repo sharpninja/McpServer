@@ -278,6 +278,21 @@ if (!app.Environment.IsEnvironment("Test"))
     }
 }
 
+// Write .mcp-server.json marker for the primary host so agents can discover the port.
+{
+    var primaryRepoRoot = McpInstanceResolver.GetEffectiveMcpValue(app.Configuration, instanceName, "RepoRoot") ?? ".";
+    var primaryWorkspacePath = Path.IsPathRooted(primaryRepoRoot)
+        ? Path.GetFullPath(primaryRepoRoot)
+        : Path.GetFullPath(Path.Combine(app.Environment.ContentRootPath, primaryRepoRoot));
+    var primaryWorkspaceName = Path.GetFileName(primaryWorkspacePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+    await MarkerFileService.WriteMarkerAsync(primaryWorkspacePath, listenPort, primaryWorkspaceName).ConfigureAwait(false);
+
+    app.Lifetime.ApplicationStopping.Register(() =>
+    {
+        MarkerFileService.RemoveMarker(primaryWorkspacePath);
+    });
+}
+
 // TR-PLANNED-013: Structured interaction logging for all requests; optional async submission to LoggingServiceUrl.
 app.UseMiddleware<InteractionLoggingMiddleware>();
 

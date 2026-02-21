@@ -44,6 +44,10 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             var entry = new WorkspaceHostEntry(app, DateTime.UtcNow, port);
             _hosts[key] = entry;
 
+            // Write .mcp-server.json marker so agents can discover the port.
+            var workspaceName = Path.GetFileName(key.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+            await MarkerFileService.WriteMarkerAsync(key, port, workspaceName, _logger, ct).ConfigureAwait(false);
+
             _logger.LogInformation("Workspace Kestrel host started: {Path} on port {Port}", key, port);
             return new WorkspaceProcessStatus(true, Port: port);
         }
@@ -66,6 +70,9 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         {
             await entry.App.StopAsync(ct).ConfigureAwait(false);
             await entry.App.DisposeAsync().ConfigureAwait(false);
+
+            // Remove .mcp-server.json marker on stop.
+            MarkerFileService.RemoveMarker(key, _logger);
 
             _logger.LogInformation("Workspace Kestrel host stopped: {Path}", key);
             return new WorkspaceProcessStatus(false);
@@ -140,12 +147,13 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     /// <inheritdoc />
     public void Dispose()
     {
-        foreach (var entry in _hosts.Values)
+        foreach (var (key, entry) in _hosts)
         {
             try
             {
                 entry.App.StopAsync(TimeSpan.FromSeconds(5)).GetAwaiter().GetResult();
                 entry.App.DisposeAsync().AsTask().GetAwaiter().GetResult();
+                MarkerFileService.RemoveMarker(key, _logger);
             }
             catch (Exception ex)
             {

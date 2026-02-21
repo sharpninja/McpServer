@@ -1,0 +1,721 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.ToolManifest
+  commentId: T:McpServer.Support.Mcp.Services.ToolManifest
+  id: ToolManifest
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.ToolManifest.#ctor(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.String},System.String,System.String,System.String)
+  - McpServer.Support.Mcp.Services.ToolManifest.CommandTemplate
+  - McpServer.Support.Mcp.Services.ToolManifest.Description
+  - McpServer.Support.Mcp.Services.ToolManifest.ManifestFile
+  - McpServer.Support.Mcp.Services.ToolManifest.Name
+  - McpServer.Support.Mcp.Services.ToolManifest.ParameterSchema
+  - McpServer.Support.Mcp.Services.ToolManifest.Tags
+  langs:
+  - csharp
+  - vb
+  name: ToolManifest
+  nameWithType: ToolManifest
+  fullName: McpServer.Support.Mcp.Services.ToolManifest
+  type: Class
+  source:
+    id: ToolManifest
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 65
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: A tool manifest as read from a bucket repository (not yet installed).
+  example: []
+  syntax:
+    content: 'public sealed record ToolManifest : IEquatable<ToolManifest>'
+    content.vb: Public NotInheritable Class ToolManifest Implements IEquatable(Of ToolManifest)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{McpServer.Support.Mcp.Services.ToolManifest}
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Services.ToolManifest.#ctor(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.String},System.String,System.String,System.String)
+  commentId: M:McpServer.Support.Mcp.Services.ToolManifest.#ctor(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.String},System.String,System.String,System.String)
+  id: '#ctor(System.String,System.String,System.Collections.Generic.IReadOnlyList{System.String},System.String,System.String,System.String)'
+  parent: McpServer.Support.Mcp.Services.ToolManifest
+  langs:
+  - csharp
+  - vb
+  name: ToolManifest(string, string, IReadOnlyList<string>, string?, string?, string)
+  nameWithType: ToolManifest.ToolManifest(string, string, IReadOnlyList<string>, string?, string?, string)
+  fullName: McpServer.Support.Mcp.Services.ToolManifest.ToolManifest(string, string, System.Collections.Generic.IReadOnlyList<string>, string?, string?, string)
+  type: Constructor
+  source:
+    id: .ctor
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 65
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: A tool manifest as read from a bucket repository (not yet installed).
+  example: []
+  syntax:
+    content: public ToolManifest(string Name, string Description, IReadOnlyList<string> Tags, string? ParameterSchema, string? CommandTemplate, string ManifestFile)
+    parameters:
+    - id: Name
+      type: System.String
+      description: Tool name from the manifest file.
+    - id: Description
+      type: System.String
+      description: Human-readable description.
+    - id: Tags
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+      description: Keyword tags for discovery.
+    - id: ParameterSchema
+      type: System.String
+      description: Optional JSON schema for parameters.
+    - id: CommandTemplate
+      type: System.String
+      description: Optional command template.
+    - id: ManifestFile
+      type: System.String
+      description: File path within the repo.
+    content.vb: Public Sub New(Name As String, Description As String, Tags As IReadOnlyList(Of String), ParameterSchema As String, CommandTemplate As String, ManifestFile As String)
+  overload: McpServer.Support.Mcp.Services.ToolManifest.#ctor*
+  nameWithType.vb: ToolManifest.New(String, String, IReadOnlyList(Of String), String, String, String)
+  fullName.vb: McpServer.Support.Mcp.Services.ToolManifest.New(String, String, System.Collections.Generic.IReadOnlyList(Of String), String, String, String)
+  name.vb: New(String, String, IReadOnlyList(Of String), String, String, String)
+- uid: McpServer.Support.Mcp.Services.ToolManifest.Name
+  commentId: P:McpServer.Support.Mcp.Services.ToolManifest.Name
+  id: Name
+  parent: McpServer.Support.Mcp.Services.ToolManifest
+  langs:
+  - csharp
+  - vb
+  name: Name
+  nameWithType: ToolManifest.Name
+  fullName: McpServer.Support.Mcp.Services.ToolManifest.Name
+  type: Property
+  source:
+    id: Name
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 66
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Tool name from the manifest file.
+  example: []
+  syntax:
+    content: public string Name { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Name As String
+  overload: McpServer.Support.Mcp.Services.ToolManifest.Name*
+- uid: McpServer.Support.Mcp.Services.ToolManifest.Description
+  commentId: P:McpServer.Support.Mcp.Services.ToolManifest.Description
+  id: Description
+  parent: McpServer.Support.Mcp.Services.ToolManifest
+  langs:
+  - csharp
+  - vb
+  name: Description
+  nameWithType: ToolManifest.Description
+  fullName: McpServer.Support.Mcp.Services.ToolManifest.Description
+  type: Property
+  source:
+    id: Description
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 67
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Human-readable description.
+  example: []
+  syntax:
+    content: public string Description { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Description As String
+  overload: McpServer.Support.Mcp.Services.ToolManifest.Description*
+- uid: McpServer.Support.Mcp.Services.ToolManifest.Tags
+  commentId: P:McpServer.Support.Mcp.Services.ToolManifest.Tags
+  id: Tags
+  parent: McpServer.Support.Mcp.Services.ToolManifest
+  langs:
+  - csharp
+  - vb
+  name: Tags
+  nameWithType: ToolManifest.Tags
+  fullName: McpServer.Support.Mcp.Services.ToolManifest.Tags
+  type: Property
+  source:
+    id: Tags
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 68
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Keyword tags for discovery.
+  example: []
+  syntax:
+    content: public IReadOnlyList<string> Tags { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+    content.vb: Public Property Tags As IReadOnlyList(Of String)
+  overload: McpServer.Support.Mcp.Services.ToolManifest.Tags*
+- uid: McpServer.Support.Mcp.Services.ToolManifest.ParameterSchema
+  commentId: P:McpServer.Support.Mcp.Services.ToolManifest.ParameterSchema
+  id: ParameterSchema
+  parent: McpServer.Support.Mcp.Services.ToolManifest
+  langs:
+  - csharp
+  - vb
+  name: ParameterSchema
+  nameWithType: ToolManifest.ParameterSchema
+  fullName: McpServer.Support.Mcp.Services.ToolManifest.ParameterSchema
+  type: Property
+  source:
+    id: ParameterSchema
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 69
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Optional JSON schema for parameters.
+  example: []
+  syntax:
+    content: public string? ParameterSchema { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property ParameterSchema As String
+  overload: McpServer.Support.Mcp.Services.ToolManifest.ParameterSchema*
+- uid: McpServer.Support.Mcp.Services.ToolManifest.CommandTemplate
+  commentId: P:McpServer.Support.Mcp.Services.ToolManifest.CommandTemplate
+  id: CommandTemplate
+  parent: McpServer.Support.Mcp.Services.ToolManifest
+  langs:
+  - csharp
+  - vb
+  name: CommandTemplate
+  nameWithType: ToolManifest.CommandTemplate
+  fullName: McpServer.Support.Mcp.Services.ToolManifest.CommandTemplate
+  type: Property
+  source:
+    id: CommandTemplate
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 70
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Optional command template.
+  example: []
+  syntax:
+    content: public string? CommandTemplate { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property CommandTemplate As String
+  overload: McpServer.Support.Mcp.Services.ToolManifest.CommandTemplate*
+- uid: McpServer.Support.Mcp.Services.ToolManifest.ManifestFile
+  commentId: P:McpServer.Support.Mcp.Services.ToolManifest.ManifestFile
+  id: ManifestFile
+  parent: McpServer.Support.Mcp.Services.ToolManifest
+  langs:
+  - csharp
+  - vb
+  name: ManifestFile
+  nameWithType: ToolManifest.ManifestFile
+  fullName: McpServer.Support.Mcp.Services.ToolManifest.ManifestFile
+  type: Property
+  source:
+    id: ManifestFile
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolBucketService.cs
+    startLine: 71
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: File path within the repo.
+  example: []
+  syntax:
+    content: public string ManifestFile { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property ManifestFile As String
+  overload: McpServer.Support.Mcp.Services.ToolManifest.ManifestFile*
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.IEquatable{McpServer.Support.Mcp.Services.ToolManifest}
+  commentId: T:System.IEquatable{McpServer.Support.Mcp.Services.ToolManifest}
+  parent: System
+  definition: System.IEquatable`1
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<ToolManifest>
+  nameWithType: IEquatable<ToolManifest>
+  fullName: System.IEquatable<McpServer.Support.Mcp.Services.ToolManifest>
+  nameWithType.vb: IEquatable(Of ToolManifest)
+  fullName.vb: System.IEquatable(Of McpServer.Support.Mcp.Services.ToolManifest)
+  name.vb: IEquatable(Of ToolManifest)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.ToolManifest
+    name: ToolManifest
+    href: McpServer.Support.Mcp.Services.ToolManifest.html
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.ToolManifest
+    name: ToolManifest
+    href: McpServer.Support.Mcp.Services.ToolManifest.html
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Services.ToolManifest.#ctor*
+  commentId: Overload:McpServer.Support.Mcp.Services.ToolManifest.#ctor
+  href: McpServer.Support.Mcp.Services.ToolManifest.html#McpServer_Support_Mcp_Services_ToolManifest__ctor_System_String_System_String_System_Collections_Generic_IReadOnlyList_System_String__System_String_System_String_System_String_
+  name: ToolManifest
+  nameWithType: ToolManifest.ToolManifest
+  fullName: McpServer.Support.Mcp.Services.ToolManifest.ToolManifest
+  nameWithType.vb: ToolManifest.New
+  fullName.vb: McpServer.Support.Mcp.Services.ToolManifest.New
+  name.vb: New
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Collections.Generic.IReadOnlyList{System.String}
+  commentId: T:System.Collections.Generic.IReadOnlyList{System.String}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IReadOnlyList`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<string>
+  nameWithType: IReadOnlyList<string>
+  fullName: System.Collections.Generic.IReadOnlyList<string>
+  nameWithType.vb: IReadOnlyList(Of String)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of String)
+  name.vb: IReadOnlyList(Of String)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: System.Collections.Generic.IReadOnlyList`1
+  commentId: T:System.Collections.Generic.IReadOnlyList`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<T>
+  nameWithType: IReadOnlyList<T>
+  fullName: System.Collections.Generic.IReadOnlyList<T>
+  nameWithType.vb: IReadOnlyList(Of T)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of T)
+  name.vb: IReadOnlyList(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: McpServer.Support.Mcp.Services.ToolManifest.Name*
+  commentId: Overload:McpServer.Support.Mcp.Services.ToolManifest.Name
+  href: McpServer.Support.Mcp.Services.ToolManifest.html#McpServer_Support_Mcp_Services_ToolManifest_Name
+  name: Name
+  nameWithType: ToolManifest.Name
+  fullName: McpServer.Support.Mcp.Services.ToolManifest.Name
+- uid: McpServer.Support.Mcp.Services.ToolManifest.Description*
+  commentId: Overload:McpServer.Support.Mcp.Services.ToolManifest.Description
+  href: McpServer.Support.Mcp.Services.ToolManifest.html#McpServer_Support_Mcp_Services_ToolManifest_Description
+  name: Description
+  nameWithType: ToolManifest.Description
+  fullName: McpServer.Support.Mcp.Services.ToolManifest.Description
+- uid: McpServer.Support.Mcp.Services.ToolManifest.Tags*
+  commentId: Overload:McpServer.Support.Mcp.Services.ToolManifest.Tags
+  href: McpServer.Support.Mcp.Services.ToolManifest.html#McpServer_Support_Mcp_Services_ToolManifest_Tags
+  name: Tags
+  nameWithType: ToolManifest.Tags
+  fullName: McpServer.Support.Mcp.Services.ToolManifest.Tags
+- uid: McpServer.Support.Mcp.Services.ToolManifest.ParameterSchema*
+  commentId: Overload:McpServer.Support.Mcp.Services.ToolManifest.ParameterSchema
+  href: McpServer.Support.Mcp.Services.ToolManifest.html#McpServer_Support_Mcp_Services_ToolManifest_ParameterSchema
+  name: ParameterSchema
+  nameWithType: ToolManifest.ParameterSchema
+  fullName: McpServer.Support.Mcp.Services.ToolManifest.ParameterSchema
+- uid: McpServer.Support.Mcp.Services.ToolManifest.CommandTemplate*
+  commentId: Overload:McpServer.Support.Mcp.Services.ToolManifest.CommandTemplate
+  href: McpServer.Support.Mcp.Services.ToolManifest.html#McpServer_Support_Mcp_Services_ToolManifest_CommandTemplate
+  name: CommandTemplate
+  nameWithType: ToolManifest.CommandTemplate
+  fullName: McpServer.Support.Mcp.Services.ToolManifest.CommandTemplate
+- uid: McpServer.Support.Mcp.Services.ToolManifest.ManifestFile*
+  commentId: Overload:McpServer.Support.Mcp.Services.ToolManifest.ManifestFile
+  href: McpServer.Support.Mcp.Services.ToolManifest.html#McpServer_Support_Mcp_Services_ToolManifest_ManifestFile
+  name: ManifestFile
+  nameWithType: ToolManifest.ManifestFile
+  fullName: McpServer.Support.Mcp.Services.ToolManifest.ManifestFile

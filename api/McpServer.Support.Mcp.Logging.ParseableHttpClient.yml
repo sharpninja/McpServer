@@ -1,0 +1,861 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Logging.ParseableHttpClient
+  commentId: T:McpServer.Support.Mcp.Logging.ParseableHttpClient
+  id: ParseableHttpClient
+  parent: McpServer.Support.Mcp.Logging
+  children:
+  - McpServer.Support.Mcp.Logging.ParseableHttpClient.#ctor(System.String,System.String,System.String)
+  - McpServer.Support.Mcp.Logging.ParseableHttpClient.Configure(Microsoft.Extensions.Configuration.IConfiguration)
+  - McpServer.Support.Mcp.Logging.ParseableHttpClient.Dispose
+  - McpServer.Support.Mcp.Logging.ParseableHttpClient.ParseableMetaPropertyName
+  - McpServer.Support.Mcp.Logging.ParseableHttpClient.PostAsync(System.String,System.IO.Stream,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: ParseableHttpClient
+  nameWithType: ParseableHttpClient
+  fullName: McpServer.Support.Mcp.Logging.ParseableHttpClient
+  type: Class
+  source:
+    id: ParseableHttpClient
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Logging\ParseableHttpClient.cs
+    startLine: 14
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Logging
+  summary: 'TR-PLANNED-013: IHttpClient implementation that POSTs to Parseable with X-P-Stream and Basic auth.'
+  example: []
+  syntax:
+    content: 'public sealed class ParseableHttpClient : IHttpClient, IDisposable'
+    content.vb: Public NotInheritable Class ParseableHttpClient Implements IHttpClient, IDisposable
+  inheritance:
+  - System.Object
+  implements:
+  - Serilog.Sinks.Http.IHttpClient
+  - System.IDisposable
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Logging.ParseableHttpClient.ParseableMetaPropertyName
+  commentId: F:McpServer.Support.Mcp.Logging.ParseableHttpClient.ParseableMetaPropertyName
+  id: ParseableMetaPropertyName
+  parent: McpServer.Support.Mcp.Logging.ParseableHttpClient
+  langs:
+  - csharp
+  - vb
+  name: ParseableMetaPropertyName
+  nameWithType: ParseableHttpClient.ParseableMetaPropertyName
+  fullName: McpServer.Support.Mcp.Logging.ParseableHttpClient.ParseableMetaPropertyName
+  type: Field
+  source:
+    id: ParseableMetaPropertyName
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Logging\ParseableHttpClient.cs
+    startLine: 17
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Logging
+  summary: Property set on meta-logs (success/failure of push) so they can be excluded from the Parseable sink and not republished.
+  example: []
+  syntax:
+    content: public const string ParseableMetaPropertyName = "ParseableMeta"
+    return:
+      type: System.String
+    content.vb: Public Const ParseableMetaPropertyName As String = "ParseableMeta"
+- uid: McpServer.Support.Mcp.Logging.ParseableHttpClient.#ctor(System.String,System.String,System.String)
+  commentId: M:McpServer.Support.Mcp.Logging.ParseableHttpClient.#ctor(System.String,System.String,System.String)
+  id: '#ctor(System.String,System.String,System.String)'
+  parent: McpServer.Support.Mcp.Logging.ParseableHttpClient
+  langs:
+  - csharp
+  - vb
+  name: ParseableHttpClient(string, string, string)
+  nameWithType: ParseableHttpClient.ParseableHttpClient(string, string, string)
+  fullName: McpServer.Support.Mcp.Logging.ParseableHttpClient.ParseableHttpClient(string, string, string)
+  type: Constructor
+  source:
+    id: .ctor
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Logging\ParseableHttpClient.cs
+    startLine: 25
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Logging
+  summary: 'TR-PLANNED-013: Constructor.'
+  example: []
+  syntax:
+    content: public ParseableHttpClient(string streamName, string username, string password)
+    parameters:
+    - id: streamName
+      type: System.String
+      description: Parseable stream name (X-P-Stream header).
+    - id: username
+      type: System.String
+      description: Basic auth username.
+    - id: password
+      type: System.String
+      description: Basic auth password.
+    content.vb: Public Sub New(streamName As String, username As String, password As String)
+  overload: McpServer.Support.Mcp.Logging.ParseableHttpClient.#ctor*
+  nameWithType.vb: ParseableHttpClient.New(String, String, String)
+  fullName.vb: McpServer.Support.Mcp.Logging.ParseableHttpClient.New(String, String, String)
+  name.vb: New(String, String, String)
+- uid: McpServer.Support.Mcp.Logging.ParseableHttpClient.Configure(Microsoft.Extensions.Configuration.IConfiguration)
+  commentId: M:McpServer.Support.Mcp.Logging.ParseableHttpClient.Configure(Microsoft.Extensions.Configuration.IConfiguration)
+  id: Configure(Microsoft.Extensions.Configuration.IConfiguration)
+  parent: McpServer.Support.Mcp.Logging.ParseableHttpClient
+  langs:
+  - csharp
+  - vb
+  name: Configure(IConfiguration)
+  nameWithType: ParseableHttpClient.Configure(IConfiguration)
+  fullName: McpServer.Support.Mcp.Logging.ParseableHttpClient.Configure(Microsoft.Extensions.Configuration.IConfiguration)
+  type: Method
+  source:
+    id: Configure
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Logging\ParseableHttpClient.cs
+    startLine: 34
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Logging
+  summary: Configures the HTTP client.
+  example: []
+  syntax:
+    content: public void Configure(IConfiguration configuration)
+    parameters:
+    - id: configuration
+      type: Microsoft.Extensions.Configuration.IConfiguration
+      description: The application configuration properties.
+    content.vb: Public Sub Configure(configuration As IConfiguration)
+  overload: McpServer.Support.Mcp.Logging.ParseableHttpClient.Configure*
+  implements:
+  - Serilog.Sinks.Http.IHttpClient.Configure(Microsoft.Extensions.Configuration.IConfiguration)
+- uid: McpServer.Support.Mcp.Logging.ParseableHttpClient.PostAsync(System.String,System.IO.Stream,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Logging.ParseableHttpClient.PostAsync(System.String,System.IO.Stream,System.Threading.CancellationToken)
+  id: PostAsync(System.String,System.IO.Stream,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Logging.ParseableHttpClient
+  langs:
+  - csharp
+  - vb
+  name: PostAsync(string, Stream, CancellationToken)
+  nameWithType: ParseableHttpClient.PostAsync(string, Stream, CancellationToken)
+  fullName: McpServer.Support.Mcp.Logging.ParseableHttpClient.PostAsync(string, System.IO.Stream, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: PostAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Logging\ParseableHttpClient.cs
+    startLine: 40
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Logging
+  summary: Sends a POST request to the specified Uri as an asynchronous operation.
+  example: []
+  syntax:
+    content: public Task<HttpResponseMessage> PostAsync(string requestUri, Stream contentStream, CancellationToken cancellationToken = default)
+    parameters:
+    - id: requestUri
+      type: System.String
+      description: The Uri the request is sent to.
+    - id: contentStream
+      type: System.IO.Stream
+      description: The stream containing the content of the request.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: >-
+        A cancellation token that can be used by other objects or threads to receive notice of
+
+        cancellation.
+    return:
+      type: System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage}
+      description: The task object representing the asynchronous operation.
+    content.vb: Public Function PostAsync(requestUri As String, contentStream As Stream, cancellationToken As CancellationToken = Nothing) As Task(Of HttpResponseMessage)
+  overload: McpServer.Support.Mcp.Logging.ParseableHttpClient.PostAsync*
+  implements:
+  - Serilog.Sinks.Http.IHttpClient.PostAsync(System.String,System.IO.Stream,System.Threading.CancellationToken)
+  nameWithType.vb: ParseableHttpClient.PostAsync(String, Stream, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Logging.ParseableHttpClient.PostAsync(String, System.IO.Stream, System.Threading.CancellationToken)
+  name.vb: PostAsync(String, Stream, CancellationToken)
+- uid: McpServer.Support.Mcp.Logging.ParseableHttpClient.Dispose
+  commentId: M:McpServer.Support.Mcp.Logging.ParseableHttpClient.Dispose
+  id: Dispose
+  parent: McpServer.Support.Mcp.Logging.ParseableHttpClient
+  langs:
+  - csharp
+  - vb
+  name: Dispose()
+  nameWithType: ParseableHttpClient.Dispose()
+  fullName: McpServer.Support.Mcp.Logging.ParseableHttpClient.Dispose()
+  type: Method
+  source:
+    id: Dispose
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Logging\ParseableHttpClient.cs
+    startLine: 74
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Logging
+  summary: Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+  example: []
+  syntax:
+    content: public void Dispose()
+    content.vb: Public Sub Dispose()
+  overload: McpServer.Support.Mcp.Logging.ParseableHttpClient.Dispose*
+  implements:
+  - System.IDisposable.Dispose
+references:
+- uid: McpServer.Support.Mcp.Logging
+  commentId: N:McpServer.Support.Mcp.Logging
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Logging
+  nameWithType: McpServer.Support.Mcp.Logging
+  fullName: McpServer.Support.Mcp.Logging
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Logging
+    name: Logging
+    href: McpServer.Support.Mcp.Logging.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Logging
+    name: Logging
+    href: McpServer.Support.Mcp.Logging.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: Serilog.Sinks.Http.IHttpClient
+  commentId: T:Serilog.Sinks.Http.IHttpClient
+  parent: Serilog.Sinks.Http
+  isExternal: true
+  name: IHttpClient
+  nameWithType: IHttpClient
+  fullName: Serilog.Sinks.Http.IHttpClient
+- uid: System.IDisposable
+  commentId: T:System.IDisposable
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.idisposable
+  name: IDisposable
+  nameWithType: IDisposable
+  fullName: System.IDisposable
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Serilog.Sinks.Http
+  commentId: N:Serilog.Sinks.Http
+  isExternal: true
+  name: Serilog.Sinks.Http
+  nameWithType: Serilog.Sinks.Http
+  fullName: Serilog.Sinks.Http
+  spec.csharp:
+  - uid: Serilog
+    name: Serilog
+    isExternal: true
+  - name: .
+  - uid: Serilog.Sinks
+    name: Sinks
+    isExternal: true
+  - name: .
+  - uid: Serilog.Sinks.Http
+    name: Http
+    isExternal: true
+  spec.vb:
+  - uid: Serilog
+    name: Serilog
+    isExternal: true
+  - name: .
+  - uid: Serilog.Sinks
+    name: Sinks
+    isExternal: true
+  - name: .
+  - uid: Serilog.Sinks.Http
+    name: Http
+    isExternal: true
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Logging.ParseableHttpClient.#ctor*
+  commentId: Overload:McpServer.Support.Mcp.Logging.ParseableHttpClient.#ctor
+  href: McpServer.Support.Mcp.Logging.ParseableHttpClient.html#McpServer_Support_Mcp_Logging_ParseableHttpClient__ctor_System_String_System_String_System_String_
+  name: ParseableHttpClient
+  nameWithType: ParseableHttpClient.ParseableHttpClient
+  fullName: McpServer.Support.Mcp.Logging.ParseableHttpClient.ParseableHttpClient
+  nameWithType.vb: ParseableHttpClient.New
+  fullName.vb: McpServer.Support.Mcp.Logging.ParseableHttpClient.New
+  name.vb: New
+- uid: McpServer.Support.Mcp.Logging.ParseableHttpClient.Configure*
+  commentId: Overload:McpServer.Support.Mcp.Logging.ParseableHttpClient.Configure
+  href: McpServer.Support.Mcp.Logging.ParseableHttpClient.html#McpServer_Support_Mcp_Logging_ParseableHttpClient_Configure_Microsoft_Extensions_Configuration_IConfiguration_
+  name: Configure
+  nameWithType: ParseableHttpClient.Configure
+  fullName: McpServer.Support.Mcp.Logging.ParseableHttpClient.Configure
+- uid: Serilog.Sinks.Http.IHttpClient.Configure(Microsoft.Extensions.Configuration.IConfiguration)
+  commentId: M:Serilog.Sinks.Http.IHttpClient.Configure(Microsoft.Extensions.Configuration.IConfiguration)
+  parent: Serilog.Sinks.Http.IHttpClient
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.configuration.iconfiguration
+  name: Configure(IConfiguration)
+  nameWithType: IHttpClient.Configure(IConfiguration)
+  fullName: Serilog.Sinks.Http.IHttpClient.Configure(Microsoft.Extensions.Configuration.IConfiguration)
+  spec.csharp:
+  - uid: Serilog.Sinks.Http.IHttpClient.Configure(Microsoft.Extensions.Configuration.IConfiguration)
+    name: Configure
+    isExternal: true
+  - name: (
+  - uid: Microsoft.Extensions.Configuration.IConfiguration
+    name: IConfiguration
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.configuration.iconfiguration
+  - name: )
+  spec.vb:
+  - uid: Serilog.Sinks.Http.IHttpClient.Configure(Microsoft.Extensions.Configuration.IConfiguration)
+    name: Configure
+    isExternal: true
+  - name: (
+  - uid: Microsoft.Extensions.Configuration.IConfiguration
+    name: IConfiguration
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.configuration.iconfiguration
+  - name: )
+- uid: Microsoft.Extensions.Configuration.IConfiguration
+  commentId: T:Microsoft.Extensions.Configuration.IConfiguration
+  parent: Microsoft.Extensions.Configuration
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.configuration.iconfiguration
+  name: IConfiguration
+  nameWithType: IConfiguration
+  fullName: Microsoft.Extensions.Configuration.IConfiguration
+- uid: Microsoft.Extensions.Configuration
+  commentId: N:Microsoft.Extensions.Configuration
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft
+  name: Microsoft.Extensions.Configuration
+  nameWithType: Microsoft.Extensions.Configuration
+  fullName: Microsoft.Extensions.Configuration
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Configuration
+    name: Configuration
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.configuration
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Configuration
+    name: Configuration
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.configuration
+- uid: McpServer.Support.Mcp.Logging.ParseableHttpClient.PostAsync*
+  commentId: Overload:McpServer.Support.Mcp.Logging.ParseableHttpClient.PostAsync
+  href: McpServer.Support.Mcp.Logging.ParseableHttpClient.html#McpServer_Support_Mcp_Logging_ParseableHttpClient_PostAsync_System_String_System_IO_Stream_System_Threading_CancellationToken_
+  name: PostAsync
+  nameWithType: ParseableHttpClient.PostAsync
+  fullName: McpServer.Support.Mcp.Logging.ParseableHttpClient.PostAsync
+- uid: Serilog.Sinks.Http.IHttpClient.PostAsync(System.String,System.IO.Stream,System.Threading.CancellationToken)
+  commentId: M:Serilog.Sinks.Http.IHttpClient.PostAsync(System.String,System.IO.Stream,System.Threading.CancellationToken)
+  parent: Serilog.Sinks.Http.IHttpClient
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: PostAsync(string, Stream, CancellationToken)
+  nameWithType: IHttpClient.PostAsync(string, Stream, CancellationToken)
+  fullName: Serilog.Sinks.Http.IHttpClient.PostAsync(string, System.IO.Stream, System.Threading.CancellationToken)
+  nameWithType.vb: IHttpClient.PostAsync(String, Stream, CancellationToken)
+  fullName.vb: Serilog.Sinks.Http.IHttpClient.PostAsync(String, System.IO.Stream, System.Threading.CancellationToken)
+  name.vb: PostAsync(String, Stream, CancellationToken)
+  spec.csharp:
+  - uid: Serilog.Sinks.Http.IHttpClient.PostAsync(System.String,System.IO.Stream,System.Threading.CancellationToken)
+    name: PostAsync
+    isExternal: true
+  - name: (
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.IO.Stream
+    name: Stream
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.io.stream
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: Serilog.Sinks.Http.IHttpClient.PostAsync(System.String,System.IO.Stream,System.Threading.CancellationToken)
+    name: PostAsync
+    isExternal: true
+  - name: (
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.IO.Stream
+    name: Stream
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.io.stream
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: System.IO.Stream
+  commentId: T:System.IO.Stream
+  parent: System.IO
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.io.stream
+  name: Stream
+  nameWithType: Stream
+  fullName: System.IO.Stream
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage}
+  commentId: T:System.Threading.Tasks.Task{System.Net.Http.HttpResponseMessage}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<HttpResponseMessage>
+  nameWithType: Task<HttpResponseMessage>
+  fullName: System.Threading.Tasks.Task<System.Net.Http.HttpResponseMessage>
+  nameWithType.vb: Task(Of HttpResponseMessage)
+  fullName.vb: System.Threading.Tasks.Task(Of System.Net.Http.HttpResponseMessage)
+  name.vb: Task(Of HttpResponseMessage)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Net.Http.HttpResponseMessage
+    name: HttpResponseMessage
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.net.http.httpresponsemessage
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Net.Http.HttpResponseMessage
+    name: HttpResponseMessage
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.net.http.httpresponsemessage
+  - name: )
+- uid: System.IO
+  commentId: N:System.IO
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.IO
+  nameWithType: System.IO
+  fullName: System.IO
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.IO
+    name: IO
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.io
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.IO
+    name: IO
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.io
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: McpServer.Support.Mcp.Logging.ParseableHttpClient.Dispose*
+  commentId: Overload:McpServer.Support.Mcp.Logging.ParseableHttpClient.Dispose
+  href: McpServer.Support.Mcp.Logging.ParseableHttpClient.html#McpServer_Support_Mcp_Logging_ParseableHttpClient_Dispose
+  name: Dispose
+  nameWithType: ParseableHttpClient.Dispose
+  fullName: McpServer.Support.Mcp.Logging.ParseableHttpClient.Dispose
+- uid: System.IDisposable.Dispose
+  commentId: M:System.IDisposable.Dispose
+  parent: System.IDisposable
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.idisposable.dispose
+  name: Dispose()
+  nameWithType: IDisposable.Dispose()
+  fullName: System.IDisposable.Dispose()
+  spec.csharp:
+  - uid: System.IDisposable.Dispose
+    name: Dispose
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.idisposable.dispose
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.IDisposable.Dispose
+    name: Dispose
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.idisposable.dispose
+  - name: (
+  - name: )

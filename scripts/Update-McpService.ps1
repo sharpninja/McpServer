@@ -41,7 +41,10 @@ $ErrorActionPreference = 'Stop'
 $ProjectDir  = Join-Path $PSScriptRoot '..\src\McpServer.Support.Mcp'
 $ProjectFile = Join-Path $ProjectDir 'McpServer.Support.Mcp.csproj'
 $ExeName     = 'McpServer.Support.Mcp.exe'
-$BackupDir   = Join-Path $env:TEMP "McpServer-update-backup-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+$Timestamp   = Get-Date -Format 'yyyyMMdd-HHmmss'
+$BackupDir   = Join-Path $env:TEMP "McpServer-update-backup-$Timestamp"
+$ArchiveDir  = Join-Path $env:USERPROFILE 'McpServer-Backups'
+$ArchivePath = Join-Path $ArchiveDir "McpServer-backup-$Timestamp.zip"
 
 # Files to preserve across updates (glob patterns relative to InstallPath).
 $PreservePatterns = @(
@@ -109,7 +112,7 @@ else {
 }
 
 # 2. Backup preserved files
-Write-Step "2/7  Backing up config & data files ..."
+Write-Step "2/7  Backing up config and data files ..."
 New-Item -ItemType Directory -Path $BackupDir -Force | Out-Null
 $backedUp = @()
 foreach ($pattern in $PreservePatterns) {
@@ -121,6 +124,13 @@ foreach ($pattern in $PreservePatterns) {
 }
 if ($backedUp.Count -gt 0) {
     Write-Host "  Backed up: $($backedUp -join ', ')" -ForegroundColor DarkGray
+
+    # Archive to a timestamped zip in the user profile for safe keeping.
+    if (-not (Test-Path $ArchiveDir)) {
+        New-Item -ItemType Directory -Path $ArchiveDir -Force | Out-Null
+    }
+    Compress-Archive -Path "$BackupDir\*" -DestinationPath $ArchivePath -Force
+    Write-Host "  Archived to: $ArchivePath" -ForegroundColor DarkGray
 }
 else {
     Write-Host "  No files matched preserve patterns." -ForegroundColor Yellow
@@ -141,7 +151,7 @@ else {
     # Publish to a staging directory first, then copy to install path.
     $stageDir = Join-Path $env:TEMP "McpServer-publish-stage"
     if (Test-Path $stageDir) { Remove-Item $stageDir -Recurse -Force }
-    dotnet publish $ProjectFile -c Release -o $stageDir
+    dotnet publish $ProjectFile -c Release --self-contained -r win-x64 -o $stageDir
     if ($LASTEXITCODE -ne 0) { Write-Error "dotnet publish failed (exit code $LASTEXITCODE)" }
 
     Copy-Item -Path "$stageDir\*" -Destination $InstallPath -Recurse -Force
@@ -150,9 +160,15 @@ else {
 Write-Host "  Publish complete." -ForegroundColor Green
 
 # 4. Restore preserved files
-Write-Step "4/7  Restoring config & data files ..."
+Write-Step "4/7  Restoring config and data files ..."
+$restoreSource = $BackupDir
+if (-not (Test-Path $BackupDir) -and (Test-Path $ArchivePath)) {
+    Write-Host "  Backup directory missing — extracting from archive: $ArchivePath" -ForegroundColor Yellow
+    New-Item -ItemType Directory -Path $BackupDir -Force | Out-Null
+    Expand-Archive -Path $ArchivePath -DestinationPath $BackupDir -Force
+}
 $restored = @()
-foreach ($f in (Get-ChildItem -Path $BackupDir -ErrorAction SilentlyContinue)) {
+foreach ($f in (Get-ChildItem -Path $restoreSource -ErrorAction SilentlyContinue)) {
     $target = Join-Path $InstallPath $f.Name
     Copy-Item -Path $f.FullName -Destination $target -Force
     $restored += $f.Name
@@ -197,3 +213,6 @@ Write-Host "  Service : $ServiceName ($($svc.Status))"
 Write-Host "  Path    : $InstallPath"
 Write-Host "  Health  : $(if ($healthy) { 'OK' } else { 'FAILED' })"
 Write-Host "  Files   : $($restored.Count) preserved, $($backedUp.Count) backed up"
+if (Test-Path $ArchivePath) {
+    Write-Host "  Archive : $ArchivePath" -ForegroundColor DarkGray
+}

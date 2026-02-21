@@ -1,0 +1,127 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Options
+  commentId: N:McpServer.Support.Mcp.Options
+  id: McpServer.Support.Mcp.Options
+  children:
+  - McpServer.Support.Mcp.Options.CloudflareTunnelOptions
+  - McpServer.Support.Mcp.Options.FrpTunnelOptions
+  - McpServer.Support.Mcp.Options.McpInstanceResolver
+  - McpServer.Support.Mcp.Options.McpInteractionLoggingOptions
+  - McpServer.Support.Mcp.Options.McpParseableOptions
+  - McpServer.Support.Mcp.Options.NgrokTunnelOptions
+  - McpServer.Support.Mcp.Options.PairingOptions
+  - McpServer.Support.Mcp.Options.PairingUser
+  - McpServer.Support.Mcp.Options.TodoStorageOptions
+  - McpServer.Support.Mcp.Options.TunnelOptions
+  langs:
+  - csharp
+  - vb
+  name: McpServer.Support.Mcp.Options
+  nameWithType: McpServer.Support.Mcp.Options
+  fullName: McpServer.Support.Mcp.Options
+  type: Namespace
+  assemblies:
+  - McpServer.Support.Mcp
+references:
+- uid: McpServer.Support.Mcp.Options.McpInstanceResolver
+  commentId: T:McpServer.Support.Mcp.Options.McpInstanceResolver
+  href: McpServer.Support.Mcp.Options.McpInstanceResolver.html
+  name: McpInstanceResolver
+  nameWithType: McpInstanceResolver
+  fullName: McpServer.Support.Mcp.Options.McpInstanceResolver
+- uid: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions
+  commentId: T:McpServer.Support.Mcp.Options.McpInteractionLoggingOptions
+  href: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.html
+  name: McpInteractionLoggingOptions
+  nameWithType: McpInteractionLoggingOptions
+  fullName: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions
+- uid: McpServer.Support.Mcp.Options.McpParseableOptions
+  commentId: T:McpServer.Support.Mcp.Options.McpParseableOptions
+  href: McpServer.Support.Mcp.Options.McpParseableOptions.html
+  name: McpParseableOptions
+  nameWithType: McpParseableOptions
+  fullName: McpServer.Support.Mcp.Options.McpParseableOptions
+- uid: McpServer.Support.Mcp.Options.PairingOptions
+  commentId: T:McpServer.Support.Mcp.Options.PairingOptions
+  href: McpServer.Support.Mcp.Options.PairingOptions.html
+  name: PairingOptions
+  nameWithType: PairingOptions
+  fullName: McpServer.Support.Mcp.Options.PairingOptions
+- uid: McpServer.Support.Mcp.Options.PairingUser
+  commentId: T:McpServer.Support.Mcp.Options.PairingUser
+  href: McpServer.Support.Mcp.Options.PairingUser.html
+  name: PairingUser
+  nameWithType: PairingUser
+  fullName: McpServer.Support.Mcp.Options.PairingUser
+- uid: McpServer.Support.Mcp.Options.TodoStorageOptions
+  commentId: T:McpServer.Support.Mcp.Options.TodoStorageOptions
+  href: McpServer.Support.Mcp.Options.TodoStorageOptions.html
+  name: TodoStorageOptions
+  nameWithType: TodoStorageOptions
+  fullName: McpServer.Support.Mcp.Options.TodoStorageOptions
+- uid: McpServer.Support.Mcp.Options.TunnelOptions
+  commentId: T:McpServer.Support.Mcp.Options.TunnelOptions
+  href: McpServer.Support.Mcp.Options.TunnelOptions.html
+  name: TunnelOptions
+  nameWithType: TunnelOptions
+  fullName: McpServer.Support.Mcp.Options.TunnelOptions
+- uid: McpServer.Support.Mcp.Options.NgrokTunnelOptions
+  commentId: T:McpServer.Support.Mcp.Options.NgrokTunnelOptions
+  parent: McpServer.Support.Mcp.Options
+  href: McpServer.Support.Mcp.Options.NgrokTunnelOptions.html
+  name: NgrokTunnelOptions
+  nameWithType: NgrokTunnelOptions
+  fullName: McpServer.Support.Mcp.Options.NgrokTunnelOptions
+- uid: McpServer.Support.Mcp.Options.CloudflareTunnelOptions
+  commentId: T:McpServer.Support.Mcp.Options.CloudflareTunnelOptions
+  parent: McpServer.Support.Mcp.Options
+  href: McpServer.Support.Mcp.Options.CloudflareTunnelOptions.html
+  name: CloudflareTunnelOptions
+  nameWithType: CloudflareTunnelOptions
+  fullName: McpServer.Support.Mcp.Options.CloudflareTunnelOptions
+- uid: McpServer.Support.Mcp.Options.FrpTunnelOptions
+  commentId: T:McpServer.Support.Mcp.Options.FrpTunnelOptions
+  parent: McpServer.Support.Mcp.Options
+  href: McpServer.Support.Mcp.Options.FrpTunnelOptions.html
+  name: FrpTunnelOptions
+  nameWithType: FrpTunnelOptions
+  fullName: McpServer.Support.Mcp.Options.FrpTunnelOptions
+- uid: McpServer.Support.Mcp.Options
+  commentId: N:McpServer.Support.Mcp.Options
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Options
+  nameWithType: McpServer.Support.Mcp.Options
+  fullName: McpServer.Support.Mcp.Options
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Options
+    name: Options
+    href: McpServer.Support.Mcp.Options.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Options
+    name: Options
+    href: McpServer.Support.Mcp.Options.html

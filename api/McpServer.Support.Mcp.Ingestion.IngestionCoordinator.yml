@@ -1,0 +1,756 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Ingestion.IngestionCoordinator
+  commentId: T:McpServer.Support.Mcp.Ingestion.IngestionCoordinator
+  id: IngestionCoordinator
+  parent: McpServer.Support.Mcp.Ingestion
+  children:
+  - McpServer.Support.Mcp.Ingestion.IngestionCoordinator.#ctor(McpServer.Support.Mcp.Storage.McpDbContext,McpServer.Support.Mcp.Ingestion.RepoIngestor,McpServer.Support.Mcp.Ingestion.SessionLogIngestor,McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor,McpServer.Support.Mcp.Ingestion.GitHubIngestor,McpServer.Support.Mcp.Ingestion.IssueIngestor,McpServer.Support.Mcp.Ingestion.ISyncStatusStore,McpServer.Support.Mcp.Indexing.IEmbeddingService,McpServer.Support.Mcp.Indexing.IVectorIndexService,Microsoft.Extensions.Logging.ILogger{McpServer.Support.Mcp.Ingestion.IngestionCoordinator})
+  - McpServer.Support.Mcp.Ingestion.IngestionCoordinator.RunAsync(System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: IngestionCoordinator
+  nameWithType: IngestionCoordinator
+  fullName: McpServer.Support.Mcp.Ingestion.IngestionCoordinator
+  type: Class
+  source:
+    id: IngestionCoordinator
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\IngestionCoordinator.cs
+    startLine: 12
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: >-
+    TR-PLANNED-013, TR-GH-013-004: Runs repo, session-log, and issue ingestion, persists to McpDbContext.
+
+    FR-SUPPORT-010: Records sync status for sync.run / sync.status. Generates embeddings for vector search.
+  example: []
+  syntax:
+    content: public sealed class IngestionCoordinator
+    content.vb: Public NotInheritable Class IngestionCoordinator
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.#ctor(McpServer.Support.Mcp.Storage.McpDbContext,McpServer.Support.Mcp.Ingestion.RepoIngestor,McpServer.Support.Mcp.Ingestion.SessionLogIngestor,McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor,McpServer.Support.Mcp.Ingestion.GitHubIngestor,McpServer.Support.Mcp.Ingestion.IssueIngestor,McpServer.Support.Mcp.Ingestion.ISyncStatusStore,McpServer.Support.Mcp.Indexing.IEmbeddingService,McpServer.Support.Mcp.Indexing.IVectorIndexService,Microsoft.Extensions.Logging.ILogger{McpServer.Support.Mcp.Ingestion.IngestionCoordinator})
+  commentId: M:McpServer.Support.Mcp.Ingestion.IngestionCoordinator.#ctor(McpServer.Support.Mcp.Storage.McpDbContext,McpServer.Support.Mcp.Ingestion.RepoIngestor,McpServer.Support.Mcp.Ingestion.SessionLogIngestor,McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor,McpServer.Support.Mcp.Ingestion.GitHubIngestor,McpServer.Support.Mcp.Ingestion.IssueIngestor,McpServer.Support.Mcp.Ingestion.ISyncStatusStore,McpServer.Support.Mcp.Indexing.IEmbeddingService,McpServer.Support.Mcp.Indexing.IVectorIndexService,Microsoft.Extensions.Logging.ILogger{McpServer.Support.Mcp.Ingestion.IngestionCoordinator})
+  id: '#ctor(McpServer.Support.Mcp.Storage.McpDbContext,McpServer.Support.Mcp.Ingestion.RepoIngestor,McpServer.Support.Mcp.Ingestion.SessionLogIngestor,McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor,McpServer.Support.Mcp.Ingestion.GitHubIngestor,McpServer.Support.Mcp.Ingestion.IssueIngestor,McpServer.Support.Mcp.Ingestion.ISyncStatusStore,McpServer.Support.Mcp.Indexing.IEmbeddingService,McpServer.Support.Mcp.Indexing.IVectorIndexService,Microsoft.Extensions.Logging.ILogger{McpServer.Support.Mcp.Ingestion.IngestionCoordinator})'
+  parent: McpServer.Support.Mcp.Ingestion.IngestionCoordinator
+  langs:
+  - csharp
+  - vb
+  name: IngestionCoordinator(McpDbContext, RepoIngestor, SessionLogIngestor, ExternalDocsIngestor, GitHubIngestor, IssueIngestor, ISyncStatusStore, IEmbeddingService, IVectorIndexService, ILogger<IngestionCoordinator>)
+  nameWithType: IngestionCoordinator.IngestionCoordinator(McpDbContext, RepoIngestor, SessionLogIngestor, ExternalDocsIngestor, GitHubIngestor, IssueIngestor, ISyncStatusStore, IEmbeddingService, IVectorIndexService, ILogger<IngestionCoordinator>)
+  fullName: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.IngestionCoordinator(McpServer.Support.Mcp.Storage.McpDbContext, McpServer.Support.Mcp.Ingestion.RepoIngestor, McpServer.Support.Mcp.Ingestion.SessionLogIngestor, McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor, McpServer.Support.Mcp.Ingestion.GitHubIngestor, McpServer.Support.Mcp.Ingestion.IssueIngestor, McpServer.Support.Mcp.Ingestion.ISyncStatusStore, McpServer.Support.Mcp.Indexing.IEmbeddingService, McpServer.Support.Mcp.Indexing.IVectorIndexService, Microsoft.Extensions.Logging.ILogger<McpServer.Support.Mcp.Ingestion.IngestionCoordinator>)
+  type: Constructor
+  source:
+    id: .ctor
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\IngestionCoordinator.cs
+    startLine: 26
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: 'TR-PLANNED-013: Constructor.'
+  example: []
+  syntax:
+    content: public IngestionCoordinator(McpDbContext db, RepoIngestor repoIngestor, SessionLogIngestor sessionLogIngestor, ExternalDocsIngestor externalDocsIngestor, GitHubIngestor gitHubIngestor, IssueIngestor issueIngestor, ISyncStatusStore syncStatusStore, IEmbeddingService embeddingService, IVectorIndexService vectorIndexService, ILogger<IngestionCoordinator> logger)
+    parameters:
+    - id: db
+      type: McpServer.Support.Mcp.Storage.McpDbContext
+    - id: repoIngestor
+      type: McpServer.Support.Mcp.Ingestion.RepoIngestor
+    - id: sessionLogIngestor
+      type: McpServer.Support.Mcp.Ingestion.SessionLogIngestor
+    - id: externalDocsIngestor
+      type: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor
+    - id: gitHubIngestor
+      type: McpServer.Support.Mcp.Ingestion.GitHubIngestor
+    - id: issueIngestor
+      type: McpServer.Support.Mcp.Ingestion.IssueIngestor
+    - id: syncStatusStore
+      type: McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+    - id: embeddingService
+      type: McpServer.Support.Mcp.Indexing.IEmbeddingService
+    - id: vectorIndexService
+      type: McpServer.Support.Mcp.Indexing.IVectorIndexService
+    - id: logger
+      type: Microsoft.Extensions.Logging.ILogger{McpServer.Support.Mcp.Ingestion.IngestionCoordinator}
+    content.vb: Public Sub New(db As McpDbContext, repoIngestor As RepoIngestor, sessionLogIngestor As SessionLogIngestor, externalDocsIngestor As ExternalDocsIngestor, gitHubIngestor As GitHubIngestor, issueIngestor As IssueIngestor, syncStatusStore As ISyncStatusStore, embeddingService As IEmbeddingService, vectorIndexService As IVectorIndexService, logger As ILogger(Of IngestionCoordinator))
+  overload: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.#ctor*
+  nameWithType.vb: IngestionCoordinator.New(McpDbContext, RepoIngestor, SessionLogIngestor, ExternalDocsIngestor, GitHubIngestor, IssueIngestor, ISyncStatusStore, IEmbeddingService, IVectorIndexService, ILogger(Of IngestionCoordinator))
+  fullName.vb: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.New(McpServer.Support.Mcp.Storage.McpDbContext, McpServer.Support.Mcp.Ingestion.RepoIngestor, McpServer.Support.Mcp.Ingestion.SessionLogIngestor, McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor, McpServer.Support.Mcp.Ingestion.GitHubIngestor, McpServer.Support.Mcp.Ingestion.IssueIngestor, McpServer.Support.Mcp.Ingestion.ISyncStatusStore, McpServer.Support.Mcp.Indexing.IEmbeddingService, McpServer.Support.Mcp.Indexing.IVectorIndexService, Microsoft.Extensions.Logging.ILogger(Of McpServer.Support.Mcp.Ingestion.IngestionCoordinator))
+  name.vb: New(McpDbContext, RepoIngestor, SessionLogIngestor, ExternalDocsIngestor, GitHubIngestor, IssueIngestor, ISyncStatusStore, IEmbeddingService, IVectorIndexService, ILogger(Of IngestionCoordinator))
+- uid: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.RunAsync(System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Ingestion.IngestionCoordinator.RunAsync(System.Threading.CancellationToken)
+  id: RunAsync(System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Ingestion.IngestionCoordinator
+  langs:
+  - csharp
+  - vb
+  name: RunAsync(CancellationToken)
+  nameWithType: IngestionCoordinator.RunAsync(CancellationToken)
+  fullName: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.RunAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: RunAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\IngestionCoordinator.cs
+    startLine: 53
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: 'FR-SUPPORT-010: Runs full ingestion and returns result.'
+  example: []
+  syntax:
+    content: public Task<SyncRunResult> RunAsync(CancellationToken cancellationToken = default)
+    parameters:
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel the operation.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Ingestion.SyncRunResult}
+      description: The sync run result with ingestion counts and status.
+    content.vb: Public Function RunAsync(cancellationToken As CancellationToken = Nothing) As Task(Of SyncRunResult)
+  overload: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.RunAsync*
+references:
+- uid: McpServer.Support.Mcp.Ingestion
+  commentId: N:McpServer.Support.Mcp.Ingestion
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Ingestion
+  nameWithType: McpServer.Support.Mcp.Ingestion
+  fullName: McpServer.Support.Mcp.Ingestion
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Ingestion
+    name: Ingestion
+    href: McpServer.Support.Mcp.Ingestion.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Ingestion
+    name: Ingestion
+    href: McpServer.Support.Mcp.Ingestion.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.#ctor*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.IngestionCoordinator.#ctor
+  href: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.html#McpServer_Support_Mcp_Ingestion_IngestionCoordinator__ctor_McpServer_Support_Mcp_Storage_McpDbContext_McpServer_Support_Mcp_Ingestion_RepoIngestor_McpServer_Support_Mcp_Ingestion_SessionLogIngestor_McpServer_Support_Mcp_Ingestion_ExternalDocsIngestor_McpServer_Support_Mcp_Ingestion_GitHubIngestor_McpServer_Support_Mcp_Ingestion_IssueIngestor_McpServer_Support_Mcp_Ingestion_ISyncStatusStore_McpServer_Support_Mcp_Indexing_IEmbeddingService_McpServer_Support_Mcp_Indexing_IVectorIndexService_Microsoft_Extensions_Logging_ILogger_McpServer_Support_Mcp_Ingestion_IngestionCoordinator__
+  name: IngestionCoordinator
+  nameWithType: IngestionCoordinator.IngestionCoordinator
+  fullName: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.IngestionCoordinator
+  nameWithType.vb: IngestionCoordinator.New
+  fullName.vb: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.New
+  name.vb: New
+- uid: McpServer.Support.Mcp.Storage.McpDbContext
+  commentId: T:McpServer.Support.Mcp.Storage.McpDbContext
+  parent: McpServer.Support.Mcp.Storage
+  href: McpServer.Support.Mcp.Storage.McpDbContext.html
+  name: McpDbContext
+  nameWithType: McpDbContext
+  fullName: McpServer.Support.Mcp.Storage.McpDbContext
+- uid: McpServer.Support.Mcp.Ingestion.RepoIngestor
+  commentId: T:McpServer.Support.Mcp.Ingestion.RepoIngestor
+  parent: McpServer.Support.Mcp.Ingestion
+  href: McpServer.Support.Mcp.Ingestion.RepoIngestor.html
+  name: RepoIngestor
+  nameWithType: RepoIngestor
+  fullName: McpServer.Support.Mcp.Ingestion.RepoIngestor
+- uid: McpServer.Support.Mcp.Ingestion.SessionLogIngestor
+  commentId: T:McpServer.Support.Mcp.Ingestion.SessionLogIngestor
+  parent: McpServer.Support.Mcp.Ingestion
+  href: McpServer.Support.Mcp.Ingestion.SessionLogIngestor.html
+  name: SessionLogIngestor
+  nameWithType: SessionLogIngestor
+  fullName: McpServer.Support.Mcp.Ingestion.SessionLogIngestor
+- uid: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor
+  commentId: T:McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor
+  parent: McpServer.Support.Mcp.Ingestion
+  href: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.html
+  name: ExternalDocsIngestor
+  nameWithType: ExternalDocsIngestor
+  fullName: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor
+- uid: McpServer.Support.Mcp.Ingestion.GitHubIngestor
+  commentId: T:McpServer.Support.Mcp.Ingestion.GitHubIngestor
+  parent: McpServer.Support.Mcp.Ingestion
+  href: McpServer.Support.Mcp.Ingestion.GitHubIngestor.html
+  name: GitHubIngestor
+  nameWithType: GitHubIngestor
+  fullName: McpServer.Support.Mcp.Ingestion.GitHubIngestor
+- uid: McpServer.Support.Mcp.Ingestion.IssueIngestor
+  commentId: T:McpServer.Support.Mcp.Ingestion.IssueIngestor
+  parent: McpServer.Support.Mcp.Ingestion
+  href: McpServer.Support.Mcp.Ingestion.IssueIngestor.html
+  name: IssueIngestor
+  nameWithType: IssueIngestor
+  fullName: McpServer.Support.Mcp.Ingestion.IssueIngestor
+- uid: McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+  commentId: T:McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+  parent: McpServer.Support.Mcp.Ingestion
+  href: McpServer.Support.Mcp.Ingestion.ISyncStatusStore.html
+  name: ISyncStatusStore
+  nameWithType: ISyncStatusStore
+  fullName: McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+- uid: McpServer.Support.Mcp.Indexing.IEmbeddingService
+  commentId: T:McpServer.Support.Mcp.Indexing.IEmbeddingService
+  parent: McpServer.Support.Mcp.Indexing
+  href: McpServer.Support.Mcp.Indexing.IEmbeddingService.html
+  name: IEmbeddingService
+  nameWithType: IEmbeddingService
+  fullName: McpServer.Support.Mcp.Indexing.IEmbeddingService
+- uid: McpServer.Support.Mcp.Indexing.IVectorIndexService
+  commentId: T:McpServer.Support.Mcp.Indexing.IVectorIndexService
+  parent: McpServer.Support.Mcp.Indexing
+  href: McpServer.Support.Mcp.Indexing.IVectorIndexService.html
+  name: IVectorIndexService
+  nameWithType: IVectorIndexService
+  fullName: McpServer.Support.Mcp.Indexing.IVectorIndexService
+- uid: Microsoft.Extensions.Logging.ILogger{McpServer.Support.Mcp.Ingestion.IngestionCoordinator}
+  commentId: T:Microsoft.Extensions.Logging.ILogger{McpServer.Support.Mcp.Ingestion.IngestionCoordinator}
+  parent: Microsoft.Extensions.Logging
+  definition: Microsoft.Extensions.Logging.ILogger`1
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  name: ILogger<IngestionCoordinator>
+  nameWithType: ILogger<IngestionCoordinator>
+  fullName: Microsoft.Extensions.Logging.ILogger<McpServer.Support.Mcp.Ingestion.IngestionCoordinator>
+  nameWithType.vb: ILogger(Of IngestionCoordinator)
+  fullName.vb: Microsoft.Extensions.Logging.ILogger(Of McpServer.Support.Mcp.Ingestion.IngestionCoordinator)
+  name.vb: ILogger(Of IngestionCoordinator)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Ingestion.IngestionCoordinator
+    name: IngestionCoordinator
+    href: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.html
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Ingestion.IngestionCoordinator
+    name: IngestionCoordinator
+    href: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.html
+  - name: )
+- uid: McpServer.Support.Mcp.Storage
+  commentId: N:McpServer.Support.Mcp.Storage
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Storage
+  nameWithType: McpServer.Support.Mcp.Storage
+  fullName: McpServer.Support.Mcp.Storage
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+- uid: McpServer.Support.Mcp.Indexing
+  commentId: N:McpServer.Support.Mcp.Indexing
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Indexing
+  nameWithType: McpServer.Support.Mcp.Indexing
+  fullName: McpServer.Support.Mcp.Indexing
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Indexing
+    name: Indexing
+    href: McpServer.Support.Mcp.Indexing.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Indexing
+    name: Indexing
+    href: McpServer.Support.Mcp.Indexing.html
+- uid: Microsoft.Extensions.Logging.ILogger`1
+  commentId: T:Microsoft.Extensions.Logging.ILogger`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  name: ILogger<TCategoryName>
+  nameWithType: ILogger<TCategoryName>
+  fullName: Microsoft.Extensions.Logging.ILogger<TCategoryName>
+  nameWithType.vb: ILogger(Of TCategoryName)
+  fullName.vb: Microsoft.Extensions.Logging.ILogger(Of TCategoryName)
+  name.vb: ILogger(Of TCategoryName)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: <
+  - name: TCategoryName
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TCategoryName
+  - name: )
+- uid: Microsoft.Extensions.Logging
+  commentId: N:Microsoft.Extensions.Logging
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft
+  name: Microsoft.Extensions.Logging
+  nameWithType: Microsoft.Extensions.Logging
+  fullName: Microsoft.Extensions.Logging
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Logging
+    name: Logging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Logging
+    name: Logging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging
+- uid: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.RunAsync*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.IngestionCoordinator.RunAsync
+  href: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.html#McpServer_Support_Mcp_Ingestion_IngestionCoordinator_RunAsync_System_Threading_CancellationToken_
+  name: RunAsync
+  nameWithType: IngestionCoordinator.RunAsync
+  fullName: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.RunAsync
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Ingestion.SyncRunResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Ingestion.SyncRunResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<SyncRunResult>
+  nameWithType: Task<SyncRunResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Ingestion.SyncRunResult>
+  nameWithType.vb: Task(Of SyncRunResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Ingestion.SyncRunResult)
+  name.vb: Task(Of SyncRunResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Ingestion.SyncRunResult
+    name: SyncRunResult
+    href: McpServer.Support.Mcp.Ingestion.SyncRunResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Ingestion.SyncRunResult
+    name: SyncRunResult
+    href: McpServer.Support.Mcp.Ingestion.SyncRunResult.html
+  - name: )
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks

@@ -1,0 +1,268 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.IRequirementsService
+  commentId: T:McpServer.Support.Mcp.Services.IRequirementsService
+  id: IRequirementsService
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.IRequirementsService.AnalyzeAsync(System.String,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: IRequirementsService
+  nameWithType: IRequirementsService
+  fullName: McpServer.Support.Mcp.Services.IRequirementsService
+  type: Interface
+  source:
+    id: IRequirementsService
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IRequirementsService.cs
+    startLine: 7
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: >-
+    Service that invokes Copilot CLI to analyze a TODO item and produce
+
+    associated Functional and Technical Requirement IDs, then updates the
+
+    project docs and the TODO item itself.
+  example: []
+  syntax:
+    content: public interface IRequirementsService
+    content.vb: Public Interface IRequirementsService
+- uid: McpServer.Support.Mcp.Services.IRequirementsService.AnalyzeAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IRequirementsService.AnalyzeAsync(System.String,System.Threading.CancellationToken)
+  id: AnalyzeAsync(System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IRequirementsService
+  langs:
+  - csharp
+  - vb
+  name: AnalyzeAsync(string, CancellationToken)
+  nameWithType: IRequirementsService.AnalyzeAsync(string, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IRequirementsService.AnalyzeAsync(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: AnalyzeAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IRequirementsService.cs
+    startLine: 16
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: >-
+    Analyze a TODO item, generate FR/TR entries via Copilot CLI,
+
+    update docs/Project/*.md, and return the assigned FR/TR IDs.
+  example: []
+  syntax:
+    content: Task<RequirementsAnalysisResult> AnalyzeAsync(string todoId, CancellationToken cancellationToken = default)
+    parameters:
+    - id: todoId
+      type: System.String
+      description: The TODO item id to analyze.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.RequirementsAnalysisResult}
+      description: Result containing assigned FR and TR IDs, or an error.
+    content.vb: Function AnalyzeAsync(todoId As String, cancellationToken As CancellationToken = Nothing) As Task(Of RequirementsAnalysisResult)
+  overload: McpServer.Support.Mcp.Services.IRequirementsService.AnalyzeAsync*
+  nameWithType.vb: IRequirementsService.AnalyzeAsync(String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IRequirementsService.AnalyzeAsync(String, System.Threading.CancellationToken)
+  name.vb: AnalyzeAsync(String, CancellationToken)
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: McpServer.Support.Mcp.Services.IRequirementsService.AnalyzeAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IRequirementsService.AnalyzeAsync
+  href: McpServer.Support.Mcp.Services.IRequirementsService.html#McpServer_Support_Mcp_Services_IRequirementsService_AnalyzeAsync_System_String_System_Threading_CancellationToken_
+  name: AnalyzeAsync
+  nameWithType: IRequirementsService.AnalyzeAsync
+  fullName: McpServer.Support.Mcp.Services.IRequirementsService.AnalyzeAsync
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.RequirementsAnalysisResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.RequirementsAnalysisResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<RequirementsAnalysisResult>
+  nameWithType: Task<RequirementsAnalysisResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.RequirementsAnalysisResult>
+  nameWithType.vb: Task(Of RequirementsAnalysisResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.RequirementsAnalysisResult)
+  name.vb: Task(Of RequirementsAnalysisResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.RequirementsAnalysisResult
+    name: RequirementsAnalysisResult
+    href: McpServer.Support.Mcp.Services.RequirementsAnalysisResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.RequirementsAnalysisResult
+    name: RequirementsAnalysisResult
+    href: McpServer.Support.Mcp.Services.RequirementsAnalysisResult.html
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks

@@ -1,0 +1,695 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Models.CodeReviewPhase
+  commentId: T:McpServer.Support.Mcp.Models.CodeReviewPhase
+  id: CodeReviewPhase
+  parent: McpServer.Support.Mcp.Models
+  children:
+  - McpServer.Support.Mcp.Models.CodeReviewPhase.Done
+  - McpServer.Support.Mcp.Models.CodeReviewPhase.Estimate
+  - McpServer.Support.Mcp.Models.CodeReviewPhase.Id
+  - McpServer.Support.Mcp.Models.CodeReviewPhase.ImplementationTasks
+  - McpServer.Support.Mcp.Models.CodeReviewPhase.Phase
+  - McpServer.Support.Mcp.Models.CodeReviewPhase.Title
+  langs:
+  - csharp
+  - vb
+  name: CodeReviewPhase
+  nameWithType: CodeReviewPhase
+  fullName: McpServer.Support.Mcp.Models.CodeReviewPhase
+  type: Class
+  source:
+    id: CodeReviewPhase
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 153
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: 'TR-PLANNED-013: A code review remediation phase.'
+  example: []
+  syntax:
+    content: public sealed class CodeReviewPhase
+    content.vb: Public NotInheritable Class CodeReviewPhase
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Models.CodeReviewPhase.Id
+  commentId: P:McpServer.Support.Mcp.Models.CodeReviewPhase.Id
+  id: Id
+  parent: McpServer.Support.Mcp.Models.CodeReviewPhase
+  langs:
+  - csharp
+  - vb
+  name: Id
+  nameWithType: CodeReviewPhase.Id
+  fullName: McpServer.Support.Mcp.Models.CodeReviewPhase.Id
+  type: Property
+  source:
+    id: Id
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 156
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Unique identifier for the phase.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "id")]
+
+      public string? Id { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <YamlMember(Alias:="id")>
+
+      Public Property Id As String
+  overload: McpServer.Support.Mcp.Models.CodeReviewPhase.Id*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: id
+- uid: McpServer.Support.Mcp.Models.CodeReviewPhase.Phase
+  commentId: P:McpServer.Support.Mcp.Models.CodeReviewPhase.Phase
+  id: Phase
+  parent: McpServer.Support.Mcp.Models.CodeReviewPhase
+  langs:
+  - csharp
+  - vb
+  name: Phase
+  nameWithType: CodeReviewPhase.Phase
+  fullName: McpServer.Support.Mcp.Models.CodeReviewPhase.Phase
+  type: Property
+  source:
+    id: Phase
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 160
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Phase number or label.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "phase")]
+
+      public string? Phase { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <YamlMember(Alias:="phase")>
+
+      Public Property Phase As String
+  overload: McpServer.Support.Mcp.Models.CodeReviewPhase.Phase*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: phase
+- uid: McpServer.Support.Mcp.Models.CodeReviewPhase.Estimate
+  commentId: P:McpServer.Support.Mcp.Models.CodeReviewPhase.Estimate
+  id: Estimate
+  parent: McpServer.Support.Mcp.Models.CodeReviewPhase
+  langs:
+  - csharp
+  - vb
+  name: Estimate
+  nameWithType: CodeReviewPhase.Estimate
+  fullName: McpServer.Support.Mcp.Models.CodeReviewPhase.Estimate
+  type: Property
+  source:
+    id: Estimate
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 164
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Time estimate for the phase.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "estimate")]
+
+      public string? Estimate { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <YamlMember(Alias:="estimate")>
+
+      Public Property Estimate As String
+  overload: McpServer.Support.Mcp.Models.CodeReviewPhase.Estimate*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: estimate
+- uid: McpServer.Support.Mcp.Models.CodeReviewPhase.Done
+  commentId: P:McpServer.Support.Mcp.Models.CodeReviewPhase.Done
+  id: Done
+  parent: McpServer.Support.Mcp.Models.CodeReviewPhase
+  langs:
+  - csharp
+  - vb
+  name: Done
+  nameWithType: CodeReviewPhase.Done
+  fullName: McpServer.Support.Mcp.Models.CodeReviewPhase.Done
+  type: Property
+  source:
+    id: Done
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 168
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Whether the phase is completed.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "done")]
+
+      public bool Done { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: >-
+      <YamlMember(Alias:="done")>
+
+      Public Property Done As Boolean
+  overload: McpServer.Support.Mcp.Models.CodeReviewPhase.Done*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: done
+- uid: McpServer.Support.Mcp.Models.CodeReviewPhase.Title
+  commentId: P:McpServer.Support.Mcp.Models.CodeReviewPhase.Title
+  id: Title
+  parent: McpServer.Support.Mcp.Models.CodeReviewPhase
+  langs:
+  - csharp
+  - vb
+  name: Title
+  nameWithType: CodeReviewPhase.Title
+  fullName: McpServer.Support.Mcp.Models.CodeReviewPhase.Title
+  type: Property
+  source:
+    id: Title
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 172
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Title of the remediation phase.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "title")]
+
+      public string? Title { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <YamlMember(Alias:="title")>
+
+      Public Property Title As String
+  overload: McpServer.Support.Mcp.Models.CodeReviewPhase.Title*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: title
+- uid: McpServer.Support.Mcp.Models.CodeReviewPhase.ImplementationTasks
+  commentId: P:McpServer.Support.Mcp.Models.CodeReviewPhase.ImplementationTasks
+  id: ImplementationTasks
+  parent: McpServer.Support.Mcp.Models.CodeReviewPhase
+  langs:
+  - csharp
+  - vb
+  name: ImplementationTasks
+  nameWithType: CodeReviewPhase.ImplementationTasks
+  fullName: McpServer.Support.Mcp.Models.CodeReviewPhase.ImplementationTasks
+  type: Property
+  source:
+    id: ImplementationTasks
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\TodoModels.cs
+    startLine: 176
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Sub-tasks for implementing this phase.
+  example: []
+  syntax:
+    content: >-
+      [YamlMember(Alias = "implementation-tasks")]
+
+      public List<ImplementationTask>? ImplementationTasks { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.List{McpServer.Support.Mcp.Models.ImplementationTask}
+    content.vb: >-
+      <YamlMember(Alias:="implementation-tasks")>
+
+      Public Property ImplementationTasks As List(Of ImplementationTask)
+  overload: McpServer.Support.Mcp.Models.CodeReviewPhase.ImplementationTasks*
+  attributes:
+  - type: YamlDotNet.Serialization.YamlMemberAttribute
+    ctor: YamlDotNet.Serialization.YamlMemberAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Alias
+      type: System.String
+      value: implementation-tasks
+references:
+- uid: McpServer.Support.Mcp.Models
+  commentId: N:McpServer.Support.Mcp.Models
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Models
+  nameWithType: McpServer.Support.Mcp.Models
+  fullName: McpServer.Support.Mcp.Models
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Models.CodeReviewPhase.Id*
+  commentId: Overload:McpServer.Support.Mcp.Models.CodeReviewPhase.Id
+  href: McpServer.Support.Mcp.Models.CodeReviewPhase.html#McpServer_Support_Mcp_Models_CodeReviewPhase_Id
+  name: Id
+  nameWithType: CodeReviewPhase.Id
+  fullName: McpServer.Support.Mcp.Models.CodeReviewPhase.Id
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Models.CodeReviewPhase.Phase*
+  commentId: Overload:McpServer.Support.Mcp.Models.CodeReviewPhase.Phase
+  href: McpServer.Support.Mcp.Models.CodeReviewPhase.html#McpServer_Support_Mcp_Models_CodeReviewPhase_Phase
+  name: Phase
+  nameWithType: CodeReviewPhase.Phase
+  fullName: McpServer.Support.Mcp.Models.CodeReviewPhase.Phase
+- uid: McpServer.Support.Mcp.Models.CodeReviewPhase.Estimate*
+  commentId: Overload:McpServer.Support.Mcp.Models.CodeReviewPhase.Estimate
+  href: McpServer.Support.Mcp.Models.CodeReviewPhase.html#McpServer_Support_Mcp_Models_CodeReviewPhase_Estimate
+  name: Estimate
+  nameWithType: CodeReviewPhase.Estimate
+  fullName: McpServer.Support.Mcp.Models.CodeReviewPhase.Estimate
+- uid: McpServer.Support.Mcp.Models.CodeReviewPhase.Done*
+  commentId: Overload:McpServer.Support.Mcp.Models.CodeReviewPhase.Done
+  href: McpServer.Support.Mcp.Models.CodeReviewPhase.html#McpServer_Support_Mcp_Models_CodeReviewPhase_Done
+  name: Done
+  nameWithType: CodeReviewPhase.Done
+  fullName: McpServer.Support.Mcp.Models.CodeReviewPhase.Done
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: McpServer.Support.Mcp.Models.CodeReviewPhase.Title*
+  commentId: Overload:McpServer.Support.Mcp.Models.CodeReviewPhase.Title
+  href: McpServer.Support.Mcp.Models.CodeReviewPhase.html#McpServer_Support_Mcp_Models_CodeReviewPhase_Title
+  name: Title
+  nameWithType: CodeReviewPhase.Title
+  fullName: McpServer.Support.Mcp.Models.CodeReviewPhase.Title
+- uid: McpServer.Support.Mcp.Models.CodeReviewPhase.ImplementationTasks*
+  commentId: Overload:McpServer.Support.Mcp.Models.CodeReviewPhase.ImplementationTasks
+  href: McpServer.Support.Mcp.Models.CodeReviewPhase.html#McpServer_Support_Mcp_Models_CodeReviewPhase_ImplementationTasks
+  name: ImplementationTasks
+  nameWithType: CodeReviewPhase.ImplementationTasks
+  fullName: McpServer.Support.Mcp.Models.CodeReviewPhase.ImplementationTasks
+- uid: System.Collections.Generic.List{McpServer.Support.Mcp.Models.ImplementationTask}
+  commentId: T:System.Collections.Generic.List{McpServer.Support.Mcp.Models.ImplementationTask}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<ImplementationTask>
+  nameWithType: List<ImplementationTask>
+  fullName: System.Collections.Generic.List<McpServer.Support.Mcp.Models.ImplementationTask>
+  nameWithType.vb: List(Of ImplementationTask)
+  fullName.vb: System.Collections.Generic.List(Of McpServer.Support.Mcp.Models.ImplementationTask)
+  name.vb: List(Of ImplementationTask)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Models.ImplementationTask
+    name: ImplementationTask
+    href: McpServer.Support.Mcp.Models.ImplementationTask.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Models.ImplementationTask
+    name: ImplementationTask
+    href: McpServer.Support.Mcp.Models.ImplementationTask.html
+  - name: )
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic

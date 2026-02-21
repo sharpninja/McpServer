@@ -1,0 +1,582 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest
+  commentId: T:McpServer.Support.Mcp.Services.WorkspaceUpdateRequest
+  id: WorkspaceUpdateRequest
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.Name
+  - McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.RunAs
+  - McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.TodoPath
+  - McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.TunnelProvider
+  - McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.WorkspacePort
+  langs:
+  - csharp
+  - vb
+  name: WorkspaceUpdateRequest
+  nameWithType: WorkspaceUpdateRequest
+  fullName: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest
+  type: Class
+  source:
+    id: WorkspaceUpdateRequest
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 49
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Request to update a workspace. Null fields are not changed.
+  example: []
+  syntax:
+    content: 'public sealed record WorkspaceUpdateRequest : IEquatable<WorkspaceUpdateRequest>'
+    content.vb: Public NotInheritable Class WorkspaceUpdateRequest Implements IEquatable(Of WorkspaceUpdateRequest)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{McpServer.Support.Mcp.Services.WorkspaceUpdateRequest}
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.Name
+  commentId: P:McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.Name
+  id: Name
+  parent: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: Name
+  nameWithType: WorkspaceUpdateRequest.Name
+  fullName: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.Name
+  type: Property
+  source:
+    id: Name
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 52
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated name (null = no change).
+  example: []
+  syntax:
+    content: public string? Name { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Name As String
+  overload: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.Name*
+- uid: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.TodoPath
+  commentId: P:McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.TodoPath
+  id: TodoPath
+  parent: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: TodoPath
+  nameWithType: WorkspaceUpdateRequest.TodoPath
+  fullName: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.TodoPath
+  type: Property
+  source:
+    id: TodoPath
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 55
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated todo path (null = no change).
+  example: []
+  syntax:
+    content: public string? TodoPath { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property TodoPath As String
+  overload: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.TodoPath*
+- uid: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.WorkspacePort
+  commentId: P:McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.WorkspacePort
+  id: WorkspacePort
+  parent: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: WorkspacePort
+  nameWithType: WorkspaceUpdateRequest.WorkspacePort
+  fullName: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.WorkspacePort
+  type: Property
+  source:
+    id: WorkspacePort
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 58
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated port (null = no change, 0 = auto-assign).
+  example: []
+  syntax:
+    content: public int? WorkspacePort { get; init; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: Public Property WorkspacePort As Integer?
+  overload: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.WorkspacePort*
+- uid: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.TunnelProvider
+  commentId: P:McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.TunnelProvider
+  id: TunnelProvider
+  parent: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: TunnelProvider
+  nameWithType: WorkspaceUpdateRequest.TunnelProvider
+  fullName: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.TunnelProvider
+  type: Property
+  source:
+    id: TunnelProvider
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 61
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated tunnel provider (null = no change, empty string = disable tunnel).
+  example: []
+  syntax:
+    content: public string? TunnelProvider { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property TunnelProvider As String
+  overload: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.TunnelProvider*
+- uid: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.RunAs
+  commentId: P:McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.RunAs
+  id: RunAs
+  parent: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: RunAs
+  nameWithType: WorkspaceUpdateRequest.RunAs
+  fullName: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.RunAs
+  type: Property
+  source:
+    id: RunAs
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 64
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated RunAs identity (null = no change, empty string = default).
+  example: []
+  syntax:
+    content: public string? RunAs { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property RunAs As String
+  overload: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.RunAs*
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.IEquatable{McpServer.Support.Mcp.Services.WorkspaceUpdateRequest}
+  commentId: T:System.IEquatable{McpServer.Support.Mcp.Services.WorkspaceUpdateRequest}
+  parent: System
+  definition: System.IEquatable`1
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<WorkspaceUpdateRequest>
+  nameWithType: IEquatable<WorkspaceUpdateRequest>
+  fullName: System.IEquatable<McpServer.Support.Mcp.Services.WorkspaceUpdateRequest>
+  nameWithType.vb: IEquatable(Of WorkspaceUpdateRequest)
+  fullName.vb: System.IEquatable(Of McpServer.Support.Mcp.Services.WorkspaceUpdateRequest)
+  name.vb: IEquatable(Of WorkspaceUpdateRequest)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest
+    name: WorkspaceUpdateRequest
+    href: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.html
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest
+    name: WorkspaceUpdateRequest
+    href: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.html
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.Name*
+  commentId: Overload:McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.Name
+  href: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.html#McpServer_Support_Mcp_Services_WorkspaceUpdateRequest_Name
+  name: Name
+  nameWithType: WorkspaceUpdateRequest.Name
+  fullName: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.Name
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.TodoPath*
+  commentId: Overload:McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.TodoPath
+  href: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.html#McpServer_Support_Mcp_Services_WorkspaceUpdateRequest_TodoPath
+  name: TodoPath
+  nameWithType: WorkspaceUpdateRequest.TodoPath
+  fullName: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.TodoPath
+- uid: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.WorkspacePort*
+  commentId: Overload:McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.WorkspacePort
+  href: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.html#McpServer_Support_Mcp_Services_WorkspaceUpdateRequest_WorkspacePort
+  name: WorkspacePort
+  nameWithType: WorkspaceUpdateRequest.WorkspacePort
+  fullName: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.WorkspacePort
+- uid: System.Nullable{System.Int32}
+  commentId: T:System.Nullable{System.Int32}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int?
+  nameWithType: int?
+  fullName: int?
+  nameWithType.vb: Integer?
+  fullName.vb: Integer?
+  name.vb: Integer?
+  spec.csharp:
+  - uid: System.Int32
+    name: int
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: '?'
+  spec.vb:
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.TunnelProvider*
+  commentId: Overload:McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.TunnelProvider
+  href: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.html#McpServer_Support_Mcp_Services_WorkspaceUpdateRequest_TunnelProvider
+  name: TunnelProvider
+  nameWithType: WorkspaceUpdateRequest.TunnelProvider
+  fullName: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.TunnelProvider
+- uid: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.RunAs*
+  commentId: Overload:McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.RunAs
+  href: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.html#McpServer_Support_Mcp_Services_WorkspaceUpdateRequest_RunAs
+  name: RunAs
+  nameWithType: WorkspaceUpdateRequest.RunAs
+  fullName: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.RunAs

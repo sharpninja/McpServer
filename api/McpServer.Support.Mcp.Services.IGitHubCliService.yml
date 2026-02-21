@@ -1,0 +1,928 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService
+  commentId: T:McpServer.Support.Mcp.Services.IGitHubCliService
+  id: IGitHubCliService
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.IGitHubCliService.CloseIssueAsync(System.Int32,System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnIssueAsync(System.String,System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnPullAsync(System.String,System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IGitHubCliService.CreateIssueAsync(System.String,System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IGitHubCliService.GetIssueAsync(System.Int32,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IGitHubCliService.ListIssueLabelsAsync(System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IGitHubCliService.ListIssuesAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IGitHubCliService.ListPullsAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IGitHubCliService.ReopenIssueAsync(System.Int32,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IGitHubCliService.UpdateIssueAsync(System.Int32,McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: IGitHubCliService
+  nameWithType: IGitHubCliService
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService
+  type: Interface
+  source:
+    id: IGitHubCliService
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IGitHubCliService.cs
+    startLine: 8
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: >-
+    TR-PLANNED-013, TR-GH-013-001: Wrapper for GitHub CLI (gh) for issues and PRs.
+
+    FR-SUPPORT-010, FR-SUPPORT-013: Uses existing local gh auth.
+  example: []
+  syntax:
+    content: public interface IGitHubCliService
+    content.vb: Public Interface IGitHubCliService
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.ListIssuesAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IGitHubCliService.ListIssuesAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  id: ListIssuesAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IGitHubCliService
+  langs:
+  - csharp
+  - vb
+  name: ListIssuesAsync(string?, int, CancellationToken)
+  nameWithType: IGitHubCliService.ListIssuesAsync(string?, int, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.ListIssuesAsync(string?, int, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: ListIssuesAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IGitHubCliService.cs
+    startLine: 15
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Lists issues (gh issue list). Returns empty list if gh not available or not authenticated.
+  example: []
+  syntax:
+    content: Task<GitHubIssueListResult> ListIssuesAsync(string? state, int limit, CancellationToken cancellationToken = default)
+    parameters:
+    - id: state
+      type: System.String
+      description: Optional state filter (open, closed, all).
+    - id: limit
+      type: System.Int32
+      description: Maximum number of issues to return.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel the operation.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.GitHubIssueListResult}
+      description: Issue list result with success flag and items.
+    content.vb: Function ListIssuesAsync(state As String, limit As Integer, cancellationToken As CancellationToken = Nothing) As Task(Of GitHubIssueListResult)
+  overload: McpServer.Support.Mcp.Services.IGitHubCliService.ListIssuesAsync*
+  nameWithType.vb: IGitHubCliService.ListIssuesAsync(String, Integer, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IGitHubCliService.ListIssuesAsync(String, Integer, System.Threading.CancellationToken)
+  name.vb: ListIssuesAsync(String, Integer, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.ListPullsAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IGitHubCliService.ListPullsAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  id: ListPullsAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IGitHubCliService
+  langs:
+  - csharp
+  - vb
+  name: ListPullsAsync(string?, int, CancellationToken)
+  nameWithType: IGitHubCliService.ListPullsAsync(string?, int, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.ListPullsAsync(string?, int, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: ListPullsAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IGitHubCliService.cs
+    startLine: 22
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Lists pull requests (gh pr list).
+  example: []
+  syntax:
+    content: Task<GitHubPullListResult> ListPullsAsync(string? state, int limit, CancellationToken cancellationToken = default)
+    parameters:
+    - id: state
+      type: System.String
+      description: Optional state filter (open, closed, all).
+    - id: limit
+      type: System.Int32
+      description: Maximum number of PRs to return.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel the operation.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.GitHubPullListResult}
+      description: Pull request list result with success flag and items.
+    content.vb: Function ListPullsAsync(state As String, limit As Integer, cancellationToken As CancellationToken = Nothing) As Task(Of GitHubPullListResult)
+  overload: McpServer.Support.Mcp.Services.IGitHubCliService.ListPullsAsync*
+  nameWithType.vb: IGitHubCliService.ListPullsAsync(String, Integer, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IGitHubCliService.ListPullsAsync(String, Integer, System.Threading.CancellationToken)
+  name.vb: ListPullsAsync(String, Integer, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.CreateIssueAsync(System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IGitHubCliService.CreateIssueAsync(System.String,System.String,System.Threading.CancellationToken)
+  id: CreateIssueAsync(System.String,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IGitHubCliService
+  langs:
+  - csharp
+  - vb
+  name: CreateIssueAsync(string, string?, CancellationToken)
+  nameWithType: IGitHubCliService.CreateIssueAsync(string, string?, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.CreateIssueAsync(string, string?, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: CreateIssueAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IGitHubCliService.cs
+    startLine: 29
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Creates an issue (gh issue create).
+  example: []
+  syntax:
+    content: Task<GitHubCreateIssueResult> CreateIssueAsync(string title, string? body, CancellationToken cancellationToken = default)
+    parameters:
+    - id: title
+      type: System.String
+      description: Issue title.
+    - id: body
+      type: System.String
+      description: Optional issue body.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel the operation.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.GitHubCreateIssueResult}
+      description: Create result with the new issue number and URL.
+    content.vb: Function CreateIssueAsync(title As String, body As String, cancellationToken As CancellationToken = Nothing) As Task(Of GitHubCreateIssueResult)
+  overload: McpServer.Support.Mcp.Services.IGitHubCliService.CreateIssueAsync*
+  nameWithType.vb: IGitHubCliService.CreateIssueAsync(String, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IGitHubCliService.CreateIssueAsync(String, String, System.Threading.CancellationToken)
+  name.vb: CreateIssueAsync(String, String, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnIssueAsync(System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnIssueAsync(System.String,System.String,System.Threading.CancellationToken)
+  id: CommentOnIssueAsync(System.String,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IGitHubCliService
+  langs:
+  - csharp
+  - vb
+  name: CommentOnIssueAsync(string, string, CancellationToken)
+  nameWithType: IGitHubCliService.CommentOnIssueAsync(string, string, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnIssueAsync(string, string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: CommentOnIssueAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IGitHubCliService.cs
+    startLine: 36
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Adds a comment to an issue (gh issue comment).
+  example: []
+  syntax:
+    content: Task<GitHubCommentResult> CommentOnIssueAsync(string issueId, string body, CancellationToken cancellationToken = default)
+    parameters:
+    - id: issueId
+      type: System.String
+      description: Issue number or identifier.
+    - id: body
+      type: System.String
+      description: Comment body text.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel the operation.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.GitHubCommentResult}
+      description: Comment result indicating success or failure.
+    content.vb: Function CommentOnIssueAsync(issueId As String, body As String, cancellationToken As CancellationToken = Nothing) As Task(Of GitHubCommentResult)
+  overload: McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnIssueAsync*
+  nameWithType.vb: IGitHubCliService.CommentOnIssueAsync(String, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnIssueAsync(String, String, System.Threading.CancellationToken)
+  name.vb: CommentOnIssueAsync(String, String, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnPullAsync(System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnPullAsync(System.String,System.String,System.Threading.CancellationToken)
+  id: CommentOnPullAsync(System.String,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IGitHubCliService
+  langs:
+  - csharp
+  - vb
+  name: CommentOnPullAsync(string, string, CancellationToken)
+  nameWithType: IGitHubCliService.CommentOnPullAsync(string, string, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnPullAsync(string, string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: CommentOnPullAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IGitHubCliService.cs
+    startLine: 43
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Adds a comment to a PR (gh pr comment).
+  example: []
+  syntax:
+    content: Task<GitHubCommentResult> CommentOnPullAsync(string prId, string body, CancellationToken cancellationToken = default)
+    parameters:
+    - id: prId
+      type: System.String
+      description: PR number or identifier.
+    - id: body
+      type: System.String
+      description: Comment body text.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel the operation.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.GitHubCommentResult}
+      description: Comment result indicating success or failure.
+    content.vb: Function CommentOnPullAsync(prId As String, body As String, cancellationToken As CancellationToken = Nothing) As Task(Of GitHubCommentResult)
+  overload: McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnPullAsync*
+  nameWithType.vb: IGitHubCliService.CommentOnPullAsync(String, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnPullAsync(String, String, System.Threading.CancellationToken)
+  name.vb: CommentOnPullAsync(String, String, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.GetIssueAsync(System.Int32,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IGitHubCliService.GetIssueAsync(System.Int32,System.Threading.CancellationToken)
+  id: GetIssueAsync(System.Int32,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IGitHubCliService
+  langs:
+  - csharp
+  - vb
+  name: GetIssueAsync(int, CancellationToken)
+  nameWithType: IGitHubCliService.GetIssueAsync(int, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.GetIssueAsync(int, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: GetIssueAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IGitHubCliService.cs
+    startLine: 49
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-GH-013-001: Gets full issue detail (gh issue view --json).'
+  example: []
+  syntax:
+    content: Task<GitHubIssueDetailResult> GetIssueAsync(int issueNumber, CancellationToken ct = default)
+    parameters:
+    - id: issueNumber
+      type: System.Int32
+      description: Issue number.
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: Cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Models.GitHubIssueDetailResult}
+      description: Issue detail result.
+    content.vb: Function GetIssueAsync(issueNumber As Integer, ct As CancellationToken = Nothing) As Task(Of GitHubIssueDetailResult)
+  overload: McpServer.Support.Mcp.Services.IGitHubCliService.GetIssueAsync*
+  nameWithType.vb: IGitHubCliService.GetIssueAsync(Integer, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IGitHubCliService.GetIssueAsync(Integer, System.Threading.CancellationToken)
+  name.vb: GetIssueAsync(Integer, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.UpdateIssueAsync(System.Int32,McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IGitHubCliService.UpdateIssueAsync(System.Int32,McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest,System.Threading.CancellationToken)
+  id: UpdateIssueAsync(System.Int32,McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IGitHubCliService
+  langs:
+  - csharp
+  - vb
+  name: UpdateIssueAsync(int, GitHubIssueUpdateRequest, CancellationToken)
+  nameWithType: IGitHubCliService.UpdateIssueAsync(int, GitHubIssueUpdateRequest, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.UpdateIssueAsync(int, McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: UpdateIssueAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IGitHubCliService.cs
+    startLine: 56
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-GH-013-001: Updates issue metadata (gh issue edit).'
+  example: []
+  syntax:
+    content: Task<GitHubMutationResult> UpdateIssueAsync(int issueNumber, GitHubIssueUpdateRequest request, CancellationToken ct = default)
+    parameters:
+    - id: issueNumber
+      type: System.Int32
+      description: Issue number.
+    - id: request
+      type: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest
+      description: Fields to update.
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: Cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Models.GitHubMutationResult}
+      description: Mutation result.
+    content.vb: Function UpdateIssueAsync(issueNumber As Integer, request As GitHubIssueUpdateRequest, ct As CancellationToken = Nothing) As Task(Of GitHubMutationResult)
+  overload: McpServer.Support.Mcp.Services.IGitHubCliService.UpdateIssueAsync*
+  nameWithType.vb: IGitHubCliService.UpdateIssueAsync(Integer, GitHubIssueUpdateRequest, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IGitHubCliService.UpdateIssueAsync(Integer, McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest, System.Threading.CancellationToken)
+  name.vb: UpdateIssueAsync(Integer, GitHubIssueUpdateRequest, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.CloseIssueAsync(System.Int32,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IGitHubCliService.CloseIssueAsync(System.Int32,System.String,System.Threading.CancellationToken)
+  id: CloseIssueAsync(System.Int32,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IGitHubCliService
+  langs:
+  - csharp
+  - vb
+  name: CloseIssueAsync(int, string?, CancellationToken)
+  nameWithType: IGitHubCliService.CloseIssueAsync(int, string?, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.CloseIssueAsync(int, string?, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: CloseIssueAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IGitHubCliService.cs
+    startLine: 63
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-GH-013-001: Closes an issue (gh issue close).'
+  example: []
+  syntax:
+    content: Task<GitHubMutationResult> CloseIssueAsync(int issueNumber, string? reason = null, CancellationToken ct = default)
+    parameters:
+    - id: issueNumber
+      type: System.Int32
+      description: Issue number.
+    - id: reason
+      type: System.String
+      description: 'Close reason (completed or not_planned). Default: completed.'
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: Cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Models.GitHubMutationResult}
+      description: Mutation result.
+    content.vb: Function CloseIssueAsync(issueNumber As Integer, reason As String = Nothing, ct As CancellationToken = Nothing) As Task(Of GitHubMutationResult)
+  overload: McpServer.Support.Mcp.Services.IGitHubCliService.CloseIssueAsync*
+  nameWithType.vb: IGitHubCliService.CloseIssueAsync(Integer, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IGitHubCliService.CloseIssueAsync(Integer, String, System.Threading.CancellationToken)
+  name.vb: CloseIssueAsync(Integer, String, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.ReopenIssueAsync(System.Int32,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IGitHubCliService.ReopenIssueAsync(System.Int32,System.Threading.CancellationToken)
+  id: ReopenIssueAsync(System.Int32,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IGitHubCliService
+  langs:
+  - csharp
+  - vb
+  name: ReopenIssueAsync(int, CancellationToken)
+  nameWithType: IGitHubCliService.ReopenIssueAsync(int, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.ReopenIssueAsync(int, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: ReopenIssueAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IGitHubCliService.cs
+    startLine: 69
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-GH-013-001: Reopens an issue (gh issue reopen).'
+  example: []
+  syntax:
+    content: Task<GitHubMutationResult> ReopenIssueAsync(int issueNumber, CancellationToken ct = default)
+    parameters:
+    - id: issueNumber
+      type: System.Int32
+      description: Issue number.
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: Cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Models.GitHubMutationResult}
+      description: Mutation result.
+    content.vb: Function ReopenIssueAsync(issueNumber As Integer, ct As CancellationToken = Nothing) As Task(Of GitHubMutationResult)
+  overload: McpServer.Support.Mcp.Services.IGitHubCliService.ReopenIssueAsync*
+  nameWithType.vb: IGitHubCliService.ReopenIssueAsync(Integer, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IGitHubCliService.ReopenIssueAsync(Integer, System.Threading.CancellationToken)
+  name.vb: ReopenIssueAsync(Integer, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.ListIssueLabelsAsync(System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IGitHubCliService.ListIssueLabelsAsync(System.Threading.CancellationToken)
+  id: ListIssueLabelsAsync(System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IGitHubCliService
+  langs:
+  - csharp
+  - vb
+  name: ListIssueLabelsAsync(CancellationToken)
+  nameWithType: IGitHubCliService.ListIssueLabelsAsync(CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.ListIssueLabelsAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: ListIssueLabelsAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IGitHubCliService.cs
+    startLine: 74
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-GH-013-001: Lists repository labels (gh label list --json).'
+  example: []
+  syntax:
+    content: Task<GitHubLabelsResult> ListIssueLabelsAsync(CancellationToken ct = default)
+    parameters:
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: Cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Models.GitHubLabelsResult}
+      description: Labels result.
+    content.vb: Function ListIssueLabelsAsync(ct As CancellationToken = Nothing) As Task(Of GitHubLabelsResult)
+  overload: McpServer.Support.Mcp.Services.IGitHubCliService.ListIssueLabelsAsync*
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.ListIssuesAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IGitHubCliService.ListIssuesAsync
+  href: McpServer.Support.Mcp.Services.IGitHubCliService.html#McpServer_Support_Mcp_Services_IGitHubCliService_ListIssuesAsync_System_String_System_Int32_System_Threading_CancellationToken_
+  name: ListIssuesAsync
+  nameWithType: IGitHubCliService.ListIssuesAsync
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.ListIssuesAsync
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.GitHubIssueListResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.GitHubIssueListResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<GitHubIssueListResult>
+  nameWithType: Task<GitHubIssueListResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.GitHubIssueListResult>
+  nameWithType.vb: Task(Of GitHubIssueListResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.GitHubIssueListResult)
+  name.vb: Task(Of GitHubIssueListResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.GitHubIssueListResult
+    name: GitHubIssueListResult
+    href: McpServer.Support.Mcp.Services.GitHubIssueListResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.GitHubIssueListResult
+    name: GitHubIssueListResult
+    href: McpServer.Support.Mcp.Services.GitHubIssueListResult.html
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.ListPullsAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IGitHubCliService.ListPullsAsync
+  href: McpServer.Support.Mcp.Services.IGitHubCliService.html#McpServer_Support_Mcp_Services_IGitHubCliService_ListPullsAsync_System_String_System_Int32_System_Threading_CancellationToken_
+  name: ListPullsAsync
+  nameWithType: IGitHubCliService.ListPullsAsync
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.ListPullsAsync
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.GitHubPullListResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.GitHubPullListResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<GitHubPullListResult>
+  nameWithType: Task<GitHubPullListResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.GitHubPullListResult>
+  nameWithType.vb: Task(Of GitHubPullListResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.GitHubPullListResult)
+  name.vb: Task(Of GitHubPullListResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.GitHubPullListResult
+    name: GitHubPullListResult
+    href: McpServer.Support.Mcp.Services.GitHubPullListResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.GitHubPullListResult
+    name: GitHubPullListResult
+    href: McpServer.Support.Mcp.Services.GitHubPullListResult.html
+  - name: )
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.CreateIssueAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IGitHubCliService.CreateIssueAsync
+  href: McpServer.Support.Mcp.Services.IGitHubCliService.html#McpServer_Support_Mcp_Services_IGitHubCliService_CreateIssueAsync_System_String_System_String_System_Threading_CancellationToken_
+  name: CreateIssueAsync
+  nameWithType: IGitHubCliService.CreateIssueAsync
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.CreateIssueAsync
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.GitHubCreateIssueResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.GitHubCreateIssueResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<GitHubCreateIssueResult>
+  nameWithType: Task<GitHubCreateIssueResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.GitHubCreateIssueResult>
+  nameWithType.vb: Task(Of GitHubCreateIssueResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.GitHubCreateIssueResult)
+  name.vb: Task(Of GitHubCreateIssueResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.GitHubCreateIssueResult
+    name: GitHubCreateIssueResult
+    href: McpServer.Support.Mcp.Services.GitHubCreateIssueResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.GitHubCreateIssueResult
+    name: GitHubCreateIssueResult
+    href: McpServer.Support.Mcp.Services.GitHubCreateIssueResult.html
+  - name: )
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnIssueAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnIssueAsync
+  href: McpServer.Support.Mcp.Services.IGitHubCliService.html#McpServer_Support_Mcp_Services_IGitHubCliService_CommentOnIssueAsync_System_String_System_String_System_Threading_CancellationToken_
+  name: CommentOnIssueAsync
+  nameWithType: IGitHubCliService.CommentOnIssueAsync
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnIssueAsync
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.GitHubCommentResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.GitHubCommentResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<GitHubCommentResult>
+  nameWithType: Task<GitHubCommentResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.GitHubCommentResult>
+  nameWithType.vb: Task(Of GitHubCommentResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.GitHubCommentResult)
+  name.vb: Task(Of GitHubCommentResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.GitHubCommentResult
+    name: GitHubCommentResult
+    href: McpServer.Support.Mcp.Services.GitHubCommentResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.GitHubCommentResult
+    name: GitHubCommentResult
+    href: McpServer.Support.Mcp.Services.GitHubCommentResult.html
+  - name: )
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnPullAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnPullAsync
+  href: McpServer.Support.Mcp.Services.IGitHubCliService.html#McpServer_Support_Mcp_Services_IGitHubCliService_CommentOnPullAsync_System_String_System_String_System_Threading_CancellationToken_
+  name: CommentOnPullAsync
+  nameWithType: IGitHubCliService.CommentOnPullAsync
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.CommentOnPullAsync
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.GetIssueAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IGitHubCliService.GetIssueAsync
+  href: McpServer.Support.Mcp.Services.IGitHubCliService.html#McpServer_Support_Mcp_Services_IGitHubCliService_GetIssueAsync_System_Int32_System_Threading_CancellationToken_
+  name: GetIssueAsync
+  nameWithType: IGitHubCliService.GetIssueAsync
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.GetIssueAsync
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Models.GitHubIssueDetailResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Models.GitHubIssueDetailResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<GitHubIssueDetailResult>
+  nameWithType: Task<GitHubIssueDetailResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Models.GitHubIssueDetailResult>
+  nameWithType.vb: Task(Of GitHubIssueDetailResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Models.GitHubIssueDetailResult)
+  name.vb: Task(Of GitHubIssueDetailResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Models.GitHubIssueDetailResult
+    name: GitHubIssueDetailResult
+    href: McpServer.Support.Mcp.Models.GitHubIssueDetailResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Models.GitHubIssueDetailResult
+    name: GitHubIssueDetailResult
+    href: McpServer.Support.Mcp.Models.GitHubIssueDetailResult.html
+  - name: )
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.UpdateIssueAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IGitHubCliService.UpdateIssueAsync
+  href: McpServer.Support.Mcp.Services.IGitHubCliService.html#McpServer_Support_Mcp_Services_IGitHubCliService_UpdateIssueAsync_System_Int32_McpServer_Support_Mcp_Models_GitHubIssueUpdateRequest_System_Threading_CancellationToken_
+  name: UpdateIssueAsync
+  nameWithType: IGitHubCliService.UpdateIssueAsync
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.UpdateIssueAsync
+- uid: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest
+  commentId: T:McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest
+  parent: McpServer.Support.Mcp.Models
+  href: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.html
+  name: GitHubIssueUpdateRequest
+  nameWithType: GitHubIssueUpdateRequest
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Models.GitHubMutationResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Models.GitHubMutationResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<GitHubMutationResult>
+  nameWithType: Task<GitHubMutationResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Models.GitHubMutationResult>
+  nameWithType.vb: Task(Of GitHubMutationResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Models.GitHubMutationResult)
+  name.vb: Task(Of GitHubMutationResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Models.GitHubMutationResult
+    name: GitHubMutationResult
+    href: McpServer.Support.Mcp.Models.GitHubMutationResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Models.GitHubMutationResult
+    name: GitHubMutationResult
+    href: McpServer.Support.Mcp.Models.GitHubMutationResult.html
+  - name: )
+- uid: McpServer.Support.Mcp.Models
+  commentId: N:McpServer.Support.Mcp.Models
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Models
+  nameWithType: McpServer.Support.Mcp.Models
+  fullName: McpServer.Support.Mcp.Models
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.CloseIssueAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IGitHubCliService.CloseIssueAsync
+  href: McpServer.Support.Mcp.Services.IGitHubCliService.html#McpServer_Support_Mcp_Services_IGitHubCliService_CloseIssueAsync_System_Int32_System_String_System_Threading_CancellationToken_
+  name: CloseIssueAsync
+  nameWithType: IGitHubCliService.CloseIssueAsync
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.CloseIssueAsync
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.ReopenIssueAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IGitHubCliService.ReopenIssueAsync
+  href: McpServer.Support.Mcp.Services.IGitHubCliService.html#McpServer_Support_Mcp_Services_IGitHubCliService_ReopenIssueAsync_System_Int32_System_Threading_CancellationToken_
+  name: ReopenIssueAsync
+  nameWithType: IGitHubCliService.ReopenIssueAsync
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.ReopenIssueAsync
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService.ListIssueLabelsAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IGitHubCliService.ListIssueLabelsAsync
+  href: McpServer.Support.Mcp.Services.IGitHubCliService.html#McpServer_Support_Mcp_Services_IGitHubCliService_ListIssueLabelsAsync_System_Threading_CancellationToken_
+  name: ListIssueLabelsAsync
+  nameWithType: IGitHubCliService.ListIssueLabelsAsync
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService.ListIssueLabelsAsync
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Models.GitHubLabelsResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Models.GitHubLabelsResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<GitHubLabelsResult>
+  nameWithType: Task<GitHubLabelsResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Models.GitHubLabelsResult>
+  nameWithType.vb: Task(Of GitHubLabelsResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Models.GitHubLabelsResult)
+  name.vb: Task(Of GitHubLabelsResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Models.GitHubLabelsResult
+    name: GitHubLabelsResult
+    href: McpServer.Support.Mcp.Models.GitHubLabelsResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Models.GitHubLabelsResult
+    name: GitHubLabelsResult
+    href: McpServer.Support.Mcp.Models.GitHubLabelsResult.html
+  - name: )

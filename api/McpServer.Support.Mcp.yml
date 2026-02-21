@@ -1,0 +1,23 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp
+  commentId: N:McpServer.Support.Mcp
+  id: McpServer.Support.Mcp
+  children:
+  - McpServer.Support.Mcp.McpApiEntryPoint
+  langs:
+  - csharp
+  - vb
+  name: McpServer.Support.Mcp
+  nameWithType: McpServer.Support.Mcp
+  fullName: McpServer.Support.Mcp
+  type: Namespace
+  assemblies:
+  - McpServer.Support.Mcp
+references:
+- uid: McpServer.Support.Mcp.McpApiEntryPoint
+  commentId: T:McpServer.Support.Mcp.McpApiEntryPoint
+  href: McpServer.Support.Mcp.McpApiEntryPoint.html
+  name: McpApiEntryPoint
+  nameWithType: McpApiEntryPoint
+  fullName: McpServer.Support.Mcp.McpApiEntryPoint

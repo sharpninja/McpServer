@@ -1,0 +1,531 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Ingestion.SessionLogImportResult
+  commentId: T:McpServer.Support.Mcp.Ingestion.SessionLogImportResult
+  id: SessionLogImportResult
+  parent: McpServer.Support.Mcp.Ingestion
+  children:
+  - McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Failed
+  - McpServer.Support.Mcp.Ingestion.SessionLogImportResult.FilesScanned
+  - McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Imported
+  - McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Skipped
+  - McpServer.Support.Mcp.Ingestion.SessionLogImportResult.TotalEntries
+  langs:
+  - csharp
+  - vb
+  name: SessionLogImportResult
+  nameWithType: SessionLogImportResult
+  fullName: McpServer.Support.Mcp.Ingestion.SessionLogImportResult
+  type: Class
+  source:
+    id: SessionLogImportResult
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\SessionLogIngestor.cs
+    startLine: 11
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: 'TR-PLANNED-013: Statistics from a session log import run.'
+  example: []
+  syntax:
+    content: 'public sealed record SessionLogImportResult : IEquatable<SessionLogImportResult>'
+    content.vb: Public NotInheritable Class SessionLogImportResult Implements IEquatable(Of SessionLogImportResult)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{McpServer.Support.Mcp.Ingestion.SessionLogImportResult}
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.FilesScanned
+  commentId: P:McpServer.Support.Mcp.Ingestion.SessionLogImportResult.FilesScanned
+  id: FilesScanned
+  parent: McpServer.Support.Mcp.Ingestion.SessionLogImportResult
+  langs:
+  - csharp
+  - vb
+  name: FilesScanned
+  nameWithType: SessionLogImportResult.FilesScanned
+  fullName: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.FilesScanned
+  type: Property
+  source:
+    id: FilesScanned
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\SessionLogIngestor.cs
+    startLine: 14
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: Total JSON files scanned in the sessions directory.
+  example: []
+  syntax:
+    content: public int FilesScanned { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property FilesScanned As Integer
+  overload: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.FilesScanned*
+- uid: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Imported
+  commentId: P:McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Imported
+  id: Imported
+  parent: McpServer.Support.Mcp.Ingestion.SessionLogImportResult
+  langs:
+  - csharp
+  - vb
+  name: Imported
+  nameWithType: SessionLogImportResult.Imported
+  fullName: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Imported
+  type: Property
+  source:
+    id: Imported
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\SessionLogIngestor.cs
+    startLine: 17
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: Files imported (new or updated in the database).
+  example: []
+  syntax:
+    content: public int Imported { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property Imported As Integer
+  overload: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Imported*
+- uid: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Skipped
+  commentId: P:McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Skipped
+  id: Skipped
+  parent: McpServer.Support.Mcp.Ingestion.SessionLogImportResult
+  langs:
+  - csharp
+  - vb
+  name: Skipped
+  nameWithType: SessionLogImportResult.Skipped
+  fullName: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Skipped
+  type: Property
+  source:
+    id: Skipped
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\SessionLogIngestor.cs
+    startLine: 20
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: Files skipped because their content hash was unchanged.
+  example: []
+  syntax:
+    content: public int Skipped { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property Skipped As Integer
+  overload: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Skipped*
+- uid: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Failed
+  commentId: P:McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Failed
+  id: Failed
+  parent: McpServer.Support.Mcp.Ingestion.SessionLogImportResult
+  langs:
+  - csharp
+  - vb
+  name: Failed
+  nameWithType: SessionLogImportResult.Failed
+  fullName: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Failed
+  type: Property
+  source:
+    id: Failed
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\SessionLogIngestor.cs
+    startLine: 23
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: Files that failed to parse or read.
+  example: []
+  syntax:
+    content: public int Failed { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property Failed As Integer
+  overload: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Failed*
+- uid: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.TotalEntries
+  commentId: P:McpServer.Support.Mcp.Ingestion.SessionLogImportResult.TotalEntries
+  id: TotalEntries
+  parent: McpServer.Support.Mcp.Ingestion.SessionLogImportResult
+  langs:
+  - csharp
+  - vb
+  name: TotalEntries
+  nameWithType: SessionLogImportResult.TotalEntries
+  fullName: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.TotalEntries
+  type: Property
+  source:
+    id: TotalEntries
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\SessionLogIngestor.cs
+    startLine: 26
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: Total entries across all imported session logs.
+  example: []
+  syntax:
+    content: public int TotalEntries { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property TotalEntries As Integer
+  overload: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.TotalEntries*
+references:
+- uid: McpServer.Support.Mcp.Ingestion
+  commentId: N:McpServer.Support.Mcp.Ingestion
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Ingestion
+  nameWithType: McpServer.Support.Mcp.Ingestion
+  fullName: McpServer.Support.Mcp.Ingestion
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Ingestion
+    name: Ingestion
+    href: McpServer.Support.Mcp.Ingestion.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Ingestion
+    name: Ingestion
+    href: McpServer.Support.Mcp.Ingestion.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.IEquatable{McpServer.Support.Mcp.Ingestion.SessionLogImportResult}
+  commentId: T:System.IEquatable{McpServer.Support.Mcp.Ingestion.SessionLogImportResult}
+  parent: System
+  definition: System.IEquatable`1
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<SessionLogImportResult>
+  nameWithType: IEquatable<SessionLogImportResult>
+  fullName: System.IEquatable<McpServer.Support.Mcp.Ingestion.SessionLogImportResult>
+  nameWithType.vb: IEquatable(Of SessionLogImportResult)
+  fullName.vb: System.IEquatable(Of McpServer.Support.Mcp.Ingestion.SessionLogImportResult)
+  name.vb: IEquatable(Of SessionLogImportResult)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Ingestion.SessionLogImportResult
+    name: SessionLogImportResult
+    href: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Ingestion.SessionLogImportResult
+    name: SessionLogImportResult
+    href: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.html
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.FilesScanned*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.SessionLogImportResult.FilesScanned
+  href: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.html#McpServer_Support_Mcp_Ingestion_SessionLogImportResult_FilesScanned
+  name: FilesScanned
+  nameWithType: SessionLogImportResult.FilesScanned
+  fullName: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.FilesScanned
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Imported*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Imported
+  href: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.html#McpServer_Support_Mcp_Ingestion_SessionLogImportResult_Imported
+  name: Imported
+  nameWithType: SessionLogImportResult.Imported
+  fullName: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Imported
+- uid: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Skipped*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Skipped
+  href: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.html#McpServer_Support_Mcp_Ingestion_SessionLogImportResult_Skipped
+  name: Skipped
+  nameWithType: SessionLogImportResult.Skipped
+  fullName: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Skipped
+- uid: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Failed*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Failed
+  href: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.html#McpServer_Support_Mcp_Ingestion_SessionLogImportResult_Failed
+  name: Failed
+  nameWithType: SessionLogImportResult.Failed
+  fullName: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.Failed
+- uid: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.TotalEntries*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.SessionLogImportResult.TotalEntries
+  href: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.html#McpServer_Support_Mcp_Ingestion_SessionLogImportResult_TotalEntries
+  name: TotalEntries
+  nameWithType: SessionLogImportResult.TotalEntries
+  fullName: McpServer.Support.Mcp.Ingestion.SessionLogImportResult.TotalEntries

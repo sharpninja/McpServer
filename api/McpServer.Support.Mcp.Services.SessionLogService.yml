@@ -1,0 +1,1349 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.SessionLogService
+  commentId: T:McpServer.Support.Mcp.Services.SessionLogService
+  id: SessionLogService
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.SessionLogService.#ctor(McpServer.Support.Mcp.Storage.McpDbContext,Microsoft.Extensions.Logging.ILogger{McpServer.Support.Mcp.Services.SessionLogService})
+  - McpServer.Support.Mcp.Services.SessionLogService.AppendProcessingDialogAsync(System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ProcessingDialogItemDto},System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.SessionLogService.IsUnchangedAsync(System.String,System.String,System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.SessionLogService.QueryAsync(McpServer.Support.Mcp.Services.SessionLogQueryRequest,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.SessionLogService.SubmitAsync(McpServer.Support.Mcp.Models.UnifiedSessionLogDto,System.String,System.String,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: SessionLogService
+  nameWithType: SessionLogService
+  fullName: McpServer.Support.Mcp.Services.SessionLogService
+  type: Class
+  source:
+    id: SessionLogService
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\SessionLogService.cs
+    startLine: 14
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: >-
+    TR-PLANNED-013: Implements session log submit (upsert) and query with pagination (MVP-SUPPORT-011).
+
+    FR-SUPPORT-010: Persists session logs in 4NF-normalized SQLite tables via <xref href="McpServer.Support.Mcp.Storage.McpDbContext" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: 'public sealed class SessionLogService : ISessionLogService'
+    content.vb: Public NotInheritable Class SessionLogService Implements ISessionLogService
+  inheritance:
+  - System.Object
+  implements:
+  - McpServer.Support.Mcp.Services.ISessionLogService
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Services.SessionLogService.#ctor(McpServer.Support.Mcp.Storage.McpDbContext,Microsoft.Extensions.Logging.ILogger{McpServer.Support.Mcp.Services.SessionLogService})
+  commentId: M:McpServer.Support.Mcp.Services.SessionLogService.#ctor(McpServer.Support.Mcp.Storage.McpDbContext,Microsoft.Extensions.Logging.ILogger{McpServer.Support.Mcp.Services.SessionLogService})
+  id: '#ctor(McpServer.Support.Mcp.Storage.McpDbContext,Microsoft.Extensions.Logging.ILogger{McpServer.Support.Mcp.Services.SessionLogService})'
+  parent: McpServer.Support.Mcp.Services.SessionLogService
+  langs:
+  - csharp
+  - vb
+  name: SessionLogService(McpDbContext, ILogger<SessionLogService>)
+  nameWithType: SessionLogService.SessionLogService(McpDbContext, ILogger<SessionLogService>)
+  fullName: McpServer.Support.Mcp.Services.SessionLogService.SessionLogService(McpServer.Support.Mcp.Storage.McpDbContext, Microsoft.Extensions.Logging.ILogger<McpServer.Support.Mcp.Services.SessionLogService>)
+  type: Constructor
+  source:
+    id: .ctor
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\SessionLogService.cs
+    startLine: 22
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-PLANNED-013: Constructor.'
+  example: []
+  syntax:
+    content: public SessionLogService(McpDbContext db, ILogger<SessionLogService> logger)
+    parameters:
+    - id: db
+      type: McpServer.Support.Mcp.Storage.McpDbContext
+    - id: logger
+      type: Microsoft.Extensions.Logging.ILogger{McpServer.Support.Mcp.Services.SessionLogService}
+    content.vb: Public Sub New(db As McpDbContext, logger As ILogger(Of SessionLogService))
+  overload: McpServer.Support.Mcp.Services.SessionLogService.#ctor*
+  nameWithType.vb: SessionLogService.New(McpDbContext, ILogger(Of SessionLogService))
+  fullName.vb: McpServer.Support.Mcp.Services.SessionLogService.New(McpServer.Support.Mcp.Storage.McpDbContext, Microsoft.Extensions.Logging.ILogger(Of McpServer.Support.Mcp.Services.SessionLogService))
+  name.vb: New(McpDbContext, ILogger(Of SessionLogService))
+- uid: McpServer.Support.Mcp.Services.SessionLogService.SubmitAsync(McpServer.Support.Mcp.Models.UnifiedSessionLogDto,System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.SessionLogService.SubmitAsync(McpServer.Support.Mcp.Models.UnifiedSessionLogDto,System.String,System.String,System.Threading.CancellationToken)
+  id: SubmitAsync(McpServer.Support.Mcp.Models.UnifiedSessionLogDto,System.String,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.SessionLogService
+  langs:
+  - csharp
+  - vb
+  name: SubmitAsync(UnifiedSessionLogDto, string?, string?, CancellationToken)
+  nameWithType: SessionLogService.SubmitAsync(UnifiedSessionLogDto, string?, string?, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.SessionLogService.SubmitAsync(McpServer.Support.Mcp.Models.UnifiedSessionLogDto, string?, string?, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: SubmitAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\SessionLogService.cs
+    startLine: 29
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-PLANNED-013: Submit (upsert) a session log. Inserts or replaces by (SourceType, SessionId).'
+  example: []
+  syntax:
+    content: public Task<long> SubmitAsync(UnifiedSessionLogDto dto, string? sourceFilePath = null, string? contentHash = null, CancellationToken cancellationToken = default)
+    parameters:
+    - id: dto
+      type: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+      description: Unified session log payload conforming to the schema.
+    - id: sourceFilePath
+      type: System.String
+      description: Full path to the source JSON file, or null for API submissions.
+    - id: contentHash
+      type: System.String
+      description: SHA-256 hash of the source file at time of import, stored for change detection during sync.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{System.Int64}
+      description: The persisted session log id.
+    content.vb: Public Function SubmitAsync(dto As UnifiedSessionLogDto, sourceFilePath As String = Nothing, contentHash As String = Nothing, cancellationToken As CancellationToken = Nothing) As Task(Of Long)
+  overload: McpServer.Support.Mcp.Services.SessionLogService.SubmitAsync*
+  implements:
+  - McpServer.Support.Mcp.Services.ISessionLogService.SubmitAsync(McpServer.Support.Mcp.Models.UnifiedSessionLogDto,System.String,System.String,System.Threading.CancellationToken)
+  nameWithType.vb: SessionLogService.SubmitAsync(UnifiedSessionLogDto, String, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.SessionLogService.SubmitAsync(McpServer.Support.Mcp.Models.UnifiedSessionLogDto, String, String, System.Threading.CancellationToken)
+  name.vb: SubmitAsync(UnifiedSessionLogDto, String, String, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.SessionLogService.IsUnchangedAsync(System.String,System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.SessionLogService.IsUnchangedAsync(System.String,System.String,System.String,System.Threading.CancellationToken)
+  id: IsUnchangedAsync(System.String,System.String,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.SessionLogService
+  langs:
+  - csharp
+  - vb
+  name: IsUnchangedAsync(string, string, string, CancellationToken)
+  nameWithType: SessionLogService.IsUnchangedAsync(string, string, string, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.SessionLogService.IsUnchangedAsync(string, string, string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: IsUnchangedAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\SessionLogService.cs
+    startLine: 78
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-PLANNED-013: Checks whether a session with the given key already exists with the specified content hash.'
+  example: []
+  syntax:
+    content: public Task<bool> IsUnchangedAsync(string sourceType, string sessionId, string contentHash, CancellationToken cancellationToken = default)
+    parameters:
+    - id: sourceType
+      type: System.String
+      description: Agent source type.
+    - id: sessionId
+      type: System.String
+      description: Session identifier.
+    - id: contentHash
+      type: System.String
+      description: SHA-256 content hash to compare.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{System.Boolean}
+      description: True if the session exists and its stored hash matches; false otherwise.
+    content.vb: Public Function IsUnchangedAsync(sourceType As String, sessionId As String, contentHash As String, cancellationToken As CancellationToken = Nothing) As Task(Of Boolean)
+  overload: McpServer.Support.Mcp.Services.SessionLogService.IsUnchangedAsync*
+  implements:
+  - McpServer.Support.Mcp.Services.ISessionLogService.IsUnchangedAsync(System.String,System.String,System.String,System.Threading.CancellationToken)
+  nameWithType.vb: SessionLogService.IsUnchangedAsync(String, String, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.SessionLogService.IsUnchangedAsync(String, String, String, System.Threading.CancellationToken)
+  name.vb: IsUnchangedAsync(String, String, String, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.SessionLogService.AppendProcessingDialogAsync(System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ProcessingDialogItemDto},System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.SessionLogService.AppendProcessingDialogAsync(System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ProcessingDialogItemDto},System.Threading.CancellationToken)
+  id: AppendProcessingDialogAsync(System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ProcessingDialogItemDto},System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.SessionLogService
+  langs:
+  - csharp
+  - vb
+  name: AppendProcessingDialogAsync(string, string, string, IReadOnlyList<ProcessingDialogItemDto>, CancellationToken)
+  nameWithType: SessionLogService.AppendProcessingDialogAsync(string, string, string, IReadOnlyList<ProcessingDialogItemDto>, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.SessionLogService.AppendProcessingDialogAsync(string, string, string, System.Collections.Generic.IReadOnlyList<McpServer.Support.Mcp.Models.ProcessingDialogItemDto>, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: AppendProcessingDialogAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\SessionLogService.cs
+    startLine: 92
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: >-
+    TR-PLANNED-013: Append one or more processing dialog items to an existing entry.
+
+    The AI model calls this on the fly to record reasoning, tool calls, and execution trace.
+  example: []
+  syntax:
+    content: public Task<int> AppendProcessingDialogAsync(string sourceType, string sessionId, string requestId, IReadOnlyList<ProcessingDialogItemDto> items, CancellationToken cancellationToken = default)
+    parameters:
+    - id: sourceType
+      type: System.String
+      description: Agent source type.
+    - id: sessionId
+      type: System.String
+      description: Session identifier.
+    - id: requestId
+      type: System.String
+      description: Request entry identifier within the session.
+    - id: items
+      type: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ProcessingDialogItemDto}
+      description: Dialog items to append (added after existing items).
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{System.Int32}
+      description: Total dialog item count on the entry after appending.
+    content.vb: Public Function AppendProcessingDialogAsync(sourceType As String, sessionId As String, requestId As String, items As IReadOnlyList(Of ProcessingDialogItemDto), cancellationToken As CancellationToken = Nothing) As Task(Of Integer)
+  overload: McpServer.Support.Mcp.Services.SessionLogService.AppendProcessingDialogAsync*
+  implements:
+  - McpServer.Support.Mcp.Services.ISessionLogService.AppendProcessingDialogAsync(System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ProcessingDialogItemDto},System.Threading.CancellationToken)
+  nameWithType.vb: SessionLogService.AppendProcessingDialogAsync(String, String, String, IReadOnlyList(Of ProcessingDialogItemDto), CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.SessionLogService.AppendProcessingDialogAsync(String, String, String, System.Collections.Generic.IReadOnlyList(Of McpServer.Support.Mcp.Models.ProcessingDialogItemDto), System.Threading.CancellationToken)
+  name.vb: AppendProcessingDialogAsync(String, String, String, IReadOnlyList(Of ProcessingDialogItemDto), CancellationToken)
+- uid: McpServer.Support.Mcp.Services.SessionLogService.QueryAsync(McpServer.Support.Mcp.Services.SessionLogQueryRequest,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.SessionLogService.QueryAsync(McpServer.Support.Mcp.Services.SessionLogQueryRequest,System.Threading.CancellationToken)
+  id: QueryAsync(McpServer.Support.Mcp.Services.SessionLogQueryRequest,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.SessionLogService
+  langs:
+  - csharp
+  - vb
+  name: QueryAsync(SessionLogQueryRequest, CancellationToken)
+  nameWithType: SessionLogService.QueryAsync(SessionLogQueryRequest, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.SessionLogService.QueryAsync(McpServer.Support.Mcp.Services.SessionLogQueryRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: QueryAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\SessionLogService.cs
+    startLine: 138
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-PLANNED-013: Query session logs with optional filters and pagination.'
+  example: []
+  syntax:
+    content: public Task<SessionLogQueryResult> QueryAsync(SessionLogQueryRequest request, CancellationToken cancellationToken = default)
+    parameters:
+    - id: request
+      type: McpServer.Support.Mcp.Services.SessionLogQueryRequest
+      description: Query parameters.
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.SessionLogQueryResult}
+      description: Paginated list of session logs with entries.
+    content.vb: Public Function QueryAsync(request As SessionLogQueryRequest, cancellationToken As CancellationToken = Nothing) As Task(Of SessionLogQueryResult)
+  overload: McpServer.Support.Mcp.Services.SessionLogService.QueryAsync*
+  implements:
+  - McpServer.Support.Mcp.Services.ISessionLogService.QueryAsync(McpServer.Support.Mcp.Services.SessionLogQueryRequest,System.Threading.CancellationToken)
+references:
+- uid: McpServer.Support.Mcp.Storage.McpDbContext
+  commentId: T:McpServer.Support.Mcp.Storage.McpDbContext
+  parent: McpServer.Support.Mcp.Storage
+  href: McpServer.Support.Mcp.Storage.McpDbContext.html
+  name: McpDbContext
+  nameWithType: McpDbContext
+  fullName: McpServer.Support.Mcp.Storage.McpDbContext
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: McpServer.Support.Mcp.Services.ISessionLogService
+  commentId: T:McpServer.Support.Mcp.Services.ISessionLogService
+  parent: McpServer.Support.Mcp.Services
+  href: McpServer.Support.Mcp.Services.ISessionLogService.html
+  name: ISessionLogService
+  nameWithType: ISessionLogService
+  fullName: McpServer.Support.Mcp.Services.ISessionLogService
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: McpServer.Support.Mcp.Storage
+  commentId: N:McpServer.Support.Mcp.Storage
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Storage
+  nameWithType: McpServer.Support.Mcp.Storage
+  fullName: McpServer.Support.Mcp.Storage
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Services.SessionLogService.#ctor*
+  commentId: Overload:McpServer.Support.Mcp.Services.SessionLogService.#ctor
+  href: McpServer.Support.Mcp.Services.SessionLogService.html#McpServer_Support_Mcp_Services_SessionLogService__ctor_McpServer_Support_Mcp_Storage_McpDbContext_Microsoft_Extensions_Logging_ILogger_McpServer_Support_Mcp_Services_SessionLogService__
+  name: SessionLogService
+  nameWithType: SessionLogService.SessionLogService
+  fullName: McpServer.Support.Mcp.Services.SessionLogService.SessionLogService
+  nameWithType.vb: SessionLogService.New
+  fullName.vb: McpServer.Support.Mcp.Services.SessionLogService.New
+  name.vb: New
+- uid: Microsoft.Extensions.Logging.ILogger{McpServer.Support.Mcp.Services.SessionLogService}
+  commentId: T:Microsoft.Extensions.Logging.ILogger{McpServer.Support.Mcp.Services.SessionLogService}
+  parent: Microsoft.Extensions.Logging
+  definition: Microsoft.Extensions.Logging.ILogger`1
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  name: ILogger<SessionLogService>
+  nameWithType: ILogger<SessionLogService>
+  fullName: Microsoft.Extensions.Logging.ILogger<McpServer.Support.Mcp.Services.SessionLogService>
+  nameWithType.vb: ILogger(Of SessionLogService)
+  fullName.vb: Microsoft.Extensions.Logging.ILogger(Of McpServer.Support.Mcp.Services.SessionLogService)
+  name.vb: ILogger(Of SessionLogService)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.SessionLogService
+    name: SessionLogService
+    href: McpServer.Support.Mcp.Services.SessionLogService.html
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.SessionLogService
+    name: SessionLogService
+    href: McpServer.Support.Mcp.Services.SessionLogService.html
+  - name: )
+- uid: Microsoft.Extensions.Logging.ILogger`1
+  commentId: T:Microsoft.Extensions.Logging.ILogger`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  name: ILogger<TCategoryName>
+  nameWithType: ILogger<TCategoryName>
+  fullName: Microsoft.Extensions.Logging.ILogger<TCategoryName>
+  nameWithType.vb: ILogger(Of TCategoryName)
+  fullName.vb: Microsoft.Extensions.Logging.ILogger(Of TCategoryName)
+  name.vb: ILogger(Of TCategoryName)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: <
+  - name: TCategoryName
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Logging.ILogger`1
+    name: ILogger
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging.ilogger-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TCategoryName
+  - name: )
+- uid: Microsoft.Extensions.Logging
+  commentId: N:Microsoft.Extensions.Logging
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft
+  name: Microsoft.Extensions.Logging
+  nameWithType: Microsoft.Extensions.Logging
+  fullName: Microsoft.Extensions.Logging
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Logging
+    name: Logging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Logging
+    name: Logging
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.logging
+- uid: McpServer.Support.Mcp.Services.SessionLogService.SubmitAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.SessionLogService.SubmitAsync
+  href: McpServer.Support.Mcp.Services.SessionLogService.html#McpServer_Support_Mcp_Services_SessionLogService_SubmitAsync_McpServer_Support_Mcp_Models_UnifiedSessionLogDto_System_String_System_String_System_Threading_CancellationToken_
+  name: SubmitAsync
+  nameWithType: SessionLogService.SubmitAsync
+  fullName: McpServer.Support.Mcp.Services.SessionLogService.SubmitAsync
+- uid: McpServer.Support.Mcp.Services.ISessionLogService.SubmitAsync(McpServer.Support.Mcp.Models.UnifiedSessionLogDto,System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.ISessionLogService.SubmitAsync(McpServer.Support.Mcp.Models.UnifiedSessionLogDto,System.String,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.ISessionLogService
+  isExternal: true
+  href: McpServer.Support.Mcp.Services.ISessionLogService.html#McpServer_Support_Mcp_Services_ISessionLogService_SubmitAsync_McpServer_Support_Mcp_Models_UnifiedSessionLogDto_System_String_System_String_System_Threading_CancellationToken_
+  name: SubmitAsync(UnifiedSessionLogDto, string, string, CancellationToken)
+  nameWithType: ISessionLogService.SubmitAsync(UnifiedSessionLogDto, string, string, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.ISessionLogService.SubmitAsync(McpServer.Support.Mcp.Models.UnifiedSessionLogDto, string, string, System.Threading.CancellationToken)
+  nameWithType.vb: ISessionLogService.SubmitAsync(UnifiedSessionLogDto, String, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.ISessionLogService.SubmitAsync(McpServer.Support.Mcp.Models.UnifiedSessionLogDto, String, String, System.Threading.CancellationToken)
+  name.vb: SubmitAsync(UnifiedSessionLogDto, String, String, CancellationToken)
+  spec.csharp:
+  - uid: McpServer.Support.Mcp.Services.ISessionLogService.SubmitAsync(McpServer.Support.Mcp.Models.UnifiedSessionLogDto,System.String,System.String,System.Threading.CancellationToken)
+    name: SubmitAsync
+    href: McpServer.Support.Mcp.Services.ISessionLogService.html#McpServer_Support_Mcp_Services_ISessionLogService_SubmitAsync_McpServer_Support_Mcp_Models_UnifiedSessionLogDto_System_String_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+    name: UnifiedSessionLogDto
+    href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: McpServer.Support.Mcp.Services.ISessionLogService.SubmitAsync(McpServer.Support.Mcp.Models.UnifiedSessionLogDto,System.String,System.String,System.Threading.CancellationToken)
+    name: SubmitAsync
+    href: McpServer.Support.Mcp.Services.ISessionLogService.html#McpServer_Support_Mcp_Services_ISessionLogService_SubmitAsync_McpServer_Support_Mcp_Models_UnifiedSessionLogDto_System_String_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+    name: UnifiedSessionLogDto
+    href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  commentId: T:McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  parent: McpServer.Support.Mcp.Models
+  href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html
+  name: UnifiedSessionLogDto
+  nameWithType: UnifiedSessionLogDto
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{System.Int64}
+  commentId: T:System.Threading.Tasks.Task{System.Int64}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<long>
+  nameWithType: Task<long>
+  fullName: System.Threading.Tasks.Task<long>
+  nameWithType.vb: Task(Of Long)
+  fullName.vb: System.Threading.Tasks.Task(Of Long)
+  name.vb: Task(Of Long)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Int64
+    name: long
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int64
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Int64
+    name: Long
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int64
+  - name: )
+- uid: McpServer.Support.Mcp.Models
+  commentId: N:McpServer.Support.Mcp.Models
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Models
+  nameWithType: McpServer.Support.Mcp.Models
+  fullName: McpServer.Support.Mcp.Models
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: McpServer.Support.Mcp.Services.SessionLogService.IsUnchangedAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.SessionLogService.IsUnchangedAsync
+  href: McpServer.Support.Mcp.Services.SessionLogService.html#McpServer_Support_Mcp_Services_SessionLogService_IsUnchangedAsync_System_String_System_String_System_String_System_Threading_CancellationToken_
+  name: IsUnchangedAsync
+  nameWithType: SessionLogService.IsUnchangedAsync
+  fullName: McpServer.Support.Mcp.Services.SessionLogService.IsUnchangedAsync
+- uid: McpServer.Support.Mcp.Services.ISessionLogService.IsUnchangedAsync(System.String,System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.ISessionLogService.IsUnchangedAsync(System.String,System.String,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.ISessionLogService
+  isExternal: true
+  href: McpServer.Support.Mcp.Services.ISessionLogService.html#McpServer_Support_Mcp_Services_ISessionLogService_IsUnchangedAsync_System_String_System_String_System_String_System_Threading_CancellationToken_
+  name: IsUnchangedAsync(string, string, string, CancellationToken)
+  nameWithType: ISessionLogService.IsUnchangedAsync(string, string, string, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.ISessionLogService.IsUnchangedAsync(string, string, string, System.Threading.CancellationToken)
+  nameWithType.vb: ISessionLogService.IsUnchangedAsync(String, String, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.ISessionLogService.IsUnchangedAsync(String, String, String, System.Threading.CancellationToken)
+  name.vb: IsUnchangedAsync(String, String, String, CancellationToken)
+  spec.csharp:
+  - uid: McpServer.Support.Mcp.Services.ISessionLogService.IsUnchangedAsync(System.String,System.String,System.String,System.Threading.CancellationToken)
+    name: IsUnchangedAsync
+    href: McpServer.Support.Mcp.Services.ISessionLogService.html#McpServer_Support_Mcp_Services_ISessionLogService_IsUnchangedAsync_System_String_System_String_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: McpServer.Support.Mcp.Services.ISessionLogService.IsUnchangedAsync(System.String,System.String,System.String,System.Threading.CancellationToken)
+    name: IsUnchangedAsync
+    href: McpServer.Support.Mcp.Services.ISessionLogService.html#McpServer_Support_Mcp_Services_ISessionLogService_IsUnchangedAsync_System_String_System_String_System_String_System_Threading_CancellationToken_
+  - name: (
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: System.Threading.Tasks.Task{System.Boolean}
+  commentId: T:System.Threading.Tasks.Task{System.Boolean}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<bool>
+  nameWithType: Task<bool>
+  fullName: System.Threading.Tasks.Task<bool>
+  nameWithType.vb: Task(Of Boolean)
+  fullName.vb: System.Threading.Tasks.Task(Of Boolean)
+  name.vb: Task(Of Boolean)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: )
+- uid: McpServer.Support.Mcp.Services.SessionLogService.AppendProcessingDialogAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.SessionLogService.AppendProcessingDialogAsync
+  href: McpServer.Support.Mcp.Services.SessionLogService.html#McpServer_Support_Mcp_Services_SessionLogService_AppendProcessingDialogAsync_System_String_System_String_System_String_System_Collections_Generic_IReadOnlyList_McpServer_Support_Mcp_Models_ProcessingDialogItemDto__System_Threading_CancellationToken_
+  name: AppendProcessingDialogAsync
+  nameWithType: SessionLogService.AppendProcessingDialogAsync
+  fullName: McpServer.Support.Mcp.Services.SessionLogService.AppendProcessingDialogAsync
+- uid: McpServer.Support.Mcp.Services.ISessionLogService.AppendProcessingDialogAsync(System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ProcessingDialogItemDto},System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.ISessionLogService.AppendProcessingDialogAsync(System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ProcessingDialogItemDto},System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.ISessionLogService
+  isExternal: true
+  href: McpServer.Support.Mcp.Services.ISessionLogService.html#McpServer_Support_Mcp_Services_ISessionLogService_AppendProcessingDialogAsync_System_String_System_String_System_String_System_Collections_Generic_IReadOnlyList_McpServer_Support_Mcp_Models_ProcessingDialogItemDto__System_Threading_CancellationToken_
+  name: AppendProcessingDialogAsync(string, string, string, IReadOnlyList<ProcessingDialogItemDto>, CancellationToken)
+  nameWithType: ISessionLogService.AppendProcessingDialogAsync(string, string, string, IReadOnlyList<ProcessingDialogItemDto>, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.ISessionLogService.AppendProcessingDialogAsync(string, string, string, System.Collections.Generic.IReadOnlyList<McpServer.Support.Mcp.Models.ProcessingDialogItemDto>, System.Threading.CancellationToken)
+  nameWithType.vb: ISessionLogService.AppendProcessingDialogAsync(String, String, String, IReadOnlyList(Of ProcessingDialogItemDto), CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.ISessionLogService.AppendProcessingDialogAsync(String, String, String, System.Collections.Generic.IReadOnlyList(Of McpServer.Support.Mcp.Models.ProcessingDialogItemDto), System.Threading.CancellationToken)
+  name.vb: AppendProcessingDialogAsync(String, String, String, IReadOnlyList(Of ProcessingDialogItemDto), CancellationToken)
+  spec.csharp:
+  - uid: McpServer.Support.Mcp.Services.ISessionLogService.AppendProcessingDialogAsync(System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ProcessingDialogItemDto},System.Threading.CancellationToken)
+    name: AppendProcessingDialogAsync
+    href: McpServer.Support.Mcp.Services.ISessionLogService.html#McpServer_Support_Mcp_Services_ISessionLogService_AppendProcessingDialogAsync_System_String_System_String_System_String_System_Collections_Generic_IReadOnlyList_McpServer_Support_Mcp_Models_ProcessingDialogItemDto__System_Threading_CancellationToken_
+  - name: (
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Models.ProcessingDialogItemDto
+    name: ProcessingDialogItemDto
+    href: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.html
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: McpServer.Support.Mcp.Services.ISessionLogService.AppendProcessingDialogAsync(System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ProcessingDialogItemDto},System.Threading.CancellationToken)
+    name: AppendProcessingDialogAsync
+    href: McpServer.Support.Mcp.Services.ISessionLogService.html#McpServer_Support_Mcp_Services_ISessionLogService_AppendProcessingDialogAsync_System_String_System_String_System_String_System_Collections_Generic_IReadOnlyList_McpServer_Support_Mcp_Models_ProcessingDialogItemDto__System_Threading_CancellationToken_
+  - name: (
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: ','
+  - name: " "
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Models.ProcessingDialogItemDto
+    name: ProcessingDialogItemDto
+    href: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.html
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ProcessingDialogItemDto}
+  commentId: T:System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ProcessingDialogItemDto}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IReadOnlyList`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<ProcessingDialogItemDto>
+  nameWithType: IReadOnlyList<ProcessingDialogItemDto>
+  fullName: System.Collections.Generic.IReadOnlyList<McpServer.Support.Mcp.Models.ProcessingDialogItemDto>
+  nameWithType.vb: IReadOnlyList(Of ProcessingDialogItemDto)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of McpServer.Support.Mcp.Models.ProcessingDialogItemDto)
+  name.vb: IReadOnlyList(Of ProcessingDialogItemDto)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Models.ProcessingDialogItemDto
+    name: ProcessingDialogItemDto
+    href: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Models.ProcessingDialogItemDto
+    name: ProcessingDialogItemDto
+    href: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.html
+  - name: )
+- uid: System.Threading.Tasks.Task{System.Int32}
+  commentId: T:System.Threading.Tasks.Task{System.Int32}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<int>
+  nameWithType: Task<int>
+  fullName: System.Threading.Tasks.Task<int>
+  nameWithType.vb: Task(Of Integer)
+  fullName.vb: System.Threading.Tasks.Task(Of Integer)
+  name.vb: Task(Of Integer)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Int32
+    name: int
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: )
+- uid: System.Collections.Generic.IReadOnlyList`1
+  commentId: T:System.Collections.Generic.IReadOnlyList`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<T>
+  nameWithType: IReadOnlyList<T>
+  fullName: System.Collections.Generic.IReadOnlyList<T>
+  nameWithType.vb: IReadOnlyList(Of T)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of T)
+  name.vb: IReadOnlyList(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: McpServer.Support.Mcp.Services.SessionLogService.QueryAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.SessionLogService.QueryAsync
+  href: McpServer.Support.Mcp.Services.SessionLogService.html#McpServer_Support_Mcp_Services_SessionLogService_QueryAsync_McpServer_Support_Mcp_Services_SessionLogQueryRequest_System_Threading_CancellationToken_
+  name: QueryAsync
+  nameWithType: SessionLogService.QueryAsync
+  fullName: McpServer.Support.Mcp.Services.SessionLogService.QueryAsync
+- uid: McpServer.Support.Mcp.Services.ISessionLogService.QueryAsync(McpServer.Support.Mcp.Services.SessionLogQueryRequest,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.ISessionLogService.QueryAsync(McpServer.Support.Mcp.Services.SessionLogQueryRequest,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.ISessionLogService
+  isExternal: true
+  href: McpServer.Support.Mcp.Services.ISessionLogService.html#McpServer_Support_Mcp_Services_ISessionLogService_QueryAsync_McpServer_Support_Mcp_Services_SessionLogQueryRequest_System_Threading_CancellationToken_
+  name: QueryAsync(SessionLogQueryRequest, CancellationToken)
+  nameWithType: ISessionLogService.QueryAsync(SessionLogQueryRequest, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.ISessionLogService.QueryAsync(McpServer.Support.Mcp.Services.SessionLogQueryRequest, System.Threading.CancellationToken)
+  spec.csharp:
+  - uid: McpServer.Support.Mcp.Services.ISessionLogService.QueryAsync(McpServer.Support.Mcp.Services.SessionLogQueryRequest,System.Threading.CancellationToken)
+    name: QueryAsync
+    href: McpServer.Support.Mcp.Services.ISessionLogService.html#McpServer_Support_Mcp_Services_ISessionLogService_QueryAsync_McpServer_Support_Mcp_Services_SessionLogQueryRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: McpServer.Support.Mcp.Services.SessionLogQueryRequest
+    name: SessionLogQueryRequest
+    href: McpServer.Support.Mcp.Services.SessionLogQueryRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+  spec.vb:
+  - uid: McpServer.Support.Mcp.Services.ISessionLogService.QueryAsync(McpServer.Support.Mcp.Services.SessionLogQueryRequest,System.Threading.CancellationToken)
+    name: QueryAsync
+    href: McpServer.Support.Mcp.Services.ISessionLogService.html#McpServer_Support_Mcp_Services_ISessionLogService_QueryAsync_McpServer_Support_Mcp_Services_SessionLogQueryRequest_System_Threading_CancellationToken_
+  - name: (
+  - uid: McpServer.Support.Mcp.Services.SessionLogQueryRequest
+    name: SessionLogQueryRequest
+    href: McpServer.Support.Mcp.Services.SessionLogQueryRequest.html
+  - name: ','
+  - name: " "
+  - uid: System.Threading.CancellationToken
+    name: CancellationToken
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  - name: )
+- uid: McpServer.Support.Mcp.Services.SessionLogQueryRequest
+  commentId: T:McpServer.Support.Mcp.Services.SessionLogQueryRequest
+  parent: McpServer.Support.Mcp.Services
+  href: McpServer.Support.Mcp.Services.SessionLogQueryRequest.html
+  name: SessionLogQueryRequest
+  nameWithType: SessionLogQueryRequest
+  fullName: McpServer.Support.Mcp.Services.SessionLogQueryRequest
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.SessionLogQueryResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.SessionLogQueryResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<SessionLogQueryResult>
+  nameWithType: Task<SessionLogQueryResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.SessionLogQueryResult>
+  nameWithType.vb: Task(Of SessionLogQueryResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.SessionLogQueryResult)
+  name.vb: Task(Of SessionLogQueryResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.SessionLogQueryResult
+    name: SessionLogQueryResult
+    href: McpServer.Support.Mcp.Services.SessionLogQueryResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.SessionLogQueryResult
+    name: SessionLogQueryResult
+    href: McpServer.Support.Mcp.Services.SessionLogQueryResult.html
+  - name: )

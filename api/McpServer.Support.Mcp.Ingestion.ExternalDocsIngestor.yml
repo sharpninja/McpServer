@@ -1,0 +1,710 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor
+  commentId: T:McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor
+  id: ExternalDocsIngestor
+  parent: McpServer.Support.Mcp.Ingestion
+  children:
+  - McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.#ctor(McpServer.Support.Mcp.Indexing.Chunker,Microsoft.Extensions.Options.IOptions{McpServer.Support.Mcp.Ingestion.IngestionOptions})
+  - McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.IngestAsync(System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: ExternalDocsIngestor
+  nameWithType: ExternalDocsIngestor
+  fullName: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor
+  type: Class
+  source:
+    id: ExternalDocsIngestor
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\ExternalDocsIngestor.cs
+    startLine: 11
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: >-
+    TR-PLANNED-013: Ingests external docs from cached path (e.g. docs/external).
+
+    FR-SUPPORT-010: Only cached copies under ExternalDocsPath are indexed.
+  example: []
+  syntax:
+    content: public sealed class ExternalDocsIngestor
+    content.vb: Public NotInheritable Class ExternalDocsIngestor
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.#ctor(McpServer.Support.Mcp.Indexing.Chunker,Microsoft.Extensions.Options.IOptions{McpServer.Support.Mcp.Ingestion.IngestionOptions})
+  commentId: M:McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.#ctor(McpServer.Support.Mcp.Indexing.Chunker,Microsoft.Extensions.Options.IOptions{McpServer.Support.Mcp.Ingestion.IngestionOptions})
+  id: '#ctor(McpServer.Support.Mcp.Indexing.Chunker,Microsoft.Extensions.Options.IOptions{McpServer.Support.Mcp.Ingestion.IngestionOptions})'
+  parent: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor
+  langs:
+  - csharp
+  - vb
+  name: ExternalDocsIngestor(Chunker, IOptions<IngestionOptions>)
+  nameWithType: ExternalDocsIngestor.ExternalDocsIngestor(Chunker, IOptions<IngestionOptions>)
+  fullName: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.ExternalDocsIngestor(McpServer.Support.Mcp.Indexing.Chunker, Microsoft.Extensions.Options.IOptions<McpServer.Support.Mcp.Ingestion.IngestionOptions>)
+  type: Constructor
+  source:
+    id: .ctor
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\ExternalDocsIngestor.cs
+    startLine: 19
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: 'TR-PLANNED-013: Constructor.'
+  example: []
+  syntax:
+    content: public ExternalDocsIngestor(Chunker chunker, IOptions<IngestionOptions> options)
+    parameters:
+    - id: chunker
+      type: McpServer.Support.Mcp.Indexing.Chunker
+      description: Chunker for splitting content.
+    - id: options
+      type: Microsoft.Extensions.Options.IOptions{McpServer.Support.Mcp.Ingestion.IngestionOptions}
+      description: Ingestion options providing external docs path.
+    content.vb: Public Sub New(chunker As Chunker, options As IOptions(Of IngestionOptions))
+  overload: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.#ctor*
+  nameWithType.vb: ExternalDocsIngestor.New(Chunker, IOptions(Of IngestionOptions))
+  fullName.vb: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.New(McpServer.Support.Mcp.Indexing.Chunker, Microsoft.Extensions.Options.IOptions(Of McpServer.Support.Mcp.Ingestion.IngestionOptions))
+  name.vb: New(Chunker, IOptions(Of IngestionOptions))
+- uid: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.IngestAsync(System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.IngestAsync(System.Threading.CancellationToken)
+  id: IngestAsync(System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor
+  langs:
+  - csharp
+  - vb
+  name: IngestAsync(CancellationToken)
+  nameWithType: ExternalDocsIngestor.IngestAsync(CancellationToken)
+  fullName: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.IngestAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: IngestAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\ExternalDocsIngestor.cs
+    startLine: 28
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: 'FR-SUPPORT-010: Ingests all files under ExternalDocsPath; returns documents and chunks.'
+  example: []
+  syntax:
+    content: public Task<IReadOnlyList<(ContextDocument Doc, IReadOnlyList<ContextChunk> Chunks)>> IngestAsync(CancellationToken cancellationToken = default)
+    parameters:
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel the operation.
+    return:
+      type: System.Threading.Tasks.Task{System.Collections.Generic.IReadOnlyList{System.ValueTuple{McpServer.Support.Mcp.Models.ContextDocument,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ContextChunk}}}}
+      description: List of ingested documents with their chunks.
+    content.vb: Public Function IngestAsync(cancellationToken As CancellationToken = Nothing) As Task(Of IReadOnlyList(Of (Doc As ContextDocument, Chunks As IReadOnlyList(Of ContextChunk))))
+  overload: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.IngestAsync*
+references:
+- uid: McpServer.Support.Mcp.Ingestion
+  commentId: N:McpServer.Support.Mcp.Ingestion
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Ingestion
+  nameWithType: McpServer.Support.Mcp.Ingestion
+  fullName: McpServer.Support.Mcp.Ingestion
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Ingestion
+    name: Ingestion
+    href: McpServer.Support.Mcp.Ingestion.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Ingestion
+    name: Ingestion
+    href: McpServer.Support.Mcp.Ingestion.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.#ctor*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.#ctor
+  href: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.html#McpServer_Support_Mcp_Ingestion_ExternalDocsIngestor__ctor_McpServer_Support_Mcp_Indexing_Chunker_Microsoft_Extensions_Options_IOptions_McpServer_Support_Mcp_Ingestion_IngestionOptions__
+  name: ExternalDocsIngestor
+  nameWithType: ExternalDocsIngestor.ExternalDocsIngestor
+  fullName: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.ExternalDocsIngestor
+  nameWithType.vb: ExternalDocsIngestor.New
+  fullName.vb: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.New
+  name.vb: New
+- uid: McpServer.Support.Mcp.Indexing.Chunker
+  commentId: T:McpServer.Support.Mcp.Indexing.Chunker
+  parent: McpServer.Support.Mcp.Indexing
+  href: McpServer.Support.Mcp.Indexing.Chunker.html
+  name: Chunker
+  nameWithType: Chunker
+  fullName: McpServer.Support.Mcp.Indexing.Chunker
+- uid: Microsoft.Extensions.Options.IOptions{McpServer.Support.Mcp.Ingestion.IngestionOptions}
+  commentId: T:Microsoft.Extensions.Options.IOptions{McpServer.Support.Mcp.Ingestion.IngestionOptions}
+  parent: Microsoft.Extensions.Options
+  definition: Microsoft.Extensions.Options.IOptions`1
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  name: IOptions<IngestionOptions>
+  nameWithType: IOptions<IngestionOptions>
+  fullName: Microsoft.Extensions.Options.IOptions<McpServer.Support.Mcp.Ingestion.IngestionOptions>
+  nameWithType.vb: IOptions(Of IngestionOptions)
+  fullName.vb: Microsoft.Extensions.Options.IOptions(Of McpServer.Support.Mcp.Ingestion.IngestionOptions)
+  name.vb: IOptions(Of IngestionOptions)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Options.IOptions`1
+    name: IOptions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Ingestion.IngestionOptions
+    name: IngestionOptions
+    href: McpServer.Support.Mcp.Ingestion.IngestionOptions.html
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Options.IOptions`1
+    name: IOptions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Ingestion.IngestionOptions
+    name: IngestionOptions
+    href: McpServer.Support.Mcp.Ingestion.IngestionOptions.html
+  - name: )
+- uid: McpServer.Support.Mcp.Indexing
+  commentId: N:McpServer.Support.Mcp.Indexing
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Indexing
+  nameWithType: McpServer.Support.Mcp.Indexing
+  fullName: McpServer.Support.Mcp.Indexing
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Indexing
+    name: Indexing
+    href: McpServer.Support.Mcp.Indexing.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Indexing
+    name: Indexing
+    href: McpServer.Support.Mcp.Indexing.html
+- uid: Microsoft.Extensions.Options.IOptions`1
+  commentId: T:Microsoft.Extensions.Options.IOptions`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  name: IOptions<TOptions>
+  nameWithType: IOptions<TOptions>
+  fullName: Microsoft.Extensions.Options.IOptions<TOptions>
+  nameWithType.vb: IOptions(Of TOptions)
+  fullName.vb: Microsoft.Extensions.Options.IOptions(Of TOptions)
+  name.vb: IOptions(Of TOptions)
+  spec.csharp:
+  - uid: Microsoft.Extensions.Options.IOptions`1
+    name: IOptions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  - name: <
+  - name: TOptions
+  - name: '>'
+  spec.vb:
+  - uid: Microsoft.Extensions.Options.IOptions`1
+    name: IOptions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options.ioptions-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TOptions
+  - name: )
+- uid: Microsoft.Extensions.Options
+  commentId: N:Microsoft.Extensions.Options
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/microsoft
+  name: Microsoft.Extensions.Options
+  nameWithType: Microsoft.Extensions.Options
+  fullName: Microsoft.Extensions.Options
+  spec.csharp:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Options
+    name: Options
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options
+  spec.vb:
+  - uid: Microsoft
+    name: Microsoft
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft
+  - name: .
+  - uid: Microsoft.Extensions
+    name: Extensions
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions
+  - name: .
+  - uid: Microsoft.Extensions.Options
+    name: Options
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/microsoft.extensions.options
+- uid: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.IngestAsync*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.IngestAsync
+  href: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.html#McpServer_Support_Mcp_Ingestion_ExternalDocsIngestor_IngestAsync_System_Threading_CancellationToken_
+  name: IngestAsync
+  nameWithType: ExternalDocsIngestor.IngestAsync
+  fullName: McpServer.Support.Mcp.Ingestion.ExternalDocsIngestor.IngestAsync
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{System.Collections.Generic.IReadOnlyList{System.ValueTuple{McpServer.Support.Mcp.Models.ContextDocument,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ContextChunk}}}}
+  commentId: T:System.Threading.Tasks.Task{System.Collections.Generic.IReadOnlyList{System.ValueTuple{McpServer.Support.Mcp.Models.ContextDocument,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ContextChunk}}}}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<IReadOnlyList<(ContextDocument Doc, IReadOnlyList<ContextChunk> Chunks)>>
+  nameWithType: Task<IReadOnlyList<(ContextDocument Doc, IReadOnlyList<ContextChunk> Chunks)>>
+  fullName: System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<(McpServer.Support.Mcp.Models.ContextDocument Doc, System.Collections.Generic.IReadOnlyList<McpServer.Support.Mcp.Models.ContextChunk> Chunks)>>
+  nameWithType.vb: Task(Of IReadOnlyList(Of (Doc As ContextDocument, Chunks As IReadOnlyList(Of ContextChunk))))
+  fullName.vb: System.Threading.Tasks.Task(Of System.Collections.Generic.IReadOnlyList(Of (Doc As McpServer.Support.Mcp.Models.ContextDocument, Chunks As System.Collections.Generic.IReadOnlyList(Of McpServer.Support.Mcp.Models.ContextChunk))))
+  name.vb: Task(Of IReadOnlyList(Of (Doc As ContextDocument, Chunks As IReadOnlyList(Of ContextChunk))))
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - name: (
+  - uid: McpServer.Support.Mcp.Models.ContextDocument
+    name: ContextDocument
+    href: McpServer.Support.Mcp.Models.ContextDocument.html
+  - name: " "
+  - uid: System.ValueTuple{McpServer.Support.Mcp.Models.ContextDocument,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ContextChunk}}.Doc
+    name: Doc
+    href: https://learn.microsoft.com/dotnet/api/system.valuetuple-mcpserver.support.mcp.models.contextdocument,system.collections.generic.ireadonlylist-mcpserver.support.mcp.models.contextchunk--.doc
+  - name: ','
+  - name: " "
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Models.ContextChunk
+    name: ContextChunk
+    href: McpServer.Support.Mcp.Models.ContextChunk.html
+  - name: '>'
+  - name: " "
+  - uid: System.ValueTuple{McpServer.Support.Mcp.Models.ContextDocument,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ContextChunk}}.Chunks
+    name: Chunks
+    href: https://learn.microsoft.com/dotnet/api/system.valuetuple-mcpserver.support.mcp.models.contextdocument,system.collections.generic.ireadonlylist-mcpserver.support.mcp.models.contextchunk--.chunks
+  - name: )
+  - name: '>'
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: (
+  - uid: System.ValueTuple{McpServer.Support.Mcp.Models.ContextDocument,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ContextChunk}}.Doc
+    name: Doc
+    href: https://learn.microsoft.com/dotnet/api/system.valuetuple-mcpserver.support.mcp.models.contextdocument,system.collections.generic.ireadonlylist-mcpserver.support.mcp.models.contextchunk--.doc
+  - name: " "
+  - name: As
+  - name: " "
+  - uid: McpServer.Support.Mcp.Models.ContextDocument
+    name: ContextDocument
+    href: McpServer.Support.Mcp.Models.ContextDocument.html
+  - name: ','
+  - name: " "
+  - uid: System.ValueTuple{McpServer.Support.Mcp.Models.ContextDocument,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.ContextChunk}}.Chunks
+    name: Chunks
+    href: https://learn.microsoft.com/dotnet/api/system.valuetuple-mcpserver.support.mcp.models.contextdocument,system.collections.generic.ireadonlylist-mcpserver.support.mcp.models.contextchunk--.chunks
+  - name: " "
+  - name: As
+  - name: " "
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Models.ContextChunk
+    name: ContextChunk
+    href: McpServer.Support.Mcp.Models.ContextChunk.html
+  - name: )
+  - name: )
+  - name: )
+  - name: )
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks

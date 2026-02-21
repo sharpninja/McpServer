@@ -1,0 +1,507 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.ITodoService
+  commentId: T:McpServer.Support.Mcp.Services.ITodoService
+  id: ITodoService
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.ITodoService.CreateAsync(McpServer.Support.Mcp.Services.TodoCreateRequest,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.ITodoService.DeleteAsync(System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.ITodoService.GetByIdAsync(System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.ITodoService.QueryAsync(McpServer.Support.Mcp.Services.TodoQueryRequest,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.ITodoService.UpdateAsync(System.String,McpServer.Support.Mcp.Services.TodoUpdateRequest,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: ITodoService
+  nameWithType: ITodoService
+  fullName: McpServer.Support.Mcp.Services.ITodoService
+  type: Interface
+  source:
+    id: ITodoService
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 6
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: >-
+    TR-PLANNED-013: Service for querying and managing TODO items from the YAML file.
+
+    Provides CRUD operations and search by keyword, priority, or id.
+  example: []
+  syntax:
+    content: public interface ITodoService
+    content.vb: Public Interface ITodoService
+- uid: McpServer.Support.Mcp.Services.ITodoService.QueryAsync(McpServer.Support.Mcp.Services.TodoQueryRequest,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.ITodoService.QueryAsync(McpServer.Support.Mcp.Services.TodoQueryRequest,System.Threading.CancellationToken)
+  id: QueryAsync(McpServer.Support.Mcp.Services.TodoQueryRequest,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.ITodoService
+  langs:
+  - csharp
+  - vb
+  name: QueryAsync(TodoQueryRequest, CancellationToken)
+  nameWithType: ITodoService.QueryAsync(TodoQueryRequest, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.ITodoService.QueryAsync(McpServer.Support.Mcp.Services.TodoQueryRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: QueryAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 9
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Query TODO items by optional keyword, priority, and/or id.
+  example: []
+  syntax:
+    content: Task<TodoQueryResult> QueryAsync(TodoQueryRequest request, CancellationToken cancellationToken = default)
+    parameters:
+    - id: request
+      type: McpServer.Support.Mcp.Services.TodoQueryRequest
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.TodoQueryResult}
+    content.vb: Function QueryAsync(request As TodoQueryRequest, cancellationToken As CancellationToken = Nothing) As Task(Of TodoQueryResult)
+  overload: McpServer.Support.Mcp.Services.ITodoService.QueryAsync*
+- uid: McpServer.Support.Mcp.Services.ITodoService.GetByIdAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.ITodoService.GetByIdAsync(System.String,System.Threading.CancellationToken)
+  id: GetByIdAsync(System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.ITodoService
+  langs:
+  - csharp
+  - vb
+  name: GetByIdAsync(string, CancellationToken)
+  nameWithType: ITodoService.GetByIdAsync(string, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.ITodoService.GetByIdAsync(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: GetByIdAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 12
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Get a single TODO item by its id.
+  example: []
+  syntax:
+    content: Task<TodoFlatItem?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+    parameters:
+    - id: id
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.TodoFlatItem}
+    content.vb: Function GetByIdAsync(id As String, cancellationToken As CancellationToken = Nothing) As Task(Of TodoFlatItem)
+  overload: McpServer.Support.Mcp.Services.ITodoService.GetByIdAsync*
+  nameWithType.vb: ITodoService.GetByIdAsync(String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.ITodoService.GetByIdAsync(String, System.Threading.CancellationToken)
+  name.vb: GetByIdAsync(String, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.ITodoService.CreateAsync(McpServer.Support.Mcp.Services.TodoCreateRequest,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.ITodoService.CreateAsync(McpServer.Support.Mcp.Services.TodoCreateRequest,System.Threading.CancellationToken)
+  id: CreateAsync(McpServer.Support.Mcp.Services.TodoCreateRequest,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.ITodoService
+  langs:
+  - csharp
+  - vb
+  name: CreateAsync(TodoCreateRequest, CancellationToken)
+  nameWithType: ITodoService.CreateAsync(TodoCreateRequest, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.ITodoService.CreateAsync(McpServer.Support.Mcp.Services.TodoCreateRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: CreateAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 15
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Create a new TODO item in the specified section and priority.
+  example: []
+  syntax:
+    content: Task<TodoMutationResult> CreateAsync(TodoCreateRequest request, CancellationToken cancellationToken = default)
+    parameters:
+    - id: request
+      type: McpServer.Support.Mcp.Services.TodoCreateRequest
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.TodoMutationResult}
+    content.vb: Function CreateAsync(request As TodoCreateRequest, cancellationToken As CancellationToken = Nothing) As Task(Of TodoMutationResult)
+  overload: McpServer.Support.Mcp.Services.ITodoService.CreateAsync*
+- uid: McpServer.Support.Mcp.Services.ITodoService.UpdateAsync(System.String,McpServer.Support.Mcp.Services.TodoUpdateRequest,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.ITodoService.UpdateAsync(System.String,McpServer.Support.Mcp.Services.TodoUpdateRequest,System.Threading.CancellationToken)
+  id: UpdateAsync(System.String,McpServer.Support.Mcp.Services.TodoUpdateRequest,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.ITodoService
+  langs:
+  - csharp
+  - vb
+  name: UpdateAsync(string, TodoUpdateRequest, CancellationToken)
+  nameWithType: ITodoService.UpdateAsync(string, TodoUpdateRequest, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.ITodoService.UpdateAsync(string, McpServer.Support.Mcp.Services.TodoUpdateRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: UpdateAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 18
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Update an existing TODO item by id.
+  example: []
+  syntax:
+    content: Task<TodoMutationResult> UpdateAsync(string id, TodoUpdateRequest request, CancellationToken cancellationToken = default)
+    parameters:
+    - id: id
+      type: System.String
+    - id: request
+      type: McpServer.Support.Mcp.Services.TodoUpdateRequest
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.TodoMutationResult}
+    content.vb: Function UpdateAsync(id As String, request As TodoUpdateRequest, cancellationToken As CancellationToken = Nothing) As Task(Of TodoMutationResult)
+  overload: McpServer.Support.Mcp.Services.ITodoService.UpdateAsync*
+  nameWithType.vb: ITodoService.UpdateAsync(String, TodoUpdateRequest, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.ITodoService.UpdateAsync(String, McpServer.Support.Mcp.Services.TodoUpdateRequest, System.Threading.CancellationToken)
+  name.vb: UpdateAsync(String, TodoUpdateRequest, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.ITodoService.DeleteAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.ITodoService.DeleteAsync(System.String,System.Threading.CancellationToken)
+  id: DeleteAsync(System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.ITodoService
+  langs:
+  - csharp
+  - vb
+  name: DeleteAsync(string, CancellationToken)
+  nameWithType: ITodoService.DeleteAsync(string, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.ITodoService.DeleteAsync(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: DeleteAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 21
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Delete a TODO item by id.
+  example: []
+  syntax:
+    content: Task<TodoMutationResult> DeleteAsync(string id, CancellationToken cancellationToken = default)
+    parameters:
+    - id: id
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.TodoMutationResult}
+    content.vb: Function DeleteAsync(id As String, cancellationToken As CancellationToken = Nothing) As Task(Of TodoMutationResult)
+  overload: McpServer.Support.Mcp.Services.ITodoService.DeleteAsync*
+  nameWithType.vb: ITodoService.DeleteAsync(String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.ITodoService.DeleteAsync(String, System.Threading.CancellationToken)
+  name.vb: DeleteAsync(String, CancellationToken)
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: McpServer.Support.Mcp.Services.ITodoService.QueryAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.ITodoService.QueryAsync
+  href: McpServer.Support.Mcp.Services.ITodoService.html#McpServer_Support_Mcp_Services_ITodoService_QueryAsync_McpServer_Support_Mcp_Services_TodoQueryRequest_System_Threading_CancellationToken_
+  name: QueryAsync
+  nameWithType: ITodoService.QueryAsync
+  fullName: McpServer.Support.Mcp.Services.ITodoService.QueryAsync
+- uid: McpServer.Support.Mcp.Services.TodoQueryRequest
+  commentId: T:McpServer.Support.Mcp.Services.TodoQueryRequest
+  parent: McpServer.Support.Mcp.Services
+  href: McpServer.Support.Mcp.Services.TodoQueryRequest.html
+  name: TodoQueryRequest
+  nameWithType: TodoQueryRequest
+  fullName: McpServer.Support.Mcp.Services.TodoQueryRequest
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.TodoQueryResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.TodoQueryResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TodoQueryResult>
+  nameWithType: Task<TodoQueryResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.TodoQueryResult>
+  nameWithType.vb: Task(Of TodoQueryResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.TodoQueryResult)
+  name.vb: Task(Of TodoQueryResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.TodoQueryResult
+    name: TodoQueryResult
+    href: McpServer.Support.Mcp.Services.TodoQueryResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.TodoQueryResult
+    name: TodoQueryResult
+    href: McpServer.Support.Mcp.Services.TodoQueryResult.html
+  - name: )
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: McpServer.Support.Mcp.Services.ITodoService.GetByIdAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.ITodoService.GetByIdAsync
+  href: McpServer.Support.Mcp.Services.ITodoService.html#McpServer_Support_Mcp_Services_ITodoService_GetByIdAsync_System_String_System_Threading_CancellationToken_
+  name: GetByIdAsync
+  nameWithType: ITodoService.GetByIdAsync
+  fullName: McpServer.Support.Mcp.Services.ITodoService.GetByIdAsync
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.TodoFlatItem}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.TodoFlatItem}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TodoFlatItem>
+  nameWithType: Task<TodoFlatItem>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.TodoFlatItem>
+  nameWithType.vb: Task(Of TodoFlatItem)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.TodoFlatItem)
+  name.vb: Task(Of TodoFlatItem)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.TodoFlatItem
+    name: TodoFlatItem
+    href: McpServer.Support.Mcp.Services.TodoFlatItem.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.TodoFlatItem
+    name: TodoFlatItem
+    href: McpServer.Support.Mcp.Services.TodoFlatItem.html
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Services.ITodoService.CreateAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.ITodoService.CreateAsync
+  href: McpServer.Support.Mcp.Services.ITodoService.html#McpServer_Support_Mcp_Services_ITodoService_CreateAsync_McpServer_Support_Mcp_Services_TodoCreateRequest_System_Threading_CancellationToken_
+  name: CreateAsync
+  nameWithType: ITodoService.CreateAsync
+  fullName: McpServer.Support.Mcp.Services.ITodoService.CreateAsync
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest
+  commentId: T:McpServer.Support.Mcp.Services.TodoCreateRequest
+  parent: McpServer.Support.Mcp.Services
+  href: McpServer.Support.Mcp.Services.TodoCreateRequest.html
+  name: TodoCreateRequest
+  nameWithType: TodoCreateRequest
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.TodoMutationResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.TodoMutationResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TodoMutationResult>
+  nameWithType: Task<TodoMutationResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.TodoMutationResult>
+  nameWithType.vb: Task(Of TodoMutationResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.TodoMutationResult)
+  name.vb: Task(Of TodoMutationResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.TodoMutationResult
+    name: TodoMutationResult
+    href: McpServer.Support.Mcp.Services.TodoMutationResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.TodoMutationResult
+    name: TodoMutationResult
+    href: McpServer.Support.Mcp.Services.TodoMutationResult.html
+  - name: )
+- uid: McpServer.Support.Mcp.Services.ITodoService.UpdateAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.ITodoService.UpdateAsync
+  href: McpServer.Support.Mcp.Services.ITodoService.html#McpServer_Support_Mcp_Services_ITodoService_UpdateAsync_System_String_McpServer_Support_Mcp_Services_TodoUpdateRequest_System_Threading_CancellationToken_
+  name: UpdateAsync
+  nameWithType: ITodoService.UpdateAsync
+  fullName: McpServer.Support.Mcp.Services.ITodoService.UpdateAsync
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  commentId: T:McpServer.Support.Mcp.Services.TodoUpdateRequest
+  parent: McpServer.Support.Mcp.Services
+  href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html
+  name: TodoUpdateRequest
+  nameWithType: TodoUpdateRequest
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest
+- uid: McpServer.Support.Mcp.Services.ITodoService.DeleteAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.ITodoService.DeleteAsync
+  href: McpServer.Support.Mcp.Services.ITodoService.html#McpServer_Support_Mcp_Services_ITodoService_DeleteAsync_System_String_System_Threading_CancellationToken_
+  name: DeleteAsync
+  nameWithType: ITodoService.DeleteAsync
+  fullName: McpServer.Support.Mcp.Services.ITodoService.DeleteAsync

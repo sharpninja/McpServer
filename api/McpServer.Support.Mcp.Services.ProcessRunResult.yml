@@ -1,0 +1,521 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.ProcessRunResult
+  commentId: T:McpServer.Support.Mcp.Services.ProcessRunResult
+  id: ProcessRunResult
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.ProcessRunResult.#ctor(System.Int32,System.String,System.String)
+  - McpServer.Support.Mcp.Services.ProcessRunResult.ExitCode
+  - McpServer.Support.Mcp.Services.ProcessRunResult.Stderr
+  - McpServer.Support.Mcp.Services.ProcessRunResult.Stdout
+  langs:
+  - csharp
+  - vb
+  name: ProcessRunResult
+  nameWithType: ProcessRunResult
+  fullName: McpServer.Support.Mcp.Services.ProcessRunResult
+  type: Class
+  source:
+    id: ProcessRunResult
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IProcessRunner.cs
+    startLine: 19
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-PLANNED-013: Result of running an external process.'
+  example: []
+  syntax:
+    content: 'public sealed record ProcessRunResult : IEquatable<ProcessRunResult>'
+    content.vb: Public NotInheritable Class ProcessRunResult Implements IEquatable(Of ProcessRunResult)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{McpServer.Support.Mcp.Services.ProcessRunResult}
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Services.ProcessRunResult.#ctor(System.Int32,System.String,System.String)
+  commentId: M:McpServer.Support.Mcp.Services.ProcessRunResult.#ctor(System.Int32,System.String,System.String)
+  id: '#ctor(System.Int32,System.String,System.String)'
+  parent: McpServer.Support.Mcp.Services.ProcessRunResult
+  langs:
+  - csharp
+  - vb
+  name: ProcessRunResult(int, string?, string?)
+  nameWithType: ProcessRunResult.ProcessRunResult(int, string?, string?)
+  fullName: McpServer.Support.Mcp.Services.ProcessRunResult.ProcessRunResult(int, string?, string?)
+  type: Constructor
+  source:
+    id: .ctor
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IProcessRunner.cs
+    startLine: 19
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-PLANNED-013: Result of running an external process.'
+  example: []
+  syntax:
+    content: public ProcessRunResult(int ExitCode, string? Stdout, string? Stderr)
+    parameters:
+    - id: ExitCode
+      type: System.Int32
+      description: Process exit code.
+    - id: Stdout
+      type: System.String
+      description: Standard output text.
+    - id: Stderr
+      type: System.String
+      description: Standard error text.
+    content.vb: Public Sub New(ExitCode As Integer, Stdout As String, Stderr As String)
+  overload: McpServer.Support.Mcp.Services.ProcessRunResult.#ctor*
+  nameWithType.vb: ProcessRunResult.New(Integer, String, String)
+  fullName.vb: McpServer.Support.Mcp.Services.ProcessRunResult.New(Integer, String, String)
+  name.vb: New(Integer, String, String)
+- uid: McpServer.Support.Mcp.Services.ProcessRunResult.ExitCode
+  commentId: P:McpServer.Support.Mcp.Services.ProcessRunResult.ExitCode
+  id: ExitCode
+  parent: McpServer.Support.Mcp.Services.ProcessRunResult
+  langs:
+  - csharp
+  - vb
+  name: ExitCode
+  nameWithType: ProcessRunResult.ExitCode
+  fullName: McpServer.Support.Mcp.Services.ProcessRunResult.ExitCode
+  type: Property
+  source:
+    id: ExitCode
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IProcessRunner.cs
+    startLine: 19
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Process exit code.
+  example: []
+  syntax:
+    content: public int ExitCode { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property ExitCode As Integer
+  overload: McpServer.Support.Mcp.Services.ProcessRunResult.ExitCode*
+- uid: McpServer.Support.Mcp.Services.ProcessRunResult.Stdout
+  commentId: P:McpServer.Support.Mcp.Services.ProcessRunResult.Stdout
+  id: Stdout
+  parent: McpServer.Support.Mcp.Services.ProcessRunResult
+  langs:
+  - csharp
+  - vb
+  name: Stdout
+  nameWithType: ProcessRunResult.Stdout
+  fullName: McpServer.Support.Mcp.Services.ProcessRunResult.Stdout
+  type: Property
+  source:
+    id: Stdout
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IProcessRunner.cs
+    startLine: 19
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Standard output text.
+  example: []
+  syntax:
+    content: public string? Stdout { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Stdout As String
+  overload: McpServer.Support.Mcp.Services.ProcessRunResult.Stdout*
+- uid: McpServer.Support.Mcp.Services.ProcessRunResult.Stderr
+  commentId: P:McpServer.Support.Mcp.Services.ProcessRunResult.Stderr
+  id: Stderr
+  parent: McpServer.Support.Mcp.Services.ProcessRunResult
+  langs:
+  - csharp
+  - vb
+  name: Stderr
+  nameWithType: ProcessRunResult.Stderr
+  fullName: McpServer.Support.Mcp.Services.ProcessRunResult.Stderr
+  type: Property
+  source:
+    id: Stderr
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IProcessRunner.cs
+    startLine: 19
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Standard error text.
+  example: []
+  syntax:
+    content: public string? Stderr { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Stderr As String
+  overload: McpServer.Support.Mcp.Services.ProcessRunResult.Stderr*
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.IEquatable{McpServer.Support.Mcp.Services.ProcessRunResult}
+  commentId: T:System.IEquatable{McpServer.Support.Mcp.Services.ProcessRunResult}
+  parent: System
+  definition: System.IEquatable`1
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<ProcessRunResult>
+  nameWithType: IEquatable<ProcessRunResult>
+  fullName: System.IEquatable<McpServer.Support.Mcp.Services.ProcessRunResult>
+  nameWithType.vb: IEquatable(Of ProcessRunResult)
+  fullName.vb: System.IEquatable(Of McpServer.Support.Mcp.Services.ProcessRunResult)
+  name.vb: IEquatable(Of ProcessRunResult)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.ProcessRunResult
+    name: ProcessRunResult
+    href: McpServer.Support.Mcp.Services.ProcessRunResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.ProcessRunResult
+    name: ProcessRunResult
+    href: McpServer.Support.Mcp.Services.ProcessRunResult.html
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Services.ProcessRunResult.#ctor*
+  commentId: Overload:McpServer.Support.Mcp.Services.ProcessRunResult.#ctor
+  href: McpServer.Support.Mcp.Services.ProcessRunResult.html#McpServer_Support_Mcp_Services_ProcessRunResult__ctor_System_Int32_System_String_System_String_
+  name: ProcessRunResult
+  nameWithType: ProcessRunResult.ProcessRunResult
+  fullName: McpServer.Support.Mcp.Services.ProcessRunResult.ProcessRunResult
+  nameWithType.vb: ProcessRunResult.New
+  fullName.vb: McpServer.Support.Mcp.Services.ProcessRunResult.New
+  name.vb: New
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Services.ProcessRunResult.ExitCode*
+  commentId: Overload:McpServer.Support.Mcp.Services.ProcessRunResult.ExitCode
+  href: McpServer.Support.Mcp.Services.ProcessRunResult.html#McpServer_Support_Mcp_Services_ProcessRunResult_ExitCode
+  name: ExitCode
+  nameWithType: ProcessRunResult.ExitCode
+  fullName: McpServer.Support.Mcp.Services.ProcessRunResult.ExitCode
+- uid: McpServer.Support.Mcp.Services.ProcessRunResult.Stdout*
+  commentId: Overload:McpServer.Support.Mcp.Services.ProcessRunResult.Stdout
+  href: McpServer.Support.Mcp.Services.ProcessRunResult.html#McpServer_Support_Mcp_Services_ProcessRunResult_Stdout
+  name: Stdout
+  nameWithType: ProcessRunResult.Stdout
+  fullName: McpServer.Support.Mcp.Services.ProcessRunResult.Stdout
+- uid: McpServer.Support.Mcp.Services.ProcessRunResult.Stderr*
+  commentId: Overload:McpServer.Support.Mcp.Services.ProcessRunResult.Stderr
+  href: McpServer.Support.Mcp.Services.ProcessRunResult.html#McpServer_Support_Mcp_Services_ProcessRunResult_Stderr
+  name: Stderr
+  nameWithType: ProcessRunResult.Stderr
+  fullName: McpServer.Support.Mcp.Services.ProcessRunResult.Stderr

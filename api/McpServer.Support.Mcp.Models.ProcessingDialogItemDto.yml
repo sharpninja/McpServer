@@ -1,0 +1,482 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Models.ProcessingDialogItemDto
+  commentId: T:McpServer.Support.Mcp.Models.ProcessingDialogItemDto
+  id: ProcessingDialogItemDto
+  parent: McpServer.Support.Mcp.Models
+  children:
+  - McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Category
+  - McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Content
+  - McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Role
+  - McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Timestamp
+  langs:
+  - csharp
+  - vb
+  name: ProcessingDialogItemDto
+  nameWithType: ProcessingDialogItemDto
+  fullName: McpServer.Support.Mcp.Models.ProcessingDialogItemDto
+  type: Class
+  source:
+    id: ProcessingDialogItemDto
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 198
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: 'TR-PLANNED-013: Single processing dialog entry recording model reasoning during request execution.'
+  example: []
+  syntax:
+    content: public sealed class ProcessingDialogItemDto
+    content.vb: Public NotInheritable Class ProcessingDialogItemDto
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Timestamp
+  commentId: P:McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Timestamp
+  id: Timestamp
+  parent: McpServer.Support.Mcp.Models.ProcessingDialogItemDto
+  langs:
+  - csharp
+  - vb
+  name: Timestamp
+  nameWithType: ProcessingDialogItemDto.Timestamp
+  fullName: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Timestamp
+  type: Property
+  source:
+    id: Timestamp
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 201
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: ISO 8601 timestamp when this dialog item was recorded.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("timestamp")]
+
+      public string? Timestamp { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("timestamp")>
+
+      Public Property Timestamp As String
+  overload: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Timestamp*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: timestamp
+- uid: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Role
+  commentId: P:McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Role
+  id: Role
+  parent: McpServer.Support.Mcp.Models.ProcessingDialogItemDto
+  langs:
+  - csharp
+  - vb
+  name: Role
+  nameWithType: ProcessingDialogItemDto.Role
+  fullName: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Role
+  type: Property
+  source:
+    id: Role
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 205
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Role of the speaker (e.g. model, tool, system, user).
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("role")]
+
+      public string? Role { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("role")>
+
+      Public Property Role As String
+  overload: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Role*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: role
+- uid: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Content
+  commentId: P:McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Content
+  id: Content
+  parent: McpServer.Support.Mcp.Models.ProcessingDialogItemDto
+  langs:
+  - csharp
+  - vb
+  name: Content
+  nameWithType: ProcessingDialogItemDto.Content
+  fullName: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Content
+  type: Property
+  source:
+    id: Content
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 209
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Content of the processing dialog entry.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("content")]
+
+      public string? Content { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("content")>
+
+      Public Property Content As String
+  overload: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Content*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: content
+- uid: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Category
+  commentId: P:McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Category
+  id: Category
+  parent: McpServer.Support.Mcp.Models.ProcessingDialogItemDto
+  langs:
+  - csharp
+  - vb
+  name: Category
+  nameWithType: ProcessingDialogItemDto.Category
+  fullName: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Category
+  type: Property
+  source:
+    id: Category
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 213
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Optional category (e.g. reasoning, tool_call, tool_result, observation, decision).
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("category")]
+
+      public string? Category { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("category")>
+
+      Public Property Category As String
+  overload: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Category*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: category
+references:
+- uid: McpServer.Support.Mcp.Models
+  commentId: N:McpServer.Support.Mcp.Models
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Models
+  nameWithType: McpServer.Support.Mcp.Models
+  fullName: McpServer.Support.Mcp.Models
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Timestamp*
+  commentId: Overload:McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Timestamp
+  href: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.html#McpServer_Support_Mcp_Models_ProcessingDialogItemDto_Timestamp
+  name: Timestamp
+  nameWithType: ProcessingDialogItemDto.Timestamp
+  fullName: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Timestamp
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Role*
+  commentId: Overload:McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Role
+  href: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.html#McpServer_Support_Mcp_Models_ProcessingDialogItemDto_Role
+  name: Role
+  nameWithType: ProcessingDialogItemDto.Role
+  fullName: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Role
+- uid: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Content*
+  commentId: Overload:McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Content
+  href: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.html#McpServer_Support_Mcp_Models_ProcessingDialogItemDto_Content
+  name: Content
+  nameWithType: ProcessingDialogItemDto.Content
+  fullName: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Content
+- uid: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Category*
+  commentId: Overload:McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Category
+  href: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.html#McpServer_Support_Mcp_Models_ProcessingDialogItemDto_Category
+  name: Category
+  nameWithType: ProcessingDialogItemDto.Category
+  fullName: McpServer.Support.Mcp.Models.ProcessingDialogItemDto.Category

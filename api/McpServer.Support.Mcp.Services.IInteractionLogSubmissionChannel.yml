@@ -1,0 +1,373 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel
+  commentId: T:McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel
+  id: IInteractionLogSubmissionChannel
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryDequeueAsync(System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryEnqueue(McpServer.Support.Mcp.Models.InteractionLogEntry)
+  langs:
+  - csharp
+  - vb
+  name: IInteractionLogSubmissionChannel
+  nameWithType: IInteractionLogSubmissionChannel
+  fullName: McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel
+  type: Interface
+  source:
+    id: IInteractionLogSubmissionChannel
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IInteractionLogSubmissionQueue.cs
+    startLine: 7
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-PLANNED-013: Channel for enqueueing interaction log entries to be submitted asynchronously to a logging service.'
+  example: []
+  syntax:
+    content: public interface IInteractionLogSubmissionChannel
+    content.vb: Public Interface IInteractionLogSubmissionChannel
+- uid: McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryEnqueue(McpServer.Support.Mcp.Models.InteractionLogEntry)
+  commentId: M:McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryEnqueue(McpServer.Support.Mcp.Models.InteractionLogEntry)
+  id: TryEnqueue(McpServer.Support.Mcp.Models.InteractionLogEntry)
+  parent: McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel
+  langs:
+  - csharp
+  - vb
+  name: TryEnqueue(InteractionLogEntry)
+  nameWithType: IInteractionLogSubmissionChannel.TryEnqueue(InteractionLogEntry)
+  fullName: McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryEnqueue(McpServer.Support.Mcp.Models.InteractionLogEntry)
+  type: Method
+  source:
+    id: TryEnqueue
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IInteractionLogSubmissionQueue.cs
+    startLine: 12
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Attempts to enqueue an entry without blocking. Returns false if channel is full.
+  example: []
+  syntax:
+    content: bool TryEnqueue(InteractionLogEntry entry)
+    parameters:
+    - id: entry
+      type: McpServer.Support.Mcp.Models.InteractionLogEntry
+      description: The interaction log entry to enqueue.
+    return:
+      type: System.Boolean
+      description: <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">true</a> if the entry was enqueued; <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/bool">false</a> if the channel is full.
+    content.vb: Function TryEnqueue(entry As InteractionLogEntry) As Boolean
+  overload: McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryEnqueue*
+- uid: McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryDequeueAsync(System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryDequeueAsync(System.Threading.CancellationToken)
+  id: TryDequeueAsync(System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel
+  langs:
+  - csharp
+  - vb
+  name: TryDequeueAsync(CancellationToken)
+  nameWithType: IInteractionLogSubmissionChannel.TryDequeueAsync(CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryDequeueAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: TryDequeueAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IInteractionLogSubmissionQueue.cs
+    startLine: 17
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Attempts to dequeue the next entry. Returns (true, entry) or (false, null). Used by the background submission service.
+  example: []
+  syntax:
+    content: ValueTask<(bool Success, InteractionLogEntry? Entry)> TryDequeueAsync(CancellationToken cancellationToken = default)
+    parameters:
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+      description: Token to cancel the wait.
+    return:
+      type: System.Threading.Tasks.ValueTask{System.ValueTuple{System.Boolean,McpServer.Support.Mcp.Models.InteractionLogEntry}}
+      description: A tuple indicating success and the dequeued entry (or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a>).
+    content.vb: Function TryDequeueAsync(cancellationToken As CancellationToken = Nothing) As ValueTask(Of (Success As Boolean, Entry As InteractionLogEntry))
+  overload: McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryDequeueAsync*
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryEnqueue*
+  commentId: Overload:McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryEnqueue
+  href: McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.html#McpServer_Support_Mcp_Services_IInteractionLogSubmissionChannel_TryEnqueue_McpServer_Support_Mcp_Models_InteractionLogEntry_
+  name: TryEnqueue
+  nameWithType: IInteractionLogSubmissionChannel.TryEnqueue
+  fullName: McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryEnqueue
+- uid: McpServer.Support.Mcp.Models.InteractionLogEntry
+  commentId: T:McpServer.Support.Mcp.Models.InteractionLogEntry
+  parent: McpServer.Support.Mcp.Models
+  href: McpServer.Support.Mcp.Models.InteractionLogEntry.html
+  name: InteractionLogEntry
+  nameWithType: InteractionLogEntry
+  fullName: McpServer.Support.Mcp.Models.InteractionLogEntry
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: McpServer.Support.Mcp.Models
+  commentId: N:McpServer.Support.Mcp.Models
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Models
+  nameWithType: McpServer.Support.Mcp.Models
+  fullName: McpServer.Support.Mcp.Models
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryDequeueAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryDequeueAsync
+  href: McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.html#McpServer_Support_Mcp_Services_IInteractionLogSubmissionChannel_TryDequeueAsync_System_Threading_CancellationToken_
+  name: TryDequeueAsync
+  nameWithType: IInteractionLogSubmissionChannel.TryDequeueAsync
+  fullName: McpServer.Support.Mcp.Services.IInteractionLogSubmissionChannel.TryDequeueAsync
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.ValueTask{System.ValueTuple{System.Boolean,McpServer.Support.Mcp.Models.InteractionLogEntry}}
+  commentId: T:System.Threading.Tasks.ValueTask{System.ValueTuple{System.Boolean,McpServer.Support.Mcp.Models.InteractionLogEntry}}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.ValueTask`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1
+  name: ValueTask<(bool Success, InteractionLogEntry Entry)>
+  nameWithType: ValueTask<(bool Success, InteractionLogEntry Entry)>
+  fullName: System.Threading.Tasks.ValueTask<(bool Success, McpServer.Support.Mcp.Models.InteractionLogEntry Entry)>
+  nameWithType.vb: ValueTask(Of (Success As Boolean, Entry As InteractionLogEntry))
+  fullName.vb: System.Threading.Tasks.ValueTask(Of (Success As Boolean, Entry As McpServer.Support.Mcp.Models.InteractionLogEntry))
+  name.vb: ValueTask(Of (Success As Boolean, Entry As InteractionLogEntry))
+  spec.csharp:
+  - uid: System.Threading.Tasks.ValueTask`1
+    name: ValueTask
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1
+  - name: <
+  - name: (
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: " "
+  - uid: System.ValueTuple{System.Boolean,McpServer.Support.Mcp.Models.InteractionLogEntry}.Success
+    name: Success
+    href: https://learn.microsoft.com/dotnet/api/system.valuetuple-system.boolean,mcpserver.support.mcp.models.interactionlogentry-.success
+  - name: ','
+  - name: " "
+  - uid: McpServer.Support.Mcp.Models.InteractionLogEntry
+    name: InteractionLogEntry
+    href: McpServer.Support.Mcp.Models.InteractionLogEntry.html
+  - name: " "
+  - uid: System.ValueTuple{System.Boolean,McpServer.Support.Mcp.Models.InteractionLogEntry}.Entry
+    name: Entry
+    href: https://learn.microsoft.com/dotnet/api/system.valuetuple-system.boolean,mcpserver.support.mcp.models.interactionlogentry-.entry
+  - name: )
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.ValueTask`1
+    name: ValueTask
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: (
+  - uid: System.ValueTuple{System.Boolean,McpServer.Support.Mcp.Models.InteractionLogEntry}.Success
+    name: Success
+    href: https://learn.microsoft.com/dotnet/api/system.valuetuple-system.boolean,mcpserver.support.mcp.models.interactionlogentry-.success
+  - name: " "
+  - name: As
+  - name: " "
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: ','
+  - name: " "
+  - uid: System.ValueTuple{System.Boolean,McpServer.Support.Mcp.Models.InteractionLogEntry}.Entry
+    name: Entry
+    href: https://learn.microsoft.com/dotnet/api/system.valuetuple-system.boolean,mcpserver.support.mcp.models.interactionlogentry-.entry
+  - name: " "
+  - name: As
+  - name: " "
+  - uid: McpServer.Support.Mcp.Models.InteractionLogEntry
+    name: InteractionLogEntry
+    href: McpServer.Support.Mcp.Models.InteractionLogEntry.html
+  - name: )
+  - name: )
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.ValueTask`1
+  commentId: T:System.Threading.Tasks.ValueTask`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1
+  name: ValueTask<TResult>
+  nameWithType: ValueTask<TResult>
+  fullName: System.Threading.Tasks.ValueTask<TResult>
+  nameWithType.vb: ValueTask(Of TResult)
+  fullName.vb: System.Threading.Tasks.ValueTask(Of TResult)
+  name.vb: ValueTask(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.ValueTask`1
+    name: ValueTask
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.ValueTask`1
+    name: ValueTask
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
