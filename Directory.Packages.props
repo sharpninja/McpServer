@@ -3,19 +3,32 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="HNSWIndex" Version="1.6.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.12" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Analyzers" Version="9.0.12" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.12" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.12" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.12" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.2" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.2" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.2" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="10.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.12" />
     <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Options" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.ML.OnnxRuntime" Version="1.24.1" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="9.0.0" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.15.0" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.15.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.15.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.15.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.15.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.12" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.12" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.12" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.12" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Analyzers" Version="9.0.12" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.12" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.12" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageVersion Include="xunit.v3" Version="3.2.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    <PackageVersion Include="Castle.Core" Version="5.2.1" />
+    <PackageVersion Include="NSubstitute" Version="6.0.0" />
     <PackageVersion Include="ModelContextProtocol" Version="0.9.0-preview.1" />
     <PackageVersion Include="ModelContextProtocol.AspNetCore" Version="0.9.0-preview.1" />
     <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
@@ -24,13 +37,7 @@
     <PackageVersion Include="Serilog.Sinks.Http" Version="9.2.1" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="10.1.2" />
     <PackageVersion Include="YamlDotNet" Version="16.3.0" />
-    <!-- Test packages -->
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-    <PackageVersion Include="xunit.v3" Version="3.2.2" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
-    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
-    <PackageVersion Include="Castle.Core" Version="5.2.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.12" />
-    <PackageVersion Include="NSubstitute" Version="6.0.0" />
+    <PackageVersion Include="Microsoft.ML.OnnxRuntime" Version="1.24.1" />
+    <PackageVersion Include="HnswIndex" Version="1.6.0" />
   </ItemGroup>
 </Project>
