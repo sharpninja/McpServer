@@ -40,6 +40,7 @@ Workspace child processes auto-assign ports starting at **7148**.
 ### How do I connect an MCP client?
 
 **Claude Desktop** (`claude_desktop_config.json`):
+
 ```json
 {
   "mcpServers": {
@@ -51,6 +52,7 @@ Workspace child processes auto-assign ports starting at **7148**.
 ```
 
 **VS Code / Cursor** (`.vscode/mcp.json`):
+
 ```json
 {
   "servers": {
@@ -313,7 +315,8 @@ Or change the port in `appsettings.json` under `Mcp:Port`.
 ### MCP client gets 406 Not Acceptable
 
 The `/mcp-transport` endpoint requires the header:
-```
+
+```text
 Accept: application/json, text/event-stream
 ```
 

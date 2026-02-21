@@ -11,6 +11,7 @@ This document lists all functional requirements (FR) and technical requirements 
 Local MCP server providing context retrieval, TODO management, repository access, session logging, and sync capabilities for AI agent integration.
 
 **Covered by:**
+
 - `ContextController` — hybrid search, context packs, index rebuild
 - `TodoController` — CRUD and query for TODO items
 - `RepoController` — file read/write/list with path allowlist and audit
@@ -31,6 +32,7 @@ Local MCP server providing context retrieval, TODO management, repository access
 Automatic TODO tracking with GitHub Issues, bidirectional sync, and GitHub metadata indexing for semantic search.
 
 **Covered by:**
+
 - `GitHubController` — issue/PR CRUD, sync, label endpoints
 - `GitHubCliService` — `gh` CLI wrapper
 - `IssueTodoSyncService` — bidirectional issue ↔ TODO sync with `ISSUE-{number}` IDs
@@ -42,6 +44,7 @@ Automatic TODO tracking with GitHub Issues, bidirectional sync, and GitHub metad
 Dynamic workspace registration, configuration, and lifecycle management replacing static instance configuration.
 
 **Covered by:**
+
 - `WorkspaceController` — CRUD, init, start/stop, status endpoints
 - `WorkspaceService` — auto-port assignment, init scaffolding, CRUD
 - `WorkspaceEntity` — EF Core entity with WorkspacePath PK
@@ -51,6 +54,7 @@ Dynamic workspace registration, configuration, and lifecycle management replacin
 The main server spawns and manages child MCP processes per workspace with process lifecycle tracking.
 
 **Covered by:**
+
 - `WorkspaceProcessManager` — child process spawn, stop, status (PID, uptime, port)
 - `IWorkspaceProcessManager` — `IHostedService` for graceful shutdown
 
@@ -59,6 +63,7 @@ The main server spawns and manages child MCP processes per workspace with proces
 Agents can discover tools by keyword search across global and workspace-scoped tool definitions, with GitHub-backed bucket repositories for tool distribution.
 
 **Covered by:**
+
 - `ToolRegistryController` — search, CRUD, bucket endpoints
 - `ToolRegistryService` — keyword search (tags, name, description), CRUD
 - `ToolBucketService` — GitHub repo browsing, install, sync via `gh api`
@@ -69,6 +74,7 @@ Agents can discover tools by keyword search across global and workspace-scoped t
 Protect mutating API endpoints with an API key while keeping read endpoints publicly accessible.
 
 **Covered by:**
+
 - `ApiKeyAuthFilter` — `IAsyncActionFilter` checking `Mcp:ApiKey` config
 - `SkipApiKeyAuthAttribute` — bypass marker for public endpoints
 - Applied to `WorkspaceController` and `ToolRegistryController`
@@ -78,6 +84,7 @@ Protect mutating API endpoints with an API key while keeping read endpoints publ
 Browser-based login flow for authorized users to retrieve the server API key for MCP client configuration.
 
 **Covered by:**
+
 - `PairingHtml` — login form, API key display, not-configured HTML templates
 - `PairingOptions` — binds `Mcp:ApiKey` and `Mcp:PairingUsers`
 - `PairingSessionService` — session cookie management
@@ -88,6 +95,7 @@ Browser-based login flow for authorized users to retrieve the server API key for
 Expose the local MCP server to the internet via pluggable tunnel providers for remote agent access.
 
 **Covered by:**
+
 - `ITunnelProvider` — strategy interface (`IHostedService` + `GetStatusAsync`)
 - `NgrokTunnelProvider` — ngrok CLI integration with env-var auth
 - `CloudflareTunnelProvider` — cloudflared quick/named tunnel
@@ -99,6 +107,7 @@ Expose the local MCP server to the internet via pluggable tunnel providers for r
 Native MCP protocol endpoint coexisting with REST API on the same port, enabling standard MCP client connections.
 
 **Covered by:**
+
 - `app.MapMcp("/mcp-transport")` in `Program.cs`
 - `ModelContextProtocol.AspNetCore` package integration
 - `McpServerMcpTools` — shared tool implementations
@@ -108,6 +117,7 @@ Native MCP protocol endpoint coexisting with REST API on the same port, enabling
 Run the MCP server as a Windows service with automatic startup, failure recovery, and gsudo-based management.
 
 **Covered by:**
+
 - `UseWindowsService(options => { options.ServiceName = "McpServer"; })` in `Program.cs`
 - `scripts/Manage-McpService.ps1` — Install/Uninstall/Start/Stop/Restart/Status/Publish
 
@@ -126,6 +136,7 @@ Localization and internationalization support for the MCP server.
 Core technical implementation covering all MCP server infrastructure: middleware, storage, indexing, ingestion, logging, and service architecture.
 
 **Covers:**
+
 - ASP.NET Core middleware pipeline (Serilog, interaction logging, Swagger)
 - EF Core SQLite with migrations (documents, chunks, session logs, workspaces, tools)
 - FTS5 full-text indexing and HNSW vector indexing
