@@ -121,6 +121,69 @@ Run the MCP server as a Windows service with automatic startup, failure recovery
 - `UseWindowsService(options => { options.ServiceName = "McpServer"; })` in `Program.cs`
 - `scripts/Manage-McpService.ps1` — Install/Uninstall/Start/Stop/Restart/Status/Publish
 
+### FR-MCP-018: Marker File Agent Discovery *(NEW)*
+
+When a workspace Kestrel host starts, write a `.mcp-server.yaml` marker file to the workspace root so agents can discover the correct port, endpoint paths, and connection prompt without manual configuration. Remove the marker file when the host stops.
+
+**Covered by:**
+
+- `MarkerFileService` — `WriteMarkerAsync` / `RemoveMarker` static helpers
+- `WorkspaceProcessManager` — calls `MarkerFileService` on start and stop
+
+### FR-MCP-019: Workspace Host Controller Isolation *(NEW)*
+
+Workspace-scoped Kestrel hosts expose all API controllers except `WorkspaceController`. Workspace lifecycle management is available on the primary host only.
+
+**Covered by:**
+
+- `ExcludeControllerFeatureProvider` — `IApplicationFeatureProvider<ControllerFeature>` removing `WorkspaceController`
+- `WorkspaceAppFactory` — registers the provider during workspace host build
+
+### FR-MCP-020: Workspace Auto-Start on Service Startup *(NEW)*
+
+On service startup, automatically start Kestrel hosts for all workspaces already registered in the database, restoring full availability without manual intervention.
+
+**Covered by:**
+
+- `WorkspaceProcessManager` (`IHostedService.StartAsync`) — iterates all registered workspaces and calls `StartAsync` per workspace
+
+### FR-MCP-021: Workspace Auto-Init and Auto-Start on Creation *(NEW)*
+
+When a new workspace is registered, automatically initialize its directory scaffold and start its Kestrel host in the same request so the workspace is immediately operational.
+
+**Covered by:**
+
+- `WorkspaceController` POST — calls `WorkspaceService.InitAsync` then `WorkspaceProcessManager.StartAsync`
+- `WorkspaceService.InitAsync` — creates directories, `todo.yaml`, `mcp.db`
+
+### FR-MCP-022: Tool Registry Default Bucket Seeding *(NEW)*
+
+On first startup, seed default tool buckets from `Mcp:ToolRegistry:DefaultBuckets` configuration if they are not already registered, ensuring new installations have the primary tool repository available without manual setup.
+
+**Covered by:**
+
+- `ToolRegistryOptions.DefaultBuckets` — configuration model
+- `Program.cs` startup — calls `IToolBucketService.EnsureDefaultBucketsAsync`
+
+### FR-MCP-023: AI-Assisted Requirements Analysis *(NEW)*
+
+Provide a service that invokes the Copilot CLI to examine a TODO item, identify matching existing FR/TR IDs from project docs, create new FR/TR entries for unaddressed functionality, and persist assigned IDs back to the TODO item.
+
+**Covered by:**
+
+- `RequirementsService` — prompt construction, Copilot invocation, ID extraction (JSON + regex fallback), TODO update
+- `IRequirementsService` — interface
+- `ICopilotClient` — `McpServer.Common.Copilot` integration
+
+### FR-MCP-024: Markdown Session Log Ingestion *(NEW)*
+
+The ingestion pipeline shall parse legacy Markdown session log files (matching a `# Session Log – {title}` header) into the unified session log schema, enabling retroactive indexing of pre-existing agent session records.
+
+**Covered by:**
+
+- `MarkdownSessionLogParser` — `TryParse`, `NormalizeToStructuredText`
+- `SessionLogIngestor` — integrates parser into ingestion pipeline
+
 ### FR-LOC-001: Localization Support
 
 Localization and internationalization support for the MCP server.
@@ -220,6 +283,34 @@ Auth token passed via `NGROK_AUTHTOKEN` environment variable instead of CLI argu
 
 `UseWindowsService()` with explicit `ServiceName = "McpServer"`. Self-contained single-file publish to `C:\ProgramData\McpServer`. Recovery policy: restart on failure with 60s delay.
 
+### TR-MCP-WS-005: Marker File Service *(NEW)*
+
+`MarkerFileService.WriteMarkerAsync` writes `.mcp-server.yaml` to the workspace root on host start. `RemoveMarker` deletes it on stop, also cleaning up legacy `.mcp-server.json` files. The YAML includes port, `baseUrl`, all endpoint paths, PID, `startedAt`, workspace name, and a machine-readable `prompt` block.
+
+### TR-MCP-WS-006: Workspace Host Controller Isolation *(NEW)*
+
+`ExcludeControllerFeatureProvider` implements `IApplicationFeatureProvider<ControllerFeature>` and removes specified controller types from workspace `WebApplication` instances. `WorkspaceAppFactory` registers it to exclude `WorkspaceController`, preventing workspace lifecycle endpoints from being routed on workspace-scoped ports.
+
+### TR-MCP-WS-007: Workspace Auto-Start on Startup *(NEW)*
+
+`WorkspaceProcessManager.StartAsync` (as `IHostedService`) queries all `WorkspaceEntity` records at service startup and calls `StartAsync` for each. Individual failures are caught and logged without aborting overall startup.
+
+### TR-MCP-WS-008: Workspace Auto-Init and Auto-Start on Creation *(NEW)*
+
+`WorkspaceController` POST calls `WorkspaceService.InitAsync` for directory scaffolding, then `WorkspaceProcessManager.StartAsync` to start the Kestrel host, all within the same HTTP request. Returns 201 Created only after both steps succeed.
+
+### TR-MCP-TR-003: Tool Registry Default Bucket Seeding *(NEW)*
+
+`ToolRegistryOptions.DefaultBuckets` (section `Mcp:ToolRegistry:DefaultBuckets`) holds a list of `DefaultBucketEntry` records (name, owner, repo, branch, manifestPath). `Program.cs` calls `IToolBucketService.EnsureDefaultBucketsAsync` on startup; the method is idempotent and skips existing buckets.
+
+### TR-MCP-REQ-001: AI Requirements Analysis Service *(NEW)*
+
+`RequirementsService` builds a structured prompt from the TODO's title, description, technical details, and pre-existing FR/TR IDs, then invokes `ICopilotClient` with a 5-minute timeout. Response parsing first attempts JSON extraction via `JsonDocument`; falls back to regex (`FR-[A-Z]+-\d{3}` / `TR-[A-Z]+-\d{3}`). Discovered IDs are merged into the existing TODO via `ITodoService.UpdateAsync`.
+
+### TR-MCP-INGEST-002: Markdown Session Log Parser *(NEW)*
+
+`MarkdownSessionLogParser.TryParse` recognizes files with a `# [Copilot ]Session Log – {title}` header and maps known Markdown sections to `UnifiedSessionLogDto`. Individual `### Request` sub-sections become separate `UnifiedRequestEntryDto` entries. `NormalizeToStructuredText` produces a flat structured-text representation for FTS5 and vector embedding, matching the format used for JSON session logs.
+
 ### TR-LOC-001: Localization Infrastructure
 
 Localization infrastructure for multi-language support.
@@ -242,13 +333,23 @@ Localization infrastructure for multi-language support.
 | FR-MCP-015 | ✅ Complete | NgrokTunnelProvider, CloudflareTunnelProvider, FrpTunnelProvider |
 | FR-MCP-016 | ✅ Complete | Program.cs (MapMcp), ModelContextProtocol.AspNetCore |
 | FR-MCP-017 | ✅ Complete | Program.cs (UseWindowsService), Manage-McpService.ps1 |
+| FR-MCP-018 | ✅ Complete | MarkerFileService, WorkspaceProcessManager |
+| FR-MCP-019 | ✅ Complete | ExcludeControllerFeatureProvider, WorkspaceAppFactory |
+| FR-MCP-020 | ✅ Complete | WorkspaceProcessManager (IHostedService.StartAsync) |
+| FR-MCP-021 | ✅ Complete | WorkspaceController POST, WorkspaceService.InitAsync |
+| FR-MCP-022 | ✅ Complete | ToolRegistryOptions, Program.cs (EnsureDefaultBucketsAsync) |
+| FR-MCP-023 | ✅ Complete | RequirementsService, IRequirementsService, ICopilotClient |
+| FR-MCP-024 | ✅ Complete | MarkdownSessionLogParser, SessionLogIngestor |
 | FR-LOC-001 | 🔲 Planned | — |
 | TR-PLANNED-013 | ✅ Complete | Core infrastructure |
 | TR-GH-013-001–006 | ✅ Complete | GitHub integration |
 | TR-MCP-WS-002–004 | ✅ Complete | Workspace management |
-| TR-MCP-TR-001–002 | ✅ Complete | Tool registry |
+| TR-MCP-WS-005–008 | ✅ Complete | Workspace lifecycle enhancements |
+| TR-MCP-TR-001–003 | ✅ Complete | Tool registry |
 | TR-MCP-SEC-001–002 | ✅ Complete | Security |
 | TR-MCP-TUN-001–003 | ✅ Complete | Tunneling |
 | TR-MCP-HTTP-001 | ✅ Complete | MCP transport |
 | TR-MCP-SVC-001 | ✅ Complete | Windows service |
+| TR-MCP-REQ-001 | ✅ Complete | AI requirements analysis |
+| TR-MCP-INGEST-002 | ✅ Complete | Markdown session log parser |
 | TR-LOC-001 | 🔲 Planned | — |
