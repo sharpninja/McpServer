@@ -190,6 +190,7 @@ builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
 builder.Services.AddScoped<IToolBucketService, ToolBucketService>();
 builder.Services.AddSingleton<IWorkspaceProcessManager, WorkspaceProcessManager>();
 builder.Services.Configure<PairingOptions>(builder.Configuration.GetSection(PairingOptions.SectionName));
+builder.Services.Configure<ToolRegistryOptions>(builder.Configuration.GetSection(ToolRegistryOptions.SectionName));
 builder.Services.AddSingleton<PairingSessionService>();
 
 // Tunnel strategy pattern — follows ITodoService provider-switch convention.
@@ -253,6 +254,27 @@ if (!app.Environment.IsEnvironment("Test"))
     {
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         await db.Database.MigrateAsync().ConfigureAwait(false);
+    }
+
+    // Seed default tool buckets from configuration (idempotent — skips existing).
+    using (var scope = app.Services.CreateScope())
+    {
+        var bucketService = scope.ServiceProvider.GetRequiredService<IToolBucketService>();
+        var toolRegistryOpts = scope.ServiceProvider.GetRequiredService<IOptions<ToolRegistryOptions>>().Value;
+        foreach (var entry in toolRegistryOpts.DefaultBuckets)
+        {
+            if (string.IsNullOrWhiteSpace(entry.Name) || string.IsNullOrWhiteSpace(entry.Owner) || string.IsNullOrWhiteSpace(entry.Repo))
+                continue;
+
+            var result = await bucketService.AddBucketAsync(
+                new BucketAddRequest(entry.Name, entry.Owner, entry.Repo, entry.Branch, entry.ManifestPath),
+                default).ConfigureAwait(false);
+
+            if (result.Success)
+                Log.Information("[ToolRegistry] Seeded default bucket '{Name}' ({Owner}/{Repo})", entry.Name, entry.Owner, entry.Repo);
+            else
+                Log.Debug("[ToolRegistry] Default bucket '{Name}' already exists, skipping.", entry.Name);
+        }
     }
 }
 
