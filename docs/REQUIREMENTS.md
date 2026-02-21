@@ -55,7 +55,7 @@ The main server spawns and manages child MCP processes per workspace with proces
 
 **Covered by:**
 
-- `WorkspaceProcessManager` — child process spawn, stop, status (PID, uptime, port)
+- `WorkspaceProcessManager` — in-process Kestrel host lifecycle (start, stop, status per workspace port)
 - `IWorkspaceProcessManager` — `IHostedService` for graceful shutdown
 
 ### FR-MCP-012: Tool Registry *(NEW)*
@@ -178,7 +178,7 @@ Workspace CRUD operations, auto-port assignment (base 7148, increment from max),
 
 ### TR-MCP-WS-003: Workspace Process Manager
 
-Child process management using `System.Diagnostics.Process` with `IHostedService` for graceful shutdown. Tracks PID, uptime, and port per workspace.
+In-process Kestrel host management via `WorkspaceAppFactory` with `IHostedService` for graceful shutdown. Each workspace gets its own `WebApplication`, DI container, and listener on its assigned port — all within the primary service process.
 
 ### TR-MCP-WS-004: Workspace Controller
 

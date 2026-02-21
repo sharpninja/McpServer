@@ -35,7 +35,7 @@ The default port is **7147**. Configure it with:
 - `PORT` environment variable
 - `--urls http://+:PORT` command-line argument
 
-Workspace child processes auto-assign ports starting at **7148**.
+Workspace instances are hosted as in-process Kestrel listeners starting at port **7148**.
 
 ### How do I connect an MCP client?
 
