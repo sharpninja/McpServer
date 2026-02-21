@@ -61,6 +61,12 @@ public sealed class WorkspaceController : ControllerBase
         if (!result.Success)
             return Conflict(result);
 
+        // Auto-initialize and start the workspace instance immediately.
+        await _workspaceService.InitAsync(request.WorkspacePath, ct).ConfigureAwait(false);
+        var workspace = await _workspaceService.GetAsync(request.WorkspacePath, ct).ConfigureAwait(false);
+        if (workspace is not null)
+            await _processManager.StartAsync(request.WorkspacePath, workspace.WorkspacePort, ct).ConfigureAwait(false);
+
         var key = EncodeKey(request.WorkspacePath);
         return Created(new Uri($"/mcp/workspace/{key}", UriKind.Relative), result);
     }
