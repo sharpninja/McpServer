@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Reflection;
 using McpServer.Common.Copilot.Extensions;
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Ingestion;
@@ -7,6 +8,8 @@ using McpServer.Support.Mcp.McpStdio;
 using McpServer.Support.Mcp.Middleware;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Storage;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.EntityFrameworkCore;
 using ModelContextProtocol.AspNetCore;
 using Serilog;
@@ -119,7 +122,12 @@ public static class WorkspaceAppFactory
             .WithToolsFromAssembly(typeof(FwhMcpTools).Assembly);
 
         builder.Services.AddControllers()
-            .AddApplicationPart(typeof(WorkspaceAppFactory).Assembly);
+            .AddApplicationPart(typeof(WorkspaceAppFactory).Assembly)
+            .ConfigureApplicationPartManager(manager =>
+            {
+                // Exclude WorkspaceController — workspace lifecycle is managed by the primary host only.
+                manager.FeatureProviders.Add(new ExcludeControllerFeatureProvider(typeof(Controllers.WorkspaceController)));
+            });
 
         var app = builder.Build();
 
@@ -131,9 +139,30 @@ public static class WorkspaceAppFactory
         }
 
         app.UseMiddleware<InteractionLoggingMiddleware>();
+        app.MapControllers();
         app.MapMcp("/mcp-transport");
         app.MapGet("/health", () => Results.Ok(new { status = "healthy", workspace = workspaceName, port }));
 
         return app;
+    }
+}
+
+/// <summary>
+/// Removes specified controller types from the MVC feature so they are not discovered.
+/// Used by workspace hosts to exclude primary-only controllers (e.g. WorkspaceController).
+/// </summary>
+internal sealed class ExcludeControllerFeatureProvider : IApplicationFeatureProvider<ControllerFeature>
+{
+    private readonly HashSet<TypeInfo> _excluded;
+
+    public ExcludeControllerFeatureProvider(params Type[] excludedControllers)
+    {
+        _excluded = new HashSet<TypeInfo>(excludedControllers.Select(t => t.GetTypeInfo()));
+    }
+
+    public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
+    {
+        foreach (var type in _excluded)
+            feature.Controllers.Remove(type);
     }
 }
