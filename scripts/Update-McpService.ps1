@@ -101,7 +101,7 @@ Write-Step "1/7  Stopping service '$ServiceName' ..."
 if ($wasRunning) {
     sc.exe stop $ServiceName | Out-Null
     if (-not (Wait-ProcessExit -Name $ExeName.Replace('.exe','') -TimeoutSeconds 30)) {
-        Write-Warning "Process did not exit within 30 s — forcing termination"
+        Write-Warning "Process did not exit within 30 s - forcing termination"
         Get-Process -Name $ExeName.Replace('.exe','') -ErrorAction SilentlyContinue | Stop-Process -Force
         Start-Sleep -Seconds 2
     }
@@ -163,7 +163,7 @@ Write-Host "  Publish complete." -ForegroundColor Green
 Write-Step "4/7  Restoring config and data files ..."
 $restoreSource = $BackupDir
 if (-not (Test-Path $BackupDir) -and (Test-Path $ArchivePath)) {
-    Write-Host "  Backup directory missing — extracting from archive: $ArchivePath" -ForegroundColor Yellow
+    Write-Host "  Backup directory missing - extracting from archive: $ArchivePath" -ForegroundColor Yellow
     New-Item -ItemType Directory -Path $BackupDir -Force | Out-Null
     Expand-Archive -Path $ArchivePath -DestinationPath $BackupDir -Force
 }
@@ -190,7 +190,7 @@ $healthy = $false
 for ($attempt = 1; $attempt -le 10; $attempt++) {
     try {
         $r = Invoke-WebRequest -Uri "http://localhost:$Port/health" -TimeoutSec 3 -UseBasicParsing -ErrorAction Stop
-        Write-Host "  Health: HTTP $($r.StatusCode) — $($r.Content)" -ForegroundColor Green
+        Write-Host "  Health: HTTP $($r.StatusCode) - $($r.Content)" -ForegroundColor Green
         $healthy = $true
         break
     }
