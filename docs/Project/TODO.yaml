@@ -1,0 +1,139 @@
+staging-and-infrastructure:
+  high-priority:
+  - id: nuget-client-lib
+    title: Create REST client library and NuGet package with publish pipeline
+    estimate: 3-5 days
+    note: High priority — enables external consumers and CI/CD integration testing. Must multi-target net9.0+netstandard2.0 for broad compatibility.
+    done: false
+    description:
+    - Create a typed REST client library (McpServer.Client) wrapping all 52 MCP Server API endpoints across 8 controllers
+    - Package as SharpNinja.McpServer.Client for nuget.org distribution
+    - 'Add publish-to-NuGet stage in CI pipeline: main branch publishes to nuget.org, develop/other branches publish to GitHub NuGet repository'
+    - Include DI extension method AddMcpServerClient() for easy ASP.NET Core integration
+    - Full XML-doc coverage and README with usage examples
+    technical-details:
+    - 'Target frameworks: net9.0;netstandard2.0 (multi-target for broad compatibility)'
+    - 'Dependencies: System.Net.Http.Json, System.Text.Json, Microsoft.Extensions.DependencyInjection.Abstractions, Microsoft.Extensions.Http, Microsoft.Extensions.Options'
+    - 'Project path: src/McpServer.Client/McpServer.Client.csproj'
+    - 'PackageId: SharpNinja.McpServer.Client'
+    - 'Version source: .version file + -preview.{buildnumber} suffix for non-main branches'
+    - SourceLink enabled via Directory.Build.props (already configured for deterministic builds)
+    - HttpClient-based with IHttpClientFactory integration for proper connection pooling
+    - System.Text.Json source generators for AOT-compatible serialization (McpJsonContext)
+    - All response types use records for immutability
+    - CancellationToken on every async method
+    - Nullable reference types enabled
+    - API key passed via X-Api-Key header (configurable via McpServerClientOptions)
+    functional-requirements:
+    - 'FR-01: Client must expose typed methods for all 52 API endpoints across 8 controllers'
+    - 'FR-02: All methods must be async and accept CancellationToken'
+    - 'FR-03: Client must support API key authentication for protected endpoints (tools write operations)'
+    - 'FR-04: Client must support configurable base URL for multi-instance deployments'
+    - 'FR-05: Client must deserialize all response types to strongly-typed DTOs'
+    - 'FR-06: Client must throw typed exceptions for HTTP error responses (400→McpValidationException with errors dict, 404→McpNotFoundException, 401→McpUnauthorizedException, 500→McpServerException)'
+    - 'FR-07: Client must support both DI (AddMcpServerClient) and manual instantiation (McpServerClientFactory)'
+    - 'FR-08: Package must work on net9.0 and netstandard2.0 consumers'
+    - 'FR-09: CI must publish stable packages to nuget.org from main branch only'
+    - 'FR-10: CI must publish preview packages to GitHub Packages from develop/feature branches'
+    technical-requirements:
+    - 'TR-01: Multi-target net9.0;netstandard2.0 in csproj'
+    - 'TR-02: Use IHttpClientFactory pattern for connection pooling and lifecycle management'
+    - 'TR-03: System.Text.Json source generators for AOT compatibility (JsonSerializerContext)'
+    - 'TR-04: All public types must have XML documentation comments'
+    - 'TR-05: Enable nullable reference types'
+    - 'TR-06: SourceLink enabled for debugger source stepping'
+    - 'TR-07: Deterministic build (already in Directory.Build.props)'
+    - 'TR-08: Package version derived from .version file + CI build number for pre-release suffix'
+    - 'TR-09: GitHub Actions job uses conditional steps for NuGet source selection'
+    - 'TR-10: NUGET_API_KEY stored as GitHub repository secret'
+    - 'TR-11: GitHub Packages auth uses built-in GITHUB_TOKEN'
+    - 'TR-12: --skip-duplicate flag on nuget push to handle re-runs gracefully'
+    - 'TR-13: Unit test coverage >90% on client methods using mocked HttpMessageHandler'
+    - 'TR-14: Integration tests gated behind MCP_TEST_BASE_URL environment variable'
+    implementation-tasks:
+    - task: '[Phase 1 — Scaffolding] Create src/McpServer.Client/ directory and McpServer.Client.csproj with multi-target net9.0;netstandard2.0'
+      done: false
+    - task: '[Phase 1 — Scaffolding] Add NuGet metadata: PackageId=SharpNinja.McpServer.Client, Authors, Description, PackageProjectUrl, RepositoryUrl, PackageTags=mcp model-context-protocol rest-client, PackageReadmeFile=README.md, PackageLicenseExpression=MIT'
+      done: false
+    - task: '[Phase 1 — Scaffolding] Add project to McpServer.sln in src/ solution folder'
+      done: false
+    - task: '[Phase 1 — Scaffolding] Add PackageReference entries to Directory.Packages.props for new dependencies'
+      done: false
+    - task: '[Phase 1 — Scaffolding] Create src/McpServer.Client/README.md with usage examples (included in NuGet package)'
+      done: false
+    - task: '[Phase 1 — Scaffolding] Configure GenerateDocumentationFile=true, verify dotnet build and dotnet pack succeed locally'
+      done: false
+    - task: '[Phase 2 — DTOs] Create Models/ directory with all request/response record types'
+      done: false
+    - task: '[Phase 2 — DTOs] WorkspaceModels.cs: WorkspaceDto, WorkspaceCreateRequest, WorkspaceUpdateRequest, WorkspaceListResult, WorkspaceMutationResult, WorkspaceInitResult'
+      done: false
+    - task: '[Phase 2 — DTOs] TodoModels.cs: TodoFlatItem, TodoFlatTask, TodoCreateRequest, TodoUpdateRequest, TodoQueryResult, TodoMutationResult, TodoQueryRequest'
+      done: false
+    - task: '[Phase 2 — DTOs] ToolRegistryModels.cs: ToolDto, ToolCreateRequest, ToolUpdateRequest, ToolSearchResult, ToolMutationResult, BucketDto, BucketListResult, BucketBrowseResult, BucketMutationResult, BucketSyncResult, BucketAddRequest'
+      done: false
+    - task: '[Phase 2 — DTOs] SessionLogModels.cs: UnifiedSessionLogDto, SessionLogQueryRequest, SessionLogQueryResult, ProcessingDialogItemDto'
+      done: false
+    - task: '[Phase 2 — DTOs] ContextModels.cs: ContextSearchRequest, ContextSearchResult, ContextPackRequest, ContextPack, ContextDocument'
+      done: false
+    - task: '[Phase 2 — DTOs] GitHubModels.cs: GitHubIssueItem, GitHubIssueListResult, GitHubIssueDetail, GitHubIssueDetailResult, GitHubIssueRequest, GitHubCommentRequest/Result, GitHubCreateIssueResult, GitHubMutationResult, GitHubPullItem/ListResult, GitHubLabelsResult, IssueSyncResult'
+      done: false
+    - task: '[Phase 2 — DTOs] RepoModels.cs: RepoListResult, RepoListEntry, RepoFileReadResult, RepoWriteRequest, RepoWriteResult'
+      done: false
+    - task: '[Phase 2 — DTOs] SyncModels.cs: SyncRunResult, SyncStatus'
+      done: false
+    - task: '[Phase 2 — DTOs] Create McpJsonContext.cs with [JsonSerializable] attributes for all types (AOT source generator)'
+      done: false
+    - task: '[Phase 2 — DTOs] Add XML-doc summaries on every public type and property'
+      done: false
+    - task: '[Phase 3 — Clients] Create McpServerClientOptions.cs: BaseUrl (Uri), ApiKey (string?), Timeout (TimeSpan, default 30s)'
+      done: false
+    - task: '[Phase 3 — Clients] Create base McpClientBase.cs: shared HttpClient, JSON serialization, error handling, API key header injection, typed exception mapping'
+      done: false
+    - task: '[Phase 3 — Clients] WorkspaceClient.cs: ListAsync, GetAsync, CreateAsync, UpdateAsync, DeleteAsync, InitAsync, StartAsync, StopAsync, GetStatusAsync — 9 methods'
+      done: false
+    - task: '[Phase 3 — Clients] TodoClient.cs: QueryAsync, GetAsync, CreateAsync, UpdateAsync, DeleteAsync, AnalyzeRequirementsAsync — 6 methods'
+      done: false
+    - task: '[Phase 3 — Clients] ToolRegistryClient.cs: ListAsync, SearchAsync, GetAsync, CreateAsync, UpdateAsync, DeleteAsync, ListBucketsAsync, CreateBucketAsync, DeleteBucketAsync, BrowseBucketAsync, InstallBucketAsync, SyncBucketAsync — 12 methods'
+      done: false
+    - task: '[Phase 3 — Clients] SessionLogClient.cs: SubmitAsync, QueryAsync, AppendDialogAsync — 3 methods'
+      done: false
+    - task: '[Phase 3 — Clients] ContextClient.cs: SearchAsync, RebuildIndexAsync, PackAsync, ListSourcesAsync — 4 methods'
+      done: false
+    - task: '[Phase 3 — Clients] GitHubClient.cs: ListIssuesAsync, GetIssueAsync, CreateIssueAsync, UpdateIssueAsync, CloseIssueAsync, ReopenIssueAsync, CommentOnIssueAsync, ListLabelsAsync, ListPullsAsync, CommentOnPullAsync, SyncFromGitHubAsync, SyncToGitHubAsync, SyncIssueAsync — 13 methods'
+      done: false
+    - task: '[Phase 3 — Clients] RepoClient.cs: ReadFileAsync, WriteFileAsync, ListAsync — 3 methods'
+      done: false
+    - task: '[Phase 3 — Clients] SyncClient.cs: RunAsync, GetStatusAsync — 2 methods'
+      done: false
+    - task: '[Phase 4 — Facade/DI] Create McpServerClient.cs: facade owning all 8 sub-clients as properties (Workspace, Todo, Tools, SessionLog, Context, GitHub, Repo, Sync)'
+      done: false
+    - task: '[Phase 4 — Facade/DI] Create ServiceCollectionExtensions.cs: AddMcpServerClient(Action<McpServerClientOptions>) with named HttpClient via IHttpClientFactory'
+      done: false
+    - task: '[Phase 4 — Facade/DI] Create McpServerClientFactory.cs for non-DI scenarios'
+      done: false
+    - task: "[Phase 5 — CI Pipeline] Add 'publish-nuget' job to mcp-server-ci.yml, depends on build-test-publish, push-only (no PRs)"
+      done: false
+    - task: '[Phase 5 — CI Pipeline] Read version from .version file; set VERSION (stable for main, -preview.{run_number} for other branches)'
+      done: false
+    - task: '[Phase 5 — CI Pipeline] dotnet pack McpServer.Client -c Release -p:PackageVersion=$VERSION -o ./nupkg'
+      done: false
+    - task: '[Phase 5 — CI Pipeline] Main branch: dotnet nuget push to https://api.nuget.org/v3/index.json --api-key secrets.NUGET_API_KEY --skip-duplicate'
+      done: false
+    - task: '[Phase 5 — CI Pipeline] Non-main: dotnet nuget push to https://nuget.pkg.github.com/sharpninja/index.json --api-key secrets.GITHUB_TOKEN --skip-duplicate'
+      done: false
+    - task: '[Phase 5 — CI Pipeline] Upload .nupkg as build artifact; document NUGET_API_KEY secret requirement in README'
+      done: false
+    - task: '[Phase 6 — Testing] Create tests/McpServer.Client.Tests/ (xUnit v3, net9.0) with mocked HttpMessageHandler unit tests'
+      done: false
+    - task: '[Phase 6 — Testing] Unit tests for each sub-client: URL construction, HTTP method, headers, request serialization, response deserialization'
+      done: false
+    - task: '[Phase 6 — Testing] Test error handling: 400→McpValidationException, 404→McpNotFoundException, 401→McpUnauthorizedException, 500→McpServerException'
+      done: false
+    - task: '[Phase 6 — Testing] Integration smoke tests gated behind MCP_TEST_BASE_URL env var'
+      done: false
+    - task: '[Phase 7 — Docs/Release] Update root README.md with client library section and install instructions'
+      done: false
+    - task: '[Phase 7 — Docs/Release] Write src/McpServer.Client/README.md with installation, quick start, DI setup, all client method listing'
+      done: false
+    - task: '[Phase 7 — Docs/Release] Add CHANGELOG.md entry; tag v{version} after first nuget.org publish; verify package on nuget.org'
+      done: false

@@ -1,0 +1,150 @@
+using System.Net;
+using System.Net.Http.Json;
+using McpServer.Todo.Validation.Models;
+using Xunit;
+
+namespace McpServer.Todo.Validation.ErrorTests;
+
+/// <summary>
+/// Audit: Error and edge-case tests for TODO endpoints.
+/// Validates proper HTTP status codes for invalid inputs, missing resources, and duplicates.
+/// </summary>
+[Collection("TodoEndpoint")]
+public sealed class TodoErrorTests
+{
+    private readonly TodoEndpointFixture _fixture;
+    private readonly ITestOutputHelper _output;
+
+    public TodoErrorTests(TodoEndpointFixture fixture, ITestOutputHelper output)
+    {
+        _fixture = fixture;
+        _output = output;
+    }
+
+    // ── Missing resource tests ───────────────────────────────────────────
+
+    [Fact]
+    public async Task Get_NonExistent_Returns404()
+    {
+        var fakeId = $"NONEXISTENT-{Guid.NewGuid():N}";
+        var response = await _fixture.Client.GetAsync(
+            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}");
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Update_NonExistent_Returns404()
+    {
+        var fakeId = $"NONEXISTENT-{Guid.NewGuid():N}";
+        var body = new { Title = "Ghost" };
+        var response = await _fixture.Client.PutAsJsonAsync(
+            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}", body);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Delete_NonExistent_Returns404()
+    {
+        var fakeId = $"NONEXISTENT-{Guid.NewGuid():N}";
+        var response = await _fixture.Client.DeleteAsync(
+            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}");
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    // ── Duplicate create test ────────────────────────────────────────────
+
+    [Fact]
+    public async Task Create_Duplicate_Returns409()
+    {
+        var testId = TodoEndpointFixture.GenerateTestId();
+        try
+        {
+            var body = new { Id = testId, Title = "DupeFirst", Section = "mvp-support", Priority = "low" };
+            var first = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, body);
+            Assert.Equal(HttpStatusCode.Created, first.StatusCode);
+
+            var second = await _fixture.Client.PostAsJsonAsync(TodoEndpointFixture.TodoRoute, body);
+            Assert.Equal(HttpStatusCode.Conflict, second.StatusCode);
+
+            var result = await second.Content.ReadFromJsonAsync<TodoMutationResult>();
+            Assert.NotNull(result);
+            Assert.False(result.Success);
+            Assert.False(string.IsNullOrWhiteSpace(result.Error));
+            _output.WriteLine($"Duplicate error: {result.Error}");
+        }
+        finally
+        {
+            await _fixture.Client.DeleteAsync($"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(testId)}");
+        }
+    }
+
+    // ── Missing/empty body tests ─────────────────────────────────────────
+
+    [Fact]
+    public async Task Create_EmptyBody_ReturnsBadRequest()
+    {
+        var response = await _fixture.Client.PostAsync(
+            TodoEndpointFixture.TodoRoute,
+            new StringContent("{}", System.Text.Encoding.UTF8, "application/json"));
+
+        Assert.True(
+            response.StatusCode == HttpStatusCode.BadRequest ||
+            response.StatusCode == HttpStatusCode.UnprocessableEntity,
+            $"Expected 400/422 but got {(int)response.StatusCode}.");
+    }
+
+    [Fact]
+    public async Task Update_NullBody_Returns400OrUnsupportedMedia()
+    {
+        var fakeId = $"FAKE-{Guid.NewGuid():N}";
+        var response = await _fixture.Client.PutAsync(
+            $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}",
+            null);
+
+        Assert.True(
+            response.StatusCode == HttpStatusCode.BadRequest ||
+            response.StatusCode == HttpStatusCode.UnsupportedMediaType ||
+            response.StatusCode == HttpStatusCode.NotFound,
+            $"Expected 400/415/404 but got {(int)response.StatusCode}.");
+    }
+
+    // ── Method not allowed ───────────────────────────────────────────────
+
+    [Fact]
+    public async Task Patch_NotSupported_Returns405()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Patch, $"{TodoEndpointFixture.TodoRoute}/some-id")
+        {
+            Content = new StringContent("{}", System.Text.Encoding.UTF8, "application/json")
+        };
+        var response = await _fixture.Client.SendAsync(request);
+
+        Assert.Equal(HttpStatusCode.MethodNotAllowed, response.StatusCode);
+    }
+
+    // ── Query with invalid filter combinations (should still return 200) ─
+
+    [Fact]
+    public async Task Query_InvalidPriority_Returns200EmptyOrAll()
+    {
+        var response = await _fixture.Client.GetAsync(
+            $"{TodoEndpointFixture.TodoRoute}?priority=nonexistent_priority");
+
+        // The service should handle gracefully — either return empty or all items.
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = await response.Content.ReadFromJsonAsync<TodoQueryResult>();
+        Assert.NotNull(result);
+    }
+
+    [Fact]
+    public async Task Query_MultipleFilters_Returns200()
+    {
+        var response = await _fixture.Client.GetAsync(
+            $"{TodoEndpointFixture.TodoRoute}?priority=high&done=false&section=audit");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var result = await response.Content.ReadFromJsonAsync<TodoQueryResult>();
+        Assert.NotNull(result);
+        Assert.NotNull(result.Items);
+    }
+}
