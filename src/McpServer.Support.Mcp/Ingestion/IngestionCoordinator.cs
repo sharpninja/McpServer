@@ -144,13 +144,17 @@ public sealed class IngestionCoordinator
         }
         catch (Exception ex)
         {
+            var innerMsg = ex is DbUpdateException dbEx && dbEx.InnerException is not null
+                ? $"{ex.Message} -> {dbEx.InnerException.Message}"
+                : ex.Message;
+            _logger.LogError(ex, "Sync run {RunId} failed: {Error}", runId, innerMsg);
             var result = new SyncRunResult
             {
                 RunId = runId,
                 StartedAt = started,
                 CompletedAt = DateTime.UtcNow,
                 Status = "Failed",
-                Error = ex.Message,
+                Error = innerMsg,
                 DocumentsIngested = docsIngested,
                 ChunksWritten = chunksWritten
             };

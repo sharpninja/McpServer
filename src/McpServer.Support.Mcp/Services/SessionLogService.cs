@@ -251,6 +251,17 @@ public sealed class SessionLogService : ISessionLogService
     {
         var incoming = dtoEntries ?? [];
 
+        // Deduplicate incoming entries by RequestId — keep last occurrence
+        var deduped = new List<UnifiedRequestEntryDto>();
+        var seenRequestIds = new HashSet<string>(StringComparer.Ordinal);
+        for (var i = incoming.Count - 1; i >= 0; i--)
+        {
+            var dto = incoming[i];
+            if (dto.RequestId == null || seenRequestIds.Add(dto.RequestId))
+                deduped.Add(dto);
+        }
+        deduped.Reverse();
+
         // Build a lookup of existing entries by RequestId for O(1) matching
         var existingByRequestId = session.Entries
             .Where(e => e.RequestId != null)
@@ -259,7 +270,7 @@ public sealed class SessionLogService : ISessionLogService
         // Track which existing entries are still present in the DTO
         var matchedIds = new HashSet<string>(StringComparer.Ordinal);
 
-        foreach (var dto in incoming)
+        foreach (var dto in deduped)
         {
             if (dto.RequestId != null && existingByRequestId.TryGetValue(dto.RequestId, out var existingEntry))
             {

@@ -38,7 +38,9 @@ public sealed class SyncController : ControllerBase
             result.Status,
             result.Error,
             result.DocumentsIngested,
-            result.ChunksWritten
+            result.ChunksWritten,
+            result.SessionLogsImported,
+            result.IssuesSynced
         });
     }
 
@@ -59,7 +61,9 @@ public sealed class SyncController : ControllerBase
             status = last.Status,
             error = last.Error,
             documentsIngested = last.DocumentsIngested,
-            chunksWritten = last.ChunksWritten
+            chunksWritten = last.ChunksWritten,
+            sessionLogsImported = last.SessionLogsImported,
+            issuesSynced = last.IssuesSynced
         });
     }
 }
