@@ -1,0 +1,178 @@
+using System.Net;
+using System.Net.Http.Json;
+using McpServer.Support.Mcp.Services;
+using Xunit;
+
+namespace McpServer.Support.Mcp.Tests.Controllers;
+
+/// <summary>Integration tests for WorkspaceController endpoints.</summary>
+public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicationFactory>, IDisposable
+{
+    private readonly HttpClient _client;
+
+    public WorkspaceControllerTests(CustomWebApplicationFactory factory)
+    {
+        _client = factory.CreateClient();
+    }
+
+    public void Dispose() => _client.Dispose();
+
+    [Fact]
+    public async Task ListWorkspaces_Empty_Returns200WithZeroItems()
+    {
+        var response = await _client.GetAsync(new Uri("/mcp/workspace", UriKind.Relative)).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var result = await response.Content.ReadFromJsonAsync<WorkspaceListResult>().ConfigureAwait(true);
+        Assert.NotNull(result);
+        Assert.Equal(0, result.TotalCount);
+    }
+
+    [Fact]
+    public async Task CreateWorkspace_ValidRequest_Returns201()
+    {
+        var request = new
+        {
+            workspacePath = Path.Combine(Path.GetTempPath(), $"ws_test_{Guid.NewGuid():N}"),
+            name = "test-ws"
+        };
+
+        var response = await _client.PostAsJsonAsync(new Uri("/mcp/workspace", UriKind.Relative), request).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+
+        var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>().ConfigureAwait(true);
+        Assert.NotNull(result);
+        Assert.True(result.Success);
+        Assert.NotNull(result.Workspace);
+        Assert.Equal("test-ws", result.Workspace.Name);
+        Assert.True(result.Workspace.WorkspacePort >= 7148);
+    }
+
+    [Fact]
+    public async Task CreateWorkspace_NoPort_AutoAssignsStartingAt7148()
+    {
+        var request = new
+        {
+            workspacePath = Path.Combine(Path.GetTempPath(), $"ws_auto_{Guid.NewGuid():N}")
+        };
+
+        var response = await _client.PostAsJsonAsync(new Uri("/mcp/workspace", UriKind.Relative), request).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+
+        var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>().ConfigureAwait(true);
+        Assert.NotNull(result);
+        Assert.True(result.Workspace!.WorkspacePort >= 7148);
+    }
+
+    [Fact]
+    public async Task CreateWorkspace_NoName_DerivesFromPath()
+    {
+        var folderName = $"MyProject_{Guid.NewGuid():N}";
+        var request = new
+        {
+            workspacePath = Path.Combine(Path.GetTempPath(), folderName)
+        };
+
+        var response = await _client.PostAsJsonAsync(new Uri("/mcp/workspace", UriKind.Relative), request).ConfigureAwait(true);
+        var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>().ConfigureAwait(true);
+        Assert.Equal(folderName, result!.Workspace!.Name);
+    }
+
+    [Fact]
+    public async Task CreateWorkspace_NoTodoPath_DefaultsToDocsTodoYaml()
+    {
+        var request = new
+        {
+            workspacePath = Path.Combine(Path.GetTempPath(), $"ws_todo_{Guid.NewGuid():N}")
+        };
+
+        var response = await _client.PostAsJsonAsync(new Uri("/mcp/workspace", UriKind.Relative), request).ConfigureAwait(true);
+        var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>().ConfigureAwait(true);
+        Assert.Equal("docs/todo.yaml", result!.Workspace!.TodoPath);
+    }
+
+    [Fact]
+    public async Task CreateWorkspace_Duplicate_Returns409()
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"ws_dup_{Guid.NewGuid():N}");
+        var request = new { workspacePath = path };
+
+        await _client.PostAsJsonAsync(new Uri("/mcp/workspace", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcp/workspace", UriKind.Relative), request).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetWorkspace_ValidKey_Returns200()
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"ws_get_{Guid.NewGuid():N}");
+        await _client.PostAsJsonAsync(new Uri("/mcp/workspace", UriKind.Relative), new { workspacePath = path }).ConfigureAwait(true);
+
+        var key = EncodeKey(Path.GetFullPath(path));
+        var response = await _client.GetAsync(new Uri($"/mcp/workspace/{key}", UriKind.Relative)).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetWorkspace_InvalidKey_Returns404()
+    {
+        var key = EncodeKey("C:\\nonexistent\\path");
+        var response = await _client.GetAsync(new Uri($"/mcp/workspace/{key}", UriKind.Relative)).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateWorkspace_ChangeName_Returns200()
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"ws_upd_{Guid.NewGuid():N}");
+        await _client.PostAsJsonAsync(new Uri("/mcp/workspace", UriKind.Relative), new { workspacePath = path }).ConfigureAwait(true);
+
+        var key = EncodeKey(Path.GetFullPath(path));
+        var updateRequest = new { name = "renamed-ws" };
+        var response = await _client.PutAsJsonAsync(new Uri($"/mcp/workspace/{key}", UriKind.Relative), updateRequest).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>().ConfigureAwait(true);
+        Assert.Equal("renamed-ws", result!.Workspace!.Name);
+    }
+
+    [Fact]
+    public async Task DeleteWorkspace_Exists_Returns200()
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"ws_del_{Guid.NewGuid():N}");
+        await _client.PostAsJsonAsync(new Uri("/mcp/workspace", UriKind.Relative), new { workspacePath = path }).ConfigureAwait(true);
+
+        var key = EncodeKey(Path.GetFullPath(path));
+        var response = await _client.DeleteAsync(new Uri($"/mcp/workspace/{key}", UriKind.Relative)).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task DeleteWorkspace_NotFound_Returns404()
+    {
+        var key = EncodeKey("C:\\missing\\workspace");
+        var response = await _client.DeleteAsync(new Uri($"/mcp/workspace/{key}", UriKind.Relative)).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetStatus_NoProcess_ReturnsNotRunning()
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"ws_stat_{Guid.NewGuid():N}");
+        await _client.PostAsJsonAsync(new Uri("/mcp/workspace", UriKind.Relative), new { workspacePath = path }).ConfigureAwait(true);
+
+        var key = EncodeKey(Path.GetFullPath(path));
+        var response = await _client.GetAsync(new Uri($"/mcp/workspace/{key}/status", UriKind.Relative)).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var status = await response.Content.ReadFromJsonAsync<WorkspaceProcessStatus>().ConfigureAwait(true);
+        Assert.NotNull(status);
+        Assert.False(status.IsRunning);
+    }
+
+    private static string EncodeKey(string path)
+    {
+        var bytes = System.Text.Encoding.UTF8.GetBytes(path.Trim());
+        return Convert.ToBase64String(bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_');
+    }
+}

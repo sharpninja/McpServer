@@ -3,6 +3,7 @@ using System;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace McpServer.Support.Mcp.Storage.Migrations
 {
     [DbContext(typeof(McpDbContext))]
-    partial class McpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260221034628_AddWorkspaceEntity")]
+    partial class AddWorkspaceEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.12");
@@ -361,123 +364,6 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.ToTable("SessionLogProcessingDialogs");
                 });
 
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Branch")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("DateTimeCreated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset?>("DateTimeLastSynced")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ManifestPath")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Owner")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Repo")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("ToolBuckets");
-                });
-
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("BucketName")
-                        .HasMaxLength(128)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CommandTemplate")
-                        .HasMaxLength(2048)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("DateTimeCreated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("DateTimeModified")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ParameterSchema")
-                        .HasMaxLength(8192)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("WorkspacePath")
-                        .HasMaxLength(2048)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("WorkspacePath");
-
-                    b.HasIndex("Name", "WorkspacePath")
-                        .IsUnique();
-
-                    b.ToTable("ToolDefinitions");
-                });
-
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Tag")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("ToolDefinitionId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Tag");
-
-                    b.HasIndex("ToolDefinitionId", "Tag")
-                        .IsUnique();
-
-                    b.ToTable("ToolDefinitionTags");
-                });
-
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", b =>
                 {
                     b.Property<string>("WorkspacePath")
@@ -585,27 +471,6 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Navigation("SessionLogEntry");
                 });
 
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity", b =>
-                {
-                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", "Workspace")
-                        .WithMany()
-                        .HasForeignKey("WorkspacePath")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Workspace");
-                });
-
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity", b =>
-                {
-                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity", "ToolDefinition")
-                        .WithMany("Tags")
-                        .HasForeignKey("ToolDefinitionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ToolDefinition");
-                });
-
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity", b =>
                 {
                     b.Navigation("Chunks");
@@ -624,11 +489,6 @@ namespace McpServer.Support.Mcp.Storage.Migrations
 
                     b.Navigation("ProcessingDialog");
 
-                    b.Navigation("Tags");
-                });
-
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity", b =>
-                {
                     b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618

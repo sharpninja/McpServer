@@ -39,6 +39,18 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-PLANNED-013: Session log entry processing dialog items (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogProcessingDialogEntity> SessionLogProcessingDialogs => Set<SessionLogProcessingDialogEntity>();
 
+    /// <summary>Registered workspaces for hosted MCP instances.</summary>
+    public DbSet<WorkspaceEntity> Workspaces => Set<WorkspaceEntity>();
+
+    /// <summary>Tool definitions discoverable by keyword search.</summary>
+    public DbSet<ToolDefinitionEntity> ToolDefinitions => Set<ToolDefinitionEntity>();
+
+    /// <summary>Keyword tags for tool definitions.</summary>
+    public DbSet<ToolDefinitionTagEntity> ToolDefinitionTags => Set<ToolDefinitionTagEntity>();
+
+    /// <summary>Tool bucket repositories (GitHub-backed manifest sources).</summary>
+    public DbSet<ToolBucketEntity> ToolBuckets => Set<ToolBucketEntity>();
+
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -106,6 +118,36 @@ public sealed class McpDbContext : DbContext
                 .WithMany(x => x.ProcessingDialog)
                 .HasForeignKey(x => x.SessionLogEntryId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<WorkspaceEntity>(e =>
+        {
+            e.HasIndex(x => x.WorkspacePort).IsUnique();
+        });
+
+        modelBuilder.Entity<ToolDefinitionEntity>(e =>
+        {
+            e.HasIndex(x => new { x.Name, x.WorkspacePath }).IsUnique();
+            e.HasIndex(x => x.WorkspacePath);
+            e.HasOne(x => x.Workspace)
+                .WithMany()
+                .HasForeignKey(x => x.WorkspacePath)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<ToolDefinitionTagEntity>(e =>
+        {
+            e.HasIndex(x => x.Tag);
+            e.HasIndex(x => new { x.ToolDefinitionId, x.Tag }).IsUnique();
+            e.HasOne(x => x.ToolDefinition)
+                .WithMany(x => x.Tags)
+                .HasForeignKey(x => x.ToolDefinitionId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<ToolBucketEntity>(e =>
+        {
+            e.HasIndex(x => x.Name).IsUnique();
         });
     }
 }
