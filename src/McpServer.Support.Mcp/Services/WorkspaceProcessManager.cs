@@ -1,100 +1,72 @@
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// FR-MCP-011 / TR-MCP-WS-003: Manages child dotnet processes per workspace.
-/// Implements IHostedService for graceful shutdown of all child processes on app exit.
+/// FR-MCP-011 / TR-MCP-WS-003: Manages in-process Kestrel hosts per workspace.
+/// Each workspace gets its own <see cref="WebApplication"/> listening on the assigned port.
+/// Implements IHostedService for graceful shutdown of all workspace hosts on app exit.
 /// </summary>
 public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposable
 {
-    private readonly ConcurrentDictionary<string, WorkspaceProcessEntry> _processes = new(StringComparer.OrdinalIgnoreCase);
+    private readonly ConcurrentDictionary<string, WorkspaceHostEntry> _hosts = new(StringComparer.OrdinalIgnoreCase);
     private readonly ILogger<WorkspaceProcessManager> _logger;
+    private readonly ILoggerFactory _loggerFactory;
 
     /// <summary>Initializes a new instance of the <see cref="WorkspaceProcessManager"/> class.</summary>
-    public WorkspaceProcessManager(ILogger<WorkspaceProcessManager> logger)
+    public WorkspaceProcessManager(ILogger<WorkspaceProcessManager> logger, ILoggerFactory loggerFactory)
     {
         _logger = logger;
+        _loggerFactory = loggerFactory;
     }
 
     /// <inheritdoc />
-    public Task<WorkspaceProcessStatus> StartAsync(string workspacePath, int port, CancellationToken ct = default)
+    public async Task<WorkspaceProcessStatus> StartAsync(string workspacePath, int port, CancellationToken ct = default)
     {
         var key = NormalizeKey(workspacePath);
 
-        if (_processes.TryGetValue(key, out var existing) && !existing.Process.HasExited)
-            return Task.FromResult(new WorkspaceProcessStatus(true, existing.Process.Id, DateTime.UtcNow - existing.StartedAt, port));
+        if (_hosts.TryGetValue(key, out var existing) && existing.IsRunning)
+            return new WorkspaceProcessStatus(true, Uptime: DateTime.UtcNow - existing.StartedAt, Port: port);
 
         try
         {
-            // Resolve the project path relative to the running assembly.
-            var assemblyDir = Path.GetDirectoryName(typeof(WorkspaceProcessManager).Assembly.Location) ?? ".";
-            var projectPath = ResolveProjectPath(assemblyDir);
+            var app = WorkspaceAppFactory.Create(key, port, _loggerFactory);
+            await app.StartAsync(ct).ConfigureAwait(false);
 
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = "dotnet",
-                Arguments = $"run --project \"{projectPath}\" --no-build -- --instance \"{Path.GetFileName(key)}\" --port {port}",
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                Environment = { ["Mcp__RepoRoot"] = key, ["PORT"] = port.ToString(System.Globalization.CultureInfo.InvariantCulture) },
-            };
+            var entry = new WorkspaceHostEntry(app, DateTime.UtcNow, port);
+            _hosts[key] = entry;
 
-            var process = new Process { StartInfo = startInfo, EnableRaisingEvents = true };
-            process.Exited += (_, _) =>
-            {
-                _logger.LogInformation("Workspace process exited: {Path} (PID {Pid})", key, process.Id);
-                _processes.TryRemove(key, out _);
-            };
-
-            process.Start();
-            var entry = new WorkspaceProcessEntry(process, DateTime.UtcNow, port);
-            _processes[key] = entry;
-
-            _logger.LogInformation("Workspace process started: {Path} on port {Port} (PID {Pid})", key, port, process.Id);
-            return Task.FromResult(new WorkspaceProcessStatus(true, process.Id, TimeSpan.Zero, port));
+            _logger.LogInformation("Workspace Kestrel host started: {Path} on port {Port}", key, port);
+            return new WorkspaceProcessStatus(true, Port: port);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to start workspace process: {Path}", key);
-            return Task.FromResult(new WorkspaceProcessStatus(false, Error: ex.Message));
+            _logger.LogError(ex, "Failed to start workspace Kestrel host: {Path}", key);
+            return new WorkspaceProcessStatus(false, Error: ex.Message);
         }
     }
 
     /// <inheritdoc />
-    public Task<WorkspaceProcessStatus> StopAsync(string workspacePath, CancellationToken ct = default)
+    public async Task<WorkspaceProcessStatus> StopAsync(string workspacePath, CancellationToken ct = default)
     {
         var key = NormalizeKey(workspacePath);
 
-        if (!_processes.TryRemove(key, out var entry))
-            return Task.FromResult(new WorkspaceProcessStatus(false, Error: "No running process for this workspace."));
+        if (!_hosts.TryRemove(key, out var entry))
+            return new WorkspaceProcessStatus(false, Error: "No running host for this workspace.");
 
         try
         {
-            if (!entry.Process.HasExited)
-            {
-                entry.Process.Kill(entireProcessTree: true);
-                entry.Process.WaitForExit(5000);
-            }
-            var pid = entry.Process.Id;
-            entry.Process.Dispose();
+            await entry.App.StopAsync(ct).ConfigureAwait(false);
+            await entry.App.DisposeAsync().ConfigureAwait(false);
 
-            _logger.LogInformation("Workspace process stopped: {Path} (PID {Pid})", key, pid);
-            return Task.FromResult(new WorkspaceProcessStatus(false, pid));
-        }
-        catch (InvalidOperationException)
-        {
-            entry.Process.Dispose();
-            return Task.FromResult(new WorkspaceProcessStatus(false));
+            _logger.LogInformation("Workspace Kestrel host stopped: {Path}", key);
+            return new WorkspaceProcessStatus(false);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error stopping workspace process: {Path}", key);
-            return Task.FromResult(new WorkspaceProcessStatus(false, Error: ex.Message));
+            _logger.LogError(ex, "Error stopping workspace Kestrel host: {Path}", key);
+            return new WorkspaceProcessStatus(false, Error: ex.Message);
         }
     }
 
@@ -103,22 +75,22 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     {
         var key = NormalizeKey(workspacePath);
 
-        if (!_processes.TryGetValue(key, out var entry))
+        if (!_hosts.TryGetValue(key, out var entry))
             return new WorkspaceProcessStatus(false);
 
-        if (entry.Process.HasExited)
+        if (!entry.IsRunning)
         {
-            _processes.TryRemove(key, out _);
+            _hosts.TryRemove(key, out _);
             return new WorkspaceProcessStatus(false);
         }
 
-        return new WorkspaceProcessStatus(true, entry.Process.Id, DateTime.UtcNow - entry.StartedAt, entry.Port);
+        return new WorkspaceProcessStatus(true, Uptime: DateTime.UtcNow - entry.StartedAt, Port: entry.Port);
     }
 
     /// <inheritdoc />
     public async Task StopAllAsync(CancellationToken ct = default)
     {
-        var keys = _processes.Keys.ToList();
+        var keys = _hosts.Keys.ToList();
         foreach (var key in keys)
         {
             await StopAsync(key, ct).ConfigureAwait(false);
@@ -132,17 +104,19 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     /// <inheritdoc />
     public void Dispose()
     {
-        foreach (var entry in _processes.Values)
+        foreach (var entry in _hosts.Values)
         {
             try
             {
-                if (!entry.Process.HasExited)
-                    entry.Process.Kill(entireProcessTree: true);
-                entry.Process.Dispose();
+                entry.App.StopAsync(TimeSpan.FromSeconds(5)).GetAwaiter().GetResult();
+                entry.App.DisposeAsync().AsTask().GetAwaiter().GetResult();
             }
-            catch (InvalidOperationException) { /* already exited */ }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Error disposing workspace host during shutdown");
+            }
         }
-        _processes.Clear();
+        _hosts.Clear();
     }
 
     private static string NormalizeKey(string path)
@@ -150,20 +124,20 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         return Path.GetFullPath(path.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
     }
 
-    private static string ResolveProjectPath(string assemblyDir)
+    private sealed class WorkspaceHostEntry
     {
-        // Walk up from bin output to find the .csproj.
-        var dir = new DirectoryInfo(assemblyDir);
-        while (dir is not null)
-        {
-            var csproj = dir.GetFiles("McpServer.Support.Mcp.csproj", SearchOption.TopDirectoryOnly);
-            if (csproj.Length > 0)
-                return csproj[0].FullName;
-            dir = dir.Parent;
-        }
-        // Fallback: assume standard repo layout.
-        return Path.Combine(assemblyDir, "..", "..", "..", "McpServer.Support.Mcp.csproj");
-    }
+        public WebApplication App { get; }
+        public DateTime StartedAt { get; }
+        public int Port { get; }
 
-    private sealed record WorkspaceProcessEntry(Process Process, DateTime StartedAt, int Port);
+        public bool IsRunning => App.Lifetime.ApplicationStarted.IsCancellationRequested
+            && !App.Lifetime.ApplicationStopped.IsCancellationRequested;
+
+        public WorkspaceHostEntry(WebApplication app, DateTime startedAt, int port)
+        {
+            App = app;
+            StartedAt = startedAt;
+            Port = port;
+        }
+    }
 }
