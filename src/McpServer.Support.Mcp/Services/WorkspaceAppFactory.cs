@@ -1,4 +1,5 @@
 using System.Globalization;
+using McpServer.Common.Copilot.Extensions;
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Logging;
@@ -92,6 +93,7 @@ public static class WorkspaceAppFactory
         });
         builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
         builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
+        builder.Services.AddCopilotClient();
 
         builder.Services.AddScoped<RepoIngestor>();
         builder.Services.AddScoped<SessionLogIngestor>();

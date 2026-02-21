@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Services;
@@ -6,6 +7,7 @@ namespace McpServer.Support.Mcp.Services;
 /// <summary>
 /// FR-MCP-011 / TR-MCP-WS-003: Manages in-process Kestrel hosts per workspace.
 /// Each workspace gets its own <see cref="WebApplication"/> listening on the assigned port.
+/// On startup, all registered workspaces are automatically started.
 /// Implements IHostedService for graceful shutdown of all workspace hosts on app exit.
 /// </summary>
 public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposable
@@ -13,12 +15,17 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     private readonly ConcurrentDictionary<string, WorkspaceHostEntry> _hosts = new(StringComparer.OrdinalIgnoreCase);
     private readonly ILogger<WorkspaceProcessManager> _logger;
     private readonly ILoggerFactory _loggerFactory;
+    private readonly IServiceProvider _serviceProvider;
 
     /// <summary>Initializes a new instance of the <see cref="WorkspaceProcessManager"/> class.</summary>
-    public WorkspaceProcessManager(ILogger<WorkspaceProcessManager> logger, ILoggerFactory loggerFactory)
+    public WorkspaceProcessManager(
+        ILogger<WorkspaceProcessManager> logger,
+        ILoggerFactory loggerFactory,
+        IServiceProvider serviceProvider)
     {
         _logger = logger;
         _loggerFactory = loggerFactory;
+        _serviceProvider = serviceProvider;
     }
 
     /// <inheritdoc />
@@ -97,8 +104,37 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         }
     }
 
-    // IHostedService — no-op on start, cleanup on stop.
-    Task IHostedService.StartAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+    // IHostedService — start all registered workspaces on app startup, cleanup on stop.
+    async Task IHostedService.StartAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            using var scope = _serviceProvider.CreateScope();
+            var workspaceService = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
+            var workspaces = await workspaceService.ListAsync(cancellationToken).ConfigureAwait(false);
+
+            if (workspaces.TotalCount == 0)
+            {
+                _logger.LogInformation("No registered workspaces to auto-start");
+                return;
+            }
+
+            _logger.LogInformation("Auto-starting {Count} registered workspace(s) ...", workspaces.TotalCount);
+
+            foreach (var ws in workspaces.Items)
+            {
+                var status = await StartAsync(ws.WorkspacePath, ws.WorkspacePort, cancellationToken).ConfigureAwait(false);
+                if (status.IsRunning)
+                    _logger.LogInformation("  ✓ {Name} on port {Port}", ws.Name, ws.WorkspacePort);
+                else
+                    _logger.LogWarning("  ✗ {Name} failed: {Error}", ws.Name, status.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during workspace auto-start");
+        }
+    }
     Task IHostedService.StopAsync(CancellationToken cancellationToken) => StopAllAsync(cancellationToken);
 
     /// <inheritdoc />
