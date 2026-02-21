@@ -1,0 +1,22 @@
+{
+  "build": {
+    "content": [
+      {
+        "files": ["docs/**.md", "docs/**/toc.yml", "*.md", "toc.yml"]
+      }
+    ],
+    "resource": [
+      {
+        "files": ["docs/images/**"]
+      }
+    ],
+    "output": "_site",
+    "template": ["default", "modern"],
+    "globalMetadata": {
+      "_appTitle": "MCP Server",
+      "_appName": "MCP Server Documentation",
+      "_appFooter": "MCP Server &copy; 2025",
+      "_enableSearch": true
+    }
+  }
+}

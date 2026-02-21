@@ -6,6 +6,9 @@ namespace McpServer.Support.Mcp.Indexing;
 /// </summary>
 public sealed class VectorIndexOptions
 {
+    /// <summary>TR-PLANNED-013: Whether vector search is enabled (default true). Set false for CI or lightweight deployments.</summary>
+    public bool Enabled { get; set; } = true;
+
     /// <summary>TR-PLANNED-013: Embedding vector dimensions (default 384).</summary>
     public int Dimensions { get; set; } = 384;
 

@@ -4,6 +4,7 @@ using System.Text.Json;
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Ingestion;
@@ -222,6 +223,11 @@ public sealed class SessionLogIngestor
             {
                 failed++;
                 _logger.LogWarning(ex, "Failed to read session log file: {Path}", path);
+            }
+            catch (DbUpdateException ex)
+            {
+                failed++;
+                _logger.LogWarning(ex, "Failed to save session log to database: {Path} — {Msg}", path, ex.InnerException?.Message ?? ex.Message);
             }
         }
 

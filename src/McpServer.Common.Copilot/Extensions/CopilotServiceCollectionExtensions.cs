@@ -1,35 +1,23 @@
+using McpServer.Common.Copilot;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace McpServer.Common.Copilot.Extensions;
 
-/// <summary>TR-CLI-001: DI extension methods for McpServer.Common.Copilot.</summary>
+/// <summary>Extension methods for registering Copilot client services.</summary>
 public static class CopilotServiceCollectionExtensions
 {
-    /// <summary>
-    /// Registers the Copilot CLI client with default options.
-    /// </summary>
-    /// <param name="services">The service collection.</param>
-    /// <returns>The service collection for chaining.</returns>
+    /// <summary>Registers ICopilotClient with default options.</summary>
     public static IServiceCollection AddCopilotClient(this IServiceCollection services)
     {
-        services.TryAddSingleton<ICopilotClient, CopilotClient>();
-        services.AddOptions<CopilotClientOptions>();
+        services.AddSingleton<ICopilotClient, CopilotClient>();
         return services;
     }
 
-    /// <summary>
-    /// Registers the Copilot CLI client with custom options.
-    /// </summary>
-    /// <param name="services">The service collection.</param>
-    /// <param name="configure">Action to configure <see cref="CopilotClientOptions"/>.</param>
-    /// <returns>The service collection for chaining.</returns>
-    public static IServiceCollection AddCopilotClient(
-        this IServiceCollection services,
-        Action<CopilotClientOptions> configure)
+    /// <summary>Registers ICopilotClient with custom options.</summary>
+    public static IServiceCollection AddCopilotClient(this IServiceCollection services, Action<CopilotClientOptions> configure)
     {
-        services.TryAddSingleton<ICopilotClient, CopilotClient>();
         services.Configure(configure);
+        services.AddSingleton<ICopilotClient, CopilotClient>();
         return services;
     }
 }

@@ -34,13 +34,13 @@ dotnet restore McpServer.sln
 dotnet build McpServer.sln -c Staging
 ```
 
-2. Run the default instance:
+1. Run the default instance:
 
 ```powershell
 .\scripts\Start-McpServer.ps1 -Configuration Staging -Instance default
 ```
 
-3. Open Swagger:
+1. Open Swagger:
 
 ```text
 http://localhost:7147/swagger

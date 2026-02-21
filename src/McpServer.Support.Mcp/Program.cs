@@ -1,6 +1,8 @@
 // TR-PLANNED-013 / FR-SUPPORT-010: MCP Context Unification - local MCP server for Cursor and Copilot.
 
 using System.Globalization;
+using System.Security.Cryptography;
+using System.Text;
 using McpServer.Common.Copilot.Extensions;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Indexing;
@@ -10,7 +12,10 @@ using McpServer.Support.Mcp.Middleware;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
+using McpServer.Support.Mcp.Web;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using ModelContextProtocol.AspNetCore;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.File;
@@ -37,11 +42,15 @@ bool IsStdioTransportRequested(string[] a)
 var builder = WebApplication.CreateBuilder(args);
 if (OperatingSystem.IsWindows())
 {
-    builder.Host.UseWindowsService();
+    builder.Host.UseWindowsService(options =>
+    {
+        options.ServiceName = "McpServer";
+    });
 }
 
 var instanceName = McpInstanceResolver.GetRequestedInstanceName(args);
 McpInstanceResolver.ValidateInstances(builder.Configuration);
+McpInstanceResolver.ValidateTodoStorage(builder.Configuration, instanceName);
 
 // TR-PLANNED-013: Serilog with optional Parseable (local Docker) sink.
 builder.Host.UseSerilog((context, _, config) =>
@@ -176,15 +185,49 @@ builder.Services.AddCopilotClient();
 builder.Services.AddScoped<ISessionLogService, SessionLogService>();
 builder.Services.AddScoped<Fts5SearchService>();
 builder.Services.AddScoped<IContextSearchService, HybridSearchService>();
+builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
+builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
+builder.Services.AddScoped<IToolBucketService, ToolBucketService>();
+builder.Services.AddSingleton<IWorkspaceProcessManager, WorkspaceProcessManager>();
+builder.Services.Configure<PairingOptions>(builder.Configuration.GetSection(PairingOptions.SectionName));
+builder.Services.AddSingleton<PairingSessionService>();
+
+// Tunnel strategy pattern — follows ITodoService provider-switch convention.
+var tunnelProvider = (builder.Configuration
+    .GetSection(TunnelOptions.SectionName)
+    .Get<TunnelOptions>()?.Provider ?? "")
+    .Trim().ToUpperInvariant();
+
+if (!string.IsNullOrEmpty(tunnelProvider))
+{
+    builder.Services.Configure<TunnelOptions>(
+        builder.Configuration.GetSection(TunnelOptions.SectionName));
+    builder.Services.AddSingleton<ITunnelProvider>(sp => tunnelProvider switch
+    {
+        "NGROK" => ActivatorUtilities.CreateInstance<NgrokTunnelProvider>(sp),
+        "CLOUDFLARE" => ActivatorUtilities.CreateInstance<CloudflareTunnelProvider>(sp),
+        "FRP" => ActivatorUtilities.CreateInstance<FrpTunnelProvider>(sp),
+        _ => throw new InvalidOperationException($"Unknown tunnel provider: {tunnelProvider}"),
+    });
+}
 
 if (!builder.Environment.IsEnvironment("Test"))
 {
     builder.Services.AddHostedService<SessionLogFileWatcher>();
     builder.Services.AddHostedService<VectorIndexStartupService>();
+    builder.Services.AddHostedService(sp => (WorkspaceProcessManager)sp.GetRequiredService<IWorkspaceProcessManager>());
+
+    if (!string.IsNullOrEmpty(tunnelProvider))
+        builder.Services.AddHostedService(sp => sp.GetRequiredService<ITunnelProvider>());
 }
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+// MCP Streamable HTTP transport — shares FwhMcpTools with STDIO transport.
+builder.Services.AddMcpServer()
+    .WithHttpTransport()
+    .WithToolsFromAssembly(typeof(FwhMcpTools).Assembly);
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new() { Title = "MCP Context API", Version = "v1" });
@@ -224,7 +267,56 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MCP Context
 app.MapGet("/", () => Results.Redirect("/swagger"))
     .ExcludeFromDescription();
 
+app.MapMcp("/mcp-transport");
 app.MapControllers();
+
+// /pair web login flow — authenticate to view the API key.
+app.MapGet("/pair", (IOptions<PairingOptions> opts) =>
+{
+    var o = opts.Value;
+    if (o.PairingUsers.Count == 0 || string.IsNullOrEmpty(o.ApiKey))
+        return Results.Content(PairingHtml.NotConfiguredPage(), "text/html");
+    return Results.Content(PairingHtml.LoginPage(), "text/html");
+}).ExcludeFromDescription();
+
+app.MapPost("/pair", async (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions) =>
+{
+    var o = opts.Value;
+    if (o.PairingUsers.Count == 0 || string.IsNullOrEmpty(o.ApiKey))
+        return Results.Content(PairingHtml.NotConfiguredPage(), "text/html");
+
+    var form = await context.Request.ReadFormAsync().ConfigureAwait(false);
+    var username = form["username"].ToString();
+    var password = form["password"].ToString();
+
+    var user = o.PairingUsers.Find(u =>
+        string.Equals(u.Username, username, StringComparison.OrdinalIgnoreCase));
+
+    if (user is null || !VerifyPairingPassword(password, user.PasswordHash))
+        return Results.Content(PairingHtml.LoginPage(error: true), "text/html");
+
+    var token = sessions.CreateToken();
+    context.Response.Cookies.Append("mcp_pair", token, new CookieOptions
+    {
+        HttpOnly = true,
+        Secure = context.Request.IsHttps,
+        SameSite = SameSiteMode.Strict,
+        Expires = DateTimeOffset.UtcNow.AddHours(1),
+    });
+    return Results.Redirect("/pair/key");
+}).ExcludeFromDescription();
+
+app.MapGet("/pair/key", (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions) =>
+{
+    var token = context.Request.Cookies["mcp_pair"];
+    if (!sessions.Validate(token))
+        return Results.Redirect("/pair");
+
+    var o = opts.Value;
+    var request = context.Request;
+    var serverUrl = $"{request.Scheme}://{request.Host}";
+    return Results.Content(PairingHtml.KeyPage(o.ApiKey, serverUrl), "text/html");
+}).ExcludeFromDescription();
 
 try
 {
@@ -233,4 +325,11 @@ try
 finally
 {
     await Log.CloseAndFlushAsync().ConfigureAwait(false);
+}
+
+static bool VerifyPairingPassword(string plaintext, string expectedHash)
+{
+    var computed = SHA256.HashData(Encoding.UTF8.GetBytes(plaintext));
+    var expected = Convert.FromHexString(expectedHash);
+    return CryptographicOperations.FixedTimeEquals(computed, expected);
 }

@@ -1,0 +1,38 @@
+services:
+  mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mcp-server:latest
+    container_name: mcp-server
+    ports:
+      - "7147:7147"
+    volumes:
+      - ${MCP_WORKSPACE:-.}:/workspace:ro
+      - mcp-data:/data
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - Mcp__Port=7147
+      - Mcp__RepoRoot=/workspace
+      - Mcp__DataSource=mcp.db
+      - Mcp__DataDirectory=/data
+      - VectorIndex__IndexPath=/data/vector.idx
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7147/health"]
+      interval: 30s
+      timeout: 3s
+      start_period: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - mcp-network
+
+volumes:
+  mcp-data:
+    driver: local
+
+networks:
+  mcp-network:
+    driver: bridge

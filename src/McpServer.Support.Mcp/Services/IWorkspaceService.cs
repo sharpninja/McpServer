@@ -1,0 +1,103 @@
+namespace McpServer.Support.Mcp.Services;
+
+/// <summary>
+/// Service for managing workspace registrations, initialization, and lifecycle.
+/// </summary>
+public interface IWorkspaceService
+{
+    /// <summary>List all registered workspaces.</summary>
+    Task<WorkspaceListResult> ListAsync(CancellationToken ct = default);
+
+    /// <summary>Get a single workspace by its path.</summary>
+    Task<WorkspaceDto?> GetAsync(string workspacePath, CancellationToken ct = default);
+
+    /// <summary>Create (register) a new workspace.</summary>
+    Task<WorkspaceMutationResult> CreateAsync(WorkspaceCreateRequest request, CancellationToken ct = default);
+
+    /// <summary>Update an existing workspace by its path.</summary>
+    Task<WorkspaceMutationResult> UpdateAsync(string workspacePath, WorkspaceUpdateRequest request, CancellationToken ct = default);
+
+    /// <summary>Delete a workspace registration by its path.</summary>
+    Task<WorkspaceMutationResult> DeleteAsync(string workspacePath, CancellationToken ct = default);
+
+    /// <summary>Initialize data files in a workspace (scaffold dirs, todo.yaml, mcp.db).</summary>
+    Task<WorkspaceInitResult> InitAsync(string workspacePath, CancellationToken ct = default);
+}
+
+/// <summary>Request to create a new workspace.</summary>
+public sealed record WorkspaceCreateRequest
+{
+    /// <summary>Absolute path to the workspace root folder. Required.</summary>
+    public required string WorkspacePath { get; init; }
+
+    /// <summary>Human-readable workspace name. Default: last segment of WorkspacePath.</summary>
+    public string? Name { get; init; }
+
+    /// <summary>HTTP port for this workspace's hosted instance. 0 = auto-assign (starting at 7148).</summary>
+    public int WorkspacePort { get; init; }
+
+    /// <summary>Relative path to todo file within workspace. Default: docs/todo.yaml.</summary>
+    public string? TodoPath { get; init; }
+
+    /// <summary>Tunnel provider key (ngrok, cloudflare, frp) or null = no tunnel.</summary>
+    public string? TunnelProvider { get; init; }
+
+    /// <summary>Identity for child process. Null = current Windows user.</summary>
+    public string? RunAs { get; init; }
+}
+
+/// <summary>Request to update a workspace. Null fields are not changed.</summary>
+public sealed record WorkspaceUpdateRequest
+{
+    /// <summary>Updated name (null = no change).</summary>
+    public string? Name { get; init; }
+
+    /// <summary>Updated todo path (null = no change).</summary>
+    public string? TodoPath { get; init; }
+
+    /// <summary>Updated port (null = no change, 0 = auto-assign).</summary>
+    public int? WorkspacePort { get; init; }
+
+    /// <summary>Updated tunnel provider (null = no change, empty string = disable tunnel).</summary>
+    public string? TunnelProvider { get; init; }
+
+    /// <summary>Updated RunAs identity (null = no change, empty string = default).</summary>
+    public string? RunAs { get; init; }
+}
+
+/// <summary>Read-only workspace view.</summary>
+public sealed record WorkspaceDto
+{
+    /// <summary>Absolute path to workspace root folder.</summary>
+    public required string WorkspacePath { get; init; }
+
+    /// <summary>Human-readable workspace name.</summary>
+    public required string Name { get; init; }
+
+    /// <summary>Relative path to todo file.</summary>
+    public required string TodoPath { get; init; }
+
+    /// <summary>HTTP port for this workspace's hosted instance.</summary>
+    public required int WorkspacePort { get; init; }
+
+    /// <summary>Tunnel provider key or null.</summary>
+    public string? TunnelProvider { get; init; }
+
+    /// <summary>When the workspace was registered.</summary>
+    public DateTimeOffset DateTimeCreated { get; init; }
+
+    /// <summary>When the workspace was last updated.</summary>
+    public DateTimeOffset DateTimeModified { get; init; }
+
+    /// <summary>Identity for child process.</summary>
+    public string? RunAs { get; init; }
+}
+
+/// <summary>Result of listing workspaces.</summary>
+public sealed record WorkspaceListResult(IReadOnlyList<WorkspaceDto> Items, int TotalCount);
+
+/// <summary>Result of a workspace mutation (create/update/delete).</summary>
+public sealed record WorkspaceMutationResult(bool Success, string? Error = null, WorkspaceDto? Workspace = null);
+
+/// <summary>Result of workspace initialization.</summary>
+public sealed record WorkspaceInitResult(bool Success, string? Error = null, IReadOnlyList<string>? FilesCreated = null);

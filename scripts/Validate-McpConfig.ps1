@@ -32,6 +32,10 @@ $instances.PSObject.Properties | ForEach-Object {
     if (-not $instance.RepoRoot) {
         throw "Instance '$name' missing RepoRoot."
     }
+    $resolvedRoot = [System.IO.Path]::GetFullPath([string]$instance.RepoRoot)
+    if (-not (Test-Path -Path $resolvedRoot -PathType Container)) {
+        throw "Instance '$name' RepoRoot does not exist: '$($instance.RepoRoot)' (resolved '$resolvedRoot')."
+    }
 
     $port = [int]$instance.Port
     if ($port -le 0) {
@@ -42,6 +46,25 @@ $instances.PSObject.Properties | ForEach-Object {
         throw "Duplicate port '$port' in instances '$($ports[$port])' and '$name'."
     }
     $ports[$port] = $name
+
+    $provider = "yaml"
+    if ($instance.TodoStorage -and $instance.TodoStorage.Provider) {
+        $provider = ([string]$instance.TodoStorage.Provider).Trim().ToLowerInvariant()
+    }
+
+    if (@("yaml", "sqlite") -notcontains $provider) {
+        throw "Instance '$name' has unsupported TodoStorage provider '$provider'. Allowed: yaml, sqlite."
+    }
+
+    if ($provider -eq "sqlite") {
+        $sqliteDataSource = ""
+        if ($instance.TodoStorage -and $instance.TodoStorage.SqliteDataSource) {
+            $sqliteDataSource = [string]$instance.TodoStorage.SqliteDataSource
+        }
+        if ([string]::IsNullOrWhiteSpace($sqliteDataSource)) {
+            throw "Instance '$name' provider sqlite requires TodoStorage.SqliteDataSource."
+        }
+    }
 }
 
 $instanceCount = @($instances.PSObject.Properties).Count
