@@ -3,12 +3,14 @@
 ## Pre-Release Verification
 
 ### Build & Test
+
 - [ ] `dotnet build McpServer.sln -c Release` succeeds with 0 errors, 0 warnings
 - [ ] `dotnet run --project tests/McpServer.Support.Mcp.Tests` — all tests pass (target: 236+)
 - [ ] Docker build succeeds: `docker build -t mcp-server:latest .`
 - [ ] Container health check passes: `curl http://localhost:7147/health`
 
 ### Compatibility
+
 - [ ] REST API routes unchanged (compare with `docs/stdio-tool-contract.json` httpEquivalent fields)
 - [ ] STDIO tool names and parameters unchanged (compare with `docs/stdio-tool-contract.json`)
 - [ ] TODO YAML schema compatible (test with existing `docs/Project/TODO.yaml`)
@@ -17,12 +19,14 @@
 - [ ] Multi-instance configuration validated (`scripts/Test-McpMultiInstance.ps1`)
 
 ### Configuration
+
 - [ ] `appsettings.json` has all required keys with sensible defaults
 - [ ] Environment variable overrides work (Mcp__Port, Mcp__RepoRoot, etc.)
 - [ ] Feature toggles (Embedding:Enabled, VectorIndex:Enabled) respect settings
 - [ ] Per-instance TODO storage backend selection works (YAML and SQLite)
 
 ### Documentation
+
 - [ ] README.md is current with all features
 - [ ] `docs/MCP-SERVER.md` server documentation up to date
 - [ ] `docs/stdio-tool-contract.json` manifest matches actual tools

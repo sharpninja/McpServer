@@ -14,7 +14,7 @@ and other MCP clients to the standalone MCP server.
 
 The `McpServer-mcp-todo` VS Code extension communicates with the MCP server via HTTP REST.
 
-### Configuration
+### VS Code Settings
 
 In VS Code `settings.json`:
 
@@ -52,7 +52,7 @@ The `McpServer.VsExtension.McpTodo.Vsix` project provides a Visual Studio 2022+ 
 dotnet build src/McpServer.VsExtension.McpTodo.Vsix/McpServer.VsExtension.McpTodo.Vsix.csproj -c Release
 ```
 
-### Configuration
+### VSIX Settings
 
 The VSIX reads the MCP server URL from VS settings or defaults to `http://localhost:7147`.
 
@@ -78,6 +78,7 @@ For MCP-compatible clients (e.g., Cursor), configure the STDIO transport:
 See `docs/stdio-tool-contract.json` for the complete machine-readable manifest of all 21 tools.
 
 Key tool categories:
+
 - **Context**: `context_search`, `context_pack`, `context_sources`
 - **Repository**: `repo_read`, `repo_list`, `repo_write`
 - **Sync**: `sync_run`, `sync_status`
@@ -102,12 +103,13 @@ See `appsettings.json` → `Mcp:Instances` for instance configuration.
 
 All clients should verify connectivity before making API calls:
 
-```
+```text
 GET /health → { "status": "Healthy" }
 ```
 
 ## Swagger / OpenAPI
 
 Interactive API documentation is available at:
+
 - Swagger UI: `http://localhost:7147/swagger`
 - OpenAPI JSON: `http://localhost:7147/swagger/v1/swagger.json`

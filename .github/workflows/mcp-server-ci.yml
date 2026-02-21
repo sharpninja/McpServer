@@ -3,6 +3,8 @@ name: mcp-server-ci
 permissions:
   contents: write
   actions: write
+  pages: write
+  id-token: write
 
 on:
   push:
@@ -205,3 +207,52 @@ jobs:
           args: --verbose --no-progress docs README.md
           fail: true
           failIfEmpty: false
+
+  docs-build:
+    runs-on: ubuntu-latest
+    needs: docs-quality
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restore tools
+        run: dotnet tool restore
+
+      - name: Build documentation
+        run: dotnet docfx docfx.json --warningsAsErrors
+
+      - name: Upload docs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcp-server-docs
+          path: _site
+
+  docs-deploy:
+    runs-on: ubuntu-latest
+    needs: docs-build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download docs artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: mcp-server-docs
+          path: _site
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
