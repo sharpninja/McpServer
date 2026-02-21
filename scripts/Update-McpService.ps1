@@ -5,7 +5,7 @@
 .DESCRIPTION
     Stops the service, publishes the latest build, restores preserved files
     (appsettings, databases), restarts the service, and verifies health.
-    Uses gsudo for elevation.
+    Run this script elevated (e.g. gsudo .\Update-McpService.ps1).
 
 .PARAMETER ServiceName
     The Windows service name. Default: McpServer.
@@ -23,8 +23,8 @@
     Path to pre-built publish output. Only used with -SkipBuild.
 
 .EXAMPLE
-    .\Update-McpService.ps1
-    .\Update-McpService.ps1 -SkipBuild -PublishSource E:\github\McpServer\_publish
+    gsudo .\Update-McpService.ps1
+    gsudo .\Update-McpService.ps1 -SkipBuild -PublishSource E:\github\McpServer\_publish
 #>
 [CmdletBinding()]
 param(
@@ -55,9 +55,11 @@ $PreservePatterns = @(
 # Helpers
 # ---------------------------------------------------------------------------
 
-function Assert-Gsudo {
-    if (-not (Get-Command gsudo -ErrorAction SilentlyContinue)) {
-        Write-Error "gsudo is required but not found. Install it: winget install gerardog.gsudo"
+function Assert-Elevated {
+    $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = [Security.Principal.WindowsPrincipal]$identity
+    if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+        Write-Error "This script must be run elevated. Use: gsudo .\Update-McpService.ps1"
     }
 }
 
@@ -82,7 +84,7 @@ function Wait-ProcessExit {
 # Pipeline
 # ---------------------------------------------------------------------------
 
-Assert-Gsudo
+Assert-Elevated
 
 $svc = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
 if (-not $svc) {
@@ -94,13 +96,10 @@ $wasRunning = $svc.Status -eq 'Running'
 # 1. Stop the service
 Write-Step "1/7  Stopping service '$ServiceName' ..."
 if ($wasRunning) {
-    gsudo sc.exe stop $ServiceName | Out-Null
+    sc.exe stop $ServiceName | Out-Null
     if (-not (Wait-ProcessExit -Name $ExeName.Replace('.exe','') -TimeoutSeconds 30)) {
         Write-Warning "Process did not exit within 30 s — forcing termination"
-        gsudo {
-            param($name)
-            Get-Process -Name $name -ErrorAction SilentlyContinue | Stop-Process -Force
-        } -args $ExeName.Replace('.exe','')
+        Get-Process -Name $ExeName.Replace('.exe','') -ErrorAction SilentlyContinue | Stop-Process -Force
         Start-Sleep -Seconds 2
     }
     Write-Host "  Service stopped." -ForegroundColor Green
@@ -133,19 +132,19 @@ if ($SkipBuild) {
     if (-not $PublishSource -or -not (Test-Path $PublishSource)) {
         Write-Error "PublishSource '$PublishSource' not found. Provide a valid path with -SkipBuild."
     }
-    gsudo { param($src, $dst) Copy-Item -Path "$src\*" -Destination $dst -Recurse -Force } -args $PublishSource, $InstallPath
+    Copy-Item -Path "$PublishSource\*" -Destination $InstallPath -Recurse -Force
 }
 else {
     if (-not (Test-Path $ProjectFile)) {
         Write-Error "Project file not found: $ProjectFile"
     }
-    # Publish to a temp staging directory first, then copy elevated.
+    # Publish to a staging directory first, then copy to install path.
     $stageDir = Join-Path $env:TEMP "McpServer-publish-stage"
     if (Test-Path $stageDir) { Remove-Item $stageDir -Recurse -Force }
     dotnet publish $ProjectFile -c Release -o $stageDir
     if ($LASTEXITCODE -ne 0) { Write-Error "dotnet publish failed (exit code $LASTEXITCODE)" }
 
-    gsudo { param($src, $dst) Copy-Item -Path "$src\*" -Destination $dst -Recurse -Force } -args $stageDir, $InstallPath
+    Copy-Item -Path "$stageDir\*" -Destination $InstallPath -Recurse -Force
     Remove-Item $stageDir -Recurse -Force -ErrorAction SilentlyContinue
 }
 Write-Host "  Publish complete." -ForegroundColor Green
@@ -155,7 +154,7 @@ Write-Step "4/7  Restoring config & data files ..."
 $restored = @()
 foreach ($f in (Get-ChildItem -Path $BackupDir -ErrorAction SilentlyContinue)) {
     $target = Join-Path $InstallPath $f.Name
-    gsudo { param($src, $dst) Copy-Item -Path $src -Destination $dst -Force } -args $f.FullName, $target
+    Copy-Item -Path $f.FullName -Destination $target -Force
     $restored += $f.Name
 }
 if ($restored.Count -gt 0) {
@@ -164,7 +163,7 @@ if ($restored.Count -gt 0) {
 
 # 5. Start the service
 Write-Step "5/7  Starting service '$ServiceName' ..."
-gsudo sc.exe start $ServiceName | Out-Null
+sc.exe start $ServiceName | Out-Null
 Start-Sleep -Seconds 3
 $svc = Get-Service -Name $ServiceName
 Write-Host "  Service status: $($svc.Status)" -ForegroundColor $(if ($svc.Status -eq 'Running') { 'Green' } else { 'Red' })
