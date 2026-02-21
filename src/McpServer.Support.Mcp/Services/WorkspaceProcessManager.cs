@@ -34,7 +34,12 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         var key = NormalizeKey(workspacePath);
 
         if (_hosts.TryGetValue(key, out var existing) && existing.IsRunning)
+        {
+            // Ensure the .mcp-server.yaml marker exists (may have been missed on initial start).
+            var name = Path.GetFileName(key.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+            await MarkerFileService.WriteMarkerAsync(key, port, name, _logger, CancellationToken.None).ConfigureAwait(false);
             return new WorkspaceProcessStatus(true, Uptime: DateTime.UtcNow - existing.StartedAt, Port: port);
+        }
 
         try
         {
@@ -44,9 +49,10 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             var entry = new WorkspaceHostEntry(app, DateTime.UtcNow, port);
             _hosts[key] = entry;
 
-            // Write .mcp-server.json marker so agents can discover the port.
+            // Write .mcp-server.yaml marker so agents can discover the port.
+            // Use CancellationToken.None — the marker must be written regardless of HTTP request lifecycle.
             var workspaceName = Path.GetFileName(key.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
-            await MarkerFileService.WriteMarkerAsync(key, port, workspaceName, _logger, ct).ConfigureAwait(false);
+            await MarkerFileService.WriteMarkerAsync(key, port, workspaceName, _logger, CancellationToken.None).ConfigureAwait(false);
 
             _logger.LogInformation("Workspace Kestrel host started: {Path} on port {Port}", key, port);
             return new WorkspaceProcessStatus(true, Port: port);
@@ -71,7 +77,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             await entry.App.StopAsync(ct).ConfigureAwait(false);
             await entry.App.DisposeAsync().ConfigureAwait(false);
 
-            // Remove .mcp-server.json marker on stop.
+            // Remove .mcp-server.yaml marker on stop.
             MarkerFileService.RemoveMarker(key, _logger);
 
             _logger.LogInformation("Workspace Kestrel host stopped: {Path}", key);

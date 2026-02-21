@@ -484,6 +484,7 @@ $RECYCLE.BIN/
 *.swp
 
 # MCP server marker files (runtime artifacts for agent port discovery)
+.mcp-server.yaml
 .mcp-server.json
 
 # SQLite database files (runtime data)

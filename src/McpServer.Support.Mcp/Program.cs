@@ -278,7 +278,7 @@ if (!app.Environment.IsEnvironment("Test"))
     }
 }
 
-// Write .mcp-server.json marker for the primary host so agents can discover the port.
+// Write .mcp-server.yaml marker for the primary host so agents can discover the port.
 {
     var primaryRepoRoot = McpInstanceResolver.GetEffectiveMcpValue(app.Configuration, instanceName, "RepoRoot") ?? ".";
     var primaryWorkspacePath = Path.IsPathRooted(primaryRepoRoot)

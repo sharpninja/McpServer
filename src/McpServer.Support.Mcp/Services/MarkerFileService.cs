@@ -1,29 +1,27 @@
 using System.Diagnostics;
 using System.Globalization;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// Writes and removes <c>.mcp-server.json</c> marker files in workspace roots so that
+/// Writes and removes <c>.mcp-server.yaml</c> marker files in workspace roots so that
 /// agents can discover the correct port and endpoints for calling the MCP server.
 /// </summary>
 public static class MarkerFileService
 {
     /// <summary>Well-known marker file name placed at the workspace root.</summary>
-    public const string MarkerFileName = ".mcp-server.json";
+    public const string MarkerFileName = ".mcp-server.yaml";
 
-    private static readonly JsonSerializerOptions s_jsonOptions = new()
-    {
-        WriteIndented = true,
-        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-    };
+    private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
+        .WithNamingConvention(CamelCaseNamingConvention.Instance)
+        .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
+        .Build();
 
     /// <summary>
-    /// Writes the <c>.mcp-server.json</c> marker file to <paramref name="workspacePath"/>.
+    /// Writes the <c>.mcp-server.yaml</c> marker file to <paramref name="workspacePath"/>.
     /// </summary>
     public static async Task WriteMarkerAsync(
         string workspacePath,
@@ -66,22 +64,29 @@ public static class MarkerFileService
 
         try
         {
-            var json = JsonSerializer.Serialize(marker, s_jsonOptions);
-            await File.WriteAllTextAsync(markerPath, json, ct).ConfigureAwait(false);
+            var yaml = s_yamlSerializer.Serialize(marker);
+            await File.WriteAllTextAsync(markerPath, yaml, ct).ConfigureAwait(false);
             logger?.LogInformation("Wrote MCP marker file: {Path}", markerPath);
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or OperationCanceledException)
         {
             logger?.LogWarning(ex, "Failed to write MCP marker file: {Path}", markerPath);
         }
     }
 
     /// <summary>
-    /// Removes the <c>.mcp-server.json</c> marker file from <paramref name="workspacePath"/>.
+    /// Removes the <c>.mcp-server.yaml</c> marker file from <paramref name="workspacePath"/>.
+    /// Also removes any legacy <c>.mcp-server.json</c> file if present.
     /// </summary>
     public static void RemoveMarker(string workspacePath, ILogger? logger = null)
     {
-        var markerPath = Path.Combine(workspacePath, MarkerFileName);
+        RemoveSingleFile(Path.Combine(workspacePath, MarkerFileName), logger);
+        // Clean up legacy JSON marker if it exists.
+        RemoveSingleFile(Path.Combine(workspacePath, ".mcp-server.json"), logger);
+    }
+
+    private static void RemoveSingleFile(string markerPath, ILogger? logger)
+    {
         try
         {
             if (File.Exists(markerPath))
@@ -153,7 +158,7 @@ For each task or conversation turn:
 - MCP Protocol: {baseUrl}/mcp-transport — Model Context Protocol streamable HTTP transport endpoint";
 }
 
-/// <summary>Serialization model for the <c>.mcp-server.json</c> marker file.</summary>
+/// <summary>Serialization model for the <c>.mcp-server.yaml</c> marker file.</summary>
 internal sealed class MarkerFile
 {
     public int Port { get; set; }
