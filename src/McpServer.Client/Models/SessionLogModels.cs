@@ -49,6 +49,14 @@ public sealed class UnifiedSessionLogDto
     /// <summary>Total tokens across all entries.</summary>
     [JsonPropertyName("totalTokens")]
     public int? TotalTokens { get; set; }
+
+    /// <summary>Optional Cursor session label.</summary>
+    [JsonPropertyName("cursorSessionLabel")]
+    public string? CursorSessionLabel { get; set; }
+
+    /// <summary>Optional Copilot statistics.</summary>
+    [JsonPropertyName("copilotStatistics")]
+    public CopilotStatisticsDto? CopilotStatistics { get; set; }
 }
 
 /// <summary>Workspace metadata within a session log.</summary>
@@ -122,9 +130,57 @@ public sealed class UnifiedRequestEntryDto
     [JsonPropertyName("contextList")]
     public List<string>? ContextList { get; set; }
 
+    /// <summary>Provider-specific raw context payload.</summary>
+    [JsonPropertyName("rawContext")]
+    public object? RawContext { get; set; }
+
+    /// <summary>Model provider identifier.</summary>
+    [JsonPropertyName("modelProvider")]
+    public string? ModelProvider { get; set; }
+
+    /// <summary>Failure note (when present).</summary>
+    [JsonPropertyName("failureNote")]
+    public string? FailureNote { get; set; }
+
+    /// <summary>Optional score.</summary>
+    [JsonPropertyName("score")]
+    public double? Score { get; set; }
+
+    /// <summary>Whether the request used premium capacity.</summary>
+    [JsonPropertyName("isPremium")]
+    public bool? IsPremium { get; set; }
+
+    /// <summary>Original provider-specific entry payload.</summary>
+    [JsonPropertyName("originalEntry")]
+    public object? OriginalEntry { get; set; }
+
     /// <summary>Processing dialog items.</summary>
     [JsonPropertyName("processingDialog")]
     public List<ProcessingDialogItemDto>? ProcessingDialog { get; set; }
+}
+
+/// <summary>Copilot statistics summary when present on a session log item.</summary>
+public sealed class CopilotStatisticsDto
+{
+    /// <summary>Average success score across requests.</summary>
+    [JsonPropertyName("averageSuccessScore")]
+    public double? AverageSuccessScore { get; set; }
+
+    /// <summary>Total net tokens consumed.</summary>
+    [JsonPropertyName("totalNetTokens")]
+    public int? TotalNetTokens { get; set; }
+
+    /// <summary>Total net premium requests consumed.</summary>
+    [JsonPropertyName("totalNetPremiumRequests")]
+    public int? TotalNetPremiumRequests { get; set; }
+
+    /// <summary>Completed request count.</summary>
+    [JsonPropertyName("completedCount")]
+    public int? CompletedCount { get; set; }
+
+    /// <summary>In-progress request count.</summary>
+    [JsonPropertyName("inProgressCount")]
+    public int? InProgressCount { get; set; }
 }
 
 /// <summary>An action taken within a request entry.</summary>
