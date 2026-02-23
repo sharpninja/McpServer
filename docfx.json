@@ -11,7 +11,7 @@
       }
     ],
     "output": "_site",
-    "template": ["default", "modern"],
+    "template": ["default", "modern", "templates"],
     "globalMetadata": {
       "_appTitle": "MCP Server",
       "_appName": "MCP Server Documentation",
