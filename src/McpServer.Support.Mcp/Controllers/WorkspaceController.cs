@@ -268,7 +268,8 @@ public sealed class WorkspaceController : ControllerBase
             root.Reload();
 
         // Regenerate all marker files so running workspaces pick up the new global prompt.
-        await _processManager.RegenerateAllMarkersAsync(ct).ConfigureAwait(false);
+        // Pass the new template explicitly to avoid IOptionsMonitor staleness after reload.
+        await _processManager.RegenerateAllMarkersAsync(ct, globalPromptOverride: newTemplate ?? string.Empty).ConfigureAwait(false);
 
         var isDefault = newTemplate is null;
         return Ok(new GlobalPromptResult(

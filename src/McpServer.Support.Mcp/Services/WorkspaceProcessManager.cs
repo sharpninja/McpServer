@@ -148,12 +148,18 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     }
 
     /// <inheritdoc />
-    public async Task RegenerateAllMarkersAsync(CancellationToken ct = default)
+    public async Task RegenerateAllMarkersAsync(CancellationToken ct = default, string? globalPromptOverride = null)
     {
         using var scope = _serviceProvider.CreateScope();
         var workspaceService = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
         var workspaces = await workspaceService.ListAsync(ct).ConfigureAwait(false);
-        var globalTemplate = _promptOptions.CurrentValue.MarkerPromptTemplate;
+
+        // Read the global template from IConfiguration directly (synchronous after Reload)
+        // rather than IOptionsMonitor which may lag behind the config change.
+        var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+        var globalTemplate = globalPromptOverride
+            ?? config.GetSection("Mcp")["MarkerPromptTemplate"]
+            ?? _promptOptions.CurrentValue.MarkerPromptTemplate;
 
         foreach (var ws in workspaces.Items)
         {

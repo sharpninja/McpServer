@@ -18,7 +18,12 @@ public interface IWorkspaceProcessManager : IHostedService
     Task StopAllAsync(CancellationToken ct = default);
 
     /// <summary>Regenerate all marker files for running workspaces (e.g. after a prompt template change).</summary>
-    Task RegenerateAllMarkersAsync(CancellationToken ct = default);
+    /// <param name="ct">Cancellation token.</param>
+    /// <param name="globalPromptOverride">
+    /// When non-null, use this value as the global prompt template instead of reading from options.
+    /// Pass <see cref="string.Empty"/> to force the built-in default prompt.
+    /// </param>
+    Task RegenerateAllMarkersAsync(CancellationToken ct = default, string? globalPromptOverride = null);
 }
 
 /// <summary>Process status for a workspace instance.</summary>

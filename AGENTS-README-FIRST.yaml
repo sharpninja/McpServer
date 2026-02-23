@@ -18,8 +18,8 @@ endpoints:
   workspace: /mcp/workspace
 workspace: McpServer
 workspacePath: E:\github\McpServer
-pid: 20956
-startedAt: 2026-02-23T06:37:44.6077199+00:00
+pid: 34032
+startedAt: 2026-02-23T15:42:13.4953582+00:00
 prompt: >-
   You are connected to an MCP Context Server at http://localhost:7148. Use this server to coordinate your work.
 
@@ -93,3 +93,6 @@ prompt: >-
   - Tool Registry: GET http://localhost:7148/mcp/tools/search — discover available tools; GET/POST http://localhost:7148/mcp/tools — manage tool definitions
 
   - MCP Protocol: http://localhost:7148/mcp-transport — Model Context Protocol streamable HTTP transport endpoint
+
+
+  **TEST**
