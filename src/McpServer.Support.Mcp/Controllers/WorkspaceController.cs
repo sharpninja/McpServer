@@ -119,6 +119,10 @@ public sealed class WorkspaceController : ControllerBase
         if (!result.Success)
             return NotFound(result);
 
+        // Regenerate marker files when the workspace prompt template changes.
+        if (request.PromptTemplate is not null)
+            await _processManager.RegenerateAllMarkersAsync(ct).ConfigureAwait(false);
+
         return Ok(result);
     }
 
@@ -262,6 +266,9 @@ public sealed class WorkspaceController : ControllerBase
 
         if (_configuration is IConfigurationRoot root)
             root.Reload();
+
+        // Regenerate all marker files so running workspaces pick up the new global prompt.
+        await _processManager.RegenerateAllMarkersAsync(ct).ConfigureAwait(false);
 
         var isDefault = newTemplate is null;
         return Ok(new GlobalPromptResult(

@@ -16,6 +16,9 @@ public interface IWorkspaceProcessManager : IHostedService
 
     /// <summary>Stop all running workspace processes.</summary>
     Task StopAllAsync(CancellationToken ct = default);
+
+    /// <summary>Regenerate all marker files for running workspaces (e.g. after a prompt template change).</summary>
+    Task RegenerateAllMarkersAsync(CancellationToken ct = default);
 }
 
 /// <summary>Process status for a workspace instance.</summary>

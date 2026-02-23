@@ -20,7 +20,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     private readonly ILogger<WorkspaceProcessManager> _logger;
     private readonly ILoggerFactory _loggerFactory;
     private readonly IServiceProvider _serviceProvider;
-    private readonly MarkerPromptOptions _promptOptions;
+    private readonly IOptionsMonitor<MarkerPromptOptions> _promptOptions;
 
     // Resolved once during IHostedService.StartAsync; null until then.
     private string? _primaryWorkspaceKey;
@@ -30,19 +30,19 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         ILogger<WorkspaceProcessManager> logger,
         ILoggerFactory loggerFactory,
         IServiceProvider serviceProvider,
-        IOptions<MarkerPromptOptions> promptOptions)
+        IOptionsMonitor<MarkerPromptOptions> promptOptions)
     {
         _logger = logger;
         _loggerFactory = loggerFactory;
         _serviceProvider = serviceProvider;
-        _promptOptions = promptOptions.Value;
+        _promptOptions = promptOptions;
     }
 
     /// <inheritdoc />
     public async Task<WorkspaceProcessStatus> StartAsync(string workspacePath, int port, CancellationToken ct = default, string? dataDirectory = null, string? workspacePromptTemplate = null)
     {
         var key = NormalizeKey(workspacePath);
-        var globalTemplate = _promptOptions.MarkerPromptTemplate;
+        var globalTemplate = _promptOptions.CurrentValue.MarkerPromptTemplate;
 
         // If this workspace is the primary host, just write the marker — the primary app already serves it.
         if (IsPrimaryWorkspace(key))
@@ -145,6 +145,30 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         {
             await StopAsync(key, ct).ConfigureAwait(false);
         }
+    }
+
+    /// <inheritdoc />
+    public async Task RegenerateAllMarkersAsync(CancellationToken ct = default)
+    {
+        using var scope = _serviceProvider.CreateScope();
+        var workspaceService = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
+        var workspaces = await workspaceService.ListAsync(ct).ConfigureAwait(false);
+        var globalTemplate = _promptOptions.CurrentValue.MarkerPromptTemplate;
+
+        foreach (var ws in workspaces.Items)
+        {
+            if (!ws.IsEnabled) continue;
+
+            var key = NormalizeKey(ws.WorkspacePath);
+            var isRunning = IsPrimaryWorkspace(key) || (_hosts.TryGetValue(key, out var entry) && entry.IsRunning);
+            if (!isRunning) continue;
+
+            var name = DeriveWorkspaceName(key);
+            await MarkerFileService.WriteMarkerAsync(key, ws.WorkspacePort, name, _logger, ct,
+                globalTemplate, ws.PromptTemplate).ConfigureAwait(false);
+        }
+
+        _logger.LogInformation("Regenerated marker files for all running workspaces");
     }
 
     // IHostedService — start all registered workspaces on app startup, cleanup on stop.
