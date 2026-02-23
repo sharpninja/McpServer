@@ -165,6 +165,21 @@ public static class WorkspaceAppFactory
         app.MapMcp("/mcp-transport");
         app.MapGet("/health", () => Results.Ok(new { status = "healthy", workspace = workspaceName, port }));
 
+        // Unprotected endpoint returning the default (anonymous) API key for consumers without marker file access.
+        app.MapGet("/api-key", (WorkspaceTokenService ts, IConfiguration cfg) =>
+        {
+            var wp = cfg["Mcp:RepoRoot"] ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(wp))
+                return Results.Problem("No workspace configured.", statusCode: 503);
+
+            var k = Path.GetFullPath(wp).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            var dt = ts.GetDefaultToken(k);
+            if (dt is null)
+                return Results.Problem("Default token not yet generated. Retry shortly.", statusCode: 503);
+
+            return Results.Ok(new { apiKey = dt });
+        });
+
         return app;
     }
 }

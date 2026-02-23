@@ -343,6 +343,21 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MCP Context
 app.MapGet("/", () => Results.Redirect("/swagger"))
     .ExcludeFromDescription();
 
+// Unprotected endpoint returning the default (anonymous) API key for consumers without marker file access.
+app.MapGet("/api-key", (WorkspaceTokenService tokenService, IConfiguration configuration) =>
+{
+    var workspacePath = configuration["Mcp:RepoRoot"] ?? string.Empty;
+    if (string.IsNullOrWhiteSpace(workspacePath))
+        return Results.Problem("No workspace configured.", statusCode: 503);
+
+    var key = Path.GetFullPath(workspacePath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+    var defaultToken = tokenService.GetDefaultToken(key);
+    if (defaultToken is null)
+        return Results.Problem("Default token not yet generated. Retry shortly.", statusCode: 503);
+
+    return Results.Ok(new { apiKey = defaultToken });
+}).ExcludeFromDescription();
+
 app.MapMcp("/mcp-transport");
 app.MapControllers();
 

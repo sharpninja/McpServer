@@ -5,9 +5,15 @@ namespace McpServer.Support.Mcp.Middleware;
 
 /// <summary>
 /// Pipeline middleware that enforces per-workspace auth tokens on all <c>/mcp/*</c> routes.
-/// Tokens rotate on every service restart and are published in the
-/// <c>AGENTS-README-FIRST.yaml</c> marker file so agents auto-discover them.
-/// Non-<c>/mcp/</c> routes (health, swagger, MCP transport, etc.) pass through unprotected.
+/// Two token tiers are supported:
+/// <list type="bullet">
+///   <item><description><strong>Full-access</strong> — the per-workspace token from the marker
+///     file. Grants unrestricted access to all endpoints.</description></item>
+///   <item><description><strong>Default (anonymous)</strong> — the token returned by
+///     <c>GET /api-key</c>. Grants read-only access to all endpoints <strong>except</strong>
+///     TODO routes (<c>/mcp/todo*</c>) which are read-write.</description></item>
+/// </list>
+/// Non-<c>/mcp/</c> routes (health, swagger, MCP transport, <c>/api-key</c>) pass through unprotected.
 /// </summary>
 public sealed class WorkspaceAuthMiddleware
 {
@@ -17,7 +23,19 @@ public sealed class WorkspaceAuthMiddleware
     /// <summary>The query-string parameter accepted as a fallback.</summary>
     public const string QueryParam = "api_key";
 
+    /// <summary>
+    /// Key set in <see cref="HttpContext.Items"/> when the request was authenticated with a
+    /// default (anonymous) token. Downstream controllers/middleware can inspect this to
+    /// enforce additional restrictions.
+    /// </summary>
+    public const string IsDefaultKeyItem = "IsDefaultKey";
+
     private static readonly JsonSerializerOptions s_json = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+
+    private static readonly HashSet<string> s_readOnlyMethods = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "GET", "HEAD", "OPTIONS"
+    };
 
     private readonly RequestDelegate _next;
 
@@ -58,9 +76,38 @@ public sealed class WorkspaceAuthMiddleware
         var provided = context.Request.Headers[HeaderName].FirstOrDefault()
                        ?? context.Request.Query[QueryParam].FirstOrDefault();
 
+        // Full-access token — unrestricted.
         if (tokenService.ValidateToken(workspacePath, provided))
         {
             await _next(context).ConfigureAwait(false);
+            return;
+        }
+
+        // Default (anonymous) token — read-only except for TODO routes.
+        if (tokenService.ValidateDefaultToken(workspacePath, provided))
+        {
+            context.Items[IsDefaultKeyItem] = true;
+
+            var isTodoRoute = path.StartsWithSegments("/mcp/todo", StringComparison.OrdinalIgnoreCase);
+            var isReadOnly = s_readOnlyMethods.Contains(context.Request.Method);
+
+            if (isTodoRoute || isReadOnly)
+            {
+                await _next(context).ConfigureAwait(false);
+                return;
+            }
+
+            // Write operation on a non-todo route with a default key → forbidden.
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            context.Response.ContentType = "application/json";
+            var forbiddenBody = new
+            {
+                error = "Default API key grants read-only access to non-todo endpoints. " +
+                        "Use the full workspace API key from the AGENTS-README-FIRST.yaml marker file for write operations."
+            };
+            await context.Response.WriteAsync(
+                JsonSerializer.Serialize(forbiddenBody, s_json),
+                context.RequestAborted).ConfigureAwait(false);
             return;
         }
 

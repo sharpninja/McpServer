@@ -49,6 +49,9 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         var globalTemplate = _promptOptions.CurrentValue.MarkerPromptTemplate;
         var token = _tokenService.GetToken(key) ?? _tokenService.GenerateToken(key);
 
+        // Ensure a default (anonymous) token also exists for this workspace.
+        _ = _tokenService.GetDefaultToken(key) ?? _tokenService.GenerateDefaultToken(key);
+
         // If this workspace is the primary host, just write the marker — the primary app already serves it.
         if (IsPrimaryWorkspace(key))
         {
@@ -177,6 +180,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
 
             var name = DeriveWorkspaceName(key);
             var token = _tokenService.GetToken(key) ?? _tokenService.GenerateToken(key);
+            _ = _tokenService.GetDefaultToken(key) ?? _tokenService.GenerateDefaultToken(key);
             await MarkerFileService.WriteMarkerAsync(key, ws.WorkspacePort, name, _logger, ct,
                 globalTemplate, ws.PromptTemplate, token, ws).ConfigureAwait(false);
         }

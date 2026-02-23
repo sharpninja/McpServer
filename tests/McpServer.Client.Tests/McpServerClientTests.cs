@@ -109,4 +109,57 @@ public sealed class McpServerClientTests
         Assert.Equal(9999, client.SessionLog.Port);
         Assert.Equal(9999, client.Tools.Port);
     }
+
+    [Fact]
+    public async System.Threading.Tasks.Task InitializeAsync_FetchesDefaultKeyAndSetsOnAllClients()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"apiKey":"default-anon-key"}""");
+        using var http = new HttpClient(handler);
+        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7148") };
+        var client = new McpServerClient(http, options);
+
+        var key = await client.InitializeAsync();
+
+        Assert.Equal("default-anon-key", key);
+        Assert.Equal("default-anon-key", client.ApiKey);
+        Assert.Equal("default-anon-key", client.Todo.ApiKey);
+        Assert.Equal("default-anon-key", client.Context.ApiKey);
+        Assert.Equal("default-anon-key", client.Repo.ApiKey);
+        Assert.Contains("/api-key", handler.LastRequest!.RequestUri!.ToString());
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task InitializeAsync_SkipsIfApiKeyAlreadySet()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"apiKey":"should-not-use"}""");
+        using var http = new HttpClient(handler);
+        var client = new McpServerClient(http, TestOptions);
+
+        var key = await client.InitializeAsync();
+
+        Assert.Equal("test-key", key);
+        Assert.Null(handler.LastRequest); // No HTTP call made
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task InitializeAsync_ServerError_ThrowsMcpServerException()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.ServiceUnavailable, """{"error":"not ready"}""");
+        using var http = new HttpClient(handler);
+        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7148") };
+        var client = new McpServerClient(http, options);
+
+        await Assert.ThrowsAsync<McpServerException>(() => client.InitializeAsync());
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task InitializeAsync_MissingApiKeyInResponse_ThrowsInvalidOperation()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"other":"value"}""");
+        using var http = new HttpClient(handler);
+        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7148") };
+        var client = new McpServerClient(http, options);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => client.InitializeAsync());
+    }
 }

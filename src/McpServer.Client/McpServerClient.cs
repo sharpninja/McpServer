@@ -1,5 +1,8 @@
 using System;
 using System.Net.Http;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace McpServer.Client;
 
@@ -7,9 +10,15 @@ namespace McpServer.Client;
 /// Facade client providing unified access to all MCP Server API sub-clients.
 ///
 /// <para><strong>Authentication:</strong> Set <see cref="ApiKey"/> before making any API
-/// call. The value is propagated to every sub-client and read at call time so it can be
-/// rotated without creating a new instance. An <see cref="InvalidOperationException"/> is
-/// thrown at request time if the key is empty.</para>
+/// call, or call <see cref="InitializeAsync"/> to automatically fetch the default
+/// (anonymous) API key from the server. The value is propagated to every sub-client and
+/// read at call time so it can be rotated without creating a new instance. An
+/// <see cref="InvalidOperationException"/> is thrown at request time if the key is empty.</para>
+///
+/// <para><strong>Default key:</strong> The default key returned by <see cref="InitializeAsync"/>
+/// grants <em>read-only</em> access to all endpoints except TODO routes (<c>/mcp/todo*</c>)
+/// which are read-write. Consumers with access to the <c>AGENTS-README-FIRST.yaml</c> marker
+/// file should use the full-access token from that file instead.</para>
 ///
 /// <para><strong>Port targeting:</strong> Set <see cref="Port"/> to retarget all sub-clients
 /// to a different workspace host at runtime (e.g. after calling the workspace Start
@@ -21,17 +30,27 @@ namespace McpServer.Client;
 /// </summary>
 /// <example>
 /// <code>
+/// // Option A: Auto-initialize with default key (no marker file needed)
+/// var client = McpServerClientFactory.Create(new McpServerClientOptions
+/// {
+///     BaseUrl = new Uri("http://localhost:7147")
+/// });
+/// await client.InitializeAsync();
+/// var items = await client.Todo.QueryAsync();
+///
+/// // Option B: Use full-access key from marker file
 /// var client = McpServerClientFactory.Create(new McpServerClientOptions
 /// {
 ///     BaseUrl = new Uri("http://localhost:7147"),
-///     ApiKey = "my-api-key"
+///     ApiKey = "full-access-token-from-marker"
 /// });
-/// var items = await client.Todo.QueryAsync();
 /// </code>
 /// </example>
 public sealed class McpServerClient
 {
     private readonly McpClientBase[] _allClients;
+    private readonly HttpClient _http;
+    private readonly McpServerClientOptions _options;
     private string _apiKey;
     private int _port;
 
@@ -54,6 +73,9 @@ public sealed class McpServerClient
     {
         if (http is null) throw new ArgumentNullException(nameof(http));
         if (options is null) throw new ArgumentNullException(nameof(options));
+
+        _http = http;
+        _options = options;
 
         Todo = new TodoClient(http, options);
         Context = new ContextClient(http, options);
@@ -109,6 +131,68 @@ public sealed class McpServerClient
             _port = value;
             foreach (var c in _allClients) c.Port = value;
         }
+    }
+
+    /// <summary>
+    /// Fetches the default (anonymous) API key from the server's unprotected
+    /// <c>GET /api-key</c> endpoint and sets it on all sub-clients. This is the
+    /// recommended startup call for consumers that do <strong>not</strong> have access
+    /// to the <c>AGENTS-README-FIRST.yaml</c> marker file.
+    ///
+    /// <para>The default key grants <em>read-only</em> access to all endpoints except
+    /// TODO routes (<c>/mcp/todo*</c>) which are read-write. For full unrestricted
+    /// access, use the workspace token from the marker file instead.</para>
+    ///
+    /// <para>This method is a no-op if <see cref="ApiKey"/> is already non-empty
+    /// (i.e. it was seeded via <see cref="McpServerClientOptions.ApiKey"/> or set
+    /// manually before calling this method).</para>
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The default API key that was fetched and applied.</returns>
+    /// <exception cref="McpServerException">
+    /// Thrown when the server returns a non-success status code (e.g. 503 if the
+    /// workspace is not yet ready).
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when the server response does not contain an <c>apiKey</c> property.
+    /// </exception>
+    /// <example>
+    /// <code>
+    /// var client = McpServerClientFactory.Create(new McpServerClientOptions
+    /// {
+    ///     BaseUrl = new Uri("http://localhost:7147")
+    /// });
+    /// await client.InitializeAsync();
+    /// // client.ApiKey is now set; all sub-clients are ready.
+    /// var items = await client.Todo.QueryAsync();
+    /// </code>
+    /// </example>
+    public async Task<string> InitializeAsync(CancellationToken cancellationToken = default)
+    {
+        // Skip if a key was already provided (e.g. from marker file).
+        if (!string.IsNullOrWhiteSpace(_apiKey))
+            return _apiKey;
+
+        var uri = new Uri($"{_options.BaseUrl.Scheme}://{_options.BaseUrl.Host}:{Port}/api-key");
+        using var response = await _http.GetAsync(uri, cancellationToken).ConfigureAwait(false);
+
+        var content = await response.Content.ReadAsStringAsync(
+#if !NETSTANDARD2_0
+            cancellationToken
+#endif
+        ).ConfigureAwait(false);
+
+        if (!response.IsSuccessStatusCode)
+            throw new McpServerException(
+                $"Failed to fetch default API key: HTTP {(int)response.StatusCode} — {content}",
+                (int)response.StatusCode);
+
+        using var doc = JsonDocument.Parse(content);
+        if (!doc.RootElement.TryGetProperty("apiKey", out var keyElement) || keyElement.GetString() is not { } key)
+            throw new InvalidOperationException("Server response did not contain an 'apiKey' property.");
+
+        ApiKey = key;
+        return key;
     }
 
     /// <summary>

@@ -1079,3 +1079,5 @@ mvp-mcp:
     description:
     - Extract the copilot-related functions from the VS2026 VSIX extension and expose them as MCP server endpoints under /mcp/todo or similar.
     - This consolidates agent-facing capabilities into the MCP server rather than the IDE extension.
+test:
+  low-priority: []
