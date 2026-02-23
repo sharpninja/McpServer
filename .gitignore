@@ -499,3 +499,5 @@ _site/
 # Local scratch files
 _tmp*
 _temp*
+
+AGENTS-README-FIRST.yaml

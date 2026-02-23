@@ -101,8 +101,8 @@ staging-and-infrastructure:
   - id: nuget-client-lib
     title: Create REST client library and NuGet package with publish pipeline
     estimate: 3-5 days
-    note: High priority — enables external consumers and CI/CD integration testing. Must multi-target net9.0+netstandard2.0 for broad compatibility.
-    done: false
+    note: 'Implemented: McpServer.Client library with 8 sub-clients covering all 52+ API endpoints, typed DTOs, exception hierarchy, DI integration, factory pattern, 35 unit tests, CI pipeline with NuGet publish (main→nuget.org, other→GitHub Packages).'
+    done: true
     description:
     - Create a typed REST client library (McpServer.Client) wrapping all 52 MCP Server API endpoints across 8 controllers
     - Package as SharpNinja.McpServer.Client for nuget.org distribution
@@ -1057,3 +1057,9 @@ saas:
     - saas-12-legal-compliance
     - saas-15-funding
     - saas-16-exit-strategy
+  low-priority:
+  - id: MVP-MARKETING-005
+    title: Add REST clients similar to MVP-MARKETING-004 for Python and TypeScript
+    done: false
+    description:
+    - Create typed REST client libraries for Python (PyPI) and TypeScript (npm) mirroring the McpServer.Client NuGet package — covering all API endpoints with typed models, error handling, and DI/factory patterns appropriate to each ecosystem.
