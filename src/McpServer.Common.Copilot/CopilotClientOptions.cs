@@ -47,4 +47,12 @@ public sealed class CopilotClientOptions
     /// Null or empty = inherit the current process environment.
     /// </summary>
     public string? RunAs { get; set; }
+
+    /// <summary>
+    /// GitHub personal access token or OAuth token passed as <c>GH_TOKEN</c> to the
+    /// spawned Copilot CLI process. Required when running as a service account that
+    /// cannot access the user's Windows Credential Manager (keyring).
+    /// Null or empty = rely on the CLI's default auth discovery.
+    /// </summary>
+    public string? GitHubToken { get; set; }
 }

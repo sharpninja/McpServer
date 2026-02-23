@@ -211,6 +211,7 @@ builder.Services.Configure<TodoPromptOptions>(options =>
         options.PlanPrompt = primaryWorkspaceEntry.PlanPrompt;
         options.BaseUrl = $"http://localhost:{primaryWorkspaceEntry.WorkspacePort}";
         options.RunAs = primaryWorkspaceEntry.RunAs;
+        options.GitHubToken = primaryWorkspaceEntry.GitHubToken;
     }
 });
 builder.Services.AddCopilotClient();

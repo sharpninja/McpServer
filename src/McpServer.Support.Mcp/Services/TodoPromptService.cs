@@ -87,6 +87,7 @@ public sealed class TodoPromptService(
             Timeout = timeout,
             WorkingDirectory = hostEnvironment.ContentRootPath,
             RunAs = promptOptions.Value.RunAs,
+            GitHubToken = promptOptions.Value.GitHubToken,
         };
 
         return copilotClient.InvokeStreamingAsync(prompt, options, cancellationToken);

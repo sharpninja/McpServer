@@ -85,6 +85,7 @@ public sealed class CopilotClient(
         };
 
         ApplyRunAsEnvironment(psi, opts.RunAs);
+        ApplyGitHubToken(psi, opts.GitHubToken);
 
         if (opts.EnvironmentVariables is { Count: > 0 } envVars)
         {
@@ -230,6 +231,7 @@ public sealed class CopilotClient(
         };
 
         ApplyRunAsEnvironment(psi, opts.RunAs);
+        ApplyGitHubToken(psi, opts.GitHubToken);
 
         if (opts.EnvironmentVariables is { Count: > 0 } envVars)
         {
@@ -360,6 +362,21 @@ public sealed class CopilotClient(
         try { File.Delete(path); }
         catch (IOException) { /* Best-effort cleanup */ }
         catch (UnauthorizedAccessException) { /* Best-effort cleanup */ }
+    }
+
+    /// <summary>
+    /// Sets <c>GH_TOKEN</c> on the process if a GitHub token is configured.
+    /// Falls back to the current process's <c>GH_TOKEN</c> environment variable.
+    /// This is required when the service account cannot access the user's keyring.
+    /// </summary>
+    private static void ApplyGitHubToken(ProcessStartInfo psi, string? token)
+    {
+        var effective = !string.IsNullOrWhiteSpace(token)
+            ? token
+            : Environment.GetEnvironmentVariable("GH_TOKEN");
+
+        if (!string.IsNullOrWhiteSpace(effective))
+            psi.Environment["GH_TOKEN"] = effective;
     }
 
     /// <summary>

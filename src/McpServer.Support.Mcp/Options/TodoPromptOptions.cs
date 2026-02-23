@@ -32,4 +32,11 @@ public sealed class TodoPromptOptions
     /// Null or empty = inherit the service account's environment.
     /// </summary>
     public string? RunAs { get; set; }
+
+    /// <summary>
+    /// GitHub personal access token or OAuth token passed as <c>GH_TOKEN</c> to the
+    /// Copilot CLI process. Required when running as a Windows service that cannot
+    /// access the user's keyring. Null or empty = rely on the CLI's default auth.
+    /// </summary>
+    public string? GitHubToken { get; set; }
 }

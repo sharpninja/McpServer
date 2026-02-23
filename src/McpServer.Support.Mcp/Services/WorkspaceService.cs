@@ -326,6 +326,13 @@ public sealed class WorkspaceConfigEntry
     public string? RunAs { get; set; }
 
     /// <summary>
+    /// GitHub personal access token or OAuth token passed as <c>GH_TOKEN</c> to
+    /// the Copilot CLI process. Required when the service runs as a system account
+    /// that cannot access the user's Windows keyring. Null = default auth discovery.
+    /// </summary>
+    public string? GitHubToken { get; set; }
+
+    /// <summary>
     /// When true, this workspace is the primary instance — the host process serves it directly
     /// and no child app is spun up. The primary workspace with the lowest port wins at startup.
     /// </summary>
