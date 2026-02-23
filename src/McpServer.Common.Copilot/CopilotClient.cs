@@ -68,7 +68,8 @@ public sealed class CopilotClient(
             ? $"Get-Content -Raw '{tmpFile.Replace("'", "''", StringComparison.Ordinal)}'"
             : $"cat '{tmpFile.Replace("'", "'\\''", StringComparison.Ordinal)}'";
         var modelArg = string.Equals(opts.Model, "auto", StringComparison.OrdinalIgnoreCase) ? "" : $" --model {opts.Model}";
-        var agentCmd = $"{opts.AgentPath} -p \"$({readCmd})\"{modelArg} --output-format {opts.OutputFormat} 2>&1";
+        var silentArg = opts.Silent ? " --silent" : "";
+        var agentCmd = $"{opts.AgentPath} -p \"$({readCmd})\"{modelArg}{silentArg} 2>&1";
         var shell = isWindows ? "pwsh" : "sh";
         var shellArgs = isWindows ? $"-NoProfile -Command {agentCmd}" : $"-c {agentCmd}";
 
@@ -158,7 +159,6 @@ public sealed class CopilotClient(
     {
         var agentPath = opts.AgentPath;
         var model = opts.Model;
-        var outputFormat = opts.OutputFormat;
         var cwd = opts.WorkingDirectory ?? Environment.CurrentDirectory;
         var isWindows = OperatingSystem.IsWindows();
 
@@ -189,7 +189,7 @@ public sealed class CopilotClient(
 
         try
         {
-            return await SpawnAgentAsync(agentPath, model, outputFormat, tmpFile, cwd, opts, cancellationToken).ConfigureAwait(false);
+            return await SpawnAgentAsync(agentPath, model, tmpFile, cwd, opts, cancellationToken).ConfigureAwait(false);
         }
         finally
         {
@@ -200,7 +200,6 @@ public sealed class CopilotClient(
     private async Task<CopilotResult> SpawnAgentAsync(
         string agentPath,
         string model,
-        string outputFormat,
         string tmpFile,
         string cwd,
         CopilotClientOptions opts,
@@ -211,7 +210,8 @@ public sealed class CopilotClient(
             ? $"Get-Content -Raw '{tmpFile.Replace("'", "''", StringComparison.Ordinal)}'"
             : $"cat '{tmpFile.Replace("'", "'\\''", StringComparison.Ordinal)}'";
         var modelArg = string.Equals(model, "auto", StringComparison.OrdinalIgnoreCase) ? "" : $" --model {model}";
-        var agentCmd = $"{agentPath} -p \"$({readCmd})\"{modelArg} --output-format {outputFormat} 2>&1";
+        var silentArg = opts.Silent ? " --silent" : "";
+        var agentCmd = $"{agentPath} -p \"$({readCmd})\"{modelArg}{silentArg} 2>&1";
 
         var shell = isWindows ? "pwsh" : "sh";
         var shellArgs = isWindows ? $"-NoProfile -Command {agentCmd}" : $"-c {agentCmd}";

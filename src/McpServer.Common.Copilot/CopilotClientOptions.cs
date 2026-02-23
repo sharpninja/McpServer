@@ -15,10 +15,11 @@ public sealed class CopilotClientOptions
     public string Model { get; set; } = "auto";
 
     /// <summary>
-    /// Output format passed to the agent via --output-format.
-    /// Defaults to "text".
+    /// When <c>true</c>, passes <c>--silent</c> to the Copilot CLI so only the
+    /// agent response is emitted (no statistics or progress lines).
+    /// Defaults to <c>true</c>.
     /// </summary>
-    public string OutputFormat { get; set; } = "text";
+    public bool Silent { get; set; } = true;
 
     /// <summary>
     /// Timeout for the CLI process. Defaults to 2 minutes.

@@ -84,7 +84,6 @@ public sealed class TodoPromptService(
     {
         var options = new CopilotClientOptions
         {
-            OutputFormat = "text",
             Timeout = timeout,
             WorkingDirectory = hostEnvironment.ContentRootPath,
             RunAs = promptOptions.Value.RunAs,

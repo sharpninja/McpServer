@@ -30,7 +30,6 @@ internal sealed class RequirementsService(
 
         var options = new CopilotClientOptions
         {
-            OutputFormat = "text",
             Timeout = TimeSpan.FromMinutes(5),
         };
 
