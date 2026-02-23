@@ -34,28 +34,29 @@ public static class MarkerFileService
 
         For each task or conversation turn:
         1. POST {baseUrl}/mcp/sessionlog with a JSON body containing:
-           - sourceType: your agent identifier (e.g. "Cline", "Cursor", "Copilot")
-           - sessionId: a stable identifier for your current session
-           - title: a brief summary of the session's purpose
-           - model: the AI model you are using (e.g. "claude-sonnet-4-20250514")
+           - sourceType: YOUR agent identifier (e.g. "Cline", "Cursor", "Copilot")
+           - sessionId: a stable identifier for your current session that is prefixed with YOUR agent identifier.  Do not reuse sessions from different agent sessions.
+           - title: a brief summary of the session's purpose.  Keep up-to-date.
+           - model: the AI model you are using (e.g. "claude-sonnet-4-20250514").  Create a new session log if changing models.
            - started: ISO 8601 timestamp when the session began
            - lastUpdated: ISO 8601 timestamp of the latest activity
            - status: "in_progress" or "completed"
            - entries: array of request entries, each with:
-             - requestId: unique ID for this request within the session
-             - timestamp: ISO 8601 timestamp
-             - queryText: the full user query or task description
-             - queryTitle: short summary of the query
-             - response: your response text (can be a summary for long responses)
-             - interpretation: your understanding of what was asked
-             - status: "completed" or "in_progress"
-             - actions: array of { order, description, type, status, filePath } for each action taken
-             - model: the model used for this specific entry
-             - tokenCount: approximate token count if available
-             - tags: relevant tags (e.g. ["refactor", "bugfix", "feature"])
-             - contextList: files or resources referenced
+             - [REQUIRED] requestId: unique ID for this request within the session
+             - [REQUIRED] timestamp: ISO 8601 timestamp
+             - [REQUIRED] queryText: the full user query or task description
+             - [REQUIRED] queryTitle: short summary of the query
+             - [REQUIRED] response: your response text (verbatim, not summarized)
+             - [REQUIRED] interpretation: your understanding of what was asked
+             - [REQUIRED] status: "completed" or "in_progress"
+             - [REQUIRED] actions: array of { order, description, type, status, filePath } for each action taken
+             - [REQUIRED] model: the model used for this specific entry
+             - [RECOMMENDED] tokenCount: approximate token count if available
+             - [REQUIRED] tags: relevant tags (e.g. ["refactor", "bugfix", "feature"]) Update as needed.
+             - [REQUIRED] contextList: files or resources referenced
+             - [REQUIRED] Processing Dialog/Decisons.  See #2 below
 
-        2. For long-running requests, stream your reasoning in real-time via:
+        2. For all requests, stream your reasoning in real-time via:
            POST {baseUrl}/mcp/sessionlog/{agent}/{sessionId}/{requestId}/dialog
            Send an array of dialog items, each with:
            - timestamp: ISO 8601
@@ -75,6 +76,8 @@ public static class MarkerFileService
         - Sync: POST {baseUrl}/mcp/sync/run — trigger full ingestion sync; GET {baseUrl}/mcp/sync/status — check sync status
         - Tool Registry: GET {baseUrl}/mcp/tools/search — discover available tools; GET/POST {baseUrl}/mcp/tools — manage tool definitions
         - MCP Protocol: {baseUrl}/mcp-transport — Model Context Protocol streamable HTTP transport endpoint
+
+        **THESE RULES MUST BE ADHERED TO AND THIS MARKER READ ON EACH NEW REQUEST BY THE USER.**
         """;
 
     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
