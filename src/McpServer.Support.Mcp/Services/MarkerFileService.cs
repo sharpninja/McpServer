@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Globalization;
 using HandlebarsDotNet;
 using Microsoft.Extensions.Logging;
+using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -348,6 +349,7 @@ internal sealed class MarkerFile
     public string WorkspacePath { get; set; } = string.Empty;
     public int Pid { get; set; }
     public string StartedAt { get; set; } = string.Empty;
+    [YamlMember(ScalarStyle = ScalarStyle.Literal)]
     public string Prompt { get; set; } = string.Empty;
 }
 

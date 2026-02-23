@@ -1,6 +1,6 @@
 port: 7148
 baseUrl: http://localhost:7148
-apiKey: O6AZK7UUlWDLHKy4fcJ_62z9FAI-XSlxfO2ti42-sUs
+apiKey: WBOyEmPV6ISprzzHKH_45uYqICsn2B4VEttxkdiBOpA
 endpoints:
   health: /health
   swagger: /swagger/v1/swagger.json
@@ -19,98 +19,58 @@ endpoints:
   workspace: /mcp/workspace
 workspace: McpServer
 workspacePath: E:\github\McpServer
-pid: 65032
-startedAt: 2026-02-23T19:54:34.2864292+00:00
-prompt: >-
+pid: 32120
+startedAt: 2026-02-23T21:27:16.4448241+00:00
+prompt: |-
   You are connected to an MCP Context Server at http://localhost:7148. Use this server to coordinate your work.
-
 
   ## Glossary
 
-
   | Term | Definition |
-
   |------|-----------|
-
   | MCP | Model Context Protocol — an open standard for tool-calling between AI agents and context servers. |
-
   | Workspace | A project directory registered with the MCP server. Each workspace has its own port, data directory, and auth token. |
-
   | Marker File | The `AGENTS-README-FIRST.yaml` file placed at each workspace root. Contains connection details, auth token, and this prompt. |
-
   | API Key | A per-workspace cryptographic token that rotates on each server restart. Required for all `/mcp/*` REST endpoints. |
-
   | Streamable HTTP | The MCP wire protocol transport at `/mcp-transport`. Carries JSON-RPC tool calls over HTTP POST with streaming responses. |
-
   | Session Log | An audit record of every agent interaction, stored per-session with full request/response history and reasoning dialog. |
-
   | Context Pack | An ordered set of document chunks retrieved by semantic + full-text hybrid search, scoped to the workspace. |
-
   | Tool Bucket | A GitHub repository containing tool manifest files, similar to a Scoop package bucket. |
-
 
   ## Workspace Definition
 
-
   | Property | Value |
-
   |----------|-------|
-
   | Name | McpServer |
-
   | Path | E:\github\McpServer |
-
   | Port | 7148 |
-
   | Primary | False |
-
   | Enabled | True |
-
   | Data Directory | E:\github\McpServer |
-
   | Todo Path | docs/Project/TODO.yaml |
-
   | Tunnel Provider | none |
-
   | Created | 2026-02-23T04:02:39.7879069+00:00 |
-
   | Modified | 2026-02-23T05:28:43.4511844+00:00 |
 
-
   ## Authentication (REQUIRED)
-
   All `/mcp/*` REST endpoints require a per-workspace auth token. Include it with every request:
-
-  - **Header**: `X-Api-Key: O6AZK7UUlWDLHKy4fcJ_62z9FAI-XSlxfO2ti42-sUs`
-
-  - **Or query param**: `?api_key=O6AZK7UUlWDLHKy4fcJ_62z9FAI-XSlxfO2ti42-sUs`
-
+  - **Header**: `X-Api-Key: WBOyEmPV6ISprzzHKH_45uYqICsn2B4VEttxkdiBOpA`
+  - **Or query param**: `?api_key=WBOyEmPV6ISprzzHKH_45uYqICsn2B4VEttxkdiBOpA`
   If you receive a 401 response, re-read this AGENTS-README-FIRST.yaml marker file — the token rotates on each server restart.
 
-
   ## Available Protocols
-
   This server supports multiple connection protocols:
-
   - **REST API**: All `/mcp/*` endpoints (requires `X-Api-Key` header). Full OpenAPI spec at GET http://localhost:7148/swagger/v1/swagger.json. Interactive Swagger UI at http://localhost:7148/swagger.
-
   - **MCP Streamable HTTP**: POST http://localhost:7148/mcp-transport — Model Context Protocol transport for tool-calling agents. No API key required for MCP transport.
-
   - **Health Check**: GET http://localhost:7148/health — returns {"status":"healthy"}. No API key required.
 
-
   ## Server Health
-
   Before making API calls, verify the server is running: GET http://localhost:7148/health — returns {"status":"healthy"}.
 
-
   ## Session Logging (REQUIRED)
-
   You MUST log every request you process to the session log endpoint. This is critical for audit, continuity, and team visibility.
 
-
   For each task or conversation turn:
-
   1. POST http://localhost:7148/mcp/sessionlog with a JSON body containing:
      - sourceType: YOUR agent identifier (e.g. "Cline", "Cursor", "Copilot")
      - sessionId: a stable identifier for your current session that is prefixed with YOUR agent identifier.  Do not reuse sessions from different agent sessions.
@@ -144,26 +104,15 @@ prompt: >-
 
   3. At the end of each session or task, POST the final session log with status "completed" and all entries filled in.
 
-
   ## Available Capabilities
-
   - Context Search: POST http://localhost:7148/mcp/context/search — semantic + full-text hybrid search over indexed project documents
-
   - Context Pack: POST http://localhost:7148/mcp/context/pack — retrieve ordered context chunks for a topic
-
   - Context Sources: GET http://localhost:7148/mcp/context/sources — list all indexed document sources
-
   - Todo Management: GET/POST/PUT/DELETE http://localhost:7148/mcp/todo — query, create, update, and delete project tasks
-
   - Repo Files: GET http://localhost:7148/mcp/repo/file, POST http://localhost:7148/mcp/repo/file, GET http://localhost:7148/mcp/repo/list — read, write, and list repository files
-
   - GitHub Integration: http://localhost:7148/mcp/gh/issues, http://localhost:7148/mcp/gh/pulls, http://localhost:7148/mcp/gh/labels — issue, PR, and label management
-
   - Sync: POST http://localhost:7148/mcp/sync/run — trigger full ingestion sync; GET http://localhost:7148/mcp/sync/status — check sync status
-
   - Tool Registry: GET http://localhost:7148/mcp/tools/search — discover available tools; GET/POST http://localhost:7148/mcp/tools — manage tool definitions
-
   - MCP Protocol: http://localhost:7148/mcp-transport — Model Context Protocol streamable HTTP transport endpoint
-
 
   **THESE RULES MUST BE ADHERED TO AND THIS MARKER READ ON EACH NEW REQUEST BY THE USER.**
