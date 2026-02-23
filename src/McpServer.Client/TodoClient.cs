@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -57,6 +58,63 @@ public sealed class TodoClient : McpClientBase
     {
         return await PostAsync<RequirementsAnalysisResult>($"mcp/todo/{Encode(id)}/requirements", null, cancellationToken).ConfigureAwait(false);
     }
+
+    /// <summary>
+    /// Streams a Copilot-generated status report for the specified TODO item via SSE.
+    /// Each yielded string is one line of the report, delivered in real-time as the
+    /// server generates it.
+    /// </summary>
+    /// <param name="id">TODO item ID.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>An async stream of status-report lines.</returns>
+    /// <example>
+    /// <code>
+    /// await foreach (var line in client.Todo.StreamStatusAsync("MVP-APP-001"))
+    ///     Console.WriteLine(line);
+    /// </code>
+    /// </example>
+    /// <seealso cref="StreamImplementAsync"/>
+    /// <seealso cref="StreamPlanAsync"/>
+    public IAsyncEnumerable<string> StreamStatusAsync(string id, CancellationToken cancellationToken = default)
+        => StreamSseAsync($"mcp/todo/{Encode(id)}/prompt/status", cancellationToken);
+
+    /// <summary>
+    /// Streams a Copilot-generated implementation guide for the specified TODO item via SSE.
+    /// Each yielded string is one line of the guide, delivered in real-time as the
+    /// server generates it.
+    /// </summary>
+    /// <param name="id">TODO item ID.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>An async stream of implementation-guide lines.</returns>
+    /// <example>
+    /// <code>
+    /// await foreach (var line in client.Todo.StreamImplementAsync("MVP-APP-001"))
+    ///     Console.WriteLine(line);
+    /// </code>
+    /// </example>
+    /// <seealso cref="StreamStatusAsync"/>
+    /// <seealso cref="StreamPlanAsync"/>
+    public IAsyncEnumerable<string> StreamImplementAsync(string id, CancellationToken cancellationToken = default)
+        => StreamSseAsync($"mcp/todo/{Encode(id)}/prompt/implement", cancellationToken);
+
+    /// <summary>
+    /// Streams a Copilot-generated plan for the specified TODO item via SSE.
+    /// Each yielded string is one line of the plan, delivered in real-time as the
+    /// server generates it.
+    /// </summary>
+    /// <param name="id">TODO item ID.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>An async stream of plan lines.</returns>
+    /// <example>
+    /// <code>
+    /// await foreach (var line in client.Todo.StreamPlanAsync("MVP-APP-001"))
+    ///     Console.WriteLine(line);
+    /// </code>
+    /// </example>
+    /// <seealso cref="StreamStatusAsync"/>
+    /// <seealso cref="StreamImplementAsync"/>
+    public IAsyncEnumerable<string> StreamPlanAsync(string id, CancellationToken cancellationToken = default)
+        => StreamSseAsync($"mcp/todo/{Encode(id)}/prompt/plan", cancellationToken);
 
     private static string Encode(string value) => System.Uri.EscapeDataString(value);
 

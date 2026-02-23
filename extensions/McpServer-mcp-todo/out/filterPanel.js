@@ -12,8 +12,6 @@ function escapeHtml(s) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
 }
-const MRU_KEY = 'fwhMcpTodo.filterMru';
-const MRU_MAX = 10;
 function getHtml(webview, state) {
     const priority = escapeHtml(state.priority);
     const text = escapeHtml(state.text);
@@ -21,8 +19,6 @@ function getHtml(webview, state) {
     const selId = textScope === 'id' ? 'selected' : '';
     const selTitle = textScope === 'title' ? 'selected' : '';
     const selAll = textScope === 'all' ? 'selected' : '';
-    const mru = state.mru ?? [];
-    const datalistOptions = mru.map((s) => `<option value="${escapeHtml(s)}">`).join('');
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,8 +69,7 @@ function getHtml(webview, state) {
       <option value="all" ${selAll}>ALL</option>
     </select>
     <label for="text">Text</label>
-    <input type="text" id="text" list="text-mru" placeholder="e.g. plan || impl, !plan, (a || b) &amp;&amp; !trip" value="${text}" title="Text filter. Press ENTER to add to recent. Use &amp;&amp; AND, || OR, ! NOT, ( ) group." />
-    <datalist id="text-mru">${datalistOptions}</datalist>
+    <input type="text" id="text" placeholder="Search…" value="${text}" title="Filter by text" />
   </div>
   <script>
     (function() {
@@ -91,11 +86,6 @@ function getHtml(webview, state) {
       scopeEl.addEventListener('change', sendScope);
       textEl.addEventListener('input', sendText);
       textEl.addEventListener('change', sendText);
-      textEl.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-          vscode.postMessage({ type: 'textEnter', value: textEl.value });
-        }
-      });
       document.getElementById('clear').addEventListener('click', function() {
         vscode.postMessage({ type: 'clear' });
       });
@@ -106,10 +96,6 @@ function getHtml(webview, state) {
           if (priorityEl.value !== msg.priority) { priorityEl.value = msg.priority || ''; }
           if (scopeEl.value !== msg.textScope) { scopeEl.value = msg.textScope || 'title'; }
           if (textEl.value !== msg.text) { textEl.value = msg.text || ''; }
-          if (msg.mru && Array.isArray(msg.mru)) {
-            const dl = document.getElementById('text-mru');
-            if (dl) { dl.innerHTML = msg.mru.map(function(s) { return '<option value="' + s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;') + '">'; }).join(''); }
-          }
         }
       });
     })();
@@ -118,24 +104,20 @@ function getHtml(webview, state) {
 </html>`;
 }
 class FilterPanelProvider {
-    _context;
     _provider;
     _onFilterChange;
     _view;
-    constructor(_context, _provider, _onFilterChange) {
-        this._context = _context;
+    constructor(_provider, _onFilterChange) {
         this._provider = _provider;
         this._onFilterChange = _onFilterChange;
     }
     resolveWebviewView(webviewView, _context, _token) {
         this._view = webviewView;
         webviewView.webview.options = { enableScripts: true };
-        const mru = this._context.globalState.get(MRU_KEY, []) ?? [];
         const state = {
             priority: this._provider.filterPriority,
             text: this._provider.filterText,
             textScope: this._provider.filterTextScope,
-            mru,
         };
         webviewView.webview.html = getHtml(webviewView.webview, state);
         webviewView.webview.onDidReceiveMessage((msg) => {
@@ -148,18 +130,6 @@ class FilterPanelProvider {
                     this._provider.setFilterText(msg.value ?? '');
                     this._onFilterChange();
                     break;
-                case 'textEnter': {
-                    const value = (msg.value ?? '').trim();
-                    if (value) {
-                        const mru = this._context.globalState.get(MRU_KEY, []) ?? [];
-                        const next = [value, ...mru.filter((x) => x !== value)].slice(0, MRU_MAX);
-                        void this._context.globalState.update(MRU_KEY, next);
-                    }
-                    this._provider.setFilterText(value);
-                    this._onFilterChange();
-                    this.updateFilterState();
-                    break;
-                }
                 case 'textScope':
                     this._provider.setFilterTextScope(msg.value ?? 'title');
                     this._onFilterChange();
@@ -177,13 +147,11 @@ class FilterPanelProvider {
     updateFilterState() {
         if (!this._view)
             return;
-        const mru = this._context.globalState.get(MRU_KEY, []) ?? [];
         this._view.webview.postMessage({
             type: 'setState',
             priority: this._provider.filterPriority,
             text: this._provider.filterText,
             textScope: this._provider.filterTextScope,
-            mru,
         });
     }
 }

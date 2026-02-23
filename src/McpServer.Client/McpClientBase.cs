@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -142,6 +145,66 @@ public abstract class McpClientBase
 
         using var response = await _http.SendAsync(request, cancellationToken).ConfigureAwait(false);
         return await ReadResponseAsync<T>(response, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Sends a GET request for an SSE (Server-Sent Events) endpoint and yields each
+    /// <c>data:</c> line as a string. The stream terminates when the server sends an
+    /// <c>event: done</c> message or closes the connection.
+    /// </summary>
+    /// <param name="path">Relative API path (e.g. <c>mcp/todo/{id}/prompt/status</c>).</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>An async stream of text lines from the SSE response.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when <see cref="ApiKey"/> is not set.</exception>
+    /// <exception cref="McpServerException">Any non-success HTTP status.</exception>
+    protected async IAsyncEnumerable<string> StreamSseAsync(
+        string path, [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(ApiKey))
+            throw new InvalidOperationException(
+                "ApiKey must be set before calling an endpoint. " +
+                "Read the workspace token from the AGENTS-README-FIRST.yaml marker file.");
+
+        var uri = new Uri($"{_scheme}://{_host}:{Port}/{path.TrimStart('/')}");
+        using var request = new HttpRequestMessage(HttpMethod.Get, uri);
+        request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
+        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));
+
+        using var response = await _http.SendAsync(
+            request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var body = await response.Content.ReadAsStringAsync(
+#if !NETSTANDARD2_0
+                cancellationToken
+#endif
+            ).ConfigureAwait(false);
+            ThrowForStatus(response.StatusCode, body);
+        }
+
+#if NETSTANDARD2_0
+        using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+#else
+        using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+#endif
+        using var reader = new StreamReader(stream, Encoding.UTF8);
+
+        while (!cancellationToken.IsCancellationRequested)
+        {
+#if NETSTANDARD2_0
+            var line = await reader.ReadLineAsync().ConfigureAwait(false);
+#else
+            var line = await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false);
+#endif
+            if (line is null) break; // stream closed
+
+            if (line.StartsWith("event: done", StringComparison.Ordinal))
+                break;
+
+            if (line.StartsWith("data: ", StringComparison.Ordinal))
+                yield return line.Substring(6);
+        }
     }
 
     private static async Task<T> ReadResponseAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken)

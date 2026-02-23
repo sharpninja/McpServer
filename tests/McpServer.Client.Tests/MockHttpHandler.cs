@@ -11,13 +11,15 @@ internal sealed class MockHttpHandler : HttpMessageHandler
 {
     private readonly HttpStatusCode _statusCode;
     private readonly string _responseBody;
+    private readonly string _contentType;
     private HttpRequestMessage? _lastRequest;
     private string? _lastRequestBody;
 
-    public MockHttpHandler(HttpStatusCode statusCode, string responseBody)
+    public MockHttpHandler(HttpStatusCode statusCode, string responseBody, string contentType = "application/json")
     {
         _statusCode = statusCode;
         _responseBody = responseBody;
+        _contentType = contentType;
     }
 
     public HttpRequestMessage? LastRequest => _lastRequest;
@@ -31,7 +33,7 @@ internal sealed class MockHttpHandler : HttpMessageHandler
 
         return new HttpResponseMessage(_statusCode)
         {
-            Content = new StringContent(_responseBody, Encoding.UTF8, "application/json")
+            Content = new StringContent(_responseBody, Encoding.UTF8, _contentType)
         };
     }
 }
