@@ -142,6 +142,7 @@ public sealed class TodoController : ControllerBase
     [Produces("text/event-stream")]
     public async Task StreamStatusPromptAsync(string id, CancellationToken cancellationToken)
     {
+        if (!await EnsureTodoExistsAsync(id, cancellationToken).ConfigureAwait(false)) return;
         await StreamCopilotResponseAsync(_todoPromptService.StreamStatusAsync(id, cancellationToken), cancellationToken).ConfigureAwait(false);
     }
 
@@ -156,6 +157,7 @@ public sealed class TodoController : ControllerBase
     [Produces("text/event-stream")]
     public async Task StreamImplementPromptAsync(string id, CancellationToken cancellationToken)
     {
+        if (!await EnsureTodoExistsAsync(id, cancellationToken).ConfigureAwait(false)) return;
         await StreamCopilotResponseAsync(_todoPromptService.StreamImplementAsync(id, cancellationToken), cancellationToken).ConfigureAwait(false);
     }
 
@@ -170,7 +172,20 @@ public sealed class TodoController : ControllerBase
     [Produces("text/event-stream")]
     public async Task StreamPlanPromptAsync(string id, CancellationToken cancellationToken)
     {
+        if (!await EnsureTodoExistsAsync(id, cancellationToken).ConfigureAwait(false)) return;
         await StreamCopilotResponseAsync(_todoPromptService.StreamPlanAsync(id, cancellationToken), cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>Returns <c>true</c> if the item exists; writes a 404 JSON response and returns <c>false</c> otherwise.</summary>
+    private async Task<bool> EnsureTodoExistsAsync(string id, CancellationToken cancellationToken)
+    {
+        var item = await _todoService.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
+        if (item is not null) return true;
+
+        Response.StatusCode = 404;
+        Response.ContentType = "application/json";
+        await Response.WriteAsync($"{{\"error\":\"TODO '{id}' not found.\"}}", cancellationToken).ConfigureAwait(false);
+        return false;
     }
 
     private async Task StreamCopilotResponseAsync(IAsyncEnumerable<string> lines, CancellationToken cancellationToken)
