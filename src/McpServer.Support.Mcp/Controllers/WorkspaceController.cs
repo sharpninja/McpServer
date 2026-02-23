@@ -247,7 +247,7 @@ public sealed class WorkspaceController : ControllerBase
         var newTemplate = string.IsNullOrWhiteSpace(request.Template) ? null : request.Template.Trim();
 
         // Persist to appsettings.json using the same atomic JSON patching as WorkspaceService.
-        var appsettingsPath = Path.Combine(_env.ContentRootPath, "appsettings.json");
+        var appsettingsPath = ResolveAppsettingsPath();
         var jsonText = await System.IO.File.ReadAllTextAsync(appsettingsPath, ct).ConfigureAwait(false);
         var doc = JsonNode.Parse(jsonText, new JsonNodeOptions { PropertyNameCaseInsensitive = true })!;
         var mcp = doc["Mcp"] as JsonObject ?? new JsonObject();
@@ -287,6 +287,22 @@ public sealed class WorkspaceController : ControllerBase
         // Check if this process is the one serving the primary workspace by comparing ports.
         var listeningUrls = HttpContext.Connection.LocalPort;
         return primary.WorkspacePort == listeningUrls;
+    }
+
+    /// <summary>
+    /// Resolves the path to <c>appsettings.json</c>, falling back to the application base directory
+    /// when the file does not exist under the content root path
+    /// (which may point to a workspace root rather than the install directory).
+    /// </summary>
+    private string ResolveAppsettingsPath()
+    {
+        var fromContentRoot = Path.Combine(_env.ContentRootPath, "appsettings.json");
+        if (System.IO.File.Exists(fromContentRoot)) return fromContentRoot;
+
+        var fromBaseDir = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
+        if (System.IO.File.Exists(fromBaseDir)) return fromBaseDir;
+
+        return fromContentRoot;
     }
 
     private static readonly JsonSerializerOptions s_jsonOptions = new()

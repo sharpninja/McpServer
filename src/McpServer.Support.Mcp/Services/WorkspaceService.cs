@@ -213,7 +213,7 @@ public sealed class WorkspaceService : IWorkspaceService
 
     private async Task WriteAllAsync(List<WorkspaceConfigEntry> workspaces, CancellationToken ct)
     {
-        var path = Path.Combine(_env.ContentRootPath, "appsettings.json");
+        var path = ResolveAppsettingsPath();
         var jsonText = await File.ReadAllTextAsync(path, ct).ConfigureAwait(false);
         var doc = JsonNode.Parse(jsonText, new JsonNodeOptions { PropertyNameCaseInsensitive = true })!;
         var mcp = doc["Mcp"] as JsonObject ?? new JsonObject();
@@ -229,6 +229,22 @@ public sealed class WorkspaceService : IWorkspaceService
         WriteIndented = true,
         DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
     };
+
+    /// <summary>
+    /// Resolves the path to <c>appsettings.json</c>, falling back to the application base directory
+    /// when the file does not exist under <see cref="IHostEnvironment.ContentRootPath"/>
+    /// (which may point to a workspace root rather than the install directory).
+    /// </summary>
+    internal string ResolveAppsettingsPath()
+    {
+        var fromContentRoot = Path.Combine(_env.ContentRootPath, "appsettings.json");
+        if (File.Exists(fromContentRoot)) return fromContentRoot;
+
+        var fromBaseDir = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
+        if (File.Exists(fromBaseDir)) return fromBaseDir;
+
+        return fromContentRoot; // fallback — will throw a clear error on read
+    }
 
     private static int GetNextAvailablePort(List<WorkspaceConfigEntry> all)
     {
