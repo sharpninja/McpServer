@@ -39,9 +39,6 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-PLANNED-013: Session log entry processing dialog items (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogProcessingDialogEntity> SessionLogProcessingDialogs => Set<SessionLogProcessingDialogEntity>();
 
-    /// <summary>Registered workspaces for hosted MCP instances.</summary>
-    public DbSet<WorkspaceEntity> Workspaces => Set<WorkspaceEntity>();
-
     /// <summary>Tool definitions discoverable by keyword search.</summary>
     public DbSet<ToolDefinitionEntity> ToolDefinitions => Set<ToolDefinitionEntity>();
 
@@ -120,19 +117,10 @@ public sealed class McpDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        modelBuilder.Entity<WorkspaceEntity>(e =>
-        {
-            e.HasIndex(x => x.WorkspacePort).IsUnique();
-        });
-
         modelBuilder.Entity<ToolDefinitionEntity>(e =>
         {
             e.HasIndex(x => new { x.Name, x.WorkspacePath }).IsUnique();
             e.HasIndex(x => x.WorkspacePath);
-            e.HasOne(x => x.Workspace)
-                .WithMany()
-                .HasForeignKey(x => x.WorkspacePath)
-                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<ToolDefinitionTagEntity>(e =>

@@ -1,0 +1,288 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.IWriteAuditLog
+  commentId: T:McpServer.Support.Mcp.Services.IWriteAuditLog
+  id: IWriteAuditLog
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.IWriteAuditLog.GetRecent(System.Int32)
+  - McpServer.Support.Mcp.Services.IWriteAuditLog.RecordWrite(System.String,System.DateTime)
+  langs:
+  - csharp
+  - vb
+  name: IWriteAuditLog
+  nameWithType: IWriteAuditLog
+  fullName: McpServer.Support.Mcp.Services.IWriteAuditLog
+  type: Interface
+  source:
+    id: IWriteAuditLog
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWriteAuditLog.cs
+    startLine: 6
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: >-
+    TR-PLANNED-013: Audit log for repo write operations.
+
+    FR-SUPPORT-010: Enforce audit trail for repo.write.
+  example: []
+  syntax:
+    content: public interface IWriteAuditLog
+    content.vb: Public Interface IWriteAuditLog
+- uid: McpServer.Support.Mcp.Services.IWriteAuditLog.RecordWrite(System.String,System.DateTime)
+  commentId: M:McpServer.Support.Mcp.Services.IWriteAuditLog.RecordWrite(System.String,System.DateTime)
+  id: RecordWrite(System.String,System.DateTime)
+  parent: McpServer.Support.Mcp.Services.IWriteAuditLog
+  langs:
+  - csharp
+  - vb
+  name: RecordWrite(string, DateTime)
+  nameWithType: IWriteAuditLog.RecordWrite(string, DateTime)
+  fullName: McpServer.Support.Mcp.Services.IWriteAuditLog.RecordWrite(string, System.DateTime)
+  type: Method
+  source:
+    id: RecordWrite
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWriteAuditLog.cs
+    startLine: 11
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Records a write (path, timestamp, optional run id).
+  example: []
+  syntax:
+    content: void RecordWrite(string relativePath, DateTime at)
+    parameters:
+    - id: relativePath
+      type: System.String
+      description: Relative path of the written file.
+    - id: at
+      type: System.DateTime
+      description: UTC timestamp of the write.
+    content.vb: Sub RecordWrite(relativePath As String, at As Date)
+  overload: McpServer.Support.Mcp.Services.IWriteAuditLog.RecordWrite*
+  nameWithType.vb: IWriteAuditLog.RecordWrite(String, Date)
+  fullName.vb: McpServer.Support.Mcp.Services.IWriteAuditLog.RecordWrite(String, Date)
+  name.vb: RecordWrite(String, Date)
+- uid: McpServer.Support.Mcp.Services.IWriteAuditLog.GetRecent(System.Int32)
+  commentId: M:McpServer.Support.Mcp.Services.IWriteAuditLog.GetRecent(System.Int32)
+  id: GetRecent(System.Int32)
+  parent: McpServer.Support.Mcp.Services.IWriteAuditLog
+  langs:
+  - csharp
+  - vb
+  name: GetRecent(int)
+  nameWithType: IWriteAuditLog.GetRecent(int)
+  fullName: McpServer.Support.Mcp.Services.IWriteAuditLog.GetRecent(int)
+  type: Method
+  source:
+    id: GetRecent
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWriteAuditLog.cs
+    startLine: 16
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Returns the last N write entries (for status/debug).
+  example: []
+  syntax:
+    content: IReadOnlyList<WriteAuditEntry> GetRecent(int count = 50)
+    parameters:
+    - id: count
+      type: System.Int32
+      description: Maximum number of recent entries to return.
+    return:
+      type: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Services.WriteAuditEntry}
+      description: A read-only list of the most recent write audit entries.
+    content.vb: Function GetRecent(count As Integer = 50) As IReadOnlyList(Of WriteAuditEntry)
+  overload: McpServer.Support.Mcp.Services.IWriteAuditLog.GetRecent*
+  nameWithType.vb: IWriteAuditLog.GetRecent(Integer)
+  fullName.vb: McpServer.Support.Mcp.Services.IWriteAuditLog.GetRecent(Integer)
+  name.vb: GetRecent(Integer)
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: McpServer.Support.Mcp.Services.IWriteAuditLog.RecordWrite*
+  commentId: Overload:McpServer.Support.Mcp.Services.IWriteAuditLog.RecordWrite
+  href: McpServer.Support.Mcp.Services.IWriteAuditLog.html#McpServer_Support_Mcp_Services_IWriteAuditLog_RecordWrite_System_String_System_DateTime_
+  name: RecordWrite
+  nameWithType: IWriteAuditLog.RecordWrite
+  fullName: McpServer.Support.Mcp.Services.IWriteAuditLog.RecordWrite
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.DateTime
+  commentId: T:System.DateTime
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetime
+  name: DateTime
+  nameWithType: DateTime
+  fullName: System.DateTime
+  nameWithType.vb: Date
+  fullName.vb: Date
+  name.vb: Date
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Services.IWriteAuditLog.GetRecent*
+  commentId: Overload:McpServer.Support.Mcp.Services.IWriteAuditLog.GetRecent
+  href: McpServer.Support.Mcp.Services.IWriteAuditLog.html#McpServer_Support_Mcp_Services_IWriteAuditLog_GetRecent_System_Int32_
+  name: GetRecent
+  nameWithType: IWriteAuditLog.GetRecent
+  fullName: McpServer.Support.Mcp.Services.IWriteAuditLog.GetRecent
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Services.WriteAuditEntry}
+  commentId: T:System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Services.WriteAuditEntry}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IReadOnlyList`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<WriteAuditEntry>
+  nameWithType: IReadOnlyList<WriteAuditEntry>
+  fullName: System.Collections.Generic.IReadOnlyList<McpServer.Support.Mcp.Services.WriteAuditEntry>
+  nameWithType.vb: IReadOnlyList(Of WriteAuditEntry)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of McpServer.Support.Mcp.Services.WriteAuditEntry)
+  name.vb: IReadOnlyList(Of WriteAuditEntry)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.WriteAuditEntry
+    name: WriteAuditEntry
+    href: McpServer.Support.Mcp.Services.WriteAuditEntry.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.WriteAuditEntry
+    name: WriteAuditEntry
+    href: McpServer.Support.Mcp.Services.WriteAuditEntry.html
+  - name: )
+- uid: System.Collections.Generic.IReadOnlyList`1
+  commentId: T:System.Collections.Generic.IReadOnlyList`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<T>
+  nameWithType: IReadOnlyList<T>
+  fullName: System.Collections.Generic.IReadOnlyList<T>
+  nameWithType.vb: IReadOnlyList(Of T)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of T)
+  name.vb: IReadOnlyList(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic

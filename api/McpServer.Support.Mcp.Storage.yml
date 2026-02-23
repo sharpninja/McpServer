@@ -1,0 +1,62 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Storage
+  commentId: N:McpServer.Support.Mcp.Storage
+  id: McpServer.Support.Mcp.Storage
+  children:
+  - McpServer.Support.Mcp.Storage.McpDbContext
+  langs:
+  - csharp
+  - vb
+  name: McpServer.Support.Mcp.Storage
+  nameWithType: McpServer.Support.Mcp.Storage
+  fullName: McpServer.Support.Mcp.Storage
+  type: Namespace
+  assemblies:
+  - McpServer.Support.Mcp
+references:
+- uid: McpServer.Support.Mcp.Storage.McpDbContext
+  commentId: T:McpServer.Support.Mcp.Storage.McpDbContext
+  parent: McpServer.Support.Mcp.Storage
+  href: McpServer.Support.Mcp.Storage.McpDbContext.html
+  name: McpDbContext
+  nameWithType: McpDbContext
+  fullName: McpServer.Support.Mcp.Storage.McpDbContext
+- uid: McpServer.Support.Mcp.Storage
+  commentId: N:McpServer.Support.Mcp.Storage
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Storage
+  nameWithType: McpServer.Support.Mcp.Storage
+  fullName: McpServer.Support.Mcp.Storage
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html

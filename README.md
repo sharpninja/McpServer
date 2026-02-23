@@ -87,7 +87,7 @@ Environment overrides:
     "Instances": {
       "default": {
         "Port": 7147,
-        "RepoRoot": "E:\\github\\FunWasHad",
+        "RepoRoot": ".",
         "DataSource": "mcp.db",
         "TodoFilePath": "docs/Project/TODO.yaml",
         "TodoStorage": {
@@ -135,6 +135,7 @@ Migrate todo data between backends:
 
 - `scripts/Start-McpServer.ps1` - build/run server with optional `-Instance`
 - `scripts/Run-McpServer.ps1` - direct local run helper
+- `scripts/Update-McpService.ps1` - stop, publish Debug build, restore config/data, restart, health-check Windows service
 - `scripts/Validate-McpConfig.ps1` - config validation
 - `scripts/Test-McpMultiInstance.ps1` - two-instance smoke test
 - `scripts/Migrate-McpTodoStorage.ps1` - todo backend migration
@@ -181,6 +182,33 @@ Extension sources and packaging scripts live in:
 - `extensions/McpServer-mcp-todo`
 - `scripts/Package-Vsix.ps1`
 - `scripts/Build-AndInstall-Vsix.ps1`
+
+## Client Library
+
+A typed REST client is available as a NuGet package for consuming the MCP Server API:
+
+```powershell
+dotnet add package SharpNinja.McpServer.Client
+```
+
+```csharp
+// With DI
+builder.Services.AddMcpServerClient(options =>
+{
+    options.BaseUrl = new Uri("http://localhost:7148");
+    options.ApiKey = "your-api-key"; // optional
+});
+
+// Without DI
+var client = McpServerClientFactory.Create(new McpServerClientOptions
+{
+    BaseUrl = new Uri("http://localhost:7148"),
+});
+```
+
+Covers all API endpoints: Todo, Context, SessionLog, GitHub, Repo, Sync, Workspace, and Tools.
+
+Source: `src/McpServer.Client/` — see the [package README](src/McpServer.Client/README.md) for full usage.
 
 ## Additional Documentation
 

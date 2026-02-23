@@ -22,11 +22,13 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
 
     private static readonly IDeserializer Deserializer = new DeserializerBuilder()
         .WithNamingConvention(HyphenatedNamingConvention.Instance)
+        .WithTypeConverter(new TodoFileYamlConverter())
         .IgnoreUnmatchedProperties()
         .Build();
 
     private static readonly ISerializer Serializer = new SerializerBuilder()
         .WithNamingConvention(HyphenatedNamingConvention.Instance)
+        .WithTypeConverter(new TodoFileYamlConverter())
         .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
         .Build();
 
@@ -90,13 +92,12 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
             if (existing is not null)
                 return new TodoMutationResult(false, $"Item with id '{request.Id}' already exists.");
 
-            var section = GetOrCreateSection(file, request.Section);
-            if (section is null)
-                return new TodoMutationResult(false, $"Unknown section '{request.Section}'.");
+            var priorityError = TodoValidator.ValidatePriority(request.Priority);
+            if (priorityError is not null)
+                return new TodoMutationResult(false, priorityError);
 
-            var list = GetPriorityList(section, request.Priority);
-            if (list is null)
-                return new TodoMutationResult(false, $"Unknown priority '{request.Priority}'. Use high, medium, or low.");
+            var section = GetOrCreateSection(file, request.Section);
+            var list = GetPriorityList(section, request.Priority)!;
 
             var item = new TodoItem
             {
@@ -116,7 +117,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
             if (item.DependsOn is { Count: > 0 })
             {
                 var allItems = FlattenAll(file);
-                var depError = ValidateDependencies(request.Id, item.DependsOn, allItems);
+                var depError = TodoValidator.ValidateDependencies(request.Id, item.DependsOn, allItems);
                 if (depError is not null)
                     return new TodoMutationResult(false, depError);
             }
@@ -171,7 +172,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
             {
                 var allItems = FlattenAll(file);
                 var proposedDeps = request.DependsOn.ToList();
-                var depError = ValidateDependencies(id, proposedDeps, allItems);
+                var depError = TodoValidator.ValidateDependencies(id, proposedDeps, allItems);
                 if (depError is not null)
                     return new TodoMutationResult(false, depError);
                 item.DependsOn = proposedDeps;
@@ -186,12 +187,9 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
             if (request.Priority is not null && !string.Equals(request.Priority, priority, StringComparison.OrdinalIgnoreCase))
             {
                 var sectionObj = GetOrCreateSection(file, section!);
-                if (sectionObj is not null)
-                {
-                    RemoveFromPriorityList(sectionObj, priority!, id);
-                    AddToPriorityList(sectionObj, request.Priority, item);
-                    newPriority = request.Priority;
-                }
+                RemoveFromPriorityList(sectionObj, priority!, id);
+                AddToPriorityList(sectionObj, request.Priority, item);
+                newPriority = request.Priority;
             }
 
             // Handle section change: move item between sections
@@ -199,12 +197,9 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
             {
                 var oldSection = GetOrCreateSection(file, section!);
                 var newSection = GetOrCreateSection(file, request.Section);
-                if (oldSection is not null && newSection is not null)
-                {
-                    RemoveFromPriorityList(oldSection, newPriority, id);
-                    AddToPriorityList(newSection, newPriority, item);
-                    section = request.Section;
-                }
+                RemoveFromPriorityList(oldSection, newPriority, id);
+                AddToPriorityList(newSection, newPriority, item);
+                section = request.Section;
             }
 
             await WriteFileAsync(file, cancellationToken).ConfigureAwait(false);
@@ -280,11 +275,8 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
     private static List<TodoFlatItem> FlattenAll(TodoFile file)
     {
         var result = new List<TodoFlatItem>();
-        FlattenSection(result, file.MvpApp, "mvp-app");
-        FlattenSection(result, file.MvpMarketing, "mvp-marketing");
-        FlattenSection(result, file.MvpSupport, "mvp-support");
-        FlattenSection(result, file.MvpLegal, "mvp-legal");
-        FlattenSection(result, file.StagingAndInfrastructure, "staging-and-infrastructure");
+        foreach (var (key, section) in file.Sections)
+            FlattenSection(result, section, key);
         FlattenCodeReview(result, file.CodeReviewRemediation);
         return result;
     }
@@ -394,18 +386,8 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
 
     private static (TodoItem? Item, string? Section, string? Priority) FindItemInFile(TodoFile file, string id)
     {
-        var sections = new (TodoSection? Section, string Key)[]
+        foreach (var (key, section) in file.Sections)
         {
-            (file.MvpApp, "mvp-app"),
-            (file.MvpMarketing, "mvp-marketing"),
-            (file.MvpSupport, "mvp-support"),
-            (file.MvpLegal, "mvp-legal"),
-            (file.StagingAndInfrastructure, "staging-and-infrastructure"),
-        };
-
-        foreach (var (section, key) in sections)
-        {
-            if (section is null) continue;
             var priorities = new (List<TodoItem>? List, string Name)[]
             {
                 (section.HighPriority, "high"),
@@ -426,7 +408,6 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
             var phase = file.CodeReviewRemediation.Phases.FirstOrDefault(p => string.Equals(p.Id, id, StringComparison.OrdinalIgnoreCase));
             if (phase is not null)
             {
-                // Return a synthetic TodoItem wrapping the phase for update
                 var synth = new TodoItem
                 {
                     Id = phase.Id,
@@ -444,15 +425,8 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
 
     private static bool RemoveItemFromFile(TodoFile file, string id)
     {
-        var sections = new TodoSection?[]
+        foreach (var section in file.Sections.Values)
         {
-            file.MvpApp, file.MvpMarketing, file.MvpSupport,
-            file.MvpLegal, file.StagingAndInfrastructure
-        };
-
-        foreach (var section in sections)
-        {
-            if (section is null) continue;
             var lists = new[] { section.HighPriority, section.MediumPriority, section.LowPriority };
             foreach (var list in lists)
             {
@@ -465,7 +439,6 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
             }
         }
 
-        // Check code review phases
         if (file.CodeReviewRemediation?.Phases is not null)
         {
             var phase = file.CodeReviewRemediation.Phases.FirstOrDefault(p => string.Equals(p.Id, id, StringComparison.OrdinalIgnoreCase));
@@ -479,14 +452,14 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
         return false;
     }
 
-    private static TodoSection? GetOrCreateSection(TodoFile file, string sectionKey)
+    private static TodoSection GetOrCreateSection(TodoFile file, string sectionKey)
     {
-        if (string.Equals(sectionKey, "mvp-app", StringComparison.OrdinalIgnoreCase)) return file.MvpApp ??= new TodoSection();
-        if (string.Equals(sectionKey, "mvp-marketing", StringComparison.OrdinalIgnoreCase)) return file.MvpMarketing ??= new TodoSection();
-        if (string.Equals(sectionKey, "mvp-support", StringComparison.OrdinalIgnoreCase)) return file.MvpSupport ??= new TodoSection();
-        if (string.Equals(sectionKey, "mvp-legal", StringComparison.OrdinalIgnoreCase)) return file.MvpLegal ??= new TodoSection();
-        if (string.Equals(sectionKey, "staging-and-infrastructure", StringComparison.OrdinalIgnoreCase)) return file.StagingAndInfrastructure ??= new TodoSection();
-        return null;
+        if (!file.Sections.TryGetValue(sectionKey, out var section))
+        {
+            section = new TodoSection();
+            file.Sections[sectionKey] = section;
+        }
+        return section;
     }
 
     private static List<TodoItem>? GetPriorityList(TodoSection section, string priority)
@@ -508,77 +481,5 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
     {
         var list = GetPriorityList(section, priority);
         list?.Add(item);
-    }
-
-    /// <summary>
-    /// Validates that proposed dependencies are valid: all referenced IDs exist,
-    /// none is a self-reference, and no circular dependency would result.
-    /// Returns an error message string, or null if valid.
-    /// </summary>
-    private static string? ValidateDependencies(string itemId, List<string> dependsOn, List<TodoFlatItem> allItems)
-    {
-        // Self-reference check
-        if (dependsOn.Any(d => string.Equals(d, itemId, StringComparison.OrdinalIgnoreCase)))
-            return $"Item '{itemId}' cannot depend on itself.";
-
-        // Build a lookup of all known IDs
-        var knownIds = new HashSet<string>(allItems.Select(i => i.Id), StringComparer.OrdinalIgnoreCase);
-
-        // Check that all referenced dependency IDs exist (allow the item itself to not yet exist for create)
-        foreach (var depId in dependsOn)
-        {
-            if (!knownIds.Contains(depId) && !string.Equals(depId, itemId, StringComparison.OrdinalIgnoreCase))
-                return $"Dependency '{depId}' does not exist.";
-        }
-
-        // Build adjacency list from existing items (using proposed deps for itemId)
-        var graph = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
-        foreach (var item in allItems)
-        {
-            var deps = string.Equals(item.Id, itemId, StringComparison.OrdinalIgnoreCase)
-                ? dependsOn
-                : item.DependsOn?.ToList() ?? [];
-            graph[item.Id] = deps;
-        }
-
-        // If itemId is new (not in allItems), add it
-        if (!graph.ContainsKey(itemId))
-            graph[itemId] = dependsOn;
-
-        // Detect cycles using DFS from itemId
-        var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        var inStack = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-        if (HasCycle(itemId, graph, visited, inStack))
-            return $"Circular dependency detected involving '{itemId}'.";
-
-        return null;
-    }
-
-    private static bool HasCycle(
-        string node,
-        Dictionary<string, List<string>> graph,
-        HashSet<string> visited,
-        HashSet<string> inStack)
-    {
-        if (inStack.Contains(node))
-            return true;
-        if (visited.Contains(node))
-            return false;
-
-        visited.Add(node);
-        inStack.Add(node);
-
-        if (graph.TryGetValue(node, out var deps))
-        {
-            foreach (var dep in deps)
-            {
-                if (HasCycle(dep, graph, visited, inStack))
-                    return true;
-            }
-        }
-
-        inStack.Remove(node);
-        return false;
     }
 }

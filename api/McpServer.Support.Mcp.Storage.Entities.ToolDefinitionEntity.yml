@@ -1,0 +1,919 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  id: ToolDefinitionEntity
+  parent: McpServer.Support.Mcp.Storage.Entities
+  children:
+  - McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.BucketName
+  - McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.CommandTemplate
+  - McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.DateTimeCreated
+  - McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.DateTimeModified
+  - McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Description
+  - McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Id
+  - McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Name
+  - McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.ParameterSchema
+  - McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Tags
+  - McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Workspace
+  - McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.WorkspacePath
+  langs:
+  - csharp
+  - vb
+  name: ToolDefinitionEntity
+  nameWithType: ToolDefinitionEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  type: Class
+  source:
+    id: ToolDefinitionEntity
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolDefinitionEntity.cs
+    startLine: 10
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: >-
+    Registered tool definition that agents can discover via keyword search.
+
+    Tools are either <b>global</b> (<xref href="McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.WorkspacePath" data-throw-if-not-resolved="false"></xref> is <code>null</code>) or
+
+    <b>workspace-scoped</b> (tied to a specific workspace). Keyword queries return
+
+    the union of global tools and tools belonging to the queried workspace.
+  example: []
+  syntax:
+    content: public sealed class ToolDefinitionEntity
+    content.vb: Public NotInheritable Class ToolDefinitionEntity
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Id
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Id
+  id: Id
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  langs:
+  - csharp
+  - vb
+  name: Id
+  nameWithType: ToolDefinitionEntity.Id
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Id
+  type: Property
+  source:
+    id: Id
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolDefinitionEntity.cs
+    startLine: 13
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: Auto-generated primary key.
+  example: []
+  syntax:
+    content: >-
+      [Key]
+
+      public int Id { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: >-
+      <Key>
+
+      Public Property Id As Integer
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Id*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.KeyAttribute
+    ctor: System.ComponentModel.DataAnnotations.KeyAttribute.#ctor
+    arguments: []
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Name
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Name
+  id: Name
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  langs:
+  - csharp
+  - vb
+  name: Name
+  nameWithType: ToolDefinitionEntity.Name
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Name
+  type: Property
+  source:
+    id: Name
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolDefinitionEntity.cs
+    startLine: 17
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: Unique tool name (e.g. <code>screenshot</code>, <code>clipboard_copy</code>).
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(128)]
+
+      public required string Name { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(128)>
+
+      Public Property Name As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Name*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 128
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Description
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Description
+  id: Description
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  langs:
+  - csharp
+  - vb
+  name: Description
+  nameWithType: ToolDefinitionEntity.Description
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Description
+  type: Property
+  source:
+    id: Description
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolDefinitionEntity.cs
+    startLine: 22
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: Short human-readable description shown to agents.
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(1024)]
+
+      public required string Description { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(1024)>
+
+      Public Property Description As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Description*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 1024
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.ParameterSchema
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.ParameterSchema
+  id: ParameterSchema
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  langs:
+  - csharp
+  - vb
+  name: ParameterSchema
+  nameWithType: ToolDefinitionEntity.ParameterSchema
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.ParameterSchema
+  type: Property
+  source:
+    id: ParameterSchema
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolDefinitionEntity.cs
+    startLine: 27
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: JSON schema describing the tool's input parameters (optional).
+  example: []
+  syntax:
+    content: >-
+      [MaxLength(8192)]
+
+      public string? ParameterSchema { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <MaxLength(8192)>
+
+      Public Property ParameterSchema As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.ParameterSchema*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 8192
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.CommandTemplate
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.CommandTemplate
+  id: CommandTemplate
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  langs:
+  - csharp
+  - vb
+  name: CommandTemplate
+  nameWithType: ToolDefinitionEntity.CommandTemplate
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.CommandTemplate
+  type: Property
+  source:
+    id: CommandTemplate
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolDefinitionEntity.cs
+    startLine: 31
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: Command or executable template for invocation (e.g. <code>powershell -File Take-Screenshot.ps1 -Path {path}</code>).
+  example: []
+  syntax:
+    content: >-
+      [MaxLength(2048)]
+
+      public string? CommandTemplate { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <MaxLength(2048)>
+
+      Public Property CommandTemplate As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.CommandTemplate*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 2048
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.WorkspacePath
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.WorkspacePath
+  id: WorkspacePath
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  langs:
+  - csharp
+  - vb
+  name: WorkspacePath
+  nameWithType: ToolDefinitionEntity.WorkspacePath
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.WorkspacePath
+  type: Property
+  source:
+    id: WorkspacePath
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolDefinitionEntity.cs
+    startLine: 38
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: >-
+    Optional workspace scope. When <code>null</code> the tool is global (available to all workspaces).
+
+    When set, the tool is visible only within that workspace (plus all global tools).
+  example: []
+  syntax:
+    content: >-
+      [MaxLength(2048)]
+
+      public string? WorkspacePath { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <MaxLength(2048)>
+
+      Public Property WorkspacePath As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.WorkspacePath*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 2048
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Workspace
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Workspace
+  id: Workspace
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  langs:
+  - csharp
+  - vb
+  name: Workspace
+  nameWithType: ToolDefinitionEntity.Workspace
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Workspace
+  type: Property
+  source:
+    id: Workspace
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolDefinitionEntity.cs
+    startLine: 42
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: Navigation to the owning workspace (null for global tools).
+  example: []
+  syntax:
+    content: public WorkspaceEntity? Workspace { get; set; }
+    parameters: []
+    return:
+      type: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+    content.vb: Public Property Workspace As WorkspaceEntity
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Workspace*
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.BucketName
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.BucketName
+  id: BucketName
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  langs:
+  - csharp
+  - vb
+  name: BucketName
+  nameWithType: ToolDefinitionEntity.BucketName
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.BucketName
+  type: Property
+  source:
+    id: BucketName
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolDefinitionEntity.cs
+    startLine: 48
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: >-
+    Name of the bucket this tool was installed from, or <code>null</code> if created manually.
+
+    Used to track provenance and enable updates from the source bucket.
+  example: []
+  syntax:
+    content: >-
+      [MaxLength(128)]
+
+      public string? BucketName { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <MaxLength(128)>
+
+      Public Property BucketName As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.BucketName*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 128
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.DateTimeCreated
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.DateTimeCreated
+  id: DateTimeCreated
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  langs:
+  - csharp
+  - vb
+  name: DateTimeCreated
+  nameWithType: ToolDefinitionEntity.DateTimeCreated
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.DateTimeCreated
+  type: Property
+  source:
+    id: DateTimeCreated
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolDefinitionEntity.cs
+    startLine: 52
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: When the tool was registered.
+  example: []
+  syntax:
+    content: public DateTimeOffset DateTimeCreated { get; set; }
+    parameters: []
+    return:
+      type: System.DateTimeOffset
+    content.vb: Public Property DateTimeCreated As DateTimeOffset
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.DateTimeCreated*
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.DateTimeModified
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.DateTimeModified
+  id: DateTimeModified
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  langs:
+  - csharp
+  - vb
+  name: DateTimeModified
+  nameWithType: ToolDefinitionEntity.DateTimeModified
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.DateTimeModified
+  type: Property
+  source:
+    id: DateTimeModified
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolDefinitionEntity.cs
+    startLine: 55
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: When the tool was last modified.
+  example: []
+  syntax:
+    content: public DateTimeOffset DateTimeModified { get; set; }
+    parameters: []
+    return:
+      type: System.DateTimeOffset
+    content.vb: Public Property DateTimeModified As DateTimeOffset
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.DateTimeModified*
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Tags
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Tags
+  id: Tags
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity
+  langs:
+  - csharp
+  - vb
+  name: Tags
+  nameWithType: ToolDefinitionEntity.Tags
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Tags
+  type: Property
+  source:
+    id: Tags
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolDefinitionEntity.cs
+    startLine: 58
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: Tags for keyword-based discovery. EF Core requires mutable collection for relationship fixup.
+  example: []
+  syntax:
+    content: public ICollection<ToolDefinitionTagEntity> Tags { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.ICollection{McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity}
+    content.vb: Public Property Tags As ICollection(Of ToolDefinitionTagEntity)
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Tags*
+references:
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.WorkspacePath
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.WorkspacePath
+  href: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolDefinitionEntity_WorkspacePath
+  name: WorkspacePath
+  nameWithType: ToolDefinitionEntity.WorkspacePath
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.WorkspacePath
+- uid: McpServer.Support.Mcp.Storage.Entities
+  commentId: N:McpServer.Support.Mcp.Storage.Entities
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Storage.Entities
+  nameWithType: McpServer.Support.Mcp.Storage.Entities
+  fullName: McpServer.Support.Mcp.Storage.Entities
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage.Entities
+    name: Entities
+    href: McpServer.Support.Mcp.Storage.Entities.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage.Entities
+    name: Entities
+    href: McpServer.Support.Mcp.Storage.Entities.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Id*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Id
+  href: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolDefinitionEntity_Id
+  name: Id
+  nameWithType: ToolDefinitionEntity.Id
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Id
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Name*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Name
+  href: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolDefinitionEntity_Name
+  name: Name
+  nameWithType: ToolDefinitionEntity.Name
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Name
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Description*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Description
+  href: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolDefinitionEntity_Description
+  name: Description
+  nameWithType: ToolDefinitionEntity.Description
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Description
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.ParameterSchema*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.ParameterSchema
+  href: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolDefinitionEntity_ParameterSchema
+  name: ParameterSchema
+  nameWithType: ToolDefinitionEntity.ParameterSchema
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.ParameterSchema
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.CommandTemplate*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.CommandTemplate
+  href: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolDefinitionEntity_CommandTemplate
+  name: CommandTemplate
+  nameWithType: ToolDefinitionEntity.CommandTemplate
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.CommandTemplate
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.WorkspacePath*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.WorkspacePath
+  href: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolDefinitionEntity_WorkspacePath
+  name: WorkspacePath
+  nameWithType: ToolDefinitionEntity.WorkspacePath
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.WorkspacePath
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Workspace*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Workspace
+  href: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolDefinitionEntity_Workspace
+  name: Workspace
+  nameWithType: ToolDefinitionEntity.Workspace
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Workspace
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+  parent: McpServer.Support.Mcp.Storage.Entities
+  href: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.html
+  name: WorkspaceEntity
+  nameWithType: WorkspaceEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.BucketName*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.BucketName
+  href: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolDefinitionEntity_BucketName
+  name: BucketName
+  nameWithType: ToolDefinitionEntity.BucketName
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.BucketName
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.DateTimeCreated*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.DateTimeCreated
+  href: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolDefinitionEntity_DateTimeCreated
+  name: DateTimeCreated
+  nameWithType: ToolDefinitionEntity.DateTimeCreated
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.DateTimeCreated
+- uid: System.DateTimeOffset
+  commentId: T:System.DateTimeOffset
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  name: DateTimeOffset
+  nameWithType: DateTimeOffset
+  fullName: System.DateTimeOffset
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.DateTimeModified*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.DateTimeModified
+  href: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolDefinitionEntity_DateTimeModified
+  name: DateTimeModified
+  nameWithType: ToolDefinitionEntity.DateTimeModified
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.DateTimeModified
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Tags*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Tags
+  href: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolDefinitionEntity_Tags
+  name: Tags
+  nameWithType: ToolDefinitionEntity.Tags
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity.Tags
+- uid: System.Collections.Generic.ICollection{McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity}
+  commentId: T:System.Collections.Generic.ICollection{McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.ICollection`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<ToolDefinitionTagEntity>
+  nameWithType: ICollection<ToolDefinitionTagEntity>
+  fullName: System.Collections.Generic.ICollection<McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity>
+  nameWithType.vb: ICollection(Of ToolDefinitionTagEntity)
+  fullName.vb: System.Collections.Generic.ICollection(Of McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity)
+  name.vb: ICollection(Of ToolDefinitionTagEntity)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity
+    name: ToolDefinitionTagEntity
+    href: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity
+    name: ToolDefinitionTagEntity
+    href: McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity.html
+  - name: )
+- uid: System.Collections.Generic.ICollection`1
+  commentId: T:System.Collections.Generic.ICollection`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<T>
+  nameWithType: ICollection<T>
+  fullName: System.Collections.Generic.ICollection<T>
+  nameWithType.vb: ICollection(Of T)
+  fullName.vb: System.Collections.Generic.ICollection(Of T)
+  name.vb: ICollection(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic

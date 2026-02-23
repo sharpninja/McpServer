@@ -1,0 +1,1070 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  commentId: T:McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  id: UnifiedSessionLogDto
+  parent: McpServer.Support.Mcp.Models
+  children:
+  - McpServer.Support.Mcp.Models.UnifiedSessionLogDto.CopilotStatistics
+  - McpServer.Support.Mcp.Models.UnifiedSessionLogDto.CursorSessionLabel
+  - McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Entries
+  - McpServer.Support.Mcp.Models.UnifiedSessionLogDto.EntryCount
+  - McpServer.Support.Mcp.Models.UnifiedSessionLogDto.LastUpdated
+  - McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Model
+  - McpServer.Support.Mcp.Models.UnifiedSessionLogDto.SessionId
+  - McpServer.Support.Mcp.Models.UnifiedSessionLogDto.SourceType
+  - McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Started
+  - McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Status
+  - McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Title
+  - McpServer.Support.Mcp.Models.UnifiedSessionLogDto.TotalTokens
+  - McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Workspace
+  langs:
+  - csharp
+  - vb
+  name: UnifiedSessionLogDto
+  nameWithType: UnifiedSessionLogDto
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  type: Class
+  source:
+    id: UnifiedSessionLogDto
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 8
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: 'FR-SUPPORT-010: DTO matching docs/schemas/UnifiedModel.schema.json for session log normalization.'
+  example: []
+  syntax:
+    content: public sealed class UnifiedSessionLogDto
+    content.vb: Public NotInheritable Class UnifiedSessionLogDto
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.SourceType
+  commentId: P:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.SourceType
+  id: SourceType
+  parent: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  langs:
+  - csharp
+  - vb
+  name: SourceType
+  nameWithType: UnifiedSessionLogDto.SourceType
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.SourceType
+  type: Property
+  source:
+    id: SourceType
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 11
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Agent source type (e.g. Cursor, Copilot).
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("sourceType")]
+
+      public string? SourceType { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("sourceType")>
+
+      Public Property SourceType As String
+  overload: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.SourceType*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: sourceType
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.SessionId
+  commentId: P:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.SessionId
+  id: SessionId
+  parent: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  langs:
+  - csharp
+  - vb
+  name: SessionId
+  nameWithType: UnifiedSessionLogDto.SessionId
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.SessionId
+  type: Property
+  source:
+    id: SessionId
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 15
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Unique session identifier.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("sessionId")]
+
+      public string? SessionId { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("sessionId")>
+
+      Public Property SessionId As String
+  overload: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.SessionId*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: sessionId
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Title
+  commentId: P:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Title
+  id: Title
+  parent: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  langs:
+  - csharp
+  - vb
+  name: Title
+  nameWithType: UnifiedSessionLogDto.Title
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Title
+  type: Property
+  source:
+    id: Title
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 19
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Human-readable session title.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("title")]
+
+      public string? Title { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("title")>
+
+      Public Property Title As String
+  overload: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Title*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: title
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Model
+  commentId: P:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Model
+  id: Model
+  parent: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  langs:
+  - csharp
+  - vb
+  name: Model
+  nameWithType: UnifiedSessionLogDto.Model
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Model
+  type: Property
+  source:
+    id: Model
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 23
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: AI model used for the session.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("model")]
+
+      public string? Model { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("model")>
+
+      Public Property Model As String
+  overload: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Model*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: model
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Started
+  commentId: P:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Started
+  id: Started
+  parent: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  langs:
+  - csharp
+  - vb
+  name: Started
+  nameWithType: UnifiedSessionLogDto.Started
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Started
+  type: Property
+  source:
+    id: Started
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 27
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: ISO 8601 timestamp when the session started.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("started")]
+
+      public string? Started { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("started")>
+
+      Public Property Started As String
+  overload: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Started*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: started
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.LastUpdated
+  commentId: P:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.LastUpdated
+  id: LastUpdated
+  parent: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  langs:
+  - csharp
+  - vb
+  name: LastUpdated
+  nameWithType: UnifiedSessionLogDto.LastUpdated
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.LastUpdated
+  type: Property
+  source:
+    id: LastUpdated
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 31
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: ISO 8601 timestamp of the last update.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("lastUpdated")]
+
+      public string? LastUpdated { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("lastUpdated")>
+
+      Public Property LastUpdated As String
+  overload: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.LastUpdated*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: lastUpdated
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Status
+  commentId: P:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Status
+  id: Status
+  parent: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  langs:
+  - csharp
+  - vb
+  name: Status
+  nameWithType: UnifiedSessionLogDto.Status
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Status
+  type: Property
+  source:
+    id: Status
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 35
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Session status (e.g. in_progress, completed).
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("status")]
+
+      public string? Status { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("status")>
+
+      Public Property Status As String
+  overload: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Status*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: status
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.EntryCount
+  commentId: P:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.EntryCount
+  id: EntryCount
+  parent: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  langs:
+  - csharp
+  - vb
+  name: EntryCount
+  nameWithType: UnifiedSessionLogDto.EntryCount
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.EntryCount
+  type: Property
+  source:
+    id: EntryCount
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 39
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Number of request/response entries in the session.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("entryCount")]
+
+      public int EntryCount { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: >-
+      <JsonPropertyName("entryCount")>
+
+      Public Property EntryCount As Integer
+  overload: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.EntryCount*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: entryCount
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Workspace
+  commentId: P:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Workspace
+  id: Workspace
+  parent: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  langs:
+  - csharp
+  - vb
+  name: Workspace
+  nameWithType: UnifiedSessionLogDto.Workspace
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Workspace
+  type: Property
+  source:
+    id: Workspace
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 43
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Workspace metadata.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("workspace")]
+
+      public WorkspaceInfoDto? Workspace { get; set; }
+    parameters: []
+    return:
+      type: McpServer.Support.Mcp.Models.WorkspaceInfoDto
+    content.vb: >-
+      <JsonPropertyName("workspace")>
+
+      Public Property Workspace As WorkspaceInfoDto
+  overload: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Workspace*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: workspace
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Entries
+  commentId: P:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Entries
+  id: Entries
+  parent: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  langs:
+  - csharp
+  - vb
+  name: Entries
+  nameWithType: UnifiedSessionLogDto.Entries
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Entries
+  type: Property
+  source:
+    id: Entries
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 47
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Ordered request/response entries.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("entries")]
+
+      public List<UnifiedRequestEntryDto>? Entries { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.List{McpServer.Support.Mcp.Models.UnifiedRequestEntryDto}
+    content.vb: >-
+      <JsonPropertyName("entries")>
+
+      Public Property Entries As List(Of UnifiedRequestEntryDto)
+  overload: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Entries*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: entries
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.TotalTokens
+  commentId: P:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.TotalTokens
+  id: TotalTokens
+  parent: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  langs:
+  - csharp
+  - vb
+  name: TotalTokens
+  nameWithType: UnifiedSessionLogDto.TotalTokens
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.TotalTokens
+  type: Property
+  source:
+    id: TotalTokens
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 53
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: 'TR-PLANNED-013: Total token count across all entries.'
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("totalTokens")]
+
+      public int? TotalTokens { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: >-
+      <JsonPropertyName("totalTokens")>
+
+      Public Property TotalTokens As Integer?
+  overload: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.TotalTokens*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: totalTokens
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.CursorSessionLabel
+  commentId: P:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.CursorSessionLabel
+  id: CursorSessionLabel
+  parent: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  langs:
+  - csharp
+  - vb
+  name: CursorSessionLabel
+  nameWithType: UnifiedSessionLogDto.CursorSessionLabel
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.CursorSessionLabel
+  type: Property
+  source:
+    id: CursorSessionLabel
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 57
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: 'TR-PLANNED-013: Cursor-specific session label.'
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("cursorSessionLabel")]
+
+      public string? CursorSessionLabel { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("cursorSessionLabel")>
+
+      Public Property CursorSessionLabel As String
+  overload: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.CursorSessionLabel*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: cursorSessionLabel
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.CopilotStatistics
+  commentId: P:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.CopilotStatistics
+  id: CopilotStatistics
+  parent: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+  langs:
+  - csharp
+  - vb
+  name: CopilotStatistics
+  nameWithType: UnifiedSessionLogDto.CopilotStatistics
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.CopilotStatistics
+  type: Property
+  source:
+    id: CopilotStatistics
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 61
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: 'TR-PLANNED-013: Copilot-specific aggregate statistics.'
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("copilotStatistics")]
+
+      public CopilotStatisticsDto? CopilotStatistics { get; set; }
+    parameters: []
+    return:
+      type: McpServer.Support.Mcp.Models.CopilotStatisticsDto
+    content.vb: >-
+      <JsonPropertyName("copilotStatistics")>
+
+      Public Property CopilotStatistics As CopilotStatisticsDto
+  overload: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.CopilotStatistics*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: copilotStatistics
+references:
+- uid: McpServer.Support.Mcp.Models
+  commentId: N:McpServer.Support.Mcp.Models
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Models
+  nameWithType: McpServer.Support.Mcp.Models
+  fullName: McpServer.Support.Mcp.Models
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.SourceType*
+  commentId: Overload:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.SourceType
+  href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html#McpServer_Support_Mcp_Models_UnifiedSessionLogDto_SourceType
+  name: SourceType
+  nameWithType: UnifiedSessionLogDto.SourceType
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.SourceType
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.SessionId*
+  commentId: Overload:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.SessionId
+  href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html#McpServer_Support_Mcp_Models_UnifiedSessionLogDto_SessionId
+  name: SessionId
+  nameWithType: UnifiedSessionLogDto.SessionId
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.SessionId
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Title*
+  commentId: Overload:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Title
+  href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html#McpServer_Support_Mcp_Models_UnifiedSessionLogDto_Title
+  name: Title
+  nameWithType: UnifiedSessionLogDto.Title
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Title
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Model*
+  commentId: Overload:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Model
+  href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html#McpServer_Support_Mcp_Models_UnifiedSessionLogDto_Model
+  name: Model
+  nameWithType: UnifiedSessionLogDto.Model
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Model
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Started*
+  commentId: Overload:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Started
+  href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html#McpServer_Support_Mcp_Models_UnifiedSessionLogDto_Started
+  name: Started
+  nameWithType: UnifiedSessionLogDto.Started
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Started
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.LastUpdated*
+  commentId: Overload:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.LastUpdated
+  href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html#McpServer_Support_Mcp_Models_UnifiedSessionLogDto_LastUpdated
+  name: LastUpdated
+  nameWithType: UnifiedSessionLogDto.LastUpdated
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.LastUpdated
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Status*
+  commentId: Overload:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Status
+  href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html#McpServer_Support_Mcp_Models_UnifiedSessionLogDto_Status
+  name: Status
+  nameWithType: UnifiedSessionLogDto.Status
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Status
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.EntryCount*
+  commentId: Overload:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.EntryCount
+  href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html#McpServer_Support_Mcp_Models_UnifiedSessionLogDto_EntryCount
+  name: EntryCount
+  nameWithType: UnifiedSessionLogDto.EntryCount
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.EntryCount
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Workspace*
+  commentId: Overload:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Workspace
+  href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html#McpServer_Support_Mcp_Models_UnifiedSessionLogDto_Workspace
+  name: Workspace
+  nameWithType: UnifiedSessionLogDto.Workspace
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Workspace
+- uid: McpServer.Support.Mcp.Models.WorkspaceInfoDto
+  commentId: T:McpServer.Support.Mcp.Models.WorkspaceInfoDto
+  parent: McpServer.Support.Mcp.Models
+  href: McpServer.Support.Mcp.Models.WorkspaceInfoDto.html
+  name: WorkspaceInfoDto
+  nameWithType: WorkspaceInfoDto
+  fullName: McpServer.Support.Mcp.Models.WorkspaceInfoDto
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Entries*
+  commentId: Overload:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Entries
+  href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html#McpServer_Support_Mcp_Models_UnifiedSessionLogDto_Entries
+  name: Entries
+  nameWithType: UnifiedSessionLogDto.Entries
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.Entries
+- uid: System.Collections.Generic.List{McpServer.Support.Mcp.Models.UnifiedRequestEntryDto}
+  commentId: T:System.Collections.Generic.List{McpServer.Support.Mcp.Models.UnifiedRequestEntryDto}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<UnifiedRequestEntryDto>
+  nameWithType: List<UnifiedRequestEntryDto>
+  fullName: System.Collections.Generic.List<McpServer.Support.Mcp.Models.UnifiedRequestEntryDto>
+  nameWithType.vb: List(Of UnifiedRequestEntryDto)
+  fullName.vb: System.Collections.Generic.List(Of McpServer.Support.Mcp.Models.UnifiedRequestEntryDto)
+  name.vb: List(Of UnifiedRequestEntryDto)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Models.UnifiedRequestEntryDto
+    name: UnifiedRequestEntryDto
+    href: McpServer.Support.Mcp.Models.UnifiedRequestEntryDto.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Models.UnifiedRequestEntryDto
+    name: UnifiedRequestEntryDto
+    href: McpServer.Support.Mcp.Models.UnifiedRequestEntryDto.html
+  - name: )
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.TotalTokens*
+  commentId: Overload:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.TotalTokens
+  href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html#McpServer_Support_Mcp_Models_UnifiedSessionLogDto_TotalTokens
+  name: TotalTokens
+  nameWithType: UnifiedSessionLogDto.TotalTokens
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.TotalTokens
+- uid: System.Nullable{System.Int32}
+  commentId: T:System.Nullable{System.Int32}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int?
+  nameWithType: int?
+  fullName: int?
+  nameWithType.vb: Integer?
+  fullName.vb: Integer?
+  name.vb: Integer?
+  spec.csharp:
+  - uid: System.Int32
+    name: int
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: '?'
+  spec.vb:
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.CursorSessionLabel*
+  commentId: Overload:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.CursorSessionLabel
+  href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html#McpServer_Support_Mcp_Models_UnifiedSessionLogDto_CursorSessionLabel
+  name: CursorSessionLabel
+  nameWithType: UnifiedSessionLogDto.CursorSessionLabel
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.CursorSessionLabel
+- uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.CopilotStatistics*
+  commentId: Overload:McpServer.Support.Mcp.Models.UnifiedSessionLogDto.CopilotStatistics
+  href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html#McpServer_Support_Mcp_Models_UnifiedSessionLogDto_CopilotStatistics
+  name: CopilotStatistics
+  nameWithType: UnifiedSessionLogDto.CopilotStatistics
+  fullName: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.CopilotStatistics
+- uid: McpServer.Support.Mcp.Models.CopilotStatisticsDto
+  commentId: T:McpServer.Support.Mcp.Models.CopilotStatisticsDto
+  parent: McpServer.Support.Mcp.Models
+  href: McpServer.Support.Mcp.Models.CopilotStatisticsDto.html
+  name: CopilotStatisticsDto
+  nameWithType: CopilotStatisticsDto
+  fullName: McpServer.Support.Mcp.Models.CopilotStatisticsDto

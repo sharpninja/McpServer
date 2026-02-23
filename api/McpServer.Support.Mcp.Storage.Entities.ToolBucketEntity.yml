@@ -1,0 +1,755 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity
+  id: ToolBucketEntity
+  parent: McpServer.Support.Mcp.Storage.Entities
+  children:
+  - McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Branch
+  - McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.DateTimeCreated
+  - McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.DateTimeLastSynced
+  - McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Id
+  - McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.ManifestPath
+  - McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Name
+  - McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Owner
+  - McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Repo
+  langs:
+  - csharp
+  - vb
+  name: ToolBucketEntity
+  nameWithType: ToolBucketEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity
+  type: Class
+  source:
+    id: ToolBucketEntity
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolBucketEntity.cs
+    startLine: 9
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: >-
+    A tool bucket is a GitHub repository containing tool manifest files (JSON),
+
+    similar to Scoop package manager buckets. Each manifest defines a tool's
+
+    name, description, tags, command template, and parameter schema.
+  example: []
+  syntax:
+    content: public sealed class ToolBucketEntity
+    content.vb: Public NotInheritable Class ToolBucketEntity
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Id
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Id
+  id: Id
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity
+  langs:
+  - csharp
+  - vb
+  name: Id
+  nameWithType: ToolBucketEntity.Id
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Id
+  type: Property
+  source:
+    id: Id
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolBucketEntity.cs
+    startLine: 12
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: Auto-generated primary key.
+  example: []
+  syntax:
+    content: >-
+      [Key]
+
+      public int Id { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: >-
+      <Key>
+
+      Public Property Id As Integer
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Id*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.KeyAttribute
+    ctor: System.ComponentModel.DataAnnotations.KeyAttribute.#ctor
+    arguments: []
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Name
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Name
+  id: Name
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity
+  langs:
+  - csharp
+  - vb
+  name: Name
+  nameWithType: ToolBucketEntity.Name
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Name
+  type: Property
+  source:
+    id: Name
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolBucketEntity.cs
+    startLine: 16
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: Short unique name for this bucket (e.g. <code>official</code>, <code>community</code>).
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(128)]
+
+      public required string Name { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(128)>
+
+      Public Property Name As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Name*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 128
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Owner
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Owner
+  id: Owner
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity
+  langs:
+  - csharp
+  - vb
+  name: Owner
+  nameWithType: ToolBucketEntity.Owner
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Owner
+  type: Property
+  source:
+    id: Owner
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolBucketEntity.cs
+    startLine: 21
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: GitHub repository owner (user or org).
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(256)]
+
+      public required string Owner { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(256)>
+
+      Public Property Owner As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Owner*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 256
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Repo
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Repo
+  id: Repo
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity
+  langs:
+  - csharp
+  - vb
+  name: Repo
+  nameWithType: ToolBucketEntity.Repo
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Repo
+  type: Property
+  source:
+    id: Repo
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolBucketEntity.cs
+    startLine: 26
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: GitHub repository name.
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(256)]
+
+      public required string Repo { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(256)>
+
+      Public Property Repo As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Repo*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 256
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Branch
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Branch
+  id: Branch
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity
+  langs:
+  - csharp
+  - vb
+  name: Branch
+  nameWithType: ToolBucketEntity.Branch
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Branch
+  type: Property
+  source:
+    id: Branch
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolBucketEntity.cs
+    startLine: 31
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'Branch to read manifests from (default: <code>main</code>).'
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(128)]
+
+      public string Branch { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(128)>
+
+      Public Property Branch As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Branch*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 128
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.ManifestPath
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.ManifestPath
+  id: ManifestPath
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity
+  langs:
+  - csharp
+  - vb
+  name: ManifestPath
+  nameWithType: ToolBucketEntity.ManifestPath
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.ManifestPath
+  type: Property
+  source:
+    id: ManifestPath
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolBucketEntity.cs
+    startLine: 36
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'Path within the repo where tool manifests live (default: root <code>/</code>).'
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(512)]
+
+      public string ManifestPath { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(512)>
+
+      Public Property ManifestPath As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.ManifestPath*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 512
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.DateTimeCreated
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.DateTimeCreated
+  id: DateTimeCreated
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity
+  langs:
+  - csharp
+  - vb
+  name: DateTimeCreated
+  nameWithType: ToolBucketEntity.DateTimeCreated
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.DateTimeCreated
+  type: Property
+  source:
+    id: DateTimeCreated
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolBucketEntity.cs
+    startLine: 41
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: When the bucket was added.
+  example: []
+  syntax:
+    content: public DateTimeOffset DateTimeCreated { get; set; }
+    parameters: []
+    return:
+      type: System.DateTimeOffset
+    content.vb: Public Property DateTimeCreated As DateTimeOffset
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.DateTimeCreated*
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.DateTimeLastSynced
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.DateTimeLastSynced
+  id: DateTimeLastSynced
+  parent: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity
+  langs:
+  - csharp
+  - vb
+  name: DateTimeLastSynced
+  nameWithType: ToolBucketEntity.DateTimeLastSynced
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.DateTimeLastSynced
+  type: Property
+  source:
+    id: DateTimeLastSynced
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ToolBucketEntity.cs
+    startLine: 44
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: When the bucket was last synced (manifests refreshed).
+  example: []
+  syntax:
+    content: public DateTimeOffset? DateTimeLastSynced { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.DateTimeOffset}
+    content.vb: Public Property DateTimeLastSynced As DateTimeOffset?
+  overload: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.DateTimeLastSynced*
+references:
+- uid: McpServer.Support.Mcp.Storage.Entities
+  commentId: N:McpServer.Support.Mcp.Storage.Entities
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Storage.Entities
+  nameWithType: McpServer.Support.Mcp.Storage.Entities
+  fullName: McpServer.Support.Mcp.Storage.Entities
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage.Entities
+    name: Entities
+    href: McpServer.Support.Mcp.Storage.Entities.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage.Entities
+    name: Entities
+    href: McpServer.Support.Mcp.Storage.Entities.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Id*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Id
+  href: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolBucketEntity_Id
+  name: Id
+  nameWithType: ToolBucketEntity.Id
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Id
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Name*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Name
+  href: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolBucketEntity_Name
+  name: Name
+  nameWithType: ToolBucketEntity.Name
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Name
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Owner*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Owner
+  href: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolBucketEntity_Owner
+  name: Owner
+  nameWithType: ToolBucketEntity.Owner
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Owner
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Repo*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Repo
+  href: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolBucketEntity_Repo
+  name: Repo
+  nameWithType: ToolBucketEntity.Repo
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Repo
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Branch*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Branch
+  href: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolBucketEntity_Branch
+  name: Branch
+  nameWithType: ToolBucketEntity.Branch
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.Branch
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.ManifestPath*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.ManifestPath
+  href: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolBucketEntity_ManifestPath
+  name: ManifestPath
+  nameWithType: ToolBucketEntity.ManifestPath
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.ManifestPath
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.DateTimeCreated*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.DateTimeCreated
+  href: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolBucketEntity_DateTimeCreated
+  name: DateTimeCreated
+  nameWithType: ToolBucketEntity.DateTimeCreated
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.DateTimeCreated
+- uid: System.DateTimeOffset
+  commentId: T:System.DateTimeOffset
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  name: DateTimeOffset
+  nameWithType: DateTimeOffset
+  fullName: System.DateTimeOffset
+- uid: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.DateTimeLastSynced*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.DateTimeLastSynced
+  href: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.html#McpServer_Support_Mcp_Storage_Entities_ToolBucketEntity_DateTimeLastSynced
+  name: DateTimeLastSynced
+  nameWithType: ToolBucketEntity.DateTimeLastSynced
+  fullName: McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity.DateTimeLastSynced
+- uid: System.Nullable{System.DateTimeOffset}
+  commentId: T:System.Nullable{System.DateTimeOffset}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  name: DateTimeOffset?
+  nameWithType: DateTimeOffset?
+  fullName: System.DateTimeOffset?
+  spec.csharp:
+  - uid: System.DateTimeOffset
+    name: DateTimeOffset
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  - name: '?'
+  spec.vb:
+  - uid: System.DateTimeOffset
+    name: DateTimeOffset
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )

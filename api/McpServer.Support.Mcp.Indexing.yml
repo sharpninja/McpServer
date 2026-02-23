@@ -1,0 +1,92 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Indexing
+  commentId: N:McpServer.Support.Mcp.Indexing
+  id: McpServer.Support.Mcp.Indexing
+  children:
+  - McpServer.Support.Mcp.Indexing.Chunker
+  - McpServer.Support.Mcp.Indexing.EmbeddingOptions
+  - McpServer.Support.Mcp.Indexing.IEmbeddingService
+  - McpServer.Support.Mcp.Indexing.IVectorIndexService
+  - McpServer.Support.Mcp.Indexing.VectorIndexOptions
+  langs:
+  - csharp
+  - vb
+  name: McpServer.Support.Mcp.Indexing
+  nameWithType: McpServer.Support.Mcp.Indexing
+  fullName: McpServer.Support.Mcp.Indexing
+  type: Namespace
+  assemblies:
+  - McpServer.Support.Mcp
+references:
+- uid: McpServer.Support.Mcp.Indexing.Chunker
+  commentId: T:McpServer.Support.Mcp.Indexing.Chunker
+  parent: McpServer.Support.Mcp.Indexing
+  href: McpServer.Support.Mcp.Indexing.Chunker.html
+  name: Chunker
+  nameWithType: Chunker
+  fullName: McpServer.Support.Mcp.Indexing.Chunker
+- uid: McpServer.Support.Mcp.Indexing.EmbeddingOptions
+  commentId: T:McpServer.Support.Mcp.Indexing.EmbeddingOptions
+  href: McpServer.Support.Mcp.Indexing.EmbeddingOptions.html
+  name: EmbeddingOptions
+  nameWithType: EmbeddingOptions
+  fullName: McpServer.Support.Mcp.Indexing.EmbeddingOptions
+- uid: McpServer.Support.Mcp.Indexing.IEmbeddingService
+  commentId: T:McpServer.Support.Mcp.Indexing.IEmbeddingService
+  parent: McpServer.Support.Mcp.Indexing
+  href: McpServer.Support.Mcp.Indexing.IEmbeddingService.html
+  name: IEmbeddingService
+  nameWithType: IEmbeddingService
+  fullName: McpServer.Support.Mcp.Indexing.IEmbeddingService
+- uid: McpServer.Support.Mcp.Indexing.IVectorIndexService
+  commentId: T:McpServer.Support.Mcp.Indexing.IVectorIndexService
+  parent: McpServer.Support.Mcp.Indexing
+  href: McpServer.Support.Mcp.Indexing.IVectorIndexService.html
+  name: IVectorIndexService
+  nameWithType: IVectorIndexService
+  fullName: McpServer.Support.Mcp.Indexing.IVectorIndexService
+- uid: McpServer.Support.Mcp.Indexing.VectorIndexOptions
+  commentId: T:McpServer.Support.Mcp.Indexing.VectorIndexOptions
+  href: McpServer.Support.Mcp.Indexing.VectorIndexOptions.html
+  name: VectorIndexOptions
+  nameWithType: VectorIndexOptions
+  fullName: McpServer.Support.Mcp.Indexing.VectorIndexOptions
+- uid: McpServer.Support.Mcp.Indexing
+  commentId: N:McpServer.Support.Mcp.Indexing
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Indexing
+  nameWithType: McpServer.Support.Mcp.Indexing
+  fullName: McpServer.Support.Mcp.Indexing
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Indexing
+    name: Indexing
+    href: McpServer.Support.Mcp.Indexing.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Indexing
+    name: Indexing
+    href: McpServer.Support.Mcp.Indexing.html

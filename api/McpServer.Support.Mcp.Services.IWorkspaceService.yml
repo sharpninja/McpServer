@@ -1,0 +1,569 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.IWorkspaceService
+  commentId: T:McpServer.Support.Mcp.Services.IWorkspaceService
+  id: IWorkspaceService
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.IWorkspaceService.CreateAsync(McpServer.Support.Mcp.Services.WorkspaceCreateRequest,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IWorkspaceService.DeleteAsync(System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IWorkspaceService.GetAsync(System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IWorkspaceService.InitAsync(System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IWorkspaceService.ListAsync(System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IWorkspaceService.UpdateAsync(System.String,McpServer.Support.Mcp.Services.WorkspaceUpdateRequest,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: IWorkspaceService
+  nameWithType: IWorkspaceService
+  fullName: McpServer.Support.Mcp.Services.IWorkspaceService
+  type: Interface
+  source:
+    id: IWorkspaceService
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 5
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Service for managing workspace registrations, initialization, and lifecycle.
+  example: []
+  syntax:
+    content: public interface IWorkspaceService
+    content.vb: Public Interface IWorkspaceService
+- uid: McpServer.Support.Mcp.Services.IWorkspaceService.ListAsync(System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IWorkspaceService.ListAsync(System.Threading.CancellationToken)
+  id: ListAsync(System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IWorkspaceService
+  langs:
+  - csharp
+  - vb
+  name: ListAsync(CancellationToken)
+  nameWithType: IWorkspaceService.ListAsync(CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IWorkspaceService.ListAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: ListAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 8
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: List all registered workspaces.
+  example: []
+  syntax:
+    content: Task<WorkspaceListResult> ListAsync(CancellationToken ct = default)
+    parameters:
+    - id: ct
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.WorkspaceListResult}
+    content.vb: Function ListAsync(ct As CancellationToken = Nothing) As Task(Of WorkspaceListResult)
+  overload: McpServer.Support.Mcp.Services.IWorkspaceService.ListAsync*
+- uid: McpServer.Support.Mcp.Services.IWorkspaceService.GetAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IWorkspaceService.GetAsync(System.String,System.Threading.CancellationToken)
+  id: GetAsync(System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IWorkspaceService
+  langs:
+  - csharp
+  - vb
+  name: GetAsync(string, CancellationToken)
+  nameWithType: IWorkspaceService.GetAsync(string, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IWorkspaceService.GetAsync(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: GetAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 11
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Get a single workspace by its path.
+  example: []
+  syntax:
+    content: Task<WorkspaceDto?> GetAsync(string workspacePath, CancellationToken ct = default)
+    parameters:
+    - id: workspacePath
+      type: System.String
+    - id: ct
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.WorkspaceDto}
+    content.vb: Function GetAsync(workspacePath As String, ct As CancellationToken = Nothing) As Task(Of WorkspaceDto)
+  overload: McpServer.Support.Mcp.Services.IWorkspaceService.GetAsync*
+  nameWithType.vb: IWorkspaceService.GetAsync(String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IWorkspaceService.GetAsync(String, System.Threading.CancellationToken)
+  name.vb: GetAsync(String, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IWorkspaceService.CreateAsync(McpServer.Support.Mcp.Services.WorkspaceCreateRequest,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IWorkspaceService.CreateAsync(McpServer.Support.Mcp.Services.WorkspaceCreateRequest,System.Threading.CancellationToken)
+  id: CreateAsync(McpServer.Support.Mcp.Services.WorkspaceCreateRequest,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IWorkspaceService
+  langs:
+  - csharp
+  - vb
+  name: CreateAsync(WorkspaceCreateRequest, CancellationToken)
+  nameWithType: IWorkspaceService.CreateAsync(WorkspaceCreateRequest, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IWorkspaceService.CreateAsync(McpServer.Support.Mcp.Services.WorkspaceCreateRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: CreateAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 14
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Create (register) a new workspace.
+  example: []
+  syntax:
+    content: Task<WorkspaceMutationResult> CreateAsync(WorkspaceCreateRequest request, CancellationToken ct = default)
+    parameters:
+    - id: request
+      type: McpServer.Support.Mcp.Services.WorkspaceCreateRequest
+    - id: ct
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.WorkspaceMutationResult}
+    content.vb: Function CreateAsync(request As WorkspaceCreateRequest, ct As CancellationToken = Nothing) As Task(Of WorkspaceMutationResult)
+  overload: McpServer.Support.Mcp.Services.IWorkspaceService.CreateAsync*
+- uid: McpServer.Support.Mcp.Services.IWorkspaceService.UpdateAsync(System.String,McpServer.Support.Mcp.Services.WorkspaceUpdateRequest,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IWorkspaceService.UpdateAsync(System.String,McpServer.Support.Mcp.Services.WorkspaceUpdateRequest,System.Threading.CancellationToken)
+  id: UpdateAsync(System.String,McpServer.Support.Mcp.Services.WorkspaceUpdateRequest,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IWorkspaceService
+  langs:
+  - csharp
+  - vb
+  name: UpdateAsync(string, WorkspaceUpdateRequest, CancellationToken)
+  nameWithType: IWorkspaceService.UpdateAsync(string, WorkspaceUpdateRequest, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IWorkspaceService.UpdateAsync(string, McpServer.Support.Mcp.Services.WorkspaceUpdateRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: UpdateAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 17
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Update an existing workspace by its path.
+  example: []
+  syntax:
+    content: Task<WorkspaceMutationResult> UpdateAsync(string workspacePath, WorkspaceUpdateRequest request, CancellationToken ct = default)
+    parameters:
+    - id: workspacePath
+      type: System.String
+    - id: request
+      type: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest
+    - id: ct
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.WorkspaceMutationResult}
+    content.vb: Function UpdateAsync(workspacePath As String, request As WorkspaceUpdateRequest, ct As CancellationToken = Nothing) As Task(Of WorkspaceMutationResult)
+  overload: McpServer.Support.Mcp.Services.IWorkspaceService.UpdateAsync*
+  nameWithType.vb: IWorkspaceService.UpdateAsync(String, WorkspaceUpdateRequest, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IWorkspaceService.UpdateAsync(String, McpServer.Support.Mcp.Services.WorkspaceUpdateRequest, System.Threading.CancellationToken)
+  name.vb: UpdateAsync(String, WorkspaceUpdateRequest, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IWorkspaceService.DeleteAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IWorkspaceService.DeleteAsync(System.String,System.Threading.CancellationToken)
+  id: DeleteAsync(System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IWorkspaceService
+  langs:
+  - csharp
+  - vb
+  name: DeleteAsync(string, CancellationToken)
+  nameWithType: IWorkspaceService.DeleteAsync(string, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IWorkspaceService.DeleteAsync(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: DeleteAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 20
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Delete a workspace registration by its path.
+  example: []
+  syntax:
+    content: Task<WorkspaceMutationResult> DeleteAsync(string workspacePath, CancellationToken ct = default)
+    parameters:
+    - id: workspacePath
+      type: System.String
+    - id: ct
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.WorkspaceMutationResult}
+    content.vb: Function DeleteAsync(workspacePath As String, ct As CancellationToken = Nothing) As Task(Of WorkspaceMutationResult)
+  overload: McpServer.Support.Mcp.Services.IWorkspaceService.DeleteAsync*
+  nameWithType.vb: IWorkspaceService.DeleteAsync(String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IWorkspaceService.DeleteAsync(String, System.Threading.CancellationToken)
+  name.vb: DeleteAsync(String, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IWorkspaceService.InitAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IWorkspaceService.InitAsync(System.String,System.Threading.CancellationToken)
+  id: InitAsync(System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IWorkspaceService
+  langs:
+  - csharp
+  - vb
+  name: InitAsync(string, CancellationToken)
+  nameWithType: IWorkspaceService.InitAsync(string, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IWorkspaceService.InitAsync(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: InitAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 23
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Initialize data files in a workspace (scaffold dirs, todo.yaml, mcp.db).
+  example: []
+  syntax:
+    content: Task<WorkspaceInitResult> InitAsync(string workspacePath, CancellationToken ct = default)
+    parameters:
+    - id: workspacePath
+      type: System.String
+    - id: ct
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.WorkspaceInitResult}
+    content.vb: Function InitAsync(workspacePath As String, ct As CancellationToken = Nothing) As Task(Of WorkspaceInitResult)
+  overload: McpServer.Support.Mcp.Services.IWorkspaceService.InitAsync*
+  nameWithType.vb: IWorkspaceService.InitAsync(String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IWorkspaceService.InitAsync(String, System.Threading.CancellationToken)
+  name.vb: InitAsync(String, CancellationToken)
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: McpServer.Support.Mcp.Services.IWorkspaceService.ListAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IWorkspaceService.ListAsync
+  href: McpServer.Support.Mcp.Services.IWorkspaceService.html#McpServer_Support_Mcp_Services_IWorkspaceService_ListAsync_System_Threading_CancellationToken_
+  name: ListAsync
+  nameWithType: IWorkspaceService.ListAsync
+  fullName: McpServer.Support.Mcp.Services.IWorkspaceService.ListAsync
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.WorkspaceListResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.WorkspaceListResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<WorkspaceListResult>
+  nameWithType: Task<WorkspaceListResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.WorkspaceListResult>
+  nameWithType.vb: Task(Of WorkspaceListResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.WorkspaceListResult)
+  name.vb: Task(Of WorkspaceListResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.WorkspaceListResult
+    name: WorkspaceListResult
+    href: McpServer.Support.Mcp.Services.WorkspaceListResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.WorkspaceListResult
+    name: WorkspaceListResult
+    href: McpServer.Support.Mcp.Services.WorkspaceListResult.html
+  - name: )
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: McpServer.Support.Mcp.Services.IWorkspaceService.GetAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IWorkspaceService.GetAsync
+  href: McpServer.Support.Mcp.Services.IWorkspaceService.html#McpServer_Support_Mcp_Services_IWorkspaceService_GetAsync_System_String_System_Threading_CancellationToken_
+  name: GetAsync
+  nameWithType: IWorkspaceService.GetAsync
+  fullName: McpServer.Support.Mcp.Services.IWorkspaceService.GetAsync
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.WorkspaceDto}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.WorkspaceDto}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<WorkspaceDto>
+  nameWithType: Task<WorkspaceDto>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.WorkspaceDto>
+  nameWithType.vb: Task(Of WorkspaceDto)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.WorkspaceDto)
+  name.vb: Task(Of WorkspaceDto)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.WorkspaceDto
+    name: WorkspaceDto
+    href: McpServer.Support.Mcp.Services.WorkspaceDto.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.WorkspaceDto
+    name: WorkspaceDto
+    href: McpServer.Support.Mcp.Services.WorkspaceDto.html
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Services.IWorkspaceService.CreateAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IWorkspaceService.CreateAsync
+  href: McpServer.Support.Mcp.Services.IWorkspaceService.html#McpServer_Support_Mcp_Services_IWorkspaceService_CreateAsync_McpServer_Support_Mcp_Services_WorkspaceCreateRequest_System_Threading_CancellationToken_
+  name: CreateAsync
+  nameWithType: IWorkspaceService.CreateAsync
+  fullName: McpServer.Support.Mcp.Services.IWorkspaceService.CreateAsync
+- uid: McpServer.Support.Mcp.Services.WorkspaceCreateRequest
+  commentId: T:McpServer.Support.Mcp.Services.WorkspaceCreateRequest
+  parent: McpServer.Support.Mcp.Services
+  href: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.html
+  name: WorkspaceCreateRequest
+  nameWithType: WorkspaceCreateRequest
+  fullName: McpServer.Support.Mcp.Services.WorkspaceCreateRequest
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.WorkspaceMutationResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.WorkspaceMutationResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<WorkspaceMutationResult>
+  nameWithType: Task<WorkspaceMutationResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.WorkspaceMutationResult>
+  nameWithType.vb: Task(Of WorkspaceMutationResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.WorkspaceMutationResult)
+  name.vb: Task(Of WorkspaceMutationResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.WorkspaceMutationResult
+    name: WorkspaceMutationResult
+    href: McpServer.Support.Mcp.Services.WorkspaceMutationResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.WorkspaceMutationResult
+    name: WorkspaceMutationResult
+    href: McpServer.Support.Mcp.Services.WorkspaceMutationResult.html
+  - name: )
+- uid: McpServer.Support.Mcp.Services.IWorkspaceService.UpdateAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IWorkspaceService.UpdateAsync
+  href: McpServer.Support.Mcp.Services.IWorkspaceService.html#McpServer_Support_Mcp_Services_IWorkspaceService_UpdateAsync_System_String_McpServer_Support_Mcp_Services_WorkspaceUpdateRequest_System_Threading_CancellationToken_
+  name: UpdateAsync
+  nameWithType: IWorkspaceService.UpdateAsync
+  fullName: McpServer.Support.Mcp.Services.IWorkspaceService.UpdateAsync
+- uid: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest
+  commentId: T:McpServer.Support.Mcp.Services.WorkspaceUpdateRequest
+  parent: McpServer.Support.Mcp.Services
+  href: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest.html
+  name: WorkspaceUpdateRequest
+  nameWithType: WorkspaceUpdateRequest
+  fullName: McpServer.Support.Mcp.Services.WorkspaceUpdateRequest
+- uid: McpServer.Support.Mcp.Services.IWorkspaceService.DeleteAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IWorkspaceService.DeleteAsync
+  href: McpServer.Support.Mcp.Services.IWorkspaceService.html#McpServer_Support_Mcp_Services_IWorkspaceService_DeleteAsync_System_String_System_Threading_CancellationToken_
+  name: DeleteAsync
+  nameWithType: IWorkspaceService.DeleteAsync
+  fullName: McpServer.Support.Mcp.Services.IWorkspaceService.DeleteAsync
+- uid: McpServer.Support.Mcp.Services.IWorkspaceService.InitAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IWorkspaceService.InitAsync
+  href: McpServer.Support.Mcp.Services.IWorkspaceService.html#McpServer_Support_Mcp_Services_IWorkspaceService_InitAsync_System_String_System_Threading_CancellationToken_
+  name: InitAsync
+  nameWithType: IWorkspaceService.InitAsync
+  fullName: McpServer.Support.Mcp.Services.IWorkspaceService.InitAsync
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.WorkspaceInitResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.WorkspaceInitResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<WorkspaceInitResult>
+  nameWithType: Task<WorkspaceInitResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.WorkspaceInitResult>
+  nameWithType.vb: Task(Of WorkspaceInitResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.WorkspaceInitResult)
+  name.vb: Task(Of WorkspaceInitResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.WorkspaceInitResult
+    name: WorkspaceInitResult
+    href: McpServer.Support.Mcp.Services.WorkspaceInitResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.WorkspaceInitResult
+    name: WorkspaceInitResult
+    href: McpServer.Support.Mcp.Services.WorkspaceInitResult.html
+  - name: )

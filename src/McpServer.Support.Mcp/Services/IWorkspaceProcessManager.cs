@@ -6,7 +6,7 @@ namespace McpServer.Support.Mcp.Services;
 public interface IWorkspaceProcessManager : IHostedService
 {
     /// <summary>Start a hosted MCP instance for the given workspace.</summary>
-    Task<WorkspaceProcessStatus> StartAsync(string workspacePath, int port, CancellationToken ct = default);
+    Task<WorkspaceProcessStatus> StartAsync(string workspacePath, int port, CancellationToken ct = default, string? dataDirectory = null, string? workspacePromptTemplate = null);
 
     /// <summary>Stop the hosted MCP instance for the given workspace.</summary>
     Task<WorkspaceProcessStatus> StopAsync(string workspacePath, CancellationToken ct = default);
@@ -16,6 +16,14 @@ public interface IWorkspaceProcessManager : IHostedService
 
     /// <summary>Stop all running workspace processes.</summary>
     Task StopAllAsync(CancellationToken ct = default);
+
+    /// <summary>Regenerate all marker files for running workspaces (e.g. after a prompt template change).</summary>
+    /// <param name="ct">Cancellation token.</param>
+    /// <param name="globalPromptOverride">
+    /// When non-null, use this value as the global prompt template instead of reading from options.
+    /// Pass <see cref="string.Empty"/> to force the built-in default prompt.
+    /// </param>
+    Task RegenerateAllMarkersAsync(CancellationToken ct = default, string? globalPromptOverride = null);
 }
 
 /// <summary>Process status for a workspace instance.</summary>

@@ -21,6 +21,7 @@
 ### Configuration
 
 - [ ] `appsettings.json` has all required keys with sensible defaults
+- [ ] `appsettings.Production.json` absolute paths are correct for `C:\ProgramData\McpServer`
 - [ ] Environment variable overrides work (Mcp__Port, Mcp__RepoRoot, etc.)
 - [ ] Feature toggles (Embedding:Enabled, VectorIndex:Enabled) respect settings
 - [ ] Per-instance TODO storage backend selection works (YAML and SQLite)
@@ -28,7 +29,7 @@
 ### Documentation
 
 - [ ] README.md is current with all features
-- [ ] `docs/MCP-SERVER.md` server documentation up to date
+- [ ] `docs/MCP-SERVER.md` server documentation up to date (workspaces, diagnostic endpoints, Production deployment)
 - [ ] `docs/stdio-tool-contract.json` manifest matches actual tools
 - [ ] `docs/Project/` requirements documents reflect current state
 - [ ] CHANGELOG or release notes drafted

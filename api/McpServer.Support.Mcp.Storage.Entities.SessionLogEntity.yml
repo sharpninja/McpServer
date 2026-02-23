@@ -1,0 +1,1473 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  id: SessionLogEntity
+  parent: McpServer.Support.Mcp.Storage.Entities
+  children:
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Branch
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.ContentHash
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotAvgSuccessScore
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotCompletedCount
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotInProgressCount
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotTotalNetPremiumRequests
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotTotalNetTokens
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CursorSessionLabel
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Entries
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.EntryCount
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Id
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.LastUpdated
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Model
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Project
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Repository
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SessionId
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SourceFilePath
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SourceType
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Started
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Status
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.TargetFramework
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Title
+  - McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.TotalTokens
+  langs:
+  - csharp
+  - vb
+  name: SessionLogEntity
+  nameWithType: SessionLogEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  type: Class
+  source:
+    id: SessionLogEntity
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 9
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: >-
+    TR-PLANNED-013: 4NF session log entity. One row per session, keyed by (SourceType, SessionId).
+
+    FR-SUPPORT-010: Persisted in MCP SQLite database for session log normalization.
+  example: []
+  syntax:
+    content: public sealed class SessionLogEntity
+    content.vb: Public NotInheritable Class SessionLogEntity
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Id
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Id
+  id: Id
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: Id
+  nameWithType: SessionLogEntity.Id
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Id
+  type: Property
+  source:
+    id: Id
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 12
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Auto-generated primary key.'
+  example: []
+  syntax:
+    content: >-
+      [Key]
+
+      public long Id { get; set; }
+    parameters: []
+    return:
+      type: System.Int64
+    content.vb: >-
+      <Key>
+
+      Public Property Id As Long
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Id*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.KeyAttribute
+    ctor: System.ComponentModel.DataAnnotations.KeyAttribute.#ctor
+    arguments: []
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SourceType
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SourceType
+  id: SourceType
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: SourceType
+  nameWithType: SessionLogEntity.SourceType
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SourceType
+  type: Property
+  source:
+    id: SourceType
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 16
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Agent source type (e.g. Cursor, Copilot). Unique with SessionId.'
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(64)]
+
+      public required string SourceType { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(64)>
+
+      Public Property SourceType As String
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SourceType*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 64
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SessionId
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SessionId
+  id: SessionId
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: SessionId
+  nameWithType: SessionLogEntity.SessionId
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SessionId
+  type: Property
+  source:
+    id: SessionId
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 21
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Unique session identifier within the source type.'
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(256)]
+
+      public required string SessionId { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(256)>
+
+      Public Property SessionId As String
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SessionId*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 256
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Title
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Title
+  id: Title
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: Title
+  nameWithType: SessionLogEntity.Title
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Title
+  type: Property
+  source:
+    id: Title
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 26
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Human-readable session title.'
+  example: []
+  syntax:
+    content: >-
+      [MaxLength(1024)]
+
+      public string? Title { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <MaxLength(1024)>
+
+      Public Property Title As String
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Title*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 1024
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Model
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Model
+  id: Model
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: Model
+  nameWithType: SessionLogEntity.Model
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Model
+  type: Property
+  source:
+    id: Model
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 30
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: AI model used for the session.'
+  example: []
+  syntax:
+    content: >-
+      [MaxLength(128)]
+
+      public string? Model { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <MaxLength(128)>
+
+      Public Property Model As String
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Model*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 128
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Started
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Started
+  id: Started
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: Started
+  nameWithType: SessionLogEntity.Started
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Started
+  type: Property
+  source:
+    id: Started
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 34
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Session start timestamp (UTC).'
+  example: []
+  syntax:
+    content: public DateTimeOffset? Started { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.DateTimeOffset}
+    content.vb: Public Property Started As DateTimeOffset?
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Started*
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.LastUpdated
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.LastUpdated
+  id: LastUpdated
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: LastUpdated
+  nameWithType: SessionLogEntity.LastUpdated
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.LastUpdated
+  type: Property
+  source:
+    id: LastUpdated
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 37
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Last update timestamp (UTC).'
+  example: []
+  syntax:
+    content: public DateTimeOffset? LastUpdated { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.DateTimeOffset}
+    content.vb: Public Property LastUpdated As DateTimeOffset?
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.LastUpdated*
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Status
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Status
+  id: Status
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: Status
+  nameWithType: SessionLogEntity.Status
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Status
+  type: Property
+  source:
+    id: Status
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 40
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Session status (e.g. completed, in_progress).'
+  example: []
+  syntax:
+    content: >-
+      [MaxLength(64)]
+
+      public string? Status { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <MaxLength(64)>
+
+      Public Property Status As String
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Status*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 64
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.EntryCount
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.EntryCount
+  id: EntryCount
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: EntryCount
+  nameWithType: SessionLogEntity.EntryCount
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.EntryCount
+  type: Property
+  source:
+    id: EntryCount
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 44
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Number of request/response entries.'
+  example: []
+  syntax:
+    content: public int EntryCount { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property EntryCount As Integer
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.EntryCount*
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.TotalTokens
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.TotalTokens
+  id: TotalTokens
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: TotalTokens
+  nameWithType: SessionLogEntity.TotalTokens
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.TotalTokens
+  type: Property
+  source:
+    id: TotalTokens
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 47
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Total token count across all entries.'
+  example: []
+  syntax:
+    content: public int? TotalTokens { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: Public Property TotalTokens As Integer?
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.TotalTokens*
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CursorSessionLabel
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CursorSessionLabel
+  id: CursorSessionLabel
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: CursorSessionLabel
+  nameWithType: SessionLogEntity.CursorSessionLabel
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CursorSessionLabel
+  type: Property
+  source:
+    id: CursorSessionLabel
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 50
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Cursor-specific session label.'
+  example: []
+  syntax:
+    content: >-
+      [MaxLength(512)]
+
+      public string? CursorSessionLabel { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <MaxLength(512)>
+
+      Public Property CursorSessionLabel As String
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CursorSessionLabel*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 512
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotAvgSuccessScore
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotAvgSuccessScore
+  id: CopilotAvgSuccessScore
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: CopilotAvgSuccessScore
+  nameWithType: SessionLogEntity.CopilotAvgSuccessScore
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotAvgSuccessScore
+  type: Property
+  source:
+    id: CopilotAvgSuccessScore
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 56
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Average success score across entries.'
+  example: []
+  syntax:
+    content: public double? CopilotAvgSuccessScore { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Double}
+    content.vb: Public Property CopilotAvgSuccessScore As Double?
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotAvgSuccessScore*
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotTotalNetTokens
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotTotalNetTokens
+  id: CopilotTotalNetTokens
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: CopilotTotalNetTokens
+  nameWithType: SessionLogEntity.CopilotTotalNetTokens
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotTotalNetTokens
+  type: Property
+  source:
+    id: CopilotTotalNetTokens
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 59
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Total net tokens used.'
+  example: []
+  syntax:
+    content: public int? CopilotTotalNetTokens { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: Public Property CopilotTotalNetTokens As Integer?
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotTotalNetTokens*
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotTotalNetPremiumRequests
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotTotalNetPremiumRequests
+  id: CopilotTotalNetPremiumRequests
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: CopilotTotalNetPremiumRequests
+  nameWithType: SessionLogEntity.CopilotTotalNetPremiumRequests
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotTotalNetPremiumRequests
+  type: Property
+  source:
+    id: CopilotTotalNetPremiumRequests
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 62
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Total net premium requests.'
+  example: []
+  syntax:
+    content: public int? CopilotTotalNetPremiumRequests { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: Public Property CopilotTotalNetPremiumRequests As Integer?
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotTotalNetPremiumRequests*
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotCompletedCount
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotCompletedCount
+  id: CopilotCompletedCount
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: CopilotCompletedCount
+  nameWithType: SessionLogEntity.CopilotCompletedCount
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotCompletedCount
+  type: Property
+  source:
+    id: CopilotCompletedCount
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 65
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Number of completed entries.'
+  example: []
+  syntax:
+    content: public int? CopilotCompletedCount { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: Public Property CopilotCompletedCount As Integer?
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotCompletedCount*
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotInProgressCount
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotInProgressCount
+  id: CopilotInProgressCount
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: CopilotInProgressCount
+  nameWithType: SessionLogEntity.CopilotInProgressCount
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotInProgressCount
+  type: Property
+  source:
+    id: CopilotInProgressCount
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 68
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Number of in-progress entries.'
+  example: []
+  syntax:
+    content: public int? CopilotInProgressCount { get; set; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Int32}
+    content.vb: Public Property CopilotInProgressCount As Integer?
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotInProgressCount*
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Project
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Project
+  id: Project
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: Project
+  nameWithType: SessionLogEntity.Project
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Project
+  type: Property
+  source:
+    id: Project
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 73
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Project name from workspace.'
+  example: []
+  syntax:
+    content: >-
+      [MaxLength(256)]
+
+      public string? Project { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <MaxLength(256)>
+
+      Public Property Project As String
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Project*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 256
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.TargetFramework
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.TargetFramework
+  id: TargetFramework
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: TargetFramework
+  nameWithType: SessionLogEntity.TargetFramework
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.TargetFramework
+  type: Property
+  source:
+    id: TargetFramework
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 77
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Target framework from workspace.'
+  example: []
+  syntax:
+    content: >-
+      [MaxLength(64)]
+
+      public string? TargetFramework { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <MaxLength(64)>
+
+      Public Property TargetFramework As String
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.TargetFramework*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 64
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Repository
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Repository
+  id: Repository
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: Repository
+  nameWithType: SessionLogEntity.Repository
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Repository
+  type: Property
+  source:
+    id: Repository
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 81
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Repository URL or name from workspace.'
+  example: []
+  syntax:
+    content: >-
+      [MaxLength(512)]
+
+      public string? Repository { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <MaxLength(512)>
+
+      Public Property Repository As String
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Repository*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 512
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Branch
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Branch
+  id: Branch
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: Branch
+  nameWithType: SessionLogEntity.Branch
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Branch
+  type: Property
+  source:
+    id: Branch
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 85
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Git branch name from workspace.'
+  example: []
+  syntax:
+    content: >-
+      [MaxLength(256)]
+
+      public string? Branch { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <MaxLength(256)>
+
+      Public Property Branch As String
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Branch*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 256
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SourceFilePath
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SourceFilePath
+  id: SourceFilePath
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: SourceFilePath
+  nameWithType: SessionLogEntity.SourceFilePath
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SourceFilePath
+  type: Property
+  source:
+    id: SourceFilePath
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 89
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Full path to the source JSON file that was imported.'
+  example: []
+  syntax:
+    content: >-
+      [MaxLength(2048)]
+
+      public string? SourceFilePath { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <MaxLength(2048)>
+
+      Public Property SourceFilePath As String
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SourceFilePath*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 2048
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.ContentHash
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.ContentHash
+  id: ContentHash
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: ContentHash
+  nameWithType: SessionLogEntity.ContentHash
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.ContentHash
+  type: Property
+  source:
+    id: ContentHash
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 93
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: SHA-256 hash of the source file content at the time the record was last updated. Used to skip unchanged files during sync.'
+  example: []
+  syntax:
+    content: >-
+      [MaxLength(64)]
+
+      public string? ContentHash { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <MaxLength(64)>
+
+      Public Property ContentHash As String
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.ContentHash*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 64
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Entries
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Entries
+  id: Entries
+  parent: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity
+  langs:
+  - csharp
+  - vb
+  name: Entries
+  nameWithType: SessionLogEntity.Entries
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Entries
+  type: Property
+  source:
+    id: Entries
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\SessionLogEntity.cs
+    startLine: 97
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Navigation to session log entries.'
+  example: []
+  syntax:
+    content: public ICollection<SessionLogEntryEntity> Entries { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.ICollection{McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity}
+    content.vb: Public Property Entries As ICollection(Of SessionLogEntryEntity)
+  overload: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Entries*
+references:
+- uid: McpServer.Support.Mcp.Storage.Entities
+  commentId: N:McpServer.Support.Mcp.Storage.Entities
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Storage.Entities
+  nameWithType: McpServer.Support.Mcp.Storage.Entities
+  fullName: McpServer.Support.Mcp.Storage.Entities
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage.Entities
+    name: Entities
+    href: McpServer.Support.Mcp.Storage.Entities.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage.Entities
+    name: Entities
+    href: McpServer.Support.Mcp.Storage.Entities.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Id*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Id
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_Id
+  name: Id
+  nameWithType: SessionLogEntity.Id
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Id
+- uid: System.Int64
+  commentId: T:System.Int64
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int64
+  name: long
+  nameWithType: long
+  fullName: long
+  nameWithType.vb: Long
+  fullName.vb: Long
+  name.vb: Long
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SourceType*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SourceType
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_SourceType
+  name: SourceType
+  nameWithType: SessionLogEntity.SourceType
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SourceType
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SessionId*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SessionId
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_SessionId
+  name: SessionId
+  nameWithType: SessionLogEntity.SessionId
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SessionId
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Title*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Title
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_Title
+  name: Title
+  nameWithType: SessionLogEntity.Title
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Title
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Model*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Model
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_Model
+  name: Model
+  nameWithType: SessionLogEntity.Model
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Model
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Started*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Started
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_Started
+  name: Started
+  nameWithType: SessionLogEntity.Started
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Started
+- uid: System.Nullable{System.DateTimeOffset}
+  commentId: T:System.Nullable{System.DateTimeOffset}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  name: DateTimeOffset?
+  nameWithType: DateTimeOffset?
+  fullName: System.DateTimeOffset?
+  spec.csharp:
+  - uid: System.DateTimeOffset
+    name: DateTimeOffset
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  - name: '?'
+  spec.vb:
+  - uid: System.DateTimeOffset
+    name: DateTimeOffset
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.LastUpdated*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.LastUpdated
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_LastUpdated
+  name: LastUpdated
+  nameWithType: SessionLogEntity.LastUpdated
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.LastUpdated
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Status*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Status
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_Status
+  name: Status
+  nameWithType: SessionLogEntity.Status
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Status
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.EntryCount*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.EntryCount
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_EntryCount
+  name: EntryCount
+  nameWithType: SessionLogEntity.EntryCount
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.EntryCount
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.TotalTokens*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.TotalTokens
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_TotalTokens
+  name: TotalTokens
+  nameWithType: SessionLogEntity.TotalTokens
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.TotalTokens
+- uid: System.Nullable{System.Int32}
+  commentId: T:System.Nullable{System.Int32}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int?
+  nameWithType: int?
+  fullName: int?
+  nameWithType.vb: Integer?
+  fullName.vb: Integer?
+  name.vb: Integer?
+  spec.csharp:
+  - uid: System.Int32
+    name: int
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: '?'
+  spec.vb:
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: '?'
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CursorSessionLabel*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CursorSessionLabel
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_CursorSessionLabel
+  name: CursorSessionLabel
+  nameWithType: SessionLogEntity.CursorSessionLabel
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CursorSessionLabel
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotAvgSuccessScore*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotAvgSuccessScore
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_CopilotAvgSuccessScore
+  name: CopilotAvgSuccessScore
+  nameWithType: SessionLogEntity.CopilotAvgSuccessScore
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotAvgSuccessScore
+- uid: System.Nullable{System.Double}
+  commentId: T:System.Nullable{System.Double}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.double
+  name: double?
+  nameWithType: double?
+  fullName: double?
+  nameWithType.vb: Double?
+  fullName.vb: Double?
+  name.vb: Double?
+  spec.csharp:
+  - uid: System.Double
+    name: double
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.double
+  - name: '?'
+  spec.vb:
+  - uid: System.Double
+    name: Double
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.double
+  - name: '?'
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotTotalNetTokens*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotTotalNetTokens
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_CopilotTotalNetTokens
+  name: CopilotTotalNetTokens
+  nameWithType: SessionLogEntity.CopilotTotalNetTokens
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotTotalNetTokens
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotTotalNetPremiumRequests*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotTotalNetPremiumRequests
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_CopilotTotalNetPremiumRequests
+  name: CopilotTotalNetPremiumRequests
+  nameWithType: SessionLogEntity.CopilotTotalNetPremiumRequests
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotTotalNetPremiumRequests
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotCompletedCount*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotCompletedCount
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_CopilotCompletedCount
+  name: CopilotCompletedCount
+  nameWithType: SessionLogEntity.CopilotCompletedCount
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotCompletedCount
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotInProgressCount*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotInProgressCount
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_CopilotInProgressCount
+  name: CopilotInProgressCount
+  nameWithType: SessionLogEntity.CopilotInProgressCount
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.CopilotInProgressCount
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Project*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Project
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_Project
+  name: Project
+  nameWithType: SessionLogEntity.Project
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Project
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.TargetFramework*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.TargetFramework
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_TargetFramework
+  name: TargetFramework
+  nameWithType: SessionLogEntity.TargetFramework
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.TargetFramework
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Repository*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Repository
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_Repository
+  name: Repository
+  nameWithType: SessionLogEntity.Repository
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Repository
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Branch*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Branch
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_Branch
+  name: Branch
+  nameWithType: SessionLogEntity.Branch
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Branch
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SourceFilePath*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SourceFilePath
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_SourceFilePath
+  name: SourceFilePath
+  nameWithType: SessionLogEntity.SourceFilePath
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.SourceFilePath
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.ContentHash*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.ContentHash
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_ContentHash
+  name: ContentHash
+  nameWithType: SessionLogEntity.ContentHash
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.ContentHash
+- uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Entries*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Entries
+  href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.html#McpServer_Support_Mcp_Storage_Entities_SessionLogEntity_Entries
+  name: Entries
+  nameWithType: SessionLogEntity.Entries
+  fullName: McpServer.Support.Mcp.Storage.Entities.SessionLogEntity.Entries
+- uid: System.Collections.Generic.ICollection{McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity}
+  commentId: T:System.Collections.Generic.ICollection{McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.ICollection`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<SessionLogEntryEntity>
+  nameWithType: ICollection<SessionLogEntryEntity>
+  fullName: System.Collections.Generic.ICollection<McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity>
+  nameWithType.vb: ICollection(Of SessionLogEntryEntity)
+  fullName.vb: System.Collections.Generic.ICollection(Of McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity)
+  name.vb: ICollection(Of SessionLogEntryEntity)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity
+    name: SessionLogEntryEntity
+    href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity
+    name: SessionLogEntryEntity
+    href: McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity.html
+  - name: )
+- uid: System.Collections.Generic.ICollection`1
+  commentId: T:System.Collections.Generic.ICollection`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<T>
+  nameWithType: ICollection<T>
+  fullName: System.Collections.Generic.ICollection<T>
+  nameWithType.vb: ICollection(Of T)
+  fullName.vb: System.Collections.Generic.ICollection(Of T)
+  name.vb: ICollection(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic

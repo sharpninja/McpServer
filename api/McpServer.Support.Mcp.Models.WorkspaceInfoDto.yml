@@ -1,0 +1,482 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Models.WorkspaceInfoDto
+  commentId: T:McpServer.Support.Mcp.Models.WorkspaceInfoDto
+  id: WorkspaceInfoDto
+  parent: McpServer.Support.Mcp.Models
+  children:
+  - McpServer.Support.Mcp.Models.WorkspaceInfoDto.Branch
+  - McpServer.Support.Mcp.Models.WorkspaceInfoDto.Project
+  - McpServer.Support.Mcp.Models.WorkspaceInfoDto.Repository
+  - McpServer.Support.Mcp.Models.WorkspaceInfoDto.TargetFramework
+  langs:
+  - csharp
+  - vb
+  name: WorkspaceInfoDto
+  nameWithType: WorkspaceInfoDto
+  fullName: McpServer.Support.Mcp.Models.WorkspaceInfoDto
+  type: Class
+  source:
+    id: WorkspaceInfoDto
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 90
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: 'FR-SUPPORT-010: Workspace section of UnifiedModel.'
+  example: []
+  syntax:
+    content: public sealed class WorkspaceInfoDto
+    content.vb: Public NotInheritable Class WorkspaceInfoDto
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Models.WorkspaceInfoDto.Project
+  commentId: P:McpServer.Support.Mcp.Models.WorkspaceInfoDto.Project
+  id: Project
+  parent: McpServer.Support.Mcp.Models.WorkspaceInfoDto
+  langs:
+  - csharp
+  - vb
+  name: Project
+  nameWithType: WorkspaceInfoDto.Project
+  fullName: McpServer.Support.Mcp.Models.WorkspaceInfoDto.Project
+  type: Property
+  source:
+    id: Project
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 93
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Project name.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("project")]
+
+      public string? Project { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("project")>
+
+      Public Property Project As String
+  overload: McpServer.Support.Mcp.Models.WorkspaceInfoDto.Project*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: project
+- uid: McpServer.Support.Mcp.Models.WorkspaceInfoDto.TargetFramework
+  commentId: P:McpServer.Support.Mcp.Models.WorkspaceInfoDto.TargetFramework
+  id: TargetFramework
+  parent: McpServer.Support.Mcp.Models.WorkspaceInfoDto
+  langs:
+  - csharp
+  - vb
+  name: TargetFramework
+  nameWithType: WorkspaceInfoDto.TargetFramework
+  fullName: McpServer.Support.Mcp.Models.WorkspaceInfoDto.TargetFramework
+  type: Property
+  source:
+    id: TargetFramework
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 97
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Target framework (e.g. .NET 9).
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("targetFramework")]
+
+      public string? TargetFramework { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("targetFramework")>
+
+      Public Property TargetFramework As String
+  overload: McpServer.Support.Mcp.Models.WorkspaceInfoDto.TargetFramework*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: targetFramework
+- uid: McpServer.Support.Mcp.Models.WorkspaceInfoDto.Repository
+  commentId: P:McpServer.Support.Mcp.Models.WorkspaceInfoDto.Repository
+  id: Repository
+  parent: McpServer.Support.Mcp.Models.WorkspaceInfoDto
+  langs:
+  - csharp
+  - vb
+  name: Repository
+  nameWithType: WorkspaceInfoDto.Repository
+  fullName: McpServer.Support.Mcp.Models.WorkspaceInfoDto.Repository
+  type: Property
+  source:
+    id: Repository
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 101
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Repository URL or name.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("repository")]
+
+      public string? Repository { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("repository")>
+
+      Public Property Repository As String
+  overload: McpServer.Support.Mcp.Models.WorkspaceInfoDto.Repository*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: repository
+- uid: McpServer.Support.Mcp.Models.WorkspaceInfoDto.Branch
+  commentId: P:McpServer.Support.Mcp.Models.WorkspaceInfoDto.Branch
+  id: Branch
+  parent: McpServer.Support.Mcp.Models.WorkspaceInfoDto
+  langs:
+  - csharp
+  - vb
+  name: Branch
+  nameWithType: WorkspaceInfoDto.Branch
+  fullName: McpServer.Support.Mcp.Models.WorkspaceInfoDto.Branch
+  type: Property
+  source:
+    id: Branch
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\UnifiedSessionLogDto.cs
+    startLine: 105
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Git branch name.
+  example: []
+  syntax:
+    content: >-
+      [JsonPropertyName("branch")]
+
+      public string? Branch { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <JsonPropertyName("branch")>
+
+      Public Property Branch As String
+  overload: McpServer.Support.Mcp.Models.WorkspaceInfoDto.Branch*
+  attributes:
+  - type: System.Text.Json.Serialization.JsonPropertyNameAttribute
+    ctor: System.Text.Json.Serialization.JsonPropertyNameAttribute.#ctor(System.String)
+    arguments:
+    - type: System.String
+      value: branch
+references:
+- uid: McpServer.Support.Mcp.Models
+  commentId: N:McpServer.Support.Mcp.Models
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Models
+  nameWithType: McpServer.Support.Mcp.Models
+  fullName: McpServer.Support.Mcp.Models
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Models.WorkspaceInfoDto.Project*
+  commentId: Overload:McpServer.Support.Mcp.Models.WorkspaceInfoDto.Project
+  href: McpServer.Support.Mcp.Models.WorkspaceInfoDto.html#McpServer_Support_Mcp_Models_WorkspaceInfoDto_Project
+  name: Project
+  nameWithType: WorkspaceInfoDto.Project
+  fullName: McpServer.Support.Mcp.Models.WorkspaceInfoDto.Project
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Models.WorkspaceInfoDto.TargetFramework*
+  commentId: Overload:McpServer.Support.Mcp.Models.WorkspaceInfoDto.TargetFramework
+  href: McpServer.Support.Mcp.Models.WorkspaceInfoDto.html#McpServer_Support_Mcp_Models_WorkspaceInfoDto_TargetFramework
+  name: TargetFramework
+  nameWithType: WorkspaceInfoDto.TargetFramework
+  fullName: McpServer.Support.Mcp.Models.WorkspaceInfoDto.TargetFramework
+- uid: McpServer.Support.Mcp.Models.WorkspaceInfoDto.Repository*
+  commentId: Overload:McpServer.Support.Mcp.Models.WorkspaceInfoDto.Repository
+  href: McpServer.Support.Mcp.Models.WorkspaceInfoDto.html#McpServer_Support_Mcp_Models_WorkspaceInfoDto_Repository
+  name: Repository
+  nameWithType: WorkspaceInfoDto.Repository
+  fullName: McpServer.Support.Mcp.Models.WorkspaceInfoDto.Repository
+- uid: McpServer.Support.Mcp.Models.WorkspaceInfoDto.Branch*
+  commentId: Overload:McpServer.Support.Mcp.Models.WorkspaceInfoDto.Branch
+  href: McpServer.Support.Mcp.Models.WorkspaceInfoDto.html#McpServer_Support_Mcp_Models_WorkspaceInfoDto_Branch
+  name: Branch
+  nameWithType: WorkspaceInfoDto.Branch
+  fullName: McpServer.Support.Mcp.Models.WorkspaceInfoDto.Branch

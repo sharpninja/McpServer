@@ -1,0 +1,484 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.WriteAuditEntry
+  commentId: T:McpServer.Support.Mcp.Services.WriteAuditEntry
+  id: WriteAuditEntry
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.WriteAuditEntry.#ctor(System.String,System.DateTime)
+  - McpServer.Support.Mcp.Services.WriteAuditEntry.At
+  - McpServer.Support.Mcp.Services.WriteAuditEntry.RelativePath
+  langs:
+  - csharp
+  - vb
+  name: WriteAuditEntry
+  nameWithType: WriteAuditEntry
+  fullName: McpServer.Support.Mcp.Services.WriteAuditEntry
+  type: Class
+  source:
+    id: WriteAuditEntry
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWriteAuditLog.cs
+    startLine: 22
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-PLANNED-013: Single audit entry.'
+  example: []
+  syntax:
+    content: 'public sealed record WriteAuditEntry : IEquatable<WriteAuditEntry>'
+    content.vb: Public NotInheritable Class WriteAuditEntry Implements IEquatable(Of WriteAuditEntry)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{McpServer.Support.Mcp.Services.WriteAuditEntry}
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Services.WriteAuditEntry.#ctor(System.String,System.DateTime)
+  commentId: M:McpServer.Support.Mcp.Services.WriteAuditEntry.#ctor(System.String,System.DateTime)
+  id: '#ctor(System.String,System.DateTime)'
+  parent: McpServer.Support.Mcp.Services.WriteAuditEntry
+  langs:
+  - csharp
+  - vb
+  name: WriteAuditEntry(string, DateTime)
+  nameWithType: WriteAuditEntry.WriteAuditEntry(string, DateTime)
+  fullName: McpServer.Support.Mcp.Services.WriteAuditEntry.WriteAuditEntry(string, System.DateTime)
+  type: Constructor
+  source:
+    id: .ctor
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWriteAuditLog.cs
+    startLine: 22
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-PLANNED-013: Single audit entry.'
+  example: []
+  syntax:
+    content: public WriteAuditEntry(string RelativePath, DateTime At)
+    parameters:
+    - id: RelativePath
+      type: System.String
+      description: Relative path of the written file.
+    - id: At
+      type: System.DateTime
+      description: UTC timestamp of the write.
+    content.vb: Public Sub New(RelativePath As String, At As Date)
+  overload: McpServer.Support.Mcp.Services.WriteAuditEntry.#ctor*
+  nameWithType.vb: WriteAuditEntry.New(String, Date)
+  fullName.vb: McpServer.Support.Mcp.Services.WriteAuditEntry.New(String, Date)
+  name.vb: New(String, Date)
+- uid: McpServer.Support.Mcp.Services.WriteAuditEntry.RelativePath
+  commentId: P:McpServer.Support.Mcp.Services.WriteAuditEntry.RelativePath
+  id: RelativePath
+  parent: McpServer.Support.Mcp.Services.WriteAuditEntry
+  langs:
+  - csharp
+  - vb
+  name: RelativePath
+  nameWithType: WriteAuditEntry.RelativePath
+  fullName: McpServer.Support.Mcp.Services.WriteAuditEntry.RelativePath
+  type: Property
+  source:
+    id: RelativePath
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWriteAuditLog.cs
+    startLine: 22
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Relative path of the written file.
+  example: []
+  syntax:
+    content: public string RelativePath { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property RelativePath As String
+  overload: McpServer.Support.Mcp.Services.WriteAuditEntry.RelativePath*
+- uid: McpServer.Support.Mcp.Services.WriteAuditEntry.At
+  commentId: P:McpServer.Support.Mcp.Services.WriteAuditEntry.At
+  id: At
+  parent: McpServer.Support.Mcp.Services.WriteAuditEntry
+  langs:
+  - csharp
+  - vb
+  name: At
+  nameWithType: WriteAuditEntry.At
+  fullName: McpServer.Support.Mcp.Services.WriteAuditEntry.At
+  type: Property
+  source:
+    id: At
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWriteAuditLog.cs
+    startLine: 22
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: UTC timestamp of the write.
+  example: []
+  syntax:
+    content: public DateTime At { get; init; }
+    parameters: []
+    return:
+      type: System.DateTime
+    content.vb: Public Property At As Date
+  overload: McpServer.Support.Mcp.Services.WriteAuditEntry.At*
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.IEquatable{McpServer.Support.Mcp.Services.WriteAuditEntry}
+  commentId: T:System.IEquatable{McpServer.Support.Mcp.Services.WriteAuditEntry}
+  parent: System
+  definition: System.IEquatable`1
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<WriteAuditEntry>
+  nameWithType: IEquatable<WriteAuditEntry>
+  fullName: System.IEquatable<McpServer.Support.Mcp.Services.WriteAuditEntry>
+  nameWithType.vb: IEquatable(Of WriteAuditEntry)
+  fullName.vb: System.IEquatable(Of McpServer.Support.Mcp.Services.WriteAuditEntry)
+  name.vb: IEquatable(Of WriteAuditEntry)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.WriteAuditEntry
+    name: WriteAuditEntry
+    href: McpServer.Support.Mcp.Services.WriteAuditEntry.html
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.WriteAuditEntry
+    name: WriteAuditEntry
+    href: McpServer.Support.Mcp.Services.WriteAuditEntry.html
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Services.WriteAuditEntry.#ctor*
+  commentId: Overload:McpServer.Support.Mcp.Services.WriteAuditEntry.#ctor
+  href: McpServer.Support.Mcp.Services.WriteAuditEntry.html#McpServer_Support_Mcp_Services_WriteAuditEntry__ctor_System_String_System_DateTime_
+  name: WriteAuditEntry
+  nameWithType: WriteAuditEntry.WriteAuditEntry
+  fullName: McpServer.Support.Mcp.Services.WriteAuditEntry.WriteAuditEntry
+  nameWithType.vb: WriteAuditEntry.New
+  fullName.vb: McpServer.Support.Mcp.Services.WriteAuditEntry.New
+  name.vb: New
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.DateTime
+  commentId: T:System.DateTime
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetime
+  name: DateTime
+  nameWithType: DateTime
+  fullName: System.DateTime
+  nameWithType.vb: Date
+  fullName.vb: Date
+  name.vb: Date
+- uid: McpServer.Support.Mcp.Services.WriteAuditEntry.RelativePath*
+  commentId: Overload:McpServer.Support.Mcp.Services.WriteAuditEntry.RelativePath
+  href: McpServer.Support.Mcp.Services.WriteAuditEntry.html#McpServer_Support_Mcp_Services_WriteAuditEntry_RelativePath
+  name: RelativePath
+  nameWithType: WriteAuditEntry.RelativePath
+  fullName: McpServer.Support.Mcp.Services.WriteAuditEntry.RelativePath
+- uid: McpServer.Support.Mcp.Services.WriteAuditEntry.At*
+  commentId: Overload:McpServer.Support.Mcp.Services.WriteAuditEntry.At
+  href: McpServer.Support.Mcp.Services.WriteAuditEntry.html#McpServer_Support_Mcp_Services_WriteAuditEntry_At
+  name: At
+  nameWithType: WriteAuditEntry.At
+  fullName: McpServer.Support.Mcp.Services.WriteAuditEntry.At

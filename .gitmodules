@@ -1,0 +1,3 @@
+[submodule "tools/McpServerTools"]
+	path = tools/McpServerTools
+	url = https://github.com/sharpninja/McpServerTools.git

@@ -1,0 +1,138 @@
+{
+  "format": 1,
+  "restore": {
+    "E:\\github\\McpServer\\tests\\McpServer.SessionLog.Validation\\McpServer.SessionLog.Validation.csproj": {}
+  },
+  "projects": {
+    "E:\\github\\McpServer\\tests\\McpServer.SessionLog.Validation\\McpServer.SessionLog.Validation.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\github\\McpServer\\tests\\McpServer.SessionLog.Validation\\McpServer.SessionLog.Validation.csproj",
+        "projectName": "McpServer.SessionLog.Validation",
+        "projectPath": "E:\\github\\McpServer\\tests\\McpServer.SessionLog.Validation\\McpServer.SessionLog.Validation.csproj",
+        "packagesPath": "E:\\packages\\NuGet\\cache",
+        "outputPath": "E:\\github\\McpServer\\tests\\McpServer.SessionLog.Validation\\obj\\",
+        "projectStyle": "PackageReference",
+        "centralPackageVersionsManagementEnabled": true,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "E:\\github\\McpServer\\NuGet.Config",
+          "C:\\Users\\kingd\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.pkg.github.com/sharpninja/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true,
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[18.0.1, )",
+              "versionCentrallyManaged": true
+            },
+            "coverlet.collector": {
+              "target": "Package",
+              "version": "[6.0.4, )",
+              "versionCentrallyManaged": true
+            },
+            "xunit.runner.visualstudio": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.5, )",
+              "versionCentrallyManaged": true
+            },
+            "xunit.v3": {
+              "target": "Package",
+              "version": "[3.2.2, )",
+              "versionCentrallyManaged": true
+            }
+          },
+          "centralPackageVersions": {
+            "Castle.Core": "5.2.1",
+            "coverlet.collector": "6.0.4",
+            "HnswIndex": "1.6.0",
+            "Microsoft.AspNetCore.Mvc.Testing": "9.0.12",
+            "Microsoft.EntityFrameworkCore": "9.0.12",
+            "Microsoft.EntityFrameworkCore.Analyzers": "9.0.12",
+            "Microsoft.EntityFrameworkCore.Design": "9.0.12",
+            "Microsoft.EntityFrameworkCore.InMemory": "9.0.12",
+            "Microsoft.EntityFrameworkCore.Relational": "9.0.12",
+            "Microsoft.EntityFrameworkCore.Sqlite": "9.0.12",
+            "Microsoft.Extensions.DependencyInjection": "10.0.2",
+            "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.2",
+            "Microsoft.Extensions.Hosting.Abstractions": "9.0.0",
+            "Microsoft.Extensions.Hosting.WindowsServices": "9.0.12",
+            "Microsoft.Extensions.Http.Resilience": "9.0.0",
+            "Microsoft.Extensions.Logging.Abstractions": "10.0.2",
+            "Microsoft.Extensions.Options": "10.0.2",
+            "Microsoft.Extensions.ServiceDiscovery": "9.0.0",
+            "Microsoft.ML.OnnxRuntime": "1.24.1",
+            "Microsoft.NET.Test.Sdk": "18.0.1",
+            "ModelContextProtocol": "0.8.0-preview.1",
+            "ModelContextProtocol.AspNetCore": "0.8.0-preview.1",
+            "NSubstitute": "6.0.0",
+            "OpenTelemetry.Exporter.OpenTelemetryProtocol": "1.15.0",
+            "OpenTelemetry.Extensions.Hosting": "1.15.0",
+            "OpenTelemetry.Instrumentation.AspNetCore": "1.15.0",
+            "OpenTelemetry.Instrumentation.Http": "1.15.0",
+            "OpenTelemetry.Instrumentation.Runtime": "1.15.0",
+            "Serilog.AspNetCore": "10.0.0",
+            "Serilog.Sinks.Console": "6.1.1",
+            "Serilog.Sinks.File": "7.0.0",
+            "Serilog.Sinks.Http": "9.2.1",
+            "Swashbuckle.AspNetCore": "10.1.2",
+            "xunit.runner.visualstudio": "3.1.5",
+            "xunit.v3": "3.2.2",
+            "YamlDotNet": "16.3.0"
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

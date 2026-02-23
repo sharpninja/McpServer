@@ -1,0 +1,595 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.SessionLogQueryResult
+  commentId: T:McpServer.Support.Mcp.Services.SessionLogQueryResult
+  id: SessionLogQueryResult
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.SessionLogQueryResult.Items
+  - McpServer.Support.Mcp.Services.SessionLogQueryResult.Limit
+  - McpServer.Support.Mcp.Services.SessionLogQueryResult.Offset
+  - McpServer.Support.Mcp.Services.SessionLogQueryResult.TotalCount
+  langs:
+  - csharp
+  - vb
+  name: SessionLogQueryResult
+  nameWithType: SessionLogQueryResult
+  fullName: McpServer.Support.Mcp.Services.SessionLogQueryResult
+  type: Class
+  source:
+    id: SessionLogQueryResult
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ISessionLogService.cs
+    startLine: 82
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-PLANNED-013: Paginated result of a session log query.'
+  example: []
+  syntax:
+    content: 'public sealed record SessionLogQueryResult : IEquatable<SessionLogQueryResult>'
+    content.vb: Public NotInheritable Class SessionLogQueryResult Implements IEquatable(Of SessionLogQueryResult)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{McpServer.Support.Mcp.Services.SessionLogQueryResult}
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Services.SessionLogQueryResult.TotalCount
+  commentId: P:McpServer.Support.Mcp.Services.SessionLogQueryResult.TotalCount
+  id: TotalCount
+  parent: McpServer.Support.Mcp.Services.SessionLogQueryResult
+  langs:
+  - csharp
+  - vb
+  name: TotalCount
+  nameWithType: SessionLogQueryResult.TotalCount
+  fullName: McpServer.Support.Mcp.Services.SessionLogQueryResult.TotalCount
+  type: Property
+  source:
+    id: TotalCount
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ISessionLogService.cs
+    startLine: 85
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Total number of matching sessions (before pagination).
+  example: []
+  syntax:
+    content: public int TotalCount { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property TotalCount As Integer
+  overload: McpServer.Support.Mcp.Services.SessionLogQueryResult.TotalCount*
+- uid: McpServer.Support.Mcp.Services.SessionLogQueryResult.Limit
+  commentId: P:McpServer.Support.Mcp.Services.SessionLogQueryResult.Limit
+  id: Limit
+  parent: McpServer.Support.Mcp.Services.SessionLogQueryResult
+  langs:
+  - csharp
+  - vb
+  name: Limit
+  nameWithType: SessionLogQueryResult.Limit
+  fullName: McpServer.Support.Mcp.Services.SessionLogQueryResult.Limit
+  type: Property
+  source:
+    id: Limit
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ISessionLogService.cs
+    startLine: 88
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Page size used.
+  example: []
+  syntax:
+    content: public int Limit { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property Limit As Integer
+  overload: McpServer.Support.Mcp.Services.SessionLogQueryResult.Limit*
+- uid: McpServer.Support.Mcp.Services.SessionLogQueryResult.Offset
+  commentId: P:McpServer.Support.Mcp.Services.SessionLogQueryResult.Offset
+  id: Offset
+  parent: McpServer.Support.Mcp.Services.SessionLogQueryResult
+  langs:
+  - csharp
+  - vb
+  name: Offset
+  nameWithType: SessionLogQueryResult.Offset
+  fullName: McpServer.Support.Mcp.Services.SessionLogQueryResult.Offset
+  type: Property
+  source:
+    id: Offset
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ISessionLogService.cs
+    startLine: 91
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Offset used.
+  example: []
+  syntax:
+    content: public int Offset { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property Offset As Integer
+  overload: McpServer.Support.Mcp.Services.SessionLogQueryResult.Offset*
+- uid: McpServer.Support.Mcp.Services.SessionLogQueryResult.Items
+  commentId: P:McpServer.Support.Mcp.Services.SessionLogQueryResult.Items
+  id: Items
+  parent: McpServer.Support.Mcp.Services.SessionLogQueryResult
+  langs:
+  - csharp
+  - vb
+  name: Items
+  nameWithType: SessionLogQueryResult.Items
+  fullName: McpServer.Support.Mcp.Services.SessionLogQueryResult.Items
+  type: Property
+  source:
+    id: Items
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ISessionLogService.cs
+    startLine: 94
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Session log DTOs for the current page.
+  example: []
+  syntax:
+    content: public required IReadOnlyList<UnifiedSessionLogDto> Items { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.UnifiedSessionLogDto}
+    content.vb: Public Property Items As IReadOnlyList(Of UnifiedSessionLogDto)
+  overload: McpServer.Support.Mcp.Services.SessionLogQueryResult.Items*
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.IEquatable{McpServer.Support.Mcp.Services.SessionLogQueryResult}
+  commentId: T:System.IEquatable{McpServer.Support.Mcp.Services.SessionLogQueryResult}
+  parent: System
+  definition: System.IEquatable`1
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<SessionLogQueryResult>
+  nameWithType: IEquatable<SessionLogQueryResult>
+  fullName: System.IEquatable<McpServer.Support.Mcp.Services.SessionLogQueryResult>
+  nameWithType.vb: IEquatable(Of SessionLogQueryResult)
+  fullName.vb: System.IEquatable(Of McpServer.Support.Mcp.Services.SessionLogQueryResult)
+  name.vb: IEquatable(Of SessionLogQueryResult)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.SessionLogQueryResult
+    name: SessionLogQueryResult
+    href: McpServer.Support.Mcp.Services.SessionLogQueryResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.SessionLogQueryResult
+    name: SessionLogQueryResult
+    href: McpServer.Support.Mcp.Services.SessionLogQueryResult.html
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Services.SessionLogQueryResult.TotalCount*
+  commentId: Overload:McpServer.Support.Mcp.Services.SessionLogQueryResult.TotalCount
+  href: McpServer.Support.Mcp.Services.SessionLogQueryResult.html#McpServer_Support_Mcp_Services_SessionLogQueryResult_TotalCount
+  name: TotalCount
+  nameWithType: SessionLogQueryResult.TotalCount
+  fullName: McpServer.Support.Mcp.Services.SessionLogQueryResult.TotalCount
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: McpServer.Support.Mcp.Services.SessionLogQueryResult.Limit*
+  commentId: Overload:McpServer.Support.Mcp.Services.SessionLogQueryResult.Limit
+  href: McpServer.Support.Mcp.Services.SessionLogQueryResult.html#McpServer_Support_Mcp_Services_SessionLogQueryResult_Limit
+  name: Limit
+  nameWithType: SessionLogQueryResult.Limit
+  fullName: McpServer.Support.Mcp.Services.SessionLogQueryResult.Limit
+- uid: McpServer.Support.Mcp.Services.SessionLogQueryResult.Offset*
+  commentId: Overload:McpServer.Support.Mcp.Services.SessionLogQueryResult.Offset
+  href: McpServer.Support.Mcp.Services.SessionLogQueryResult.html#McpServer_Support_Mcp_Services_SessionLogQueryResult_Offset
+  name: Offset
+  nameWithType: SessionLogQueryResult.Offset
+  fullName: McpServer.Support.Mcp.Services.SessionLogQueryResult.Offset
+- uid: McpServer.Support.Mcp.Services.SessionLogQueryResult.Items*
+  commentId: Overload:McpServer.Support.Mcp.Services.SessionLogQueryResult.Items
+  href: McpServer.Support.Mcp.Services.SessionLogQueryResult.html#McpServer_Support_Mcp_Services_SessionLogQueryResult_Items
+  name: Items
+  nameWithType: SessionLogQueryResult.Items
+  fullName: McpServer.Support.Mcp.Services.SessionLogQueryResult.Items
+- uid: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.UnifiedSessionLogDto}
+  commentId: T:System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.UnifiedSessionLogDto}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IReadOnlyList`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<UnifiedSessionLogDto>
+  nameWithType: IReadOnlyList<UnifiedSessionLogDto>
+  fullName: System.Collections.Generic.IReadOnlyList<McpServer.Support.Mcp.Models.UnifiedSessionLogDto>
+  nameWithType.vb: IReadOnlyList(Of UnifiedSessionLogDto)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of McpServer.Support.Mcp.Models.UnifiedSessionLogDto)
+  name.vb: IReadOnlyList(Of UnifiedSessionLogDto)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+    name: UnifiedSessionLogDto
+    href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Models.UnifiedSessionLogDto
+    name: UnifiedSessionLogDto
+    href: McpServer.Support.Mcp.Models.UnifiedSessionLogDto.html
+  - name: )
+- uid: System.Collections.Generic.IReadOnlyList`1
+  commentId: T:System.Collections.Generic.IReadOnlyList`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<T>
+  nameWithType: IReadOnlyList<T>
+  fullName: System.Collections.Generic.IReadOnlyList<T>
+  nameWithType.vb: IReadOnlyList(Of T)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of T)
+  name.vb: IReadOnlyList(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic

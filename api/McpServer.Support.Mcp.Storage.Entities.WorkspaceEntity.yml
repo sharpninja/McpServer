@@ -1,0 +1,681 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+  id: WorkspaceEntity
+  parent: McpServer.Support.Mcp.Storage.Entities
+  children:
+  - McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.DateTimeCreated
+  - McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.DateTimeModified
+  - McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.Name
+  - McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.RunAs
+  - McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.TodoPath
+  - McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.TunnelProvider
+  - McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.WorkspacePath
+  - McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.WorkspacePort
+  langs:
+  - csharp
+  - vb
+  name: WorkspaceEntity
+  nameWithType: WorkspaceEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+  type: Class
+  source:
+    id: WorkspaceEntity
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\WorkspaceEntity.cs
+    startLine: 8
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: >-
+    Workspace registration entity. Each workspace maps to a hosted MCP instance
+
+    on a dedicated port, keyed by its root folder path.
+  example: []
+  syntax:
+    content: public sealed class WorkspaceEntity
+    content.vb: Public NotInheritable Class WorkspaceEntity
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.WorkspacePath
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.WorkspacePath
+  id: WorkspacePath
+  parent: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+  langs:
+  - csharp
+  - vb
+  name: WorkspacePath
+  nameWithType: WorkspaceEntity.WorkspacePath
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.WorkspacePath
+  type: Property
+  source:
+    id: WorkspacePath
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\WorkspaceEntity.cs
+    startLine: 11
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: Absolute path to the workspace root folder (primary key).
+  example: []
+  syntax:
+    content: >-
+      [Key]
+
+      [MaxLength(2048)]
+
+      public required string WorkspacePath { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Key>
+
+      <MaxLength(2048)>
+
+      Public Property WorkspacePath As String
+  overload: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.WorkspacePath*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.KeyAttribute
+    ctor: System.ComponentModel.DataAnnotations.KeyAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 2048
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.Name
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.Name
+  id: Name
+  parent: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+  langs:
+  - csharp
+  - vb
+  name: Name
+  nameWithType: WorkspaceEntity.Name
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.Name
+  type: Property
+  source:
+    id: Name
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\WorkspaceEntity.cs
+    startLine: 16
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: Human-readable workspace name. Defaults to the last segment of WorkspacePath.
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(256)]
+
+      public required string Name { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(256)>
+
+      Public Property Name As String
+  overload: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.Name*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 256
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.TodoPath
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.TodoPath
+  id: TodoPath
+  parent: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+  langs:
+  - csharp
+  - vb
+  name: TodoPath
+  nameWithType: WorkspaceEntity.TodoPath
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.TodoPath
+  type: Property
+  source:
+    id: TodoPath
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\WorkspaceEntity.cs
+    startLine: 21
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: Relative path to todo.yaml within the workspace.
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(2048)]
+
+      public string TodoPath { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(2048)>
+
+      Public Property TodoPath As String
+  overload: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.TodoPath*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 2048
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.WorkspacePort
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.WorkspacePort
+  id: WorkspacePort
+  parent: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+  langs:
+  - csharp
+  - vb
+  name: WorkspacePort
+  nameWithType: WorkspaceEntity.WorkspacePort
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.WorkspacePort
+  type: Property
+  source:
+    id: WorkspacePort
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\WorkspaceEntity.cs
+    startLine: 26
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: HTTP port for this workspace's hosted MCP instance.
+  example: []
+  syntax:
+    content: public int WorkspacePort { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property WorkspacePort As Integer
+  overload: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.WorkspacePort*
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.TunnelProvider
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.TunnelProvider
+  id: TunnelProvider
+  parent: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+  langs:
+  - csharp
+  - vb
+  name: TunnelProvider
+  nameWithType: WorkspaceEntity.TunnelProvider
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.TunnelProvider
+  type: Property
+  source:
+    id: TunnelProvider
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\WorkspaceEntity.cs
+    startLine: 29
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: Tunnel provider key (ngrok, cloudflare, frp) or null if disabled.
+  example: []
+  syntax:
+    content: >-
+      [MaxLength(64)]
+
+      public string? TunnelProvider { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <MaxLength(64)>
+
+      Public Property TunnelProvider As String
+  overload: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.TunnelProvider*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 64
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.DateTimeCreated
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.DateTimeCreated
+  id: DateTimeCreated
+  parent: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+  langs:
+  - csharp
+  - vb
+  name: DateTimeCreated
+  nameWithType: WorkspaceEntity.DateTimeCreated
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.DateTimeCreated
+  type: Property
+  source:
+    id: DateTimeCreated
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\WorkspaceEntity.cs
+    startLine: 33
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: When the workspace was registered.
+  example: []
+  syntax:
+    content: public DateTimeOffset DateTimeCreated { get; set; }
+    parameters: []
+    return:
+      type: System.DateTimeOffset
+    content.vb: Public Property DateTimeCreated As DateTimeOffset
+  overload: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.DateTimeCreated*
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.DateTimeModified
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.DateTimeModified
+  id: DateTimeModified
+  parent: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+  langs:
+  - csharp
+  - vb
+  name: DateTimeModified
+  nameWithType: WorkspaceEntity.DateTimeModified
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.DateTimeModified
+  type: Property
+  source:
+    id: DateTimeModified
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\WorkspaceEntity.cs
+    startLine: 36
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: When the workspace was last updated.
+  example: []
+  syntax:
+    content: public DateTimeOffset DateTimeModified { get; set; }
+    parameters: []
+    return:
+      type: System.DateTimeOffset
+    content.vb: Public Property DateTimeModified As DateTimeOffset
+  overload: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.DateTimeModified*
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.RunAs
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.RunAs
+  id: RunAs
+  parent: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity
+  langs:
+  - csharp
+  - vb
+  name: RunAs
+  nameWithType: WorkspaceEntity.RunAs
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.RunAs
+  type: Property
+  source:
+    id: RunAs
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\WorkspaceEntity.cs
+    startLine: 39
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: Identity for the child process (null = current Windows user).
+  example: []
+  syntax:
+    content: >-
+      [MaxLength(256)]
+
+      public string? RunAs { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <MaxLength(256)>
+
+      Public Property RunAs As String
+  overload: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.RunAs*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 256
+references:
+- uid: McpServer.Support.Mcp.Storage.Entities
+  commentId: N:McpServer.Support.Mcp.Storage.Entities
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Storage.Entities
+  nameWithType: McpServer.Support.Mcp.Storage.Entities
+  fullName: McpServer.Support.Mcp.Storage.Entities
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage.Entities
+    name: Entities
+    href: McpServer.Support.Mcp.Storage.Entities.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage.Entities
+    name: Entities
+    href: McpServer.Support.Mcp.Storage.Entities.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.WorkspacePath*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.WorkspacePath
+  href: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.html#McpServer_Support_Mcp_Storage_Entities_WorkspaceEntity_WorkspacePath
+  name: WorkspacePath
+  nameWithType: WorkspaceEntity.WorkspacePath
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.WorkspacePath
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.Name*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.Name
+  href: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.html#McpServer_Support_Mcp_Storage_Entities_WorkspaceEntity_Name
+  name: Name
+  nameWithType: WorkspaceEntity.Name
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.Name
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.TodoPath*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.TodoPath
+  href: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.html#McpServer_Support_Mcp_Storage_Entities_WorkspaceEntity_TodoPath
+  name: TodoPath
+  nameWithType: WorkspaceEntity.TodoPath
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.TodoPath
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.WorkspacePort*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.WorkspacePort
+  href: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.html#McpServer_Support_Mcp_Storage_Entities_WorkspaceEntity_WorkspacePort
+  name: WorkspacePort
+  nameWithType: WorkspaceEntity.WorkspacePort
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.WorkspacePort
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.TunnelProvider*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.TunnelProvider
+  href: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.html#McpServer_Support_Mcp_Storage_Entities_WorkspaceEntity_TunnelProvider
+  name: TunnelProvider
+  nameWithType: WorkspaceEntity.TunnelProvider
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.TunnelProvider
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.DateTimeCreated*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.DateTimeCreated
+  href: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.html#McpServer_Support_Mcp_Storage_Entities_WorkspaceEntity_DateTimeCreated
+  name: DateTimeCreated
+  nameWithType: WorkspaceEntity.DateTimeCreated
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.DateTimeCreated
+- uid: System.DateTimeOffset
+  commentId: T:System.DateTimeOffset
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetimeoffset
+  name: DateTimeOffset
+  nameWithType: DateTimeOffset
+  fullName: System.DateTimeOffset
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.DateTimeModified*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.DateTimeModified
+  href: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.html#McpServer_Support_Mcp_Storage_Entities_WorkspaceEntity_DateTimeModified
+  name: DateTimeModified
+  nameWithType: WorkspaceEntity.DateTimeModified
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.DateTimeModified
+- uid: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.RunAs*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.RunAs
+  href: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.html#McpServer_Support_Mcp_Storage_Entities_WorkspaceEntity_RunAs
+  name: RunAs
+  nameWithType: WorkspaceEntity.RunAs
+  fullName: McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity.RunAs

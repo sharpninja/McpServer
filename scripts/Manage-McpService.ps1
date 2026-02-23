@@ -82,7 +82,7 @@ function Publish-App {
     }
 
     dotnet publish $ProjectFile `
-        -c Release `
+        -c Debug `
         -r win-x64 `
         --self-contained true `
         -p:PublishSingleFile=true `

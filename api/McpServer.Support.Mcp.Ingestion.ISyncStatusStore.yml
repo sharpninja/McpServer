@@ -1,0 +1,141 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+  commentId: T:McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+  id: ISyncStatusStore
+  parent: McpServer.Support.Mcp.Ingestion
+  children:
+  - McpServer.Support.Mcp.Ingestion.ISyncStatusStore.GetLast
+  - McpServer.Support.Mcp.Ingestion.ISyncStatusStore.SetLast(McpServer.Support.Mcp.Ingestion.SyncRunResult)
+  langs:
+  - csharp
+  - vb
+  name: ISyncStatusStore
+  nameWithType: ISyncStatusStore
+  fullName: McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+  type: Interface
+  source:
+    id: ISyncStatusStore
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\ISyncStatusStore.cs
+    startLine: 5
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: 'TR-PLANNED-013: Stores last sync run result for sync.status endpoint.'
+  example: []
+  syntax:
+    content: public interface ISyncStatusStore
+    content.vb: Public Interface ISyncStatusStore
+- uid: McpServer.Support.Mcp.Ingestion.ISyncStatusStore.GetLast
+  commentId: M:McpServer.Support.Mcp.Ingestion.ISyncStatusStore.GetLast
+  id: GetLast
+  parent: McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+  langs:
+  - csharp
+  - vb
+  name: GetLast()
+  nameWithType: ISyncStatusStore.GetLast()
+  fullName: McpServer.Support.Mcp.Ingestion.ISyncStatusStore.GetLast()
+  type: Method
+  source:
+    id: GetLast
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\ISyncStatusStore.cs
+    startLine: 9
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: Gets the last sync result (or null if never run).
+  example: []
+  syntax:
+    content: SyncRunResult? GetLast()
+    return:
+      type: McpServer.Support.Mcp.Ingestion.SyncRunResult
+      description: The last sync run result, or <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/null">null</a> if no sync has been run.
+    content.vb: Function GetLast() As SyncRunResult
+  overload: McpServer.Support.Mcp.Ingestion.ISyncStatusStore.GetLast*
+- uid: McpServer.Support.Mcp.Ingestion.ISyncStatusStore.SetLast(McpServer.Support.Mcp.Ingestion.SyncRunResult)
+  commentId: M:McpServer.Support.Mcp.Ingestion.ISyncStatusStore.SetLast(McpServer.Support.Mcp.Ingestion.SyncRunResult)
+  id: SetLast(McpServer.Support.Mcp.Ingestion.SyncRunResult)
+  parent: McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+  langs:
+  - csharp
+  - vb
+  name: SetLast(SyncRunResult)
+  nameWithType: ISyncStatusStore.SetLast(SyncRunResult)
+  fullName: McpServer.Support.Mcp.Ingestion.ISyncStatusStore.SetLast(McpServer.Support.Mcp.Ingestion.SyncRunResult)
+  type: Method
+  source:
+    id: SetLast
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Ingestion\ISyncStatusStore.cs
+    startLine: 13
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Ingestion
+  summary: Sets the last sync result.
+  example: []
+  syntax:
+    content: void SetLast(SyncRunResult result)
+    parameters:
+    - id: result
+      type: McpServer.Support.Mcp.Ingestion.SyncRunResult
+      description: The sync run result to store.
+    content.vb: Sub SetLast(result As SyncRunResult)
+  overload: McpServer.Support.Mcp.Ingestion.ISyncStatusStore.SetLast*
+references:
+- uid: McpServer.Support.Mcp.Ingestion
+  commentId: N:McpServer.Support.Mcp.Ingestion
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Ingestion
+  nameWithType: McpServer.Support.Mcp.Ingestion
+  fullName: McpServer.Support.Mcp.Ingestion
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Ingestion
+    name: Ingestion
+    href: McpServer.Support.Mcp.Ingestion.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Ingestion
+    name: Ingestion
+    href: McpServer.Support.Mcp.Ingestion.html
+- uid: McpServer.Support.Mcp.Ingestion.ISyncStatusStore.GetLast*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.ISyncStatusStore.GetLast
+  href: McpServer.Support.Mcp.Ingestion.ISyncStatusStore.html#McpServer_Support_Mcp_Ingestion_ISyncStatusStore_GetLast
+  name: GetLast
+  nameWithType: ISyncStatusStore.GetLast
+  fullName: McpServer.Support.Mcp.Ingestion.ISyncStatusStore.GetLast
+- uid: McpServer.Support.Mcp.Ingestion.SyncRunResult
+  commentId: T:McpServer.Support.Mcp.Ingestion.SyncRunResult
+  parent: McpServer.Support.Mcp.Ingestion
+  href: McpServer.Support.Mcp.Ingestion.SyncRunResult.html
+  name: SyncRunResult
+  nameWithType: SyncRunResult
+  fullName: McpServer.Support.Mcp.Ingestion.SyncRunResult
+- uid: McpServer.Support.Mcp.Ingestion.ISyncStatusStore.SetLast*
+  commentId: Overload:McpServer.Support.Mcp.Ingestion.ISyncStatusStore.SetLast
+  href: McpServer.Support.Mcp.Ingestion.ISyncStatusStore.html#McpServer_Support_Mcp_Ingestion_ISyncStatusStore_SetLast_McpServer_Support_Mcp_Ingestion_SyncRunResult_
+  name: SetLast
+  nameWithType: ISyncStatusStore.SetLast
+  fullName: McpServer.Support.Mcp.Ingestion.ISyncStatusStore.SetLast

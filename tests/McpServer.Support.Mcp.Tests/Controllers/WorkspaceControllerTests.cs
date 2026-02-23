@@ -17,6 +17,15 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
 
     public void Dispose() => _client.Dispose();
 
+    /// <summary>Deletes a workspace created during a test to prevent config pollution.</summary>
+    private async Task CleanupWorkspaceAsync(string path)
+    {
+        var key = EncodeKey(Path.GetFullPath(path));
+        await _client.PostAsync(new Uri($"/mcp/workspace/{key}/stop", UriKind.Relative), null).ConfigureAwait(true);
+        var deleteResponse = await _client.DeleteAsync(new Uri($"/mcp/workspace/{key}", UriKind.Relative)).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
+    }
+
     [Fact]
     public async Task ListWorkspaces_Returns200WithValidResult()
     {
@@ -31,11 +40,8 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
     [Fact]
     public async Task CreateWorkspace_ValidRequest_Returns201()
     {
-        var request = new
-        {
-            workspacePath = Path.Combine(Path.GetTempPath(), $"ws_test_{Guid.NewGuid():N}"),
-            name = "test-ws"
-        };
+        var path = Path.Combine(Path.GetTempPath(), $"ws_test_{Guid.NewGuid():N}");
+        var request = new { workspacePath = path, name = "test-ws" };
 
         var response = await _client.PostAsJsonAsync(new Uri("/mcp/workspace", UriKind.Relative), request).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
@@ -46,15 +52,15 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
         Assert.NotNull(result.Workspace);
         Assert.Equal("test-ws", result.Workspace.Name);
         Assert.True(result.Workspace.WorkspacePort >= 7148);
+
+        await CleanupWorkspaceAsync(path).ConfigureAwait(true);
     }
 
     [Fact]
     public async Task CreateWorkspace_NoPort_AutoAssignsStartingAt7148()
     {
-        var request = new
-        {
-            workspacePath = Path.Combine(Path.GetTempPath(), $"ws_auto_{Guid.NewGuid():N}")
-        };
+        var path = Path.Combine(Path.GetTempPath(), $"ws_auto_{Guid.NewGuid():N}");
+        var request = new { workspacePath = path };
 
         var response = await _client.PostAsJsonAsync(new Uri("/mcp/workspace", UriKind.Relative), request).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
@@ -62,33 +68,35 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
         var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>().ConfigureAwait(true);
         Assert.NotNull(result);
         Assert.True(result.Workspace!.WorkspacePort >= 7148);
+
+        await CleanupWorkspaceAsync(path).ConfigureAwait(true);
     }
 
     [Fact]
     public async Task CreateWorkspace_NoName_DerivesFromPath()
     {
         var folderName = $"MyProject_{Guid.NewGuid():N}";
-        var request = new
-        {
-            workspacePath = Path.Combine(Path.GetTempPath(), folderName)
-        };
+        var path = Path.Combine(Path.GetTempPath(), folderName);
+        var request = new { workspacePath = path };
 
         var response = await _client.PostAsJsonAsync(new Uri("/mcp/workspace", UriKind.Relative), request).ConfigureAwait(true);
         var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>().ConfigureAwait(true);
         Assert.Equal(folderName, result!.Workspace!.Name);
+
+        await CleanupWorkspaceAsync(path).ConfigureAwait(true);
     }
 
     [Fact]
     public async Task CreateWorkspace_NoTodoPath_DefaultsToDocsTodoYaml()
     {
-        var request = new
-        {
-            workspacePath = Path.Combine(Path.GetTempPath(), $"ws_todo_{Guid.NewGuid():N}")
-        };
+        var path = Path.Combine(Path.GetTempPath(), $"ws_todo_{Guid.NewGuid():N}");
+        var request = new { workspacePath = path };
 
         var response = await _client.PostAsJsonAsync(new Uri("/mcp/workspace", UriKind.Relative), request).ConfigureAwait(true);
         var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>().ConfigureAwait(true);
         Assert.Equal("docs/todo.yaml", result!.Workspace!.TodoPath);
+
+        await CleanupWorkspaceAsync(path).ConfigureAwait(true);
     }
 
     [Fact]
@@ -100,6 +108,8 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
         await _client.PostAsJsonAsync(new Uri("/mcp/workspace", UriKind.Relative), request).ConfigureAwait(true);
         var response = await _client.PostAsJsonAsync(new Uri("/mcp/workspace", UriKind.Relative), request).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+
+        await CleanupWorkspaceAsync(path).ConfigureAwait(true);
     }
 
     [Fact]
@@ -111,6 +121,8 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
         var key = EncodeKey(Path.GetFullPath(path));
         var response = await _client.GetAsync(new Uri($"/mcp/workspace/{key}", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        await CleanupWorkspaceAsync(path).ConfigureAwait(true);
     }
 
     [Fact]
@@ -134,6 +146,8 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
 
         var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>().ConfigureAwait(true);
         Assert.Equal("renamed-ws", result!.Workspace!.Name);
+
+        await CleanupWorkspaceAsync(path).ConfigureAwait(true);
     }
 
     [Fact]
@@ -156,18 +170,23 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
     }
 
     [Fact]
-    public async Task GetStatus_NoProcess_ReturnsNotRunning()
+    public async Task GetStatus_StoppedProcess_ReturnsNotRunning()
     {
         var path = Path.Combine(Path.GetTempPath(), $"ws_stat_{Guid.NewGuid():N}");
         await _client.PostAsJsonAsync(new Uri("/mcp/workspace", UriKind.Relative), new { workspacePath = path }).ConfigureAwait(true);
 
+        // Creation auto-starts the workspace (FR-MCP-021); stop it first so we can verify "not running" status.
         var key = EncodeKey(Path.GetFullPath(path));
+        await _client.PostAsync(new Uri($"/mcp/workspace/{key}/stop", UriKind.Relative), null).ConfigureAwait(true);
+
         var response = await _client.GetAsync(new Uri($"/mcp/workspace/{key}/status", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var status = await response.Content.ReadFromJsonAsync<WorkspaceProcessStatus>().ConfigureAwait(true);
         Assert.NotNull(status);
         Assert.False(status.IsRunning);
+
+        await CleanupWorkspaceAsync(path).ConfigureAwait(true);
     }
 
     private static string EncodeKey(string path)

@@ -10,6 +10,7 @@ using McpServer.Support.Mcp.Logging;
 using McpServer.Support.Mcp.McpStdio;
 using McpServer.Support.Mcp.Middleware;
 using McpServer.Support.Mcp.Options;
+using McpServer.Support.Mcp.Controllers;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Web;
@@ -51,6 +52,23 @@ if (OperatingSystem.IsWindows())
 var instanceName = McpInstanceResolver.GetRequestedInstanceName(args);
 McpInstanceResolver.ValidateInstances(builder.Configuration);
 McpInstanceResolver.ValidateTodoStorage(builder.Configuration, instanceName);
+
+// Resolve the primary workspace from Mcp:Workspaces config (FR-MCP-025).
+// Set ContentRootPath to the primary workspace's path so relative paths resolve correctly
+// and WorkspaceProcessManager can identify it.
+{
+    var workspaces = builder.Configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
+    var primary = workspaces
+        .Where(w => w.IsPrimary && w.IsEnabled)
+        .OrderBy(w => w.WorkspacePort)
+        .FirstOrDefault();
+    primary ??= workspaces
+        .Where(w => w.IsEnabled)
+        .OrderBy(w => w.WorkspacePort)
+        .FirstOrDefault();
+    if (primary is not null)
+        builder.Environment.ContentRootPath = Path.GetFullPath(primary.WorkspacePath);
+}
 
 // TR-PLANNED-013: Serilog with optional Parseable (local Docker) sink.
 builder.Host.UseSerilog((context, _, config) =>
@@ -115,6 +133,7 @@ else
 }
 
 builder.Services.Configure<IngestionOptions>(builder.Configuration.GetSection("Mcp"));
+builder.Services.Configure<MarkerPromptOptions>(builder.Configuration.GetSection(MarkerPromptOptions.SectionName));
 builder.Services.Configure<McpParseableOptions>(builder.Configuration.GetSection(McpParseableOptions.SectionName));
 builder.Services.Configure<McpInteractionLoggingOptions>(builder.Configuration.GetSection(McpInteractionLoggingOptions.SectionName));
 builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(TodoStorageOptions.SectionName));
@@ -190,6 +209,7 @@ builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
 builder.Services.AddScoped<IToolBucketService, ToolBucketService>();
 builder.Services.AddSingleton<IWorkspaceProcessManager, WorkspaceProcessManager>();
 builder.Services.Configure<PairingOptions>(builder.Configuration.GetSection(PairingOptions.SectionName));
+builder.Services.Configure<ToolRegistryOptions>(builder.Configuration.GetSection(ToolRegistryOptions.SectionName));
 builder.Services.AddSingleton<PairingSessionService>();
 
 // Tunnel strategy pattern — follows ITodoService provider-switch convention.
@@ -221,7 +241,12 @@ if (!builder.Environment.IsEnvironment("Test"))
         builder.Services.AddHostedService(sp => sp.GetRequiredService<ITunnelProvider>());
 }
 
-builder.Services.AddControllers();
+var mvcBuilder = builder.Services.AddControllers();
+#if !DEBUG
+if (!builder.Environment.IsStaging())
+    mvcBuilder.ConfigureApplicationPartManager(mgr =>
+        mgr.FeatureProviders.Add(new ExcludeControllerFeatureProvider(typeof(DiagnosticController))));
+#endif
 builder.Services.AddEndpointsApiExplorer();
 
 // MCP Streamable HTTP transport — shares FwhMcpTools with STDIO transport.
@@ -254,6 +279,41 @@ if (!app.Environment.IsEnvironment("Test"))
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         await db.Database.MigrateAsync().ConfigureAwait(false);
     }
+
+    // Seed default tool buckets from configuration (idempotent — skips existing).
+    using (var scope = app.Services.CreateScope())
+    {
+        var bucketService = scope.ServiceProvider.GetRequiredService<IToolBucketService>();
+        var toolRegistryOpts = scope.ServiceProvider.GetRequiredService<IOptions<ToolRegistryOptions>>().Value;
+        foreach (var entry in toolRegistryOpts.DefaultBuckets)
+        {
+            if (string.IsNullOrWhiteSpace(entry.Name) || string.IsNullOrWhiteSpace(entry.Owner) || string.IsNullOrWhiteSpace(entry.Repo))
+                continue;
+
+            var result = await bucketService.AddBucketAsync(
+                new BucketAddRequest(entry.Name, entry.Owner, entry.Repo, entry.Branch, entry.ManifestPath),
+                default).ConfigureAwait(false);
+
+            if (result.Success)
+                Log.Information("[ToolRegistry] Seeded default bucket '{Name}' ({Owner}/{Repo})", entry.Name, entry.Owner, entry.Repo);
+            else
+                Log.Debug("[ToolRegistry] Default bucket '{Name}' already exists, skipping.", entry.Name);
+        }
+    }
+}
+
+// Marker files are written by WorkspaceProcessManager during auto-start (including the primary workspace).
+// Register cleanup for the primary workspace marker on shutdown.
+{
+    var primaryRepoRoot = McpInstanceResolver.GetEffectiveMcpValue(app.Configuration, instanceName, "RepoRoot") ?? ".";
+    var primaryWorkspacePath = Path.IsPathRooted(primaryRepoRoot)
+        ? Path.GetFullPath(primaryRepoRoot)
+        : Path.GetFullPath(Path.Combine(app.Environment.ContentRootPath, primaryRepoRoot));
+
+    app.Lifetime.ApplicationStopping.Register(() =>
+    {
+        MarkerFileService.RemoveMarker(primaryWorkspacePath);
+    });
 }
 
 // TR-PLANNED-013: Structured interaction logging for all requests; optional async submission to LoggingServiceUrl.

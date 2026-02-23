@@ -1,0 +1,669 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Logging.ParseableBatchFormatter
+  commentId: T:McpServer.Support.Mcp.Logging.ParseableBatchFormatter
+  id: ParseableBatchFormatter
+  parent: McpServer.Support.Mcp.Logging
+  children:
+  - McpServer.Support.Mcp.Logging.ParseableBatchFormatter.Format(System.Collections.Generic.IEnumerable{Serilog.Events.LogEvent},Serilog.Formatting.ITextFormatter,System.IO.TextWriter)
+  - McpServer.Support.Mcp.Logging.ParseableBatchFormatter.Format(System.Collections.Generic.IEnumerable{System.String},System.IO.TextWriter)
+  langs:
+  - csharp
+  - vb
+  name: ParseableBatchFormatter
+  nameWithType: ParseableBatchFormatter
+  fullName: McpServer.Support.Mcp.Logging.ParseableBatchFormatter
+  type: Class
+  source:
+    id: ParseableBatchFormatter
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Logging\ParseableBatchFormatter.cs
+    startLine: 17
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Logging
+  summary: >-
+    TR-PLANNED-013: Formats Serilog batches for Parseable ingest API per
+
+    https://www.parseable.com/docs/ingest-data/programming-languages/dotnet.
+
+    Uses <xref href="McpServer.Support.Mcp.Logging.ParseableEventFormatter" data-throw-if-not-resolved="false"></xref> shape; sink may call either LogEvent or string overload.
+  example: []
+  syntax:
+    content: 'public sealed class ParseableBatchFormatter : IBatchFormatter'
+    content.vb: Public NotInheritable Class ParseableBatchFormatter Implements IBatchFormatter
+  inheritance:
+  - System.Object
+  implements:
+  - Serilog.Sinks.Http.IBatchFormatter
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Logging.ParseableBatchFormatter.Format(System.Collections.Generic.IEnumerable{Serilog.Events.LogEvent},Serilog.Formatting.ITextFormatter,System.IO.TextWriter)
+  commentId: M:McpServer.Support.Mcp.Logging.ParseableBatchFormatter.Format(System.Collections.Generic.IEnumerable{Serilog.Events.LogEvent},Serilog.Formatting.ITextFormatter,System.IO.TextWriter)
+  id: Format(System.Collections.Generic.IEnumerable{Serilog.Events.LogEvent},Serilog.Formatting.ITextFormatter,System.IO.TextWriter)
+  parent: McpServer.Support.Mcp.Logging.ParseableBatchFormatter
+  langs:
+  - csharp
+  - vb
+  name: Format(IEnumerable<LogEvent>, ITextFormatter, TextWriter)
+  nameWithType: ParseableBatchFormatter.Format(IEnumerable<LogEvent>, ITextFormatter, TextWriter)
+  fullName: McpServer.Support.Mcp.Logging.ParseableBatchFormatter.Format(System.Collections.Generic.IEnumerable<Serilog.Events.LogEvent>, Serilog.Formatting.ITextFormatter, System.IO.TextWriter)
+  type: Method
+  source:
+    id: Format
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Logging\ParseableBatchFormatter.cs
+    startLine: 20
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Logging
+  example: []
+  syntax:
+    content: public void Format(IEnumerable<LogEvent> logEvents, ITextFormatter formatter, TextWriter output)
+    parameters:
+    - id: logEvents
+      type: System.Collections.Generic.IEnumerable{Serilog.Events.LogEvent}
+    - id: formatter
+      type: Serilog.Formatting.ITextFormatter
+    - id: output
+      type: System.IO.TextWriter
+    content.vb: Public Sub Format(logEvents As IEnumerable(Of LogEvent), formatter As ITextFormatter, output As TextWriter)
+  overload: McpServer.Support.Mcp.Logging.ParseableBatchFormatter.Format*
+  nameWithType.vb: ParseableBatchFormatter.Format(IEnumerable(Of LogEvent), ITextFormatter, TextWriter)
+  fullName.vb: McpServer.Support.Mcp.Logging.ParseableBatchFormatter.Format(System.Collections.Generic.IEnumerable(Of Serilog.Events.LogEvent), Serilog.Formatting.ITextFormatter, System.IO.TextWriter)
+  name.vb: Format(IEnumerable(Of LogEvent), ITextFormatter, TextWriter)
+- uid: McpServer.Support.Mcp.Logging.ParseableBatchFormatter.Format(System.Collections.Generic.IEnumerable{System.String},System.IO.TextWriter)
+  commentId: M:McpServer.Support.Mcp.Logging.ParseableBatchFormatter.Format(System.Collections.Generic.IEnumerable{System.String},System.IO.TextWriter)
+  id: Format(System.Collections.Generic.IEnumerable{System.String},System.IO.TextWriter)
+  parent: McpServer.Support.Mcp.Logging.ParseableBatchFormatter
+  langs:
+  - csharp
+  - vb
+  name: Format(IEnumerable<string>, TextWriter)
+  nameWithType: ParseableBatchFormatter.Format(IEnumerable<string>, TextWriter)
+  fullName: McpServer.Support.Mcp.Logging.ParseableBatchFormatter.Format(System.Collections.Generic.IEnumerable<string>, System.IO.TextWriter)
+  type: Method
+  source:
+    id: Format
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Logging\ParseableBatchFormatter.cs
+    startLine: 38
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Logging
+  summary: Format the log events into a payload.
+  remarks: Called when the sink pre-formats each event with the configured text formatter (e.g. <xref href="McpServer.Support.Mcp.Logging.ParseableEventFormatter" data-throw-if-not-resolved="false"></xref>).
+  example: []
+  syntax:
+    content: public void Format(IEnumerable<string> logEvents, TextWriter output)
+    parameters:
+    - id: logEvents
+      type: System.Collections.Generic.IEnumerable{System.String}
+      description: The events to format.
+    - id: output
+      type: System.IO.TextWriter
+      description: The payload to send over the network.
+    content.vb: Public Sub Format(logEvents As IEnumerable(Of String), output As TextWriter)
+  overload: McpServer.Support.Mcp.Logging.ParseableBatchFormatter.Format*
+  implements:
+  - Serilog.Sinks.Http.IBatchFormatter.Format(System.Collections.Generic.IEnumerable{System.String},System.IO.TextWriter)
+  nameWithType.vb: ParseableBatchFormatter.Format(IEnumerable(Of String), TextWriter)
+  fullName.vb: McpServer.Support.Mcp.Logging.ParseableBatchFormatter.Format(System.Collections.Generic.IEnumerable(Of String), System.IO.TextWriter)
+  name.vb: Format(IEnumerable(Of String), TextWriter)
+references:
+- uid: McpServer.Support.Mcp.Logging.ParseableEventFormatter
+  commentId: T:McpServer.Support.Mcp.Logging.ParseableEventFormatter
+  href: McpServer.Support.Mcp.Logging.ParseableEventFormatter.html
+  name: ParseableEventFormatter
+  nameWithType: ParseableEventFormatter
+  fullName: McpServer.Support.Mcp.Logging.ParseableEventFormatter
+- uid: McpServer.Support.Mcp.Logging
+  commentId: N:McpServer.Support.Mcp.Logging
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Logging
+  nameWithType: McpServer.Support.Mcp.Logging
+  fullName: McpServer.Support.Mcp.Logging
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Logging
+    name: Logging
+    href: McpServer.Support.Mcp.Logging.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Logging
+    name: Logging
+    href: McpServer.Support.Mcp.Logging.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: Serilog.Sinks.Http.IBatchFormatter
+  commentId: T:Serilog.Sinks.Http.IBatchFormatter
+  parent: Serilog.Sinks.Http
+  isExternal: true
+  name: IBatchFormatter
+  nameWithType: IBatchFormatter
+  fullName: Serilog.Sinks.Http.IBatchFormatter
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Serilog.Sinks.Http
+  commentId: N:Serilog.Sinks.Http
+  isExternal: true
+  name: Serilog.Sinks.Http
+  nameWithType: Serilog.Sinks.Http
+  fullName: Serilog.Sinks.Http
+  spec.csharp:
+  - uid: Serilog
+    name: Serilog
+    isExternal: true
+  - name: .
+  - uid: Serilog.Sinks
+    name: Sinks
+    isExternal: true
+  - name: .
+  - uid: Serilog.Sinks.Http
+    name: Http
+    isExternal: true
+  spec.vb:
+  - uid: Serilog
+    name: Serilog
+    isExternal: true
+  - name: .
+  - uid: Serilog.Sinks
+    name: Sinks
+    isExternal: true
+  - name: .
+  - uid: Serilog.Sinks.Http
+    name: Http
+    isExternal: true
+- uid: McpServer.Support.Mcp.Logging.ParseableBatchFormatter.Format*
+  commentId: Overload:McpServer.Support.Mcp.Logging.ParseableBatchFormatter.Format
+  href: McpServer.Support.Mcp.Logging.ParseableBatchFormatter.html#McpServer_Support_Mcp_Logging_ParseableBatchFormatter_Format_System_Collections_Generic_IEnumerable_Serilog_Events_LogEvent__Serilog_Formatting_ITextFormatter_System_IO_TextWriter_
+  name: Format
+  nameWithType: ParseableBatchFormatter.Format
+  fullName: McpServer.Support.Mcp.Logging.ParseableBatchFormatter.Format
+- uid: System.Collections.Generic.IEnumerable{Serilog.Events.LogEvent}
+  commentId: T:System.Collections.Generic.IEnumerable{Serilog.Events.LogEvent}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IEnumerable`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  name: IEnumerable<LogEvent>
+  nameWithType: IEnumerable<LogEvent>
+  fullName: System.Collections.Generic.IEnumerable<Serilog.Events.LogEvent>
+  nameWithType.vb: IEnumerable(Of LogEvent)
+  fullName.vb: System.Collections.Generic.IEnumerable(Of Serilog.Events.LogEvent)
+  name.vb: IEnumerable(Of LogEvent)
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: <
+  - uid: Serilog.Events.LogEvent
+    name: LogEvent
+    isExternal: true
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: Serilog.Events.LogEvent
+    name: LogEvent
+    isExternal: true
+  - name: )
+- uid: Serilog.Formatting.ITextFormatter
+  commentId: T:Serilog.Formatting.ITextFormatter
+  parent: Serilog.Formatting
+  isExternal: true
+  name: ITextFormatter
+  nameWithType: ITextFormatter
+  fullName: Serilog.Formatting.ITextFormatter
+- uid: System.IO.TextWriter
+  commentId: T:System.IO.TextWriter
+  parent: System.IO
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.io.textwriter
+  name: TextWriter
+  nameWithType: TextWriter
+  fullName: System.IO.TextWriter
+- uid: System.Collections.Generic.IEnumerable`1
+  commentId: T:System.Collections.Generic.IEnumerable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  name: IEnumerable<T>
+  nameWithType: IEnumerable<T>
+  fullName: System.Collections.Generic.IEnumerable<T>
+  nameWithType.vb: IEnumerable(Of T)
+  fullName.vb: System.Collections.Generic.IEnumerable(Of T)
+  name.vb: IEnumerable(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: Serilog.Formatting
+  commentId: N:Serilog.Formatting
+  isExternal: true
+  name: Serilog.Formatting
+  nameWithType: Serilog.Formatting
+  fullName: Serilog.Formatting
+  spec.csharp:
+  - uid: Serilog
+    name: Serilog
+    isExternal: true
+  - name: .
+  - uid: Serilog.Formatting
+    name: Formatting
+    isExternal: true
+  spec.vb:
+  - uid: Serilog
+    name: Serilog
+    isExternal: true
+  - name: .
+  - uid: Serilog.Formatting
+    name: Formatting
+    isExternal: true
+- uid: System.IO
+  commentId: N:System.IO
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.IO
+  nameWithType: System.IO
+  fullName: System.IO
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.IO
+    name: IO
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.io
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.IO
+    name: IO
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.io
+- uid: Serilog.Sinks.Http.IBatchFormatter.Format(System.Collections.Generic.IEnumerable{System.String},System.IO.TextWriter)
+  commentId: M:Serilog.Sinks.Http.IBatchFormatter.Format(System.Collections.Generic.IEnumerable{System.String},System.IO.TextWriter)
+  parent: Serilog.Sinks.Http.IBatchFormatter
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  name: Format(IEnumerable<string>, TextWriter)
+  nameWithType: IBatchFormatter.Format(IEnumerable<string>, TextWriter)
+  fullName: Serilog.Sinks.Http.IBatchFormatter.Format(System.Collections.Generic.IEnumerable<string>, System.IO.TextWriter)
+  nameWithType.vb: IBatchFormatter.Format(IEnumerable(Of String), TextWriter)
+  fullName.vb: Serilog.Sinks.Http.IBatchFormatter.Format(System.Collections.Generic.IEnumerable(Of String), System.IO.TextWriter)
+  name.vb: Format(IEnumerable(Of String), TextWriter)
+  spec.csharp:
+  - uid: Serilog.Sinks.Http.IBatchFormatter.Format(System.Collections.Generic.IEnumerable{System.String},System.IO.TextWriter)
+    name: Format
+    isExternal: true
+  - name: (
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: '>'
+  - name: ','
+  - name: " "
+  - uid: System.IO.TextWriter
+    name: TextWriter
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.io.textwriter
+  - name: )
+  spec.vb:
+  - uid: Serilog.Sinks.Http.IBatchFormatter.Format(System.Collections.Generic.IEnumerable{System.String},System.IO.TextWriter)
+    name: Format
+    isExternal: true
+  - name: (
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+  - name: ','
+  - name: " "
+  - uid: System.IO.TextWriter
+    name: TextWriter
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.io.textwriter
+  - name: )
+- uid: System.Collections.Generic.IEnumerable{System.String}
+  commentId: T:System.Collections.Generic.IEnumerable{System.String}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IEnumerable`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  name: IEnumerable<string>
+  nameWithType: IEnumerable<string>
+  fullName: System.Collections.Generic.IEnumerable<string>
+  nameWithType.vb: IEnumerable(Of String)
+  fullName.vb: System.Collections.Generic.IEnumerable(Of String)
+  name.vb: IEnumerable(Of String)
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )

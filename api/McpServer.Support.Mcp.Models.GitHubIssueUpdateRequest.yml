@@ -1,0 +1,636 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest
+  commentId: T:McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest
+  id: GitHubIssueUpdateRequest
+  parent: McpServer.Support.Mcp.Models
+  children:
+  - McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.AddAssignees
+  - McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.AddLabels
+  - McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Body
+  - McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Milestone
+  - McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.RemoveAssignees
+  - McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.RemoveLabels
+  - McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Title
+  langs:
+  - csharp
+  - vb
+  name: GitHubIssueUpdateRequest
+  nameWithType: GitHubIssueUpdateRequest
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest
+  type: Class
+  source:
+    id: GitHubIssueUpdateRequest
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 47
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: 'TR-GH-013-001: Request to update an issue.'
+  example: []
+  syntax:
+    content: public sealed class GitHubIssueUpdateRequest
+    content.vb: Public NotInheritable Class GitHubIssueUpdateRequest
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Title
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Title
+  id: Title
+  parent: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: Title
+  nameWithType: GitHubIssueUpdateRequest.Title
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Title
+  type: Property
+  source:
+    id: Title
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 50
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Updated title (null = no change).
+  example: []
+  syntax:
+    content: public string? Title { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Title As String
+  overload: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Title*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Body
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Body
+  id: Body
+  parent: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: Body
+  nameWithType: GitHubIssueUpdateRequest.Body
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Body
+  type: Property
+  source:
+    id: Body
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 53
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Updated body (null = no change).
+  example: []
+  syntax:
+    content: public string? Body { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Body As String
+  overload: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Body*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.AddLabels
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.AddLabels
+  id: AddLabels
+  parent: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: AddLabels
+  nameWithType: GitHubIssueUpdateRequest.AddLabels
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.AddLabels
+  type: Property
+  source:
+    id: AddLabels
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 56
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Labels to add.
+  example: []
+  syntax:
+    content: public IReadOnlyList<string>? AddLabels { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+    content.vb: Public Property AddLabels As IReadOnlyList(Of String)
+  overload: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.AddLabels*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.RemoveLabels
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.RemoveLabels
+  id: RemoveLabels
+  parent: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: RemoveLabels
+  nameWithType: GitHubIssueUpdateRequest.RemoveLabels
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.RemoveLabels
+  type: Property
+  source:
+    id: RemoveLabels
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 59
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Labels to remove.
+  example: []
+  syntax:
+    content: public IReadOnlyList<string>? RemoveLabels { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+    content.vb: Public Property RemoveLabels As IReadOnlyList(Of String)
+  overload: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.RemoveLabels*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.AddAssignees
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.AddAssignees
+  id: AddAssignees
+  parent: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: AddAssignees
+  nameWithType: GitHubIssueUpdateRequest.AddAssignees
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.AddAssignees
+  type: Property
+  source:
+    id: AddAssignees
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 62
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Assignees to add.
+  example: []
+  syntax:
+    content: public IReadOnlyList<string>? AddAssignees { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+    content.vb: Public Property AddAssignees As IReadOnlyList(Of String)
+  overload: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.AddAssignees*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.RemoveAssignees
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.RemoveAssignees
+  id: RemoveAssignees
+  parent: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: RemoveAssignees
+  nameWithType: GitHubIssueUpdateRequest.RemoveAssignees
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.RemoveAssignees
+  type: Property
+  source:
+    id: RemoveAssignees
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 65
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Assignees to remove.
+  example: []
+  syntax:
+    content: public IReadOnlyList<string>? RemoveAssignees { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+    content.vb: Public Property RemoveAssignees As IReadOnlyList(Of String)
+  overload: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.RemoveAssignees*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Milestone
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Milestone
+  id: Milestone
+  parent: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: Milestone
+  nameWithType: GitHubIssueUpdateRequest.Milestone
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Milestone
+  type: Property
+  source:
+    id: Milestone
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 68
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Milestone to set (null = no change).
+  example: []
+  syntax:
+    content: public string? Milestone { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Milestone As String
+  overload: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Milestone*
+references:
+- uid: McpServer.Support.Mcp.Models
+  commentId: N:McpServer.Support.Mcp.Models
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Models
+  nameWithType: McpServer.Support.Mcp.Models
+  fullName: McpServer.Support.Mcp.Models
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Title*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Title
+  href: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.html#McpServer_Support_Mcp_Models_GitHubIssueUpdateRequest_Title
+  name: Title
+  nameWithType: GitHubIssueUpdateRequest.Title
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Title
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Body*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Body
+  href: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.html#McpServer_Support_Mcp_Models_GitHubIssueUpdateRequest_Body
+  name: Body
+  nameWithType: GitHubIssueUpdateRequest.Body
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Body
+- uid: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.AddLabels*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.AddLabels
+  href: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.html#McpServer_Support_Mcp_Models_GitHubIssueUpdateRequest_AddLabels
+  name: AddLabels
+  nameWithType: GitHubIssueUpdateRequest.AddLabels
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.AddLabels
+- uid: System.Collections.Generic.IReadOnlyList{System.String}
+  commentId: T:System.Collections.Generic.IReadOnlyList{System.String}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IReadOnlyList`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<string>
+  nameWithType: IReadOnlyList<string>
+  fullName: System.Collections.Generic.IReadOnlyList<string>
+  nameWithType.vb: IReadOnlyList(Of String)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of String)
+  name.vb: IReadOnlyList(Of String)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: System.Collections.Generic.IReadOnlyList`1
+  commentId: T:System.Collections.Generic.IReadOnlyList`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<T>
+  nameWithType: IReadOnlyList<T>
+  fullName: System.Collections.Generic.IReadOnlyList<T>
+  nameWithType.vb: IReadOnlyList(Of T)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of T)
+  name.vb: IReadOnlyList(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.RemoveLabels*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.RemoveLabels
+  href: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.html#McpServer_Support_Mcp_Models_GitHubIssueUpdateRequest_RemoveLabels
+  name: RemoveLabels
+  nameWithType: GitHubIssueUpdateRequest.RemoveLabels
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.RemoveLabels
+- uid: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.AddAssignees*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.AddAssignees
+  href: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.html#McpServer_Support_Mcp_Models_GitHubIssueUpdateRequest_AddAssignees
+  name: AddAssignees
+  nameWithType: GitHubIssueUpdateRequest.AddAssignees
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.AddAssignees
+- uid: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.RemoveAssignees*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.RemoveAssignees
+  href: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.html#McpServer_Support_Mcp_Models_GitHubIssueUpdateRequest_RemoveAssignees
+  name: RemoveAssignees
+  nameWithType: GitHubIssueUpdateRequest.RemoveAssignees
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.RemoveAssignees
+- uid: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Milestone*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Milestone
+  href: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.html#McpServer_Support_Mcp_Models_GitHubIssueUpdateRequest_Milestone
+  name: Milestone
+  nameWithType: GitHubIssueUpdateRequest.Milestone
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueUpdateRequest.Milestone

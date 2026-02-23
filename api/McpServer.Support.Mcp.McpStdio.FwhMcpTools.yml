@@ -1,0 +1,1958 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  commentId: T:McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  id: FwhMcpTools
+  parent: McpServer.Support.Mcp.McpStdio
+  children:
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.#ctor(McpServer.Support.Mcp.Storage.McpDbContext,McpServer.Support.Mcp.Services.IRepoFileService,McpServer.Support.Mcp.Ingestion.IngestionCoordinator,McpServer.Support.Mcp.Ingestion.ISyncStatusStore,McpServer.Support.Mcp.Services.IContextSearchService,McpServer.Support.Mcp.Services.ITodoService,McpServer.Support.Mcp.Services.ISessionLogService,McpServer.Support.Mcp.Services.IGitHubCliService)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextPack(System.String,System.Int32,System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextSearch(System.String,System.Int32,System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextSources(System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentIssue(System.String,System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentPull(System.String,System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCreateIssue(System.String,System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListIssues(System.String,System.Int32,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListPulls(System.String,System.Int32,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoList(System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoRead(System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoWrite(System.String,System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogDialog(System.String,System.String,System.String,System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogQuery(System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogSubmit(System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.SyncRun(System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.SyncStatus
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoCreate(System.String,System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoDelete(System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoGet(System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoList(System.String,System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoUpdate(System.String,System.String,System.String,System.Nullable{System.Boolean},System.String,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: FwhMcpTools
+  nameWithType: FwhMcpTools
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  type: Class
+  source:
+    id: FwhMcpTools
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 17
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: >-
+    TR-PLANNED-013: MCP tools exposed over STDIO; same capabilities as HTTP /mcp/context, /mcp/repo, /mcp/sync.
+
+    Includes TODO, Session Log, and GitHub tools for full STDIO parity.
+  example: []
+  syntax:
+    content: >-
+      [McpServerToolType]
+
+      public sealed class FwhMcpTools
+    content.vb: >-
+      <McpServerToolType>
+
+      Public NotInheritable Class FwhMcpTools
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolTypeAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolTypeAttribute.#ctor
+    arguments: []
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.#ctor(McpServer.Support.Mcp.Storage.McpDbContext,McpServer.Support.Mcp.Services.IRepoFileService,McpServer.Support.Mcp.Ingestion.IngestionCoordinator,McpServer.Support.Mcp.Ingestion.ISyncStatusStore,McpServer.Support.Mcp.Services.IContextSearchService,McpServer.Support.Mcp.Services.ITodoService,McpServer.Support.Mcp.Services.ISessionLogService,McpServer.Support.Mcp.Services.IGitHubCliService)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.#ctor(McpServer.Support.Mcp.Storage.McpDbContext,McpServer.Support.Mcp.Services.IRepoFileService,McpServer.Support.Mcp.Ingestion.IngestionCoordinator,McpServer.Support.Mcp.Ingestion.ISyncStatusStore,McpServer.Support.Mcp.Services.IContextSearchService,McpServer.Support.Mcp.Services.ITodoService,McpServer.Support.Mcp.Services.ISessionLogService,McpServer.Support.Mcp.Services.IGitHubCliService)
+  id: '#ctor(McpServer.Support.Mcp.Storage.McpDbContext,McpServer.Support.Mcp.Services.IRepoFileService,McpServer.Support.Mcp.Ingestion.IngestionCoordinator,McpServer.Support.Mcp.Ingestion.ISyncStatusStore,McpServer.Support.Mcp.Services.IContextSearchService,McpServer.Support.Mcp.Services.ITodoService,McpServer.Support.Mcp.Services.ISessionLogService,McpServer.Support.Mcp.Services.IGitHubCliService)'
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: FwhMcpTools(McpDbContext, IRepoFileService, IngestionCoordinator, ISyncStatusStore, IContextSearchService, ITodoService, ISessionLogService, IGitHubCliService)
+  nameWithType: FwhMcpTools.FwhMcpTools(McpDbContext, IRepoFileService, IngestionCoordinator, ISyncStatusStore, IContextSearchService, ITodoService, ISessionLogService, IGitHubCliService)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.FwhMcpTools(McpServer.Support.Mcp.Storage.McpDbContext, McpServer.Support.Mcp.Services.IRepoFileService, McpServer.Support.Mcp.Ingestion.IngestionCoordinator, McpServer.Support.Mcp.Ingestion.ISyncStatusStore, McpServer.Support.Mcp.Services.IContextSearchService, McpServer.Support.Mcp.Services.ITodoService, McpServer.Support.Mcp.Services.ISessionLogService, McpServer.Support.Mcp.Services.IGitHubCliService)
+  type: Constructor
+  source:
+    id: .ctor
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 31
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: 'TR-PLANNED-013: Constructor for DI.'
+  example: []
+  syntax:
+    content: public FwhMcpTools(McpDbContext db, IRepoFileService repoFileService, IngestionCoordinator coordinator, ISyncStatusStore syncStatusStore, IContextSearchService searchService, ITodoService todoService, ISessionLogService sessionLogService, IGitHubCliService gitHubCliService)
+    parameters:
+    - id: db
+      type: McpServer.Support.Mcp.Storage.McpDbContext
+    - id: repoFileService
+      type: McpServer.Support.Mcp.Services.IRepoFileService
+    - id: coordinator
+      type: McpServer.Support.Mcp.Ingestion.IngestionCoordinator
+    - id: syncStatusStore
+      type: McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+    - id: searchService
+      type: McpServer.Support.Mcp.Services.IContextSearchService
+    - id: todoService
+      type: McpServer.Support.Mcp.Services.ITodoService
+    - id: sessionLogService
+      type: McpServer.Support.Mcp.Services.ISessionLogService
+    - id: gitHubCliService
+      type: McpServer.Support.Mcp.Services.IGitHubCliService
+    content.vb: Public Sub New(db As McpDbContext, repoFileService As IRepoFileService, coordinator As IngestionCoordinator, syncStatusStore As ISyncStatusStore, searchService As IContextSearchService, todoService As ITodoService, sessionLogService As ISessionLogService, gitHubCliService As IGitHubCliService)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.#ctor*
+  nameWithType.vb: FwhMcpTools.New(McpDbContext, IRepoFileService, IngestionCoordinator, ISyncStatusStore, IContextSearchService, ITodoService, ISessionLogService, IGitHubCliService)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.New(McpServer.Support.Mcp.Storage.McpDbContext, McpServer.Support.Mcp.Services.IRepoFileService, McpServer.Support.Mcp.Ingestion.IngestionCoordinator, McpServer.Support.Mcp.Ingestion.ISyncStatusStore, McpServer.Support.Mcp.Services.IContextSearchService, McpServer.Support.Mcp.Services.ITodoService, McpServer.Support.Mcp.Services.ISessionLogService, McpServer.Support.Mcp.Services.IGitHubCliService)
+  name.vb: New(McpDbContext, IRepoFileService, IngestionCoordinator, ISyncStatusStore, IContextSearchService, ITodoService, ISessionLogService, IGitHubCliService)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextSearch(System.String,System.Int32,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextSearch(System.String,System.Int32,System.String,System.Threading.CancellationToken)
+  id: ContextSearch(System.String,System.Int32,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: ContextSearch(string, int, string?, CancellationToken)
+  nameWithType: FwhMcpTools.ContextSearch(string, int, string?, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextSearch(string, int, string?, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: ContextSearch
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 53
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: Search indexed context chunks by query text.
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "context_search")]
+
+      public Task<string> ContextSearch(string query, int limit = 20, string? sourceType = null, CancellationToken cancellationToken = default)
+    parameters:
+    - id: query
+      type: System.String
+    - id: limit
+      type: System.Int32
+    - id: sourceType
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+      description: JSON string with matching chunks and source keys.
+    content.vb: >-
+      <McpServerTool(Name:="context_search")>
+
+      Public Function ContextSearch(query As String, limit As Integer = 20, sourceType As String = Nothing, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextSearch*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: context_search
+  nameWithType.vb: FwhMcpTools.ContextSearch(String, Integer, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextSearch(String, Integer, String, System.Threading.CancellationToken)
+  name.vb: ContextSearch(String, Integer, String, CancellationToken)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextPack(System.String,System.Int32,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextPack(System.String,System.Int32,System.String,System.Threading.CancellationToken)
+  id: ContextPack(System.String,System.Int32,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: ContextPack(string, int, string?, CancellationToken)
+  nameWithType: FwhMcpTools.ContextPack(string, int, string?, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextPack(string, int, string?, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: ContextPack
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 77
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: Get a deterministic context pack by query.
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "context_pack")]
+
+      public Task<string> ContextPack(string query, int limit = 20, string? queryId = null, CancellationToken cancellationToken = default)
+    parameters:
+    - id: query
+      type: System.String
+    - id: limit
+      type: System.Int32
+    - id: queryId
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+      description: JSON string with ordered context pack.
+    content.vb: >-
+      <McpServerTool(Name:="context_pack")>
+
+      Public Function ContextPack(query As String, limit As Integer = 20, queryId As String = Nothing, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextPack*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: context_pack
+  nameWithType.vb: FwhMcpTools.ContextPack(String, Integer, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextPack(String, Integer, String, System.Threading.CancellationToken)
+  name.vb: ContextPack(String, Integer, String, CancellationToken)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextSources(System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextSources(System.Threading.CancellationToken)
+  id: ContextSources(System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: ContextSources(CancellationToken)
+  nameWithType: FwhMcpTools.ContextSources(CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextSources(System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: ContextSources
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 116
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: List indexed document sources.
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "context_sources")]
+
+      public Task<string> ContextSources(CancellationToken cancellationToken = default)
+    parameters:
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+      description: JSON string with source keys, types, and ingestion timestamps.
+    content.vb: >-
+      <McpServerTool(Name:="context_sources")>
+
+      Public Function ContextSources(cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextSources*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: context_sources
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoRead(System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoRead(System.String,System.Threading.CancellationToken)
+  id: RepoRead(System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: RepoRead(string, CancellationToken)
+  nameWithType: FwhMcpTools.RepoRead(string, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoRead(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: RepoRead
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 127
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: Read file content by relative path from repo root.
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "repo_read")]
+
+      public Task<string> RepoRead(string path, CancellationToken cancellationToken = default)
+    parameters:
+    - id: path
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+      description: JSON string with file path, content, and existence flag.
+    content.vb: >-
+      <McpServerTool(Name:="repo_read")>
+
+      Public Function RepoRead(path As String, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoRead*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: repo_read
+  nameWithType.vb: FwhMcpTools.RepoRead(String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoRead(String, System.Threading.CancellationToken)
+  name.vb: RepoRead(String, CancellationToken)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoList(System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoList(System.String,System.Threading.CancellationToken)
+  id: RepoList(System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: RepoList(string?, CancellationToken)
+  nameWithType: FwhMcpTools.RepoList(string?, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoList(string?, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: RepoList
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 142
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: List files and directories under a relative path.
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "repo_list")]
+
+      public Task<string> RepoList(string? path = null, CancellationToken cancellationToken = default)
+    parameters:
+    - id: path
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+      description: JSON string with path and directory entries.
+    content.vb: >-
+      <McpServerTool(Name:="repo_list")>
+
+      Public Function RepoList(path As String = Nothing, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoList*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: repo_list
+  nameWithType.vb: FwhMcpTools.RepoList(String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoList(String, System.Threading.CancellationToken)
+  name.vb: RepoList(String, CancellationToken)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoWrite(System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoWrite(System.String,System.String,System.Threading.CancellationToken)
+  id: RepoWrite(System.String,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: RepoWrite(string, string, CancellationToken)
+  nameWithType: FwhMcpTools.RepoWrite(string, string, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoWrite(string, string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: RepoWrite
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 153
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: Write content to a path (audit logged).
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "repo_write")]
+
+      public Task<string> RepoWrite(string path, string content, CancellationToken cancellationToken = default)
+    parameters:
+    - id: path
+      type: System.String
+    - id: content
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+      description: JSON string indicating write success or error.
+    content.vb: >-
+      <McpServerTool(Name:="repo_write")>
+
+      Public Function RepoWrite(path As String, content As String, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoWrite*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: repo_write
+  nameWithType.vb: FwhMcpTools.RepoWrite(String, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoWrite(String, String, System.Threading.CancellationToken)
+  name.vb: RepoWrite(String, String, CancellationToken)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SyncRun(System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.SyncRun(System.Threading.CancellationToken)
+  id: SyncRun(System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: SyncRun(CancellationToken)
+  nameWithType: FwhMcpTools.SyncRun(CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SyncRun(System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: SyncRun
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 169
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: Trigger full ingestion (repo, session logs, external docs).
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "sync_run")]
+
+      public Task<string> SyncRun(CancellationToken cancellationToken = default)
+    parameters:
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+      description: JSON string with sync run result.
+    content.vb: >-
+      <McpServerTool(Name:="sync_run")>
+
+      Public Function SyncRun(cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SyncRun*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: sync_run
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SyncStatus
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.SyncStatus
+  id: SyncStatus
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: SyncStatus()
+  nameWithType: FwhMcpTools.SyncStatus()
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SyncStatus()
+  type: Method
+  source:
+    id: SyncStatus
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 187
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: Get last sync run status.
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "sync_status")]
+
+      public string SyncStatus()
+    return:
+      type: System.String
+      description: JSON string with last run timestamps, status, and counts.
+    content.vb: >-
+      <McpServerTool(Name:="sync_status")>
+
+      Public Function SyncStatus() As String
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SyncStatus*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: sync_status
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoList(System.String,System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoList(System.String,System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)
+  id: TodoList(System.String,System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: TodoList(string?, string?, bool?, CancellationToken)
+  nameWithType: FwhMcpTools.TodoList(string?, string?, bool?, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoList(string?, string?, bool?, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: TodoList
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 207
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: 'TR-PLANNED-013: List/search TODO items.'
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "todo_list")]
+
+      public Task<string> TodoList(string? section = null, string? priority = null, bool? done = null, CancellationToken cancellationToken = default)
+    parameters:
+    - id: section
+      type: System.String
+    - id: priority
+      type: System.String
+    - id: done
+      type: System.Nullable{System.Boolean}
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+    content.vb: >-
+      <McpServerTool(Name:="todo_list")>
+
+      Public Function TodoList(section As String = Nothing, priority As String = Nothing, done As Boolean? = Nothing, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoList*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: todo_list
+  nameWithType.vb: FwhMcpTools.TodoList(String, String, Boolean?, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoList(String, String, Boolean?, System.Threading.CancellationToken)
+  name.vb: TodoList(String, String, Boolean?, CancellationToken)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoGet(System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoGet(System.String,System.Threading.CancellationToken)
+  id: TodoGet(System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: TodoGet(string, CancellationToken)
+  nameWithType: FwhMcpTools.TodoGet(string, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoGet(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: TodoGet
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 223
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: 'TR-PLANNED-013: Get a single TODO by id.'
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "todo_get")]
+
+      public Task<string> TodoGet(string id, CancellationToken cancellationToken = default)
+    parameters:
+    - id: id
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+    content.vb: >-
+      <McpServerTool(Name:="todo_get")>
+
+      Public Function TodoGet(id As String, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoGet*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: todo_get
+  nameWithType.vb: FwhMcpTools.TodoGet(String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoGet(String, System.Threading.CancellationToken)
+  name.vb: TodoGet(String, CancellationToken)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoCreate(System.String,System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoCreate(System.String,System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)
+  id: TodoCreate(System.String,System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: TodoCreate(string, string, string, string, string?, string?, CancellationToken)
+  nameWithType: FwhMcpTools.TodoCreate(string, string, string, string, string?, string?, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoCreate(string, string, string, string, string?, string?, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: TodoCreate
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 238
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: 'TR-PLANNED-013: Create a new TODO item.'
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "todo_create")]
+
+      public Task<string> TodoCreate(string id, string title, string section, string priority, string? estimate = null, string? description = null, CancellationToken cancellationToken = default)
+    parameters:
+    - id: id
+      type: System.String
+    - id: title
+      type: System.String
+    - id: section
+      type: System.String
+    - id: priority
+      type: System.String
+    - id: estimate
+      type: System.String
+    - id: description
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+    content.vb: >-
+      <McpServerTool(Name:="todo_create")>
+
+      Public Function TodoCreate(id As String, title As String, section As String, priority As String, estimate As String = Nothing, description As String = Nothing, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoCreate*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: todo_create
+  nameWithType.vb: FwhMcpTools.TodoCreate(String, String, String, String, String, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoCreate(String, String, String, String, String, String, System.Threading.CancellationToken)
+  name.vb: TodoCreate(String, String, String, String, String, String, CancellationToken)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoUpdate(System.String,System.String,System.String,System.Nullable{System.Boolean},System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoUpdate(System.String,System.String,System.String,System.Nullable{System.Boolean},System.String,System.Threading.CancellationToken)
+  id: TodoUpdate(System.String,System.String,System.String,System.Nullable{System.Boolean},System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: TodoUpdate(string, string?, string?, bool?, string?, CancellationToken)
+  nameWithType: FwhMcpTools.TodoUpdate(string, string?, string?, bool?, string?, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoUpdate(string, string?, string?, bool?, string?, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: TodoUpdate
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 267
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: 'TR-PLANNED-013: Update an existing TODO item.'
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "todo_update")]
+
+      public Task<string> TodoUpdate(string id, string? title = null, string? priority = null, bool? done = null, string? note = null, CancellationToken cancellationToken = default)
+    parameters:
+    - id: id
+      type: System.String
+    - id: title
+      type: System.String
+    - id: priority
+      type: System.String
+    - id: done
+      type: System.Nullable{System.Boolean}
+    - id: note
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+    content.vb: >-
+      <McpServerTool(Name:="todo_update")>
+
+      Public Function TodoUpdate(id As String, title As String = Nothing, priority As String = Nothing, done As Boolean? = Nothing, note As String = Nothing, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoUpdate*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: todo_update
+  nameWithType.vb: FwhMcpTools.TodoUpdate(String, String, String, Boolean?, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoUpdate(String, String, String, Boolean?, String, System.Threading.CancellationToken)
+  name.vb: TodoUpdate(String, String, String, Boolean?, String, CancellationToken)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoDelete(System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoDelete(System.String,System.Threading.CancellationToken)
+  id: TodoDelete(System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: TodoDelete(string, CancellationToken)
+  nameWithType: FwhMcpTools.TodoDelete(string, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoDelete(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: TodoDelete
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 287
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: 'TR-PLANNED-013: Delete a TODO item by id.'
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "todo_delete")]
+
+      public Task<string> TodoDelete(string id, CancellationToken cancellationToken = default)
+    parameters:
+    - id: id
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+    content.vb: >-
+      <McpServerTool(Name:="todo_delete")>
+
+      Public Function TodoDelete(id As String, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoDelete*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: todo_delete
+  nameWithType.vb: FwhMcpTools.TodoDelete(String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoDelete(String, System.Threading.CancellationToken)
+  name.vb: TodoDelete(String, CancellationToken)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogSubmit(System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogSubmit(System.String,System.Threading.CancellationToken)
+  id: SessionLogSubmit(System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: SessionLogSubmit(string, CancellationToken)
+  nameWithType: FwhMcpTools.SessionLogSubmit(string, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogSubmit(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: SessionLogSubmit
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 304
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: 'TR-PLANNED-013: Submit a session log payload.'
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "sessionlog_submit")]
+
+      public Task<string> SessionLogSubmit(string json, CancellationToken cancellationToken = default)
+    parameters:
+    - id: json
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+    content.vb: >-
+      <McpServerTool(Name:="sessionlog_submit")>
+
+      Public Function SessionLogSubmit(json As String, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogSubmit*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: sessionlog_submit
+  nameWithType.vb: FwhMcpTools.SessionLogSubmit(String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogSubmit(String, System.Threading.CancellationToken)
+  name.vb: SessionLogSubmit(String, CancellationToken)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogQuery(System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogQuery(System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)
+  id: SessionLogQuery(System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: SessionLogQuery(string?, string?, string?, string?, string?, int?, CancellationToken)
+  nameWithType: FwhMcpTools.SessionLogQuery(string?, string?, string?, string?, string?, int?, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogQuery(string?, string?, string?, string?, string?, int?, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: SessionLogQuery
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 320
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: 'TR-PLANNED-013: Query session logs.'
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "sessionlog_query")]
+
+      public Task<string> SessionLogQuery(string? agent = null, string? model = null, string? text = null, string? from = null, string? to = null, int? limit = null, CancellationToken cancellationToken = default)
+    parameters:
+    - id: agent
+      type: System.String
+    - id: model
+      type: System.String
+    - id: text
+      type: System.String
+    - id: from
+      type: System.String
+    - id: to
+      type: System.String
+    - id: limit
+      type: System.Nullable{System.Int32}
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+    content.vb: >-
+      <McpServerTool(Name:="sessionlog_query")>
+
+      Public Function SessionLogQuery(agent As String = Nothing, model As String = Nothing, text As String = Nothing, from As String = Nothing, [to] As String = Nothing, limit As Integer? = Nothing, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogQuery*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: sessionlog_query
+  nameWithType.vb: FwhMcpTools.SessionLogQuery(String, String, String, String, String, Integer?, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogQuery(String, String, String, String, String, Integer?, System.Threading.CancellationToken)
+  name.vb: SessionLogQuery(String, String, String, String, String, Integer?, CancellationToken)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogDialog(System.String,System.String,System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogDialog(System.String,System.String,System.String,System.String,System.Threading.CancellationToken)
+  id: SessionLogDialog(System.String,System.String,System.String,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: SessionLogDialog(string, string, string, string, CancellationToken)
+  nameWithType: FwhMcpTools.SessionLogDialog(string, string, string, string, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogDialog(string, string, string, string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: SessionLogDialog
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 348
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: 'TR-PLANNED-013: Append processing dialog items to an existing session log entry.'
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "sessionlog_dialog")]
+
+      public Task<string> SessionLogDialog(string agent, string sessionId, string requestId, string itemsJson, CancellationToken cancellationToken = default)
+    parameters:
+    - id: agent
+      type: System.String
+    - id: sessionId
+      type: System.String
+    - id: requestId
+      type: System.String
+    - id: itemsJson
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+    content.vb: >-
+      <McpServerTool(Name:="sessionlog_dialog")>
+
+      Public Function SessionLogDialog(agent As String, sessionId As String, requestId As String, itemsJson As String, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogDialog*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: sessionlog_dialog
+  nameWithType.vb: FwhMcpTools.SessionLogDialog(String, String, String, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogDialog(String, String, String, String, System.Threading.CancellationToken)
+  name.vb: SessionLogDialog(String, String, String, String, CancellationToken)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListIssues(System.String,System.Int32,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListIssues(System.String,System.Int32,System.Threading.CancellationToken)
+  id: GitHubListIssues(System.String,System.Int32,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: GitHubListIssues(string?, int, CancellationToken)
+  nameWithType: FwhMcpTools.GitHubListIssues(string?, int, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListIssues(string?, int, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: GitHubListIssues
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 369
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: 'TR-PLANNED-013: List GitHub issues.'
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "github_list_issues")]
+
+      public Task<string> GitHubListIssues(string? state = null, int limit = 30, CancellationToken cancellationToken = default)
+    parameters:
+    - id: state
+      type: System.String
+    - id: limit
+      type: System.Int32
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+    content.vb: >-
+      <McpServerTool(Name:="github_list_issues")>
+
+      Public Function GitHubListIssues(state As String = Nothing, limit As Integer = 30, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListIssues*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: github_list_issues
+  nameWithType.vb: FwhMcpTools.GitHubListIssues(String, Integer, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListIssues(String, Integer, System.Threading.CancellationToken)
+  name.vb: GitHubListIssues(String, Integer, CancellationToken)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListPulls(System.String,System.Int32,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListPulls(System.String,System.Int32,System.Threading.CancellationToken)
+  id: GitHubListPulls(System.String,System.Int32,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: GitHubListPulls(string?, int, CancellationToken)
+  nameWithType: FwhMcpTools.GitHubListPulls(string?, int, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListPulls(string?, int, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: GitHubListPulls
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 385
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: 'TR-PLANNED-013: List GitHub pull requests.'
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "github_list_pulls")]
+
+      public Task<string> GitHubListPulls(string? state = null, int limit = 30, CancellationToken cancellationToken = default)
+    parameters:
+    - id: state
+      type: System.String
+    - id: limit
+      type: System.Int32
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+    content.vb: >-
+      <McpServerTool(Name:="github_list_pulls")>
+
+      Public Function GitHubListPulls(state As String = Nothing, limit As Integer = 30, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListPulls*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: github_list_pulls
+  nameWithType.vb: FwhMcpTools.GitHubListPulls(String, Integer, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListPulls(String, Integer, System.Threading.CancellationToken)
+  name.vb: GitHubListPulls(String, Integer, CancellationToken)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCreateIssue(System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCreateIssue(System.String,System.String,System.Threading.CancellationToken)
+  id: GitHubCreateIssue(System.String,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: GitHubCreateIssue(string, string?, CancellationToken)
+  nameWithType: FwhMcpTools.GitHubCreateIssue(string, string?, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCreateIssue(string, string?, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: GitHubCreateIssue
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 401
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: 'TR-PLANNED-013: Create a GitHub issue.'
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "github_create_issue")]
+
+      public Task<string> GitHubCreateIssue(string title, string? body = null, CancellationToken cancellationToken = default)
+    parameters:
+    - id: title
+      type: System.String
+    - id: body
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+    content.vb: >-
+      <McpServerTool(Name:="github_create_issue")>
+
+      Public Function GitHubCreateIssue(title As String, body As String = Nothing, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCreateIssue*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: github_create_issue
+  nameWithType.vb: FwhMcpTools.GitHubCreateIssue(String, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCreateIssue(String, String, System.Threading.CancellationToken)
+  name.vb: GitHubCreateIssue(String, String, CancellationToken)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentIssue(System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentIssue(System.String,System.String,System.Threading.CancellationToken)
+  id: GitHubCommentIssue(System.String,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: GitHubCommentIssue(string, string, CancellationToken)
+  nameWithType: FwhMcpTools.GitHubCommentIssue(string, string, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentIssue(string, string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: GitHubCommentIssue
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 417
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: 'TR-PLANNED-013: Comment on a GitHub issue.'
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "github_comment_issue")]
+
+      public Task<string> GitHubCommentIssue(string issueId, string body, CancellationToken cancellationToken = default)
+    parameters:
+    - id: issueId
+      type: System.String
+    - id: body
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+    content.vb: >-
+      <McpServerTool(Name:="github_comment_issue")>
+
+      Public Function GitHubCommentIssue(issueId As String, body As String, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentIssue*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: github_comment_issue
+  nameWithType.vb: FwhMcpTools.GitHubCommentIssue(String, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentIssue(String, String, System.Threading.CancellationToken)
+  name.vb: GitHubCommentIssue(String, String, CancellationToken)
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentPull(System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentPull(System.String,System.String,System.Threading.CancellationToken)
+  id: GitHubCommentPull(System.String,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.McpStdio.FwhMcpTools
+  langs:
+  - csharp
+  - vb
+  name: GitHubCommentPull(string, string, CancellationToken)
+  nameWithType: FwhMcpTools.GitHubCommentPull(string, string, CancellationToken)
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentPull(string, string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: GitHubCommentPull
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\McpStdio\McpServerMcpTools.cs
+    startLine: 433
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.McpStdio
+  summary: 'TR-PLANNED-013: Comment on a GitHub pull request.'
+  example: []
+  syntax:
+    content: >-
+      [McpServerTool(Name = "github_comment_pull")]
+
+      public Task<string> GitHubCommentPull(string prId, string body, CancellationToken cancellationToken = default)
+    parameters:
+    - id: prId
+      type: System.String
+    - id: body
+      type: System.String
+    - id: cancellationToken
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{System.String}
+    content.vb: >-
+      <McpServerTool(Name:="github_comment_pull")>
+
+      Public Function GitHubCommentPull(prId As String, body As String, cancellationToken As CancellationToken = Nothing) As Task(Of String)
+  overload: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentPull*
+  attributes:
+  - type: ModelContextProtocol.Server.McpServerToolAttribute
+    ctor: ModelContextProtocol.Server.McpServerToolAttribute.#ctor
+    arguments: []
+    namedArguments:
+    - name: Name
+      type: System.String
+      value: github_comment_pull
+  nameWithType.vb: FwhMcpTools.GitHubCommentPull(String, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentPull(String, String, System.Threading.CancellationToken)
+  name.vb: GitHubCommentPull(String, String, CancellationToken)
+references:
+- uid: McpServer.Support.Mcp.McpStdio
+  commentId: N:McpServer.Support.Mcp.McpStdio
+  href: McpServer.html
+  name: McpServer.Support.Mcp.McpStdio
+  nameWithType: McpServer.Support.Mcp.McpStdio
+  fullName: McpServer.Support.Mcp.McpStdio
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.McpStdio
+    name: McpStdio
+    href: McpServer.Support.Mcp.McpStdio.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.McpStdio
+    name: McpStdio
+    href: McpServer.Support.Mcp.McpStdio.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.#ctor*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.#ctor
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools__ctor_McpServer_Support_Mcp_Storage_McpDbContext_McpServer_Support_Mcp_Services_IRepoFileService_McpServer_Support_Mcp_Ingestion_IngestionCoordinator_McpServer_Support_Mcp_Ingestion_ISyncStatusStore_McpServer_Support_Mcp_Services_IContextSearchService_McpServer_Support_Mcp_Services_ITodoService_McpServer_Support_Mcp_Services_ISessionLogService_McpServer_Support_Mcp_Services_IGitHubCliService_
+  name: FwhMcpTools
+  nameWithType: FwhMcpTools.FwhMcpTools
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.FwhMcpTools
+  nameWithType.vb: FwhMcpTools.New
+  fullName.vb: McpServer.Support.Mcp.McpStdio.FwhMcpTools.New
+  name.vb: New
+- uid: McpServer.Support.Mcp.Storage.McpDbContext
+  commentId: T:McpServer.Support.Mcp.Storage.McpDbContext
+  parent: McpServer.Support.Mcp.Storage
+  href: McpServer.Support.Mcp.Storage.McpDbContext.html
+  name: McpDbContext
+  nameWithType: McpDbContext
+  fullName: McpServer.Support.Mcp.Storage.McpDbContext
+- uid: McpServer.Support.Mcp.Services.IRepoFileService
+  commentId: T:McpServer.Support.Mcp.Services.IRepoFileService
+  parent: McpServer.Support.Mcp.Services
+  href: McpServer.Support.Mcp.Services.IRepoFileService.html
+  name: IRepoFileService
+  nameWithType: IRepoFileService
+  fullName: McpServer.Support.Mcp.Services.IRepoFileService
+- uid: McpServer.Support.Mcp.Ingestion.IngestionCoordinator
+  commentId: T:McpServer.Support.Mcp.Ingestion.IngestionCoordinator
+  parent: McpServer.Support.Mcp.Ingestion
+  href: McpServer.Support.Mcp.Ingestion.IngestionCoordinator.html
+  name: IngestionCoordinator
+  nameWithType: IngestionCoordinator
+  fullName: McpServer.Support.Mcp.Ingestion.IngestionCoordinator
+- uid: McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+  commentId: T:McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+  parent: McpServer.Support.Mcp.Ingestion
+  href: McpServer.Support.Mcp.Ingestion.ISyncStatusStore.html
+  name: ISyncStatusStore
+  nameWithType: ISyncStatusStore
+  fullName: McpServer.Support.Mcp.Ingestion.ISyncStatusStore
+- uid: McpServer.Support.Mcp.Services.IContextSearchService
+  commentId: T:McpServer.Support.Mcp.Services.IContextSearchService
+  parent: McpServer.Support.Mcp.Services
+  href: McpServer.Support.Mcp.Services.IContextSearchService.html
+  name: IContextSearchService
+  nameWithType: IContextSearchService
+  fullName: McpServer.Support.Mcp.Services.IContextSearchService
+- uid: McpServer.Support.Mcp.Services.ITodoService
+  commentId: T:McpServer.Support.Mcp.Services.ITodoService
+  parent: McpServer.Support.Mcp.Services
+  href: McpServer.Support.Mcp.Services.ITodoService.html
+  name: ITodoService
+  nameWithType: ITodoService
+  fullName: McpServer.Support.Mcp.Services.ITodoService
+- uid: McpServer.Support.Mcp.Services.ISessionLogService
+  commentId: T:McpServer.Support.Mcp.Services.ISessionLogService
+  parent: McpServer.Support.Mcp.Services
+  href: McpServer.Support.Mcp.Services.ISessionLogService.html
+  name: ISessionLogService
+  nameWithType: ISessionLogService
+  fullName: McpServer.Support.Mcp.Services.ISessionLogService
+- uid: McpServer.Support.Mcp.Services.IGitHubCliService
+  commentId: T:McpServer.Support.Mcp.Services.IGitHubCliService
+  parent: McpServer.Support.Mcp.Services
+  href: McpServer.Support.Mcp.Services.IGitHubCliService.html
+  name: IGitHubCliService
+  nameWithType: IGitHubCliService
+  fullName: McpServer.Support.Mcp.Services.IGitHubCliService
+- uid: McpServer.Support.Mcp.Storage
+  commentId: N:McpServer.Support.Mcp.Storage
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Storage
+  nameWithType: McpServer.Support.Mcp.Storage
+  fullName: McpServer.Support.Mcp.Storage
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: McpServer.Support.Mcp.Ingestion
+  commentId: N:McpServer.Support.Mcp.Ingestion
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Ingestion
+  nameWithType: McpServer.Support.Mcp.Ingestion
+  fullName: McpServer.Support.Mcp.Ingestion
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Ingestion
+    name: Ingestion
+    href: McpServer.Support.Mcp.Ingestion.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Ingestion
+    name: Ingestion
+    href: McpServer.Support.Mcp.Ingestion.html
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextSearch*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextSearch
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_ContextSearch_System_String_System_Int32_System_String_System_Threading_CancellationToken_
+  name: ContextSearch
+  nameWithType: FwhMcpTools.ContextSearch
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextSearch
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{System.String}
+  commentId: T:System.Threading.Tasks.Task{System.String}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<string>
+  nameWithType: Task<string>
+  fullName: System.Threading.Tasks.Task<string>
+  nameWithType.vb: Task(Of String)
+  fullName.vb: System.Threading.Tasks.Task(Of String)
+  name.vb: Task(Of String)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextPack*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextPack
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_ContextPack_System_String_System_Int32_System_String_System_Threading_CancellationToken_
+  name: ContextPack
+  nameWithType: FwhMcpTools.ContextPack
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextPack
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextSources*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextSources
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_ContextSources_System_Threading_CancellationToken_
+  name: ContextSources
+  nameWithType: FwhMcpTools.ContextSources
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.ContextSources
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoRead*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoRead
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_RepoRead_System_String_System_Threading_CancellationToken_
+  name: RepoRead
+  nameWithType: FwhMcpTools.RepoRead
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoRead
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoList*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoList
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_RepoList_System_String_System_Threading_CancellationToken_
+  name: RepoList
+  nameWithType: FwhMcpTools.RepoList
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoList
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoWrite*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoWrite
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_RepoWrite_System_String_System_String_System_Threading_CancellationToken_
+  name: RepoWrite
+  nameWithType: FwhMcpTools.RepoWrite
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.RepoWrite
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SyncRun*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.SyncRun
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_SyncRun_System_Threading_CancellationToken_
+  name: SyncRun
+  nameWithType: FwhMcpTools.SyncRun
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SyncRun
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SyncStatus*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.SyncStatus
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_SyncStatus
+  name: SyncStatus
+  nameWithType: FwhMcpTools.SyncStatus
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SyncStatus
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoList*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoList
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_TodoList_System_String_System_String_System_Nullable_System_Boolean__System_Threading_CancellationToken_
+  name: TodoList
+  nameWithType: FwhMcpTools.TodoList
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoList
+- uid: System.Nullable{System.Boolean}
+  commentId: T:System.Nullable{System.Boolean}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool?
+  nameWithType: bool?
+  fullName: bool?
+  nameWithType.vb: Boolean?
+  fullName.vb: Boolean?
+  name.vb: Boolean?
+  spec.csharp:
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: '?'
+  spec.vb:
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoGet*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoGet
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_TodoGet_System_String_System_Threading_CancellationToken_
+  name: TodoGet
+  nameWithType: FwhMcpTools.TodoGet
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoGet
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoCreate*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoCreate
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_TodoCreate_System_String_System_String_System_String_System_String_System_String_System_String_System_Threading_CancellationToken_
+  name: TodoCreate
+  nameWithType: FwhMcpTools.TodoCreate
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoCreate
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoUpdate*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoUpdate
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_TodoUpdate_System_String_System_String_System_String_System_Nullable_System_Boolean__System_String_System_Threading_CancellationToken_
+  name: TodoUpdate
+  nameWithType: FwhMcpTools.TodoUpdate
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoUpdate
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoDelete*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoDelete
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_TodoDelete_System_String_System_Threading_CancellationToken_
+  name: TodoDelete
+  nameWithType: FwhMcpTools.TodoDelete
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.TodoDelete
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogSubmit*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogSubmit
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_SessionLogSubmit_System_String_System_Threading_CancellationToken_
+  name: SessionLogSubmit
+  nameWithType: FwhMcpTools.SessionLogSubmit
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogSubmit
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogQuery*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogQuery
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_SessionLogQuery_System_String_System_String_System_String_System_String_System_String_System_Nullable_System_Int32__System_Threading_CancellationToken_
+  name: SessionLogQuery
+  nameWithType: FwhMcpTools.SessionLogQuery
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogQuery
+- uid: System.Nullable{System.Int32}
+  commentId: T:System.Nullable{System.Int32}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int?
+  nameWithType: int?
+  fullName: int?
+  nameWithType.vb: Integer?
+  fullName.vb: Integer?
+  name.vb: Integer?
+  spec.csharp:
+  - uid: System.Int32
+    name: int
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: '?'
+  spec.vb:
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.int32
+  - name: '?'
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogDialog*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogDialog
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_SessionLogDialog_System_String_System_String_System_String_System_String_System_Threading_CancellationToken_
+  name: SessionLogDialog
+  nameWithType: FwhMcpTools.SessionLogDialog
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.SessionLogDialog
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListIssues*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListIssues
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_GitHubListIssues_System_String_System_Int32_System_Threading_CancellationToken_
+  name: GitHubListIssues
+  nameWithType: FwhMcpTools.GitHubListIssues
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListIssues
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListPulls*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListPulls
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_GitHubListPulls_System_String_System_Int32_System_Threading_CancellationToken_
+  name: GitHubListPulls
+  nameWithType: FwhMcpTools.GitHubListPulls
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubListPulls
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCreateIssue*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCreateIssue
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_GitHubCreateIssue_System_String_System_String_System_Threading_CancellationToken_
+  name: GitHubCreateIssue
+  nameWithType: FwhMcpTools.GitHubCreateIssue
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCreateIssue
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentIssue*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentIssue
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_GitHubCommentIssue_System_String_System_String_System_Threading_CancellationToken_
+  name: GitHubCommentIssue
+  nameWithType: FwhMcpTools.GitHubCommentIssue
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentIssue
+- uid: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentPull*
+  commentId: Overload:McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentPull
+  href: McpServer.Support.Mcp.McpStdio.FwhMcpTools.html#McpServer_Support_Mcp_McpStdio_FwhMcpTools_GitHubCommentPull_System_String_System_String_System_Threading_CancellationToken_
+  name: GitHubCommentPull
+  nameWithType: FwhMcpTools.GitHubCommentPull
+  fullName: McpServer.Support.Mcp.McpStdio.FwhMcpTools.GitHubCommentPull

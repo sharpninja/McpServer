@@ -1,0 +1,565 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.ToolSearchResult
+  commentId: T:McpServer.Support.Mcp.Services.ToolSearchResult
+  id: ToolSearchResult
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.ToolSearchResult.#ctor(System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Services.ToolDto},System.Int32)
+  - McpServer.Support.Mcp.Services.ToolSearchResult.Tools
+  - McpServer.Support.Mcp.Services.ToolSearchResult.TotalCount
+  langs:
+  - csharp
+  - vb
+  name: ToolSearchResult
+  nameWithType: ToolSearchResult
+  fullName: McpServer.Support.Mcp.Services.ToolSearchResult
+  type: Class
+  source:
+    id: ToolSearchResult
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolRegistryService.cs
+    startLine: 71
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Result of a tool keyword search or list.
+  example: []
+  syntax:
+    content: 'public sealed record ToolSearchResult : IEquatable<ToolSearchResult>'
+    content.vb: Public NotInheritable Class ToolSearchResult Implements IEquatable(Of ToolSearchResult)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{McpServer.Support.Mcp.Services.ToolSearchResult}
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Services.ToolSearchResult.#ctor(System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Services.ToolDto},System.Int32)
+  commentId: M:McpServer.Support.Mcp.Services.ToolSearchResult.#ctor(System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Services.ToolDto},System.Int32)
+  id: '#ctor(System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Services.ToolDto},System.Int32)'
+  parent: McpServer.Support.Mcp.Services.ToolSearchResult
+  langs:
+  - csharp
+  - vb
+  name: ToolSearchResult(IReadOnlyList<ToolDto>, int)
+  nameWithType: ToolSearchResult.ToolSearchResult(IReadOnlyList<ToolDto>, int)
+  fullName: McpServer.Support.Mcp.Services.ToolSearchResult.ToolSearchResult(System.Collections.Generic.IReadOnlyList<McpServer.Support.Mcp.Services.ToolDto>, int)
+  type: Constructor
+  source:
+    id: .ctor
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolRegistryService.cs
+    startLine: 71
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Result of a tool keyword search or list.
+  example: []
+  syntax:
+    content: public ToolSearchResult(IReadOnlyList<ToolDto> Tools, int TotalCount)
+    parameters:
+    - id: Tools
+      type: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Services.ToolDto}
+    - id: TotalCount
+      type: System.Int32
+    content.vb: Public Sub New(Tools As IReadOnlyList(Of ToolDto), TotalCount As Integer)
+  overload: McpServer.Support.Mcp.Services.ToolSearchResult.#ctor*
+  nameWithType.vb: ToolSearchResult.New(IReadOnlyList(Of ToolDto), Integer)
+  fullName.vb: McpServer.Support.Mcp.Services.ToolSearchResult.New(System.Collections.Generic.IReadOnlyList(Of McpServer.Support.Mcp.Services.ToolDto), Integer)
+  name.vb: New(IReadOnlyList(Of ToolDto), Integer)
+- uid: McpServer.Support.Mcp.Services.ToolSearchResult.Tools
+  commentId: P:McpServer.Support.Mcp.Services.ToolSearchResult.Tools
+  id: Tools
+  parent: McpServer.Support.Mcp.Services.ToolSearchResult
+  langs:
+  - csharp
+  - vb
+  name: Tools
+  nameWithType: ToolSearchResult.Tools
+  fullName: McpServer.Support.Mcp.Services.ToolSearchResult.Tools
+  type: Property
+  source:
+    id: Tools
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolRegistryService.cs
+    startLine: 71
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  syntax:
+    content: public IReadOnlyList<ToolDto> Tools { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Services.ToolDto}
+    content.vb: Public Property Tools As IReadOnlyList(Of ToolDto)
+  overload: McpServer.Support.Mcp.Services.ToolSearchResult.Tools*
+- uid: McpServer.Support.Mcp.Services.ToolSearchResult.TotalCount
+  commentId: P:McpServer.Support.Mcp.Services.ToolSearchResult.TotalCount
+  id: TotalCount
+  parent: McpServer.Support.Mcp.Services.ToolSearchResult
+  langs:
+  - csharp
+  - vb
+  name: TotalCount
+  nameWithType: ToolSearchResult.TotalCount
+  fullName: McpServer.Support.Mcp.Services.ToolSearchResult.TotalCount
+  type: Property
+  source:
+    id: TotalCount
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolRegistryService.cs
+    startLine: 71
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  syntax:
+    content: public int TotalCount { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property TotalCount As Integer
+  overload: McpServer.Support.Mcp.Services.ToolSearchResult.TotalCount*
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.IEquatable{McpServer.Support.Mcp.Services.ToolSearchResult}
+  commentId: T:System.IEquatable{McpServer.Support.Mcp.Services.ToolSearchResult}
+  parent: System
+  definition: System.IEquatable`1
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<ToolSearchResult>
+  nameWithType: IEquatable<ToolSearchResult>
+  fullName: System.IEquatable<McpServer.Support.Mcp.Services.ToolSearchResult>
+  nameWithType.vb: IEquatable(Of ToolSearchResult)
+  fullName.vb: System.IEquatable(Of McpServer.Support.Mcp.Services.ToolSearchResult)
+  name.vb: IEquatable(Of ToolSearchResult)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.ToolSearchResult
+    name: ToolSearchResult
+    href: McpServer.Support.Mcp.Services.ToolSearchResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.ToolSearchResult
+    name: ToolSearchResult
+    href: McpServer.Support.Mcp.Services.ToolSearchResult.html
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Services.ToolSearchResult.#ctor*
+  commentId: Overload:McpServer.Support.Mcp.Services.ToolSearchResult.#ctor
+  href: McpServer.Support.Mcp.Services.ToolSearchResult.html#McpServer_Support_Mcp_Services_ToolSearchResult__ctor_System_Collections_Generic_IReadOnlyList_McpServer_Support_Mcp_Services_ToolDto__System_Int32_
+  name: ToolSearchResult
+  nameWithType: ToolSearchResult.ToolSearchResult
+  fullName: McpServer.Support.Mcp.Services.ToolSearchResult.ToolSearchResult
+  nameWithType.vb: ToolSearchResult.New
+  fullName.vb: McpServer.Support.Mcp.Services.ToolSearchResult.New
+  name.vb: New
+- uid: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Services.ToolDto}
+  commentId: T:System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Services.ToolDto}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IReadOnlyList`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<ToolDto>
+  nameWithType: IReadOnlyList<ToolDto>
+  fullName: System.Collections.Generic.IReadOnlyList<McpServer.Support.Mcp.Services.ToolDto>
+  nameWithType.vb: IReadOnlyList(Of ToolDto)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of McpServer.Support.Mcp.Services.ToolDto)
+  name.vb: IReadOnlyList(Of ToolDto)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.ToolDto
+    name: ToolDto
+    href: McpServer.Support.Mcp.Services.ToolDto.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.ToolDto
+    name: ToolDto
+    href: McpServer.Support.Mcp.Services.ToolDto.html
+  - name: )
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: System.Collections.Generic.IReadOnlyList`1
+  commentId: T:System.Collections.Generic.IReadOnlyList`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<T>
+  nameWithType: IReadOnlyList<T>
+  fullName: System.Collections.Generic.IReadOnlyList<T>
+  nameWithType.vb: IReadOnlyList(Of T)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of T)
+  name.vb: IReadOnlyList(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: McpServer.Support.Mcp.Services.ToolSearchResult.Tools*
+  commentId: Overload:McpServer.Support.Mcp.Services.ToolSearchResult.Tools
+  href: McpServer.Support.Mcp.Services.ToolSearchResult.html#McpServer_Support_Mcp_Services_ToolSearchResult_Tools
+  name: Tools
+  nameWithType: ToolSearchResult.Tools
+  fullName: McpServer.Support.Mcp.Services.ToolSearchResult.Tools
+- uid: McpServer.Support.Mcp.Services.ToolSearchResult.TotalCount*
+  commentId: Overload:McpServer.Support.Mcp.Services.ToolSearchResult.TotalCount
+  href: McpServer.Support.Mcp.Services.ToolSearchResult.html#McpServer_Support_Mcp_Services_ToolSearchResult_TotalCount
+  name: TotalCount
+  nameWithType: ToolSearchResult.TotalCount
+  fullName: McpServer.Support.Mcp.Services.ToolSearchResult.TotalCount

@@ -1,0 +1,553 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions
+  commentId: T:McpServer.Support.Mcp.Options.McpInteractionLoggingOptions
+  id: McpInteractionLoggingOptions
+  parent: McpServer.Support.Mcp.Options
+  children:
+  - McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeQueryString
+  - McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeRequestBody
+  - McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeResponseBody
+  - McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.LoggingServiceUrl
+  - McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.MaxBodyCaptureSize
+  - McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.QueueCapacity
+  - McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.SectionName
+  langs:
+  - csharp
+  - vb
+  name: McpInteractionLoggingOptions
+  nameWithType: McpInteractionLoggingOptions
+  fullName: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions
+  type: Class
+  source:
+    id: McpInteractionLoggingOptions
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Options\McpInteractionLoggingOptions.cs
+    startLine: 5
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Options
+  summary: 'TR-PLANNED-013: Options for MCP interaction structured logging and optional async submission to a logging service.'
+  example: []
+  syntax:
+    content: public sealed class McpInteractionLoggingOptions
+    content.vb: Public NotInheritable Class McpInteractionLoggingOptions
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.SectionName
+  commentId: F:McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.SectionName
+  id: SectionName
+  parent: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions
+  langs:
+  - csharp
+  - vb
+  name: SectionName
+  nameWithType: McpInteractionLoggingOptions.SectionName
+  fullName: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.SectionName
+  type: Field
+  source:
+    id: SectionName
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Options\McpInteractionLoggingOptions.cs
+    startLine: 8
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Options
+  summary: Configuration section name.
+  example: []
+  syntax:
+    content: public const string SectionName = "Mcp:InteractionLogging"
+    return:
+      type: System.String
+    content.vb: Public Const SectionName As String = "Mcp:InteractionLogging"
+- uid: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.LoggingServiceUrl
+  commentId: P:McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.LoggingServiceUrl
+  id: LoggingServiceUrl
+  parent: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions
+  langs:
+  - csharp
+  - vb
+  name: LoggingServiceUrl
+  nameWithType: McpInteractionLoggingOptions.LoggingServiceUrl
+  fullName: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.LoggingServiceUrl
+  type: Property
+  source:
+    id: LoggingServiceUrl
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Options\McpInteractionLoggingOptions.cs
+    startLine: 14
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Options
+  summary: >-
+    Base URL of the logging service to receive structured log entries (POST JSON).
+
+    When null or empty, only local structured logging is performed; no HTTP submission.
+  example: []
+  syntax:
+    content: public string? LoggingServiceUrl { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property LoggingServiceUrl As String
+  overload: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.LoggingServiceUrl*
+- uid: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.QueueCapacity
+  commentId: P:McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.QueueCapacity
+  id: QueueCapacity
+  parent: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions
+  langs:
+  - csharp
+  - vb
+  name: QueueCapacity
+  nameWithType: McpInteractionLoggingOptions.QueueCapacity
+  fullName: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.QueueCapacity
+  type: Property
+  source:
+    id: QueueCapacity
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Options\McpInteractionLoggingOptions.cs
+    startLine: 17
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Options
+  summary: Maximum number of log entries to hold in the submission queue. Default 1000.
+  example: []
+  syntax:
+    content: public int QueueCapacity { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property QueueCapacity As Integer
+  overload: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.QueueCapacity*
+- uid: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeQueryString
+  commentId: P:McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeQueryString
+  id: IncludeQueryString
+  parent: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions
+  langs:
+  - csharp
+  - vb
+  name: IncludeQueryString
+  nameWithType: McpInteractionLoggingOptions.IncludeQueryString
+  fullName: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeQueryString
+  type: Property
+  source:
+    id: IncludeQueryString
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Options\McpInteractionLoggingOptions.cs
+    startLine: 20
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Options
+  summary: Include query string in log entries when true. Default false to avoid logging sensitive or large query data.
+  example: []
+  syntax:
+    content: public bool IncludeQueryString { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property IncludeQueryString As Boolean
+  overload: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeQueryString*
+- uid: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeRequestBody
+  commentId: P:McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeRequestBody
+  id: IncludeRequestBody
+  parent: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions
+  langs:
+  - csharp
+  - vb
+  name: IncludeRequestBody
+  nameWithType: McpInteractionLoggingOptions.IncludeRequestBody
+  fullName: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeRequestBody
+  type: Property
+  source:
+    id: IncludeRequestBody
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Options\McpInteractionLoggingOptions.cs
+    startLine: 23
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Options
+  summary: Capture and include request body (input) in log entries. Default true.
+  example: []
+  syntax:
+    content: public bool IncludeRequestBody { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property IncludeRequestBody As Boolean
+  overload: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeRequestBody*
+- uid: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeResponseBody
+  commentId: P:McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeResponseBody
+  id: IncludeResponseBody
+  parent: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions
+  langs:
+  - csharp
+  - vb
+  name: IncludeResponseBody
+  nameWithType: McpInteractionLoggingOptions.IncludeResponseBody
+  fullName: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeResponseBody
+  type: Property
+  source:
+    id: IncludeResponseBody
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Options\McpInteractionLoggingOptions.cs
+    startLine: 26
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Options
+  summary: Capture and include response body (output) in log entries. Default true.
+  example: []
+  syntax:
+    content: public bool IncludeResponseBody { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property IncludeResponseBody As Boolean
+  overload: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeResponseBody*
+- uid: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.MaxBodyCaptureSize
+  commentId: P:McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.MaxBodyCaptureSize
+  id: MaxBodyCaptureSize
+  parent: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions
+  langs:
+  - csharp
+  - vb
+  name: MaxBodyCaptureSize
+  nameWithType: McpInteractionLoggingOptions.MaxBodyCaptureSize
+  fullName: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.MaxBodyCaptureSize
+  type: Property
+  source:
+    id: MaxBodyCaptureSize
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Options\McpInteractionLoggingOptions.cs
+    startLine: 29
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Options
+  summary: Maximum body size (in characters) to capture. Bodies larger than this are truncated. Default 32 768.
+  example: []
+  syntax:
+    content: public int MaxBodyCaptureSize { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property MaxBodyCaptureSize As Integer
+  overload: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.MaxBodyCaptureSize*
+references:
+- uid: McpServer.Support.Mcp.Options
+  commentId: N:McpServer.Support.Mcp.Options
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Options
+  nameWithType: McpServer.Support.Mcp.Options
+  fullName: McpServer.Support.Mcp.Options
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Options
+    name: Options
+    href: McpServer.Support.Mcp.Options.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Options
+    name: Options
+    href: McpServer.Support.Mcp.Options.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.LoggingServiceUrl*
+  commentId: Overload:McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.LoggingServiceUrl
+  href: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.html#McpServer_Support_Mcp_Options_McpInteractionLoggingOptions_LoggingServiceUrl
+  name: LoggingServiceUrl
+  nameWithType: McpInteractionLoggingOptions.LoggingServiceUrl
+  fullName: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.LoggingServiceUrl
+- uid: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.QueueCapacity*
+  commentId: Overload:McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.QueueCapacity
+  href: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.html#McpServer_Support_Mcp_Options_McpInteractionLoggingOptions_QueueCapacity
+  name: QueueCapacity
+  nameWithType: McpInteractionLoggingOptions.QueueCapacity
+  fullName: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.QueueCapacity
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeQueryString*
+  commentId: Overload:McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeQueryString
+  href: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.html#McpServer_Support_Mcp_Options_McpInteractionLoggingOptions_IncludeQueryString
+  name: IncludeQueryString
+  nameWithType: McpInteractionLoggingOptions.IncludeQueryString
+  fullName: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeQueryString
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeRequestBody*
+  commentId: Overload:McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeRequestBody
+  href: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.html#McpServer_Support_Mcp_Options_McpInteractionLoggingOptions_IncludeRequestBody
+  name: IncludeRequestBody
+  nameWithType: McpInteractionLoggingOptions.IncludeRequestBody
+  fullName: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeRequestBody
+- uid: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeResponseBody*
+  commentId: Overload:McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeResponseBody
+  href: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.html#McpServer_Support_Mcp_Options_McpInteractionLoggingOptions_IncludeResponseBody
+  name: IncludeResponseBody
+  nameWithType: McpInteractionLoggingOptions.IncludeResponseBody
+  fullName: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.IncludeResponseBody
+- uid: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.MaxBodyCaptureSize*
+  commentId: Overload:McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.MaxBodyCaptureSize
+  href: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.html#McpServer_Support_Mcp_Options_McpInteractionLoggingOptions_MaxBodyCaptureSize
+  name: MaxBodyCaptureSize
+  nameWithType: McpInteractionLoggingOptions.MaxBodyCaptureSize
+  fullName: McpServer.Support.Mcp.Options.McpInteractionLoggingOptions.MaxBodyCaptureSize

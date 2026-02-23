@@ -1,0 +1,868 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest
+  commentId: T:McpServer.Support.Mcp.Services.TodoCreateRequest
+  id: TodoCreateRequest
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.TodoCreateRequest.DependsOn
+  - McpServer.Support.Mcp.Services.TodoCreateRequest.Description
+  - McpServer.Support.Mcp.Services.TodoCreateRequest.Estimate
+  - McpServer.Support.Mcp.Services.TodoCreateRequest.FunctionalRequirements
+  - McpServer.Support.Mcp.Services.TodoCreateRequest.Id
+  - McpServer.Support.Mcp.Services.TodoCreateRequest.ImplementationTasks
+  - McpServer.Support.Mcp.Services.TodoCreateRequest.Priority
+  - McpServer.Support.Mcp.Services.TodoCreateRequest.Section
+  - McpServer.Support.Mcp.Services.TodoCreateRequest.TechnicalDetails
+  - McpServer.Support.Mcp.Services.TodoCreateRequest.TechnicalRequirements
+  - McpServer.Support.Mcp.Services.TodoCreateRequest.Title
+  langs:
+  - csharp
+  - vb
+  name: TodoCreateRequest
+  nameWithType: TodoCreateRequest
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest
+  type: Class
+  source:
+    id: TodoCreateRequest
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 108
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-PLANNED-013: Request to create a new TODO item.'
+  example: []
+  syntax:
+    content: 'public sealed record TodoCreateRequest : IEquatable<TodoCreateRequest>'
+    content.vb: Public NotInheritable Class TodoCreateRequest Implements IEquatable(Of TodoCreateRequest)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{McpServer.Support.Mcp.Services.TodoCreateRequest}
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.Id
+  commentId: P:McpServer.Support.Mcp.Services.TodoCreateRequest.Id
+  id: Id
+  parent: McpServer.Support.Mcp.Services.TodoCreateRequest
+  langs:
+  - csharp
+  - vb
+  name: Id
+  nameWithType: TodoCreateRequest.Id
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.Id
+  type: Property
+  source:
+    id: Id
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 111
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Item id (e.g. MVP-APP-006). Required.
+  example: []
+  syntax:
+    content: public required string Id { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Id As String
+  overload: McpServer.Support.Mcp.Services.TodoCreateRequest.Id*
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.Title
+  commentId: P:McpServer.Support.Mcp.Services.TodoCreateRequest.Title
+  id: Title
+  parent: McpServer.Support.Mcp.Services.TodoCreateRequest
+  langs:
+  - csharp
+  - vb
+  name: Title
+  nameWithType: TodoCreateRequest.Title
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.Title
+  type: Property
+  source:
+    id: Title
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 114
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Item title. Required.
+  example: []
+  syntax:
+    content: public required string Title { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Title As String
+  overload: McpServer.Support.Mcp.Services.TodoCreateRequest.Title*
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.Section
+  commentId: P:McpServer.Support.Mcp.Services.TodoCreateRequest.Section
+  id: Section
+  parent: McpServer.Support.Mcp.Services.TodoCreateRequest
+  langs:
+  - csharp
+  - vb
+  name: Section
+  nameWithType: TodoCreateRequest.Section
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.Section
+  type: Property
+  source:
+    id: Section
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 117
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Section key (e.g. mvp-app, mvp-support). Required.
+  example: []
+  syntax:
+    content: public required string Section { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Section As String
+  overload: McpServer.Support.Mcp.Services.TodoCreateRequest.Section*
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.Priority
+  commentId: P:McpServer.Support.Mcp.Services.TodoCreateRequest.Priority
+  id: Priority
+  parent: McpServer.Support.Mcp.Services.TodoCreateRequest
+  langs:
+  - csharp
+  - vb
+  name: Priority
+  nameWithType: TodoCreateRequest.Priority
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.Priority
+  type: Property
+  source:
+    id: Priority
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 120
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Priority level (high, medium, low). Required.
+  example: []
+  syntax:
+    content: public required string Priority { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Priority As String
+  overload: McpServer.Support.Mcp.Services.TodoCreateRequest.Priority*
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.Estimate
+  commentId: P:McpServer.Support.Mcp.Services.TodoCreateRequest.Estimate
+  id: Estimate
+  parent: McpServer.Support.Mcp.Services.TodoCreateRequest
+  langs:
+  - csharp
+  - vb
+  name: Estimate
+  nameWithType: TodoCreateRequest.Estimate
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.Estimate
+  type: Property
+  source:
+    id: Estimate
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 123
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Estimate string.
+  example: []
+  syntax:
+    content: public string? Estimate { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Estimate As String
+  overload: McpServer.Support.Mcp.Services.TodoCreateRequest.Estimate*
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.Description
+  commentId: P:McpServer.Support.Mcp.Services.TodoCreateRequest.Description
+  id: Description
+  parent: McpServer.Support.Mcp.Services.TodoCreateRequest
+  langs:
+  - csharp
+  - vb
+  name: Description
+  nameWithType: TodoCreateRequest.Description
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.Description
+  type: Property
+  source:
+    id: Description
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 126
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Description lines.
+  example: []
+  syntax:
+    content: public IReadOnlyList<string>? Description { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+    content.vb: Public Property Description As IReadOnlyList(Of String)
+  overload: McpServer.Support.Mcp.Services.TodoCreateRequest.Description*
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.TechnicalDetails
+  commentId: P:McpServer.Support.Mcp.Services.TodoCreateRequest.TechnicalDetails
+  id: TechnicalDetails
+  parent: McpServer.Support.Mcp.Services.TodoCreateRequest
+  langs:
+  - csharp
+  - vb
+  name: TechnicalDetails
+  nameWithType: TodoCreateRequest.TechnicalDetails
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.TechnicalDetails
+  type: Property
+  source:
+    id: TechnicalDetails
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 129
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Technical detail lines.
+  example: []
+  syntax:
+    content: public IReadOnlyList<string>? TechnicalDetails { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+    content.vb: Public Property TechnicalDetails As IReadOnlyList(Of String)
+  overload: McpServer.Support.Mcp.Services.TodoCreateRequest.TechnicalDetails*
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.ImplementationTasks
+  commentId: P:McpServer.Support.Mcp.Services.TodoCreateRequest.ImplementationTasks
+  id: ImplementationTasks
+  parent: McpServer.Support.Mcp.Services.TodoCreateRequest
+  langs:
+  - csharp
+  - vb
+  name: ImplementationTasks
+  nameWithType: TodoCreateRequest.ImplementationTasks
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.ImplementationTasks
+  type: Property
+  source:
+    id: ImplementationTasks
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 132
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Implementation sub-tasks.
+  example: []
+  syntax:
+    content: public IReadOnlyList<TodoFlatTask>? ImplementationTasks { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Services.TodoFlatTask}
+    content.vb: Public Property ImplementationTasks As IReadOnlyList(Of TodoFlatTask)
+  overload: McpServer.Support.Mcp.Services.TodoCreateRequest.ImplementationTasks*
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.DependsOn
+  commentId: P:McpServer.Support.Mcp.Services.TodoCreateRequest.DependsOn
+  id: DependsOn
+  parent: McpServer.Support.Mcp.Services.TodoCreateRequest
+  langs:
+  - csharp
+  - vb
+  name: DependsOn
+  nameWithType: TodoCreateRequest.DependsOn
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.DependsOn
+  type: Property
+  source:
+    id: DependsOn
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 135
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: IDs of TODO items this item depends on.
+  example: []
+  syntax:
+    content: public IReadOnlyList<string>? DependsOn { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+    content.vb: Public Property DependsOn As IReadOnlyList(Of String)
+  overload: McpServer.Support.Mcp.Services.TodoCreateRequest.DependsOn*
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.FunctionalRequirements
+  commentId: P:McpServer.Support.Mcp.Services.TodoCreateRequest.FunctionalRequirements
+  id: FunctionalRequirements
+  parent: McpServer.Support.Mcp.Services.TodoCreateRequest
+  langs:
+  - csharp
+  - vb
+  name: FunctionalRequirements
+  nameWithType: TodoCreateRequest.FunctionalRequirements
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.FunctionalRequirements
+  type: Property
+  source:
+    id: FunctionalRequirements
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 138
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Associated functional requirement IDs.
+  example: []
+  syntax:
+    content: public IReadOnlyList<string>? FunctionalRequirements { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+    content.vb: Public Property FunctionalRequirements As IReadOnlyList(Of String)
+  overload: McpServer.Support.Mcp.Services.TodoCreateRequest.FunctionalRequirements*
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.TechnicalRequirements
+  commentId: P:McpServer.Support.Mcp.Services.TodoCreateRequest.TechnicalRequirements
+  id: TechnicalRequirements
+  parent: McpServer.Support.Mcp.Services.TodoCreateRequest
+  langs:
+  - csharp
+  - vb
+  name: TechnicalRequirements
+  nameWithType: TodoCreateRequest.TechnicalRequirements
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.TechnicalRequirements
+  type: Property
+  source:
+    id: TechnicalRequirements
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 141
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Associated technical requirement IDs.
+  example: []
+  syntax:
+    content: public IReadOnlyList<string>? TechnicalRequirements { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+    content.vb: Public Property TechnicalRequirements As IReadOnlyList(Of String)
+  overload: McpServer.Support.Mcp.Services.TodoCreateRequest.TechnicalRequirements*
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.IEquatable{McpServer.Support.Mcp.Services.TodoCreateRequest}
+  commentId: T:System.IEquatable{McpServer.Support.Mcp.Services.TodoCreateRequest}
+  parent: System
+  definition: System.IEquatable`1
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<TodoCreateRequest>
+  nameWithType: IEquatable<TodoCreateRequest>
+  fullName: System.IEquatable<McpServer.Support.Mcp.Services.TodoCreateRequest>
+  nameWithType.vb: IEquatable(Of TodoCreateRequest)
+  fullName.vb: System.IEquatable(Of McpServer.Support.Mcp.Services.TodoCreateRequest)
+  name.vb: IEquatable(Of TodoCreateRequest)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.TodoCreateRequest
+    name: TodoCreateRequest
+    href: McpServer.Support.Mcp.Services.TodoCreateRequest.html
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.TodoCreateRequest
+    name: TodoCreateRequest
+    href: McpServer.Support.Mcp.Services.TodoCreateRequest.html
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.Id*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoCreateRequest.Id
+  href: McpServer.Support.Mcp.Services.TodoCreateRequest.html#McpServer_Support_Mcp_Services_TodoCreateRequest_Id
+  name: Id
+  nameWithType: TodoCreateRequest.Id
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.Id
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.Title*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoCreateRequest.Title
+  href: McpServer.Support.Mcp.Services.TodoCreateRequest.html#McpServer_Support_Mcp_Services_TodoCreateRequest_Title
+  name: Title
+  nameWithType: TodoCreateRequest.Title
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.Title
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.Section*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoCreateRequest.Section
+  href: McpServer.Support.Mcp.Services.TodoCreateRequest.html#McpServer_Support_Mcp_Services_TodoCreateRequest_Section
+  name: Section
+  nameWithType: TodoCreateRequest.Section
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.Section
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.Priority*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoCreateRequest.Priority
+  href: McpServer.Support.Mcp.Services.TodoCreateRequest.html#McpServer_Support_Mcp_Services_TodoCreateRequest_Priority
+  name: Priority
+  nameWithType: TodoCreateRequest.Priority
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.Priority
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.Estimate*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoCreateRequest.Estimate
+  href: McpServer.Support.Mcp.Services.TodoCreateRequest.html#McpServer_Support_Mcp_Services_TodoCreateRequest_Estimate
+  name: Estimate
+  nameWithType: TodoCreateRequest.Estimate
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.Estimate
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.Description*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoCreateRequest.Description
+  href: McpServer.Support.Mcp.Services.TodoCreateRequest.html#McpServer_Support_Mcp_Services_TodoCreateRequest_Description
+  name: Description
+  nameWithType: TodoCreateRequest.Description
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.Description
+- uid: System.Collections.Generic.IReadOnlyList{System.String}
+  commentId: T:System.Collections.Generic.IReadOnlyList{System.String}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IReadOnlyList`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<string>
+  nameWithType: IReadOnlyList<string>
+  fullName: System.Collections.Generic.IReadOnlyList<string>
+  nameWithType.vb: IReadOnlyList(Of String)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of String)
+  name.vb: IReadOnlyList(Of String)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: System.Collections.Generic.IReadOnlyList`1
+  commentId: T:System.Collections.Generic.IReadOnlyList`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<T>
+  nameWithType: IReadOnlyList<T>
+  fullName: System.Collections.Generic.IReadOnlyList<T>
+  nameWithType.vb: IReadOnlyList(Of T)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of T)
+  name.vb: IReadOnlyList(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.TechnicalDetails*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoCreateRequest.TechnicalDetails
+  href: McpServer.Support.Mcp.Services.TodoCreateRequest.html#McpServer_Support_Mcp_Services_TodoCreateRequest_TechnicalDetails
+  name: TechnicalDetails
+  nameWithType: TodoCreateRequest.TechnicalDetails
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.TechnicalDetails
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.ImplementationTasks*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoCreateRequest.ImplementationTasks
+  href: McpServer.Support.Mcp.Services.TodoCreateRequest.html#McpServer_Support_Mcp_Services_TodoCreateRequest_ImplementationTasks
+  name: ImplementationTasks
+  nameWithType: TodoCreateRequest.ImplementationTasks
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.ImplementationTasks
+- uid: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Services.TodoFlatTask}
+  commentId: T:System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Services.TodoFlatTask}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IReadOnlyList`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<TodoFlatTask>
+  nameWithType: IReadOnlyList<TodoFlatTask>
+  fullName: System.Collections.Generic.IReadOnlyList<McpServer.Support.Mcp.Services.TodoFlatTask>
+  nameWithType.vb: IReadOnlyList(Of TodoFlatTask)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of McpServer.Support.Mcp.Services.TodoFlatTask)
+  name.vb: IReadOnlyList(Of TodoFlatTask)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.TodoFlatTask
+    name: TodoFlatTask
+    href: McpServer.Support.Mcp.Services.TodoFlatTask.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.TodoFlatTask
+    name: TodoFlatTask
+    href: McpServer.Support.Mcp.Services.TodoFlatTask.html
+  - name: )
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.DependsOn*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoCreateRequest.DependsOn
+  href: McpServer.Support.Mcp.Services.TodoCreateRequest.html#McpServer_Support_Mcp_Services_TodoCreateRequest_DependsOn
+  name: DependsOn
+  nameWithType: TodoCreateRequest.DependsOn
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.DependsOn
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.FunctionalRequirements*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoCreateRequest.FunctionalRequirements
+  href: McpServer.Support.Mcp.Services.TodoCreateRequest.html#McpServer_Support_Mcp_Services_TodoCreateRequest_FunctionalRequirements
+  name: FunctionalRequirements
+  nameWithType: TodoCreateRequest.FunctionalRequirements
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.FunctionalRequirements
+- uid: McpServer.Support.Mcp.Services.TodoCreateRequest.TechnicalRequirements*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoCreateRequest.TechnicalRequirements
+  href: McpServer.Support.Mcp.Services.TodoCreateRequest.html#McpServer_Support_Mcp_Services_TodoCreateRequest_TechnicalRequirements
+  name: TechnicalRequirements
+  nameWithType: TodoCreateRequest.TechnicalRequirements
+  fullName: McpServer.Support.Mcp.Services.TodoCreateRequest.TechnicalRequirements

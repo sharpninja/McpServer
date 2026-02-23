@@ -1,0 +1,558 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.GitHubPullItem
+  commentId: T:McpServer.Support.Mcp.Services.GitHubPullItem
+  id: GitHubPullItem
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.GitHubPullItem.#ctor(System.Int32,System.String,System.String,System.String)
+  - McpServer.Support.Mcp.Services.GitHubPullItem.Number
+  - McpServer.Support.Mcp.Services.GitHubPullItem.State
+  - McpServer.Support.Mcp.Services.GitHubPullItem.Title
+  - McpServer.Support.Mcp.Services.GitHubPullItem.Url
+  langs:
+  - csharp
+  - vb
+  name: GitHubPullItem
+  nameWithType: GitHubPullItem
+  fullName: McpServer.Support.Mcp.Services.GitHubPullItem
+  type: Class
+  source:
+    id: GitHubPullItem
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IGitHubCliService.cs
+    startLine: 101
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-PLANNED-013: Single PR item.'
+  example: []
+  syntax:
+    content: 'public sealed record GitHubPullItem : IEquatable<GitHubPullItem>'
+    content.vb: Public NotInheritable Class GitHubPullItem Implements IEquatable(Of GitHubPullItem)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{McpServer.Support.Mcp.Services.GitHubPullItem}
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Services.GitHubPullItem.#ctor(System.Int32,System.String,System.String,System.String)
+  commentId: M:McpServer.Support.Mcp.Services.GitHubPullItem.#ctor(System.Int32,System.String,System.String,System.String)
+  id: '#ctor(System.Int32,System.String,System.String,System.String)'
+  parent: McpServer.Support.Mcp.Services.GitHubPullItem
+  langs:
+  - csharp
+  - vb
+  name: GitHubPullItem(int, string, string?, string?)
+  nameWithType: GitHubPullItem.GitHubPullItem(int, string, string?, string?)
+  fullName: McpServer.Support.Mcp.Services.GitHubPullItem.GitHubPullItem(int, string, string?, string?)
+  type: Constructor
+  source:
+    id: .ctor
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IGitHubCliService.cs
+    startLine: 101
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-PLANNED-013: Single PR item.'
+  example: []
+  syntax:
+    content: public GitHubPullItem(int Number, string Title, string? Url, string? State)
+    parameters:
+    - id: Number
+      type: System.Int32
+      description: Pull request number.
+    - id: Title
+      type: System.String
+      description: Pull request title.
+    - id: Url
+      type: System.String
+      description: Pull request URL on GitHub.
+    - id: State
+      type: System.String
+      description: Pull request state (open, closed, merged).
+    content.vb: Public Sub New(Number As Integer, Title As String, Url As String, State As String)
+  overload: McpServer.Support.Mcp.Services.GitHubPullItem.#ctor*
+  nameWithType.vb: GitHubPullItem.New(Integer, String, String, String)
+  fullName.vb: McpServer.Support.Mcp.Services.GitHubPullItem.New(Integer, String, String, String)
+  name.vb: New(Integer, String, String, String)
+- uid: McpServer.Support.Mcp.Services.GitHubPullItem.Number
+  commentId: P:McpServer.Support.Mcp.Services.GitHubPullItem.Number
+  id: Number
+  parent: McpServer.Support.Mcp.Services.GitHubPullItem
+  langs:
+  - csharp
+  - vb
+  name: Number
+  nameWithType: GitHubPullItem.Number
+  fullName: McpServer.Support.Mcp.Services.GitHubPullItem.Number
+  type: Property
+  source:
+    id: Number
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IGitHubCliService.cs
+    startLine: 101
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Pull request number.
+  example: []
+  syntax:
+    content: public int Number { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property Number As Integer
+  overload: McpServer.Support.Mcp.Services.GitHubPullItem.Number*
+- uid: McpServer.Support.Mcp.Services.GitHubPullItem.Title
+  commentId: P:McpServer.Support.Mcp.Services.GitHubPullItem.Title
+  id: Title
+  parent: McpServer.Support.Mcp.Services.GitHubPullItem
+  langs:
+  - csharp
+  - vb
+  name: Title
+  nameWithType: GitHubPullItem.Title
+  fullName: McpServer.Support.Mcp.Services.GitHubPullItem.Title
+  type: Property
+  source:
+    id: Title
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IGitHubCliService.cs
+    startLine: 101
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Pull request title.
+  example: []
+  syntax:
+    content: public string Title { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Title As String
+  overload: McpServer.Support.Mcp.Services.GitHubPullItem.Title*
+- uid: McpServer.Support.Mcp.Services.GitHubPullItem.Url
+  commentId: P:McpServer.Support.Mcp.Services.GitHubPullItem.Url
+  id: Url
+  parent: McpServer.Support.Mcp.Services.GitHubPullItem
+  langs:
+  - csharp
+  - vb
+  name: Url
+  nameWithType: GitHubPullItem.Url
+  fullName: McpServer.Support.Mcp.Services.GitHubPullItem.Url
+  type: Property
+  source:
+    id: Url
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IGitHubCliService.cs
+    startLine: 101
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Pull request URL on GitHub.
+  example: []
+  syntax:
+    content: public string? Url { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Url As String
+  overload: McpServer.Support.Mcp.Services.GitHubPullItem.Url*
+- uid: McpServer.Support.Mcp.Services.GitHubPullItem.State
+  commentId: P:McpServer.Support.Mcp.Services.GitHubPullItem.State
+  id: State
+  parent: McpServer.Support.Mcp.Services.GitHubPullItem
+  langs:
+  - csharp
+  - vb
+  name: State
+  nameWithType: GitHubPullItem.State
+  fullName: McpServer.Support.Mcp.Services.GitHubPullItem.State
+  type: Property
+  source:
+    id: State
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IGitHubCliService.cs
+    startLine: 101
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Pull request state (open, closed, merged).
+  example: []
+  syntax:
+    content: public string? State { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property State As String
+  overload: McpServer.Support.Mcp.Services.GitHubPullItem.State*
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.IEquatable{McpServer.Support.Mcp.Services.GitHubPullItem}
+  commentId: T:System.IEquatable{McpServer.Support.Mcp.Services.GitHubPullItem}
+  parent: System
+  definition: System.IEquatable`1
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<GitHubPullItem>
+  nameWithType: IEquatable<GitHubPullItem>
+  fullName: System.IEquatable<McpServer.Support.Mcp.Services.GitHubPullItem>
+  nameWithType.vb: IEquatable(Of GitHubPullItem)
+  fullName.vb: System.IEquatable(Of McpServer.Support.Mcp.Services.GitHubPullItem)
+  name.vb: IEquatable(Of GitHubPullItem)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.GitHubPullItem
+    name: GitHubPullItem
+    href: McpServer.Support.Mcp.Services.GitHubPullItem.html
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.GitHubPullItem
+    name: GitHubPullItem
+    href: McpServer.Support.Mcp.Services.GitHubPullItem.html
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Services.GitHubPullItem.#ctor*
+  commentId: Overload:McpServer.Support.Mcp.Services.GitHubPullItem.#ctor
+  href: McpServer.Support.Mcp.Services.GitHubPullItem.html#McpServer_Support_Mcp_Services_GitHubPullItem__ctor_System_Int32_System_String_System_String_System_String_
+  name: GitHubPullItem
+  nameWithType: GitHubPullItem.GitHubPullItem
+  fullName: McpServer.Support.Mcp.Services.GitHubPullItem.GitHubPullItem
+  nameWithType.vb: GitHubPullItem.New
+  fullName.vb: McpServer.Support.Mcp.Services.GitHubPullItem.New
+  name.vb: New
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Services.GitHubPullItem.Number*
+  commentId: Overload:McpServer.Support.Mcp.Services.GitHubPullItem.Number
+  href: McpServer.Support.Mcp.Services.GitHubPullItem.html#McpServer_Support_Mcp_Services_GitHubPullItem_Number
+  name: Number
+  nameWithType: GitHubPullItem.Number
+  fullName: McpServer.Support.Mcp.Services.GitHubPullItem.Number
+- uid: McpServer.Support.Mcp.Services.GitHubPullItem.Title*
+  commentId: Overload:McpServer.Support.Mcp.Services.GitHubPullItem.Title
+  href: McpServer.Support.Mcp.Services.GitHubPullItem.html#McpServer_Support_Mcp_Services_GitHubPullItem_Title
+  name: Title
+  nameWithType: GitHubPullItem.Title
+  fullName: McpServer.Support.Mcp.Services.GitHubPullItem.Title
+- uid: McpServer.Support.Mcp.Services.GitHubPullItem.Url*
+  commentId: Overload:McpServer.Support.Mcp.Services.GitHubPullItem.Url
+  href: McpServer.Support.Mcp.Services.GitHubPullItem.html#McpServer_Support_Mcp_Services_GitHubPullItem_Url
+  name: Url
+  nameWithType: GitHubPullItem.Url
+  fullName: McpServer.Support.Mcp.Services.GitHubPullItem.Url
+- uid: McpServer.Support.Mcp.Services.GitHubPullItem.State*
+  commentId: Overload:McpServer.Support.Mcp.Services.GitHubPullItem.State
+  href: McpServer.Support.Mcp.Services.GitHubPullItem.html#McpServer_Support_Mcp_Services_GitHubPullItem_State
+  name: State
+  nameWithType: GitHubPullItem.State
+  fullName: McpServer.Support.Mcp.Services.GitHubPullItem.State

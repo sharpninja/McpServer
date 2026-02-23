@@ -1,0 +1,559 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.IToolRegistryService
+  commentId: T:McpServer.Support.Mcp.Services.IToolRegistryService
+  id: IToolRegistryService
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.IToolRegistryService.CreateAsync(McpServer.Support.Mcp.Services.ToolCreateRequest,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IToolRegistryService.DeleteAsync(System.Int32,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IToolRegistryService.GetAsync(System.Int32,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IToolRegistryService.ListAsync(System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IToolRegistryService.SearchAsync(System.String,System.String,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IToolRegistryService.UpdateAsync(System.Int32,McpServer.Support.Mcp.Services.ToolUpdateRequest,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: IToolRegistryService
+  nameWithType: IToolRegistryService
+  fullName: McpServer.Support.Mcp.Services.IToolRegistryService
+  type: Interface
+  source:
+    id: IToolRegistryService
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolRegistryService.cs
+    startLine: 7
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: >-
+    Service for registering tool definitions and searching them by keyword.
+
+    Tools can be global (available to all workspaces) or workspace-scoped.
+
+    Keyword queries return the union of global tools and workspace-specific tools.
+  example: []
+  syntax:
+    content: public interface IToolRegistryService
+    content.vb: Public Interface IToolRegistryService
+- uid: McpServer.Support.Mcp.Services.IToolRegistryService.SearchAsync(System.String,System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IToolRegistryService.SearchAsync(System.String,System.String,System.Threading.CancellationToken)
+  id: SearchAsync(System.String,System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IToolRegistryService
+  langs:
+  - csharp
+  - vb
+  name: SearchAsync(string, string?, CancellationToken)
+  nameWithType: IToolRegistryService.SearchAsync(string, string?, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IToolRegistryService.SearchAsync(string, string?, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: SearchAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolRegistryService.cs
+    startLine: 10
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Search tools by keyword. Returns global tools plus tools for the specified workspace.
+  example: []
+  syntax:
+    content: Task<ToolSearchResult> SearchAsync(string keyword, string? workspacePath = null, CancellationToken ct = default)
+    parameters:
+    - id: keyword
+      type: System.String
+    - id: workspacePath
+      type: System.String
+    - id: ct
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.ToolSearchResult}
+    content.vb: Function SearchAsync(keyword As String, workspacePath As String = Nothing, ct As CancellationToken = Nothing) As Task(Of ToolSearchResult)
+  overload: McpServer.Support.Mcp.Services.IToolRegistryService.SearchAsync*
+  nameWithType.vb: IToolRegistryService.SearchAsync(String, String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IToolRegistryService.SearchAsync(String, String, System.Threading.CancellationToken)
+  name.vb: SearchAsync(String, String, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IToolRegistryService.GetAsync(System.Int32,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IToolRegistryService.GetAsync(System.Int32,System.Threading.CancellationToken)
+  id: GetAsync(System.Int32,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IToolRegistryService
+  langs:
+  - csharp
+  - vb
+  name: GetAsync(int, CancellationToken)
+  nameWithType: IToolRegistryService.GetAsync(int, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IToolRegistryService.GetAsync(int, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: GetAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolRegistryService.cs
+    startLine: 13
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Get a single tool by id.
+  example: []
+  syntax:
+    content: Task<ToolDto?> GetAsync(int id, CancellationToken ct = default)
+    parameters:
+    - id: id
+      type: System.Int32
+    - id: ct
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.ToolDto}
+    content.vb: Function GetAsync(id As Integer, ct As CancellationToken = Nothing) As Task(Of ToolDto)
+  overload: McpServer.Support.Mcp.Services.IToolRegistryService.GetAsync*
+  nameWithType.vb: IToolRegistryService.GetAsync(Integer, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IToolRegistryService.GetAsync(Integer, System.Threading.CancellationToken)
+  name.vb: GetAsync(Integer, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IToolRegistryService.ListAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IToolRegistryService.ListAsync(System.String,System.Threading.CancellationToken)
+  id: ListAsync(System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IToolRegistryService
+  langs:
+  - csharp
+  - vb
+  name: ListAsync(string?, CancellationToken)
+  nameWithType: IToolRegistryService.ListAsync(string?, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IToolRegistryService.ListAsync(string?, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: ListAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolRegistryService.cs
+    startLine: 16
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: List all tools, optionally filtered to a workspace (includes global).
+  example: []
+  syntax:
+    content: Task<ToolSearchResult> ListAsync(string? workspacePath = null, CancellationToken ct = default)
+    parameters:
+    - id: workspacePath
+      type: System.String
+    - id: ct
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.ToolSearchResult}
+    content.vb: Function ListAsync(workspacePath As String = Nothing, ct As CancellationToken = Nothing) As Task(Of ToolSearchResult)
+  overload: McpServer.Support.Mcp.Services.IToolRegistryService.ListAsync*
+  nameWithType.vb: IToolRegistryService.ListAsync(String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IToolRegistryService.ListAsync(String, System.Threading.CancellationToken)
+  name.vb: ListAsync(String, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IToolRegistryService.CreateAsync(McpServer.Support.Mcp.Services.ToolCreateRequest,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IToolRegistryService.CreateAsync(McpServer.Support.Mcp.Services.ToolCreateRequest,System.Threading.CancellationToken)
+  id: CreateAsync(McpServer.Support.Mcp.Services.ToolCreateRequest,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IToolRegistryService
+  langs:
+  - csharp
+  - vb
+  name: CreateAsync(ToolCreateRequest, CancellationToken)
+  nameWithType: IToolRegistryService.CreateAsync(ToolCreateRequest, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IToolRegistryService.CreateAsync(McpServer.Support.Mcp.Services.ToolCreateRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: CreateAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolRegistryService.cs
+    startLine: 19
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Register a new tool definition.
+  example: []
+  syntax:
+    content: Task<ToolMutationResult> CreateAsync(ToolCreateRequest request, CancellationToken ct = default)
+    parameters:
+    - id: request
+      type: McpServer.Support.Mcp.Services.ToolCreateRequest
+    - id: ct
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.ToolMutationResult}
+    content.vb: Function CreateAsync(request As ToolCreateRequest, ct As CancellationToken = Nothing) As Task(Of ToolMutationResult)
+  overload: McpServer.Support.Mcp.Services.IToolRegistryService.CreateAsync*
+- uid: McpServer.Support.Mcp.Services.IToolRegistryService.UpdateAsync(System.Int32,McpServer.Support.Mcp.Services.ToolUpdateRequest,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IToolRegistryService.UpdateAsync(System.Int32,McpServer.Support.Mcp.Services.ToolUpdateRequest,System.Threading.CancellationToken)
+  id: UpdateAsync(System.Int32,McpServer.Support.Mcp.Services.ToolUpdateRequest,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IToolRegistryService
+  langs:
+  - csharp
+  - vb
+  name: UpdateAsync(int, ToolUpdateRequest, CancellationToken)
+  nameWithType: IToolRegistryService.UpdateAsync(int, ToolUpdateRequest, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IToolRegistryService.UpdateAsync(int, McpServer.Support.Mcp.Services.ToolUpdateRequest, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: UpdateAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolRegistryService.cs
+    startLine: 22
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Update an existing tool definition.
+  example: []
+  syntax:
+    content: Task<ToolMutationResult> UpdateAsync(int id, ToolUpdateRequest request, CancellationToken ct = default)
+    parameters:
+    - id: id
+      type: System.Int32
+    - id: request
+      type: McpServer.Support.Mcp.Services.ToolUpdateRequest
+    - id: ct
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.ToolMutationResult}
+    content.vb: Function UpdateAsync(id As Integer, request As ToolUpdateRequest, ct As CancellationToken = Nothing) As Task(Of ToolMutationResult)
+  overload: McpServer.Support.Mcp.Services.IToolRegistryService.UpdateAsync*
+  nameWithType.vb: IToolRegistryService.UpdateAsync(Integer, ToolUpdateRequest, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IToolRegistryService.UpdateAsync(Integer, McpServer.Support.Mcp.Services.ToolUpdateRequest, System.Threading.CancellationToken)
+  name.vb: UpdateAsync(Integer, ToolUpdateRequest, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IToolRegistryService.DeleteAsync(System.Int32,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IToolRegistryService.DeleteAsync(System.Int32,System.Threading.CancellationToken)
+  id: DeleteAsync(System.Int32,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IToolRegistryService
+  langs:
+  - csharp
+  - vb
+  name: DeleteAsync(int, CancellationToken)
+  nameWithType: IToolRegistryService.DeleteAsync(int, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IToolRegistryService.DeleteAsync(int, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: DeleteAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IToolRegistryService.cs
+    startLine: 25
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Delete a tool definition.
+  example: []
+  syntax:
+    content: Task<ToolMutationResult> DeleteAsync(int id, CancellationToken ct = default)
+    parameters:
+    - id: id
+      type: System.Int32
+    - id: ct
+      type: System.Threading.CancellationToken
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.ToolMutationResult}
+    content.vb: Function DeleteAsync(id As Integer, ct As CancellationToken = Nothing) As Task(Of ToolMutationResult)
+  overload: McpServer.Support.Mcp.Services.IToolRegistryService.DeleteAsync*
+  nameWithType.vb: IToolRegistryService.DeleteAsync(Integer, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IToolRegistryService.DeleteAsync(Integer, System.Threading.CancellationToken)
+  name.vb: DeleteAsync(Integer, CancellationToken)
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: McpServer.Support.Mcp.Services.IToolRegistryService.SearchAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IToolRegistryService.SearchAsync
+  href: McpServer.Support.Mcp.Services.IToolRegistryService.html#McpServer_Support_Mcp_Services_IToolRegistryService_SearchAsync_System_String_System_String_System_Threading_CancellationToken_
+  name: SearchAsync
+  nameWithType: IToolRegistryService.SearchAsync
+  fullName: McpServer.Support.Mcp.Services.IToolRegistryService.SearchAsync
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.ToolSearchResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.ToolSearchResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<ToolSearchResult>
+  nameWithType: Task<ToolSearchResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.ToolSearchResult>
+  nameWithType.vb: Task(Of ToolSearchResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.ToolSearchResult)
+  name.vb: Task(Of ToolSearchResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.ToolSearchResult
+    name: ToolSearchResult
+    href: McpServer.Support.Mcp.Services.ToolSearchResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.ToolSearchResult
+    name: ToolSearchResult
+    href: McpServer.Support.Mcp.Services.ToolSearchResult.html
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: McpServer.Support.Mcp.Services.IToolRegistryService.GetAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IToolRegistryService.GetAsync
+  href: McpServer.Support.Mcp.Services.IToolRegistryService.html#McpServer_Support_Mcp_Services_IToolRegistryService_GetAsync_System_Int32_System_Threading_CancellationToken_
+  name: GetAsync
+  nameWithType: IToolRegistryService.GetAsync
+  fullName: McpServer.Support.Mcp.Services.IToolRegistryService.GetAsync
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.ToolDto}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.ToolDto}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<ToolDto>
+  nameWithType: Task<ToolDto>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.ToolDto>
+  nameWithType.vb: Task(Of ToolDto)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.ToolDto)
+  name.vb: Task(Of ToolDto)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.ToolDto
+    name: ToolDto
+    href: McpServer.Support.Mcp.Services.ToolDto.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.ToolDto
+    name: ToolDto
+    href: McpServer.Support.Mcp.Services.ToolDto.html
+  - name: )
+- uid: McpServer.Support.Mcp.Services.IToolRegistryService.ListAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IToolRegistryService.ListAsync
+  href: McpServer.Support.Mcp.Services.IToolRegistryService.html#McpServer_Support_Mcp_Services_IToolRegistryService_ListAsync_System_String_System_Threading_CancellationToken_
+  name: ListAsync
+  nameWithType: IToolRegistryService.ListAsync
+  fullName: McpServer.Support.Mcp.Services.IToolRegistryService.ListAsync
+- uid: McpServer.Support.Mcp.Services.IToolRegistryService.CreateAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IToolRegistryService.CreateAsync
+  href: McpServer.Support.Mcp.Services.IToolRegistryService.html#McpServer_Support_Mcp_Services_IToolRegistryService_CreateAsync_McpServer_Support_Mcp_Services_ToolCreateRequest_System_Threading_CancellationToken_
+  name: CreateAsync
+  nameWithType: IToolRegistryService.CreateAsync
+  fullName: McpServer.Support.Mcp.Services.IToolRegistryService.CreateAsync
+- uid: McpServer.Support.Mcp.Services.ToolCreateRequest
+  commentId: T:McpServer.Support.Mcp.Services.ToolCreateRequest
+  parent: McpServer.Support.Mcp.Services
+  href: McpServer.Support.Mcp.Services.ToolCreateRequest.html
+  name: ToolCreateRequest
+  nameWithType: ToolCreateRequest
+  fullName: McpServer.Support.Mcp.Services.ToolCreateRequest
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.ToolMutationResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.ToolMutationResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<ToolMutationResult>
+  nameWithType: Task<ToolMutationResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.ToolMutationResult>
+  nameWithType.vb: Task(Of ToolMutationResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.ToolMutationResult)
+  name.vb: Task(Of ToolMutationResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.ToolMutationResult
+    name: ToolMutationResult
+    href: McpServer.Support.Mcp.Services.ToolMutationResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.ToolMutationResult
+    name: ToolMutationResult
+    href: McpServer.Support.Mcp.Services.ToolMutationResult.html
+  - name: )
+- uid: McpServer.Support.Mcp.Services.IToolRegistryService.UpdateAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IToolRegistryService.UpdateAsync
+  href: McpServer.Support.Mcp.Services.IToolRegistryService.html#McpServer_Support_Mcp_Services_IToolRegistryService_UpdateAsync_System_Int32_McpServer_Support_Mcp_Services_ToolUpdateRequest_System_Threading_CancellationToken_
+  name: UpdateAsync
+  nameWithType: IToolRegistryService.UpdateAsync
+  fullName: McpServer.Support.Mcp.Services.IToolRegistryService.UpdateAsync
+- uid: McpServer.Support.Mcp.Services.ToolUpdateRequest
+  commentId: T:McpServer.Support.Mcp.Services.ToolUpdateRequest
+  parent: McpServer.Support.Mcp.Services
+  href: McpServer.Support.Mcp.Services.ToolUpdateRequest.html
+  name: ToolUpdateRequest
+  nameWithType: ToolUpdateRequest
+  fullName: McpServer.Support.Mcp.Services.ToolUpdateRequest
+- uid: McpServer.Support.Mcp.Services.IToolRegistryService.DeleteAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IToolRegistryService.DeleteAsync
+  href: McpServer.Support.Mcp.Services.IToolRegistryService.html#McpServer_Support_Mcp_Services_IToolRegistryService_DeleteAsync_System_Int32_System_Threading_CancellationToken_
+  name: DeleteAsync
+  nameWithType: IToolRegistryService.DeleteAsync
+  fullName: McpServer.Support.Mcp.Services.IToolRegistryService.DeleteAsync

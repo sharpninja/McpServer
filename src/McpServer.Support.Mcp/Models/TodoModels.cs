@@ -1,4 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
+using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
 #pragma warning disable CA1002 // YamlDotNet requires mutable List<T> for deserialization
@@ -6,39 +8,24 @@ using YamlDotNet.Serialization;
 
 namespace McpServer.Support.Mcp.Models;
 
-/// <summary>TR-PLANNED-013: Root model for TODO.yaml file.</summary>
+/// <summary>
+/// TR-PLANNED-013: Root model for TODO.yaml file.
+/// Sections are arbitrary string keys with no semantic meaning to the service;
+/// they are informational for agents only.
+/// Serialization is handled by <see cref="TodoFileYamlConverter"/>.
+/// </summary>
 public sealed class TodoFile
 {
-    /// <summary>MVP App feature TODO items.</summary>
-    [YamlMember(Alias = "mvp-app")]
-    public TodoSection? MvpApp { get; set; }
-
-    /// <summary>MVP Marketing feature TODO items.</summary>
-    [YamlMember(Alias = "mvp-marketing")]
-    public TodoSection? MvpMarketing { get; set; }
-
-    /// <summary>MVP Support feature TODO items.</summary>
-    [YamlMember(Alias = "mvp-support")]
-    public TodoSection? MvpSupport { get; set; }
-
-    /// <summary>MVP Legal feature TODO items.</summary>
-    [YamlMember(Alias = "mvp-legal")]
-    public TodoSection? MvpLegal { get; set; }
-
-    /// <summary>Staging and infrastructure TODO items.</summary>
-    [YamlMember(Alias = "staging-and-infrastructure")]
-    public TodoSection? StagingAndInfrastructure { get; set; }
+    /// <summary>Arbitrary-named sections, each containing priority-bucketed item lists.</summary>
+    public Dictionary<string, TodoSection> Sections { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 
     /// <summary>Code review remediation section.</summary>
-    [YamlMember(Alias = "code-review-remediation")]
     public CodeReviewSection? CodeReviewRemediation { get; set; }
 
     /// <summary>Groups of completed items by date.</summary>
-    [YamlMember(Alias = "completed")]
     public List<CompletedGroup>? Completed { get; set; }
 
     /// <summary>Free-form notes.</summary>
-    [YamlMember(Alias = "notes")]
     public List<string>? Notes { get; set; }
 }
 
@@ -204,4 +191,63 @@ public sealed class CompletedItem
     /// <summary>Summary of what was accomplished.</summary>
     [YamlMember(Alias = "summary")]
     public string? Summary { get; set; }
+}
+
+/// <summary>
+/// YamlDotNet type converter for <see cref="TodoFile"/>.
+/// Arbitrary top-level keys become entries in <see cref="TodoFile.Sections"/>.
+/// Reserved keys: <c>code-review-remediation</c>, <c>completed</c>, <c>notes</c>.
+/// </summary>
+internal sealed class TodoFileYamlConverter : IYamlTypeConverter
+{
+    /// <inheritdoc />
+    public bool Accepts(Type type) => type == typeof(TodoFile);
+
+    /// <inheritdoc />
+    public object? ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer)
+    {
+        var file = new TodoFile();
+        parser.Consume<MappingStart>();
+        while (!parser.TryConsume<MappingEnd>(out _))
+        {
+            var key = parser.Consume<Scalar>().Value;
+            if (string.Equals(key, "code-review-remediation", StringComparison.OrdinalIgnoreCase))
+                file.CodeReviewRemediation = (CodeReviewSection?)rootDeserializer(typeof(CodeReviewSection));
+            else if (string.Equals(key, "completed", StringComparison.OrdinalIgnoreCase))
+                file.Completed = (List<CompletedGroup>?)rootDeserializer(typeof(List<CompletedGroup>));
+            else if (string.Equals(key, "notes", StringComparison.OrdinalIgnoreCase))
+                file.Notes = (List<string>?)rootDeserializer(typeof(List<string>));
+            else
+                file.Sections[key] = (TodoSection?)rootDeserializer(typeof(TodoSection)) ?? new TodoSection();
+        }
+        return file;
+    }
+
+    /// <inheritdoc />
+    public void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer serializer)
+    {
+        var file = (TodoFile)(value ?? new TodoFile());
+        emitter.Emit(new MappingStart(null, null, false, MappingStyle.Block));
+        foreach (var (key, section) in file.Sections)
+        {
+            emitter.Emit(new Scalar(key));
+            serializer(section, typeof(TodoSection));
+        }
+        if (file.CodeReviewRemediation is not null)
+        {
+            emitter.Emit(new Scalar("code-review-remediation"));
+            serializer(file.CodeReviewRemediation, typeof(CodeReviewSection));
+        }
+        if (file.Completed is not null)
+        {
+            emitter.Emit(new Scalar("completed"));
+            serializer(file.Completed, typeof(List<CompletedGroup>));
+        }
+        if (file.Notes is not null)
+        {
+            emitter.Emit(new Scalar("notes"));
+            serializer(file.Notes, typeof(List<string>));
+        }
+        emitter.Emit(new MappingEnd());
+    }
 }

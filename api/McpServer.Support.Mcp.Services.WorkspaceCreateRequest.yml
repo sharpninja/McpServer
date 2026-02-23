@@ -1,0 +1,576 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.WorkspaceCreateRequest
+  commentId: T:McpServer.Support.Mcp.Services.WorkspaceCreateRequest
+  id: WorkspaceCreateRequest
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.WorkspaceCreateRequest.Name
+  - McpServer.Support.Mcp.Services.WorkspaceCreateRequest.RunAs
+  - McpServer.Support.Mcp.Services.WorkspaceCreateRequest.TodoPath
+  - McpServer.Support.Mcp.Services.WorkspaceCreateRequest.TunnelProvider
+  - McpServer.Support.Mcp.Services.WorkspaceCreateRequest.WorkspacePath
+  - McpServer.Support.Mcp.Services.WorkspaceCreateRequest.WorkspacePort
+  langs:
+  - csharp
+  - vb
+  name: WorkspaceCreateRequest
+  nameWithType: WorkspaceCreateRequest
+  fullName: McpServer.Support.Mcp.Services.WorkspaceCreateRequest
+  type: Class
+  source:
+    id: WorkspaceCreateRequest
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 27
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Request to create a new workspace.
+  example: []
+  syntax:
+    content: 'public sealed record WorkspaceCreateRequest : IEquatable<WorkspaceCreateRequest>'
+    content.vb: Public NotInheritable Class WorkspaceCreateRequest Implements IEquatable(Of WorkspaceCreateRequest)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{McpServer.Support.Mcp.Services.WorkspaceCreateRequest}
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.WorkspacePath
+  commentId: P:McpServer.Support.Mcp.Services.WorkspaceCreateRequest.WorkspacePath
+  id: WorkspacePath
+  parent: McpServer.Support.Mcp.Services.WorkspaceCreateRequest
+  langs:
+  - csharp
+  - vb
+  name: WorkspacePath
+  nameWithType: WorkspaceCreateRequest.WorkspacePath
+  fullName: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.WorkspacePath
+  type: Property
+  source:
+    id: WorkspacePath
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 30
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Absolute path to the workspace root folder. Required.
+  example: []
+  syntax:
+    content: public required string WorkspacePath { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property WorkspacePath As String
+  overload: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.WorkspacePath*
+- uid: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.Name
+  commentId: P:McpServer.Support.Mcp.Services.WorkspaceCreateRequest.Name
+  id: Name
+  parent: McpServer.Support.Mcp.Services.WorkspaceCreateRequest
+  langs:
+  - csharp
+  - vb
+  name: Name
+  nameWithType: WorkspaceCreateRequest.Name
+  fullName: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.Name
+  type: Property
+  source:
+    id: Name
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 33
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'Human-readable workspace name. Default: last segment of WorkspacePath.'
+  example: []
+  syntax:
+    content: public string? Name { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Name As String
+  overload: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.Name*
+- uid: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.WorkspacePort
+  commentId: P:McpServer.Support.Mcp.Services.WorkspaceCreateRequest.WorkspacePort
+  id: WorkspacePort
+  parent: McpServer.Support.Mcp.Services.WorkspaceCreateRequest
+  langs:
+  - csharp
+  - vb
+  name: WorkspacePort
+  nameWithType: WorkspaceCreateRequest.WorkspacePort
+  fullName: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.WorkspacePort
+  type: Property
+  source:
+    id: WorkspacePort
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 36
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: HTTP port for this workspace's hosted instance. 0 = auto-assign (starting at 7148).
+  example: []
+  syntax:
+    content: public int WorkspacePort { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property WorkspacePort As Integer
+  overload: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.WorkspacePort*
+- uid: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.TodoPath
+  commentId: P:McpServer.Support.Mcp.Services.WorkspaceCreateRequest.TodoPath
+  id: TodoPath
+  parent: McpServer.Support.Mcp.Services.WorkspaceCreateRequest
+  langs:
+  - csharp
+  - vb
+  name: TodoPath
+  nameWithType: WorkspaceCreateRequest.TodoPath
+  fullName: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.TodoPath
+  type: Property
+  source:
+    id: TodoPath
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 39
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'Relative path to todo file within workspace. Default: docs/todo.yaml.'
+  example: []
+  syntax:
+    content: public string? TodoPath { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property TodoPath As String
+  overload: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.TodoPath*
+- uid: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.TunnelProvider
+  commentId: P:McpServer.Support.Mcp.Services.WorkspaceCreateRequest.TunnelProvider
+  id: TunnelProvider
+  parent: McpServer.Support.Mcp.Services.WorkspaceCreateRequest
+  langs:
+  - csharp
+  - vb
+  name: TunnelProvider
+  nameWithType: WorkspaceCreateRequest.TunnelProvider
+  fullName: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.TunnelProvider
+  type: Property
+  source:
+    id: TunnelProvider
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 42
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Tunnel provider key (ngrok, cloudflare, frp) or null = no tunnel.
+  example: []
+  syntax:
+    content: public string? TunnelProvider { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property TunnelProvider As String
+  overload: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.TunnelProvider*
+- uid: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.RunAs
+  commentId: P:McpServer.Support.Mcp.Services.WorkspaceCreateRequest.RunAs
+  id: RunAs
+  parent: McpServer.Support.Mcp.Services.WorkspaceCreateRequest
+  langs:
+  - csharp
+  - vb
+  name: RunAs
+  nameWithType: WorkspaceCreateRequest.RunAs
+  fullName: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.RunAs
+  type: Property
+  source:
+    id: RunAs
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IWorkspaceService.cs
+    startLine: 45
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Identity for child process. Null = current Windows user.
+  example: []
+  syntax:
+    content: public string? RunAs { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property RunAs As String
+  overload: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.RunAs*
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.IEquatable{McpServer.Support.Mcp.Services.WorkspaceCreateRequest}
+  commentId: T:System.IEquatable{McpServer.Support.Mcp.Services.WorkspaceCreateRequest}
+  parent: System
+  definition: System.IEquatable`1
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<WorkspaceCreateRequest>
+  nameWithType: IEquatable<WorkspaceCreateRequest>
+  fullName: System.IEquatable<McpServer.Support.Mcp.Services.WorkspaceCreateRequest>
+  nameWithType.vb: IEquatable(Of WorkspaceCreateRequest)
+  fullName.vb: System.IEquatable(Of McpServer.Support.Mcp.Services.WorkspaceCreateRequest)
+  name.vb: IEquatable(Of WorkspaceCreateRequest)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.WorkspaceCreateRequest
+    name: WorkspaceCreateRequest
+    href: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.html
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.WorkspaceCreateRequest
+    name: WorkspaceCreateRequest
+    href: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.html
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.WorkspacePath*
+  commentId: Overload:McpServer.Support.Mcp.Services.WorkspaceCreateRequest.WorkspacePath
+  href: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.html#McpServer_Support_Mcp_Services_WorkspaceCreateRequest_WorkspacePath
+  name: WorkspacePath
+  nameWithType: WorkspaceCreateRequest.WorkspacePath
+  fullName: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.WorkspacePath
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.Name*
+  commentId: Overload:McpServer.Support.Mcp.Services.WorkspaceCreateRequest.Name
+  href: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.html#McpServer_Support_Mcp_Services_WorkspaceCreateRequest_Name
+  name: Name
+  nameWithType: WorkspaceCreateRequest.Name
+  fullName: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.Name
+- uid: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.WorkspacePort*
+  commentId: Overload:McpServer.Support.Mcp.Services.WorkspaceCreateRequest.WorkspacePort
+  href: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.html#McpServer_Support_Mcp_Services_WorkspaceCreateRequest_WorkspacePort
+  name: WorkspacePort
+  nameWithType: WorkspaceCreateRequest.WorkspacePort
+  fullName: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.WorkspacePort
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.TodoPath*
+  commentId: Overload:McpServer.Support.Mcp.Services.WorkspaceCreateRequest.TodoPath
+  href: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.html#McpServer_Support_Mcp_Services_WorkspaceCreateRequest_TodoPath
+  name: TodoPath
+  nameWithType: WorkspaceCreateRequest.TodoPath
+  fullName: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.TodoPath
+- uid: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.TunnelProvider*
+  commentId: Overload:McpServer.Support.Mcp.Services.WorkspaceCreateRequest.TunnelProvider
+  href: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.html#McpServer_Support_Mcp_Services_WorkspaceCreateRequest_TunnelProvider
+  name: TunnelProvider
+  nameWithType: WorkspaceCreateRequest.TunnelProvider
+  fullName: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.TunnelProvider
+- uid: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.RunAs*
+  commentId: Overload:McpServer.Support.Mcp.Services.WorkspaceCreateRequest.RunAs
+  href: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.html#McpServer_Support_Mcp_Services_WorkspaceCreateRequest_RunAs
+  name: RunAs
+  nameWithType: WorkspaceCreateRequest.RunAs
+  fullName: McpServer.Support.Mcp.Services.WorkspaceCreateRequest.RunAs

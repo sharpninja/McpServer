@@ -1,0 +1,1055 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  commentId: T:McpServer.Support.Mcp.Services.TodoUpdateRequest
+  id: TodoUpdateRequest
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.TodoUpdateRequest.CompletedDate
+  - McpServer.Support.Mcp.Services.TodoUpdateRequest.DependsOn
+  - McpServer.Support.Mcp.Services.TodoUpdateRequest.Description
+  - McpServer.Support.Mcp.Services.TodoUpdateRequest.Done
+  - McpServer.Support.Mcp.Services.TodoUpdateRequest.DoneSummary
+  - McpServer.Support.Mcp.Services.TodoUpdateRequest.Estimate
+  - McpServer.Support.Mcp.Services.TodoUpdateRequest.FunctionalRequirements
+  - McpServer.Support.Mcp.Services.TodoUpdateRequest.ImplementationTasks
+  - McpServer.Support.Mcp.Services.TodoUpdateRequest.Note
+  - McpServer.Support.Mcp.Services.TodoUpdateRequest.Priority
+  - McpServer.Support.Mcp.Services.TodoUpdateRequest.Remaining
+  - McpServer.Support.Mcp.Services.TodoUpdateRequest.Section
+  - McpServer.Support.Mcp.Services.TodoUpdateRequest.TechnicalDetails
+  - McpServer.Support.Mcp.Services.TodoUpdateRequest.TechnicalRequirements
+  - McpServer.Support.Mcp.Services.TodoUpdateRequest.Title
+  langs:
+  - csharp
+  - vb
+  name: TodoUpdateRequest
+  nameWithType: TodoUpdateRequest
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  type: Class
+  source:
+    id: TodoUpdateRequest
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 145
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-PLANNED-013: Request to update an existing TODO item.'
+  example: []
+  syntax:
+    content: 'public sealed record TodoUpdateRequest : IEquatable<TodoUpdateRequest>'
+    content.vb: Public NotInheritable Class TodoUpdateRequest Implements IEquatable(Of TodoUpdateRequest)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{McpServer.Support.Mcp.Services.TodoUpdateRequest}
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.Title
+  commentId: P:McpServer.Support.Mcp.Services.TodoUpdateRequest.Title
+  id: Title
+  parent: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: Title
+  nameWithType: TodoUpdateRequest.Title
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.Title
+  type: Property
+  source:
+    id: Title
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 148
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated title (null = no change).
+  example: []
+  syntax:
+    content: public string? Title { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Title As String
+  overload: McpServer.Support.Mcp.Services.TodoUpdateRequest.Title*
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.Priority
+  commentId: P:McpServer.Support.Mcp.Services.TodoUpdateRequest.Priority
+  id: Priority
+  parent: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: Priority
+  nameWithType: TodoUpdateRequest.Priority
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.Priority
+  type: Property
+  source:
+    id: Priority
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 151
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated priority (null = no change).
+  example: []
+  syntax:
+    content: public string? Priority { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Priority As String
+  overload: McpServer.Support.Mcp.Services.TodoUpdateRequest.Priority*
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.Section
+  commentId: P:McpServer.Support.Mcp.Services.TodoUpdateRequest.Section
+  id: Section
+  parent: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: Section
+  nameWithType: TodoUpdateRequest.Section
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.Section
+  type: Property
+  source:
+    id: Section
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 154
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated section (null = no change).
+  example: []
+  syntax:
+    content: public string? Section { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Section As String
+  overload: McpServer.Support.Mcp.Services.TodoUpdateRequest.Section*
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.Done
+  commentId: P:McpServer.Support.Mcp.Services.TodoUpdateRequest.Done
+  id: Done
+  parent: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: Done
+  nameWithType: TodoUpdateRequest.Done
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.Done
+  type: Property
+  source:
+    id: Done
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 157
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated done status (null = no change).
+  example: []
+  syntax:
+    content: public bool? Done { get; init; }
+    parameters: []
+    return:
+      type: System.Nullable{System.Boolean}
+    content.vb: Public Property Done As Boolean?
+  overload: McpServer.Support.Mcp.Services.TodoUpdateRequest.Done*
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.Estimate
+  commentId: P:McpServer.Support.Mcp.Services.TodoUpdateRequest.Estimate
+  id: Estimate
+  parent: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: Estimate
+  nameWithType: TodoUpdateRequest.Estimate
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.Estimate
+  type: Property
+  source:
+    id: Estimate
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 160
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated estimate (null = no change).
+  example: []
+  syntax:
+    content: public string? Estimate { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Estimate As String
+  overload: McpServer.Support.Mcp.Services.TodoUpdateRequest.Estimate*
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.Description
+  commentId: P:McpServer.Support.Mcp.Services.TodoUpdateRequest.Description
+  id: Description
+  parent: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: Description
+  nameWithType: TodoUpdateRequest.Description
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.Description
+  type: Property
+  source:
+    id: Description
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 163
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated description lines (null = no change).
+  example: []
+  syntax:
+    content: public IReadOnlyList<string>? Description { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+    content.vb: Public Property Description As IReadOnlyList(Of String)
+  overload: McpServer.Support.Mcp.Services.TodoUpdateRequest.Description*
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.TechnicalDetails
+  commentId: P:McpServer.Support.Mcp.Services.TodoUpdateRequest.TechnicalDetails
+  id: TechnicalDetails
+  parent: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: TechnicalDetails
+  nameWithType: TodoUpdateRequest.TechnicalDetails
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.TechnicalDetails
+  type: Property
+  source:
+    id: TechnicalDetails
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 166
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated technical details (null = no change).
+  example: []
+  syntax:
+    content: public IReadOnlyList<string>? TechnicalDetails { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+    content.vb: Public Property TechnicalDetails As IReadOnlyList(Of String)
+  overload: McpServer.Support.Mcp.Services.TodoUpdateRequest.TechnicalDetails*
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.ImplementationTasks
+  commentId: P:McpServer.Support.Mcp.Services.TodoUpdateRequest.ImplementationTasks
+  id: ImplementationTasks
+  parent: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: ImplementationTasks
+  nameWithType: TodoUpdateRequest.ImplementationTasks
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.ImplementationTasks
+  type: Property
+  source:
+    id: ImplementationTasks
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 169
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated implementation tasks (null = no change).
+  example: []
+  syntax:
+    content: public IReadOnlyList<TodoFlatTask>? ImplementationTasks { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Services.TodoFlatTask}
+    content.vb: Public Property ImplementationTasks As IReadOnlyList(Of TodoFlatTask)
+  overload: McpServer.Support.Mcp.Services.TodoUpdateRequest.ImplementationTasks*
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.Note
+  commentId: P:McpServer.Support.Mcp.Services.TodoUpdateRequest.Note
+  id: Note
+  parent: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: Note
+  nameWithType: TodoUpdateRequest.Note
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.Note
+  type: Property
+  source:
+    id: Note
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 172
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated note (null = no change).
+  example: []
+  syntax:
+    content: public string? Note { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Note As String
+  overload: McpServer.Support.Mcp.Services.TodoUpdateRequest.Note*
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.CompletedDate
+  commentId: P:McpServer.Support.Mcp.Services.TodoUpdateRequest.CompletedDate
+  id: CompletedDate
+  parent: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: CompletedDate
+  nameWithType: TodoUpdateRequest.CompletedDate
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.CompletedDate
+  type: Property
+  source:
+    id: CompletedDate
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 175
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated completed date (null = no change).
+  example: []
+  syntax:
+    content: public string? CompletedDate { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property CompletedDate As String
+  overload: McpServer.Support.Mcp.Services.TodoUpdateRequest.CompletedDate*
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.DoneSummary
+  commentId: P:McpServer.Support.Mcp.Services.TodoUpdateRequest.DoneSummary
+  id: DoneSummary
+  parent: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: DoneSummary
+  nameWithType: TodoUpdateRequest.DoneSummary
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.DoneSummary
+  type: Property
+  source:
+    id: DoneSummary
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 178
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated done summary (null = no change).
+  example: []
+  syntax:
+    content: public string? DoneSummary { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property DoneSummary As String
+  overload: McpServer.Support.Mcp.Services.TodoUpdateRequest.DoneSummary*
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.Remaining
+  commentId: P:McpServer.Support.Mcp.Services.TodoUpdateRequest.Remaining
+  id: Remaining
+  parent: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: Remaining
+  nameWithType: TodoUpdateRequest.Remaining
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.Remaining
+  type: Property
+  source:
+    id: Remaining
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 181
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated remaining text (null = no change).
+  example: []
+  syntax:
+    content: public string? Remaining { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Remaining As String
+  overload: McpServer.Support.Mcp.Services.TodoUpdateRequest.Remaining*
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.DependsOn
+  commentId: P:McpServer.Support.Mcp.Services.TodoUpdateRequest.DependsOn
+  id: DependsOn
+  parent: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: DependsOn
+  nameWithType: TodoUpdateRequest.DependsOn
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.DependsOn
+  type: Property
+  source:
+    id: DependsOn
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 184
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated dependency list (null = no change).
+  example: []
+  syntax:
+    content: public IReadOnlyList<string>? DependsOn { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+    content.vb: Public Property DependsOn As IReadOnlyList(Of String)
+  overload: McpServer.Support.Mcp.Services.TodoUpdateRequest.DependsOn*
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.FunctionalRequirements
+  commentId: P:McpServer.Support.Mcp.Services.TodoUpdateRequest.FunctionalRequirements
+  id: FunctionalRequirements
+  parent: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: FunctionalRequirements
+  nameWithType: TodoUpdateRequest.FunctionalRequirements
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.FunctionalRequirements
+  type: Property
+  source:
+    id: FunctionalRequirements
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 187
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated functional requirement IDs (null = no change).
+  example: []
+  syntax:
+    content: public IReadOnlyList<string>? FunctionalRequirements { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+    content.vb: Public Property FunctionalRequirements As IReadOnlyList(Of String)
+  overload: McpServer.Support.Mcp.Services.TodoUpdateRequest.FunctionalRequirements*
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.TechnicalRequirements
+  commentId: P:McpServer.Support.Mcp.Services.TodoUpdateRequest.TechnicalRequirements
+  id: TechnicalRequirements
+  parent: McpServer.Support.Mcp.Services.TodoUpdateRequest
+  langs:
+  - csharp
+  - vb
+  name: TechnicalRequirements
+  nameWithType: TodoUpdateRequest.TechnicalRequirements
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.TechnicalRequirements
+  type: Property
+  source:
+    id: TechnicalRequirements
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\ITodoService.cs
+    startLine: 190
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: Updated technical requirement IDs (null = no change).
+  example: []
+  syntax:
+    content: public IReadOnlyList<string>? TechnicalRequirements { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+    content.vb: Public Property TechnicalRequirements As IReadOnlyList(Of String)
+  overload: McpServer.Support.Mcp.Services.TodoUpdateRequest.TechnicalRequirements*
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.IEquatable{McpServer.Support.Mcp.Services.TodoUpdateRequest}
+  commentId: T:System.IEquatable{McpServer.Support.Mcp.Services.TodoUpdateRequest}
+  parent: System
+  definition: System.IEquatable`1
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<TodoUpdateRequest>
+  nameWithType: IEquatable<TodoUpdateRequest>
+  fullName: System.IEquatable<McpServer.Support.Mcp.Services.TodoUpdateRequest>
+  nameWithType.vb: IEquatable(Of TodoUpdateRequest)
+  fullName.vb: System.IEquatable(Of McpServer.Support.Mcp.Services.TodoUpdateRequest)
+  name.vb: IEquatable(Of TodoUpdateRequest)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.TodoUpdateRequest
+    name: TodoUpdateRequest
+    href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.TodoUpdateRequest
+    name: TodoUpdateRequest
+    href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.Title*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoUpdateRequest.Title
+  href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html#McpServer_Support_Mcp_Services_TodoUpdateRequest_Title
+  name: Title
+  nameWithType: TodoUpdateRequest.Title
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.Title
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.Priority*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoUpdateRequest.Priority
+  href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html#McpServer_Support_Mcp_Services_TodoUpdateRequest_Priority
+  name: Priority
+  nameWithType: TodoUpdateRequest.Priority
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.Priority
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.Section*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoUpdateRequest.Section
+  href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html#McpServer_Support_Mcp_Services_TodoUpdateRequest_Section
+  name: Section
+  nameWithType: TodoUpdateRequest.Section
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.Section
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.Done*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoUpdateRequest.Done
+  href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html#McpServer_Support_Mcp_Services_TodoUpdateRequest_Done
+  name: Done
+  nameWithType: TodoUpdateRequest.Done
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.Done
+- uid: System.Nullable{System.Boolean}
+  commentId: T:System.Nullable{System.Boolean}
+  parent: System
+  definition: System.Nullable`1
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool?
+  nameWithType: bool?
+  fullName: bool?
+  nameWithType.vb: Boolean?
+  fullName.vb: Boolean?
+  name.vb: Boolean?
+  spec.csharp:
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: '?'
+  spec.vb:
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.boolean
+  - name: '?'
+- uid: System.Nullable`1
+  commentId: T:System.Nullable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  name: Nullable<T>
+  nameWithType: Nullable<T>
+  fullName: System.Nullable<T>
+  nameWithType.vb: Nullable(Of T)
+  fullName.vb: System.Nullable(Of T)
+  name.vb: Nullable(Of T)
+  spec.csharp:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Nullable`1
+    name: Nullable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.nullable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.Estimate*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoUpdateRequest.Estimate
+  href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html#McpServer_Support_Mcp_Services_TodoUpdateRequest_Estimate
+  name: Estimate
+  nameWithType: TodoUpdateRequest.Estimate
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.Estimate
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.Description*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoUpdateRequest.Description
+  href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html#McpServer_Support_Mcp_Services_TodoUpdateRequest_Description
+  name: Description
+  nameWithType: TodoUpdateRequest.Description
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.Description
+- uid: System.Collections.Generic.IReadOnlyList{System.String}
+  commentId: T:System.Collections.Generic.IReadOnlyList{System.String}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IReadOnlyList`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<string>
+  nameWithType: IReadOnlyList<string>
+  fullName: System.Collections.Generic.IReadOnlyList<string>
+  nameWithType.vb: IReadOnlyList(Of String)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of String)
+  name.vb: IReadOnlyList(Of String)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: System.Collections.Generic.IReadOnlyList`1
+  commentId: T:System.Collections.Generic.IReadOnlyList`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<T>
+  nameWithType: IReadOnlyList<T>
+  fullName: System.Collections.Generic.IReadOnlyList<T>
+  nameWithType.vb: IReadOnlyList(Of T)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of T)
+  name.vb: IReadOnlyList(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.TechnicalDetails*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoUpdateRequest.TechnicalDetails
+  href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html#McpServer_Support_Mcp_Services_TodoUpdateRequest_TechnicalDetails
+  name: TechnicalDetails
+  nameWithType: TodoUpdateRequest.TechnicalDetails
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.TechnicalDetails
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.ImplementationTasks*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoUpdateRequest.ImplementationTasks
+  href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html#McpServer_Support_Mcp_Services_TodoUpdateRequest_ImplementationTasks
+  name: ImplementationTasks
+  nameWithType: TodoUpdateRequest.ImplementationTasks
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.ImplementationTasks
+- uid: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Services.TodoFlatTask}
+  commentId: T:System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Services.TodoFlatTask}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IReadOnlyList`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<TodoFlatTask>
+  nameWithType: IReadOnlyList<TodoFlatTask>
+  fullName: System.Collections.Generic.IReadOnlyList<McpServer.Support.Mcp.Services.TodoFlatTask>
+  nameWithType.vb: IReadOnlyList(Of TodoFlatTask)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of McpServer.Support.Mcp.Services.TodoFlatTask)
+  name.vb: IReadOnlyList(Of TodoFlatTask)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.TodoFlatTask
+    name: TodoFlatTask
+    href: McpServer.Support.Mcp.Services.TodoFlatTask.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.TodoFlatTask
+    name: TodoFlatTask
+    href: McpServer.Support.Mcp.Services.TodoFlatTask.html
+  - name: )
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.Note*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoUpdateRequest.Note
+  href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html#McpServer_Support_Mcp_Services_TodoUpdateRequest_Note
+  name: Note
+  nameWithType: TodoUpdateRequest.Note
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.Note
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.CompletedDate*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoUpdateRequest.CompletedDate
+  href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html#McpServer_Support_Mcp_Services_TodoUpdateRequest_CompletedDate
+  name: CompletedDate
+  nameWithType: TodoUpdateRequest.CompletedDate
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.CompletedDate
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.DoneSummary*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoUpdateRequest.DoneSummary
+  href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html#McpServer_Support_Mcp_Services_TodoUpdateRequest_DoneSummary
+  name: DoneSummary
+  nameWithType: TodoUpdateRequest.DoneSummary
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.DoneSummary
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.Remaining*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoUpdateRequest.Remaining
+  href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html#McpServer_Support_Mcp_Services_TodoUpdateRequest_Remaining
+  name: Remaining
+  nameWithType: TodoUpdateRequest.Remaining
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.Remaining
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.DependsOn*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoUpdateRequest.DependsOn
+  href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html#McpServer_Support_Mcp_Services_TodoUpdateRequest_DependsOn
+  name: DependsOn
+  nameWithType: TodoUpdateRequest.DependsOn
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.DependsOn
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.FunctionalRequirements*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoUpdateRequest.FunctionalRequirements
+  href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html#McpServer_Support_Mcp_Services_TodoUpdateRequest_FunctionalRequirements
+  name: FunctionalRequirements
+  nameWithType: TodoUpdateRequest.FunctionalRequirements
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.FunctionalRequirements
+- uid: McpServer.Support.Mcp.Services.TodoUpdateRequest.TechnicalRequirements*
+  commentId: Overload:McpServer.Support.Mcp.Services.TodoUpdateRequest.TechnicalRequirements
+  href: McpServer.Support.Mcp.Services.TodoUpdateRequest.html#McpServer_Support_Mcp_Services_TodoUpdateRequest_TechnicalRequirements
+  name: TechnicalRequirements
+  nameWithType: TodoUpdateRequest.TechnicalRequirements
+  fullName: McpServer.Support.Mcp.Services.TodoUpdateRequest.TechnicalRequirements

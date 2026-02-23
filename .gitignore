@@ -483,6 +483,21 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
+# MCP server marker files (runtime artifacts for agent port discovery)
+.mcp-server.yaml
+.mcp-server.json
+
+# SQLite database files (runtime data)
+*.db
+*.db-shm
+*.db-wal
+
+# Build / publish output
+_publish/
+_site/
+
 # Local scratch files
 _tmp*
 _temp*
+
+AGENTS-README-FIRST.yaml

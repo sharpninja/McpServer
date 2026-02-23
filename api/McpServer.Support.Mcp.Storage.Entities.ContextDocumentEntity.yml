@@ -1,0 +1,698 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity
+  commentId: T:McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity
+  id: ContextDocumentEntity
+  parent: McpServer.Support.Mcp.Storage.Entities
+  children:
+  - McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.Chunks
+  - McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.ContentHash
+  - McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.Id
+  - McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.IngestedAt
+  - McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.SourceKey
+  - McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.SourceType
+  langs:
+  - csharp
+  - vb
+  name: ContextDocumentEntity
+  nameWithType: ContextDocumentEntity
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity
+  type: Class
+  source:
+    id: ContextDocumentEntity
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ContextDocumentEntity.cs
+    startLine: 8
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: >-
+    TR-PLANNED-013: Persisted document record for MCP indexing.
+
+    FR-SUPPORT-010: Stored in SQLite for full-text and metadata.
+  example: []
+  syntax:
+    content: public sealed class ContextDocumentEntity
+    content.vb: Public NotInheritable Class ContextDocumentEntity
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.Id
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.Id
+  id: Id
+  parent: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity
+  langs:
+  - csharp
+  - vb
+  name: Id
+  nameWithType: ContextDocumentEntity.Id
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.Id
+  type: Property
+  source:
+    id: Id
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ContextDocumentEntity.cs
+    startLine: 11
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Unique document identifier.'
+  example: []
+  syntax:
+    content: >-
+      [Key]
+
+      [MaxLength(256)]
+
+      public required string Id { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Key>
+
+      <MaxLength(256)>
+
+      Public Property Id As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.Id*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.KeyAttribute
+    ctor: System.ComponentModel.DataAnnotations.KeyAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 256
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.SourceType
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.SourceType
+  id: SourceType
+  parent: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity
+  langs:
+  - csharp
+  - vb
+  name: SourceType
+  nameWithType: ContextDocumentEntity.SourceType
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.SourceType
+  type: Property
+  source:
+    id: SourceType
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ContextDocumentEntity.cs
+    startLine: 16
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'FR-SUPPORT-010: Source type (repo, session-log, external-doc, issue, pr).'
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(64)]
+
+      public required string SourceType { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(64)>
+
+      Public Property SourceType As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.SourceType*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 64
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.SourceKey
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.SourceKey
+  id: SourceKey
+  parent: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity
+  langs:
+  - csharp
+  - vb
+  name: SourceKey
+  nameWithType: ContextDocumentEntity.SourceKey
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.SourceKey
+  type: Property
+  source:
+    id: SourceKey
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ContextDocumentEntity.cs
+    startLine: 21
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Source path or URL.'
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(2048)]
+
+      public required string SourceKey { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(2048)>
+
+      Public Property SourceKey As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.SourceKey*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 2048
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.IngestedAt
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.IngestedAt
+  id: IngestedAt
+  parent: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity
+  langs:
+  - csharp
+  - vb
+  name: IngestedAt
+  nameWithType: ContextDocumentEntity.IngestedAt
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.IngestedAt
+  type: Property
+  source:
+    id: IngestedAt
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ContextDocumentEntity.cs
+    startLine: 26
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'FR-SUPPORT-010: Last ingestion timestamp (UTC).'
+  example: []
+  syntax:
+    content: public DateTime IngestedAt { get; set; }
+    parameters: []
+    return:
+      type: System.DateTime
+    content.vb: Public Property IngestedAt As Date
+  overload: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.IngestedAt*
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.ContentHash
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.ContentHash
+  id: ContentHash
+  parent: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity
+  langs:
+  - csharp
+  - vb
+  name: ContentHash
+  nameWithType: ContextDocumentEntity.ContentHash
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.ContentHash
+  type: Property
+  source:
+    id: ContentHash
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ContextDocumentEntity.cs
+    startLine: 29
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: 'TR-PLANNED-013: Hash for change detection.'
+  example: []
+  syntax:
+    content: >-
+      [Required]
+
+      [MaxLength(64)]
+
+      public required string ContentHash { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: >-
+      <Required>
+
+      <MaxLength(64)>
+
+      Public Property ContentHash As String
+  overload: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.ContentHash*
+  attributes:
+  - type: System.ComponentModel.DataAnnotations.RequiredAttribute
+    ctor: System.ComponentModel.DataAnnotations.RequiredAttribute.#ctor
+    arguments: []
+  - type: System.ComponentModel.DataAnnotations.MaxLengthAttribute
+    ctor: System.ComponentModel.DataAnnotations.MaxLengthAttribute.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: 64
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.Chunks
+  commentId: P:McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.Chunks
+  id: Chunks
+  parent: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity
+  langs:
+  - csharp
+  - vb
+  name: Chunks
+  nameWithType: ContextDocumentEntity.Chunks
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.Chunks
+  type: Property
+  source:
+    id: Chunks
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Storage\Entities\ContextDocumentEntity.cs
+    startLine: 34
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Storage.Entities
+  summary: Navigation to chunks. EF Core requires mutable collection for relationship fixup.
+  example: []
+  syntax:
+    content: public ICollection<ContextChunkEntity> Chunks { get; set; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.ICollection{McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity}
+    content.vb: Public Property Chunks As ICollection(Of ContextChunkEntity)
+  overload: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.Chunks*
+references:
+- uid: McpServer.Support.Mcp.Storage.Entities
+  commentId: N:McpServer.Support.Mcp.Storage.Entities
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Storage.Entities
+  nameWithType: McpServer.Support.Mcp.Storage.Entities
+  fullName: McpServer.Support.Mcp.Storage.Entities
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage.Entities
+    name: Entities
+    href: McpServer.Support.Mcp.Storage.Entities.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage
+    name: Storage
+    href: McpServer.Support.Mcp.Storage.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Storage.Entities
+    name: Entities
+    href: McpServer.Support.Mcp.Storage.Entities.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.Id*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.Id
+  href: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.html#McpServer_Support_Mcp_Storage_Entities_ContextDocumentEntity_Id
+  name: Id
+  nameWithType: ContextDocumentEntity.Id
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.Id
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.SourceType*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.SourceType
+  href: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.html#McpServer_Support_Mcp_Storage_Entities_ContextDocumentEntity_SourceType
+  name: SourceType
+  nameWithType: ContextDocumentEntity.SourceType
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.SourceType
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.SourceKey*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.SourceKey
+  href: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.html#McpServer_Support_Mcp_Storage_Entities_ContextDocumentEntity_SourceKey
+  name: SourceKey
+  nameWithType: ContextDocumentEntity.SourceKey
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.SourceKey
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.IngestedAt*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.IngestedAt
+  href: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.html#McpServer_Support_Mcp_Storage_Entities_ContextDocumentEntity_IngestedAt
+  name: IngestedAt
+  nameWithType: ContextDocumentEntity.IngestedAt
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.IngestedAt
+- uid: System.DateTime
+  commentId: T:System.DateTime
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.datetime
+  name: DateTime
+  nameWithType: DateTime
+  fullName: System.DateTime
+  nameWithType.vb: Date
+  fullName.vb: Date
+  name.vb: Date
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.ContentHash*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.ContentHash
+  href: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.html#McpServer_Support_Mcp_Storage_Entities_ContextDocumentEntity_ContentHash
+  name: ContentHash
+  nameWithType: ContextDocumentEntity.ContentHash
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.ContentHash
+- uid: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.Chunks*
+  commentId: Overload:McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.Chunks
+  href: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.html#McpServer_Support_Mcp_Storage_Entities_ContextDocumentEntity_Chunks
+  name: Chunks
+  nameWithType: ContextDocumentEntity.Chunks
+  fullName: McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity.Chunks
+- uid: System.Collections.Generic.ICollection{McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity}
+  commentId: T:System.Collections.Generic.ICollection{McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.ICollection`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<ContextChunkEntity>
+  nameWithType: ICollection<ContextChunkEntity>
+  fullName: System.Collections.Generic.ICollection<McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity>
+  nameWithType.vb: ICollection(Of ContextChunkEntity)
+  fullName.vb: System.Collections.Generic.ICollection(Of McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity)
+  name.vb: ICollection(Of ContextChunkEntity)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity
+    name: ContextChunkEntity
+    href: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity
+    name: ContextChunkEntity
+    href: McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity.html
+  - name: )
+- uid: System.Collections.Generic.ICollection`1
+  commentId: T:System.Collections.Generic.ICollection`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  name: ICollection<T>
+  nameWithType: ICollection<T>
+  fullName: System.Collections.Generic.ICollection<T>
+  nameWithType.vb: ICollection(Of T)
+  fullName.vb: System.Collections.Generic.ICollection(Of T)
+  name.vb: ICollection(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.ICollection`1
+    name: ICollection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.icollection-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic

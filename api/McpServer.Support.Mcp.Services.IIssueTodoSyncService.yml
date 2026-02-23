@@ -1,0 +1,511 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Services.IIssueTodoSyncService
+  commentId: T:McpServer.Support.Mcp.Services.IIssueTodoSyncService
+  id: IIssueTodoSyncService
+  parent: McpServer.Support.Mcp.Services
+  children:
+  - McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncAllIssuesToTodosAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncAllTodosToIssuesAsync(System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncIssueToTodoAsync(McpServer.Support.Mcp.Models.GitHubIssueDetail,System.Threading.CancellationToken)
+  - McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncTodoToIssueAsync(System.String,System.Threading.CancellationToken)
+  langs:
+  - csharp
+  - vb
+  name: IIssueTodoSyncService
+  nameWithType: IIssueTodoSyncService
+  fullName: McpServer.Support.Mcp.Services.IIssueTodoSyncService
+  type: Interface
+  source:
+    id: IIssueTodoSyncService
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IIssueTodoSyncService.cs
+    startLine: 8
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: >-
+    TR-GH-013-002, TR-GH-013-003: Bidirectional sync between GitHub Issues and MCP TODOs.
+
+    FR-SUPPORT-013: Automatic TODO tracking with ISSUE-&lt;number&gt; IDs.
+  example: []
+  syntax:
+    content: public interface IIssueTodoSyncService
+    content.vb: Public Interface IIssueTodoSyncService
+- uid: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncIssueToTodoAsync(McpServer.Support.Mcp.Models.GitHubIssueDetail,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncIssueToTodoAsync(McpServer.Support.Mcp.Models.GitHubIssueDetail,System.Threading.CancellationToken)
+  id: SyncIssueToTodoAsync(McpServer.Support.Mcp.Models.GitHubIssueDetail,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IIssueTodoSyncService
+  langs:
+  - csharp
+  - vb
+  name: SyncIssueToTodoAsync(GitHubIssueDetail, CancellationToken)
+  nameWithType: IIssueTodoSyncService.SyncIssueToTodoAsync(GitHubIssueDetail, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncIssueToTodoAsync(McpServer.Support.Mcp.Models.GitHubIssueDetail, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: SyncIssueToTodoAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IIssueTodoSyncService.cs
+    startLine: 14
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-GH-013-003: Syncs a single GitHub issue to a TODO item.'
+  example: []
+  syntax:
+    content: Task<TodoMutationResult> SyncIssueToTodoAsync(GitHubIssueDetail issue, CancellationToken ct = default)
+    parameters:
+    - id: issue
+      type: McpServer.Support.Mcp.Models.GitHubIssueDetail
+      description: Full issue detail.
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: Cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.TodoMutationResult}
+      description: Mutation result.
+    content.vb: Function SyncIssueToTodoAsync(issue As GitHubIssueDetail, ct As CancellationToken = Nothing) As Task(Of TodoMutationResult)
+  overload: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncIssueToTodoAsync*
+- uid: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncAllIssuesToTodosAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncAllIssuesToTodosAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  id: SyncAllIssuesToTodosAsync(System.String,System.Int32,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IIssueTodoSyncService
+  langs:
+  - csharp
+  - vb
+  name: SyncAllIssuesToTodosAsync(string?, int, CancellationToken)
+  nameWithType: IIssueTodoSyncService.SyncAllIssuesToTodosAsync(string?, int, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncAllIssuesToTodosAsync(string?, int, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: SyncAllIssuesToTodosAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IIssueTodoSyncService.cs
+    startLine: 21
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-GH-013-003: Batch sync from GitHub to TODO.yaml.'
+  example: []
+  syntax:
+    content: Task<IssueSyncResult> SyncAllIssuesToTodosAsync(string? state, int limit, CancellationToken ct = default)
+    parameters:
+    - id: state
+      type: System.String
+      description: Issue state filter (open, closed, all).
+    - id: limit
+      type: System.Int32
+      description: Max issues to sync.
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: Cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.IssueSyncResult}
+      description: Sync result with counts.
+    content.vb: Function SyncAllIssuesToTodosAsync(state As String, limit As Integer, ct As CancellationToken = Nothing) As Task(Of IssueSyncResult)
+  overload: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncAllIssuesToTodosAsync*
+  nameWithType.vb: IIssueTodoSyncService.SyncAllIssuesToTodosAsync(String, Integer, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncAllIssuesToTodosAsync(String, Integer, System.Threading.CancellationToken)
+  name.vb: SyncAllIssuesToTodosAsync(String, Integer, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncTodoToIssueAsync(System.String,System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncTodoToIssueAsync(System.String,System.Threading.CancellationToken)
+  id: SyncTodoToIssueAsync(System.String,System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IIssueTodoSyncService
+  langs:
+  - csharp
+  - vb
+  name: SyncTodoToIssueAsync(string, CancellationToken)
+  nameWithType: IIssueTodoSyncService.SyncTodoToIssueAsync(string, CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncTodoToIssueAsync(string, System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: SyncTodoToIssueAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IIssueTodoSyncService.cs
+    startLine: 27
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-GH-013-003: Syncs a TODO item back to GitHub.'
+  example: []
+  syntax:
+    content: Task<GitHubMutationResult> SyncTodoToIssueAsync(string todoId, CancellationToken ct = default)
+    parameters:
+    - id: todoId
+      type: System.String
+      description: TODO item id (ISSUE-{number}).
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: Cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Models.GitHubMutationResult}
+      description: Mutation result.
+    content.vb: Function SyncTodoToIssueAsync(todoId As String, ct As CancellationToken = Nothing) As Task(Of GitHubMutationResult)
+  overload: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncTodoToIssueAsync*
+  nameWithType.vb: IIssueTodoSyncService.SyncTodoToIssueAsync(String, CancellationToken)
+  fullName.vb: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncTodoToIssueAsync(String, System.Threading.CancellationToken)
+  name.vb: SyncTodoToIssueAsync(String, CancellationToken)
+- uid: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncAllTodosToIssuesAsync(System.Threading.CancellationToken)
+  commentId: M:McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncAllTodosToIssuesAsync(System.Threading.CancellationToken)
+  id: SyncAllTodosToIssuesAsync(System.Threading.CancellationToken)
+  parent: McpServer.Support.Mcp.Services.IIssueTodoSyncService
+  langs:
+  - csharp
+  - vb
+  name: SyncAllTodosToIssuesAsync(CancellationToken)
+  nameWithType: IIssueTodoSyncService.SyncAllTodosToIssuesAsync(CancellationToken)
+  fullName: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncAllTodosToIssuesAsync(System.Threading.CancellationToken)
+  type: Method
+  source:
+    id: SyncAllTodosToIssuesAsync
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Services\IIssueTodoSyncService.cs
+    startLine: 32
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Services
+  summary: 'TR-GH-013-003: Batch sync from TODO.yaml to GitHub.'
+  example: []
+  syntax:
+    content: Task<IssueSyncResult> SyncAllTodosToIssuesAsync(CancellationToken ct = default)
+    parameters:
+    - id: ct
+      type: System.Threading.CancellationToken
+      description: Cancellation token.
+    return:
+      type: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.IssueSyncResult}
+      description: Sync result with counts.
+    content.vb: Function SyncAllTodosToIssuesAsync(ct As CancellationToken = Nothing) As Task(Of IssueSyncResult)
+  overload: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncAllTodosToIssuesAsync*
+references:
+- uid: McpServer.Support.Mcp.Services
+  commentId: N:McpServer.Support.Mcp.Services
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Services
+  nameWithType: McpServer.Support.Mcp.Services
+  fullName: McpServer.Support.Mcp.Services
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Services
+    name: Services
+    href: McpServer.Support.Mcp.Services.html
+- uid: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncIssueToTodoAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncIssueToTodoAsync
+  href: McpServer.Support.Mcp.Services.IIssueTodoSyncService.html#McpServer_Support_Mcp_Services_IIssueTodoSyncService_SyncIssueToTodoAsync_McpServer_Support_Mcp_Models_GitHubIssueDetail_System_Threading_CancellationToken_
+  name: SyncIssueToTodoAsync
+  nameWithType: IIssueTodoSyncService.SyncIssueToTodoAsync
+  fullName: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncIssueToTodoAsync
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail
+  commentId: T:McpServer.Support.Mcp.Models.GitHubIssueDetail
+  parent: McpServer.Support.Mcp.Models
+  href: McpServer.Support.Mcp.Models.GitHubIssueDetail.html
+  name: GitHubIssueDetail
+  nameWithType: GitHubIssueDetail
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail
+- uid: System.Threading.CancellationToken
+  commentId: T:System.Threading.CancellationToken
+  parent: System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.cancellationtoken
+  name: CancellationToken
+  nameWithType: CancellationToken
+  fullName: System.Threading.CancellationToken
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.TodoMutationResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.TodoMutationResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TodoMutationResult>
+  nameWithType: Task<TodoMutationResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.TodoMutationResult>
+  nameWithType.vb: Task(Of TodoMutationResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.TodoMutationResult)
+  name.vb: Task(Of TodoMutationResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.TodoMutationResult
+    name: TodoMutationResult
+    href: McpServer.Support.Mcp.Services.TodoMutationResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.TodoMutationResult
+    name: TodoMutationResult
+    href: McpServer.Support.Mcp.Services.TodoMutationResult.html
+  - name: )
+- uid: McpServer.Support.Mcp.Models
+  commentId: N:McpServer.Support.Mcp.Models
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Models
+  nameWithType: McpServer.Support.Mcp.Models
+  fullName: McpServer.Support.Mcp.Models
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+- uid: System.Threading
+  commentId: N:System.Threading
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading
+  nameWithType: System.Threading
+  fullName: System.Threading
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+- uid: System.Threading.Tasks.Task`1
+  commentId: T:System.Threading.Tasks.Task`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<TResult>
+  nameWithType: Task<TResult>
+  fullName: System.Threading.Tasks.Task<TResult>
+  nameWithType.vb: Task(Of TResult)
+  fullName.vb: System.Threading.Tasks.Task(Of TResult)
+  name.vb: Task(Of TResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks
+- uid: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncAllIssuesToTodosAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncAllIssuesToTodosAsync
+  href: McpServer.Support.Mcp.Services.IIssueTodoSyncService.html#McpServer_Support_Mcp_Services_IIssueTodoSyncService_SyncAllIssuesToTodosAsync_System_String_System_Int32_System_Threading_CancellationToken_
+  name: SyncAllIssuesToTodosAsync
+  nameWithType: IIssueTodoSyncService.SyncAllIssuesToTodosAsync
+  fullName: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncAllIssuesToTodosAsync
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.IssueSyncResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Services.IssueSyncResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<IssueSyncResult>
+  nameWithType: Task<IssueSyncResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Services.IssueSyncResult>
+  nameWithType.vb: Task(Of IssueSyncResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Services.IssueSyncResult)
+  name.vb: Task(Of IssueSyncResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Services.IssueSyncResult
+    name: IssueSyncResult
+    href: McpServer.Support.Mcp.Services.IssueSyncResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Services.IssueSyncResult
+    name: IssueSyncResult
+    href: McpServer.Support.Mcp.Services.IssueSyncResult.html
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncTodoToIssueAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncTodoToIssueAsync
+  href: McpServer.Support.Mcp.Services.IIssueTodoSyncService.html#McpServer_Support_Mcp_Services_IIssueTodoSyncService_SyncTodoToIssueAsync_System_String_System_Threading_CancellationToken_
+  name: SyncTodoToIssueAsync
+  nameWithType: IIssueTodoSyncService.SyncTodoToIssueAsync
+  fullName: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncTodoToIssueAsync
+- uid: System.Threading.Tasks.Task{McpServer.Support.Mcp.Models.GitHubMutationResult}
+  commentId: T:System.Threading.Tasks.Task{McpServer.Support.Mcp.Models.GitHubMutationResult}
+  parent: System.Threading.Tasks
+  definition: System.Threading.Tasks.Task`1
+  href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  name: Task<GitHubMutationResult>
+  nameWithType: Task<GitHubMutationResult>
+  fullName: System.Threading.Tasks.Task<McpServer.Support.Mcp.Models.GitHubMutationResult>
+  nameWithType.vb: Task(Of GitHubMutationResult)
+  fullName.vb: System.Threading.Tasks.Task(Of McpServer.Support.Mcp.Models.GitHubMutationResult)
+  name.vb: Task(Of GitHubMutationResult)
+  spec.csharp:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Models.GitHubMutationResult
+    name: GitHubMutationResult
+    href: McpServer.Support.Mcp.Models.GitHubMutationResult.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Threading.Tasks.Task`1
+    name: Task
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Models.GitHubMutationResult
+    name: GitHubMutationResult
+    href: McpServer.Support.Mcp.Models.GitHubMutationResult.html
+  - name: )
+- uid: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncAllTodosToIssuesAsync*
+  commentId: Overload:McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncAllTodosToIssuesAsync
+  href: McpServer.Support.Mcp.Services.IIssueTodoSyncService.html#McpServer_Support_Mcp_Services_IIssueTodoSyncService_SyncAllTodosToIssuesAsync_System_Threading_CancellationToken_
+  name: SyncAllTodosToIssuesAsync
+  nameWithType: IIssueTodoSyncService.SyncAllTodosToIssuesAsync
+  fullName: McpServer.Support.Mcp.Services.IIssueTodoSyncService.SyncAllTodosToIssuesAsync

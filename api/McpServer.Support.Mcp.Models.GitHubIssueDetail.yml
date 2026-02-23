@@ -1,0 +1,1063 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail
+  commentId: T:McpServer.Support.Mcp.Models.GitHubIssueDetail
+  id: GitHubIssueDetail
+  parent: McpServer.Support.Mcp.Models
+  children:
+  - McpServer.Support.Mcp.Models.GitHubIssueDetail.#ctor(System.Int32,System.String,System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.GitHubLabel},System.Collections.Generic.IReadOnlyList{System.String},System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.GitHubIssueComment})
+  - McpServer.Support.Mcp.Models.GitHubIssueDetail.Assignees
+  - McpServer.Support.Mcp.Models.GitHubIssueDetail.Author
+  - McpServer.Support.Mcp.Models.GitHubIssueDetail.Body
+  - McpServer.Support.Mcp.Models.GitHubIssueDetail.ClosedAt
+  - McpServer.Support.Mcp.Models.GitHubIssueDetail.Comments
+  - McpServer.Support.Mcp.Models.GitHubIssueDetail.CreatedAt
+  - McpServer.Support.Mcp.Models.GitHubIssueDetail.Labels
+  - McpServer.Support.Mcp.Models.GitHubIssueDetail.Milestone
+  - McpServer.Support.Mcp.Models.GitHubIssueDetail.Number
+  - McpServer.Support.Mcp.Models.GitHubIssueDetail.State
+  - McpServer.Support.Mcp.Models.GitHubIssueDetail.Title
+  - McpServer.Support.Mcp.Models.GitHubIssueDetail.UpdatedAt
+  - McpServer.Support.Mcp.Models.GitHubIssueDetail.Url
+  langs:
+  - csharp
+  - vb
+  name: GitHubIssueDetail
+  nameWithType: GitHubIssueDetail
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail
+  type: Class
+  source:
+    id: GitHubIssueDetail
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 19
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: >-
+    TR-GH-013-001: Full issue detail including body, labels, assignees, timestamps, and comments.
+
+    FR-SUPPORT-013: Complete issue metadata for MCP integration.
+  example: []
+  syntax:
+    content: 'public sealed record GitHubIssueDetail : IEquatable<GitHubIssueDetail>'
+    content.vb: Public NotInheritable Class GitHubIssueDetail Implements IEquatable(Of GitHubIssueDetail)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{McpServer.Support.Mcp.Models.GitHubIssueDetail}
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.#ctor(System.Int32,System.String,System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.GitHubLabel},System.Collections.Generic.IReadOnlyList{System.String},System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.GitHubIssueComment})
+  commentId: M:McpServer.Support.Mcp.Models.GitHubIssueDetail.#ctor(System.Int32,System.String,System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.GitHubLabel},System.Collections.Generic.IReadOnlyList{System.String},System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.GitHubIssueComment})
+  id: '#ctor(System.Int32,System.String,System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.GitHubLabel},System.Collections.Generic.IReadOnlyList{System.String},System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.GitHubIssueComment})'
+  parent: McpServer.Support.Mcp.Models.GitHubIssueDetail
+  langs:
+  - csharp
+  - vb
+  name: GitHubIssueDetail(int, string, string?, string?, string?, IReadOnlyList<GitHubLabel>, IReadOnlyList<string>, string?, string?, string?, string?, string?, IReadOnlyList<GitHubIssueComment>)
+  nameWithType: GitHubIssueDetail.GitHubIssueDetail(int, string, string?, string?, string?, IReadOnlyList<GitHubLabel>, IReadOnlyList<string>, string?, string?, string?, string?, string?, IReadOnlyList<GitHubIssueComment>)
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.GitHubIssueDetail(int, string, string?, string?, string?, System.Collections.Generic.IReadOnlyList<McpServer.Support.Mcp.Models.GitHubLabel>, System.Collections.Generic.IReadOnlyList<string>, string?, string?, string?, string?, string?, System.Collections.Generic.IReadOnlyList<McpServer.Support.Mcp.Models.GitHubIssueComment>)
+  type: Constructor
+  source:
+    id: .ctor
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 19
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: >-
+    TR-GH-013-001: Full issue detail including body, labels, assignees, timestamps, and comments.
+
+    FR-SUPPORT-013: Complete issue metadata for MCP integration.
+  example: []
+  syntax:
+    content: public GitHubIssueDetail(int Number, string Title, string? Body, string? State, string? Url, IReadOnlyList<GitHubLabel> Labels, IReadOnlyList<string> Assignees, string? Milestone, string? CreatedAt, string? UpdatedAt, string? ClosedAt, string? Author, IReadOnlyList<GitHubIssueComment> Comments)
+    parameters:
+    - id: Number
+      type: System.Int32
+      description: Issue number.
+    - id: Title
+      type: System.String
+      description: Issue title.
+    - id: Body
+      type: System.String
+      description: Issue body (markdown).
+    - id: State
+      type: System.String
+      description: Issue state (OPEN, CLOSED).
+    - id: Url
+      type: System.String
+      description: Issue URL on GitHub.
+    - id: Labels
+      type: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.GitHubLabel}
+      description: List of labels.
+    - id: Assignees
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+      description: List of assignee logins.
+    - id: Milestone
+      type: System.String
+      description: Milestone title, or null.
+    - id: CreatedAt
+      type: System.String
+      description: When the issue was created.
+    - id: UpdatedAt
+      type: System.String
+      description: When the issue was last updated.
+    - id: ClosedAt
+      type: System.String
+      description: When the issue was closed, or null.
+    - id: Author
+      type: System.String
+      description: Issue author login.
+    - id: Comments
+      type: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.GitHubIssueComment}
+      description: List of comments.
+    content.vb: Public Sub New(Number As Integer, Title As String, Body As String, State As String, Url As String, Labels As IReadOnlyList(Of GitHubLabel), Assignees As IReadOnlyList(Of String), Milestone As String, CreatedAt As String, UpdatedAt As String, ClosedAt As String, Author As String, Comments As IReadOnlyList(Of GitHubIssueComment))
+  overload: McpServer.Support.Mcp.Models.GitHubIssueDetail.#ctor*
+  nameWithType.vb: GitHubIssueDetail.New(Integer, String, String, String, String, IReadOnlyList(Of GitHubLabel), IReadOnlyList(Of String), String, String, String, String, String, IReadOnlyList(Of GitHubIssueComment))
+  fullName.vb: McpServer.Support.Mcp.Models.GitHubIssueDetail.New(Integer, String, String, String, String, System.Collections.Generic.IReadOnlyList(Of McpServer.Support.Mcp.Models.GitHubLabel), System.Collections.Generic.IReadOnlyList(Of String), String, String, String, String, String, System.Collections.Generic.IReadOnlyList(Of McpServer.Support.Mcp.Models.GitHubIssueComment))
+  name.vb: New(Integer, String, String, String, String, IReadOnlyList(Of GitHubLabel), IReadOnlyList(Of String), String, String, String, String, String, IReadOnlyList(Of GitHubIssueComment))
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Number
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueDetail.Number
+  id: Number
+  parent: McpServer.Support.Mcp.Models.GitHubIssueDetail
+  langs:
+  - csharp
+  - vb
+  name: Number
+  nameWithType: GitHubIssueDetail.Number
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Number
+  type: Property
+  source:
+    id: Number
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 20
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Issue number.
+  example: []
+  syntax:
+    content: public int Number { get; init; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property Number As Integer
+  overload: McpServer.Support.Mcp.Models.GitHubIssueDetail.Number*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Title
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueDetail.Title
+  id: Title
+  parent: McpServer.Support.Mcp.Models.GitHubIssueDetail
+  langs:
+  - csharp
+  - vb
+  name: Title
+  nameWithType: GitHubIssueDetail.Title
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Title
+  type: Property
+  source:
+    id: Title
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 21
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Issue title.
+  example: []
+  syntax:
+    content: public string Title { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Title As String
+  overload: McpServer.Support.Mcp.Models.GitHubIssueDetail.Title*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Body
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueDetail.Body
+  id: Body
+  parent: McpServer.Support.Mcp.Models.GitHubIssueDetail
+  langs:
+  - csharp
+  - vb
+  name: Body
+  nameWithType: GitHubIssueDetail.Body
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Body
+  type: Property
+  source:
+    id: Body
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 22
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Issue body (markdown).
+  example: []
+  syntax:
+    content: public string? Body { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Body As String
+  overload: McpServer.Support.Mcp.Models.GitHubIssueDetail.Body*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.State
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueDetail.State
+  id: State
+  parent: McpServer.Support.Mcp.Models.GitHubIssueDetail
+  langs:
+  - csharp
+  - vb
+  name: State
+  nameWithType: GitHubIssueDetail.State
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.State
+  type: Property
+  source:
+    id: State
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 23
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Issue state (OPEN, CLOSED).
+  example: []
+  syntax:
+    content: public string? State { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property State As String
+  overload: McpServer.Support.Mcp.Models.GitHubIssueDetail.State*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Url
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueDetail.Url
+  id: Url
+  parent: McpServer.Support.Mcp.Models.GitHubIssueDetail
+  langs:
+  - csharp
+  - vb
+  name: Url
+  nameWithType: GitHubIssueDetail.Url
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Url
+  type: Property
+  source:
+    id: Url
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 24
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Issue URL on GitHub.
+  example: []
+  syntax:
+    content: public string? Url { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Url As String
+  overload: McpServer.Support.Mcp.Models.GitHubIssueDetail.Url*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Labels
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueDetail.Labels
+  id: Labels
+  parent: McpServer.Support.Mcp.Models.GitHubIssueDetail
+  langs:
+  - csharp
+  - vb
+  name: Labels
+  nameWithType: GitHubIssueDetail.Labels
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Labels
+  type: Property
+  source:
+    id: Labels
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 25
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: List of labels.
+  example: []
+  syntax:
+    content: public IReadOnlyList<GitHubLabel> Labels { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.GitHubLabel}
+    content.vb: Public Property Labels As IReadOnlyList(Of GitHubLabel)
+  overload: McpServer.Support.Mcp.Models.GitHubIssueDetail.Labels*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Assignees
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueDetail.Assignees
+  id: Assignees
+  parent: McpServer.Support.Mcp.Models.GitHubIssueDetail
+  langs:
+  - csharp
+  - vb
+  name: Assignees
+  nameWithType: GitHubIssueDetail.Assignees
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Assignees
+  type: Property
+  source:
+    id: Assignees
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 26
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: List of assignee logins.
+  example: []
+  syntax:
+    content: public IReadOnlyList<string> Assignees { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{System.String}
+    content.vb: Public Property Assignees As IReadOnlyList(Of String)
+  overload: McpServer.Support.Mcp.Models.GitHubIssueDetail.Assignees*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Milestone
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueDetail.Milestone
+  id: Milestone
+  parent: McpServer.Support.Mcp.Models.GitHubIssueDetail
+  langs:
+  - csharp
+  - vb
+  name: Milestone
+  nameWithType: GitHubIssueDetail.Milestone
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Milestone
+  type: Property
+  source:
+    id: Milestone
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 27
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Milestone title, or null.
+  example: []
+  syntax:
+    content: public string? Milestone { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Milestone As String
+  overload: McpServer.Support.Mcp.Models.GitHubIssueDetail.Milestone*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.CreatedAt
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueDetail.CreatedAt
+  id: CreatedAt
+  parent: McpServer.Support.Mcp.Models.GitHubIssueDetail
+  langs:
+  - csharp
+  - vb
+  name: CreatedAt
+  nameWithType: GitHubIssueDetail.CreatedAt
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.CreatedAt
+  type: Property
+  source:
+    id: CreatedAt
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 28
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: When the issue was created.
+  example: []
+  syntax:
+    content: public string? CreatedAt { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property CreatedAt As String
+  overload: McpServer.Support.Mcp.Models.GitHubIssueDetail.CreatedAt*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.UpdatedAt
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueDetail.UpdatedAt
+  id: UpdatedAt
+  parent: McpServer.Support.Mcp.Models.GitHubIssueDetail
+  langs:
+  - csharp
+  - vb
+  name: UpdatedAt
+  nameWithType: GitHubIssueDetail.UpdatedAt
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.UpdatedAt
+  type: Property
+  source:
+    id: UpdatedAt
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 29
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: When the issue was last updated.
+  example: []
+  syntax:
+    content: public string? UpdatedAt { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property UpdatedAt As String
+  overload: McpServer.Support.Mcp.Models.GitHubIssueDetail.UpdatedAt*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.ClosedAt
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueDetail.ClosedAt
+  id: ClosedAt
+  parent: McpServer.Support.Mcp.Models.GitHubIssueDetail
+  langs:
+  - csharp
+  - vb
+  name: ClosedAt
+  nameWithType: GitHubIssueDetail.ClosedAt
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.ClosedAt
+  type: Property
+  source:
+    id: ClosedAt
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 30
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: When the issue was closed, or null.
+  example: []
+  syntax:
+    content: public string? ClosedAt { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property ClosedAt As String
+  overload: McpServer.Support.Mcp.Models.GitHubIssueDetail.ClosedAt*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Author
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueDetail.Author
+  id: Author
+  parent: McpServer.Support.Mcp.Models.GitHubIssueDetail
+  langs:
+  - csharp
+  - vb
+  name: Author
+  nameWithType: GitHubIssueDetail.Author
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Author
+  type: Property
+  source:
+    id: Author
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 31
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: Issue author login.
+  example: []
+  syntax:
+    content: public string? Author { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Author As String
+  overload: McpServer.Support.Mcp.Models.GitHubIssueDetail.Author*
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Comments
+  commentId: P:McpServer.Support.Mcp.Models.GitHubIssueDetail.Comments
+  id: Comments
+  parent: McpServer.Support.Mcp.Models.GitHubIssueDetail
+  langs:
+  - csharp
+  - vb
+  name: Comments
+  nameWithType: GitHubIssueDetail.Comments
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Comments
+  type: Property
+  source:
+    id: Comments
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Models\GitHubModels.cs
+    startLine: 32
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Models
+  summary: List of comments.
+  example: []
+  syntax:
+    content: public IReadOnlyList<GitHubIssueComment> Comments { get; init; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.GitHubIssueComment}
+    content.vb: Public Property Comments As IReadOnlyList(Of GitHubIssueComment)
+  overload: McpServer.Support.Mcp.Models.GitHubIssueDetail.Comments*
+references:
+- uid: McpServer.Support.Mcp.Models
+  commentId: N:McpServer.Support.Mcp.Models
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Models
+  nameWithType: McpServer.Support.Mcp.Models
+  fullName: McpServer.Support.Mcp.Models
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Models
+    name: Models
+    href: McpServer.Support.Mcp.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.IEquatable{McpServer.Support.Mcp.Models.GitHubIssueDetail}
+  commentId: T:System.IEquatable{McpServer.Support.Mcp.Models.GitHubIssueDetail}
+  parent: System
+  definition: System.IEquatable`1
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<GitHubIssueDetail>
+  nameWithType: IEquatable<GitHubIssueDetail>
+  fullName: System.IEquatable<McpServer.Support.Mcp.Models.GitHubIssueDetail>
+  nameWithType.vb: IEquatable(Of GitHubIssueDetail)
+  fullName.vb: System.IEquatable(Of McpServer.Support.Mcp.Models.GitHubIssueDetail)
+  name.vb: IEquatable(Of GitHubIssueDetail)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Models.GitHubIssueDetail
+    name: GitHubIssueDetail
+    href: McpServer.Support.Mcp.Models.GitHubIssueDetail.html
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Models.GitHubIssueDetail
+    name: GitHubIssueDetail
+    href: McpServer.Support.Mcp.Models.GitHubIssueDetail.html
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.iequatable-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.#ctor*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueDetail.#ctor
+  href: McpServer.Support.Mcp.Models.GitHubIssueDetail.html#McpServer_Support_Mcp_Models_GitHubIssueDetail__ctor_System_Int32_System_String_System_String_System_String_System_String_System_Collections_Generic_IReadOnlyList_McpServer_Support_Mcp_Models_GitHubLabel__System_Collections_Generic_IReadOnlyList_System_String__System_String_System_String_System_String_System_String_System_String_System_Collections_Generic_IReadOnlyList_McpServer_Support_Mcp_Models_GitHubIssueComment__
+  name: GitHubIssueDetail
+  nameWithType: GitHubIssueDetail.GitHubIssueDetail
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.GitHubIssueDetail
+  nameWithType.vb: GitHubIssueDetail.New
+  fullName.vb: McpServer.Support.Mcp.Models.GitHubIssueDetail.New
+  name.vb: New
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.GitHubLabel}
+  commentId: T:System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.GitHubLabel}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IReadOnlyList`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<GitHubLabel>
+  nameWithType: IReadOnlyList<GitHubLabel>
+  fullName: System.Collections.Generic.IReadOnlyList<McpServer.Support.Mcp.Models.GitHubLabel>
+  nameWithType.vb: IReadOnlyList(Of GitHubLabel)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of McpServer.Support.Mcp.Models.GitHubLabel)
+  name.vb: IReadOnlyList(Of GitHubLabel)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Models.GitHubLabel
+    name: GitHubLabel
+    href: McpServer.Support.Mcp.Models.GitHubLabel.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Models.GitHubLabel
+    name: GitHubLabel
+    href: McpServer.Support.Mcp.Models.GitHubLabel.html
+  - name: )
+- uid: System.Collections.Generic.IReadOnlyList{System.String}
+  commentId: T:System.Collections.Generic.IReadOnlyList{System.String}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IReadOnlyList`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<string>
+  nameWithType: IReadOnlyList<string>
+  fullName: System.Collections.Generic.IReadOnlyList<string>
+  nameWithType.vb: IReadOnlyList(Of String)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of String)
+  name.vb: IReadOnlyList(Of String)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.string
+  - name: )
+- uid: System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.GitHubIssueComment}
+  commentId: T:System.Collections.Generic.IReadOnlyList{McpServer.Support.Mcp.Models.GitHubIssueComment}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IReadOnlyList`1
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<GitHubIssueComment>
+  nameWithType: IReadOnlyList<GitHubIssueComment>
+  fullName: System.Collections.Generic.IReadOnlyList<McpServer.Support.Mcp.Models.GitHubIssueComment>
+  nameWithType.vb: IReadOnlyList(Of GitHubIssueComment)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of McpServer.Support.Mcp.Models.GitHubIssueComment)
+  name.vb: IReadOnlyList(Of GitHubIssueComment)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - uid: McpServer.Support.Mcp.Models.GitHubIssueComment
+    name: GitHubIssueComment
+    href: McpServer.Support.Mcp.Models.GitHubIssueComment.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: McpServer.Support.Mcp.Models.GitHubIssueComment
+    name: GitHubIssueComment
+    href: McpServer.Support.Mcp.Models.GitHubIssueComment.html
+  - name: )
+- uid: System.Collections.Generic.IReadOnlyList`1
+  commentId: T:System.Collections.Generic.IReadOnlyList`1
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  name: IReadOnlyList<T>
+  nameWithType: IReadOnlyList<T>
+  fullName: System.Collections.Generic.IReadOnlyList<T>
+  nameWithType.vb: IReadOnlyList(Of T)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of T)
+  name.vb: IReadOnlyList(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Number*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueDetail.Number
+  href: McpServer.Support.Mcp.Models.GitHubIssueDetail.html#McpServer_Support_Mcp_Models_GitHubIssueDetail_Number
+  name: Number
+  nameWithType: GitHubIssueDetail.Number
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Number
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Title*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueDetail.Title
+  href: McpServer.Support.Mcp.Models.GitHubIssueDetail.html#McpServer_Support_Mcp_Models_GitHubIssueDetail_Title
+  name: Title
+  nameWithType: GitHubIssueDetail.Title
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Title
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Body*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueDetail.Body
+  href: McpServer.Support.Mcp.Models.GitHubIssueDetail.html#McpServer_Support_Mcp_Models_GitHubIssueDetail_Body
+  name: Body
+  nameWithType: GitHubIssueDetail.Body
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Body
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.State*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueDetail.State
+  href: McpServer.Support.Mcp.Models.GitHubIssueDetail.html#McpServer_Support_Mcp_Models_GitHubIssueDetail_State
+  name: State
+  nameWithType: GitHubIssueDetail.State
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.State
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Url*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueDetail.Url
+  href: McpServer.Support.Mcp.Models.GitHubIssueDetail.html#McpServer_Support_Mcp_Models_GitHubIssueDetail_Url
+  name: Url
+  nameWithType: GitHubIssueDetail.Url
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Url
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Labels*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueDetail.Labels
+  href: McpServer.Support.Mcp.Models.GitHubIssueDetail.html#McpServer_Support_Mcp_Models_GitHubIssueDetail_Labels
+  name: Labels
+  nameWithType: GitHubIssueDetail.Labels
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Labels
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Assignees*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueDetail.Assignees
+  href: McpServer.Support.Mcp.Models.GitHubIssueDetail.html#McpServer_Support_Mcp_Models_GitHubIssueDetail_Assignees
+  name: Assignees
+  nameWithType: GitHubIssueDetail.Assignees
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Assignees
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Milestone*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueDetail.Milestone
+  href: McpServer.Support.Mcp.Models.GitHubIssueDetail.html#McpServer_Support_Mcp_Models_GitHubIssueDetail_Milestone
+  name: Milestone
+  nameWithType: GitHubIssueDetail.Milestone
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Milestone
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.CreatedAt*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueDetail.CreatedAt
+  href: McpServer.Support.Mcp.Models.GitHubIssueDetail.html#McpServer_Support_Mcp_Models_GitHubIssueDetail_CreatedAt
+  name: CreatedAt
+  nameWithType: GitHubIssueDetail.CreatedAt
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.CreatedAt
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.UpdatedAt*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueDetail.UpdatedAt
+  href: McpServer.Support.Mcp.Models.GitHubIssueDetail.html#McpServer_Support_Mcp_Models_GitHubIssueDetail_UpdatedAt
+  name: UpdatedAt
+  nameWithType: GitHubIssueDetail.UpdatedAt
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.UpdatedAt
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.ClosedAt*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueDetail.ClosedAt
+  href: McpServer.Support.Mcp.Models.GitHubIssueDetail.html#McpServer_Support_Mcp_Models_GitHubIssueDetail_ClosedAt
+  name: ClosedAt
+  nameWithType: GitHubIssueDetail.ClosedAt
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.ClosedAt
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Author*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueDetail.Author
+  href: McpServer.Support.Mcp.Models.GitHubIssueDetail.html#McpServer_Support_Mcp_Models_GitHubIssueDetail_Author
+  name: Author
+  nameWithType: GitHubIssueDetail.Author
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Author
+- uid: McpServer.Support.Mcp.Models.GitHubIssueDetail.Comments*
+  commentId: Overload:McpServer.Support.Mcp.Models.GitHubIssueDetail.Comments
+  href: McpServer.Support.Mcp.Models.GitHubIssueDetail.html#McpServer_Support_Mcp_Models_GitHubIssueDetail_Comments
+  name: Comments
+  nameWithType: GitHubIssueDetail.Comments
+  fullName: McpServer.Support.Mcp.Models.GitHubIssueDetail.Comments

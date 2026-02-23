@@ -1,0 +1,37 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Logging
+  commentId: N:McpServer.Support.Mcp.Logging
+  id: McpServer.Support.Mcp.Logging
+  children:
+  - McpServer.Support.Mcp.Logging.ParseableBatchFormatter
+  - McpServer.Support.Mcp.Logging.ParseableEventFormatter
+  - McpServer.Support.Mcp.Logging.ParseableHttpClient
+  langs:
+  - csharp
+  - vb
+  name: McpServer.Support.Mcp.Logging
+  nameWithType: McpServer.Support.Mcp.Logging
+  fullName: McpServer.Support.Mcp.Logging
+  type: Namespace
+  assemblies:
+  - McpServer.Support.Mcp
+references:
+- uid: McpServer.Support.Mcp.Logging.ParseableBatchFormatter
+  commentId: T:McpServer.Support.Mcp.Logging.ParseableBatchFormatter
+  href: McpServer.Support.Mcp.Logging.ParseableBatchFormatter.html
+  name: ParseableBatchFormatter
+  nameWithType: ParseableBatchFormatter
+  fullName: McpServer.Support.Mcp.Logging.ParseableBatchFormatter
+- uid: McpServer.Support.Mcp.Logging.ParseableEventFormatter
+  commentId: T:McpServer.Support.Mcp.Logging.ParseableEventFormatter
+  href: McpServer.Support.Mcp.Logging.ParseableEventFormatter.html
+  name: ParseableEventFormatter
+  nameWithType: ParseableEventFormatter
+  fullName: McpServer.Support.Mcp.Logging.ParseableEventFormatter
+- uid: McpServer.Support.Mcp.Logging.ParseableHttpClient
+  commentId: T:McpServer.Support.Mcp.Logging.ParseableHttpClient
+  href: McpServer.Support.Mcp.Logging.ParseableHttpClient.html
+  name: ParseableHttpClient
+  nameWithType: ParseableHttpClient
+  fullName: McpServer.Support.Mcp.Logging.ParseableHttpClient

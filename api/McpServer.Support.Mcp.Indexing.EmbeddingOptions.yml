@@ -1,0 +1,493 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Indexing.EmbeddingOptions
+  commentId: T:McpServer.Support.Mcp.Indexing.EmbeddingOptions
+  id: EmbeddingOptions
+  parent: McpServer.Support.Mcp.Indexing
+  children:
+  - McpServer.Support.Mcp.Indexing.EmbeddingOptions.AutoDownload
+  - McpServer.Support.Mcp.Indexing.EmbeddingOptions.Dimensions
+  - McpServer.Support.Mcp.Indexing.EmbeddingOptions.Enabled
+  - McpServer.Support.Mcp.Indexing.EmbeddingOptions.MaxSequenceLength
+  - McpServer.Support.Mcp.Indexing.EmbeddingOptions.ModelPath
+  langs:
+  - csharp
+  - vb
+  name: EmbeddingOptions
+  nameWithType: EmbeddingOptions
+  fullName: McpServer.Support.Mcp.Indexing.EmbeddingOptions
+  type: Class
+  source:
+    id: EmbeddingOptions
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Indexing\EmbeddingOptions.cs
+    startLine: 6
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Indexing
+  summary: >-
+    TR-PLANNED-013: Configuration options for the ONNX embedding service.
+
+    FR-SUPPORT-010: Controls model acquisition and inference parameters for all-MiniLM-L6-v2.
+  example: []
+  syntax:
+    content: public sealed class EmbeddingOptions
+    content.vb: Public NotInheritable Class EmbeddingOptions
+  inheritance:
+  - System.Object
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: McpServer.Support.Mcp.Indexing.EmbeddingOptions.Enabled
+  commentId: P:McpServer.Support.Mcp.Indexing.EmbeddingOptions.Enabled
+  id: Enabled
+  parent: McpServer.Support.Mcp.Indexing.EmbeddingOptions
+  langs:
+  - csharp
+  - vb
+  name: Enabled
+  nameWithType: EmbeddingOptions.Enabled
+  fullName: McpServer.Support.Mcp.Indexing.EmbeddingOptions.Enabled
+  type: Property
+  source:
+    id: Enabled
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Indexing\EmbeddingOptions.cs
+    startLine: 9
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Indexing
+  summary: 'TR-PLANNED-013: Whether embedding generation is enabled (default true). Set false for CI or lightweight deployments.'
+  example: []
+  syntax:
+    content: public bool Enabled { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property Enabled As Boolean
+  overload: McpServer.Support.Mcp.Indexing.EmbeddingOptions.Enabled*
+- uid: McpServer.Support.Mcp.Indexing.EmbeddingOptions.ModelPath
+  commentId: P:McpServer.Support.Mcp.Indexing.EmbeddingOptions.ModelPath
+  id: ModelPath
+  parent: McpServer.Support.Mcp.Indexing.EmbeddingOptions
+  langs:
+  - csharp
+  - vb
+  name: ModelPath
+  nameWithType: EmbeddingOptions.ModelPath
+  fullName: McpServer.Support.Mcp.Indexing.EmbeddingOptions.ModelPath
+  type: Property
+  source:
+    id: ModelPath
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Indexing\EmbeddingOptions.cs
+    startLine: 12
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Indexing
+  summary: 'TR-PLANNED-013: Path to the ONNX model file. If null, uses auto-download to LocalAppData.'
+  example: []
+  syntax:
+    content: public string? ModelPath { get; set; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property ModelPath As String
+  overload: McpServer.Support.Mcp.Indexing.EmbeddingOptions.ModelPath*
+- uid: McpServer.Support.Mcp.Indexing.EmbeddingOptions.Dimensions
+  commentId: P:McpServer.Support.Mcp.Indexing.EmbeddingOptions.Dimensions
+  id: Dimensions
+  parent: McpServer.Support.Mcp.Indexing.EmbeddingOptions
+  langs:
+  - csharp
+  - vb
+  name: Dimensions
+  nameWithType: EmbeddingOptions.Dimensions
+  fullName: McpServer.Support.Mcp.Indexing.EmbeddingOptions.Dimensions
+  type: Property
+  source:
+    id: Dimensions
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Indexing\EmbeddingOptions.cs
+    startLine: 15
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Indexing
+  summary: 'TR-PLANNED-013: Embedding vector dimensions (default 384 for MiniLM).'
+  example: []
+  syntax:
+    content: public int Dimensions { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property Dimensions As Integer
+  overload: McpServer.Support.Mcp.Indexing.EmbeddingOptions.Dimensions*
+- uid: McpServer.Support.Mcp.Indexing.EmbeddingOptions.MaxSequenceLength
+  commentId: P:McpServer.Support.Mcp.Indexing.EmbeddingOptions.MaxSequenceLength
+  id: MaxSequenceLength
+  parent: McpServer.Support.Mcp.Indexing.EmbeddingOptions
+  langs:
+  - csharp
+  - vb
+  name: MaxSequenceLength
+  nameWithType: EmbeddingOptions.MaxSequenceLength
+  fullName: McpServer.Support.Mcp.Indexing.EmbeddingOptions.MaxSequenceLength
+  type: Property
+  source:
+    id: MaxSequenceLength
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Indexing\EmbeddingOptions.cs
+    startLine: 18
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Indexing
+  summary: 'TR-PLANNED-013: Maximum input sequence length in tokens (default 128).'
+  example: []
+  syntax:
+    content: public int MaxSequenceLength { get; set; }
+    parameters: []
+    return:
+      type: System.Int32
+    content.vb: Public Property MaxSequenceLength As Integer
+  overload: McpServer.Support.Mcp.Indexing.EmbeddingOptions.MaxSequenceLength*
+- uid: McpServer.Support.Mcp.Indexing.EmbeddingOptions.AutoDownload
+  commentId: P:McpServer.Support.Mcp.Indexing.EmbeddingOptions.AutoDownload
+  id: AutoDownload
+  parent: McpServer.Support.Mcp.Indexing.EmbeddingOptions
+  langs:
+  - csharp
+  - vb
+  name: AutoDownload
+  nameWithType: EmbeddingOptions.AutoDownload
+  fullName: McpServer.Support.Mcp.Indexing.EmbeddingOptions.AutoDownload
+  type: Property
+  source:
+    id: AutoDownload
+    path: E:\github\McpServer\src\McpServer.Support.Mcp\Indexing\EmbeddingOptions.cs
+    startLine: 21
+  assemblies:
+  - McpServer.Support.Mcp
+  namespace: McpServer.Support.Mcp.Indexing
+  summary: 'TR-PLANNED-013: Whether to auto-download the model on first use.'
+  example: []
+  syntax:
+    content: public bool AutoDownload { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Property AutoDownload As Boolean
+  overload: McpServer.Support.Mcp.Indexing.EmbeddingOptions.AutoDownload*
+references:
+- uid: McpServer.Support.Mcp.Indexing
+  commentId: N:McpServer.Support.Mcp.Indexing
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Indexing
+  nameWithType: McpServer.Support.Mcp.Indexing
+  fullName: McpServer.Support.Mcp.Indexing
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Indexing
+    name: Indexing
+    href: McpServer.Support.Mcp.Indexing.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Indexing
+    name: Indexing
+    href: McpServer.Support.Mcp.Indexing.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gethashcode
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.gettype
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.referenceequals
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.object.tostring
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: McpServer.Support.Mcp.Indexing.EmbeddingOptions.Enabled*
+  commentId: Overload:McpServer.Support.Mcp.Indexing.EmbeddingOptions.Enabled
+  href: McpServer.Support.Mcp.Indexing.EmbeddingOptions.html#McpServer_Support_Mcp_Indexing_EmbeddingOptions_Enabled
+  name: Enabled
+  nameWithType: EmbeddingOptions.Enabled
+  fullName: McpServer.Support.Mcp.Indexing.EmbeddingOptions.Enabled
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.boolean
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: McpServer.Support.Mcp.Indexing.EmbeddingOptions.ModelPath*
+  commentId: Overload:McpServer.Support.Mcp.Indexing.EmbeddingOptions.ModelPath
+  href: McpServer.Support.Mcp.Indexing.EmbeddingOptions.html#McpServer_Support_Mcp_Indexing_EmbeddingOptions_ModelPath
+  name: ModelPath
+  nameWithType: EmbeddingOptions.ModelPath
+  fullName: McpServer.Support.Mcp.Indexing.EmbeddingOptions.ModelPath
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.string
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: McpServer.Support.Mcp.Indexing.EmbeddingOptions.Dimensions*
+  commentId: Overload:McpServer.Support.Mcp.Indexing.EmbeddingOptions.Dimensions
+  href: McpServer.Support.Mcp.Indexing.EmbeddingOptions.html#McpServer_Support_Mcp_Indexing_EmbeddingOptions_Dimensions
+  name: Dimensions
+  nameWithType: EmbeddingOptions.Dimensions
+  fullName: McpServer.Support.Mcp.Indexing.EmbeddingOptions.Dimensions
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system.int32
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: McpServer.Support.Mcp.Indexing.EmbeddingOptions.MaxSequenceLength*
+  commentId: Overload:McpServer.Support.Mcp.Indexing.EmbeddingOptions.MaxSequenceLength
+  href: McpServer.Support.Mcp.Indexing.EmbeddingOptions.html#McpServer_Support_Mcp_Indexing_EmbeddingOptions_MaxSequenceLength
+  name: MaxSequenceLength
+  nameWithType: EmbeddingOptions.MaxSequenceLength
+  fullName: McpServer.Support.Mcp.Indexing.EmbeddingOptions.MaxSequenceLength
+- uid: McpServer.Support.Mcp.Indexing.EmbeddingOptions.AutoDownload*
+  commentId: Overload:McpServer.Support.Mcp.Indexing.EmbeddingOptions.AutoDownload
+  href: McpServer.Support.Mcp.Indexing.EmbeddingOptions.html#McpServer_Support_Mcp_Indexing_EmbeddingOptions_AutoDownload
+  name: AutoDownload
+  nameWithType: EmbeddingOptions.AutoDownload
+  fullName: McpServer.Support.Mcp.Indexing.EmbeddingOptions.AutoDownload

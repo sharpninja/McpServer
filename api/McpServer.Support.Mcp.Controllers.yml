@@ -1,0 +1,150 @@
+### YamlMime:ManagedReference
+items:
+- uid: McpServer.Support.Mcp.Controllers
+  commentId: N:McpServer.Support.Mcp.Controllers
+  id: McpServer.Support.Mcp.Controllers
+  children:
+  - McpServer.Support.Mcp.Controllers.ContextController
+  - McpServer.Support.Mcp.Controllers.ContextPackRequest
+  - McpServer.Support.Mcp.Controllers.ContextSearchRequest
+  - McpServer.Support.Mcp.Controllers.GitHubCommentRequest
+  - McpServer.Support.Mcp.Controllers.GitHubController
+  - McpServer.Support.Mcp.Controllers.GitHubIssueRequest
+  - McpServer.Support.Mcp.Controllers.RepoController
+  - McpServer.Support.Mcp.Controllers.RepoWriteRequest
+  - McpServer.Support.Mcp.Controllers.SessionLogController
+  - McpServer.Support.Mcp.Controllers.SyncController
+  - McpServer.Support.Mcp.Controllers.TodoController
+  - McpServer.Support.Mcp.Controllers.ToolRegistryController
+  - McpServer.Support.Mcp.Controllers.WorkspaceController
+  langs:
+  - csharp
+  - vb
+  name: McpServer.Support.Mcp.Controllers
+  nameWithType: McpServer.Support.Mcp.Controllers
+  fullName: McpServer.Support.Mcp.Controllers
+  type: Namespace
+  assemblies:
+  - McpServer.Support.Mcp
+references:
+- uid: McpServer.Support.Mcp.Controllers.ContextController
+  commentId: T:McpServer.Support.Mcp.Controllers.ContextController
+  href: McpServer.Support.Mcp.Controllers.ContextController.html
+  name: ContextController
+  nameWithType: ContextController
+  fullName: McpServer.Support.Mcp.Controllers.ContextController
+- uid: McpServer.Support.Mcp.Controllers.ContextSearchRequest
+  commentId: T:McpServer.Support.Mcp.Controllers.ContextSearchRequest
+  parent: McpServer.Support.Mcp.Controllers
+  href: McpServer.Support.Mcp.Controllers.ContextSearchRequest.html
+  name: ContextSearchRequest
+  nameWithType: ContextSearchRequest
+  fullName: McpServer.Support.Mcp.Controllers.ContextSearchRequest
+- uid: McpServer.Support.Mcp.Controllers.ContextPackRequest
+  commentId: T:McpServer.Support.Mcp.Controllers.ContextPackRequest
+  parent: McpServer.Support.Mcp.Controllers
+  href: McpServer.Support.Mcp.Controllers.ContextPackRequest.html
+  name: ContextPackRequest
+  nameWithType: ContextPackRequest
+  fullName: McpServer.Support.Mcp.Controllers.ContextPackRequest
+- uid: McpServer.Support.Mcp.Controllers.GitHubController
+  commentId: T:McpServer.Support.Mcp.Controllers.GitHubController
+  href: McpServer.Support.Mcp.Controllers.GitHubController.html
+  name: GitHubController
+  nameWithType: GitHubController
+  fullName: McpServer.Support.Mcp.Controllers.GitHubController
+- uid: McpServer.Support.Mcp.Controllers.GitHubIssueRequest
+  commentId: T:McpServer.Support.Mcp.Controllers.GitHubIssueRequest
+  parent: McpServer.Support.Mcp.Controllers
+  href: McpServer.Support.Mcp.Controllers.GitHubIssueRequest.html
+  name: GitHubIssueRequest
+  nameWithType: GitHubIssueRequest
+  fullName: McpServer.Support.Mcp.Controllers.GitHubIssueRequest
+- uid: McpServer.Support.Mcp.Controllers.GitHubCommentRequest
+  commentId: T:McpServer.Support.Mcp.Controllers.GitHubCommentRequest
+  parent: McpServer.Support.Mcp.Controllers
+  href: McpServer.Support.Mcp.Controllers.GitHubCommentRequest.html
+  name: GitHubCommentRequest
+  nameWithType: GitHubCommentRequest
+  fullName: McpServer.Support.Mcp.Controllers.GitHubCommentRequest
+- uid: McpServer.Support.Mcp.Controllers.RepoController
+  commentId: T:McpServer.Support.Mcp.Controllers.RepoController
+  href: McpServer.Support.Mcp.Controllers.RepoController.html
+  name: RepoController
+  nameWithType: RepoController
+  fullName: McpServer.Support.Mcp.Controllers.RepoController
+- uid: McpServer.Support.Mcp.Controllers.RepoWriteRequest
+  commentId: T:McpServer.Support.Mcp.Controllers.RepoWriteRequest
+  parent: McpServer.Support.Mcp.Controllers
+  href: McpServer.Support.Mcp.Controllers.RepoWriteRequest.html
+  name: RepoWriteRequest
+  nameWithType: RepoWriteRequest
+  fullName: McpServer.Support.Mcp.Controllers.RepoWriteRequest
+- uid: McpServer.Support.Mcp.Controllers.SessionLogController
+  commentId: T:McpServer.Support.Mcp.Controllers.SessionLogController
+  href: McpServer.Support.Mcp.Controllers.SessionLogController.html
+  name: SessionLogController
+  nameWithType: SessionLogController
+  fullName: McpServer.Support.Mcp.Controllers.SessionLogController
+- uid: McpServer.Support.Mcp.Controllers.SyncController
+  commentId: T:McpServer.Support.Mcp.Controllers.SyncController
+  href: McpServer.Support.Mcp.Controllers.SyncController.html
+  name: SyncController
+  nameWithType: SyncController
+  fullName: McpServer.Support.Mcp.Controllers.SyncController
+- uid: McpServer.Support.Mcp.Controllers.TodoController
+  commentId: T:McpServer.Support.Mcp.Controllers.TodoController
+  href: McpServer.Support.Mcp.Controllers.TodoController.html
+  name: TodoController
+  nameWithType: TodoController
+  fullName: McpServer.Support.Mcp.Controllers.TodoController
+- uid: McpServer.Support.Mcp.Controllers.ToolRegistryController
+  commentId: T:McpServer.Support.Mcp.Controllers.ToolRegistryController
+  href: McpServer.Support.Mcp.Controllers.ToolRegistryController.html
+  name: ToolRegistryController
+  nameWithType: ToolRegistryController
+  fullName: McpServer.Support.Mcp.Controllers.ToolRegistryController
+- uid: McpServer.Support.Mcp.Controllers.WorkspaceController
+  commentId: T:McpServer.Support.Mcp.Controllers.WorkspaceController
+  href: McpServer.Support.Mcp.Controllers.WorkspaceController.html
+  name: WorkspaceController
+  nameWithType: WorkspaceController
+  fullName: McpServer.Support.Mcp.Controllers.WorkspaceController
+- uid: McpServer.Support.Mcp.Controllers
+  commentId: N:McpServer.Support.Mcp.Controllers
+  href: McpServer.html
+  name: McpServer.Support.Mcp.Controllers
+  nameWithType: McpServer.Support.Mcp.Controllers
+  fullName: McpServer.Support.Mcp.Controllers
+  spec.csharp:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Controllers
+    name: Controllers
+    href: McpServer.Support.Mcp.Controllers.html
+  spec.vb:
+  - uid: McpServer
+    name: McpServer
+    href: McpServer.html
+  - name: .
+  - uid: McpServer.Support
+    name: Support
+    href: McpServer.Support.html
+  - name: .
+  - uid: McpServer.Support.Mcp
+    name: Mcp
+    href: McpServer.Support.Mcp.html
+  - name: .
+  - uid: McpServer.Support.Mcp.Controllers
+    name: Controllers
+    href: McpServer.Support.Mcp.Controllers.html

@@ -478,47 +478,6 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.ToTable("ToolDefinitionTags");
                 });
 
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", b =>
-                {
-                    b.Property<string>("WorkspacePath")
-                        .HasMaxLength(2048)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("DateTimeCreated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("DateTimeModified")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("RunAs")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("TodoPath")
-                        .IsRequired()
-                        .HasMaxLength(2048)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("TunnelProvider")
-                        .HasMaxLength(64)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("WorkspacePort")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("WorkspacePath");
-
-                    b.HasIndex("WorkspacePort")
-                        .IsUnique();
-
-                    b.ToTable("Workspaces");
-                });
-
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity", "Document")
@@ -583,16 +542,6 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .IsRequired();
 
                     b.Navigation("SessionLogEntry");
-                });
-
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity", b =>
-                {
-                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.WorkspaceEntity", "Workspace")
-                        .WithMany()
-                        .HasForeignKey("WorkspacePath")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Workspace");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity", b =>

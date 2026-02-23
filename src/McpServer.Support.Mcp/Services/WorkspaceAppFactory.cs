@@ -26,13 +26,17 @@ public static class WorkspaceAppFactory
     /// Creates a <see cref="WebApplication"/> configured for the given workspace path and port.
     /// The host serves MCP tools and API controllers scoped to the workspace data.
     /// </summary>
-    public static WebApplication Create(string workspacePath, int port, ILoggerFactory loggerFactory)
+    public static WebApplication Create(string workspacePath, int port, ILoggerFactory loggerFactory, string? dataDirectory = null)
     {
         var workspaceName = Path.GetFileName(
             workspacePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
-        var dataSource = Path.Combine(workspacePath, "mcp.db");
+        var effectiveDataDir = string.IsNullOrWhiteSpace(dataDirectory) ? workspacePath : dataDirectory;
+        var dataSource = Path.Combine(effectiveDataDir, "mcp.db");
 
         var builder = WebApplication.CreateSlimBuilder();
+
+        // Set the content root to the workspace directory so relative paths resolve correctly.
+        builder.Environment.ContentRootPath = workspacePath;
 
         // Kestrel listens on the workspace port only.
         builder.WebHost.ConfigureKestrel(options =>
@@ -45,7 +49,7 @@ public static class WorkspaceAppFactory
         {
             ["Mcp:Port"] = port.ToString(CultureInfo.InvariantCulture),
             ["Mcp:RepoRoot"] = workspacePath,
-            ["Mcp:DataDirectory"] = workspacePath,
+            ["Mcp:DataDirectory"] = effectiveDataDir,
             ["Mcp:DataSource"] = dataSource,
             ["Mcp:TodoFilePath"] = Path.Combine(workspacePath, "docs", "Project", "TODO.yaml"),
             ["Mcp:SessionsPath"] = Path.Combine(workspacePath, "docs", "sessions"),

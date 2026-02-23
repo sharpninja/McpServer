@@ -1,0 +1,141 @@
+using System.Net;
+using System.Net.Http.Json;
+using System.Text.Json;
+using McpServer.SessionLog.Validation.Models;
+using Xunit;
+
+namespace McpServer.SessionLog.Validation.SequenceTests;
+
+[Collection("SessionLogEndpoint")]
+public sealed class SessionLogLifecycleTests
+{
+    private readonly SessionLogEndpointFixture _fixture;
+    private static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
+
+    public SessionLogLifecycleTests(SessionLogEndpointFixture fixture) => _fixture = fixture;
+
+    [Fact]
+    public async Task FullLifecycle_Submit_Query_AppendDialog_Requery()
+    {
+        // Step 1: Submit a session log with one entry
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId();
+        var requestId = SessionLogEndpointFixture.GenerateRequestId();
+        var sourceType = "LifecycleTest";
+
+        var submitPayload = new
+        {
+            sourceType,
+            sessionId,
+            title = "Lifecycle audit test",
+            model = "test-lifecycle-model",
+            started = DateTimeOffset.UtcNow.AddMinutes(-5).ToString("o"),
+            lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
+            status = "in_progress",
+            entryCount = 1,
+            workspace = new
+            {
+                project = "McpServer",
+                targetFramework = ".NET 9",
+                repository = "https://github.com/sharpninja/McpServer.git",
+                branch = "develop"
+            },
+            entries = new[]
+            {
+                new
+                {
+                    requestId,
+                    timestamp = DateTimeOffset.UtcNow.ToString("o"),
+                    queryText = "Full lifecycle test query",
+                    queryTitle = "Lifecycle test",
+                    response = "Processing...",
+                    status = "in_progress",
+                    tags = new[] { "lifecycle", "audit" },
+                    actions = new[]
+                    {
+                        new { order = 1, description = "Step 1", type = "create", status = "completed", filePath = "lifecycle.cs" }
+                    }
+                }
+            }
+        };
+
+        var submitResponse = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, submitPayload);
+        Assert.Equal(HttpStatusCode.Created, submitResponse.StatusCode);
+        var submitResult = await submitResponse.Content.ReadFromJsonAsync<SubmitResult>(JsonOpts);
+        Assert.NotNull(submitResult);
+        var sessionDbId = submitResult!.Id;
+        Assert.True(sessionDbId > 0);
+
+        // Step 2: Query by agent to find our session
+        var queryResponse = await _fixture.Client.GetAsync(
+            $"{SessionLogEndpointFixture.SessionLogRoute}?agent={sourceType}");
+        Assert.Equal(HttpStatusCode.OK, queryResponse.StatusCode);
+        var queryResult = await queryResponse.Content.ReadFromJsonAsync<QueryResult>(JsonOpts);
+        Assert.NotNull(queryResult);
+        Assert.True(queryResult!.TotalCount >= 1);
+        var ourSession = queryResult.Items!.FirstOrDefault(s => s.SessionId == sessionId);
+        Assert.NotNull(ourSession);
+        Assert.Equal("Lifecycle audit test", ourSession!.Title);
+        Assert.Equal("test-lifecycle-model", ourSession.Model);
+
+        // Step 3: Append dialog items to the entry
+        var dialogItems = new[]
+        {
+            new { timestamp = DateTimeOffset.UtcNow.ToString("o"), role = "model", content = "Reasoning about the approach...", category = "reasoning" },
+            new { timestamp = DateTimeOffset.UtcNow.ToString("o"), role = "tool", content = "Executed read_file on lifecycle.cs", category = "tool_call" },
+            new { timestamp = DateTimeOffset.UtcNow.ToString("o"), role = "model", content = "Decision: proceed with edit", category = "decision" }
+        };
+
+        var dialogRoute = $"{SessionLogEndpointFixture.SessionLogRoute}/{sourceType}/{sessionId}/{requestId}/dialog";
+        var dialogResponse = await _fixture.Client.PostAsJsonAsync(dialogRoute, dialogItems);
+        Assert.Equal(HttpStatusCode.OK, dialogResponse.StatusCode);
+        var dialogResult = await dialogResponse.Content.ReadFromJsonAsync<DialogAppendResult>(JsonOpts);
+        Assert.NotNull(dialogResult);
+        Assert.Equal(3, dialogResult!.TotalDialogCount);
+
+        // Step 4: Upsert the session as completed
+        var updatePayload = new
+        {
+            sourceType,
+            sessionId,
+            title = "Lifecycle audit test",
+            model = "test-lifecycle-model",
+            started = DateTimeOffset.UtcNow.AddMinutes(-5).ToString("o"),
+            lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
+            status = "completed",
+            entryCount = 1,
+            entries = new[]
+            {
+                new
+                {
+                    requestId,
+                    timestamp = DateTimeOffset.UtcNow.ToString("o"),
+                    queryText = "Full lifecycle test query",
+                    queryTitle = "Lifecycle test",
+                    response = "Completed successfully",
+                    status = "completed",
+                    tags = new[] { "lifecycle", "audit" },
+                    actions = new[]
+                    {
+                        new { order = 1, description = "Step 1", type = "create", status = "completed", filePath = "lifecycle.cs" },
+                        new { order = 2, description = "Step 2 - edit", type = "edit", status = "completed", filePath = "lifecycle.cs" }
+                    }
+                }
+            }
+        };
+
+        var updateResponse = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, updatePayload);
+        Assert.Equal(HttpStatusCode.Created, updateResponse.StatusCode);
+        var updateResult = await updateResponse.Content.ReadFromJsonAsync<SubmitResult>(JsonOpts);
+        Assert.Equal(sessionDbId, updateResult!.Id); // Same ID = upsert
+
+        // Step 5: Re-query to verify final state
+        var finalQuery = await _fixture.Client.GetAsync(
+            $"{SessionLogEndpointFixture.SessionLogRoute}?agent={sourceType}");
+        Assert.Equal(HttpStatusCode.OK, finalQuery.StatusCode);
+        var finalResult = await finalQuery.Content.ReadFromJsonAsync<QueryResult>(JsonOpts);
+        Assert.NotNull(finalResult);
+        var finalSession = finalResult!.Items!.FirstOrDefault(s => s.SessionId == sessionId);
+        Assert.NotNull(finalSession);
+        Assert.Equal("completed", finalSession!.Status);
+    }
+}
