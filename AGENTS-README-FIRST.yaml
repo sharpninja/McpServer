@@ -1,5 +1,6 @@
 port: 7148
 baseUrl: http://localhost:7148
+apiKey: h79wkDiVlEPEa5-o4BuTZ0azQAK21ZfLjHULCC5809A
 endpoints:
   health: /health
   swagger: /swagger/v1/swagger.json
@@ -18,20 +19,89 @@ endpoints:
   workspace: /mcp/workspace
 workspace: McpServer
 workspacePath: E:\github\McpServer
-pid: 62776
-startedAt: 2026-02-23T16:19:27.5556778+00:00
+pid: 45964
+startedAt: 2026-02-23T17:38:16.8714403+00:00
 prompt: >-
   You are connected to an MCP Context Server at http://localhost:7148. Use this server to coordinate your work.
+
+
+  ## Glossary
+
+
+  | Term | Definition |
+
+  |------|-----------|
+
+  | MCP | Model Context Protocol — an open standard for tool-calling between AI agents and context servers. |
+
+  | Workspace | A project directory registered with the MCP server. Each workspace has its own port, data directory, and auth token. |
+
+  | Marker File | The `AGENTS-README-FIRST.yaml` file placed at each workspace root. Contains connection details, auth token, and this prompt. |
+
+  | API Key | A per-workspace cryptographic token that rotates on each server restart. Required for all `/mcp/*` REST endpoints. |
+
+  | Streamable HTTP | The MCP wire protocol transport at `/mcp-transport`. Carries JSON-RPC tool calls over HTTP POST with streaming responses. |
+
+  | Session Log | An audit record of every agent interaction, stored per-session with full request/response history and reasoning dialog. |
+
+  | Context Pack | An ordered set of document chunks retrieved by semantic + full-text hybrid search, scoped to the workspace. |
+
+  | Tool Bucket | A GitHub repository containing tool manifest files, similar to a Scoop package bucket. |
+
+
+  ## Workspace Definition
+
+
+  | Property | Value |
+
+  |----------|-------|
+
+  | Name | McpServer |
+
+  | Path | E:\github\McpServer |
+
+  | Port | 7148 |
+
+  | Primary | False |
+
+  | Enabled | True |
+
+  | Data Directory | E:\github\McpServer |
+
+  | Todo Path | docs/Project/TODO.yaml |
+
+  | Tunnel Provider | none |
+
+  | Created | 2026-02-23T04:02:39.7879069+00:00 |
+
+  | Modified | 2026-02-23T05:28:43.4511844+00:00 |
+
+
+  ## Authentication (REQUIRED)
+
+  All `/mcp/*` REST endpoints require a per-workspace auth token. Include it with every request:
+
+  - **Header**: `X-Api-Key: h79wkDiVlEPEa5-o4BuTZ0azQAK21ZfLjHULCC5809A`
+
+  - **Or query param**: `?api_key=h79wkDiVlEPEa5-o4BuTZ0azQAK21ZfLjHULCC5809A`
+
+  If you receive a 401 response, re-read this AGENTS-README-FIRST.yaml marker file — the token rotates on each server restart.
+
+
+  ## Available Protocols
+
+  This server supports multiple connection protocols:
+
+  - **REST API**: All `/mcp/*` endpoints (requires `X-Api-Key` header). Full OpenAPI spec at GET http://localhost:7148/swagger/v1/swagger.json. Interactive Swagger UI at http://localhost:7148/swagger.
+
+  - **MCP Streamable HTTP**: POST http://localhost:7148/mcp-transport — Model Context Protocol transport for tool-calling agents. No API key required for MCP transport.
+
+  - **Health Check**: GET http://localhost:7148/health — returns {"status":"healthy"}. No API key required.
 
 
   ## Server Health
 
   Before making API calls, verify the server is running: GET http://localhost:7148/health — returns {"status":"healthy"}.
-
-
-  ## API Discovery
-
-  The full OpenAPI spec is at GET http://localhost:7148/swagger/v1/swagger.json. The interactive Swagger UI is at http://localhost:7148/swagger. Use the spec to understand request/response schemas before calling endpoints.
 
 
   ## Session Logging (REQUIRED)
@@ -42,28 +112,29 @@ prompt: >-
   For each task or conversation turn:
 
   1. POST http://localhost:7148/mcp/sessionlog with a JSON body containing:
-     - sourceType: your agent identifier (e.g. "Cline", "Cursor", "Copilot")
-     - sessionId: a stable identifier for your current session
-     - title: a brief summary of the session's purpose
-     - model: the AI model you are using (e.g. "claude-sonnet-4-20250514")
+     - sourceType: YOUR agent identifier (e.g. "Cline", "Cursor", "Copilot")
+     - sessionId: a stable identifier for your current session that is prefixed with YOUR agent identifier.  Do not reuse sessions from different agent sessions.
+     - title: a brief summary of the session's purpose.  Keep up-to-date.
+     - model: the AI model you are using (e.g. "claude-sonnet-4-20250514").  Create a new session log if changing models.
      - started: ISO 8601 timestamp when the session began
      - lastUpdated: ISO 8601 timestamp of the latest activity
      - status: "in_progress" or "completed"
      - entries: array of request entries, each with:
-       - requestId: unique ID for this request within the session
-       - timestamp: ISO 8601 timestamp
-       - queryText: the full user query or task description
-       - queryTitle: short summary of the query
-       - response: your response text (can be a summary for long responses)
-       - interpretation: your understanding of what was asked
-       - status: "completed" or "in_progress"
-       - actions: array of { order, description, type, status, filePath } for each action taken
-       - model: the model used for this specific entry
-       - tokenCount: approximate token count if available
-       - tags: relevant tags (e.g. ["refactor", "bugfix", "feature"])
-       - contextList: files or resources referenced
+       - [REQUIRED] requestId: unique ID for this request within the session
+       - [REQUIRED] timestamp: ISO 8601 timestamp
+       - [REQUIRED] queryText: the full user query or task description
+       - [REQUIRED] queryTitle: short summary of the query
+       - [REQUIRED] response: your response text (verbatim, not summarized)
+       - [REQUIRED] interpretation: your understanding of what was asked
+       - [REQUIRED] status: "completed" or "in_progress"
+       - [REQUIRED] actions: array of { order, description, type, status, filePath } for each action taken
+       - [REQUIRED] model: the model used for this specific entry
+       - [RECOMMENDED] tokenCount: approximate token count if available
+       - [REQUIRED] tags: relevant tags (e.g. ["refactor", "bugfix", "feature"]) Update as needed.
+       - [REQUIRED] contextList: files or resources referenced
+       - [REQUIRED] Processing Dialog/Decisions.  See #2 below
 
-  2. For long-running requests, stream your reasoning in real-time via:
+  2. For all requests, stream your reasoning in real-time via:
      POST http://localhost:7148/mcp/sessionlog/{agent}/{sessionId}/{requestId}/dialog
      Send an array of dialog items, each with:
      - timestamp: ISO 8601
@@ -95,4 +166,4 @@ prompt: >-
   - MCP Protocol: http://localhost:7148/mcp-transport — Model Context Protocol streamable HTTP transport endpoint
 
 
-  **TEST**
+  **THESE RULES MUST BE ADHERED TO AND THIS MARKER READ ON EACH NEW REQUEST BY THE USER.**

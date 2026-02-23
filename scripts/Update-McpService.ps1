@@ -152,7 +152,10 @@ else {
     # Publish to a staging directory first, then copy to install path.
     $stageDir = Join-Path $env:TEMP "McpServer-publish-stage"
     if (Test-Path $stageDir) { Remove-Item $stageDir -Recurse -Force }
-    dotnet publish $ProjectFile -c Debug --self-contained -r win-x64 -o $stageDir
+    dotnet publish $ProjectFile -c Release --self-contained -r win-x64 `
+        /p:PublishSingleFile=true `
+        /p:IncludeNativeLibrariesForSelfExtract=true `
+        -o $stageDir
     if ($LASTEXITCODE -ne 0) { Write-Error "dotnet publish failed (exit code $LASTEXITCODE)" }
 
     Copy-Item -Path "$stageDir\*" -Destination $InstallPath -Recurse -Force

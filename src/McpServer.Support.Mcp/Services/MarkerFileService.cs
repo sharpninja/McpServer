@@ -331,7 +331,8 @@ public static class MarkerFileService
     private static string RenderHandlebars(string template, Dictionary<string, object?> context)
     {
         var compiled = s_handlebars.Compile(template);
-        return compiled(context);
+        // Normalize to LF — YAML folded scalars mishandle CRLF as extra blank lines.
+        return compiled(context).ReplaceLineEndings("\n");
     }
 }
 
