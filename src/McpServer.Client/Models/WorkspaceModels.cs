@@ -54,6 +54,18 @@ public sealed class WorkspaceDto
     /// <summary>Optional markdown prompt template appended to the global marker prompt.</summary>
     [JsonPropertyName("promptTemplate")]
     public string? PromptTemplate { get; set; }
+
+    /// <summary>Effective Copilot status prompt (custom override or built-in default).</summary>
+    [JsonPropertyName("statusPrompt")]
+    public string StatusPrompt { get; set; } = string.Empty;
+
+    /// <summary>Effective Copilot implement prompt (custom override or built-in default).</summary>
+    [JsonPropertyName("implementPrompt")]
+    public string ImplementPrompt { get; set; } = string.Empty;
+
+    /// <summary>Effective Copilot plan prompt (custom override or built-in default).</summary>
+    [JsonPropertyName("planPrompt")]
+    public string PlanPrompt { get; set; } = string.Empty;
 }
 
 /// <summary>Request to create a workspace.</summary>
@@ -98,6 +110,18 @@ public sealed class WorkspaceCreateRequest
     /// <summary>Optional markdown prompt template appended to the global marker prompt.</summary>
     [JsonPropertyName("promptTemplate")]
     public string? PromptTemplate { get; set; }
+
+    /// <summary>Override for the Copilot status prompt. Null = use built-in default.</summary>
+    [JsonPropertyName("statusPrompt")]
+    public string? StatusPrompt { get; set; }
+
+    /// <summary>Override for the Copilot implement prompt. Null = use built-in default.</summary>
+    [JsonPropertyName("implementPrompt")]
+    public string? ImplementPrompt { get; set; }
+
+    /// <summary>Override for the Copilot plan prompt. Null = use built-in default.</summary>
+    [JsonPropertyName("planPrompt")]
+    public string? PlanPrompt { get; set; }
 }
 
 /// <summary>Request to update a workspace.</summary>
@@ -138,6 +162,18 @@ public sealed class WorkspaceUpdateRequest
     /// <summary>Updated workspace prompt template (null = no change, empty string = remove).</summary>
     [JsonPropertyName("promptTemplate")]
     public string? PromptTemplate { get; set; }
+
+    /// <summary>Updated status prompt (null = no change, empty string = revert to default).</summary>
+    [JsonPropertyName("statusPrompt")]
+    public string? StatusPrompt { get; set; }
+
+    /// <summary>Updated implement prompt (null = no change, empty string = revert to default).</summary>
+    [JsonPropertyName("implementPrompt")]
+    public string? ImplementPrompt { get; set; }
+
+    /// <summary>Updated plan prompt (null = no change, empty string = revert to default).</summary>
+    [JsonPropertyName("planPrompt")]
+    public string? PlanPrompt { get; set; }
 }
 
 /// <summary>Result of reading the global marker prompt template.</summary>

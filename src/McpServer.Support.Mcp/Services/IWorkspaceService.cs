@@ -63,6 +63,15 @@ public sealed record WorkspaceCreateRequest
     /// Supports <c>{baseUrl}</c> placeholder.
     /// </summary>
     public string? PromptTemplate { get; init; }
+
+    /// <summary>Override for the Copilot status prompt. Null = use built-in default.</summary>
+    public string? StatusPrompt { get; init; }
+
+    /// <summary>Override for the Copilot implement prompt. Null = use built-in default.</summary>
+    public string? ImplementPrompt { get; init; }
+
+    /// <summary>Override for the Copilot plan prompt. Null = use built-in default.</summary>
+    public string? PlanPrompt { get; init; }
 }
 
 /// <summary>Request to update a workspace. Null fields are not changed.</summary>
@@ -96,6 +105,15 @@ public sealed record WorkspaceUpdateRequest
 
     /// <summary>Updated workspace prompt template (null = no change, empty string = remove).</summary>
     public string? PromptTemplate { get; init; }
+
+    /// <summary>Updated status prompt (null = no change, empty string = revert to default).</summary>
+    public string? StatusPrompt { get; init; }
+
+    /// <summary>Updated implement prompt (null = no change, empty string = revert to default).</summary>
+    public string? ImplementPrompt { get; init; }
+
+    /// <summary>Updated plan prompt (null = no change, empty string = revert to default).</summary>
+    public string? PlanPrompt { get; init; }
 }
 
 /// <summary>Read-only workspace view.</summary>
@@ -142,6 +160,15 @@ public sealed record WorkspaceDto
     /// Supports <c>{baseUrl}</c> placeholder.
     /// </summary>
     public string? PromptTemplate { get; init; }
+
+    /// <summary>Effective Copilot status prompt (custom override or built-in default).</summary>
+    public required string StatusPrompt { get; init; }
+
+    /// <summary>Effective Copilot implement prompt (custom override or built-in default).</summary>
+    public required string ImplementPrompt { get; init; }
+
+    /// <summary>Effective Copilot plan prompt (custom override or built-in default).</summary>
+    public required string PlanPrompt { get; init; }
 }
 
 /// <summary>Result of listing workspaces.</summary>

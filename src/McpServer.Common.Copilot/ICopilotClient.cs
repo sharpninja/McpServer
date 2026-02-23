@@ -27,4 +27,16 @@ public interface ICopilotClient
         string prompt,
         CopilotClientOptions? options = null,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Invoke the Copilot CLI agent and stream stdout lines as they are produced.
+    /// </summary>
+    /// <param name="prompt">The prompt text to send to the agent.</param>
+    /// <param name="options">Optional per-call configuration overrides.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>An async enumerable of stdout lines.</returns>
+    IAsyncEnumerable<string> InvokeStreamingAsync(
+        string prompt,
+        CopilotClientOptions? options = null,
+        CancellationToken cancellationToken = default);
 }

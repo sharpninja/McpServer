@@ -146,7 +146,10 @@ public sealed class MarkerFileServiceTests
             DateTimeCreated = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc),
             DateTimeModified = new DateTime(2025, 6, 1, 0, 0, 0, DateTimeKind.Utc),
             RunAs = "admin",
-            PromptTemplate = "custom template"
+            PromptTemplate = "custom template",
+            StatusPrompt = TodoPromptDefaults.StatusPrompt,
+            ImplementPrompt = TodoPromptDefaults.ImplementPrompt,
+            PlanPrompt = TodoPromptDefaults.PlanPrompt,
         };
 
         var ctx = MarkerFileService.BuildTemplateContext("http://localhost:7200", "tok123", ws, ws.WorkspacePath, ws.Name, ws.WorkspacePort);
@@ -187,7 +190,10 @@ public sealed class MarkerFileServiceTests
             DateTimeCreated = DateTime.UtcNow,
             DateTimeModified = DateTime.UtcNow,
             RunAs = null,
-            PromptTemplate = null
+            PromptTemplate = null,
+            StatusPrompt = TodoPromptDefaults.StatusPrompt,
+            ImplementPrompt = TodoPromptDefaults.ImplementPrompt,
+            PlanPrompt = TodoPromptDefaults.PlanPrompt,
         };
 
         var ctx = MarkerFileService.BuildTemplateContext(BaseUrl, "mytoken", ws, ws.WorkspacePath, ws.Name, ws.WorkspacePort);

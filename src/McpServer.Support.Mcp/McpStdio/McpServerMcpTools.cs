@@ -25,6 +25,7 @@ public sealed class FwhMcpTools
     private readonly ISyncStatusStore _syncStatusStore;
     private readonly IContextSearchService _searchService;
     private readonly ITodoService _todoService;
+    private readonly ITodoPromptService _todoPromptService;
     private readonly ISessionLogService _sessionLogService;
     private readonly IGitHubCliService _gitHubCliService;
 
@@ -36,6 +37,7 @@ public sealed class FwhMcpTools
         ISyncStatusStore syncStatusStore,
         IContextSearchService searchService,
         ITodoService todoService,
+        ITodoPromptService todoPromptService,
         ISessionLogService sessionLogService,
         IGitHubCliService gitHubCliService)
     {
@@ -45,6 +47,7 @@ public sealed class FwhMcpTools
         _syncStatusStore = syncStatusStore;
         _searchService = searchService;
         _todoService = todoService;
+        _todoPromptService = todoPromptService;
         _sessionLogService = sessionLogService;
         _gitHubCliService = gitHubCliService;
     }
@@ -297,6 +300,56 @@ public sealed class FwhMcpTools
             return JsonSerializer.Serialize(new { success = true });
         }
         catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+    }
+
+    /// <summary>MVP-MCP-002: Invoke Copilot to generate a status report for a TODO item.</summary>
+    [McpServerTool(Name = "todo_status"), Description("Invoke Copilot to generate a status report for a TODO item in the workspace.")]
+    public async Task<string> TodoStatus(
+        [Description("TODO item id")] string id,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            return await CollectStreamAsync(_todoPromptService.StreamStatusAsync(id, cancellationToken)).ConfigureAwait(false);
+        }
+        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+    }
+
+    /// <summary>MVP-MCP-002: Invoke Copilot to implement a TODO item in the workspace.</summary>
+    [McpServerTool(Name = "todo_implement"), Description("Invoke Copilot to implement a TODO item, working through each task in the workspace.")]
+    public async Task<string> TodoImplement(
+        [Description("TODO item id")] string id,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            return await CollectStreamAsync(_todoPromptService.StreamImplementAsync(id, cancellationToken)).ConfigureAwait(false);
+        }
+        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+    }
+
+    /// <summary>MVP-MCP-002: Invoke Copilot to create a detailed implementation plan for a TODO item.</summary>
+    [McpServerTool(Name = "todo_plan"), Description("Invoke Copilot to create a detailed implementation plan for a TODO item in the workspace.")]
+    public async Task<string> TodoPlan(
+        [Description("TODO item id")] string id,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            return await CollectStreamAsync(_todoPromptService.StreamPlanAsync(id, cancellationToken)).ConfigureAwait(false);
+        }
+        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+    }
+
+    private static async Task<string> CollectStreamAsync(IAsyncEnumerable<string> lines)
+    {
+        var sb = new System.Text.StringBuilder();
+        await foreach (var line in lines.ConfigureAwait(false))
+        {
+            if (sb.Length > 0) sb.AppendLine();
+            sb.Append(line);
+        }
+        return sb.ToString();
     }
 
     // ── GROUP B: Session Log tools ───────────────────────────────────────

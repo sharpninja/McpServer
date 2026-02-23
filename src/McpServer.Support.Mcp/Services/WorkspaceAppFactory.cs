@@ -26,7 +26,7 @@ public static class WorkspaceAppFactory
     /// Creates a <see cref="WebApplication"/> configured for the given workspace path and port.
     /// The host serves MCP tools and API controllers scoped to the workspace data.
     /// </summary>
-    public static WebApplication Create(string workspacePath, int port, ILoggerFactory loggerFactory, string? dataDirectory = null, WorkspaceTokenService? tokenService = null)
+    public static WebApplication Create(string workspacePath, int port, ILoggerFactory loggerFactory, string? dataDirectory = null, WorkspaceTokenService? tokenService = null, WorkspaceConfigEntry? workspaceConfig = null)
     {
         var workspaceName = Path.GetFileName(
             workspacePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
@@ -75,6 +75,16 @@ public static class WorkspaceAppFactory
         });
         builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(TodoStorageOptions.SectionName));
         builder.Services.Configure<EmbeddingOptions>(builder.Configuration.GetSection("Embedding"));
+        builder.Services.Configure<TodoPromptOptions>(options =>
+        {
+            options.BaseUrl = $"http://localhost:{port}";
+            if (workspaceConfig is not null)
+            {
+                options.StatusPrompt = workspaceConfig.StatusPrompt;
+                options.ImplementPrompt = workspaceConfig.ImplementPrompt;
+                options.PlanPrompt = workspaceConfig.PlanPrompt;
+            }
+        });
         builder.Services.Configure<VectorIndexOptions>(options =>
         {
             options.IndexPath = Path.Combine(workspacePath, "mcp-data", "vector.idx");
@@ -100,6 +110,7 @@ public static class WorkspaceAppFactory
         });
         builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
         builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
+        builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
         builder.Services.AddCopilotClient();
 
         builder.Services.AddScoped<RepoIngestor>();

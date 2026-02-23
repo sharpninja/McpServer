@@ -56,18 +56,19 @@ McpInstanceResolver.ValidateTodoStorage(builder.Configuration, instanceName);
 // Resolve the primary workspace from Mcp:Workspaces config (FR-MCP-025).
 // Set ContentRootPath to the primary workspace's path so relative paths resolve correctly
 // and WorkspaceProcessManager can identify it.
+WorkspaceConfigEntry? primaryWorkspaceEntry = null;
 {
     var workspaces = builder.Configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
-    var primary = workspaces
+    primaryWorkspaceEntry = workspaces
         .Where(w => w.IsPrimary && w.IsEnabled)
         .OrderBy(w => w.WorkspacePort)
         .FirstOrDefault();
-    primary ??= workspaces
+    primaryWorkspaceEntry ??= workspaces
         .Where(w => w.IsEnabled)
         .OrderBy(w => w.WorkspacePort)
         .FirstOrDefault();
-    if (primary is not null)
-        builder.Environment.ContentRootPath = Path.GetFullPath(primary.WorkspacePath);
+    if (primaryWorkspaceEntry is not null)
+        builder.Environment.ContentRootPath = Path.GetFullPath(primaryWorkspaceEntry.WorkspacePath);
 }
 
 // TR-PLANNED-013: Serilog with optional Parseable (local Docker) sink.
@@ -200,6 +201,17 @@ builder.Services.AddSingleton<ITodoService>(sp =>
 });
 builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
 builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
+builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
+builder.Services.Configure<TodoPromptOptions>(options =>
+{
+    if (primaryWorkspaceEntry is not null)
+    {
+        options.StatusPrompt = primaryWorkspaceEntry.StatusPrompt;
+        options.ImplementPrompt = primaryWorkspaceEntry.ImplementPrompt;
+        options.PlanPrompt = primaryWorkspaceEntry.PlanPrompt;
+        options.BaseUrl = $"http://localhost:{primaryWorkspaceEntry.WorkspacePort}";
+    }
+});
 builder.Services.AddCopilotClient();
 builder.Services.AddScoped<ISessionLogService, SessionLogService>();
 builder.Services.AddScoped<Fts5SearchService>();

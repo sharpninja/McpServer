@@ -69,7 +69,8 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
 
         try
         {
-            var app = WorkspaceAppFactory.Create(key, port, _loggerFactory, workspace.DataDirectory, _tokenService);
+            var configEntry = LookupConfigEntry(key);
+            var app = WorkspaceAppFactory.Create(key, port, _loggerFactory, workspace.DataDirectory, _tokenService, configEntry);
             await app.StartAsync(ct).ConfigureAwait(false);
 
             var entry = new WorkspaceHostEntry(app, DateTime.UtcNow, port);
@@ -258,6 +259,18 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
 
     private static string NormalizeKey(string path)
         => Path.GetFullPath(path.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+
+    /// <summary>Reads the raw <see cref="WorkspaceConfigEntry"/> from <c>appsettings.json</c> for prompt overrides.</summary>
+    private WorkspaceConfigEntry? LookupConfigEntry(string normalizedKey)
+    {
+        var config = _serviceProvider.GetRequiredService<IConfiguration>();
+        var entries = config.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
+        return entries.FirstOrDefault(e =>
+            string.Equals(
+                Path.GetFullPath(e.WorkspacePath.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)),
+                normalizedKey,
+                StringComparison.OrdinalIgnoreCase));
+    }
 
     private bool IsPrimaryWorkspace(string normalizedKey)
         => _primaryWorkspaceKey is not null

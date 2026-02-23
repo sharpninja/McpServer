@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -44,6 +45,95 @@ public sealed class CopilotClient(
             Parsed = parsed,
             ContentType = contentType,
         };
+    }
+
+    /// <inheritdoc />
+    public async IAsyncEnumerable<string> InvokeStreamingAsync(
+        string prompt,
+        CopilotClientOptions? options = null,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(prompt);
+        var opts = options ?? defaultOptions.Value;
+        var cwd = opts.WorkingDirectory ?? Environment.CurrentDirectory;
+        var isWindows = OperatingSystem.IsWindows();
+
+        // Write prompt to temp file to avoid shell escaping issues
+        var tmpFile = Path.Combine(Path.GetTempPath(), $"fwh-copilot-{Environment.TickCount64}-{Guid.NewGuid():N}.txt");
+        await File.WriteAllTextAsync(tmpFile, prompt, Encoding.UTF8, cancellationToken).ConfigureAwait(false);
+
+        var readCmd = isWindows
+            ? $"Get-Content -Raw '{tmpFile.Replace("'", "''", StringComparison.Ordinal)}'"
+            : $"cat '{tmpFile.Replace("'", "'\\''", StringComparison.Ordinal)}'";
+        var modelArg = string.Equals(opts.Model, "auto", StringComparison.OrdinalIgnoreCase) ? "" : $" --model {opts.Model}";
+        var agentCmd = $"{opts.AgentPath} -p \"$({readCmd})\"{modelArg} --output-format {opts.OutputFormat} 2>&1";
+        var shell = isWindows ? "pwsh" : "sh";
+        var shellArgs = isWindows ? $"-NoProfile -Command {agentCmd}" : $"-c {agentCmd}";
+
+        var psi = new ProcessStartInfo
+        {
+            FileName = shell,
+            Arguments = shellArgs,
+            WorkingDirectory = cwd,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+        };
+
+        if (opts.EnvironmentVariables is { Count: > 0 } envVars)
+        {
+            foreach (var (key, value) in envVars)
+                psi.Environment[key] = value;
+        }
+
+        Process process;
+        try
+        {
+            process = Process.Start(psi) ?? throw new InvalidOperationException("Process.Start returned null");
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
+        {
+            logger.LogError(ex, "Failed to spawn streaming process: {Shell}", shell);
+            TryDeleteFile(tmpFile);
+            yield break;
+        }
+
+        try
+        {
+            using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            if (opts.Timeout > TimeSpan.Zero && opts.Timeout != System.Threading.Timeout.InfiniteTimeSpan)
+                timeoutCts.CancelAfter(opts.Timeout);
+
+            var reader = process.StandardOutput;
+            while (!timeoutCts.Token.IsCancellationRequested)
+            {
+                string? line;
+                try
+                {
+                    line = await reader.ReadLineAsync(timeoutCts.Token).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    break;
+                }
+
+                if (line is null)
+                    break;
+
+                yield return line;
+            }
+
+            if (!process.HasExited)
+                TryKillProcess(process);
+
+            await process.WaitForExitAsync(CancellationToken.None).ConfigureAwait(false);
+        }
+        finally
+        {
+            process.Dispose();
+            TryDeleteFile(tmpFile);
+        }
     }
 
     private async Task<CopilotResult> RunProcessAsync(

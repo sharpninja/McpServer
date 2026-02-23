@@ -74,6 +74,9 @@ public sealed class WorkspaceService : IWorkspaceService
                 TunnelProvider = string.IsNullOrWhiteSpace(request.TunnelProvider) ? null : request.TunnelProvider.Trim(),
                 RunAs = string.IsNullOrWhiteSpace(request.RunAs) ? null : request.RunAs.Trim(),
                 PromptTemplate = string.IsNullOrWhiteSpace(request.PromptTemplate) ? null : request.PromptTemplate.Trim(),
+                StatusPrompt = StripIfDefault(nameof(TodoPromptDefaults.StatusPrompt), request.StatusPrompt),
+                ImplementPrompt = StripIfDefault(nameof(TodoPromptDefaults.ImplementPrompt), request.ImplementPrompt),
+                PlanPrompt = StripIfDefault(nameof(TodoPromptDefaults.PlanPrompt), request.PlanPrompt),
                 IsPrimary = request.IsPrimary,
                 IsEnabled = request.IsEnabled,
                 DateTimeCreated = now,
@@ -126,6 +129,12 @@ public sealed class WorkspaceService : IWorkspaceService
                 entry.IsEnabled = request.IsEnabled.Value;
             if (request.PromptTemplate is not null)
                 entry.PromptTemplate = string.IsNullOrWhiteSpace(request.PromptTemplate) ? null : request.PromptTemplate.Trim();
+            if (request.StatusPrompt is not null)
+                entry.StatusPrompt = StripIfDefault(nameof(TodoPromptDefaults.StatusPrompt), request.StatusPrompt);
+            if (request.ImplementPrompt is not null)
+                entry.ImplementPrompt = StripIfDefault(nameof(TodoPromptDefaults.ImplementPrompt), request.ImplementPrompt);
+            if (request.PlanPrompt is not null)
+                entry.PlanPrompt = StripIfDefault(nameof(TodoPromptDefaults.PlanPrompt), request.PlanPrompt);
             entry.DateTimeModified = DateTimeOffset.UtcNow;
 
             await WriteAllAsync(all, ct).ConfigureAwait(false);
@@ -261,6 +270,14 @@ public sealed class WorkspaceService : IWorkspaceService
     private static string NormalizePath(string path)
         => Path.GetFullPath(path.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
 
+    /// <summary>Returns null when the prompt value is empty/whitespace or matches the built-in default.</summary>
+    private static string? StripIfDefault(string promptName, string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return null;
+        return TodoPromptDefaults.IsDefault(promptName, value) ? null : value.Trim();
+    }
+
     private static WorkspaceDto ToDto(WorkspaceConfigEntry e) => new()
     {
         WorkspacePath = e.WorkspacePath,
@@ -275,11 +292,14 @@ public sealed class WorkspaceService : IWorkspaceService
         DateTimeModified = e.DateTimeModified,
         RunAs = string.IsNullOrWhiteSpace(e.RunAs) ? null : e.RunAs,
         PromptTemplate = string.IsNullOrWhiteSpace(e.PromptTemplate) ? null : e.PromptTemplate,
+        StatusPrompt = e.StatusPrompt ?? TodoPromptDefaults.StatusPrompt,
+        ImplementPrompt = e.ImplementPrompt ?? TodoPromptDefaults.ImplementPrompt,
+        PlanPrompt = e.PlanPrompt ?? TodoPromptDefaults.PlanPrompt,
     };
 }
 
 /// <summary>Workspace entry as stored in <c>appsettings.json</c> under <c>Mcp:Workspaces</c>.</summary>
-internal sealed class WorkspaceConfigEntry
+public sealed class WorkspaceConfigEntry
 {
     /// <summary>Absolute path to the workspace root folder (primary key).</summary>
     public string WorkspacePath { get; set; } = string.Empty;
@@ -321,6 +341,15 @@ internal sealed class WorkspaceConfigEntry
     /// Supports <c>{baseUrl}</c> placeholder. When <see langword="null"/>, only the global prompt is used.
     /// </summary>
     public string? PromptTemplate { get; set; }
+
+    /// <summary>Override for the Copilot status prompt. Null = use built-in default.</summary>
+    public string? StatusPrompt { get; set; }
+
+    /// <summary>Override for the Copilot implement prompt. Null = use built-in default.</summary>
+    public string? ImplementPrompt { get; set; }
+
+    /// <summary>Override for the Copilot plan prompt. Null = use built-in default.</summary>
+    public string? PlanPrompt { get; set; }
 
     /// <summary>When the workspace was registered.</summary>
     public DateTimeOffset DateTimeCreated { get; set; }

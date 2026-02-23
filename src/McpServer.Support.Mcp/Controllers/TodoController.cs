@@ -13,12 +13,14 @@ public sealed class TodoController : ControllerBase
 {
     private readonly ITodoService _todoService;
     private readonly IRequirementsService _requirementsService;
+    private readonly ITodoPromptService _todoPromptService;
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
-    public TodoController(ITodoService todoService, IRequirementsService requirementsService)
+    public TodoController(ITodoService todoService, IRequirementsService requirementsService, ITodoPromptService todoPromptService)
     {
         _todoService = todoService;
         _requirementsService = requirementsService;
+        _todoPromptService = todoPromptService;
     }
 
     /// <summary>TR-PLANNED-013: Query TODO items by keyword, priority, section, id, or done status.</summary>
@@ -128,5 +130,62 @@ public sealed class TodoController : ControllerBase
             return UnprocessableEntity(result);
 
         return Ok(result);
+    }
+
+    /// <summary>
+    /// MVP-MCP-002: Stream a Copilot-generated status report for a TODO item via SSE.
+    /// The Copilot CLI is invoked in the workspace directory and output is streamed line by line.
+    /// </summary>
+    /// <param name="id">The TODO item id.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    [HttpGet("{id}/prompt/status")]
+    [Produces("text/event-stream")]
+    public async Task StreamStatusPromptAsync(string id, CancellationToken cancellationToken)
+    {
+        await StreamCopilotResponseAsync(_todoPromptService.StreamStatusAsync(id, cancellationToken), cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// MVP-MCP-002: Stream a Copilot-driven implementation session for a TODO item via SSE.
+    /// The Copilot CLI is invoked in the workspace directory with full item context and
+    /// step-by-step implementation instructions. Output is streamed line by line.
+    /// </summary>
+    /// <param name="id">The TODO item id.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    [HttpGet("{id}/prompt/implement")]
+    [Produces("text/event-stream")]
+    public async Task StreamImplementPromptAsync(string id, CancellationToken cancellationToken)
+    {
+        await StreamCopilotResponseAsync(_todoPromptService.StreamImplementAsync(id, cancellationToken), cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// MVP-MCP-002: Stream a Copilot-driven planning session for a TODO item via SSE.
+    /// The Copilot CLI is invoked in the workspace directory with full item context and
+    /// instructions to create a detailed implementation plan. Output is streamed line by line.
+    /// </summary>
+    /// <param name="id">The TODO item id.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    [HttpGet("{id}/prompt/plan")]
+    [Produces("text/event-stream")]
+    public async Task StreamPlanPromptAsync(string id, CancellationToken cancellationToken)
+    {
+        await StreamCopilotResponseAsync(_todoPromptService.StreamPlanAsync(id, cancellationToken), cancellationToken).ConfigureAwait(false);
+    }
+
+    private async Task StreamCopilotResponseAsync(IAsyncEnumerable<string> lines, CancellationToken cancellationToken)
+    {
+        Response.Headers["Cache-Control"] = "no-cache";
+        Response.Headers["Connection"] = "keep-alive";
+        Response.ContentType = "text/event-stream";
+
+        await foreach (var line in lines.WithCancellation(cancellationToken).ConfigureAwait(false))
+        {
+            await Response.WriteAsync($"data: {line}\n\n", cancellationToken).ConfigureAwait(false);
+            await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        await Response.WriteAsync("event: done\ndata: \n\n", cancellationToken).ConfigureAwait(false);
+        await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
     }
 }
