@@ -1,6 +1,6 @@
 port: 7148
 baseUrl: http://localhost:7148
-apiKey: 6iHGf6gkINiZJCLqiiVafEqF5_2jK-AcSgk8KV6ZKM4
+apiKey: O6AZK7UUlWDLHKy4fcJ_62z9FAI-XSlxfO2ti42-sUs
 endpoints:
   health: /health
   swagger: /swagger/v1/swagger.json
@@ -19,8 +19,8 @@ endpoints:
   workspace: /mcp/workspace
 workspace: McpServer
 workspacePath: E:\github\McpServer
-pid: 61908
-startedAt: 2026-02-23T17:41:03.3985249+00:00
+pid: 65032
+startedAt: 2026-02-23T19:54:34.2864292+00:00
 prompt: >-
   You are connected to an MCP Context Server at http://localhost:7148. Use this server to coordinate your work.
 
@@ -81,9 +81,9 @@ prompt: >-
 
   All `/mcp/*` REST endpoints require a per-workspace auth token. Include it with every request:
 
-  - **Header**: `X-Api-Key: 6iHGf6gkINiZJCLqiiVafEqF5_2jK-AcSgk8KV6ZKM4`
+  - **Header**: `X-Api-Key: O6AZK7UUlWDLHKy4fcJ_62z9FAI-XSlxfO2ti42-sUs`
 
-  - **Or query param**: `?api_key=6iHGf6gkINiZJCLqiiVafEqF5_2jK-AcSgk8KV6ZKM4`
+  - **Or query param**: `?api_key=O6AZK7UUlWDLHKy4fcJ_62z9FAI-XSlxfO2ti42-sUs`
 
   If you receive a 401 response, re-read this AGENTS-README-FIRST.yaml marker file — the token rotates on each server restart.
 

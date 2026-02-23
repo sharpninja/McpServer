@@ -77,8 +77,7 @@ public abstract class McpClientBase
 
     private void ApplyHeaders(HttpRequestMessage request)
     {
-        if (!string.IsNullOrWhiteSpace(_options.ApiKey))
-            request.Headers.TryAddWithoutValidation("X-Api-Key", _options.ApiKey);
+        request.Headers.TryAddWithoutValidation("X-Api-Key", _options.ApiKey);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
     }
 

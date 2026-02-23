@@ -13,6 +13,8 @@ public static class McpServerClientFactory
     public static McpServerClient Create(McpServerClientOptions options)
     {
         if (options is null) throw new ArgumentNullException(nameof(options));
+        if (string.IsNullOrWhiteSpace(options.ApiKey))
+            throw new ArgumentException("ApiKey is required. Read the workspace token from the AGENTS-README-FIRST.yaml marker file.", nameof(options));
 
         var http = new HttpClient
         {

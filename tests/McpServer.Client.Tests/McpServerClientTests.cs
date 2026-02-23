@@ -7,12 +7,17 @@ namespace McpServer.Client.Tests;
 
 public sealed class McpServerClientTests
 {
+    private static readonly McpServerClientOptions TestOptions = new()
+    {
+        BaseUrl = new Uri("http://localhost:7148"),
+        ApiKey = "test-key"
+    };
+
     [Fact]
     public void AllSubClients_AreInitialized()
     {
-        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7148") };
         using var http = new HttpClient();
-        var client = new McpServerClient(http, options);
+        var client = new McpServerClient(http, TestOptions);
 
         Assert.NotNull(client.Todo);
         Assert.NotNull(client.Context);
@@ -27,8 +32,7 @@ public sealed class McpServerClientTests
     [Fact]
     public void Factory_CreateWithOptions_Works()
     {
-        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7148") };
-        var client = McpServerClientFactory.Create(options);
+        var client = McpServerClientFactory.Create(TestOptions);
 
         Assert.NotNull(client);
         Assert.NotNull(client.Todo);
@@ -37,9 +41,8 @@ public sealed class McpServerClientTests
     [Fact]
     public void Factory_CreateWithHttpClient_Works()
     {
-        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7148") };
         using var http = new HttpClient();
-        var client = McpServerClientFactory.Create(http, options);
+        var client = McpServerClientFactory.Create(http, TestOptions);
 
         Assert.NotNull(client);
         Assert.NotNull(client.Todo);
@@ -49,5 +52,20 @@ public sealed class McpServerClientTests
     public void Factory_NullOptions_Throws()
     {
         Assert.Throws<ArgumentNullException>(() => McpServerClientFactory.Create(null!));
+    }
+
+    [Fact]
+    public void Constructor_MissingApiKey_Throws()
+    {
+        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7148") };
+        using var http = new HttpClient();
+        Assert.Throws<ArgumentException>(() => new McpServerClient(http, options));
+    }
+
+    [Fact]
+    public void Factory_MissingApiKey_Throws()
+    {
+        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7148") };
+        Assert.Throws<ArgumentException>(() => McpServerClientFactory.Create(options));
     }
 }

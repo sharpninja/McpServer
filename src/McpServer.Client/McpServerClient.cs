@@ -39,6 +39,8 @@ public sealed class McpServerClient
     {
         if (http is null) throw new ArgumentNullException(nameof(http));
         if (options is null) throw new ArgumentNullException(nameof(options));
+        if (string.IsNullOrWhiteSpace(options.ApiKey))
+            throw new ArgumentException("ApiKey is required. Read the workspace token from the AGENTS-README-FIRST.yaml marker file.", nameof(options));
 
         Todo = new TodoClient(http, options);
         Context = new ContextClient(http, options);
