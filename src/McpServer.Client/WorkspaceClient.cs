@@ -66,4 +66,16 @@ public sealed class WorkspaceClient : McpClientBase
     {
         return await GetAsync<WorkspaceProcessStatus>($"mcp/workspace/{Uri.EscapeDataString(key)}/status", cancellationToken).ConfigureAwait(false);
     }
+
+    /// <summary>Get the global marker prompt template. Only available on the primary workspace.</summary>
+    public async Task<GlobalPromptResult> GetGlobalPromptAsync(CancellationToken cancellationToken = default)
+    {
+        return await GetAsync<GlobalPromptResult>("mcp/workspace/prompt", cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>Update the global marker prompt template. Only available on the primary workspace.</summary>
+    public async Task<GlobalPromptResult> UpdateGlobalPromptAsync(GlobalPromptUpdateRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PutAsync<GlobalPromptResult>("mcp/workspace/prompt", request, cancellationToken).ConfigureAwait(false);
+    }
 }

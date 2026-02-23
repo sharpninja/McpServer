@@ -8,7 +8,7 @@
 
 | Controller | Route | Endpoints | Tests | Result |
 |-----------|-------|-----------|-------|--------|
-| [WorkspaceController](#workspace) | `mcp/workspace` | 9 | 40 | ✅ All passed |
+| [WorkspaceController](#workspace) | `mcp/workspace` | 11 | 40 | ✅ All passed |
 | [TodoController](#todo) | `mcp/todo` | 6 | 33 | ✅ All passed |
 | [ToolRegistryController](#tool-registry) | `mcp/tools` | 12 | 38 | ✅ All passed |
 | [SessionLogController](#session-log) | `mcp/sessionlog` | 3 | 21 | ✅ All passed |
@@ -17,7 +17,7 @@
 | [RepoController](#repo) | `mcp/repo` | 3 | 8 | ✅ All passed |
 | [SyncController](#sync) | `mcp/sync` | 2 | 4 | ✅ All passed |
 | [DiagnosticController](#diagnostic) | `mcp/diagnostic` | 2 | — | ✅ Debug/Staging only |
-| **Total** | | **54** | **168** | **✅ All passed** |
+| **Total** | | **56** | **168** | **✅ All passed** |
 
 ---
 
@@ -30,16 +30,18 @@
 | # | Method | Route | Auth | Status |
 |---|--------|-------|------|--------|
 | 1 | `GET` | `/mcp/workspace` | None | ✅ |
-| 2 | `POST` | `/mcp/workspace` | None | ✅ |
+| 2 | `POST` | `/mcp/workspace` | API Key | ✅ |
 | 3 | `GET` | `/mcp/workspace/{key}` | None | ✅ |
-| 4 | `PUT` | `/mcp/workspace/{key}` | None | ✅ |
-| 5 | `DELETE` | `/mcp/workspace/{key}` | None | ✅ |
-| 6 | `POST` | `/mcp/workspace/{key}/init` | None | ✅ |
-| 7 | `POST` | `/mcp/workspace/{key}/start` | None | ✅ |
-| 8 | `POST` | `/mcp/workspace/{key}/stop` | None | ✅ |
+| 4 | `PUT` | `/mcp/workspace/{key}` | API Key | ✅ |
+| 5 | `DELETE` | `/mcp/workspace/{key}` | API Key | ✅ |
+| 6 | `POST` | `/mcp/workspace/{key}/init` | API Key | ✅ |
+| 7 | `POST` | `/mcp/workspace/{key}/start` | API Key | ✅ |
+| 8 | `POST` | `/mcp/workspace/{key}/stop` | API Key | ✅ |
 | 9 | `GET` | `/mcp/workspace/{key}/status` | None | ✅ |
+| 10 | `GET` | `/mcp/workspace/prompt` | None | ✅ |
+| 11 | `PUT` | `/mcp/workspace/prompt` | API Key | ✅ |
 
-**Key Findings:** All 9 endpoints respond correctly. Full lifecycle creates + deletes cleanly. Keys are base64-encoded directory paths.
+**Key Findings:** All 11 endpoints respond correctly. Full lifecycle creates + deletes cleanly. Keys are base64-encoded directory paths. Read endpoints (GET list, GET single, GET status, GET prompt) are public; all mutating endpoints require API key. Prompt endpoints are gated to the primary workspace (returns 403 from non-primary instances).
 
 ---
 

@@ -50,6 +50,10 @@ public sealed class WorkspaceDto
     /// <summary>Windows identity for the workspace process.</summary>
     [JsonPropertyName("runAs")]
     public string? RunAs { get; set; }
+
+    /// <summary>Optional markdown prompt template appended to the global marker prompt.</summary>
+    [JsonPropertyName("promptTemplate")]
+    public string? PromptTemplate { get; set; }
 }
 
 /// <summary>Request to create a workspace.</summary>
@@ -90,6 +94,10 @@ public sealed class WorkspaceCreateRequest
     /// <summary>Enable auto-start.</summary>
     [JsonPropertyName("isEnabled")]
     public bool IsEnabled { get; set; } = true;
+
+    /// <summary>Optional markdown prompt template appended to the global marker prompt.</summary>
+    [JsonPropertyName("promptTemplate")]
+    public string? PromptTemplate { get; set; }
 }
 
 /// <summary>Request to update a workspace.</summary>
@@ -126,6 +134,30 @@ public sealed class WorkspaceUpdateRequest
     /// <summary>Updated enabled flag.</summary>
     [JsonPropertyName("isEnabled")]
     public bool? IsEnabled { get; set; }
+
+    /// <summary>Updated workspace prompt template (null = no change, empty string = remove).</summary>
+    [JsonPropertyName("promptTemplate")]
+    public string? PromptTemplate { get; set; }
+}
+
+/// <summary>Result of reading the global marker prompt template.</summary>
+public sealed class GlobalPromptResult
+{
+    /// <summary>The resolved prompt template text.</summary>
+    [JsonPropertyName("template")]
+    public string Template { get; set; } = string.Empty;
+
+    /// <summary>Whether the built-in default template is in use.</summary>
+    [JsonPropertyName("isDefault")]
+    public bool IsDefault { get; set; }
+}
+
+/// <summary>Request to update the global marker prompt template.</summary>
+public sealed class GlobalPromptUpdateRequest
+{
+    /// <summary>The new global prompt template. Send null or empty to revert to default.</summary>
+    [JsonPropertyName("template")]
+    public string? Template { get; set; }
 }
 
 /// <summary>Result of listing workspaces.</summary>

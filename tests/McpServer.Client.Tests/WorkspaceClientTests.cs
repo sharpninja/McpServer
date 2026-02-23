@@ -38,4 +38,33 @@ public sealed class WorkspaceClientTests
         Assert.True(result.IsRunning);
         Assert.Contains("/mcp/workspace/abc123/start", handler.LastRequest!.RequestUri!.AbsolutePath);
     }
+
+    [Fact]
+    public async System.Threading.Tasks.Task GetGlobalPromptAsync_GetsPrompt()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"template":"Hello {baseUrl}","isDefault":false}""");
+        using var http = new HttpClient(handler);
+        var client = new WorkspaceClient(http, DefaultOptions);
+
+        var result = await client.GetGlobalPromptAsync();
+
+        Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
+        Assert.Contains("/mcp/workspace/prompt", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Equal("Hello {baseUrl}", result.Template);
+        Assert.False(result.IsDefault);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task UpdateGlobalPromptAsync_PutsPrompt()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"template":"Custom prompt","isDefault":false}""");
+        using var http = new HttpClient(handler);
+        var client = new WorkspaceClient(http, DefaultOptions);
+
+        var result = await client.UpdateGlobalPromptAsync(new Models.GlobalPromptUpdateRequest { Template = "Custom prompt" });
+
+        Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
+        Assert.Contains("/mcp/workspace/prompt", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Equal("Custom prompt", result.Template);
+    }
 }
