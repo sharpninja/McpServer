@@ -5,7 +5,7 @@ Welcome to the MCP Server documentation. MCP Server is a .NET 9/ASP.NET Core app
 ## Quick Links
 
 - [FAQ](docs/FAQ.md) — Frequently asked questions
-- [Requirements](docs/REQUIREMENTS.md) — Functional and technical requirements
+- [Requirements](docs/Project/Requirements-Matrix.md) — Functional and technical requirements
 
 ## Features
 

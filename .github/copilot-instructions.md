@@ -48,11 +48,11 @@ pwsh ./scripts/Validate-McpConfig.ps1
 
 ### Requirement Traceability Comments
 
-All source files reference their FR/TR requirement IDs in doc comments (e.g., `/// <summary>TR-PLANNED-013: Constructor.</summary>`). When adding new functionality, reference the relevant requirement ID from `docs/REQUIREMENTS.md`.
+All source files reference their FR/TR requirement IDs in doc comments (e.g., `/// <summary>TR-PLANNED-013: Constructor.</summary>`). When adding new functionality, reference the relevant requirement ID from `docs/Project/Functional-Requirements.md` and `docs/Project/Technical-Requirements.md`.
 
 ### DRY — No Duplication (TR-MCP-DRY-001)
 
-Shared logic must be extracted to a single reusable location. No copy-pasted logic across files or scripts. See `docs/REQUIREMENTS.md` § TR-MCP-DRY-001.
+Shared logic must be extracted to a single reusable location. No copy-pasted logic across files or scripts. See `docs/Project/Technical-Requirements.md` § TR-MCP-DRY-001.
 
 ### Async Patterns
 
