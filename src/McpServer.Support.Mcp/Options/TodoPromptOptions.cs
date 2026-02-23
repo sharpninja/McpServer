@@ -24,4 +24,12 @@ public sealed class TodoPromptOptions
     /// Resolved at startup from the workspace port.
     /// </summary>
     public string BaseUrl { get; set; } = "http://localhost:7147";
+
+    /// <summary>
+    /// Windows user identity whose profile environment is loaded when spawning the
+    /// Copilot CLI process. This ensures the CLI finds its cached authentication tokens
+    /// and is discoverable on the user's PATH (e.g. WinGet links directory).
+    /// Null or empty = inherit the service account's environment.
+    /// </summary>
+    public string? RunAs { get; set; }
 }

@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -81,13 +83,16 @@ public sealed class CopilotClient(
             RedirectStandardError = true,
         };
 
+        ApplyRunAsEnvironment(psi, opts.RunAs);
+
         if (opts.EnvironmentVariables is { Count: > 0 } envVars)
         {
             foreach (var (key, value) in envVars)
                 psi.Environment[key] = value;
         }
 
-        Process process;
+        Process? process;
+        string? spawnError = null;
         try
         {
             process = Process.Start(psi) ?? throw new InvalidOperationException("Process.Start returned null");
@@ -96,8 +101,18 @@ public sealed class CopilotClient(
         {
             logger.LogError(ex, "Failed to spawn streaming process: {Shell}", shell);
             TryDeleteFile(tmpFile);
+            spawnError = $"error: Failed to spawn Copilot CLI — {ex.Message}";
+            process = null;
+        }
+
+        if (spawnError is not null)
+        {
+            yield return spawnError;
             yield break;
         }
+
+        // process is guaranteed non-null when spawnError is null.
+        var proc = process!;
 
         try
         {
@@ -105,7 +120,7 @@ public sealed class CopilotClient(
             if (opts.Timeout > TimeSpan.Zero && opts.Timeout != System.Threading.Timeout.InfiniteTimeSpan)
                 timeoutCts.CancelAfter(opts.Timeout);
 
-            var reader = process.StandardOutput;
+            var reader = proc.StandardOutput;
             while (!timeoutCts.Token.IsCancellationRequested)
             {
                 string? line;
@@ -124,14 +139,14 @@ public sealed class CopilotClient(
                 yield return line;
             }
 
-            if (!process.HasExited)
-                TryKillProcess(process);
+            if (!proc.HasExited)
+                TryKillProcess(proc);
 
-            await process.WaitForExitAsync(CancellationToken.None).ConfigureAwait(false);
+            await proc.WaitForExitAsync(CancellationToken.None).ConfigureAwait(false);
         }
         finally
         {
-            process.Dispose();
+            proc.Dispose();
             TryDeleteFile(tmpFile);
         }
     }
@@ -213,6 +228,8 @@ public sealed class CopilotClient(
             RedirectStandardOutput = true,
             RedirectStandardError = true,
         };
+
+        ApplyRunAsEnvironment(psi, opts.RunAs);
 
         if (opts.EnvironmentVariables is { Count: > 0 } envVars)
         {
@@ -343,5 +360,96 @@ public sealed class CopilotClient(
         try { File.Delete(path); }
         catch (IOException) { /* Best-effort cleanup */ }
         catch (UnauthorizedAccessException) { /* Best-effort cleanup */ }
+    }
+
+    /// <summary>
+    /// When <paramref name="runAsUser"/> is specified (Windows only), loads the user's
+    /// profile environment into <paramref name="psi"/> so the spawned process can find
+    /// CLIs on the user's PATH and access cached auth tokens in their profile.
+    /// </summary>
+    private void ApplyRunAsEnvironment(ProcessStartInfo psi, string? runAsUser)
+    {
+        if (string.IsNullOrWhiteSpace(runAsUser) || !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            return;
+
+        var userProfile = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile).Contains(runAsUser, StringComparison.OrdinalIgnoreCase)
+                ? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
+                : Path.Combine(GetUsersRoot(), runAsUser));
+
+        if (!Directory.Exists(userProfile))
+        {
+            logger.LogWarning("RunAs user profile not found: {UserProfile}", userProfile);
+            return;
+        }
+
+        var appData = Path.Combine(userProfile, "AppData", "Roaming");
+        var localAppData = Path.Combine(userProfile, "AppData", "Local");
+
+        psi.Environment["USERPROFILE"] = userProfile;
+        psi.Environment["HOME"] = userProfile;
+        psi.Environment["APPDATA"] = appData;
+        psi.Environment["LOCALAPPDATA"] = localAppData;
+
+        // Merge the user's PATH: read from registry HKEY_USERS\{username} or standard locations.
+        var userPath = ResolveUserPath(runAsUser, localAppData);
+        if (!string.IsNullOrWhiteSpace(userPath))
+        {
+            var currentPath = psi.Environment.TryGetValue("PATH", out var existing) ? existing : Environment.GetEnvironmentVariable("PATH");
+            psi.Environment["PATH"] = $"{userPath};{currentPath}";
+        }
+
+        logger.LogDebug("Applied RunAs environment for user {User}: USERPROFILE={Profile}", runAsUser, userProfile);
+    }
+
+    /// <summary>
+    /// Resolves the user-specific PATH entries by reading from the registry
+    /// (<c>HKEY_USERS\{SID}\Environment\Path</c>) and appending common WinGet/Scoop directories.
+    /// </summary>
+    [SupportedOSPlatform("windows")]
+    private static string ResolveUserPath(string username, string localAppData)
+    {
+        var parts = new List<string>();
+
+        // Try reading the user's PATH from the registry via their SID.
+        try
+        {
+            using var usersKey = Microsoft.Win32.Registry.Users;
+            foreach (var sid in usersKey.GetSubKeyNames())
+            {
+                using var envKey = usersKey.OpenSubKey($@"{sid}\Environment");
+                if (envKey is null) continue;
+
+                var regPath = envKey.GetValue("Path") as string;
+                if (string.IsNullOrWhiteSpace(regPath)) continue;
+
+                // Heuristic: the correct SID's PATH will reference the username's profile.
+                if (regPath.Contains(username, StringComparison.OrdinalIgnoreCase))
+                {
+                    parts.Add(regPath);
+                    break;
+                }
+            }
+        }
+        catch (System.Security.SecurityException)
+        {
+            // LocalSystem may not be able to read all registry hives.
+        }
+
+        // Always include common tool directories that are known to host CLIs.
+        var wingetLinks = Path.Combine(localAppData, "Microsoft", "WinGet", "Links");
+        if (Directory.Exists(wingetLinks) && !parts.Any(p => p.Contains(wingetLinks, StringComparison.OrdinalIgnoreCase)))
+            parts.Add(wingetLinks);
+
+        return string.Join(";", parts);
+    }
+
+    private static string GetUsersRoot()
+    {
+        // "C:\Users" on typical Windows installs.
+        var profileRoot = Environment.GetEnvironmentVariable("PUBLIC");
+        return profileRoot is not null
+            ? Path.GetDirectoryName(profileRoot) ?? @"C:\Users"
+            : @"C:\Users";
     }
 }

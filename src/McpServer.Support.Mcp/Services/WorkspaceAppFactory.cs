@@ -83,6 +83,7 @@ public static class WorkspaceAppFactory
                 options.StatusPrompt = workspaceConfig.StatusPrompt;
                 options.ImplementPrompt = workspaceConfig.ImplementPrompt;
                 options.PlanPrompt = workspaceConfig.PlanPrompt;
+                options.RunAs = workspaceConfig.RunAs;
             }
         });
         builder.Services.Configure<VectorIndexOptions>(options =>

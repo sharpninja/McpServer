@@ -210,6 +210,7 @@ builder.Services.Configure<TodoPromptOptions>(options =>
         options.ImplementPrompt = primaryWorkspaceEntry.ImplementPrompt;
         options.PlanPrompt = primaryWorkspaceEntry.PlanPrompt;
         options.BaseUrl = $"http://localhost:{primaryWorkspaceEntry.WorkspacePort}";
+        options.RunAs = primaryWorkspaceEntry.RunAs;
     }
 });
 builder.Services.AddCopilotClient();

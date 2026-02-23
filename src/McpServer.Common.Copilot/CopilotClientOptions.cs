@@ -4,9 +4,9 @@ namespace McpServer.Common.Copilot;
 public sealed class CopilotClientOptions
 {
     /// <summary>
-    /// Path to the CLI agent binary. Defaults to "agent" (must be on PATH).
+    /// Path to the CLI agent binary. Defaults to "copilot" (GitHub Copilot CLI, must be on PATH).
     /// </summary>
-    public string AgentPath { get; set; } = "agent";
+    public string AgentPath { get; set; } = "copilot";
 
     /// <summary>
     /// Model to use for the agent via --model.
@@ -36,4 +36,14 @@ public sealed class CopilotClientOptions
     /// Additional environment variables to pass to the spawned process.
     /// </summary>
     public Dictionary<string, string> EnvironmentVariables { get; } = [];
+
+    /// <summary>
+    /// Windows user identity whose profile environment is loaded before spawning
+    /// the CLI process. When running as a Windows service (<c>LocalSystem</c>), this
+    /// ensures the spawned process inherits the user's <c>PATH</c> (so the CLI binary
+    /// is discoverable) and profile directories (<c>USERPROFILE</c>, <c>APPDATA</c>,
+    /// <c>LOCALAPPDATA</c>) so the CLI can access cached authentication tokens.
+    /// Null or empty = inherit the current process environment.
+    /// </summary>
+    public string? RunAs { get; set; }
 }
