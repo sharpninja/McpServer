@@ -141,8 +141,6 @@ Available in Debug builds and `Staging` environment; excluded in Production Rele
 
 Use these to verify which binary and which `appsettings.json` a running instance has loaded.
 
-
-
 Use `Mcp:Instances:{name}` to define isolated instances with unique ports,
 roots, and storage backends.
 

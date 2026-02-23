@@ -278,7 +278,7 @@ jobs:
         id: version
         shell: bash
         run: |
-          BASE_VERSION=$(cat .version | tr -d '[:space:]' | sed 's/\xEF\xBB\xBF//')
+          BASE_VERSION=$(cat .version | LC_ALL=C tr -cd '0-9A-Za-z.\-' )
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             echo "version=$BASE_VERSION" >> "$GITHUB_OUTPUT"
           else

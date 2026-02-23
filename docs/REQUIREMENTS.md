@@ -97,6 +97,7 @@ Dynamic workspace registration, configuration, and lifecycle management. Workspa
 ```
 
 **Notes:**
+
 - `WorkspacePath` is the primary key. Duplicate paths are rejected with 409 Conflict.
 - Port uniqueness is enforced; new workspaces auto-assign `max(existing ports) + 1` if no port is supplied.
 - `IsPrimary` marks a workspace as served by the host process — no child app is started (FR-MCP-025).
