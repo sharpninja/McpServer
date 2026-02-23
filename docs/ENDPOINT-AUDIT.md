@@ -177,6 +177,7 @@
 | 2 | `GET` | `/mcp/diagnostic/appsettings-path` | None | ✅ |
 
 **Key Findings:** `execution-path` returns `{ processPath, baseDirectory }` — the actual executable path and its directory. `appsettings-path` returns `{ environmentName, contentRootPath, files[] }` listing which appsettings files are present in the content root. Both used during deployment verification to confirm correct binary and config file selection.
+
 ## Sync
 
 **Controller:** `SyncController` at `mcp/sync`  
