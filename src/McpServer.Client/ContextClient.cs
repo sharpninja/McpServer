@@ -6,14 +6,19 @@ using McpServer.Client.Models;
 
 namespace McpServer.Client;
 
-/// <summary>Client for context search endpoints (/mcp/context).</summary>
+/// <summary>
+/// Client for context search endpoints (<c>/mcp/context</c>). Provides hybrid
+/// semantic + full-text search over indexed workspace content, deterministic context packs,
+/// index rebuilds, and source listing.
+/// </summary>
+/// <seealso cref="McpServerClient.Context"/>
 public sealed class ContextClient : McpClientBase
 {
-    /// <summary>Initializes a new instance of <see cref="ContextClient"/>.</summary>
+    /// <inheritdoc />
     public ContextClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 
-    /// <summary>Perform a hybrid semantic + full-text search.</summary>
+    /// <summary>Perform a hybrid semantic + full-text search over indexed workspace content.</summary>
     public async Task<ContextSearchResult> SearchAsync(
         string query, string? sourceType = null, int limit = 20, CancellationToken cancellationToken = default)
     {
@@ -42,18 +47,18 @@ public sealed class ContextClient : McpClientBase
     }
 }
 
-/// <summary>Result of a rebuild index operation.</summary>
+/// <summary>Result of a <see cref="ContextClient.RebuildIndexAsync"/> operation.</summary>
 public sealed class RebuildIndexResult
 {
-    /// <summary>Operation status.</summary>
+    /// <summary>Human-readable operation status (e.g. <c>"completed"</c>).</summary>
     [System.Text.Json.Serialization.JsonPropertyName("status")]
     public string? Status { get; set; }
 }
 
-/// <summary>Result of listing context sources.</summary>
+/// <summary>Result of <see cref="ContextClient.ListSourcesAsync"/> containing all indexed document sources.</summary>
 public sealed class ContextSourcesResult
 {
-    /// <summary>Indexed sources.</summary>
+    /// <summary>Collection of indexed sources with their keys, types, and ingestion timestamps.</summary>
     [System.Text.Json.Serialization.JsonPropertyName("sources")]
     public IReadOnlyList<ContextSource> Sources { get; set; } = [];
 }

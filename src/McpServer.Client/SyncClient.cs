@@ -5,14 +5,18 @@ using McpServer.Client.Models;
 
 namespace McpServer.Client;
 
-/// <summary>Client for sync endpoints (/mcp/sync).</summary>
+/// <summary>
+/// Client for sync endpoints (<c>/mcp/sync</c>). Triggers full ingestion runs (repo files,
+/// session logs, external docs) and retrieves the current sync status.
+/// </summary>
+/// <seealso cref="McpServerClient.Sync"/>
 public sealed class SyncClient : McpClientBase
 {
-    /// <summary>Initializes a new instance of <see cref="SyncClient"/>.</summary>
+    /// <inheritdoc />
     public SyncClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 
-    /// <summary>Trigger a full ingestion sync.</summary>
+    /// <summary>Trigger a full ingestion sync (repo, session logs, external docs).</summary>
     public async Task<SyncRunResult> RunAsync(CancellationToken cancellationToken = default)
     {
         return await PostAsync<SyncRunResult>("mcp/sync/run", null, cancellationToken).ConfigureAwait(false);

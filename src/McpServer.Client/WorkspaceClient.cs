@@ -6,10 +6,15 @@ using McpServer.Client.Models;
 
 namespace McpServer.Client;
 
-/// <summary>Client for workspace management endpoints (/mcp/workspace).</summary>
+/// <summary>
+/// Client for workspace management endpoints (<c>/mcp/workspace</c>). Provides full
+/// lifecycle operations: list, get, create, update, delete, start/stop Kestrel hosts,
+/// query process status, and manage the global marker prompt template.
+/// </summary>
+/// <seealso cref="McpServerClient.Workspace"/>
 public sealed class WorkspaceClient : McpClientBase
 {
-    /// <summary>Initializes a new instance of <see cref="WorkspaceClient"/>.</summary>
+    /// <inheritdoc />
     public WorkspaceClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 

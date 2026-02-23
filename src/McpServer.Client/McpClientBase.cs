@@ -9,7 +9,19 @@ using System.Threading.Tasks;
 
 namespace McpServer.Client;
 
-/// <summary>Base class for MCP sub-clients providing shared HTTP helpers.</summary>
+/// <summary>
+/// Abstract base class for all MCP Server sub-clients (e.g. <see cref="TodoClient"/>,
+/// <see cref="WorkspaceClient"/>). Provides shared HTTP plumbing, automatic
+/// <c>X-Api-Key</c> header injection, and dynamic port-based URL construction.
+///
+/// <para><strong>Runtime authentication:</strong> Every outbound request reads the current
+/// value of <see cref="ApiKey"/>. If the key is empty or whitespace at call time, an
+/// <see cref="InvalidOperationException"/> is thrown — this avoids silent 401 failures.</para>
+///
+/// <para><strong>Dynamic port:</strong> The <see cref="Port"/> property is read at call time
+/// to construct the request URL, so callers can retarget a client to a different workspace
+/// host without creating a new instance.</para>
+/// </summary>
 public abstract class McpClientBase
 {
     private static readonly JsonSerializerOptions JsonOptions = new()
@@ -19,72 +31,117 @@ public abstract class McpClientBase
     };
 
     private readonly HttpClient _http;
-    private readonly McpServerClientOptions _options;
+    private readonly string _scheme;
+    private readonly string _host;
 
-    /// <summary>Initializes a new instance of the sub-client.</summary>
+    /// <summary>
+    /// Initializes a new instance of the sub-client, extracting scheme, host, and port
+    /// from <paramref name="options"/>.<see cref="McpServerClientOptions.BaseUrl"/> and
+    /// seeding <see cref="ApiKey"/> from <paramref name="options"/>.<see cref="McpServerClientOptions.ApiKey"/>.
+    /// </summary>
+    /// <param name="http">
+    /// The <see cref="HttpClient"/> used for all outbound HTTP requests.
+    /// Callers typically share a single instance (or use <c>IHttpClientFactory</c>).
+    /// </param>
+    /// <param name="options">
+    /// Configuration snapshot. <see cref="McpServerClientOptions.BaseUrl"/> supplies scheme,
+    /// host, and initial port. <see cref="McpServerClientOptions.ApiKey"/> is an optional
+    /// seed value — the key can also be set later via the <see cref="ApiKey"/> property.
+    /// </param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="http"/> or <paramref name="options"/> is <see langword="null"/>.
+    /// </exception>
     protected McpClientBase(HttpClient http, McpServerClientOptions options)
     {
         _http = http ?? throw new ArgumentNullException(nameof(http));
-        _options = options ?? throw new ArgumentNullException(nameof(options));
+        if (options is null) throw new ArgumentNullException(nameof(options));
+
+        _scheme = options.BaseUrl.Scheme;
+        _host = options.BaseUrl.Host;
+        Port = options.BaseUrl.Port;
+        ApiKey = options.ApiKey ?? string.Empty;
     }
 
-    /// <summary>Builds an absolute URI from a relative path.</summary>
-    protected Uri BuildUri(string relativePath)
-    {
-        var baseUrl = _options.BaseUrl.ToString().TrimEnd('/');
-        return new Uri($"{baseUrl}/{relativePath.TrimStart('/')}");
-    }
+    /// <summary>
+    /// API key for workspace authentication, sent as the <c>X-Api-Key</c> header on every
+    /// request. The value is read at call time so it can be rotated without recreating the
+    /// client. Must be non-empty before any endpoint is called; otherwise an
+    /// <see cref="InvalidOperationException"/> is thrown.
+    ///
+    /// <para>Obtain the key from the <c>AGENTS-README-FIRST.yaml</c> marker file that the
+    /// MCP Server writes to each workspace root on startup.</para>
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// client.ApiKey = File.ReadAllText("AGENTS-README-FIRST.yaml")
+    ///     .Split("apiKey:")[1].Trim();
+    /// </code>
+    /// </example>
+    public string ApiKey { get; set; } = string.Empty;
 
-    /// <summary>Sends a GET request and deserializes the response.</summary>
-    protected async Task<T> GetAsync<T>(string path, CancellationToken cancellationToken)
-    {
-        using var request = new HttpRequestMessage(HttpMethod.Get, BuildUri(path));
-        ApplyHeaders(request);
-        using var response = await _http.SendAsync(request, cancellationToken).ConfigureAwait(false);
-        return await ReadResponseAsync<T>(response, cancellationToken).ConfigureAwait(false);
-    }
+    /// <summary>
+    /// TCP port used to construct the base URL for API calls (e.g. <c>http://localhost:{Port}/</c>).
+    /// Initialized from <see cref="McpServerClientOptions.BaseUrl"/> and can be changed at
+    /// any time — the new value takes effect on the very next HTTP call. This allows a single
+    /// client instance to be retargeted to a different workspace host.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// client.Port = 7149; // switch to the "other-project" workspace
+    /// var items = await client.Todo.QueryAsync();
+    /// </code>
+    /// </example>
+    public int Port { get; set; }
 
-    /// <summary>Sends a POST request with a JSON body and deserializes the response.</summary>
-    protected async Task<T> PostAsync<T>(string path, object? body, CancellationToken cancellationToken)
-    {
-        using var request = new HttpRequestMessage(HttpMethod.Post, BuildUri(path));
-        ApplyHeaders(request);
-        if (body is not null)
-            request.Content = CreateJsonContent(body);
-        using var response = await _http.SendAsync(request, cancellationToken).ConfigureAwait(false);
-        return await ReadResponseAsync<T>(response, cancellationToken).ConfigureAwait(false);
-    }
+    /// <summary>Sends a GET request and deserializes the JSON response body to <typeparamref name="T"/>.</summary>
+    /// <inheritdoc cref="SendAsync{T}(HttpMethod, string, object?, CancellationToken)" path="/exception"/>
+    protected Task<T> GetAsync<T>(string path, CancellationToken cancellationToken)
+        => SendAsync<T>(HttpMethod.Get, path, null, cancellationToken);
 
-    /// <summary>Sends a PUT request with a JSON body and deserializes the response.</summary>
-    protected async Task<T> PutAsync<T>(string path, object? body, CancellationToken cancellationToken)
-    {
-        using var request = new HttpRequestMessage(HttpMethod.Put, BuildUri(path));
-        ApplyHeaders(request);
-        if (body is not null)
-            request.Content = CreateJsonContent(body);
-        using var response = await _http.SendAsync(request, cancellationToken).ConfigureAwait(false);
-        return await ReadResponseAsync<T>(response, cancellationToken).ConfigureAwait(false);
-    }
+    /// <summary>Sends a POST request with a JSON body and deserializes the response to <typeparamref name="T"/>.</summary>
+    /// <inheritdoc cref="SendAsync{T}(HttpMethod, string, object?, CancellationToken)" path="/exception"/>
+    protected Task<T> PostAsync<T>(string path, object? body, CancellationToken cancellationToken)
+        => SendAsync<T>(HttpMethod.Post, path, body, cancellationToken);
 
-    /// <summary>Sends a DELETE request and deserializes the response.</summary>
-    protected async Task<T> DeleteAsync<T>(string path, CancellationToken cancellationToken)
-    {
-        using var request = new HttpRequestMessage(HttpMethod.Delete, BuildUri(path));
-        ApplyHeaders(request);
-        using var response = await _http.SendAsync(request, cancellationToken).ConfigureAwait(false);
-        return await ReadResponseAsync<T>(response, cancellationToken).ConfigureAwait(false);
-    }
+    /// <summary>Sends a PUT request with a JSON body and deserializes the response to <typeparamref name="T"/>.</summary>
+    /// <inheritdoc cref="SendAsync{T}(HttpMethod, string, object?, CancellationToken)" path="/exception"/>
+    protected Task<T> PutAsync<T>(string path, object? body, CancellationToken cancellationToken)
+        => SendAsync<T>(HttpMethod.Put, path, body, cancellationToken);
 
-    private void ApplyHeaders(HttpRequestMessage request)
+    /// <summary>Sends a DELETE request and deserializes the JSON response body to <typeparamref name="T"/>.</summary>
+    /// <inheritdoc cref="SendAsync{T}(HttpMethod, string, object?, CancellationToken)" path="/exception"/>
+    protected Task<T> DeleteAsync<T>(string path, CancellationToken cancellationToken)
+        => SendAsync<T>(HttpMethod.Delete, path, null, cancellationToken);
+
+    /// <summary>
+    /// Core HTTP dispatch: builds the URI from <see cref="Port"/>, attaches the
+    /// <c>X-Api-Key</c> header from <see cref="ApiKey"/>, optionally serializes
+    /// <paramref name="body"/> as JSON, sends the request, and deserializes the response.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown when <see cref="ApiKey"/> is not set.</exception>
+    /// <exception cref="McpValidationException">HTTP 400 Bad Request.</exception>
+    /// <exception cref="McpUnauthorizedException">HTTP 401 Unauthorized.</exception>
+    /// <exception cref="McpNotFoundException">HTTP 404 Not Found.</exception>
+    /// <exception cref="McpConflictException">HTTP 409 Conflict.</exception>
+    /// <exception cref="McpServerException">Any other non-success HTTP status.</exception>
+    private async Task<T> SendAsync<T>(HttpMethod method, string path, object? body, CancellationToken cancellationToken)
     {
-        request.Headers.TryAddWithoutValidation("X-Api-Key", _options.ApiKey);
+        if (string.IsNullOrWhiteSpace(ApiKey))
+            throw new InvalidOperationException(
+                "ApiKey must be set before calling an endpoint. " +
+                "Read the workspace token from the AGENTS-README-FIRST.yaml marker file.");
+
+        var uri = new Uri($"{_scheme}://{_host}:{Port}/{path.TrimStart('/')}");
+        using var request = new HttpRequestMessage(method, uri);
+        request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-    }
 
-    private static StringContent CreateJsonContent(object body)
-    {
-        var json = JsonSerializer.Serialize(body, JsonOptions);
-        return new StringContent(json, Encoding.UTF8, "application/json");
+        if (body is not null)
+            request.Content = new StringContent(
+                JsonSerializer.Serialize(body, JsonOptions), Encoding.UTF8, "application/json");
+
+        using var response = await _http.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        return await ReadResponseAsync<T>(response, cancellationToken).ConfigureAwait(false);
     }
 
     private static async Task<T> ReadResponseAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken)

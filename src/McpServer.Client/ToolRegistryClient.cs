@@ -7,10 +7,15 @@ using McpServer.Client.Models;
 
 namespace McpServer.Client;
 
-/// <summary>Client for tool registry endpoints (/mcp/tools).</summary>
+/// <summary>
+/// Client for tool registry endpoints (<c>/mcp/tools</c>). Manages tool definitions (CRUD),
+/// keyword search, bucket management (add/remove/browse/sync), and tool installation from
+/// buckets.
+/// </summary>
+/// <seealso cref="McpServerClient.Tools"/>
 public sealed class ToolRegistryClient : McpClientBase
 {
-    /// <summary>Initializes a new instance of <see cref="ToolRegistryClient"/>.</summary>
+    /// <inheritdoc />
     public ToolRegistryClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 

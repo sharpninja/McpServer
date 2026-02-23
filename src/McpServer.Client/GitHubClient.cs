@@ -6,10 +6,15 @@ using McpServer.Client.Models;
 
 namespace McpServer.Client;
 
-/// <summary>Client for GitHub integration endpoints (/mcp/gh).</summary>
+/// <summary>
+/// Client for GitHub integration endpoints (<c>/mcp/gh</c>). Provides issue and pull request
+/// management, commenting, label listing, and bidirectional sync between GitHub issues and
+/// workspace TODO items.
+/// </summary>
+/// <seealso cref="McpServerClient.GitHub"/>
 public sealed class GitHubClient : McpClientBase
 {
-    /// <summary>Initializes a new instance of <see cref="GitHubClient"/>.</summary>
+    /// <inheritdoc />
     public GitHubClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 

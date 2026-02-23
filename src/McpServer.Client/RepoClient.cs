@@ -6,10 +6,14 @@ using McpServer.Client.Models;
 
 namespace McpServer.Client;
 
-/// <summary>Client for repository file endpoints (/mcp/repo).</summary>
+/// <summary>
+/// Client for repository file endpoints (<c>/mcp/repo</c>). Supports reading file content,
+/// writing files, and listing directory entries in the workspace repository.
+/// </summary>
+/// <seealso cref="McpServerClient.Repo"/>
 public sealed class RepoClient : McpClientBase
 {
-    /// <summary>Initializes a new instance of <see cref="RepoClient"/>.</summary>
+    /// <inheritdoc />
     public RepoClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 

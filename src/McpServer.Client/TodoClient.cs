@@ -5,10 +5,17 @@ using McpServer.Client.Models;
 
 namespace McpServer.Client;
 
-/// <summary>Client for TODO management endpoints (/mcp/todo).</summary>
+/// <summary>
+/// Client for TODO management endpoints (<c>/mcp/todo</c>). Provides full CRUD operations
+/// on TODO items and a Copilot-powered requirements analysis endpoint.
+///
+/// <para>All methods read <see cref="McpClientBase.ApiKey"/> and <see cref="McpClientBase.Port"/>
+/// at call time, allowing runtime re-targeting without recreating the client.</para>
+/// </summary>
+/// <seealso cref="McpServerClient.Todo"/>
 public sealed class TodoClient : McpClientBase
 {
-    /// <summary>Initializes a new instance of <see cref="TodoClient"/>.</summary>
+    /// <inheritdoc />
     public TodoClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 

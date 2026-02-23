@@ -7,14 +7,19 @@ using McpServer.Client.Models;
 
 namespace McpServer.Client;
 
-/// <summary>Client for session log endpoints (/mcp/sessionlog).</summary>
+/// <summary>
+/// Client for session log endpoints (<c>/mcp/sessionlog</c>). Supports submitting (upserting)
+/// session logs, querying historical logs with filters, and appending processing dialog items
+/// to existing log entries.
+/// </summary>
+/// <seealso cref="McpServerClient.SessionLog"/>
 public sealed class SessionLogClient : McpClientBase
 {
-    /// <summary>Initializes a new instance of <see cref="SessionLogClient"/>.</summary>
+    /// <inheritdoc />
     public SessionLogClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 
-    /// <summary>Submit (upsert) a session log.</summary>
+    /// <summary>Submit (upsert) a session log entry. Creates or updates based on session ID.</summary>
     public async Task<SessionLogSubmitResult> SubmitAsync(UnifiedSessionLogDto sessionLog, CancellationToken cancellationToken = default)
     {
         return await PostAsync<SessionLogSubmitResult>("mcp/sessionlog", sessionLog, cancellationToken).ConfigureAwait(false);
