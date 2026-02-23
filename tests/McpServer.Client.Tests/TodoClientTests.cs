@@ -101,4 +101,18 @@ public sealed class TodoClientTests
         Assert.True(handler.LastRequest.Headers.TryGetValues("X-Api-Key", out var values));
         Assert.Contains("test-key", values!);
     }
+
+    [Fact]
+    public async System.Threading.Tasks.Task AnalyzeRequirementsAsync_PostsCorrectUrl()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"copilotResponse":"analysis"}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.AnalyzeRequirementsAsync("MVP-001");
+
+        Assert.True(result.Success);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcp/todo/MVP-001/requirements", handler.LastRequest.RequestUri!.AbsolutePath);
+    }
 }

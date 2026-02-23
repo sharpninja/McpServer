@@ -53,4 +53,18 @@ public sealed class ContextClientTests
         Assert.Single(result.Sources);
         Assert.Equal("repo", result.Sources[0].SourceType);
     }
+
+    [Fact]
+    public async System.Threading.Tasks.Task RebuildIndexAsync_PostsCorrectly()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"status":"completed"}""");
+        using var http = new HttpClient(handler);
+        var client = new ContextClient(http, DefaultOptions);
+
+        var result = await client.RebuildIndexAsync();
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcp/context/rebuild-index", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Equal("completed", result.Status);
+    }
 }
