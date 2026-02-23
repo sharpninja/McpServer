@@ -43,7 +43,8 @@ jobs:
           script: |
             const retentionDays = Number(process.env.RETENTION_DAYS);
             const dryRun = process.env.DRY_RUN === 'true';
-            const cutoff = Date.now() - retentionDays * 24 * 60 * 60 * 1000;
+            const msPerDay = 24 * 60 * 60 * 1000;
+            const cutoff = Date.now() - retentionDays * msPerDay;
 
             const runs = await github.paginate(github.rest.actions.listWorkflowRunsForRepo, {
               owner: context.repo.owner,
@@ -75,7 +76,8 @@ jobs:
           script: |
             const retentionDays = Number(process.env.RETENTION_DAYS);
             const dryRun = process.env.DRY_RUN === 'true';
-            const cutoff = Date.now() - retentionDays * 24 * 60 * 60 * 1000;
+            const msPerDay = 24 * 60 * 60 * 1000;
+            const cutoff = Date.now() - retentionDays * msPerDay;
 
             const artifacts = await github.paginate(github.rest.actions.listArtifactsForRepo, {
               owner: context.repo.owner,
@@ -115,7 +117,9 @@ jobs:
               per_page: 100
             });
 
-            const matchingReleases = releases.filter(release => release.tag_name?.startsWith(prefix));
+            const matchingReleases = releases
+              .filter(release => release.tag_name?.startsWith(prefix))
+              .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
             const staleReleases = matchingReleases.slice(keepReleases);
             core.info(`Found ${staleReleases.length} stale releases for prefix '${prefix}' after keeping ${keepReleases}.`);
 
