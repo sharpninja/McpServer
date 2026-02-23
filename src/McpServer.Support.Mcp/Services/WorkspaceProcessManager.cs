@@ -1,6 +1,8 @@
 using System.Collections.Concurrent;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using McpServer.Support.Mcp.Options;
 
 namespace McpServer.Support.Mcp.Services;
 
@@ -18,6 +20,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     private readonly ILogger<WorkspaceProcessManager> _logger;
     private readonly ILoggerFactory _loggerFactory;
     private readonly IServiceProvider _serviceProvider;
+    private readonly MarkerPromptOptions _promptOptions;
 
     // Resolved once during IHostedService.StartAsync; null until then.
     private string? _primaryWorkspaceKey;
@@ -26,23 +29,27 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     public WorkspaceProcessManager(
         ILogger<WorkspaceProcessManager> logger,
         ILoggerFactory loggerFactory,
-        IServiceProvider serviceProvider)
+        IServiceProvider serviceProvider,
+        IOptions<MarkerPromptOptions> promptOptions)
     {
         _logger = logger;
         _loggerFactory = loggerFactory;
         _serviceProvider = serviceProvider;
+        _promptOptions = promptOptions.Value;
     }
 
     /// <inheritdoc />
-    public async Task<WorkspaceProcessStatus> StartAsync(string workspacePath, int port, CancellationToken ct = default, string? dataDirectory = null)
+    public async Task<WorkspaceProcessStatus> StartAsync(string workspacePath, int port, CancellationToken ct = default, string? dataDirectory = null, string? workspacePromptTemplate = null)
     {
         var key = NormalizeKey(workspacePath);
+        var globalTemplate = _promptOptions.MarkerPromptTemplate;
 
         // If this workspace is the primary host, just write the marker — the primary app already serves it.
         if (IsPrimaryWorkspace(key))
         {
             var name = DeriveWorkspaceName(key);
-            await MarkerFileService.WriteMarkerAsync(key, port, name, _logger, CancellationToken.None).ConfigureAwait(false);
+            await MarkerFileService.WriteMarkerAsync(key, port, name, _logger, CancellationToken.None,
+                globalTemplate, workspacePromptTemplate).ConfigureAwait(false);
             _logger.LogInformation("Workspace {Path} is the primary host — marker written, skipping duplicate app", key);
             return new WorkspaceProcessStatus(true, Port: port);
         }
@@ -50,7 +57,8 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         if (_hosts.TryGetValue(key, out var existing) && existing.IsRunning)
         {
             var name = DeriveWorkspaceName(key);
-            await MarkerFileService.WriteMarkerAsync(key, port, name, _logger, CancellationToken.None).ConfigureAwait(false);
+            await MarkerFileService.WriteMarkerAsync(key, port, name, _logger, CancellationToken.None,
+                globalTemplate, workspacePromptTemplate).ConfigureAwait(false);
             return new WorkspaceProcessStatus(true, Uptime: DateTime.UtcNow - existing.StartedAt, Port: port);
         }
 
@@ -63,7 +71,8 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             _hosts[key] = entry;
 
             var workspaceName = DeriveWorkspaceName(key);
-            await MarkerFileService.WriteMarkerAsync(key, port, workspaceName, _logger, CancellationToken.None).ConfigureAwait(false);
+            await MarkerFileService.WriteMarkerAsync(key, port, workspaceName, _logger, CancellationToken.None,
+                globalTemplate, workspacePromptTemplate).ConfigureAwait(false);
 
             _logger.LogInformation("Workspace Kestrel host started: {Path} on port {Port}", key, port);
             return new WorkspaceProcessStatus(true, Port: port);
@@ -176,7 +185,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
                     continue;
                 }
 
-                var status = await StartAsync(ws.WorkspacePath, ws.WorkspacePort, cancellationToken, ws.DataDirectory).ConfigureAwait(false);
+                var status = await StartAsync(ws.WorkspacePath, ws.WorkspacePort, cancellationToken, ws.DataDirectory, ws.PromptTemplate).ConfigureAwait(false);
                 if (status.IsRunning)
                     _logger.LogInformation("  ✓ {Name} on port {Port}{Primary}", ws.Name, ws.WorkspacePort,
                         IsPrimaryWorkspace(NormalizeKey(ws.WorkspacePath)) ? " (primary)" : "");

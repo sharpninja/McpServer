@@ -15,6 +15,68 @@ public static class MarkerFileService
     /// <summary>Well-known marker file name placed at the workspace root.</summary>
     public const string MarkerFileName = "AGENTS-README-FIRST.yaml";
 
+    /// <summary>
+    /// Built-in default prompt template with <c>{baseUrl}</c> placeholders.
+    /// Used when no <c>Mcp:MarkerPromptTemplate</c> is configured.
+    /// </summary>
+    public const string DefaultPromptTemplate =
+        """
+        You are connected to an MCP Context Server at {baseUrl}. Use this server to coordinate your work.
+
+        ## Server Health
+        Before making API calls, verify the server is running: GET {baseUrl}/health — returns {"status":"healthy"}.
+
+        ## API Discovery
+        The full OpenAPI spec is at GET {baseUrl}/swagger/v1/swagger.json. The interactive Swagger UI is at {baseUrl}/swagger. Use the spec to understand request/response schemas before calling endpoints.
+
+        ## Session Logging (REQUIRED)
+        You MUST log every request you process to the session log endpoint. This is critical for audit, continuity, and team visibility.
+
+        For each task or conversation turn:
+        1. POST {baseUrl}/mcp/sessionlog with a JSON body containing:
+           - sourceType: your agent identifier (e.g. "Cline", "Cursor", "Copilot")
+           - sessionId: a stable identifier for your current session
+           - title: a brief summary of the session's purpose
+           - model: the AI model you are using (e.g. "claude-sonnet-4-20250514")
+           - started: ISO 8601 timestamp when the session began
+           - lastUpdated: ISO 8601 timestamp of the latest activity
+           - status: "in_progress" or "completed"
+           - entries: array of request entries, each with:
+             - requestId: unique ID for this request within the session
+             - timestamp: ISO 8601 timestamp
+             - queryText: the full user query or task description
+             - queryTitle: short summary of the query
+             - response: your response text (can be a summary for long responses)
+             - interpretation: your understanding of what was asked
+             - status: "completed" or "in_progress"
+             - actions: array of { order, description, type, status, filePath } for each action taken
+             - model: the model used for this specific entry
+             - tokenCount: approximate token count if available
+             - tags: relevant tags (e.g. ["refactor", "bugfix", "feature"])
+             - contextList: files or resources referenced
+
+        2. For long-running requests, stream your reasoning in real-time via:
+           POST {baseUrl}/mcp/sessionlog/{agent}/{sessionId}/{requestId}/dialog
+           Send an array of dialog items, each with:
+           - timestamp: ISO 8601
+           - role: "model", "tool", "system", or "user"
+           - content: the reasoning text, tool output, or observation
+           - category: "reasoning", "tool_call", "tool_result", "observation", or "decision"
+
+        3. At the end of each session or task, POST the final session log with status "completed" and all entries filled in.
+
+        ## Available Capabilities
+        - Context Search: POST {baseUrl}/mcp/context/search — semantic + full-text hybrid search over indexed project documents
+        - Context Pack: POST {baseUrl}/mcp/context/pack — retrieve ordered context chunks for a topic
+        - Context Sources: GET {baseUrl}/mcp/context/sources — list all indexed document sources
+        - Todo Management: GET/POST/PUT/DELETE {baseUrl}/mcp/todo — query, create, update, and delete project tasks
+        - Repo Files: GET {baseUrl}/mcp/repo/file, POST {baseUrl}/mcp/repo/file, GET {baseUrl}/mcp/repo/list — read, write, and list repository files
+        - GitHub Integration: {baseUrl}/mcp/gh/issues, {baseUrl}/mcp/gh/pulls, {baseUrl}/mcp/gh/labels — issue, PR, and label management
+        - Sync: POST {baseUrl}/mcp/sync/run — trigger full ingestion sync; GET {baseUrl}/mcp/sync/status — check sync status
+        - Tool Registry: GET {baseUrl}/mcp/tools/search — discover available tools; GET/POST {baseUrl}/mcp/tools — manage tool definitions
+        - MCP Protocol: {baseUrl}/mcp-transport — Model Context Protocol streamable HTTP transport endpoint
+        """;
+
     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
         .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
@@ -23,12 +85,27 @@ public static class MarkerFileService
     /// <summary>
     /// Writes the <c>AGENTS-README-FIRST.yaml</c> marker file to <paramref name="workspacePath"/>.
     /// </summary>
+    /// <param name="workspacePath">Absolute path to the workspace root directory.</param>
+    /// <param name="port">HTTP port the workspace is served on.</param>
+    /// <param name="workspaceName">Human-readable workspace name.</param>
+    /// <param name="logger">Optional logger for diagnostics.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <param name="globalPromptTemplate">
+    /// Optional global prompt template with <c>{baseUrl}</c> placeholder.
+    /// When <see langword="null"/> or empty, the built-in default prompt is used.
+    /// </param>
+    /// <param name="workspacePromptTemplate">
+    /// Optional per-workspace prompt template with <c>{baseUrl}</c> placeholder.
+    /// When non-null, the resolved text is appended to the global prompt.
+    /// </param>
     public static async Task WriteMarkerAsync(
         string workspacePath,
         int port,
         string workspaceName,
         ILogger? logger = null,
-        CancellationToken ct = default)
+        CancellationToken ct = default,
+        string? globalPromptTemplate = null,
+        string? workspacePromptTemplate = null)
     {
         var baseUrl = $"http://localhost:{port.ToString(CultureInfo.InvariantCulture)}";
         var markerPath = Path.Combine(workspacePath, MarkerFileName);
@@ -59,7 +136,7 @@ public static class MarkerFileService
             WorkspacePath = workspacePath,
             Pid = Environment.ProcessId,
             StartedAt = DateTimeOffset.UtcNow.ToString("o", CultureInfo.InvariantCulture),
-            Prompt = BuildPrompt(baseUrl),
+            Prompt = ResolvePrompt(baseUrl, globalPromptTemplate, workspacePromptTemplate),
         };
 
         try
@@ -125,61 +202,25 @@ public static class MarkerFileService
         }
     }
 
-    private static string BuildPrompt(string baseUrl) =>
-$@"You are connected to an MCP Context Server at {baseUrl}. Use this server to coordinate your work.
+    /// <summary>
+    /// Resolves the final prompt from the global template, workspace template, and built-in default.
+    /// Visible for testing.
+    /// </summary>
+    internal static string ResolvePrompt(string baseUrl, string? globalPromptTemplate, string? workspacePromptTemplate)
+    {
+        var global = string.IsNullOrWhiteSpace(globalPromptTemplate)
+            ? BuildDefaultPrompt(baseUrl)
+            : globalPromptTemplate.Replace("{baseUrl}", baseUrl, StringComparison.Ordinal);
 
-## Server Health
-Before making API calls, verify the server is running: GET {baseUrl}/health — returns {{""status"":""healthy""}}.
+        if (string.IsNullOrWhiteSpace(workspacePromptTemplate))
+            return global;
 
-## API Discovery
-The full OpenAPI spec is at GET {baseUrl}/swagger/v1/swagger.json. The interactive Swagger UI is at {baseUrl}/swagger. Use the spec to understand request/response schemas before calling endpoints.
+        var workspace = workspacePromptTemplate.Replace("{baseUrl}", baseUrl, StringComparison.Ordinal);
+        return global + "\n\n" + workspace;
+    }
 
-## Session Logging (REQUIRED)
-You MUST log every request you process to the session log endpoint. This is critical for audit, continuity, and team visibility.
-
-For each task or conversation turn:
-1. POST {baseUrl}/mcp/sessionlog with a JSON body containing:
-   - sourceType: your agent identifier (e.g. ""Cline"", ""Cursor"", ""Copilot"")
-   - sessionId: a stable identifier for your current session
-   - title: a brief summary of the session's purpose
-   - model: the AI model you are using (e.g. ""claude-sonnet-4-20250514"")
-   - started: ISO 8601 timestamp when the session began
-   - lastUpdated: ISO 8601 timestamp of the latest activity
-   - status: ""in_progress"" or ""completed""
-   - entries: array of request entries, each with:
-     - requestId: unique ID for this request within the session
-     - timestamp: ISO 8601 timestamp
-     - queryText: the full user query or task description
-     - queryTitle: short summary of the query
-     - response: your response text (can be a summary for long responses)
-     - interpretation: your understanding of what was asked
-     - status: ""completed"" or ""in_progress""
-     - actions: array of {{ order, description, type, status, filePath }} for each action taken
-     - model: the model used for this specific entry
-     - tokenCount: approximate token count if available
-     - tags: relevant tags (e.g. [""refactor"", ""bugfix"", ""feature""])
-     - contextList: files or resources referenced
-
-2. For long-running requests, stream your reasoning in real-time via:
-   POST {baseUrl}/mcp/sessionlog/{{agent}}/{{sessionId}}/{{requestId}}/dialog
-   Send an array of dialog items, each with:
-   - timestamp: ISO 8601
-   - role: ""model"", ""tool"", ""system"", or ""user""
-   - content: the reasoning text, tool output, or observation
-   - category: ""reasoning"", ""tool_call"", ""tool_result"", ""observation"", or ""decision""
-
-3. At the end of each session or task, POST the final session log with status ""completed"" and all entries filled in.
-
-## Available Capabilities
-- Context Search: POST {baseUrl}/mcp/context/search — semantic + full-text hybrid search over indexed project documents
-- Context Pack: POST {baseUrl}/mcp/context/pack — retrieve ordered context chunks for a topic
-- Context Sources: GET {baseUrl}/mcp/context/sources — list all indexed document sources
-- Todo Management: GET/POST/PUT/DELETE {baseUrl}/mcp/todo — query, create, update, and delete project tasks
-- Repo Files: GET {baseUrl}/mcp/repo/file, POST {baseUrl}/mcp/repo/file, GET {baseUrl}/mcp/repo/list — read, write, and list repository files
-- GitHub Integration: {baseUrl}/mcp/gh/issues, {baseUrl}/mcp/gh/pulls, {baseUrl}/mcp/gh/labels — issue, PR, and label management
-- Sync: POST {baseUrl}/mcp/sync/run — trigger full ingestion sync; GET {baseUrl}/mcp/sync/status — check sync status
-- Tool Registry: GET {baseUrl}/mcp/tools/search — discover available tools; GET/POST {baseUrl}/mcp/tools — manage tool definitions
-- MCP Protocol: {baseUrl}/mcp-transport — Model Context Protocol streamable HTTP transport endpoint";
+    private static string BuildDefaultPrompt(string baseUrl) =>
+        DefaultPromptTemplate.Replace("{baseUrl}", baseUrl, StringComparison.Ordinal);
 }
 
 /// <summary>Serialization model for the <c>AGENTS-README-FIRST.yaml</c> marker file.</summary>

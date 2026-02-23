@@ -6,7 +6,7 @@ namespace McpServer.Support.Mcp.Services;
 public interface IWorkspaceProcessManager : IHostedService
 {
     /// <summary>Start a hosted MCP instance for the given workspace.</summary>
-    Task<WorkspaceProcessStatus> StartAsync(string workspacePath, int port, CancellationToken ct = default, string? dataDirectory = null);
+    Task<WorkspaceProcessStatus> StartAsync(string workspacePath, int port, CancellationToken ct = default, string? dataDirectory = null, string? workspacePromptTemplate = null);
 
     /// <summary>Stop the hosted MCP instance for the given workspace.</summary>
     Task<WorkspaceProcessStatus> StopAsync(string workspacePath, CancellationToken ct = default);

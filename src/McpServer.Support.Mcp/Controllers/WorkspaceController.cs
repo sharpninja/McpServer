@@ -1,6 +1,10 @@
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using McpServer.Support.Mcp.Middleware;
+using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Controllers;
 
@@ -16,12 +20,23 @@ public sealed class WorkspaceController : ControllerBase
 {
     private readonly IWorkspaceService _workspaceService;
     private readonly IWorkspaceProcessManager _processManager;
+    private readonly IConfiguration _configuration;
+    private readonly IWebHostEnvironment _env;
+    private readonly IOptionsMonitor<MarkerPromptOptions> _promptOptions;
 
     /// <summary>Initializes a new instance of the <see cref="WorkspaceController"/> class.</summary>
-    public WorkspaceController(IWorkspaceService workspaceService, IWorkspaceProcessManager processManager)
+    public WorkspaceController(
+        IWorkspaceService workspaceService,
+        IWorkspaceProcessManager processManager,
+        IConfiguration configuration,
+        IWebHostEnvironment env,
+        IOptionsMonitor<MarkerPromptOptions> promptOptions)
     {
         _workspaceService = workspaceService;
         _processManager = processManager;
+        _configuration = configuration;
+        _env = env;
+        _promptOptions = promptOptions;
     }
 
     /// <summary>
@@ -75,7 +90,8 @@ public sealed class WorkspaceController : ControllerBase
         await _workspaceService.InitAsync(request.WorkspacePath, ct).ConfigureAwait(false);
         var workspace = await _workspaceService.GetAsync(request.WorkspacePath, ct).ConfigureAwait(false);
         if (workspace is not null)
-            await _processManager.StartAsync(request.WorkspacePath, workspace.WorkspacePort, ct).ConfigureAwait(false);
+            await _processManager.StartAsync(request.WorkspacePath, workspace.WorkspacePort, ct,
+                workspace.DataDirectory, workspace.PromptTemplate).ConfigureAwait(false);
 
         var key = EncodeKey(request.WorkspacePath);
         return Created(new Uri($"/mcp/workspace/{key}", UriKind.Relative), result);
@@ -155,7 +171,8 @@ public sealed class WorkspaceController : ControllerBase
         if (workspace is null)
             return NotFound(new WorkspaceProcessStatus(false, Error: "Workspace not found."));
 
-        var status = await _processManager.StartAsync(path, workspace.WorkspacePort, ct).ConfigureAwait(false);
+        var status = await _processManager.StartAsync(path, workspace.WorkspacePort, ct,
+            workspace.DataDirectory, workspace.PromptTemplate).ConfigureAwait(false);
         return Ok(status);
     }
 
@@ -183,6 +200,100 @@ public sealed class WorkspaceController : ControllerBase
         var status = _processManager.GetStatus(path);
         return Ok(status);
     }
+
+    /// <summary>
+    /// Get the global marker prompt template. Only available on the primary workspace.
+    /// Returns the configured template, or the built-in default when none is configured.
+    /// </summary>
+    [HttpGet("prompt")]
+    [SkipApiKeyAuth]
+    public async Task<ActionResult<GlobalPromptResult>> GetGlobalPromptAsync(CancellationToken ct)
+    {
+        var primary = await FindPrimaryWorkspaceAsync(ct).ConfigureAwait(false);
+        if (primary is null)
+            return NotFound(new { error = "No primary workspace configured." });
+
+        // Only the primary workspace may serve this endpoint.
+        if (!IsPrimaryInstance(primary))
+            return StatusCode(403, new { error = "Global prompt is only available on the primary workspace." });
+
+        var template = _promptOptions.CurrentValue.MarkerPromptTemplate;
+        var isDefault = string.IsNullOrWhiteSpace(template);
+        return Ok(new GlobalPromptResult(
+            Template: isDefault ? MarkerFileService.DefaultPromptTemplate : template!,
+            IsDefault: isDefault));
+    }
+
+    /// <summary>
+    /// Update the global marker prompt template. Only available on the primary workspace.
+    /// Send an empty or null <c>template</c> to revert to the built-in default.
+    /// The template supports <c>{baseUrl}</c> placeholder for runtime substitution.
+    /// </summary>
+    [HttpPut("prompt")]
+    public async Task<ActionResult<GlobalPromptResult>> UpdateGlobalPromptAsync(
+        [FromBody] GlobalPromptUpdateRequest? request,
+        CancellationToken ct)
+    {
+        if (request is null)
+            return BadRequest(new { error = "Request body is required." });
+
+        var primary = await FindPrimaryWorkspaceAsync(ct).ConfigureAwait(false);
+        if (primary is null)
+            return NotFound(new { error = "No primary workspace configured." });
+
+        if (!IsPrimaryInstance(primary))
+            return StatusCode(403, new { error = "Global prompt is only available on the primary workspace." });
+
+        var newTemplate = string.IsNullOrWhiteSpace(request.Template) ? null : request.Template.Trim();
+
+        // Persist to appsettings.json using the same atomic JSON patching as WorkspaceService.
+        var appsettingsPath = Path.Combine(_env.ContentRootPath, "appsettings.json");
+        var jsonText = await System.IO.File.ReadAllTextAsync(appsettingsPath, ct).ConfigureAwait(false);
+        var doc = JsonNode.Parse(jsonText, new JsonNodeOptions { PropertyNameCaseInsensitive = true })!;
+        var mcp = doc["Mcp"] as JsonObject ?? new JsonObject();
+
+        if (newTemplate is null)
+            mcp.Remove("MarkerPromptTemplate");
+        else
+            mcp["MarkerPromptTemplate"] = newTemplate;
+
+        doc["Mcp"] = mcp;
+        await System.IO.File.WriteAllTextAsync(appsettingsPath, doc.ToJsonString(s_jsonOptions), ct).ConfigureAwait(false);
+
+        if (_configuration is IConfigurationRoot root)
+            root.Reload();
+
+        var isDefault = newTemplate is null;
+        return Ok(new GlobalPromptResult(
+            Template: isDefault ? MarkerFileService.DefaultPromptTemplate : newTemplate!,
+            IsDefault: isDefault));
+    }
+
+    private async Task<WorkspaceDto?> FindPrimaryWorkspaceAsync(CancellationToken ct)
+    {
+        var list = await _workspaceService.ListAsync(ct).ConfigureAwait(false);
+        return list.Items
+            .Where(w => w.IsPrimary && w.IsEnabled)
+            .OrderBy(w => w.WorkspacePort)
+            .FirstOrDefault()
+            ?? list.Items
+                .Where(w => w.IsEnabled)
+                .OrderBy(w => w.WorkspacePort)
+                .FirstOrDefault();
+    }
+
+    private bool IsPrimaryInstance(WorkspaceDto primary)
+    {
+        // Check if this process is the one serving the primary workspace by comparing ports.
+        var listeningUrls = HttpContext.Connection.LocalPort;
+        return primary.WorkspacePort == listeningUrls;
+    }
+
+    private static readonly JsonSerializerOptions s_jsonOptions = new()
+    {
+        WriteIndented = true,
+        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+    };
 
     // Base64URL encode a workspace path for use as a URL key.
     private static string EncodeKey(string path)

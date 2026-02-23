@@ -133,6 +133,7 @@ else
 }
 
 builder.Services.Configure<IngestionOptions>(builder.Configuration.GetSection("Mcp"));
+builder.Services.Configure<MarkerPromptOptions>(builder.Configuration.GetSection(MarkerPromptOptions.SectionName));
 builder.Services.Configure<McpParseableOptions>(builder.Configuration.GetSection(McpParseableOptions.SectionName));
 builder.Services.Configure<McpInteractionLoggingOptions>(builder.Configuration.GetSection(McpInteractionLoggingOptions.SectionName));
 builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(TodoStorageOptions.SectionName));

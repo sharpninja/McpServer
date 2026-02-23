@@ -73,6 +73,7 @@ public sealed class WorkspaceService : IWorkspaceService
                 WorkspacePort = port,
                 TunnelProvider = string.IsNullOrWhiteSpace(request.TunnelProvider) ? null : request.TunnelProvider.Trim(),
                 RunAs = string.IsNullOrWhiteSpace(request.RunAs) ? null : request.RunAs.Trim(),
+                PromptTemplate = string.IsNullOrWhiteSpace(request.PromptTemplate) ? null : request.PromptTemplate.Trim(),
                 IsPrimary = request.IsPrimary,
                 IsEnabled = request.IsEnabled,
                 DateTimeCreated = now,
@@ -123,6 +124,8 @@ public sealed class WorkspaceService : IWorkspaceService
                 entry.IsPrimary = request.IsPrimary.Value;
             if (request.IsEnabled is not null)
                 entry.IsEnabled = request.IsEnabled.Value;
+            if (request.PromptTemplate is not null)
+                entry.PromptTemplate = string.IsNullOrWhiteSpace(request.PromptTemplate) ? null : request.PromptTemplate.Trim();
             entry.DateTimeModified = DateTimeOffset.UtcNow;
 
             await WriteAllAsync(all, ct).ConfigureAwait(false);
@@ -255,6 +258,7 @@ public sealed class WorkspaceService : IWorkspaceService
         DateTimeCreated = e.DateTimeCreated,
         DateTimeModified = e.DateTimeModified,
         RunAs = string.IsNullOrWhiteSpace(e.RunAs) ? null : e.RunAs,
+        PromptTemplate = string.IsNullOrWhiteSpace(e.PromptTemplate) ? null : e.PromptTemplate,
     };
 }
 
@@ -295,6 +299,12 @@ internal sealed class WorkspaceConfigEntry
     /// When false, the workspace is skipped during auto-start. Default: true.
     /// </summary>
     public bool IsEnabled { get; set; } = true;
+
+    /// <summary>
+    /// Optional markdown prompt template appended to the global marker prompt for this workspace.
+    /// Supports <c>{baseUrl}</c> placeholder. When <see langword="null"/>, only the global prompt is used.
+    /// </summary>
+    public string? PromptTemplate { get; set; }
 
     /// <summary>When the workspace was registered.</summary>
     public DateTimeOffset DateTimeCreated { get; set; }
