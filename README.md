@@ -183,6 +183,33 @@ Extension sources and packaging scripts live in:
 - `scripts/Package-Vsix.ps1`
 - `scripts/Build-AndInstall-Vsix.ps1`
 
+## Client Library
+
+A typed REST client is available as a NuGet package for consuming the MCP Server API:
+
+```powershell
+dotnet add package SharpNinja.McpServer.Client
+```
+
+```csharp
+// With DI
+builder.Services.AddMcpServerClient(options =>
+{
+    options.BaseUrl = new Uri("http://localhost:7148");
+    options.ApiKey = "your-api-key"; // optional
+});
+
+// Without DI
+var client = McpServerClientFactory.Create(new McpServerClientOptions
+{
+    BaseUrl = new Uri("http://localhost:7148"),
+});
+```
+
+Covers all API endpoints: Todo, Context, SessionLog, GitHub, Repo, Sync, Workspace, and Tools.
+
+Source: `src/McpServer.Client/` — see the [package README](src/McpServer.Client/README.md) for full usage.
+
 ## Additional Documentation
 
 - Full server guide: `docs/MCP-SERVER.md`

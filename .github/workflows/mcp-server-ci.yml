@@ -3,6 +3,7 @@ name: mcp-server-ci
 permissions:
   contents: write
   actions: write
+  packages: write
   pages: write
   id-token: write
 
@@ -11,7 +12,9 @@ on:
     branches: [ main, develop ]
     paths:
       - "src/McpServer.Support.Mcp/**"
+      - "src/McpServer.Client/**"
       - "tests/McpServer.Support.Mcp.Tests/**"
+      - "tests/McpServer.Client.Tests/**"
       - "docs/**"
       - "scripts/Start-McpServer.ps1"
       - "scripts/Package-McpServerMsix.ps1"
@@ -22,7 +25,9 @@ on:
   pull_request:
     paths:
       - "src/McpServer.Support.Mcp/**"
+      - "src/McpServer.Client/**"
       - "tests/McpServer.Support.Mcp.Tests/**"
+      - "tests/McpServer.Client.Tests/**"
       - "docs/**"
       - "scripts/Start-McpServer.ps1"
       - "scripts/Package-McpServerMsix.ps1"
@@ -256,3 +261,43 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  publish-nuget:
+    runs-on: ubuntu-latest
+    needs: build-test-publish
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Read version
+        id: version
+        shell: bash
+        run: |
+          BASE_VERSION=$(cat .version | tr -d '[:space:]' | sed 's/\xEF\xBB\xBF//')
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "version=$BASE_VERSION" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=$BASE_VERSION-preview.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Pack
+        run: dotnet pack src/McpServer.Client/McpServer.Client.csproj -c Release -p:PackageVersion=${{ steps.version.outputs.version }} -o ./nupkg
+
+      - name: Push to NuGet (main only)
+        if: github.ref == 'refs/heads/main'
+        run: dotnet nuget push ./nupkg/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+
+      - name: Push to GitHub Packages (non-main)
+        if: github.ref != 'refs/heads/main'
+        run: dotnet nuget push ./nupkg/*.nupkg --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+
+      - name: Upload NuGet artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcp-client-nupkg
+          path: nupkg/*.nupkg

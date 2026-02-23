@@ -9,6 +9,7 @@
     <PackageVersion Include="Microsoft.Extensions.Options" Version="10.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.12" />
     <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.5" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.0.0" />
     <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="9.0.0" />
     <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.15.0" />
@@ -39,5 +40,7 @@
     <PackageVersion Include="YamlDotNet" Version="16.3.0" />
     <PackageVersion Include="Microsoft.ML.OnnxRuntime" Version="1.24.1" />
     <PackageVersion Include="HnswIndex" Version="1.6.0" />
+    <PackageVersion Include="System.Text.Json" Version="9.0.5" />
+    <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.2" />
   </ItemGroup>
 </Project>
