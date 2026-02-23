@@ -104,14 +104,12 @@ async function streamPromptToEditor(id, action) {
 function activate(context) {
     // Create output channel and log immediately so we know activation ran
     (0, logger_1.log)('activate() called');
-    // Only fully initialise when the FunWasHad solution is in the workspace
-    const isFunWasHad = vscode.workspace.workspaceFolders?.some((f) => {
-        const fs = require('fs');
-        const path = require('path');
-        return fs.existsSync(path.join(f.uri.fsPath, 'FunWasHad.sln'));
+    // Only fully initialise when the AGENTS-README-FIRST.yaml marker file is in a workspace root
+    const hasMarker = vscode.workspace.workspaceFolders?.some((f) => {
+        return fs.existsSync(path.join(f.uri.fsPath, 'AGENTS-README-FIRST.yaml'));
     });
-    if (!isFunWasHad) {
-        (0, logger_1.log)('FunWasHad.sln not found in workspace — extension inactive.');
+    if (!hasMarker) {
+        (0, logger_1.log)('AGENTS-README-FIRST.yaml not found in workspace — extension inactive.');
         return;
     }
     try {

@@ -83,14 +83,12 @@ export function activate(context: vscode.ExtensionContext): void {
   // Create output channel and log immediately so we know activation ran
   log('activate() called');
 
-  // Only fully initialise when the FunWasHad solution is in the workspace
-  const isFunWasHad = vscode.workspace.workspaceFolders?.some((f) => {
-    const fs = require('fs') as typeof import('fs');
-    const path = require('path') as typeof import('path');
-    return fs.existsSync(path.join(f.uri.fsPath, 'FunWasHad.sln'));
+  // Only fully initialise when the AGENTS-README-FIRST.yaml marker file is in a workspace root
+  const hasMarker = vscode.workspace.workspaceFolders?.some((f) => {
+    return fs.existsSync(path.join(f.uri.fsPath, 'AGENTS-README-FIRST.yaml'));
   });
-  if (!isFunWasHad) {
-    log('FunWasHad.sln not found in workspace — extension inactive.');
+  if (!hasMarker) {
+    log('AGENTS-README-FIRST.yaml not found in workspace — extension inactive.');
     return;
   }
 
