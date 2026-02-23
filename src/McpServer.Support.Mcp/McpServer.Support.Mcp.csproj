@@ -34,6 +34,7 @@
     <PackageReference Include="YamlDotNet" />
     <PackageReference Include="Microsoft.ML.OnnxRuntime" />
     <PackageReference Include="HNSWIndex" />
+    <PackageReference Include="Handlebars.Net" />
     <ProjectReference Include="..\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj" />
     <ProjectReference Include="..\McpServer.Common.Copilot\McpServer.Common.Copilot.csproj" />
   </ItemGroup>

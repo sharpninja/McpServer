@@ -26,7 +26,7 @@ public static class WorkspaceAppFactory
     /// Creates a <see cref="WebApplication"/> configured for the given workspace path and port.
     /// The host serves MCP tools and API controllers scoped to the workspace data.
     /// </summary>
-    public static WebApplication Create(string workspacePath, int port, ILoggerFactory loggerFactory, string? dataDirectory = null)
+    public static WebApplication Create(string workspacePath, int port, ILoggerFactory loggerFactory, string? dataDirectory = null, WorkspaceTokenService? tokenService = null)
     {
         var workspaceName = Path.GetFileName(
             workspacePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
@@ -120,6 +120,12 @@ public static class WorkspaceAppFactory
         });
         builder.Services.AddSingleton<IInteractionLogSubmissionChannel, InteractionLogSubmissionChannel>();
 
+        // Share the primary host's token service so child workspaces validate the same tokens.
+        if (tokenService is not null)
+            builder.Services.AddSingleton(tokenService);
+        else
+            builder.Services.AddSingleton<WorkspaceTokenService>();
+
         // MCP Streamable HTTP transport with the same tools as the primary host.
         builder.Services.AddMcpServer()
             .WithHttpTransport()
@@ -143,6 +149,7 @@ public static class WorkspaceAppFactory
         }
 
         app.UseMiddleware<InteractionLoggingMiddleware>();
+        app.UseMiddleware<WorkspaceAuthMiddleware>();
         app.MapControllers();
         app.MapMcp("/mcp-transport");
         app.MapGet("/health", () => Results.Ok(new { status = "healthy", workspace = workspaceName, port }));

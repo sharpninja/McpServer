@@ -156,7 +156,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
 
         // 2. Update the workspace prompt — latch on marker rewrite.
         var markerChanged = WatchForMarkerChange();
-        var workspacePrompt = "WORKSPACE SPECIFIC PROMPT for {baseUrl}";
+        var workspacePrompt = "WORKSPACE SPECIFIC PROMPT for {{baseUrl}}";
         var updateResponse = await _client.PutAsJsonAsync(
             new Uri($"/mcp/workspace/{key}", UriKind.Relative),
             new { promptTemplate = workspacePrompt }).ConfigureAwait(true);
@@ -181,7 +181,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         // 2. Set a custom global prompt — latch on settings + marker writes.
         var settingsChanged = WatchForSettingsChange();
         var markerGlobal = WatchForMarkerChange();
-        var globalPrompt = "GLOBAL SECTION {baseUrl}";
+        var globalPrompt = "GLOBAL SECTION {{baseUrl}}";
         var globalResponse = await _client.PutAsJsonAsync(
             new Uri("/mcp/workspace/prompt", UriKind.Relative),
             new { template = globalPrompt }).ConfigureAwait(true);
@@ -196,7 +196,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         // 3. Set a workspace prompt — latch on settings + marker writes.
         var settingsChanged2 = WatchForSettingsChange();
         var markerWs = WatchForMarkerChange();
-        var workspacePrompt = "WORKSPACE SECTION {baseUrl}";
+        var workspacePrompt = "WORKSPACE SECTION {{baseUrl}}";
         var wsResponse = await _client.PutAsJsonAsync(
             new Uri($"/mcp/workspace/{key}", UriKind.Relative),
             new { promptTemplate = workspacePrompt }).ConfigureAwait(true);

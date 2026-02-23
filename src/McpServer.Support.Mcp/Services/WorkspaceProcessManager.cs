@@ -21,6 +21,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     private readonly ILoggerFactory _loggerFactory;
     private readonly IServiceProvider _serviceProvider;
     private readonly IOptionsMonitor<MarkerPromptOptions> _promptOptions;
+    private readonly WorkspaceTokenService _tokenService;
 
     // Resolved once during IHostedService.StartAsync; null until then.
     private string? _primaryWorkspaceKey;
@@ -30,26 +31,30 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         ILogger<WorkspaceProcessManager> logger,
         ILoggerFactory loggerFactory,
         IServiceProvider serviceProvider,
-        IOptionsMonitor<MarkerPromptOptions> promptOptions)
+        IOptionsMonitor<MarkerPromptOptions> promptOptions,
+        WorkspaceTokenService tokenService)
     {
         _logger = logger;
         _loggerFactory = loggerFactory;
         _serviceProvider = serviceProvider;
         _promptOptions = promptOptions;
+        _tokenService = tokenService;
     }
 
     /// <inheritdoc />
-    public async Task<WorkspaceProcessStatus> StartAsync(string workspacePath, int port, CancellationToken ct = default, string? dataDirectory = null, string? workspacePromptTemplate = null)
+    public async Task<WorkspaceProcessStatus> StartAsync(WorkspaceDto workspace, CancellationToken ct = default)
     {
-        var key = NormalizeKey(workspacePath);
+        var key = NormalizeKey(workspace.WorkspacePath);
+        var port = workspace.WorkspacePort;
         var globalTemplate = _promptOptions.CurrentValue.MarkerPromptTemplate;
+        var token = _tokenService.GetToken(key) ?? _tokenService.GenerateToken(key);
 
         // If this workspace is the primary host, just write the marker — the primary app already serves it.
         if (IsPrimaryWorkspace(key))
         {
             var name = DeriveWorkspaceName(key);
             await MarkerFileService.WriteMarkerAsync(key, port, name, _logger, CancellationToken.None,
-                globalTemplate, workspacePromptTemplate).ConfigureAwait(false);
+                globalTemplate, workspace.PromptTemplate, token, workspace).ConfigureAwait(false);
             _logger.LogInformation("Workspace {Path} is the primary host — marker written, skipping duplicate app", key);
             return new WorkspaceProcessStatus(true, Port: port);
         }
@@ -58,13 +63,13 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         {
             var name = DeriveWorkspaceName(key);
             await MarkerFileService.WriteMarkerAsync(key, port, name, _logger, CancellationToken.None,
-                globalTemplate, workspacePromptTemplate).ConfigureAwait(false);
+                globalTemplate, workspace.PromptTemplate, token, workspace).ConfigureAwait(false);
             return new WorkspaceProcessStatus(true, Uptime: DateTime.UtcNow - existing.StartedAt, Port: port);
         }
 
         try
         {
-            var app = WorkspaceAppFactory.Create(key, port, _loggerFactory, dataDirectory);
+            var app = WorkspaceAppFactory.Create(key, port, _loggerFactory, workspace.DataDirectory, _tokenService);
             await app.StartAsync(ct).ConfigureAwait(false);
 
             var entry = new WorkspaceHostEntry(app, DateTime.UtcNow, port);
@@ -72,7 +77,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
 
             var workspaceName = DeriveWorkspaceName(key);
             await MarkerFileService.WriteMarkerAsync(key, port, workspaceName, _logger, CancellationToken.None,
-                globalTemplate, workspacePromptTemplate).ConfigureAwait(false);
+                globalTemplate, workspace.PromptTemplate, token, workspace).ConfigureAwait(false);
 
             _logger.LogInformation("Workspace Kestrel host started: {Path} on port {Port}", key, port);
             return new WorkspaceProcessStatus(true, Port: port);
@@ -170,8 +175,9 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             if (!isRunning) continue;
 
             var name = DeriveWorkspaceName(key);
+            var token = _tokenService.GetToken(key) ?? _tokenService.GenerateToken(key);
             await MarkerFileService.WriteMarkerAsync(key, ws.WorkspacePort, name, _logger, ct,
-                globalTemplate, ws.PromptTemplate).ConfigureAwait(false);
+                globalTemplate, ws.PromptTemplate, token, ws).ConfigureAwait(false);
         }
 
         _logger.LogInformation("Regenerated marker files for all running workspaces");
@@ -215,7 +221,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
                     continue;
                 }
 
-                var status = await StartAsync(ws.WorkspacePath, ws.WorkspacePort, cancellationToken, ws.DataDirectory, ws.PromptTemplate).ConfigureAwait(false);
+                var status = await StartAsync(ws, cancellationToken).ConfigureAwait(false);
                 if (status.IsRunning)
                     _logger.LogInformation("  ✓ {Name} on port {Port}{Primary}", ws.Name, ws.WorkspacePort,
                         IsPrimaryWorkspace(NormalizeKey(ws.WorkspacePath)) ? " (primary)" : "");

@@ -1,4 +1,3 @@
-using McpServer.Support.Mcp.Middleware;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +12,6 @@ namespace McpServer.Support.Mcp.Controllers;
 /// </summary>
 [ApiController]
 [Route("mcp/tools")]
-[ApiKeyAuthFilter]
 public sealed class ToolRegistryController : ControllerBase
 {
     private readonly IToolRegistryService _registry;
@@ -34,7 +32,6 @@ public sealed class ToolRegistryController : ControllerBase
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Matching tool definitions.</returns>
     [HttpGet("search")]
-    [SkipApiKeyAuth]
     [ProducesResponseType(typeof(ToolSearchResult), StatusCodes.Status200OK)]
     public async Task<ActionResult<ToolSearchResult>> SearchAsync(
         [FromQuery] string keyword,
@@ -49,7 +46,6 @@ public sealed class ToolRegistryController : ControllerBase
     /// <param name="workspace">Optional workspace path to include workspace-scoped tools.</param>
     /// <param name="ct">Cancellation token.</param>
     [HttpGet]
-    [SkipApiKeyAuth]
     [ProducesResponseType(typeof(ToolSearchResult), StatusCodes.Status200OK)]
     public async Task<ActionResult<ToolSearchResult>> ListAsync(
         [FromQuery] string? workspace = null,
@@ -63,7 +59,6 @@ public sealed class ToolRegistryController : ControllerBase
     /// <param name="id">Tool definition id.</param>
     /// <param name="ct">Cancellation token.</param>
     [HttpGet("{id:int}")]
-    [SkipApiKeyAuth]
     [ProducesResponseType(typeof(ToolDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ToolDto>> GetAsync(int id, CancellationToken ct = default)
@@ -129,7 +124,6 @@ public sealed class ToolRegistryController : ControllerBase
     /// <summary>List all registered tool buckets.</summary>
     /// <param name="ct">Cancellation token.</param>
     [HttpGet("buckets")]
-    [SkipApiKeyAuth]
     [ProducesResponseType(typeof(BucketListResult), StatusCodes.Status200OK)]
     public async Task<ActionResult<BucketListResult>> ListBucketsAsync(CancellationToken ct = default)
     {
@@ -175,7 +169,6 @@ public sealed class ToolRegistryController : ControllerBase
     /// <param name="name">Bucket name.</param>
     /// <param name="ct">Cancellation token.</param>
     [HttpGet("buckets/{name}/browse")]
-    [SkipApiKeyAuth]
     [ProducesResponseType(typeof(BucketBrowseResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(BucketBrowseResult), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<BucketBrowseResult>> BrowseBucketAsync(

@@ -207,6 +207,7 @@ builder.Services.AddScoped<IContextSearchService, HybridSearchService>();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
 builder.Services.AddScoped<IToolBucketService, ToolBucketService>();
+builder.Services.AddSingleton<WorkspaceTokenService>();
 builder.Services.AddSingleton<IWorkspaceProcessManager, WorkspaceProcessManager>();
 builder.Services.Configure<PairingOptions>(builder.Configuration.GetSection(PairingOptions.SectionName));
 builder.Services.Configure<ToolRegistryOptions>(builder.Configuration.GetSection(ToolRegistryOptions.SectionName));
@@ -318,6 +319,9 @@ if (!app.Environment.IsEnvironment("Test"))
 
 // TR-PLANNED-013: Structured interaction logging for all requests; optional async submission to LoggingServiceUrl.
 app.UseMiddleware<InteractionLoggingMiddleware>();
+
+// Per-workspace auth tokens: protect all /mcp/* REST routes.
+app.UseMiddleware<WorkspaceAuthMiddleware>();
 
 app.MapDefaultEndpoints();
 
