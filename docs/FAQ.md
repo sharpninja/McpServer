@@ -158,12 +158,12 @@ Buckets use the `gh` CLI to read repository contents.
 
 ### How does API key authentication work?
 
-Set `Mcp:ApiKey` in configuration. Mutating endpoints require the key via:
+Per-workspace auth tokens are generated on each service restart and written into the `AGENTS-README-FIRST.yaml` marker file in each workspace root. All `/mcp/*` endpoints require the token via:
 
-- Header: `X-Api-Key: YOUR_KEY`
-- Query parameter: `?api_key=YOUR_KEY`
+- Header: `X-Api-Key: YOUR_TOKEN`
+- Query parameter: `?api_key=YOUR_TOKEN`
 
-Read-only endpoints (GET) are public by default (marked `[SkipApiKeyAuth]`).
+Agents read the token from the marker file and include it in requests. Tokens are not persisted — they rotate automatically on restart.
 
 ### What is the pairing web UI?
 

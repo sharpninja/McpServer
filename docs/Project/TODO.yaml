@@ -1,6 +1,6 @@
 requirements-management:
   high-priority:
-  - id: FR-MCP-025
+  - id: FR-MCP-026
     title: Requirements Management Feature — CRUD + document generation endpoints
     estimate: 4-6 days
     note: 'High priority — builds on FR-MCP-023 (AI requirements analysis). Provides a first-class Requirements Management subsystem: in-memory model loaded from the four canonical docs, full CRUD for FR/TR/TEST entries, and REST + MCP tool endpoints to regenerate any or all four documents in their exact established Markdown format (individually or as a ZIP).'
@@ -19,11 +19,11 @@ requirements-management:
     - 'MCP tools (added to McpServerMcpTools.cs): requirements_generate(doc), requirements_list(type), requirements_create(type, id, title, body), requirements_update(type, id, title?, body?), requirements_delete(type, id).'
     - 'Document file paths resolved relative to RepoRoot via IOptions<McpOptions>. Default paths: docs/Project/Functional-Requirements.md, docs/Project/Technical-Requirements.md, docs/Project/Testing-Requirements.md, docs/Project/TR-per-FR-Mapping.md. Configurable via Mcp:Requirements:* config section.'
     - All public types require XML doc comments (CS1591 enforced as error in this repo).
-    - ApiKeyAuthFilter applies to all mutating endpoints; read and generate endpoints decorated with [SkipApiKeyAuth].
+    - ApiKeyAuthFilter is no longer used; all /mcp/* routes are protected by WorkspaceAuthMiddleware at the pipeline level. No per-controller auth attributes needed.
     functional-requirements:
-    - 'FR-MCP-025: Server shall support CRUD for FR, TR, and TEST requirement entries stored in the four canonical project documentation files.'
-    - 'FR-MCP-025: Server shall expose a document generation endpoint rendering any or all four requirements documents in their established Markdown format.'
-    - 'FR-MCP-025: Server shall expose MCP tools for requirements CRUD and document generation usable by AI agents.'
+    - 'FR-MCP-026: Server shall support CRUD for FR, TR, and TEST requirement entries stored in the four canonical project documentation files.'
+    - 'FR-MCP-026: Server shall expose a document generation endpoint rendering any or all four requirements documents in their established Markdown format.'
+    - 'FR-MCP-026: Server shall expose MCP tools for requirements CRUD and document generation usable by AI agents.'
     technical-requirements:
     - 'TR-MCP-REQ-002: RequirementsDocumentService parses all four files into a typed in-memory model on startup and keeps files synchronized on mutation.'
     - 'TR-MCP-REQ-002: RequirementsDocumentRenderer produces Markdown output matching exact heading style and bullet/table structure of each canonical document.'
@@ -68,7 +68,7 @@ requirements-management:
       done: false
     - task: '[Phase 5 — Controller] Add GET /mcp/requirements/mapping and PUT /mcp/requirements/mapping/{frId} for the TR-per-FR table'
       done: false
-    - task: '[Phase 5 — Controller] Apply [ApiKeyAuthFilter] to mutating endpoints; [SkipApiKeyAuth] to GET and generate endpoints'
+    - task: '[Phase 5 — Controller] Auth is handled by WorkspaceAuthMiddleware at the pipeline level — no per-action attributes needed'
       done: false
     - task: '[Phase 5 — Controller] Add full XML doc comments on all controller actions and parameters'
       done: false
@@ -1063,3 +1063,19 @@ saas:
     done: false
     description:
     - Create typed REST client libraries for Python (PyPI) and TypeScript (npm) mirroring the McpServer.Client NuGet package — covering all API endpoints with typed models, error handling, and DI/factory patterns appropriate to each ecosystem.
+mvp-app:
+  high-priority:
+  - id: MVP-MCP-001
+    title: Add notifications about changed context (including session logs) on changes within a workspace
+    done: false
+    description:
+    - Implement a notification/event system that alerts connected agents when workspace context changes
+    - Include session log updates, context source changes, file modifications, and other relevant mutations within a workspace
+mvp-mcp:
+  high-priority:
+  - id: MVP-MCP-002
+    title: Move VS2026 extension copilot functions into MCP server as todo endpoints
+    done: false
+    description:
+    - Extract the copilot-related functions from the VS2026 VSIX extension and expose them as MCP server endpoints under /mcp/todo or similar.
+    - This consolidates agent-facing capabilities into the MCP server rather than the IDE extension.

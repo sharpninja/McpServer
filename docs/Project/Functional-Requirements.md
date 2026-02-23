@@ -44,9 +44,9 @@ The server shall spawn and manage in-process Kestrel hosts per workspace, with f
 
 Agents shall be able to discover tools by keyword search across global and workspace-scoped tool definitions, and install tool definitions from GitHub-backed bucket repositories.
 
-## FR-MCP-013 API Key Authentication
+## FR-MCP-013 Per-Workspace Auth Tokens
 
-The server shall protect mutating API endpoints with an API key (checked via `X-Api-Key` header or `api_key` query parameter) while keeping read endpoints publicly accessible via a `[SkipApiKeyAuth]` bypass marker.
+The server shall protect all `/mcp/*` API endpoints with per-workspace cryptographic tokens that rotate on each service restart. Tokens are discoverable via the `AGENTS-README-FIRST.yaml` marker file, checked via the `X-Api-Key` header or `api_key` query parameter, and enforced by `WorkspaceAuthMiddleware` at the pipeline level.
 
 ## FR-MCP-014 Pairing Web UI
 

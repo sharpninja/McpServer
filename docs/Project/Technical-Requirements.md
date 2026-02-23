@@ -46,11 +46,11 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-WS-004
 
-**Workspace Controller** — REST API at `/mcp/workspace` with Base64URL-encoded path keys. Provides create, read, update, delete, init, start, stop, and status endpoints. Protected by `[ApiKeyAuthFilter]` with `[SkipApiKeyAuth]` on read-only endpoints.
+**Workspace Controller** — REST API at `/mcp/workspace` with Base64URL-encoded path keys. Provides create, read, update, delete, init, start, stop, status, and prompt (GET/PUT) endpoints. All `/mcp/*` routes protected by `WorkspaceAuthMiddleware` (per-workspace token).
 
 ## TR-MCP-WS-005
 
-**Marker File Service** — `MarkerFileService.WriteMarkerAsync` writes `.mcp-server.yaml` to the workspace root when a workspace Kestrel host starts; `RemoveMarker` deletes it on stop. The YAML file contains port, `baseUrl`, all endpoint paths, process PID, `startedAt` timestamp, workspace name, and a machine-readable `prompt` block for agent consumption. Legacy `.mcp-server.json` files are also cleaned up on removal.
+**Marker File Service** — `MarkerFileService.WriteMarkerAsync` writes `AGENTS-README-FIRST.yaml` to the workspace root when a workspace Kestrel host starts; `RemoveMarker` deletes it on stop. Uses Handlebars.Net templating with full workspace context. The YAML file contains port, `baseUrl`, all endpoint paths, process PID, `startedAt` timestamp, workspace name, per-workspace auth token (`apiKey`), and a machine-readable `prompt` block with glossary, workspace definition table, and protocol instructions.
 
 ## TR-MCP-WS-006
 
@@ -78,7 +78,7 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-SEC-001
 
-**API Key Authentication Filter** — `ApiKeyAuthFilter` is an `IAsyncActionFilter` that reads `Mcp:ApiKey` from configuration and validates it against the `X-Api-Key` header or `api_key` query parameter. Endpoints annotated with `[SkipApiKeyAuth]` bypass the check via endpoint metadata inspection.
+**Per-Workspace Auth Tokens** — `WorkspaceAuthMiddleware` intercepts all `/mcp/*` requests at the pipeline level. `WorkspaceTokenService` generates per-workspace cryptographic tokens (32-byte base64url) on startup — not persisted, rotating on each restart. Tokens are validated via the `X-Api-Key` header or `api_key` query parameter. On 401, the response instructs the agent to re-read the `AGENTS-README-FIRST.yaml` marker file for the updated token.
 
 ## TR-MCP-SEC-002
 
