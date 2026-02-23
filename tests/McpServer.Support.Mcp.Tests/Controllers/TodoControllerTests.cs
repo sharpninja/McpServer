@@ -222,7 +222,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
-    /// <summary>POST /mcp/todo with unknown section returns 409.</summary>
+    /// <summary>POST /mcp/todo with any section creates item (sections are now arbitrary).</summary>
     [Fact]
     public async Task Create_UnknownSection_ReturnsConflict()
     {
@@ -235,7 +235,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         };
 
         var response = await _client.PostAsJsonAsync(new Uri("/mcp/todo", UriKind.Relative), request).ConfigureAwait(true);
-        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 
     /// <summary>POST /mcp/todo with FR/TR creates item with requirement IDs.</summary>

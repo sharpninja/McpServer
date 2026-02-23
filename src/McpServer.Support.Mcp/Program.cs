@@ -10,6 +10,7 @@ using McpServer.Support.Mcp.Logging;
 using McpServer.Support.Mcp.McpStdio;
 using McpServer.Support.Mcp.Middleware;
 using McpServer.Support.Mcp.Options;
+using McpServer.Support.Mcp.Controllers;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Web;
@@ -51,6 +52,23 @@ if (OperatingSystem.IsWindows())
 var instanceName = McpInstanceResolver.GetRequestedInstanceName(args);
 McpInstanceResolver.ValidateInstances(builder.Configuration);
 McpInstanceResolver.ValidateTodoStorage(builder.Configuration, instanceName);
+
+// Resolve the primary workspace from Mcp:Workspaces config (FR-MCP-025).
+// Set ContentRootPath to the primary workspace's path so relative paths resolve correctly
+// and WorkspaceProcessManager can identify it.
+{
+    var workspaces = builder.Configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
+    var primary = workspaces
+        .Where(w => w.IsPrimary && w.IsEnabled)
+        .OrderBy(w => w.WorkspacePort)
+        .FirstOrDefault();
+    primary ??= workspaces
+        .Where(w => w.IsEnabled)
+        .OrderBy(w => w.WorkspacePort)
+        .FirstOrDefault();
+    if (primary is not null)
+        builder.Environment.ContentRootPath = Path.GetFullPath(primary.WorkspacePath);
+}
 
 // TR-PLANNED-013: Serilog with optional Parseable (local Docker) sink.
 builder.Host.UseSerilog((context, _, config) =>
@@ -222,7 +240,12 @@ if (!builder.Environment.IsEnvironment("Test"))
         builder.Services.AddHostedService(sp => sp.GetRequiredService<ITunnelProvider>());
 }
 
-builder.Services.AddControllers();
+var mvcBuilder = builder.Services.AddControllers();
+#if !DEBUG
+if (!builder.Environment.IsStaging())
+    mvcBuilder.ConfigureApplicationPartManager(mgr =>
+        mgr.FeatureProviders.Add(new ExcludeControllerFeatureProvider(typeof(DiagnosticController))));
+#endif
 builder.Services.AddEndpointsApiExplorer();
 
 // MCP Streamable HTTP transport — shares FwhMcpTools with STDIO transport.
@@ -278,14 +301,13 @@ if (!app.Environment.IsEnvironment("Test"))
     }
 }
 
-// Write .mcp-server.yaml marker for the primary host so agents can discover the port.
+// Marker files are written by WorkspaceProcessManager during auto-start (including the primary workspace).
+// Register cleanup for the primary workspace marker on shutdown.
 {
     var primaryRepoRoot = McpInstanceResolver.GetEffectiveMcpValue(app.Configuration, instanceName, "RepoRoot") ?? ".";
     var primaryWorkspacePath = Path.IsPathRooted(primaryRepoRoot)
         ? Path.GetFullPath(primaryRepoRoot)
         : Path.GetFullPath(Path.Combine(app.Environment.ContentRootPath, primaryRepoRoot));
-    var primaryWorkspaceName = Path.GetFileName(primaryWorkspacePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
-    await MarkerFileService.WriteMarkerAsync(primaryWorkspacePath, listenPort, primaryWorkspaceName).ConfigureAwait(false);
 
     app.Lifetime.ApplicationStopping.Register(() =>
     {

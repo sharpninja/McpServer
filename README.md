@@ -87,7 +87,7 @@ Environment overrides:
     "Instances": {
       "default": {
         "Port": 7147,
-        "RepoRoot": "E:\\github\\FunWasHad",
+        "RepoRoot": ".",
         "DataSource": "mcp.db",
         "TodoFilePath": "docs/Project/TODO.yaml",
         "TodoStorage": {
@@ -135,6 +135,7 @@ Migrate todo data between backends:
 
 - `scripts/Start-McpServer.ps1` - build/run server with optional `-Instance`
 - `scripts/Run-McpServer.ps1` - direct local run helper
+- `scripts/Update-McpService.ps1` - stop, publish Debug build, restore config/data, restart, health-check Windows service
 - `scripts/Validate-McpConfig.ps1` - config validation
 - `scripts/Test-McpMultiInstance.ps1` - two-instance smoke test
 - `scripts/Migrate-McpTodoStorage.ps1` - todo backend migration

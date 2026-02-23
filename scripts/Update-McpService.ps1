@@ -37,18 +37,19 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+$ProgressPreference    = 'SilentlyContinue'
 
 $ProjectDir  = Join-Path $PSScriptRoot '..\src\McpServer.Support.Mcp'
 $ProjectFile = Join-Path $ProjectDir 'McpServer.Support.Mcp.csproj'
 $ExeName     = 'McpServer.Support.Mcp.exe'
-$Timestamp   = Get-Date -Format 'yyyyMMdd-HHmmss'
+$Timestamp   = Get-Date -Format 'yyyyMMdd-HHmmssfff'
 $BackupDir   = Join-Path $env:TEMP "McpServer-update-backup-$Timestamp"
 $ArchiveDir  = Join-Path $env:USERPROFILE 'McpServer-Backups'
 $ArchivePath = Join-Path $ArchiveDir "McpServer-backup-$Timestamp.zip"
 
 # Files to preserve across updates (glob patterns relative to InstallPath).
 $PreservePatterns = @(
-    'appsettings*.json',
+    '*.json',
     '*.db',
     '*.db-shm',
     '*.db-wal'
@@ -151,7 +152,7 @@ else {
     # Publish to a staging directory first, then copy to install path.
     $stageDir = Join-Path $env:TEMP "McpServer-publish-stage"
     if (Test-Path $stageDir) { Remove-Item $stageDir -Recurse -Force }
-    dotnet publish $ProjectFile -c Release --self-contained -r win-x64 -o $stageDir
+    dotnet publish $ProjectFile -c Debug --self-contained -r win-x64 -o $stageDir
     if ($LASTEXITCODE -ne 0) { Write-Error "dotnet publish failed (exit code $LASTEXITCODE)" }
 
     Copy-Item -Path "$stageDir\*" -Destination $InstallPath -Recurse -Force

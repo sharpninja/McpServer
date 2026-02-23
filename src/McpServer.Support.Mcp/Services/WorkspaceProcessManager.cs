@@ -7,8 +7,10 @@ namespace McpServer.Support.Mcp.Services;
 /// <summary>
 /// FR-MCP-011 / TR-MCP-WS-003: Manages in-process Kestrel hosts per workspace.
 /// Each workspace gets its own <see cref="WebApplication"/> listening on the assigned port.
-/// On startup, all registered workspaces are automatically started.
-/// Implements IHostedService for graceful shutdown of all workspace hosts on app exit.
+/// On startup, all registered workspaces are automatically started. Workspaces with
+/// <see cref="WorkspaceDto.IsEnabled"/> = false are skipped. The primary workspace
+/// (determined by <see cref="WorkspaceDto.IsPrimary"/>, or lowest-port enabled fallback)
+/// only gets a marker file — the host process already serves it.
 /// </summary>
 public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposable
 {
@@ -16,6 +18,9 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     private readonly ILogger<WorkspaceProcessManager> _logger;
     private readonly ILoggerFactory _loggerFactory;
     private readonly IServiceProvider _serviceProvider;
+
+    // Resolved once during IHostedService.StartAsync; null until then.
+    private string? _primaryWorkspaceKey;
 
     /// <summary>Initializes a new instance of the <see cref="WorkspaceProcessManager"/> class.</summary>
     public WorkspaceProcessManager(
@@ -29,29 +34,35 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     }
 
     /// <inheritdoc />
-    public async Task<WorkspaceProcessStatus> StartAsync(string workspacePath, int port, CancellationToken ct = default)
+    public async Task<WorkspaceProcessStatus> StartAsync(string workspacePath, int port, CancellationToken ct = default, string? dataDirectory = null)
     {
         var key = NormalizeKey(workspacePath);
 
+        // If this workspace is the primary host, just write the marker — the primary app already serves it.
+        if (IsPrimaryWorkspace(key))
+        {
+            var name = DeriveWorkspaceName(key);
+            await MarkerFileService.WriteMarkerAsync(key, port, name, _logger, CancellationToken.None).ConfigureAwait(false);
+            _logger.LogInformation("Workspace {Path} is the primary host — marker written, skipping duplicate app", key);
+            return new WorkspaceProcessStatus(true, Port: port);
+        }
+
         if (_hosts.TryGetValue(key, out var existing) && existing.IsRunning)
         {
-            // Ensure the .mcp-server.yaml marker exists (may have been missed on initial start).
-            var name = Path.GetFileName(key.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+            var name = DeriveWorkspaceName(key);
             await MarkerFileService.WriteMarkerAsync(key, port, name, _logger, CancellationToken.None).ConfigureAwait(false);
             return new WorkspaceProcessStatus(true, Uptime: DateTime.UtcNow - existing.StartedAt, Port: port);
         }
 
         try
         {
-            var app = WorkspaceAppFactory.Create(key, port, _loggerFactory);
+            var app = WorkspaceAppFactory.Create(key, port, _loggerFactory, dataDirectory);
             await app.StartAsync(ct).ConfigureAwait(false);
 
             var entry = new WorkspaceHostEntry(app, DateTime.UtcNow, port);
             _hosts[key] = entry;
 
-            // Write .mcp-server.yaml marker so agents can discover the port.
-            // Use CancellationToken.None — the marker must be written regardless of HTTP request lifecycle.
-            var workspaceName = Path.GetFileName(key.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+            var workspaceName = DeriveWorkspaceName(key);
             await MarkerFileService.WriteMarkerAsync(key, port, workspaceName, _logger, CancellationToken.None).ConfigureAwait(false);
 
             _logger.LogInformation("Workspace Kestrel host started: {Path} on port {Port}", key, port);
@@ -69,6 +80,13 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     {
         var key = NormalizeKey(workspacePath);
 
+        // Primary workspace cannot be stopped via the process manager — it IS the host process.
+        if (IsPrimaryWorkspace(key))
+        {
+            MarkerFileService.RemoveMarker(key, _logger);
+            return new WorkspaceProcessStatus(false);
+        }
+
         if (!_hosts.TryRemove(key, out var entry))
             return new WorkspaceProcessStatus(false, Error: "No running host for this workspace.");
 
@@ -77,7 +95,6 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             await entry.App.StopAsync(ct).ConfigureAwait(false);
             await entry.App.DisposeAsync().ConfigureAwait(false);
 
-            // Remove .mcp-server.yaml marker on stop.
             MarkerFileService.RemoveMarker(key, _logger);
 
             _logger.LogInformation("Workspace Kestrel host stopped: {Path}", key);
@@ -94,6 +111,10 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     public WorkspaceProcessStatus GetStatus(string workspacePath)
     {
         var key = NormalizeKey(workspacePath);
+
+        // Primary workspace is always running as long as the host process is alive.
+        if (IsPrimaryWorkspace(key))
+            return new WorkspaceProcessStatus(true);
 
         if (!_hosts.TryGetValue(key, out var entry))
             return new WorkspaceProcessStatus(false);
@@ -132,13 +153,33 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
                 return;
             }
 
-            _logger.LogInformation("Auto-starting {Count} registered workspace(s) ...", workspaces.TotalCount);
+            // Resolve the primary workspace: explicit IsPrimary flag wins; fallback = lowest-port enabled workspace.
+            var primary = workspaces.Items
+                .Where(w => w.IsPrimary && w.IsEnabled)
+                .OrderBy(w => w.WorkspacePort)
+                .FirstOrDefault();
+            primary ??= workspaces.Items
+                .Where(w => w.IsEnabled)
+                .OrderBy(w => w.WorkspacePort)
+                .FirstOrDefault();
+            if (primary is not null)
+                _primaryWorkspaceKey = NormalizeKey(primary.WorkspacePath);
+
+            _logger.LogInformation("Auto-starting {Count} registered workspace(s); primary = {Primary}",
+                workspaces.TotalCount, primary?.Name ?? "(none)");
 
             foreach (var ws in workspaces.Items)
             {
-                var status = await StartAsync(ws.WorkspacePath, ws.WorkspacePort, cancellationToken).ConfigureAwait(false);
+                if (!ws.IsEnabled)
+                {
+                    _logger.LogInformation("  ⊘ {Name} skipped (disabled)", ws.Name);
+                    continue;
+                }
+
+                var status = await StartAsync(ws.WorkspacePath, ws.WorkspacePort, cancellationToken, ws.DataDirectory).ConfigureAwait(false);
                 if (status.IsRunning)
-                    _logger.LogInformation("  ✓ {Name} on port {Port}", ws.Name, ws.WorkspacePort);
+                    _logger.LogInformation("  ✓ {Name} on port {Port}{Primary}", ws.Name, ws.WorkspacePort,
+                        IsPrimaryWorkspace(NormalizeKey(ws.WorkspacePath)) ? " (primary)" : "");
                 else
                     _logger.LogWarning("  ✗ {Name} failed: {Error}", ws.Name, status.Error);
             }
@@ -148,6 +189,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             _logger.LogError(ex, "Error during workspace auto-start");
         }
     }
+
     Task IHostedService.StopAsync(CancellationToken cancellationToken) => StopAllAsync(cancellationToken);
 
     /// <inheritdoc />
@@ -170,9 +212,14 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     }
 
     private static string NormalizeKey(string path)
-    {
-        return Path.GetFullPath(path.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
-    }
+        => Path.GetFullPath(path.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+
+    private bool IsPrimaryWorkspace(string normalizedKey)
+        => _primaryWorkspaceKey is not null
+           && string.Equals(normalizedKey, _primaryWorkspaceKey, StringComparison.OrdinalIgnoreCase);
+
+    private static string DeriveWorkspaceName(string normalizedKey)
+        => Path.GetFileName(normalizedKey.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
 
     private sealed class WorkspaceHostEntry
     {

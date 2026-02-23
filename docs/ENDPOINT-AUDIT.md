@@ -16,7 +16,8 @@
 | [GitHubController](#github) | `mcp/gh` | 13 | 15 | ✅ All passed |
 | [RepoController](#repo) | `mcp/repo` | 3 | 8 | ✅ All passed |
 | [SyncController](#sync) | `mcp/sync` | 2 | 4 | ✅ All passed |
-| **Total** | | **52** | **168** | **✅ All passed** |
+| [DiagnosticController](#diagnostic) | `mcp/diagnostic` | 2 | — | ✅ Debug/Staging only |
+| **Total** | | **54** | **168** | **✅ All passed** |
 
 ---
 
@@ -165,7 +166,18 @@
 
 ---
 
-## Sync
+## Diagnostic
+
+**Controller:** `DiagnosticController` at `mcp/diagnostic`  
+**Active in:** Debug builds and `Staging` environment only (excluded in Production Release).
+
+| # | Method | Route | Auth | Status |
+|---|--------|-------|------|--------|
+| 1 | `GET` | `/mcp/diagnostic/execution-path` | None | ✅ |
+| 2 | `GET` | `/mcp/diagnostic/appsettings-path` | None | ✅ |
+
+**Key Findings:** `execution-path` returns `{ processPath, baseDirectory }` — the actual executable path and its directory. `appsettings-path` returns `{ environmentName, contentRootPath, files[] }` listing which appsettings files are present in the content root. Both used during deployment verification to confirm correct binary and config file selection.
+
 
 **Controller:** `SyncController` at `mcp/sync`  
 **Test Project:** `tests/McpServer.Sync.Validation`

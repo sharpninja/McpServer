@@ -42,7 +42,7 @@ public sealed class IssueSyncE2ETests
 
         // Verify it was created with correct priority and section from labels
         await _todoService.Received(1).CreateAsync(
-            Arg.Is<TodoCreateRequest>(r => r != null && r.Id == "ISSUE-42" && r.Priority == "high" && r.Section == "mvp-app"),
+            Arg.Is<TodoCreateRequest>(r => r != null && r.Id == "ISSUE-42" && r.Priority == "high" && r.Section == "app"),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
 
         // Step 2: TODO is marked done -> sync back should close GitHub issue

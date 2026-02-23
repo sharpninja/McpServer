@@ -143,13 +143,13 @@ public sealed class IssueTodoSyncServiceTests
     public void MapSection_AreaAppLabel_ReturnsMvpApp()
     {
         var labels = new[] { new GitHubLabel("area:app", null, null) };
-        Assert.Equal("mvp-app", IssueTodoSyncService.MapSection(labels));
+        Assert.Equal("app", IssueTodoSyncService.MapSection(labels));
     }
 
     [Fact]
     public void MapSection_NoLabels_ReturnsMvpSupport()
     {
-        Assert.Equal("mvp-support", IssueTodoSyncService.MapSection(Array.Empty<GitHubLabel>()));
+        Assert.Equal("issues", IssueTodoSyncService.MapSection(Array.Empty<GitHubLabel>()));
     }
 
     private static GitHubIssueDetail CreateTestIssue(int number, string title, string state) =>

@@ -39,11 +39,24 @@ public sealed record WorkspaceCreateRequest
     /// <summary>Relative path to todo file within workspace. Default: docs/todo.yaml.</summary>
     public string? TodoPath { get; init; }
 
+    /// <summary>
+    /// Override directory for <c>mcp.db</c> and related data files.
+    /// Useful when <see cref="WorkspacePath"/> is a symlink to a non-Windows filesystem (e.g. WSL).
+    /// Null = use <see cref="WorkspacePath"/>.
+    /// </summary>
+    public string? DataDirectory { get; init; }
+
     /// <summary>Tunnel provider key (ngrok, cloudflare, frp) or null = no tunnel.</summary>
     public string? TunnelProvider { get; init; }
 
     /// <summary>Identity for child process. Null = current Windows user.</summary>
     public string? RunAs { get; init; }
+
+    /// <summary>Mark this workspace as the primary instance served by the host process. Default: false.</summary>
+    public bool IsPrimary { get; init; }
+
+    /// <summary>Whether the workspace is started during auto-start. Default: true.</summary>
+    public bool IsEnabled { get; init; } = true;
 }
 
 /// <summary>Request to update a workspace. Null fields are not changed.</summary>
@@ -55,6 +68,11 @@ public sealed record WorkspaceUpdateRequest
     /// <summary>Updated todo path (null = no change).</summary>
     public string? TodoPath { get; init; }
 
+    /// <summary>
+    /// Override directory for <c>mcp.db</c> (null = no change, empty string = revert to WorkspacePath).
+    /// </summary>
+    public string? DataDirectory { get; init; }
+
     /// <summary>Updated port (null = no change, 0 = auto-assign).</summary>
     public int? WorkspacePort { get; init; }
 
@@ -63,6 +81,12 @@ public sealed record WorkspaceUpdateRequest
 
     /// <summary>Updated RunAs identity (null = no change, empty string = default).</summary>
     public string? RunAs { get; init; }
+
+    /// <summary>Updated primary flag (null = no change).</summary>
+    public bool? IsPrimary { get; init; }
+
+    /// <summary>Updated enabled flag (null = no change).</summary>
+    public bool? IsEnabled { get; init; }
 }
 
 /// <summary>Read-only workspace view.</summary>
@@ -77,11 +101,23 @@ public sealed record WorkspaceDto
     /// <summary>Relative path to todo file.</summary>
     public required string TodoPath { get; init; }
 
+    /// <summary>
+    /// Override directory for <c>mcp.db</c> and related data files.
+    /// Null = <see cref="WorkspacePath"/> is used as the data directory.
+    /// </summary>
+    public string? DataDirectory { get; init; }
+
     /// <summary>HTTP port for this workspace's hosted instance.</summary>
     public required int WorkspacePort { get; init; }
 
     /// <summary>Tunnel provider key or null.</summary>
     public string? TunnelProvider { get; init; }
+
+    /// <summary>True if this workspace is served by the primary host process (no child app).</summary>
+    public bool IsPrimary { get; init; }
+
+    /// <summary>Whether the workspace is started during auto-start.</summary>
+    public bool IsEnabled { get; init; } = true;
 
     /// <summary>When the workspace was registered.</summary>
     public DateTimeOffset DateTimeCreated { get; init; }

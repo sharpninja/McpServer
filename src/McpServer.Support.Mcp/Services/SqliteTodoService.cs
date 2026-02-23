@@ -72,10 +72,9 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
     public async Task<TodoMutationResult> CreateAsync(TodoCreateRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
-        if (!IsValidPriority(request.Priority))
-            return new TodoMutationResult(false, "Unknown priority. Use high, medium, or low.");
-        if (string.IsNullOrWhiteSpace(request.Section))
-            return new TodoMutationResult(false, "Section is required.");
+        var priorityError = TodoValidator.ValidatePriority(request.Priority);
+        if (priorityError is not null)
+            return new TodoMutationResult(false, priorityError);
 
         await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
@@ -101,7 +100,7 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
             };
 
             var all = await GetAllAsync(cancellationToken).ConfigureAwait(false);
-            var depError = ValidateDependencies(request.Id, request.DependsOn?.ToList() ?? [], all);
+            var depError = TodoValidator.ValidateDependencies(request.Id, request.DependsOn?.ToList() ?? [], all);
             if (depError is not null)
                 return new TodoMutationResult(false, depError);
 
@@ -165,13 +164,12 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
                 TechnicalRequirements = request.TechnicalRequirements ?? existing.TechnicalRequirements,
             };
 
-            if (!IsValidPriority(updated.Priority))
-                return new TodoMutationResult(false, "Unknown priority. Use high, medium, or low.");
-            if (string.IsNullOrWhiteSpace(updated.Section))
-                return new TodoMutationResult(false, "Section is required.");
+            var priorityError = TodoValidator.ValidatePriority(updated.Priority);
+            if (priorityError is not null)
+                return new TodoMutationResult(false, priorityError);
 
             var all = await GetAllAsync(cancellationToken).ConfigureAwait(false);
-            var depError = ValidateDependencies(id, updated.DependsOn?.ToList() ?? [], all);
+            var depError = TodoValidator.ValidateDependencies(id, updated.DependsOn?.ToList() ?? [], all);
             if (depError is not null)
                 return new TodoMutationResult(false, depError);
 
@@ -410,70 +408,6 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
         if (item.DoneSummary?.Contains(keyword, StringComparison.OrdinalIgnoreCase) == true) return true;
         if (item.Remaining?.Contains(keyword, StringComparison.OrdinalIgnoreCase) == true) return true;
         if (item.ImplementationTasks?.Any(t => t.Task.Contains(keyword, StringComparison.OrdinalIgnoreCase)) == true) return true;
-        return false;
-    }
-
-    private static bool IsValidPriority(string? priority)
-        => string.Equals(priority, "high", StringComparison.OrdinalIgnoreCase)
-           || string.Equals(priority, "medium", StringComparison.OrdinalIgnoreCase)
-           || string.Equals(priority, "low", StringComparison.OrdinalIgnoreCase);
-
-    private static string? ValidateDependencies(string itemId, List<string> dependsOn, List<TodoFlatItem> allItems)
-    {
-        if (dependsOn.Any(d => string.Equals(d, itemId, StringComparison.OrdinalIgnoreCase)))
-            return $"Item '{itemId}' cannot depend on itself.";
-
-        var knownIds = new HashSet<string>(allItems.Select(i => i.Id), StringComparer.OrdinalIgnoreCase);
-        foreach (var depId in dependsOn)
-        {
-            if (!knownIds.Contains(depId) && !string.Equals(depId, itemId, StringComparison.OrdinalIgnoreCase))
-                return $"Dependency '{depId}' does not exist.";
-        }
-
-        var graph = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
-        foreach (var item in allItems)
-        {
-            var deps = string.Equals(item.Id, itemId, StringComparison.OrdinalIgnoreCase)
-                ? dependsOn
-                : item.DependsOn?.ToList() ?? [];
-            graph[item.Id] = deps;
-        }
-
-        if (!graph.ContainsKey(itemId))
-            graph[itemId] = dependsOn;
-
-        var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        var inStack = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        if (HasCycle(itemId, graph, visited, inStack))
-            return $"Circular dependency detected involving '{itemId}'.";
-
-        return null;
-    }
-
-    private static bool HasCycle(
-        string node,
-        Dictionary<string, List<string>> graph,
-        HashSet<string> visited,
-        HashSet<string> inStack)
-    {
-        if (inStack.Contains(node))
-            return true;
-        if (visited.Contains(node))
-            return false;
-
-        visited.Add(node);
-        inStack.Add(node);
-
-        if (graph.TryGetValue(node, out var deps))
-        {
-            foreach (var dep in deps)
-            {
-                if (HasCycle(dep, graph, visited, inStack))
-                    return true;
-            }
-        }
-
-        inStack.Remove(node);
         return false;
     }
 }

@@ -39,9 +39,6 @@ public sealed class ToolDefinitionEntity
     [MaxLength(2048)]
     public string? WorkspacePath { get; set; }
 
-    /// <summary>Navigation to the owning workspace (null for global tools).</summary>
-    public WorkspaceEntity? Workspace { get; set; }
-
     /// <summary>
     /// Name of the bucket this tool was installed from, or <c>null</c> if created manually.
     /// Used to track provenance and enable updates from the source bucket.

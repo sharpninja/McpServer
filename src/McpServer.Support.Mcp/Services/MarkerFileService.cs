@@ -7,13 +7,13 @@ using YamlDotNet.Serialization.NamingConventions;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// Writes and removes <c>.mcp-server.yaml</c> marker files in workspace roots so that
+/// Writes and removes <c>AGENTS-README-FIRST.yaml</c> marker files in workspace roots so that
 /// agents can discover the correct port and endpoints for calling the MCP server.
 /// </summary>
 public static class MarkerFileService
 {
     /// <summary>Well-known marker file name placed at the workspace root.</summary>
-    public const string MarkerFileName = ".mcp-server.yaml";
+    public const string MarkerFileName = "AGENTS-README-FIRST.yaml";
 
     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
@@ -21,7 +21,7 @@ public static class MarkerFileService
         .Build();
 
     /// <summary>
-    /// Writes the <c>.mcp-server.yaml</c> marker file to <paramref name="workspacePath"/>.
+    /// Writes the <c>AGENTS-README-FIRST.yaml</c> marker file to <paramref name="workspacePath"/>.
     /// </summary>
     public static async Task WriteMarkerAsync(
         string workspacePath,
@@ -75,13 +75,14 @@ public static class MarkerFileService
     }
 
     /// <summary>
-    /// Removes the <c>.mcp-server.yaml</c> marker file from <paramref name="workspacePath"/>.
-    /// Also removes any legacy <c>.mcp-server.json</c> file if present.
+    /// Removes the <c>AGENTS-README-FIRST.yaml</c> marker file from <paramref name="workspacePath"/>.
+    /// Also removes any legacy <c>.mcp-server.json</c> and <c>.mcp-server.yaml</c> files if present.
     /// </summary>
     public static void RemoveMarker(string workspacePath, ILogger? logger = null)
     {
         RemoveSingleFile(Path.Combine(workspacePath, MarkerFileName), logger);
-        // Clean up legacy JSON marker if it exists.
+        // Clean up legacy markers if they exist.
+        RemoveSingleFile(Path.Combine(workspacePath, ".mcp-server.yaml"), logger);
         RemoveSingleFile(Path.Combine(workspacePath, ".mcp-server.json"), logger);
     }
 
@@ -158,7 +159,7 @@ For each task or conversation turn:
 - MCP Protocol: {baseUrl}/mcp-transport — Model Context Protocol streamable HTTP transport endpoint";
 }
 
-/// <summary>Serialization model for the <c>.mcp-server.yaml</c> marker file.</summary>
+/// <summary>Serialization model for the <c>AGENTS-README-FIRST.yaml</c> marker file.</summary>
 internal sealed class MarkerFile
 {
     public int Port { get; set; }

@@ -1,0 +1,95 @@
+port: 7148
+baseUrl: http://localhost:7148
+endpoints:
+  health: /health
+  swagger: /swagger/v1/swagger.json
+  swaggerUi: /swagger
+  mcpTransport: /mcp-transport
+  sessionLog: /mcp/sessionlog
+  sessionLogDialog: /mcp/sessionlog/{agent}/{sessionId}/{requestId}/dialog
+  contextSearch: /mcp/context/search
+  contextPack: /mcp/context/pack
+  contextSources: /mcp/context/sources
+  todo: /mcp/todo
+  repo: /mcp/repo
+  sync: /mcp/sync
+  gitHub: /mcp/gh
+  tools: /mcp/tools
+  workspace: /mcp/workspace
+workspace: McpServer
+workspacePath: E:\github\McpServer
+pid: 72064
+startedAt: 2026-02-23T05:26:30.6182098+00:00
+prompt: >-
+  You are connected to an MCP Context Server at http://localhost:7148. Use this server to coordinate your work.
+
+
+  ## Server Health
+
+  Before making API calls, verify the server is running: GET http://localhost:7148/health — returns {"status":"healthy"}.
+
+
+  ## API Discovery
+
+  The full OpenAPI spec is at GET http://localhost:7148/swagger/v1/swagger.json. The interactive Swagger UI is at http://localhost:7148/swagger. Use the spec to understand request/response schemas before calling endpoints.
+
+
+  ## Session Logging (REQUIRED)
+
+  You MUST log every request you process to the session log endpoint. This is critical for audit, continuity, and team visibility.
+
+
+  For each task or conversation turn:
+
+  1. POST http://localhost:7148/mcp/sessionlog with a JSON body containing:
+     - sourceType: your agent identifier (e.g. "Cline", "Cursor", "Copilot")
+     - sessionId: a stable identifier for your current session
+     - title: a brief summary of the session's purpose
+     - model: the AI model you are using (e.g. "claude-sonnet-4-20250514")
+     - started: ISO 8601 timestamp when the session began
+     - lastUpdated: ISO 8601 timestamp of the latest activity
+     - status: "in_progress" or "completed"
+     - entries: array of request entries, each with:
+       - requestId: unique ID for this request within the session
+       - timestamp: ISO 8601 timestamp
+       - queryText: the full user query or task description
+       - queryTitle: short summary of the query
+       - response: your response text (can be a summary for long responses)
+       - interpretation: your understanding of what was asked
+       - status: "completed" or "in_progress"
+       - actions: array of { order, description, type, status, filePath } for each action taken
+       - model: the model used for this specific entry
+       - tokenCount: approximate token count if available
+       - tags: relevant tags (e.g. ["refactor", "bugfix", "feature"])
+       - contextList: files or resources referenced
+
+  2. For long-running requests, stream your reasoning in real-time via:
+     POST http://localhost:7148/mcp/sessionlog/{agent}/{sessionId}/{requestId}/dialog
+     Send an array of dialog items, each with:
+     - timestamp: ISO 8601
+     - role: "model", "tool", "system", or "user"
+     - content: the reasoning text, tool output, or observation
+     - category: "reasoning", "tool_call", "tool_result", "observation", or "decision"
+
+  3. At the end of each session or task, POST the final session log with status "completed" and all entries filled in.
+
+
+  ## Available Capabilities
+
+  - Context Search: POST http://localhost:7148/mcp/context/search — semantic + full-text hybrid search over indexed project documents
+
+  - Context Pack: POST http://localhost:7148/mcp/context/pack — retrieve ordered context chunks for a topic
+
+  - Context Sources: GET http://localhost:7148/mcp/context/sources — list all indexed document sources
+
+  - Todo Management: GET/POST/PUT/DELETE http://localhost:7148/mcp/todo — query, create, update, and delete project tasks
+
+  - Repo Files: GET http://localhost:7148/mcp/repo/file, POST http://localhost:7148/mcp/repo/file, GET http://localhost:7148/mcp/repo/list — read, write, and list repository files
+
+  - GitHub Integration: http://localhost:7148/mcp/gh/issues, http://localhost:7148/mcp/gh/pulls, http://localhost:7148/mcp/gh/labels — issue, PR, and label management
+
+  - Sync: POST http://localhost:7148/mcp/sync/run — trigger full ingestion sync; GET http://localhost:7148/mcp/sync/status — check sync status
+
+  - Tool Registry: GET http://localhost:7148/mcp/tools/search — discover available tools; GET/POST http://localhost:7148/mcp/tools — manage tool definitions
+
+  - MCP Protocol: http://localhost:7148/mcp-transport — Model Context Protocol streamable HTTP transport endpoint

@@ -99,7 +99,10 @@ Synced items get `ISSUE-{number}` IDs. Status changes (done ↔ closed) propagat
 
 ### What is a workspace?
 
-A workspace maps a local folder (e.g., `E:\github\MyProject`) to a managed MCP instance with its own port, TODO storage, and optional tunnel. Workspaces replace the static `Mcp:Instances` config with a dynamic API.
+A workspace maps a local folder (e.g., `E:\github\MyProject`) to a managed MCP instance with
+its own port, TODO storage, and optional tunnel. Workspace configuration is stored in
+`Mcp:Workspaces` within `appsettings.json` — not in the database — and is managed entirely
+via the REST API.
 
 ### How do I create a workspace?
 
@@ -280,12 +283,14 @@ Published to `C:\ProgramData\McpServer\` as a self-contained single-file executa
 ### How do I update the service?
 
 ```powershell
-.\scripts\Manage-McpService.ps1 -Action Stop
-.\scripts\Manage-McpService.ps1 -Action Publish   # rebuilds without reinstalling
-.\scripts\Manage-McpService.ps1 -Action Start
+gsudo .\scripts\Update-McpService.ps1
 ```
 
-### What actions are available?
+This stops the service, publishes a fresh Debug build, restores all `*.json` and `*.db*` files
+(preserving config and data), restarts the service, and verifies health. A timestamped archive
+is saved to `%USERPROFILE%\McpServer-Backups\` for rollback.
+
+### What actions are available in the management script?
 
 | Action | Description |
 |--------|-------------|

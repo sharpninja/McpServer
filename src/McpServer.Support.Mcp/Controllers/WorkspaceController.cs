@@ -24,7 +24,12 @@ public sealed class WorkspaceController : ControllerBase
         _processManager = processManager;
     }
 
-    /// <summary>List all registered workspaces. This endpoint is publicly accessible.</summary>
+    /// <summary>
+    /// List all registered workspaces. This endpoint is publicly accessible.
+    /// Each workspace includes <c>isPrimary</c> and <c>isEnabled</c> flags.
+    /// The primary workspace is served by the host process itself (no child app).
+    /// Disabled workspaces are skipped during auto-start.
+    /// </summary>
     [HttpGet]
     [SkipApiKeyAuth]
     public async Task<ActionResult<WorkspaceListResult>> ListAsync(CancellationToken ct)
@@ -48,7 +53,12 @@ public sealed class WorkspaceController : ControllerBase
         return Ok(dto);
     }
 
-    /// <summary>Create (register) a new workspace.</summary>
+    /// <summary>
+    /// Create (register) a new workspace.
+    /// Set <c>isPrimary</c> to mark this workspace as the primary instance (served by the host process;
+    /// no child app is spun up). Set <c>isEnabled</c> to false to register without auto-starting.
+    /// If no workspace is marked primary, the enabled workspace with the lowest port is used.
+    /// </summary>
     [HttpPost]
     public async Task<ActionResult<WorkspaceMutationResult>> CreateAsync(
         [FromBody] WorkspaceCreateRequest? request,
@@ -71,7 +81,11 @@ public sealed class WorkspaceController : ControllerBase
         return Created(new Uri($"/mcp/workspace/{key}", UriKind.Relative), result);
     }
 
-    /// <summary>Update a workspace by Base64URL-encoded path key.</summary>
+    /// <summary>
+    /// Update a workspace by Base64URL-encoded path key.
+    /// Supports updating <c>isPrimary</c> (bool) and <c>isEnabled</c> (bool) flags.
+    /// Null fields are not changed.
+    /// </summary>
     [HttpPut("{key}")]
     public async Task<ActionResult<WorkspaceMutationResult>> UpdateAsync(
         string key,
@@ -125,7 +139,11 @@ public sealed class WorkspaceController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>Start the hosted MCP instance for a workspace.</summary>
+    /// <summary>
+    /// Start the hosted MCP instance for a workspace.
+    /// If the workspace is the primary instance, only writes the marker file — the host process already serves it.
+    /// Returns 404 if the workspace is not registered. Disabled workspaces can still be started manually.
+    /// </summary>
     [HttpPost("{key}/start")]
     public async Task<ActionResult<WorkspaceProcessStatus>> StartAsync(string key, CancellationToken ct)
     {

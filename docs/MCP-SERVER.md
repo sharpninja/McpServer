@@ -68,14 +68,80 @@ Common keys:
   external-doc cache folder under `RepoRoot`.
 - `Mcp:InteractionLogging:*`: request/response interaction logging controls.
 - `Mcp:Parseable:*`: Parseable sink controls.
-- `Mcp:Instances:{name}:*`: per-instance overrides.
+- `Mcp:Instances:{name}:*`: per-instance overrides (static, config-file-only instances).
+- `Mcp:Workspaces`: dynamic workspace list managed via API (see [Workspaces](#workspaces)).
 
 Environment overrides:
 
 - `PORT` (highest-priority runtime port override)
 - `MCP_INSTANCE` (instance selector when `--instance` is not passed)
 
-## Multi-Instance Support
+## Workspaces
+
+Workspaces are dynamic MCP instances tied to local project folders. They are stored in
+`Mcp:Workspaces` inside the active `appsettings.json` (never in the database) and managed
+entirely through the REST API — no manual config editing needed.
+
+Each workspace entry has:
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `WorkspacePath` | ✅ | Absolute path to the project folder |
+| `Name` | auto | Defaults to the last path segment |
+| `WorkspacePort` | auto | Auto-assigned from 7148+ |
+| `TodoPath` | auto | Defaults to `docs/todo.yaml` within `WorkspacePath` |
+| `TunnelProvider` | optional | `ngrok`, `cloudflare`, or `frp` |
+| `RunAs` | optional | User account for the child process |
+
+Create a workspace:
+
+```bash
+curl -X POST http://localhost:7147/mcp/workspace \
+  -H "Content-Type: application/json" \
+  -d '{"workspacePath": "E:\\github\\MyProject"}'
+```
+
+The child MCP instance starts automatically and is accessible at the assigned port (e.g., `http://localhost:7148`).
+
+Workspace state is written to `{ContentRootPath}/appsettings.json` by the running process.
+For the Windows service this is `C:\ProgramData\McpServer\appsettings.json`.
+
+## Production Deployment (Windows Service)
+
+`appsettings.Production.json` (in `src/McpServer.Support.Mcp/`) overrides paths to absolute
+locations so the service never resolves files relative to the working directory:
+
+```json
+{
+  "Mcp": {
+    "DataDirectory": "C:\\ProgramData\\McpServer",
+    "RepoRoot": "C:\\ProgramData\\McpServer",
+    "TodoStorage": { "SqliteDataSource": "C:\\ProgramData\\McpServer\\mcp.db" }
+  }
+}
+```
+
+Update the service in-place (preserves all `*.json` and `*.db*` files):
+
+```powershell
+gsudo .\scripts\Update-McpService.ps1
+```
+
+The script performs: stop → backup all `*.json`/`*.db*` → publish Debug build → copy binaries →
+restore backup → start → health-check → archive backup to `%USERPROFILE%\McpServer-Backups\`.
+
+## Diagnostic Endpoints (Debug / Staging only)
+
+Available in Debug builds and `Staging` environment; excluded in Production Release builds.
+
+| Method | Route | Returns |
+|--------|-------|---------|
+| `GET` | `/mcp/diagnostic/execution-path` | `{ processPath, baseDirectory }` |
+| `GET` | `/mcp/diagnostic/appsettings-path` | `{ environmentName, contentRootPath, files[] }` |
+
+Use these to verify which binary and which `appsettings.json` a running instance has loaded.
+
+
 
 Use `Mcp:Instances:{name}` to define isolated instances with unique ports,
 roots, and storage backends.
@@ -171,6 +237,12 @@ Swagger:
 - `/swagger`
 
 ## Operations Runbook
+
+Update service in-place:
+
+```powershell
+gsudo .\scripts\Update-McpService.ps1
+```
 
 Health checks:
 

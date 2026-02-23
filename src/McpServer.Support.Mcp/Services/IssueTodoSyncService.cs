@@ -13,7 +13,6 @@ public sealed class IssueTodoSyncService(
     ILogger<IssueTodoSyncService> logger) : IIssueTodoSyncService
 {
     private const string IssueIdPrefix = "ISSUE-";
-    private const string DefaultSection = "mvp-support";
 
     /// <inheritdoc />
     public async Task<TodoMutationResult> SyncIssueToTodoAsync(GitHubIssueDetail issue, CancellationToken ct = default)
@@ -220,17 +219,15 @@ public sealed class IssueTodoSyncService(
         return "low";
     }
 
-    /// <summary>TR-GH-013-002: Maps issue labels to section.</summary>
+    /// <summary>TR-GH-013-002: Maps issue labels to section. Derives section from <c>area:*</c> labels; defaults to "issues".</summary>
     internal static string MapSection(IReadOnlyList<GitHubLabel> labels)
     {
+        const string areaPrefix = "area:";
         foreach (var label in labels)
         {
-            if (string.Equals(label.Name, "area:app", StringComparison.OrdinalIgnoreCase)) return "mvp-app";
-            if (string.Equals(label.Name, "area:marketing", StringComparison.OrdinalIgnoreCase)) return "mvp-marketing";
-            if (string.Equals(label.Name, "area:support", StringComparison.OrdinalIgnoreCase)) return "mvp-support";
-            if (string.Equals(label.Name, "area:legal", StringComparison.OrdinalIgnoreCase)) return "mvp-legal";
-            if (string.Equals(label.Name, "area:infra", StringComparison.OrdinalIgnoreCase)) return "staging-and-infrastructure";
+            if (label.Name.StartsWith(areaPrefix, StringComparison.OrdinalIgnoreCase))
+                return label.Name[areaPrefix.Length..].ToLowerInvariant();
         }
-        return DefaultSection;
+        return "issues";
     }
 }
