@@ -64,6 +64,7 @@ public static class MarkerFileService
 
         try
         {
+            EnsureGitIgnored(workspacePath, logger);
             var yaml = s_yamlSerializer.Serialize(marker);
             await File.WriteAllTextAsync(markerPath, yaml, ct).ConfigureAwait(false);
             logger?.LogInformation("Wrote MCP marker file: {Path}", markerPath);
@@ -84,6 +85,28 @@ public static class MarkerFileService
         // Clean up legacy markers if they exist.
         RemoveSingleFile(Path.Combine(workspacePath, ".mcp-server.yaml"), logger);
         RemoveSingleFile(Path.Combine(workspacePath, ".mcp-server.json"), logger);
+    }
+
+    /// <summary>Ensures <see cref="MarkerFileName"/> is listed in the workspace root's <c>.gitignore</c>.</summary>
+    private static void EnsureGitIgnored(string workspacePath, ILogger? logger)
+    {
+        try
+        {
+            var gitignorePath = Path.Combine(workspacePath, ".gitignore");
+            if (File.Exists(gitignorePath))
+            {
+                var lines = File.ReadAllLines(gitignorePath);
+                if (lines.Any(l => l.Trim().Equals(MarkerFileName, StringComparison.OrdinalIgnoreCase)))
+                    return;
+            }
+
+            File.AppendAllText(gitignorePath, $"{Environment.NewLine}{MarkerFileName}{Environment.NewLine}");
+            logger?.LogInformation("Added {Marker} to .gitignore at {Path}", MarkerFileName, gitignorePath);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            logger?.LogWarning(ex, "Failed to update .gitignore at {Path}", workspacePath);
+        }
     }
 
     private static void RemoveSingleFile(string markerPath, ILogger? logger)

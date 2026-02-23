@@ -18,8 +18,8 @@ endpoints:
   workspace: /mcp/workspace
 workspace: McpServer
 workspacePath: E:\github\McpServer
-pid: 72064
-startedAt: 2026-02-23T05:26:30.6182098+00:00
+pid: 20956
+startedAt: 2026-02-23T06:37:44.6077199+00:00
 prompt: >-
   You are connected to an MCP Context Server at http://localhost:7148. Use this server to coordinate your work.
 
