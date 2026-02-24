@@ -194,10 +194,58 @@ public sealed class TodoController : ControllerBase
         Response.Headers["Connection"] = "keep-alive";
         Response.ContentType = "text/event-stream";
 
-        await foreach (var line in lines.WithCancellation(cancellationToken).ConfigureAwait(false))
+        // Flush headers immediately so clients see the connection is alive.
+        await Response.WriteAsync("event: thinking\ndata: Processing…\n\n", cancellationToken).ConfigureAwait(false);
+        await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
+
+        // Send periodic heartbeat events while waiting for data lines.
+        // The enumerator is consumed concurrently with a heartbeat timer.
+        var heartbeatInterval = TimeSpan.FromSeconds(5);
+        var enumerator = lines.GetAsyncEnumerator(cancellationToken);
+        try
         {
-            await Response.WriteAsync($"data: {line}\n\n", cancellationToken).ConfigureAwait(false);
-            await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
+            var hasData = false;
+            while (true)
+            {
+                // Race: next data line vs heartbeat timer.
+                var moveVt = enumerator.MoveNextAsync();
+                Task<bool> moveTask;
+                if (moveVt.IsCompleted)
+                {
+                    moveTask = Task.FromResult(moveVt.Result);
+                }
+                else
+                {
+                    moveTask = moveVt.AsTask();
+                    while (!moveTask.IsCompleted)
+                    {
+                        var completed = await Task.WhenAny(moveTask, Task.Delay(heartbeatInterval, cancellationToken)).ConfigureAwait(false);
+                        if (completed != moveTask)
+                        {
+                            await Response.WriteAsync("event: thinking\ndata: …\n\n", cancellationToken).ConfigureAwait(false);
+                            await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
+                        }
+                    }
+                }
+
+                if (!await moveTask.ConfigureAwait(false))
+                    break;
+
+                hasData = true;
+                var line = enumerator.Current;
+                await Response.WriteAsync($"data: {line}\n\n", cancellationToken).ConfigureAwait(false);
+                await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            if (!hasData)
+            {
+                await Response.WriteAsync("data: (no output)\n\n", cancellationToken).ConfigureAwait(false);
+                await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
+            }
+        }
+        finally
+        {
+            await enumerator.DisposeAsync();
         }
 
         await Response.WriteAsync("event: done\ndata: \n\n", cancellationToken).ConfigureAwait(false);

@@ -358,6 +358,12 @@ public sealed class WorkspaceConfigEntry
     /// <summary>Override for the Copilot plan prompt. Null = use built-in default.</summary>
     public string? PlanPrompt { get; set; }
 
+    /// <summary>
+    /// Absolute path to the Copilot CLI agent executable.
+    /// Null = use the default (<c>copilot</c>).
+    /// </summary>
+    public string? AgentPath { get; set; }
+
     /// <summary>When the workspace was registered.</summary>
     public DateTimeOffset DateTimeCreated { get; set; }
 

@@ -10,7 +10,7 @@ namespace McpServer.Common.Copilot;
 
 /// <summary>TR-CLI-001: Invokes the Copilot CLI agent, captures output, and returns structured results.</summary>
 public sealed class CopilotClient(
-    IOptions<CopilotClientOptions> defaultOptions,
+    IOptionsMonitor<CopilotClientOptions> defaultOptions,
     ILogger<CopilotClient> logger) : ICopilotClient
 {
 
@@ -21,7 +21,7 @@ public sealed class CopilotClient(
         CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt);
-        var opts = options ?? defaultOptions.Value;
+        var opts = options ?? defaultOptions.CurrentValue;
         return await RunProcessAsync(prompt, opts, cancellationToken).ConfigureAwait(false);
     }
 
@@ -32,7 +32,7 @@ public sealed class CopilotClient(
         CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt);
-        var opts = options ?? defaultOptions.Value;
+        var opts = options ?? defaultOptions.CurrentValue;
         var result = await RunProcessAsync(prompt, opts, cancellationToken).ConfigureAwait(false);
 
         // Attempt typed deserialization
@@ -56,42 +56,11 @@ public sealed class CopilotClient(
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt);
-        var opts = options ?? defaultOptions.Value;
-        var cwd = opts.WorkingDirectory ?? Environment.CurrentDirectory;
-        var isWindows = OperatingSystem.IsWindows();
+        var opts = options ?? defaultOptions.CurrentValue;
 
-        // Write prompt to temp file to avoid shell escaping issues
-        var tmpFile = Path.Combine(Path.GetTempPath(), $"fwh-copilot-{Environment.TickCount64}-{Guid.NewGuid():N}.txt");
-        await File.WriteAllTextAsync(tmpFile, prompt, Encoding.UTF8, cancellationToken).ConfigureAwait(false);
+        var psi = BuildProcessStartInfo(opts, prompt);
 
-        var readCmd = isWindows
-            ? $"Get-Content -Raw '{tmpFile.Replace("'", "''", StringComparison.Ordinal)}'"
-            : $"cat '{tmpFile.Replace("'", "'\\''", StringComparison.Ordinal)}'";
-        var modelArg = string.Equals(opts.Model, "auto", StringComparison.OrdinalIgnoreCase) ? "" : $" --model {opts.Model}";
-        var silentArg = opts.Silent ? " --silent" : "";
-        var agentCmd = $"{opts.AgentPath} -p \"$({readCmd})\"{modelArg}{silentArg} 2>&1";
-        var shell = isWindows ? "pwsh" : "sh";
-        var shellArgs = isWindows ? $"-NoProfile -Command {agentCmd}" : $"-c {agentCmd}";
-
-        var psi = new ProcessStartInfo
-        {
-            FileName = shell,
-            Arguments = shellArgs,
-            WorkingDirectory = cwd,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-        };
-
-        ApplyRunAsEnvironment(psi, opts.RunAs);
-        ApplyGitHubToken(psi, opts.GitHubToken);
-
-        if (opts.EnvironmentVariables is { Count: > 0 } envVars)
-        {
-            foreach (var (key, value) in envVars)
-                psi.Environment[key] = value;
-        }
+        logger.LogDebug("Streaming: {Agent} in {Cwd}", opts.AgentPath, psi.WorkingDirectory);
 
         Process? process;
         string? spawnError = null;
@@ -101,8 +70,7 @@ public sealed class CopilotClient(
         }
         catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
         {
-            logger.LogError(ex, "Failed to spawn streaming process: {Shell}", shell);
-            TryDeleteFile(tmpFile);
+            logger.LogError(ex, "Failed to spawn streaming process: {Agent}", opts.AgentPath);
             spawnError = $"error: Failed to spawn Copilot CLI — {ex.Message}";
             process = null;
         }
@@ -121,6 +89,9 @@ public sealed class CopilotClient(
             using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             if (opts.Timeout > TimeSpan.Zero && opts.Timeout != System.Threading.Timeout.InfiniteTimeSpan)
                 timeoutCts.CancelAfter(opts.Timeout);
+
+            // Drain stderr in background to prevent deadlocks and capture error output.
+            var stderrTask = proc.StandardError.ReadToEndAsync(timeoutCts.Token);
 
             var reader = proc.StandardOutput;
             while (!timeoutCts.Token.IsCancellationRequested)
@@ -145,11 +116,15 @@ public sealed class CopilotClient(
                 TryKillProcess(proc);
 
             await proc.WaitForExitAsync(CancellationToken.None).ConfigureAwait(false);
+
+            // Log stderr if present (best-effort, don't block on timeout).
+            var stderr = await ReadPartialAsync(stderrTask).ConfigureAwait(false);
+            if (!string.IsNullOrWhiteSpace(stderr))
+                logger.LogWarning("Copilot CLI stderr: {Stderr}", stderr.Trim());
         }
         finally
         {
             proc.Dispose();
-            TryDeleteFile(tmpFile);
         }
     }
 
@@ -158,86 +133,9 @@ public sealed class CopilotClient(
         CopilotClientOptions opts,
         CancellationToken cancellationToken)
     {
-        var agentPath = opts.AgentPath;
-        var model = opts.Model;
-        var cwd = opts.WorkingDirectory ?? Environment.CurrentDirectory;
-        var isWindows = OperatingSystem.IsWindows();
+        var psi = BuildProcessStartInfo(opts, prompt);
 
-        // Write prompt to temp file to avoid shell escaping issues
-        var tmpFile = Path.Combine(Path.GetTempPath(), $"fwh-copilot-{Environment.TickCount64}-{Guid.NewGuid():N}.txt");
-        try
-        {
-            await File.WriteAllTextAsync(tmpFile, prompt, Encoding.UTF8, cancellationToken).ConfigureAwait(false);
-        }
-        catch (IOException ex)
-        {
-            logger.LogError(ex, "Failed to write prompt to temp file {TmpFile}", tmpFile);
-            return new CopilotResult
-            {
-                State = CopilotResultState.SpawnError,
-                Stderr = $"Failed to write prompt to temp file: {ex.Message}",
-            };
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            logger.LogError(ex, "Failed to write prompt to temp file {TmpFile}", tmpFile);
-            return new CopilotResult
-            {
-                State = CopilotResultState.SpawnError,
-                Stderr = $"Failed to write prompt to temp file: {ex.Message}",
-            };
-        }
-
-        try
-        {
-            return await SpawnAgentAsync(agentPath, model, tmpFile, cwd, opts, cancellationToken).ConfigureAwait(false);
-        }
-        finally
-        {
-            TryDeleteFile(tmpFile);
-        }
-    }
-
-    private async Task<CopilotResult> SpawnAgentAsync(
-        string agentPath,
-        string model,
-        string tmpFile,
-        string cwd,
-        CopilotClientOptions opts,
-        CancellationToken cancellationToken)
-    {
-        var isWindows = OperatingSystem.IsWindows();
-        var readCmd = isWindows
-            ? $"Get-Content -Raw '{tmpFile.Replace("'", "''", StringComparison.Ordinal)}'"
-            : $"cat '{tmpFile.Replace("'", "'\\''", StringComparison.Ordinal)}'";
-        var modelArg = string.Equals(model, "auto", StringComparison.OrdinalIgnoreCase) ? "" : $" --model {model}";
-        var silentArg = opts.Silent ? " --silent" : "";
-        var agentCmd = $"{agentPath} -p \"$({readCmd})\"{modelArg}{silentArg} 2>&1";
-
-        var shell = isWindows ? "pwsh" : "sh";
-        var shellArgs = isWindows ? $"-NoProfile -Command {agentCmd}" : $"-c {agentCmd}";
-
-        logger.LogDebug("Spawning: {Shell} {Args} in {Cwd}", shell, shellArgs, cwd);
-
-        var psi = new ProcessStartInfo
-        {
-            FileName = shell,
-            Arguments = shellArgs,
-            WorkingDirectory = cwd,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-        };
-
-        ApplyRunAsEnvironment(psi, opts.RunAs);
-        ApplyGitHubToken(psi, opts.GitHubToken);
-
-        if (opts.EnvironmentVariables is { Count: > 0 } envVars)
-        {
-            foreach (var (key, value) in envVars)
-                psi.Environment[key] = value;
-        }
+        logger.LogDebug("Spawning: {Agent} {Args} in {Cwd}", opts.AgentPath, psi.Arguments, psi.WorkingDirectory);
 
         Process process;
         try
@@ -246,7 +144,7 @@ public sealed class CopilotClient(
         }
         catch (InvalidOperationException ex)
         {
-            logger.LogError(ex, "Failed to spawn process: {Shell}", shell);
+            logger.LogError(ex, "Failed to spawn process: {Agent}", opts.AgentPath);
             return new CopilotResult
             {
                 State = CopilotResultState.SpawnError,
@@ -255,7 +153,7 @@ public sealed class CopilotClient(
         }
         catch (System.ComponentModel.Win32Exception ex)
         {
-            logger.LogError(ex, "Failed to spawn process: {Shell}", shell);
+            logger.LogError(ex, "Failed to spawn process: {Agent}", opts.AgentPath);
             return new CopilotResult
             {
                 State = CopilotResultState.SpawnError,
@@ -324,6 +222,53 @@ public sealed class CopilotClient(
         }
     }
 
+    /// <summary>
+    /// Builds a <see cref="ProcessStartInfo"/> that invokes the agent binary directly
+    /// (no shell wrapper), using <see cref="ProcessStartInfo.ArgumentList"/> for safe escaping.
+    /// This avoids PowerShell/sh buffering so stdout streams in real time.
+    /// </summary>
+    private ProcessStartInfo BuildProcessStartInfo(CopilotClientOptions opts, string prompt)
+    {
+        var cwd = opts.WorkingDirectory ?? Environment.CurrentDirectory;
+
+        var psi = new ProcessStartInfo
+        {
+            FileName = opts.AgentPath,
+            WorkingDirectory = cwd,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+        };
+
+        psi.ArgumentList.Add("-p");
+        psi.ArgumentList.Add(prompt);
+
+        if (!string.Equals(opts.Model, "auto", StringComparison.OrdinalIgnoreCase))
+        {
+            psi.ArgumentList.Add("--model");
+            psi.ArgumentList.Add(opts.Model);
+        }
+
+        if (opts.Silent)
+            psi.ArgumentList.Add("--silent");
+
+        // Force streaming even when stdout is a pipe (not a TTY).
+        psi.ArgumentList.Add("--stream");
+        psi.ArgumentList.Add("on");
+
+        ApplyRunAsEnvironment(psi, opts.RunAs);
+        ApplyGitHubToken(psi, opts.GitHubToken);
+
+        if (opts.EnvironmentVariables is { Count: > 0 } envVars)
+        {
+            foreach (var (key, value) in envVars)
+                psi.Environment[key] = value;
+        }
+
+        return psi;
+    }
+
     private static async Task<string> ReadPartialAsync(Task<string> readTask)
     {
         try
@@ -355,13 +300,6 @@ public sealed class CopilotClient(
         {
             // Access denied or other OS error
         }
-    }
-
-    private static void TryDeleteFile(string path)
-    {
-        try { File.Delete(path); }
-        catch (IOException) { /* Best-effort cleanup */ }
-        catch (UnauthorizedAccessException) { /* Best-effort cleanup */ }
     }
 
     /// <summary>

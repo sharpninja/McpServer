@@ -52,9 +52,12 @@ public sealed class InteractionLoggingMiddleware
         }
 
         // --- Wrap response body stream to capture output ---
+        // Skip response buffering for SSE endpoints — buffering defeats real-time streaming.
+        var isSse = string.Equals(context.Request.Headers.Accept.ToString(), "text/event-stream", StringComparison.OrdinalIgnoreCase)
+                    || context.Request.Path.Value?.Contains("/prompt/", StringComparison.OrdinalIgnoreCase) == true;
         Stream? originalResponseBody = null;
         MemoryStream? responseBuffer = null;
-        if (_options.IncludeResponseBody)
+        if (_options.IncludeResponseBody && !isSse)
         {
             originalResponseBody = context.Response.Body;
             responseBuffer = new MemoryStream();

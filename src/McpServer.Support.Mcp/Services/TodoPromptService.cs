@@ -11,12 +11,14 @@ namespace McpServer.Support.Mcp.Services;
 /// Generates agent-consumable prompts for TODO items and invokes Copilot CLI
 /// in the workspace directory, streaming output line by line.
 /// Extracted from VS2026 extension copilot functions (MVP-MCP-002).
+/// Uses <see cref="IOptionsMonitor{TOptions}"/> so prompt templates are re-read
+/// from configuration on every call instead of being cached at startup.
 /// </summary>
 public sealed class TodoPromptService(
     ITodoService todoService,
     ICopilotClient copilotClient,
     IWebHostEnvironment hostEnvironment,
-    IOptions<TodoPromptOptions> promptOptions,
+    IOptionsMonitor<TodoPromptOptions> promptOptions,
     ILogger<TodoPromptService> logger) : ITodoPromptService
 {
     /// <inheritdoc />
@@ -76,19 +78,23 @@ public sealed class TodoPromptService(
             yield return line;
     }
 
-    private string EffectiveStatusPrompt => promptOptions.Value.StatusPrompt ?? TodoPromptDefaults.StatusPrompt;
-    private string EffectiveImplementPrompt => promptOptions.Value.ImplementPrompt ?? TodoPromptDefaults.ImplementPrompt;
-    private string EffectivePlanPrompt => promptOptions.Value.PlanPrompt ?? TodoPromptDefaults.PlanPrompt;
+    private string EffectiveStatusPrompt => promptOptions.CurrentValue.StatusPrompt ?? TodoPromptDefaults.StatusPrompt;
+    private string EffectiveImplementPrompt => promptOptions.CurrentValue.ImplementPrompt ?? TodoPromptDefaults.ImplementPrompt;
+    private string EffectivePlanPrompt => promptOptions.CurrentValue.PlanPrompt ?? TodoPromptDefaults.PlanPrompt;
 
     private IAsyncEnumerable<string> InvokeCopilotStreaming(string prompt, TimeSpan timeout, CancellationToken cancellationToken)
     {
+        var current = promptOptions.CurrentValue;
         var options = new CopilotClientOptions
         {
             Timeout = timeout,
             WorkingDirectory = hostEnvironment.ContentRootPath,
-            RunAs = promptOptions.Value.RunAs,
-            GitHubToken = promptOptions.Value.GitHubToken,
+            RunAs = current.RunAs,
+            GitHubToken = current.GitHubToken,
         };
+
+        if (!string.IsNullOrWhiteSpace(current.AgentPath))
+            options.AgentPath = current.AgentPath;
 
         return copilotClient.InvokeStreamingAsync(prompt, options, cancellationToken);
     }
@@ -99,7 +105,7 @@ public sealed class TodoPromptService(
     /// </summary>
     private string BuildPrompt(string template, TodoFlatItem item)
     {
-        var baseUrl = promptOptions.Value.BaseUrl;
+        var baseUrl = promptOptions.CurrentValue.BaseUrl;
         var rendered = template
             .Replace("{id}", item.Id, StringComparison.Ordinal)
             .Replace("{title}", item.Title, StringComparison.Ordinal)

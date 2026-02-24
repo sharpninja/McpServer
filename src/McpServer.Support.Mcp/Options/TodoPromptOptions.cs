@@ -39,4 +39,10 @@ public sealed class TodoPromptOptions
     /// access the user's keyring. Null or empty = rely on the CLI's default auth.
     /// </summary>
     public string? GitHubToken { get; set; }
+
+    /// <summary>
+    /// Absolute path to the Copilot CLI agent executable.
+    /// Null or empty = use the <c>CopilotClientOptions.AgentPath</c> default (<c>copilot</c>).
+    /// </summary>
+    public string? AgentPath { get; set; }
 }

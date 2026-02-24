@@ -85,6 +85,7 @@ public static class WorkspaceAppFactory
                 options.PlanPrompt = workspaceConfig.PlanPrompt;
                 options.RunAs = workspaceConfig.RunAs;
                 options.GitHubToken = workspaceConfig.GitHubToken;
+                options.AgentPath = workspaceConfig.AgentPath;
             }
         });
         builder.Services.Configure<VectorIndexOptions>(options =>
