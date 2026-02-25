@@ -233,8 +233,54 @@ staging-and-infrastructure:
       done: false
     - task: '[Phase 7 — Docs/Release] Write src/McpServer.Client/README.md with installation, quick start, DI setup, all client method listing'
       done: false
-    - task: '[Phase 7 — Docs/Release] Add CHANGELOG.md entry; tag v{version} after first nuget.org publish; verify package on nuget.org'
+    - task: '[Phase 7 - Docs/Release] Add CHANGELOG.md entry; tag v{version} after first nuget.org publish; verify package on nuget.org'
       done: false
+  - id: frp-railway-tunnel
+    title: FRP tunnel provider hardening and Railway-hosted frps deployment assets
+    estimate: 2-4 days
+    note: 'FRP tunnel provider already exists (FrpTunnelProvider). This work is for Railway-ready configuration, provider hardening/observability, deployment assets for self-hosted frps, tests, and docs.'
+    done: true
+    description:
+    - Use the existing FRP provider (frpc) in McpServer.Support.Mcp and make it production-ready for Railway-hosted frps.
+    - Support a simple MVP deployment path first (HTTP mode), then add hardening and operational visibility.
+    - Provide Railway deployment assets and a runbook so a local MCP instance can connect to a self-hosted frps service.
+    technical-details:
+    - 'Existing integration points: src/McpServer.Support.Mcp/Services/FrpTunnelProvider.cs, src/McpServer.Support.Mcp/Options/TunnelOptions.cs, src/McpServer.Support.Mcp/Program.cs.'
+    - 'MVP should preserve backward compatibility with current Mcp:Tunnel:Frp settings (ServerAddress, ServerPort, Token, Subdomain, CustomDomain).'
+    - 'Add Railway-focused options only as needed (for example: PublicBaseUrl, StartupTimeoutSeconds, ProxyType).'
+    - 'Prefer HTTP proxy mode first because current FrpTunnelProvider.GenerateConfig() already emits FRP HTTP config.'
+    - 'Secrets (FRP token) must not be logged or written to committed files.'
+    implementation-tasks:
+    - task: '[Commit 1 - MVP] Extend FrpTunnelOptions in src/McpServer.Support.Mcp/Options/TunnelOptions.cs with Railway-ready fields (PublicBaseUrl, StartupTimeoutSeconds, ProxyType defaulting to http) while keeping existing options backward compatible'
+      done: true
+    - task: '[Commit 1 - MVP] Update src/McpServer.Support.Mcp/Services/FrpTunnelProvider.cs to prefer PublicBaseUrl when building TunnelStatus.PublicUrl, then fall back to CustomDomain/Subdomain behavior'
+      done: true
+    - task: '[Commit 1 - MVP] Add startup timeout and clear error reporting in FrpTunnelProvider when frpc does not connect successfully (avoid silent hang/optimistic success)'
+      done: true
+    - task: '[Commit 1 - MVP] Add provider startup validation/logging in FrpTunnelProvider (sanitized server/port/proxy type) and optional Program.cs log indicating Provider=frp selected'
+      done: true
+    - task: '[Commit 2 - Hardening] Capture frpc stdout/stderr asynchronously in FrpTunnelProvider, surface actionable errors in TunnelStatus.Error, and log connection lifecycle without exposing secrets'
+      done: true
+    - task: '[Commit 2 - Hardening] Add FRP option validation in FrpTunnelProvider for incompatible/missing combinations (for example Subdomain + CustomDomain, unsupported ProxyType, missing required values)'
+      done: true
+    - task: '[Commit 2 - Hardening] Handle frpc process exit after startup and update provider status/error state so GetStatusAsync reports crashes accurately'
+      done: true
+    - task: '[Commit 3 - Railway Assets] Add infra/frp/railway/Dockerfile to run self-hosted frps on Railway'
+      done: true
+    - task: '[Commit 3 - Railway Assets] Add infra/frp/railway/entrypoint.sh and frps.toml.template to generate frps runtime config from environment variables (token auth + HTTP vhost mode)'
+      done: true
+    - task: '[Commit 3 - Railway Assets] Add infra/frp/railway/.env.example and README.md documenting required Railway service variables and exposed ports'
+      done: true
+    - task: '[Commit 3 - Railway Assets] Optional local parity: add infra/frp/local/docker-compose.frps.yml for local frps validation before Railway deployment'
+      done: true
+    - task: '[Commit 4 - Tests] Add tests/McpServer.Support.Mcp.Tests/Services/FrpTunnelProviderTests.cs covering config generation, PublicUrl precedence (PublicBaseUrl > CustomDomain > Subdomain), and invalid-option validation'
+      done: true
+    - task: '[Commit 4 - Tests] Add tests for missing frpc binary / startup failure paths and temp config cleanup behavior in FrpTunnelProvider'
+      done: true
+    - task: '[Commit 5 - Docs] Add docs/Operations/Tunnel-FRP-Railway.md runbook with Railway frps deployment steps, TCP proxy setup for frps bind port, and MCP appsettings.json examples for Mcp:Tunnel:Provider=frp'
+      done: true
+    - task: '[Commit 5 - Docs] Add troubleshooting notes (token mismatch, wrong public URL, port mismatch, frpc not found) and an end-to-end validation checklist (/health through FRP public URL)'
+      done: true
 saas:
   medium-priority:
   - id: saas-01-executive-summary

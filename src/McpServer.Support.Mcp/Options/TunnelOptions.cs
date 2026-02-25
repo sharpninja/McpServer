@@ -57,6 +57,11 @@ public sealed class FrpTunnelOptions
     /// <summary>FRP server bind port.</summary>
     public int ServerPort { get; set; } = 7000;
 
+    /// <summary>
+    /// Proxy type for the generated FRP proxy config. MVP currently supports <c>http</c>.
+    /// </summary>
+    public string ProxyType { get; set; } = "http";
+
     /// <summary>Authentication token shared with the FRP server.</summary>
     public string? Token { get; set; }
 
@@ -65,4 +70,16 @@ public sealed class FrpTunnelOptions
 
     /// <summary>Custom domain for HTTP proxy.</summary>
     public string? CustomDomain { get; set; }
+
+    /// <summary>
+    /// Optional explicit public base URL used for status reporting (for example a Railway domain).
+    /// When set, this takes precedence over <see cref="CustomDomain"/> and <see cref="Subdomain"/>.
+    /// </summary>
+    public string? PublicBaseUrl { get; set; }
+
+    /// <summary>
+    /// Startup wait time before considering the tunnel process healthy. Used to detect early
+    /// <c>frpc</c> startup failures and report a clear error instead of optimistic success.
+    /// </summary>
+    public int StartupTimeoutSeconds { get; set; } = 5;
 }
