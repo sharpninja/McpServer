@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -46,6 +47,17 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     {
         var key = NormalizeKey(workspace.WorkspacePath);
         var port = workspace.WorkspacePort;
+        var isPrimary = IsPrimaryWorkspace(key);
+
+        _logger.LogInformation(
+            "Workspace instance startup requested: Name={WorkspaceName}; Path={WorkspacePath}; Port={Port}; Primary={IsPrimary}; PID={ProcessId}; Command={CommandLine}",
+            workspace.Name,
+            key,
+            port,
+            isPrimary,
+            Environment.ProcessId,
+            Environment.CommandLine);
+
         var globalTemplate = _promptOptions.CurrentValue.MarkerPromptTemplate;
         var token = _tokenService.GetToken(key) ?? _tokenService.GenerateToken(key);
 
@@ -53,7 +65,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         _ = _tokenService.GetDefaultToken(key) ?? _tokenService.GenerateDefaultToken(key);
 
         // If this workspace is the primary host, just write the marker — the primary app already serves it.
-        if (IsPrimaryWorkspace(key))
+        if (isPrimary)
         {
             var name = DeriveWorkspaceName(key);
             await MarkerFileService.WriteMarkerAsync(key, port, name, _logger, CancellationToken.None,
@@ -65,30 +77,89 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         if (_hosts.TryGetValue(key, out var existing) && existing.IsRunning)
         {
             var name = DeriveWorkspaceName(key);
-            await MarkerFileService.WriteMarkerAsync(key, port, name, _logger, CancellationToken.None,
+            await MarkerFileService.WriteMarkerAsync(key, existing.Port, name, _logger, CancellationToken.None,
                 globalTemplate, workspace.PromptTemplate, token, workspace).ConfigureAwait(false);
-            return new WorkspaceProcessStatus(true, Uptime: DateTime.UtcNow - existing.StartedAt, Port: port);
+            return new WorkspaceProcessStatus(true, Uptime: DateTime.UtcNow - existing.StartedAt, Port: existing.Port);
         }
 
+        var requestedPort = port;
+        var effectivePort = requestedPort;
         try
         {
             var configEntry = LookupConfigEntry(key);
-            var app = WorkspaceAppFactory.Create(key, port, _loggerFactory, workspace.DataDirectory, _tokenService, configEntry);
-            await app.StartAsync(ct).ConfigureAwait(false);
 
-            var entry = new WorkspaceHostEntry(app, DateTime.UtcNow, port);
+            if (TryGetPortConflictDetails(requestedPort, out var configuredConflict))
+            {
+                if (!TryGetPrefixedPortFallback(requestedPort, out effectivePort, out var fallbackError))
+                {
+                    _logger.LogError(
+                        "Workspace startup failed due to configured port conflict with no valid fallback: Name={WorkspaceName}; Path={WorkspacePath}; Port={Port}; ConflictPid={ConflictPid}; ConflictProcess={ConflictProcess}; ConflictPath={ConflictPath}; Reason={Reason}",
+                        workspace.Name,
+                        key,
+                        requestedPort,
+                        configuredConflict?.Pid,
+                        configuredConflict?.ProcessName,
+                        configuredConflict?.ExecutablePath,
+                        fallbackError);
+                    return new WorkspaceProcessStatus(false, Error: fallbackError);
+                }
+
+                _logger.LogWarning(
+                    "Workspace startup port conflict detected: Name={WorkspaceName}; Path={WorkspacePath}; ConfiguredPort={ConfiguredPort}; FallbackPort={FallbackPort}; ConflictPid={ConflictPid}; ConflictProcess={ConflictProcess}; ConflictPath={ConflictPath}",
+                    workspace.Name,
+                    key,
+                    requestedPort,
+                    effectivePort,
+                    configuredConflict?.Pid,
+                    configuredConflict?.ProcessName,
+                    configuredConflict?.ExecutablePath);
+
+                if (TryGetPortConflictDetails(effectivePort, out var fallbackConflict))
+                {
+                    var error = $"Fallback port {effectivePort} is also in use.";
+                    _logger.LogError(
+                        "Workspace startup failed because fallback port is also in use: Name={WorkspaceName}; Path={WorkspacePath}; ConfiguredPort={ConfiguredPort}; FallbackPort={FallbackPort}; ConflictPid={ConflictPid}; ConflictProcess={ConflictProcess}; ConflictPath={ConflictPath}",
+                        workspace.Name,
+                        key,
+                        requestedPort,
+                        effectivePort,
+                        fallbackConflict?.Pid,
+                        fallbackConflict?.ProcessName,
+                        fallbackConflict?.ExecutablePath);
+                    return new WorkspaceProcessStatus(false, Error: error);
+                }
+            }
+
+            var entry = await StartWorkspaceHostWithFallbackAsync(
+                key,
+                workspace.Name,
+                workspace.DataDirectory,
+                requestedPort,
+                effectivePort,
+                configEntry,
+                ct).ConfigureAwait(false);
+
             _hosts[key] = entry;
 
             var workspaceName = DeriveWorkspaceName(key);
-            await MarkerFileService.WriteMarkerAsync(key, port, workspaceName, _logger, CancellationToken.None,
+            await MarkerFileService.WriteMarkerAsync(key, entry.Port, workspaceName, _logger, CancellationToken.None,
                 globalTemplate, workspace.PromptTemplate, token, workspace).ConfigureAwait(false);
 
-            _logger.LogInformation("Workspace Kestrel host started: {Path} on port {Port}", key, port);
-            return new WorkspaceProcessStatus(true, Port: port);
+            _logger.LogInformation(
+                "Workspace Kestrel host started: {Path} on port {Port} (configured {ConfiguredPort})",
+                key,
+                entry.Port,
+                requestedPort);
+            return new WorkspaceProcessStatus(true, Port: entry.Port);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to start workspace Kestrel host: {Path}", key);
+            _logger.LogError(
+                ex,
+                "Failed to start workspace Kestrel host: {Path}; ConfiguredPort={ConfiguredPort}; PlannedPort={PlannedPort}",
+                key,
+                requestedPort,
+                effectivePort);
             return new WorkspaceProcessStatus(false, Error: ex.Message);
         }
     }
@@ -115,12 +186,12 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
 
             MarkerFileService.RemoveMarker(key, _logger);
 
-            _logger.LogInformation("Workspace Kestrel host stopped: {Path}", key);
+            _logger.LogInformation("Workspace Kestrel host stopped: {Path} on port {Port}", key, entry.Port);
             return new WorkspaceProcessStatus(false);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error stopping workspace Kestrel host: {Path}", key);
+            _logger.LogError(ex, "Error stopping workspace Kestrel host: {Path}; Port={Port}", key, entry.Port);
             return new WorkspaceProcessStatus(false, Error: ex.Message);
         }
     }
@@ -177,11 +248,14 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             var key = NormalizeKey(ws.WorkspacePath);
             var isRunning = IsPrimaryWorkspace(key) || (_hosts.TryGetValue(key, out var entry) && entry.IsRunning);
             if (!isRunning) continue;
+            var markerPort = IsPrimaryWorkspace(key)
+                ? ws.WorkspacePort
+                : (_hosts.TryGetValue(key, out var runningEntry) && runningEntry.IsRunning ? runningEntry.Port : ws.WorkspacePort);
 
             var name = DeriveWorkspaceName(key);
             var token = _tokenService.GetToken(key) ?? _tokenService.GenerateToken(key);
             _ = _tokenService.GetDefaultToken(key) ?? _tokenService.GenerateDefaultToken(key);
-            await MarkerFileService.WriteMarkerAsync(key, ws.WorkspacePort, name, _logger, ct,
+            await MarkerFileService.WriteMarkerAsync(key, markerPort, name, _logger, ct,
                 globalTemplate, ws.PromptTemplate, token, ws).ConfigureAwait(false);
         }
 
@@ -191,6 +265,8 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     // IHostedService — start all registered workspaces on app startup, cleanup on stop.
     async Task IHostedService.StartAsync(CancellationToken cancellationToken)
     {
+        string? currentWorkspaceName = null;
+        int? currentWorkspacePort = null;
         try
         {
             using var scope = _serviceProvider.CreateScope();
@@ -220,6 +296,9 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
 
             foreach (var ws in workspaces.Items)
             {
+                currentWorkspaceName = ws.Name;
+                currentWorkspacePort = ws.WorkspacePort;
+
                 if (!ws.IsEnabled)
                 {
                     _logger.LogInformation("  ⊘ {Name} skipped (disabled)", ws.Name);
@@ -228,15 +307,26 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
 
                 var status = await StartAsync(ws, cancellationToken).ConfigureAwait(false);
                 if (status.IsRunning)
-                    _logger.LogInformation("  ✓ {Name} on port {Port}{Primary}", ws.Name, ws.WorkspacePort,
+                    _logger.LogInformation("  ✓ {Name} on port {Port}{Primary}", ws.Name, status.Port ?? ws.WorkspacePort,
                         IsPrimaryWorkspace(NormalizeKey(ws.WorkspacePath)) ? " (primary)" : "");
                 else
-                    _logger.LogWarning("  ✗ {Name} failed: {Error}", ws.Name, status.Error);
+                    _logger.LogWarning("  ✗ {Name} failed on configured port {Port}: {Error}", ws.Name, ws.WorkspacePort, status.Error);
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error during workspace auto-start");
+            if (currentWorkspacePort.HasValue)
+            {
+                _logger.LogError(
+                    ex,
+                    "Error during workspace auto-start while processing {Name}; Port={Port}",
+                    currentWorkspaceName ?? "(unknown)",
+                    currentWorkspacePort.Value);
+            }
+            else
+            {
+                _logger.LogError(ex, "Error during workspace auto-start before workspace port could be determined");
+            }
         }
     }
 
@@ -255,7 +345,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Error disposing workspace host during shutdown");
+                _logger.LogWarning(ex, "Error disposing workspace host during shutdown: {Path}; Port={Port}", key, entry.Port);
             }
         }
         _hosts.Clear();
@@ -283,6 +373,212 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     private static string DeriveWorkspaceName(string normalizedKey)
         => Path.GetFileName(normalizedKey.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
 
+    private async Task<WorkspaceHostEntry> StartWorkspaceHostWithFallbackAsync(
+        string workspacePath,
+        string workspaceName,
+        string? dataDirectory,
+        int requestedPort,
+        int initialPort,
+        WorkspaceConfigEntry? configEntry,
+        CancellationToken ct)
+    {
+        try
+        {
+            return await StartWorkspaceHostAsync(workspacePath, initialPort, dataDirectory, configEntry, ct).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (initialPort == requestedPort && IsPortInUseException(ex))
+        {
+            if (!TryGetPrefixedPortFallback(requestedPort, out var fallbackPort, out var fallbackError))
+                throw new InvalidOperationException(fallbackError ?? $"No valid fallback port for {requestedPort}.", ex);
+
+            if (TryGetPortConflictDetails(requestedPort, out var conflict))
+            {
+                _logger.LogWarning(
+                    ex,
+                    "Workspace startup bind conflict on configured port; retrying fallback: Name={WorkspaceName}; Path={WorkspacePath}; ConfiguredPort={ConfiguredPort}; FallbackPort={FallbackPort}; ConflictPid={ConflictPid}; ConflictProcess={ConflictProcess}; ConflictPath={ConflictPath}",
+                    workspaceName,
+                    workspacePath,
+                    requestedPort,
+                    fallbackPort,
+                    conflict?.Pid,
+                    conflict?.ProcessName,
+                    conflict?.ExecutablePath);
+            }
+            else
+            {
+                _logger.LogWarning(
+                    ex,
+                    "Workspace startup bind conflict on configured port; retrying fallback: Name={WorkspaceName}; Path={WorkspacePath}; ConfiguredPort={ConfiguredPort}; FallbackPort={FallbackPort}",
+                    workspaceName,
+                    workspacePath,
+                    requestedPort,
+                    fallbackPort);
+            }
+
+            if (TryGetPortConflictDetails(fallbackPort, out var fallbackConflict))
+            {
+                throw new InvalidOperationException(
+                    $"Fallback port {fallbackPort} is also in use by PID {fallbackConflict?.Pid} ({fallbackConflict?.ProcessName}).",
+                    ex);
+            }
+
+            return await StartWorkspaceHostAsync(workspacePath, fallbackPort, dataDirectory, configEntry, ct).ConfigureAwait(false);
+        }
+    }
+
+    private async Task<WorkspaceHostEntry> StartWorkspaceHostAsync(
+        string workspacePath,
+        int port,
+        string? dataDirectory,
+        WorkspaceConfigEntry? configEntry,
+        CancellationToken ct)
+    {
+        var app = WorkspaceAppFactory.Create(workspacePath, port, _loggerFactory, dataDirectory, _tokenService, configEntry);
+        try
+        {
+            await app.StartAsync(ct).ConfigureAwait(false);
+            return new WorkspaceHostEntry(app, DateTime.UtcNow, port);
+        }
+        catch
+        {
+            try
+            {
+                await app.DisposeAsync().ConfigureAwait(false);
+            }
+            catch
+            {
+                // Best-effort cleanup after failed startup.
+            }
+
+            throw;
+        }
+    }
+
+    private static bool TryGetPrefixedPortFallback(int port, out int fallbackPort, out string? error)
+    {
+        fallbackPort = port;
+        error = null;
+
+        var fallbackText = $"1{port}";
+        if (!int.TryParse(fallbackText, out fallbackPort))
+        {
+            error = $"Could not compute fallback port from configured port {port}.";
+            return false;
+        }
+
+        if (fallbackPort is <= 0 or > 65535)
+        {
+            error = $"Computed fallback port {fallbackPort} is outside valid range.";
+            return false;
+        }
+
+        return true;
+    }
+
+    private static bool IsPortInUseException(Exception ex)
+    {
+        for (var current = ex; current is not null; current = current.InnerException!)
+        {
+            if (current is IOException ioEx &&
+                ioEx.Message.Contains("address already in use", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            if (current.Message.Contains("address already in use", StringComparison.OrdinalIgnoreCase) ||
+                current.Message.Contains("Only one usage of each socket address", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool TryGetPortConflictDetails(int port, out PortConflictDetails? details)
+    {
+        details = null;
+
+        if (!OperatingSystem.IsWindows())
+            return false;
+
+        try
+        {
+            using var process = new Process();
+            process.StartInfo = new ProcessStartInfo
+            {
+                FileName = "netstat",
+                Arguments = "-ano -p tcp",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+            };
+
+            if (!process.Start())
+                return false;
+
+            var output = process.StandardOutput.ReadToEnd();
+            if (!process.WaitForExit(2000))
+            {
+                try { process.Kill(entireProcessTree: true); } catch { }
+                return false;
+            }
+
+            foreach (var rawLine in output.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries))
+            {
+                var line = rawLine.Trim();
+                if (!line.StartsWith("TCP", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                var parts = line.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length < 5)
+                    continue;
+
+                if (!parts[3].Equals("LISTENING", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                if (!EndpointMatchesPort(parts[1], port))
+                    continue;
+
+                if (!int.TryParse(parts[4], out var pid))
+                    continue;
+
+                string? processName = null;
+                string? executablePath = null;
+
+                try
+                {
+                    var owner = Process.GetProcessById(pid);
+                    processName = owner.ProcessName;
+                    try { executablePath = owner.MainModule?.FileName; } catch { }
+                }
+                catch
+                {
+                    // Best effort only.
+                }
+
+                details = new PortConflictDetails(pid, processName, executablePath, parts[1]);
+                return true;
+            }
+        }
+        catch
+        {
+            // Best effort only — startup should continue even if conflict introspection fails.
+        }
+
+        return false;
+    }
+
+    private static bool EndpointMatchesPort(string endpoint, int port)
+    {
+        var index = endpoint.LastIndexOf(':');
+        if (index < 0 || index == endpoint.Length - 1)
+            return false;
+
+        return int.TryParse(endpoint[(index + 1)..], out var parsed) && parsed == port;
+    }
+
     private sealed class WorkspaceHostEntry
     {
         public WebApplication App { get; }
@@ -299,4 +595,6 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             Port = port;
         }
     }
+
+    private sealed record PortConflictDetails(int Pid, string? ProcessName, string? ExecutablePath, string LocalEndpoint);
 }

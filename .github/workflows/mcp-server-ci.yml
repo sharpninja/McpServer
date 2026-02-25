@@ -32,6 +32,7 @@ on:
       - "scripts/Validate-McpConfig.ps1"
       - "scripts/Test-McpMultiInstance.ps1"
       - ".github/workflows/mcp-server-ci.yml"
+      - "GitVersion.yml"
   pull_request:
     paths:
       - "src/McpServer.Support.Mcp/**"
@@ -55,12 +56,15 @@ on:
       - "scripts/Validate-McpConfig.ps1"
       - "scripts/Test-McpMultiInstance.ps1"
       - ".github/workflows/mcp-server-ci.yml"
+      - "GitVersion.yml"
 
 jobs:
   build-test-publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -300,22 +304,33 @@ jobs:
     if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
 
-      - name: Read version
+      - name: Install GitVersion CLI
+        run: dotnet tool install --global GitVersion.Tool
+
+      - name: Compute version from GitVersion
         id: version
-        shell: bash
+        shell: pwsh
         run: |
-          BASE_VERSION=$(cat .version | LC_ALL=C tr -cd '0-9A-Za-z.\-' )
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            echo "version=$BASE_VERSION" >> "$GITHUB_OUTPUT"
-          else
-            echo "version=$BASE_VERSION-preview.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
-          fi
+          $gvJson = dotnet-gitversion /output json | Out-String
+          $gv = $gvJson | ConvertFrom-Json
+          if ('${{ github.ref }}' -eq 'refs/heads/main') {
+            $version = $gv.MajorMinorPatch
+          }
+          else {
+            $version = $gv.SemVer
+          }
+          Write-Host "GitVersion FullSemVer: $($gv.FullSemVer)"
+          Write-Host "GitVersion SemVer: $($gv.SemVer)"
+          Write-Host "PackageVersion: $version"
+          "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8NoBOM -Append
 
       - name: Pack
         run: dotnet pack src/McpServer.Client/McpServer.Client.csproj -c Release -p:PackageVersion=${{ steps.version.outputs.version }} -o ./nupkg

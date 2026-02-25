@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using McpServer.Director.Auth;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.ViewModels;
@@ -12,38 +13,54 @@ namespace McpServer.Director.Screens;
 /// </summary>
 internal sealed class MainScreen : Window
 {
-    private readonly McpHttpClient? _client;
+    private readonly DirectorMcpContext _directorContext;
     private readonly IAuthorizationPolicyService _authorizationPolicy;
     private readonly IRoleContext _roleContext;
     private readonly HealthSnapshotsViewModel _healthVm;
+    private readonly DispatcherLogsViewModel _dispatcherLogsVm;
     private readonly SessionLogListViewModel _sessionLogVm;
+    private readonly SyncStatusViewModel _syncStatusVm;
+    private readonly RunSyncViewModel _runSyncVm;
     private readonly TodoListViewModel _todoVm;
     private readonly TodoDetailViewModel _todoDetailVm;
     private readonly WorkspaceListViewModel _workspaceListVm;
+    private readonly WorkspaceDetailViewModel _workspaceDetailVm;
     private readonly WorkspacePolicyViewModel _workspacePolicyVm;
     private Label _authLabel = null!;
     private TabView _tabView = null!;
+    private Label _workspaceContextLabel = null!;
+    private TextView _workspaceContextStatus = null!;
+    private readonly ObservableCollection<WorkspacePickerItem> _workspacePickerSource = [];
+    private bool _authRefreshQueued;
 
     public MainScreen(
         WorkspaceListViewModel workspaceListVm,
+        WorkspaceDetailViewModel workspaceDetailVm,
         WorkspacePolicyViewModel workspacePolicyVm,
         HealthSnapshotsViewModel healthVm,
+        DispatcherLogsViewModel dispatcherLogsVm,
         SessionLogListViewModel sessionLogVm,
+        SyncStatusViewModel syncStatusVm,
+        RunSyncViewModel runSyncVm,
         TodoListViewModel todoVm,
         TodoDetailViewModel todoDetailVm,
         IAuthorizationPolicyService authorizationPolicy,
         IRoleContext roleContext,
-        McpHttpClient? client = null)
+        DirectorMcpContext directorContext)
     {
         _healthVm = healthVm;
+        _dispatcherLogsVm = dispatcherLogsVm;
         _sessionLogVm = sessionLogVm;
+        _syncStatusVm = syncStatusVm;
+        _runSyncVm = runSyncVm;
         _todoVm = todoVm;
         _todoDetailVm = todoDetailVm;
         _workspaceListVm = workspaceListVm;
+        _workspaceDetailVm = workspaceDetailVm;
         _workspacePolicyVm = workspacePolicyVm;
         _authorizationPolicy = authorizationPolicy;
         _roleContext = roleContext;
-        _client = client;
+        _directorContext = directorContext;
 
         Title = "McpServer Director";
         Width = Dim.Fill();
@@ -67,8 +84,7 @@ internal sealed class MainScreen : Window
                     new MenuItem("L_ogout", "", () =>
                     {
                         OidcAuthService.Logout();
-                        UpdateAuthStatus();
-                        RebuildTabs();
+                        QueueAuthStateChangedRefresh();
                     }),
                     null!,
                     new MenuItem("_Quit", "", () => Application.RequestStop()),
@@ -103,71 +119,107 @@ internal sealed class MainScreen : Window
             X = 0,
             Y = 1,
             Width = Dim.Fill(),
-            Height = Dim.Fill(1),
+            Height = Dim.Fill(2),
         };
         Add(_tabView);
         RebuildTabs();
+        _tabView.SelectedTabChanged += (_, e) => RefreshTab(e.NewTab);
+
+        _directorContext.ActiveWorkspaceChanged += (_, _) =>
+        {
+            Application.Invoke(() =>
+            {
+                UpdateWorkspaceContextStatus();
+            });
+
+            _workspacePolicyVm.WorkspacePath = _directorContext.ActiveWorkspacePath ?? "";
+            if (_tabView.SelectedTab?.View is not WorkspaceListScreen)
+                RefreshCurrentTab();
+        };
+        _workspaceListVm.Workspaces.CollectionChanged += (_, _) =>
+        {
+            Application.Invoke(RefreshWorkspacePickerItems);
+        };
+
+        BuildWorkspaceContextRow();
 
         // Status bar
         var statusBar = new StatusBar { Y = Pos.AnchorEnd(1) };
         statusBar.Add(new Shortcut { Key = Key.F2, Title = "Login" });
         statusBar.Add(new Shortcut { Key = Key.F5, Title = "Refresh" });
+        statusBar.Add(new Shortcut { Key = Key.W.WithCtrl, Title = "Workspace" });
         statusBar.Add(new Shortcut { Key = Key.C.WithCtrl, Title = "Copy" });
         statusBar.Add(new Shortcut { Key = Key.Q.WithCtrl, Title = "Quit" });
         Add(statusBar);
 
+        Application.KeyDown += OnApplicationKeyDown;
+        Disposing += (_, _) => Application.KeyDown -= OnApplicationKeyDown;
+
         // Key bindings
         KeyDown += (_, e) =>
         {
-            if (e.KeyCode == KeyCode.F2)
-            {
-                ShowLoginDialog();
-                e.Handled = true;
-            }
-            else if (e.KeyCode == KeyCode.F5)
-            {
-                RefreshCurrentTab();
-                e.Handled = true;
-            }
-            else if (e.KeyCode == (KeyCode.C | KeyCode.CtrlMask))
-            {
-                CopyFocusedText();
-                e.Handled = true;
-            }
-            else if (e.KeyCode == (KeyCode.Q | KeyCode.CtrlMask))
-            {
-                Application.RequestStop();
-                e.Handled = true;
-            }
+            HandleGlobalShortcutKey(e);
         };
 
         // Auto-load on startup
         Loaded += (_, _) =>
         {
-            if (_client is not null)
+            _ = Task.Run(async () =>
             {
-                _ = Task.Run(async () =>
+                var logsScreen = _tabView.Tabs
+                    .Select(t => t.View)
+                    .OfType<DispatcherLogsScreen>()
+                    .FirstOrDefault();
+                if (logsScreen is not null)
+                    await logsScreen.LoadAsync().ConfigureAwait(false);
+
+                if (!_directorContext.HasControlConnection)
+                    return;
+
+                // Load health + workspaces on startup
+                if (_tabView.Tabs.FirstOrDefault()?.View is HealthScreen hs)
+                    await hs.CheckHealthAsync().ConfigureAwait(false);
+                if (_authorizationPolicy.CanViewArea(McpArea.Workspaces))
                 {
-                    // Load health + workspaces on startup
-                    if (_tabView.Tabs.FirstOrDefault()?.View is HealthScreen hs)
-                        await hs.CheckHealthAsync().ConfigureAwait(false);
-                    if (_authorizationPolicy.CanViewArea(McpArea.Workspaces))
-                        await _workspaceListVm.LoadAsync().ConfigureAwait(false);
-                });
-            }
+                    await _workspaceListVm.LoadAsync().ConfigureAwait(false);
+                    Application.Invoke(() =>
+                    {
+                        RefreshWorkspacePickerItems();
+                        TryAutoSelectWorkspaceContext();
+                    });
+                }
+            });
         };
     }
 
     private void ShowLoginDialog()
     {
-        var dlg = new LoginDialog(username =>
-        {
-            UpdateAuthStatus();
-            // Re-attach bearer token to client
-            _client?.TrySetCachedBearerToken();
-            RebuildTabs();
-        });
+        // Avoid mutating the main screen layout while the modal dialog is drawing/running.
+        // Terminal.Gui can throw during nested draw when parent views are rebuilt from a dialog callback.
+        var dlg = new LoginDialog();
         Application.Run(dlg);
+        QueueAuthStateChangedRefresh();
+    }
+
+    private void HandleAuthStateChanged()
+    {
+        UpdateAuthStatus();
+        _directorContext.RefreshBearerTokens();
+        RebuildTabs();
+        RefreshCurrentTab();
+    }
+
+    private void QueueAuthStateChangedRefresh()
+    {
+        if (_authRefreshQueued)
+            return;
+
+        _authRefreshQueued = true;
+        Application.Invoke(() =>
+        {
+            _authRefreshQueued = false;
+            HandleAuthStateChanged();
+        });
     }
 
     private void UpdateAuthStatus()
@@ -231,28 +283,52 @@ internal sealed class MainScreen : Window
     }
 
     private void RefreshCurrentTab()
+        => RefreshTab(_tabView.SelectedTab);
+
+    private void RefreshTab(Tab? tab)
+        => RefreshTabView(tab?.View);
+
+    private void RefreshTabView(View? view)
     {
-        if (_tabView.SelectedTab?.View is HealthScreen hs)
+        if (view is HealthScreen hs)
         {
             _ = Task.Run(hs.CheckHealthAsync);
             return;
         }
 
-        if (_tabView.SelectedTab?.View is SessionLogScreen ss)
+        if (view is SessionLogScreen ss)
         {
             _ = Task.Run(ss.LoadAsync);
             return;
         }
 
-        if (_tabView.SelectedTab?.View is TodoScreen ts)
+        if (view is DispatcherLogsScreen dls)
+        {
+            _ = Task.Run(dls.LoadAsync);
+            return;
+        }
+
+        if (view is TodoScreen ts)
         {
             _ = Task.Run(ts.LoadAsync);
             return;
         }
 
-        if (_tabView.SelectedTab?.View is WorkspaceListScreen)
+        if (view is WorkspaceListScreen ws)
         {
-            _ = Task.Run(() => _workspaceListVm.LoadAsync());
+            _ = Task.Run(ws.LoadAsync);
+            return;
+        }
+
+        if (view is AgentScreen ags)
+        {
+            _ = Task.Run(ags.LoadAllAsync);
+            return;
+        }
+
+        if (view is SyncScreen sync)
+        {
+            _ = Task.Run(sync.CheckStatusAsync);
         }
     }
 
@@ -260,47 +336,60 @@ internal sealed class MainScreen : Window
     {
         var previousTab = _tabView.SelectedTab?.DisplayText?.ToString();
 
-        _tabView.RemoveAll();
+        // TabView.RemoveAll() is inherited from View and removes the control's
+        // internal subviews (including the tab strip). Remove hosted tabs only.
+        foreach (var tab in _tabView.Tabs.ToList())
+        {
+            _tabView.RemoveTab(tab);
+            // Avoid disposing removed tab views here. Terminal.Gui can still hold transient
+            // internal references during redraw and throw when disposed views are re-drawn.
+        }
 
         var selectFirst = true;
 
-        if (_client is not null && _authorizationPolicy.CanViewArea(McpArea.Health))
+        if (_directorContext.HasControlConnection && _authorizationPolicy.CanViewArea(McpArea.Health))
         {
-            _tabView.AddTab(new Tab { DisplayText = "Health", View = new HealthScreen(_healthVm, _client) }, andSelect: selectFirst);
+            _tabView.AddTab(new Tab { DisplayText = "Health", View = new HealthScreen(_healthVm, _directorContext.GetRequiredControlHttpClient()) }, andSelect: selectFirst);
             selectFirst = false;
         }
 
-        if (_authorizationPolicy.CanViewArea(McpArea.Workspaces))
+        if (_authorizationPolicy.CanViewArea(McpArea.DispatcherLogs))
         {
-            _tabView.AddTab(new Tab { DisplayText = "Workspaces", View = new WorkspaceListScreen(_workspaceListVm) }, andSelect: selectFirst);
+            _tabView.AddTab(new Tab { DisplayText = "Logs", View = new DispatcherLogsScreen(_dispatcherLogsVm) }, andSelect: selectFirst);
             selectFirst = false;
         }
 
-        if (_client is not null && _authorizationPolicy.CanViewArea(McpArea.Agents))
+        if (_directorContext.HasControlConnection && _authorizationPolicy.CanViewArea(McpArea.Workspaces))
         {
-            _tabView.AddTab(new Tab { DisplayText = "Agents", View = new AgentScreen(_client) }, andSelect: selectFirst);
+            _tabView.AddTab(new Tab { DisplayText = "Workspaces", View = new WorkspaceListScreen(_workspaceListVm, _workspaceDetailVm, _directorContext) }, andSelect: selectFirst);
             selectFirst = false;
         }
 
-        if (_client is not null && _authorizationPolicy.CanViewArea(McpArea.Todo))
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Agents))
         {
-            _tabView.AddTab(new Tab { DisplayText = "TODO", View = new TodoScreen(_todoVm, _todoDetailVm) }, andSelect: selectFirst);
+            _tabView.AddTab(new Tab { DisplayText = "Agents", View = new AgentScreen(_directorContext) }, andSelect: selectFirst);
             selectFirst = false;
         }
 
-        if (_client is not null && _authorizationPolicy.CanViewArea(McpArea.SessionLogs))
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Todo))
+        {
+            _tabView.AddTab(new Tab { DisplayText = "TODO", View = new TodoScreen(_todoVm, _todoDetailVm, _directorContext) }, andSelect: selectFirst);
+            selectFirst = false;
+        }
+
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.SessionLogs))
         {
             _tabView.AddTab(new Tab { DisplayText = "Sessions", View = new SessionLogScreen(_sessionLogVm) }, andSelect: selectFirst);
             selectFirst = false;
         }
 
-        if (_client is not null && _authorizationPolicy.CanViewArea(McpArea.Sync))
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Sync))
         {
-            _tabView.AddTab(new Tab { DisplayText = "Sync", View = new SyncScreen(_client) }, andSelect: selectFirst);
+            _tabView.AddTab(new Tab { DisplayText = "Sync", View = new SyncScreen(_syncStatusVm, _runSyncVm) }, andSelect: selectFirst);
             selectFirst = false;
         }
 
-        if (_authorizationPolicy.CanViewArea(McpArea.Policy))
+        if (_directorContext.HasControlConnection && _authorizationPolicy.CanViewArea(McpArea.Policy))
         {
             _tabView.AddTab(new Tab { DisplayText = "Policy", View = new WorkspacePolicyScreen(_workspacePolicyVm) }, andSelect: selectFirst);
             selectFirst = false;
@@ -323,5 +412,194 @@ internal sealed class MainScreen : Window
             if (match is not null)
                 _tabView.SelectedTab = match;
         }
+
+        RefreshWorkspacePickerItems();
+        UpdateWorkspaceContextStatus();
+    }
+
+    private void BuildWorkspaceContextRow()
+    {
+        var rowY = Pos.AnchorEnd(2);
+
+        _workspaceContextLabel = new Label
+        {
+            X = 0,
+            Y = rowY,
+            Text = "Workspace:",
+        };
+        Add(_workspaceContextLabel);
+
+        _workspaceContextStatus = new TextView
+        {
+            X = Pos.Right(_workspaceContextLabel) + 1,
+            Y = rowY,
+            Width = Dim.Fill(),
+            Height = 1,
+            ReadOnly = true,
+            WordWrap = false,
+            Text = "",
+        };
+        Add(_workspaceContextStatus);
+
+        RefreshWorkspacePickerItems();
+        UpdateWorkspaceContextStatus();
+    }
+
+    private void RefreshWorkspacePickerItems()
+    {
+        _workspacePickerSource.Clear();
+        foreach (var ws in _workspaceListVm.Workspaces)
+        {
+            var label = ws.IsPrimary
+                ? $"* {ws.Name} ({ws.WorkspacePort})"
+                : $"  {ws.Name} ({ws.WorkspacePort})";
+            _workspacePickerSource.Add(new WorkspacePickerItem(ws.WorkspacePath, label));
+        }
+    }
+
+    private void ShowWorkspaceSelectionDialog()
+    {
+        RefreshWorkspacePickerItems();
+
+        if (_workspacePickerSource.Count == 0)
+        {
+            UpdateWorkspaceContextStatus("No workspaces available. Open Workspaces tab and refresh.");
+            return;
+        }
+
+        var snapshot = new ObservableCollection<WorkspacePickerItem>(_workspacePickerSource.ToList());
+        var selectedPath = _directorContext.ActiveWorkspacePath;
+        string? chosenPath = null;
+
+        var dlg = new Dialog
+        {
+            Title = "Select Workspace",
+            Width = 72,
+            Height = Math.Min(Math.Max(snapshot.Count + 6, 10), 20),
+        };
+
+        var listView = new ListView
+        {
+            X = 1,
+            Y = 1,
+            Width = Dim.Fill(2),
+            Height = Dim.Fill(2),
+        };
+        listView.SetSource(snapshot);
+        dlg.Add(listView);
+
+        if (!string.IsNullOrWhiteSpace(selectedPath))
+        {
+            for (var i = 0; i < snapshot.Count; i++)
+            {
+                if (string.Equals(snapshot[i].WorkspacePath, selectedPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    listView.SelectedItem = i;
+                    listView.EnsureSelectedItemVisible();
+                    break;
+                }
+            }
+        }
+
+        void CommitSelection()
+        {
+            var index = listView.SelectedItem;
+            if (index < 0 || index >= snapshot.Count)
+                return;
+
+            chosenPath = snapshot[index].WorkspacePath;
+            Application.RequestStop();
+        }
+
+        listView.OpenSelectedItem += (_, _) => CommitSelection();
+
+        var activateBtn = new Button { Text = "Activate" };
+        activateBtn.Accepting += (_, _) => CommitSelection();
+        dlg.AddButton(activateBtn);
+
+        var cancelBtn = new Button { Text = "Cancel" };
+        cancelBtn.Accepting += (_, _) => Application.RequestStop();
+        dlg.AddButton(cancelBtn);
+
+        listView.SetFocus();
+        Application.Run(dlg);
+
+        if (string.IsNullOrWhiteSpace(chosenPath))
+            return;
+
+        if (!_directorContext.TrySetActiveWorkspace(chosenPath, out var error))
+            UpdateWorkspaceContextStatus($"Context switch failed: {error}");
+    }
+
+    private void OnApplicationKeyDown(object? sender, Key e)
+    {
+        if (!Visible)
+            return;
+
+        if (e.Handled)
+            return;
+
+        if (e.KeyCode == (KeyCode.W | KeyCode.CtrlMask))
+        {
+            ShowWorkspaceSelectionDialog();
+            e.Handled = true;
+        }
+    }
+
+    private void HandleGlobalShortcutKey(Key e)
+    {
+        if (e.Handled)
+            return;
+
+        if (e.KeyCode == KeyCode.F2)
+        {
+            ShowLoginDialog();
+            e.Handled = true;
+        }
+        else if (e.KeyCode == KeyCode.F5)
+        {
+            RefreshCurrentTab();
+            e.Handled = true;
+        }
+        else if (e.KeyCode == (KeyCode.C | KeyCode.CtrlMask))
+        {
+            CopyFocusedText();
+            e.Handled = true;
+        }
+        else if (e.KeyCode == (KeyCode.Q | KeyCode.CtrlMask))
+        {
+            Application.RequestStop();
+            e.Handled = true;
+        }
+    }
+
+    private void TryAutoSelectWorkspaceContext()
+    {
+        if (_directorContext.HasActiveWorkspaceConnection)
+            return;
+        if (_workspacePickerSource.Count == 0)
+            return;
+
+        var preferred = _workspaceListVm.Workspaces.FirstOrDefault(w => w.IsPrimary)?.WorkspacePath
+                        ?? _workspaceListVm.Workspaces.FirstOrDefault()?.WorkspacePath;
+        if (string.IsNullOrWhiteSpace(preferred))
+            return;
+
+        _directorContext.TrySetActiveWorkspace(preferred, out _);
+    }
+
+    private void UpdateWorkspaceContextStatus(string? explicitStatus = null)
+    {
+        if (_workspaceContextStatus is null)
+            return;
+
+        var control = _directorContext.ControlClient?.BaseUrl ?? "(none)";
+        var active = _directorContext.ActiveWorkspacePath ?? "(none)";
+        _workspaceContextStatus.Text = explicitStatus ?? $"Control: {control} | Active: {active}";
+    }
+
+    private sealed record WorkspacePickerItem(string WorkspacePath, string DisplayText)
+    {
+        public override string ToString() => DisplayText;
     }
 }

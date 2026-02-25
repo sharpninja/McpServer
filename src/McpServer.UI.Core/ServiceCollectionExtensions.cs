@@ -36,9 +36,23 @@ public static class ServiceCollectionExtensions
 
         // Register ViewModels as transient
         services.AddTransient<WorkspaceListViewModel>();
+        services.AddTransient<WorkspaceDetailViewModel>();
         services.AddTransient<WorkspacePolicyViewModel>();
         services.AddTransient<HealthSnapshotsViewModel>();
         services.AddTransient<SessionLogListViewModel>();
+        services.AddTransient<DispatcherLogsViewModel>();
+        services.AddTransient<SyncStatusViewModel>();
+        services.AddTransient<RunSyncViewModel>();
+        services.AddTransient<RepoListViewModel>();
+        services.AddTransient<RepoFileViewModel>();
+        services.AddTransient<WriteRepoFileViewModel>();
+        services.AddTransient<ContextSearchViewModel>();
+        services.AddTransient<ContextPackViewModel>();
+        services.AddTransient<ContextSourcesViewModel>();
+        services.AddTransient<ContextRebuildIndexViewModel>();
+        services.AddTransient<AuthConfigViewModel>();
+        services.AddTransient<DiagnosticExecutionPathViewModel>();
+        services.AddTransient<DiagnosticAppSettingsPathViewModel>();
         services.AddTransient<TodoListViewModel>();
         services.AddTransient<TodoDetailViewModel>();
         services.AddTransient<CreateTodoViewModel>();

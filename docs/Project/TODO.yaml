@@ -1,9 +1,9 @@
 requirements-management:
   high-priority:
-  - id: FR-MCP-026
+  - id: REQ-MGMT-001
     title: Requirements Management Feature — CRUD + document generation endpoints
     estimate: 4-6 days
-    note: 'High priority — builds on FR-MCP-023 (AI requirements analysis). Provides a first-class Requirements Management subsystem: in-memory model loaded from the four canonical docs, full CRUD for FR/TR/TEST entries, and REST + MCP tool endpoints to regenerate any or all four documents in their exact established Markdown format (individually or as a ZIP).'
+    note: 'High priority — builds on FR-MCP-023 (AI requirements analysis). This TODO intentionally uses a non-FR ID because FR-MCP-026 was reassigned to Keycloak OIDC authentication in the requirements docs. Provides a first-class Requirements Management subsystem: in-memory model loaded from the four canonical docs, full CRUD for FR/TR/TEST entries, and REST + MCP tool endpoints to regenerate any or all four documents in their exact established Markdown format (individually or as a ZIP).'
     done: false
     description:
     - 'Create a RequirementsManagementController with REST endpoints for CRUD on Functional Requirements (FR), Technical Requirements (TR), and Testing Requirements (TEST) entries, backed by the four canonical files: Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, and TR-per-FR-Mapping.md.'
@@ -21,9 +21,9 @@ requirements-management:
     - All public types require XML doc comments (CS1591 enforced as error in this repo).
     - ApiKeyAuthFilter is no longer used; all /mcp/* routes are protected by WorkspaceAuthMiddleware at the pipeline level. No per-controller auth attributes needed.
     functional-requirements:
-    - 'FR-MCP-026: Server shall support CRUD for FR, TR, and TEST requirement entries stored in the four canonical project documentation files.'
-    - 'FR-MCP-026: Server shall expose a document generation endpoint rendering any or all four requirements documents in their established Markdown format.'
-    - 'FR-MCP-026: Server shall expose MCP tools for requirements CRUD and document generation usable by AI agents.'
+    - 'FR-ID-TBD: Server shall support CRUD for FR, TR, and TEST requirement entries stored in the four canonical project documentation files.'
+    - 'FR-ID-TBD: Server shall expose a document generation endpoint rendering any or all four requirements documents in their established Markdown format.'
+    - 'FR-ID-TBD: Server shall expose MCP tools for requirements CRUD and document generation usable by AI agents.'
     technical-requirements:
     - 'TR-MCP-REQ-002: RequirementsDocumentService parses all four files into a typed in-memory model on startup and keeps files synchronized on mutation.'
     - 'TR-MCP-REQ-002: RequirementsDocumentRenderer produces Markdown output matching exact heading style and bullet/table structure of each canonical document.'
@@ -1075,7 +1075,7 @@ mvp-mcp:
   high-priority:
   - id: MVP-MCP-002
     title: Move VS2026 extension copilot functions into MCP server as todo endpoints
-    done: false
+    done: true
     description:
     - Extract the copilot-related functions from the VS2026 VSIX extension and expose them as MCP server endpoints under /mcp/todo or similar.
     - This consolidates agent-facing capabilities into the MCP server rather than the IDE extension.
@@ -1107,7 +1107,7 @@ mvp-mcp:
     technical-requirements: []
     implementation-tasks:
     - task: 'Phase 0: Add UI.Core RBAC contracts (IRoleContext, IAuthorizationPolicyService), area enum/action keys, shared list/detail VM base types, and IAsyncRelayCommand-compatible wrappers.'
-      done: false
+      done: true
     - task: 'Phase 1: Add Director RoleContext + authorization policy implementation, tab metadata registry, and DI registrations for all UI.Core API adapters backed by McpServer.Client.'
       done: false
     - task: 'Phase 2.1: Implement Health area handlers + list/detail VMs and migrate Health tab to ViewModel-only.'
@@ -1117,7 +1117,7 @@ mvp-mcp:
     - task: 'Phase 2.3: Complete Agents endpoint coverage (definitions/instances/events/validate/ban) with list/detail VMs and migrate Agents tab.'
       done: false
     - task: 'Phase 2.4: Complete TODO endpoint coverage (CRUD + requirements/prompt endpoints) with list/detail VMs and migrate TODO tab.'
-      done: false
+      done: true
     - task: 'Phase 2.5: Complete SessionLog query/submit/dialog endpoint coverage with session list/detail VMs and migrate Sessions tab.'
       done: false
     - task: 'Phase 2.6: Complete Sync run/status handlers with list/detail VMs and migrate Sync tab (admin-only run action).'

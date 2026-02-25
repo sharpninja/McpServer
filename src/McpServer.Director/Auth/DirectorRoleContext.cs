@@ -25,6 +25,18 @@ internal sealed class DirectorRoleContext : IRoleContext
     private static TokenInfo? GetActiveUser()
     {
         var user = OidcAuthService.GetCurrentUser();
-        return user is { IsExpired: false } ? user : null;
+        if (user is null)
+            return null;
+
+        if (!user.IsExpired)
+            return user;
+
+        // RBAC checks happen before some request paths that would otherwise refresh
+        // the token. Attempt refresh here so permissions reflect the current login.
+        if (!McpHttpClient.TryRefreshCachedToken())
+            return null;
+
+        var refreshed = OidcAuthService.GetCurrentUser();
+        return refreshed is { IsExpired: false } ? refreshed : null;
     }
 }

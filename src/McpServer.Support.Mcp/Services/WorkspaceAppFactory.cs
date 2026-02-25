@@ -32,6 +32,7 @@ public static class WorkspaceAppFactory
             workspacePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
         var effectiveDataDir = string.IsNullOrWhiteSpace(dataDirectory) ? workspacePath : dataDirectory;
         var dataSource = Path.Combine(effectiveDataDir, "mcp.db");
+        var logger = loggerFactory.CreateLogger("McpServer.Support.Mcp.WorkspaceAppFactory");
 
         var builder = WebApplication.CreateSlimBuilder();
 
@@ -156,17 +157,36 @@ public static class WorkspaceAppFactory
             .AddApplicationPart(typeof(WorkspaceAppFactory).Assembly)
             .ConfigureApplicationPartManager(manager =>
             {
-                // Exclude WorkspaceController — workspace lifecycle is managed by the primary host only.
-                manager.FeatureProviders.Add(new ExcludeControllerFeatureProvider(typeof(Controllers.WorkspaceController)));
+                // Exclude primary-host-only controllers from child workspace apps.
+                manager.FeatureProviders.Add(new ExcludeControllerFeatureProvider(
+                    typeof(Controllers.WorkspaceController),
+                    typeof(Controllers.AgentController)));
             });
 
         var app = builder.Build();
 
-        // Run workspace DB migrations.
+        // Run workspace DB migrations only when needed. Calling Migrate() unconditionally can block
+        // child-host startup on SQLite migration locks even when the schema is already current.
         using (var scope = app.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-            db.Database.Migrate();
+            var pendingMigrations = db.Database.GetPendingMigrations().ToArray();
+            if (pendingMigrations.Length > 0)
+            {
+                logger.LogInformation(
+                    "Applying {Count} pending workspace DB migration(s): Workspace={WorkspacePath}; Port={Port}",
+                    pendingMigrations.Length,
+                    workspacePath,
+                    port);
+                db.Database.Migrate();
+            }
+            else
+            {
+                logger.LogDebug(
+                    "Workspace DB already up to date; skipping migration lock acquisition: Workspace={WorkspacePath}; Port={Port}",
+                    workspacePath,
+                    port);
+            }
         }
 
         app.UseMiddleware<InteractionLoggingMiddleware>();

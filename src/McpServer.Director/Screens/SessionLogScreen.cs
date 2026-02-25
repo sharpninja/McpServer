@@ -8,7 +8,7 @@ internal sealed class SessionLogScreen : View
 {
     private readonly SessionLogListViewModel _viewModel;
     private TableView _table = null!;
-    private Label _statusLabel = null!;
+    private TextView _statusLabel = null!;
 
     public SessionLogScreen(SessionLogListViewModel viewModel)
     {
@@ -26,10 +26,20 @@ internal sealed class SessionLogScreen : View
         {
             X = 0, Y = 0, Width = Dim.Fill(), Height = Dim.Fill(2),
             FullRowSelect = true,
+            MultiSelect = false,
         };
         Add(_table);
 
-        _statusLabel = new Label { X = 0, Y = Pos.AnchorEnd(2), Width = Dim.Fill(), Text = "" };
+        _statusLabel = new TextView
+        {
+            X = 0,
+            Y = Pos.AnchorEnd(2),
+            Width = Dim.Fill(),
+            Height = 1,
+            ReadOnly = true,
+            WordWrap = false,
+            Text = "",
+        };
         Add(_statusLabel);
 
         var refreshBtn = new Button { X = 0, Y = Pos.AnchorEnd(1), Text = "Refresh" };

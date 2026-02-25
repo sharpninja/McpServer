@@ -11,8 +11,8 @@ internal static class CommandHelpers
         var client = McpHttpClient.FromMarkerFile(workspace);
         if (client is null)
         {
-            AnsiConsole.MarkupLine("[red]Error:[/] Could not find AGENTS-README-FIRST.yaml.");
-            AnsiConsole.MarkupLine("[dim]Run this command from a workspace directory, or pass --workspace <path>.[/]");
+            AnsiConsole.MarkupLine("[red]Error:[/] Could not find AGENTS-README-FIRST.yaml and no default MCP URL is configured.");
+            AnsiConsole.MarkupLine("[dim]Run this command from a workspace directory, or pass --workspace <path>, or set a default URL with 'director config set-default-url <url>'.[/]");
             return null;
         }
 

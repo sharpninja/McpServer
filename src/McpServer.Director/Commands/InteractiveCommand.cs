@@ -37,20 +37,13 @@ internal static class InteractiveCommand
 
         cmd.SetHandler((string? workspace) =>
         {
-            // Resolve McpHttpClient from marker file
-            var client = McpHttpClient.FromMarkerFile(workspace);
-            client?.TrySetCachedBearerToken();
+            var activeWorkspaceClient = McpHttpClient.FromMarkerOnly(workspace);
+            activeWorkspaceClient?.TrySetCachedBearerToken();
 
-            McpServerClient? workspaceApi = null;
-            if (client is not null)
-            {
-                workspaceApi = McpServerClientFactory.Create(new McpServerClientOptions
-                {
-                    BaseUrl = new Uri(client.BaseUrl),
-                    ApiKey = client.ApiKey,
-                    Timeout = TimeSpan.FromMinutes(10),
-                });
-            }
+            var controlClient = McpHttpClient.FromDefaultUrlOrMarker(workspace);
+            controlClient?.TrySetCachedBearerToken();
+
+            var directorContext = new DirectorMcpContext(controlClient, activeWorkspaceClient);
 
             // Build DI container with CQRS + UI Core
             var services = new ServiceCollection();
@@ -62,21 +55,29 @@ internal static class InteractiveCommand
             services.RemoveAll<IAuthorizationPolicyService>();
             services.AddSingleton<IRoleContext, DirectorRoleContext>();
             services.AddSingleton<IAuthorizationPolicyService, DirectorAuthorizationPolicyService>();
-            if (client is not null)
-                services.AddSingleton(client);
-            services.AddSingleton<IHealthApiClient>(_ => new HealthApiClientAdapter(client));
-            services.AddSingleton<ISessionLogApiClient>(_ => new SessionLogApiClientAdapter(client));
-            if (workspaceApi is not null)
-                services.AddSingleton(workspaceApi);
-            services.AddSingleton<IWorkspaceApiClient>(_ => new WorkspaceApiClientAdapter(workspaceApi));
-            services.AddSingleton<ITodoApiClient>(_ => new TodoApiClientAdapter(workspaceApi));
+            services.AddSingleton(directorContext);
+            if (controlClient is not null)
+                services.AddSingleton(controlClient);
+            services.AddSingleton<IHealthApiClient>(_ => new HealthApiClientAdapter(directorContext.ControlClient));
+            services.AddSingleton<ISessionLogApiClient>(_ => new SessionLogApiClientAdapter(directorContext));
+            services.AddSingleton<IWorkspaceApiClient>(_ => new WorkspaceApiClientAdapter(directorContext));
+            services.AddSingleton<ISyncApiClient>(_ => new SyncApiClientAdapter(directorContext));
+            services.AddSingleton<IRepoApiClient>(_ => new RepoApiClientAdapter(directorContext));
+            services.AddSingleton<IContextApiClient>(_ => new ContextApiClientAdapter(directorContext));
+            services.AddSingleton<IAuthConfigApiClient>(_ => new AuthConfigApiClientAdapter(directorContext));
+            services.AddSingleton<IDiagnosticApiClient>(_ => new DiagnosticApiClientAdapter(directorContext));
+            services.AddSingleton<ITodoApiClient>(_ => new TodoApiClientAdapter(directorContext));
             using var sp = services.BuildServiceProvider();
 
             // Resolve ViewModels
             var workspaceListVm = sp.GetRequiredService<WorkspaceListViewModel>();
+            var workspaceDetailVm = sp.GetRequiredService<WorkspaceDetailViewModel>();
             var workspacePolicyVm = sp.GetRequiredService<WorkspacePolicyViewModel>();
             var healthVm = sp.GetRequiredService<HealthSnapshotsViewModel>();
+            var dispatcherLogsVm = sp.GetRequiredService<DispatcherLogsViewModel>();
             var sessionLogVm = sp.GetRequiredService<SessionLogListViewModel>();
+            var syncStatusVm = sp.GetRequiredService<SyncStatusViewModel>();
+            var runSyncVm = sp.GetRequiredService<RunSyncViewModel>();
             var todoVm = sp.GetRequiredService<TodoListViewModel>();
             var todoDetailVm = sp.GetRequiredService<TodoDetailViewModel>();
             var roleContext = sp.GetRequiredService<IRoleContext>();
@@ -89,19 +90,31 @@ internal static class InteractiveCommand
             {
                 var mainScreen = new MainScreen(
                     workspaceListVm,
+                    workspaceDetailVm,
                     workspacePolicyVm,
                     healthVm,
+                    dispatcherLogsVm,
                     sessionLogVm,
+                    syncStatusVm,
+                    runSyncVm,
                     todoVm,
                     todoDetailVm,
                     authorizationPolicy,
                     roleContext,
-                    client);
+                    directorContext);
                 Terminal.Gui.Application.Run(mainScreen);
             }
             finally
             {
                 Terminal.Gui.Application.Shutdown();
+                try
+                {
+                    Console.Clear();
+                }
+                catch
+                {
+                    // Best-effort terminal cleanup on exit.
+                }
             }
         }, WorkspaceOption);
 

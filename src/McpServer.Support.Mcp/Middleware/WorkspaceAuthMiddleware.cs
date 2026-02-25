@@ -57,6 +57,15 @@ public sealed class WorkspaceAuthMiddleware
             return;
         }
 
+        // When OIDC is enabled, agent mutation routes are JWT-protected via [Authorize(Policy="AgentManager")].
+        // Skip API-key enforcement here so ASP.NET authorization can challenge/validate the bearer token.
+        var oidcEnabled = !string.IsNullOrWhiteSpace(configuration["Mcp:Auth:Authority"]);
+        if (oidcEnabled && IsAgentMutationRoute(path, context.Request.Method))
+        {
+            await _next(context).ConfigureAwait(false);
+            return;
+        }
+
         var workspacePath = configuration["Mcp:RepoRoot"] ?? string.Empty;
 
         // If no workspace is configured or no token generated yet (startup race), allow through.
@@ -120,5 +129,13 @@ public sealed class WorkspaceAuthMiddleware
         await context.Response.WriteAsync(
             JsonSerializer.Serialize(body, s_json),
             context.RequestAborted).ConfigureAwait(false);
+    }
+
+    private static bool IsAgentMutationRoute(PathString path, string method)
+    {
+        if (!path.StartsWithSegments("/mcp/agents", StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        return !s_readOnlyMethods.Contains(method);
     }
 }

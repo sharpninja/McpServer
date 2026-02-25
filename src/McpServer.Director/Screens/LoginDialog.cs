@@ -10,7 +10,7 @@ namespace McpServer.Director.Screens;
 internal sealed class LoginDialog : Dialog
 {
     private readonly Action<string>? _onLoginSuccess;
-    private Label _statusLabel = null!;
+    private TextView _statusLabel = null!;
     private TextField _codeField = null!;
     private TextField _uriField = null!;
 
@@ -61,7 +61,16 @@ internal sealed class LoginDialog : Dialog
 
         _codeField = new TextField { X = 1, Y = 4, Width = Dim.Fill(2), Text = "", ReadOnly = true };
         _uriField = new TextField { X = 1, Y = 5, Width = Dim.Fill(2), Text = "", ReadOnly = true };
-        _statusLabel = new Label { X = 1, Y = 7, Width = Dim.Fill(2), Text = "" };
+        _statusLabel = new TextView
+        {
+            X = 1,
+            Y = 7,
+            Width = Dim.Fill(2),
+            Height = 1,
+            ReadOnly = true,
+            WordWrap = false,
+            Text = "",
+        };
         Add(_codeField, _uriField, _statusLabel);
 
         // Whoami section
@@ -115,6 +124,7 @@ internal sealed class LoginDialog : Dialog
                         _statusLabel.Text = $"✓ Logged in as {result.Username}";
                         whoamiLabel.Text = GetWhoamiText();
                         _onLoginSuccess?.Invoke(result.Username ?? "unknown");
+                        Application.RequestStop();
                     }
                     else
                     {

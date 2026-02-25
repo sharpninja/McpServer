@@ -1,3 +1,5 @@
+using System.Text.Json;
+using McpServer.UI.Core.ViewModels;
 using Terminal.Gui;
 
 namespace McpServer.Director.Screens;
@@ -5,13 +7,15 @@ namespace McpServer.Director.Screens;
 /// <summary>Terminal.Gui screen for ingestion sync management.</summary>
 internal sealed class SyncScreen : View
 {
-    private readonly McpHttpClient _client;
-    private Label _statusLabel = null!;
+    private readonly SyncStatusViewModel _syncStatusViewModel;
+    private readonly RunSyncViewModel _runSyncViewModel;
+    private TextView _statusLabel = null!;
     private TextView _detailView = null!;
 
-    public SyncScreen(McpHttpClient client)
+    public SyncScreen(SyncStatusViewModel syncStatusViewModel, RunSyncViewModel runSyncViewModel)
     {
-        _client = client;
+        _syncStatusViewModel = syncStatusViewModel;
+        _runSyncViewModel = runSyncViewModel;
         Title = "Sync";
         Width = Dim.Fill();
         Height = Dim.Fill();
@@ -21,7 +25,16 @@ internal sealed class SyncScreen : View
 
     private void BuildUi()
     {
-        _statusLabel = new Label { X = 0, Y = 0, Width = Dim.Fill(), Text = "" };
+        _statusLabel = new TextView
+        {
+            X = 0,
+            Y = 0,
+            Width = Dim.Fill(),
+            Height = 1,
+            ReadOnly = true,
+            WordWrap = false,
+            Text = "",
+        };
         Add(_statusLabel);
 
         _detailView = new TextView
@@ -45,23 +58,43 @@ internal sealed class SyncScreen : View
         SetStatus("⏳ Checking sync status...");
         try
         {
-            var json = await _client.GetStringAsync("/mcp/sync/status").ConfigureAwait(false);
+            await _syncStatusViewModel.GetStatusCommand.ExecuteAsync(null).ConfigureAwait(false);
+            var result = _syncStatusViewModel.LastResult;
             Application.Invoke(() =>
             {
-                _statusLabel.Text = "✓ Sync status retrieved";
-                _detailView.Text = json;
+                if (result is { IsSuccess: true, Value: not null })
+                {
+                    _statusLabel.Text = "✓ Sync status retrieved";
+                    _detailView.Text = JsonSerializer.Serialize(result.Value, new JsonSerializerOptions { WriteIndented = true });
+                }
+                else
+                {
+                    _statusLabel.Text = $"✗ {result?.Error ?? "Unknown sync status error"}";
+                }
             });
         }
         catch (Exception ex) { SetStatus($"✗ {ex.Message}"); }
     }
 
-    private async Task RunSyncAsync()
+    public async Task RunSyncAsync()
     {
         SetStatus("⏳ Running sync...");
         try
         {
-            await _client.PostRawAsync("/mcp/sync/run").ConfigureAwait(false);
-            SetStatus("✓ Sync completed");
+            await _runSyncViewModel.RunCommand.ExecuteAsync(null).ConfigureAwait(false);
+            var result = _runSyncViewModel.LastResult;
+            Application.Invoke(() =>
+            {
+                if (result is { IsSuccess: true, Value: not null })
+                {
+                    _statusLabel.Text = "✓ Sync completed";
+                    _detailView.Text = JsonSerializer.Serialize(result.Value, new JsonSerializerOptions { WriteIndented = true });
+                }
+                else
+                {
+                    _statusLabel.Text = $"✗ {result?.Error ?? "Unknown sync run error"}";
+                }
+            });
         }
         catch (Exception ex) { SetStatus($"✗ {ex.Message}"); }
     }

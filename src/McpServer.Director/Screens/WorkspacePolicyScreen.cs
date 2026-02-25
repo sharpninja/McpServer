@@ -36,7 +36,28 @@ internal sealed class WorkspacePolicyScreen : View
         };
         Add(pathLabel, pathField);
 
-        _binder.BindTextField(pathField, val => _vm.WorkspacePath = val);
+        var syncingPathField = false;
+        _binder.BindTextField(pathField, val =>
+        {
+            if (!syncingPathField)
+                _vm.WorkspacePath = val;
+        });
+        _binder.BindProperty(_vm, nameof(_vm.WorkspacePath), () =>
+        {
+            var current = pathField.Text ?? "";
+            if (string.Equals(current, _vm.WorkspacePath, StringComparison.Ordinal))
+                return;
+
+            syncingPathField = true;
+            try
+            {
+                pathField.Text = _vm.WorkspacePath;
+            }
+            finally
+            {
+                syncingPathField = false;
+            }
+        });
 
         // Ban lists — each as a labeled text area
         var y = 2;
@@ -46,11 +67,14 @@ internal sealed class WorkspacePolicyScreen : View
         var individualsView = AddBanListSection(ref y, "Banned Individuals:", _vm.BannedIndividuals);
 
         // Status / error
-        var statusLabel = new Label
+        var statusLabel = new TextView
         {
             X = 0,
             Y = Pos.AnchorEnd(2),
             Width = Dim.Fill(),
+            Height = 1,
+            ReadOnly = true,
+            WordWrap = false,
             Text = "",
         };
         Add(statusLabel);

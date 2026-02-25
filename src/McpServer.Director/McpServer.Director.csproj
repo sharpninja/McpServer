@@ -17,6 +17,7 @@
     <Description>CLI management tool for McpServer. Provides workspace management, agent orchestration, compliance policy editing, Keycloak OIDC auth, and an interactive Terminal.Gui TUI with 7 tabbed screens. 18 CLI commands via System.CommandLine.</Description>
     <PackageTags>cli;director;mcp;management;dotnet-tool;terminal-gui;agent-orchestration</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/sharpninja/McpServer</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
@@ -33,5 +34,9 @@
   <ItemGroup>
     <ProjectReference Include="..\McpServer.Client\McpServer.Client.csproj" />
     <ProjectReference Include="..\McpServer.UI.Core\McpServer.UI.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>

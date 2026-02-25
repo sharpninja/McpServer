@@ -37,6 +37,9 @@ internal static class Program
         // FR-MCP-030: Register auth commands (login, logout, whoami)
         AuthCommands.Register(rootCommand);
 
+        // Director CLI defaults (e.g., default base URL outside workspace markers)
+        ConfigCommands.Register(rootCommand);
+
         // FR-MCP-030: Register interactive TUI command
         InteractiveCommand.Register(rootCommand);
 
@@ -63,28 +66,26 @@ internal static class Program
         services.AddSingleton<IRoleContext, DirectorRoleContext>();
         services.AddSingleton<IAuthorizationPolicyService, DirectorAuthorizationPolicyService>();
 
-        var legacyClient = McpHttpClient.FromMarkerFile(workspace);
-        legacyClient?.TrySetCachedBearerToken();
-        if (legacyClient is not null)
-            services.AddSingleton(legacyClient);
-        services.AddSingleton<IHealthApiClient>(_ => new HealthApiClientAdapter(legacyClient));
-        services.AddSingleton<ISessionLogApiClient>(_ => new SessionLogApiClientAdapter(legacyClient));
+        var activeWorkspaceClient = McpHttpClient.FromMarkerOnly(workspace);
+        activeWorkspaceClient?.TrySetCachedBearerToken();
 
-        McpServerClient? workspaceApi = null;
-        if (legacyClient is not null)
-        {
-            workspaceApi = McpServerClientFactory.Create(new McpServerClientOptions
-            {
-                BaseUrl = new Uri(legacyClient.BaseUrl),
-                ApiKey = legacyClient.ApiKey,
-                Timeout = TimeSpan.FromMinutes(10),
-            });
-        }
+        var controlClient = McpHttpClient.FromDefaultUrlOrMarker(workspace);
+        controlClient?.TrySetCachedBearerToken();
 
-        if (workspaceApi is not null)
-            services.AddSingleton(workspaceApi);
-        services.AddSingleton<IWorkspaceApiClient>(_ => new WorkspaceApiClientAdapter(workspaceApi));
-        services.AddSingleton<ITodoApiClient>(_ => new TodoApiClientAdapter(workspaceApi));
+        var directorContext = new DirectorMcpContext(controlClient, activeWorkspaceClient);
+        services.AddSingleton(directorContext);
+        if (controlClient is not null)
+            services.AddSingleton(controlClient);
+
+        services.AddSingleton<IHealthApiClient>(_ => new HealthApiClientAdapter(directorContext.ControlClient));
+        services.AddSingleton<ISessionLogApiClient>(_ => new SessionLogApiClientAdapter(directorContext));
+        services.AddSingleton<IWorkspaceApiClient>(_ => new WorkspaceApiClientAdapter(directorContext));
+        services.AddSingleton<ISyncApiClient>(_ => new SyncApiClientAdapter(directorContext));
+        services.AddSingleton<IRepoApiClient>(_ => new RepoApiClientAdapter(directorContext));
+        services.AddSingleton<IContextApiClient>(_ => new ContextApiClientAdapter(directorContext));
+        services.AddSingleton<IAuthConfigApiClient>(_ => new AuthConfigApiClientAdapter(directorContext));
+        services.AddSingleton<IDiagnosticApiClient>(_ => new DiagnosticApiClientAdapter(directorContext));
+        services.AddSingleton<ITodoApiClient>(_ => new TodoApiClientAdapter(directorContext));
 
         return services.BuildServiceProvider();
     }

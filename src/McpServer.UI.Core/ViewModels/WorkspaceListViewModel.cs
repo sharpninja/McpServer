@@ -52,30 +52,69 @@ public partial class WorkspaceListViewModel : ObservableObject
     /// <returns>A task representing the async operation.</returns>
     public async Task LoadAsync(CancellationToken ct = default)
     {
-        IsLoading = true;
-        ErrorMessage = null;
+        InvokeOnUiThread(() =>
+        {
+            IsLoading = true;
+            ErrorMessage = null;
+        });
         try
         {
             var result = await RefreshCommand.DispatchAsync(ct).ConfigureAwait(false);
             if (result.IsSuccess && result.Value is not null)
             {
-                Workspaces.Clear();
-                foreach (var ws in result.Value.Items)
-                    Workspaces.Add(ws);
-                TotalCount = result.Value.TotalCount;
+                var items = result.Value.Items.ToArray();
+                var totalCount = result.Value.TotalCount;
+
+                InvokeOnUiThread(() =>
+                {
+                    Workspaces.Clear();
+                    foreach (var ws in items)
+                        Workspaces.Add(ws);
+                    TotalCount = totalCount;
+                });
             }
             else
             {
-                ErrorMessage = result.Error ?? "Unknown error loading workspaces.";
+                var error = result.Error ?? "Unknown error loading workspaces.";
+                InvokeOnUiThread(() => ErrorMessage = error);
             }
         }
         catch (Exception ex)
         {
-            ErrorMessage = ex.Message;
+            var error = ex.Message;
+            InvokeOnUiThread(() => ErrorMessage = error);
         }
         finally
         {
-            IsLoading = false;
+            InvokeOnUiThread(() => IsLoading = false);
         }
+    }
+
+    private static void InvokeOnUiThread(Action action)
+    {
+        if (TryInvokeTerminalGuiApplication(action))
+            return;
+
+        action();
+    }
+
+    private static bool TryInvokeTerminalGuiApplication(Action action)
+    {
+        var applicationType = Type.GetType("Terminal.Gui.Application, Terminal.Gui");
+        if (applicationType is null)
+            return false;
+
+        var invokeMethod = applicationType.GetMethod(
+            "Invoke",
+            System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static,
+            binder: null,
+            types: [typeof(Action)],
+            modifiers: null);
+
+        if (invokeMethod is null)
+            return false;
+
+        invokeMethod.Invoke(obj: null, parameters: [action]);
+        return true;
     }
 }

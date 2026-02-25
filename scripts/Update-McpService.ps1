@@ -55,6 +55,12 @@ $PreservePatterns = @(
     '*.db-wal'
 )
 
+# Directories containing runtime data that should survive updates.
+$PreserveDirectories = @(
+    'logs',
+    'mcp-data'
+)
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -84,6 +90,167 @@ function Wait-ProcessExit {
     return $false
 }
 
+function Get-PrefixedFallbackPort {
+    param([int]$Port)
+
+    $candidateText = "1$Port"
+    $candidate = 0
+    if (-not [int]::TryParse($candidateText, [ref]$candidate)) {
+        return $null
+    }
+
+    if ($candidate -lt 1 -or $candidate -gt 65535) {
+        return $null
+    }
+
+    return $candidate
+}
+
+function Test-HealthEndpoint {
+    param(
+        [Parameter(Mandatory)]
+        [int]$Port,
+        [int]$Attempts = 1,
+        [int]$TimeoutSeconds = 3,
+        [int]$DelaySeconds = 2
+    )
+
+    $lastError = $null
+    for ($attempt = 1; $attempt -le $Attempts; $attempt++) {
+        try {
+            $r = Invoke-WebRequest -Uri "http://localhost:$Port/health" -TimeoutSec $TimeoutSeconds -UseBasicParsing -ErrorAction Stop
+            return [pscustomobject]@{
+                Healthy    = $true
+                Port       = $Port
+                StatusCode = [int]$r.StatusCode
+                Content    = [string]$r.Content
+                Error      = $null
+            }
+        }
+        catch {
+            $lastError = $_.Exception.Message
+            if ($attempt -lt $Attempts) {
+                Start-Sleep -Seconds $DelaySeconds
+            }
+        }
+    }
+
+    return [pscustomobject]@{
+        Healthy    = $false
+        Port       = $Port
+        StatusCode = $null
+        Content    = $null
+        Error      = $lastError
+    }
+}
+
+function Remove-StaleInstallContent {
+    param(
+        [Parameter(Mandatory)]
+        [string]$InstallRoot,
+        [Parameter(Mandatory)]
+        [string]$PublishRoot,
+        [string[]]$PreserveFilePatterns = @(),
+        [string[]]$PreserveDirNames = @()
+    )
+
+    if (-not (Test-Path $InstallRoot) -or -not (Test-Path $PublishRoot)) {
+        return [pscustomobject]@{
+            FilesRemoved = 0
+            DirsRemoved  = 0
+        }
+    }
+
+    $pathComparer = [System.StringComparer]::OrdinalIgnoreCase
+    $sourceFiles = [System.Collections.Generic.HashSet[string]]::new($pathComparer)
+    $sourceDirs  = [System.Collections.Generic.HashSet[string]]::new($pathComparer)
+
+    function Get-RelativePathCompat {
+        param(
+            [Parameter(Mandatory)][string]$BasePath,
+            [Parameter(Mandatory)][string]$TargetPath
+        )
+
+        $baseFull = [System.IO.Path]::GetFullPath($BasePath).TrimEnd('\','/') + [System.IO.Path]::DirectorySeparatorChar
+        $targetFull = [System.IO.Path]::GetFullPath($TargetPath)
+
+        if ($targetFull.StartsWith($baseFull, [System.StringComparison]::OrdinalIgnoreCase)) {
+            return $targetFull.Substring($baseFull.Length)
+        }
+
+        try {
+            $baseUri = [System.Uri]($baseFull)
+            $targetUri = [System.Uri]($targetFull)
+            return [System.Uri]::UnescapeDataString($baseUri.MakeRelativeUri($targetUri).ToString()).Replace('/','\')
+        }
+        catch {
+            return $TargetPath
+        }
+    }
+
+    foreach ($item in Get-ChildItem -Path $PublishRoot -Recurse -Force -ErrorAction SilentlyContinue) {
+        $relative = Get-RelativePathCompat -BasePath $PublishRoot -TargetPath $item.FullName
+        if ([string]::IsNullOrWhiteSpace($relative) -or $relative -eq '.') { continue }
+        if ($item.PSIsContainer) { [void]$sourceDirs.Add($relative) } else { [void]$sourceFiles.Add($relative) }
+    }
+
+    $preserveDirSet = [System.Collections.Generic.HashSet[string]]::new($pathComparer)
+    foreach ($dirName in $PreserveDirNames) {
+        if (-not [string]::IsNullOrWhiteSpace($dirName)) {
+            [void]$preserveDirSet.Add($dirName.Trim('\','/'))
+        }
+    }
+
+    function Test-IsUnderPreservedDir {
+        param([string]$RelativePath)
+        $topSegment = ($RelativePath -split '[\\/]', 2)[0]
+        return $preserveDirSet.Contains($topSegment)
+    }
+
+    function Test-IsPreservedRootFile {
+        param([string]$RelativePath)
+        if (Test-IsUnderPreservedDir -RelativePath $RelativePath) { return $true }
+        if ($RelativePath -match '[\\/]') { return $false }
+        $fileName = [System.IO.Path]::GetFileName($RelativePath)
+        foreach ($pattern in $PreserveFilePatterns) {
+            if ($fileName -like $pattern) { return $true }
+        }
+        return $false
+    }
+
+    $filesRemoved = 0
+    $dirsRemoved = 0
+
+    foreach ($file in Get-ChildItem -Path $InstallRoot -Recurse -Force -File -ErrorAction SilentlyContinue) {
+        $relative = Get-RelativePathCompat -BasePath $InstallRoot -TargetPath $file.FullName
+        if ([string]::IsNullOrWhiteSpace($relative) -or $relative -eq '.') { continue }
+        if (Test-IsPreservedRootFile -RelativePath $relative) { continue }
+        if (-not $sourceFiles.Contains($relative)) {
+            Remove-Item -Path $file.FullName -Force -ErrorAction SilentlyContinue
+            $filesRemoved++
+        }
+    }
+
+    $dirs = Get-ChildItem -Path $InstallRoot -Recurse -Force -Directory -ErrorAction SilentlyContinue |
+        Sort-Object { $_.FullName.Length } -Descending
+    foreach ($dir in $dirs) {
+        $relative = Get-RelativePathCompat -BasePath $InstallRoot -TargetPath $dir.FullName
+        if ([string]::IsNullOrWhiteSpace($relative) -or $relative -eq '.') { continue }
+        if (Test-IsUnderPreservedDir -RelativePath $relative) { continue }
+        if (-not $sourceDirs.Contains($relative)) {
+            if (-not (Get-ChildItem -Path $dir.FullName -Force -ErrorAction SilentlyContinue | Select-Object -First 1)) {
+                Remove-Item -Path $dir.FullName -Force -ErrorAction SilentlyContinue
+                $dirsRemoved++
+            }
+        }
+    }
+
+    return [pscustomobject]@{
+        FilesRemoved = $filesRemoved
+        DirsRemoved  = $dirsRemoved
+    }
+}
+
 # ---------------------------------------------------------------------------
 # Pipeline
 # ---------------------------------------------------------------------------
@@ -98,7 +265,7 @@ if (-not $svc) {
 $wasRunning = $svc.Status -eq 'Running'
 
 # 1. Stop the service
-Write-Step "1/7  Stopping service '$ServiceName' ..."
+Write-Step "1/8  Stopping service '$ServiceName' ..."
 if ($wasRunning) {
     sc.exe stop $ServiceName | Out-Null
     if (-not (Wait-ProcessExit -Name $ExeName.Replace('.exe','') -TimeoutSeconds 30)) {
@@ -113,7 +280,7 @@ else {
 }
 
 # 2. Backup preserved files
-Write-Step "2/7  Backing up config and data files ..."
+Write-Step "2/8  Backing up config and data files ..."
 New-Item -ItemType Directory -Path $BackupDir -Force | Out-Null
 $backedUp = @()
 foreach ($pattern in $PreservePatterns) {
@@ -138,11 +305,14 @@ else {
 }
 
 # 3. Build / Publish
-Write-Step "3/7  Publishing new build ..."
+Write-Step "3/8  Publishing new build ..."
 if ($SkipBuild) {
     if (-not $PublishSource -or -not (Test-Path $PublishSource)) {
         Write-Error "PublishSource '$PublishSource' not found. Provide a valid path with -SkipBuild."
     }
+    Write-Host "  Cleaning stale files before copy ..." -ForegroundColor DarkGray
+    $cleanup = Remove-StaleInstallContent -InstallRoot $InstallPath -PublishRoot $PublishSource -PreserveFilePatterns $PreservePatterns -PreserveDirNames $PreserveDirectories
+    Write-Host "  Removed stale items: $($cleanup.FilesRemoved) file(s), $($cleanup.DirsRemoved) director$(if ($cleanup.DirsRemoved -eq 1) { 'y' } else { 'ies' })" -ForegroundColor DarkGray
     Copy-Item -Path "$PublishSource\*" -Destination $InstallPath -Recurse -Force
 }
 else {
@@ -158,13 +328,17 @@ else {
         -o $stageDir
     if ($LASTEXITCODE -ne 0) { Write-Error "dotnet publish failed (exit code $LASTEXITCODE)" }
 
+    Write-Host "  Cleaning stale files before copy ..." -ForegroundColor DarkGray
+    $cleanup = Remove-StaleInstallContent -InstallRoot $InstallPath -PublishRoot $stageDir -PreserveFilePatterns $PreservePatterns -PreserveDirNames $PreserveDirectories
+    Write-Host "  Removed stale items: $($cleanup.FilesRemoved) file(s), $($cleanup.DirsRemoved) director$(if ($cleanup.DirsRemoved -eq 1) { 'y' } else { 'ies' })" -ForegroundColor DarkGray
+
     Copy-Item -Path "$stageDir\*" -Destination $InstallPath -Recurse -Force
     Remove-Item $stageDir -Recurse -Force -ErrorAction SilentlyContinue
 }
 Write-Host "  Publish complete." -ForegroundColor Green
 
 # 4. Restore preserved files
-Write-Step "4/7  Restoring config and data files ..."
+Write-Step "4/8  Restoring config and data files ..."
 $restoreSource = $BackupDir
 if (-not (Test-Path $BackupDir) -and (Test-Path $ArchivePath)) {
     Write-Host "  Backup directory missing - extracting from archive: $ArchivePath" -ForegroundColor Yellow
@@ -182,32 +356,100 @@ if ($restored.Count -gt 0) {
 }
 
 # 5. Start the service
-Write-Step "5/7  Starting service '$ServiceName' ..."
+Write-Step "5/8  Starting service '$ServiceName' ..."
 sc.exe start $ServiceName | Out-Null
 Start-Sleep -Seconds 3
 $svc = Get-Service -Name $ServiceName
 Write-Host "  Service status: $($svc.Status)" -ForegroundColor $(if ($svc.Status -eq 'Running') { 'Green' } else { 'Red' })
 
 # 6. Health check
-Write-Step "6/7  Verifying health on port $Port ..."
-$healthy = $false
-for ($attempt = 1; $attempt -le 10; $attempt++) {
-    try {
-        $r = Invoke-WebRequest -Uri "http://localhost:$Port/health" -TimeoutSec 3 -UseBasicParsing -ErrorAction Stop
-        Write-Host "  Health: HTTP $($r.StatusCode) - $($r.Content)" -ForegroundColor Green
-        $healthy = $true
-        break
-    }
-    catch {
-        if ($attempt -lt 10) { Start-Sleep -Seconds 2 }
-    }
+Write-Step "6/8  Verifying health on port $Port ..."
+$primaryHealth = Test-HealthEndpoint -Port $Port -Attempts 10 -TimeoutSeconds 3 -DelaySeconds 2
+$healthy = [bool]$primaryHealth.Healthy
+if ($healthy) {
+    Write-Host "  Health: HTTP $($primaryHealth.StatusCode) - $($primaryHealth.Content)" -ForegroundColor Green
 }
 if (-not $healthy) {
     Write-Warning "Service did not respond to health check after 20 seconds."
 }
 
-# 7. Cleanup
-Write-Step "7/7  Cleanup ..."
+# 7. Workspace health checks (reads deployed appsettings.json after restore to test configured/fallback ports).
+Write-Step "7/8  Verifying workspace health checks from deployed appsettings.json ..."
+$workspaceChecks = @()
+$workspaceHealthChecked = 0
+$workspaceHealthOk = 0
+$workspaceHealthFailed = 0
+$appSettingsPath = Join-Path $InstallPath 'appsettings.json'
+if (-not (Test-Path $appSettingsPath)) {
+    Write-Warning "Deployed appsettings.json not found at $appSettingsPath; skipping workspace health checks."
+}
+else {
+    try {
+        $deployedSettings = Get-Content -Path $appSettingsPath -Raw | ConvertFrom-Json
+        $workspaceChecks = @($deployedSettings.Mcp.Workspaces)
+    }
+    catch {
+        Write-Warning "Failed to parse deployed appsettings.json for workspace health checks: $($_.Exception.Message)"
+        $workspaceChecks = @()
+    }
+
+    if ($workspaceChecks.Count -eq 0) {
+        Write-Host "  No workspaces defined in deployed appsettings.json." -ForegroundColor DarkGray
+    }
+    else {
+        foreach ($ws in $workspaceChecks) {
+            if ($null -eq $ws) { continue }
+
+            $isEnabled = $true
+            if ($null -ne $ws.IsEnabled) {
+                $isEnabled = [bool]$ws.IsEnabled
+            }
+            if (-not $isEnabled) {
+                continue
+            }
+
+            $workspaceHealthChecked++
+            $wsName = if ([string]::IsNullOrWhiteSpace([string]$ws.Name)) { [string]$ws.WorkspacePath } else { [string]$ws.Name }
+            $configuredPort = [int]$ws.WorkspacePort
+            $fallbackPort = Get-PrefixedFallbackPort -Port $configuredPort
+
+            $probes = @($configuredPort)
+            if ($null -ne $fallbackPort -and $fallbackPort -ne $configuredPort) {
+                $probes += $fallbackPort
+            }
+
+            $success = $null
+            $errors = @()
+            foreach ($probePort in $probes) {
+                $probe = Test-HealthEndpoint -Port $probePort -Attempts 1 -TimeoutSeconds 2 -DelaySeconds 1
+                if ($probe.Healthy) {
+                    $success = $probe
+                    break
+                }
+                $errors += ("port {0}: {1}" -f $probePort, $probe.Error)
+            }
+
+            if ($null -ne $success) {
+                $workspaceHealthOk++
+                $portMode = if ($success.Port -eq $configuredPort) { 'configured' } else { 'fallback' }
+                Write-Host "  OK $wsName health OK on port $($success.Port) ($portMode)" -ForegroundColor Green
+            }
+            else {
+                $workspaceHealthFailed++
+                $fallbackPortDisplay = if ($null -ne $fallbackPort) { [string]$fallbackPort } else { '(none)' }
+                $workspaceErrorSummary = $errors -join ' | '
+                Write-Warning ("Workspace health check failed: {0}; configured={1}; fallback={2}; errors={3}" -f `
+                    $wsName, `
+                    $configuredPort, `
+                    $fallbackPortDisplay, `
+                    $workspaceErrorSummary)
+            }
+        }
+    }
+}
+
+# 8. Cleanup
+Write-Step "8/8  Cleanup ..."
 Remove-Item $BackupDir -Recurse -Force -ErrorAction SilentlyContinue
 Write-Host "  Backup directory removed." -ForegroundColor DarkGray
 
@@ -216,6 +458,7 @@ Write-Host "`n=== Update complete ===" -ForegroundColor Green
 Write-Host "  Service : $ServiceName ($($svc.Status))"
 Write-Host "  Path    : $InstallPath"
 Write-Host "  Health  : $(if ($healthy) { 'OK' } else { 'FAILED' })"
+Write-Host "  WSHealth: $(if ($workspaceHealthFailed -eq 0) { 'OK' } else { 'WARN' }) ($workspaceHealthOk/$workspaceHealthChecked)"
 Write-Host "  Files   : $($restored.Count) preserved, $($backedUp.Count) backed up"
 if (Test-Path $ArchivePath) {
     Write-Host "  Archive : $ArchivePath" -ForegroundColor DarkGray

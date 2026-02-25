@@ -12,9 +12,11 @@ namespace McpServer.Cqrs;
 /// </summary>
 public sealed class Dispatcher : ILoggerProvider
 {
+    private const int MaxRetainedDispatchLogs = 200;
     private readonly IServiceProvider _services;
     private readonly ILogger<Dispatcher> _logger;
     private readonly ConcurrentDictionary<long, CallContext> _activeContexts = new();
+    private readonly ConcurrentQueue<DispatchLogRecord> _recentDispatches = new();
 
     /// <summary>Initializes a new <see cref="Dispatcher"/>.</summary>
     /// <param name="services">The DI service provider for resolving handlers and behaviors.</param>
@@ -27,6 +29,11 @@ public sealed class Dispatcher : ILoggerProvider
 
     /// <summary>Active call contexts keyed by <see cref="CorrelationId.BaseId"/>.</summary>
     public IReadOnlyDictionary<long, CallContext> ActiveContexts => _activeContexts;
+
+    /// <summary>
+    /// Recently completed dispatch log snapshots (oldest to newest), bounded to a fixed count.
+    /// </summary>
+    public IReadOnlyList<DispatchLogRecord> RecentDispatches => _recentDispatches.ToArray();
 
     /// <summary>
     /// Dispatches a command to its handler, wrapped in pipeline behaviors.
@@ -53,6 +60,8 @@ public sealed class Dispatcher : ILoggerProvider
         var requestType = request.GetType();
         var context = new CallContext { OperationName = requestType.Name, CancellationToken = ct };
         _activeContexts[context.Correlation.BaseId] = context;
+        var outcome = "Unknown";
+        string? error = null;
 
         var sw = Stopwatch.StartNew();
         try
@@ -97,6 +106,8 @@ public sealed class Dispatcher : ILoggerProvider
 
                 sw.Stop();
                 LogResult(result, context, sw.Elapsed);
+                outcome = result.IsSuccess ? "Success" : "Failure";
+                error = result.Error;
                 return result;
             }
             finally
@@ -110,6 +121,8 @@ public sealed class Dispatcher : ILoggerProvider
             var result = Result<TResult>.Failure("Operation was cancelled.", ex);
             _logger.LogWarning("Dispatch cancelled {Operation} [{CorrelationId}] after {Elapsed}ms",
                 context.OperationName, context.Correlation.Current, sw.ElapsedMilliseconds);
+            outcome = "Cancelled";
+            error = result.Error;
             return result;
         }
         catch (OperationCanceledException ex)
@@ -118,6 +131,8 @@ public sealed class Dispatcher : ILoggerProvider
             var result = Result<TResult>.Failure("Operation timed out.", ex);
             _logger.LogWarning("Dispatch timed out {Operation} [{CorrelationId}] after {Elapsed}ms",
                 context.OperationName, context.Correlation.Current, sw.ElapsedMilliseconds);
+            outcome = "Timeout";
+            error = result.Error;
             return result;
         }
         catch (Exception ex)
@@ -125,11 +140,16 @@ public sealed class Dispatcher : ILoggerProvider
             sw.Stop();
             _logger.LogError(ex, "Dispatch failed {Operation} [{CorrelationId}] after {Elapsed}ms",
                 context.OperationName, context.Correlation.Current, sw.ElapsedMilliseconds);
+            outcome = "Exception";
+            error = ex.Message;
             return Result<TResult>.Failure(ex);
         }
         finally
         {
+            if (sw.IsRunning)
+                sw.Stop();
             _activeContexts.TryRemove(context.Correlation.BaseId, out _);
+            CaptureDispatchLog(context, sw.Elapsed, outcome, error);
             context.Dispose();
         }
     }
@@ -178,6 +198,38 @@ public sealed class Dispatcher : ILoggerProvider
 
     /// <inheritdoc />
     public void Dispose() { /* No resources to dispose */ }
+
+    private void CaptureDispatchLog(CallContext context, TimeSpan elapsed, string outcome, string? error)
+    {
+        var finishedAt = DateTimeOffset.UtcNow;
+        var entries = context.Entries
+            .OrderBy(e => e.Timestamp)
+            .Select(static e => new DispatchLogRecordEntry(
+                e.Timestamp,
+                e.Level,
+                e.Message,
+                e.Exception?.GetType().FullName,
+                e.Exception?.Message))
+            .ToArray();
+
+        var record = new DispatchLogRecord(
+            context.Started,
+            finishedAt,
+            context.OperationName,
+            context.Correlation.Current,
+            string.IsNullOrWhiteSpace(outcome) ? "Unknown" : outcome,
+            (long)Math.Round(elapsed.TotalMilliseconds),
+            error,
+            context.UserId,
+            context.UserName,
+            context.Roles?.Where(static r => !string.IsNullOrWhiteSpace(r)).ToArray() ?? [],
+            entries);
+
+        _recentDispatches.Enqueue(record);
+        while (_recentDispatches.Count > MaxRetainedDispatchLogs && _recentDispatches.TryDequeue(out _))
+        {
+        }
+    }
 }
 
 /// <summary>

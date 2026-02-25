@@ -401,7 +401,8 @@ internal static class DirectorCommands
                 Info("Built-in agent definitions seeded.");
 
                 // Log init event
-                var body = new { agentId = "system", eventType = "Init", details = "Workspace initialized via Director CLI" };
+                // Server endpoint currently expects AgentEventType as a numeric enum value (Init = 7).
+                var body = new { agentId = "system", eventType = 7, details = "Workspace initialized via Director CLI" };
                 await client.PostAsync<JsonElement>($"/mcp/agents/system/events?workspace={path}", body).ConfigureAwait(false);
 
                 Success("Workspace initialized for agent management.");

@@ -85,8 +85,10 @@ public sealed class McpServerClient
         Sync = new SyncClient(http, options);
         Workspace = new WorkspaceClient(http, options);
         Tools = new ToolRegistryClient(http, options);
+        AuthConfig = new AuthConfigClient(http, options);
+        Diagnostic = new DiagnosticClient(http, options);
 
-        _allClients = new McpClientBase[] { Todo, Context, SessionLog, GitHub, Repo, Sync, Workspace, Tools };
+        _allClients = new McpClientBase[] { Todo, Context, SessionLog, GitHub, Repo, Sync, Workspace, Tools, AuthConfig, Diagnostic };
         _apiKey = options.ApiKey ?? string.Empty;
         _port = options.BaseUrl.Port;
     }
@@ -242,4 +244,16 @@ public sealed class McpServerClient
     /// <para>See <see cref="ToolRegistryClient"/> for the full method list.</para>
     /// </summary>
     public ToolRegistryClient Tools { get; }
+
+    /// <summary>
+    /// Public auth configuration endpoint for Director OIDC auto-discovery.
+    /// <para>See <see cref="AuthConfigClient"/> for the full method list.</para>
+    /// </summary>
+    public AuthConfigClient AuthConfig { get; }
+
+    /// <summary>
+    /// Diagnostic endpoints for execution/appsettings path inspection.
+    /// <para>See <see cref="DiagnosticClient"/> for the full method list.</para>
+    /// </summary>
+    public DiagnosticClient Diagnostic { get; }
 }

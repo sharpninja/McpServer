@@ -202,7 +202,7 @@ Enhanced GitHub integration capabilities including GitHub as Keycloak Identity P
 
 A Copilot-integrated prompt tool that accepts natural language policy directives (e.g. "Ban chinese sources from all workspaces") and translates them into workspace configuration changes across all or targeted workspaces. Each policy change is session-logged per affected workspace with action type `policy_change`.
 
-**Covered by:** `PolicyManagementTool` in `McpServer.Support.Mcp`
+**Covered by:** `PolicyManagementTool` in `McpServer.Support.Mcp` *(planned)*
 
 ## FR-MCP-034 Workspace Compliance Configuration
 
@@ -220,7 +220,7 @@ The marker prompt shall include mandatory sections for: absolute honesty, correc
 
 Every server-initiated Copilot interaction must be session-logged in every affected workspace. An `AuditedCopilotClient` decorator wraps `ICopilotClient` to create session log entries before and after each call, with action type `copilot_invocation`.
 
-**Covered by:** `AuditedCopilotClient` decorator
+**Covered by:** `AuditedCopilotClient` decorator *(planned)*
 
 ## FR-MCP-037 Director CLI Exec Command
 
@@ -238,4 +238,4 @@ Agents must follow a session continuity protocol: at session start, read the mar
 
 All source files from `McpServer.Cqrs`, `McpServer.Cqrs.Mvvm`, `McpServer.UI.Core`, and `McpServer.Director` shall be indexed into the MCP context store for semantic search. The marker prompt lists these projects in the Available Capabilities section.
 
-**Covered by:** Ingestion configuration, `MarkerFileService.DefaultPromptTemplate`
+**Covered by:** Ingestion configuration, `MarkerFileService.DefaultPromptTemplate` *(planned)*

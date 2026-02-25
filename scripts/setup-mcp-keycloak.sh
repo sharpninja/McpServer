@@ -25,8 +25,8 @@ while [[ $# -gt 0 ]]; do
         --admin-user)         ADMIN_USER="$2"; shift 2 ;;
         --admin-password)     ADMIN_PASSWORD="$2"; shift 2 ;;
         --realm)              REALM_NAME="$2"; shift 2 ;;
-        --github-client-id)   GITHUB_CLIENT_ID="$2"; shift 2 ;;
-        --github-client-secret) GITHUB_CLIENT_SECRET="$2"; shift 2 ;;
+        --github-client-id|--GitHubClientId)   GITHUB_CLIENT_ID="$2"; shift 2 ;;
+        --github-client-secret|--GitHubClientSecret) GITHUB_CLIENT_SECRET="$2"; shift 2 ;;
         --mcp-server-url)     MCP_SERVER_URL="$2"; shift 2 ;;
         -h|--help)
             echo "Usage: $0 [options]"
@@ -34,8 +34,8 @@ while [[ $# -gt 0 ]]; do
             echo "  --admin-user USER         Admin username (default: admin)"
             echo "  --admin-password PASS     Admin password (default: admin)"
             echo "  --realm NAME              Realm name (default: mcpserver)"
-            echo "  --github-client-id ID     GitHub OAuth App Client ID"
-            echo "  --github-client-secret S  GitHub OAuth App Client Secret"
+            echo "  --github-client-id ID     GitHub OAuth App Client ID (alias: --GitHubClientId)"
+            echo "  --github-client-secret S  GitHub OAuth App Client Secret (alias: --GitHubClientSecret)"
             echo "  --mcp-server-url URL      MCP Server URL (default: http://localhost:7148)"
             exit 0
             ;;

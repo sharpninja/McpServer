@@ -8,12 +8,13 @@ internal sealed class TodoScreen : View
 {
     private readonly TodoListViewModel _listViewModel;
     private readonly TodoDetailViewModel _detailViewModel;
+    private readonly DirectorMcpContext? _directorContext;
     private TableView _table = null!;
     private TextView _detailView = null!;
     private Label _detailTitleLabel = null!;
     private Label _editorTitleLabel = null!;
     private Label _doneValueLabel = null!;
-    private Label _statusLabel = null!;
+    private TextView _statusLabel = null!;
     private TextField _sectionFilter = null!;
     private TextField _idField = null!;
     private TextField _titleField = null!;
@@ -25,11 +26,15 @@ internal sealed class TodoScreen : View
     private TextView _technicalDetailsEditor = null!;
     private TextView _implementationTasksEditor = null!;
     private List<TodoRow> _rows = [];
+    private readonly SemaphoreSlim _detailLoadGate = new(1, 1);
+    private int _detailLoadRequestVersion;
+    private string? _lastAutoDetailTodoId;
 
-    public TodoScreen(TodoListViewModel listViewModel, TodoDetailViewModel detailViewModel)
+    public TodoScreen(TodoListViewModel listViewModel, TodoDetailViewModel detailViewModel, DirectorMcpContext? directorContext = null)
     {
         _listViewModel = listViewModel;
         _detailViewModel = detailViewModel;
+        _directorContext = directorContext;
         Title = "TODO";
         Width = Dim.Fill();
         Height = Dim.Fill();
@@ -52,7 +57,9 @@ internal sealed class TodoScreen : View
             Width = Dim.Fill(),
             Height = Dim.Percent(32),
             FullRowSelect = true,
+            MultiSelect = false,
         };
+        _table.SelectedCellChanged += (_, _) => QueueSelectedRowDetailRefresh();
         Add(_table);
 
         _editorTitleLabel = new Label
@@ -165,7 +172,7 @@ internal sealed class TodoScreen : View
             X = 0,
             Y = Pos.Bottom(tasksFrame),
             Width = Dim.Fill(),
-            Text = "Detail: (select a row, then Load Detail)",
+            Text = "Detail: (select a row to load detail)",
         };
         Add(_detailTitleLabel);
 
@@ -181,13 +188,22 @@ internal sealed class TodoScreen : View
         };
         Add(_detailView);
 
-        _statusLabel = new Label { X = 0, Y = Pos.AnchorEnd(2), Width = Dim.Fill(), Text = "" };
+        _statusLabel = new TextView
+        {
+            X = 0,
+            Y = Pos.AnchorEnd(2),
+            Width = Dim.Fill(),
+            Height = 1,
+            ReadOnly = true,
+            WordWrap = false,
+            Text = "",
+        };
         Add(_statusLabel);
 
         var refreshBtn = new Button { X = 0, Y = Pos.AnchorEnd(1), Text = "Refresh" };
         refreshBtn.Accepting += (_, _) => _ = Task.Run(LoadAsync);
 
-        var detailBtn = new Button { X = Pos.Right(refreshBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Load Detail" };
+        var detailBtn = new Button { X = Pos.Right(refreshBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Reload Detail" };
         detailBtn.Accepting += (_, _) => _ = Task.Run(LoadSelectedDetailAsync);
 
         var newBtn = new Button { X = Pos.Right(detailBtn) + 2, Y = Pos.AnchorEnd(1), Text = "New" };
@@ -203,13 +219,13 @@ internal sealed class TodoScreen : View
         reqsBtn.Accepting += (_, _) => _ = Task.Run(AnalyzeRequirementsAsync);
 
         var statusPromptBtn = new Button { X = Pos.Right(reqsBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Status" };
-        statusPromptBtn.Accepting += (_, _) => _ = Task.Run(GenerateStatusPromptAsync);
+        statusPromptBtn.Accepting += (_, _) => ShowPromptResponseDialog("status", _detailViewModel.GenerateStatusPromptAsync);
 
         var implementPromptBtn = new Button { X = Pos.Right(statusPromptBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Implement" };
-        implementPromptBtn.Accepting += (_, _) => _ = Task.Run(GenerateImplementPromptAsync);
+        implementPromptBtn.Accepting += (_, _) => ShowPromptResponseDialog("implement", _detailViewModel.GenerateImplementPromptAsync);
 
         var planPromptBtn = new Button { X = Pos.Right(implementPromptBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Plan" };
-        planPromptBtn.Accepting += (_, _) => _ = Task.Run(GeneratePlanPromptAsync);
+        planPromptBtn.Accepting += (_, _) => ShowPromptResponseDialog("plan", _detailViewModel.GeneratePlanPromptAsync);
 
         Add(refreshBtn, detailBtn, newBtn, saveBtn, deleteBtn, reqsBtn, statusPromptBtn, implementPromptBtn, planPromptBtn);
     }
@@ -231,6 +247,7 @@ internal sealed class TodoScreen : View
                     item.Done ? "✓" : "○"))
                 .ToList();
             _rows = rows;
+            _lastAutoDetailTodoId = null;
 
             Application.Invoke(() =>
             {
@@ -273,6 +290,7 @@ internal sealed class TodoScreen : View
             return;
         }
 
+        _lastAutoDetailTodoId = todoId;
         await LoadTodoDetailAsync(todoId, autoLoaded: false).ConfigureAwait(false);
     }
 
@@ -384,11 +402,19 @@ internal sealed class TodoScreen : View
 
     private async Task LoadTodoDetailAsync(string todoId, bool autoLoaded)
     {
+        var requestVersion = Interlocked.Increment(ref _detailLoadRequestVersion);
+        await _detailLoadGate.WaitAsync().ConfigureAwait(false);
         try
         {
+            if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
+                return;
+
             SetStatus(autoLoaded ? $"⏳ Loading detail for {todoId}..." : $"⏳ Loading selected detail ({todoId})...");
             _detailViewModel.TodoId = todoId;
             await _detailViewModel.LoadAsync().ConfigureAwait(false);
+
+            if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
+                return;
 
             if (_detailViewModel.ErrorMessage is not null)
             {
@@ -422,6 +448,9 @@ internal sealed class TodoScreen : View
         }
         catch (Exception ex)
         {
+            if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
+                return;
+
             Application.Invoke(() =>
             {
                 _detailTitleLabel.Text = $"Detail: {todoId}";
@@ -429,6 +458,23 @@ internal sealed class TodoScreen : View
             });
             SetStatus($"✗ {ex.Message}");
         }
+        finally
+        {
+            _detailLoadGate.Release();
+        }
+    }
+
+    private void QueueSelectedRowDetailRefresh()
+    {
+        var todoId = GetSelectedTodoId();
+        if (string.IsNullOrWhiteSpace(todoId))
+            return;
+
+        if (string.Equals(_lastAutoDetailTodoId, todoId, StringComparison.Ordinal))
+            return;
+
+        _lastAutoDetailTodoId = todoId;
+        _ = Task.Run(() => LoadTodoDetailAsync(todoId, autoLoaded: true));
     }
 
     private async Task GeneratePromptAsync(string promptType, Func<CancellationToken, Task> generateAsync)
@@ -466,6 +512,181 @@ internal sealed class TodoScreen : View
             SetStatus($"✗ {ex.Message}");
         }
     }
+
+    private void ShowPromptResponseDialog(string promptType, Func<CancellationToken, Task> fallbackGenerateAsync)
+    {
+        if (_directorContext is null)
+        {
+            _ = Task.Run(() => GeneratePromptAsync(promptType, fallbackGenerateAsync));
+            return;
+        }
+
+        SyncEditorFieldsToViewModel();
+        var todoId = _detailViewModel.EditorId;
+        if (string.IsNullOrWhiteSpace(todoId))
+        {
+            SetStatus("✗ Load or enter a TODO ID first.");
+            return;
+        }
+
+        var promptLabel = GetPromptDisplayName(promptType);
+        var dialog = new Dialog
+        {
+            Title = $"Copilot {promptLabel}: {todoId}",
+            Width = Math.Min(120, Math.Max(80, Application.Top?.Frame.Width - 4 ?? 96)),
+            Height = Math.Min(30, Math.Max(12, Application.Top?.Frame.Height - 4 ?? 24)),
+        };
+
+        var outputView = new TextView
+        {
+            X = 1,
+            Y = 1,
+            Width = Dim.Fill(2),
+            Height = Dim.Fill(3),
+            ReadOnly = true,
+            WordWrap = false,
+            Text = "",
+        };
+        dialog.Add(outputView);
+
+        var statusView = new TextView
+        {
+            X = 1,
+            Y = Pos.AnchorEnd(2),
+            Width = Dim.Fill(2),
+            Height = 1,
+            ReadOnly = true,
+            WordWrap = false,
+            Text = $"Preparing {promptLabel} prompt stream...",
+        };
+        dialog.Add(statusView);
+
+        var closeButton = new Button { Text = "Close" };
+        var cts = new CancellationTokenSource();
+        McpServer.UI.Core.Messages.TodoPromptOutput? finalOutput = null;
+        string? finalError = null;
+        var dialogClosed = 0;
+
+        closeButton.Accepting += (_, _) =>
+        {
+            cts.Cancel();
+            Application.RequestStop();
+        };
+        dialog.AddButton(closeButton);
+
+        dialog.Disposing += (_, _) =>
+        {
+            Interlocked.Exchange(ref dialogClosed, 1);
+            cts.Cancel();
+        };
+
+        void SafeDialogUi(Action update)
+        {
+            if (Volatile.Read(ref dialogClosed) != 0)
+                return;
+
+            Application.Invoke(() =>
+            {
+                if (Volatile.Read(ref dialogClosed) != 0)
+                    return;
+                update();
+            });
+        }
+
+        SetStatus($"⏳ Generating {promptType} prompt for {todoId}...");
+
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                var lines = new List<string>();
+                await foreach (var line in StreamPromptLinesAsync(todoId, promptType, cts.Token).WithCancellation(cts.Token).ConfigureAwait(false))
+                {
+                    lines.Add(line);
+                    var currentText = string.Join(Environment.NewLine, lines);
+                    var currentStatus = $"Streaming {promptLabel} prompt... {lines.Count} lines";
+                    SafeDialogUi(() =>
+                    {
+                        outputView.Text = currentText;
+                        statusView.Text = currentStatus;
+                    });
+                }
+
+                var text = string.Join(Environment.NewLine, lines);
+                finalOutput = new McpServer.UI.Core.Messages.TodoPromptOutput(
+                    TodoId: todoId,
+                    PromptType: promptType,
+                    Lines: lines,
+                    Text: text);
+
+                SafeDialogUi(() =>
+                {
+                    outputView.Text = text;
+                    statusView.Text = $"Completed {promptLabel} prompt ({lines.Count} lines).";
+                });
+            }
+            catch (OperationCanceledException)
+            {
+                SafeDialogUi(() => statusView.Text = "Canceled.");
+            }
+            catch (Exception ex)
+            {
+                finalError = ex.Message;
+                SafeDialogUi(() => statusView.Text = $"Error: {ex.Message}");
+            }
+        });
+
+        Application.Run(dialog);
+
+        cts.Cancel();
+        cts.Dispose();
+
+        if (finalOutput is not null)
+        {
+            _detailViewModel.PromptOutput = finalOutput;
+            ShowPromptInDetailPane(finalOutput);
+            SetStatus($"✓ Generated {finalOutput.PromptType} prompt ({finalOutput.Lines.Count} lines)");
+            return;
+        }
+
+        if (!string.IsNullOrWhiteSpace(finalError))
+        {
+            SetStatus($"✗ {finalError}");
+            return;
+        }
+
+        SetStatus($"✗ {promptLabel} prompt canceled.");
+    }
+
+    private async IAsyncEnumerable<string> StreamPromptLinesAsync(
+        string todoId,
+        string promptType,
+        [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        if (_directorContext is null)
+            throw new InvalidOperationException("Prompt streaming requires a Director workspace context.");
+
+        var client = await _directorContext.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+        var stream = promptType switch
+        {
+            "status" => client.Todo.StreamStatusAsync(todoId, cancellationToken),
+            "implement" => client.Todo.StreamImplementAsync(todoId, cancellationToken),
+            "plan" => client.Todo.StreamPlanAsync(todoId, cancellationToken),
+            _ => throw new InvalidOperationException($"Unknown prompt type '{promptType}'."),
+        };
+
+        await foreach (var line in stream.WithCancellation(cancellationToken).ConfigureAwait(false))
+            yield return line;
+    }
+
+    private static string GetPromptDisplayName(string promptType)
+        => promptType switch
+        {
+            "status" => "Status",
+            "implement" => "Implement",
+            "plan" => "Plan",
+            _ => promptType,
+        };
 
     private void BeginNewDraft()
     {

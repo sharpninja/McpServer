@@ -10,16 +10,17 @@ namespace McpServer.Director;
 /// </summary>
 internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
 {
-    private readonly McpServerClient? _client;
+    private readonly DirectorMcpContext _context;
 
-    public WorkspaceApiClientAdapter(McpServerClient? client)
+    public WorkspaceApiClientAdapter(DirectorMcpContext context)
     {
-        _client = client;
+        _context = context;
     }
 
     public async Task<ListWorkspacesResult> ListWorkspacesAsync(CancellationToken ct = default)
     {
-        var response = await GetRequiredClient().Workspace.ListAsync(ct).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(false);
+        var response = await client.Workspace.ListAsync(ct).ConfigureAwait(false);
 
         var items = response.Items
             .Select(ws => new WorkspaceSummary(
@@ -38,7 +39,8 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
         var key = EncodeWorkspaceKey(workspacePath);
         try
         {
-            var dto = await GetRequiredClient().Workspace.GetAsync(key, ct).ConfigureAwait(false);
+            var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(false);
+            var dto = await client.Workspace.GetAsync(key, ct).ConfigureAwait(false);
             return MapWorkspaceDetail(dto);
         }
         catch (McpNotFoundException)
@@ -58,7 +60,8 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
             BannedIndividuals = command.BannedIndividuals,
         };
 
-        var result = await GetRequiredClient().Workspace.UpdateAsync(
+        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(false);
+        var result = await client.Workspace.UpdateAsync(
             key,
             new WorkspaceUpdateRequest
             {
@@ -70,18 +73,6 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
             ct).ConfigureAwait(false);
 
         return result?.Success == true;
-    }
-
-    private McpServerClient GetRequiredClient()
-    {
-        if (_client is null)
-        {
-            throw new InvalidOperationException(
-                "No MCP workspace connection is available. Ensure AGENTS-README-FIRST.yaml exists in the workspace root " +
-                "or launch Director with --workspace pointing to a workspace that contains the marker file.");
-        }
-
-        return _client;
     }
 
     private static WorkspaceDetail MapWorkspaceDetail(WorkspaceDto dto)

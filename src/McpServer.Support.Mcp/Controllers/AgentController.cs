@@ -144,6 +144,7 @@ public class AgentController : ControllerBase
 
     /// <summary>Log an agent lifecycle event.</summary>
     [HttpPost("{agentId}/events")]
+    [Authorize(Policy = "AgentManager")]
     public async Task<ActionResult<AgentMutationResult>> LogEvent(
         string agentId, [FromBody] AgentEventRequest request, [FromQuery] string? workspace, CancellationToken ct)
     {

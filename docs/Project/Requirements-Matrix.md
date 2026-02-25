@@ -42,14 +42,26 @@
 | TR-MCP-REQ-001 | ✅ Complete | AI requirements analysis |
 | TR-MCP-DRY-001 | ✅ Active directive | All code and scripts |
 | TR-LOC-001 | 🔲 Planned | — |
-| FR-MCP-026 | 🔨 In Progress | OidcAuthOptions, Program.cs, AgentController, Setup-McpKeycloak.ps1 |
-| FR-MCP-027 | 🔨 In Progress | AgentController, AgentService, AgentDefaults, AgentDefinitionEntity |
-| FR-MCP-028 | 🔨 In Progress | AgentController, AgentService, AgentWorkspaceEntity, AgentEventLogEntity |
+| FR-MCP-026 | ✅ Complete | OidcAuthOptions, Program.cs (JWT Bearer + AgentManager policy), WorkspaceAuthMiddleware, AgentController, AuthConfigController, Setup-McpKeycloak.ps1, setup-mcp-keycloak.sh, McpServer.Director (AuthCommands, OidcAuthService, LoginDialog) |
+| FR-MCP-027 | ✅ Complete | Program.cs (startup built-in seeding), AgentController, AgentService, AgentDefaults, AgentDefinitionEntity |
+| FR-MCP-028 | ✅ Complete | AgentController, AgentService, AgentWorkspaceEntity, AgentEventLogEntity, McpDbContext |
 | FR-MCP-029 | ✅ Complete | McpServer.Cqrs (Dispatcher, CallContext, CorrelationId, Result, IPipelineBehavior) |
 | FR-MCP-030 | ✅ Complete | McpServer.Director (Program, DirectorCommands, AuthCommands, InteractiveCommand, McpHttpClient, OidcAuthService, TokenCache, MainScreen, HealthScreen, AgentScreen, TodoScreen, SessionLogScreen, SyncScreen, WorkspaceListScreen, WorkspacePolicyScreen, LoginDialog, ViewModelBinder) |
 | FR-MCP-031 | 🔲 Planned | — |
 | FR-MCP-032 | 🔲 Planned | — |
-| TR-MCP-AUTH-001–003 | 🔨 In Progress | OIDC authentication |
-| TR-MCP-AGENT-001–003 | 🔨 In Progress | Agent management |
+| FR-MCP-033 | 🔲 Planned | — |
+| FR-MCP-034 | ✅ Complete | IWorkspaceService, MarkerFileService, WorkspaceModels |
+| FR-MCP-035 | ✅ Complete | MarkerFileService.DefaultPromptTemplate |
+| FR-MCP-036 | 🔲 Planned | — |
+| FR-MCP-037 | ✅ Complete | McpServer.Director (Program exec/list-viewmodels), McpServer.Cqrs.Mvvm (IViewModelRegistry) |
+| FR-MCP-038 | ✅ Complete | MarkerFileService.DefaultPromptTemplate |
+| FR-MCP-039 | 🔲 Planned | — |
+| TR-MCP-AUTH-001–003 | ✅ Complete | OidcAuthOptions, Program.cs (JwtBearer + AgentManager policy), WorkspaceAuthMiddleware, AgentController, Setup-McpKeycloak.ps1, setup-mcp-keycloak.sh, McpServer.Director (AuthCommands, OidcAuthService) |
+| TR-MCP-AGENT-001–003 | ✅ Complete | AgentDefinitionEntity, AgentWorkspaceEntity, AgentEventLogEntity, McpDbContext, AgentDefaults, AgentService, AgentController, Program.cs (startup seeding), WorkspaceAppFactory (primary-only controller exposure) |
 | TR-MCP-CQRS-001–005 | ✅ Complete | McpServer.Cqrs (Dispatcher, CallContext, CorrelationId, Result, IPipelineBehavior, ILoggerProvider) |
 | TR-MCP-DIR-001–003 | ✅ Complete | McpServer.Director (System.CommandLine CLI, CQRS dispatch, OIDC auth, exec command, Terminal.Gui interactive mode) |
+| TR-MCP-COMP-001–003 | ✅ Complete | IWorkspaceService, MarkerFileService |
+| TR-MCP-AUDIT-001 | 🔲 Planned | — |
+| TR-MCP-POL-001 | 🔲 Planned | — |
+| TR-MCP-DTO-001 | ✅ Complete | UnifiedSessionLogDto |
+| TR-MCP-CTX-001 | 🔲 Planned | — |

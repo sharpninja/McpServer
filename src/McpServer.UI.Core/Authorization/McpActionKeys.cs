@@ -47,4 +47,37 @@ public static class McpActionKeys
 
     /// <summary>TODO plan prompt generation action.</summary>
     public const string TodoPromptPlan = "todo.prompt.plan";
+
+    /// <summary>Sync status query action.</summary>
+    public const string SyncStatus = "sync.status";
+
+    /// <summary>Repo list action.</summary>
+    public const string RepoList = "repo.list";
+
+    /// <summary>Repo read action.</summary>
+    public const string RepoRead = "repo.read";
+
+    /// <summary>Repo write action.</summary>
+    public const string RepoWrite = "repo.write";
+
+    /// <summary>Context search action.</summary>
+    public const string ContextSearch = "context.search";
+
+    /// <summary>Context pack action.</summary>
+    public const string ContextPack = "context.pack";
+
+    /// <summary>Context sources action.</summary>
+    public const string ContextSources = "context.sources";
+
+    /// <summary>Context rebuild-index action.</summary>
+    public const string ContextRebuildIndex = "context.rebuild-index";
+
+    /// <summary>Auth config query action.</summary>
+    public const string AuthConfigGet = "auth.config.get";
+
+    /// <summary>Diagnostic execution-path query action.</summary>
+    public const string DiagnosticExecutionPath = "diagnostic.execution-path";
+
+    /// <summary>Diagnostic appsettings-path query action.</summary>
+    public const string DiagnosticAppSettingsPath = "diagnostic.appsettings-path";
 }

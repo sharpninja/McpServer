@@ -62,7 +62,23 @@ public sealed class CallContext : ILogger, IDisposable
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
         if (_disposed || !IsEnabled(logLevel)) return;
-        _entries.Add(new LogEntry(DateTime.UtcNow, logLevel, formatter(state, exception), exception));
+        var message = formatter(state, exception);
+
+        // Include the full exception text (type + message + stack) in error messages so
+        // dispatcher log views remain useful when only the formatted message is displayed.
+        if (exception is not null && logLevel >= LogLevel.Error)
+        {
+            var exceptionText = exception.ToString();
+            if (!string.IsNullOrWhiteSpace(exceptionText) &&
+                (string.IsNullOrEmpty(message) || !message.Contains(exceptionText, StringComparison.Ordinal)))
+            {
+                message = string.IsNullOrWhiteSpace(message)
+                    ? exceptionText
+                    : $"{message}{Environment.NewLine}{exceptionText}";
+            }
+        }
+
+        _entries.Add(new LogEntry(DateTime.UtcNow, logLevel, message, exception));
     }
 
     /// <inheritdoc />

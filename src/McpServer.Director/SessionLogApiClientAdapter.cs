@@ -1,85 +1,54 @@
-using System.Text.Json;
+using McpServer.Client.Models;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.Services;
 
 namespace McpServer.Director;
 
 /// <summary>
-/// Director adapter for <see cref="ISessionLogApiClient"/> backed by <see cref="McpHttpClient"/>.
+/// Director adapter for <see cref="ISessionLogApiClient"/> backed by the selected workspace
+/// <see cref="McpServer.Client.McpServerClient"/> in <see cref="DirectorMcpContext"/>.
 /// </summary>
 internal sealed class SessionLogApiClientAdapter : ISessionLogApiClient
 {
-    private readonly McpHttpClient? _client;
+    private readonly DirectorMcpContext _context;
 
     /// <summary>Initializes a new adapter instance.</summary>
-    /// <param name="client">Director HTTP client, or null if no marker file is available.</param>
-    public SessionLogApiClientAdapter(McpHttpClient? client)
+    /// <param name="context">Director connection context.</param>
+    public SessionLogApiClientAdapter(DirectorMcpContext context)
     {
-        _client = client;
+        _context = context;
     }
 
     /// <inheritdoc />
     public async Task<ListSessionLogsResult> ListSessionLogsAsync(ListSessionLogsQuery query, CancellationToken cancellationToken = default)
     {
-        if (_client is null)
-            throw new InvalidOperationException("Session-log API client is unavailable. No workspace marker file was found.");
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+        var result = await client.SessionLog.QueryAsync(
+            agent: string.IsNullOrWhiteSpace(query.Agent) ? null : query.Agent,
+            model: string.IsNullOrWhiteSpace(query.Model) ? null : query.Model,
+            text: string.IsNullOrWhiteSpace(query.Text) ? null : query.Text,
+            limit: Math.Max(1, query.Limit),
+            offset: Math.Max(0, query.Offset),
+            cancellationToken: cancellationToken).ConfigureAwait(false);
 
-        var path = BuildPath(query);
-        var result = await _client.GetAsync<JsonElement>(path, cancellationToken).ConfigureAwait(false);
+        var items = result.Items
+            .Select(MapItem)
+            .ToList();
 
-        if (!result.TryGetProperty("items", out var itemsElement) || itemsElement.ValueKind != JsonValueKind.Array)
-            throw new InvalidOperationException("Session-log query response did not contain an items array.");
-
-        var items = new List<SessionLogSummary>();
-        foreach (var item in itemsElement.EnumerateArray())
-        {
-            items.Add(new SessionLogSummary(
-                SessionId: GetString(item, "sessionId"),
-                SourceType: GetString(item, "sourceType"),
-                Title: GetString(item, "title"),
-                Status: GetString(item, "status"),
-                Model: GetOptionalString(item, "model"),
-                Started: GetOptionalString(item, "started"),
-                LastUpdated: GetOptionalString(item, "lastUpdated"),
-                EntryCount: GetInt(item, "entryCount")));
-        }
-
-        var totalCount = GetInt(result, "totalCount", items.Count);
-        var limit = GetInt(result, "limit", query.Limit <= 0 ? 20 : query.Limit);
-        var offset = GetInt(result, "offset", Math.Max(0, query.Offset));
-
+        var totalCount = result.TotalCount;
+        var limit = result.Limit <= 0 ? Math.Max(1, query.Limit) : result.Limit;
+        var offset = result.Offset < 0 ? Math.Max(0, query.Offset) : result.Offset;
         return new ListSessionLogsResult(items, totalCount, limit, offset);
     }
 
-    private static string BuildPath(ListSessionLogsQuery query)
-    {
-        var parts = new List<string>();
-
-        if (!string.IsNullOrWhiteSpace(query.Agent))
-            parts.Add($"agent={Uri.EscapeDataString(query.Agent)}");
-        if (!string.IsNullOrWhiteSpace(query.Model))
-            parts.Add($"model={Uri.EscapeDataString(query.Model)}");
-        if (!string.IsNullOrWhiteSpace(query.Text))
-            parts.Add($"text={Uri.EscapeDataString(query.Text)}");
-
-        parts.Add($"limit={Math.Max(1, query.Limit)}");
-        parts.Add($"offset={Math.Max(0, query.Offset)}");
-
-        return $"/mcp/sessionlog?{string.Join("&", parts)}";
-    }
-
-    private static string GetString(JsonElement element, string property)
-        => element.TryGetProperty(property, out var prop) && prop.ValueKind == JsonValueKind.String
-            ? prop.GetString() ?? string.Empty
-            : string.Empty;
-
-    private static string? GetOptionalString(JsonElement element, string property)
-        => element.TryGetProperty(property, out var prop) && prop.ValueKind == JsonValueKind.String
-            ? prop.GetString()
-            : null;
-
-    private static int GetInt(JsonElement element, string property, int defaultValue = 0)
-        => element.TryGetProperty(property, out var prop) && prop.TryGetInt32(out var value)
-            ? value
-            : defaultValue;
+    private static SessionLogSummary MapItem(UnifiedSessionLogDto item)
+        => new(
+            SessionId: item.SessionId ?? string.Empty,
+            SourceType: item.SourceType ?? string.Empty,
+            Title: item.Title ?? string.Empty,
+            Status: item.Status ?? string.Empty,
+            Model: item.Model,
+            Started: item.Started,
+            LastUpdated: item.LastUpdated,
+            EntryCount: item.EntryCount);
 }

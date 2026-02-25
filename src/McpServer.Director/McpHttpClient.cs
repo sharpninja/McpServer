@@ -5,7 +5,8 @@ namespace McpServer.Director;
 
 /// <summary>
 /// HTTP client for communicating with the MCP server REST API.
-/// Reads connection details from AGENTS-README-FIRST.yaml in the workspace.
+/// Reads connection details from AGENTS-README-FIRST.yaml in the workspace, with optional
+/// fallback to Director CLI defaults when no marker exists.
 /// </summary>
 internal sealed class McpHttpClient : IDisposable
 {
@@ -27,7 +28,8 @@ internal sealed class McpHttpClient : IDisposable
         ApiKey = apiKey;
         WorkspacePath = workspacePath;
         _http = new HttpClient { BaseAddress = new Uri(BaseUrl) };
-        _http.DefaultRequestHeaders.Add("X-Api-Key", ApiKey);
+        if (!string.IsNullOrWhiteSpace(ApiKey))
+            _http.DefaultRequestHeaders.Add("X-Api-Key", ApiKey);
     }
 
     /// <summary>
@@ -76,6 +78,32 @@ internal sealed class McpHttpClient : IDisposable
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Attempts to refresh the cached token (if expired and refreshable) and persist it back to the token cache.
+    /// Returns true when a non-expired cached token exists after the call (either already valid or successfully refreshed).
+    /// </summary>
+    internal static bool TryRefreshCachedToken()
+    {
+        var cached = Auth.TokenCache.Load();
+        if (cached is null)
+            return false;
+
+        if (!cached.IsExpired)
+            return true;
+
+        if (string.IsNullOrWhiteSpace(cached.RefreshToken))
+            return false;
+
+        try
+        {
+            return RefreshTokenSync(cached) is not null;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     /// <summary>
@@ -173,9 +201,28 @@ internal sealed class McpHttpClient : IDisposable
 
     /// <summary>
     /// Discovers connection details from AGENTS-README-FIRST.yaml in the given directory
-    /// (or current directory if not specified).
+    /// (or current directory if not specified). If no marker exists, falls back to the
+    /// Director CLI default base URL (if configured) with an empty API key.
     /// </summary>
     public static McpHttpClient? FromMarkerFile(string? directory = null)
+    {
+        var markerClient = FromMarkerOnly(directory);
+        if (markerClient is not null)
+            return markerClient;
+
+        var dir = directory ?? Directory.GetCurrentDirectory();
+        var cfg = DirectorCliConfigStore.Load();
+        if (string.IsNullOrWhiteSpace(cfg.DefaultBaseUrl))
+            return null;
+
+        return new McpHttpClient(cfg.DefaultBaseUrl, apiKey: string.Empty, workspacePath: dir);
+    }
+
+    /// <summary>
+    /// Discovers connection details from AGENTS-README-FIRST.yaml in the given directory
+    /// without falling back to Director defaults.
+    /// </summary>
+    public static McpHttpClient? FromMarkerOnly(string? directory = null)
     {
         var dir = directory ?? Directory.GetCurrentDirectory();
         var markerPath = Path.Combine(dir, "AGENTS-README-FIRST.yaml");
@@ -200,6 +247,28 @@ internal sealed class McpHttpClient : IDisposable
             return null;
 
         return new McpHttpClient(baseUrl, apiKey, workspacePath ?? dir);
+    }
+
+    /// <summary>
+    /// Creates a control-plane connection using the configured default base URL when present,
+    /// falling back to the detected workspace marker connection otherwise. When a default URL
+    /// is configured, the connection intentionally starts without a seeded API key so the
+    /// typed client can initialize against that server's own default key.
+    /// </summary>
+    public static McpHttpClient? FromDefaultUrlOrMarker(string? directory = null)
+    {
+        var dir = directory ?? Directory.GetCurrentDirectory();
+        var markerClient = FromMarkerOnly(dir);
+        var cfg = DirectorCliConfigStore.Load();
+        if (!string.IsNullOrWhiteSpace(cfg.DefaultBaseUrl))
+        {
+            return new McpHttpClient(
+                cfg.DefaultBaseUrl,
+                apiKey: string.Empty,
+                markerClient?.WorkspacePath ?? dir);
+        }
+
+        return markerClient;
     }
 
     /// <summary>

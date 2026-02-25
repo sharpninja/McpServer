@@ -11,7 +11,7 @@ internal sealed class HealthScreen : View
 {
     private readonly HealthSnapshotsViewModel _viewModel;
     private readonly McpHttpClient _client;
-    private Label _statusLabel = null!;
+    private TextView _statusLabel = null!;
     private Label _serverLabel = null!;
     private TextView _detailView = null!;
 
@@ -31,7 +31,16 @@ internal sealed class HealthScreen : View
         _serverLabel = new Label { X = 0, Y = 0, Text = $"Server: {_client.BaseUrl}" };
         Add(_serverLabel);
 
-        _statusLabel = new Label { X = 0, Y = 1, Width = Dim.Fill(), Text = "Checking..." };
+        _statusLabel = new TextView
+        {
+            X = 0,
+            Y = 1,
+            Width = Dim.Fill(),
+            Height = 1,
+            ReadOnly = true,
+            WordWrap = false,
+            Text = "Checking...",
+        };
         Add(_statusLabel);
 
         _detailView = new TextView
@@ -87,7 +96,8 @@ internal sealed class HealthScreen : View
         {
             await _client.PostRawAsync("/mcp/agents/definitions/seed").ConfigureAwait(false);
             var path = Uri.EscapeDataString(_client.WorkspacePath);
-            var body = new { agentId = "system", eventType = "Init", details = "Workspace initialized via Director TUI" };
+            // Server endpoint currently expects AgentEventType as a numeric enum value (Init = 7).
+            var body = new { agentId = "system", eventType = 7, details = "Workspace initialized via Director TUI" };
             await _client.PostAsync<JsonElement>($"/mcp/agents/system/events?workspace={path}", body).ConfigureAwait(false);
             Application.Invoke(() => _statusLabel.Text = "✓ Workspace initialized");
         }
