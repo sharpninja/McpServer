@@ -42,3 +42,14 @@
 | TR-MCP-REQ-001 | ✅ Complete | AI requirements analysis |
 | TR-MCP-DRY-001 | ✅ Active directive | All code and scripts |
 | TR-LOC-001 | 🔲 Planned | — |
+| FR-MCP-026 | 🔨 In Progress | OidcAuthOptions, Program.cs, AgentController, Setup-McpKeycloak.ps1 |
+| FR-MCP-027 | 🔨 In Progress | AgentController, AgentService, AgentDefaults, AgentDefinitionEntity |
+| FR-MCP-028 | 🔨 In Progress | AgentController, AgentService, AgentWorkspaceEntity, AgentEventLogEntity |
+| FR-MCP-029 | ✅ Complete | McpServer.Cqrs (Dispatcher, CallContext, CorrelationId, Result, IPipelineBehavior) |
+| FR-MCP-030 | ✅ Complete | McpServer.Director (Program, DirectorCommands, AuthCommands, InteractiveCommand, McpHttpClient, OidcAuthService, TokenCache, MainScreen, HealthScreen, AgentScreen, TodoScreen, SessionLogScreen, SyncScreen, WorkspaceListScreen, WorkspacePolicyScreen, LoginDialog, ViewModelBinder) |
+| FR-MCP-031 | 🔲 Planned | — |
+| FR-MCP-032 | 🔲 Planned | — |
+| TR-MCP-AUTH-001–003 | 🔨 In Progress | OIDC authentication |
+| TR-MCP-AGENT-001–003 | 🔨 In Progress | Agent management |
+| TR-MCP-CQRS-001–005 | ✅ Complete | McpServer.Cqrs (Dispatcher, CallContext, CorrelationId, Result, IPipelineBehavior, ILoggerProvider) |
+| TR-MCP-DIR-001–003 | ✅ Complete | McpServer.Director (System.CommandLine CLI, CQRS dispatch, OIDC auth, exec command, Terminal.Gui interactive mode) |

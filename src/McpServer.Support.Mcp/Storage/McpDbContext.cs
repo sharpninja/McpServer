@@ -48,6 +48,15 @@ public sealed class McpDbContext : DbContext
     /// <summary>Tool bucket repositories (GitHub-backed manifest sources).</summary>
     public DbSet<ToolBucketEntity> ToolBuckets => Set<ToolBucketEntity>();
 
+    /// <summary>Agent type definitions (built-in and custom).</summary>
+    public DbSet<AgentDefinitionEntity> AgentDefinitions => Set<AgentDefinitionEntity>();
+
+    /// <summary>Per-workspace agent configurations.</summary>
+    public DbSet<AgentWorkspaceEntity> AgentWorkspaces => Set<AgentWorkspaceEntity>();
+
+    /// <summary>Agent lifecycle event audit log.</summary>
+    public DbSet<AgentEventLogEntity> AgentEventLogs => Set<AgentEventLogEntity>();
+
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -136,6 +145,31 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<ToolBucketEntity>(e =>
         {
             e.HasIndex(x => x.Name).IsUnique();
+        });
+
+        // Agent management entities
+        modelBuilder.Entity<AgentDefinitionEntity>(e =>
+        {
+            e.HasKey(x => x.Id);
+            e.HasIndex(x => x.IsBuiltIn);
+        });
+
+        modelBuilder.Entity<AgentWorkspaceEntity>(e =>
+        {
+            e.HasIndex(x => new { x.AgentDefinitionId, x.WorkspacePath }).IsUnique();
+            e.HasIndex(x => x.WorkspacePath);
+            e.HasOne(x => x.AgentDefinition)
+                .WithMany(x => x.WorkspaceConfigs)
+                .HasForeignKey(x => x.AgentDefinitionId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<AgentEventLogEntity>(e =>
+        {
+            e.HasIndex(x => x.AgentId);
+            e.HasIndex(x => x.WorkspacePath);
+            e.HasIndex(x => x.Timestamp);
+            e.HasIndex(x => x.EventType);
         });
     }
 }

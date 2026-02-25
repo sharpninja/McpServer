@@ -66,6 +66,22 @@ public sealed class WorkspaceDto
     /// <summary>Effective Copilot plan prompt (custom override or built-in default).</summary>
     [JsonPropertyName("planPrompt")]
     public string PlanPrompt { get; set; } = string.Empty;
+
+    /// <summary>SPDX license identifiers banned in this workspace.</summary>
+    [JsonPropertyName("bannedLicenses")]
+    public List<string> BannedLicenses { get; set; } = [];
+
+    /// <summary>ISO country codes banned as dependency origin in this workspace.</summary>
+    [JsonPropertyName("bannedCountriesOfOrigin")]
+    public List<string> BannedCountriesOfOrigin { get; set; } = [];
+
+    /// <summary>Organization/company names banned in this workspace.</summary>
+    [JsonPropertyName("bannedOrganizations")]
+    public List<string> BannedOrganizations { get; set; } = [];
+
+    /// <summary>Individual names/handles banned in this workspace.</summary>
+    [JsonPropertyName("bannedIndividuals")]
+    public List<string> BannedIndividuals { get; set; } = [];
 }
 
 /// <summary>Request to create a workspace.</summary>
@@ -122,6 +138,22 @@ public sealed class WorkspaceCreateRequest
     /// <summary>Override for the Copilot plan prompt. Null = use built-in default.</summary>
     [JsonPropertyName("planPrompt")]
     public string? PlanPrompt { get; set; }
+
+    /// <summary>Initial banned licenses for this workspace.</summary>
+    [JsonPropertyName("bannedLicenses")]
+    public List<string>? BannedLicenses { get; set; }
+
+    /// <summary>Initial banned countries of origin for this workspace.</summary>
+    [JsonPropertyName("bannedCountriesOfOrigin")]
+    public List<string>? BannedCountriesOfOrigin { get; set; }
+
+    /// <summary>Initial banned organizations for this workspace.</summary>
+    [JsonPropertyName("bannedOrganizations")]
+    public List<string>? BannedOrganizations { get; set; }
+
+    /// <summary>Initial banned individuals for this workspace.</summary>
+    [JsonPropertyName("bannedIndividuals")]
+    public List<string>? BannedIndividuals { get; set; }
 }
 
 /// <summary>Request to update a workspace.</summary>
@@ -174,6 +206,22 @@ public sealed class WorkspaceUpdateRequest
     /// <summary>Updated plan prompt (null = no change, empty string = revert to default).</summary>
     [JsonPropertyName("planPrompt")]
     public string? PlanPrompt { get; set; }
+
+    /// <summary>Updated banned licenses (null = no change, empty list = clear all).</summary>
+    [JsonPropertyName("bannedLicenses")]
+    public List<string>? BannedLicenses { get; set; }
+
+    /// <summary>Updated banned countries of origin (null = no change, empty list = clear all).</summary>
+    [JsonPropertyName("bannedCountriesOfOrigin")]
+    public List<string>? BannedCountriesOfOrigin { get; set; }
+
+    /// <summary>Updated banned organizations (null = no change, empty list = clear all).</summary>
+    [JsonPropertyName("bannedOrganizations")]
+    public List<string>? BannedOrganizations { get; set; }
+
+    /// <summary>Updated banned individuals (null = no change, empty list = clear all).</summary>
+    [JsonPropertyName("bannedIndividuals")]
+    public List<string>? BannedIndividuals { get; set; }
 }
 
 /// <summary>Result of reading the global marker prompt template.</summary>

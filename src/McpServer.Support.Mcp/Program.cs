@@ -225,6 +225,7 @@ builder.Services.AddScoped<IToolBucketService, ToolBucketService>();
 builder.Services.AddSingleton<WorkspaceTokenService>();
 builder.Services.AddSingleton<IWorkspaceProcessManager, WorkspaceProcessManager>();
 builder.Services.Configure<PairingOptions>(builder.Configuration.GetSection(PairingOptions.SectionName));
+builder.Services.Configure<OidcAuthOptions>(builder.Configuration.GetSection(OidcAuthOptions.SectionName));
 builder.Services.Configure<ToolRegistryOptions>(builder.Configuration.GetSection(ToolRegistryOptions.SectionName));
 builder.Services.AddSingleton<PairingSessionService>();
 

@@ -72,6 +72,18 @@ public sealed record WorkspaceCreateRequest
 
     /// <summary>Override for the Copilot plan prompt. Null = use built-in default.</summary>
     public string? PlanPrompt { get; init; }
+
+    /// <summary>SPDX license identifiers banned in this workspace (e.g. "GPL-3.0", "AGPL-3.0").</summary>
+    public List<string>? BannedLicenses { get; init; }
+
+    /// <summary>ISO 3166-1 alpha-2 country codes banned as dependency origin (e.g. "CN", "RU").</summary>
+    public List<string>? BannedCountriesOfOrigin { get; init; }
+
+    /// <summary>Organization/company names whose code and libraries are banned.</summary>
+    public List<string>? BannedOrganizations { get; init; }
+
+    /// <summary>Individual names/handles whose code and libraries are banned.</summary>
+    public List<string>? BannedIndividuals { get; init; }
 }
 
 /// <summary>Request to update a workspace. Null fields are not changed.</summary>
@@ -114,6 +126,18 @@ public sealed record WorkspaceUpdateRequest
 
     /// <summary>Updated plan prompt (null = no change, empty string = revert to default).</summary>
     public string? PlanPrompt { get; init; }
+
+    /// <summary>Updated banned licenses (null = no change, empty list = clear all).</summary>
+    public List<string>? BannedLicenses { get; init; }
+
+    /// <summary>Updated banned countries of origin (null = no change, empty list = clear all).</summary>
+    public List<string>? BannedCountriesOfOrigin { get; init; }
+
+    /// <summary>Updated banned organizations (null = no change, empty list = clear all).</summary>
+    public List<string>? BannedOrganizations { get; init; }
+
+    /// <summary>Updated banned individuals (null = no change, empty list = clear all).</summary>
+    public List<string>? BannedIndividuals { get; init; }
 }
 
 /// <summary>Read-only workspace view.</summary>
@@ -169,6 +193,18 @@ public sealed record WorkspaceDto
 
     /// <summary>Effective Copilot plan prompt (custom override or built-in default).</summary>
     public required string PlanPrompt { get; init; }
+
+    /// <summary>SPDX license identifiers banned in this workspace (e.g. "GPL-3.0", "AGPL-3.0").</summary>
+    public List<string> BannedLicenses { get; init; } = [];
+
+    /// <summary>ISO 3166-1 alpha-2 country codes banned as dependency origin (e.g. "CN", "RU").</summary>
+    public List<string> BannedCountriesOfOrigin { get; init; } = [];
+
+    /// <summary>Organization/company names whose code and libraries are banned.</summary>
+    public List<string> BannedOrganizations { get; init; } = [];
+
+    /// <summary>Individual names/handles whose code and libraries are banned.</summary>
+    public List<string> BannedIndividuals { get; init; } = [];
 }
 
 /// <summary>Result of listing workspaces.</summary>

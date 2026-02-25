@@ -44,6 +44,12 @@ public static class WorkspaceAppFactory
             options.ListenLocalhost(port);
         });
 
+        // Load appsettings.json from the workspace directory (if present) so workspace-level
+        // config (e.g. Mcp:Auth) is available to workspace controllers.
+        var workspaceAppSettings = Path.Combine(workspacePath, "appsettings.json");
+        if (File.Exists(workspaceAppSettings))
+            builder.Configuration.AddJsonFile(workspaceAppSettings, optional: true, reloadOnChange: false);
+
         // Override configuration for this workspace.
         builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
         {
@@ -75,6 +81,7 @@ public static class WorkspaceAppFactory
         });
         builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(TodoStorageOptions.SectionName));
         builder.Services.Configure<EmbeddingOptions>(builder.Configuration.GetSection("Embedding"));
+        builder.Services.Configure<OidcAuthOptions>(builder.Configuration.GetSection(OidcAuthOptions.SectionName));
         builder.Services.Configure<TodoPromptOptions>(options =>
         {
             options.BaseUrl = $"http://localhost:{port}";

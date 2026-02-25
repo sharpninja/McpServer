@@ -1079,5 +1079,71 @@ mvp-mcp:
     description:
     - Extract the copilot-related functions from the VS2026 VSIX extension and expose them as MCP server endpoints under /mcp/todo or similar.
     - This consolidates agent-facing capabilities into the MCP server rather than the IDE extension.
+  - id: MVP-MCP-003
+    title: Complete Director MVVM/CQRS endpoint coverage with per-area ViewModels, handlers, commands, and RBAC tab visibility
+    estimate: 3-5 days
+    done: false
+    description:
+    - Implement complete MCP Director administration coverage through the McpServer.UI.Core MVVM/CQRS layer.
+    - Every MCP area should have ViewModel coverage, every endpoint should have a handler, and every handler should be callable from an IAsyncRelayCommand.
+    - Each tab must include a primary entity list/grid plus detail views for CRUD or read-only detail as applicable.
+    - Add RBAC-aware tab and command visibility (viewer, agent-manager, admin), with hidden workspaces/admin features for non-admin users.
+    - Director interactive screens should use ViewModels/CQRS only for covered areas (no direct endpoint calls in migrated tabs).
+    technical-details:
+    - 'Scope: all /mcp/* areas plus /auth/config and /health diagnostics/event views.'
+    - 'Handler granularity: strict 1:1 endpoint-to-handler mapping (query/command + handler + ViewModel async command).'
+    - 'ViewModel convention: per area ListViewModel + DetailViewModel pair.'
+    - Director shell must consume ViewModels only for migrated tabs; use McpServer.Client adapters behind UI.Core service abstractions.
+    - 'RBAC source: JWT realm roles parsed by Director auth (realm_roles/roles). Role tiers: viewer, agent-manager, admin.'
+    - 'RBAC UX behavior: hide unauthorized tabs and commands; still rely on server-side auth as authority.'
+    - 'UI.Core additions planned: IRoleContext, IAuthorizationPolicyService, shared list/detail VM base types, operation state helpers.'
+    - 'Area API abstractions planned in UI.Core: IWorkspaceApiClient, ITodoApiClient, IAgentApiClient, ISessionLogApiClient, ISyncApiClient, IContextApiClient, IRepoApiClient, IToolRegistryApiClient, IGitHubApiClient, IAuthConfigApiClient, IDiagnosticApiClient, IEventStreamApiClient, IHealthApiClient.'
+    - 'Existing tabs migrate first: Health, Workspaces/Policy, Agents, TODO, Session Logs, Sync; then add Context, Repo, Tools, GitHub, Events, Diagnostic, Auth Config.'
+    - 'Testing requirements: handler unit tests, ViewModel command/visibility tests, RBAC policy tests, Director exec integration checks, per-tab UI acceptance (list+detail minimum).'
+    - 'Approximate endpoint coverage target from current controllers: ~78 endpoint handlers/commands including /health.'
+    depends-on:
+    - MVP-MCP-002
+    functional-requirements: []
+    technical-requirements: []
+    implementation-tasks:
+    - task: 'Phase 0: Add UI.Core RBAC contracts (IRoleContext, IAuthorizationPolicyService), area enum/action keys, shared list/detail VM base types, and IAsyncRelayCommand-compatible wrappers.'
+      done: false
+    - task: 'Phase 1: Add Director RoleContext + authorization policy implementation, tab metadata registry, and DI registrations for all UI.Core API adapters backed by McpServer.Client.'
+      done: false
+    - task: 'Phase 2.1: Implement Health area handlers + list/detail VMs and migrate Health tab to ViewModel-only.'
+      done: false
+    - task: 'Phase 2.2: Complete Workspace/Policy endpoint handler coverage + detail VMs and enforce admin-only visibility.'
+      done: false
+    - task: 'Phase 2.3: Complete Agents endpoint coverage (definitions/instances/events/validate/ban) with list/detail VMs and migrate Agents tab.'
+      done: false
+    - task: 'Phase 2.4: Complete TODO endpoint coverage (CRUD + requirements/prompt endpoints) with list/detail VMs and migrate TODO tab.'
+      done: false
+    - task: 'Phase 2.5: Complete SessionLog query/submit/dialog endpoint coverage with session list/detail VMs and migrate Sessions tab.'
+      done: false
+    - task: 'Phase 2.6: Complete Sync run/status handlers with list/detail VMs and migrate Sync tab (admin-only run action).'
+      done: false
+    - task: 'Phase 3: Add missing tabs/areas (Context, Repo, Tool Registry, GitHub, Event Stream, Diagnostic, Auth Config) with list/detail VMs and strict endpoint handler mapping.'
+      done: false
+    - task: 'Phase 4: Ensure director exec parity for all ViewModels and apply permission checks through shared authorization policy service.'
+      done: false
+    - task: 'Phase 5: Hardening (error/loading consistency, cancellation, keyboard UX, auth role refresh behavior, integration verification on deployed service topology).'
+      done: false
+  low-priority: []
 test:
   low-priority: []
+infrastructure:
+  high-priority:
+  - id: web-ui
+    title: McpServer Management Web UI
+    done: false
+    description:
+    - Build a web-based management UI for McpServer
+    - Provides workspace management, agent configuration, session log viewing, todo management, and system health monitoring
+    - Should integrate with Keycloak OIDC for authentication
+  - id: github-integration
+    title: Github Integration
+    done: false
+    description:
+    - Enhance GitHub integration capabilities for McpServer
+    - Support GitHub as Keycloak Identity Provider for user authentication
+    - Integrate with GitHub OAuth for agent workspace management and PR workflows

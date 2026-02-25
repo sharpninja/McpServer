@@ -129,3 +129,145 @@ Operational scripts for startup, health checks, packaging, config validation, an
 ## TR-LOC-001
 
 **Localization Infrastructure** — Multi-language support for the MCP server. *(Planned — implementation scope TBD.)*
+
+## TR-MCP-AUTH-001
+
+**Keycloak OIDC JWT Bearer Authentication** — ASP.NET Core JWT Bearer middleware configured with Keycloak realm authority, audience (`mcp-server-api`), and client secret. `OidcAuthOptions` bound from `Mcp:Auth` configuration section. Management endpoints (agent mutations) require `[Authorize(Policy = "AgentManager")]`; read endpoints fall back to existing API key auth. `RequireHttpsMetadata` configurable for local development.
+
+**Covered by:** `OidcAuthOptions`, `Program.cs`, `AgentController`
+
+## TR-MCP-AUTH-002
+
+**GitHub Identity Provider in Keycloak** — Keycloak realm setup scripts configure GitHub as a social Identity Provider with `user:email read:org` scopes. First-login flow auto-creates Keycloak users from GitHub accounts. GitHub username mapped to `github_username` user attribute. Setup scripts accept `--GitHubClientId` / `--GitHubClientSecret` parameters; GitHub IdP is optional.
+
+**Covered by:** `Setup-McpKeycloak.ps1`, `setup-mcp-keycloak.sh`
+
+## TR-MCP-AUTH-003
+
+**Device Authorization Flow for CLI Clients** — Keycloak `mcp-director` client configured as public with OAuth 2.0 Device Authorization Grant enabled. Director CLI initiates device flow, displays user code and verification URI, polls for token completion. Audience mapper ensures `mcp-server-api` appears in token audience. Realm roles mapper includes `realm_roles` claim.
+
+**Covered by:** `Setup-McpKeycloak.ps1`, `setup-mcp-keycloak.sh`, `McpServer.Director`
+
+## TR-MCP-AGENT-001
+
+**Agent EF Core Entities** — `AgentDefinitionEntity` (agent type definitions with defaults), `AgentWorkspaceEntity` (per-workspace agent configurations with overrides, banning, isolation strategy), and `AgentEventLogEntity` (lifecycle event audit log). All stored in primary instance SQLite via `McpDbContext`. Unique index on `(AgentDefinitionId, WorkspacePath)` for workspace configs. JSON serialization for list fields (`DefaultModelsJson`, `ModelsOverrideJson`, `InstructionFilesOverrideJson`).
+
+**Covered by:** `AgentDefinitionEntity`, `AgentWorkspaceEntity`, `AgentEventLogEntity`, `McpDbContext`
+
+## TR-MCP-AGENT-002
+
+**Built-in Agent Type Defaults** — `AgentDefaults.GetBuiltInDefaults()` returns seed data for 7 built-in agent types: copilot, cline, cursor, windsurf, claude-code, aider, continue. Each includes default launch command, instruction file path, models, branch strategy, and seed prompt. `AgentService.SeedBuiltInDefaultsAsync` is idempotent — only inserts agents not already present. Built-in definitions cannot be deleted.
+
+**Covered by:** `AgentDefaults`, `AgentService`
+
+## TR-MCP-AGENT-003
+
+**Agent REST API** — `AgentController` at `/mcp/agents` with endpoints for: definition CRUD (`/definitions`), workspace agent CRUD (root), ban/unban (`/{agentId}/ban`, `/{agentId}/unban`), lifecycle events (`/{agentId}/events`), and YAML validation (`/validate`). Mutation endpoints require `[Authorize(Policy = "AgentManager")]` (JWT). Read endpoints use standard workspace API key auth.
+
+**Covered by:** `AgentController`, `IAgentService`, `AgentService`
+
+## TR-MCP-CQRS-001
+
+**Standalone CQRS Library** — `McpServer.Cqrs` published as NuGet package `SharpNinja.McpServer.Cqrs`. Targets `net9.0`. Zero external dependencies beyond `Microsoft.Extensions.Logging.Abstractions` and `Microsoft.Extensions.DependencyInjection.Abstractions`. Provides: `ICommand<TResult>`, `IQuery<TResult>`, `ICommandHandler<TCommand, TResult>`, `IQueryHandler<TQuery, TResult>`, `Dispatcher`, `CallContext`, `CorrelationId`, `Result<T>`, `IPipelineBehavior`, and DI registration extensions. All dispatched calls are async (`Task<Result<T>>`).
+
+**Status:** ✅ Complete — 37 unit tests passing
+
+**Covered by:** `McpServer.Cqrs` project
+
+## TR-MCP-CQRS-002
+
+**Decimal Correlation IDs** — `CorrelationId` uses format `{baseId}.{counter}` where `baseId` is a random 8-digit long (stable for the entire call tree) and `counter` is a thread-safe (`Interlocked.Increment`) incrementing integer. Each pipeline step or handler call advances the counter. `CorrelationId.Parse(string)` reconstitutes from string. Propagated via HTTP headers (`X-Correlation-Id`).
+
+**Status:** ✅ Complete
+
+**Covered by:** `CorrelationId`
+
+## TR-MCP-CQRS-003
+
+**Dispatcher as ILoggerProvider with Context Registry** — `Dispatcher` implements `ILoggerProvider` and maintains a `ConcurrentDictionary<long, CallContext>` of active contexts keyed by `CorrelationId.BaseId`. `DispatcherLogger` (created by the provider) extracts correlation IDs from log scopes, looks up the `CallContext`, and enriches structured log entries with decomposed fields: `correlationId`, `correlationBaseId`, `correlationStep`, `operationName`, `userId`, `roles`, `elapsed`. `CallContext` implements `ILogger` and captures log entries to an internal list.
+
+**Status:** ✅ Complete
+
+**Covered by:** `Dispatcher`, `DispatcherLogger`, `CallContext`
+
+## TR-MCP-CQRS-004
+
+**Automatic Result Monad Logging** — After handler execution, the Dispatcher inspects the `Result<T>`: success results logged at `Debug` level with elapsed time; failures with `Exception` logged at `Error` level with exception details; failures without exception logged at `Warning` level. Dispatch calls themselves logged at `Debug` with full call context. All logging includes decomposed correlation ID fields.
+
+**Status:** ✅ Complete
+
+**Covered by:** `Dispatcher`
+
+## TR-MCP-CQRS-005
+
+**Pipeline Behaviors** — `IPipelineBehavior` wraps handler execution with pre/post processing. Behaviors receive the request, `CallContext`, and a `next` delegate. Behaviors can short-circuit by returning `Result<T>.Failure()` without calling `next`. Registration order determines execution order (outermost first). Built-in behaviors: `LoggingBehavior`, `ValidationBehavior`.
+
+**Status:** ✅ Complete
+
+**Covered by:** `IPipelineBehavior`, `Dispatcher`
+
+## TR-MCP-DIR-001
+
+**Director Console App with CQRS** — `McpServer.Director` console application using `System.CommandLine` for CLI parsing and `McpServer.Cqrs` for all action dispatch. CLI commands: `health`, `list`, `agents` (defs/ws/events), `add`, `ban`, `unban`, `delete`, `validate`, `init`, `sync` (status/run), `todo`, `session-log`, `login`, `logout`, `whoami`, `interactive` (aliases: `tui`, `ui`), `exec`, `list-viewmodels`. Interactive mode uses Terminal.Gui v2 with 7 tabbed screens (Health, Workspaces, Agents, TODO, Sessions, Sync, Policy) plus LoginDialog, menu bar, auth status indicator, and keyboard shortcuts (F2 Login, F5 Refresh, Ctrl+Q Quit).
+
+**Status:** ✅ Complete — 18 CLI commands, 9 Terminal.Gui screens, solution builds with 0 warnings
+
+**Covered by:** `McpServer.Director` project (`Program.cs`, `DirectorCommands.cs`, `AuthCommands.cs`, `InteractiveCommand.cs`, `McpHttpClient.cs`, `MainScreen.cs`, `HealthScreen.cs`, `AgentScreen.cs`, `TodoScreen.cs`, `SessionLogScreen.cs`, `SyncScreen.cs`, `WorkspaceListScreen.cs`, `WorkspacePolicyScreen.cs`, `LoginDialog.cs`, `ViewModelBinder.cs`)
+
+## TR-MCP-DIR-002
+
+**Director OIDC Authentication** — `OidcAuthService` implements Keycloak Device Authorization Flow. Initiates device flow, displays user code and verification URI, polls for token. Tokens cached to `~/.mcpserver/tokens.json` via `TokenCache`. `McpHttpClient.TrySetCachedBearerToken()` loads cached tokens on startup. CLI commands: `login`, `logout`, `whoami`. TUI: `LoginDialog` with Device Flow UI, authority/client-id fields, user code display, polling status, and whoami frame. Token includes `sub`, `preferred_username`, `email`, `realm_roles` claims.
+
+**Status:** ✅ Complete
+
+**Covered by:** `McpServer.Director` project (`Auth/OidcAuthService.cs`, `Auth/TokenCache.cs`, `Auth/DirectorAuthOptions.cs`, `Commands/AuthCommands.cs`, `Screens/LoginDialog.cs`)
+
+## TR-MCP-COMP-001
+
+**Workspace Compliance Ban Lists** — `WorkspaceDto`, `WorkspaceCreateRequest`, and `WorkspaceUpdateRequest` include four `List<string>` properties: `BannedLicenses`, `BannedCountriesOfOrigin`, `BannedOrganizations`, `BannedIndividuals`. `MarkerFileService.BuildTemplateContext` exposes these as Handlebars context (null when empty). `DefaultPromptTemplate` uses `{{#if}}` / `{{#each}}` blocks to conditionally render compliance sections. Recognized action types: `license_violation`, `origin_violation`, `origin_review`, `entity_violation`, `dependency_add`.
+
+**Covered by:** `IWorkspaceService.cs`, `MarkerFileService.cs`
+
+## TR-MCP-COMP-002
+
+**Agent Values Prompt Sections** — `DefaultPromptTemplate` includes five mandatory non-configurable sections: (1) Absolute Honesty, (2) Correctness Above All, (3) Complete Decision Documentation, (4) Professional Representation and Audit Trail, (5) Source Attribution. Each section specifies required session log action types (`commit`, `pr_comment`, `issue_comment`, `web_reference`, `design_decision`).
+
+**Covered by:** `MarkerFileService.DefaultPromptTemplate`
+
+## TR-MCP-COMP-003
+
+**Session Continuity Protocol** — `DefaultPromptTemplate` includes Requirements Tracking, Design Decision Logging, and Session Continuity sections. Agents must: read marker file at session start, query recent session logs, query TODOs, read Requirements-Matrix.md, post updated session logs every ~10 interactions, and capture requirements/decisions as they emerge.
+
+**Covered by:** `MarkerFileService.DefaultPromptTemplate`
+
+## TR-MCP-AUDIT-001
+
+**Audited Copilot Client** — `AuditedCopilotClient` decorates `ICopilotClient`. Before each Copilot invocation: determines affected workspaces, creates `in_progress` session log entries per workspace. After invocation: logs `completed` entries with result and actions taken. Action type: `copilot_invocation`. Registered as DI decorator so all server-initiated Copilot calls are audited.
+
+**Covered by:** `AuditedCopilotClient` (planned)
+
+## TR-MCP-POL-001
+
+**Natural Language Policy Management** — `PolicyManagementTool` MCP STDIO tool + `POST /mcp/workspace/policy` REST endpoint. Accepts natural language directives, parses intent (action, category, value, scope) via LLM, applies workspace config mutations via `IWorkspaceService.UpdateAsync`, logs `policy_change` actions per affected workspace session log.
+
+**Covered by:** `PolicyManagementTool` (planned)
+
+## TR-MCP-DIR-003
+
+**Director Exec Command** — `director exec <ViewModelName>` CLI command. `IViewModelRegistry` maps ViewModel names/aliases to types. `ExecCliCommand` resolves ViewModel from DI, deserializes JSON input to properties via `System.Text.Json`, executes primary `IRelayCommand`, serializes `Result<T>` to JSON stdout. `[ViewModelCommand("alias")]` attribute for CLI aliases. Exit code 0/1 maps to Result success/failure.
+
+**Status:** ✅ Complete
+
+**Covered by:** `McpServer.Director` project (`Program.cs` exec/list-viewmodels commands), `McpServer.UI.Core` (`IViewModelRegistry`)
+
+## TR-MCP-DTO-001
+
+**Extended Session Log Entry Fields** — `UnifiedRequestEntryDto` extended with: `designDecisions` (List<string>), `requirementsDiscovered` (List<string> of requirement IDs), `filesModified` (List<string> of file paths), `blockers` (List<string>). All fields are REQUIRED in the marker prompt session logging instructions except `blockers` which is RECOMMENDED.
+
+**Covered by:** `UnifiedSessionLogDto.cs`
+
+## TR-MCP-CTX-001
+
+**New Project Context Indexing** — Ingestion configuration must include `src/McpServer.Cqrs/**/*.cs`, `src/McpServer.Cqrs.Mvvm/**/*.cs`, `src/McpServer.UI.Core/**/*.cs`, and `src/McpServer.Director/**/*.cs` in file patterns. Marker prompt Available Capabilities section lists all four projects with descriptions.
+
+**Covered by:** Ingestion configuration (planned)

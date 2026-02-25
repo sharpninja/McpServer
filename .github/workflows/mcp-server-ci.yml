@@ -13,8 +13,13 @@ on:
     paths:
       - "src/McpServer.Support.Mcp/**"
       - "src/McpServer.Client/**"
+      - "src/McpServer.Director/**"
+      - "src/McpServer.UI.Core/**"
+      - "src/McpServer.Cqrs/**"
+      - "src/McpServer.Cqrs.Mvvm/**"
       - "tests/McpServer.Support.Mcp.Tests/**"
       - "tests/McpServer.Client.Tests/**"
+      - "tests/McpServer.Cqrs.Tests/**"
       - "docs/**"
       - "docfx.json"
       - "templates/**"
@@ -31,8 +36,13 @@ on:
     paths:
       - "src/McpServer.Support.Mcp/**"
       - "src/McpServer.Client/**"
+      - "src/McpServer.Director/**"
+      - "src/McpServer.UI.Core/**"
+      - "src/McpServer.Cqrs/**"
+      - "src/McpServer.Cqrs.Mvvm/**"
       - "tests/McpServer.Support.Mcp.Tests/**"
       - "tests/McpServer.Client.Tests/**"
+      - "tests/McpServer.Cqrs.Tests/**"
       - "docs/**"
       - "docfx.json"
       - "templates/**"
@@ -73,6 +83,12 @@ jobs:
       - name: Publish MCP Server
         run: dotnet publish src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj -c Release -o artifacts/mcp-server
 
+      - name: Build Director tool
+        run: dotnet build src/McpServer.Director/McpServer.Director.csproj -c Release
+
+      - name: Pack Director tool
+        run: dotnet pack src/McpServer.Director/McpServer.Director.csproj -c Release --no-build -o artifacts/director-tool
+
       - name: Generate OpenAPI artifact
         shell: bash
         run: |
@@ -95,6 +111,12 @@ jobs:
         with:
           name: mcp-server-publish
           path: artifacts/mcp-server
+
+      - name: Upload Director tool package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: director-tool-nupkg
+          path: artifacts/director-tool/*.nupkg
 
       - name: Upload OpenAPI artifact
         uses: actions/upload-artifact@v4
@@ -298,6 +320,9 @@ jobs:
       - name: Pack
         run: dotnet pack src/McpServer.Client/McpServer.Client.csproj -c Release -p:PackageVersion=${{ steps.version.outputs.version }} -o ./nupkg
 
+      - name: Pack Director tool
+        run: dotnet pack src/McpServer.Director/McpServer.Director.csproj -c Release -p:PackageVersion=${{ steps.version.outputs.version }} -o ./nupkg
+
       - name: Push to NuGet (main only)
         if: github.ref == 'refs/heads/main'
         run: dotnet nuget push ./nupkg/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
@@ -309,5 +334,5 @@ jobs:
       - name: Upload NuGet artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mcp-client-nupkg
+          name: mcp-packages-nupkg
           path: nupkg/*.nupkg

@@ -17,6 +17,171 @@ namespace McpServer.Support.Mcp.Storage.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.12");
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DefaultBranchStrategy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DefaultInstructionFile")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DefaultLaunchCommand")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DefaultModelsJson")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DefaultSeedPrompt")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsBuiltIn")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsBuiltIn");
+
+                    b.ToTable("AgentDefinitions");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentEventLogEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AgentId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DetailsJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EventType")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WorkspacePath")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AgentId");
+
+                    b.HasIndex("EventType");
+
+                    b.HasIndex("Timestamp");
+
+                    b.HasIndex("WorkspacePath");
+
+                    b.ToTable("AgentEventLogs");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentWorkspaceEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AgentDefinitionId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AgentIsolation")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Banned")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("BannedReason")
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("BannedUntilPr")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("BranchStrategyOverride")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("InstructionFilesOverrideJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastLaunchedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LaunchCommandOverride")
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MarkerAdditions")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModelsOverrideJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SeedPromptOverride")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WorkspacePath")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspacePath");
+
+                    b.HasIndex("AgentDefinitionId", "WorkspacePath")
+                        .IsUnique();
+
+                    b.ToTable("AgentWorkspaces");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity", b =>
                 {
                     b.Property<string>("Id")
@@ -478,6 +643,17 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.ToTable("ToolDefinitionTags");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentWorkspaceEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", "AgentDefinition")
+                        .WithMany("WorkspaceConfigs")
+                        .HasForeignKey("AgentDefinitionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AgentDefinition");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity", "Document")
@@ -553,6 +729,11 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .IsRequired();
 
                     b.Navigation("ToolDefinition");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", b =>
+                {
+                    b.Navigation("WorkspaceConfigs");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity", b =>

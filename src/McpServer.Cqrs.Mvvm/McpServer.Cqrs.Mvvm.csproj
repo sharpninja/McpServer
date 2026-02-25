@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>McpServer.Cqrs.Mvvm</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CA1515;CA1849;CA1031</NoWarn>
+
+    <!-- NuGet Package Metadata -->
+    <PackageId>SharpNinja.McpServer.Cqrs.Mvvm</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>SharpNinja</Authors>
+    <Description>MVVM bridge for McpServer.Cqrs — provides IRelayCommand implementations that dispatch CQRS commands/queries through the Dispatcher, with ObservableObject base class integration.</Description>
+    <PackageTags>cqrs;mvvm;relay-command;observable;viewmodel</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/sharpninja/McpServer</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\McpServer.Cqrs\McpServer.Cqrs.csproj" />
+  </ItemGroup>
+</Project>

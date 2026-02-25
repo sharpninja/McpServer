@@ -151,3 +151,91 @@ One workspace is designated as the **primary** workspace — served by the host 
 ## FR-LOC-001 Localization Support
 
 Localization and internationalization support for the MCP server. *(Planned — implementation scope TBD.)*
+
+## FR-MCP-026 Keycloak OIDC Authentication
+
+The server shall support Keycloak OIDC JWT Bearer authentication for management endpoints, with GitHub as a social Identity Provider for user login. Users authenticating via GitHub shall have Keycloak accounts auto-created. Management endpoints (agent mutations) require JWT; read endpoints use existing API key auth.
+
+**Covered by:** `OidcAuthOptions`, `Program.cs`, `AgentController`, `Setup-McpKeycloak.ps1`, `setup-mcp-keycloak.sh`
+
+## FR-MCP-027 Agent Definition Management
+
+The server shall provide CRUD operations for agent type definitions with built-in defaults for well-known AI coding agents (copilot, cline, cursor, windsurf, claude-code, aider, continue). Built-in definitions are seeded on first run and cannot be deleted.
+
+**Covered by:** `AgentController`, `AgentService`, `AgentDefaults`, `AgentDefinitionEntity`
+
+## FR-MCP-028 Per-Workspace Agent Configuration
+
+The server shall support per-workspace agent configuration with overrides for launch command, models, branch strategy, seed prompt, and instruction files. Agents can be banned per-workspace or globally with optional PR-gated unbanning. All agent lifecycle events (add, launch, exit, ban, unban, delete, merge, init) are logged for audit.
+
+**Covered by:** `AgentController`, `AgentService`, `AgentWorkspaceEntity`, `AgentEventLogEntity`
+
+## FR-MCP-029 CQRS Framework
+
+A standalone CQRS framework (`McpServer.Cqrs`) shall provide async command/query dispatch with a Result monad, decimal correlation IDs (`baseId.counter`), pipeline behaviors, and an `ILoggerProvider` implementation that auto-enriches structured logs with decomposed correlation context. The Dispatcher shall automatically log Result outcomes (success at Debug, errors at Error/Warning).
+
+**Status:** ✅ Complete
+
+**Covered by:** `McpServer.Cqrs` project (`Dispatcher`, `CallContext`, `CorrelationId`, `Result<T>`, `IPipelineBehavior`), `McpServer.Cqrs.Mvvm` (IViewModelRegistry, ViewModelRegistryExtensions), `McpServer.UI.Core` (WorkspaceListViewModel, WorkspacePolicyViewModel, AddUiCore DI extension)
+
+**Implementation:** 37 unit tests passing. Provides `ICommand<T>`/`IQuery<T>` message types, `ICommandHandler<,>`/`IQueryHandler<,>` handlers, `Dispatcher` with pipeline behavior chain, `CallContext` with `CorrelationId` for structured logging, and `Result<T>` monad with success/error paths. MVVM layer adds `IViewModelRegistry` for CLI exec command support.
+
+## FR-MCP-030 Director CLI
+
+A console application (`McpServer.Director`) shall provide agent orchestration commands (init, add, launch, ban, unban, delete, merge, login, list, agents, validate, interactive) dispatched through the CQRS framework. Authentication uses Keycloak Device Authorization Flow. Interactive mode uses Terminal.Gui v2 with ViewModel-bound screens.
+
+**Status:** ✅ Complete
+
+**Covered by:** `McpServer.Director` project — 16 source files: `Program.cs`, `McpHttpClient.cs`, `Auth/DirectorAuthOptions.cs`, `Auth/OidcAuthService.cs`, `Auth/TokenCache.cs`, `Commands/AuthCommands.cs`, `Commands/CommandHelpers.cs`, `Commands/DirectorCommands.cs`, `Commands/InteractiveCommand.cs`, `Screens/MainScreen.cs`, `Screens/HealthScreen.cs`, `Screens/AgentScreen.cs`, `Screens/TodoScreen.cs`, `Screens/SessionLogScreen.cs`, `Screens/SyncScreen.cs`, `Screens/WorkspaceListScreen.cs`, `Screens/WorkspacePolicyScreen.cs`, `Screens/LoginDialog.cs`, `Screens/ViewModelBinder.cs`
+
+**Implementation:** 18 CLI commands registered via System.CommandLine. All commands communicate with the MCP server via `McpHttpClient` (reads connection details from `AGENTS-README-FIRST.yaml`). Auth uses Keycloak Device Authorization Flow with token caching to `~/.mcpserver/tokens.json`. Interactive mode (`director interactive|tui|ui`) launches Terminal.Gui v2 with 7 tabs (Health, Workspaces, Agents, TODO, Sessions, Sync, Policy) plus a Login dialog, menu bar, auth status indicator, and keyboard shortcuts (F2 Login, F5 Refresh, Ctrl+Q Quit). ViewModels from `McpServer.UI.Core` are bound to Terminal.Gui controls via `ViewModelBinder` (INotifyPropertyChanged → Application.Invoke).
+
+## FR-MCP-031 McpServer Management Web UI
+
+A web-based management UI for McpServer providing workspace management, agent configuration, session log viewing, todo management, and system health monitoring. Integrates with Keycloak OIDC for authentication. *(Planned — tracked as high-priority TODO.)*
+
+## FR-MCP-032 Enhanced GitHub Integration
+
+Enhanced GitHub integration capabilities including GitHub as Keycloak Identity Provider for user authentication, and GitHub OAuth for agent workspace management and PR workflows. *(Planned — tracked as high-priority TODO.)*
+
+## FR-MCP-033 Natural Language Policy Management
+
+A Copilot-integrated prompt tool that accepts natural language policy directives (e.g. "Ban chinese sources from all workspaces") and translates them into workspace configuration changes across all or targeted workspaces. Each policy change is session-logged per affected workspace with action type `policy_change`.
+
+**Covered by:** `PolicyManagementTool` in `McpServer.Support.Mcp`
+
+## FR-MCP-034 Workspace Compliance Configuration
+
+Per-workspace compliance configuration supporting four ban lists: `BannedLicenses` (SPDX identifiers), `BannedCountriesOfOrigin` (ISO 3166-1 alpha-2 codes), `BannedOrganizations`, and `BannedIndividuals`. Ban lists are conditionally rendered into the AGENTS-README-FIRST.yaml marker prompt via Handlebars templates. Agents must verify compliance before adding dependencies and log violations.
+
+**Covered by:** `WorkspaceDto`, `WorkspaceCreateRequest`, `WorkspaceUpdateRequest`, `MarkerFileService`
+
+## FR-MCP-035 Agent Values and Conduct Enforcement
+
+The marker prompt shall include mandatory sections for: absolute honesty, correctness above speed, complete decision documentation, professional representation and audit trail (commits, PRs, issues logged in full), and source attribution (web references logged). These are non-configurable and always present.
+
+**Covered by:** `MarkerFileService.DefaultPromptTemplate`
+
+## FR-MCP-036 Audited Copilot Interactions
+
+Every server-initiated Copilot interaction must be session-logged in every affected workspace. An `AuditedCopilotClient` decorator wraps `ICopilotClient` to create session log entries before and after each call, with action type `copilot_invocation`.
+
+**Covered by:** `AuditedCopilotClient` decorator
+
+## FR-MCP-037 Director CLI Exec Command
+
+The Director CLI shall support a `director exec <ViewModelName>` command that instantiates the named ViewModel from the registry, populates properties from JSON input (stdin or `--input` flag), executes the primary `IRelayCommand`, and returns the result as JSON to stdout. Exit code 0 = success, 1 = failure.
+
+**Covered by:** `McpServer.Director` project, `IViewModelRegistry`
+
+## FR-MCP-038 Session Continuity Protocol
+
+Agents must follow a session continuity protocol: at session start, read the marker file, query recent session logs (limit=5), query current TODOs, and read Requirements-Matrix.md. During long sessions, post updated session logs every ~10 interactions. Requirements and design decisions must be captured as they emerge, not deferred.
+
+**Covered by:** `MarkerFileService.DefaultPromptTemplate`
+
+## FR-MCP-039 MCP Context Indexing for New Projects
+
+All source files from `McpServer.Cqrs`, `McpServer.Cqrs.Mvvm`, `McpServer.UI.Core`, and `McpServer.Director` shall be indexed into the MCP context store for semantic search. The marker prompt lists these projects in the Available Capabilities section.
+
+**Covered by:** Ingestion configuration, `MarkerFileService.DefaultPromptTemplate`

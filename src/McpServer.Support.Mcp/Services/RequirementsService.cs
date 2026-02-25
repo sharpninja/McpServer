@@ -1,5 +1,8 @@
 using System.Text.Json;
 using McpServer.Common.Copilot;
+using McpServer.Support.Mcp.Options;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Services;
 
@@ -11,6 +14,8 @@ namespace McpServer.Support.Mcp.Services;
 internal sealed class RequirementsService(
     ICopilotClient copilotClient,
     ITodoService todoService,
+    IWebHostEnvironment hostEnvironment,
+    IOptionsMonitor<TodoPromptOptions> promptOptions,
     ILogger<RequirementsService> logger) : IRequirementsService
 {
     /// <inheritdoc />
@@ -28,12 +33,27 @@ internal sealed class RequirementsService(
 
         logger.LogInformation("Invoking Copilot to analyze requirements for TODO {Id}", todoId);
 
+        var currentPromptOptions = promptOptions.CurrentValue;
         var options = new CopilotClientOptions
         {
             Timeout = TimeSpan.FromMinutes(5),
+            WorkingDirectory = hostEnvironment.ContentRootPath,
+            RunAs = currentPromptOptions.RunAs,
+            GitHubToken = currentPromptOptions.GitHubToken,
         };
+        if (!string.IsNullOrWhiteSpace(currentPromptOptions.AgentPath))
+            options.AgentPath = currentPromptOptions.AgentPath;
 
         var result = await copilotClient.InvokeAsync(prompt, options, cancellationToken).ConfigureAwait(false);
+
+        if (ShouldRetryWithStreamingFallback(result))
+        {
+            logger.LogWarning(
+                "Copilot CLI reported unsupported option during requirements analysis for TODO {Id}. Retrying with streaming fallback.",
+                todoId);
+
+            result = await InvokeWithStreamingFallbackAsync(prompt, options, cancellationToken).ConfigureAwait(false);
+        }
 
         if (result.State != CopilotResultState.Success)
         {
@@ -90,6 +110,70 @@ internal sealed class RequirementsService(
             TechnicalRequirements: mergedTrs,
             CopilotResponse: result.Body);
     }
+
+    private async Task<CopilotResult> InvokeWithStreamingFallbackAsync(
+        string prompt,
+        CopilotClientOptions options,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var lines = new List<string>();
+            await foreach (var line in copilotClient.InvokeStreamingAsync(prompt, options, cancellationToken))
+            {
+                if (!string.IsNullOrWhiteSpace(line))
+                    lines.Add(line);
+            }
+
+            var body = string.Join(Environment.NewLine, lines).Trim();
+            if (string.IsNullOrWhiteSpace(body))
+            {
+                return new CopilotResult
+                {
+                    State = CopilotResultState.Error,
+                    Stderr = "Streaming fallback produced no output.",
+                };
+            }
+
+            // Best-effort failure detection because streaming API does not currently expose exit code/stderr.
+            if (body.Contains("error: unknown option", StringComparison.OrdinalIgnoreCase))
+            {
+                return new CopilotResult
+                {
+                    State = CopilotResultState.Error,
+                    Body = body,
+                    Stderr = body,
+                };
+            }
+
+            return new CopilotResult
+            {
+                State = CopilotResultState.Success,
+                Body = body,
+            };
+        }
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            return new CopilotResult
+            {
+                State = CopilotResultState.Timeout,
+                Stderr = "Streaming fallback timed out.",
+            };
+        }
+        catch (Exception ex)
+        {
+            return new CopilotResult
+            {
+                State = CopilotResultState.Error,
+                Stderr = ex.Message,
+            };
+        }
+    }
+
+    private static bool ShouldRetryWithStreamingFallback(CopilotResult result)
+        => result.State != CopilotResultState.Success
+           && (result.Stderr.Contains("unknown option '--no-warnings'", StringComparison.OrdinalIgnoreCase)
+               || result.Body.Contains("unknown option '--no-warnings'", StringComparison.OrdinalIgnoreCase));
 
     private static string BuildPrompt(TodoFlatItem todo)
     {
