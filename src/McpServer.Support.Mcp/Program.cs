@@ -1,8 +1,11 @@
 // TR-PLANNED-013 / FR-SUPPORT-010: MCP Context Unification - local MCP server for Cursor and Copilot.
 
 using System.Globalization;
+using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Runtime.Versioning;
 using System.Text;
+using System.Text.Json;
 using McpServer.Common.Copilot.Extensions;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Indexing;
@@ -14,8 +17,10 @@ using McpServer.Support.Mcp.Controllers;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Web;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using ModelContextProtocol.AspNetCore;
 using Serilog;
 using Serilog.Events;
@@ -80,6 +85,17 @@ builder.Host.UseSerilog((context, _, config) =>
 
     var parseable = context.Configuration.GetSection(McpParseableOptions.SectionName).Get<McpParseableOptions>()
         ?? new McpParseableOptions();
+    if (!context.HostingEnvironment.IsEnvironment("Test"))
+    {
+        var fileLogPath = ResolveSerilogFilePath(parseable.FallbackLogPath);
+        EnsureSerilogFileDirectory(fileLogPath);
+        config.WriteTo.File(
+            path: fileLogPath,
+            rollingInterval: RollingInterval.Day,
+            formatProvider: CultureInfo.InvariantCulture,
+            shared: true);
+    }
+
     if (!string.IsNullOrWhiteSpace(parseable.Url) && !context.HostingEnvironment.IsEnvironment("Test"))
     {
         var ingestUri = $"{parseable.Url!.TrimEnd('/')}/api/v1/ingest";
@@ -88,15 +104,13 @@ builder.Host.UseSerilog((context, _, config) =>
         config.WriteTo.Logger(lc => lc
             .Filter.ByExcluding(e => e.Properties.TryGetValue(ParseableHttpClient.ParseableMetaPropertyName, out var v) && v is ScalarValue s && (s.Value is true or "True"))
             .WriteTo.Http(requestUri: ingestUri, queueLimitBytes: null, textFormatter: new ParseableEventFormatter(), batchFormatter: new ParseableBatchFormatter(), httpClient: httpClient, restrictedToMinimumLevel: LogEventLevel.Verbose));
-
-        // TR-PLANNED-013: File-based fallback when publishing to Parseable fails (e.g. Parseable down).
-        var fallbackPath = !string.IsNullOrWhiteSpace(parseable.FallbackLogPath) ? parseable.FallbackLogPath!.Trim() : "logs/mcp-.log";
-        config.WriteTo.File(
-            path: fallbackPath,
-            rollingInterval: RollingInterval.Day,
-            formatProvider: CultureInfo.InvariantCulture);
     }
-});
+}, writeToProviders: true);
+
+if (OperatingSystem.IsWindows())
+{
+    ConfigureWindowsEventLogSource(builder);
+}
 
 var portFromEnv = Environment.GetEnvironmentVariable("PORT");
 var configuredPort = McpInstanceResolver.GetEffectiveMcpInt(builder.Configuration, instanceName, "Port", 7147);
@@ -222,12 +236,55 @@ builder.Services.AddScoped<IContextSearchService, HybridSearchService>();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
 builder.Services.AddScoped<IToolBucketService, ToolBucketService>();
+builder.Services.AddScoped<IAgentService, AgentService>();
 builder.Services.AddSingleton<WorkspaceTokenService>();
 builder.Services.AddSingleton<IWorkspaceProcessManager, WorkspaceProcessManager>();
 builder.Services.Configure<PairingOptions>(builder.Configuration.GetSection(PairingOptions.SectionName));
 builder.Services.Configure<OidcAuthOptions>(builder.Configuration.GetSection(OidcAuthOptions.SectionName));
 builder.Services.Configure<ToolRegistryOptions>(builder.Configuration.GetSection(ToolRegistryOptions.SectionName));
 builder.Services.AddSingleton<PairingSessionService>();
+
+var oidcAuthBootstrap = builder.Configuration.GetSection(OidcAuthOptions.SectionName).Get<OidcAuthOptions>()
+    ?? new OidcAuthOptions();
+
+if (oidcAuthBootstrap.Enabled)
+{
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.MapInboundClaims = false;
+            options.Authority = oidcAuthBootstrap.Authority;
+            options.Audience = oidcAuthBootstrap.Audience;
+            options.RequireHttpsMetadata = oidcAuthBootstrap.RequireHttpsMetadata;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                NameClaimType = "preferred_username",
+                RoleClaimType = "realm_roles",
+                ValidateAudience = !string.IsNullOrWhiteSpace(oidcAuthBootstrap.Audience),
+            };
+        });
+}
+else
+{
+    // Keep authorization available so [Authorize(Policy="AgentManager")] can fall back to API-key-only mode.
+    builder.Services.AddAuthentication();
+}
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AgentManager", policy =>
+    {
+        if (!oidcAuthBootstrap.Enabled)
+        {
+            policy.RequireAssertion(_ => true);
+            return;
+        }
+
+        policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+        policy.RequireAuthenticatedUser();
+        policy.RequireAssertion(ctx => HasAnyRole(ctx.User, "agent-manager", "admin"));
+    });
+});
 
 // Tunnel strategy pattern — follows ITodoService provider-switch convention.
 var tunnelProvider = (builder.Configuration
@@ -277,12 +334,20 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+var serverProcessId = Environment.ProcessId;
+var serverCommandLine = Environment.CommandLine;
+
 // Log application version at startup for deployment verification.
 app.LogApplicationVersion();
+app.Logger.LogInformation(
+    "Server startup event: PID={ProcessId}; Command={CommandLine}",
+    serverProcessId,
+    serverCommandLine);
 
 if (!app.Environment.IsEnvironment("Test"))
 {
     var parseableOpts = app.Configuration.GetSection(McpParseableOptions.SectionName).Get<McpParseableOptions>() ?? new McpParseableOptions();
+    Log.Information("[Serilog] File sink enabled, path: {Path}", ResolveSerilogFilePath(parseableOpts.FallbackLogPath));
     if (!string.IsNullOrWhiteSpace(parseableOpts.Url))
         Log.Information("[Parseable] Sink enabled, ingestion URL: {Url}/api/v1/ingest (X-P-Stream: {Stream})", parseableOpts.Url.TrimEnd('/'), parseableOpts.StreamName);
     else
@@ -295,6 +360,15 @@ if (!app.Environment.IsEnvironment("Test"))
     {
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         await db.Database.MigrateAsync().ConfigureAwait(false);
+    }
+
+    // Seed built-in agent definitions on startup (idempotent).
+    using (var scope = app.Services.CreateScope())
+    {
+        var agentService = scope.ServiceProvider.GetRequiredService<IAgentService>();
+        var seededCount = await agentService.SeedBuiltInDefaultsAsync().ConfigureAwait(false);
+        if (seededCount > 0)
+            Log.Information("[Agents] Seeded {Count} built-in agent definitions", seededCount);
     }
 
     // Seed default tool buckets from configuration (idempotent — skips existing).
@@ -329,8 +403,43 @@ if (!app.Environment.IsEnvironment("Test"))
 
     app.Lifetime.ApplicationStopping.Register(() =>
     {
+        app.Logger.LogInformation(
+            "Graceful shutdown initiated: PID={ProcessId}; Command={CommandLine}",
+            serverProcessId,
+            serverCommandLine);
         MarkerFileService.RemoveMarker(primaryWorkspacePath);
     });
+
+    app.Lifetime.ApplicationStopped.Register(() =>
+    {
+        app.Logger.LogInformation(
+            "Graceful shutdown completed: PID={ProcessId}; Command={CommandLine}",
+            serverProcessId,
+            serverCommandLine);
+    });
+}
+
+// Seed primary-host API tokens eagerly so /api-key is ready even if workspace auto-start lags.
+{
+    var apiKeyWorkspacePath = ResolvePrimaryApiKeyWorkspacePath(app.Configuration, app.Environment, instanceName);
+    if (!string.IsNullOrWhiteSpace(apiKeyWorkspacePath))
+    {
+        var tokenService = app.Services.GetRequiredService<WorkspaceTokenService>();
+        var fullTokenExisted = tokenService.GetToken(apiKeyWorkspacePath) is not null;
+        var defaultTokenExisted = tokenService.GetDefaultToken(apiKeyWorkspacePath) is not null;
+
+        _ = tokenService.GetToken(apiKeyWorkspacePath) ?? tokenService.GenerateToken(apiKeyWorkspacePath);
+        _ = tokenService.GetDefaultToken(apiKeyWorkspacePath) ?? tokenService.GenerateDefaultToken(apiKeyWorkspacePath);
+
+        if (!fullTokenExisted || !defaultTokenExisted)
+        {
+            app.Logger.LogInformation(
+                "Primary host API tokens seeded: Workspace={WorkspacePath}; FullTokenExisted={FullTokenExisted}; DefaultTokenExisted={DefaultTokenExisted}",
+                apiKeyWorkspacePath,
+                fullTokenExisted,
+                defaultTokenExisted);
+        }
+    }
 }
 
 // TR-PLANNED-013: Structured interaction logging for all requests; optional async submission to LoggingServiceUrl.
@@ -338,6 +447,8 @@ app.UseMiddleware<InteractionLoggingMiddleware>();
 
 // Per-workspace auth tokens: protect all /mcp/* REST routes.
 app.UseMiddleware<WorkspaceAuthMiddleware>();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapDefaultEndpoints();
 
@@ -348,16 +459,20 @@ app.MapGet("/", () => Results.Redirect("/swagger"))
     .ExcludeFromDescription();
 
 // Unprotected endpoint returning the default (anonymous) API key for consumers without marker file access.
-app.MapGet("/api-key", (WorkspaceTokenService tokenService, IConfiguration configuration) =>
+app.MapGet("/api-key", (WorkspaceTokenService tokenService) =>
 {
-    var workspacePath = configuration["Mcp:RepoRoot"] ?? string.Empty;
+    var workspacePath = ResolvePrimaryApiKeyWorkspacePath(app.Configuration, app.Environment, instanceName) ?? string.Empty;
     if (string.IsNullOrWhiteSpace(workspacePath))
         return Results.Problem("No workspace configured.", statusCode: 503);
 
-    var key = Path.GetFullPath(workspacePath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-    var defaultToken = tokenService.GetDefaultToken(key);
+    var defaultToken = tokenService.GetDefaultToken(workspacePath);
     if (defaultToken is null)
-        return Results.Problem("Default token not yet generated. Retry shortly.", statusCode: 503);
+    {
+        defaultToken = tokenService.GenerateDefaultToken(workspacePath);
+        app.Logger.LogWarning(
+            "Default API token was missing during /api-key request and was generated on demand: Workspace={WorkspacePath}",
+            workspacePath);
+    }
 
     return Results.Ok(new { apiKey = defaultToken });
 }).ExcludeFromDescription();
@@ -427,4 +542,125 @@ static bool VerifyPairingPassword(string plaintext, string expectedHash)
     var computed = SHA256.HashData(Encoding.UTF8.GetBytes(plaintext));
     var expected = Convert.FromHexString(expectedHash);
     return CryptographicOperations.FixedTimeEquals(computed, expected);
+}
+
+[SupportedOSPlatform("windows")]
+static void ConfigureWindowsEventLogSource(WebApplicationBuilder builder)
+{
+#pragma warning disable CA1416
+    builder.Logging.AddEventLog(settings =>
+    {
+        settings.SourceName = "McpServer";
+        settings.LogName = "Application";
+        settings.Filter = (_, level) => level >= LogLevel.Information;
+    });
+#pragma warning restore CA1416
+}
+
+static string ResolveSerilogFilePath(string? configuredPath)
+{
+    var rawPath = !string.IsNullOrWhiteSpace(configuredPath) ? configuredPath.Trim() : "logs/mcp-.log";
+    return Path.IsPathRooted(rawPath)
+        ? rawPath
+        : Path.GetFullPath(rawPath, AppContext.BaseDirectory);
+}
+
+static void EnsureSerilogFileDirectory(string filePath)
+{
+    var directory = Path.GetDirectoryName(filePath);
+    if (!string.IsNullOrWhiteSpace(directory))
+        Directory.CreateDirectory(directory);
+}
+
+static bool HasAnyRole(ClaimsPrincipal user, params string[] requiredRoles)
+{
+    if (user.Identity?.IsAuthenticated != true)
+        return false;
+
+    var required = new HashSet<string>(requiredRoles, StringComparer.OrdinalIgnoreCase);
+    foreach (var claim in user.Claims)
+    {
+        if (!string.Equals(claim.Type, "realm_roles", StringComparison.OrdinalIgnoreCase) &&
+            !string.Equals(claim.Type, "roles", StringComparison.OrdinalIgnoreCase) &&
+            !string.Equals(claim.Type, ClaimTypes.Role, StringComparison.OrdinalIgnoreCase))
+        {
+            continue;
+        }
+
+        if (ContainsRequiredRole(claim.Value, required))
+            return true;
+    }
+
+    return false;
+}
+
+static string? ResolvePrimaryApiKeyWorkspacePath(IConfiguration configuration, IHostEnvironment environment, string? instanceName)
+{
+    var effectiveRepoRoot = McpInstanceResolver.GetEffectiveMcpValue(configuration, instanceName, "RepoRoot");
+    if (!string.IsNullOrWhiteSpace(effectiveRepoRoot))
+        return NormalizeWorkspacePathForToken(effectiveRepoRoot, environment.ContentRootPath);
+
+    var workspaces = configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
+    var primary = workspaces
+        .Where(w => w.IsPrimary && w.IsEnabled)
+        .OrderBy(w => w.WorkspacePort)
+        .FirstOrDefault();
+    primary ??= workspaces
+        .Where(w => w.IsEnabled)
+        .OrderBy(w => w.WorkspacePort)
+        .FirstOrDefault();
+
+    return string.IsNullOrWhiteSpace(primary?.WorkspacePath)
+        ? null
+        : NormalizeWorkspacePathForToken(primary.WorkspacePath, environment.ContentRootPath);
+}
+
+static string NormalizeWorkspacePathForToken(string workspacePath, string contentRootPath)
+{
+    var trimmed = workspacePath.Trim();
+    var absolute = Path.IsPathRooted(trimmed)
+        ? Path.GetFullPath(trimmed)
+        : Path.GetFullPath(Path.Combine(contentRootPath, trimmed));
+
+    return absolute.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+}
+
+static bool ContainsRequiredRole(string? claimValue, ISet<string> requiredRoles)
+{
+    if (string.IsNullOrWhiteSpace(claimValue))
+        return false;
+
+    var trimmed = claimValue.Trim();
+    if (requiredRoles.Contains(trimmed))
+        return true;
+
+    if (trimmed.StartsWith("[", StringComparison.Ordinal))
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(trimmed);
+            if (doc.RootElement.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var element in doc.RootElement.EnumerateArray())
+                {
+                    var role = element.GetString();
+                    if (!string.IsNullOrWhiteSpace(role) && requiredRoles.Contains(role))
+                        return true;
+                }
+            }
+        }
+        catch (JsonException)
+        {
+            // Fall back to delimited parsing below.
+        }
+    }
+
+    foreach (var token in trimmed.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+    {
+        var normalized = token.Trim('"');
+        if (requiredRoles.Contains(normalized))
+            return true;
+    }
+
+    return false;
 }
