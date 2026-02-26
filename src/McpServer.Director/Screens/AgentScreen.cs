@@ -343,8 +343,9 @@ internal sealed class AgentScreen : View
     {
         try
         {
-            var client = _context.GetRequiredActiveWorkspaceHttpClient();
-            var path = Uri.EscapeDataString(client.WorkspacePath);
+            var workspacePath = GetRequiredActiveWorkspacePath();
+            var client = GetAgentWorkspaceManagementHttpClient();
+            var path = Uri.EscapeDataString(workspacePath);
             var result = await client.GetAsync<JsonElement>($"/mcp/agents?workspace={path}").ConfigureAwait(false);
             var items = result.GetProperty("items");
             var rows = new List<AgentRow>();
@@ -416,6 +417,12 @@ internal sealed class AgentScreen : View
 
         return _context.GetRequiredActiveWorkspaceHttpClient();
     }
+
+    private McpHttpClient GetAgentWorkspaceManagementHttpClient()
+        => GetAgentDefinitionsHttpClient();
+
+    private string GetRequiredActiveWorkspacePath()
+        => _context.GetRequiredActiveWorkspaceHttpClient().WorkspacePath;
 
     private void QueueSelectedDefinitionDetailRefresh()
         => QueueDefinitionDetailRefresh(GetSelectedDefinitionId());
@@ -507,14 +514,15 @@ internal sealed class AgentScreen : View
         try
         {
             TraceUi($"load-agent-detail.start version={version} agentId={agentId}");
-            var client = _context.GetRequiredActiveWorkspaceHttpClient();
-            var path = Uri.EscapeDataString(client.WorkspacePath);
+            var workspacePath = GetRequiredActiveWorkspacePath();
+            var client = GetAgentWorkspaceManagementHttpClient();
+            var path = Uri.EscapeDataString(workspacePath);
             var result = await client.GetAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}?workspace={path}").ConfigureAwait(false);
 
             var detail = new AgentDetailState
             {
                 AgentId = GetString(result, "agentId") ?? agentId,
-                WorkspacePath = GetString(result, "workspacePath") ?? client.WorkspacePath,
+                WorkspacePath = GetString(result, "workspacePath") ?? workspacePath,
                 Enabled = GetBool(result, "enabled"),
                 Banned = GetBool(result, "banned"),
                 BannedReason = GetString(result, "bannedReason") ?? "",
@@ -794,8 +802,9 @@ internal sealed class AgentScreen : View
         SetStatus($"Saving detail for '{request.AgentId}'...");
         try
         {
-            var client = _context.GetRequiredActiveWorkspaceHttpClient();
-            var path = Uri.EscapeDataString(client.WorkspacePath);
+            var workspacePath = GetRequiredActiveWorkspacePath();
+            var client = GetAgentWorkspaceManagementHttpClient();
+            var path = Uri.EscapeDataString(workspacePath);
             var body = new
             {
                 agentId = request.AgentId,
@@ -860,8 +869,9 @@ internal sealed class AgentScreen : View
         SetStatus($"Assigning '{agentId}' to current workspace...");
         try
         {
-            var client = _context.GetRequiredActiveWorkspaceHttpClient();
-            var path = Uri.EscapeDataString(client.WorkspacePath);
+            var workspacePath = GetRequiredActiveWorkspacePath();
+            var client = GetAgentWorkspaceManagementHttpClient();
+            var path = Uri.EscapeDataString(workspacePath);
             var body = new { agentId, enabled = true, agentIsolation = "worktree" };
             await client.PostAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}?workspace={path}", body).ConfigureAwait(false);
             SetStatus($"Agent '{agentId}' assigned to workspace");
@@ -935,8 +945,9 @@ internal sealed class AgentScreen : View
                 SetStatus($"Banning {agentId}...");
                 try
                 {
-                    var client = _context.GetRequiredActiveWorkspaceHttpClient();
-                    var path = Uri.EscapeDataString(client.WorkspacePath);
+                    var workspacePath = GetRequiredActiveWorkspacePath();
+                    var client = GetAgentWorkspaceManagementHttpClient();
+                    var path = Uri.EscapeDataString(workspacePath);
                     var body = new { reason = reasonField.Text ?? "", global = false };
                     await client.PostAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}/ban?workspace={path}", body).ConfigureAwait(false);
                     SetStatus($"Agent '{agentId}' banned");
@@ -969,8 +980,9 @@ internal sealed class AgentScreen : View
         SetStatus($"Unbanning {agentId}...");
         try
         {
-            var client = _context.GetRequiredActiveWorkspaceHttpClient();
-            var path = Uri.EscapeDataString(client.WorkspacePath);
+            var workspacePath = GetRequiredActiveWorkspacePath();
+            var client = GetAgentWorkspaceManagementHttpClient();
+            var path = Uri.EscapeDataString(workspacePath);
             await client.PostAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}/unban?workspace={path}&global=false").ConfigureAwait(false);
             SetStatus($"Agent '{agentId}' unbanned");
             await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
@@ -994,8 +1006,9 @@ internal sealed class AgentScreen : View
         SetStatus($"Deleting {agentId}...");
         try
         {
-            var client = _context.GetRequiredActiveWorkspaceHttpClient();
-            var path = Uri.EscapeDataString(client.WorkspacePath);
+            var workspacePath = GetRequiredActiveWorkspacePath();
+            var client = GetAgentWorkspaceManagementHttpClient();
+            var path = Uri.EscapeDataString(workspacePath);
             await client.DeleteAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}?workspace={path}").ConfigureAwait(false);
             SetStatus($"Agent '{agentId}' removed");
             await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
@@ -1011,8 +1024,9 @@ internal sealed class AgentScreen : View
         SetStatus("Validating agents.yaml...");
         try
         {
-            var client = _context.GetRequiredActiveWorkspaceHttpClient();
-            var path = Uri.EscapeDataString(client.WorkspacePath);
+            var workspacePath = GetRequiredActiveWorkspacePath();
+            var client = GetAgentWorkspaceManagementHttpClient();
+            var path = Uri.EscapeDataString(workspacePath);
             var result = await client.GetAsync<JsonElement>($"/mcp/agents/validate?workspace={path}").ConfigureAwait(false);
             var valid = result.TryGetProperty("valid", out var v) && v.GetBoolean();
             SetStatus(valid
@@ -1032,8 +1046,9 @@ internal sealed class AgentScreen : View
         SetStatus($"Adding {agentId}...");
         try
         {
-            var client = _context.GetRequiredActiveWorkspaceHttpClient();
-            var path = Uri.EscapeDataString(client.WorkspacePath);
+            var workspacePath = GetRequiredActiveWorkspacePath();
+            var client = GetAgentWorkspaceManagementHttpClient();
+            var path = Uri.EscapeDataString(workspacePath);
             var body = new { agentId, enabled = true, agentIsolation = "worktree" };
             await client.PostAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}?workspace={path}", body).ConfigureAwait(false);
             SetStatus($"Agent '{agentId}' added");

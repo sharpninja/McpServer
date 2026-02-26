@@ -17,6 +17,8 @@ namespace McpServer.Support.Mcp.Controllers;
 [Route("auth")]
 public sealed class AuthConfigController : ControllerBase
 {
+    private const int MinimumOidcTokenLifetimeSeconds = 24 * 60 * 60;
+
     /// <summary>
     /// Returns the public OIDC configuration for CLI clients.
     /// No secrets are exposed — only the authority URL, public client ID, and endpoint URLs.
@@ -91,7 +93,8 @@ public sealed class AuthConfigController : ControllerBase
             GetTokenEndpoint(options.Value),
             httpClientFactory,
             logger,
-            cancellationToken);
+            cancellationToken,
+            enforceMinimumTokenLifetime: true);
 
     /// <summary>
     /// Browser-facing Keycloak UI proxy for device-flow verification pages and supporting assets.
@@ -112,7 +115,8 @@ public sealed class AuthConfigController : ControllerBase
         IHttpClientFactory httpClientFactory,
         ILogger<AuthConfigController> logger,
         CancellationToken cancellationToken,
-        bool rewriteDeviceVerificationUris = false)
+        bool rewriteDeviceVerificationUris = false,
+        bool enforceMinimumTokenLifetime = false)
     {
         if (string.IsNullOrWhiteSpace(endpoint))
         {
@@ -166,6 +170,13 @@ public sealed class AuthConfigController : ControllerBase
                 content = RewriteDeviceAuthorizationResponse(content, contentType, authOptions);
             }
 
+            if (enforceMinimumTokenLifetime &&
+                response.IsSuccessStatusCode &&
+                TryBuildTokenLifetimeViolationResult(content, contentType, logger, out var tokenLifetimeViolation))
+            {
+                return tokenLifetimeViolation;
+            }
+
             return new ContentResult
             {
                 StatusCode = (int)response.StatusCode,
@@ -185,6 +196,98 @@ public sealed class AuthConfigController : ControllerBase
                 detail: ex.Message,
                 statusCode: StatusCodes.Status502BadGateway);
         }
+    }
+
+    private bool TryBuildTokenLifetimeViolationResult(
+        string content,
+        string contentType,
+        ILogger<AuthConfigController> logger,
+        out IActionResult violationResult)
+    {
+        violationResult = null!;
+
+        if (!IsJsonResponse(contentType))
+        {
+            return false;
+        }
+
+        JsonNode? root;
+        try
+        {
+            root = JsonNode.Parse(content);
+        }
+        catch
+        {
+            return false;
+        }
+
+        if (root is not JsonObject obj)
+        {
+            return false;
+        }
+
+        var hasAccess = TryReadTokenLifetimeSeconds(obj, "expires_in", out var accessExpiresInSeconds);
+        var hasRefresh = TryReadTokenLifetimeSeconds(obj, "refresh_expires_in", out var refreshExpiresInSeconds);
+
+        if (!hasAccess && !hasRefresh)
+        {
+            return false;
+        }
+
+        var isAccessTooShort = hasAccess && accessExpiresInSeconds < MinimumOidcTokenLifetimeSeconds;
+        var isRefreshTooShort = hasRefresh && refreshExpiresInSeconds < MinimumOidcTokenLifetimeSeconds;
+        if (!isAccessTooShort && !isRefreshTooShort)
+        {
+            return false;
+        }
+
+        logger.LogWarning(
+            "OIDC token response rejected: minimum lifetime {MinimumSeconds}s required; expires_in={AccessExpiresIn}; refresh_expires_in={RefreshExpiresIn}",
+            MinimumOidcTokenLifetimeSeconds,
+            hasAccess ? accessExpiresInSeconds : null,
+            hasRefresh ? refreshExpiresInSeconds : null);
+
+        violationResult = StatusCode(StatusCodes.Status502BadGateway, new
+        {
+            error = "oidc_token_lifetime_too_short",
+            error_description = "OIDC tokens must be valid for at least 24 hours. Update Keycloak token lifespan settings.",
+            minimumLifetimeSeconds = MinimumOidcTokenLifetimeSeconds,
+            expiresIn = hasAccess ? (int?)accessExpiresInSeconds : null,
+            refreshExpiresIn = hasRefresh ? (int?)refreshExpiresInSeconds : null
+        });
+
+        return true;
+    }
+
+    private static bool TryReadTokenLifetimeSeconds(JsonObject obj, string propertyName, out int seconds)
+    {
+        seconds = 0;
+
+        if (obj[propertyName] is not JsonValue value)
+        {
+            return false;
+        }
+
+        if (value.TryGetValue<int>(out seconds))
+        {
+            return true;
+        }
+
+        if (value.TryGetValue<long>(out var longSeconds) &&
+            longSeconds >= int.MinValue &&
+            longSeconds <= int.MaxValue)
+        {
+            seconds = (int)longSeconds;
+            return true;
+        }
+
+        if (value.TryGetValue<string>(out var stringSeconds) &&
+            int.TryParse(stringSeconds, out seconds))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private async Task<IActionResult> ProxyOidcBrowserUiAsync(

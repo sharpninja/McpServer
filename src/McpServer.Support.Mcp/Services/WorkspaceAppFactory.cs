@@ -130,6 +130,7 @@ public static class WorkspaceAppFactory
         }
 
         builder.Services.AddAuthorization();
+        builder.Services.AddHttpClient();
 
         // Core services required by MCP tools.
         builder.Services.AddSingleton<ISyncStatusStore, SyncStatusStore>();
