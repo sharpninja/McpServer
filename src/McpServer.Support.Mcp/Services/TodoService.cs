@@ -107,6 +107,8 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
                 Estimate = request.Estimate,
                 Description = request.Description?.ToList(),
                 TechnicalDetails = request.TechnicalDetails?.ToList(),
+                Note = request.Note,
+                Remaining = request.Remaining,
                 DependsOn = request.DependsOn?.ToList(),
                 FunctionalRequirements = request.FunctionalRequirements?.ToList(),
                 TechnicalRequirements = request.TechnicalRequirements?.ToList(),

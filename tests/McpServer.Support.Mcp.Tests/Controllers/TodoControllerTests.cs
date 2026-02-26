@@ -19,6 +19,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
     {
         _factory = factory;
         _client = factory.CreateClient();
+        _client.DefaultRequestHeaders.TryAddWithoutValidation("X-Api-Key", factory.GetFullWorkspaceApiKey());
     }
 
     public void Dispose() => _client.Dispose();
@@ -135,6 +136,8 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
             section = "mvp-app",
             priority = "low",
             estimate = "8-16 hours",
+            note = "Create note",
+            remaining = "Remaining from create",
             description = new[] { "First line", "Second line" }
         };
 
@@ -150,6 +153,8 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         Assert.Equal("New test item", item.Title);
         Assert.Equal("mvp-app", item.Section);
         Assert.Equal("low", item.Priority);
+        Assert.Equal("Create note", item.Note);
+        Assert.Equal("Remaining from create", item.Remaining);
     }
 
     /// <summary>POST /mcp/todo with duplicate id returns 409 Conflict.</summary>
@@ -468,6 +473,13 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
                     { "Mcp:RepoRoot", _tempDir }
                 });
             });
+        }
+
+        public string GetFullWorkspaceApiKey()
+        {
+            var tokenService = Services.GetRequiredService<WorkspaceTokenService>();
+            return tokenService.GetToken(_tempDir)
+                   ?? throw new InvalidOperationException("Workspace full API key was not generated for test host.");
         }
 
         private new void Dispose()

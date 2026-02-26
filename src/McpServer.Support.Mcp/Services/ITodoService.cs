@@ -132,6 +132,12 @@ public sealed record TodoCreateRequest
     /// <summary>Implementation sub-tasks.</summary>
     public IReadOnlyList<TodoFlatTask>? ImplementationTasks { get; init; }
 
+    /// <summary>Optional note.</summary>
+    public string? Note { get; init; }
+
+    /// <summary>Remaining work text.</summary>
+    public string? Remaining { get; init; }
+
     /// <summary>IDs of TODO items this item depends on.</summary>
     public IReadOnlyList<string>? DependsOn { get; init; }
 

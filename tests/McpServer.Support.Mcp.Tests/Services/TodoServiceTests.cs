@@ -117,7 +117,9 @@ public sealed class TodoServiceTests : IDisposable
             Id = "TEST-NEW-001",
             Title = "New test item",
             Section = "mvp-support",
-            Priority = "low"
+            Priority = "low",
+            Note = "created note",
+            Remaining = "created remaining"
         };
 
         var result = await _sut.CreateAsync(request).ConfigureAwait(true);
@@ -126,6 +128,8 @@ public sealed class TodoServiceTests : IDisposable
         var retrieved = await _sut.GetByIdAsync("TEST-NEW-001").ConfigureAwait(true);
         Assert.NotNull(retrieved);
         Assert.Equal("New test item", retrieved.Title);
+        Assert.Equal("created note", retrieved.Note);
+        Assert.Equal("created remaining", retrieved.Remaining);
     }
 
     [Fact]
