@@ -264,6 +264,7 @@ builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
 builder.Services.AddScoped<IToolBucketService, ToolBucketService>();
 builder.Services.AddScoped<IAgentService, AgentService>();
 builder.Services.AddSingleton<WorkspaceTokenService>();
+builder.Services.AddScoped<WorkspaceContext>();
 builder.Services.AddSingleton(new ServerRuntimeInfo(serverStartupUtc));
 builder.Services.AddSingleton<IWorkspaceProcessManager, WorkspaceProcessManager>();
 builder.Services.Configure<PairingOptions>(builder.Configuration.GetSection(PairingOptions.SectionName));
@@ -482,6 +483,7 @@ app.UseMiddleware<InteractionLoggingMiddleware>();
 
 // Per-workspace auth tokens: protect all /mcp/* REST routes.
 app.UseAuthentication();
+app.UseMiddleware<WorkspaceResolutionMiddleware>();
 app.UseMiddleware<WorkspaceAuthMiddleware>();
 app.UseAuthorization();
 

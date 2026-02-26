@@ -48,7 +48,7 @@ public sealed class WorkspaceAuthMiddleware
     }
 
     /// <summary>Validates the auth token for <c>/mcp/*</c> requests.</summary>
-    public async Task InvokeAsync(HttpContext context, WorkspaceTokenService tokenService, IConfiguration configuration)
+    public async Task InvokeAsync(HttpContext context, WorkspaceTokenService tokenService, IConfiguration configuration, WorkspaceContext workspaceContext)
     {
         var path = context.Request.Path;
 
@@ -78,7 +78,7 @@ public sealed class WorkspaceAuthMiddleware
             return;
         }
 
-        var workspacePath = configuration["Mcp:RepoRoot"] ?? string.Empty;
+        var workspacePath = workspaceContext.WorkspacePath ?? configuration["Mcp:RepoRoot"] ?? string.Empty;
 
         // If no workspace is configured or no token generated yet (startup race), allow through.
         if (string.IsNullOrWhiteSpace(workspacePath))

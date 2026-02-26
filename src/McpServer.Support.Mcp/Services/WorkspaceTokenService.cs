@@ -22,6 +22,8 @@ public sealed class WorkspaceTokenService
     private const int TokenByteLength = 32;
     private readonly ConcurrentDictionary<string, string> _tokens = new(StringComparer.OrdinalIgnoreCase);
     private readonly ConcurrentDictionary<string, string> _defaultTokens = new(StringComparer.OrdinalIgnoreCase);
+    private readonly ConcurrentDictionary<string, string> _tokenToWorkspace = new(StringComparer.Ordinal);
+    private readonly ConcurrentDictionary<string, string> _defaultTokenToWorkspace = new(StringComparer.Ordinal);
 
     /// <summary>
     /// Generates a new cryptographic random full-access token for the given workspace and stores it.
@@ -32,7 +34,13 @@ public sealed class WorkspaceTokenService
     {
         var key = Normalize(workspacePath);
         var token = MakeToken();
+
+        // Remove old reverse mapping if a previous token exists
+        if (_tokens.TryGetValue(key, out var oldToken))
+            _tokenToWorkspace.TryRemove(oldToken, out _);
+
         _tokens[key] = token;
+        _tokenToWorkspace[token] = key;
         return token;
     }
 
@@ -67,7 +75,13 @@ public sealed class WorkspaceTokenService
     {
         var key = Normalize(workspacePath);
         var token = MakeToken();
+
+        // Remove old reverse mapping if a previous default token exists
+        if (_defaultTokens.TryGetValue(key, out var oldToken))
+            _defaultTokenToWorkspace.TryRemove(oldToken, out _);
+
         _defaultTokens[key] = token;
+        _defaultTokenToWorkspace[token] = key;
         return token;
     }
 
@@ -105,6 +119,37 @@ public sealed class WorkspaceTokenService
         return _defaultTokens.TryGetValue(key, out var expected)
                && string.Equals(expected, candidate, StringComparison.Ordinal);
     }
+
+    /// <summary>
+    /// TR-MCP-MT-002: Resolves a workspace path from a token (full-access or default).
+    /// Returns <c>null</c> if the token is unknown.
+    /// Also indicates via <paramref name="isDefault"/> whether the matched token is a default (anonymous) token.
+    /// </summary>
+    public string? ResolveWorkspaceByToken(string? token, out bool isDefault)
+    {
+        isDefault = false;
+
+        if (string.IsNullOrWhiteSpace(token))
+            return null;
+
+        if (_tokenToWorkspace.TryGetValue(token, out var fullPath))
+            return fullPath;
+
+        if (_defaultTokenToWorkspace.TryGetValue(token, out var defaultPath))
+        {
+            isDefault = true;
+            return defaultPath;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// TR-MCP-MT-002: Resolves a workspace path from a token (full-access or default).
+    /// Returns <c>null</c> if the token is unknown.
+    /// </summary>
+    public string? ResolveWorkspaceByToken(string? token)
+        => ResolveWorkspaceByToken(token, out _);
 
     private static string MakeToken() =>
         Convert.ToBase64String(RandomNumberGenerator.GetBytes(TokenByteLength))

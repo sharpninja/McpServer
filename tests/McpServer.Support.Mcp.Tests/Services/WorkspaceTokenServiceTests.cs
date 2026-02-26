@@ -91,4 +91,74 @@ public sealed class WorkspaceTokenServiceTests
         var def = _sut.GenerateDefaultToken(@"C:\projects\test");
         Assert.False(_sut.ValidateToken(@"C:\projects\test", def));
     }
+
+    // --- Reverse lookup tests (TR-MCP-MT-002) ---
+
+    [Fact]
+    public void ResolveWorkspaceByToken_ReturnsCorrectWorkspace()
+    {
+        var token = _sut.GenerateToken(@"C:\projects\test");
+        var result = _sut.ResolveWorkspaceByToken(token);
+        Assert.NotNull(result);
+        Assert.Equal(Path.GetFullPath(@"C:\projects\test"), result, ignoreCase: true);
+    }
+
+    [Fact]
+    public void ResolveWorkspaceByToken_ReturnsNull_ForUnknownToken()
+    {
+        _sut.GenerateToken(@"C:\projects\test");
+        Assert.Null(_sut.ResolveWorkspaceByToken("unknown-token-xyz"));
+    }
+
+    [Fact]
+    public void ResolveWorkspaceByToken_ReturnsNull_ForNullOrEmpty()
+    {
+        Assert.Null(_sut.ResolveWorkspaceByToken(null));
+        Assert.Null(_sut.ResolveWorkspaceByToken(""));
+        Assert.Null(_sut.ResolveWorkspaceByToken("   "));
+    }
+
+    [Fact]
+    public void ResolveWorkspaceByToken_DefaultToken_ReturnsCorrectWorkspace()
+    {
+        var token = _sut.GenerateDefaultToken(@"C:\projects\test");
+        var result = _sut.ResolveWorkspaceByToken(token, out var isDefault);
+        Assert.NotNull(result);
+        Assert.True(isDefault);
+    }
+
+    [Fact]
+    public void ResolveWorkspaceByToken_FullToken_IsNotDefault()
+    {
+        var token = _sut.GenerateToken(@"C:\projects\test");
+        var result = _sut.ResolveWorkspaceByToken(token, out var isDefault);
+        Assert.NotNull(result);
+        Assert.False(isDefault);
+    }
+
+    [Fact]
+    public void ResolveWorkspaceByToken_AfterTokenRotation_OldTokenReturnsNull()
+    {
+        var oldToken = _sut.GenerateToken(@"C:\projects\test");
+        var newToken = _sut.GenerateToken(@"C:\projects\test");
+
+        Assert.Null(_sut.ResolveWorkspaceByToken(oldToken));
+        Assert.NotNull(_sut.ResolveWorkspaceByToken(newToken));
+    }
+
+    [Fact]
+    public void ResolveWorkspaceByToken_MultipleWorkspaces_ReturnsCorrectOne()
+    {
+        var tokenA = _sut.GenerateToken(@"C:\projects\alpha");
+        var tokenB = _sut.GenerateToken(@"C:\projects\beta");
+        var tokenC = _sut.GenerateToken(@"C:\projects\gamma");
+
+        var resolvedA = _sut.ResolveWorkspaceByToken(tokenA);
+        var resolvedB = _sut.ResolveWorkspaceByToken(tokenB);
+        var resolvedC = _sut.ResolveWorkspaceByToken(tokenC);
+
+        Assert.Contains("alpha", resolvedA!, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("beta", resolvedB!, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("gamma", resolvedC!, StringComparison.OrdinalIgnoreCase);
+    }
 }
