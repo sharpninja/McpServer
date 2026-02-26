@@ -108,20 +108,11 @@ For the Windows service this is `C:\ProgramData\McpServer\appsettings.json`.
 
 ## Production Deployment (Windows Service)
 
-`appsettings.Production.json` (in `src/McpServer.Support.Mcp/`) overrides paths to absolute
-locations so the service never resolves files relative to the working directory:
+`C:\ProgramData\McpServer\appsettings.json` is the canonical Windows service configuration.
+Environment-specific appsettings files (such as `appsettings.Production.json`) are not used by
+the Windows service and should not be relied on for runtime configuration.
 
-```json
-{
-  "Mcp": {
-    "DataDirectory": "C:\\ProgramData\\McpServer",
-    "RepoRoot": "C:\\ProgramData\\McpServer",
-    "TodoStorage": { "SqliteDataSource": "C:\\ProgramData\\McpServer\\mcp.db" }
-  }
-}
-```
-
-Update the service in-place (preserves all `*.json` and `*.db*` files):
+Update the service in-place (preserves `appsettings.json` and `*.db*` files):
 
 ```powershell
 gsudo .\scripts\Update-McpService.ps1

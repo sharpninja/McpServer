@@ -48,8 +48,10 @@ $ArchiveDir  = Join-Path $env:USERPROFILE 'McpServer-Backups'
 $ArchivePath = Join-Path $ArchiveDir "McpServer-backup-$Timestamp.zip"
 
 # Files to preserve across updates (glob patterns relative to InstallPath).
+# appsettings.json is the canonical service config; environment-specific appsettings
+# files are not preserved and should be removed from the install path.
 $PreservePatterns = @(
-    '*.json',
+    'appsettings.json',
     '*.db',
     '*.db-shm',
     '*.db-wal'
@@ -251,6 +253,26 @@ function Remove-StaleInstallContent {
     }
 }
 
+function Remove-LegacyEnvironmentAppSettings {
+    param(
+        [Parameter(Mandatory)]
+        [string]$InstallRoot
+    )
+
+    $removed = @()
+    foreach ($name in @('appsettings.Production.json')) {
+        $path = Join-Path $InstallRoot $name
+        if (Test-Path $path) {
+            Remove-Item -Path $path -Force -ErrorAction SilentlyContinue
+            if (-not (Test-Path $path)) {
+                $removed += $name
+            }
+        }
+    }
+
+    return ,$removed
+}
+
 # ---------------------------------------------------------------------------
 # Pipeline
 # ---------------------------------------------------------------------------
@@ -353,6 +375,11 @@ foreach ($f in (Get-ChildItem -Path $restoreSource -ErrorAction SilentlyContinue
 }
 if ($restored.Count -gt 0) {
     Write-Host "  Restored: $($restored -join ', ')" -ForegroundColor DarkGray
+}
+
+$legacyConfigRemoved = Remove-LegacyEnvironmentAppSettings -InstallRoot $InstallPath
+if ($legacyConfigRemoved.Count -gt 0) {
+    Write-Host "  Removed legacy environment config overrides: $($legacyConfigRemoved -join ', ')" -ForegroundColor DarkGray
 }
 
 # 5. Start the service

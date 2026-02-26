@@ -28,13 +28,21 @@ public static class WorkspaceAppFactory
     /// Creates a <see cref="WebApplication"/> configured for the given workspace path and port.
     /// The host serves MCP tools and API controllers scoped to the workspace data.
     /// </summary>
-    public static WebApplication Create(string workspacePath, int port, ILoggerFactory loggerFactory, string? dataDirectory = null, WorkspaceTokenService? tokenService = null, WorkspaceConfigEntry? workspaceConfig = null)
+    public static WebApplication Create(
+        string workspacePath,
+        int port,
+        ILoggerFactory loggerFactory,
+        string? dataDirectory = null,
+        WorkspaceTokenService? tokenService = null,
+        WorkspaceConfigEntry? workspaceConfig = null,
+        DateTimeOffset? serverStartedAtUtc = null)
     {
         var workspaceName = Path.GetFileName(
             workspacePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
         var effectiveDataDir = string.IsNullOrWhiteSpace(dataDirectory) ? workspacePath : dataDirectory;
         var dataSource = Path.Combine(effectiveDataDir, "mcp.db");
         var logger = loggerFactory.CreateLogger("McpServer.Support.Mcp.WorkspaceAppFactory");
+        var runtimeInfo = new ServerRuntimeInfo(serverStartedAtUtc ?? DateTimeOffset.UtcNow);
 
         var builder = WebApplication.CreateSlimBuilder();
 
@@ -178,6 +186,7 @@ public static class WorkspaceAppFactory
             builder.Services.AddSingleton(tokenService);
         else
             builder.Services.AddSingleton<WorkspaceTokenService>();
+        builder.Services.AddSingleton(runtimeInfo);
 
         // MCP Streamable HTTP transport with the same tools as the primary host.
         builder.Services.AddMcpServer()
@@ -227,6 +236,14 @@ public static class WorkspaceAppFactory
         app.MapControllers();
         app.MapMcp("/mcp-transport");
         app.MapGet("/health", () => Results.Ok(new { status = "healthy", workspace = workspaceName, port }));
+        app.MapGet("/server-startup-utc", (ServerRuntimeInfo runtime) =>
+            MarkerDiagnosticsEndpointHelper.GetServerStartupResult(runtime, workspaceName, port));
+        app.MapGet("/marker-file-timestamp", (string? repoPath, IConfiguration cfg) =>
+            MarkerDiagnosticsEndpointHelper.GetMarkerFileTimestampResult(
+                repoPath,
+                cfg,
+                app.Environment.ContentRootPath,
+                restrictToCurrentRepoRoot: true));
 
         // Unprotected endpoint returning the default (anonymous) API key for consumers without marker file access.
         app.MapGet("/api-key", (WorkspaceTokenService ts, IConfiguration cfg) =>

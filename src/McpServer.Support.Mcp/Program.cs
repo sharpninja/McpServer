@@ -20,7 +20,9 @@ using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Web;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Hosting.WindowsServices;
 using Microsoft.IdentityModel.Tokens;
 using ModelContextProtocol.AspNetCore;
 using Serilog;
@@ -33,6 +35,8 @@ if (IsStdioTransportRequested(args))
     await McpStdioHost.RunAsync(args, default).ConfigureAwait(false);
     return;
 }
+
+var serverStartupUtc = DateTimeOffset.UtcNow;
 
 bool IsStdioTransportRequested(string[] a)
 {
@@ -47,6 +51,7 @@ bool IsStdioTransportRequested(string[] a)
 }
 
 var builder = WebApplication.CreateBuilder(args);
+DisableEnvironmentSpecificJsonConfigForWindowsService(builder);
 if (OperatingSystem.IsWindows())
 {
     builder.Host.UseWindowsService(options =>
@@ -259,6 +264,7 @@ builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
 builder.Services.AddScoped<IToolBucketService, ToolBucketService>();
 builder.Services.AddScoped<IAgentService, AgentService>();
 builder.Services.AddSingleton<WorkspaceTokenService>();
+builder.Services.AddSingleton(new ServerRuntimeInfo(serverStartupUtc));
 builder.Services.AddSingleton<IWorkspaceProcessManager, WorkspaceProcessManager>();
 builder.Services.Configure<PairingOptions>(builder.Configuration.GetSection(PairingOptions.SectionName));
 builder.Services.Configure<OidcAuthOptions>(builder.Configuration.GetSection(OidcAuthOptions.SectionName));
@@ -487,6 +493,20 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MCP Context
 app.MapGet("/", () => Results.Redirect("/swagger"))
     .ExcludeFromDescription();
 
+// Unprotected diagnostics endpoint for stale-marker detection and client troubleshooting.
+app.MapGet("/server-startup-utc", (ServerRuntimeInfo runtimeInfo) =>
+    MarkerDiagnosticsEndpointHelper.GetServerStartupResult(runtimeInfo))
+    .ExcludeFromDescription();
+
+// Unprotected diagnostics endpoint returning marker file timestamps for configured workspaces.
+app.MapGet("/marker-file-timestamp", (string? repoPath, IConfiguration configuration) =>
+    MarkerDiagnosticsEndpointHelper.GetMarkerFileTimestampResult(
+        repoPath,
+        configuration,
+        app.Environment.ContentRootPath,
+        restrictToCurrentRepoRoot: false))
+    .ExcludeFromDescription();
+
 // Unprotected endpoint returning the default (anonymous) API key for consumers without marker file access.
 app.MapGet("/api-key", (WorkspaceTokenService tokenService) =>
 {
@@ -571,6 +591,31 @@ static bool VerifyPairingPassword(string plaintext, string expectedHash)
     var computed = SHA256.HashData(Encoding.UTF8.GetBytes(plaintext));
     var expected = Convert.FromHexString(expectedHash);
     return CryptographicOperations.FixedTimeEquals(computed, expected);
+}
+
+static void DisableEnvironmentSpecificJsonConfigForWindowsService(WebApplicationBuilder builder)
+{
+    if (!OperatingSystem.IsWindows() || !WindowsServiceHelpers.IsWindowsService())
+        return;
+
+    var environmentFileName = $"appsettings.{builder.Environment.EnvironmentName}.json";
+    var toRemove = builder.Configuration.Sources
+        .OfType<JsonConfigurationSource>()
+        .Where(source =>
+            string.Equals(
+                Path.GetFileName(source.Path ?? string.Empty),
+                environmentFileName,
+                StringComparison.OrdinalIgnoreCase))
+        .ToList();
+
+    if (toRemove.Count == 0)
+        return;
+
+    foreach (var source in toRemove)
+        builder.Configuration.Sources.Remove(source);
+
+    if (builder.Configuration is IConfigurationRoot configurationRoot)
+        configurationRoot.Reload();
 }
 
 [SupportedOSPlatform("windows")]

@@ -21,7 +21,7 @@
 ### Configuration
 
 - [ ] `appsettings.json` has all required keys with sensible defaults
-- [ ] `appsettings.Production.json` absolute paths are correct for `C:\ProgramData\McpServer`
+- [ ] `C:\ProgramData\McpServer\appsettings.json` is the canonical Windows service config (no `appsettings.Production.json` override)
 - [ ] Environment variable overrides work (Mcp__Port, Mcp__RepoRoot, etc.)
 - [ ] Feature toggles (Embedding:Enabled, VectorIndex:Enabled) respect settings
 - [ ] Per-instance TODO storage backend selection works (YAML and SQLite)

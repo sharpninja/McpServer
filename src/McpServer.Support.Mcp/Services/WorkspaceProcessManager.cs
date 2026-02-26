@@ -23,6 +23,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     private readonly IServiceProvider _serviceProvider;
     private readonly IOptionsMonitor<MarkerPromptOptions> _promptOptions;
     private readonly WorkspaceTokenService _tokenService;
+    private readonly ServerRuntimeInfo _serverRuntimeInfo;
 
     // Resolved once during IHostedService.StartAsync; null until then.
     private string? _primaryWorkspaceKey;
@@ -33,13 +34,15 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         ILoggerFactory loggerFactory,
         IServiceProvider serviceProvider,
         IOptionsMonitor<MarkerPromptOptions> promptOptions,
-        WorkspaceTokenService tokenService)
+        WorkspaceTokenService tokenService,
+        ServerRuntimeInfo serverRuntimeInfo)
     {
         _logger = logger;
         _loggerFactory = loggerFactory;
         _serviceProvider = serviceProvider;
         _promptOptions = promptOptions;
         _tokenService = tokenService;
+        _serverRuntimeInfo = serverRuntimeInfo;
     }
 
     /// <inheritdoc />
@@ -69,7 +72,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         {
             var name = DeriveWorkspaceName(key);
             await MarkerFileService.WriteMarkerAsync(key, port, name, _logger, CancellationToken.None,
-                globalTemplate, workspace.PromptTemplate, token, workspace).ConfigureAwait(false);
+                globalTemplate, workspace.PromptTemplate, token, workspace, _serverRuntimeInfo.StartedAtUtc).ConfigureAwait(false);
             _logger.LogInformation("Workspace {Path} is the primary host — marker written, skipping duplicate app", key);
             return new WorkspaceProcessStatus(true, Port: port);
         }
@@ -78,8 +81,8 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         {
             var name = DeriveWorkspaceName(key);
             await MarkerFileService.WriteMarkerAsync(key, existing.Port, name, _logger, CancellationToken.None,
-                globalTemplate, workspace.PromptTemplate, token, workspace).ConfigureAwait(false);
-            return new WorkspaceProcessStatus(true, Uptime: DateTime.UtcNow - existing.StartedAt, Port: existing.Port);
+                globalTemplate, workspace.PromptTemplate, token, workspace, existing.StartedAtUtc).ConfigureAwait(false);
+            return new WorkspaceProcessStatus(true, Uptime: DateTimeOffset.UtcNow - existing.StartedAtUtc, Port: existing.Port);
         }
 
         var requestedPort = port;
@@ -143,7 +146,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
 
             var workspaceName = DeriveWorkspaceName(key);
             await MarkerFileService.WriteMarkerAsync(key, entry.Port, workspaceName, _logger, CancellationToken.None,
-                globalTemplate, workspace.PromptTemplate, token, workspace).ConfigureAwait(false);
+                globalTemplate, workspace.PromptTemplate, token, workspace, entry.StartedAtUtc).ConfigureAwait(false);
 
             _logger.LogInformation(
                 "Workspace Kestrel host started: {Path} on port {Port} (configured {ConfiguredPort})",
@@ -214,7 +217,8 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             return new WorkspaceProcessStatus(false);
         }
 
-        return new WorkspaceProcessStatus(true, Uptime: DateTime.UtcNow - entry.StartedAt, Port: entry.Port);
+        return new WorkspaceProcessStatus(true, Uptime: DateTimeOffset.UtcNow - entry.StartedAtUtc, Port: entry.Port);
+
     }
 
     /// <inheritdoc />
@@ -255,8 +259,13 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             var name = DeriveWorkspaceName(key);
             var token = _tokenService.GetToken(key) ?? _tokenService.GenerateToken(key);
             _ = _tokenService.GetDefaultToken(key) ?? _tokenService.GenerateDefaultToken(key);
+            var serverStartedAtUtc = IsPrimaryWorkspace(key)
+                ? _serverRuntimeInfo.StartedAtUtc
+                : (_hosts.TryGetValue(key, out var runningHost) && runningHost.IsRunning
+                    ? runningHost.StartedAtUtc
+                    : DateTimeOffset.UtcNow);
             await MarkerFileService.WriteMarkerAsync(key, markerPort, name, _logger, ct,
-                globalTemplate, ws.PromptTemplate, token, ws).ConfigureAwait(false);
+                globalTemplate, ws.PromptTemplate, token, ws, serverStartedAtUtc).ConfigureAwait(false);
         }
 
         _logger.LogInformation("Regenerated marker files for all running workspaces");
@@ -433,11 +442,12 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         WorkspaceConfigEntry? configEntry,
         CancellationToken ct)
     {
-        var app = WorkspaceAppFactory.Create(workspacePath, port, _loggerFactory, dataDirectory, _tokenService, configEntry);
+        var startedAtUtc = DateTimeOffset.UtcNow;
+        var app = WorkspaceAppFactory.Create(workspacePath, port, _loggerFactory, dataDirectory, _tokenService, configEntry, startedAtUtc);
         try
         {
             await app.StartAsync(ct).ConfigureAwait(false);
-            return new WorkspaceHostEntry(app, DateTime.UtcNow, port);
+            return new WorkspaceHostEntry(app, startedAtUtc, port);
         }
         catch
         {
@@ -582,16 +592,16 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     private sealed class WorkspaceHostEntry
     {
         public WebApplication App { get; }
-        public DateTime StartedAt { get; }
+        public DateTimeOffset StartedAtUtc { get; }
         public int Port { get; }
 
         public bool IsRunning => App.Lifetime.ApplicationStarted.IsCancellationRequested
             && !App.Lifetime.ApplicationStopped.IsCancellationRequested;
 
-        public WorkspaceHostEntry(WebApplication app, DateTime startedAt, int port)
+        public WorkspaceHostEntry(WebApplication app, DateTimeOffset startedAtUtc, int port)
         {
             App = app;
-            StartedAt = startedAt;
+            StartedAtUtc = startedAtUtc;
             Port = port;
         }
     }
