@@ -110,9 +110,10 @@ public static class MarkerFileService
         | Term | Definition |
         |------|-----------|
         | MCP | Model Context Protocol — an open standard for tool-calling between AI agents and context servers. |
-        | Workspace | A project directory registered with the MCP server. Each workspace has its own port, data directory, and auth token. |
+        | Workspace | A project directory registered with the MCP server. All workspaces share a single port; use the `X-Workspace-Path` header to target a specific one. |
         | Marker File | The `AGENTS-README-FIRST.yaml` file placed at each workspace root. Contains connection details, auth token, and this prompt. |
         | API Key | A per-workspace cryptographic token that rotates on each server restart. Required for all `/mcp/*` REST endpoints. |
+        | X-Workspace-Path | Optional HTTP header specifying the target workspace's absolute path. Highest priority in workspace resolution. |
         | Streamable HTTP | The MCP wire protocol transport at `/mcp-transport`. Carries JSON-RPC tool calls over HTTP POST with streaming responses. |
         | Session Log | An audit record of every agent interaction, stored per-session with full request/response history and reasoning dialog. |
         | Context Pack | An ordered set of document chunks retrieved by semantic + full-text hybrid search, scoped to the workspace. |
@@ -154,6 +155,13 @@ public static class MarkerFileService
         - **REST API**: All `/mcp/*` endpoints (requires `X-Api-Key` header). Full OpenAPI spec at GET {{baseUrl}}/swagger/v1/swagger.json. Interactive Swagger UI at {{baseUrl}}/swagger.
         - **MCP Streamable HTTP**: POST {{baseUrl}}/mcp-transport — Model Context Protocol transport for tool-calling agents. No API key required for MCP transport.
         - **Health Check**: GET {{baseUrl}}/health — returns {"status":"healthy"}. No API key required.
+
+        ## Workspace Resolution
+        All workspaces share a single server port. The server resolves which workspace a request targets using this priority chain:
+        1. **`X-Workspace-Path` header** (highest priority): Send `X-Workspace-Path: {{workspace.WorkspacePath}}` to explicitly target this workspace.
+        2. **API key reverse lookup**: The `X-Api-Key` token is unique per workspace — the server resolves the workspace from it automatically.
+        3. **Default workspace**: If neither header nor key is present, the primary workspace is used.
+        For most agents, simply including `X-Api-Key` from this marker file is sufficient — the server resolves the workspace automatically.
 
         ## Server Health
         Before making API calls, verify the server is running: GET {{baseUrl}}/health — returns {"status":"healthy"}.

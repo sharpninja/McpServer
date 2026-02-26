@@ -1,4 +1,5 @@
 using McpServer.Support.Mcp.Ingestion;
+using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace McpServer.Support.Mcp.Controllers;
@@ -13,14 +14,17 @@ public sealed class SyncController : ControllerBase
 {
     private readonly IngestionCoordinator _coordinator;
     private readonly ISyncStatusStore _syncStatusStore;
+    private readonly WorkspaceContext _workspaceContext;
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
     /// <param name="coordinator">Ingestion coordinator for running sync.</param>
     /// <param name="syncStatusStore">Store for tracking sync run status.</param>
-    public SyncController(IngestionCoordinator coordinator, ISyncStatusStore syncStatusStore)
+    /// <param name="workspaceContext">Per-request workspace context.</param>
+    public SyncController(IngestionCoordinator coordinator, ISyncStatusStore syncStatusStore, WorkspaceContext workspaceContext)
     {
         _coordinator = coordinator;
         _syncStatusStore = syncStatusStore;
+        _workspaceContext = workspaceContext;
     }
 
     /// <summary>TR-PLANNED-013: Trigger ingestion (sync.run).</summary>
@@ -49,7 +53,10 @@ public sealed class SyncController : ControllerBase
     [HttpGet("status")]
     public ActionResult<object> GetSyncStatus()
     {
-        var last = _syncStatusStore.GetLast();
+        var wsId = _workspaceContext.WorkspacePath;
+        var last = !string.IsNullOrEmpty(wsId)
+            ? _syncStatusStore.GetLast(wsId)
+            : _syncStatusStore.GetLast();
         if (last == null)
         {
             return Ok(new { lastRun = (DateTime?)null, status = "idle", error = (string?)null });
