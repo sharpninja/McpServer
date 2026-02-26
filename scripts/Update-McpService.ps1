@@ -92,22 +92,6 @@ function Wait-ProcessExit {
     return $false
 }
 
-function Get-PrefixedFallbackPort {
-    param([int]$Port)
-
-    $candidateText = "1$Port"
-    $candidate = 0
-    if (-not [int]::TryParse($candidateText, [ref]$candidate)) {
-        return $null
-    }
-
-    if ($candidate -lt 1 -or $candidate -gt 65535) {
-        return $null
-    }
-
-    return $candidate
-}
-
 function Test-HealthEndpoint {
     param(
         [Parameter(Mandatory)]
@@ -437,39 +421,16 @@ else {
 
             $workspaceHealthChecked++
             $wsName = if ([string]::IsNullOrWhiteSpace([string]$ws.Name)) { [string]$ws.WorkspacePath } else { [string]$ws.Name }
-            $configuredPort = [int]$ws.WorkspacePort
-            $fallbackPort = Get-PrefixedFallbackPort -Port $configuredPort
 
-            $probes = @($configuredPort)
-            if ($null -ne $fallbackPort -and $fallbackPort -ne $configuredPort) {
-                $probes += $fallbackPort
-            }
-
-            $success = $null
-            $errors = @()
-            foreach ($probePort in $probes) {
-                $probe = Test-HealthEndpoint -Port $probePort -Attempts 1 -TimeoutSeconds 2 -DelaySeconds 1
-                if ($probe.Healthy) {
-                    $success = $probe
-                    break
-                }
-                $errors += ("port {0}: {1}" -f $probePort, $probe.Error)
-            }
-
-            if ($null -ne $success) {
+            # All workspaces use the global port (single-port model)
+            $probe = Test-HealthEndpoint -Port $Port -Attempts 1 -TimeoutSeconds 2 -DelaySeconds 1
+            if ($probe.Healthy) {
                 $workspaceHealthOk++
-                $portMode = if ($success.Port -eq $configuredPort) { 'configured' } else { 'fallback' }
-                Write-Host "  OK $wsName health OK on port $($success.Port) ($portMode)" -ForegroundColor Green
+                Write-Host "  OK $wsName health OK on port $Port" -ForegroundColor Green
             }
             else {
                 $workspaceHealthFailed++
-                $fallbackPortDisplay = if ($null -ne $fallbackPort) { [string]$fallbackPort } else { '(none)' }
-                $workspaceErrorSummary = $errors -join ' | '
-                Write-Warning ("Workspace health check failed: {0}; configured={1}; fallback={2}; errors={3}" -f `
-                    $wsName, `
-                    $configuredPort, `
-                    $fallbackPortDisplay, `
-                    $workspaceErrorSummary)
+                Write-Warning ("Workspace health check failed: {0}; port={1}; error={2}" -f $wsName, $Port, $probe.Error)
             }
         }
     }
