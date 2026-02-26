@@ -158,21 +158,47 @@ public abstract class McpClientBase
         // JWT and API key are mutually exclusive auth mechanisms.
         // When a Bearer token is present, it is the sole auth header — API keys are
         // an agent-only convenience and must not be sent alongside a JWT.
+        var authMode = "none";
         if (!string.IsNullOrWhiteSpace(BearerToken))
+        {
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", BearerToken);
+            authMode = "Bearer";
+        }
         else if (!string.IsNullOrWhiteSpace(ApiKey))
+        {
             request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
+            authMode = $"ApiKey({ApiKey[..Math.Min(8, ApiKey.Length)]}…)";
+        }
 
         if (!string.IsNullOrWhiteSpace(WorkspacePath))
             request.Headers.TryAddWithoutValidation("X-Workspace-Path", WorkspacePath);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+        System.Diagnostics.Trace.TraceInformation(
+            $"[McpClient] {method} {uri} | Auth={authMode} | WorkspacePath={WorkspacePath ?? "(none)"}");
+
         if (body is not null)
             request.Content = new StringContent(
                 JsonSerializer.Serialize(body, s_jsonOptions), Encoding.UTF8, "application/json");
 
-        using var response = await _http.SendAsync(request, cancellationToken).ConfigureAwait(false);
-        return await ReadResponseAsync<T>(response, cancellationToken).ConfigureAwait(false);
+        HttpResponseMessage response;
+        try
+        {
+            response = await _http.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(
+                $"[McpClient] NETWORK ERROR {method} {uri}: {ex.GetType().Name}: {ex.Message}");
+            throw;
+        }
+
+        using (response)
+        {
+            System.Diagnostics.Trace.TraceInformation(
+                $"[McpClient] {method} {uri} → HTTP {(int)response.StatusCode}");
+            return await ReadResponseAsync<T>(response, cancellationToken).ConfigureAwait(false);
+        }
     }
 
     /// <summary>

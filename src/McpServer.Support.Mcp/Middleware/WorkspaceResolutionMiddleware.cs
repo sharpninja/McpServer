@@ -1,4 +1,5 @@
 using McpServer.Support.Mcp.Services;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Middleware;
 
@@ -18,11 +19,13 @@ public sealed class WorkspaceResolutionMiddleware
     public const string WorkspacePathHeader = "X-Workspace-Path";
 
     private readonly RequestDelegate _next;
+    private readonly ILogger<WorkspaceResolutionMiddleware> _logger;
 
     /// <summary>Initializes a new instance of the <see cref="WorkspaceResolutionMiddleware"/> class.</summary>
-    public WorkspaceResolutionMiddleware(RequestDelegate next)
+    public WorkspaceResolutionMiddleware(RequestDelegate next, ILogger<WorkspaceResolutionMiddleware> logger)
     {
         _next = next;
+        _logger = logger;
     }
 
     /// <summary>Resolves workspace identity and populates <see cref="WorkspaceContext"/>.</summary>
@@ -42,6 +45,10 @@ public sealed class WorkspaceResolutionMiddleware
             return;
         }
 
+        var method = context.Request.Method;
+        var hasBearerToken = context.Request.Headers.Authorization.ToString()
+            .StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase);
+
         // Tier 1: X-Workspace-Path header
         var headerValue = context.Request.Headers[WorkspacePathHeader].FirstOrDefault();
         if (!string.IsNullOrWhiteSpace(headerValue))
@@ -49,6 +56,8 @@ public sealed class WorkspaceResolutionMiddleware
             var ws = await workspaceService.GetAsync(headerValue, context.RequestAborted).ConfigureAwait(false);
             if (ws is null)
             {
+                _logger.LogWarning("[WS-Resolve] {Method} {Path} | Tier1 FAILED: X-Workspace-Path='{HeaderValue}' not found in registered workspaces",
+                    method, path, headerValue);
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 context.Response.ContentType = "application/json";
                 await context.Response.WriteAsync(
@@ -57,18 +66,14 @@ public sealed class WorkspaceResolutionMiddleware
                 return;
             }
 
+            _logger.LogInformation("[WS-Resolve] {Method} {Path} | Tier1 OK: X-Workspace-Path='{HeaderValue}' → {WorkspaceName}",
+                method, path, headerValue, ws.Name);
             PopulateContext(workspaceContext, ws, isDefault: false, context);
             await _next(context).ConfigureAwait(false);
             return;
         }
 
         // Tier 2: API key reverse lookup — only for agent callers (no Bearer token).
-        // JWT-authenticated users identify their workspace via X-Workspace-Path (Tier 1)
-        // or fall through to the primary workspace (Tier 3). API keys are an agent-only
-        // convenience and must not influence workspace resolution when a JWT is present.
-        var hasBearerToken = context.Request.Headers.Authorization.ToString()
-            .StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase);
-
         if (!hasBearerToken)
         {
             var apiKey = context.Request.Headers[WorkspaceAuthMiddleware.HeaderName].FirstOrDefault()
@@ -82,12 +87,27 @@ public sealed class WorkspaceResolutionMiddleware
                     var ws = await workspaceService.GetAsync(resolvedPath, context.RequestAborted).ConfigureAwait(false);
                     if (ws is not null)
                     {
+                        _logger.LogInformation("[WS-Resolve] {Method} {Path} | Tier2 OK: ApiKey reverse lookup → {WorkspaceName} (isDefault={IsDefault})",
+                            method, path, ws.Name, isDefault);
                         PopulateContext(workspaceContext, ws, isDefault, context);
                         await _next(context).ConfigureAwait(false);
                         return;
                     }
+
+                    _logger.LogWarning("[WS-Resolve] {Method} {Path} | Tier2 PARTIAL: ApiKey resolved path '{ResolvedPath}' but workspace not found in service",
+                        method, path, resolvedPath);
+                }
+                else
+                {
+                    _logger.LogWarning("[WS-Resolve] {Method} {Path} | Tier2 FAILED: ApiKey not recognized by token service",
+                        method, path);
                 }
             }
+        }
+        else
+        {
+            _logger.LogDebug("[WS-Resolve] {Method} {Path} | Tier2 SKIPPED: Bearer token present, no X-Workspace-Path header",
+                method, path);
         }
 
         // Tier 3: Primary workspace from registered list
@@ -95,7 +115,14 @@ public sealed class WorkspaceResolutionMiddleware
         var primary = list.Items.FirstOrDefault(w => w.IsPrimary) ?? list.Items.FirstOrDefault();
         if (primary is not null)
         {
+            _logger.LogInformation("[WS-Resolve] {Method} {Path} | Tier3 FALLBACK: using primary workspace '{WorkspaceName}' (HasBearer={HasBearer})",
+                method, path, primary.Name, hasBearerToken);
             PopulateContext(workspaceContext, primary, isDefault: false, context);
+        }
+        else
+        {
+            _logger.LogError("[WS-Resolve] {Method} {Path} | ALL TIERS FAILED: no workspace could be resolved",
+                method, path);
         }
 
         await _next(context).ConfigureAwait(false);

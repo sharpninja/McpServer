@@ -65,23 +65,31 @@ public sealed class WorkspaceAuthMiddleware
             return;
         }
 
+        var method = context.Request.Method;
+
         // ── JWT path ──────────────────────────────────────────────────────────
         // When a Bearer header is present, API keys are IGNORED entirely.
         // JWT is the sole auth mechanism for that request.
         var hasBearerHeader = context.Request.Headers.Authorization.ToString()
             .StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase);
 
+        _logger.LogDebug("[WS-Auth] {Method} {Path} | HasBearer={HasBearer} | ResolvedWorkspace={Workspace}",
+            method, path, hasBearerHeader, workspaceContext.WorkspaceName ?? "(none)");
+
         if (hasBearerHeader)
         {
             var (authenticated, failureReason) = await TryAuthenticateJwtAsync(context).ConfigureAwait(false);
             if (authenticated)
             {
+                _logger.LogInformation("[WS-Auth] {Method} {Path} | JWT OK → workspace={Workspace}",
+                    method, path, workspaceContext.WorkspaceName ?? "(none)");
                 await _next(context).ConfigureAwait(false);
                 return;
             }
 
             // JWT was present but invalid — reject immediately, do NOT fall through to API key.
-            _logger.LogWarning("JWT Bearer token present but validation failed: {Reason}", failureReason ?? "unknown");
+            _logger.LogWarning("[WS-Auth] {Method} {Path} | JWT FAILED: {Reason} → 401",
+                method, path, failureReason ?? "unknown");
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             context.Response.ContentType = "application/json";
             var jwtError = new
