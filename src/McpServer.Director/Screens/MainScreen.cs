@@ -361,12 +361,6 @@ internal sealed class MainScreen : Window
             selectFirst = false;
         }
 
-        if (_authorizationPolicy.CanViewArea(McpArea.DispatcherLogs))
-        {
-            _tabView.AddTab(new Tab { DisplayText = "Logs", View = new DispatcherLogsScreen(_dispatcherLogsVm) }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
         if (_directorContext.HasControlConnection && _authorizationPolicy.CanViewArea(McpArea.Workspaces))
         {
             _tabView.AddTab(new Tab { DisplayText = "Workspaces", View = new WorkspaceListScreen(_workspaceListVm, _workspaceDetailVm, _directorContext) }, andSelect: selectFirst);
@@ -406,6 +400,12 @@ internal sealed class MainScreen : Window
         if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Tunnels))
         {
             _tabView.AddTab(new Tab { DisplayText = "Tunnels", View = new TunnelScreen(_tunnelListVm) }, andSelect: selectFirst);
+            selectFirst = false;
+        }
+
+        if (_authorizationPolicy.CanViewArea(McpArea.DispatcherLogs))
+        {
+            _tabView.AddTab(new Tab { DisplayText = "Logs", View = new DispatcherLogsScreen(_dispatcherLogsVm) }, andSelect: selectFirst);
             selectFirst = false;
         }
 
