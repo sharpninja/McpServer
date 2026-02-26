@@ -27,6 +27,30 @@ public static class MarkerFileService
         """
         You are connected to an MCP Context Server at {{baseUrl}}. Use this server to coordinate your work.
 
+        ## ⚠️ SESSION LOGGING — MANDATORY PRECONDITION ⚠️
+
+        **Before taking ANY action on a user request, you MUST first POST a session log entry to {{baseUrl}}/mcp/sessionlog.**
+        This is a PRECONDITION — do not proceed with code changes, builds, file reads, or any other work until your
+        session log POST succeeds. Session logging is not optional, not deferred, and not secondary to the user's task.
+
+        On your FIRST interaction each session:
+        1. Read this marker file
+        2. GET {{baseUrl}}/health to verify the server is running
+        3. GET {{baseUrl}}/mcp/sessionlog?limit=5 to review recent session history
+        4. GET {{baseUrl}}/mcp/todo to review current tasks
+        5. POST {{baseUrl}}/mcp/sessionlog with a new session (status: "in_progress", sourceType: your agent name)
+        6. THEN begin working on the user's request
+
+        On EVERY subsequent interaction:
+        1. POST an updated session log entry BEFORE starting work
+        2. Complete the user's request
+        3. POST the final updated session log with results, actions taken, and files modified
+
+        If the session log POST fails (e.g., 401), re-read this marker file for a fresh API key and retry.
+        **Failure to maintain the session log is a compliance violation. Every interaction must be logged.**
+
+        See the "Session Logging Details" section below for the full payload schema.
+
         ## Owner Values and Agent Conduct (MANDATORY)
 
         You are acting as a representative of the workspace owner. Your work — code, commits, documentation,
@@ -166,8 +190,9 @@ public static class MarkerFileService
         ## Server Health
         Before making API calls, verify the server is running: GET {{baseUrl}}/health — returns {"status":"healthy"}.
 
-        ## Session Logging (REQUIRED)
+        ## Session Logging Details (REQUIRED — SEE PRECONDITION ABOVE)
         You MUST log every request you process to the session log endpoint. This is critical for audit, continuity, and team visibility.
+        **Reminder: Your first action on each user request is POST {{baseUrl}}/mcp/sessionlog — before any code changes.**
 
         For each task or conversation turn:
         1. POST {{baseUrl}}/mcp/sessionlog with a JSON body containing:
@@ -302,6 +327,7 @@ public static class MarkerFileService
         - `policy_change` — workspace policy configuration change
 
         **THESE RULES MUST BE ADHERED TO AND THIS MARKER READ ON EACH NEW REQUEST BY THE USER.**
+        **REMINDER: Your FIRST action on every user request is POST {{baseUrl}}/mcp/sessionlog. Do not skip this.**
         """;
 
     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
