@@ -160,4 +160,47 @@ public sealed class WorkspaceAuthMiddlewareTests
 
         Assert.True(nextCalled);
     }
+
+    [Fact]
+    public async Task ReadsWorkspaceFromContext_InsteadOfConfig()
+    {
+        // WorkspaceContext points to WorkspacePath, config points elsewhere.
+        // Auth middleware should use the context workspace path.
+        var tokenService = new WorkspaceTokenService();
+        tokenService.GenerateToken(WorkspacePath);
+        var fullToken = tokenService.GetToken(WorkspacePath)!;
+        var configOther = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?> { ["Mcp:RepoRoot"] = @"C:\other" })
+            .Build();
+        var wsContext = new WorkspaceContext { WorkspacePath = WorkspacePath };
+        var nextCalled = false;
+        var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
+        var ctx = CreateContext("POST", "/mcp/sync/run", fullToken);
+
+        await middleware.InvokeAsync(ctx, tokenService, configOther, wsContext);
+
+        Assert.True(nextCalled, "Should accept token validated against WorkspaceContext path, not config path");
+    }
+
+    [Fact]
+    public async Task EmptyApiKey_Config_PassesAll()
+    {
+        // When Mcp:ApiKey is empty, auth is open mode — all requests pass.
+        var tokenService = new WorkspaceTokenService();
+        var config = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["Mcp:ApiKey"] = "",
+                ["Mcp:RepoRoot"] = WorkspacePath,
+            })
+            .Build();
+        var wsContext = new WorkspaceContext { WorkspacePath = WorkspacePath };
+        var nextCalled = false;
+        var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
+        var ctx = CreateContext("POST", "/mcp/sync/run", null);
+
+        await middleware.InvokeAsync(ctx, tokenService, config, wsContext);
+
+        Assert.True(nextCalled);
+    }
 }
