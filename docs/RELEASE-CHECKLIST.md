@@ -16,7 +16,9 @@
 - [ ] TODO YAML schema compatible (test with existing `docs/Project/TODO.yaml`)
 - [ ] ISSUE-* frontmatter parse/serialize stable
 - [ ] Session log schema compatible (test with existing session logs)
-- [ ] Multi-instance configuration validated (`scripts/Test-McpMultiInstance.ps1`)
+- [ ] Multi-tenant workspace resolution tested with `X-Workspace-Path` header
+- [ ] Director workspace switching via header verified
+- [ ] EF Core global query filter workspace isolation verified
 
 ### Configuration
 
