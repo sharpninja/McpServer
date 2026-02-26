@@ -64,33 +64,41 @@ public abstract class McpClientBase
         _scheme = options.BaseUrl.Scheme;
         _host = options.BaseUrl.Host;
         Port = options.BaseUrl.Port;
+        WorkspacePath = options.WorkspacePath ?? string.Empty;
+        // Set ApiKey first, then BearerToken — BearerToken setter clears ApiKey
+        // when a JWT is provided, enforcing mutual exclusivity from construction.
         ApiKey = options.ApiKey ?? string.Empty;
         BearerToken = options.BearerToken ?? string.Empty;
-        WorkspacePath = options.WorkspacePath ?? string.Empty;
     }
 
     /// <summary>
     /// API key for workspace authentication, sent as the <c>X-Api-Key</c> header on every
-    /// request. The value is read at call time so it can be rotated without recreating the
-    /// client. Must be non-empty before any endpoint is called; otherwise an
-    /// <see cref="InvalidOperationException"/> is thrown.
+    /// request. <b>Mutually exclusive with <see cref="BearerToken"/>.</b> Setting the API key
+    /// is silently ignored when a JWT bearer token is already active. Setting
+    /// <see cref="BearerToken"/> to a non-empty value clears the API key.
     ///
     /// <para>Obtain the key from the <c>AGENTS-README-FIRST.yaml</c> marker file that the
     /// MCP Server writes to each workspace root on startup.</para>
     /// </summary>
-    /// <example>
-    /// <code>
-    /// client.ApiKey = File.ReadAllText("AGENTS-README-FIRST.yaml")
-    ///     .Split("apiKey:")[1].Trim();
-    /// </code>
-    /// </example>
-    public string ApiKey { get; set; } = string.Empty;
+    public string ApiKey
+    {
+        get => _apiKey;
+        set
+        {
+            // JWT and API key are mutually exclusive. Once a Bearer token is set,
+            // API key writes are ignored — agents use API keys, users use JWT.
+            if (!string.IsNullOrWhiteSpace(_bearerToken))
+                return;
+            _apiKey = value ?? string.Empty;
+        }
+    }
+    private string _apiKey = string.Empty;
 
     /// <summary>
-    /// Optional JWT bearer token sent as the <c>Authorization: Bearer</c> header on every
-    /// request. The value is read at call time so it can be refreshed without recreating the
-    /// client. When set, requests may be authorized by the server without an API key.
-    /// Setting this to a non-empty value automatically enables <see cref="RequireBearerToken"/>.
+    /// JWT bearer token sent as the <c>Authorization: Bearer</c> header on every request.
+    /// <b>Mutually exclusive with <see cref="ApiKey"/>.</b> Setting this to a non-empty value
+    /// clears the API key and enables <see cref="RequireBearerToken"/>, permanently preventing
+    /// silent fallback to API key authentication for the lifetime of this client instance.
     /// </summary>
     public string BearerToken
     {
@@ -99,7 +107,10 @@ public abstract class McpClientBase
         {
             _bearerToken = value ?? string.Empty;
             if (!string.IsNullOrWhiteSpace(_bearerToken))
+            {
+                _apiKey = string.Empty;
                 RequireBearerToken = true;
+            }
         }
     }
     private string _bearerToken = string.Empty;
@@ -155,9 +166,31 @@ public abstract class McpClientBase
         => SendAsync<T>(HttpMethod.Delete, path, null, cancellationToken);
 
     /// <summary>
+    /// Pre-flight auth check called before every outbound request. Throws with a
+    /// descriptive message when no valid credential is available.
+    /// </summary>
+    private void EnsureAuthenticated()
+    {
+        var hasBearer = !string.IsNullOrWhiteSpace(BearerToken);
+        var hasApiKey = !string.IsNullOrWhiteSpace(ApiKey);
+
+        if (RequireBearerToken && !hasBearer)
+            throw new InvalidOperationException(
+                "Authentication failed: a JWT bearer token was previously set on this client but is " +
+                "now empty. The client cannot fall back to API key authentication once a bearer token " +
+                "has been configured. Re-authenticate via OIDC to obtain a new token.");
+
+        if (!hasBearer && !hasApiKey)
+            throw new InvalidOperationException(
+                "Authentication required: no credential is configured on this client. " +
+                "Set BearerToken (for interactive users via OIDC) or ApiKey (for agents via " +
+                "the AGENTS-README-FIRST.yaml marker file) before calling any endpoint.");
+    }
+
+    /// <summary>
     /// Core HTTP dispatch: builds the URI from <see cref="Port"/>, attaches the
-    /// auth headers from <see cref="ApiKey"/> and/or <see cref="BearerToken"/>, optionally serializes
-    /// <paramref name="body"/> as JSON, sends the request, and deserializes the response.
+    /// auth header (<see cref="BearerToken"/> xor <see cref="ApiKey"/> — mutually exclusive),
+    /// optionally serializes <paramref name="body"/> as JSON, sends the request, and deserializes the response.
     /// </summary>
     /// <exception cref="InvalidOperationException">Thrown when neither <see cref="ApiKey"/> nor <see cref="BearerToken"/> is set.</exception>
     /// <exception cref="McpValidationException">HTTP 400 Bad Request.</exception>
@@ -167,15 +200,7 @@ public abstract class McpClientBase
     /// <exception cref="McpServerException">Any other non-success HTTP status.</exception>
     private async Task<T> SendAsync<T>(HttpMethod method, string path, object? body, CancellationToken cancellationToken)
     {
-        if (RequireBearerToken && string.IsNullOrWhiteSpace(BearerToken))
-            throw new InvalidOperationException(
-                "BearerToken is required but not set. The client was configured with a JWT token " +
-                "and must not fall back to API key authentication. Re-authenticate via OIDC first.");
-
-        if (string.IsNullOrWhiteSpace(ApiKey) && string.IsNullOrWhiteSpace(BearerToken))
-            throw new InvalidOperationException(
-                "ApiKey or BearerToken must be set before calling an endpoint. " +
-                "Read the workspace token from the AGENTS-README-FIRST.yaml marker file or authenticate with OIDC.");
+        EnsureAuthenticated();
 
         var uri = new Uri($"{_scheme}://{_host}:{Port}/{path.TrimStart('/')}");
         using var request = new HttpRequestMessage(method, uri);
@@ -239,15 +264,7 @@ public abstract class McpClientBase
     protected async IAsyncEnumerable<string> StreamSseAsync(
         string path, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        if (RequireBearerToken && string.IsNullOrWhiteSpace(BearerToken))
-            throw new InvalidOperationException(
-                "BearerToken is required but not set. The client was configured with a JWT token " +
-                "and must not fall back to API key authentication. Re-authenticate via OIDC first.");
-
-        if (string.IsNullOrWhiteSpace(ApiKey) && string.IsNullOrWhiteSpace(BearerToken))
-            throw new InvalidOperationException(
-                "ApiKey or BearerToken must be set before calling an endpoint. " +
-                "Read the workspace token from the AGENTS-README-FIRST.yaml marker file or authenticate with OIDC.");
+        EnsureAuthenticated();
 
         var uri = new Uri($"{_scheme}://{_host}:{Port}/{path.TrimStart('/')}");
         using var request = new HttpRequestMessage(HttpMethod.Get, uri);
