@@ -12,7 +12,6 @@ public sealed record ListWorkspacesResult(IReadOnlyList<WorkspaceSummary> Items,
 public sealed record WorkspaceSummary(
     string WorkspacePath,
     string Name,
-    int WorkspacePort,
     bool IsPrimary,
     bool IsEnabled);
 
@@ -25,7 +24,6 @@ public sealed record WorkspaceDetail(
     string Name,
     string TodoPath,
     string? DataDirectory,
-    int WorkspacePort,
     string? TunnelProvider,
     bool IsPrimary,
     bool IsEnabled,

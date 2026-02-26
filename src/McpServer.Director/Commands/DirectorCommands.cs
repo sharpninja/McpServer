@@ -74,16 +74,14 @@ internal static class DirectorCommands
                 var table = new Table();
                 table.AddColumn("Name");
                 table.AddColumn("Path");
-                table.AddColumn("Port");
                 table.AddColumn("Enabled");
 
                 foreach (var item in items.EnumerateArray())
                 {
                     table.AddRow(
                         Markup.Escape(item.GetProperty("name").GetString() ?? ""),
-                        Markup.Escape(item.GetProperty("path").GetString() ?? ""),
-                        item.TryGetProperty("port", out var port) ? port.ToString() : "-",
-                        item.TryGetProperty("enabled", out var en) ? (en.GetBoolean() ? "[green]Yes[/]" : "[red]No[/]") : "-");
+                        Markup.Escape(item.GetProperty("workspacePath").GetString() ?? ""),
+                        item.TryGetProperty("isEnabled", out var en) ? (en.GetBoolean() ? "[green]Yes[/]" : "[red]No[/]") : "-");
                 }
 
                 AnsiConsole.Write(table);

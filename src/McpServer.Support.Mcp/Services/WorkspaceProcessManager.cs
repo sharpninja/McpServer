@@ -45,7 +45,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     public async Task<WorkspaceProcessStatus> StartAsync(WorkspaceDto workspace, CancellationToken ct = default)
     {
         var key = NormalizeKey(workspace.WorkspacePath);
-        var port = workspace.WorkspacePort;
+        var port = _serverRuntimeInfo.ListenPort;
 
         _logger.LogInformation(
             "Registering workspace: Name={WorkspaceName}; Path={WorkspacePath}; Port={Port}",
@@ -113,7 +113,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             var name = DeriveWorkspaceName(key);
             var token = _tokenService.GetToken(key) ?? _tokenService.GenerateToken(key);
             _ = _tokenService.GetDefaultToken(key) ?? _tokenService.GenerateDefaultToken(key);
-            await MarkerFileService.WriteMarkerAsync(key, ws.WorkspacePort, name, _logger, ct,
+            await MarkerFileService.WriteMarkerAsync(key, _serverRuntimeInfo.ListenPort, name, _logger, ct,
                 globalTemplate, ws.PromptTemplate, token, ws, _serverRuntimeInfo.StartedAtUtc).ConfigureAwait(false);
         }
 
@@ -138,11 +138,9 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
 
             var primary = workspaces.Items
                 .Where(w => w.IsPrimary && w.IsEnabled)
-                .OrderBy(w => w.WorkspacePort)
                 .FirstOrDefault();
             primary ??= workspaces.Items
                 .Where(w => w.IsEnabled)
-                .OrderBy(w => w.WorkspacePort)
                 .FirstOrDefault();
             if (primary is not null)
                 _primaryWorkspaceKey = NormalizeKey(primary.WorkspacePath);
@@ -162,7 +160,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
 
                 var status = await StartAsync(ws, cancellationToken).ConfigureAwait(false);
                 if (status.IsRunning)
-                    _logger.LogInformation("  ✓ {Name} on port {Port}{Primary}", ws.Name, status.Port ?? ws.WorkspacePort,
+                    _logger.LogInformation("  ✓ {Name}{Primary}", ws.Name,
                         IsPrimaryWorkspace(NormalizeKey(ws.WorkspacePath)) ? " (primary)" : "");
                 else
                     _logger.LogWarning("  ✗ {Name} failed: {Error}", ws.Name, status.Error);

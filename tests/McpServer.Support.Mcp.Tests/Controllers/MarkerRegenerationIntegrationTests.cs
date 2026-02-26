@@ -57,7 +57,6 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
                     {
                         WorkspacePath = _workspacePath,
                         Name = "marker-test",
-                        WorkspacePort = 0,
                         TodoPath = "docs/todo.yaml",
                         IsPrimary = true,
                         IsEnabled = true,
@@ -142,7 +141,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
 
         var updatedContent = await File.ReadAllTextAsync(_markerPath).ConfigureAwait(true);
         Assert.Contains("CUSTOM GLOBAL PROMPT for testing marker regeneration", updatedContent);
-        Assert.Contains("http://localhost:0", updatedContent);
+        Assert.Contains("http://localhost:7147", updatedContent);
     }
 
     [Fact]
@@ -211,8 +210,8 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
 
         // 4. Read the final marker — both prompts should be present.
         var finalContent = await File.ReadAllTextAsync(_markerPath).ConfigureAwait(true);
-        Assert.Contains("GLOBAL SECTION http://localhost:0", finalContent);
-        Assert.Contains("WORKSPACE SECTION http://localhost:0", finalContent);
+        Assert.Contains("GLOBAL SECTION http://localhost:7147", finalContent);
+        Assert.Contains("WORKSPACE SECTION http://localhost:7147", finalContent);
     }
 
     /// <summary>

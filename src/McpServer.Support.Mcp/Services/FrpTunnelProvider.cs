@@ -473,58 +473,20 @@ public sealed class FrpTunnelProvider : ITunnelProvider, IDisposable
         return new FrpRuntimeConfig(configText, publicEndpoint, localPortSummary);
     }
 
-    private async Task<IReadOnlyList<FrpTcpPortMapping>> ResolveTcpMappedPortsAsync(
+    private Task<IReadOnlyList<FrpTcpPortMapping>> ResolveTcpMappedPortsAsync(
         FrpTunnelOptions frp,
         string proxyType,
         CancellationToken cancellationToken)
     {
+        _ = cancellationToken; // reserved for future use
         if (!string.Equals(proxyType, "tcp", StringComparison.Ordinal))
-            return [];
+            return Task.FromResult<IReadOnlyList<FrpTcpPortMapping>>([]);
 
-        if (!ShouldUseWorkspaceTcpPortAutoMap(frp, proxyType) || _scopeFactory is null)
-            return [.. GetTcpMappedPorts(frp)];
+        if (!ShouldUseWorkspaceTcpPortAutoMap(frp, proxyType))
+            return Task.FromResult<IReadOnlyList<FrpTcpPortMapping>>([.. GetTcpMappedPorts(frp)]);
 
-        using var scope = _scopeFactory.CreateScope();
-        var workspaceService = scope.ServiceProvider.GetService<IWorkspaceService>();
-        if (workspaceService is null)
-        {
-            _logger.LogWarning(
-                "FRP tcp auto-mapping requested but IWorkspaceService is unavailable. Falling back to static tcp mapping.");
-            return [.. GetTcpMappedPorts(frp)];
-        }
-
-        var workspaces = await workspaceService.ListAsync(cancellationToken).ConfigureAwait(false);
-        var ports = new SortedSet<int> { _options.Port };
-        foreach (var workspace in workspaces.Items)
-        {
-            if (!workspace.IsEnabled)
-                continue;
-
-            var effectivePort = workspace.WorkspacePort;
-            if (_workspaceProcessManager is not null)
-            {
-                try
-                {
-                    var runtimeStatus = _workspaceProcessManager.GetStatus(workspace.WorkspacePath);
-                    if (runtimeStatus.IsRunning && runtimeStatus.Port is int runtimePort && runtimePort > 0)
-                        effectivePort = runtimePort;
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogDebug(
-                        ex,
-                        "Failed to read runtime workspace port for FRP auto-mapping: WorkspacePath={WorkspacePath}",
-                        workspace.WorkspacePath);
-                }
-            }
-
-            if (effectivePort <= 0)
-                continue;
-
-            ports.Add(effectivePort);
-        }
-
-        return [.. ports.Select(port => new FrpTcpPortMapping(port, port))];
+        // All workspaces share a single port; just map the server listen port.
+        return Task.FromResult<IReadOnlyList<FrpTcpPortMapping>>([new FrpTcpPortMapping(_options.Port, _options.Port)]);
     }
 
     private static bool ShouldUseWorkspaceTcpPortAutoMap(FrpTunnelOptions frp, string proxyType)

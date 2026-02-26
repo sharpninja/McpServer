@@ -18,7 +18,6 @@ public sealed class WorkspaceResolutionMiddlewareTests
             WorkspacePath = path,
             Name = Path.GetFileName(path),
             TodoPath = "docs/todo.yaml",
-            WorkspacePort = 7148,
             IsPrimary = isPrimary,
             StatusPrompt = "",
             ImplementPrompt = "",

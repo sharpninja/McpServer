@@ -52,13 +52,12 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
         Assert.True(result.Success);
         Assert.NotNull(result.Workspace);
         Assert.Equal("test-ws", result.Workspace.Name);
-        Assert.True(result.Workspace.WorkspacePort >= 7148);
 
         await CleanupWorkspaceAsync(path).ConfigureAwait(true);
     }
 
     [Fact]
-    public async Task CreateWorkspace_NoPort_AutoAssignsStartingAt7148()
+    public async Task CreateWorkspace_NoName_CreatesWorkspace()
     {
         var path = Path.Combine(Path.GetTempPath(), $"ws_auto_{Guid.NewGuid():N}");
         var request = new { workspacePath = path };
@@ -68,7 +67,7 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
 
         var result = await response.Content.ReadFromJsonAsync<WorkspaceMutationResult>().ConfigureAwait(true);
         Assert.NotNull(result);
-        Assert.True(result.Workspace!.WorkspacePort >= 7148);
+        Assert.NotNull(result.Workspace);
 
         await CleanupWorkspaceAsync(path).ConfigureAwait(true);
     }

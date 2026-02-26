@@ -13,7 +13,6 @@ namespace McpServer.Support.Mcp.Services;
 public sealed class WorkspaceService : IWorkspaceService
 {
     private static readonly SemaphoreSlim _writeLock = new(1, 1);
-    private const int BaseAutoPort = 7148;
     private const string DefaultTodoPath = "docs/todo.yaml";
 
     private readonly IConfiguration _configuration;
@@ -59,10 +58,6 @@ public sealed class WorkspaceService : IWorkspaceService
             if (all.Any(w => NormalizePath(w.WorkspacePath) == normalized))
                 return new WorkspaceMutationResult(false, $"Workspace already registered: {normalized}");
 
-            var port = request.WorkspacePort > 0 ? request.WorkspacePort : GetNextAvailablePort(all);
-            if (request.WorkspacePort > 0 && all.Any(w => w.WorkspacePort == port))
-                return new WorkspaceMutationResult(false, $"Port {port} is already in use by another workspace.");
-
             var now = DateTimeOffset.UtcNow;
             var entry = new WorkspaceConfigEntry
             {
@@ -70,7 +65,6 @@ public sealed class WorkspaceService : IWorkspaceService
                 Name = !string.IsNullOrWhiteSpace(request.Name) ? request.Name.Trim() : DeriveNameFromPath(normalized),
                 TodoPath = !string.IsNullOrWhiteSpace(request.TodoPath) ? request.TodoPath.Trim() : DefaultTodoPath,
                 DataDirectory = string.IsNullOrWhiteSpace(request.DataDirectory) ? null : Path.GetFullPath(request.DataDirectory.Trim()),
-                WorkspacePort = port,
                 TunnelProvider = string.IsNullOrWhiteSpace(request.TunnelProvider) ? null : request.TunnelProvider.Trim(),
                 RunAs = string.IsNullOrWhiteSpace(request.RunAs) ? null : request.RunAs.Trim(),
                 PromptTemplate = string.IsNullOrWhiteSpace(request.PromptTemplate) ? null : request.PromptTemplate.Trim(),
@@ -84,7 +78,7 @@ public sealed class WorkspaceService : IWorkspaceService
             };
             all.Add(entry);
             await WriteAllAsync(all, ct).ConfigureAwait(false);
-            _logger.LogInformation("Workspace created: {Name} at {Path} on port {Port}", entry.Name, entry.WorkspacePath, entry.WorkspacePort);
+            _logger.LogInformation("Workspace created: {Name} at {Path}", entry.Name, entry.WorkspacePath);
             return new WorkspaceMutationResult(true, Workspace: ToDto(entry));
         }
         finally
@@ -109,14 +103,6 @@ public sealed class WorkspaceService : IWorkspaceService
                 entry.Name = string.IsNullOrWhiteSpace(request.Name) ? DeriveNameFromPath(normalized) : request.Name.Trim();
             if (request.TodoPath is not null)
                 entry.TodoPath = string.IsNullOrWhiteSpace(request.TodoPath) ? DefaultTodoPath : request.TodoPath.Trim();
-            if (request.WorkspacePort is not null)
-            {
-                var newPort = request.WorkspacePort.Value <= 0 ? GetNextAvailablePort(all) : request.WorkspacePort.Value;
-                if (request.WorkspacePort.Value > 0 && newPort != entry.WorkspacePort
-                    && all.Any(w => w.WorkspacePort == newPort && NormalizePath(w.WorkspacePath) != normalized))
-                    return new WorkspaceMutationResult(false, $"Port {newPort} is already in use by another workspace.");
-                entry.WorkspacePort = newPort;
-            }
             if (request.TunnelProvider is not null)
                 entry.TunnelProvider = string.IsNullOrWhiteSpace(request.TunnelProvider) ? null : request.TunnelProvider.Trim();
             if (request.RunAs is not null)
@@ -255,12 +241,6 @@ public sealed class WorkspaceService : IWorkspaceService
         return fromContentRoot; // fallback — will throw a clear error on read
     }
 
-    private static int GetNextAvailablePort(List<WorkspaceConfigEntry> all)
-    {
-        var maxPort = all.Count > 0 ? all.Max(w => w.WorkspacePort) : 0;
-        return maxPort >= BaseAutoPort ? maxPort + 1 : BaseAutoPort;
-    }
-
     private static string DeriveNameFromPath(string path)
     {
         var name = Path.GetFileName(path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
@@ -284,7 +264,6 @@ public sealed class WorkspaceService : IWorkspaceService
         Name = e.Name,
         TodoPath = e.TodoPath,
         DataDirectory = string.IsNullOrWhiteSpace(e.DataDirectory) ? null : e.DataDirectory,
-        WorkspacePort = e.WorkspacePort,
         TunnelProvider = string.IsNullOrWhiteSpace(e.TunnelProvider) ? null : e.TunnelProvider,
         IsPrimary = e.IsPrimary,
         IsEnabled = e.IsEnabled,
@@ -316,9 +295,6 @@ public sealed class WorkspaceConfigEntry
     /// </summary>
     public string? DataDirectory { get; set; }
 
-    /// <summary>HTTP port for this workspace's hosted MCP instance.</summary>
-    public int WorkspacePort { get; set; }
-
     /// <summary>Tunnel provider key (ngrok, cloudflare, frp) or null if disabled.</summary>
     public string? TunnelProvider { get; set; }
 
@@ -334,7 +310,7 @@ public sealed class WorkspaceConfigEntry
 
     /// <summary>
     /// When true, this workspace is the primary instance — the host process serves it directly
-    /// and no child app is spun up. The primary workspace with the lowest port wins at startup.
+    /// and no child app is spun up.
     /// </summary>
     public bool IsPrimary { get; set; }
 

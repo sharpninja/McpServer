@@ -28,7 +28,6 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
             .Select(ws => new WorkspaceSummary(
                 ws.WorkspacePath,
                 ws.Name,
-                ws.WorkspacePort,
                 ws.IsPrimary,
                 ws.IsEnabled))
             .ToList();
@@ -113,7 +112,6 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
             dto.Name,
             dto.TodoPath,
             dto.DataDirectory,
-            dto.WorkspacePort,
             dto.TunnelProvider,
             dto.IsPrimary,
             dto.IsEnabled,

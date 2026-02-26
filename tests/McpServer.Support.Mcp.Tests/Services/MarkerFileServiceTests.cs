@@ -9,7 +9,7 @@ public sealed class MarkerFileServiceTests
     private const string BaseUrl = "http://localhost:7148";
 
     private static Dictionary<string, object?> MakeContext(string baseUrl = BaseUrl, string? apiKey = null) =>
-        MarkerFileService.BuildTemplateContext(baseUrl, apiKey, workspace: null, workspacePath: @"C:\test", workspaceName: "test", port: 7148);
+        MarkerFileService.BuildTemplateContext(baseUrl, apiKey, workspace: null, workspacePath: @"C:\test", workspaceName: "test");
 
     [Fact]
     public void ResolvePrompt_NullGlobal_NullWorkspace_ReturnsDefault()
@@ -118,7 +118,6 @@ public sealed class MarkerFileServiceTests
         var template = MarkerFileService.DefaultPromptTemplate;
         Assert.Contains("## Workspace Definition", template);
         Assert.Contains("{{workspace.Name}}", template);
-        Assert.Contains("{{workspace.WorkspacePort}}", template);
     }
 
     [Fact]
@@ -139,7 +138,6 @@ public sealed class MarkerFileServiceTests
             WorkspacePath = @"C:\projects\my",
             TodoPath = @"C:\projects\my\todo.yaml",
             DataDirectory = @"C:\data\my",
-            WorkspacePort = 7200,
             TunnelProvider = "cloudflare",
             IsPrimary = true,
             IsEnabled = true,
@@ -152,7 +150,7 @@ public sealed class MarkerFileServiceTests
             PlanPrompt = TodoPromptDefaults.PlanPrompt,
         };
 
-        var ctx = MarkerFileService.BuildTemplateContext("http://localhost:7200", "tok123", ws, ws.WorkspacePath, ws.Name, ws.WorkspacePort);
+        var ctx = MarkerFileService.BuildTemplateContext("http://localhost:7200", "tok123", ws, ws.WorkspacePath, ws.Name);
 
         Assert.Equal("http://localhost:7200", ctx["baseUrl"]);
         Assert.Equal("tok123", ctx["apiKey"]);
@@ -165,7 +163,7 @@ public sealed class MarkerFileServiceTests
     [Fact]
     public void BuildTemplateContext_NullWorkspace_UsesFallbacks()
     {
-        var ctx = MarkerFileService.BuildTemplateContext("http://localhost:7148", null, null, @"C:\ws", "fallback", 7148);
+        var ctx = MarkerFileService.BuildTemplateContext("http://localhost:7148", null, null, @"C:\ws", "fallback");
 
         Assert.Equal(string.Empty, ctx["apiKey"]);
         var wsDict = Assert.IsType<Dictionary<string, object?>>(ctx["workspace"]);
@@ -183,7 +181,6 @@ public sealed class MarkerFileServiceTests
             WorkspacePath = @"C:\test",
             TodoPath = @"C:\test\todo.yaml",
             DataDirectory = @"C:\test",
-            WorkspacePort = 7148,
             TunnelProvider = null,
             IsPrimary = false,
             IsEnabled = true,
@@ -196,7 +193,7 @@ public sealed class MarkerFileServiceTests
             PlanPrompt = TodoPromptDefaults.PlanPrompt,
         };
 
-        var ctx = MarkerFileService.BuildTemplateContext(BaseUrl, "mytoken", ws, ws.WorkspacePath, ws.Name, ws.WorkspacePort);
+        var ctx = MarkerFileService.BuildTemplateContext(BaseUrl, "mytoken", ws, ws.WorkspacePath, ws.Name);
         var result = MarkerFileService.ResolvePrompt(ctx, null, null);
 
         Assert.Contains("TestProj", result);

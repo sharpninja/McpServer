@@ -33,9 +33,6 @@ public sealed record WorkspaceCreateRequest
     /// <summary>Human-readable workspace name. Default: last segment of WorkspacePath.</summary>
     public string? Name { get; init; }
 
-    /// <summary>HTTP port for this workspace's hosted instance. 0 = auto-assign (starting at 7148).</summary>
-    public int WorkspacePort { get; init; }
-
     /// <summary>Relative path to todo file within workspace. Default: docs/todo.yaml.</summary>
     public string? TodoPath { get; init; }
 
@@ -100,9 +97,6 @@ public sealed record WorkspaceUpdateRequest
     /// </summary>
     public string? DataDirectory { get; init; }
 
-    /// <summary>Updated port (null = no change, 0 = auto-assign).</summary>
-    public int? WorkspacePort { get; init; }
-
     /// <summary>Updated tunnel provider (null = no change, empty string = disable tunnel).</summary>
     public string? TunnelProvider { get; init; }
 
@@ -157,9 +151,6 @@ public sealed record WorkspaceDto
     /// Null = <see cref="WorkspacePath"/> is used as the data directory.
     /// </summary>
     public string? DataDirectory { get; init; }
-
-    /// <summary>HTTP port for this workspace's hosted instance.</summary>
-    public required int WorkspacePort { get; init; }
 
     /// <summary>Tunnel provider key or null.</summary>
     public string? TunnelProvider { get; init; }

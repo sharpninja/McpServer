@@ -273,19 +273,16 @@ public sealed class WorkspaceController : ControllerBase
         var list = await _workspaceService.ListAsync(ct).ConfigureAwait(false);
         return list.Items
             .Where(w => w.IsPrimary && w.IsEnabled)
-            .OrderBy(w => w.WorkspacePort)
             .FirstOrDefault()
             ?? list.Items
                 .Where(w => w.IsEnabled)
-                .OrderBy(w => w.WorkspacePort)
                 .FirstOrDefault();
     }
 
-    private bool IsPrimaryInstance(WorkspaceDto primary)
+    private static bool IsPrimaryInstance(WorkspaceDto _)
     {
-        // Check if this process is the one serving the primary workspace by comparing ports.
-        var listeningUrls = HttpContext.Connection.LocalPort;
-        return primary.WorkspacePort == listeningUrls;
+        // All workspaces share a single port; the primary workspace is always served by this process.
+        return true;
     }
 
     /// <summary>

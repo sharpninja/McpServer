@@ -149,7 +149,6 @@ public static class MarkerFileService
         |----------|-------|
         | Name | {{workspace.Name}} |
         | Path | {{workspace.WorkspacePath}} |
-        | Port | {{workspace.WorkspacePort}} |
         | Primary | {{workspace.IsPrimary}} |
         | Enabled | {{workspace.IsEnabled}} |
         | Data Directory | {{workspace.DataDirectory}} |
@@ -383,7 +382,7 @@ public static class MarkerFileService
         var markerWrittenAtUtcText = markerWrittenAtUtc.ToString("o", CultureInfo.InvariantCulture);
         var serverStartedAtUtcText = resolvedServerStartedAtUtc.ToString("o", CultureInfo.InvariantCulture);
 
-        var templateContext = BuildTemplateContext(baseUrl, apiKey, workspace, workspacePath, workspaceName, port);
+        var templateContext = BuildTemplateContext(baseUrl, apiKey, workspace, workspacePath, workspaceName);
         templateContext["markerWrittenAtUtc"] = markerWrittenAtUtcText;
         templateContext["serverStartedAtUtc"] = serverStartedAtUtcText;
 
@@ -514,8 +513,7 @@ public static class MarkerFileService
         string? apiKey,
         WorkspaceDto? workspace,
         string workspacePath,
-        string workspaceName,
-        int port)
+        string workspaceName)
     {
         return new Dictionary<string, object?>
         {
@@ -527,7 +525,6 @@ public static class MarkerFileService
                 ["WorkspacePath"] = workspace.WorkspacePath,
                 ["TodoPath"] = workspace.TodoPath,
                 ["DataDirectory"] = workspace.DataDirectory ?? workspace.WorkspacePath,
-                ["WorkspacePort"] = workspace.WorkspacePort,
                 ["TunnelProvider"] = workspace.TunnelProvider ?? "none",
                 ["IsPrimary"] = workspace.IsPrimary,
                 ["IsEnabled"] = workspace.IsEnabled,
@@ -545,7 +542,6 @@ public static class MarkerFileService
                 ["WorkspacePath"] = workspacePath,
                 ["TodoPath"] = string.Empty,
                 ["DataDirectory"] = workspacePath,
-                ["WorkspacePort"] = port,
                 ["TunnelProvider"] = "none",
                 ["IsPrimary"] = false,
                 ["IsEnabled"] = true,

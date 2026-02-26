@@ -72,11 +72,9 @@ WorkspaceConfigEntry? primaryWorkspaceEntry = null;
     var workspaces = builder.Configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
     primaryWorkspaceEntry = workspaces
         .Where(w => w.IsPrimary && w.IsEnabled)
-        .OrderBy(w => w.WorkspacePort)
         .FirstOrDefault();
     primaryWorkspaceEntry ??= workspaces
         .Where(w => w.IsEnabled)
-        .OrderBy(w => w.WorkspacePort)
         .FirstOrDefault();
     if (primaryWorkspaceEntry is not null)
         builder.Environment.ContentRootPath = Path.GetFullPath(primaryWorkspaceEntry.WorkspacePath);
@@ -251,7 +249,7 @@ builder.Services.Configure<TodoPromptOptions>(options =>
         options.StatusPrompt = primaryWorkspaceEntry.StatusPrompt;
         options.ImplementPrompt = primaryWorkspaceEntry.ImplementPrompt;
         options.PlanPrompt = primaryWorkspaceEntry.PlanPrompt;
-        options.BaseUrl = $"http://localhost:{primaryWorkspaceEntry.WorkspacePort}";
+        options.BaseUrl = $"http://localhost:{listenPort}";
         options.RunAs = primaryWorkspaceEntry.RunAs;
         options.GitHubToken = primaryWorkspaceEntry.GitHubToken;
         options.AgentPath = primaryWorkspaceEntry.AgentPath;
@@ -267,7 +265,7 @@ builder.Services.AddScoped<IToolBucketService, ToolBucketService>();
 builder.Services.AddScoped<IAgentService, AgentService>();
 builder.Services.AddSingleton<WorkspaceTokenService>();
 builder.Services.AddScoped<WorkspaceContext>();
-builder.Services.AddSingleton(new ServerRuntimeInfo(serverStartupUtc));
+builder.Services.AddSingleton(new ServerRuntimeInfo(serverStartupUtc, listenPort));
 builder.Services.AddSingleton<IWorkspaceProcessManager, WorkspaceProcessManager>();
 builder.Services.Configure<PairingOptions>(builder.Configuration.GetSection(PairingOptions.SectionName));
 builder.Services.Configure<OidcAuthOptions>(builder.Configuration.GetSection(OidcAuthOptions.SectionName));
@@ -695,11 +693,9 @@ static string? ResolvePrimaryApiKeyWorkspacePath(IConfiguration configuration, I
     var workspaces = configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
     var primary = workspaces
         .Where(w => w.IsPrimary && w.IsEnabled)
-        .OrderBy(w => w.WorkspacePort)
         .FirstOrDefault();
     primary ??= workspaces
         .Where(w => w.IsEnabled)
-        .OrderBy(w => w.WorkspacePort)
         .FirstOrDefault();
 
     return string.IsNullOrWhiteSpace(primary?.WorkspacePath)

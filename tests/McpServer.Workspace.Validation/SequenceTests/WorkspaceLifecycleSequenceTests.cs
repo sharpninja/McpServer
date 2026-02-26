@@ -50,8 +50,7 @@ public sealed class WorkspaceLifecycleSequenceTests
             Assert.NotNull(createResult);
             Assert.True(createResult.Success, $"Create failed: {createResult.Error}");
             Assert.NotNull(createResult.Workspace);
-            var assignedPort = createResult.Workspace.WorkspacePort;
-            _output.WriteLine($"  Created workspace on port {assignedPort}");
+            _output.WriteLine($"  Created workspace: {createResult.Workspace.Name}");
 
             // ── Step 3: List (verify count increased) ─────────────────────
             _output.WriteLine("Step 3: GET /mcp/workspace — List (verify +1)");

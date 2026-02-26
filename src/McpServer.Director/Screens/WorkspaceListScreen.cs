@@ -263,7 +263,6 @@ internal sealed class WorkspaceListScreen : View
         {
             $"Path: {detail.WorkspacePath}",
             $"Name: {detail.Name}",
-            $"Port: {detail.WorkspacePort}",
             $"Todo Path: {detail.TodoPath}",
             $"Data Dir: {detail.DataDirectory ?? ""}",
             $"Tunnel Provider: {detail.TunnelProvider ?? ""}",

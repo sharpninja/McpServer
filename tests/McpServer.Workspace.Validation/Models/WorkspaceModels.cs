@@ -6,7 +6,6 @@ public sealed class WorkspaceDto
     public string WorkspacePath { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string TodoPath { get; set; } = string.Empty;
-    public int WorkspacePort { get; set; }
     public string? TunnelProvider { get; set; }
     public DateTimeOffset DateTimeCreated { get; set; }
     public DateTimeOffset DateTimeModified { get; set; }

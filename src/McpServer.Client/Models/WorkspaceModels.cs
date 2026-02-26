@@ -23,10 +23,6 @@ public sealed class WorkspaceDto
     [JsonPropertyName("dataDirectory")]
     public string? DataDirectory { get; set; }
 
-    /// <summary>HTTP port for the workspace Kestrel host.</summary>
-    [JsonPropertyName("workspacePort")]
-    public int WorkspacePort { get; set; }
-
     /// <summary>Tunnel provider (ngrok, cloudflare, frp, or null).</summary>
     [JsonPropertyName("tunnelProvider")]
     public string? TunnelProvider { get; set; }
@@ -94,10 +90,6 @@ public sealed class WorkspaceCreateRequest
     /// <summary>Workspace name.</summary>
     [JsonPropertyName("name")]
     public string? Name { get; set; }
-
-    /// <summary>HTTP port (0 for auto-assign).</summary>
-    [JsonPropertyName("workspacePort")]
-    public int WorkspacePort { get; set; }
 
     /// <summary>TODO file path.</summary>
     [JsonPropertyName("todoPath")]
@@ -170,10 +162,6 @@ public sealed class WorkspaceUpdateRequest
     /// <summary>Updated data directory.</summary>
     [JsonPropertyName("dataDirectory")]
     public string? DataDirectory { get; set; }
-
-    /// <summary>Updated port.</summary>
-    [JsonPropertyName("workspacePort")]
-    public int? WorkspacePort { get; set; }
 
     /// <summary>Updated tunnel provider.</summary>
     [JsonPropertyName("tunnelProvider")]
