@@ -46,6 +46,13 @@ public sealed class McpServerClientOptions
     public string? ApiKey { get; set; }
 
     /// <summary>
+    /// Optional JWT bearer token for user authentication. When set, sub-clients send an
+    /// <c>Authorization: Bearer</c> header on every request. This can be used instead of an
+    /// API key when the server accepts authenticated user tokens for the target endpoint.
+    /// </summary>
+    public string? BearerToken { get; set; }
+
+    /// <summary>
     /// HTTP request timeout applied to the internally-created <see cref="System.Net.Http.HttpClient"/>
     /// when using <see cref="McpServerClientFactory.Create(McpServerClientOptions)"/>.
     /// Defaults to 30 seconds.

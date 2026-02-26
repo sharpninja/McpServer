@@ -8,9 +8,11 @@ using McpServer.Support.Mcp.McpStdio;
 using McpServer.Support.Mcp.Middleware;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Storage;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ModelContextProtocol.AspNetCore;
 using Serilog;
 
@@ -101,6 +103,33 @@ public static class WorkspaceAppFactory
             options.IndexPath = Path.Combine(workspacePath, "mcp-data", "vector.idx");
         });
 
+        var oidcAuthBootstrap = builder.Configuration.GetSection(OidcAuthOptions.SectionName).Get<OidcAuthOptions>()
+            ?? new OidcAuthOptions();
+
+        if (oidcAuthBootstrap.Enabled)
+        {
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.MapInboundClaims = false;
+                    options.Authority = oidcAuthBootstrap.Authority;
+                    options.Audience = oidcAuthBootstrap.Audience;
+                    options.RequireHttpsMetadata = oidcAuthBootstrap.RequireHttpsMetadata;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = "preferred_username",
+                        RoleClaimType = "realm_roles",
+                        ValidateAudience = !string.IsNullOrWhiteSpace(oidcAuthBootstrap.Audience),
+                    };
+                });
+        }
+        else
+        {
+            builder.Services.AddAuthentication();
+        }
+
+        builder.Services.AddAuthorization();
+
         // Core services required by MCP tools.
         builder.Services.AddSingleton<ISyncStatusStore, SyncStatusStore>();
         builder.Services.AddSingleton<IWriteAuditLog, WriteAuditLog>();
@@ -190,7 +219,9 @@ public static class WorkspaceAppFactory
         }
 
         app.UseMiddleware<InteractionLoggingMiddleware>();
+        app.UseAuthentication();
         app.UseMiddleware<WorkspaceAuthMiddleware>();
+        app.UseAuthorization();
         app.MapControllers();
         app.MapMcp("/mcp-transport");
         app.MapGet("/health", () => Results.Ok(new { status = "healthy", workspace = workspaceName, port }));

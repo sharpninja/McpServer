@@ -1,4 +1,5 @@
 using McpServer.Client;
+using McpServer.Director.Auth;
 using System.Text.Json;
 
 namespace McpServer.Director;
@@ -63,6 +64,7 @@ internal sealed class DirectorMcpContext : IDisposable
         {
             _controlClient?.TrySetCachedBearerToken();
             _activeWorkspaceClient?.TrySetCachedBearerToken();
+            ApplyCachedBearerTokenToTypedClients_NoLock();
         }
     }
 
@@ -162,6 +164,8 @@ internal sealed class DirectorMcpContext : IDisposable
     {
         if (!string.IsNullOrWhiteSpace(client.ApiKey))
             return;
+        if (!string.IsNullOrWhiteSpace(client.BearerToken))
+            return;
 
         await client.InitializeAsync(cancellationToken).ConfigureAwait(false);
     }
@@ -175,8 +179,30 @@ internal sealed class DirectorMcpContext : IDisposable
         {
             BaseUrl = new Uri(client.BaseUrl),
             ApiKey = string.IsNullOrWhiteSpace(client.ApiKey) ? null : client.ApiKey,
+            BearerToken = TryGetCachedBearerTokenValue(),
             Timeout = TimeSpan.FromMinutes(10),
         });
+    }
+
+    private void ApplyCachedBearerTokenToTypedClients_NoLock()
+    {
+        var bearerToken = TryGetCachedBearerTokenValue() ?? string.Empty;
+
+        if (_controlApiClient is not null)
+            _controlApiClient.BearerToken = bearerToken;
+
+        if (_activeWorkspaceApiClient is not null)
+            _activeWorkspaceApiClient.BearerToken = bearerToken;
+    }
+
+    private static string? TryGetCachedBearerTokenValue()
+    {
+        _ = McpHttpClient.TryRefreshCachedToken();
+        var cached = TokenCache.Load();
+        if (cached is null || cached.IsExpired || string.IsNullOrWhiteSpace(cached.AccessToken))
+            return null;
+
+        return cached.AccessToken;
     }
 
     private void TrySeedControlApiKeyFromPrimaryWorkspaceMarker(McpServerClient client)

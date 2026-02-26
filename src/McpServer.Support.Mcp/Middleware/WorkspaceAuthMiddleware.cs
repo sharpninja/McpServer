@@ -1,5 +1,7 @@
 using System.Text.Json;
 using McpServer.Support.Mcp.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace McpServer.Support.Mcp.Middleware;
 
@@ -52,6 +54,16 @@ public sealed class WorkspaceAuthMiddleware
 
         // Only protect /mcp/* API routes.
         if (!path.StartsWithSegments("/mcp", StringComparison.OrdinalIgnoreCase))
+        {
+            await _next(context).ConfigureAwait(false);
+            return;
+        }
+
+        // A valid user auth token (e.g., JWT bearer) should satisfy authentication without also
+        // requiring a workspace API key.
+        // We check both the current principal and (when a Bearer header is present) explicitly
+        // authenticate the JWT scheme so this remains correct even if pipeline ordering changes.
+        if (await HasAuthenticatedJwtAsync(context).ConfigureAwait(false))
         {
             await _next(context).ConfigureAwait(false);
             return;
@@ -137,5 +149,22 @@ public sealed class WorkspaceAuthMiddleware
             return false;
 
         return !s_readOnlyMethods.Contains(method);
+    }
+
+    private static async Task<bool> HasAuthenticatedJwtAsync(HttpContext context)
+    {
+        if (context.User.Identity?.IsAuthenticated == true)
+            return true;
+
+        var authorization = context.Request.Headers.Authorization.ToString();
+        if (!authorization.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+            return false;
+
+        var result = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme).ConfigureAwait(false);
+        if (!result.Succeeded || result.Principal?.Identity?.IsAuthenticated != true)
+            return false;
+
+        context.User = result.Principal;
+        return true;
     }
 }

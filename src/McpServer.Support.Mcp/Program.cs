@@ -296,13 +296,21 @@ if (!string.IsNullOrEmpty(tunnelProvider))
 {
     builder.Services.Configure<TunnelOptions>(
         builder.Configuration.GetSection(TunnelOptions.SectionName));
-    builder.Services.AddSingleton<ITunnelProvider>(sp => tunnelProvider switch
+
+    if (tunnelProvider is "NGROK" or "CLOUDFLARE")
     {
-        "NGROK" => ActivatorUtilities.CreateInstance<NgrokTunnelProvider>(sp),
-        "CLOUDFLARE" => ActivatorUtilities.CreateInstance<CloudflareTunnelProvider>(sp),
-        "FRP" => ActivatorUtilities.CreateInstance<FrpTunnelProvider>(sp),
-        _ => throw new InvalidOperationException($"Unknown tunnel provider: {tunnelProvider}"),
-    });
+        builder.Services.AddSingleton<ITunnelProvider>(sp => tunnelProvider switch
+        {
+            "NGROK" => ActivatorUtilities.CreateInstance<NgrokTunnelProvider>(sp),
+            "CLOUDFLARE" => ActivatorUtilities.CreateInstance<CloudflareTunnelProvider>(sp),
+            _ => throw new InvalidOperationException($"Unknown tunnel provider: {tunnelProvider}"),
+        });
+    }
+    else
+    {
+        Console.WriteLine($"[McpServer] Tunnel provider '{tunnelProvider}' is not enabled in this build. Tunnel startup disabled.");
+        tunnelProvider = string.Empty;
+    }
 }
 
 if (!builder.Environment.IsEnvironment("Test"))
@@ -446,8 +454,8 @@ if (!app.Environment.IsEnvironment("Test"))
 app.UseMiddleware<InteractionLoggingMiddleware>();
 
 // Per-workspace auth tokens: protect all /mcp/* REST routes.
-app.UseMiddleware<WorkspaceAuthMiddleware>();
 app.UseAuthentication();
+app.UseMiddleware<WorkspaceAuthMiddleware>();
 app.UseAuthorization();
 
 app.MapDefaultEndpoints();

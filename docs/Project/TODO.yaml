@@ -236,9 +236,13 @@ staging-and-infrastructure:
     - task: '[Phase 7 - Docs/Release] Add CHANGELOG.md entry; tag v{version} after first nuget.org publish; verify package on nuget.org'
       done: false
   - id: frp-railway-tunnel
-    title: FRP tunnel provider hardening and Railway-hosted frps deployment assets
+    title: FRP tunnel provider hardening and Railway-hosted frps deployment assets (superseded for Railway multi-port exposure)
     estimate: 2-4 days
-    note: 'FRP tunnel provider already exists (FrpTunnelProvider). This work is for Railway-ready configuration, provider hardening/observability, deployment assets for self-hosted frps, tests, and docs.'
+    note: 'FRP tunnel provider work was completed, but the Railway deployment strategy is no longer the preferred path for this environment because Railway does not support the required multi-public-port exposure model (7147-7160). Keep FRP support for non-Railway scenarios; use ngrok/cloudflare strategies for this environment.'
+    superseded: true
+    superseded-by:
+    - ngrok-tunnel-strategy
+    - cloudflare-tunnel-strategy
     done: true
     description:
     - Use the existing FRP provider (frpc) in McpServer.Support.Mcp and make it production-ready for Railway-hosted frps.
@@ -281,6 +285,46 @@ staging-and-infrastructure:
       done: true
     - task: '[Commit 5 - Docs] Add troubleshooting notes (token mismatch, wrong public URL, port mismatch, frpc not found) and an end-to-end validation checklist (/health through FRP public URL)'
       done: true
+  - id: ngrok-tunnel-strategy
+    title: ngrok tunnel strategy for MCP remote/mobile access in single-public-port environments
+    estimate: 1-2 days
+    note: 'ngrok provider already exists (NgrokTunnelProvider). This strategy is the preferred managed-tunnel path when the hosting/network environment does not support exposing multiple public ports.'
+    done: false
+    description:
+    - Use the existing ngrok provider in McpServer.Support.Mcp for the primary MCP host endpoint on port 7147.
+    - Define how workspace endpoints are accessed without exposing 7148-7160 directly (proxy routes via MCP host, or primary-only exposure).
+    - Add operational guidance and validation steps for local/dev and deployed environments.
+    technical-details:
+    - 'Existing integration points: src/McpServer.Support.Mcp/Services/NgrokTunnelProvider.cs, src/McpServer.Support.Mcp/Options/TunnelOptions.cs, src/McpServer.Support.Mcp/Program.cs.'
+    - 'Confirm ngrok auth token handling and avoid logging secrets.'
+    - 'Document whether workspace APIs are proxied through the primary host or intentionally not exposed publicly.'
+    implementation-tasks:
+    - task: '[Commit 1 - Strategy] Decide and document single-public-endpoint access model for workspaces when Provider=ngrok (proxy routes vs primary-only)'
+      done: false
+    - task: '[Commit 2 - Provider Hardening] Verify NgrokTunnelProvider startup/error/status behavior and add any missing structured logs or timeout handling'
+      done: false
+    - task: '[Commit 3 - Docs] Add/Update ngrok runbook with appsettings.json examples, token setup, and /health validation checklist'
+      done: false
+  - id: cloudflare-tunnel-strategy
+    title: Cloudflare Tunnel strategy for MCP remote/mobile access in single-public-port environments
+    estimate: 1-3 days
+    note: 'Cloudflare tunnel provider already exists (CloudflareTunnelProvider). This strategy is the preferred no-open-port path when Cloudflare DNS/Tunnel is available.'
+    done: false
+    description:
+    - Use the existing Cloudflare tunnel provider in McpServer.Support.Mcp to expose the primary MCP host endpoint on port 7147.
+    - Define workspace access model under a single public hostname (proxy routes via MCP host, or primary-only exposure).
+    - Produce deployment guidance for cloudflared named tunnel setup, credentials, and hostname routing.
+    technical-details:
+    - 'Existing integration points: src/McpServer.Support.Mcp/Services/CloudflareTunnelProvider.cs, src/McpServer.Support.Mcp/Options/TunnelOptions.cs, src/McpServer.Support.Mcp/Program.cs.'
+    - 'Document prerequisites: Cloudflare account, zone, named tunnel, and credentials file placement.'
+    - 'Validate public URL/status reporting and error surfacing when cloudflared is missing or tunnel auth is invalid.'
+    implementation-tasks:
+    - task: '[Commit 1 - Strategy] Decide and document single-host workspace access model for Provider=cloudflare (proxy routes vs primary-only)'
+      done: false
+    - task: '[Commit 2 - Provider Hardening] Verify CloudflareTunnelProvider startup/error/status behavior and add missing diagnostics/timeouts if needed'
+      done: false
+    - task: '[Commit 3 - Docs] Add/Update Cloudflare tunnel runbook with tunnel creation, hostname mapping, appsettings.json example, and /health validation checklist'
+      done: false
 saas:
   medium-priority:
   - id: saas-01-executive-summary
@@ -1179,6 +1223,18 @@ test:
   low-priority: []
 infrastructure:
   high-priority:
+  - id: android-oidc-proxy-routes
+    title: OIDC proxy routes on MCP server for Android device flow
+    done: false
+    note: 'Android can reach MCP server on :7147 but may not be able to reach Keycloak directly on :7080. Add MCP-hosted OIDC proxy routes so Android device-flow traffic stays on :7147.'
+    description:
+    - 'Expose MCP-server OIDC proxy routes for Android app use: GET /auth/config, POST /auth/device, and POST /auth/token.'
+    - 'Android app should call MCP on :7147 only; MCP server forwards OIDC requests to Keycloak (:7080) and returns equivalent responses.'
+    - 'This fixes the current failure mode where /auth/config succeeds on :7147 but token polling later fails when Android tries to connect directly to Keycloak on :7080.'
+    technical-details:
+    - 'MCP proxy routes are server endpoints, not Android-side rewrites. The server must forward device authorization and token polling requests to Keycloak using configured OIDC authority/realm endpoints.'
+    - 'Preserve OIDC response payloads/status codes so Android device-flow polling logic continues to work unchanged except for base URL (:7147 instead of :7080).'
+    - 'Route examples: GET /auth/config (local metadata), POST /auth/device (proxy to Keycloak device authorization endpoint), POST /auth/token (proxy to Keycloak token endpoint).'
   - id: web-ui
     title: McpServer Management Web UI
     done: false

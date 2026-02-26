@@ -18,8 +18,9 @@ namespace McpServer.Client;
 /// <c>X-Api-Key</c> header injection, and dynamic port-based URL construction.
 ///
 /// <para><strong>Runtime authentication:</strong> Every outbound request reads the current
-/// value of <see cref="ApiKey"/>. If the key is empty or whitespace at call time, an
-/// <see cref="InvalidOperationException"/> is thrown — this avoids silent 401 failures.</para>
+/// value of <see cref="ApiKey"/> and <see cref="BearerToken"/>. At least one must be set at
+/// call time, otherwise an <see cref="InvalidOperationException"/> is thrown — this avoids
+/// silent 401 failures.</para>
 ///
 /// <para><strong>Dynamic port:</strong> The <see cref="Port"/> property is read at call time
 /// to construct the request URL, so callers can retarget a client to a different workspace
@@ -50,6 +51,7 @@ public abstract class McpClientBase
     /// Configuration snapshot. <see cref="McpServerClientOptions.BaseUrl"/> supplies scheme,
     /// host, and initial port. <see cref="McpServerClientOptions.ApiKey"/> is an optional
     /// seed value — the key can also be set later via the <see cref="ApiKey"/> property.
+    /// <see cref="McpServerClientOptions.BearerToken"/> seeds <see cref="BearerToken"/>.
     /// </param>
     /// <exception cref="ArgumentNullException">
     /// Thrown when <paramref name="http"/> or <paramref name="options"/> is <see langword="null"/>.
@@ -63,6 +65,7 @@ public abstract class McpClientBase
         _host = options.BaseUrl.Host;
         Port = options.BaseUrl.Port;
         ApiKey = options.ApiKey ?? string.Empty;
+        BearerToken = options.BearerToken ?? string.Empty;
     }
 
     /// <summary>
@@ -81,6 +84,13 @@ public abstract class McpClientBase
     /// </code>
     /// </example>
     public string ApiKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Optional JWT bearer token sent as the <c>Authorization: Bearer</c> header on every
+    /// request. The value is read at call time so it can be refreshed without recreating the
+    /// client. When set, requests may be authorized by the server without an API key.
+    /// </summary>
+    public string BearerToken { get; set; } = string.Empty;
 
     /// <summary>
     /// TCP port used to construct the base URL for API calls (e.g. <c>http://localhost:{Port}/</c>).
@@ -118,10 +128,10 @@ public abstract class McpClientBase
 
     /// <summary>
     /// Core HTTP dispatch: builds the URI from <see cref="Port"/>, attaches the
-    /// <c>X-Api-Key</c> header from <see cref="ApiKey"/>, optionally serializes
+    /// auth headers from <see cref="ApiKey"/> and/or <see cref="BearerToken"/>, optionally serializes
     /// <paramref name="body"/> as JSON, sends the request, and deserializes the response.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown when <see cref="ApiKey"/> is not set.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when neither <see cref="ApiKey"/> nor <see cref="BearerToken"/> is set.</exception>
     /// <exception cref="McpValidationException">HTTP 400 Bad Request.</exception>
     /// <exception cref="McpUnauthorizedException">HTTP 401 Unauthorized.</exception>
     /// <exception cref="McpNotFoundException">HTTP 404 Not Found.</exception>
@@ -129,14 +139,17 @@ public abstract class McpClientBase
     /// <exception cref="McpServerException">Any other non-success HTTP status.</exception>
     private async Task<T> SendAsync<T>(HttpMethod method, string path, object? body, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(ApiKey))
+        if (string.IsNullOrWhiteSpace(ApiKey) && string.IsNullOrWhiteSpace(BearerToken))
             throw new InvalidOperationException(
-                "ApiKey must be set before calling an endpoint. " +
-                "Read the workspace token from the AGENTS-README-FIRST.yaml marker file.");
+                "ApiKey or BearerToken must be set before calling an endpoint. " +
+                "Read the workspace token from the AGENTS-README-FIRST.yaml marker file or authenticate with OIDC.");
 
         var uri = new Uri($"{_scheme}://{_host}:{Port}/{path.TrimStart('/')}");
         using var request = new HttpRequestMessage(method, uri);
-        request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
+        if (!string.IsNullOrWhiteSpace(ApiKey))
+            request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
+        if (!string.IsNullOrWhiteSpace(BearerToken))
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", BearerToken);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         if (body is not null)
@@ -155,19 +168,22 @@ public abstract class McpClientBase
     /// <param name="path">Relative API path (e.g. <c>mcp/todo/{id}/prompt/status</c>).</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>An async stream of text lines from the SSE response.</returns>
-    /// <exception cref="InvalidOperationException">Thrown when <see cref="ApiKey"/> is not set.</exception>
+    /// <exception cref="InvalidOperationException">Thrown when neither <see cref="ApiKey"/> nor <see cref="BearerToken"/> is set.</exception>
     /// <exception cref="McpServerException">Any non-success HTTP status.</exception>
     protected async IAsyncEnumerable<string> StreamSseAsync(
         string path, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(ApiKey))
+        if (string.IsNullOrWhiteSpace(ApiKey) && string.IsNullOrWhiteSpace(BearerToken))
             throw new InvalidOperationException(
-                "ApiKey must be set before calling an endpoint. " +
-                "Read the workspace token from the AGENTS-README-FIRST.yaml marker file.");
+                "ApiKey or BearerToken must be set before calling an endpoint. " +
+                "Read the workspace token from the AGENTS-README-FIRST.yaml marker file or authenticate with OIDC.");
 
         var uri = new Uri($"{_scheme}://{_host}:{Port}/{path.TrimStart('/')}");
         using var request = new HttpRequestMessage(HttpMethod.Get, uri);
-        request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
+        if (!string.IsNullOrWhiteSpace(ApiKey))
+            request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
+        if (!string.IsNullOrWhiteSpace(BearerToken))
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", BearerToken);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));
 
         using var response = await _http.SendAsync(

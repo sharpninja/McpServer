@@ -52,6 +52,7 @@ public sealed class McpServerClient
     private readonly HttpClient _http;
     private readonly McpServerClientOptions _options;
     private string _apiKey;
+    private string _bearerToken;
     private int _port;
 
     /// <summary>
@@ -90,6 +91,7 @@ public sealed class McpServerClient
 
         _allClients = new McpClientBase[] { Todo, Context, SessionLog, GitHub, Repo, Sync, Workspace, Tools, AuthConfig, Diagnostic };
         _apiKey = options.ApiKey ?? string.Empty;
+        _bearerToken = options.BearerToken ?? string.Empty;
         _port = options.BaseUrl.Port;
     }
 
@@ -112,6 +114,21 @@ public sealed class McpServerClient
         {
             _apiKey = value;
             foreach (var c in _allClients) c.ApiKey = value;
+        }
+    }
+
+    /// <summary>
+    /// JWT bearer token for user authentication, propagated to every sub-client.
+    /// Setting this property immediately updates <see cref="McpClientBase.BearerToken"/> on all
+    /// sub-clients so the next call from <em>any</em> client uses the new token.
+    /// </summary>
+    public string BearerToken
+    {
+        get => _bearerToken;
+        set
+        {
+            _bearerToken = value;
+            foreach (var c in _allClients) c.BearerToken = value;
         }
     }
 
@@ -171,9 +188,11 @@ public sealed class McpServerClient
     /// </example>
     public async Task<string> InitializeAsync(CancellationToken cancellationToken = default)
     {
-        // Skip if a key was already provided (e.g. from marker file).
+        // Skip if credentials were already provided (e.g. marker API key or OIDC bearer token).
         if (!string.IsNullOrWhiteSpace(_apiKey))
             return _apiKey;
+        if (!string.IsNullOrWhiteSpace(_bearerToken))
+            return string.Empty;
 
         var uri = new Uri($"{_options.BaseUrl.Scheme}://{_options.BaseUrl.Host}:{Port}/api-key");
         using var response = await _http.GetAsync(uri, cancellationToken).ConfigureAwait(false);

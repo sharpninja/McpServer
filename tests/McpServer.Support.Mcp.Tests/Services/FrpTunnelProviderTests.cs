@@ -17,14 +17,14 @@ public sealed class FrpTunnelProviderTests
     [Fact]
     public async Task StartAsync_WhenProxyTypeUnsupported_SetsValidationErrorAndSkipsCliCheck()
     {
-        var sut = CreateSut(o => o.Frp.ProxyType = "tcp");
+        var sut = CreateSut(o => o.Frp.ProxyType = "udp");
 
         await sut.StartAsync(CancellationToken.None).ConfigureAwait(true);
 
         var status = await sut.GetStatusAsync().ConfigureAwait(true);
         Assert.False(status.IsRunning);
         Assert.NotNull(status.Error);
-        Assert.Contains("ProxyType 'tcp' is not supported yet", status.Error, StringComparison.Ordinal);
+        Assert.Contains("ProxyType 'udp' is not supported yet", status.Error, StringComparison.Ordinal);
         _ = _processRunner.DidNotReceiveWithAnyArgs().RunAsync(default!, default!, default);
     }
 
@@ -105,6 +105,50 @@ public sealed class FrpTunnelProviderTests
     }
 
     [Fact]
+    public void GenerateConfig_TcpRange_CreatesOneToOneMappings()
+    {
+        var sut = CreateSut(o => o.Port = 7147);
+        var frp = new FrpTunnelOptions
+        {
+            ServerAddress = "frps.example.com",
+            ProxyType = "tcp",
+            TcpPortRangeStart = 7147,
+            TcpPortRangeEnd = 7149,
+        };
+
+        var config = Assert.IsType<string>(InvokePrivateInstance(sut, "GenerateConfig", frp, "tcp"));
+
+        Assert.Contains("type = \"tcp\"", config, StringComparison.Ordinal);
+        Assert.Contains("name = \"mcp-tcp-7147\"", config, StringComparison.Ordinal);
+        Assert.Contains("localPort = 7147", config, StringComparison.Ordinal);
+        Assert.Contains("remotePort = 7147", config, StringComparison.Ordinal);
+        Assert.Contains("name = \"mcp-tcp-7148\"", config, StringComparison.Ordinal);
+        Assert.Contains("localPort = 7148", config, StringComparison.Ordinal);
+        Assert.Contains("remotePort = 7148", config, StringComparison.Ordinal);
+        Assert.Contains("name = \"mcp-tcp-7149\"", config, StringComparison.Ordinal);
+        Assert.Contains("localPort = 7149", config, StringComparison.Ordinal);
+        Assert.Contains("remotePort = 7149", config, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void GenerateConfig_TcpSinglePort_UsesLocalTunnelPortAndConfiguredRemotePort()
+    {
+        var sut = CreateSut(o => o.Port = 7147);
+        var frp = new FrpTunnelOptions
+        {
+            ServerAddress = "frps.example.com",
+            ProxyType = "tcp",
+            RemotePort = 17147,
+        };
+
+        var config = Assert.IsType<string>(InvokePrivateInstance(sut, "GenerateConfig", frp, "tcp"));
+
+        Assert.Contains("name = \"mcp-tcp-17147\"", config, StringComparison.Ordinal);
+        Assert.Contains("localPort = 7147", config, StringComparison.Ordinal);
+        Assert.Contains("remotePort = 17147", config, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void BuildPublicUrl_PrefersPublicBaseUrl_ThenCustomDomain_ThenSubdomain()
     {
         var withPublicBaseUrl = new FrpTunnelOptions
@@ -150,6 +194,42 @@ public sealed class FrpTunnelProviderTests
         Assert.NotNull(status.Error);
         Assert.Contains("exit code", status.Error, StringComparison.Ordinal);
         Assert.Contains("simulated frpc startup failure", status.Error, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task StartAsync_WhenTcpRangeMissingEnd_SetsValidationError()
+    {
+        var sut = CreateSut(o =>
+        {
+            o.Frp.ProxyType = "tcp";
+            o.Frp.TcpPortRangeStart = 7147;
+        });
+
+        await sut.StartAsync(CancellationToken.None).ConfigureAwait(true);
+
+        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        Assert.False(status.IsRunning);
+        Assert.NotNull(status.Error);
+        Assert.Contains("TcpPortRangeStart and TcpPortRangeEnd must be set together", status.Error, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task StartAsync_WhenTcpRangeAndRemotePortBothConfigured_SetsValidationError()
+    {
+        var sut = CreateSut(o =>
+        {
+            o.Frp.ProxyType = "tcp";
+            o.Frp.RemotePort = 17147;
+            o.Frp.TcpPortRangeStart = 7147;
+            o.Frp.TcpPortRangeEnd = 7160;
+        });
+
+        await sut.StartAsync(CancellationToken.None).ConfigureAwait(true);
+
+        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+        Assert.False(status.IsRunning);
+        Assert.NotNull(status.Error);
+        Assert.Contains("either RemotePort or TcpPortRangeStart/End", status.Error, StringComparison.Ordinal);
     }
 
     [Fact]

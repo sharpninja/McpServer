@@ -31,6 +31,27 @@ This folder contains deployment assets for running a self-hosted FRP server (`fr
    - Railway TCP proxy host + port for `frpc` (`ServerAddress`, `ServerPort`)
    - Railway public HTTP domain for MCP public URL (`PublicBaseUrl` or `CustomDomain`)
 
+## TCP range mode (for MCP/workspace ports like `7147-7160`)
+
+If you want FRP to expose a 1:1 TCP port range (for example MCP + workspace ports), add these Railway service variables:
+
+- `FRPS_ALLOW_PORTS_START=7147`
+- `FRPS_ALLOW_PORTS_END=7160`
+
+Then create Railway TCP proxies mapping each external port to the same internal `frps` service port:
+
+- external `7147` -> service `frps` port `7147`
+- ...
+- external `7160` -> service `frps` port `7160`
+
+On the MCP host, configure `Mcp:Tunnel:Frp` with:
+
+- `ProxyType = "tcp"`
+- `TcpPortRangeStart = 7147`
+- `TcpPortRangeEnd = 7160`
+
+This makes MCP generate the `frpc` config for the range so the server controls what FRP exposes.
+
 ## MCP (local `frpc`) configuration example
 
 Set in your MCP server `appsettings.json`:
@@ -54,6 +75,26 @@ Set in your MCP server `appsettings.json`:
 ```
 
 Adjust `ServerPort` to the actual Railway TCP Proxy port, and `PublicBaseUrl` to the public domain serving `FRPS_VHOST_HTTP_PORT`.
+
+### MCP TCP range example (`7147-7160`)
+
+```json
+{
+  "Mcp": {
+    "Tunnel": {
+      "Provider": "frp",
+      "Frp": {
+        "ServerAddress": "your-railway-frps-tcp-proxy-host",
+        "ServerPort": 443,
+        "Token": "same-token-as-frps",
+        "ProxyType": "tcp",
+        "TcpPortRangeStart": 7147,
+        "TcpPortRangeEnd": 7160
+      }
+    }
+  }
+}
+```
 
 ## Local smoke test (before Railway)
 

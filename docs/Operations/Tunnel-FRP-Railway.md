@@ -39,10 +39,11 @@ Set these on the Railway service:
 - `FRPS_VHOST_HTTP_PORT` (default `8080`) - public HTTP vhost port handled by `frps`
 - `FRPS_LOG_LEVEL` (default `info`)
 - `FRPS_SUBDOMAIN_HOST` (optional, only if using FRP HTTP subdomains)
+- `FRPS_ALLOW_PORTS_START` / `FRPS_ALLOW_PORTS_END` (optional, recommended for TCP range mode; example `7147` / `7160`)
 
 ### Railway networking
 
-Configure both of these:
+Configure both of these (HTTP mode):
 
 1. TCP Proxy for `FRPS_BIND_PORT`
 2. Public HTTP exposure for `FRPS_VHOST_HTTP_PORT` (Railway domain or custom domain)
@@ -51,6 +52,17 @@ Record:
 
 - TCP Proxy host and port (used by local MCP `Frp:ServerAddress` and `Frp:ServerPort`)
 - Public HTTP domain (used by local MCP `Frp:PublicBaseUrl` or `Frp:CustomDomain`)
+
+### Railway networking for TCP range mode (`7147-7160`)
+
+If you want MCP/workspace ports exposed as raw TCP (1:1), configure:
+
+1. TCP Proxy for `FRPS_BIND_PORT` (control connection)
+2. TCP Proxy mappings for each FRP remote port in the range (for example `7147` through `7160`) to the `frps` service
+
+Recommendation:
+
+- Set `FRPS_ALLOW_PORTS_START=7147` and `FRPS_ALLOW_PORTS_END=7160` on the `frps` service to restrict remote TCP ports to the expected range.
 
 ## Configure MCP (local `frpc`)
 
@@ -78,8 +90,36 @@ Update your MCP `appsettings.json` (service deployment config) with a tunnel sec
 Notes:
 
 - `Port` must match the local MCP HTTP listener you want to expose.
-- `ProxyType` currently supports `http` in the provider.
+- `ProxyType` supports `http` and `tcp`.
 - `PublicBaseUrl` is recommended on Railway so status reporting returns the correct public URL.
+
+### MCP TCP range configuration example (`7147-7160`)
+
+This lets MCP generate `frpc` mappings and define what FRP exposes:
+
+```json
+{
+  "Mcp": {
+    "Tunnel": {
+      "Provider": "frp",
+      "Frp": {
+        "ServerAddress": "your-railway-frps-control-proxy-host",
+        "ServerPort": 443,
+        "Token": "same-strong-token",
+        "ProxyType": "tcp",
+        "TcpPortRangeStart": 7147,
+        "TcpPortRangeEnd": 7160,
+        "StartupTimeoutSeconds": 8
+      }
+    }
+  }
+}
+```
+
+Notes:
+
+- This is a 1:1 mapping range (local port `7147` maps to remote port `7147`, etc.).
+- Railway must still expose TCP proxies for each remote port in the range.
 
 ## Start and verify
 
@@ -117,6 +157,7 @@ Common causes:
 - wrong Railway TCP Proxy host/port for `Frp:ServerAddress` / `Frp:ServerPort`
 - outbound firewall restrictions from the MCP host
 - unsupported `ProxyType`
+- missing Railway TCP proxy for one of the requested TCP ports
 
 Check MCP logs for the `frpc` exit message and captured stderr/stdout snippet.
 
