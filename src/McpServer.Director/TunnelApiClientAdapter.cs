@@ -18,7 +18,7 @@ internal sealed class TunnelApiClientAdapter : ITunnelApiClient
     /// <inheritdoc />
     public async Task<TunnelListSnapshot> ListAsync(CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(false);
         var providers = await client.Tunnel.ListAsync(cancellationToken).ConfigureAwait(false);
         return new TunnelListSnapshot(providers.Select(Map).ToList());
     }
@@ -26,7 +26,7 @@ internal sealed class TunnelApiClientAdapter : ITunnelApiClient
     /// <inheritdoc />
     public async Task<TunnelProviderSnapshot> EnableAsync(string providerName, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(false);
         var info = await client.Tunnel.EnableAsync(providerName, cancellationToken).ConfigureAwait(false);
         return Map(info);
     }
@@ -34,7 +34,7 @@ internal sealed class TunnelApiClientAdapter : ITunnelApiClient
     /// <inheritdoc />
     public async Task<TunnelProviderSnapshot> DisableAsync(string providerName, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(false);
         var info = await client.Tunnel.DisableAsync(providerName, cancellationToken).ConfigureAwait(false);
         return Map(info);
     }
@@ -42,7 +42,7 @@ internal sealed class TunnelApiClientAdapter : ITunnelApiClient
     /// <inheritdoc />
     public async Task<TunnelProviderSnapshot> StartAsync(string providerName, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(false);
         var info = await client.Tunnel.StartAsync(providerName, cancellationToken).ConfigureAwait(false);
         return Map(info);
     }
@@ -50,7 +50,7 @@ internal sealed class TunnelApiClientAdapter : ITunnelApiClient
     /// <inheritdoc />
     public async Task<TunnelProviderSnapshot> StopAsync(string providerName, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(false);
         var info = await client.Tunnel.StopAsync(providerName, cancellationToken).ConfigureAwait(false);
         return Map(info);
     }
@@ -58,7 +58,7 @@ internal sealed class TunnelApiClientAdapter : ITunnelApiClient
     /// <inheritdoc />
     public async Task<TunnelProviderSnapshot> RestartAsync(string providerName, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(false);
         var info = await client.Tunnel.RestartAsync(providerName, cancellationToken).ConfigureAwait(false);
         return Map(info);
     }
