@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Text.Json;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Requirements;
+using McpServer.Support.Mcp.Requirements.Models;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +30,7 @@ public sealed class FwhMcpTools
     private readonly ITodoPromptService _todoPromptService;
     private readonly ISessionLogService _sessionLogService;
     private readonly IGitHubCliService _gitHubCliService;
+    private readonly IRequirementsDocumentService _requirementsDocumentService;
 
     /// <summary>TR-PLANNED-013: Constructor for DI.</summary>
     public FwhMcpTools(
@@ -39,7 +42,8 @@ public sealed class FwhMcpTools
         ITodoService todoService,
         ITodoPromptService todoPromptService,
         ISessionLogService sessionLogService,
-        IGitHubCliService gitHubCliService)
+        IGitHubCliService gitHubCliService,
+        IRequirementsDocumentService requirementsDocumentService)
     {
         _db = db;
         _repoFileService = repoFileService;
@@ -50,6 +54,7 @@ public sealed class FwhMcpTools
         _todoPromptService = todoPromptService;
         _sessionLogService = sessionLogService;
         _gitHubCliService = gitHubCliService;
+        _requirementsDocumentService = requirementsDocumentService;
     }
 
     /// <summary>Search indexed context chunks by query text.</summary>
@@ -352,6 +357,226 @@ public sealed class FwhMcpTools
         return sb.ToString();
     }
 
+    // ── GROUP A2: Requirements management tools ──────────────────────────
+
+    /// <summary>REQ-MGMT-001: List requirements entries by type (fr/tr/test/mapping/all).</summary>
+    [McpServerTool(Name = "requirements_list"), Description("List requirements entries. type = fr|tr|test|mapping|all (default all).")]
+    public async Task<string> RequirementsList(
+        [Description("Entry type: fr, tr, test, mapping, or all")] string? type = "all",
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (!TryParseRequirementsEntityType(type, out var entityType))
+                return JsonSerializer.Serialize(new { error = "Unsupported type. Expected fr|tr|test|mapping|all." });
+
+            return entityType switch
+            {
+                RequirementsEntityType.Functional => JsonSerializer.Serialize(new { type = "fr", items = await _requirementsDocumentService.GetAllFrAsync(cancellationToken).ConfigureAwait(false) }),
+                RequirementsEntityType.Technical => JsonSerializer.Serialize(new { type = "tr", items = await _requirementsDocumentService.GetAllTrAsync(cancellationToken).ConfigureAwait(false) }),
+                RequirementsEntityType.Testing => JsonSerializer.Serialize(new { type = "test", items = await _requirementsDocumentService.GetAllTestAsync(cancellationToken).ConfigureAwait(false) }),
+                RequirementsEntityType.Mapping => JsonSerializer.Serialize(new { type = "mapping", items = await _requirementsDocumentService.GetAllMappingsAsync(cancellationToken).ConfigureAwait(false) }),
+                RequirementsEntityType.All => JsonSerializer.Serialize(new
+                {
+                    functional = await _requirementsDocumentService.GetAllFrAsync(cancellationToken).ConfigureAwait(false),
+                    technical = await _requirementsDocumentService.GetAllTrAsync(cancellationToken).ConfigureAwait(false),
+                    testing = await _requirementsDocumentService.GetAllTestAsync(cancellationToken).ConfigureAwait(false),
+                    mapping = await _requirementsDocumentService.GetAllMappingsAsync(cancellationToken).ConfigureAwait(false)
+                }),
+                _ => JsonSerializer.Serialize(new { error = "Unsupported type." })
+            };
+        }
+        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+    }
+
+    /// <summary>REQ-MGMT-001: Generate requirements documents as Markdown (doc=all concatenates all docs).</summary>
+    [McpServerTool(Name = "requirements_generate"), Description("Generate requirements documents as Markdown. doc = functional|technical|testing|mapping|all (default all).")]
+    public async Task<string> RequirementsGenerate(
+        [Description("Document selector: functional, technical, testing, mapping, or all")] string? doc = "all",
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (!TryParseRequirementsDocType(doc, out var docType))
+                return JsonSerializer.Serialize(new { error = "Unsupported doc. Expected functional|technical|testing|mapping|all." });
+
+            if (docType == RequirementsDocType.All)
+            {
+                var functional = await _requirementsDocumentService.GenerateDocumentAsync(RequirementsDocType.Functional, cancellationToken).ConfigureAwait(false);
+                var technical = await _requirementsDocumentService.GenerateDocumentAsync(RequirementsDocType.Technical, cancellationToken).ConfigureAwait(false);
+                var testing = await _requirementsDocumentService.GenerateDocumentAsync(RequirementsDocType.Testing, cancellationToken).ConfigureAwait(false);
+                var mapping = await _requirementsDocumentService.GenerateDocumentAsync(RequirementsDocType.Mapping, cancellationToken).ConfigureAwait(false);
+                return string.Join(
+                    "\n\n---\n\n",
+                    functional.Content.TrimEnd(),
+                    technical.Content.TrimEnd(),
+                    testing.Content.TrimEnd(),
+                    mapping.Content.TrimEnd());
+            }
+
+            var result = await _requirementsDocumentService.GenerateDocumentAsync(docType, cancellationToken).ConfigureAwait(false);
+            return result.Content;
+        }
+        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+    }
+
+    /// <summary>REQ-MGMT-001: Create a requirement or mapping row.</summary>
+    [McpServerTool(Name = "requirements_create"), Description("Create a requirement entry. type = fr|tr|test|mapping. For mapping, body is a comma-separated TR id list.")]
+    public async Task<string> RequirementsCreate(
+        [Description("Entry type: fr, tr, test, or mapping")] string type,
+        [Description("Entry id (FR/TR/TEST id or FR id for mapping rows)")] string id,
+        [Description("Title (required for fr; optional for tr; ignored for test/mapping)")] string? title = null,
+        [Description("Body text (required for fr/tr/test; for mapping use comma-separated TR ids)")] string? body = null,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (!TryParseRequirementsEntityType(type, out var entityType) || entityType == RequirementsEntityType.All)
+                return JsonSerializer.Serialize(new { error = "Unsupported type. Expected fr|tr|test|mapping." });
+
+            switch (entityType)
+            {
+                case RequirementsEntityType.Functional:
+                {
+                    var entry = new FrEntry(id, title ?? string.Empty, body ?? string.Empty);
+                    await _requirementsDocumentService.AddFrAsync(entry, cancellationToken).ConfigureAwait(false);
+                    return JsonSerializer.Serialize(new { success = true, item = entry });
+                }
+                case RequirementsEntityType.Technical:
+                {
+                    var entry = new TrEntry(id, title ?? string.Empty, body ?? string.Empty);
+                    await _requirementsDocumentService.AddTrAsync(entry, cancellationToken).ConfigureAwait(false);
+                    return JsonSerializer.Serialize(new { success = true, item = entry });
+                }
+                case RequirementsEntityType.Testing:
+                {
+                    var condition = string.IsNullOrWhiteSpace(body) ? (title ?? string.Empty) : body;
+                    var entry = new TestEntry(id, condition);
+                    await _requirementsDocumentService.AddTestAsync(entry, cancellationToken).ConfigureAwait(false);
+                    return JsonSerializer.Serialize(new { success = true, item = entry });
+                }
+                case RequirementsEntityType.Mapping:
+                {
+                    var mapping = new FrTrMapping(id, ParseMappingTrIds(body));
+                    await _requirementsDocumentService.UpsertMappingAsync(mapping, cancellationToken).ConfigureAwait(false);
+                    return JsonSerializer.Serialize(new { success = true, item = mapping });
+                }
+                default:
+                    return JsonSerializer.Serialize(new { error = "Unsupported type." });
+            }
+        }
+        catch (RequirementsRepositoryException ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (ArgumentException ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+    }
+
+    /// <summary>REQ-MGMT-001: Update a requirement or mapping row. Omitted fields remain unchanged.</summary>
+    [McpServerTool(Name = "requirements_update"), Description("Update a requirement entry. type = fr|tr|test|mapping. Omitted title/body values keep the current value.")]
+    public async Task<string> RequirementsUpdate(
+        [Description("Entry type: fr, tr, test, or mapping")] string type,
+        [Description("Entry id (FR/TR/TEST id or FR id for mapping rows)")] string id,
+        [Description("Updated title (fr/tr only)")] string? title = null,
+        [Description("Updated body text or mapping TR id list")] string? body = null,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (!TryParseRequirementsEntityType(type, out var entityType) || entityType == RequirementsEntityType.All)
+                return JsonSerializer.Serialize(new { error = "Unsupported type. Expected fr|tr|test|mapping." });
+
+            switch (entityType)
+            {
+                case RequirementsEntityType.Functional:
+                {
+                    var existing = await _requirementsDocumentService.GetFrAsync(id, cancellationToken).ConfigureAwait(false);
+                    if (existing is null) return JsonSerializer.Serialize(new { error = $"FR '{id}' not found." });
+                    var updated = existing with
+                    {
+                        Title = title ?? existing.Title,
+                        Body = body ?? existing.Body
+                    };
+                    await _requirementsDocumentService.UpdateFrAsync(updated, cancellationToken).ConfigureAwait(false);
+                    return JsonSerializer.Serialize(new { success = true, item = updated });
+                }
+                case RequirementsEntityType.Technical:
+                {
+                    var existing = await _requirementsDocumentService.GetTrAsync(id, cancellationToken).ConfigureAwait(false);
+                    if (existing is null) return JsonSerializer.Serialize(new { error = $"TR '{id}' not found." });
+                    var updated = existing with
+                    {
+                        Title = title ?? existing.Title,
+                        Body = body ?? existing.Body
+                    };
+                    await _requirementsDocumentService.UpdateTrAsync(updated, cancellationToken).ConfigureAwait(false);
+                    return JsonSerializer.Serialize(new { success = true, item = updated });
+                }
+                case RequirementsEntityType.Testing:
+                {
+                    var existing = await _requirementsDocumentService.GetTestAsync(id, cancellationToken).ConfigureAwait(false);
+                    if (existing is null) return JsonSerializer.Serialize(new { error = $"TEST '{id}' not found." });
+                    var updated = existing with
+                    {
+                        Condition = body ?? title ?? existing.Condition
+                    };
+                    await _requirementsDocumentService.UpdateTestAsync(updated, cancellationToken).ConfigureAwait(false);
+                    return JsonSerializer.Serialize(new { success = true, item = updated });
+                }
+                case RequirementsEntityType.Mapping:
+                {
+                    var existing = await _requirementsDocumentService.GetMappingAsync(id, cancellationToken).ConfigureAwait(false);
+                    var trIds = body is null && existing is not null
+                        ? existing.TrIds
+                        : ParseMappingTrIds(body);
+                    var updated = new FrTrMapping(id, trIds);
+                    await _requirementsDocumentService.UpsertMappingAsync(updated, cancellationToken).ConfigureAwait(false);
+                    return JsonSerializer.Serialize(new { success = true, item = updated });
+                }
+                default:
+                    return JsonSerializer.Serialize(new { error = "Unsupported type." });
+            }
+        }
+        catch (RequirementsRepositoryException ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (ArgumentException ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+    }
+
+    /// <summary>REQ-MGMT-001: Delete a requirement or mapping row by id.</summary>
+    [McpServerTool(Name = "requirements_delete"), Description("Delete a requirement entry. type = fr|tr|test|mapping.")]
+    public async Task<string> RequirementsDelete(
+        [Description("Entry type: fr, tr, test, or mapping")] string type,
+        [Description("Entry id (FR/TR/TEST id or FR id for mapping rows)")] string id,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (!TryParseRequirementsEntityType(type, out var entityType) || entityType == RequirementsEntityType.All)
+                return JsonSerializer.Serialize(new { error = "Unsupported type. Expected fr|tr|test|mapping." });
+
+            switch (entityType)
+            {
+                case RequirementsEntityType.Functional:
+                    await _requirementsDocumentService.DeleteFrAsync(id, cancellationToken).ConfigureAwait(false);
+                    break;
+                case RequirementsEntityType.Technical:
+                    await _requirementsDocumentService.DeleteTrAsync(id, cancellationToken).ConfigureAwait(false);
+                    break;
+                case RequirementsEntityType.Testing:
+                    await _requirementsDocumentService.DeleteTestAsync(id, cancellationToken).ConfigureAwait(false);
+                    break;
+                case RequirementsEntityType.Mapping:
+                    await _requirementsDocumentService.DeleteMappingAsync(id, cancellationToken).ConfigureAwait(false);
+                    break;
+                default:
+                    return JsonSerializer.Serialize(new { error = "Unsupported type." });
+            }
+
+            return JsonSerializer.Serialize(new { success = true });
+        }
+        catch (RequirementsRepositoryException ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (ArgumentException ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+    }
+
     // ── GROUP B: Session Log tools ───────────────────────────────────────
 
     /// <summary>TR-PLANNED-013: Submit a session log payload.</summary>
@@ -497,5 +722,82 @@ public sealed class FwhMcpTools
             return JsonSerializer.Serialize(new { success = true });
         }
         catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+    }
+
+    private enum RequirementsEntityType
+    {
+        Functional,
+        Technical,
+        Testing,
+        Mapping,
+        All
+    }
+
+    private static bool TryParseRequirementsDocType(string? raw, out RequirementsDocType docType)
+    {
+        switch ((raw ?? string.Empty).Trim().ToLowerInvariant())
+        {
+            case "functional":
+            case "fr":
+                docType = RequirementsDocType.Functional;
+                return true;
+            case "technical":
+            case "tr":
+                docType = RequirementsDocType.Technical;
+                return true;
+            case "testing":
+            case "test":
+                docType = RequirementsDocType.Testing;
+                return true;
+            case "mapping":
+                docType = RequirementsDocType.Mapping;
+                return true;
+            case "all":
+                docType = RequirementsDocType.All;
+                return true;
+            default:
+                docType = default;
+                return false;
+        }
+    }
+
+    private static bool TryParseRequirementsEntityType(string? raw, out RequirementsEntityType entityType)
+    {
+        switch ((raw ?? string.Empty).Trim().ToLowerInvariant())
+        {
+            case "functional":
+            case "fr":
+                entityType = RequirementsEntityType.Functional;
+                return true;
+            case "technical":
+            case "tr":
+                entityType = RequirementsEntityType.Technical;
+                return true;
+            case "testing":
+            case "test":
+                entityType = RequirementsEntityType.Testing;
+                return true;
+            case "mapping":
+                entityType = RequirementsEntityType.Mapping;
+                return true;
+            case "all":
+                entityType = RequirementsEntityType.All;
+                return true;
+            default:
+                entityType = default;
+                return false;
+        }
+    }
+
+    private static IReadOnlyList<string> ParseMappingTrIds(string? body)
+    {
+        if (string.IsNullOrWhiteSpace(body))
+            return Array.Empty<string>();
+
+        return body
+            .Split([',', '\n', '\r'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(static id => !string.IsNullOrWhiteSpace(id))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
     }
 }

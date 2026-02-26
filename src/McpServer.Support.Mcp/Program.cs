@@ -13,6 +13,7 @@ using McpServer.Support.Mcp.Logging;
 using McpServer.Support.Mcp.McpStdio;
 using McpServer.Support.Mcp.Middleware;
 using McpServer.Support.Mcp.Options;
+using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Controllers;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
@@ -152,6 +153,7 @@ builder.Services.Configure<MarkerPromptOptions>(builder.Configuration.GetSection
 builder.Services.Configure<McpParseableOptions>(builder.Configuration.GetSection(McpParseableOptions.SectionName));
 builder.Services.Configure<McpInteractionLoggingOptions>(builder.Configuration.GetSection(McpInteractionLoggingOptions.SectionName));
 builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(TodoStorageOptions.SectionName));
+builder.Services.Configure<RequirementsOptions>(builder.Configuration.GetSection(RequirementsOptions.SectionName));
 builder.Services.PostConfigure<VectorIndexOptions>(options =>
 {
     var instanceIndexPath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "IndexPath");
@@ -181,6 +183,22 @@ builder.Services.PostConfigure<TodoStorageOptions>(options =>
         var dataDirectory = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "DataDirectory") ?? ".";
         options.SqliteDataSource = Path.GetFullPath(Path.Combine(dataDirectory, options.SqliteDataSource));
     }
+});
+builder.Services.PostConfigure<RequirementsOptions>(options =>
+{
+    var repoRoot = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "RepoRoot")
+                  ?? builder.Environment.ContentRootPath;
+    repoRoot = Path.GetFullPath(repoRoot);
+
+    static string ResolvePath(string repoRootPath, string path) =>
+        Path.IsPathRooted(path)
+            ? Path.GetFullPath(path)
+            : Path.GetFullPath(Path.Combine(repoRootPath, path));
+
+    options.FunctionalRequirementsPath = ResolvePath(repoRoot, options.FunctionalRequirementsPath);
+    options.TechnicalRequirementsPath = ResolvePath(repoRoot, options.TechnicalRequirementsPath);
+    options.TestingRequirementsPath = ResolvePath(repoRoot, options.TestingRequirementsPath);
+    options.MappingPath = ResolvePath(repoRoot, options.MappingPath);
 });
 builder.Services.Configure<EmbeddingOptions>(builder.Configuration.GetSection("Embedding"));
 builder.Services.Configure<VectorIndexOptions>(builder.Configuration.GetSection("VectorIndex"));
@@ -215,6 +233,9 @@ builder.Services.AddSingleton<ITodoService>(sp =>
 });
 builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
 builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
+builder.Services.AddSingleton<RequirementsDocumentService>();
+builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<RequirementsDocumentService>());
+builder.Services.AddSingleton<IRequirementsDocumentService>(sp => sp.GetRequiredService<RequirementsDocumentService>());
 builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
 builder.Services.Configure<TodoPromptOptions>(options =>
 {

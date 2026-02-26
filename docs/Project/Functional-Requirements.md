@@ -239,3 +239,21 @@ Agents must follow a session continuity protocol: at session start, read the mar
 All source files from `McpServer.Cqrs`, `McpServer.Cqrs.Mvvm`, `McpServer.UI.Core`, and `McpServer.Director` shall be indexed into the MCP context store for semantic search. The marker prompt lists these projects in the Available Capabilities section.
 
 **Covered by:** Ingestion configuration, `MarkerFileService.DefaultPromptTemplate` *(planned)*
+
+## FR-MCP-040 Requirements Document CRUD Management
+
+The server shall support CRUD operations for Functional Requirements (FR), Technical Requirements (TR), Testing Requirements (TEST), and FR-to-TR mapping rows backed by the canonical project requirements Markdown files.
+
+**Covered by:** `RequirementsController`, `RequirementsDocumentService`, `IRequirementsRepository`
+
+## FR-MCP-041 Requirements Document Generation
+
+The server shall expose a requirements document generation endpoint that renders any canonical requirements document as Markdown and can return all documents together as a ZIP archive with canonical filenames.
+
+**Covered by:** `RequirementsController` (`/mcp/requirements/generate`), `RequirementsDocumentService`, `RequirementsDocumentRenderer`
+
+## FR-MCP-042 Requirements Management MCP Tools
+
+The STDIO MCP tool surface shall expose requirements management tools for listing, generating, creating, updating, and deleting requirements entries so AI agents can manage requirements directly from a conversation.
+
+**Covered by:** `FwhMcpTools` (`requirements_list`, `requirements_generate`, `requirements_create`, `requirements_update`, `requirements_delete`), `RequirementsDocumentService`

@@ -112,6 +112,18 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **AI Requirements Analysis Service** — `RequirementsService` invokes `ICopilotClient` with a structured prompt containing the TODO item's title, description, technical details, implementation tasks, and pre-existing FR/TR assignments. The prompt instructs Copilot to identify existing FRs/TRs from `docs/Project/` and create new entries for unaddressed functionality, then emit a JSON block with assigned IDs. Response parsing first attempts structured JSON extraction; falls back to regex (`FR-[A-Z]+-\d{3}` / `TR-[A-Z]+-\d{3}`) for robustness. Discovered IDs are merged (deduplicated, order-preserved) back into the TODO via `ITodoService.UpdateAsync`.
 
+## TR-MCP-REQ-002
+
+**Requirements Document Management Service** — `RequirementsDocumentService` parses the four canonical requirements documents (`Functional-Requirements.md`, `Technical-Requirements.md`, `Testing-Requirements.md`, `TR-per-FR-Mapping.md`) into a strongly typed in-memory model on startup and provides CRUD operations for FR/TR/TEST entries and mapping rows. Mutations are serialized with `SemaphoreSlim` and persisted with atomic file swaps (temp file + `File.Replace`/fallback overwrite) to prevent document corruption under concurrent writes.
+
+**Covered by:** `RequirementsDocumentService`, `RequirementsDocumentParser`, `RequirementsDocumentRenderer`, `RequirementsOptions`
+
+## TR-MCP-REQ-003
+
+**Requirements REST + STDIO Tool Integration** — The requirements management feature is exposed over REST via `RequirementsController` at `/mcp/requirements/*` and over STDIO via MCP tools (`requirements_list`, `requirements_generate`, `requirements_create`, `requirements_update`, `requirements_delete`). Document generation supports individual Markdown documents and `doc=all` ZIP bundles with canonical filenames.
+
+**Covered by:** `RequirementsController`, `FwhMcpTools`, `Program.cs` (DI/config registration), `RequirementsDocumentService`
+
 ## TR-MCP-INGEST-002
 
 **Markdown Session Log Parser** — `MarkdownSessionLogParser.TryParse` recognizes Markdown files with a `# Session Log – {title}` or `# Copilot Session Log – {title}` header and parses them into `UnifiedSessionLogDto`. Extracts date, status, branch, model, duration, and known sections (Session Overview, Changes Made, Technical Requirements, Testing, etc.) as a summary entry. Individual `### Request` subsections are parsed as separate `UnifiedRequestEntryDto` entries. `NormalizeToStructuredText` produces a structured plain-text representation for FTS5 and vector embedding.

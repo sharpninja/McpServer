@@ -4,7 +4,9 @@ requirements-management:
     title: Requirements Management Feature — CRUD + document generation endpoints
     estimate: 4-6 days
     note: 'High priority — builds on FR-MCP-023 (AI requirements analysis). This TODO intentionally uses a non-FR ID because FR-MCP-026 was reassigned to Keycloak OIDC authentication in the requirements docs. Provides a first-class Requirements Management subsystem: in-memory model loaded from the four canonical docs, full CRUD for FR/TR/TEST entries, and REST + MCP tool endpoints to regenerate any or all four documents in their exact established Markdown format (individually or as a ZIP).'
-    done: false
+    done: true
+    completed: '2026-02-26'
+    done-summary: Implemented requirements document parsing/rendering service, REST CRUD + generate endpoints, STDIO MCP tools, DI/config wiring, and focused service/controller tests.
     description:
     - 'Create a RequirementsManagementController with REST endpoints for CRUD on Functional Requirements (FR), Technical Requirements (TR), and Testing Requirements (TEST) entries, backed by the four canonical files: Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, and TR-per-FR-Mapping.md.'
     - Add a document generation endpoint GET /mcp/requirements/generate?doc={functional|technical| testing|mapping|all} that renders requirements documents as Markdown (text/markdown) matching the exact established structure, or as a ZIP archive when doc=all.
@@ -17,13 +19,13 @@ requirements-management:
     - RequirementsDocumentRenderer — RenderFunctional(), RenderTechnical(), RenderTesting(), RenderMapping(), RenderAll(). RenderAll() uses System.IO.Compression.ZipArchive to produce a single in-memory ZIP containing all four files with their canonical filenames.
     - 'Sub-resources: POST/GET /mcp/requirements/fr, GET/PUT/DELETE /mcp/requirements/fr/{id}; same pattern for /tr/{id} and /test/{id}. GET /mcp/requirements/mapping for the full table. GET /mcp/requirements/generate?doc= for document output.'
     - 'MCP tools (added to McpServerMcpTools.cs): requirements_generate(doc), requirements_list(type), requirements_create(type, id, title, body), requirements_update(type, id, title?, body?), requirements_delete(type, id).'
-    - 'Document file paths resolved relative to RepoRoot via IOptions<McpOptions>. Default paths: docs/Project/Functional-Requirements.md, docs/Project/Technical-Requirements.md, docs/Project/Testing-Requirements.md, docs/Project/TR-per-FR-Mapping.md. Configurable via Mcp:Requirements:* config section.'
+    - 'Document file paths resolved relative to RepoRoot via IOptions<RequirementsOptions>. Default paths: docs/Project/Functional-Requirements.md, docs/Project/Technical-Requirements.md, docs/Project/Testing-Requirements.md, docs/Project/TR-per-FR-Mapping.md. Configurable via Mcp:Requirements:* config section.'
     - All public types require XML doc comments (CS1591 enforced as error in this repo).
     - ApiKeyAuthFilter is no longer used; all /mcp/* routes are protected by WorkspaceAuthMiddleware at the pipeline level. No per-controller auth attributes needed.
     functional-requirements:
-    - 'FR-ID-TBD: Server shall support CRUD for FR, TR, and TEST requirement entries stored in the four canonical project documentation files.'
-    - 'FR-ID-TBD: Server shall expose a document generation endpoint rendering any or all four requirements documents in their established Markdown format.'
-    - 'FR-ID-TBD: Server shall expose MCP tools for requirements CRUD and document generation usable by AI agents.'
+    - 'FR-MCP-040: Server shall support CRUD for FR, TR, and TEST requirement entries stored in the four canonical project documentation files.'
+    - 'FR-MCP-041: Server shall expose a document generation endpoint rendering any or all four requirements documents in their established Markdown format.'
+    - 'FR-MCP-042: Server shall expose MCP tools for requirements CRUD and document generation usable by AI agents.'
     technical-requirements:
     - 'TR-MCP-REQ-002: RequirementsDocumentService parses all four files into a typed in-memory model on startup and keeps files synchronized on mutation.'
     - 'TR-MCP-REQ-002: RequirementsDocumentRenderer produces Markdown output matching exact heading style and bullet/table structure of each canonical document.'
@@ -31,71 +33,71 @@ requirements-management:
     - 'TR-MCP-REQ-002: Write operations use atomic file swap (temp + File.Replace) and SemaphoreSlim serialization to prevent corruption.'
     implementation-tasks:
     - task: '[Phase 1 — Model] Define FrEntry(Id, Title, Body), TrEntry(Id, Title, Body), TestEntry(Id, Condition), FrTrMapping(FrId, TrIds) records in Requirements/Models/'
-      done: false
+      done: true
     - task: '[Phase 1 — Model] Define IRequirementsRepository with GetAllFrAsync, GetFrAsync, AddFrAsync, UpdateFrAsync, DeleteFrAsync (same for Tr/Test/Mapping)'
-      done: false
+      done: true
     - task: '[Phase 1 — Model] Define IRequirementsDocumentService extending IRequirementsRepository plus GenerateDocumentAsync(RequirementsDocType), GenerateAllAsync()'
-      done: false
+      done: true
     - task: '[Phase 2 — Parsing] Implement FunctionalRequirementsParser: regex ## (FR-[A-Z]+-\d+)\s+\n+\*\*?(.+?)\*\*?\s+—?\s+([\s\S]+?)(?=\n## |\z) to extract Id/Title/Body'
-      done: false
+      done: true
     - task: '[Phase 2 — Parsing] Implement TechnicalRequirementsParser: same ## heading pattern, bold title with em-dash separator convention'
-      done: false
+      done: true
     - task: '[Phase 2 — Parsing] Implement TestingRequirementsParser: bullet list pattern - (TEST-[A-Z]+-\d+): (.+) per line'
-      done: false
+      done: true
     - task: '[Phase 2 — Parsing] Implement MappingParser: Markdown table rows | FR-id | TR-ids | with comma-separated TR IDs per cell'
-      done: false
+      done: true
     - task: '[Phase 3 — Renderer] Implement RequirementsDocumentRenderer.RenderFunctional(IEnumerable<FrEntry>): # Functional Requirements (MCP Server)\n\n## {Id}\n\n{Title}\n\n{Body}\n\n'
-      done: false
+      done: true
     - task: '[Phase 3 — Renderer] Implement RenderTechnical(IEnumerable<TrEntry>): ## {Id}\n\n**{Title}** — {Body}\n\n'
-      done: false
+      done: true
     - task: '[Phase 3 — Renderer] Implement RenderTesting(IEnumerable<TestEntry>): # Testing Requirements (MCP Server)\n\n- {Id}: {Condition}\n per entry'
-      done: false
+      done: true
     - task: '[Phase 3 — Renderer] Implement RenderMapping(IEnumerable<FrTrMapping>): | FR | Primary TRs |\n| --- | --- |\n| {FrId} | {TrIds joined by ", "} |'
-      done: false
+      done: true
     - task: '[Phase 3 — Renderer] Implement RenderAll(): create MemoryStream + ZipArchive, add all four rendered documents as entries with canonical filenames'
-      done: false
+      done: true
     - task: '[Phase 4 — Service] Implement RequirementsDocumentService: constructor reads all four files via IRequirementsRepository, populates _frEntries/_trEntries/_testEntries/_mappings ConcurrentDictionary'
-      done: false
+      done: true
     - task: '[Phase 4 — Service] Implement atomic file write: write to {path}.tmp, then File.Replace(tmp, target, backup: null) under SemaphoreSlim'
-      done: false
+      done: true
     - task: '[Phase 4 — Service] Implement GenerateDocumentAsync(RequirementsDocType): switch on enum, call appropriate renderer, return (content, mimeType) tuple'
-      done: false
+      done: true
     - task: '[Phase 4 — Service] Implement GenerateAllAsync(): call RenderAll(), return MemoryStream'
-      done: false
+      done: true
     - task: '[Phase 5 — Controller] Implement RequirementsController: GET/POST /mcp/requirements/fr, GET/PUT/DELETE /mcp/requirements/fr/{id} (same pattern for /tr and /test)'
-      done: false
+      done: true
     - task: '[Phase 5 — Controller] Add GET /mcp/requirements/generate?doc= endpoint: parse enum, call GenerateDocumentAsync or GenerateAllAsync, set Content-Disposition attachment header'
-      done: false
+      done: true
     - task: '[Phase 5 — Controller] Add GET /mcp/requirements/mapping and PUT /mcp/requirements/mapping/{frId} for the TR-per-FR table'
-      done: false
+      done: true
     - task: '[Phase 5 — Controller] Auth is handled by WorkspaceAuthMiddleware at the pipeline level — no per-action attributes needed'
-      done: false
+      done: true
     - task: '[Phase 5 — Controller] Add full XML doc comments on all controller actions and parameters'
-      done: false
+      done: true
     - task: '[Phase 6 — MCP Tools] Add [McpServerTool] requirements_list(string type) to McpServerMcpTools.cs: returns JSON array of matching entries'
-      done: false
+      done: true
     - task: '[Phase 6 — MCP Tools] Add [McpServerTool] requirements_generate(string doc) to McpServerMcpTools.cs: returns Markdown string for specified doc type (all returns concatenated with --- separators)'
-      done: false
+      done: true
     - task: '[Phase 6 — MCP Tools] Add [McpServerTool] requirements_create(string type, string id, string title, string body) with XML docs'
-      done: false
+      done: true
     - task: '[Phase 6 — MCP Tools] Add [McpServerTool] requirements_update(string type, string id, string? title, string? body) with XML docs'
-      done: false
+      done: true
     - task: '[Phase 6 — MCP Tools] Add [McpServerTool] requirements_delete(string type, string id) with XML docs'
-      done: false
+      done: true
     - task: '[Phase 7 — Config] Add RequirementsOptions bound to Mcp:Requirements with FunctionalRequirementsPath, TechnicalRequirementsPath, TestingRequirementsPath, MappingPath (all defaulting to docs/Project/*.md relative to RepoRoot)'
-      done: false
+      done: true
     - task: '[Phase 7 — Config] Register IRequirementsDocumentService, IRequirementsRepository in Program.cs DI'
-      done: false
+      done: true
     - task: '[Phase 8 — Tests] Unit tests for each parser: given canonical file content, when parsed, then all entries are correctly extracted with right IDs, titles, and bodies'
-      done: false
+      done: true
     - task: '[Phase 8 — Tests] Unit tests for each renderer: given typed entries, when rendered, then output matches expected Markdown structure exactly (heading level, bold format, bullet syntax)'
-      done: false
+      done: true
     - task: '[Phase 8 — Tests] Integration test: POST /mcp/requirements/fr creates entry → GET /mcp/requirements/generate?doc=functional contains new entry → DELETE removes it → generate no longer contains it'
-      done: false
+      done: true
     - task: '[Phase 8 — Tests] Integration test: GET /mcp/requirements/generate?doc=all returns 200 application/zip with four entries matching canonical filenames'
-      done: false
+      done: true
     - task: '[Phase 8 — Tests] Test atomic write: simulate concurrent mutations, verify file integrity after all complete'
-      done: false
+      done: true
 staging-and-infrastructure:
   high-priority:
   - id: nuget-client-lib

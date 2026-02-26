@@ -40,6 +40,8 @@
 | TR-MCP-HTTP-001 | ✅ Complete | MCP transport |
 | TR-MCP-SVC-001 | ✅ Complete | Windows service |
 | TR-MCP-REQ-001 | ✅ Complete | AI requirements analysis |
+| TR-MCP-REQ-002 | ✅ Complete | RequirementsDocumentService, RequirementsDocumentParser, RequirementsDocumentRenderer, RequirementsOptions |
+| TR-MCP-REQ-003 | ✅ Complete | RequirementsController, FwhMcpTools, Program.cs (requirements DI/config) |
 | TR-MCP-DRY-001 | ✅ Active directive | All code and scripts |
 | TR-LOC-001 | 🔲 Planned | — |
 | FR-MCP-026 | ✅ Complete | OidcAuthOptions, Program.cs (JWT Bearer + AgentManager policy), WorkspaceAuthMiddleware, AgentController, AuthConfigController, Setup-McpKeycloak.ps1, setup-mcp-keycloak.sh, McpServer.Director (AuthCommands, OidcAuthService, LoginDialog) |
@@ -56,6 +58,9 @@
 | FR-MCP-037 | ✅ Complete | McpServer.Director (Program exec/list-viewmodels), McpServer.Cqrs.Mvvm (IViewModelRegistry) |
 | FR-MCP-038 | ✅ Complete | MarkerFileService.DefaultPromptTemplate |
 | FR-MCP-039 | 🔲 Planned | — |
+| FR-MCP-040 | ✅ Complete | RequirementsController, RequirementsDocumentService, IRequirementsRepository |
+| FR-MCP-041 | ✅ Complete | RequirementsController (/mcp/requirements/generate), RequirementsDocumentService, RequirementsDocumentRenderer |
+| FR-MCP-042 | ✅ Complete | FwhMcpTools (requirements_* tools), RequirementsDocumentService |
 | TR-MCP-AUTH-001–003 | ✅ Complete | OidcAuthOptions, Program.cs (JwtBearer + AgentManager policy), WorkspaceAuthMiddleware, AgentController, Setup-McpKeycloak.ps1, setup-mcp-keycloak.sh, McpServer.Director (AuthCommands, OidcAuthService) |
 | TR-MCP-AGENT-001–003 | ✅ Complete | AgentDefinitionEntity, AgentWorkspaceEntity, AgentEventLogEntity, McpDbContext, AgentDefaults, AgentService, AgentController, Program.cs (startup seeding), WorkspaceAppFactory (primary-only controller exposure) |
 | TR-MCP-CQRS-001–005 | ✅ Complete | McpServer.Cqrs (Dispatcher, CallContext, CorrelationId, Result, IPipelineBehavior, ILoggerProvider) |
