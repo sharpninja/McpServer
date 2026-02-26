@@ -7,13 +7,16 @@ namespace McpServer.Support.Mcp.Middleware;
 
 /// <summary>
 /// Pipeline middleware that enforces per-workspace auth tokens on all <c>/mcp/*</c> routes.
-/// Two token tiers are supported:
-/// <list type="bullet">
-///   <item><description><strong>Full-access</strong> — the per-workspace token from the marker
-///     file. Grants unrestricted access to all endpoints.</description></item>
-///   <item><description><strong>Default (anonymous)</strong> — the token returned by
+/// Three authentication tiers are evaluated in order:
+/// <list type="number">
+///   <item><description><strong>JWT Bearer</strong> — a valid OIDC token bypasses all API-key
+///     restrictions, granting full access.</description></item>
+///   <item><description><strong>Full-access API key</strong> — the per-workspace token from the
+///     marker file. Grants unrestricted access to all endpoints.</description></item>
+///   <item><description><strong>Default (anonymous) API key</strong> — the token returned by
 ///     <c>GET /api-key</c>. Grants read-only access to all endpoints <strong>except</strong>
-///     TODO routes (<c>/mcp/todo*</c>) which are read-write.</description></item>
+///     TODO routes (<c>/mcp/todo*</c>) which are read-write. This restriction applies
+///     <strong>only</strong> when no valid JWT is also present.</description></item>
 /// </list>
 /// Non-<c>/mcp/</c> routes (health, swagger, MCP transport, <c>/api-key</c>) pass through unprotected.
 /// </summary>
@@ -104,7 +107,8 @@ public sealed class WorkspaceAuthMiddleware
             return;
         }
 
-        // Default (anonymous) token — read-only except for TODO routes.
+        // Default (anonymous) token — read-only except for TODO routes,
+        // but only when the user is NOT also JWT-authenticated.
         if (tokenService.ValidateDefaultToken(workspacePath, provided))
         {
             context.Items[IsDefaultKeyItem] = true;
@@ -118,13 +122,22 @@ public sealed class WorkspaceAuthMiddleware
                 return;
             }
 
-            // Write operation on a non-todo route with a default key → forbidden.
+            // Write operation on a non-todo route — allow if the request also carries a valid JWT.
+            if (await HasAuthenticatedJwtAsync(context).ConfigureAwait(false))
+            {
+                context.Items[IsDefaultKeyItem] = false;
+                await _next(context).ConfigureAwait(false);
+                return;
+            }
+
+            // No JWT — enforce default-key restriction.
             context.Response.StatusCode = StatusCodes.Status403Forbidden;
             context.Response.ContentType = "application/json";
             var forbiddenBody = new
             {
                 error = "Default API key grants read-only access to non-todo endpoints. " +
-                        "Use the full workspace API key from the AGENTS-README-FIRST.yaml marker file for write operations."
+                        "Use the full workspace API key from the AGENTS-README-FIRST.yaml marker file for write operations, " +
+                        "or authenticate with a valid JWT Bearer token."
             };
             await context.Response.WriteAsync(
                 JsonSerializer.Serialize(forbiddenBody, s_json),
@@ -156,15 +169,27 @@ public sealed class WorkspaceAuthMiddleware
         if (context.User.Identity?.IsAuthenticated == true)
             return true;
 
+        // Also check non-primary identities (e.g. when multiple auth schemes populate the principal).
+        if (context.User.Identities.Any(i => i.IsAuthenticated))
+            return true;
+
         var authorization = context.Request.Headers.Authorization.ToString();
         if (!authorization.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
             return false;
 
-        var result = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme).ConfigureAwait(false);
-        if (!result.Succeeded || result.Principal?.Identity?.IsAuthenticated != true)
-            return false;
+        try
+        {
+            var result = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme).ConfigureAwait(false);
+            if (!result.Succeeded || result.Principal?.Identity?.IsAuthenticated != true)
+                return false;
 
-        context.User = result.Principal;
-        return true;
+            context.User = result.Principal;
+            return true;
+        }
+        catch (InvalidOperationException)
+        {
+            // JWT Bearer scheme not registered (OIDC disabled) — fall through to API-key auth.
+            return false;
+        }
     }
 }

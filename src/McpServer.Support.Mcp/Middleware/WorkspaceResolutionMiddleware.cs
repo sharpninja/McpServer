@@ -58,7 +58,7 @@ public sealed class WorkspaceResolutionMiddleware
                 return;
             }
 
-            PopulateContext(workspaceContext, ws, isDefault: false);
+            PopulateContext(workspaceContext, ws, isDefault: false, context);
             await _next(context).ConfigureAwait(false);
             return;
         }
@@ -75,7 +75,7 @@ public sealed class WorkspaceResolutionMiddleware
                 var ws = await workspaceService.GetAsync(resolvedPath, context.RequestAborted).ConfigureAwait(false);
                 if (ws is not null)
                 {
-                    PopulateContext(workspaceContext, ws, isDefault);
+                    PopulateContext(workspaceContext, ws, isDefault, context);
                     await _next(context).ConfigureAwait(false);
                     return;
                 }
@@ -89,7 +89,7 @@ public sealed class WorkspaceResolutionMiddleware
             var ws = await workspaceService.GetAsync(defaultPath, context.RequestAborted).ConfigureAwait(false);
             if (ws is not null)
             {
-                PopulateContext(workspaceContext, ws, isDefault: false);
+                PopulateContext(workspaceContext, ws, isDefault: false, context);
                 await _next(context).ConfigureAwait(false);
                 return;
             }
@@ -100,19 +100,22 @@ public sealed class WorkspaceResolutionMiddleware
         var primary = list.Items.FirstOrDefault(w => w.IsPrimary) ?? list.Items.FirstOrDefault();
         if (primary is not null)
         {
-            PopulateContext(workspaceContext, primary, isDefault: false);
+            PopulateContext(workspaceContext, primary, isDefault: false, context);
         }
 
         await _next(context).ConfigureAwait(false);
     }
 
-    private static void PopulateContext(WorkspaceContext ctx, WorkspaceDto ws, bool isDefault)
+    private static void PopulateContext(WorkspaceContext ctx, WorkspaceDto ws, bool isDefault, HttpContext httpContext)
     {
         ctx.WorkspacePath = ws.WorkspacePath;
         ctx.WorkspaceName = ws.Name;
         ctx.DataDirectory = ws.DataDirectory;
         ctx.TodoFilePath = ws.TodoPath;
-        ctx.IsDefaultKey = isDefault;
+
+        // A JWT-authenticated user is never treated as a "default key" user, even when the
+        // workspace was resolved via the anonymous API key.
+        ctx.IsDefaultKey = isDefault && httpContext.User.Identity?.IsAuthenticated != true;
 
         // Derive session and external docs paths from workspace path
         ctx.SessionsPath = Path.Combine(ws.WorkspacePath, "docs", "sessions");
