@@ -61,6 +61,9 @@ public abstract class McpClientBase
         _http = http ?? throw new ArgumentNullException(nameof(http));
         if (options is null) throw new ArgumentNullException(nameof(options));
 
+        if (_http.DefaultRequestHeaders.UserAgent.Count == 0)
+            _http.DefaultRequestHeaders.UserAgent.ParseAdd("McpServer");
+
         _scheme = options.BaseUrl.Scheme;
         _host = options.BaseUrl.Host;
         Port = options.BaseUrl.Port;
