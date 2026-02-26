@@ -1166,6 +1166,7 @@ mvp-app:
     - Include session log updates, context source changes, file modifications, and other relevant mutations within a workspace
   - id: MT-001
     title: Eliminate Multi-Instance Architecture - Single-Port Multi-Tenant
+    note: 'Phase 1-3,5-7 DONE. 32/44 todos complete. 7 commits on develop. 58 multi-tenant tests + 84 client tests pass. Remaining: Phase 2 EF migration, Phase 4 remove multi-instance (WorkspaceAppFactory, ProcessManager), integration tests, stdio-contract.'
     done: false
     description:
     - Consolidate from N separate WebApplication instances into single-port multi-tenant model.

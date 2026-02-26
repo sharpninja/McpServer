@@ -316,41 +316,21 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
-// Tunnel strategy pattern — follows ITodoService provider-switch convention.
-var tunnelProvider = (builder.Configuration
+// Tunnel registry — always registered, providers populated at startup based on config.
+builder.Services.Configure<TunnelOptions>(
+    builder.Configuration.GetSection(TunnelOptions.SectionName));
+builder.Services.AddSingleton<TunnelRegistry>();
+
+var activeTunnelProvider = (builder.Configuration
     .GetSection(TunnelOptions.SectionName)
     .Get<TunnelOptions>()?.Provider ?? "")
     .Trim().ToUpperInvariant();
-
-if (!string.IsNullOrEmpty(tunnelProvider))
-{
-    builder.Services.Configure<TunnelOptions>(
-        builder.Configuration.GetSection(TunnelOptions.SectionName));
-
-    if (tunnelProvider is "NGROK" or "CLOUDFLARE")
-    {
-        builder.Services.AddSingleton<ITunnelProvider>(sp => tunnelProvider switch
-        {
-            "NGROK" => ActivatorUtilities.CreateInstance<NgrokTunnelProvider>(sp),
-            "CLOUDFLARE" => ActivatorUtilities.CreateInstance<CloudflareTunnelProvider>(sp),
-            _ => throw new InvalidOperationException($"Unknown tunnel provider: {tunnelProvider}"),
-        });
-    }
-    else
-    {
-        Console.WriteLine($"[McpServer] Tunnel provider '{tunnelProvider}' is not enabled in this build. Tunnel startup disabled.");
-        tunnelProvider = string.Empty;
-    }
-}
 
 if (!builder.Environment.IsEnvironment("Test"))
 {
     builder.Services.AddHostedService<SessionLogFileWatcher>();
     builder.Services.AddHostedService<VectorIndexStartupService>();
     builder.Services.AddHostedService(sp => (WorkspaceProcessManager)sp.GetRequiredService<IWorkspaceProcessManager>());
-
-    if (!string.IsNullOrEmpty(tunnelProvider))
-        builder.Services.AddHostedService(sp => sp.GetRequiredService<ITunnelProvider>());
 }
 
 var mvcBuilder = builder.Services.AddControllers();
@@ -478,6 +458,40 @@ if (!app.Environment.IsEnvironment("Test"))
                 defaultTokenExisted);
         }
     }
+}
+
+// Populate tunnel registry with all known providers; start the active one.
+{
+    var registry = app.Services.GetRequiredService<TunnelRegistry>();
+    var tunnelOpts = app.Services.GetRequiredService<IOptions<TunnelOptions>>().Value;
+
+    if (!app.Environment.IsEnvironment("Test"))
+    {
+        try
+        {
+            var ngrok = ActivatorUtilities.CreateInstance<NgrokTunnelProvider>(app.Services);
+            registry.Register(ngrok, enabled: activeTunnelProvider == "NGROK");
+        }
+        catch (Exception ex) { app.Logger.LogDebug(ex, "ngrok provider not available"); }
+
+        try
+        {
+            var cloudflare = ActivatorUtilities.CreateInstance<CloudflareTunnelProvider>(app.Services);
+            registry.Register(cloudflare, enabled: activeTunnelProvider == "CLOUDFLARE");
+        }
+        catch (Exception ex) { app.Logger.LogDebug(ex, "cloudflare provider not available"); }
+
+        try
+        {
+            var frp = ActivatorUtilities.CreateInstance<FrpTunnelProvider>(app.Services);
+            registry.Register(frp, enabled: activeTunnelProvider == "FRP");
+        }
+        catch (Exception ex) { app.Logger.LogDebug(ex, "frp provider not available"); }
+
+        _ = registry.StartEnabledAsync(CancellationToken.None);
+    }
+
+    app.Lifetime.ApplicationStopping.Register(() => registry.StopAllAsync().GetAwaiter().GetResult());
 }
 
 // TR-PLANNED-013: Structured interaction logging for all requests; optional async submission to LoggingServiceUrl.

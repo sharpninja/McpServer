@@ -4,103 +4,101 @@ using Microsoft.AspNetCore.Mvc;
 namespace McpServer.Support.Mcp.Controllers;
 
 /// <summary>
-/// Tunnel lifecycle endpoints: start, stop, restart, and status.
-/// Only available when a tunnel provider is registered.
+/// Tunnel lifecycle endpoints: list strategies, enable/disable, start, stop, restart, and status.
+/// Uses <see cref="TunnelRegistry"/> to manage multiple tunnel providers.
 /// </summary>
 [ApiController]
 [Route("mcp/tunnel")]
 public sealed class TunnelController : ControllerBase
 {
-    private readonly ITunnelProvider? _tunnelProvider;
+    private readonly TunnelRegistry _registry;
 
     /// <summary>Initializes a new instance of the <see cref="TunnelController"/> class.</summary>
-    /// <param name="tunnelProvider">Optional tunnel provider (null when no provider is configured).</param>
-    public TunnelController(ITunnelProvider? tunnelProvider = null)
+    /// <param name="registry">Tunnel registry managing all providers.</param>
+    public TunnelController(TunnelRegistry registry)
     {
-        _tunnelProvider = tunnelProvider;
+        _registry = registry;
     }
 
-    /// <summary>Get the current tunnel status.</summary>
+    /// <summary>List all registered tunnel providers with their current state.</summary>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Tunnel status including running state, public URL, and any error.</returns>
-    [HttpGet("status")]
-    public async Task<ActionResult<object>> GetStatusAsync(CancellationToken ct)
+    /// <returns>Array of tunnel provider info objects.</returns>
+    [HttpGet("list")]
+    public async Task<ActionResult<IReadOnlyList<TunnelInfo>>> ListAsync(CancellationToken ct)
     {
-        if (_tunnelProvider is null)
-            return Ok(new { provider = (string?)null, isRunning = false, error = "No tunnel provider configured." });
-
-        var status = await _tunnelProvider.GetStatusAsync(ct).ConfigureAwait(false);
-        return Ok(new
-        {
-            provider = _tunnelProvider.ProviderName,
-            status.IsRunning,
-            status.PublicUrl,
-            status.Error,
-        });
+        var list = await _registry.ListAsync(ct).ConfigureAwait(false);
+        return Ok(list);
     }
 
-    /// <summary>Start the tunnel. No-op if already running.</summary>
+    /// <summary>Get the status of a specific tunnel provider.</summary>
+    /// <param name="name">Provider name (e.g. <c>ngrok</c>, <c>cloudflare</c>, <c>frp</c>).</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Tunnel status after start attempt.</returns>
-    [HttpPost("start")]
-    public async Task<ActionResult<object>> StartAsync(CancellationToken ct)
+    /// <returns>Tunnel provider info or 404 if not found.</returns>
+    [HttpGet("{name}/status")]
+    public async Task<ActionResult<TunnelInfo>> GetStatusAsync(string name, CancellationToken ct)
     {
-        if (_tunnelProvider is null)
-            return BadRequest(new { error = "No tunnel provider configured." });
-
-        var pre = await _tunnelProvider.GetStatusAsync(ct).ConfigureAwait(false);
-        if (pre.IsRunning)
-            return Ok(new { provider = _tunnelProvider.ProviderName, pre.IsRunning, pre.PublicUrl, message = "Tunnel already running." });
-
-        await _tunnelProvider.StartAsync(ct).ConfigureAwait(false);
-        var post = await _tunnelProvider.GetStatusAsync(ct).ConfigureAwait(false);
-        return Ok(new
-        {
-            provider = _tunnelProvider.ProviderName,
-            post.IsRunning,
-            post.PublicUrl,
-            post.Error,
-        });
+        var info = await _registry.GetAsync(name, ct).ConfigureAwait(false);
+        return info is null ? NotFound(new { error = $"Tunnel provider '{name}' not found." }) : Ok(info);
     }
 
-    /// <summary>Stop the tunnel. No-op if not running.</summary>
+    /// <summary>Enable a tunnel provider (does not start it).</summary>
+    /// <param name="name">Provider name.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Tunnel status after stop attempt.</returns>
-    [HttpPost("stop")]
-    public async Task<ActionResult<object>> StopAsync(CancellationToken ct)
+    /// <returns>Updated tunnel info.</returns>
+    [HttpPost("{name}/enable")]
+    public async Task<ActionResult<TunnelInfo>> EnableAsync(string name, CancellationToken ct)
     {
-        if (_tunnelProvider is null)
-            return BadRequest(new { error = "No tunnel provider configured." });
+        if (!_registry.Enable(name))
+            return NotFound(new { error = $"Tunnel provider '{name}' not found." });
 
-        await _tunnelProvider.StopAsync(ct).ConfigureAwait(false);
-        var status = await _tunnelProvider.GetStatusAsync(ct).ConfigureAwait(false);
-        return Ok(new
-        {
-            provider = _tunnelProvider.ProviderName,
-            status.IsRunning,
-            status.PublicUrl,
-            status.Error,
-        });
+        var info = await _registry.GetAsync(name, ct).ConfigureAwait(false);
+        return Ok(info);
     }
 
-    /// <summary>Restart the tunnel (stop then start).</summary>
+    /// <summary>Disable a tunnel provider. Stops it if running.</summary>
+    /// <param name="name">Provider name.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>Tunnel status after restart.</returns>
-    [HttpPost("restart")]
-    public async Task<ActionResult<object>> RestartAsync(CancellationToken ct)
+    /// <returns>Updated tunnel info.</returns>
+    [HttpPost("{name}/disable")]
+    public async Task<ActionResult<TunnelInfo>> DisableAsync(string name, CancellationToken ct)
     {
-        if (_tunnelProvider is null)
-            return BadRequest(new { error = "No tunnel provider configured." });
+        if (!await _registry.DisableAsync(name, ct).ConfigureAwait(false))
+            return NotFound(new { error = $"Tunnel provider '{name}' not found." });
 
-        await _tunnelProvider.StopAsync(ct).ConfigureAwait(false);
-        await _tunnelProvider.StartAsync(ct).ConfigureAwait(false);
-        var status = await _tunnelProvider.GetStatusAsync(ct).ConfigureAwait(false);
-        return Ok(new
-        {
-            provider = _tunnelProvider.ProviderName,
-            status.IsRunning,
-            status.PublicUrl,
-            status.Error,
-        });
+        var info = await _registry.GetAsync(name, ct).ConfigureAwait(false);
+        return Ok(info);
+    }
+
+    /// <summary>Start a tunnel provider. Must be enabled first.</summary>
+    /// <param name="name">Provider name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Tunnel info after start attempt.</returns>
+    [HttpPost("{name}/start")]
+    public async Task<ActionResult<TunnelInfo>> StartAsync(string name, CancellationToken ct)
+    {
+        var info = await _registry.StartAsync(name, ct).ConfigureAwait(false);
+        return info is null ? NotFound(new { error = $"Tunnel provider '{name}' not found." }) : Ok(info);
+    }
+
+    /// <summary>Stop a tunnel provider.</summary>
+    /// <param name="name">Provider name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Tunnel info after stop.</returns>
+    [HttpPost("{name}/stop")]
+    public async Task<ActionResult<TunnelInfo>> StopAsync(string name, CancellationToken ct)
+    {
+        var info = await _registry.StopAsync(name, ct).ConfigureAwait(false);
+        return info is null ? NotFound(new { error = $"Tunnel provider '{name}' not found." }) : Ok(info);
+    }
+
+    /// <summary>Restart a tunnel provider (stop then start). Must be enabled.</summary>
+    /// <param name="name">Provider name.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Tunnel info after restart.</returns>
+    [HttpPost("{name}/restart")]
+    public async Task<ActionResult<TunnelInfo>> RestartAsync(string name, CancellationToken ct)
+    {
+        var info = await _registry.RestartAsync(name, ct).ConfigureAwait(false);
+        return info is null ? NotFound(new { error = $"Tunnel provider '{name}' not found." }) : Ok(info);
     }
 }

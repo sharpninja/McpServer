@@ -26,6 +26,7 @@ internal sealed class MainScreen : Window
     private readonly WorkspaceListViewModel _workspaceListVm;
     private readonly WorkspaceDetailViewModel _workspaceDetailVm;
     private readonly WorkspacePolicyViewModel _workspacePolicyVm;
+    private readonly TunnelListViewModel _tunnelListVm;
     private Label _authLabel = null!;
     private TabView _tabView = null!;
     private Label _workspaceContextLabel = null!;
@@ -44,6 +45,7 @@ internal sealed class MainScreen : Window
         RunSyncViewModel runSyncVm,
         TodoListViewModel todoVm,
         TodoDetailViewModel todoDetailVm,
+        TunnelListViewModel tunnelListVm,
         IAuthorizationPolicyService authorizationPolicy,
         IRoleContext roleContext,
         DirectorMcpContext directorContext)
@@ -58,6 +60,7 @@ internal sealed class MainScreen : Window
         _workspaceListVm = workspaceListVm;
         _workspaceDetailVm = workspaceDetailVm;
         _workspacePolicyVm = workspacePolicyVm;
+        _tunnelListVm = tunnelListVm;
         _authorizationPolicy = authorizationPolicy;
         _roleContext = roleContext;
         _directorContext = directorContext;
@@ -330,6 +333,11 @@ internal sealed class MainScreen : Window
         {
             _ = Task.Run(sync.CheckStatusAsync);
         }
+
+        if (view is TunnelScreen tunnel)
+        {
+            _ = Task.Run(tunnel.LoadAsync);
+        }
     }
 
     private void RebuildTabs()
@@ -392,6 +400,12 @@ internal sealed class MainScreen : Window
         if (_directorContext.HasControlConnection && _authorizationPolicy.CanViewArea(McpArea.Policy))
         {
             _tabView.AddTab(new Tab { DisplayText = "Policy", View = new WorkspacePolicyScreen(_workspacePolicyVm) }, andSelect: selectFirst);
+            selectFirst = false;
+        }
+
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Tunnels))
+        {
+            _tabView.AddTab(new Tab { DisplayText = "Tunnels", View = new TunnelScreen(_tunnelListVm) }, andSelect: selectFirst);
             selectFirst = false;
         }
 

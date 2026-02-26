@@ -6,7 +6,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Controllers;
 
-/// <summary>Unit tests for <see cref="McpServer.Support.Mcp.Controllers.TunnelController"/>.</summary>
+/// <summary>Integration tests for <see cref="McpServer.Support.Mcp.Controllers.TunnelController"/> with <see cref="TunnelRegistry"/>.</summary>
 public sealed class TunnelControllerTests
 {
     /// <summary>Adds auth header from WorkspaceTokenService to the test client.</summary>
@@ -17,7 +17,6 @@ public sealed class TunnelControllerTests
         var config = scope.ServiceProvider.GetRequiredService<Microsoft.Extensions.Configuration.IConfiguration>();
         var env = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Hosting.IWebHostEnvironment>();
 
-        // Resolve workspace path the same way Program.cs does at startup.
         var repoRoot = config["Mcp:RepoRoot"] ?? ".";
         var workspacePath = Path.IsPathRooted(repoRoot)
             ? Path.GetFullPath(repoRoot)
@@ -30,53 +29,62 @@ public sealed class TunnelControllerTests
     }
 
     [Fact]
-    public async Task Status_NoProvider_ReturnsNotConfigured()
+    public async Task List_EmptyRegistry_ReturnsEmptyArray()
     {
         await using var factory = new CustomWebApplicationFactory();
         using var client = factory.CreateClient();
         AddAuthHeader(client, factory.Services);
 
-        var response = await client.GetAsync("/mcp/tunnel/status");
+        var response = await client.GetAsync("/mcp/tunnel/list");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var body = await response.Content.ReadAsStringAsync();
-        Assert.Contains("No tunnel provider configured", body, StringComparison.Ordinal);
+        Assert.Equal("[]", body);
     }
 
     [Fact]
-    public async Task Start_NoProvider_Returns400()
+    public async Task Status_UnknownProvider_Returns404()
     {
         await using var factory = new CustomWebApplicationFactory();
         using var client = factory.CreateClient();
         AddAuthHeader(client, factory.Services);
 
-        var response = await client.PostAsync("/mcp/tunnel/start", null);
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var response = await client.GetAsync("/mcp/tunnel/unknown/status");
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Enable_UnknownProvider_Returns404()
+    {
+        await using var factory = new CustomWebApplicationFactory();
+        using var client = factory.CreateClient();
+        AddAuthHeader(client, factory.Services);
+
+        var response = await client.PostAsync("/mcp/tunnel/unknown/enable", null);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task List_WithMockProvider_ReturnsProviderInfo()
+    {
+        var mockProvider = Substitute.For<ITunnelProvider>();
+        mockProvider.ProviderName.Returns("ngrok");
+        mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
+            .Returns(new TunnelStatus(false, Error: "Not started."));
+
+        await using var factory = new CustomWebApplicationFactory();
+        var registry = factory.Services.GetRequiredService<TunnelRegistry>();
+        registry.Register(mockProvider, enabled: true);
+
+        using var client = factory.CreateClient();
+        AddAuthHeader(client, factory.Services);
+
+        var response = await client.GetAsync("/mcp/tunnel/list");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var body = await response.Content.ReadAsStringAsync();
-        Assert.Contains("No tunnel provider configured", body, StringComparison.Ordinal);
-    }
-
-    [Fact]
-    public async Task Stop_NoProvider_Returns400()
-    {
-        await using var factory = new CustomWebApplicationFactory();
-        using var client = factory.CreateClient();
-        AddAuthHeader(client, factory.Services);
-
-        var response = await client.PostAsync("/mcp/tunnel/stop", null);
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-    }
-
-    [Fact]
-    public async Task Restart_NoProvider_Returns400()
-    {
-        await using var factory = new CustomWebApplicationFactory();
-        using var client = factory.CreateClient();
-        AddAuthHeader(client, factory.Services);
-
-        var response = await client.PostAsync("/mcp/tunnel/restart", null);
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Contains("ngrok", body, StringComparison.Ordinal);
+        Assert.Contains("\"enabled\":true", body, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -87,85 +95,115 @@ public sealed class TunnelControllerTests
         mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
             .Returns(new TunnelStatus(true, "https://abc.ngrok.io"));
 
-        await using var factory = new CustomWebApplicationFactory(services =>
-        {
-            services.AddSingleton(mockProvider);
-        });
+        await using var factory = new CustomWebApplicationFactory();
+        var registry = factory.Services.GetRequiredService<TunnelRegistry>();
+        registry.Register(mockProvider, enabled: true);
+
         using var client = factory.CreateClient();
         AddAuthHeader(client, factory.Services);
 
-        var response = await client.GetAsync("/mcp/tunnel/status");
+        var response = await client.GetAsync("/mcp/tunnel/ngrok/status");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var body = await response.Content.ReadAsStringAsync();
-        Assert.Contains("ngrok", body, StringComparison.Ordinal);
         Assert.Contains("abc.ngrok.io", body, StringComparison.Ordinal);
     }
 
     [Fact]
-    public async Task Start_AlreadyRunning_ReturnsAlreadyRunning()
-    {
-        var mockProvider = Substitute.For<ITunnelProvider>();
-        mockProvider.ProviderName.Returns("ngrok");
-        mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
-            .Returns(new TunnelStatus(true, "https://abc.ngrok.io"));
-
-        await using var factory = new CustomWebApplicationFactory(services =>
-        {
-            services.AddSingleton(mockProvider);
-        });
-        using var client = factory.CreateClient();
-        AddAuthHeader(client, factory.Services);
-
-        var response = await client.PostAsync("/mcp/tunnel/start", null);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-        var body = await response.Content.ReadAsStringAsync();
-        Assert.Contains("already running", body, StringComparison.OrdinalIgnoreCase);
-        await mockProvider.DidNotReceive().StartAsync(Arg.Any<CancellationToken>());
-    }
-
-    [Fact]
-    public async Task Start_NotRunning_CallsStartAndReturnsStatus()
+    public async Task Enable_Disable_TogglesState()
     {
         var mockProvider = Substitute.For<ITunnelProvider>();
         mockProvider.ProviderName.Returns("cloudflare");
         mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
-            .Returns(
-                new TunnelStatus(false, Error: "Not started."),
-                new TunnelStatus(true, "https://my.trycloudflare.com"));
+            .Returns(new TunnelStatus(false));
 
-        await using var factory = new CustomWebApplicationFactory(services =>
-        {
-            services.AddSingleton(mockProvider);
-        });
+        await using var factory = new CustomWebApplicationFactory();
+        var registry = factory.Services.GetRequiredService<TunnelRegistry>();
+        registry.Register(mockProvider, enabled: false);
+
         using var client = factory.CreateClient();
         AddAuthHeader(client, factory.Services);
 
-        var response = await client.PostAsync("/mcp/tunnel/start", null);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        // Verify initially disabled
+        var statusResp = await client.GetAsync("/mcp/tunnel/cloudflare/status");
+        var statusBody = await statusResp.Content.ReadAsStringAsync();
+        Assert.Contains("\"enabled\":false", statusBody, StringComparison.Ordinal);
 
-        await mockProvider.Received(1).StartAsync(Arg.Any<CancellationToken>());
-        var body = await response.Content.ReadAsStringAsync();
-        Assert.Contains("trycloudflare", body, StringComparison.Ordinal);
+        // Enable
+        var enableResp = await client.PostAsync("/mcp/tunnel/cloudflare/enable", null);
+        Assert.Equal(HttpStatusCode.OK, enableResp.StatusCode);
+        var enableBody = await enableResp.Content.ReadAsStringAsync();
+        Assert.Contains("\"enabled\":true", enableBody, StringComparison.Ordinal);
+
+        // Disable
+        var disableResp = await client.PostAsync("/mcp/tunnel/cloudflare/disable", null);
+        Assert.Equal(HttpStatusCode.OK, disableResp.StatusCode);
+        var disableBody = await disableResp.Content.ReadAsStringAsync();
+        Assert.Contains("\"enabled\":false", disableBody, StringComparison.Ordinal);
     }
 
     [Fact]
-    public async Task Stop_Running_CallsStopAndReturnsStatus()
+    public async Task Start_Disabled_ReturnsError()
     {
         var mockProvider = Substitute.For<ITunnelProvider>();
         mockProvider.ProviderName.Returns("ngrok");
         mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
             .Returns(new TunnelStatus(false));
 
-        await using var factory = new CustomWebApplicationFactory(services =>
-        {
-            services.AddSingleton(mockProvider);
-        });
+        await using var factory = new CustomWebApplicationFactory();
+        var registry = factory.Services.GetRequiredService<TunnelRegistry>();
+        registry.Register(mockProvider, enabled: false);
+
         using var client = factory.CreateClient();
         AddAuthHeader(client, factory.Services);
 
-        var response = await client.PostAsync("/mcp/tunnel/stop", null);
+        var response = await client.PostAsync("/mcp/tunnel/ngrok/start", null);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var body = await response.Content.ReadAsStringAsync();
+        Assert.Contains("disabled", body, StringComparison.OrdinalIgnoreCase);
+        await mockProvider.DidNotReceive().StartAsync(Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Start_Enabled_CallsStartOnProvider()
+    {
+        var mockProvider = Substitute.For<ITunnelProvider>();
+        mockProvider.ProviderName.Returns("ngrok");
+        mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
+            .Returns(
+                new TunnelStatus(false),
+                new TunnelStatus(true, "https://new.ngrok.io"));
+
+        await using var factory = new CustomWebApplicationFactory();
+        var registry = factory.Services.GetRequiredService<TunnelRegistry>();
+        registry.Register(mockProvider, enabled: true);
+
+        using var client = factory.CreateClient();
+        AddAuthHeader(client, factory.Services);
+
+        var response = await client.PostAsync("/mcp/tunnel/ngrok/start", null);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        await mockProvider.Received(1).StartAsync(Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task Stop_CallsStopOnProvider()
+    {
+        var mockProvider = Substitute.For<ITunnelProvider>();
+        mockProvider.ProviderName.Returns("ngrok");
+        mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
+            .Returns(new TunnelStatus(false));
+
+        await using var factory = new CustomWebApplicationFactory();
+        var registry = factory.Services.GetRequiredService<TunnelRegistry>();
+        registry.Register(mockProvider, enabled: true);
+
+        using var client = factory.CreateClient();
+        AddAuthHeader(client, factory.Services);
+
+        var response = await client.PostAsync("/mcp/tunnel/ngrok/stop", null);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         await mockProvider.Received(1).StopAsync(Arg.Any<CancellationToken>());
@@ -177,16 +215,16 @@ public sealed class TunnelControllerTests
         var mockProvider = Substitute.For<ITunnelProvider>();
         mockProvider.ProviderName.Returns("ngrok");
         mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
-            .Returns(new TunnelStatus(true, "https://new.ngrok.io"));
+            .Returns(new TunnelStatus(true, "https://restarted.ngrok.io"));
 
-        await using var factory = new CustomWebApplicationFactory(services =>
-        {
-            services.AddSingleton(mockProvider);
-        });
+        await using var factory = new CustomWebApplicationFactory();
+        var registry = factory.Services.GetRequiredService<TunnelRegistry>();
+        registry.Register(mockProvider, enabled: true);
+
         using var client = factory.CreateClient();
         AddAuthHeader(client, factory.Services);
 
-        var response = await client.PostAsync("/mcp/tunnel/restart", null);
+        var response = await client.PostAsync("/mcp/tunnel/ngrok/restart", null);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         Received.InOrder(() =>

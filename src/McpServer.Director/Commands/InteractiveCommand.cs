@@ -67,6 +67,7 @@ internal static class InteractiveCommand
             services.AddSingleton<IAuthConfigApiClient>(_ => new AuthConfigApiClientAdapter(directorContext));
             services.AddSingleton<IDiagnosticApiClient>(_ => new DiagnosticApiClientAdapter(directorContext));
             services.AddSingleton<ITodoApiClient>(_ => new TodoApiClientAdapter(directorContext));
+        services.AddSingleton<ITunnelApiClient>(_ => new TunnelApiClientAdapter(directorContext));
             using var sp = services.BuildServiceProvider();
 
             // Resolve ViewModels
@@ -80,6 +81,7 @@ internal static class InteractiveCommand
             var runSyncVm = sp.GetRequiredService<RunSyncViewModel>();
             var todoVm = sp.GetRequiredService<TodoListViewModel>();
             var todoDetailVm = sp.GetRequiredService<TodoDetailViewModel>();
+            var tunnelListVm = sp.GetRequiredService<TunnelListViewModel>();
             var roleContext = sp.GetRequiredService<IRoleContext>();
             var authorizationPolicy = sp.GetRequiredService<IAuthorizationPolicyService>();
 
@@ -99,6 +101,7 @@ internal static class InteractiveCommand
                     runSyncVm,
                     todoVm,
                     todoDetailVm,
+                    tunnelListVm,
                     authorizationPolicy,
                     roleContext,
                     directorContext);

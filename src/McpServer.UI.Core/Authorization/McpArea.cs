@@ -49,4 +49,7 @@ public enum McpArea
 
     /// <summary>Workspace auth configuration inspection.</summary>
     AuthConfig,
+
+    /// <summary>Tunnel provider lifecycle management.</summary>
+    Tunnels,
 }

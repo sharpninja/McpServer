@@ -85,12 +85,13 @@ public sealed class McpServerClient
         GitHub = new GitHubClient(http, options);
         Repo = new RepoClient(http, options);
         Sync = new SyncClient(http, options);
+        Tunnel = new TunnelClient(http, options);
         Workspace = new WorkspaceClient(http, options);
         Tools = new ToolRegistryClient(http, options);
         AuthConfig = new AuthConfigClient(http, options);
         Diagnostic = new DiagnosticClient(http, options);
 
-        _allClients = new McpClientBase[] { Todo, Context, SessionLog, GitHub, Repo, Sync, Workspace, Tools, AuthConfig, Diagnostic };
+        _allClients = new McpClientBase[] { Todo, Context, SessionLog, GitHub, Repo, Sync, Tunnel, Workspace, Tools, AuthConfig, Diagnostic };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
         _workspacePath = options.WorkspacePath ?? string.Empty;
@@ -268,6 +269,12 @@ public sealed class McpServerClient
     /// <para>See <see cref="SyncClient"/> for the full method list.</para>
     /// </summary>
     public SyncClient Sync { get; }
+
+    /// <summary>
+    /// Tunnel management endpoints — list strategies, enable/disable, start, stop, restart.
+    /// <para>See <see cref="TunnelClient"/> for the full method list.</para>
+    /// </summary>
+    public TunnelClient Tunnel { get; }
 
     /// <summary>
     /// Workspace management endpoints — list, create, update, delete, start, and stop workspaces.

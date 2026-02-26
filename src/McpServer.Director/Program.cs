@@ -86,6 +86,7 @@ internal static class Program
         services.AddSingleton<IAuthConfigApiClient>(_ => new AuthConfigApiClientAdapter(directorContext));
         services.AddSingleton<IDiagnosticApiClient>(_ => new DiagnosticApiClientAdapter(directorContext));
         services.AddSingleton<ITodoApiClient>(_ => new TodoApiClientAdapter(directorContext));
+        services.AddSingleton<ITunnelApiClient>(_ => new TunnelApiClientAdapter(directorContext));
 
         return services.BuildServiceProvider();
     }
