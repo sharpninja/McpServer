@@ -193,43 +193,345 @@ public static class MarkerFileService
         You MUST log every request you process to the session log endpoint. This is critical for audit, continuity, and team visibility.
         **Reminder: Your first action on each user request is POST {{baseUrl}}/mcp/sessionlog — before any code changes.**
 
-        For each task or conversation turn:
-        1. POST {{baseUrl}}/mcp/sessionlog with a JSON body containing:
-           - sourceType: YOUR agent identifier (e.g. "Cline", "Cursor", "Copilot")
-           - sessionId: a stable identifier for your current session that is prefixed with YOUR agent identifier.  Do not reuse sessions from different agent sessions.
-           - title: a brief summary of the session's purpose.  Keep up-to-date.
-           - model: the AI model you are using (e.g. "claude-sonnet-4-20250514").  Create a new session log if changing models.
-           - started: ISO 8601 timestamp when the session began
-           - lastUpdated: ISO 8601 timestamp of the latest activity
-           - status: "in_progress" or "completed"
-           - entries: array of request entries, each with:
-             - [REQUIRED] requestId: unique ID for this request within the session
-             - [REQUIRED] timestamp: ISO 8601 timestamp
-             - [REQUIRED] queryText: the full user query or task description
-             - [REQUIRED] queryTitle: short summary of the query
-             - [REQUIRED] response: your response text (verbatim, not summarized)
-             - [REQUIRED] interpretation: your understanding of what was asked
-             - [REQUIRED] status: "completed" or "in_progress"
-             - [REQUIRED] actions: array of { order, description, type, status, filePath } for each action taken
-             - [REQUIRED] model: the model used for this specific entry
-             - [RECOMMENDED] tokenCount: approximate token count if available
-             - [REQUIRED] tags: relevant tags (e.g. ["refactor", "bugfix", "feature"]) Update as needed.
-             - [REQUIRED] contextList: files or resources referenced
-             - [REQUIRED] designDecisions: array of design decisions made during this interaction
-             - [REQUIRED] requirementsDiscovered: array of requirement IDs created (e.g. ["TR-MCP-CQRS-001"])
-             - [REQUIRED] filesModified: array of file paths changed during this interaction
-             - [RECOMMENDED] blockers: array of issues preventing progress (if any)
-             - [REQUIRED] Processing Dialog/Decisions.  See #2 below
+        Do NOT invent your own tracking methodology. Use these endpoints exactly as documented below.
 
-        2. For all requests, stream your reasoning in real-time via:
-           POST {{baseUrl}}/mcp/sessionlog/{agent}/{sessionId}/{requestId}/dialog
-           Send an array of dialog items, each with:
-           - timestamp: ISO 8601
-           - role: "model", "tool", "system", or "user"
-           - content: the reasoning text, tool output, or observation
-           - category: "reasoning", "tool_call", "tool_result", "observation", or "decision"
+        ### Session Log Endpoints
 
-        3. At the end of each session or task, POST the final session log with status "completed" and all entries filled in.
+        | Method | Endpoint | Description |
+        |--------|----------|-------------|
+        | POST | `/mcp/sessionlog` | Create or update a session log |
+        | GET | `/mcp/sessionlog?limit=N&offset=M` | Query recent session logs |
+        | POST | `/mcp/sessionlog/{agent}/{sessionId}/{requestId}/dialog` | Stream reasoning dialog |
+
+        ### Session Log Object Model
+
+        **SessionLog** (POST body to `/mcp/sessionlog`):
+        ```json
+        {
+          "sourceType": "string — YOUR agent name (e.g. 'Copilot', 'Cline', 'Cursor')",
+          "sessionId": "string — stable session ID prefixed with agent name (e.g. 'Copilot-abc123')",
+          "title": "string — brief session summary, keep updated",
+          "model": "string — AI model name (e.g. 'claude-sonnet-4-20250514')",
+          "started": "string — ISO 8601 timestamp when session began",
+          "lastUpdated": "string — ISO 8601 timestamp of latest activity",
+          "status": "string — 'in_progress' or 'completed'",
+          "entries": [ "array of RequestEntry objects (see below)" ]
+        }
+        ```
+
+        **RequestEntry** (each element in `entries`):
+        ```json
+        {
+          "requestId": "string — unique ID for this request within the session",
+          "timestamp": "string — ISO 8601",
+          "queryText": "string — full user query or task description",
+          "queryTitle": "string — short summary of the query",
+          "response": "string — your response text",
+          "interpretation": "string — your understanding of what was asked",
+          "status": "string — 'completed' or 'in_progress'",
+          "model": "string — model used for this entry",
+          "tokenCount": "integer|null — approximate token count",
+          "tags": ["string array — e.g. 'refactor', 'bugfix', 'feature'"],
+          "contextList": ["string array — files or resources referenced"],
+          "designDecisions": ["string array — decisions made during this interaction"],
+          "requirementsDiscovered": ["string array — requirement IDs e.g. 'TR-MCP-001'"],
+          "filesModified": ["string array — file paths changed"],
+          "blockers": ["string array — issues preventing progress"],
+          "actions": [ "array of Action objects (see below)" ],
+          "processingDialog": [ "array of DialogItem objects (see below)" ]
+        }
+        ```
+
+        **Action** (each element in `actions`):
+        ```json
+        {
+          "order": "integer — sequence number",
+          "description": "string — what was done",
+          "type": "string — action type (see Recognized Action Types below)",
+          "status": "string — 'completed', 'in_progress', or 'failed'",
+          "filePath": "string — affected file path, or empty string"
+        }
+        ```
+
+        **DialogItem** (each element in `processingDialog`, or POST body to dialog endpoint):
+        ```json
+        {
+          "timestamp": "string — ISO 8601",
+          "role": "string — 'model', 'tool', 'system', or 'user'",
+          "content": "string — reasoning text, tool output, or observation",
+          "category": "string — 'reasoning', 'tool_call', 'tool_result', 'observation', or 'decision'"
+        }
+        ```
+
+        ### Session Logging PowerShell Examples
+
+        **Create a new session log (do this FIRST on every session):**
+        ```powershell
+        $headers = @{ "X-Api-Key" = "{{apiKey}}"; "Content-Type" = "application/json" }
+        $body = @'
+        {
+          "sourceType": "Copilot",
+          "sessionId": "Copilot-my-session-001",
+          "title": "Implementing feature X",
+          "model": "claude-sonnet-4-20250514",
+          "started": "2026-01-15T10:00:00Z",
+          "lastUpdated": "2026-01-15T10:00:00Z",
+          "status": "in_progress",
+          "entries": [
+            {
+              "requestId": "req-001",
+              "timestamp": "2026-01-15T10:00:00Z",
+              "queryText": "Add authentication to the API",
+              "queryTitle": "Add API auth",
+              "response": "Working on it...",
+              "interpretation": "User wants JWT auth added to REST endpoints",
+              "status": "in_progress",
+              "model": "claude-sonnet-4-20250514",
+              "tags": ["feature", "auth"],
+              "contextList": ["src/Controllers/AuthController.cs"],
+              "designDecisions": ["Using JWT bearer tokens for stateless auth"],
+              "requirementsDiscovered": [],
+              "filesModified": [],
+              "blockers": [],
+              "actions": []
+            }
+          ]
+        }
+        '@
+        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/sessionlog" -Method Post -Headers $headers -Body $body
+        ```
+
+        **Update session log after completing work (do this AFTER each task):**
+        ```powershell
+        $headers = @{ "X-Api-Key" = "{{apiKey}}"; "Content-Type" = "application/json" }
+        $body = @'
+        {
+          "sourceType": "Copilot",
+          "sessionId": "Copilot-my-session-001",
+          "title": "Implementing feature X",
+          "model": "claude-sonnet-4-20250514",
+          "started": "2026-01-15T10:00:00Z",
+          "lastUpdated": "2026-01-15T10:30:00Z",
+          "status": "in_progress",
+          "entries": [
+            {
+              "requestId": "req-001",
+              "timestamp": "2026-01-15T10:00:00Z",
+              "queryText": "Add authentication to the API",
+              "queryTitle": "Add API auth",
+              "response": "Added JWT auth to AuthController. Committed as abc123.",
+              "interpretation": "User wants JWT auth added to REST endpoints",
+              "status": "completed",
+              "model": "claude-sonnet-4-20250514",
+              "tags": ["feature", "auth"],
+              "contextList": ["src/Controllers/AuthController.cs", "src/Services/TokenService.cs"],
+              "designDecisions": ["Using JWT bearer tokens for stateless auth"],
+              "requirementsDiscovered": ["TR-MCP-AUTH-001"],
+              "filesModified": ["src/Controllers/AuthController.cs", "src/Services/TokenService.cs"],
+              "blockers": [],
+              "actions": [
+                { "order": 1, "description": "Created TokenService with JWT signing", "type": "create", "status": "completed", "filePath": "src/Services/TokenService.cs" },
+                { "order": 2, "description": "Added [Authorize] to API controllers", "type": "edit", "status": "completed", "filePath": "src/Controllers/AuthController.cs" },
+                { "order": 3, "description": "Commit abc123: Add JWT authentication", "type": "commit", "status": "completed", "filePath": "" }
+              ]
+            }
+          ]
+        }
+        '@
+        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/sessionlog" -Method Post -Headers $headers -Body $body
+        ```
+
+        **Query recent session logs (do this at session start for continuity):**
+        ```powershell
+        $headers = @{ "X-Api-Key" = "{{apiKey}}" }
+        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/sessionlog?limit=5" -Headers $headers
+        ```
+
+        **Post reasoning dialog:**
+        ```powershell
+        $headers = @{ "X-Api-Key" = "{{apiKey}}"; "Content-Type" = "application/json" }
+        $body = @'
+        [
+          {
+            "timestamp": "2026-01-15T10:05:00Z",
+            "role": "model",
+            "content": "The user needs JWT auth. I will create a TokenService first.",
+            "category": "reasoning"
+          },
+          {
+            "timestamp": "2026-01-15T10:06:00Z",
+            "role": "model",
+            "content": "Decided to use RS256 over HS256 for key rotation support.",
+            "category": "decision"
+          }
+        ]
+        '@
+        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/sessionlog/Copilot/Copilot-my-session-001/req-001/dialog" -Method Post -Headers $headers -Body $body
+        ```
+
+        ## Todo Management (REQUIRED)
+        Use the Todo API to track, create, and update project tasks. Do NOT use your own internal tracking
+        as a substitute — the MCP server todo list is the single source of truth for project work items.
+        At session start, query existing todos to understand current project state.
+
+        ### Todo Endpoints
+
+        | Method | Endpoint | Description |
+        |--------|----------|-------------|
+        | GET | `/mcp/todo` | List all todos |
+        | POST | `/mcp/todo` | Create a new todo |
+        | GET | `/mcp/todo/{id}` | Get a specific todo |
+        | PUT | `/mcp/todo/{id}` | Update a todo |
+        | DELETE | `/mcp/todo/{id}` | Delete a todo |
+        | GET | `/mcp/todo/{id}/prompt/implement` | Get implementation prompt for a todo |
+        | GET | `/mcp/todo/{id}/prompt/plan` | Get planning prompt for a todo |
+        | GET | `/mcp/todo/{id}/prompt/status` | Get status prompt for a todo |
+        | POST | `/mcp/todo/{id}/requirements` | Add requirements to a todo |
+
+        ### Todo Object Model
+
+        **TodoFlatItem** (returned by GET, included in responses):
+        ```json
+        {
+          "id": "string — unique kebab-case ID (e.g. 'add-jwt-auth')",
+          "title": "string — brief title",
+          "section": "string — grouping category (e.g. 'Backend', 'Frontend', 'Infrastructure')",
+          "priority": "string — 'critical', 'high', 'medium', or 'low'",
+          "done": "boolean — whether the task is complete",
+          "estimate": "string|null — effort estimate (e.g. '2h', '1d')",
+          "note": "string|null — additional context",
+          "description": ["string array — detailed description lines"],
+          "technicalDetails": ["string array — technical implementation notes"],
+          "implementationTasks": [
+            { "task": "string — subtask description", "done": "boolean" }
+          ],
+          "completedDate": "string|null — ISO 8601 when completed",
+          "doneSummary": "string|null — summary of what was done",
+          "remaining": "string|null — what work remains",
+          "priorityNote": "string|null — why this priority",
+          "reference": "string|null — link or reference",
+          "dependsOn": ["string array — IDs of prerequisite todos"],
+          "functionalRequirements": ["string array — FR IDs"],
+          "technicalRequirements": ["string array — TR IDs"]
+        }
+        ```
+
+        **TodoCreateRequest** (POST body to `/mcp/todo`):
+        ```json
+        {
+          "id": "string — REQUIRED unique kebab-case ID",
+          "title": "string — REQUIRED brief title",
+          "section": "string — REQUIRED grouping category",
+          "priority": "string — REQUIRED: 'critical', 'high', 'medium', or 'low'",
+          "estimate": "string|null",
+          "description": ["string array|null"],
+          "technicalDetails": ["string array|null"],
+          "implementationTasks": [{ "task": "string", "done": false }],
+          "note": "string|null",
+          "remaining": "string|null",
+          "dependsOn": ["string array|null — IDs of prerequisite todos"],
+          "functionalRequirements": ["string array|null"],
+          "technicalRequirements": ["string array|null"]
+        }
+        ```
+
+        **TodoUpdateRequest** (PUT body to `/mcp/todo/{id}`):
+        ```json
+        {
+          "title": "string|null — only include fields you want to change",
+          "priority": "string|null",
+          "section": "string|null",
+          "done": "boolean|null — set true to mark complete",
+          "estimate": "string|null",
+          "description": ["string array|null"],
+          "technicalDetails": ["string array|null"],
+          "implementationTasks": [{ "task": "string", "done": true }],
+          "note": "string|null",
+          "completedDate": "string|null",
+          "doneSummary": "string|null",
+          "remaining": "string|null",
+          "dependsOn": ["string array|null"],
+          "functionalRequirements": ["string array|null"],
+          "technicalRequirements": ["string array|null"]
+        }
+        ```
+
+        ### Todo PowerShell Examples
+
+        **List all todos (do this at session start):**
+        ```powershell
+        $headers = @{ "X-Api-Key" = "{{apiKey}}" }
+        $result = Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo" -Headers $headers
+        $result.items | Format-Table id, title, priority, done, section
+        ```
+
+        **Create a new todo:**
+        ```powershell
+        $headers = @{ "X-Api-Key" = "{{apiKey}}"; "Content-Type" = "application/json" }
+        $body = @'
+        {
+          "id": "add-jwt-auth",
+          "title": "Add JWT authentication to REST API",
+          "section": "Backend",
+          "priority": "high",
+          "estimate": "4h",
+          "description": [
+            "Implement JWT bearer token authentication for all /api/* endpoints.",
+            "Include token refresh and revocation support."
+          ],
+          "technicalDetails": [
+            "Use RS256 signing with key rotation.",
+            "Store refresh tokens in database with expiry."
+          ],
+          "implementationTasks": [
+            { "task": "Create TokenService with JWT signing", "done": false },
+            { "task": "Add auth middleware to pipeline", "done": false },
+            { "task": "Add [Authorize] to controllers", "done": false },
+            { "task": "Write unit tests", "done": false }
+          ],
+          "dependsOn": ["setup-database"],
+          "functionalRequirements": ["FR-MCP-AUTH-001"],
+          "technicalRequirements": ["TR-MCP-AUTH-001"]
+        }
+        '@
+        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo" -Method Post -Headers $headers -Body $body
+        ```
+
+        **Update a todo (mark subtasks done, update remaining work):**
+        ```powershell
+        $headers = @{ "X-Api-Key" = "{{apiKey}}"; "Content-Type" = "application/json" }
+        $body = @'
+        {
+          "implementationTasks": [
+            { "task": "Create TokenService with JWT signing", "done": true },
+            { "task": "Add auth middleware to pipeline", "done": true },
+            { "task": "Add [Authorize] to controllers", "done": false },
+            { "task": "Write unit tests", "done": false }
+          ],
+          "remaining": "Need to add [Authorize] attributes and write tests"
+        }
+        '@
+        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo/add-jwt-auth" -Method Put -Headers $headers -Body $body
+        ```
+
+        **Mark a todo as complete:**
+        ```powershell
+        $headers = @{ "X-Api-Key" = "{{apiKey}}"; "Content-Type" = "application/json" }
+        $body = @'
+        {
+          "done": true,
+          "completedDate": "2026-01-15T12:00:00Z",
+          "doneSummary": "JWT auth implemented with RS256, refresh tokens, and full test coverage."
+        }
+        '@
+        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo/add-jwt-auth" -Method Put -Headers $headers -Body $body
+        ```
+
+        **Get implementation prompt for a todo (to understand what needs doing):**
+        ```powershell
+        $headers = @{ "X-Api-Key" = "{{apiKey}}" }
+        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo/add-jwt-auth/prompt/implement" -Headers $headers
+        ```
 
         ## Available Capabilities
         - Context Search: POST {{baseUrl}}/mcp/context/search — semantic + full-text hybrid search over indexed project documents
