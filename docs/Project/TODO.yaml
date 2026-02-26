@@ -5,13 +5,13 @@ requirements-management:
     estimate: 4-6 days
     note: 'High priority — builds on FR-MCP-023 (AI requirements analysis). This TODO intentionally uses a non-FR ID because FR-MCP-026 was reassigned to Keycloak OIDC authentication in the requirements docs. Provides a first-class Requirements Management subsystem: in-memory model loaded from the four canonical docs, full CRUD for FR/TR/TEST entries, and REST + MCP tool endpoints to regenerate any or all four documents in their exact established Markdown format (individually or as a ZIP).'
     done: true
-    completed: '2026-02-26'
-    done-summary: Implemented requirements document parsing/rendering service, REST CRUD + generate endpoints, STDIO MCP tools, DI/config wiring, and focused service/controller tests.
+    completed: 2026-02-26
     description:
     - 'Create a RequirementsManagementController with REST endpoints for CRUD on Functional Requirements (FR), Technical Requirements (TR), and Testing Requirements (TEST) entries, backed by the four canonical files: Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, and TR-per-FR-Mapping.md.'
     - Add a document generation endpoint GET /mcp/requirements/generate?doc={functional|technical| testing|mapping|all} that renders requirements documents as Markdown (text/markdown) matching the exact established structure, or as a ZIP archive when doc=all.
     - 'Expose five MCP tools: requirements_generate, requirements_list, requirements_create, requirements_update, requirements_delete — enabling AI agents to manage requirements and generate up-to-date documentation directly from a conversation.'
     - On startup, parse all four document files into a strongly-typed in-memory model and keep it synchronized with file writes on every mutating operation.
+    done-summary: Implemented requirements document parsing/rendering service, REST CRUD + generate endpoints, STDIO MCP tools, DI/config wiring, and focused service/controller tests.
     technical-details:
     - 'New project component: RequirementsManagementController at src/McpServer.Support.Mcp/Controllers/RequirementsController.cs'
     - 'RequirementsDocumentService — parses Functional-Requirements.md (## FR-{ID}\n\n{title}\n\n{body}), Technical-Requirements.md (## TR-{ID}\n\n**{title}** — {body}), Testing-Requirements.md (bullet list: - TEST-{ID}: {condition} format), and TR-per-FR-Mapping.md (Markdown table). Exposes IRequirementsDocumentService with typed CRUD and generation methods.'
@@ -240,11 +240,7 @@ staging-and-infrastructure:
   - id: frp-railway-tunnel
     title: FRP tunnel provider hardening and Railway-hosted frps deployment assets (superseded for Railway multi-port exposure)
     estimate: 2-4 days
-    note: 'FRP tunnel provider work was completed, but the Railway deployment strategy is no longer the preferred path for this environment because Railway does not support the required multi-public-port exposure model (7147-7160). Keep FRP support for non-Railway scenarios; use ngrok/cloudflare strategies for this environment.'
-    superseded: true
-    superseded-by:
-    - ngrok-tunnel-strategy
-    - cloudflare-tunnel-strategy
+    note: FRP tunnel provider work was completed, but the Railway deployment strategy is no longer the preferred path for this environment because Railway does not support the required multi-public-port exposure model (7147-7160). Keep FRP support for non-Railway scenarios; use ngrok/cloudflare strategies for this environment.
     done: true
     description:
     - Use the existing FRP provider (frpc) in McpServer.Support.Mcp and make it production-ready for Railway-hosted frps.
@@ -252,10 +248,10 @@ staging-and-infrastructure:
     - Provide Railway deployment assets and a runbook so a local MCP instance can connect to a self-hosted frps service.
     technical-details:
     - 'Existing integration points: src/McpServer.Support.Mcp/Services/FrpTunnelProvider.cs, src/McpServer.Support.Mcp/Options/TunnelOptions.cs, src/McpServer.Support.Mcp/Program.cs.'
-    - 'MVP should preserve backward compatibility with current Mcp:Tunnel:Frp settings (ServerAddress, ServerPort, Token, Subdomain, CustomDomain).'
+    - MVP should preserve backward compatibility with current Mcp:Tunnel:Frp settings (ServerAddress, ServerPort, Token, Subdomain, CustomDomain).
     - 'Add Railway-focused options only as needed (for example: PublicBaseUrl, StartupTimeoutSeconds, ProxyType).'
-    - 'Prefer HTTP proxy mode first because current FrpTunnelProvider.GenerateConfig() already emits FRP HTTP config.'
-    - 'Secrets (FRP token) must not be logged or written to committed files.'
+    - Prefer HTTP proxy mode first because current FrpTunnelProvider.GenerateConfig() already emits FRP HTTP config.
+    - Secrets (FRP token) must not be logged or written to committed files.
     implementation-tasks:
     - task: '[Commit 1 - MVP] Extend FrpTunnelOptions in src/McpServer.Support.Mcp/Options/TunnelOptions.cs with Railway-ready fields (PublicBaseUrl, StartupTimeoutSeconds, ProxyType defaulting to http) while keeping existing options backward compatible'
       done: true
@@ -290,43 +286,48 @@ staging-and-infrastructure:
   - id: ngrok-tunnel-strategy
     title: ngrok tunnel strategy for MCP remote/mobile access in single-public-port environments
     estimate: 1-2 days
-    note: 'ngrok provider already exists (NgrokTunnelProvider). This strategy is the preferred managed-tunnel path when the hosting/network environment does not support exposing multiple public ports.'
-    done: false
+    note: ngrok provider already exists (NgrokTunnelProvider). This strategy is the preferred managed-tunnel path when the hosting/network environment does not support exposing multiple public ports.
+    done: true
     description:
     - Use the existing ngrok provider in McpServer.Support.Mcp for the primary MCP host endpoint on port 7147.
-    - Define how workspace endpoints are accessed without exposing 7148-7160 directly (proxy routes via MCP host, or primary-only exposure).
-    - Add operational guidance and validation steps for local/dev and deployed environments.
+    - 'Strategy decision: single-public-port ngrok deployments expose the primary MCP host only (7147). Child workspace listeners (7148+) remain private unless a separate gateway/proxy feature is implemented.'
+    - Add operational guidance and validation steps for local/dev and deployed environments, including OIDC proxy endpoints for mobile device-flow auth on the same public hostname.
     technical-details:
     - 'Existing integration points: src/McpServer.Support.Mcp/Services/NgrokTunnelProvider.cs, src/McpServer.Support.Mcp/Options/TunnelOptions.cs, src/McpServer.Support.Mcp/Program.cs.'
-    - 'Confirm ngrok auth token handling and avoid logging secrets.'
-    - 'Document whether workspace APIs are proxied through the primary host or intentionally not exposed publicly.'
+    - Current provider starts `ngrok http {Mcp:Tunnel:Port}` and discovers the public URL via the local ngrok API (`http://127.0.0.1:4040/api/tunnels`) using `curl`.
+    - 'ngrok auth token handling is already secret-safe in provider startup: token is passed via `NGROK_AUTHTOKEN` environment variable instead of CLI args.'
+    - No generic primary-host reverse proxy exists today for child workspace ports; strategy is primary-only public exposure. Use FRP TCP mode for multi-port/child-workspace public access.
+    - 'Remote/mobile auth can stay on the same public ngrok hostname via existing OIDC proxy routes: `/auth/config`, `/auth/device`, `/auth/token`, and `/auth/ui/*`.'
     implementation-tasks:
-    - task: '[Commit 1 - Strategy] Decide and document single-public-endpoint access model for workspaces when Provider=ngrok (proxy routes vs primary-only)'
-      done: false
-    - task: '[Commit 2 - Provider Hardening] Verify NgrokTunnelProvider startup/error/status behavior and add any missing structured logs or timeout handling'
-      done: false
-    - task: '[Commit 3 - Docs] Add/Update ngrok runbook with appsettings.json examples, token setup, and /health validation checklist'
-      done: false
+    - task: '[Commit 1 - Strategy] Decide and document single-public-endpoint access model for workspaces when Provider=ngrok (chosen: primary-only exposure; child workspace ports remain private)'
+      done: true
+    - task: '[Commit 2 - Provider Hardening] Verify NgrokTunnelProvider startup/error/status behavior and add missing timeout/exit diagnostics (including clearer handling when ngrok local API/curl is unavailable)'
+      done: true
+    - task: '[Commit 3 - Docs] Add docs/Operations/Tunnel-Ngrok.md runbook with appsettings.json examples, token setup, single-port workspace access model, OIDC proxy notes, and public /health validation checklist'
+      done: true
   - id: cloudflare-tunnel-strategy
     title: Cloudflare Tunnel strategy for MCP remote/mobile access in single-public-port environments
     estimate: 1-3 days
-    note: 'Cloudflare tunnel provider already exists (CloudflareTunnelProvider). This strategy is the preferred no-open-port path when Cloudflare DNS/Tunnel is available.'
-    done: false
+    note: Cloudflare tunnel provider already exists (CloudflareTunnelProvider). This strategy is the preferred no-open-port path when Cloudflare DNS/Tunnel is available.
+    done: true
     description:
     - Use the existing Cloudflare tunnel provider in McpServer.Support.Mcp to expose the primary MCP host endpoint on port 7147.
-    - Define workspace access model under a single public hostname (proxy routes via MCP host, or primary-only exposure).
-    - Produce deployment guidance for cloudflared named tunnel setup, credentials, and hostname routing.
+    - 'Strategy decision: single-host Cloudflare Tunnel deployments expose the primary MCP host only (7147). Child workspace listeners (7148+) remain private unless a separate gateway/proxy feature is implemented.'
+    - Produce deployment guidance for cloudflared quick tunnels and named tunnels, including credentials/runtime prerequisites and hostname routing responsibilities.
     technical-details:
     - 'Existing integration points: src/McpServer.Support.Mcp/Services/CloudflareTunnelProvider.cs, src/McpServer.Support.Mcp/Options/TunnelOptions.cs, src/McpServer.Support.Mcp/Program.cs.'
-    - 'Document prerequisites: Cloudflare account, zone, named tunnel, and credentials file placement.'
-    - 'Validate public URL/status reporting and error surfacing when cloudflared is missing or tunnel auth is invalid.'
+    - Current provider supports quick tunnel mode (`cloudflared tunnel --url http://localhost:{port}`) and named tunnel mode (`cloudflared tunnel run {TunnelName}`); it captures quick-tunnel URLs by parsing stderr.
+    - Named tunnel hostnames/DNS routes are managed outside the provider (Cloudflare dashboard or cloudflared commands). `Hostname` is only passed in quick-tunnel mode in the current implementation.
+    - 'Document prerequisites: Cloudflare account/zone, cloudflared login + named tunnel creation (for stable hostnames), and credentials/config availability for the runtime account.'
+    - Validate public URL/status reporting and error surfacing when cloudflared is missing or tunnel auth is invalid; named tunnel status may be healthy even when no URL is captured from stderr.
+    - 'Remote/mobile auth can stay on the same public Cloudflare hostname via existing OIDC proxy routes: `/auth/config`, `/auth/device`, `/auth/token`, and `/auth/ui/*`.'
     implementation-tasks:
-    - task: '[Commit 1 - Strategy] Decide and document single-host workspace access model for Provider=cloudflare (proxy routes vs primary-only)'
-      done: false
-    - task: '[Commit 2 - Provider Hardening] Verify CloudflareTunnelProvider startup/error/status behavior and add missing diagnostics/timeouts if needed'
-      done: false
-    - task: '[Commit 3 - Docs] Add/Update Cloudflare tunnel runbook with tunnel creation, hostname mapping, appsettings.json example, and /health validation checklist'
-      done: false
+    - task: '[Commit 1 - Strategy] Decide and document single-host workspace access model for Provider=cloudflare (chosen: primary-only exposure; child workspace ports remain private)'
+      done: true
+    - task: '[Commit 2 - Provider Hardening] Verify CloudflareTunnelProvider startup/error/status behavior and add startup timeout/process-exit diagnostics plus improved URL/status reporting for named tunnels'
+      done: true
+    - task: '[Commit 3 - Docs] Add docs/Operations/Tunnel-Cloudflare.md runbook with quick/named tunnel setup, hostname routing, appsettings.json examples, single-port workspace access model, and public /health validation checklist'
+      done: true
 saas:
   medium-priority:
   - id: saas-01-executive-summary
@@ -1163,6 +1164,14 @@ mvp-app:
     description:
     - Implement a notification/event system that alerts connected agents when workspace context changes
     - Include session log updates, context source changes, file modifications, and other relevant mutations within a workspace
+  - id: MT-001
+    title: Eliminate Multi-Instance Architecture - Single-Port Multi-Tenant
+    done: false
+    description:
+    - Consolidate from N separate WebApplication instances into single-port multi-tenant model.
+    - 'Resolution: X-Workspace-Path header > API key reverse lookup > default workspace.'
+    - Shared SQLite DB with WorkspaceId discriminator.
+    - '7 phases: Resolution Layer, DB Consolidation, Service Multi-Tenancy, Remove Multi-Instance, Director Updates, Testing, Documentation.'
 mvp-mcp:
   high-priority:
   - id: MVP-MCP-002
@@ -1227,15 +1236,15 @@ infrastructure:
   high-priority:
   - id: android-oidc-proxy-routes
     title: OIDC proxy routes on MCP server for Android device flow
+    note: Android can reach MCP server on :7147 but may not be able to reach Keycloak directly on :7080. Add MCP-hosted OIDC proxy routes so Android device-flow traffic stays on :7147.
     done: false
-    note: 'Android can reach MCP server on :7147 but may not be able to reach Keycloak directly on :7080. Add MCP-hosted OIDC proxy routes so Android device-flow traffic stays on :7147.'
     description:
     - 'Expose MCP-server OIDC proxy routes for Android app use: GET /auth/config, POST /auth/device, and POST /auth/token.'
-    - 'Android app should call MCP on :7147 only; MCP server forwards OIDC requests to Keycloak (:7080) and returns equivalent responses.'
-    - 'This fixes the current failure mode where /auth/config succeeds on :7147 but token polling later fails when Android tries to connect directly to Keycloak on :7080.'
+    - Android app should call MCP on :7147 only; MCP server forwards OIDC requests to Keycloak (:7080) and returns equivalent responses.
+    - This fixes the current failure mode where /auth/config succeeds on :7147 but token polling later fails when Android tries to connect directly to Keycloak on :7080.
     technical-details:
-    - 'MCP proxy routes are server endpoints, not Android-side rewrites. The server must forward device authorization and token polling requests to Keycloak using configured OIDC authority/realm endpoints.'
-    - 'Preserve OIDC response payloads/status codes so Android device-flow polling logic continues to work unchanged except for base URL (:7147 instead of :7080).'
+    - MCP proxy routes are server endpoints, not Android-side rewrites. The server must forward device authorization and token polling requests to Keycloak using configured OIDC authority/realm endpoints.
+    - Preserve OIDC response payloads/status codes so Android device-flow polling logic continues to work unchanged except for base URL (:7147 instead of :7080).
     - 'Route examples: GET /auth/config (local metadata), POST /auth/device (proxy to Keycloak device authorization endpoint), POST /auth/token (proxy to Keycloak token endpoint).'
   - id: web-ui
     title: McpServer Management Web UI

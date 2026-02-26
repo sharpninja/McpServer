@@ -56,15 +56,15 @@ The server shall support containerized deployment and packaged distribution.
 
 ## FR-MCP-009 Workspace Management
 
-The server shall support dynamic workspace registration, configuration, and lifecycle management — replacing static instance configuration — with per-workspace port assignment, directory scaffolding, and Base64URL-encoded path keys.
+The server shall support dynamic workspace registration, configuration, and lifecycle management — replacing static instance configuration — with directory scaffolding and Base64URL-encoded path keys. All workspaces are served on a single port via `X-Workspace-Path` header resolution (see FR-MCP-043).
 
 **Covered by:** `WorkspaceController`, `WorkspaceService`, `WorkspaceConfigEntry`
 
 ## FR-MCP-011 Workspace Process Orchestration
 
-The server shall spawn and manage in-process Kestrel hosts per workspace, with full process lifecycle tracking (start, stop, status), graceful shutdown of all workspace hosts on exit, and automatic startup of all registered workspaces when the service starts.
+The server shall manage workspace lifecycle via marker files: write `AGENTS-README-FIRST.yaml` on start, remove on stop. All workspaces share the single host process and port. Automatic startup of all registered workspaces writes markers on service start.
 
-**Covered by:** `WorkspaceProcessManager`, `IWorkspaceProcessManager`
+**Covered by:** `WorkspaceProcessManager`, `IWorkspaceProcessManager`, `MarkerFileService`
 
 ## FR-MCP-012 Tool Registry
 
@@ -74,9 +74,9 @@ Agents shall be able to discover tools by keyword search across global and works
 
 ## FR-MCP-013 Per-Workspace Auth Tokens
 
-The server shall protect all `/mcp/*` API endpoints with per-workspace cryptographic tokens that rotate on each service restart. Tokens are discoverable via the `AGENTS-README-FIRST.yaml` marker file, checked via the `X-Api-Key` header or `api_key` query parameter, and enforced by `WorkspaceAuthMiddleware` at the pipeline level.
+The server shall protect all `/mcp/*` API endpoints with per-workspace cryptographic tokens that rotate on each service restart. Tokens are discoverable via the `AGENTS-README-FIRST.yaml` marker file, checked via the `X-Api-Key` header or `api_key` query parameter, and enforced by `WorkspaceAuthMiddleware`. Workspace resolution uses a three-tier chain: `X-Workspace-Path` header → API key reverse lookup → default workspace (see FR-MCP-043).
 
-**Covered by:** `WorkspaceAuthMiddleware`, `WorkspaceTokenService`, `MarkerFileService`
+**Covered by:** `WorkspaceAuthMiddleware`, `WorkspaceTokenService`, `WorkspaceResolutionMiddleware`, `MarkerFileService`
 
 ## FR-MCP-014 Pairing Web UI
 
@@ -104,25 +104,23 @@ The server shall run as a Windows service with automatic startup, failure recove
 
 ## FR-MCP-018 Marker File Agent Discovery
 
-When a workspace Kestrel host starts, the server shall write an `AGENTS-README-FIRST.yaml` marker file to the workspace root containing the port, all endpoint paths, a machine-readable prompt, and PID, so that agents can discover and connect to the correct server instance without manual configuration. The marker shall be removed when the host stops.
+When a workspace is started, the server shall write an `AGENTS-README-FIRST.yaml` marker file to the workspace root containing the shared host port, all endpoint paths, a machine-readable prompt, and PID. All markers point to the same port; workspace identity is resolved via the `X-Workspace-Path` header. The marker shall be removed when the workspace is stopped.
 
 **Covered by:** `MarkerFileService`, `WorkspaceProcessManager`
 
 ## FR-MCP-019 Workspace Host Controller Isolation
 
-Workspace-scoped Kestrel hosts shall expose all API controllers except `WorkspaceController`. Workspace lifecycle management (create, delete, start, stop) shall be available only on the primary host.
-
-**Covered by:** `ExcludeControllerFeatureProvider`, `WorkspaceAppFactory`
+*Obsolete — replaced by single-app multi-tenant model (FR-MCP-043).* All controllers are available on the single host. Workspace lifecycle management endpoints on `WorkspaceController` remain admin-only.
 
 ## FR-MCP-020 Workspace Auto-Start on Service Startup
 
-On service startup, the server shall automatically start Kestrel host instances for all workspaces already registered in the database, restoring availability without manual intervention.
+On service startup, the server shall automatically write marker files for all workspaces already registered, restoring agent discoverability without manual intervention. All workspaces share the single host port.
 
 **Covered by:** `WorkspaceProcessManager` (IHostedService.StartAsync)
 
 ## FR-MCP-021 Workspace Auto-Init and Auto-Start on Creation
 
-When a new workspace is registered, the server shall automatically initialize the workspace directory scaffold (todo.yaml, mcp.db, docs structure) and start its Kestrel host in the same request, so the workspace is immediately operational.
+When a new workspace is registered, the server shall automatically initialize the workspace directory scaffold (todo.yaml, mcp.db, docs structure) and write its marker file, so the workspace is immediately operational on the shared port.
 
 **Covered by:** `WorkspaceController` POST, `WorkspaceService.InitAsync`
 
@@ -257,3 +255,15 @@ The server shall expose a requirements document generation endpoint that renders
 The STDIO MCP tool surface shall expose requirements management tools for listing, generating, creating, updating, and deleting requirements entries so AI agents can manage requirements directly from a conversation.
 
 **Covered by:** `FwhMcpTools` (`requirements_list`, `requirements_generate`, `requirements_create`, `requirements_update`, `requirements_delete`), `RequirementsDocumentService`
+
+## FR-MCP-043 Multi-Tenant Workspace Resolution
+
+The server shall resolve the target workspace per-request using a three-tier resolution chain: (1) `X-Workspace-Path` header (highest priority), (2) API key reverse lookup via `WorkspaceTokenService`, (3) default/primary workspace from configuration. All workspaces are served on a single port; no per-workspace Kestrel hosts are spawned.
+
+**Covered by:** `WorkspaceResolutionMiddleware`, `WorkspaceContext`, `WorkspaceTokenService`, `WorkspaceAuthMiddleware`
+
+## FR-MCP-044 Shared Database Multi-Tenancy
+
+All workspace data shall be stored in a single shared SQLite database with a `WorkspaceId` discriminator column on every entity table. EF Core global query filters ensure workspace data isolation per-request. Cross-workspace queries use `IgnoreQueryFilters()` for admin operations.
+
+**Covered by:** `McpDbContext`, `WorkspaceContext`, all entity types (`WorkspaceId` property)

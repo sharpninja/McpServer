@@ -193,6 +193,12 @@ Passwords are stored as SHA-256 hashes and verified with constant-time compariso
 
 Configure via `Mcp:Tunnel:Provider` in `appsettings.json`.
 
+Detailed runbooks:
+
+- `docs/Operations/Tunnel-Ngrok.md`
+- `docs/Operations/Tunnel-Cloudflare.md`
+- `docs/Operations/Tunnel-FRP-Railway.md`
+
 ### How do I self-host with FRP?
 
 1. Deploy `frps` on a VPS: `docker compose -f docker-compose.frps.yml up -d`
@@ -345,3 +351,25 @@ gh auth login
 ```
 
 The server uses the local `gh` CLI authentication — no API tokens are configured separately.
+
+## Multi-Tenant Workspace Resolution
+
+### How does workspace resolution work?
+
+The server uses a three-tier resolution chain to determine which workspace a request targets:
+
+1. **`X-Workspace-Path` header** (highest priority) — Send the absolute workspace path in this header. Returns 400 if the path is not a registered workspace.
+2. **API key reverse lookup** — The `X-Api-Key` token is mapped back to its generating workspace via `WorkspaceTokenService`.
+3. **Default workspace** (lowest priority) — Falls back to the primary workspace from configuration.
+
+### Can I still use per-workspace ports?
+
+No. All workspaces are served on a single shared port. Use the `X-Workspace-Path` header to target a specific workspace. Each workspace still gets its own API key in its marker file, which can also be used for workspace resolution.
+
+### How does the Director switch workspaces?
+
+The Director TUI reuses the same base URL for all workspaces and changes only the `X-Workspace-Path` header when switching workspaces. No need to re-read marker files for workspace switching after the initial connection.
+
+### How is workspace data isolated?
+
+All workspace data is stored in a single shared SQLite database. Each entity table has a `WorkspaceId` column, and EF Core global query filters automatically scope all queries to the active workspace. Admin operations can use `IgnoreQueryFilters()` for cross-workspace queries.

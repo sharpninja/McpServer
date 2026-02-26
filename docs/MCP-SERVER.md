@@ -88,10 +88,9 @@ Each workspace entry has:
 |-------|----------|-------------|
 | `WorkspacePath` | ✅ | Absolute path to the project folder |
 | `Name` | auto | Defaults to the last path segment |
-| `WorkspacePort` | auto | Auto-assigned from 7148+ |
+| `WorkspacePort` | auto | Shared with host port |
 | `TodoPath` | auto | Defaults to `docs/todo.yaml` within `WorkspacePath` |
 | `TunnelProvider` | optional | `ngrok`, `cloudflare`, or `frp` |
-| `RunAs` | optional | User account for the child process |
 
 Create a workspace:
 
@@ -101,7 +100,23 @@ curl -X POST http://localhost:7147/mcp/workspace \
   -d '{"workspacePath": "E:\\github\\MyProject"}'
 ```
 
-The child MCP instance starts automatically and is accessible at the assigned port (e.g., `http://localhost:7148`).
+The workspace is immediately accessible on the shared host port. Target it with the `X-Workspace-Path` header:
+
+```bash
+curl http://localhost:7147/mcp/todo \
+  -H "X-Api-Key: <token>" \
+  -H "X-Workspace-Path: E:\\github\\MyProject"
+```
+
+### Workspace Resolution
+
+All workspaces share a single port. Per-request workspace identity is resolved via a three-tier chain:
+
+1. **`X-Workspace-Path` header** — highest priority. Send the absolute workspace path.
+2. **API key reverse lookup** — the `X-Api-Key` token maps back to its workspace.
+3. **Default workspace** — falls back to the primary workspace from configuration.
+
+This eliminates per-workspace ports and simplifies agent connectivity.
 
 Workspace state is written to `{ContentRootPath}/appsettings.json` by the running process.
 For the Windows service this is `C:\ProgramData\McpServer\appsettings.json`.

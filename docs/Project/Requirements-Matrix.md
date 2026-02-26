@@ -19,8 +19,8 @@
 | FR-MCP-016 | ✅ Complete | Program.cs (MapMcp), ModelContextProtocol.AspNetCore |
 | FR-MCP-017 | ✅ Complete | Program.cs (UseWindowsService), Manage-McpService.ps1 |
 | FR-MCP-018 | ✅ Complete | MarkerFileService, WorkspaceProcessManager |
-| FR-MCP-019 | ✅ Complete | ExcludeControllerFeatureProvider, WorkspaceAppFactory |
-| FR-MCP-020 | ✅ Complete | WorkspaceProcessManager (IHostedService.StartAsync) |
+| FR-MCP-019 | 🔀 Replaced | Replaced by FR-MCP-043 (single-app multi-tenant) |
+| FR-MCP-020 | ✅ Complete | WorkspaceProcessManager (marker file writes) |
 | FR-MCP-021 | ✅ Complete | WorkspaceController POST, WorkspaceService.InitAsync |
 | FR-MCP-022 | ✅ Complete | ToolRegistryOptions, Program.cs (EnsureDefaultBucketsAsync) |
 | FR-MCP-023 | ✅ Complete | RequirementsService, IRequirementsService, ICopilotClient |
@@ -33,7 +33,7 @@
 | TR-MCP-INGEST-001–002 | ✅ Complete | Ingestion pipeline |
 | TR-MCP-API-001 | ✅ Complete | REST API |
 | TR-MCP-OPS-001 | ✅ Complete | Operational scripts |
-| TR-MCP-WS-002–009 | ✅ Complete | Workspace management |
+| TR-MCP-WS-002–009 | ✅ Complete | Workspace management (TR-MCP-WS-006 obsolete) |
 | TR-MCP-TR-001–003 | ✅ Complete | Tool registry |
 | TR-MCP-SEC-001–002 | ✅ Complete | Security |
 | TR-MCP-TUN-001–003 | ✅ Complete | Tunneling |
@@ -61,6 +61,8 @@
 | FR-MCP-040 | ✅ Complete | RequirementsController, RequirementsDocumentService, IRequirementsRepository |
 | FR-MCP-041 | ✅ Complete | RequirementsController (/mcp/requirements/generate), RequirementsDocumentService, RequirementsDocumentRenderer |
 | FR-MCP-042 | ✅ Complete | FwhMcpTools (requirements_* tools), RequirementsDocumentService |
+| FR-MCP-043 | ✅ In Progress | WorkspaceResolutionMiddleware, WorkspaceContext, WorkspaceTokenService |
+| FR-MCP-044 | ✅ In Progress | McpDbContext (global query filter), all entities (WorkspaceId) |
 | TR-MCP-AUTH-001–003 | ✅ Complete | OidcAuthOptions, Program.cs (JwtBearer + AgentManager policy), WorkspaceAuthMiddleware, AgentController, Setup-McpKeycloak.ps1, setup-mcp-keycloak.sh, McpServer.Director (AuthCommands, OidcAuthService) |
 | TR-MCP-AGENT-001–003 | ✅ Complete | AgentDefinitionEntity, AgentWorkspaceEntity, AgentEventLogEntity, McpDbContext, AgentDefaults, AgentService, AgentController, Program.cs (startup seeding), WorkspaceAppFactory (primary-only controller exposure) |
 | TR-MCP-CQRS-001–005 | ✅ Complete | McpServer.Cqrs (Dispatcher, CallContext, CorrelationId, Result, IPipelineBehavior, ILoggerProvider) |
@@ -70,3 +72,6 @@
 | TR-MCP-POL-001 | 🔲 Planned | — |
 | TR-MCP-DTO-001 | ✅ Complete | UnifiedSessionLogDto |
 | TR-MCP-CTX-001 | 🔲 Planned | — |
+| TR-MCP-MT-001 | ✅ Complete | WorkspaceContext, WorkspaceResolutionMiddleware |
+| TR-MCP-MT-002 | ✅ Complete | WorkspaceResolutionMiddleware, WorkspaceTokenService |
+| TR-MCP-MT-003 | ✅ Complete | McpDbContext (global query filter), all entities (WorkspaceId) |
