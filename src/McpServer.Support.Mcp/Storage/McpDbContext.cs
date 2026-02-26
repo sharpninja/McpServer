@@ -1,3 +1,4 @@
+using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,13 +7,17 @@ namespace McpServer.Support.Mcp.Storage;
 /// <summary>
 /// TR-PLANNED-013: EF Core DbContext for MCP metadata and chunks.
 /// FR-SUPPORT-010: SQLite storage for local MCP server.
+/// TR-MCP-MT-003: Global query filter on WorkspaceId for multi-tenant data isolation.
 /// </summary>
 public sealed class McpDbContext : DbContext
 {
-    /// <summary>TR-PLANNED-013: Constructor for DI.</summary>
-    public McpDbContext(DbContextOptions<McpDbContext> options)
+    private readonly string _workspaceId;
+
+    /// <summary>TR-PLANNED-013: Constructor for DI with workspace context.</summary>
+    public McpDbContext(DbContextOptions<McpDbContext> options, WorkspaceContext? workspaceContext = null)
         : base(options)
     {
+        _workspaceId = workspaceContext?.WorkspacePath ?? string.Empty;
     }
 
     /// <summary>TR-PLANNED-013: Indexed documents.</summary>
@@ -171,5 +176,40 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => x.Timestamp);
             e.HasIndex(x => x.EventType);
         });
+
+        // TR-MCP-MT-003: Global query filters for multi-tenant workspace isolation.
+        // EF Core re-evaluates the _workspaceId field per query, allowing scoped
+        // workspace context to control which rows are visible.
+        // Filters only apply when _workspaceId is non-empty (backward-compatible).
+        modelBuilder.Entity<ContextDocumentEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<ContextChunkEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogEntryEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogActionEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogEntryTagEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogEntryContextEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogProcessingDialogEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<ToolDefinitionEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<ToolDefinitionTagEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<ToolBucketEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<AgentDefinitionEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<AgentWorkspaceEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<AgentEventLogEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+
+        // WorkspaceId indexes for all entity types
+        modelBuilder.Entity<ContextDocumentEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<ContextChunkEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<SessionLogEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<SessionLogEntryEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<SessionLogActionEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<SessionLogEntryTagEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<SessionLogEntryContextEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<SessionLogProcessingDialogEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<ToolDefinitionEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<ToolDefinitionTagEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<ToolBucketEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<AgentDefinitionEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<AgentWorkspaceEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<AgentEventLogEntity>().HasIndex(e => e.WorkspaceId);
     }
 }
