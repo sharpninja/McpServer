@@ -263,110 +263,43 @@ public static class MarkerFileService
         }
         ```
 
-        ### Session Logging PowerShell Examples
+        ### Session Logging — Use the McpSession Module
 
-        **Create a new session log (do this FIRST on every session):**
+        Helper modules are registered in the MCP Tool Registry. Search for them:
         ```powershell
-        $headers = @{ "X-Api-Key" = "{{apiKey}}"; "Content-Type" = "application/json" }
-        $body = @'
-        {
-          "sourceType": "Copilot",
-          "sessionId": "Copilot-my-session-001",
-          "title": "Implementing feature X",
-          "model": "claude-sonnet-4-20250514",
-          "started": "2026-01-15T10:00:00Z",
-          "lastUpdated": "2026-01-15T10:00:00Z",
-          "status": "in_progress",
-          "entries": [
-            {
-              "requestId": "req-001",
-              "timestamp": "2026-01-15T10:00:00Z",
-              "queryText": "Add authentication to the API",
-              "queryTitle": "Add API auth",
-              "response": "Working on it...",
-              "interpretation": "User wants JWT auth added to REST endpoints",
-              "status": "in_progress",
-              "model": "claude-sonnet-4-20250514",
-              "tags": ["feature", "auth"],
-              "contextList": ["src/Controllers/AuthController.cs"],
-              "designDecisions": ["Using JWT bearer tokens for stateless auth"],
-              "requirementsDiscovered": [],
-              "filesModified": [],
-              "blockers": [],
-              "actions": []
-            }
-          ]
-        }
-        '@
-        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/sessionlog" -Method Post -Headers $headers -Body $body
+        # Discover available modules
+        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/tools/search?keyword=session" -Headers @{ "X-Api-Key" = "{{apiKey}}" }
         ```
 
-        **Update session log after completing work (do this AFTER each task):**
+        **PowerShell (recommended):** Download `McpSession-PowerShell` from the tool registry, save as `McpSession.psm1`:
         ```powershell
-        $headers = @{ "X-Api-Key" = "{{apiKey}}"; "Content-Type" = "application/json" }
-        $body = @'
-        {
-          "sourceType": "Copilot",
-          "sessionId": "Copilot-my-session-001",
-          "title": "Implementing feature X",
-          "model": "claude-sonnet-4-20250514",
-          "started": "2026-01-15T10:00:00Z",
-          "lastUpdated": "2026-01-15T10:30:00Z",
-          "status": "in_progress",
-          "entries": [
-            {
-              "requestId": "req-001",
-              "timestamp": "2026-01-15T10:00:00Z",
-              "queryText": "Add authentication to the API",
-              "queryTitle": "Add API auth",
-              "response": "Added JWT auth to AuthController. Committed as abc123.",
-              "interpretation": "User wants JWT auth added to REST endpoints",
-              "status": "completed",
-              "model": "claude-sonnet-4-20250514",
-              "tags": ["feature", "auth"],
-              "contextList": ["src/Controllers/AuthController.cs", "src/Services/TokenService.cs"],
-              "designDecisions": ["Using JWT bearer tokens for stateless auth"],
-              "requirementsDiscovered": ["TR-MCP-AUTH-001"],
-              "filesModified": ["src/Controllers/AuthController.cs", "src/Services/TokenService.cs"],
-              "blockers": [],
-              "actions": [
-                { "order": 1, "description": "Created TokenService with JWT signing", "type": "create", "status": "completed", "filePath": "src/Services/TokenService.cs" },
-                { "order": 2, "description": "Added [Authorize] to API controllers", "type": "edit", "status": "completed", "filePath": "src/Controllers/AuthController.cs" },
-                { "order": 3, "description": "Commit abc123: Add JWT authentication", "type": "commit", "status": "completed", "filePath": "" }
-              ]
-            }
-          ]
-        }
-        '@
-        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/sessionlog" -Method Post -Headers $headers -Body $body
+        Import-Module ./McpSession.psm1
+        Initialize-McpSession                                    # reads this marker file automatically
+        $s = New-McpSessionLog -SourceType "Copilot" -Title "Implementing feature X" -Model "claude-sonnet-4"
+        $e = Add-McpSessionEntry -Session $s -QueryTitle "Add auth" -QueryText "Add JWT authentication"
+        Add-McpAction -Entry $e -Description "Created TokenService" -Type create -FilePath "src/TokenService.cs"
+        Set-McpSessionEntry -Entry $e -Session $s -Response "Done" -Status completed
+        Update-McpSessionLog -Session $s -Status completed       # final push
         ```
 
-        **Query recent session logs (do this at session start for continuity):**
+        **Bash:** Download `McpSession-Bash`, save as `mcp-session.sh` (requires `jq`):
+        ```bash
+        source ./mcp-session.sh
+        mcp_session_init
+        mcp_session_create "Copilot" "Implementing feature X" "claude-sonnet-4"
+        mcp_session_add_entry "req-001" "Add auth" "Add JWT authentication" "in_progress"
+        mcp_session_add_action "req-001" "Created TokenService" "create" "src/TokenService.cs"
+        mcp_session_update_entry "req-001" "status" "completed"
+        mcp_session_complete
+        ```
+
+        **Raw API (if modules unavailable):**
         ```powershell
-        $headers = @{ "X-Api-Key" = "{{apiKey}}" }
+        $headers = @{ "X-Api-Key" = "{{apiKey}}"; "Content-Type" = "application/json" }
+        # Query recent logs at session start
         Invoke-RestMethod -Uri "{{baseUrl}}/mcp/sessionlog?limit=5" -Headers $headers
-        ```
-
-        **Post reasoning dialog:**
-        ```powershell
-        $headers = @{ "X-Api-Key" = "{{apiKey}}"; "Content-Type" = "application/json" }
-        $body = @'
-        [
-          {
-            "timestamp": "2026-01-15T10:05:00Z",
-            "role": "model",
-            "content": "The user needs JWT auth. I will create a TokenService first.",
-            "category": "reasoning"
-          },
-          {
-            "timestamp": "2026-01-15T10:06:00Z",
-            "role": "model",
-            "content": "Decided to use RS256 over HS256 for key rotation support.",
-            "category": "decision"
-          }
-        ]
-        '@
-        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/sessionlog/Copilot/Copilot-my-session-001/req-001/dialog" -Method Post -Headers $headers -Body $body
+        # POST session log — see object models above for full schema
+        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/sessionlog" -Method Post -Headers $headers -Body ($sessionObject | ConvertTo-Json -Depth 10)
         ```
 
         ## Todo Management (REQUIRED)
@@ -456,80 +389,44 @@ public static class MarkerFileService
         }
         ```
 
-        ### Todo PowerShell Examples
+        ### Todo Management — Use the McpTodo Module
 
-        **List all todos (do this at session start):**
+        Helper modules are registered in the MCP Tool Registry. Search for them:
         ```powershell
-        $headers = @{ "X-Api-Key" = "{{apiKey}}" }
-        $result = Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo" -Headers $headers
-        $result.items | Format-Table id, title, priority, done, section
+        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/tools/search?keyword=todo" -Headers @{ "X-Api-Key" = "{{apiKey}}" }
         ```
 
-        **Create a new todo:**
+        **PowerShell (recommended):** Download `McpTodo-PowerShell` from the tool registry, save as `McpTodo.psm1`:
+        ```powershell
+        Import-Module ./McpTodo.psm1
+        Initialize-McpTodo                                       # reads this marker file automatically
+        Get-McpTodoList | Format-Table id, title, priority, done # list todos at session start
+        New-McpTodo -Id "add-jwt-auth" -Title "Add JWT auth" -Section "Backend" -Priority high `
+          -Description @("Implement JWT bearer tokens") -Estimate "4h"
+        Update-McpTodo -Id "add-jwt-auth" -Done $true -DoneSummary "JWT auth complete"
+        Get-McpTodoPrompt -Id "add-jwt-auth" -PromptType implement  # get implementation guidance
+        ```
+
+        **Bash:** Download `McpTodo-Bash`, save as `mcp-todo.sh` (requires `jq`):
+        ```bash
+        source ./mcp-todo.sh
+        mcp_todo_init
+        mcp_todo_list | jq '.items[] | {id, title, done}'
+        mcp_todo_create "add-jwt-auth" "Add JWT auth" "Backend" "high" '{"estimate":"4h"}'
+        mcp_todo_update "add-jwt-auth" '{"done":true,"doneSummary":"JWT auth complete"}'
+        mcp_todo_prompt "add-jwt-auth" "implement"
+        ```
+
+        **Raw API (if modules unavailable):**
         ```powershell
         $headers = @{ "X-Api-Key" = "{{apiKey}}"; "Content-Type" = "application/json" }
-        $body = @'
-        {
-          "id": "add-jwt-auth",
-          "title": "Add JWT authentication to REST API",
-          "section": "Backend",
-          "priority": "high",
-          "estimate": "4h",
-          "description": [
-            "Implement JWT bearer token authentication for all /api/* endpoints.",
-            "Include token refresh and revocation support."
-          ],
-          "technicalDetails": [
-            "Use RS256 signing with key rotation.",
-            "Store refresh tokens in database with expiry."
-          ],
-          "implementationTasks": [
-            { "task": "Create TokenService with JWT signing", "done": false },
-            { "task": "Add auth middleware to pipeline", "done": false },
-            { "task": "Add [Authorize] to controllers", "done": false },
-            { "task": "Write unit tests", "done": false }
-          ],
-          "dependsOn": ["setup-database"],
-          "functionalRequirements": ["FR-MCP-AUTH-001"],
-          "technicalRequirements": ["TR-MCP-AUTH-001"]
-        }
-        '@
-        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo" -Method Post -Headers $headers -Body $body
-        ```
-
-        **Update a todo (mark subtasks done, update remaining work):**
-        ```powershell
-        $headers = @{ "X-Api-Key" = "{{apiKey}}"; "Content-Type" = "application/json" }
-        $body = @'
-        {
-          "implementationTasks": [
-            { "task": "Create TokenService with JWT signing", "done": true },
-            { "task": "Add auth middleware to pipeline", "done": true },
-            { "task": "Add [Authorize] to controllers", "done": false },
-            { "task": "Write unit tests", "done": false }
-          ],
-          "remaining": "Need to add [Authorize] attributes and write tests"
-        }
-        '@
-        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo/add-jwt-auth" -Method Put -Headers $headers -Body $body
-        ```
-
-        **Mark a todo as complete:**
-        ```powershell
-        $headers = @{ "X-Api-Key" = "{{apiKey}}"; "Content-Type" = "application/json" }
-        $body = @'
-        {
-          "done": true,
-          "completedDate": "2026-01-15T12:00:00Z",
-          "doneSummary": "JWT auth implemented with RS256, refresh tokens, and full test coverage."
-        }
-        '@
-        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo/add-jwt-auth" -Method Put -Headers $headers -Body $body
-        ```
-
-        **Get implementation prompt for a todo (to understand what needs doing):**
-        ```powershell
-        $headers = @{ "X-Api-Key" = "{{apiKey}}" }
+        # List todos at session start
+        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo" -Headers $headers | % items | Format-Table id, title, done
+        # Create — see object models above for full schema
+        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo" -Method Post -Headers $headers -Body ($todoObject | ConvertTo-Json -Depth 5)
+        # Update
+        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo/add-jwt-auth" -Method Put -Headers $headers -Body '{"done":true}'
+        # Get implementation prompt
         Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo/add-jwt-auth/prompt/implement" -Headers $headers
         ```
 
