@@ -13,6 +13,7 @@ public sealed class RepoControllerTests : IClassFixture<CustomWebApplicationFact
     public RepoControllerTests(CustomWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(_client, factory.Services);
     }
 
     /// <summary>GET /mcp/repo/list returns 200 and entries array.</summary>

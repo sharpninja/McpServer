@@ -83,6 +83,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
 
         _factory = new MarkerRegenerationFactory(_workspacePath);
         _client = _factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(_client, _factory.Services);
         return ValueTask.CompletedTask;
     }
 

@@ -20,6 +20,7 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
     {
         _factory = factory;
         _client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(_client, factory.Services);
     }
 
     /// <summary>GET /mcp/context/sources returns 200 and array.</summary>

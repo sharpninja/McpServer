@@ -13,6 +13,7 @@ public sealed class WorkspaceControllerTests : IClassFixture<CustomWebApplicatio
     public WorkspaceControllerTests(CustomWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(_client, factory.Services);
     }
 
     public void Dispose() => _client.Dispose();

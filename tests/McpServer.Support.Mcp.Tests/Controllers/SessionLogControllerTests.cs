@@ -14,6 +14,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     public SessionLogControllerTests(CustomWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(_client, factory.Services);
     }
 
     public void Dispose() => _client.Dispose();

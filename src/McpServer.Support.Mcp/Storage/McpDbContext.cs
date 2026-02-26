@@ -212,4 +212,38 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<AgentWorkspaceEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<AgentEventLogEntity>().HasIndex(e => e.WorkspaceId);
     }
+
+    /// <summary>
+    /// TR-MCP-MT-003: Auto-stamps <c>WorkspaceId</c> on all added entities
+    /// whose <c>WorkspaceId</c> is still empty, ensuring multi-tenant isolation
+    /// without requiring every service to set it manually.
+    /// </summary>
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
+    {
+        StampWorkspaceId();
+        return base.SaveChanges(acceptAllChangesOnSuccess);
+    }
+
+    /// <inheritdoc cref="SaveChanges(bool)"/>
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        StampWorkspaceId();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void StampWorkspaceId()
+    {
+        if (_workspaceId.Length == 0) return;
+
+        foreach (var entry in ChangeTracker.Entries()
+                     .Where(e => e.State == EntityState.Added))
+        {
+            var prop = entry.Properties
+                .FirstOrDefault(p => p.Metadata.Name == nameof(ContextDocumentEntity.WorkspaceId));
+            if (prop is not null && prop.CurrentValue is string val && val.Length == 0)
+            {
+                prop.CurrentValue = _workspaceId;
+            }
+        }
+    }
 }

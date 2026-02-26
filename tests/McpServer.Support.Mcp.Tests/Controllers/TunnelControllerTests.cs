@@ -9,31 +9,13 @@ namespace McpServer.Support.Mcp.Tests.Controllers;
 /// <summary>Integration tests for <see cref="McpServer.Support.Mcp.Controllers.TunnelController"/> with <see cref="TunnelRegistry"/>.</summary>
 public sealed class TunnelControllerTests
 {
-    /// <summary>Adds auth header from WorkspaceTokenService to the test client.</summary>
-    private static void AddAuthHeader(HttpClient client, IServiceProvider services)
-    {
-        using var scope = services.CreateScope();
-        var tokenService = scope.ServiceProvider.GetRequiredService<WorkspaceTokenService>();
-        var config = scope.ServiceProvider.GetRequiredService<Microsoft.Extensions.Configuration.IConfiguration>();
-        var env = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.Hosting.IWebHostEnvironment>();
-
-        var repoRoot = config["Mcp:RepoRoot"] ?? ".";
-        var workspacePath = Path.IsPathRooted(repoRoot)
-            ? Path.GetFullPath(repoRoot)
-            : Path.GetFullPath(Path.Combine(env.ContentRootPath, repoRoot));
-        workspacePath = workspacePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-
-        var token = tokenService.GetToken(workspacePath);
-        if (token is not null)
-            client.DefaultRequestHeaders.Add("X-Api-Key", token);
-    }
 
     [Fact]
     public async Task List_EmptyRegistry_ReturnsEmptyArray()
     {
         await using var factory = new CustomWebApplicationFactory();
         using var client = factory.CreateClient();
-        AddAuthHeader(client, factory.Services);
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
 
         var response = await client.GetAsync("/mcp/tunnel/list");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -47,7 +29,7 @@ public sealed class TunnelControllerTests
     {
         await using var factory = new CustomWebApplicationFactory();
         using var client = factory.CreateClient();
-        AddAuthHeader(client, factory.Services);
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
 
         var response = await client.GetAsync("/mcp/tunnel/unknown/status");
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -58,7 +40,7 @@ public sealed class TunnelControllerTests
     {
         await using var factory = new CustomWebApplicationFactory();
         using var client = factory.CreateClient();
-        AddAuthHeader(client, factory.Services);
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
 
         var response = await client.PostAsync("/mcp/tunnel/unknown/enable", null);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -77,7 +59,7 @@ public sealed class TunnelControllerTests
         registry.Register(mockProvider, enabled: true);
 
         using var client = factory.CreateClient();
-        AddAuthHeader(client, factory.Services);
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
 
         var response = await client.GetAsync("/mcp/tunnel/list");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -100,7 +82,7 @@ public sealed class TunnelControllerTests
         registry.Register(mockProvider, enabled: true);
 
         using var client = factory.CreateClient();
-        AddAuthHeader(client, factory.Services);
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
 
         var response = await client.GetAsync("/mcp/tunnel/ngrok/status");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -122,7 +104,7 @@ public sealed class TunnelControllerTests
         registry.Register(mockProvider, enabled: false);
 
         using var client = factory.CreateClient();
-        AddAuthHeader(client, factory.Services);
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
 
         // Verify initially disabled
         var statusResp = await client.GetAsync("/mcp/tunnel/cloudflare/status");
@@ -155,7 +137,7 @@ public sealed class TunnelControllerTests
         registry.Register(mockProvider, enabled: false);
 
         using var client = factory.CreateClient();
-        AddAuthHeader(client, factory.Services);
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
 
         var response = await client.PostAsync("/mcp/tunnel/ngrok/start", null);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -180,7 +162,7 @@ public sealed class TunnelControllerTests
         registry.Register(mockProvider, enabled: true);
 
         using var client = factory.CreateClient();
-        AddAuthHeader(client, factory.Services);
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
 
         var response = await client.PostAsync("/mcp/tunnel/ngrok/start", null);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -201,7 +183,7 @@ public sealed class TunnelControllerTests
         registry.Register(mockProvider, enabled: true);
 
         using var client = factory.CreateClient();
-        AddAuthHeader(client, factory.Services);
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
 
         var response = await client.PostAsync("/mcp/tunnel/ngrok/stop", null);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -222,7 +204,7 @@ public sealed class TunnelControllerTests
         registry.Register(mockProvider, enabled: true);
 
         using var client = factory.CreateClient();
-        AddAuthHeader(client, factory.Services);
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
 
         var response = await client.PostAsync("/mcp/tunnel/ngrok/restart", null);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);

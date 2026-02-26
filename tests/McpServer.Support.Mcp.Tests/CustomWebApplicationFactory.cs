@@ -17,7 +17,7 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<McpApiEn
 
     /// <summary>Initializes a new instance with optional service overrides.</summary>
     /// <param name="configureServices">Optional callback to register additional or replacement services.</param>
-    public CustomWebApplicationFactory(Action<IServiceCollection>? configureServices)
+    internal CustomWebApplicationFactory(Action<IServiceCollection>? configureServices)
     {
         _configureServices = configureServices;
     }

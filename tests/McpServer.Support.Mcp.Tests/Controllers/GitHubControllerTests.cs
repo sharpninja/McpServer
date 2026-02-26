@@ -14,6 +14,7 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
     public GitHubControllerTests(CustomWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(_client, factory.Services);
     }
 
     /// <summary>GET /mcp/gh/issues returns 200 and body with issues array (or error when gh not available).</summary>
