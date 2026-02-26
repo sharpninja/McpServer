@@ -7,7 +7,7 @@ namespace McpServer.Support.Mcp.Middleware;
 /// <list type="number">
 ///   <item><description><c>X-Workspace-Path</c> header — explicit workspace path (highest priority).</description></item>
 ///   <item><description><c>X-Api-Key</c> reverse lookup via <see cref="WorkspaceTokenService"/>.</description></item>
-///   <item><description>Default (primary) workspace from configuration (lowest priority).</description></item>
+///   <item><description>Primary workspace from the registered workspace list (lowest priority).</description></item>
 /// </list>
 /// Populates the scoped <see cref="WorkspaceContext"/> for downstream services.
 /// Non-<c>/mcp/</c> and non-<c>/mcp-transport</c> routes skip resolution.
@@ -30,8 +30,7 @@ public sealed class WorkspaceResolutionMiddleware
         HttpContext context,
         WorkspaceContext workspaceContext,
         WorkspaceTokenService tokenService,
-        IWorkspaceService workspaceService,
-        IConfiguration configuration)
+        IWorkspaceService workspaceService)
     {
         var path = context.Request.Path;
 
@@ -82,20 +81,7 @@ public sealed class WorkspaceResolutionMiddleware
             }
         }
 
-        // Tier 3: Default (primary) workspace
-        var defaultPath = configuration["Mcp:RepoRoot"];
-        if (!string.IsNullOrWhiteSpace(defaultPath))
-        {
-            var ws = await workspaceService.GetAsync(defaultPath, context.RequestAborted).ConfigureAwait(false);
-            if (ws is not null)
-            {
-                PopulateContext(workspaceContext, ws, isDefault: false, context);
-                await _next(context).ConfigureAwait(false);
-                return;
-            }
-        }
-
-        // Fallback: find primary workspace from registered list
+        // Tier 3: Primary workspace from registered list
         var list = await workspaceService.ListAsync(context.RequestAborted).ConfigureAwait(false);
         var primary = list.Items.FirstOrDefault(w => w.IsPrimary) ?? list.Items.FirstOrDefault();
         if (primary is not null)
