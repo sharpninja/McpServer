@@ -151,7 +151,6 @@ internal sealed class WorkspaceListScreen : View
                 {
                     ["Name"] = ws => ws.Name,
                     ["Path"] = ws => ws.WorkspacePath,
-                    ["Port"] = ws => ws.WorkspacePort,
                     ["Primary"] = ws => ws.IsPrimary ? "✓" : "",
                     ["Enabled"] = ws => ws.IsEnabled ? "✓" : "✗",
                 });
@@ -224,7 +223,7 @@ internal sealed class WorkspaceListScreen : View
             }
 
             ShowDetailText(
-                $"Detail: {_detailVm.Detail.Name} ({_detailVm.Detail.WorkspacePort})",
+                $"Detail: {_detailVm.Detail.Name}",
                 FormatDetail(_detailVm.Detail));
         }
         finally
