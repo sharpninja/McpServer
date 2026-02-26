@@ -55,3 +55,14 @@ public sealed record UpdateWorkspacePolicyCommand : ICommand<bool>
     /// <summary>Updated banned individuals (null = no change).</summary>
     public List<string>? BannedIndividuals { get; init; }
 }
+
+/// <summary>
+/// Command to initialize a workspace for Director agent-management usage.
+/// Hosts may implement this as a composite operation (for example, seeding definitions and writing init events).
+/// </summary>
+public sealed record InitWorkspaceCommand(string WorkspacePath) : ICommand<WorkspaceInitInfo>;
+
+/// <summary>Result of a successful Director workspace initialization workflow.</summary>
+/// <param name="WorkspacePath">Workspace path that was initialized.</param>
+/// <param name="SeededDefinitions">Optional count of seeded definitions when available.</param>
+public sealed record WorkspaceInitInfo(string WorkspacePath, int? SeededDefinitions);
