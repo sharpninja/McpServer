@@ -7,17 +7,16 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Middleware;
 
 /// <summary>
-/// Pipeline middleware that enforces per-workspace auth tokens on all <c>/mcp/*</c> routes.
-/// Three authentication tiers are evaluated in order:
+/// Pipeline middleware that enforces authentication on all <c>/mcp/*</c> routes.
+/// Two authentication mechanisms are supported, evaluated in this order:
 /// <list type="number">
-///   <item><description><strong>JWT Bearer</strong> — a valid OIDC token bypasses all API-key
-///     restrictions, granting full access.</description></item>
-///   <item><description><strong>Full-access API key</strong> — the per-workspace token from the
-///     marker file. Grants unrestricted access to all endpoints.</description></item>
-///   <item><description><strong>Default (anonymous) API key</strong> — the token returned by
-///     <c>GET /api-key</c>. Grants read-only access to all endpoints <strong>except</strong>
-///     TODO routes (<c>/mcp/todo*</c>) which are read-write. This restriction applies
-///     <strong>only</strong> when no valid JWT is also present.</description></item>
+///   <item><description><strong>JWT Bearer</strong> — a valid OIDC token grants full access.
+///     When a <c>Authorization: Bearer</c> header is present, API keys are completely
+///     ignored. If the JWT fails validation, the request is rejected immediately —
+///     no fallthrough to API-key auth occurs.</description></item>
+///   <item><description><strong>API key</strong> — for agents that cannot perform OIDC.
+///     Full-access keys (from marker files) grant unrestricted access. Default keys
+///     (from <c>GET /api-key</c>) grant read-only access except for TODO routes.</description></item>
 /// </list>
 /// Non-<c>/mcp/</c> routes (health, swagger, MCP transport, <c>/api-key</c>) pass through unprotected.
 /// </summary>
@@ -46,7 +45,6 @@ public sealed class WorkspaceAuthMiddleware
     private readonly RequestDelegate _next;
     private readonly ILogger<WorkspaceAuthMiddleware> _logger;
 
-
     /// <summary>Initializes a new instance of the <see cref="WorkspaceAuthMiddleware"/> class.</summary>
     public WorkspaceAuthMiddleware(RequestDelegate next,
         ILogger<WorkspaceAuthMiddleware> logger)
@@ -67,16 +65,45 @@ public sealed class WorkspaceAuthMiddleware
             return;
         }
 
-        // A valid user auth token (e.g., JWT bearer) should satisfy authentication without also
-        // requiring a workspace API key.
-        // We check both the current principal and (when a Bearer header is present) explicitly
-        // authenticate the JWT scheme so this remains correct even if pipeline ordering changes.
-        if (await HasAuthenticatedJwtAsync(context).ConfigureAwait(false))
+        // ── JWT path ──────────────────────────────────────────────────────────
+        // When a Bearer header is present, API keys are IGNORED entirely.
+        // JWT is the sole auth mechanism for that request.
+        var hasBearerHeader = context.Request.Headers.Authorization.ToString()
+            .StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase);
+
+        if (hasBearerHeader)
+        {
+            var (authenticated, failureReason) = await TryAuthenticateJwtAsync(context).ConfigureAwait(false);
+            if (authenticated)
+            {
+                await _next(context).ConfigureAwait(false);
+                return;
+            }
+
+            // JWT was present but invalid — reject immediately, do NOT fall through to API key.
+            _logger.LogWarning("JWT Bearer token present but validation failed: {Reason}", failureReason ?? "unknown");
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            context.Response.ContentType = "application/json";
+            var jwtError = new
+            {
+                error = $"JWT Bearer token could not be validated ({failureReason ?? "unknown reason"}). " +
+                        "Re-authenticate with OIDC to obtain a fresh token."
+            };
+            await context.Response.WriteAsync(
+                JsonSerializer.Serialize(jwtError, s_json),
+                context.RequestAborted).ConfigureAwait(false);
+            return;
+        }
+
+        // Also check if the user was already authenticated by prior middleware (e.g. cookie).
+        if (context.User.Identity?.IsAuthenticated == true
+            || context.User.Identities.Any(i => i.IsAuthenticated))
         {
             await _next(context).ConfigureAwait(false);
             return;
         }
 
+        // ── Agent mutation routes (OIDC-only) ─────────────────────────────────
         // When OIDC is enabled, agent mutation routes are JWT-protected via [Authorize(Policy="AgentManager")].
         // Skip API-key enforcement here so ASP.NET authorization can challenge/validate the bearer token.
         var oidcEnabled = !string.IsNullOrWhiteSpace(configuration["Mcp:Auth:Authority"]);
@@ -86,6 +113,7 @@ public sealed class WorkspaceAuthMiddleware
             return;
         }
 
+        // ── API key path (agents only) ────────────────────────────────────────
         var workspacePath = workspaceContext.WorkspacePath ?? configuration["Mcp:RepoRoot"] ?? string.Empty;
 
         // If no workspace is configured or no token generated yet (startup race), allow through.
@@ -112,8 +140,7 @@ public sealed class WorkspaceAuthMiddleware
             return;
         }
 
-        // Default (anonymous) token — read-only except for TODO routes,
-        // but only when the user is NOT also JWT-authenticated.
+        // Default (anonymous) token — read-only except for TODO routes.
         if (tokenService.ValidateDefaultToken(workspacePath, provided))
         {
             context.Items[IsDefaultKeyItem] = true;
@@ -127,15 +154,7 @@ public sealed class WorkspaceAuthMiddleware
                 return;
             }
 
-            // Write operation on a non-todo route — allow if the request also carries a valid JWT.
-            if (await HasAuthenticatedJwtAsync(context).ConfigureAwait(false))
-            {
-                context.Items[IsDefaultKeyItem] = false;
-                await _next(context).ConfigureAwait(false);
-                return;
-            }
-
-            // No JWT — enforce default-key restriction.
+            // Write operation on a non-todo route with only a default key — reject.
             context.Response.StatusCode = StatusCodes.Status403Forbidden;
             context.Response.ContentType = "application/json";
             var forbiddenBody = new
@@ -169,33 +188,33 @@ public sealed class WorkspaceAuthMiddleware
         return !s_readOnlyMethods.Contains(method);
     }
 
-    private async Task<bool> HasAuthenticatedJwtAsync(HttpContext context)
+    /// <summary>
+    /// Attempts JWT Bearer authentication. Returns a tuple of (success, failureReason).
+    /// Only called when a Bearer header is known to be present.
+    /// </summary>
+    private async Task<(bool Authenticated, string? FailureReason)> TryAuthenticateJwtAsync(HttpContext context)
     {
         if (context.User.Identity?.IsAuthenticated == true)
-            return true;
+            return (true, null);
 
-        // Also check non-primary identities (e.g. when multiple auth schemes populate the principal).
         if (context.User.Identities.Any(i => i.IsAuthenticated))
-            return true;
-
-        var authorization = context.Request.Headers.Authorization.ToString();
-        if (!authorization.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
-            return false;
+            return (true, null);
 
         try
         {
             var result = await context.AuthenticateAsync(JwtBearerDefaults.AuthenticationScheme).ConfigureAwait(false);
-            if (!result.Succeeded || result.Principal?.Identity?.IsAuthenticated != true)
-                return false;
+            if (result.Succeeded && result.Principal?.Identity?.IsAuthenticated == true)
+            {
+                context.User = result.Principal;
+                return (true, null);
+            }
 
-            context.User = result.Principal;
-            return true;
+            return (false, result.Failure?.Message ?? "token validation failed");
         }
         catch (InvalidOperationException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
-            // JWT Bearer scheme not registered (OIDC disabled) — fall through to API-key auth.
-            return false;
+            // JWT Bearer scheme not registered (OIDC disabled).
+            return (false, $"JWT scheme not available: {ex.Message}");
         }
     }
 }

@@ -154,10 +154,15 @@ public abstract class McpClientBase
 
         var uri = new Uri($"{_scheme}://{_host}:{Port}/{path.TrimStart('/')}");
         using var request = new HttpRequestMessage(method, uri);
-        if (!string.IsNullOrWhiteSpace(ApiKey))
-            request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
+
+        // JWT and API key are mutually exclusive auth mechanisms.
+        // When a Bearer token is present, it is the sole auth header — API keys are
+        // an agent-only convenience and must not be sent alongside a JWT.
         if (!string.IsNullOrWhiteSpace(BearerToken))
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", BearerToken);
+        else if (!string.IsNullOrWhiteSpace(ApiKey))
+            request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
+
         if (!string.IsNullOrWhiteSpace(WorkspacePath))
             request.Headers.TryAddWithoutValidation("X-Workspace-Path", WorkspacePath);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -190,10 +195,10 @@ public abstract class McpClientBase
 
         var uri = new Uri($"{_scheme}://{_host}:{Port}/{path.TrimStart('/')}");
         using var request = new HttpRequestMessage(HttpMethod.Get, uri);
-        if (!string.IsNullOrWhiteSpace(ApiKey))
-            request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
         if (!string.IsNullOrWhiteSpace(BearerToken))
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", BearerToken);
+        else if (!string.IsNullOrWhiteSpace(ApiKey))
+            request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
         if (!string.IsNullOrWhiteSpace(WorkspacePath))
             request.Headers.TryAddWithoutValidation("X-Workspace-Path", WorkspacePath);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));

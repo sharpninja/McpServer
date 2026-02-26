@@ -62,21 +62,30 @@ public sealed class WorkspaceResolutionMiddleware
             return;
         }
 
-        // Tier 2: API key reverse lookup
-        var apiKey = context.Request.Headers[WorkspaceAuthMiddleware.HeaderName].FirstOrDefault()
-                     ?? context.Request.Query[WorkspaceAuthMiddleware.QueryParam].FirstOrDefault();
+        // Tier 2: API key reverse lookup — only for agent callers (no Bearer token).
+        // JWT-authenticated users identify their workspace via X-Workspace-Path (Tier 1)
+        // or fall through to the primary workspace (Tier 3). API keys are an agent-only
+        // convenience and must not influence workspace resolution when a JWT is present.
+        var hasBearerToken = context.Request.Headers.Authorization.ToString()
+            .StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase);
 
-        if (!string.IsNullOrWhiteSpace(apiKey))
+        if (!hasBearerToken)
         {
-            var resolvedPath = tokenService.ResolveWorkspaceByToken(apiKey, out var isDefault);
-            if (resolvedPath is not null)
+            var apiKey = context.Request.Headers[WorkspaceAuthMiddleware.HeaderName].FirstOrDefault()
+                         ?? context.Request.Query[WorkspaceAuthMiddleware.QueryParam].FirstOrDefault();
+
+            if (!string.IsNullOrWhiteSpace(apiKey))
             {
-                var ws = await workspaceService.GetAsync(resolvedPath, context.RequestAborted).ConfigureAwait(false);
-                if (ws is not null)
+                var resolvedPath = tokenService.ResolveWorkspaceByToken(apiKey, out var isDefault);
+                if (resolvedPath is not null)
                 {
-                    PopulateContext(workspaceContext, ws, isDefault, context);
-                    await _next(context).ConfigureAwait(false);
-                    return;
+                    var ws = await workspaceService.GetAsync(resolvedPath, context.RequestAborted).ConfigureAwait(false);
+                    if (ws is not null)
+                    {
+                        PopulateContext(workspaceContext, ws, isDefault, context);
+                        await _next(context).ConfigureAwait(false);
+                        return;
+                    }
                 }
             }
         }
