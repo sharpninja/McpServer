@@ -13,6 +13,9 @@ public class AgentDefinitionEntity
     [MaxLength(64)]
     public string Id { get; set; } = "";
 
+    /// <summary>TR-MCP-MT-003: Workspace discriminator for multi-tenant data isolation.</summary>
+    public string WorkspaceId { get; set; } = string.Empty;
+
     /// <summary>Human-readable display name.</summary>
     [MaxLength(128)]
     public string DisplayName { get; set; } = "";

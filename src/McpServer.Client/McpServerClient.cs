@@ -53,6 +53,7 @@ public sealed class McpServerClient
     private readonly McpServerClientOptions _options;
     private string _apiKey;
     private string _bearerToken;
+    private string _workspacePath;
     private int _port;
 
     /// <summary>
@@ -92,6 +93,7 @@ public sealed class McpServerClient
         _allClients = new McpClientBase[] { Todo, Context, SessionLog, GitHub, Repo, Sync, Workspace, Tools, AuthConfig, Diagnostic };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
+        _workspacePath = options.WorkspacePath ?? string.Empty;
         _port = options.BaseUrl.Port;
     }
 
@@ -129,6 +131,21 @@ public sealed class McpServerClient
         {
             _bearerToken = value;
             foreach (var c in _allClients) c.BearerToken = value;
+        }
+    }
+
+    /// <summary>
+    /// Workspace path for multi-tenant routing, propagated to every sub-client.
+    /// Setting this property immediately updates <see cref="McpClientBase.WorkspacePath"/> on all
+    /// sub-clients so the next call from <em>any</em> client uses the new workspace.
+    /// </summary>
+    public string WorkspacePath
+    {
+        get => _workspacePath;
+        set
+        {
+            _workspacePath = value;
+            foreach (var c in _allClients) c.WorkspacePath = value;
         }
     }
 

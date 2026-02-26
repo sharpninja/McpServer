@@ -14,6 +14,9 @@ public class AgentWorkspaceEntity
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
+    /// <summary>TR-MCP-MT-003: Workspace discriminator for multi-tenant data isolation.</summary>
+    public string WorkspaceId { get; set; } = string.Empty;
+
     /// <summary>Agent type identifier (FK to <see cref="AgentDefinitionEntity"/>).</summary>
     [MaxLength(64)]
     public string AgentDefinitionId { get; set; } = "";

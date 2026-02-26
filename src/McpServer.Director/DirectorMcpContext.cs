@@ -78,39 +78,55 @@ internal sealed class DirectorMcpContext : IDisposable
             return false;
         }
 
-        var markerClient = McpHttpClient.FromMarkerOnly(workspacePath);
-        if (markerClient is null)
-        {
-            error = $"Workspace marker not found at '{workspacePath}'.";
-            return false;
-        }
+        // Single-port model: reuse control client's base URL, change only the workspace path header.
+        McpHttpClient? controlRef;
+        lock (_gate)
+            controlRef = _controlClient;
 
-        markerClient.TrySetCachedBearerToken();
+        McpHttpClient newClient;
+        if (controlRef is not null)
+        {
+            // Reuse control connection base URL + API key; only workspace path changes.
+            newClient = new McpHttpClient(controlRef.BaseUrl, controlRef.ApiKey ?? string.Empty, workspacePath);
+            newClient.TrySetCachedBearerToken();
+        }
+        else
+        {
+            // Fallback: read marker file from target workspace for bootstrap
+            var markerClient = McpHttpClient.FromMarkerOnly(workspacePath);
+            if (markerClient is null)
+            {
+                error = $"Workspace marker not found at '{workspacePath}'.";
+                return false;
+            }
+            markerClient.TrySetCachedBearerToken();
+            newClient = markerClient;
+        }
 
         lock (_gate)
         {
             if (_activeWorkspaceClient is not null &&
-                string.Equals(_activeWorkspaceClient.WorkspacePath, markerClient.WorkspacePath, StringComparison.OrdinalIgnoreCase) &&
-                string.Equals(_activeWorkspaceClient.BaseUrl, markerClient.BaseUrl, StringComparison.OrdinalIgnoreCase) &&
-                string.Equals(_activeWorkspaceClient.ApiKey ?? string.Empty, markerClient.ApiKey ?? string.Empty, StringComparison.Ordinal))
+                string.Equals(_activeWorkspaceClient.WorkspacePath, workspacePath, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(_activeWorkspaceClient.BaseUrl, newClient.BaseUrl, StringComparison.OrdinalIgnoreCase))
             {
-                markerClient.Dispose();
+                if (!ReferenceEquals(_activeWorkspaceClient, newClient))
+                    newClient.Dispose();
                 return true;
             }
         }
 
-        var typed = CreateTypedClient(markerClient);
+        var typed = CreateTypedClient(newClient);
 
         McpHttpClient? oldHttp = null;
         lock (_gate)
         {
             oldHttp = _activeWorkspaceClient;
-            _activeWorkspaceClient = markerClient;
+            _activeWorkspaceClient = newClient;
             _activeWorkspaceApiClient = typed;
-            ActiveWorkspacePath = markerClient.WorkspacePath;
+            ActiveWorkspacePath = workspacePath;
         }
 
-        if (!ReferenceEquals(oldHttp, markerClient))
+        if (!ReferenceEquals(oldHttp, newClient))
             oldHttp?.Dispose();
 
         ActiveWorkspaceChanged?.Invoke(this, EventArgs.Empty);
@@ -180,6 +196,7 @@ internal sealed class DirectorMcpContext : IDisposable
             BaseUrl = new Uri(client.BaseUrl),
             ApiKey = string.IsNullOrWhiteSpace(client.ApiKey) ? null : client.ApiKey,
             BearerToken = TryGetCachedBearerTokenValue(),
+            WorkspacePath = client.WorkspacePath,
             Timeout = TimeSpan.FromMinutes(10),
         });
     }

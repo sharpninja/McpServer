@@ -14,6 +14,9 @@ public class AgentEventLogEntity
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long Id { get; set; }
 
+    /// <summary>TR-MCP-MT-003: Workspace discriminator for multi-tenant data isolation.</summary>
+    public string WorkspaceId { get; set; } = string.Empty;
+
     /// <summary>Agent type identifier.</summary>
     [MaxLength(64)]
     public string AgentId { get; set; } = "";

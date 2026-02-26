@@ -30,6 +30,8 @@ internal sealed class McpHttpClient : IDisposable
         _http = new HttpClient { BaseAddress = new Uri(BaseUrl) };
         if (!string.IsNullOrWhiteSpace(ApiKey))
             _http.DefaultRequestHeaders.Add("X-Api-Key", ApiKey);
+        if (!string.IsNullOrWhiteSpace(WorkspacePath))
+            _http.DefaultRequestHeaders.Add("X-Workspace-Path", WorkspacePath);
     }
 
     /// <summary>

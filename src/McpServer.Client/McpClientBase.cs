@@ -66,6 +66,7 @@ public abstract class McpClientBase
         Port = options.BaseUrl.Port;
         ApiKey = options.ApiKey ?? string.Empty;
         BearerToken = options.BearerToken ?? string.Empty;
+        WorkspacePath = options.WorkspacePath ?? string.Empty;
     }
 
     /// <summary>
@@ -91,6 +92,13 @@ public abstract class McpClientBase
     /// client. When set, requests may be authorized by the server without an API key.
     /// </summary>
     public string BearerToken { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Optional workspace path sent as the <c>X-Workspace-Path</c> header on every request.
+    /// Used for multi-tenant workspace routing. The value is read at call time so it can be
+    /// changed without recreating the client.
+    /// </summary>
+    public string WorkspacePath { get; set; } = string.Empty;
 
     /// <summary>
     /// TCP port used to construct the base URL for API calls (e.g. <c>http://localhost:{Port}/</c>).
@@ -150,6 +158,8 @@ public abstract class McpClientBase
             request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
         if (!string.IsNullOrWhiteSpace(BearerToken))
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", BearerToken);
+        if (!string.IsNullOrWhiteSpace(WorkspacePath))
+            request.Headers.TryAddWithoutValidation("X-Workspace-Path", WorkspacePath);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         if (body is not null)
@@ -184,6 +194,8 @@ public abstract class McpClientBase
             request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
         if (!string.IsNullOrWhiteSpace(BearerToken))
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", BearerToken);
+        if (!string.IsNullOrWhiteSpace(WorkspacePath))
+            request.Headers.TryAddWithoutValidation("X-Workspace-Path", WorkspacePath);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));
 
         using var response = await _http.SendAsync(

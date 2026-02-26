@@ -53,6 +53,12 @@ public sealed class McpServerClientOptions
     public string? BearerToken { get; set; }
 
     /// <summary>
+    /// Optional workspace path for multi-tenant routing. When set, sub-clients send an
+    /// <c>X-Workspace-Path</c> header on every request so the server resolves the correct workspace.
+    /// </summary>
+    public string? WorkspacePath { get; set; }
+
+    /// <summary>
     /// HTTP request timeout applied to the internally-created <see cref="System.Net.Http.HttpClient"/>
     /// when using <see cref="McpServerClientFactory.Create(McpServerClientOptions)"/>.
     /// Defaults to 30 seconds.
