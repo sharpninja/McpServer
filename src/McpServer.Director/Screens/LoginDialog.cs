@@ -1,4 +1,5 @@
 using McpServer.Director.Auth;
+using McpServer.Director.Handlers;
 using Terminal.Gui;
 
 namespace McpServer.Director.Screens;
@@ -10,6 +11,7 @@ namespace McpServer.Director.Screens;
 internal sealed class LoginDialog : Dialog
 {
     private readonly Action<string>? _onLoginSuccess;
+    private readonly LoginDialogAuthConfigHandler _authConfigHandler = new();
     private TextView _statusLabel = null!;
     private TextField _codeField = null!;
     private TextField _uriField = null!;
@@ -37,15 +39,6 @@ internal sealed class LoginDialog : Dialog
         // Pre-populate from server auto-discovery
         var defaultAuthority = Environment.GetEnvironmentVariable("MCP_AUTH_AUTHORITY") ?? "";
         var defaultClientId = "mcp-director";
-
-        _serverConfig = DiscoverAuthConfigSync();
-        if (_serverConfig is not null && _serverConfig.Enabled)
-        {
-            if (string.IsNullOrWhiteSpace(defaultAuthority))
-                defaultAuthority = _serverConfig.Authority;
-            if (!string.IsNullOrWhiteSpace(_serverConfig.ClientId))
-                defaultClientId = _serverConfig.ClientId;
-        }
 
         var authorityLabel = new Label { X = 1, Y = 1, Text = "Authority URL:" };
         var authorityField = new TextField
@@ -151,6 +144,8 @@ internal sealed class LoginDialog : Dialog
         AddButton(logoutBtn);
         AddButton(closeBtn);
 
+        QueueAuthConfigDiscovery(authorityField, clientIdField);
+
         // Clipboard hotkeys: Ctrl+Y copies user code, Ctrl+U copies verification URL
         KeyDown += (_, e) =>
         {
@@ -169,22 +164,28 @@ internal sealed class LoginDialog : Dialog
         };
     }
 
-    /// <summary>
-    /// Synchronously discovers auth config from the MCP server via the marker file.
-    /// Returns null if the server is unreachable or no marker file exists.
-    /// </summary>
-    private static AuthConfigResponse? DiscoverAuthConfigSync()
+    private void QueueAuthConfigDiscovery(TextField authorityField, TextField clientIdField)
     {
-        try
+        _ = Task.Run(async () =>
         {
-            using var client = McpHttpClient.FromMarkerFile();
-            if (client is null) return null;
-            return client.GetAuthConfigAsync().GetAwaiter().GetResult();
-        }
-        catch
-        {
-            return null;
-        }
+            var config = await _authConfigHandler.DiscoverAuthConfigAsync().ConfigureAwait(false);
+            if (config is null || !config.Enabled)
+                return;
+
+            Application.Invoke(() =>
+            {
+                _serverConfig = config;
+                if (string.IsNullOrWhiteSpace(authorityField.Text?.ToString()))
+                    authorityField.Text = config.Authority;
+                var currentClientId = clientIdField.Text?.ToString();
+                if (!string.IsNullOrWhiteSpace(config.ClientId)
+                    && (string.IsNullOrWhiteSpace(currentClientId)
+                        || string.Equals(currentClientId, "mcp-director", StringComparison.Ordinal)))
+                {
+                    clientIdField.Text = config.ClientId;
+                }
+            });
+        });
     }
 
     private static string GetWhoamiText()

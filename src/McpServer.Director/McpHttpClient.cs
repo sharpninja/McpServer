@@ -30,6 +30,8 @@ internal sealed class McpHttpClient : IDisposable
         _http = new HttpClient { BaseAddress = new Uri(BaseUrl) };
         if (!string.IsNullOrWhiteSpace(ApiKey))
             _http.DefaultRequestHeaders.Add("X-Api-Key", ApiKey);
+        if (!string.IsNullOrWhiteSpace(WorkspacePath))
+            _http.DefaultRequestHeaders.Add("X-Workspace-Path", WorkspacePath);
     }
 
     /// <summary>
@@ -113,12 +115,13 @@ internal sealed class McpHttpClient : IDisposable
     private static Auth.CachedToken? RefreshTokenSync(Auth.CachedToken cached)
     {
         using var http = new HttpClient();
-        var tokenEndpoint = $"{cached.Authority.TrimEnd('/')}/protocol/openid-connect/token";
+        var tokenEndpoint = ResolveTokenEndpointForRefresh(cached);
+        var clientId = string.IsNullOrWhiteSpace(cached.ClientId) ? "mcp-director" : cached.ClientId;
 
         var content = new FormUrlEncodedContent(new Dictionary<string, string>
         {
             ["grant_type"] = "refresh_token",
-            ["client_id"] = "mcp-director",
+            ["client_id"] = clientId,
             ["refresh_token"] = cached.RefreshToken,
         });
 
@@ -142,10 +145,59 @@ internal sealed class McpHttpClient : IDisposable
             ExpiresAtUtc = DateTime.UtcNow.AddSeconds(
                 root.TryGetProperty("expires_in", out var expProp) ? expProp.GetInt32() : 300),
             Authority = cached.Authority,
+            TokenEndpoint = tokenEndpoint,
+            ClientId = clientId,
         };
 
         Auth.TokenCache.Save(newToken);
         return newToken;
+    }
+
+    /// <summary>
+    /// Resolves the best token endpoint for refresh. Prefers the cached endpoint (which may be the MCP proxy
+    /// <c>/auth/token</c>) and falls back to the authority-derived Keycloak endpoint for older cached tokens.
+    /// </summary>
+    private static string ResolveTokenEndpointForRefresh(Auth.CachedToken cached)
+    {
+        if (!string.IsNullOrWhiteSpace(cached.TokenEndpoint))
+            return cached.TokenEndpoint;
+
+        var discovered = TryDiscoverProxyTokenEndpointForRefresh(cached.Authority);
+        if (!string.IsNullOrWhiteSpace(discovered))
+            return discovered;
+
+        // Back-compat for tokens cached before proxy endpoint persistence was added.
+        return $"{cached.Authority.TrimEnd('/')}/protocol/openid-connect/token";
+    }
+
+    private static string? TryDiscoverProxyTokenEndpointForRefresh(string expectedAuthority)
+    {
+        try
+        {
+            using var client = FromDefaultUrlOrMarker();
+            if (client is null)
+                return null;
+
+            var config = client.GetAuthConfigAsync().GetAwaiter().GetResult();
+            if (config is null || !config.Enabled || string.IsNullOrWhiteSpace(config.TokenEndpoint))
+                return null;
+
+            if (!string.IsNullOrWhiteSpace(expectedAuthority) &&
+                !string.IsNullOrWhiteSpace(config.Authority) &&
+                !string.Equals(
+                    config.Authority.TrimEnd('/'),
+                    expectedAuthority.TrimEnd('/'),
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            return config.TokenEndpoint;
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     /// <summary>GET request returning deserialized JSON.</summary>
@@ -268,7 +320,60 @@ internal sealed class McpHttpClient : IDisposable
                 markerClient?.WorkspacePath ?? dir);
         }
 
+        var primaryMarkerClient = TryFromLocalPrimaryWorkspaceMarker();
+        if (primaryMarkerClient is not null)
+            return primaryMarkerClient;
+
         return markerClient;
+    }
+
+    /// <summary>
+    /// Best-effort local bootstrap for the control-plane connection. When running on a machine with a local
+    /// McpServer Windows service install, prefer the primary workspace marker from the deployed appsettings.
+    /// This avoids pointing control-plane tabs (e.g. Agents/Workspaces) at a child workspace host.
+    /// </summary>
+    private static McpHttpClient? TryFromLocalPrimaryWorkspaceMarker()
+    {
+        try
+        {
+            const string appSettingsPath = @"C:\ProgramData\McpServer\appsettings.json";
+            if (!File.Exists(appSettingsPath))
+                return null;
+
+            using var doc = JsonDocument.Parse(File.ReadAllText(appSettingsPath));
+            if (!doc.RootElement.TryGetProperty("Mcp", out var mcp) ||
+                !mcp.TryGetProperty("Workspaces", out var workspaces) ||
+                workspaces.ValueKind != JsonValueKind.Array)
+            {
+                return null;
+            }
+
+            foreach (var ws in workspaces.EnumerateArray())
+            {
+                if (ws.ValueKind != JsonValueKind.Object)
+                    continue;
+
+                if (!ws.TryGetProperty("IsPrimary", out var isPrimary) || isPrimary.ValueKind != JsonValueKind.True)
+                    continue;
+
+                if (!ws.TryGetProperty("WorkspacePath", out var pathProp) || pathProp.ValueKind != JsonValueKind.String)
+                    continue;
+
+                var workspacePath = pathProp.GetString();
+                if (string.IsNullOrWhiteSpace(workspacePath))
+                    continue;
+
+                var client = FromMarkerOnly(workspacePath);
+                if (client is not null)
+                    return client;
+            }
+
+            return null;
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     /// <summary>

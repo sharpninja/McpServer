@@ -15,6 +15,9 @@ public static class McpActionKeys
     /// <summary>Workspace policy update action.</summary>
     public const string WorkspaceUpdatePolicy = "workspace.update-policy";
 
+    /// <summary>Workspace initialization action.</summary>
+    public const string WorkspaceInit = "workspace.init";
+
     /// <summary>Sync run action.</summary>
     public const string SyncRun = "sync.run";
 

@@ -13,6 +13,9 @@ public sealed class SessionLogProcessingDialogEntity
     [Key]
     public long Id { get; set; }
 
+    /// <summary>TR-MCP-MT-003: Workspace discriminator for multi-tenant data isolation.</summary>
+    public string WorkspaceId { get; set; } = string.Empty;
+
     /// <summary>TR-PLANNED-013: Foreign key to parent entry.</summary>
     public long SessionLogEntryId { get; set; }
 

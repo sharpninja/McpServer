@@ -1,8 +1,12 @@
 # MCP Server Endpoint Audit Summary
 
-**Date:** 2026-02-21  
+**Date:** 2026-02-21 (Updated 2026-02-26)  
 **Service:** MCP Server on `http://localhost:7147`  
 **Auditor:** Cline / Claude Sonnet 4
+
+> **Note:** All endpoints are workspace-scoped via the `X-Workspace-Path` header resolution chain.
+> Send `X-Workspace-Path: <absolute-path>` to target a specific workspace. If omitted, workspace is
+> resolved from the `X-Api-Key` token or defaults to the primary workspace.
 
 ## Overview
 

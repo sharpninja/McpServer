@@ -54,12 +54,16 @@ public sealed class TodoClientTests
             Id = "NEW-001",
             Title = "New item",
             Section = "test",
-            Priority = "high"
+            Priority = "high",
+            Note = "client note",
+            Remaining = "client remaining"
         });
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
         Assert.Contains("NEW-001", handler.LastRequestBody!);
+        Assert.Contains("\"note\":\"client note\"", handler.LastRequestBody!, StringComparison.Ordinal);
+        Assert.Contains("\"remaining\":\"client remaining\"", handler.LastRequestBody!, StringComparison.Ordinal);
     }
 
     [Fact]

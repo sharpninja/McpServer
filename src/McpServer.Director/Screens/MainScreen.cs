@@ -451,8 +451,8 @@ internal sealed class MainScreen : Window
         foreach (var ws in _workspaceListVm.Workspaces)
         {
             var label = ws.IsPrimary
-                ? $"* {ws.Name} ({ws.WorkspacePort})"
-                : $"  {ws.Name} ({ws.WorkspacePort})";
+                ? $"* {ws.Name}"
+                : $"  {ws.Name}";
             _workspacePickerSource.Add(new WorkspacePickerItem(ws.WorkspacePath, label));
         }
     }

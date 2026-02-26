@@ -13,13 +13,16 @@ using McpServer.Support.Mcp.Logging;
 using McpServer.Support.Mcp.McpStdio;
 using McpServer.Support.Mcp.Middleware;
 using McpServer.Support.Mcp.Options;
+using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Controllers;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Web;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Hosting.WindowsServices;
 using Microsoft.IdentityModel.Tokens;
 using ModelContextProtocol.AspNetCore;
 using Serilog;
@@ -32,6 +35,8 @@ if (IsStdioTransportRequested(args))
     await McpStdioHost.RunAsync(args, default).ConfigureAwait(false);
     return;
 }
+
+var serverStartupUtc = DateTimeOffset.UtcNow;
 
 bool IsStdioTransportRequested(string[] a)
 {
@@ -46,6 +51,7 @@ bool IsStdioTransportRequested(string[] a)
 }
 
 var builder = WebApplication.CreateBuilder(args);
+DisableEnvironmentSpecificJsonConfigForWindowsService(builder);
 if (OperatingSystem.IsWindows())
 {
     builder.Host.UseWindowsService(options =>
@@ -153,6 +159,7 @@ builder.Services.Configure<McpParseableOptions>(builder.Configuration.GetSection
 builder.Services.Configure<McpInteractionLoggingOptions>(builder.Configuration.GetSection(McpInteractionLoggingOptions.SectionName));
 builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(TodoStorageOptions.SectionName));
 builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
+builder.Services.Configure<RequirementsOptions>(builder.Configuration.GetSection(RequirementsOptions.SectionName));
 builder.Services.PostConfigure<VectorIndexOptions>(options =>
 {
     var instanceIndexPath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "IndexPath");
@@ -182,6 +189,22 @@ builder.Services.PostConfigure<TodoStorageOptions>(options =>
         var dataDirectory = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "DataDirectory") ?? ".";
         options.SqliteDataSource = Path.GetFullPath(Path.Combine(dataDirectory, options.SqliteDataSource));
     }
+});
+builder.Services.PostConfigure<RequirementsOptions>(options =>
+{
+    var repoRoot = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "RepoRoot")
+                  ?? builder.Environment.ContentRootPath;
+    repoRoot = Path.GetFullPath(repoRoot);
+
+    static string ResolvePath(string repoRootPath, string path) =>
+        Path.IsPathRooted(path)
+            ? Path.GetFullPath(path)
+            : Path.GetFullPath(Path.Combine(repoRootPath, path));
+
+    options.FunctionalRequirementsPath = ResolvePath(repoRoot, options.FunctionalRequirementsPath);
+    options.TechnicalRequirementsPath = ResolvePath(repoRoot, options.TechnicalRequirementsPath);
+    options.TestingRequirementsPath = ResolvePath(repoRoot, options.TestingRequirementsPath);
+    options.MappingPath = ResolvePath(repoRoot, options.MappingPath);
 });
 builder.Services.Configure<EmbeddingOptions>(builder.Configuration.GetSection("Embedding"));
 builder.Services.Configure<VectorIndexOptions>(builder.Configuration.GetSection("VectorIndex"));
@@ -216,6 +239,9 @@ builder.Services.AddSingleton<ITodoService>(sp =>
 });
 builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
 builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
+builder.Services.AddSingleton<RequirementsDocumentService>();
+builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<RequirementsDocumentService>());
+builder.Services.AddSingleton<IRequirementsDocumentService>(sp => sp.GetRequiredService<RequirementsDocumentService>());
 builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
 builder.Services.AddSingleton<IVoiceConversationService, VoiceConversationService>();
 builder.Services.Configure<TodoPromptOptions>(options =>
@@ -240,6 +266,8 @@ builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
 builder.Services.AddScoped<IToolBucketService, ToolBucketService>();
 builder.Services.AddScoped<IAgentService, AgentService>();
 builder.Services.AddSingleton<WorkspaceTokenService>();
+builder.Services.AddScoped<WorkspaceContext>();
+builder.Services.AddSingleton(new ServerRuntimeInfo(serverStartupUtc));
 builder.Services.AddSingleton<IWorkspaceProcessManager, WorkspaceProcessManager>();
 builder.Services.Configure<PairingOptions>(builder.Configuration.GetSection(PairingOptions.SectionName));
 builder.Services.Configure<OidcAuthOptions>(builder.Configuration.GetSection(OidcAuthOptions.SectionName));
@@ -457,6 +485,7 @@ app.UseMiddleware<InteractionLoggingMiddleware>();
 
 // Per-workspace auth tokens: protect all /mcp/* REST routes.
 app.UseAuthentication();
+app.UseMiddleware<WorkspaceResolutionMiddleware>();
 app.UseMiddleware<WorkspaceAuthMiddleware>();
 app.UseAuthorization();
 
@@ -466,6 +495,20 @@ app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MCP Context API v1"));
 
 app.MapGet("/", () => Results.Redirect("/swagger"))
+    .ExcludeFromDescription();
+
+// Unprotected diagnostics endpoint for stale-marker detection and client troubleshooting.
+app.MapGet("/server-startup-utc", (ServerRuntimeInfo runtimeInfo) =>
+    MarkerDiagnosticsEndpointHelper.GetServerStartupResult(runtimeInfo))
+    .ExcludeFromDescription();
+
+// Unprotected diagnostics endpoint returning marker file timestamps for configured workspaces.
+app.MapGet("/marker-file-timestamp", (string? repoPath, IConfiguration configuration) =>
+    MarkerDiagnosticsEndpointHelper.GetMarkerFileTimestampResult(
+        repoPath,
+        configuration,
+        app.Environment.ContentRootPath,
+        restrictToCurrentRepoRoot: false))
     .ExcludeFromDescription();
 
 // Unprotected endpoint returning the default (anonymous) API key for consumers without marker file access.
@@ -552,6 +595,31 @@ static bool VerifyPairingPassword(string plaintext, string expectedHash)
     var computed = SHA256.HashData(Encoding.UTF8.GetBytes(plaintext));
     var expected = Convert.FromHexString(expectedHash);
     return CryptographicOperations.FixedTimeEquals(computed, expected);
+}
+
+static void DisableEnvironmentSpecificJsonConfigForWindowsService(WebApplicationBuilder builder)
+{
+    if (!OperatingSystem.IsWindows() || !WindowsServiceHelpers.IsWindowsService())
+        return;
+
+    var environmentFileName = $"appsettings.{builder.Environment.EnvironmentName}.json";
+    var toRemove = builder.Configuration.Sources
+        .OfType<JsonConfigurationSource>()
+        .Where(source =>
+            string.Equals(
+                Path.GetFileName(source.Path ?? string.Empty),
+                environmentFileName,
+                StringComparison.OrdinalIgnoreCase))
+        .ToList();
+
+    if (toRemove.Count == 0)
+        return;
+
+    foreach (var source in toRemove)
+        builder.Configuration.Sources.Remove(source);
+
+    if (builder.Configuration is IConfigurationRoot configurationRoot)
+        configurationRoot.Reload();
 }
 
 [SupportedOSPlatform("windows")]

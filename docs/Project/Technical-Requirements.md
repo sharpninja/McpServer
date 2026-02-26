@@ -46,7 +46,7 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-WS-003
 
-**Workspace Process Manager** — In-process Kestrel host management via `WorkspaceAppFactory`. Each workspace gets its own `WebApplication`, isolated DI container, `McpDbContext`, and Kestrel listener on its assigned port, all within the primary service process. Implements `IHostedService` for graceful shutdown of all workspace hosts on app exit.
+**Workspace Process Manager** — Manages workspace marker file lifecycle. On startup, generates tokens and writes `AGENTS-README-FIRST.yaml` marker files for all registered workspaces — all pointing to the single shared host port. On stop, removes marker files. No longer spawns child `WebApplication` instances (replaced by single-app multi-tenant model, see TR-MCP-MT-001 through TR-MCP-MT-003).
 
 ## TR-MCP-WS-004
 
@@ -54,15 +54,15 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-WS-005
 
-**Marker File Service** — `MarkerFileService.WriteMarkerAsync` writes `AGENTS-README-FIRST.yaml` to the workspace root when a workspace Kestrel host starts; `RemoveMarker` deletes it on stop. Uses Handlebars.Net templating with full workspace context. The YAML file contains port, `baseUrl`, all endpoint paths, process PID, `startedAt` timestamp, workspace name, per-workspace auth token (`apiKey`), and a machine-readable `prompt` block with glossary, workspace definition table, and protocol instructions.
+**Marker File Service** — `MarkerFileService.WriteMarkerAsync` writes `AGENTS-README-FIRST.yaml` to the workspace root. All markers point to the same shared host port. Uses Handlebars.Net templating with full workspace context. The YAML file contains port, `baseUrl`, all endpoint paths, process PID, `startedAt` timestamp, workspace name, per-workspace auth token (`apiKey`), and a machine-readable `prompt` block. Agents should send `X-Workspace-Path` header for workspace targeting.
 
 ## TR-MCP-WS-006
 
-**Workspace Host Controller Isolation** — `ExcludeControllerFeatureProvider` (an `IApplicationFeatureProvider<ControllerFeature>`) is registered in workspace `WebApplication` instances to remove `WorkspaceController` from the MVC feature provider, preventing workspace lifecycle endpoints from being accessible on workspace-scoped ports.
+**Workspace Host Controller Isolation** — *Obsolete.* Replaced by single-app multi-tenant model (TR-MCP-MT-002). `ExcludeControllerFeatureProvider` can be removed.
 
 ## TR-MCP-WS-007
 
-**Workspace Auto-Start on Service Startup** — `WorkspaceProcessManager`, as an `IHostedService`, queries all registered workspaces from the database on `StartAsync` and starts a Kestrel host for each. Failures on individual workspace starts are logged and skipped rather than aborting global startup.
+**Workspace Auto-Start on Service Startup** — `WorkspaceProcessManager`, as an `IHostedService`, queries all registered workspaces on `StartAsync` and writes marker files for each. Failures on individual workspace marker writes are logged and skipped rather than aborting global startup.
 
 ## TR-MCP-WS-008
 
@@ -82,7 +82,7 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-SEC-001
 
-**Per-Workspace Auth Tokens** — `WorkspaceAuthMiddleware` intercepts all `/mcp/*` requests at the pipeline level. `WorkspaceTokenService` generates per-workspace cryptographic tokens (32-byte base64url) on startup — not persisted, rotating on each restart. Tokens are validated via the `X-Api-Key` header or `api_key` query parameter. On 401, the response instructs the agent to re-read the `AGENTS-README-FIRST.yaml` marker file for the updated token.
+**Per-Workspace Auth Tokens** — `WorkspaceResolutionMiddleware` resolves workspace identity per-request using a three-tier chain: (1) `X-Workspace-Path` header, (2) API key reverse lookup via `WorkspaceTokenService`, (3) default workspace from config. `WorkspaceAuthMiddleware` then validates the token against the resolved workspace. `WorkspaceTokenService` generates per-workspace cryptographic tokens (32-byte base64url) on startup and maintains reverse-lookup maps for API key → workspace resolution.
 
 ## TR-MCP-SEC-002
 
@@ -111,6 +111,18 @@ Operational scripts for startup, health checks, packaging, config validation, an
 ## TR-MCP-REQ-001
 
 **AI Requirements Analysis Service** — `RequirementsService` invokes `ICopilotClient` with a structured prompt containing the TODO item's title, description, technical details, implementation tasks, and pre-existing FR/TR assignments. The prompt instructs Copilot to identify existing FRs/TRs from `docs/Project/` and create new entries for unaddressed functionality, then emit a JSON block with assigned IDs. Response parsing first attempts structured JSON extraction; falls back to regex (`FR-[A-Z]+-\d{3}` / `TR-[A-Z]+-\d{3}`) for robustness. Discovered IDs are merged (deduplicated, order-preserved) back into the TODO via `ITodoService.UpdateAsync`.
+
+## TR-MCP-REQ-002
+
+**Requirements Document Management Service** — `RequirementsDocumentService` parses the four canonical requirements documents (`Functional-Requirements.md`, `Technical-Requirements.md`, `Testing-Requirements.md`, `TR-per-FR-Mapping.md`) into a strongly typed in-memory model on startup and provides CRUD operations for FR/TR/TEST entries and mapping rows. Mutations are serialized with `SemaphoreSlim` and persisted with atomic file swaps (temp file + `File.Replace`/fallback overwrite) to prevent document corruption under concurrent writes.
+
+**Covered by:** `RequirementsDocumentService`, `RequirementsDocumentParser`, `RequirementsDocumentRenderer`, `RequirementsOptions`
+
+## TR-MCP-REQ-003
+
+**Requirements REST + STDIO Tool Integration** — The requirements management feature is exposed over REST via `RequirementsController` at `/mcp/requirements/*` and over STDIO via MCP tools (`requirements_list`, `requirements_generate`, `requirements_create`, `requirements_update`, `requirements_delete`). Document generation supports individual Markdown documents and `doc=all` ZIP bundles with canonical filenames.
+
+**Covered by:** `RequirementsController`, `FwhMcpTools`, `Program.cs` (DI/config registration), `RequirementsDocumentService`
 
 ## TR-MCP-INGEST-002
 
@@ -271,3 +283,21 @@ Operational scripts for startup, health checks, packaging, config validation, an
 **New Project Context Indexing** — Ingestion configuration must include `src/McpServer.Cqrs/**/*.cs`, `src/McpServer.Cqrs.Mvvm/**/*.cs`, `src/McpServer.UI.Core/**/*.cs`, and `src/McpServer.Director/**/*.cs` in file patterns. Marker prompt Available Capabilities section lists all four projects with descriptions.
 
 **Covered by:** Ingestion configuration (planned)
+
+## TR-MCP-MT-001
+
+**WorkspaceContext Scoped Per-Request Service** — `WorkspaceContext` is a scoped service holding resolved workspace identity: `WorkspacePath`, `WorkspaceName`, `DataDirectory`, `TodoFilePath`, `SessionsPath`, `ExternalDocsPath`, `IsDefaultKey`, `IsResolved`. Populated by `WorkspaceResolutionMiddleware` before downstream services execute. Downstream services inject `WorkspaceContext` instead of reading `IConfiguration["Mcp:RepoRoot"]`.
+
+**Covered by:** `WorkspaceContext`, `WorkspaceResolutionMiddleware`
+
+## TR-MCP-MT-002
+
+**WorkspaceResolutionMiddleware** — Runs before `WorkspaceAuthMiddleware` in the pipeline. Only activates for `/mcp/*` and `/mcp-transport` routes. Resolution chain: (1) `X-Workspace-Path` header validated against registered workspaces — returns 400 for unregistered paths; (2) API key reverse lookup via `WorkspaceTokenService.ResolveWorkspaceByToken()`; (3) `Mcp:RepoRoot` config fallback; (4) primary workspace from workspace list. Populates `WorkspaceContext` scoped service.
+
+**Covered by:** `WorkspaceResolutionMiddleware`, `WorkspaceContext`, `WorkspaceTokenService`
+
+## TR-MCP-MT-003
+
+**EF Core Global Query Filter for WorkspaceId** — `McpDbContext` accepts optional `WorkspaceContext` to capture `_workspaceId` per-instance. `OnModelCreating` applies `.HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId)` on all 14 entity types. Empty `_workspaceId` disables filtering (backward compatible). `IgnoreQueryFilters()` escapes for cross-workspace admin queries. `WorkspaceId TEXT NOT NULL DEFAULT ''` column with indexes on all entity tables.
+
+**Covered by:** `McpDbContext`, all entity types (`WorkspaceId` property)

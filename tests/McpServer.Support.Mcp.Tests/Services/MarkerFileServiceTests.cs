@@ -202,4 +202,41 @@ public sealed class MarkerFileServiceTests
         Assert.Contains("TestProj", result);
         Assert.Contains("mytoken", result);
     }
+
+    [Fact]
+    public async Task WriteMarkerAsync_EmitsUtcTimestampsAndDiagnosticsEndpoints()
+    {
+        var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-test-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDir);
+
+        try
+        {
+            var serverStartedAtUtc = new DateTimeOffset(2026, 2, 26, 8, 30, 0, TimeSpan.Zero);
+
+            await MarkerFileService.WriteMarkerAsync(
+                workspacePath: tempDir,
+                port: 7148,
+                workspaceName: "test",
+                serverStartedAtUtc: serverStartedAtUtc);
+
+            var markerPath = Path.Combine(tempDir, MarkerFileService.MarkerFileName);
+            var yaml = await File.ReadAllTextAsync(markerPath);
+
+            Assert.Contains("markerWrittenAtUtc:", yaml);
+            Assert.Contains($"serverStartedAtUtc: {serverStartedAtUtc:o}", yaml);
+            Assert.Contains("serverStartupUtc: /server-startup-utc", yaml);
+            Assert.Contains("markerFileTimestamp: /marker-file-timestamp?repoPath={workspacePath}", yaml);
+        }
+        finally
+        {
+            try
+            {
+                Directory.Delete(tempDir, recursive: true);
+            }
+            catch
+            {
+                // Best-effort cleanup for temp test directory.
+            }
+        }
+    }
 }

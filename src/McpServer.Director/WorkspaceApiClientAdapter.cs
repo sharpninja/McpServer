@@ -1,3 +1,4 @@
+using System.Text.Json;
 using McpServer.Client;
 using McpServer.Client.Models;
 using McpServer.UI.Core.Messages;
@@ -6,7 +7,8 @@ using McpServer.UI.Core.Services;
 namespace McpServer.Director;
 
 /// <summary>
-/// Director-specific implementation of <see cref="IWorkspaceApiClient"/> backed by <see cref="McpServerClient"/>.
+/// Director-specific implementation of <see cref="IWorkspaceApiClient"/> backed by <see cref="DirectorMcpContext"/>
+/// using typed clients where available and composite raw calls for Director workflows.
 /// </summary>
 internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
 {
@@ -73,6 +75,35 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
             ct).ConfigureAwait(false);
 
         return result?.Success == true;
+    }
+
+    public async Task<WorkspaceInitInfo> InitWorkspaceAsync(string workspacePath, CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(workspacePath))
+            throw new ArgumentException("Workspace path is required.", nameof(workspacePath));
+
+        var client = _context.HasControlConnection
+            ? _context.GetRequiredControlHttpClient()
+            : _context.GetRequiredActiveWorkspaceHttpClient();
+
+        var seedResult = await client.PostAsync<JsonElement>("/mcp/agents/definitions/seed", ct: ct).ConfigureAwait(false);
+        var path = Uri.EscapeDataString(workspacePath);
+        var eventBody = new
+        {
+            agentId = "system",
+            eventType = 7, // AgentEventType.Init
+            details = "Workspace initialized via Director TUI",
+        };
+        await client.PostAsync<JsonElement>($"/mcp/agents/system/events?workspace={path}", eventBody, ct).ConfigureAwait(false);
+
+        int? seeded = null;
+        if (seedResult.TryGetProperty("seeded", out var seededProp) && seededProp.ValueKind == JsonValueKind.Number
+            && seededProp.TryGetInt32(out var seededCount))
+        {
+            seeded = seededCount;
+        }
+
+        return new WorkspaceInitInfo(workspacePath, seeded);
     }
 
     private static WorkspaceDetail MapWorkspaceDetail(WorkspaceDto dto)

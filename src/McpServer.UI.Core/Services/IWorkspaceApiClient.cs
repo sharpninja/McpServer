@@ -30,4 +30,12 @@ public interface IWorkspaceApiClient
     /// <param name="ct">Cancellation token.</param>
     /// <returns><see langword="true"/> when the server reports success; otherwise <see langword="false"/>.</returns>
     Task<bool> UpdateWorkspacePolicyAsync(UpdateWorkspacePolicyCommand command, CancellationToken ct = default);
+
+    /// <summary>
+    /// Runs the Director workspace-initialization workflow for the specified workspace.
+    /// </summary>
+    /// <param name="workspacePath">Absolute workspace path.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Initialization summary.</returns>
+    Task<WorkspaceInitInfo> InitWorkspaceAsync(string workspacePath, CancellationToken ct = default);
 }

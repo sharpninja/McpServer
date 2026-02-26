@@ -68,6 +68,8 @@ internal sealed class OidcAuthService : IDisposable
                     RefreshToken = tokenResult.RefreshToken ?? "",
                     ExpiresAtUtc = DateTime.UtcNow.AddSeconds(tokenResult.ExpiresIn),
                     Authority = _options.Authority,
+                    TokenEndpoint = _options.GetTokenEndpoint(),
+                    ClientId = _options.ClientId,
                 });
 
                 var username = ExtractUsername(tokenResult.AccessToken!);
@@ -120,6 +122,8 @@ internal sealed class OidcAuthService : IDisposable
             RefreshToken = refreshed.RefreshToken ?? cached.RefreshToken,
             ExpiresAtUtc = DateTime.UtcNow.AddSeconds(refreshed.ExpiresIn),
             Authority = _options.Authority,
+            TokenEndpoint = _options.GetTokenEndpoint(),
+            ClientId = _options.ClientId,
         });
 
         return refreshed.AccessToken;

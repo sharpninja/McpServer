@@ -116,9 +116,14 @@ $realm = @{
     resetPasswordAllowed     = $true
     editUsernameAllowed      = $false
     bruteForceProtected      = $true
-    accessTokenLifespan      = 300
-    ssoSessionIdleTimeout    = 1800
-    ssoSessionMaxLifespan    = 36000
+    # Issue tokens with at least 24h of validity (server enforces >= 86400s).
+    # Use 25h for access tokens to avoid edge cases around issuance/clock skew.
+    accessTokenLifespan      = 90000
+    # Keep online sessions alive long enough so refresh_expires_in also clears the 24h minimum.
+    ssoSessionIdleTimeout    = 172800
+    ssoSessionMaxLifespan    = 172800
+    clientSessionIdleTimeout = 172800
+    clientSessionMaxLifespan = 172800
     offlineSessionIdleTimeout = 2592000
     oauth2DeviceCodeLifespan = 600
     oauth2DevicePollingInterval = 5

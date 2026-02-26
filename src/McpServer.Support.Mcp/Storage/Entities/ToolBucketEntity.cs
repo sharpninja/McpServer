@@ -13,6 +13,9 @@ public sealed class ToolBucketEntity
     [Key]
     public int Id { get; set; }
 
+    /// <summary>TR-MCP-MT-003: Workspace discriminator for multi-tenant data isolation.</summary>
+    public string WorkspaceId { get; set; } = string.Empty;
+
     /// <summary>Short unique name for this bucket (e.g. <c>official</c>, <c>community</c>).</summary>
     [Required]
     [MaxLength(128)]

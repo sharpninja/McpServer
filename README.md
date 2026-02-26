@@ -6,8 +6,9 @@ Standalone repository for `McpServer.Support.Mcp`, the MCP context server used f
 
 - HTTP API with Swagger UI
 - MCP over STDIO transport (`--transport stdio`)
-- Multi-instance hosting from `appsettings` (`Mcp:Instances`)
-- Per-instance todo storage backend (`yaml` file-backed or `sqlite` table-backed)
+- Single-port multi-tenant workspace hosting via `X-Workspace-Path` header
+- Per-workspace todo storage backend (`yaml` file-backed or `sqlite` table-backed)
+- Three-tier workspace resolution: header → API key reverse lookup → default
 - Optional interaction logging and Parseable sink support
 
 ## Repository Layout

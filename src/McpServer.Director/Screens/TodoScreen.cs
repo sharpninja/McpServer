@@ -14,6 +14,7 @@ internal sealed class TodoScreen : View
     private Label _detailTitleLabel = null!;
     private Label _editorTitleLabel = null!;
     private Label _doneValueLabel = null!;
+    private Button _showCompletedToggleButton = null!;
     private TextView _statusLabel = null!;
     private TextField _sectionFilter = null!;
     private TextField _idField = null!;
@@ -29,6 +30,7 @@ internal sealed class TodoScreen : View
     private readonly SemaphoreSlim _detailLoadGate = new(1, 1);
     private int _detailLoadRequestVersion;
     private string? _lastAutoDetailTodoId;
+    private bool _showCompletedItems;
 
     public TodoScreen(TodoListViewModel listViewModel, TodoDetailViewModel detailViewModel, DirectorMcpContext? directorContext = null)
     {
@@ -49,6 +51,10 @@ internal sealed class TodoScreen : View
         var filterLabel = new Label { X = 0, Y = 0, Text = "Section:" };
         _sectionFilter = new TextField { X = 10, Y = 0, Width = 30, Text = "" };
         Add(filterLabel, _sectionFilter);
+
+        _showCompletedToggleButton = new Button { X = 43, Y = 0, Text = "Show Completed" };
+        _showCompletedToggleButton.Accepting += (_, _) => ToggleShowCompletedItems();
+        Add(_showCompletedToggleButton);
 
         _table = new TableView
         {
@@ -235,10 +241,16 @@ internal sealed class TodoScreen : View
         SetStatus("⏳ Loading TODO items...");
         try
         {
+            var previouslySelectedTodoId = GetSelectedTodoId();
             _listViewModel.Section = _sectionFilter?.Text;
             await _listViewModel.LoadAsync().ConfigureAwait(false);
 
-            var rows = _listViewModel.Items
+            var allItems = _listViewModel.Items.ToList();
+            var visibleItems = _showCompletedItems
+                ? allItems
+                : allItems.Where(item => !item.Done).ToList();
+
+            var rows = visibleItems
                 .Select(item => new TodoRow(
                     item.Id,
                     item.Title,
@@ -248,6 +260,9 @@ internal sealed class TodoScreen : View
                 .ToList();
             _rows = rows;
             _lastAutoDetailTodoId = null;
+            var selectedRow = rows.FindIndex(r => string.Equals(r.Id, previouslySelectedTodoId, StringComparison.Ordinal));
+            if (selectedRow < 0 && rows.Count > 0)
+                selectedRow = 0;
 
             Application.Invoke(() =>
             {
@@ -260,18 +275,24 @@ internal sealed class TodoScreen : View
                         ["Priority"] = r => r.Priority,
                         ["Done"] = r => r.Done,
                     });
+
+                if (selectedRow >= 0 && selectedRow < rows.Count)
+                    _table.SelectedRow = selectedRow;
             });
+            var hiddenCompletedCount = Math.Max(0, allItems.Count - rows.Count);
             SetStatus(_listViewModel.ErrorMessage is null
-                ? $"✓ {rows.Count} items"
+                ? BuildListStatus(rows.Count, allItems.Count, hiddenCompletedCount)
                 : $"✗ {_listViewModel.ErrorMessage}");
 
             if (_listViewModel.ErrorMessage is null && rows.Count > 0)
             {
-                await LoadTodoDetailAsync(rows[0].Id, autoLoaded: true).ConfigureAwait(false);
+                await LoadTodoDetailAsync(rows[selectedRow].Id, autoLoaded: true).ConfigureAwait(false);
             }
             else if (rows.Count == 0)
             {
-                ClearDetailPane("Detail: (no TODO items)");
+                ClearDetailPane(_showCompletedItems
+                    ? "Detail: (no TODO items)"
+                    : "Detail: (no open TODO items)");
                 BeginNewDraft();
             }
         }
@@ -739,6 +760,21 @@ internal sealed class TodoScreen : View
         Application.Invoke(() => _doneValueLabel.Text = _detailViewModel.EditorDone ? "true" : "false");
     }
 
+    private void ToggleShowCompletedItems()
+    {
+        _showCompletedItems = !_showCompletedItems;
+        UpdateShowCompletedToggleButtonText();
+        _ = Task.Run(LoadAsync);
+    }
+
+    private void UpdateShowCompletedToggleButtonText()
+    {
+        Application.Invoke(() =>
+        {
+            _showCompletedToggleButton.Text = _showCompletedItems ? "Hide Completed" : "Show Completed";
+        });
+    }
+
     private string? GetSelectedTodoId()
     {
         var row = _table.SelectedRow;
@@ -859,6 +895,16 @@ internal sealed class TodoScreen : View
     }
 
     private void SetStatus(string text) => Application.Invoke(() => _statusLabel.Text = text);
+
+    private string BuildListStatus(int visibleCount, int totalCount, int hiddenCompletedCount)
+    {
+        if (_showCompletedItems)
+            return $"✓ {visibleCount} items (including completed)";
+
+        return hiddenCompletedCount > 0
+            ? $"✓ {visibleCount}/{totalCount} items (completed hidden: {hiddenCompletedCount})"
+            : $"✓ {visibleCount} items";
+    }
 
     private sealed record TodoRow(string Id, string Title, string Section, string Priority, string Done);
 }

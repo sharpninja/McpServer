@@ -1,4 +1,4 @@
-using System.Text.Json;
+using McpServer.Director.Handlers;
 using Terminal.Gui;
 
 namespace McpServer.Director.Screens;
@@ -6,6 +6,7 @@ namespace McpServer.Director.Screens;
 internal sealed class AgentScreen : View
 {
     private readonly DirectorMcpContext _context;
+    private readonly AgentScreenHandler _handler;
     private TableView _defsTable = null!;
     private TableView _agentsTable = null!;
     private TextView _statusLabel = null!;
@@ -40,6 +41,7 @@ internal sealed class AgentScreen : View
     public AgentScreen(DirectorMcpContext context)
     {
         _context = context;
+        _handler = new AgentScreenHandler(context);
         Title = "Agents";
         Width = Dim.Fill();
         Height = Dim.Fill();
@@ -308,17 +310,13 @@ internal sealed class AgentScreen : View
         SetStatus("Loading definitions...");
         try
         {
-            var client = GetAgentDefinitionsHttpClient();
-            var result = await client.GetAsync<JsonElement>("/mcp/agents/definitions").ConfigureAwait(false);
-            var items = result.GetProperty("items");
-            var rows = new List<AgentDefRow>();
-            foreach (var item in items.EnumerateArray())
-            {
-                rows.Add(new AgentDefRow(
-                    item.GetProperty("id").GetString() ?? "",
-                    item.GetProperty("displayName").GetString() ?? "",
-                    item.TryGetProperty("isBuiltIn", out var bi) && bi.GetBoolean() ? "Yes" : "No"));
-            }
+            var definitions = await _handler.ListDefinitionsAsync().ConfigureAwait(false);
+            var rows = definitions
+                .Select(static item => new AgentDefRow(
+                    item.Id,
+                    item.DisplayName,
+                    item.IsBuiltIn ? "Yes" : "No"))
+                .ToList();
 
             _defRows = rows;
             Application.Invoke(() =>
@@ -343,19 +341,15 @@ internal sealed class AgentScreen : View
     {
         try
         {
-            var client = _context.GetRequiredActiveWorkspaceHttpClient();
-            var path = Uri.EscapeDataString(client.WorkspacePath);
-            var result = await client.GetAsync<JsonElement>($"/mcp/agents?workspace={path}").ConfigureAwait(false);
-            var items = result.GetProperty("items");
-            var rows = new List<AgentRow>();
-            foreach (var item in items.EnumerateArray())
-            {
-                rows.Add(new AgentRow(
-                    item.GetProperty("agentId").GetString() ?? "",
-                    item.TryGetProperty("enabled", out var en) && en.GetBoolean() ? "Yes" : "No",
-                    item.TryGetProperty("banned", out var b) && b.GetBoolean() ? "Yes" : "No",
-                    item.TryGetProperty("agentIsolation", out var iso) ? iso.GetString() ?? "worktree" : "worktree"));
-            }
+            var workspacePath = GetRequiredActiveWorkspacePath();
+            var agents = await _handler.ListWorkspaceAgentsAsync(workspacePath).ConfigureAwait(false);
+            var rows = agents
+                .Select(static item => new AgentRow(
+                    item.AgentId,
+                    item.Enabled ? "Yes" : "No",
+                    item.Banned ? "Yes" : "No",
+                    item.AgentIsolation))
+                .ToList();
 
             _agentRows = rows;
             Application.Invoke(() =>
@@ -409,13 +403,8 @@ internal sealed class AgentScreen : View
         return null;
     }
 
-    private McpHttpClient GetAgentDefinitionsHttpClient()
-    {
-        if (_context.HasControlConnection)
-            return _context.GetRequiredControlHttpClient();
-
-        return _context.GetRequiredActiveWorkspaceHttpClient();
-    }
+    private string GetRequiredActiveWorkspacePath()
+        => _context.GetRequiredActiveWorkspaceHttpClient().WorkspacePath;
 
     private void QueueSelectedDefinitionDetailRefresh()
         => QueueDefinitionDetailRefresh(GetSelectedDefinitionId());
@@ -507,25 +496,8 @@ internal sealed class AgentScreen : View
         try
         {
             TraceUi($"load-agent-detail.start version={version} agentId={agentId}");
-            var client = _context.GetRequiredActiveWorkspaceHttpClient();
-            var path = Uri.EscapeDataString(client.WorkspacePath);
-            var result = await client.GetAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}?workspace={path}").ConfigureAwait(false);
-
-            var detail = new AgentDetailState
-            {
-                AgentId = GetString(result, "agentId") ?? agentId,
-                WorkspacePath = GetString(result, "workspacePath") ?? client.WorkspacePath,
-                Enabled = GetBool(result, "enabled"),
-                Banned = GetBool(result, "banned"),
-                BannedReason = GetString(result, "bannedReason") ?? "",
-                AgentIsolation = GetString(result, "agentIsolation") ?? "worktree",
-                LaunchCommandOverride = GetString(result, "launchCommandOverride"),
-                ModelsOverride = GetStringArray(result, "modelsOverride"),
-                BranchStrategyOverride = GetString(result, "branchStrategyOverride"),
-                SeedPromptOverride = GetString(result, "seedPromptOverride"),
-                MarkerAdditions = GetString(result, "markerAdditions") ?? "",
-                InstructionFilesOverride = GetStringArray(result, "instructionFilesOverride"),
-            };
+            var workspacePath = GetRequiredActiveWorkspacePath();
+            var detail = await _handler.GetWorkspaceAgentDetailAsync(workspacePath, agentId).ConfigureAwait(false);
 
             if (version != System.Threading.Volatile.Read(ref _detailLoadVersion))
             {
@@ -549,20 +521,7 @@ internal sealed class AgentScreen : View
     {
         try
         {
-            var client = GetAgentDefinitionsHttpClient();
-            var result = await client.GetAsync<JsonElement>($"/mcp/agents/definitions/{Uri.EscapeDataString(agentId)}").ConfigureAwait(false);
-
-            var detail = new AgentDefinitionDetailState
-            {
-                AgentId = GetString(result, "id") ?? agentId,
-                DisplayName = GetString(result, "displayName") ?? agentId,
-                IsBuiltIn = GetBool(result, "isBuiltIn"),
-                DefaultLaunchCommand = GetString(result, "defaultLaunchCommand") ?? "",
-                DefaultModels = GetStringArray(result, "defaultModels"),
-                DefaultBranchStrategy = GetString(result, "defaultBranchStrategy") ?? "",
-                DefaultSeedPrompt = GetString(result, "defaultSeedPrompt") ?? "",
-                DefaultInstructionFile = GetString(result, "defaultInstructionFile") ?? "",
-            };
+            var detail = await _handler.GetDefinitionDetailAsync(agentId).ConfigureAwait(false);
 
             if (version != System.Threading.Volatile.Read(ref _detailLoadVersion))
                 return;
@@ -794,22 +753,8 @@ internal sealed class AgentScreen : View
         SetStatus($"Saving detail for '{request.AgentId}'...");
         try
         {
-            var client = _context.GetRequiredActiveWorkspaceHttpClient();
-            var path = Uri.EscapeDataString(client.WorkspacePath);
-            var body = new
-            {
-                agentId = request.AgentId,
-                enabled = request.Enabled,
-                agentIsolation = request.AgentIsolation,
-                launchCommandOverride = request.LaunchCommandOverride,
-                modelsOverride = request.ModelsOverride,
-                branchStrategyOverride = request.BranchStrategyOverride,
-                seedPromptOverride = request.SeedPromptOverride,
-                markerAdditions = request.MarkerAdditions,
-                instructionFilesOverride = request.InstructionFilesOverride,
-            };
-
-            await client.PostAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(request.AgentId)}?workspace={path}", body).ConfigureAwait(false);
+            var workspacePath = GetRequiredActiveWorkspacePath();
+            await _handler.SaveWorkspaceAgentAsync(workspacePath, request).ConfigureAwait(false);
             SetStatus($"Workspace agent '{request.AgentId}' updated");
             await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
             QueueAgentDetailRefresh(request.AgentId);
@@ -825,19 +770,7 @@ internal sealed class AgentScreen : View
         SetStatus($"Saving global definition '{request.AgentId}'...");
         try
         {
-            var client = GetAgentDefinitionsHttpClient();
-            var body = new
-            {
-                id = request.AgentId,
-                displayName = request.DisplayName,
-                defaultLaunchCommand = request.DefaultLaunchCommand,
-                defaultInstructionFile = request.DefaultInstructionFile,
-                defaultModels = request.DefaultModels,
-                defaultBranchStrategy = request.DefaultBranchStrategy,
-                defaultSeedPrompt = request.DefaultSeedPrompt,
-            };
-
-            await client.PostAsync<JsonElement>("/mcp/agents/definitions", body).ConfigureAwait(false);
+            await _handler.SaveDefinitionAsync(request).ConfigureAwait(false);
             await LoadDefinitionsAsync().ConfigureAwait(false);
             SetStatus($"Global definition '{request.AgentId}' updated");
             QueueDefinitionDetailRefresh(request.AgentId);
@@ -860,10 +793,8 @@ internal sealed class AgentScreen : View
         SetStatus($"Assigning '{agentId}' to current workspace...");
         try
         {
-            var client = _context.GetRequiredActiveWorkspaceHttpClient();
-            var path = Uri.EscapeDataString(client.WorkspacePath);
-            var body = new { agentId, enabled = true, agentIsolation = "worktree" };
-            await client.PostAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}?workspace={path}", body).ConfigureAwait(false);
+            var workspacePath = GetRequiredActiveWorkspacePath();
+            await _handler.AssignWorkspaceAgentAsync(workspacePath, agentId).ConfigureAwait(false);
             SetStatus($"Agent '{agentId}' assigned to workspace");
             await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
             QueueAgentDetailRefresh(agentId);
@@ -935,10 +866,8 @@ internal sealed class AgentScreen : View
                 SetStatus($"Banning {agentId}...");
                 try
                 {
-                    var client = _context.GetRequiredActiveWorkspaceHttpClient();
-                    var path = Uri.EscapeDataString(client.WorkspacePath);
-                    var body = new { reason = reasonField.Text ?? "", global = false };
-                    await client.PostAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}/ban?workspace={path}", body).ConfigureAwait(false);
+                    var workspacePath = GetRequiredActiveWorkspacePath();
+                    await _handler.BanWorkspaceAgentAsync(workspacePath, agentId, reasonField.Text?.ToString() ?? "").ConfigureAwait(false);
                     SetStatus($"Agent '{agentId}' banned");
                     await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
                     QueueAgentDetailRefresh(agentId);
@@ -969,9 +898,8 @@ internal sealed class AgentScreen : View
         SetStatus($"Unbanning {agentId}...");
         try
         {
-            var client = _context.GetRequiredActiveWorkspaceHttpClient();
-            var path = Uri.EscapeDataString(client.WorkspacePath);
-            await client.PostAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}/unban?workspace={path}&global=false").ConfigureAwait(false);
+            var workspacePath = GetRequiredActiveWorkspacePath();
+            await _handler.UnbanWorkspaceAgentAsync(workspacePath, agentId).ConfigureAwait(false);
             SetStatus($"Agent '{agentId}' unbanned");
             await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
             QueueAgentDetailRefresh(agentId);
@@ -994,9 +922,8 @@ internal sealed class AgentScreen : View
         SetStatus($"Deleting {agentId}...");
         try
         {
-            var client = _context.GetRequiredActiveWorkspaceHttpClient();
-            var path = Uri.EscapeDataString(client.WorkspacePath);
-            await client.DeleteAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}?workspace={path}").ConfigureAwait(false);
+            var workspacePath = GetRequiredActiveWorkspacePath();
+            await _handler.DeleteWorkspaceAgentAsync(workspacePath, agentId).ConfigureAwait(false);
             SetStatus($"Agent '{agentId}' removed");
             await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
         }
@@ -1011,13 +938,11 @@ internal sealed class AgentScreen : View
         SetStatus("Validating agents.yaml...");
         try
         {
-            var client = _context.GetRequiredActiveWorkspaceHttpClient();
-            var path = Uri.EscapeDataString(client.WorkspacePath);
-            var result = await client.GetAsync<JsonElement>($"/mcp/agents/validate?workspace={path}").ConfigureAwait(false);
-            var valid = result.TryGetProperty("valid", out var v) && v.GetBoolean();
-            SetStatus(valid
+            var workspacePath = GetRequiredActiveWorkspacePath();
+            var result = await _handler.ValidateWorkspaceAgentsAsync(workspacePath).ConfigureAwait(false);
+            SetStatus(result.Valid
                 ? "agents.yaml is valid"
-                : $"Validation failed: {(result.TryGetProperty("error", out var e) ? e.GetString() : "unknown")}");
+                : $"Validation failed: {result.Error ?? "unknown"}");
         }
         catch (Exception ex)
         {
@@ -1032,10 +957,8 @@ internal sealed class AgentScreen : View
         SetStatus($"Adding {agentId}...");
         try
         {
-            var client = _context.GetRequiredActiveWorkspaceHttpClient();
-            var path = Uri.EscapeDataString(client.WorkspacePath);
-            var body = new { agentId, enabled = true, agentIsolation = "worktree" };
-            await client.PostAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}?workspace={path}", body).ConfigureAwait(false);
+            var workspacePath = GetRequiredActiveWorkspacePath();
+            await _handler.AssignWorkspaceAgentAsync(workspacePath, agentId).ConfigureAwait(false);
             SetStatus($"Agent '{agentId}' added");
             await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
             QueueAgentDetailRefresh(agentId);
@@ -1054,9 +977,7 @@ internal sealed class AgentScreen : View
         SetStatus($"Creating definition '{agentId}'...");
         try
         {
-            var client = GetAgentDefinitionsHttpClient();
-            var body = new { id = agentId, displayName = agentId };
-            await client.PostAsync<JsonElement>("/mcp/agents/definitions", body).ConfigureAwait(false);
+            await _handler.CreateDefinitionAsync(agentId).ConfigureAwait(false);
             if (refreshDefinitions)
                 await LoadDefinitionsAsync().ConfigureAwait(false);
             SetStatus($"Definition '{agentId}' created");
@@ -1065,39 +986,6 @@ internal sealed class AgentScreen : View
         {
             SetStatus($"Create definition failed: {ex.Message}");
         }
-    }
-
-    private static string? GetString(JsonElement element, string propertyName)
-    {
-        if (!element.TryGetProperty(propertyName, out var value))
-            return null;
-        return value.ValueKind == JsonValueKind.Null ? null : value.ToString();
-    }
-
-    private static bool GetBool(JsonElement element, string propertyName)
-    {
-        if (!element.TryGetProperty(propertyName, out var value))
-            return false;
-        if (value.ValueKind == JsonValueKind.True) return true;
-        if (value.ValueKind == JsonValueKind.False) return false;
-        return bool.TryParse(value.ToString(), out var parsed) && parsed;
-    }
-
-    private static IReadOnlyList<string>? GetStringArray(JsonElement element, string propertyName)
-    {
-        if (!element.TryGetProperty(propertyName, out var value) || value.ValueKind == JsonValueKind.Null)
-            return null;
-        if (value.ValueKind != JsonValueKind.Array)
-            return null;
-
-        var items = new List<string>();
-        foreach (var entry in value.EnumerateArray())
-        {
-            var s = entry.GetString();
-            if (!string.IsNullOrWhiteSpace(s))
-                items.Add(s);
-        }
-        return items.Count == 0 ? null : items;
     }
 
     private static string JoinCsv(IReadOnlyList<string>? items)
@@ -1145,54 +1033,6 @@ internal sealed class AgentScreen : View
         Definition,
         WorkspaceAssignment
     }
-
-    private sealed class AgentDetailState
-    {
-        public string AgentId { get; init; } = "";
-        public string WorkspacePath { get; init; } = "";
-        public bool Enabled { get; init; }
-        public bool Banned { get; init; }
-        public string BannedReason { get; init; } = "";
-        public string AgentIsolation { get; init; } = "worktree";
-        public string? LaunchCommandOverride { get; init; }
-        public IReadOnlyList<string>? ModelsOverride { get; init; }
-        public string? BranchStrategyOverride { get; init; }
-        public string? SeedPromptOverride { get; init; }
-        public string? MarkerAdditions { get; init; }
-        public IReadOnlyList<string>? InstructionFilesOverride { get; init; }
-    }
-
-    private sealed class AgentDefinitionDetailState
-    {
-        public string AgentId { get; init; } = "";
-        public string DisplayName { get; init; } = "";
-        public bool IsBuiltIn { get; init; }
-        public string DefaultLaunchCommand { get; init; } = "";
-        public IReadOnlyList<string>? DefaultModels { get; init; }
-        public string DefaultBranchStrategy { get; init; } = "";
-        public string DefaultSeedPrompt { get; init; } = "";
-        public string DefaultInstructionFile { get; init; } = "";
-    }
-
-    private sealed record AgentDetailSaveRequest(
-        string AgentId,
-        bool Enabled,
-        string AgentIsolation,
-        string? LaunchCommandOverride,
-        string[]? ModelsOverride,
-        string? BranchStrategyOverride,
-        string? SeedPromptOverride,
-        string MarkerAdditions,
-        string[]? InstructionFilesOverride);
-
-    private sealed record AgentDefinitionSaveRequest(
-        string AgentId,
-        string DisplayName,
-        string DefaultLaunchCommand,
-        string DefaultInstructionFile,
-        IReadOnlyList<string> DefaultModels,
-        string DefaultBranchStrategy,
-        string DefaultSeedPrompt);
 
     private static void TraceUi(string message)
     {

@@ -33,6 +33,8 @@ public sealed class SqliteTodoServiceTests : IDisposable
             Title = "SQLite TODO",
             Section = "mvp-support",
             Priority = "high",
+            Note = "sqlite note",
+            Remaining = "sqlite remaining",
             Description = ["stored in sqlite"],
         }).ConfigureAwait(true);
 
@@ -43,6 +45,8 @@ public sealed class SqliteTodoServiceTests : IDisposable
         Assert.Equal("SQLite TODO", item.Title);
         Assert.Equal("mvp-support", item.Section);
         Assert.Equal("high", item.Priority);
+        Assert.Equal("sqlite note", item.Note);
+        Assert.Equal("sqlite remaining", item.Remaining);
         Assert.Equal("stored in sqlite", item.Description![0]);
     }
 

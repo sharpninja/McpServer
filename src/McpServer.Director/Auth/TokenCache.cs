@@ -19,6 +19,12 @@ internal sealed class CachedToken
     /// <summary>Keycloak authority this token was issued by.</summary>
     public string Authority { get; set; } = "";
 
+    /// <summary>OIDC token endpoint used to mint/refresh this token (may be an MCP proxy endpoint).</summary>
+    public string TokenEndpoint { get; set; } = "";
+
+    /// <summary>OIDC client id used to mint/refresh this token.</summary>
+    public string ClientId { get; set; } = "mcp-director";
+
     /// <summary>Whether the access token has expired (with 30-second buffer).</summary>
     public bool IsExpired => DateTime.UtcNow >= ExpiresAtUtc.AddSeconds(-30);
 }

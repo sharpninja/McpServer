@@ -60,9 +60,15 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IsBuiltIn");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.ToTable("AgentDefinitions");
                 });
@@ -93,6 +99,10 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("WorkspacePath")
                         .IsRequired()
                         .HasMaxLength(1024)
@@ -105,6 +115,8 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.HasIndex("EventType");
 
                     b.HasIndex("Timestamp");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.HasIndex("WorkspacePath");
 
@@ -167,12 +179,18 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<string>("SeedPromptOverride")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("WorkspacePath")
                         .IsRequired()
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.HasIndex("WorkspacePath");
 
@@ -206,9 +224,15 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<int>("TokenCount")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DocumentId");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.ToTable("Chunks");
                 });
@@ -237,6 +261,10 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IngestedAt");
@@ -244,6 +272,8 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.HasIndex("SourceKey");
 
                     b.HasIndex("SourceType");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.ToTable("Documents");
                 });
@@ -275,9 +305,15 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SessionLogEntryId");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.ToTable("SessionLogActions");
                 });
@@ -365,6 +401,10 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<int?>("TotalTokens")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("LastUpdated");
@@ -372,6 +412,8 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.HasIndex("SourceType");
 
                     b.HasIndex("Started");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.HasIndex("SourceType", "SessionId")
                         .IsUnique();
@@ -396,9 +438,15 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<long>("SessionLogEntryId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SessionLogEntryId");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.ToTable("SessionLogEntryContexts");
                 });
@@ -462,7 +510,13 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<int?>("TokenCount")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.HasIndex("SessionLogId", "RequestId")
                         .IsUnique();
@@ -484,9 +538,15 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SessionLogEntryId");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.ToTable("SessionLogEntryTags");
                 });
@@ -519,9 +579,15 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<DateTimeOffset>("Timestamp")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SessionLogEntryId");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.ToTable("SessionLogProcessingDialogs");
                 });
@@ -563,10 +629,16 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
+
+                    b.HasIndex("WorkspaceId");
 
                     b.ToTable("ToolBuckets");
                 });
@@ -605,11 +677,17 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .HasMaxLength(8192)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("WorkspacePath")
                         .HasMaxLength(2048)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.HasIndex("WorkspacePath");
 
@@ -633,9 +711,15 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<int>("ToolDefinitionId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Tag");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.HasIndex("ToolDefinitionId", "Tag")
                         .IsUnique();

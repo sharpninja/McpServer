@@ -1,4 +1,3 @@
-using System.Text.Json;
 using McpServer.UI.Core.ViewModels;
 using Terminal.Gui;
 
@@ -94,12 +93,20 @@ internal sealed class HealthScreen : View
         Application.Invoke(() => _statusLabel.Text = "⏳ Initializing...");
         try
         {
-            await _client.PostRawAsync("/mcp/agents/definitions/seed").ConfigureAwait(false);
-            var path = Uri.EscapeDataString(_client.WorkspacePath);
-            // Server endpoint currently expects AgentEventType as a numeric enum value (Init = 7).
-            var body = new { agentId = "system", eventType = 7, details = "Workspace initialized via Director TUI" };
-            await _client.PostAsync<JsonElement>($"/mcp/agents/system/events?workspace={path}", body).ConfigureAwait(false);
-            Application.Invoke(() => _statusLabel.Text = "✓ Workspace initialized");
+            var result = await _viewModel.InitializeWorkspaceAsync(_client.WorkspacePath).ConfigureAwait(false);
+            Application.Invoke(() =>
+            {
+                if (!result.IsSuccess || result.Value is null)
+                {
+                    _statusLabel.Text = $"✗ Init failed: {result.Error ?? "Unknown error"}";
+                    return;
+                }
+
+                var seededText = result.Value.SeededDefinitions is int seeded
+                    ? $" (seeded {seeded})"
+                    : "";
+                _statusLabel.Text = $"✓ Workspace initialized{seededText}";
+            });
         }
         catch (Exception ex)
         {
