@@ -40,6 +40,7 @@ internal sealed class DeleteTodoCommandHandler : ICommandHandler<DeleteTodoComma
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<TodoMutationOutcome>.Failure(ex);
         }
     }

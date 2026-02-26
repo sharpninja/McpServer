@@ -111,6 +111,7 @@ internal sealed class ViewModelBinder : IDisposable
                 }
                 catch (Exception ex)
                 {
+                    System.Diagnostics.Trace.TraceError(ex.ToString());
                     Application.Invoke(() =>
                         MessageBox.ErrorQuery("Error", ex.Message, "OK"));
                 }

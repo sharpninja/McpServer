@@ -39,6 +39,7 @@ internal sealed class ListSessionLogsQueryHandler : IQueryHandler<ListSessionLog
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<ListSessionLogsResult>.Failure(ex);
         }
     }

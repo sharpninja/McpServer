@@ -152,8 +152,9 @@ internal sealed class RequirementsService(
                 Body = body,
             };
         }
-        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+        catch (OperationCanceledException ex) when (!cancellationToken.IsCancellationRequested)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return new CopilotResult
             {
                 State = CopilotResultState.Timeout,
@@ -162,6 +163,7 @@ internal sealed class RequirementsService(
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return new CopilotResult
             {
                 State = CopilotResultState.Error,
@@ -277,8 +279,9 @@ internal sealed class RequirementsService(
                 if (frIds.Count > 0 || trIds.Count > 0)
                     return (frIds, trIds);
             }
-            catch (JsonException)
+            catch (JsonException ex)
             {
+                System.Diagnostics.Trace.TraceWarning(ex.ToString());
                 // Fall through to regex
             }
         }

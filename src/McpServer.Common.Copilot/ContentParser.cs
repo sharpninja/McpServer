@@ -22,8 +22,9 @@ public static class ContentParser
             {
                 return JsonSerializer.Deserialize<JsonElement>(trimmed, JsonOptions);
             }
-            catch (JsonException)
+            catch (JsonException ex)
             {
+                System.Diagnostics.Trace.TraceWarning(ex.ToString());
                 return null;
             }
         }
@@ -42,8 +43,9 @@ public static class ContentParser
             {
                 return JsonSerializer.Deserialize<T>(trimmed, JsonOptions);
             }
-            catch (JsonException)
+            catch (JsonException ex)
             {
+                System.Diagnostics.Trace.TraceWarning(ex.ToString());
                 return default;
             }
         }
@@ -152,8 +154,9 @@ public static class ContentParser
                 var result = JsonSerializer.Deserialize<T>(json, JsonOptions);
                 return (CopilotContentType.Yaml, result);
             }
-            catch (JsonException)
+            catch (JsonException ex)
             {
+                System.Diagnostics.Trace.TraceWarning(ex.ToString());
                 return (CopilotContentType.Yaml, default);
             }
         }

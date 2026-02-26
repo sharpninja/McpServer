@@ -50,6 +50,7 @@ internal static class DirectorCommands
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
                 Error($"Server unreachable: {ex.Message}");
             }
         }, WorkspaceOption);
@@ -86,7 +87,11 @@ internal static class DirectorCommands
 
                 AnsiConsole.Write(table);
             }
-            catch (Exception ex) { Error(ex.Message); }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
+                Error(ex.Message);
+            }
         }, WorkspaceOption);
         return cmd;
     }
@@ -128,7 +133,11 @@ internal static class DirectorCommands
 
                 AnsiConsole.Write(table);
             }
-            catch (Exception ex) { Error(ex.Message); }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
+                Error(ex.Message);
+            }
         }, WorkspaceOption);
 
         var wsCmd = new Command("workspace", "List agents configured for this workspace");
@@ -238,7 +247,11 @@ internal static class DirectorCommands
                 else
                     Error(result.TryGetProperty("error", out var e) ? e.GetString() ?? "Unknown error" : "Unknown error");
             }
-            catch (HttpRequestException ex) { Error(ex.Message); }
+            catch (HttpRequestException ex)
+            {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
+                Error(ex.Message);
+            }
         }, agentIdArg, WorkspaceOption, isolationOpt, enabledOpt);
 
         return cmd;
@@ -278,7 +291,11 @@ internal static class DirectorCommands
                 else
                     Error(result.TryGetProperty("error", out var e) ? e.GetString() ?? "Unknown error" : "Unknown error");
             }
-            catch (HttpRequestException ex) { Error(ex.Message); }
+            catch (HttpRequestException ex)
+            {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
+                Error(ex.Message);
+            }
         }, agentIdArg, WorkspaceOption, reasonOpt, globalOpt, prOpt);
 
         return cmd;
@@ -313,7 +330,11 @@ internal static class DirectorCommands
                 else
                     Error(result.TryGetProperty("error", out var e) ? e.GetString() ?? "Unknown error" : "Unknown error");
             }
-            catch (HttpRequestException ex) { Error(ex.Message); }
+            catch (HttpRequestException ex)
+            {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
+                Error(ex.Message);
+            }
         }, agentIdArg, WorkspaceOption, globalOpt);
 
         return cmd;
@@ -346,7 +367,11 @@ internal static class DirectorCommands
                 else
                     Error(result.TryGetProperty("error", out var e) ? e.GetString() ?? "Unknown error" : "Unknown error");
             }
-            catch (HttpRequestException ex) { Error(ex.Message); }
+            catch (HttpRequestException ex)
+            {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
+                Error(ex.Message);
+            }
         }, agentIdArg, WorkspaceOption);
 
         return cmd;
@@ -376,7 +401,11 @@ internal static class DirectorCommands
                         AnsiConsole.MarkupLine($"  [dim]{Markup.Escape(e.GetString() ?? "")}[/]");
                 }
             }
-            catch (HttpRequestException ex) { Error(ex.Message); }
+            catch (HttpRequestException ex)
+            {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
+                Error(ex.Message);
+            }
         }, WorkspaceOption);
         return cmd;
     }
@@ -405,7 +434,11 @@ internal static class DirectorCommands
 
                 Success("Workspace initialized for agent management.");
             }
-            catch (HttpRequestException ex) { Error(ex.Message); }
+            catch (HttpRequestException ex)
+            {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
+                Error(ex.Message);
+            }
         }, WorkspaceOption);
         return cmd;
     }
@@ -426,7 +459,11 @@ internal static class DirectorCommands
                 AnsiConsole.MarkupLine("[blue]Sync Status:[/]");
                 AnsiConsole.WriteLine(json);
             }
-            catch (Exception ex) { Error(ex.Message); }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
+                Error(ex.Message);
+            }
         }, WorkspaceOption);
 
         var runCmd = new Command("run", "Trigger a full ingestion sync") { WorkspaceOption };
@@ -443,7 +480,11 @@ internal static class DirectorCommands
                 }).ConfigureAwait(false);
                 Success("Sync completed.");
             }
-            catch (Exception ex) { Error(ex.Message); }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
+                Error(ex.Message);
+            }
         }, WorkspaceOption);
 
         var syncCmd = new Command("sync", "Manage ingestion sync") { statusCmd, runCmd };
@@ -489,7 +530,11 @@ internal static class DirectorCommands
                 AnsiConsole.Write(table);
                 Info($"{items.GetArrayLength()} items");
             }
-            catch (Exception ex) { Error(ex.Message); }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
+                Error(ex.Message);
+            }
         }, WorkspaceOption, sectionOpt);
 
         var todoCmd = new Command("todo", "Manage TODO items") { listCmd };
@@ -534,7 +579,11 @@ internal static class DirectorCommands
 
                 AnsiConsole.Write(table);
             }
-            catch (Exception ex) { Error(ex.Message); }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
+                Error(ex.Message);
+            }
         }, WorkspaceOption, limitOpt);
 
         var slCmd = new Command("session-log", "View session logs") { listCmd };

@@ -82,6 +82,7 @@ public partial class WorkspacePolicyViewModel : ObservableObject
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             ErrorMessage = ex.Message;
         }
         finally

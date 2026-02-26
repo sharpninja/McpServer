@@ -151,10 +151,12 @@ internal static class Program
             }
             catch (InvalidOperationException ex)
             {
+                System.Diagnostics.Trace.TraceWarning(ex.ToString());
                 AnsiConsole.MarkupLine($"[red]Error:[/] {ex.Message}");
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
                 AnsiConsole.WriteException(ex);
             }
         }, viewModelArg, inputOption);

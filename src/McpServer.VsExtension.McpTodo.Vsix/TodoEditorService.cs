@@ -103,6 +103,7 @@ internal sealed class TodoEditorService : IVsRunningDocTableEvents3, IDisposable
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             CopilotOutputPane.Log($"Failed to open {todoId}: {ex.Message}");
         }
@@ -178,6 +179,7 @@ internal sealed class TodoEditorService : IVsRunningDocTableEvents3, IDisposable
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
                 CopilotOutputPane.Log($"Copilot CLI failed (New Todo): {ex.Message}");
             }
         }
@@ -201,6 +203,7 @@ internal sealed class TodoEditorService : IVsRunningDocTableEvents3, IDisposable
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
                 CopilotOutputPane.Log($"Failed to update {todoId}: {ex.Message}");
             }
         }
@@ -248,8 +251,14 @@ internal sealed class TodoEditorService : IVsRunningDocTableEvents3, IDisposable
     private static void TryDeleteFile(string path)
     {
         try { if (File.Exists(path)) File.Delete(path); }
-        catch (IOException) { }
-        catch (UnauthorizedAccessException) { }
+        catch (IOException ex)
+        {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+        }
     }
 
     public void Dispose()

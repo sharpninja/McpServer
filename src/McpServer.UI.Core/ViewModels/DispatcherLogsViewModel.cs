@@ -66,6 +66,7 @@ public sealed partial class DispatcherLogsViewModel : AreaListViewModelBase<Disp
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             ErrorMessage = ex.Message;
             StatusMessage = "Failed to load dispatcher logs.";
         }

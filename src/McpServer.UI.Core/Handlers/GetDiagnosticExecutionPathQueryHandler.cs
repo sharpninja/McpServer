@@ -33,6 +33,7 @@ internal sealed class GetDiagnosticExecutionPathQueryHandler : IQueryHandler<Get
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<DiagnosticExecutionPathSnapshot>.Failure(ex);
         }
     }

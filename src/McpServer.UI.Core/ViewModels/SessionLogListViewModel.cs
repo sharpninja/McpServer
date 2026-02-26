@@ -77,6 +77,7 @@ public sealed partial class SessionLogListViewModel : AreaListViewModelBase<Sess
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             ErrorMessage = ex.Message;
             StatusMessage = "Session log load failed.";
         }

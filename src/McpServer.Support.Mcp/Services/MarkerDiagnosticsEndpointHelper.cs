@@ -98,6 +98,7 @@ internal static class MarkerDiagnosticsEndpointHelper
         }
         catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             error = $"Invalid repoPath '{repoPath}'.";
             return false;
         }

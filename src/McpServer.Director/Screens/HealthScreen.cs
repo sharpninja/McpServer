@@ -80,6 +80,7 @@ internal sealed class HealthScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             Application.Invoke(() =>
             {
                 _statusLabel.Text = "✗ Server unreachable";
@@ -110,6 +111,7 @@ internal sealed class HealthScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             Application.Invoke(() => _statusLabel.Text = $"✗ Init failed: {ex.Message}");
         }
     }

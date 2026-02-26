@@ -33,6 +33,7 @@ internal sealed class SearchContextQueryHandler : IQueryHandler<SearchContextQue
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<ContextSearchPayload>.Failure(ex);
         }
     }

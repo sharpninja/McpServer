@@ -35,6 +35,7 @@ internal sealed class RunSyncCommandHandler : ICommandHandler<RunSyncCommand, Sy
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<SyncRunSummary>.Failure(ex);
         }
     }

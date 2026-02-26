@@ -120,8 +120,9 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         {
             execution = await ExecuteTurnAsync(state, turnId, userText, linkedCts!.Token).ConfigureAwait(false);
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             execution = new VoiceTurnExecutionResult("interrupted", "Voice turn interrupted.", "Interrupted.", [], null);
         }
         catch (Exception ex)
@@ -272,8 +273,9 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
             {
                 state.ActiveTurnCts?.Cancel();
             }
-            catch (ObjectDisposedException)
+            catch (ObjectDisposedException ex)
             {
+                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
                 // ignored
             }
 
@@ -606,6 +608,7 @@ public sealed partial class VoiceConversationService
         }
         catch (VoiceToolValidationException vex)
         {
+            _logger.LogWarning("{ExceptionDetail}", vex.ToString());
             return BlockedToolOutcome(turnId, step, normalizedToolName, arguments, isMutation, vex.Message);
         }
         catch (OperationCanceledException)
@@ -785,7 +788,7 @@ public sealed partial class VoiceConversationService
         return sb.ToString();
     }
 
-    private static bool TryParseModelEnvelope(string body, out ModelEnvelope? envelope, out string error)
+    private bool TryParseModelEnvelope(string body, out ModelEnvelope? envelope, out string error)
     {
         envelope = null;
         error = string.Empty;
@@ -864,6 +867,7 @@ public sealed partial class VoiceConversationService
         }
         catch (JsonException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             error = ex.Message;
             return false;
         }

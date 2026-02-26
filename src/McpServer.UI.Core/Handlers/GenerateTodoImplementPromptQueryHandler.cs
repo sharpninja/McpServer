@@ -39,6 +39,7 @@ internal sealed class GenerateTodoImplementPromptQueryHandler : IQueryHandler<Ge
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<TodoPromptOutput>.Failure(ex);
         }
     }

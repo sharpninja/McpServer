@@ -186,8 +186,9 @@ public sealed class WorkspaceAuthMiddleware
             context.User = result.Principal;
             return true;
         }
-        catch (InvalidOperationException)
+        catch (InvalidOperationException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             // JWT Bearer scheme not registered (OIDC disabled) — fall through to API-key auth.
             return false;
         }

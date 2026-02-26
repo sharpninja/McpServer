@@ -36,6 +36,7 @@ internal sealed class ListWorkspacesQueryHandler : IQueryHandler<ListWorkspacesQ
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<ListWorkspacesResult>.Failure(ex);
         }
     }

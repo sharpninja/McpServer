@@ -35,6 +35,7 @@ internal sealed class GetSyncStatusQueryHandler : IQueryHandler<GetSyncStatusQue
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<SyncStatusSnapshot>.Failure(ex);
         }
     }

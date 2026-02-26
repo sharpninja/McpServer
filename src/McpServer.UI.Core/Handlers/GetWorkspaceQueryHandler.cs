@@ -40,6 +40,7 @@ internal sealed class GetWorkspaceQueryHandler : IQueryHandler<GetWorkspaceQuery
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<WorkspaceDetail?>.Failure(ex);
         }
     }

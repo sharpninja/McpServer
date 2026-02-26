@@ -62,12 +62,14 @@ public sealed class ExternalDocsIngestor
                 var chunks = _chunker.Chunk(documentId, content);
                 results.Add((doc, chunks));
             }
-            catch (IOException)
+            catch (IOException ex)
             {
+                System.Diagnostics.Trace.TraceWarning(ex.ToString());
                 // Skip unreadable
             }
-            catch (UnauthorizedAccessException)
+            catch (UnauthorizedAccessException ex)
             {
+                System.Diagnostics.Trace.TraceWarning(ex.ToString());
                 // Skip inaccessible
             }
         }

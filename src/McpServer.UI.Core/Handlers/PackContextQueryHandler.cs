@@ -33,6 +33,7 @@ internal sealed class PackContextQueryHandler : IQueryHandler<PackContextQuery, 
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<ContextPackPayload>.Failure(ex);
         }
     }

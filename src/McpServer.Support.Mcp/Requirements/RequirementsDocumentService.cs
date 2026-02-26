@@ -391,6 +391,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
                 }
                 catch (Exception ex) when (ex is PlatformNotSupportedException or UnauthorizedAccessException)
                 {
+                    _logger.LogError("{ExceptionDetail}", ex.ToString());
                     File.Move(tempPath, fullPath, overwrite: true);
                 }
             }

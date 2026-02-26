@@ -40,6 +40,7 @@ internal sealed class UpdateTodoCommandHandler : ICommandHandler<UpdateTodoComma
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<TodoMutationOutcome>.Failure(ex);
         }
     }

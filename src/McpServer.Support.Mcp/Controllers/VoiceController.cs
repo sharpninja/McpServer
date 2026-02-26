@@ -37,6 +37,7 @@ public sealed class VoiceController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new { error = ex.Message });
         }
     }
@@ -62,10 +63,12 @@ public sealed class VoiceController : ControllerBase
         }
         catch (ArgumentException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return BadRequest(new { error = ex.Message });
         }
         catch (InvalidOperationException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new { error = ex.Message });
         }
         catch (Exception ex)
@@ -90,6 +93,7 @@ public sealed class VoiceController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new { error = ex.Message });
         }
     }
@@ -109,6 +113,7 @@ public sealed class VoiceController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new { error = ex.Message });
         }
     }
@@ -128,6 +133,7 @@ public sealed class VoiceController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new { error = ex.Message });
         }
     }
@@ -147,6 +153,7 @@ public sealed class VoiceController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new { error = ex.Message });
         }
     }

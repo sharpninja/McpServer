@@ -190,6 +190,7 @@ public class AgentController : ControllerBase
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Ok(new { valid = false, error = ex.Message, path = agentsYamlPath });
         }
     }

@@ -74,6 +74,7 @@ public sealed partial class WorkspaceDetailViewModel : AreaDetailViewModelBase<W
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             Detail = null;
             ErrorMessage = ex.Message;
             StatusMessage = "Workspace detail load failed.";

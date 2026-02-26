@@ -77,10 +77,12 @@ public sealed class RepoFileService : IRepoFileService
         }
         catch (IOException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return new RepoWriteResult(false, ex.Message);
         }
         catch (UnauthorizedAccessException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return new RepoWriteResult(false, ex.Message);
         }
     }

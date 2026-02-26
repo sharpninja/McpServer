@@ -33,6 +33,7 @@ internal sealed class GetAuthConfigQueryHandler : IQueryHandler<GetAuthConfigQue
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<AuthConfigSnapshot>.Failure(ex);
         }
     }

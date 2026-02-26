@@ -150,8 +150,9 @@ public sealed class FrpTunnelProvider : ITunnelProvider, IDisposable
         {
             _reconcileLoopCts?.Cancel();
         }
-        catch (ObjectDisposedException)
+        catch (ObjectDisposedException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // Best effort during disposal.
         }
 
@@ -159,7 +160,11 @@ public sealed class FrpTunnelProvider : ITunnelProvider, IDisposable
         {
             StopProcessCore(logStopped: false);
         }
-        catch (InvalidOperationException) { /* process already exited */ }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            /* process already exited */
+        }
         CleanupConfig();
         _reconcileLoopCts?.Dispose();
         _lifecycleGate.Dispose();
@@ -273,8 +278,9 @@ public sealed class FrpTunnelProvider : ITunnelProvider, IDisposable
                     _logger.LogInformation("FRP tunnel stopped.");
             }
         }
-        catch (InvalidOperationException)
+        catch (InvalidOperationException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // Process exited between checks.
         }
         finally
@@ -318,7 +324,10 @@ public sealed class FrpTunnelProvider : ITunnelProvider, IDisposable
         if (cts is not null)
         {
             try { cts.Cancel(); }
-            catch (ObjectDisposedException) { }
+            catch (ObjectDisposedException ex)
+            {
+                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            }
         }
 
         if (loopTask is null)
@@ -328,8 +337,9 @@ public sealed class FrpTunnelProvider : ITunnelProvider, IDisposable
         {
             await loopTask.ConfigureAwait(false);
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // Expected during shutdown.
         }
         catch (Exception ex)
@@ -373,8 +383,9 @@ public sealed class FrpTunnelProvider : ITunnelProvider, IDisposable
                     isRestart: processIsRunning,
                     cancellationToken).ConfigureAwait(false);
             }
-            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            catch (OperationCanceledException ex) when (cancellationToken.IsCancellationRequested)
             {
+                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
                 return;
             }
             catch (Exception ex)
@@ -390,8 +401,9 @@ public sealed class FrpTunnelProvider : ITunnelProvider, IDisposable
         {
             return _process is { HasExited: false };
         }
-        catch (InvalidOperationException)
+        catch (InvalidOperationException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return false;
         }
     }
@@ -429,12 +441,14 @@ public sealed class FrpTunnelProvider : ITunnelProvider, IDisposable
                     _logger.LogDebug("frpc stdout: {Line}", line);
             }
         }
-        catch (ObjectDisposedException)
+        catch (ObjectDisposedException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // Process/stream disposed during shutdown.
         }
-        catch (InvalidOperationException)
+        catch (InvalidOperationException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // Stream unavailable if process exits very early.
         }
         catch (Exception ex)

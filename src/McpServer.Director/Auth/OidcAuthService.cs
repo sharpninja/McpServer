@@ -212,6 +212,7 @@ internal sealed class OidcAuthService : IDisposable
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return new TokenResponse { Error = "network_error", ErrorDescription = ex.Message };
         }
     }

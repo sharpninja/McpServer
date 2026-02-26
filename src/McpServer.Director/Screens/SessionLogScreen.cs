@@ -79,7 +79,11 @@ internal sealed class SessionLogScreen : View
                 ? $"✓ {rows.Count} logs"
                 : $"✗ {_viewModel.ErrorMessage}");
         }
-        catch (Exception ex) { SetStatus($"✗ {ex.Message}"); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            SetStatus($"✗ {ex.Message}");
+        }
     }
 
     private void SetStatus(string text) => Application.Invoke(() => _statusLabel.Text = text);

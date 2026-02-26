@@ -137,6 +137,7 @@ internal static class CopilotCliHelper
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             CopilotOutputPane.Log($"<<< SpawnError: {ex.Message}");
             return new CopilotCliResult { State = "spawnError", Body = ex.Message };
         }
@@ -150,15 +151,27 @@ internal static class CopilotCliHelper
     private static void TryKillProcess(Process process)
     {
         try { if (!process.HasExited) process.Kill(); }
-        catch (InvalidOperationException) { }
-        catch (System.ComponentModel.Win32Exception) { }
+        catch (InvalidOperationException ex)
+        {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+        }
+        catch (System.ComponentModel.Win32Exception ex)
+        {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+        }
     }
 
     private static void TryDeleteFile(string path)
     {
         try { File.Delete(path); }
-        catch (IOException) { }
-        catch (UnauthorizedAccessException) { }
+        catch (IOException ex)
+        {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+        }
     }
 }
 

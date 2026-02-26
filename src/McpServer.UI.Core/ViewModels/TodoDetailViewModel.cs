@@ -208,6 +208,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             Detail = null;
             ErrorMessage = ex.Message;
             StatusMessage = "TODO detail load failed.";
@@ -314,6 +315,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             ErrorMessage = ex.Message;
             StatusMessage = "TODO mutation failed.";
         }
@@ -353,6 +355,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             ErrorMessage = ex.Message;
             StatusMessage = "TODO requirements analysis failed.";
         }
@@ -386,6 +389,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             ErrorMessage = ex.Message;
             StatusMessage = "TODO prompt generation failed.";
         }

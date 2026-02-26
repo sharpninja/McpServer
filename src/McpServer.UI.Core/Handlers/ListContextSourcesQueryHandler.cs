@@ -33,6 +33,7 @@ internal sealed class ListContextSourcesQueryHandler : IQueryHandler<ListContext
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<ContextSourcesPayload>.Failure(ex);
         }
     }

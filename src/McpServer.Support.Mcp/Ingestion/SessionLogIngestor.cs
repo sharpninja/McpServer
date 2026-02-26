@@ -106,12 +106,14 @@ public sealed class SessionLogIngestor
                 var chunks = _chunker.Chunk(documentId, normalized);
                 results.Add((doc, chunks));
             }
-            catch (IOException)
+            catch (IOException ex)
             {
+                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
                 // Skip unreadable files
             }
-            catch (JsonException)
+            catch (JsonException ex)
             {
+                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
                 // Skip invalid JSON
             }
         }
@@ -119,7 +121,7 @@ public sealed class SessionLogIngestor
         return results;
     }
 
-    private static string NormalizeJsonSessionLog(string json)
+    private string NormalizeJsonSessionLog(string json)
     {
         try
         {
@@ -141,8 +143,9 @@ public sealed class SessionLogIngestor
             }
             return sb.ToString();
         }
-        catch (JsonException)
+        catch (JsonException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return json;
         }
     }

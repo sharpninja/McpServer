@@ -46,6 +46,7 @@ internal sealed class CreateTodoCommandHandler : ICommandHandler<CreateTodoComma
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<TodoMutationOutcome>.Failure(ex);
         }
     }

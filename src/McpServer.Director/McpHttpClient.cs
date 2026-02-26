@@ -393,8 +393,9 @@ internal sealed class McpHttpClient : IDisposable
         {
             return await GetAsync<AuthConfigResponse>("/auth/config", ct).ConfigureAwait(false);
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return null;
         }
     }

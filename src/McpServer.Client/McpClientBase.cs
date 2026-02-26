@@ -273,8 +273,9 @@ public abstract class McpClientBase
             if (doc.RootElement.TryGetProperty("errorMessage", out var errMsg))
                 return errMsg.GetString();
         }
-        catch (JsonException)
+        catch (JsonException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             // Not JSON — use raw content.
         }
         return null;

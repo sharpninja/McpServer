@@ -42,6 +42,7 @@ internal sealed class GetTodoQueryHandler : IQueryHandler<GetTodoQuery, TodoDeta
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<TodoDetail?>.Failure(ex);
         }
     }

@@ -176,8 +176,9 @@ public sealed class GitHubCliService : IGitHubCliService
             }
             return list;
         }
-        catch (JsonException)
+        catch (JsonException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return Array.Empty<GitHubIssueItem>();
         }
     }
@@ -199,8 +200,9 @@ public sealed class GitHubCliService : IGitHubCliService
             }
             return list;
         }
-        catch (JsonException)
+        catch (JsonException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return Array.Empty<GitHubPullItem>();
         }
     }
@@ -282,8 +284,9 @@ public sealed class GitHubCliService : IGitHubCliService
 
             return new GitHubIssueDetail(number, title, body, state, url, labels, assignees, milestone, createdAt, updatedAt, closedAt, author, comments);
         }
-        catch (JsonException)
+        catch (JsonException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return null;
         }
     }
@@ -304,8 +307,9 @@ public sealed class GitHubCliService : IGitHubCliService
             }
             return list;
         }
-        catch (JsonException)
+        catch (JsonException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return Array.Empty<GitHubLabel>();
         }
     }

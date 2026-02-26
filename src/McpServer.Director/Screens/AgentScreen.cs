@@ -333,6 +333,7 @@ internal sealed class AgentScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             SetStatus($"Load definitions failed: {ex.Message}");
         }
     }
@@ -382,6 +383,7 @@ internal sealed class AgentScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             SetStatus($"Load workspace agents failed: {ex.Message}");
         }
     }
@@ -510,6 +512,7 @@ internal sealed class AgentScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             if (version != System.Threading.Volatile.Read(ref _detailLoadVersion))
                 return;
 
@@ -530,6 +533,7 @@ internal sealed class AgentScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             if (version != System.Threading.Volatile.Read(ref _detailLoadVersion))
                 return;
 
@@ -761,6 +765,7 @@ internal sealed class AgentScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             SetStatus($"Save detail failed: {ex.Message}");
         }
     }
@@ -777,6 +782,7 @@ internal sealed class AgentScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             SetStatus($"Save global definition failed: {ex.Message}");
         }
     }
@@ -801,6 +807,7 @@ internal sealed class AgentScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             SetStatus($"Assign failed: {ex.Message}");
         }
     }
@@ -874,6 +881,7 @@ internal sealed class AgentScreen : View
                 }
                 catch (Exception ex)
                 {
+                    System.Diagnostics.Trace.TraceError(ex.ToString());
                     SetStatus($"Ban failed: {ex.Message}");
                 }
             });
@@ -906,6 +914,7 @@ internal sealed class AgentScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             SetStatus($"Unban failed: {ex.Message}");
         }
     }
@@ -929,6 +938,7 @@ internal sealed class AgentScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             SetStatus($"Delete failed: {ex.Message}");
         }
     }
@@ -946,6 +956,7 @@ internal sealed class AgentScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             SetStatus($"Validate failed: {ex.Message}");
         }
     }
@@ -965,6 +976,7 @@ internal sealed class AgentScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             var message = ex.Message.Contains("Create it first", StringComparison.OrdinalIgnoreCase)
                 ? $"{ex.Message} Use 'Create Definition' in Add by ID."
                 : ex.Message;
@@ -984,6 +996,7 @@ internal sealed class AgentScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             SetStatus($"Create definition failed: {ex.Message}");
         }
     }

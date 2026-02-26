@@ -44,8 +44,9 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
             var dto = await client.Workspace.GetAsync(key, ct).ConfigureAwait(false);
             return MapWorkspaceDetail(dto);
         }
-        catch (McpNotFoundException)
+        catch (McpNotFoundException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return null;
         }
     }

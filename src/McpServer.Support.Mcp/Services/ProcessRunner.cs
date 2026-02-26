@@ -27,12 +27,14 @@ public sealed class ProcessRunner : IProcessRunner
             var stderr = await stderrTask.ConfigureAwait(false);
             return new ProcessRunResult(process.ExitCode, stdout, string.IsNullOrWhiteSpace(stderr) ? null : stderr);
         }
-        catch (System.ComponentModel.Win32Exception)
+        catch (System.ComponentModel.Win32Exception ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return new ProcessRunResult(-1, null, $"{fileName} not found.");
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return new ProcessRunResult(-1, null, ex.Message);
         }
     }

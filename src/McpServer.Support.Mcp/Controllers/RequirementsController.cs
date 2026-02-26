@@ -47,10 +47,12 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsConflictException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return Conflict(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return BadRequest(new { error = ex.Message });
         }
 
@@ -71,10 +73,12 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsNotFoundException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return NotFound(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return BadRequest(new { error = ex.Message });
         }
 
@@ -91,6 +95,7 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsNotFoundException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return NotFound(new { error = ex.Message });
         }
 
@@ -124,10 +129,12 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsConflictException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return Conflict(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return BadRequest(new { error = ex.Message });
         }
 
@@ -148,10 +155,12 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsNotFoundException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return NotFound(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return BadRequest(new { error = ex.Message });
         }
 
@@ -168,6 +177,7 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsNotFoundException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return NotFound(new { error = ex.Message });
         }
 
@@ -201,10 +211,12 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsConflictException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return Conflict(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return BadRequest(new { error = ex.Message });
         }
 
@@ -225,10 +237,12 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsNotFoundException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return NotFound(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return BadRequest(new { error = ex.Message });
         }
 
@@ -245,6 +259,7 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsNotFoundException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return NotFound(new { error = ex.Message });
         }
 
@@ -278,6 +293,7 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (ArgumentException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return BadRequest(new { error = ex.Message });
         }
 
@@ -294,6 +310,7 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsNotFoundException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return NotFound(new { error = ex.Message });
         }
 

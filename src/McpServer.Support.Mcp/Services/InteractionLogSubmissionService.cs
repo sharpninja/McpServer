@@ -56,8 +56,9 @@ public sealed class InteractionLogSubmissionService : BackgroundService
 
                 await PostEntryAsync(client, entry, stoppingToken).ConfigureAwait(false);
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException ex)
             {
+                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
                 break;
             }
             catch (Exception ex)

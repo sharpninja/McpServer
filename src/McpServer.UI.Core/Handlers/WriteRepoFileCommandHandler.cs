@@ -35,6 +35,7 @@ internal sealed class WriteRepoFileCommandHandler : ICommandHandler<WriteRepoFil
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<RepoWriteOutcome>.Failure(ex);
         }
     }

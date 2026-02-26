@@ -101,8 +101,9 @@ public sealed class CopilotClient(
                 {
                     line = await reader.ReadLineAsync(timeoutCts.Token).ConfigureAwait(false);
                 }
-                catch (OperationCanceledException)
+                catch (OperationCanceledException ex)
                 {
+                    System.Diagnostics.Trace.TraceWarning(ex.ToString());
                     break;
                 }
 
@@ -275,12 +276,14 @@ public sealed class CopilotClient(
         {
             return await readTask.WaitAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
         }
-        catch (TimeoutException)
+        catch (TimeoutException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return string.Empty;
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return string.Empty;
         }
     }
@@ -292,12 +295,14 @@ public sealed class CopilotClient(
             if (!process.HasExited)
                 process.Kill(entireProcessTree: true);
         }
-        catch (InvalidOperationException)
+        catch (InvalidOperationException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             // Process already exited
         }
-        catch (System.ComponentModel.Win32Exception)
+        catch (System.ComponentModel.Win32Exception ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             // Access denied or other OS error
         }
     }
@@ -386,8 +391,9 @@ public sealed class CopilotClient(
                 }
             }
         }
-        catch (System.Security.SecurityException)
+        catch (System.Security.SecurityException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             // LocalSystem may not be able to read all registry hives.
         }
 

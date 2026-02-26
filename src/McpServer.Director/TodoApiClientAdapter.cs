@@ -49,8 +49,9 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
             var item = await client.Todo.GetAsync(todoId, cancellationToken).ConfigureAwait(false);
             return MapTodoDetail(item);
         }
-        catch (McpNotFoundException)
+        catch (McpNotFoundException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return null;
         }
     }
@@ -80,10 +81,12 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
         }
         catch (McpConflictException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return new TodoMutationOutcome(false, ex.Message, null);
         }
         catch (McpValidationException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return new TodoMutationOutcome(false, ex.Message, null);
         }
     }
@@ -114,10 +117,12 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
         }
         catch (McpNotFoundException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return new TodoMutationOutcome(false, ex.Message, null);
         }
         catch (McpValidationException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return new TodoMutationOutcome(false, ex.Message, null);
         }
     }
@@ -132,6 +137,7 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
         }
         catch (McpNotFoundException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return new TodoMutationOutcome(false, ex.Message, null);
         }
     }

@@ -298,6 +298,7 @@ internal sealed class TodoScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             SetStatus($"✗ {ex.Message}");
         }
     }
@@ -469,6 +470,7 @@ internal sealed class TodoScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
                 return;
 
@@ -530,6 +532,7 @@ internal sealed class TodoScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             SetStatus($"✗ {ex.Message}");
         }
     }
@@ -646,12 +649,14 @@ internal sealed class TodoScreen : View
                     statusView.Text = $"Completed {promptLabel} prompt ({lines.Count} lines).";
                 });
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException ex)
             {
+                System.Diagnostics.Trace.TraceWarning(ex.ToString());
                 SafeDialogUi(() => statusView.Text = "Canceled.");
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
                 finalError = ex.Message;
                 SafeDialogUi(() => statusView.Text = $"Error: {ex.Message}");
             }

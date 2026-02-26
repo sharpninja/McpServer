@@ -35,6 +35,7 @@ internal sealed class GetRepoFileQueryHandler : IQueryHandler<GetRepoFileQuery, 
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<RepoFileDetail>.Failure(ex);
         }
     }

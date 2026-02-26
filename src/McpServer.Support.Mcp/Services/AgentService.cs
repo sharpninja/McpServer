@@ -108,7 +108,7 @@ public sealed class AgentService : IAgentService
 
         foreach (var def in defaults)
         {
-            var exists = await _db.AgentDefinitions.AnyAsync(x => x.Id == def.Id, ct).ConfigureAwait(false);
+            var exists = await _db.AgentDefinitions.IgnoreQueryFilters().AnyAsync(x => x.Id == def.Id, ct).ConfigureAwait(false);
             if (!exists)
             {
                 _db.AgentDefinitions.Add(def);
@@ -413,7 +413,7 @@ public sealed class AgentService : IAgentService
     private static IReadOnlyList<string> DeserializeStringList(string json)
     {
         try { return JsonSerializer.Deserialize<List<string>>(json) ?? []; }
-        catch { return []; }
+        catch (JsonException ex) { System.Diagnostics.Trace.TraceWarning(ex.ToString()); return []; }
     }
 
     private static string NormalizePath(string path)

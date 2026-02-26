@@ -134,6 +134,7 @@ internal sealed class DispatcherLogsScreen : View
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             SetStatus($"✗ {ex.Message}");
         }
     }

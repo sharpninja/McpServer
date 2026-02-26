@@ -39,6 +39,7 @@ public sealed partial class TunnelListViewModel : AreaListViewModelBase<TunnelPr
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             ErrorMessage = ex.Message;
         }
         finally

@@ -77,6 +77,7 @@ public sealed partial class TodoListViewModel : AreaListViewModelBase<TodoListIt
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             ErrorMessage = ex.Message;
             StatusMessage = "TODO load failed.";
         }

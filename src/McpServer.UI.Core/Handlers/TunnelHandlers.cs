@@ -20,6 +20,7 @@ internal sealed class ListTunnelsQueryHandler : IQueryHandler<ListTunnelsQuery, 
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<TunnelListSnapshot>.Failure(ex);
         }
     }
@@ -41,6 +42,7 @@ internal sealed class EnableTunnelCommandHandler : ICommandHandler<EnableTunnelC
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<TunnelProviderSnapshot>.Failure(ex);
         }
     }
@@ -62,6 +64,7 @@ internal sealed class DisableTunnelCommandHandler : ICommandHandler<DisableTunne
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<TunnelProviderSnapshot>.Failure(ex);
         }
     }
@@ -83,6 +86,7 @@ internal sealed class StartTunnelCommandHandler : ICommandHandler<StartTunnelCom
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<TunnelProviderSnapshot>.Failure(ex);
         }
     }
@@ -104,6 +108,7 @@ internal sealed class StopTunnelCommandHandler : ICommandHandler<StopTunnelComma
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<TunnelProviderSnapshot>.Failure(ex);
         }
     }
@@ -125,6 +130,7 @@ internal sealed class RestartTunnelCommandHandler : ICommandHandler<RestartTunne
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<TunnelProviderSnapshot>.Failure(ex);
         }
     }

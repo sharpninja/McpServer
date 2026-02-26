@@ -737,8 +737,9 @@ static bool ContainsRequiredRole(string? claimValue, ISet<string> requiredRoles)
                 }
             }
         }
-        catch (JsonException)
+        catch (JsonException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             // Fall back to delimited parsing below.
         }
     }

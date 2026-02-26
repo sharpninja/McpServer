@@ -39,6 +39,7 @@ internal sealed class AnalyzeTodoRequirementsCommandHandler : ICommandHandler<An
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<TodoRequirementsAnalysis>.Failure(ex);
         }
     }

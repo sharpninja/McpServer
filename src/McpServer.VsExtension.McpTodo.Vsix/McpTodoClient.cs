@@ -62,6 +62,7 @@ public sealed class McpTodoClient
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             CopilotOutputPane.Log($"Failed to start MCP server process: {ex.Message}");
             return false;
         }

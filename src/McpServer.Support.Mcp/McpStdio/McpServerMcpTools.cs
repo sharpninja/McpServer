@@ -225,7 +225,11 @@ public sealed class FwhMcpTools
             var result = await _todoService.QueryAsync(new TodoQueryRequest { Section = section, Priority = priority, Done = done }, cancellationToken).ConfigureAwait(false);
             return JsonSerializer.Serialize(new { items = result.Items, totalCount = result.TotalCount });
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     /// <summary>TR-PLANNED-013: Get a single TODO by id.</summary>
@@ -240,7 +244,11 @@ public sealed class FwhMcpTools
             if (item == null) return JsonSerializer.Serialize(new { error = $"TODO '{id}' not found" });
             return JsonSerializer.Serialize(item);
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     /// <summary>TR-PLANNED-013: Create a new TODO item.</summary>
@@ -269,7 +277,11 @@ public sealed class FwhMcpTools
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { success = true, item = result.Item });
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     /// <summary>TR-PLANNED-013: Update an existing TODO item.</summary>
@@ -289,7 +301,11 @@ public sealed class FwhMcpTools
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { success = true, item = result.Item });
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     /// <summary>TR-PLANNED-013: Delete a TODO item by id.</summary>
@@ -304,7 +320,11 @@ public sealed class FwhMcpTools
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { success = true });
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     /// <summary>MVP-MCP-002: Invoke Copilot to generate a status report for a TODO item.</summary>
@@ -317,7 +337,11 @@ public sealed class FwhMcpTools
         {
             return await CollectStreamAsync(_todoPromptService.StreamStatusAsync(id, cancellationToken)).ConfigureAwait(false);
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     /// <summary>MVP-MCP-002: Invoke Copilot to implement a TODO item in the workspace.</summary>
@@ -330,7 +354,11 @@ public sealed class FwhMcpTools
         {
             return await CollectStreamAsync(_todoPromptService.StreamImplementAsync(id, cancellationToken)).ConfigureAwait(false);
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     /// <summary>MVP-MCP-002: Invoke Copilot to create a detailed implementation plan for a TODO item.</summary>
@@ -343,7 +371,11 @@ public sealed class FwhMcpTools
         {
             return await CollectStreamAsync(_todoPromptService.StreamPlanAsync(id, cancellationToken)).ConfigureAwait(false);
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     private static async Task<string> CollectStreamAsync(IAsyncEnumerable<string> lines)
@@ -386,7 +418,11 @@ public sealed class FwhMcpTools
                 _ => JsonSerializer.Serialize(new { error = "Unsupported type." })
             };
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     /// <summary>REQ-MGMT-001: Generate requirements documents as Markdown (doc=all concatenates all docs).</summary>
@@ -417,7 +453,11 @@ public sealed class FwhMcpTools
             var result = await _requirementsDocumentService.GenerateDocumentAsync(docType, cancellationToken).ConfigureAwait(false);
             return result.Content;
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     /// <summary>REQ-MGMT-001: Create a requirement or mapping row.</summary>
@@ -465,9 +505,21 @@ public sealed class FwhMcpTools
                     return JsonSerializer.Serialize(new { error = "Unsupported type." });
             }
         }
-        catch (RequirementsRepositoryException ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
-        catch (ArgumentException ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (RequirementsRepositoryException ex)
+        {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     /// <summary>REQ-MGMT-001: Update a requirement or mapping row. Omitted fields remain unchanged.</summary>
@@ -535,9 +587,21 @@ public sealed class FwhMcpTools
                     return JsonSerializer.Serialize(new { error = "Unsupported type." });
             }
         }
-        catch (RequirementsRepositoryException ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
-        catch (ArgumentException ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (RequirementsRepositoryException ex)
+        {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     /// <summary>REQ-MGMT-001: Delete a requirement or mapping row by id.</summary>
@@ -572,9 +636,21 @@ public sealed class FwhMcpTools
 
             return JsonSerializer.Serialize(new { success = true });
         }
-        catch (RequirementsRepositoryException ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
-        catch (ArgumentException ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (RequirementsRepositoryException ex)
+        {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     // ── GROUP B: Session Log tools ───────────────────────────────────────
@@ -592,7 +668,11 @@ public sealed class FwhMcpTools
             var id = await _sessionLogService.SubmitAsync(dto, cancellationToken: cancellationToken).ConfigureAwait(false);
             return JsonSerializer.Serialize(new { success = true, id });
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     /// <summary>TR-PLANNED-013: Query session logs.</summary>
@@ -620,7 +700,11 @@ public sealed class FwhMcpTools
             var result = await _sessionLogService.QueryAsync(req, cancellationToken).ConfigureAwait(false);
             return JsonSerializer.Serialize(new { totalCount = result.TotalCount, items = result.Items });
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     /// <summary>TR-PLANNED-013: Append processing dialog items to an existing session log entry.</summary>
@@ -639,7 +723,11 @@ public sealed class FwhMcpTools
             var count = await _sessionLogService.AppendProcessingDialogAsync(agent, sessionId, requestId, items, cancellationToken).ConfigureAwait(false);
             return JsonSerializer.Serialize(new { success = true, totalDialogItems = count });
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     // ── GROUP C: GitHub tools ────────────────────────────────────────────
@@ -657,7 +745,11 @@ public sealed class FwhMcpTools
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { issues = result.Issues });
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     /// <summary>TR-PLANNED-013: List GitHub pull requests.</summary>
@@ -673,7 +765,11 @@ public sealed class FwhMcpTools
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { pulls = result.Pulls });
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     /// <summary>TR-PLANNED-013: Create a GitHub issue.</summary>
@@ -689,7 +785,11 @@ public sealed class FwhMcpTools
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { success = true, number = result.Number, url = result.Url });
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     /// <summary>TR-PLANNED-013: Comment on a GitHub issue.</summary>
@@ -705,7 +805,11 @@ public sealed class FwhMcpTools
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { success = true });
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     /// <summary>TR-PLANNED-013: Comment on a GitHub pull request.</summary>
@@ -721,7 +825,11 @@ public sealed class FwhMcpTools
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { success = true });
         }
-        catch (Exception ex) { return JsonSerializer.Serialize(new { error = ex.Message }); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
     }
 
     private enum RequirementsEntityType

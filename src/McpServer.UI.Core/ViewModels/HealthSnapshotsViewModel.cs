@@ -65,6 +65,7 @@ public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnaps
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             ErrorMessage = ex.Message;
             StatusMessage = "Health check failed.";
         }
@@ -107,6 +108,7 @@ public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnaps
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             ErrorMessage = ex.Message;
             StatusMessage = "Workspace initialization failed.";
             return Result<WorkspaceInitInfo>.Failure(ex);

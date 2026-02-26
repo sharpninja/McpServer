@@ -43,6 +43,7 @@ internal sealed class UpdateWorkspacePolicyCommandHandler : ICommandHandler<Upda
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<bool>.Failure(ex);
         }
     }

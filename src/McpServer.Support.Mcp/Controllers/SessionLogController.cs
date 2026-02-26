@@ -123,6 +123,7 @@ public sealed class SessionLogController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return NotFound(new { error = ex.Message });
         }
     }

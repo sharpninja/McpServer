@@ -123,7 +123,11 @@ public sealed class CloudflareTunnelProvider : ITunnelProvider, IDisposable
                 _logger.LogInformation("Cloudflare tunnel stopped.");
             }
         }
-        catch (InvalidOperationException) { /* process exited between check and kill */ }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            /* process exited between check and kill */
+        }
         finally
         {
             StopOutputReaders();
@@ -154,7 +158,11 @@ public sealed class CloudflareTunnelProvider : ITunnelProvider, IDisposable
             if (_process is not null && !_process.HasExited)
                 _process.Kill(entireProcessTree: true);
         }
-        catch (InvalidOperationException) { /* process already exited */ }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            /* process already exited */
+        }
         if (_process is not null)
             _process.Exited -= OnProcessExited;
         _process?.Dispose();
@@ -193,8 +201,9 @@ public sealed class CloudflareTunnelProvider : ITunnelProvider, IDisposable
         {
             _outputPumpCts.Cancel();
         }
-        catch (ObjectDisposedException)
+        catch (ObjectDisposedException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // ignored
         }
 
@@ -229,16 +238,19 @@ public sealed class CloudflareTunnelProvider : ITunnelProvider, IDisposable
                 }
             }
         }
-        catch (OperationCanceledException) when (ct.IsCancellationRequested)
+        catch (OperationCanceledException ex) when (ct.IsCancellationRequested)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // expected during shutdown
         }
-        catch (ObjectDisposedException)
+        catch (ObjectDisposedException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // process stream disposed during shutdown
         }
-        catch (InvalidOperationException)
+        catch (InvalidOperationException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // process exited and stream became unavailable
         }
         catch (Exception ex)
@@ -298,8 +310,9 @@ public sealed class CloudflareTunnelProvider : ITunnelProvider, IDisposable
         {
             hasExited = process.HasExited;
         }
-        catch (InvalidOperationException)
+        catch (InvalidOperationException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             hasExited = true;
         }
 
@@ -317,14 +330,15 @@ public sealed class CloudflareTunnelProvider : ITunnelProvider, IDisposable
         return true;
     }
 
-    private static int? TryGetExitCode(Process process)
+    private int? TryGetExitCode(Process process)
     {
         try
         {
             return process.ExitCode;
         }
-        catch (InvalidOperationException)
+        catch (InvalidOperationException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return null;
         }
     }

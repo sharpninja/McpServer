@@ -40,6 +40,7 @@ internal sealed class CheckHealthQueryHandler : IQueryHandler<CheckHealthQuery, 
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<HealthSnapshot>.Failure(ex);
         }
     }

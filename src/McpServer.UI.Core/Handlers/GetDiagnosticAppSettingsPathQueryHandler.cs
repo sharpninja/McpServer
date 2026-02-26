@@ -33,6 +33,7 @@ internal sealed class GetDiagnosticAppSettingsPathQueryHandler : IQueryHandler<G
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<DiagnosticAppSettingsSnapshot>.Failure(ex);
         }
     }

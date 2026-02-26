@@ -115,6 +115,7 @@ public sealed class IssueTodoSyncService(
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
                 failed++;
                 errors.Add($"Issue #{issueItem.Number}: {ex.Message}");
             }
@@ -198,6 +199,7 @@ public sealed class IssueTodoSyncService(
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {
+                System.Diagnostics.Trace.TraceError(ex.ToString());
                 failed++;
                 errors.Add($"{todo.Id}: {ex.Message}");
             }

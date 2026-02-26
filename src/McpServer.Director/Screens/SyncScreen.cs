@@ -73,7 +73,11 @@ internal sealed class SyncScreen : View
                 }
             });
         }
-        catch (Exception ex) { SetStatus($"✗ {ex.Message}"); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            SetStatus($"✗ {ex.Message}");
+        }
     }
 
     public async Task RunSyncAsync()
@@ -96,7 +100,11 @@ internal sealed class SyncScreen : View
                 }
             });
         }
-        catch (Exception ex) { SetStatus($"✗ {ex.Message}"); }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            SetStatus($"✗ {ex.Message}");
+        }
     }
 
     private void SetStatus(string text) => Application.Invoke(() => _statusLabel.Text = text);

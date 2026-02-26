@@ -39,6 +39,7 @@ internal sealed class ListTodosQueryHandler : IQueryHandler<ListTodosQuery, List
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<ListTodosResult>.Failure(ex);
         }
     }

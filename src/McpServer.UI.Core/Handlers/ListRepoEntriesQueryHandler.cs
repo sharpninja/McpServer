@@ -35,6 +35,7 @@ internal sealed class ListRepoEntriesQueryHandler : IQueryHandler<ListRepoEntrie
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<RepoListResultView>.Failure(ex);
         }
     }

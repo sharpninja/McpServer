@@ -81,6 +81,7 @@ public partial class WorkspaceListViewModel : ObservableObject
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             var error = ex.Message;
             InvokeOnUiThread(() => ErrorMessage = error);
         }

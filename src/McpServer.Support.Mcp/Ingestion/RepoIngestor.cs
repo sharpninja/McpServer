@@ -69,12 +69,14 @@ public sealed class RepoIngestor
                 var chunks = _chunker.Chunk(documentId, content);
                 results.Add((doc, chunks));
             }
-            catch (IOException)
+            catch (IOException ex)
             {
+                System.Diagnostics.Trace.TraceWarning(ex.ToString());
                 // Skip unreadable files
             }
-            catch (UnauthorizedAccessException)
+            catch (UnauthorizedAccessException ex)
             {
+                System.Diagnostics.Trace.TraceWarning(ex.ToString());
                 // Skip inaccessible files
             }
         }

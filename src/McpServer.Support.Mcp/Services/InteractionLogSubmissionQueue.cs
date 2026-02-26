@@ -42,8 +42,9 @@ public sealed class InteractionLogSubmissionChannel : IInteractionLogSubmissionC
                     return (true, entry);
             }
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             // Expected on shutdown
         }
 

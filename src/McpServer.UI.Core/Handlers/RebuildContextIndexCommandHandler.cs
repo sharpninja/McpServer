@@ -33,6 +33,7 @@ internal sealed class RebuildContextIndexCommandHandler : ICommandHandler<Rebuil
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<ContextRebuildResult>.Failure(ex);
         }
     }

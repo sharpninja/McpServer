@@ -39,6 +39,7 @@ internal sealed class GenerateTodoPlanPromptQueryHandler : IQueryHandler<Generat
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             return Result<TodoPromptOutput>.Failure(ex);
         }
     }
