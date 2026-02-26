@@ -152,6 +152,7 @@ builder.Services.Configure<MarkerPromptOptions>(builder.Configuration.GetSection
 builder.Services.Configure<McpParseableOptions>(builder.Configuration.GetSection(McpParseableOptions.SectionName));
 builder.Services.Configure<McpInteractionLoggingOptions>(builder.Configuration.GetSection(McpInteractionLoggingOptions.SectionName));
 builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(TodoStorageOptions.SectionName));
+builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
 builder.Services.PostConfigure<VectorIndexOptions>(options =>
 {
     var instanceIndexPath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "IndexPath");
@@ -216,6 +217,7 @@ builder.Services.AddSingleton<ITodoService>(sp =>
 builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
 builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
 builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
+builder.Services.AddSingleton<IVoiceConversationService, VoiceConversationService>();
 builder.Services.Configure<TodoPromptOptions>(options =>
 {
     if (primaryWorkspaceEntry is not null)

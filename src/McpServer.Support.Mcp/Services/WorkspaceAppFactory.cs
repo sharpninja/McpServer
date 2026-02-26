@@ -84,6 +84,7 @@ public static class WorkspaceAppFactory
             options.ExternalDocsPath = Path.Combine(workspacePath, "docs", "external");
         });
         builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(TodoStorageOptions.SectionName));
+        builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
         builder.Services.Configure<EmbeddingOptions>(builder.Configuration.GetSection("Embedding"));
         builder.Services.Configure<OidcAuthOptions>(builder.Configuration.GetSection(OidcAuthOptions.SectionName));
         builder.Services.Configure<TodoPromptOptions>(options =>
@@ -152,6 +153,7 @@ public static class WorkspaceAppFactory
         builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
         builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
         builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
+        builder.Services.AddSingleton<IVoiceConversationService, VoiceConversationService>();
         builder.Services.AddCopilotClient();
 
         builder.Services.AddScoped<RepoIngestor>();
