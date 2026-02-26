@@ -1,5 +1,7 @@
 using McpServer.UI.Core.ViewModels;
 using Terminal.Gui;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace McpServer.Director.Screens;
 
@@ -9,9 +11,13 @@ internal sealed class SessionLogScreen : View
     private readonly SessionLogListViewModel _viewModel;
     private TableView _table = null!;
     private TextView _statusLabel = null!;
+    private readonly ILogger<SessionLogScreen> _logger;
 
-    public SessionLogScreen(SessionLogListViewModel viewModel)
+
+    public SessionLogScreen(SessionLogListViewModel viewModel,
+        ILogger<SessionLogScreen>? logger = null)
     {
+        _logger = logger ?? NullLogger<SessionLogScreen>.Instance;
         _viewModel = viewModel;
         Title = "Session Logs";
         Width = Dim.Fill();
@@ -81,7 +87,7 @@ internal sealed class SessionLogScreen : View
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             SetStatus($"✗ {ex.Message}");
         }
     }

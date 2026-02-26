@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using McpServer.VsExtension.McpTodo.Models;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.VsExtension.McpTodo;
 
@@ -20,9 +21,12 @@ public partial class McpServerMcpTodoToolWindowControl : UserControl
     private string _filterText = "";
     private string _filterTextScope = "title";
     private CancellationTokenSource? _copilotCts;
+    private readonly ILogger<McpServerMcpTodoToolWindowControl> _logger;
 
-    public McpServerMcpTodoToolWindowControl()
+
+    public McpServerMcpTodoToolWindowControl(ILogger<McpServerMcpTodoToolWindowControl> logger)
     {
+        _logger = logger;
         InitializeComponent();
         _client = new McpTodoClient();
         _editorService = TodoEditorService.Instance ?? new TodoEditorService(_client);
@@ -53,7 +57,7 @@ public partial class McpServerMcpTodoToolWindowControl : UserControl
         }
         catch (System.Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             StatusText.Text = "Error: " + ex.Message;
             _entries = new List<TodoListEntry>();
@@ -305,7 +309,7 @@ public partial class McpServerMcpTodoToolWindowControl : UserControl
         }
         catch (System.Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             StatusText.Text = $"Copilot unavailable for {action} {id}";
             CopilotOutputPane.Log($"Copilot CLI failed ({action} {id}): {ex.Message}");

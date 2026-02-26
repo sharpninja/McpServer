@@ -20,9 +20,13 @@ public sealed class McpTodoClient
     };
 
     public string BaseUrl { get; }
+    private readonly ILogger<McpTodoClient> _logger;
 
-    public McpTodoClient(string baseUrl = "http://localhost:7147")
+
+    public McpTodoClient(string baseUrl = "http://localhost:7147",
+        ILogger<McpTodoClient> logger)
     {
+        _logger = logger;
         BaseUrl = (baseUrl ?? "http://localhost:7147").TrimEnd('/');
         _http = new HttpClient { BaseAddress = new Uri(BaseUrl) };
         _http.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
@@ -62,7 +66,7 @@ public sealed class McpTodoClient
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             CopilotOutputPane.Log($"Failed to start MCP server process: {ex.Message}");
             return false;
         }

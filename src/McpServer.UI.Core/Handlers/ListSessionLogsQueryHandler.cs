@@ -2,6 +2,7 @@ using McpServer.Cqrs;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.Handlers;
 
@@ -12,11 +13,14 @@ internal sealed class ListSessionLogsQueryHandler : IQueryHandler<ListSessionLog
 {
     private readonly ISessionLogApiClient _sessionLogApiClient;
     private readonly IAuthorizationPolicyService _authorizationPolicy;
+    private readonly ILogger<ListSessionLogsQueryHandler> _logger;
 
-    public ListSessionLogsQueryHandler(
-        ISessionLogApiClient sessionLogApiClient,
-        IAuthorizationPolicyService authorizationPolicy)
+
+    public ListSessionLogsQueryHandler(ISessionLogApiClient sessionLogApiClient,
+        IAuthorizationPolicyService authorizationPolicy,
+        ILogger<ListSessionLogsQueryHandler> logger)
     {
+        _logger = logger;
         _sessionLogApiClient = sessionLogApiClient;
         _authorizationPolicy = authorizationPolicy;
     }
@@ -39,7 +43,7 @@ internal sealed class ListSessionLogsQueryHandler : IQueryHandler<ListSessionLog
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Result<ListSessionLogsResult>.Failure(ex);
         }
     }

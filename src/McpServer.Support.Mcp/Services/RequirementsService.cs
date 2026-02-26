@@ -154,7 +154,7 @@ internal sealed class RequirementsService(
         }
         catch (OperationCanceledException ex) when (!cancellationToken.IsCancellationRequested)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return new CopilotResult
             {
                 State = CopilotResultState.Timeout,
@@ -163,7 +163,7 @@ internal sealed class RequirementsService(
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            logger.LogError("{ExceptionDetail}", ex.ToString());
             return new CopilotResult
             {
                 State = CopilotResultState.Error,
@@ -261,7 +261,7 @@ internal sealed class RequirementsService(
     /// Extract FR-XXX-### and TR-XXX-### IDs from the Copilot response.
     /// First tries to parse a JSON block; falls back to regex extraction.
     /// </summary>
-    internal static (List<string> FrIds, List<string> TrIds) ExtractRequirementIds(string body)
+    internal (List<string> FrIds, List<string> TrIds) ExtractRequirementIds(string body)
     {
         // Try to find a JSON block in the response
         var jsonMatch = System.Text.RegularExpressions.Regex.Match(
@@ -281,7 +281,7 @@ internal sealed class RequirementsService(
             }
             catch (JsonException ex)
             {
-                System.Diagnostics.Trace.TraceWarning(ex.ToString());
+                logger.LogWarning("{ExceptionDetail}", ex.ToString());
                 // Fall through to regex
             }
         }

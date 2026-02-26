@@ -5,6 +5,7 @@ using McpServer.Cqrs.Mvvm;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.ViewModels.Base;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.ViewModels;
 
@@ -16,12 +17,17 @@ namespace McpServer.UI.Core.ViewModels;
 public sealed partial class TodoListViewModel : AreaListViewModelBase<TodoListItem>
 {
     private readonly CqrsQueryCommand<ListTodosResult> _refreshCommand;
+    private readonly ILogger<TodoListViewModel> _logger;
+
 
     /// <summary>Initializes a new instance of the TODO list ViewModel.</summary>
     /// <param name="dispatcher">CQRS dispatcher.</param>
-    public TodoListViewModel(Dispatcher dispatcher)
+    /// <param name="logger">Logger instance.</param>
+    public TodoListViewModel(Dispatcher dispatcher,
+        ILogger<TodoListViewModel> logger)
         : base(McpArea.Todo)
     {
+        _logger = logger;
         _refreshCommand = new CqrsQueryCommand<ListTodosResult>(dispatcher, BuildQuery);
     }
 
@@ -77,7 +83,7 @@ public sealed partial class TodoListViewModel : AreaListViewModelBase<TodoListIt
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             ErrorMessage = ex.Message;
             StatusMessage = "TODO load failed.";
         }

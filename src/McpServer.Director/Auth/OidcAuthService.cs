@@ -1,5 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace McpServer.Director.Auth;
 
@@ -16,10 +18,14 @@ internal sealed class OidcAuthService : IDisposable
 {
     private readonly DirectorAuthOptions _options;
     private readonly HttpClient _http;
+    private readonly ILogger<OidcAuthService> _logger;
+
 
     /// <summary>Creates a new auth service with the given options.</summary>
-    public OidcAuthService(DirectorAuthOptions options)
+    public OidcAuthService(DirectorAuthOptions options,
+        ILogger<OidcAuthService>? logger = null)
     {
+        _logger = logger ?? NullLogger<OidcAuthService>.Instance;
         _options = options;
         _http = new HttpClient();
     }
@@ -212,7 +218,7 @@ internal sealed class OidcAuthService : IDisposable
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return new TokenResponse { Error = "network_error", ErrorDescription = ex.Message };
         }
     }

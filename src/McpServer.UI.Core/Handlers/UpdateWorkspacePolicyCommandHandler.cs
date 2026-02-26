@@ -2,6 +2,7 @@ using McpServer.Cqrs;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.Handlers;
 
@@ -12,11 +13,14 @@ internal sealed class UpdateWorkspacePolicyCommandHandler : ICommandHandler<Upda
 {
     private readonly IWorkspaceApiClient _workspaceApiClient;
     private readonly IAuthorizationPolicyService _authorizationPolicy;
+    private readonly ILogger<UpdateWorkspacePolicyCommandHandler> _logger;
 
-    public UpdateWorkspacePolicyCommandHandler(
-        IWorkspaceApiClient workspaceApiClient,
-        IAuthorizationPolicyService authorizationPolicy)
+
+    public UpdateWorkspacePolicyCommandHandler(IWorkspaceApiClient workspaceApiClient,
+        IAuthorizationPolicyService authorizationPolicy,
+        ILogger<UpdateWorkspacePolicyCommandHandler> logger)
     {
+        _logger = logger;
         _workspaceApiClient = workspaceApiClient;
         _authorizationPolicy = authorizationPolicy;
     }
@@ -43,7 +47,7 @@ internal sealed class UpdateWorkspacePolicyCommandHandler : ICommandHandler<Upda
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Result<bool>.Failure(ex);
         }
     }

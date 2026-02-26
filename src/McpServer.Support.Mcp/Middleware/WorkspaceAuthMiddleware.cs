@@ -2,6 +2,7 @@ using System.Text.Json;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Middleware;
 
@@ -43,10 +44,14 @@ public sealed class WorkspaceAuthMiddleware
     };
 
     private readonly RequestDelegate _next;
+    private readonly ILogger<WorkspaceAuthMiddleware> _logger;
+
 
     /// <summary>Initializes a new instance of the <see cref="WorkspaceAuthMiddleware"/> class.</summary>
-    public WorkspaceAuthMiddleware(RequestDelegate next)
+    public WorkspaceAuthMiddleware(RequestDelegate next,
+        ILogger<WorkspaceAuthMiddleware> logger)
     {
+        _logger = logger;
         _next = next;
     }
 
@@ -164,7 +169,7 @@ public sealed class WorkspaceAuthMiddleware
         return !s_readOnlyMethods.Contains(method);
     }
 
-    private static async Task<bool> HasAuthenticatedJwtAsync(HttpContext context)
+    private async Task<bool> HasAuthenticatedJwtAsync(HttpContext context)
     {
         if (context.User.Identity?.IsAuthenticated == true)
             return true;
@@ -188,7 +193,7 @@ public sealed class WorkspaceAuthMiddleware
         }
         catch (InvalidOperationException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // JWT Bearer scheme not registered (OIDC disabled) — fall through to API-key auth.
             return false;
         }

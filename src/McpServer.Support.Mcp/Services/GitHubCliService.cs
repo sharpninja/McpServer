@@ -11,10 +11,14 @@ public sealed class GitHubCliService : IGitHubCliService
 {
     private const string GhExe = "gh";
     private readonly IProcessRunner _processRunner;
+    private readonly ILogger<GitHubCliService> _logger;
+
 
     /// <summary>TR-PLANNED-013: Constructor with IProcessRunner for testability.</summary>
-    public GitHubCliService(IProcessRunner processRunner)
+    public GitHubCliService(IProcessRunner processRunner,
+        ILogger<GitHubCliService> logger)
     {
+        _logger = logger;
         _processRunner = processRunner;
     }
 
@@ -159,7 +163,7 @@ public sealed class GitHubCliService : IGitHubCliService
         return new GitHubLabelsResult(true, labels, null);
     }
 
-    private static IReadOnlyList<GitHubIssueItem> ParseIssueList(string? json)
+    private IReadOnlyList<GitHubIssueItem> ParseIssueList(string? json)
     {
         if (string.IsNullOrWhiteSpace(json)) return Array.Empty<GitHubIssueItem>();
         try
@@ -178,12 +182,12 @@ public sealed class GitHubCliService : IGitHubCliService
         }
         catch (JsonException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return Array.Empty<GitHubIssueItem>();
         }
     }
 
-    private static IReadOnlyList<GitHubPullItem> ParsePullList(string? json)
+    private IReadOnlyList<GitHubPullItem> ParsePullList(string? json)
     {
         if (string.IsNullOrWhiteSpace(json)) return Array.Empty<GitHubPullItem>();
         try
@@ -202,7 +206,7 @@ public sealed class GitHubCliService : IGitHubCliService
         }
         catch (JsonException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return Array.Empty<GitHubPullItem>();
         }
     }
@@ -222,7 +226,7 @@ public sealed class GitHubCliService : IGitHubCliService
         return s.Replace("\\", "\\\\", StringComparison.Ordinal).Replace("\"", "\\\"", StringComparison.Ordinal);
     }
 
-    private static GitHubIssueDetail? ParseIssueDetail(string? json)
+    private GitHubIssueDetail? ParseIssueDetail(string? json)
     {
         if (string.IsNullOrWhiteSpace(json)) return null;
         try
@@ -286,12 +290,12 @@ public sealed class GitHubCliService : IGitHubCliService
         }
         catch (JsonException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return null;
         }
     }
 
-    private static IReadOnlyList<GitHubLabel> ParseLabels(string? json)
+    private IReadOnlyList<GitHubLabel> ParseLabels(string? json)
     {
         if (string.IsNullOrWhiteSpace(json)) return Array.Empty<GitHubLabel>();
         try
@@ -309,7 +313,7 @@ public sealed class GitHubCliService : IGitHubCliService
         }
         catch (JsonException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return Array.Empty<GitHubLabel>();
         }
     }

@@ -2,6 +2,7 @@ using McpServer.Cqrs;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.Handlers;
 
@@ -10,9 +11,13 @@ internal sealed class RebuildContextIndexCommandHandler : ICommandHandler<Rebuil
 {
     private readonly IContextApiClient _contextApiClient;
     private readonly IAuthorizationPolicyService _authorizationPolicy;
+    private readonly ILogger<RebuildContextIndexCommandHandler> _logger;
 
-    public RebuildContextIndexCommandHandler(IContextApiClient contextApiClient, IAuthorizationPolicyService authorizationPolicy)
+
+    public RebuildContextIndexCommandHandler(IContextApiClient contextApiClient, IAuthorizationPolicyService authorizationPolicy,
+        ILogger<RebuildContextIndexCommandHandler> logger)
     {
+        _logger = logger;
         _contextApiClient = contextApiClient;
         _authorizationPolicy = authorizationPolicy;
     }
@@ -33,7 +38,7 @@ internal sealed class RebuildContextIndexCommandHandler : ICommandHandler<Rebuil
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Result<ContextRebuildResult>.Failure(ex);
         }
     }

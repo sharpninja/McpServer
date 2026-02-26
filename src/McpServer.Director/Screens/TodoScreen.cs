@@ -1,5 +1,7 @@
 using McpServer.UI.Core.ViewModels;
 using Terminal.Gui;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace McpServer.Director.Screens;
 
@@ -31,9 +33,13 @@ internal sealed class TodoScreen : View
     private int _detailLoadRequestVersion;
     private string? _lastAutoDetailTodoId;
     private bool _showCompletedItems;
+    private readonly ILogger<TodoScreen> _logger;
 
-    public TodoScreen(TodoListViewModel listViewModel, TodoDetailViewModel detailViewModel, DirectorMcpContext? directorContext = null)
+
+    public TodoScreen(TodoListViewModel listViewModel, TodoDetailViewModel detailViewModel,
+        ILogger<TodoScreen>? logger = null, DirectorMcpContext? directorContext = null)
     {
+        _logger = logger ?? NullLogger<TodoScreen>.Instance;
         _listViewModel = listViewModel;
         _detailViewModel = detailViewModel;
         _directorContext = directorContext;
@@ -298,7 +304,7 @@ internal sealed class TodoScreen : View
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             SetStatus($"✗ {ex.Message}");
         }
     }
@@ -470,7 +476,7 @@ internal sealed class TodoScreen : View
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
                 return;
 
@@ -532,7 +538,7 @@ internal sealed class TodoScreen : View
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             SetStatus($"✗ {ex.Message}");
         }
     }
@@ -651,12 +657,12 @@ internal sealed class TodoScreen : View
             }
             catch (OperationCanceledException ex)
             {
-                System.Diagnostics.Trace.TraceWarning(ex.ToString());
+                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
                 SafeDialogUi(() => statusView.Text = "Canceled.");
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Trace.TraceError(ex.ToString());
+                _logger.LogError("{ExceptionDetail}", ex.ToString());
                 finalError = ex.Message;
                 SafeDialogUi(() => statusView.Text = $"Error: {ex.Message}");
             }

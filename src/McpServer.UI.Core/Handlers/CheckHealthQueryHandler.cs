@@ -2,6 +2,7 @@ using McpServer.Cqrs;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.Handlers;
 
@@ -12,11 +13,14 @@ internal sealed class CheckHealthQueryHandler : IQueryHandler<CheckHealthQuery, 
 {
     private readonly IHealthApiClient _healthApiClient;
     private readonly IAuthorizationPolicyService _authorizationPolicy;
+    private readonly ILogger<CheckHealthQueryHandler> _logger;
 
-    public CheckHealthQueryHandler(
-        IHealthApiClient healthApiClient,
-        IAuthorizationPolicyService authorizationPolicy)
+
+    public CheckHealthQueryHandler(IHealthApiClient healthApiClient,
+        IAuthorizationPolicyService authorizationPolicy,
+        ILogger<CheckHealthQueryHandler> logger)
     {
+        _logger = logger;
         _healthApiClient = healthApiClient;
         _authorizationPolicy = authorizationPolicy;
     }
@@ -40,7 +44,7 @@ internal sealed class CheckHealthQueryHandler : IQueryHandler<CheckHealthQuery, 
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Result<HealthSnapshot>.Failure(ex);
         }
     }

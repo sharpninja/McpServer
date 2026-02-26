@@ -1,6 +1,7 @@
 using McpServer.Cqrs;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.Handlers;
 
@@ -8,8 +9,13 @@ namespace McpServer.UI.Core.Handlers;
 internal sealed class ListTunnelsQueryHandler : IQueryHandler<ListTunnelsQuery, TunnelListSnapshot>
 {
     private readonly ITunnelApiClient _client;
+    private readonly ILogger<ListTunnelsQueryHandler> _logger;
 
-    public ListTunnelsQueryHandler(ITunnelApiClient client) => _client = client;
+    public ListTunnelsQueryHandler(ITunnelApiClient client, ILogger<ListTunnelsQueryHandler> logger)
+    {
+        _client = client;
+        _logger = logger;
+    }
 
     public async Task<Result<TunnelListSnapshot>> HandleAsync(ListTunnelsQuery query, CallContext context)
     {
@@ -20,7 +26,7 @@ internal sealed class ListTunnelsQueryHandler : IQueryHandler<ListTunnelsQuery, 
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Result<TunnelListSnapshot>.Failure(ex);
         }
     }
@@ -30,8 +36,13 @@ internal sealed class ListTunnelsQueryHandler : IQueryHandler<ListTunnelsQuery, 
 internal sealed class EnableTunnelCommandHandler : ICommandHandler<EnableTunnelCommand, TunnelProviderSnapshot>
 {
     private readonly ITunnelApiClient _client;
+    private readonly ILogger<EnableTunnelCommandHandler> _logger;
 
-    public EnableTunnelCommandHandler(ITunnelApiClient client) => _client = client;
+    public EnableTunnelCommandHandler(ITunnelApiClient client, ILogger<EnableTunnelCommandHandler> logger)
+    {
+        _client = client;
+        _logger = logger;
+    }
 
     public async Task<Result<TunnelProviderSnapshot>> HandleAsync(EnableTunnelCommand command, CallContext context)
     {
@@ -42,7 +53,7 @@ internal sealed class EnableTunnelCommandHandler : ICommandHandler<EnableTunnelC
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Result<TunnelProviderSnapshot>.Failure(ex);
         }
     }
@@ -52,8 +63,13 @@ internal sealed class EnableTunnelCommandHandler : ICommandHandler<EnableTunnelC
 internal sealed class DisableTunnelCommandHandler : ICommandHandler<DisableTunnelCommand, TunnelProviderSnapshot>
 {
     private readonly ITunnelApiClient _client;
+    private readonly ILogger<DisableTunnelCommandHandler> _logger;
 
-    public DisableTunnelCommandHandler(ITunnelApiClient client) => _client = client;
+    public DisableTunnelCommandHandler(ITunnelApiClient client, ILogger<DisableTunnelCommandHandler> logger)
+    {
+        _client = client;
+        _logger = logger;
+    }
 
     public async Task<Result<TunnelProviderSnapshot>> HandleAsync(DisableTunnelCommand command, CallContext context)
     {
@@ -64,7 +80,7 @@ internal sealed class DisableTunnelCommandHandler : ICommandHandler<DisableTunne
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Result<TunnelProviderSnapshot>.Failure(ex);
         }
     }
@@ -74,8 +90,13 @@ internal sealed class DisableTunnelCommandHandler : ICommandHandler<DisableTunne
 internal sealed class StartTunnelCommandHandler : ICommandHandler<StartTunnelCommand, TunnelProviderSnapshot>
 {
     private readonly ITunnelApiClient _client;
+    private readonly ILogger<StartTunnelCommandHandler> _logger;
 
-    public StartTunnelCommandHandler(ITunnelApiClient client) => _client = client;
+    public StartTunnelCommandHandler(ITunnelApiClient client, ILogger<StartTunnelCommandHandler> logger)
+    {
+        _client = client;
+        _logger = logger;
+    }
 
     public async Task<Result<TunnelProviderSnapshot>> HandleAsync(StartTunnelCommand command, CallContext context)
     {
@@ -86,7 +107,7 @@ internal sealed class StartTunnelCommandHandler : ICommandHandler<StartTunnelCom
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Result<TunnelProviderSnapshot>.Failure(ex);
         }
     }
@@ -96,8 +117,13 @@ internal sealed class StartTunnelCommandHandler : ICommandHandler<StartTunnelCom
 internal sealed class StopTunnelCommandHandler : ICommandHandler<StopTunnelCommand, TunnelProviderSnapshot>
 {
     private readonly ITunnelApiClient _client;
+    private readonly ILogger<StopTunnelCommandHandler> _logger;
 
-    public StopTunnelCommandHandler(ITunnelApiClient client) => _client = client;
+    public StopTunnelCommandHandler(ITunnelApiClient client, ILogger<StopTunnelCommandHandler> logger)
+    {
+        _client = client;
+        _logger = logger;
+    }
 
     public async Task<Result<TunnelProviderSnapshot>> HandleAsync(StopTunnelCommand command, CallContext context)
     {
@@ -108,7 +134,7 @@ internal sealed class StopTunnelCommandHandler : ICommandHandler<StopTunnelComma
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Result<TunnelProviderSnapshot>.Failure(ex);
         }
     }
@@ -118,8 +144,13 @@ internal sealed class StopTunnelCommandHandler : ICommandHandler<StopTunnelComma
 internal sealed class RestartTunnelCommandHandler : ICommandHandler<RestartTunnelCommand, TunnelProviderSnapshot>
 {
     private readonly ITunnelApiClient _client;
+    private readonly ILogger<RestartTunnelCommandHandler> _logger;
 
-    public RestartTunnelCommandHandler(ITunnelApiClient client) => _client = client;
+    public RestartTunnelCommandHandler(ITunnelApiClient client, ILogger<RestartTunnelCommandHandler> logger)
+    {
+        _client = client;
+        _logger = logger;
+    }
 
     public async Task<Result<TunnelProviderSnapshot>> HandleAsync(RestartTunnelCommand command, CallContext context)
     {
@@ -130,7 +161,7 @@ internal sealed class RestartTunnelCommandHandler : ICommandHandler<RestartTunne
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Result<TunnelProviderSnapshot>.Failure(ex);
         }
     }

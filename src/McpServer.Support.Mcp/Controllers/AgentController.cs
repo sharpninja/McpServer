@@ -2,6 +2,7 @@ using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Controllers;
 
@@ -15,10 +16,14 @@ namespace McpServer.Support.Mcp.Controllers;
 public class AgentController : ControllerBase
 {
     private readonly IAgentService _agentService;
+    private readonly ILogger<AgentController> _logger;
+
 
     /// <summary>Initializes a new instance of <see cref="AgentController"/>.</summary>
-    public AgentController(IAgentService agentService)
+    public AgentController(IAgentService agentService,
+        ILogger<AgentController> logger)
     {
+        _logger = logger;
         _agentService = agentService;
     }
 
@@ -190,7 +195,7 @@ public class AgentController : ControllerBase
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Ok(new { valid = false, error = ex.Message, path = agentsYamlPath });
         }
     }

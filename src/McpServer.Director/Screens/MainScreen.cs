@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using McpServer.Director.Auth;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.ViewModels;
+using Microsoft.Extensions.Logging;
 using Terminal.Gui;
 
 namespace McpServer.Director.Screens;
@@ -33,6 +34,7 @@ internal sealed class MainScreen : Window
     private TextView _workspaceContextStatus = null!;
     private readonly ObservableCollection<WorkspacePickerItem> _workspacePickerSource = [];
     private bool _authRefreshQueued;
+    private readonly ILoggerFactory _loggerFactory;
 
     public MainScreen(
         WorkspaceListViewModel workspaceListVm,
@@ -48,7 +50,8 @@ internal sealed class MainScreen : Window
         TunnelListViewModel tunnelListVm,
         IAuthorizationPolicyService authorizationPolicy,
         IRoleContext roleContext,
-        DirectorMcpContext directorContext)
+        DirectorMcpContext directorContext,
+        ILoggerFactory loggerFactory)
     {
         _healthVm = healthVm;
         _dispatcherLogsVm = dispatcherLogsVm;
@@ -64,6 +67,7 @@ internal sealed class MainScreen : Window
         _authorizationPolicy = authorizationPolicy;
         _roleContext = roleContext;
         _directorContext = directorContext;
+        _loggerFactory = loggerFactory;
 
         Title = "McpServer Director";
         Width = Dim.Fill();
@@ -375,7 +379,7 @@ internal sealed class MainScreen : Window
 
         if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Todo))
         {
-            _tabView.AddTab(new Tab { DisplayText = "TODO", View = new TodoScreen(_todoVm, _todoDetailVm, _directorContext) }, andSelect: selectFirst);
+            _tabView.AddTab(new Tab { DisplayText = "TODO", View = new TodoScreen(_todoVm, _todoDetailVm, directorContext: _directorContext) }, andSelect: selectFirst);
             selectFirst = false;
         }
 

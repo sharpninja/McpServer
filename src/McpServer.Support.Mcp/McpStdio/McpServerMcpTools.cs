@@ -10,6 +10,7 @@ using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.EntityFrameworkCore;
 using ModelContextProtocol.Server;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.McpStdio;
 
@@ -31,10 +32,11 @@ public sealed class FwhMcpTools
     private readonly ISessionLogService _sessionLogService;
     private readonly IGitHubCliService _gitHubCliService;
     private readonly IRequirementsDocumentService _requirementsDocumentService;
+    private readonly ILogger<FwhMcpTools> _logger;
+
 
     /// <summary>TR-PLANNED-013: Constructor for DI.</summary>
-    public FwhMcpTools(
-        McpDbContext db,
+    public FwhMcpTools(McpDbContext db,
         IRepoFileService repoFileService,
         IngestionCoordinator coordinator,
         ISyncStatusStore syncStatusStore,
@@ -43,8 +45,10 @@ public sealed class FwhMcpTools
         ITodoPromptService todoPromptService,
         ISessionLogService sessionLogService,
         IGitHubCliService gitHubCliService,
-        IRequirementsDocumentService requirementsDocumentService)
+        IRequirementsDocumentService requirementsDocumentService,
+        ILogger<FwhMcpTools> logger)
     {
+        _logger = logger;
         _db = db;
         _repoFileService = repoFileService;
         _coordinator = coordinator;
@@ -227,7 +231,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -246,7 +250,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -279,7 +283,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -303,7 +307,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -322,7 +326,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -339,7 +343,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -356,7 +360,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -373,7 +377,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -420,7 +424,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -455,7 +459,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -507,17 +511,17 @@ public sealed class FwhMcpTools
         }
         catch (RequirementsRepositoryException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -589,17 +593,17 @@ public sealed class FwhMcpTools
         }
         catch (RequirementsRepositoryException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -638,17 +642,17 @@ public sealed class FwhMcpTools
         }
         catch (RequirementsRepositoryException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -670,7 +674,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -702,7 +706,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -725,7 +729,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -747,7 +751,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -767,7 +771,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -787,7 +791,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -807,7 +811,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }
@@ -827,7 +831,7 @@ public sealed class FwhMcpTools
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
     }

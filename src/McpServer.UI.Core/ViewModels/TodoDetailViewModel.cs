@@ -5,6 +5,7 @@ using McpServer.Cqrs.Mvvm;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.ViewModels.Base;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.ViewModels;
 
@@ -22,12 +23,17 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
     private readonly CqrsQueryCommand<TodoPromptOutput> _statusPromptCommand;
     private readonly CqrsQueryCommand<TodoPromptOutput> _implementPromptCommand;
     private readonly CqrsQueryCommand<TodoPromptOutput> _planPromptCommand;
+    private readonly ILogger<TodoDetailViewModel> _logger;
+
 
     /// <summary>Initializes a new instance of the TODO detail ViewModel.</summary>
     /// <param name="dispatcher">CQRS dispatcher.</param>
-    public TodoDetailViewModel(Dispatcher dispatcher)
+    /// <param name="logger">Logger instance.</param>
+    public TodoDetailViewModel(Dispatcher dispatcher,
+        ILogger<TodoDetailViewModel> logger)
         : base(McpArea.Todo)
     {
+        _logger = logger;
         _loadCommand = new CqrsQueryCommand<TodoDetail?>(dispatcher, BuildQuery);
         _createCommand = new CqrsRelayCommand<TodoMutationOutcome>(dispatcher, BuildCreateCommand);
         _updateCommand = new CqrsRelayCommand<TodoMutationOutcome>(dispatcher, BuildUpdateCommand);
@@ -208,7 +214,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             Detail = null;
             ErrorMessage = ex.Message;
             StatusMessage = "TODO detail load failed.";
@@ -315,7 +321,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             ErrorMessage = ex.Message;
             StatusMessage = "TODO mutation failed.";
         }
@@ -355,7 +361,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             ErrorMessage = ex.Message;
             StatusMessage = "TODO requirements analysis failed.";
         }
@@ -389,7 +395,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             ErrorMessage = ex.Message;
             StatusMessage = "TODO prompt generation failed.";
         }

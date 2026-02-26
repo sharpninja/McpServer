@@ -3,6 +3,8 @@ using McpServer.Client;
 using McpServer.Client.Models;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.Services;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace McpServer.Director;
 
@@ -13,9 +15,13 @@ namespace McpServer.Director;
 internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
 {
     private readonly DirectorMcpContext _context;
+    private readonly ILogger<WorkspaceApiClientAdapter> _logger;
 
-    public WorkspaceApiClientAdapter(DirectorMcpContext context)
+
+    public WorkspaceApiClientAdapter(DirectorMcpContext context,
+        ILogger<WorkspaceApiClientAdapter>? logger = null)
     {
+        _logger = logger ?? NullLogger<WorkspaceApiClientAdapter>.Instance;
         _context = context;
     }
 
@@ -46,7 +52,7 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
         }
         catch (McpNotFoundException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return null;
         }
     }

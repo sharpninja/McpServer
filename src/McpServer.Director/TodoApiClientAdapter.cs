@@ -2,6 +2,8 @@ using McpServer.Client;
 using McpServer.Client.Models;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.Services;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace McpServer.Director;
 
@@ -11,9 +13,13 @@ namespace McpServer.Director;
 internal sealed class TodoApiClientAdapter : ITodoApiClient
 {
     private readonly DirectorMcpContext _context;
+    private readonly ILogger<TodoApiClientAdapter> _logger;
 
-    public TodoApiClientAdapter(DirectorMcpContext context)
+
+    public TodoApiClientAdapter(DirectorMcpContext context,
+        ILogger<TodoApiClientAdapter>? logger = null)
     {
+        _logger = logger ?? NullLogger<TodoApiClientAdapter>.Instance;
         _context = context;
     }
 
@@ -51,7 +57,7 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
         }
         catch (McpNotFoundException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return null;
         }
     }
@@ -81,12 +87,12 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
         }
         catch (McpConflictException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return new TodoMutationOutcome(false, ex.Message, null);
         }
         catch (McpValidationException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return new TodoMutationOutcome(false, ex.Message, null);
         }
     }
@@ -117,12 +123,12 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
         }
         catch (McpNotFoundException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return new TodoMutationOutcome(false, ex.Message, null);
         }
         catch (McpValidationException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return new TodoMutationOutcome(false, ex.Message, null);
         }
     }
@@ -137,7 +143,7 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
         }
         catch (McpNotFoundException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return new TodoMutationOutcome(false, ex.Message, null);
         }
     }

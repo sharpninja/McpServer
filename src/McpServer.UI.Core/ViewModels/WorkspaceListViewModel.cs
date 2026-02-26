@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using McpServer.Cqrs;
 using McpServer.Cqrs.Mvvm;
 using McpServer.UI.Core.Messages;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.ViewModels;
 
@@ -14,11 +15,16 @@ namespace McpServer.UI.Core.ViewModels;
 public partial class WorkspaceListViewModel : ObservableObject
 {
     private readonly Dispatcher _dispatcher;
+    private readonly ILogger<WorkspaceListViewModel> _logger;
+
 
     /// <summary>Initializes a new <see cref="WorkspaceListViewModel"/>.</summary>
     /// <param name="dispatcher">The CQRS dispatcher.</param>
-    public WorkspaceListViewModel(Dispatcher dispatcher)
+    /// <param name="logger">Logger instance.</param>
+    public WorkspaceListViewModel(Dispatcher dispatcher,
+        ILogger<WorkspaceListViewModel> logger)
     {
+        _logger = logger;
         _dispatcher = dispatcher;
         RefreshCommand = new CqrsQueryCommand<ListWorkspacesResult>(dispatcher, () => new ListWorkspacesQuery());
     }
@@ -81,7 +87,7 @@ public partial class WorkspaceListViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             var error = ex.Message;
             InvokeOnUiThread(() => ErrorMessage = error);
         }

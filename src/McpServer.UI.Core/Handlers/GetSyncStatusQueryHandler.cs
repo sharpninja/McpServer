@@ -2,6 +2,7 @@ using McpServer.Cqrs;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.Handlers;
 
@@ -10,9 +11,13 @@ internal sealed class GetSyncStatusQueryHandler : IQueryHandler<GetSyncStatusQue
 {
     private readonly ISyncApiClient _syncApiClient;
     private readonly IAuthorizationPolicyService _authorizationPolicy;
+    private readonly ILogger<GetSyncStatusQueryHandler> _logger;
 
-    public GetSyncStatusQueryHandler(ISyncApiClient syncApiClient, IAuthorizationPolicyService authorizationPolicy)
+
+    public GetSyncStatusQueryHandler(ISyncApiClient syncApiClient, IAuthorizationPolicyService authorizationPolicy,
+        ILogger<GetSyncStatusQueryHandler> logger)
     {
+        _logger = logger;
         _syncApiClient = syncApiClient;
         _authorizationPolicy = authorizationPolicy;
     }
@@ -35,7 +40,7 @@ internal sealed class GetSyncStatusQueryHandler : IQueryHandler<GetSyncStatusQue
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Result<SyncStatusSnapshot>.Failure(ex);
         }
     }

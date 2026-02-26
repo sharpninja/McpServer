@@ -36,17 +36,7 @@ public sealed class SessionLogService : ISessionLogService
         if (string.IsNullOrWhiteSpace(dto.SessionId))
             throw new ArgumentException("SessionId is required.", nameof(dto));
 
-        var existing = await _db.SessionLogs
-            .Include(s => s.Entries)
-                .ThenInclude(e => e.Actions)
-            .Include(s => s.Entries)
-                .ThenInclude(e => e.Tags)
-            .Include(s => s.Entries)
-                .ThenInclude(e => e.ContextItems)
-            .Include(s => s.Entries)
-                .ThenInclude(e => e.ProcessingDialog)
-            .FirstOrDefaultAsync(s => s.SourceType == dto.SourceType && s.SessionId == dto.SessionId, cancellationToken)
-            .ConfigureAwait(false);
+        var existing = await FindExistingSessionAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false);
 
         if (existing != null)
         {
@@ -71,9 +61,43 @@ public sealed class SessionLogService : ISessionLogService
             _logger.LogInformation("Created session log {SourceType}/{SessionId}", dto.SourceType, dto.SessionId);
         }
 
-        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        }
+        catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("UNIQUE constraint failed", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            // Race condition: another request inserted the same (SourceType, SessionId) between
+            // our query and save. Detach the failed entity, re-query, and update instead.
+            _logger.LogWarning("UNIQUE constraint race for {SourceType}/{SessionId}, retrying as update", dto.SourceType, dto.SessionId);
+            _db.ChangeTracker.Clear();
+
+            existing = await FindExistingSessionAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false)
+                ?? throw new InvalidOperationException($"Session log {dto.SourceType}/{dto.SessionId} disappeared after UNIQUE constraint failure.");
+
+            MapDtoToEntity(dto, existing);
+            existing.SourceFilePath = sourceFilePath;
+            existing.ContentHash = contentHash;
+            UpsertEntries(existing, dto.Entries);
+
+            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            _logger.LogInformation("Updated session log {SourceType}/{SessionId} (Id={Id}) after retry", dto.SourceType, dto.SessionId, existing.Id);
+        }
+
         return existing.Id;
     }
+
+    private Task<SessionLogEntity?> FindExistingSessionAsync(string sourceType, string sessionId, CancellationToken cancellationToken) =>
+        _db.SessionLogs
+            .Include(s => s.Entries)
+                .ThenInclude(e => e.Actions)
+            .Include(s => s.Entries)
+                .ThenInclude(e => e.Tags)
+            .Include(s => s.Entries)
+                .ThenInclude(e => e.ContextItems)
+            .Include(s => s.Entries)
+                .ThenInclude(e => e.ProcessingDialog)
+            .FirstOrDefaultAsync(s => s.SourceType == sourceType && s.SessionId == sessionId, cancellationToken);
 
     /// <inheritdoc />
     public async Task<bool> IsUnchangedAsync(string sourceType, string sessionId, string contentHash, CancellationToken cancellationToken = default)

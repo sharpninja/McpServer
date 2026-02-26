@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using McpServer.Cqrs;
 using McpServer.Cqrs.Mvvm;
 using McpServer.UI.Core.Messages;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.ViewModels;
 
@@ -14,11 +15,16 @@ namespace McpServer.UI.Core.ViewModels;
 public partial class WorkspacePolicyViewModel : ObservableObject
 {
     private readonly Dispatcher _dispatcher;
+    private readonly ILogger<WorkspacePolicyViewModel> _logger;
+
 
     /// <summary>Initializes a new <see cref="WorkspacePolicyViewModel"/>.</summary>
     /// <param name="dispatcher">The CQRS dispatcher.</param>
-    public WorkspacePolicyViewModel(Dispatcher dispatcher)
+    /// <param name="logger">Logger instance.</param>
+    public WorkspacePolicyViewModel(Dispatcher dispatcher,
+        ILogger<WorkspacePolicyViewModel> logger)
     {
+        _logger = logger;
         _dispatcher = dispatcher;
         SaveCommand = new CqrsRelayCommand<bool>(dispatcher, BuildCommand);
     }
@@ -82,7 +88,7 @@ public partial class WorkspacePolicyViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             ErrorMessage = ex.Message;
         }
         finally

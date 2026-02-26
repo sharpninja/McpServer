@@ -2,6 +2,7 @@ using System.Threading.Channels;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Services;
 
@@ -11,11 +12,16 @@ namespace McpServer.Support.Mcp.Services;
 public sealed class InteractionLogSubmissionChannel : IInteractionLogSubmissionChannel
 {
     private readonly Channel<InteractionLogEntry> _channel;
+    private readonly ILogger<InteractionLogSubmissionChannel> _logger;
+
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
     /// <param name="options">Interaction logging options providing queue capacity.</param>
-    public InteractionLogSubmissionChannel(IOptions<McpInteractionLoggingOptions> options)
+    /// <param name="logger">Logger instance.</param>
+    public InteractionLogSubmissionChannel(IOptions<McpInteractionLoggingOptions> options,
+        ILogger<InteractionLogSubmissionChannel> logger)
     {
+        _logger = logger;
         var capacity = options?.Value?.QueueCapacity ?? 1000;
         _channel = Channel.CreateBounded<InteractionLogEntry>(new BoundedChannelOptions(capacity)
         {
@@ -44,7 +50,7 @@ public sealed class InteractionLogSubmissionChannel : IInteractionLogSubmissionC
         }
         catch (OperationCanceledException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // Expected on shutdown
         }
 

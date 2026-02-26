@@ -5,6 +5,7 @@ using McpServer.Cqrs.Mvvm;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.ViewModels.Base;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.ViewModels;
 
@@ -15,12 +16,17 @@ namespace McpServer.UI.Core.ViewModels;
 public sealed partial class WorkspaceDetailViewModel : AreaDetailViewModelBase<WorkspaceDetail>
 {
     private readonly CqrsQueryCommand<WorkspaceDetail?> _getWorkspaceCommand;
+    private readonly ILogger<WorkspaceDetailViewModel> _logger;
+
 
     /// <summary>Initializes a new instance of the workspace detail ViewModel.</summary>
     /// <param name="dispatcher">CQRS dispatcher.</param>
-    public WorkspaceDetailViewModel(Dispatcher dispatcher)
+    /// <param name="logger">Logger instance.</param>
+    public WorkspaceDetailViewModel(Dispatcher dispatcher,
+        ILogger<WorkspaceDetailViewModel> logger)
         : base(McpArea.Workspaces)
     {
+        _logger = logger;
         _getWorkspaceCommand = new CqrsQueryCommand<WorkspaceDetail?>(
             dispatcher,
             () => new GetWorkspaceQuery(WorkspacePath));
@@ -74,7 +80,7 @@ public sealed partial class WorkspaceDetailViewModel : AreaDetailViewModelBase<W
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             Detail = null;
             ErrorMessage = ex.Message;
             StatusMessage = "Workspace detail load failed.";

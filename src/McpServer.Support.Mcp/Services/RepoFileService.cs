@@ -1,5 +1,6 @@
 using McpServer.Support.Mcp.Ingestion;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Services;
 
@@ -12,12 +13,17 @@ public sealed class RepoFileService : IRepoFileService
     private static readonly char[] TrimSlashChars = { '/', '\\' };
     private readonly IngestionOptions _options;
     private readonly IWriteAuditLog _auditLog;
+    private readonly ILogger<RepoFileService> _logger;
+
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
     /// <param name="options">Ingestion options providing repo root and allowlist.</param>
     /// <param name="auditLog">Audit log for recording write operations.</param>
-    public RepoFileService(IOptions<IngestionOptions> options, IWriteAuditLog auditLog)
+    /// <param name="logger">Logger instance.</param>
+    public RepoFileService(IOptions<IngestionOptions> options, IWriteAuditLog auditLog,
+        ILogger<RepoFileService> logger)
     {
+        _logger = logger;
         _options = options?.Value ?? new IngestionOptions();
         _auditLog = auditLog ?? throw new ArgumentNullException(nameof(auditLog));
     }
@@ -77,12 +83,12 @@ public sealed class RepoFileService : IRepoFileService
         }
         catch (IOException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return new RepoWriteResult(false, ex.Message);
         }
         catch (UnauthorizedAccessException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return new RepoWriteResult(false, ex.Message);
         }
     }

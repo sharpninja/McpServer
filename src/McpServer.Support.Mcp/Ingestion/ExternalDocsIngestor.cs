@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Models;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Ingestion;
 
@@ -13,12 +14,17 @@ public sealed class ExternalDocsIngestor
 {
     private readonly Chunker _chunker;
     private readonly IngestionOptions _options;
+    private readonly ILogger<ExternalDocsIngestor> _logger;
+
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
     /// <param name="chunker">Chunker for splitting content.</param>
     /// <param name="options">Ingestion options providing external docs path.</param>
-    public ExternalDocsIngestor(Chunker chunker, Microsoft.Extensions.Options.IOptions<IngestionOptions> options)
+    /// <param name="logger">Logger instance.</param>
+    public ExternalDocsIngestor(Chunker chunker, Microsoft.Extensions.Options.IOptions<IngestionOptions> options,
+        ILogger<ExternalDocsIngestor> logger)
     {
+        _logger = logger;
         _chunker = chunker;
         _options = options?.Value ?? new IngestionOptions();
     }
@@ -64,12 +70,12 @@ public sealed class ExternalDocsIngestor
             }
             catch (IOException ex)
             {
-                System.Diagnostics.Trace.TraceWarning(ex.ToString());
+                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
                 // Skip unreadable
             }
             catch (UnauthorizedAccessException ex)
             {
-                System.Diagnostics.Trace.TraceWarning(ex.ToString());
+                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
                 // Skip inaccessible
             }
         }

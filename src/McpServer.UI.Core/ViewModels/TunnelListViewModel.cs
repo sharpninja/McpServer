@@ -4,6 +4,7 @@ using McpServer.Cqrs;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.ViewModels.Base;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.ViewModels;
 
@@ -11,10 +12,14 @@ namespace McpServer.UI.Core.ViewModels;
 public sealed partial class TunnelListViewModel : AreaListViewModelBase<TunnelProviderSnapshot>
 {
     private readonly Dispatcher _dispatcher;
+    private readonly ILogger<TunnelListViewModel> _logger;
+
 
     /// <summary>Initializes a new instance of the <see cref="TunnelListViewModel"/> class.</summary>
-    public TunnelListViewModel(Dispatcher dispatcher) : base(McpArea.Tunnels)
+    public TunnelListViewModel(Dispatcher dispatcher,
+        ILogger<TunnelListViewModel> logger) : base(McpArea.Tunnels)
     {
+        _logger = logger;
         _dispatcher = dispatcher;
     }
 
@@ -39,7 +44,7 @@ public sealed partial class TunnelListViewModel : AreaListViewModelBase<TunnelPr
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             ErrorMessage = ex.Message;
         }
         finally

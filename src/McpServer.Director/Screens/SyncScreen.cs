@@ -1,6 +1,8 @@
 using System.Text.Json;
 using McpServer.UI.Core.ViewModels;
 using Terminal.Gui;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace McpServer.Director.Screens;
 
@@ -11,9 +13,13 @@ internal sealed class SyncScreen : View
     private readonly RunSyncViewModel _runSyncViewModel;
     private TextView _statusLabel = null!;
     private TextView _detailView = null!;
+    private readonly ILogger<SyncScreen> _logger;
 
-    public SyncScreen(SyncStatusViewModel syncStatusViewModel, RunSyncViewModel runSyncViewModel)
+
+    public SyncScreen(SyncStatusViewModel syncStatusViewModel, RunSyncViewModel runSyncViewModel,
+        ILogger<SyncScreen>? logger = null)
     {
+        _logger = logger ?? NullLogger<SyncScreen>.Instance;
         _syncStatusViewModel = syncStatusViewModel;
         _runSyncViewModel = runSyncViewModel;
         Title = "Sync";
@@ -75,7 +81,7 @@ internal sealed class SyncScreen : View
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             SetStatus($"✗ {ex.Message}");
         }
     }
@@ -102,7 +108,7 @@ internal sealed class SyncScreen : View
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             SetStatus($"✗ {ex.Message}");
         }
     }

@@ -1,6 +1,7 @@
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Controllers;
 
@@ -15,10 +16,14 @@ public sealed class SessionLogController : ControllerBase
     private const int MaxEntryCount = 5000;
 
     private readonly ISessionLogService _service;
+    private readonly ILogger<SessionLogController> _logger;
+
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
-    public SessionLogController(ISessionLogService service)
+    public SessionLogController(ISessionLogService service,
+        ILogger<SessionLogController> logger)
     {
+        _logger = logger;
         _service = service ?? throw new ArgumentNullException(nameof(service));
     }
 
@@ -123,7 +128,7 @@ public sealed class SessionLogController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return NotFound(new { error = ex.Message });
         }
     }

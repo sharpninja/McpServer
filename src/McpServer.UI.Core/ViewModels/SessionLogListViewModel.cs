@@ -5,6 +5,7 @@ using McpServer.Cqrs.Mvvm;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.ViewModels.Base;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.ViewModels;
 
@@ -16,12 +17,17 @@ namespace McpServer.UI.Core.ViewModels;
 public sealed partial class SessionLogListViewModel : AreaListViewModelBase<SessionLogSummary>
 {
     private readonly CqrsQueryCommand<ListSessionLogsResult> _refreshCommand;
+    private readonly ILogger<SessionLogListViewModel> _logger;
+
 
     /// <summary>Initializes a new instance of the session log list ViewModel.</summary>
     /// <param name="dispatcher">CQRS dispatcher.</param>
-    public SessionLogListViewModel(Dispatcher dispatcher)
+    /// <param name="logger">Logger instance.</param>
+    public SessionLogListViewModel(Dispatcher dispatcher,
+        ILogger<SessionLogListViewModel> logger)
         : base(McpArea.SessionLogs)
     {
+        _logger = logger;
         _refreshCommand = new CqrsQueryCommand<ListSessionLogsResult>(dispatcher, BuildQuery);
     }
 
@@ -77,7 +83,7 @@ public sealed partial class SessionLogListViewModel : AreaListViewModelBase<Sess
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             ErrorMessage = ex.Message;
             StatusMessage = "Session log load failed.";
         }

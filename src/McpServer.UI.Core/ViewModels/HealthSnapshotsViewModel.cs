@@ -4,6 +4,7 @@ using McpServer.Cqrs.Mvvm;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.ViewModels.Base;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.ViewModels;
 
@@ -16,12 +17,17 @@ public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnaps
 {
     private readonly Dispatcher _dispatcher;
     private readonly CqrsQueryCommand<HealthSnapshot> _checkHealthCommand;
+    private readonly ILogger<HealthSnapshotsViewModel> _logger;
+
 
     /// <summary>Initializes a new instance of the health snapshots ViewModel.</summary>
     /// <param name="dispatcher">CQRS dispatcher.</param>
-    public HealthSnapshotsViewModel(Dispatcher dispatcher)
+    /// <param name="logger">Logger instance.</param>
+    public HealthSnapshotsViewModel(Dispatcher dispatcher,
+        ILogger<HealthSnapshotsViewModel> logger)
         : base(McpArea.Health)
     {
+        _logger = logger;
         _dispatcher = dispatcher;
         _checkHealthCommand = new CqrsQueryCommand<HealthSnapshot>(dispatcher, static () => new CheckHealthQuery());
     }
@@ -65,7 +71,7 @@ public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnaps
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             ErrorMessage = ex.Message;
             StatusMessage = "Health check failed.";
         }
@@ -108,7 +114,7 @@ public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnaps
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             ErrorMessage = ex.Message;
             StatusMessage = "Workspace initialization failed.";
             return Result<WorkspaceInitInfo>.Failure(ex);

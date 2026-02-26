@@ -2,6 +2,7 @@ using McpServer.Cqrs;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.Handlers;
 
@@ -12,11 +13,14 @@ internal sealed class GenerateTodoStatusPromptQueryHandler : IQueryHandler<Gener
 {
     private readonly ITodoApiClient _todoApiClient;
     private readonly IAuthorizationPolicyService _authorizationPolicy;
+    private readonly ILogger<GenerateTodoStatusPromptQueryHandler> _logger;
 
-    public GenerateTodoStatusPromptQueryHandler(
-        ITodoApiClient todoApiClient,
-        IAuthorizationPolicyService authorizationPolicy)
+
+    public GenerateTodoStatusPromptQueryHandler(ITodoApiClient todoApiClient,
+        IAuthorizationPolicyService authorizationPolicy,
+        ILogger<GenerateTodoStatusPromptQueryHandler> logger)
     {
+        _logger = logger;
         _todoApiClient = todoApiClient;
         _authorizationPolicy = authorizationPolicy;
     }
@@ -39,7 +43,7 @@ internal sealed class GenerateTodoStatusPromptQueryHandler : IQueryHandler<Gener
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Result<TodoPromptOutput>.Failure(ex);
         }
     }

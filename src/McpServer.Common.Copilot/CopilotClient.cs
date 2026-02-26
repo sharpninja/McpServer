@@ -103,7 +103,7 @@ public sealed class CopilotClient(
                 }
                 catch (OperationCanceledException ex)
                 {
-                    System.Diagnostics.Trace.TraceWarning(ex.ToString());
+                    logger.LogWarning("{ExceptionDetail}", ex.ToString());
                     break;
                 }
 
@@ -270,7 +270,7 @@ public sealed class CopilotClient(
         return psi;
     }
 
-    private static async Task<string> ReadPartialAsync(Task<string> readTask)
+    private async Task<string> ReadPartialAsync(Task<string> readTask)
     {
         try
         {
@@ -278,17 +278,17 @@ public sealed class CopilotClient(
         }
         catch (TimeoutException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return string.Empty;
         }
         catch (OperationCanceledException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return string.Empty;
         }
     }
 
-    private static void TryKillProcess(Process process)
+    private void TryKillProcess(Process process)
     {
         try
         {
@@ -297,12 +297,12 @@ public sealed class CopilotClient(
         }
         catch (InvalidOperationException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // Process already exited
         }
         catch (System.ComponentModel.Win32Exception ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // Access denied or other OS error
         }
     }
@@ -367,7 +367,7 @@ public sealed class CopilotClient(
     /// (<c>HKEY_USERS\{SID}\Environment\Path</c>) and appending common WinGet/Scoop directories.
     /// </summary>
     [SupportedOSPlatform("windows")]
-    private static string ResolveUserPath(string username, string localAppData)
+    private string ResolveUserPath(string username, string localAppData)
     {
         var parts = new List<string>();
 
@@ -393,7 +393,7 @@ public sealed class CopilotClient(
         }
         catch (System.Security.SecurityException ex)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // LocalSystem may not be able to read all registry hives.
         }
 

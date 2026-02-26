@@ -2,6 +2,7 @@ using McpServer.Cqrs;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.Handlers;
 
@@ -10,9 +11,13 @@ internal sealed class PackContextQueryHandler : IQueryHandler<PackContextQuery, 
 {
     private readonly IContextApiClient _contextApiClient;
     private readonly IAuthorizationPolicyService _authorizationPolicy;
+    private readonly ILogger<PackContextQueryHandler> _logger;
 
-    public PackContextQueryHandler(IContextApiClient contextApiClient, IAuthorizationPolicyService authorizationPolicy)
+
+    public PackContextQueryHandler(IContextApiClient contextApiClient, IAuthorizationPolicyService authorizationPolicy,
+        ILogger<PackContextQueryHandler> logger)
     {
+        _logger = logger;
         _contextApiClient = contextApiClient;
         _authorizationPolicy = authorizationPolicy;
     }
@@ -33,7 +38,7 @@ internal sealed class PackContextQueryHandler : IQueryHandler<PackContextQuery, 
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Result<ContextPackPayload>.Failure(ex);
         }
     }

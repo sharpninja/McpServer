@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using McpServer.Cqrs;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.ViewModels.Base;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.ViewModels;
 
@@ -23,12 +24,17 @@ public sealed partial class DispatcherLogsViewModel : AreaListViewModelBase<Disp
 
     [ObservableProperty]
     private IReadOnlyList<DispatchLogRecord> _result = [];
+    private readonly ILogger<DispatcherLogsViewModel> _logger;
+
 
     /// <summary>Initializes a new instance.</summary>
     /// <param name="dispatcher">The local CQRS dispatcher retaining dispatch log history.</param>
-    public DispatcherLogsViewModel(Dispatcher dispatcher)
+    /// <param name="logger">Logger instance.</param>
+    public DispatcherLogsViewModel(Dispatcher dispatcher,
+        ILogger<DispatcherLogsViewModel> logger)
         : base(McpArea.DispatcherLogs)
     {
+        _logger = logger;
         _dispatcher = dispatcher;
         _refreshCommand = new AsyncRelayCommand(LoadAsync);
     }
@@ -66,7 +72,7 @@ public sealed partial class DispatcherLogsViewModel : AreaListViewModelBase<Disp
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             ErrorMessage = ex.Message;
             StatusMessage = "Failed to load dispatcher logs.";
         }

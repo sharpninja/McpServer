@@ -1,6 +1,7 @@
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Xunit;
 
@@ -14,7 +15,7 @@ public sealed class InteractionLogSubmissionChannelTests
     public async Task TryEnqueue_ThenTryDequeue_ReturnsEntry()
     {
         var options = Microsoft.Extensions.Options.Options.Create(new McpInteractionLoggingOptions { QueueCapacity = 10 });
-        var channel = new InteractionLogSubmissionChannel(options);
+        var channel = new InteractionLogSubmissionChannel(options, NullLogger<InteractionLogSubmissionChannel>.Instance);
 
         var entry = new InteractionLogEntry
         {
@@ -43,7 +44,7 @@ public sealed class InteractionLogSubmissionChannelTests
     public async Task TryDequeueAsync_WhenEmpty_CanBeCancelled()
     {
         var options = Microsoft.Extensions.Options.Options.Create(new McpInteractionLoggingOptions { QueueCapacity = 10 });
-        var channel = new InteractionLogSubmissionChannel(options);
+        var channel = new InteractionLogSubmissionChannel(options, NullLogger<InteractionLogSubmissionChannel>.Instance);
 
         using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(50));
         var (success, entry) = await channel.TryDequeueAsync(cts.Token).ConfigureAwait(true);

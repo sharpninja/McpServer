@@ -2,6 +2,7 @@ using McpServer.Cqrs;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.Handlers;
 
@@ -10,9 +11,13 @@ internal sealed class GetDiagnosticAppSettingsPathQueryHandler : IQueryHandler<G
 {
     private readonly IDiagnosticApiClient _diagnosticApiClient;
     private readonly IAuthorizationPolicyService _authorizationPolicy;
+    private readonly ILogger<GetDiagnosticAppSettingsPathQueryHandler> _logger;
 
-    public GetDiagnosticAppSettingsPathQueryHandler(IDiagnosticApiClient diagnosticApiClient, IAuthorizationPolicyService authorizationPolicy)
+
+    public GetDiagnosticAppSettingsPathQueryHandler(IDiagnosticApiClient diagnosticApiClient, IAuthorizationPolicyService authorizationPolicy,
+        ILogger<GetDiagnosticAppSettingsPathQueryHandler> logger)
     {
+        _logger = logger;
         _diagnosticApiClient = diagnosticApiClient;
         _authorizationPolicy = authorizationPolicy;
     }
@@ -33,7 +38,7 @@ internal sealed class GetDiagnosticAppSettingsPathQueryHandler : IQueryHandler<G
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Result<DiagnosticAppSettingsSnapshot>.Failure(ex);
         }
     }

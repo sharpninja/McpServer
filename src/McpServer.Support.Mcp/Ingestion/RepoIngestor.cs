@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Models;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Ingestion;
 
@@ -14,12 +15,17 @@ public sealed class RepoIngestor
     private static readonly char[] TrimSlashChars = { '/' };
     private readonly Chunker _chunker;
     private readonly IngestionOptions _options;
+    private readonly ILogger<RepoIngestor> _logger;
+
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
     /// <param name="chunker">Chunker for splitting content.</param>
     /// <param name="options">Ingestion options providing repo root and allowlist.</param>
-    public RepoIngestor(Chunker chunker, Microsoft.Extensions.Options.IOptions<IngestionOptions> options)
+    /// <param name="logger">Logger instance.</param>
+    public RepoIngestor(Chunker chunker, Microsoft.Extensions.Options.IOptions<IngestionOptions> options,
+        ILogger<RepoIngestor> logger)
     {
+        _logger = logger;
         _chunker = chunker;
         _options = options?.Value ?? new IngestionOptions();
     }
@@ -71,12 +77,12 @@ public sealed class RepoIngestor
             }
             catch (IOException ex)
             {
-                System.Diagnostics.Trace.TraceWarning(ex.ToString());
+                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
                 // Skip unreadable files
             }
             catch (UnauthorizedAccessException ex)
             {
-                System.Diagnostics.Trace.TraceWarning(ex.ToString());
+                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
                 // Skip inaccessible files
             }
         }

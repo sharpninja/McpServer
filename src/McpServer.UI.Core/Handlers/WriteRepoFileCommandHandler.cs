@@ -2,6 +2,7 @@ using McpServer.Cqrs;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.Handlers;
 
@@ -10,9 +11,13 @@ internal sealed class WriteRepoFileCommandHandler : ICommandHandler<WriteRepoFil
 {
     private readonly IRepoApiClient _repoApiClient;
     private readonly IAuthorizationPolicyService _authorizationPolicy;
+    private readonly ILogger<WriteRepoFileCommandHandler> _logger;
 
-    public WriteRepoFileCommandHandler(IRepoApiClient repoApiClient, IAuthorizationPolicyService authorizationPolicy)
+
+    public WriteRepoFileCommandHandler(IRepoApiClient repoApiClient, IAuthorizationPolicyService authorizationPolicy,
+        ILogger<WriteRepoFileCommandHandler> logger)
     {
+        _logger = logger;
         _repoApiClient = repoApiClient;
         _authorizationPolicy = authorizationPolicy;
     }
@@ -35,7 +40,7 @@ internal sealed class WriteRepoFileCommandHandler : ICommandHandler<WriteRepoFil
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Result<RepoWriteOutcome>.Failure(ex);
         }
     }

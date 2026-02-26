@@ -1,5 +1,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace McpServer.Director;
 
@@ -20,10 +22,14 @@ internal sealed class McpHttpClient : IDisposable
 
     /// <summary>Workspace path.</summary>
     public string WorkspacePath { get; }
+    private readonly ILogger<McpHttpClient> _logger;
+
 
     /// <summary>Creates a new client from explicit connection details.</summary>
-    public McpHttpClient(string baseUrl, string apiKey, string workspacePath)
+    public McpHttpClient(string baseUrl, string apiKey, string workspacePath,
+        ILogger<McpHttpClient>? logger = null)
     {
+        _logger = logger ?? NullLogger<McpHttpClient>.Instance;
         BaseUrl = baseUrl.TrimEnd('/');
         ApiKey = apiKey;
         WorkspacePath = workspacePath;
@@ -395,7 +401,7 @@ internal sealed class McpHttpClient : IDisposable
         }
         catch (HttpRequestException ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return null;
         }
     }

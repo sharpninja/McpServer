@@ -365,7 +365,7 @@ public sealed class AgentService : IAgentService
 
     // --- Mapping helpers ---
 
-    private static AgentDefinitionDto MapDefinition(AgentDefinitionEntity e) => new()
+    private AgentDefinitionDto MapDefinition(AgentDefinitionEntity e) => new()
     {
         Id = e.Id,
         DisplayName = e.DisplayName,
@@ -379,7 +379,7 @@ public sealed class AgentService : IAgentService
         ModifiedAt = e.ModifiedAt
     };
 
-    private static AgentWorkspaceConfigDto MapWorkspaceConfig(AgentWorkspaceEntity e) => new()
+    private AgentWorkspaceConfigDto MapWorkspaceConfig(AgentWorkspaceEntity e) => new()
     {
         Id = e.Id,
         AgentId = e.AgentDefinitionId,
@@ -410,10 +410,10 @@ public sealed class AgentService : IAgentService
         Timestamp = e.Timestamp
     };
 
-    private static IReadOnlyList<string> DeserializeStringList(string json)
+    private IReadOnlyList<string> DeserializeStringList(string json)
     {
         try { return JsonSerializer.Deserialize<List<string>>(json) ?? []; }
-        catch (JsonException ex) { System.Diagnostics.Trace.TraceWarning(ex.ToString()); return []; }
+        catch (JsonException ex) { _logger.LogWarning("{ExceptionDetail}", ex.ToString()); return []; }
     }
 
     private static string NormalizePath(string path)

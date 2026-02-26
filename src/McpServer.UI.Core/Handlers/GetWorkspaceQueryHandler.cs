@@ -2,6 +2,7 @@ using McpServer.Cqrs;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.Handlers;
 
@@ -12,11 +13,14 @@ internal sealed class GetWorkspaceQueryHandler : IQueryHandler<GetWorkspaceQuery
 {
     private readonly IWorkspaceApiClient _workspaceApiClient;
     private readonly IAuthorizationPolicyService _authorizationPolicy;
+    private readonly ILogger<GetWorkspaceQueryHandler> _logger;
 
-    public GetWorkspaceQueryHandler(
-        IWorkspaceApiClient workspaceApiClient,
-        IAuthorizationPolicyService authorizationPolicy)
+
+    public GetWorkspaceQueryHandler(IWorkspaceApiClient workspaceApiClient,
+        IAuthorizationPolicyService authorizationPolicy,
+        ILogger<GetWorkspaceQueryHandler> logger)
     {
+        _logger = logger;
         _workspaceApiClient = workspaceApiClient;
         _authorizationPolicy = authorizationPolicy;
     }
@@ -40,7 +44,7 @@ internal sealed class GetWorkspaceQueryHandler : IQueryHandler<GetWorkspaceQuery
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Result<WorkspaceDetail?>.Failure(ex);
         }
     }

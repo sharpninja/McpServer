@@ -2,6 +2,7 @@ using McpServer.Cqrs;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.UI.Core.Handlers;
 
@@ -10,9 +11,13 @@ internal sealed class GetAuthConfigQueryHandler : IQueryHandler<GetAuthConfigQue
 {
     private readonly IAuthConfigApiClient _authConfigApiClient;
     private readonly IAuthorizationPolicyService _authorizationPolicy;
+    private readonly ILogger<GetAuthConfigQueryHandler> _logger;
 
-    public GetAuthConfigQueryHandler(IAuthConfigApiClient authConfigApiClient, IAuthorizationPolicyService authorizationPolicy)
+
+    public GetAuthConfigQueryHandler(IAuthConfigApiClient authConfigApiClient, IAuthorizationPolicyService authorizationPolicy,
+        ILogger<GetAuthConfigQueryHandler> logger)
     {
+        _logger = logger;
         _authConfigApiClient = authConfigApiClient;
         _authorizationPolicy = authorizationPolicy;
     }
@@ -33,7 +38,7 @@ internal sealed class GetAuthConfigQueryHandler : IQueryHandler<GetAuthConfigQue
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Result<AuthConfigSnapshot>.Failure(ex);
         }
     }

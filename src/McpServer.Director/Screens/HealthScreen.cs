@@ -1,5 +1,7 @@
 using McpServer.UI.Core.ViewModels;
 using Terminal.Gui;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace McpServer.Director.Screens;
 
@@ -13,9 +15,13 @@ internal sealed class HealthScreen : View
     private TextView _statusLabel = null!;
     private Label _serverLabel = null!;
     private TextView _detailView = null!;
+    private readonly ILogger<HealthScreen> _logger;
 
-    public HealthScreen(HealthSnapshotsViewModel viewModel, McpHttpClient client)
+
+    public HealthScreen(HealthSnapshotsViewModel viewModel, McpHttpClient client,
+        ILogger<HealthScreen>? logger = null)
     {
+        _logger = logger ?? NullLogger<HealthScreen>.Instance;
         _viewModel = viewModel;
         _client = client;
         Title = "Health";
@@ -80,7 +86,7 @@ internal sealed class HealthScreen : View
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             Application.Invoke(() =>
             {
                 _statusLabel.Text = "✗ Server unreachable";
@@ -111,7 +117,7 @@ internal sealed class HealthScreen : View
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             Application.Invoke(() => _statusLabel.Text = $"✗ Init failed: {ex.Message}");
         }
     }

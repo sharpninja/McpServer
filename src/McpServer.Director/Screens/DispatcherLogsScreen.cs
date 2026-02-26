@@ -1,6 +1,8 @@
 using McpServer.Cqrs;
 using McpServer.UI.Core.ViewModels;
 using Terminal.Gui;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace McpServer.Director.Screens;
 
@@ -15,9 +17,13 @@ internal sealed class DispatcherLogsScreen : View
     private TextView _statusView = null!;
     private Label _detailTitleLabel = null!;
     private readonly List<DispatchLogRecord> _rows = [];
+    private readonly ILogger<DispatcherLogsScreen> _logger;
 
-    public DispatcherLogsScreen(DispatcherLogsViewModel viewModel)
+
+    public DispatcherLogsScreen(DispatcherLogsViewModel viewModel,
+        ILogger<DispatcherLogsScreen>? logger = null)
     {
+        _logger = logger ?? NullLogger<DispatcherLogsScreen>.Instance;
         _viewModel = viewModel;
         Title = "Logs";
         Width = Dim.Fill();
@@ -134,7 +140,7 @@ internal sealed class DispatcherLogsScreen : View
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             SetStatus($"✗ {ex.Message}");
         }
     }

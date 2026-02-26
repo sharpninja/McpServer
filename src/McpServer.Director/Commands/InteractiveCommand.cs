@@ -104,7 +104,8 @@ internal static class InteractiveCommand
                     tunnelListVm,
                     authorizationPolicy,
                     roleContext,
-                    directorContext);
+                    directorContext,
+                    sp.GetRequiredService<ILoggerFactory>());
                 Terminal.Gui.Application.Run(mainScreen);
             }
             finally
