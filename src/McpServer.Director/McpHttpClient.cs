@@ -262,12 +262,12 @@ internal sealed class McpHttpClient : IDisposable
         if (markerClient is not null)
             return markerClient;
 
-        var dir = directory ?? Directory.GetCurrentDirectory();
         var cfg = DirectorCliConfigStore.Load();
         if (string.IsNullOrWhiteSpace(cfg.DefaultBaseUrl))
             return null;
 
-        return new McpHttpClient(cfg.DefaultBaseUrl, apiKey: string.Empty, workspacePath: dir);
+        // No marker found — don't send CWD as workspace path; it's not a registered workspace.
+        return new McpHttpClient(cfg.DefaultBaseUrl, apiKey: string.Empty, workspacePath: string.Empty);
     }
 
     /// <summary>
