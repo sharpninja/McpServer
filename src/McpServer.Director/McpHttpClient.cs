@@ -314,10 +314,16 @@ internal sealed class McpHttpClient : IDisposable
         var cfg = DirectorCliConfigStore.Load();
         if (!string.IsNullOrWhiteSpace(cfg.DefaultBaseUrl))
         {
+            // Use marker workspace path if available; otherwise try the primary workspace
+            // from the deployed appsettings. Never fall back to CWD — it may be the service
+            // install directory (e.g. C:\ProgramData\McpServer), not a registered workspace.
+            var workspacePath = markerClient?.WorkspacePath
+                                ?? TryFromLocalPrimaryWorkspaceMarker()?.WorkspacePath
+                                ?? string.Empty;
             return new McpHttpClient(
                 cfg.DefaultBaseUrl,
                 apiKey: string.Empty,
-                markerClient?.WorkspacePath ?? dir);
+                workspacePath);
         }
 
         var primaryMarkerClient = TryFromLocalPrimaryWorkspaceMarker();
