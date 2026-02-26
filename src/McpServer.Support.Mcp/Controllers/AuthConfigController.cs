@@ -361,15 +361,17 @@ public sealed class AuthConfigController : ControllerBase
         string proxyUiBaseUrl,
         string proxyUiPrefix)
     {
-        CopyHeaderCollection(upstream.Headers, keycloakHostBaseUri, proxyUiBaseUrl, proxyUiPrefix);
-        CopyHeaderCollection(upstream.Content.Headers, keycloakHostBaseUri, proxyUiBaseUrl, proxyUiPrefix);
+        var isProxyHttps = Request.IsHttps;
+        CopyHeaderCollection(upstream.Headers, keycloakHostBaseUri, proxyUiBaseUrl, proxyUiPrefix, isProxyHttps);
+        CopyHeaderCollection(upstream.Content.Headers, keycloakHostBaseUri, proxyUiBaseUrl, proxyUiPrefix, isProxyHttps);
     }
 
     private void CopyHeaderCollection(
         IEnumerable<KeyValuePair<string, IEnumerable<string>>> headers,
         Uri keycloakHostBaseUri,
         string proxyUiBaseUrl,
-        string proxyUiPrefix)
+        string proxyUiPrefix,
+        bool isProxyHttps)
     {
         foreach (var header in headers)
         {
@@ -393,7 +395,7 @@ public sealed class AuthConfigController : ControllerBase
             {
                 foreach (var value in header.Value)
                 {
-                    Response.Headers.Append(header.Key, RewriteSetCookieForUiProxy(value, proxyUiPrefix));
+                    Response.Headers.Append(header.Key, RewriteSetCookieForUiProxy(value, proxyUiPrefix, isProxyHttps));
                 }
 
                 continue;
@@ -500,7 +502,7 @@ public sealed class AuthConfigController : ControllerBase
         return value;
     }
 
-    private static string RewriteSetCookieForUiProxy(string setCookie, string proxyUiPrefix)
+    private static string RewriteSetCookieForUiProxy(string setCookie, string proxyUiPrefix, bool isProxyHttps)
     {
         if (string.IsNullOrWhiteSpace(setCookie))
         {
@@ -533,6 +535,23 @@ public sealed class AuthConfigController : ControllerBase
                 rewritten.Add($"Path={cookiePath}");
                 pathRewritten = true;
                 continue;
+            }
+
+            if (!isProxyHttps && part.Equals("Secure", StringComparison.OrdinalIgnoreCase))
+            {
+                // Browsers drop Secure cookies on plain-http dev/LAN MCP proxy URLs (e.g. http://host:7147/auth/ui/...).
+                continue;
+            }
+
+            if (!isProxyHttps && part.StartsWith("SameSite=", StringComparison.OrdinalIgnoreCase))
+            {
+                var sameSiteValue = part.Substring("SameSite=".Length).Trim();
+                if (sameSiteValue.Equals("None", StringComparison.OrdinalIgnoreCase))
+                {
+                    // SameSite=None requires Secure; downgrade for plain-http proxy login flows.
+                    rewritten.Add("SameSite=Lax");
+                    continue;
+                }
             }
 
             rewritten.Add(part);
