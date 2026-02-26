@@ -1,23 +1,23 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using McpServer.Support.Mcp.Requirements.Models;
 
 namespace McpServer.Support.Mcp.Requirements;
 
 internal static class RequirementsDocumentParser
 {
-    private static readonly Regex FrEntryRegex = new(
+    private static readonly Regex s_frEntryRegex = new(
         @"^##\s+(?<id>FR-[^\s]+)\s+(?<title>.+?)\s*\r?\n\r?\n(?<body>[\s\S]*?)(?=^##\s+FR-[^\s]+\s+|\z)",
         RegexOptions.Compiled | RegexOptions.Multiline);
 
-    private static readonly Regex TrEntryRegex = new(
+    private static readonly Regex s_trEntryRegex = new(
         @"^##\s+(?<id>TR-[^\s]+)\s*\r?\n\r?\n(?<body>[\s\S]*?)(?=^##\s+TR-[^\s]+\s*$|\z)",
         RegexOptions.Compiled | RegexOptions.Multiline);
 
-    private static readonly Regex TestEntryRegex = new(
+    private static readonly Regex s_testEntryRegex = new(
         @"^\s*-\s+(?<id>TEST-[^:\r\n]+):\s*(?<condition>.+?)\s*$",
         RegexOptions.Compiled | RegexOptions.Multiline);
 
-    private static readonly Regex TrBoldTitleRegex = new(
+    private static readonly Regex s_trBoldTitleRegex = new(
         @"^\*\*(?<title>.+?)\*\*\s*[—-]\s*(?<rest>.*)$",
         RegexOptions.Compiled);
 
@@ -27,7 +27,7 @@ internal static class RequirementsDocumentParser
             return [];
 
         var list = new List<FrEntry>();
-        foreach (Match match in FrEntryRegex.Matches(content))
+        foreach (Match match in s_frEntryRegex.Matches(content))
         {
             if (!match.Success)
                 continue;
@@ -50,7 +50,7 @@ internal static class RequirementsDocumentParser
             return [];
 
         var list = new List<TrEntry>();
-        foreach (Match match in TrEntryRegex.Matches(content))
+        foreach (Match match in s_trEntryRegex.Matches(content))
         {
             if (!match.Success)
                 continue;
@@ -73,7 +73,7 @@ internal static class RequirementsDocumentParser
             return [];
 
         var list = new List<TestEntry>();
-        foreach (Match match in TestEntryRegex.Matches(content))
+        foreach (Match match in s_testEntryRegex.Matches(content))
         {
             if (!match.Success)
                 continue;
@@ -147,7 +147,7 @@ internal static class RequirementsDocumentParser
         var firstLine = firstNewLine >= 0 ? normalized[..firstNewLine].Trim() : normalized.Trim();
         var remainder = firstNewLine >= 0 ? normalized[(firstNewLine + 1)..].TrimStart('\n') : string.Empty;
 
-        var titleMatch = TrBoldTitleRegex.Match(firstLine);
+        var titleMatch = s_trBoldTitleRegex.Match(firstLine);
         if (!titleMatch.Success)
             return (string.Empty, NormalizeBody(body));
 

@@ -1,4 +1,4 @@
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -193,7 +193,7 @@ internal sealed class OidcAuthService : IDisposable
                 return null;
 
             var json = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
-            return JsonSerializer.Deserialize<DeviceAuthResponse>(json, JsonOpts);
+            return JsonSerializer.Deserialize<DeviceAuthResponse>(json, s_jsonOpts);
         }
         catch
         {
@@ -214,7 +214,7 @@ internal sealed class OidcAuthService : IDisposable
         {
             var response = await _http.PostAsync(_options.GetTokenEndpoint(), content, ct).ConfigureAwait(false);
             var json = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
-            return JsonSerializer.Deserialize<TokenResponse>(json, JsonOpts) ?? new TokenResponse { Error = "deserialization_failed" };
+            return JsonSerializer.Deserialize<TokenResponse>(json, s_jsonOpts) ?? new TokenResponse { Error = "deserialization_failed" };
         }
         catch (Exception ex)
         {
@@ -236,7 +236,7 @@ internal sealed class OidcAuthService : IDisposable
         {
             var response = await _http.PostAsync(_options.GetTokenEndpoint(), content, ct).ConfigureAwait(false);
             var json = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
-            return JsonSerializer.Deserialize<TokenResponse>(json, JsonOpts);
+            return JsonSerializer.Deserialize<TokenResponse>(json, s_jsonOpts);
         }
         catch
         {
@@ -262,7 +262,7 @@ internal sealed class OidcAuthService : IDisposable
     /// <inheritdoc />
     public void Dispose() => _http.Dispose();
 
-    private static readonly JsonSerializerOptions JsonOpts = new()
+    private static readonly JsonSerializerOptions s_jsonOpts = new()
     {
         PropertyNameCaseInsensitive = true,
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,

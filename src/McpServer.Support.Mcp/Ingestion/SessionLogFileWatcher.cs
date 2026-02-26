@@ -1,4 +1,4 @@
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using McpServer.Support.Mcp.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,7 +21,7 @@ public sealed class SessionLogFileWatcher : IHostedService, IDisposable
     private FileSystemWatcher? _mdWatcher;
     private Timer? _debounceTimer;
     private readonly ConcurrentDictionary<string, byte> _pendingFiles = new(StringComparer.OrdinalIgnoreCase);
-    private static readonly TimeSpan DebounceInterval = TimeSpan.FromSeconds(2);
+    private static readonly TimeSpan s_debounceInterval = TimeSpan.FromSeconds(2);
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
     public SessionLogFileWatcher(
@@ -112,7 +112,7 @@ public sealed class SessionLogFileWatcher : IHostedService, IDisposable
     private void ScheduleDebounce()
     {
         _debounceTimer?.Dispose();
-        _debounceTimer = new Timer(OnDebounceElapsed, null, DebounceInterval, Timeout.InfiniteTimeSpan);
+        _debounceTimer = new Timer(OnDebounceElapsed, null, s_debounceInterval, Timeout.InfiniteTimeSpan);
     }
 
     private async void OnDebounceElapsed(object? state)

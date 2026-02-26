@@ -1,4 +1,4 @@
-// TR-PLANNED-013: Formats a single log event as Parseable-compatible JSON (per-event formatter for HTTP sink).
+﻿// TR-PLANNED-013: Formats a single log event as Parseable-compatible JSON (per-event formatter for HTTP sink).
 
 using System.Globalization;
 using System.IO;
@@ -16,7 +16,7 @@ namespace McpServer.Support.Mcp.Logging;
 public sealed class ParseableEventFormatter : ITextFormatter
 {
     private const string TimestampFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
-    internal static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
+    internal static readonly JsonSerializerOptions s_jsonOptions = new() { WriteIndented = false };
 
     /// <inheritdoc />
     public void Format(LogEvent logEvent, TextWriter output)
@@ -25,7 +25,7 @@ public sealed class ParseableEventFormatter : ITextFormatter
         ArgumentNullException.ThrowIfNull(output);
 
         var obj = ToParseableObject(logEvent);
-        var json = JsonSerializer.Serialize(obj, JsonOptions);
+        var json = JsonSerializer.Serialize(obj, s_jsonOptions);
         output.Write(json);
     }
 

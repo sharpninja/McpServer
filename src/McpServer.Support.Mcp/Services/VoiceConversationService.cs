@@ -1,4 +1,4 @@
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Globalization;
 using System.Security.Cryptography;
@@ -15,7 +15,7 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 public sealed partial class VoiceConversationService : IVoiceConversationService
 {
-    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
+    private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web)
     {
         WriteIndented = false
     };
@@ -405,7 +405,7 @@ public sealed partial class VoiceConversationService
                         summary = toolOutcome.Record.ResultSummary,
                         result = toolOutcome.ResultForModel
                     };
-                    toolResultsForPrompt.Add(JsonSerializer.Serialize(modelToolResultPayload, JsonOptions));
+                    toolResultsForPrompt.Add(JsonSerializer.Serialize(modelToolResultPayload, s_jsonOptions));
                     continue;
                 }
                 default:
@@ -432,7 +432,7 @@ public sealed partial class VoiceConversationService
 
         var normalizedToolName = toolName.Trim().ToLowerInvariant();
         var isMutation = IsMutationTool(normalizedToolName);
-        var argsJson = JsonSerializer.Serialize(arguments, JsonOptions);
+        var argsJson = JsonSerializer.Serialize(arguments, s_jsonOptions);
 
         if (!guardState.TryRegister(normalizedToolName, argsJson, isMutation, out var guardError))
             return BlockedToolOutcome(turnId, step, normalizedToolName, arguments, isMutation, guardError ?? "Blocked by guardrail.");
@@ -660,7 +660,7 @@ public sealed partial class VoiceConversationService
                 TurnId = turnId,
                 ToolName = toolName,
                 Step = step,
-                ArgumentsJson = JsonSerializer.Serialize(arguments, JsonOptions),
+                ArgumentsJson = JsonSerializer.Serialize(arguments, s_jsonOptions),
                 Status = "blocked",
                 IsMutation = isMutation,
                 ResultSummary = null,

@@ -1,4 +1,4 @@
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Models;
@@ -12,7 +12,7 @@ namespace McpServer.Support.Mcp.Ingestion;
 /// </summary>
 public sealed class RepoIngestor
 {
-    private static readonly char[] TrimSlashChars = { '/' };
+    private static readonly char[] s_trimSlashChars = { '/' };
     private readonly Chunker _chunker;
     private readonly IngestionOptions _options;
     private readonly ILogger<RepoIngestor> _logger;
@@ -134,7 +134,7 @@ public sealed class RepoIngestor
         {
             if (p.Contains("**", StringComparison.Ordinal))
             {
-                var prefix = p.Replace("**", string.Empty, StringComparison.Ordinal).TrimEnd(TrimSlashChars);
+                var prefix = p.Replace("**", string.Empty, StringComparison.Ordinal).TrimEnd(s_trimSlashChars);
                 if (relativePath.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) return true;
             }
             else if (p.StartsWith("*.", StringComparison.Ordinal))

@@ -87,8 +87,13 @@ public sealed class SessionLogService : ISessionLogService
         return existing.Id;
     }
 
+    /// <summary>
+    /// Finds an existing session log by (SourceType, SessionId), bypassing global query filters
+    /// so the lookup matches the UNIQUE constraint scope (which is workspace-agnostic).
+    /// </summary>
     private Task<SessionLogEntity?> FindExistingSessionAsync(string sourceType, string sessionId, CancellationToken cancellationToken) =>
         _db.SessionLogs
+            .IgnoreQueryFilters()
             .Include(s => s.Entries)
                 .ThenInclude(e => e.Actions)
             .Include(s => s.Entries)

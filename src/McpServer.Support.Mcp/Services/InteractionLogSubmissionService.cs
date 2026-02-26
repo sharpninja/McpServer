@@ -1,4 +1,4 @@
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Text.Json;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
@@ -15,7 +15,7 @@ public sealed class InteractionLogSubmissionService : BackgroundService
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<InteractionLogSubmissionService> _logger;
     private readonly McpInteractionLoggingOptions _options;
-    private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+    private static readonly JsonSerializerOptions s_jsonOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
     /// <param name="channel">Channel for dequeuing log entries.</param>
@@ -74,7 +74,7 @@ public sealed class InteractionLogSubmissionService : BackgroundService
     {
         try
         {
-            var response = await client.PostAsJsonAsync(_options.LoggingServiceUrl!, entry, JsonOptions, cancellationToken).ConfigureAwait(false);
+            var response = await client.PostAsJsonAsync(_options.LoggingServiceUrl!, entry, s_jsonOptions, cancellationToken).ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
                 _logger.LogWarning("Log submission returned {StatusCode} for {Path}", response.StatusCode, entry.Path);
         }

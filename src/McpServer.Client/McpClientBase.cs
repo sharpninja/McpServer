@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -28,7 +28,7 @@ namespace McpServer.Client;
 /// </summary>
 public abstract class McpClientBase
 {
-    private static readonly JsonSerializerOptions JsonOptions = new()
+    private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
         DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
@@ -164,7 +164,7 @@ public abstract class McpClientBase
 
         if (body is not null)
             request.Content = new StringContent(
-                JsonSerializer.Serialize(body, JsonOptions), Encoding.UTF8, "application/json");
+                JsonSerializer.Serialize(body, s_jsonOptions), Encoding.UTF8, "application/json");
 
         using var response = await _http.SendAsync(request, cancellationToken).ConfigureAwait(false);
         return await ReadResponseAsync<T>(response, cancellationToken).ConfigureAwait(false);
@@ -246,7 +246,7 @@ public abstract class McpClientBase
         if (!response.IsSuccessStatusCode)
             ThrowForStatus(response.StatusCode, content);
 
-        return JsonSerializer.Deserialize<T>(content, JsonOptions)
+        return JsonSerializer.Deserialize<T>(content, s_jsonOptions)
             ?? throw new McpServerException("Response deserialized to null.", (int)response.StatusCode);
     }
 

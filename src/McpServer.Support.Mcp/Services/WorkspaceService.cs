@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Nodes;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -12,7 +12,7 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 public sealed class WorkspaceService : IWorkspaceService
 {
-    private static readonly SemaphoreSlim _writeLock = new(1, 1);
+    private static readonly SemaphoreSlim s_writeLock = new(1, 1);
     private const string DefaultTodoPath = "docs/todo.yaml";
 
     private readonly IConfiguration _configuration;
@@ -51,7 +51,7 @@ public sealed class WorkspaceService : IWorkspaceService
         if (!Path.IsPathRooted(normalized))
             return new WorkspaceMutationResult(false, "WorkspacePath must be an absolute path.");
 
-        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        await s_writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
             var all = ReadAll();
@@ -83,7 +83,7 @@ public sealed class WorkspaceService : IWorkspaceService
         }
         finally
         {
-            _writeLock.Release();
+            s_writeLock.Release();
         }
     }
 
@@ -91,7 +91,7 @@ public sealed class WorkspaceService : IWorkspaceService
     public async Task<WorkspaceMutationResult> UpdateAsync(string workspacePath, WorkspaceUpdateRequest request, CancellationToken ct = default)
     {
         var normalized = NormalizePath(workspacePath);
-        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        await s_writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
             var all = ReadAll();
@@ -129,7 +129,7 @@ public sealed class WorkspaceService : IWorkspaceService
         }
         finally
         {
-            _writeLock.Release();
+            s_writeLock.Release();
         }
     }
 
@@ -137,7 +137,7 @@ public sealed class WorkspaceService : IWorkspaceService
     public async Task<WorkspaceMutationResult> DeleteAsync(string workspacePath, CancellationToken ct = default)
     {
         var normalized = NormalizePath(workspacePath);
-        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        await s_writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
             var all = ReadAll();
@@ -152,7 +152,7 @@ public sealed class WorkspaceService : IWorkspaceService
         }
         finally
         {
-            _writeLock.Release();
+            s_writeLock.Release();
         }
     }
 
@@ -212,14 +212,14 @@ public sealed class WorkspaceService : IWorkspaceService
         var jsonText = await File.ReadAllTextAsync(path, ct).ConfigureAwait(false);
         var doc = JsonNode.Parse(jsonText, new JsonNodeOptions { PropertyNameCaseInsensitive = true })!;
         var mcp = doc["Mcp"] as JsonObject ?? new JsonObject();
-        mcp["Workspaces"] = JsonSerializer.SerializeToNode(workspaces, _jsonOptions);
+        mcp["Workspaces"] = JsonSerializer.SerializeToNode(workspaces, s_jsonOptions);
         doc["Mcp"] = mcp;
-        await File.WriteAllTextAsync(path, doc.ToJsonString(_jsonOptions), ct).ConfigureAwait(false);
+        await File.WriteAllTextAsync(path, doc.ToJsonString(s_jsonOptions), ct).ConfigureAwait(false);
         if (_configuration is IConfigurationRoot root)
             root.Reload();
     }
 
-    private static readonly JsonSerializerOptions _jsonOptions = new()
+    private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
         WriteIndented = true,
         DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,

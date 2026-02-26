@@ -1,4 +1,4 @@
-// TR-PLANNED-013 / FR-SUPPORT-010: MCP tools for STDIO transport (mirrors HTTP API capabilities).
+﻿// TR-PLANNED-013 / FR-SUPPORT-010: MCP tools for STDIO transport (mirrors HTTP API capabilities).
 
 using System.ComponentModel;
 using System.Text.Json;
@@ -21,7 +21,7 @@ namespace McpServer.Support.Mcp.McpStdio;
 [McpServerToolType]
 public sealed class FwhMcpTools
 {
-    private static readonly JsonSerializerOptions CaseInsensitiveOptions = new() { PropertyNameCaseInsensitive = true };
+    private static readonly JsonSerializerOptions s_caseInsensitiveOptions = new() { PropertyNameCaseInsensitive = true };
     private readonly McpDbContext _db;
     private readonly IRepoFileService _repoFileService;
     private readonly IngestionCoordinator _coordinator;
@@ -667,7 +667,7 @@ public sealed class FwhMcpTools
     {
         try
         {
-            var dto = JsonSerializer.Deserialize<UnifiedSessionLogDto>(json, CaseInsensitiveOptions);
+            var dto = JsonSerializer.Deserialize<UnifiedSessionLogDto>(json, s_caseInsensitiveOptions);
             if (dto == null) return JsonSerializer.Serialize(new { error = "Invalid JSON" });
             var id = await _sessionLogService.SubmitAsync(dto, cancellationToken: cancellationToken).ConfigureAwait(false);
             return JsonSerializer.Serialize(new { success = true, id });
@@ -722,7 +722,7 @@ public sealed class FwhMcpTools
     {
         try
         {
-            var items = JsonSerializer.Deserialize<List<ProcessingDialogItemDto>>(itemsJson, CaseInsensitiveOptions);
+            var items = JsonSerializer.Deserialize<List<ProcessingDialogItemDto>>(itemsJson, s_caseInsensitiveOptions);
             if (items == null || items.Count == 0) return JsonSerializer.Serialize(new { error = "items required" });
             var count = await _sessionLogService.AppendProcessingDialogAsync(agent, sessionId, requestId, items, cancellationToken).ConfigureAwait(false);
             return JsonSerializer.Serialize(new { success = true, totalDialogItems = count });

@@ -1,11 +1,11 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace McpServer.Common.Copilot;
 
 /// <summary>TR-CLI-001: Detects content type and attempts deserialization of CLI output.</summary>
 public static class ContentParser
 {
-    private static readonly JsonSerializerOptions JsonOptions = new()
+    private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
     };
@@ -20,7 +20,7 @@ public static class ContentParser
         {
             try
             {
-                return JsonSerializer.Deserialize<JsonElement>(trimmed, JsonOptions);
+                return JsonSerializer.Deserialize<JsonElement>(trimmed, s_jsonOptions);
             }
             catch (JsonException ex)
             {
@@ -41,7 +41,7 @@ public static class ContentParser
         {
             try
             {
-                return JsonSerializer.Deserialize<T>(trimmed, JsonOptions);
+                return JsonSerializer.Deserialize<T>(trimmed, s_jsonOptions);
             }
             catch (JsonException ex)
             {
@@ -150,8 +150,8 @@ public static class ContentParser
             // Attempt JSON round-trip for typed deserialization
             try
             {
-                var json = JsonSerializer.Serialize(yamlResult, JsonOptions);
-                var result = JsonSerializer.Deserialize<T>(json, JsonOptions);
+                var json = JsonSerializer.Serialize(yamlResult, s_jsonOptions);
+                var result = JsonSerializer.Deserialize<T>(json, s_jsonOptions);
                 return (CopilotContentType.Yaml, result);
             }
             catch (JsonException ex)

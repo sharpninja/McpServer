@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text.Json;
 using McpServer.Support.Mcp.Options;
 using Microsoft.Extensions.Logging;
@@ -12,8 +12,8 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
 {
-    private static readonly TimeSpan StartupPollInterval = TimeSpan.FromMilliseconds(500);
-    private static readonly TimeSpan StartupTimeout = TimeSpan.FromSeconds(8);
+    private static readonly TimeSpan s_startupPollInterval = TimeSpan.FromMilliseconds(500);
+    private static readonly TimeSpan s_startupTimeout = TimeSpan.FromSeconds(8);
 
     /// <inheritdoc />
     public string ProviderName => "ngrok";
@@ -248,7 +248,7 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
 
     private async Task WaitForPublicUrlOrTimeoutAsync(CancellationToken cancellationToken)
     {
-        var deadline = DateTime.UtcNow + StartupTimeout;
+        var deadline = DateTime.UtcNow + s_startupTimeout;
 
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -268,14 +268,14 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
             if (DateTime.UtcNow >= deadline)
             {
                 _error = BuildStartupTimeoutError(
-                    (int)StartupTimeout.TotalSeconds,
+                    (int)s_startupTimeout.TotalSeconds,
                     _lastApiQueryError,
                     _lastStderrLine,
                     _lastStdoutLine);
                 return;
             }
 
-            await Task.Delay(StartupPollInterval, cancellationToken).ConfigureAwait(false);
+            await Task.Delay(s_startupPollInterval, cancellationToken).ConfigureAwait(false);
         }
     }
 

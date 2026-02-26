@@ -1,4 +1,4 @@
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using McpServer.Support.Mcp.Indexing;
@@ -38,7 +38,7 @@ public sealed class SessionLogIngestor
     private readonly IngestionOptions _options;
     private readonly ISessionLogService _sessionLogService;
     private readonly ILogger<SessionLogIngestor> _logger;
-    private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
+    private static readonly JsonSerializerOptions s_jsonOptions = new() { PropertyNameCaseInsensitive = true };
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
     /// <param name="chunker">Chunker for splitting content.</param>
@@ -125,7 +125,7 @@ public sealed class SessionLogIngestor
     {
         try
         {
-            var dto = JsonSerializer.Deserialize<UnifiedSessionLogDto>(json, JsonOptions);
+            var dto = JsonSerializer.Deserialize<UnifiedSessionLogDto>(json, s_jsonOptions);
             if (dto == null) return json;
             var sb = new StringBuilder();
             sb.Append("Session: ").Append(dto.Title ?? dto.SessionId ?? "unknown").AppendLine();
@@ -322,13 +322,13 @@ public sealed class SessionLogIngestor
         // Handle copilotStatistics
         if (root.TryGetProperty("copilotStatistics", out var cs) && cs.ValueKind == JsonValueKind.Object)
         {
-            dto.CopilotStatistics = JsonSerializer.Deserialize<CopilotStatisticsDto>(cs.GetRawText(), JsonOptions);
+            dto.CopilotStatistics = JsonSerializer.Deserialize<CopilotStatisticsDto>(cs.GetRawText(), s_jsonOptions);
         }
 
         // Entries: use standard deserialization (entries schema is consistent)
         if (root.TryGetProperty("entries", out var entries) && entries.ValueKind == JsonValueKind.Array)
         {
-            dto.Entries = JsonSerializer.Deserialize<List<UnifiedRequestEntryDto>>(entries.GetRawText(), JsonOptions);
+            dto.Entries = JsonSerializer.Deserialize<List<UnifiedRequestEntryDto>>(entries.GetRawText(), s_jsonOptions);
         }
 
         return dto;

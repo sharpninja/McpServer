@@ -1,4 +1,4 @@
-using System.IO.Compression;
+﻿using System.IO.Compression;
 using System.Text;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements.Models;
@@ -11,7 +11,7 @@ namespace McpServer.Support.Mcp.Requirements;
 /// </summary>
 public sealed class RequirementsDocumentService : IRequirementsDocumentService
 {
-    private static readonly UTF8Encoding Utf8NoBom = new(false);
+    private static readonly UTF8Encoding s_utf8NoBom = new(false);
 
     private readonly RequirementsOptions _options;
     private readonly ILogger<RequirementsDocumentService> _logger;
@@ -352,7 +352,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     {
         var entry = zip.CreateEntry(entryName);
         using var stream = entry.Open();
-        using var writer = new StreamWriter(stream, Utf8NoBom, leaveOpen: false);
+        using var writer = new StreamWriter(stream, s_utf8NoBom, leaveOpen: false);
         writer.Write(content);
     }
 
@@ -381,7 +381,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
         var tempPath = fullPath + "." + Guid.NewGuid().ToString("N")[..8] + ".tmp";
         try
         {
-            await File.WriteAllTextAsync(tempPath, content, Utf8NoBom, ct).ConfigureAwait(false);
+            await File.WriteAllTextAsync(tempPath, content, s_utf8NoBom, ct).ConfigureAwait(false);
 
             if (File.Exists(fullPath))
             {

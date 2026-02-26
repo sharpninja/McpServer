@@ -1,4 +1,4 @@
-using System.CommandLine;
+﻿using System.CommandLine;
 using System.Text.Json;
 using Spectre.Console;
 using static McpServer.Director.Commands.CommandHelpers;
@@ -11,12 +11,12 @@ namespace McpServer.Director.Commands;
 /// </summary>
 internal static class DirectorCommands
 {
-    private static readonly Option<string?> WorkspaceOption = new("--workspace", "Workspace path (defaults to current directory)");
+    private static readonly Option<string?> s_workspaceOption = new("--workspace", "Workspace path (defaults to current directory)");
 
     /// <summary>Registers all Director commands on the root command.</summary>
     public static void Register(RootCommand root)
     {
-        WorkspaceOption.AddAlias("-w");
+        s_workspaceOption.AddAlias("-w");
 
         root.AddCommand(BuildHealthCommand());
         root.AddCommand(BuildListCommand());
@@ -36,7 +36,7 @@ internal static class DirectorCommands
 
     private static Command BuildHealthCommand()
     {
-        var cmd = new Command("health", "Check MCP server health") { WorkspaceOption };
+        var cmd = new Command("health", "Check MCP server health") { s_workspaceOption };
         cmd.SetHandler(async (string? workspace) =>
         {
             using var client = ResolveClient(workspace);
@@ -53,7 +53,7 @@ internal static class DirectorCommands
                 System.Diagnostics.Trace.TraceError(ex.ToString());
                 Error($"Server unreachable: {ex.Message}");
             }
-        }, WorkspaceOption);
+        }, s_workspaceOption);
         return cmd;
     }
 
@@ -61,7 +61,7 @@ internal static class DirectorCommands
 
     private static Command BuildListCommand()
     {
-        var cmd = new Command("list", "List all registered workspaces") { WorkspaceOption };
+        var cmd = new Command("list", "List all registered workspaces") { s_workspaceOption };
         cmd.SetHandler(async (string? workspace) =>
         {
             using var client = ResolveClient(workspace);
@@ -92,7 +92,7 @@ internal static class DirectorCommands
                 System.Diagnostics.Trace.TraceError(ex.ToString());
                 Error(ex.Message);
             }
-        }, WorkspaceOption);
+        }, s_workspaceOption);
         return cmd;
     }
 
@@ -102,7 +102,7 @@ internal static class DirectorCommands
     {
         var defCmd = new Command("definitions", "List all agent type definitions");
         defCmd.AddAlias("defs");
-        defCmd.AddOption(WorkspaceOption);
+        defCmd.AddOption(s_workspaceOption);
         defCmd.SetHandler(async (string? workspace) =>
         {
             using var client = ResolveClient(workspace);
@@ -138,11 +138,11 @@ internal static class DirectorCommands
                 System.Diagnostics.Trace.TraceError(ex.ToString());
                 Error(ex.Message);
             }
-        }, WorkspaceOption);
+        }, s_workspaceOption);
 
         var wsCmd = new Command("workspace", "List agents configured for this workspace");
         wsCmd.AddAlias("ws");
-        wsCmd.AddOption(WorkspaceOption);
+        wsCmd.AddOption(s_workspaceOption);
         wsCmd.SetHandler(async (string? workspace) =>
         {
             using var client = ResolveClient(workspace);
@@ -171,13 +171,13 @@ internal static class DirectorCommands
             }
 
             AnsiConsole.Write(table);
-        }, WorkspaceOption);
+        }, s_workspaceOption);
 
         var eventsCmd = new Command("events", "Show agent lifecycle events");
         var agentIdArg = new Argument<string>("agent-id", "Agent type ID");
         var limitOpt = new Option<int>("--limit", () => 20, "Max events to show");
         eventsCmd.AddArgument(agentIdArg);
-        eventsCmd.AddOption(WorkspaceOption);
+        eventsCmd.AddOption(s_workspaceOption);
         eventsCmd.AddOption(limitOpt);
         eventsCmd.SetHandler(async (string agentId, string? workspace, int limit) =>
         {
@@ -204,7 +204,7 @@ internal static class DirectorCommands
             }
 
             AnsiConsole.Write(table);
-        }, agentIdArg, WorkspaceOption, limitOpt);
+        }, agentIdArg, s_workspaceOption, limitOpt);
 
         var agentsCmd = new Command("agents", "Manage agents (definitions, workspace configs, events)")
         {
@@ -226,7 +226,7 @@ internal static class DirectorCommands
         var cmd = new Command("add", "Add an agent to the current workspace")
         {
             agentIdArg,
-            WorkspaceOption,
+            s_workspaceOption,
             isolationOpt,
             enabledOpt,
         };
@@ -252,7 +252,7 @@ internal static class DirectorCommands
                 System.Diagnostics.Trace.TraceError(ex.ToString());
                 Error(ex.Message);
             }
-        }, agentIdArg, WorkspaceOption, isolationOpt, enabledOpt);
+        }, agentIdArg, s_workspaceOption, isolationOpt, enabledOpt);
 
         return cmd;
     }
@@ -269,7 +269,7 @@ internal static class DirectorCommands
         var cmd = new Command("ban", "Ban an agent from a workspace (or globally)")
         {
             agentIdArg,
-            WorkspaceOption,
+            s_workspaceOption,
             reasonOpt,
             globalOpt,
             prOpt,
@@ -296,7 +296,7 @@ internal static class DirectorCommands
                 System.Diagnostics.Trace.TraceError(ex.ToString());
                 Error(ex.Message);
             }
-        }, agentIdArg, WorkspaceOption, reasonOpt, globalOpt, prOpt);
+        }, agentIdArg, s_workspaceOption, reasonOpt, globalOpt, prOpt);
 
         return cmd;
     }
@@ -311,7 +311,7 @@ internal static class DirectorCommands
         var cmd = new Command("unban", "Unban an agent")
         {
             agentIdArg,
-            WorkspaceOption,
+            s_workspaceOption,
             globalOpt,
         };
 
@@ -335,7 +335,7 @@ internal static class DirectorCommands
                 System.Diagnostics.Trace.TraceError(ex.ToString());
                 Error(ex.Message);
             }
-        }, agentIdArg, WorkspaceOption, globalOpt);
+        }, agentIdArg, s_workspaceOption, globalOpt);
 
         return cmd;
     }
@@ -349,7 +349,7 @@ internal static class DirectorCommands
         var cmd = new Command("delete", "Remove an agent from the current workspace")
         {
             agentIdArg,
-            WorkspaceOption,
+            s_workspaceOption,
         };
 
         cmd.SetHandler(async (string agentId, string? workspace) =>
@@ -372,7 +372,7 @@ internal static class DirectorCommands
                 System.Diagnostics.Trace.TraceError(ex.ToString());
                 Error(ex.Message);
             }
-        }, agentIdArg, WorkspaceOption);
+        }, agentIdArg, s_workspaceOption);
 
         return cmd;
     }
@@ -381,7 +381,7 @@ internal static class DirectorCommands
 
     private static Command BuildValidateCommand()
     {
-        var cmd = new Command("validate", "Validate the agents.yaml file for a workspace") { WorkspaceOption };
+        var cmd = new Command("validate", "Validate the agents.yaml file for a workspace") { s_workspaceOption };
         cmd.SetHandler(async (string? workspace) =>
         {
             using var client = ResolveClient(workspace);
@@ -406,7 +406,7 @@ internal static class DirectorCommands
                 System.Diagnostics.Trace.TraceError(ex.ToString());
                 Error(ex.Message);
             }
-        }, WorkspaceOption);
+        }, s_workspaceOption);
         return cmd;
     }
 
@@ -414,7 +414,7 @@ internal static class DirectorCommands
 
     private static Command BuildInitCommand()
     {
-        var cmd = new Command("init", "Initialize the current workspace for agent management") { WorkspaceOption };
+        var cmd = new Command("init", "Initialize the current workspace for agent management") { s_workspaceOption };
         cmd.SetHandler(async (string? workspace) =>
         {
             using var client = ResolveClient(workspace);
@@ -439,7 +439,7 @@ internal static class DirectorCommands
                 System.Diagnostics.Trace.TraceError(ex.ToString());
                 Error(ex.Message);
             }
-        }, WorkspaceOption);
+        }, s_workspaceOption);
         return cmd;
     }
 
@@ -447,7 +447,7 @@ internal static class DirectorCommands
 
     private static Command BuildSyncCommand()
     {
-        var statusCmd = new Command("status", "Check sync status") { WorkspaceOption };
+        var statusCmd = new Command("status", "Check sync status") { s_workspaceOption };
         statusCmd.SetHandler(async (string? workspace) =>
         {
             using var client = ResolveClient(workspace);
@@ -464,9 +464,9 @@ internal static class DirectorCommands
                 System.Diagnostics.Trace.TraceError(ex.ToString());
                 Error(ex.Message);
             }
-        }, WorkspaceOption);
+        }, s_workspaceOption);
 
-        var runCmd = new Command("run", "Trigger a full ingestion sync") { WorkspaceOption };
+        var runCmd = new Command("run", "Trigger a full ingestion sync") { s_workspaceOption };
         runCmd.SetHandler(async (string? workspace) =>
         {
             using var client = ResolveClient(workspace);
@@ -485,7 +485,7 @@ internal static class DirectorCommands
                 System.Diagnostics.Trace.TraceError(ex.ToString());
                 Error(ex.Message);
             }
-        }, WorkspaceOption);
+        }, s_workspaceOption);
 
         var syncCmd = new Command("sync", "Manage ingestion sync") { statusCmd, runCmd };
         return syncCmd;
@@ -495,7 +495,7 @@ internal static class DirectorCommands
 
     private static Command BuildTodoCommand()
     {
-        var listCmd = new Command("list", "List TODO items") { WorkspaceOption };
+        var listCmd = new Command("list", "List TODO items") { s_workspaceOption };
         var sectionOpt = new Option<string?>("--section", "Filter by section");
         listCmd.AddOption(sectionOpt);
         listCmd.SetHandler(async (string? workspace, string? section) =>
@@ -535,7 +535,7 @@ internal static class DirectorCommands
                 System.Diagnostics.Trace.TraceError(ex.ToString());
                 Error(ex.Message);
             }
-        }, WorkspaceOption, sectionOpt);
+        }, s_workspaceOption, sectionOpt);
 
         var todoCmd = new Command("todo", "Manage TODO items") { listCmd };
         return todoCmd;
@@ -545,7 +545,7 @@ internal static class DirectorCommands
 
     private static Command BuildSessionLogCommand()
     {
-        var listCmd = new Command("list", "List recent session logs") { WorkspaceOption };
+        var listCmd = new Command("list", "List recent session logs") { s_workspaceOption };
         var limitOpt = new Option<int>("--limit", () => 10, "Max logs to show");
         listCmd.AddOption(limitOpt);
         listCmd.SetHandler(async (string? workspace, int limit) =>
@@ -584,7 +584,7 @@ internal static class DirectorCommands
                 System.Diagnostics.Trace.TraceError(ex.ToString());
                 Error(ex.Message);
             }
-        }, WorkspaceOption, limitOpt);
+        }, s_workspaceOption, limitOpt);
 
         var slCmd = new Command("session-log", "View session logs") { listCmd };
         slCmd.AddAlias("sl");

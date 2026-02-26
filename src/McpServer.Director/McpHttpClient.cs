@@ -1,4 +1,4 @@
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -211,7 +211,7 @@ internal sealed class McpHttpClient : IDisposable
     {
         var response = await _http.GetAsync(path, ct).ConfigureAwait(false);
         await EnsureSuccessOrThrowAsync(response, ct).ConfigureAwait(false);
-        return await response.Content.ReadFromJsonAsync<T>(JsonOpts, ct).ConfigureAwait(false);
+        return await response.Content.ReadFromJsonAsync<T>(s_jsonOpts, ct).ConfigureAwait(false);
     }
 
     /// <summary>GET request returning raw string.</summary>
@@ -225,15 +225,15 @@ internal sealed class McpHttpClient : IDisposable
     /// <summary>POST request with JSON body returning deserialized JSON.</summary>
     public async Task<T?> PostAsync<T>(string path, object? body = null, CancellationToken ct = default)
     {
-        var response = await _http.PostAsJsonAsync(path, body, JsonOpts, ct).ConfigureAwait(false);
+        var response = await _http.PostAsJsonAsync(path, body, s_jsonOpts, ct).ConfigureAwait(false);
         await EnsureSuccessOrThrowAsync(response, ct).ConfigureAwait(false);
-        return await response.Content.ReadFromJsonAsync<T>(JsonOpts, ct).ConfigureAwait(false);
+        return await response.Content.ReadFromJsonAsync<T>(s_jsonOpts, ct).ConfigureAwait(false);
     }
 
     /// <summary>POST request with JSON body returning raw response.</summary>
     public async Task<HttpResponseMessage> PostRawAsync(string path, object? body = null, CancellationToken ct = default)
     {
-        var response = await _http.PostAsJsonAsync(path, body, JsonOpts, ct).ConfigureAwait(false);
+        var response = await _http.PostAsJsonAsync(path, body, s_jsonOpts, ct).ConfigureAwait(false);
         await EnsureSuccessOrThrowAsync(response, ct).ConfigureAwait(false);
         return response;
     }
@@ -243,7 +243,7 @@ internal sealed class McpHttpClient : IDisposable
     {
         var response = await _http.DeleteAsync(path, ct).ConfigureAwait(false);
         await EnsureSuccessOrThrowAsync(response, ct).ConfigureAwait(false);
-        return await response.Content.ReadFromJsonAsync<T>(JsonOpts, ct).ConfigureAwait(false);
+        return await response.Content.ReadFromJsonAsync<T>(s_jsonOpts, ct).ConfigureAwait(false);
     }
 
     private static async Task EnsureSuccessOrThrowAsync(HttpResponseMessage response, CancellationToken ct)
@@ -406,7 +406,7 @@ internal sealed class McpHttpClient : IDisposable
         }
     }
 
-    private static readonly JsonSerializerOptions JsonOpts = new()
+    private static readonly JsonSerializerOptions s_jsonOpts = new()
     {
         PropertyNameCaseInsensitive = true,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,

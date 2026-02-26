@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using McpServer.Support.Mcp.Notifications;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +11,7 @@ namespace McpServer.Support.Mcp.Controllers;
 [ApiController]
 public sealed class EventStreamController : ControllerBase
 {
-    private static readonly JsonSerializerOptions JsonOptions = new()
+    private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
     };
@@ -36,7 +36,7 @@ public sealed class EventStreamController : ControllerBase
             if (category is not null && !string.Equals(evt.Category, category, StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            var data = JsonSerializer.Serialize(evt, JsonOptions);
+            var data = JsonSerializer.Serialize(evt, s_jsonOptions);
             await Response.WriteAsync($"event: {evt.Category}\ndata: {data}\n\n", ct).ConfigureAwait(false);
             await Response.Body.FlushAsync(ct).ConfigureAwait(false);
         }

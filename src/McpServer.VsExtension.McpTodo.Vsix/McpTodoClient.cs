@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -13,7 +13,7 @@ namespace McpServer.VsExtension.McpTodo;
 public sealed class McpTodoClient
 {
     private readonly HttpClient _http;
-    private static readonly JsonSerializerOptions JsonOptions = new()
+    private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -120,7 +120,7 @@ public sealed class McpTodoClient
         var response = await _http.GetAsync(path, cancellationToken).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        var result = JsonSerializer.Deserialize<TodoQueryResult>(json, JsonOptions);
+        var result = JsonSerializer.Deserialize<TodoQueryResult>(json, s_jsonOptions);
         return result ?? new TodoQueryResult { Items = new List<TodoFlatItem>(), TotalCount = 0 };
     }
 
@@ -132,20 +132,20 @@ public sealed class McpTodoClient
             return null;
         response.EnsureSuccessStatusCode();
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        return JsonSerializer.Deserialize<TodoFlatItem>(json, JsonOptions);
+        return JsonSerializer.Deserialize<TodoFlatItem>(json, s_jsonOptions);
     }
 
     public async Task<TodoMutationResult> UpdateTodoAsync(string id, TodoUpdateBody body, CancellationToken cancellationToken = default)
     {
         var path = "/mcp/todo/" + Uri.EscapeDataString(id);
-        using var content = new StringContent(JsonSerializer.Serialize(body, JsonOptions), System.Text.Encoding.UTF8, "application/json");
+        using var content = new StringContent(JsonSerializer.Serialize(body, s_jsonOptions), System.Text.Encoding.UTF8, "application/json");
         var response = await _http.PutAsync(path, content, cancellationToken).ConfigureAwait(false);
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         if (!response.IsSuccessStatusCode)
         {
-            var err = JsonSerializer.Deserialize<TodoMutationResult>(json, JsonOptions);
+            var err = JsonSerializer.Deserialize<TodoMutationResult>(json, s_jsonOptions);
             return err ?? new TodoMutationResult { Success = false, Error = response.ReasonPhrase ?? response.StatusCode.ToString() };
         }
-        return JsonSerializer.Deserialize<TodoMutationResult>(json, JsonOptions) ?? new TodoMutationResult { Success = true };
+        return JsonSerializer.Deserialize<TodoMutationResult>(json, s_jsonOptions) ?? new TodoMutationResult { Success = true };
     }
 }

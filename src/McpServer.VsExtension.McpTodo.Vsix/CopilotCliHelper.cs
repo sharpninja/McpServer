@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -15,7 +15,7 @@ namespace McpServer.VsExtension.McpTodo;
 /// </summary>
 internal static class CopilotCliHelper
 {
-    private static readonly Regex AnsiEscapePattern = new(@"\x1B\[[0-9;]*[A-Za-z]", RegexOptions.Compiled);
+    private static readonly Regex s_ansiEscapePattern = new(@"\x1B\[[0-9;]*[A-Za-z]", RegexOptions.Compiled);
 
     /// <summary>
     /// Working directory for the Copilot CLI process. Set to the solution directory
@@ -101,7 +101,7 @@ internal static class CopilotCliHelper
                     while ((line = await process.StandardOutput.ReadLineAsync().ConfigureAwait(false)) != null)
                     {
                         stdoutBuf.AppendLine(line);
-                        onStdoutLine?.Invoke(AnsiEscapePattern.Replace(line, ""));
+                        onStdoutLine?.Invoke(s_ansiEscapePattern.Replace(line, ""));
                     }
                 }
 

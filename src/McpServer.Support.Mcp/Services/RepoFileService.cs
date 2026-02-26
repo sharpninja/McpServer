@@ -1,4 +1,4 @@
-using McpServer.Support.Mcp.Ingestion;
+﻿using McpServer.Support.Mcp.Ingestion;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 
@@ -10,7 +10,7 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 public sealed class RepoFileService : IRepoFileService
 {
-    private static readonly char[] TrimSlashChars = { '/', '\\' };
+    private static readonly char[] s_trimSlashChars = { '/', '\\' };
     private readonly IngestionOptions _options;
     private readonly IWriteAuditLog _auditLog;
     private readonly ILogger<RepoFileService> _logger;
@@ -96,7 +96,7 @@ public sealed class RepoFileService : IRepoFileService
     private static string NormalizeRelative(string? relative)
     {
         if (string.IsNullOrWhiteSpace(relative)) return ".";
-        var s = relative.Replace('\\', '/').TrimStart(TrimSlashChars);
+        var s = relative.Replace('\\', '/').TrimStart(s_trimSlashChars);
         return string.IsNullOrEmpty(s) ? "." : s;
     }
 
@@ -128,7 +128,7 @@ public sealed class RepoFileService : IRepoFileService
         {
             if (p.Contains("**", StringComparison.Ordinal))
             {
-                var prefix = p.Replace("**", string.Empty, StringComparison.Ordinal).TrimEnd(TrimSlashChars);
+                var prefix = p.Replace("**", string.Empty, StringComparison.Ordinal).TrimEnd(s_trimSlashChars);
                 if (relativePath.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) return true;
             }
             else if (p.StartsWith("*.", StringComparison.Ordinal))

@@ -1,4 +1,4 @@
-using McpServer.UI.Core.Authorization;
+﻿using McpServer.UI.Core.Authorization;
 
 namespace McpServer.Director.Auth;
 
@@ -10,7 +10,7 @@ internal sealed class DirectorAuthorizationPolicyService : IAuthorizationPolicyS
 {
     private readonly IRoleContext _roleContext;
 
-    private static readonly IReadOnlyDictionary<McpArea, string> AreaRoles = new Dictionary<McpArea, string>
+    private static readonly IReadOnlyDictionary<McpArea, string> s_areaRoles = new Dictionary<McpArea, string>
     {
         [McpArea.Health] = McpRoles.Viewer,
         [McpArea.Workspaces] = McpRoles.Admin,
@@ -29,7 +29,7 @@ internal sealed class DirectorAuthorizationPolicyService : IAuthorizationPolicyS
         [McpArea.AuthConfig] = McpRoles.Viewer,
     };
 
-    private static readonly IReadOnlyDictionary<string, string> ActionRoles =
+    private static readonly IReadOnlyDictionary<string, string> s_actionRoles =
         new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             [McpActionKeys.WorkspaceList] = McpRoles.Admin,
@@ -76,7 +76,7 @@ internal sealed class DirectorAuthorizationPolicyService : IAuthorizationPolicyS
 
     /// <inheritdoc />
     public string? GetRequiredRole(McpArea area)
-        => AreaRoles.TryGetValue(area, out var role) ? role : McpRoles.Viewer;
+        => s_areaRoles.TryGetValue(area, out var role) ? role : McpRoles.Viewer;
 
     /// <inheritdoc />
     public string? GetRequiredRole(string actionKey)
@@ -84,7 +84,7 @@ internal sealed class DirectorAuthorizationPolicyService : IAuthorizationPolicyS
         if (string.IsNullOrWhiteSpace(actionKey))
             return null;
 
-        return ActionRoles.TryGetValue(actionKey, out var role) ? role : McpRoles.Viewer;
+        return s_actionRoles.TryGetValue(actionKey, out var role) ? role : McpRoles.Viewer;
     }
 
     private bool IsAllowed(string? requiredRole)

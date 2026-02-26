@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace McpServer.Director;
 
@@ -7,13 +7,13 @@ namespace McpServer.Director;
 /// </summary>
 internal static class DirectorCliConfigStore
 {
-    private static readonly string ConfigDir = Path.Combine(
+    private static readonly string s_configDir = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
         ".mcpserver");
 
-    private static readonly string ConfigPath = Path.Combine(ConfigDir, "director.config.json");
+    private static readonly string s_configPath = Path.Combine(s_configDir, "director.config.json");
 
-    private static readonly JsonSerializerOptions JsonOpts = new()
+    private static readonly JsonSerializerOptions s_jsonOpts = new()
     {
         WriteIndented = true,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -22,13 +22,13 @@ internal static class DirectorCliConfigStore
 
     public static DirectorCliConfig Load()
     {
-        if (!File.Exists(ConfigPath))
+        if (!File.Exists(s_configPath))
             return new DirectorCliConfig();
 
         try
         {
-            var json = File.ReadAllText(ConfigPath);
-            return JsonSerializer.Deserialize<DirectorCliConfig>(json, JsonOpts) ?? new DirectorCliConfig();
+            var json = File.ReadAllText(s_configPath);
+            return JsonSerializer.Deserialize<DirectorCliConfig>(json, s_jsonOpts) ?? new DirectorCliConfig();
         }
         catch
         {
@@ -38,12 +38,12 @@ internal static class DirectorCliConfigStore
 
     public static void Save(DirectorCliConfig config)
     {
-        Directory.CreateDirectory(ConfigDir);
-        var json = JsonSerializer.Serialize(config, JsonOpts);
-        File.WriteAllText(ConfigPath, json);
+        Directory.CreateDirectory(s_configDir);
+        var json = JsonSerializer.Serialize(config, s_jsonOpts);
+        File.WriteAllText(s_configPath, json);
     }
 
-    public static string GetConfigPath() => ConfigPath;
+    public static string GetConfigPath() => s_configPath;
 }
 
 internal sealed class DirectorCliConfig

@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace McpServer.Director.Auth;
 
@@ -34,13 +34,13 @@ internal sealed class CachedToken
 /// </summary>
 internal static class TokenCache
 {
-    private static readonly string CacheDir = Path.Combine(
+    private static readonly string s_cacheDir = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
         ".mcpserver");
 
-    private static readonly string CachePath = Path.Combine(CacheDir, "tokens.json");
+    private static readonly string s_cachePath = Path.Combine(s_cacheDir, "tokens.json");
 
-    private static readonly JsonSerializerOptions JsonOpts = new()
+    private static readonly JsonSerializerOptions s_jsonOpts = new()
     {
         WriteIndented = true,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -50,13 +50,13 @@ internal static class TokenCache
     /// <summary>Loads the cached token, or returns null if none exists.</summary>
     public static CachedToken? Load()
     {
-        if (!File.Exists(CachePath))
+        if (!File.Exists(s_cachePath))
             return null;
 
         try
         {
-            var json = File.ReadAllText(CachePath);
-            return JsonSerializer.Deserialize<CachedToken>(json, JsonOpts);
+            var json = File.ReadAllText(s_cachePath);
+            return JsonSerializer.Deserialize<CachedToken>(json, s_jsonOpts);
         }
         catch
         {
@@ -67,18 +67,18 @@ internal static class TokenCache
     /// <summary>Saves a token to the cache file.</summary>
     public static void Save(CachedToken token)
     {
-        Directory.CreateDirectory(CacheDir);
-        var json = JsonSerializer.Serialize(token, JsonOpts);
-        File.WriteAllText(CachePath, json);
+        Directory.CreateDirectory(s_cacheDir);
+        var json = JsonSerializer.Serialize(token, s_jsonOpts);
+        File.WriteAllText(s_cachePath, json);
     }
 
     /// <summary>Deletes the cached token file.</summary>
     public static void Clear()
     {
-        if (File.Exists(CachePath))
-            File.Delete(CachePath);
+        if (File.Exists(s_cachePath))
+            File.Delete(s_cachePath);
     }
 
     /// <summary>Returns the cache file path for display purposes.</summary>
-    public static string GetCachePath() => CachePath;
+    public static string GetCachePath() => s_cachePath;
 }

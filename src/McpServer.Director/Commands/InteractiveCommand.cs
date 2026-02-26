@@ -1,4 +1,4 @@
-using System.CommandLine;
+﻿using System.CommandLine;
 using McpServer.Client;
 using McpServer.Cqrs;
 using McpServer.Cqrs.Mvvm;
@@ -21,16 +21,16 @@ namespace McpServer.Director.Commands;
 /// </summary>
 internal static class InteractiveCommand
 {
-    private static readonly Option<string?> WorkspaceOption = new("--workspace", "Workspace path (defaults to current directory)");
+    private static readonly Option<string?> s_workspaceOption = new("--workspace", "Workspace path (defaults to current directory)");
 
     /// <summary>Registers the interactive command on the root command.</summary>
     public static void Register(RootCommand root)
     {
-        WorkspaceOption.AddAlias("-w");
+        s_workspaceOption.AddAlias("-w");
 
         var cmd = new Command("interactive", "Launch interactive Terminal UI for workspace management")
         {
-            WorkspaceOption,
+            s_workspaceOption,
         };
         cmd.AddAlias("tui");
         cmd.AddAlias("ui");
@@ -120,7 +120,7 @@ internal static class InteractiveCommand
                     // Best-effort terminal cleanup on exit.
                 }
             }
-        }, WorkspaceOption);
+        }, s_workspaceOption);
 
         root.AddCommand(cmd);
     }
