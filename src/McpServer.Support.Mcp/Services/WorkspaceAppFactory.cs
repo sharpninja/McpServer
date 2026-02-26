@@ -41,10 +41,11 @@ public static class WorkspaceAppFactory
         // Set the content root to the workspace directory so relative paths resolve correctly.
         builder.Environment.ContentRootPath = workspacePath;
 
-        // Kestrel listens on the workspace port only.
+        // Bind workspace hosts on AnyIP so external clients (e.g., Android devices on LAN)
+        // can reach per-workspace ports such as 7148.
         builder.WebHost.ConfigureKestrel(options =>
         {
-            options.ListenLocalhost(port);
+            options.ListenAnyIP(port);
         });
 
         // Load appsettings.json from the workspace directory (if present) so workspace-level
