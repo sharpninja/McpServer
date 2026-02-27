@@ -152,6 +152,7 @@ internal sealed class MainScreen : Window
 
         // Status bar
         var statusBar = new StatusBar { Y = Pos.AnchorEnd(1) };
+        statusBar.Add(new Shortcut { Key = Key.Tab.WithShift, Title = "Next Tab" });
         statusBar.Add(new Shortcut { Key = Key.F2, Title = "Login" });
         statusBar.Add(new Shortcut { Key = Key.F5, Title = "Refresh" });
         statusBar.Add(new Shortcut { Key = Key.W.WithCtrl, Title = "Workspace" });
@@ -549,6 +550,14 @@ internal sealed class MainScreen : Window
             UpdateWorkspaceContextStatus($"Context switch failed: {error}");
     }
 
+    private void CycleTab()
+    {
+        var tabs = _tabView.Tabs.ToList();
+        if (tabs.Count < 2) return;
+        var idx = tabs.IndexOf(_tabView.SelectedTab!);
+        _tabView.SelectedTab = tabs[(idx + 1) % tabs.Count];
+    }
+
     private void OnApplicationKeyDown(object? sender, Key e)
     {
         if (!Visible)
@@ -569,7 +578,12 @@ internal sealed class MainScreen : Window
         if (e.Handled)
             return;
 
-        if (e.KeyCode == KeyCode.F2)
+        if (e.KeyCode == (KeyCode.Tab | KeyCode.ShiftMask))
+        {
+            CycleTab();
+            e.Handled = true;
+        }
+        else if (e.KeyCode == KeyCode.F2)
         {
             ShowLoginDialog();
             e.Handled = true;
