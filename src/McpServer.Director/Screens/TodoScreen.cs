@@ -211,11 +211,13 @@ internal sealed class TodoScreen : View
             Y = Pos.Bottom(_detailTitleLabel),
             Width = Dim.Fill(),
             Height = Dim.Fill(5),
-            ReadOnly = true,
+            ReadOnly = false,
             WordWrap = true,
             Text = "",
         };
         Add(_detailView);
+
+        ApplyEditableScheme(_detailView);
 
         _statusLabel = new TextView
         {
