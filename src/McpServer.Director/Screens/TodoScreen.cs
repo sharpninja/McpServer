@@ -792,6 +792,7 @@ internal sealed class TodoScreen : View
         _detailViewModel.EditorDone = !_detailViewModel.EditorDone;
         _detailViewModel.IsDirty = true;
         Application.Invoke(() => _doneValueLabel.Text = _detailViewModel.EditorDone ? "true" : "false");
+        _ = Task.Run(SaveEditorAsync);
     }
 
     private void ToggleShowCompletedItems()
