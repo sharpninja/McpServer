@@ -298,31 +298,30 @@ internal sealed class TodoScreen : View
             Application.Invoke(() =>
             {
                 var dt = new System.Data.DataTable();
+                dt.Columns.Add("Pri", typeof(string));
                 dt.Columns.Add("ID", typeof(string));
                 dt.Columns.Add("Name", typeof(string));
-                dt.Columns.Add("Pri", typeof(string));
                 foreach (var r in rows)
-                    dt.Rows.Add(r.Id, r.Title, r.Priority);
+                    dt.Rows.Add(r.Priority, r.Id, r.Title);
 
                 _table.Table = new DataTableSource(dt);
                 _table.Style.ColumnStyles.Clear();
                 _table.Style.ColumnStyles[0] = new ColumnStyle
                 {
-                    MaxWidth = 27,
+                    Alignment = Alignment.Center,
+                    MaxWidth = 12,
                     RepresentationGetter = v => $" {v} ",
                 };
                 _table.Style.ColumnStyles[1] = new ColumnStyle
                 {
-                    MaxWidth = 52,
+                    MaxWidth = 27,
                     RepresentationGetter = v => $" {v} ",
                 };
                 _table.Style.ColumnStyles[2] = new ColumnStyle
                 {
-                    Alignment = Alignment.End,
-                    MaxWidth = 12,
                     RepresentationGetter = v => $" {v} ",
                 };
-                _table.Style.ExpandLastColumn = false;
+                _table.Style.ExpandLastColumn = true;
 
                 if (selectedRow >= 0 && selectedRow < rows.Count)
                     _table.SelectedRow = selectedRow;
