@@ -87,6 +87,24 @@ internal sealed class TodoScreen : View
         _table.Style.ShowHorizontalHeaderUnderline = true;
         _table.Style.ShowVerticalCellLines = true;
         _table.Style.ShowVerticalHeaderLines = true;
+        _table.Style.ExpandLastColumn = true;
+        _table.Style.ColumnStyles[0] = new ColumnStyle
+        {
+            Alignment = Alignment.Center,
+            MinWidth = 6,
+            MaxWidth = 12,
+            RepresentationGetter = v => $" {v} ",
+        };
+        _table.Style.ColumnStyles[1] = new ColumnStyle
+        {
+            MinWidth = 10,
+            MaxWidth = 30,
+            RepresentationGetter = v => $" {v} ",
+        };
+        _table.Style.ColumnStyles[2] = new ColumnStyle
+        {
+            RepresentationGetter = v => $" {v} ",
+        };
         _table.SelectedCellChanged += (_, _) => QueueSelectedRowDetailRefresh();
         Add(_table);
 
@@ -299,25 +317,6 @@ internal sealed class TodoScreen : View
                 }
 
                 _table.Table = new DataTableSource(dt);
-                _table.Style.ColumnStyles.Clear();
-                _table.Style.ColumnStyles[0] = new ColumnStyle
-                {
-                    Alignment = Alignment.Center,
-                    MinWidth = 6,
-                    MaxWidth = 12,
-                    RepresentationGetter = v => $" {v} ",
-                };
-                _table.Style.ColumnStyles[1] = new ColumnStyle
-                {
-                    MinWidth = 10,
-                    MaxWidth = 30,
-                    RepresentationGetter = v => $" {v} ",
-                };
-                _table.Style.ColumnStyles[2] = new ColumnStyle
-                {
-                    RepresentationGetter = v => $" {v} ",
-                };
-                _table.Style.ExpandLastColumn = true;
 
                 if (selectedRow >= 0 && selectedRow < rows.Count)
                     _table.SelectedRow = selectedRow;
