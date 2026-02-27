@@ -8,7 +8,9 @@ using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Requirements.Models;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using ModelContextProtocol.Server;
 using Microsoft.Extensions.Logging;
 
@@ -32,6 +34,7 @@ public sealed class FwhMcpTools
     private readonly ISessionLogService _sessionLogService;
     private readonly IGitHubCliService _gitHubCliService;
     private readonly IRequirementsDocumentService _requirementsDocumentService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ILogger<FwhMcpTools> _logger;
 
 
@@ -46,6 +49,7 @@ public sealed class FwhMcpTools
         ISessionLogService sessionLogService,
         IGitHubCliService gitHubCliService,
         IRequirementsDocumentService requirementsDocumentService,
+        IHttpContextAccessor httpContextAccessor,
         ILogger<FwhMcpTools> logger)
     {
         _logger = logger;
@@ -59,6 +63,23 @@ public sealed class FwhMcpTools
         _sessionLogService = sessionLogService;
         _gitHubCliService = gitHubCliService;
         _requirementsDocumentService = requirementsDocumentService;
+        _httpContextAccessor = httpContextAccessor;
+    }
+
+    /// <summary>
+    /// TR-MCP-MT-001: Overrides the scoped workspace context when an explicit workspace path
+    /// is provided by the MCP tool caller. Sets both the scoped <see cref="WorkspaceContext"/>
+    /// and the <see cref="McpDbContext"/> workspace ID so query filters and auto-stamping apply correctly.
+    /// </summary>
+    private void ApplyWorkspaceOverride(string? workspacePath)
+    {
+        if (string.IsNullOrWhiteSpace(workspacePath)) return;
+
+        var ctx = _httpContextAccessor.HttpContext?.RequestServices.GetService<WorkspaceContext>();
+        if (ctx is not null)
+            ctx.WorkspacePath = workspacePath;
+
+        _db.OverrideWorkspaceId(workspacePath);
     }
 
     /// <summary>Search indexed context chunks by query text.</summary>
@@ -68,8 +89,10 @@ public sealed class FwhMcpTools
         [Description("Search query text")] string query,
         [Description("Max chunks to return (default 20)")] int limit = 20,
         [Description("Optional source type filter")] string? sourceType = null,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         var q = (query ?? string.Empty).Trim();
         var lim = Math.Clamp(limit, 1, 100);
 
@@ -92,8 +115,10 @@ public sealed class FwhMcpTools
         [Description("Search query text")] string query,
         [Description("Max chunks in pack (default 20)")] int limit = 20,
         [Description("Optional query id for reproducibility")] string? queryId = null,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         var q = (query ?? string.Empty).Trim();
         var lim = Math.Clamp(limit, 1, 100);
         var qid = queryId ?? Guid.NewGuid().ToString("N");
@@ -127,8 +152,11 @@ public sealed class FwhMcpTools
     /// <summary>List indexed document sources.</summary>
     /// <returns>JSON string with source keys, types, and ingestion timestamps.</returns>
     [McpServerTool(Name = "context_sources"), Description("List indexed document sources (sourceKey, sourceType, ingestedAt).")]
-    public async Task<string> ContextSources(CancellationToken cancellationToken = default)
+    public async Task<string> ContextSources(
+        [Description("Optional workspace path override")] string? workspacePath = null,
+        CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         var sources = await _db.Documents.AsNoTracking()
             .Select(d => new { d.SourceKey, d.SourceType, d.IngestedAt })
             .ToListAsync(cancellationToken).ConfigureAwait(false);
@@ -140,8 +168,10 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "repo_read"), Description("Read file content by relative path from repo root. Path must be allowed.")]
     public async Task<string> RepoRead(
         [Description("Relative path from repo root")] string path,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         if (string.IsNullOrWhiteSpace(path))
             return JsonSerializer.Serialize(new { error = "path is required" });
         var result = await _repoFileService.ReadAsync(path, cancellationToken).ConfigureAwait(false);
@@ -155,8 +185,10 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "repo_list"), Description("List files and directories under a relative path. Empty path = repo root.")]
     public async Task<string> RepoList(
         [Description("Relative path (optional, default repo root)")] string? path = null,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         var result = await _repoFileService.ListAsync(path, cancellationToken).ConfigureAwait(false);
         return JsonSerializer.Serialize(new { path = result.Path, entries = result.Entries.Select(e => new { e.Name, e.IsDirectory }).ToList() });
     }
@@ -167,8 +199,10 @@ public sealed class FwhMcpTools
     public async Task<string> RepoWrite(
         [Description("Relative path from repo root")] string path,
         [Description("File content to write")] string content,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         if (string.IsNullOrWhiteSpace(path))
             return JsonSerializer.Serialize(new { error = "path and content are required" });
         var result = await _repoFileService.WriteAsync(path, content ?? string.Empty, cancellationToken).ConfigureAwait(false);
@@ -180,8 +214,11 @@ public sealed class FwhMcpTools
     /// <summary>Trigger full ingestion (repo, session logs, external docs).</summary>
     /// <returns>JSON string with sync run result.</returns>
     [McpServerTool(Name = "sync_run"), Description("Trigger full ingestion (repo, session logs, external docs). Returns run result.")]
-    public async Task<string> SyncRun(CancellationToken cancellationToken = default)
+    public async Task<string> SyncRun(
+        [Description("Optional workspace path override")] string? workspacePath = null,
+        CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         var result = await _coordinator.RunAsync(cancellationToken).ConfigureAwait(false);
         return JsonSerializer.Serialize(new
         {
@@ -198,8 +235,10 @@ public sealed class FwhMcpTools
     /// <summary>Get last sync run status.</summary>
     /// <returns>JSON string with last run timestamps, status, and counts.</returns>
     [McpServerTool(Name = "sync_status"), Description("Get last sync run status (lastRun, status, error, counts).")]
-    public string SyncStatus()
+    public string SyncStatus(
+        [Description("Optional workspace path override")] string? workspacePath = null)
     {
+        ApplyWorkspaceOverride(workspacePath);
         var last = _syncStatusStore.GetLast();
         if (last == null)
             return JsonSerializer.Serialize(new { lastRun = (DateTime?)null, status = "idle", error = (string?)null });
@@ -222,8 +261,10 @@ public sealed class FwhMcpTools
         [Description("Section filter (e.g. mvp-app)")] string? section = null,
         [Description("Priority filter (high/medium/low)")] string? priority = null,
         [Description("Done filter (true/false)")] bool? done = null,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _workspaceAccessor.GetTodoService().QueryAsync(new TodoQueryRequest { Section = section, Priority = priority, Done = done }, cancellationToken).ConfigureAwait(false);
@@ -240,8 +281,10 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "todo_get"), Description("Get a single TODO item by its id (e.g. MVP-APP-001).")]
     public async Task<string> TodoGet(
         [Description("TODO item id")] string id,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         try
         {
             var item = await _workspaceAccessor.GetTodoService().GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
@@ -264,8 +307,10 @@ public sealed class FwhMcpTools
         [Description("Priority (high/medium/low)")] string priority,
         [Description("Estimate string")] string? estimate = null,
         [Description("Description text")] string? description = null,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         try
         {
             var req = new TodoCreateRequest
@@ -296,8 +341,10 @@ public sealed class FwhMcpTools
         [Description("Updated priority")] string? priority = null,
         [Description("Mark as done")] bool? done = null,
         [Description("Updated note")] string? note = null,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         try
         {
             var req = new TodoUpdateRequest { Title = title, Priority = priority, Done = done, Note = note };
@@ -316,8 +363,10 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "todo_delete"), Description("Delete a TODO item by id.")]
     public async Task<string> TodoDelete(
         [Description("TODO item id")] string id,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         try
         {
             var result = await _workspaceAccessor.GetTodoService().DeleteAsync(id, cancellationToken).ConfigureAwait(false);
@@ -335,8 +384,10 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "todo_status"), Description("Invoke Copilot to generate a status report for a TODO item in the workspace.")]
     public async Task<string> TodoStatus(
         [Description("TODO item id")] string id,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         try
         {
             return await CollectStreamAsync(_todoPromptService.StreamStatusAsync(id, cancellationToken)).ConfigureAwait(false);
@@ -352,8 +403,10 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "todo_implement"), Description("Invoke Copilot to implement a TODO item, working through each task in the workspace.")]
     public async Task<string> TodoImplement(
         [Description("TODO item id")] string id,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         try
         {
             return await CollectStreamAsync(_todoPromptService.StreamImplementAsync(id, cancellationToken)).ConfigureAwait(false);
@@ -369,8 +422,10 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "todo_plan"), Description("Invoke Copilot to create a detailed implementation plan for a TODO item in the workspace.")]
     public async Task<string> TodoPlan(
         [Description("TODO item id")] string id,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         try
         {
             return await CollectStreamAsync(_todoPromptService.StreamPlanAsync(id, cancellationToken)).ConfigureAwait(false);
@@ -399,8 +454,10 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "requirements_list"), Description("List requirements entries. type = fr|tr|test|mapping|all (default all).")]
     public async Task<string> RequirementsList(
         [Description("Entry type: fr, tr, test, mapping, or all")] string? type = "all",
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!TryParseRequirementsEntityType(type, out var entityType))
@@ -433,8 +490,10 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "requirements_generate"), Description("Generate requirements documents as Markdown. doc = functional|technical|testing|mapping|all (default all).")]
     public async Task<string> RequirementsGenerate(
         [Description("Document selector: functional, technical, testing, mapping, or all")] string? doc = "all",
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!TryParseRequirementsDocType(doc, out var docType))
@@ -471,8 +530,10 @@ public sealed class FwhMcpTools
         [Description("Entry id (FR/TR/TEST id or FR id for mapping rows)")] string id,
         [Description("Title (required for fr; optional for tr; ignored for test/mapping)")] string? title = null,
         [Description("Body text (required for fr/tr/test; for mapping use comma-separated TR ids)")] string? body = null,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!TryParseRequirementsEntityType(type, out var entityType) || entityType == RequirementsEntityType.All)
@@ -533,8 +594,10 @@ public sealed class FwhMcpTools
         [Description("Entry id (FR/TR/TEST id or FR id for mapping rows)")] string id,
         [Description("Updated title (fr/tr only)")] string? title = null,
         [Description("Updated body text or mapping TR id list")] string? body = null,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!TryParseRequirementsEntityType(type, out var entityType) || entityType == RequirementsEntityType.All)
@@ -613,8 +676,10 @@ public sealed class FwhMcpTools
     public async Task<string> RequirementsDelete(
         [Description("Entry type: fr, tr, test, or mapping")] string type,
         [Description("Entry id (FR/TR/TEST id or FR id for mapping rows)")] string id,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!TryParseRequirementsEntityType(type, out var entityType) || entityType == RequirementsEntityType.All)
@@ -663,8 +728,10 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "sessionlog_submit"), Description("Submit (upsert) a session log. Body is JSON string conforming to UnifiedSessionLogDto.")]
     public async Task<string> SessionLogSubmit(
         [Description("JSON string of the session log payload")] string json,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         try
         {
             var dto = JsonSerializer.Deserialize<UnifiedSessionLogDto>(json, s_caseInsensitiveOptions);
@@ -688,8 +755,10 @@ public sealed class FwhMcpTools
         [Description("From date (ISO 8601)")] string? from = null,
         [Description("To date (ISO 8601)")] string? to = null,
         [Description("Max results (default 100)")] int? limit = null,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         try
         {
             var req = new SessionLogQueryRequest
@@ -718,8 +787,10 @@ public sealed class FwhMcpTools
         [Description("Session id")] string sessionId,
         [Description("Request id")] string requestId,
         [Description("JSON array of dialog items")] string itemsJson,
+        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
+        ApplyWorkspaceOverride(workspacePath);
         try
         {
             var items = JsonSerializer.Deserialize<List<ProcessingDialogItemDto>>(itemsJson, s_caseInsensitiveOptions);
