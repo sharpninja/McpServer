@@ -19,6 +19,9 @@
 .PARAMETER SkipBuild
     When set, copies from a pre-built publish folder instead of running dotnet publish.
 
+.PARAMETER SkipVersionBump
+    When set, skips the GitVersion.yml next-version patch bump.
+
 .PARAMETER PublishSource
     Path to pre-built publish output. Only used with -SkipBuild.
 
@@ -32,6 +35,7 @@ param(
     [string]$InstallPath = 'C:\ProgramData\McpServer',
     [int]$Port = 7147,
     [switch]$SkipBuild,
+    [switch]$SkipVersionBump,
     [string]$PublishSource = ''
 )
 
@@ -39,7 +43,8 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $ProgressPreference    = 'SilentlyContinue'
 
-$ProjectDir  = Join-Path $PSScriptRoot '..\src\McpServer.Support.Mcp'
+$RepoRoot    = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
+$ProjectDir  = Join-Path $RepoRoot 'src\McpServer.Support.Mcp'
 $ProjectFile = Join-Path $ProjectDir 'McpServer.Support.Mcp.csproj'
 $ExeName     = 'McpServer.Support.Mcp.exe'
 $Timestamp   = Get-Date -Format 'yyyyMMdd-HHmmssfff'
@@ -62,6 +67,12 @@ $PreserveDirectories = @(
     'logs',
     'mcp-data'
 )
+
+# ---------------------------------------------------------------------------
+# Shared: version bump helper (TR-MCP-DRY-001)
+# ---------------------------------------------------------------------------
+
+. (Join-Path $PSScriptRoot 'Bump-GitVersionPatch.ps1')
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -262,6 +273,13 @@ function Remove-LegacyEnvironmentAppSettings {
 # ---------------------------------------------------------------------------
 
 Assert-Elevated
+
+# 0. Version bump
+if (-not $SkipBuild -and -not $SkipVersionBump) {
+    Write-Step "0/8  Bumping GitVersion next-version patch ..."
+    $bumpResult = Bump-GitVersionPatch -RepoRoot $RepoRoot
+    Write-Host "  $($bumpResult.OldVersion) -> $($bumpResult.NewVersion)" -ForegroundColor Green
+}
 
 $svc = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
 if (-not $svc) {

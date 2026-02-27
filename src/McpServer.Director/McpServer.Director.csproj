@@ -12,7 +12,6 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>director</ToolCommandName>
     <PackageId>SharpNinja.McpServer.Director</PackageId>
-    <Version>0.1.0-alpha.18</Version>
     <Authors>SharpNinja</Authors>
     <Description>CLI management tool for McpServer. Provides workspace management, agent orchestration, compliance policy editing, Keycloak OIDC auth, and an interactive Terminal.Gui TUI with 7 tabbed screens. 18 CLI commands via System.CommandLine.</Description>
     <PackageTags>cli;director;mcp;management;dotnet-tool;terminal-gui;agent-orchestration</PackageTags>
