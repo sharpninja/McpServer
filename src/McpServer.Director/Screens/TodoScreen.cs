@@ -130,6 +130,9 @@ internal sealed class TodoScreen : View
         _noteField = new TextField { X = 6, Y = row3Y, Width = Dim.Fill(), Text = "" };
         Add(_noteField);
 
+        ApplyEditableScheme(_sectionFilter, _idField, _titleField, _editorSectionField,
+            _priorityField, _estimateField, _noteField);
+
         var editorsY = Pos.Bottom(_noteField);
         var descFrame = new FrameView
         {
@@ -190,6 +193,8 @@ internal sealed class TodoScreen : View
         };
         tasksFrame.Add(_implementationTasksEditor);
         Add(tasksFrame);
+
+        ApplyEditableScheme(_descriptionEditor, _technicalDetailsEditor, _implementationTasksEditor);
 
         _detailTitleLabel = new Label
         {
@@ -982,4 +987,12 @@ internal sealed class TodoScreen : View
     private sealed record TodoRow(string Id, string Title, string Section, string Priority, string Done);
 
     private enum SortField { Priority, Name }
+
+    private static void ApplyEditableScheme(params View[] views)
+    {
+        if (!Colors.ColorSchemes.TryGetValue("Editable", out var scheme))
+            return;
+        foreach (var v in views)
+            v.ColorScheme = scheme;
+    }
 }

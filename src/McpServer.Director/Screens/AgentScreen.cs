@@ -296,6 +296,11 @@ internal sealed class AgentScreen : View
         _detailMarkerAdditionsView = new TextView { X = 0, Y = row, Width = Dim.Fill(), Height = Dim.Fill(2), WordWrap = true, Text = "" };
         parent.Add(_detailMarkerAdditionsView);
 
+        ApplyEditableScheme(_detailDisplayNameField, _detailLaunchCommandOverrideField,
+            _detailModelsOverrideField, _detailBranchStrategyOverrideField,
+            _detailInstructionFilesOverrideField, _detailSeedPromptOverrideView,
+            _detailMarkerAdditionsView);
+
         var saveDetailBtn = new Button { X = 0, Y = Pos.AnchorEnd(1), Text = "Save Detail" };
         saveDetailBtn.Accepting += (_, _) => QueueSaveSelectedDetail();
         var reloadDetailBtn = new Button { X = Pos.Right(saveDetailBtn) + 1, Y = Pos.AnchorEnd(1), Text = "Reload Detail" };
@@ -1071,5 +1076,13 @@ internal sealed class AgentScreen : View
         {
             // Ignore trace failures. This is diagnostic-only instrumentation.
         }
+    }
+
+    private static void ApplyEditableScheme(params View[] views)
+    {
+        if (!Colors.ColorSchemes.TryGetValue("Editable", out var scheme))
+            return;
+        foreach (var v in views)
+            v.ColorScheme = scheme;
     }
 }

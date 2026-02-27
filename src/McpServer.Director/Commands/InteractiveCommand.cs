@@ -172,5 +172,14 @@ internal static class InteractiveCommand
         Terminal.Gui.Colors.ColorSchemes["Dialog"] = dialogScheme;
         Terminal.Gui.Colors.ColorSchemes["Menu"] = menuScheme;
         Terminal.Gui.Colors.ColorSchemes["Error"] = errorScheme;
+
+        // Editable text fields use accent blue for normal text to distinguish from labels
+        var editableScheme = new Terminal.Gui.ColorScheme(
+            normal: new Terminal.Gui.Attribute(accent, bg),
+            focus: new Terminal.Gui.Attribute(accent, focusBg),
+            hotNormal: new Terminal.Gui.Attribute(hotKey, bg),
+            hotFocus: new Terminal.Gui.Attribute(hotKey, focusBg),
+            disabled: new Terminal.Gui.Attribute(fg, bg));
+        Terminal.Gui.Colors.ColorSchemes["Editable"] = editableScheme;
     }
 }

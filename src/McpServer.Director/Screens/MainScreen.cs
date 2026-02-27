@@ -172,6 +172,8 @@ internal sealed class MainScreen : Window
         // Auto-load on startup
         Loaded += (_, _) =>
         {
+            ViewModelBinder.EnableScrollBars(this);
+
             _ = Task.Run(async () =>
             {
                 var logsScreen = _tabView.Tabs
