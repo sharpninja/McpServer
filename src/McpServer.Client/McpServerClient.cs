@@ -151,6 +151,18 @@ public sealed class McpServerClient
     }
 
     /// <summary>
+    /// Clears both API key and bearer token on all sub-clients, resetting the client
+    /// to an unauthenticated state. After calling this method, a new API key or bearer
+    /// token can be set.
+    /// </summary>
+    public void Logout()
+    {
+        _apiKey = string.Empty;
+        _bearerToken = string.Empty;
+        foreach (var c in _allClients) c.Logout();
+    }
+
+    /// <summary>
     /// TCP port propagated to every sub-client. Changing this immediately retargets all
     /// API calls to the new port (e.g. switching between workspace hosts).
     /// </summary>

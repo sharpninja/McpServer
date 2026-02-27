@@ -96,6 +96,12 @@ public abstract class McpClientBase
             // API key writes are ignored — agents use API keys, users use JWT.
             if (!string.IsNullOrWhiteSpace(_bearerToken))
                 return;
+
+            // API key is set-once. After initial assignment, further writes are ignored.
+            // Call Logout() to clear credentials and start over.
+            if (!string.IsNullOrWhiteSpace(_apiKey))
+                return;
+
             _apiKey = value ?? string.Empty;
         }
     }
@@ -106,12 +112,19 @@ public abstract class McpClientBase
     /// <b>Mutually exclusive with <see cref="ApiKey"/>.</b> Setting this to a non-empty value
     /// clears the API key and enables <see cref="RequireBearerToken"/>, permanently preventing
     /// silent fallback to API key authentication for the lifetime of this client instance.
+    /// <para>The bearer token is set-once: after initial assignment, further writes are
+    /// silently ignored. Call <see cref="Logout"/> to clear all credentials.</para>
     /// </summary>
     public string BearerToken
     {
         get => _bearerToken;
         set
         {
+            // Bearer token is set-once. After initial assignment, further writes are
+            // ignored. Call Logout() to clear credentials and start over.
+            if (!string.IsNullOrWhiteSpace(_bearerToken))
+                return;
+
             _bearerToken = value ?? string.Empty;
             if (!string.IsNullOrWhiteSpace(_bearerToken))
             {
@@ -121,6 +134,18 @@ public abstract class McpClientBase
         }
     }
     private string _bearerToken = string.Empty;
+
+    /// <summary>
+    /// Clears both API key and bearer token, resetting the client to an unauthenticated
+    /// state. After calling this method, a new API key or bearer token can be set.
+    /// <see cref="RequireBearerToken"/> is also reset.
+    /// </summary>
+    public void Logout()
+    {
+        _apiKey = string.Empty;
+        _bearerToken = string.Empty;
+        RequireBearerToken = false;
+    }
 
     /// <summary>
     /// When <see langword="true"/>, every outbound request <b>must</b> carry a Bearer token.
