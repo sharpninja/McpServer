@@ -33,6 +33,10 @@ internal sealed class TodoScreen : View
     private int _detailLoadRequestVersion;
     private string? _lastAutoDetailTodoId;
     private bool _showCompletedItems;
+    private SortField _currentSort = SortField.Priority;
+    private bool _sortDescending;
+    private Button _sortPriorityBtn = null!;
+    private Button _sortNameBtn = null!;
     private readonly ILogger<TodoScreen> _logger;
 
 
@@ -61,6 +65,14 @@ internal sealed class TodoScreen : View
         _showCompletedToggleButton = new Button { X = 43, Y = 0, Text = "Show Completed" };
         _showCompletedToggleButton.Accepting += (_, _) => ToggleShowCompletedItems();
         Add(_showCompletedToggleButton);
+
+        _sortPriorityBtn = new Button { X = Pos.Right(_showCompletedToggleButton) + 2, Y = 0, Text = "▼ Priority" };
+        _sortPriorityBtn.Accepting += (_, _) => ApplySort(SortField.Priority);
+        Add(_sortPriorityBtn);
+
+        _sortNameBtn = new Button { X = Pos.Right(_sortPriorityBtn) + 1, Y = 0, Text = "  Name" };
+        _sortNameBtn.Accepting += (_, _) => ApplySort(SortField.Name);
+        Add(_sortNameBtn);
 
         _table = new TableView
         {
@@ -264,6 +276,7 @@ internal sealed class TodoScreen : View
                     item.Priority,
                     item.Done ? "✓" : "○"))
                 .ToList();
+            rows = SortRows(rows);
             _rows = rows;
             _lastAutoDetailTodoId = null;
             var selectedRow = rows.FindIndex(r => string.Equals(r.Id, previouslySelectedTodoId, StringComparison.Ordinal));
@@ -786,6 +799,55 @@ internal sealed class TodoScreen : View
         });
     }
 
+    private void ApplySort(SortField field)
+    {
+        if (_currentSort == field)
+            _sortDescending = !_sortDescending;
+        else
+        {
+            _currentSort = field;
+            _sortDescending = false;
+        }
+
+        UpdateSortButtonLabels();
+        _ = Task.Run(LoadAsync);
+    }
+
+    private void UpdateSortButtonLabels()
+    {
+        var arrow = _sortDescending ? "▲" : "▼";
+        Application.Invoke(() =>
+        {
+            _sortPriorityBtn.Text = _currentSort == SortField.Priority ? $"{arrow} Priority" : "  Priority";
+            _sortNameBtn.Text = _currentSort == SortField.Name ? $"{arrow} Name" : "  Name";
+        });
+    }
+
+    private List<TodoRow> SortRows(List<TodoRow> rows)
+    {
+        return _currentSort switch
+        {
+            SortField.Priority => (_sortDescending
+                ? rows.OrderByDescending(r => PriorityRank(r.Priority))
+                : rows.OrderBy(r => PriorityRank(r.Priority)))
+                .ThenBy(r => r.Title, StringComparer.OrdinalIgnoreCase)
+                .ToList(),
+            SortField.Name => (_sortDescending
+                ? rows.OrderByDescending(r => r.Title, StringComparer.OrdinalIgnoreCase)
+                : rows.OrderBy(r => r.Title, StringComparer.OrdinalIgnoreCase))
+                .ToList(),
+            _ => rows,
+        };
+    }
+
+    private static int PriorityRank(string priority) => priority.ToLowerInvariant() switch
+    {
+        "high" => 0,
+        "medium" => 1,
+        "low" => 2,
+        _ => 3,
+    };
+
     private string? GetSelectedTodoId()
     {
         var row = _table.SelectedRow;
@@ -918,4 +980,6 @@ internal sealed class TodoScreen : View
     }
 
     private sealed record TodoRow(string Id, string Title, string Section, string Priority, string Done);
+
+    private enum SortField { Priority, Name }
 }
