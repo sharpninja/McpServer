@@ -308,18 +308,18 @@ internal sealed class TodoScreen : View
                 _table.Style.ColumnStyles.Clear();
                 _table.Style.ColumnStyles[0] = new ColumnStyle
                 {
-                    MaxWidth = 25,
+                    MaxWidth = 27,
                     RepresentationGetter = v => $" {v} ",
                 };
                 _table.Style.ColumnStyles[1] = new ColumnStyle
                 {
-                    MaxWidth = 50,
+                    MaxWidth = 52,
                     RepresentationGetter = v => $" {v} ",
                 };
                 _table.Style.ColumnStyles[2] = new ColumnStyle
                 {
                     Alignment = Alignment.End,
-                    MaxWidth = 10,
+                    MaxWidth = 12,
                     RepresentationGetter = v => $" {v} ",
                 };
                 _table.Style.ExpandLastColumn = false;
