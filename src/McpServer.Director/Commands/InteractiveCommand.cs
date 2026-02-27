@@ -129,16 +129,16 @@ internal static class InteractiveCommand
     /// <summary>Applies a Darcula-inspired dark color scheme to all Terminal.Gui color scheme slots.</summary>
     private static void ApplyDarculaTheme()
     {
-        // Darcula palette
-        var bg = new Terminal.Gui.Color(43, 43, 43);
-        var fg = new Terminal.Gui.Color(187, 187, 187);
-        var accent = new Terminal.Gui.Color(104, 151, 187);
-        var hotKey = new Terminal.Gui.Color(204, 120, 50);
-        var focusBg = new Terminal.Gui.Color(50, 50, 50);
-        var disabled = new Terminal.Gui.Color(100, 100, 100);
-        var dialogBg = new Terminal.Gui.Color(60, 63, 65);
-        var menuBg = new Terminal.Gui.Color(49, 51, 53);
-        var errorFg = new Terminal.Gui.Color(255, 107, 104);
+        // Darcula palette — text brighter, borders dimmer
+        var bg = new Terminal.Gui.Color(40, 40, 40);
+        var fg = new Terminal.Gui.Color(210, 210, 210);
+        var accent = new Terminal.Gui.Color(120, 170, 210);
+        var hotKey = new Terminal.Gui.Color(220, 140, 65);
+        var focusBg = new Terminal.Gui.Color(48, 48, 48);
+        var disabled = new Terminal.Gui.Color(90, 90, 90);
+        var dialogBg = new Terminal.Gui.Color(55, 57, 59);
+        var menuBg = new Terminal.Gui.Color(45, 47, 49);
+        var errorFg = new Terminal.Gui.Color(255, 120, 115);
 
         var baseScheme = new Terminal.Gui.ColorScheme(
             normal: new Terminal.Gui.Attribute(fg, bg),
