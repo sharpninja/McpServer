@@ -97,6 +97,10 @@ internal sealed class TodoScreen : View
         {
             MaxWidth = 30,
         };
+        _table.Style.ColumnStyles[2] = new ColumnStyle
+        {
+            MaxWidth = 200,
+        };
         _table.SelectedCellChanged += (_, _) => QueueSelectedRowDetailRefresh();
         Add(_table);
 
@@ -305,7 +309,8 @@ internal sealed class TodoScreen : View
                 {
                     var pri = (r.Priority.Length > 8 ? r.Priority[..8] : r.Priority).PadRight(8);
                     var id = (r.Id.Length > 28 ? r.Id[..28] : r.Id).PadRight(28);
-                    dt.Rows.Add(pri, id, r.Title);
+                    var name = r.Title.Length > 60 ? r.Title[..57] + "..." : r.Title;
+                    dt.Rows.Add(pri, id, name);
                 }
 
                 _table.Table = new DataTableSource(dt);
