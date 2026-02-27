@@ -12,7 +12,6 @@ using McpServer.UI.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Spectre.Console;
 
 namespace McpServer.Director;
