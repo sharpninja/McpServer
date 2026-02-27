@@ -235,6 +235,7 @@ builder.Services.AddSingleton<ITodoService>(sp =>
         _ => ActivatorUtilities.CreateInstance<TodoService>(sp),
     };
 });
+builder.Services.AddSingleton<TodoServiceResolver>();
 builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
 builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
 builder.Services.AddSingleton<RequirementsDocumentService>();
