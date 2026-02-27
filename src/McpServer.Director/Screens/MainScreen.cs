@@ -360,6 +360,18 @@ internal sealed class MainScreen : Window
 
         var selectFirst = true;
 
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Todo))
+        {
+            _tabView.AddTab(new Tab { DisplayText = "TODO", View = new TodoScreen(_todoVm, _todoDetailVm, directorContext: _directorContext) }, andSelect: selectFirst);
+            selectFirst = false;
+        }
+
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.SessionLogs))
+        {
+            _tabView.AddTab(new Tab { DisplayText = "Sessions", View = new SessionLogScreen(_sessionLogVm) }, andSelect: selectFirst);
+            selectFirst = false;
+        }
+
         if (_directorContext.HasControlConnection && _authorizationPolicy.CanViewArea(McpArea.Health))
         {
             _tabView.AddTab(new Tab { DisplayText = "Health", View = new HealthScreen(_healthVm, _directorContext.GetRequiredControlHttpClient()) }, andSelect: selectFirst);
@@ -375,18 +387,6 @@ internal sealed class MainScreen : Window
         if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Agents))
         {
             _tabView.AddTab(new Tab { DisplayText = "Agents", View = new AgentScreen(_directorContext) }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Todo))
-        {
-            _tabView.AddTab(new Tab { DisplayText = "TODO", View = new TodoScreen(_todoVm, _todoDetailVm, directorContext: _directorContext) }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.SessionLogs))
-        {
-            _tabView.AddTab(new Tab { DisplayText = "Sessions", View = new SessionLogScreen(_sessionLogVm) }, andSelect: selectFirst);
             selectFirst = false;
         }
 
