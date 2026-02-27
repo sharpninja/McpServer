@@ -68,6 +68,10 @@ internal static class InteractiveCommand
         services.AddSingleton<ITunnelApiClient>(_ => new TunnelApiClientAdapter(directorContext));
             using var sp = services.BuildServiceProvider();
 
+            // Add Dispatcher as a log provider after construction to break the circular dep
+            // (Dispatcher implements ILoggerProvider but also needs ILogger<Dispatcher>).
+            sp.GetRequiredService<ILoggerFactory>().AddProvider(sp.GetRequiredService<Dispatcher>());
+
             // Resolve ViewModels
             var workspaceListVm = sp.GetRequiredService<WorkspaceListViewModel>();
             var workspaceDetailVm = sp.GetRequiredService<WorkspaceDetailViewModel>();

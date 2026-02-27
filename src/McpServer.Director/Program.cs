@@ -86,7 +86,12 @@ internal static class Program
         services.AddSingleton<ITodoApiClient>(_ => new TodoApiClientAdapter(directorContext));
         services.AddSingleton<ITunnelApiClient>(_ => new TunnelApiClientAdapter(directorContext));
 
-        return services.BuildServiceProvider();
+        var sp = services.BuildServiceProvider();
+
+        // Add Dispatcher as a log provider after construction to break the circular dep
+        sp.GetRequiredService<ILoggerFactory>().AddProvider(sp.GetRequiredService<Dispatcher>());
+
+        return sp;
     }
 
     private static Command BuildExecCommand()
