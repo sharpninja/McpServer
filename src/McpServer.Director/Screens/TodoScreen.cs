@@ -296,11 +296,14 @@ internal sealed class TodoScreen : View
                     new Dictionary<string, Func<TodoRow, object>>
                     {
                         ["ID"] = r => r.Id,
-                        ["Title"] = r => r.Title,
-                        ["Section"] = r => r.Section,
+                        ["Name"] = r => r.Title,
                         ["Priority"] = r => r.Priority,
-                        ["Done"] = r => r.Done,
                     });
+                _table.Style.ColumnStyles.Clear();
+                var priIdx = _table.Table.ColumnNames.ToList().IndexOf("Priority");
+                if (priIdx >= 0)
+                    _table.Style.ColumnStyles.Add(priIdx,
+                        new ColumnStyle { Alignment = Alignment.End });
 
                 if (selectedRow >= 0 && selectedRow < rows.Count)
                     _table.SelectedRow = selectedRow;
