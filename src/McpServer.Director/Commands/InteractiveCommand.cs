@@ -87,6 +87,7 @@ internal static class InteractiveCommand
 
             // Initialize Terminal.Gui
             Terminal.Gui.Application.Init();
+            ApplyDarculaTheme();
 
             try
             {
@@ -123,5 +124,54 @@ internal static class InteractiveCommand
         }, s_workspaceOption);
 
         root.AddCommand(cmd);
+    }
+
+    /// <summary>Applies a Darcula-inspired dark color scheme to all Terminal.Gui color scheme slots.</summary>
+    private static void ApplyDarculaTheme()
+    {
+        // Darcula palette
+        var bg = new Terminal.Gui.Color(43, 43, 43);
+        var fg = new Terminal.Gui.Color(187, 187, 187);
+        var accent = new Terminal.Gui.Color(104, 151, 187);
+        var hotKey = new Terminal.Gui.Color(204, 120, 50);
+        var focusBg = new Terminal.Gui.Color(50, 50, 50);
+        var disabled = new Terminal.Gui.Color(100, 100, 100);
+        var dialogBg = new Terminal.Gui.Color(60, 63, 65);
+        var menuBg = new Terminal.Gui.Color(49, 51, 53);
+        var errorFg = new Terminal.Gui.Color(255, 107, 104);
+
+        var baseScheme = new Terminal.Gui.ColorScheme(
+            normal: new Terminal.Gui.Attribute(fg, bg),
+            focus: new Terminal.Gui.Attribute(accent, focusBg),
+            hotNormal: new Terminal.Gui.Attribute(hotKey, bg),
+            hotFocus: new Terminal.Gui.Attribute(hotKey, focusBg),
+            disabled: new Terminal.Gui.Attribute(disabled, bg));
+
+        var dialogScheme = new Terminal.Gui.ColorScheme(
+            normal: new Terminal.Gui.Attribute(fg, dialogBg),
+            focus: new Terminal.Gui.Attribute(accent, focusBg),
+            hotNormal: new Terminal.Gui.Attribute(hotKey, dialogBg),
+            hotFocus: new Terminal.Gui.Attribute(hotKey, focusBg),
+            disabled: new Terminal.Gui.Attribute(disabled, dialogBg));
+
+        var menuScheme = new Terminal.Gui.ColorScheme(
+            normal: new Terminal.Gui.Attribute(fg, menuBg),
+            focus: new Terminal.Gui.Attribute(accent, focusBg),
+            hotNormal: new Terminal.Gui.Attribute(hotKey, menuBg),
+            hotFocus: new Terminal.Gui.Attribute(hotKey, focusBg),
+            disabled: new Terminal.Gui.Attribute(disabled, menuBg));
+
+        var errorScheme = new Terminal.Gui.ColorScheme(
+            normal: new Terminal.Gui.Attribute(errorFg, bg),
+            focus: new Terminal.Gui.Attribute(errorFg, focusBg),
+            hotNormal: new Terminal.Gui.Attribute(hotKey, bg),
+            hotFocus: new Terminal.Gui.Attribute(hotKey, focusBg),
+            disabled: new Terminal.Gui.Attribute(disabled, bg));
+
+        Terminal.Gui.Colors.ColorSchemes["Base"] = baseScheme;
+        Terminal.Gui.Colors.ColorSchemes["TopLevel"] = baseScheme;
+        Terminal.Gui.Colors.ColorSchemes["Dialog"] = dialogScheme;
+        Terminal.Gui.Colors.ColorSchemes["Menu"] = menuScheme;
+        Terminal.Gui.Colors.ColorSchemes["Error"] = errorScheme;
     }
 }
