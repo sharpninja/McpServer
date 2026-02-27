@@ -16,7 +16,7 @@ public sealed class WorkspaceHeaderTests
         using var http = new HttpClient(handler);
         var options = new McpServerClientOptions
         {
-            BaseUrl = new Uri("http://localhost:7148"),
+            BaseUrl = new Uri("http://localhost:7147"),
             ApiKey = "test-key",
             WorkspacePath = @"C:\projects\alpha",
         };
@@ -38,7 +38,7 @@ public sealed class WorkspaceHeaderTests
         using var http = new HttpClient(handler);
         var options = new McpServerClientOptions
         {
-            BaseUrl = new Uri("http://localhost:7148"),
+            BaseUrl = new Uri("http://localhost:7147"),
             ApiKey = "test-key",
             // WorkspacePath not set — defaults to null/empty
         };
@@ -57,7 +57,7 @@ public sealed class WorkspaceHeaderTests
         using var http = new HttpClient(handler);
         var options = new McpServerClientOptions
         {
-            BaseUrl = new Uri("http://localhost:7148"),
+            BaseUrl = new Uri("http://localhost:7147"),
             ApiKey = "test-key",
             WorkspacePath = @"C:\projects\beta",
         };
@@ -76,7 +76,7 @@ public sealed class WorkspaceHeaderTests
         using var http = new HttpClient();
         var options = new McpServerClientOptions
         {
-            BaseUrl = new Uri("http://localhost:7148"),
+            BaseUrl = new Uri("http://localhost:7147"),
             ApiKey = "test-key",
             WorkspacePath = @"C:\initial",
         };

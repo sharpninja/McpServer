@@ -16,7 +16,7 @@ ADMIN_PASSWORD="${ADMIN_PASSWORD:-admin}"
 REALM_NAME="${REALM_NAME:-mcpserver}"
 GITHUB_CLIENT_ID=""
 GITHUB_CLIENT_SECRET=""
-MCP_SERVER_URL="${MCP_SERVER_URL:-http://localhost:7148}"
+MCP_SERVER_URL="${MCP_SERVER_URL:-http://localhost:7147}"
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -36,7 +36,7 @@ while [[ $# -gt 0 ]]; do
             echo "  --realm NAME              Realm name (default: mcpserver)"
             echo "  --github-client-id ID     GitHub OAuth App Client ID (alias: --GitHubClientId)"
             echo "  --github-client-secret S  GitHub OAuth App Client Secret (alias: --GitHubClientSecret)"
-            echo "  --mcp-server-url URL      MCP Server URL (default: http://localhost:7148)"
+            echo "  --mcp-server-url URL      MCP Server URL (default: http://localhost:7147)"
             exit 0
             ;;
         *) echo "Unknown option: $1"; exit 1 ;;

@@ -6,7 +6,7 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// <summary>Tests for <see cref="MarkerFileService.ResolvePrompt"/> template resolution.</summary>
 public sealed class MarkerFileServiceTests
 {
-    private const string BaseUrl = "http://localhost:7148";
+    private const string BaseUrl = "http://localhost:7147";
 
     private static Dictionary<string, object?> MakeContext(string baseUrl = BaseUrl, string? apiKey = null) =>
         MarkerFileService.BuildTemplateContext(baseUrl, apiKey, workspace: null, workspacePath: @"C:\test", workspaceName: "test");
@@ -163,7 +163,7 @@ public sealed class MarkerFileServiceTests
     [Fact]
     public void BuildTemplateContext_NullWorkspace_UsesFallbacks()
     {
-        var ctx = MarkerFileService.BuildTemplateContext("http://localhost:7148", null, null, @"C:\ws", "fallback");
+        var ctx = MarkerFileService.BuildTemplateContext("http://localhost:7147", null, null, @"C:\ws", "fallback");
 
         Assert.Equal(string.Empty, ctx["apiKey"]);
         var wsDict = Assert.IsType<Dictionary<string, object?>>(ctx["workspace"]);
@@ -212,7 +212,7 @@ public sealed class MarkerFileServiceTests
 
             await MarkerFileService.WriteMarkerAsync(
                 workspacePath: tempDir,
-                port: 7148,
+                port: 7147,
                 workspaceName: "test",
                 serverStartedAtUtc: serverStartedAtUtc);
 

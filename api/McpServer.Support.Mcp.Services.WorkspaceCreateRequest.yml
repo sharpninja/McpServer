@@ -113,7 +113,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Services
-  summary: HTTP port for this workspace's hosted instance. 0 = auto-assign (starting at 7148).
+  summary: HTTP port for this workspace's hosted instance. 0 = auto-assign (starting at 7147).
   example: []
   syntax:
     content: public int WorkspacePort { get; init; }

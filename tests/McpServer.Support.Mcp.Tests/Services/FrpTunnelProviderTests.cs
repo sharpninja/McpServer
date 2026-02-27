@@ -122,9 +122,9 @@ public sealed class FrpTunnelProviderTests
         Assert.Contains("name = \"mcp-tcp-7147\"", config, StringComparison.Ordinal);
         Assert.Contains("localPort = 7147", config, StringComparison.Ordinal);
         Assert.Contains("remotePort = 7147", config, StringComparison.Ordinal);
-        Assert.Contains("name = \"mcp-tcp-7148\"", config, StringComparison.Ordinal);
-        Assert.Contains("localPort = 7148", config, StringComparison.Ordinal);
-        Assert.Contains("remotePort = 7148", config, StringComparison.Ordinal);
+        Assert.Contains("name = \"mcp-tcp-7147\"", config, StringComparison.Ordinal);
+        Assert.Contains("localPort = 7147", config, StringComparison.Ordinal);
+        Assert.Contains("remotePort = 7147", config, StringComparison.Ordinal);
         Assert.Contains("name = \"mcp-tcp-7149\"", config, StringComparison.Ordinal);
         Assert.Contains("localPort = 7149", config, StringComparison.Ordinal);
         Assert.Contains("remotePort = 7149", config, StringComparison.Ordinal);

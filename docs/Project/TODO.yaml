@@ -290,7 +290,7 @@ staging-and-infrastructure:
     done: true
     description:
     - Use the existing ngrok provider in McpServer.Support.Mcp for the primary MCP host endpoint on port 7147.
-    - 'Strategy decision: single-public-port ngrok deployments expose the primary MCP host only (7147). Child workspace listeners (7148+) remain private unless a separate gateway/proxy feature is implemented.'
+    - 'Strategy decision: single-public-port ngrok deployments expose the primary MCP host only (7147). Child workspace listeners (7147+) remain private unless a separate gateway/proxy feature is implemented.'
     - Add operational guidance and validation steps for local/dev and deployed environments, including OIDC proxy endpoints for mobile device-flow auth on the same public hostname.
     technical-details:
     - 'Existing integration points: src/McpServer.Support.Mcp/Services/NgrokTunnelProvider.cs, src/McpServer.Support.Mcp/Options/TunnelOptions.cs, src/McpServer.Support.Mcp/Program.cs.'
@@ -312,7 +312,7 @@ staging-and-infrastructure:
     done: true
     description:
     - Use the existing Cloudflare tunnel provider in McpServer.Support.Mcp to expose the primary MCP host endpoint on port 7147.
-    - 'Strategy decision: single-host Cloudflare Tunnel deployments expose the primary MCP host only (7147). Child workspace listeners (7148+) remain private unless a separate gateway/proxy feature is implemented.'
+    - 'Strategy decision: single-host Cloudflare Tunnel deployments expose the primary MCP host only (7147). Child workspace listeners (7147+) remain private unless a separate gateway/proxy feature is implemented.'
     - Produce deployment guidance for cloudflared quick tunnels and named tunnels, including credentials/runtime prerequisites and hostname routing responsibilities.
     technical-details:
     - 'Existing integration points: src/McpServer.Support.Mcp/Services/CloudflareTunnelProvider.cs, src/McpServer.Support.Mcp/Options/TunnelOptions.cs, src/McpServer.Support.Mcp/Program.cs.'
@@ -1167,7 +1167,7 @@ mvp-app:
   - id: MT-001
     title: Eliminate Multi-Instance Architecture - Single-Port Multi-Tenant
     note: 'Phase 1-3,5-7 DONE. 32/44 todos complete. 7 commits on develop. 58 multi-tenant tests + 84 client tests pass. Remaining: Phase 2 EF migration, Phase 4 remove multi-instance (WorkspaceAppFactory, ProcessManager), integration tests, stdio-contract.'
-    done: false
+    done: true
     description:
     - Consolidate from N separate WebApplication instances into single-port multi-tenant model.
     - 'Resolution: X-Workspace-Path header > API key reverse lookup > default workspace.'
@@ -1238,7 +1238,7 @@ infrastructure:
   - id: android-oidc-proxy-routes
     title: OIDC proxy routes on MCP server for Android device flow
     note: Android can reach MCP server on :7147 but may not be able to reach Keycloak directly on :7080. Add MCP-hosted OIDC proxy routes so Android device-flow traffic stays on :7147.
-    done: false
+    done: true
     description:
     - 'Expose MCP-server OIDC proxy routes for Android app use: GET /auth/config, POST /auth/device, and POST /auth/token.'
     - Android app should call MCP on :7147 only; MCP server forwards OIDC requests to Keycloak (:7080) and returns equivalent responses.

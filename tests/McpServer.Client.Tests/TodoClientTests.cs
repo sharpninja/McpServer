@@ -9,7 +9,7 @@ public sealed class TodoClientTests
 {
     private static readonly McpServerClientOptions DefaultOptions = new()
     {
-        BaseUrl = new Uri("http://localhost:7148"),
+        BaseUrl = new Uri("http://localhost:7147"),
         ApiKey = "test-key"
     };
 
@@ -177,7 +177,7 @@ public sealed class TodoClientTests
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, "", "text/event-stream");
         using var http = new HttpClient(handler);
-        var client = new TodoClient(http, new McpServerClientOptions { BaseUrl = new System.Uri("http://localhost:7148") });
+        var client = new TodoClient(http, new McpServerClientOptions { BaseUrl = new System.Uri("http://localhost:7147") });
 
         await Assert.ThrowsAsync<System.InvalidOperationException>(async () =>
         {

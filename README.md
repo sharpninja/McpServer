@@ -196,14 +196,14 @@ dotnet add package SharpNinja.McpServer.Client
 // With DI
 builder.Services.AddMcpServerClient(options =>
 {
-    options.BaseUrl = new Uri("http://localhost:7148");
+    options.BaseUrl = new Uri("http://localhost:7147");
     options.ApiKey = "your-api-key"; // optional
 });
 
 // Without DI
 var client = McpServerClientFactory.Create(new McpServerClientOptions
 {
-    BaseUrl = new Uri("http://localhost:7148"),
+    BaseUrl = new Uri("http://localhost:7147"),
 });
 ```
 
