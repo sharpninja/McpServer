@@ -139,8 +139,8 @@ internal sealed class TodoScreen : View
             Title = "Description",
             X = 0,
             Y = editorsY,
-            Width = Dim.Percent(33),
-            Height = 6,
+            Width = Dim.Fill(),
+            Height = 4,
         };
         _descriptionEditor = new TextView
         {
@@ -157,10 +157,10 @@ internal sealed class TodoScreen : View
         var techFrame = new FrameView
         {
             Title = "Technical Details",
-            X = Pos.Right(descFrame),
-            Y = editorsY,
-            Width = Dim.Percent(33),
-            Height = 6,
+            X = 0,
+            Y = Pos.Bottom(descFrame),
+            Width = Dim.Fill(),
+            Height = 4,
         };
         _technicalDetailsEditor = new TextView
         {
@@ -177,10 +177,10 @@ internal sealed class TodoScreen : View
         var tasksFrame = new FrameView
         {
             Title = "Implementation Tasks",
-            X = Pos.Right(techFrame),
-            Y = editorsY,
+            X = 0,
+            Y = Pos.Bottom(techFrame),
             Width = Dim.Fill(),
-            Height = 6,
+            Height = 4,
         };
         _implementationTasksEditor = new TextView
         {
