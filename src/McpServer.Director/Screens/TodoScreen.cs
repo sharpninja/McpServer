@@ -306,9 +306,22 @@ internal sealed class TodoScreen : View
 
                 _table.Table = new DataTableSource(dt);
                 _table.Style.ColumnStyles.Clear();
-                _table.Style.ColumnStyles[0] = new ColumnStyle { MaxWidth = 25 };
-                _table.Style.ColumnStyles[1] = new ColumnStyle { MaxWidth = 50 };
-                _table.Style.ColumnStyles[2] = new ColumnStyle { Alignment = Alignment.End, MaxWidth = 10 };
+                _table.Style.ColumnStyles[0] = new ColumnStyle
+                {
+                    MaxWidth = 25,
+                    RepresentationGetter = v => $" {v} ",
+                };
+                _table.Style.ColumnStyles[1] = new ColumnStyle
+                {
+                    MaxWidth = 50,
+                    RepresentationGetter = v => $" {v} ",
+                };
+                _table.Style.ColumnStyles[2] = new ColumnStyle
+                {
+                    Alignment = Alignment.End,
+                    MaxWidth = 10,
+                    RepresentationGetter = v => $" {v} ",
+                };
                 _table.Style.ExpandLastColumn = false;
 
                 if (selectedRow >= 0 && selectedRow < rows.Count)
