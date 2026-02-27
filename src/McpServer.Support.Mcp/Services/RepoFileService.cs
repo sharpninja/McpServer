@@ -12,19 +12,22 @@ public sealed class RepoFileService : IRepoFileService
 {
     private static readonly char[] s_trimSlashChars = { '/', '\\' };
     private readonly IngestionOptions _options;
+    private readonly WorkspaceContext _workspaceContext;
     private readonly IWriteAuditLog _auditLog;
     private readonly ILogger<RepoFileService> _logger;
 
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
-    /// <param name="options">Ingestion options providing repo root and allowlist.</param>
+    /// <summary>TR-PLANNED-013, TR-MCP-MT-001: Constructor. Uses WorkspaceContext for workspace-aware path resolution.</summary>
+    /// <param name="options">Ingestion options providing default repo root and allowlist.</param>
+    /// <param name="workspaceContext">Per-request workspace context for multi-workspace resolution.</param>
     /// <param name="auditLog">Audit log for recording write operations.</param>
     /// <param name="logger">Logger instance.</param>
-    public RepoFileService(IOptions<IngestionOptions> options, IWriteAuditLog auditLog,
-        ILogger<RepoFileService> logger)
+    public RepoFileService(IOptions<IngestionOptions> options, WorkspaceContext workspaceContext,
+        IWriteAuditLog auditLog, ILogger<RepoFileService> logger)
     {
         _logger = logger;
         _options = options?.Value ?? new IngestionOptions();
+        _workspaceContext = workspaceContext;
         _auditLog = auditLog ?? throw new ArgumentNullException(nameof(auditLog));
     }
 
@@ -104,7 +107,7 @@ public sealed class RepoFileService : IRepoFileService
     {
         fullPath = null!;
         if (IsPathTraversal(relativePath)) return false;
-        var repoRoot = Path.GetFullPath(_options.RepoRoot);
+        var repoRoot = Path.GetFullPath(_workspaceContext.WorkspacePath ?? _options.RepoRoot);
         fullPath = Path.GetFullPath(Path.Combine(repoRoot, relativePath));
         return fullPath.StartsWith(repoRoot, StringComparison.OrdinalIgnoreCase);
     }

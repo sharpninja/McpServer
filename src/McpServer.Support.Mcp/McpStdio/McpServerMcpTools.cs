@@ -27,7 +27,7 @@ public sealed class FwhMcpTools
     private readonly IngestionCoordinator _coordinator;
     private readonly ISyncStatusStore _syncStatusStore;
     private readonly IContextSearchService _searchService;
-    private readonly ITodoService _todoService;
+    private readonly WorkspaceServiceAccessor _workspaceAccessor;
     private readonly ITodoPromptService _todoPromptService;
     private readonly ISessionLogService _sessionLogService;
     private readonly IGitHubCliService _gitHubCliService;
@@ -35,13 +35,13 @@ public sealed class FwhMcpTools
     private readonly ILogger<FwhMcpTools> _logger;
 
 
-    /// <summary>TR-PLANNED-013: Constructor for DI.</summary>
+    /// <summary>TR-PLANNED-013, TR-MCP-MT-001: Constructor for DI. Uses WorkspaceServiceAccessor for workspace-aware TODO resolution.</summary>
     public FwhMcpTools(McpDbContext db,
         IRepoFileService repoFileService,
         IngestionCoordinator coordinator,
         ISyncStatusStore syncStatusStore,
         IContextSearchService searchService,
-        ITodoService todoService,
+        WorkspaceServiceAccessor workspaceAccessor,
         ITodoPromptService todoPromptService,
         ISessionLogService sessionLogService,
         IGitHubCliService gitHubCliService,
@@ -54,7 +54,7 @@ public sealed class FwhMcpTools
         _coordinator = coordinator;
         _syncStatusStore = syncStatusStore;
         _searchService = searchService;
-        _todoService = todoService;
+        _workspaceAccessor = workspaceAccessor;
         _todoPromptService = todoPromptService;
         _sessionLogService = sessionLogService;
         _gitHubCliService = gitHubCliService;
@@ -226,7 +226,7 @@ public sealed class FwhMcpTools
     {
         try
         {
-            var result = await _todoService.QueryAsync(new TodoQueryRequest { Section = section, Priority = priority, Done = done }, cancellationToken).ConfigureAwait(false);
+            var result = await _workspaceAccessor.GetTodoService().QueryAsync(new TodoQueryRequest { Section = section, Priority = priority, Done = done }, cancellationToken).ConfigureAwait(false);
             return JsonSerializer.Serialize(new { items = result.Items, totalCount = result.TotalCount });
         }
         catch (Exception ex)
@@ -244,7 +244,7 @@ public sealed class FwhMcpTools
     {
         try
         {
-            var item = await _todoService.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
+            var item = await _workspaceAccessor.GetTodoService().GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
             if (item == null) return JsonSerializer.Serialize(new { error = $"TODO '{id}' not found" });
             return JsonSerializer.Serialize(item);
         }
@@ -277,7 +277,7 @@ public sealed class FwhMcpTools
                 Estimate = estimate,
                 Description = description != null ? new[] { description } : null
             };
-            var result = await _todoService.CreateAsync(req, cancellationToken).ConfigureAwait(false);
+            var result = await _workspaceAccessor.GetTodoService().CreateAsync(req, cancellationToken).ConfigureAwait(false);
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { success = true, item = result.Item });
         }
@@ -301,7 +301,7 @@ public sealed class FwhMcpTools
         try
         {
             var req = new TodoUpdateRequest { Title = title, Priority = priority, Done = done, Note = note };
-            var result = await _todoService.UpdateAsync(id, req, cancellationToken).ConfigureAwait(false);
+            var result = await _workspaceAccessor.GetTodoService().UpdateAsync(id, req, cancellationToken).ConfigureAwait(false);
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { success = true, item = result.Item });
         }
@@ -320,7 +320,7 @@ public sealed class FwhMcpTools
     {
         try
         {
-            var result = await _todoService.DeleteAsync(id, cancellationToken).ConfigureAwait(false);
+            var result = await _workspaceAccessor.GetTodoService().DeleteAsync(id, cancellationToken).ConfigureAwait(false);
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { success = true });
         }

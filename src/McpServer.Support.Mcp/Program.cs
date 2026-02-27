@@ -236,6 +236,8 @@ builder.Services.AddSingleton<ITodoService>(sp =>
     };
 });
 builder.Services.AddSingleton<TodoServiceResolver>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<WorkspaceServiceAccessor>();
 builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
 builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
 builder.Services.AddSingleton<RequirementsDocumentService>();
