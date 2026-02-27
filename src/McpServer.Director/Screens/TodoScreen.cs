@@ -69,8 +69,8 @@ internal sealed class TodoScreen : View
         _sortPriorityBtn.Accepting += (_, _) => ApplySort(SortField.Priority);
         Add(_sortPriorityBtn);
 
-        _sortNameBtn = new Button { X = Pos.Right(_sortPriorityBtn) + 1, Y = 0, Text = "  Name" };
-        _sortNameBtn.Accepting += (_, _) => ApplySort(SortField.Name);
+        _sortNameBtn = new Button { X = Pos.Right(_sortPriorityBtn) + 1, Y = 0, Text = "  ID" };
+        _sortNameBtn.Accepting += (_, _) => ApplySort(SortField.Id);
         Add(_sortNameBtn);
 
         _table = new TableView
@@ -834,7 +834,7 @@ internal sealed class TodoScreen : View
         Application.Invoke(() =>
         {
             _sortPriorityBtn.Text = _currentSort == SortField.Priority ? $"{arrow} Priority" : "  Priority";
-            _sortNameBtn.Text = _currentSort == SortField.Name ? $"{arrow} Name" : "  Name";
+            _sortNameBtn.Text = _currentSort == SortField.Id ? $"{arrow} ID" : "  ID";
         });
     }
 
@@ -847,9 +847,9 @@ internal sealed class TodoScreen : View
                 : rows.OrderBy(r => PriorityRank(r.Priority)))
                 .ThenBy(r => r.Title, StringComparer.OrdinalIgnoreCase)
                 .ToList(),
-            SortField.Name => (_sortDescending
-                ? rows.OrderByDescending(r => r.Title, StringComparer.OrdinalIgnoreCase)
-                : rows.OrderBy(r => r.Title, StringComparer.OrdinalIgnoreCase))
+            SortField.Id => (_sortDescending
+                ? rows.OrderByDescending(r => r.Id, StringComparer.OrdinalIgnoreCase)
+                : rows.OrderBy(r => r.Id, StringComparer.OrdinalIgnoreCase))
                 .ToList(),
             _ => rows,
         };
@@ -996,7 +996,7 @@ internal sealed class TodoScreen : View
 
     private sealed record TodoRow(string Id, string Title, string Section, string Priority, string Done);
 
-    private enum SortField { Priority, Name }
+    private enum SortField { Priority, Id }
 
     private static void ApplyEditableScheme(params View[] views)
     {
