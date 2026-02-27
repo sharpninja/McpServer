@@ -14,7 +14,6 @@ internal sealed class TodoScreen : View
     private TableView _table = null!;
     private TextView _detailView = null!;
     private Label _detailTitleLabel = null!;
-    private Label _editorTitleLabel = null!;
     private Label _doneValueLabel = null!;
     private Button _showCompletedToggleButton = null!;
     private TextView _statusLabel = null!;
@@ -91,18 +90,9 @@ internal sealed class TodoScreen : View
         _table.SelectedCellChanged += (_, _) => QueueSelectedRowDetailRefresh();
         Add(_table);
 
-        _editorTitleLabel = new Label
-        {
-            X = 0,
-            Y = Pos.Bottom(_table),
-            Width = Dim.Fill(),
-            Text = "Editor: New TODO",
-        };
-        Add(_editorTitleLabel);
-
-        var row1Y = Pos.Bottom(_editorTitleLabel);
+        var row1Y = Pos.Bottom(_table);
         Add(new Label { X = 0, Y = row1Y, Text = "ID:" });
-        _idField = new TextField { X = 4, Y = row1Y, Width = 28, Text = "" };
+        _idField = new TextField { X = 4, Y = row1Y, Width = 28, Text = "", ReadOnly = true };
         Add(_idField);
 
         Add(new Label { X = 34, Y = row1Y, Text = "Title:" });
@@ -135,7 +125,7 @@ internal sealed class TodoScreen : View
         _noteField = new TextField { X = 6, Y = row3Y, Width = Dim.Fill(), Text = "" };
         Add(_noteField);
 
-        ApplyEditableScheme(_sectionFilter, _idField, _titleField, _editorSectionField,
+        ApplyEditableScheme(_sectionFilter, _titleField, _editorSectionField,
             _priorityField, _estimateField, _noteField);
 
         var editorsY = Pos.Bottom(_noteField);
@@ -785,9 +775,6 @@ internal sealed class TodoScreen : View
             _technicalDetailsEditor.Text = _detailViewModel.EditorTechnicalDetailsText ?? "";
             _implementationTasksEditor.Text = _detailViewModel.EditorImplementationTasksText ?? "";
             _doneValueLabel.Text = _detailViewModel.EditorDone ? "true" : "false";
-            _editorTitleLabel.Text = _detailViewModel.IsNewDraft
-                ? "Editor: New TODO draft"
-                : $"Editor: {_detailViewModel.EditorId}";
         });
     }
 
