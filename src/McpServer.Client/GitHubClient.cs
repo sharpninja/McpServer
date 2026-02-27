@@ -18,6 +18,9 @@ public sealed class GitHubClient : McpClientBase
     public GitHubClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 
+    internal GitHubClient(HttpClient http, McpServerClientOptions options, WorkspacePathHolder holder)
+        : base(http, options, holder) { }
+
     /// <summary>List GitHub issues.</summary>
     public async Task<GitHubIssueListResult> ListIssuesAsync(string? state = null, int limit = 30, CancellationToken cancellationToken = default)
     {

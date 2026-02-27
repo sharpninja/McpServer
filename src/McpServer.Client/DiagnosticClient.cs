@@ -14,6 +14,9 @@ public sealed class DiagnosticClient : McpClientBase
     public DiagnosticClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 
+    internal DiagnosticClient(HttpClient http, McpServerClientOptions options, WorkspacePathHolder holder)
+        : base(http, options, holder) { }
+
     /// <summary>Gets execution-path diagnostic details.</summary>
     public async Task<DiagnosticExecutionPathResult> GetExecutionPathAsync(CancellationToken cancellationToken = default)
     {

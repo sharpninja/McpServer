@@ -79,22 +79,25 @@ public sealed class McpServerClient
         _http = http;
         _options = options;
 
-        Todo = new TodoClient(http, options);
-        Context = new ContextClient(http, options);
-        SessionLog = new SessionLogClient(http, options);
-        GitHub = new GitHubClient(http, options);
-        Repo = new RepoClient(http, options);
-        Sync = new SyncClient(http, options);
-        Tunnel = new TunnelClient(http, options);
-        Workspace = new WorkspaceClient(http, options);
-        Tools = new ToolRegistryClient(http, options);
-        AuthConfig = new AuthConfigClient(http, options);
-        Diagnostic = new DiagnosticClient(http, options);
+        // Single shared holder — all sub-clients read/write the same workspace path.
+        var holder = new WorkspacePathHolder { Path = options.WorkspacePath ?? string.Empty };
+
+        Todo = new TodoClient(http, options, holder);
+        Context = new ContextClient(http, options, holder);
+        SessionLog = new SessionLogClient(http, options, holder);
+        GitHub = new GitHubClient(http, options, holder);
+        Repo = new RepoClient(http, options, holder);
+        Sync = new SyncClient(http, options, holder);
+        Tunnel = new TunnelClient(http, options, holder);
+        Workspace = new WorkspaceClient(http, options, holder);
+        Tools = new ToolRegistryClient(http, options, holder);
+        AuthConfig = new AuthConfigClient(http, options, holder);
+        Diagnostic = new DiagnosticClient(http, options, holder);
 
         _allClients = new McpClientBase[] { Todo, Context, SessionLog, GitHub, Repo, Sync, Tunnel, Workspace, Tools, AuthConfig, Diagnostic };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
-        _workspacePath = options.WorkspacePath ?? string.Empty;
+        _workspacePath = holder.Path;
         _port = options.BaseUrl.Port;
     }
 
@@ -136,9 +139,9 @@ public sealed class McpServerClient
     }
 
     /// <summary>
-    /// Workspace path for multi-tenant routing, propagated to every sub-client.
-    /// Setting this property immediately updates <see cref="McpClientBase.WorkspacePath"/> on all
-    /// sub-clients so the next call from <em>any</em> client uses the new workspace.
+    /// Workspace path for multi-tenant routing. All sub-clients share a single
+    /// <see cref="WorkspacePathHolder"/>, so setting this once is instantly visible
+    /// to every sub-client at the next request — no propagation loop needed.
     /// </summary>
     public string WorkspacePath
     {
@@ -146,7 +149,8 @@ public sealed class McpServerClient
         set
         {
             _workspacePath = value;
-            foreach (var c in _allClients) c.WorkspacePath = value;
+            // All sub-clients share the same holder — one write, all clients see it.
+            _allClients[0].WorkspacePath = value;
         }
     }
 

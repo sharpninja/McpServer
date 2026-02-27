@@ -17,6 +17,9 @@ public sealed class TunnelClient : McpClientBase
     public TunnelClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 
+    internal TunnelClient(HttpClient http, McpServerClientOptions options, WorkspacePathHolder holder)
+        : base(http, options, holder) { }
+
     /// <summary>List all registered tunnel providers.</summary>
     public async Task<List<TunnelProviderInfo>> ListAsync(CancellationToken cancellationToken = default)
     {

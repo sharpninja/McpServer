@@ -17,6 +17,9 @@ public sealed class RepoClient : McpClientBase
     public RepoClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 
+    internal RepoClient(HttpClient http, McpServerClientOptions options, WorkspacePathHolder holder)
+        : base(http, options, holder) { }
+
     /// <summary>Read a file from the repository.</summary>
     public async Task<RepoFileReadResult> ReadFileAsync(string path, CancellationToken cancellationToken = default)
     {

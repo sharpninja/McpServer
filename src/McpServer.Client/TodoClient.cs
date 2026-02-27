@@ -20,6 +20,9 @@ public sealed class TodoClient : McpClientBase
     public TodoClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 
+    internal TodoClient(HttpClient http, McpServerClientOptions options, WorkspacePathHolder holder)
+        : base(http, options, holder) { }
+
     /// <summary>Query TODO items with optional filters.</summary>
     public async Task<TodoQueryResult> QueryAsync(
         string? keyword = null, string? priority = null, string? section = null,

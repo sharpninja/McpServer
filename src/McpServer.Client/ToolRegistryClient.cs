@@ -19,6 +19,9 @@ public sealed class ToolRegistryClient : McpClientBase
     public ToolRegistryClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 
+    internal ToolRegistryClient(HttpClient http, McpServerClientOptions options, WorkspacePathHolder holder)
+        : base(http, options, holder) { }
+
     /// <summary>List all tools, optionally filtered by workspace.</summary>
     public async Task<ToolSearchResult> ListAsync(string? workspace = null, CancellationToken cancellationToken = default)
     {

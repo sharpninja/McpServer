@@ -19,6 +19,9 @@ public sealed class SessionLogClient : McpClientBase
     public SessionLogClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 
+    internal SessionLogClient(HttpClient http, McpServerClientOptions options, WorkspacePathHolder holder)
+        : base(http, options, holder) { }
+
     /// <summary>Submit (upsert) a session log entry. Creates or updates based on session ID.</summary>
     public async Task<SessionLogSubmitResult> SubmitAsync(UnifiedSessionLogDto sessionLog, CancellationToken cancellationToken = default)
     {

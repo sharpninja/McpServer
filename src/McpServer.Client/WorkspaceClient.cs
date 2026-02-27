@@ -18,6 +18,9 @@ public sealed class WorkspaceClient : McpClientBase
     public WorkspaceClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 
+    internal WorkspaceClient(HttpClient http, McpServerClientOptions options, WorkspacePathHolder holder)
+        : base(http, options, holder) { }
+
     /// <summary>List all registered workspaces.</summary>
     public async Task<WorkspaceListResult> ListAsync(CancellationToken cancellationToken = default)
     {

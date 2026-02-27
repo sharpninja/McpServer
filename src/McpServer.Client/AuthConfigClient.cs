@@ -14,6 +14,9 @@ public sealed class AuthConfigClient : McpClientBase
     public AuthConfigClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 
+    internal AuthConfigClient(HttpClient http, McpServerClientOptions options, WorkspacePathHolder holder)
+        : base(http, options, holder) { }
+
     /// <summary>Gets public OIDC configuration metadata.</summary>
     public async Task<AuthConfigResponse> GetConfigAsync(CancellationToken cancellationToken = default)
     {

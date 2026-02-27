@@ -18,6 +18,9 @@ public sealed class ContextClient : McpClientBase
     public ContextClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 
+    internal ContextClient(HttpClient http, McpServerClientOptions options, WorkspacePathHolder holder)
+        : base(http, options, holder) { }
+
     /// <summary>Perform a hybrid semantic + full-text search over indexed workspace content.</summary>
     public async Task<ContextSearchResult> SearchAsync(
         string query, string? sourceType = null, int limit = 20, CancellationToken cancellationToken = default)

@@ -14,6 +14,16 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Client;
 
 /// <summary>
+/// Shared mutable container for the workspace path. A single instance is shared across
+/// all <see cref="McpClientBase"/> sub-clients created from the same options, so updating
+/// the path once is instantly visible to every sub-client at the next request.
+/// </summary>
+internal sealed class WorkspacePathHolder
+{
+    public volatile string Path = string.Empty;
+}
+
+/// <summary>
 /// Abstract base class for all MCP Server sub-clients (e.g. <see cref="TodoClient"/>,
 /// <see cref="WorkspaceClient"/>). Provides shared HTTP plumbing, automatic
 /// <c>X-Api-Key</c> header injection, and dynamic port-based URL construction.
@@ -38,6 +48,7 @@ public abstract class McpClientBase
     private readonly HttpClient _http;
     private readonly string _scheme;
     private readonly string _host;
+    internal readonly WorkspacePathHolder _workspacePathHolder;
     private readonly ILogger? _logger;
 
     /// <summary>
@@ -59,6 +70,16 @@ public abstract class McpClientBase
     /// Thrown when <paramref name="http"/> or <paramref name="options"/> is <see langword="null"/>.
     /// </exception>
     protected McpClientBase(HttpClient http, McpServerClientOptions options)
+        : this(http, options, null)
+    {
+    }
+
+    /// <summary>
+    /// Internal constructor that accepts a shared <see cref="WorkspacePathHolder"/> so all
+    /// sub-clients created from the same <see cref="McpServerClient"/> read from a single
+    /// workspace-path source of truth.
+    /// </summary>
+    internal McpClientBase(HttpClient http, McpServerClientOptions options, WorkspacePathHolder? sharedHolder)
     {
         _http = http ?? throw new ArgumentNullException(nameof(http));
         if (options is null) throw new ArgumentNullException(nameof(options));
@@ -71,7 +92,10 @@ public abstract class McpClientBase
         _scheme = options.BaseUrl.Scheme;
         _host = options.BaseUrl.Host;
         Port = options.BaseUrl.Port;
-        WorkspacePath = options.WorkspacePath ?? string.Empty;
+
+        _workspacePathHolder = sharedHolder ?? new WorkspacePathHolder();
+        _workspacePathHolder.Path = options.WorkspacePath ?? string.Empty;
+
         // Set ApiKey first, then BearerToken — BearerToken setter clears ApiKey
         // when a JWT is provided, enforcing mutual exclusivity from construction.
         ApiKey = options.ApiKey ?? string.Empty;
@@ -157,11 +181,15 @@ public abstract class McpClientBase
     public bool RequireBearerToken { get; set; }
 
     /// <summary>
-    /// Optional workspace path sent as the <c>X-Workspace-Path</c> header on every request.
-    /// Used for multi-tenant workspace routing. The value is read at call time so it can be
-    /// changed without recreating the client.
+    /// Workspace path sent as the <c>X-Workspace-Path</c> header on every request.
+    /// Backed by a shared <see cref="WorkspacePathHolder"/> so all sub-clients created
+    /// from the same <see cref="McpServerClient"/> read and write the same value.
     /// </summary>
-    public string WorkspacePath { get; set; } = string.Empty;
+    public string WorkspacePath
+    {
+        get => _workspacePathHolder.Path;
+        set => _workspacePathHolder.Path = value ?? string.Empty;
+    }
 
     /// <summary>
     /// TCP port used to construct the base URL for API calls (e.g. <c>http://localhost:{Port}/</c>).

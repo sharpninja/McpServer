@@ -16,6 +16,9 @@ public sealed class SyncClient : McpClientBase
     public SyncClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 
+    internal SyncClient(HttpClient http, McpServerClientOptions options, WorkspacePathHolder holder)
+        : base(http, options, holder) { }
+
     /// <summary>Trigger a full ingestion sync (repo, session logs, external docs).</summary>
     public async Task<SyncRunResult> RunAsync(CancellationToken cancellationToken = default)
     {
