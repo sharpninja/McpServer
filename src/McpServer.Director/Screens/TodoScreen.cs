@@ -83,6 +83,11 @@ internal sealed class TodoScreen : View
             FullRowSelect = true,
             MultiSelect = false,
         };
+        _table.Style.ShowHeaders = true;
+        _table.Style.ShowHorizontalHeaderOverline = true;
+        _table.Style.ShowHorizontalHeaderUnderline = true;
+        _table.Style.ShowVerticalCellLines = true;
+        _table.Style.ShowVerticalHeaderLines = true;
         _table.SelectedCellChanged += (_, _) => QueueSelectedRowDetailRefresh();
         Add(_table);
 
