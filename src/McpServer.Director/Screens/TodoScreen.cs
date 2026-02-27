@@ -91,19 +91,11 @@ internal sealed class TodoScreen : View
         _table.Style.ColumnStyles[0] = new ColumnStyle
         {
             Alignment = Alignment.Center,
-            MinWidth = 6,
-            MaxWidth = 12,
-            RepresentationGetter = v => $" {v} ",
+            MaxWidth = 10,
         };
         _table.Style.ColumnStyles[1] = new ColumnStyle
         {
-            MinWidth = 10,
             MaxWidth = 30,
-            RepresentationGetter = v => $" {v} ",
-        };
-        _table.Style.ColumnStyles[2] = new ColumnStyle
-        {
-            RepresentationGetter = v => $" {v} ",
         };
         _table.SelectedCellChanged += (_, _) => QueueSelectedRowDetailRefresh();
         Add(_table);
@@ -311,8 +303,8 @@ internal sealed class TodoScreen : View
                 dt.Columns.Add("Name", typeof(string));
                 foreach (var r in rows)
                 {
-                    var pri = r.Priority.Length > 10 ? r.Priority[..10] : r.Priority;
-                    var id = r.Id.Length > 28 ? r.Id[..28] : r.Id;
+                    var pri = (r.Priority.Length > 8 ? r.Priority[..8] : r.Priority).PadRight(8);
+                    var id = (r.Id.Length > 28 ? r.Id[..28] : r.Id).PadRight(28);
                     dt.Rows.Add(pri, id, r.Title);
                 }
 
