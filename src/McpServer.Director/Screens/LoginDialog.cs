@@ -61,7 +61,7 @@ internal sealed class LoginDialog : Dialog
             Width = Dim.Fill(2),
             Height = 1,
             ReadOnly = true,
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         Add(_codeField, _uriField, _statusLabel);

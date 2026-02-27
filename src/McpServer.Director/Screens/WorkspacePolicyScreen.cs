@@ -74,7 +74,7 @@ internal sealed class WorkspacePolicyScreen : View
             Width = Dim.Fill(),
             Height = 1,
             ReadOnly = true,
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         Add(statusLabel);
@@ -135,7 +135,7 @@ internal sealed class WorkspacePolicyScreen : View
             Width = Dim.Fill(),
             Height = 4,
             Text = string.Join("\n", collection),
-            WordWrap = false,
+            WordWrap = true,
         };
         Add(textView);
         y += 5;

@@ -38,7 +38,7 @@ internal sealed class SyncScreen : View
             Width = Dim.Fill(),
             Height = 1,
             ReadOnly = true,
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         Add(_statusLabel);

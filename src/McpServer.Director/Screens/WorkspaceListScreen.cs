@@ -91,7 +91,7 @@ internal sealed class WorkspaceListScreen : View
             Width = Dim.Fill(),
             Height = Dim.Fill(3),
             ReadOnly = true,
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         Add(_detailView);

@@ -145,7 +145,7 @@ internal sealed class TodoScreen : View
             Y = 0,
             Width = Dim.Fill(),
             Height = Dim.Fill(),
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         descFrame.Add(_descriptionEditor);
@@ -165,7 +165,7 @@ internal sealed class TodoScreen : View
             Y = 0,
             Width = Dim.Fill(),
             Height = Dim.Fill(),
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         techFrame.Add(_technicalDetailsEditor);
@@ -185,7 +185,7 @@ internal sealed class TodoScreen : View
             Y = 0,
             Width = Dim.Fill(),
             Height = Dim.Fill(),
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         tasksFrame.Add(_implementationTasksEditor);
@@ -219,7 +219,7 @@ internal sealed class TodoScreen : View
             Width = Dim.Fill(),
             Height = 1,
             ReadOnly = true,
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         Add(_statusLabel);
@@ -587,7 +587,7 @@ internal sealed class TodoScreen : View
             Width = Dim.Fill(2),
             Height = Dim.Fill(3),
             ReadOnly = true,
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         dialog.Add(outputView);
@@ -599,7 +599,7 @@ internal sealed class TodoScreen : View
             Width = Dim.Fill(2),
             Height = 1,
             ReadOnly = true,
-            WordWrap = false,
+            WordWrap = true,
             Text = $"Preparing {promptLabel} prompt stream...",
         };
         dialog.Add(statusView);
