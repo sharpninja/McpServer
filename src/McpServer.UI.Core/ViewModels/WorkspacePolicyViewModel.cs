@@ -15,23 +15,31 @@ namespace McpServer.UI.Core.ViewModels;
 public partial class WorkspacePolicyViewModel : ObservableObject
 {
     private readonly Dispatcher _dispatcher;
+    private readonly WorkspaceContextViewModel _workspaceContext;
     private readonly ILogger<WorkspacePolicyViewModel> _logger;
 
 
     /// <summary>Initializes a new <see cref="WorkspacePolicyViewModel"/>.</summary>
     /// <param name="dispatcher">The CQRS dispatcher.</param>
+    /// <param name="workspaceContext">Shared workspace context for reacting to workspace changes.</param>
     /// <param name="logger">Logger instance.</param>
     public WorkspacePolicyViewModel(Dispatcher dispatcher,
+        WorkspaceContextViewModel workspaceContext,
         ILogger<WorkspacePolicyViewModel> logger)
     {
         _logger = logger;
         _dispatcher = dispatcher;
+        _workspaceContext = workspaceContext;
         SaveCommand = new CqrsRelayCommand<bool>(dispatcher, BuildCommand);
+        workspaceContext.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(WorkspaceContextViewModel.ActiveWorkspacePath))
+                OnPropertyChanged(nameof(WorkspacePath));
+        };
     }
 
-    /// <summary>The workspace path to update.</summary>
-    [ObservableProperty]
-    private string _workspacePath = "";
+    /// <summary>The workspace path — delegates to <see cref="WorkspaceContextViewModel"/>.</summary>
+    public string WorkspacePath => _workspaceContext.ActiveWorkspacePath ?? "";
 
     /// <summary>Banned licenses.</summary>
     public ObservableCollection<string> BannedLicenses { get; } = [];

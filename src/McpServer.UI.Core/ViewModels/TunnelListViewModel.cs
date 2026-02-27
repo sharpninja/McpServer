@@ -17,10 +17,16 @@ public sealed partial class TunnelListViewModel : AreaListViewModelBase<TunnelPr
 
     /// <summary>Initializes a new instance of the <see cref="TunnelListViewModel"/> class.</summary>
     public TunnelListViewModel(Dispatcher dispatcher,
+        WorkspaceContextViewModel workspaceContext,
         ILogger<TunnelListViewModel> logger) : base(McpArea.Tunnels)
     {
         _logger = logger;
         _dispatcher = dispatcher;
+        workspaceContext.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(WorkspaceContextViewModel.ActiveWorkspacePath))
+                _ = Task.Run(() => LoadAsync());
+        };
     }
 
     /// <summary>Loads or refreshes the tunnel list.</summary>

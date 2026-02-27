@@ -11,6 +11,7 @@ internal sealed class TodoScreen : View
     private readonly TodoListViewModel _listViewModel;
     private readonly TodoDetailViewModel _detailViewModel;
     private readonly DirectorMcpContext? _directorContext;
+    private volatile bool _isLoadingExplicitly;
     private TableView _table = null!;
     private TextView _detailView = null!;
     private Label _detailTitleLabel = null!;
@@ -53,6 +54,13 @@ internal sealed class TodoScreen : View
         BuildUi();
         _detailViewModel.BeginNewDraft();
         SyncEditorFieldsFromViewModel();
+
+        // When the ViewModel reloads (e.g. workspace change), rebuild the table.
+        _listViewModel.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(TodoListViewModel.LastRefreshedAt) && !_isLoadingExplicitly)
+                RebuildTableFromViewModel();
+        };
     }
 
     private void BuildUi()
@@ -275,71 +283,84 @@ internal sealed class TodoScreen : View
         SetStatus("⏳ Loading TODO items...");
         try
         {
-            var previouslySelectedTodoId = GetSelectedTodoId();
+            _isLoadingExplicitly = true;
             _listViewModel.Section = _sectionFilter?.Text;
             await _listViewModel.LoadAsync().ConfigureAwait(false);
-
-            var allItems = _listViewModel.Items.ToList();
-            var visibleItems = _showCompletedItems
-                ? allItems
-                : allItems.Where(item => !item.Done).ToList();
-
-            var rows = visibleItems
-                .Select(item => new TodoRow(
-                    item.Id,
-                    item.Title,
-                    item.Section,
-                    item.Priority,
-                    item.Done ? "✓" : "○"))
-                .ToList();
-            rows = SortRows(rows);
-            _rows = rows;
-            _lastAutoDetailTodoId = null;
-            var selectedRow = rows.FindIndex(r => string.Equals(r.Id, previouslySelectedTodoId, StringComparison.Ordinal));
-            if (selectedRow < 0 && rows.Count > 0)
-                selectedRow = 0;
-
-            Application.Invoke(() =>
-            {
-                var dt = new System.Data.DataTable();
-                dt.Columns.Add("Pri", typeof(string));
-                dt.Columns.Add("ID", typeof(string));
-                dt.Columns.Add("Name", typeof(string));
-                foreach (var r in rows)
-                {
-                    var pri = (r.Priority.Length > 8 ? r.Priority[..8] : r.Priority).PadRight(8);
-                    var id = (r.Id.Length > 28 ? r.Id[..28] : r.Id).PadRight(28);
-                    var name = r.Title.Length > 60 ? r.Title[..57] + "..." : r.Title;
-                    dt.Rows.Add(pri, id, name);
-                }
-
-                _table.Table = new DataTableSource(dt);
-                _table.SetNeedsDraw();
-
-                if (selectedRow >= 0 && selectedRow < rows.Count)
-                    _table.SelectedRow = selectedRow;
-            });
-            var hiddenCompletedCount = Math.Max(0, allItems.Count - rows.Count);
-            SetStatus(_listViewModel.ErrorMessage is null
-                ? BuildListStatus(rows.Count, allItems.Count, hiddenCompletedCount)
-                : $"✗ {_listViewModel.ErrorMessage}");
-
-            if (_listViewModel.ErrorMessage is null && rows.Count > 0)
-            {
-                await LoadTodoDetailAsync(rows[selectedRow].Id, autoLoaded: true).ConfigureAwait(false);
-            }
-            else if (rows.Count == 0)
-            {
-                ClearDetailPane(_showCompletedItems
-                    ? "Detail: (no TODO items)"
-                    : "Detail: (no open TODO items)");
-                BeginNewDraft();
-            }
+            await RebuildTableFromViewModelAsync().ConfigureAwait(false);
         }
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
             SetStatus($"✗ {ex.Message}");
+        }
+        finally
+        {
+            _isLoadingExplicitly = false;
+        }
+    }
+
+    private void RebuildTableFromViewModel()
+        => _ = Task.Run(() => RebuildTableFromViewModelAsync());
+
+    private async Task RebuildTableFromViewModelAsync()
+    {
+        var previouslySelectedTodoId = GetSelectedTodoId();
+
+        var allItems = _listViewModel.Items.ToList();
+        var visibleItems = _showCompletedItems
+            ? allItems
+            : allItems.Where(item => !item.Done).ToList();
+
+        var rows = visibleItems
+            .Select(item => new TodoRow(
+                item.Id,
+                item.Title,
+                item.Section,
+                item.Priority,
+                item.Done ? "✓" : "○"))
+            .ToList();
+        rows = SortRows(rows);
+        _rows = rows;
+        _lastAutoDetailTodoId = null;
+        var selectedRow = rows.FindIndex(r => string.Equals(r.Id, previouslySelectedTodoId, StringComparison.Ordinal));
+        if (selectedRow < 0 && rows.Count > 0)
+            selectedRow = 0;
+
+        Application.Invoke(() =>
+        {
+            var dt = new System.Data.DataTable();
+            dt.Columns.Add("Pri", typeof(string));
+            dt.Columns.Add("ID", typeof(string));
+            dt.Columns.Add("Name", typeof(string));
+            foreach (var r in rows)
+            {
+                var pri = (r.Priority.Length > 8 ? r.Priority[..8] : r.Priority).PadRight(8);
+                var id = (r.Id.Length > 28 ? r.Id[..28] : r.Id).PadRight(28);
+                var name = r.Title.Length > 60 ? r.Title[..57] + "..." : r.Title;
+                dt.Rows.Add(pri, id, name);
+            }
+
+            _table.Table = new DataTableSource(dt);
+            _table.SetNeedsDraw();
+
+            if (selectedRow >= 0 && selectedRow < rows.Count)
+                _table.SelectedRow = selectedRow;
+        });
+        var hiddenCompletedCount = Math.Max(0, allItems.Count - rows.Count);
+        SetStatus(_listViewModel.ErrorMessage is null
+            ? BuildListStatus(rows.Count, allItems.Count, hiddenCompletedCount)
+            : $"✗ {_listViewModel.ErrorMessage}");
+
+        if (_listViewModel.ErrorMessage is null && rows.Count > 0)
+        {
+            await LoadTodoDetailAsync(rows[selectedRow].Id, autoLoaded: true).ConfigureAwait(false);
+        }
+        else if (rows.Count == 0)
+        {
+            ClearDetailPane(_showCompletedItems
+                ? "Detail: (no TODO items)"
+                : "Detail: (no open TODO items)");
+            BeginNewDraft();
         }
     }
 
@@ -849,7 +870,7 @@ internal sealed class TodoScreen : View
             SortField.Priority => (_sortDescending
                 ? rows.OrderByDescending(r => PriorityRank(r.Priority))
                 : rows.OrderBy(r => PriorityRank(r.Priority)))
-                .ThenBy(r => r.Title, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(r => r.Id, StringComparer.OrdinalIgnoreCase)
                 .ToList(),
             SortField.Id => (_sortDescending
                 ? rows.OrderByDescending(r => r.Id, StringComparer.OrdinalIgnoreCase)

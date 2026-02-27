@@ -47,8 +47,7 @@ internal static class InteractiveCommand
 
             // Build DI container with CQRS + UI Core
             var services = new ServiceCollection();
-            services.AddSingleton<ILoggerFactory>(NullLoggerFactory.Instance);
-            services.AddSingleton(typeof(ILogger<>), typeof(NullLogger<>));
+            services.AddDirectorLogging();
             services.AddCqrs(typeof(Program).Assembly);
             services.AddUiCore();
             services.RemoveAll<IRoleContext>();
@@ -82,6 +81,7 @@ internal static class InteractiveCommand
             var todoVm = sp.GetRequiredService<TodoListViewModel>();
             var todoDetailVm = sp.GetRequiredService<TodoDetailViewModel>();
             var tunnelListVm = sp.GetRequiredService<TunnelListViewModel>();
+            var workspaceContextVm = sp.GetRequiredService<WorkspaceContextViewModel>();
             var roleContext = sp.GetRequiredService<IRoleContext>();
             var authorizationPolicy = sp.GetRequiredService<IAuthorizationPolicyService>();
 
@@ -103,6 +103,7 @@ internal static class InteractiveCommand
                     todoVm,
                     todoDetailVm,
                     tunnelListVm,
+                    workspaceContextVm,
                     authorizationPolicy,
                     roleContext,
                     directorContext,

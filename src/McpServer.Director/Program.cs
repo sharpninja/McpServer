@@ -57,8 +57,7 @@ internal static class Program
     private static ServiceProvider BuildServiceProvider(string? workspace = null)
     {
         var services = new ServiceCollection();
-        services.AddSingleton<ILoggerFactory>(NullLoggerFactory.Instance);
-        services.AddSingleton(typeof(ILogger<>), typeof(NullLogger<>));
+        services.AddDirectorLogging();
         services.AddCqrs(typeof(Program).Assembly);
         services.AddUiCore();
         services.RemoveAll<IRoleContext>();

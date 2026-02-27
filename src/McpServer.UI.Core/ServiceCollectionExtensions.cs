@@ -34,6 +34,9 @@ public static class ServiceCollectionExtensions
         services.TryAddSingleton<IRoleContext, AllowAllRoleContext>();
         services.TryAddSingleton<IAuthorizationPolicyService, AllowAllAuthorizationPolicyService>();
 
+        // Register shared workspace context as singleton so all ViewModels observe the same instance
+        services.AddSingleton<WorkspaceContextViewModel>();
+
         // Register ViewModels as transient
         services.AddTransient<WorkspaceListViewModel>();
         services.AddTransient<WorkspaceDetailViewModel>();

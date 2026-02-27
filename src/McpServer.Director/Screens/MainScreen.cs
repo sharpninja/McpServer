@@ -28,6 +28,7 @@ internal sealed class MainScreen : Window
     private readonly WorkspaceDetailViewModel _workspaceDetailVm;
     private readonly WorkspacePolicyViewModel _workspacePolicyVm;
     private readonly TunnelListViewModel _tunnelListVm;
+    private readonly WorkspaceContextViewModel _workspaceContextVm;
     private Label _authLabel = null!;
     private TabView _tabView = null!;
     private Label _workspaceContextLabel = null!;
@@ -48,6 +49,7 @@ internal sealed class MainScreen : Window
         TodoListViewModel todoVm,
         TodoDetailViewModel todoDetailVm,
         TunnelListViewModel tunnelListVm,
+        WorkspaceContextViewModel workspaceContextVm,
         IAuthorizationPolicyService authorizationPolicy,
         IRoleContext roleContext,
         DirectorMcpContext directorContext,
@@ -64,6 +66,7 @@ internal sealed class MainScreen : Window
         _workspaceDetailVm = workspaceDetailVm;
         _workspacePolicyVm = workspacePolicyVm;
         _tunnelListVm = tunnelListVm;
+        _workspaceContextVm = workspaceContextVm;
         _authorizationPolicy = authorizationPolicy;
         _roleContext = roleContext;
         _directorContext = directorContext;
@@ -74,6 +77,10 @@ internal sealed class MainScreen : Window
         Height = Dim.Fill();
 
         BuildUi();
+
+        // Seed the shared workspace context from the initial active workspace (e.g. from marker file).
+        // Done after BuildUi so screen PropertyChanged subscriptions are active.
+        _workspaceContextVm.ActiveWorkspacePath = _directorContext.ActiveWorkspacePath;
     }
 
     private void BuildUi()
@@ -139,9 +146,9 @@ internal sealed class MainScreen : Window
                 UpdateWorkspaceContextStatus();
             });
 
-            _workspacePolicyVm.WorkspacePath = _directorContext.ActiveWorkspacePath ?? "";
-            if (_tabView.SelectedTab?.View is not WorkspaceListScreen)
-                RefreshCurrentTab();
+            // Propagate workspace change to the shared ViewModel;
+            // subscribed ViewModels react and refresh themselves.
+            _workspaceContextVm.ActiveWorkspacePath = _directorContext.ActiveWorkspacePath;
         };
         _workspaceListVm.Workspaces.CollectionChanged += (_, _) =>
         {
@@ -615,7 +622,11 @@ internal sealed class MainScreen : Window
         if (_workspacePickerSource.Count == 0)
             return;
 
-        var preferred = _workspaceListVm.Workspaces.FirstOrDefault(w => w.IsPrimary)?.WorkspacePath
+        // Prefer the workspace matching CWD over the primary workspace.
+        var cwd = Directory.GetCurrentDirectory();
+        var preferred = _workspaceListVm.Workspaces.FirstOrDefault(w =>
+                            string.Equals(w.WorkspacePath, cwd, StringComparison.OrdinalIgnoreCase))?.WorkspacePath
+                        ?? _workspaceListVm.Workspaces.FirstOrDefault(w => w.IsPrimary)?.WorkspacePath
                         ?? _workspaceListVm.Workspaces.FirstOrDefault()?.WorkspacePath;
         if (string.IsNullOrWhiteSpace(preferred))
             return;
