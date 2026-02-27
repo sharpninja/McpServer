@@ -297,24 +297,18 @@ internal sealed class TodoScreen : View
 
             Application.Invoke(() =>
             {
-                _table.Table = new EnumerableTableSource<TodoRow>(rows,
-                    new Dictionary<string, Func<TodoRow, object>>
-                    {
-                        ["ID"] = r => r.Id,
-                        ["Name"] = r => r.Title,
-                        ["Priority"] = r => r.Priority,
-                    });
+                var dt = new System.Data.DataTable();
+                dt.Columns.Add("ID", typeof(string));
+                dt.Columns.Add("Name", typeof(string));
+                dt.Columns.Add("Priority", typeof(string));
+                foreach (var r in rows)
+                    dt.Rows.Add(r.Id, r.Title, r.Priority);
+
+                _table.Table = new DataTableSource(dt);
                 _table.Style.ColumnStyles.Clear();
-                var colNames = _table.Table.ColumnNames.ToList();
-                var idIdx = colNames.IndexOf("ID");
-                var nameIdx = colNames.IndexOf("Name");
-                var priIdx = colNames.IndexOf("Priority");
-                if (idIdx >= 0)
-                    _table.Style.ColumnStyles[idIdx] = new ColumnStyle { MaxWidth = 30, MinWidth = 10 };
-                if (nameIdx >= 0)
-                    _table.Style.ColumnStyles[nameIdx] = new ColumnStyle { MinWidth = 20 };
-                if (priIdx >= 0)
-                    _table.Style.ColumnStyles[priIdx] = new ColumnStyle { Alignment = Alignment.End, MaxWidth = 10, MinWidth = 8 };
+                _table.Style.ColumnStyles[0] = new ColumnStyle { MaxWidth = 28 };
+                _table.Style.ColumnStyles[2] = new ColumnStyle { Alignment = Alignment.End, MaxWidth = 10 };
+                _table.Style.ExpandLastColumn = false;
 
                 if (selectedRow >= 0 && selectedRow < rows.Count)
                     _table.SelectedRow = selectedRow;
