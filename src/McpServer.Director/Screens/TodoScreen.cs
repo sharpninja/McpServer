@@ -300,13 +300,14 @@ internal sealed class TodoScreen : View
                 var dt = new System.Data.DataTable();
                 dt.Columns.Add("ID", typeof(string));
                 dt.Columns.Add("Name", typeof(string));
-                dt.Columns.Add("Priority", typeof(string));
+                dt.Columns.Add("Pri", typeof(string));
                 foreach (var r in rows)
                     dt.Rows.Add(r.Id, r.Title, r.Priority);
 
                 _table.Table = new DataTableSource(dt);
                 _table.Style.ColumnStyles.Clear();
-                _table.Style.ColumnStyles[0] = new ColumnStyle { MaxWidth = 28 };
+                _table.Style.ColumnStyles[0] = new ColumnStyle { MaxWidth = 25 };
+                _table.Style.ColumnStyles[1] = new ColumnStyle { MaxWidth = 50 };
                 _table.Style.ColumnStyles[2] = new ColumnStyle { Alignment = Alignment.End, MaxWidth = 10 };
                 _table.Style.ExpandLastColumn = false;
 
