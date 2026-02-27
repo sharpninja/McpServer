@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.Client;
 
@@ -37,6 +38,7 @@ public abstract class McpClientBase
     private readonly HttpClient _http;
     private readonly string _scheme;
     private readonly string _host;
+    private readonly ILogger? _logger;
 
     /// <summary>
     /// Initializes a new instance of the sub-client, extracting scheme, host, and port
@@ -60,6 +62,8 @@ public abstract class McpClientBase
     {
         _http = http ?? throw new ArgumentNullException(nameof(http));
         if (options is null) throw new ArgumentNullException(nameof(options));
+
+        _logger = options.LoggerFactory?.CreateLogger(GetType().Name);
 
         if (_http.DefaultRequestHeaders.UserAgent.Count == 0)
             _http.DefaultRequestHeaders.UserAgent.ParseAdd("McpServer");
@@ -227,8 +231,8 @@ public abstract class McpClientBase
             request.Headers.TryAddWithoutValidation("X-Workspace-Path", WorkspacePath);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-        System.Diagnostics.Trace.TraceInformation(
-            $"[McpClient] {method} {uri} | Auth={authMode} | WorkspacePath={WorkspacePath ?? "(none)"}");
+        _logger?.LogInformation("[McpClient] {Method} {Uri} | Auth={AuthMode} | WorkspacePath={WorkspacePath}",
+            method, uri, authMode, WorkspacePath ?? "(none)");
 
         if (body is not null)
             request.Content = new StringContent(
@@ -241,15 +245,14 @@ public abstract class McpClientBase
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Trace.TraceError(
-                $"[McpClient] NETWORK ERROR {method} {uri}: {ex.GetType().Name}: {ex.Message}");
+            _logger?.LogError(ex, "[McpClient] NETWORK ERROR {Method} {Uri}", method, uri);
             throw;
         }
 
         using (response)
         {
-            System.Diagnostics.Trace.TraceInformation(
-                $"[McpClient] {method} {uri} → HTTP {(int)response.StatusCode}");
+            _logger?.LogInformation("[McpClient] {Method} {Uri} → HTTP {StatusCode}",
+                method, uri, (int)response.StatusCode);
             return await ReadResponseAsync<T>(response, cancellationToken).ConfigureAwait(false);
         }
     }
@@ -354,9 +357,8 @@ public abstract class McpClientBase
             if (doc.RootElement.TryGetProperty("errorMessage", out var errMsg))
                 return errMsg.GetString();
         }
-        catch (JsonException ex)
+        catch (JsonException)
         {
-            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             // Not JSON — use raw content.
         }
         return null;

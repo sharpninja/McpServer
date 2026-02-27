@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.Client;
 
@@ -68,4 +69,11 @@ public sealed class McpServerClientOptions
     /// ignored — configure the timeout directly on your <see cref="System.Net.Http.HttpClient"/> instead.
     /// </remarks>
     public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(30);
+
+    /// <summary>
+    /// Optional logger factory for diagnostic logging. When set, each sub-client creates
+    /// its own <see cref="ILogger"/> via <see cref="ILoggerFactory.CreateLogger(string)"/>.
+    /// When <see langword="null"/>, diagnostic messages are silently discarded.
+    /// </summary>
+    public ILoggerFactory? LoggerFactory { get; set; }
 }
