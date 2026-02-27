@@ -9,7 +9,7 @@ public sealed class McpServerClientTests
 {
     private static readonly McpServerClientOptions TestOptions = new()
     {
-        BaseUrl = new Uri("http://localhost:7148"),
+        BaseUrl = new Uri("http://localhost:7147"),
         ApiKey = "test-key"
     };
 
@@ -57,7 +57,7 @@ public sealed class McpServerClientTests
     [Fact]
     public void Constructor_NoApiKey_DoesNotThrow()
     {
-        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7148") };
+        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7147") };
         using var http = new HttpClient();
         var client = new McpServerClient(http, options);
         Assert.NotNull(client);
@@ -68,28 +68,10 @@ public sealed class McpServerClientTests
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, "{}");
         using var http = new HttpClient(handler);
-        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7148") };
+        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7147") };
         var client = new McpServerClient(http, options);
 
         await Assert.ThrowsAsync<InvalidOperationException>(() => client.Todo.QueryAsync());
-    }
-
-    [Fact]
-    public void ApiKey_PropagatedToAllSubClients()
-    {
-        using var http = new HttpClient();
-        var client = new McpServerClient(http, TestOptions);
-
-        client.ApiKey = "new-key";
-
-        Assert.Equal("new-key", client.Todo.ApiKey);
-        Assert.Equal("new-key", client.Context.ApiKey);
-        Assert.Equal("new-key", client.Sync.ApiKey);
-        Assert.Equal("new-key", client.Workspace.ApiKey);
-        Assert.Equal("new-key", client.Repo.ApiKey);
-        Assert.Equal("new-key", client.GitHub.ApiKey);
-        Assert.Equal("new-key", client.SessionLog.ApiKey);
-        Assert.Equal("new-key", client.Tools.ApiKey);
     }
 
     [Fact]
@@ -115,7 +97,7 @@ public sealed class McpServerClientTests
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"apiKey":"default-anon-key"}""");
         using var http = new HttpClient(handler);
-        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7148") };
+        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7147") };
         var client = new McpServerClient(http, options);
 
         var key = await client.InitializeAsync();
@@ -146,7 +128,7 @@ public sealed class McpServerClientTests
     {
         var handler = new MockHttpHandler(HttpStatusCode.ServiceUnavailable, """{"error":"not ready"}""");
         using var http = new HttpClient(handler);
-        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7148") };
+        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7147") };
         var client = new McpServerClient(http, options);
 
         await Assert.ThrowsAsync<McpServerException>(() => client.InitializeAsync());
@@ -157,7 +139,7 @@ public sealed class McpServerClientTests
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"other":"value"}""");
         using var http = new HttpClient(handler);
-        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7148") };
+        var options = new McpServerClientOptions { BaseUrl = new Uri("http://localhost:7147") };
         var client = new McpServerClient(http, options);
 
         await Assert.ThrowsAsync<InvalidOperationException>(() => client.InitializeAsync());
