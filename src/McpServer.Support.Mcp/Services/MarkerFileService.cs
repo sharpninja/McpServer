@@ -35,21 +35,37 @@ public static class MarkerFileService
 
         On your FIRST interaction each session:
         1. Read this marker file
-        2. GET {{baseUrl}}/health to verify the server is running
-        3. GET {{baseUrl}}/mcp/sessionlog?limit=5 to review recent session history
-        4. GET {{baseUrl}}/mcp/todo to review current tasks
-        5. POST {{baseUrl}}/mcp/sessionlog with a new session (status: "in_progress", sourceType: your agent name)
+        2. **Bootstrap helper modules** — download `McpSession-PowerShell` and `McpTodo-PowerShell` from the
+           Tool Registry (see "Module Bootstrap" below), import and initialize them.
+           `Initialize-McpSession` verifies server health automatically.
+           If module download fails, fall back to raw API calls for the remaining steps.
+        3. Review recent session history: `Get-McpSessionLog -Limit 5` (PS) / `mcp_session_query 5` (Bash)
+        4. Review current tasks: `Get-McpTodo` (PS) / `mcp_todo_list` (Bash)
+        5. Create session log: `New-McpSessionLog -SourceType "YourAgent" -Title "..." -Model "..."`
+           (PS) / `mcp_session_create "YourAgent" "..." "..."` (Bash)
         6. THEN begin working on the user's request
 
         On EVERY subsequent interaction:
-        1. POST an updated session log entry BEFORE starting work
+        1. Add a session entry BEFORE starting work:
+           `Add-McpSessionEntry -Session $s -QueryTitle "..." -QueryText "..."` (PS)
+           / `mcp_session_add_entry "req-NNN" "..." "..." "in_progress"` (Bash)
         2. Complete the user's request
-        3. POST the final updated session log with results, actions taken, and files modified
+        3. Update the entry with results and push:
+           `Set-McpSessionEntry -Entry $e -Session $s -Response "..." -Status completed` (PS)
+           / `mcp_session_update_entry "req-NNN" "status" "completed"` (Bash)
 
-        If the session log POST fails (e.g., 401), re-read this marker file for a fresh API key and retry.
+        If module initialization or session log push fails (e.g., 401), re-read this marker file for a fresh
+        API key, re-initialize the modules, and retry.
         **Failure to maintain the session log is a compliance violation. Every interaction must be logged.**
 
-        See the "Session Logging Details" section below for the full payload schema.
+        See the "Module Bootstrap" and "Session Logging Details" sections below for setup and schema.
+
+        ## ⚠️ MODULE-FIRST POLICY — NON-NEGOTIABLE ⚠️
+
+        **All session log and TODO operations MUST use the McpSession and McpTodo helper modules.**
+        Raw `Invoke-RestMethod` / `curl` calls to `/mcp/sessionlog` and `/mcp/todo` endpoints are permitted
+        ONLY as a fallback when module download or import fails.
+        Agents using raw API calls when modules are available are non-compliant.
 
         ## Owner Values and Agent Conduct (MANDATORY)
 
@@ -190,12 +206,12 @@ public static class MarkerFileService
         Before making API calls, verify the server is running: GET {{baseUrl}}/health — returns {"status":"healthy"}.
 
         ## Session Logging Details (REQUIRED — SEE PRECONDITION ABOVE)
-        You MUST log every request you process to the session log endpoint. This is critical for audit, continuity, and team visibility.
-        **Reminder: Your first action on each user request is POST {{baseUrl}}/mcp/sessionlog — before any code changes.**
+        You MUST log every request you process to the session log. This is critical for audit, continuity, and team visibility.
+        **Reminder: Your first action on each user request is `Add-McpSessionEntry` (or `mcp_session_add_entry`) — before any code changes.**
 
-        Do NOT invent your own tracking methodology. Use these endpoints exactly as documented below.
+        Do NOT invent your own tracking methodology. Use the McpSession module (or the endpoints below as fallback).
 
-        ### Session Log Endpoints
+        ### Session Log Endpoints (Reference — prefer module cmdlets)
 
         | Method | Endpoint | Description |
         |--------|----------|-------------|
@@ -263,51 +279,91 @@ public static class MarkerFileService
         }
         ```
 
-        ### Session Logging — Use the McpSession Module
+        ### Module Bootstrap (REQUIRED — Do This at Session Start)
 
-        Helper modules are registered in the MCP Tool Registry. Search for them:
-        ```powershell
-        # Discover available modules
-        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/tools/search?keyword=session" -Headers @{ "X-Api-Key" = "{{apiKey}}" }
-        ```
+        Helper modules are registered in the MCP Tool Registry. Download, import, and initialize them
+        **before any session log or TODO operations**:
 
-        **PowerShell (recommended):** Download `McpSession-PowerShell` from the tool registry, save as `McpSession.psm1`:
         ```powershell
+        # 1. Discover and download modules from the Tool Registry
+        $headers = @{ "X-Api-Key" = "{{apiKey}}" }
+        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/tools/search?keyword=session" -Headers $headers
+        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/tools/search?keyword=todo" -Headers $headers
+        # Save the downloaded files as McpSession.psm1 and McpTodo.psm1
+
+        # 2. Import and initialize
         Import-Module ./McpSession.psm1
-        Initialize-McpSession                                    # reads this marker file automatically
-        $s = New-McpSessionLog -SourceType "Copilot" -Title "Implementing feature X" -Model "claude-sonnet-4"
-        $e = Add-McpSessionEntry -Session $s -QueryTitle "Add auth" -QueryText "Add JWT authentication"
-        Add-McpAction -Entry $e -Description "Created TokenService" -Type create -FilePath "src/TokenService.cs"
-        Set-McpSessionEntry -Entry $e -Session $s -Response "Done" -Status completed
-        Update-McpSessionLog -Session $s -Status completed       # final push
+        Import-Module ./McpTodo.psm1
+        Initialize-McpSession          # reads marker file, verifies server health
+        Initialize-McpTodo             # reads marker file, verifies server health
         ```
 
-        **Bash:** Download `McpSession-Bash`, save as `mcp-session.sh` (requires `jq`):
         ```bash
-        source ./mcp-session.sh
-        mcp_session_init
+        # Bash equivalent
+        source ./mcp-session.sh && mcp_session_init
+        source ./mcp-todo.sh   && mcp_todo_init
+        ```
+
+        If module download fails, fall back to raw API calls (see "Raw API Fallback" sections below).
+
+        ### Session Logging — McpSession Module (REQUIRED)
+
+        **You MUST use these cmdlets for all session log operations.** Raw API calls are only permitted
+        when module import fails.
+
+        **PowerShell — Full session lifecycle:**
+        ```powershell
+        # Query recent logs at session start
+        Get-McpSessionLog -Limit 5
+
+        # Create session
+        $s = New-McpSessionLog -SourceType "Copilot" -Title "Implementing feature X" -Model "claude-sonnet-4"
+
+        # Add entry for each user request
+        $e = Add-McpSessionEntry -Session $s -QueryTitle "Add auth" -QueryText "Add JWT authentication"
+
+        # Record actions during work
+        Add-McpAction -Entry $e -Description "Created TokenService" -Type create -FilePath "src/TokenService.cs"
+
+        # Stream reasoning dialog as you work
+        Send-McpDialog -Session $s -RequestId $e.requestId -Content "Analyzing the issue..." -Category reasoning
+
+        # Complete the entry
+        Set-McpSessionEntry -Entry $e -Session $s -Response "Done" -Status completed
+
+        # Final push at session end
+        Update-McpSessionLog -Session $s -Status completed
+        ```
+
+        **Bash — Full session lifecycle:**
+        ```bash
+        # Query recent logs at session start
+        mcp_session_query 5
+
+        # Create session
         mcp_session_create "Copilot" "Implementing feature X" "claude-sonnet-4"
+
+        # Add entry, record actions, stream dialog, complete
         mcp_session_add_entry "req-001" "Add auth" "Add JWT authentication" "in_progress"
         mcp_session_add_action "req-001" "Created TokenService" "create" "src/TokenService.cs"
+        mcp_session_send_dialog "req-001" "Analyzing the issue..." "reasoning"
         mcp_session_update_entry "req-001" "status" "completed"
         mcp_session_complete
         ```
 
-        **Raw API (if modules unavailable):**
+        **Raw API Fallback (ONLY if modules are unavailable):**
         ```powershell
         $headers = @{ "X-Api-Key" = "{{apiKey}}"; "Content-Type" = "application/json" }
-        # Query recent logs at session start
         Invoke-RestMethod -Uri "{{baseUrl}}/mcp/sessionlog?limit=5" -Headers $headers
-        # POST session log — see object models above for full schema
         Invoke-RestMethod -Uri "{{baseUrl}}/mcp/sessionlog" -Method Post -Headers $headers -Body ($sessionObject | ConvertTo-Json -Depth 10)
         ```
 
         ## Todo Management (REQUIRED)
-        Use the Todo API to track, create, and update project tasks. Do NOT use your own internal tracking
+        Use the McpTodo module to track, create, and update project tasks. Do NOT use your own internal tracking
         as a substitute — the MCP server todo list is the single source of truth for project work items.
-        At session start, query existing todos to understand current project state.
+        At session start, query existing todos: `Get-McpTodo` (PS) / `mcp_todo_list` (Bash).
 
-        ### Todo Endpoints
+        ### Todo Endpoints (Reference — prefer module cmdlets)
 
         | Method | Endpoint | Description |
         |--------|----------|-------------|
@@ -389,45 +445,60 @@ public static class MarkerFileService
         }
         ```
 
-        ### Todo Management — Use the McpTodo Module
+        ### Todo Management — McpTodo Module (REQUIRED)
 
-        Helper modules are registered in the MCP Tool Registry. Search for them:
-        ```powershell
-        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/tools/search?keyword=todo" -Headers @{ "X-Api-Key" = "{{apiKey}}" }
-        ```
+        **You MUST use these cmdlets for all TODO operations.** Raw API calls are only permitted
+        when module import fails. Module bootstrap is covered in "Module Bootstrap" above.
 
-        **PowerShell (recommended):** Download `McpTodo-PowerShell` from the tool registry, save as `McpTodo.psm1`:
+        **PowerShell — Full TODO lifecycle:**
         ```powershell
-        Import-Module ./McpTodo.psm1
-        Initialize-McpTodo                                       # reads this marker file automatically
-        Get-McpTodoList | Format-Table id, title, priority, done # list todos at session start
+        # List todos at session start
+        Get-McpTodo | Format-Table id, title, priority, done
+
+        # Get a specific todo
+        Get-McpTodo -Id "add-jwt-auth"
+
+        # Create a new todo
         New-McpTodo -Id "add-jwt-auth" -Title "Add JWT auth" -Section "Backend" -Priority high `
           -Description @("Implement JWT bearer tokens") -Estimate "4h"
-        Update-McpTodo -Id "add-jwt-auth" -Done $true -DoneSummary "JWT auth complete"
-        Get-McpTodoPrompt -Id "add-jwt-auth" -PromptType implement  # get implementation guidance
+
+        # Update fields
+        Update-McpTodo -Id "add-jwt-auth" -Remaining "Need tests"
+
+        # Mark complete
+        Complete-McpTodo -Id "add-jwt-auth" -DoneSummary "JWT auth complete"
+
+        # Get implementation guidance
+        Get-McpTodoPrompt -Id "add-jwt-auth" -Type implement
+
+        # Add requirements
+        Add-McpTodoRequirements -Id "add-jwt-auth" -FunctionalRequirements @("FR-AUTH-001") `
+          -TechnicalRequirements @("TR-AUTH-001")
+
+        # Delete
+        Remove-McpTodo -Id "add-jwt-auth"
         ```
 
-        **Bash:** Download `McpTodo-Bash`, save as `mcp-todo.sh` (requires `jq`):
+        **Bash — Full TODO lifecycle:**
         ```bash
         source ./mcp-todo.sh
         mcp_todo_init
         mcp_todo_list | jq '.items[] | {id, title, done}'
+        mcp_todo_get "add-jwt-auth"
         mcp_todo_create "add-jwt-auth" "Add JWT auth" "Backend" "high" '{"estimate":"4h"}'
-        mcp_todo_update "add-jwt-auth" '{"done":true,"doneSummary":"JWT auth complete"}'
+        mcp_todo_update "add-jwt-auth" '{"remaining":"Need tests"}'
+        mcp_todo_complete "add-jwt-auth" "JWT auth complete"
         mcp_todo_prompt "add-jwt-auth" "implement"
+        mcp_todo_add_requirements "add-jwt-auth" '{"functionalRequirements":["FR-AUTH-001"]}'
+        mcp_todo_delete "add-jwt-auth"
         ```
 
-        **Raw API (if modules unavailable):**
+        **Raw API Fallback (ONLY if modules are unavailable):**
         ```powershell
         $headers = @{ "X-Api-Key" = "{{apiKey}}"; "Content-Type" = "application/json" }
-        # List todos at session start
         Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo" -Headers $headers | % items | Format-Table id, title, done
-        # Create — see object models above for full schema
         Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo" -Method Post -Headers $headers -Body ($todoObject | ConvertTo-Json -Depth 5)
-        # Update
         Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo/add-jwt-auth" -Method Put -Headers $headers -Body '{"done":true}'
-        # Get implementation prompt
-        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo/add-jwt-auth/prompt/implement" -Headers $headers
         ```
 
         ## Available Capabilities
@@ -525,7 +596,7 @@ public static class MarkerFileService
         - `policy_change` — workspace policy configuration change
 
         **THESE RULES MUST BE ADHERED TO AND THIS MARKER READ ON EACH NEW REQUEST BY THE USER.**
-        **REMINDER: Your FIRST action on every user request is POST {{baseUrl}}/mcp/sessionlog. Do not skip this.**
+        **REMINDER: Your FIRST action on every user request is `Add-McpSessionEntry` (or `mcp_session_add_entry`). Do not skip this.**
         """;
 
     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
