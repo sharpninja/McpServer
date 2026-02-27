@@ -184,9 +184,7 @@ internal sealed class MainScreen : Window
                 if (!_directorContext.HasControlConnection)
                     return;
 
-                // Load health + workspaces on startup
-                if (_tabView.Tabs.FirstOrDefault()?.View is HealthScreen hs)
-                    await hs.CheckHealthAsync().ConfigureAwait(false);
+                // Load workspaces and auto-select context first
                 if (_authorizationPolicy.CanViewArea(McpArea.Workspaces))
                 {
                     await _workspaceListVm.LoadAsync().ConfigureAwait(false);
@@ -196,6 +194,9 @@ internal sealed class MainScreen : Window
                         TryAutoSelectWorkspaceContext();
                     });
                 }
+
+                // Refresh the initially selected tab after workspace context is settled
+                Application.Invoke(RefreshCurrentTab);
             });
         };
     }
