@@ -305,10 +305,16 @@ internal sealed class TodoScreen : View
                         ["Priority"] = r => r.Priority,
                     });
                 _table.Style.ColumnStyles.Clear();
-                var priIdx = _table.Table.ColumnNames.ToList().IndexOf("Priority");
+                var colNames = _table.Table.ColumnNames.ToList();
+                var idIdx = colNames.IndexOf("ID");
+                var nameIdx = colNames.IndexOf("Name");
+                var priIdx = colNames.IndexOf("Priority");
+                if (idIdx >= 0)
+                    _table.Style.ColumnStyles[idIdx] = new ColumnStyle { MaxWidth = 30, MinWidth = 10 };
+                if (nameIdx >= 0)
+                    _table.Style.ColumnStyles[nameIdx] = new ColumnStyle { MinWidth = 20 };
                 if (priIdx >= 0)
-                    _table.Style.ColumnStyles.Add(priIdx,
-                        new ColumnStyle { Alignment = Alignment.End });
+                    _table.Style.ColumnStyles[priIdx] = new ColumnStyle { Alignment = Alignment.End, MaxWidth = 10, MinWidth = 8 };
 
                 if (selectedRow >= 0 && selectedRow < rows.Count)
                     _table.SelectedRow = selectedRow;

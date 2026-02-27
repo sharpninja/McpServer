@@ -157,6 +157,16 @@ internal sealed class ViewModelBinder : IDisposable
                 view.HorizontalScrollBar.AutoShow = true;
             }
 
+            // TabView tab content isn't in the normal Subviews tree
+            if (view is TabView tabView)
+            {
+                foreach (var tab in tabView.Tabs)
+                {
+                    if (tab.View is not null)
+                        EnableScrollBars(tab.View);
+                }
+            }
+
             EnableScrollBars(view);
         }
     }
