@@ -314,6 +314,7 @@ internal sealed class TodoScreen : View
                 }
 
                 _table.Table = new DataTableSource(dt);
+                _table.SetNeedsDraw();
 
                 if (selectedRow >= 0 && selectedRow < rows.Count)
                     _table.SelectedRow = selectedRow;
@@ -766,6 +767,7 @@ internal sealed class TodoScreen : View
     {
         Application.Invoke(() =>
         {
+            _idField.ReadOnly = !_detailViewModel.IsNewDraft;
             _idField.Text = _detailViewModel.EditorId ?? "";
             _titleField.Text = _detailViewModel.EditorTitle ?? "";
             _editorSectionField.Text = _detailViewModel.EditorSection ?? "";

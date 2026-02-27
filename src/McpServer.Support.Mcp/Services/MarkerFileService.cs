@@ -38,7 +38,7 @@ public static class MarkerFileService
         2. **Bootstrap helper modules** — download `McpSession-PowerShell` and `McpTodo-PowerShell` from the
            Tool Registry (see "Module Bootstrap" below), import and initialize them.
            `Initialize-McpSession` verifies server health automatically.
-           If module download fails, fall back to raw API calls for the remaining steps.
+           Module usage is **mandatory** — do NOT use raw API calls.
         3. Review recent session history: `Get-McpSessionLog -Limit 5` (PS) / `mcp_session_query 5` (Bash)
         4. Review current tasks: `Get-McpTodo` (PS) / `mcp_todo_list` (Bash)
         5. Create session log: `New-McpSessionLog -SourceType "YourAgent" -Title "..." -Model "..."`
@@ -63,9 +63,10 @@ public static class MarkerFileService
         ## ⚠️ MODULE-FIRST POLICY — NON-NEGOTIABLE ⚠️
 
         **All session log and TODO operations MUST use the McpSession and McpTodo helper modules.**
-        Raw `Invoke-RestMethod` / `curl` calls to `/mcp/sessionlog` and `/mcp/todo` endpoints are permitted
-        ONLY as a fallback when module download or import fails.
-        Agents using raw API calls when modules are available are non-compliant.
+        Using the helper modules is NOT optional. Raw `Invoke-RestMethod` / `curl` calls to
+        `/mcp/sessionlog` and `/mcp/todo` endpoints are NOT permitted.
+        The modules handle workspace routing (X-Workspace-Path header) automatically — raw calls will
+        target the wrong workspace. Agents bypassing the modules are non-compliant.
 
         ## Owner Values and Agent Conduct (MANDATORY)
 
@@ -304,12 +305,11 @@ public static class MarkerFileService
         source ./mcp-todo.sh   && mcp_todo_init
         ```
 
-        If module download fails, fall back to raw API calls (see "Raw API Fallback" sections below).
+        If module download fails, retry with exponential backoff. Do NOT fall back to raw API calls.
 
         ### Session Logging — McpSession Module (REQUIRED)
 
-        **You MUST use these cmdlets for all session log operations.** Raw API calls are only permitted
-        when module import fails.
+        **You MUST use these cmdlets for all session log operations.** Raw API calls are NOT permitted.
 
         **PowerShell — Full session lifecycle:**
         ```powershell
@@ -349,13 +349,6 @@ public static class MarkerFileService
         mcp_session_send_dialog "req-001" "Analyzing the issue..." "reasoning"
         mcp_session_update_entry "req-001" "status" "completed"
         mcp_session_complete
-        ```
-
-        **Raw API Fallback (ONLY if modules are unavailable):**
-        ```powershell
-        $headers = @{ "X-Api-Key" = "{{apiKey}}"; "Content-Type" = "application/json" }
-        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/sessionlog?limit=5" -Headers $headers
-        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/sessionlog" -Method Post -Headers $headers -Body ($sessionObject | ConvertTo-Json -Depth 10)
         ```
 
         ## Todo Management (REQUIRED)
@@ -447,8 +440,8 @@ public static class MarkerFileService
 
         ### Todo Management — McpTodo Module (REQUIRED)
 
-        **You MUST use these cmdlets for all TODO operations.** Raw API calls are only permitted
-        when module import fails. Module bootstrap is covered in "Module Bootstrap" above.
+        **You MUST use these cmdlets for all TODO operations.** Raw API calls are NOT permitted.
+        Module bootstrap is covered in "Module Bootstrap" above.
 
         **PowerShell — Full TODO lifecycle:**
         ```powershell
@@ -493,12 +486,14 @@ public static class MarkerFileService
         mcp_todo_delete "add-jwt-auth"
         ```
 
-        **Raw API Fallback (ONLY if modules are unavailable):**
+        **Raw API Reference (for understanding only — do NOT use directly):**
         ```powershell
-        $headers = @{ "X-Api-Key" = "{{apiKey}}"; "Content-Type" = "application/json" }
-        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo" -Headers $headers | % items | Format-Table id, title, done
-        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo" -Method Post -Headers $headers -Body ($todoObject | ConvertTo-Json -Depth 5)
-        Invoke-RestMethod -Uri "{{baseUrl}}/mcp/todo/add-jwt-auth" -Method Put -Headers $headers -Body '{"done":true}'
+        # These endpoints exist but MUST be accessed through the modules, not raw calls.
+        # The modules automatically include the X-Workspace-Path header for correct workspace routing.
+        # GET  {{baseUrl}}/mcp/todo              — list todos
+        # POST {{baseUrl}}/mcp/todo              — create todo
+        # PUT  {{baseUrl}}/mcp/todo/{id}         — update todo
+        # DELETE {{baseUrl}}/mcp/todo/{id}       — delete todo
         ```
 
         ## Available Capabilities

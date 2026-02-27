@@ -68,8 +68,8 @@ Write-Host "  Package version: $packageVersion" -ForegroundColor Green
 
 # 3. Kill running director
 Write-Step "3/6  Stopping running director ..."
-$procs = Get-Process -Name $ToolCommand -ErrorAction SilentlyContinue
-if ($procs) {
+$procs = @(Get-Process -Name $ToolCommand -ErrorAction SilentlyContinue)
+if ($procs.Count -gt 0) {
     foreach ($p in $procs) { Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue }
     Start-Sleep -Seconds 1
     Write-Host "  Killed $($procs.Count) process(es)." -ForegroundColor Green
