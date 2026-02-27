@@ -502,8 +502,7 @@ internal sealed class TodoScreen : View
                 _detailView.Text = FormatDetail(detail);
             });
 
-            if (!autoLoaded)
-                SetStatus($"✓ Loaded detail for {detail.Id}");
+            SetStatus($"✓ Loaded detail for {detail.Id}");
         }
         catch (Exception ex)
         {
