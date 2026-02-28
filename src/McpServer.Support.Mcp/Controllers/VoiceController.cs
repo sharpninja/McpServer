@@ -111,24 +111,32 @@ public sealed class VoiceController : ControllerBase
         Response.Headers.CacheControl = "no-cache";
         Response.Headers.Connection = "keep-alive";
 
+        _logger.LogInformation("SSE stream starting for session {SessionId}", sessionId);
+        var eventCount = 0;
+
         try
         {
             await foreach (var evt in _voiceService.SubmitTurnStreamingAsync(sessionId, request, cancellationToken).ConfigureAwait(false))
             {
+                eventCount++;
                 var json = JsonSerializer.Serialize(evt, s_sseJsonOptions);
+                _logger.LogDebug("SSE event #{Count} type={Type} for session {SessionId}: {Json}", eventCount, evt.Type, sessionId, json.Length > 200 ? json[..200] + "..." : json);
                 await Response.WriteAsync($"data: {json}\n\n", cancellationToken).ConfigureAwait(false);
                 await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
             }
+
+            _logger.LogInformation("SSE stream completed for session {SessionId}: {EventCount} events", sessionId, eventCount);
         }
         catch (ArgumentException ex)
         {
+            _logger.LogWarning(ex, "SSE stream argument error for session {SessionId} after {EventCount} events", sessionId, eventCount);
             var json = JsonSerializer.Serialize(new VoiceTurnStreamEvent { Type = "error", Message = ex.Message }, s_sseJsonOptions);
             await Response.WriteAsync($"data: {json}\n\n", cancellationToken).ConfigureAwait(false);
             await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
-            _logger.LogError(ex, "Streaming voice turn failed for session {SessionId}", sessionId);
+            _logger.LogError(ex, "Streaming voice turn failed for session {SessionId} after {EventCount} events", sessionId, eventCount);
             var json = JsonSerializer.Serialize(new VoiceTurnStreamEvent { Type = "error", Message = "Voice turn processing failed." }, s_sseJsonOptions);
             await Response.WriteAsync($"data: {json}\n\n", cancellationToken).ConfigureAwait(false);
             await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);

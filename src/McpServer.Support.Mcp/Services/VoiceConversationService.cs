@@ -347,6 +347,8 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         CancellationTokenSource? linkedCts = null;
         string turnId;
 
+        _logger.LogInformation("ProduceStreamingTurnAsync starting: Session={SessionId}, UserText={UserText}", sessionId, userText.Length > 80 ? userText[..80] + "..." : userText);
+
         await state.Gate.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
@@ -386,17 +388,26 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         var toolRecords = new List<VoiceToolCallRecordDto>();
         var fullText = new StringBuilder();
         VoiceTurnStreamEvent? finalEvent = null;
+        var chunkCount = 0;
+
+        _logger.LogInformation("Starting ExecuteTurnStreamingAsync: Session={SessionId}, Turn={TurnId}", sessionId, turnId);
 
         try
         {
             await foreach (var evt in ExecuteTurnStreamingAsync(state, turnId, userText, toolRecords, linkedCts!.Token).ConfigureAwait(false))
             {
+                _logger.LogDebug("Producer received event type={Type} for Turn={TurnId}", evt.Type, turnId);
+
                 if (evt.Type == "chunk")
+                {
+                    chunkCount++;
                     fullText.Append(evt.Text);
+                }
 
                 if (evt.Type is "done" or "error")
                 {
                     finalEvent = evt;
+                    _logger.LogInformation("Producer got terminal event type={Type} for Turn={TurnId} after {ChunkCount} chunks", evt.Type, turnId, chunkCount);
                     break;
                 }
 
@@ -405,12 +416,13 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         }
         catch (OperationCanceledException)
         {
+            _logger.LogWarning("Streaming turn canceled: Session={SessionId}, Turn={TurnId}, Chunks={ChunkCount}", sessionId, turnId, chunkCount);
             finalEvent = new VoiceTurnStreamEvent { Type = "done", TurnId = turnId, Status = "interrupted", LatencyMs = (int)sw.ElapsedMilliseconds };
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Streaming voice turn failed: Session={SessionId}; Turn={TurnId}", sessionId, turnId);
-            finalEvent = new VoiceTurnStreamEvent { Type = "error", TurnId = turnId, Message = "Voice turn processing failed." };
+            _logger.LogError(ex, "Streaming voice turn failed: Session={SessionId}; Turn={TurnId}; Chunks={ChunkCount}", sessionId, turnId, chunkCount);
+            finalEvent = new VoiceTurnStreamEvent { Type = "error", TurnId = turnId, Message = $"Voice turn processing failed: {ex.Message}" };
         }
 
         sw.Stop();
@@ -660,9 +672,12 @@ public sealed partial class VoiceConversationService
             var prompt = BuildCopilotPrompt(state, turnId, userText, [], 1);
             var copilotOpts = BuildCopilotOptions(opts, state.WorkspacePath);
 
+            _logger.LogInformation("Launching interactive Copilot session for {SessionId}, prompt length={PromptLen}", state.SessionId, prompt.Length);
+
             try
             {
                 state.InteractiveSession = _copilotClient.CreateInteractiveSession(prompt, copilotOpts);
+                _logger.LogInformation("Interactive session created, reading initial response stream for {SessionId}", state.SessionId);
                 lineStream = state.InteractiveSession.ReadInitialResponseStreamingAsync(cancellationToken);
             }
             catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
@@ -673,6 +688,7 @@ public sealed partial class VoiceConversationService
         }
         else
         {
+            _logger.LogInformation("Sending to existing interactive session for {SessionId}, text length={TextLen}", state.SessionId, userText.Length);
             lineStream = state.InteractiveSession.SendStreamingAsync(userText, cancellationToken);
         }
 
@@ -682,11 +698,15 @@ public sealed partial class VoiceConversationService
             yield break;
         }
 
+        var lineCount = 0;
         await foreach (var line in lineStream!.ConfigureAwait(false))
         {
+            lineCount++;
+            _logger.LogDebug("Stream line #{LineCount} for {SessionId}: {Line}", lineCount, state.SessionId, line.Length > 100 ? line[..100] + "..." : line);
             yield return new VoiceTurnStreamEvent { Type = "chunk", Text = line + "\n" };
         }
 
+        _logger.LogInformation("Stream complete for {SessionId}: {LineCount} lines", state.SessionId, lineCount);
         yield return new VoiceTurnStreamEvent { Type = "done", TurnId = turnId, Status = "completed", ToolCalls = toolRecords };
     }
 
