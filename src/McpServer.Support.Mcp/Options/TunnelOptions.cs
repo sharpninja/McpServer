@@ -31,6 +31,12 @@ public sealed class NgrokTunnelOptions
     /// <summary>Enable ngrok tunnel configuration (selection is still controlled by <c>Mcp:Tunnel:Provider</c>).</summary>
     public bool Enabled { get; set; }
 
+    /// <summary>
+    /// Full path to the <c>ngrok</c> executable. When empty, <c>ngrok</c> is resolved via the system PATH.
+    /// Required when the service runs as LocalSystem (which lacks the interactive user's PATH).
+    /// </summary>
+    public string? ExecutablePath { get; set; }
+
     /// <summary>Optional ngrok subdomain (requires paid plan).</summary>
     public string? Subdomain { get; set; }
 

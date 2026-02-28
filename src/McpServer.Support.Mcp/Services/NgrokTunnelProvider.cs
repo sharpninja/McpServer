@@ -46,8 +46,10 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
     {
         ResetRuntimeStateForStart();
 
+        var ngrokExe = ResolveExecutablePath();
+
         // Verify ngrok is installed.
-        var check = await _processRunner.RunAsync("ngrok", "version", cancellationToken).ConfigureAwait(false);
+        var check = await _processRunner.RunAsync(ngrokExe, "version", cancellationToken).ConfigureAwait(false);
         if (check.ExitCode != 0)
         {
             _error = "ngrok CLI not found. Install from https://ngrok.com/download";
@@ -64,7 +66,7 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
 
         var startInfo = new ProcessStartInfo
         {
-            FileName = "ngrok",
+            FileName = ngrokExe,
             Arguments = args,
             UseShellExecute = false,
             CreateNoWindow = true,
@@ -424,5 +426,21 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
 
         const int maxLength = 240;
         return singleLine.Length <= maxLength ? singleLine : singleLine[..maxLength] + "...";
+    }
+
+    /// <summary>
+    /// Returns the ngrok executable path from <see cref="NgrokTunnelOptions.ExecutablePath"/>
+    /// or falls back to the bare <c>ngrok</c> command name (resolved via PATH).
+    /// </summary>
+    private string ResolveExecutablePath()
+    {
+        var configured = _options.Ngrok.ExecutablePath;
+        if (!string.IsNullOrWhiteSpace(configured))
+        {
+            _logger.LogDebug("Using configured ngrok path: {Path}", configured);
+            return configured;
+        }
+
+        return "ngrok";
     }
 }
