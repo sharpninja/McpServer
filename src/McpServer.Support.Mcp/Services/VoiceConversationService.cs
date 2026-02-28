@@ -677,7 +677,7 @@ public sealed partial class VoiceConversationService
             try
             {
                 state.InteractiveSession = _copilotClient.CreateInteractiveSession(prompt, copilotOpts);
-                _logger.LogInformation("Interactive session created, reading initial response stream for {SessionId}", state.SessionId);
+                _logger.LogInformation("Interactive session created (PID={Pid}), reading initial response stream for {SessionId}", state.InteractiveSession.ProcessId, state.SessionId);
                 lineStream = state.InteractiveSession.ReadInitialResponseStreamingAsync(cancellationToken);
             }
             catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)

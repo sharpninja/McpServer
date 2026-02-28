@@ -30,6 +30,9 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
     /// <summary>Returns <c>true</c> when the underlying process is still running.</summary>
     public bool IsAlive => !_disposed && !_process.HasExited;
 
+    /// <summary>Gets the OS process ID of the Copilot CLI process.</summary>
+    public int ProcessId => _process.Id;
+
     /// <summary>
     /// Reads the initial response produced by the <c>-i</c> prompt.
     /// Call once immediately after creation.

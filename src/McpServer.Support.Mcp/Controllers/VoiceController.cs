@@ -110,6 +110,7 @@ public sealed class VoiceController : ControllerBase
         Response.ContentType = "text/event-stream";
         Response.Headers.CacheControl = "no-cache";
         Response.Headers.Connection = "keep-alive";
+        Response.Headers["X-Accel-Buffering"] = "no";
 
         _logger.LogInformation("SSE stream starting for session {SessionId}", sessionId);
         var eventCount = 0;
