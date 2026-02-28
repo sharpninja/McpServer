@@ -65,7 +65,8 @@ $PreservePatterns = @(
 # Directories containing runtime data that should survive updates.
 $PreserveDirectories = @(
     'logs',
-    'mcp-data'
+    'mcp-data',
+    'tools'
 )
 
 # ---------------------------------------------------------------------------

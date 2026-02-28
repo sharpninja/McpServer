@@ -1,5 +1,7 @@
 using System.Net;
+using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Xunit;
@@ -9,11 +11,34 @@ namespace McpServer.Support.Mcp.Tests.Controllers;
 /// <summary>Integration tests for <see cref="McpServer.Support.Mcp.Controllers.TunnelController"/> with <see cref="TunnelRegistry"/>.</summary>
 public sealed class TunnelControllerTests
 {
+    /// <summary>Creates a factory that injects mock tunnel providers via DI.</summary>
+    private static CustomWebApplicationFactory CreateFactory(
+        string activeProvider,
+        params ITunnelProvider[] providers) =>
+        new(services =>
+        {
+            // Remove the real tunnel provider registrations
+            var descriptors = services
+                .Where(d => d.ServiceType == typeof(ITunnelProvider)
+                    || d.ServiceType == typeof(NgrokTunnelProvider)
+                    || d.ServiceType == typeof(CloudflareTunnelProvider)
+                    || d.ServiceType == typeof(FrpTunnelProvider))
+                .ToList();
+            foreach (var d in descriptors)
+                services.Remove(d);
+
+            // Inject mock providers
+            foreach (var p in providers)
+                services.AddSingleton<ITunnelProvider>(p);
+
+            // Set the active provider in config
+            services.PostConfigure<TunnelOptions>(opts => opts.Provider = activeProvider);
+        });
 
     [Fact]
     public async Task List_EmptyRegistry_ReturnsEmptyArray()
     {
-        await using var factory = new CustomWebApplicationFactory();
+        await using var factory = CreateFactory("");
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
@@ -27,7 +52,7 @@ public sealed class TunnelControllerTests
     [Fact]
     public async Task Status_UnknownProvider_Returns404()
     {
-        await using var factory = new CustomWebApplicationFactory();
+        await using var factory = CreateFactory("");
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
@@ -38,7 +63,7 @@ public sealed class TunnelControllerTests
     [Fact]
     public async Task Enable_UnknownProvider_Returns404()
     {
-        await using var factory = new CustomWebApplicationFactory();
+        await using var factory = CreateFactory("");
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
@@ -54,10 +79,7 @@ public sealed class TunnelControllerTests
         mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
             .Returns(new TunnelStatus(false, Error: "Not started."));
 
-        await using var factory = new CustomWebApplicationFactory();
-        var registry = factory.Services.GetRequiredService<TunnelRegistry>();
-        registry.Register(mockProvider, enabled: true);
-
+        await using var factory = CreateFactory("ngrok", mockProvider);
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
@@ -77,10 +99,7 @@ public sealed class TunnelControllerTests
         mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
             .Returns(new TunnelStatus(true, "https://abc.ngrok.io"));
 
-        await using var factory = new CustomWebApplicationFactory();
-        var registry = factory.Services.GetRequiredService<TunnelRegistry>();
-        registry.Register(mockProvider, enabled: true);
-
+        await using var factory = CreateFactory("ngrok", mockProvider);
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
@@ -99,10 +118,8 @@ public sealed class TunnelControllerTests
         mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
             .Returns(new TunnelStatus(false));
 
-        await using var factory = new CustomWebApplicationFactory();
-        var registry = factory.Services.GetRequiredService<TunnelRegistry>();
-        registry.Register(mockProvider, enabled: false);
-
+        // Register as disabled (active provider is empty)
+        await using var factory = CreateFactory("", mockProvider);
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
@@ -132,10 +149,8 @@ public sealed class TunnelControllerTests
         mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
             .Returns(new TunnelStatus(false));
 
-        await using var factory = new CustomWebApplicationFactory();
-        var registry = factory.Services.GetRequiredService<TunnelRegistry>();
-        registry.Register(mockProvider, enabled: false);
-
+        // Register as disabled (active provider is empty)
+        await using var factory = CreateFactory("", mockProvider);
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
@@ -157,10 +172,7 @@ public sealed class TunnelControllerTests
                 new TunnelStatus(false),
                 new TunnelStatus(true, "https://new.ngrok.io"));
 
-        await using var factory = new CustomWebApplicationFactory();
-        var registry = factory.Services.GetRequiredService<TunnelRegistry>();
-        registry.Register(mockProvider, enabled: true);
-
+        await using var factory = CreateFactory("ngrok", mockProvider);
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
@@ -178,10 +190,7 @@ public sealed class TunnelControllerTests
         mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
             .Returns(new TunnelStatus(false));
 
-        await using var factory = new CustomWebApplicationFactory();
-        var registry = factory.Services.GetRequiredService<TunnelRegistry>();
-        registry.Register(mockProvider, enabled: true);
-
+        await using var factory = CreateFactory("ngrok", mockProvider);
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 
@@ -199,10 +208,7 @@ public sealed class TunnelControllerTests
         mockProvider.GetStatusAsync(Arg.Any<CancellationToken>())
             .Returns(new TunnelStatus(true, "https://restarted.ngrok.io"));
 
-        await using var factory = new CustomWebApplicationFactory();
-        var registry = factory.Services.GetRequiredService<TunnelRegistry>();
-        registry.Register(mockProvider, enabled: true);
-
+        await using var factory = CreateFactory("ngrok", mockProvider);
         using var client = factory.CreateClient();
         TestAuthHelper.AddAuthHeader(client, factory.Services);
 

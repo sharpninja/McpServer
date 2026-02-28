@@ -1,34 +1,39 @@
 using System.Collections.Concurrent;
 using McpServer.Support.Mcp.Options;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// Registry managing all known tunnel providers. Tracks enabled/disabled state per provider
-/// and delegates lifecycle operations (start/stop) to the underlying <see cref="ITunnelProvider"/>.
-/// Providers are created eagerly but only started when enabled.
+/// Registry managing all known tunnel providers. Providers are injected via DI
+/// and the active provider (determined by <c>Mcp:Tunnel:Provider</c>) is started
+/// automatically as part of the <see cref="IHostedService"/> lifecycle.
 /// </summary>
-public sealed class TunnelRegistry
+public sealed class TunnelRegistry : IHostedService
 {
     private readonly ConcurrentDictionary<string, TunnelEntry> _entries = new(StringComparer.OrdinalIgnoreCase);
     private readonly ILogger<TunnelRegistry> _logger;
 
     /// <summary>Initializes a new instance of the <see cref="TunnelRegistry"/> class.</summary>
+    /// <param name="providers">All tunnel provider singletons registered in DI.</param>
+    /// <param name="options">Tunnel configuration determining which provider is active.</param>
     /// <param name="logger">Logger.</param>
-    public TunnelRegistry(ILogger<TunnelRegistry> logger)
+    public TunnelRegistry(
+        IEnumerable<ITunnelProvider> providers,
+        IOptions<TunnelOptions> options,
+        ILogger<TunnelRegistry> logger)
     {
         _logger = logger;
-    }
+        var activeProvider = (options.Value.Provider ?? "").Trim().ToUpperInvariant();
 
-    /// <summary>Registers a provider in the registry. Not thread-safe during startup (call before serving requests).</summary>
-    /// <param name="provider">The tunnel provider instance.</param>
-    /// <param name="enabled">Whether the provider should be considered enabled at registration time.</param>
-    public void Register(ITunnelProvider provider, bool enabled)
-    {
-        _entries[provider.ProviderName] = new TunnelEntry(provider, enabled);
-        _logger.LogInformation("Tunnel provider registered: {Provider}, Enabled={Enabled}", provider.ProviderName, enabled);
+        foreach (var provider in providers)
+        {
+            var enabled = provider.ProviderName.Equals(activeProvider, StringComparison.OrdinalIgnoreCase);
+            _entries[provider.ProviderName] = new TunnelEntry(provider, enabled);
+            _logger.LogInformation("Tunnel provider registered: {Provider}, Enabled={Enabled}", provider.ProviderName, enabled);
+        }
     }
 
     /// <summary>Lists all registered tunnel providers with their current state.</summary>
@@ -148,6 +153,20 @@ public sealed class TunnelRegistry
         await entry.Provider.StartAsync(ct).ConfigureAwait(false);
         var post = await entry.Provider.GetStatusAsync(ct).ConfigureAwait(false);
         return new TunnelInfo(entry.Provider.ProviderName, true, post.IsRunning, post.PublicUrl, post.Error);
+    }
+
+    /// <inheritdoc />
+    /// <summary>Starts all enabled providers as part of the hosted service lifecycle.</summary>
+    async Task IHostedService.StartAsync(CancellationToken cancellationToken)
+    {
+        await StartEnabledAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    /// <summary>Stops all running providers as part of the hosted service lifecycle.</summary>
+    async Task IHostedService.StopAsync(CancellationToken cancellationToken)
+    {
+        await StopAllAsync(cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Starts all enabled providers. Called during application startup.</summary>
