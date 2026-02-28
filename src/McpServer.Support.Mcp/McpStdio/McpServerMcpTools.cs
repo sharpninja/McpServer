@@ -1,4 +1,4 @@
-﻿// TR-PLANNED-013 / FR-SUPPORT-010: MCP tools for STDIO transport (mirrors HTTP API capabilities).
+// TR-PLANNED-013 / FR-SUPPORT-010: MCP tools for STDIO transport (mirrors HTTP API capabilities).
 
 using System.ComponentModel;
 using System.Text.Json;
@@ -71,10 +71,8 @@ public sealed class FwhMcpTools
     /// is provided by the MCP tool caller. Sets both the scoped <see cref="WorkspaceContext"/>
     /// and the <see cref="McpDbContext"/> workspace ID so query filters and auto-stamping apply correctly.
     /// </summary>
-    private void ApplyWorkspaceOverride(string? workspacePath)
+    private void ApplyWorkspaceOverride(string workspacePath)
     {
-        if (string.IsNullOrWhiteSpace(workspacePath)) return;
-
         var ctx = _httpContextAccessor.HttpContext?.RequestServices.GetService<WorkspaceContext>();
         if (ctx is not null)
             ctx.WorkspacePath = workspacePath;
@@ -87,9 +85,9 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "context_search"), Description("Search indexed context chunks by query text. Optional sourceType filter and limit (1-100).")]
     public async Task<string> ContextSearch(
         [Description("Search query text")] string query,
+        [Description("Workspace path (required)")] string workspacePath,
         [Description("Max chunks to return (default 20)")] int limit = 20,
         [Description("Optional source type filter")] string? sourceType = null,
-        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -113,9 +111,9 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "context_pack"), Description("Get a deterministic context pack by query. Optional queryId and limit (1-100).")]
     public async Task<string> ContextPack(
         [Description("Search query text")] string query,
+        [Description("Workspace path (required)")] string workspacePath,
         [Description("Max chunks in pack (default 20)")] int limit = 20,
         [Description("Optional query id for reproducibility")] string? queryId = null,
-        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -153,7 +151,7 @@ public sealed class FwhMcpTools
     /// <returns>JSON string with source keys, types, and ingestion timestamps.</returns>
     [McpServerTool(Name = "context_sources"), Description("List indexed document sources (sourceKey, sourceType, ingestedAt).")]
     public async Task<string> ContextSources(
-        [Description("Optional workspace path override")] string? workspacePath = null,
+        [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -168,7 +166,7 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "repo_read"), Description("Read file content by relative path from repo root. Path must be allowed.")]
     public async Task<string> RepoRead(
         [Description("Relative path from repo root")] string path,
-        [Description("Optional workspace path override")] string? workspacePath = null,
+        [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -184,8 +182,8 @@ public sealed class FwhMcpTools
     /// <returns>JSON string with path and directory entries.</returns>
     [McpServerTool(Name = "repo_list"), Description("List files and directories under a relative path. Empty path = repo root.")]
     public async Task<string> RepoList(
+        [Description("Workspace path (required)")] string workspacePath,
         [Description("Relative path (optional, default repo root)")] string? path = null,
-        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -199,7 +197,7 @@ public sealed class FwhMcpTools
     public async Task<string> RepoWrite(
         [Description("Relative path from repo root")] string path,
         [Description("File content to write")] string content,
-        [Description("Optional workspace path override")] string? workspacePath = null,
+        [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -215,7 +213,7 @@ public sealed class FwhMcpTools
     /// <returns>JSON string with sync run result.</returns>
     [McpServerTool(Name = "sync_run"), Description("Trigger full ingestion (repo, session logs, external docs). Returns run result.")]
     public async Task<string> SyncRun(
-        [Description("Optional workspace path override")] string? workspacePath = null,
+        [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -236,7 +234,7 @@ public sealed class FwhMcpTools
     /// <returns>JSON string with last run timestamps, status, and counts.</returns>
     [McpServerTool(Name = "sync_status"), Description("Get last sync run status (lastRun, status, error, counts).")]
     public string SyncStatus(
-        [Description("Optional workspace path override")] string? workspacePath = null)
+        [Description("Workspace path (required)")] string workspacePath)
     {
         ApplyWorkspaceOverride(workspacePath);
         var last = _syncStatusStore.GetLast();
@@ -258,10 +256,10 @@ public sealed class FwhMcpTools
     /// <summary>TR-PLANNED-013: List/search TODO items.</summary>
     [McpServerTool(Name = "todo_list"), Description("Query TODO items. Optional filters: section, priority, done.")]
     public async Task<string> TodoList(
+        [Description("Workspace path (required)")] string workspacePath,
         [Description("Section filter (e.g. mvp-app)")] string? section = null,
         [Description("Priority filter (high/medium/low)")] string? priority = null,
         [Description("Done filter (true/false)")] bool? done = null,
-        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -281,7 +279,7 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "todo_get"), Description("Get a single TODO item by its id (e.g. MVP-APP-001).")]
     public async Task<string> TodoGet(
         [Description("TODO item id")] string id,
-        [Description("Optional workspace path override")] string? workspacePath = null,
+        [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -305,9 +303,9 @@ public sealed class FwhMcpTools
         [Description("Item title")] string title,
         [Description("Section (e.g. mvp-app)")] string section,
         [Description("Priority (high/medium/low)")] string priority,
+        [Description("Workspace path (required)")] string workspacePath,
         [Description("Estimate string")] string? estimate = null,
         [Description("Description text")] string? description = null,
-        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -337,11 +335,11 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "todo_update"), Description("Update a TODO item by id. Only provided fields are changed.")]
     public async Task<string> TodoUpdate(
         [Description("TODO item id")] string id,
+        [Description("Workspace path (required)")] string workspacePath,
         [Description("Updated title")] string? title = null,
         [Description("Updated priority")] string? priority = null,
         [Description("Mark as done")] bool? done = null,
         [Description("Updated note")] string? note = null,
-        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -363,7 +361,7 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "todo_delete"), Description("Delete a TODO item by id.")]
     public async Task<string> TodoDelete(
         [Description("TODO item id")] string id,
-        [Description("Optional workspace path override")] string? workspacePath = null,
+        [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -384,7 +382,7 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "todo_status"), Description("Invoke Copilot to generate a status report for a TODO item in the workspace.")]
     public async Task<string> TodoStatus(
         [Description("TODO item id")] string id,
-        [Description("Optional workspace path override")] string? workspacePath = null,
+        [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -403,7 +401,7 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "todo_implement"), Description("Invoke Copilot to implement a TODO item, working through each task in the workspace.")]
     public async Task<string> TodoImplement(
         [Description("TODO item id")] string id,
-        [Description("Optional workspace path override")] string? workspacePath = null,
+        [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -422,7 +420,7 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "todo_plan"), Description("Invoke Copilot to create a detailed implementation plan for a TODO item in the workspace.")]
     public async Task<string> TodoPlan(
         [Description("TODO item id")] string id,
-        [Description("Optional workspace path override")] string? workspacePath = null,
+        [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -453,8 +451,8 @@ public sealed class FwhMcpTools
     /// <summary>REQ-MGMT-001: List requirements entries by type (fr/tr/test/mapping/all).</summary>
     [McpServerTool(Name = "requirements_list"), Description("List requirements entries. type = fr|tr|test|mapping|all (default all).")]
     public async Task<string> RequirementsList(
+        [Description("Workspace path (required)")] string workspacePath,
         [Description("Entry type: fr, tr, test, mapping, or all")] string? type = "all",
-        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -489,8 +487,8 @@ public sealed class FwhMcpTools
     /// <summary>REQ-MGMT-001: Generate requirements documents as Markdown (doc=all concatenates all docs).</summary>
     [McpServerTool(Name = "requirements_generate"), Description("Generate requirements documents as Markdown. doc = functional|technical|testing|mapping|all (default all).")]
     public async Task<string> RequirementsGenerate(
+        [Description("Workspace path (required)")] string workspacePath,
         [Description("Document selector: functional, technical, testing, mapping, or all")] string? doc = "all",
-        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -528,9 +526,9 @@ public sealed class FwhMcpTools
     public async Task<string> RequirementsCreate(
         [Description("Entry type: fr, tr, test, or mapping")] string type,
         [Description("Entry id (FR/TR/TEST id or FR id for mapping rows)")] string id,
+        [Description("Workspace path (required)")] string workspacePath,
         [Description("Title (required for fr; optional for tr; ignored for test/mapping)")] string? title = null,
         [Description("Body text (required for fr/tr/test; for mapping use comma-separated TR ids)")] string? body = null,
-        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -592,9 +590,9 @@ public sealed class FwhMcpTools
     public async Task<string> RequirementsUpdate(
         [Description("Entry type: fr, tr, test, or mapping")] string type,
         [Description("Entry id (FR/TR/TEST id or FR id for mapping rows)")] string id,
+        [Description("Workspace path (required)")] string workspacePath,
         [Description("Updated title (fr/tr only)")] string? title = null,
         [Description("Updated body text or mapping TR id list")] string? body = null,
-        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -676,7 +674,7 @@ public sealed class FwhMcpTools
     public async Task<string> RequirementsDelete(
         [Description("Entry type: fr, tr, test, or mapping")] string type,
         [Description("Entry id (FR/TR/TEST id or FR id for mapping rows)")] string id,
-        [Description("Optional workspace path override")] string? workspacePath = null,
+        [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -728,7 +726,7 @@ public sealed class FwhMcpTools
     [McpServerTool(Name = "sessionlog_submit"), Description("Submit (upsert) a session log. Body is JSON string conforming to UnifiedSessionLogDto.")]
     public async Task<string> SessionLogSubmit(
         [Description("JSON string of the session log payload")] string json,
-        [Description("Optional workspace path override")] string? workspacePath = null,
+        [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -749,13 +747,13 @@ public sealed class FwhMcpTools
     /// <summary>TR-PLANNED-013: Query session logs.</summary>
     [McpServerTool(Name = "sessionlog_query"), Description("Query session logs with optional filters: agent, model, text, from, to, limit.")]
     public async Task<string> SessionLogQuery(
+        [Description("Workspace path (required)")] string workspacePath,
         [Description("Agent filter (e.g. cursor, copilot)")] string? agent = null,
         [Description("Model filter")] string? model = null,
         [Description("Text search")] string? text = null,
         [Description("From date (ISO 8601)")] string? from = null,
         [Description("To date (ISO 8601)")] string? to = null,
         [Description("Max results (default 100)")] int? limit = null,
-        [Description("Optional workspace path override")] string? workspacePath = null,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -787,7 +785,7 @@ public sealed class FwhMcpTools
         [Description("Session id")] string sessionId,
         [Description("Request id")] string requestId,
         [Description("JSON array of dialog items")] string itemsJson,
-        [Description("Optional workspace path override")] string? workspacePath = null,
+        [Description("Workspace path (required)")] string workspacePath,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
