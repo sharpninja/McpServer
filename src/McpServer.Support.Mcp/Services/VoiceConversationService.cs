@@ -707,7 +707,8 @@ public sealed partial class VoiceConversationService
 
     /// <summary>
     /// Resolves the Copilot agent path, trying workspace config, <see cref="TodoPromptOptions"/>,
-    /// and finally <see cref="DesktopProcessLauncher.ResolveCommandPathAsync"/> via desktop Get-Command.
+    /// well-known install locations, and finally <see cref="DesktopProcessLauncher.ResolveCommandPathAsync"/>
+    /// via desktop Get-Command.
     /// </summary>
     private async Task<string> ResolveAgentPathAsync(CancellationToken cancellationToken)
     {
@@ -724,7 +725,12 @@ public sealed partial class VoiceConversationService
         if (!string.IsNullOrWhiteSpace(promptOpts.AgentPath))
             return promptOpts.AgentPath;
 
-        // 3. Resolve via Get-Command on the interactive desktop
+        // 3. Probe well-known WinGet install locations for all user profiles
+        var probePaths = ProbeWellKnownCopilotPaths();
+        if (probePaths is not null)
+            return probePaths;
+
+        // 4. Resolve via Get-Command on the interactive desktop
         if (_desktopLauncher is not null)
         {
             var resolved = await _desktopLauncher.ResolveCommandPathAsync("copilot", cancellationToken).ConfigureAwait(false);
@@ -733,6 +739,36 @@ public sealed partial class VoiceConversationService
         }
 
         return "copilot";
+    }
+
+    /// <summary>
+    /// Probes well-known install paths for the Copilot CLI executable.
+    /// Checks WinGet Links and Packages directories for all user profiles.
+    /// </summary>
+    private string? ProbeWellKnownCopilotPaths()
+    {
+        var usersDir = Path.GetDirectoryName(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile))
+            ?? @"C:\Users";
+
+        try
+        {
+            foreach (var userDir in Directory.EnumerateDirectories(usersDir))
+            {
+                // Check WinGet Links symlink first
+                var linksPath = Path.Combine(userDir, @"AppData\Local\Microsoft\WinGet\Links\copilot.exe");
+                if (File.Exists(linksPath))
+                {
+                    _logger.LogDebug("Found Copilot at well-known path: {Path}", linksPath);
+                    return linksPath;
+                }
+            }
+        }
+        catch (Exception ex) when (ex is not OutOfMemoryException)
+        {
+            _logger.LogDebug("Error probing well-known paths: {Error}", ex.Message);
+        }
+
+        return null;
     }
 
     private CopilotClientOptions BuildCopilotOptions(VoiceConversationOptions opts)
