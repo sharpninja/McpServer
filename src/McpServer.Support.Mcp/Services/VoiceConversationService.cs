@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using McpServer.Common.Copilot;
+using McpServer.Support.Mcp.Native;
 using McpServer.Support.Mcp.Options;
 using Microsoft.Extensions.Options;
 
@@ -22,6 +23,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
 
     private readonly ConcurrentDictionary<string, VoiceSessionState> _sessions = new(StringComparer.OrdinalIgnoreCase);
     private readonly ICopilotClient _copilotClient;
+    private readonly DesktopProcessLauncher? _desktopLauncher;
     private readonly WorkspaceServiceAccessor _workspaceAccessor;
     private readonly IOptionsMonitor<VoiceConversationOptions> _options;
     private readonly IHostEnvironment _hostEnvironment;
@@ -35,13 +37,17 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         WorkspaceServiceAccessor workspaceAccessor,
         IOptionsMonitor<VoiceConversationOptions> options,
         IHostEnvironment hostEnvironment,
-        ILogger<VoiceConversationService> logger)
+        ILogger<VoiceConversationService> logger,
+        ILoggerFactory loggerFactory)
     {
         _copilotClient = copilotClient ?? throw new ArgumentNullException(nameof(copilotClient));
         _workspaceAccessor = workspaceAccessor ?? throw new ArgumentNullException(nameof(workspaceAccessor));
         _options = options ?? throw new ArgumentNullException(nameof(options));
         _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+        if (OperatingSystem.IsWindows())
+            _desktopLauncher = new DesktopProcessLauncher(loggerFactory.CreateLogger<DesktopProcessLauncher>());
     }
 
     /// <inheritdoc />
@@ -305,9 +311,9 @@ public sealed partial class VoiceConversationService
             cancellationToken.ThrowIfCancellationRequested();
 
             var prompt = BuildCopilotPrompt(state, turnId, userText, toolResultsForPrompt, step);
-            var copilotResult = await _copilotClient.InvokeAsync(
+            var copilotResult = await InvokeCopilotWithDesktopFallbackAsync(
                 prompt,
-                BuildCopilotOptions(opts),
+                opts,
                 cancellationToken).ConfigureAwait(false);
 
             if (copilotResult.State != CopilotResultState.Success)
@@ -701,6 +707,125 @@ public sealed partial class VoiceConversationService
             Timeout = TimeSpan.FromSeconds(Math.Max(5, opts.CopilotTimeoutSeconds)),
             WorkingDirectory = workingDirectory
         };
+    }
+
+    /// <summary>
+    /// Invokes Copilot CLI via <see cref="DesktopProcessLauncher"/> when desktop launch is enabled
+    /// and the launcher is available; otherwise falls back to <see cref="ICopilotClient.InvokeAsync"/>.
+    /// </summary>
+    private async Task<CopilotResult> InvokeCopilotWithDesktopFallbackAsync(
+        string prompt,
+        VoiceConversationOptions opts,
+        CancellationToken cancellationToken)
+    {
+        if (!opts.UseDesktopLaunch || _desktopLauncher is null)
+            return await _copilotClient.InvokeAsync(prompt, BuildCopilotOptions(opts), cancellationToken).ConfigureAwait(false);
+
+        try
+        {
+            return await InvokeCopilotViaDesktopAsync(prompt, opts, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            _logger.LogWarning("Desktop launch failed, falling back to Process.Start: {Error}", ex.ToString());
+            return await _copilotClient.InvokeAsync(prompt, BuildCopilotOptions(opts), cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    /// <summary>
+    /// Launches Copilot CLI on the interactive desktop with full stdio pipe access.
+    /// </summary>
+    private async Task<CopilotResult> InvokeCopilotViaDesktopAsync(
+        string prompt,
+        VoiceConversationOptions opts,
+        CancellationToken cancellationToken)
+    {
+        var copilotOpts = BuildCopilotOptions(opts);
+        var arguments = BuildCopilotArguments(prompt, copilotOpts);
+        var workingDirectory = copilotOpts.WorkingDirectory;
+        var agentPath = copilotOpts.AgentPath;
+
+        var envVars = new Dictionary<string, string>();
+        if (!string.IsNullOrWhiteSpace(copilotOpts.GitHubToken))
+            envVars["GH_TOKEN"] = copilotOpts.GitHubToken;
+        foreach (var (key, value) in copilotOpts.EnvironmentVariables)
+            envVars[key] = value;
+
+        _logger.LogDebug(
+            "Launching Copilot via desktop: {Agent} {Args}",
+            agentPath, arguments);
+
+        using var handle = _desktopLauncher!.LaunchWithStdio(
+            agentPath,
+            arguments,
+            workingDirectory,
+            envVars.Count > 0 ? envVars : null);
+
+        using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        cts.CancelAfter(copilotOpts.Timeout);
+
+        try
+        {
+            var stdoutTask = handle.StandardOutput.ReadToEndAsync(cts.Token);
+            var stderrTask = handle.StandardError.ReadToEndAsync(cts.Token);
+
+            await Task.WhenAll(stdoutTask, stderrTask).ConfigureAwait(false);
+
+            var exitCode = await handle.WaitForExitAsync(cts.Token).ConfigureAwait(false);
+            var body = (await stdoutTask.ConfigureAwait(false)).Trim();
+            var stderr = (await stderrTask.ConfigureAwait(false)).Trim();
+
+            return new CopilotResult
+            {
+                State = exitCode == 0 ? CopilotResultState.Success : CopilotResultState.Error,
+                Body = body,
+                Stderr = stderr,
+                ExitCode = exitCode,
+            };
+        }
+        catch (OperationCanceledException) when (cts.IsCancellationRequested && !cancellationToken.IsCancellationRequested)
+        {
+            return new CopilotResult
+            {
+                State = CopilotResultState.Timeout,
+                Body = string.Empty,
+                Stderr = "Desktop Copilot invocation timed out.",
+                ExitCode = null,
+            };
+        }
+    }
+
+    /// <summary>
+    /// Builds the argument string for Copilot CLI, matching the format used by <see cref="CopilotClient"/>.
+    /// </summary>
+    private static string BuildCopilotArguments(string prompt, CopilotClientOptions copilotOpts)
+    {
+        var args = new StringBuilder();
+        args.Append("-p ");
+        args.Append(EscapeArgument(prompt));
+
+        if (!string.Equals(copilotOpts.Model, "auto", StringComparison.OrdinalIgnoreCase))
+        {
+            args.Append(" --model ");
+            args.Append(EscapeArgument(copilotOpts.Model));
+        }
+
+        if (copilotOpts.Silent)
+            args.Append(" --silent");
+
+        args.Append(" --stream on");
+
+        return args.ToString();
+    }
+
+    /// <summary>
+    /// Escapes a string argument for command-line use.
+    /// </summary>
+    private static string EscapeArgument(string value)
+    {
+        if (string.IsNullOrEmpty(value)) return "\"\"";
+        if (!value.Contains(' ') && !value.Contains('"') && !value.Contains('\\')) return value;
+        return "\"" + value.Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"";
     }
 
     private string BuildCopilotPrompt(

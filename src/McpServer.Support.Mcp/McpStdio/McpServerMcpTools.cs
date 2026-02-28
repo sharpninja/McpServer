@@ -34,6 +34,7 @@ public sealed class FwhMcpTools
     private readonly ISessionLogService _sessionLogService;
     private readonly IGitHubCliService _gitHubCliService;
     private readonly IRequirementsDocumentService _requirementsDocumentService;
+    private readonly IProcessRunner _processRunner;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ILogger<FwhMcpTools> _logger;
 
@@ -49,6 +50,7 @@ public sealed class FwhMcpTools
         ISessionLogService sessionLogService,
         IGitHubCliService gitHubCliService,
         IRequirementsDocumentService requirementsDocumentService,
+        IProcessRunner processRunner,
         IHttpContextAccessor httpContextAccessor,
         ILogger<FwhMcpTools> logger)
     {
@@ -63,6 +65,7 @@ public sealed class FwhMcpTools
         _sessionLogService = sessionLogService;
         _gitHubCliService = gitHubCliService;
         _requirementsDocumentService = requirementsDocumentService;
+        _processRunner = processRunner;
         _httpContextAccessor = httpContextAccessor;
     }
 
@@ -903,6 +906,97 @@ public sealed class FwhMcpTools
             _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
+    }
+
+    /// <summary>Launch a process on the interactive desktop using CreateProcessWithTokenW.</summary>
+    /// <returns>JSON result with processId, exitCode, or error.</returns>
+    [McpServerTool(Name = "desktop_launch"), Description("Launch a desktop process using CreateProcessWithTokenW. Use this to open GUI applications on the user's interactive desktop.")]
+    public async Task<string> DesktopLaunch(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Full path to executable")] string executablePath,
+        [Description("Command-line arguments")] string? arguments = null,
+        [Description("Working directory for the process")] string? workingDirectory = null,
+        [Description("JSON object of environment variables to set")] string? environmentVariables = null,
+        [Description("If true, launch without a visible window")] bool createNoWindow = false,
+        [Description("Window style: Normal, Hidden, Minimized, Maximized")] string windowStyle = "Normal",
+        [Description("If true, wait for the process to exit before returning")] bool waitForExit = false,
+        [Description("Timeout in ms when waiting for exit")] int? timeoutMs = null,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            ApplyWorkspaceOverride(workspacePath);
+
+            var launcherPath = ResolveLauncherPath(workspacePath);
+            if (launcherPath is null)
+                return JsonSerializer.Serialize(new { error = "McpServer.Launcher.exe not found. Check Mcp:LauncherPath configuration." });
+
+            var payload = new Dictionary<string, object?>
+            {
+                ["executablePath"] = executablePath,
+                ["arguments"] = arguments,
+                ["workingDirectory"] = workingDirectory,
+                ["createNoWindow"] = createNoWindow,
+                ["windowStyle"] = windowStyle,
+                ["waitForExit"] = waitForExit,
+                ["timeoutMs"] = timeoutMs
+            };
+
+            if (!string.IsNullOrWhiteSpace(environmentVariables))
+            {
+                try
+                {
+                    var envDict = JsonSerializer.Deserialize<Dictionary<string, string>>(environmentVariables, s_caseInsensitiveOptions);
+                    payload["environmentVariables"] = envDict;
+                }
+                catch (JsonException ex)
+                {
+                    return JsonSerializer.Serialize(new { error = $"Invalid environmentVariables JSON: {ex.Message}" });
+                }
+            }
+
+            var json = JsonSerializer.Serialize(payload, s_caseInsensitiveOptions);
+            var escapedJson = json.Replace("\"", "\\\"");
+            var result = await _processRunner.RunAsync(launcherPath, $"\"{escapedJson}\"", cancellationToken).ConfigureAwait(false);
+
+            if (result.ExitCode != 0)
+            {
+                var errBody = string.IsNullOrWhiteSpace(result.Stderr) ? result.Stdout : result.Stderr;
+                return JsonSerializer.Serialize(new { error = $"Launcher exited with code {result.ExitCode}: {errBody}" });
+            }
+
+            return result.Stdout ?? JsonSerializer.Serialize(new { error = "No output from launcher" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Resolves the McpServer.Launcher.exe path from config, assembly directory, or workspace.
+    /// </summary>
+    private string? ResolveLauncherPath(string workspacePath)
+    {
+        // 1. Explicit config
+        var config = _httpContextAccessor.HttpContext?.RequestServices.GetService<IConfiguration>();
+        var configPath = config?["Mcp:LauncherPath"];
+        if (!string.IsNullOrWhiteSpace(configPath) && File.Exists(configPath))
+            return configPath;
+
+        // 2. Same directory as MCP server
+        var assemblyDir = AppContext.BaseDirectory;
+        var sideBySide = Path.Combine(assemblyDir, "McpServer.Launcher.exe");
+        if (File.Exists(sideBySide))
+            return sideBySide;
+
+        // 3. _publish directory relative to workspace
+        var publishPath = Path.Combine(workspacePath, "_publish", "McpServer.Launcher", "McpServer.Launcher.exe");
+        if (File.Exists(publishPath))
+            return publishPath;
+
+        return null;
     }
 
     private enum RequirementsEntityType

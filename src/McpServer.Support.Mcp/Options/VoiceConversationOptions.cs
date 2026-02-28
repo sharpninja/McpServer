@@ -59,4 +59,11 @@ public sealed class VoiceConversationOptions
     /// Maximum number of transcript entries included in the model context prompt.
     /// </summary>
     public int TranscriptContextEntryLimit { get; set; } = 20;
+
+    /// <summary>
+    /// When <see langword="true"/>, voice chat launches the Copilot CLI on the interactive desktop
+    /// using <c>CreateProcessWithTokenW</c> instead of <see cref="System.Diagnostics.Process.Start(System.Diagnostics.ProcessStartInfo)"/>.
+    /// This is required when the MCP server runs as a Windows service.
+    /// </summary>
+    public bool UseDesktopLaunch { get; set; } = true;
 }
