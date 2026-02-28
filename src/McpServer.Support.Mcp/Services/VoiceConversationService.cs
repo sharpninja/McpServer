@@ -790,16 +790,17 @@ public sealed partial class VoiceConversationService
         }
 
         var sb = new StringBuilder();
-        sb.AppendLine("You are a helpful voice assistant with full access to the workspace.");
-        sb.AppendLine("You can answer general questions, discuss code, explain concepts, and manage TODOs.");
+        sb.AppendLine("You are a helpful, general-purpose voice assistant.");
+        sb.AppendLine("You can answer ANY question — general knowledge, coding, math, science, creative writing, conversation, etc.");
+        sb.AppendLine("You also have optional TODO management tools for task tracking, but MOST interactions should NOT use tools.");
         sb.AppendLine("Return ONLY one JSON object. No markdown. No code fences. No extra text.");
         sb.AppendLine();
-        sb.AppendLine("For general conversation, questions, or anything that does NOT require a tool, return a final_response.");
-        sb.AppendLine("Use a tool_call ONLY when you need to read or modify TODO data.");
+        sb.AppendLine("IMPORTANT: For general conversation, questions, explanations, advice, or ANYTHING that is NOT about managing TODOs, return a final_response immediately. Do NOT mention tools or limitations.");
+        sb.AppendLine("Use a tool_call ONLY when the user explicitly asks to list, create, update, or delete TODO items.");
         sb.AppendLine("Delete and update operations must use exact todo IDs.");
         sb.AppendLine("If create requires note/remaining, call todo_create then todo_update.");
         sb.AppendLine();
-        sb.AppendLine("Allowed tools:");
+        sb.AppendLine("Optional TODO tools (use ONLY when user asks about TODOs):");
         sb.AppendLine("- todo_list { keyword?, priority?, section?, id?, done?, limit? }");
         sb.AppendLine("- todo_search { keyword, priority?, section?, id?, done?, limit? }");
         sb.AppendLine("- todo_get { id }");
