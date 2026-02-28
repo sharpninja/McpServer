@@ -119,6 +119,9 @@ internal sealed class DesktopProcessLauncher
         string? workingDirectory = null,
         Dictionary<string, string>? environmentVariables = null)
     {
+        // Resolve symlinks — CreateProcessWithTokenW may not follow them (e.g. WinGet shims)
+        executablePath = ResolveSymlinks(executablePath);
+
         // Create pipes for stdin, stdout, stderr
         CreatePipeWithInheritance(out var stdinRead, out var stdinWrite, inheritRead: true);
         CreatePipeWithInheritance(out var stdoutRead, out var stdoutWrite, inheritRead: false);
@@ -326,6 +329,37 @@ internal sealed class DesktopProcessLauncher
         _logger.LogWarning("Could not resolve command '{Command}' on desktop (exit={ExitCode}, output='{Output}')",
             commandName, exitCode, resolvedPath);
         return null;
+    }
+
+    /// <summary>
+    /// Resolves symbolic links to their final target path.
+    /// <c>CreateProcessWithTokenW</c> may not follow symlinks (e.g. WinGet shims).
+    /// </summary>
+    private string ResolveSymlinks(string path)
+    {
+        try
+        {
+            var fi = new FileInfo(path);
+            if (fi.LinkTarget is { } target)
+            {
+                // Resolve relative link targets
+                var resolved = Path.IsPathRooted(target)
+                    ? target
+                    : Path.GetFullPath(target, Path.GetDirectoryName(path)!);
+
+                if (File.Exists(resolved))
+                {
+                    _logger.LogDebug("Resolved symlink '{Original}' → '{Target}'", path, resolved);
+                    return resolved;
+                }
+            }
+        }
+        catch (Exception ex) when (ex is not OutOfMemoryException)
+        {
+            _logger.LogWarning("Failed to resolve symlink for '{Path}': {Error}", path, ex.Message);
+        }
+
+        return path;
     }
 
     private static void CreatePipeWithInheritance(out IntPtr readHandle, out IntPtr writeHandle, bool inheritRead)
