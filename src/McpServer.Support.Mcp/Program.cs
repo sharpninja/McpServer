@@ -213,6 +213,13 @@ builder.Services.AddSingleton<ISyncStatusStore, SyncStatusStore>();
 builder.Services.AddSingleton<IWriteAuditLog, WriteAuditLog>();
 builder.Services.AddSingleton<Chunker>();
 builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
+builder.Services.Configure<ProcessRunnerOptions>(options =>
+{
+    if (primaryWorkspaceEntry is not null)
+    {
+        options.GitHubToken = primaryWorkspaceEntry.GitHubToken;
+    }
+});
 builder.Services.AddSingleton<IEmbeddingService, EmbeddingService>();
 builder.Services.AddSingleton<IVectorIndexService, VectorIndexService>();
 builder.Services.AddScoped<RepoIngestor>();

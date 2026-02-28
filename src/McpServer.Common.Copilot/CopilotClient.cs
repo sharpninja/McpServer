@@ -1,7 +1,5 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -11,6 +9,7 @@ namespace McpServer.Common.Copilot;
 /// <summary>TR-CLI-001: Invokes the Copilot CLI agent, captures output, and returns structured results.</summary>
 public sealed class CopilotClient(
     IOptionsMonitor<CopilotClientOptions> defaultOptions,
+    IProcessEnvironmentService processEnvironment,
     ILogger<CopilotClient> logger) : ICopilotClient
 {
 
@@ -280,8 +279,8 @@ public sealed class CopilotClient(
         // Auto-confirm tool invocations without user prompts.
         psi.ArgumentList.Add("--yolo");
 
-        ApplyRunAsEnvironment(psi, opts.RunAs);
-        ApplyGitHubToken(psi, opts.GitHubToken);
+        processEnvironment.ApplyAll(psi, opts.RunAs, opts.GitHubToken);
+        psi.FileName = processEnvironment.ResolveExecutable(psi, opts.AgentPath);
 
         if (opts.EnvironmentVariables is { Count: > 0 } envVars)
         {
@@ -327,112 +326,5 @@ public sealed class CopilotClient(
             logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // Access denied or other OS error
         }
-    }
-
-    /// <summary>
-    /// Sets <c>GH_TOKEN</c> on the process if a GitHub token is configured.
-    /// Falls back to the current process's <c>GH_TOKEN</c> environment variable.
-    /// This is required when the service account cannot access the user's keyring.
-    /// </summary>
-    private static void ApplyGitHubToken(ProcessStartInfo psi, string? token)
-    {
-        var effective = !string.IsNullOrWhiteSpace(token)
-            ? token
-            : Environment.GetEnvironmentVariable("GH_TOKEN");
-
-        if (!string.IsNullOrWhiteSpace(effective))
-            psi.Environment["GH_TOKEN"] = effective;
-    }
-
-    /// <summary>
-    /// When <paramref name="runAsUser"/> is specified (Windows only), loads the user's
-    /// profile environment into <paramref name="psi"/> so the spawned process can find
-    /// CLIs on the user's PATH and access cached auth tokens in their profile.
-    /// </summary>
-    private void ApplyRunAsEnvironment(ProcessStartInfo psi, string? runAsUser)
-    {
-        if (string.IsNullOrWhiteSpace(runAsUser) || !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            return;
-
-        var userProfile = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile).Contains(runAsUser, StringComparison.OrdinalIgnoreCase)
-                ? Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
-                : Path.Combine(GetUsersRoot(), runAsUser));
-
-        if (!Directory.Exists(userProfile))
-        {
-            logger.LogWarning("RunAs user profile not found: {UserProfile}", userProfile);
-            return;
-        }
-
-        var appData = Path.Combine(userProfile, "AppData", "Roaming");
-        var localAppData = Path.Combine(userProfile, "AppData", "Local");
-
-        psi.Environment["USERPROFILE"] = userProfile;
-        psi.Environment["HOME"] = userProfile;
-        psi.Environment["APPDATA"] = appData;
-        psi.Environment["LOCALAPPDATA"] = localAppData;
-
-        // Merge the user's PATH: read from registry HKEY_USERS\{username} or standard locations.
-        var userPath = ResolveUserPath(runAsUser, localAppData);
-        if (!string.IsNullOrWhiteSpace(userPath))
-        {
-            var currentPath = psi.Environment.TryGetValue("PATH", out var existing) ? existing : Environment.GetEnvironmentVariable("PATH");
-            psi.Environment["PATH"] = $"{userPath};{currentPath}";
-        }
-
-        logger.LogDebug("Applied RunAs environment for user {User}: USERPROFILE={Profile}", runAsUser, userProfile);
-    }
-
-    /// <summary>
-    /// Resolves the user-specific PATH entries by reading from the registry
-    /// (<c>HKEY_USERS\{SID}\Environment\Path</c>) and appending common WinGet/Scoop directories.
-    /// </summary>
-    [SupportedOSPlatform("windows")]
-    private string ResolveUserPath(string username, string localAppData)
-    {
-        var parts = new List<string>();
-
-        // Try reading the user's PATH from the registry via their SID.
-        try
-        {
-            using var usersKey = Microsoft.Win32.Registry.Users;
-            foreach (var sid in usersKey.GetSubKeyNames())
-            {
-                using var envKey = usersKey.OpenSubKey($@"{sid}\Environment");
-                if (envKey is null) continue;
-
-                var regPath = envKey.GetValue("Path") as string;
-                if (string.IsNullOrWhiteSpace(regPath)) continue;
-
-                // Heuristic: the correct SID's PATH will reference the username's profile.
-                if (regPath.Contains(username, StringComparison.OrdinalIgnoreCase))
-                {
-                    parts.Add(regPath);
-                    break;
-                }
-            }
-        }
-        catch (System.Security.SecurityException ex)
-        {
-            logger.LogWarning("{ExceptionDetail}", ex.ToString());
-            // LocalSystem may not be able to read all registry hives.
-        }
-
-        // Always include common tool directories that are known to host CLIs.
-        var wingetLinks = Path.Combine(localAppData, "Microsoft", "WinGet", "Links");
-        if (Directory.Exists(wingetLinks) && !parts.Any(p => p.Contains(wingetLinks, StringComparison.OrdinalIgnoreCase)))
-            parts.Add(wingetLinks);
-
-        return string.Join(";", parts);
-    }
-
-    private static string GetUsersRoot()
-    {
-        // "C:\Users" on typical Windows installs.
-        var profileRoot = Environment.GetEnvironmentVariable("PUBLIC");
-        return profileRoot is not null
-            ? Path.GetDirectoryName(profileRoot) ?? @"C:\Users"
-            : @"C:\Users";
     }
 }
