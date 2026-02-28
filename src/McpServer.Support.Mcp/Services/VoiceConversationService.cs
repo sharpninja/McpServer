@@ -26,6 +26,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     private readonly DesktopProcessLauncher? _desktopLauncher;
     private readonly WorkspaceServiceAccessor _workspaceAccessor;
     private readonly IOptionsMonitor<VoiceConversationOptions> _options;
+    private readonly IOptionsMonitor<TodoPromptOptions> _todoPromptOptions;
     private readonly IHostEnvironment _hostEnvironment;
     private readonly ILogger<VoiceConversationService> _logger;
 
@@ -36,6 +37,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         ICopilotClient copilotClient,
         WorkspaceServiceAccessor workspaceAccessor,
         IOptionsMonitor<VoiceConversationOptions> options,
+        IOptionsMonitor<TodoPromptOptions> todoPromptOptions,
         IHostEnvironment hostEnvironment,
         ILogger<VoiceConversationService> logger,
         ILoggerFactory loggerFactory)
@@ -43,6 +45,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         _copilotClient = copilotClient ?? throw new ArgumentNullException(nameof(copilotClient));
         _workspaceAccessor = workspaceAccessor ?? throw new ArgumentNullException(nameof(workspaceAccessor));
         _options = options ?? throw new ArgumentNullException(nameof(options));
+        _todoPromptOptions = todoPromptOptions ?? throw new ArgumentNullException(nameof(todoPromptOptions));
         _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
@@ -700,8 +703,12 @@ public sealed partial class VoiceConversationService
             ? _workspaceAccessor.GetWorkspacePath()
             : opts.WorkingDirectory;
 
+        var promptOpts = _todoPromptOptions.CurrentValue;
+        var agentPath = string.IsNullOrWhiteSpace(promptOpts.AgentPath) ? "copilot" : promptOpts.AgentPath;
+
         return new CopilotClientOptions
         {
+            AgentPath = agentPath,
             Model = model,
             Silent = true,
             Timeout = TimeSpan.FromSeconds(Math.Max(5, opts.CopilotTimeoutSeconds)),
