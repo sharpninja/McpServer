@@ -842,9 +842,14 @@ public sealed partial class VoiceConversationService
             "Launching Copilot via visible desktop: {Agent} {Args}",
             agentPath, arguments);
 
+        // Wrap in cmd.exe /k so copilot gets a real interactive console
+        var cmdPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.System), "cmd.exe");
+        var wrappedArgs = $"/k \"{agentPath}\" {arguments}";
+
         var pid = _desktopLauncher!.LaunchVisible(
-            agentPath,
-            arguments,
+            cmdPath,
+            wrappedArgs,
             workingDirectory,
             envVars.Count > 0 ? envVars : null);
 
