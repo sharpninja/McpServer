@@ -773,79 +773,24 @@ public sealed partial class VoiceConversationService
         };
     }
 
-    private string BuildCopilotPrompt(
+    private static string BuildCopilotPrompt(
         VoiceSessionState state,
         string turnId,
         string userText,
         IReadOnlyList<string> toolResultsForPrompt,
         int step)
     {
-        var opts = _options.CurrentValue;
-        List<VoiceTranscriptEntryDto> transcriptSnapshot;
-        lock (state.SyncRoot)
-        {
-            transcriptSnapshot = state.Transcript
-                .TakeLast(Math.Max(1, opts.TranscriptContextEntryLimit))
-                .ToList();
-        }
-
+        // No system prompt — only the user's seed text and any tool results.
         var sb = new StringBuilder();
-        sb.AppendLine("You are a helpful, general-purpose voice assistant.");
-        sb.AppendLine("You can answer ANY question — general knowledge, coding, math, science, creative writing, conversation, etc.");
-        sb.AppendLine("You also have optional TODO management tools for task tracking, but MOST interactions should NOT use tools.");
-        sb.AppendLine("Return ONLY one JSON object. No markdown. No code fences. No extra text.");
-        sb.AppendLine();
-        sb.AppendLine("IMPORTANT: For general conversation, questions, explanations, advice, or ANYTHING that is NOT about managing TODOs, return a final_response immediately. Do NOT mention tools or limitations.");
-        sb.AppendLine("Use a tool_call ONLY when the user explicitly asks to list, create, update, or delete TODO items.");
-        sb.AppendLine("Delete and update operations must use exact todo IDs.");
-        sb.AppendLine("If create requires note/remaining, call todo_create then todo_update.");
-        sb.AppendLine();
-        sb.AppendLine("Optional TODO tools (use ONLY when user asks about TODOs):");
-        sb.AppendLine("- todo_list { keyword?, priority?, section?, id?, done?, limit? }");
-        sb.AppendLine("- todo_search { keyword, priority?, section?, id?, done?, limit? }");
-        sb.AppendLine("- todo_get { id }");
-        sb.AppendLine("- todo_create { id, title, section, priority, estimate?, description?, technicalDetails?, implementationTasks?, dependsOn?, functionalRequirements?, technicalRequirements? }");
-        sb.AppendLine("- todo_update { id, title?, priority?, section?, done?, estimate?, description?, technicalDetails?, implementationTasks?, note?, completedDate?, doneSummary?, remaining?, dependsOn?, functionalRequirements?, technicalRequirements? }");
-        sb.AppendLine("- todo_delete { id }");
-        sb.AppendLine("- todo_toggle_done { id, done? }");
-        sb.AppendLine("implementationTasks items are objects: {\"task\":\"...\",\"done\":false}");
-        sb.AppendLine();
-        sb.AppendLine("Response schemas (choose one):");
-        sb.AppendLine("{\"type\":\"tool_call\",\"toolName\":\"todo_list\",\"arguments\":{},\"reasoningSummary\":\"short\"}");
-        sb.AppendLine("{\"type\":\"final_response\",\"displayText\":\"...\",\"speakText\":\"...\",\"reasoningSummary\":\"short\"}");
-        sb.AppendLine("{\"type\":\"error_response\",\"userMessage\":\"...\",\"speakText\":\"...\"}");
-        sb.AppendLine();
-        sb.AppendLine($"SessionId: {state.SessionId}");
-        sb.AppendLine($"TurnId: {turnId}");
-        sb.AppendLine($"Step: {step}");
-        sb.AppendLine($"Language: {state.Language}");
-        sb.AppendLine();
-        sb.AppendLine("Recent transcript context:");
-        if (transcriptSnapshot.Count == 0)
-        {
-            sb.AppendLine("(none)");
-        }
-        else
-        {
-            foreach (var entry in transcriptSnapshot)
-                sb.AppendLine($"- [{entry.TimestampUtc}] {entry.Role}/{entry.Category}: {entry.Text}");
-        }
+        sb.Append(userText);
 
-        sb.AppendLine();
-        sb.AppendLine($"Current user transcript: {userText}");
-        sb.AppendLine();
-        sb.AppendLine("Tool results from this turn so far:");
-        if (toolResultsForPrompt.Count == 0)
+        if (toolResultsForPrompt.Count > 0)
         {
-            sb.AppendLine("(none)");
-        }
-        else
-        {
+            sb.AppendLine();
             foreach (var result in toolResultsForPrompt)
                 sb.AppendLine(result);
         }
-        sb.AppendLine();
-        sb.AppendLine("Return ONLY JSON now.");
+
         return sb.ToString();
     }
 
