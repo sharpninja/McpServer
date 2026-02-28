@@ -11,14 +11,16 @@ namespace McpServer.Support.Mcp.Controllers;
 public sealed class VoiceController : ControllerBase
 {
     private readonly IVoiceConversationService _voiceService;
+    private readonly WorkspaceContext _workspaceContext;
     private readonly ILogger<VoiceController> _logger;
 
     /// <summary>
     /// Creates a new <see cref="VoiceController"/>.
     /// </summary>
-    public VoiceController(IVoiceConversationService voiceService, ILogger<VoiceController> logger)
+    public VoiceController(IVoiceConversationService voiceService, WorkspaceContext workspaceContext, ILogger<VoiceController> logger)
     {
         _voiceService = voiceService ?? throw new ArgumentNullException(nameof(voiceService));
+        _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -32,6 +34,14 @@ public sealed class VoiceController : ControllerBase
     {
         try
         {
+            // Workspace resolution is enforced by WorkspaceResolutionMiddleware —
+            // if we get here, the workspace is valid.
+
+            // Stamp the resolved workspace path so Copilot launches with the correct CWD
+            request ??= new VoiceSessionCreateRequest();
+            if (string.IsNullOrWhiteSpace(request.WorkspacePath))
+                request.WorkspacePath = _workspaceContext.WorkspacePath;
+
             var result = await _voiceService.CreateSessionAsync(request, cancellationToken).ConfigureAwait(false);
             return Created(new Uri($"/mcp/voice/session/{Uri.EscapeDataString(result.SessionId)}", UriKind.Relative), result);
         }

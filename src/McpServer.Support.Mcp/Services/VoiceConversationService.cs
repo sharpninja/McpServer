@@ -54,7 +54,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         var now = DateTimeOffset.UtcNow;
         var sessionId = $"voice-{now:yyyyMMddHHmmss}-{Guid.NewGuid():N}".ToLowerInvariant();
         var language = NormalizeLanguage(request?.Language);
-        var state = new VoiceSessionState(sessionId, language, request?.DeviceId, request?.ClientName, now);
+        var state = new VoiceSessionState(sessionId, language, request?.DeviceId, request?.ClientName, request?.WorkspacePath, now);
         _sessions[sessionId] = state;
 
         return Task.FromResult(new VoiceSessionCreateResponse
@@ -258,14 +258,14 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     }
 
     /// <inheritdoc />
-    public Task<bool> DeleteSessionAsync(string sessionId, CancellationToken cancellationToken = default)
+    public async Task<bool> DeleteSessionAsync(string sessionId, CancellationToken cancellationToken = default)
     {
         EnsureEnabled();
         cancellationToken.ThrowIfCancellationRequested();
         ArgumentException.ThrowIfNullOrWhiteSpace(sessionId);
 
         if (!_sessions.TryRemove(sessionId, out var state))
-            return Task.FromResult(false);
+            return false;
 
         lock (state.SyncRoot)
         {
@@ -282,8 +282,26 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
             state.ActiveTurnCts?.Dispose();
         }
 
+        // Gracefully end the interactive Copilot session
+        if (state.InteractiveSession is not null)
+        {
+            if (state.InteractiveSession.IsAlive)
+            {
+                try
+                {
+                    await state.InteractiveSession.EndAsync(TimeSpan.FromSeconds(30)).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Error ending interactive session: {SessionId}", sessionId);
+                }
+            }
+
+            await state.InteractiveSession.DisposeAsync().ConfigureAwait(false);
+        }
+
         state.Gate.Dispose();
-        return Task.FromResult(true);
+        return true;
     }
 }
 
@@ -304,11 +322,33 @@ public sealed partial class VoiceConversationService
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var prompt = BuildCopilotPrompt(state, turnId, userText, toolResultsForPrompt, step);
-            var copilotResult = await _copilotClient.InvokeAsync(
-                prompt,
-                BuildCopilotOptions(opts),
-                cancellationToken).ConfigureAwait(false);
+            CopilotResult copilotResult;
+
+            if (state.InteractiveSession is { IsAlive: true })
+            {
+                // Interactive session is alive — send via stdin
+                var stdinPrompt = step == 1
+                    ? userText
+                    : toolResultsForPrompt[^1];
+                copilotResult = await state.InteractiveSession.SendAsync(stdinPrompt, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                // First turn or session died — launch interactive process with full system prompt
+                var prompt = BuildCopilotPrompt(state, turnId, userText, toolResultsForPrompt, step);
+                var copilotOpts = BuildCopilotOptions(opts, state.WorkspacePath);
+
+                try
+                {
+                    state.InteractiveSession = _copilotClient.CreateInteractiveSession(prompt, copilotOpts);
+                    copilotResult = await state.InteractiveSession.ReadInitialResponseAsync(cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
+                {
+                    _logger.LogError(ex, "Failed to create interactive Copilot session: {SessionId}", state.SessionId);
+                    return ErrorResult($"Failed to start Copilot: {ex.Message}", toolRecords);
+                }
+            }
 
             if (copilotResult.State != CopilotResultState.Success)
             {
@@ -325,15 +365,41 @@ public sealed partial class VoiceConversationService
 
             if (!TryParseModelEnvelope(copilotResult.Body, out var envelope, out var parseError))
             {
-                var repaired = await _copilotClient.InvokeAsync(
-                    BuildJsonRepairPrompt(copilotResult.Body),
-                    BuildCopilotOptions(opts),
-                    cancellationToken).ConfigureAwait(false);
+                // Try JSON repair first
+                CopilotResult repaired;
+                if (state.InteractiveSession is { IsAlive: true })
+                {
+                    repaired = await state.InteractiveSession.SendAsync(
+                        BuildJsonRepairPrompt(copilotResult.Body),
+                        cancellationToken).ConfigureAwait(false);
+                }
+                else
+                {
+                    repaired = await _copilotClient.InvokeAsync(
+                        BuildJsonRepairPrompt(copilotResult.Body),
+                        BuildCopilotOptions(opts),
+                        cancellationToken).ConfigureAwait(false);
+                }
 
                 if (repaired.State != CopilotResultState.Success ||
                     !TryParseModelEnvelope(repaired.Body, out envelope, out parseError))
                 {
-                    return ErrorResult($"Model returned invalid JSON output: {parseError}", toolRecords);
+                    // Fallback: treat raw text as a conversational final_response
+                    var rawText = (copilotResult.Body ?? string.Empty).Trim();
+                    if (!string.IsNullOrWhiteSpace(rawText))
+                    {
+                        _logger.LogDebug("Voice turn: treating non-JSON response as plain text final_response ({Length} chars)", rawText.Length);
+                        envelope = new ModelEnvelope
+                        {
+                            Type = "final_response",
+                            DisplayText = rawText,
+                            SpeakText = rawText
+                        };
+                    }
+                    else
+                    {
+                        return ErrorResult($"Model returned invalid JSON output: {parseError}", toolRecords);
+                    }
                 }
             }
 
@@ -687,12 +753,16 @@ public sealed partial class VoiceConversationService
         }
     }
 
-    private CopilotClientOptions BuildCopilotOptions(VoiceConversationOptions opts)
+    private CopilotClientOptions BuildCopilotOptions(VoiceConversationOptions opts, string? sessionWorkspacePath = null)
     {
         var model = string.IsNullOrWhiteSpace(opts.CopilotModel) ? "auto" : opts.CopilotModel.Trim();
-        var workingDirectory = string.IsNullOrWhiteSpace(opts.WorkingDirectory)
-            ? _hostEnvironment.ContentRootPath
-            : opts.WorkingDirectory;
+
+        // Session workspace path (from X-Workspace-Path at session creation) takes priority
+        var workingDirectory = !string.IsNullOrWhiteSpace(sessionWorkspacePath)
+            ? sessionWorkspacePath
+            : !string.IsNullOrWhiteSpace(opts.WorkingDirectory)
+                ? opts.WorkingDirectory
+                : _hostEnvironment.ContentRootPath;
 
         return new CopilotClientOptions
         {
@@ -720,9 +790,12 @@ public sealed partial class VoiceConversationService
         }
 
         var sb = new StringBuilder();
-        sb.AppendLine("You are an MCP voice todo assistant operating on a local TODO store.");
+        sb.AppendLine("You are a helpful voice assistant with full access to the workspace.");
+        sb.AppendLine("You can answer general questions, discuss code, explain concepts, and manage TODOs.");
         sb.AppendLine("Return ONLY one JSON object. No markdown. No code fences. No extra text.");
-        sb.AppendLine("Use a tool_call if you need todo data or must mutate todos; otherwise final_response.");
+        sb.AppendLine();
+        sb.AppendLine("For general conversation, questions, or anything that does NOT require a tool, return a final_response.");
+        sb.AppendLine("Use a tool_call ONLY when you need to read or modify TODO data.");
         sb.AppendLine("Delete and update operations must use exact todo IDs.");
         sb.AppendLine("If create requires note/remaining, call todo_create then todo_update.");
         sb.AppendLine();
@@ -1054,12 +1127,13 @@ public sealed partial class VoiceConversationService
 
     private sealed class VoiceSessionState
     {
-        public VoiceSessionState(string sessionId, string language, string? deviceId, string? clientName, DateTimeOffset now)
+        public VoiceSessionState(string sessionId, string language, string? deviceId, string? clientName, string? workspacePath, DateTimeOffset now)
         {
             SessionId = sessionId;
             Language = language;
             DeviceId = deviceId;
             ClientName = clientName;
+            WorkspacePath = workspacePath;
             CreatedUtc = now;
             LastUpdatedUtc = now;
         }
@@ -1070,6 +1144,7 @@ public sealed partial class VoiceConversationService
         public string Language { get; }
         public string? DeviceId { get; }
         public string? ClientName { get; }
+        public string? WorkspacePath { get; }
         public DateTimeOffset CreatedUtc { get; set; }
         public DateTimeOffset LastUpdatedUtc { get; set; }
         public bool IsTurnActive { get; set; }
@@ -1078,6 +1153,7 @@ public sealed partial class VoiceConversationService
         public string? LastTurnId { get; set; }
         public int TurnCounter { get; set; }
         public CancellationTokenSource? ActiveTurnCts { get; set; }
+        public CopilotInteractiveSession? InteractiveSession { get; set; }
         public List<VoiceTranscriptEntryDto> Transcript { get; } = [];
         public List<VoiceToolCallRecordDto> LastTurnToolCalls { get; } = [];
     }

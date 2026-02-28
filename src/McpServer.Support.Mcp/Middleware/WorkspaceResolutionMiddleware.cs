@@ -4,12 +4,13 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Middleware;
 
 /// <summary>
-/// TR-MCP-MT-002: Resolves workspace identity per-request using a three-tier chain:
+/// TR-MCP-MT-002: Resolves workspace identity per-request using a two-tier chain:
 /// <list type="number">
 ///   <item><description><c>X-Workspace-Path</c> header — explicit workspace path (highest priority).</description></item>
 ///   <item><description><c>X-Api-Key</c> reverse lookup via <see cref="WorkspaceTokenService"/>.</description></item>
-///   <item><description>Primary workspace from the registered workspace list (lowest priority).</description></item>
 /// </list>
+/// If neither tier resolves a workspace, workspace-independent routes pass through with an
+/// empty <see cref="WorkspaceContext"/>; workspace-required routes receive a <c>404</c>.
 /// Populates the scoped <see cref="WorkspaceContext"/> for downstream services.
 /// Non-<c>/mcp/</c> and non-<c>/mcp-transport</c> routes skip resolution.
 /// </summary>
@@ -17,6 +18,26 @@ public sealed class WorkspaceResolutionMiddleware
 {
     /// <summary>HTTP header for explicit workspace path targeting.</summary>
     public const string WorkspacePathHeader = "X-Workspace-Path";
+
+    /// <summary>
+    /// Route prefixes (under <c>/mcp</c>) that do NOT require a resolved workspace.
+    /// Requests to these routes pass through with an empty <see cref="WorkspaceContext"/>
+    /// when no header or API key identifies a workspace.
+    /// </summary>
+    private static readonly HashSet<string> WorkspaceIndependentPrefixes = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "/mcp/workspace",
+        "/mcp/todo",
+        "/mcp/sessionlog",
+        "/mcp/requirements",
+        "/mcp/repo",
+        "/mcp/tools",
+        "/mcp/tunnel",
+        "/mcp/diagnostic",
+        "/mcp/events",
+        "/mcp/gh",
+        "/mcp/context",
+    };
 
     private readonly RequestDelegate _next;
     private readonly ILogger<WorkspaceResolutionMiddleware> _logger;
@@ -110,22 +131,33 @@ public sealed class WorkspaceResolutionMiddleware
                 method, path);
         }
 
-        // Tier 3: Primary workspace from registered list
-        var list = await workspaceService.ListAsync(context.RequestAborted).ConfigureAwait(false);
-        var primary = list.Items.FirstOrDefault(w => w.IsPrimary) ?? list.Items.FirstOrDefault();
-        if (primary is not null)
+        // No workspace resolved — check whether this route requires one.
+        if (IsWorkspaceIndependent(path))
         {
-            _logger.LogInformation("[WS-Resolve] {Method} {Path} | Tier3 FALLBACK: using primary workspace '{WorkspaceName}' (HasBearer={HasBearer})",
-                method, path, primary.Name, hasBearerToken);
-            PopulateContext(workspaceContext, primary, isDefault: false, context);
-        }
-        else
-        {
-            _logger.LogError("[WS-Resolve] {Method} {Path} | ALL TIERS FAILED: no workspace could be resolved",
+            _logger.LogDebug("[WS-Resolve] {Method} {Path} | SKIP: workspace-independent route, proceeding without workspace",
                 method, path);
+            await _next(context).ConfigureAwait(false);
+            return;
         }
 
-        await _next(context).ConfigureAwait(false);
+        // Workspace-required route with no workspace resolved — reject.
+        _logger.LogWarning("[WS-Resolve] {Method} {Path} | REJECTED: workspace-required route but no workspace resolved (HasBearer={HasBearer})",
+            method, path, hasBearerToken);
+        context.Response.StatusCode = StatusCodes.Status404NotFound;
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsync(
+            """{"error":"Workspace required. Send X-Workspace-Path header."}""",
+            context.RequestAborted).ConfigureAwait(false);
+    }
+
+    private static bool IsWorkspaceIndependent(PathString path)
+    {
+        foreach (var prefix in WorkspaceIndependentPrefixes)
+        {
+            if (path.StartsWithSegments(prefix, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+        return false;
     }
 
     private static void PopulateContext(WorkspaceContext ctx, WorkspaceDto ws, bool isDefault, HttpContext httpContext)

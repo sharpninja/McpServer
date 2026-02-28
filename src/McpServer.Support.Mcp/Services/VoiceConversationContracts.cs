@@ -19,6 +19,11 @@ public sealed record VoiceSessionCreateRequest
     /// Optional client display name.
     /// </summary>
     public string? ClientName { get; init; }
+
+    /// <summary>
+    /// Workspace root path to use as CWD when launching Copilot. Typically resolved from X-Workspace-Path header.
+    /// </summary>
+    public string? WorkspacePath { get; set; }
 }
 
 /// <summary>
