@@ -6,8 +6,6 @@
 
 Before doing ANY work on ANY user request, you MUST complete these steps in order:
 
-1. **Read `AGENTS-README-FIRST.yaml`** in the repo root for the current API key and endpoints
-2. **GET `/health`** to verify the MCP server is running
 3. **POST `/mcp/sessionlog`** with your session entry — do NOT proceed until this succeeds
 4. **GET `/mcp/sessionlog?limit=5`** to review recent session history for context
 5. **GET `/mcp/todo`** to check current tasks
