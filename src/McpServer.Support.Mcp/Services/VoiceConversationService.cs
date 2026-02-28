@@ -865,7 +865,18 @@ public sealed partial class VoiceConversationService
     private static string BuildCopilotArguments(string prompt, CopilotClientOptions copilotOpts, bool interactive = false)
     {
         var args = new StringBuilder();
-        args.Append("-p ");
+
+        if (interactive)
+        {
+            // -i starts interactive mode with an initial prompt
+            args.Append("-i ");
+        }
+        else
+        {
+            // -p is non-interactive: process prompt and exit
+            args.Append("-p ");
+        }
+
         args.Append(EscapeArgument(prompt));
 
         if (!string.Equals(copilotOpts.Model, "auto", StringComparison.OrdinalIgnoreCase))
@@ -874,11 +885,14 @@ public sealed partial class VoiceConversationService
             args.Append(EscapeArgument(copilotOpts.Model));
         }
 
-        // Skip --silent for interactive desktop sessions
-        if (copilotOpts.Silent && !interactive)
-            args.Append(" --silent");
+        // Skip --silent and --stream for interactive desktop sessions
+        if (!interactive)
+        {
+            if (copilotOpts.Silent)
+                args.Append(" --silent");
 
-        args.Append(" --stream on");
+            args.Append(" --stream on");
+        }
 
         return args.ToString();
     }
