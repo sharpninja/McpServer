@@ -317,7 +317,12 @@ public sealed partial class VoiceConversationService
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var prompt = BuildCopilotPrompt(state, turnId, userText, toolResultsForPrompt, step);
+            // Desktop launch sends only the user text; the full system prompt
+            // is used only for the non-desktop (CopilotClient) path.
+            var useDesktop = opts.UseDesktopLaunch && _desktopLauncher is not null;
+            var prompt = useDesktop
+                ? userText
+                : BuildCopilotPrompt(state, turnId, userText, toolResultsForPrompt, step);
             var copilotResult = await InvokeCopilotWithDesktopFallbackAsync(
                 prompt,
                 opts,
