@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 namespace McpServer.Support.Mcp.Native;
 
 /// <summary>
-/// P/Invoke declarations for Windows process creation and token APIs.
+/// P/Invoke declarations for Windows process creation, token, and terminal services APIs.
 /// Used by <see cref="DesktopProcessLauncher"/> for interactive desktop process launches.
 /// </summary>
 internal static partial class NativeMethods
@@ -90,4 +90,18 @@ internal static partial class NativeMethods
     [DllImport("kernel32.dll", EntryPoint = "GetExitCodeProcess", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static extern bool GetExitCodeProcess(IntPtr hProcess, out int lpExitCode);
+
+    /// <summary>
+    /// Retrieves the session identifier of the console session (the interactive desktop).
+    /// </summary>
+    [DllImport("kernel32.dll", EntryPoint = "WTSGetActiveConsoleSessionId")]
+    internal static extern int WTSGetActiveConsoleSessionId();
+
+    /// <summary>
+    /// Obtains the primary access token of the logged-on user for the specified session.
+    /// Requires the caller to have the SE_TCB_NAME privilege (LocalSystem has this).
+    /// </summary>
+    [DllImport("wtsapi32.dll", EntryPoint = "WTSQueryUserToken", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool WTSQueryUserToken(int sessionId, out IntPtr phToken);
 }

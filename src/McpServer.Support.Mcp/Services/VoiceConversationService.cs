@@ -7,6 +7,7 @@ using System.Text.Json;
 using McpServer.Common.Copilot;
 using McpServer.Support.Mcp.Native;
 using McpServer.Support.Mcp.Options;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Services;
@@ -25,6 +26,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     private readonly ICopilotClient _copilotClient;
     private readonly DesktopProcessLauncher? _desktopLauncher;
     private readonly WorkspaceServiceAccessor _workspaceAccessor;
+    private readonly IConfiguration _configuration;
     private readonly IOptionsMonitor<VoiceConversationOptions> _options;
     private readonly IOptionsMonitor<TodoPromptOptions> _todoPromptOptions;
     private readonly IHostEnvironment _hostEnvironment;
@@ -36,6 +38,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     public VoiceConversationService(
         ICopilotClient copilotClient,
         WorkspaceServiceAccessor workspaceAccessor,
+        IConfiguration configuration,
         IOptionsMonitor<VoiceConversationOptions> options,
         IOptionsMonitor<TodoPromptOptions> todoPromptOptions,
         IHostEnvironment hostEnvironment,
@@ -44,6 +47,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     {
         _copilotClient = copilotClient ?? throw new ArgumentNullException(nameof(copilotClient));
         _workspaceAccessor = workspaceAccessor ?? throw new ArgumentNullException(nameof(workspaceAccessor));
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _options = options ?? throw new ArgumentNullException(nameof(options));
         _todoPromptOptions = todoPromptOptions ?? throw new ArgumentNullException(nameof(todoPromptOptions));
         _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
@@ -696,6 +700,36 @@ public sealed partial class VoiceConversationService
         }
     }
 
+    /// <summary>
+    /// Resolves the Copilot agent path, trying workspace config, <see cref="TodoPromptOptions"/>,
+    /// and finally <see cref="DesktopProcessLauncher.ResolveCommandPathAsync"/> via desktop Get-Command.
+    /// </summary>
+    private async Task<string> ResolveAgentPathAsync(CancellationToken cancellationToken)
+    {
+        // 1. Try workspace config entries from IConfiguration
+        var workspacePath = _workspaceAccessor.GetWorkspacePath();
+        var workspaces = _configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>();
+        var entry = workspaces?.FirstOrDefault(w =>
+            string.Equals(w.WorkspacePath, workspacePath, StringComparison.OrdinalIgnoreCase));
+        if (!string.IsNullOrWhiteSpace(entry?.AgentPath))
+            return entry.AgentPath;
+
+        // 2. Try TodoPromptOptions (set for primary workspace)
+        var promptOpts = _todoPromptOptions.CurrentValue;
+        if (!string.IsNullOrWhiteSpace(promptOpts.AgentPath))
+            return promptOpts.AgentPath;
+
+        // 3. Resolve via Get-Command on the interactive desktop
+        if (_desktopLauncher is not null)
+        {
+            var resolved = await _desktopLauncher.ResolveCommandPathAsync("copilot", cancellationToken).ConfigureAwait(false);
+            if (!string.IsNullOrWhiteSpace(resolved))
+                return resolved;
+        }
+
+        return "copilot";
+    }
+
     private CopilotClientOptions BuildCopilotOptions(VoiceConversationOptions opts)
     {
         var model = string.IsNullOrWhiteSpace(opts.CopilotModel) ? "auto" : opts.CopilotModel.Trim();
@@ -718,7 +752,7 @@ public sealed partial class VoiceConversationService
 
     /// <summary>
     /// Invokes Copilot CLI via <see cref="DesktopProcessLauncher"/> when desktop launch is enabled
-    /// and the launcher is available; otherwise falls back to <see cref="ICopilotClient.InvokeAsync"/>.
+    /// and the launcher is available; otherwise uses <see cref="ICopilotClient.InvokeAsync"/>.
     /// </summary>
     private async Task<CopilotResult> InvokeCopilotWithDesktopFallbackAsync(
         string prompt,
@@ -728,15 +762,7 @@ public sealed partial class VoiceConversationService
         if (!opts.UseDesktopLaunch || _desktopLauncher is null)
             return await _copilotClient.InvokeAsync(prompt, BuildCopilotOptions(opts), cancellationToken).ConfigureAwait(false);
 
-        try
-        {
-            return await InvokeCopilotViaDesktopAsync(prompt, opts, cancellationToken).ConfigureAwait(false);
-        }
-        catch (Exception ex) when (ex is not OperationCanceledException)
-        {
-            _logger.LogWarning("Desktop launch failed, falling back to Process.Start: {Error}", ex.ToString());
-            return await _copilotClient.InvokeAsync(prompt, BuildCopilotOptions(opts), cancellationToken).ConfigureAwait(false);
-        }
+        return await InvokeCopilotViaDesktopAsync(prompt, opts, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -750,7 +776,10 @@ public sealed partial class VoiceConversationService
         var copilotOpts = BuildCopilotOptions(opts);
         var arguments = BuildCopilotArguments(prompt, copilotOpts);
         var workingDirectory = copilotOpts.WorkingDirectory;
-        var agentPath = copilotOpts.AgentPath;
+
+        // Resolve the full path to copilot via workspace config or desktop Get-Command
+        var agentPath = await ResolveAgentPathAsync(cancellationToken).ConfigureAwait(false);
+        copilotOpts.AgentPath = agentPath;
 
         var envVars = new Dictionary<string, string>();
         if (!string.IsNullOrWhiteSpace(copilotOpts.GitHubToken))

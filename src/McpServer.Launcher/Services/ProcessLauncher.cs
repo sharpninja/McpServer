@@ -20,7 +20,7 @@ public sealed class ProcessLauncher : IProcessLauncher
 
         try
         {
-            duplicatedToken = TokenService.DuplicateCurrentProcessToken();
+            duplicatedToken = TokenService.GetConsoleSessionUserToken();
 
             var si = new NativeStructs.STARTUPINFO
             {

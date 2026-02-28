@@ -128,20 +128,19 @@ internal sealed class DesktopProcessLauncher
 
         try
         {
-            duplicatedToken = DuplicateCurrentProcessToken();
+            duplicatedToken = GetConsoleSessionUserToken();
 
             var si = new NativeStructs.STARTUPINFO
             {
                 cb = Marshal.SizeOf<NativeStructs.STARTUPINFO>(),
                 lpDesktop = "winsta0\\default",
-                dwFlags = NativeConstants.STARTF_USESTDHANDLES | NativeConstants.STARTF_USESHOWWINDOW,
-                wShowWindow = NativeConstants.SW_HIDE,
+                dwFlags = NativeConstants.STARTF_USESTDHANDLES,
                 hStdInput = stdinRead,
                 hStdOutput = stdoutWrite,
                 hStdError = stderrWrite
             };
 
-            var creationFlags = NativeConstants.CREATE_UNICODE_ENVIRONMENT | NativeConstants.CREATE_NO_WINDOW;
+            var creationFlags = NativeConstants.CREATE_UNICODE_ENVIRONMENT | NativeConstants.CREATE_NEW_CONSOLE;
             var envBlock = BuildEnvironmentBlock(environmentVariables);
 
             var commandLine = BuildCommandLine(executablePath, arguments);
@@ -211,35 +210,79 @@ internal sealed class DesktopProcessLauncher
         }
     }
 
-    private static IntPtr DuplicateCurrentProcessToken()
+    /// <summary>
+    /// Gets the logged-in user's token from the active console session via WTSQueryUserToken,
+    /// then duplicates it as a primary token for CreateProcessWithTokenW.
+    /// </summary>
+    private static IntPtr GetConsoleSessionUserToken()
     {
-        if (!NativeMethods.OpenProcessToken(
-                NativeMethods.GetCurrentProcess(),
-                NativeConstants.TOKEN_DUPLICATE | NativeConstants.TOKEN_QUERY | NativeConstants.TOKEN_ASSIGN_PRIMARY,
-                out var existingToken))
-        {
-            throw new Win32Exception(Marshal.GetLastWin32Error(), "Failed to open current process token.");
-        }
+        var sessionId = NativeMethods.WTSGetActiveConsoleSessionId();
+        if (sessionId == -1)
+            throw new InvalidOperationException("No active console session found. Is a user logged in?");
+
+        if (!NativeMethods.WTSQueryUserToken(sessionId, out var userToken))
+            throw new Win32Exception(Marshal.GetLastWin32Error(), $"WTSQueryUserToken failed for session {sessionId}. Service may need SE_TCB_NAME privilege.");
 
         try
         {
             if (!NativeMethods.DuplicateTokenEx(
-                    existingToken,
+                    userToken,
                     NativeConstants.TOKEN_ALL_ACCESS,
                     IntPtr.Zero,
                     NativeConstants.SECURITY_IMPERSONATION,
                     NativeConstants.TOKEN_PRIMARY,
                     out var duplicatedToken))
             {
-                throw new Win32Exception(Marshal.GetLastWin32Error(), "Failed to duplicate process token.");
+                throw new Win32Exception(Marshal.GetLastWin32Error(), "Failed to duplicate console session user token.");
             }
 
             return duplicatedToken;
         }
         finally
         {
-            NativeMethods.CloseHandle(existingToken);
+            NativeMethods.CloseHandle(userToken);
         }
+    }
+
+    /// <summary>
+    /// Resolves a command name to its full executable path by running
+    /// <c>Get-Command</c> in a PowerShell session on the interactive desktop.
+    /// Returns null if the command cannot be resolved.
+    /// </summary>
+    /// <param name="commandName">The command name to resolve (e.g. <c>copilot</c>).</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The full path to the executable, or null if not found.</returns>
+    internal async Task<string?> ResolveCommandPathAsync(string commandName, CancellationToken cancellationToken = default)
+    {
+        var psPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.System),
+            "WindowsPowerShell", "v1.0", "powershell.exe");
+
+        if (!File.Exists(psPath))
+        {
+            _logger.LogWarning("PowerShell not found at {Path}, cannot resolve command", psPath);
+            return null;
+        }
+
+        var escapedName = commandName.Replace("'", "''");
+        var arguments = $"-NoProfile -NonInteractive -Command \"(Get-Command '{escapedName}' -ErrorAction SilentlyContinue).Source\"";
+
+        _logger.LogDebug("Resolving command path for '{Command}' via desktop PowerShell", commandName);
+
+        using var handle = LaunchWithStdio(psPath, arguments);
+        var stdout = await handle.StandardOutput.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
+        var exitCode = await handle.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
+
+        var resolvedPath = stdout.Trim();
+        if (exitCode == 0 && !string.IsNullOrEmpty(resolvedPath) && File.Exists(resolvedPath))
+        {
+            _logger.LogInformation("Resolved '{Command}' → '{Path}'", commandName, resolvedPath);
+            return resolvedPath;
+        }
+
+        _logger.LogWarning("Could not resolve command '{Command}' on desktop (exit={ExitCode}, output='{Output}')",
+            commandName, exitCode, resolvedPath);
+        return null;
     }
 
     private static void CreatePipeWithInheritance(out IntPtr readHandle, out IntPtr writeHandle, bool inheritRead)
