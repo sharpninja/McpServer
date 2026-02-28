@@ -21,6 +21,7 @@ using McpServer.Support.Mcp.Web;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.Json;
+using NetEscapades.Configuration.Yaml;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Hosting.WindowsServices;
 using Microsoft.IdentityModel.Tokens;
@@ -52,6 +53,10 @@ bool IsStdioTransportRequested(string[] a)
 
 var builder = WebApplication.CreateBuilder(args);
 DisableEnvironmentSpecificJsonConfigForWindowsService(builder);
+
+// Load optional YAML configuration (overrides JSON settings when present).
+builder.Configuration.AddYamlFile("appsettings.yaml", optional: true, reloadOnChange: true);
+
 if (OperatingSystem.IsWindows())
 {
     builder.Host.UseWindowsService(options =>

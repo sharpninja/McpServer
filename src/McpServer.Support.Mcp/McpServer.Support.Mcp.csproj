@@ -33,6 +33,7 @@
     <PackageReference Include="Serilog.Sinks.Http" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
     <PackageReference Include="YamlDotNet" />
+    <PackageReference Include="NetEscapades.Configuration.Yaml" />
     <PackageReference Include="Microsoft.ML.OnnxRuntime" />
     <PackageReference Include="HNSWIndex" />
     <PackageReference Include="Handlebars.Net" />

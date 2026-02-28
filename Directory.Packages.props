@@ -45,6 +45,7 @@
     <PackageVersion Include="IdentityModel" Version="7.0.0" />
     <PackageVersion Include="IdentityModel.OidcClient" Version="6.0.0" />
     <PackageVersion Include="YamlDotNet" Version="16.3.0" />
+    <PackageVersion Include="NetEscapades.Configuration.Yaml" Version="3.1.0" />
     <PackageVersion Include="Microsoft.ML.OnnxRuntime" Version="1.24.1" />
     <PackageVersion Include="HnswIndex" Version="1.6.0" />
     <PackageVersion Include="System.Text.Json" Version="9.0.5" />

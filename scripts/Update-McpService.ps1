@@ -57,6 +57,7 @@ $ArchivePath = Join-Path $ArchiveDir "McpServer-backup-$Timestamp.zip"
 # files are not preserved and should be removed from the install path.
 $PreservePatterns = @(
     'appsettings.json',
+    'appsettings.yaml',
     '*.db',
     '*.db-shm',
     '*.db-wal'
@@ -404,22 +405,48 @@ if (-not $healthy) {
 }
 
 # 7. Workspace health checks (reads deployed appsettings.json after restore to test configured/fallback ports).
-Write-Step "7/8  Verifying workspace health checks from deployed appsettings.json ..."
+Write-Step "7/8  Verifying workspace health checks from deployed config ..."
 $workspaceChecks = @()
 $workspaceHealthChecked = 0
 $workspaceHealthOk = 0
 $workspaceHealthFailed = 0
-$appSettingsPath = Join-Path $InstallPath 'appsettings.json'
-if (-not (Test-Path $appSettingsPath)) {
-    Write-Warning "Deployed appsettings.json not found at $appSettingsPath; skipping workspace health checks."
+$appSettingsYamlPath = Join-Path $InstallPath 'appsettings.yaml'
+$appSettingsJsonPath = Join-Path $InstallPath 'appsettings.json'
+if (Test-Path $appSettingsYamlPath) {
+    $appSettingsPath = $appSettingsYamlPath
+    $appSettingsFormat = 'yaml'
+}
+elseif (Test-Path $appSettingsJsonPath) {
+    $appSettingsPath = $appSettingsJsonPath
+    $appSettingsFormat = 'json'
+}
+else {
+    $appSettingsPath = $null
+    $appSettingsFormat = $null
+}
+
+if ($null -eq $appSettingsPath) {
+    Write-Warning "No deployed appsettings.json or appsettings.yaml found at $InstallPath; skipping workspace health checks."
 }
 else {
     try {
-        $deployedSettings = Get-Content -Path $appSettingsPath -Raw | ConvertFrom-Json
+        if ($appSettingsFormat -eq 'json') {
+            $deployedSettings = Get-Content -Path $appSettingsPath -Raw | ConvertFrom-Json
+        }
+        else {
+            # YAML — requires powershell-yaml module
+            if (-not (Get-Module -ListAvailable -Name powershell-yaml)) {
+                Install-Module -Name powershell-yaml -Force -Scope CurrentUser -ErrorAction Stop
+            }
+            Import-Module powershell-yaml -ErrorAction Stop
+            $yamlContent = Get-Content -Path $appSettingsPath -Raw
+            $yamlHash = ConvertFrom-Yaml -Yaml $yamlContent
+            $deployedSettings = $yamlHash | ConvertTo-Json -Depth 20 | ConvertFrom-Json
+        }
         $workspaceChecks = @($deployedSettings.Mcp.Workspaces)
     }
     catch {
-        Write-Warning "Failed to parse deployed appsettings.json for workspace health checks: $($_.Exception.Message)"
+        Write-Warning "Failed to parse deployed $appSettingsFormat config for workspace health checks: $($_.Exception.Message)"
         $workspaceChecks = @()
     }
 
