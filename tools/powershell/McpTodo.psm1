@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    MCP Todo PowerShell module — cmdlets for the /mcp/todo API.
+    MCP Todo PowerShell module — cmdlets for the /mcpserver/todo API.
 
 .DESCRIPTION
     Provides cmdlets to list, create, update, complete, and delete todos on an MCP Context Server.
@@ -90,10 +90,10 @@ function Get-McpTodo {
     Assert-Initialized
 
     if ($Id) {
-        $uri = "$($script:McpBaseUrl)/mcp/todo/$Id"
+        $uri = "$($script:McpBaseUrl)/mcpserver/todo/$Id"
         return Invoke-RestMethod -Uri $uri -Headers $script:McpHeaders
     } else {
-        $uri = "$($script:McpBaseUrl)/mcp/todo"
+        $uri = "$($script:McpBaseUrl)/mcpserver/todo"
         $result = Invoke-RestMethod -Uri $uri -Headers $script:McpHeaders
         return $result.items
     }
@@ -111,7 +111,7 @@ function Get-McpTodoPrompt {
         [Parameter(Mandatory)][ValidateSet("implement","plan","status")][string]$Type
     )
     Assert-Initialized
-    $uri = "$($script:McpBaseUrl)/mcp/todo/$Id/prompt/$Type"
+    $uri = "$($script:McpBaseUrl)/mcpserver/todo/$Id/prompt/$Type"
     return Invoke-RestMethod -Uri $uri -Headers $script:McpHeaders
 }
 
@@ -171,7 +171,7 @@ function New-McpTodo {
     }
 
     $body = $todo | ConvertTo-Json -Depth 5
-    return Invoke-RestMethod -Uri "$($script:McpBaseUrl)/mcp/todo" -Method Post -Headers $script:McpHeaders -Body $body
+    return Invoke-RestMethod -Uri "$($script:McpBaseUrl)/mcpserver/todo" -Method Post -Headers $script:McpHeaders -Body $body
 }
 
 # ─── Update ──────────────────────────────────────────────────────────────────
@@ -239,7 +239,7 @@ function Update-McpTodo {
     }
 
     $body = $update | ConvertTo-Json -Depth 5
-    return Invoke-RestMethod -Uri "$($script:McpBaseUrl)/mcp/todo/$Id" -Method Put -Headers $script:McpHeaders -Body $body
+    return Invoke-RestMethod -Uri "$($script:McpBaseUrl)/mcpserver/todo/$Id" -Method Put -Headers $script:McpHeaders -Body $body
 }
 
 # ─── Complete ────────────────────────────────────────────────────────────────
@@ -263,7 +263,7 @@ function Complete-McpTodo {
         doneSummary   = $DoneSummary
     }
     $body = $update | ConvertTo-Json -Depth 5
-    return Invoke-RestMethod -Uri "$($script:McpBaseUrl)/mcp/todo/$Id" -Method Put -Headers $script:McpHeaders -Body $body
+    return Invoke-RestMethod -Uri "$($script:McpBaseUrl)/mcpserver/todo/$Id" -Method Put -Headers $script:McpHeaders -Body $body
 }
 
 # ─── Delete ──────────────────────────────────────────────────────────────────
@@ -278,7 +278,7 @@ function Remove-McpTodo {
         [Parameter(Mandatory)][string]$Id
     )
     Assert-Initialized
-    Invoke-RestMethod -Uri "$($script:McpBaseUrl)/mcp/todo/$Id" -Method Delete -Headers $script:McpHeaders | Out-Null
+    Invoke-RestMethod -Uri "$($script:McpBaseUrl)/mcpserver/todo/$Id" -Method Delete -Headers $script:McpHeaders | Out-Null
     Write-Host "Deleted todo: $Id" -ForegroundColor Yellow
 }
 
@@ -304,7 +304,7 @@ function Add-McpTodoRequirements {
     if ($TechnicalRequirements)  { $body.technicalRequirements  = $TechnicalRequirements }
 
     $json = $body | ConvertTo-Json -Depth 3
-    return Invoke-RestMethod -Uri "$($script:McpBaseUrl)/mcp/todo/$Id/requirements" -Method Post -Headers $script:McpHeaders -Body $json
+    return Invoke-RestMethod -Uri "$($script:McpBaseUrl)/mcpserver/todo/$Id/requirements" -Method Post -Headers $script:McpHeaders -Body $json
 }
 
 # ─── Helpers ─────────────────────────────────────────────────────────────────

@@ -166,7 +166,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
 
             ## TR-MCP-WS-004
 
-            **Workspace Controller** — REST API at `/mcp/workspace` with Base64URL-encoded path keys.
+            **Workspace Controller** — REST API at `/mcpserver/workspace` with Base64URL-encoded path keys.
             """);
 
         File.WriteAllText(Path.Combine(projectDir, "Testing-Requirements.md"), """

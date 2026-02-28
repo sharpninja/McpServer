@@ -5,7 +5,7 @@ using Xunit;
 
 namespace McpServer.Workspace.Validation.AtomicTests;
 
-/// <summary>Audit: POST /mcp/workspace/{key}/stop — Stop the hosted MCP instance.</summary>
+/// <summary>Audit: POST /mcpserver/workspace/{key}/stop — Stop the hosted MCP instance.</summary>
 [Collection("WorkspaceEndpoint")]
 public sealed class StopWorkspaceTests : IAsyncLifetime
 {

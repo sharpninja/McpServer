@@ -12,7 +12,7 @@ public sealed class TodoEndpointFixture : IDisposable
     public const string BaseUrl = "http://localhost:7147";
 
     /// <summary>Route prefix for TODO endpoints.</summary>
-    public const string TodoRoute = "/mcp/todo";
+    public const string TodoRoute = "/mcpserver/todo";
 
     /// <summary>Pre-configured HTTP client targeting the live service.</summary>
     public HttpClient Client { get; }

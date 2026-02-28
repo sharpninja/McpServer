@@ -87,9 +87,9 @@ IDs follow a `SECTION-NNN` pattern (e.g., `APP-001`, `SUPPORT-042`). GitHub-sync
 
 Yes. Bidirectional sync is available:
 
-- **GitHub → TODO**: `POST /mcp/gh/issues/sync/from-github`
-- **TODO → GitHub**: `POST /mcp/gh/issues/sync/to-github`
-- **Single issue**: `POST /mcp/gh/issues/{number}/sync`
+- **GitHub → TODO**: `POST /mcpserver/gh/issues/sync/from-github`
+- **TODO → GitHub**: `POST /mcpserver/gh/issues/sync/to-github`
+- **Single issue**: `POST /mcpserver/gh/issues/{number}/sync`
 
 Synced items get `ISSUE-{number}` IDs. Status changes (done ↔ closed) propagate in both directions.
 
@@ -107,7 +107,7 @@ via the REST API.
 ### How do I create a workspace?
 
 ```bash
-curl -X POST http://localhost:7147/mcp/workspace \
+curl -X POST http://localhost:7147/mcpserver/workspace \
   -H "Content-Type: application/json" \
   -H "X-Api-Key: YOUR_KEY" \
   -d '{"workspacePath": "E:\\github\\MyProject"}'
@@ -117,7 +117,7 @@ Defaults are applied automatically: name from last path segment, port auto-assig
 
 ### What does the init endpoint do?
 
-`POST /mcp/workspace/{key}/init` scaffolds the workspace directory with:
+`POST /mcpserver/workspace/{key}/init` scaffolds the workspace directory with:
 
 - Creates directories as needed
 - Creates an empty `todo.yaml` at the configured TodoPath
@@ -133,7 +133,7 @@ The `{key}` URL parameter is the Base64URL-encoded `WorkspacePath`. For example,
 
 ### How does tool search work?
 
-`GET /mcp/tools/search?keyword=screenshot` searches across:
+`GET /mcpserver/tools/search?keyword=screenshot` searches across:
 
 1. **Tags** — bidirectional contains match (handles singular/plural, e.g., `screenshot` matches `screenshots`)
 2. **Tool name** — case-insensitive contains
@@ -145,10 +145,10 @@ Results include both **global** tools (no workspace scope) and **workspace-speci
 
 Buckets are GitHub repositories that serve as package registries for tool definitions, similar to Scoop buckets. They contain JSON manifest files describing tools. You can:
 
-- **Add a bucket**: `POST /mcp/tools/buckets` with `{owner, repo, branch, path}`
-- **Browse tools**: `GET /mcp/tools/buckets/{name}/browse`
-- **Install a tool**: `POST /mcp/tools/buckets/{name}/install?tool=mytool`
-- **Sync all**: `POST /mcp/tools/buckets/{name}/sync`
+- **Add a bucket**: `POST /mcpserver/tools/buckets` with `{owner, repo, branch, path}`
+- **Browse tools**: `GET /mcpserver/tools/buckets/{name}/browse`
+- **Install a tool**: `POST /mcpserver/tools/buckets/{name}/install?tool=mytool`
+- **Sync all**: `POST /mcpserver/tools/buckets/{name}/sync`
 
 Buckets use the `gh` CLI to read repository contents.
 
@@ -158,7 +158,7 @@ Buckets use the `gh` CLI to read repository contents.
 
 ### How does API key authentication work?
 
-Per-workspace auth tokens are generated on each service restart and written into the `AGENTS-README-FIRST.yaml` marker file in each workspace root. All `/mcp/*` endpoints require the token via:
+Per-workspace auth tokens are generated on each service restart and written into the `AGENTS-README-FIRST.yaml` marker file in each workspace root. All `/mcpserver/*` endpoints require the token via:
 
 - Header: `X-Api-Key: YOUR_TOKEN`
 - Query parameter: `?api_key=YOUR_TOKEN`
@@ -175,8 +175,8 @@ Passwords are stored as SHA-256 hashes and verified with constant-time compariso
 
 | Controller | Public Endpoints |
 |------------|------------------|
-| Workspace | `GET /mcp/workspace`, `GET /mcp/workspace/{key}`, `GET /mcp/workspace/{key}/status` |
-| Tool Registry | `GET /mcp/tools/search`, `GET /mcp/tools`, `GET /mcp/tools/{id}` |
+| Workspace | `GET /mcpserver/workspace`, `GET /mcpserver/workspace/{key}`, `GET /mcpserver/workspace/{key}/status` |
+| Tool Registry | `GET /mcpserver/tools/search`, `GET /mcpserver/tools`, `GET /mcpserver/tools/{id}` |
 | Health | `GET /health`, `GET /alive` |
 
 ---
@@ -220,7 +220,7 @@ Yes. The auth token is passed via the `NGROK_AUTHTOKEN` environment variable, no
 
 ### How does hybrid search work?
 
-The context search endpoint (`POST /mcp/context/search`) combines:
+The context search endpoint (`POST /mcpserver/context/search`) combines:
 
 1. **FTS5 full-text search** — BM25-ranked SQLite FTS5 with snippet extraction
 2. **HNSW vector search** — cosine-similarity nearest-neighbor using all-MiniLM-L6-v2 embeddings (384 dimensions)
@@ -237,11 +237,11 @@ The ingestion pipeline indexes:
 - GitHub issues and PRs (via `gh` CLI)
 - External docs (from cached `docs/external/` path)
 
-Trigger a full re-index with `POST /mcp/sync/run`.
+Trigger a full re-index with `POST /mcpserver/sync/run`.
 
 ### What is a context pack?
 
-`POST /mcp/context/pack` produces a deterministic collection of ranked context chunks — a curated bundle of relevant content for an AI agent's prompt context.
+`POST /mcpserver/context/pack` produces a deterministic collection of ranked context chunks — a curated bundle of relevant content for an AI agent's prompt context.
 
 ---
 
@@ -249,7 +249,7 @@ Trigger a full re-index with `POST /mcp/sync/run`.
 
 ### What's the difference between REST and MCP transport?
 
-| Feature | REST API (`/mcp/*`) | MCP Transport (`/mcp-transport`) |
+| Feature | REST API (`/mcpserver/*`) | MCP Transport (`/mcp-transport`) |
 |---------|--------------------|---------------------------------|
 | Protocol | Standard HTTP/JSON | MCP Streamable HTTP (JSON-RPC) |
 | Clients | Any HTTP client, curl, Swagger | Claude Desktop, VS Code Copilot, Cursor |
@@ -331,7 +331,7 @@ The `/mcp-transport` endpoint requires the header:
 Accept: application/json, text/event-stream
 ```
 
-Ensure your MCP client sends this header. Standard REST clients should use the `/mcp/*` endpoints instead.
+Ensure your MCP client sends this header. Standard REST clients should use the `/mcpserver/*` endpoints instead.
 
 ### The health endpoint returns unhealthy
 

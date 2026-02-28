@@ -5,7 +5,7 @@ using Xunit;
 
 namespace McpServer.Workspace.Validation.AtomicTests;
 
-/// <summary>Audit: PUT /mcp/workspace/{key} — Update a workspace registration.</summary>
+/// <summary>Audit: PUT /mcpserver/workspace/{key} — Update a workspace registration.</summary>
 [Collection("WorkspaceEndpoint")]
 public sealed class UpdateWorkspaceTests : IAsyncLifetime
 {

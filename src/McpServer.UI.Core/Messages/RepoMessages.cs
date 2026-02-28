@@ -2,17 +2,17 @@ using McpServer.Cqrs;
 
 namespace McpServer.UI.Core.Messages;
 
-/// <summary>Query for <c>/mcp/repo/list</c>.</summary>
+/// <summary>Query for <c>/mcpserver/repo/list</c>.</summary>
 public sealed record ListRepoEntriesQuery : IQuery<RepoListResultView>
 {
     /// <summary>Optional relative path to list.</summary>
     public string? Path { get; init; }
 }
 
-/// <summary>Query for <c>/mcp/repo/file</c> (read).</summary>
+/// <summary>Query for <c>/mcpserver/repo/file</c> (read).</summary>
 public sealed record GetRepoFileQuery(string Path) : IQuery<RepoFileDetail>;
 
-/// <summary>Command for <c>POST /mcp/repo/file</c> (write).</summary>
+/// <summary>Command for <c>POST /mcpserver/repo/file</c> (write).</summary>
 public sealed record WriteRepoFileCommand(string Path, string Content) : ICommand<RepoWriteOutcome>;
 
 /// <summary>Repo list result model used by UI.Core.</summary>

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Middleware;
 
 /// <summary>
-/// Pipeline middleware that enforces authentication on all <c>/mcp/*</c> routes.
+/// Pipeline middleware that enforces authentication on all <c>/mcpserver/*</c> routes.
 /// Two authentication mechanisms are supported, evaluated in this order:
 /// <list type="number">
 ///   <item><description><strong>JWT Bearer</strong> — a valid OIDC token grants full access.
@@ -18,7 +18,7 @@ namespace McpServer.Support.Mcp.Middleware;
 ///     Full-access keys (from marker files) grant unrestricted access. Default keys
 ///     (from <c>GET /api-key</c>) grant read-only access except for TODO routes.</description></item>
 /// </list>
-/// Non-<c>/mcp/</c> routes (health, swagger, MCP transport, <c>/api-key</c>) pass through unprotected.
+/// Non-<c>/mcpserver/</c> routes (health, swagger, MCP transport, <c>/api-key</c>) pass through unprotected.
 /// </summary>
 public sealed class WorkspaceAuthMiddleware
 {
@@ -53,13 +53,13 @@ public sealed class WorkspaceAuthMiddleware
         _next = next;
     }
 
-    /// <summary>Validates the auth token for <c>/mcp/*</c> requests.</summary>
+    /// <summary>Validates the auth token for <c>/mcpserver/*</c> requests.</summary>
     public async Task InvokeAsync(HttpContext context, WorkspaceTokenService tokenService, IConfiguration configuration, WorkspaceContext workspaceContext)
     {
         var path = context.Request.Path;
 
-        // Only protect /mcp/* API routes.
-        if (!path.StartsWithSegments("/mcp", StringComparison.OrdinalIgnoreCase))
+        // Only protect /mcpserver/* API routes; /mcp-transport and other non-/mcpserver/ routes pass through.
+        if (!path.HasValue || !path.Value.StartsWith("/mcpserver/", StringComparison.OrdinalIgnoreCase))
         {
             await _next(context).ConfigureAwait(false);
             return;
@@ -153,7 +153,7 @@ public sealed class WorkspaceAuthMiddleware
         {
             context.Items[IsDefaultKeyItem] = true;
 
-            var isTodoRoute = path.StartsWithSegments("/mcp/todo", StringComparison.OrdinalIgnoreCase);
+            var isTodoRoute = path.StartsWithSegments("/mcpserver/todo", StringComparison.OrdinalIgnoreCase);
             var isReadOnly = s_readOnlyMethods.Contains(context.Request.Method);
 
             if (isTodoRoute || isReadOnly)
@@ -190,7 +190,7 @@ public sealed class WorkspaceAuthMiddleware
 
     private static bool IsAgentMutationRoute(PathString path, string method)
     {
-        if (!path.StartsWithSegments("/mcp/agents", StringComparison.OrdinalIgnoreCase))
+        if (!path.StartsWithSegments("/mcpserver/agents", StringComparison.OrdinalIgnoreCase))
             return false;
 
         return !s_readOnlyMethods.Contains(method);

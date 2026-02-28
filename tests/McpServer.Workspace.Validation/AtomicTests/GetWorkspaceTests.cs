@@ -5,7 +5,7 @@ using Xunit;
 
 namespace McpServer.Workspace.Validation.AtomicTests;
 
-/// <summary>Audit: GET /mcp/workspace/{key} — Retrieve a workspace by key (public endpoint).</summary>
+/// <summary>Audit: GET /mcpserver/workspace/{key} — Retrieve a workspace by key (public endpoint).</summary>
 [Collection("WorkspaceEndpoint")]
 public sealed class GetWorkspaceTests : IAsyncLifetime
 {

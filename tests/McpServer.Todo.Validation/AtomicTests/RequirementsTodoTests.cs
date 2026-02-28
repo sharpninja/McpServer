@@ -5,7 +5,7 @@ using Xunit;
 
 namespace McpServer.Todo.Validation.AtomicTests;
 
-/// <summary>Audit: POST /mcp/todo/{id}/requirements — Analyze requirements via Copilot.</summary>
+/// <summary>Audit: POST /mcpserver/todo/{id}/requirements — Analyze requirements via Copilot.</summary>
 [Collection("TodoEndpoint")]
 public sealed class RequirementsTodoTests : IAsyncLifetime
 {

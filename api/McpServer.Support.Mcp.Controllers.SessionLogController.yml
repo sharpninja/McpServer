@@ -32,13 +32,13 @@ items:
     content: >-
       [ApiController]
 
-      [Route("mcp/sessionlog")]
+      [Route("mcpserver/sessionlog")]
 
       public sealed class SessionLogController : ControllerBase
     content.vb: >-
       <ApiController>
 
-      <Route("mcp/sessionlog")>
+      <Route("mcpserver/sessionlog")>
 
       Public NotInheritable Class SessionLogController Inherits ControllerBase
   inheritance:

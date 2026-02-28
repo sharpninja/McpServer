@@ -36,29 +36,29 @@ public sealed class RequirementsControllerTests : IClassFixture<RequirementsCont
             body = "The server shall support end-to-end requirements CRUD integration tests."
         };
 
-        var createResponse = await _client.PostAsJsonAsync("/mcp/requirements/fr", createBody).ConfigureAwait(true);
+        var createResponse = await _client.PostAsJsonAsync("/mcpserver/requirements/fr", createBody).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
 
-        var getResponse = await _client.GetAsync("/mcp/requirements/fr/FR-MCP-999").ConfigureAwait(true);
+        var getResponse = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-999").ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
 
-        var generated = await _client.GetAsync("/mcp/requirements/generate?doc=functional").ConfigureAwait(true);
+        var generated = await _client.GetAsync("/mcpserver/requirements/generate?doc=functional").ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, generated.StatusCode);
         Assert.Equal("text/markdown", generated.Content.Headers.ContentType?.MediaType);
         var generatedMarkdown = await generated.Content.ReadAsStringAsync().ConfigureAwait(true);
         Assert.Contains("FR-MCP-999 Requirements test entry", generatedMarkdown);
 
-        var deleteResponse = await _client.DeleteAsync("/mcp/requirements/fr/FR-MCP-999").ConfigureAwait(true);
+        var deleteResponse = await _client.DeleteAsync("/mcpserver/requirements/fr/FR-MCP-999").ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
 
-        var getDeletedResponse = await _client.GetAsync("/mcp/requirements/fr/FR-MCP-999").ConfigureAwait(true);
+        var getDeletedResponse = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-999").ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, getDeletedResponse.StatusCode);
     }
 
     [Fact]
     public async Task GenerateAll_ReturnsZipWithFourDocuments()
     {
-        var response = await _client.GetAsync("/mcp/requirements/generate?doc=all").ConfigureAwait(true);
+        var response = await _client.GetAsync("/mcpserver/requirements/generate?doc=all").ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("application/zip", response.Content.Headers.ContentType?.MediaType);
 

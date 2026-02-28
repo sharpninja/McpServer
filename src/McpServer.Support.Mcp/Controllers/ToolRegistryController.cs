@@ -11,7 +11,7 @@ namespace McpServer.Support.Mcp.Controllers;
 /// from GitHub-backed bucket repositories (similar to Scoop package manager).
 /// </summary>
 [ApiController]
-[Route("mcp/tools")]
+[Route("mcpserver/tools")]
 public sealed class ToolRegistryController : ControllerBase
 {
     private readonly IToolRegistryService _registry;
@@ -82,7 +82,7 @@ public sealed class ToolRegistryController : ControllerBase
         var result = await _registry.CreateAsync(request, ct).ConfigureAwait(false);
         if (!result.Success)
             return Conflict(result);
-        return Created(new Uri($"/mcp/tools/{result.Tool!.Id}", UriKind.Relative), result);
+        return Created(new Uri($"/mcpserver/tools/{result.Tool!.Id}", UriKind.Relative), result);
     }
 
     /// <summary>Update an existing tool definition. Null fields are left unchanged.</summary>
@@ -144,7 +144,7 @@ public sealed class ToolRegistryController : ControllerBase
         var result = await _bucketService.AddBucketAsync(request, ct).ConfigureAwait(false);
         if (!result.Success)
             return Conflict(result);
-        return Created(new Uri($"/mcp/tools/buckets", UriKind.Relative), result);
+        return Created(new Uri($"/mcpserver/tools/buckets", UriKind.Relative), result);
     }
 
     /// <summary>Remove a bucket and optionally uninstall all tools installed from it.</summary>
@@ -203,7 +203,7 @@ public sealed class ToolRegistryController : ControllerBase
                 return NotFound(result);
             return Conflict(result);
         }
-        return Created(new Uri($"/mcp/tools/{result.Tool!.Id}", UriKind.Relative), result);
+        return Created(new Uri($"/mcpserver/tools/{result.Tool!.Id}", UriKind.Relative), result);
     }
 
     /// <summary>Sync all installed tools from a bucket to pick up manifest changes.</summary>

@@ -5,7 +5,7 @@ using Xunit;
 
 namespace McpServer.Workspace.Validation.AtomicTests;
 
-/// <summary>Audit: POST /mcp/workspace — Create (register) a new workspace.</summary>
+/// <summary>Audit: POST /mcpserver/workspace — Create (register) a new workspace.</summary>
 [Collection("WorkspaceEndpoint")]
 public sealed class CreateWorkspaceTests : IAsyncLifetime
 {

@@ -1,4 +1,4 @@
-﻿using System.CommandLine;
+using System.CommandLine;
 using System.Text.Json;
 using Spectre.Console;
 using static McpServer.Director.Commands.CommandHelpers;
@@ -68,7 +68,7 @@ internal static class DirectorCommands
 
             try
             {
-                var result = await client.GetAsync<JsonElement>("/mcp/workspace").ConfigureAwait(false);
+                var result = await client.GetAsync<JsonElement>("/mcpserver/workspace").ConfigureAwait(false);
                 var items = result.GetProperty("items");
 
                 var table = new Table();
@@ -109,7 +109,7 @@ internal static class DirectorCommands
 
             try
             {
-                var result = await client.GetAsync<JsonElement>("/mcp/agents/definitions").ConfigureAwait(false);
+                var result = await client.GetAsync<JsonElement>("/mcpserver/agents/definitions").ConfigureAwait(false);
                 var items = result.GetProperty("items");
 
                 var table = new Table();
@@ -148,7 +148,7 @@ internal static class DirectorCommands
             if (client is null) return;
 
             var path = Uri.EscapeDataString(client.WorkspacePath);
-            var result = await client.GetAsync<JsonElement>($"/mcp/agents?workspace={path}").ConfigureAwait(false);
+            var result = await client.GetAsync<JsonElement>($"/mcpserver/agents?workspace={path}").ConfigureAwait(false);
             var items = result.GetProperty("items");
 
             var table = new Table();
@@ -184,7 +184,7 @@ internal static class DirectorCommands
             if (client is null) return;
 
             var path = Uri.EscapeDataString(client.WorkspacePath);
-            var result = await client.GetAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}/events?workspace={path}&limit={limit}").ConfigureAwait(false);
+            var result = await client.GetAsync<JsonElement>($"/mcpserver/agents/{Uri.EscapeDataString(agentId)}/events?workspace={path}&limit={limit}").ConfigureAwait(false);
             var items = result.GetProperty("items");
 
             var table = new Table();
@@ -239,7 +239,7 @@ internal static class DirectorCommands
             try
             {
                 var body = new { agentId, enabled, agentIsolation = isolation };
-                var result = await client.PostAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}?workspace={path}", body).ConfigureAwait(false);
+                var result = await client.PostAsync<JsonElement>($"/mcpserver/agents/{Uri.EscapeDataString(agentId)}?workspace={path}", body).ConfigureAwait(false);
                 var success = result.TryGetProperty("success", out var s) && s.GetBoolean();
                 if (success)
                     Success($"Agent '{agentId}' added to workspace.");
@@ -283,7 +283,7 @@ internal static class DirectorCommands
             try
             {
                 var body = new { reason, global, bannedUntilPr = untilPr };
-                var result = await client.PostAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}/ban?workspace={path}", body).ConfigureAwait(false);
+                var result = await client.PostAsync<JsonElement>($"/mcpserver/agents/{Uri.EscapeDataString(agentId)}/ban?workspace={path}", body).ConfigureAwait(false);
                 var success = result.TryGetProperty("success", out var s) && s.GetBoolean();
                 if (success)
                     Success($"Agent '{agentId}' banned{(global ? " globally" : "")}.");
@@ -322,7 +322,7 @@ internal static class DirectorCommands
             var path = Uri.EscapeDataString(client.WorkspacePath);
             try
             {
-                var result = await client.PostAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}/unban?workspace={path}&global={global}").ConfigureAwait(false);
+                var result = await client.PostAsync<JsonElement>($"/mcpserver/agents/{Uri.EscapeDataString(agentId)}/unban?workspace={path}&global={global}").ConfigureAwait(false);
                 var success = result.TryGetProperty("success", out var s) && s.GetBoolean();
                 if (success)
                     Success($"Agent '{agentId}' unbanned{(global ? " globally" : "")}.");
@@ -359,7 +359,7 @@ internal static class DirectorCommands
             var path = Uri.EscapeDataString(client.WorkspacePath);
             try
             {
-                var result = await client.DeleteAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}?workspace={path}").ConfigureAwait(false);
+                var result = await client.DeleteAsync<JsonElement>($"/mcpserver/agents/{Uri.EscapeDataString(agentId)}?workspace={path}").ConfigureAwait(false);
                 var success = result.TryGetProperty("success", out var s) && s.GetBoolean();
                 if (success)
                     Success($"Agent '{agentId}' removed from workspace.");
@@ -389,7 +389,7 @@ internal static class DirectorCommands
             var path = Uri.EscapeDataString(client.WorkspacePath);
             try
             {
-                var result = await client.GetAsync<JsonElement>($"/mcp/agents/validate?workspace={path}").ConfigureAwait(false);
+                var result = await client.GetAsync<JsonElement>($"/mcpserver/agents/validate?workspace={path}").ConfigureAwait(false);
                 var valid = result.TryGetProperty("valid", out var v) && v.GetBoolean();
                 if (valid)
                     Success("agents.yaml is valid.");
@@ -423,13 +423,13 @@ internal static class DirectorCommands
             try
             {
                 // Seed built-in agent definitions
-                await client.PostRawAsync("/mcp/agents/definitions/seed").ConfigureAwait(false);
+                await client.PostRawAsync("/mcpserver/agents/definitions/seed").ConfigureAwait(false);
                 Info("Built-in agent definitions seeded.");
 
                 // Log init event
                 // Server endpoint currently expects AgentEventType as a numeric enum value (Init = 7).
                 var body = new { agentId = "system", eventType = 7, details = "Workspace initialized via Director CLI" };
-                await client.PostAsync<JsonElement>($"/mcp/agents/system/events?workspace={path}", body).ConfigureAwait(false);
+                await client.PostAsync<JsonElement>($"/mcpserver/agents/system/events?workspace={path}", body).ConfigureAwait(false);
 
                 Success("Workspace initialized for agent management.");
             }
@@ -456,7 +456,7 @@ internal static class DirectorCommands
 
             try
             {
-                var url = "/mcp/todo" + (section is not null ? $"?section={Uri.EscapeDataString(section)}" : "");
+                var url = "/mcpserver/todo" + (section is not null ? $"?section={Uri.EscapeDataString(section)}" : "");
                 var result = await client.GetAsync<JsonElement>(url).ConfigureAwait(false);
                 var items = result.GetProperty("items");
 
@@ -507,7 +507,7 @@ internal static class DirectorCommands
             try
             {
                 var body = new { limit, sortBy = "lastUpdated", sortDirection = "desc" };
-                var result = await client.PostAsync<JsonElement>("/mcp/sessionlog", body).ConfigureAwait(false);
+                var result = await client.PostAsync<JsonElement>("/mcpserver/sessionlog", body).ConfigureAwait(false);
                 var items = result.GetProperty("items");
 
                 var table = new Table();

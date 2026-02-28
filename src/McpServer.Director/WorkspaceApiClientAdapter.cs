@@ -92,7 +92,7 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
             ? _context.GetRequiredControlHttpClient()
             : _context.GetRequiredActiveWorkspaceHttpClient();
 
-        var seedResult = await client.PostAsync<JsonElement>("/mcp/agents/definitions/seed", ct: ct).ConfigureAwait(false);
+        var seedResult = await client.PostAsync<JsonElement>("/mcpserver/agents/definitions/seed", ct: ct).ConfigureAwait(false);
         var path = Uri.EscapeDataString(workspacePath);
         var eventBody = new
         {
@@ -100,7 +100,7 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
             eventType = 7, // AgentEventType.Init
             details = "Workspace initialized via Director TUI",
         };
-        await client.PostAsync<JsonElement>($"/mcp/agents/system/events?workspace={path}", eventBody, ct).ConfigureAwait(false);
+        await client.PostAsync<JsonElement>($"/mcpserver/agents/system/events?workspace={path}", eventBody, ct).ConfigureAwait(false);
 
         int? seeded = null;
         if (seedResult.TryGetProperty("seeded", out var seededProp) && seededProp.ValueKind == JsonValueKind.Number

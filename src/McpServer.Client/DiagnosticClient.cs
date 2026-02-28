@@ -6,7 +6,7 @@ using McpServer.Client.Models;
 namespace McpServer.Client;
 
 /// <summary>
-/// Client for diagnostic endpoints (<c>/mcp/diagnostic</c>).
+/// Client for diagnostic endpoints (<c>/mcpserver/diagnostic</c>).
 /// </summary>
 public sealed class DiagnosticClient : McpClientBase
 {
@@ -21,7 +21,7 @@ public sealed class DiagnosticClient : McpClientBase
     public async Task<DiagnosticExecutionPathResult> GetExecutionPathAsync(CancellationToken cancellationToken = default)
     {
         return await GetAsync<DiagnosticExecutionPathResult>(
-            "mcp/diagnostic/execution-path",
+            "mcpserver/diagnostic/execution-path",
             cancellationToken).ConfigureAwait(false);
     }
 
@@ -29,7 +29,7 @@ public sealed class DiagnosticClient : McpClientBase
     public async Task<DiagnosticAppSettingsPathResult> GetAppSettingsPathAsync(CancellationToken cancellationToken = default)
     {
         return await GetAsync<DiagnosticAppSettingsPathResult>(
-            "mcp/diagnostic/appsettings-path",
+            "mcpserver/diagnostic/appsettings-path",
             cancellationToken).ConfigureAwait(false);
     }
 }

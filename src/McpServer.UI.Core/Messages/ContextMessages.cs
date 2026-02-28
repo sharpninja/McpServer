@@ -2,7 +2,7 @@ using McpServer.Cqrs;
 
 namespace McpServer.UI.Core.Messages;
 
-/// <summary>Query for <c>POST /mcp/context/search</c>.</summary>
+/// <summary>Query for <c>POST /mcpserver/context/search</c>.</summary>
 public sealed record SearchContextQuery : IQuery<ContextSearchPayload>
 {
     /// <summary>Query text (required).</summary>
@@ -15,10 +15,10 @@ public sealed record SearchContextQuery : IQuery<ContextSearchPayload>
     public int Limit { get; init; } = 20;
 }
 
-/// <summary>Command for <c>POST /mcp/context/rebuild-index</c>.</summary>
+/// <summary>Command for <c>POST /mcpserver/context/rebuild-index</c>.</summary>
 public sealed record RebuildContextIndexCommand : ICommand<ContextRebuildResult>;
 
-/// <summary>Query for <c>POST /mcp/context/pack</c>.</summary>
+/// <summary>Query for <c>POST /mcpserver/context/pack</c>.</summary>
 public sealed record PackContextQuery : IQuery<ContextPackPayload>
 {
     /// <summary>Query text (required).</summary>
@@ -31,7 +31,7 @@ public sealed record PackContextQuery : IQuery<ContextPackPayload>
     public int Limit { get; init; } = 20;
 }
 
-/// <summary>Query for <c>/mcp/context/sources</c>.</summary>
+/// <summary>Query for <c>/mcpserver/context/sources</c>.</summary>
 public sealed record ListContextSourcesQuery : IQuery<ContextSourcesPayload>;
 
 /// <summary>Context search payload.</summary>

@@ -143,7 +143,7 @@ workspace: demo
         It 'pushes to server on creation' {
             New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
-                $Method -eq 'Post' -and $Uri -like '*/mcp/sessionlog'
+                $Method -eq 'Post' -and $Uri -like '*/mcpserver/sessionlog'
             }
         }
     }
@@ -257,7 +257,7 @@ workspace: demo
             Mock Invoke-RestMethod { $null } -ModuleName McpSession
             Set-McpSessionEntry -Entry $e -Session $s -Response 'done'
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
-                $Method -eq 'Post' -and $Uri -like '*/mcp/sessionlog'
+                $Method -eq 'Post' -and $Uri -like '*/mcpserver/sessionlog'
             }
         }
     }
@@ -350,7 +350,7 @@ workspace: demo
             Mock Invoke-RestMethod { $null } -ModuleName McpSession
             Update-McpSessionLog -Session $s
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
-                $Method -eq 'Post' -and $Uri -like '*/mcp/sessionlog'
+                $Method -eq 'Post' -and $Uri -like '*/mcpserver/sessionlog'
             }
         }
     }
@@ -365,14 +365,14 @@ workspace: demo
         It 'uses default limit=5 and offset=0' {
             Get-McpSessionLog
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
-                $Uri -eq 'http://test:9999/mcp/sessionlog?limit=5&offset=0'
+                $Uri -eq 'http://test:9999/mcpserver/sessionlog?limit=5&offset=0'
             }
         }
 
         It 'passes custom limit and offset' {
             Get-McpSessionLog -Limit 20 -Offset 10
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
-                $Uri -eq 'http://test:9999/mcp/sessionlog?limit=20&offset=10'
+                $Uri -eq 'http://test:9999/mcpserver/sessionlog?limit=20&offset=10'
             }
         }
     }
@@ -388,7 +388,7 @@ workspace: demo
             $s = New-McpSessionLog -SourceType 'Agent' -SessionId 'sess-42' -Title 't' -Model 'm'
             Send-McpDialog -Session $s -RequestId 'req-001' -Content 'Thinking...'
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
-                $Uri -eq 'http://test:9999/mcp/sessionlog/Agent/sess-42/req-001/dialog' -and
+                $Uri -eq 'http://test:9999/mcpserver/sessionlog/Agent/sess-42/req-001/dialog' -and
                 $Method -eq 'Post'
             }
         }

@@ -59,7 +59,7 @@
 | FR-MCP-038 | ✅ Complete | MarkerFileService.DefaultPromptTemplate |
 | FR-MCP-039 | 🔲 Planned | — |
 | FR-MCP-040 | ✅ Complete | RequirementsController, RequirementsDocumentService, IRequirementsRepository |
-| FR-MCP-041 | ✅ Complete | RequirementsController (/mcp/requirements/generate), RequirementsDocumentService, RequirementsDocumentRenderer |
+| FR-MCP-041 | ✅ Complete | RequirementsController (/mcpserver/requirements/generate), RequirementsDocumentService, RequirementsDocumentRenderer |
 | FR-MCP-042 | ✅ Complete | FwhMcpTools (requirements_* tools), RequirementsDocumentService |
 | FR-MCP-043 | ✅ In Progress | WorkspaceResolutionMiddleware, WorkspaceContext, WorkspaceTokenService |
 | FR-MCP-044 | ✅ In Progress | McpDbContext (global query filter), all entities (WorkspaceId) |

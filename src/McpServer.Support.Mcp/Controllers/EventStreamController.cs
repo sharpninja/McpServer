@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using McpServer.Support.Mcp.Notifications;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +7,7 @@ namespace McpServer.Support.Mcp.Controllers;
 /// <summary>
 /// FR-MCP-031: Server-Sent Events stream for REST clients to receive change notifications.
 /// </summary>
-[Route("mcp/events")]
+[Route("mcpserver/events")]
 [ApiController]
 public sealed class EventStreamController : ControllerBase
 {

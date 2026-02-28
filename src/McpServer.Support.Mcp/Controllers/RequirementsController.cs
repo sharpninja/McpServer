@@ -10,7 +10,7 @@ namespace McpServer.Support.Mcp.Controllers;
 /// REST endpoints for managing requirements documents (FR/TR/TEST/mapping) and generating canonical Markdown/ZIP output.
 /// </summary>
 [ApiController]
-[Route("mcp/requirements")]
+[Route("mcpserver/requirements")]
 public sealed class RequirementsController : ControllerBase
 {
     private readonly IRequirementsDocumentService _requirements;
@@ -61,7 +61,7 @@ public sealed class RequirementsController : ControllerBase
             return BadRequest(new { error = ex.Message });
         }
 
-        return Created(new Uri($"/mcp/requirements/fr/{Uri.EscapeDataString(entry.Id)}", UriKind.Relative), entry);
+        return Created(new Uri($"/mcpserver/requirements/fr/{Uri.EscapeDataString(entry.Id)}", UriKind.Relative), entry);
     }
 
     /// <summary>Updates an existing Functional Requirement entry.</summary>
@@ -143,7 +143,7 @@ public sealed class RequirementsController : ControllerBase
             return BadRequest(new { error = ex.Message });
         }
 
-        return Created(new Uri($"/mcp/requirements/tr/{Uri.EscapeDataString(entry.Id)}", UriKind.Relative), entry);
+        return Created(new Uri($"/mcpserver/requirements/tr/{Uri.EscapeDataString(entry.Id)}", UriKind.Relative), entry);
     }
 
     /// <summary>Updates an existing Technical Requirement entry.</summary>
@@ -225,7 +225,7 @@ public sealed class RequirementsController : ControllerBase
             return BadRequest(new { error = ex.Message });
         }
 
-        return Created(new Uri($"/mcp/requirements/test/{Uri.EscapeDataString(entry.Id)}", UriKind.Relative), entry);
+        return Created(new Uri($"/mcpserver/requirements/test/{Uri.EscapeDataString(entry.Id)}", UriKind.Relative), entry);
     }
 
     /// <summary>Updates an existing Testing Requirement entry.</summary>

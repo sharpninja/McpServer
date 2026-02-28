@@ -8,7 +8,7 @@ namespace McpServer.Support.Mcp.Controllers;
 /// Uses <see cref="TunnelRegistry"/> to manage multiple tunnel providers.
 /// </summary>
 [ApiController]
-[Route("mcp/tunnel")]
+[Route("mcpserver/tunnel")]
 public sealed class TunnelController : ControllerBase
 {
     private readonly TunnelRegistry _registry;

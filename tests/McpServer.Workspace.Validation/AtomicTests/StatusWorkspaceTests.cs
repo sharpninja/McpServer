@@ -5,7 +5,7 @@ using Xunit;
 
 namespace McpServer.Workspace.Validation.AtomicTests;
 
-/// <summary>Audit: GET /mcp/workspace/{key}/status — Get process status (public endpoint).</summary>
+/// <summary>Audit: GET /mcpserver/workspace/{key}/status — Get process status (public endpoint).</summary>
 [Collection("WorkspaceEndpoint")]
 public sealed class StatusWorkspaceTests : IAsyncLifetime
 {

@@ -17,11 +17,11 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
         TestAuthHelper.AddAuthHeader(_client, factory.Services);
     }
 
-    /// <summary>GET /mcp/gh/issues returns 200 and body with issues array (or error when gh not available).</summary>
+    /// <summary>GET /mcpserver/gh/issues returns 200 and body with issues array (or error when gh not available).</summary>
     [Fact]
     public async Task ListIssues_ReturnsOk()
     {
-        var response = await _client.GetAsync(new Uri("/mcp/gh/issues?limit=5", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/gh/issues?limit=5", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
         using var doc = JsonDocument.Parse(json);
@@ -29,11 +29,11 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
         Assert.Equal(JsonValueKind.Array, issues.ValueKind);
     }
 
-    /// <summary>GET /mcp/gh/pulls returns 200 and body with pulls array (or error when gh not available).</summary>
+    /// <summary>GET /mcpserver/gh/pulls returns 200 and body with pulls array (or error when gh not available).</summary>
     [Fact]
     public async Task ListPulls_ReturnsOk()
     {
-        var response = await _client.GetAsync(new Uri("/mcp/gh/pulls?limit=5", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/gh/pulls?limit=5", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
         using var doc = JsonDocument.Parse(json);
@@ -41,46 +41,46 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
         Assert.Equal(JsonValueKind.Array, pulls.ValueKind);
     }
 
-    /// <summary>POST /mcp/gh/issues without title returns 400.</summary>
+    /// <summary>POST /mcpserver/gh/issues without title returns 400.</summary>
     [Fact]
     public async Task CreateIssue_WithoutTitle_ReturnsBadRequest()
     {
         var request = new { title = "", body = (string?)null };
-        var response = await _client.PostAsJsonAsync(new Uri("/mcp/gh/issues", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/gh/issues", UriKind.Relative), request).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
-    /// <summary>POST /mcp/gh/issues with null body (missing title) returns 400.</summary>
+    /// <summary>POST /mcpserver/gh/issues with null body (missing title) returns 400.</summary>
     [Fact]
     public async Task CreateIssue_NullBody_ReturnsBadRequest()
     {
-        var response = await _client.PostAsJsonAsync(new Uri("/mcp/gh/issues", UriKind.Relative), (object?)null).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/gh/issues", UriKind.Relative), (object?)null).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
-    /// <summary>POST /mcp/gh/issues/{id}/comments without body returns 400.</summary>
+    /// <summary>POST /mcpserver/gh/issues/{id}/comments without body returns 400.</summary>
     [Fact]
     public async Task CommentOnIssue_WithoutBody_ReturnsBadRequest()
     {
         var request = new { body = "" };
-        var response = await _client.PostAsJsonAsync(new Uri("/mcp/gh/issues/1/comments", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/gh/issues/1/comments", UriKind.Relative), request).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
-    /// <summary>POST /mcp/gh/pulls/{id}/comments without body returns 400.</summary>
+    /// <summary>POST /mcpserver/gh/pulls/{id}/comments without body returns 400.</summary>
     [Fact]
     public async Task CommentOnPull_WithoutBody_ReturnsBadRequest()
     {
         var request = new { body = "" };
-        var response = await _client.PostAsJsonAsync(new Uri("/mcp/gh/pulls/1/comments", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/gh/pulls/1/comments", UriKind.Relative), request).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
-    /// <summary>GET /mcp/gh/labels returns 200 and body with labels array.</summary>
+    /// <summary>GET /mcpserver/gh/labels returns 200 and body with labels array.</summary>
     [Fact]
     public async Task ListLabels_ReturnsOk()
     {
-        var response = await _client.GetAsync(new Uri("/mcp/gh/labels", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/gh/labels", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
         using var doc = JsonDocument.Parse(json);
@@ -88,27 +88,27 @@ public sealed class GitHubControllerTests : IClassFixture<CustomWebApplicationFa
         Assert.Equal(JsonValueKind.Array, labels.ValueKind);
     }
 
-    /// <summary>PUT /mcp/gh/issues/{number} with null body returns 400.</summary>
+    /// <summary>PUT /mcpserver/gh/issues/{number} with null body returns 400.</summary>
     [Fact]
     public async Task UpdateIssue_NullBody_ReturnsBadRequest()
     {
-        var response = await _client.PutAsJsonAsync(new Uri("/mcp/gh/issues/1", UriKind.Relative), (object?)null).ConfigureAwait(true);
+        var response = await _client.PutAsJsonAsync(new Uri("/mcpserver/gh/issues/1", UriKind.Relative), (object?)null).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
-    /// <summary>POST /mcp/gh/issues/sync/from-github returns 200.</summary>
+    /// <summary>POST /mcpserver/gh/issues/sync/from-github returns 200.</summary>
     [Fact]
     public async Task SyncFromGitHub_ReturnsOk()
     {
-        var response = await _client.PostAsync(new Uri("/mcp/gh/issues/sync/from-github?limit=5", UriKind.Relative), null).ConfigureAwait(true);
+        var response = await _client.PostAsync(new Uri("/mcpserver/gh/issues/sync/from-github?limit=5", UriKind.Relative), null).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
-    /// <summary>POST /mcp/gh/issues/sync/to-github returns 200.</summary>
+    /// <summary>POST /mcpserver/gh/issues/sync/to-github returns 200.</summary>
     [Fact]
     public async Task SyncToGitHub_ReturnsOk()
     {
-        var response = await _client.PostAsync(new Uri("/mcp/gh/issues/sync/to-github", UriKind.Relative), null).ConfigureAwait(true);
+        var response = await _client.PostAsync(new Uri("/mcpserver/gh/issues/sync/to-github", UriKind.Relative), null).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 }

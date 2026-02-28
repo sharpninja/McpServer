@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    MCP Session Log PowerShell module — cmdlets for the /mcp/sessionlog API.
+    MCP Session Log PowerShell module — cmdlets for the /mcpserver/sessionlog API.
 
 .DESCRIPTION
     Provides cmdlets to create, update, query, and manage session logs on an MCP Context Server.
@@ -148,7 +148,7 @@ function Get-McpSessionLog {
         [int]$Offset = 0
     )
     Assert-Initialized
-    $uri = "$($script:McpBaseUrl)/mcp/sessionlog?limit=$Limit&offset=$Offset"
+    $uri = "$($script:McpBaseUrl)/mcpserver/sessionlog?limit=$Limit&offset=$Offset"
     return Invoke-RestMethod -Uri $uri -Headers $script:McpHeaders
 }
 
@@ -307,7 +307,7 @@ function Send-McpDialog {
         category  = $Category
     }
 
-    $uri = "$($script:McpBaseUrl)/mcp/sessionlog/$($Session.sourceType)/$($Session.sessionId)/$RequestId/dialog"
+    $uri = "$($script:McpBaseUrl)/mcpserver/sessionlog/$($Session.sourceType)/$($Session.sessionId)/$RequestId/dialog"
     $body = ConvertTo-Json @($item) -Depth 5
     Invoke-RestMethod -Uri $uri -Method Post -Headers $script:McpHeaders -Body $body | Out-Null
 }
@@ -323,7 +323,7 @@ function Assert-Initialized {
 function Push-SessionLog {
     param([PSCustomObject]$Session)
     $body = $Session | ConvertTo-Json -Depth 10
-    Invoke-RestMethod -Uri "$($script:McpBaseUrl)/mcp/sessionlog" -Method Post -Headers $script:McpHeaders -Body $body | Out-Null
+    Invoke-RestMethod -Uri "$($script:McpBaseUrl)/mcpserver/sessionlog" -Method Post -Headers $script:McpHeaders -Body $body | Out-Null
 }
 
 # ─── Exports ─────────────────────────────────────────────────────────────────

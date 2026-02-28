@@ -8,7 +8,7 @@ namespace McpServer.Support.Mcp.Controllers;
 /// Voice conversation endpoints for Android clients (session lifecycle, turns, interrupts, transcript/status).
 /// </summary>
 [ApiController]
-[Route("mcp/voice")]
+[Route("mcpserver/voice")]
 public sealed class VoiceController : ControllerBase
 {
     private static readonly JsonSerializerOptions s_sseJsonOptions = new(JsonSerializerDefaults.Web) { WriteIndented = false };
@@ -46,7 +46,7 @@ public sealed class VoiceController : ControllerBase
                 request.WorkspacePath = _workspaceContext.WorkspacePath;
 
             var result = await _voiceService.CreateSessionAsync(request, cancellationToken).ConfigureAwait(false);
-            return Created(new Uri($"/mcp/voice/session/{Uri.EscapeDataString(result.SessionId)}", UriKind.Relative), result);
+            return Created(new Uri($"/mcpserver/voice/session/{Uri.EscapeDataString(result.SessionId)}", UriKind.Relative), result);
         }
         catch (InvalidOperationException ex)
         {

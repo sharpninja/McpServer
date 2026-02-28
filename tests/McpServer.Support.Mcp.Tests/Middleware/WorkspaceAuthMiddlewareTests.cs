@@ -54,7 +54,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var fullToken = tokenService.GetToken(WorkspacePath)!;
         var nextCalled = false;
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
-        var ctx = CreateContext("POST", "/mcp/repo/file", fullToken);
+        var ctx = CreateContext("POST", "/mcpserver/repo/file", fullToken);
 
         await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
 
@@ -69,7 +69,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var defaultToken = tokenService.GetDefaultToken(WorkspacePath)!;
         var nextCalled = false;
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
-        var ctx = CreateContext("GET", "/mcp/context/search", defaultToken);
+        var ctx = CreateContext("GET", "/mcpserver/context/search", defaultToken);
 
         await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
 
@@ -84,7 +84,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var defaultToken = tokenService.GetDefaultToken(WorkspacePath)!;
         var nextCalled = false;
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
-        var ctx = CreateContext("POST", "/mcp/todo", defaultToken);
+        var ctx = CreateContext("POST", "/mcpserver/todo", defaultToken);
 
         await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
 
@@ -98,7 +98,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var defaultToken = tokenService.GetDefaultToken(WorkspacePath)!;
         var nextCalled = false;
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
-        var ctx = CreateContext("POST", "/mcp/repo/file", defaultToken);
+        var ctx = CreateContext("POST", "/mcpserver/repo/file", defaultToken);
 
         await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
 
@@ -113,7 +113,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var defaultToken = tokenService.GetDefaultToken(WorkspacePath)!;
         var nextCalled = false;
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
-        var ctx = CreateContext("DELETE", "/mcp/repo/test.txt", defaultToken);
+        var ctx = CreateContext("DELETE", "/mcpserver/repo/test.txt", defaultToken);
 
         await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
 
@@ -128,7 +128,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var defaultToken = tokenService.GetDefaultToken(WorkspacePath)!;
         var nextCalled = false;
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
-        var ctx = CreateContext("DELETE", "/mcp/todo/MVP-APP-001", defaultToken);
+        var ctx = CreateContext("DELETE", "/mcpserver/todo/MVP-APP-001", defaultToken);
 
         await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
 
@@ -141,7 +141,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var tokenService = CreateTokenService();
         var nextCalled = false;
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
-        var ctx = CreateContext("GET", "/mcp/todo", "totally-wrong-token");
+        var ctx = CreateContext("GET", "/mcpserver/todo", "totally-wrong-token");
 
         await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
 
@@ -176,7 +176,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var wsContext = new WorkspaceContext { WorkspacePath = WorkspacePath };
         var nextCalled = false;
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
-        var ctx = CreateContext("POST", "/mcp/repo/file", fullToken);
+        var ctx = CreateContext("POST", "/mcpserver/repo/file", fullToken);
 
         await middleware.InvokeAsync(ctx, tokenService, configOther, wsContext);
 
@@ -198,7 +198,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var wsContext = new WorkspaceContext { WorkspacePath = WorkspacePath };
         var nextCalled = false;
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
-        var ctx = CreateContext("POST", "/mcp/repo/file", null);
+        var ctx = CreateContext("POST", "/mcpserver/repo/file", null);
 
         await middleware.InvokeAsync(ctx, tokenService, config, wsContext);
 

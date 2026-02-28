@@ -16,7 +16,7 @@ namespace McpServer.Client;
 /// <see cref="InvalidOperationException"/> is thrown at request time if the key is empty.</para>
 ///
 /// <para><strong>Default key:</strong> The default key returned by <see cref="InitializeAsync"/>
-/// grants <em>read-only</em> access to all endpoints except TODO routes (<c>/mcp/todo*</c>)
+/// grants <em>read-only</em> access to all endpoints except TODO routes (<c>/mcpserver/todo*</c>)
 /// which are read-write. Consumers with access to the <c>AGENTS-README-FIRST.yaml</c> marker
 /// file should use the full-access token from that file instead.</para>
 ///
@@ -192,7 +192,7 @@ public sealed class McpServerClient
     /// to the <c>AGENTS-README-FIRST.yaml</c> marker file.
     ///
     /// <para>The default key grants <em>read-only</em> access to all endpoints except
-    /// TODO routes (<c>/mcp/todo*</c>) which are read-write. For full unrestricted
+    /// TODO routes (<c>/mcpserver/todo*</c>) which are read-write. For full unrestricted
     /// access, use the workspace token from the marker file instead.</para>
     ///
     /// <para>This method is a no-op if <see cref="ApiKey"/> is already non-empty

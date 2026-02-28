@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
-# MCP Session Log — Bash helper functions for the /mcp/sessionlog API.
+# MCP Session Log — Bash helper functions for the /mcpserver/sessionlog API.
 #
 # Usage:
 #   source ./mcp-session.sh
@@ -106,7 +106,7 @@ mcp_session_query() {
     local limit="${1:-5}"
     curl -sf -H "X-Api-Key: ${MCP_API_KEY}" \
         -H "X-Workspace-Path: ${MCP_WORKSPACE_PATH}" \
-        "${MCP_BASE_URL}/mcp/sessionlog?limit=${limit}"
+        "${MCP_BASE_URL}/mcpserver/sessionlog?limit=${limit}"
 }
 
 # ─── Entries ─────────────────────────────────────────────────────────────────
@@ -234,7 +234,7 @@ mcp_session_send_dialog() {
         -H "X-Workspace-Path: ${MCP_WORKSPACE_PATH}" \
         -H "Content-Type: application/json" \
         -d "$body" \
-        "${MCP_BASE_URL}/mcp/sessionlog/${source_type}/${session_id}/${req_id}/dialog" \
+        "${MCP_BASE_URL}/mcpserver/sessionlog/${source_type}/${session_id}/${req_id}/dialog" \
         > /dev/null
 }
 
@@ -246,6 +246,6 @@ _mcp_session_push() {
         -H "X-Workspace-Path: ${MCP_WORKSPACE_PATH}" \
         -H "Content-Type: application/json" \
         -d @"$MCP_SESSION_FILE" \
-        "${MCP_BASE_URL}/mcp/sessionlog" \
+        "${MCP_BASE_URL}/mcpserver/sessionlog" \
         > /dev/null
 }

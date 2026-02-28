@@ -87,7 +87,7 @@ public sealed class ToolRegistryClientTests
 
         var result = await client.GetAsync(5);
 
-        Assert.Contains("/mcp/tools/5", handler.LastRequest!.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/tools/5", handler.LastRequest!.RequestUri!.AbsolutePath);
         Assert.Equal("lint", result.Name);
     }
 
@@ -101,7 +101,7 @@ public sealed class ToolRegistryClientTests
         var result = await client.CreateAsync(new Models.ToolCreateRequest { Name = "new-tool", Description = "d" });
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/tools", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/tools", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.True(result.Success);
     }
 
@@ -115,7 +115,7 @@ public sealed class ToolRegistryClientTests
         var result = await client.UpdateAsync(3, new Models.ToolUpdateRequest { Description = "updated" });
 
         Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/tools/3", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/tools/3", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.True(result.Success);
     }
 
@@ -129,7 +129,7 @@ public sealed class ToolRegistryClientTests
         var result = await client.DeleteAsync(3);
 
         Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/tools/3", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/tools/3", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.True(result.Success);
     }
 
@@ -143,7 +143,7 @@ public sealed class ToolRegistryClientTests
         var result = await client.ListBucketsAsync();
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/tools/buckets", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/tools/buckets", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.Equal(0, result.TotalCount);
     }
 
@@ -170,7 +170,7 @@ public sealed class ToolRegistryClientTests
         var result = await client.DeleteBucketAsync("default", uninstallTools: true);
 
         Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/tools/buckets/default", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/tools/buckets/default", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.Contains("uninstallTools=true", handler.LastRequest.RequestUri.Query);
         Assert.True(result.Success);
     }
@@ -185,7 +185,7 @@ public sealed class ToolRegistryClientTests
         var result = await client.BrowseBucketAsync("default");
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/tools/buckets/default/browse", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/tools/buckets/default/browse", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.True(result.Success);
         Assert.Single(result.Tools!);
     }

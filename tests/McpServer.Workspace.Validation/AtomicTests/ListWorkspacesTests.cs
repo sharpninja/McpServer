@@ -5,7 +5,7 @@ using Xunit;
 
 namespace McpServer.Workspace.Validation.AtomicTests;
 
-/// <summary>Audit: GET /mcp/workspace — List all registered workspaces (public endpoint).</summary>
+/// <summary>Audit: GET /mcpserver/workspace — List all registered workspaces (public endpoint).</summary>
 [Collection("WorkspaceEndpoint")]
 public sealed class ListWorkspacesTests
 {

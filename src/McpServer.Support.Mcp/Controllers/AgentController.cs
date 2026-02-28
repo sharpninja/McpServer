@@ -12,7 +12,7 @@ namespace McpServer.Support.Mcp.Controllers;
 /// Read endpoints use standard workspace API key auth.
 /// </summary>
 [ApiController]
-[Route("mcp/agents")]
+[Route("mcpserver/agents")]
 public class AgentController : ControllerBase
 {
     private readonly IAgentService _agentService;

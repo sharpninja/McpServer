@@ -5,7 +5,7 @@ using Xunit;
 
 namespace McpServer.Todo.Validation.AtomicTests;
 
-/// <summary>Audit: GET /mcp/todo — Query TODO items with various filters.</summary>
+/// <summary>Audit: GET /mcpserver/todo — Query TODO items with various filters.</summary>
 [Collection("TodoEndpoint")]
 public sealed class QueryTodoTests
 {

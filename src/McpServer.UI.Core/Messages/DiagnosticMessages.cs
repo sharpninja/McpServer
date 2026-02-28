@@ -2,10 +2,10 @@ using McpServer.Cqrs;
 
 namespace McpServer.UI.Core.Messages;
 
-/// <summary>Query for <c>/mcp/diagnostic/execution-path</c>.</summary>
+/// <summary>Query for <c>/mcpserver/diagnostic/execution-path</c>.</summary>
 public sealed record GetDiagnosticExecutionPathQuery : IQuery<DiagnosticExecutionPathSnapshot>;
 
-/// <summary>Query for <c>/mcp/diagnostic/appsettings-path</c>.</summary>
+/// <summary>Query for <c>/mcpserver/diagnostic/appsettings-path</c>.</summary>
 public sealed record GetDiagnosticAppSettingsPathQuery : IQuery<DiagnosticAppSettingsSnapshot>;
 
 /// <summary>Execution-path diagnostic snapshot.</summary>

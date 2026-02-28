@@ -12,7 +12,7 @@ namespace McpServer.Support.Mcp.Middleware;
 /// If neither tier resolves a workspace, workspace-independent routes pass through with an
 /// empty <see cref="WorkspaceContext"/>; workspace-required routes receive a <c>404</c>.
 /// Populates the scoped <see cref="WorkspaceContext"/> for downstream services.
-/// Non-<c>/mcp/</c> and non-<c>/mcp-transport</c> routes skip resolution.
+/// Non-<c>/mcpserver/</c> and non-<c>/mcp-transport</c> routes skip resolution.
 /// </summary>
 public sealed class WorkspaceResolutionMiddleware
 {
@@ -26,18 +26,18 @@ public sealed class WorkspaceResolutionMiddleware
     /// </summary>
     private static readonly HashSet<string> WorkspaceIndependentPrefixes = new(StringComparer.OrdinalIgnoreCase)
     {
-        "/mcp/workspace",
-        "/mcp/todo",
-        "/mcp/sessionlog",
-        "/mcp/requirements",
-        "/mcp/repo",
-        "/mcp/tools",
-        "/mcp/tunnel",
-        "/mcp/diagnostic",
-        "/mcp/events",
-        "/mcp/gh",
-        "/mcp/context",
-        "/mcp/voice",
+        "/mcpserver/workspace",
+        "/mcpserver/todo",
+        "/mcpserver/sessionlog",
+        "/mcpserver/requirements",
+        "/mcpserver/repo",
+        "/mcpserver/tools",
+        "/mcpserver/tunnel",
+        "/mcpserver/diagnostic",
+        "/mcpserver/events",
+        "/mcpserver/gh",
+        "/mcpserver/context",
+        "/mcpserver/voice",
         "/mcp-transport",
     };
 
@@ -60,8 +60,8 @@ public sealed class WorkspaceResolutionMiddleware
     {
         var path = context.Request.Path;
 
-        // Only resolve for /mcp/* and /mcp-transport routes.
-        if (!path.StartsWithSegments("/mcp", StringComparison.OrdinalIgnoreCase)
+        // Only resolve for /mcpserver/* and /mcp-transport routes.
+        if (!path.StartsWithSegments("/mcpserver", StringComparison.OrdinalIgnoreCase)
             && !path.StartsWithSegments("/mcp-transport", StringComparison.OrdinalIgnoreCase))
         {
             await _next(context).ConfigureAwait(false);

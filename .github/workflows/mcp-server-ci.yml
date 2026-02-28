@@ -202,7 +202,7 @@ jobs:
           curl -fsS http://localhost:7147/health | grep -q Healthy
 
       - name: Test TODO endpoint
-        run: curl -fsS http://localhost:7147/mcp/todo | head -c 200
+        run: curl -fsS http://localhost:7147/mcpserver/todo | head -c 200
 
       - name: Test Swagger
         run: curl -fsS http://localhost:7147/swagger/v1/swagger.json -o /dev/null

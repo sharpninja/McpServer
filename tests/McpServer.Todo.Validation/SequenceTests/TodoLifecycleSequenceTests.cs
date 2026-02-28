@@ -31,7 +31,7 @@ public sealed class TodoLifecycleSequenceTests
         try
         {
             // ── Step 1: Query (baseline) ──────────────────────────────────
-            _output.WriteLine("Step 1: GET /mcp/todo — Query (baseline)");
+            _output.WriteLine("Step 1: GET /mcpserver/todo — Query (baseline)");
             var listResponse = await client.GetAsync(route);
             Assert.Equal(HttpStatusCode.OK, listResponse.StatusCode);
             var listResult = await listResponse.Content.ReadFromJsonAsync<TodoQueryResult>();
@@ -40,7 +40,7 @@ public sealed class TodoLifecycleSequenceTests
             _output.WriteLine($"  Baseline TODO count: {baselineCount}");
 
             // ── Step 2: Create ────────────────────────────────────────────
-            _output.WriteLine("Step 2: POST /mcp/todo — Create");
+            _output.WriteLine("Step 2: POST /mcpserver/todo — Create");
             var createBody = new
             {
                 Id = testId,
@@ -65,14 +65,14 @@ public sealed class TodoLifecycleSequenceTests
             _output.WriteLine($"  Created TODO: {createResult.Item.Id}");
 
             // ── Step 3: Query (verify count increased) ────────────────────
-            _output.WriteLine("Step 3: GET /mcp/todo — Query (verify +1)");
+            _output.WriteLine("Step 3: GET /mcpserver/todo — Query (verify +1)");
             var list2 = await client.GetAsync(route);
             var list2Result = await list2.Content.ReadFromJsonAsync<TodoQueryResult>();
             Assert.NotNull(list2Result);
             Assert.Equal(baselineCount + 1, list2Result.TotalCount);
 
             // ── Step 4: Get by ID ─────────────────────────────────────────
-            _output.WriteLine("Step 4: GET /mcp/todo/{id} — Get");
+            _output.WriteLine("Step 4: GET /mcpserver/todo/{id} — Get");
             var getResponse = await client.GetAsync($"{route}/{Uri.EscapeDataString(testId)}");
             Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
             var item = await getResponse.Content.ReadFromJsonAsync<TodoFlatItem>();
@@ -87,7 +87,7 @@ public sealed class TodoLifecycleSequenceTests
             _output.WriteLine($"  Retrieved: {item.Title} ({item.Priority})");
 
             // ── Step 5: Query by ID filter ────────────────────────────────
-            _output.WriteLine("Step 5: GET /mcp/todo?id={id} — Query by ID filter");
+            _output.WriteLine("Step 5: GET /mcpserver/todo?id={id} — Query by ID filter");
             var queryById = await client.GetAsync($"{route}?id={Uri.EscapeDataString(testId)}");
             var queryByIdResult = await queryById.Content.ReadFromJsonAsync<TodoQueryResult>();
             Assert.NotNull(queryByIdResult);
@@ -95,7 +95,7 @@ public sealed class TodoLifecycleSequenceTests
             Assert.Contains(queryByIdResult.Items, i => i.Id == testId);
 
             // ── Step 6: Update (rename) ───────────────────────────────────
-            _output.WriteLine("Step 6: PUT /mcp/todo/{id} — Update title");
+            _output.WriteLine("Step 6: PUT /mcpserver/todo/{id} — Update title");
             var updateBody = new { Title = "LifecycleAuditRenamed" };
             var updateResponse = await client.PutAsJsonAsync($"{route}/{Uri.EscapeDataString(testId)}", updateBody);
             Assert.Equal(HttpStatusCode.OK, updateResponse.StatusCode);
@@ -107,14 +107,14 @@ public sealed class TodoLifecycleSequenceTests
             _output.WriteLine("  Renamed to: LifecycleAuditRenamed");
 
             // ── Step 7: Get (verify update) ───────────────────────────────
-            _output.WriteLine("Step 7: GET /mcp/todo/{id} — Verify update");
+            _output.WriteLine("Step 7: GET /mcpserver/todo/{id} — Verify update");
             var get2 = await client.GetAsync($"{route}/{Uri.EscapeDataString(testId)}");
             var item2 = await get2.Content.ReadFromJsonAsync<TodoFlatItem>();
             Assert.NotNull(item2);
             Assert.Equal("LifecycleAuditRenamed", item2.Title);
 
             // ── Step 8: Update (mark done) ────────────────────────────────
-            _output.WriteLine("Step 8: PUT /mcp/todo/{id} — Mark done");
+            _output.WriteLine("Step 8: PUT /mcpserver/todo/{id} — Mark done");
             var doneBody = new { Done = true, CompletedDate = "2026-02-21", DoneSummary = "Audit complete" };
             var doneResponse = await client.PutAsJsonAsync($"{route}/{Uri.EscapeDataString(testId)}", doneBody);
             Assert.Equal(HttpStatusCode.OK, doneResponse.StatusCode);
@@ -126,14 +126,14 @@ public sealed class TodoLifecycleSequenceTests
             _output.WriteLine("  Marked done.");
 
             // ── Step 9: Query (done=true filter) ──────────────────────────
-            _output.WriteLine("Step 9: GET /mcp/todo?done=true — Verify in done list");
+            _output.WriteLine("Step 9: GET /mcpserver/todo?done=true — Verify in done list");
             var doneQuery = await client.GetAsync($"{route}?done=true");
             var doneQueryResult = await doneQuery.Content.ReadFromJsonAsync<TodoQueryResult>();
             Assert.NotNull(doneQueryResult);
             Assert.Contains(doneQueryResult.Items, i => i.Id == testId);
 
             // ── Step 10: Requirements (if Copilot available) ──────────────
-            _output.WriteLine("Step 10: POST /mcp/todo/{id}/requirements — Analyze");
+            _output.WriteLine("Step 10: POST /mcpserver/todo/{id}/requirements — Analyze");
             var reqResponse = await client.PostAsync(
                 $"{route}/{Uri.EscapeDataString(testId)}/requirements", null);
             Assert.True(
@@ -145,7 +145,7 @@ public sealed class TodoLifecycleSequenceTests
             _output.WriteLine($"  Requirements success={reqResult.Success}, error={reqResult.Error}");
 
             // ── Step 11: Delete ───────────────────────────────────────────
-            _output.WriteLine("Step 11: DELETE /mcp/todo/{id} — Delete");
+            _output.WriteLine("Step 11: DELETE /mcpserver/todo/{id} — Delete");
             var deleteResponse = await client.DeleteAsync($"{route}/{Uri.EscapeDataString(testId)}");
             Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
             var deleteResult = await deleteResponse.Content.ReadFromJsonAsync<TodoMutationResult>();
@@ -154,13 +154,13 @@ public sealed class TodoLifecycleSequenceTests
             _output.WriteLine("  Deleted successfully.");
 
             // ── Step 12: Get (verify 404) ─────────────────────────────────
-            _output.WriteLine("Step 12: GET /mcp/todo/{id} — Verify gone (404)");
+            _output.WriteLine("Step 12: GET /mcpserver/todo/{id} — Verify gone (404)");
             var getGone = await client.GetAsync($"{route}/{Uri.EscapeDataString(testId)}");
             Assert.Equal(HttpStatusCode.NotFound, getGone.StatusCode);
             _output.WriteLine("  Confirmed: TODO returns 404 after deletion.");
 
             // ── Step 13: Query (verify count restored) ────────────────────
-            _output.WriteLine("Step 13: GET /mcp/todo — Verify count restored");
+            _output.WriteLine("Step 13: GET /mcpserver/todo — Verify count restored");
             var listFinal = await client.GetAsync(route);
             var listFinalResult = await listFinal.Content.ReadFromJsonAsync<TodoQueryResult>();
             Assert.NotNull(listFinalResult);

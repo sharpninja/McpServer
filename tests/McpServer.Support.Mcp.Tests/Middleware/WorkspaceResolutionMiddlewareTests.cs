@@ -70,7 +70,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
         var nextCalled = false;
         var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
 
-        var ctx = CreateContext("/mcp/todo", workspaceHeader: WorkspaceA);
+        var ctx = CreateContext("/mcpserver/todo", workspaceHeader: WorkspaceA);
         await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
 
         Assert.True(nextCalled);
@@ -87,7 +87,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
         var nextCalled = false;
         var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
 
-        var ctx = CreateContext("/mcp/todo", workspaceHeader: @"C:\nonexistent");
+        var ctx = CreateContext("/mcpserver/todo", workspaceHeader: @"C:\nonexistent");
         await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
 
         Assert.False(nextCalled);
@@ -105,7 +105,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
         var nextCalled = false;
         var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
 
-        var ctx = CreateContext("/mcp/todo", apiKey: token);
+        var ctx = CreateContext("/mcpserver/todo", apiKey: token);
         await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
 
         Assert.True(nextCalled);
@@ -123,7 +123,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
         var nextCalled = false;
         var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
 
-        var ctx = CreateContext("/mcp/todo");
+        var ctx = CreateContext("/mcpserver/todo");
         await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
 
         Assert.True(nextCalled);
@@ -140,7 +140,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
         var nextCalled = false;
         var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
 
-        var ctx = CreateContext("/mcp/todo", apiKey: "unknown-token-abc");
+        var ctx = CreateContext("/mcpserver/todo", apiKey: "unknown-token-abc");
         await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
 
         Assert.True(nextCalled);
@@ -160,7 +160,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
         var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
 
         // Header says workspace A, but API key is for workspace B → header wins
-        var ctx = CreateContext("/mcp/todo", workspaceHeader: WorkspaceA, apiKey: tokenB);
+        var ctx = CreateContext("/mcpserver/todo", workspaceHeader: WorkspaceA, apiKey: tokenB);
         await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
 
         Assert.True(nextCalled);
@@ -212,7 +212,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
         var nextCalled = false;
         var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
 
-        var ctx = CreateContext("/mcp/todo", workspaceHeader: "", apiKey: token);
+        var ctx = CreateContext("/mcpserver/todo", workspaceHeader: "", apiKey: token);
         await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
 
         Assert.True(nextCalled);
@@ -230,7 +230,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
         var wsContext = new WorkspaceContext();
         var mw = CreateMiddleware(_ => Task.CompletedTask);
 
-        var ctx = CreateContext("/mcp/todo", apiKey: defToken);
+        var ctx = CreateContext("/mcpserver/todo", apiKey: defToken);
         await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
 
         Assert.True(wsContext.IsResolved);

@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace McpServer.Client.Models;
 
-/// <summary>Diagnostic result for <c>/mcp/diagnostic/execution-path</c>.</summary>
+/// <summary>Diagnostic result for <c>/mcpserver/diagnostic/execution-path</c>.</summary>
 public sealed class DiagnosticExecutionPathResult
 {
     /// <summary>Current process executable path.</summary>
@@ -14,7 +14,7 @@ public sealed class DiagnosticExecutionPathResult
     public string? BaseDirectory { get; set; }
 }
 
-/// <summary>Diagnostic result for <c>/mcp/diagnostic/appsettings-path</c>.</summary>
+/// <summary>Diagnostic result for <c>/mcpserver/diagnostic/appsettings-path</c>.</summary>
 public sealed class DiagnosticAppSettingsPathResult
 {
     /// <summary>Hosting environment name.</summary>

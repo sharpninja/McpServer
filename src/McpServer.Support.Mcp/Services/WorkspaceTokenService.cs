@@ -9,10 +9,10 @@ namespace McpServer.Support.Mcp.Services;
 /// <list type="bullet">
 ///   <item><description><strong>Full-access tokens</strong> — published in the
 ///     <c>AGENTS-README-FIRST.yaml</c> marker file. Grant unrestricted access to all
-///     <c>/mcp/*</c> endpoints.</description></item>
+///     <c>/mcpserver/*</c> endpoints.</description></item>
 ///   <item><description><strong>Default (anonymous) tokens</strong> — returned by the
 ///     unprotected <c>GET /api-key</c> endpoint. Grant <em>read-only</em> access to all
-///     endpoints <strong>except</strong> TODO routes (<c>/mcp/todo*</c>), which are
+///     endpoints <strong>except</strong> TODO routes (<c>/mcpserver/todo*</c>), which are
 ///     read-write.</description></item>
 /// </list>
 /// Tokens are held in memory only (never persisted) and rotate on every service restart.

@@ -186,7 +186,7 @@ public partial class McpServerMcpTodoToolWindowControl : UserControl
     {
         if (TodoList.SelectedItem is not TodoListEntry entry || entry.Item == null) return;
         var id = entry.Item.Id;
-        var prompt = $"Get the current status of TODO {id} from the local MCP server at http://localhost:7147. Use: curl http://localhost:7147/mcp/todo/{id} to retrieve the item. Report the title, priority, section, done status, description, technical details, implementation tasks with completion status, and any blockers or next steps.";
+        var prompt = $"Get the current status of TODO {id} from the local MCP server at http://localhost:7147. Use: curl http://localhost:7147/mcpserver/todo/{id} to retrieve the item. Report the title, priority, section, done status, description, technical details, implementation tasks with completion status, and any blockers or next steps.";
         await InvokeCopilotPromptAsync(id, "Status", prompt).ConfigureAwait(true);
     }
 
@@ -199,27 +199,27 @@ public partial class McpServerMcpTodoToolWindowControl : UserControl
         var prompt = $@"Implement TODO {id}. Follow this procedure:
 
 1. RETRIEVE: Fetch the full TODO from the local MCP server:
-   curl http://localhost:7147/mcp/todo/{id}
+   curl http://localhost:7147/mcpserver/todo/{id}
    Note the implementationTasks array — each entry has {{ task, done }}.
 
 2. IMPLEMENT TASKS: Work through each implementationTask that has done=false.
    After completing each task, immediately update the TODO via PUT to mark
    that specific task done. Send the FULL implementationTasks array with the
    completed task's done field set to true:
-   curl -X PUT http://localhost:7147/mcp/todo/{id} \
+   curl -X PUT http://localhost:7147/mcpserver/todo/{id} \
      -H ""Content-Type: application/json"" \
      -d '{{""implementationTasks"": [ ...full array with updated done flags... ]}}'
    This makes progress visible in the tree view in real time.
 
 3. UPDATE DEPENDENTS: After all tasks are complete, query all TODOs:
-   curl http://localhost:7147/mcp/todo
+   curl http://localhost:7147/mcpserver/todo
    Find any TODO whose dependsOn array contains ""{id}"". For each dependent:
    - Update its technicalDetails or note to reflect that {id} is now complete.
    - If all of the dependent's own dependencies are satisfied, update its
      remaining estimate and note accordingly.
 
 4. MARK DONE: When all implementationTasks are done, mark the TODO itself done:
-   curl -X PUT http://localhost:7147/mcp/todo/{id} \
+   curl -X PUT http://localhost:7147/mcpserver/todo/{id} \
      -H ""Content-Type: application/json"" \
      -d '{{""done"": true}}'
 
@@ -234,7 +234,7 @@ public partial class McpServerMcpTodoToolWindowControl : UserControl
     {
         if (TodoList.SelectedItem is not TodoListEntry entry || entry.Item == null) return;
         var id = entry.Item.Id;
-        var prompt = $"Create an implementation plan in excruciating detail as a new TODO that TODO {id} depends on. First retrieve the full details of {id} from the local MCP server using: curl http://localhost:7147/mcp/todo/{id}. Then create a new TODO via POST http://localhost:7147/mcp/todo with the detailed plan. Finally update {id} via PUT http://localhost:7147/mcp/todo/{id} to add the new plan TODO as a dependency.";
+        var prompt = $"Create an implementation plan in excruciating detail as a new TODO that TODO {id} depends on. First retrieve the full details of {id} from the local MCP server using: curl http://localhost:7147/mcpserver/todo/{id}. Then create a new TODO via POST http://localhost:7147/mcpserver/todo with the detailed plan. Finally update {id} via PUT http://localhost:7147/mcpserver/todo/{id} to add the new plan TODO as a dependency.";
         await InvokeCopilotPromptAsync(id, "Plan", prompt).ConfigureAwait(true);
     }
 

@@ -74,7 +74,7 @@ Agents shall be able to discover tools by keyword search across global and works
 
 ## FR-MCP-013 Per-Workspace Auth Tokens
 
-The server shall protect all `/mcp/*` API endpoints with per-workspace cryptographic tokens that rotate on each service restart. Tokens are discoverable via the `AGENTS-README-FIRST.yaml` marker file, checked via the `X-Api-Key` header or `api_key` query parameter, and enforced by `WorkspaceAuthMiddleware`. Workspace resolution uses a three-tier chain: `X-Workspace-Path` header → API key reverse lookup → default workspace (see FR-MCP-043).
+The server shall protect all `/mcpserver/*` API endpoints with per-workspace cryptographic tokens that rotate on each service restart. Tokens are discoverable via the `AGENTS-README-FIRST.yaml` marker file, checked via the `X-Api-Key` header or `api_key` query parameter, and enforced by `WorkspaceAuthMiddleware`. Workspace resolution uses a three-tier chain: `X-Workspace-Path` header → API key reverse lookup → default workspace (see FR-MCP-043).
 
 **Covered by:** `WorkspaceAuthMiddleware`, `WorkspaceTokenService`, `WorkspaceResolutionMiddleware`, `MarkerFileService`
 
@@ -248,7 +248,7 @@ The server shall support CRUD operations for Functional Requirements (FR), Techn
 
 The server shall expose a requirements document generation endpoint that renders any canonical requirements document as Markdown and can return all documents together as a ZIP archive with canonical filenames.
 
-**Covered by:** `RequirementsController` (`/mcp/requirements/generate`), `RequirementsDocumentService`, `RequirementsDocumentRenderer`
+**Covered by:** `RequirementsController` (`/mcpserver/requirements/generate`), `RequirementsDocumentService`, `RequirementsDocumentRenderer`
 
 ## FR-MCP-042 Requirements Management MCP Tools
 

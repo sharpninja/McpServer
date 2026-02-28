@@ -18,7 +18,7 @@ internal sealed class AgentScreenHandler
     public async Task<IReadOnlyList<AgentDefinitionSummary>> ListDefinitionsAsync(CancellationToken ct = default)
     {
         var client = GetAgentDefinitionsHttpClient();
-        var result = await client.GetAsync<JsonElement>("/mcp/agents/definitions", ct).ConfigureAwait(false);
+        var result = await client.GetAsync<JsonElement>("/mcpserver/agents/definitions", ct).ConfigureAwait(false);
         var items = result.GetProperty("items");
         var rows = new List<AgentDefinitionSummary>();
         foreach (var item in items.EnumerateArray())
@@ -36,7 +36,7 @@ internal sealed class AgentScreenHandler
     {
         var client = GetAgentWorkspaceManagementHttpClient();
         var path = Uri.EscapeDataString(workspacePath);
-        var result = await client.GetAsync<JsonElement>($"/mcp/agents?workspace={path}", ct).ConfigureAwait(false);
+        var result = await client.GetAsync<JsonElement>($"/mcpserver/agents?workspace={path}", ct).ConfigureAwait(false);
         var items = result.GetProperty("items");
         var rows = new List<WorkspaceAgentSummary>();
         foreach (var item in items.EnumerateArray())
@@ -55,7 +55,7 @@ internal sealed class AgentScreenHandler
     {
         var client = GetAgentWorkspaceManagementHttpClient();
         var path = Uri.EscapeDataString(workspacePath);
-        var result = await client.GetAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}?workspace={path}", ct).ConfigureAwait(false);
+        var result = await client.GetAsync<JsonElement>($"/mcpserver/agents/{Uri.EscapeDataString(agentId)}?workspace={path}", ct).ConfigureAwait(false);
 
         return new AgentDetailState
         {
@@ -77,7 +77,7 @@ internal sealed class AgentScreenHandler
     public async Task<AgentDefinitionDetailState> GetDefinitionDetailAsync(string agentId, CancellationToken ct = default)
     {
         var client = GetAgentDefinitionsHttpClient();
-        var result = await client.GetAsync<JsonElement>($"/mcp/agents/definitions/{Uri.EscapeDataString(agentId)}", ct).ConfigureAwait(false);
+        var result = await client.GetAsync<JsonElement>($"/mcpserver/agents/definitions/{Uri.EscapeDataString(agentId)}", ct).ConfigureAwait(false);
 
         return new AgentDefinitionDetailState
         {
@@ -109,7 +109,7 @@ internal sealed class AgentScreenHandler
             instructionFilesOverride = request.InstructionFilesOverride,
         };
 
-        await client.PostAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(request.AgentId)}?workspace={path}", body, ct)
+        await client.PostAsync<JsonElement>($"/mcpserver/agents/{Uri.EscapeDataString(request.AgentId)}?workspace={path}", body, ct)
             .ConfigureAwait(false);
     }
 
@@ -127,7 +127,7 @@ internal sealed class AgentScreenHandler
             defaultSeedPrompt = request.DefaultSeedPrompt,
         };
 
-        await client.PostAsync<JsonElement>("/mcp/agents/definitions", body, ct).ConfigureAwait(false);
+        await client.PostAsync<JsonElement>("/mcpserver/agents/definitions", body, ct).ConfigureAwait(false);
     }
 
     public async Task AssignWorkspaceAgentAsync(string workspacePath, string agentId, CancellationToken ct = default)
@@ -135,7 +135,7 @@ internal sealed class AgentScreenHandler
         var client = GetAgentWorkspaceManagementHttpClient();
         var path = Uri.EscapeDataString(workspacePath);
         var body = new { agentId, enabled = true, agentIsolation = "worktree" };
-        await client.PostAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}?workspace={path}", body, ct)
+        await client.PostAsync<JsonElement>($"/mcpserver/agents/{Uri.EscapeDataString(agentId)}?workspace={path}", body, ct)
             .ConfigureAwait(false);
     }
 
@@ -144,7 +144,7 @@ internal sealed class AgentScreenHandler
         var client = GetAgentWorkspaceManagementHttpClient();
         var path = Uri.EscapeDataString(workspacePath);
         var body = new { reason, global = false };
-        await client.PostAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}/ban?workspace={path}", body, ct)
+        await client.PostAsync<JsonElement>($"/mcpserver/agents/{Uri.EscapeDataString(agentId)}/ban?workspace={path}", body, ct)
             .ConfigureAwait(false);
     }
 
@@ -152,7 +152,7 @@ internal sealed class AgentScreenHandler
     {
         var client = GetAgentWorkspaceManagementHttpClient();
         var path = Uri.EscapeDataString(workspacePath);
-        await client.PostAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}/unban?workspace={path}&global=false", ct: ct)
+        await client.PostAsync<JsonElement>($"/mcpserver/agents/{Uri.EscapeDataString(agentId)}/unban?workspace={path}&global=false", ct: ct)
             .ConfigureAwait(false);
     }
 
@@ -160,7 +160,7 @@ internal sealed class AgentScreenHandler
     {
         var client = GetAgentWorkspaceManagementHttpClient();
         var path = Uri.EscapeDataString(workspacePath);
-        await client.DeleteAsync<JsonElement>($"/mcp/agents/{Uri.EscapeDataString(agentId)}?workspace={path}", ct)
+        await client.DeleteAsync<JsonElement>($"/mcpserver/agents/{Uri.EscapeDataString(agentId)}?workspace={path}", ct)
             .ConfigureAwait(false);
     }
 
@@ -168,7 +168,7 @@ internal sealed class AgentScreenHandler
     {
         var client = GetAgentWorkspaceManagementHttpClient();
         var path = Uri.EscapeDataString(workspacePath);
-        var result = await client.GetAsync<JsonElement>($"/mcp/agents/validate?workspace={path}", ct).ConfigureAwait(false);
+        var result = await client.GetAsync<JsonElement>($"/mcpserver/agents/validate?workspace={path}", ct).ConfigureAwait(false);
         var valid = result.TryGetProperty("valid", out var v) && v.GetBoolean();
         var error = result.TryGetProperty("error", out var e) ? e.GetString() : null;
         return new AgentValidationResult(valid, error);
@@ -178,7 +178,7 @@ internal sealed class AgentScreenHandler
     {
         var client = GetAgentDefinitionsHttpClient();
         var body = new { id = agentId, displayName = agentId };
-        await client.PostAsync<JsonElement>("/mcp/agents/definitions", body, ct).ConfigureAwait(false);
+        await client.PostAsync<JsonElement>("/mcpserver/agents/definitions", body, ct).ConfigureAwait(false);
     }
 
     private McpHttpClient GetAgentDefinitionsHttpClient()

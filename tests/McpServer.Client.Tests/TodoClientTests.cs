@@ -39,7 +39,7 @@ public sealed class TodoClientTests
         var result = await client.GetAsync("MVP-001");
 
         Assert.Equal("MVP-001", result.Id);
-        Assert.Contains("/mcp/todo/MVP-001", handler.LastRequest!.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/todo/MVP-001", handler.LastRequest!.RequestUri!.AbsolutePath);
     }
 
     [Fact]
@@ -117,7 +117,7 @@ public sealed class TodoClientTests
 
         Assert.True(result.Success);
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/todo/MVP-001/requirements", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/todo/MVP-001/requirements", handler.LastRequest.RequestUri!.AbsolutePath);
     }
 
     [Fact]
@@ -135,7 +135,7 @@ public sealed class TodoClientTests
         Assert.Equal(2, lines.Count);
         Assert.Equal("Line one", lines[0]);
         Assert.Equal("Line two", lines[1]);
-        Assert.Contains("/mcp/todo/MVP-001/prompt/status", handler.LastRequest!.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/todo/MVP-001/prompt/status", handler.LastRequest!.RequestUri!.AbsolutePath);
     }
 
     [Fact]
@@ -152,7 +152,7 @@ public sealed class TodoClientTests
 
         Assert.Single(lines);
         Assert.Equal("impl line", lines[0]);
-        Assert.Contains("/mcp/todo/MVP-001/prompt/implement", handler.LastRequest!.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/todo/MVP-001/prompt/implement", handler.LastRequest!.RequestUri!.AbsolutePath);
     }
 
     [Fact]
@@ -169,7 +169,7 @@ public sealed class TodoClientTests
 
         Assert.Equal(3, lines.Count);
         Assert.Equal("plan step 1", lines[0]);
-        Assert.Contains("/mcp/todo/MVP-001/prompt/plan", handler.LastRequest!.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/todo/MVP-001/prompt/plan", handler.LastRequest!.RequestUri!.AbsolutePath);
     }
 
     [Fact]

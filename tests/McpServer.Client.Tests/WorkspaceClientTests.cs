@@ -36,7 +36,7 @@ public sealed class WorkspaceClientTests
         var result = await client.StartAsync("abc123");
 
         Assert.True(result.IsRunning);
-        Assert.Contains("/mcp/workspace/abc123/start", handler.LastRequest!.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/workspace/abc123/start", handler.LastRequest!.RequestUri!.AbsolutePath);
     }
 
     [Fact]
@@ -49,7 +49,7 @@ public sealed class WorkspaceClientTests
         var result = await client.GetGlobalPromptAsync();
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/workspace/prompt", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/workspace/prompt", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.Equal("Hello {baseUrl}", result.Template);
         Assert.False(result.IsDefault);
     }
@@ -64,7 +64,7 @@ public sealed class WorkspaceClientTests
         var result = await client.UpdateGlobalPromptAsync(new Models.GlobalPromptUpdateRequest { Template = "Custom prompt" });
 
         Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/workspace/prompt", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/workspace/prompt", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.Equal("Custom prompt", result.Template);
     }
 
@@ -78,7 +78,7 @@ public sealed class WorkspaceClientTests
         var result = await client.GetAsync("abc123");
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/workspace/abc123", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/workspace/abc123", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.Equal("test", result.Name);
     }
 
@@ -92,7 +92,7 @@ public sealed class WorkspaceClientTests
         var result = await client.CreateAsync(new Models.WorkspaceCreateRequest { WorkspacePath = "/tmp", Name = "new" });
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/workspace", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/workspace", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.True(result.Success);
     }
 
@@ -106,7 +106,7 @@ public sealed class WorkspaceClientTests
         var result = await client.UpdateAsync("abc123", new Models.WorkspaceUpdateRequest { Name = "renamed" });
 
         Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/workspace/abc123", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/workspace/abc123", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.True(result.Success);
     }
 
@@ -120,7 +120,7 @@ public sealed class WorkspaceClientTests
         var result = await client.DeleteAsync("abc123");
 
         Assert.Equal(HttpMethod.Delete, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/workspace/abc123", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/workspace/abc123", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.True(result.Success);
     }
 
@@ -134,7 +134,7 @@ public sealed class WorkspaceClientTests
         var result = await client.InitAsync("abc123");
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/workspace/abc123/init", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/workspace/abc123/init", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.True(result.Success);
     }
 
@@ -148,7 +148,7 @@ public sealed class WorkspaceClientTests
         var result = await client.StopAsync("abc123");
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/workspace/abc123/stop", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/workspace/abc123/stop", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.False(result.IsRunning);
     }
 
@@ -162,7 +162,7 @@ public sealed class WorkspaceClientTests
         var result = await client.GetStatusAsync("abc123");
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/workspace/abc123/status", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/workspace/abc123/status", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.True(result.IsRunning);
         Assert.Equal(1234, result.Pid);
     }

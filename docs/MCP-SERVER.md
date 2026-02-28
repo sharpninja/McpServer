@@ -95,7 +95,7 @@ Each workspace entry has:
 Create a workspace:
 
 ```bash
-curl -X POST http://localhost:7147/mcp/workspace \
+curl -X POST http://localhost:7147/mcpserver/workspace \
   -H "Content-Type: application/json" \
   -d '{"workspacePath": "E:\\github\\MyProject"}'
 ```
@@ -103,7 +103,7 @@ curl -X POST http://localhost:7147/mcp/workspace \
 The workspace is immediately accessible on the shared host port. Target it with the `X-Workspace-Path` header:
 
 ```bash
-curl http://localhost:7147/mcp/todo \
+curl http://localhost:7147/mcpserver/todo \
   -H "X-Api-Key: <token>" \
   -H "X-Workspace-Path: E:\\github\\MyProject"
 ```
@@ -142,8 +142,8 @@ Available in Debug builds and `Staging` environment; excluded in Production Rele
 
 | Method | Route | Returns |
 |--------|-------|---------|
-| `GET` | `/mcp/diagnostic/execution-path` | `{ processPath, baseDirectory }` |
-| `GET` | `/mcp/diagnostic/appsettings-path` | `{ environmentName, contentRootPath, files[] }` |
+| `GET` | `/mcpserver/diagnostic/execution-path` | `{ processPath, baseDirectory }` |
+| `GET` | `/mcpserver/diagnostic/appsettings-path` | `{ environmentName, contentRootPath, files[] }` |
 
 Use these to verify which binary and which `appsettings.json` a running instance has loaded.
 
@@ -229,12 +229,12 @@ Migrate between backends:
 
 Primary controllers:
 
-- `/mcp/todo`
-- `/mcp/sessionlog`
-- `/mcp/context`
-- `/mcp/repo`
-- `/mcp/gh`
-- `/mcp/sync`
+- `/mcpserver/todo`
+- `/mcpserver/sessionlog`
+- `/mcpserver/context`
+- `/mcpserver/repo`
+- `/mcpserver/gh`
+- `/mcpserver/sync`
 
 Swagger:
 
@@ -251,8 +251,8 @@ gsudo .\scripts\Update-McpService.ps1
 Health checks:
 
 1. Open `/swagger` and `/health`.
-2. Test todo read/write with `/mcp/todo`.
-3. Test context search with `/mcp/context/search`.
+2. Test todo read/write with `/mcpserver/todo`.
+3. Test context search with `/mcpserver/context/search`.
 4. For GitHub integration, run `gh auth status` on the host.
 
 Log signals:

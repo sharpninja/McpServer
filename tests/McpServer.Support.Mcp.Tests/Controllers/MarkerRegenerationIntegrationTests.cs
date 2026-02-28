@@ -100,7 +100,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
     public async Task GlobalPromptUpdate_RegeneratesMarkerFile()
     {
         // Verify the workspace was seeded in config.
-        var listResponse = await _client.GetAsync(new Uri("/mcp/workspace", UriKind.Relative)).ConfigureAwait(true);
+        var listResponse = await _client.GetAsync(new Uri("/mcpserver/workspace", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, listResponse.StatusCode);
         var listBody = await listResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
         Assert.Contains("marker-test", listBody);
@@ -109,7 +109,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         var key = EncodeKey(Path.GetFullPath(_workspacePath));
         var markerCreated = WatchForMarkerChange();
         var startResponse = await _client.PostAsync(
-            new Uri($"/mcp/workspace/{key}/start", UriKind.Relative), null).ConfigureAwait(true);
+            new Uri($"/mcpserver/workspace/{key}/start", UriKind.Relative), null).ConfigureAwait(true);
         var startBody = await startResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
         Assert.True(startResponse.StatusCode == HttpStatusCode.OK,
             $"Start failed ({startResponse.StatusCode}): {startBody}");
@@ -126,7 +126,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
 
         var customPrompt = "CUSTOM GLOBAL PROMPT for testing marker regeneration {baseUrl}";
         var updateResponse = await _client.PutAsJsonAsync(
-            new Uri("/mcp/workspace/prompt", UriKind.Relative),
+            new Uri("/mcpserver/workspace/prompt", UriKind.Relative),
             new { template = customPrompt }).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, updateResponse.StatusCode);
 
@@ -151,14 +151,14 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         var key = EncodeKey(Path.GetFullPath(_workspacePath));
         var markerCreated = WatchForMarkerChange();
         await _client.PostAsync(
-            new Uri($"/mcp/workspace/{key}/start", UriKind.Relative), null).ConfigureAwait(true);
+            new Uri($"/mcpserver/workspace/{key}/start", UriKind.Relative), null).ConfigureAwait(true);
         await markerCreated.ConfigureAwait(true);
 
         // 2. Update the workspace prompt — latch on marker rewrite.
         var markerChanged = WatchForMarkerChange();
         var workspacePrompt = "WORKSPACE SPECIFIC PROMPT for {{baseUrl}}";
         var updateResponse = await _client.PutAsJsonAsync(
-            new Uri($"/mcp/workspace/{key}", UriKind.Relative),
+            new Uri($"/mcpserver/workspace/{key}", UriKind.Relative),
             new { promptTemplate = workspacePrompt }).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, updateResponse.StatusCode);
 
@@ -175,7 +175,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         var key = EncodeKey(Path.GetFullPath(_workspacePath));
         var markerCreated = WatchForMarkerChange();
         await _client.PostAsync(
-            new Uri($"/mcp/workspace/{key}/start", UriKind.Relative), null).ConfigureAwait(true);
+            new Uri($"/mcpserver/workspace/{key}/start", UriKind.Relative), null).ConfigureAwait(true);
         await markerCreated.ConfigureAwait(true);
 
         // 2. Set a custom global prompt — latch on settings + marker writes.
@@ -183,7 +183,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         var markerGlobal = WatchForMarkerChange();
         var globalPrompt = "GLOBAL SECTION {{baseUrl}}";
         var globalResponse = await _client.PutAsJsonAsync(
-            new Uri("/mcp/workspace/prompt", UriKind.Relative),
+            new Uri("/mcpserver/workspace/prompt", UriKind.Relative),
             new { template = globalPrompt }).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, globalResponse.StatusCode);
         await settingsChanged.ConfigureAwait(true);
@@ -198,7 +198,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         var markerWs = WatchForMarkerChange();
         var workspacePrompt = "WORKSPACE SECTION {{baseUrl}}";
         var wsResponse = await _client.PutAsJsonAsync(
-            new Uri($"/mcp/workspace/{key}", UriKind.Relative),
+            new Uri($"/mcpserver/workspace/{key}", UriKind.Relative),
             new { promptTemplate = workspacePrompt }).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, wsResponse.StatusCode);
         await settingsChanged2.ConfigureAwait(true);

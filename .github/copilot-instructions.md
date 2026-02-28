@@ -6,9 +6,9 @@
 
 Before doing ANY work on ANY user request, you MUST complete these steps in order:
 
-3. **POST `/mcp/sessionlog`** with your session entry — do NOT proceed until this succeeds
-4. **GET `/mcp/sessionlog?limit=5`** to review recent session history for context
-5. **GET `/mcp/todo`** to check current tasks
+3. **POST `/mcpserver/sessionlog`** with your session entry — do NOT proceed until this succeeds
+4. **GET `/mcpserver/sessionlog?limit=5`** to review recent session history for context
+5. **GET `/mcpserver/todo`** to check current tasks
 6. **THEN** begin working on the user's request
 
 On EVERY subsequent user message:
@@ -48,7 +48,7 @@ pwsh ./scripts/Validate-McpConfig.ps1
 
 **McpServer** is a standalone ASP.NET Core 9 server providing context retrieval, TODO management, session logging, repository operations, and GitHub issue sync for AI agents. It exposes functionality via two transports:
 
-- **HTTP REST API** — Controllers under `src/McpServer.Support.Mcp/Controllers/` (routes at `/mcp/*`).
+- **HTTP REST API** — Controllers under `src/McpServer.Support.Mcp/Controllers/` (routes at `/mcpserver/*`).
 - **MCP Streamable HTTP** — `app.MapMcp("/mcp-transport")` using ModelContextProtocol.AspNetCore.
 - **MCP STDIO** — `--transport stdio` flag; same tools as HTTP via `McpStdio/FwhMcpTools.cs`.
 
@@ -87,7 +87,7 @@ All async methods use `.ConfigureAwait(false)`. Controllers and services accept 
 
 ### Controller Patterns
 
-Controllers are `sealed`, use `[ApiController]` + `[Route("mcp/...")]`. Mutating endpoints return `TodoMutationResult`-style result objects. Not-found returns 404 with the result; validation errors return 400/409.
+Controllers are `sealed`, use `[ApiController]` + `[Route("mcpserver/...")]`. Mutating endpoints return `TodoMutationResult`-style result objects. Not-found returns 404 with the result; validation errors return 400/409.
 
 ### Service Registration
 

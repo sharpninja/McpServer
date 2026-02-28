@@ -28,20 +28,20 @@ public static class TodoPromptDefaults
 
         1. IMPLEMENT TASKS: Work through each implementation task that is not yet done.
            After completing each task, immediately update the TODO via:
-           curl -X PUT {baseUrl}/mcp/todo/{id} \
+           curl -X PUT {baseUrl}/mcpserver/todo/{id} \
              -H "Content-Type: application/json" \
              -d '{"implementationTasks": [ ...full array with updated done flags... ]}'
            This makes progress visible in real time.
 
         2. UPDATE DEPENDENTS: After all tasks are complete, query all TODOs:
-           curl {baseUrl}/mcp/todo
+           curl {baseUrl}/mcpserver/todo
            Find any TODO whose dependsOn array contains "{id}". For each dependent:
            - Update its technicalDetails or note to reflect that {id} is now complete.
            - If all of the dependent's own dependencies are satisfied, update its
              remaining estimate and note accordingly.
 
         3. MARK DONE: When all implementationTasks are done, mark the TODO itself done:
-           curl -X PUT {baseUrl}/mcp/todo/{id} \
+           curl -X PUT {baseUrl}/mcpserver/todo/{id} \
              -H "Content-Type: application/json" \
              -d '{"done": true}'
 
@@ -58,11 +58,11 @@ public static class TodoPromptDefaults
            Include file paths, class names, method signatures, test scenarios, and integration points.
 
         2. Create a new TODO via:
-           POST {baseUrl}/mcp/todo
+           POST {baseUrl}/mcpserver/todo
            with the detailed plan as the body (id, title, section, priority, description,
            technicalDetails, implementationTasks).
 
-        3. Update {id} via PUT {baseUrl}/mcp/todo/{id}
+        3. Update {id} via PUT {baseUrl}/mcpserver/todo/{id}
            to add the new plan TODO as a dependency in its dependsOn array.
         """;
 

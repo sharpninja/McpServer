@@ -8,7 +8,7 @@ namespace McpServer.Support.Mcp.Controllers;
 /// Agents can search, create, update, and delete TODO items via REST.
 /// </summary>
 [ApiController]
-[Route("mcp/todo")]
+[Route("mcpserver/todo")]
 public sealed class TodoController : ControllerBase
 {
     private readonly ITodoService _todoService;
@@ -78,7 +78,7 @@ public sealed class TodoController : ControllerBase
         if (!result.Success)
             return Conflict(result);
 
-        return Created(new Uri($"/mcp/todo/{Uri.EscapeDataString(request.Id)}", UriKind.Relative), result);
+        return Created(new Uri($"/mcpserver/todo/{Uri.EscapeDataString(request.Id)}", UriKind.Relative), result);
     }
 
     /// <summary>TR-PLANNED-013: Update an existing TODO item by id.</summary>

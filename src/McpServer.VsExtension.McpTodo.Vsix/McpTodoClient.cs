@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -116,7 +116,7 @@ public sealed class McpTodoClient
         if (done.HasValue) query.Add("done=" + done.Value.ToString().ToLowerInvariant());
         if (!string.IsNullOrWhiteSpace(priority)) query.Add("priority=" + Uri.EscapeDataString(priority!));
         if (!string.IsNullOrWhiteSpace(keyword)) query.Add("keyword=" + Uri.EscapeDataString(keyword!));
-        var path = query.Count > 0 ? "/mcp/todo?" + string.Join("&", query) : "/mcp/todo";
+        var path = query.Count > 0 ? "/mcpserver/todo?" + string.Join("&", query) : "/mcpserver/todo";
         var response = await _http.GetAsync(path, cancellationToken).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -126,7 +126,7 @@ public sealed class McpTodoClient
 
     public async Task<TodoFlatItem?> GetTodoByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var path = "/mcp/todo/" + Uri.EscapeDataString(id);
+        var path = "/mcpserver/todo/" + Uri.EscapeDataString(id);
         var response = await _http.GetAsync(path, cancellationToken).ConfigureAwait(false);
         if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             return null;
@@ -137,7 +137,7 @@ public sealed class McpTodoClient
 
     public async Task<TodoMutationResult> UpdateTodoAsync(string id, TodoUpdateBody body, CancellationToken cancellationToken = default)
     {
-        var path = "/mcp/todo/" + Uri.EscapeDataString(id);
+        var path = "/mcpserver/todo/" + Uri.EscapeDataString(id);
         using var content = new StringContent(JsonSerializer.Serialize(body, s_jsonOptions), System.Text.Encoding.UTF8, "application/json");
         var response = await _http.PutAsync(path, content, cancellationToken).ConfigureAwait(false);
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);

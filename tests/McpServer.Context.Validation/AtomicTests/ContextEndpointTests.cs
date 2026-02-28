@@ -13,7 +13,7 @@ public sealed class ContextEndpointTests
 
     public ContextEndpointTests(ContextEndpointFixture fixture) => _fixture = fixture;
 
-    // --- GET /mcp/context/sources ---
+    // --- GET /mcpserver/context/sources ---
 
     [Fact]
     public async Task Sources_Returns200WithSourcesArray()
@@ -25,7 +25,7 @@ public sealed class ContextEndpointTests
         Assert.Equal(JsonValueKind.Array, sources.ValueKind);
     }
 
-    // --- POST /mcp/context/search ---
+    // --- POST /mcpserver/context/search ---
 
     [Fact]
     public async Task Search_EmptyQuery_Returns200()
@@ -66,7 +66,7 @@ public sealed class ContextEndpointTests
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
-    // --- POST /mcp/context/pack ---
+    // --- POST /mcpserver/context/pack ---
 
     [Fact]
     public async Task Pack_EmptyQuery_Returns200WithPack()
@@ -99,7 +99,7 @@ public sealed class ContextEndpointTests
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
-    // --- POST /mcp/context/rebuild-index ---
+    // --- POST /mcpserver/context/rebuild-index ---
 
     [Fact]
     public async Task RebuildIndex_Returns200Or500()

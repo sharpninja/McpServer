@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
-# MCP Todo — Bash helper functions for the /mcp/todo API.
+# MCP Todo — Bash helper functions for the /mcpserver/todo API.
 #
 # Usage:
 #   source ./mcp-todo.sh
@@ -58,7 +58,7 @@ mcp_todo_list() {
     # Usage: mcp_todo_list
     curl -sf -H "X-Api-Key: ${MCP_TODO_API_KEY}" \
         -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
-        "${MCP_TODO_BASE_URL}/mcp/todo"
+        "${MCP_TODO_BASE_URL}/mcpserver/todo"
 }
 
 mcp_todo_get() {
@@ -66,7 +66,7 @@ mcp_todo_get() {
     local id="$1"
     curl -sf -H "X-Api-Key: ${MCP_TODO_API_KEY}" \
         -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
-        "${MCP_TODO_BASE_URL}/mcp/todo/${id}"
+        "${MCP_TODO_BASE_URL}/mcpserver/todo/${id}"
 }
 
 mcp_todo_prompt() {
@@ -74,7 +74,7 @@ mcp_todo_prompt() {
     local id="$1" ptype="$2"
     curl -sf -H "X-Api-Key: ${MCP_TODO_API_KEY}" \
         -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
-        "${MCP_TODO_BASE_URL}/mcp/todo/${id}/prompt/${ptype}"
+        "${MCP_TODO_BASE_URL}/mcpserver/todo/${id}/prompt/${ptype}"
 }
 
 # ─── Create ──────────────────────────────────────────────────────────────────
@@ -98,7 +98,7 @@ mcp_todo_create() {
         -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
         -H "Content-Type: application/json" \
         -d "$body" \
-        "${MCP_TODO_BASE_URL}/mcp/todo"
+        "${MCP_TODO_BASE_URL}/mcpserver/todo"
 }
 
 mcp_todo_create_full() {
@@ -110,7 +110,7 @@ mcp_todo_create_full() {
         -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
         -H "Content-Type: application/json" \
         -d "$body" \
-        "${MCP_TODO_BASE_URL}/mcp/todo"
+        "${MCP_TODO_BASE_URL}/mcpserver/todo"
 }
 
 # ─── Update ──────────────────────────────────────────────────────────────────
@@ -124,7 +124,7 @@ mcp_todo_update() {
         -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
         -H "Content-Type: application/json" \
         -d "$body" \
-        "${MCP_TODO_BASE_URL}/mcp/todo/${id}"
+        "${MCP_TODO_BASE_URL}/mcpserver/todo/${id}"
 } 
 
 # ─── Complete ────────────────────────────────────────────────────────────────
@@ -143,7 +143,7 @@ mcp_todo_complete() {
         -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
         -H "Content-Type: application/json" \
         -d "$body" \
-        "${MCP_TODO_BASE_URL}/mcp/todo/${id}"
+        "${MCP_TODO_BASE_URL}/mcpserver/todo/${id}"
 }
 
 # ─── Delete ──────────────────────────────────────────────────────────────────
@@ -154,7 +154,7 @@ mcp_todo_delete() {
     curl -sf -X DELETE \
         -H "X-Api-Key: ${MCP_TODO_API_KEY}" \
         -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
-        "${MCP_TODO_BASE_URL}/mcp/todo/${id}"
+        "${MCP_TODO_BASE_URL}/mcpserver/todo/${id}"
     echo "Deleted todo: ${id}"
 }
 
@@ -169,5 +169,5 @@ mcp_todo_add_requirements() {
         -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
         -H "Content-Type: application/json" \
         -d "$body" \
-        "${MCP_TODO_BASE_URL}/mcp/todo/${id}/requirements"
+        "${MCP_TODO_BASE_URL}/mcpserver/todo/${id}/requirements"
 }

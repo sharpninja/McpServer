@@ -23,7 +23,7 @@ public sealed class ContextClientTests
         var result = await client.SearchAsync("auth", limit: 5);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/context/search", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/context/search", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.Contains("auth", handler.LastRequestBody!);
         Assert.Equal("auth", result.Query);
     }
@@ -64,7 +64,7 @@ public sealed class ContextClientTests
         var result = await client.RebuildIndexAsync();
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/context/rebuild-index", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/context/rebuild-index", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.Equal("completed", result.Status);
     }
 }

@@ -21,7 +21,7 @@ public sealed class InteractionLogSubmissionChannelTests
         {
             TimestampUtc = DateTime.UtcNow,
             Method = "GET",
-            Path = "/mcp/context/sources",
+            Path = "/mcpserver/context/sources",
             StatusCode = 200,
             DurationMs = 1.5,
             RequestId = "req-1"
@@ -34,7 +34,7 @@ public sealed class InteractionLogSubmissionChannelTests
         Assert.True(success);
         Assert.NotNull(dequeued);
         Assert.Equal("GET", dequeued.Method);
-        Assert.Equal("/mcp/context/sources", dequeued.Path);
+        Assert.Equal("/mcpserver/context/sources", dequeued.Path);
         Assert.Equal(200, dequeued.StatusCode);
         Assert.Equal("req-1", dequeued.RequestId);
     }

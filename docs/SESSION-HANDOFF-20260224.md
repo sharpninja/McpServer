@@ -66,9 +66,9 @@ Version `0.1.0-alpha.18` packed and installed as global dotnet tool `SharpNinja.
 
 | Query/Command | Handler Needed | API Endpoint |
 |---|---|---|
-| `ListWorkspacesQuery` → `ListWorkspacesResult` | `ListWorkspacesQueryHandler` | `GET /mcp/workspace` |
-| `GetWorkspaceQuery` → `WorkspaceDetail?` | `GetWorkspaceQueryHandler` | `GET /mcp/workspace/{path}` |
-| `UpdateWorkspacePolicyCommand` → `bool` | `UpdateWorkspacePolicyCommandHandler` | `POST /mcp/workspace/policy` |
+| `ListWorkspacesQuery` → `ListWorkspacesResult` | `ListWorkspacesQueryHandler` | `GET /mcpserver/workspace` |
+| `GetWorkspaceQuery` → `WorkspaceDetail?` | `GetWorkspaceQueryHandler` | `GET /mcpserver/workspace/{path}` |
+| `UpdateWorkspacePolicyCommand` → `bool` | `UpdateWorkspacePolicyCommandHandler` | `POST /mcpserver/workspace/policy` |
 
 **Where to create them:** `src/McpServer.UI.Core/Handlers/`
 

@@ -42,13 +42,13 @@ items:
     content: >-
       [ApiController]
 
-      [Route("mcp/gh")]
+      [Route("mcpserver/gh")]
 
       public sealed class GitHubController : ControllerBase
     content.vb: >-
       <ApiController>
 
-      <Route("mcp/gh")>
+      <Route("mcpserver/gh")>
 
       Public NotInheritable Class GitHubController Inherits ControllerBase
   inheritance:

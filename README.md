@@ -153,12 +153,12 @@ dotnet test tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj
 
 Main endpoints:
 
-- `/mcp/todo`
-- `/mcp/sessionlog`
-- `/mcp/context`
-- `/mcp/repo`
-- `/mcp/gh`
-- `/mcp/sync`
+- `/mcpserver/todo`
+- `/mcpserver/sessionlog`
+- `/mcpserver/context`
+- `/mcpserver/repo`
+- `/mcpserver/gh`
+- `/mcpserver/sync`
 - `/health`
 - `/swagger`
 

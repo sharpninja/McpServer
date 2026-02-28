@@ -9,10 +9,10 @@ namespace McpServer.Support.Mcp.Controllers;
 
 /// <summary>
 /// FR-MCP-009 / TR-MCP-WS-004: Workspace registration, initialization, and process lifecycle endpoints.
-/// All <c>/mcp/*</c> endpoints are protected by per-workspace auth tokens via <see cref="Middleware.WorkspaceAuthMiddleware"/>.
+/// All <c>/mcpserver/*</c> endpoints are protected by per-workspace auth tokens via <see cref="Middleware.WorkspaceAuthMiddleware"/>.
 /// </summary>
 [ApiController]
-[Route("mcp/workspace")]
+[Route("mcpserver/workspace")]
 public sealed class WorkspaceController : ControllerBase
 {
     private readonly IWorkspaceService _workspaceService;
@@ -88,7 +88,7 @@ public sealed class WorkspaceController : ControllerBase
             await _processManager.StartAsync(workspace, ct).ConfigureAwait(false);
 
         var key = EncodeKey(request.WorkspacePath);
-        return Created(new Uri($"/mcp/workspace/{key}", UriKind.Relative), result);
+        return Created(new Uri($"/mcpserver/workspace/{key}", UriKind.Relative), result);
     }
 
     /// <summary>

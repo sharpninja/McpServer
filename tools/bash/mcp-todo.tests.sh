@@ -225,7 +225,7 @@ it "calls DELETE on the correct endpoint" \
         MCP_TODO_BASE_URL='http://test:9999'
         MCP_TODO_API_KEY='key'
         mcp_todo_delete 'old-todo' > /dev/null
-        [[ \"\$CAPTURED_URL\" == 'http://test:9999/mcp/todo/old-todo' ]]
+        [[ \"\$CAPTURED_URL\" == 'http://test:9999/mcpserver/todo/old-todo' ]]
     "
 
 # -- mcp_todo_add_requirements --
@@ -249,7 +249,7 @@ it "posts requirements to correct endpoint" \
         MCP_TODO_API_KEY='key'
         body='{\"functionalRequirements\":[\"FR-001\"],\"technicalRequirements\":[\"TR-001\"]}'
         mcp_todo_add_requirements 'api' \"\$body\" > /dev/null
-        [[ \"\$CAPTURED_URL\" == *'/mcp/todo/api/requirements' ]] &&
+        [[ \"\$CAPTURED_URL\" == *'/mcpserver/todo/api/requirements' ]] &&
         echo \"\$CAPTURED_BODY\" | jq -e '.functionalRequirements[0] == \"FR-001\"' > /dev/null
     "
 
@@ -257,7 +257,7 @@ it "posts requirements to correct endpoint" \
 
 describe "mcp_todo_prompt"
 
-it "calls GET /mcp/todo/{id}/prompt/{type}" \
+it "calls GET /mcpserver/todo/{id}/prompt/{type}" \
     bash -c "
         source '$SCRIPT_DIR/mcp-todo.sh'
         CAPTURED_URL=''
@@ -270,7 +270,7 @@ it "calls GET /mcp/todo/{id}/prompt/{type}" \
         MCP_TODO_BASE_URL='http://test:9999'
         MCP_TODO_API_KEY='key'
         mcp_todo_prompt 'fix-auth' 'implement' > /dev/null
-        [[ \"\$CAPTURED_URL\" == 'http://test:9999/mcp/todo/fix-auth/prompt/implement' ]]
+        [[ \"\$CAPTURED_URL\" == 'http://test:9999/mcpserver/todo/fix-auth/prompt/implement' ]]
     "
 
 # -- Summary --

@@ -13,7 +13,7 @@ For `ngrok` in single-public-port environments, MCP exposes only the primary hos
 
 Current behavior and scope:
 
-- Publicly exposed: primary MCP host routes on the tunneled port (`/health`, `/auth/*`, primary-host `/mcp/*`)
+- Publicly exposed: primary MCP host routes on the tunneled port (`/health`, `/auth/*`, primary-host `/mcpserver/*`)
 - Not publicly exposed: child workspace listeners on `7147+`
 - If you need direct remote access to child workspace ports, use FRP TCP mode or implement a future primary-host workspace proxy/gateway feature
 
@@ -70,7 +70,7 @@ Use the ngrok public URL for:
 
 - `GET /health` (connectivity smoke test)
 - `GET /auth/config`, `POST /auth/device`, `POST /auth/token`, `GET/POST /auth/ui/*` (OIDC device-flow + browser proxy on the same host)
-- Primary-host REST endpoints under `/mcp/*` (with `X-Api-Key`)
+- Primary-host REST endpoints under `/mcpserver/*` (with `X-Api-Key`)
 
 Do not assume the ngrok URL exposes child workspaces on `7147+`.
 
@@ -101,7 +101,7 @@ https://<your-ngrok-host>/auth/config
 6. Validate an authenticated MCP endpoint (replace API key):
 
 ```bash
-curl https://<your-ngrok-host>/mcp/workspace -H "X-Api-Key: <workspace-api-key>"
+curl https://<your-ngrok-host>/mcpserver/workspace -H "X-Api-Key: <workspace-api-key>"
 ```
 
 ## Troubleshooting
@@ -139,7 +139,7 @@ Try without `Subdomain` first.
 - [ ] ngrok public URL is visible in MCP logs (or ngrok local API)
 - [ ] `GET /health` works through the public ngrok URL
 - [ ] `GET /auth/config` works through the public ngrok URL (when auth enabled)
-- [ ] Authenticated `GET /mcp/workspace` works with `X-Api-Key`
+- [ ] Authenticated `GET /mcpserver/workspace` works with `X-Api-Key`
 - [ ] Team understands current scope: primary host only, child workspace ports remain private
 
 ## Provider Hardening Status

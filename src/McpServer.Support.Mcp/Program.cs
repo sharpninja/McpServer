@@ -478,7 +478,7 @@ app.Lifetime.ApplicationStopping.Register(() =>
 // TR-PLANNED-013: Structured interaction logging for all requests; optional async submission to LoggingServiceUrl.
 app.UseMiddleware<InteractionLoggingMiddleware>();
 
-// Per-workspace auth tokens: protect all /mcp/* REST routes.
+// Per-workspace auth tokens: protect all /mcpserver/* REST routes.
 app.UseAuthentication();
 app.UseMiddleware<WorkspaceResolutionMiddleware>();
 app.UseMiddleware<WorkspaceAuthMiddleware>();

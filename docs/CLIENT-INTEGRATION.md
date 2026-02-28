@@ -21,7 +21,7 @@ In VS Code `settings.json`:
 ```json
 {
   "mcpServer.url": "http://localhost:7147",
-  "mcpServer.todoEndpoint": "/mcp/todo"
+  "mcpServer.todoEndpoint": "/mcpserver/todo"
 }
 ```
 
@@ -91,7 +91,7 @@ Key tool categories:
 All workspaces share a single port. To target a specific workspace, send the `X-Workspace-Path` header:
 
 ```bash
-curl http://localhost:7147/mcp/todo \
+curl http://localhost:7147/mcpserver/todo \
   -H "X-Api-Key: <token>" \
   -H "X-Workspace-Path: E:\\github\\MyProject"
 ```

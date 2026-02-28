@@ -8,7 +8,7 @@ requirements-management:
     completed: 2026-02-26
     description:
     - 'Create a RequirementsManagementController with REST endpoints for CRUD on Functional Requirements (FR), Technical Requirements (TR), and Testing Requirements (TEST) entries, backed by the four canonical files: Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, and TR-per-FR-Mapping.md.'
-    - Add a document generation endpoint GET /mcp/requirements/generate?doc={functional|technical| testing|mapping|all} that renders requirements documents as Markdown (text/markdown) matching the exact established structure, or as a ZIP archive when doc=all.
+    - Add a document generation endpoint GET /mcpserver/requirements/generate?doc={functional|technical| testing|mapping|all} that renders requirements documents as Markdown (text/markdown) matching the exact established structure, or as a ZIP archive when doc=all.
     - 'Expose five MCP tools: requirements_generate, requirements_list, requirements_create, requirements_update, requirements_delete — enabling AI agents to manage requirements and generate up-to-date documentation directly from a conversation.'
     - On startup, parse all four document files into a strongly-typed in-memory model and keep it synchronized with file writes on every mutating operation.
     done-summary: Implemented requirements document parsing/rendering service, REST CRUD + generate endpoints, STDIO MCP tools, DI/config wiring, and focused service/controller tests.
@@ -17,11 +17,11 @@ requirements-management:
     - 'RequirementsDocumentService — parses Functional-Requirements.md (## FR-{ID}\n\n{title}\n\n{body}), Technical-Requirements.md (## TR-{ID}\n\n**{title}** — {body}), Testing-Requirements.md (bullet list: - TEST-{ID}: {condition} format), and TR-per-FR-Mapping.md (Markdown table). Exposes IRequirementsDocumentService with typed CRUD and generation methods.'
     - IRequirementsRepository — file-backed persistence using SemaphoreSlim for write serialization. Each mutating call updates the in-memory model then atomically writes the affected file via File.WriteAllTextAsync to a temp path followed by File.Replace (atomic swap).
     - RequirementsDocumentRenderer — RenderFunctional(), RenderTechnical(), RenderTesting(), RenderMapping(), RenderAll(). RenderAll() uses System.IO.Compression.ZipArchive to produce a single in-memory ZIP containing all four files with their canonical filenames.
-    - 'Sub-resources: POST/GET /mcp/requirements/fr, GET/PUT/DELETE /mcp/requirements/fr/{id}; same pattern for /tr/{id} and /test/{id}. GET /mcp/requirements/mapping for the full table. GET /mcp/requirements/generate?doc= for document output.'
+    - 'Sub-resources: POST/GET /mcpserver/requirements/fr, GET/PUT/DELETE /mcpserver/requirements/fr/{id}; same pattern for /tr/{id} and /test/{id}. GET /mcpserver/requirements/mapping for the full table. GET /mcpserver/requirements/generate?doc= for document output.'
     - 'MCP tools (added to McpServerMcpTools.cs): requirements_generate(doc), requirements_list(type), requirements_create(type, id, title, body), requirements_update(type, id, title?, body?), requirements_delete(type, id).'
     - 'Document file paths resolved relative to RepoRoot via IOptions<RequirementsOptions>. Default paths: docs/Project/Functional-Requirements.md, docs/Project/Technical-Requirements.md, docs/Project/Testing-Requirements.md, docs/Project/TR-per-FR-Mapping.md. Configurable via Mcp:Requirements:* config section.'
     - All public types require XML doc comments (CS1591 enforced as error in this repo).
-    - ApiKeyAuthFilter is no longer used; all /mcp/* routes are protected by WorkspaceAuthMiddleware at the pipeline level. No per-controller auth attributes needed.
+    - ApiKeyAuthFilter is no longer used; all /mcpserver/* routes are protected by WorkspaceAuthMiddleware at the pipeline level. No per-controller auth attributes needed.
     functional-requirements:
     - 'FR-MCP-040: Server shall support CRUD for FR, TR, and TEST requirement entries stored in the four canonical project documentation files.'
     - 'FR-MCP-041: Server shall expose a document generation endpoint rendering any or all four requirements documents in their established Markdown format.'
@@ -64,11 +64,11 @@ requirements-management:
       done: true
     - task: '[Phase 4 — Service] Implement GenerateAllAsync(): call RenderAll(), return MemoryStream'
       done: true
-    - task: '[Phase 5 — Controller] Implement RequirementsController: GET/POST /mcp/requirements/fr, GET/PUT/DELETE /mcp/requirements/fr/{id} (same pattern for /tr and /test)'
+    - task: '[Phase 5 — Controller] Implement RequirementsController: GET/POST /mcpserver/requirements/fr, GET/PUT/DELETE /mcpserver/requirements/fr/{id} (same pattern for /tr and /test)'
       done: true
-    - task: '[Phase 5 — Controller] Add GET /mcp/requirements/generate?doc= endpoint: parse enum, call GenerateDocumentAsync or GenerateAllAsync, set Content-Disposition attachment header'
+    - task: '[Phase 5 — Controller] Add GET /mcpserver/requirements/generate?doc= endpoint: parse enum, call GenerateDocumentAsync or GenerateAllAsync, set Content-Disposition attachment header'
       done: true
-    - task: '[Phase 5 — Controller] Add GET /mcp/requirements/mapping and PUT /mcp/requirements/mapping/{frId} for the TR-per-FR table'
+    - task: '[Phase 5 — Controller] Add GET /mcpserver/requirements/mapping and PUT /mcpserver/requirements/mapping/{frId} for the TR-per-FR table'
       done: true
     - task: '[Phase 5 — Controller] Auth is handled by WorkspaceAuthMiddleware at the pipeline level — no per-action attributes needed'
       done: true
@@ -92,9 +92,9 @@ requirements-management:
       done: true
     - task: '[Phase 8 — Tests] Unit tests for each renderer: given typed entries, when rendered, then output matches expected Markdown structure exactly (heading level, bold format, bullet syntax)'
       done: true
-    - task: '[Phase 8 — Tests] Integration test: POST /mcp/requirements/fr creates entry → GET /mcp/requirements/generate?doc=functional contains new entry → DELETE removes it → generate no longer contains it'
+    - task: '[Phase 8 — Tests] Integration test: POST /mcpserver/requirements/fr creates entry → GET /mcpserver/requirements/generate?doc=functional contains new entry → DELETE removes it → generate no longer contains it'
       done: true
-    - task: '[Phase 8 — Tests] Integration test: GET /mcp/requirements/generate?doc=all returns 200 application/zip with four entries matching canonical filenames'
+    - task: '[Phase 8 — Tests] Integration test: GET /mcpserver/requirements/generate?doc=all returns 200 application/zip with four entries matching canonical filenames'
       done: true
     - task: '[Phase 8 — Tests] Test atomic write: simulate concurrent mutations, verify file integrity after all complete'
       done: true
@@ -1166,7 +1166,7 @@ saas:
     - 'TYPESCRIPT LIBRARY ARCHITECTURE: Package name @sharpninja/mcpserver-client on npm. Use native fetch API. Zod schemas for runtime validation with inferred TypeScript types. Class-based facade McpServerClient with 15 sub-client properties. TypeScript 5.0+ with strict mode. ESM + CJS dual output via tsup. AsyncGenerator<T> for SSE streaming.'
     - 'AUTH MODEL: Both libraries must support dual auth — API Key (X-Api-Key header) and Bearer JWT (Authorization: Bearer header). Set-once credential pattern with logout() to reset. ApiKey and BearerToken are mutually exclusive. InitializeAsync fetches default API key from GET /api-key.'
     - 'SHARED STATE PATTERN: WorkspacePath set on facade propagates to all sub-clients via shared reference object. Port is read at call-time for dynamic URL construction ({scheme}://{host}:{port}/{path}). Auth credentials set once on facade, propagated to all sub-clients.'
-    - 'SSE STREAMING: Python — async generators yielding str from httpx-sse (data: line parsing, event: done termination). TypeScript — AsyncGenerator<string> using fetch with ReadableStream. Required for: GET /mcp/events (ChangeEvent), GET /mcp/todo/{id}/prompt/status|implement|plan (prompt text).'
+    - 'SSE STREAMING: Python — async generators yielding str from httpx-sse (data: line parsing, event: done termination). TypeScript — AsyncGenerator<string> using fetch with ReadableStream. Required for: GET /mcpserver/events (ChangeEvent), GET /mcpserver/todo/{id}/prompt/status|implement|plan (prompt text).'
     - 'ERROR HANDLING: Map HTTP status codes to typed exceptions — 400->ValidationError, 401->UnauthorizedError, 404->NotFoundError, 409->ConflictError, 5xx->ServerError. Extract error message from JSON response body (error or errorMessage field). Python: raise exceptions. TypeScript: throw errors.'
     - 'TESTING: Python — pytest + pytest-asyncio + respx (httpx mock transport). TypeScript — vitest + msw (Mock Service Worker). Mirror the C# MockHttpHandler pattern — intercept at HTTP transport layer, no network needed. Min 2 tests per client (GET + POST), ~60 tests per language.'
     - 'PACKAGING: Python — pyproject.toml with hatchling build backend, src layout, py.typed marker for PEP 561. TypeScript — package.json with tsup for bundling, dual ESM/CJS output, .d.ts type declarations. Both: README, LICENSE (MIT), CHANGELOG.'
@@ -1246,16 +1246,16 @@ mvp-app:
   - id: MVP-MCP-001
     title: Add notifications about changed context (including session logs) on changes within a workspace
     estimate: 8-12 hours AI-assisted
-    note: 'Audit completed 2026-02-27. Infrastructure partially built (5 notification model files, SSE endpoint, middleware SSE bypass). NON-FUNCTIONAL: ChannelChangeEventBus not registered in DI (runtime crash on /mcp/events), zero PublishAsync calls anywhere, no tests, no FR/TR/TEST requirements documented. 52 mutation points across 12 services need event publishing. EventStreamController incorrectly references FR-MCP-031 (Web UI) — needs new FR-MCP-045.'
+    note: 'Audit completed 2026-02-27. Infrastructure partially built (5 notification model files, SSE endpoint, middleware SSE bypass). NON-FUNCTIONAL: ChannelChangeEventBus not registered in DI (runtime crash on /mcpserver/events), zero PublishAsync calls anywhere, no tests, no FR/TR/TEST requirements documented. 52 mutation points across 12 services need event publishing. EventStreamController incorrectly references FR-MCP-031 (Web UI) — needs new FR-MCP-045.'
     done: false
     description:
     - Implement a notification/event system that alerts connected agents when workspace context changes
     - Include session log updates, context source changes, file modifications, and other relevant mutations within a workspace
-    - 'Infrastructure audit (2026-02-27): ChangeEvent model (5 files in Notifications/), EventStreamController (GET /mcp/events SSE), InteractionLoggingMiddleware SSE bypass — all exist but bus is not in DI and nothing publishes events'
+    - 'Infrastructure audit (2026-02-27): ChangeEvent model (5 files in Notifications/), EventStreamController (GET /mcpserver/events SSE), InteractionLoggingMiddleware SSE bypass — all exist but bus is not in DI and nothing publishes events'
     - '52 mutation points across 12 services/controllers need PublishAsync calls: todo(4), session_log(2), repo(1), context(2), tool_registry(4), tool_bucket(3), workspace(7), github(9), marker(2), agent(8), requirements(11)'
     remaining: 'Phase 1: DI registration + 2 new categories. Phase 2: Inject IChangeEventBus into 6 core services (TodoService, SqliteTodoService, SessionLogService, RepoFileService, ToolRegistryService, ToolBucketService) + add ~16 PublishAsync calls. Phase 3: Inject into 4 extended services (WorkspaceService, AgentService, RequirementsDocumentService, IngestionCoordinator) + ~20 PublishAsync calls. Phase 4: Controller-level publishing for GitHubController + MarkerFileService callers (~11 calls). Phase 5: Unit + integration tests (~8 test classes). Phase 6: Requirements docs (FR-MCP-045, TR-MCP-EVT-001..005, TEST-MCP-048..053).'
     technical-details:
-    - 'ARCHITECTURE: In-process fan-out pub/sub via ChannelChangeEventBus (bounded channel, 1000-item buffer, drop-oldest). SSE delivery via EventStreamController at GET /mcp/events?category=xxx. Per-subscriber channels ensure independent consumption.'
+    - 'ARCHITECTURE: In-process fan-out pub/sub via ChannelChangeEventBus (bounded channel, 1000-item buffer, drop-oldest). SSE delivery via EventStreamController at GET /mcpserver/events?category=xxx. Per-subscriber channels ensure independent consumption.'
     - 'DI REGISTRATION: builder.Services.AddSingleton<IChangeEventBus, ChannelChangeEventBus>() in Program.cs — MUST be singleton so all scoped services and the SSE controller share the same bus instance.'
     - 'PUBLISH LOCATION: Service layer (not controllers) for all CRUD operations so internal callers (IssueTodoSyncService, RequirementsService.AnalyzeAsync) also emit events. Controller-only for operations that bypass services (GitHubController gh cli calls, workspace start/stop side effects).'
     - 'UPSERT DETECTION: For upsert methods (SessionLogService.SubmitAsync, AgentService.UpsertDefinitionAsync/UpsertWorkspaceAgentAsync), detect create vs update by checking if entity existed before write, then emit appropriate ChangeEventActions.Created or .Updated.'
@@ -1276,7 +1276,7 @@ mvp-app:
     implementation-tasks:
     - task: Phase 0 — Audit and document current state (ChangeEvent model, ChannelChangeEventBus, EventStreamController, InteractionLoggingMiddleware SSE bypass, SessionLogFileWatcher). Verify all 5 Notifications/ files compile. Verify EventStreamController would crash without DI registration.
       done: true
-    - task: "Phase 1.1 — Register ChannelChangeEventBus in DI: Add \builder.Services.AddSingleton<IChangeEventBus, ChannelChangeEventBus>(); to Program.cs in the service registration block (after line ~269, near other singletons). Verify /mcp/events endpoint no longer crashes (returns empty SSE stream)."
+    - task: "Phase 1.1 — Register ChannelChangeEventBus in DI: Add \builder.Services.AddSingleton<IChangeEventBus, ChannelChangeEventBus>(); to Program.cs in the service registration block (after line ~269, near other singletons). Verify /mcpserver/events endpoint no longer crashes (returns empty SSE stream)."
       done: false
     - task: >-
         Phase 1.2 — Add new ChangeEventCategories: Add public const string Agent = gent; and public const string Requirements = 
@@ -1319,15 +1319,15 @@ mvp-app:
       done: false
     - task: 'Phase 5.3 — SessionLogService event publishing tests: Add tests to SessionLogServiceTests or new file: (1) SubmitAsync_NewSession_PublishesCreatedEvent, (2) SubmitAsync_ExistingSession_PublishesUpdatedEvent, (3) AppendDialogAsync_Success_PublishesUpdatedEvent. Mock IChangeEventBus, verify category=session_log.'
       done: false
-    - task: 'Phase 5.4 — EventStreamController integration test: Create tests/McpServer.Support.Mcp.Tests/Controllers/EventStreamIntegrationTests.cs. Use CustomWebApplicationFactory with IChangeEventBus registered. Test: (1) GET /mcp/events returns text/event-stream content type, (2) publishing an event to the bus produces SSE output with correct event: and data: lines, (3) category filter works. Use HttpClient with SendAsync + HttpCompletionOption.ResponseHeadersRead for streaming.'
+    - task: 'Phase 5.4 — EventStreamController integration test: Create tests/McpServer.Support.Mcp.Tests/Controllers/EventStreamIntegrationTests.cs. Use CustomWebApplicationFactory with IChangeEventBus registered. Test: (1) GET /mcpserver/events returns text/event-stream content type, (2) publishing an event to the bus produces SSE output with correct event: and data: lines, (3) category filter works. Use HttpClient with SendAsync + HttpCompletionOption.ResponseHeadersRead for streaming.'
       done: false
     - task: 'Phase 5.5 — Extended service event publishing tests: Add at least one PublishAsync verification test for each of: ToolRegistryService (create publishes tool_registry/created), WorkspaceService (create publishes workspace/created), AgentService (upsert new publishes agent/created, upsert existing publishes agent/updated), RepoFileService (write new file publishes repo/created). NSubstitute mock pattern.'
       done: false
-    - task: "Phase 6.1 — Create FR-MCP-045 in Functional-Requirements.md: 'Workspace Change Notifications — The server shall provide a real-time event notification system that publishes domain change events (create/update/delete) for all workspace mutations (TODO, session log, repo files, context sync, tool registry, tool buckets, workspaces, GitHub issues/PRs, marker files, agents, requirements) via an in-process pub/sub bus, delivered to REST clients as Server-Sent Events (SSE) at GET /mcp/events with optional category filtering.'"
+    - task: "Phase 6.1 — Create FR-MCP-045 in Functional-Requirements.md: 'Workspace Change Notifications — The server shall provide a real-time event notification system that publishes domain change events (create/update/delete) for all workspace mutations (TODO, session log, repo files, context sync, tool registry, tool buckets, workspaces, GitHub issues/PRs, marker files, agents, requirements) via an in-process pub/sub bus, delivered to REST clients as Server-Sent Events (SSE) at GET /mcpserver/events with optional category filtering.'"
       done: false
     - task: 'Phase 6.2 — Create TR-MCP-EVT-001..005 in Technical-Requirements.md: EVT-001 (ChannelChangeEventBus singleton, fan-out pub/sub, bounded 1000-item channels, drop-oldest), EVT-002 (PublishAsync in service layer after successful writes, try/catch with LogWarning), EVT-003 (SSE delivery via EventStreamController, text/event-stream, Cache-Control no-cache, optional category filter), EVT-004 (ChangeEvent record with Category/Action/EntityId/ResourceUri/Timestamp), EVT-005 (11 event categories: todo, session_log, repo, context, tool_registry, tool_bucket, workspace, github, marker, agent, requirements).'
       done: false
-    - task: 'Phase 6.3 — Create TEST-MCP-048..053 in Testing-Requirements.md: 048 (ChannelChangeEventBus unit tests — fan-out, overflow, cancellation), 049 (TodoService/SqliteTodoService publish verification), 050 (SessionLogService publish verification), 051 (EventStreamController SSE integration), 052 (Extended service publish verification — ToolRegistry, Workspace, Agent, Repo), 053 (Category filtering on /mcp/events).'
+    - task: 'Phase 6.3 — Create TEST-MCP-048..053 in Testing-Requirements.md: 048 (ChannelChangeEventBus unit tests — fan-out, overflow, cancellation), 049 (TodoService/SqliteTodoService publish verification), 050 (SessionLogService publish verification), 051 (EventStreamController SSE integration), 052 (Extended service publish verification — ToolRegistry, Workspace, Agent, Repo), 053 (Category filtering on /mcpserver/events).'
       done: false
     - task: 'Phase 6.4 — Update TR-per-FR-Mapping.md: Add row FR-MCP-045 → TR-MCP-EVT-001, TR-MCP-EVT-002, TR-MCP-EVT-003, TR-MCP-EVT-004, TR-MCP-EVT-005.'
       done: false
@@ -1337,7 +1337,7 @@ mvp-app:
       done: false
     - task: 'Phase 8 — Test execution: dotnet test tests\McpServer.Support.Mcp.Tests -c Debug must pass all existing tests plus all new notification tests. Zero regressions. Run with --filter to verify each new test class independently.'
       done: false
-    - task: 'Phase 9 — Manual SSE smoke test: Start server, curl GET http://localhost:7147/mcp/events, then POST a TODO mutation in another terminal, verify SSE event appears in the stream with correct category/action/entityId. Test with ?category=todo filter.'
+    - task: 'Phase 9 — Manual SSE smoke test: Start server, curl GET http://localhost:7147/mcpserver/events, then POST a TODO mutation in another terminal, verify SSE event appears in the stream with correct category/action/entityId. Test with ?category=todo filter.'
       done: false
   - id: MT-001
     title: Eliminate Multi-Instance Architecture - Single-Port Multi-Tenant
@@ -1354,7 +1354,7 @@ mvp-mcp:
     title: Move VS2026 extension copilot functions into MCP server as todo endpoints
     done: true
     description:
-    - Extract the copilot-related functions from the VS2026 VSIX extension and expose them as MCP server endpoints under /mcp/todo or similar.
+    - Extract the copilot-related functions from the VS2026 VSIX extension and expose them as MCP server endpoints under /mcpserver/todo or similar.
     - This consolidates agent-facing capabilities into the MCP server rather than the IDE extension.
   - id: MVP-MCP-003
     title: Complete Director MVVM/CQRS endpoint coverage with per-area ViewModels, handlers, commands, and RBAC tab visibility
@@ -1370,7 +1370,7 @@ mvp-mcp:
     - 'AUDIT SUMMARY (2026-02-27): 33/112 handlers (29%), 29 ViewModels, 10/14 API client interfaces, 10 Messages files. Phase 0+2.4+2.6 done, 4 phases partial, 4 phases not started.'
     remaining: 75 handlers, 4 McpServer.Client client classes, 4 UI.Core API client interfaces, 4 Director API adapter classes, ~20 ViewModels, ~15 Message files, 1 screen migration (AgentScreen), 6 new Director screens, UI.Core test project + tests, Director screen tests.
     technical-details:
-    - 'Scope: all /mcp/* areas plus /auth/config and /health diagnostics/event views. ACTUAL endpoint count is 112 REST endpoints (not the originally estimated ~78). Excludes minimal-API endpoints (pairing, server-startup-utc, etc.) and MCP protocol tools.'
+    - 'Scope: all /mcpserver/* areas plus /auth/config and /health diagnostics/event views. ACTUAL endpoint count is 112 REST endpoints (not the originally estimated ~78). Excludes minimal-API endpoints (pairing, server-startup-utc, etc.) and MCP protocol tools.'
     - 'Handler granularity: strict 1:1 endpoint-to-handler mapping (query/command + handler + ViewModel async command).'
     - 'ViewModel convention: per area ListViewModel + DetailViewModel pair. Both inherit from AreaListViewModelBase<T> or AreaDetailViewModelBase<T>.'
     - Director shell must consume ViewModels only for migrated tabs; use McpServer.Client adapters behind UI.Core service abstractions.
@@ -1578,7 +1578,7 @@ mvp-mcp:
     - 'MARKER FILE INTEGRATION: Modify MarkerFileService.BuildTemplateContext() to include agent-specific additions. When generating AGENTS-README-FIRST.yaml for a workspace, query AgentWorkspaceEntity records for that workspace. For each enabled (non-banned) agent with non-empty MarkerAdditions, append to the marker template context. Add a new Handlebars section: {{#if agentAdditions}}## Agent-Specific Instructions\n{{#each agentAdditions}}### {{this.agentId}}\n{{this.content}}\n{{/each}}{{/if}}. Agents see their own additions because all additions go in one marker file (agents filter relevant sections by their own name).'
     - 'SESSION LOG LINKAGE: (1) Add optional AgentDefinitionId (string, nullable) FK to SessionLogEntity. (2) Add EF migration for the new column. (3) In SessionLogService.SubmitAsync, when SourceType matches a known AgentDefinitionEntity.Id (case-insensitive lookup), populate AgentDefinitionId automatically. (4) Add AgentDefinitionId filter to session log query endpoint. (5) Add navigation property to SessionLogEntity -> AgentDefinitionEntity (optional). This enables queries like: all sessions from agent copilot in workspace X.'
     - 'AGENT HEALTH MONITOR: Create AgentHealthMonitorService as IHostedService (BackgroundService). On a configurable interval (default 30s), iterate all running agent processes. For each: check Process.HasExited. If exited unexpectedly (non-zero exit code or not user-requested stop): log AgentEventLog with EventType=Exit and exit code, apply restart policy (AgentWorkspaceEntity.RestartPolicy: never/on-failure/always). On restart: re-launch with same config. Cap restarts at configurable max (default 3) with exponential backoff. Log all health check results at Debug level, failures at Warning.'
-    - 'NEW AGENT CONTROLLER ENDPOINTS: Add to AgentController: POST /mcp/agents/{agentId}/launch?workspace= (launches agent process), POST /mcp/agents/{agentId}/stop?workspace= (stops agent process), GET /mcp/agents/{agentId}/process-status?workspace= (gets running process info), GET /mcp/agents/running?workspace= (lists all running agents in workspace). All require JWT AgentManager policy. Return AgentProcessInfo DTOs.'
+    - 'NEW AGENT CONTROLLER ENDPOINTS: Add to AgentController: POST /mcpserver/agents/{agentId}/launch?workspace= (launches agent process), POST /mcpserver/agents/{agentId}/stop?workspace= (stops agent process), GET /mcpserver/agents/{agentId}/process-status?workspace= (gets running process info), GET /mcpserver/agents/running?workspace= (lists all running agents in workspace). All require JWT AgentManager policy. Return AgentProcessInfo DTOs.'
     - 'NEW AGENT SERVICE METHODS: Add to IAgentService: LaunchAgentAsync(workspacePath, agentId, ct), StopAgentAsync(workspacePath, agentId, ct), GetAgentProcessStatusAsync(workspacePath, agentId, ct), ListRunningAgentsAsync(workspacePath, ct). These delegate to IAgentProcessManager after resolving config from AgentWorkspaceEntity.'
     - 'DI REGISTRATION: Register IAgentProcessManager as singleton (manages cross-request process state). Register IAgentIsolationStrategy implementations as named services or strategy factory. Register AgentHealthMonitorService as hosted service. Register IAgentBranchStrategy implementations similarly.'
     - 'TESTING: (1) AgentProcessManagerTests — mock Process.Start, verify launch/stop/status lifecycle, verify process tracking dictionary. (2) WorktreeIsolationStrategyTests — mock git commands, verify worktree add/remove calls. (3) FeatureBranchStrategyTests — mock git commands, verify branch creation. (4) AgentHealthMonitorTests — mock process status, verify restart logic and backoff. (5) MarkerFileService integration test — verify agentAdditions appear in generated marker. (6) SessionLogService test — verify AgentDefinitionId auto-populated from SourceType. (7) AgentController integration tests — launch/stop/status endpoints.'
@@ -1606,11 +1606,11 @@ mvp-mcp:
       done: false
     - task: 'Phase 3.1 — Add launch/stop methods to IAgentService + AgentService: Add to IAgentService: Task<AgentProcessInfo> LaunchAgentAsync(string workspacePath, string agentId, CancellationToken ct), Task<bool> StopAgentAsync(string workspacePath, string agentId, CancellationToken ct), Task<AgentProcessInfo?> GetAgentProcessStatusAsync(string workspacePath, string agentId, CancellationToken ct), Task<IReadOnlyList<AgentProcessInfo>> ListRunningAgentsAsync(string? workspacePath, CancellationToken ct). Implement in AgentService: (1) Resolve AgentWorkspaceEntity for config. (2) Check not banned. (3) Resolve effective launch command (override ?? default). (4) Resolve isolation strategy via factory. (5) Prepare work directory. (6) Resolve branch strategy. (7) Prepare branch. (8) Delegate to IAgentProcessManager.LaunchAsync. (9) Log AgentEventLog with EventType=Launch. StopAgentAsync: delegate to IAgentProcessManager.StopAsync, log EventType=Exit.'
       done: false
-    - task: 'Phase 3.2 — Add launch/stop endpoints to AgentController: Add 4 new endpoints: POST /mcp/agents/{agentId}/launch?workspace= [Authorize(AgentManager)] -> AgentProcessInfo, POST /mcp/agents/{agentId}/stop?workspace= [Authorize(AgentManager)] -> {success}, GET /mcp/agents/{agentId}/process-status?workspace= [ApiKey] -> AgentProcessInfo, GET /mcp/agents/running?workspace= [ApiKey] -> {agents: AgentProcessInfo[]}. Each delegates to AgentService. Return 404 if agent not configured for workspace. Return 409 if already running (launch) or not running (stop).'
+    - task: 'Phase 3.2 — Add launch/stop endpoints to AgentController: Add 4 new endpoints: POST /mcpserver/agents/{agentId}/launch?workspace= [Authorize(AgentManager)] -> AgentProcessInfo, POST /mcpserver/agents/{agentId}/stop?workspace= [Authorize(AgentManager)] -> {success}, GET /mcpserver/agents/{agentId}/process-status?workspace= [ApiKey] -> AgentProcessInfo, GET /mcpserver/agents/running?workspace= [ApiKey] -> {agents: AgentProcessInfo[]}. Each delegates to AgentService. Return 404 if agent not configured for workspace. Return 409 if already running (launch) or not running (stop).'
       done: false
     - task: 'Phase 4.1 — Marker file integration: Modify MarkerFileService.BuildTemplateContext() to accept optional IReadOnlyList<AgentWorkspaceEntity> agentConfigs parameter. For each non-banned agent with non-empty MarkerAdditions, add to context dictionary: agentAdditions = list of { agentId, content }. Add Handlebars section to DefaultPromptTemplate (or external template file if MVP-MCP-004 is done): {{#if agentAdditions}}\n## Agent-Specific Instructions\n{{#each agentAdditions}}\n### {{this.agentId}}\n{{this.content}}\n{{/each}}\n{{/if}}. Update all callers of BuildTemplateContext to pass agent configs (query from AgentService in WorkspaceProcessManager).'
       done: false
-    - task: 'Phase 4.2 — Session log agent linkage: (1) Add AgentDefinitionId (string?, nullable) property to SessionLogEntity. (2) Add optional navigation property: AgentDefinitionEntity? AgentDefinition. (3) Create EF Core migration: dotnet ef migrations add AddSessionLogAgentLink. (4) In SessionLogService.SubmitAsync, after upserting: if AgentDefinitionId is null and SourceType is not empty, try resolving via _dbContext.AgentDefinitions.FirstOrDefaultAsync(a => a.Id.ToLower() == dto.SourceType.ToLower()). If found, set AgentDefinitionId and save. (5) Add agentDefinitionId filter to GET /mcp/sessionlog query endpoint. (6) Update SessionLogDto to include AgentDefinitionId.'
+    - task: 'Phase 4.2 — Session log agent linkage: (1) Add AgentDefinitionId (string?, nullable) property to SessionLogEntity. (2) Add optional navigation property: AgentDefinitionEntity? AgentDefinition. (3) Create EF Core migration: dotnet ef migrations add AddSessionLogAgentLink. (4) In SessionLogService.SubmitAsync, after upserting: if AgentDefinitionId is null and SourceType is not empty, try resolving via _dbContext.AgentDefinitions.FirstOrDefaultAsync(a => a.Id.ToLower() == dto.SourceType.ToLower()). If found, set AgentDefinitionId and save. (5) Add agentDefinitionId filter to GET /mcpserver/sessionlog query endpoint. (6) Update SessionLogDto to include AgentDefinitionId.'
       done: false
     - task: 'Phase 5.1 — Agent health monitor: Create src/McpServer.Support.Mcp/Services/AgentHealthMonitorService.cs extending BackgroundService. Constructor injects IAgentProcessManager, IAgentService (for restart config), ILogger. ExecuteAsync: loop with await Task.Delay(interval, ct). Each iteration: call ListRunningAsync, for each running agent check if process has exited unexpectedly. If exited with non-zero: log Warning, check restart policy from AgentWorkspaceEntity (never/on-failure/always), track restart count per (workspace, agentId) in dictionary, apply exponential backoff (base * 2^retryCount), re-launch if under max restarts. Log all decisions. Register as hosted service in Program.cs.'
       done: false

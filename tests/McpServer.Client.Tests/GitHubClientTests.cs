@@ -36,7 +36,7 @@ public sealed class GitHubClientTests
         var result = await client.GetIssueAsync(42);
 
         Assert.Equal(42, result.Number);
-        Assert.Contains("/mcp/gh/issues/42", handler.LastRequest!.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/gh/issues/42", handler.LastRequest!.RequestUri!.AbsolutePath);
     }
 
     [Fact]
@@ -75,7 +75,7 @@ public sealed class GitHubClientTests
         var result = await client.CreateIssueAsync(new Models.GitHubIssueRequest { Title = "Bug" });
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/gh/issues", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/gh/issues", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.Equal(99, result.Number);
     }
 
@@ -89,7 +89,7 @@ public sealed class GitHubClientTests
         var result = await client.UpdateIssueAsync(42, new Models.GitHubIssueUpdateRequest { Title = "Updated" });
 
         Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/gh/issues/42", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/gh/issues/42", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.True(result.Success);
     }
 
@@ -103,7 +103,7 @@ public sealed class GitHubClientTests
         await client.ReopenIssueAsync(7);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/gh/issues/7/reopen", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/gh/issues/7/reopen", handler.LastRequest.RequestUri!.AbsolutePath);
     }
 
     [Fact]
@@ -116,7 +116,7 @@ public sealed class GitHubClientTests
         await client.CommentOnIssueAsync(5, "Nice work!");
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/gh/issues/5/comments", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/gh/issues/5/comments", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.Contains("Nice work!", handler.LastRequestBody!);
     }
 
@@ -130,7 +130,7 @@ public sealed class GitHubClientTests
         var result = await client.ListLabelsAsync();
 
         Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/gh/labels", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/gh/labels", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.Single(result.Labels!);
     }
 
@@ -157,7 +157,7 @@ public sealed class GitHubClientTests
         await client.CommentOnPullAsync(3, "LGTM");
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/gh/pulls/3/comments", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/gh/pulls/3/comments", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.Contains("LGTM", handler.LastRequestBody!);
     }
 
@@ -185,7 +185,7 @@ public sealed class GitHubClientTests
         var result = await client.SyncIssueAsync(10, "from-github");
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/gh/issues/10/sync", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/gh/issues/10/sync", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.Contains("direction=from-github", handler.LastRequest.RequestUri.Query);
         Assert.True(result.Success);
     }

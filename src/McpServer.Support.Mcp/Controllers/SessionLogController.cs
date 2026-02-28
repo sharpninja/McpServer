@@ -10,7 +10,7 @@ namespace McpServer.Support.Mcp.Controllers;
 /// FR-SUPPORT-010: Agents POST session log payloads; clients GET with optional filters.
 /// </summary>
 [ApiController]
-[Route("mcp/sessionlog")]
+[Route("mcpserver/sessionlog")]
 public sealed class SessionLogController : ControllerBase
 {
     private const int MaxEntryCount = 5000;
@@ -53,7 +53,7 @@ public sealed class SessionLogController : ControllerBase
         var id = await _service.SubmitAsync(dto, sourceFilePath: null, contentHash: null, cancellationToken).ConfigureAwait(false);
 
         return Created(
-            new Uri($"/mcp/sessionlog?agent={Uri.EscapeDataString(dto.SourceType)}&sessionId={Uri.EscapeDataString(dto.SessionId)}", UriKind.Relative),
+            new Uri($"/mcpserver/sessionlog?agent={Uri.EscapeDataString(dto.SourceType)}&sessionId={Uri.EscapeDataString(dto.SessionId)}", UriKind.Relative),
             new { id, sourceType = dto.SourceType, sessionId = dto.SessionId });
     }
 

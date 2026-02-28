@@ -96,7 +96,7 @@ internal static class PairingHtml
             </div>
             <div class="section">
               <h2>cURL Example</h2>
-              <pre>curl {{serverUrl}}/mcp/workspace \
+              <pre>curl {{serverUrl}}/mcpserver/workspace \
           -H "X-Api-Key: {{apiKey}}"</pre>
             </div>
             <p class="warn">Keep this key secret. It grants write access to workspace and tool endpoints.</p>
