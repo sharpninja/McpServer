@@ -83,4 +83,22 @@ public static class McpActionKeys
 
     /// <summary>Diagnostic appsettings-path query action.</summary>
     public const string DiagnosticAppSettingsPath = "diagnostic.appsettings-path";
+
+    /// <summary>Tunnel list query action.</summary>
+    public const string TunnelList = "tunnel.list";
+
+    /// <summary>Tunnel enable action.</summary>
+    public const string TunnelEnable = "tunnel.enable";
+
+    /// <summary>Tunnel disable action.</summary>
+    public const string TunnelDisable = "tunnel.disable";
+
+    /// <summary>Tunnel start action.</summary>
+    public const string TunnelStart = "tunnel.start";
+
+    /// <summary>Tunnel stop action.</summary>
+    public const string TunnelStop = "tunnel.stop";
+
+    /// <summary>Tunnel restart action.</summary>
+    public const string TunnelRestart = "tunnel.restart";
 }

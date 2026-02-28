@@ -1,17 +1,10 @@
 using System.CommandLine;
 using System.Reflection;
 using System.Text.Json;
-using McpServer.Client;
 using McpServer.Cqrs;
 using McpServer.Cqrs.Mvvm;
 using McpServer.Director.Commands;
-using McpServer.Director.Auth;
-using McpServer.UI.Core;
-using McpServer.UI.Core.Authorization;
-using McpServer.UI.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Logging;
 using Spectre.Console;
 
 namespace McpServer.Director;
@@ -56,42 +49,8 @@ internal static class Program
     private static ServiceProvider BuildServiceProvider(string? workspace = null)
     {
         var services = new ServiceCollection();
-        services.AddDirectorLogging();
-        services.AddCqrs(typeof(Program).Assembly);
-        services.AddUiCore();
-        services.RemoveAll<IRoleContext>();
-        services.RemoveAll<IAuthorizationPolicyService>();
-        services.AddSingleton<IRoleContext, DirectorRoleContext>();
-        services.AddSingleton<IAuthorizationPolicyService, DirectorAuthorizationPolicyService>();
-
-        var activeWorkspaceClient = McpHttpClient.FromMarkerOnly(workspace);
-        activeWorkspaceClient?.TrySetCachedBearerToken();
-
-        var controlClient = McpHttpClient.FromDefaultUrlOrMarker(workspace);
-        controlClient?.TrySetCachedBearerToken();
-
-        var directorContext = new DirectorMcpContext(controlClient, activeWorkspaceClient);
-        services.AddSingleton(directorContext);
-        if (controlClient is not null)
-            services.AddSingleton(controlClient);
-
-        services.AddSingleton<IHealthApiClient>(_ => new HealthApiClientAdapter(directorContext.ControlClient));
-        services.AddSingleton<ISessionLogApiClient>(_ => new SessionLogApiClientAdapter(directorContext));
-        services.AddSingleton<IWorkspaceApiClient>(_ => new WorkspaceApiClientAdapter(directorContext));
-        services.AddSingleton<ISyncApiClient>(_ => new SyncApiClientAdapter(directorContext));
-        services.AddSingleton<IRepoApiClient>(_ => new RepoApiClientAdapter(directorContext));
-        services.AddSingleton<IContextApiClient>(_ => new ContextApiClientAdapter(directorContext));
-        services.AddSingleton<IAuthConfigApiClient>(_ => new AuthConfigApiClientAdapter(directorContext));
-        services.AddSingleton<IDiagnosticApiClient>(_ => new DiagnosticApiClientAdapter(directorContext));
-        services.AddSingleton<ITodoApiClient>(_ => new TodoApiClientAdapter(directorContext));
-        services.AddSingleton<ITunnelApiClient>(_ => new TunnelApiClientAdapter(directorContext));
-
-        var sp = services.BuildServiceProvider();
-
-        // Add Dispatcher as a log provider after construction to break the circular dep
-        sp.GetRequiredService<ILoggerFactory>().AddProvider(sp.GetRequiredService<Dispatcher>());
-
-        return sp;
+        DirectorServiceRegistration.Configure(services, workspace);
+        return DirectorServiceRegistration.BuildAndFinalize(services);
     }
 
     private static Command BuildExecCommand()

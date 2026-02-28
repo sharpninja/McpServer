@@ -28,8 +28,10 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
 
     /// <summary>Initializes a new instance of the TODO detail ViewModel.</summary>
     /// <param name="dispatcher">CQRS dispatcher.</param>
+    /// <param name="workspaceContext">Shared workspace context for reacting to workspace changes.</param>
     /// <param name="logger">Logger instance.</param>
     public TodoDetailViewModel(Dispatcher dispatcher,
+        WorkspaceContextViewModel workspaceContext,
         ILogger<TodoDetailViewModel> logger)
         : base(McpArea.Todo)
     {
@@ -42,6 +44,15 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         _statusPromptCommand = new CqrsQueryCommand<TodoPromptOutput>(dispatcher, BuildStatusPromptQuery);
         _implementPromptCommand = new CqrsQueryCommand<TodoPromptOutput>(dispatcher, BuildImplementPromptQuery);
         _planPromptCommand = new CqrsQueryCommand<TodoPromptOutput>(dispatcher, BuildPlanPromptQuery);
+        workspaceContext.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(WorkspaceContextViewModel.ActiveWorkspacePath))
+            {
+                _logger.LogInformation("Workspace changed to '{WorkspacePath}' — clearing TODO detail",
+                    workspaceContext.ActiveWorkspacePath);
+                BeginNewDraft();
+            }
+        };
     }
 
     /// <summary>TODO item ID to load.</summary>

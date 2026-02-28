@@ -9,12 +9,18 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// <summary>Unit tests for RequirementsService.ExtractRequirementIds and MergeIds.</summary>
 public sealed class RequirementsServiceTests
 {
-    private readonly RequirementsService _sut = new(
-        Substitute.For<ICopilotClient>(),
-        Substitute.For<ITodoService>(),
-        Substitute.For<Microsoft.AspNetCore.Hosting.IWebHostEnvironment>(),
-        Substitute.For<Microsoft.Extensions.Options.IOptionsMonitor<McpServer.Support.Mcp.Options.TodoPromptOptions>>(),
-        NullLogger<RequirementsService>.Instance);
+    private readonly RequirementsService _sut;
+
+    public RequirementsServiceTests()
+    {
+        var todoService = Substitute.For<ITodoService>();
+        var accessor = TestWorkspaceAccessorHelper.Create(todoService);
+        _sut = new RequirementsService(
+            Substitute.For<ICopilotClient>(),
+            accessor,
+            Substitute.For<Microsoft.Extensions.Options.IOptionsMonitor<McpServer.Support.Mcp.Options.TodoPromptOptions>>(),
+            NullLogger<RequirementsService>.Instance);
+    }
 
     [Fact]
     public async Task ExtractRequirementIds_JsonBlock_ExtractsIds()
