@@ -856,10 +856,16 @@ public sealed partial class VoiceConversationService
 
     /// <summary>
     /// Escapes a string argument for command-line use.
+    /// Collapses newlines to spaces since <c>CreateProcessWithTokenW</c> takes a flat
+    /// <c>lpCommandLine</c> string that cannot contain embedded line breaks.
     /// </summary>
     private static string EscapeArgument(string value)
     {
         if (string.IsNullOrEmpty(value)) return "\"\"";
+
+        // CreateProcessWithTokenW lpCommandLine cannot contain newlines
+        value = value.Replace("\r\n", " ").Replace('\n', ' ').Replace('\r', ' ');
+
         if (!value.Contains(' ') && !value.Contains('"') && !value.Contains('\\')) return value;
         return "\"" + value.Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"";
     }
