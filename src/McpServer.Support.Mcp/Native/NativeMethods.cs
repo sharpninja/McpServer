@@ -106,6 +106,28 @@ internal static partial class NativeMethods
     internal static extern bool WTSQueryUserToken(int sessionId, out IntPtr phToken);
 
     /// <summary>
+    /// Creates a new process and its primary thread using the specified token.
+    /// Unlike <see cref="CreateProcessWithTokenW"/>, this does not create a new logon session
+    /// and directly uses the token's existing session, making it suitable for
+    /// launching interactive desktop processes from LocalSystem services.
+    /// Requires SE_ASSIGNPRIMARYTOKEN_NAME and SE_INCREASE_QUOTA_NAME privileges.
+    /// </summary>
+    [DllImport("advapi32.dll", EntryPoint = "CreateProcessAsUserW", SetLastError = true, CharSet = CharSet.Unicode)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool CreateProcessAsUser(
+        IntPtr hToken,
+        string? lpApplicationName,
+        string? lpCommandLine,
+        IntPtr lpProcessAttributes,
+        IntPtr lpThreadAttributes,
+        [MarshalAs(UnmanagedType.Bool)] bool bInheritHandles,
+        int dwCreationFlags,
+        IntPtr lpEnvironment,
+        string? lpCurrentDirectory,
+        ref NativeStructs.STARTUPINFO lpStartupInfo,
+        out NativeStructs.PROCESS_INFORMATION lpProcessInformation);
+
+    /// <summary>
     /// Sets information for an access token.
     /// Used to assign the token to an interactive desktop session via <c>TokenSessionId</c>.
     /// </summary>
