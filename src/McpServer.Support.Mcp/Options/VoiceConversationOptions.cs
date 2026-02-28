@@ -28,7 +28,7 @@ public sealed class VoiceConversationOptions
     /// <summary>
     /// Timeout for a single Copilot CLI invocation in seconds.
     /// </summary>
-    public int CopilotTimeoutSeconds { get; set; } = 120;
+    public int CopilotTimeoutSeconds { get; set; } = 14400;
 
     /// <summary>
     /// Maximum number of todo write mutations allowed in a single turn.

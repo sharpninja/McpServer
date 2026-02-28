@@ -771,7 +771,8 @@ public sealed partial class VoiceConversationService
     }
 
     /// <summary>
-    /// Launches Copilot CLI on the interactive desktop with full stdio pipe access.
+    /// Launches Copilot CLI on the interactive desktop as a visible console window.
+    /// Returns immediately after launch — the process runs independently.
     /// </summary>
     private async Task<CopilotResult> InvokeCopilotViaDesktopAsync(
         string prompt,
@@ -779,7 +780,7 @@ public sealed partial class VoiceConversationService
         CancellationToken cancellationToken)
     {
         var copilotOpts = BuildCopilotOptions(opts);
-        var arguments = BuildCopilotArguments(prompt, copilotOpts);
+        var arguments = BuildCopilotArguments(prompt, copilotOpts, interactive: true);
         var workingDirectory = copilotOpts.WorkingDirectory;
 
         // Resolve the full path to copilot via workspace config or desktop Get-Command
@@ -793,53 +794,30 @@ public sealed partial class VoiceConversationService
             envVars[key] = value;
 
         _logger.LogDebug(
-            "Launching Copilot via desktop: {Agent} {Args}",
+            "Launching Copilot via visible desktop: {Agent} {Args}",
             agentPath, arguments);
 
-        using var handle = _desktopLauncher!.LaunchWithStdio(
+        var pid = _desktopLauncher!.LaunchVisible(
             agentPath,
             arguments,
             workingDirectory,
             envVars.Count > 0 ? envVars : null);
 
-        using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        cts.CancelAfter(copilotOpts.Timeout);
+        _logger.LogInformation("Copilot launched on desktop: PID={ProcessId}", pid);
 
-        try
+        return new CopilotResult
         {
-            var stdoutTask = handle.StandardOutput.ReadToEndAsync(cts.Token);
-            var stderrTask = handle.StandardError.ReadToEndAsync(cts.Token);
-
-            await Task.WhenAll(stdoutTask, stderrTask).ConfigureAwait(false);
-
-            var exitCode = await handle.WaitForExitAsync(cts.Token).ConfigureAwait(false);
-            var body = (await stdoutTask.ConfigureAwait(false)).Trim();
-            var stderr = (await stderrTask.ConfigureAwait(false)).Trim();
-
-            return new CopilotResult
-            {
-                State = exitCode == 0 ? CopilotResultState.Success : CopilotResultState.Error,
-                Body = body,
-                Stderr = stderr,
-                ExitCode = exitCode,
-            };
-        }
-        catch (OperationCanceledException) when (cts.IsCancellationRequested && !cancellationToken.IsCancellationRequested)
-        {
-            return new CopilotResult
-            {
-                State = CopilotResultState.Timeout,
-                Body = string.Empty,
-                Stderr = "Desktop Copilot invocation timed out.",
-                ExitCode = null,
-            };
-        }
+            State = CopilotResultState.Success,
+            Body = $"{{\"type\":\"final_response\",\"displayText\":\"Copilot launched on desktop (PID {pid}).\",\"speakText\":\"Copilot launched on desktop.\"}}",
+            Stderr = string.Empty,
+            ExitCode = 0,
+        };
     }
 
     /// <summary>
     /// Builds the argument string for Copilot CLI, matching the format used by <see cref="CopilotClient"/>.
     /// </summary>
-    private static string BuildCopilotArguments(string prompt, CopilotClientOptions copilotOpts)
+    private static string BuildCopilotArguments(string prompt, CopilotClientOptions copilotOpts, bool interactive = false)
     {
         var args = new StringBuilder();
         args.Append("-p ");
@@ -851,7 +829,8 @@ public sealed partial class VoiceConversationService
             args.Append(EscapeArgument(copilotOpts.Model));
         }
 
-        if (copilotOpts.Silent)
+        // Skip --silent for interactive desktop sessions
+        if (copilotOpts.Silent && !interactive)
             args.Append(" --silent");
 
         args.Append(" --stream on");

@@ -214,6 +214,77 @@ internal sealed class DesktopProcessLauncher
     }
 
     /// <summary>
+    /// Launches a process on the interactive desktop with a visible console window.
+    /// No stdio pipes are created — the process runs interactively.
+    /// Returns the process ID.
+    /// </summary>
+    /// <param name="executablePath">Path to the executable.</param>
+    /// <param name="arguments">Command-line arguments.</param>
+    /// <param name="workingDirectory">Working directory (null for current).</param>
+    /// <param name="environmentVariables">Additional environment variables to set.</param>
+    /// <returns>The process ID of the launched process.</returns>
+    /// <exception cref="Win32Exception">Thrown when native API calls fail.</exception>
+    internal int LaunchVisible(
+        string executablePath,
+        string arguments,
+        string? workingDirectory = null,
+        Dictionary<string, string>? environmentVariables = null)
+    {
+        executablePath = ResolveSymlinks(executablePath);
+
+        IntPtr duplicatedToken = IntPtr.Zero;
+
+        try
+        {
+            duplicatedToken = GetConsoleSessionUserToken();
+
+            var si = new NativeStructs.STARTUPINFO
+            {
+                cb = Marshal.SizeOf<NativeStructs.STARTUPINFO>(),
+                lpDesktop = "winsta0\\default",
+                dwFlags = NativeConstants.STARTF_USESHOWWINDOW,
+                wShowWindow = NativeConstants.SW_SHOWNORMAL
+            };
+
+            var creationFlags = NativeConstants.CREATE_UNICODE_ENVIRONMENT | NativeConstants.CREATE_NEW_CONSOLE;
+            var envBlock = BuildEnvironmentBlock(environmentVariables);
+
+            var commandLine = BuildCommandLine(executablePath, arguments);
+
+            _logger.LogDebug(
+                "Launching visible desktop process: {CommandLine} in {WorkingDirectory}",
+                commandLine, workingDirectory ?? "(default)");
+
+            var success = NativeMethods.CreateProcessWithTokenW(
+                duplicatedToken,
+                NativeConstants.LOGON_WITH_PROFILE,
+                null,
+                commandLine,
+                creationFlags,
+                envBlock,
+                workingDirectory,
+                ref si,
+                out var pi);
+
+            if (!success)
+            {
+                var errorCode = Marshal.GetLastWin32Error();
+                throw new Win32Exception(errorCode, $"CreateProcessWithTokenW failed for '{executablePath}'.");
+            }
+
+            NativeMethods.CloseHandle(pi.hProcess);
+            NativeMethods.CloseHandle(pi.hThread);
+
+            _logger.LogInformation("Visible desktop process launched: PID={ProcessId}", pi.dwProcessId);
+            return pi.dwProcessId;
+        }
+        finally
+        {
+            CloseIfValid(duplicatedToken);
+        }
+    }
+
+    /// <summary>
     /// Gets a token for launching processes on the interactive desktop.
     /// Tries WTSQueryUserToken first (requires SE_TCB_NAME, works for LocalSystem services),
     /// then falls back to duplicating the current process token (works when the service runs
