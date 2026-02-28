@@ -104,4 +104,16 @@ internal static partial class NativeMethods
     [DllImport("wtsapi32.dll", EntryPoint = "WTSQueryUserToken", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static extern bool WTSQueryUserToken(int sessionId, out IntPtr phToken);
+
+    /// <summary>
+    /// Sets information for an access token.
+    /// Used to assign the token to an interactive desktop session via <c>TokenSessionId</c>.
+    /// </summary>
+    [DllImport("advapi32.dll", EntryPoint = "SetTokenInformation", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool SetTokenInformation(
+        IntPtr tokenHandle,
+        int tokenInformationClass,
+        ref int tokenInformation,
+        int tokenInformationLength);
 }

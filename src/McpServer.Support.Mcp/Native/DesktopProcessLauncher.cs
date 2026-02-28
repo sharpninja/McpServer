@@ -314,8 +314,28 @@ internal sealed class DesktopProcessLauncher
                 sessionId, wtsError);
         }
 
-        // Fallback: duplicate the current process token — works when service runs as the logged-in user
-        return DuplicateCurrentProcessToken();
+        // Fallback: duplicate the current process token and reassign to the console session
+        var token = DuplicateCurrentProcessToken();
+        if (sessionId != -1)
+        {
+            if (!NativeMethods.SetTokenInformation(
+                    token,
+                    NativeConstants.TOKEN_SESSION_ID,
+                    ref sessionId,
+                    sizeof(int)))
+            {
+                var setErr = Marshal.GetLastWin32Error();
+                _logger.LogWarning(
+                    "SetTokenInformation(TokenSessionId={SessionId}) failed (error {ErrorCode}); process may launch in Session 0",
+                    sessionId, setErr);
+            }
+            else
+            {
+                _logger.LogDebug("Set duplicated token session to {SessionId}", sessionId);
+            }
+        }
+
+        return token;
     }
 
     /// <summary>
@@ -325,7 +345,8 @@ internal sealed class DesktopProcessLauncher
     {
         if (!NativeMethods.OpenProcessToken(
                 NativeMethods.GetCurrentProcess(),
-                NativeConstants.TOKEN_DUPLICATE | NativeConstants.TOKEN_QUERY | NativeConstants.TOKEN_ASSIGN_PRIMARY,
+                NativeConstants.TOKEN_DUPLICATE | NativeConstants.TOKEN_QUERY
+                    | NativeConstants.TOKEN_ASSIGN_PRIMARY | NativeConstants.TOKEN_ADJUST_SESSIONID,
                 out var existingToken))
         {
             throw new Win32Exception(Marshal.GetLastWin32Error(), "Failed to open current process token.");

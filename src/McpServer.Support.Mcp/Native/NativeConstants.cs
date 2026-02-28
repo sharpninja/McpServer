@@ -73,4 +73,12 @@ internal static class NativeConstants
 
     /// <summary>Infinite timeout.</summary>
     internal const int INFINITE = unchecked((int)0xFFFFFFFF);
+
+    // ── Token information classes ────────────────────────────────────────
+
+    /// <summary>TokenSessionId information class for SetTokenInformation (value 12).</summary>
+    internal const int TOKEN_SESSION_ID = 12;
+
+    /// <summary>Required to adjust the session ID of an access token.</summary>
+    internal const int TOKEN_ADJUST_SESSIONID = 0x0100;
 }
