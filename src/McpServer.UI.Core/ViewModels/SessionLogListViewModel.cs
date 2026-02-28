@@ -22,13 +22,20 @@ public sealed partial class SessionLogListViewModel : AreaListViewModelBase<Sess
 
     /// <summary>Initializes a new instance of the session log list ViewModel.</summary>
     /// <param name="dispatcher">CQRS dispatcher.</param>
+    /// <param name="workspaceContext">Shared workspace context for reacting to workspace changes.</param>
     /// <param name="logger">Logger instance.</param>
     public SessionLogListViewModel(Dispatcher dispatcher,
+        WorkspaceContextViewModel workspaceContext,
         ILogger<SessionLogListViewModel> logger)
         : base(McpArea.SessionLogs)
     {
         _logger = logger;
         _refreshCommand = new CqrsQueryCommand<ListSessionLogsResult>(dispatcher, BuildQuery);
+        workspaceContext.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(WorkspaceContextViewModel.ActiveWorkspacePath))
+                _ = Task.Run(() => LoadAsync());
+        };
     }
 
     /// <summary>Filter by source/agent.</summary>

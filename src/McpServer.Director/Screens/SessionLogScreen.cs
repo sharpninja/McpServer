@@ -9,6 +9,7 @@ namespace McpServer.Director.Screens;
 internal sealed class SessionLogScreen : View
 {
     private readonly SessionLogListViewModel _viewModel;
+    private volatile bool _isLoadingExplicitly;
     private TableView _table = null!;
     private TextView _statusLabel = null!;
     private readonly ILogger<SessionLogScreen> _logger;
@@ -24,6 +25,13 @@ internal sealed class SessionLogScreen : View
         Height = Dim.Fill();
         CanFocus = true;
         BuildUi();
+
+        // When the ViewModel reloads (e.g. workspace change), rebuild the table.
+        _viewModel.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(SessionLogListViewModel.LastRefreshedAt) && !_isLoadingExplicitly)
+                RebuildTableFromViewModel();
+        };
     }
 
     private void BuildUi()
@@ -43,7 +51,7 @@ internal sealed class SessionLogScreen : View
             Width = Dim.Fill(),
             Height = 1,
             ReadOnly = true,
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         Add(_statusLabel);
@@ -58,38 +66,47 @@ internal sealed class SessionLogScreen : View
         SetStatus("⏳ Loading session logs...");
         try
         {
+            _isLoadingExplicitly = true;
             await _viewModel.LoadAsync().ConfigureAwait(false);
-
-            var rows = _viewModel.Items
-                .Select(item => new SessionRow(
-                    item.SessionId,
-                    item.SourceType,
-                    item.Title,
-                    item.Status,
-                    item.LastUpdated ?? ""))
-                .ToList();
-
-            Application.Invoke(() =>
-            {
-                _table.Table = new EnumerableTableSource<SessionRow>(rows,
-                    new Dictionary<string, Func<SessionRow, object>>
-                    {
-                        ["ID"] = r => r.Id,
-                        ["Source"] = r => r.Source,
-                        ["Title"] = r => r.Title,
-                        ["Status"] = r => r.Status,
-                        ["Updated"] = r => r.Updated,
-                    });
-            });
-            SetStatus(_viewModel.ErrorMessage is null
-                ? $"✓ {rows.Count} logs"
-                : $"✗ {_viewModel.ErrorMessage}");
+            RebuildTableFromViewModel();
         }
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
             SetStatus($"✗ {ex.Message}");
         }
+        finally
+        {
+            _isLoadingExplicitly = false;
+        }
+    }
+
+    private void RebuildTableFromViewModel()
+    {
+        var rows = _viewModel.Items
+            .Select(item => new SessionRow(
+                item.SessionId,
+                item.SourceType,
+                item.Title,
+                item.Status,
+                item.LastUpdated ?? ""))
+            .ToList();
+
+        Application.Invoke(() =>
+        {
+            _table.Table = new EnumerableTableSource<SessionRow>(rows,
+                new Dictionary<string, Func<SessionRow, object>>
+                {
+                    ["ID"] = r => r.Id,
+                    ["Source"] = r => r.Source,
+                    ["Title"] = r => r.Title,
+                    ["Status"] = r => r.Status,
+                    ["Updated"] = r => r.Updated,
+                });
+        });
+        SetStatus(_viewModel.ErrorMessage is null
+            ? $"✓ {rows.Count} logs"
+            : $"✗ {_viewModel.ErrorMessage}");
     }
 
     private void SetStatus(string text) => Application.Invoke(() => _statusLabel.Text = text);

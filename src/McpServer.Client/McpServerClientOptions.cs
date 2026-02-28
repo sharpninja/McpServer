@@ -27,12 +27,12 @@ public sealed class McpServerClientOptions
 {
     /// <summary>
     /// Base URL of the MCP Server workspace host. The scheme, host, and port are extracted
-    /// to construct per-request URIs. The default value targets <c>http://localhost:7148</c>.
+    /// to construct per-request URIs. The default value targets <c>http://localhost:7147</c>.
     /// </summary>
     /// <remarks>
     /// The path component is ignored — each sub-client appends its own endpoint paths.
     /// </remarks>
-    public Uri BaseUrl { get; set; } = new Uri("http://localhost:7148");
+    public Uri BaseUrl { get; set; } = new Uri("http://localhost:7147");
 
     /// <summary>
     /// Optional seed API key for workspace authentication. When non-null, the value is

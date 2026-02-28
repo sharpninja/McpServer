@@ -13,7 +13,7 @@ For `cloudflare` in single-public-port environments, MCP exposes only the primar
 Current behavior and scope:
 
 - Publicly exposed: primary MCP host routes on the tunneled port (`/health`, `/auth/*`, primary-host `/mcp/*`)
-- Not publicly exposed: child workspace listeners on `7148+`
+- Not publicly exposed: child workspace listeners on `7147+`
 - If you need direct remote access to child workspace ports, use FRP TCP mode or implement a future primary-host workspace proxy/gateway feature
 
 ## Provider Modes Supported Today
@@ -104,7 +104,7 @@ Use the Cloudflare hostname for:
 - `GET /auth/config`, `POST /auth/device`, `POST /auth/token`, `GET/POST /auth/ui/*` (OIDC device-flow + browser proxy on the same host)
 - Primary-host REST endpoints under `/mcp/*` (with `X-Api-Key`)
 
-Do not assume the Cloudflare hostname exposes child workspaces on `7148+`.
+Do not assume the Cloudflare hostname exposes child workspaces on `7147+`.
 
 If a remote client needs a non-primary workspace endpoint:
 
@@ -169,7 +169,7 @@ Verify `cloudflared tunnel list` and `cloudflared tunnel run <TunnelName>` manua
 
 ### Public hostname works for `/health` but remote workspace access is incomplete
 
-- Expected in the current strategy if the client is trying to reach child workspace ports (`7148+`)
+- Expected in the current strategy if the client is trying to reach child workspace ports (`7147+`)
 - Use the primary host endpoints only, or switch to FRP for multi-port exposure
 
 ## Validation Checklist

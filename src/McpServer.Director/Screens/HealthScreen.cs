@@ -43,7 +43,7 @@ internal sealed class HealthScreen : View
             Width = Dim.Fill(),
             Height = 1,
             ReadOnly = true,
-            WordWrap = false,
+            WordWrap = true,
             Text = "Checking...",
         };
         Add(_statusLabel);

@@ -17,6 +17,7 @@ set -euo pipefail
 # ─── State ───────────────────────────────────────────────────────────────────
 MCP_TODO_BASE_URL=""
 MCP_TODO_API_KEY=""
+MCP_TODO_WORKSPACE_PATH=""
 
 # ─── Connection ──────────────────────────────────────────────────────────────
 
@@ -41,6 +42,7 @@ mcp_todo_init() {
 
     MCP_TODO_BASE_URL=$(grep -oP 'baseUrl:\s*\K\S+' "$marker")
     MCP_TODO_API_KEY=$(grep -oP 'apiKey:\s*\K\S+' "$marker")
+    MCP_TODO_WORKSPACE_PATH=$(grep -oP 'workspacePath:\s*\K.+' "$marker" | sed 's/[[:space:]]*$//')
 
     # Verify connectivity
     if curl -sf "${MCP_TODO_BASE_URL}/health" > /dev/null 2>&1; then
@@ -55,6 +57,7 @@ mcp_todo_init() {
 mcp_todo_list() {
     # Usage: mcp_todo_list
     curl -sf -H "X-Api-Key: ${MCP_TODO_API_KEY}" \
+        -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
         "${MCP_TODO_BASE_URL}/mcp/todo"
 }
 
@@ -62,6 +65,7 @@ mcp_todo_get() {
     # Usage: mcp_todo_get <id>
     local id="$1"
     curl -sf -H "X-Api-Key: ${MCP_TODO_API_KEY}" \
+        -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
         "${MCP_TODO_BASE_URL}/mcp/todo/${id}"
 }
 
@@ -69,6 +73,7 @@ mcp_todo_prompt() {
     # Usage: mcp_todo_prompt <id> <type>  (type: implement, plan, status)
     local id="$1" ptype="$2"
     curl -sf -H "X-Api-Key: ${MCP_TODO_API_KEY}" \
+        -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
         "${MCP_TODO_BASE_URL}/mcp/todo/${id}/prompt/${ptype}"
 }
 
@@ -90,6 +95,7 @@ mcp_todo_create() {
 
     curl -sf -X POST \
         -H "X-Api-Key: ${MCP_TODO_API_KEY}" \
+        -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
         -H "Content-Type: application/json" \
         -d "$body" \
         "${MCP_TODO_BASE_URL}/mcp/todo"
@@ -101,6 +107,7 @@ mcp_todo_create_full() {
     local body="$1"
     curl -sf -X POST \
         -H "X-Api-Key: ${MCP_TODO_API_KEY}" \
+        -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
         -H "Content-Type: application/json" \
         -d "$body" \
         "${MCP_TODO_BASE_URL}/mcp/todo"
@@ -114,10 +121,11 @@ mcp_todo_update() {
     local id="$1" body="$2"
     curl -sf -X PUT \
         -H "X-Api-Key: ${MCP_TODO_API_KEY}" \
+        -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
         -H "Content-Type: application/json" \
         -d "$body" \
         "${MCP_TODO_BASE_URL}/mcp/todo/${id}"
-}
+} 
 
 # ─── Complete ────────────────────────────────────────────────────────────────
 
@@ -132,6 +140,7 @@ mcp_todo_complete() {
 
     curl -sf -X PUT \
         -H "X-Api-Key: ${MCP_TODO_API_KEY}" \
+        -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
         -H "Content-Type: application/json" \
         -d "$body" \
         "${MCP_TODO_BASE_URL}/mcp/todo/${id}"
@@ -144,6 +153,7 @@ mcp_todo_delete() {
     local id="$1"
     curl -sf -X DELETE \
         -H "X-Api-Key: ${MCP_TODO_API_KEY}" \
+        -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
         "${MCP_TODO_BASE_URL}/mcp/todo/${id}"
     echo "Deleted todo: ${id}"
 }
@@ -156,6 +166,7 @@ mcp_todo_add_requirements() {
     local id="$1" body="$2"
     curl -sf -X POST \
         -H "X-Api-Key: ${MCP_TODO_API_KEY}" \
+        -H "X-Workspace-Path: ${MCP_TODO_WORKSPACE_PATH}" \
         -H "Content-Type: application/json" \
         -d "$body" \
         "${MCP_TODO_BASE_URL}/mcp/todo/${id}/requirements"

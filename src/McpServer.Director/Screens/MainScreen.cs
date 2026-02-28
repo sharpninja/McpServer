@@ -28,6 +28,7 @@ internal sealed class MainScreen : Window
     private readonly WorkspaceDetailViewModel _workspaceDetailVm;
     private readonly WorkspacePolicyViewModel _workspacePolicyVm;
     private readonly TunnelListViewModel _tunnelListVm;
+    private readonly WorkspaceContextViewModel _workspaceContextVm;
     private Label _authLabel = null!;
     private TabView _tabView = null!;
     private Label _workspaceContextLabel = null!;
@@ -48,6 +49,7 @@ internal sealed class MainScreen : Window
         TodoListViewModel todoVm,
         TodoDetailViewModel todoDetailVm,
         TunnelListViewModel tunnelListVm,
+        WorkspaceContextViewModel workspaceContextVm,
         IAuthorizationPolicyService authorizationPolicy,
         IRoleContext roleContext,
         DirectorMcpContext directorContext,
@@ -64,6 +66,7 @@ internal sealed class MainScreen : Window
         _workspaceDetailVm = workspaceDetailVm;
         _workspacePolicyVm = workspacePolicyVm;
         _tunnelListVm = tunnelListVm;
+        _workspaceContextVm = workspaceContextVm;
         _authorizationPolicy = authorizationPolicy;
         _roleContext = roleContext;
         _directorContext = directorContext;
@@ -74,6 +77,10 @@ internal sealed class MainScreen : Window
         Height = Dim.Fill();
 
         BuildUi();
+
+        // Seed the shared workspace context from the initial active workspace (e.g. from marker file).
+        // Done after BuildUi so screen PropertyChanged subscriptions are active.
+        _workspaceContextVm.ActiveWorkspacePath = _directorContext.ActiveWorkspacePath;
     }
 
     private void BuildUi()
@@ -139,9 +146,9 @@ internal sealed class MainScreen : Window
                 UpdateWorkspaceContextStatus();
             });
 
-            _workspacePolicyVm.WorkspacePath = _directorContext.ActiveWorkspacePath ?? "";
-            if (_tabView.SelectedTab?.View is not WorkspaceListScreen)
-                RefreshCurrentTab();
+            // Propagate workspace change to the shared ViewModel;
+            // subscribed ViewModels react and refresh themselves.
+            _workspaceContextVm.ActiveWorkspacePath = _directorContext.ActiveWorkspacePath;
         };
         _workspaceListVm.Workspaces.CollectionChanged += (_, _) =>
         {
@@ -152,6 +159,7 @@ internal sealed class MainScreen : Window
 
         // Status bar
         var statusBar = new StatusBar { Y = Pos.AnchorEnd(1) };
+        statusBar.Add(new Shortcut { Key = Key.Tab.WithShift, Title = "Next Tab" });
         statusBar.Add(new Shortcut { Key = Key.F2, Title = "Login" });
         statusBar.Add(new Shortcut { Key = Key.F5, Title = "Refresh" });
         statusBar.Add(new Shortcut { Key = Key.W.WithCtrl, Title = "Workspace" });
@@ -171,6 +179,8 @@ internal sealed class MainScreen : Window
         // Auto-load on startup
         Loaded += (_, _) =>
         {
+            ViewModelBinder.EnableScrollBars(this);
+
             _ = Task.Run(async () =>
             {
                 var logsScreen = _tabView.Tabs
@@ -183,9 +193,7 @@ internal sealed class MainScreen : Window
                 if (!_directorContext.HasControlConnection)
                     return;
 
-                // Load health + workspaces on startup
-                if (_tabView.Tabs.FirstOrDefault()?.View is HealthScreen hs)
-                    await hs.CheckHealthAsync().ConfigureAwait(false);
+                // Load workspaces and auto-select context first
                 if (_authorizationPolicy.CanViewArea(McpArea.Workspaces))
                 {
                     await _workspaceListVm.LoadAsync().ConfigureAwait(false);
@@ -195,6 +203,9 @@ internal sealed class MainScreen : Window
                         TryAutoSelectWorkspaceContext();
                     });
                 }
+
+                // Refresh the initially selected tab after workspace context is settled
+                Application.Invoke(RefreshCurrentTab);
             });
         };
     }
@@ -359,6 +370,18 @@ internal sealed class MainScreen : Window
 
         var selectFirst = true;
 
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Todo))
+        {
+            _tabView.AddTab(new Tab { DisplayText = "TODO", View = new TodoScreen(_todoVm, _todoDetailVm, directorContext: _directorContext) }, andSelect: selectFirst);
+            selectFirst = false;
+        }
+
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.SessionLogs))
+        {
+            _tabView.AddTab(new Tab { DisplayText = "Sessions", View = new SessionLogScreen(_sessionLogVm) }, andSelect: selectFirst);
+            selectFirst = false;
+        }
+
         if (_directorContext.HasControlConnection && _authorizationPolicy.CanViewArea(McpArea.Health))
         {
             _tabView.AddTab(new Tab { DisplayText = "Health", View = new HealthScreen(_healthVm, _directorContext.GetRequiredControlHttpClient()) }, andSelect: selectFirst);
@@ -374,18 +397,6 @@ internal sealed class MainScreen : Window
         if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Agents))
         {
             _tabView.AddTab(new Tab { DisplayText = "Agents", View = new AgentScreen(_directorContext) }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Todo))
-        {
-            _tabView.AddTab(new Tab { DisplayText = "TODO", View = new TodoScreen(_todoVm, _todoDetailVm, directorContext: _directorContext) }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.SessionLogs))
-        {
-            _tabView.AddTab(new Tab { DisplayText = "Sessions", View = new SessionLogScreen(_sessionLogVm) }, andSelect: selectFirst);
             selectFirst = false;
         }
 
@@ -454,7 +465,7 @@ internal sealed class MainScreen : Window
             Width = Dim.Fill(),
             Height = 1,
             ReadOnly = true,
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         Add(_workspaceContextStatus);
@@ -549,6 +560,14 @@ internal sealed class MainScreen : Window
             UpdateWorkspaceContextStatus($"Context switch failed: {error}");
     }
 
+    private void CycleTab()
+    {
+        var tabs = _tabView.Tabs.ToList();
+        if (tabs.Count < 2) return;
+        var idx = tabs.IndexOf(_tabView.SelectedTab!);
+        _tabView.SelectedTab = tabs[(idx + 1) % tabs.Count];
+    }
+
     private void OnApplicationKeyDown(object? sender, Key e)
     {
         if (!Visible)
@@ -569,7 +588,12 @@ internal sealed class MainScreen : Window
         if (e.Handled)
             return;
 
-        if (e.KeyCode == KeyCode.F2)
+        if (e.KeyCode == (KeyCode.Tab | KeyCode.ShiftMask))
+        {
+            CycleTab();
+            e.Handled = true;
+        }
+        else if (e.KeyCode == KeyCode.F2)
         {
             ShowLoginDialog();
             e.Handled = true;
@@ -598,7 +622,11 @@ internal sealed class MainScreen : Window
         if (_workspacePickerSource.Count == 0)
             return;
 
-        var preferred = _workspaceListVm.Workspaces.FirstOrDefault(w => w.IsPrimary)?.WorkspacePath
+        // Prefer the workspace matching CWD over the primary workspace.
+        var cwd = Directory.GetCurrentDirectory();
+        var preferred = _workspaceListVm.Workspaces.FirstOrDefault(w =>
+                            string.Equals(w.WorkspacePath, cwd, StringComparison.OrdinalIgnoreCase))?.WorkspacePath
+                        ?? _workspaceListVm.Workspaces.FirstOrDefault(w => w.IsPrimary)?.WorkspacePath
                         ?? _workspaceListVm.Workspaces.FirstOrDefault()?.WorkspacePath;
         if (string.IsNullOrWhiteSpace(preferred))
             return;

@@ -88,6 +88,9 @@ public static class McpStdioHost
                 _ => ActivatorUtilities.CreateInstance<TodoService>(sp),
             };
         });
+        builder.Services.AddSingleton<TodoServiceResolver>();
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddSingleton<WorkspaceServiceAccessor>();
         builder.Services.AddScoped<RepoIngestor>();
         builder.Services.AddScoped<SessionLogIngestor>();
         builder.Services.AddScoped<ExternalDocsIngestor>();

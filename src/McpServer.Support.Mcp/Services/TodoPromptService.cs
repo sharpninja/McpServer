@@ -15,9 +15,8 @@ namespace McpServer.Support.Mcp.Services;
 /// from configuration on every call instead of being cached at startup.
 /// </summary>
 public sealed class TodoPromptService(
-    ITodoService todoService,
+    WorkspaceServiceAccessor workspaceAccessor,
     ICopilotClient copilotClient,
-    IWebHostEnvironment hostEnvironment,
     IOptionsMonitor<TodoPromptOptions> promptOptions,
     ILogger<TodoPromptService> logger) : ITodoPromptService
 {
@@ -26,7 +25,7 @@ public sealed class TodoPromptService(
         string id,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var item = await todoService.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
+        var item = await workspaceAccessor.GetTodoService().GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
         if (item is null)
         {
             yield return $"error: TODO '{id}' not found.";
@@ -34,7 +33,7 @@ public sealed class TodoPromptService(
         }
 
         var prompt = BuildPrompt(EffectiveStatusPrompt, item);
-        logger.LogInformation("Streaming Copilot status for TODO {Id} in {Cwd}", id, hostEnvironment.ContentRootPath);
+        logger.LogInformation("Streaming Copilot status for TODO {Id} in {Cwd}", id, workspaceAccessor.GetWorkspacePath());
 
         await foreach (var line in InvokeCopilotStreaming(prompt, TimeSpan.FromMinutes(3), cancellationToken).ConfigureAwait(false))
             yield return line;
@@ -45,7 +44,7 @@ public sealed class TodoPromptService(
         string id,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var item = await todoService.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
+        var item = await workspaceAccessor.GetTodoService().GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
         if (item is null)
         {
             yield return $"error: TODO '{id}' not found.";
@@ -53,7 +52,7 @@ public sealed class TodoPromptService(
         }
 
         var prompt = BuildPrompt(EffectiveImplementPrompt, item);
-        logger.LogInformation("Streaming Copilot implement for TODO {Id} in {Cwd}", id, hostEnvironment.ContentRootPath);
+        logger.LogInformation("Streaming Copilot implement for TODO {Id} in {Cwd}", id, workspaceAccessor.GetWorkspacePath());
 
         await foreach (var line in InvokeCopilotStreaming(prompt, TimeSpan.FromMinutes(5), cancellationToken).ConfigureAwait(false))
             yield return line;
@@ -64,7 +63,7 @@ public sealed class TodoPromptService(
         string id,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        var item = await todoService.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
+        var item = await workspaceAccessor.GetTodoService().GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
         if (item is null)
         {
             yield return $"error: TODO '{id}' not found.";
@@ -72,7 +71,7 @@ public sealed class TodoPromptService(
         }
 
         var prompt = BuildPrompt(EffectivePlanPrompt, item);
-        logger.LogInformation("Streaming Copilot plan for TODO {Id} in {Cwd}", id, hostEnvironment.ContentRootPath);
+        logger.LogInformation("Streaming Copilot plan for TODO {Id} in {Cwd}", id, workspaceAccessor.GetWorkspacePath());
 
         await foreach (var line in InvokeCopilotStreaming(prompt, TimeSpan.FromMinutes(5), cancellationToken).ConfigureAwait(false))
             yield return line;
@@ -88,7 +87,7 @@ public sealed class TodoPromptService(
         var options = new CopilotClientOptions
         {
             Timeout = timeout,
-            WorkingDirectory = hostEnvironment.ContentRootPath,
+            WorkingDirectory = workspaceAccessor.GetWorkspacePath(),
             RunAs = current.RunAs,
             GitHubToken = current.GitHubToken,
         };

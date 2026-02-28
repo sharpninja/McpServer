@@ -147,7 +147,7 @@ internal sealed class AgentScreen : View
             Width = Dim.Fill(),
             Height = 1,
             ReadOnly = true,
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         Add(_statusLabel);
@@ -286,15 +286,20 @@ internal sealed class AgentScreen : View
         parent.Add(new Label { X = 0, Y = row, Text = "Seed Prompt Override:" });
         row++;
 
-        _detailSeedPromptOverrideView = new TextView { X = 0, Y = row, Width = Dim.Fill(), Height = 3, WordWrap = false, Text = "" };
+        _detailSeedPromptOverrideView = new TextView { X = 0, Y = row, Width = Dim.Fill(), Height = 3, WordWrap = true, Text = "" };
         parent.Add(_detailSeedPromptOverrideView);
         row += 3;
 
         parent.Add(new Label { X = 0, Y = row, Text = "Marker Additions:" });
         row++;
 
-        _detailMarkerAdditionsView = new TextView { X = 0, Y = row, Width = Dim.Fill(), Height = Dim.Fill(2), WordWrap = false, Text = "" };
+        _detailMarkerAdditionsView = new TextView { X = 0, Y = row, Width = Dim.Fill(), Height = Dim.Fill(2), WordWrap = true, Text = "" };
         parent.Add(_detailMarkerAdditionsView);
+
+        ApplyEditableScheme(_detailDisplayNameField, _detailLaunchCommandOverrideField,
+            _detailModelsOverrideField, _detailBranchStrategyOverrideField,
+            _detailInstructionFilesOverrideField, _detailSeedPromptOverrideView,
+            _detailMarkerAdditionsView);
 
         var saveDetailBtn = new Button { X = 0, Y = Pos.AnchorEnd(1), Text = "Save Detail" };
         saveDetailBtn.Accepting += (_, _) => QueueSaveSelectedDetail();
@@ -1071,5 +1076,13 @@ internal sealed class AgentScreen : View
         {
             // Ignore trace failures. This is diagnostic-only instrumentation.
         }
+    }
+
+    private static void ApplyEditableScheme(params View[] views)
+    {
+        if (!Colors.ColorSchemes.TryGetValue("Editable", out var scheme))
+            return;
+        foreach (var v in views)
+            v.ColorScheme = scheme;
     }
 }

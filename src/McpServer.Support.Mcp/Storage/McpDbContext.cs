@@ -11,7 +11,7 @@ namespace McpServer.Support.Mcp.Storage;
 /// </summary>
 public sealed class McpDbContext : DbContext
 {
-    private readonly string _workspaceId;
+    private string _workspaceId;
 
     /// <summary>TR-PLANNED-013: Constructor for DI with workspace context.</summary>
     public McpDbContext(DbContextOptions<McpDbContext> options, WorkspaceContext? workspaceContext = null)
@@ -19,6 +19,9 @@ public sealed class McpDbContext : DbContext
     {
         _workspaceId = workspaceContext?.WorkspacePath ?? string.Empty;
     }
+
+    /// <summary>TR-MCP-MT-001: Overrides the workspace ID for this context instance (e.g. from an MCP tool parameter).</summary>
+    internal void OverrideWorkspaceId(string workspaceId) => _workspaceId = workspaceId;
 
     /// <summary>TR-PLANNED-013: Indexed documents.</summary>
     public DbSet<ContextDocumentEntity> Documents => Set<ContextDocumentEntity>();

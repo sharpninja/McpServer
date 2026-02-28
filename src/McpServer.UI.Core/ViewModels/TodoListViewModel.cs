@@ -22,13 +22,24 @@ public sealed partial class TodoListViewModel : AreaListViewModelBase<TodoListIt
 
     /// <summary>Initializes a new instance of the TODO list ViewModel.</summary>
     /// <param name="dispatcher">CQRS dispatcher.</param>
+    /// <param name="workspaceContext">Shared workspace context for reacting to workspace changes.</param>
     /// <param name="logger">Logger instance.</param>
     public TodoListViewModel(Dispatcher dispatcher,
+        WorkspaceContextViewModel workspaceContext,
         ILogger<TodoListViewModel> logger)
         : base(McpArea.Todo)
     {
         _logger = logger;
         _refreshCommand = new CqrsQueryCommand<ListTodosResult>(dispatcher, BuildQuery);
+        workspaceContext.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(WorkspaceContextViewModel.ActiveWorkspacePath))
+            {
+                _logger.LogInformation("Workspace changed to '{WorkspacePath}' — scheduling TODO reload",
+                    workspaceContext.ActiveWorkspacePath);
+                _ = Task.Run(() => LoadAsync());
+            }
+        };
     }
 
     /// <summary>Optional keyword filter.</summary>
@@ -64,6 +75,9 @@ public sealed partial class TodoListViewModel : AreaListViewModelBase<TodoListIt
     /// <param name="ct">Cancellation token.</param>
     public async Task LoadAsync(CancellationToken ct = default)
     {
+        _logger.LogInformation("LoadAsync called — building query with filters: Keyword={Keyword}, Priority={Priority}, Section={Section}, Id={Id}, Done={Done}",
+            Keyword, Priority, Section, TodoId, Done);
+
         IsLoading = true;
         ErrorMessage = null;
         StatusMessage = "Loading TODO items...";
@@ -73,10 +87,14 @@ public sealed partial class TodoListViewModel : AreaListViewModelBase<TodoListIt
             var result = await _refreshCommand.DispatchAsync(ct).ConfigureAwait(false);
             if (!result.IsSuccess || result.Value is null)
             {
+                _logger.LogWarning("LoadAsync failed: {Error}", result.Error ?? "null result");
                 ErrorMessage = result.Error ?? "Unknown error loading TODO items.";
                 StatusMessage = "TODO load failed.";
                 return;
             }
+
+            _logger.LogInformation("LoadAsync succeeded — {Count} items returned (total {Total})",
+                result.Value.Items.Count, result.Value.TotalCount);
 
             SetItems(result.Value.Items, result.Value.TotalCount);
             StatusMessage = $"Loaded {Items.Count} TODO items.";

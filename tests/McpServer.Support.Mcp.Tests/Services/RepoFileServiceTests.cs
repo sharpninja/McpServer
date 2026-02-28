@@ -22,7 +22,8 @@ public sealed class RepoFileServiceTests : IDisposable
         File.WriteAllText(Path.Combine(_tempDir, "src", "code.cs"), "class Foo {}");
 
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir });
-        _sut = new RepoFileService(options, _auditLog, NullLogger<RepoFileService>.Instance);
+        var workspaceContext = new WorkspaceContext();
+        _sut = new RepoFileService(options, workspaceContext, _auditLog, NullLogger<RepoFileService>.Instance);
     }
 
     public void Dispose()
@@ -57,7 +58,7 @@ public sealed class RepoFileServiceTests : IDisposable
             RepoRoot = _tempDir,
             RepoAllowlist = new[] { "*.md" }
         });
-        var sut = new RepoFileService(options, _auditLog, NullLogger<RepoFileService>.Instance);
+        var sut = new RepoFileService(options, new WorkspaceContext(), _auditLog, NullLogger<RepoFileService>.Instance);
 
         var result = await sut.ReadAsync("src/code.cs").ConfigureAwait(true);
 
@@ -100,7 +101,7 @@ public sealed class RepoFileServiceTests : IDisposable
             RepoRoot = _tempDir,
             RepoAllowlist = new[] { "*.md" }
         });
-        var sut = new RepoFileService(options, _auditLog, NullLogger<RepoFileService>.Instance);
+        var sut = new RepoFileService(options, new WorkspaceContext(), _auditLog, NullLogger<RepoFileService>.Instance);
 
         var result = await sut.WriteAsync("secret.txt", "data").ConfigureAwait(true);
 

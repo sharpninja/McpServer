@@ -11,10 +11,10 @@ internal sealed class TodoScreen : View
     private readonly TodoListViewModel _listViewModel;
     private readonly TodoDetailViewModel _detailViewModel;
     private readonly DirectorMcpContext? _directorContext;
+    private volatile bool _isLoadingExplicitly;
     private TableView _table = null!;
     private TextView _detailView = null!;
     private Label _detailTitleLabel = null!;
-    private Label _editorTitleLabel = null!;
     private Label _doneValueLabel = null!;
     private Button _showCompletedToggleButton = null!;
     private TextView _statusLabel = null!;
@@ -33,6 +33,10 @@ internal sealed class TodoScreen : View
     private int _detailLoadRequestVersion;
     private string? _lastAutoDetailTodoId;
     private bool _showCompletedItems;
+    private SortField _currentSort = SortField.Priority;
+    private bool _sortDescending;
+    private Button _sortPriorityBtn = null!;
+    private Button _sortNameBtn = null!;
     private readonly ILogger<TodoScreen> _logger;
 
 
@@ -50,6 +54,13 @@ internal sealed class TodoScreen : View
         BuildUi();
         _detailViewModel.BeginNewDraft();
         SyncEditorFieldsFromViewModel();
+
+        // When the ViewModel reloads (e.g. workspace change), rebuild the table.
+        _listViewModel.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(TodoListViewModel.LastRefreshedAt) && !_isLoadingExplicitly)
+                RebuildTableFromViewModel();
+        };
     }
 
     private void BuildUi()
@@ -62,6 +73,14 @@ internal sealed class TodoScreen : View
         _showCompletedToggleButton.Accepting += (_, _) => ToggleShowCompletedItems();
         Add(_showCompletedToggleButton);
 
+        _sortPriorityBtn = new Button { X = Pos.Right(_showCompletedToggleButton) + 2, Y = 0, Text = "▼ Priority" };
+        _sortPriorityBtn.Accepting += (_, _) => ApplySort(SortField.Priority);
+        Add(_sortPriorityBtn);
+
+        _sortNameBtn = new Button { X = Pos.Right(_sortPriorityBtn) + 1, Y = 0, Text = "  ID" };
+        _sortNameBtn.Accepting += (_, _) => ApplySort(SortField.Id);
+        Add(_sortNameBtn);
+
         _table = new TableView
         {
             X = 0,
@@ -71,21 +90,31 @@ internal sealed class TodoScreen : View
             FullRowSelect = true,
             MultiSelect = false,
         };
+        _table.Style.ShowHeaders = true;
+        _table.Style.ShowHorizontalHeaderOverline = true;
+        _table.Style.ShowHorizontalHeaderUnderline = true;
+        _table.Style.ShowVerticalCellLines = true;
+        _table.Style.ShowVerticalHeaderLines = true;
+        _table.Style.ExpandLastColumn = true;
+        _table.Style.ColumnStyles[0] = new ColumnStyle
+        {
+            Alignment = Alignment.Center,
+            MaxWidth = 10,
+        };
+        _table.Style.ColumnStyles[1] = new ColumnStyle
+        {
+            MaxWidth = 30,
+        };
+        _table.Style.ColumnStyles[2] = new ColumnStyle
+        {
+            MaxWidth = 200,
+        };
         _table.SelectedCellChanged += (_, _) => QueueSelectedRowDetailRefresh();
         Add(_table);
 
-        _editorTitleLabel = new Label
-        {
-            X = 0,
-            Y = Pos.Bottom(_table),
-            Width = Dim.Fill(),
-            Text = "Editor: New TODO",
-        };
-        Add(_editorTitleLabel);
-
-        var row1Y = Pos.Bottom(_editorTitleLabel);
+        var row1Y = Pos.Bottom(_table);
         Add(new Label { X = 0, Y = row1Y, Text = "ID:" });
-        _idField = new TextField { X = 4, Y = row1Y, Width = 28, Text = "" };
+        _idField = new TextField { X = 4, Y = row1Y, Width = 28, Text = "", ReadOnly = true };
         Add(_idField);
 
         Add(new Label { X = 34, Y = row1Y, Text = "Title:" });
@@ -118,14 +147,17 @@ internal sealed class TodoScreen : View
         _noteField = new TextField { X = 6, Y = row3Y, Width = Dim.Fill(), Text = "" };
         Add(_noteField);
 
+        ApplyEditableScheme(_sectionFilter, _titleField, _editorSectionField,
+            _priorityField, _estimateField, _noteField);
+
         var editorsY = Pos.Bottom(_noteField);
         var descFrame = new FrameView
         {
             Title = "Description",
             X = 0,
             Y = editorsY,
-            Width = Dim.Percent(33),
-            Height = 6,
+            Width = Dim.Fill(),
+            Height = 4,
         };
         _descriptionEditor = new TextView
         {
@@ -133,7 +165,7 @@ internal sealed class TodoScreen : View
             Y = 0,
             Width = Dim.Fill(),
             Height = Dim.Fill(),
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         descFrame.Add(_descriptionEditor);
@@ -142,10 +174,10 @@ internal sealed class TodoScreen : View
         var techFrame = new FrameView
         {
             Title = "Technical Details",
-            X = Pos.Right(descFrame),
-            Y = editorsY,
-            Width = Dim.Percent(33),
-            Height = 6,
+            X = 0,
+            Y = Pos.Bottom(descFrame),
+            Width = Dim.Fill(),
+            Height = 4,
         };
         _technicalDetailsEditor = new TextView
         {
@@ -153,7 +185,7 @@ internal sealed class TodoScreen : View
             Y = 0,
             Width = Dim.Fill(),
             Height = Dim.Fill(),
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         techFrame.Add(_technicalDetailsEditor);
@@ -162,10 +194,10 @@ internal sealed class TodoScreen : View
         var tasksFrame = new FrameView
         {
             Title = "Implementation Tasks",
-            X = Pos.Right(techFrame),
-            Y = editorsY,
+            X = 0,
+            Y = Pos.Bottom(techFrame),
             Width = Dim.Fill(),
-            Height = 6,
+            Height = 4,
         };
         _implementationTasksEditor = new TextView
         {
@@ -173,11 +205,13 @@ internal sealed class TodoScreen : View
             Y = 0,
             Width = Dim.Fill(),
             Height = Dim.Fill(),
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         tasksFrame.Add(_implementationTasksEditor);
         Add(tasksFrame);
+
+        ApplyEditableScheme(_descriptionEditor, _technicalDetailsEditor, _implementationTasksEditor);
 
         _detailTitleLabel = new Label
         {
@@ -194,11 +228,13 @@ internal sealed class TodoScreen : View
             Y = Pos.Bottom(_detailTitleLabel),
             Width = Dim.Fill(),
             Height = Dim.Fill(5),
-            ReadOnly = true,
+            ReadOnly = false,
             WordWrap = true,
             Text = "",
         };
         Add(_detailView);
+
+        ApplyEditableScheme(_detailView);
 
         _statusLabel = new TextView
         {
@@ -207,7 +243,7 @@ internal sealed class TodoScreen : View
             Width = Dim.Fill(),
             Height = 1,
             ReadOnly = true,
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         Add(_statusLabel);
@@ -247,65 +283,84 @@ internal sealed class TodoScreen : View
         SetStatus("⏳ Loading TODO items...");
         try
         {
-            var previouslySelectedTodoId = GetSelectedTodoId();
+            _isLoadingExplicitly = true;
             _listViewModel.Section = _sectionFilter?.Text;
             await _listViewModel.LoadAsync().ConfigureAwait(false);
-
-            var allItems = _listViewModel.Items.ToList();
-            var visibleItems = _showCompletedItems
-                ? allItems
-                : allItems.Where(item => !item.Done).ToList();
-
-            var rows = visibleItems
-                .Select(item => new TodoRow(
-                    item.Id,
-                    item.Title,
-                    item.Section,
-                    item.Priority,
-                    item.Done ? "✓" : "○"))
-                .ToList();
-            _rows = rows;
-            _lastAutoDetailTodoId = null;
-            var selectedRow = rows.FindIndex(r => string.Equals(r.Id, previouslySelectedTodoId, StringComparison.Ordinal));
-            if (selectedRow < 0 && rows.Count > 0)
-                selectedRow = 0;
-
-            Application.Invoke(() =>
-            {
-                _table.Table = new EnumerableTableSource<TodoRow>(rows,
-                    new Dictionary<string, Func<TodoRow, object>>
-                    {
-                        ["ID"] = r => r.Id,
-                        ["Title"] = r => r.Title,
-                        ["Section"] = r => r.Section,
-                        ["Priority"] = r => r.Priority,
-                        ["Done"] = r => r.Done,
-                    });
-
-                if (selectedRow >= 0 && selectedRow < rows.Count)
-                    _table.SelectedRow = selectedRow;
-            });
-            var hiddenCompletedCount = Math.Max(0, allItems.Count - rows.Count);
-            SetStatus(_listViewModel.ErrorMessage is null
-                ? BuildListStatus(rows.Count, allItems.Count, hiddenCompletedCount)
-                : $"✗ {_listViewModel.ErrorMessage}");
-
-            if (_listViewModel.ErrorMessage is null && rows.Count > 0)
-            {
-                await LoadTodoDetailAsync(rows[selectedRow].Id, autoLoaded: true).ConfigureAwait(false);
-            }
-            else if (rows.Count == 0)
-            {
-                ClearDetailPane(_showCompletedItems
-                    ? "Detail: (no TODO items)"
-                    : "Detail: (no open TODO items)");
-                BeginNewDraft();
-            }
+            await RebuildTableFromViewModelAsync().ConfigureAwait(false);
         }
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
             SetStatus($"✗ {ex.Message}");
+        }
+        finally
+        {
+            _isLoadingExplicitly = false;
+        }
+    }
+
+    private void RebuildTableFromViewModel()
+        => _ = Task.Run(() => RebuildTableFromViewModelAsync());
+
+    private async Task RebuildTableFromViewModelAsync()
+    {
+        var previouslySelectedTodoId = GetSelectedTodoId();
+
+        var allItems = _listViewModel.Items.ToList();
+        var visibleItems = _showCompletedItems
+            ? allItems
+            : allItems.Where(item => !item.Done).ToList();
+
+        var rows = visibleItems
+            .Select(item => new TodoRow(
+                item.Id,
+                item.Title,
+                item.Section,
+                item.Priority,
+                item.Done ? "✓" : "○"))
+            .ToList();
+        rows = SortRows(rows);
+        _rows = rows;
+        _lastAutoDetailTodoId = null;
+        var selectedRow = rows.FindIndex(r => string.Equals(r.Id, previouslySelectedTodoId, StringComparison.Ordinal));
+        if (selectedRow < 0 && rows.Count > 0)
+            selectedRow = 0;
+
+        Application.Invoke(() =>
+        {
+            var dt = new System.Data.DataTable();
+            dt.Columns.Add("Pri", typeof(string));
+            dt.Columns.Add("ID", typeof(string));
+            dt.Columns.Add("Name", typeof(string));
+            foreach (var r in rows)
+            {
+                var pri = (r.Priority.Length > 8 ? r.Priority[..8] : r.Priority).PadRight(8);
+                var id = (r.Id.Length > 28 ? r.Id[..28] : r.Id).PadRight(28);
+                var name = r.Title.Length > 60 ? r.Title[..57] + "..." : r.Title;
+                dt.Rows.Add(pri, id, name);
+            }
+
+            _table.Table = new DataTableSource(dt);
+            _table.SetNeedsDraw();
+
+            if (selectedRow >= 0 && selectedRow < rows.Count)
+                _table.SelectedRow = selectedRow;
+        });
+        var hiddenCompletedCount = Math.Max(0, allItems.Count - rows.Count);
+        SetStatus(_listViewModel.ErrorMessage is null
+            ? BuildListStatus(rows.Count, allItems.Count, hiddenCompletedCount)
+            : $"✗ {_listViewModel.ErrorMessage}");
+
+        if (_listViewModel.ErrorMessage is null && rows.Count > 0)
+        {
+            await LoadTodoDetailAsync(rows[selectedRow].Id, autoLoaded: true).ConfigureAwait(false);
+        }
+        else if (rows.Count == 0)
+        {
+            ClearDetailPane(_showCompletedItems
+                ? "Detail: (no TODO items)"
+                : "Detail: (no open TODO items)");
+            BeginNewDraft();
         }
     }
 
@@ -471,8 +526,7 @@ internal sealed class TodoScreen : View
                 _detailView.Text = FormatDetail(detail);
             });
 
-            if (!autoLoaded)
-                SetStatus($"✓ Loaded detail for {detail.Id}");
+            SetStatus($"✓ Loaded detail for {detail.Id}");
         }
         catch (Exception ex)
         {
@@ -574,7 +628,7 @@ internal sealed class TodoScreen : View
             Width = Dim.Fill(2),
             Height = Dim.Fill(3),
             ReadOnly = true,
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         dialog.Add(outputView);
@@ -586,7 +640,7 @@ internal sealed class TodoScreen : View
             Width = Dim.Fill(2),
             Height = 1,
             ReadOnly = true,
-            WordWrap = false,
+            WordWrap = true,
             Text = $"Preparing {promptLabel} prompt stream...",
         };
         dialog.Add(statusView);
@@ -734,6 +788,7 @@ internal sealed class TodoScreen : View
     {
         Application.Invoke(() =>
         {
+            _idField.ReadOnly = !_detailViewModel.IsNewDraft;
             _idField.Text = _detailViewModel.EditorId ?? "";
             _titleField.Text = _detailViewModel.EditorTitle ?? "";
             _editorSectionField.Text = _detailViewModel.EditorSection ?? "";
@@ -744,9 +799,6 @@ internal sealed class TodoScreen : View
             _technicalDetailsEditor.Text = _detailViewModel.EditorTechnicalDetailsText ?? "";
             _implementationTasksEditor.Text = _detailViewModel.EditorImplementationTasksText ?? "";
             _doneValueLabel.Text = _detailViewModel.EditorDone ? "true" : "false";
-            _editorTitleLabel.Text = _detailViewModel.IsNewDraft
-                ? "Editor: New TODO draft"
-                : $"Editor: {_detailViewModel.EditorId}";
         });
     }
 
@@ -769,6 +821,7 @@ internal sealed class TodoScreen : View
         _detailViewModel.EditorDone = !_detailViewModel.EditorDone;
         _detailViewModel.IsDirty = true;
         Application.Invoke(() => _doneValueLabel.Text = _detailViewModel.EditorDone ? "true" : "false");
+        _ = Task.Run(SaveEditorAsync);
     }
 
     private void ToggleShowCompletedItems()
@@ -785,6 +838,55 @@ internal sealed class TodoScreen : View
             _showCompletedToggleButton.Text = _showCompletedItems ? "Hide Completed" : "Show Completed";
         });
     }
+
+    private void ApplySort(SortField field)
+    {
+        if (_currentSort == field)
+            _sortDescending = !_sortDescending;
+        else
+        {
+            _currentSort = field;
+            _sortDescending = false;
+        }
+
+        UpdateSortButtonLabels();
+        _ = Task.Run(LoadAsync);
+    }
+
+    private void UpdateSortButtonLabels()
+    {
+        var arrow = _sortDescending ? "▲" : "▼";
+        Application.Invoke(() =>
+        {
+            _sortPriorityBtn.Text = _currentSort == SortField.Priority ? $"{arrow} Priority" : "  Priority";
+            _sortNameBtn.Text = _currentSort == SortField.Id ? $"{arrow} ID" : "  ID";
+        });
+    }
+
+    private List<TodoRow> SortRows(List<TodoRow> rows)
+    {
+        return _currentSort switch
+        {
+            SortField.Priority => (_sortDescending
+                ? rows.OrderByDescending(r => PriorityRank(r.Priority))
+                : rows.OrderBy(r => PriorityRank(r.Priority)))
+                .ThenBy(r => r.Id, StringComparer.OrdinalIgnoreCase)
+                .ToList(),
+            SortField.Id => (_sortDescending
+                ? rows.OrderByDescending(r => r.Id, StringComparer.OrdinalIgnoreCase)
+                : rows.OrderBy(r => r.Id, StringComparer.OrdinalIgnoreCase))
+                .ToList(),
+            _ => rows,
+        };
+    }
+
+    private static int PriorityRank(string priority) => priority.ToLowerInvariant() switch
+    {
+        "high" => 0,
+        "medium" => 1,
+        "low" => 2,
+        _ => 3,
+    };
 
     private string? GetSelectedTodoId()
     {
@@ -918,4 +1020,14 @@ internal sealed class TodoScreen : View
     }
 
     private sealed record TodoRow(string Id, string Title, string Section, string Priority, string Done);
+
+    private enum SortField { Priority, Id }
+
+    private static void ApplyEditableScheme(params View[] views)
+    {
+        if (!Colors.ColorSchemes.TryGetValue("Editable", out var scheme))
+            return;
+        foreach (var v in views)
+            v.ColorScheme = scheme;
+    }
 }

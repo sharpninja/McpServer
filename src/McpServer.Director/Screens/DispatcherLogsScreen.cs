@@ -66,7 +66,7 @@ internal sealed class DispatcherLogsScreen : View
             Width = Dim.Fill(),
             Height = Dim.Fill(3),
             ReadOnly = true,
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         Add(_detailView);
@@ -78,7 +78,7 @@ internal sealed class DispatcherLogsScreen : View
             Width = Dim.Fill(),
             Height = 1,
             ReadOnly = true,
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         Add(_statusView);
@@ -108,6 +108,7 @@ internal sealed class DispatcherLogsScreen : View
                     r.FinishedAt.ToLocalTime().ToString("HH:mm:ss"),
                     r.OperationName,
                     r.Outcome,
+                    MaxLevel(r.Entries),
                     r.ElapsedMilliseconds,
                     r.CorrelationId,
                     r.Error ?? ""))
@@ -123,6 +124,7 @@ internal sealed class DispatcherLogsScreen : View
                     {
                         ["Time"] = r => r.Time,
                         ["Operation"] = r => r.Operation,
+                        ["Level"] = r => r.Level,
                         ["Outcome"] = r => r.Outcome,
                         ["ms"] = r => r.ElapsedMs,
                         ["Correlation"] = r => r.CorrelationId,
@@ -214,10 +216,29 @@ internal sealed class DispatcherLogsScreen : View
         return string.Join(Environment.NewLine, lines);
     }
 
+    private static string MaxLevel(IReadOnlyList<DispatchLogRecordEntry> entries)
+    {
+        if (entries.Count == 0)
+            return "—";
+
+        var max = entries.Max(e => e.Level);
+        return max switch
+        {
+            LogLevel.Critical => "CRT",
+            LogLevel.Error => "ERR",
+            LogLevel.Warning => "WRN",
+            LogLevel.Information => "INF",
+            LogLevel.Debug => "DBG",
+            LogLevel.Trace => "TRC",
+            _ => max.ToString()[..3].ToUpperInvariant(),
+        };
+    }
+
     private sealed record DispatchRow(
         string Time,
         string Operation,
         string Outcome,
+        string Level,
         long ElapsedMs,
         string CorrelationId,
         string Error);

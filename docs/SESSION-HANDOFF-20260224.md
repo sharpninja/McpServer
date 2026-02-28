@@ -24,7 +24,7 @@ This session focused on Keycloak OIDC authentication integration for the Directo
 **Files modified:**
 - `src/McpServer.Support.Mcp/Services/WorkspaceAppFactory.cs`
 
-**What:** Workspace sub-applications now load their own `appsettings.json` and register `OidcAuthOptions` so the `/auth/config` endpoint works on workspace ports (e.g., `:7148`), not just the primary server (`:7147`).
+**What:** Workspace sub-applications now load their own `appsettings.json` and register `OidcAuthOptions` so the `/auth/config` endpoint works on workspace ports (e.g., `:7147`), not just the primary server (`:7147`).
 
 ### 3. User Management Script
 **Files created:**

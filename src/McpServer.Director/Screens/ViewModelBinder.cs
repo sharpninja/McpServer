@@ -145,4 +145,29 @@ internal sealed class ViewModelBinder : IDisposable
         }
         _cleanupActions.Clear();
     }
+
+    /// <summary>Enables auto-show scrollbars on all scrollable descendant views recursively.</summary>
+    internal static void EnableScrollBars(View root)
+    {
+        foreach (var view in root.Subviews)
+        {
+            if (view is TextView or TableView or ListView)
+            {
+                view.VerticalScrollBar.AutoShow = true;
+                view.HorizontalScrollBar.AutoShow = true;
+            }
+
+            // TabView tab content isn't in the normal Subviews tree
+            if (view is TabView tabView)
+            {
+                foreach (var tab in tabView.Tabs)
+                {
+                    if (tab.View is not null)
+                        EnableScrollBars(tab.View);
+                }
+            }
+
+            EnableScrollBars(view);
+        }
+    }
 }

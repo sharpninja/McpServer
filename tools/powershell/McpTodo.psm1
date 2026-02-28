@@ -17,9 +17,10 @@
 #>
 
 # ─── Module state ────────────────────────────────────────────────────────────
-$script:McpBaseUrl = $null
-$script:McpApiKey  = $null
-$script:McpHeaders = @{}
+$script:McpBaseUrl       = $null
+$script:McpApiKey        = $null
+$script:McpWorkspacePath = $null
+$script:McpHeaders       = @{}
 
 # ─── Connection ──────────────────────────────────────────────────────────────
 
@@ -55,13 +56,15 @@ function Initialize-McpTodo {
             throw "AGENTS-README-FIRST.yaml not found. Provide -MarkerPath, or run from within a workspace."
         }
         $content = Get-Content $MarkerPath -Raw
-        $script:McpBaseUrl = ([regex]::Match($content, 'baseUrl:\s*(\S+)')).Groups[1].Value
-        $script:McpApiKey  = ([regex]::Match($content, 'apiKey:\s*(\S+)')).Groups[1].Value
+        $script:McpBaseUrl       = ([regex]::Match($content, 'baseUrl:\s*(\S+)')).Groups[1].Value
+        $script:McpApiKey        = ([regex]::Match($content, 'apiKey:\s*(\S+)')).Groups[1].Value
+        $script:McpWorkspacePath = ([regex]::Match($content, 'workspacePath:\s*(.+)')).Groups[1].Value.Trim()
     }
 
     $script:McpHeaders = @{
-        "X-Api-Key"    = $script:McpApiKey
-        "Content-Type" = "application/json"
+        "X-Api-Key"        = $script:McpApiKey
+        "Content-Type"     = "application/json"
+        "X-Workspace-Path" = $script:McpWorkspacePath
     }
 
     # Verify connectivity

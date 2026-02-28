@@ -29,7 +29,7 @@
     GitHub OAuth App Client Secret. Required if GitHubClientId is provided.
 
 .PARAMETER McpServerUrl
-    The MCP Server base URL for redirect URIs. Default: http://localhost:7148
+    The MCP Server base URL for redirect URIs. Default: http://localhost:7147
 
 .EXAMPLE
     ./Setup-McpKeycloak.ps1
@@ -44,7 +44,7 @@ param(
     [string]$RealmName = "mcpserver",
     [string]$GitHubClientId = "",
     [string]$GitHubClientSecret = "",
-    [string]$McpServerUrl = "http://localhost:7148"
+    [string]$McpServerUrl = "http://localhost:7147"
 )
 
 $ErrorActionPreference = "Stop"

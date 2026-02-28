@@ -21,8 +21,10 @@ public sealed partial class WorkspaceDetailViewModel : AreaDetailViewModelBase<W
 
     /// <summary>Initializes a new instance of the workspace detail ViewModel.</summary>
     /// <param name="dispatcher">CQRS dispatcher.</param>
+    /// <param name="workspaceContext">Shared workspace context for reacting to workspace changes.</param>
     /// <param name="logger">Logger instance.</param>
     public WorkspaceDetailViewModel(Dispatcher dispatcher,
+        WorkspaceContextViewModel workspaceContext,
         ILogger<WorkspaceDetailViewModel> logger)
         : base(McpArea.Workspaces)
     {
@@ -30,6 +32,16 @@ public sealed partial class WorkspaceDetailViewModel : AreaDetailViewModelBase<W
         _getWorkspaceCommand = new CqrsQueryCommand<WorkspaceDetail?>(
             dispatcher,
             () => new GetWorkspaceQuery(WorkspacePath));
+        workspaceContext.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(WorkspaceContextViewModel.ActiveWorkspacePath))
+            {
+                _logger.LogInformation("Workspace changed to '{WorkspacePath}' — reloading workspace detail",
+                    workspaceContext.ActiveWorkspacePath);
+                WorkspacePath = workspaceContext.ActiveWorkspacePath ?? string.Empty;
+                _ = Task.Run(() => LoadAsync());
+            }
+        };
     }
 
     /// <summary>Workspace path to load.</summary>

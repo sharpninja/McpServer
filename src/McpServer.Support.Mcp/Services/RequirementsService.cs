@@ -13,8 +13,7 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 internal sealed class RequirementsService(
     ICopilotClient copilotClient,
-    ITodoService todoService,
-    IWebHostEnvironment hostEnvironment,
+    WorkspaceServiceAccessor workspaceAccessor,
     IOptionsMonitor<TodoPromptOptions> promptOptions,
     ILogger<RequirementsService> logger) : IRequirementsService
 {
@@ -25,7 +24,7 @@ internal sealed class RequirementsService(
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(todoId);
 
-        var todo = await todoService.GetByIdAsync(todoId, cancellationToken).ConfigureAwait(false);
+        var todo = await workspaceAccessor.GetTodoService().GetByIdAsync(todoId, cancellationToken).ConfigureAwait(false);
         if (todo is null)
             return new RequirementsAnalysisResult(false, Error: $"TODO item '{todoId}' not found.");
 
@@ -37,7 +36,7 @@ internal sealed class RequirementsService(
         var options = new CopilotClientOptions
         {
             Timeout = TimeSpan.FromMinutes(5),
-            WorkingDirectory = hostEnvironment.ContentRootPath,
+            WorkingDirectory = workspaceAccessor.GetWorkspacePath(),
             RunAs = currentPromptOptions.RunAs,
             GitHubToken = currentPromptOptions.GitHubToken,
         };
@@ -88,7 +87,7 @@ internal sealed class RequirementsService(
             TechnicalRequirements = mergedTrs,
         };
 
-        var updateResult = await todoService.UpdateAsync(todoId, updateRequest, cancellationToken).ConfigureAwait(false);
+        var updateResult = await workspaceAccessor.GetTodoService().UpdateAsync(todoId, updateRequest, cancellationToken).ConfigureAwait(false);
         if (!updateResult.Success)
         {
             logger.LogWarning("Failed to update TODO {Id} with FR/TR: {Error}", todoId, updateResult.Error);

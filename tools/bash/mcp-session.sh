@@ -15,6 +15,7 @@ set -euo pipefail
 # ─── State ───────────────────────────────────────────────────────────────────
 MCP_BASE_URL=""
 MCP_API_KEY=""
+MCP_WORKSPACE_PATH=""
 MCP_SESSION_FILE=""   # temp file holding the session JSON
 
 # ─── Connection ──────────────────────────────────────────────────────────────
@@ -40,6 +41,7 @@ mcp_session_init() {
 
     MCP_BASE_URL=$(grep -oP 'baseUrl:\s*\K\S+' "$marker")
     MCP_API_KEY=$(grep -oP 'apiKey:\s*\K\S+' "$marker")
+    MCP_WORKSPACE_PATH=$(grep -oP 'workspacePath:\s*\K.+' "$marker" | sed 's/[[:space:]]*$//')
     MCP_SESSION_FILE=$(mktemp /tmp/mcp-session-XXXXXX.json)
 
     # Verify connectivity
@@ -103,6 +105,7 @@ mcp_session_query() {
     # Usage: mcp_session_query [limit]
     local limit="${1:-5}"
     curl -sf -H "X-Api-Key: ${MCP_API_KEY}" \
+        -H "X-Workspace-Path: ${MCP_WORKSPACE_PATH}" \
         "${MCP_BASE_URL}/mcp/sessionlog?limit=${limit}"
 }
 
@@ -228,6 +231,7 @@ mcp_session_send_dialog() {
 
     curl -sf -X POST \
         -H "X-Api-Key: ${MCP_API_KEY}" \
+        -H "X-Workspace-Path: ${MCP_WORKSPACE_PATH}" \
         -H "Content-Type: application/json" \
         -d "$body" \
         "${MCP_BASE_URL}/mcp/sessionlog/${source_type}/${session_id}/${req_id}/dialog" \
@@ -239,6 +243,7 @@ mcp_session_send_dialog() {
 _mcp_session_push() {
     curl -sf -X POST \
         -H "X-Api-Key: ${MCP_API_KEY}" \
+        -H "X-Workspace-Path: ${MCP_WORKSPACE_PATH}" \
         -H "Content-Type: application/json" \
         -d @"$MCP_SESSION_FILE" \
         "${MCP_BASE_URL}/mcp/sessionlog" \

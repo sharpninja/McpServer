@@ -22,7 +22,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
 
     private readonly ConcurrentDictionary<string, VoiceSessionState> _sessions = new(StringComparer.OrdinalIgnoreCase);
     private readonly ICopilotClient _copilotClient;
-    private readonly ITodoService _todoService;
+    private readonly WorkspaceServiceAccessor _workspaceAccessor;
     private readonly IOptionsMonitor<VoiceConversationOptions> _options;
     private readonly IHostEnvironment _hostEnvironment;
     private readonly ILogger<VoiceConversationService> _logger;
@@ -32,13 +32,13 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     /// </summary>
     public VoiceConversationService(
         ICopilotClient copilotClient,
-        ITodoService todoService,
+        WorkspaceServiceAccessor workspaceAccessor,
         IOptionsMonitor<VoiceConversationOptions> options,
         IHostEnvironment hostEnvironment,
         ILogger<VoiceConversationService> logger)
     {
         _copilotClient = copilotClient ?? throw new ArgumentNullException(nameof(copilotClient));
-        _todoService = todoService ?? throw new ArgumentNullException(nameof(todoService));
+        _workspaceAccessor = workspaceAccessor ?? throw new ArgumentNullException(nameof(workspaceAccessor));
         _options = options ?? throw new ArgumentNullException(nameof(options));
         _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -526,7 +526,7 @@ public sealed partial class VoiceConversationService
                     if (normalizedToolName == "todo_search" && string.IsNullOrWhiteSpace(query.Keyword))
                         throw new VoiceToolValidationException("todo_search requires a non-empty keyword.");
 
-                    var result = await _todoService.QueryAsync(query, cancellationToken).ConfigureAwait(false);
+                    var result = await _workspaceAccessor.GetTodoService().QueryAsync(query, cancellationToken).ConfigureAwait(false);
                     var limit = Math.Clamp(GetOptionalInt(arguments, "limit") ?? 10, 1, 50);
                     var items = result.Items.Take(limit).Select(MapTodoSummary).ToList();
                     resultPayload = new
@@ -543,7 +543,7 @@ public sealed partial class VoiceConversationService
                 {
                     EnsureOnlyProperties(arguments, normalizedToolName, ["id"]);
                     var id = RequireString(arguments, "id");
-                    var item = await _todoService.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
+                    var item = await _workspaceAccessor.GetTodoService().GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
                     if (item is null)
                     {
                         resultPayload = new { success = false, error = $"Todo '{id}' not found." };
@@ -579,7 +579,7 @@ public sealed partial class VoiceConversationService
                         TechnicalRequirements = GetOptionalStringList(arguments, "technicalRequirements"),
                     };
 
-                    var result = await _todoService.CreateAsync(request, cancellationToken).ConfigureAwait(false);
+                    var result = await _workspaceAccessor.GetTodoService().CreateAsync(request, cancellationToken).ConfigureAwait(false);
                     resultPayload = new { success = result.Success, error = result.Error, item = result.Item };
                     summary = result.Success && result.Item is not null
                         ? $"Created todo {result.Item.Id}."
@@ -614,7 +614,7 @@ public sealed partial class VoiceConversationService
                         TechnicalRequirements = GetOptionalStringList(arguments, "technicalRequirements")
                     };
 
-                    var result = await _todoService.UpdateAsync(id, update, cancellationToken).ConfigureAwait(false);
+                    var result = await _workspaceAccessor.GetTodoService().UpdateAsync(id, update, cancellationToken).ConfigureAwait(false);
                     resultPayload = new { success = result.Success, error = result.Error, item = result.Item };
                     summary = result.Success
                         ? $"Updated todo {id}."
@@ -625,7 +625,7 @@ public sealed partial class VoiceConversationService
                 {
                     EnsureOnlyProperties(arguments, normalizedToolName, ["id"]);
                     var id = RequireString(arguments, "id");
-                    var result = await _todoService.DeleteAsync(id, cancellationToken).ConfigureAwait(false);
+                    var result = await _workspaceAccessor.GetTodoService().DeleteAsync(id, cancellationToken).ConfigureAwait(false);
                     resultPayload = new { success = result.Success, error = result.Error, item = result.Item };
                     summary = result.Success
                         ? $"Deleted todo {id}."
@@ -636,7 +636,7 @@ public sealed partial class VoiceConversationService
                 {
                     EnsureOnlyProperties(arguments, normalizedToolName, ["id", "done"]);
                     var id = RequireString(arguments, "id");
-                    var current = await _todoService.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
+                    var current = await _workspaceAccessor.GetTodoService().GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
                     if (current is null)
                     {
                         resultPayload = new { success = false, error = $"Todo '{id}' not found." };
@@ -645,7 +645,7 @@ public sealed partial class VoiceConversationService
                     else
                     {
                         var targetDone = GetOptionalNullableBool(arguments, "done") ?? !current.Done;
-                        var result = await _todoService.UpdateAsync(id, new TodoUpdateRequest { Done = targetDone }, cancellationToken).ConfigureAwait(false);
+                        var result = await _workspaceAccessor.GetTodoService().UpdateAsync(id, new TodoUpdateRequest { Done = targetDone }, cancellationToken).ConfigureAwait(false);
                         resultPayload = new { success = result.Success, error = result.Error, item = result.Item };
                         summary = result.Success
                             ? (targetDone ? $"Marked {id} done." : $"Reopened {id}.")
@@ -762,7 +762,7 @@ public sealed partial class VoiceConversationService
             ? sessionWorkspacePath
             : !string.IsNullOrWhiteSpace(opts.WorkingDirectory)
                 ? opts.WorkingDirectory
-                : _hostEnvironment.ContentRootPath;
+                : _workspaceAccessor.GetWorkspacePath();
 
         return new CopilotClientOptions
         {

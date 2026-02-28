@@ -35,7 +35,7 @@ The default port is **7147**. Configure it with:
 - `PORT` environment variable
 - `--urls http://+:PORT` command-line argument
 
-Workspace instances are hosted as in-process Kestrel listeners starting at port **7148**.
+Workspace instances are hosted as in-process Kestrel listeners starting at port **7147**.
 
 ### How do I connect an MCP client?
 
@@ -113,7 +113,7 @@ curl -X POST http://localhost:7147/mcp/workspace \
   -d '{"workspacePath": "E:\\github\\MyProject"}'
 ```
 
-Defaults are applied automatically: name from last path segment, port auto-assigned from 7148+, TodoPath defaults to `docs/todo.yaml`.
+Defaults are applied automatically: name from last path segment, port auto-assigned from 7147+, TodoPath defaults to `docs/todo.yaml`.
 
 ### What does the init endpoint do?
 

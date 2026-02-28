@@ -9,7 +9,7 @@ public sealed class WorkspaceClientTests
 {
     private static readonly McpServerClientOptions DefaultOptions = new()
     {
-        BaseUrl = new Uri("http://localhost:7148"),
+        BaseUrl = new Uri("http://localhost:7147"),
         ApiKey = "test-key"
     };
 

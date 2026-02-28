@@ -33,30 +33,17 @@ internal sealed class WorkspacePolicyScreen : View
             Y = 0,
             Width = Dim.Fill(),
             Text = _vm.WorkspacePath,
+            ReadOnly = true,
         };
         Add(pathLabel, pathField);
 
-        var syncingPathField = false;
-        _binder.BindTextField(pathField, val =>
-        {
-            if (!syncingPathField)
-                _vm.WorkspacePath = val;
-        });
         _binder.BindProperty(_vm, nameof(_vm.WorkspacePath), () =>
         {
             var current = pathField.Text ?? "";
             if (string.Equals(current, _vm.WorkspacePath, StringComparison.Ordinal))
                 return;
 
-            syncingPathField = true;
-            try
-            {
-                pathField.Text = _vm.WorkspacePath;
-            }
-            finally
-            {
-                syncingPathField = false;
-            }
+            pathField.Text = _vm.WorkspacePath;
         });
 
         // Ban lists — each as a labeled text area
@@ -74,7 +61,7 @@ internal sealed class WorkspacePolicyScreen : View
             Width = Dim.Fill(),
             Height = 1,
             ReadOnly = true,
-            WordWrap = false,
+            WordWrap = true,
             Text = "",
         };
         Add(statusLabel);
@@ -135,7 +122,7 @@ internal sealed class WorkspacePolicyScreen : View
             Width = Dim.Fill(),
             Height = 4,
             Text = string.Join("\n", collection),
-            WordWrap = false,
+            WordWrap = true,
         };
         Add(textView);
         y += 5;

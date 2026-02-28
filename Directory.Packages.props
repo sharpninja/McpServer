@@ -33,6 +33,7 @@
     <PackageVersion Include="ModelContextProtocol" Version="0.8.0-preview.1" />
     <PackageVersion Include="ModelContextProtocol.AspNetCore" Version="0.8.0-preview.1" />
     <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
+    <PackageVersion Include="Serilog.Extensions.Logging" Version="9.0.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
     <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
     <PackageVersion Include="Serilog.Sinks.Http" Version="9.2.1" />

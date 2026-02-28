@@ -22,14 +22,25 @@ public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnaps
 
     /// <summary>Initializes a new instance of the health snapshots ViewModel.</summary>
     /// <param name="dispatcher">CQRS dispatcher.</param>
+    /// <param name="workspaceContext">Shared workspace context for reacting to workspace changes.</param>
     /// <param name="logger">Logger instance.</param>
     public HealthSnapshotsViewModel(Dispatcher dispatcher,
+        WorkspaceContextViewModel workspaceContext,
         ILogger<HealthSnapshotsViewModel> logger)
         : base(McpArea.Health)
     {
         _logger = logger;
         _dispatcher = dispatcher;
         _checkHealthCommand = new CqrsQueryCommand<HealthSnapshot>(dispatcher, static () => new CheckHealthQuery());
+        workspaceContext.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(WorkspaceContextViewModel.ActiveWorkspacePath))
+            {
+                _logger.LogInformation("Workspace changed to '{WorkspacePath}' — clearing health snapshots",
+                    workspaceContext.ActiveWorkspacePath);
+                ClearItems();
+            }
+        };
     }
 
     /// <summary>

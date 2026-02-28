@@ -4,6 +4,13 @@ namespace McpServer.UI.Core.ViewModels.Base;
 
 /// <summary>
 /// Shared operation-state model for async UI workflows (load/save/run/etc.).
+/// Provides observable busy/error/status tracking with timestamp history.
+/// <para>
+/// This class is not yet referenced by existing ViewModels but is provided as
+/// a reusable building block for future async operations that need more granular
+/// state tracking than the base ViewModel classes offer (e.g., multi-step wizards,
+/// background sync indicators).
+/// </para>
 /// </summary>
 public partial class OperationState : ObservableObject
 {

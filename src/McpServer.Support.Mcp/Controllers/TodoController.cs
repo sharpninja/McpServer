@@ -15,10 +15,10 @@ public sealed class TodoController : ControllerBase
     private readonly IRequirementsService _requirementsService;
     private readonly ITodoPromptService _todoPromptService;
 
-    /// <summary>TR-PLANNED-013: Constructor.</summary>
-    public TodoController(ITodoService todoService, IRequirementsService requirementsService, ITodoPromptService todoPromptService)
+    /// <summary>TR-PLANNED-013, TR-MCP-MT-001: Constructor. Resolves workspace-specific TODO service.</summary>
+    public TodoController(TodoServiceResolver todoServiceResolver, WorkspaceContext workspaceContext, IRequirementsService requirementsService, ITodoPromptService todoPromptService)
     {
-        _todoService = todoService;
+        _todoService = todoServiceResolver.Resolve(workspaceContext);
         _requirementsService = requirementsService;
         _todoPromptService = todoPromptService;
     }
