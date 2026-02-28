@@ -1153,13 +1153,14 @@ saas:
   low-priority:
   - id: MVP-MARKETING-005
     title: Add REST clients similar to MVP-MARKETING-004 for Python and TypeScript
-    done: false
     estimate: 5-7 days AI-assisted
     note: 'Reference implementation: src/McpServer.Client/ (C# NuGet, PackageId: SharpNinja.McpServer.Client). Python uses httpx+pydantic, TypeScript uses fetch+zod. Both must cover all 82 endpoints across 15 controllers with identical API surface. Dual auth (API Key + Bearer JWT), SSE streaming, typed exception hierarchy, facade+sub-client composition.'
+    done: false
     description:
-    - 'Create typed REST client libraries for Python (PyPI) and TypeScript (npm) mirroring the McpServer.Client NuGet package — covering all 82 API endpoints across 15 controllers with typed models, error handling, and DI/factory patterns appropriate to each ecosystem.'
+    - Create typed REST client libraries for Python (PyPI) and TypeScript (npm) mirroring the McpServer.Client NuGet package — covering all 82 API endpoints across 15 controllers with typed models, error handling, and DI/factory patterns appropriate to each ecosystem.
     - 'REFERENCE IMPLEMENTATION: src/McpServer.Client/ provides the definitive pattern — facade + sub-client composition, shared auth state, dynamic port, typed exception hierarchy, SSE streaming, dual auth (API Key + Bearer JWT). 11 sub-client classes, 11 model files, MockHttpHandler test pattern.'
     - 'SCOPE: 82 REST endpoints across 15 controllers: Auth(4), Agents(14), Context(4), Diagnostic(2), Events(1 SSE), GitHub(13), Repo(3), Requirements(20), SessionLog(3), Sync(2), Todo(9), Tools(12), Tunnel(7), Voice(6), Workspace(11).'
+    remaining: 'All phases. Python library (Phases 0-4: scaffold, base client, exceptions, options, 15 domain clients, facade, factory, ~80 tests). TypeScript library (Phases 5-8: scaffold, base client, exceptions, Zod types, 15 domain clients, facade, factory, ~63 tests). CI/CD (Phase 9: 4 workflows). Docs (Phase 10: 2 READMEs). Integration tests (Phase 11). Requirements (Phase 12).'
     technical-details:
     - 'PYTHON LIBRARY ARCHITECTURE: Package name mcpserver-client on PyPI. Use httpx for async HTTP (SSE support via httpx-sse). Pydantic v2 models for all DTOs with Field(alias=camelCase) for JSON compat. Facade class McpServerClient with 15 sub-client properties (.todo, .context, .session_log, .github, .repo, .sync, .tunnel, .workspace, .tools, .auth_config, .diagnostic, .agents, .requirements, .voice, .events). Python 3.10+ for match statements and union types. async context manager (__aenter__/__aexit__) for httpx client lifecycle.'
     - 'TYPESCRIPT LIBRARY ARCHITECTURE: Package name @sharpninja/mcpserver-client on npm. Use native fetch API. Zod schemas for runtime validation with inferred TypeScript types. Class-based facade McpServerClient with 15 sub-client properties. TypeScript 5.0+ with strict mode. ESM + CJS dual output via tsup. AsyncGenerator<T> for SSE streaming.'
@@ -1240,7 +1241,6 @@ saas:
       done: false
     - task: 'Phase 12.1 — Requirements docs: Create FR-MCP-047 (Python REST Client Library) and FR-MCP-048 (TypeScript REST Client Library) in docs/Project/Functional-Requirements.md. Create TR-MCP-PYCLI-001 (httpx+pydantic architecture), TR-MCP-PYCLI-002 (test coverage with respx), TR-MCP-PYCLI-003 (PyPI publishing). Create TR-MCP-TSCLI-001 (fetch+zod architecture), TR-MCP-TSCLI-002 (test coverage with vitest), TR-MCP-TSCLI-003 (npm publishing). Update docs/Project/TR-per-FR-Mapping.md and docs/Project/Requirements-Matrix.md.'
       done: false
-    remaining: 'All phases. Python library (Phases 0-4: scaffold, base client, exceptions, options, 15 domain clients, facade, factory, ~80 tests). TypeScript library (Phases 5-8: scaffold, base client, exceptions, Zod types, 15 domain clients, facade, factory, ~63 tests). CI/CD (Phase 9: 4 workflows). Docs (Phase 10: 2 READMEs). Integration tests (Phase 11). Requirements (Phase 12).'
 mvp-app:
   high-priority:
   - id: MVP-MCP-001
@@ -1490,15 +1490,15 @@ mvp-mcp:
       done: false
   - id: MVP-MCP-004
     title: Migrate all templates to YAML files
-    done: false
     estimate: 3-4 days AI-assisted
     note: 'Audit completed 2026-02-27. 3 template categories: (1) MarkerFileService.DefaultPromptTemplate — 570 lines inline Handlebars const string, rendered via HandlebarsDotNet. (2) TodoPromptDefaults — 3 inline const string templates (~38 lines total), rendered via string.Replace. (3) PairingHtml — 3 inline HTML pages (~110 lines total), C# string interpolation. YamlDotNet already a dependency. Template engine code stays in C#; only template *content* moves to external YAML files.'
+    done: false
     description:
-    - 'Externalize all inline template strings from C# source code into loadable YAML files, enabling runtime customization without recompilation.'
-    - 'MarkerFileService.DefaultPromptTemplate (570 lines of Handlebars) is the primary migration target — move to templates/default-marker-prompt.hbs.yaml.'
+    - Externalize all inline template strings from C# source code into loadable YAML files, enabling runtime customization without recompilation.
+    - MarkerFileService.DefaultPromptTemplate (570 lines of Handlebars) is the primary migration target — move to templates/default-marker-prompt.hbs.yaml.
     - 'TodoPromptDefaults (3 templates: StatusPrompt, ImplementPrompt, PlanPrompt) — move to templates/todo-prompts.yaml.'
     - 'PairingHtml (3 HTML pages: LoginPage, KeyPage, NotConfiguredPage) — move to templates/pairing-pages.yaml.'
-    - 'Template rendering engines (HandlebarsDotNet for marker, string.Replace for TODO prompts, C# interpolation for HTML) remain in code. Only the template content source changes from const string to file-loaded string.'
+    - Template rendering engines (HandlebarsDotNet for marker, string.Replace for TODO prompts, C# interpolation for HTML) remain in code. Only the template content source changes from const string to file-loaded string.
     - 'Configuration: Mcp:TemplatePath setting specifies base directory for template files (default: templates/ relative to content root). Templates loaded at startup and cached. IOptionsMonitor for hot-reload support.'
     technical-details:
     - 'TEMPLATE FILE FORMAT: Each YAML file contains named template strings. The YAML structure varies by category: marker prompt is a single multi-line string under a key, TODO prompts are 3 named strings, pairing pages are 3 named strings. Use YAML block scalars (|) for multi-line template content to preserve formatting.'
@@ -1558,11 +1558,11 @@ mvp-mcp:
       done: false
   - id: MVP-MCP-005
     title: Implement per-agent workspace functionality
-    done: false
     estimate: 5-8 days AI-assisted
     note: 'Audit completed 2026-02-27. Data model is COMPLETE: AgentDefinitionEntity (global templates, 7 built-in), AgentWorkspaceEntity (per-workspace overrides with isolation, ban, models, branch strategy, seed prompt, launch command, marker additions), AgentEventLogEntity (audit trail). AgentService has full CRUD for both tiers. AgentController has 14 endpoints. What is MISSING: (1) Agent process lifecycle management (launch/stop/monitor), (2) AgentIsolation strategy enforcement (worktree/clone — field stored but never acted on), (3) Session log -> agent FK linkage (sourceType is free-form string, no FK to AgentDefinitionEntity), (4) Per-agent marker file sections (MarkerAdditions field stored but not injected into AGENTS-README-FIRST.yaml), (5) Per-agent git branch management (BranchStrategy stored but not enforced), (6) Agent health monitoring and auto-restart, (7) Multi-agent orchestration (priority, scheduling, conflict resolution).'
+    done: false
     description:
-    - 'Implement the runtime behavior layer for per-agent workspace functionality, building on the existing complete data model (AgentDefinitionEntity, AgentWorkspaceEntity, AgentEventLogEntity) and service layer (AgentService, AgentController).'
+    - Implement the runtime behavior layer for per-agent workspace functionality, building on the existing complete data model (AgentDefinitionEntity, AgentWorkspaceEntity, AgentEventLogEntity) and service layer (AgentService, AgentController).
     - 'Core capability: Launch, monitor, and stop agent processes per-workspace with workspace-specific configuration overrides (launch command, models, branch strategy, seed prompt, isolation mode).'
     - 'Agent isolation: Enforce AgentIsolation strategies — worktree mode creates a git worktree per agent, clone mode creates a shallow clone. Agents work in their isolated copy, changes merged back via PR.'
     - 'Marker file integration: Inject AgentWorkspaceEntity.MarkerAdditions into AGENTS-README-FIRST.yaml during marker file generation, allowing per-agent custom instructions.'
@@ -1673,3 +1673,35 @@ infrastructure:
     - Enhance GitHub integration capabilities for McpServer
     - Support GitHub as Keycloak Identity Provider for user authentication
     - Integrate with GitHub OAuth for agent workspace management and PR workflows
+Architecture:
+  high-priority:
+  - id: audit-di-ssot
+    title: Audit ALL code for Single Source of Truth adherence and DI data exposure with INotifyPropertyChanged
+    done: false
+    description:
+    - Audit the entire codebase to ensure every data source follows the Single Source of Truth principle.
+    - All data sources must be registered in DI as singletons or scoped services.
+    - Services must never push data directly — they must notify via INotifyPropertyChanged and let consumers pull.
+    - Race conditions are solved by DI, not by manual synchronization or fire-and-forget patterns.
+    - Identify and remediate any remaining ActivatorUtilities.CreateInstance patterns for stateful services.
+    - Verify all observable state uses INotifyPropertyChanged for change notification.
+    technical-details:
+    - 'Directive: DI is the solution to race conditions. Never push data. Notify services that data is available/changed and let them pull for single source of truth, which must live in DI.'
+    - 'Example fix: TunnelRegistry refactored from manual Register() calls to constructor-injected IEnumerable<ITunnelProvider> (commit 0c307a9).'
+    - 'Scope includes: all services, registries, managers, and providers across McpServer.Support.Mcp.'
+    - Check for any remaining patterns where services are created outside DI or data is pushed between components.
+    implementation-tasks:
+    - task: Inventory all services created via ActivatorUtilities or manual new() outside DI
+      done: false
+    - task: Inventory all data sources not registered in DI container
+      done: false
+    - task: Inventory all push-based data patterns (direct property sets, event args with data payloads)
+      done: false
+    - task: Verify all observable state implements INotifyPropertyChanged
+      done: false
+    - task: Refactor identified violations to use DI + notification pattern
+      done: false
+    - task: Update tests to use DI injection instead of manual service creation
+      done: false
+    - task: Document the SSOT/DI pattern in Technical-Requirements.md
+      done: false

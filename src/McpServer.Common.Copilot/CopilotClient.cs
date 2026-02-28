@@ -50,6 +50,23 @@ public sealed class CopilotClient(
     }
 
     /// <inheritdoc />
+    public CopilotInteractiveSession CreateInteractiveSession(
+        string initialPrompt,
+        CopilotClientOptions? options = null)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(initialPrompt);
+        var opts = options ?? defaultOptions.CurrentValue;
+        var psi = BuildProcessStartInfo(opts, initialPrompt, interactive: true);
+
+        logger.LogDebug("Launching interactive session: {Agent} in {Cwd}", opts.AgentPath, psi.WorkingDirectory);
+
+        var process = Process.Start(psi)
+            ?? throw new InvalidOperationException("Process.Start returned null for interactive session");
+
+        return new CopilotInteractiveSession(process, logger);
+    }
+
+    /// <inheritdoc />
     public async IAsyncEnumerable<string> InvokeStreamingAsync(
         string prompt,
         CopilotClientOptions? options = null,
@@ -228,7 +245,7 @@ public sealed class CopilotClient(
     /// (no shell wrapper), using <see cref="ProcessStartInfo.ArgumentList"/> for safe escaping.
     /// This avoids PowerShell/sh buffering so stdout streams in real time.
     /// </summary>
-    private ProcessStartInfo BuildProcessStartInfo(CopilotClientOptions opts, string prompt)
+    private ProcessStartInfo BuildProcessStartInfo(CopilotClientOptions opts, string prompt, bool interactive = false)
     {
         var cwd = opts.WorkingDirectory ?? Environment.CurrentDirectory;
 
@@ -240,9 +257,10 @@ public sealed class CopilotClient(
             CreateNoWindow = true,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
+            RedirectStandardInput = interactive,
         };
 
-        psi.ArgumentList.Add("-p");
+        psi.ArgumentList.Add(interactive ? "-i" : "-p");
         psi.ArgumentList.Add(prompt);
 
         if (!string.Equals(opts.Model, "auto", StringComparison.OrdinalIgnoreCase))
@@ -251,12 +269,16 @@ public sealed class CopilotClient(
             psi.ArgumentList.Add(opts.Model);
         }
 
-        if (opts.Silent)
+        // Don't suppress interactive prompts — the sentinel is needed for turn detection.
+        if (opts.Silent && !interactive)
             psi.ArgumentList.Add("--silent");
 
         // Force streaming even when stdout is a pipe (not a TTY).
         psi.ArgumentList.Add("--stream");
         psi.ArgumentList.Add("on");
+
+        // Auto-confirm tool invocations without user prompts.
+        psi.ArgumentList.Add("--yolo");
 
         ApplyRunAsEnvironment(psi, opts.RunAs);
         ApplyGitHubToken(psi, opts.GitHubToken);

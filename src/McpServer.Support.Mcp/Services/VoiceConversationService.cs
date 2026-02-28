@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -67,7 +68,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         var now = DateTimeOffset.UtcNow;
         var sessionId = $"voice-{now:yyyyMMddHHmmss}-{Guid.NewGuid():N}".ToLowerInvariant();
         var language = NormalizeLanguage(request?.Language);
-        var state = new VoiceSessionState(sessionId, language, request?.DeviceId, request?.ClientName, now);
+        var state = new VoiceSessionState(sessionId, language, request?.DeviceId, request?.ClientName, request?.WorkspacePath, now);
         _sessions[sessionId] = state;
 
         return Task.FromResult(new VoiceSessionCreateResponse
@@ -271,14 +272,14 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     }
 
     /// <inheritdoc />
-    public Task<bool> DeleteSessionAsync(string sessionId, CancellationToken cancellationToken = default)
+    public async Task<bool> DeleteSessionAsync(string sessionId, CancellationToken cancellationToken = default)
     {
         EnsureEnabled();
         cancellationToken.ThrowIfCancellationRequested();
         ArgumentException.ThrowIfNullOrWhiteSpace(sessionId);
 
         if (!_sessions.TryRemove(sessionId, out var state))
-            return Task.FromResult(false);
+            return false;
 
         lock (state.SyncRoot)
         {
@@ -295,8 +296,198 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
             state.ActiveTurnCts?.Dispose();
         }
 
+        // Gracefully end the interactive Copilot session
+        if (state.InteractiveSession is not null)
+        {
+            if (state.InteractiveSession.IsAlive)
+            {
+                try
+                {
+                    await state.InteractiveSession.EndAsync(TimeSpan.FromSeconds(30)).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Error ending interactive session: {SessionId}", sessionId);
+                }
+            }
+
+            await state.InteractiveSession.DisposeAsync().ConfigureAwait(false);
+        }
+
         state.Gate.Dispose();
-        return Task.FromResult(true);
+        return true;
+    }
+
+    /// <inheritdoc />
+    public async IAsyncEnumerable<VoiceTurnStreamEvent> SubmitTurnStreamingAsync(
+        string sessionId,
+        VoiceTurnRequest request,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        EnsureEnabled();
+        ArgumentException.ThrowIfNullOrWhiteSpace(sessionId);
+        if (request is null) throw new ArgumentNullException(nameof(request));
+
+        var userText = (request.UserTranscriptText ?? string.Empty).Trim();
+        if (string.IsNullOrWhiteSpace(userText))
+            throw new ArgumentException("UserTranscriptText is required.", nameof(request));
+
+        if (!_sessions.TryGetValue(sessionId, out var state))
+        {
+            yield return new VoiceTurnStreamEvent { Type = "error", Message = $"Voice session '{sessionId}' not found." };
+            yield break;
+        }
+
+        var channel = System.Threading.Channels.Channel.CreateUnbounded<VoiceTurnStreamEvent>();
+        _ = ProduceStreamingTurnAsync(state, sessionId, userText, channel.Writer, cancellationToken);
+
+        await foreach (var evt in channel.Reader.ReadAllAsync(cancellationToken).ConfigureAwait(false))
+        {
+            yield return evt;
+        }
+    }
+
+    /// <summary>
+    /// Producer that writes streaming events to the channel. Handles try/catch internally.
+    /// </summary>
+    private async Task ProduceStreamingTurnAsync(
+        VoiceSessionState state,
+        string sessionId,
+        string userText,
+        System.Threading.Channels.ChannelWriter<VoiceTurnStreamEvent> writer,
+        CancellationToken cancellationToken)
+    {
+        CancellationTokenSource? linkedCts = null;
+        string turnId;
+
+        _logger.LogInformation("ProduceStreamingTurnAsync starting: Session={SessionId}, UserText={UserText}", sessionId, userText.Length > 80 ? userText[..80] + "..." : userText);
+
+        await state.Gate.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            if (state.IsTurnActive)
+            {
+                await writer.WriteAsync(new VoiceTurnStreamEvent { Type = "error", Message = "A turn is already in progress." }, cancellationToken).ConfigureAwait(false);
+                writer.Complete();
+                return;
+            }
+
+            state.IsTurnActive = true;
+            state.Status = "thinking";
+            state.LastError = null;
+            state.LastUpdatedUtc = DateTimeOffset.UtcNow;
+            state.TurnCounter++;
+            turnId = $"turn-{state.TurnCounter.ToString("0000", CultureInfo.InvariantCulture)}";
+            state.LastTurnId = turnId;
+
+            linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            state.ActiveTurnCts = linkedCts;
+
+            AddTranscriptEntryIfEnabled(state, new VoiceTranscriptEntryDto
+            {
+                TimestampUtc = DateTimeOffset.UtcNow.ToString("O"),
+                TurnId = turnId,
+                Role = "user",
+                Category = "transcript",
+                Text = userText
+            });
+        }
+        finally
+        {
+            state.Gate.Release();
+        }
+
+        var sw = Stopwatch.StartNew();
+        var toolRecords = new List<VoiceToolCallRecordDto>();
+        var fullText = new StringBuilder();
+        VoiceTurnStreamEvent? finalEvent = null;
+        var chunkCount = 0;
+
+        _logger.LogInformation("Starting ExecuteTurnStreamingAsync: Session={SessionId}, Turn={TurnId}", sessionId, turnId);
+
+        try
+        {
+            await foreach (var evt in ExecuteTurnStreamingAsync(state, turnId, userText, toolRecords, linkedCts!.Token).ConfigureAwait(false))
+            {
+                _logger.LogDebug("Producer received event type={Type} for Turn={TurnId}", evt.Type, turnId);
+
+                if (evt.Type == "chunk")
+                {
+                    chunkCount++;
+                    fullText.Append(evt.Text);
+                }
+
+                if (evt.Type is "done" or "error")
+                {
+                    finalEvent = evt;
+                    _logger.LogInformation("Producer got terminal event type={Type} for Turn={TurnId} after {ChunkCount} chunks", evt.Type, turnId, chunkCount);
+                    break;
+                }
+
+                await writer.WriteAsync(evt, cancellationToken).ConfigureAwait(false);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            _logger.LogWarning("Streaming turn canceled: Session={SessionId}, Turn={TurnId}, Chunks={ChunkCount}", sessionId, turnId, chunkCount);
+            finalEvent = new VoiceTurnStreamEvent { Type = "done", TurnId = turnId, Status = "interrupted", LatencyMs = (int)sw.ElapsedMilliseconds };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Streaming voice turn failed: Session={SessionId}; Turn={TurnId}; Chunks={ChunkCount}", sessionId, turnId, chunkCount);
+            finalEvent = new VoiceTurnStreamEvent { Type = "error", TurnId = turnId, Message = $"Voice turn processing failed: {ex.Message}" };
+        }
+
+        sw.Stop();
+
+        // Clean up turn state
+        await state.Gate.WaitAsync(CancellationToken.None).ConfigureAwait(false);
+        try
+        {
+            if (state.ActiveTurnCts == linkedCts)
+                state.ActiveTurnCts = null;
+
+            linkedCts?.Dispose();
+            state.IsTurnActive = false;
+
+            var status = finalEvent?.Status ?? finalEvent?.Type ?? "error";
+            state.Status = status is "completed" or "interrupted" ? "idle" : "error";
+            state.LastError = finalEvent?.Type == "error" ? finalEvent.Message : null;
+            state.LastUpdatedUtc = DateTimeOffset.UtcNow;
+
+            state.LastTurnToolCalls.Clear();
+            foreach (var item in toolRecords)
+                state.LastTurnToolCalls.Add(item);
+
+            var displayText = fullText.ToString().Trim();
+            if (!string.IsNullOrWhiteSpace(displayText))
+            {
+                AddTranscriptEntryIfEnabled(state, new VoiceTranscriptEntryDto
+                {
+                    TimestampUtc = DateTimeOffset.UtcNow.ToString("O"),
+                    TurnId = turnId,
+                    Role = "assistant",
+                    Category = finalEvent?.Type == "error" ? "error" : "transcript",
+                    Text = displayText
+                });
+            }
+        }
+        finally
+        {
+            state.Gate.Release();
+        }
+
+        // Write final event
+        var done = finalEvent ?? new VoiceTurnStreamEvent
+        {
+            Type = "done",
+            TurnId = turnId,
+            Status = "completed",
+            ToolCalls = toolRecords,
+            LatencyMs = (int)Math.Clamp(sw.ElapsedMilliseconds, 0, int.MaxValue)
+        };
+        await writer.WriteAsync(done, CancellationToken.None).ConfigureAwait(false);
+        writer.Complete();
     }
 }
 
@@ -317,16 +508,33 @@ public sealed partial class VoiceConversationService
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            // Desktop launch sends only the user text; the full system prompt
-            // is used only for the non-desktop (CopilotClient) path.
-            var useDesktop = opts.UseDesktopLaunch && _desktopLauncher is not null;
-            var prompt = useDesktop
-                ? userText
-                : BuildCopilotPrompt(state, turnId, userText, toolResultsForPrompt, step);
-            var copilotResult = await InvokeCopilotWithDesktopFallbackAsync(
-                prompt,
-                opts,
-                cancellationToken).ConfigureAwait(false);
+            CopilotResult copilotResult;
+
+            if (state.InteractiveSession is { IsAlive: true })
+            {
+                // Interactive session is alive — send via stdin
+                var stdinPrompt = step == 1
+                    ? userText
+                    : toolResultsForPrompt[^1];
+                copilotResult = await state.InteractiveSession.SendAsync(stdinPrompt, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                // First turn or session died — launch interactive process with full system prompt
+                var prompt = BuildCopilotPrompt(state, turnId, userText, toolResultsForPrompt, step);
+                var copilotOpts = BuildCopilotOptions(opts, state.WorkspacePath);
+
+                try
+                {
+                    state.InteractiveSession = _copilotClient.CreateInteractiveSession(prompt, copilotOpts);
+                    copilotResult = await state.InteractiveSession.ReadInitialResponseAsync(cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
+                {
+                    _logger.LogError(ex, "Failed to create interactive Copilot session: {SessionId}", state.SessionId);
+                    return ErrorResult($"Failed to start Copilot: {ex.Message}", toolRecords);
+                }
+            }
 
             if (copilotResult.State != CopilotResultState.Success)
             {
@@ -343,15 +551,41 @@ public sealed partial class VoiceConversationService
 
             if (!TryParseModelEnvelope(copilotResult.Body, out var envelope, out var parseError))
             {
-                var repaired = await _copilotClient.InvokeAsync(
-                    BuildJsonRepairPrompt(copilotResult.Body),
-                    BuildCopilotOptions(opts),
-                    cancellationToken).ConfigureAwait(false);
+                // Try JSON repair first
+                CopilotResult repaired;
+                if (state.InteractiveSession is { IsAlive: true })
+                {
+                    repaired = await state.InteractiveSession.SendAsync(
+                        BuildJsonRepairPrompt(copilotResult.Body),
+                        cancellationToken).ConfigureAwait(false);
+                }
+                else
+                {
+                    repaired = await _copilotClient.InvokeAsync(
+                        BuildJsonRepairPrompt(copilotResult.Body),
+                        BuildCopilotOptions(opts),
+                        cancellationToken).ConfigureAwait(false);
+                }
 
                 if (repaired.State != CopilotResultState.Success ||
                     !TryParseModelEnvelope(repaired.Body, out envelope, out parseError))
                 {
-                    return ErrorResult($"Model returned invalid JSON output: {parseError}", toolRecords);
+                    // Fallback: treat raw text as a conversational final_response
+                    var rawText = (copilotResult.Body ?? string.Empty).Trim();
+                    if (!string.IsNullOrWhiteSpace(rawText))
+                    {
+                        _logger.LogDebug("Voice turn: treating non-JSON response as plain text final_response ({Length} chars)", rawText.Length);
+                        envelope = new ModelEnvelope
+                        {
+                            Type = "final_response",
+                            DisplayText = rawText,
+                            SpeakText = rawText
+                        };
+                    }
+                    else
+                    {
+                        return ErrorResult($"Model returned invalid JSON output: {parseError}", toolRecords);
+                    }
                 }
             }
 
@@ -432,6 +666,61 @@ public sealed partial class VoiceConversationService
         }
 
         return ErrorResult("Model exceeded maximum tool steps for a single turn.", toolRecords);
+    }
+
+    private async IAsyncEnumerable<VoiceTurnStreamEvent> ExecuteTurnStreamingAsync(
+        VoiceSessionState state,
+        string turnId,
+        string userText,
+        List<VoiceToolCallRecordDto> toolRecords,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        var opts = _options.CurrentValue;
+
+        IAsyncEnumerable<string>? lineStream = null;
+        string? launchError = null;
+
+        if (state.InteractiveSession is not { IsAlive: true })
+        {
+            var prompt = BuildCopilotPrompt(state, turnId, userText, [], 1);
+            var copilotOpts = BuildCopilotOptions(opts, state.WorkspacePath);
+
+            _logger.LogInformation("Launching interactive Copilot session for {SessionId}, prompt length={PromptLen}", state.SessionId, prompt.Length);
+
+            try
+            {
+                state.InteractiveSession = _copilotClient.CreateInteractiveSession(prompt, copilotOpts);
+                _logger.LogInformation("Interactive session created (PID={Pid}), reading initial response stream for {SessionId}", state.InteractiveSession.ProcessId, state.SessionId);
+                lineStream = state.InteractiveSession.ReadInitialResponseStreamingAsync(cancellationToken);
+            }
+            catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
+            {
+                _logger.LogError(ex, "Failed to create interactive Copilot session: {SessionId}", state.SessionId);
+                launchError = $"Failed to start Copilot: {ex.Message}";
+            }
+        }
+        else
+        {
+            _logger.LogInformation("Sending to existing interactive session for {SessionId}, text length={TextLen}", state.SessionId, userText.Length);
+            lineStream = state.InteractiveSession.SendStreamingAsync(userText, cancellationToken);
+        }
+
+        if (launchError is not null)
+        {
+            yield return new VoiceTurnStreamEvent { Type = "error", TurnId = turnId, Message = launchError };
+            yield break;
+        }
+
+        var lineCount = 0;
+        await foreach (var line in lineStream!.ConfigureAwait(false))
+        {
+            lineCount++;
+            _logger.LogDebug("Stream line #{LineCount} for {SessionId}: {Line}", lineCount, state.SessionId, line.Length > 100 ? line[..100] + "..." : line);
+            yield return new VoiceTurnStreamEvent { Type = "chunk", Text = line + "\n" };
+        }
+
+        _logger.LogInformation("Stream complete for {SessionId}: {LineCount} lines", state.SessionId, lineCount);
+        yield return new VoiceTurnStreamEvent { Type = "done", TurnId = turnId, Status = "completed", ToolCalls = toolRecords };
     }
 
     private async Task<ToolExecutionOutcome> ExecuteToolCallAsync(
@@ -780,12 +1069,16 @@ public sealed partial class VoiceConversationService
         return null;
     }
 
-    private CopilotClientOptions BuildCopilotOptions(VoiceConversationOptions opts)
+    private CopilotClientOptions BuildCopilotOptions(VoiceConversationOptions opts, string? sessionWorkspacePath = null)
     {
         var model = string.IsNullOrWhiteSpace(opts.CopilotModel) ? "auto" : opts.CopilotModel.Trim();
-        var workingDirectory = string.IsNullOrWhiteSpace(opts.WorkingDirectory)
-            ? _workspaceAccessor.GetWorkspacePath()
-            : opts.WorkingDirectory;
+
+        // Session workspace path (from X-Workspace-Path at session creation) takes priority
+        var workingDirectory = !string.IsNullOrWhiteSpace(sessionWorkspacePath)
+            ? sessionWorkspacePath
+            : !string.IsNullOrWhiteSpace(opts.WorkingDirectory)
+                ? opts.WorkingDirectory
+                : _workspaceAccessor.GetWorkspacePath();
 
         var promptOpts = _todoPromptOptions.CurrentValue;
         var agentPath = string.IsNullOrWhiteSpace(promptOpts.AgentPath) ? "copilot" : promptOpts.AgentPath;
@@ -918,75 +1211,24 @@ public sealed partial class VoiceConversationService
         return "\"" + value.Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"";
     }
 
-    private string BuildCopilotPrompt(
+    private static string BuildCopilotPrompt(
         VoiceSessionState state,
         string turnId,
         string userText,
         IReadOnlyList<string> toolResultsForPrompt,
         int step)
     {
-        var opts = _options.CurrentValue;
-        List<VoiceTranscriptEntryDto> transcriptSnapshot;
-        lock (state.SyncRoot)
-        {
-            transcriptSnapshot = state.Transcript
-                .TakeLast(Math.Max(1, opts.TranscriptContextEntryLimit))
-                .ToList();
-        }
-
+        // No system prompt — only the user's seed text and any tool results.
         var sb = new StringBuilder();
-        sb.AppendLine("You are an MCP voice todo assistant operating on a local TODO store.");
-        sb.AppendLine("Return ONLY one JSON object. No markdown. No code fences. No extra text.");
-        sb.AppendLine("Use a tool_call if you need todo data or must mutate todos; otherwise final_response.");
-        sb.AppendLine("Delete and update operations must use exact todo IDs.");
-        sb.AppendLine("If create requires note/remaining, call todo_create then todo_update.");
-        sb.AppendLine();
-        sb.AppendLine("Allowed tools:");
-        sb.AppendLine("- todo_list { keyword?, priority?, section?, id?, done?, limit? }");
-        sb.AppendLine("- todo_search { keyword, priority?, section?, id?, done?, limit? }");
-        sb.AppendLine("- todo_get { id }");
-        sb.AppendLine("- todo_create { id, title, section, priority, estimate?, description?, technicalDetails?, implementationTasks?, dependsOn?, functionalRequirements?, technicalRequirements? }");
-        sb.AppendLine("- todo_update { id, title?, priority?, section?, done?, estimate?, description?, technicalDetails?, implementationTasks?, note?, completedDate?, doneSummary?, remaining?, dependsOn?, functionalRequirements?, technicalRequirements? }");
-        sb.AppendLine("- todo_delete { id }");
-        sb.AppendLine("- todo_toggle_done { id, done? }");
-        sb.AppendLine("implementationTasks items are objects: {\"task\":\"...\",\"done\":false}");
-        sb.AppendLine();
-        sb.AppendLine("Response schemas (choose one):");
-        sb.AppendLine("{\"type\":\"tool_call\",\"toolName\":\"todo_list\",\"arguments\":{},\"reasoningSummary\":\"short\"}");
-        sb.AppendLine("{\"type\":\"final_response\",\"displayText\":\"...\",\"speakText\":\"...\",\"reasoningSummary\":\"short\"}");
-        sb.AppendLine("{\"type\":\"error_response\",\"userMessage\":\"...\",\"speakText\":\"...\"}");
-        sb.AppendLine();
-        sb.AppendLine($"SessionId: {state.SessionId}");
-        sb.AppendLine($"TurnId: {turnId}");
-        sb.AppendLine($"Step: {step}");
-        sb.AppendLine($"Language: {state.Language}");
-        sb.AppendLine();
-        sb.AppendLine("Recent transcript context:");
-        if (transcriptSnapshot.Count == 0)
-        {
-            sb.AppendLine("(none)");
-        }
-        else
-        {
-            foreach (var entry in transcriptSnapshot)
-                sb.AppendLine($"- [{entry.TimestampUtc}] {entry.Role}/{entry.Category}: {entry.Text}");
-        }
+        sb.Append(userText);
 
-        sb.AppendLine();
-        sb.AppendLine($"Current user transcript: {userText}");
-        sb.AppendLine();
-        sb.AppendLine("Tool results from this turn so far:");
-        if (toolResultsForPrompt.Count == 0)
+        if (toolResultsForPrompt.Count > 0)
         {
-            sb.AppendLine("(none)");
-        }
-        else
-        {
+            sb.AppendLine();
             foreach (var result in toolResultsForPrompt)
                 sb.AppendLine(result);
         }
-        sb.AppendLine();
-        sb.AppendLine("Return ONLY JSON now.");
+
         return sb.ToString();
     }
 
@@ -1269,12 +1511,13 @@ public sealed partial class VoiceConversationService
 
     private sealed class VoiceSessionState
     {
-        public VoiceSessionState(string sessionId, string language, string? deviceId, string? clientName, DateTimeOffset now)
+        public VoiceSessionState(string sessionId, string language, string? deviceId, string? clientName, string? workspacePath, DateTimeOffset now)
         {
             SessionId = sessionId;
             Language = language;
             DeviceId = deviceId;
             ClientName = clientName;
+            WorkspacePath = workspacePath;
             CreatedUtc = now;
             LastUpdatedUtc = now;
         }
@@ -1285,6 +1528,7 @@ public sealed partial class VoiceConversationService
         public string Language { get; }
         public string? DeviceId { get; }
         public string? ClientName { get; }
+        public string? WorkspacePath { get; }
         public DateTimeOffset CreatedUtc { get; set; }
         public DateTimeOffset LastUpdatedUtc { get; set; }
         public bool IsTurnActive { get; set; }
@@ -1293,6 +1537,7 @@ public sealed partial class VoiceConversationService
         public string? LastTurnId { get; set; }
         public int TurnCounter { get; set; }
         public CancellationTokenSource? ActiveTurnCts { get; set; }
+        public CopilotInteractiveSession? InteractiveSession { get; set; }
         public List<VoiceTranscriptEntryDto> Transcript { get; } = [];
         public List<VoiceToolCallRecordDto> LastTurnToolCalls { get; } = [];
     }
