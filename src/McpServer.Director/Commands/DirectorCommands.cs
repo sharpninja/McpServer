@@ -7,7 +7,7 @@ namespace McpServer.Director.Commands;
 
 /// <summary>
 /// FR-MCP-030: All Director CLI commands for agent management in workspaces.
-/// Commands: health, list, agents, add, ban, unban, delete, validate, init, sync, todo, session-log.
+/// Commands: health, list, agents, add, ban, unban, delete, validate, init, todo, session-log.
 /// </summary>
 internal static class DirectorCommands
 {
@@ -27,7 +27,6 @@ internal static class DirectorCommands
         root.AddCommand(BuildDeleteCommand());
         root.AddCommand(BuildValidateCommand());
         root.AddCommand(BuildInitCommand());
-        root.AddCommand(BuildSyncCommand());
         root.AddCommand(BuildTodoCommand());
         root.AddCommand(BuildSessionLogCommand());
     }
@@ -441,54 +440,6 @@ internal static class DirectorCommands
             }
         }, s_workspaceOption);
         return cmd;
-    }
-
-    // ── sync ─────────────────────────────────────────────────────────────
-
-    private static Command BuildSyncCommand()
-    {
-        var statusCmd = new Command("status", "Check sync status") { s_workspaceOption };
-        statusCmd.SetHandler(async (string? workspace) =>
-        {
-            using var client = ResolveClient(workspace);
-            if (client is null) return;
-
-            try
-            {
-                var json = await client.GetStringAsync("/mcp/sync/status").ConfigureAwait(false);
-                AnsiConsole.MarkupLine("[blue]Sync Status:[/]");
-                AnsiConsole.WriteLine(json);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.TraceError(ex.ToString());
-                Error(ex.Message);
-            }
-        }, s_workspaceOption);
-
-        var runCmd = new Command("run", "Trigger a full ingestion sync") { s_workspaceOption };
-        runCmd.SetHandler(async (string? workspace) =>
-        {
-            using var client = ResolveClient(workspace);
-            if (client is null) return;
-
-            try
-            {
-                await AnsiConsole.Status().StartAsync("Syncing...", async _ =>
-                {
-                    await client.PostRawAsync("/mcp/sync/run").ConfigureAwait(false);
-                }).ConfigureAwait(false);
-                Success("Sync completed.");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.TraceError(ex.ToString());
-                Error(ex.Message);
-            }
-        }, s_workspaceOption);
-
-        var syncCmd = new Command("sync", "Manage ingestion sync") { statusCmd, runCmd };
-        return syncCmd;
     }
 
     // ── todo ─────────────────────────────────────────────────────────────

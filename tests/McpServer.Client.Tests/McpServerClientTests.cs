@@ -24,7 +24,6 @@ public sealed class McpServerClientTests
         Assert.NotNull(client.SessionLog);
         Assert.NotNull(client.GitHub);
         Assert.NotNull(client.Repo);
-        Assert.NotNull(client.Sync);
         Assert.NotNull(client.Workspace);
         Assert.NotNull(client.Tools);
     }
@@ -84,7 +83,6 @@ public sealed class McpServerClientTests
 
         Assert.Equal(9999, client.Todo.Port);
         Assert.Equal(9999, client.Context.Port);
-        Assert.Equal(9999, client.Sync.Port);
         Assert.Equal(9999, client.Workspace.Port);
         Assert.Equal(9999, client.Repo.Port);
         Assert.Equal(9999, client.GitHub.Port);

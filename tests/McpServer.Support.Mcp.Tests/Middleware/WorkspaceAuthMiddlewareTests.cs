@@ -54,7 +54,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var fullToken = tokenService.GetToken(WorkspacePath)!;
         var nextCalled = false;
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
-        var ctx = CreateContext("POST", "/mcp/sync/run", fullToken);
+        var ctx = CreateContext("POST", "/mcp/repo/file", fullToken);
 
         await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
 
@@ -98,7 +98,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var defaultToken = tokenService.GetDefaultToken(WorkspacePath)!;
         var nextCalled = false;
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
-        var ctx = CreateContext("POST", "/mcp/sync/run", defaultToken);
+        var ctx = CreateContext("POST", "/mcp/repo/file", defaultToken);
 
         await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
 
@@ -176,7 +176,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var wsContext = new WorkspaceContext { WorkspacePath = WorkspacePath };
         var nextCalled = false;
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
-        var ctx = CreateContext("POST", "/mcp/sync/run", fullToken);
+        var ctx = CreateContext("POST", "/mcp/repo/file", fullToken);
 
         await middleware.InvokeAsync(ctx, tokenService, configOther, wsContext);
 
@@ -198,7 +198,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var wsContext = new WorkspaceContext { WorkspacePath = WorkspacePath };
         var nextCalled = false;
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
-        var ctx = CreateContext("POST", "/mcp/sync/run", null);
+        var ctx = CreateContext("POST", "/mcp/repo/file", null);
 
         await middleware.InvokeAsync(ctx, tokenService, config, wsContext);
 

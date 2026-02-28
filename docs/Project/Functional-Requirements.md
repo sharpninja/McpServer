@@ -2,9 +2,9 @@
 
 ## FR-SUPPORT-010 MCP Context Unification
 
-Local MCP server providing context retrieval, TODO management, repository access, session logging, and sync capabilities for AI agent integration.
+Local MCP server providing context retrieval, TODO management, repository access, session logging, and ingestion capabilities for AI agent integration.
 
-**Covered by:** `ContextController`, `TodoController`, `RepoController`, `SessionLogController`, `SyncController`, `McpServerMcpTools`, `McpDbContext`, `HybridSearchService`, `EmbeddingService`, `VectorIndexService`, `Fts5SearchService`, `RepoFileService`, `IngestionCoordinator`
+**Covered by:** `ContextController`, `TodoController`, `RepoController`, `SessionLogController`, `McpServerMcpTools`, `McpDbContext`, `HybridSearchService`, `EmbeddingService`, `VectorIndexService`, `Fts5SearchService`, `RepoFileService`, `IngestionCoordinator`
 
 ## FR-MCP-001 Configurable workspace root and paths
 
@@ -184,9 +184,9 @@ A console application (`McpServer.Director`) shall provide agent orchestration c
 
 **Status:** ✅ Complete
 
-**Covered by:** `McpServer.Director` project — 16 source files: `Program.cs`, `McpHttpClient.cs`, `Auth/DirectorAuthOptions.cs`, `Auth/OidcAuthService.cs`, `Auth/TokenCache.cs`, `Commands/AuthCommands.cs`, `Commands/CommandHelpers.cs`, `Commands/DirectorCommands.cs`, `Commands/InteractiveCommand.cs`, `Screens/MainScreen.cs`, `Screens/HealthScreen.cs`, `Screens/AgentScreen.cs`, `Screens/TodoScreen.cs`, `Screens/SessionLogScreen.cs`, `Screens/SyncScreen.cs`, `Screens/WorkspaceListScreen.cs`, `Screens/WorkspacePolicyScreen.cs`, `Screens/LoginDialog.cs`, `Screens/ViewModelBinder.cs`
+**Covered by:** `McpServer.Director` project — 15 source files: `Program.cs`, `McpHttpClient.cs`, `Auth/DirectorAuthOptions.cs`, `Auth/OidcAuthService.cs`, `Auth/TokenCache.cs`, `Commands/AuthCommands.cs`, `Commands/CommandHelpers.cs`, `Commands/DirectorCommands.cs`, `Commands/InteractiveCommand.cs`, `Screens/MainScreen.cs`, `Screens/HealthScreen.cs`, `Screens/AgentScreen.cs`, `Screens/TodoScreen.cs`, `Screens/SessionLogScreen.cs`, `Screens/WorkspaceListScreen.cs`, `Screens/WorkspacePolicyScreen.cs`, `Screens/LoginDialog.cs`, `Screens/ViewModelBinder.cs`
 
-**Implementation:** 18 CLI commands registered via System.CommandLine. All commands communicate with the MCP server via `McpHttpClient` (reads connection details from `AGENTS-README-FIRST.yaml`). Auth uses Keycloak Device Authorization Flow with token caching to `~/.mcpserver/tokens.json`. Interactive mode (`director interactive|tui|ui`) launches Terminal.Gui v2 with 7 tabs (Health, Workspaces, Agents, TODO, Sessions, Sync, Policy) plus a Login dialog, menu bar, auth status indicator, and keyboard shortcuts (F2 Login, F5 Refresh, Ctrl+Q Quit). ViewModels from `McpServer.UI.Core` are bound to Terminal.Gui controls via `ViewModelBinder` (INotifyPropertyChanged → Application.Invoke).
+**Implementation:** 17 CLI commands registered via System.CommandLine. All commands communicate with the MCP server via `McpHttpClient` (reads connection details from `AGENTS-README-FIRST.yaml`). Auth uses Keycloak Device Authorization Flow with token caching to `~/.mcpserver/tokens.json`. Interactive mode (`director interactive|tui|ui`) launches Terminal.Gui v2 with 6 tabs (Health, Workspaces, Agents, TODO, Sessions, Policy) plus a Login dialog, menu bar, auth status indicator, and keyboard shortcuts (F2 Login, F5 Refresh, Ctrl+Q Quit). ViewModels from `McpServer.UI.Core` are bound to Terminal.Gui controls via `ViewModelBinder` (INotifyPropertyChanged → Application.Invoke).
 
 ## FR-MCP-031 McpServer Management Web UI
 

@@ -86,7 +86,6 @@ public sealed class WorkspaceHeaderTests
 
         Assert.Equal(@"C:\updated", client.Todo.WorkspacePath);
         Assert.Equal(@"C:\updated", client.Context.WorkspacePath);
-        Assert.Equal(@"C:\updated", client.Sync.WorkspacePath);
         Assert.Equal(@"C:\updated", client.Workspace.WorkspacePath);
         Assert.Equal(@"C:\updated", client.Repo.WorkspacePath);
         Assert.Equal(@"C:\updated", client.GitHub.WorkspacePath);

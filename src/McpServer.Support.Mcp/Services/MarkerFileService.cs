@@ -503,8 +503,7 @@ public static class MarkerFileService
         - Todo Management: GET/POST/PUT/DELETE {{baseUrl}}/mcp/todo — query, create, update, and delete project tasks
         - Repo Files: GET {{baseUrl}}/mcp/repo/file, POST {{baseUrl}}/mcp/repo/file, GET {{baseUrl}}/mcp/repo/list — read, write, and list repository files
         - GitHub Integration: {{baseUrl}}/mcp/gh/issues, {{baseUrl}}/mcp/gh/pulls, {{baseUrl}}/mcp/gh/labels — issue, PR, and label management
-        - Sync: POST {{baseUrl}}/mcp/sync/run — trigger full ingestion sync; GET {{baseUrl}}/mcp/sync/status — check sync status
-        - Tool Registry: GET {{baseUrl}}/mcp/tools/search — discover available tools; GET/POST {{baseUrl}}/mcp/tools — manage tool definitions
+        - Tool Registry:GET {{baseUrl}}/mcp/tools/search — discover available tools; GET/POST {{baseUrl}}/mcp/tools — manage tool definitions
         - MCP Protocol: {{baseUrl}}/mcp-transport — Model Context Protocol streamable HTTP transport endpoint
 
         {{#if workspace.BannedLicenses}}
@@ -669,7 +668,6 @@ public static class MarkerFileService
                 ContextSources = "/mcp/context/sources",
                 Todo = "/mcp/todo",
                 Repo = "/mcp/repo",
-                Sync = "/mcp/sync",
                 GitHub = "/mcp/gh",
                 Tools = "/mcp/tools",
                 Workspace = "/mcp/workspace",
@@ -863,7 +861,6 @@ internal sealed class MarkerEndpoints
     public string ContextSources { get; set; } = string.Empty;
     public string Todo { get; set; } = string.Empty;
     public string Repo { get; set; } = string.Empty;
-    public string Sync { get; set; } = string.Empty;
     public string GitHub { get; set; } = string.Empty;
     public string Tools { get; set; } = string.Empty;
     public string Workspace { get; set; } = string.Empty;

@@ -44,8 +44,6 @@ public static class ServiceCollectionExtensions
         services.AddTransient<HealthSnapshotsViewModel>();
         services.AddTransient<SessionLogListViewModel>();
         services.AddTransient<DispatcherLogsViewModel>();
-        services.AddTransient<SyncStatusViewModel>();
-        services.AddTransient<RunSyncViewModel>();
         services.AddTransient<RepoListViewModel>();
         services.AddTransient<RepoFileViewModel>();
         services.AddTransient<WriteRepoFileViewModel>();

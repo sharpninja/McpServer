@@ -17,7 +17,7 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.McpStdio;
 
 /// <summary>
-/// TR-PLANNED-013: MCP tools exposed over STDIO; same capabilities as HTTP /mcp/context, /mcp/repo, /mcp/sync.
+/// TR-PLANNED-013: MCP tools exposed over STDIO; same capabilities as HTTP /mcp/context, /mcp/repo.
 /// Includes TODO, Session Log, and GitHub tools for full STDIO parity.
 /// </summary>
 [McpServerToolType]

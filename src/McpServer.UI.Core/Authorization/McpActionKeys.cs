@@ -18,9 +18,6 @@ public static class McpActionKeys
     /// <summary>Workspace initialization action.</summary>
     public const string WorkspaceInit = "workspace.init";
 
-    /// <summary>Sync run action.</summary>
-    public const string SyncRun = "sync.run";
-
     /// <summary>Session-log query action.</summary>
     public const string SessionLogQuery = "sessionlog.query";
 
@@ -50,9 +47,6 @@ public static class McpActionKeys
 
     /// <summary>TODO plan prompt generation action.</summary>
     public const string TodoPromptPlan = "todo.prompt.plan";
-
-    /// <summary>Sync status query action.</summary>
-    public const string SyncStatus = "sync.status";
 
     /// <summary>Repo list action.</summary>
     public const string RepoList = "repo.list";

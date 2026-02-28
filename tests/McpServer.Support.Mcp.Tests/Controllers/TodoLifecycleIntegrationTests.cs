@@ -22,6 +22,7 @@ public sealed class TodoLifecycleIntegrationTests
     public TodoLifecycleIntegrationTests(LifecycleWebFactory factory)
     {
         _client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(_client, factory.Services);
     }
 
     public void Dispose()

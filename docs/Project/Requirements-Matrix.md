@@ -48,7 +48,7 @@
 | FR-MCP-027 | ✅ Complete | Program.cs (startup built-in seeding), AgentController, AgentService, AgentDefaults, AgentDefinitionEntity |
 | FR-MCP-028 | ✅ Complete | AgentController, AgentService, AgentWorkspaceEntity, AgentEventLogEntity, McpDbContext |
 | FR-MCP-029 | ✅ Complete | McpServer.Cqrs (Dispatcher, CallContext, CorrelationId, Result, IPipelineBehavior) |
-| FR-MCP-030 | ✅ Complete | McpServer.Director (Program, DirectorCommands, AuthCommands, InteractiveCommand, McpHttpClient, OidcAuthService, TokenCache, MainScreen, HealthScreen, AgentScreen, TodoScreen, SessionLogScreen, SyncScreen, WorkspaceListScreen, WorkspacePolicyScreen, LoginDialog, ViewModelBinder) |
+| FR-MCP-030 | ✅ Complete | McpServer.Director (Program, DirectorCommands, AuthCommands, InteractiveCommand, McpHttpClient, OidcAuthService, TokenCache, MainScreen, HealthScreen, AgentScreen, TodoScreen, SessionLogScreen, WorkspaceListScreen, WorkspacePolicyScreen, LoginDialog, ViewModelBinder) |
 | FR-MCP-031 | 🔲 Planned | — |
 | FR-MCP-032 | 🔲 Planned | — |
 | FR-MCP-033 | 🔲 Planned | — |

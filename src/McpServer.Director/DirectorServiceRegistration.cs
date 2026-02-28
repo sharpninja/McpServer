@@ -54,7 +54,6 @@ internal static class DirectorServiceRegistration
         services.AddSingleton<IHealthApiClient>(_ => new HealthApiClientAdapter(directorContext.ControlClient));
         services.AddSingleton<ISessionLogApiClient>(_ => new SessionLogApiClientAdapter(directorContext));
         services.AddSingleton<IWorkspaceApiClient>(_ => new WorkspaceApiClientAdapter(directorContext));
-        services.AddSingleton<ISyncApiClient>(_ => new SyncApiClientAdapter(directorContext));
         services.AddSingleton<IRepoApiClient>(_ => new RepoApiClientAdapter(directorContext));
         services.AddSingleton<IContextApiClient>(_ => new ContextApiClientAdapter(directorContext));
         services.AddSingleton<IAuthConfigApiClient>(_ => new AuthConfigApiClientAdapter(directorContext));

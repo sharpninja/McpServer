@@ -182,7 +182,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
         var middleware = new McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware(next, logger, options, channel);
 
-        var context = CreateContext("POST", "/mcp/sync/run");
+        var context = CreateContext("POST", "/mcp/repo/file");
         var bodyBytes = Encoding.UTF8.GetBytes("{\"force\":true}");
         context.Request.Body = new MemoryStream(bodyBytes);
         context.Request.ContentLength = bodyBytes.Length;
@@ -280,7 +280,7 @@ public sealed class InteractionLoggingMiddlewareTests
         var middleware = new McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware(next, logger, options);
 
         var originalBody = new MemoryStream();
-        var context = CreateContext("GET", "/mcp/sync/status");
+        var context = CreateContext("GET", "/mcp/repo/list");
         context.Response.Body = originalBody;
 
         await middleware.InvokeAsync(context).ConfigureAwait(true);

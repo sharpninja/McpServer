@@ -114,7 +114,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
     }
 
     [Fact]
-    public async Task NoHeaderNoKey_FallsToDefault()
+    public async Task NoHeaderNoKey_PassesThroughWithoutResolution()
     {
         var wsDto = MakeDto(WorkspaceA, isPrimary: true);
         var workspaceService = CreateWorkspaceService(wsDto);
@@ -127,11 +127,11 @@ public sealed class WorkspaceResolutionMiddlewareTests
         await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
 
         Assert.True(nextCalled);
-        Assert.True(wsContext.IsResolved);
+        Assert.False(wsContext.IsResolved);
     }
 
     [Fact]
-    public async Task ApiKey_UnknownToken_FallsToDefault()
+    public async Task ApiKey_UnknownToken_PassesThroughWithoutResolution()
     {
         var wsDto = MakeDto(WorkspaceA, isPrimary: true);
         var workspaceService = CreateWorkspaceService(wsDto);
@@ -144,8 +144,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
         await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
 
         Assert.True(nextCalled);
-        Assert.True(wsContext.IsResolved);
-        Assert.Contains("alpha", wsContext.WorkspacePath!, StringComparison.OrdinalIgnoreCase);
+        Assert.False(wsContext.IsResolved);
     }
 
     [Fact]

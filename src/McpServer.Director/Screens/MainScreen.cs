@@ -20,8 +20,6 @@ internal sealed class MainScreen : Window
     private readonly HealthSnapshotsViewModel _healthVm;
     private readonly DispatcherLogsViewModel _dispatcherLogsVm;
     private readonly SessionLogListViewModel _sessionLogVm;
-    private readonly SyncStatusViewModel _syncStatusVm;
-    private readonly RunSyncViewModel _runSyncVm;
     private readonly TodoListViewModel _todoVm;
     private readonly TodoDetailViewModel _todoDetailVm;
     private readonly WorkspaceListViewModel _workspaceListVm;
@@ -44,8 +42,6 @@ internal sealed class MainScreen : Window
         HealthSnapshotsViewModel healthVm,
         DispatcherLogsViewModel dispatcherLogsVm,
         SessionLogListViewModel sessionLogVm,
-        SyncStatusViewModel syncStatusVm,
-        RunSyncViewModel runSyncVm,
         TodoListViewModel todoVm,
         TodoDetailViewModel todoDetailVm,
         TunnelListViewModel tunnelListVm,
@@ -58,8 +54,6 @@ internal sealed class MainScreen : Window
         _healthVm = healthVm;
         _dispatcherLogsVm = dispatcherLogsVm;
         _sessionLogVm = sessionLogVm;
-        _syncStatusVm = syncStatusVm;
-        _runSyncVm = runSyncVm;
         _todoVm = todoVm;
         _todoDetailVm = todoDetailVm;
         _workspaceListVm = workspaceListVm;
@@ -344,11 +338,6 @@ internal sealed class MainScreen : Window
             return;
         }
 
-        if (view is SyncScreen sync)
-        {
-            _ = Task.Run(sync.CheckStatusAsync);
-        }
-
         if (view is TunnelScreen tunnel)
         {
             _ = Task.Run(tunnel.LoadAsync);
@@ -397,12 +386,6 @@ internal sealed class MainScreen : Window
         if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Agents))
         {
             _tabView.AddTab(new Tab { DisplayText = "Agents", View = new AgentScreen(_directorContext) }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Sync))
-        {
-            _tabView.AddTab(new Tab { DisplayText = "Sync", View = new SyncScreen(_syncStatusVm, _runSyncVm) }, andSelect: selectFirst);
             selectFirst = false;
         }
 

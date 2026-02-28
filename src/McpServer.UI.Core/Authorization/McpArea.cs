@@ -26,9 +26,6 @@ public enum McpArea
     /// <summary>Local CQRS dispatcher log history captured by the Director process.</summary>
     DispatcherLogs,
 
-    /// <summary>Sync runs and sync status.</summary>
-    Sync,
-
     /// <summary>Context search, pack, sources, and index operations.</summary>
     Context,
 

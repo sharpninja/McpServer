@@ -37,6 +37,8 @@ public sealed class WorkspaceResolutionMiddleware
         "/mcp/events",
         "/mcp/gh",
         "/mcp/context",
+        "/mcp/voice",
+        "/mcp-transport",
     };
 
     private readonly RequestDelegate _next;
