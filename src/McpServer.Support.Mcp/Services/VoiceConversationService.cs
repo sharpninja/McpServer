@@ -747,14 +747,23 @@ public sealed partial class VoiceConversationService
     /// </summary>
     private string? ProbeWellKnownCopilotPaths()
     {
-        var usersDir = Path.GetDirectoryName(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile))
-            ?? @"C:\Users";
+        // Use the system drive Users directory — Environment.SpecialFolder.UserProfile
+        // returns the SYSTEM profile for LocalSystem, not C:\Users.
+        var systemDrive = Environment.GetEnvironmentVariable("SystemDrive") ?? @"C:";
+        var usersDir = Path.Combine(systemDrive, "Users");
 
         try
         {
             foreach (var userDir in Directory.EnumerateDirectories(usersDir))
             {
-                // Check WinGet Links symlink first
+                var dirName = Path.GetFileName(userDir);
+                // Skip system directories
+                if (string.Equals(dirName, "Public", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(dirName, "Default", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(dirName, "Default User", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(dirName, "All Users", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
                 var linksPath = Path.Combine(userDir, @"AppData\Local\Microsoft\WinGet\Links\copilot.exe");
                 if (File.Exists(linksPath))
                 {
