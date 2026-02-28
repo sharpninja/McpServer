@@ -277,6 +277,9 @@ public sealed class CopilotClient(
         psi.ArgumentList.Add("--stream");
         psi.ArgumentList.Add("on");
 
+        // Auto-confirm tool invocations without user prompts.
+        psi.ArgumentList.Add("--yolo");
+
         ApplyRunAsEnvironment(psi, opts.RunAs);
         ApplyGitHubToken(psi, opts.GitHubToken);
 
