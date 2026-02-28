@@ -211,37 +211,80 @@ internal sealed class DesktopProcessLauncher
     }
 
     /// <summary>
-    /// Gets the logged-in user's token from the active console session via WTSQueryUserToken,
-    /// then duplicates it as a primary token for CreateProcessWithTokenW.
+    /// Gets a token for launching processes on the interactive desktop.
+    /// Tries WTSQueryUserToken first (requires SE_TCB_NAME, works for LocalSystem services),
+    /// then falls back to duplicating the current process token (works when the service runs
+    /// as the same user who is logged in at the console).
     /// </summary>
-    private static IntPtr GetConsoleSessionUserToken()
+    private IntPtr GetConsoleSessionUserToken()
     {
         var sessionId = NativeMethods.WTSGetActiveConsoleSessionId();
-        if (sessionId == -1)
-            throw new InvalidOperationException("No active console session found. Is a user logged in?");
+        if (sessionId != -1)
+        {
+            if (NativeMethods.WTSQueryUserToken(sessionId, out var userToken))
+            {
+                _logger.LogDebug("Acquired console session {SessionId} user token via WTSQueryUserToken", sessionId);
+                try
+                {
+                    return DuplicateToken(userToken);
+                }
+                finally
+                {
+                    NativeMethods.CloseHandle(userToken);
+                }
+            }
 
-        if (!NativeMethods.WTSQueryUserToken(sessionId, out var userToken))
-            throw new Win32Exception(Marshal.GetLastWin32Error(), $"WTSQueryUserToken failed for session {sessionId}. Service may need SE_TCB_NAME privilege.");
+            var wtsError = Marshal.GetLastWin32Error();
+            _logger.LogDebug(
+                "WTSQueryUserToken failed for session {SessionId} (error {ErrorCode}), falling back to current process token",
+                sessionId, wtsError);
+        }
+
+        // Fallback: duplicate the current process token — works when service runs as the logged-in user
+        return DuplicateCurrentProcessToken();
+    }
+
+    /// <summary>
+    /// Duplicates the current process token as a primary token.
+    /// </summary>
+    private IntPtr DuplicateCurrentProcessToken()
+    {
+        if (!NativeMethods.OpenProcessToken(
+                NativeMethods.GetCurrentProcess(),
+                NativeConstants.TOKEN_DUPLICATE | NativeConstants.TOKEN_QUERY | NativeConstants.TOKEN_ASSIGN_PRIMARY,
+                out var existingToken))
+        {
+            throw new Win32Exception(Marshal.GetLastWin32Error(), "Failed to open current process token.");
+        }
 
         try
         {
-            if (!NativeMethods.DuplicateTokenEx(
-                    userToken,
-                    NativeConstants.TOKEN_ALL_ACCESS,
-                    IntPtr.Zero,
-                    NativeConstants.SECURITY_IMPERSONATION,
-                    NativeConstants.TOKEN_PRIMARY,
-                    out var duplicatedToken))
-            {
-                throw new Win32Exception(Marshal.GetLastWin32Error(), "Failed to duplicate console session user token.");
-            }
-
-            return duplicatedToken;
+            _logger.LogDebug("Duplicating current process token for desktop launch");
+            return DuplicateToken(existingToken);
         }
         finally
         {
-            NativeMethods.CloseHandle(userToken);
+            NativeMethods.CloseHandle(existingToken);
         }
+    }
+
+    /// <summary>
+    /// Duplicates a token as a primary token with all access.
+    /// </summary>
+    private static IntPtr DuplicateToken(IntPtr sourceToken)
+    {
+        if (!NativeMethods.DuplicateTokenEx(
+                sourceToken,
+                NativeConstants.TOKEN_ALL_ACCESS,
+                IntPtr.Zero,
+                NativeConstants.SECURITY_IMPERSONATION,
+                NativeConstants.TOKEN_PRIMARY,
+                out var duplicatedToken))
+        {
+            throw new Win32Exception(Marshal.GetLastWin32Error(), "Failed to duplicate token.");
+        }
+
+        return duplicatedToken;
     }
 
     /// <summary>
