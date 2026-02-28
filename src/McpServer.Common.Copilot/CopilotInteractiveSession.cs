@@ -37,6 +37,40 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
     public Task<CopilotResult> ReadInitialResponseAsync(CancellationToken ct = default)
         => ReadUntilSentinelAsync(ct);
 
+    /// <summary>
+    /// Streams the initial response line-by-line. Call once immediately after creation.
+    /// </summary>
+    public async IAsyncEnumerable<string> ReadInitialResponseStreamingAsync(
+        [EnumeratorCancellation] CancellationToken ct = default)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+
+        await _gate.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            while (!ct.IsCancellationRequested)
+            {
+                string? line;
+                try
+                {
+                    line = await _process.StandardOutput.ReadLineAsync(ct).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    break;
+                }
+
+                if (line is null) break;
+                if (line.Contains(Sentinel, StringComparison.Ordinal)) break;
+                yield return line;
+            }
+        }
+        finally
+        {
+            _gate.Release();
+        }
+    }
+
     /// <summary>Sends a prompt via stdin and reads the response until the sentinel.</summary>
     public async Task<CopilotResult> SendAsync(string prompt, CancellationToken ct = default)
     {

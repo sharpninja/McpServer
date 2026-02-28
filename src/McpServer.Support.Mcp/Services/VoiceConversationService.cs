@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -303,6 +304,166 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         state.Gate.Dispose();
         return true;
     }
+
+    /// <inheritdoc />
+    public async IAsyncEnumerable<VoiceTurnStreamEvent> SubmitTurnStreamingAsync(
+        string sessionId,
+        VoiceTurnRequest request,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        EnsureEnabled();
+        ArgumentException.ThrowIfNullOrWhiteSpace(sessionId);
+        if (request is null) throw new ArgumentNullException(nameof(request));
+
+        var userText = (request.UserTranscriptText ?? string.Empty).Trim();
+        if (string.IsNullOrWhiteSpace(userText))
+            throw new ArgumentException("UserTranscriptText is required.", nameof(request));
+
+        if (!_sessions.TryGetValue(sessionId, out var state))
+        {
+            yield return new VoiceTurnStreamEvent { Type = "error", Message = $"Voice session '{sessionId}' not found." };
+            yield break;
+        }
+
+        var channel = System.Threading.Channels.Channel.CreateUnbounded<VoiceTurnStreamEvent>();
+        _ = ProduceStreamingTurnAsync(state, sessionId, userText, channel.Writer, cancellationToken);
+
+        await foreach (var evt in channel.Reader.ReadAllAsync(cancellationToken).ConfigureAwait(false))
+        {
+            yield return evt;
+        }
+    }
+
+    /// <summary>
+    /// Producer that writes streaming events to the channel. Handles try/catch internally.
+    /// </summary>
+    private async Task ProduceStreamingTurnAsync(
+        VoiceSessionState state,
+        string sessionId,
+        string userText,
+        System.Threading.Channels.ChannelWriter<VoiceTurnStreamEvent> writer,
+        CancellationToken cancellationToken)
+    {
+        CancellationTokenSource? linkedCts = null;
+        string turnId;
+
+        await state.Gate.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            if (state.IsTurnActive)
+            {
+                await writer.WriteAsync(new VoiceTurnStreamEvent { Type = "error", Message = "A turn is already in progress." }, cancellationToken).ConfigureAwait(false);
+                writer.Complete();
+                return;
+            }
+
+            state.IsTurnActive = true;
+            state.Status = "thinking";
+            state.LastError = null;
+            state.LastUpdatedUtc = DateTimeOffset.UtcNow;
+            state.TurnCounter++;
+            turnId = $"turn-{state.TurnCounter.ToString("0000", CultureInfo.InvariantCulture)}";
+            state.LastTurnId = turnId;
+
+            linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            state.ActiveTurnCts = linkedCts;
+
+            AddTranscriptEntryIfEnabled(state, new VoiceTranscriptEntryDto
+            {
+                TimestampUtc = DateTimeOffset.UtcNow.ToString("O"),
+                TurnId = turnId,
+                Role = "user",
+                Category = "transcript",
+                Text = userText
+            });
+        }
+        finally
+        {
+            state.Gate.Release();
+        }
+
+        var sw = Stopwatch.StartNew();
+        var toolRecords = new List<VoiceToolCallRecordDto>();
+        var fullText = new StringBuilder();
+        VoiceTurnStreamEvent? finalEvent = null;
+
+        try
+        {
+            await foreach (var evt in ExecuteTurnStreamingAsync(state, turnId, userText, toolRecords, linkedCts!.Token).ConfigureAwait(false))
+            {
+                if (evt.Type == "chunk")
+                    fullText.Append(evt.Text);
+
+                if (evt.Type is "done" or "error")
+                {
+                    finalEvent = evt;
+                    break;
+                }
+
+                await writer.WriteAsync(evt, cancellationToken).ConfigureAwait(false);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            finalEvent = new VoiceTurnStreamEvent { Type = "done", TurnId = turnId, Status = "interrupted", LatencyMs = (int)sw.ElapsedMilliseconds };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Streaming voice turn failed: Session={SessionId}; Turn={TurnId}", sessionId, turnId);
+            finalEvent = new VoiceTurnStreamEvent { Type = "error", TurnId = turnId, Message = "Voice turn processing failed." };
+        }
+
+        sw.Stop();
+
+        // Clean up turn state
+        await state.Gate.WaitAsync(CancellationToken.None).ConfigureAwait(false);
+        try
+        {
+            if (state.ActiveTurnCts == linkedCts)
+                state.ActiveTurnCts = null;
+
+            linkedCts?.Dispose();
+            state.IsTurnActive = false;
+
+            var status = finalEvent?.Status ?? finalEvent?.Type ?? "error";
+            state.Status = status is "completed" or "interrupted" ? "idle" : "error";
+            state.LastError = finalEvent?.Type == "error" ? finalEvent.Message : null;
+            state.LastUpdatedUtc = DateTimeOffset.UtcNow;
+
+            state.LastTurnToolCalls.Clear();
+            foreach (var item in toolRecords)
+                state.LastTurnToolCalls.Add(item);
+
+            var displayText = fullText.ToString().Trim();
+            if (!string.IsNullOrWhiteSpace(displayText))
+            {
+                AddTranscriptEntryIfEnabled(state, new VoiceTranscriptEntryDto
+                {
+                    TimestampUtc = DateTimeOffset.UtcNow.ToString("O"),
+                    TurnId = turnId,
+                    Role = "assistant",
+                    Category = finalEvent?.Type == "error" ? "error" : "transcript",
+                    Text = displayText
+                });
+            }
+        }
+        finally
+        {
+            state.Gate.Release();
+        }
+
+        // Write final event
+        var done = finalEvent ?? new VoiceTurnStreamEvent
+        {
+            Type = "done",
+            TurnId = turnId,
+            Status = "completed",
+            ToolCalls = toolRecords,
+            LatencyMs = (int)Math.Clamp(sw.ElapsedMilliseconds, 0, int.MaxValue)
+        };
+        await writer.WriteAsync(done, CancellationToken.None).ConfigureAwait(false);
+        writer.Complete();
+    }
 }
 
 public sealed partial class VoiceConversationService
@@ -480,6 +641,53 @@ public sealed partial class VoiceConversationService
         }
 
         return ErrorResult("Model exceeded maximum tool steps for a single turn.", toolRecords);
+    }
+
+    private async IAsyncEnumerable<VoiceTurnStreamEvent> ExecuteTurnStreamingAsync(
+        VoiceSessionState state,
+        string turnId,
+        string userText,
+        List<VoiceToolCallRecordDto> toolRecords,
+        [EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        var opts = _options.CurrentValue;
+
+        IAsyncEnumerable<string>? lineStream = null;
+        string? launchError = null;
+
+        if (state.InteractiveSession is not { IsAlive: true })
+        {
+            var prompt = BuildCopilotPrompt(state, turnId, userText, [], 1);
+            var copilotOpts = BuildCopilotOptions(opts, state.WorkspacePath);
+
+            try
+            {
+                state.InteractiveSession = _copilotClient.CreateInteractiveSession(prompt, copilotOpts);
+                lineStream = state.InteractiveSession.ReadInitialResponseStreamingAsync(cancellationToken);
+            }
+            catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
+            {
+                _logger.LogError(ex, "Failed to create interactive Copilot session: {SessionId}", state.SessionId);
+                launchError = $"Failed to start Copilot: {ex.Message}";
+            }
+        }
+        else
+        {
+            lineStream = state.InteractiveSession.SendStreamingAsync(userText, cancellationToken);
+        }
+
+        if (launchError is not null)
+        {
+            yield return new VoiceTurnStreamEvent { Type = "error", TurnId = turnId, Message = launchError };
+            yield break;
+        }
+
+        await foreach (var line in lineStream!.ConfigureAwait(false))
+        {
+            yield return new VoiceTurnStreamEvent { Type = "chunk", Text = line + "\n" };
+        }
+
+        yield return new VoiceTurnStreamEvent { Type = "done", TurnId = turnId, Status = "completed", ToolCalls = toolRecords };
     }
 
     private async Task<ToolExecutionOutcome> ExecuteToolCallAsync(

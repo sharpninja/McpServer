@@ -328,4 +328,65 @@ public interface IVoiceConversationService
     /// Deletes a voice session and its in-memory transcript history.
     /// </summary>
     Task<bool> DeleteSessionAsync(string sessionId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Processes a voice turn with streaming output via Server-Sent Events.
+    /// Yields text chunks as they arrive from Copilot CLI, tool status events
+    /// during tool call loops, and a final done/error event with metadata.
+    /// </summary>
+    IAsyncEnumerable<VoiceTurnStreamEvent> SubmitTurnStreamingAsync(
+        string sessionId,
+        VoiceTurnRequest request,
+        CancellationToken cancellationToken = default);
+}
+
+/// <summary>
+/// A single Server-Sent Event emitted during a streaming voice turn.
+/// </summary>
+public sealed record VoiceTurnStreamEvent
+{
+    /// <summary>
+    /// Event type: <c>chunk</c>, <c>tool_status</c>, <c>done</c>, or <c>error</c>.
+    /// </summary>
+    public required string Type { get; init; }
+
+    /// <summary>
+    /// Text fragment (for <c>chunk</c> events).
+    /// </summary>
+    public string? Text { get; init; }
+
+    /// <summary>
+    /// Turn identifier (for <c>done</c> and <c>error</c> events).
+    /// </summary>
+    public string? TurnId { get; init; }
+
+    /// <summary>
+    /// Turn status (for <c>done</c> events): <c>completed</c>, <c>interrupted</c>, <c>error</c>.
+    /// </summary>
+    public string? Status { get; init; }
+
+    /// <summary>
+    /// Error or status message (for <c>error</c> and <c>tool_status</c> events).
+    /// </summary>
+    public string? Message { get; init; }
+
+    /// <summary>
+    /// Tool name (for <c>tool_status</c> events).
+    /// </summary>
+    public string? ToolName { get; init; }
+
+    /// <summary>
+    /// Tool execution summary (for <c>tool_status</c> events).
+    /// </summary>
+    public string? Summary { get; init; }
+
+    /// <summary>
+    /// Tool call records (for <c>done</c> events).
+    /// </summary>
+    public IReadOnlyList<VoiceToolCallRecordDto>? ToolCalls { get; init; }
+
+    /// <summary>
+    /// Total turn latency in milliseconds (for <c>done</c> events).
+    /// </summary>
+    public int? LatencyMs { get; init; }
 }

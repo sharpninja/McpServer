@@ -1,3 +1,4 @@
+using System.Text.Json;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,8 @@ namespace McpServer.Support.Mcp.Controllers;
 [Route("mcp/voice")]
 public sealed class VoiceController : ControllerBase
 {
+    private static readonly JsonSerializerOptions s_sseJsonOptions = new(JsonSerializerDefaults.Web) { WriteIndented = false };
+
     private readonly IVoiceConversationService _voiceService;
     private readonly WorkspaceContext _workspaceContext;
     private readonly ILogger<VoiceController> _logger;
@@ -85,6 +88,50 @@ public sealed class VoiceController : ControllerBase
         {
             _logger.LogError(ex, "Voice turn request failed for session {SessionId}", sessionId);
             return StatusCode(StatusCodes.Status500InternalServerError, new { error = "Voice turn processing failed." });
+        }
+    }
+
+    /// <summary>
+    /// Submits a single transcribed voice turn with streaming response via Server-Sent Events.
+    /// </summary>
+    [HttpPost("session/{sessionId}/turn/stream")]
+    public async Task SubmitTurnStreamingAsync(
+        string sessionId,
+        [FromBody] VoiceTurnRequest? request,
+        CancellationToken cancellationToken)
+    {
+        if (request is null)
+        {
+            Response.StatusCode = StatusCodes.Status400BadRequest;
+            await Response.WriteAsJsonAsync(new { error = "Request body is required." }, cancellationToken).ConfigureAwait(false);
+            return;
+        }
+
+        Response.ContentType = "text/event-stream";
+        Response.Headers.CacheControl = "no-cache";
+        Response.Headers.Connection = "keep-alive";
+
+        try
+        {
+            await foreach (var evt in _voiceService.SubmitTurnStreamingAsync(sessionId, request, cancellationToken).ConfigureAwait(false))
+            {
+                var json = JsonSerializer.Serialize(evt, s_sseJsonOptions);
+                await Response.WriteAsync($"data: {json}\n\n", cancellationToken).ConfigureAwait(false);
+                await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
+            }
+        }
+        catch (ArgumentException ex)
+        {
+            var json = JsonSerializer.Serialize(new VoiceTurnStreamEvent { Type = "error", Message = ex.Message }, s_sseJsonOptions);
+            await Response.WriteAsync($"data: {json}\n\n", cancellationToken).ConfigureAwait(false);
+            await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            _logger.LogError(ex, "Streaming voice turn failed for session {SessionId}", sessionId);
+            var json = JsonSerializer.Serialize(new VoiceTurnStreamEvent { Type = "error", Message = "Voice turn processing failed." }, s_sseJsonOptions);
+            await Response.WriteAsync($"data: {json}\n\n", cancellationToken).ConfigureAwait(false);
+            await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
         }
     }
 
