@@ -26,6 +26,7 @@ internal sealed class DirectorAuthorizationPolicyService : IAuthorizationPolicyS
         [McpArea.Events] = McpRoles.Viewer,
         [McpArea.Diagnostic] = McpRoles.Viewer,
         [McpArea.AuthConfig] = McpRoles.Viewer,
+        [McpArea.Templates] = McpRoles.Viewer,
     };
 
     private static readonly IReadOnlyDictionary<string, string> s_actionRoles =
@@ -56,6 +57,12 @@ internal sealed class DirectorAuthorizationPolicyService : IAuthorizationPolicyS
             [McpActionKeys.TodoPromptImplement] = McpRoles.Viewer,
             [McpActionKeys.TodoPromptPlan] = McpRoles.Viewer,
             ["agents.mutate"] = McpRoles.AgentManager,
+            [McpActionKeys.TemplateList] = McpRoles.Viewer,
+            [McpActionKeys.TemplateGet] = McpRoles.Viewer,
+            [McpActionKeys.TemplateTest] = McpRoles.Viewer,
+            [McpActionKeys.TemplateCreate] = McpRoles.Admin,
+            [McpActionKeys.TemplateUpdate] = McpRoles.Admin,
+            [McpActionKeys.TemplateDelete] = McpRoles.Admin,
         };
 
     /// <summary>Initializes a new instance of the policy service.</summary>

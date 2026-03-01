@@ -49,4 +49,7 @@ public enum McpArea
 
     /// <summary>Tunnel provider lifecycle management.</summary>
     Tunnels,
+
+    /// <summary>Prompt template registry management.</summary>
+    Templates,
 }

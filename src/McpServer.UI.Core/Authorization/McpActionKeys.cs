@@ -95,4 +95,22 @@ public static class McpActionKeys
 
     /// <summary>Tunnel restart action.</summary>
     public const string TunnelRestart = "tunnel.restart";
+
+    /// <summary>Template list query action.</summary>
+    public const string TemplateList = "template.list";
+
+    /// <summary>Template detail query action.</summary>
+    public const string TemplateGet = "template.get";
+
+    /// <summary>Template create action.</summary>
+    public const string TemplateCreate = "template.create";
+
+    /// <summary>Template update action.</summary>
+    public const string TemplateUpdate = "template.update";
+
+    /// <summary>Template delete action.</summary>
+    public const string TemplateDelete = "template.delete";
+
+    /// <summary>Template test/render action.</summary>
+    public const string TemplateTest = "template.test";
 }

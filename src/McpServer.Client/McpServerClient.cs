@@ -92,8 +92,9 @@ public sealed class McpServerClient
         Tools = new ToolRegistryClient(http, options, holder);
         AuthConfig = new AuthConfigClient(http, options, holder);
         Diagnostic = new DiagnosticClient(http, options, holder);
+        Template = new TemplateClient(http, options, holder);
 
-        _allClients = new McpClientBase[] { Todo, Context, SessionLog, GitHub, Repo, Tunnel, Workspace, Tools, AuthConfig, Diagnostic };
+        _allClients = new McpClientBase[] { Todo, Context, SessionLog, GitHub, Repo, Tunnel, Workspace, Tools, AuthConfig, Diagnostic, Template };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
         _workspacePath = holder.Path;
@@ -308,4 +309,10 @@ public sealed class McpServerClient
     /// <para>See <see cref="DiagnosticClient"/> for the full method list.</para>
     /// </summary>
     public DiagnosticClient Diagnostic { get; }
+
+    /// <summary>
+    /// Prompt template management endpoints.
+    /// <para>See <see cref="TemplateClient"/> for the full method list.</para>
+    /// </summary>
+    public TemplateClient Template { get; }
 }

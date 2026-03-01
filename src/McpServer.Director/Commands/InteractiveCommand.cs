@@ -46,6 +46,8 @@ internal static class InteractiveCommand
             var todoVm = sp.GetRequiredService<TodoListViewModel>();
             var todoDetailVm = sp.GetRequiredService<TodoDetailViewModel>();
             var tunnelListVm = sp.GetRequiredService<TunnelListViewModel>();
+            var templateListVm = sp.GetRequiredService<TemplateListViewModel>();
+            var templateDetailVm = sp.GetRequiredService<TemplateDetailViewModel>();
             var workspaceContextVm = sp.GetRequiredService<WorkspaceContextViewModel>();
             var roleContext = sp.GetRequiredService<IRoleContext>();
             var authorizationPolicy = sp.GetRequiredService<IAuthorizationPolicyService>();
@@ -66,6 +68,8 @@ internal static class InteractiveCommand
                     todoVm,
                     todoDetailVm,
                     tunnelListVm,
+                    templateListVm,
+                    templateDetailVm,
                     workspaceContextVm,
                     authorizationPolicy,
                     roleContext,

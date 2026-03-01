@@ -27,6 +27,8 @@ internal sealed class MainScreen : Window
     private readonly WorkspaceDetailViewModel _workspaceDetailVm;
     private readonly WorkspacePolicyViewModel _workspacePolicyVm;
     private readonly TunnelListViewModel _tunnelListVm;
+    private readonly TemplateListViewModel _templateListVm;
+    private readonly TemplateDetailViewModel _templateDetailVm;
     private readonly WorkspaceContextViewModel _workspaceContextVm;
     private Label _authLabel = null!;
     private TabView _tabView = null!;
@@ -47,6 +49,8 @@ internal sealed class MainScreen : Window
         TodoListViewModel todoVm,
         TodoDetailViewModel todoDetailVm,
         TunnelListViewModel tunnelListVm,
+        TemplateListViewModel templateListVm,
+        TemplateDetailViewModel templateDetailVm,
         WorkspaceContextViewModel workspaceContextVm,
         IAuthorizationPolicyService authorizationPolicy,
         IRoleContext roleContext,
@@ -63,6 +67,8 @@ internal sealed class MainScreen : Window
         _workspaceDetailVm = workspaceDetailVm;
         _workspacePolicyVm = workspacePolicyVm;
         _tunnelListVm = tunnelListVm;
+        _templateListVm = templateListVm;
+        _templateDetailVm = templateDetailVm;
         _workspaceContextVm = workspaceContextVm;
         _authorizationPolicy = authorizationPolicy;
         _roleContext = roleContext;
@@ -345,6 +351,12 @@ internal sealed class MainScreen : Window
         if (view is TunnelScreen tunnel)
         {
             _ = Task.Run(tunnel.LoadAsync);
+            return;
+        }
+
+        if (view is TemplatesScreen tmpl)
+        {
+            _ = Task.Run(tmpl.LoadAsync);
         }
     }
 
@@ -402,6 +414,12 @@ internal sealed class MainScreen : Window
         if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Tunnels))
         {
             _tabView.AddTab(new Tab { DisplayText = "Tunnels", View = new TunnelScreen(_tunnelListVm) }, andSelect: selectFirst);
+            selectFirst = false;
+        }
+
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Templates))
+        {
+            _tabView.AddTab(new Tab { DisplayText = "Templates", View = new TemplatesScreen(_templateListVm, _templateDetailVm) }, andSelect: selectFirst);
             selectFirst = false;
         }
 

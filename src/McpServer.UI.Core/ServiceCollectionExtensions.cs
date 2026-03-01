@@ -64,6 +64,8 @@ public static class ServiceCollectionExtensions
         services.AddTransient<TodoImplementPromptViewModel>();
         services.AddTransient<TodoPlanPromptViewModel>();
         services.AddTransient<TunnelListViewModel>();
+        services.AddTransient<TemplateListViewModel>();
+        services.AddTransient<TemplateDetailViewModel>();
 
         // Register the ViewModelRegistry scanning this assembly + any extras
         var allAssemblies = new List<Assembly> { thisAssembly };
