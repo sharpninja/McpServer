@@ -16,7 +16,9 @@ internal sealed class TemplatesScreen : View
     private readonly TemplateDetailViewModel _detailVm;
     private readonly ViewModelBinder _binder = new();
     private readonly List<TemplateListItem> _rows = [];
-    private int _detailLoadSequence;
+    private readonly SemaphoreSlim _detailLoadGate = new(1, 1);
+    private int _detailLoadRequestVersion;
+    private string? _lastAutoDetailTemplateId;
     private TableView _tableView = null!;
     private Label _statusLabel = null!;
     private TextView _detailView = null!;
@@ -99,19 +101,7 @@ internal sealed class TemplatesScreen : View
             FullRowSelect = true,
             MultiSelect = false,
         };
-        _tableView.SelectedCellChanged += (_, e) =>
-        {
-            var seq = Interlocked.Increment(ref _detailLoadSequence);
-            var row = e.NewRow;
-            _ = Task.Run(async () =>
-            {
-                if (row < 0 || row >= _rows.Count) return;
-                var id = _rows[row].Id;
-                await _detailVm.LoadAsync(id).ConfigureAwait(false);
-                if (Interlocked.CompareExchange(ref _detailLoadSequence, seq, seq) != seq) return;
-                Application.Invoke(() => _detailView.Text = _detailVm.Detail?.Content ?? "");
-            });
-        };
+        _tableView.SelectedCellChanged += (_, _) => QueueSelectedRowDetailRefresh();
         Add(_tableView);
 
         // Detail preview (lower half)
@@ -200,21 +190,48 @@ internal sealed class TemplatesScreen : View
     /// <summary>Triggers initial data load.</summary>
     public async Task LoadAsync()
     {
+        _lastAutoDetailTemplateId = null;
         await _listVm.LoadAsync().ConfigureAwait(false);
     }
 
     private async Task LoadSelectedDetailAsync()
     {
-        var selected = GetSelectedTemplate();
-        if (selected is null) return;
+        var row = _tableView.SelectedRow;
+        if (row < 0 || row >= _rows.Count) return;
 
-        await _detailVm.LoadAsync(selected.Id).ConfigureAwait(false);
+        var selected = _rows[row];
+        var requestVersion = Interlocked.Increment(ref _detailLoadRequestVersion);
+        await _detailLoadGate.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
+                return;
+
+            await _detailVm.LoadAsync(selected.Id).ConfigureAwait(false);
+
+            if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
+                return;
+
+            Application.Invoke(() => _detailView.Text = _detailVm.Detail?.Content ?? "");
+        }
+        finally
+        {
+            _detailLoadGate.Release();
+        }
     }
 
-    private async Task LoadDetailForRowAsync(int row)
+    private void QueueSelectedRowDetailRefresh()
     {
-        if (row < 0 || row >= _rows.Count) return;
-        await _detailVm.LoadAsync(_rows[row].Id).ConfigureAwait(false);
+        var row = _tableView.SelectedRow;
+        if (row < 0 || row >= _rows.Count)
+            return;
+
+        var id = _rows[row].Id;
+        if (string.Equals(_lastAutoDetailTemplateId, id, StringComparison.Ordinal))
+            return;
+
+        _lastAutoDetailTemplateId = id;
+        _ = Task.Run(() => LoadSelectedDetailAsync());
     }
 
     private TemplateListItem? GetSelectedTemplate()
