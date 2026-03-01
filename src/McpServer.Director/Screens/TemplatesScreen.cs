@@ -194,12 +194,8 @@ internal sealed class TemplatesScreen : View
         await _listVm.LoadAsync().ConfigureAwait(false);
     }
 
-    private async Task LoadSelectedDetailAsync()
+    private async Task LoadDetailForTemplateAsync(string templateId)
     {
-        var row = _tableView.SelectedRow;
-        if (row < 0 || row >= _rows.Count) return;
-
-        var selected = _rows[row];
         var requestVersion = Interlocked.Increment(ref _detailLoadRequestVersion);
         await _detailLoadGate.WaitAsync().ConfigureAwait(false);
         try
@@ -207,7 +203,7 @@ internal sealed class TemplatesScreen : View
             if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
                 return;
 
-            await _detailVm.LoadAsync(selected.Id).ConfigureAwait(false);
+            await _detailVm.LoadAsync(templateId).ConfigureAwait(false);
 
             if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
                 return;
@@ -231,7 +227,7 @@ internal sealed class TemplatesScreen : View
             return;
 
         _lastAutoDetailTemplateId = id;
-        _ = Task.Run(() => LoadSelectedDetailAsync());
+        _ = Task.Run(() => LoadDetailForTemplateAsync(id));
     }
 
     private TemplateListItem? GetSelectedTemplate()
