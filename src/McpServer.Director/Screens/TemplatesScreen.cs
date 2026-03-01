@@ -98,7 +98,7 @@ internal sealed class TemplatesScreen : View
             FullRowSelect = true,
             MultiSelect = false,
         };
-        _tableView.SelectedCellChanged += (_, _) => _ = Task.Run(LoadSelectedDetailAsync);
+        _tableView.SelectedCellChanged += (_, e) => _ = Task.Run(() => LoadDetailForRowAsync(e.NewRow));
         Add(_tableView);
 
         // Detail preview (lower half)
@@ -198,6 +198,12 @@ internal sealed class TemplatesScreen : View
         if (selected is null) return;
 
         await _detailVm.LoadAsync(selected.Id).ConfigureAwait(false);
+    }
+
+    private async Task LoadDetailForRowAsync(int row)
+    {
+        if (row < 0 || row >= _rows.Count) return;
+        await _detailVm.LoadAsync(_rows[row].Id).ConfigureAwait(false);
     }
 
     private TemplateListItem? GetSelectedTemplate()
