@@ -16,6 +16,7 @@ internal sealed class TemplatesScreen : View
     private readonly TemplateDetailViewModel _detailVm;
     private readonly ViewModelBinder _binder = new();
     private readonly List<TemplateListItem> _rows = [];
+    private int _detailLoadSequence;
     private TableView _tableView = null!;
     private Label _statusLabel = null!;
     private TextView _detailView = null!;
@@ -98,7 +99,19 @@ internal sealed class TemplatesScreen : View
             FullRowSelect = true,
             MultiSelect = false,
         };
-        _tableView.SelectedCellChanged += (_, e) => _ = Task.Run(() => LoadDetailForRowAsync(e.NewRow));
+        _tableView.SelectedCellChanged += (_, e) =>
+        {
+            var seq = Interlocked.Increment(ref _detailLoadSequence);
+            var row = e.NewRow;
+            _ = Task.Run(async () =>
+            {
+                if (row < 0 || row >= _rows.Count) return;
+                var id = _rows[row].Id;
+                await _detailVm.LoadAsync(id).ConfigureAwait(false);
+                if (Interlocked.CompareExchange(ref _detailLoadSequence, seq, seq) != seq) return;
+                Application.Invoke(() => _detailView.Text = _detailVm.Detail?.Content ?? "");
+            });
+        };
         Add(_tableView);
 
         // Detail preview (lower half)
@@ -116,7 +129,7 @@ internal sealed class TemplatesScreen : View
             Y = Pos.Bottom(detailLabel),
             Width = Dim.Fill(),
             Height = Dim.Fill(2),
-            ReadOnly = true,
+            ReadOnly = false,
         };
         Add(_detailView);
 
@@ -164,10 +177,8 @@ internal sealed class TemplatesScreen : View
             countLabel.Text = $"Templates: {_listVm.TotalCount}";
         });
 
-        _binder.BindProperty(_detailVm, nameof(_detailVm.Detail), () =>
-        {
-            _detailView.Text = _detailVm.Detail?.Content ?? "";
-        });
+        // Detail text is updated explicitly in the SelectedCellChanged handler
+        // to avoid race conditions between stale async loads.
 
         _binder.BindCollection(_listVm.Items, _tableView, items =>
         {
