@@ -82,27 +82,27 @@ If a remote client needs a non-primary workspace endpoint:
 ## Start and Verify
 
 1. Start or restart MCP.
-2. Check logs for ngrok startup (`ngrok started (PID ...)`).
-3. Confirm the provider reports a public URL in logs, or inspect the local ngrok API on the host (`http://127.0.0.1:4040/api/tunnels`).
-4. Validate the public URL:
+1. Check logs for ngrok startup (`ngrok started (PID ...)`).
+1. Confirm the provider reports a public URL in logs, or inspect the local ngrok API on the host (`http://127.0.0.1:4040/api/tunnels`).
+1. Validate the public URL:
 
-```text
-https://<your-ngrok-host>/health
-```
+   ```text
+   https://<your-ngrok-host>/health
+   ```
 
-Expected result: HTTP 200 with a healthy JSON response.
+   Expected result: HTTP 200 with a healthy JSON response.
 
-5. Validate OIDC proxy discovery (if auth is enabled):
+1. Validate OIDC proxy discovery (if auth is enabled):
 
-```text
-https://<your-ngrok-host>/auth/config
-```
+   ```text
+   https://<your-ngrok-host>/auth/config
+   ```
 
-6. Validate an authenticated MCP endpoint (replace API key):
+1. Validate an authenticated MCP endpoint (replace API key):
 
-```bash
-curl https://<your-ngrok-host>/mcpserver/workspace -H "X-Api-Key: <workspace-api-key>"
-```
+   ```bash
+   curl https://<your-ngrok-host>/mcpserver/workspace -H "X-Api-Key: <workspace-api-key>"
+   ```
 
 ## Troubleshooting
 

@@ -114,29 +114,29 @@ If a remote client needs a non-primary workspace endpoint:
 ## Start and Verify
 
 1. Start or restart MCP.
-2. Check logs for cloudflared startup (`cloudflared started (PID ...)`).
-3. Determine the public hostname:
+1. Check logs for cloudflared startup (`cloudflared started (PID ...)`).
+1. Determine the public hostname:
    - Quick tunnel: capture `https://*.trycloudflare.com` from logs
    - Named tunnel: use the preconfigured Cloudflare hostname
-4. Validate the public endpoint:
+1. Validate the public endpoint:
 
-```text
-https://<your-cloudflare-host>/health
-```
+   ```text
+   https://<your-cloudflare-host>/health
+   ```
 
-Expected result: HTTP 200 with a healthy JSON response.
+   Expected result: HTTP 200 with a healthy JSON response.
 
-5. Validate OIDC proxy discovery (if auth is enabled):
+1. Validate OIDC proxy discovery (if auth is enabled):
 
-```text
-https://<your-cloudflare-host>/auth/config
-```
+   ```text
+   https://<your-cloudflare-host>/auth/config
+   ```
 
-6. Validate an authenticated MCP endpoint (replace API key):
+1. Validate an authenticated MCP endpoint (replace API key):
 
-```bash
-curl https://<your-cloudflare-host>/mcpserver/workspace -H "X-Api-Key: <workspace-api-key>"
-```
+   ```bash
+   curl https://<your-cloudflare-host>/mcpserver/workspace -H "X-Api-Key: <workspace-api-key>"
+   ```
 
 ## Troubleshooting
 

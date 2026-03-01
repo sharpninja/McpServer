@@ -274,7 +274,7 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-DTO-001
 
-**Extended Session Log Entry Fields** — `UnifiedRequestEntryDto` extended with: `designDecisions` (List<string>), `requirementsDiscovered` (List<string> of requirement IDs), `filesModified` (List<string> of file paths), `blockers` (List<string>). All fields are REQUIRED in the marker prompt session logging instructions except `blockers` which is RECOMMENDED.
+**Extended Session Log Entry Fields** — `UnifiedRequestEntryDto` extended with: `designDecisions` (`List<string>`), `requirementsDiscovered` (`List<string>` of requirement IDs), `filesModified` (`List<string>` of file paths), `blockers` (`List<string>`). All fields are REQUIRED in the marker prompt session logging instructions except `blockers` which is RECOMMENDED.
 
 **Covered by:** `UnifiedSessionLogDto.cs`
 

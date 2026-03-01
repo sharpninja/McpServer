@@ -470,7 +470,8 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
                     { "Mcp:DataSource", ":memory:" },
-                    { "Mcp:RepoRoot", _tempDir }
+                    { "Mcp:RepoRoot", _tempDir },
+                    { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" }
                 });
             });
         }
