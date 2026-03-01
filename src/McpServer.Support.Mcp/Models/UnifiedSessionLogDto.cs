@@ -194,6 +194,12 @@ public sealed class UnifiedRequestEntryDto
     [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
     public List<ProcessingDialogItemDto>? ProcessingDialog { get; set; }
 
+    /// <summary>Git commits made during this request entry.</summary>
+    [JsonPropertyName("commits")]
+    [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
+    [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
+    public List<SessionLogCommitDto>? Commits { get; set; }
+
     /// <summary>Design decisions made during this interaction (decision text, rationale, alternatives).</summary>
     [JsonPropertyName("designDecisions")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
@@ -261,4 +267,34 @@ public sealed class UnifiedActionDto
     /// <summary>File path affected by this action.</summary>
     [JsonPropertyName("filePath")]
     public string? FilePath { get; set; }
+}
+
+/// <summary>FR-SUPPORT-010: Git commit recorded during a session log request entry.</summary>
+public sealed class SessionLogCommitDto
+{
+    /// <summary>Git commit SHA hash.</summary>
+    [JsonPropertyName("sha")]
+    public string? Sha { get; set; }
+
+    /// <summary>Git branch name.</summary>
+    [JsonPropertyName("branch")]
+    public string? Branch { get; set; }
+
+    /// <summary>Commit message text.</summary>
+    [JsonPropertyName("message")]
+    public string? Message { get; set; }
+
+    /// <summary>Commit author name or email.</summary>
+    [JsonPropertyName("author")]
+    public string? Author { get; set; }
+
+    /// <summary>Commit timestamp (ISO 8601).</summary>
+    [JsonPropertyName("timestamp")]
+    public string? Timestamp { get; set; }
+
+    /// <summary>Files changed in this commit.</summary>
+    [JsonPropertyName("filesChanged")]
+    [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
+    [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
+    public List<string>? FilesChanged { get; set; }
 }

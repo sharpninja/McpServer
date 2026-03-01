@@ -87,4 +87,12 @@ public sealed class SessionLogEntryEntity
     /// <summary>TR-PLANNED-013: Navigation to processing dialog items. The AI model can independently append entries.</summary>
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "EF Core navigation collection")]
     public ICollection<SessionLogProcessingDialogEntity> ProcessingDialog { get; set; } = new List<SessionLogProcessingDialogEntity>();
+
+    /// <summary>TR-PLANNED-013: Navigation to commits recorded during this entry.</summary>
+    [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "EF Core navigation collection")]
+    public ICollection<SessionLogCommitEntity> Commits { get; set; } = new List<SessionLogCommitEntity>();
+
+    /// <summary>TR-PLANNED-013: Navigation to generic string-list items (design decisions, requirements, files modified, blockers).</summary>
+    [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "EF Core navigation collection")]
+    public ICollection<SessionLogEntryStringListEntity> StringListItems { get; set; } = new List<SessionLogEntryStringListEntity>();
 }

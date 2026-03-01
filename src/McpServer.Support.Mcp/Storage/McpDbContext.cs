@@ -47,6 +47,12 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-PLANNED-013: Session log entry processing dialog items (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogProcessingDialogEntity> SessionLogProcessingDialogs => Set<SessionLogProcessingDialogEntity>();
 
+    /// <summary>TR-PLANNED-013: Session log entry commits.</summary>
+    public DbSet<SessionLogCommitEntity> SessionLogCommits => Set<SessionLogCommitEntity>();
+
+    /// <summary>TR-PLANNED-013: Session log entry string-list items (design decisions, requirements, files modified, blockers).</summary>
+    public DbSet<SessionLogEntryStringListEntity> SessionLogEntryStringLists => Set<SessionLogEntryStringListEntity>();
+
     /// <summary>Tool definitions discoverable by keyword search.</summary>
     public DbSet<ToolDefinitionEntity> ToolDefinitions => Set<ToolDefinitionEntity>();
 
@@ -134,6 +140,23 @@ public sealed class McpDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
+        modelBuilder.Entity<SessionLogCommitEntity>(e =>
+        {
+            e.HasOne(x => x.SessionLogEntry)
+                .WithMany(x => x.Commits)
+                .HasForeignKey(x => x.SessionLogEntryId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<SessionLogEntryStringListEntity>(e =>
+        {
+            e.HasOne(x => x.SessionLogEntry)
+                .WithMany(x => x.StringListItems)
+                .HasForeignKey(x => x.SessionLogEntryId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasIndex(x => new { x.SessionLogEntryId, x.ListType });
+        });
+
         modelBuilder.Entity<ToolDefinitionEntity>(e =>
         {
             e.HasIndex(x => new { x.Name, x.WorkspacePath }).IsUnique();
@@ -192,6 +215,8 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<SessionLogEntryTagEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<SessionLogEntryContextEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<SessionLogProcessingDialogEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogCommitEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogEntryStringListEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<ToolDefinitionEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<ToolDefinitionTagEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<ToolBucketEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);

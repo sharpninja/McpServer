@@ -102,6 +102,10 @@ public sealed class SessionLogService : ISessionLogService
                 .ThenInclude(e => e.ContextItems)
             .Include(s => s.Entries)
                 .ThenInclude(e => e.ProcessingDialog)
+            .Include(s => s.Entries)
+                .ThenInclude(e => e.Commits)
+            .Include(s => s.Entries)
+                .ThenInclude(e => e.StringListItems)
             .FirstOrDefaultAsync(s => s.SourceType == sourceType && s.SessionId == sessionId, cancellationToken);
 
     /// <inheritdoc />
@@ -196,6 +200,10 @@ public sealed class SessionLogService : ISessionLogService
                 .ThenInclude(e => e.ContextItems.OrderBy(c => c.Ordinal))
             .Include(s => s.Entries)
                 .ThenInclude(e => e.ProcessingDialog.OrderBy(p => p.Ordinal))
+            .Include(s => s.Entries)
+                .ThenInclude(e => e.Commits.OrderBy(c => c.Ordinal))
+            .Include(s => s.Entries)
+                .ThenInclude(e => e.StringListItems.OrderBy(sl => sl.Ordinal))
             .AsSplitQuery()
             .AsNoTracking()
             .ToListAsync(cancellationToken)
@@ -351,11 +359,15 @@ public sealed class SessionLogService : ISessionLogService
         _db.SessionLogEntryTags.RemoveRange(entity.Tags);
         _db.SessionLogEntryContexts.RemoveRange(entity.ContextItems);
         _db.SessionLogProcessingDialogs.RemoveRange(entity.ProcessingDialog);
+        _db.SessionLogCommits.RemoveRange(entity.Commits);
+        _db.SessionLogEntryStringLists.RemoveRange(entity.StringListItems);
 
         entity.Actions = MapActions(dto.Actions);
         entity.Tags = MapTags(dto.Tags);
         entity.ContextItems = MapContextItems(dto.ContextList);
         entity.ProcessingDialog = MapProcessingDialog(dto.ProcessingDialog);
+        entity.Commits = MapCommits(dto.Commits);
+        entity.StringListItems = MapStringListItems(dto);
     }
 
     private static List<SessionLogEntryEntity> MapNewEntries(List<UnifiedRequestEntryDto>? entries)
@@ -388,7 +400,9 @@ public sealed class SessionLogService : ISessionLogService
             Actions = MapActions(e.Actions),
             Tags = MapTags(e.Tags),
             ContextItems = MapContextItems(e.ContextList),
-            ProcessingDialog = MapProcessingDialog(e.ProcessingDialog)
+            ProcessingDialog = MapProcessingDialog(e.ProcessingDialog),
+            Commits = MapCommits(e.Commits),
+            StringListItems = MapStringListItems(e)
         };
     }
 
@@ -428,6 +442,47 @@ public sealed class SessionLogService : ISessionLogService
             Content = d.Content ?? string.Empty,
             Category = d.Category
         }).ToList() ?? [];
+    }
+
+    private static List<SessionLogCommitEntity> MapCommits(List<SessionLogCommitDto>? commits)
+    {
+        return commits?.Select((c, i) => new SessionLogCommitEntity
+        {
+            Ordinal = i,
+            Sha = c.Sha,
+            Branch = c.Branch,
+            Message = c.Message,
+            Author = c.Author,
+            CommitTimestamp = ParseDateTimeOffset(c.Timestamp),
+            FilesChangedJson = c.FilesChanged is { Count: > 0 }
+                ? JsonSerializer.Serialize(c.FilesChanged)
+                : null
+        }).ToList() ?? [];
+    }
+
+    private static List<SessionLogEntryStringListEntity> MapStringListItems(UnifiedRequestEntryDto dto)
+    {
+        var items = new List<SessionLogEntryStringListEntity>();
+        AddStringListItems(items, "DesignDecision", dto.DesignDecisions);
+        AddStringListItems(items, "Requirement", dto.RequirementsDiscovered);
+        AddStringListItems(items, "FileModified", dto.FilesModified);
+        AddStringListItems(items, "Blocker", dto.Blockers);
+        return items;
+    }
+
+    private static void AddStringListItems(List<SessionLogEntryStringListEntity> items, string listType, List<string>? values)
+    {
+        if (values is not { Count: > 0 })
+            return;
+        for (int i = 0; i < values.Count; i++)
+        {
+            items.Add(new SessionLogEntryStringListEntity
+            {
+                ListType = listType,
+                Ordinal = i,
+                Value = values[i]
+            });
+        }
     }
 
     private static UnifiedSessionLogDto MapEntityToDto(SessionLogEntity entity)
@@ -503,7 +558,22 @@ public sealed class SessionLogService : ISessionLogService
                         Content = p.Content,
                         Category = p.Category
                     }).ToList()
-                    : null
+                    : null,
+                Commits = e.Commits.Count > 0
+                    ? e.Commits.OrderBy(c => c.Ordinal).Select(c => new SessionLogCommitDto
+                    {
+                        Sha = c.Sha,
+                        Branch = c.Branch,
+                        Message = c.Message,
+                        Author = c.Author,
+                        Timestamp = c.CommitTimestamp?.ToString("o", CultureInfo.InvariantCulture),
+                        FilesChanged = DeserializeStringList(c.FilesChangedJson)
+                    }).ToList()
+                    : null,
+                DesignDecisions = MapStringListToDto(e.StringListItems, "DesignDecision"),
+                RequirementsDiscovered = MapStringListToDto(e.StringListItems, "Requirement"),
+                FilesModified = MapStringListToDto(e.StringListItems, "FileModified"),
+                Blockers = MapStringListToDto(e.StringListItems, "Blocker")
             }).ToList()
         };
     }
@@ -527,5 +597,25 @@ public sealed class SessionLogService : ISessionLogService
         if (string.IsNullOrWhiteSpace(json))
             return null;
         return JsonSerializer.Deserialize<object>(json);
+    }
+
+    private static List<string>? MapStringListToDto(ICollection<SessionLogEntryStringListEntity> items, string listType)
+    {
+        var filtered = items.Where(i => i.ListType == listType).OrderBy(i => i.Ordinal).Select(i => i.Value).ToList();
+        return filtered.Count > 0 ? filtered : null;
+    }
+
+    private static List<string>? DeserializeStringList(string? json)
+    {
+        if (string.IsNullOrEmpty(json))
+            return null;
+        try
+        {
+            return JsonSerializer.Deserialize<List<string>>(json);
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
     }
 }

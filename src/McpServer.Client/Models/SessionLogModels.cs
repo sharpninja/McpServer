@@ -157,6 +157,26 @@ public sealed class UnifiedRequestEntryDto
     /// <summary>Processing dialog items.</summary>
     [JsonPropertyName("processingDialog")]
     public List<ProcessingDialogItemDto>? ProcessingDialog { get; set; }
+
+    /// <summary>Git commits made during this request entry.</summary>
+    [JsonPropertyName("commits")]
+    public List<SessionLogCommitDto>? Commits { get; set; }
+
+    /// <summary>Design decisions made during this interaction.</summary>
+    [JsonPropertyName("designDecisions")]
+    public List<string>? DesignDecisions { get; set; }
+
+    /// <summary>Requirement IDs discovered or created.</summary>
+    [JsonPropertyName("requirementsDiscovered")]
+    public List<string>? RequirementsDiscovered { get; set; }
+
+    /// <summary>File paths modified during this interaction.</summary>
+    [JsonPropertyName("filesModified")]
+    public List<string>? FilesModified { get; set; }
+
+    /// <summary>Blockers or issues preventing progress.</summary>
+    [JsonPropertyName("blockers")]
+    public List<string>? Blockers { get; set; }
 }
 
 /// <summary>Copilot statistics summary when present on a session log item.</summary>
@@ -225,6 +245,34 @@ public sealed class ProcessingDialogItemDto
     /// <summary>Category: reasoning, tool_call, tool_result, observation, decision.</summary>
     [JsonPropertyName("category")]
     public string? Category { get; set; }
+}
+
+/// <summary>Git commit recorded during a session log request entry.</summary>
+public sealed class SessionLogCommitDto
+{
+    /// <summary>Git commit SHA hash.</summary>
+    [JsonPropertyName("sha")]
+    public string? Sha { get; set; }
+
+    /// <summary>Git branch name.</summary>
+    [JsonPropertyName("branch")]
+    public string? Branch { get; set; }
+
+    /// <summary>Commit message text.</summary>
+    [JsonPropertyName("message")]
+    public string? Message { get; set; }
+
+    /// <summary>Commit author name or email.</summary>
+    [JsonPropertyName("author")]
+    public string? Author { get; set; }
+
+    /// <summary>Commit timestamp (ISO 8601).</summary>
+    [JsonPropertyName("timestamp")]
+    public string? Timestamp { get; set; }
+
+    /// <summary>Files changed in this commit.</summary>
+    [JsonPropertyName("filesChanged")]
+    public List<string>? FilesChanged { get; set; }
 }
 
 /// <summary>Result of a session log query.</summary>
