@@ -16,9 +16,7 @@ internal sealed class TemplatesScreen : View
     private readonly TemplateDetailViewModel _detailVm;
     private readonly ViewModelBinder _binder = new();
     private readonly List<TemplateListItem> _rows = [];
-    private readonly SemaphoreSlim _detailLoadGate = new(1, 1);
-    private int _detailLoadRequestVersion;
-    private string? _lastAutoDetailTemplateId;
+    private int _detailLoadVersion;
     private TemplateListItem? _selectedTemplate;
     private TableView _tableView = null!;
     private Label _statusLabel = null!;
@@ -109,13 +107,35 @@ internal sealed class TemplatesScreen : View
 
             var item = _rows[row];
             _selectedTemplate = item;
-
-            if (string.Equals(_lastAutoDetailTemplateId, item.Id, StringComparison.Ordinal))
-                return;
-
-            _lastAutoDetailTemplateId = item.Id;
             _detailView.Text = $"Loading {item.Id}...";
-            _ = Task.Run(() => LoadDetailForTemplateAsync(item.Id));
+
+            var version = Interlocked.Increment(ref _detailLoadVersion);
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _detailVm.LoadAsync(item.Id).ConfigureAwait(false);
+                    if (Volatile.Read(ref _detailLoadVersion) != version) return;
+
+                    var content = _detailVm.Detail?.Content
+                        ?? _detailVm.ErrorMessage
+                        ?? "(no content)";
+                    Application.Invoke(() =>
+                    {
+                        _detailView.Text = content;
+                        _detailView.SetNeedsDraw();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    if (Volatile.Read(ref _detailLoadVersion) != version) return;
+                    Application.Invoke(() =>
+                    {
+                        _detailView.Text = $"Error: {ex.Message}";
+                        _detailView.SetNeedsDraw();
+                    });
+                }
+            });
         };
         Add(_tableView);
 
@@ -205,35 +225,7 @@ internal sealed class TemplatesScreen : View
     /// <summary>Triggers initial data load.</summary>
     public async Task LoadAsync()
     {
-        _lastAutoDetailTemplateId = null;
         await _listVm.LoadAsync().ConfigureAwait(false);
-    }
-
-    private async Task LoadDetailForTemplateAsync(string templateId)
-    {
-        var requestVersion = Interlocked.Increment(ref _detailLoadRequestVersion);
-        await _detailLoadGate.WaitAsync().ConfigureAwait(false);
-        try
-        {
-            if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
-                return;
-
-            await _detailVm.LoadAsync(templateId).ConfigureAwait(false);
-
-            if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
-                return;
-
-            var content = _detailVm.Detail?.Content ?? "";
-            Application.Invoke(() =>
-            {
-                _detailView.Text = content;
-                _detailView.SetNeedsDraw();
-            });
-        }
-        finally
-        {
-            _detailLoadGate.Release();
-        }
     }
 
     private TemplateListItem? GetSelectedTemplate() => _selectedTemplate;
