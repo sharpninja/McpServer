@@ -18,6 +18,7 @@ public sealed class TodoPromptService(
     WorkspaceServiceAccessor workspaceAccessor,
     ICopilotClient copilotClient,
     IOptionsMonitor<TodoPromptOptions> promptOptions,
+    ITodoPromptProvider todoPromptProvider,
     ILogger<TodoPromptService> logger) : ITodoPromptService
 {
     /// <inheritdoc />
@@ -32,7 +33,7 @@ public sealed class TodoPromptService(
             yield break;
         }
 
-        var prompt = BuildPrompt(EffectiveStatusPrompt, item);
+        var prompt = BuildPrompt(await GetEffectiveStatusPromptAsync(cancellationToken).ConfigureAwait(false), item);
         logger.LogInformation("Streaming Copilot status for TODO {Id} in {Cwd}", id, workspaceAccessor.GetWorkspacePath());
 
         await foreach (var line in InvokeCopilotStreaming(prompt, TimeSpan.FromMinutes(3), cancellationToken).ConfigureAwait(false))
@@ -51,7 +52,7 @@ public sealed class TodoPromptService(
             yield break;
         }
 
-        var prompt = BuildPrompt(EffectiveImplementPrompt, item);
+        var prompt = BuildPrompt(await GetEffectiveImplementPromptAsync(cancellationToken).ConfigureAwait(false), item);
         logger.LogInformation("Streaming Copilot implement for TODO {Id} in {Cwd}", id, workspaceAccessor.GetWorkspacePath());
 
         await foreach (var line in InvokeCopilotStreaming(prompt, TimeSpan.FromMinutes(5), cancellationToken).ConfigureAwait(false))
@@ -70,16 +71,21 @@ public sealed class TodoPromptService(
             yield break;
         }
 
-        var prompt = BuildPrompt(EffectivePlanPrompt, item);
+        var prompt = BuildPrompt(await GetEffectivePlanPromptAsync(cancellationToken).ConfigureAwait(false), item);
         logger.LogInformation("Streaming Copilot plan for TODO {Id} in {Cwd}", id, workspaceAccessor.GetWorkspacePath());
 
         await foreach (var line in InvokeCopilotStreaming(prompt, TimeSpan.FromMinutes(5), cancellationToken).ConfigureAwait(false))
             yield return line;
     }
 
-    private string EffectiveStatusPrompt => promptOptions.CurrentValue.StatusPrompt ?? TodoPromptDefaults.StatusPrompt;
-    private string EffectiveImplementPrompt => promptOptions.CurrentValue.ImplementPrompt ?? TodoPromptDefaults.ImplementPrompt;
-    private string EffectivePlanPrompt => promptOptions.CurrentValue.PlanPrompt ?? TodoPromptDefaults.PlanPrompt;
+    private async Task<string> GetEffectiveStatusPromptAsync(CancellationToken ct) =>
+        promptOptions.CurrentValue.StatusPrompt ?? await todoPromptProvider.GetStatusPromptAsync(ct).ConfigureAwait(false);
+
+    private async Task<string> GetEffectiveImplementPromptAsync(CancellationToken ct) =>
+        promptOptions.CurrentValue.ImplementPrompt ?? await todoPromptProvider.GetImplementPromptAsync(ct).ConfigureAwait(false);
+
+    private async Task<string> GetEffectivePlanPromptAsync(CancellationToken ct) =>
+        promptOptions.CurrentValue.PlanPrompt ?? await todoPromptProvider.GetPlanPromptAsync(ct).ConfigureAwait(false);
 
     private IAsyncEnumerable<string> InvokeCopilotStreaming(string prompt, TimeSpan timeout, CancellationToken cancellationToken)
     {

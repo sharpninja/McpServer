@@ -257,6 +257,12 @@ builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredServi
 builder.Services.AddSingleton<IRequirementsDocumentService>(sp => sp.GetRequiredService<RequirementsDocumentService>());
 builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
 builder.Services.AddSingleton<IVoiceConversationService, VoiceConversationService>();
+builder.Services.AddSingleton<PromptTemplateRenderer>();
+builder.Services.Configure<TemplateStorageOptions>(builder.Configuration.GetSection(TemplateStorageOptions.SectionName));
+builder.Services.AddSingleton<IPromptTemplateService, PromptTemplateService>();
+builder.Services.AddSingleton<IMarkerPromptProvider, FileMarkerPromptProvider>();
+builder.Services.AddSingleton<ITodoPromptProvider, TodoPromptProvider>();
+builder.Services.AddSingleton<PairingHtmlRenderer>();
 builder.Services.Configure<TodoPromptOptions>(options =>
 {
     if (primaryWorkspaceEntry is not null)
@@ -534,19 +540,19 @@ app.MapMcp("/mcp-transport");
 app.MapControllers();
 
 // /pair web login flow — authenticate to view the API key.
-app.MapGet("/pair", (IOptions<PairingOptions> opts) =>
+app.MapGet("/pair", async (IOptions<PairingOptions> opts, PairingHtmlRenderer pairingRenderer) =>
 {
     var o = opts.Value;
     if (o.PairingUsers.Count == 0 || string.IsNullOrEmpty(o.ApiKey))
-        return Results.Content(PairingHtml.NotConfiguredPage(), "text/html");
-    return Results.Content(PairingHtml.LoginPage(), "text/html");
+        return Results.Content(await pairingRenderer.RenderNotConfiguredPageAsync().ConfigureAwait(false), "text/html");
+    return Results.Content(await pairingRenderer.RenderLoginPageAsync().ConfigureAwait(false), "text/html");
 }).ExcludeFromDescription();
 
-app.MapPost("/pair", async (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions) =>
+app.MapPost("/pair", async (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions, PairingHtmlRenderer pairingRenderer) =>
 {
     var o = opts.Value;
     if (o.PairingUsers.Count == 0 || string.IsNullOrEmpty(o.ApiKey))
-        return Results.Content(PairingHtml.NotConfiguredPage(), "text/html");
+        return Results.Content(await pairingRenderer.RenderNotConfiguredPageAsync().ConfigureAwait(false), "text/html");
 
     var form = await context.Request.ReadFormAsync().ConfigureAwait(false);
     var username = form["username"].ToString();
@@ -556,7 +562,7 @@ app.MapPost("/pair", async (HttpContext context, IOptions<PairingOptions> opts, 
         string.Equals(u.Username, username, StringComparison.OrdinalIgnoreCase));
 
     if (user is null || !VerifyPairingPassword(password, user.PasswordHash))
-        return Results.Content(PairingHtml.LoginPage(error: true), "text/html");
+        return Results.Content(await pairingRenderer.RenderLoginPageAsync(error: true).ConfigureAwait(false), "text/html");
 
     var token = sessions.CreateToken();
     context.Response.Cookies.Append("mcp_pair", token, new CookieOptions
@@ -569,7 +575,7 @@ app.MapPost("/pair", async (HttpContext context, IOptions<PairingOptions> opts, 
     return Results.Redirect("/pair/key");
 }).ExcludeFromDescription();
 
-app.MapGet("/pair/key", (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions) =>
+app.MapGet("/pair/key", async (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions, PairingHtmlRenderer pairingRenderer) =>
 {
     var token = context.Request.Cookies["mcp_pair"];
     if (!sessions.Validate(token))
@@ -578,7 +584,7 @@ app.MapGet("/pair/key", (HttpContext context, IOptions<PairingOptions> opts, Pai
     var o = opts.Value;
     var request = context.Request;
     var serverUrl = $"{request.Scheme}://{request.Host}";
-    return Results.Content(PairingHtml.KeyPage(o.ApiKey, serverUrl), "text/html");
+    return Results.Content(await pairingRenderer.RenderKeyPageAsync(o.ApiKey, serverUrl).ConfigureAwait(false), "text/html");
 }).ExcludeFromDescription();
 
 try

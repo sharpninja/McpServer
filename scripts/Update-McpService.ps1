@@ -67,6 +67,7 @@ $PreservePatterns = @(
 $PreserveDirectories = @(
     'logs',
     'mcp-data',
+    'templates',
     'tools'
 )
 

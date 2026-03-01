@@ -45,4 +45,9 @@
       <_Parameter1>McpServer.Support.Mcp.Tests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\templates\**\*.yaml" Link="templates\%(RecursiveDir)%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

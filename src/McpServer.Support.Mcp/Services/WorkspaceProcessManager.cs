@@ -18,6 +18,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     private readonly ILogger<WorkspaceProcessManager> _logger;
     private readonly IServiceProvider _serviceProvider;
     private readonly IOptionsMonitor<MarkerPromptOptions> _promptOptions;
+    private readonly IMarkerPromptProvider _markerPromptProvider;
     private readonly WorkspaceTokenService _tokenService;
     private readonly ServerRuntimeInfo _serverRuntimeInfo;
 
@@ -29,12 +30,14 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         ILoggerFactory loggerFactory,
         IServiceProvider serviceProvider,
         IOptionsMonitor<MarkerPromptOptions> promptOptions,
+        IMarkerPromptProvider markerPromptProvider,
         WorkspaceTokenService tokenService,
         ServerRuntimeInfo serverRuntimeInfo)
     {
         _logger = logger;
         _serviceProvider = serviceProvider;
         _promptOptions = promptOptions;
+        _markerPromptProvider = markerPromptProvider;
         _tokenService = tokenService;
         _serverRuntimeInfo = serverRuntimeInfo;
         // loggerFactory kept in signature for backward compat (DI registration) but no longer needed
@@ -51,7 +54,8 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             "Registering workspace: Name={WorkspaceName}; Path={WorkspacePath}; Port={Port}",
             workspace.Name, key, port);
 
-        var globalTemplate = _promptOptions.CurrentValue.MarkerPromptTemplate;
+        var globalTemplate = _promptOptions.CurrentValue.MarkerPromptTemplate
+            ?? await _markerPromptProvider.GetGlobalPromptTemplateAsync(ct).ConfigureAwait(false);
         var token = _tokenService.GetToken(key) ?? _tokenService.GenerateToken(key);
         _ = _tokenService.GetDefaultToken(key) ?? _tokenService.GenerateDefaultToken(key);
 
@@ -100,9 +104,11 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         var workspaces = await workspaceService.ListAsync(ct).ConfigureAwait(false);
 
         var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+        var fileTemplate = await _markerPromptProvider.GetGlobalPromptTemplateAsync(ct).ConfigureAwait(false);
         var globalTemplate = globalPromptOverride
             ?? config.GetSection("Mcp")["MarkerPromptTemplate"]
-            ?? _promptOptions.CurrentValue.MarkerPromptTemplate;
+            ?? _promptOptions.CurrentValue.MarkerPromptTemplate
+            ?? fileTemplate;
 
         foreach (var ws in workspaces.Items)
         {

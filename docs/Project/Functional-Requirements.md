@@ -291,3 +291,15 @@ The server shall support launching interactive desktop processes from a Windows 
 The server shall support `appsettings.yaml` as an optional configuration source loaded after `appsettings.json` with hot reload, enabling YAML-format configuration alongside JSON for local-only overrides.
 
 **Covered by:** `Program.cs` (`AddYamlFile`), `NetEscapades.Configuration.Yaml`
+
+## FR-MCP-049 Prompt Template Registry
+
+The server shall provide a global prompt template registry with REST API endpoints (`/mcpserver/templates`) and MCP tools for CRUD operations (list, get, create, update, delete) and test/render operations. Templates are stored as YAML files, support Handlebars rendering with declared variables, and are filterable by category, tag, and keyword. A Director TUI tab shall enable template browsing and preview.
+
+**Covered by:** `PromptTemplateController`, `PromptTemplateService`, `PromptTemplateRenderer`, `FwhMcpTools` (6 template tools), `TemplateClient`, `TemplatesScreen`
+
+## FR-MCP-050 Template Externalization
+
+The server shall load system prompt templates (marker prompt, TODO prompts, pairing HTML pages) from external YAML files via provider interfaces, with graceful fallback to built-in inline defaults when files are missing. Configuration overrides (`Mcp:MarkerPromptTemplate`, `Mcp:TodoPrompts`) take precedence over file-loaded templates. This enables runtime template customization without recompilation.
+
+**Covered by:** `IMarkerPromptProvider`, `FileMarkerPromptProvider`, `ITodoPromptProvider`, `TodoPromptProvider`, `PairingHtmlRenderer`
