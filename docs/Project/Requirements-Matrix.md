@@ -87,6 +87,6 @@
 | TR-MCP-TPL-001 | ✅ Complete | PromptTemplateService, TemplateStorageOptions |
 | TR-MCP-TPL-002 | ✅ Complete | PromptTemplateRenderer |
 | TR-MCP-TPL-003 | ✅ Complete | PromptTemplateController, FwhMcpTools |
-| TR-MCP-TPL-004 | ✅ Complete | TemplateMessages, *TemplateQueryHandler, *TemplateCommandHandler, TemplateApiClientAdapter, TemplateListViewModel, TemplateDetailViewModel, TemplatesScreen |
+| TR-MCP-TPL-004 | ✅ Complete | TemplateMessages, \*TemplateQueryHandler, \*TemplateCommandHandler, TemplateApiClientAdapter, TemplateListViewModel, TemplateDetailViewModel, TemplatesScreen |
 | FR-MCP-050 | ✅ Complete | IMarkerPromptProvider, FileMarkerPromptProvider, ITodoPromptProvider, TodoPromptProvider, PairingHtmlRenderer |
 | TR-MCP-TPL-005 | ✅ Complete | IMarkerPromptProvider, FileMarkerPromptProvider, ITodoPromptProvider, TodoPromptProvider, PairingHtmlRenderer, templates/prompt-templates.yaml |
