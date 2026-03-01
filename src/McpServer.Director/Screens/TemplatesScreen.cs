@@ -19,6 +19,7 @@ internal sealed class TemplatesScreen : View
     private readonly SemaphoreSlim _detailLoadGate = new(1, 1);
     private int _detailLoadRequestVersion;
     private string? _lastAutoDetailTemplateId;
+    private TemplateListItem? _selectedTemplate;
     private TableView _tableView = null!;
     private Label _statusLabel = null!;
     private TextView _detailView = null!;
@@ -101,7 +102,21 @@ internal sealed class TemplatesScreen : View
             FullRowSelect = true,
             MultiSelect = false,
         };
-        _tableView.SelectedCellChanged += (_, _) => QueueSelectedRowDetailRefresh();
+        _tableView.SelectedCellChanged += (_, e) =>
+        {
+            var row = e.NewRow;
+            if (row < 0 || row >= _rows.Count) return;
+
+            var item = _rows[row];
+            _selectedTemplate = item;
+
+            if (string.Equals(_lastAutoDetailTemplateId, item.Id, StringComparison.Ordinal))
+                return;
+
+            _lastAutoDetailTemplateId = item.Id;
+            _detailView.Text = $"Loading {item.Id}...";
+            _ = Task.Run(() => LoadDetailForTemplateAsync(item.Id));
+        };
         Add(_tableView);
 
         // Detail preview (lower half)
@@ -208,7 +223,12 @@ internal sealed class TemplatesScreen : View
             if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
                 return;
 
-            Application.Invoke(() => _detailView.Text = _detailVm.Detail?.Content ?? "");
+            var content = _detailVm.Detail?.Content ?? "";
+            Application.Invoke(() =>
+            {
+                _detailView.Text = content;
+                _detailView.SetNeedsDraw();
+            });
         }
         finally
         {
@@ -216,25 +236,7 @@ internal sealed class TemplatesScreen : View
         }
     }
 
-    private void QueueSelectedRowDetailRefresh()
-    {
-        var row = _tableView.SelectedRow;
-        if (row < 0 || row >= _rows.Count)
-            return;
-
-        var id = _rows[row].Id;
-        if (string.Equals(_lastAutoDetailTemplateId, id, StringComparison.Ordinal))
-            return;
-
-        _lastAutoDetailTemplateId = id;
-        _ = Task.Run(() => LoadDetailForTemplateAsync(id));
-    }
-
-    private TemplateListItem? GetSelectedTemplate()
-    {
-        var row = _tableView.SelectedRow;
-        return row >= 0 && row < _rows.Count ? _rows[row] : null;
-    }
+    private TemplateListItem? GetSelectedTemplate() => _selectedTemplate;
 
     private void ShowTemplateDialog(bool isNew)
     {
@@ -338,11 +340,27 @@ internal sealed class TemplatesScreen : View
         var selected = GetSelectedTemplate();
         if (selected is null) return;
 
-        if (_detailVm.Detail?.Id != selected.Id)
-            await _detailVm.LoadAsync(selected.Id).ConfigureAwait(false);
+        try
+        {
+            if (_detailVm.Detail?.Id != selected.Id)
+                await _detailVm.LoadAsync(selected.Id).ConfigureAwait(false);
 
-        var ok = await _detailVm.DeleteAsync().ConfigureAwait(false);
-        if (ok) await LoadAsync().ConfigureAwait(false);
+            var ok = await _detailVm.DeleteAsync().ConfigureAwait(false);
+            if (ok)
+            {
+                await LoadAsync().ConfigureAwait(false);
+            }
+            else
+            {
+                var err = _detailVm.ErrorMessage ?? "Delete failed.";
+                Application.Invoke(() => MessageBox.ErrorQuery("Delete Failed", err, "OK"));
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
+            Application.Invoke(() => MessageBox.ErrorQuery("Error", ex.Message, "OK"));
+        }
     }
 
     private void ShowTestDialog()
