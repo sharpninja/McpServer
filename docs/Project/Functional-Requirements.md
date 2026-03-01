@@ -267,3 +267,27 @@ The server shall resolve the target workspace per-request using a three-tier res
 All workspace data shall be stored in a single shared SQLite database with a `WorkspaceId` discriminator column on every entity table. EF Core global query filters ensure workspace data isolation per-request. Cross-workspace queries use `IgnoreQueryFilters()` for admin operations.
 
 **Covered by:** `McpDbContext`, `WorkspaceContext`, all entity types (`WorkspaceId` property)
+
+## FR-MCP-045 Cross-Workspace TODO Move
+
+The server shall support moving a TODO item from one workspace to another via REST (`POST /mcpserver/todo/{id}/move`) and STDIO (`todo_move` MCP tool), preserving all item fields including implementation tasks, requirements, and metadata. The move is implemented as create-in-target then delete-from-source.
+
+**Covered by:** `TodoController.MoveAsync`, `FwhMcpTools.TodoMove`, `TodoMoveRequest`, `TodoServiceResolver`
+
+## FR-MCP-046 Voice Conversation Sessions
+
+The server shall provide voice-enabled agent interaction via Copilot CLI, supporting session creation with device binding, voice turn processing (synchronous and SSE streaming), transcript retrieval, session interruption, ESC-key injection for generation cancellation, and automatic idle session cleanup with configurable timeout. One active session per device is enforced.
+
+**Covered by:** `VoiceController`, `VoiceConversationService`, `VoiceConversationOptions`, `CopilotInteractiveSession`
+
+## FR-MCP-047 Desktop Process Launch
+
+The server shall support launching interactive desktop processes from a Windows service (LocalSystem) context using `CreateProcessAsUser` with WTS session token negotiation, enabling Copilot CLI and other GUI/console tools to run on the interactive desktop with stdio pipe redirection or visible console windows.
+
+**Covered by:** `DesktopProcessLauncher`, `NativeMethods`
+
+## FR-MCP-048 YAML Configuration Support
+
+The server shall support `appsettings.yaml` as an optional configuration source loaded after `appsettings.json` with hot reload, enabling YAML-format configuration alongside JSON for local-only overrides.
+
+**Covered by:** `Program.cs` (`AddYamlFile`), `NetEscapades.Configuration.Yaml`
