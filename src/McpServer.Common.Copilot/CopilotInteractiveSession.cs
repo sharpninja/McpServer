@@ -74,6 +74,20 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
         }
     }
 
+    /// <summary>
+    /// Sends three ESC characters (<c>\x1B\x1B\x1B</c>) to the Copilot CLI process stdin
+    /// to immediately cancel the current generation without ending the session.
+    /// </summary>
+    public async Task SendEscapeAsync(CancellationToken ct = default)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        if (_process.HasExited) return;
+
+        const string EscChars = "\x1B\x1B\x1B";
+        await _process.StandardInput.WriteAsync(EscChars.AsMemory(), ct).ConfigureAwait(false);
+        await _process.StandardInput.FlushAsync(ct).ConfigureAwait(false);
+    }
+
     /// <summary>Sends a prompt via stdin and reads the response until the sentinel.</summary>
     public async Task<CopilotResult> SendAsync(string prompt, CancellationToken ct = default)
     {

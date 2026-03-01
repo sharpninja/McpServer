@@ -226,6 +226,24 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     }
 
     /// <inheritdoc />
+    public async Task<bool> SendEscapeAsync(string sessionId, CancellationToken cancellationToken = default)
+    {
+        EnsureEnabled();
+        cancellationToken.ThrowIfCancellationRequested();
+        ArgumentException.ThrowIfNullOrWhiteSpace(sessionId);
+
+        if (!_sessions.TryGetValue(sessionId, out var state))
+            return false;
+
+        var session = state.InteractiveSession;
+        if (session is null || !session.IsAlive)
+            return false;
+
+        await session.SendEscapeAsync(cancellationToken).ConfigureAwait(false);
+        return true;
+    }
+
+    /// <inheritdoc />
     public Task<VoiceSessionStatusDto?> GetStatusAsync(string sessionId, CancellationToken cancellationToken = default)
     {
         EnsureEnabled();
@@ -1089,7 +1107,9 @@ public sealed partial class VoiceConversationService
             Model = model,
             Silent = true,
             Timeout = TimeSpan.FromSeconds(Math.Max(5, opts.CopilotTimeoutSeconds)),
-            WorkingDirectory = workingDirectory
+            WorkingDirectory = workingDirectory,
+            RunAs = promptOpts.RunAs,
+            GitHubToken = promptOpts.GitHubToken,
         };
     }
 

@@ -10,9 +10,9 @@ public sealed class CopilotClientOptions
 
     /// <summary>
     /// Model to use for the agent via --model.
-    /// Defaults to "auto".
+    /// Defaults to "claude-opus-4.6".
     /// </summary>
-    public string Model { get; set; } = "auto";
+    public string Model { get; set; } = "claude-opus-4.6";
 
     /// <summary>
     /// When <c>true</c>, passes <c>--silent</c> to the Copilot CLI so only the

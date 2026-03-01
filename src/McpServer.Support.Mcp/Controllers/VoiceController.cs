@@ -165,6 +165,27 @@ public sealed class VoiceController : ControllerBase
     }
 
     /// <summary>
+    /// Sends three ESC characters to the active Copilot interactive session stdin,
+    /// cancelling the current generation without ending the session.
+    /// </summary>
+    [HttpPost("session/{sessionId}/escape")]
+    public async Task<IActionResult> SendEscapeAsync(string sessionId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var sent = await _voiceService.SendEscapeAsync(sessionId, cancellationToken).ConfigureAwait(false);
+            if (!sent)
+                return NotFound(new { error = $"Voice session '{sessionId}' not found or has no active interactive session." });
+            return Ok(new { sent = true });
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new { error = ex.Message });
+        }
+    }
+
+    /// <summary>
     /// Gets the current status for a voice session.
     /// </summary>
     [HttpGet("session/{sessionId}")]

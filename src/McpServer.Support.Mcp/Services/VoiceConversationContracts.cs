@@ -315,6 +315,13 @@ public interface IVoiceConversationService
     Task<VoiceInterruptResponse?> InterruptAsync(string sessionId, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Sends three ESC characters to the active Copilot interactive session stdin
+    /// to cancel the current generation without ending the session.
+    /// Returns <c>false</c> if the session was not found or has no active interactive session.
+    /// </summary>
+    Task<bool> SendEscapeAsync(string sessionId, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Gets session status details.
     /// </summary>
     Task<VoiceSessionStatusDto?> GetStatusAsync(string sessionId, CancellationToken cancellationToken = default);

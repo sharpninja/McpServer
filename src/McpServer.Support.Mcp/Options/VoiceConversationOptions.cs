@@ -18,7 +18,7 @@ public sealed class VoiceConversationOptions
     /// <summary>
     /// Claude-capable model identifier passed to Copilot CLI via <c>--model</c>.
     /// </summary>
-    public string CopilotModel { get; set; } = "claude-sonnet-4.6";
+    public string CopilotModel { get; set; } = "claude-opus-4.6";
 
     /// <summary>
     /// Maximum number of tool-call loop iterations per turn.

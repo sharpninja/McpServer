@@ -170,11 +170,17 @@ public sealed class AuthConfigController : ControllerBase
                 content = RewriteDeviceAuthorizationResponse(content, contentType, authOptions);
             }
 
-            if (enforceMinimumTokenLifetime &&
-                response.IsSuccessStatusCode &&
-                TryBuildTokenLifetimeViolationResult(content, contentType, logger, out var tokenLifetimeViolation))
+            if (enforceMinimumTokenLifetime && response.IsSuccessStatusCode)
             {
-                return tokenLifetimeViolation;
+                logger.LogInformation(
+                    "OIDC token response received (HTTP {StatusCode}); enforcing minimum lifetime. Content-Type={ContentType}, Body length={BodyLength}",
+                    (int)response.StatusCode, contentType, content.Length);
+                logger.LogDebug("OIDC token response body: {Body}", content);
+
+                if (TryBuildTokenLifetimeViolationResult(content, contentType, logger, out var tokenLifetimeViolation))
+                {
+                    return tokenLifetimeViolation;
+                }
             }
 
             return new ContentResult
@@ -236,6 +242,17 @@ public sealed class AuthConfigController : ControllerBase
 
         var isAccessTooShort = hasAccess && accessExpiresInSeconds < MinimumOidcTokenLifetimeSeconds;
         var isRefreshTooShort = hasRefresh && refreshExpiresInSeconds < MinimumOidcTokenLifetimeSeconds;
+
+        logger.LogInformation(
+            "OIDC token lifetime check: expires_in={AccessExpiresIn}s (hasAccess={HasAccess}, tooShort={AccessTooShort}), refresh_expires_in={RefreshExpiresIn}s (hasRefresh={HasRefresh}, tooShort={RefreshTooShort}), minimum={MinimumSeconds}s",
+            hasAccess ? accessExpiresInSeconds : null,
+            hasAccess,
+            isAccessTooShort,
+            hasRefresh ? refreshExpiresInSeconds : null,
+            hasRefresh,
+            isRefreshTooShort,
+            MinimumOidcTokenLifetimeSeconds);
+
         if (!isAccessTooShort && !isRefreshTooShort)
         {
             return false;

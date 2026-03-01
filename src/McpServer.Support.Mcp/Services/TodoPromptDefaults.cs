@@ -64,6 +64,8 @@ public static class TodoPromptDefaults
 
         3. Update {id} via PUT {baseUrl}/mcpserver/todo/{id}
            to add the new plan TODO as a dependency in its dependsOn array.
+
+        Finally, update the todo with the plan.
         """;
 
     /// <summary>
