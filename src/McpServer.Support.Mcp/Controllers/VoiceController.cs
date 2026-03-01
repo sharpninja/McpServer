@@ -56,6 +56,29 @@ public sealed class VoiceController : ControllerBase
     }
 
     /// <summary>
+    /// Finds an active voice session for the specified device.
+    /// </summary>
+    [HttpGet("session")]
+    public ActionResult<VoiceSessionStatusDto> FindSessionByDeviceAsync([FromQuery] string deviceId)
+    {
+        if (string.IsNullOrWhiteSpace(deviceId))
+            return BadRequest(new { error = "deviceId query parameter is required." });
+
+        try
+        {
+            var result = _voiceService.FindSessionByDevice(deviceId);
+            if (result is null)
+                return NotFound(new { error = $"No active voice session found for device '{deviceId}'." });
+            return Ok(result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new { error = ex.Message });
+        }
+    }
+
+    /// <summary>
     /// Submits a single transcribed voice turn for processing.
     /// </summary>
     [HttpPost("session/{sessionId}/turn")]

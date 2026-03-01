@@ -16,7 +16,7 @@ namespace McpServer.Support.Mcp.Services;
 /// <summary>
 /// In-memory voice conversation orchestration service backed by Copilot CLI and MCP todo services.
 /// </summary>
-public sealed partial class VoiceConversationService : IVoiceConversationService
+public sealed partial class VoiceConversationService : IVoiceConversationService, IDisposable
 {
     private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web)
     {
@@ -32,6 +32,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     private readonly IOptionsMonitor<TodoPromptOptions> _todoPromptOptions;
     private readonly IHostEnvironment _hostEnvironment;
     private readonly ILogger<VoiceConversationService> _logger;
+    private readonly Timer _idleCleanupTimer;
 
     /// <summary>
     /// Creates a new <see cref="VoiceConversationService"/>.
@@ -56,13 +57,28 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
 
         if (OperatingSystem.IsWindows())
             _desktopLauncher = new DesktopProcessLauncher(loggerFactory.CreateLogger<DesktopProcessLauncher>());
+
+        _idleCleanupTimer = new Timer(OnIdleCleanupTick, null, TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(60));
     }
 
     /// <inheritdoc />
-    public Task<VoiceSessionCreateResponse> CreateSessionAsync(VoiceSessionCreateRequest? request, CancellationToken cancellationToken = default)
+    public async Task<VoiceSessionCreateResponse> CreateSessionAsync(VoiceSessionCreateRequest? request, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         EnsureEnabled();
+
+        // Enforce one-session-per-device: close any existing session for this device
+        if (!string.IsNullOrWhiteSpace(request?.DeviceId))
+        {
+            foreach (var kvp in _sessions)
+            {
+                if (string.Equals(kvp.Value.DeviceId, request.DeviceId, StringComparison.OrdinalIgnoreCase))
+                {
+                    _logger.LogInformation("Closing existing session {OldSessionId} for device {DeviceId}", kvp.Key, request.DeviceId);
+                    await DeleteSessionAsync(kvp.Key, cancellationToken).ConfigureAwait(false);
+                }
+            }
+        }
 
         var opts = _options.CurrentValue;
         var now = DateTimeOffset.UtcNow;
@@ -71,14 +87,16 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         var state = new VoiceSessionState(sessionId, language, request?.DeviceId, request?.ClientName, request?.WorkspacePath, now);
         _sessions[sessionId] = state;
 
-        return Task.FromResult(new VoiceSessionCreateResponse
+        _logger.LogInformation("Created voice session {SessionId} for device {DeviceId}", sessionId, request?.DeviceId ?? "(none)");
+
+        return new VoiceSessionCreateResponse
         {
             SessionId = sessionId,
             Status = "idle",
             Language = language,
             ModelRequested = opts.CopilotModel,
             ModelResolved = opts.CopilotModel
-        });
+        };
     }
 
     /// <inheritdoc />
@@ -240,6 +258,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
             return false;
 
         await session.SendEscapeAsync(cancellationToken).ConfigureAwait(false);
+        state.LastUpdatedUtc = DateTimeOffset.UtcNow;
         return true;
     }
 
@@ -255,6 +274,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
 
         lock (state.SyncRoot)
         {
+            state.LastUpdatedUtc = DateTimeOffset.UtcNow;
             return Task.FromResult<VoiceSessionStatusDto?>(new VoiceSessionStatusDto
             {
                 SessionId = state.SessionId,
@@ -264,7 +284,9 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
                 LastUpdatedUtc = state.LastUpdatedUtc.ToString("O"),
                 IsTurnActive = state.IsTurnActive,
                 LastError = state.LastError,
-                LastTurnId = state.LastTurnId
+                LastTurnId = state.LastTurnId,
+                TurnCounter = state.TurnCounter,
+                TranscriptCount = state.Transcript.Count
             });
         }
     }
@@ -334,6 +356,46 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
 
         state.Gate.Dispose();
         return true;
+    }
+
+    /// <inheritdoc />
+    public VoiceSessionStatusDto? FindSessionByDevice(string deviceId)
+    {
+        EnsureEnabled();
+        ArgumentException.ThrowIfNullOrWhiteSpace(deviceId);
+
+        var idleTimeout = TimeSpan.FromMinutes(_options.CurrentValue.SessionIdleTimeoutMinutes);
+        var now = DateTimeOffset.UtcNow;
+
+        foreach (var state in _sessions.Values)
+        {
+            if (!string.Equals(state.DeviceId, deviceId, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            // Skip sessions that are past idle timeout
+            if (now - state.LastUpdatedUtc > idleTimeout)
+                continue;
+
+            lock (state.SyncRoot)
+            {
+                state.LastUpdatedUtc = now;
+                return new VoiceSessionStatusDto
+                {
+                    SessionId = state.SessionId,
+                    Status = state.Status,
+                    Language = state.Language,
+                    CreatedUtc = state.CreatedUtc.ToString("O"),
+                    LastUpdatedUtc = state.LastUpdatedUtc.ToString("O"),
+                    IsTurnActive = state.IsTurnActive,
+                    LastError = state.LastError,
+                    LastTurnId = state.LastTurnId,
+                    TurnCounter = state.TurnCounter,
+                    TranscriptCount = state.Transcript.Count
+                };
+            }
+        }
+
+        return null;
     }
 
     /// <inheritdoc />
@@ -1527,6 +1589,81 @@ public sealed partial class VoiceConversationService
         }
 
         return tasks;
+    }
+
+    /// <summary>
+    /// Periodically scans for idle sessions and performs graceful shutdown.
+    /// </summary>
+    private void OnIdleCleanupTick(object? state)
+    {
+        _ = CleanupIdleSessionsAsync();
+    }
+
+    private async Task CleanupIdleSessionsAsync()
+    {
+        try
+        {
+            var opts = _options.CurrentValue;
+            var timeout = TimeSpan.FromMinutes(opts.SessionIdleTimeoutMinutes);
+            var now = DateTimeOffset.UtcNow;
+            var staleIds = new List<string>();
+
+            foreach (var kvp in _sessions)
+            {
+                if (now - kvp.Value.LastUpdatedUtc > timeout && !kvp.Value.IsTurnActive)
+                    staleIds.Add(kvp.Key);
+            }
+
+            foreach (var sessionId in staleIds)
+            {
+                if (!_sessions.TryGetValue(sessionId, out var sessionState))
+                    continue;
+
+                _logger.LogInformation("Idle cleanup: session {SessionId} idle for >{TimeoutMin}m, initiating graceful shutdown",
+                    sessionId, opts.SessionIdleTimeoutMinutes);
+
+                // Send shutdown command to live Copilot subprocess before terminating
+                if (sessionState.InteractiveSession is { IsAlive: true })
+                {
+                    try
+                    {
+                        var command = opts.IdleShutdownCommand;
+                        var sentinel = opts.IdleShutdownSentinel;
+
+                        _logger.LogInformation("Idle cleanup: sending shutdown command to {SessionId}", sessionId);
+                        var responseStream = sessionState.InteractiveSession.SendStreamingAsync(command, CancellationToken.None);
+
+                        await foreach (var line in responseStream)
+                        {
+                            if (!string.IsNullOrEmpty(line) && line.Contains(sentinel, StringComparison.OrdinalIgnoreCase))
+                            {
+                                _logger.LogInformation("Idle cleanup: received shutdown sentinel from {SessionId}", sessionId);
+                                break;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Idle cleanup: error during graceful shutdown of {SessionId}", sessionId);
+                    }
+                }
+
+                await DeleteSessionAsync(sessionId, CancellationToken.None).ConfigureAwait(false);
+                _logger.LogInformation("Idle cleanup: cleaned up session {SessionId}", sessionId);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Idle cleanup: unexpected error during session scan");
+        }
+    }
+
+    /// <summary>
+    /// Disposes the idle cleanup timer.
+    /// </summary>
+    public void Dispose()
+    {
+        _idleCleanupTimer.Dispose();
     }
 
     private sealed class VoiceSessionState

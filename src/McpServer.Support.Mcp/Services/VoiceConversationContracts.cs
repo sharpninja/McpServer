@@ -199,6 +199,16 @@ public sealed record VoiceSessionStatusDto
     /// Most recent turn identifier, if any.
     /// </summary>
     public string? LastTurnId { get; init; }
+
+    /// <summary>
+    /// Number of turns completed in this session.
+    /// </summary>
+    public int TurnCounter { get; init; }
+
+    /// <summary>
+    /// Number of transcript entries available for retrieval.
+    /// </summary>
+    public int TranscriptCount { get; init; }
 }
 
 /// <summary>
@@ -335,6 +345,12 @@ public interface IVoiceConversationService
     /// Deletes a voice session and its in-memory transcript history.
     /// </summary>
     Task<bool> DeleteSessionAsync(string sessionId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Finds an active voice session for the specified device.
+    /// Returns <c>null</c> if no active session exists for the device.
+    /// </summary>
+    VoiceSessionStatusDto? FindSessionByDevice(string deviceId);
 
     /// <summary>
     /// Processes a voice turn with streaming output via Server-Sent Events.

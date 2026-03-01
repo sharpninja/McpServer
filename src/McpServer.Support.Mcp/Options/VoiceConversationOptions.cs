@@ -66,4 +66,20 @@ public sealed class VoiceConversationOptions
     /// This is required when the MCP server runs as a Windows service.
     /// </summary>
     public bool UseDesktopLaunch { get; set; } = true;
+
+    /// <summary>
+    /// Minutes of inactivity before a voice session is considered idle and eligible for cleanup.
+    /// </summary>
+    public int SessionIdleTimeoutMinutes { get; set; } = 15;
+
+    /// <summary>
+    /// Command sent to the Copilot subprocess before terminating an idle session.
+    /// The subprocess is expected to respond with the <see cref="IdleShutdownSentinel"/> text.
+    /// </summary>
+    public string IdleShutdownCommand { get; set; } = "Commit changes and update session log, then announce 'Ready to shut down'";
+
+    /// <summary>
+    /// Sentinel text the server waits for in the Copilot response before terminating an idle session.
+    /// </summary>
+    public string IdleShutdownSentinel { get; set; } = "Ready to shut down";
 }
