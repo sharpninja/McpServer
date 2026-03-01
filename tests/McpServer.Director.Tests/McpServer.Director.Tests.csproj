@@ -9,14 +9,13 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
     <PackageReference Include="xunit.v3" />
     <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
     <PackageReference Include="coverlet.collector" />
   </ItemGroup>
   <ItemGroup>
-    <!-- Reference ensures Director is built before tests; we invoke the DLL directly via dotnet exec. -->
-    <ProjectReference Include="..\..\src\McpServer.Director\McpServer.Director.csproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
+    <!-- Reference Director assembly for both integration tests (dotnet exec) and unit tests (internal types). -->
+    <ProjectReference Include="..\..\src\McpServer.Director\McpServer.Director.csproj" />
   </ItemGroup>
 </Project>

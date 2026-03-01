@@ -1,5 +1,6 @@
 ﻿using System.CommandLine;
 using McpServer.Cqrs.Mvvm;
+using McpServer.Director.Helpers;
 using McpServer.Director.Screens;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.ViewModels;
@@ -69,7 +70,8 @@ internal static class InteractiveCommand
                     authorizationPolicy,
                     roleContext,
                     directorContext,
-                    sp.GetRequiredService<ILoggerFactory>());
+                    sp.GetRequiredService<ILoggerFactory>(),
+                    sp.GetRequiredService<IBrowserLauncher>());
                 Terminal.Gui.Application.Run(mainScreen);
             }
             finally

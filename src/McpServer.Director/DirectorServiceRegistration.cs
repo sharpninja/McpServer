@@ -1,6 +1,7 @@
 using McpServer.Client;
 using McpServer.Cqrs;
 using McpServer.Director.Auth;
+using McpServer.Director.Helpers;
 using McpServer.UI.Core;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Services;
@@ -31,6 +32,8 @@ internal static class DirectorServiceRegistration
         services.AddDirectorLogging();
         services.AddCqrs(typeof(Program).Assembly);
         services.AddUiCore();
+
+        services.AddSingleton<IBrowserLauncher, BrowserLauncher>();
 
         // Override default permissive auth with Director-specific implementations
         services.RemoveAll<IRoleContext>();

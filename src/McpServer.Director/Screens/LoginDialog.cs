@@ -1,5 +1,6 @@
 using McpServer.Director.Auth;
 using McpServer.Director.Handlers;
+using McpServer.Director.Helpers;
 using Terminal.Gui;
 
 namespace McpServer.Director.Screens;
@@ -11,6 +12,7 @@ namespace McpServer.Director.Screens;
 internal sealed class LoginDialog : Dialog
 {
     private readonly Action<string>? _onLoginSuccess;
+    private readonly IBrowserLauncher _browserLauncher;
     private readonly LoginDialogAuthConfigHandler _authConfigHandler = new();
     private TextView _statusLabel = null!;
     private TextField _codeField = null!;
@@ -25,11 +27,12 @@ internal sealed class LoginDialog : Dialog
     /// <summary>Current verification URI for clipboard copy.</summary>
     private string? _currentVerificationUri;
 
-    public LoginDialog(Action<string>? onLoginSuccess = null)
+    public LoginDialog(IBrowserLauncher browserLauncher, Action<string>? onLoginSuccess = null)
     {
+        _browserLauncher = browserLauncher;
         _onLoginSuccess = onLoginSuccess;
         Title = "Login — Keycloak Device Authorization";
-        Width = 65;
+        Width = 70;
         Height = 18;
         BuildUi();
     }
@@ -100,13 +103,16 @@ internal sealed class LoginDialog : Dialog
 
                 var result = await authService.LoginAsync((userCode, verificationUri, verificationUriComplete) =>
                 {
+                    var targetUrl = verificationUriComplete ?? verificationUri;
+                    _browserLauncher.TryOpenUrl(targetUrl);
+
                     Application.Invoke(() =>
                     {
                         _currentUserCode = userCode;
-                        _currentVerificationUri = verificationUriComplete ?? verificationUri;
+                        _currentVerificationUri = targetUrl;
                         _codeField.Text = $"User Code: {userCode}  (select & Ctrl+C to copy)";
                         _uriField.Text = $"{_currentVerificationUri}";
-                        _statusLabel.Text = "⏳ Waiting for browser authentication...";
+                        _statusLabel.Text = "⏳ Browser opened — complete authentication there...";
                     });
                 }).ConfigureAwait(false);
 
@@ -137,10 +143,25 @@ internal sealed class LoginDialog : Dialog
             _onLoginSuccess?.Invoke("");
         };
 
+        var browserBtn = new Button { Text = "Open Browser" };
+        browserBtn.Accepting += (_, _) =>
+        {
+            if (!string.IsNullOrWhiteSpace(_currentVerificationUri))
+            {
+                _browserLauncher.TryOpenUrl(_currentVerificationUri);
+                _statusLabel.Text = "🌐 Browser opened — complete authentication there...";
+            }
+            else
+            {
+                _statusLabel.Text = "✗ No verification URL yet — click Login first";
+            }
+        };
+
         var closeBtn = new Button { Text = "Close" };
         closeBtn.Accepting += (_, _) => Application.RequestStop();
 
         AddButton(loginBtn);
+        AddButton(browserBtn);
         AddButton(logoutBtn);
         AddButton(closeBtn);
 

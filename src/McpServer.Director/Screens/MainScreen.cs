@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using McpServer.Director.Auth;
+using McpServer.Director.Helpers;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.ViewModels;
 using Microsoft.Extensions.Logging;
@@ -34,6 +35,7 @@ internal sealed class MainScreen : Window
     private readonly ObservableCollection<WorkspacePickerItem> _workspacePickerSource = [];
     private bool _authRefreshQueued;
     private readonly ILoggerFactory _loggerFactory;
+    private readonly IBrowserLauncher _browserLauncher;
 
     public MainScreen(
         WorkspaceListViewModel workspaceListVm,
@@ -49,7 +51,8 @@ internal sealed class MainScreen : Window
         IAuthorizationPolicyService authorizationPolicy,
         IRoleContext roleContext,
         DirectorMcpContext directorContext,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory,
+        IBrowserLauncher browserLauncher)
     {
         _healthVm = healthVm;
         _dispatcherLogsVm = dispatcherLogsVm;
@@ -65,6 +68,7 @@ internal sealed class MainScreen : Window
         _roleContext = roleContext;
         _directorContext = directorContext;
         _loggerFactory = loggerFactory;
+        _browserLauncher = browserLauncher;
 
         Title = "McpServer Director";
         Width = Dim.Fill();
@@ -208,7 +212,7 @@ internal sealed class MainScreen : Window
     {
         // Avoid mutating the main screen layout while the modal dialog is drawing/running.
         // Terminal.Gui can throw during nested draw when parent views are rebuilt from a dialog callback.
-        var dlg = new LoginDialog();
+        var dlg = new LoginDialog(_browserLauncher);
         Application.Run(dlg);
         QueueAuthStateChangedRefresh();
     }

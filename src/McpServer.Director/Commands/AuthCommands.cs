@@ -1,5 +1,7 @@
 using System.CommandLine;
 using McpServer.Director.Auth;
+using McpServer.Director.Helpers;
+using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using static McpServer.Director.Commands.CommandHelpers;
 
@@ -68,16 +70,24 @@ internal static class AuthCommands
 
             using var authService = new OidcAuthService(options);
 
+            // Resolve browser launcher from DI
+            var services = new ServiceCollection();
+            DirectorServiceRegistration.Configure(services);
+            using var sp = DirectorServiceRegistration.BuildAndFinalize(services);
+            var browserLauncher = sp.GetRequiredService<IBrowserLauncher>();
+
             AnsiConsole.MarkupLine($"[blue]Authenticating with:[/] {Markup.Escape(options.Authority)}");
             AnsiConsole.WriteLine();
 
             var result = await authService.LoginAsync((userCode, verificationUri, verificationUriComplete) =>
             {
+                var targetUrl = verificationUriComplete ?? verificationUri;
+
                 var panel = new Panel(
                     new Rows(
                         new Markup($"[bold yellow]User Code:[/] [bold white on blue] {Markup.Escape(userCode)} [/]"),
                         new Markup(""),
-                        new Markup($"[blue]Go to:[/] [link]{Markup.Escape(verificationUriComplete ?? verificationUri)}[/]"),
+                        new Markup($"[blue]Go to:[/] [link]{Markup.Escape(targetUrl)}[/]"),
                         new Markup(""),
                         new Markup("[dim]Enter the code above in your browser to complete login.[/]"),
                         new Markup("[dim]Waiting for authentication...[/]")))
@@ -89,6 +99,9 @@ internal static class AuthCommands
 
                 AnsiConsole.Write(panel);
                 AnsiConsole.WriteLine();
+
+                if (browserLauncher.TryOpenUrl(targetUrl))
+                    AnsiConsole.MarkupLine("[dim]Browser opened automatically.[/]");
             }).ConfigureAwait(false);
 
             if (result.IsSuccess)
