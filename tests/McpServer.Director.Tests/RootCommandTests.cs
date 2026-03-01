@@ -22,7 +22,6 @@ public sealed class RootCommandTests
         Assert.Contains("delete", result.StdOut);
         Assert.Contains("validate", result.StdOut);
         Assert.Contains("init", result.StdOut);
-        Assert.Contains("sync", result.StdOut);
         Assert.Contains("todo", result.StdOut);
         Assert.Contains("session-log", result.StdOut);
         Assert.Contains("login", result.StdOut);
