@@ -36,6 +36,8 @@ public sealed class FwhMcpTools
     private readonly IRequirementsDocumentService _requirementsDocumentService;
     private readonly IProcessRunner _processRunner;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IWorkspaceService _workspaceService;
+    private readonly TodoServiceResolver _todoServiceResolver;
     private readonly ILogger<FwhMcpTools> _logger;
 
 
@@ -52,6 +54,8 @@ public sealed class FwhMcpTools
         IRequirementsDocumentService requirementsDocumentService,
         IProcessRunner processRunner,
         IHttpContextAccessor httpContextAccessor,
+        IWorkspaceService workspaceService,
+        TodoServiceResolver todoServiceResolver,
         ILogger<FwhMcpTools> logger)
     {
         _logger = logger;
@@ -67,6 +71,8 @@ public sealed class FwhMcpTools
         _requirementsDocumentService = requirementsDocumentService;
         _processRunner = processRunner;
         _httpContextAccessor = httpContextAccessor;
+        _workspaceService = workspaceService;
+        _todoServiceResolver = todoServiceResolver;
     }
 
     /// <summary>
@@ -373,6 +379,57 @@ public sealed class FwhMcpTools
             var result = await _workspaceAccessor.GetTodoService().DeleteAsync(id, cancellationToken).ConfigureAwait(false);
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { success = true });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>Move a TODO item from the source workspace to a different target workspace.</summary>
+    [McpServerTool(Name = "todo_move"), Description("Move a TODO item from one workspace to another by its ID.")]
+    public async Task<string> TodoMove(
+        [Description("TODO item id")] string id,
+        [Description("Source workspace path (required)")] string workspacePath,
+        [Description("Target workspace path to move the item to")] string targetWorkspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var sourceService = _workspaceAccessor.GetTodoService();
+            var item = await sourceService.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
+            if (item is null) return JsonSerializer.Serialize(new { error = $"Item '{id}' not found in source workspace." });
+
+            var targetWs = await _workspaceService.GetAsync(targetWorkspacePath, cancellationToken).ConfigureAwait(false);
+            if (targetWs is null) return JsonSerializer.Serialize(new { error = $"Target workspace '{targetWorkspacePath}' not found." });
+
+            var targetContext = new WorkspaceContext
+            {
+                WorkspacePath = targetWs.WorkspacePath,
+                WorkspaceName = targetWs.Name,
+                DataDirectory = targetWs.DataDirectory,
+                TodoFilePath = targetWs.TodoPath,
+            };
+            var targetService = _todoServiceResolver.Resolve(targetContext);
+
+            var createReq = new TodoCreateRequest
+            {
+                Id = item.Id, Title = item.Title, Section = item.Section, Priority = item.Priority,
+                Estimate = item.Estimate, Description = item.Description, TechnicalDetails = item.TechnicalDetails,
+                ImplementationTasks = item.ImplementationTasks, Note = item.Note, Remaining = item.Remaining,
+                DependsOn = item.DependsOn, FunctionalRequirements = item.FunctionalRequirements,
+                TechnicalRequirements = item.TechnicalRequirements,
+            };
+
+            var createResult = await targetService.CreateAsync(createReq, cancellationToken).ConfigureAwait(false);
+            if (!createResult.Success) return JsonSerializer.Serialize(new { error = $"Failed to create in target: {createResult.Error}" });
+
+            var deleteResult = await sourceService.DeleteAsync(id, cancellationToken).ConfigureAwait(false);
+            if (!deleteResult.Success) return JsonSerializer.Serialize(new { error = $"Created in target but failed to delete from source: {deleteResult.Error}" });
+
+            return JsonSerializer.Serialize(new { success = true, movedTo = targetWs.WorkspacePath });
         }
         catch (Exception ex)
         {

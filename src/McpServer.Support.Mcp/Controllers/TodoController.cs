@@ -12,12 +12,16 @@ namespace McpServer.Support.Mcp.Controllers;
 public sealed class TodoController : ControllerBase
 {
     private readonly ITodoService _todoService;
+    private readonly TodoServiceResolver _todoServiceResolver;
+    private readonly IWorkspaceService _workspaceService;
     private readonly IRequirementsService _requirementsService;
     private readonly ITodoPromptService _todoPromptService;
 
     /// <summary>TR-PLANNED-013, TR-MCP-MT-001: Constructor. Resolves workspace-specific TODO service.</summary>
-    public TodoController(TodoServiceResolver todoServiceResolver, WorkspaceContext workspaceContext, IRequirementsService requirementsService, ITodoPromptService todoPromptService)
+    public TodoController(TodoServiceResolver todoServiceResolver, WorkspaceContext workspaceContext, IWorkspaceService workspaceService, IRequirementsService requirementsService, ITodoPromptService todoPromptService)
     {
+        _todoServiceResolver = todoServiceResolver;
+        _workspaceService = workspaceService;
         _todoService = todoServiceResolver.Resolve(workspaceContext);
         _requirementsService = requirementsService;
         _todoPromptService = todoPromptService;
@@ -112,6 +116,69 @@ public sealed class TodoController : ControllerBase
             return NotFound(result);
 
         return Ok(result);
+    }
+
+    /// <summary>Move a TODO item from the current workspace to a different workspace.</summary>
+    /// <param name="id">The TODO item id to move.</param>
+    /// <param name="request">Request body containing the target workspace path.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    [HttpPost("{id}/move")]
+    public async Task<ActionResult<TodoMutationResult>> MoveAsync(
+        string id,
+        [FromBody] TodoMoveRequest? request,
+        CancellationToken cancellationToken)
+    {
+        if (request is null || string.IsNullOrWhiteSpace(request.TargetWorkspacePath))
+            return BadRequest(new TodoMutationResult(false, "Request body with targetWorkspacePath is required."));
+
+        // 1. Get the item from the source workspace.
+        var item = await _todoService.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
+        if (item is null)
+            return NotFound(new TodoMutationResult(false, $"Item with id '{id}' not found in source workspace."));
+
+        // 2. Resolve the target workspace.
+        var targetWorkspace = await _workspaceService.GetAsync(request.TargetWorkspacePath, cancellationToken).ConfigureAwait(false);
+        if (targetWorkspace is null)
+            return BadRequest(new TodoMutationResult(false, $"Target workspace '{request.TargetWorkspacePath}' not found."));
+
+        var targetContext = new WorkspaceContext
+        {
+            WorkspacePath = targetWorkspace.WorkspacePath,
+            WorkspaceName = targetWorkspace.Name,
+            DataDirectory = targetWorkspace.DataDirectory,
+            TodoFilePath = targetWorkspace.TodoPath,
+        };
+
+        var targetService = _todoServiceResolver.Resolve(targetContext);
+
+        // 3. Create in the target workspace.
+        var createRequest = new TodoCreateRequest
+        {
+            Id = item.Id,
+            Title = item.Title,
+            Section = item.Section,
+            Priority = item.Priority,
+            Estimate = item.Estimate,
+            Description = item.Description,
+            TechnicalDetails = item.TechnicalDetails,
+            ImplementationTasks = item.ImplementationTasks,
+            Note = item.Note,
+            Remaining = item.Remaining,
+            DependsOn = item.DependsOn,
+            FunctionalRequirements = item.FunctionalRequirements,
+            TechnicalRequirements = item.TechnicalRequirements,
+        };
+
+        var createResult = await targetService.CreateAsync(createRequest, cancellationToken).ConfigureAwait(false);
+        if (!createResult.Success)
+            return Conflict(new TodoMutationResult(false, $"Failed to create in target workspace: {createResult.Error}"));
+
+        // 4. Delete from the source workspace.
+        var deleteResult = await _todoService.DeleteAsync(id, cancellationToken).ConfigureAwait(false);
+        if (!deleteResult.Success)
+            return StatusCode(500, new TodoMutationResult(false, $"Created in target but failed to delete from source: {deleteResult.Error}"));
+
+        return Ok(new TodoMutationResult(true, null, createResult.Item));
     }
 
     /// <summary>

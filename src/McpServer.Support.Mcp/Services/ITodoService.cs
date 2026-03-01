@@ -199,3 +199,10 @@ public sealed record TodoUpdateRequest
 
 /// <summary>TR-PLANNED-013: Result of a TODO mutation (create/update/delete).</summary>
 public sealed record TodoMutationResult(bool Success, string? Error = null, TodoFlatItem? Item = null);
+
+/// <summary>Request to move a TODO item to a different workspace.</summary>
+public sealed record TodoMoveRequest
+{
+    /// <summary>Absolute path of the target workspace to move the item to. Required.</summary>
+    public required string TargetWorkspacePath { get; init; }
+}
