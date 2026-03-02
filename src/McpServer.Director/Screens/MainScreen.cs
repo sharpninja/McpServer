@@ -351,6 +351,12 @@ internal sealed class MainScreen : Window
             return;
         }
 
+        if (view is AgentPoolScreen aps)
+        {
+            _ = Task.Run(aps.LoadAsync);
+            return;
+        }
+
         if (view is TunnelScreen tunnel)
         {
             _ = Task.Run(tunnel.LoadAsync);
@@ -405,6 +411,12 @@ internal sealed class MainScreen : Window
         if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Agents))
         {
             _tabView.AddTab(new Tab { DisplayText = "Agents", View = new AgentScreen(_directorContext) }, andSelect: selectFirst);
+            selectFirst = false;
+        }
+
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Agents))
+        {
+            _tabView.AddTab(new Tab { DisplayText = "Agent Pool", View = new AgentPoolScreen(_directorContext) }, andSelect: selectFirst);
             selectFirst = false;
         }
 

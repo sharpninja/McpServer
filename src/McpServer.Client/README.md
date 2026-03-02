@@ -52,6 +52,7 @@ var todos = await client.Todo.QueryAsync();
 | `GitHub` | Issues, PRs, labels, bidirectional sync |
 | `Workspace` | Manage workspace lifecycle |
 | `Tools` | Tool registry search, CRUD, bucket management |
+| `AgentPool` | Pooled agent lifecycle, one-shot queueing, and SSE monitoring |
 
 ## Target Frameworks
 

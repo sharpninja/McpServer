@@ -26,6 +26,7 @@ public sealed class McpServerClientTests
         Assert.NotNull(client.Repo);
         Assert.NotNull(client.Workspace);
         Assert.NotNull(client.Tools);
+        Assert.NotNull(client.AgentPool);
     }
 
     [Fact]
@@ -88,6 +89,7 @@ public sealed class McpServerClientTests
         Assert.Equal(9999, client.GitHub.Port);
         Assert.Equal(9999, client.SessionLog.Port);
         Assert.Equal(9999, client.Tools.Port);
+        Assert.Equal(9999, client.AgentPool.Port);
     }
 
     [Fact]
@@ -105,6 +107,7 @@ public sealed class McpServerClientTests
         Assert.Equal("default-anon-key", client.Todo.ApiKey);
         Assert.Equal("default-anon-key", client.Context.ApiKey);
         Assert.Equal("default-anon-key", client.Repo.ApiKey);
+        Assert.Equal("default-anon-key", client.AgentPool.ApiKey);
         Assert.Contains("/api-key", handler.LastRequest!.RequestUri!.ToString());
     }
 

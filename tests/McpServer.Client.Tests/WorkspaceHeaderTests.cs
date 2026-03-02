@@ -91,6 +91,7 @@ public sealed class WorkspaceHeaderTests
         Assert.Equal(@"C:\updated", client.GitHub.WorkspacePath);
         Assert.Equal(@"C:\updated", client.SessionLog.WorkspacePath);
         Assert.Equal(@"C:\updated", client.Tools.WorkspacePath);
+        Assert.Equal(@"C:\updated", client.AgentPool.WorkspacePath);
     }
 
     [Fact]

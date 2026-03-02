@@ -92,17 +92,17 @@
 | TR-MCP-TPL-005 | ✅ Complete | IMarkerPromptProvider, FileMarkerPromptProvider, ITodoPromptProvider, TodoPromptProvider, PairingHtmlRenderer, templates/prompt-templates.yaml |
 | FR-MCP-051 | 🔲 Planned | CopilotClientOptions, VoiceConversationOptions, AgentDefaults |
 | TR-MCP-CFG-005 | 🔲 Planned | CopilotClientOptions, VoiceConversationOptions, AgentDefaults |
-| FR-MCP-052 | 🔲 Planned | AgentPoolOptions *(planned)*, AgentPoolService *(planned)* |
-| FR-MCP-053 | 🔲 Planned | AgentPoolQueueService *(planned)*, AgentPoolController *(planned)* |
-| FR-MCP-054 | 🔲 Planned | AgentPoolController *(planned)*, AgentPoolNotificationService *(planned)* |
-| FR-MCP-055 | 🔲 Planned | AgentPoolIntentResolver *(planned)*, AgentPoolService *(planned)* |
-| FR-MCP-056 | 🔲 Planned | PromptTemplateController *(planned extension)*, AgentPoolController *(planned)* |
-| FR-MCP-057 | 🔲 Planned | AgentPoolScreen *(planned)*, AgentPoolViewModel *(planned)* |
-| FR-MCP-058 | 🔲 Planned | AgentPoolStreamService *(planned)*, VoiceConversationService *(planned extension)* |
-| TR-MCP-AGENT-004 | 🔲 Planned | AgentPoolOptions *(planned)*, Program.cs *(planned extension)* |
-| TR-MCP-AGENT-005 | 🔲 Planned | IAgentPoolService *(planned)*, AgentPoolService *(planned)*, AgentPoolQueueService *(planned)* |
-| TR-MCP-API-002 | 🔲 Planned | AgentPoolController *(planned)*, AgentPoolIntentResolver *(planned)* |
-| TR-MCP-API-003 | 🔲 Planned | AgentPoolController *(planned)*, AgentPoolNotificationService *(planned)*, AgentPoolStreamService *(planned)* |
-| TR-MCP-TPL-006 | 🔲 Planned | PromptTemplateController *(planned extension)*, PromptTemplateRenderer, AgentPoolController *(planned)* |
-| TR-MCP-VOICE-004 | 🔲 Planned | VoiceConversationService *(planned extension)*, AgentPoolStreamService *(planned)* |
-| TR-MCP-DIR-004 | 🔲 Planned | AgentPoolScreen *(planned)*, AgentPoolViewModel *(planned)*, McpHttpClient *(planned extension)* |
+| FR-MCP-052 | ✅ Complete | AgentPoolOptions, AgentPoolDefinitionOptions, AgentPoolOptionsValidator, Program.cs (AgentPool registration), IAgentPoolService, AgentPoolService |
+| FR-MCP-053 | ✅ Complete | AgentPoolService (queue lifecycle/dispatch), AgentPoolController (queue endpoints), TodoController queue enqueue endpoints |
+| FR-MCP-054 | ✅ Complete | AgentPoolController, AgentPoolService (notification and per-job stream fan-out) |
+| FR-MCP-055 | ✅ Complete | AgentPoolService (intent/context routing and default agent resolution), AgentPoolModels |
+| FR-MCP-056 | ✅ Complete | PromptTemplateController, PromptTemplateService, PromptTemplateRenderer, AgentPoolService.ResolvePromptAsync, AgentPoolController queue/resolve |
+| FR-MCP-057 | ✅ Complete | AgentPoolClient, Client.Models.AgentPoolModels, McpServerClient.AgentPool, AgentPoolScreen, MainScreen tab wiring |
+| FR-MCP-058 | ✅ Complete | AgentPoolController SSE endpoints, AgentPoolService stream subscriptions, VoiceConversationService agent-session reuse/one-shot guard, VoiceController |
+| TR-MCP-AGENT-004 | ✅ Complete | AgentPoolOptions, AgentPoolDefinitionOptions, AgentPoolOptionsValidator, Program.cs options validation/DI |
+| TR-MCP-AGENT-005 | ✅ Complete | IAgentPoolService, AgentPoolService, AgentPoolController |
+| TR-MCP-API-002 | ✅ Complete | AgentPoolController lifecycle/queue/resolve endpoints, AgentPoolService prompt/context routing |
+| TR-MCP-API-003 | ✅ Complete | AgentPoolController notifications/jobs SSE, AgentPoolService notification + job stream channels |
+| TR-MCP-TPL-006 | ✅ Complete | PromptTemplateController, PromptTemplateRenderer, AgentPoolService template/context prompt resolution |
+| TR-MCP-VOICE-004 | ✅ Complete | VoiceConversationService pooled agent reuse + one-shot guard, AgentPoolService voice-runtime dispatch integration |
+| TR-MCP-DIR-004 | ✅ Complete | AgentPoolClient, AgentPoolScreen, MainScreen tab integration, DirectorMcpContext typed client usage |

@@ -93,8 +93,9 @@ public sealed class McpServerClient
         AuthConfig = new AuthConfigClient(http, options, holder);
         Diagnostic = new DiagnosticClient(http, options, holder);
         Template = new TemplateClient(http, options, holder);
+        AgentPool = new AgentPoolClient(http, options, holder);
 
-        _allClients = new McpClientBase[] { Todo, Context, SessionLog, GitHub, Repo, Tunnel, Workspace, Tools, AuthConfig, Diagnostic, Template };
+        _allClients = new McpClientBase[] { Todo, Context, SessionLog, GitHub, Repo, Tunnel, Workspace, Tools, AuthConfig, Diagnostic, Template, AgentPool };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
         _workspacePath = holder.Path;
@@ -315,4 +316,10 @@ public sealed class McpServerClient
     /// <para>See <see cref="TemplateClient"/> for the full method list.</para>
     /// </summary>
     public TemplateClient Template { get; }
+
+    /// <summary>
+    /// Agent-pool runtime endpoints — lifecycle, queue operations, prompt resolution, and streams.
+    /// <para>See <see cref="AgentPoolClient"/> for the full method list.</para>
+    /// </summary>
+    public AgentPoolClient AgentPool { get; }
 }

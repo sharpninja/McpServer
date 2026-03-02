@@ -2248,21 +2248,21 @@ Architecture:
     - Implement pooled agents configured by AgentName/AgentPath/AgentModel/AgentSeed/AgentParameters; route voice and one-shot through pooled voice-launch sessions; add queue management, availability/control APIs, notification SSE, read-only stream fan-out, and Director Agent Pool + queue management UI.
     implementation-tasks:
     - task: Add McpServer.Client agent-pool API methods for agents, queue operations, lifecycle controls, and SSE subscriptions
-      done: false
+      done: true
     - task: Implement Director Agent Pool tab with live agent status, queue list, and action wiring (connect/start/stop/recycle)
-      done: false
+      done: true
     - task: Add Director queue actions for cancel/remove/reorder and free-form one-shot enqueue using queue/resolve + queue/one-shot
-      done: false
+      done: true
     - task: Add server tests for AgentPoolService queue lifecycle, dispatch, cancel, and move operations
-      done: false
+      done: true
     - task: Add server tests for AgentPoolController endpoints including queue/one-shot, queue/resolve, and SSE payload contracts
-      done: false
+      done: true
     - task: Add voice integration tests for pooled AgentName session reuse and interactive-only presence signaling (User is here/AFK)
-      done: false
+      done: true
     - task: Update docs/Project/Requirements-Matrix.md entries for FR-MCP-052..058 and TR-MCP-AGENT/API/TPL/VOICE/DIR from Planned to implemented status
-      done: false
+      done: true
     - task: Run validation with dotnet build src\\McpServer.Support.Mcp -c Debug and targeted tests for Support.Mcp, Client, and Director changes
-      done: false
+      done: true
 Director:
   high-priority:
   - id: director-sessionlog-details
