@@ -254,7 +254,16 @@ internal sealed class TodoScreen : View
         var detailBtn = new Button { X = Pos.Right(refreshBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Reload Detail" };
         detailBtn.Accepting += (_, _) => _ = Task.Run(LoadSelectedDetailAsync);
 
-        var newBtn = new Button { X = Pos.Right(detailBtn) + 2, Y = Pos.AnchorEnd(1), Text = "New" };
+        var planPromptBtn = new Button { X = Pos.Right(detailBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Plan" };
+        planPromptBtn.Accepting += (_, _) => ShowPromptResponseDialog("plan", _detailViewModel.GeneratePlanPromptAsync);
+
+        var implementPromptBtn = new Button { X = Pos.Right(planPromptBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Implement" };
+        implementPromptBtn.Accepting += (_, _) => ShowPromptResponseDialog("implement", _detailViewModel.GenerateImplementPromptAsync);
+
+        var statusPromptBtn = new Button { X = Pos.Right(implementPromptBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Status" };
+        statusPromptBtn.Accepting += (_, _) => ShowPromptResponseDialog("status", _detailViewModel.GenerateStatusPromptAsync);
+
+        var newBtn = new Button { X = Pos.Right(statusPromptBtn) + 2, Y = Pos.AnchorEnd(1), Text = "New" };
         newBtn.Accepting += (_, _) => BeginNewDraft();
 
         var saveBtn = new Button { X = Pos.Right(newBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Save" };
@@ -266,16 +275,7 @@ internal sealed class TodoScreen : View
         var reqsBtn = new Button { X = Pos.Right(deleteBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Reqs" };
         reqsBtn.Accepting += (_, _) => _ = Task.Run(AnalyzeRequirementsAsync);
 
-        var statusPromptBtn = new Button { X = Pos.Right(reqsBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Status" };
-        statusPromptBtn.Accepting += (_, _) => ShowPromptResponseDialog("status", _detailViewModel.GenerateStatusPromptAsync);
-
-        var implementPromptBtn = new Button { X = Pos.Right(statusPromptBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Implement" };
-        implementPromptBtn.Accepting += (_, _) => ShowPromptResponseDialog("implement", _detailViewModel.GenerateImplementPromptAsync);
-
-        var planPromptBtn = new Button { X = Pos.Right(implementPromptBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Plan" };
-        planPromptBtn.Accepting += (_, _) => ShowPromptResponseDialog("plan", _detailViewModel.GeneratePlanPromptAsync);
-
-        Add(refreshBtn, detailBtn, newBtn, saveBtn, deleteBtn, reqsBtn, statusPromptBtn, implementPromptBtn, planPromptBtn);
+        Add(refreshBtn, detailBtn, planPromptBtn, implementPromptBtn, statusPromptBtn, newBtn, saveBtn, deleteBtn, reqsBtn);
     }
 
     public async Task LoadAsync()
@@ -692,6 +692,7 @@ internal sealed class TodoScreen : View
                     SafeDialogUi(() =>
                     {
                         outputView.Text = currentText;
+                        outputView.MoveEnd();
                         statusView.Text = currentStatus;
                     });
                 }
@@ -706,6 +707,7 @@ internal sealed class TodoScreen : View
                 SafeDialogUi(() =>
                 {
                     outputView.Text = text;
+                    outputView.MoveEnd();
                     statusView.Text = $"Completed {promptLabel} prompt ({lines.Count} lines).";
                 });
             }

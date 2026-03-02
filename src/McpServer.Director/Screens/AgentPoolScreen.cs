@@ -1,5 +1,6 @@
 using McpServer.Client;
 using McpServer.Client.Models;
+using McpServer.Director.Handlers;
 using Terminal.Gui;
 
 namespace McpServer.Director.Screens;
@@ -11,6 +12,7 @@ namespace McpServer.Director.Screens;
 internal sealed class AgentPoolScreen : View
 {
     private readonly DirectorMcpContext _directorContext;
+    private readonly AgentScreenHandler _agentHandler;
     private readonly List<AgentPoolAgentStatus> _agentRows = [];
     private readonly List<AgentPoolQueueItem> _queueRows = [];
 
@@ -23,6 +25,7 @@ internal sealed class AgentPoolScreen : View
     public AgentPoolScreen(DirectorMcpContext directorContext)
     {
         _directorContext = directorContext ?? throw new ArgumentNullException(nameof(directorContext));
+        _agentHandler = new AgentScreenHandler(_directorContext);
         Title = "Agent Pool";
         Width = Dim.Fill();
         Height = Dim.Fill();
@@ -89,7 +92,9 @@ internal sealed class AgentPoolScreen : View
         Add(_statusLabel);
 
         var agentsLabel = new Label { X = 0, Y = 1, Text = "Agents" };
-        Add(agentsLabel);
+        var newAgentBtn = new Button { X = Pos.Right(agentsLabel) + 2, Y = 1, Text = "New Agent" };
+        newAgentBtn.Accepting += (_, _) => ShowNewAgentDialog();
+        Add(agentsLabel, newAgentBtn);
 
         _agentsTable = new TableView
         {
@@ -177,6 +182,42 @@ internal sealed class AgentPoolScreen : View
             return;
 
         Application.Invoke(() => _agentNameField.Text = selected.AgentName);
+    }
+
+    private void ShowNewAgentDialog()
+    {
+        var dialog = new Dialog
+        {
+            Title = "New Agent",
+            Width = 60,
+            Height = 10,
+        };
+
+        var nameLabel = new Label { X = 1, Y = 1, Text = "Agent Name:" };
+        var initialName = (_agentNameField.Text?.ToString() ?? string.Empty).Trim();
+        var nameField = new TextField { X = 13, Y = 1, Width = 44, Text = initialName };
+
+        var createBtn = new Button { Text = "Create" };
+        createBtn.Accepting += (_, _) =>
+        {
+            var agentName = (nameField.Text?.ToString() ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(agentName))
+            {
+                SetStatus("Enter an agent name first.");
+                return;
+            }
+
+            Application.RequestStop();
+            _ = Task.Run(() => CreateAgentForPoolAsync(agentName));
+        };
+
+        var cancelBtn = new Button { Text = "Cancel" };
+        cancelBtn.Accepting += (_, _) => Application.RequestStop();
+
+        dialog.Add(nameLabel, nameField);
+        dialog.AddButton(createBtn);
+        dialog.AddButton(cancelBtn);
+        Application.Run(dialog);
     }
 
     private AgentPoolAgentStatus? GetSelectedAgent()
@@ -401,6 +442,44 @@ internal sealed class AgentPoolScreen : View
             return typed;
         return GetSelectedAgent()?.AgentName;
     }
+
+    private async Task CreateAgentForPoolAsync(string agentName)
+    {
+        SetStatus($"Creating agent '{agentName}'...");
+        try
+        {
+            var workspacePath = GetRequiredActiveWorkspacePath();
+            var createdDefinition = false;
+            var definitionAlreadyExists = false;
+            try
+            {
+                await _agentHandler.CreateDefinitionAsync(agentName).ConfigureAwait(false);
+                createdDefinition = true;
+            }
+            catch (Exception ex) when (ex.Message.Contains("already exists", StringComparison.OrdinalIgnoreCase))
+            {
+                definitionAlreadyExists = true;
+            }
+
+            await _agentHandler.AssignWorkspaceAgentAsync(workspacePath, agentName).ConfigureAwait(false);
+            await LoadAsync().ConfigureAwait(false);
+            Application.Invoke(() => _agentNameField.Text = agentName);
+            SetStatus(createdDefinition
+                ? $"Agent '{agentName}' created and added to workspace."
+                : definitionAlreadyExists
+                    ? $"Agent '{agentName}' already existed and was added to workspace."
+                    : $"Agent '{agentName}' added to workspace.");
+        }
+        catch (Exception ex)
+        {
+            SetStatus($"Create agent failed: {ex.Message}");
+        }
+    }
+
+    private string GetRequiredActiveWorkspacePath()
+        => !string.IsNullOrWhiteSpace(_directorContext.ActiveWorkspacePath)
+            ? _directorContext.ActiveWorkspacePath
+            : throw new InvalidOperationException("No active workspace is selected.");
 
     private void SetStatus(string text)
     {
