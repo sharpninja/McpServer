@@ -14,8 +14,8 @@ public sealed class TemplateStorageOptions
     public string Provider { get; set; } = "yaml";
 
     /// <summary>
-    /// File path for YAML-backed template storage.
-    /// Relative paths are resolved under the application base directory.
-    /// </summary>
+     /// File path for YAML-backed template storage.
+    /// Relative paths are resolved under the effective data folder.
+     /// </summary>
     public string FilePath { get; set; } = "templates/prompt-templates.yaml";
 }

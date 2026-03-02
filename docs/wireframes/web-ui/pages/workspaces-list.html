@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Workspaces List Wireframe</title>
+  <link rel="stylesheet" href="../shared/wireframe.css" />
+</head>
+<body>
+  <main class="gh-content">
+    <h1 class="page-title">Workspaces</h1>
+    <p class="subtitle">List-first workflow with GitHub-style filter/action bar.</p>
+
+    <section class="panel">
+      <div class="row">
+        <input class="input" placeholder="Filter workspace" style="min-width:220px" />
+        <select class="select"><option>Status: all</option></select>
+        <button class="btn">Clear</button>
+        <button class="btn btn-primary">New workspace</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <table class="table">
+        <thead><tr><th>Name</th><th>Path</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>McpServer</td><td>E:\github\McpServer</td><td><span class="badge badge-success">enabled</span></td><td><button class="btn">Open</button></td></tr>
+          <tr><td>RequestTracker</td><td>E:\github\RequestTracker</td><td><span class="badge badge-warn">disabled</span></td><td><button class="btn">Open</button></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <p><a href="workspace-detail.html">Open workspace detail wireframe</a></p>
+    <p><a href="../index.html">Back to index</a></p>
+  </main>
+</body>
+</html>

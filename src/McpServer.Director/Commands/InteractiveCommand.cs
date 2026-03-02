@@ -43,6 +43,7 @@ internal static class InteractiveCommand
             var healthVm = sp.GetRequiredService<HealthSnapshotsViewModel>();
             var dispatcherLogsVm = sp.GetRequiredService<DispatcherLogsViewModel>();
             var sessionLogVm = sp.GetRequiredService<SessionLogListViewModel>();
+            var sessionLogDetailVm = sp.GetRequiredService<SessionLogDetailViewModel>();
             var todoVm = sp.GetRequiredService<TodoListViewModel>();
             var todoDetailVm = sp.GetRequiredService<TodoDetailViewModel>();
             var tunnelListVm = sp.GetRequiredService<TunnelListViewModel>();
@@ -65,6 +66,7 @@ internal static class InteractiveCommand
                     healthVm,
                     dispatcherLogsVm,
                     sessionLogVm,
+                    sessionLogDetailVm,
                     todoVm,
                     todoDetailVm,
                     tunnelListVm,

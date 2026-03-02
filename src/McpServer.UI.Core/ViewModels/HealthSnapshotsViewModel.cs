@@ -75,7 +75,7 @@ public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnaps
             }
 
             Items.Insert(0, result.Value);
-            SelectedItem = result.Value;
+            SelectedIndex = 0;
             TotalCount = Items.Count;
             LastRefreshedAt = DateTimeOffset.UtcNow;
             StatusMessage = $"Health check recorded at {result.Value.CheckedAt:HH:mm:ss}.";

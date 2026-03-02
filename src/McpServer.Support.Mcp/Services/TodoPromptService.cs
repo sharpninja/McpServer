@@ -36,6 +36,9 @@ public sealed class TodoPromptService(
         var prompt = BuildPrompt(await GetEffectiveStatusPromptAsync(cancellationToken).ConfigureAwait(false), item);
         logger.LogInformation("Streaming Copilot status for TODO {Id} in {Cwd}", id, workspaceAccessor.GetWorkspacePath());
 
+        foreach (var line in FormatPromptLines(prompt))
+            yield return line;
+
         await foreach (var line in InvokeCopilotStreaming(prompt, TimeSpan.FromMinutes(3), cancellationToken).ConfigureAwait(false))
             yield return line;
     }
@@ -55,6 +58,9 @@ public sealed class TodoPromptService(
         var prompt = BuildPrompt(await GetEffectiveImplementPromptAsync(cancellationToken).ConfigureAwait(false), item);
         logger.LogInformation("Streaming Copilot implement for TODO {Id} in {Cwd}", id, workspaceAccessor.GetWorkspacePath());
 
+        foreach (var line in FormatPromptLines(prompt))
+            yield return line;
+
         await foreach (var line in InvokeCopilotStreaming(prompt, TimeSpan.FromMinutes(5), cancellationToken).ConfigureAwait(false))
             yield return line;
     }
@@ -73,6 +79,9 @@ public sealed class TodoPromptService(
 
         var prompt = BuildPrompt(await GetEffectivePlanPromptAsync(cancellationToken).ConfigureAwait(false), item);
         logger.LogInformation("Streaming Copilot plan for TODO {Id} in {Cwd}", id, workspaceAccessor.GetWorkspacePath());
+
+        foreach (var line in FormatPromptLines(prompt))
+            yield return line;
 
         await foreach (var line in InvokeCopilotStreaming(prompt, TimeSpan.FromMinutes(5), cancellationToken).ConfigureAwait(false))
             yield return line;
@@ -122,6 +131,16 @@ public sealed class TodoPromptService(
         sb.AppendLine("--- TODO ITEM ---");
         AppendItemContext(sb, item);
         return sb.ToString();
+    }
+
+    /// <summary>Yields the supplied prompt as labelled lines for the response stream.</summary>
+    private static IEnumerable<string> FormatPromptLines(string prompt)
+    {
+        yield return "--- PROMPT ---";
+        foreach (var line in prompt.Split('\n'))
+            yield return line.TrimEnd('\r');
+        yield return "--- END PROMPT ---";
+        yield return "";
     }
 
     private static void AppendItemContext(StringBuilder sb, TodoFlatItem item)

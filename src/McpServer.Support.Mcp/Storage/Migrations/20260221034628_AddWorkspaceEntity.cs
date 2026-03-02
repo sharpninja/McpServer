@@ -11,10 +11,14 @@ namespace McpServer.Support.Mcp.Storage.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            var embeddingType = ActiveProvider.Contains("Npgsql", StringComparison.Ordinal)
+                ? "bytea"
+                : "BLOB";
+
             migrationBuilder.AddColumn<byte[]>(
                 name: "Embedding",
                 table: "Chunks",
-                type: "BLOB",
+                type: embeddingType,
                 nullable: true);
 
             migrationBuilder.CreateTable(

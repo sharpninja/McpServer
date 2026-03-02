@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Button States Pattern</title>
+  <link rel="stylesheet" href="wireframe.css" />
+</head>
+<body>
+  <main class="gh-content">
+    <h1 class="page-title">Button States (GitHub Parity)</h1>
+    <p class="subtitle">Buttons should match GitHub state transitions: default, hover, focus-visible, active, disabled, and busy.</p>
+
+    <section class="panel">
+      <h2>Primary/Secondary/Danger</h2>
+      <div class="row">
+        <button class="btn">Default</button>
+        <button class="btn btn-primary">Primary</button>
+        <button class="btn btn-danger">Danger</button>
+        <button class="btn btn-outline">Outline</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Disabled and Busy</h2>
+      <div class="row">
+        <button class="btn btn-primary" disabled>Saving</button>
+        <button class="btn btn-primary" aria-busy="true">Save changes</button>
+        <button class="btn btn-danger" aria-busy="true">Delete workspace</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Behavior Rules</h2>
+      <ul>
+        <li>Primary action is singular per panel where possible.</li>
+        <li>Danger actions require explicit confirmation dialog.</li>
+        <li>Busy state locks control and communicates progress.</li>
+      </ul>
+    </section>
+
+    <p><a href="../index.html">Back to index</a></p>
+  </main>
+</body>
+</html>

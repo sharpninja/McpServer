@@ -18,6 +18,7 @@ public class ViewModelRegistryTests
         services.AddSingleton(typeof(ILogger<>), typeof(NullLogger<>));
         services.AddCqrs(typeof(ViewModelRegistryTests).Assembly);
         services.AddTransient<WorkspaceListViewModel>();
+        services.AddTransient<WorkspaceContextViewModel>();
         services.AddTransient<WorkspacePolicyViewModel>();
 
         var sp = services.BuildServiceProvider();
@@ -81,12 +82,13 @@ public class ViewModelRegistryTests
         var (sp, registry) = BuildRegistry();
         using var _ = sp;
 
-        var vm = registry.Resolve("update-policy");
-        var json = JsonSerializer.Deserialize<JsonElement>("{\"workspacePath\":\"/test/path\"}");
+        var vm = registry.Resolve("list-workspaces");
+        var json = JsonSerializer.Deserialize<JsonElement>("{\"errorMessage\":\"/test/path\",\"totalCount\":7}");
         registry.SetProperties(vm, json);
 
-        var policyVm = (WorkspacePolicyViewModel)vm;
-        Assert.Equal("/test/path", policyVm.WorkspacePath);
+        var listVm = (WorkspaceListViewModel)vm;
+        Assert.Equal("/test/path", listVm.ErrorMessage);
+        Assert.Equal(7, listVm.TotalCount);
     }
 
     [Fact]

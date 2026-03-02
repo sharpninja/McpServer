@@ -62,6 +62,7 @@ public sealed class Dispatcher : ILoggerProvider
         _activeContexts[context.Correlation.BaseId] = context;
         var outcome = "Unknown";
         string? error = null;
+        context.Properties["RequestData"] = request.ToYaml();
 
         var sw = Stopwatch.StartNew();
         try
@@ -108,6 +109,7 @@ public sealed class Dispatcher : ILoggerProvider
                 LogResult(result, context, sw.Elapsed);
                 outcome = result.IsSuccess ? "Success" : "Failure";
                 error = result.Error;
+                context.Properties["ResultData"] = result.ToString();
                 return result;
             }
             finally
@@ -123,6 +125,7 @@ public sealed class Dispatcher : ILoggerProvider
                 context.OperationName, context.Correlation.Current, sw.ElapsedMilliseconds);
             outcome = "Cancelled";
             error = result.Error;
+            context.Properties["ResultData"] = result.ToString();
             return result;
         }
         catch (OperationCanceledException ex)
@@ -133,6 +136,7 @@ public sealed class Dispatcher : ILoggerProvider
                 context.OperationName, context.Correlation.Current, sw.ElapsedMilliseconds);
             outcome = "Timeout";
             error = result.Error;
+            context.Properties["ResultData"] = result.ToString();
             return result;
         }
         catch (Exception ex)
@@ -142,7 +146,9 @@ public sealed class Dispatcher : ILoggerProvider
                 context.OperationName, context.Correlation.Current, sw.ElapsedMilliseconds);
             outcome = "Exception";
             error = ex.Message;
-            return Result<TResult>.Failure(ex);
+            var result = Result<TResult>.Failure(ex);
+            context.Properties["ResultData"] = result.ToString();
+            return result;
         }
         finally
         {
@@ -212,6 +218,9 @@ public sealed class Dispatcher : ILoggerProvider
                 e.Exception?.Message))
             .ToArray();
 
+        context.Properties.TryGetValue("RequestData", out var reqObj);
+        context.Properties.TryGetValue("ResultData", out var resObj);
+
         var record = new DispatchLogRecord(
             context.Started,
             finishedAt,
@@ -223,7 +232,9 @@ public sealed class Dispatcher : ILoggerProvider
             context.UserId,
             context.UserName,
             context.Roles?.Where(static r => !string.IsNullOrWhiteSpace(r)).ToArray() ?? [],
-            entries);
+            entries,
+            reqObj as string,
+            resObj as string);
 
         _recentDispatches.Enqueue(record);
         while (_recentDispatches.Count > MaxRetainedDispatchLogs && _recentDispatches.TryDequeue(out _))

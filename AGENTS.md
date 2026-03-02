@@ -21,3 +21,8 @@ On EVERY subsequent user message:
 **If you skip any of these steps, STOP and go back and do them before continuing.**
 Session logging is not optional, not deferred, and not secondary to the task.
 Failure to maintain the session log is a compliance violation.
+
+## Response Formatting
+
+- Do not use table-style output in responses.
+- Use concise bullets or short paragraphs instead.

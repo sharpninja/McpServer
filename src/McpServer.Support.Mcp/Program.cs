@@ -20,6 +20,7 @@ using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Web;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration.Json;
 using NetEscapades.Configuration.Yaml;
 using Microsoft.Extensions.Options;
@@ -149,11 +150,32 @@ if (builder.Environment.IsEnvironment("Test"))
 }
 else
 {
-    var dataSource = McpInstanceResolver.ResolveSqliteDataSource(builder.Configuration, instanceName);
-    builder.Services.AddDbContext<McpDbContext>(options =>
+    var databaseProvider = (McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "DatabaseProvider") ?? "sqlite")
+        .Trim()
+        .ToUpperInvariant();
+
+    if (databaseProvider is "POSTGRES" or "POSTGRESQL" or "NPGSQL")
     {
-        options.UseSqlite($"Data Source={dataSource}");
-    }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
+        var postgresConnectionString = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "PostgresConnectionString")
+            ?? builder.Configuration.GetConnectionString("Mcp");
+
+        if (string.IsNullOrWhiteSpace(postgresConnectionString))
+            throw new InvalidOperationException("Mcp:PostgresConnectionString (or ConnectionStrings:Mcp) is required when Mcp:DatabaseProvider is postgres.");
+
+        builder.Services.AddDbContext<McpDbContext>(options =>
+        {
+            options.UseNpgsql(postgresConnectionString);
+            options.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
+        }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
+    }
+    else
+    {
+        var dataSource = McpInstanceResolver.ResolveSqliteDataSource(builder.Configuration, instanceName);
+        builder.Services.AddDbContext<McpDbContext>(options =>
+        {
+            options.UseSqlite($"Data Source={dataSource}");
+        }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
+    }
 }
 
 builder.Services.Configure<IngestionOptions>(builder.Configuration.GetSection("Mcp"));
@@ -161,8 +183,10 @@ builder.Services.Configure<MarkerPromptOptions>(builder.Configuration.GetSection
 builder.Services.Configure<McpParseableOptions>(builder.Configuration.GetSection(McpParseableOptions.SectionName));
 builder.Services.Configure<McpInteractionLoggingOptions>(builder.Configuration.GetSection(McpInteractionLoggingOptions.SectionName));
 builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(TodoStorageOptions.SectionName));
+builder.Services.Configure<AgentPoolOptions>(builder.Configuration.GetSection(AgentPoolOptions.SectionName));
 builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
 builder.Services.Configure<RequirementsOptions>(builder.Configuration.GetSection(RequirementsOptions.SectionName));
+builder.Services.AddSingleton<IValidateOptions<AgentPoolOptions>, AgentPoolOptionsValidator>();
 builder.Services.PostConfigure<VectorIndexOptions>(options =>
 {
     var instanceIndexPath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "IndexPath");
@@ -182,16 +206,21 @@ builder.Services.PostConfigure<IngestionOptions>(options =>
     options.SessionsPath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "SessionsPath") ?? options.SessionsPath;
     options.UnifiedModelSchemaPath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "UnifiedModelSchemaPath") ?? options.UnifiedModelSchemaPath;
     options.ExternalDocsPath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "ExternalDocsPath") ?? options.ExternalDocsPath;
+
+    options.TodoFilePath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.TodoFilePath);
+    options.SessionsPath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.SessionsPath);
+    options.UnifiedModelSchemaPath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.UnifiedModelSchemaPath);
 });
 builder.Services.PostConfigure<TodoStorageOptions>(options =>
 {
     options.Provider = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TodoStorage:Provider") ?? options.Provider;
     options.SqliteDataSource = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TodoStorage:SqliteDataSource") ?? options.SqliteDataSource;
-    if (!Path.IsPathRooted(options.SqliteDataSource))
-    {
-        var dataDirectory = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "DataDirectory") ?? ".";
-        options.SqliteDataSource = Path.GetFullPath(Path.Combine(dataDirectory, options.SqliteDataSource));
-    }
+    options.SqliteDataSource = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.SqliteDataSource);
+});
+builder.Services.PostConfigure<TemplateStorageOptions>(options =>
+{
+    options.FilePath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TemplateStorage:FilePath") ?? options.FilePath;
+    options.FilePath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.FilePath);
 });
 builder.Services.PostConfigure<RequirementsOptions>(options =>
 {
@@ -257,6 +286,7 @@ builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredServi
 builder.Services.AddSingleton<IRequirementsDocumentService>(sp => sp.GetRequiredService<RequirementsDocumentService>());
 builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
 builder.Services.AddSingleton<IVoiceConversationService, VoiceConversationService>();
+builder.Services.AddSingleton<IAgentPoolService, AgentPoolService>();
 builder.Services.AddSingleton<PromptTemplateRenderer>();
 builder.Services.Configure<TemplateStorageOptions>(builder.Configuration.GetSection(TemplateStorageOptions.SectionName));
 builder.Services.AddSingleton<IPromptTemplateService, PromptTemplateService>();

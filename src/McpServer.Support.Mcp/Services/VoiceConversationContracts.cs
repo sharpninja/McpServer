@@ -8,22 +8,57 @@ public sealed record VoiceSessionCreateRequest
     /// <summary>
     /// Preferred language tag for STT/TTS text (default <c>en-US</c>).
     /// </summary>
-    public string? Language { get; init; }
+    public string? Language { get; set; }
 
     /// <summary>
     /// Optional client/device identifier for diagnostics.
     /// </summary>
-    public string? DeviceId { get; init; }
+    public string? DeviceId { get; set; }
 
     /// <summary>
     /// Optional client display name.
     /// </summary>
-    public string? ClientName { get; init; }
+    public string? ClientName { get; set; }
 
     /// <summary>
     /// Workspace root path to use as CWD when launching Copilot. Typically resolved from X-Workspace-Path header.
     /// </summary>
     public string? WorkspacePath { get; set; }
+
+    /// <summary>
+    /// Optional pooled-agent name used for agent-pool routing and session reuse.
+    /// </summary>
+    public string? AgentName { get; set; }
+
+    /// <summary>
+    /// Optional agent binary path override for this session.
+    /// </summary>
+    public string? AgentPath { get; set; }
+
+    /// <summary>
+    /// Optional model override for this session.
+    /// </summary>
+    public string? AgentModel { get; set; }
+
+    /// <summary>
+    /// Optional seed prompt prepended to the first turn for this session.
+    /// </summary>
+    public string? AgentSeed { get; set; }
+
+    /// <summary>
+    /// Optional immediate prompt sent when connecting to an existing running agent session.
+    /// </summary>
+    public string? AgentPrompt { get; set; }
+
+    /// <summary>
+    /// Optional key-value parameters forwarded as environment variables for this session.
+    /// </summary>
+    public Dictionary<string, string>? AgentParameters { get; set; }
+
+    /// <summary>
+    /// Whether this session is dedicated to one-shot processing.
+    /// </summary>
+    public bool OneShotSession { get; set; }
 }
 
 /// <summary>
@@ -330,6 +365,12 @@ public interface IVoiceConversationService
     /// Returns <c>false</c> if the session was not found or has no active interactive session.
     /// </summary>
     Task<bool> SendEscapeAsync(string sessionId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Sends an arbitrary message into an active interactive session.
+    /// </summary>
+    /// <returns><see langword="true"/> when the message was sent; otherwise <see langword="false"/>.</returns>
+    Task<bool> SendSessionMessageAsync(string sessionId, string message, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets session status details.

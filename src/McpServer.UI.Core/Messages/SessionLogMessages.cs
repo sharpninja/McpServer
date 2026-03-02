@@ -38,3 +38,86 @@ public sealed record SessionLogSummary(
     string? Started,
     string? LastUpdated,
     int EntryCount);
+
+/// <summary>TR-PLANNED-013: Query to load a single session log by session ID.</summary>
+public sealed record GetSessionLogQuery(string SessionId) : IQuery<SessionLogDetail?>;
+
+/// <summary>TR-PLANNED-013: Detailed session log view for Director drill-down screens.</summary>
+public sealed record SessionLogDetail(
+    string SessionId,
+    string SourceType,
+    string Title,
+    string Status,
+    string? Model,
+    string? Started,
+    string? LastUpdated,
+    int EntryCount,
+    int? TotalTokens,
+    string? CursorSessionLabel,
+    SessionLogWorkspaceInfo? Workspace,
+    SessionLogCopilotStatistics? CopilotStatistics,
+    IReadOnlyList<SessionLogEntryDetail> Entries);
+
+/// <summary>Workspace metadata attached to a session log.</summary>
+public sealed record SessionLogWorkspaceInfo(
+    string? Project,
+    string? TargetFramework,
+    string? Repository,
+    string? Branch);
+
+/// <summary>Aggregate Copilot usage statistics attached to a session log.</summary>
+public sealed record SessionLogCopilotStatistics(
+    double? AverageSuccessScore,
+    int? TotalNetTokens,
+    int? TotalNetPremiumRequests,
+    int? CompletedCount,
+    int? InProgressCount);
+
+/// <summary>Detailed request entry within a session log.</summary>
+public sealed record SessionLogEntryDetail(
+    string RequestId,
+    string? Timestamp,
+    string? QueryTitle,
+    string? QueryText,
+    string? Response,
+    string? Interpretation,
+    string? Status,
+    string? Model,
+    string? ModelProvider,
+    int? TokenCount,
+    string? FailureNote,
+    double? Score,
+    bool? IsPremium,
+    IReadOnlyList<string> Tags,
+    IReadOnlyList<string> ContextList,
+    IReadOnlyList<string> DesignDecisions,
+    IReadOnlyList<string> RequirementsDiscovered,
+    IReadOnlyList<string> FilesModified,
+    IReadOnlyList<string> Blockers,
+    IReadOnlyList<SessionLogActionDetail> Actions,
+    IReadOnlyList<SessionLogDialogDetail> ProcessingDialog,
+    IReadOnlyList<SessionLogCommitDetail> Commits);
+
+/// <summary>Action detail attached to a session log request entry.</summary>
+public sealed record SessionLogActionDetail(
+    int Order,
+    string? Description,
+    string? Type,
+    string? Status,
+    string? FilePath);
+
+/// <summary>Processing dialog detail attached to a session log request entry.</summary>
+public sealed record SessionLogDialogDetail(
+    string? Timestamp,
+    string? Role,
+    string? Category,
+    string? Content);
+
+/// <summary>Commit detail attached to a session log request entry.</summary>
+public sealed record SessionLogCommitDetail(
+    string? Sha,
+    string? Branch,
+    string? Message,
+    string? Author,
+    string? Timestamp,
+    IReadOnlyList<string> FilesChanged);

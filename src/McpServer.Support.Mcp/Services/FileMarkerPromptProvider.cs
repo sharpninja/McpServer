@@ -1,5 +1,7 @@
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using Microsoft.Extensions.Options;
+using McpServer.Support.Mcp.Options;
 
 namespace McpServer.Support.Mcp.Services;
 
@@ -23,9 +25,22 @@ public sealed class FileMarkerPromptProvider : IMarkerPromptProvider
 
     /// <summary>Initializes a new instance of the <see cref="FileMarkerPromptProvider"/> class.</summary>
     public FileMarkerPromptProvider(ILogger<FileMarkerPromptProvider> logger)
+        : this(Microsoft.Extensions.Options.Options.Create(new TemplateStorageOptions()), logger)
     {
+    }
+
+    /// <summary>Initializes a new instance of the <see cref="FileMarkerPromptProvider"/> class.</summary>
+    public FileMarkerPromptProvider(IOptions<TemplateStorageOptions> options, ILogger<FileMarkerPromptProvider> logger)
+    {
+        ArgumentNullException.ThrowIfNull(options);
         _logger = logger;
-        _filePath = Path.Combine(AppContext.BaseDirectory, "templates", "default-marker-prompt.hbs.yaml");
+
+        var templateFilePath = options.Value.FilePath;
+        if (!Path.IsPathRooted(templateFilePath))
+            templateFilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, templateFilePath));
+
+        var templateDirectory = Path.GetDirectoryName(templateFilePath) ?? Path.Combine(AppContext.BaseDirectory, "templates");
+        _filePath = Path.Combine(templateDirectory, "default-marker-prompt.hbs.yaml");
     }
 
     /// <inheritdoc />

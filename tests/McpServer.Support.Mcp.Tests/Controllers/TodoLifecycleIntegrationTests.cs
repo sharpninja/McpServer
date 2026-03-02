@@ -683,6 +683,7 @@ public sealed class TodoLifecycleIntegrationTests
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
                     { "Mcp:DataSource", ":memory:" },
+                    { "DataFolder", _tempDir },
                     { "Mcp:RepoRoot", _tempDir },
                     { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" }
                 });

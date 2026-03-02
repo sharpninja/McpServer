@@ -43,6 +43,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<WorkspacePolicyViewModel>();
         services.AddTransient<HealthSnapshotsViewModel>();
         services.AddTransient<SessionLogListViewModel>();
+        services.AddTransient<SessionLogDetailViewModel>();
         services.AddTransient<DispatcherLogsViewModel>();
         services.AddTransient<RepoListViewModel>();
         services.AddTransient<RepoFileViewModel>();

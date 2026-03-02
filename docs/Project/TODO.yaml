@@ -3,7 +3,7 @@ requirements-management:
   - id: REQ-MGMT-001
     title: Requirements Management Feature — CRUD + document generation endpoints
     estimate: 4-6 days
-    note: 'High priority — builds on FR-MCP-023 (AI requirements analysis). This TODO intentionally uses a non-FR ID because FR-MCP-026 was reassigned to Keycloak OIDC authentication in the requirements docs. Provides a first-class Requirements Management subsystem: in-memory model loaded from the four canonical docs, full CRUD for FR/TR/TEST entries, and REST + MCP tool endpoints to regenerate any or all four documents in their exact established Markdown format (individually or as a ZIP).'
+    note: 'High priority — builds on FR-MCP-023 (AI requirements analysis). This TODO intentionally uses a non-FR ID because FR-MCP-026 was reassigned to OIDC authentication in the requirements docs. Provides a first-class Requirements Management subsystem: in-memory model loaded from the four canonical docs, full CRUD for FR/TR/TEST entries, and REST + MCP tool endpoints to regenerate any or all four documents in their exact established Markdown format (individually or as a ZIP).'
     done: true
     completed: 2026-02-26
     description:
@@ -1246,7 +1246,7 @@ mvp-app:
   - id: MVP-MCP-001
     title: Add notifications about changed context (including session logs) on changes within a workspace
     estimate: 8-12 hours AI-assisted
-    note: 'Audit completed 2026-02-27. Infrastructure partially built (5 notification model files, SSE endpoint, middleware SSE bypass). NON-FUNCTIONAL: ChannelChangeEventBus not registered in DI (runtime crash on /mcpserver/events), zero PublishAsync calls anywhere, no tests, no FR/TR/TEST requirements documented. 52 mutation points across 12 services need event publishing. EventStreamController incorrectly references FR-MCP-031 (Web UI) — needs new FR-MCP-045.'
+    note: 'Audit 2026-03-01. Infrastructure built: ChannelChangeEventBus.cs exists, EventStreamController.cs exists at /mcpserver/events with SSE streaming. NON-FUNCTIONAL: ChannelChangeEventBus NOT registered in DI (runtime crash), ZERO PublishAsync calls in codebase, no services inject IChangeEventBus. EventStreamController references FR-MCP-031 (Web UI) - needs dedicated FR (FR-MCP-049). 52 mutation points across 12 services need event publishing wired up.'
     done: false
     description:
     - Implement a notification/event system that alerts connected agents when workspace context changes
@@ -1348,6 +1348,57 @@ mvp-app:
     - 'Resolution: X-Workspace-Path header > API key reverse lookup > default workspace.'
     - Shared SQLite DB with WorkspaceId discriminator.
     - '7 phases: Resolution Layer, DB Consolidation, Service Multi-Tenancy, Remove Multi-Instance, Director Updates, Testing, Documentation.'
+  - id: sessionlog-commit-collection
+    title: Create collection for commits on the request object in the session log
+    note: 'All 13 code implementation tasks verified complete in codebase. Build passes with 0 warnings, all 515 tests pass (434 + 81). Remaining: E2E deploy verification and final TODO/docs update. Migration was combined into single file 20260301111848_AddSessionLogCommitsAndStringLists.cs (not split as originally planned).'
+    done: true
+    description:
+    - Add a commits collection property to the session log RequestEntry object
+    - Allow agents to log git commits (SHA, branch, message, files changed) as structured data alongside each request entry
+    technical-details:
+    - 10 tasks across 2 new files and 5 modified files
+    - 'SessionLogCommitDto: Sha, Branch, Message, Author, Timestamp, FilesChanged (List<string>)'
+    - 'SessionLogCommitEntity: 4NF child of SessionLogEntryEntity, FK + cascade delete'
+    - FilesChanged stored as JSON string (FilesChangedJson) to avoid 4th-level entity
+    - CommitTimestamp (not Timestamp) to avoid name collision with base properties
+    - 'Migration: 20260302000000_AddSessionLogCommits (CreateTable + FK + indexes on SessionLogEntryId and WorkspaceId)'
+    - 'Service: MapCommits, DeserializeStringList, UpdateEntryFromDto, MapSingleEntry, MapEntityToDto, Include chains'
+    - 'Client mirror: SessionLogCommitDto + Commits property in McpServer.Client/Models/SessionLogModels.cs'
+    - 'No new endpoints: commits flow through existing POST /mcpserver/sessionlog'
+    - 'No CQRS/Director changes: commits are submitted not queried independently'
+    implementation-tasks:
+    - task: 'commit-dto: Add SessionLogCommitDto class + Commits property to UnifiedSessionLogDto.cs'
+      done: false
+    - task: 'commit-entity: Create SessionLogCommitEntity.cs (4NF child entity with FK to SessionLogEntryEntity)'
+      done: false
+    - task: 'commit-entry-nav: Add ICollection<SessionLogCommitEntity> Commits navigation to SessionLogEntryEntity.cs'
+      done: false
+    - task: 'commit-dbcontext: Register in McpDbContext (DbSet, Fluent API HasOne/WithMany/FK/Cascade, HasQueryFilter)'
+      done: false
+    - task: 'commit-migration: Hand-written migration 20260302000000_AddSessionLogCommits.cs (CreateTable + FK + indexes)'
+      done: false
+    - task: 'commit-service-mapping: Add MapCommits, DeserializeStringList, update UpdateEntryFromDto/MapSingleEntry/MapEntityToDto/Include chains'
+      done: false
+    - task: 'commit-client-dto: Mirror SessionLogCommitDto + Commits property in McpServer.Client/Models/SessionLogModels.cs'
+      done: false
+    - task: 'stringlist-entity: Create SessionLogEntryStringListEntity.cs (4NF generic with ListType discriminator)'
+      done: false
+    - task: 'stringlist-entry-nav: Add ICollection<SessionLogEntryStringListEntity> StringListItems to SessionLogEntryEntity'
+      done: false
+    - task: 'stringlist-dbcontext: Register in McpDbContext (DbSet, Fluent API, composite index on EntryId+ListType, HasQueryFilter)'
+      done: false
+    - task: 'stringlist-migration: Migration 20260302000001_AddSessionLogEntryStringLists.cs'
+      done: false
+    - task: 'stringlist-service-mapping: MapStringListItems/AddStringListItems/MapStringListToDto + UpdateEntryFromDto/MapSingleEntry/MapEntityToDto/Include chains'
+      done: false
+    - task: 'stringlist-client-dto: Add DesignDecisions/RequirementsDiscovered/FilesModified/Blockers to client DTO if missing'
+      done: false
+    - task: 'commit-build-verify: Build + test all projects (0 warnings, all tests pass)'
+      done: false
+    - task: 'commit-deploy-verify: Deploy server, E2E test commits + string-lists round-trip'
+      done: false
+    - task: 'commit-todo-update: Mark done, update FR/TR docs, update session log'
+      done: false
 mvp-mcp:
   high-priority:
   - id: MVP-MCP-002
@@ -1359,7 +1410,7 @@ mvp-mcp:
   - id: MVP-MCP-003
     title: Complete Director MVVM/CQRS endpoint coverage with per-area ViewModels, handlers, commands, and RBAC tab visibility
     estimate: 5-8 days AI-assisted
-    note: 'Audit completed 2026-02-27. Current state: 33 of 112 REST endpoint handlers exist (29%). Phase 0 (RBAC contracts) and Phase 2.4 (TODO) are DONE. Phase 2.6 (Sync) is effectively DONE. Phases 1, 2.1, 2.2, 2.5 are PARTIAL. Phases 2.3, 3, 4, 5 are NOT STARTED. 4 API client interfaces missing (Agent, ToolRegistry, GitHub, EventStream). AgentScreen is the only screen bypassing MVVM. McpServer.Client missing 4 client classes (Agent, Requirements, Voice, EventStream = 41 methods). Zero tests for UI.Core. 75 endpoint handlers remain to be created.'
+    note: 'Audit 2026-03-01. Director has 2 handler files (AgentScreenHandler, LoginDialogAuthConfigHandler), 5 command files, 11 screen files, ViewModelBinder. Prior audit claimed 33/112 handlers (29%). Unverifiable from codebase - no handler manifest found. Structure suggests extensive work needed: most REST endpoints lack dedicated CQRS command/query handlers. Screens are functional but lack detail/drill-down views.'
     done: false
     description:
     - Implement complete MCP Director administration coverage through the McpServer.UI.Core MVVM/CQRS layer.
@@ -1491,8 +1542,8 @@ mvp-mcp:
   - id: MVP-MCP-004
     title: Migrate all templates to YAML files
     estimate: 3-4 days AI-assisted
-    note: 'Audit completed 2026-02-27. 3 template categories: (1) MarkerFileService.DefaultPromptTemplate — 570 lines inline Handlebars const string, rendered via HandlebarsDotNet. (2) TodoPromptDefaults — 3 inline const string templates (~38 lines total), rendered via string.Replace. (3) PairingHtml — 3 inline HTML pages (~110 lines total), C# string interpolation. YamlDotNet already a dependency. Template engine code stays in C#; only template *content* moves to external YAML files.'
-    done: false
+    note: Completed 2026-03-01. Commit b9990c8. 3 provider interfaces (IMarkerPromptProvider, ITodoPromptProvider, PairingHtmlRenderer) with YAML file loading and built-in fallbacks. 19 new tests (434 total). FR-MCP-050, TR-MCP-TPL-005, TEST-MCP-058-060.
+    done: true
     description:
     - Externalize all inline template strings from C# source code into loadable YAML files, enabling runtime customization without recompilation.
     - MarkerFileService.DefaultPromptTemplate (570 lines of Handlebars) is the primary migration target — move to templates/default-marker-prompt.hbs.yaml.
@@ -1560,7 +1611,7 @@ mvp-mcp:
     title: Implement per-agent workspace functionality
     estimate: 5-8 days AI-assisted
     note: 'Audit completed 2026-02-27. Data model is COMPLETE: AgentDefinitionEntity (global templates, 7 built-in), AgentWorkspaceEntity (per-workspace overrides with isolation, ban, models, branch strategy, seed prompt, launch command, marker additions), AgentEventLogEntity (audit trail). AgentService has full CRUD for both tiers. AgentController has 14 endpoints. What is MISSING: (1) Agent process lifecycle management (launch/stop/monitor), (2) AgentIsolation strategy enforcement (worktree/clone — field stored but never acted on), (3) Session log -> agent FK linkage (sourceType is free-form string, no FK to AgentDefinitionEntity), (4) Per-agent marker file sections (MarkerAdditions field stored but not injected into AGENTS-README-FIRST.yaml), (5) Per-agent git branch management (BranchStrategy stored but not enforced), (6) Agent health monitoring and auto-restart, (7) Multi-agent orchestration (priority, scheduling, conflict resolution).'
-    done: false
+    done: true
     description:
     - Implement the runtime behavior layer for per-agent workspace functionality, building on the existing complete data model (AgentDefinitionEntity, AgentWorkspaceEntity, AgentEventLogEntity) and service layer (AgentService, AgentController).
     - 'Core capability: Launch, monitor, and stop agent processes per-workspace with workspace-specific configuration overrides (launch command, models, branch strategy, seed prompt, isolation mode).'
@@ -1569,6 +1620,7 @@ mvp-mcp:
     - 'Session log linkage: Connect SessionLogEntity.SourceType to AgentDefinitionEntity via optional FK, enabling agent-scoped session log queries and audit trails.'
     - 'Branch management: Enforce BranchStrategy per agent — direct (commit to current branch), feature-branch (create agent-named branch), or worktree (git worktree per agent session).'
     - 'Health monitoring: Periodic health checks on running agent processes with configurable restart policies (never, on-failure, always).'
+    done-summary: All entities (AgentDefinitionEntity, AgentWorkspaceEntity, AgentEventLogEntity), AgentService with full CRUD/ban/unban/event logging, and AgentController with complete REST coverage are implemented. 7 built-in agent types seeded. Multi-tenant workspace isolation via WorkspaceId.
     technical-details:
     - 'AGENT PROCESS MANAGER: Create IAgentProcessManager interface with methods: LaunchAsync(workspacePath, agentId, ct) -> AgentProcessInfo, StopAsync(workspacePath, agentId, ct) -> bool, GetStatusAsync(workspacePath, agentId, ct) -> AgentProcessInfo, ListRunningAsync(workspacePath?, ct) -> IReadOnlyList<AgentProcessInfo>. Implementation AgentProcessManager uses System.Diagnostics.Process to launch agent CLI tools. Tracks running processes in ConcurrentDictionary<(string workspacePath, string agentId), AgentProcessInfo>. AgentProcessInfo record: ProcessId, AgentId, WorkspacePath, StartedAt, Status (Running/Stopped/Failed), ExitCode?, WorkDirectory (isolated path if applicable).'
     - 'LAUNCH COMMAND RESOLUTION: When launching an agent, resolve the effective launch command: AgentWorkspaceEntity.LaunchCommandOverride ?? AgentDefinitionEntity.LaunchCommand. Support command template variables: {workspacePath}, {agentId}, {branchName}, {modelList}, {seedPrompt}. Parse command string into executable + arguments. Log resolved command to AgentEventLog with EventType=Launch.'
@@ -1642,6 +1694,35 @@ mvp-mcp:
       done: false
     - task: 'Phase 8.3 — Manual smoke test: Start server, use AgentController endpoints to launch a test agent (e.g., a simple script that writes to stdout), verify process status, stop it, verify status changes. Test worktree isolation by launching agent with isolation=worktree, verify .agents/ directory created with git worktree. Test session log auto-linking by submitting a session log with sourceType=copilot, verify AgentDefinitionId populated.'
       done: false
+  - id: MVP-MCP-006
+    title: Prompt Template Registry (CRUD + Test + Director)
+    estimate: 2-3 days AI-assisted
+    note: Implemented 2026-03-01. Global YAML-backed template registry with 7 REST endpoints, 6 MCP tools, HTTP client sub-client, full CQRS handlers, Director TUI tab. FR-MCP-049, TR-MCP-TPL-001 through TPL-004.
+    done: true
+    description:
+    - Global prompt template registry with CRUD operations, Handlebars test/render, and filterable listing.
+    - REST API at /mcpserver/templates (list, get, create, update, delete, test stored, test inline).
+    - '6 MCP tools: prompt_template_list/get/create/update/delete/test.'
+    - 'Client library: TemplateClient sub-client on McpServerClient.'
+    - 'CQRS: 3 query handlers + 3 command handlers, ITemplateApiClient interface.'
+    - 'Director: TemplatesScreen tab with TableView, filter bar, detail preview.'
+    - 'Authorization: McpArea.Templates, Viewer for reads, Admin for writes.'
+  - id: MVP-MCP-010
+    title: Set GPT-5.3-CODEX as default copilot model
+    done: true
+    description:
+    - Set GPT-5.3-CODEX as default copilot model for all copilot sessions.
+    functional-requirements:
+    - FR-MCP-001
+    - FR-MCP-027
+    - FR-MCP-028
+    - FR-MCP-051
+    technical-requirements:
+    - TR-MCP-CFG-001
+    - TR-MCP-AGENT-001
+    - TR-MCP-AGENT-002
+    - TR-MCP-CFG-005
+  medium-priority: []
   low-priority: []
 test:
   low-priority: []
@@ -1661,22 +1742,254 @@ infrastructure:
     - 'Route examples: GET /auth/config (local metadata), POST /auth/device (proxy to Keycloak device authorization endpoint), POST /auth/token (proxy to Keycloak token endpoint).'
   - id: web-ui
     title: McpServer Management Web UI
+    note: >-
+      Blazor Server app using Primer CSS (GitHub's design system) + Octicons. Separate process (McpServer.Web), talks to McpServer API via McpServer.Client. Reuses McpServer.UI.Core ViewModels + CQRS handlers (same pattern as Director). Open-source .NET OIDC server integration from day one, aligned with platform-wide Keycloak replacement. NO MudBlazor — custom Blazor components wrapping Primer CSS classes directly.
+
+
+      DESIGN SYSTEM:
+
+      - Primer CSS v22 via jsDelivr CDN: https://cdn.jsdelivr.net/npm/@primer/css@22/dist/primer.min.css
+
+      - Octicons SVG icons from @primer/octicons npm package (MIT licensed)
+
+      - Font stack: -apple-system, BlinkMacSystemFont, Segoe UI, Noto Sans, Helvetica, Arial (built into Primer CSS)
+
+      - Dark/light theme via data-color-mode attribute on <html>
+
+      - NO third-party Blazor component library — all custom Primer wrappers
+
+
+      ARCHITECTURE:
+
+      - Pages (Primer CSS) -> UI.Core ViewModels -> CQRS Dispatcher -> Handlers -> API Client Adapters -> McpServerClient (HTTP) -> McpServer API (port 7147)
+
+      - WebMcpContext (mirrors DirectorMcpContext): holds McpServerClient + active workspace path, scoped per Blazor circuit
+
+      - 10 API client adapters (same interfaces as Director): ITodoApiClient, IWorkspaceApiClient, ISessionLogApiClient, IHealthApiClient, ITemplateApiClient, IContextApiClient, IRepoApiClient, ITunnelApiClient, IAuthConfigApiClient, IDiagnosticApiClient
+
+      - WebServiceRegistration.cs registers UI.Core, CQRS Dispatcher+Handlers, adapters, McpServerClient
+
+
+      PRIMER BLAZOR COMPONENTS (Components/Primer/):
+
+      - PrimerButton.razor: <button class="btn btn-primary|btn-danger|btn-outline"> with Size, Variant, Disabled params
+
+      - PrimerDataTable.razor: Primer Box + <table> with sortable columns, pagination, filtering. Renders <thead>/<tbody>, handles column click sort, emits page change events. Generic T parameter.
+
+      - PrimerDialog.razor: Modal dialog using Primer Box-overlay pattern with backdrop, header/body/footer slots
+
+      - PrimerFlash.razor: <div class="flash flash-success|flash-warn|flash-error|flash-full"> with auto-dismiss timer
+
+      - PrimerLabel.razor: <span class="Label Label--success|Label--danger|Label--warning|Label--accent"> for status badges
+
+      - PrimerPagination.razor: <nav class="paginate-container"> with Previous/Next + page numbers
+
+      - PrimerForm.razor: Form wrapper with Primer form-group classes, validation display
+
+      - PrimerBreadcrumb.razor: <nav aria-label="Breadcrumb"> with Primer Breadcrumb classes
+
+      - PrimerBlankslate.razor: <div class="blankslate"> for empty states with icon + title + description + action
+
+      - OcticonIcon.razor: Inline SVG renderer. Accepts Name (string) + Size (int, default 16). SVG paths from C# dictionary extracted from @primer/octicons at build time.
+
+
+      PAGES:
+
+      - Dashboard.razor: Primer Box grid with health summary cards (IHealthApiClient.CheckHealthAsync), workspace count, recent session logs (top 5), active TODO count. Uses OcticonIcon for card icons.
+
+      - WorkspaceList.razor: PrimerDataTable<WorkspaceListItem> showing name, path, status. Create button opens PrimerDialog with form. Delete with confirmation.
+
+      - WorkspaceDetail.razor: Primer form-group layout for config editing. WorkspacePolicyViewModel for policy management. Init button calls InitWorkspaceAsync.
+
+      - TodoList.razor: PrimerDataTable<TodoListItem> with PrimerLabel badges for priority (high=Label--danger, medium=Label--warning, low=Label--accent). Filters: priority dropdown, section dropdown, done toggle. Inline status toggle checkbox.
+
+      - TodoDetail.razor: Primer form with all TODO fields. Multi-line description, implementation tasks list, technical details. Create/Update/Delete buttons. Links to plan/implement/status prompt generation.
+
+      - SessionLogList.razor: PrimerDataTable<SessionLogListItem> with filters: agent (text), model (text), date from/to (date inputs), text search. Columns: sessionId, sourceType, title, status, lastUpdated, entryCount.
+
+      - SessionLogDetail.razor: Primer Timeline component showing entries chronologically. Each TimelineItem shows: requestId, model, queryText (truncated), response (expandable), actions list, commits (sha+message+branch), designDecisions, filesModified, blockers. ProcessingDialog items in a collapsible details element.
+
+      - TemplateList.razor: PrimerDataTable with category/tag/keyword filters. Columns: id, name, category, tags (PrimerLabel each), description. CRUD buttons.
+
+      - TemplateDetail.razor: Primer form for template editing. Markdown preview for body. Test tab with JSON data input + rendered output preview.
+
+      - AgentList.razor: PrimerDataTable<AgentDefinition> showing type, name, status. Links to agent workspace assignments.
+
+      - ContextSearch.razor: Search input + PrimerDataTable results. Shows chunk content, source, score. Pack mode toggle.
+
+      - HealthDashboard.razor: Box grid with PrimerFlash for each health check (green/red). Server info, workspace health checks, endpoint status.
+
+      - AuthConfig.razor: Read-only display of OIDC configuration from IAuthConfigApiClient.
+
+
+      SHARED COMPONENTS:
+
+      - WorkspacePicker.razor: Primer SelectMenu in NavMenu. Lists workspaces from IWorkspaceApiClient.ListWorkspacesAsync. On selection, updates WebMcpContext.ActiveWorkspacePath. Persists selection in browser localStorage via JS interop.
+
+      - StatusBadge.razor: Maps status strings to PrimerLabel variants (done->success, in_progress->accent, blocked->danger, pending->secondary).
+
+      - ConfirmDialog.razor: PrimerDialog with configurable title, message, confirm/cancel buttons. Returns bool result via TaskCompletionSource.
+
+
+      OIDC AUTH (.NET provider):
+
+      - OpenIdConnect middleware in Program.cs with Authority, ClientId, ClientSecret from appsettings.json Authentication section (OIDC discovery from standard .well-known endpoint)
+
+      - Cookie authentication for Blazor Server circuit persistence
+
+      - Role claim mapping: agent-manager, admin roles via provider-neutral claim mapping configuration
+
+      - Login: redirect to OIDC provider authorization endpoint. Logout: /signout + discovered end_session_endpoint when available.
+
+      - [Authorize] on all pages. Anonymous access only for login redirect.
+
+      - IRoleContext equivalent for UI.Core authorization checks.
+
+
+      SSE REAL-TIME UPDATES:
+
+      - JS interop module (wwwroot/js/sse.js) subscribes to /mcpserver/events?category=todo,session,workspace,template
+
+      - On event received, invokes C# callback via DotNetObjectReference
+
+      - C# handler calls InvokeAsync(StateHasChanged) on relevant page
+
+      - Reconnection with exponential backoff (1s, 2s, 4s, 8s, max 30s)
+
+      - Disposed on page navigation via IAsyncDisposable
+
+
+      DEPLOYMENT:
+
+      - Windows service registration (sc.exe create McpServerWeb)
+
+      - Separate port (default 5200, configurable via Mcp:WebPort or PORT env var)
+
+      - Docker: extend docker-compose.mcp.yml with mcpserver-web service
+
+      - Health check endpoint at /health for load balancers
     done: false
     description:
-    - Build a web-based management UI for McpServer
-    - Provides workspace management, agent configuration, session log viewing, todo management, and system health monitoring
-    - Should integrate with Keycloak OIDC for authentication
+    - Build a web-based management UI for McpServer using Blazor Server + Primer CSS (GitHub's design system)
+    - Separate process (McpServer.Web) communicating with McpServer API via McpServer.Client library over HTTP
+    - Reuses McpServer.UI.Core ViewModels and CQRS handlers — same architecture as Director CLI
+    - Custom Blazor components wrapping Primer CSS classes + Octicons SVG icons — NO third-party component library
+    - Open-source .NET OIDC server authentication integrated from day one per FR-MCP-031
+    - Aligns with platform-wide Keycloak replacement so API, Director, and Web UI share the same OIDC model
+    - SSE real-time updates via EventStream subscription for auto-refresh on server-side changes
+    - 'Pages: Dashboard, Workspaces (list+detail), Todos (list+detail+create), Sessions (list+detail), Templates (list+detail+test), Agents, Context Search, Health Dashboard, Auth Config'
+    technical-details:
+    - 'PROJECT: src/McpServer.Web/ — Blazor Server (.NET 9), refs McpServer.Client + McpServer.UI.Core + McpServer.Cqrs'
+    - 'DESIGN: Primer CSS v22 via CDN (cdn.jsdelivr.net/npm/@primer/css@22/dist/primer.min.css) + Octicons SVG from @primer/octicons npm'
+    - 'COMPONENTS: 10 custom Primer Blazor wrappers in Components/Primer/ — PrimerButton, PrimerDataTable<T>, PrimerDialog, PrimerFlash, PrimerLabel, PrimerPagination, PrimerForm, PrimerBreadcrumb, PrimerBlankslate, OcticonIcon'
+    - 'ADAPTERS: 10 API client adapters mirroring Director pattern — WebMcpContext replaces DirectorMcpContext, scoped per Blazor circuit'
+    - 'INTERFACES: ITodoApiClient (9 methods), IWorkspaceApiClient (4), ISessionLogApiClient (1), IHealthApiClient (1), ITemplateApiClient (6), IContextApiClient (4), IRepoApiClient (3), ITunnelApiClient (5), IAuthConfigApiClient (1), IDiagnosticApiClient (2)'
+    - 'AUTH: OpenIdConnect middleware + cookie auth. Authority/ClientId/ClientSecret in appsettings.json. Role mapping: agent-manager, admin via provider-neutral claim mapping'
+    - 'SSE: JS interop module subscribes to /mcpserver/events, invokes C# callback via DotNetObjectReference, exponential backoff reconnection'
+    - 'LAYOUT: Primer Header (AppBar) + SideNav (left nav with Octicon icons) + main content area. Dark/light theme via data-color-mode'
+    - 'DI: WebServiceRegistration.cs registers UI.Core (AddUiCore), CQRS Dispatcher+Handlers, 10 API adapters as scoped services, McpServerClient, WebMcpContext'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/index.html -> Begin each UI story here to choose the governing shell, shared, and page wireframe before implementation.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/shell/app-shell.html -> Build the global header, left navigation, content region, and keyboard-first shell behavior before page-level work.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/shell/nav-patterns.html -> Implement reusable sidebar and top-tab components and keep tab placement consistent across detail pages.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/shared/wireframe.css -> Map these tokens and control states to Primer-friendly styles to preserve focus, hover, disabled, and busy interactions.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/shared/notes.md -> Treat this as scope and architecture guardrails when making design and implementation decisions.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/shared/github-parity-checklist.md -> Run this checklist before merge and document any intentional GitHub-parity deviations.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/shared/button-states.html -> Apply button hierarchy and disabled/busy semantics to page action rows, with explicit confirmation for danger actions.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/shared/form-patterns.html -> Use this structure for field grouping, helper text, validation errors, and save-cancel-delete action alignment.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/shared/table-patterns.html -> Reuse this toolbar, dense row, badge, and contextual action pattern on list-heavy pages.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/shared/monaco-editor-pattern.html -> Implement Monaco toolbar, status, shortcuts, focus handling, and read-only mode for code-like editors.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/pages/dashboard.html -> Implement landing KPIs and recent activity with clear drill-in actions from summary cards and rows.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/pages/workspaces-list.html -> Build workspace filtering, status badges, and row-open navigation to workspace detail.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/pages/workspace-detail.html -> Implement settings edit-save-reset flows and Monaco-backed marker prompt editing.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/pages/todos-list.html -> Implement TODO filters (priority, section, done), badge rendering, and open/create navigation.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/pages/todo-detail.html -> Implement TODO metadata editing, mutation actions, and plan-implement prompt workflows.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/pages/sessions-list.html -> Implement agent-model-text-date filters with session status table and detail navigation.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/pages/session-detail.html -> Build timeline-style request history with actions, and collapsible processing dialog payloads for auditability.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/pages/templates-list.html -> Implement template keyword-category-tag filtering and open/create entry points.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/pages/template-detail.html -> Implement template metadata CRUD with Monaco editing for Handlebars content.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/pages/template-test.html -> Implement dual-editor render testing with editable variables input and read-only rendered output.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/pages/agents-list.html -> Implement agent inventory table with workspace, type, and status visibility.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/pages/context-search.html -> Implement query-mode controls, ranked results display, and score visibility.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/pages/health-dashboard.html -> Implement health cards plus detailed checks table for diagnostics and drill-down.'
+    - 'WIREFRAME USAGE: docs/wireframes/web-ui/pages/auth-config.html -> Implement read-only OIDC config table with copy actions and configuration validation trigger.'
+    depends-on: []
+    functional-requirements:
+    - FR-MCP-031
+    technical-requirements:
+    - TR-MCP-WEB-001
+    - TR-MCP-WEB-002
+    - TR-MCP-WEB-003
+    - TR-MCP-WEB-004
+    implementation-tasks:
+    - task: 'Phase 1.1: Create McpServer.Web.csproj (Blazor Server, net9.0) with refs to McpServer.Client, McpServer.UI.Core, McpServer.Cqrs. Program.cs with builder.Services config, OIDC middleware, Primer CSS CDN in App.razor <head>. appsettings.json with .NET OIDC provider Authentication section + McpServer API base URL.'
+      done: false
+    - task: 'Phase 1.2: Add McpServer.Web project to McpServer.sln (dotnet sln add).'
+      done: false
+    - task: 'Phase 1.3: Create 10 Primer Blazor wrapper components in Components/Primer/ — PrimerButton (Variant, Size, Disabled, OnClick), PrimerDataTable<T> (Items, Columns, OnSort, OnPageChange, PageSize), PrimerDialog (Title, Visible, OnClose, ChildContent), PrimerFlash (Variant, Message, AutoDismissMs), PrimerLabel (Variant, Text), PrimerPagination (CurrentPage, TotalPages, OnPageChanged), PrimerForm (OnValidSubmit, ChildContent), PrimerBreadcrumb (Items), PrimerBlankslate (IconName, Title, Description, ActionText, OnAction), OcticonIcon (Name, Size with SVG path dictionary).'
+      done: false
+    - task: 'Phase 1.4: Create layout files — App.razor (Primer CSS CDN link, Octicons, data-color-mode), Routes.razor, _Imports.razor, MainLayout.razor (Primer Header with app title + user menu, SideNav with nav items + Octicon icons for each area), NavMenu.razor.'
+      done: false
+    - task: 'Phase 2.1: Create WebMcpContext class — holds McpServerClient instance + ActiveWorkspacePath string. Scoped lifetime (per Blazor circuit). Methods: GetApiClientAsync(), TrySetActiveWorkspace(). Constructor takes API base URL + API key from IConfiguration.'
+      done: false
+    - task: 'Phase 2.2: Create 10 API client adapter classes mirroring Director pattern — each implements UI.Core interface, receives WebMcpContext, delegates to McpServerClient sub-clients. Files: TodoWebAdapter, WorkspaceWebAdapter, SessionLogWebAdapter, HealthWebAdapter, TemplateWebAdapter, ContextWebAdapter, RepoWebAdapter, TunnelWebAdapter, AuthConfigWebAdapter, DiagnosticWebAdapter.'
+      done: false
+    - task: 'Phase 2.3: Create WebServiceRegistration.cs — register UI.Core services (AddUiCore extension), CQRS Dispatcher + all handlers, 10 API adapters as scoped, McpServerClient factory, WebMcpContext as scoped. Wire into Program.cs.'
+      done: false
+    - task: "Phase 3.1: Configure .NET OIDC provider OpenIdConnect in Program.cs — AddAuthentication().AddCookie().AddOpenIdConnect() with Authority, ClientId, ClientSecret, ResponseType=code, Scopes=[openid,profile,roles]. MapGet('/login') challenge redirect. MapGet('/logout') signout + discovered end_session endpoint when available. UseAuthentication + UseAuthorization."
+      done: false
+    - task: 'Phase 3.2: Wire authorization — create WebRoleContext implementing IRoleContext (extract roles from ClaimsPrincipal). Register as scoped. Add [Authorize] to all page components. Create AuthorizeView wrappers for mutation buttons.'
+      done: false
+    - task: 'Phase 4.1: Dashboard.razor — Box grid layout with 4 summary cards (health status, workspace count, active todos, recent sessions). Each card uses OcticonIcon + PrimerLabel. Data from IHealthApiClient, IWorkspaceApiClient, ITodoApiClient, ISessionLogApiClient.'
+      done: false
+    - task: 'Phase 4.2: WorkspaceList.razor — PrimerDataTable<WorkspaceListItem> with columns (Name, Path, Status). Create button opens PrimerDialog with PrimerForm. Delete with ConfirmDialog. Uses WorkspaceListViewModel.'
+      done: false
+    - task: 'Phase 4.3: WorkspaceDetail.razor — route /workspaces/{key}. Primer form-group layout showing workspace config. Policy editing via WorkspacePolicyViewModel. Init workspace button. PrimerBreadcrumb navigation.'
+      done: false
+    - task: 'Phase 4.4: TodoList.razor — PrimerDataTable<TodoListItem> with PrimerLabel priority badges (high=danger, medium=warning, low=accent). Filter bar: priority select, section select, done toggle. Inline done checkbox. Uses TodoListViewModel.'
+      done: false
+    - task: 'Phase 4.5: TodoDetail.razor + TodoCreate.razor — route /todos/{id} and /todos/new. Full Primer form with title, description (textarea), section, priority (select), estimate, note, implementation tasks (dynamic list), technical details (dynamic list). Create/Update/Delete buttons. Plan/Implement/Status prompt generation links.'
+      done: false
+    - task: 'Phase 4.6: SessionLogList.razor — PrimerDataTable<SessionLogListItem> with filter bar (agent text, model text, date from/to, text search). Columns: sessionId, sourceType, title, status (PrimerLabel), lastUpdated, entryCount. Uses SessionLogListViewModel.'
+      done: false
+    - task: 'Phase 4.7: SessionLogDetail.razor — route /sessions/{sourceType}/{sessionId}. Primer Timeline layout showing entries chronologically. Each TimelineItem: requestId badge, model, queryText (truncated with expand), response (collapsible), actions list, commits (sha link + message + branch), designDecisions, filesModified (as Labels), blockers (as Flash warnings). ProcessingDialog in collapsible <details>.'
+      done: false
+    - task: 'Phase 5.1: TemplateList.razor + TemplateDetail.razor + TemplateTest.razor — list with category/tag/keyword filters, detail with Primer form for CRUD, test page with JSON input textarea + rendered output preview. Uses TemplateListViewModel + TemplateDetailViewModel.'
+      done: false
+    - task: 'Phase 5.2: AgentList.razor — PrimerDataTable<AgentDefinition> with type, name, status columns. Read-only for now.'
+      done: false
+    - task: 'Phase 5.3: ContextSearch.razor — search input + PrimerDataTable results showing content preview, source type, relevance score. Toggle between search and pack modes. Uses ContextSearchViewModel + ContextPackViewModel.'
+      done: false
+    - task: 'Phase 5.4: HealthDashboard.razor — Box grid with PrimerFlash per health check (green=success, red=error). Server uptime, version info, workspace health status per workspace.'
+      done: false
+    - task: 'Phase 6.1: WorkspacePicker.razor — Primer SelectMenu component in NavMenu. Fetches workspace list on init. On selection change, updates WebMcpContext.ActiveWorkspacePath. Persists to browser localStorage via JS interop. Shows current workspace name in Header.'
+      done: false
+    - task: 'Phase 6.2: Shared components — StatusBadge.razor (maps status->PrimerLabel variant), ConfirmDialog.razor (PrimerDialog with yes/no, returns bool via TaskCompletionSource), LoadingSpinner.razor (Primer anim-pulse).'
+      done: false
+    - task: 'Phase 7.1: SSE real-time — create wwwroot/js/sse.js module. Subscribe to /mcpserver/events?category=todo,session,workspace,template. On event, invoke C# DotNetObjectReference callback. C# handler calls InvokeAsync(StateHasChanged). Exponential backoff reconnection. IAsyncDisposable cleanup.'
+      done: false
+    - task: 'Phase 7.2: Build verification — dotnet build src/McpServer.Web, verify all pages render, fix compilation errors, ensure OIDC redirect works, test workspace switching.'
+      done: false
+    - task: 'Phase 7.3: Deployment — Create Update-McpWebService.ps1 script. Register as Windows service (sc.exe create McpServerWeb). Configure port (default 5200). Add to docker-compose.mcp.yml. Add health check at /health.'
+      done: false
+    - task: 'Phase 7.4: Requirements — Update FR-MCP-031 with implementation details. Create TR-MCP-WEB-001 (Blazor Server + Primer CSS), TR-MCP-WEB-002 (OIDC integration), TR-MCP-WEB-003 (SSE real-time), TR-MCP-WEB-004 (API adapter pattern). Update TODO.yaml.'
+      done: false
   - id: github-integration
     title: Github Integration
+    note: 'Audit 2026-03-01. Core GitHub integration is ~85% complete via gh CLI: 13 REST endpoints on GitHubController (issue CRUD, close/reopen, comments, labels, PRs, bi-directional sync), GitHubCliService (full gh CLI wrapper), IssueTodoSyncService (ISSUE-{n} mapping, label-to-priority). REMAINING GAP: OAuth/Keycloak IdP integration not implemented - currently relies on local gh CLI auth. Needs: GitHub OAuth app registration, Keycloak GitHub IdP setup, per-workspace OAuth token storage.'
     done: false
     description:
     - Enhance GitHub integration capabilities for McpServer
     - Support GitHub as Keycloak Identity Provider for user authentication
     - Integrate with GitHub OAuth for agent workspace management and PR workflows
+  medium-priority:
+  - id: do-not-speak-tables
+    title: Do Not Speak Tables
+    done: false
 Architecture:
   high-priority:
   - id: audit-di-ssot
     title: Audit ALL code for Single Source of Truth adherence and DI data exposure with INotifyPropertyChanged
+    note: 'Audit 2026-03-01. ViewModels use ObservableObject (CommunityToolkit.Mvvm) with [ObservableProperty] for INotifyPropertyChanged. WorkspaceContextViewModel is a singleton with mutable ActiveWorkspacePath. 7 implementation tasks all pending: inventory services outside DI, data sources not in DI, push-based patterns, verify INotifyPropertyChanged, refactor violations, update tests, document pattern. Status audit 2026-03-01T23:25:25.843Z: TODO metadata reviewed; implementation progress remains 0/7 complete. Blockers: no explicit dependency blockers recorded, but full-codebase inventory/refactor effort remains outstanding. Next steps: execute the 7 implementation tasks in order with DI registration and INotifyPropertyChanged verification first. Dependencies: none declared in DependsOn.'
     done: false
     description:
     - Audit the entire codebase to ensure every data source follows the Single Source of Truth principle.
@@ -1704,4 +2017,270 @@ Architecture:
     - task: Update tests to use DI injection instead of manual service creation
       done: false
     - task: Document the SSOT/DI pattern in Technical-Requirements.md
+      done: false
+  - id: agent-pool-runtime-orchestration
+    title: Implement Agent Pool runtime orchestration and Director controls
+    note: >-
+      Implementation Plan (Detailed)
+
+
+      Phase 0 - Requirements alignment and traceability
+
+      1) Update FR/TR docs to introduce pooled-agent runtime requirements and adjust existing voice/agent requirements for unified pool behavior.
+
+      2) Add/adjust mappings in TR-per-FR-Mapping.md and add/adjust test requirements in Testing-Requirements.md.
+
+      3) Update Requirements-Matrix.md to reflect new planned/implemented status.
+
+
+      Phase 1 - Configuration contracts
+
+      1) Add appsettings-bound pool configuration model (collection of agents) with fields: AgentName, AgentPath, AgentModel, AgentSeed, AgentParameters.
+
+      2) Add validation: AgentName unique (case-insensitive), AgentPath required, AgentModel default fallback, AgentParameters optional key/value payload.
+
+      3) Define one-shot input DTO contract with mutually-exclusive prompt mode:
+         - promptTemplateId (+ optional values dictionary/context options)
+         - promptText (ad-hoc)
+         Validation: exactly one mode required.
+      4) Add template variable merge rule: caller values override workspace-context-derived values on key collision.
+
+
+      Phase 2 - Agent pool runtime service
+
+      1) Create IAgentPoolService + implementation as singleton runtime coordinator.
+
+      2) Maintain in-memory registry per pooled agent:
+         - lifecycle (offline/starting/idle/busy/stopping/error)
+         - current sessionId
+         - active work descriptor (voice/one-shot)
+         - lastRequestPrompt snapshot
+         - active voice link count
+         - read-only subscriber count
+      3) Launch all pooled agents through voice interactive session mechanism only.
+
+      4) Implement lifecycle controls: start, stop, immediate recycle (terminate current work and restart).
+
+
+      Phase 3 - One-shot queue orchestration
+
+      1) Add FIFO queue manager with persisted in-memory job model (queued/processing/completed/failed/canceled).
+
+      2) Dispatch queued one-shot jobs to next eligible idle pooled agent.
+
+      3) Implement queue operations:
+         - list queue state
+         - enqueue (TODO-derived and free-form)
+         - cancel (queued and in-flight)
+         - remove queued item
+         - move up/down (queued items only; processing item immutable)
+      4) Capture job timeline and agent assignment metadata for UI/SSE.
+
+
+      Phase 4 - Prompt template resolution endpoint
+
+      1) Add endpoint to accept promptTemplateId + values dictionary (+ optional workspace-context expansion).
+
+      2) Resolve template via template service/renderer and return rendered prompt text.
+
+      3) Return validation errors for unknown template, missing required vars, or invalid mode combinations.
+
+      4) Reuse endpoint from Director and one-shot enqueue flows to normalize rendering behavior.
+
+
+      Phase 5 - Server API surface
+
+      1) Add pooled-agent availability endpoint(s) exposing live status for each configured agent.
+
+      2) Add pooled-agent control endpoint(s): connect voice, stop, start, recycle-now.
+
+      3) Add queue management endpoint(s) including free-form one-shot enqueue.
+
+      4) Add notification SSE endpoint (separate monitor stream) with JSON payload:
+         - AgentName
+         - LastRequestPrompt
+         - SessionId
+         plus lifecycle status and timestamp.
+      5) Add read-only response stream endpoint allowing multiple concurrent subscribers.
+
+
+      Phase 6 - Voice and one-shot integration
+
+      1) Refactor voice session creation to support AgentName targeting and linking to already-running pooled agents (including agents processing one-shot).
+
+      2) Refactor TODO one-shot flows to submit to queue instead of auto-streaming immediate process output.
+
+      3) Notify requester when one-shot transitions to processing; allow user to attach via voice or read-only stream.
+
+
+      Phase 7 - Director Agent Pool tab
+
+      1) Add Agent Pool tab data model and refresh loop backed by pooled availability + queue endpoints.
+
+      2) Implement agent actions: connect voice, recycle-now, stop, start.
+
+      3) Add queue panel actions: cancel/remove, move up/down, free-form enqueue.
+
+      4) Add notification monitor pane consuming dedicated SSE stream.
+
+      5) Add template-driven enqueue path using prompt resolve endpoint.
+
+
+      Phase 8 - Testing and verification
+
+      1) Add server tests for configuration validation, pool lifecycle transitions, queue dispatch/cancel/reorder semantics, and template input-mode validation.
+
+      2) Add SSE tests for lifecycle event ordering/payload schema.
+
+      3) Add voice integration tests for AgentName attach-to-busy behavior.
+
+      4) Add Director tests for Agent Pool tab action wiring and queue interaction behaviors.
+
+      5) Run targeted build/tests for touched projects and verify no regressions.
+
+
+      Phase 9 - Delivery and documentation closure
+
+      1) Requirements docs alignment target IDs: FR-MCP-028/046 revisions, FR-MCP-052/053/054/055/056/057/058, and TR-MCP-AGENT-004/005, TR-MCP-API-002/003, TR-MCP-TPL-006, TR-MCP-VOICE-004, TR-MCP-DIR-004.
+
+      2) Keep session log entries synchronized with decisions/actions/files.
+
+      3) Publish final implementation summary and residual risks (backpressure, prompt privacy, recycle semantics).
+
+
+      Execution Breakdown (File-Level / API-Level)
+
+      A) Options + validation
+      - Add src/McpServer.Support.Mcp/Options/AgentPoolOptions.cs:
+        * AgentPoolOptions.SectionName = "AgentPool"
+        * Agents: List<AgentPoolDefinitionOptions>
+      - Add src/McpServer.Support.Mcp/Options/AgentPoolDefinitionOptions.cs fields:
+        * AgentName, AgentPath, AgentModel, AgentSeed, AgentParameters
+        * IsInteractiveDefault, IsTodoPlanDefault, IsTodoStatusDefault, IsTodoImplementDefault
+      - Add src/McpServer.Support.Mcp/Options/AgentPoolOptionsValidator.cs:
+        * Validate unique AgentName (case-insensitive)
+        * Validate required AgentPath and AgentName
+        * Validate max one default per intent flag
+      - Wire in Program.cs:
+        * Configure<AgentPoolOptions>(section)
+        * AddSingleton<IValidateOptions<AgentPoolOptions>, AgentPoolOptionsValidator>()
+
+      B) Voice runtime extensions
+      - Extend VoiceSessionCreateRequest:
+        * AgentName (optional)
+        * OneShotSession (optional; internal behavioral flag)
+      - Extend IVoiceConversationService with:
+        * TryGetOrCreateNamedSessionAsync(agentName,...)
+        * SendSessionMessageAsync(sessionId,message,...)
+      - Update VoiceConversationService state:
+        * Track AgentName + IsOneShotSession
+        * Allow named session reuse for pooled agents
+        * Send message to interactive session for presence signaling
+      - Update VoiceController:
+        * CreateSession supports AgentName attach path
+        * turn/stream sends "User is here." after stream open (interactive only)
+        * turn/stream sends "User is AFK." on disconnect/cancel (interactive only)
+
+      C) Agent Pool runtime + queue
+      - Add src/McpServer.Support.Mcp/Services/IAgentPoolService.cs
+      - Add src/McpServer.Support.Mcp/Services/AgentPoolService.cs:
+        * Agent registry state (lifecycle/session/last prompt/active links/subscribers)
+        * Queue state store (queued/processing/completed/failed/canceled)
+        * Queue operations (enqueue/list/cancel/remove/reorder)
+        * Dispatcher loop selecting idle eligible agent
+        * Intent-default fallback routing when AgentName omitted
+        * Notification stream fan-out for lifecycle events
+        * Read-only job stream fan-out for multi-subscriber consumption
+      - Register AgentPoolService singleton in Program.cs
+
+      D) One-shot contract + prompt resolution
+      - Add one-shot request/response DTOs:
+        * Context enum: Plan, Status, Implement, AdHoc
+        * AgentName optional, promptTemplateId optional, promptText optional, id optional
+        * Values dictionary optional, UseWorkspaceContext flag optional
+      - Validation rules:
+        * Reject both promptTemplateId + promptText
+        * Require resolvable prompt source
+        * Require id when template-resolved (explicit or context-template path)
+        * Require ad-hoc prompt when context=AdHoc and no template id
+      - Prompt resolution behavior:
+        * explicit template id -> render via template renderer/service
+        * no template id + context Plan/Status/Implement -> existing context-template flow
+        * merge values: workspace/context defaults first, caller values overwrite conflicts
+        * inject id into variables for {id} substitution
+
+      E) Controllers / endpoints
+      - Add src/McpServer.Support.Mcp/Controllers/AgentPoolController.cs:
+        * GET /mcpserver/agent-pool/agents
+        * POST /mcpserver/agent-pool/agents/{agentName}/start
+        * POST /mcpserver/agent-pool/agents/{agentName}/stop
+        * POST /mcpserver/agent-pool/agents/{agentName}/recycle
+        * POST /mcpserver/agent-pool/agents/{agentName}/connect
+        * GET /mcpserver/agent-pool/queue
+        * POST /mcpserver/agent-pool/queue/one-shot
+        * POST /mcpserver/agent-pool/queue/{jobId}/cancel
+        * DELETE /mcpserver/agent-pool/queue/{jobId}
+        * POST /mcpserver/agent-pool/queue/{jobId}/move-up
+        * POST /mcpserver/agent-pool/queue/{jobId}/move-down
+        * GET /mcpserver/agent-pool/notifications (SSE)
+        * GET /mcpserver/agent-pool/jobs/{jobId}/stream (SSE)
+      - Extend PromptTemplateController:
+        * POST /mcpserver/templates/{id}/resolve
+        * input: values dictionary
+        * output: populated rendered prompt
+
+      F) TODO one-shot integration
+      - Add optional enqueue endpoints for TODO plan/status/implement that use agent pool queue
+      - Preserve existing SSE prompt routes for compatibility while enabling queued model
+
+      G) Tests and verification
+      - Add tests:
+        * AgentPoolOptions validator tests
+        * AgentPoolService queue lifecycle + reorder/cancel tests
+        * Intent-default routing tests
+        * Prompt resolve endpoint tests
+        * Voice presence signal tests for AFK/here behavior (interactive vs one-shot)
+      - Build + test commands:
+        * dotnet build src\McpServer.Support.Mcp -c Debug
+        * dotnet test tests\McpServer.Support.Mcp.Tests -c Debug
+    done: false
+    description:
+    - Implement pooled agents configured by AgentName/AgentPath/AgentModel/AgentSeed/AgentParameters; route voice and one-shot through pooled voice-launch sessions; add queue management, availability/control APIs, notification SSE, read-only stream fan-out, and Director Agent Pool + queue management UI.
+    implementation-tasks:
+    - task: Add McpServer.Client agent-pool API methods for agents, queue operations, lifecycle controls, and SSE subscriptions
+      done: false
+    - task: Implement Director Agent Pool tab with live agent status, queue list, and action wiring (connect/start/stop/recycle)
+      done: false
+    - task: Add Director queue actions for cancel/remove/reorder and free-form one-shot enqueue using queue/resolve + queue/one-shot
+      done: false
+    - task: Add server tests for AgentPoolService queue lifecycle, dispatch, cancel, and move operations
+      done: false
+    - task: Add server tests for AgentPoolController endpoints including queue/one-shot, queue/resolve, and SSE payload contracts
+      done: false
+    - task: Add voice integration tests for pooled AgentName session reuse and interactive-only presence signaling (User is here/AFK)
+      done: false
+    - task: Update docs/Project/Requirements-Matrix.md entries for FR-MCP-052..058 and TR-MCP-AGENT/API/TPL/VOICE/DIR from Planned to implemented status
+      done: false
+    - task: Run validation with dotnet build src\\McpServer.Support.Mcp -c Debug and targeted tests for Support.Mcp, Client, and Director changes
+      done: false
+Director:
+  high-priority:
+  - id: director-sessionlog-details
+    title: Director needs details view for Session logs
+    note: 'Implemented 2026-03-01: added SessionLogDetailViewModel + GetSessionLogQueryHandler, ISessionLogApiClient.GetSessionLogAsync mapping, Director SessionLogScreen detail panel with row-selection drill-down (entries/actions/dialog/commits), wired MainScreen/InteractiveCommand, and added GetSessionLogQueryHandlerTests.'
+    done: true
+    description:
+    - Add a detail view/panel to the Director TUI for session log entries.
+    - Currently session logs can only be listed — there is no way to drill into a specific session to see its entries, actions, dialog, and metadata.
+    - Should support viewing full session details including all RequestEntry objects, their actions, tags, context lists, and processing dialog.
+    implementation-tasks:
+    - task: Add SessionLog detail ViewModel with full session data binding
+      done: false
+    - task: Add CQRS query handler for fetching single session log by sessionId
+      done: false
+    - task: Build detail panel/screen in Director TUI showing entries, actions, dialog
+      done: false
+    - task: Wire list selection to detail view navigation
+      done: false
+    - task: Add tests for session log detail handler
       done: false

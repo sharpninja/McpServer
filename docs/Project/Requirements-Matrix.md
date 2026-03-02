@@ -46,7 +46,7 @@
 | TR-LOC-001 | 🔲 Planned | — |
 | FR-MCP-026 | ✅ Complete | OidcAuthOptions, Program.cs (JWT Bearer + AgentManager policy), WorkspaceAuthMiddleware, AgentController, AuthConfigController, Setup-McpKeycloak.ps1, setup-mcp-keycloak.sh, McpServer.Director (AuthCommands, OidcAuthService, LoginDialog) |
 | FR-MCP-027 | ✅ Complete | Program.cs (startup built-in seeding), AgentController, AgentService, AgentDefaults, AgentDefinitionEntity |
-| FR-MCP-028 | ✅ Complete | AgentController, AgentService, AgentWorkspaceEntity, AgentEventLogEntity, McpDbContext |
+| FR-MCP-028 | 🔲 Planned | AgentController, AgentService, AgentWorkspaceEntity, AgentEventLogEntity, McpDbContext |
 | FR-MCP-029 | ✅ Complete | McpServer.Cqrs (Dispatcher, CallContext, CorrelationId, Result, IPipelineBehavior) |
 | FR-MCP-030 | ✅ Complete | McpServer.Director (Program, DirectorCommands, AuthCommands, InteractiveCommand, McpHttpClient, OidcAuthService, TokenCache, MainScreen, HealthScreen, AgentScreen, TodoScreen, SessionLogScreen, WorkspaceListScreen, WorkspacePolicyScreen, LoginDialog, ViewModelBinder) |
 | FR-MCP-031 | 🔲 Planned | — |
@@ -76,7 +76,7 @@
 | TR-MCP-MT-002 | ✅ Complete | WorkspaceResolutionMiddleware, WorkspaceTokenService |
 | TR-MCP-MT-003 | ✅ Complete | McpDbContext (global query filter), all entities (WorkspaceId) |
 | FR-MCP-045 | ✅ Complete | TodoController.MoveAsync, FwhMcpTools.TodoMove, TodoMoveRequest |
-| FR-MCP-046 | ✅ Complete | VoiceController, VoiceConversationService, VoiceConversationOptions |
+| FR-MCP-046 | 🔲 Planned | VoiceController, VoiceConversationService, VoiceConversationOptions, AgentPoolService *(planned)* |
 | FR-MCP-047 | ✅ Complete | DesktopProcessLauncher, NativeMethods |
 | FR-MCP-048 | ✅ Complete | Program.cs (AddYamlFile), NetEscapades.Configuration.Yaml |
 | TR-MCP-TODO-002 | ✅ Complete | TodoController, FwhMcpTools, TodoServiceResolver |
@@ -90,3 +90,19 @@
 | TR-MCP-TPL-004 | ✅ Complete | TemplateMessages, \*TemplateQueryHandler, \*TemplateCommandHandler, TemplateApiClientAdapter, TemplateListViewModel, TemplateDetailViewModel, TemplatesScreen |
 | FR-MCP-050 | ✅ Complete | IMarkerPromptProvider, FileMarkerPromptProvider, ITodoPromptProvider, TodoPromptProvider, PairingHtmlRenderer |
 | TR-MCP-TPL-005 | ✅ Complete | IMarkerPromptProvider, FileMarkerPromptProvider, ITodoPromptProvider, TodoPromptProvider, PairingHtmlRenderer, templates/prompt-templates.yaml |
+| FR-MCP-051 | 🔲 Planned | CopilotClientOptions, VoiceConversationOptions, AgentDefaults |
+| TR-MCP-CFG-005 | 🔲 Planned | CopilotClientOptions, VoiceConversationOptions, AgentDefaults |
+| FR-MCP-052 | 🔲 Planned | AgentPoolOptions *(planned)*, AgentPoolService *(planned)* |
+| FR-MCP-053 | 🔲 Planned | AgentPoolQueueService *(planned)*, AgentPoolController *(planned)* |
+| FR-MCP-054 | 🔲 Planned | AgentPoolController *(planned)*, AgentPoolNotificationService *(planned)* |
+| FR-MCP-055 | 🔲 Planned | AgentPoolIntentResolver *(planned)*, AgentPoolService *(planned)* |
+| FR-MCP-056 | 🔲 Planned | PromptTemplateController *(planned extension)*, AgentPoolController *(planned)* |
+| FR-MCP-057 | 🔲 Planned | AgentPoolScreen *(planned)*, AgentPoolViewModel *(planned)* |
+| FR-MCP-058 | 🔲 Planned | AgentPoolStreamService *(planned)*, VoiceConversationService *(planned extension)* |
+| TR-MCP-AGENT-004 | 🔲 Planned | AgentPoolOptions *(planned)*, Program.cs *(planned extension)* |
+| TR-MCP-AGENT-005 | 🔲 Planned | IAgentPoolService *(planned)*, AgentPoolService *(planned)*, AgentPoolQueueService *(planned)* |
+| TR-MCP-API-002 | 🔲 Planned | AgentPoolController *(planned)*, AgentPoolIntentResolver *(planned)* |
+| TR-MCP-API-003 | 🔲 Planned | AgentPoolController *(planned)*, AgentPoolNotificationService *(planned)*, AgentPoolStreamService *(planned)* |
+| TR-MCP-TPL-006 | 🔲 Planned | PromptTemplateController *(planned extension)*, PromptTemplateRenderer, AgentPoolController *(planned)* |
+| TR-MCP-VOICE-004 | 🔲 Planned | VoiceConversationService *(planned extension)*, AgentPoolStreamService *(planned)* |
+| TR-MCP-DIR-004 | 🔲 Planned | AgentPoolScreen *(planned)*, AgentPoolViewModel *(planned)*, McpHttpClient *(planned extension)* |

@@ -21,6 +21,7 @@ internal sealed class MainScreen : Window
     private readonly HealthSnapshotsViewModel _healthVm;
     private readonly DispatcherLogsViewModel _dispatcherLogsVm;
     private readonly SessionLogListViewModel _sessionLogVm;
+    private readonly SessionLogDetailViewModel _sessionLogDetailVm;
     private readonly TodoListViewModel _todoVm;
     private readonly TodoDetailViewModel _todoDetailVm;
     private readonly WorkspaceListViewModel _workspaceListVm;
@@ -46,6 +47,7 @@ internal sealed class MainScreen : Window
         HealthSnapshotsViewModel healthVm,
         DispatcherLogsViewModel dispatcherLogsVm,
         SessionLogListViewModel sessionLogVm,
+        SessionLogDetailViewModel sessionLogDetailVm,
         TodoListViewModel todoVm,
         TodoDetailViewModel todoDetailVm,
         TunnelListViewModel tunnelListVm,
@@ -61,6 +63,7 @@ internal sealed class MainScreen : Window
         _healthVm = healthVm;
         _dispatcherLogsVm = dispatcherLogsVm;
         _sessionLogVm = sessionLogVm;
+        _sessionLogDetailVm = sessionLogDetailVm;
         _todoVm = todoVm;
         _todoDetailVm = todoDetailVm;
         _workspaceListVm = workspaceListVm;
@@ -383,7 +386,7 @@ internal sealed class MainScreen : Window
 
         if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.SessionLogs))
         {
-            _tabView.AddTab(new Tab { DisplayText = "Sessions", View = new SessionLogScreen(_sessionLogVm) }, andSelect: selectFirst);
+            _tabView.AddTab(new Tab { DisplayText = "Sessions", View = new SessionLogScreen(_sessionLogVm, _sessionLogDetailVm) }, andSelect: selectFirst);
             selectFirst = false;
         }
 

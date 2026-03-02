@@ -67,6 +67,39 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         cancellationToken.ThrowIfCancellationRequested();
         EnsureEnabled();
 
+        var opts = _options.CurrentValue;
+        var now = DateTimeOffset.UtcNow;
+        var requestedModel = string.IsNullOrWhiteSpace(request?.AgentModel) ? opts.CopilotModel : request.AgentModel.Trim();
+
+        var requestedAgentName = request?.AgentName;
+        if (!string.IsNullOrWhiteSpace(requestedAgentName))
+        {
+            foreach (var existing in _sessions.Values)
+            {
+                if (!string.Equals(existing.AgentName, requestedAgentName, StringComparison.OrdinalIgnoreCase))
+                    continue;
+                if (existing.IsTurnActive)
+                    continue;
+
+                existing.LastUpdatedUtc = now;
+                if (!string.IsNullOrWhiteSpace(request?.AgentPrompt) &&
+                    existing.InteractiveSession is { IsAlive: true } liveSession)
+                {
+                    _ = await liveSession.SendAsync(request.AgentPrompt, cancellationToken).ConfigureAwait(false);
+                }
+
+                _logger.LogInformation("Reusing voice session {SessionId} for pooled agent {AgentName}", existing.SessionId, requestedAgentName);
+                return new VoiceSessionCreateResponse
+                {
+                    SessionId = existing.SessionId,
+                    Status = existing.Status,
+                    Language = existing.Language,
+                    ModelRequested = requestedModel,
+                    ModelResolved = requestedModel,
+                };
+            }
+        }
+
         // Enforce one-session-per-device: close any existing session for this device
         if (!string.IsNullOrWhiteSpace(request?.DeviceId))
         {
@@ -80,11 +113,27 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
             }
         }
 
-        var opts = _options.CurrentValue;
-        var now = DateTimeOffset.UtcNow;
         var sessionId = $"voice-{now:yyyyMMddHHmmss}-{Guid.NewGuid():N}".ToLowerInvariant();
         var language = NormalizeLanguage(request?.Language);
-        var state = new VoiceSessionState(sessionId, language, request?.DeviceId, request?.ClientName, request?.WorkspacePath, now);
+        var combinedSeed = request?.AgentSeed;
+        if (!string.IsNullOrWhiteSpace(request?.AgentPrompt))
+            combinedSeed = string.IsNullOrWhiteSpace(combinedSeed)
+                ? request.AgentPrompt
+                : $"{combinedSeed}{Environment.NewLine}{Environment.NewLine}{request.AgentPrompt}";
+
+        var state = new VoiceSessionState(
+            sessionId,
+            language,
+            request?.DeviceId,
+            request?.ClientName,
+            request?.WorkspacePath,
+            request?.AgentName,
+            request?.AgentPath,
+            requestedModel,
+            combinedSeed,
+            request?.AgentParameters,
+            request?.OneShotSession ?? false,
+            now);
         _sessions[sessionId] = state;
 
         _logger.LogInformation("Created voice session {SessionId} for device {DeviceId}", sessionId, request?.DeviceId ?? "(none)");
@@ -94,8 +143,8 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
             SessionId = sessionId,
             Status = "idle",
             Language = language,
-            ModelRequested = opts.CopilotModel,
-            ModelResolved = opts.CopilotModel
+            ModelRequested = requestedModel,
+            ModelResolved = requestedModel
         };
     }
 
@@ -260,6 +309,29 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         await session.SendEscapeAsync(cancellationToken).ConfigureAwait(false);
         state.LastUpdatedUtc = DateTimeOffset.UtcNow;
         return true;
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> SendSessionMessageAsync(string sessionId, string message, CancellationToken cancellationToken = default)
+    {
+        EnsureEnabled();
+        cancellationToken.ThrowIfCancellationRequested();
+        ArgumentException.ThrowIfNullOrWhiteSpace(sessionId);
+        ArgumentException.ThrowIfNullOrWhiteSpace(message);
+
+        if (!_sessions.TryGetValue(sessionId, out var state))
+            return false;
+
+        if (state.IsOneShotSession)
+            return false;
+
+        var session = state.InteractiveSession;
+        if (session is null || !session.IsAlive)
+            return false;
+
+        var response = await session.SendAsync(message, cancellationToken).ConfigureAwait(false);
+        state.LastUpdatedUtc = DateTimeOffset.UtcNow;
+        return response.State == CopilotResultState.Success;
     }
 
     /// <inheritdoc />
@@ -602,7 +674,7 @@ public sealed partial class VoiceConversationService
             {
                 // First turn or session died — launch interactive process with full system prompt
                 var prompt = BuildCopilotPrompt(state, turnId, userText, toolResultsForPrompt, step);
-                var copilotOpts = BuildCopilotOptions(opts, state.WorkspacePath);
+                var copilotOpts = BuildCopilotOptions(opts, state);
 
                 try
                 {
@@ -643,7 +715,7 @@ public sealed partial class VoiceConversationService
                 {
                     repaired = await _copilotClient.InvokeAsync(
                         BuildJsonRepairPrompt(copilotResult.Body),
-                        BuildCopilotOptions(opts),
+                        BuildCopilotOptions(opts, state),
                         cancellationToken).ConfigureAwait(false);
                 }
 
@@ -763,7 +835,7 @@ public sealed partial class VoiceConversationService
         if (state.InteractiveSession is not { IsAlive: true })
         {
             var prompt = BuildCopilotPrompt(state, turnId, userText, [], 1);
-            var copilotOpts = BuildCopilotOptions(opts, state.WorkspacePath);
+            var copilotOpts = BuildCopilotOptions(opts, state);
 
             _logger.LogInformation("Launching interactive Copilot session for {SessionId}, prompt length={PromptLen}", state.SessionId, prompt.Length);
 
@@ -1149,21 +1221,29 @@ public sealed partial class VoiceConversationService
         return null;
     }
 
-    private CopilotClientOptions BuildCopilotOptions(VoiceConversationOptions opts, string? sessionWorkspacePath = null)
+    private CopilotClientOptions BuildCopilotOptions(VoiceConversationOptions opts, VoiceSessionState? sessionState = null)
     {
-        var model = string.IsNullOrWhiteSpace(opts.CopilotModel) ? "auto" : opts.CopilotModel.Trim();
+        var model = !string.IsNullOrWhiteSpace(sessionState?.AgentModel)
+            ? sessionState.AgentModel!.Trim()
+            : string.IsNullOrWhiteSpace(opts.CopilotModel)
+                ? "gpt-5.3-codex"
+                : opts.CopilotModel.Trim();
 
         // Session workspace path (from X-Workspace-Path at session creation) takes priority
-        var workingDirectory = !string.IsNullOrWhiteSpace(sessionWorkspacePath)
-            ? sessionWorkspacePath
+        var workingDirectory = !string.IsNullOrWhiteSpace(sessionState?.WorkspacePath)
+            ? sessionState.WorkspacePath
             : !string.IsNullOrWhiteSpace(opts.WorkingDirectory)
                 ? opts.WorkingDirectory
                 : _workspaceAccessor.GetWorkspacePath();
 
         var promptOpts = _todoPromptOptions.CurrentValue;
-        var agentPath = string.IsNullOrWhiteSpace(promptOpts.AgentPath) ? "copilot" : promptOpts.AgentPath;
+        var agentPath = !string.IsNullOrWhiteSpace(sessionState?.AgentPath)
+            ? sessionState.AgentPath
+            : string.IsNullOrWhiteSpace(promptOpts.AgentPath)
+                ? "copilot"
+                : promptOpts.AgentPath;
 
-        return new CopilotClientOptions
+        var options = new CopilotClientOptions
         {
             AgentPath = agentPath,
             Model = model,
@@ -1173,6 +1253,14 @@ public sealed partial class VoiceConversationService
             RunAs = promptOpts.RunAs,
             GitHubToken = promptOpts.GitHubToken,
         };
+
+        if (sessionState?.AgentParameters is not null)
+        {
+            foreach (var pair in sessionState.AgentParameters)
+                options.EnvironmentVariables[pair.Key] = pair.Value;
+        }
+
+        return options;
     }
 
     /// <summary>
@@ -1302,6 +1390,12 @@ public sealed partial class VoiceConversationService
     {
         // No system prompt — only the user's seed text and any tool results.
         var sb = new StringBuilder();
+        if (step == 1 && !string.IsNullOrWhiteSpace(state.AgentSeed))
+        {
+            sb.AppendLine(state.AgentSeed.Trim());
+            sb.AppendLine();
+        }
+
         sb.Append(userText);
 
         if (toolResultsForPrompt.Count > 0)
@@ -1668,13 +1762,33 @@ public sealed partial class VoiceConversationService
 
     private sealed class VoiceSessionState
     {
-        public VoiceSessionState(string sessionId, string language, string? deviceId, string? clientName, string? workspacePath, DateTimeOffset now)
+        public VoiceSessionState(
+            string sessionId,
+            string language,
+            string? deviceId,
+            string? clientName,
+            string? workspacePath,
+            string? agentName,
+            string? agentPath,
+            string? agentModel,
+            string? agentSeed,
+            Dictionary<string, string>? agentParameters,
+            bool isOneShotSession,
+            DateTimeOffset now)
         {
             SessionId = sessionId;
             Language = language;
             DeviceId = deviceId;
             ClientName = clientName;
             WorkspacePath = workspacePath;
+            AgentName = agentName;
+            AgentPath = agentPath;
+            AgentModel = agentModel;
+            AgentSeed = agentSeed;
+            AgentParameters = agentParameters is null
+                ? []
+                : new Dictionary<string, string>(agentParameters, StringComparer.OrdinalIgnoreCase);
+            IsOneShotSession = isOneShotSession;
             CreatedUtc = now;
             LastUpdatedUtc = now;
         }
@@ -1686,6 +1800,12 @@ public sealed partial class VoiceConversationService
         public string? DeviceId { get; }
         public string? ClientName { get; }
         public string? WorkspacePath { get; }
+        public string? AgentName { get; }
+        public string? AgentPath { get; }
+        public string? AgentModel { get; }
+        public string? AgentSeed { get; }
+        public Dictionary<string, string> AgentParameters { get; }
+        public bool IsOneShotSession { get; }
         public DateTimeOffset CreatedUtc { get; set; }
         public DateTimeOffset LastUpdatedUtc { get; set; }
         public bool IsTurnActive { get; set; }

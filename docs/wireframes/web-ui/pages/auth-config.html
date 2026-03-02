@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Auth Config Wireframe</title>
+  <link rel="stylesheet" href="../shared/wireframe.css" />
+</head>
+<body>
+  <main class="gh-content">
+    <h1 class="page-title">Auth Configuration</h1>
+    <p class="subtitle">Read-only OIDC config surface with copy and validation affordances.</p>
+
+    <section class="panel">
+      <table class="table">
+        <tbody>
+          <tr><th>Authority</th><td>http://localhost:7080/realms/mcp</td><td><button class="btn">Copy</button></td></tr>
+          <tr><th>Client Id</th><td>mcpserver-web</td><td><button class="btn">Copy</button></td></tr>
+          <tr><th>Scopes</th><td>openid profile roles</td><td><button class="btn">Copy</button></td></tr>
+        </tbody>
+      </table>
+      <div class="row" style="margin-top:8px"><button class="btn btn-primary">Validate configuration</button></div>
+    </section>
+
+    <p><a href="../index.html">Back to index</a></p>
+  </main>
+</body>
+</html>

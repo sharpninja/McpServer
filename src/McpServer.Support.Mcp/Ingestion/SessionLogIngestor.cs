@@ -64,7 +64,10 @@ public sealed class SessionLogIngestor
         CancellationToken cancellationToken = default)
     {
         var repoRoot = Path.GetFullPath(_options.RepoRoot);
-        var sessionsDir = Path.Combine(repoRoot, _options.SessionsPath.TrimStart('.', Path.DirectorySeparatorChar));
+        var sessionsDir = Path.IsPathRooted(_options.SessionsPath)
+            ? Path.GetFullPath(_options.SessionsPath)
+            : Path.GetFullPath(Path.Combine(repoRoot, _options.SessionsPath.TrimStart('.', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)));
+        var sourceRoot = Path.IsPathRooted(_options.SessionsPath) ? sessionsDir : repoRoot;
         if (!Directory.Exists(sessionsDir))
         {
             return Array.Empty<(ContextDocument, IReadOnlyList<ContextChunk>)>();
@@ -93,7 +96,7 @@ public sealed class SessionLogIngestor
                     ? NormalizeJsonSessionLog(content)
                     : NormalizeMarkdownSessionLog(content);
                 var contentHash = ComputeHash(content);
-                var relativePath = Path.GetRelativePath(repoRoot, path).Replace('\\', '/');
+                var relativePath = Path.GetRelativePath(sourceRoot, path).Replace('\\', '/');
                 var documentId = "session-log:" + relativePath.Replace("/", "-", StringComparison.Ordinal).Replace(":", "-", StringComparison.Ordinal);
                 var doc = new ContextDocument
                 {
@@ -168,7 +171,9 @@ public sealed class SessionLogIngestor
     public async Task<SessionLogImportResult> ImportToSessionLogTablesAsync(CancellationToken cancellationToken = default)
     {
         var repoRoot = Path.GetFullPath(_options.RepoRoot);
-        var sessionsDir = Path.Combine(repoRoot, _options.SessionsPath.TrimStart('.', Path.DirectorySeparatorChar));
+        var sessionsDir = Path.IsPathRooted(_options.SessionsPath)
+            ? Path.GetFullPath(_options.SessionsPath)
+            : Path.GetFullPath(Path.Combine(repoRoot, _options.SessionsPath.TrimStart('.', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)));
         if (!Directory.Exists(sessionsDir))
         {
             _logger.LogWarning("Sessions directory not found: {SessionsDir}", sessionsDir);

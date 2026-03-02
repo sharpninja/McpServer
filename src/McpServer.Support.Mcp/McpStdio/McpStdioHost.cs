@@ -6,6 +6,7 @@ using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -33,11 +34,32 @@ public static class McpStdioHost
             consoleOptions.LogToStandardErrorThreshold = LogLevel.Information;
         });
 
-        var dataSource = McpInstanceResolver.ResolveSqliteDataSource(builder.Configuration, instanceName);
-        builder.Services.AddDbContext<McpDbContext>(options =>
+        var databaseProvider = (McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "DatabaseProvider") ?? "sqlite")
+            .Trim()
+            .ToUpperInvariant();
+
+        if (databaseProvider is "POSTGRES" or "POSTGRESQL" or "NPGSQL")
         {
-            options.UseSqlite($"Data Source={dataSource}");
-        }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
+            var postgresConnectionString = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "PostgresConnectionString")
+                ?? builder.Configuration.GetConnectionString("Mcp");
+
+            if (string.IsNullOrWhiteSpace(postgresConnectionString))
+                throw new InvalidOperationException("Mcp:PostgresConnectionString (or ConnectionStrings:Mcp) is required when Mcp:DatabaseProvider is postgres.");
+
+            builder.Services.AddDbContext<McpDbContext>(options =>
+            {
+                options.UseNpgsql(postgresConnectionString);
+                options.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
+            }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
+        }
+        else
+        {
+            var dataSource = McpInstanceResolver.ResolveSqliteDataSource(builder.Configuration, instanceName);
+            builder.Services.AddDbContext<McpDbContext>(options =>
+            {
+                options.UseSqlite($"Data Source={dataSource}");
+            }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
+        }
 
         builder.Services.Configure<IngestionOptions>(builder.Configuration.GetSection("Mcp"));
         builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(TodoStorageOptions.SectionName));
@@ -60,16 +82,16 @@ public static class McpStdioHost
             options.SessionsPath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "SessionsPath") ?? options.SessionsPath;
             options.UnifiedModelSchemaPath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "UnifiedModelSchemaPath") ?? options.UnifiedModelSchemaPath;
             options.ExternalDocsPath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "ExternalDocsPath") ?? options.ExternalDocsPath;
+
+            options.TodoFilePath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.TodoFilePath);
+            options.SessionsPath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.SessionsPath);
+            options.UnifiedModelSchemaPath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.UnifiedModelSchemaPath);
         });
         builder.Services.PostConfigure<TodoStorageOptions>(options =>
         {
             options.Provider = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TodoStorage:Provider") ?? options.Provider;
             options.SqliteDataSource = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TodoStorage:SqliteDataSource") ?? options.SqliteDataSource;
-            if (!Path.IsPathRooted(options.SqliteDataSource))
-            {
-                var dataDirectory = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "DataDirectory") ?? ".";
-                options.SqliteDataSource = Path.GetFullPath(Path.Combine(dataDirectory, options.SqliteDataSource));
-            }
+            options.SqliteDataSource = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.SqliteDataSource);
         });
         builder.Services.AddSingleton<ISyncStatusStore, SyncStatusStore>();
         builder.Services.AddSingleton<IWriteAuditLog, WriteAuditLog>();

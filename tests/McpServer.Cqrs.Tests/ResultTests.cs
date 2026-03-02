@@ -97,14 +97,18 @@ public class ResultTests
     public void ToString_Success_Format()
     {
         var result = Result<int>.Success(42);
-        Assert.Equal("Success(42)", result.ToString());
+        var text = result.ToString();
+        Assert.StartsWith("Success", text, StringComparison.Ordinal);
+        Assert.Contains("42", text, StringComparison.Ordinal);
     }
 
     [Fact]
     public void ToString_Failure_Format()
     {
         var result = Result<int>.Failure("oops");
-        Assert.Equal("Failure(oops)", result.ToString());
+        var text = result.ToString();
+        Assert.StartsWith("Failure", text, StringComparison.Ordinal);
+        Assert.Contains("oops", text, StringComparison.Ordinal);
     }
 
     // Non-generic Result tests

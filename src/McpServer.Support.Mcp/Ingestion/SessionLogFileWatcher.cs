@@ -38,7 +38,9 @@ public sealed class SessionLogFileWatcher : IHostedService, IDisposable
     public Task StartAsync(CancellationToken cancellationToken)
     {
         var repoRoot = Path.GetFullPath(_options.RepoRoot);
-        var sessionsDir = Path.Combine(repoRoot, _options.SessionsPath.TrimStart('.', Path.DirectorySeparatorChar));
+        var sessionsDir = Path.IsPathRooted(_options.SessionsPath)
+            ? Path.GetFullPath(_options.SessionsPath)
+            : Path.GetFullPath(Path.Combine(repoRoot, _options.SessionsPath.TrimStart('.', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)));
 
         if (!Directory.Exists(sessionsDir))
         {

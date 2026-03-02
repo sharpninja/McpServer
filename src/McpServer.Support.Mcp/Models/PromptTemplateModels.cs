@@ -140,3 +140,45 @@ public sealed record PromptTemplateTestResult
     /// <summary>Required variables that were missing from the input.</summary>
     public IReadOnlyList<string>? MissingVariables { get; init; }
 }
+
+/// <summary>
+/// FR-MCP-056: Request to resolve a stored template by id and variable dictionary.
+/// </summary>
+public sealed record PromptTemplateResolveRequest
+{
+    /// <summary>
+    /// Variable values to pass to template rendering.
+    /// </summary>
+    public Dictionary<string, object?>? Values { get; init; }
+}
+
+/// <summary>
+/// FR-MCP-056: Result of resolving a stored template by id.
+/// </summary>
+public sealed record PromptTemplateResolveResult
+{
+    /// <summary>
+    /// Whether rendering succeeded.
+    /// </summary>
+    public required bool Success { get; init; }
+
+    /// <summary>
+    /// Template identifier used for rendering.
+    /// </summary>
+    public string? TemplateId { get; init; }
+
+    /// <summary>
+    /// Populated prompt text.
+    /// </summary>
+    public string? Prompt { get; init; }
+
+    /// <summary>
+    /// Error text for failed resolutions.
+    /// </summary>
+    public string? Error { get; init; }
+
+    /// <summary>
+    /// Missing required variables when validation fails.
+    /// </summary>
+    public IReadOnlyList<string>? MissingVariables { get; init; }
+}

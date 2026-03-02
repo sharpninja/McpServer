@@ -1,4 +1,5 @@
 AllowedHosts: '*'
+DataFolder: .
 applicationName: McpServer.Support.Mcp
 CommonProgramFiles: C:\Program Files\Common Files
 CommonProgramFiles(x86): C:\Program Files (x86)\Common Files
@@ -14,6 +15,8 @@ Logging:
     Default: Debug
     Microsoft.AspNetCore: Debug
 Mcp:
+  DatabaseProvider: sqlite
+  PostgresConnectionString: ''
   # Auth:
   #   Audience: mcp-server-api
   #   Authority: http://localhost:7080/realms/mcpserver

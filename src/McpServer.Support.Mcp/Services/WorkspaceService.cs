@@ -248,7 +248,12 @@ public sealed class WorkspaceService : IWorkspaceService
     }
 
     private static string NormalizePath(string path)
-        => Path.GetFullPath(path.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return string.Empty;
+
+        return Path.GetFullPath(path.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+    }
 
     /// <summary>Returns null when the prompt value is empty/whitespace or matches the built-in default.</summary>
     private static string? StripIfDefault(string promptName, string? value)
