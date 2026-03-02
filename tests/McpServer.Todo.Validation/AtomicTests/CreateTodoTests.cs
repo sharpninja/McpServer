@@ -5,7 +5,7 @@ using Xunit;
 
 namespace McpServer.Todo.Validation.AtomicTests;
 
-/// <summary>Audit: POST /mcp/todo — Create a new TODO item.</summary>
+/// <summary>Audit: POST /mcpserver/todo — Create a new TODO item.</summary>
 [Collection("TodoEndpoint")]
 public sealed class CreateTodoTests : IAsyncLifetime
 {

@@ -1,7 +1,7 @@
 namespace McpServer.Support.Mcp.Ingestion;
 
 /// <summary>
-/// TR-PLANNED-013: Stores last sync run result for sync.status endpoint.
+/// TR-PLANNED-013, TR-MCP-MT-004: Stores last sync run result per workspace for sync.status endpoint.
 /// </summary>
 public interface ISyncStatusStore
 {
@@ -12,4 +12,14 @@ public interface ISyncStatusStore
     /// <summary>Sets the last sync result.</summary>
     /// <param name="result">The sync run result to store.</param>
     void SetLast(SyncRunResult result);
+
+    /// <summary>Gets the last sync result for a specific workspace.</summary>
+    /// <param name="workspaceId">Normalized workspace identifier.</param>
+    /// <returns>The last sync run result for the workspace, or <see langword="null"/>.</returns>
+    SyncRunResult? GetLast(string workspaceId);
+
+    /// <summary>Sets the last sync result for a specific workspace.</summary>
+    /// <param name="workspaceId">Normalized workspace identifier.</param>
+    /// <param name="result">The sync run result to store.</param>
+    void SetLast(string workspaceId, SyncRunResult result);
 }

@@ -13,8 +13,13 @@ on:
     paths:
       - "src/McpServer.Support.Mcp/**"
       - "src/McpServer.Client/**"
+      - "src/McpServer.Director/**"
+      - "src/McpServer.UI.Core/**"
+      - "src/McpServer.Cqrs/**"
+      - "src/McpServer.Cqrs.Mvvm/**"
       - "tests/McpServer.Support.Mcp.Tests/**"
       - "tests/McpServer.Client.Tests/**"
+      - "tests/McpServer.Cqrs.Tests/**"
       - "docs/**"
       - "docfx.json"
       - "templates/**"
@@ -27,12 +32,18 @@ on:
       - "scripts/Validate-McpConfig.ps1"
       - "scripts/Test-McpMultiInstance.ps1"
       - ".github/workflows/mcp-server-ci.yml"
+      - "GitVersion.yml"
   pull_request:
     paths:
       - "src/McpServer.Support.Mcp/**"
       - "src/McpServer.Client/**"
+      - "src/McpServer.Director/**"
+      - "src/McpServer.UI.Core/**"
+      - "src/McpServer.Cqrs/**"
+      - "src/McpServer.Cqrs.Mvvm/**"
       - "tests/McpServer.Support.Mcp.Tests/**"
       - "tests/McpServer.Client.Tests/**"
+      - "tests/McpServer.Cqrs.Tests/**"
       - "docs/**"
       - "docfx.json"
       - "templates/**"
@@ -45,12 +56,15 @@ on:
       - "scripts/Validate-McpConfig.ps1"
       - "scripts/Test-McpMultiInstance.ps1"
       - ".github/workflows/mcp-server-ci.yml"
+      - "GitVersion.yml"
 
 jobs:
   build-test-publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -72,6 +86,12 @@ jobs:
 
       - name: Publish MCP Server
         run: dotnet publish src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj -c Release -o artifacts/mcp-server
+
+      - name: Build Director tool
+        run: dotnet build src/McpServer.Director/McpServer.Director.csproj -c Release
+
+      - name: Pack Director tool
+        run: dotnet pack src/McpServer.Director/McpServer.Director.csproj -c Release --no-build -o artifacts/director-tool
 
       - name: Generate OpenAPI artifact
         shell: bash
@@ -95,6 +115,12 @@ jobs:
         with:
           name: mcp-server-publish
           path: artifacts/mcp-server
+
+      - name: Upload Director tool package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: director-tool-nupkg
+          path: artifacts/director-tool/*.nupkg
 
       - name: Upload OpenAPI artifact
         uses: actions/upload-artifact@v4
@@ -176,7 +202,7 @@ jobs:
           curl -fsS http://localhost:7147/health | grep -q Healthy
 
       - name: Test TODO endpoint
-        run: curl -fsS http://localhost:7147/mcp/todo | head -c 200
+        run: curl -fsS http://localhost:7147/mcpserver/todo | head -c 200
 
       - name: Test Swagger
         run: curl -fsS http://localhost:7147/swagger/v1/swagger.json -o /dev/null
@@ -278,25 +304,39 @@ jobs:
     if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
 
-      - name: Read version
+      - name: Install GitVersion CLI
+        run: dotnet tool install --global GitVersion.Tool
+
+      - name: Compute version from GitVersion
         id: version
-        shell: bash
+        shell: pwsh
         run: |
-          BASE_VERSION=$(cat .version | LC_ALL=C tr -cd '0-9A-Za-z.\-' )
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            echo "version=$BASE_VERSION" >> "$GITHUB_OUTPUT"
-          else
-            echo "version=$BASE_VERSION-preview.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
-          fi
+          $gvJson = dotnet-gitversion /output json | Out-String
+          $gv = $gvJson | ConvertFrom-Json
+          if ('${{ github.ref }}' -eq 'refs/heads/main') {
+            $version = $gv.MajorMinorPatch
+          }
+          else {
+            $version = $gv.SemVer
+          }
+          Write-Host "GitVersion FullSemVer: $($gv.FullSemVer)"
+          Write-Host "GitVersion SemVer: $($gv.SemVer)"
+          Write-Host "PackageVersion: $version"
+          "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8NoBOM -Append
 
       - name: Pack
         run: dotnet pack src/McpServer.Client/McpServer.Client.csproj -c Release -p:PackageVersion=${{ steps.version.outputs.version }} -o ./nupkg
+
+      - name: Pack Director tool
+        run: dotnet pack src/McpServer.Director/McpServer.Director.csproj -c Release -p:PackageVersion=${{ steps.version.outputs.version }} -o ./nupkg
 
       - name: Push to NuGet (main only)
         if: github.ref == 'refs/heads/main'
@@ -309,5 +349,5 @@ jobs:
       - name: Upload NuGet artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mcp-client-nupkg
+          name: mcp-packages-nupkg
           path: nupkg/*.nupkg

@@ -6,8 +6,9 @@ Standalone repository for `McpServer.Support.Mcp`, the MCP context server used f
 
 - HTTP API with Swagger UI
 - MCP over STDIO transport (`--transport stdio`)
-- Multi-instance hosting from `appsettings` (`Mcp:Instances`)
-- Per-instance todo storage backend (`yaml` file-backed or `sqlite` table-backed)
+- Single-port multi-tenant workspace hosting via `X-Workspace-Path` header
+- Per-workspace todo storage backend (`yaml` file-backed or `sqlite` table-backed)
+- Three-tier workspace resolution: header → API key reverse lookup → default
 - Optional interaction logging and Parseable sink support
 
 ## Repository Layout
@@ -152,12 +153,12 @@ dotnet test tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj
 
 Main endpoints:
 
-- `/mcp/todo`
-- `/mcp/sessionlog`
-- `/mcp/context`
-- `/mcp/repo`
-- `/mcp/gh`
-- `/mcp/sync`
+- `/mcpserver/todo`
+- `/mcpserver/sessionlog`
+- `/mcpserver/context`
+- `/mcpserver/repo`
+- `/mcpserver/gh`
+- `/mcpserver/sync`
 - `/health`
 - `/swagger`
 
@@ -195,14 +196,14 @@ dotnet add package SharpNinja.McpServer.Client
 // With DI
 builder.Services.AddMcpServerClient(options =>
 {
-    options.BaseUrl = new Uri("http://localhost:7148");
+    options.BaseUrl = new Uri("http://localhost:7147");
     options.ApiKey = "your-api-key"; // optional
 });
 
 // Without DI
 var client = McpServerClientFactory.Create(new McpServerClientOptions
 {
-    BaseUrl = new Uri("http://localhost:7148"),
+    BaseUrl = new Uri("http://localhost:7147"),
 });
 ```
 

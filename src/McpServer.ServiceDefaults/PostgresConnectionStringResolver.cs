@@ -68,8 +68,9 @@ public static class PostgresConnectionStringResolver
                 parts.Add("Trust Server Certificate=true");
             return string.Join(";", parts);
         }
-        catch (UriFormatException)
+        catch (UriFormatException ex)
         {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
             return url;
         }
     }

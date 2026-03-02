@@ -1,5 +1,8 @@
 using System.Text.Json;
 using McpServer.Common.Copilot;
+using McpServer.Support.Mcp.Options;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Services;
 
@@ -10,7 +13,8 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 internal sealed class RequirementsService(
     ICopilotClient copilotClient,
-    ITodoService todoService,
+    WorkspaceServiceAccessor workspaceAccessor,
+    IOptionsMonitor<TodoPromptOptions> promptOptions,
     ILogger<RequirementsService> logger) : IRequirementsService
 {
     /// <inheritdoc />
@@ -20,7 +24,7 @@ internal sealed class RequirementsService(
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(todoId);
 
-        var todo = await todoService.GetByIdAsync(todoId, cancellationToken).ConfigureAwait(false);
+        var todo = await workspaceAccessor.GetTodoService().GetByIdAsync(todoId, cancellationToken).ConfigureAwait(false);
         if (todo is null)
             return new RequirementsAnalysisResult(false, Error: $"TODO item '{todoId}' not found.");
 
@@ -28,13 +32,27 @@ internal sealed class RequirementsService(
 
         logger.LogInformation("Invoking Copilot to analyze requirements for TODO {Id}", todoId);
 
+        var currentPromptOptions = promptOptions.CurrentValue;
         var options = new CopilotClientOptions
         {
-            OutputFormat = "text",
             Timeout = TimeSpan.FromMinutes(5),
+            WorkingDirectory = workspaceAccessor.GetWorkspacePath(),
+            RunAs = currentPromptOptions.RunAs,
+            GitHubToken = currentPromptOptions.GitHubToken,
         };
+        if (!string.IsNullOrWhiteSpace(currentPromptOptions.AgentPath))
+            options.AgentPath = currentPromptOptions.AgentPath;
 
         var result = await copilotClient.InvokeAsync(prompt, options, cancellationToken).ConfigureAwait(false);
+
+        if (ShouldRetryWithStreamingFallback(result))
+        {
+            logger.LogWarning(
+                "Copilot CLI reported unsupported option during requirements analysis for TODO {Id}. Retrying with streaming fallback.",
+                todoId);
+
+            result = await InvokeWithStreamingFallbackAsync(prompt, options, cancellationToken).ConfigureAwait(false);
+        }
 
         if (result.State != CopilotResultState.Success)
         {
@@ -69,7 +87,7 @@ internal sealed class RequirementsService(
             TechnicalRequirements = mergedTrs,
         };
 
-        var updateResult = await todoService.UpdateAsync(todoId, updateRequest, cancellationToken).ConfigureAwait(false);
+        var updateResult = await workspaceAccessor.GetTodoService().UpdateAsync(todoId, updateRequest, cancellationToken).ConfigureAwait(false);
         if (!updateResult.Success)
         {
             logger.LogWarning("Failed to update TODO {Id} with FR/TR: {Error}", todoId, updateResult.Error);
@@ -91,6 +109,72 @@ internal sealed class RequirementsService(
             TechnicalRequirements: mergedTrs,
             CopilotResponse: result.Body);
     }
+
+    private async Task<CopilotResult> InvokeWithStreamingFallbackAsync(
+        string prompt,
+        CopilotClientOptions options,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var lines = new List<string>();
+            await foreach (var line in copilotClient.InvokeStreamingAsync(prompt, options, cancellationToken))
+            {
+                if (!string.IsNullOrWhiteSpace(line))
+                    lines.Add(line);
+            }
+
+            var body = string.Join(Environment.NewLine, lines).Trim();
+            if (string.IsNullOrWhiteSpace(body))
+            {
+                return new CopilotResult
+                {
+                    State = CopilotResultState.Error,
+                    Stderr = "Streaming fallback produced no output.",
+                };
+            }
+
+            // Best-effort failure detection because streaming API does not currently expose exit code/stderr.
+            if (body.Contains("error: unknown option", StringComparison.OrdinalIgnoreCase))
+            {
+                return new CopilotResult
+                {
+                    State = CopilotResultState.Error,
+                    Body = body,
+                    Stderr = body,
+                };
+            }
+
+            return new CopilotResult
+            {
+                State = CopilotResultState.Success,
+                Body = body,
+            };
+        }
+        catch (OperationCanceledException ex) when (!cancellationToken.IsCancellationRequested)
+        {
+            logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            return new CopilotResult
+            {
+                State = CopilotResultState.Timeout,
+                Stderr = "Streaming fallback timed out.",
+            };
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("{ExceptionDetail}", ex.ToString());
+            return new CopilotResult
+            {
+                State = CopilotResultState.Error,
+                Stderr = ex.Message,
+            };
+        }
+    }
+
+    private static bool ShouldRetryWithStreamingFallback(CopilotResult result)
+        => result.State != CopilotResultState.Success
+           && (result.Stderr.Contains("unknown option '--no-warnings'", StringComparison.OrdinalIgnoreCase)
+               || result.Body.Contains("unknown option '--no-warnings'", StringComparison.OrdinalIgnoreCase));
 
     private static string BuildPrompt(TodoFlatItem todo)
     {
@@ -176,7 +260,7 @@ internal sealed class RequirementsService(
     /// Extract FR-XXX-### and TR-XXX-### IDs from the Copilot response.
     /// First tries to parse a JSON block; falls back to regex extraction.
     /// </summary>
-    internal static (List<string> FrIds, List<string> TrIds) ExtractRequirementIds(string body)
+    internal (List<string> FrIds, List<string> TrIds) ExtractRequirementIds(string body)
     {
         // Try to find a JSON block in the response
         var jsonMatch = System.Text.RegularExpressions.Regex.Match(
@@ -194,8 +278,9 @@ internal sealed class RequirementsService(
                 if (frIds.Count > 0 || trIds.Count > 0)
                     return (frIds, trIds);
             }
-            catch (JsonException)
+            catch (JsonException ex)
             {
+                logger.LogWarning("{ExceptionDetail}", ex.ToString());
                 // Fall through to regex
             }
         }

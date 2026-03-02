@@ -15,7 +15,7 @@ dotnet add package SharpNinja.McpServer.Client
 ```csharp
 builder.Services.AddMcpServerClient(options =>
 {
-    options.BaseUrl = new Uri("http://localhost:7148");
+    options.BaseUrl = new Uri("http://localhost:7147");
     options.ApiKey = "your-api-key"; // optional
 });
 
@@ -35,7 +35,7 @@ public class MyService(McpServerClient mcp)
 ```csharp
 var client = McpServerClientFactory.Create(new McpServerClientOptions
 {
-    BaseUrl = new Uri("http://localhost:7148"),
+    BaseUrl = new Uri("http://localhost:7147"),
 });
 
 var todos = await client.Todo.QueryAsync();
@@ -52,7 +52,6 @@ var todos = await client.Todo.QueryAsync();
 | `GitHub` | Issues, PRs, labels, bidirectional sync |
 | `Workspace` | Manage workspace lifecycle |
 | `Tools` | Tool registry search, CRUD, bucket management |
-| `Sync` | Trigger and monitor ingestion sync |
 
 ## Target Frameworks
 

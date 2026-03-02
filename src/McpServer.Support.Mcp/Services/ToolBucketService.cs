@@ -1,4 +1,4 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +13,7 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 public sealed class ToolBucketService : IToolBucketService
 {
-    private static readonly JsonSerializerOptions JsonOpts = new()
+    private static readonly JsonSerializerOptions s_jsonOpts = new()
     {
         PropertyNameCaseInsensitive = true,
         ReadCommentHandling = JsonCommentHandling.Skip,
@@ -231,7 +231,7 @@ public sealed class ToolBucketService : IToolBucketService
         JsonElement[] files;
         try
         {
-            files = JsonSerializer.Deserialize<JsonElement[]>(listResult.Stdout, JsonOpts) ?? [];
+            files = JsonSerializer.Deserialize<JsonElement[]>(listResult.Stdout, s_jsonOpts) ?? [];
         }
         catch (JsonException ex)
         {
@@ -257,7 +257,7 @@ public sealed class ToolBucketService : IToolBucketService
 
             try
             {
-                var manifest = JsonSerializer.Deserialize<ToolManifestFile>(fileResult.Stdout, JsonOpts);
+                var manifest = JsonSerializer.Deserialize<ToolManifestFile>(fileResult.Stdout, s_jsonOpts);
                 if (manifest is not null && !string.IsNullOrWhiteSpace(manifest.Name))
                 {
                     manifests.Add(new ToolManifest(

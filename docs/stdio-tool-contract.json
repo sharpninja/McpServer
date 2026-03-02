@@ -13,7 +13,7 @@
         "limit": { "type": "integer", "default": 20, "description": "Max chunks to return (default 20)" },
         "sourceType": { "type": "string", "required": false, "description": "Optional source type filter" }
       },
-      "httpEquivalent": "POST /mcp/context/search"
+      "httpEquivalent": "POST /mcpserver/context/search"
     },
     {
       "name": "context_pack",
@@ -23,13 +23,13 @@
         "limit": { "type": "integer", "default": 20, "description": "Max chunks in pack (default 20)" },
         "queryId": { "type": "string", "required": false, "description": "Optional query id for reproducibility" }
       },
-      "httpEquivalent": "POST /mcp/context/pack"
+      "httpEquivalent": "POST /mcpserver/context/pack"
     },
     {
       "name": "context_sources",
       "description": "List indexed document sources (sourceKey, sourceType, ingestedAt).",
       "parameters": {},
-      "httpEquivalent": "GET /mcp/context/sources"
+      "httpEquivalent": "GET /mcpserver/context/sources"
     },
     {
       "name": "repo_read",
@@ -37,7 +37,7 @@
       "parameters": {
         "path": { "type": "string", "required": true, "description": "Relative path from repo root" }
       },
-      "httpEquivalent": "GET /mcp/repo/{path}"
+      "httpEquivalent": "GET /mcpserver/repo/{path}"
     },
     {
       "name": "repo_list",
@@ -45,7 +45,7 @@
       "parameters": {
         "path": { "type": "string", "required": false, "description": "Relative path (optional, default repo root)" }
       },
-      "httpEquivalent": "GET /mcp/repo"
+      "httpEquivalent": "GET /mcpserver/repo"
     },
     {
       "name": "repo_write",
@@ -54,19 +54,19 @@
         "path": { "type": "string", "required": true, "description": "Relative path from repo root" },
         "content": { "type": "string", "required": true, "description": "File content to write" }
       },
-      "httpEquivalent": "PUT /mcp/repo/{path}"
+      "httpEquivalent": "PUT /mcpserver/repo/{path}"
     },
     {
       "name": "sync_run",
       "description": "Trigger full ingestion (repo, session logs, external docs). Returns run result.",
       "parameters": {},
-      "httpEquivalent": "POST /mcp/sync/ingest"
+      "httpEquivalent": "POST /mcpserver/sync/ingest"
     },
     {
       "name": "sync_status",
       "description": "Get last sync run status (lastRun, status, error, counts).",
       "parameters": {},
-      "httpEquivalent": "GET /mcp/sync/status"
+      "httpEquivalent": "GET /mcpserver/sync/status"
     },
     {
       "name": "todo_list",
@@ -76,7 +76,7 @@
         "priority": { "type": "string", "required": false, "description": "Priority filter (high/medium/low)" },
         "done": { "type": "boolean", "required": false, "description": "Done filter (true/false)" }
       },
-      "httpEquivalent": "GET /mcp/todo"
+      "httpEquivalent": "GET /mcpserver/todo"
     },
     {
       "name": "todo_get",
@@ -84,7 +84,7 @@
       "parameters": {
         "id": { "type": "string", "required": true, "description": "TODO item id" }
       },
-      "httpEquivalent": "GET /mcp/todo/{id}"
+      "httpEquivalent": "GET /mcpserver/todo/{id}"
     },
     {
       "name": "todo_create",
@@ -97,7 +97,7 @@
         "estimate": { "type": "string", "required": false, "description": "Estimate string" },
         "description": { "type": "string", "required": false, "description": "Description text" }
       },
-      "httpEquivalent": "POST /mcp/todo"
+      "httpEquivalent": "POST /mcpserver/todo"
     },
     {
       "name": "todo_update",
@@ -109,7 +109,7 @@
         "done": { "type": "boolean", "required": false, "description": "Mark as done" },
         "note": { "type": "string", "required": false, "description": "Updated note" }
       },
-      "httpEquivalent": "PUT /mcp/todo/{id}"
+      "httpEquivalent": "PUT /mcpserver/todo/{id}"
     },
     {
       "name": "todo_delete",
@@ -117,7 +117,7 @@
       "parameters": {
         "id": { "type": "string", "required": true, "description": "TODO item id" }
       },
-      "httpEquivalent": "DELETE /mcp/todo/{id}"
+      "httpEquivalent": "DELETE /mcpserver/todo/{id}"
     },
     {
       "name": "sessionlog_submit",
@@ -125,7 +125,7 @@
       "parameters": {
         "json": { "type": "string", "required": true, "description": "JSON string of the session log payload" }
       },
-      "httpEquivalent": "POST /mcp/sessionlog"
+      "httpEquivalent": "POST /mcpserver/sessionlog"
     },
     {
       "name": "sessionlog_query",
@@ -138,7 +138,7 @@
         "to": { "type": "string", "required": false, "description": "To date (ISO 8601)" },
         "limit": { "type": "integer", "required": false, "description": "Max results (default 100)" }
       },
-      "httpEquivalent": "GET /mcp/sessionlog"
+      "httpEquivalent": "GET /mcpserver/sessionlog"
     },
     {
       "name": "sessionlog_dialog",
@@ -149,7 +149,7 @@
         "requestId": { "type": "string", "required": true, "description": "Request id" },
         "itemsJson": { "type": "string", "required": true, "description": "JSON array of dialog items" }
       },
-      "httpEquivalent": "POST /mcp/sessionlog/{agent}/{sessionId}/{requestId}/dialog"
+      "httpEquivalent": "POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog"
     },
     {
       "name": "github_list_issues",
@@ -158,7 +158,7 @@
         "state": { "type": "string", "required": false, "description": "State filter (open/closed/all)" },
         "limit": { "type": "integer", "default": 30, "description": "Max issues to return (default 30)" }
       },
-      "httpEquivalent": "GET /mcp/gh/issues"
+      "httpEquivalent": "GET /mcpserver/gh/issues"
     },
     {
       "name": "github_list_pulls",
@@ -167,7 +167,7 @@
         "state": { "type": "string", "required": false, "description": "State filter (open/closed/all)" },
         "limit": { "type": "integer", "default": 30, "description": "Max PRs to return (default 30)" }
       },
-      "httpEquivalent": "GET /mcp/gh/pulls"
+      "httpEquivalent": "GET /mcpserver/gh/pulls"
     },
     {
       "name": "github_create_issue",
@@ -176,7 +176,7 @@
         "title": { "type": "string", "required": true, "description": "Issue title" },
         "body": { "type": "string", "required": false, "description": "Issue body" }
       },
-      "httpEquivalent": "POST /mcp/gh/issues"
+      "httpEquivalent": "POST /mcpserver/gh/issues"
     },
     {
       "name": "github_comment_issue",
@@ -185,7 +185,7 @@
         "issueId": { "type": "string", "required": true, "description": "Issue number or id" },
         "body": { "type": "string", "required": true, "description": "Comment body" }
       },
-      "httpEquivalent": "POST /mcp/gh/issues/{issueId}/comments"
+      "httpEquivalent": "POST /mcpserver/gh/issues/{issueId}/comments"
     },
     {
       "name": "github_comment_pull",
@@ -194,7 +194,7 @@
         "prId": { "type": "string", "required": true, "description": "PR number or id" },
         "body": { "type": "string", "required": true, "description": "Comment body" }
       },
-      "httpEquivalent": "POST /mcp/gh/pulls/{prId}/comments"
+      "httpEquivalent": "POST /mcpserver/gh/pulls/{prId}/comments"
     }
   ]
 }

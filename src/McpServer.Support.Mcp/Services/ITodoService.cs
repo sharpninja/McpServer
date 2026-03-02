@@ -132,6 +132,12 @@ public sealed record TodoCreateRequest
     /// <summary>Implementation sub-tasks.</summary>
     public IReadOnlyList<TodoFlatTask>? ImplementationTasks { get; init; }
 
+    /// <summary>Optional note.</summary>
+    public string? Note { get; init; }
+
+    /// <summary>Remaining work text.</summary>
+    public string? Remaining { get; init; }
+
     /// <summary>IDs of TODO items this item depends on.</summary>
     public IReadOnlyList<string>? DependsOn { get; init; }
 
@@ -193,3 +199,10 @@ public sealed record TodoUpdateRequest
 
 /// <summary>TR-PLANNED-013: Result of a TODO mutation (create/update/delete).</summary>
 public sealed record TodoMutationResult(bool Success, string? Error = null, TodoFlatItem? Item = null);
+
+/// <summary>Request to move a TODO item to a different workspace.</summary>
+public sealed record TodoMoveRequest
+{
+    /// <summary>Absolute path of the target workspace to move the item to. Required.</summary>
+    public required string TargetWorkspacePath { get; init; }
+}

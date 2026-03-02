@@ -9,7 +9,7 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 public sealed class IssueTodoSyncService(
     IGitHubCliService github,
-    ITodoService todoService,
+    WorkspaceServiceAccessor workspaceAccessor,
     ILogger<IssueTodoSyncService> logger) : IIssueTodoSyncService
 {
     private const string IssueIdPrefix = "ISSUE-";
@@ -41,7 +41,7 @@ public sealed class IssueTodoSyncService(
             description.Add(bodyPreview);
         }
 
-        var existing = await todoService.GetByIdAsync(todoId, ct).ConfigureAwait(false);
+        var existing = await workspaceAccessor.GetTodoService().GetByIdAsync(todoId, ct).ConfigureAwait(false);
         if (existing is not null)
         {
             var update = new TodoUpdateRequest
@@ -53,7 +53,7 @@ public sealed class IssueTodoSyncService(
                 Note = note,
                 Description = description.Count > 0 ? description : null
             };
-            var result = await todoService.UpdateAsync(todoId, update, ct).ConfigureAwait(false);
+            var result = await workspaceAccessor.GetTodoService().UpdateAsync(todoId, update, ct).ConfigureAwait(false);
             logger.LogInformation("Updated TODO {Id} from issue #{Number}", todoId, issue.Number);
             return result;
         }
@@ -67,11 +67,11 @@ public sealed class IssueTodoSyncService(
                 Priority = priority,
                 Description = description.Count > 0 ? description : null
             };
-            var result = await todoService.CreateAsync(create, ct).ConfigureAwait(false);
+            var result = await workspaceAccessor.GetTodoService().CreateAsync(create, ct).ConfigureAwait(false);
             if (result.Success)
             {
                 // Set note and done status after creation
-                await todoService.UpdateAsync(todoId, new TodoUpdateRequest { Note = note, Done = done }, ct).ConfigureAwait(false);
+                await workspaceAccessor.GetTodoService().UpdateAsync(todoId, new TodoUpdateRequest { Note = note, Done = done }, ct).ConfigureAwait(false);
             }
             logger.LogInformation("Created TODO {Id} from issue #{Number}", todoId, issue.Number);
             return result;
@@ -115,6 +115,7 @@ public sealed class IssueTodoSyncService(
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {
+                logger.LogError("{ExceptionDetail}", ex.ToString());
                 failed++;
                 errors.Add($"Issue #{issueItem.Number}: {ex.Message}");
             }
@@ -134,7 +135,7 @@ public sealed class IssueTodoSyncService(
         if (!int.TryParse(todoId.AsSpan(IssueIdPrefix.Length), out var issueNumber))
             return new GitHubMutationResult(false, null, $"Cannot parse issue number from {todoId}");
 
-        var todo = await todoService.GetByIdAsync(todoId, ct).ConfigureAwait(false);
+        var todo = await workspaceAccessor.GetTodoService().GetByIdAsync(todoId, ct).ConfigureAwait(false);
         if (todo is null)
             return new GitHubMutationResult(false, null, $"TODO {todoId} not found");
 
@@ -176,7 +177,7 @@ public sealed class IssueTodoSyncService(
     /// <inheritdoc />
     public async Task<IssueSyncResult> SyncAllTodosToIssuesAsync(CancellationToken ct = default)
     {
-        var queryResult = await todoService.QueryAsync(new TodoQueryRequest { Keyword = IssueIdPrefix }, ct).ConfigureAwait(false);
+        var queryResult = await workspaceAccessor.GetTodoService().QueryAsync(new TodoQueryRequest { Keyword = IssueIdPrefix }, ct).ConfigureAwait(false);
         var issueTodos = queryResult.Items.Where(t => t.Id.StartsWith(IssueIdPrefix, StringComparison.OrdinalIgnoreCase)).ToList();
 
         var synced = 0;
@@ -198,6 +199,7 @@ public sealed class IssueTodoSyncService(
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {
+                logger.LogError("{ExceptionDetail}", ex.ToString());
                 failed++;
                 errors.Add($"{todo.Id}: {ex.Message}");
             }

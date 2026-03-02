@@ -20,13 +20,14 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
     {
         _factory = factory;
         _client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(_client, factory.Services);
     }
 
-    /// <summary>GET /mcp/context/sources returns 200 and array.</summary>
+    /// <summary>GET /mcpserver/context/sources returns 200 and array.</summary>
     [Fact]
     public async Task GetSources_ReturnsOk()
     {
-        var response = await _client.GetAsync(new Uri("/mcp/context/sources", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/context/sources", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
         using var doc = JsonDocument.Parse(json);
@@ -34,13 +35,13 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
         Assert.Equal(JsonValueKind.Array, sources.ValueKind);
     }
 
-    /// <summary>POST /mcp/context/pack returns 200 and ContextPack with empty chunks when query matches no content.</summary>
+    /// <summary>POST /mcpserver/context/pack returns 200 and ContextPack with empty chunks when query matches no content.</summary>
     [Fact]
     public async Task GetPack_ReturnsOk()
     {
         // Use a query that cannot match any chunk (avoids dependence on DB state / test order).
         var request = new { queryId = "test-1", query = "xyznonexistentquery123", limit = 10 };
-        var response = await _client.PostAsJsonAsync(new Uri("/mcp/context/pack", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/context/pack", UriKind.Relative), request).ConfigureAwait(true);
         response.EnsureSuccessStatusCode();
         var pack = await response.Content.ReadFromJsonAsync<ContextPack>().ConfigureAwait(true);
         Assert.NotNull(pack);
@@ -51,12 +52,12 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
         Assert.Empty(pack.SourceKeys);
     }
 
-    /// <summary>POST /mcp/context/search returns 200.</summary>
+    /// <summary>POST /mcpserver/context/search returns 200.</summary>
     [Fact]
     public async Task Search_ReturnsOk()
     {
         var request = new { query = "test", limit = 5 };
-        var response = await _client.PostAsJsonAsync(new Uri("/mcp/context/search", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/context/search", UriKind.Relative), request).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
@@ -98,8 +99,8 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
         }
 
         var request = new { queryId = "det-query-1", query = "content", limit = 10 };
-        var response1 = await _client.PostAsJsonAsync(new Uri("/mcp/context/pack", UriKind.Relative), request).ConfigureAwait(true);
-        var response2 = await _client.PostAsJsonAsync(new Uri("/mcp/context/pack", UriKind.Relative), request).ConfigureAwait(true);
+        var response1 = await _client.PostAsJsonAsync(new Uri("/mcpserver/context/pack", UriKind.Relative), request).ConfigureAwait(true);
+        var response2 = await _client.PostAsJsonAsync(new Uri("/mcpserver/context/pack", UriKind.Relative), request).ConfigureAwait(true);
         response1.EnsureSuccessStatusCode();
         response2.EnsureSuccessStatusCode();
 

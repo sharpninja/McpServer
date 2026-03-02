@@ -11,7 +11,7 @@ namespace McpServer.Support.Mcp.Controllers;
 /// FR-SUPPORT-010: Hybrid search and deterministic context packs.
 /// </summary>
 [ApiController]
-[Route("mcp/context")]
+[Route("mcpserver/context")]
 public sealed class ContextController : ControllerBase
 {
     private readonly McpDbContext _db;

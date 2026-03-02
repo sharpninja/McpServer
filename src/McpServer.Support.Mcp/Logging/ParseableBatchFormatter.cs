@@ -30,7 +30,7 @@ public sealed class ParseableBatchFormatter : IBatchFormatter
         if (list.Count == 0)
             return;
 
-        var json = JsonSerializer.Serialize(list, ParseableEventFormatter.JsonOptions);
+        var json = JsonSerializer.Serialize(list, ParseableEventFormatter.s_jsonOptions);
         output.Write(json);
     }
 

@@ -36,17 +36,7 @@ public sealed class SessionLogService : ISessionLogService
         if (string.IsNullOrWhiteSpace(dto.SessionId))
             throw new ArgumentException("SessionId is required.", nameof(dto));
 
-        var existing = await _db.SessionLogs
-            .Include(s => s.Entries)
-                .ThenInclude(e => e.Actions)
-            .Include(s => s.Entries)
-                .ThenInclude(e => e.Tags)
-            .Include(s => s.Entries)
-                .ThenInclude(e => e.ContextItems)
-            .Include(s => s.Entries)
-                .ThenInclude(e => e.ProcessingDialog)
-            .FirstOrDefaultAsync(s => s.SourceType == dto.SourceType && s.SessionId == dto.SessionId, cancellationToken)
-            .ConfigureAwait(false);
+        var existing = await FindExistingSessionAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false);
 
         if (existing != null)
         {
@@ -71,9 +61,52 @@ public sealed class SessionLogService : ISessionLogService
             _logger.LogInformation("Created session log {SourceType}/{SessionId}", dto.SourceType, dto.SessionId);
         }
 
-        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        }
+        catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("UNIQUE constraint failed", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            // Race condition: another request inserted the same (SourceType, SessionId) between
+            // our query and save. Detach the failed entity, re-query, and update instead.
+            _logger.LogWarning("UNIQUE constraint race for {SourceType}/{SessionId}, retrying as update", dto.SourceType, dto.SessionId);
+            _db.ChangeTracker.Clear();
+
+            existing = await FindExistingSessionAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false)
+                ?? throw new InvalidOperationException($"Session log {dto.SourceType}/{dto.SessionId} disappeared after UNIQUE constraint failure.");
+
+            MapDtoToEntity(dto, existing);
+            existing.SourceFilePath = sourceFilePath;
+            existing.ContentHash = contentHash;
+            UpsertEntries(existing, dto.Entries);
+
+            await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            _logger.LogInformation("Updated session log {SourceType}/{SessionId} (Id={Id}) after retry", dto.SourceType, dto.SessionId, existing.Id);
+        }
+
         return existing.Id;
     }
+
+    /// <summary>
+    /// Finds an existing session log by (SourceType, SessionId), bypassing global query filters
+    /// so the lookup matches the UNIQUE constraint scope (which is workspace-agnostic).
+    /// </summary>
+    private Task<SessionLogEntity?> FindExistingSessionAsync(string sourceType, string sessionId, CancellationToken cancellationToken) =>
+        _db.SessionLogs
+            .IgnoreQueryFilters()
+            .Include(s => s.Entries)
+                .ThenInclude(e => e.Actions)
+            .Include(s => s.Entries)
+                .ThenInclude(e => e.Tags)
+            .Include(s => s.Entries)
+                .ThenInclude(e => e.ContextItems)
+            .Include(s => s.Entries)
+                .ThenInclude(e => e.ProcessingDialog)
+            .Include(s => s.Entries)
+                .ThenInclude(e => e.Commits)
+            .Include(s => s.Entries)
+                .ThenInclude(e => e.StringListItems)
+            .FirstOrDefaultAsync(s => s.SourceType == sourceType && s.SessionId == sessionId, cancellationToken);
 
     /// <inheritdoc />
     public async Task<bool> IsUnchangedAsync(string sourceType, string sessionId, string contentHash, CancellationToken cancellationToken = default)
@@ -167,6 +200,10 @@ public sealed class SessionLogService : ISessionLogService
                 .ThenInclude(e => e.ContextItems.OrderBy(c => c.Ordinal))
             .Include(s => s.Entries)
                 .ThenInclude(e => e.ProcessingDialog.OrderBy(p => p.Ordinal))
+            .Include(s => s.Entries)
+                .ThenInclude(e => e.Commits.OrderBy(c => c.Ordinal))
+            .Include(s => s.Entries)
+                .ThenInclude(e => e.StringListItems.OrderBy(sl => sl.Ordinal))
             .AsSplitQuery()
             .AsNoTracking()
             .ToListAsync(cancellationToken)
@@ -322,11 +359,15 @@ public sealed class SessionLogService : ISessionLogService
         _db.SessionLogEntryTags.RemoveRange(entity.Tags);
         _db.SessionLogEntryContexts.RemoveRange(entity.ContextItems);
         _db.SessionLogProcessingDialogs.RemoveRange(entity.ProcessingDialog);
+        _db.SessionLogCommits.RemoveRange(entity.Commits);
+        _db.SessionLogEntryStringLists.RemoveRange(entity.StringListItems);
 
         entity.Actions = MapActions(dto.Actions);
         entity.Tags = MapTags(dto.Tags);
         entity.ContextItems = MapContextItems(dto.ContextList);
         entity.ProcessingDialog = MapProcessingDialog(dto.ProcessingDialog);
+        entity.Commits = MapCommits(dto.Commits);
+        entity.StringListItems = MapStringListItems(dto);
     }
 
     private static List<SessionLogEntryEntity> MapNewEntries(List<UnifiedRequestEntryDto>? entries)
@@ -359,7 +400,9 @@ public sealed class SessionLogService : ISessionLogService
             Actions = MapActions(e.Actions),
             Tags = MapTags(e.Tags),
             ContextItems = MapContextItems(e.ContextList),
-            ProcessingDialog = MapProcessingDialog(e.ProcessingDialog)
+            ProcessingDialog = MapProcessingDialog(e.ProcessingDialog),
+            Commits = MapCommits(e.Commits),
+            StringListItems = MapStringListItems(e)
         };
     }
 
@@ -399,6 +442,47 @@ public sealed class SessionLogService : ISessionLogService
             Content = d.Content ?? string.Empty,
             Category = d.Category
         }).ToList() ?? [];
+    }
+
+    private static List<SessionLogCommitEntity> MapCommits(List<SessionLogCommitDto>? commits)
+    {
+        return commits?.Select((c, i) => new SessionLogCommitEntity
+        {
+            Ordinal = i,
+            Sha = c.Sha,
+            Branch = c.Branch,
+            Message = c.Message,
+            Author = c.Author,
+            CommitTimestamp = ParseDateTimeOffset(c.Timestamp),
+            FilesChangedJson = c.FilesChanged is { Count: > 0 }
+                ? JsonSerializer.Serialize(c.FilesChanged)
+                : null
+        }).ToList() ?? [];
+    }
+
+    private static List<SessionLogEntryStringListEntity> MapStringListItems(UnifiedRequestEntryDto dto)
+    {
+        var items = new List<SessionLogEntryStringListEntity>();
+        AddStringListItems(items, "DesignDecision", dto.DesignDecisions);
+        AddStringListItems(items, "Requirement", dto.RequirementsDiscovered);
+        AddStringListItems(items, "FileModified", dto.FilesModified);
+        AddStringListItems(items, "Blocker", dto.Blockers);
+        return items;
+    }
+
+    private static void AddStringListItems(List<SessionLogEntryStringListEntity> items, string listType, List<string>? values)
+    {
+        if (values is not { Count: > 0 })
+            return;
+        for (int i = 0; i < values.Count; i++)
+        {
+            items.Add(new SessionLogEntryStringListEntity
+            {
+                ListType = listType,
+                Ordinal = i,
+                Value = values[i]
+            });
+        }
     }
 
     private static UnifiedSessionLogDto MapEntityToDto(SessionLogEntity entity)
@@ -474,7 +558,22 @@ public sealed class SessionLogService : ISessionLogService
                         Content = p.Content,
                         Category = p.Category
                     }).ToList()
-                    : null
+                    : null,
+                Commits = e.Commits.Count > 0
+                    ? e.Commits.OrderBy(c => c.Ordinal).Select(c => new SessionLogCommitDto
+                    {
+                        Sha = c.Sha,
+                        Branch = c.Branch,
+                        Message = c.Message,
+                        Author = c.Author,
+                        Timestamp = c.CommitTimestamp?.ToString("o", CultureInfo.InvariantCulture),
+                        FilesChanged = DeserializeStringList(c.FilesChangedJson)
+                    }).ToList()
+                    : null,
+                DesignDecisions = MapStringListToDto(e.StringListItems, "DesignDecision"),
+                RequirementsDiscovered = MapStringListToDto(e.StringListItems, "Requirement"),
+                FilesModified = MapStringListToDto(e.StringListItems, "FileModified"),
+                Blockers = MapStringListToDto(e.StringListItems, "Blocker")
             }).ToList()
         };
     }
@@ -498,5 +597,25 @@ public sealed class SessionLogService : ISessionLogService
         if (string.IsNullOrWhiteSpace(json))
             return null;
         return JsonSerializer.Deserialize<object>(json);
+    }
+
+    private static List<string>? MapStringListToDto(ICollection<SessionLogEntryStringListEntity> items, string listType)
+    {
+        var filtered = items.Where(i => i.ListType == listType).OrderBy(i => i.Ordinal).Select(i => i.Value).ToList();
+        return filtered.Count > 0 ? filtered : null;
+    }
+
+    private static List<string>? DeserializeStringList(string? json)
+    {
+        if (string.IsNullOrEmpty(json))
+            return null;
+        try
+        {
+            return JsonSerializer.Deserialize<List<string>>(json);
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
     }
 }

@@ -47,11 +47,11 @@ switch ($Action) {
             exit 1
         }
         Write-Host "=== Sync Status ===" -ForegroundColor Cyan
-        $syncStatus = Invoke-RestMethod -Uri "$McpUrl/mcp/sync/status" -Method Get
+        $syncStatus = Invoke-RestMethod -Uri "$McpUrl/mcpserver/sync/status" -Method Get
         $syncStatus | ConvertTo-Json -Depth 5 | Write-Host
 
         Write-Host "`n=== Context Sources ===" -ForegroundColor Cyan
-        $sources = Invoke-RestMethod -Uri "$McpUrl/mcp/context/sources" -Method Get
+        $sources = Invoke-RestMethod -Uri "$McpUrl/mcpserver/context/sources" -Method Get
         if ($sources.Count -gt 0) {
             $sources | ForEach-Object {
                 Write-Host "  $($_.sourceType): $($_.sourceKey) (ingested: $($_.ingestedAt))"
@@ -67,7 +67,7 @@ switch ($Action) {
             exit 1
         }
         Write-Host "Triggering full re-ingestion..." -ForegroundColor Yellow
-        $result = Invoke-RestMethod -Uri "$McpUrl/mcp/sync/ingest" -Method Post
+        $result = Invoke-RestMethod -Uri "$McpUrl/mcpserver/sync/ingest" -Method Post
         Write-Host "Ingestion result:" -ForegroundColor Green
         $result | ConvertTo-Json -Depth 5 | Write-Host
     }
@@ -96,7 +96,7 @@ switch ($Action) {
             Write-Host "FTS5 indexed chunks: $ftsCount"
         } else {
             Write-Host "sqlite3 not found. Install SQLite CLI tools for integrity checks." -ForegroundColor Yellow
-            Write-Host "Alternative: Use the MCP /mcp/sync/ingest endpoint to rebuild the index."
+            Write-Host "Alternative: Use the MCP /mcpserver/sync/ingest endpoint to rebuild the index."
         }
     }
 }

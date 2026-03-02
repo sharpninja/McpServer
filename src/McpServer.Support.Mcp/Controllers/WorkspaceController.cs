@@ -1,6 +1,5 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using McpServer.Support.Mcp.Middleware;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,12 +9,10 @@ namespace McpServer.Support.Mcp.Controllers;
 
 /// <summary>
 /// FR-MCP-009 / TR-MCP-WS-004: Workspace registration, initialization, and process lifecycle endpoints.
-/// All endpoints require a valid API key via the <c>X-Api-Key</c> header (or <c>api_key</c> query parameter).
-/// Set <c>Mcp:ApiKey</c> in configuration to enable; when empty, endpoints are open.
+/// All <c>/mcpserver/*</c> endpoints are protected by per-workspace auth tokens via <see cref="Middleware.WorkspaceAuthMiddleware"/>.
 /// </summary>
 [ApiController]
-[Route("mcp/workspace")]
-[ApiKeyAuthFilter]
+[Route("mcpserver/workspace")]
 public sealed class WorkspaceController : ControllerBase
 {
     private readonly IWorkspaceService _workspaceService;
@@ -46,7 +43,6 @@ public sealed class WorkspaceController : ControllerBase
     /// Disabled workspaces are skipped during auto-start.
     /// </summary>
     [HttpGet]
-    [SkipApiKeyAuth]
     public async Task<ActionResult<WorkspaceListResult>> ListAsync(CancellationToken ct)
     {
         var result = await _workspaceService.ListAsync(ct).ConfigureAwait(false);
@@ -55,7 +51,6 @@ public sealed class WorkspaceController : ControllerBase
 
     /// <summary>Get a single workspace by Base64URL-encoded path key. This endpoint is publicly accessible.</summary>
     [HttpGet("{key}")]
-    [SkipApiKeyAuth]
     public async Task<ActionResult<WorkspaceDto>> GetAsync(string key, CancellationToken ct)
     {
         var path = DecodeKey(key);
@@ -90,11 +85,10 @@ public sealed class WorkspaceController : ControllerBase
         await _workspaceService.InitAsync(request.WorkspacePath, ct).ConfigureAwait(false);
         var workspace = await _workspaceService.GetAsync(request.WorkspacePath, ct).ConfigureAwait(false);
         if (workspace is not null)
-            await _processManager.StartAsync(request.WorkspacePath, workspace.WorkspacePort, ct,
-                workspace.DataDirectory, workspace.PromptTemplate).ConfigureAwait(false);
+            await _processManager.StartAsync(workspace, ct).ConfigureAwait(false);
 
         var key = EncodeKey(request.WorkspacePath);
-        return Created(new Uri($"/mcp/workspace/{key}", UriKind.Relative), result);
+        return Created(new Uri($"/mcpserver/workspace/{key}", UriKind.Relative), result);
     }
 
     /// <summary>
@@ -175,8 +169,7 @@ public sealed class WorkspaceController : ControllerBase
         if (workspace is null)
             return NotFound(new WorkspaceProcessStatus(false, Error: "Workspace not found."));
 
-        var status = await _processManager.StartAsync(path, workspace.WorkspacePort, ct,
-            workspace.DataDirectory, workspace.PromptTemplate).ConfigureAwait(false);
+        var status = await _processManager.StartAsync(workspace, ct).ConfigureAwait(false);
         return Ok(status);
     }
 
@@ -194,7 +187,6 @@ public sealed class WorkspaceController : ControllerBase
 
     /// <summary>Get the process status of a workspace instance. This endpoint is publicly accessible.</summary>
     [HttpGet("{key}/status")]
-    [SkipApiKeyAuth]
     public ActionResult<WorkspaceProcessStatus> GetStatus(string key)
     {
         var path = DecodeKey(key);
@@ -210,7 +202,6 @@ public sealed class WorkspaceController : ControllerBase
     /// Returns the configured template, or the built-in default when none is configured.
     /// </summary>
     [HttpGet("prompt")]
-    [SkipApiKeyAuth]
     public async Task<ActionResult<GlobalPromptResult>> GetGlobalPromptAsync(CancellationToken ct)
     {
         var primary = await FindPrimaryWorkspaceAsync(ct).ConfigureAwait(false);
@@ -282,19 +273,16 @@ public sealed class WorkspaceController : ControllerBase
         var list = await _workspaceService.ListAsync(ct).ConfigureAwait(false);
         return list.Items
             .Where(w => w.IsPrimary && w.IsEnabled)
-            .OrderBy(w => w.WorkspacePort)
             .FirstOrDefault()
             ?? list.Items
                 .Where(w => w.IsEnabled)
-                .OrderBy(w => w.WorkspacePort)
                 .FirstOrDefault();
     }
 
-    private bool IsPrimaryInstance(WorkspaceDto primary)
+    private static bool IsPrimaryInstance(WorkspaceDto _)
     {
-        // Check if this process is the one serving the primary workspace by comparing ports.
-        var listeningUrls = HttpContext.Connection.LocalPort;
-        return primary.WorkspacePort == listeningUrls;
+        // All workspaces share a single port; the primary workspace is always served by this process.
+        return true;
     }
 
     /// <summary>

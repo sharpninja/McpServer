@@ -6,8 +6,8 @@ namespace McpServer.ToolRegistry.Validation;
 public sealed class ToolRegistryFixture : IDisposable
 {
     public const string BaseUrl = "http://localhost:7147";
-    public const string ToolRoute = "/mcp/tools";
-    public const string BucketRoute = "/mcp/tools/buckets";
+    public const string ToolRoute = "/mcpserver/tools";
+    public const string BucketRoute = "/mcpserver/tools/buckets";
 
     public HttpClient Client { get; }
 

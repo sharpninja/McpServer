@@ -120,8 +120,8 @@ try {
     Wait-Healthy -BaseUrl $firstUrl -Process $firstProcess -ErrorLogPath $firstErrLog -TimeoutSeconds $TimeoutSeconds
     Wait-Healthy -BaseUrl $secondUrl -Process $secondProcess -ErrorLogPath $secondErrLog -TimeoutSeconds $TimeoutSeconds
 
-    $firstTodo = Invoke-RestMethod -Uri "$firstUrl/mcp/todo" -Method Get
-    $secondTodo = Invoke-RestMethod -Uri "$secondUrl/mcp/todo" -Method Get
+    $firstTodo = Invoke-RestMethod -Uri "$firstUrl/mcpserver/todo" -Method Get
+    $secondTodo = Invoke-RestMethod -Uri "$secondUrl/mcpserver/todo" -Method Get
 
     $firstCount = [int]$firstTodo.totalCount
     $secondCount = [int]$secondTodo.totalCount

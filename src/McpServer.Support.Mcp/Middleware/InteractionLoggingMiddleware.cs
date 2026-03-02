@@ -42,6 +42,14 @@ public sealed class InteractionLoggingMiddleware
     {
         ArgumentNullException.ThrowIfNull(context);
 
+        // --- Log request entry with full headers ---
+        _logger.LogInformation(
+            "MCP request ENTRY {Method} {Path} (RequestId: {RequestId}, Headers: {Headers})",
+            context.Request.Method,
+            context.Request.Path.Value ?? string.Empty,
+            context.TraceIdentifier,
+            FormatHeaders(context.Request.Headers));
+
         // --- Capture request body ---
         string? requestBody = null;
         if (_options.IncludeRequestBody && context.Request.ContentLength is > 0)
@@ -52,9 +60,12 @@ public sealed class InteractionLoggingMiddleware
         }
 
         // --- Wrap response body stream to capture output ---
+        // Skip response buffering for SSE endpoints — buffering defeats real-time streaming.
+        var isSse = string.Equals(context.Request.Headers.Accept.ToString(), "text/event-stream", StringComparison.OrdinalIgnoreCase)
+                    || context.Request.Path.Value?.Contains("/prompt/", StringComparison.OrdinalIgnoreCase) == true;
         Stream? originalResponseBody = null;
         MemoryStream? responseBuffer = null;
-        if (_options.IncludeResponseBody)
+        if (_options.IncludeResponseBody && !isSse)
         {
             originalResponseBody = context.Response.Body;
             responseBuffer = new MemoryStream();
@@ -102,12 +113,14 @@ public sealed class InteractionLoggingMiddleware
             };
 
             _logger.LogInformation(
-                "MCP interaction {Method} {Path} completed with {StatusCode} in {DurationMs:F2}ms (RequestId: {RequestId}, Input: {RequestBody}, Output: {ResponseBody})",
+                "MCP interaction {Method} {Path} completed with {StatusCode} in {DurationMs:F2}ms (RequestId: {RequestId}, RequestHeaders: {RequestHeaders}, ResponseHeaders: {ResponseHeaders}, Input: {RequestBody}, Output: {ResponseBody})",
                 entry.Method,
                 entry.Path,
                 entry.StatusCode,
                 entry.DurationMs,
                 entry.RequestId,
+                FormatHeaders(context.Request.Headers),
+                FormatHeaders(context.Response.Headers),
                 entry.RequestBody ?? "(none)",
                 entry.ResponseBody ?? "(none)");
 
@@ -135,5 +148,17 @@ public sealed class InteractionLoggingMiddleware
         if (buffer.Length == 0) return null;
         buffer.Position = 0;
         return await ReadAndTruncateAsync(buffer, maxChars).ConfigureAwait(false);
+    }
+
+    /// <summary>Formats HTTP headers as a semicolon-delimited string for structured logging.</summary>
+    private static string FormatHeaders(IHeaderDictionary headers)
+    {
+        var sb = new StringBuilder();
+        foreach (var kvp in headers)
+        {
+            if (sb.Length > 0) sb.Append("; ");
+            sb.Append(kvp.Key).Append('=').Append(kvp.Value);
+        }
+        return sb.Length > 0 ? sb.ToString() : "(none)";
     }
 }

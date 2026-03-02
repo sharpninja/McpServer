@@ -13,16 +13,20 @@ namespace McpServer.VsExtension.McpTodo;
 public sealed class McpTodoClient
 {
     private readonly HttpClient _http;
-    private static readonly JsonSerializerOptions JsonOptions = new()
+    private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
     };
 
     public string BaseUrl { get; }
+    private readonly ILogger<McpTodoClient> _logger;
 
-    public McpTodoClient(string baseUrl = "http://localhost:7147")
+
+    public McpTodoClient(string baseUrl = "http://localhost:7147",
+        ILogger<McpTodoClient> logger)
     {
+        _logger = logger;
         BaseUrl = (baseUrl ?? "http://localhost:7147").TrimEnd('/');
         _http = new HttpClient { BaseAddress = new Uri(BaseUrl) };
         _http.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
@@ -62,6 +66,7 @@ public sealed class McpTodoClient
         }
         catch (Exception ex)
         {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             CopilotOutputPane.Log($"Failed to start MCP server process: {ex.Message}");
             return false;
         }
@@ -111,36 +116,36 @@ public sealed class McpTodoClient
         if (done.HasValue) query.Add("done=" + done.Value.ToString().ToLowerInvariant());
         if (!string.IsNullOrWhiteSpace(priority)) query.Add("priority=" + Uri.EscapeDataString(priority!));
         if (!string.IsNullOrWhiteSpace(keyword)) query.Add("keyword=" + Uri.EscapeDataString(keyword!));
-        var path = query.Count > 0 ? "/mcp/todo?" + string.Join("&", query) : "/mcp/todo";
+        var path = query.Count > 0 ? "/mcpserver/todo?" + string.Join("&", query) : "/mcpserver/todo";
         var response = await _http.GetAsync(path, cancellationToken).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        var result = JsonSerializer.Deserialize<TodoQueryResult>(json, JsonOptions);
+        var result = JsonSerializer.Deserialize<TodoQueryResult>(json, s_jsonOptions);
         return result ?? new TodoQueryResult { Items = new List<TodoFlatItem>(), TotalCount = 0 };
     }
 
     public async Task<TodoFlatItem?> GetTodoByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var path = "/mcp/todo/" + Uri.EscapeDataString(id);
+        var path = "/mcpserver/todo/" + Uri.EscapeDataString(id);
         var response = await _http.GetAsync(path, cancellationToken).ConfigureAwait(false);
         if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             return null;
         response.EnsureSuccessStatusCode();
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        return JsonSerializer.Deserialize<TodoFlatItem>(json, JsonOptions);
+        return JsonSerializer.Deserialize<TodoFlatItem>(json, s_jsonOptions);
     }
 
     public async Task<TodoMutationResult> UpdateTodoAsync(string id, TodoUpdateBody body, CancellationToken cancellationToken = default)
     {
-        var path = "/mcp/todo/" + Uri.EscapeDataString(id);
-        using var content = new StringContent(JsonSerializer.Serialize(body, JsonOptions), System.Text.Encoding.UTF8, "application/json");
+        var path = "/mcpserver/todo/" + Uri.EscapeDataString(id);
+        using var content = new StringContent(JsonSerializer.Serialize(body, s_jsonOptions), System.Text.Encoding.UTF8, "application/json");
         var response = await _http.PutAsync(path, content, cancellationToken).ConfigureAwait(false);
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         if (!response.IsSuccessStatusCode)
         {
-            var err = JsonSerializer.Deserialize<TodoMutationResult>(json, JsonOptions);
+            var err = JsonSerializer.Deserialize<TodoMutationResult>(json, s_jsonOptions);
             return err ?? new TodoMutationResult { Success = false, Error = response.ReasonPhrase ?? response.StatusCode.ToString() };
         }
-        return JsonSerializer.Deserialize<TodoMutationResult>(json, JsonOptions) ?? new TodoMutationResult { Success = true };
+        return JsonSerializer.Deserialize<TodoMutationResult>(json, s_jsonOptions) ?? new TodoMutationResult { Success = true };
     }
 }

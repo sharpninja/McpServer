@@ -10,12 +10,12 @@
 
 | # | Method | Route | Auth | Status |
 |---|--------|-------|------|--------|
-| 1 | `GET` | `/mcp/todo` | None | ✅ |
-| 2 | `GET` | `/mcp/todo/{id}` | None | ✅ |
-| 3 | `POST` | `/mcp/todo` | None | ✅ |
-| 4 | `PUT` | `/mcp/todo/{id}` | None | ✅ |
-| 5 | `DELETE` | `/mcp/todo/{id}` | None | ✅ |
-| 6 | `POST` | `/mcp/todo/{id}/requirements` | None | ✅ |
+| 1 | `GET` | `/mcpserver/todo` | None | ✅ |
+| 2 | `GET` | `/mcpserver/todo/{id}` | None | ✅ |
+| 3 | `POST` | `/mcpserver/todo` | None | ✅ |
+| 4 | `PUT` | `/mcpserver/todo/{id}` | None | ✅ |
+| 5 | `DELETE` | `/mcpserver/todo/{id}` | None | ✅ |
+| 6 | `POST` | `/mcpserver/todo/{id}/requirements` | None | ✅ |
 
 ## Key Findings
 

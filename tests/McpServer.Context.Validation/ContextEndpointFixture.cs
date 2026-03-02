@@ -8,7 +8,7 @@ public sealed class ContextEndpointCollection : ICollectionFixture<ContextEndpoi
 public sealed class ContextEndpointFixture : IDisposable
 {
     public const string BaseUrl = "http://localhost:7147";
-    public const string ContextRoute = "/mcp/context";
+    public const string ContextRoute = "/mcpserver/context";
     public HttpClient Client { get; }
 
     public ContextEndpointFixture()

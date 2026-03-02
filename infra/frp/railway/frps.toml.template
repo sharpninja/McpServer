@@ -1,0 +1,8 @@
+bindPort = __FRPS_BIND_PORT__
+vhostHTTPPort = __FRPS_VHOST_HTTP_PORT__
+
+auth.method = "token"
+auth.token = "__FRP_TOKEN__"
+
+log.to = "console"
+log.level = "__FRPS_LOG_LEVEL__"

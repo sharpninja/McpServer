@@ -1,6 +1,7 @@
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Controllers;
 
@@ -9,16 +10,20 @@ namespace McpServer.Support.Mcp.Controllers;
 /// FR-SUPPORT-010: Agents POST session log payloads; clients GET with optional filters.
 /// </summary>
 [ApiController]
-[Route("mcp/sessionlog")]
+[Route("mcpserver/sessionlog")]
 public sealed class SessionLogController : ControllerBase
 {
     private const int MaxEntryCount = 5000;
 
     private readonly ISessionLogService _service;
+    private readonly ILogger<SessionLogController> _logger;
+
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
-    public SessionLogController(ISessionLogService service)
+    public SessionLogController(ISessionLogService service,
+        ILogger<SessionLogController> logger)
     {
+        _logger = logger;
         _service = service ?? throw new ArgumentNullException(nameof(service));
     }
 
@@ -48,7 +53,7 @@ public sealed class SessionLogController : ControllerBase
         var id = await _service.SubmitAsync(dto, sourceFilePath: null, contentHash: null, cancellationToken).ConfigureAwait(false);
 
         return Created(
-            new Uri($"/mcp/sessionlog?agent={Uri.EscapeDataString(dto.SourceType)}&sessionId={Uri.EscapeDataString(dto.SessionId)}", UriKind.Relative),
+            new Uri($"/mcpserver/sessionlog?agent={Uri.EscapeDataString(dto.SourceType)}&sessionId={Uri.EscapeDataString(dto.SessionId)}", UriKind.Relative),
             new { id, sourceType = dto.SourceType, sessionId = dto.SessionId });
     }
 
@@ -123,6 +128,7 @@ public sealed class SessionLogController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return NotFound(new { error = ex.Message });
         }
     }

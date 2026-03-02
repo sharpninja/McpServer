@@ -12,23 +12,23 @@
 
 | # | Method | Route | Auth | Status |
 |---|--------|-------|------|--------|
-| 1 | `GET` | `/mcp/tools` | Public | ✅ |
-| 2 | `GET` | `/mcp/tools/search` | Public | ✅ |
-| 3 | `GET` | `/mcp/tools/{id}` | Public | ✅ |
-| 4 | `POST` | `/mcp/tools` | API Key | ✅ |
-| 5 | `PUT` | `/mcp/tools/{id}` | API Key | ✅ |
-| 6 | `DELETE` | `/mcp/tools/{id}` | API Key | ✅ |
+| 1 | `GET` | `/mcpserver/tools` | Public | ✅ |
+| 2 | `GET` | `/mcpserver/tools/search` | Public | ✅ |
+| 3 | `GET` | `/mcpserver/tools/{id}` | Public | ✅ |
+| 4 | `POST` | `/mcpserver/tools` | API Key | ✅ |
+| 5 | `PUT` | `/mcpserver/tools/{id}` | API Key | ✅ |
+| 6 | `DELETE` | `/mcpserver/tools/{id}` | API Key | ✅ |
 
 ### Bucket Management
 
 | # | Method | Route | Auth | Status |
 |---|--------|-------|------|--------|
-| 7 | `GET` | `/mcp/tools/buckets` | Public | ✅ |
-| 8 | `POST` | `/mcp/tools/buckets` | API Key | ✅ |
-| 9 | `DELETE` | `/mcp/tools/buckets/{name}` | API Key | ✅ |
-| 10 | `GET` | `/mcp/tools/buckets/{name}/browse` | Public | ✅ |
-| 11 | `POST` | `/mcp/tools/buckets/{name}/install` | API Key | ✅ |
-| 12 | `POST` | `/mcp/tools/buckets/{name}/sync` | API Key | ✅ |
+| 7 | `GET` | `/mcpserver/tools/buckets` | Public | ✅ |
+| 8 | `POST` | `/mcpserver/tools/buckets` | API Key | ✅ |
+| 9 | `DELETE` | `/mcpserver/tools/buckets/{name}` | API Key | ✅ |
+| 10 | `GET` | `/mcpserver/tools/buckets/{name}/browse` | Public | ✅ |
+| 11 | `POST` | `/mcpserver/tools/buckets/{name}/install` | API Key | ✅ |
+| 12 | `POST` | `/mcpserver/tools/buckets/{name}/sync` | API Key | ✅ |
 
 ## Key Findings
 

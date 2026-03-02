@@ -5,7 +5,7 @@ using Xunit;
 
 namespace McpServer.Workspace.Validation.AtomicTests;
 
-/// <summary>Audit: DELETE /mcp/workspace/{key} — Delete a workspace registration.</summary>
+/// <summary>Audit: DELETE /mcpserver/workspace/{key} — Delete a workspace registration.</summary>
 [Collection("WorkspaceEndpoint")]
 public sealed class DeleteWorkspaceTests
 {

@@ -30,7 +30,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TodoTreeDataProvider = void 0;
 const vscode = __importStar(require("vscode"));
-const filterExpr_1 = require("./filterExpr");
 const logger_1 = require("./logger");
 const PRIORITY_ORDER = ['high', 'medium', 'low'];
 function isPriorityNode(node) {
@@ -62,9 +61,9 @@ function searchableForScope(item, scope) {
 function matchesText(item, text, scope) {
     if (!text || !text.trim())
         return true;
-    const searchable = searchableForScope(item, scope).join(' ');
-    const expr = (0, filterExpr_1.parseFilterText)(text.trim());
-    return (0, filterExpr_1.evaluate)(expr, searchable);
+    const searchable = searchableForScope(item, scope).join(' ').toLowerCase();
+    const words = text.trim().toLowerCase().split(/\s+/);
+    return words.every((word) => searchable.includes(word));
 }
 function matchesPriority(item, filterPriority) {
     if (!filterPriority || !filterPriority.trim())
@@ -108,9 +107,8 @@ class TodoTreeDataProvider {
         (0, logger_1.log)('TodoTreeDataProvider.refresh() start');
         this._error = undefined;
         try {
-            const includeDone = vscode.workspace.getConfiguration('fwhMcpTodo').get('includeDone', false);
             const { fetchTodoList } = await Promise.resolve().then(() => __importStar(require('./mcpClient')));
-            const result = await fetchTodoList(includeDone ? {} : { done: false });
+            const result = await fetchTodoList({ done: false });
             this._items = result.items ?? [];
             (0, logger_1.log)('TodoTreeDataProvider.refresh() success', { itemCount: this._items.length, totalCount: result.totalCount });
         }
@@ -135,11 +133,10 @@ class TodoTreeDataProvider {
         const item = element;
         const isPlaceholder = !item.id;
         const priorityLabel = item.priority ? item.priority.charAt(0).toUpperCase() + item.priority.slice(1) : '';
-        const doneLabel = item.done ? '✓ ' : '';
         const ti = new vscode.TreeItem(item.id || item.title || '(Empty)', vscode.TreeItemCollapsibleState.None);
         ti.id = item.id || `placeholder-${item.title?.slice(0, 20) ?? 'empty'}`;
-        ti.description = item.id ? [doneLabel + (item.title ?? ''), priorityLabel].filter(Boolean).join(' · ') : undefined;
-        ti.tooltip = item.id ? `${item.id} — ${priorityLabel}${item.done ? ' (done)' : ''}\n${item.title ?? ''}` : item.title;
+        ti.description = item.id ? [item.title ?? '', priorityLabel].filter(Boolean).join(' · ') : undefined;
+        ti.tooltip = item.id ? `${item.id} — ${priorityLabel}\n${item.title ?? ''}` : item.title;
         if (!isPlaceholder) {
             ti.contextValue = 'todoItem';
             ti.command = {

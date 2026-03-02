@@ -1,5 +1,25 @@
 # Copilot Instructions — McpServer
 
+## ⚠️ PRIORITY ORDER — NON-NEGOTIABLE ⚠️
+
+**Speed is never more important than following workspace procedures.**
+
+Before doing ANY work on ANY user request, you MUST complete these steps in order:
+
+3. **POST `/mcpserver/sessionlog`** with your session entry — do NOT proceed until this succeeds
+4. **GET `/mcpserver/sessionlog?limit=5`** to review recent session history for context
+5. **GET `/mcpserver/todo`** to check current tasks
+6. **THEN** begin working on the user's request
+
+On EVERY subsequent user message:
+1. POST an updated session log entry BEFORE starting work
+2. Complete the user's request
+3. POST the final session log with results, actions taken, and files modified
+
+**If you skip any of these steps, STOP and go back and do them before continuing.**
+Session logging is not optional, not deferred, and not secondary to the task.
+Failure to maintain the session log is a compliance violation.
+
 ## Build, Test, Lint
 
 ```powershell
@@ -28,7 +48,7 @@ pwsh ./scripts/Validate-McpConfig.ps1
 
 **McpServer** is a standalone ASP.NET Core 9 server providing context retrieval, TODO management, session logging, repository operations, and GitHub issue sync for AI agents. It exposes functionality via two transports:
 
-- **HTTP REST API** — Controllers under `src/McpServer.Support.Mcp/Controllers/` (routes at `/mcp/*`).
+- **HTTP REST API** — Controllers under `src/McpServer.Support.Mcp/Controllers/` (routes at `/mcpserver/*`).
 - **MCP Streamable HTTP** — `app.MapMcp("/mcp-transport")` using ModelContextProtocol.AspNetCore.
 - **MCP STDIO** — `--transport stdio` flag; same tools as HTTP via `McpStdio/FwhMcpTools.cs`.
 
@@ -48,11 +68,11 @@ pwsh ./scripts/Validate-McpConfig.ps1
 
 ### Requirement Traceability Comments
 
-All source files reference their FR/TR requirement IDs in doc comments (e.g., `/// <summary>TR-PLANNED-013: Constructor.</summary>`). When adding new functionality, reference the relevant requirement ID from `docs/REQUIREMENTS.md`.
+All source files reference their FR/TR requirement IDs in doc comments (e.g., `/// <summary>TR-PLANNED-013: Constructor.</summary>`). When adding new functionality, reference the relevant requirement ID from `docs/Project/Functional-Requirements.md` and `docs/Project/Technical-Requirements.md`.
 
 ### DRY — No Duplication (TR-MCP-DRY-001)
 
-Shared logic must be extracted to a single reusable location. No copy-pasted logic across files or scripts. See `docs/REQUIREMENTS.md` § TR-MCP-DRY-001.
+Shared logic must be extracted to a single reusable location. No copy-pasted logic across files or scripts. See `docs/Project/Technical-Requirements.md` § TR-MCP-DRY-001.
 
 ### Async Patterns
 
@@ -67,7 +87,7 @@ All async methods use `.ConfigureAwait(false)`. Controllers and services accept 
 
 ### Controller Patterns
 
-Controllers are `sealed`, use `[ApiController]` + `[Route("mcp/...")]`. Mutating endpoints return `TodoMutationResult`-style result objects. Not-found returns 404 with the result; validation errors return 400/409.
+Controllers are `sealed`, use `[ApiController]` + `[Route("mcpserver/...")]`. Mutating endpoints return `TodoMutationResult`-style result objects. Not-found returns 404 with the result; validation errors return 400/409.
 
 ### Service Registration
 

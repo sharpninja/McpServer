@@ -9,7 +9,7 @@ namespace McpServer.Support.Mcp.Controllers;
 /// FR-SUPPORT-010, FR-SUPPORT-013: List, create, comment, update, close, reopen, sync endpoints.
 /// </summary>
 [ApiController]
-[Route("mcp/gh")]
+[Route("mcpserver/gh")]
 public sealed class GitHubController : ControllerBase
 {
     private readonly IGitHubCliService _gh;

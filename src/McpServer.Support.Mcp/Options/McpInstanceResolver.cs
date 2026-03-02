@@ -122,6 +122,7 @@ public static class McpInstanceResolver
         }
         catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             throw new InvalidOperationException($"Invalid path '{path}'.", ex);
         }
     }

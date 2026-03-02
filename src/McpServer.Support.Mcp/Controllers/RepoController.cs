@@ -8,7 +8,7 @@ namespace McpServer.Support.Mcp.Controllers;
 /// FR-SUPPORT-010: Path allowlist enforced; audit log for writes.
 /// </summary>
 [ApiController]
-[Route("mcp/repo")]
+[Route("mcpserver/repo")]
 public sealed class RepoController : ControllerBase
 {
     private readonly IRepoFileService _repoFileService;

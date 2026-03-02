@@ -1,4 +1,4 @@
-using McpServer.Support.Mcp.Ingestion;
+﻿using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Models;
 using Microsoft.Extensions.Options;
 using YamlDotNet.Serialization;
@@ -20,13 +20,13 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
     private readonly ILogger<TodoService> _logger;
     private readonly SemaphoreSlim _fileLock = new(1, 1);
 
-    private static readonly IDeserializer Deserializer = new DeserializerBuilder()
+    private static readonly IDeserializer s_deserializer = new DeserializerBuilder()
         .WithNamingConvention(HyphenatedNamingConvention.Instance)
         .WithTypeConverter(new TodoFileYamlConverter())
         .IgnoreUnmatchedProperties()
         .Build();
 
-    private static readonly ISerializer Serializer = new SerializerBuilder()
+    private static readonly ISerializer s_serializer = new SerializerBuilder()
         .WithNamingConvention(HyphenatedNamingConvention.Instance)
         .WithTypeConverter(new TodoFileYamlConverter())
         .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
@@ -107,6 +107,8 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
                 Estimate = request.Estimate,
                 Description = request.Description?.ToList(),
                 TechnicalDetails = request.TechnicalDetails?.ToList(),
+                Note = request.Note,
+                Remaining = request.Remaining,
                 DependsOn = request.DependsOn?.ToList(),
                 FunctionalRequirements = request.FunctionalRequirements?.ToList(),
                 TechnicalRequirements = request.TechnicalRequirements?.ToList(),
@@ -254,7 +256,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
             }
 
             var yaml = await File.ReadAllTextAsync(_todoFilePath, cancellationToken).ConfigureAwait(false);
-            return Deserializer.Deserialize<TodoFile>(yaml);
+            return s_deserializer.Deserialize<TodoFile>(yaml);
         }
         catch (Exception ex)
         {
@@ -265,7 +267,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
 
     private async Task WriteFileAsync(TodoFile file, CancellationToken cancellationToken)
     {
-        var yaml = Serializer.Serialize(file);
+        var yaml = s_serializer.Serialize(file);
         var dir = Path.GetDirectoryName(_todoFilePath);
         if (!string.IsNullOrEmpty(dir))
             Directory.CreateDirectory(dir);

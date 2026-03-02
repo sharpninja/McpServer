@@ -4,19 +4,49 @@ using Microsoft.Extensions.Options;
 
 namespace McpServer.Client;
 
-/// <summary>DI extension methods for registering <see cref="McpServerClient"/>.</summary>
+/// <summary>
+/// Extension methods for registering <see cref="McpServerClient"/> and its dependencies in
+/// a Microsoft.Extensions.DependencyInjection <see cref="IServiceCollection"/>.
+///
+/// <para>A named <see cref="System.Net.Http.HttpClient"/> (see <see cref="HttpClientName"/>)
+/// is configured via <c>IHttpClientFactory</c> so that socket exhaustion and DNS recycling
+/// are handled automatically.</para>
+/// </summary>
+/// <example>
+/// <code>
+/// services.AddMcpServerClient(opts =>
+/// {
+///     opts.BaseUrl = new Uri("http://localhost:7147");
+///     opts.ApiKey  = configuration["Mcp:ApiKey"];
+/// });
+/// </code>
+/// </example>
+/// <seealso cref="McpServerClient"/>
+/// <seealso cref="McpServerClientOptions"/>
 public static class ServiceCollectionExtensions
 {
-    /// <summary>The named HttpClient identifier used by the MCP Server client.</summary>
+    /// <summary>
+    /// The named <see cref="System.Net.Http.HttpClient"/> identifier registered by
+    /// <see cref="AddMcpServerClient"/>. Use this constant when you need to configure
+    /// the underlying HTTP client via <c>IHttpClientFactory</c> policies (e.g. retries, timeouts).
+    /// </summary>
     public const string HttpClientName = "McpServerClient";
 
     /// <summary>
-    /// Registers <see cref="McpServerClient"/> in the DI container with a named
+    /// Registers <see cref="McpServerClient"/> as a transient service backed by a named
     /// <see cref="System.Net.Http.HttpClient"/> via <c>IHttpClientFactory</c>.
+    /// Each resolution creates a new <see cref="McpServerClient"/> instance with the
+    /// latest <see cref="McpServerClientOptions"/> values.
     /// </summary>
-    /// <param name="services">The service collection.</param>
-    /// <param name="configure">Action to configure <see cref="McpServerClientOptions"/>.</param>
-    /// <returns>The service collection for chaining.</returns>
+    /// <param name="services">The service collection to add the registration to.</param>
+    /// <param name="configure">
+    /// Action to configure <see cref="McpServerClientOptions"/>. Called once at registration
+    /// time; the resulting options are snapshot-bound via <c>IOptions&lt;T&gt;</c>.
+    /// </param>
+    /// <returns>The <paramref name="services"/> instance for method chaining.</returns>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when <paramref name="services"/> or <paramref name="configure"/> is <see langword="null"/>.
+    /// </exception>
     public static IServiceCollection AddMcpServerClient(
         this IServiceCollection services,
         Action<McpServerClientOptions> configure)

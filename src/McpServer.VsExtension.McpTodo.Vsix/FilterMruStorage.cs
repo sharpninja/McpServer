@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace McpServer.VsExtension.McpTodo;
 internal static class FilterMruStorage
 {
     private const int MaxCount = 10;
-    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = false };
+    private static readonly JsonSerializerOptions s_jsonOptions = new() { WriteIndented = false };
 
     private static string GetFilePath()
     {
@@ -42,7 +42,7 @@ internal static class FilterMruStorage
         {
             var path = GetFilePath();
             var list = (items ?? new List<string>()).Take(MaxCount).ToList();
-            var json = JsonSerializer.Serialize(list, JsonOptions);
+            var json = JsonSerializer.Serialize(list, s_jsonOptions);
             File.WriteAllText(path, json);
         }
         catch

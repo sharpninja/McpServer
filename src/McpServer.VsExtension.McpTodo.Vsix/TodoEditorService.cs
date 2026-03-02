@@ -6,6 +6,7 @@ using McpServer.VsExtension.McpTodo.Models;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.VsExtension.McpTodo;
 
@@ -33,9 +34,13 @@ internal sealed class TodoEditorService : IVsRunningDocTableEvents3, IDisposable
 
     /// <summary>Triggers a refresh of the todo list (e.g. after MCP server becomes healthy).</summary>
     internal void NotifyRefresh() => TodoSaved?.Invoke();
+    private readonly ILogger<TodoEditorService> _logger;
 
-    internal TodoEditorService(McpTodoClient client)
+
+    internal TodoEditorService(McpTodoClient client,
+        ILogger<TodoEditorService> logger)
     {
+        _logger = logger;
         _client = client;
         Instance = this;
         SubscribeToRdt();
@@ -103,6 +108,7 @@ internal sealed class TodoEditorService : IVsRunningDocTableEvents3, IDisposable
         }
         catch (Exception ex)
         {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             CopilotOutputPane.Log($"Failed to open {todoId}: {ex.Message}");
         }
@@ -178,6 +184,7 @@ internal sealed class TodoEditorService : IVsRunningDocTableEvents3, IDisposable
             }
             catch (Exception ex)
             {
+                _logger.LogError("{ExceptionDetail}", ex.ToString());
                 CopilotOutputPane.Log($"Copilot CLI failed (New Todo): {ex.Message}");
             }
         }
@@ -201,6 +208,7 @@ internal sealed class TodoEditorService : IVsRunningDocTableEvents3, IDisposable
             }
             catch (Exception ex)
             {
+                _logger.LogError("{ExceptionDetail}", ex.ToString());
                 CopilotOutputPane.Log($"Failed to update {todoId}: {ex.Message}");
             }
         }
@@ -248,8 +256,14 @@ internal sealed class TodoEditorService : IVsRunningDocTableEvents3, IDisposable
     private static void TryDeleteFile(string path)
     {
         try { if (File.Exists(path)) File.Delete(path); }
-        catch (IOException) { }
-        catch (UnauthorizedAccessException) { }
+        catch (IOException ex)
+        {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+        }
     }
 
     public void Dispose()

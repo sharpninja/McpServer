@@ -9,6 +9,8 @@ public static class CopilotServiceCollectionExtensions
     /// <summary>Registers ICopilotClient with default options.</summary>
     public static IServiceCollection AddCopilotClient(this IServiceCollection services)
     {
+        services.AddOptions<CopilotClientOptions>();
+        services.AddSingleton<IProcessEnvironmentService, ProcessEnvironmentService>();
         services.AddSingleton<ICopilotClient, CopilotClient>();
         return services;
     }
@@ -16,7 +18,9 @@ public static class CopilotServiceCollectionExtensions
     /// <summary>Registers ICopilotClient with custom options.</summary>
     public static IServiceCollection AddCopilotClient(this IServiceCollection services, Action<CopilotClientOptions> configure)
     {
-        services.Configure(configure);
+        services.AddOptions<CopilotClientOptions>()
+            .Configure(configure);
+        services.AddSingleton<IProcessEnvironmentService, ProcessEnvironmentService>();
         services.AddSingleton<ICopilotClient, CopilotClient>();
         return services;
     }

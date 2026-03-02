@@ -7,17 +7,25 @@ using McpServer.Client.Models;
 
 namespace McpServer.Client;
 
-/// <summary>Client for session log endpoints (/mcp/sessionlog).</summary>
+/// <summary>
+/// Client for session log endpoints (<c>/mcpserver/sessionlog</c>). Supports submitting (upserting)
+/// session logs, querying historical logs with filters, and appending processing dialog items
+/// to existing log entries.
+/// </summary>
+/// <seealso cref="McpServerClient.SessionLog"/>
 public sealed class SessionLogClient : McpClientBase
 {
-    /// <summary>Initializes a new instance of <see cref="SessionLogClient"/>.</summary>
+    /// <inheritdoc />
     public SessionLogClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
 
-    /// <summary>Submit (upsert) a session log.</summary>
+    internal SessionLogClient(HttpClient http, McpServerClientOptions options, WorkspacePathHolder holder)
+        : base(http, options, holder) { }
+
+    /// <summary>Submit (upsert) a session log entry. Creates or updates based on session ID.</summary>
     public async Task<SessionLogSubmitResult> SubmitAsync(UnifiedSessionLogDto sessionLog, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<SessionLogSubmitResult>("mcp/sessionlog", sessionLog, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<SessionLogSubmitResult>("mcpserver/sessionlog", sessionLog, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Query session logs with optional filters.</summary>
@@ -35,7 +43,7 @@ public sealed class SessionLogClient : McpClientBase
         if (limit != 100) parts.Add($"limit={limit}");
         if (offset != 0) parts.Add($"offset={offset}");
         var qs = parts.Count > 0 ? "?" + string.Join("&", parts) : string.Empty;
-        return await GetAsync<SessionLogQueryResult>($"mcp/sessionlog{qs}", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<SessionLogQueryResult>($"mcpserver/sessionlog{qs}", cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>Append processing dialog items to a session log entry.</summary>
@@ -43,7 +51,7 @@ public sealed class SessionLogClient : McpClientBase
         string agent, string sessionId, string requestId,
         List<ProcessingDialogItemDto> items, CancellationToken cancellationToken = default)
     {
-        var path = $"mcp/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/dialog";
+        var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/dialog";
         return await PostAsync<DialogAppendResult>(path, items, cancellationToken).ConfigureAwait(false);
     }
 }

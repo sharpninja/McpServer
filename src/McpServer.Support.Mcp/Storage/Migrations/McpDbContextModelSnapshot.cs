@@ -17,6 +17,189 @@ namespace McpServer.Support.Mcp.Storage.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.12");
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DefaultBranchStrategy")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DefaultInstructionFile")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DefaultLaunchCommand")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DefaultModelsJson")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DefaultSeedPrompt")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsBuiltIn")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsBuiltIn");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.ToTable("AgentDefinitions");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentEventLogEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AgentId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DetailsJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EventType")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WorkspacePath")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AgentId");
+
+                    b.HasIndex("EventType");
+
+                    b.HasIndex("Timestamp");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("WorkspacePath");
+
+                    b.ToTable("AgentEventLogs");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentWorkspaceEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AgentDefinitionId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AgentIsolation")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Banned")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("BannedReason")
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("BannedUntilPr")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("BranchStrategyOverride")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("InstructionFilesOverrideJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastLaunchedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LaunchCommandOverride")
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MarkerAdditions")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModelsOverrideJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SeedPromptOverride")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WorkspacePath")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("WorkspacePath");
+
+                    b.HasIndex("AgentDefinitionId", "WorkspacePath")
+                        .IsUnique();
+
+                    b.ToTable("AgentWorkspaces");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity", b =>
                 {
                     b.Property<string>("Id")
@@ -41,9 +224,15 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<int>("TokenCount")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DocumentId");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.ToTable("Chunks");
                 });
@@ -72,6 +261,10 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IngestedAt");
@@ -79,6 +272,8 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.HasIndex("SourceKey");
 
                     b.HasIndex("SourceType");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.ToTable("Documents");
                 });
@@ -110,11 +305,61 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SessionLogEntryId");
 
+                    b.HasIndex("WorkspaceId");
+
                     b.ToTable("SessionLogActions");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogCommitEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Author")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Branch")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("CommitTimestamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FilesChangedJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("SessionLogEntryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Sha")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SessionLogEntryId");
+
+                    b.ToTable("SessionLogCommits");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntity", b =>
@@ -200,6 +445,10 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<int?>("TotalTokens")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("LastUpdated");
@@ -207,6 +456,8 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.HasIndex("SourceType");
 
                     b.HasIndex("Started");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.HasIndex("SourceType", "SessionId")
                         .IsUnique();
@@ -231,9 +482,15 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<long>("SessionLogEntryId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SessionLogEntryId");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.ToTable("SessionLogEntryContexts");
                 });
@@ -297,12 +554,50 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<int?>("TokenCount")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.HasIndex("SessionLogId", "RequestId")
                         .IsUnique();
 
                     b.ToTable("SessionLogEntries");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntryStringListEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ListType")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Ordinal")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long>("SessionLogEntryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SessionLogEntryId", "ListType");
+
+                    b.ToTable("SessionLogEntryStringLists");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntryTagEntity", b =>
@@ -319,9 +614,15 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SessionLogEntryId");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.ToTable("SessionLogEntryTags");
                 });
@@ -354,9 +655,15 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<DateTimeOffset>("Timestamp")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("SessionLogEntryId");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.ToTable("SessionLogProcessingDialogs");
                 });
@@ -398,10 +705,16 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
+
+                    b.HasIndex("WorkspaceId");
 
                     b.ToTable("ToolBuckets");
                 });
@@ -440,11 +753,17 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .HasMaxLength(8192)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("WorkspacePath")
                         .HasMaxLength(2048)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.HasIndex("WorkspacePath");
 
@@ -468,14 +787,31 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<int>("ToolDefinitionId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Tag");
+
+                    b.HasIndex("WorkspaceId");
 
                     b.HasIndex("ToolDefinitionId", "Tag")
                         .IsUnique();
 
                     b.ToTable("ToolDefinitionTags");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentWorkspaceEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", "AgentDefinition")
+                        .WithMany("WorkspaceConfigs")
+                        .HasForeignKey("AgentDefinitionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AgentDefinition");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity", b =>
@@ -493,6 +829,17 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity", "SessionLogEntry")
                         .WithMany("Actions")
+                        .HasForeignKey("SessionLogEntryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SessionLogEntry");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogCommitEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity", "SessionLogEntry")
+                        .WithMany("Commits")
                         .HasForeignKey("SessionLogEntryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -520,6 +867,17 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .IsRequired();
 
                     b.Navigation("SessionLog");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntryStringListEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity", "SessionLogEntry")
+                        .WithMany("StringListItems")
+                        .HasForeignKey("SessionLogEntryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SessionLogEntry");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntryTagEntity", b =>
@@ -555,6 +913,11 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Navigation("ToolDefinition");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", b =>
+                {
+                    b.Navigation("WorkspaceConfigs");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity", b =>
                 {
                     b.Navigation("Chunks");
@@ -569,9 +932,13 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                 {
                     b.Navigation("Actions");
 
+                    b.Navigation("Commits");
+
                     b.Navigation("ContextItems");
 
                     b.Navigation("ProcessingDialog");
+
+                    b.Navigation("StringListItems");
 
                     b.Navigation("Tags");
                 });

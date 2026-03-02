@@ -14,6 +14,9 @@ public sealed class ToolDefinitionEntity
     [Key]
     public int Id { get; set; }
 
+    /// <summary>TR-MCP-MT-003: Workspace discriminator for multi-tenant data isolation.</summary>
+    public string WorkspaceId { get; set; } = string.Empty;
+
     /// <summary>Unique tool name (e.g. <c>screenshot</c>, <c>clipboard_copy</c>).</summary>
     [Required]
     [MaxLength(128)]

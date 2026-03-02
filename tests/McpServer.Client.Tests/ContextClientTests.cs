@@ -9,7 +9,8 @@ public sealed class ContextClientTests
 {
     private static readonly McpServerClientOptions DefaultOptions = new()
     {
-        BaseUrl = new Uri("http://localhost:7148")
+        BaseUrl = new Uri("http://localhost:7147"),
+        ApiKey = "test-key"
     };
 
     [Fact]
@@ -22,7 +23,7 @@ public sealed class ContextClientTests
         var result = await client.SearchAsync("auth", limit: 5);
 
         Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
-        Assert.Contains("/mcp/context/search", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("/mcpserver/context/search", handler.LastRequest.RequestUri!.AbsolutePath);
         Assert.Contains("auth", handler.LastRequestBody!);
         Assert.Equal("auth", result.Query);
     }
@@ -51,5 +52,19 @@ public sealed class ContextClientTests
 
         Assert.Single(result.Sources);
         Assert.Equal("repo", result.Sources[0].SourceType);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task RebuildIndexAsync_PostsCorrectly()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"status":"completed"}""");
+        using var http = new HttpClient(handler);
+        var client = new ContextClient(http, DefaultOptions);
+
+        var result = await client.RebuildIndexAsync();
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/context/rebuild-index", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Equal("completed", result.Status);
     }
 }

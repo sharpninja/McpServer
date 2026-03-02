@@ -5,7 +5,7 @@ using Xunit;
 
 namespace McpServer.Todo.Validation.AtomicTests;
 
-/// <summary>Audit: PUT /mcp/todo/{id} — Update an existing TODO item.</summary>
+/// <summary>Audit: PUT /mcpserver/todo/{id} — Update an existing TODO item.</summary>
 [Collection("TodoEndpoint")]
 public sealed class UpdateTodoTests : IAsyncLifetime
 {

@@ -2,7 +2,7 @@
   "name": "fwh-mcp-todo",
   "displayName": "McpServer MCP Todo",
   "description": "Displays TODO items from the FunWasHad MCP server. Double-click to open in editor as markdown; save pushes updates to MCP.",
-  "version": "0.5.0",
+  "version": "0.8.1",
   "publisher": "FunWasHad",
   "engines": {
     "vscode": "^1.85.0"

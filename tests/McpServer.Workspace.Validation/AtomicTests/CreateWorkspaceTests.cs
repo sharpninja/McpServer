@@ -5,7 +5,7 @@ using Xunit;
 
 namespace McpServer.Workspace.Validation.AtomicTests;
 
-/// <summary>Audit: POST /mcp/workspace — Create (register) a new workspace.</summary>
+/// <summary>Audit: POST /mcpserver/workspace — Create (register) a new workspace.</summary>
 [Collection("WorkspaceEndpoint")]
 public sealed class CreateWorkspaceTests : IAsyncLifetime
 {
@@ -43,7 +43,6 @@ public sealed class CreateWorkspaceTests : IAsyncLifetime
         Assert.NotNull(result.Workspace);
         Assert.Equal(_testPath, result.Workspace.WorkspacePath);
         Assert.Equal("AuditCreateTest", result.Workspace.Name);
-        Assert.True(result.Workspace.WorkspacePort >= 7148, "Auto-assigned port should be >= 7148.");
         Assert.Equal("docs/todo.yaml", result.Workspace.TodoPath);
 
         // Location header should be set

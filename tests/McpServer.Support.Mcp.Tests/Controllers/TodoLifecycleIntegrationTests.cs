@@ -22,6 +22,7 @@ public sealed class TodoLifecycleIntegrationTests
     public TodoLifecycleIntegrationTests(LifecycleWebFactory factory)
     {
         _client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(_client, factory.Services);
     }
 
     public void Dispose()
@@ -29,7 +30,7 @@ public sealed class TodoLifecycleIntegrationTests
         // Clean up any items created during the test
         foreach (var id in _createdIds)
         {
-            _client.DeleteAsync(new Uri($"/mcp/todo/{Uri.EscapeDataString(id)}", UriKind.Relative))
+            _client.DeleteAsync(new Uri($"/mcpserver/todo/{Uri.EscapeDataString(id)}", UriKind.Relative))
                 .GetAwaiter().GetResult();
         }
         _client.Dispose();
@@ -65,13 +66,13 @@ public sealed class TodoLifecycleIntegrationTests
         };
 
         var createResponse = await _client.PostAsJsonAsync(
-            new Uri("/mcp/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
+            new Uri("/mcpserver/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
         _createdIds.Add(id);
 
         // 2. GET the item (simulates extension opening the todo)
         var getResponse = await _client.GetAsync(
-            new Uri($"/mcp/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
 
         var item = await getResponse.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
@@ -106,7 +107,7 @@ public sealed class TodoLifecycleIntegrationTests
 
         // 6. PUT the update (simulates extension save → MCP update)
         var putResponse = await _client.PutAsJsonAsync(
-            new Uri($"/mcp/todo/{id}", UriKind.Relative), updateBody).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo/{id}", UriKind.Relative), updateBody).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, putResponse.StatusCode);
 
         var mutResult = await putResponse.Content.ReadFromJsonAsync<MutationResult>().ConfigureAwait(true);
@@ -115,7 +116,7 @@ public sealed class TodoLifecycleIntegrationTests
 
         // 7. GET again to verify the update persisted (simulates list refresh / TodoSaved event)
         var verifyResponse = await _client.GetAsync(
-            new Uri($"/mcp/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, verifyResponse.StatusCode);
 
         var updated = await verifyResponse.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
@@ -143,13 +144,13 @@ public sealed class TodoLifecycleIntegrationTests
             priority = "medium"
         };
         var createResponse = await _client.PostAsJsonAsync(
-            new Uri("/mcp/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
+            new Uri("/mcpserver/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
         _createdIds.Add(id);
 
         // Verify item appears in list (simulates tree refresh after TodoSaved)
         var listResponse = await _client.GetAsync(
-            new Uri($"/mcp/todo?id={id}", UriKind.Relative)).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo?id={id}", UriKind.Relative)).ConfigureAwait(true);
         var listResult = await listResponse.Content.ReadFromJsonAsync<QueryResult>().ConfigureAwait(true);
         Assert.NotNull(listResult);
         Assert.Single(listResult.Items);
@@ -159,12 +160,12 @@ public sealed class TodoLifecycleIntegrationTests
         // Update
         var updateBody = new { title = "Updated list refresh test", done = true };
         var putResponse = await _client.PutAsJsonAsync(
-            new Uri($"/mcp/todo/{id}", UriKind.Relative), updateBody).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo/{id}", UriKind.Relative), updateBody).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, putResponse.StatusCode);
 
         // Verify list reflects the update (simulates second TodoSaved → refresh)
         var listResponse2 = await _client.GetAsync(
-            new Uri($"/mcp/todo?id={id}", UriKind.Relative)).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo?id={id}", UriKind.Relative)).ConfigureAwait(true);
         var listResult2 = await listResponse2.Content.ReadFromJsonAsync<QueryResult>().ConfigureAwait(true);
         Assert.NotNull(listResult2);
         Assert.Single(listResult2.Items);
@@ -192,13 +193,13 @@ public sealed class TodoLifecycleIntegrationTests
             dependsOn = new[] { "SEED-001" }
         };
         var createResponse = await _client.PostAsJsonAsync(
-            new Uri("/mcp/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
+            new Uri("/mcpserver/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
         _createdIds.Add(id);
 
         // GET and serialize to markdown
         var getResponse = await _client.GetAsync(
-            new Uri($"/mcp/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
         var item = await getResponse.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
         Assert.NotNull(item);
 
@@ -254,13 +255,13 @@ public sealed class TodoLifecycleIntegrationTests
             }
         };
         var createResponse = await _client.PostAsJsonAsync(
-            new Uri("/mcp/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
+            new Uri("/mcpserver/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
         _createdIds.Add(id);
 
         // First edit cycle: open → edit → save
         var get1 = await _client.GetAsync(
-            new Uri($"/mcp/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
         var item1 = await get1.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
         Assert.NotNull(item1);
 
@@ -271,12 +272,12 @@ public sealed class TodoLifecycleIntegrationTests
 
         var update1 = ParseMarkdownToUpdateBody(editedMd1);
         var put1 = await _client.PutAsJsonAsync(
-            new Uri($"/mcp/todo/{id}", UriKind.Relative), update1).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo/{id}", UriKind.Relative), update1).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, put1.StatusCode);
 
         // Verify after first save (simulates TodoSaved → list refresh)
         var verify1 = await _client.GetAsync(
-            new Uri($"/mcp/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
         var after1 = await verify1.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
         Assert.NotNull(after1);
         Assert.NotNull(after1.Description);
@@ -291,12 +292,12 @@ public sealed class TodoLifecycleIntegrationTests
 
         var update2 = ParseMarkdownToUpdateBody(editedMd2);
         var put2 = await _client.PutAsJsonAsync(
-            new Uri($"/mcp/todo/{id}", UriKind.Relative), update2).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo/{id}", UriKind.Relative), update2).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, put2.StatusCode);
 
         // Verify after second save
         var verify2 = await _client.GetAsync(
-            new Uri($"/mcp/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
         var after2 = await verify2.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
         Assert.NotNull(after2);
         Assert.NotNull(after2.Description);
@@ -322,23 +323,23 @@ public sealed class TodoLifecycleIntegrationTests
             priority = "low"
         };
         await _client.PostAsJsonAsync(
-            new Uri("/mcp/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
+            new Uri("/mcpserver/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
         _createdIds.Add(id);
 
         // Verify it exists
         var getResp = await _client.GetAsync(
-            new Uri($"/mcp/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, getResp.StatusCode);
 
         // Delete (mimics cleanup; also tests that post-delete refresh works)
         var delResp = await _client.DeleteAsync(
-            new Uri($"/mcp/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, delResp.StatusCode);
         _createdIds.Remove(id); // already deleted
 
         // Verify it's gone from list
         var listResp = await _client.GetAsync(
-            new Uri($"/mcp/todo?id={id}", UriKind.Relative)).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo?id={id}", UriKind.Relative)).ConfigureAwait(true);
         var list = await listResp.Content.ReadFromJsonAsync<QueryResult>().ConfigureAwait(true);
         Assert.NotNull(list);
         Assert.Empty(list.Items);
@@ -364,13 +365,13 @@ public sealed class TodoLifecycleIntegrationTests
             description = new[] { "Test priority persistence" }
         };
         var createResponse = await _client.PostAsJsonAsync(
-            new Uri("/mcp/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
+            new Uri("/mcpserver/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
         _createdIds.Add(id);
 
         // GET and serialize to markdown
         var getResponse = await _client.GetAsync(
-            new Uri($"/mcp/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
         var item = await getResponse.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
         Assert.NotNull(item);
         Assert.Equal("high", item.Priority);
@@ -392,12 +393,12 @@ public sealed class TodoLifecycleIntegrationTests
 
         // PUT the update
         var putResponse = await _client.PutAsJsonAsync(
-            new Uri($"/mcp/todo/{id}", UriKind.Relative), updateBody).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo/{id}", UriKind.Relative), updateBody).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, putResponse.StatusCode);
 
         // Verify the change persisted
         var verifyResponse = await _client.GetAsync(
-            new Uri($"/mcp/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
+            new Uri($"/mcpserver/todo/{id}", UriKind.Relative)).ConfigureAwait(true);
         var updated = await verifyResponse.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
         Assert.NotNull(updated);
         Assert.Equal("low", updated.Priority);
@@ -682,7 +683,8 @@ public sealed class TodoLifecycleIntegrationTests
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
                     { "Mcp:DataSource", ":memory:" },
-                    { "Mcp:RepoRoot", _tempDir }
+                    { "Mcp:RepoRoot", _tempDir },
+                    { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" }
                 });
             });
         }

@@ -104,6 +104,14 @@ function Publish-App {
         Write-Host "  appsettings.json already exists — skipped (check for new config keys)" -ForegroundColor Yellow
     }
 
+    $legacyProductionSettings = Join-Path $InstallPath 'appsettings.Production.json'
+    if (Test-Path $legacyProductionSettings) {
+        Remove-Item $legacyProductionSettings -Force -ErrorAction SilentlyContinue
+        if (-not (Test-Path $legacyProductionSettings)) {
+            Write-Host "  Removed legacy appsettings.Production.json (appsettings.json is canonical)" -ForegroundColor DarkGray
+        }
+    }
+
     Write-Host "Publish complete." -ForegroundColor Green
 }
 
