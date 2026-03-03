@@ -1762,6 +1762,15 @@ mcpserver-ui:
   - id: MCP-UI-CHAT-VM-ITEST-001
     title: Create complete integration tests for interactive chat using ViewModels in McpServer.UI
     estimate: 2d
-    done: false
+    done: true
+    note: 'Implemented 2026-03-03 (tests-only scope, no production ViewModel refactor). Added integration coverage for VoiceViewModel lifecycle, dispatcher/handler routing, guard and unauthorized behavior, exception handling, busy-state synchronization, collection replacement, and full session-state reset.'
     description:
     - Cover end-to-end interactive chat scenarios through McpServer.UI ViewModels, including message lifecycle, command handling, and UI state synchronization.
+    implementation-plan:
+    - Define VoiceViewModel integration scenario matrix for lifecycle, command handling, and UI state synchronization.
+    - Add lifecycle integration tests in tests/McpServer.UI.Core.Tests/ViewModels/VoiceViewModelIntegrationTests.cs using UiCoreTestHost and mocked IVoiceApiClient.
+    - Add guard, unauthorized, and exception-path tests that assert ErrorMessage, StatusMessage, and IsBusy behavior.
+    - Add collection synchronization assertions for transcript/tool-call replacement and ClearSessionState/DeleteSessionAsync reset behavior.
+    verification:
+    - dotnet test tests/McpServer.UI.Core.Tests/McpServer.UI.Core.Tests.csproj --filter "VoiceViewModel" (Passed: 18, Failed: 0)
+    - dotnet test tests/McpServer.UI.Core.Tests/McpServer.UI.Core.Tests.csproj (Passed: 212, Failed: 0)
