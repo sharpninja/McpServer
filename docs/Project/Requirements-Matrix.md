@@ -107,4 +107,6 @@
 | TR-MCP-VOICE-004 | ✅ Complete | VoiceConversationService pooled agent reuse + one-shot guard, AgentPoolService voice-runtime dispatch integration |
 | TR-MCP-DIR-004 | ✅ Complete | AgentPoolClient, AgentPoolScreen, MainScreen tab integration, DirectorMcpContext typed client usage |
 | FR-MCP-059 | 🔲 Planned | McpServer.Support.Mcp services/registries/managers/providers (DI SSOT state flow) |
+| FR-MCP-060 | ✅ Complete | McpServer.UI.Core (Messages/Handlers/ViewModels), McpServer.Director (MainScreen, DirectorCommands/AuthCommands, ITabRegistry/DirectorTabRegistry), McpServer.Client adapters |
+| TR-MCP-DIR-005–008 | ✅ Complete | Endpoint-to-handler parity, ViewModel conventions, RBAC visibility/action mapping, declarative tab registry |
 | TR-MCP-ARCH-002 | 🔲 Planned | DI lifetimes for state ownership, pull-notify flow via INotifyPropertyChanged, ActivatorUtilities remediation audit |

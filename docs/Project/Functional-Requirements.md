@@ -375,3 +375,13 @@ These presence messages do not apply to one-shot sessions.
 The system SHALL enforce a DI-centered Single Source of Truth architecture across `McpServer.Support.Mcp`: authoritative mutable data sources must be owned by DI-registered singleton or scoped services, services shall notify state availability/changes via `INotifyPropertyChanged`, and consumers shall pull current state from the owning service rather than receiving pushed data payloads.
 
 **Technical Implementation:** [TR-MCP-ARCH-002](./Technical-Requirements.md#tr-mcp-arch-002) | [Details](./TR-per-FR-Mapping.md#fr-mcp-059)
+
+## FR-MCP-060 Director MVVM/CQRS Full Endpoint Coverage
+
+Director SHALL expose complete administrative endpoint coverage through the shared `McpServer.UI.Core` MVVM/CQRS layer so interactive tabs and `director exec` operations use the same command/query contracts, handlers, and authorization rules.
+
+Each covered administration area SHALL provide ViewModel-first orchestration (list/detail or operation-focused ViewModel patterns), and Director screens SHALL remain presentation-only shells that delegate state and workflows to ViewModels and CQRS dispatch.
+
+Tab composition SHALL be role-aware and declarative, with registration metadata separated from shell rendering logic and enforced via shared authorization policy checks.
+
+**Technical Implementation:** [TR-MCP-DIR-005](./Technical-Requirements.md#tr-mcp-dir-005) | [TR-MCP-DIR-006](./Technical-Requirements.md#tr-mcp-dir-006) | [TR-MCP-DIR-007](./Technical-Requirements.md#tr-mcp-dir-007) | [TR-MCP-DIR-008](./Technical-Requirements.md#tr-mcp-dir-008) | [Details](./TR-per-FR-Mapping.md#fr-mcp-060)

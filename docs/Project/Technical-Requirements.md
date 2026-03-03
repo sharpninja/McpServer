@@ -474,6 +474,46 @@ Tab actions SHALL include connect, immediate recycle, stop/start, queued-item mo
 
 **Covered by:** `AgentPoolScreen` *(planned)*, `AgentPoolViewModel` *(planned)*, `McpHttpClient` *(planned extension)*
 
+## TR-MCP-DIR-005
+
+**Director Endpoint-to-Handler Coverage Contract** — Every Director-administered MCP endpoint in covered areas SHALL be represented by a UI.Core command/query message and a corresponding CQRS handler that delegates to a UI.Core API-client abstraction (`I*ApiClient`) rather than direct screen-level HTTP calls.
+
+Director non-interactive command paths (`director` CLI commands and `director exec`) SHALL dispatch through the same CQRS handler layer used by interactive tabs to prevent duplicate business logic.
+
+**Status:** ✅ Complete
+
+**Covered by:** `McpServer.UI.Core/Messages/*Messages.cs`, `McpServer.UI.Core/Handlers/*Handlers.cs`, `McpServer.Director/*ApiClientAdapter.cs`, `McpServer.Director/Commands/DirectorCommands.cs`, `McpServer.Director/Commands/AuthCommands.cs`
+
+## TR-MCP-DIR-006
+
+**Director ViewModel Conventions for Area Workflows** — Covered administration areas SHALL expose ViewModel orchestration that owns UI-facing state (`Items`, `Detail`, `IsLoading/IsBusy`, `StatusMessage`, `ErrorMessage`) and uses `Dispatcher` for command/query execution.
+
+List/detail areas SHALL follow `AreaListViewModelBase<T>` / `AreaDetailViewModelBase<TDetail>` conventions where applicable; operation-centric areas may use focused `ObservableObject` ViewModels with explicit async workflow methods.
+
+**Status:** ✅ Complete
+
+**Covered by:** `McpServer.UI.Core/ViewModels/*ViewModel.cs`, `McpServer.UI.Core/ViewModels/Base/AreaListViewModelBase.cs`, `McpServer.UI.Core/ViewModels/Base/AreaDetailViewModelBase.cs`, `McpServer.Director/Screens/*Screen.cs`
+
+## TR-MCP-DIR-007
+
+**Director RBAC Visibility and Action Gating** — Tab visibility and action execution SHALL be enforced through `IAuthorizationPolicyService` using normalized `McpArea` and `McpActionKeys` contracts with role tiers (`viewer`, `agent-manager`, `admin`).
+
+Viewer-level users SHALL retain read access surfaces while admin-only surfaces (for example workspaces/policy mutation) remain hidden or blocked unless role requirements are satisfied.
+
+**Status:** ✅ Complete
+
+**Covered by:** `McpServer.UI.Core/Authorization/McpArea.cs`, `McpServer.UI.Core/Authorization/McpActionKeys.cs`, `McpServer.Director/Auth/DirectorAuthorizationPolicyService.cs`, `McpServer.Director/Screens/MainScreen.cs`, `McpServer.UI.Core/Handlers/*Handlers.cs`
+
+## TR-MCP-DIR-008
+
+**Declarative Director Tab Registry** — Director tab metadata SHALL be registered through a dedicated registry contract that captures area, caption, required role metadata, screen factory, and optional availability predicate.
+
+Main shell rendering SHALL iterate registrations dynamically and avoid hardcoded per-tab branching in the tab rebuild path.
+
+**Status:** ✅ Complete
+
+**Covered by:** `McpServer.UI.Core/Navigation/ITabRegistry.cs`, `McpServer.Director/DirectorTabRegistry.cs`, `McpServer.Director/Screens/MainScreen.cs`, `McpServer.Director/DirectorServiceRegistration.cs`
+
 ## TR-MCP-ARCH-002
 
 **DI Single Source of Truth and Pull-Based Change Notification** — Architecture audit and remediation across `McpServer.Support.Mcp` SHALL enforce:
