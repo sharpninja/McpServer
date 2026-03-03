@@ -94,29 +94,26 @@ public sealed class MarkerFileServiceTests
     public void DefaultPromptTemplate_ContainsAllCapabilitySections()
     {
         var template = MarkerFileService.DefaultPromptTemplate;
-        Assert.Contains("## Server Health", template);
-        Assert.Contains("## Session Logging", template);
-        Assert.Contains("## Available Capabilities", template);
-        Assert.Contains("Context Search", template);
-        Assert.Contains("Todo Management", template);
-        Assert.Contains("MCP Protocol", template);
+        Assert.Contains("## Rules", template);
+        Assert.Contains("## Where Things Live", template);
+        Assert.Contains("## Context Loading by Task Type", template);
+        Assert.Contains("## Protocols", template);
     }
 
     [Fact]
-    public void DefaultPromptTemplate_ContainsGlossary()
+    public void DefaultPromptTemplate_ContainsContextLoadingReferences()
     {
         var template = MarkerFileService.DefaultPromptTemplate;
-        Assert.Contains("## Glossary", template);
-        Assert.Contains("Marker File", template);
-        Assert.Contains("Context Pack", template);
-        Assert.Contains("Tool Bucket", template);
+        Assert.Contains("docs/context/", template);
+        Assert.Contains("session-log-schema.md", template);
+        Assert.Contains("todo-schema.md", template);
     }
 
     [Fact]
-    public void DefaultPromptTemplate_ContainsWorkspaceDefinition()
+    public void DefaultPromptTemplate_ContainsWorkspace()
     {
         var template = MarkerFileService.DefaultPromptTemplate;
-        Assert.Contains("## Workspace Definition", template);
+        Assert.Contains("## Workspace", template);
         Assert.Contains("{{workspace.Name}}", template);
     }
 

@@ -329,978 +329,24 @@ staging-and-infrastructure:
     - task: '[Commit 3 - Docs] Add docs/Operations/Tunnel-Cloudflare.md runbook with quick/named tunnel setup, hostname routing, appsettings.json examples, single-port workspace access model, and public /health validation checklist'
       done: true
 saas:
-  medium-priority:
-  - id: saas-01-executive-summary
-    title: SaaS Business Plan — Executive Summary
-    done: false
-    description:
-    - '**Confidential — Draft**'
-    - '---'
-    - 1. Executive Summary
-    - 2. Company Overview
-    - 3. Problem Statement
-    - 4. Product Vision & Value Proposition
-    - 5. Market Analysis
-    - 6. Product & Service Offering
-    - 7. Business Model & Pricing Strategy
-    - 8. Go-to-Market Strategy
-    - 9. Competitive Landscape
-    - 10. Customer Acquisition & Retention
-    - 11. Operations Plan
-    - 12. Financial Projections
-    - 13. Risk Analysis & Mitigation
-    - 14. Legal, Compliance & Security
-    - 15. Funding Requirements & Use of Funds
-    - 16. Exit Strategy
-    - '---'
-    - '**Company Name:** McpServer Cloud (working title; also viable: ContextHub, MCPHost, ContextForge)'
-    - '**Product:** A fully managed, cloud-hosted SaaS platform that provisions isolated McpServer instances for software development teams, enabling AI coding assistants (GitHub Copilot, Cursor, Claude, etc.) to access rich, persistent, project-specific context — including todos, session logs, repository search, and GitHub integration — without requiring teams to self-host or maintain infrastructure.'
-    - '**Problem:** AI coding assistants are becoming central to software development workflows, but they are stateless and context-poor. McpServer solves this by providing a persistent context layer — but today it requires manual installation, self-hosting expertise, infrastructure management, and a working knowledge of the MCP protocol. This excludes the vast majority of development teams who want the benefit without the operational overhead.'
-    - '**Solution:** McpServer Cloud abstracts away all infrastructure. Customers sign up, point the platform at a GitHub repository, and receive a dedicated hosted McpServer instance within minutes. A GitHub-style web portal lets them manage subscriptions, configure server settings, inspect session logs, manage todos, and invite teammates — all without touching a command line.'
-    - '**Business Model:** Subscription SaaS (monthly/annual). Tiers from Free (single user, one server) through Enterprise (unlimited users, custom SLAs, SSO, SAML, audit logs, dedicated infrastructure).'
-    - '**Target Market:** Software engineering teams (2–500+ developers) using AI coding tools professionally. Initial focus on small-to-mid-size startups and development agencies; expand to enterprise engineering organizations.'
-    - '**Revenue Projections (Conservative):**'
-    - '- Year 1: $480K ARR (400 paying teams × $100/mo average)'
-    - '- Year 2: $2.4M ARR'
-    - '- Year 3: $7.2M ARR'
-    - '**Funding Ask:** $2.5M seed round to fund 18 months of product development, infrastructure, and initial GTM.'
-    - '---'
-  - id: saas-02-company-overview
-    title: SaaS Business Plan — Company Overview
-    done: false
-    description:
-    - '### Mission'
-    - To make every AI coding assistant smarter by giving development teams a persistent, searchable, project-aware context layer — hosted, managed, and available everywhere.
-    - '### Vision'
-    - In 5 years, McpServer Cloud will be the de-facto context infrastructure for AI-augmented software development, analogous to what GitHub is for version control or Datadog is for observability. Every team using an AI assistant will have a McpServer instance.
-    - '### Values'
-    - '- **Developer-first:** The product must feel natural to software engineers. Onboarding should take less time than reading a README.'
-    - '- **Transparency:** Usage data, pricing, and server behavior are always visible to customers.'
-    - '- **Security by default:** Isolated infrastructure per customer, encrypted at rest and in transit, never training on customer data.'
-    - '- **Open core:** McpServer itself remains open-source. The SaaS layer adds managed infrastructure, collaboration, and enterprise features.'
-    - '### Legal Structure'
-    - Delaware C-Corp (standard for venture-backed SaaS). Registered agent in Delaware; principal offices initially in the founders' location.
-    - '### Founders'
-    - '_(Placeholder — to be filled with actual team bios. Ideal profile: 1–2 founders with prior .NET/cloud infrastructure or developer-tools SaaS experience, plus a technical co-founder deeply familiar with the MCP protocol and McpServer codebase.)_'
-    - '---'
-  - id: saas-03-problem-statement
-    title: SaaS Business Plan — Problem Statement
-    done: false
-    description:
-    - '### 3.1 The AI Coding Assistant Explosion'
-    - By 2025, the majority of professional software developers at technology companies use AI coding assistants daily. Tools like GitHub Copilot (with 1.8M+ paid subscribers as of 2024), Cursor, Codeium, and Claude Code have become standard developer productivity tools. Enterprises are paying $20–$39/user/month for these tools.
-    - '### 3.2 The Context Gap'
-    - 'Despite the productivity gains, these tools share a fundamental limitation: **they are largely stateless and context-poor.** Each session begins fresh. The AI does not know:'
-    - '- What tasks are currently in progress'
-    - '- What decisions were made yesterday and why'
-    - "- What the team's conventions and patterns are"
-    - '- What third-party documentation the project depends on'
-    - '- What a previous pair-programming session with the AI concluded'
-    - Teams work around this by manually pasting README files, copying documentation into prompts, or repeating the same context every session. This is slow, error-prone, and scales poorly.
-    - '### 3.3 The MCP Protocol as Solution'
-    - The Model Context Protocol (MCP), standardized by Anthropic and rapidly adopted by all major AI assistant vendors, solves this at a protocol level. MCP allows AI clients to connect to a context server that provides tools (read file, search context, list todos, query session history) as structured capabilities. The AI assistant then calls these tools during a conversation rather than requiring the user to manually inject context.
-    - 'McpServer implements MCP comprehensively: it indexes repositories, ingests documentation, stores session logs, manages todos, and integrates with GitHub — all queryable by an AI assistant in real time.'
-    - '### 3.4 The Self-Hosting Barrier'
-    - 'Despite MCP being the right solution, adoption is bottlenecked by **operational complexity**:'
-    - 1. **Installation:** Requires .NET 9, Docker, or MSIX depending on platform.
-    - 2. **Configuration:** `appsettings.json` with 30+ settings covering ports, paths, embedding models, vector indices, tunnel providers, GitHub tokens.
-    - 3. **Persistence:** The SQLite database and vector index files must survive machine restarts, be backed up, and not be accidentally deleted.
-    - 4. **Access:** By default the server runs on `localhost`. Sharing across a team requires tunneling (ngrok, Cloudflare) or reverse proxy setup.
-    - 5. **Updates:** New versions require manual re-deployment.
-    - 6. **Multiple projects:** Each project ideally gets its own isolated McpServer instance, multiplying all of the above.
-    - 7. **Windows-only MSIX:** The packaging story is fragmented.
-    - 'The result: only highly technical individual developers run McpServer today. Teams do not.'
-    - '### 3.5 Market Opportunity'
-    - 'This creates a clear SaaS opportunity: take something that works well but requires expert setup, and make it available to anyone in 5 minutes.'
-    - '---'
-  - id: saas-04-product-vision
-    title: SaaS Business Plan — Product Vision & Value Proposition
-    done: false
-    description:
-    - '### 4.1 Core Value Proposition'
-    - '> **"Your AI assistant finally remembers everything — without you managing any servers."**'
-    - McpServer Cloud provides every development team with a **always-on, team-shared, project-aware context server** that their AI coding tools can query in real time. No installation. No configuration. No maintenance.
-    - '### 4.2 Customer Value by Persona'
-    - '**Individual Developer:**'
-    - '- One-click setup for a new project; MCP connection string ready in under 5 minutes.'
-    - '- No Docker, no .NET SDK, no shell scripts.'
-    - '- Context persists across machines (works on laptop and desktop equally).'
-    - '- Free tier available.'
-    - '**Engineering Team Lead:**'
-    - '- Shared context across the entire team — one McpServer instance, multiple users.'
-    - '- Team todos synchronized; session logs visible for review and onboarding.'
-    - '- GitHub integration managed centrally, not per-developer.'
-    - '**Engineering Manager / Director:**'
-    - '- Visibility into AI assistant usage patterns across the team.'
-    - '- Audit logs for compliance in regulated industries.'
-    - '- Per-project server isolation for IP protection.'
-    - '**CTO / VP Engineering:**'
-    - '- Enterprise SSO (SAML/OIDC) and SCIM provisioning.'
-    - '- Data residency options (US, EU).'
-    - '- Custom retention policies.'
-    - '- Dedicated infrastructure for zero cross-tenant data risk.'
-    - '- SLA guarantee (99.9% uptime).'
-    - '### 4.3 Unique Differentiators'
-    - 1. **The only managed McpServer hosting platform.** There is no current competitor doing this specific thing.
-    - 2. **GitHub-style developer UX.** The management portal is designed for developers, not IT admins. It feels like GitHub, not Salesforce.
-    - 3. **Open core.** The underlying McpServer is open-source; customers who want to self-host always can. This builds trust and creates a natural pipeline from open-source users.
-    - 4. **AI-native.** The platform itself uses McpServer internally (dogfooding) and exposes its own management API as MCP tools (meta!).
-    - 5. **No vendor lock-in for AI tools.** Works with any MCP-compatible AI assistant — GitHub Copilot, Cursor, Claude, Zed, VS Code, etc.
-    - '---'
-    depends-on:
-    - saas-01-executive-summary
-    - saas-03-problem-statement
-    - saas-02-company-overview
-  - id: saas-05-market-analysis
-    title: SaaS Business Plan — Market Analysis
-    done: false
-    description:
-    - '### 5.1 Total Addressable Market (TAM)'
-    - 'The AI developer tools market reached approximately $4.8 billion in 2024 and is projected to grow at 27% CAGR through 2030, reaching ~$20 billion. Within this:'
-    - '- **GitHub Copilot** alone has 1.8M paid individual subscribers + enterprise contracts covering millions more seats.'
-    - '- **Cursor** reached $100M ARR in under 2 years.'
-    - '- **JetBrains AI Assistant**, **Codeium/Windsurf**, and **Amazon Q** collectively cover tens of millions of developer seats.'
-    - All of these AI tools are MCP clients or will become MCP clients. Every developer using one is a potential McpServer Cloud customer.
-    - '**TAM estimate:** The global developer population is ~27 million professional developers. At $100/team/month for a team of 5, and assuming 30% of teams use AI tools professionally by 2026, TAM is ~$19B annually.'
-    - '### 5.2 Serviceable Addressable Market (SAM)'
-    - 'McpServer Cloud targets teams using:'
-    - '- GitHub Copilot (Business or Enterprise plan)'
-    - '- Cursor (Business plan)'
-    - '- Claude for Developers / Claude Code'
-    - '- Any MCP-compatible assistant'
-    - 'This cohort is roughly 5M developers currently, growing rapidly. At $100/team/month (5-person teams):'
-    - '**SAM: ~$1.2B/year**'
-    - '### 5.3 Serviceable Obtainable Market (SOM)'
-    - 'Realistic capture in years 1–3 for a well-executed product with solid open-source distribution:'
-    - '- Year 1: 0.01% of SAM = $12M potential; targeting $480K ARR (conservative ramp)'
-    - '- Year 2: 0.05% of SAM = $60M potential; targeting $2.4M ARR'
-    - '- Year 3: 0.15% of SAM = $180M potential; targeting $7.2M ARR'
-    - These are conservative estimates benchmarked against similar developer-tools SaaS at comparable stages.
-    - '### 5.4 Market Trends Supporting the Business'
-    - 1. **MCP standardization:** Anthropic's MCP protocol is gaining broad adoption (Zed, Cursor, VS Code, JetBrains all announced MCP support in 2024–2025). This is the technical tide rising under our boat.
-    - 2. **AI assistant seat growth:** Copilot Business is growing at ~40% YoY; Cursor growing explosively. More seats = more demand for persistent context.
-    - 3. **Shift from individual to team AI tools:** Enterprise procurement of AI tools is accelerating, creating budget for team-level infrastructure.
-    - 4. **Developer experience premium:** Developer tooling is one of the highest-margin SaaS categories (GitHub is ~80% gross margin). Developers pay for tools that save them time.
-    - '5. **Open source to SaaS pipeline:** Projects like HashiCorp (Terraform → Terraform Cloud), Grafana, and GitLab prove the model works: open-source creates awareness, SaaS monetizes operations.'
-    - '### 5.5 Customer Segments'
-    - '**Segment A — Indie Developers / Freelancers (~25% of revenue)**'
-    - '- 1–2 person teams'
-    - '- High price sensitivity'
-    - '- Convert from Free tier'
-    - '- Key channel: Product Hunt, Hacker News, open-source community'
-    - '- Average ACV: $100–$240/year'
-    - '**Segment B — Startup Engineering Teams (2–30 developers) (~45% of revenue)**'
-    - '- Primary ICP (ideal customer profile)'
-    - '- Budget-conscious but value productivity heavily'
-    - '- Decision maker: CTO, Engineering Lead'
-    - '- Key channel: GitHub, Cursor community, developer conferences'
-    - '- Average ACV: $1,200–$6,000/year'
-    - '**Segment C — Mid-Market Engineering Organizations (30–500 developers) (~20% of revenue)**'
-    - '- Multiple projects, multiple teams'
-    - '- Procurement involves IT/Security review'
-    - '- Need SSO, audit logs, SLA'
-    - '- Decision maker: Director/VP Engineering + InfoSec'
-    - '- Average ACV: $12,000–$60,000/year'
-    - '**Segment D — Enterprise (500+ developers) (~10% of revenue, high ACV)**'
-    - '- Custom contracts, dedicated infrastructure, data residency'
-    - '- Sales-assisted motion'
-    - '- Decision makers: CTO, CISO, VP Engineering'
-    - '- Average ACV: $60,000–$240,000+/year'
-    - '---'
-    depends-on:
-    - saas-03-problem-statement
-  - id: saas-06-competitive-landscape
-    title: SaaS Business Plan — Competitive Landscape
-    done: false
-    description:
-    - '### 9.1 Direct Competitors'
-    - As of early 2025, there are **no direct competitors** offering managed McpServer hosting specifically.
-    - The closest analog is **Composio** (composio.dev), which provides managed MCP-compatible tool integrations, but focuses on pre-built integrations rather than custom project context.
-    - '**Why no competitors yet:**'
-    - '- MCP is a very new protocol (Anthropic published it in late 2024)'
-    - '- McpServer itself is a niche, specialized application'
-    - "- The hosted infrastructure layer is the hard part that hasn't been built yet"
-    - This is a **first-mover advantage** window that will not stay open indefinitely. We estimate 6–18 months before well-funded infrastructure players (Fly.io, Railway, Render) attempt to build McpServer-specific managed offerings.
-    - '### 9.2 Indirect Competitors'
-    - '**General-purpose container/PaaS hosting:**'
-    - '- Railway, Render, Fly.io, Heroku'
-    - '- A technical developer can self-host McpServer on any of these for ~$5–15/month'
-    - '- Missing: McpServer-specific management UI, collaboration features, GitHub integration, backup/restore, auto-updates, monitoring'
-    - '**Context management products (adjacent):**'
-    - '- **Mem.ai** — Personal knowledge base with AI; not developer-focused, not MCP-compatible'
-    - '- **Obsidian Sync** — Personal knowledge sync; not team-oriented, not AI-assistant-first'
-    - '- **Notion AI** — Broad knowledge base; not MCP, not dev-tool-native'
-    - '- **Cody by Sourcegraph** — Code search and AI; heavy enterprise product, not MCP-based'
-    - '**AI coding assistant platforms with memory:**'
-    - '- **GitHub Copilot Chat** with GitHub context — Limited to GitHub.com content, no external docs, no session history'
-    - '- **Cursor** with `@docs` and codebase indexing — Built into the IDE, not portable, not team-shared'
-    - '- **Codeium** context — Similar limitations'
-    - '**Why these are not true substitutes:**'
-    - None of them implement the MCP protocol for external tool invocation. None provide the full McpServer feature set (todos, session logs, hybrid search, external docs indexing). They are single-vendor, single-tool solutions. McpServer Cloud is vendor-agnostic across all MCP-compatible AI tools.
-    - '### 9.3 Competitive Moat'
-    - 1. **Protocol alignment:** Deep, native MCP implementation. As MCP becomes standard, our moat deepens rather than erodes.
-    - 2. **Open source trust:** Developers trust what they can inspect. The open-source core prevents "black box" concerns.
-    - 3. **Data depth:** The longer a team uses McpServer Cloud, the more context, session history, and todos are accumulated. Switching cost grows over time.
-    - 4. **Workspace model:** The workspace architecture maps naturally to team/project structures. Competitors would need to redesign from scratch.
-    - 5. **First-mover brand:** In developer tools, brand matters. The team that builds the best McpServer Cloud experience in 2025 will be the recognized leader in 2027.
-    - '---'
-    depends-on:
-    - saas-05-market-analysis
-  - id: saas-07-product-offering
-    title: SaaS Business Plan — Product & Service Offering
-    done: false
-    description:
-    - '### 6.1 Core Product: McpServer Cloud'
-    - A managed hosting platform for McpServer instances, with a web portal for management, billing, and collaboration.
-    - '**What customers get:**'
-    - '- A dedicated McpServer instance provisioned in a Kubernetes pod (or isolated container) per server/project'
-    - '- A stable HTTPS endpoint (e.g., `https://contoso.mcpserver.cloud/`) ready to paste into Copilot or Cursor settings'
-    - '- Persistent SQLite storage (backed up hourly to object storage)'
-    - '- Persistent vector index (rebuilt on demand or on sync)'
-    - '- GitHub OAuth integration (so `gh`-dependent tools work without CLI setup)'
-    - '- Web portal for all management tasks'
-    - '### 6.2 Tier Structure'
-    - '#### Free Tier — "Starter"'
-    - '- **Price:** $0/month'
-    - '- **Servers:** 1 McpServer instance'
-    - '- **Users:** 1 user'
-    - '- **Storage:** 500 MB (SQLite + vector index)'
-    - '- **Syncs:** Up to 10 per day'
-    - '- **Repos:** 1 GitHub repo connected'
-    - '- **External Docs:** Up to 10 documents indexed'
-    - '- **Session Logs:** Last 30 days retained'
-    - '- **Support:** Community (GitHub Discussions)'
-    - '- **Uptime SLA:** None (best effort)'
-    - '- **Features:** All core MCP tools (context, repo, todo, sessionlog, sync, GitHub)'
-    - '- **Limitations:** No team collaboration, no custom domain, no SSO, community support only'
-    - '#### Pro Tier — "Developer"'
-    - '- **Price:** $19/month per user (or $190/year — 2 months free)'
-    - '- **Servers:** Up to 5 McpServer instances'
-    - '- **Users:** 1 user (personal plan)'
-    - '- **Storage:** 5 GB per server'
-    - '- **Syncs:** Unlimited'
-    - '- **Repos:** Up to 10 GitHub repos connected per server'
-    - '- **External Docs:** Up to 500 documents indexed per server'
-    - '- **Session Logs:** 90 days retained'
-    - '- **Support:** Email (48h SLA)'
-    - '- **Uptime SLA:** 99.5%'
-    - '- **Features:** Custom server names, API key management, basic usage analytics, server-level audit log, webhook notifications on sync completion'
-    - '- **Add-ons:** Additional storage at $0.10/GB/month'
-    - '#### Team Tier — "Workspace"'
-    - '- **Price:** $49/month per user (or $490/year)'
-    - '- **Minimum:** 2 users'
-    - '- **Servers:** Up to 20 McpServer instances'
-    - '- **Users:** Unlimited (seat-licensed)'
-    - '- **Storage:** 20 GB per server'
-    - '- **Syncs:** Unlimited + scheduled auto-sync (cron)'
-    - '- **Repos:** Unlimited GitHub repos per server'
-    - '- **External Docs:** Unlimited documents indexed'
-    - '- **Session Logs:** 1 year retained'
-    - '- **Support:** Priority email + Slack (24h SLA)'
-    - '- **Uptime SLA:** 99.9%'
-    - '- **Features:** Team collaboration (shared server access, role-based permissions), GitHub organization OAuth, server sharing with permission levels (Admin/Write/Read), team-wide session log visibility, shared todo management, usage dashboards per server and per user, Parseable integration for log streaming, webhook management, API rate limiting controls'
-    - '- **Add-ons:** Additional servers at $15/server/month'
-    - '#### Business Tier — "Organization"'
-    - '- **Price:** $99/month per user (or $990/year)'
-    - '- **Minimum:** 5 users'
-    - '- **Servers:** Unlimited McpServer instances'
-    - '- **Users:** Unlimited (seat-licensed)'
-    - '- **Storage:** 100 GB per server'
-    - '- **Syncs:** Unlimited + priority queue (faster sync)'
-    - '- **Session Logs:** 3 years retained'
-    - '- **Support:** Dedicated Slack channel, 4h SLA'
-    - '- **Uptime SLA:** 99.9%'
-    - '- **Features:** Everything in Team, plus: SSO (OIDC/SAML), SCIM provisioning, advanced RBAC (custom roles), organization-level audit log (exportable), IP allowlist/blocklist, custom webhook secrets, environment isolation (separate staging/prod servers), server templates (provision a new server from a standard config), usage-based billing overages, Jira/Linear integration (for todo sync), bulk server management API'
-    - '- **Add-ons:** Data residency options (+$20/user/month for EU-only)'
-    - '#### Enterprise Tier — "Enterprise"'
-    - '- **Price:** Custom (starting ~$5,000/month for 50 seats; negotiated per contract)'
-    - '- **Servers:** Unlimited'
-    - '- **Users:** Unlimited'
-    - '- **Storage:** Unlimited (object storage, bring-your-own or managed)'
-    - '- **Syncs:** Unlimited + dedicated sync workers'
-    - '- **Session Logs:** Custom retention (up to indefinite)'
-    - '- **Support:** Dedicated customer success manager, 1h critical SLA, onboarding assistance, quarterly business reviews'
-    - '- **Uptime SLA:** 99.99% (with dedicated infrastructure)'
-    - '- **Features:** Everything in Business, plus: Dedicated infrastructure (no shared tenancy), custom data residency (US, EU, APAC), VPC peering / private link options, custom domain with wildcard SSL, SOC 2 Type II report, HIPAA BAA available, pen test report sharing, custom contract terms, SLA credits, multi-region active-active, custom ingestion connectors (Confluence, Notion, Linear, Jira, GitLab, Bitbucket), advanced analytics and BI data export, white-labeling option (reseller partners)'
-    - '- **Procurement:** Annual contracts, PO-based invoicing, net-30 terms'
-    - '### 6.3 Add-On Products'
-    - '**McpServer Analytics** (future, Year 2+)'
-    - '- Aggregated insights across all team servers: most-queried context, most-used tools, AI session patterns'
-    - '- Price: $10/user/month add-on'
-    - '**McpServer Connect — Slack Integration** (future, Year 2+)'
-    - '- Surface todos and sync alerts directly in Slack'
-    - '- Price: $5/user/month add-on'
-    - '**McpServer Audit Compliance Pack** (future, Year 2+)'
-    - '- SOC 2 + HIPAA compliance features: immutable audit logs, access reviews, compliance reports'
-    - '- Price: $20/user/month add-on on Business tier; included in Enterprise'
-    - '**McpServer On-Premises** (future, Year 3+)'
-    - '- Fully air-gapped deployment of the SaaS platform itself on customer infrastructure'
-    - '- Price: ~$50K/year license + support'
-    - '### 6.4 Free Trial Policy'
-    - All paid tiers offer a **14-day free trial** with full feature access. No credit card required for Free and Pro trials; credit card required at checkout for Team and above. Trials that don't convert automatically downgrade to Free tier (servers are paused but data is preserved for 30 days).
-    - '---'
-    depends-on:
-    - saas-04-product-vision
-    - saas-05-market-analysis
-  - id: saas-08-pricing-strategy
-    title: SaaS Business Plan — Business Model & Pricing Strategy
-    done: false
-    description:
-    - '### 7.1 Revenue Model'
-    - '**Primary:** Monthly or annual subscription (SaaS recurring revenue). Annual plans at ~17% discount (2 months free).'
-    - '**Secondary (future):** Usage-based overages for storage and API calls beyond tier limits.'
-    - '**Tertiary (future):** Professional services (onboarding, migration, custom integrations) for Enterprise customers.'
-    - '**Open Core:** The core McpServer code remains MIT-licensed on GitHub. The SaaS layer (multi-tenancy, web portal, billing, provisioning) is proprietary. This is the standard open-core SaaS model (HashiCorp, Grafana, GitLab, Sentry, etc.).'
-    - '### 7.2 Pricing Rationale'
-    - '**Free tier:** Critical for growth. Developers discover the product, use it personally, then advocate for team adoption. The free tier is capped conservatively to ensure conversion pressure without being punitive. The cap on 1 server and 1 user creates natural upgrade triggers.'
-    - '**Pro tier ($19/mo):** Priced below psychological resistance ($20) for individual developers. Benchmarked against Railway ($5–20/mo), Render ($25/mo), Fly.io (~$15/mo) for comparable infrastructure. The value is not raw compute but managed McpServer-specific functionality.'
-    - '**Team tier ($49/user/mo):** Benchmarked against GitHub Copilot Business ($19/user/mo) and Datadog ($15–75/user/mo). Teams spending $19/user/month on Copilot to get AI assistance should rationally spend $49/user/month to make that AI assistant dramatically more effective.'
-    - '**Business tier ($99/user/mo):** SSO and SCIM are table stakes for Enterprise IT. Priced to reflect the procurement overhead and support cost premium. Benchmarked against Notion ($16/user/mo), Linear ($16/user/mo Team, enterprise custom), and Sentry Business ($26/user/mo).'
-    - '**Enterprise:** Custom pricing allows us to capture value proportional to ACV and organizational size. Starting floor of ~$5K/month ensures our enterprise sales motion is economically justified.'
-    - '### 7.3 Annual vs. Monthly Mix'
-    - 'Target 60% annual / 40% monthly by Year 2. Annual plans:'
-    - '- Improve cash flow (upfront payment)'
-    - '- Reduce churn (customers are committed)'
-    - '- Provide pricing incentive (2 months free = 16.7% discount)'
-    - '### 7.4 Unit Economics'
-    - '**Customer Acquisition Cost (CAC) Targets:**'
-    - '- Free → Pro conversion: ~$50 (primarily content/community)'
-    - '- Pro → Team upgrade: ~$150 (product-led growth + email nurture)'
-    - '- Team → Business (outbound): ~$1,500'
-    - '- Enterprise (sales-led): ~$12,000'
-    - '**Customer Lifetime Value (LTV) Targets:**'
-    - '- Pro (individual): $19/mo × 18-month average lifetime = $342 LTV'
-    - '- Team (5-person team): $245/mo × 24-month lifetime = $5,880 LTV'
-    - '- Business (20-person org): $1,980/mo × 30-month lifetime = $59,400 LTV'
-    - '- Enterprise: $8,000/mo × 36-month lifetime = $288,000 LTV'
-    - '**LTV:CAC Ratios:**'
-    - '- Pro: 342/50 = 6.8x ✅'
-    - '- Team: 5880/150 = 39.2x ✅'
-    - '- Business: 59400/1500 = 39.6x ✅'
-    - '- Enterprise: 288000/12000 = 24x ✅'
-    - All tiers are well above the healthy 3:1 benchmark.
-    - '**Infrastructure Cost Per Customer:**'
-    - '- Free: ~$0.50/mo (minimal compute, shared infrastructure)'
-    - '- Pro: ~$2/mo per server (shared cluster, small pod)'
-    - '- Team: ~$8/mo per server (slightly larger, dedicated namespace)'
-    - '- Business: ~$15/mo per server (dedicated namespace, faster storage)'
-    - '- Enterprise: ~$200/mo per deployment (dedicated nodes)'
-    - '**Gross Margin Targets:**'
-    - '- Year 1: ~60% (infrastructure costs high during scale-up)'
-    - '- Year 2: ~72% (economies of scale, better infrastructure contracts)'
-    - '- Year 3: ~78% (mature infrastructure, reduced support cost per customer)'
-    - '### 7.5 Expansion Revenue'
-    - 'A key metric for healthy SaaS is **Net Revenue Retention (NRR)**. Target NRR of 120%+ by Year 2, driven by:'
-    - '- Seat expansion (teams grow, adding more users)'
-    - '- Server count expansion (more projects)'
-    - '- Tier upgrades (Pro → Team → Business)'
-    - '- Storage overage billing'
-    - Expansion should contribute ~30% of net new ARR by Year 2.
-    - '---'
-    depends-on:
-    - saas-07-product-offering
-    - saas-05-market-analysis
-  - id: saas-09-operations-plan
-    title: SaaS Business Plan — Operations Plan
-    done: false
-    description:
-    - '### 11.1 Infrastructure (Year 1)'
-    - '**Cloud Provider:** Microsoft Azure (primary), with GCP or AWS as secondary for DR.'
-    - 'Rationale:'
-    - "- .NET 9 / C# is a natural fit for Azure (Microsoft's platform)"
-    - '- Azure Kubernetes Service (AKS) is mature'
-    - '- Azure Database for PostgreSQL for the control plane'
-    - '- Azure Blob Storage for SQLite backups and vector index persistence'
-    - '- Azure Container Registry for Docker images'
-    - '- GitHub Actions + Azure DevOps pipelines (both available)'
-    - '**Kubernetes Architecture:**'
-    - '- AKS cluster with auto-scaling node groups'
-    - '- Per-customer namespace (or per-customer pod with resource quotas)'
-    - '- Dedicated node pools for Enterprise customers'
-    - '**Data Infrastructure:**'
-    - '- Control plane database: Azure PostgreSQL Flexible Server (HA configuration)'
-    - '- Per-server SQLite: stored on Azure Files (NFS-mounted into pod) with hourly snapshots to Azure Blob'
-    - '- Vector indices: stored alongside SQLite on Azure Files'
-    - '- Blob backup: geo-redundant storage (GRS) for durability'
-    - '**Networking:**'
-    - '- Azure Application Gateway (layer 7) as main ingress'
-    - "- Per-server TLS via Let's Encrypt via cert-manager"
-    - '- Wildcard DNS: `*.mcpserver.cloud` → each server gets `{server-slug}.mcpserver.cloud`'
-    - '- Private endpoints for database connectivity (no public DB exposure)'
-    - '**CDN:** Azure Front Door for web portal static assets and API caching.'
-    - '### 11.2 Team Structure (Year 1)'
-    - '**Founding team (0–6 months):**'
-    - '- CEO/Co-founder: Product, GTM, investor relations, enterprise sales'
-    - '- CTO/Co-founder: Architecture, backend, infrastructure, DevOps'
-    - '**First hires (Months 4–12):**'
-    - '- **Full-Stack Engineer #1** (Month 4): Web portal frontend (React/Next.js); also contributes to .NET backend'
-    - '- **DevOps / Platform Engineer** (Month 6): Kubernetes, CI/CD, monitoring, reliability'
-    - '- **Full-Stack Engineer #2** (Month 9): Customer-facing features, onboarding improvements, API'
-    - '- **Customer Success Manager** (Month 10): Onboarding, retention, enterprise QBRs'
-    - '**Months 12–18 (Post-seed):**'
-    - '- Sales Development Representative (SDR) #1'
-    - '- Full-Stack Engineer #3'
-    - '- Security Engineer (part-time/contractor initially)'
-    - '- Marketing / Developer Advocate'
-    - '### 11.3 Support Operations'
-    - '**Tier 1 (Community/Free):** GitHub Discussions, documentation, AI-powered chatbot on website.'
-    - '**Tier 2 (Pro/Team):** Email ticketing system (Linear or Zendesk). Target 24–48h response.'
-    - '**Tier 3 (Business):** Shared Slack channel. Target 4h response. Dedicated CSM at threshold.'
-    - '**Tier 4 (Enterprise):** Dedicated Slack channel + hotline. 1h critical SLA. Monthly check-ins.'
-    - '**Support documentation:**'
-    - '- Full docs site (docs.mcpserver.cloud) built with DocFX (already in the codebase)'
-    - '- Video tutorials for each AI assistant integration'
-    - '- Troubleshooting guides for common issues (connection refused, sync failures, embedding errors)'
-    - '- Public status page (statuspage.io or Instatus)'
-    - '### 11.4 Reliability & SLA Management'
-    - '**99.9% uptime SLA** (Team/Business) means < 8.7 hours downtime/year.'
-    - '**To achieve this:**'
-    - '- Multi-zone AKS cluster (pods distributed across 3 AZs)'
-    - '- Health checks and automatic pod restart (Kubernetes liveness/readiness probes)'
-    - '- Rolling deployments (zero-downtime deploys)'
-    - '- Database failover: Azure PostgreSQL automatic failover < 60s'
-    - '- Per-server SQLite: NFS mount with Azure Files ZRS (zone-redundant storage)'
-    - '- On-call rotation starting Month 6 (PagerDuty or Opsgenie)'
-    - '- Runbooks for all P1 scenarios'
-    - '**99.99% uptime SLA** (Enterprise) means < 52 minutes downtime/year.'
-    - '**Additional measures for Enterprise:**'
-    - '- Dedicated node pools (no shared noisy neighbors)'
-    - '- Active-active multi-region option'
-    - '- Database read replicas for query offloading'
-    - '- Canary deployments before full rollout to Enterprise tenants'
-    - '---'
-    depends-on:
-    - saas-07-product-offering
-  - id: saas-10-go-to-market
-    title: SaaS Business Plan — Go-to-Market Strategy
-    done: false
-    description:
-    - '### 8.1 Phase 1 — Open Source Community & Developer Awareness'
-    - '**Duration:** Pre-launch through Month 6'
-    - '**Goal:** Build a community of 1,000 active McpServer open-source users who become the first cloud customers.'
-    - '**Tactics:**'
-    - 1. **GitHub presence:** McpServer repository should have a polished README, comprehensive documentation, and active issue engagement. Target 1,000 GitHub stars within 3 months of concerted effort.
-    - '2. **Hacker News / Show HN:** Launch post with genuine technical depth. HN rewards real engineering work and transparency. A "Show HN: I built a managed MCP context server for AI coding assistants" post targeting front page.'
-    - 3. **Reddit:** Engage authentically in r/LocalLLaMA, r/MachineLearning, r/programming, r/golang (though this is .NET, AI tool discussions span languages). Never spam; contribute answers and let the product speak.
-    - 4. **Product Hunt launch:** Day-of campaign with coordinated upvotes from early users. Target top 5 in "Developer Tools" category on launch day.
-    - 5. **Dev.to / Hashnode / Medium:** Technical blog posts explaining MCP, the context gap in AI assistants, and how McpServer solves it. SEO-optimized for terms like "MCP server hosting", "GitHub Copilot context", "persistent AI memory for developers".
-    - '6. **YouTube / Loom demos:** Short (3–5 minute) screen recordings showing: "Set up McpServer Cloud in 5 minutes and instantly make Cursor smarter." Distribute on YouTube, Twitter/X, LinkedIn, Discord.'
-    - 7. **Discord & Slack communities:** Join developer AI tool communities (Cursor Discord has 50K+ members), be genuinely helpful, announce McpServer Cloud when relevant.
-    - 8. **GitHub Copilot ecosystem:** Engage with GitHub Copilot community. McpServer Cloud is a natural extension for Copilot users. Consider becoming a GitHub Marketplace partner.
-    - '### 8.2 Phase 2 — Product-Led Growth Engine'
-    - '**Duration:** Months 3–12'
-    - '**Goal:** Turn product usage into viral growth. Every team that uses McpServer Cloud should naturally lead to their collaborators discovering it.'
-    - '**Tactics:**'
-    - 1. **"Powered by McpServer Cloud" attribution:** New servers start with a visible but non-intrusive badge on the server's MCP metadata. When a team member connects their AI assistant and queries context, they see the server name and provider. This is like GitHub's social proof — your work is visible.
-    - 2. **GitHub OAuth login:** Using GitHub OAuth means team members show up with their GitHub avatars and usernames. This makes the portal feel familiar and leverages GitHub's social graph.
-    - '3. **Invite flows:** When a server owner adds a team member via GitHub handle (@username), that person receives a beautiful email invitation: "Jane has invited you to join [Project Name] on McpServer Cloud."'
-    - 4. **Public server pages (optional):** Teams can optionally make their server's index public (listing connected repos, indexed docs, tool configurations) — similar to GitHub profile pages. This creates SEO content and social proof.
-    - 5. **"Deploy to McpServer Cloud" button:** Like "Deploy to Heroku" or "Deploy to Railway" buttons, we create a GitHub Action and a button that can be added to any McpServer-compatible open-source project's README. One click → sign up → server provisioned with that repo connected.
-    - 6. **Free tier as top-of-funnel:** The free tier is genuinely useful. It turns individual developers into product advocates. When they recommend McpServer Cloud to their team lead, the team lead sees a real use case already in production.
-    - "7. **In-product upgrade prompts:** When a free user hits a limit (e.g., 10 syncs/day) with contextual messaging: \"You've hit today's sync limit — upgrade to Pro to sync without limits\" with a one-click upgrade."
-    - '### 8.3 Phase 3 — Sales-Assisted Growth for Mid-Market & Enterprise'
-    - '**Duration:** Months 9–24'
-    - '**Goal:** Close $50K–$240K enterprise contracts. Hire first sales rep at ~$1.2M ARR.'
-    - '**Tactics:**'
-    - '1. **Inbound-led outbound:** When an enterprise domain (e.g., stripe.com, shopify.com) signs up for a free or Pro account, trigger a personalized outreach from a sales rep: "I noticed several engineers from [Company] are using McpServer Cloud. Happy to discuss an Enterprise plan."'
-    - 2. **Account-based marketing (ABM):** Target the Fortune 1000 + top-500 high-growth startups that are known Copilot or Cursor enterprise customers. LinkedIn outreach from technical founders.
-    - 3. **Partner channel:** Engage GitHub Enterprise resellers and Microsoft partner ecosystem (McpServer Cloud runs on Azure-compatible infrastructure; Azure Marketplace listing is a future goal).
-    - '4. **Conference presence:** Attend and sponsor: GitHub Universe, KubeCon, AWS re:Invent (developer tools track), JetBrains DevEcosystem conference, AI Engineer Summit. Sponsor hackathons with "Best Use of AI Coding Tools" categories.'
-    - 5. **Analyst relations:** Brief Gartner, Forrester, and G2 on the AI developer tools market when ARR exceeds $1M. G2 reviews are disproportionately influential in enterprise SaaS purchasing.
-    - '6. **Case studies:** Develop 3–5 detailed customer case studies by Month 18, showing measurable productivity gains (reduced context-switching time, faster onboarding, fewer repeated AI prompts). Quantify: "Team reduced average AI prompt setup time from 4 minutes to 30 seconds."'
-    - '### 8.4 Partnerships'
-    - '**GitHub/Microsoft:** GitHub Copilot Extensions and MCP marketplace listing. Microsoft is investing heavily in the MCP ecosystem and may partner with or acquire tooling providers.'
-    - "**Anthropic:** Claude.ai is the primary MCP reference implementation. An official \"Works with Claude\" partnership or listing on Anthropic's MCP directory provides significant credibility."
-    - '**Cursor:** Cursor is the fastest-growing AI IDE. An official "Recommended McpServer Provider" listing on cursor.sh would be enormously valuable.'
-    - '**Vercel / Railway / Render:** Integration partnerships — "Deploy your McpServer from Railway with one click, or use McpServer Cloud for fully managed hosting."'
-    - '---'
-    depends-on:
-    - saas-07-product-offering
-    - saas-08-pricing-strategy
-    - saas-06-competitive-landscape
-  - id: saas-11-acquisition-retention
-    title: SaaS Business Plan — Customer Acquisition & Retention
-    done: false
-    description:
-    - '### 10.1 Acquisition Funnel'
-    - '```'
-    - Awareness (GitHub stars, blog posts, HN, conferences)
-    - '    → Interest (README, docs, demo video, free tier signup)'
-    - '        → Activation (first server provisioned, first MCP connection)'
-    - '            → Revenue (upgrade to Pro or Team)'
-    - '                → Expansion (add team members, add servers)'
-    - '                    → Advocacy (referrals, case studies, reviews)'
-    - '```'
-    - '**Key activation metric:** Time from signup to first successful MCP query from an AI assistant. Target: < 10 minutes.'
-    - '### 10.2 Onboarding Flow'
-    - 1. GitHub OAuth signup → account created
-    - 2. "Create your first server" — pick a repository from GitHub org list
-    - 3. Server provisioned in background (~60 seconds)
-    - 4. "Connect to your AI assistant" — step-by-step instructions for Cursor, GitHub Copilot, VS Code MCP, Claude desktop
-    - 5. "Run your first sync" — one-click sync to index the repository
-    - 6. "Ask your AI assistant a question about your codebase" — success screen
-    - Every step has a completion indicator. The user cannot get lost because there is only one path.
-    - '### 10.3 Retention Strategy'
-    - '**Product retention:**'
-    - '- Daily active usage naturally comes from the AI assistant querying the server on every coding session. Retention is a function of AI assistant adoption, not direct engagement with our portal.'
-    - '- Email digest (weekly): "Your server synced 47 times this week. 3 new todos were created. Last session: 2 hours of context queries."'
-    - '- In-portal "Last synced X minutes ago" status promotes habitual checking.'
-    - '**Relationship retention:**'
-    - "- Monthly \"What's new\" email newsletter for Team and above customers."
-    - '- Quarterly usage reviews for Enterprise customers.'
-    - '- Proactive support outreach when usage drops >50% week-over-week (possible churn signal).'
-    - '**Cancellation prevention:**'
-    - '- 30-day data preservation after cancellation. Export-to-zip available.'
-    - '- Downgrade option prominently offered before cancellation.'
-    - '- Pause option (retain data, no charge) for seasonal users.'
-    - '### 10.4 Churn Targets'
-    - '- Free tier: N/A (no revenue impact, tracked for health)'
-    - '- Pro: Target < 5% monthly churn (= 72-month average lifetime)'
-    - '- Team: Target < 3% monthly churn'
-    - '- Business/Enterprise: Target < 1% monthly churn'
-    - '---'
-    depends-on:
-    - saas-10-go-to-market
-    - saas-08-pricing-strategy
-  - id: saas-12-legal-compliance
-    title: SaaS Business Plan — Legal, Compliance & Security
-    done: false
-    description:
-    - '### 14.1 Data Privacy'
-    - '**GDPR (EU):**'
-    - '- Data processing agreement (DPA) available for all paying customers'
-    - '- Privacy by design: customer data is isolated per namespace; no cross-tenant access'
-    - '- Right to erasure: full data deletion within 30 days of cancellation'
-    - '- Data portability: export all data as ZIP (SQLite dump + YAML exports)'
-    - '- EU data residency available as add-on (Business) or included (Enterprise)'
-    - '**CCPA (California):**'
-    - '- Privacy policy explicitly covers CCPA rights'
-    - '- No selling customer data (never a business model)'
-    - '- Data deletion requests honored within required timeframe'
-    - '**HIPAA:**'
-    - '- BAA available for Enterprise customers in healthcare'
-    - '- Requires dedicated infrastructure tier'
-    - '- Audit logging for all data access operations'
-    - '### 14.2 Security Posture'
-    - '**Authentication:**'
-    - '- GitHub OAuth primary (most developers have GitHub accounts)'
-    - '- Email/password as fallback (PBKDF2 password hashing, not bcrypt — .NET default)'
-    - '- TOTP-based MFA available for all paid tiers; required for Business+'
-    - '- SAML 2.0 / OIDC for Enterprise SSO'
-    - '**Authorization:**'
-    - '- Per-server role-based access control (Admin, Write, Read)'
-    - '- API key scoping (read-only, write, admin)'
-    - '- Tenant isolation at Kubernetes namespace level'
-    - '- Network policies preventing cross-tenant pod communication'
-    - '**Data at rest:**'
-    - '- SQLite files encrypted at filesystem level (Azure Files encryption at rest — AES-256)'
-    - '- Backup blobs encrypted with customer-managed keys (CMK) available for Enterprise'
-    - '**Data in transit:**'
-    - '- TLS 1.3 minimum for all API traffic'
-    - '- Certificate pinning documentation for security-conscious enterprise clients'
-    - '**Security operations:**'
-    - '- Static analysis in CI/CD pipeline (Snyk, GitHub code scanning)'
-    - '- Dependency vulnerability scanning (Dependabot)'
-    - '- Penetration test (third-party) before Enterprise GA'
-    - '- SOC 2 Type I at Month 12; Type II at Month 24'
-    - '### 14.3 Terms of Service & Acceptable Use'
-    - '**Key terms:**'
-    - '- Customer data is never used for training AI models'
-    - '- Customers own all their data'
-    - '- Permissible use: software development workflows, personal productivity'
-    - '- Prohibited: scraping, automated abuse, storing PII beyond workflow needs, competing product development using McpServer Cloud infrastructure'
-    - '- Fair use policy for unlimited tiers (soft limits with communication before enforcement)'
-    - '### 14.4 Intellectual Property'
-    - '- McpServer core: MIT license (maintained on GitHub)'
-    - '- SaaS platform layer: Proprietary'
-    - '- Customer data: Customer owns; we have limited license to operate the service'
-    - '- Trademarks: Register "McpServer Cloud" and logo before launch in US, EU'
-    - '---'
-    depends-on:
-    - saas-07-product-offering
-    - saas-09-operations-plan
-  - id: saas-13-financial-projections
-    title: SaaS Business Plan — Financial Projections
-    done: false
-    description:
-    - '### 12.1 Assumptions'
-    - '- CAC calculations assume PLG-dominated growth (lower CAC vs. sales-led)'
-    - '- Infrastructure costs based on Azure AKS + supporting services'
-    - '- Headcount costs based on 2025 market rates (US/remote)'
-    - '- Gross margin improves as reserved instance discounts kick in at scale'
-    - '- Annual pre-payment modeled at 60% of customers by Year 2'
-    - '### 12.2 Revenue Model (ARR)'
-    - '**Year 1 (12 months post-launch):**'
-    - '| Tier | Avg Monthly Rate | Customers (EoY) | MRR |'
-    - '|------|-----------------|-----------------|-----|'
-    - '| Free | $0 | 2,000 | $0 |'
-    - '| Pro | $19 | 800 | $15,200 |'
-    - '| Team | $245 (5 users) | 80 | $19,600 |'
-    - '| Business | $990 (10 users) | 15 | $14,850 |'
-    - '| Enterprise | $5,000 | 2 | $10,000 |'
-    - '| **Total** | | | **$59,650 MRR / $480K ARR** |'
-    - '**Year 2:**'
-    - '| Tier | Avg Monthly Rate | Customers (EoY) | MRR |'
-    - '|------|-----------------|-----------------|-----|'
-    - '| Free | $0 | 8,000 | $0 |'
-    - '| Pro | $19 | 3,500 | $66,500 |'
-    - '| Team | $295 (6 users) | 300 | $88,500 |'
-    - '| Business | $1,980 (20 users) | 60 | $118,800 |'
-    - '| Enterprise | $7,500 | 8 | $60,000 |'
-    - '| **Total** | | | **$333,800 MRR / $2.4M ARR** |'
-    - '**Year 3:**'
-    - '| Tier | Avg Monthly Rate | Customers (EoY) | MRR |'
-    - '|------|-----------------|-----------------|-----|'
-    - '| Free | $0 | 25,000 | $0 |'
-    - '| Pro | $19 | 10,000 | $190,000 |'
-    - '| Team | $350 (7 users) | 900 | $315,000 |'
-    - '| Business | $2,970 (30 users) | 180 | $534,600 |'
-    - '| Enterprise | $10,000 | 25 | $250,000 |'
-    - '| **Total** | | | **$1.29M MRR / $7.2M ARR** |'
-    - '### 12.3 Cost Structure (Monthly, Year 1 Midpoint — Month 6)'
-    - '**Infrastructure:**'
-    - '| Item | Monthly Cost |'
-    - '|------|-------------|'
-    - '| AKS cluster (3 nodes, Standard_D4s_v3) | $1,440 |'
-    - '| Azure PostgreSQL Flexible Server (GP_Standard_D4s_v3, HA) | $800 |'
-    - '| Azure Files (ZRS, 5TB) | $300 |'
-    - '| Azure Blob Storage (backups, 10TB) | $200 |'
-    - '| Azure Application Gateway (Standard_v2) | $350 |'
-    - '| Azure Front Door (Premium) | $200 |'
-    - '| Azure Container Registry | $50 |'
-    - '| Monitoring (Azure Monitor + Log Analytics) | $250 |'
-    - "| Let's Encrypt / cert-manager | $0 |"
-    - '| **Infrastructure Subtotal** | **$3,590** |'
-    - '**Headcount (Month 6):**'
-    - '| Role | Monthly Cost |'
-    - '|------|-------------|'
-    - '| CEO/Co-founder (salary) | $8,000 |'
-    - '| CTO/Co-founder (salary) | $8,000 |'
-    - '| Full-Stack Engineer #1 | $12,000 |'
-    - '| DevOps Engineer | $13,000 |'
-    - '| **Headcount Subtotal** | **$41,000** |'
-    - '**Other Operational:**'
-    - '| Item | Monthly Cost |'
-    - '|------|-------------|'
-    - '| SaaS tools (GitHub, Linear, Zendesk, PagerDuty) | $500 |'
-    - '| Marketing (content, ads) | $2,000 |'
-    - '| Legal / accounting (retainer) | $1,500 |'
-    - '| Office / co-working | $500 |'
-    - '| **Other Subtotal** | **$4,500** |'
-    - '**Total Month 6 Monthly Burn: ~$49,090**'
-    - '### 12.4 Runway & Break-Even'
-    - '- Seed funding: $2,500,000'
-    - '- Months 1–3 burn (pre-launch, infrastructure + 2 founders): ~$20K/month'
-    - '- Months 4–12 burn (with hires): $45–65K/month'
-    - '- Estimated runway on $2.5M seed: 18–24 months'
-    - '**Break-even (operational):** Targeted at ~$65K MRR (~$780K ARR). At Year 2 growth trajectory, this occurs approximately Month 20.'
-    - '### 12.5 Series A Bridge'
-    - 'If growth is on track by Month 15 ($2M+ ARR), initiate Series A raise of $8–15M to:'
-    - '- Accelerate enterprise sales (hire sales team of 5)'
-    - '- Expand to multi-region (EU, APAC)'
-    - '- Build marketplace/ecosystem integrations'
-    - '- Pursue SOC 2 Type II certification'
-    - '---'
-    depends-on:
-    - saas-08-pricing-strategy
-    - saas-09-operations-plan
-    - saas-11-acquisition-retention
-  - id: saas-14-risk-analysis
-    title: SaaS Business Plan — Risk Analysis & Mitigation
-    done: false
-    description:
-    - '### 13.1 Technical Risks'
-    - '**Risk: MCP protocol instability / breaking changes**'
-    - '- Probability: Medium (protocol is new and evolving)'
-    - '- Impact: High (platform breaks for all customers)'
-    - '- Mitigation: Contribute to MCP spec process; maintain protocol version pinning; implement adapter layer to support multiple MCP versions simultaneously; track Anthropic MCP changelog via automated dependency monitoring.'
-    - '**Risk: Embedding model dependency (ONNX/ML.NET)**'
-    - '- Probability: Low'
-    - '- Impact: Medium (context search degrades)'
-    - '- Mitigation: Embedding model is bundled and version-pinned. Migration path to newer models documented. Feature flag to disable vector search and fall back to FTS5 only.'
-    - '**Risk: SQLite concurrency under multi-user load**'
-    - '- Probability: Medium (multiple users querying same server simultaneously)'
-    - '- Impact: Medium (slow queries, lock timeouts)'
-    - '- Mitigation: Each server gets its own SQLite file. Kubernetes pod gives dedicated process. WAL mode enabled. Per-server connection pooling. Load testing as part of pre-launch gate.'
-    - '**Risk: Data loss (SQLite file corruption or pod failure)**'
-    - '- Probability: Low (with proper architecture)'
-    - '- Impact: Very High'
-    - '- Mitigation: Azure Files ZRS for primary storage (hardware-level redundancy); hourly snapshots to Blob Storage; daily full backup; point-in-time recovery for 30 days.'
-    - '### 13.2 Market Risks'
-    - '**Risk: GitHub builds native McpServer into Copilot**'
-    - '- Probability: Medium (Microsoft owns GitHub, invested in MCP)'
-    - '- Impact: High (potentially makes the product irrelevant for GitHub-only workflows)'
-    - "- Mitigation: Multi-vendor support (Cursor, Claude, JetBrains, VS Code beyond Copilot); deeper feature set than what GitHub would likely build natively; focus on enterprise collaboration features GitHub wouldn't prioritize."
-    - '**Risk: MCP adoption slower than expected**'
-    - '- Probability: Low (major vendors already committed)'
-    - '- Impact: High (smaller TAM)'
-    - '- Mitigation: Free tier + open source maintains brand presence; adjacent features (todo management, session logging) valuable without AI assistant integration.'
-    - '**Risk: Price compression from PaaS players (Railway, Render, etc.)**'
-    - '- Probability: Medium'
-    - '- Impact: Medium (margin pressure on lower tiers)'
-    - '- Mitigation: Differentiate on McpServer-specific features, not raw compute pricing. These players optimize for general containerized apps, not MCP context servers specifically.'
-    - '### 13.3 Business Risks'
-    - '**Risk: Founder dependency / single point of failure**'
-    - '- Probability: Medium (early stage)'
-    - '- Impact: High'
-    - '- Mitigation: Document all processes; cross-train early employees; key-person insurance; hiring second technical leader by Month 12.'
-    - '**Risk: Customer concentration (top 5 customers > 50% revenue)**'
-    - '- Probability: Medium in Year 1'
-    - '- Impact: High (one cancellation = major revenue impact)'
-    - '- Mitigation: Diversify customer base aggressively; avoid single-customer > 20% of revenue; long-term contracts for Enterprise.'
-    - '**Risk: Open-source fork or competitor builds clone**'
-    - '- Probability: Low-Medium'
-    - '- Impact: Medium (affects free tier conversion, not hosted features)'
-    - '- Mitigation: The open core model is intentional; moat is in the hosted platform, not the open-source code itself. Continue contributing to open source to maintain community goodwill.'
-    - '---'
-    depends-on:
-    - saas-13-financial-projections
-    - saas-09-operations-plan
-  - id: saas-15-funding
-    title: SaaS Business Plan — Funding Requirements & Use of Funds
-    done: false
-    description:
-    - '### 15.1 Pre-Seed / Bootstrapped Phase'
-    - 'If founders can ship MVP with personal capital or prior savings:'
-    - '- 0–6 months: product development, infrastructure setup'
-    - '- Target: 100 paying customers before raising seed'
-    - '### 15.2 Seed Round ($2.5M)'
-    - '**Target investors:**'
-    - '- Developer tools focused VCs: Heavybit, Work-Bench, CRV'
-    - '- Infrastructure-focused VCs: Addition, Andreessen a16z infrastructure'
-    - '- Angels: Former founders of Sentry, Railway, Vercel, Planetscale, Linear (developer-focused operators)'
-    - '**Allocation of $2.5M:**'
-    - '| Category | Amount | % |'
-    - '|---------|--------|---|'
-    - '| Engineering (salaries, 18 months) | $1,350,000 | 54% |'
-    - '| Infrastructure (hosting, tools) | $300,000 | 12% |'
-    - '| Marketing & GTM | $400,000 | 16% |'
-    - '| Legal (IP, compliance, GDPR) | $150,000 | 6% |'
-    - '| Office/operations | $100,000 | 4% |'
-    - '| Reserve | $200,000 | 8% |'
-    - '| **Total** | **$2,500,000** | **100%** |'
-    - '### 15.3 Series A ($10M target at ~$2M ARR)'
-    - '- Accelerate enterprise sales (3 AEs, 2 SDRs)'
-    - '- Multi-region expansion (EU cluster)'
-    - '- SOC 2 Type II certification'
-    - '- Platform partnerships (GitHub Marketplace, Cursor marketplace)'
-    - '- Marketing budget scale-up'
-    - '---'
-    depends-on:
-    - saas-13-financial-projections
-    - saas-14-risk-analysis
-  - id: saas-16-exit-strategy
-    title: SaaS Business Plan — Exit Strategy
-    done: false
-    description:
-    - '### 16.1 Strategic Acquirer Candidates'
-    - '**Microsoft / GitHub:**'
-    - '- GitHub Copilot is a natural home for McpServer Cloud'
-    - '- Microsoft has explicitly invested in MCP ecosystem'
-    - '- Acquisition price benchmark: 8–12x ARR at growth stage'
-    - '**Anthropic:**'
-    - '- MCP protocol creator; MCP server hosting is a natural vertical integration'
-    - '- Less likely (Anthropic focuses on models, not infrastructure) but possible'
-    - '**JetBrains:**'
-    - '- Large developer tools company with 14M+ users'
-    - '- Context server infrastructure would complement JetBrains AI Assistant'
-    - '**Atlassian:**'
-    - '- Owns Jira (todo integration potential), Confluence (docs indexing), Bitbucket'
-    - '- Developer productivity platform play'
-    - '**Sourcegraph:**'
-    - '- Code intelligence company, natural strategic fit'
-    - '- Already in the "AI + code context" space'
-    - '### 16.2 IPO Path'
-    - At $50M+ ARR with 40%+ growth and strong NRR, a developer-tools IPO is viable (GitLab, HashiCorp, Sentry have all pursued public markets). This is a 7–10 year outcome.
-    - '### 16.3 Founder Intent'
-    - The primary objective is to build a durable, profitable business. Strategic exits are considered at appropriate valuations relative to growth. Commitment to team and customers over short-term liquidity.
-    - '---'
-    - '*Document version: 1.0 — Draft for internal planning*'
-    - '*Last updated: February 2026*'
-    depends-on:
-    - saas-15-funding
-    - saas-13-financial-projections
-  - id: saas-17-implementation-plan
-    title: SaaS Business Plan — Implementation Plan (NOT YET CREATED)
-    done: false
-    description:
-    - The second document requested alongside the business plan was never created.
-    - 'This should be a detailed, phased implementation plan covering:'
-    - '- Phase 1: Infrastructure foundation (Kubernetes, CI/CD, multi-tenant architecture)'
-    - '- Phase 2: Core platform (auth, workspace provisioning, billing integration)'
-    - '- Phase 3: Web portal (GitHub-style UI, subscription management, server dashboard)'
-    - '- Phase 4: Enterprise features (SSO/SAML, audit logs, dedicated infrastructure)'
-    - '- Phase 5: Scale & optimize (multi-region, advanced monitoring, partner integrations)'
-    - Should include sprint-level detail, technology choices, and milestone definitions.
-    - Create a separate TODO per phase with dependency tracking.
-    depends-on:
-    - saas-01-executive-summary
-    - saas-02-company-overview
-    - saas-03-problem-statement
-    - saas-04-product-vision
-    - saas-05-market-analysis
-    - saas-07-product-offering
-    - saas-08-pricing-strategy
-    - saas-10-go-to-market
-    - saas-06-competitive-landscape
-    - saas-11-acquisition-retention
-    - saas-09-operations-plan
-    - saas-13-financial-projections
-    - saas-14-risk-analysis
-    - saas-12-legal-compliance
-    - saas-15-funding
-    - saas-16-exit-strategy
+  high-priority: []
+  medium-priority: []
   low-priority:
-  - id: MVP-MARKETING-005
-    title: Add REST clients similar to MVP-MARKETING-004 for Python and TypeScript
-    estimate: 5-7 days AI-assisted
-    note: >-
-      Reference implementation: src/McpServer.Client/ (C# NuGet, PackageId: SharpNinja.McpServer.Client). Python uses httpx+pydantic, TypeScript uses fetch+zod. Both must cover all 82 endpoints across 15 controllers with identical API surface. Dual auth (API Key + Bearer JWT), SSE streaming, typed exception hierarchy, facade+sub-client composition.
-
-
-      ## Audit Snapshot (2026-03-03)
-
-
-      ### Title / Priority / Section / Done
-
-      - Title: Add REST clients similar to MVP-MARKETING-004 for Python and TypeScript
-
-      - Priority: low
-
-      - Section: saas
-
-      - Done: false
-
-
-      ### Description Summary
-
-      - Build Python (PyPI) and TypeScript (npm) REST client SDKs mirroring `src/McpServer.Client`.
-
-      - Cover 82 endpoints across 15 controllers with typed DTOs, dual auth, SSE, and shared facade/sub-client composition.
-
-      - Preserve API parity and behavior with the C# reference implementation.
-
-
-      ### Technical Details Summary
-
-      - Python target: `mcpserver-client` using `httpx` + `httpx-sse` + Pydantic v2, async context manager, typed exceptions.
-
-      - TypeScript target: `@sharpninja/mcpserver-client` using `fetch` + Zod, strict TS, ESM+CJS output via tsup.
-
-      - Shared requirements: dynamic port URL construction, workspace header propagation, API key/Bearer mutual exclusivity, and typed error mapping.
-
-      - Testing and packaging requirements are defined for both ecosystems plus CI/publish workflows.
-
-
-      ### Implementation Progress
-
-      - Completion: **0 / 35** implementation tasks complete.
-
-      - Repository check: `lib/python/mcpserver-client/**` and `lib/typescript/mcpserver-client/**` do not exist yet.
-
-
-      ### Blockers / Next Steps
-
-      - Blockers: no hard blockers recorded in TODO metadata.
-
-      - Immediate next steps:
-        1. Start Phase 0 scaffolding for Python client project structure and packaging.
-        2. Implement Python base/options/exceptions foundation (Phase 1.x).
-        3. Scaffold TypeScript project and base client framework (Phase 5.x).
-        4. Execute incremental client/test implementation by domain.
-
-      ### Dependencies
-
-      - `dependsOn`: none declared in TODO.
-
-      - External implementation dependency: `src/McpServer.Client/` exists and is designated as the canonical reference.
-
-      - Referenced TODO `MVP-MARKETING-004` is not present in current TODO store.
+  - id: saas-consolidated-roadmap
+    title: SaaS planning and delivery roadmap (consolidated)
+    estimate: 3-6 weeks
     done: false
+    note: 'Consolidated from former SAAS todo items into a single parked backlog item per prioritization request. Archived detail: docs/Project/SaaS-TODO-Archive-2026-03-03.yaml.'
     description:
-    - Create typed REST client libraries for Python (PyPI) and TypeScript (npm) mirroring the McpServer.Client NuGet package — covering all 82 API endpoints across 15 controllers with typed models, error handling, and DI/factory patterns appropriate to each ecosystem.
-    - 'REFERENCE IMPLEMENTATION: src/McpServer.Client/ provides the definitive pattern — facade + sub-client composition, shared auth state, dynamic port, typed exception hierarchy, SSE streaming, dual auth (API Key + Bearer JWT). 11 sub-client classes, 11 model files, MockHttpHandler test pattern.'
-    - 'SCOPE: 82 REST endpoints across 15 controllers: Auth(4), Agents(14), Context(4), Diagnostic(2), Events(1 SSE), GitHub(13), Repo(3), Requirements(20), SessionLog(3), Sync(2), Todo(9), Tools(12), Tunnel(7), Voice(6), Workspace(11).'
-    remaining: 'All phases. Python library (Phases 0-4: scaffold, base client, exceptions, options, 15 domain clients, facade, factory, ~80 tests). TypeScript library (Phases 5-8: scaffold, base client, exceptions, Zod types, 15 domain clients, facade, factory, ~63 tests). CI/CD (Phase 9: 4 workflows). Docs (Phase 10: 2 READMEs). Integration tests (Phase 11). Requirements (Phase 12).'
-    technical-details:
-    - 'PYTHON LIBRARY ARCHITECTURE: Package name mcpserver-client on PyPI. Use httpx for async HTTP (SSE support via httpx-sse). Pydantic v2 models for all DTOs with Field(alias=camelCase) for JSON compat. Facade class McpServerClient with 15 sub-client properties (.todo, .context, .session_log, .github, .repo, .sync, .tunnel, .workspace, .tools, .auth_config, .diagnostic, .agents, .requirements, .voice, .events). Python 3.10+ for match statements and union types. async context manager (__aenter__/__aexit__) for httpx client lifecycle.'
-    - 'TYPESCRIPT LIBRARY ARCHITECTURE: Package name @sharpninja/mcpserver-client on npm. Use native fetch API. Zod schemas for runtime validation with inferred TypeScript types. Class-based facade McpServerClient with 15 sub-client properties. TypeScript 5.0+ with strict mode. ESM + CJS dual output via tsup. AsyncGenerator<T> for SSE streaming.'
-    - 'AUTH MODEL: Both libraries must support dual auth — API Key (X-Api-Key header) and Bearer JWT (Authorization: Bearer header). Set-once credential pattern with logout() to reset. ApiKey and BearerToken are mutually exclusive. InitializeAsync fetches default API key from GET /api-key.'
-    - 'SHARED STATE PATTERN: WorkspacePath set on facade propagates to all sub-clients via shared reference object. Port is read at call-time for dynamic URL construction ({scheme}://{host}:{port}/{path}). Auth credentials set once on facade, propagated to all sub-clients.'
-    - 'SSE STREAMING: Python — async generators yielding str from httpx-sse (data: line parsing, event: done termination). TypeScript — AsyncGenerator<string> using fetch with ReadableStream. Required for: GET /mcpserver/events (ChangeEvent), GET /mcpserver/todo/{id}/prompt/status|implement|plan (prompt text).'
-    - 'ERROR HANDLING: Map HTTP status codes to typed exceptions — 400->ValidationError, 401->UnauthorizedError, 404->NotFoundError, 409->ConflictError, 5xx->ServerError. Extract error message from JSON response body (error or errorMessage field). Python: raise exceptions. TypeScript: throw errors.'
-    - 'TESTING: Python — pytest + pytest-asyncio + respx (httpx mock transport). TypeScript — vitest + msw (Mock Service Worker). Mirror the C# MockHttpHandler pattern — intercept at HTTP transport layer, no network needed. Min 2 tests per client (GET + POST), ~60 tests per language.'
-    - 'PACKAGING: Python — pyproject.toml with hatchling build backend, src layout, py.typed marker for PEP 561. TypeScript — package.json with tsup for bundling, dual ESM/CJS output, .d.ts type declarations. Both: README, LICENSE (MIT), CHANGELOG.'
+    - Keep SaaS work tracked as one deferred stream until it is actively scheduled.
+    - Cover business plan, hosted product architecture, go-to-market, client SDK distribution, and operations/compliance in one unified plan.
+    - Split into implementation-sized TODOs only when the SaaS stream is re-prioritized.
     implementation-tasks:
-    - task: 'Phase 0 — Scaffold Python project: Create lib/python/mcpserver-client/ with pyproject.toml (name=mcpserver-client, version=0.1.0, python>=3.10, deps: httpx>=0.27, httpx-sse>=0.4, pydantic>=2.0, dev-deps: pytest>=8.0, pytest-asyncio>=0.24, respx>=0.22, ruff>=0.8, mypy>=1.13). Create src/mcpserver_client/__init__.py with __version__ and __all__ exports. Create src/mcpserver_client/py.typed marker for PEP 561. Create tests/__init__.py and tests/conftest.py with shared fixtures (mock_transport, default_options). Add lib/python/ patterns to root .gitignore.'
+    - task: Build a single unified SaaS scope document and milestone map.
       done: false
-    - task: 'Phase 1.1 — Python base client: Create src/mcpserver_client/_base.py with McpClientBase class. Fields: _client (httpx.AsyncClient), _options (McpServerClientOptions), _workspace_path_holder (dict ref for shared mutable state). Properties: api_key (set-once, clears bearer), bearer_token (set-once, clears api_key), workspace_path (backed by shared holder), port (read at call-time). Protected methods: _get_async(path, ct) -> T, _post_async(path, body, ct) -> T, _put_async(path, body, ct) -> T, _delete_async(path, ct) -> T, _stream_sse(path, ct) -> AsyncGenerator[str, None]. Private: _send_async(method, path, body) builds URL as {scheme}://{host}:{port}/{path}, attaches auth header (X-Api-Key or Authorization: Bearer), attaches X-Workspace-Path, serializes body with model_dump(by_alias=True), deserializes response, calls _throw_for_status on failure. SSE parser: reads lines, yields data: content, stops on event: done.'
+    - task: Revalidate market, pricing, cost, and compliance assumptions before execution.
       done: false
-    - task: 'Phase 1.2 — Python exceptions: Create src/mcpserver_client/exceptions.py. Base class McpClientError(Exception) with status_code (int), message (str), response_body (str|None). Subclasses: ValidationError (400), UnauthorizedError (401), NotFoundError (404), ConflictError (409), ServerError (5xx). Helper function _throw_for_status(response: httpx.Response) that reads response body, tries to extract error or errorMessage from JSON, maps status to exception type, raises with extracted message.'
-      done: false
-    - task: 'Phase 1.3 — Python options: Create src/mcpserver_client/options.py with McpServerClientOptions dataclass (frozen=False): base_url (str, default "http://localhost"), api_key (str|None = None), bearer_token (str|None = None), workspace_path (str|None = None), port (int = 7147), timeout (float = 30.0). Add @classmethod from_marker_file(cls, path: str) -> Self that reads AGENTS-README-FIRST.yaml using PyYAML (pyyaml dep), extracts baseUrl, apiKey, workspacePath, port.'
-      done: false
-    - task: 'Phase 2.1 — Python Todo models + client: Create src/mcpserver_client/models/todo.py with Pydantic v2 models (model_config = ConfigDict(populate_by_name=True)): ImplementationTask (task: str, done: bool), TodoFlatItem (id, title, section, priority, done, estimate, note, description, technical_details, implementation_tasks, completed_date, done_summary, remaining, priority_note, reference, depends_on, functional_requirements, technical_requirements — all with Field(alias=camelCase)), TodoCreateRequest, TodoUpdateRequest, TodoMutationResult (success, item, error, error_details), TodoQueryResult (items, total_count, limit, offset), RequirementsAnalysisResult. Create src/mcpserver_client/todo.py with TodoClient(McpClientBase): query_async(**kwargs) -> TodoQueryResult, get_async(id) -> TodoFlatItem, create_async(req) -> TodoMutationResult, update_async(id, req) -> TodoMutationResult, delete_async(id) -> TodoMutationResult, analyze_requirements_async(id) -> RequirementsAnalysisResult, stream_status_async(id) -> AsyncGenerator[str], stream_implement_async(id) -> AsyncGenerator[str], stream_plan_async(id) -> AsyncGenerator[str].'
-      done: false
-    - task: 'Phase 2.2 — Python SessionLog models + client: Create src/mcpserver_client/models/session_log.py with ActionDto (order, description, type, status, file_path), ProcessingDialogItemDto (timestamp, role, content, category), RequestEntryDto (request_id, timestamp, query_text, query_title, response, interpretation, status, model, token_count, tags, context_list, design_decisions, requirements_discovered, files_modified, blockers, actions, processing_dialog), UnifiedSessionLogDto (source_type, session_id, title, model, started, last_updated, status, entries), SessionLogQueryResult (items, total_count, limit, offset). Create src/mcpserver_client/session_log.py with SessionLogClient: submit_async(dto) -> dict, query_async(agent, model, text, from_date, to_date, limit, offset) -> SessionLogQueryResult, append_dialog_async(agent, session_id, request_id, items) -> dict.'
-      done: false
-    - task: 'Phase 2.3 — Python Context models + client: Create src/mcpserver_client/models/context.py with ContextChunk (content, source_key, source_type, score, metadata), ContextSearchResult (query, chunks, source_keys), ContextPackRequest (query, query_id, limit), ContextPack (query, chunks), ContextSource (source_key, source_type, ingested_at). Create src/mcpserver_client/context.py with ContextClient: search_async(query, source_type, limit) -> ContextSearchResult, rebuild_index_async() -> dict, pack_async(query, query_id, limit) -> ContextPack, list_sources_async() -> list[ContextSource].'
-      done: false
-    - task: 'Phase 2.4 — Python GitHub models + client: Create src/mcpserver_client/models/github.py with GitHubIssue, GitHubIssueDetail, GitHubIssueRequest, GitHubIssueUpdateRequest, GitHubCommentRequest, GitHubPull, GitHubLabel, IssueSyncResult. Create src/mcpserver_client/github.py with GitHubClient: list_issues_async(state, limit), get_issue_async(number), create_issue_async(req), update_issue_async(number, req), close_issue_async(number, reason), reopen_issue_async(number), comment_on_issue_async(id, req), list_labels_async(), list_pulls_async(state, limit), comment_on_pull_async(id, req), sync_from_github_async(state, limit), sync_to_github_async(), sync_issue_async(number, direction).'
-      done: false
-    - task: 'Phase 2.5 — Python Repo models + client: Models: RepoFileResult (path, content, exists), RepoWriteRequest (path, content), RepoEntry (name, type, path), RepoListResult (path, entries). Client: RepoClient with read_file_async(path), write_file_async(path, content), list_async(path).'
-      done: false
-    - task: 'Phase 2.6 — Python remaining domain clients (Sync, Workspace, ToolRegistry, Tunnel, Agent, Requirements, Voice, EventStream, AuthConfig, Diagnostic): Create models + client files for each. Sync: 2 methods. Workspace: 11 methods. ToolRegistry: 12 methods. Tunnel: 7 methods. Agent: 14 methods. Requirements: 20 methods + generate returning bytes. Voice: 6 methods. EventStream: 1 SSE method. AuthConfig: 1 method. Diagnostic: 2 methods. Total: ~76 methods across 10 client files.'
-      done: false
-    - task: 'Phase 3.1 — Python facade: Create src/mcpserver_client/client.py with McpServerClient class. Constructor takes McpServerClientOptions, creates httpx.AsyncClient (timeout, base_url), creates shared _workspace_path_holder dict, instantiates all 15 sub-clients passing (client, options, holder). Properties: todo, context, session_log, github, repo, sync, workspace, tools, tunnel, agents, requirements, voice, events, auth_config, diagnostic. Credential propagation: setting api_key/bearer_token/workspace_path on facade iterates _all_clients list and sets on each. initialize_async(): fetches default API key from GET /api-key. logout(): clears credentials on all sub-clients. Async context manager: __aenter__ returns self, __aexit__ calls await _client.aclose().'
-      done: false
-    - task: 'Phase 3.2 — Python factory + exports: Create src/mcpserver_client/factory.py with McpServerClientFactory: create(options) -> McpServerClient, from_marker_file(path) -> McpServerClient (reads YAML, constructs options, returns client). Update src/mcpserver_client/__init__.py with __all__ listing all public classes: McpServerClient, McpServerClientOptions, McpServerClientFactory, all exception classes, all model classes, all sub-client classes.'
-      done: false
-    - task: 'Phase 4.1 — Python tests — infrastructure: Create tests/conftest.py with shared fixtures: mock_transport (respx mock), default_options (McpServerClientOptions with test values), make_client (factory fixture returning configured TodoClient/etc). Create tests/test_base.py testing McpClientBase: (1) API key header injection, (2) Bearer token header injection, (3) mutual exclusion of API key and bearer, (4) X-Workspace-Path header, (5) dynamic port URL construction, (6) JSON request body serialization. Create tests/test_exceptions.py: (1) 400 -> ValidationError, (2) 401 -> UnauthorizedError, (3) 404 -> NotFoundError, (4) 409 -> ConflictError, (5) 500 -> ServerError, (6) error message extraction from JSON body.'
-      done: false
-    - task: 'Phase 4.2 — Python tests — TodoClient: Create tests/test_todo.py: (1) query_async builds correct URL with all query params, (2) get_async URL-encodes special characters in ID, (3) create_async sends correct JSON body with camelCase keys, (4) update_async sends PUT with correct path, (5) delete_async sends DELETE, (6) stream_status_async yields SSE data lines and stops on event:done, (7) stream_implement_async SSE works, (8) error response raises correct exception type. ~10 test cases.'
-      done: false
-    - task: 'Phase 4.3 — Python tests — all other clients: One test file per client (test_session_log.py, test_context.py, test_github.py, test_repo.py, test_sync.py, test_workspace.py, test_tools.py, test_tunnel.py, test_agents.py, test_requirements.py, test_voice.py, test_events.py, test_auth_config.py, test_diagnostic.py). Each tests at minimum: (a) one GET method verifying URL and response deserialization, (b) one POST/PUT method verifying request body and response, (c) error handling for 404. Total: ~45 test cases.'
-      done: false
-    - task: 'Phase 4.4 — Python tests — facade: Create tests/test_client.py: (1) credential propagation to all 15 sub-clients, (2) initialize_async fetches API key and sets on all clients, (3) logout clears credentials, (4) workspace_path propagation via shared holder, (5) async context manager closes httpx client, (6) from_marker_file reads YAML correctly. ~8 test cases.'
-      done: false
-    - task: 'Phase 5.0 — Scaffold TypeScript project: Create lib/typescript/mcpserver-client/ with: package.json (name=@sharpninja/mcpserver-client, version=0.1.0, type=module, exports for ESM+CJS, devDeps: typescript>=5.0, tsup, vitest, msw, zod, js-yaml, @types/js-yaml). tsconfig.json (strict, ESNext target, NodeNext module, declaration, declarationMap, sourceMap, outDir=dist). tsup.config.ts (entry: src/index.ts, format: [esm, cjs], dts: true, sourcemap: true, clean: true). vitest.config.ts. .npmignore (src/, tests/, tsconfig.json, vitest.config.ts). src/ and tests/ directories.'
-      done: false
-    - task: 'Phase 5.1 — TypeScript base client: Create src/base.ts with McpClientBase class. Constructor(options: McpServerClientOptions, workspacePathHolder: {value: string|null}). Protected methods: get<T>(path), post<T>(path, body), put<T>(path, body), del<T>(path), streamSse(path) -> AsyncGenerator<string>. Private _send<T>(method, path, body?): builds URL as {scheme}://{host}:{port}/{path}, attaches headers (X-Api-Key or Authorization: Bearer, X-Workspace-Path, Content-Type: application/json), calls fetch(), calls throwForStatus on non-2xx, returns parsed JSON. SSE parser: reads response.body ReadableStream line by line, yields data: content, stops on event: done. Properties: apiKey, bearerToken (set-once mutual exclusion), workspacePath (backed by shared holder), port.'
-      done: false
-    - task: 'Phase 5.2 — TypeScript exceptions: Create src/errors.ts. Base class McpClientError extends Error with statusCode (number), responseBody (string|undefined). Subclasses: ValidationError (400), UnauthorizedError (401), NotFoundError (404), ConflictError (409), ServerError (5xx). Function throwForStatus(response: Response): reads body text, tries JSON.parse for error/errorMessage, maps status to error class, throws.'
-      done: false
-    - task: 'Phase 5.3 — TypeScript types with Zod: Create src/types/ directory. For each domain, create a .ts file with Zod schemas AND inferred types: todo.ts (TodoFlatItemSchema, TodoCreateRequestSchema, TodoMutationResultSchema, TodoQueryResultSchema, etc.), session-log.ts, context.ts, github.ts, repo.ts, sync.ts, workspace.ts, tools.ts, tunnel.ts, agents.ts, requirements.ts, voice.ts, events.ts, auth-config.ts, diagnostic.ts. Use z.object() with camelCase keys matching the JSON API. Export both schemas and inferred types (type TodoFlatItem = z.infer<typeof TodoFlatItemSchema>). Create src/options.ts with McpServerClientOptions interface: baseUrl, apiKey?, bearerToken?, workspacePath?, port?, timeout?.'
-      done: false
-    - task: 'Phase 6.1 — TypeScript TodoClient: Create src/clients/todo.ts with TodoClient extends McpClientBase. Methods: query(params?: TodoQueryParams): Promise<TodoQueryResult>, get(id: string): Promise<TodoFlatItem>, create(request: TodoCreateRequest): Promise<TodoMutationResult>, update(id: string, request: TodoUpdateRequest): Promise<TodoMutationResult>, delete(id: string): Promise<TodoMutationResult>, analyzeRequirements(id: string): Promise<RequirementsAnalysisResult>, streamStatus(id: string): AsyncGenerator<string>, streamImplement(id: string): AsyncGenerator<string>, streamPlan(id: string): AsyncGenerator<string>. URL-encode path params with encodeURIComponent. Build query strings from params object.'
-      done: false
-    - task: 'Phase 6.2-6.13 — TypeScript remaining sub-clients: Create one file per domain in src/clients/: session-log.ts (3 methods), context.ts (4 methods), github.ts (13 methods), repo.ts (3 methods), sync.ts (2 methods), workspace.ts (11 methods), tools.ts (12 methods), tunnel.ts (7 methods), agents.ts (14 methods), requirements.ts (20 methods + generate returning ArrayBuffer), voice.ts (6 methods), events.ts (1 SSE method -> AsyncGenerator<ChangeEvent>), auth-config.ts (1 method), diagnostic.ts (2 methods). Each extends McpClientBase. Total: ~99 methods.'
-      done: false
-    - task: 'Phase 7.1 — TypeScript facade: Create src/client.ts with McpServerClient class. Constructor takes McpServerClientOptions. Creates shared workspacePathHolder object. Instantiates all 15 sub-clients. Readonly properties: todo, context, sessionLog, github, repo, sync, workspace, tools, tunnel, agents, requirements, voice, events, authConfig, diagnostic. Credential setters propagate to _allClients array. initializeAsync(): fetches GET /api-key, sets on all. logout(): clears credentials. dispose(): AbortController cleanup.'
-      done: false
-    - task: 'Phase 7.2 — TypeScript factory + exports: Create src/factory.ts with createClient(options: McpServerClientOptions): McpServerClient and fromMarkerFile(path: string): Promise<McpServerClient> (reads YAML with js-yaml, extracts connection details). Create src/index.ts barrel export: re-export McpServerClient, McpServerClientOptions, createClient, fromMarkerFile, all error classes, all type interfaces, all sub-client classes. Ensure tree-shaking friendly with named exports only.'
-      done: false
-    - task: 'Phase 8.1 — TypeScript tests — infrastructure: Create tests/helpers.ts with mockFetch helper (returns vi.fn() with configurable responses). Create tests/base.test.ts: (1) API key header, (2) Bearer token header, (3) mutual exclusion, (4) X-Workspace-Path header, (5) dynamic port URL, (6) JSON body serialization. Create tests/errors.test.ts: (1-5) status code mapping, (6) error message extraction. ~12 test cases.'
-      done: false
-    - task: 'Phase 8.2 — TypeScript tests — all clients: One test file per domain in tests/: todo.test.ts, session-log.test.ts, context.test.ts, github.test.ts, repo.test.ts, sync.test.ts, workspace.test.ts, tools.test.ts, tunnel.test.ts, agents.test.ts, requirements.test.ts, voice.test.ts, events.test.ts, auth-config.test.ts, diagnostic.test.ts. Each tests min 2 methods (GET + POST) with mock fetch. ~45 test cases.'
-      done: false
-    - task: 'Phase 8.3 — TypeScript tests — facade: Create tests/client.test.ts: (1) credential propagation, (2) initializeAsync, (3) logout, (4) workspace path propagation, (5) fromMarkerFile factory. ~6 test cases.'
-      done: false
-    - task: 'Phase 9.1 — Python CI: Create .github/workflows/python-client.yml. Trigger: push/PR to lib/python/**. Matrix: Python 3.10, 3.11, 3.12, 3.13. Jobs: lint (ruff check + ruff format --check), type-check (mypy --strict src/), test (pytest --cov --cov-report=xml), build (hatch build). Upload coverage artifact.'
-      done: false
-    - task: 'Phase 9.2 — TypeScript CI: Create .github/workflows/typescript-client.yml. Trigger: push/PR to lib/typescript/**. Matrix: Node 18, 20, 22. Jobs: lint (eslint .), type-check (tsc --noEmit), test (vitest run --coverage), build (tsup). Upload coverage artifact.'
-      done: false
-    - task: 'Phase 9.3 — Python publish: Create .github/workflows/python-client-publish.yml. Trigger: tag python-client/v*. Steps: checkout, setup-python, hatch build, pytest (gate), pypi-publish action with OIDC trusted publisher.'
-      done: false
-    - task: 'Phase 9.4 — TypeScript publish: Create .github/workflows/typescript-client-publish.yml. Trigger: tag ts-client/v*. Steps: checkout, setup-node, npm ci, vitest run (gate), tsup, npm publish with NPM_TOKEN.'
-      done: false
-    - task: 'Phase 10.1 — Python README: Create lib/python/mcpserver-client/README.md. Sections: Overview (what it does, API coverage), Installation (pip install mcpserver-client), Quick Start (async with McpServerClient.from_marker_file()), Authentication (API key vs Bearer JWT), Sub-client Usage (todo CRUD, context search, session log submit — code examples), SSE Streaming (async for event in client.events.subscribe_async()), Error Handling (try/except McpClientError), Full API Reference (table of all 82 endpoints mapped to client methods).'
-      done: false
-    - task: 'Phase 10.2 — TypeScript README: Create lib/typescript/mcpserver-client/README.md. Sections: Overview, Installation (npm install @sharpninja/mcpserver-client), Quick Start (const client = await fromMarkerFile()), Authentication, Sub-client Usage, SSE Streaming (for await...of), Error Handling (try/catch McpClientError), API Reference table.'
-      done: false
-    - task: 'Phase 11.1 — Integration smoke tests: Python tests/test_integration.py (pytest.mark.integration, skips if server unavailable): health check, list todos, create->get->delete todo lifecycle, SSE subscribe test. TypeScript tests/integration.test.ts (describe.skipIf): same test cases. Both require MCP server running on localhost:7147.'
-      done: false
-    - task: 'Phase 12.1 — Requirements docs: Create FR-MCP-047 (Python REST Client Library) and FR-MCP-048 (TypeScript REST Client Library) in docs/Project/Functional-Requirements.md. Create TR-MCP-PYCLI-001 (httpx+pydantic architecture), TR-MCP-PYCLI-002 (test coverage with respx), TR-MCP-PYCLI-003 (PyPI publishing). Create TR-MCP-TSCLI-001 (fetch+zod architecture), TR-MCP-TSCLI-002 (test coverage with vitest), TR-MCP-TSCLI-003 (npm publishing). Update docs/Project/TR-per-FR-Mapping.md and docs/Project/Requirements-Matrix.md.'
+    - task: Expand this item back into execution TODOs when work is resumed.
       done: false
 mvp-app:
   high-priority:
@@ -1468,8 +514,8 @@ mvp-mcp:
   - id: MVP-MCP-003
     title: '[READY] Complete Director MVVM/CQRS endpoint coverage with per-area ViewModels, handlers, commands, and RBAC tab visibility'
     estimate: '"5-8 days AI-assisted"'
-    note: 'Progress update: completed and committed client + UI.Core + Director endpoint coverage for Agent/ToolRegistry/GitHub/Requirements/Voice/EventStream, plus Context/Repo integration, tab registry extraction, CQRS CLI parity, VoiceViewModel orchestration, and test hardening bootstrap (new McpServer.UI.Core.Tests project, automated handler contract coverage, broad AreaList/AreaDetail ViewModel behavior coverage, Director exec integration coverage for ToolRegistry/GitHub/Requirements/EventStream/Context/Repo, Director runner cross-platform path fix, and Director authorization policy tests) (11f9153, 0a05702, c5f41c9, 61ff265, 38f433a and follow-up local changes in this branch).'
-    done: false
+    note: 'Progress update: completed and committed client + UI.Core + Director endpoint coverage for Agent/ToolRegistry/GitHub/Requirements/Voice/EventStream, plus Context/Repo integration, tab registry extraction, CQRS CLI parity, VoiceViewModel orchestration, and test hardening bootstrap (new McpServer.UI.Core.Tests project, automated handler contract coverage, broad AreaList/AreaDetail ViewModel behavior coverage, Director exec integration coverage for ToolRegistry/GitHub/Requirements/EventStream/Context/Repo, Director runner cross-platform path fix, and Director authorization policy tests) (11f9153, 0a05702, c5f41c9, 61ff265, 38f433a, c873bbb and follow-up local changes in this branch). Manual TUI smoke validation was split into MVP-MCP-011 (medium priority).'
+    done: true
     description:
     - Implement complete MCP Director administration coverage through the McpServer.UI.Core MVVM/CQRS layer.
     - Every MCP area should have ViewModel coverage, every endpoint should have a handler, and every handler should be callable from an IAsyncRelayCommand.
@@ -1477,7 +523,7 @@ mvp-mcp:
     - Add RBAC-aware tab and command visibility (viewer, agent-manager, admin), with hidden workspaces/admin features for non-admin users.
     - Director interactive screens should use ViewModels/CQRS only for covered areas (no direct endpoint calls in migrated tabs).
     - 'AUDIT SUMMARY (2026-02-27): 33/112 handlers (29%), 29 ViewModels, 10/14 API client interfaces, 10 Messages files. Phase 0+2.4+2.6 done, 4 phases partial, 4 phases not started.'
-    remaining: 'Remaining scope is test-hardening and closure work: dedicated UI.Core test project and broader automated coverage (13.x), FR/TR documentation updates (14.1), and final build/test/manual verification closure (15.x).'
+    remaining: 'Automated closure work is complete. Manual interactive smoke validation scope was moved to MVP-MCP-011 for separate tracking.'
     technical-details:
     - 'Scope: all /mcpserver/* areas plus /auth/config and /health diagnostics/event views. ACTUAL endpoint count is 112 REST endpoints (not the originally estimated ~78). Excludes minimal-API endpoints (pairing, server-startup-utc, etc.) and MCP protocol tools.'
     - 'Handler granularity: strict 1:1 endpoint-to-handler mapping (query/command + handler + ViewModel async command).'
@@ -1604,8 +650,6 @@ mvp-mcp:
       done: true
     - task: 'Phase 15.2 — Test execution: dotnet test tests/McpServer.UI.Core.Tests -c Debug, dotnet test tests/McpServer.Client.Tests -c Debug, dotnet test tests/McpServer.Director.Tests -c Debug, dotnet test tests/McpServer.Cqrs.Tests -c Debug must all pass. Zero regressions.'
       done: true
-    - task: 'Phase 15.3 — Manual TUI smoke test: Launch director interactive, verify all tabs appear for admin user, verify RBAC hides tabs for viewer, verify each new screen (ToolRegistry, GitHub, Requirements, Events, Context, Repo) loads data and CRUD operations work.'
-      done: false
   - id: MVP-MCP-004
     title: Migrate all templates to YAML files
     estimate: 3-4 days AI-assisted
@@ -1789,7 +833,111 @@ mvp-mcp:
     - TR-MCP-AGENT-001
     - TR-MCP-AGENT-002
     - TR-MCP-CFG-005
-  medium-priority: []
+  - id: MVP-MCP-012
+    title: Refactor Marker File Structure per Claude Context OS v4
+    estimate: 3-4 days
+    note: >-
+      Current AGENTS-README-FIRST.yaml marker template is 568 lines with 23+ sections.
+      Claude Context OS v4 research shows LLMs reliably track only 5-10 rules, explanatory
+      prose interferes with instruction compliance, and emphatic language causes overtriggering
+      in Claude 4.x. Refactor to a lean ~50-80 line marker with 7 plain-imperative rules,
+      moving detailed schemas, examples, and conduct guidelines into docs/context/ for
+      on-demand loading via MCP context search.
+    done: false
+    description:
+    - >-
+      Slim the marker file from 568 lines to ~50-80 lines following Claude Context OS v4
+      principles: 7 rules max, no explanatory prose, plain imperatives, just-in-time context
+      loading, verification checklist at end.
+    - >-
+      Move ~495 lines of content (session log schemas, todo schemas, module bootstrap examples,
+      API capabilities, compliance rules, action types, conduct guidelines) into docs/context/
+      reference documents and expanded AGENTS.md.
+    - >-
+      Agents retrieve detailed schemas and examples on-demand via MCP context_search or by
+      reading docs/context/ files directly, rather than receiving everything in the marker prompt.
+    technical-details:
+    - >-
+      Rewrite DefaultPromptTemplate in MarkerFileService.cs (lines 26-594) from 568-line
+      embedded Handlebars template to lean ~50-80 line template with: connection info, 7 rules,
+      Where Things Live section, context-file-to-task mapping, auth, verification at end.
+    - >-
+      Create docs/context/ directory with 6 Markdown reference docs: session-log-schema.md,
+      todo-schema.md, module-bootstrap.md, api-capabilities.md, compliance-rules.md, action-types.md.
+    - >-
+      Expand AGENTS.md with sections extracted from marker: Owner Values (5 subsections),
+      Requirements Tracking, Design Decision Logging, Session Continuity, Glossary.
+    - >-
+      Update templates/default-marker-prompt.hbs.yaml to match the new lean template.
+      Preserve all existing Handlebars variables (baseUrl, apiKey, workspace.*).
+    - >-
+      Conditional compliance sections (banned licenses, countries, orgs) become one-line
+      pointers in marker referencing docs/context/compliance-rules.md.
+    - >-
+      Ensure docs/context/ files are ingested by MCP context pipeline (FTS5 + vector).
+    functional-requirements:
+    - FR-MCP-023
+    technical-requirements:
+    - TR-MCP-DRY-001
+    reference: https://github.com/Arkya-AI/claude-context-os
+    implementation-tasks:
+    - task: 'P1-01: Create docs/context/session-log-schema.md — extract SessionLog, RequestEntry, Action, DialogItem JSON schemas and McpSession module lifecycle examples.'
+      done: false
+    - task: 'P1-02: Create docs/context/todo-schema.md — extract TodoFlatItem, TodoCreateRequest, TodoUpdateRequest JSON schemas and McpTodo module lifecycle examples.'
+      done: false
+    - task: 'P1-03: Create docs/context/module-bootstrap.md — extract Module Bootstrap section (PowerShell + Bash discovery, import, init).'
+      done: false
+    - task: 'P1-04: Create docs/context/api-capabilities.md — extract Available Protocols, Workspace Resolution, Available Capabilities, endpoint tables.'
+      done: false
+    - task: 'P1-05: Create docs/context/compliance-rules.md — extract License Compliance, Country of Origin, Banned Orgs/Individuals sections.'
+      done: false
+    - task: 'P1-06: Create docs/context/action-types.md — extract Recognized Action Types taxonomy.'
+      done: false
+    - task: 'P2-01: Move Owner Values and Agent Conduct (5 subsections) into AGENTS.md with plain imperative language.'
+      done: false
+    - task: 'P2-02: Move Requirements Tracking, Design Decision Logging, Session Continuity into AGENTS.md.'
+      done: false
+    - task: 'P2-03: Move Glossary into AGENTS.md.'
+      done: false
+    - task: 'P3-01: Rewrite DefaultPromptTemplate in MarkerFileService.cs — lean template with 7 rules, Where Things Live, context mapping, auth, verification at end.'
+      done: false
+    - task: 'P3-02: Update templates/default-marker-prompt.hbs.yaml to match lean template.'
+      done: false
+    - task: 'P3-03: Reduce conditional compliance sections to one-line pointers to docs/context/compliance-rules.md.'
+      done: false
+    - task: 'P4-01: Run sync and verify docs/context/ files are ingested by MCP context pipeline.'
+      done: false
+    - task: 'P4-02: Test context_search returns relevant chunks for session log, todo, module bootstrap queries.'
+      done: false
+    - task: 'P5-01: Update .github/copilot-instructions.md to reference new structure, remove duplicated content.'
+      done: false
+    - task: 'P6-01: Build dotnet build src/McpServer.Support.Mcp -c Debug — verify MarkerFileService compiles.'
+      done: false
+    - task: 'P6-02: Run dotnet test tests/McpServer.Support.Mcp.Tests -c Debug — verify existing tests pass.'
+      done: false
+    - task: 'P6-03: Regenerate marker file and verify ~50-80 lines of prompt content.'
+      done: false
+    - task: 'P6-04: Verify context docs are searchable via MCP context endpoints.'
+      done: false
+  medium-priority:
+  - id: MVP-MCP-011
+    title: Director manual TUI smoke validation follow-up
+    estimate: 0.5-1 day AI-assisted
+    note: 'Moved from MVP-MCP-003 Phase 15.3 so endpoint-coverage delivery can be closed while manual interactive verification is tracked independently.'
+    done: false
+    description:
+    - Launch Director interactive mode and run an end-to-end manual smoke pass for migrated tabs.
+    - Validate role-based tab visibility (admin vs viewer) in live TUI behavior.
+    - Validate representative load/list/get and CRUD operations in ToolRegistry, GitHub, Requirements, Events, Context, and Repo screens.
+    depends-on:
+    - MVP-MCP-003
+    implementation-tasks:
+    - task: 'Phase 1 — Admin smoke pass: Launch interactive UI as admin and verify tab visibility plus basic load behavior for ToolRegistry, GitHub, Requirements, Events, Context, and Repo.'
+      done: false
+    - task: 'Phase 2 — Viewer RBAC smoke pass: Launch interactive UI as viewer and verify unauthorized tabs/actions are hidden while allowed read operations still work.'
+      done: false
+    - task: 'Phase 3 — Record outcomes: Capture pass/fail results, defects, and follow-up TODOs; update TODO notes and session log with findings.'
+      done: false
   low-priority: []
 test:
   low-priority: []
@@ -2512,3 +1660,11 @@ Director:
       done: false
     - task: 'P9-08: Produce final implementation report mapping each completed task back to FR/TR compliance targets.'
       done: false
+mcpserver-ui:
+  high-priority:
+  - id: MCP-UI-CHAT-VM-ITEST-001
+    title: Create complete integration tests for interactive chat using ViewModels in McpServer.UI
+    estimate: 2d
+    done: false
+    description:
+    - Cover end-to-end interactive chat scenarios through McpServer.UI ViewModels, including message lifecycle, command handling, and UI state synchronization.
