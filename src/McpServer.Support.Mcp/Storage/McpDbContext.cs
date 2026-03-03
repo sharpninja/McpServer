@@ -1,3 +1,4 @@
+using McpServer.Common.Copilot;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -249,6 +250,7 @@ public sealed class McpDbContext : DbContext
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
         StampWorkspaceId();
+        SanitizeStrings();
         return base.SaveChanges(acceptAllChangesOnSuccess);
     }
 
@@ -256,6 +258,7 @@ public sealed class McpDbContext : DbContext
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         StampWorkspaceId();
+        SanitizeStrings();
         return base.SaveChangesAsync(cancellationToken);
     }
 
@@ -271,6 +274,27 @@ public sealed class McpDbContext : DbContext
             if (prop is not null && prop.CurrentValue is string val && val.Length == 0)
             {
                 prop.CurrentValue = _workspaceId;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Replaces typographic dashes (em/en) with ASCII hyphen in all string
+    /// properties of added or modified entities before persisting.
+    /// </summary>
+    private void SanitizeStrings()
+    {
+        foreach (var entry in ChangeTracker.Entries()
+                     .Where(e => e.State is EntityState.Added or EntityState.Modified))
+        {
+            foreach (var prop in entry.Properties)
+            {
+                if (prop.Metadata.ClrType != typeof(string)) continue;
+                if (prop.CurrentValue is not string s || s.Length == 0) continue;
+
+                var sanitized = LineSanitizer.Sanitize(s);
+                if (!ReferenceEquals(sanitized, s))
+                    prop.CurrentValue = sanitized;
             }
         }
     }
