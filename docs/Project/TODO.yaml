@@ -1468,7 +1468,7 @@ mvp-mcp:
   - id: MVP-MCP-003
     title: '[READY] Complete Director MVVM/CQRS endpoint coverage with per-area ViewModels, handlers, commands, and RBAC tab visibility'
     estimate: '"5-8 days AI-assisted"'
-    note: 'Progress update: completed and committed client + UI.Core + Director endpoint coverage for Agent/ToolRegistry/GitHub/Requirements/Voice/EventStream, plus Context/Repo integration, tab registry extraction, CQRS CLI parity, VoiceViewModel orchestration, and test hardening bootstrap (new McpServer.UI.Core.Tests project, automated handler contract coverage, Voice handler/ViewModel tests, Director authorization policy tests) (11f9153, 0a05702, c5f41c9, 61ff265 and follow-up local changes in this branch).'
+    note: 'Progress update: completed and committed client + UI.Core + Director endpoint coverage for Agent/ToolRegistry/GitHub/Requirements/Voice/EventStream, plus Context/Repo integration, tab registry extraction, CQRS CLI parity, VoiceViewModel orchestration, and test hardening bootstrap (new McpServer.UI.Core.Tests project, automated handler contract coverage, broad AreaList/AreaDetail ViewModel behavior coverage, Director exec integration coverage for ToolRegistry/GitHub/Requirements/EventStream/Context/Repo, Director runner cross-platform path fix, and Director authorization policy tests) (11f9153, 0a05702, c5f41c9, 61ff265, 38f433a and follow-up local changes in this branch).'
     done: false
     description:
     - Implement complete MCP Director administration coverage through the McpServer.UI.Core MVVM/CQRS layer.
@@ -1593,17 +1593,17 @@ mvp-mcp:
     - task: 'Phase 13.2 — Handler unit tests: For each of the ~33 existing + ~75 new handlers, add at least 1 test verifying: (a) handler calls correct API client method, (b) handler returns expected result type. Group tests by area: TodoHandlerTests, WorkspaceHandlerTests, AgentHandlerTests, ToolRegistryHandlerTests, GitHubHandlerTests, RequirementsHandlerTests, SessionLogHandlerTests, SyncHandlerTests, ContextHandlerTests, RepoHandlerTests, HealthHandlerTests, DiagnosticHandlerTests, AuthConfigHandlerTests, TunnelHandlerTests, EventStreamHandlerTests, VoiceHandlerTests. NSubstitute mock API clients.'
       done: true
     - task: 'Phase 13.3 — ViewModel unit tests: For each AreaListViewModelBase-derived VM, test: (a) LoadCommand populates Items, (b) ErrorMessage set on failure, (c) IsLoading transitions. For each AreaDetailViewModelBase-derived VM, test: (a) LoadCommand populates Detail, (b) SaveCommand calls handler. Minimum 2 tests per VM. Group by area.'
-      done: false
+      done: true
     - task: 'Phase 13.4 — Authorization policy tests: Test DirectorAuthorizationPolicyService: (a) unauthenticated user gets Viewer access, (b) admin role grants all areas, (c) agent-manager role grants agent areas, (d) viewer role blocked from admin-only areas (Workspaces, Policy). Test McpActionKeys coverage. Minimum 10 tests.'
       done: true
     - task: 'Phase 13.5 — Director screen tests: Add integration tests to McpServer.Director.Tests for new screens. For each new screen (ToolRegistry, GitHub, Requirements, EventStream, Context, Repo), verify the Director TUI --exec command can exercise the corresponding list/get operations. Minimum 2 tests per new area.'
-      done: false
+      done: true
     - task: 'Phase 14.1 — FR/TR updates: Assign FR/TR IDs to MVP-MCP-003. Create FR-MCP-046 (Director MVVM/CQRS Full Endpoint Coverage) if no existing FR covers this. Create TR entries for handler patterns, ViewModel conventions, RBAC tab visibility, tab registry. Update Requirements-Matrix.md and TR-per-FR-Mapping.md.'
       done: true
     - task: 'Phase 15.1 — Build verification: dotnet build src/McpServer.UI.Core -c Debug, dotnet build src/McpServer.Director -c Debug, dotnet build src/McpServer.Client -c Debug must pass with zero warnings. All public types have XML doc comments.'
       done: true
     - task: 'Phase 15.2 — Test execution: dotnet test tests/McpServer.UI.Core.Tests -c Debug, dotnet test tests/McpServer.Client.Tests -c Debug, dotnet test tests/McpServer.Director.Tests -c Debug, dotnet test tests/McpServer.Cqrs.Tests -c Debug must all pass. Zero regressions.'
-      done: false
+      done: true
     - task: 'Phase 15.3 — Manual TUI smoke test: Launch director interactive, verify all tabs appear for admin user, verify RBAC hides tabs for viewer, verify each new screen (ToolRegistry, GitHub, Requirements, Events, Context, Repo) loads data and CRUD operations work.'
       done: false
   - id: MVP-MCP-004

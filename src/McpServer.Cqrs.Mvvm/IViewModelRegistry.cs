@@ -99,6 +99,12 @@ public sealed class ViewModelRegistry : IViewModelRegistry
                 return cmd;
         }
 
+        // Fallback for convention-based ViewModels that expose async methods
+        // (for example LoadAsync/CheckAsync) but no command property.
+        var fallbackMethod = FindFallbackMethod(vmType);
+        if (fallbackMethod is not null)
+            return new AsyncRelayCommand(ct => InvokeFallbackAsync(viewModel, fallbackMethod, ct));
+
         throw new InvalidOperationException($"ViewModel '{vmType.Name}' does not expose an IAsyncRelayCommand property.");
     }
 
@@ -129,5 +135,162 @@ public sealed class ViewModelRegistry : IViewModelRegistry
             ?? vmType.GetProperty("LastResult", BindingFlags.Public | BindingFlags.Instance);
 
         return resultProp?.GetValue(viewModel);
+    }
+
+    private static MethodInfo? FindFallbackMethod(Type viewModelType)
+    {
+        var candidateNames = new[]
+        {
+            "LoadAsync",
+            "CheckAsync",
+            "RefreshAsync",
+            "StartAsync",
+        };
+
+        foreach (var name in candidateNames)
+        {
+            var method = viewModelType
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .FirstOrDefault(m =>
+                    string.Equals(m.Name, name, StringComparison.Ordinal) &&
+                    typeof(Task).IsAssignableFrom(m.ReturnType));
+            if (method is not null)
+                return method;
+        }
+
+        return null;
+    }
+
+    private static async Task InvokeFallbackAsync(object viewModel, MethodInfo method, CancellationToken ct)
+    {
+        // Event stream subscriptions can be long-running; bound them for exec usage.
+        using var timeoutCts = string.Equals(method.Name, "StartAsync", StringComparison.Ordinal)
+            ? CancellationTokenSource.CreateLinkedTokenSource(ct)
+            : null;
+
+        if (timeoutCts is not null)
+            timeoutCts.CancelAfter(TimeSpan.FromSeconds(2));
+
+        var effectiveCt = timeoutCts?.Token ?? ct;
+        var args = BuildInvocationArguments(viewModel, method, effectiveCt);
+        var invocationResult = method.Invoke(viewModel, args);
+
+        if (invocationResult is not Task task)
+        {
+            throw new InvalidOperationException(
+                $"Fallback method '{viewModel.GetType().Name}.{method.Name}' must return Task.");
+        }
+
+        await task.ConfigureAwait(false);
+    }
+
+    private static object?[] BuildInvocationArguments(object viewModel, MethodInfo method, CancellationToken ct)
+    {
+        var vmType = viewModel.GetType();
+        var properties = vmType
+            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            .Where(static p => p.CanRead && p.GetIndexParameters().Length == 0)
+            .ToDictionary(p => p.Name, p => p, StringComparer.OrdinalIgnoreCase);
+
+        return method.GetParameters()
+            .Select(p =>
+            {
+                if (p.ParameterType == typeof(CancellationToken))
+                    return (object?)ct;
+
+                if (properties.TryGetValue(p.Name ?? string.Empty, out var prop)
+                    && p.ParameterType.IsAssignableFrom(prop.PropertyType))
+                {
+                    var value = prop.GetValue(viewModel);
+                    if (value is not null)
+                        return value;
+                }
+
+                if (p.HasDefaultValue)
+                    return p.DefaultValue;
+
+                return CreateFallbackValue(p.ParameterType, depth: 0);
+            })
+            .ToArray();
+    }
+
+    private static object? CreateFallbackValue(Type type, int depth)
+    {
+        if (depth > 3)
+            return type.IsValueType ? Activator.CreateInstance(type) : null;
+
+        if (type == typeof(string))
+            return "sample";
+        if (type == typeof(bool))
+            return true;
+        if (type == typeof(int))
+            return 1;
+        if (type == typeof(long))
+            return 1L;
+        if (type == typeof(double))
+            return 1d;
+        if (type == typeof(decimal))
+            return 1m;
+        if (type == typeof(Guid))
+            return Guid.Empty;
+        if (type == typeof(DateTime))
+            return DateTime.UtcNow;
+        if (type == typeof(DateTimeOffset))
+            return DateTimeOffset.UtcNow;
+
+        var nullableUnderlying = Nullable.GetUnderlyingType(type);
+        if (nullableUnderlying is not null)
+            return CreateFallbackValue(nullableUnderlying, depth + 1);
+
+        if (type.IsEnum)
+        {
+            var values = Enum.GetValues(type);
+            return values.Length > 0 ? values.GetValue(0) : Activator.CreateInstance(type);
+        }
+
+        if (type.IsArray)
+        {
+            var elementType = type.GetElementType()!;
+            var array = Array.CreateInstance(elementType, 1);
+            array.SetValue(CreateFallbackValue(elementType, depth + 1), 0);
+            return array;
+        }
+
+        if (type.IsGenericType)
+        {
+            var genericDefinition = type.GetGenericTypeDefinition();
+            var genericArguments = type.GetGenericArguments();
+
+            if (genericDefinition == typeof(List<>) ||
+                genericDefinition == typeof(IReadOnlyList<>) ||
+                genericDefinition == typeof(IEnumerable<>))
+            {
+                var listType = typeof(List<>).MakeGenericType(genericArguments[0]);
+                var list = (System.Collections.IList)Activator.CreateInstance(listType)!;
+                list.Add(CreateFallbackValue(genericArguments[0], depth + 1));
+                return list;
+            }
+        }
+
+        if (type.IsValueType)
+            return Activator.CreateInstance(type);
+
+        var parameterless = type.GetConstructor(Type.EmptyTypes);
+        if (parameterless is not null)
+            return parameterless.Invoke([]);
+
+        var constructors = type.GetConstructors(BindingFlags.Instance | BindingFlags.Public)
+            .OrderByDescending(c => c.GetParameters().Length)
+            .ToArray();
+        if (constructors.Length > 0)
+        {
+            var constructor = constructors[0];
+            var args = constructor.GetParameters()
+                .Select(p => CreateFallbackValue(p.ParameterType, depth + 1))
+                .ToArray();
+            return constructor.Invoke(args);
+        }
+
+        return null;
     }
 }
