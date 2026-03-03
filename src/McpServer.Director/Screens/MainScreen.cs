@@ -31,6 +31,10 @@ internal sealed class MainScreen : Window
     private readonly TunnelListViewModel _tunnelListVm;
     private readonly TemplateListViewModel _templateListVm;
     private readonly TemplateDetailViewModel _templateDetailVm;
+    private readonly ToolListViewModel _toolListVm;
+    private readonly ToolDetailViewModel _toolDetailVm;
+    private readonly BucketListViewModel _bucketListVm;
+    private readonly BucketDetailViewModel _bucketDetailVm;
     private readonly AgentDefinitionListViewModel _agentDefinitionListVm;
     private readonly AgentDefinitionDetailViewModel _agentDefinitionDetailVm;
     private readonly WorkspaceAgentListViewModel _workspaceAgentListVm;
@@ -62,6 +66,10 @@ internal sealed class MainScreen : Window
         TunnelListViewModel tunnelListVm,
         TemplateListViewModel templateListVm,
         TemplateDetailViewModel templateDetailVm,
+        ToolListViewModel toolListVm,
+        ToolDetailViewModel toolDetailVm,
+        BucketListViewModel bucketListVm,
+        BucketDetailViewModel bucketDetailVm,
         AgentDefinitionListViewModel agentDefinitionListVm,
         AgentDefinitionDetailViewModel agentDefinitionDetailVm,
         WorkspaceAgentListViewModel workspaceAgentListVm,
@@ -89,6 +97,10 @@ internal sealed class MainScreen : Window
         _tunnelListVm = tunnelListVm;
         _templateListVm = templateListVm;
         _templateDetailVm = templateDetailVm;
+        _toolListVm = toolListVm;
+        _toolDetailVm = toolDetailVm;
+        _bucketListVm = bucketListVm;
+        _bucketDetailVm = bucketDetailVm;
         _agentDefinitionListVm = agentDefinitionListVm;
         _agentDefinitionDetailVm = agentDefinitionDetailVm;
         _workspaceAgentListVm = workspaceAgentListVm;
@@ -412,6 +424,12 @@ internal sealed class MainScreen : Window
             return;
         }
 
+        if (view is ToolRegistryScreen tools)
+        {
+            _ = Task.Run(tools.LoadAllAsync);
+            return;
+        }
+
         if (view is EventStreamScreen events)
         {
             _ = Task.Run(events.LoadAsync);
@@ -518,6 +536,21 @@ internal sealed class MainScreen : Window
             {
                 DisplayText = "Repo",
                 View = new RepoScreen(_dispatcher)
+            }, andSelect: selectFirst);
+            selectFirst = false;
+        }
+
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) &&
+            _authorizationPolicy.CanViewArea(McpArea.ToolRegistry))
+        {
+            _tabView.AddTab(new Tab
+            {
+                DisplayText = "Tools",
+                View = new ToolRegistryScreen(
+                    _toolListVm,
+                    _toolDetailVm,
+                    _bucketListVm,
+                    _bucketDetailVm)
             }, andSelect: selectFirst);
             selectFirst = false;
         }

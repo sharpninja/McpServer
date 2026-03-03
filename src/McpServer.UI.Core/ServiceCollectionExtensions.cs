@@ -55,6 +55,10 @@ public static class ServiceCollectionExtensions
         services.AddTransient<AuthConfigViewModel>();
         services.AddTransient<DiagnosticExecutionPathViewModel>();
         services.AddTransient<DiagnosticAppSettingsPathViewModel>();
+        services.AddTransient<ToolListViewModel>();
+        services.AddTransient<ToolDetailViewModel>();
+        services.AddTransient<BucketListViewModel>();
+        services.AddTransient<BucketDetailViewModel>();
         services.AddTransient<TodoListViewModel>();
         services.AddTransient<TodoDetailViewModel>();
         services.AddTransient<CreateTodoViewModel>();

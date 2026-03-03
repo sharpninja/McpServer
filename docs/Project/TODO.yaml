@@ -1550,9 +1550,9 @@ mvp-mcp:
     - task: 'Phase 6.1 — ToolRegistry handlers (12): Create all 12 handlers in UI.Core/Handlers/: ListToolsQueryHandler, SearchToolsQueryHandler, GetToolQueryHandler, CreateToolCommandHandler, UpdateToolCommandHandler, DeleteToolCommandHandler, ListBucketsQueryHandler, AddBucketCommandHandler, RemoveBucketCommandHandler, BrowseBucketQueryHandler, InstallFromBucketCommandHandler, SyncBucketCommandHandler. Each injects IToolRegistryApiClient.'
       done: true
     - task: 'Phase 6.2 — ToolRegistry ViewModels: Create ToolListViewModel (AreaListViewModelBase), ToolDetailViewModel (AreaDetailViewModelBase), BucketListViewModel (AreaListViewModelBase), BucketDetailViewModel. Register in AddUiCore().'
-      done: false
+      done: true
     - task: 'Phase 6.3 — Create ToolRegistryScreen in Director: New src/McpServer.Director/Screens/ToolRegistryScreen.cs with TableView for tools list, detail pane for tool CRUD, bucket management sub-view. Wire into MainScreen.RebuildTabs() with McpArea.ToolRegistry auth check.'
-      done: false
+      done: true
     - task: 'Phase 7.1 — GitHub handlers (13): Create all 13 handlers in UI.Core/Handlers/: ListIssuesQueryHandler, GetIssueQueryHandler, CreateIssueCommandHandler, UpdateIssueCommandHandler, CloseIssueCommandHandler, ReopenIssueCommandHandler, CommentOnIssueCommandHandler, ListLabelsQueryHandler, ListPullsQueryHandler, CommentOnPullCommandHandler, SyncFromGitHubCommandHandler, SyncToGitHubCommandHandler, SyncSingleIssueCommandHandler. Each injects IGitHubApiClient.'
       done: true
     - task: 'Phase 7.2 — GitHub ViewModels: Create IssueListViewModel (AreaListViewModelBase), IssueDetailViewModel (AreaDetailViewModelBase), PullRequestListViewModel (AreaListViewModelBase), GitHubSyncViewModel. Register in AddUiCore().'
