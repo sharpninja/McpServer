@@ -1468,7 +1468,7 @@ mvp-mcp:
   - id: MVP-MCP-003
     title: '[READY] Complete Director MVVM/CQRS endpoint coverage with per-area ViewModels, handlers, commands, and RBAC tab visibility'
     estimate: '"5-8 days AI-assisted"'
-    note: 'Progress update: completed and committed client + UI.Core + Director endpoint coverage for Agent/ToolRegistry/GitHub/Requirements/Voice/EventStream, plus Context/Repo tab integration (11f9153, 0a05702, c5f41c9 and follow-up local changes in this branch).'
+    note: 'Progress update: completed and committed client + UI.Core + Director endpoint coverage for Agent/ToolRegistry/GitHub/Requirements/Voice/EventStream, plus Context/Repo integration, tab registry extraction, CQRS CLI parity, and VoiceViewModel orchestration (11f9153, 0a05702, c5f41c9, 61ff265 and follow-up local changes in this branch).'
     done: false
     description:
     - Implement complete MCP Director administration coverage through the McpServer.UI.Core MVVM/CQRS layer.
@@ -1477,7 +1477,7 @@ mvp-mcp:
     - Add RBAC-aware tab and command visibility (viewer, agent-manager, admin), with hidden workspaces/admin features for non-admin users.
     - Director interactive screens should use ViewModels/CQRS only for covered areas (no direct endpoint calls in migrated tabs).
     - 'AUDIT SUMMARY (2026-02-27): 33/112 handlers (29%), 29 ViewModels, 10/14 API client interfaces, 10 Messages files. Phase 0+2.4+2.6 done, 4 phases partial, 4 phases not started.'
-    remaining: 'Remaining scope is UI shell and test-hardening work: HealthScreen cleanup (4.3), Agent/ToolRegistry/GitHub/Requirements/EventStream ViewModels+screens (5.2-9.2), tab registry extraction (11.1), CLI CQRS parity audit (12.1), dedicated UI.Core test project and broader automated coverage (13.x), FR/TR documentation updates (14.1), and final build/test/manual verification closure (15.x).'
+    remaining: 'Remaining scope is test-hardening and closure work: dedicated UI.Core test project and broader automated coverage (13.x), FR/TR documentation updates (14.1), and final build/test/manual verification closure (15.x).'
     technical-details:
     - 'Scope: all /mcpserver/* areas plus /auth/config and /health diagnostics/event views. ACTUAL endpoint count is 112 REST endpoints (not the originally estimated ~78). Excludes minimal-API endpoints (pairing, server-startup-utc, etc.) and MCP protocol tools.'
     - 'Handler granularity: strict 1:1 endpoint-to-handler mapping (query/command + handler + ViewModel async command).'
@@ -1485,7 +1485,7 @@ mvp-mcp:
     - Director shell must consume ViewModels only for migrated tabs; use McpServer.Client adapters behind UI.Core service abstractions.
     - 'RBAC source: JWT realm roles parsed by Director auth (realm_roles/roles). Role tiers: viewer, agent-manager, admin. Already implemented via DirectorRoleContext + DirectorAuthorizationPolicyService.'
     - 'RBAC UX behavior: hide unauthorized tabs and commands; still rely on server-side auth as authority. Already enforced in MainScreen.RebuildTabs().'
-    - 'UI.Core existing infrastructure: IRoleContext, IAuthorizationPolicyService, McpArea (16 areas), McpActionKeys (27 keys), McpRoles (3 tiers), AllowAll* defaults, AreaList/DetailViewModelBase.'
+    - 'UI.Core existing infrastructure: IRoleContext, IAuthorizationPolicyService, McpArea (17 areas), McpActionKeys (27 keys), McpRoles (3 tiers), AllowAll* defaults, AreaList/DetailViewModelBase.'
     - 'Area API abstractions: 10 of 14 exist. Missing: IAgentApiClient, IToolRegistryApiClient, IGitHubApiClient, IEventStreamApiClient.'
     - 'McpServer.Client gaps: AgentClient (14 methods), RequirementsClient (20 methods), VoiceClient (6 methods), EventStreamClient (1 SSE method) = 41 missing client methods.'
     - 'CQRS infrastructure: McpServer.Cqrs provides IDispatcher, IQueryHandler<TQuery,TResult>, ICommandHandler<TCommand,TResult>. McpServer.Cqrs.Mvvm provides CqrsRelayCommand, ViewModelCommandAttribute, IViewModelRegistry.'
@@ -1569,16 +1569,16 @@ mvp-mcp:
       done: true
     - task: 'Phase 9.2 — Create EventStreamScreen in Director: New src/McpServer.Director/Screens/EventStreamScreen.cs showing live SSE event feed in a scrollable ListView with category filter dropdown. Wire into MainScreen.RebuildTabs() with McpArea.Events auth check.'
       done: true
-    - task: 'Phase 9.3 — Voice handlers (6): Create all 6 handlers in UI.Core/Handlers/: CreateVoiceSessionCommandHandler, SubmitVoiceTurnCommandHandler, InterruptVoiceCommandHandler, GetVoiceStatusQueryHandler, GetVoiceTranscriptQueryHandler, DeleteVoiceSessionCommandHandler. Each injects IVoiceApiClient.'
+    - task: 'Phase 9.3 — Voice handlers + ViewModel: Create all 6 handlers in UI.Core/Handlers/: CreateVoiceSessionCommandHandler, SubmitVoiceTurnCommandHandler, InterruptVoiceCommandHandler, GetVoiceStatusQueryHandler, GetVoiceTranscriptQueryHandler, DeleteVoiceSessionCommandHandler. Add VoiceViewModel orchestration for create/submit/interrupt/status/transcript/delete workflows. Each handler injects IVoiceApiClient.'
       done: true
     - task: 'Phase 10.1 — Create ContextScreen in Director: UI.Core handlers and VMs already exist (4 handlers, 4 VMs: ContextSearchViewModel, ContextPackViewModel, ContextSourcesViewModel, ContextRebuildIndexViewModel). Create src/McpServer.Director/Screens/ContextScreen.cs with search input, results list, sources list, pack viewer, rebuild button. Wire into MainScreen.RebuildTabs() with McpArea.Context auth check.'
       done: true
     - task: 'Phase 10.2 — Create RepoScreen in Director: UI.Core handlers and VMs already exist (3 handlers, 2 VMs: RepoListViewModel, RepoFileViewModel + WriteRepoFileViewModel). Create src/McpServer.Director/Screens/RepoScreen.cs with file tree/list, file content viewer, write action. Wire into MainScreen.RebuildTabs() with McpArea.Repo auth check.'
       done: true
     - task: 'Phase 11.1 — Extract tab metadata registry: Create ITabRegistry interface in UI.Core with RegisterTab(McpArea, string displayText, McpRoles requiredRole, Func<IServiceProvider, object> screenFactory). Create TabRegistration record. Move hardcoded tab logic from MainScreen.RebuildTabs() into declarative registrations. MainScreen.RebuildTabs() iterates ITabRegistry entries, checks CanViewArea for each, and adds tabs dynamically.'
-      done: false
+      done: true
     - task: 'Phase 12.1 — Ensure Director exec (non-TUI) commands use CQRS: Verify that CLI commands (list, get, create, etc.) dispatch through the same CQRS handlers as the TUI screens. If any CLI command bypasses CQRS and calls McpHttpClient directly, migrate it to use IDispatcher. Check: AgentsCommand, TodoCommand, SessionLogCommand, SyncCommand, HealthCommand, ConfigCommand, ListCommand, AuthCommand.'
-      done: false
+      done: true
     - task: 'Phase 13.1 — Create McpServer.UI.Core.Tests project: Add tests/McpServer.UI.Core.Tests/McpServer.UI.Core.Tests.csproj referencing McpServer.UI.Core, xUnit v3, NSubstitute. Add to McpServer.sln. Create test infrastructure (mock API clients, test helpers).'
       done: false
     - task: 'Phase 13.2 — Handler unit tests: For each of the ~33 existing + ~75 new handlers, add at least 1 test verifying: (a) handler calls correct API client method, (b) handler returns expected result type. Group tests by area: TodoHandlerTests, WorkspaceHandlerTests, AgentHandlerTests, ToolRegistryHandlerTests, GitHubHandlerTests, RequirementsHandlerTests, SessionLogHandlerTests, SyncHandlerTests, ContextHandlerTests, RepoHandlerTests, HealthHandlerTests, DiagnosticHandlerTests, AuthConfigHandlerTests, TunnelHandlerTests, EventStreamHandlerTests, VoiceHandlerTests. NSubstitute mock API clients.'

@@ -4,6 +4,7 @@ using McpServer.Cqrs.Mvvm;
 using McpServer.Director.Helpers;
 using McpServer.Director.Screens;
 using McpServer.UI.Core.Authorization;
+using McpServer.UI.Core.Navigation;
 using McpServer.UI.Core.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -77,6 +78,7 @@ internal static class InteractiveCommand
             var roleContext = sp.GetRequiredService<IRoleContext>();
             var authorizationPolicy = sp.GetRequiredService<IAuthorizationPolicyService>();
             var dispatcher = sp.GetRequiredService<Dispatcher>();
+            var tabRegistry = sp.GetRequiredService<ITabRegistry>();
 
             // Initialize Terminal.Gui
             Terminal.Gui.Application.Init();
@@ -125,6 +127,8 @@ internal static class InteractiveCommand
                     roleContext,
                     directorContext,
                     dispatcher,
+                    tabRegistry,
+                    sp,
                     sp.GetRequiredService<ILoggerFactory>(),
                     sp.GetRequiredService<IBrowserLauncher>());
                 Terminal.Gui.Application.Run(mainScreen);

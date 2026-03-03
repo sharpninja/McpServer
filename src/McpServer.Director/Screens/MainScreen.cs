@@ -3,6 +3,7 @@ using McpServer.Cqrs;
 using McpServer.Director.Auth;
 using McpServer.Director.Helpers;
 using McpServer.UI.Core.Authorization;
+using McpServer.UI.Core.Navigation;
 using McpServer.UI.Core.ViewModels;
 using Microsoft.Extensions.Logging;
 using Terminal.Gui;
@@ -64,6 +65,8 @@ internal sealed class MainScreen : Window
     private readonly ILoggerFactory _loggerFactory;
     private readonly IBrowserLauncher _browserLauncher;
     private readonly Dispatcher _dispatcher;
+    private readonly ITabRegistry _tabRegistry;
+    private readonly IServiceProvider _serviceProvider;
 
     public MainScreen(
         WorkspaceListViewModel workspaceListVm,
@@ -106,6 +109,8 @@ internal sealed class MainScreen : Window
         IRoleContext roleContext,
         DirectorMcpContext directorContext,
         Dispatcher dispatcher,
+        ITabRegistry tabRegistry,
+        IServiceProvider serviceProvider,
         ILoggerFactory loggerFactory,
         IBrowserLauncher browserLauncher)
     {
@@ -149,6 +154,8 @@ internal sealed class MainScreen : Window
         _roleContext = roleContext;
         _directorContext = directorContext;
         _dispatcher = dispatcher;
+        _tabRegistry = tabRegistry;
+        _serviceProvider = serviceProvider;
         _loggerFactory = loggerFactory;
         _browserLauncher = browserLauncher;
 
@@ -156,11 +163,162 @@ internal sealed class MainScreen : Window
         Width = Dim.Fill();
         Height = Dim.Fill();
 
+        ConfigureTabRegistry();
         BuildUi();
 
         // Seed the shared workspace context from the initial active workspace (e.g. from marker file).
         // Done after BuildUi so screen PropertyChanged subscriptions are active.
         _workspaceContextVm.ActiveWorkspacePath = _directorContext.ActiveWorkspacePath;
+    }
+
+    private void ConfigureTabRegistry()
+    {
+        _tabRegistry.Clear();
+
+        bool HasWorkspaceOrControl(IServiceProvider _) =>
+            _directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection;
+        bool HasControlConnection(IServiceProvider _) => _directorContext.HasControlConnection;
+        bool Always(IServiceProvider _) => true;
+
+        _tabRegistry.RegisterTab(new TabRegistration(
+            McpArea.Todo,
+            "TODO",
+            McpRoles.Viewer,
+            _ => new TodoScreen(_todoVm, _todoDetailVm, directorContext: _directorContext),
+            HasWorkspaceOrControl));
+
+        _tabRegistry.RegisterTab(new TabRegistration(
+            McpArea.SessionLogs,
+            "Sessions",
+            McpRoles.Viewer,
+            _ => new SessionLogScreen(_sessionLogVm, _sessionLogDetailVm),
+            HasWorkspaceOrControl));
+
+        _tabRegistry.RegisterTab(new TabRegistration(
+            McpArea.Health,
+            "Health",
+            McpRoles.Viewer,
+            _ => new HealthScreen(_healthVm),
+            HasControlConnection));
+
+        _tabRegistry.RegisterTab(new TabRegistration(
+            McpArea.Workspaces,
+            "Workspaces",
+            McpRoles.Admin,
+            _ => new WorkspaceListScreen(_workspaceListVm, _workspaceDetailVm, _directorContext),
+            HasControlConnection));
+
+        _tabRegistry.RegisterTab(new TabRegistration(
+            McpArea.Agents,
+            "Agents",
+            McpRoles.AgentManager,
+            _ => new AgentScreen(
+                _agentDefinitionListVm,
+                _agentDefinitionDetailVm,
+                _workspaceAgentListVm,
+                _workspaceAgentDetailVm,
+                _agentEventsVm),
+            HasWorkspaceOrControl));
+
+        _tabRegistry.RegisterTab(new TabRegistration(
+            McpArea.Agents,
+            "Agent Pool",
+            McpRoles.AgentManager,
+            _ => new AgentPoolScreen(_agentPoolVm),
+            HasWorkspaceOrControl));
+
+        _tabRegistry.RegisterTab(new TabRegistration(
+            McpArea.Agents,
+            "Chat",
+            McpRoles.AgentManager,
+            _ => new AgentChatScreen(_directorContext),
+            HasWorkspaceOrControl));
+
+        _tabRegistry.RegisterTab(new TabRegistration(
+            McpArea.Policy,
+            "Policy",
+            McpRoles.Admin,
+            _ => new WorkspacePolicyScreen(_workspacePolicyVm),
+            HasControlConnection));
+
+        _tabRegistry.RegisterTab(new TabRegistration(
+            McpArea.Tunnels,
+            "Tunnels",
+            McpRoles.Viewer,
+            _ => new TunnelScreen(_tunnelListVm),
+            HasWorkspaceOrControl));
+
+        _tabRegistry.RegisterTab(new TabRegistration(
+            McpArea.Templates,
+            "Templates",
+            McpRoles.Viewer,
+            _ => new TemplatesScreen(_templateListVm, _templateDetailVm),
+            HasWorkspaceOrControl));
+
+        _tabRegistry.RegisterTab(new TabRegistration(
+            McpArea.Context,
+            "Context",
+            McpRoles.Viewer,
+            _ => new ContextScreen(_dispatcher),
+            HasWorkspaceOrControl));
+
+        _tabRegistry.RegisterTab(new TabRegistration(
+            McpArea.Repo,
+            "Repo",
+            McpRoles.Viewer,
+            _ => new RepoScreen(_dispatcher),
+            HasWorkspaceOrControl));
+
+        _tabRegistry.RegisterTab(new TabRegistration(
+            McpArea.ToolRegistry,
+            "Tools",
+            McpRoles.Viewer,
+            _ => new ToolRegistryScreen(
+                _toolListVm,
+                _toolDetailVm,
+                _bucketListVm,
+                _bucketDetailVm),
+            HasWorkspaceOrControl));
+
+        _tabRegistry.RegisterTab(new TabRegistration(
+            McpArea.GitHub,
+            "GitHub",
+            McpRoles.Viewer,
+            _ => new GitHubScreen(
+                _issueListVm,
+                _issueDetailVm,
+                _pullRequestListVm,
+                _gitHubSyncVm),
+            HasWorkspaceOrControl));
+
+        _tabRegistry.RegisterTab(new TabRegistration(
+            McpArea.Requirements,
+            "Requirements",
+            McpRoles.Viewer,
+            _ => new RequirementsScreen(
+                _frListVm,
+                _frDetailVm,
+                _trListVm,
+                _trDetailVm,
+                _testListVm,
+                _testDetailVm,
+                _mappingListVm,
+                _requirementsGenerateVm),
+            HasWorkspaceOrControl));
+
+        _tabRegistry.RegisterTab(new TabRegistration(
+            McpArea.Events,
+            "Events",
+            McpRoles.Viewer,
+            _ => new EventStreamScreen(_eventStreamVm),
+            HasWorkspaceOrControl));
+
+        _tabRegistry.RegisterTab(new TabRegistration(
+            McpArea.DispatcherLogs,
+            "Logs",
+            McpRoles.Viewer,
+            _ => new DispatcherLogsScreen(_dispatcherLogsVm),
+            Always));
     }
 
     private void BuildUi()
@@ -499,157 +657,23 @@ internal sealed class MainScreen : Window
 
         var selectFirst = true;
 
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Todo))
+        foreach (var registration in _tabRegistry.Registrations)
         {
-            _tabView.AddTab(new Tab { DisplayText = "TODO", View = new TodoScreen(_todoVm, _todoDetailVm, directorContext: _directorContext) }, andSelect: selectFirst);
-            selectFirst = false;
-        }
+            if (!_authorizationPolicy.CanViewArea(registration.Area))
+                continue;
 
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.SessionLogs))
-        {
-            _tabView.AddTab(new Tab { DisplayText = "Sessions", View = new SessionLogScreen(_sessionLogVm, _sessionLogDetailVm) }, andSelect: selectFirst);
-            selectFirst = false;
-        }
+            if (registration.AvailabilityPredicate is not null &&
+                !registration.AvailabilityPredicate(_serviceProvider))
+                continue;
 
-        if (_directorContext.HasControlConnection && _authorizationPolicy.CanViewArea(McpArea.Health))
-        {
-            _tabView.AddTab(new Tab { DisplayText = "Health", View = new HealthScreen(_healthVm) }, andSelect: selectFirst);
-            selectFirst = false;
-        }
+            if (registration.ScreenFactory(_serviceProvider) is not View view)
+                continue;
 
-        if (_directorContext.HasControlConnection && _authorizationPolicy.CanViewArea(McpArea.Workspaces))
-        {
-            _tabView.AddTab(new Tab { DisplayText = "Workspaces", View = new WorkspaceListScreen(_workspaceListVm, _workspaceDetailVm, _directorContext) }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Agents))
-        {
             _tabView.AddTab(new Tab
             {
-                DisplayText = "Agents",
-                View = new AgentScreen(
-                    _agentDefinitionListVm,
-                    _agentDefinitionDetailVm,
-                    _workspaceAgentListVm,
-                    _workspaceAgentDetailVm,
-                    _agentEventsVm)
+                DisplayText = registration.DisplayText,
+                View = view
             }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Agents))
-        {
-            _tabView.AddTab(new Tab { DisplayText = "Agent Pool", View = new AgentPoolScreen(_agentPoolVm) }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Agents))
-        {
-            _tabView.AddTab(new Tab { DisplayText = "Chat", View = new AgentChatScreen(_directorContext) }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if (_directorContext.HasControlConnection && _authorizationPolicy.CanViewArea(McpArea.Policy))
-        {
-            _tabView.AddTab(new Tab { DisplayText = "Policy", View = new WorkspacePolicyScreen(_workspacePolicyVm) }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Tunnels))
-        {
-            _tabView.AddTab(new Tab { DisplayText = "Tunnels", View = new TunnelScreen(_tunnelListVm) }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Templates))
-        {
-            _tabView.AddTab(new Tab { DisplayText = "Templates", View = new TemplatesScreen(_templateListVm, _templateDetailVm) }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Context))
-        {
-            _tabView.AddTab(new Tab
-            {
-                DisplayText = "Context",
-                View = new ContextScreen(_dispatcher)
-            }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Repo))
-        {
-            _tabView.AddTab(new Tab
-            {
-                DisplayText = "Repo",
-                View = new RepoScreen(_dispatcher)
-            }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) &&
-            _authorizationPolicy.CanViewArea(McpArea.ToolRegistry))
-        {
-            _tabView.AddTab(new Tab
-            {
-                DisplayText = "Tools",
-                View = new ToolRegistryScreen(
-                    _toolListVm,
-                    _toolDetailVm,
-                    _bucketListVm,
-                    _bucketDetailVm)
-            }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) &&
-            _authorizationPolicy.CanViewArea(McpArea.GitHub))
-        {
-            _tabView.AddTab(new Tab
-            {
-                DisplayText = "GitHub",
-                View = new GitHubScreen(
-                    _issueListVm,
-                    _issueDetailVm,
-                    _pullRequestListVm,
-                    _gitHubSyncVm)
-            }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) &&
-            _authorizationPolicy.CanViewArea(McpArea.Requirements))
-        {
-            _tabView.AddTab(new Tab
-            {
-                DisplayText = "Requirements",
-                View = new RequirementsScreen(
-                    _frListVm,
-                    _frDetailVm,
-                    _trListVm,
-                    _trDetailVm,
-                    _testListVm,
-                    _testDetailVm,
-                    _mappingListVm,
-                    _requirementsGenerateVm)
-            }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Events))
-        {
-            _tabView.AddTab(new Tab
-            {
-                DisplayText = "Events",
-                View = new EventStreamScreen(_eventStreamVm)
-            }, andSelect: selectFirst);
-            selectFirst = false;
-        }
-
-        if (_authorizationPolicy.CanViewArea(McpArea.DispatcherLogs))
-        {
-            _tabView.AddTab(new Tab { DisplayText = "Logs", View = new DispatcherLogsScreen(_dispatcherLogsVm) }, andSelect: selectFirst);
             selectFirst = false;
         }
 

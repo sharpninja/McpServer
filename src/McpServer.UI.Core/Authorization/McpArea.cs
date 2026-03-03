@@ -41,6 +41,9 @@ public enum McpArea
     /// <summary>Functional/technical/testing requirements and mappings.</summary>
     Requirements,
 
+    /// <summary>Voice session lifecycle and transcript operations.</summary>
+    Voice,
+
     /// <summary>Live event stream viewer.</summary>
     Events,
 

@@ -1,6 +1,7 @@
 using System.CommandLine;
 using McpServer.Director.Auth;
 using McpServer.Director.Helpers;
+using McpServer.UI.Core.Messages;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using static McpServer.Director.Commands.CommandHelpers;
@@ -175,11 +176,25 @@ internal static class AuthCommands
     /// </summary>
     private static async Task<AuthConfigResponse?> DiscoverAuthConfigAsync()
     {
-        using var client = McpHttpClient.FromMarkerFile();
-        if (client is null)
-            return null;
+        AuthConfigResponse? discovered = null;
+        await RunWithDispatcherAsync(null, async (_, dispatcher, _) =>
+        {
+            var result = await dispatcher.QueryAsync(new GetAuthConfigQuery()).ConfigureAwait(false);
+            if (!result.IsSuccess || result.Value is null)
+                return;
 
-        return await client.GetAuthConfigAsync().ConfigureAwait(false);
+            discovered = new AuthConfigResponse
+            {
+                Enabled = result.Value.Enabled,
+                Authority = result.Value.Authority ?? string.Empty,
+                ClientId = result.Value.ClientId ?? string.Empty,
+                Scopes = result.Value.Scopes ?? string.Empty,
+                DeviceAuthorizationEndpoint = result.Value.DeviceAuthorizationEndpoint ?? string.Empty,
+                TokenEndpoint = result.Value.TokenEndpoint ?? string.Empty,
+            };
+        }).ConfigureAwait(false);
+
+        return discovered;
     }
 
     /// <summary>
