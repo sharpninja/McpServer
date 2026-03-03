@@ -1,19 +1,5 @@
 # Copilot Instructions — McpServer
 
-## Session Start
-
-Before doing ANY work on ANY user request, complete these steps in order:
-
-1. POST `/mcpserver/sessionlog` with your session entry
-2. GET `/mcpserver/sessionlog?limit=5` to review recent session history
-3. GET `/mcpserver/todo` to check current tasks
-4. Begin working on the user's request
-
-On every subsequent message: post an updated session log entry before starting work, then update it with results when done.
-
-See `AGENTS.md` for full agent conduct, requirements tracking, and session continuity guidelines.
-See `docs/context/` for on-demand API schemas, module docs, compliance rules, and action types.
-
 ## Response Formatting
 
 - Do not use table-style output in responses.
