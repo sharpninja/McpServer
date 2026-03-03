@@ -86,6 +86,9 @@ public sealed class McpServerClient
         Context = new ContextClient(http, options, holder);
         SessionLog = new SessionLogClient(http, options, holder);
         GitHub = new GitHubClient(http, options, holder);
+        Requirements = new RequirementsClient(http, options, holder);
+        Voice = new VoiceClient(http, options, holder);
+        Events = new EventStreamClient(http, options, holder);
         Repo = new RepoClient(http, options, holder);
         Tunnel = new TunnelClient(http, options, holder);
         Workspace = new WorkspaceClient(http, options, holder);
@@ -97,7 +100,11 @@ public sealed class McpServerClient
         Agent = new AgentClient(http, options, holder);
         Health = new HealthClient(http, options, holder);
 
-        _allClients = new McpClientBase[] { Todo, Context, SessionLog, GitHub, Repo, Tunnel, Workspace, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health };
+        _allClients = new McpClientBase[]
+        {
+            Todo, Context, SessionLog, GitHub, Requirements, Voice, Events,
+            Repo, Tunnel, Workspace, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health
+        };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
         _workspacePath = holder.Path;
@@ -276,6 +283,24 @@ public sealed class McpServerClient
     /// <para>See <see cref="GitHubClient"/> for the full method list.</para>
     /// </summary>
     public GitHubClient GitHub { get; }
+
+    /// <summary>
+    /// Requirements endpoints — FR/TR/TEST CRUD, mapping, and document generation.
+    /// <para>See <see cref="RequirementsClient"/> for the full method list.</para>
+    /// </summary>
+    public RequirementsClient Requirements { get; }
+
+    /// <summary>
+    /// Voice conversation endpoints — sessions, turns, transcripts, and interrupts.
+    /// <para>See <see cref="VoiceClient"/> for the full method list.</para>
+    /// </summary>
+    public VoiceClient Voice { get; }
+
+    /// <summary>
+    /// Change-event SSE endpoints.
+    /// <para>See <see cref="EventStreamClient"/> for the full method list.</para>
+    /// </summary>
+    public EventStreamClient Events { get; }
 
     /// <summary>
     /// Repository file endpoints — read, write, and list files in the workspace repository.
