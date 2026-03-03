@@ -489,7 +489,7 @@ public sealed class FwhMcpTools
         ApplyWorkspaceOverride(workspacePath);
         try
         {
-            return await CollectStreamAsync(_todoPromptService.StreamPlanAsync(id, cancellationToken)).ConfigureAwait(false);
+            return await CollectStreamAsync(_todoPromptService.StreamPlanAsync(id, null, cancellationToken)).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
