@@ -190,3 +190,35 @@ public sealed class TemplateTestResult
     [JsonPropertyName("missingVariables")]
     public IReadOnlyList<string>? MissingVariables { get; set; }
 }
+
+/// <summary>Request to resolve a stored template by ID and variable dictionary.</summary>
+public sealed class TemplateResolveRequest
+{
+    /// <summary>Variable values to pass to template rendering.</summary>
+    [JsonPropertyName("values")]
+    public Dictionary<string, object?>? Values { get; set; }
+}
+
+/// <summary>Result of resolving a stored template by ID.</summary>
+public sealed class TemplateResolveResult
+{
+    /// <summary>Whether rendering succeeded.</summary>
+    [JsonPropertyName("success")]
+    public bool Success { get; set; }
+
+    /// <summary>Template identifier used for rendering.</summary>
+    [JsonPropertyName("templateId")]
+    public string? TemplateId { get; set; }
+
+    /// <summary>Populated prompt text.</summary>
+    [JsonPropertyName("prompt")]
+    public string? Prompt { get; set; }
+
+    /// <summary>Error text for failed resolutions.</summary>
+    [JsonPropertyName("error")]
+    public string? Error { get; set; }
+
+    /// <summary>Missing required variables when validation fails.</summary>
+    [JsonPropertyName("missingVariables")]
+    public IReadOnlyList<string>? MissingVariables { get; set; }
+}

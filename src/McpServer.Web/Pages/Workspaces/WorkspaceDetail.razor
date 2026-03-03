@@ -1,0 +1,127 @@
+@page "/workspaces/detail"
+
+@inject IWorkspaceApiClient WorkspaceApiClient
+
+<PageTitle>Workspace Detail</PageTitle>
+
+<h1 class="h2 mb-3">Workspace Detail</h1>
+<p><a href="/workspaces">← Back to workspace list</a></p>
+
+@if (string.IsNullOrWhiteSpace(WorkspacePath))
+{
+    <PrimerBlankslate Heading="No workspace selected" Description="Choose a workspace from the workspace list to view details." />
+}
+else if (!string.IsNullOrWhiteSpace(_error))
+{
+    <PrimerFlash Variant="danger" Title="Failed to load workspace">@_error</PrimerFlash>
+}
+else if (_loading)
+{
+    <p class="color-fg-muted">Loading workspace details...</p>
+}
+else if (_item is null)
+{
+    <PrimerBlankslate Heading="Workspace not found" Description="The requested workspace could not be loaded." />
+}
+else
+{
+    <div class="Box">
+        <div class="Box-header">
+            <h2 class="h3 mb-0">@_item.Name</h2>
+        </div>
+        <div class="Box-body">
+            <p><strong>Path:</strong> <code>@_item.WorkspacePath</code></p>
+            <p><strong>Todo Path:</strong> <code>@_item.TodoPath</code></p>
+            <p><strong>Data Directory:</strong> @(_item.DataDirectory ?? "(not set)")</p>
+            <p><strong>Tunnel Provider:</strong> @(_item.TunnelProvider ?? "(not set)")</p>
+            <p><strong>Run As:</strong> @(_item.RunAs ?? "(not set)")</p>
+            <p><strong>Enabled:</strong> @(_item.IsEnabled ? "Yes" : "No")</p>
+            <p><strong>Primary:</strong> @(_item.IsPrimary ? "Yes" : "No")</p>
+            <p><strong>Created:</strong> @_item.DateTimeCreated.ToString("u")</p>
+            <p><strong>Modified:</strong> @_item.DateTimeModified.ToString("u")</p>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <h3 class="h4">Policy</h3>
+        <div class="d-flex flex-column gap-2">
+            <div>
+                <strong>Banned Licenses</strong>
+                @RenderStringList(_item.BannedLicenses)
+            </div>
+            <div>
+                <strong>Banned Countries</strong>
+                @RenderStringList(_item.BannedCountriesOfOrigin)
+            </div>
+            <div>
+                <strong>Banned Organizations</strong>
+                @RenderStringList(_item.BannedOrganizations)
+            </div>
+            <div>
+                <strong>Banned Individuals</strong>
+                @RenderStringList(_item.BannedIndividuals)
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [SupplyParameterFromQuery(Name = "path")]
+    public string? WorkspacePath { get; set; }
+
+    private McpServer.UI.Core.Messages.WorkspaceDetail? _item;
+    private bool _loading;
+    private string? _error;
+    private string? _loadedPath;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (string.Equals(_loadedPath, WorkspacePath, StringComparison.Ordinal))
+            return;
+
+        _loadedPath = WorkspacePath;
+        _error = null;
+        _item = null;
+
+        if (string.IsNullOrWhiteSpace(WorkspacePath))
+            return;
+
+        _loading = true;
+        try
+        {
+            _item = await WorkspaceApiClient.GetWorkspaceAsync(WorkspacePath).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private static RenderFragment RenderStringList(IReadOnlyList<string> values) => builder =>
+    {
+        if (values.Count == 0)
+        {
+            builder.OpenElement(0, "p");
+            builder.AddAttribute(1, "class", "color-fg-muted mb-0");
+            builder.AddContent(2, "None");
+            builder.CloseElement();
+            return;
+        }
+
+        builder.OpenElement(3, "ul");
+        builder.AddAttribute(4, "class", "mb-0");
+        for (var i = 0; i < values.Count; i++)
+        {
+            builder.OpenElement(10 + i, "li");
+            builder.AddContent(20 + i, values[i]);
+            builder.CloseElement();
+        }
+
+        builder.CloseElement();
+    };
+}
+

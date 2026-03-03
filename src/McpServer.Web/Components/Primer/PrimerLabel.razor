@@ -1,0 +1,35 @@
+<span class="@CssClass" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrWhiteSpace(this.Text))
+    {
+        @this.Text
+    }
+    else
+    {
+        @this.ChildContent
+    }
+</span>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public string? Text { get; set; }
+
+    [Parameter] public string Scheme { get; set; } = "default";
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string CssClass => string.Join(' ', new[] { this.ResolveSchemeClass(), this.Class }.Where(static value => !string.IsNullOrWhiteSpace(value)));
+
+    private string ResolveSchemeClass() =>
+        this.Scheme.ToLowerInvariant() switch
+        {
+            "success" => "Label Label--success",
+            "danger" => "Label Label--danger",
+            "attention" => "Label Label--attention",
+            "done" => "Label Label--done",
+            "sponsor" => "Label Label--sponsors",
+            _ => "Label",
+        };
+}

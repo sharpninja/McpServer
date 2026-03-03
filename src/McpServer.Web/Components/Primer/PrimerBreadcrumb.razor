@@ -1,0 +1,43 @@
+@if (this.Items.Count > 0)
+{
+    <nav class="@this.CssClass" aria-label="Breadcrumb" @attributes="AdditionalAttributes">
+        <ol class="Breadcrumb">
+            @for (var index = 0; index < this.Items.Count; index++)
+            {
+                var item = this.Items[index];
+                var isCurrent = item.IsCurrent || index == this.Items.Count - 1;
+
+                <li class="Breadcrumb-item">
+                    @if (!isCurrent && !string.IsNullOrWhiteSpace(item.Href))
+                    {
+                        <a href="@item.Href">@item.Text</a>
+                    }
+                    else
+                    {
+                        <span aria-current="page">@item.Text</span>
+                    }
+                </li>
+            }
+        </ol>
+    </nav>
+}
+
+@code {
+    [Parameter] public IReadOnlyList<BreadcrumbItem> Items { get; set; } = [];
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string CssClass => string.Join(' ', new[] { this.Class }.Where(static value => !string.IsNullOrWhiteSpace(value)));
+
+    public sealed class BreadcrumbItem
+    {
+        public string Text { get; set; } = string.Empty;
+
+        public string? Href { get; set; }
+
+        public bool IsCurrent { get; set; }
+    }
+}
+

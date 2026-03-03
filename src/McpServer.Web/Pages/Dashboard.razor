@@ -1,0 +1,96 @@
+@page "/"
+@page "/dashboard"
+
+@inject IWorkspaceApiClient WorkspaceApiClient
+@inject ITodoApiClient TodoApiClient
+@inject ISessionLogApiClient SessionLogApiClient
+@inject ITemplateApiClient TemplateApiClient
+@inject IHealthApiClient HealthApiClient
+
+<PageTitle>Dashboard</PageTitle>
+
+<h1 class="h2 mb-3">Dashboard</h1>
+
+@if (!string.IsNullOrWhiteSpace(_error))
+{
+    <PrimerFlash Variant="danger" Title="Dashboard load failed">@_error</PrimerFlash>
+}
+else if (_loading)
+{
+    <p class="color-fg-muted">Loading dashboard...</p>
+}
+else
+{
+    <div class="d-flex flex-wrap gap-3">
+        <div class="Box p-3">
+            <div class="h2 mb-1">@_workspaceCount</div>
+            <div class="color-fg-muted">Workspaces</div>
+        </div>
+        <div class="Box p-3">
+            <div class="h2 mb-1">@_todoCount</div>
+            <div class="color-fg-muted">Todos</div>
+        </div>
+        <div class="Box p-3">
+            <div class="h2 mb-1">@_sessionLogCount</div>
+            <div class="color-fg-muted">Session logs</div>
+        </div>
+        <div class="Box p-3">
+            <div class="h2 mb-1">@_templateCount</div>
+            <div class="color-fg-muted">Templates</div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <PrimerLabel Scheme="@GetHealthScheme(_healthStatus)" Text="@($"Health: {_healthStatus}")" />
+    </div>
+
+    <div class="mt-4 d-flex flex-wrap gap-2">
+        <a class="btn btn-primary" href="/workspaces">Workspaces</a>
+        <a class="btn" href="/todos">Todos</a>
+        <a class="btn" href="/sessions">Session Logs</a>
+        <a class="btn" href="/templates">Templates</a>
+        <a class="btn" href="/context/search">Context Search</a>
+    </div>
+}
+
+@code {
+    private bool _loading = true;
+    private string? _error;
+    private int _workspaceCount;
+    private int _todoCount;
+    private int _sessionLogCount;
+    private int _templateCount;
+    private string _healthStatus = "unknown";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var workspaceTask = WorkspaceApiClient.ListWorkspacesAsync();
+            var todoTask = TodoApiClient.ListTodosAsync(new ListTodosQuery());
+            var sessionTask = SessionLogApiClient.ListSessionLogsAsync(new ListSessionLogsQuery { Limit = 20, Offset = 0 });
+            var templateTask = TemplateApiClient.ListTemplatesAsync(category: null, tag: null, keyword: null);
+            var healthTask = HealthApiClient.CheckHealthAsync();
+
+            await Task.WhenAll(workspaceTask, todoTask, sessionTask, templateTask, healthTask).ConfigureAwait(false);
+
+            _workspaceCount = workspaceTask.Result.TotalCount;
+            _todoCount = todoTask.Result.TotalCount;
+            _sessionLogCount = sessionTask.Result.TotalCount;
+            _templateCount = templateTask.Result.TotalCount;
+            _healthStatus = string.IsNullOrWhiteSpace(healthTask.Result.Status) ? "unknown" : healthTask.Result.Status;
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private static string GetHealthScheme(string? status)
+        => string.Equals(status, "healthy", StringComparison.OrdinalIgnoreCase) ? "success" : "attention";
+}
+

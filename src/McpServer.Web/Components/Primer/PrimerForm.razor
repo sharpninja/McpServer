@@ -1,0 +1,23 @@
+<form class="@this.CssClass"
+      @onsubmit="this.HandleSubmitAsync"
+      @onsubmit:preventDefault="this.PreventDefault"
+      @attributes="AdditionalAttributes">
+    @this.ChildContent
+</form>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public EventCallback OnSubmit { get; set; }
+
+    [Parameter] public bool PreventDefault { get; set; } = true;
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string CssClass => string.Join(' ', new[] { this.Class }.Where(static value => !string.IsNullOrWhiteSpace(value)));
+
+    private Task HandleSubmitAsync() => this.OnSubmit.InvokeAsync();
+}
+

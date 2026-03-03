@@ -357,6 +357,12 @@ internal sealed class MainScreen : Window
             return;
         }
 
+        if (view is AgentChatScreen acs)
+        {
+            _ = Task.Run(acs.LoadAsync);
+            return;
+        }
+
         if (view is TunnelScreen tunnel)
         {
             _ = Task.Run(tunnel.LoadAsync);
@@ -417,6 +423,12 @@ internal sealed class MainScreen : Window
         if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Agents))
         {
             _tabView.AddTab(new Tab { DisplayText = "Agent Pool", View = new AgentPoolScreen(_directorContext) }, andSelect: selectFirst);
+            selectFirst = false;
+        }
+
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Agents))
+        {
+            _tabView.AddTab(new Tab { DisplayText = "Chat", View = new AgentChatScreen(_directorContext) }, andSelect: selectFirst);
             selectFirst = false;
         }
 

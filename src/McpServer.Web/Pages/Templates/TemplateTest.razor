@@ -1,0 +1,137 @@
+@page "/templates/test"
+
+@inject ITemplateApiClient TemplateApiClient
+
+<PageTitle>Template Test</PageTitle>
+
+<h1 class="h2 mb-3">Template Test</h1>
+<p><a href="/templates">← Back to template list</a></p>
+
+<form method="get" class="Box p-3 mb-3">
+    <div class="d-flex flex-column gap-2">
+        <label class="d-flex flex-column">
+            <span class="text-small color-fg-muted">Template ID (optional when using inline template)</span>
+            <input class="form-control" name="templateId" value="@TemplateId" />
+        </label>
+        <label class="d-flex flex-column">
+            <span class="text-small color-fg-muted">Inline Template (optional)</span>
+            <textarea class="form-control" name="inline" rows="6">@InlineTemplate</textarea>
+        </label>
+        <label class="d-flex flex-column">
+            <span class="text-small color-fg-muted">Variables JSON</span>
+            <textarea class="form-control" name="variables" rows="6">@_effectiveVariablesJson</textarea>
+        </label>
+        <div>
+            <button class="btn btn-primary" type="submit">Run Test</button>
+        </div>
+    </div>
+</form>
+
+@if (!string.IsNullOrWhiteSpace(_error))
+{
+    <PrimerFlash Variant="danger" Title="Template test failed">@_error</PrimerFlash>
+}
+else if (_loading)
+{
+    <p class="color-fg-muted">Running template test...</p>
+}
+else if (_result is null)
+{
+    <PrimerBlankslate Heading="No test executed"
+                      Description="Provide a template ID or inline template and submit to run a test render." />
+}
+else
+{
+    <PrimerFlash Variant="@(_result.Success ? "success" : "danger")"
+                Title="@(_result.Success ? "Template rendered" : "Template test failed")">
+        @if (!string.IsNullOrWhiteSpace(_result.Error))
+        {
+            <span>@_result.Error</span>
+        }
+        else
+        {
+            <span>Render completed successfully.</span>
+        }
+    </PrimerFlash>
+
+    @if (_result.MissingVariables is { Count: > 0 })
+    {
+        <div class="Box mb-3">
+            <div class="Box-header"><h3 class="h4 mb-0">Missing Variables</h3></div>
+            <div class="Box-body">
+                <ul class="mb-0">
+                    @foreach (var variable in _result.MissingVariables)
+                    {
+                        <li><code>@variable</code></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+
+    <div class="Box">
+        <div class="Box-header"><h3 class="h4 mb-0">Rendered Content</h3></div>
+        <div class="Box-body">
+            <pre class="mb-0">@(_result.RenderedContent ?? string.Empty)</pre>
+        </div>
+    </div>
+}
+
+@code {
+    [SupplyParameterFromQuery(Name = "templateId")]
+    public string? TemplateId { get; set; }
+
+    [SupplyParameterFromQuery(Name = "inline")]
+    public string? InlineTemplate { get; set; }
+
+    [SupplyParameterFromQuery(Name = "variables")]
+    public string? VariablesJson { get; set; }
+
+    private TemplateTestOutcome? _result;
+    private bool _loading;
+    private string? _error;
+    private string _effectiveVariablesJson = "{}";
+    private string? _lastRequestKey;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _effectiveVariablesJson = string.IsNullOrWhiteSpace(VariablesJson) ? "{}" : VariablesJson;
+
+        if (string.IsNullOrWhiteSpace(TemplateId) && string.IsNullOrWhiteSpace(InlineTemplate))
+        {
+            _result = null;
+            _error = null;
+            _loading = false;
+            _lastRequestKey = null;
+            return;
+        }
+
+        var requestKey = $"{TemplateId}|{InlineTemplate}|{_effectiveVariablesJson}";
+        if (string.Equals(_lastRequestKey, requestKey, StringComparison.Ordinal))
+            return;
+
+        _lastRequestKey = requestKey;
+        _loading = true;
+        _error = null;
+        _result = null;
+
+        try
+        {
+            _result = await TemplateApiClient.TestTemplateAsync(new TestTemplateQuery
+            {
+                TemplateId = string.IsNullOrWhiteSpace(TemplateId) ? null : TemplateId,
+                InlineTemplate = string.IsNullOrWhiteSpace(InlineTemplate) ? null : InlineTemplate,
+                VariablesJson = _effectiveVariablesJson,
+            }).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+}
+

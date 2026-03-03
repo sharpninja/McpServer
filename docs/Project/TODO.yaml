@@ -1154,7 +1154,68 @@ saas:
   - id: MVP-MARKETING-005
     title: Add REST clients similar to MVP-MARKETING-004 for Python and TypeScript
     estimate: 5-7 days AI-assisted
-    note: 'Reference implementation: src/McpServer.Client/ (C# NuGet, PackageId: SharpNinja.McpServer.Client). Python uses httpx+pydantic, TypeScript uses fetch+zod. Both must cover all 82 endpoints across 15 controllers with identical API surface. Dual auth (API Key + Bearer JWT), SSE streaming, typed exception hierarchy, facade+sub-client composition.'
+    note: >-
+      Reference implementation: src/McpServer.Client/ (C# NuGet, PackageId: SharpNinja.McpServer.Client). Python uses httpx+pydantic, TypeScript uses fetch+zod. Both must cover all 82 endpoints across 15 controllers with identical API surface. Dual auth (API Key + Bearer JWT), SSE streaming, typed exception hierarchy, facade+sub-client composition.
+
+
+      ## Audit Snapshot (2026-03-03)
+
+
+      ### Title / Priority / Section / Done
+
+      - Title: Add REST clients similar to MVP-MARKETING-004 for Python and TypeScript
+
+      - Priority: low
+
+      - Section: saas
+
+      - Done: false
+
+
+      ### Description Summary
+
+      - Build Python (PyPI) and TypeScript (npm) REST client SDKs mirroring `src/McpServer.Client`.
+
+      - Cover 82 endpoints across 15 controllers with typed DTOs, dual auth, SSE, and shared facade/sub-client composition.
+
+      - Preserve API parity and behavior with the C# reference implementation.
+
+
+      ### Technical Details Summary
+
+      - Python target: `mcpserver-client` using `httpx` + `httpx-sse` + Pydantic v2, async context manager, typed exceptions.
+
+      - TypeScript target: `@sharpninja/mcpserver-client` using `fetch` + Zod, strict TS, ESM+CJS output via tsup.
+
+      - Shared requirements: dynamic port URL construction, workspace header propagation, API key/Bearer mutual exclusivity, and typed error mapping.
+
+      - Testing and packaging requirements are defined for both ecosystems plus CI/publish workflows.
+
+
+      ### Implementation Progress
+
+      - Completion: **0 / 35** implementation tasks complete.
+
+      - Repository check: `lib/python/mcpserver-client/**` and `lib/typescript/mcpserver-client/**` do not exist yet.
+
+
+      ### Blockers / Next Steps
+
+      - Blockers: no hard blockers recorded in TODO metadata.
+
+      - Immediate next steps:
+        1. Start Phase 0 scaffolding for Python client project structure and packaging.
+        2. Implement Python base/options/exceptions foundation (Phase 1.x).
+        3. Scaffold TypeScript project and base client framework (Phase 5.x).
+        4. Execute incremental client/test implementation by domain.
+
+      ### Dependencies
+
+      - `dependsOn`: none declared in TODO.
+
+      - External implementation dependency: `src/McpServer.Client/` exists and is designated as the canonical reference.
+
+      - Referenced TODO `MVP-MARKETING-004` is not present in current TODO store.
     done: false
     description:
     - Create typed REST client libraries for Python (PyPI) and TypeScript (npm) mirroring the McpServer.Client NuGet package — covering all 82 API endpoints across 15 controllers with typed models, error handling, and DI/factory patterns appropriate to each ecosystem.
@@ -1244,16 +1305,16 @@ saas:
 mvp-app:
   high-priority:
   - id: MVP-MCP-001
-    title: Add notifications about changed context (including session logs) on changes within a workspace
-    estimate: 8-12 hours AI-assisted
-    note: 'Audit 2026-03-01. Infrastructure built: ChannelChangeEventBus.cs exists, EventStreamController.cs exists at /mcpserver/events with SSE streaming. NON-FUNCTIONAL: ChannelChangeEventBus NOT registered in DI (runtime crash), ZERO PublishAsync calls in codebase, no services inject IChangeEventBus. EventStreamController references FR-MCP-031 (Web UI) - needs dedicated FR (FR-MCP-049). 52 mutation points across 12 services need event publishing wired up.'
+    title: '[READY] Add notifications about changed context (including session logs) on changes within a workspace'
+    estimate: '"8-12 hours AI-assisted"'
+    note: '"Audit 2026-03-01. Infrastructure built: ChannelChangeEventBus.cs exists, EventStreamController.cs exists at /mcpserver/events with SSE streaming. NON-FUNCTIONAL: ChannelChangeEventBus NOT registered in DI (runtime crash), ZERO PublishAsync calls in codebase, no services inject IChangeEventBus. EventStreamController references FR-MCP-031 (Web UI) - needs dedicated FR (FR-MCP-049). 52 mutation points across 12 services need event publishing wired up."'
     done: false
     description:
     - Implement a notification/event system that alerts connected agents when workspace context changes
     - Include session log updates, context source changes, file modifications, and other relevant mutations within a workspace
     - 'Infrastructure audit (2026-02-27): ChangeEvent model (5 files in Notifications/), EventStreamController (GET /mcpserver/events SSE), InteractionLoggingMiddleware SSE bypass — all exist but bus is not in DI and nothing publishes events'
     - '52 mutation points across 12 services/controllers need PublishAsync calls: todo(4), session_log(2), repo(1), context(2), tool_registry(4), tool_bucket(3), workspace(7), github(9), marker(2), agent(8), requirements(11)'
-    remaining: 'Phase 1: DI registration + 2 new categories. Phase 2: Inject IChangeEventBus into 6 core services (TodoService, SqliteTodoService, SessionLogService, RepoFileService, ToolRegistryService, ToolBucketService) + add ~16 PublishAsync calls. Phase 3: Inject into 4 extended services (WorkspaceService, AgentService, RequirementsDocumentService, IngestionCoordinator) + ~20 PublishAsync calls. Phase 4: Controller-level publishing for GitHubController + MarkerFileService callers (~11 calls). Phase 5: Unit + integration tests (~8 test classes). Phase 6: Requirements docs (FR-MCP-045, TR-MCP-EVT-001..005, TEST-MCP-048..053).'
+    remaining: '"Phase 1: DI registration + 2 new categories. Phase 2: Inject IChangeEventBus into 6 core services (TodoService, SqliteTodoService, SessionLogService, RepoFileService, ToolRegistryService, ToolBucketService) + add ~16 PublishAsync calls. Phase 3: Inject into 4 extended services (WorkspaceService, AgentService, RequirementsDocumentService, IngestionCoordinator) + ~20 PublishAsync calls. Phase 4: Controller-level publishing for GitHubController + MarkerFileService callers (~11 calls). Phase 5: Unit + integration tests (~8 test classes). Phase 6: Requirements docs (FR-MCP-045, TR-MCP-EVT-001..005, TEST-MCP-048..053)."'
     technical-details:
     - 'ARCHITECTURE: In-process fan-out pub/sub via ChannelChangeEventBus (bounded channel, 1000-item buffer, drop-oldest). SSE delivery via EventStreamController at GET /mcpserver/events?category=xxx. Per-subscriber channels ensure independent consumption.'
     - 'DI REGISTRATION: builder.Services.AddSingleton<IChangeEventBus, ChannelChangeEventBus>() in Program.cs — MUST be singleton so all scoped services and the SSE controller share the same bus instance.'
@@ -1278,10 +1339,7 @@ mvp-app:
       done: true
     - task: "Phase 1.1 — Register ChannelChangeEventBus in DI: Add \builder.Services.AddSingleton<IChangeEventBus, ChannelChangeEventBus>(); to Program.cs in the service registration block (after line ~269, near other singletons). Verify /mcpserver/events endpoint no longer crashes (returns empty SSE stream)."
       done: false
-    - task: >-
-        Phase 1.2 — Add new ChangeEventCategories: Add public const string Agent = gent; and public const string Requirements = 
-
-        equirements; to ChangeEventCategories.cs. Total: 11 categories.
+    - task: "Phase 1.2 — Add new ChangeEventCategories: Add public const string Agent = \agent; and public const string Requirements ="
       done: false
     - task: 'Phase 1.3 — Fix FR reference: Change EventStreamController.cs line 8 from FR-MCP-031 to FR-MCP-045.'
       done: false
@@ -1408,9 +1466,9 @@ mvp-mcp:
     - Extract the copilot-related functions from the VS2026 VSIX extension and expose them as MCP server endpoints under /mcpserver/todo or similar.
     - This consolidates agent-facing capabilities into the MCP server rather than the IDE extension.
   - id: MVP-MCP-003
-    title: Complete Director MVVM/CQRS endpoint coverage with per-area ViewModels, handlers, commands, and RBAC tab visibility
-    estimate: 5-8 days AI-assisted
-    note: 'Audit 2026-03-01. Director has 2 handler files (AgentScreenHandler, LoginDialogAuthConfigHandler), 5 command files, 11 screen files, ViewModelBinder. Prior audit claimed 33/112 handlers (29%). Unverifiable from codebase - no handler manifest found. Structure suggests extensive work needed: most REST endpoints lack dedicated CQRS command/query handlers. Screens are functional but lack detail/drill-down views.'
+    title: '[READY] Complete Director MVVM/CQRS endpoint coverage with per-area ViewModels, handlers, commands, and RBAC tab visibility'
+    estimate: '"5-8 days AI-assisted"'
+    note: '"Audit 2026-03-01. Director has 2 handler files (AgentScreenHandler, LoginDialogAuthConfigHandler), 5 command files, 11 screen files, ViewModelBinder. Prior audit claimed 33/112 handlers (29%). Unverifiable from codebase - no handler manifest found. Structure suggests extensive work needed: most REST endpoints lack dedicated CQRS command/query handlers. Screens are functional but lack detail/drill-down views."'
     done: false
     description:
     - Implement complete MCP Director administration coverage through the McpServer.UI.Core MVVM/CQRS layer.
@@ -1419,7 +1477,7 @@ mvp-mcp:
     - Add RBAC-aware tab and command visibility (viewer, agent-manager, admin), with hidden workspaces/admin features for non-admin users.
     - Director interactive screens should use ViewModels/CQRS only for covered areas (no direct endpoint calls in migrated tabs).
     - 'AUDIT SUMMARY (2026-02-27): 33/112 handlers (29%), 29 ViewModels, 10/14 API client interfaces, 10 Messages files. Phase 0+2.4+2.6 done, 4 phases partial, 4 phases not started.'
-    remaining: 75 handlers, 4 McpServer.Client client classes, 4 UI.Core API client interfaces, 4 Director API adapter classes, ~20 ViewModels, ~15 Message files, 1 screen migration (AgentScreen), 6 new Director screens, UI.Core test project + tests, Director screen tests.
+    remaining: '"75 handlers, 4 McpServer.Client client classes, 4 UI.Core API client interfaces, 4 Director API adapter classes, ~20 ViewModels, ~15 Message files, 1 screen migration (AgentScreen), 6 new Director screens, UI.Core test project + tests, Director screen tests."'
     technical-details:
     - 'Scope: all /mcpserver/* areas plus /auth/config and /health diagnostics/event views. ACTUAL endpoint count is 112 REST endpoints (not the originally estimated ~78). Excludes minimal-API endpoints (pairing, server-startup-utc, etc.) and MCP protocol tools.'
     - 'Handler granularity: strict 1:1 endpoint-to-handler mapping (query/command + handler + ViewModel async command).'
@@ -1741,134 +1799,9 @@ infrastructure:
     - Preserve OIDC response payloads/status codes so Android device-flow polling logic continues to work unchanged except for base URL (:7147 instead of :7080).
     - 'Route examples: GET /auth/config (local metadata), POST /auth/device (proxy to Keycloak device authorization endpoint), POST /auth/token (proxy to Keycloak token endpoint).'
   - id: web-ui
-    title: McpServer Management Web UI
-    note: >-
-      Blazor Server app using Primer CSS (GitHub's design system) + Octicons. Separate process (McpServer.Web), talks to McpServer API via McpServer.Client. Reuses McpServer.UI.Core ViewModels + CQRS handlers (same pattern as Director). Open-source .NET OIDC server integration from day one, aligned with platform-wide Keycloak replacement. NO MudBlazor — custom Blazor components wrapping Primer CSS classes directly.
-
-
-      DESIGN SYSTEM:
-
-      - Primer CSS v22 via jsDelivr CDN: https://cdn.jsdelivr.net/npm/@primer/css@22/dist/primer.min.css
-
-      - Octicons SVG icons from @primer/octicons npm package (MIT licensed)
-
-      - Font stack: -apple-system, BlinkMacSystemFont, Segoe UI, Noto Sans, Helvetica, Arial (built into Primer CSS)
-
-      - Dark/light theme via data-color-mode attribute on <html>
-
-      - NO third-party Blazor component library — all custom Primer wrappers
-
-
-      ARCHITECTURE:
-
-      - Pages (Primer CSS) -> UI.Core ViewModels -> CQRS Dispatcher -> Handlers -> API Client Adapters -> McpServerClient (HTTP) -> McpServer API (port 7147)
-
-      - WebMcpContext (mirrors DirectorMcpContext): holds McpServerClient + active workspace path, scoped per Blazor circuit
-
-      - 10 API client adapters (same interfaces as Director): ITodoApiClient, IWorkspaceApiClient, ISessionLogApiClient, IHealthApiClient, ITemplateApiClient, IContextApiClient, IRepoApiClient, ITunnelApiClient, IAuthConfigApiClient, IDiagnosticApiClient
-
-      - WebServiceRegistration.cs registers UI.Core, CQRS Dispatcher+Handlers, adapters, McpServerClient
-
-
-      PRIMER BLAZOR COMPONENTS (Components/Primer/):
-
-      - PrimerButton.razor: <button class="btn btn-primary|btn-danger|btn-outline"> with Size, Variant, Disabled params
-
-      - PrimerDataTable.razor: Primer Box + <table> with sortable columns, pagination, filtering. Renders <thead>/<tbody>, handles column click sort, emits page change events. Generic T parameter.
-
-      - PrimerDialog.razor: Modal dialog using Primer Box-overlay pattern with backdrop, header/body/footer slots
-
-      - PrimerFlash.razor: <div class="flash flash-success|flash-warn|flash-error|flash-full"> with auto-dismiss timer
-
-      - PrimerLabel.razor: <span class="Label Label--success|Label--danger|Label--warning|Label--accent"> for status badges
-
-      - PrimerPagination.razor: <nav class="paginate-container"> with Previous/Next + page numbers
-
-      - PrimerForm.razor: Form wrapper with Primer form-group classes, validation display
-
-      - PrimerBreadcrumb.razor: <nav aria-label="Breadcrumb"> with Primer Breadcrumb classes
-
-      - PrimerBlankslate.razor: <div class="blankslate"> for empty states with icon + title + description + action
-
-      - OcticonIcon.razor: Inline SVG renderer. Accepts Name (string) + Size (int, default 16). SVG paths from C# dictionary extracted from @primer/octicons at build time.
-
-
-      PAGES:
-
-      - Dashboard.razor: Primer Box grid with health summary cards (IHealthApiClient.CheckHealthAsync), workspace count, recent session logs (top 5), active TODO count. Uses OcticonIcon for card icons.
-
-      - WorkspaceList.razor: PrimerDataTable<WorkspaceListItem> showing name, path, status. Create button opens PrimerDialog with form. Delete with confirmation.
-
-      - WorkspaceDetail.razor: Primer form-group layout for config editing. WorkspacePolicyViewModel for policy management. Init button calls InitWorkspaceAsync.
-
-      - TodoList.razor: PrimerDataTable<TodoListItem> with PrimerLabel badges for priority (high=Label--danger, medium=Label--warning, low=Label--accent). Filters: priority dropdown, section dropdown, done toggle. Inline status toggle checkbox.
-
-      - TodoDetail.razor: Primer form with all TODO fields. Multi-line description, implementation tasks list, technical details. Create/Update/Delete buttons. Links to plan/implement/status prompt generation.
-
-      - SessionLogList.razor: PrimerDataTable<SessionLogListItem> with filters: agent (text), model (text), date from/to (date inputs), text search. Columns: sessionId, sourceType, title, status, lastUpdated, entryCount.
-
-      - SessionLogDetail.razor: Primer Timeline component showing entries chronologically. Each TimelineItem shows: requestId, model, queryText (truncated), response (expandable), actions list, commits (sha+message+branch), designDecisions, filesModified, blockers. ProcessingDialog items in a collapsible details element.
-
-      - TemplateList.razor: PrimerDataTable with category/tag/keyword filters. Columns: id, name, category, tags (PrimerLabel each), description. CRUD buttons.
-
-      - TemplateDetail.razor: Primer form for template editing. Markdown preview for body. Test tab with JSON data input + rendered output preview.
-
-      - AgentList.razor: PrimerDataTable<AgentDefinition> showing type, name, status. Links to agent workspace assignments.
-
-      - ContextSearch.razor: Search input + PrimerDataTable results. Shows chunk content, source, score. Pack mode toggle.
-
-      - HealthDashboard.razor: Box grid with PrimerFlash for each health check (green/red). Server info, workspace health checks, endpoint status.
-
-      - AuthConfig.razor: Read-only display of OIDC configuration from IAuthConfigApiClient.
-
-
-      SHARED COMPONENTS:
-
-      - WorkspacePicker.razor: Primer SelectMenu in NavMenu. Lists workspaces from IWorkspaceApiClient.ListWorkspacesAsync. On selection, updates WebMcpContext.ActiveWorkspacePath. Persists selection in browser localStorage via JS interop.
-
-      - StatusBadge.razor: Maps status strings to PrimerLabel variants (done->success, in_progress->accent, blocked->danger, pending->secondary).
-
-      - ConfirmDialog.razor: PrimerDialog with configurable title, message, confirm/cancel buttons. Returns bool result via TaskCompletionSource.
-
-
-      OIDC AUTH (.NET provider):
-
-      - OpenIdConnect middleware in Program.cs with Authority, ClientId, ClientSecret from appsettings.json Authentication section (OIDC discovery from standard .well-known endpoint)
-
-      - Cookie authentication for Blazor Server circuit persistence
-
-      - Role claim mapping: agent-manager, admin roles via provider-neutral claim mapping configuration
-
-      - Login: redirect to OIDC provider authorization endpoint. Logout: /signout + discovered end_session_endpoint when available.
-
-      - [Authorize] on all pages. Anonymous access only for login redirect.
-
-      - IRoleContext equivalent for UI.Core authorization checks.
-
-
-      SSE REAL-TIME UPDATES:
-
-      - JS interop module (wwwroot/js/sse.js) subscribes to /mcpserver/events?category=todo,session,workspace,template
-
-      - On event received, invokes C# callback via DotNetObjectReference
-
-      - C# handler calls InvokeAsync(StateHasChanged) on relevant page
-
-      - Reconnection with exponential backoff (1s, 2s, 4s, 8s, max 30s)
-
-      - Disposed on page navigation via IAsyncDisposable
-
-
-      DEPLOYMENT:
-
-      - Windows service registration (sc.exe create McpServerWeb)
-
-      - Separate port (default 5200, configurable via Mcp:WebPort or PORT env var)
-
-      - Docker: extend docker-compose.mcp.yml with mcpserver-web service
-
-      - Health check endpoint at /health for load balancers
-    done: false
+    title: '[READY] McpServer Management Web UI'
+    note: "\"Blazor Server app using Primer CSS (GitHub's design system) + Octicons. Separate process (McpServer.Web), talks to McpServer API via McpServer.Client. Reuses McpServer.UI.Core ViewModels + CQRS handlers (same pattern as Director). Open-source .NET OIDC server integration from day one, aligned with platform-wide Keycloak replacement. NO MudBlazor — custom Blazor components wrapping Primer CSS classes directly."
+    done: true
     description:
     - Build a web-based management UI for McpServer using Blazor Server + Primer CSS (GitHub's design system)
     - Separate process (McpServer.Web) communicating with McpServer API via McpServer.Client library over HTTP
@@ -1974,8 +1907,8 @@ infrastructure:
     - task: 'Phase 7.4: Requirements — Update FR-MCP-031 with implementation details. Create TR-MCP-WEB-001 (Blazor Server + Primer CSS), TR-MCP-WEB-002 (OIDC integration), TR-MCP-WEB-003 (SSE real-time), TR-MCP-WEB-004 (API adapter pattern). Update TODO.yaml.'
       done: false
   - id: github-integration
-    title: Github Integration
-    note: 'Audit 2026-03-01. Core GitHub integration is ~85% complete via gh CLI: 13 REST endpoints on GitHubController (issue CRUD, close/reopen, comments, labels, PRs, bi-directional sync), GitHubCliService (full gh CLI wrapper), IssueTodoSyncService (ISSUE-{n} mapping, label-to-priority). REMAINING GAP: OAuth/Keycloak IdP integration not implemented - currently relies on local gh CLI auth. Needs: GitHub OAuth app registration, Keycloak GitHub IdP setup, per-workspace OAuth token storage.'
+    title: '[NEED PLAN] Github Integration'
+    note: '"Audit 2026-03-01. Core GitHub integration is ~85% complete via gh CLI: 13 REST endpoints on GitHubController (issue CRUD, close/reopen, comments, labels, PRs, bi-directional sync), GitHubCliService (full gh CLI wrapper), IssueTodoSyncService (ISSUE-{n} mapping, label-to-priority). REMAINING GAP: OAuth/Keycloak IdP integration not implemented - currently relies on local gh CLI auth. Needs: GitHub OAuth app registration, Keycloak GitHub IdP setup, per-workspace OAuth token storage."'
     done: false
     description:
     - Enhance GitHub integration capabilities for McpServer
@@ -1983,13 +1916,13 @@ infrastructure:
     - Integrate with GitHub OAuth for agent workspace management and PR workflows
   medium-priority:
   - id: do-not-speak-tables
-    title: Do Not Speak Tables
+    title: '[NEED PLAN] Do Not Speak Tables'
     done: false
 Architecture:
   high-priority:
   - id: audit-di-ssot
-    title: Audit ALL code for Single Source of Truth adherence and DI data exposure with INotifyPropertyChanged
-    note: 'Audit 2026-03-01. ViewModels use ObservableObject (CommunityToolkit.Mvvm) with [ObservableProperty] for INotifyPropertyChanged. WorkspaceContextViewModel is a singleton with mutable ActiveWorkspacePath. 7 implementation tasks all pending: inventory services outside DI, data sources not in DI, push-based patterns, verify INotifyPropertyChanged, refactor violations, update tests, document pattern. Status audit 2026-03-01T23:25:25.843Z: TODO metadata reviewed; implementation progress remains 0/7 complete. Blockers: no explicit dependency blockers recorded, but full-codebase inventory/refactor effort remains outstanding. Next steps: execute the 7 implementation tasks in order with DI registration and INotifyPropertyChanged verification first. Dependencies: none declared in DependsOn.'
+    title: '[NEED PLAN] Audit ALL code for Single Source of Truth adherence and DI data exposure with INotifyPropertyChanged'
+    note: '"Audit 2026-03-01. ViewModels use ObservableObject (CommunityToolkit.Mvvm) with [ObservableProperty] for INotifyPropertyChanged. WorkspaceContextViewModel is a singleton with mutable ActiveWorkspacePath. 7 implementation tasks all pending: inventory services outside DI, data sources not in DI, push-based patterns, verify INotifyPropertyChanged, refactor violations, update tests, document pattern. Status audit 2026-03-01T23:25:25.843Z: TODO metadata reviewed; implementation progress remains 0/7 complete. Blockers: no explicit dependency blockers recorded, but full-codebase inventory/refactor effort remains outstanding. Next steps: execute the 7 implementation tasks in order with DI registration and INotifyPropertyChanged verification first. Dependencies: none declared in DependsOn."'
     done: false
     description:
     - Audit the entire codebase to ensure every data source follows the Single Source of Truth principle.
@@ -2017,6 +1950,38 @@ Architecture:
     - task: Update tests to use DI injection instead of manual service creation
       done: false
     - task: Document the SSOT/DI pattern in Technical-Requirements.md
+      done: false
+  - id: web-ui-cqrs-mvvm-compliance-audit
+    title: '[NEED PLAN] Web UI CQRS + MVVM compliance remediation'
+    note: >-
+      Audit 2026-03-03: McpServer.Web currently uses API-client-driven code-behind pages rather than
+      UI.Core ViewModels + CQRS dispatch orchestration. Evidence snapshot: 14 pages total, 13 pages
+      inject I*ApiClient, 13 pages declare local _loading state, 13 generic catches across pages,
+      and 0 ViewModel/Dispatcher references in src/McpServer.Web/Pages. CQRS contracts and handlers
+      exist in UI.Core and adapters, but page-level orchestration bypasses them.
+    done: false
+    description:
+    - Bring McpServer.Web into architectural compliance with CQRS and MVVM commitments.
+    - Replace page-level code-behind orchestration with UI.Core ViewModels as the single state and behavior owner.
+    - Route page operations through CQRS Dispatcher + handlers instead of invoking API adapters directly from views.
+    - Eliminate duplicated loading/error/state logic currently repeated across Razor pages.
+    technical-details:
+    - 'Evidence files: src/McpServer.Web/Pages/*.razor inject I*ApiClient and run data-fetch logic in OnInitializedAsync/OnParametersSetAsync.'
+    - 'No page-level ViewModel or Dispatcher usage: 0 matches for ViewModel/DispatchAsync in src/McpServer.Web/Pages.'
+    - 'UI.Core already provides compliant primitives: ServiceCollectionExtensions.AddUiCore registers handlers and ViewModels (e.g., TodoListViewModel, SessionLogListViewModel, TemplateListViewModel).'
+    - 'Current Web setup partially aligns with CQRS at API contract level (command/query DTOs in adapter interfaces) but not at UI orchestration level.'
+    implementation-tasks:
+    - task: Introduce per-page ViewModel injection/binding for Dashboard, Workspaces, Todos, Sessions, Templates, Context, Health, and Auth pages.
+      done: false
+    - task: Refactor page lifecycle methods to call ViewModel LoadAsync/commands and bind to observable VM state instead of local _loading/_error/_items fields.
+      done: false
+    - task: Ensure all mutations execute through CQRS command dispatch paths and all reads through CQRS query dispatch paths.
+      done: false
+    - task: Replace direct WebMcpContext mutations in shared components with WorkspaceContextViewModel-driven updates.
+      done: false
+    - task: Add focused tests proving page behavior is ViewModel-driven (state transitions, command invocation, workspace-change reloads).
+      done: false
+    - task: Update web-ui TODO notes after remediation to reflect actual architecture and remove stale architecture claims.
       done: false
   - id: agent-pool-runtime-orchestration
     title: Implement Agent Pool runtime orchestration and Director controls
@@ -2150,8 +2115,7 @@ Architecture:
 
       Execution Breakdown (File-Level / API-Level)
 
-      A) Options + validation
-      - Add src/McpServer.Support.Mcp/Options/AgentPoolOptions.cs:
+      A) Options + validation - Add src/McpServer.Support.Mcp/Options/AgentPoolOptions.cs:
         * AgentPoolOptions.SectionName = "AgentPool"
         * Agents: List<AgentPoolDefinitionOptions>
       - Add src/McpServer.Support.Mcp/Options/AgentPoolDefinitionOptions.cs fields:
@@ -2165,8 +2129,7 @@ Architecture:
         * Configure<AgentPoolOptions>(section)
         * AddSingleton<IValidateOptions<AgentPoolOptions>, AgentPoolOptionsValidator>()
 
-      B) Voice runtime extensions
-      - Extend VoiceSessionCreateRequest:
+      B) Voice runtime extensions - Extend VoiceSessionCreateRequest:
         * AgentName (optional)
         * OneShotSession (optional; internal behavioral flag)
       - Extend IVoiceConversationService with:
@@ -2181,9 +2144,7 @@ Architecture:
         * turn/stream sends "User is here." after stream open (interactive only)
         * turn/stream sends "User is AFK." on disconnect/cancel (interactive only)
 
-      C) Agent Pool runtime + queue
-      - Add src/McpServer.Support.Mcp/Services/IAgentPoolService.cs
-      - Add src/McpServer.Support.Mcp/Services/AgentPoolService.cs:
+      C) Agent Pool runtime + queue - Add src/McpServer.Support.Mcp/Services/IAgentPoolService.cs - Add src/McpServer.Support.Mcp/Services/AgentPoolService.cs:
         * Agent registry state (lifecycle/session/last prompt/active links/subscribers)
         * Queue state store (queued/processing/completed/failed/canceled)
         * Queue operations (enqueue/list/cancel/remove/reorder)
@@ -2193,8 +2154,7 @@ Architecture:
         * Read-only job stream fan-out for multi-subscriber consumption
       - Register AgentPoolService singleton in Program.cs
 
-      D) One-shot contract + prompt resolution
-      - Add one-shot request/response DTOs:
+      D) One-shot contract + prompt resolution - Add one-shot request/response DTOs:
         * Context enum: Plan, Status, Implement, AdHoc
         * AgentName optional, promptTemplateId optional, promptText optional, id optional
         * Values dictionary optional, UseWorkspaceContext flag optional
@@ -2209,8 +2169,7 @@ Architecture:
         * merge values: workspace/context defaults first, caller values overwrite conflicts
         * inject id into variables for {id} substitution
 
-      E) Controllers / endpoints
-      - Add src/McpServer.Support.Mcp/Controllers/AgentPoolController.cs:
+      E) Controllers / endpoints - Add src/McpServer.Support.Mcp/Controllers/AgentPoolController.cs:
         * GET /mcpserver/agent-pool/agents
         * POST /mcpserver/agent-pool/agents/{agentName}/start
         * POST /mcpserver/agent-pool/agents/{agentName}/stop
@@ -2229,12 +2188,9 @@ Architecture:
         * input: values dictionary
         * output: populated rendered prompt
 
-      F) TODO one-shot integration
-      - Add optional enqueue endpoints for TODO plan/status/implement that use agent pool queue
-      - Preserve existing SSE prompt routes for compatibility while enabling queued model
+      F) TODO one-shot integration - Add optional enqueue endpoints for TODO plan/status/implement that use agent pool queue - Preserve existing SSE prompt routes for compatibility while enabling queued model
 
-      G) Tests and verification
-      - Add tests:
+      G) Tests and verification - Add tests:
         * AgentPoolOptions validator tests
         * AgentPoolService queue lifecycle + reorder/cancel tests
         * Intent-default routing tests
@@ -2243,7 +2199,7 @@ Architecture:
       - Build + test commands:
         * dotnet build src\McpServer.Support.Mcp -c Debug
         * dotnet test tests\McpServer.Support.Mcp.Tests -c Debug
-    done: false
+    done: true
     description:
     - Implement pooled agents configured by AgentName/AgentPath/AgentModel/AgentSeed/AgentParameters; route voice and one-shot through pooled voice-launch sessions; add queue management, availability/control APIs, notification SSE, read-only stream fan-out, and Director Agent Pool + queue management UI.
     implementation-tasks:
@@ -2283,4 +2239,270 @@ Director:
     - task: Wire list selection to detail view navigation
       done: false
     - task: Add tests for session log detail handler
+      done: false
+  - id: agentpool-method-inventory-summary-20260303-0144
+    title: Agent Pool tab method inventory summary
+    estimate: 7-10 days AI-assisted
+    note: 'EXCRUCIATINGLY DETAILED IMPLEMENTATION PLAN: full migration of Director Agent Pool tab to CQRS + MVVM + no-code-behind + DI SSOT with file-level and handler-level decomposition, command-path parity checks, RBAC action key expansion, and verification gates.'
+    done: false
+    description:
+    - Migrate Agent Pool tab from code-behind runtime orchestration to UI.Core CQRS/MVVM architecture with Director adapter indirection.
+    - Eliminate direct calls from AgentPoolScreen to DirectorMcpContext, AgentScreenHandler, and McpServerClient/AgentPoolClient.
+    - Move mutable tab state to DI-owned ViewModel(s) and make screen rendering/presentation-only.
+    - Enforce command/query handler boundaries, action-key authorization checks, and test coverage for load/mutation/error/auth paths.
+    remaining: Execution not started. All tasks below are pending and ordered for incremental delivery with rollback-safe checkpoints.
+    technical-details:
+    - 'Current non-compliant file: src/McpServer.Director/Screens/AgentPoolScreen.cs (direct API operations in UI code-behind).'
+    - 'Cross-area coupling source: src/McpServer.Director/Handlers/AgentScreenHandler.cs used directly by AgentPoolScreen.'
+    - 'Target pattern baseline files: src/McpServer.UI.Core/Messages/TunnelMessages.cs, src/McpServer.UI.Core/Handlers/TunnelHandlers.cs, src/McpServer.UI.Core/ViewModels/TunnelListViewModel.cs, src/McpServer.Director/Screens/TunnelScreen.cs.'
+    - 'Primary acceptance rule: after migration, AgentPoolScreen must contain no endpoint invocations and no direct domain mutation logic.'
+    - 'SSOT rule: all tab data (agent rows, queue rows, selection, status, pending state) must be owned by ViewModel properties/collections in DI, not screen-local lists.'
+    depends-on:
+    - MVP-MCP-003
+    functional-requirements:
+    - FR-MCP-029
+    - FR-MCP-057
+    - FR-MCP-059
+    technical-requirements:
+    - TR-MCP-CQRS-001
+    - TR-MCP-CQRS-002
+    - TR-MCP-CQRS-003
+    - TR-MCP-CQRS-004
+    - TR-MCP-CQRS-005
+    - TR-MCP-DIR-004
+    - TR-MCP-ARCH-002
+    implementation-tasks:
+    - task: 'P0-01: Create migration branch strategy and checkpoint plan for Agent Pool tab refactor (compile-safe per phase).'
+      done: false
+    - task: 'P0-02: Build a feature parity matrix of current AgentPoolScreen actions: Refresh, Start, Stop, Recycle, Connect, Cancel Job, Remove Job, Move Up, Move Down, Enqueue.'
+      done: false
+    - task: 'P0-03: Mark each parity action with target CQRS message and handler owner before coding.'
+      done: false
+    - task: 'P0-04: Record no-code-behind acceptance criterion: screen may only bind and forward UI input to ViewModel commands.'
+      done: false
+    - task: 'P0-05: Record SSOT acceptance criterion: no local mutable row collections in AgentPoolScreen after migration.'
+      done: false
+    - task: 'P0-06: Decide and document scope for configured agent-definition editing from Agent Pool tab (retain via dedicated CQRS path or explicitly defer to Agents tab).'
+      done: false
+    - task: 'P0-07: Define regression test checklist for all Agent Pool user flows and failure modes.'
+      done: false
+    - task: 'P0-08: Freeze required file touch list to reduce architecture drift during implementation.'
+      done: false
+    - task: 'P1-01: Add src/McpServer.UI.Core/Services/IAgentPoolApiClient.cs with full runtime + queue method contract.'
+      done: false
+    - task: 'P1-02: Include ListAgentsAsync and ListQueueAsync methods in IAgentPoolApiClient.'
+      done: false
+    - task: 'P1-03: Include StartAgentAsync, StopAgentAsync, RecycleAgentAsync, ConnectAgentAsync methods in IAgentPoolApiClient.'
+      done: false
+    - task: 'P1-04: Include CancelJobAsync, RemoveJobAsync, MoveJobUpAsync, MoveJobDownAsync methods in IAgentPoolApiClient.'
+      done: false
+    - task: 'P1-05: Include ResolvePromptAsync and EnqueueOneShotAsync methods in IAgentPoolApiClient.'
+      done: false
+    - task: 'P1-06: Add src/McpServer.UI.Core/Messages/AgentPoolMessages.cs with typed query/command records.'
+      done: false
+    - task: 'P1-07: Define ListAgentPoolAgentsQuery -> AgentPoolAgentsResult in AgentPoolMessages.'
+      done: false
+    - task: 'P1-08: Define ListAgentPoolQueueQuery -> AgentPoolQueueResult in AgentPoolMessages.'
+      done: false
+    - task: 'P1-09: Define Start/Stop/Recycle/Connect command records and mutation result models in AgentPoolMessages.'
+      done: false
+    - task: 'P1-10: Define Cancel/Remove/MoveUp/MoveDown command records and mutation result models in AgentPoolMessages.'
+      done: false
+    - task: 'P1-11: Define ResolvePrompt and EnqueueOneShot command records in AgentPoolMessages.'
+      done: false
+    - task: 'P1-12: Add XML docs for all new message and service contract types to satisfy workspace documentation standards.'
+      done: false
+    - task: 'P2-01: Add src/McpServer.UI.Core/Handlers/ListAgentPoolAgentsQueryHandler.cs.'
+      done: false
+    - task: 'P2-02: Add src/McpServer.UI.Core/Handlers/ListAgentPoolQueueQueryHandler.cs.'
+      done: false
+    - task: 'P2-03: Add src/McpServer.UI.Core/Handlers/StartAgentPoolAgentCommandHandler.cs.'
+      done: false
+    - task: 'P2-04: Add src/McpServer.UI.Core/Handlers/StopAgentPoolAgentCommandHandler.cs.'
+      done: false
+    - task: 'P2-05: Add src/McpServer.UI.Core/Handlers/RecycleAgentPoolAgentCommandHandler.cs.'
+      done: false
+    - task: 'P2-06: Add src/McpServer.UI.Core/Handlers/ConnectAgentPoolAgentCommandHandler.cs.'
+      done: false
+    - task: 'P2-07: Add src/McpServer.UI.Core/Handlers/CancelAgentPoolJobCommandHandler.cs.'
+      done: false
+    - task: 'P2-08: Add src/McpServer.UI.Core/Handlers/RemoveAgentPoolJobCommandHandler.cs.'
+      done: false
+    - task: 'P2-09: Add src/McpServer.UI.Core/Handlers/MoveAgentPoolJobUpCommandHandler.cs.'
+      done: false
+    - task: 'P2-10: Add src/McpServer.UI.Core/Handlers/MoveAgentPoolJobDownCommandHandler.cs.'
+      done: false
+    - task: 'P2-11: Add src/McpServer.UI.Core/Handlers/ResolveAgentPoolPromptCommandHandler.cs.'
+      done: false
+    - task: 'P2-12: Add src/McpServer.UI.Core/Handlers/EnqueueAgentPoolOneShotCommandHandler.cs.'
+      done: false
+    - task: 'P2-13: Add action-key authorization checks in each new Agent Pool handler before API invocation.'
+      done: false
+    - task: 'P2-14: Standardize exception-to-Result mapping and log behavior (LogError with ex.ToString()) in all new handlers.'
+      done: false
+    - task: 'P3-01: Extend src/McpServer.UI.Core/Authorization/McpActionKeys.cs with Agent Pool action keys.'
+      done: false
+    - task: 'P3-02: Add action key agentpool.agents.list.'
+      done: false
+    - task: 'P3-03: Add action keys agentpool.agent.start, agentpool.agent.stop, agentpool.agent.recycle, agentpool.agent.connect.'
+      done: false
+    - task: 'P3-04: Add action key agentpool.queue.list.'
+      done: false
+    - task: 'P3-05: Add action keys agentpool.queue.cancel, agentpool.queue.remove, agentpool.queue.move-up, agentpool.queue.move-down.'
+      done: false
+    - task: 'P3-06: Add action keys agentpool.prompt.resolve and agentpool.queue.enqueue.'
+      done: false
+    - task: 'P3-07: Update src/McpServer.Director/Auth/DirectorAuthorizationPolicyService.cs to map new Agent Pool action keys to roles.'
+      done: false
+    - task: 'P3-08: Validate that tab-level area visibility and action-level authorization remain consistent for viewer/agent-manager/admin tiers.'
+      done: false
+    - task: 'P4-01: Add src/McpServer.Director/AgentPoolApiClientAdapter.cs implementing IAgentPoolApiClient via McpServerClient.AgentPool.'
+      done: false
+    - task: 'P4-02: Map ListAgentsAsync and ListQueueAsync adapter methods to AgentPoolClient GetAgentsAsync/GetQueueAsync.'
+      done: false
+    - task: 'P4-03: Map start/stop/recycle/connect adapter methods to corresponding AgentPoolClient methods.'
+      done: false
+    - task: 'P4-04: Map cancel/remove/move adapter methods to corresponding AgentPoolClient methods.'
+      done: false
+    - task: 'P4-05: Map resolve/enqueue adapter methods with full request field coverage (AgentName, Context, PromptText, UseWorkspaceContext).'
+      done: false
+    - task: 'P4-06: Register IAgentPoolApiClient -> AgentPoolApiClientAdapter in DirectorServiceRegistration.Configure().'
+      done: false
+    - task: 'P4-07: Ensure adapter uses active workspace context client path consistently to preserve workspace routing behavior.'
+      done: false
+    - task: 'P4-08: Add XML docs and nullability guards in adapter methods.'
+      done: false
+    - task: 'P5-01: Add src/McpServer.UI.Core/ViewModels/AgentPoolViewModel.cs as DI-owned SSOT state owner for Agent Pool tab.'
+      done: false
+    - task: 'P5-02: Add observable collections for runtime agents and queue items in AgentPoolViewModel.'
+      done: false
+    - task: 'P5-03: Add selected index/item properties for both tables in AgentPoolViewModel.'
+      done: false
+    - task: 'P5-04: Add input properties for AgentName and AdHocPrompt in AgentPoolViewModel.'
+      done: false
+    - task: 'P5-05: Add status and error properties for user-visible command feedback in AgentPoolViewModel.'
+      done: false
+    - task: 'P5-06: Add CqrsQueryCommand refresh commands for agents and queue queries.'
+      done: false
+    - task: 'P5-07: Add CqrsRelayCommand for Start operation and post-success refresh pipeline.'
+      done: false
+    - task: 'P5-08: Add CqrsRelayCommand for Stop operation and post-success refresh pipeline.'
+      done: false
+    - task: 'P5-09: Add CqrsRelayCommand for Recycle operation and post-success refresh pipeline.'
+      done: false
+    - task: 'P5-10: Add CqrsRelayCommand for Connect operation and post-success refresh pipeline.'
+      done: false
+    - task: 'P5-11: Add CqrsRelayCommand for Cancel job operation and post-success refresh pipeline.'
+      done: false
+    - task: 'P5-12: Add CqrsRelayCommand for Remove job operation and post-success refresh pipeline.'
+      done: false
+    - task: 'P5-13: Add CqrsRelayCommand for Move job up operation and post-success refresh pipeline.'
+      done: false
+    - task: 'P5-14: Add CqrsRelayCommand for Move job down operation and post-success refresh pipeline.'
+      done: false
+    - task: 'P5-15: Add CqrsRelayCommand for Resolve+Enqueue ad-hoc flow with validation and staged status updates.'
+      done: false
+    - task: 'P5-16: Add helper validation methods for required prompt text and required selection semantics.'
+      done: false
+    - task: 'P5-17: Add workspace context subscription (WorkspaceContextViewModel.PropertyChanged) to trigger pull-based refresh.'
+      done: false
+    - task: 'P5-18: Add in-flight guard to prevent overlapping refresh operations and command reentry races.'
+      done: false
+    - task: 'P5-19: Register AgentPoolViewModel in src/McpServer.UI.Core/ServiceCollectionExtensions.cs.'
+      done: false
+    - task: 'P5-20: Add optional [ViewModelCommand] alias if CLI exec support is required for Agent Pool operations.'
+      done: false
+    - task: 'P6-01: Refactor src/McpServer.Director/Screens/AgentPoolScreen.cs constructor to accept AgentPoolViewModel instead of DirectorMcpContext.'
+      done: false
+    - task: 'P6-02: Remove fields _directorContext and _agentHandler from AgentPoolScreen.'
+      done: false
+    - task: 'P6-03: Remove local state lists (_configuredRows, _agentRows, _queueRows) and replace with binder-driven collection rendering.'
+      done: false
+    - task: 'P6-04: Introduce ViewModelBinder instance in AgentPoolScreen and dispose it in Dispose(bool).'
+      done: false
+    - task: 'P6-05: Bind status label text to AgentPoolViewModel status property.'
+      done: false
+    - task: 'P6-06: Bind runtime agents table data source to AgentPoolViewModel agents collection.'
+      done: false
+    - task: 'P6-07: Bind queue table data source to AgentPoolViewModel queue collection.'
+      done: false
+    - task: 'P6-08: Bind selected row changes back to ViewModel selected index properties.'
+      done: false
+    - task: 'P6-09: Bind agent name input field to ViewModel AgentName property.'
+      done: false
+    - task: 'P6-10: Bind prompt input field to ViewModel AdHocPrompt property.'
+      done: false
+    - task: 'P6-11: Rewire Refresh button to ViewModel refresh command only.'
+      done: false
+    - task: 'P6-12: Rewire Start/Stop/Recycle/Connect buttons to corresponding ViewModel commands only.'
+      done: false
+    - task: 'P6-13: Rewire Cancel/Remove/MoveUp/MoveDown buttons to corresponding ViewModel commands only.'
+      done: false
+    - task: 'P6-14: Rewire Enqueue button to ViewModel resolve+enqueue command only.'
+      done: false
+    - task: 'P6-15: Remove direct API call methods (LoadAsync, RunMutationAsync, StartSelectedAsync, StopSelectedAsync, RecycleSelectedAsync, ConnectSelectedAsync, CancelSelectedJobAsync, RemoveSelectedJobAsync, MoveSelectedJobUpAsync, MoveSelectedJobDownAsync, EnqueueAdHocAsync) from code-behind logic path.'
+      done: false
+    - task: 'P7-01: Update src/McpServer.Director/Screens/MainScreen.cs to accept AgentPoolViewModel in constructor dependency list.'
+      done: false
+    - task: 'P7-02: Update MainScreen.RebuildTabs() to instantiate AgentPoolScreen with injected AgentPoolViewModel.'
+      done: false
+    - task: 'P7-03: Update MainScreen.RefreshTabView() Agent Pool branch to call screen->ViewModel load path only.'
+      done: false
+    - task: 'P7-04: Update src/McpServer.Director/Commands/InteractiveCommand.cs to resolve AgentPoolViewModel from DI.'
+      done: false
+    - task: 'P7-05: Pass AgentPoolViewModel into MainScreen constructor call in InteractiveCommand.'
+      done: false
+    - task: 'P7-06: Verify no constructor cycles or missing DI registrations after new injection path is added.'
+      done: false
+    - task: 'P8-01: Add handler unit tests for each Agent Pool query/command handler success path.'
+      done: false
+    - task: 'P8-02: Add handler unit tests for authorization-denied path (required role failure) for each handler.'
+      done: false
+    - task: 'P8-03: Add handler unit tests for exception mapping path (Result failure + logging) for each handler.'
+      done: false
+    - task: 'P8-04: Add AgentPoolViewModel test for refresh populating both agents and queue collections.'
+      done: false
+    - task: 'P8-05: Add AgentPoolViewModel test for Start command success -> status update -> refresh invocation.'
+      done: false
+    - task: 'P8-06: Add AgentPoolViewModel test for Stop command failure -> error/status propagation.'
+      done: false
+    - task: 'P8-07: Add AgentPoolViewModel test for Recycle command success and selection persistence.'
+      done: false
+    - task: 'P8-08: Add AgentPoolViewModel test for Connect command handling of missing session/error.'
+      done: false
+    - task: 'P8-09: Add AgentPoolViewModel test for queue cancel/remove/move-up/move-down command behavior.'
+      done: false
+    - task: 'P8-10: Add AgentPoolViewModel test for enqueue validation when prompt is empty.'
+      done: false
+    - task: 'P8-11: Add AgentPoolViewModel test for resolve+enqueue success flow with final refresh.'
+      done: false
+    - task: 'P8-12: Add AgentPoolViewModel workspace-context change test (pull refresh triggered).'
+      done: false
+    - task: 'P8-13: Add Director integration/smoke test ensuring Agent Pool tab can be built with DI-resolved ViewModel.'
+      done: false
+    - task: 'P8-14: Add Director smoke test ensuring Agent Pool tab refresh action executes without direct screen-side API calls.'
+      done: false
+    - task: 'P8-15: Add static guard test or grep-based assertion ensuring AgentPoolScreen contains no DirectorMcpContext field after migration.'
+      done: false
+    - task: 'P8-16: Add static guard test or grep-based assertion ensuring AgentPoolScreen does not instantiate AgentScreenHandler.'
+      done: false
+    - task: 'P8-17: Add static guard test or grep-based assertion ensuring AgentPoolScreen has no direct api.AgentPool calls.'
+      done: false
+    - task: 'P8-18: Validate all new public types/members include XML docs to satisfy workspace coding standards.'
+      done: false
+    - task: 'P9-01: Run dotnet build src/McpServer.UI.Core -c Debug and capture result.'
+      done: false
+    - task: 'P9-02: Run dotnet build src/McpServer.Director -c Debug and capture result.'
+      done: false
+    - task: 'P9-03: Run dotnet test for touched test projects and capture pass/fail summary.'
+      done: false
+    - task: 'P9-04: Perform manual Director TUI smoke run for Agent Pool tab parity actions.'
+      done: false
+    - task: 'P9-05: Verify RBAC behavior for Agent Pool actions under viewer vs agent-manager vs admin role contexts.'
+      done: false
+    - task: 'P9-06: Update todo remaining/doneSummary with executed work and residual risks after implementation.'
+      done: false
+    - task: 'P9-07: Update session log actions/filesModified/design decisions with full migration trace.'
+      done: false
+    - task: 'P9-08: Produce final implementation report mapping each completed task back to FR/TR compliance targets.'
       done: false

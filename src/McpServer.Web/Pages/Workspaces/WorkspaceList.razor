@@ -1,0 +1,74 @@
+@page "/workspaces"
+
+@inject IWorkspaceApiClient WorkspaceApiClient
+
+<PageTitle>Workspace List</PageTitle>
+
+<h1 class="h2 mb-3">Workspace List</h1>
+
+@if (!string.IsNullOrWhiteSpace(_error))
+{
+    <PrimerFlash Variant="danger" Title="Failed to load workspaces">@_error</PrimerFlash>
+}
+else if (_loading)
+{
+    <p class="color-fg-muted">Loading workspaces...</p>
+}
+else if (_items.Count == 0)
+{
+    <PrimerBlankslate Heading="No workspaces found" Description="No workspace records were returned by the server." />
+}
+else
+{
+    <PrimerDataTable TItem="WorkspaceSummary" Items="_items" ColumnCount="5" Class="Table--full-width">
+        <HeaderTemplate>
+            <tr>
+                <th>Name</th>
+                <th>Path</th>
+                <th>Enabled</th>
+                <th>Primary</th>
+                <th></th>
+            </tr>
+        </HeaderTemplate>
+        <RowTemplate Context="item">
+            <td>@item.Name</td>
+            <td><code>@item.WorkspacePath</code></td>
+            <td>
+                <PrimerLabel Scheme="@(item.IsEnabled ? "success" : "attention")" Text="@(item.IsEnabled ? "Yes" : "No")" />
+            </td>
+            <td>
+                <PrimerLabel Scheme="@(item.IsPrimary ? "done" : "default")" Text="@(item.IsPrimary ? "Primary" : "Secondary")" />
+            </td>
+            <td>
+                <a class="btn btn-sm" href="@GetWorkspaceDetailHref(item.WorkspacePath)">Details</a>
+            </td>
+        </RowTemplate>
+    </PrimerDataTable>
+}
+
+@code {
+    private IReadOnlyList<WorkspaceSummary> _items = [];
+    private bool _loading = true;
+    private string? _error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var result = await WorkspaceApiClient.ListWorkspacesAsync().ConfigureAwait(false);
+            _items = result.Items;
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private static string GetWorkspaceDetailHref(string workspacePath)
+        => $"/workspaces/detail?path={Uri.EscapeDataString(workspacePath)}";
+}
+

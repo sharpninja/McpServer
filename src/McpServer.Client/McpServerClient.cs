@@ -94,8 +94,10 @@ public sealed class McpServerClient
         Diagnostic = new DiagnosticClient(http, options, holder);
         Template = new TemplateClient(http, options, holder);
         AgentPool = new AgentPoolClient(http, options, holder);
+        Agent = new AgentClient(http, options, holder);
+        Health = new HealthClient(http, options, holder);
 
-        _allClients = new McpClientBase[] { Todo, Context, SessionLog, GitHub, Repo, Tunnel, Workspace, Tools, AuthConfig, Diagnostic, Template, AgentPool };
+        _allClients = new McpClientBase[] { Todo, Context, SessionLog, GitHub, Repo, Tunnel, Workspace, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
         _workspacePath = holder.Path;
@@ -322,4 +324,16 @@ public sealed class McpServerClient
     /// <para>See <see cref="AgentPoolClient"/> for the full method list.</para>
     /// </summary>
     public AgentPoolClient AgentPool { get; }
+
+    /// <summary>
+    /// Agent-management endpoints.
+    /// <para>See <see cref="AgentClient"/> for the full method list.</para>
+    /// </summary>
+    public AgentClient Agent { get; }
+
+    /// <summary>
+    /// Server health endpoint.
+    /// <para>See <see cref="HealthClient"/> for the full method list.</para>
+    /// </summary>
+    public HealthClient Health { get; }
 }

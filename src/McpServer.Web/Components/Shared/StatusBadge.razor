@@ -1,0 +1,35 @@
+<PrimerLabel Scheme="@ResolveScheme(this.Status)"
+             Text="@this.DisplayText"
+             Class="@this.Class"
+             @attributes="this.AdditionalAttributes" />
+
+@code {
+    [Parameter] public string? Status { get; set; }
+
+    [Parameter] public string? Text { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string DisplayText =>
+        string.IsNullOrWhiteSpace(this.Text)
+            ? (string.IsNullOrWhiteSpace(this.Status) ? "unknown" : this.Status)
+            : this.Text;
+
+    private static string ResolveScheme(string? status)
+        => status?.Trim().ToLowerInvariant() switch
+        {
+            "healthy" => "success",
+            "enabled" => "success",
+            "running" => "success",
+            "completed" => "done",
+            "done" => "done",
+            "blocked" => "danger",
+            "failed" => "danger",
+            "error" => "danger",
+            "warning" => "attention",
+            "pending" => "attention",
+            _ => "default",
+        };
+}

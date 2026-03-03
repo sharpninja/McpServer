@@ -1,0 +1,124 @@
+@page "/sessions"
+
+@inject ISessionLogApiClient SessionLogApiClient
+
+<PageTitle>Session Logs</PageTitle>
+
+<h1 class="h2 mb-3">Session Logs</h1>
+
+<form method="get" class="Box p-3 mb-3">
+    <div class="d-flex flex-wrap gap-3">
+        <label class="d-flex flex-column">
+            <span class="text-small color-fg-muted">Agent</span>
+            <input class="form-control" name="agent" value="@Agent" />
+        </label>
+        <label class="d-flex flex-column">
+            <span class="text-small color-fg-muted">Model</span>
+            <input class="form-control" name="model" value="@Model" />
+        </label>
+        <label class="d-flex flex-column flex-1">
+            <span class="text-small color-fg-muted">Text</span>
+            <input class="form-control" name="text" value="@Text" />
+        </label>
+        <div class="d-flex flex-items-end">
+            <button class="btn btn-primary" type="submit">Apply</button>
+        </div>
+    </div>
+</form>
+
+@if (!string.IsNullOrWhiteSpace(_error))
+{
+    <PrimerFlash Variant="danger" Title="Failed to load session logs">@_error</PrimerFlash>
+}
+else if (_loading)
+{
+    <p class="color-fg-muted">Loading session logs...</p>
+}
+else if (_items.Count == 0)
+{
+    <PrimerBlankslate Heading="No session logs found" Description="No logs matched the current filter." />
+}
+else
+{
+    <p class="color-fg-muted">Showing @_items.Count of @_totalCount logs.</p>
+    <PrimerDataTable TItem="SessionLogSummary" Items="_items" ColumnCount="6" Class="Table--full-width">
+        <HeaderTemplate>
+            <tr>
+                <th>Session ID</th>
+                <th>Title</th>
+                <th>Agent</th>
+                <th>Status</th>
+                <th>Last Updated</th>
+                <th></th>
+            </tr>
+        </HeaderTemplate>
+        <RowTemplate Context="item">
+            <td><code>@item.SessionId</code></td>
+            <td>@item.Title</td>
+            <td>@item.SourceType</td>
+            <td>
+                <PrimerLabel Scheme="@(string.Equals(item.Status, "completed", StringComparison.OrdinalIgnoreCase) ? "success" : "attention")"
+                             Text="@item.Status" />
+            </td>
+            <td>@(item.LastUpdated ?? "(unknown)")</td>
+            <td><a class="btn btn-sm" href="@GetDetailHref(item.SessionId)">Details</a></td>
+        </RowTemplate>
+    </PrimerDataTable>
+}
+
+@code {
+    [SupplyParameterFromQuery]
+    public string? Agent { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string? Model { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string? Text { get; set; }
+
+    private IReadOnlyList<SessionLogSummary> _items = [];
+    private int _totalCount;
+    private bool _loading;
+    private string? _error;
+    private string? _lastQueryKey;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var queryKey = $"{Agent}|{Model}|{Text}";
+        if (string.Equals(queryKey, _lastQueryKey, StringComparison.Ordinal))
+            return;
+
+        _lastQueryKey = queryKey;
+        _loading = true;
+        _error = null;
+
+        try
+        {
+            var result = await SessionLogApiClient.ListSessionLogsAsync(new ListSessionLogsQuery
+            {
+                Agent = string.IsNullOrWhiteSpace(Agent) ? null : Agent,
+                Model = string.IsNullOrWhiteSpace(Model) ? null : Model,
+                Text = string.IsNullOrWhiteSpace(Text) ? null : Text,
+                Limit = 50,
+                Offset = 0,
+            }).ConfigureAwait(false);
+
+            _items = result.Items;
+            _totalCount = result.TotalCount;
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+            _items = [];
+            _totalCount = 0;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private static string GetDetailHref(string sessionId)
+        => $"/sessions/{Uri.EscapeDataString(sessionId)}";
+}
+

@@ -139,7 +139,7 @@ internal sealed class SessionLogScreen : View
                 item.SourceType,
                 item.Title,
                 item.Status,
-                item.LastUpdated ?? ""))
+                FormatTimestamp(item.LastUpdated)))
             .ToList();
 
         _rows.Clear();
@@ -261,8 +261,8 @@ internal sealed class SessionLogScreen : View
             $"Title: {detail.Title}",
             $"Status: {detail.Status}",
             $"Model: {ValueOrDash(detail.Model)}",
-            $"Started: {ValueOrDash(detail.Started)}",
-            $"Updated: {ValueOrDash(detail.LastUpdated)}",
+            $"Started: {FormatTimestampOrDash(detail.Started)}",
+            $"Updated: {FormatTimestampOrDash(detail.LastUpdated)}",
             $"EntryCount: {detail.EntryCount}",
             $"TotalTokens: {detail.TotalTokens?.ToString() ?? "—"}",
             $"CursorSessionLabel: {ValueOrDash(detail.CursorSessionLabel)}",
@@ -300,7 +300,7 @@ internal sealed class SessionLogScreen : View
             lines.Add("");
             lines.Add($"[{i + 1}] RequestId: {ValueOrDash(entry.RequestId)}");
             lines.Add($"  Status: {ValueOrDash(entry.Status)}");
-            lines.Add($"  Timestamp: {ValueOrDash(entry.Timestamp)}");
+            lines.Add($"  Timestamp: {FormatTimestampOrDash(entry.Timestamp)}");
             lines.Add($"  QueryTitle: {ValueOrDash(entry.QueryTitle)}");
             lines.Add($"  Model: {ValueOrDash(entry.Model)}");
             lines.Add($"  ModelProvider: {ValueOrDash(entry.ModelProvider)}");
@@ -331,7 +331,7 @@ internal sealed class SessionLogScreen : View
             lines.Add($"  Dialog ({entry.ProcessingDialog.Count}):");
             foreach (var dialog in entry.ProcessingDialog)
             {
-                var timestamp = ValueOrDash(dialog.Timestamp);
+                var timestamp = FormatTimestampOrDash(dialog.Timestamp);
                 var role = ValueOrDash(dialog.Role);
                 var category = ValueOrDash(dialog.Category);
                 var content = ValueOrDash(dialog.Content?.Replace(Environment.NewLine, " "));
@@ -343,7 +343,7 @@ internal sealed class SessionLogScreen : View
             {
                 lines.Add($"    {ValueOrDash(commit.Sha)} @ {ValueOrDash(commit.Branch)}");
                 lines.Add($"      Author: {ValueOrDash(commit.Author)}");
-                lines.Add($"      Timestamp: {ValueOrDash(commit.Timestamp)}");
+                lines.Add($"      Timestamp: {FormatTimestampOrDash(commit.Timestamp)}");
                 lines.Add($"      Message: {ValueOrDash(commit.Message)}");
                 lines.Add($"      Files: {(commit.FilesChanged.Count == 0 ? "—" : string.Join(", ", commit.FilesChanged))}");
             }
@@ -370,6 +370,18 @@ internal sealed class SessionLogScreen : View
 
     private static string ValueOrDash(string? value)
         => string.IsNullOrWhiteSpace(value) ? "—" : value;
+
+    private static string FormatTimestampOrDash(string? value)
+        => string.IsNullOrWhiteSpace(value) ? "—" : FormatTimestamp(value);
+
+    private static string FormatTimestamp(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return string.Empty;
+        if (!DateTimeOffset.TryParse(value, out var parsed))
+            return value;
+        return parsed.LocalDateTime.ToString("g");
+    }
 
     private void SetStatus(string text) => Application.Invoke(() => _statusLabel.Text = text);
 

@@ -369,3 +369,9 @@ When a user reestablishes an interactive response stream connection, the server 
 These presence messages do not apply to one-shot sessions.
 
 **Covered by:** `AgentPoolStreamService` *(planned)*, `VoiceConversationService` *(planned extension)*
+
+## FR-MCP-059 DI-Centered Single Source of Truth State Flow
+
+The system SHALL enforce a DI-centered Single Source of Truth architecture across `McpServer.Support.Mcp`: authoritative mutable data sources must be owned by DI-registered singleton or scoped services, services shall notify state availability/changes via `INotifyPropertyChanged`, and consumers shall pull current state from the owning service rather than receiving pushed data payloads.
+
+**Technical Implementation:** [TR-MCP-ARCH-002](./Technical-Requirements.md#tr-mcp-arch-002) | [Details](./TR-per-FR-Mapping.md#fr-mcp-059)

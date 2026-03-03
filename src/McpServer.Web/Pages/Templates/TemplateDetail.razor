@@ -1,0 +1,121 @@
+@page "/templates/{TemplateId}"
+
+@inject ITemplateApiClient TemplateApiClient
+
+<PageTitle>Template Detail</PageTitle>
+
+<h1 class="h2 mb-3">Template Detail</h1>
+<p><a href="/templates">← Back to template list</a></p>
+
+@if (string.IsNullOrWhiteSpace(TemplateId))
+{
+    <PrimerBlankslate Heading="No template selected" Description="Choose a template from the list view." />
+}
+else if (!string.IsNullOrWhiteSpace(_error))
+{
+    <PrimerFlash Variant="danger" Title="Failed to load template">@_error</PrimerFlash>
+}
+else if (_loading)
+{
+    <p class="color-fg-muted">Loading template details...</p>
+}
+else if (_item is null)
+{
+    <PrimerBlankslate Heading="Template not found" Description="The requested template could not be loaded." />
+}
+else
+{
+    <div class="Box mb-3">
+        <div class="Box-header">
+            <h2 class="h3 mb-0">@_item.Title</h2>
+        </div>
+        <div class="Box-body">
+            <p><strong>ID:</strong> <code>@_item.Id</code></p>
+            <p><strong>Category:</strong> @_item.Category</p>
+            <p><strong>Engine:</strong> @_item.Engine</p>
+            <p><strong>Tags:</strong> @string.Join(", ", _item.Tags)</p>
+            <p><strong>Description:</strong> @(_item.Description ?? "(none)")</p>
+            <p><a class="btn btn-sm btn-primary" href="@GetTestHref(_item.Id)">Test this template</a></p>
+        </div>
+    </div>
+
+    <div class="Box mb-3">
+        <div class="Box-header">
+            <h3 class="h4 mb-0">Variables</h3>
+        </div>
+        <div class="Box-body">
+            @if (_item.Variables.Count == 0)
+            {
+                <p class="color-fg-muted mb-0">No variables declared.</p>
+            }
+            else
+            {
+                <PrimerDataTable TItem="TemplateVariableDetail" Items="_item.Variables" ColumnCount="5" Class="Table--full-width">
+                    <HeaderTemplate>
+                        <tr>
+                            <th>Name</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                            <th>Default</th>
+                        </tr>
+                    </HeaderTemplate>
+                    <RowTemplate Context="variable">
+                        <td><code>@variable.Name</code></td>
+                        <td>@(variable.Required ? "Yes" : "No")</td>
+                        <td>@(variable.Description ?? string.Empty)</td>
+                        <td><code>@(variable.Example ?? string.Empty)</code></td>
+                        <td><code>@(variable.DefaultValue ?? string.Empty)</code></td>
+                    </RowTemplate>
+                </PrimerDataTable>
+            }
+        </div>
+    </div>
+
+    <div class="Box">
+        <div class="Box-header">
+            <h3 class="h4 mb-0">Template Content</h3>
+        </div>
+        <div class="Box-body">
+            <pre class="mb-0">@_item.Content</pre>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string TemplateId { get; set; } = string.Empty;
+
+    private McpServer.UI.Core.Messages.TemplateDetail? _item;
+    private bool _loading;
+    private string? _error;
+    private string? _loadedTemplateId;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (string.Equals(_loadedTemplateId, TemplateId, StringComparison.Ordinal))
+            return;
+
+        _loadedTemplateId = TemplateId;
+        _loading = true;
+        _error = null;
+        _item = null;
+
+        try
+        {
+            _item = await TemplateApiClient.GetTemplateAsync(TemplateId).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _error = ex.Message;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private static string GetTestHref(string templateId)
+        => $"/templates/test?templateId={Uri.EscapeDataString(templateId)}";
+}
+

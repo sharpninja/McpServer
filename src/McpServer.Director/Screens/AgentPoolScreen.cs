@@ -13,10 +13,15 @@ internal sealed class AgentPoolScreen : View
 {
     private readonly DirectorMcpContext _directorContext;
     private readonly AgentScreenHandler _agentHandler;
+    private readonly List<AgentDefinitionSummary> _configuredRows = [];
     private readonly List<AgentPoolAgentStatus> _agentRows = [];
     private readonly List<AgentPoolQueueItem> _queueRows = [];
+    private bool _suppressConfiguredSelectionDialog;
+    private bool _configuredSelectionArmed;
+    private bool _openingConfiguredDialog;
 
     private Label _statusLabel = null!;
+    private TableView _configuredTable = null!;
     private TableView _agentsTable = null!;
     private TableView _queueTable = null!;
     private TextField _agentNameField = null!;
@@ -39,39 +44,60 @@ internal sealed class AgentPoolScreen : View
         try
         {
             var api = await _directorContext.GetRequiredActiveWorkspaceApiClientAsync().ConfigureAwait(false);
+            var definitions = await _agentHandler.ListDefinitionsAsync().ConfigureAwait(false);
             var agents = await api.AgentPool.GetAgentsAsync().ConfigureAwait(false);
             var queue = await api.AgentPool.GetQueueAsync().ConfigureAwait(false);
 
             Application.Invoke(() =>
             {
-                _agentRows.Clear();
-                _agentRows.AddRange(agents);
-                _queueRows.Clear();
-                _queueRows.AddRange(queue);
+                _suppressConfiguredSelectionDialog = true;
+                _configuredSelectionArmed = false;
+                try
+                {
+                    _configuredRows.Clear();
+                    _configuredRows.AddRange(definitions);
+                    _configuredTable.Table = new EnumerableTableSource<AgentDefinitionSummary>(
+                        _configuredRows,
+                        new Dictionary<string, Func<AgentDefinitionSummary, object>>
+                        {
+                            ["Id"] = x => Truncate(x.Id, 24),
+                            ["Display"] = x => Truncate(x.DisplayName, 34),
+                            ["Built-In"] = x => x.IsBuiltIn ? "yes" : "no",
+                        });
 
-                _agentsTable.Table = new EnumerableTableSource<AgentPoolAgentStatus>(
-                    _agentRows,
-                    new Dictionary<string, Func<AgentPoolAgentStatus, object>>
-                    {
-                        ["Agent"] = x => Truncate(x.AgentName, 18),
-                        ["Lifecycle"] = x => Truncate(x.Lifecycle, 10),
-                        ["Session"] = x => Truncate(x.SessionId ?? "", 18),
-                        ["Job"] = x => Truncate(x.ActiveJobId ?? "", 16),
-                        ["Links"] = x => x.ActiveVoiceLinks,
-                    });
+                    _agentRows.Clear();
+                    _agentRows.AddRange(agents);
+                    _queueRows.Clear();
+                    _queueRows.AddRange(queue);
 
-                _queueTable.Table = new EnumerableTableSource<AgentPoolQueueItem>(
-                    _queueRows,
-                    new Dictionary<string, Func<AgentPoolQueueItem, object>>
-                    {
-                        ["Job"] = x => Truncate(x.JobId, 20),
-                        ["Agent"] = x => Truncate(x.AgentName ?? "", 14),
-                        ["Status"] = x => Truncate(x.Status, 10),
-                        ["Context"] = x => x.Context?.ToString() ?? "",
-                        ["Prompt"] = x => Truncate(x.RenderedPrompt ?? "", 28),
-                    });
+                    _agentsTable.Table = new EnumerableTableSource<AgentPoolAgentStatus>(
+                        _agentRows,
+                        new Dictionary<string, Func<AgentPoolAgentStatus, object>>
+                        {
+                            ["Agent"] = x => Truncate(x.AgentName, 18),
+                            ["Lifecycle"] = x => Truncate(x.Lifecycle, 10),
+                            ["Session"] = x => Truncate(x.SessionId ?? "", 18),
+                            ["Job"] = x => Truncate(x.ActiveJobId ?? "", 16),
+                            ["Links"] = x => x.ActiveVoiceLinks,
+                        });
 
-                _statusLabel.Text = $"Agent pool loaded ({_agentRows.Count} agents, {_queueRows.Count} jobs)";
+                    _queueTable.Table = new EnumerableTableSource<AgentPoolQueueItem>(
+                        _queueRows,
+                        new Dictionary<string, Func<AgentPoolQueueItem, object>>
+                        {
+                            ["Job"] = x => Truncate(x.JobId, 20),
+                            ["Agent"] = x => Truncate(x.AgentName ?? "", 14),
+                            ["Status"] = x => Truncate(x.Status, 10),
+                            ["Context"] = x => x.Context?.ToString() ?? "",
+                            ["Prompt"] = x => Truncate(x.RenderedPrompt ?? "", 28),
+                        });
+
+                    _statusLabel.Text = $"Agent pool loaded ({_configuredRows.Count} configs, {_agentRows.Count} agents, {_queueRows.Count} jobs)";
+                }
+                finally
+                {
+                    _suppressConfiguredSelectionDialog = false;
+                }
             });
         }
         catch (Exception ex)
@@ -91,15 +117,40 @@ internal sealed class AgentPoolScreen : View
         };
         Add(_statusLabel);
 
-        var agentsLabel = new Label { X = 0, Y = 1, Text = "Agents" };
-        var newAgentBtn = new Button { X = Pos.Right(agentsLabel) + 2, Y = 1, Text = "New Agent" };
+        var configuredLabel = new Label { X = 0, Y = 1, Text = "Configured Agents" };
+        var newAgentBtn = new Button { X = Pos.Right(configuredLabel) + 2, Y = 1, Text = "New Agent" };
         newAgentBtn.Accepting += (_, _) => ShowNewAgentDialog();
-        Add(agentsLabel, newAgentBtn);
+        Add(configuredLabel, newAgentBtn);
+
+        _configuredTable = new TableView
+        {
+            X = 0,
+            Y = 2,
+            Width = Dim.Fill(),
+            Height = 5,
+            FullRowSelect = true,
+            MultiSelect = false,
+        };
+        _configuredTable.KeyDown += (_, _) => _configuredSelectionArmed = true;
+        _configuredTable.MouseClick += (_, _) =>
+        {
+            _configuredSelectionArmed = true;
+            OpenConfiguredAgentDialogForRow(_configuredTable.SelectedRow);
+        };
+        _configuredTable.SelectedCellChanged += (_, e) =>
+        {
+            if (_configuredSelectionArmed)
+                OpenConfiguredAgentDialogForRow(e.NewRow);
+        };
+        Add(_configuredTable);
+
+        var agentsLabel = new Label { X = 0, Y = Pos.Bottom(_configuredTable), Text = "Runtime Agents" };
+        Add(agentsLabel);
 
         _agentsTable = new TableView
         {
             X = 0,
-            Y = 2,
+            Y = Pos.Bottom(agentsLabel),
             Width = Dim.Fill(),
             Height = Dim.Percent(28),
             FullRowSelect = true,
@@ -175,6 +226,23 @@ internal sealed class AgentPoolScreen : View
         Add(refreshBtn, startBtn, stopBtn, recycleBtn, connectBtn, cancelBtn, removeBtn, upBtn, downBtn, enqueueBtn);
     }
 
+    private void OpenConfiguredAgentDialogForRow(int row)
+    {
+        if (_suppressConfiguredSelectionDialog || _openingConfiguredDialog || row < 0 || row >= _configuredRows.Count)
+            return;
+
+        _openingConfiguredDialog = true;
+        try
+        {
+            _configuredSelectionArmed = false;
+            ShowNewAgentDialog(_configuredRows[row].Id);
+        }
+        finally
+        {
+            _openingConfiguredDialog = false;
+        }
+    }
+
     private void SyncAgentNameFromSelection()
     {
         var selected = GetSelectedAgent();
@@ -184,20 +252,153 @@ internal sealed class AgentPoolScreen : View
         Application.Invoke(() => _agentNameField.Text = selected.AgentName);
     }
 
-    private void ShowNewAgentDialog()
+    private void ShowNewAgentDialog(string? initialAgentId = null)
     {
+        var definitionRows = new List<AgentDefinitionSummary>();
+        try
+        {
+            var definitions = _agentHandler.ListDefinitionsAsync().GetAwaiter().GetResult();
+            definitionRows.AddRange(definitions);
+        }
+        catch (Exception ex)
+        {
+            SetStatus($"Could not load agent configs: {ex.Message}");
+        }
+
         var dialog = new Dialog
         {
-            Title = "New Agent",
-            Width = 60,
-            Height = 10,
+            Title = "New / Edit Agent",
+            Width = 100,
+            Height = 24,
         };
 
         var nameLabel = new Label { X = 1, Y = 1, Text = "Agent Name:" };
-        var initialName = (_agentNameField.Text?.ToString() ?? string.Empty).Trim();
-        var nameField = new TextField { X = 13, Y = 1, Width = 44, Text = initialName };
+        var initialName = (initialAgentId ?? _agentNameField.Text?.ToString() ?? string.Empty).Trim();
+        var nameField = new TextField { X = 22, Y = 1, Width = 76, Text = initialName };
 
-        var createBtn = new Button { Text = "Create" };
+        var pathLabel = new Label { X = 1, Y = 2, Text = "Agent Path:" };
+        var pathField = new TextField { X = 22, Y = 2, Width = 76, Text = "copilot" };
+
+        var modelLabel = new Label { X = 1, Y = 3, Text = "Agent Model:" };
+        var modelField = new TextField { X = 22, Y = 3, Width = 76, Text = "gpt-5.3-codex" };
+
+        var seedLabel = new Label { X = 1, Y = 4, Text = "Agent Seed:" };
+        var seedField = new TextField { X = 22, Y = 4, Width = 76, Text = string.Empty };
+
+        var paramsLabel = new Label { X = 1, Y = 5, Text = "Agent Parameters:" };
+        var paramsField = new TextView
+        {
+            X = 22,
+            Y = 5,
+            Width = 76,
+            Height = 4,
+            Text = string.Empty,
+            WordWrap = false,
+        };
+        var paramsHelpLabel = new Label { X = 22, Y = 9, Text = "Format: key=value (one per line or ';' separated)" };
+
+        var interactiveDefault = new CheckBox
+        {
+            X = 22,
+            Y = 10,
+            Width = 34,
+            Text = "Interactive Default",
+            CheckedState = CheckState.UnChecked,
+        };
+        var planDefault = new CheckBox
+        {
+            X = 58,
+            Y = 10,
+            Width = 34,
+            Text = "Plan Default",
+            CheckedState = CheckState.UnChecked,
+        };
+        var statusDefault = new CheckBox
+        {
+            X = 22,
+            Y = 11,
+            Width = 34,
+            Text = "Status Default",
+            CheckedState = CheckState.UnChecked,
+        };
+        var implementDefault = new CheckBox
+        {
+            X = 58,
+            Y = 11,
+            Width = 34,
+            Text = "Implement Default",
+            CheckedState = CheckState.UnChecked,
+        };
+
+        var configsLabel = new Label { X = 1, Y = 13, Text = "Agent Configurations:" };
+        var configsTable = new TableView
+        {
+            X = 1,
+            Y = 14,
+            Width = Dim.Fill(2),
+            Height = 5,
+            FullRowSelect = true,
+            MultiSelect = false,
+        };
+        if (definitionRows.Count > 0)
+        {
+            configsTable.Table = new EnumerableTableSource<AgentDefinitionSummary>(
+                definitionRows,
+                new Dictionary<string, Func<AgentDefinitionSummary, object>>
+                {
+                    ["Id"] = x => Truncate(x.Id, 24),
+                    ["Display"] = x => Truncate(x.DisplayName, 34),
+                    ["Built-In"] = x => x.IsBuiltIn ? "yes" : "no",
+                });
+        }
+
+        void LoadDefinitionIntoEditors(string agentId)
+        {
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    var detail = await _agentHandler.GetDefinitionDetailAsync(agentId).ConfigureAwait(false);
+                    Application.Invoke(() =>
+                    {
+                        nameField.Text = detail.AgentId;
+                        pathField.Text = detail.DefaultLaunchCommand;
+                        modelField.Text = detail.DefaultModels is { Count: > 0 } ? detail.DefaultModels[0] : string.Empty;
+                        seedField.Text = detail.DefaultSeedPrompt ?? string.Empty;
+                    });
+                    SetStatus($"Loaded config '{agentId}' for editing.");
+                }
+                catch (Exception ex)
+                {
+                    SetStatus($"Load config failed: {ex.Message}");
+                }
+            });
+        }
+
+        configsTable.SelectedCellChanged += (_, e) =>
+        {
+            var row = e.NewRow;
+            if (row < 0 || row >= definitionRows.Count)
+                return;
+
+            LoadDefinitionIntoEditors(definitionRows[row].Id);
+        };
+
+        var selectedConfigIndex = definitionRows.FindIndex(x => string.Equals(x.Id, initialName, StringComparison.OrdinalIgnoreCase));
+        if (selectedConfigIndex >= 0)
+        {
+            configsTable.SelectedRow = selectedConfigIndex;
+            LoadDefinitionIntoEditors(definitionRows[selectedConfigIndex].Id);
+        }
+
+        var configsHelpLabel = new Label
+        {
+            X = 1,
+            Y = 19,
+            Text = "Select a configuration row to load it into the editor fields.",
+        };
+
+        var createBtn = new Button { Text = "Save + Start" };
         createBtn.Accepting += (_, _) =>
         {
             var agentName = (nameField.Text?.ToString() ?? string.Empty).Trim();
@@ -207,14 +408,61 @@ internal sealed class AgentPoolScreen : View
                 return;
             }
 
+            var agentPath = (pathField.Text?.ToString() ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(agentPath))
+            {
+                SetStatus("Enter an agent path first.");
+                return;
+            }
+
+            var agentModel = (modelField.Text?.ToString() ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(agentModel))
+            {
+                SetStatus("Enter an agent model first.");
+                return;
+            }
+
+            if (!TryParseAgentParameters(paramsField.Text?.ToString(), out var agentParameters, out var parameterError))
+            {
+                SetStatus(parameterError ?? "Invalid agent parameters.");
+                return;
+            }
+
             Application.RequestStop();
-            _ = Task.Run(() => CreateAgentForPoolAsync(agentName));
+            _ = Task.Run(() => CreateAgentForPoolAsync(new NewAgentDialogValues(
+                agentName,
+                agentPath,
+                agentModel,
+                NullIfWhiteSpace(seedField.Text?.ToString()),
+                agentParameters,
+                IsChecked(interactiveDefault),
+                IsChecked(planDefault),
+                IsChecked(statusDefault),
+                IsChecked(implementDefault))));
         };
 
         var cancelBtn = new Button { Text = "Cancel" };
         cancelBtn.Accepting += (_, _) => Application.RequestStop();
 
-        dialog.Add(nameLabel, nameField);
+        dialog.Add(
+            nameLabel,
+            nameField,
+            pathLabel,
+            pathField,
+            modelLabel,
+            modelField,
+            seedLabel,
+            seedField,
+            paramsLabel,
+            paramsField,
+            paramsHelpLabel,
+            interactiveDefault,
+            planDefault,
+            statusDefault,
+            implementDefault,
+            configsLabel,
+            configsTable,
+            configsHelpLabel);
         dialog.AddButton(createBtn);
         dialog.AddButton(cancelBtn);
         Application.Run(dialog);
@@ -443,32 +691,43 @@ internal sealed class AgentPoolScreen : View
         return GetSelectedAgent()?.AgentName;
     }
 
-    private async Task CreateAgentForPoolAsync(string agentName)
+    private async Task CreateAgentForPoolAsync(NewAgentDialogValues values)
     {
-        SetStatus($"Creating agent '{agentName}'...");
+        SetStatus($"Creating agent '{values.AgentName}'...");
         try
         {
             var workspacePath = GetRequiredActiveWorkspacePath();
-            var createdDefinition = false;
-            var definitionAlreadyExists = false;
-            try
+            await _agentHandler.SaveDefinitionAsync(new AgentDefinitionSaveRequest(
+                values.AgentName,
+                values.AgentName,
+                values.AgentPath,
+                string.Empty,
+                new[] { values.AgentModel },
+                string.Empty,
+                values.AgentSeed ?? string.Empty)).ConfigureAwait(false);
+            await _agentHandler.AssignWorkspaceAgentAsync(workspacePath, values.AgentName).ConfigureAwait(false);
+            var api = await _directorContext.GetRequiredActiveWorkspaceApiClientAsync().ConfigureAwait(false);
+            var startResult = await api.AgentPool.StartAgentAsync(values.AgentName).ConfigureAwait(false);
+            await LoadAsync().ConfigureAwait(false);
+            Application.Invoke(() => _agentNameField.Text = values.AgentName);
+
+            var usesPoolOnlyFields = values.AgentParameters.Count > 0
+                || values.IsInteractiveDefault
+                || values.IsTodoPlanDefault
+                || values.IsTodoStatusDefault
+                || values.IsTodoImplementDefault;
+            var startError = startResult.Error ?? "unknown error";
+            var started = startResult.Success
+                || startError.Contains("already", StringComparison.OrdinalIgnoreCase);
+            if (!started)
             {
-                await _agentHandler.CreateDefinitionAsync(agentName).ConfigureAwait(false);
-                createdDefinition = true;
-            }
-            catch (Exception ex) when (ex.Message.Contains("already exists", StringComparison.OrdinalIgnoreCase))
-            {
-                definitionAlreadyExists = true;
+                SetStatus($"Agent '{values.AgentName}' created and added to workspace, but instance start failed: {startError}");
+                return;
             }
 
-            await _agentHandler.AssignWorkspaceAgentAsync(workspacePath, agentName).ConfigureAwait(false);
-            await LoadAsync().ConfigureAwait(false);
-            Application.Invoke(() => _agentNameField.Text = agentName);
-            SetStatus(createdDefinition
-                ? $"Agent '{agentName}' created and added to workspace."
-                : definitionAlreadyExists
-                    ? $"Agent '{agentName}' already existed and was added to workspace."
-                    : $"Agent '{agentName}' added to workspace.");
+            SetStatus(usesPoolOnlyFields
+                ? $"Agent '{values.AgentName}' created, added, and started. Pool defaults/parameters require pool config update."
+                : $"Agent '{values.AgentName}' created, added, and started.");
         }
         catch (Exception ex)
         {
@@ -480,6 +739,44 @@ internal sealed class AgentPoolScreen : View
         => !string.IsNullOrWhiteSpace(_directorContext.ActiveWorkspacePath)
             ? _directorContext.ActiveWorkspacePath
             : throw new InvalidOperationException("No active workspace is selected.");
+
+    private static bool IsChecked(CheckBox checkBox)
+        => checkBox.CheckedState == CheckState.Checked;
+
+    private static bool TryParseAgentParameters(string? raw, out Dictionary<string, string> values, out string? error)
+    {
+        values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        error = null;
+        if (string.IsNullOrWhiteSpace(raw))
+            return true;
+
+        var entries = raw
+            .Split(new[] { '\r', '\n', ';' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        foreach (var entry in entries)
+        {
+            var equalsIndex = entry.IndexOf('=');
+            if (equalsIndex <= 0)
+            {
+                error = "Agent Parameters must use key=value format.";
+                return false;
+            }
+
+            var key = entry[..equalsIndex].Trim();
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                error = "Agent Parameters key cannot be empty.";
+                return false;
+            }
+
+            var value = entry[(equalsIndex + 1)..].Trim();
+            values[key] = value;
+        }
+
+        return true;
+    }
+
+    private static string? NullIfWhiteSpace(string? value)
+        => string.IsNullOrWhiteSpace(value) ? null : value.Trim();
 
     private void SetStatus(string text)
     {
@@ -494,4 +791,15 @@ internal sealed class AgentPoolScreen : View
             return value[..max];
         return value[..(max - 3)] + "...";
     }
+
+    private sealed record NewAgentDialogValues(
+        string AgentName,
+        string AgentPath,
+        string AgentModel,
+        string? AgentSeed,
+        Dictionary<string, string> AgentParameters,
+        bool IsInteractiveDefault,
+        bool IsTodoPlanDefault,
+        bool IsTodoStatusDefault,
+        bool IsTodoImplementDefault);
 }

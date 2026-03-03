@@ -1,0 +1,62 @@
+<PrimerDialog Visible="@this.Visible" Title="@this.Title" OnClose="this.OnCancelAsync">
+    <ChildContent>
+        <p class="mb-0">@this.Message</p>
+    </ChildContent>
+    <FooterContent>
+        <div class="d-flex flex-justify-end flex-wrap gap-2">
+            <PrimerButton Variant="default" OnClick="this.OnCancelAsync">@this.CancelText</PrimerButton>
+            <PrimerButton Variant="@this.ConfirmVariant" OnClick="this.OnConfirmAsync">@this.ConfirmText</PrimerButton>
+        </div>
+    </FooterContent>
+</PrimerDialog>
+
+@code {
+    private TaskCompletionSource<bool>? pendingConfirmation;
+
+    [Parameter] public bool Visible { get; set; }
+
+    [Parameter] public EventCallback<bool> VisibleChanged { get; set; }
+
+    [Parameter] public string Title { get; set; } = "Confirm";
+
+    [Parameter] public string Message { get; set; } = "Are you sure?";
+
+    [Parameter] public string ConfirmText { get; set; } = "Confirm";
+
+    [Parameter] public string CancelText { get; set; } = "Cancel";
+
+    [Parameter] public string ConfirmVariant { get; set; } = "danger";
+
+    [Parameter] public EventCallback Confirmed { get; set; }
+
+    [Parameter] public EventCallback Canceled { get; set; }
+
+    public Task<bool> ShowAsync()
+    {
+        this.pendingConfirmation = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        this.Visible = true;
+        _ = this.VisibleChanged.InvokeAsync(true);
+        _ = this.InvokeAsync(this.StateHasChanged);
+        return this.pendingConfirmation.Task;
+    }
+
+    private async Task OnConfirmAsync(MouseEventArgs _)
+    {
+        await this.Confirmed.InvokeAsync().ConfigureAwait(false);
+        await this.CloseAsync(true).ConfigureAwait(false);
+    }
+
+    private async Task OnCancelAsync(MouseEventArgs _)
+    {
+        await this.Canceled.InvokeAsync().ConfigureAwait(false);
+        await this.CloseAsync(false).ConfigureAwait(false);
+    }
+
+    private async Task CloseAsync(bool confirmed)
+    {
+        this.Visible = false;
+        await this.VisibleChanged.InvokeAsync(false).ConfigureAwait(false);
+        this.pendingConfirmation?.TrySetResult(confirmed);
+        this.pendingConfirmation = null;
+    }
+}
