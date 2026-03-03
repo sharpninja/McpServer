@@ -1,4 +1,5 @@
 using McpServer.Support.Mcp.Options;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -13,19 +14,19 @@ namespace McpServer.Support.Mcp.Services;
 public sealed class AgentPoolSeedService : IHostedService
 {
     private readonly IAgentPoolService _pool;
-    private readonly IWorkspaceService _workspaceService;
+    private readonly IServiceScopeFactory _scopeFactory;
     private readonly IOptionsMonitor<AgentPoolOptions> _poolOptions;
     private readonly ILogger<AgentPoolSeedService> _logger;
 
     /// <summary>Initializes a new instance of the <see cref="AgentPoolSeedService"/> class.</summary>
     public AgentPoolSeedService(
         IAgentPoolService pool,
-        IWorkspaceService workspaceService,
+        IServiceScopeFactory scopeFactory,
         IOptionsMonitor<AgentPoolOptions> poolOptions,
         ILogger<AgentPoolSeedService> logger)
     {
         _pool = pool ?? throw new ArgumentNullException(nameof(pool));
-        _workspaceService = workspaceService ?? throw new ArgumentNullException(nameof(workspaceService));
+        _scopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
         _poolOptions = poolOptions ?? throw new ArgumentNullException(nameof(poolOptions));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
@@ -49,7 +50,9 @@ public sealed class AgentPoolSeedService : IHostedService
             return;
         }
 
-        var workspaces = await _workspaceService.ListAsync(cancellationToken).ConfigureAwait(false);
+        using var scope = _scopeFactory.CreateScope();
+        var workspaceService = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
+        var workspaces = await workspaceService.ListAsync(cancellationToken).ConfigureAwait(false);
         var enabledWorkspaces = workspaces.Items.Where(w => w.IsEnabled).ToList();
 
         if (enabledWorkspaces.Count == 0)

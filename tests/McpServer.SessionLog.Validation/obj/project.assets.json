@@ -2029,35 +2029,28 @@
     ]
   },
   "packageFolders": {
-    "E:\\packages\\NuGet\\cache": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/tmp/codeql-scratch-80432ef6118332f5/dbs/csharp/working/packages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\github\\McpServer\\tests\\McpServer.SessionLog.Validation\\McpServer.SessionLog.Validation.csproj",
+      "projectUniqueName": "/home/runner/work/McpServer/McpServer/tests/McpServer.SessionLog.Validation/McpServer.SessionLog.Validation.csproj",
       "projectName": "McpServer.SessionLog.Validation",
-      "projectPath": "E:\\github\\McpServer\\tests\\McpServer.SessionLog.Validation\\McpServer.SessionLog.Validation.csproj",
-      "packagesPath": "E:\\packages\\NuGet\\cache",
-      "outputPath": "E:\\github\\McpServer\\tests\\McpServer.SessionLog.Validation\\obj\\",
+      "projectPath": "/home/runner/work/McpServer/McpServer/tests/McpServer.SessionLog.Validation/McpServer.SessionLog.Validation.csproj",
+      "packagesPath": "/tmp/codeql-scratch-80432ef6118332f5/dbs/csharp/working/packages",
+      "outputPath": "/home/runner/work/McpServer/McpServer/tests/McpServer.SessionLog.Validation/obj/",
       "projectStyle": "PackageReference",
       "centralPackageVersionsManagementEnabled": true,
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "E:\\github\\McpServer\\NuGet.Config",
-        "C:\\Users\\kingd\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/home/runner/work/McpServer/McpServer/NuGet.config",
+        "/home/runner/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
-        "C:\\Program Files\\dotnet\\library-packs": {},
-        "https://api.nuget.org/v3/index.json": {},
-        "https://nuget.pkg.github.com/sharpninja/index.json": {}
+        "/home/runner/work/McpServer/McpServer/local-packages": {},
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net9.0": {
@@ -2074,9 +2067,9 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "direct"
+        "auditMode": "all"
       },
-      "SdkAnalysisLevel": "10.0.100"
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
       "net9.0": {
@@ -2106,9 +2099,16 @@
         },
         "centralPackageVersions": {
           "Castle.Core": "5.2.1",
+          "CommunityToolkit.Mvvm": "8.4.0",
           "coverlet.collector": "6.0.4",
+          "Handlebars.Net": "2.1.6",
           "HnswIndex": "1.6.0",
+          "IdentityModel": "7.0.0",
+          "IdentityModel.OidcClient": "6.0.0",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.0",
+          "Microsoft.AspNetCore.Authentication.OpenIdConnect": "9.0.0",
           "Microsoft.AspNetCore.Mvc.Testing": "9.0.12",
+          "Microsoft.Bcl.AsyncInterfaces": "10.0.2",
           "Microsoft.EntityFrameworkCore": "9.0.12",
           "Microsoft.EntityFrameworkCore.Analyzers": "9.0.12",
           "Microsoft.EntityFrameworkCore.Design": "9.0.12",
@@ -2119,14 +2119,22 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.2",
           "Microsoft.Extensions.Hosting.Abstractions": "9.0.0",
           "Microsoft.Extensions.Hosting.WindowsServices": "9.0.12",
+          "Microsoft.Extensions.Http": "9.0.5",
           "Microsoft.Extensions.Http.Resilience": "9.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "10.0.2",
           "Microsoft.Extensions.Options": "10.0.2",
           "Microsoft.Extensions.ServiceDiscovery": "9.0.0",
           "Microsoft.ML.OnnxRuntime": "1.24.1",
           "Microsoft.NET.Test.Sdk": "18.0.1",
+          "Microsoft.VisualStudio.ImageCatalog": "17.14.40260",
+          "Microsoft.VisualStudio.Imaging": "17.14.40264",
+          "Microsoft.VisualStudio.Shell.15.0": "17.14.40264",
+          "Microsoft.VSSDK.BuildTools": "17.14.2120",
           "ModelContextProtocol": "0.8.0-preview.1",
           "ModelContextProtocol.AspNetCore": "0.8.0-preview.1",
+          "NetEscapades.Configuration.Yaml": "3.1.0",
+          "Newtonsoft.Json": "13.0.4",
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.3",
           "NSubstitute": "6.0.0",
           "OpenTelemetry.Exporter.OpenTelemetryProtocol": "1.15.0",
           "OpenTelemetry.Extensions.Hosting": "1.15.0",
@@ -2134,10 +2142,16 @@
           "OpenTelemetry.Instrumentation.Http": "1.15.0",
           "OpenTelemetry.Instrumentation.Runtime": "1.15.0",
           "Serilog.AspNetCore": "10.0.0",
+          "Serilog.Extensions.Logging": "9.0.0",
           "Serilog.Sinks.Console": "6.1.1",
           "Serilog.Sinks.File": "7.0.0",
           "Serilog.Sinks.Http": "9.2.1",
+          "Spectre.Console": "0.49.1",
           "Swashbuckle.AspNetCore": "10.1.2",
+          "System.CommandLine": "2.0.0-beta4.22272.1",
+          "System.IdentityModel.Tokens.Jwt": "8.7.0",
+          "System.Text.Json": "9.0.5",
+          "Terminal.Gui": "2.0.0",
           "xunit.runner.visualstudio": "3.1.5",
           "xunit.v3": "3.2.2",
           "YamlDotNet": "16.3.0"
@@ -2153,12 +2167,26 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[9.0.0, 9.0.0]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.linux-x64",
+            "version": "[9.0.0, 9.0.0]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[9.0.0, 9.0.0]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/tmp/codeql-scratch-80432ef6118332f5/dbs/csharp/working/.dotnet/sdk/9.0.100/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
