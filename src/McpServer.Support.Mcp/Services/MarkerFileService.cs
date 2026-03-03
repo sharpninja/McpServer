@@ -81,6 +81,13 @@ public static class MarkerFileService
         - MCP Streamable HTTP: POST {{baseUrl}}/mcp-transport (no API key required)
         - Health: GET {{baseUrl}}/health
 
+        ## WSL Networking
+
+        If you are running inside WSL, localhost will not reach the Windows host.
+        Detect WSL: check for `/proc/sys/fs/binfmt_misc/WSLInterop` or `WSL_DISTRO_NAME` in the environment.
+        If in WSL, resolve the host IP from `/etc/resolv.conf` nameserver or run `ip route show default | awk '{print $3}'`,
+        then replace `localhost` in {{baseUrl}} with that IP for all API calls.
+
         {{#if workspace.BannedLicenses}}
         ## Compliance Restrictions
 
