@@ -126,7 +126,7 @@ public sealed class CopilotClient(
                 if (line is null)
                     break;
 
-                yield return line;
+                yield return LineSanitizer.Sanitize(line);
             }
 
             if (!proc.HasExited)

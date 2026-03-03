@@ -65,7 +65,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
 
                 if (line is null) break;
                 if (line.Contains(Sentinel, StringComparison.Ordinal)) break;
-                yield return line;
+                yield return LineSanitizer.Sanitize(line);
             }
         }
         finally
@@ -136,7 +136,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
 
                 if (line is null) break;
                 if (line.Contains(Sentinel, StringComparison.Ordinal)) break;
-                yield return line;
+                yield return LineSanitizer.Sanitize(line);
             }
         }
         finally
