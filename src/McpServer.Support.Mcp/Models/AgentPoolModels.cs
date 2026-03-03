@@ -29,6 +29,11 @@ public sealed record AgentPoolOneShotRequest
     public string? AgentName { get; init; }
 
     /// <summary>
+    /// Optional workspace path for routing. When omitted, the request workspace is used.
+    /// </summary>
+    public string? WorkspacePath { get; init; }
+
+    /// <summary>
     /// Context value for default routing and context-template resolution.
     /// </summary>
     public AgentPoolOneShotContext? Context { get; init; }
@@ -70,6 +75,9 @@ public sealed record AgentPoolQueueItemDto
     /// <summary>Assigned or target agent name.</summary>
     public string? AgentName { get; init; }
 
+    /// <summary>Workspace path this queue item is scoped to.</summary>
+    public string? WorkspacePath { get; init; }
+
     /// <summary>Queue status.</summary>
     public required string Status { get; init; }
 
@@ -108,6 +116,9 @@ public sealed record AgentPoolAgentStatusDto
 {
     /// <summary>Configured pooled agent name.</summary>
     public required string AgentName { get; init; }
+
+    /// <summary>Workspace path this agent instance is scoped to.</summary>
+    public string? WorkspacePath { get; init; }
 
     /// <summary>Current lifecycle status.</summary>
     public required string Lifecycle { get; init; }
@@ -189,6 +200,9 @@ public sealed record AgentPoolNotificationEventDto
 
     /// <summary>Agent name.</summary>
     public string? AgentName { get; init; }
+
+    /// <summary>Workspace path scoping this event.</summary>
+    public string? WorkspacePath { get; init; }
 
     /// <summary>Queue job id when applicable.</summary>
     public string? JobId { get; init; }

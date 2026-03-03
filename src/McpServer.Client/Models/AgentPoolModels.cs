@@ -27,6 +27,10 @@ public sealed class AgentPoolOneShotRequest
     [JsonPropertyName("agentName")]
     public string? AgentName { get; set; }
 
+    /// <summary>Optional workspace path for routing.</summary>
+    [JsonPropertyName("workspacePath")]
+    public string? WorkspacePath { get; set; }
+
     /// <summary>Optional context value for default routing/template resolution.</summary>
     [JsonPropertyName("context")]
     public AgentPoolOneShotContext? Context { get; set; }
@@ -58,6 +62,10 @@ public sealed class AgentPoolAgentStatus
     /// <summary>Pooled agent name.</summary>
     [JsonPropertyName("agentName")]
     public string AgentName { get; set; } = string.Empty;
+
+    /// <summary>Workspace path this agent instance is scoped to.</summary>
+    [JsonPropertyName("workspacePath")]
+    public string? WorkspacePath { get; set; }
 
     /// <summary>Lifecycle status (offline, starting, idle, busy, stopping, error).</summary>
     [JsonPropertyName("lifecycle")]
@@ -110,6 +118,10 @@ public sealed class AgentPoolQueueItem
     /// <summary>Assigned agent name.</summary>
     [JsonPropertyName("agentName")]
     public string? AgentName { get; set; }
+
+    /// <summary>Workspace path this queue item is scoped to.</summary>
+    [JsonPropertyName("workspacePath")]
+    public string? WorkspacePath { get; set; }
 
     /// <summary>Queue status.</summary>
     [JsonPropertyName("status")]
@@ -218,6 +230,10 @@ public sealed class AgentPoolNotificationEvent
     /// <summary>Agent name.</summary>
     [JsonPropertyName("agentName")]
     public string? AgentName { get; set; }
+
+    /// <summary>Workspace path scoping this event.</summary>
+    [JsonPropertyName("workspacePath")]
+    public string? WorkspacePath { get; set; }
 
     /// <summary>Queue job id.</summary>
     [JsonPropertyName("jobId")]

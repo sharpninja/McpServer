@@ -11,18 +11,21 @@ namespace McpServer.Support.Mcp.Tests.Controllers;
 
 public sealed class AgentPoolControllerTests
 {
+    private static WorkspaceContext CreateWorkspaceContext()
+        => new() { WorkspacePath = @"E:\test-workspace" };
+
     [Fact]
     public async Task StartAgentAsync_FailedMutation_ReturnsBadRequest()
     {
         var service = Substitute.For<IAgentPoolService>();
-        service.StartAgentAsync("planner", Arg.Any<CancellationToken>())
+        service.StartAgentAsync("planner", @"E:\test-workspace", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new AgentPoolMutationResult
             {
                 Success = false,
                 Error = "boom",
             }));
 
-        var controller = new AgentPoolController(service);
+        var controller = new AgentPoolController(service, CreateWorkspaceContext());
         var result = await controller.StartAgentAsync("planner", CancellationToken.None).ConfigureAwait(true);
 
         var badRequest = Assert.IsType<BadRequestObjectResult>(result.Result);
@@ -35,14 +38,14 @@ public sealed class AgentPoolControllerTests
     public async Task ConnectDefaultAgentAsync_NoEligibleAgent_ReturnsNotFound()
     {
         var service = Substitute.For<IAgentPoolService>();
-        service.ConnectInteractiveAsync(null, Arg.Any<CancellationToken>())
+        service.ConnectInteractiveAsync(null, @"E:\test-workspace", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new AgentPoolConnectResult
             {
                 Success = false,
                 Error = "none",
             }));
 
-        var controller = new AgentPoolController(service);
+        var controller = new AgentPoolController(service, CreateWorkspaceContext());
         var result = await controller.ConnectDefaultAgentAsync(CancellationToken.None).ConfigureAwait(true);
 
         var notFound = Assert.IsType<NotFoundObjectResult>(result.Result);
@@ -58,7 +61,7 @@ public sealed class AgentPoolControllerTests
         service.SubscribeNotificationsAsync(Arg.Any<CancellationToken>())
             .Returns(NotificationStream());
 
-        var controller = new AgentPoolController(service);
+        var controller = new AgentPoolController(service, CreateWorkspaceContext());
         var context = new DefaultHttpContext();
         context.Response.Body = new MemoryStream();
         controller.ControllerContext = new ControllerContext { HttpContext = context };
@@ -80,7 +83,7 @@ public sealed class AgentPoolControllerTests
         service.SubscribeJobStreamAsync("job-1", Arg.Any<CancellationToken>())
             .Returns(JobStream());
 
-        var controller = new AgentPoolController(service);
+        var controller = new AgentPoolController(service, CreateWorkspaceContext());
         var context = new DefaultHttpContext();
         context.Response.Body = new MemoryStream();
         controller.ControllerContext = new ControllerContext { HttpContext = context };

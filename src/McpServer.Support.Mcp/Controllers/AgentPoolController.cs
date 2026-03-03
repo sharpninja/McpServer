@@ -14,42 +14,44 @@ public sealed class AgentPoolController : ControllerBase
 {
     private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web);
     private readonly IAgentPoolService _agentPoolService;
+    private readonly WorkspaceContext _workspaceContext;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AgentPoolController"/> class.
     /// </summary>
-    public AgentPoolController(IAgentPoolService agentPoolService)
+    public AgentPoolController(IAgentPoolService agentPoolService, WorkspaceContext workspaceContext)
     {
         _agentPoolService = agentPoolService ?? throw new ArgumentNullException(nameof(agentPoolService));
+        _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
     }
 
     /// <summary>
-    /// Returns pooled runtime state for all configured agents.
+    /// Returns pooled runtime state for all configured agents, optionally filtered by workspace.
     /// </summary>
     [HttpGet("agents")]
-    public async Task<ActionResult<IReadOnlyList<AgentPoolAgentStatusDto>>> GetAgentsAsync(CancellationToken cancellationToken)
-        => Ok(await _agentPoolService.GetAgentsAsync(cancellationToken).ConfigureAwait(false));
+    public async Task<ActionResult<IReadOnlyList<AgentPoolAgentStatusDto>>> GetAgentsAsync([FromQuery] string? workspace, CancellationToken cancellationToken)
+        => Ok(await _agentPoolService.GetAgentsAsync(workspace ?? _workspaceContext.WorkspacePath, cancellationToken).ConfigureAwait(false));
 
     /// <summary>
     /// Starts a pooled agent.
     /// </summary>
     [HttpPost("agents/{agentName}/start")]
     public async Task<ActionResult<AgentPoolMutationResult>> StartAgentAsync(string agentName, CancellationToken cancellationToken)
-        => ToActionResult(await _agentPoolService.StartAgentAsync(agentName, cancellationToken).ConfigureAwait(false));
+        => ToActionResult(await _agentPoolService.StartAgentAsync(agentName, _workspaceContext.WorkspacePath, cancellationToken).ConfigureAwait(false));
 
     /// <summary>
     /// Stops a pooled agent.
     /// </summary>
     [HttpPost("agents/{agentName}/stop")]
     public async Task<ActionResult<AgentPoolMutationResult>> StopAgentAsync(string agentName, CancellationToken cancellationToken)
-        => ToActionResult(await _agentPoolService.StopAgentAsync(agentName, cancellationToken).ConfigureAwait(false));
+        => ToActionResult(await _agentPoolService.StopAgentAsync(agentName, _workspaceContext.WorkspacePath, cancellationToken).ConfigureAwait(false));
 
     /// <summary>
     /// Recycles a pooled agent immediately.
     /// </summary>
     [HttpPost("agents/{agentName}/recycle")]
     public async Task<ActionResult<AgentPoolMutationResult>> RecycleAgentAsync(string agentName, CancellationToken cancellationToken)
-        => ToActionResult(await _agentPoolService.RecycleAgentAsync(agentName, cancellationToken).ConfigureAwait(false));
+        => ToActionResult(await _agentPoolService.RecycleAgentAsync(agentName, _workspaceContext.WorkspacePath, cancellationToken).ConfigureAwait(false));
 
     /// <summary>
     /// Connects to a pooled interactive voice session.
@@ -57,7 +59,7 @@ public sealed class AgentPoolController : ControllerBase
     [HttpPost("agents/{agentName}/connect")]
     public async Task<ActionResult<AgentPoolConnectResult>> ConnectAgentAsync(string agentName, CancellationToken cancellationToken)
     {
-        var result = await _agentPoolService.ConnectInteractiveAsync(agentName, cancellationToken).ConfigureAwait(false);
+        var result = await _agentPoolService.ConnectInteractiveAsync(agentName, _workspaceContext.WorkspacePath, cancellationToken).ConfigureAwait(false);
         return result.Success ? Ok(result) : NotFound(result);
     }
 
@@ -67,7 +69,7 @@ public sealed class AgentPoolController : ControllerBase
     [HttpPost("connect")]
     public async Task<ActionResult<AgentPoolConnectResult>> ConnectDefaultAgentAsync(CancellationToken cancellationToken)
     {
-        var result = await _agentPoolService.ConnectInteractiveAsync(null, cancellationToken).ConfigureAwait(false);
+        var result = await _agentPoolService.ConnectInteractiveAsync(null, _workspaceContext.WorkspacePath, cancellationToken).ConfigureAwait(false);
         return result.Success ? Ok(result) : NotFound(result);
     }
 

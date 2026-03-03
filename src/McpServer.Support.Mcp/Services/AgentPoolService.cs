@@ -20,7 +20,8 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
     };
 
     private readonly object _sync = new();
-    private readonly Dictionary<string, AgentRuntimeState> _agents = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, AgentPoolDefinitionOptions> _definitions = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<AgentInstanceKey, AgentRuntimeState> _agents = [];
     private readonly Dictionary<string, QueueJobState> _jobs = new(StringComparer.OrdinalIgnoreCase);
     private readonly List<string> _queuedJobIds = [];
     private readonly SemaphoreSlim _dispatchGate = new(1, 1);
@@ -64,15 +65,20 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
     }
 
     /// <inheritdoc />
-    public Task<IReadOnlyList<AgentPoolAgentStatusDto>> GetAgentsAsync(CancellationToken cancellationToken = default)
+    public Task<IReadOnlyList<AgentPoolAgentStatusDto>> GetAgentsAsync(string? workspacePath = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         lock (_sync)
         {
-            var items = _agents.Values
-                .OrderBy(x => x.Definition.AgentName, StringComparer.OrdinalIgnoreCase)
-                .Select(MapAgent)
+            var query = _agents.AsEnumerable();
+            if (!string.IsNullOrWhiteSpace(workspacePath))
+                query = query.Where(kv => string.Equals(kv.Key.WorkspacePath, workspacePath, StringComparison.OrdinalIgnoreCase));
+
+            var items = query
+                .OrderBy(kv => kv.Key.AgentName, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(kv => kv.Key.WorkspacePath, StringComparer.OrdinalIgnoreCase)
+                .Select(kv => MapAgent(kv.Value))
                 .ToList();
             return Task.FromResult<IReadOnlyList<AgentPoolAgentStatusDto>>(items);
         }
@@ -99,22 +105,24 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
     }
 
     /// <inheritdoc />
-    public async Task<AgentPoolConnectResult> ConnectInteractiveAsync(string? agentName, CancellationToken cancellationToken = default)
+    public async Task<AgentPoolConnectResult> ConnectInteractiveAsync(string? agentName, string? workspacePath = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var resolvedAgentName = ResolveAgentName(agentName, AgentPoolOneShotContext.AdHoc, interactiveFallback: true);
+        var effectiveWorkspace = workspacePath ?? _workspaceAccessor.GetWorkspacePath();
+        var resolvedAgentName = ResolveAgentName(agentName, effectiveWorkspace, AgentPoolOneShotContext.AdHoc, interactiveFallback: true);
         if (resolvedAgentName is null)
             return new AgentPoolConnectResult { Success = false, Error = "No pooled agent available for interactive connection." };
 
-        var start = await StartAgentAsync(resolvedAgentName, cancellationToken).ConfigureAwait(false);
+        var start = await StartAgentAsync(resolvedAgentName, effectiveWorkspace, cancellationToken).ConfigureAwait(false);
         if (!start.Success)
             return new AgentPoolConnectResult { Success = false, Error = start.Error };
 
+        var key = new AgentInstanceKey(resolvedAgentName, effectiveWorkspace);
         lock (_sync)
         {
-            if (!_agents.TryGetValue(resolvedAgentName, out var state))
-                return new AgentPoolConnectResult { Success = false, Error = $"Agent '{resolvedAgentName}' no longer exists." };
+            if (!_agents.TryGetValue(key, out var state))
+                return new AgentPoolConnectResult { Success = false, Error = $"Agent '{resolvedAgentName}' is not running in workspace '{effectiveWorkspace}'." };
 
             state.ActiveVoiceLinks++;
             return new AgentPoolConnectResult
@@ -127,18 +135,31 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
     }
 
     /// <inheritdoc />
-    public async Task<AgentPoolMutationResult> StartAgentAsync(string agentName, CancellationToken cancellationToken = default)
+    public async Task<AgentPoolMutationResult> StartAgentAsync(string agentName, string? workspacePath = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         if (string.IsNullOrWhiteSpace(agentName))
             return new AgentPoolMutationResult { Success = false, Error = "agentName is required." };
 
+        var effectiveWorkspace = workspacePath ?? _workspaceAccessor.GetWorkspacePath();
+        var key = new AgentInstanceKey(agentName, effectiveWorkspace);
+
         AgentRuntimeState? state;
         lock (_sync)
         {
-            _agents.TryGetValue(agentName, out state);
-            if (state is not null)
+            if (!_agents.TryGetValue(key, out state))
+            {
+                // Auto-create instance if definition exists
+                if (_definitions.TryGetValue(agentName, out var def))
+                {
+                    state = new AgentRuntimeState { Definition = def, WorkspacePath = effectiveWorkspace, Lifecycle = "starting" };
+                    _agents[key] = state;
+                }
+            }
+            else
+            {
                 state.Lifecycle = "starting";
+            }
         }
 
         if (state is null)
@@ -158,7 +179,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                         AgentName = state.Definition.AgentName,
                         DeviceId = $"agent-pool-{state.Definition.AgentName}",
                         ClientName = "agent-pool",
-                        WorkspacePath = _workspaceAccessor.GetWorkspacePath(),
+                        WorkspacePath = effectiveWorkspace,
                         AgentPath = state.Definition.AgentPath,
                         AgentModel = state.Definition.AgentModel,
                         AgentSeed = state.Definition.AgentSeed,
@@ -169,7 +190,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
 
                 lock (_sync)
                 {
-                    if (_agents.TryGetValue(agentName, out var current))
+                    if (_agents.TryGetValue(key, out var current))
                     {
                         current.SessionId = create.SessionId;
                         current.Lifecycle = "idle";
@@ -180,7 +201,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
             {
                 lock (_sync)
                 {
-                    if (_agents.TryGetValue(agentName, out var current))
+                    if (_agents.TryGetValue(key, out var current))
                     {
                         current.SessionId = existing.SessionId;
                         current.Lifecycle = current.IsBusy ? "busy" : "idle";
@@ -194,27 +215,30 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
         {
             lock (_sync)
             {
-                if (_agents.TryGetValue(agentName, out var current))
+                if (_agents.TryGetValue(key, out var current))
                     current.Lifecycle = "error";
             }
 
-            _logger.LogWarning(ex, "Failed to start pooled agent {AgentName}", agentName);
+            _logger.LogWarning(ex, "Failed to start pooled agent {AgentName}@{Workspace}", agentName, effectiveWorkspace);
             return new AgentPoolMutationResult { Success = false, Error = ex.Message };
         }
     }
 
     /// <inheritdoc />
-    public async Task<AgentPoolMutationResult> StopAgentAsync(string agentName, CancellationToken cancellationToken = default)
+    public async Task<AgentPoolMutationResult> StopAgentAsync(string agentName, string? workspacePath = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         if (string.IsNullOrWhiteSpace(agentName))
             return new AgentPoolMutationResult { Success = false, Error = "agentName is required." };
 
+        var effectiveWorkspace = workspacePath ?? _workspaceAccessor.GetWorkspacePath();
+        var key = new AgentInstanceKey(agentName, effectiveWorkspace);
+
         string? sessionId;
         lock (_sync)
         {
-            if (!_agents.TryGetValue(agentName, out var state))
-                return new AgentPoolMutationResult { Success = false, Error = $"Unknown pooled agent '{agentName}'." };
+            if (!_agents.TryGetValue(key, out var state))
+                return new AgentPoolMutationResult { Success = false, Error = $"Unknown pooled agent '{agentName}' in workspace '{effectiveWorkspace}'." };
 
             state.Lifecycle = "stopping";
             sessionId = state.SessionId;
@@ -227,7 +251,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
 
         lock (_sync)
         {
-            if (_agents.TryGetValue(agentName, out var state))
+            if (_agents.TryGetValue(key, out var state))
             {
                 state.SessionId = null;
                 state.Lifecycle = "offline";
@@ -238,15 +262,15 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
     }
 
     /// <inheritdoc />
-    public async Task<AgentPoolMutationResult> RecycleAgentAsync(string agentName, CancellationToken cancellationToken = default)
+    public async Task<AgentPoolMutationResult> RecycleAgentAsync(string agentName, string? workspacePath = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var stop = await StopAgentAsync(agentName, cancellationToken).ConfigureAwait(false);
+        var stop = await StopAgentAsync(agentName, workspacePath, cancellationToken).ConfigureAwait(false);
         if (!stop.Success)
             return stop;
 
-        return await StartAgentAsync(agentName, cancellationToken).ConfigureAwait(false);
+        return await StartAgentAsync(agentName, workspacePath, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -255,12 +279,14 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
         ArgumentNullException.ThrowIfNull(request);
         cancellationToken.ThrowIfCancellationRequested();
 
+        var effectiveWorkspace = request.WorkspacePath ?? _workspaceAccessor.GetWorkspacePath();
+
         var resolution = await ResolvePromptAsync(request, cancellationToken).ConfigureAwait(false);
         if (!resolution.Success)
             return new AgentPoolEnqueueResult { Success = false, Error = resolution.Error };
 
         var effectiveContext = request.Context ?? InferContextFromPrompt(resolution.PromptText);
-        var resolvedAgentName = ResolveAgentName(request.AgentName, effectiveContext, interactiveFallback: false);
+        var resolvedAgentName = ResolveAgentName(request.AgentName, effectiveWorkspace, effectiveContext, interactiveFallback: false);
         if (resolvedAgentName is null)
             return new AgentPoolEnqueueResult { Success = false, Error = "No eligible pooled agent configured." };
 
@@ -277,6 +303,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
             {
                 JobId = jobId,
                 AgentName = resolvedAgentName,
+                WorkspacePath = effectiveWorkspace,
                 Status = "queued",
                 Context = effectiveContext,
                 PromptTemplateId = resolution.TemplateId,
@@ -553,8 +580,12 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                 });
             }
 
-            if (!string.IsNullOrWhiteSpace(agentNameForCounter) && _agents.TryGetValue(agentNameForCounter, out var agent))
-                agent.ReadOnlySubscribers++;
+            if (!string.IsNullOrWhiteSpace(agentNameForCounter))
+            {
+                var counterKey = FindAgentKeyByJobId(jobId, agentNameForCounter);
+                if (counterKey.HasValue && _agents.TryGetValue(counterKey.Value, out var agent))
+                    agent.ReadOnlySubscribers++;
+            }
         }
 
         try
@@ -573,8 +604,12 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
 
             lock (_sync)
             {
-                if (!string.IsNullOrWhiteSpace(agentNameForCounter) && _agents.TryGetValue(agentNameForCounter, out var agent))
-                    agent.ReadOnlySubscribers = Math.Max(0, agent.ReadOnlySubscribers - 1);
+                if (!string.IsNullOrWhiteSpace(agentNameForCounter))
+                {
+                    var counterKey = FindAgentKeyByJobId(jobId, agentNameForCounter);
+                    if (counterKey.HasValue && _agents.TryGetValue(counterKey.Value, out var agent))
+                        agent.ReadOnlySubscribers = Math.Max(0, agent.ReadOnlySubscribers - 1);
+                }
             }
         }
     }
@@ -607,27 +642,29 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                 .Select(x => x.AgentName.Trim())
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-            var removed = _agents.Keys.Where(x => !names.Contains(x)).ToList();
-            foreach (var key in removed)
-                _agents.Remove(key);
+            // Update definitions cache
+            var removedDefs = _definitions.Keys.Where(x => !names.Contains(x)).ToList();
+            foreach (var key in removedDefs)
+                _definitions.Remove(key);
 
             foreach (var definition in options.Agents)
             {
                 if (string.IsNullOrWhiteSpace(definition.AgentName))
                     continue;
 
-                if (_agents.TryGetValue(definition.AgentName, out var existing))
-                {
-                    existing.Definition = definition;
-                }
-                else
-                {
-                    _agents[definition.AgentName] = new AgentRuntimeState
-                    {
-                        Definition = definition,
-                        Lifecycle = "offline",
-                    };
-                }
+                _definitions[definition.AgentName.Trim()] = definition;
+            }
+
+            // Remove agent instances whose definition was removed
+            var removedInstances = _agents.Keys.Where(k => !names.Contains(k.AgentName)).ToList();
+            foreach (var key in removedInstances)
+                _agents.Remove(key);
+
+            // Update definition reference on surviving instances
+            foreach (var kvp in _agents)
+            {
+                if (_definitions.TryGetValue(kvp.Key.AgentName, out var updatedDef))
+                    kvp.Value.Definition = updatedDef;
             }
         }
     }
@@ -690,14 +727,34 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                             continue;
                         }
 
-                        if (string.IsNullOrWhiteSpace(candidate.AgentName) || !_agents.TryGetValue(candidate.AgentName, out var candidateAgent))
+                        var candidateKey = new AgentInstanceKey(candidate.AgentName!, candidate.WorkspacePath ?? string.Empty);
+                        if (string.IsNullOrWhiteSpace(candidate.AgentName))
                         {
                             candidate.Status = "failed";
-                            candidate.Error = "No eligible pooled agent found.";
+                            candidate.Error = "No agent name specified.";
                             candidate.CompletedUtc = DateTimeOffset.UtcNow;
                             _queuedJobIds.Remove(queuedId);
                             PublishTerminalFailure(candidate);
                             continue;
+                        }
+
+                        if (!_agents.TryGetValue(candidateKey, out var candidateAgent))
+                        {
+                            // Lazily create instance from definition
+                            if (_definitions.TryGetValue(candidate.AgentName!, out var def))
+                            {
+                                candidateAgent = new AgentRuntimeState { Definition = def, WorkspacePath = candidate.WorkspacePath ?? string.Empty, Lifecycle = "offline" };
+                                _agents[candidateKey] = candidateAgent;
+                            }
+                            else
+                            {
+                                candidate.Status = "failed";
+                                candidate.Error = "No eligible pooled agent found.";
+                                candidate.CompletedUtc = DateTimeOffset.UtcNow;
+                                _queuedJobIds.Remove(queuedId);
+                                PublishTerminalFailure(candidate);
+                                continue;
+                            }
                         }
 
                         if (candidateAgent.IsBusy)
@@ -735,7 +792,8 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                     Status = "processing",
                 });
 
-                var start = await StartAgentAsync(job.AgentName!, CancellationToken.None).ConfigureAwait(false);
+                var jobKey = new AgentInstanceKey(job.AgentName!, job.WorkspacePath ?? string.Empty);
+                var start = await StartAgentAsync(job.AgentName!, job.WorkspacePath, CancellationToken.None).ConfigureAwait(false);
                 if (!start.Success)
                 {
                     lock (_sync)
@@ -747,7 +805,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                             failedJob.CompletedUtc = DateTimeOffset.UtcNow;
                         }
 
-                        if (_agents.TryGetValue(job.AgentName!, out var failedAgent))
+                        if (_agents.TryGetValue(jobKey, out var failedAgent))
                         {
                             failedAgent.IsBusy = false;
                             failedAgent.ActiveJobId = null;
@@ -762,7 +820,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                 string? sessionId;
                 lock (_sync)
                 {
-                    _agents.TryGetValue(job.AgentName!, out var currentAgent);
+                    _agents.TryGetValue(jobKey, out var currentAgent);
                     sessionId = currentAgent?.SessionId;
                     if (_jobs.TryGetValue(job.JobId, out var currentJob))
                         currentJob.SessionId = sessionId;
@@ -789,7 +847,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                 lock (_sync)
                 {
                     _jobs.TryGetValue(job.JobId, out var finalJob);
-                    _agents.TryGetValue(job.AgentName!, out var finalAgent);
+                    _agents.TryGetValue(jobKey, out var finalAgent);
                     if (finalJob is null || finalAgent is null)
                         continue;
 
@@ -863,25 +921,93 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
         }
     }
 
-    private string? ResolveAgentName(string? explicitAgentName, AgentPoolOneShotContext? context, bool interactiveFallback)
+    private string? ResolveAgentName(string? explicitAgentName, string workspacePath, AgentPoolOneShotContext? context, bool interactiveFallback)
     {
         lock (_sync)
         {
+            // Filter to agents running in the target workspace
+            var workspaceAgents = _agents
+                .Where(kv => string.Equals(kv.Key.WorkspacePath, workspacePath, StringComparison.OrdinalIgnoreCase))
+                .Select(kv => kv.Value)
+                .ToList();
+
+            // Fall back to definitions if no instances exist yet for this workspace
+            if (workspaceAgents.Count == 0 && _definitions.Count > 0)
+            {
+                if (!string.IsNullOrWhiteSpace(explicitAgentName))
+                    return _definitions.ContainsKey(explicitAgentName) ? explicitAgentName : null;
+
+                var def = context switch
+                {
+                    AgentPoolOneShotContext.Plan => _definitions.Values.FirstOrDefault(x => x.IsTodoPlanDefault),
+                    AgentPoolOneShotContext.Status => _definitions.Values.FirstOrDefault(x => x.IsTodoStatusDefault),
+                    AgentPoolOneShotContext.Implement => _definitions.Values.FirstOrDefault(x => x.IsTodoImplementDefault),
+                    AgentPoolOneShotContext.AdHoc => _definitions.Values.FirstOrDefault(x => x.IsInteractiveDefault),
+                    null when interactiveFallback => _definitions.Values.FirstOrDefault(x => x.IsInteractiveDefault),
+                    _ => null,
+                };
+                def ??= _definitions.Values.OrderBy(x => x.AgentName, StringComparer.OrdinalIgnoreCase).FirstOrDefault();
+                return def?.AgentName;
+            }
+
             if (!string.IsNullOrWhiteSpace(explicitAgentName))
-                return _agents.ContainsKey(explicitAgentName) ? explicitAgentName : null;
+                return workspaceAgents.Any(a => string.Equals(a.Definition.AgentName, explicitAgentName, StringComparison.OrdinalIgnoreCase))
+                    ? explicitAgentName
+                    : null;
 
             AgentRuntimeState? selected = context switch
             {
-                AgentPoolOneShotContext.Plan => _agents.Values.FirstOrDefault(x => x.Definition.IsTodoPlanDefault),
-                AgentPoolOneShotContext.Status => _agents.Values.FirstOrDefault(x => x.Definition.IsTodoStatusDefault),
-                AgentPoolOneShotContext.Implement => _agents.Values.FirstOrDefault(x => x.Definition.IsTodoImplementDefault),
-                AgentPoolOneShotContext.AdHoc => _agents.Values.FirstOrDefault(x => x.Definition.IsInteractiveDefault),
-                null when interactiveFallback => _agents.Values.FirstOrDefault(x => x.Definition.IsInteractiveDefault),
+                AgentPoolOneShotContext.Plan => workspaceAgents.FirstOrDefault(x => x.Definition.IsTodoPlanDefault),
+                AgentPoolOneShotContext.Status => workspaceAgents.FirstOrDefault(x => x.Definition.IsTodoStatusDefault),
+                AgentPoolOneShotContext.Implement => workspaceAgents.FirstOrDefault(x => x.Definition.IsTodoImplementDefault),
+                AgentPoolOneShotContext.AdHoc => workspaceAgents.FirstOrDefault(x => x.Definition.IsInteractiveDefault),
+                null when interactiveFallback => workspaceAgents.FirstOrDefault(x => x.Definition.IsInteractiveDefault),
                 _ => null,
             };
 
-            selected ??= _agents.Values.OrderBy(x => x.Definition.AgentName, StringComparer.OrdinalIgnoreCase).FirstOrDefault();
+            selected ??= workspaceAgents.OrderBy(x => x.Definition.AgentName, StringComparer.OrdinalIgnoreCase).FirstOrDefault();
             return selected?.Definition.AgentName;
+        }
+    }
+
+    /// <summary>Finds the composite key for a job's agent by looking up the job workspace.</summary>
+    private AgentInstanceKey? FindAgentKeyByJobId(string jobId, string agentName)
+    {
+        if (!_jobs.TryGetValue(jobId, out var job))
+            return null;
+
+        var key = new AgentInstanceKey(agentName, job.WorkspacePath ?? string.Empty);
+        return _agents.ContainsKey(key) ? key : null;
+    }
+
+    /// <inheritdoc />
+    public async Task SeedWorkspaceAgentsAsync(string workspacePath, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        List<AgentPoolDefinitionOptions> definitions;
+        lock (_sync)
+        {
+            definitions = _definitions.Values.ToList();
+        }
+
+        foreach (var def in definitions)
+        {
+            var key = new AgentInstanceKey(def.AgentName, workspacePath);
+            bool alreadyExists;
+            lock (_sync)
+            {
+                alreadyExists = _agents.ContainsKey(key);
+            }
+
+            if (alreadyExists)
+                continue;
+
+            var result = await StartAgentAsync(def.AgentName, workspacePath, cancellationToken).ConfigureAwait(false);
+            if (result.Success)
+                _logger.LogInformation("Seeded agent {Agent}@{Workspace}", def.AgentName, workspacePath);
+            else
+                _logger.LogWarning("Failed to seed agent {Agent}@{Workspace}: {Error}", def.AgentName, workspacePath, result.Error);
         }
     }
 
@@ -921,7 +1047,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
 
     private void MergeWorkspaceContextVariables(Dictionary<string, object?> variables, AgentPoolOneShotRequest request)
     {
-        variables["workspacePath"] = _workspaceAccessor.GetWorkspacePath();
+        variables["workspacePath"] = request.WorkspacePath ?? _workspaceAccessor.GetWorkspacePath();
         variables["baseUrl"] = _todoPromptOptions.CurrentValue.BaseUrl;
 
         if (!string.IsNullOrWhiteSpace(request.Id))
@@ -984,6 +1110,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
         => new()
         {
             AgentName = state.Definition.AgentName,
+            WorkspacePath = state.WorkspacePath,
             Lifecycle = state.Lifecycle,
             SessionId = state.SessionId,
             ActiveJobId = state.ActiveJobId,
@@ -1001,6 +1128,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
         {
             JobId = state.JobId,
             AgentName = state.AgentName,
+            WorkspacePath = state.WorkspacePath,
             Status = state.Status,
             Context = state.Context,
             PromptTemplateId = state.PromptTemplateId,
@@ -1016,6 +1144,8 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
     private sealed class AgentRuntimeState
     {
         public required AgentPoolDefinitionOptions Definition { get; set; }
+
+        public required string WorkspacePath { get; init; }
 
         public string Lifecycle { get; set; } = "offline";
 
@@ -1037,6 +1167,8 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
         public required string JobId { get; init; }
 
         public string? AgentName { get; set; }
+
+        public string? WorkspacePath { get; set; }
 
         public required string Status { get; set; }
 
@@ -1062,5 +1194,20 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
 
         public QueueJobState Clone()
             => (QueueJobState)MemberwiseClone();
+    }
+
+    /// <summary>Composite key for workspace-scoped agent instances.</summary>
+    private readonly record struct AgentInstanceKey(string AgentName, string WorkspacePath)
+    {
+        /// <inheritdoc />
+        public bool Equals(AgentInstanceKey other)
+            => string.Equals(AgentName, other.AgentName, StringComparison.OrdinalIgnoreCase) &&
+               string.Equals(WorkspacePath, other.WorkspacePath, StringComparison.OrdinalIgnoreCase);
+
+        /// <inheritdoc />
+        public override int GetHashCode()
+            => HashCode.Combine(
+                StringComparer.OrdinalIgnoreCase.GetHashCode(AgentName),
+                StringComparer.OrdinalIgnoreCase.GetHashCode(WorkspacePath));
     }
 }

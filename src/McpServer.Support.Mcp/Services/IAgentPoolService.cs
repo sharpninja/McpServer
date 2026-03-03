@@ -8,9 +8,9 @@ namespace McpServer.Support.Mcp.Services;
 public interface IAgentPoolService
 {
     /// <summary>
-    /// Lists runtime state for all configured pooled agents.
+    /// Lists runtime state for configured pooled agents, optionally filtered by workspace.
     /// </summary>
-    Task<IReadOnlyList<AgentPoolAgentStatusDto>> GetAgentsAsync(CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<AgentPoolAgentStatusDto>> GetAgentsAsync(string? workspacePath = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Lists all queue items across active and terminal states.
@@ -18,24 +18,24 @@ public interface IAgentPoolService
     Task<IReadOnlyList<AgentPoolQueueItemDto>> GetQueueItemsAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Connects to a pooled interactive agent session.
+    /// Connects to a pooled interactive agent session in the specified workspace.
     /// </summary>
-    Task<AgentPoolConnectResult> ConnectInteractiveAsync(string? agentName, CancellationToken cancellationToken = default);
+    Task<AgentPoolConnectResult> ConnectInteractiveAsync(string? agentName, string? workspacePath = null, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Starts a pooled agent session.
+    /// Starts a pooled agent session in the specified workspace.
     /// </summary>
-    Task<AgentPoolMutationResult> StartAgentAsync(string agentName, CancellationToken cancellationToken = default);
+    Task<AgentPoolMutationResult> StartAgentAsync(string agentName, string? workspacePath = null, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Stops a pooled agent session.
+    /// Stops a pooled agent session in the specified workspace.
     /// </summary>
-    Task<AgentPoolMutationResult> StopAgentAsync(string agentName, CancellationToken cancellationToken = default);
+    Task<AgentPoolMutationResult> StopAgentAsync(string agentName, string? workspacePath = null, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Recycles a pooled agent session immediately.
+    /// Recycles a pooled agent session in the specified workspace.
     /// </summary>
-    Task<AgentPoolMutationResult> RecycleAgentAsync(string agentName, CancellationToken cancellationToken = default);
+    Task<AgentPoolMutationResult> RecycleAgentAsync(string agentName, string? workspacePath = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Enqueues a one-shot request for pooled execution.
@@ -76,4 +76,9 @@ public interface IAgentPoolService
     /// Subscribes to read-only events for a single queue item.
     /// </summary>
     IAsyncEnumerable<AgentPoolJobStreamEventDto> SubscribeJobStreamAsync(string jobId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Seeds agent instances for every agent definition in the specified workspace.
+    /// </summary>
+    Task SeedWorkspaceAgentsAsync(string workspacePath, CancellationToken cancellationToken = default);
 }
