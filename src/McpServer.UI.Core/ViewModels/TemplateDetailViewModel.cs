@@ -14,9 +14,14 @@ namespace McpServer.UI.Core.ViewModels;
 /// <summary>
 /// ViewModel for viewing, editing, and testing a single prompt template.
 /// </summary>
+[ViewModelCommand("get-template", Description = "Get, edit, and test prompt template detail")]
 public sealed partial class TemplateDetailViewModel : AreaDetailViewModelBase<TemplateDetail>
 {
     private readonly Dispatcher _dispatcher;
+    private readonly AsyncRelayCommand _loadCommand;
+    private readonly AsyncRelayCommand _saveCommand;
+    private readonly AsyncRelayCommand _deleteCommand;
+    private readonly AsyncRelayCommand _testCommand;
     private readonly ILogger<TemplateDetailViewModel> _logger;
 
     /// <summary>Whether the current editor state represents a new unsaved draft.</summary>
@@ -43,6 +48,12 @@ public sealed partial class TemplateDetailViewModel : AreaDetailViewModelBase<Te
     /// <summary>Editor field for template engine.</summary>
     [ObservableProperty] private string _editorEngine = "handlebars";
 
+    /// <summary>JSON payload used by <see cref="TestCommand"/>.</summary>
+    [ObservableProperty] private string _testVariablesJson = "{}";
+
+    /// <summary>Rendered output from the last successful <see cref="TestCommand"/> run.</summary>
+    [ObservableProperty] private string? _testOutput;
+
     /// <summary>Initializes a new instance of the template detail ViewModel.</summary>
     /// <param name="dispatcher">CQRS dispatcher.</param>
     /// <param name="logger">Logger instance.</param>
@@ -52,7 +63,26 @@ public sealed partial class TemplateDetailViewModel : AreaDetailViewModelBase<Te
     {
         _dispatcher = dispatcher;
         _logger = logger;
+        _loadCommand = new AsyncRelayCommand(LoadFromEditorIdAsync);
+        _saveCommand = new AsyncRelayCommand(SaveFromCommandAsync);
+        _deleteCommand = new AsyncRelayCommand(DeleteFromCommandAsync);
+        _testCommand = new AsyncRelayCommand(TestFromCommandAsync);
     }
+
+    /// <summary>Loads detail using <see cref="EditorId"/> as the template identifier.</summary>
+    public IAsyncRelayCommand LoadCommand => _loadCommand;
+
+    /// <summary>Creates or updates the current template using editor state.</summary>
+    public IAsyncRelayCommand SaveCommand => _saveCommand;
+
+    /// <summary>Deletes the currently loaded template.</summary>
+    public IAsyncRelayCommand DeleteCommand => _deleteCommand;
+
+    /// <summary>Renders the currently loaded template using <see cref="TestVariablesJson"/>.</summary>
+    public IAsyncRelayCommand TestCommand => _testCommand;
+
+    /// <summary>Primary command alias for ViewModel registry execution.</summary>
+    public IAsyncRelayCommand PrimaryCommand => LoadCommand;
 
     /// <summary>Loads a template by ID.</summary>
     /// <param name="templateId">Template identifier.</param>
@@ -288,5 +318,33 @@ public sealed partial class TemplateDetailViewModel : AreaDetailViewModelBase<Te
         EditorTags = string.Join(", ", Detail.Tags);
         EditorDescription = Detail.Description ?? "";
         EditorEngine = Detail.Engine;
+    }
+
+    private async Task LoadFromEditorIdAsync()
+    {
+        if (string.IsNullOrWhiteSpace(EditorId))
+        {
+            ErrorMessage = "Template ID is required.";
+            StatusMessage = "Template load failed.";
+            return;
+        }
+
+        await LoadAsync(EditorId).ConfigureAwait(false);
+        PopulateEditorFromDetail();
+    }
+
+    private async Task SaveFromCommandAsync()
+    {
+        await SaveAsync().ConfigureAwait(false);
+    }
+
+    private async Task DeleteFromCommandAsync()
+    {
+        await DeleteAsync().ConfigureAwait(false);
+    }
+
+    private async Task TestFromCommandAsync()
+    {
+        TestOutput = await TestAsync(TestVariablesJson).ConfigureAwait(false);
     }
 }

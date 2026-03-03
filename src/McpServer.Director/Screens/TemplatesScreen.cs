@@ -176,7 +176,8 @@ internal sealed class TemplatesScreen : View
             {
                 try
                 {
-                    await _detailVm.LoadAsync(selected.Id).ConfigureAwait(false);
+                    _detailVm.EditorId = selected.Id;
+                    await _detailVm.LoadCommand.ExecuteAsync(null).ConfigureAwait(false);
                     var detail = _detailVm.Detail;
                     Application.Invoke(() =>
                     {
@@ -214,7 +215,7 @@ internal sealed class TemplatesScreen : View
     /// <summary>Triggers initial data load.</summary>
     public async Task LoadAsync()
     {
-        await _listVm.LoadAsync().ConfigureAwait(false);
+        await _listVm.RefreshCommand.ExecuteAsync(null).ConfigureAwait(false);
     }
 
     private TemplateListItem? GetSelectedTemplate() => _listVm.SelectedItem;
@@ -230,8 +231,8 @@ internal sealed class TemplatesScreen : View
             {
                 _ = Task.Run(async () =>
                 {
-                    await _detailVm.LoadAsync(selected.Id).ConfigureAwait(false);
-                    _detailVm.PopulateEditorFromDetail();
+                    _detailVm.EditorId = selected.Id;
+                    await _detailVm.LoadCommand.ExecuteAsync(null).ConfigureAwait(false);
                     Application.Invoke(() => OpenEditorDialog(isNew: false));
                 });
                 return;
@@ -302,8 +303,8 @@ internal sealed class TemplatesScreen : View
 
             _ = Task.Run(async () =>
             {
-                var ok = await _detailVm.SaveAsync().ConfigureAwait(false);
-                if (ok)
+                await _detailVm.SaveCommand.ExecuteAsync(null).ConfigureAwait(false);
+                if (string.IsNullOrWhiteSpace(_detailVm.ErrorMessage))
                 {
                     Application.Invoke(() => Application.RequestStop());
                     await LoadAsync().ConfigureAwait(false);
@@ -332,10 +333,13 @@ internal sealed class TemplatesScreen : View
         try
         {
             if (_detailVm.Detail?.Id != selected.Id)
-                await _detailVm.LoadAsync(selected.Id).ConfigureAwait(false);
+            {
+                _detailVm.EditorId = selected.Id;
+                await _detailVm.LoadCommand.ExecuteAsync(null).ConfigureAwait(false);
+            }
 
-            var ok = await _detailVm.DeleteAsync().ConfigureAwait(false);
-            if (ok)
+            await _detailVm.DeleteCommand.ExecuteAsync(null).ConfigureAwait(false);
+            if (string.IsNullOrWhiteSpace(_detailVm.ErrorMessage))
             {
                 await LoadAsync().ConfigureAwait(false);
             }
@@ -392,10 +396,11 @@ internal sealed class TemplatesScreen : View
             var varsJson = varsField.Text?.ToString() ?? "{}";
             _ = Task.Run(async () =>
             {
-                var result = await _detailVm.TestAsync(varsJson).ConfigureAwait(false);
+                _detailVm.TestVariablesJson = varsJson;
+                await _detailVm.TestCommand.ExecuteAsync(null).ConfigureAwait(false);
                 Application.Invoke(() =>
                 {
-                    resultField.Text = result ?? _detailVm.ErrorMessage ?? "No output.";
+                    resultField.Text = _detailVm.TestOutput ?? _detailVm.ErrorMessage ?? "No output.";
                 });
             });
         };

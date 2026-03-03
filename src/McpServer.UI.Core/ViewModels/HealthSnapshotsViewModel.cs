@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using McpServer.Cqrs;
 using McpServer.Cqrs.Mvvm;
@@ -13,10 +14,11 @@ namespace McpServer.UI.Core.ViewModels;
 /// Maintains a client-side history list of health checks and exposes an async command for checks.
 /// </summary>
 [ViewModelCommand("check-health", Description = "Check MCP server health and append a snapshot")]
-public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnapshot>
+public sealed partial class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnapshot>
 {
     private readonly Dispatcher _dispatcher;
     private readonly CqrsQueryCommand<HealthSnapshot> _checkHealthCommand;
+    private readonly AsyncRelayCommand _initializeWorkspaceCommand;
     private readonly ILogger<HealthSnapshotsViewModel> _logger;
 
 
@@ -32,21 +34,33 @@ public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnaps
         _logger = logger;
         _dispatcher = dispatcher;
         _checkHealthCommand = new CqrsQueryCommand<HealthSnapshot>(dispatcher, static () => new CheckHealthQuery());
+        _initializeWorkspaceCommand = new AsyncRelayCommand(InitializeWorkspaceFromInputAsync);
+        WorkspacePath = workspaceContext.ActiveWorkspacePath ?? string.Empty;
         workspaceContext.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(WorkspaceContextViewModel.ActiveWorkspacePath))
             {
                 _logger.LogInformation("Workspace changed to '{WorkspacePath}' — clearing health snapshots",
                     workspaceContext.ActiveWorkspacePath);
+                WorkspacePath = workspaceContext.ActiveWorkspacePath ?? string.Empty;
                 ClearItems();
             }
         };
     }
 
+    /// <summary>Workspace path used by <see cref="InitializeWorkspaceCommand"/>.</summary>
+    [ObservableProperty]
+    private string _workspacePath = string.Empty;
+
     /// <summary>
     /// Primary async command used by the UI and <c>director exec</c>.
     /// </summary>
     public IAsyncRelayCommand CheckHealthCommand => _checkHealthCommand;
+
+    /// <summary>
+    /// RelayCommand-backed workspace initialization operation for <c>/mcpserver/workspace/{key}/init</c>.
+    /// </summary>
+    public IAsyncRelayCommand InitializeWorkspaceCommand => _initializeWorkspaceCommand;
 
     /// <summary>Alias for <see cref="CheckHealthCommand"/> for ViewModel registry execution.</summary>
     public IAsyncRelayCommand PrimaryCommand => CheckHealthCommand;
@@ -103,6 +117,7 @@ public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnaps
         if (string.IsNullOrWhiteSpace(workspacePath))
             return Result<WorkspaceInitInfo>.Failure("WorkspacePath is required.");
 
+        WorkspacePath = workspacePath;
         IsLoading = true;
         ErrorMessage = null;
         StatusMessage = "Initializing workspace...";
@@ -134,5 +149,10 @@ public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnaps
         {
             IsLoading = false;
         }
+    }
+
+    private async Task InitializeWorkspaceFromInputAsync()
+    {
+        await InitializeWorkspaceAsync(WorkspacePath).ConfigureAwait(false);
     }
 }

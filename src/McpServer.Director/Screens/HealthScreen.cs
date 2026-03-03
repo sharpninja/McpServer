@@ -100,19 +100,17 @@ internal sealed class HealthScreen : View
         Application.Invoke(() => _statusLabel.Text = "⏳ Initializing...");
         try
         {
-            var result = await _viewModel.InitializeWorkspaceAsync(_client.WorkspacePath).ConfigureAwait(false);
+            _viewModel.WorkspacePath = _client.WorkspacePath;
+            await _viewModel.InitializeWorkspaceCommand.ExecuteAsync(null).ConfigureAwait(false);
             Application.Invoke(() =>
             {
-                if (!result.IsSuccess || result.Value is null)
+                if (!string.IsNullOrWhiteSpace(_viewModel.ErrorMessage))
                 {
-                    _statusLabel.Text = $"✗ Init failed: {result.Error ?? "Unknown error"}";
+                    _statusLabel.Text = $"✗ Init failed: {_viewModel.ErrorMessage}";
                     return;
                 }
 
-                var seededText = result.Value.SeededDefinitions is int seeded
-                    ? $" (seeded {seeded})"
-                    : "";
-                _statusLabel.Text = $"✓ Workspace initialized{seededText}";
+                _statusLabel.Text = $"✓ {_viewModel.StatusMessage ?? "Workspace initialization completed."}";
             });
         }
         catch (Exception ex)

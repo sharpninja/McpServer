@@ -65,7 +65,11 @@ internal sealed class TunnelScreen : View
             FullRowSelect = true,
             MultiSelect = false,
         };
-        _tableView.SelectedCellChanged += (_, _) => UpdateActionButtons();
+        _tableView.SelectedCellChanged += (_, _) =>
+        {
+            _vm.SelectedIndex = _tableView.SelectedRow;
+            UpdateActionButtons();
+        };
         Add(_tableView);
 
         // Button bar
@@ -130,7 +134,7 @@ internal sealed class TunnelScreen : View
     /// <summary>Triggers initial data load.</summary>
     public async Task LoadAsync()
     {
-        await _vm.LoadAsync().ConfigureAwait(false);
+        await _vm.RefreshCommand.ExecuteAsync(null).ConfigureAwait(false);
         Application.Invoke(UpdateActionButtons);
     }
 
@@ -164,11 +168,12 @@ internal sealed class TunnelScreen : View
     {
         var selected = GetSelectedProvider();
         if (selected is null) return;
+        _vm.SelectedIndex = _tableView.SelectedRow;
 
         if (selected.Enabled)
-            await _vm.DisableAsync(selected.Provider).ConfigureAwait(false);
+            await _vm.DisableCommand.ExecuteAsync(null).ConfigureAwait(false);
         else
-            await _vm.EnableAsync(selected.Provider).ConfigureAwait(false);
+            await _vm.EnableCommand.ExecuteAsync(null).ConfigureAwait(false);
 
         Application.Invoke(UpdateActionButtons);
     }
@@ -177,11 +182,12 @@ internal sealed class TunnelScreen : View
     {
         var selected = GetSelectedProvider();
         if (selected is null) return;
+        _vm.SelectedIndex = _tableView.SelectedRow;
 
         if (selected.IsRunning)
-            await _vm.StopAsync(selected.Provider).ConfigureAwait(false);
+            await _vm.StopCommand.ExecuteAsync(null).ConfigureAwait(false);
         else
-            await _vm.StartAsync(selected.Provider).ConfigureAwait(false);
+            await _vm.StartCommand.ExecuteAsync(null).ConfigureAwait(false);
 
         Application.Invoke(UpdateActionButtons);
     }
@@ -190,8 +196,9 @@ internal sealed class TunnelScreen : View
     {
         var selected = GetSelectedProvider();
         if (selected is null) return;
+        _vm.SelectedIndex = _tableView.SelectedRow;
 
-        await _vm.RestartAsync(selected.Provider).ConfigureAwait(false);
+        await _vm.RestartCommand.ExecuteAsync(null).ConfigureAwait(false);
         Application.Invoke(UpdateActionButtons);
     }
 
