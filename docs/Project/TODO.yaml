@@ -1544,9 +1544,9 @@ mvp-mcp:
     - task: 'Phase 5.1 — Agent handlers (14): Create all 14 handlers in UI.Core/Handlers/: ListAgentDefinitionsQueryHandler, GetAgentDefinitionQueryHandler, UpsertAgentDefinitionCommandHandler, DeleteAgentDefinitionCommandHandler, SeedAgentDefaultsCommandHandler, ListWorkspaceAgentsQueryHandler, GetWorkspaceAgentQueryHandler, UpsertWorkspaceAgentCommandHandler, DeleteWorkspaceAgentCommandHandler, BanAgentCommandHandler, UnbanAgentCommandHandler, LogAgentEventCommandHandler, GetAgentEventsQueryHandler, ValidateAgentQueryHandler. Each injects IAgentApiClient.'
       done: true
     - task: 'Phase 5.2 — Agent ViewModels: Create AgentDefinitionListViewModel (AreaListViewModelBase), AgentDefinitionDetailViewModel (AreaDetailViewModelBase), WorkspaceAgentListViewModel (AreaListViewModelBase), WorkspaceAgentDetailViewModel (AreaDetailViewModelBase), AgentEventsViewModel. Register all in ServiceCollectionExtensions.AddUiCore().'
-      done: false
+      done: true
     - task: 'Phase 5.3 — Migrate AgentScreen to MVVM: Replace AgentScreenHandler direct HTTP calls with AgentDefinitionListViewModel/WorkspaceAgentListViewModel. Remove AgentScreenHandler class. Update DI to inject new ViewModels into MainScreen. Ensure agent definition CRUD, workspace agent management, ban/unban, and event viewing all work through ViewModels.'
-      done: false
+      done: true
     - task: 'Phase 6.1 — ToolRegistry handlers (12): Create all 12 handlers in UI.Core/Handlers/: ListToolsQueryHandler, SearchToolsQueryHandler, GetToolQueryHandler, CreateToolCommandHandler, UpdateToolCommandHandler, DeleteToolCommandHandler, ListBucketsQueryHandler, AddBucketCommandHandler, RemoveBucketCommandHandler, BrowseBucketQueryHandler, InstallFromBucketCommandHandler, SyncBucketCommandHandler. Each injects IToolRegistryApiClient.'
       done: true
     - task: 'Phase 6.2 — ToolRegistry ViewModels: Create ToolListViewModel (AreaListViewModelBase), ToolDetailViewModel (AreaDetailViewModelBase), BucketListViewModel (AreaListViewModelBase), BucketDetailViewModel. Register in AddUiCore().'

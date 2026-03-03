@@ -31,6 +31,11 @@ internal sealed class MainScreen : Window
     private readonly TunnelListViewModel _tunnelListVm;
     private readonly TemplateListViewModel _templateListVm;
     private readonly TemplateDetailViewModel _templateDetailVm;
+    private readonly AgentDefinitionListViewModel _agentDefinitionListVm;
+    private readonly AgentDefinitionDetailViewModel _agentDefinitionDetailVm;
+    private readonly WorkspaceAgentListViewModel _workspaceAgentListVm;
+    private readonly WorkspaceAgentDetailViewModel _workspaceAgentDetailVm;
+    private readonly AgentEventsViewModel _agentEventsVm;
     private readonly AgentPoolViewModel _agentPoolVm;
     private readonly EventStreamViewModel _eventStreamVm;
     private readonly WorkspaceContextViewModel _workspaceContextVm;
@@ -57,6 +62,11 @@ internal sealed class MainScreen : Window
         TunnelListViewModel tunnelListVm,
         TemplateListViewModel templateListVm,
         TemplateDetailViewModel templateDetailVm,
+        AgentDefinitionListViewModel agentDefinitionListVm,
+        AgentDefinitionDetailViewModel agentDefinitionDetailVm,
+        WorkspaceAgentListViewModel workspaceAgentListVm,
+        WorkspaceAgentDetailViewModel workspaceAgentDetailVm,
+        AgentEventsViewModel agentEventsVm,
         AgentPoolViewModel agentPoolVm,
         EventStreamViewModel eventStreamVm,
         WorkspaceContextViewModel workspaceContextVm,
@@ -79,6 +89,11 @@ internal sealed class MainScreen : Window
         _tunnelListVm = tunnelListVm;
         _templateListVm = templateListVm;
         _templateDetailVm = templateDetailVm;
+        _agentDefinitionListVm = agentDefinitionListVm;
+        _agentDefinitionDetailVm = agentDefinitionDetailVm;
+        _workspaceAgentListVm = workspaceAgentListVm;
+        _workspaceAgentDetailVm = workspaceAgentDetailVm;
+        _agentEventsVm = agentEventsVm;
         _agentPoolVm = agentPoolVm;
         _eventStreamVm = eventStreamVm;
         _workspaceContextVm = workspaceContextVm;
@@ -444,7 +459,16 @@ internal sealed class MainScreen : Window
 
         if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Agents))
         {
-            _tabView.AddTab(new Tab { DisplayText = "Agents", View = new AgentScreen(_directorContext) }, andSelect: selectFirst);
+            _tabView.AddTab(new Tab
+            {
+                DisplayText = "Agents",
+                View = new AgentScreen(
+                    _agentDefinitionListVm,
+                    _agentDefinitionDetailVm,
+                    _workspaceAgentListVm,
+                    _workspaceAgentDetailVm,
+                    _agentEventsVm)
+            }, andSelect: selectFirst);
             selectFirst = false;
         }
 

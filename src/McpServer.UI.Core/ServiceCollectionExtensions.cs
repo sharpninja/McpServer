@@ -67,6 +67,11 @@ public static class ServiceCollectionExtensions
         services.AddTransient<TunnelListViewModel>();
         services.AddTransient<TemplateListViewModel>();
         services.AddTransient<TemplateDetailViewModel>();
+        services.AddTransient<AgentDefinitionListViewModel>();
+        services.AddTransient<AgentDefinitionDetailViewModel>();
+        services.AddTransient<WorkspaceAgentListViewModel>();
+        services.AddTransient<WorkspaceAgentDetailViewModel>();
+        services.AddTransient<AgentEventsViewModel>();
         services.AddTransient<AgentPoolViewModel>();
         services.AddTransient<EventStreamViewModel>();
 

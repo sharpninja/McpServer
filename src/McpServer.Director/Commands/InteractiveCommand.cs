@@ -50,6 +50,11 @@ internal static class InteractiveCommand
             var tunnelListVm = sp.GetRequiredService<TunnelListViewModel>();
             var templateListVm = sp.GetRequiredService<TemplateListViewModel>();
             var templateDetailVm = sp.GetRequiredService<TemplateDetailViewModel>();
+            var agentDefinitionListVm = sp.GetRequiredService<AgentDefinitionListViewModel>();
+            var agentDefinitionDetailVm = sp.GetRequiredService<AgentDefinitionDetailViewModel>();
+            var workspaceAgentListVm = sp.GetRequiredService<WorkspaceAgentListViewModel>();
+            var workspaceAgentDetailVm = sp.GetRequiredService<WorkspaceAgentDetailViewModel>();
+            var agentEventsVm = sp.GetRequiredService<AgentEventsViewModel>();
             var agentPoolVm = sp.GetRequiredService<AgentPoolViewModel>();
             var eventStreamVm = sp.GetRequiredService<EventStreamViewModel>();
             var workspaceContextVm = sp.GetRequiredService<WorkspaceContextViewModel>();
@@ -76,6 +81,11 @@ internal static class InteractiveCommand
                     tunnelListVm,
                     templateListVm,
                     templateDetailVm,
+                    agentDefinitionListVm,
+                    agentDefinitionDetailVm,
+                    workspaceAgentListVm,
+                    workspaceAgentDetailVm,
+                    agentEventsVm,
                     agentPoolVm,
                     eventStreamVm,
                     workspaceContextVm,
