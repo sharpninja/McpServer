@@ -32,6 +32,7 @@ internal sealed class MainScreen : Window
     private readonly TemplateListViewModel _templateListVm;
     private readonly TemplateDetailViewModel _templateDetailVm;
     private readonly AgentPoolViewModel _agentPoolVm;
+    private readonly EventStreamViewModel _eventStreamVm;
     private readonly WorkspaceContextViewModel _workspaceContextVm;
     private Label _authLabel = null!;
     private TabView _tabView = null!;
@@ -57,6 +58,7 @@ internal sealed class MainScreen : Window
         TemplateListViewModel templateListVm,
         TemplateDetailViewModel templateDetailVm,
         AgentPoolViewModel agentPoolVm,
+        EventStreamViewModel eventStreamVm,
         WorkspaceContextViewModel workspaceContextVm,
         IAuthorizationPolicyService authorizationPolicy,
         IRoleContext roleContext,
@@ -78,6 +80,7 @@ internal sealed class MainScreen : Window
         _templateListVm = templateListVm;
         _templateDetailVm = templateDetailVm;
         _agentPoolVm = agentPoolVm;
+        _eventStreamVm = eventStreamVm;
         _workspaceContextVm = workspaceContextVm;
         _authorizationPolicy = authorizationPolicy;
         _roleContext = roleContext;
@@ -500,7 +503,7 @@ internal sealed class MainScreen : Window
             _tabView.AddTab(new Tab
             {
                 DisplayText = "Events",
-                View = new EventStreamScreen(_dispatcher)
+                View = new EventStreamScreen(_eventStreamVm)
             }, andSelect: selectFirst);
             selectFirst = false;
         }

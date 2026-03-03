@@ -68,6 +68,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<TemplateListViewModel>();
         services.AddTransient<TemplateDetailViewModel>();
         services.AddTransient<AgentPoolViewModel>();
+        services.AddTransient<EventStreamViewModel>();
 
         // Register the ViewModelRegistry scanning this assembly + any extras
         var allAssemblies = new List<Assembly> { thisAssembly };

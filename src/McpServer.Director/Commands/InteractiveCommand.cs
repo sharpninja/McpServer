@@ -51,6 +51,7 @@ internal static class InteractiveCommand
             var templateListVm = sp.GetRequiredService<TemplateListViewModel>();
             var templateDetailVm = sp.GetRequiredService<TemplateDetailViewModel>();
             var agentPoolVm = sp.GetRequiredService<AgentPoolViewModel>();
+            var eventStreamVm = sp.GetRequiredService<EventStreamViewModel>();
             var workspaceContextVm = sp.GetRequiredService<WorkspaceContextViewModel>();
             var roleContext = sp.GetRequiredService<IRoleContext>();
             var authorizationPolicy = sp.GetRequiredService<IAuthorizationPolicyService>();
@@ -76,6 +77,7 @@ internal static class InteractiveCommand
                     templateListVm,
                     templateDetailVm,
                     agentPoolVm,
+                    eventStreamVm,
                     workspaceContextVm,
                     authorizationPolicy,
                     roleContext,
