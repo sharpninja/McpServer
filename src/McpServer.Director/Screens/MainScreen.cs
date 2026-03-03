@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using McpServer.Cqrs;
 using McpServer.Director.Auth;
 using McpServer.Director.Helpers;
 using McpServer.UI.Core.Authorization;
@@ -40,6 +41,7 @@ internal sealed class MainScreen : Window
     private bool _authRefreshQueued;
     private readonly ILoggerFactory _loggerFactory;
     private readonly IBrowserLauncher _browserLauncher;
+    private readonly Dispatcher _dispatcher;
 
     public MainScreen(
         WorkspaceListViewModel workspaceListVm,
@@ -59,6 +61,7 @@ internal sealed class MainScreen : Window
         IAuthorizationPolicyService authorizationPolicy,
         IRoleContext roleContext,
         DirectorMcpContext directorContext,
+        Dispatcher dispatcher,
         ILoggerFactory loggerFactory,
         IBrowserLauncher browserLauncher)
     {
@@ -79,6 +82,7 @@ internal sealed class MainScreen : Window
         _authorizationPolicy = authorizationPolicy;
         _roleContext = roleContext;
         _directorContext = directorContext;
+        _dispatcher = dispatcher;
         _loggerFactory = loggerFactory;
         _browserLauncher = browserLauncher;
 
@@ -375,6 +379,18 @@ internal sealed class MainScreen : Window
         if (view is TemplatesScreen tmpl)
         {
             _ = Task.Run(tmpl.LoadAsync);
+            return;
+        }
+
+        if (view is ContextScreen context)
+        {
+            _ = Task.Run(context.LoadAsync);
+            return;
+        }
+
+        if (view is RepoScreen repo)
+        {
+            _ = Task.Run(repo.LoadAsync);
         }
     }
 
@@ -450,6 +466,26 @@ internal sealed class MainScreen : Window
         if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Templates))
         {
             _tabView.AddTab(new Tab { DisplayText = "Templates", View = new TemplatesScreen(_templateListVm, _templateDetailVm) }, andSelect: selectFirst);
+            selectFirst = false;
+        }
+
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Context))
+        {
+            _tabView.AddTab(new Tab
+            {
+                DisplayText = "Context",
+                View = new ContextScreen(_dispatcher)
+            }, andSelect: selectFirst);
+            selectFirst = false;
+        }
+
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Repo))
+        {
+            _tabView.AddTab(new Tab
+            {
+                DisplayText = "Repo",
+                View = new RepoScreen(_dispatcher)
+            }, andSelect: selectFirst);
             selectFirst = false;
         }
 

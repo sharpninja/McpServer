@@ -1468,7 +1468,7 @@ mvp-mcp:
   - id: MVP-MCP-003
     title: '[READY] Complete Director MVVM/CQRS endpoint coverage with per-area ViewModels, handlers, commands, and RBAC tab visibility'
     estimate: '"5-8 days AI-assisted"'
-    note: 'Progress update: implemented and committed AgentClient full API coverage (11f9153) and Agent Pool tab migration to CQRS/MVVM/SSOT/no-code-behind via UI.Core ViewModel+handlers+adapters (0a05702).'
+    note: 'Progress update: completed and committed client + UI.Core + Director endpoint coverage for Agent/ToolRegistry/GitHub/Requirements/Voice/EventStream, plus Context/Repo tab integration (11f9153, 0a05702, c5f41c9 and follow-up local changes in this branch).'
     done: false
     description:
     - Implement complete MCP Director administration coverage through the McpServer.UI.Core MVVM/CQRS layer.
@@ -1477,7 +1477,7 @@ mvp-mcp:
     - Add RBAC-aware tab and command visibility (viewer, agent-manager, admin), with hidden workspaces/admin features for non-admin users.
     - Director interactive screens should use ViewModels/CQRS only for covered areas (no direct endpoint calls in migrated tabs).
     - 'AUDIT SUMMARY (2026-02-27): 33/112 handlers (29%), 29 ViewModels, 10/14 API client interfaces, 10 Messages files. Phase 0+2.4+2.6 done, 4 phases partial, 4 phases not started.'
-    remaining: Completed Phase 1.1 AgentClient endpoint parity and committed Agent Pool CQRS/MVVM migration phase. Remaining work is broader MVP endpoint coverage outside Agent Pool (Requirements/Voice/EventStream clients, additional adapters/handlers/screens, and coverage tests).
+    remaining: 'Remaining scope is UI shell and test-hardening work: HealthScreen cleanup (4.3), Agent/ToolRegistry/GitHub/Requirements/EventStream ViewModels+screens (5.2-9.2), tab registry extraction (11.1), CLI CQRS parity audit (12.1), dedicated UI.Core test project and broader automated coverage (13.x), FR/TR documentation updates (14.1), and final build/test/manual verification closure (15.x).'
     technical-details:
     - 'Scope: all /mcpserver/* areas plus /auth/config and /health diagnostics/event views. ACTUAL endpoint count is 112 REST endpoints (not the originally estimated ~78). Excludes minimal-API endpoints (pairing, server-startup-utc, etc.) and MCP protocol tools.'
     - 'Handler granularity: strict 1:1 endpoint-to-handler mapping (query/command + handler + ViewModel async command).'
@@ -1506,61 +1506,61 @@ mvp-mcp:
     - task: 'Phase 1.1 — Create AgentClient in McpServer.Client: Add src/McpServer.Client/AgentClient.cs extending McpClientBase. Implement 14 methods: ListDefinitionsAsync, GetDefinitionAsync, UpsertDefinitionAsync, DeleteDefinitionAsync, SeedDefaultsAsync, ListWorkspaceAgentsAsync, GetWorkspaceAgentAsync, UpsertWorkspaceAgentAsync, DeleteWorkspaceAgentAsync, BanAgentAsync, UnbanAgentAsync, LogEventAsync, GetEventsAsync, ValidateAsync. Wire into McpServerClient as property Agents. Add AgentClient unit tests in tests/McpServer.Client.Tests/AgentClientTests.cs.'
       done: true
     - task: 'Phase 1.2 — Create RequirementsClient in McpServer.Client: Add src/McpServer.Client/RequirementsClient.cs extending McpClientBase. Implement 20 methods: ListFrAsync, GetFrAsync, CreateFrAsync, UpdateFrAsync, DeleteFrAsync (×4 for TR, Test, Mapping), GenerateAsync. Wire into McpServerClient as property Requirements. Add tests in tests/McpServer.Client.Tests/RequirementsClientTests.cs.'
-      done: false
+      done: true
     - task: 'Phase 1.3 — Create VoiceClient in McpServer.Client: Add src/McpServer.Client/VoiceClient.cs extending McpClientBase. Implement 6 methods: CreateSessionAsync, SubmitTurnAsync, InterruptAsync, GetStatusAsync, GetTranscriptAsync, DeleteSessionAsync. Wire into McpServerClient as property Voice. Add tests.'
-      done: false
+      done: true
     - task: 'Phase 1.4 — Create EventStreamClient in McpServer.Client: Add src/McpServer.Client/EventStreamClient.cs extending McpClientBase. Implement 1 method: SubscribeAsync(category?, ct) returning IAsyncEnumerable<ChangeEvent> using StreamSseAsync. Wire into McpServerClient as property Events. Add tests.'
-      done: false
+      done: true
     - task: 'Phase 2.1 — Create IAgentApiClient interface in UI.Core: Add src/McpServer.UI.Core/Services/IAgentApiClient.cs with methods matching all 14 AgentController endpoints. Create AgentMessages.cs in Messages/ with query/command records: ListAgentDefinitionsQuery, GetAgentDefinitionQuery, UpsertAgentDefinitionCommand, DeleteAgentDefinitionCommand, SeedAgentDefaultsCommand, ListWorkspaceAgentsQuery, GetWorkspaceAgentQuery, UpsertWorkspaceAgentCommand, DeleteWorkspaceAgentCommand, BanAgentCommand, UnbanAgentCommand, LogAgentEventCommand, GetAgentEventsQuery, ValidateAgentQuery.'
-      done: false
+      done: true
     - task: 'Phase 2.2 — Create IToolRegistryApiClient interface in UI.Core: Add src/McpServer.UI.Core/Services/IToolRegistryApiClient.cs with methods matching all 12 ToolRegistryController endpoints. Create ToolRegistryMessages.cs in Messages/ with query/command records: ListToolsQuery, SearchToolsQuery, GetToolQuery, CreateToolCommand, UpdateToolCommand, DeleteToolCommand, ListBucketsQuery, AddBucketCommand, RemoveBucketCommand, BrowseBucketQuery, InstallFromBucketCommand, SyncBucketCommand.'
-      done: false
+      done: true
     - task: 'Phase 2.3 — Create IGitHubApiClient interface in UI.Core: Add src/McpServer.UI.Core/Services/IGitHubApiClient.cs with methods matching all 13 GitHubController endpoints. Create GitHubMessages.cs in Messages/ with query/command records for issues (list/get/create/update/close/reopen/comment), labels, pulls (list/comment), sync (from-github/to-github/single).'
-      done: false
+      done: true
     - task: 'Phase 2.4 — Create IEventStreamApiClient interface in UI.Core: Add src/McpServer.UI.Core/Services/IEventStreamApiClient.cs with SubscribeAsync method. Create EventStreamMessages.cs in Messages/ with SubscribeToEventsQuery record.'
-      done: false
+      done: true
     - task: 'Phase 2.5 — Create IRequirementsApiClient interface in UI.Core: Add src/McpServer.UI.Core/Services/IRequirementsApiClient.cs with methods matching all 20 RequirementsController endpoints. Create RequirementsMessages.cs in Messages/ with query/command records for FR/TR/Test/Mapping CRUD and Generate.'
-      done: false
+      done: true
     - task: 'Phase 2.6 — Create IVoiceApiClient interface in UI.Core: Add src/McpServer.UI.Core/Services/IVoiceApiClient.cs with methods matching all 6 VoiceController endpoints. Create VoiceMessages.cs in Messages/ with command/query records.'
-      done: false
+      done: true
     - task: 'Phase 3.1 — Create AgentApiClientAdapter in Director: Add src/McpServer.Director/AgentApiClientAdapter.cs implementing IAgentApiClient, delegating to McpServerClient.Agents (from McpServer.Client). Register as singleton in InteractiveCommand.cs DI block.'
       done: true
     - task: 'Phase 3.2 — Create ToolRegistryApiClientAdapter in Director: Add src/McpServer.Director/ToolRegistryApiClientAdapter.cs implementing IToolRegistryApiClient, delegating to McpServerClient.Tools. Register in DI.'
-      done: false
+      done: true
     - task: 'Phase 3.3 — Create GitHubApiClientAdapter in Director: Add src/McpServer.Director/GitHubApiClientAdapter.cs implementing IGitHubApiClient, delegating to McpServerClient.GitHub. Register in DI.'
-      done: false
+      done: true
     - task: 'Phase 3.4 — Create EventStreamApiClientAdapter in Director: Add src/McpServer.Director/EventStreamApiClientAdapter.cs implementing IEventStreamApiClient, delegating to McpServerClient.Events. Register in DI.'
-      done: false
+      done: true
     - task: 'Phase 3.5 — Create RequirementsApiClientAdapter in Director: Add src/McpServer.Director/RequirementsApiClientAdapter.cs implementing IRequirementsApiClient, delegating to McpServerClient.Requirements. Register in DI.'
-      done: false
+      done: true
     - task: 'Phase 3.6 — Create VoiceApiClientAdapter in Director: Add src/McpServer.Director/VoiceApiClientAdapter.cs implementing IVoiceApiClient, delegating to McpServerClient.Voice. Register in DI.'
-      done: false
+      done: true
     - task: 'Phase 4.1 — Workspace missing handlers (7): Create handlers in UI.Core/Handlers/ for: CreateWorkspaceCommandHandler, UpdateWorkspaceCommandHandler, DeleteWorkspaceCommandHandler, StartWorkspaceCommandHandler, StopWorkspaceCommandHandler, GetWorkspaceStatusQueryHandler, GetGlobalPromptQueryHandler, UpdateGlobalPromptCommandHandler. Add corresponding messages to WorkspaceMessages.cs. Total: 8 new handlers.'
-      done: false
+      done: true
     - task: 'Phase 4.2 — SessionLog missing handlers (2): Create SubmitSessionLogCommandHandler and AppendSessionLogDialogCommandHandler in UI.Core/Handlers/. Add SubmitSessionLogCommand and AppendSessionLogDialogCommand to SessionLogMessages.cs.'
-      done: false
+      done: true
     - task: 'Phase 4.3 — Health screen cleanup: Remove raw McpHttpClient usage from HealthScreen — route workspace init through InitWorkspaceCommandHandler (already exists). Verify HealthScreen is fully ViewModel-driven.'
       done: false
     - task: 'Phase 5.1 — Agent handlers (14): Create all 14 handlers in UI.Core/Handlers/: ListAgentDefinitionsQueryHandler, GetAgentDefinitionQueryHandler, UpsertAgentDefinitionCommandHandler, DeleteAgentDefinitionCommandHandler, SeedAgentDefaultsCommandHandler, ListWorkspaceAgentsQueryHandler, GetWorkspaceAgentQueryHandler, UpsertWorkspaceAgentCommandHandler, DeleteWorkspaceAgentCommandHandler, BanAgentCommandHandler, UnbanAgentCommandHandler, LogAgentEventCommandHandler, GetAgentEventsQueryHandler, ValidateAgentQueryHandler. Each injects IAgentApiClient.'
-      done: false
+      done: true
     - task: 'Phase 5.2 — Agent ViewModels: Create AgentDefinitionListViewModel (AreaListViewModelBase), AgentDefinitionDetailViewModel (AreaDetailViewModelBase), WorkspaceAgentListViewModel (AreaListViewModelBase), WorkspaceAgentDetailViewModel (AreaDetailViewModelBase), AgentEventsViewModel. Register all in ServiceCollectionExtensions.AddUiCore().'
       done: false
     - task: 'Phase 5.3 — Migrate AgentScreen to MVVM: Replace AgentScreenHandler direct HTTP calls with AgentDefinitionListViewModel/WorkspaceAgentListViewModel. Remove AgentScreenHandler class. Update DI to inject new ViewModels into MainScreen. Ensure agent definition CRUD, workspace agent management, ban/unban, and event viewing all work through ViewModels.'
       done: false
     - task: 'Phase 6.1 — ToolRegistry handlers (12): Create all 12 handlers in UI.Core/Handlers/: ListToolsQueryHandler, SearchToolsQueryHandler, GetToolQueryHandler, CreateToolCommandHandler, UpdateToolCommandHandler, DeleteToolCommandHandler, ListBucketsQueryHandler, AddBucketCommandHandler, RemoveBucketCommandHandler, BrowseBucketQueryHandler, InstallFromBucketCommandHandler, SyncBucketCommandHandler. Each injects IToolRegistryApiClient.'
-      done: false
+      done: true
     - task: 'Phase 6.2 — ToolRegistry ViewModels: Create ToolListViewModel (AreaListViewModelBase), ToolDetailViewModel (AreaDetailViewModelBase), BucketListViewModel (AreaListViewModelBase), BucketDetailViewModel. Register in AddUiCore().'
       done: false
     - task: 'Phase 6.3 — Create ToolRegistryScreen in Director: New src/McpServer.Director/Screens/ToolRegistryScreen.cs with TableView for tools list, detail pane for tool CRUD, bucket management sub-view. Wire into MainScreen.RebuildTabs() with McpArea.ToolRegistry auth check.'
       done: false
     - task: 'Phase 7.1 — GitHub handlers (13): Create all 13 handlers in UI.Core/Handlers/: ListIssuesQueryHandler, GetIssueQueryHandler, CreateIssueCommandHandler, UpdateIssueCommandHandler, CloseIssueCommandHandler, ReopenIssueCommandHandler, CommentOnIssueCommandHandler, ListLabelsQueryHandler, ListPullsQueryHandler, CommentOnPullCommandHandler, SyncFromGitHubCommandHandler, SyncToGitHubCommandHandler, SyncSingleIssueCommandHandler. Each injects IGitHubApiClient.'
-      done: false
+      done: true
     - task: 'Phase 7.2 — GitHub ViewModels: Create IssueListViewModel (AreaListViewModelBase), IssueDetailViewModel (AreaDetailViewModelBase), PullRequestListViewModel (AreaListViewModelBase), GitHubSyncViewModel. Register in AddUiCore().'
       done: false
     - task: 'Phase 7.3 — Create GitHubScreen in Director: New src/McpServer.Director/Screens/GitHubScreen.cs with issue list, PR list, detail panes, create/comment actions, sync controls. Wire into MainScreen.RebuildTabs() with McpArea.GitHub auth check.'
       done: false
     - task: 'Phase 8.1 — Requirements handlers (20): Create all 20 handlers in UI.Core/Handlers/: CRUD handlers for FR (5), TR (5), Test (5), Mapping (4), plus GenerateRequirementsQueryHandler. Each injects IRequirementsApiClient.'
-      done: false
+      done: true
     - task: 'Phase 8.2 — Requirements ViewModels: Create FrListViewModel, FrDetailViewModel, TrListViewModel, TrDetailViewModel, TestListViewModel, TestDetailViewModel, MappingListViewModel, RequirementsGenerateViewModel. Register in AddUiCore().'
       done: false
     - task: 'Phase 8.3 — Create RequirementsScreen in Director: New src/McpServer.Director/Screens/RequirementsScreen.cs with tabbed sub-views for FR, TR, Test, Mapping lists + detail panes + generate action. Wire into MainScreen.RebuildTabs().'
@@ -1570,11 +1570,11 @@ mvp-mcp:
     - task: 'Phase 9.2 — Create EventStreamScreen in Director: New src/McpServer.Director/Screens/EventStreamScreen.cs showing live SSE event feed in a scrollable ListView with category filter dropdown. Wire into MainScreen.RebuildTabs() with McpArea.Events auth check.'
       done: false
     - task: 'Phase 9.3 — Voice handlers (6): Create all 6 handlers in UI.Core/Handlers/: CreateVoiceSessionCommandHandler, SubmitVoiceTurnCommandHandler, InterruptVoiceCommandHandler, GetVoiceStatusQueryHandler, GetVoiceTranscriptQueryHandler, DeleteVoiceSessionCommandHandler. Each injects IVoiceApiClient.'
-      done: false
+      done: true
     - task: 'Phase 10.1 — Create ContextScreen in Director: UI.Core handlers and VMs already exist (4 handlers, 4 VMs: ContextSearchViewModel, ContextPackViewModel, ContextSourcesViewModel, ContextRebuildIndexViewModel). Create src/McpServer.Director/Screens/ContextScreen.cs with search input, results list, sources list, pack viewer, rebuild button. Wire into MainScreen.RebuildTabs() with McpArea.Context auth check.'
-      done: false
+      done: true
     - task: 'Phase 10.2 — Create RepoScreen in Director: UI.Core handlers and VMs already exist (3 handlers, 2 VMs: RepoListViewModel, RepoFileViewModel + WriteRepoFileViewModel). Create src/McpServer.Director/Screens/RepoScreen.cs with file tree/list, file content viewer, write action. Wire into MainScreen.RebuildTabs() with McpArea.Repo auth check.'
-      done: false
+      done: true
     - task: 'Phase 11.1 — Extract tab metadata registry: Create ITabRegistry interface in UI.Core with RegisterTab(McpArea, string displayText, McpRoles requiredRole, Func<IServiceProvider, object> screenFactory). Create TabRegistration record. Move hardcoded tab logic from MainScreen.RebuildTabs() into declarative registrations. MainScreen.RebuildTabs() iterates ITabRegistry entries, checks CanViewArea for each, and adds tabs dynamically.'
       done: false
     - task: 'Phase 12.1 — Ensure Director exec (non-TUI) commands use CQRS: Verify that CLI commands (list, get, create, etc.) dispatch through the same CQRS handlers as the TUI screens. If any CLI command bypasses CQRS and calls McpHttpClient directly, migrate it to use IDispatcher. Check: AgentsCommand, TodoCommand, SessionLogCommand, SyncCommand, HealthCommand, ConfigCommand, ListCommand, AuthCommand.'

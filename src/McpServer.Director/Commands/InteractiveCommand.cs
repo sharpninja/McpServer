@@ -1,4 +1,5 @@
 using System.CommandLine;
+using McpServer.Cqrs;
 using McpServer.Cqrs.Mvvm;
 using McpServer.Director.Helpers;
 using McpServer.Director.Screens;
@@ -53,6 +54,7 @@ internal static class InteractiveCommand
             var workspaceContextVm = sp.GetRequiredService<WorkspaceContextViewModel>();
             var roleContext = sp.GetRequiredService<IRoleContext>();
             var authorizationPolicy = sp.GetRequiredService<IAuthorizationPolicyService>();
+            var dispatcher = sp.GetRequiredService<Dispatcher>();
 
             // Initialize Terminal.Gui
             Terminal.Gui.Application.Init();
@@ -78,6 +80,7 @@ internal static class InteractiveCommand
                     authorizationPolicy,
                     roleContext,
                     directorContext,
+                    dispatcher,
                     sp.GetRequiredService<ILoggerFactory>(),
                     sp.GetRequiredService<IBrowserLauncher>());
                 Terminal.Gui.Application.Run(mainScreen);
