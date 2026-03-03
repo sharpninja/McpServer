@@ -493,8 +493,8 @@ public sealed class SessionLogService : ISessionLogService
             SessionId = entity.SessionId,
             Title = entity.Title,
             Model = entity.Model,
-            Started = entity.Started?.ToString("o", CultureInfo.InvariantCulture),
-            LastUpdated = entity.LastUpdated?.ToString("o", CultureInfo.InvariantCulture),
+            Started = entity.Started?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
+            LastUpdated = entity.LastUpdated?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
             Status = entity.Status,
             EntryCount = entity.EntryCount,
             TotalTokens = entity.TotalTokens,
@@ -522,7 +522,7 @@ public sealed class SessionLogService : ISessionLogService
             Entries = entity.Entries.Select(e => new UnifiedRequestEntryDto
             {
                 RequestId = e.RequestId,
-                Timestamp = e.Timestamp?.ToString("o", CultureInfo.InvariantCulture),
+                Timestamp = e.Timestamp?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
                 Model = e.Model,
                 ModelProvider = e.ModelProvider,
                 QueryText = e.QueryText,
@@ -553,7 +553,7 @@ public sealed class SessionLogService : ISessionLogService
                 ProcessingDialog = e.ProcessingDialog.Count > 0
                     ? e.ProcessingDialog.OrderBy(p => p.Ordinal).Select(p => new ProcessingDialogItemDto
                     {
-                        Timestamp = p.Timestamp.ToString("o", CultureInfo.InvariantCulture),
+                        Timestamp = p.Timestamp.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
                         Role = p.Role,
                         Content = p.Content,
                         Category = p.Category
@@ -566,7 +566,7 @@ public sealed class SessionLogService : ISessionLogService
                         Branch = c.Branch,
                         Message = c.Message,
                         Author = c.Author,
-                        Timestamp = c.CommitTimestamp?.ToString("o", CultureInfo.InvariantCulture),
+                        Timestamp = c.CommitTimestamp?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
                         FilesChanged = DeserializeStringList(c.FilesChangedJson)
                     }).ToList()
                     : null,
@@ -583,7 +583,7 @@ public sealed class SessionLogService : ISessionLogService
         if (string.IsNullOrWhiteSpace(value))
             return null;
         return DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var result)
-            ? result
+            ? result.ToUniversalTime()
             : null;
     }
 

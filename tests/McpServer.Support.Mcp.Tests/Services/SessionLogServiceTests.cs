@@ -229,6 +229,32 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task WhenSubmittingOffsetTimestampsThenRoundTripUpdateSucceeds()
+    {
+        var dto = CreateTestDto("Cursor", "offset-roundtrip");
+        dto.Started = "2026-03-03T12:49:58.717102-06:00";
+        dto.LastUpdated = "2026-03-03T12:50:58.717102-06:00";
+        dto.Entries![0].Timestamp = "2026-03-03T12:50:12.717102-06:00";
+        await _sut.SubmitAsync(dto).ConfigureAwait(true);
+
+        var queried = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "Cursor" }).ConfigureAwait(true);
+        var session = queried.Items.Single(i => i.SessionId == "offset-roundtrip");
+
+        // Regression coverage: previously, pushing a queried session containing
+        // offset timestamps could fail with a server-side 500.
+        var ex = await Record.ExceptionAsync(() => _sut.SubmitAsync(session)).ConfigureAwait(true);
+        Assert.Null(ex);
+
+        var stored = await _db.SessionLogs
+            .Include(s => s.Entries)
+            .SingleAsync(s => s.SessionId == "offset-roundtrip")
+            .ConfigureAwait(true);
+        Assert.Equal(TimeSpan.Zero, stored.Started?.Offset);
+        Assert.Equal(TimeSpan.Zero, stored.LastUpdated?.Offset);
+        Assert.Equal(TimeSpan.Zero, stored.Entries.Single().Timestamp?.Offset);
+    }
+
+    [Fact]
     public async Task WhenUpsertingWithNewEntryThenEntryIsAddedWithoutRemovingExisting()
     {
         var dto1 = CreateTestDto("Cursor", "keyed-add");
