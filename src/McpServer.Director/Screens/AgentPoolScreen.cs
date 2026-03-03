@@ -224,6 +224,7 @@ internal sealed class AgentPoolScreen : View
                 {
                     ["Agent"] = x => Truncate(x.AgentName, 18),
                     ["Lifecycle"] = x => Truncate(x.Lifecycle, 10),
+                    ["Workspace"] = x => Truncate(x.WorkspacePath ?? "", 24),
                     ["Session"] = x => Truncate(x.SessionId ?? "", 18),
                     ["Job"] = x => Truncate(x.ActiveJobId ?? "", 16),
                     ["Links"] = x => x.ActiveVoiceLinks,
@@ -240,6 +241,7 @@ internal sealed class AgentPoolScreen : View
                 {
                     ["Job"] = x => Truncate(x.JobId, 20),
                     ["Agent"] = x => Truncate(x.AgentName ?? "", 14),
+                    ["Workspace"] = x => Truncate(x.WorkspacePath ?? "", 24),
                     ["Status"] = x => Truncate(x.Status, 10),
                     ["Context"] = x => x.Context ?? "",
                     ["Prompt"] = x => Truncate(x.RenderedPrompt ?? "", 28),

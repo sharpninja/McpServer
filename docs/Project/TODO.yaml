@@ -513,6 +513,59 @@ mvp-app:
     done: false
     description:
     - Integrate GraphRAG into the search/context pipeline to enable graph-based retrieval-augmented generation. Evaluate Microsoft GraphRAG or similar frameworks for building knowledge graphs from ingested workspace content, and combine with the existing hybrid search (FTS5 + HNSW vector) for richer, relationship-aware context retrieval.
+    - Make GraphRAG the enhanced backend for knowledge retrieval in MCP Server, while exposing GraphRAG capabilities as native MCP tools. This upgrades existing context search and adds advanced graph-based querying (local/global/drift modes), citations, and on-demand indexing — all while preserving per-workspace isolation and existing features (todo, repo, gh, sync, sessionlog, etc.).
+    - 'Two complementary approaches (use both for maximum value):'
+    - 1. **Tight integration** — Replace/enhance the existing `/mcp/context/search` logic with GraphRAG-powered retrieval.
+    - 2. **Loose integration** — Expose dedicated MCP tools for explicit control (index, query, status).
+    - '- Treat GraphRAG as a library/dependency (via project references or future NuGet).'
+    - '- Ensure per-workspace isolation: each MCP instance/workspace gets its own isolated GraphRAG folder structure (typically containing input/, output/, cache/, and settings.yaml).'
+    - '- Add configuration section for GraphRAG (enabled flag, relative path for graphrag folder, default query method, concurrency limits for indexing).'
+    - '- On workspace creation or first use, auto-initialize the GraphRAG folder if missing (copy default settings.yaml with placeholders for LLM/embedding keys, create subfolders).'
+    - 1. **Dedicated Service Layer**
+    - Create a single service responsible for all GraphRAG interactions.
+    - 'Responsibilities:'
+    - '- Load per-workspace config.'
+    - '- Trigger indexing (wrap CLI or use programmatic API if available in your port).'
+    - '- Execute queries (select method: local/global/drift/basic, control token limits).'
+    - '- Return structured results (answer + context/entities/relationships for citations).'
+    - '- Check indexing status (e.g., existence and freshness of output artifacts).'
+    - Handle errors gracefully and log meaningfully.
+    - 2. **HTTP Endpoints (optional but recommended for debugging & typed client)**
+    - Add controller endpoints under a consistent prefix (e.g., `/mcp/graphrag/…`).
+    - 'Typical endpoints:'
+    - '- POST index (trigger indexing for a workspace).'
+    - '- POST query (method, query text, token limit → returns answer + context).'
+    - '- GET status (workspace indexing state and last run time).'
+    - Reuse the same service logic.
+    - 3. **Native MCP Tool Exposure**
+    - 'In the part of the codebase that handles tool discovery and execution (likely the STDIO handler or tool registry logic):'
+    - '- Register new tool definitions with: name, description, input schema (JSON Schema), and execution handler.'
+    - '- Example tools to expose:'
+    - '- `graphrag_query`: advanced knowledge-graph search with citations.'
+    - '- `graphrag_index`: trigger or re-trigger indexing.'
+    - '- `graphrag_status`: check if graph is indexed and ready.'
+    - '- In the execution handler: parse arguments, call the service, format results cleanly (include citations/provenance).'
+    - Mirror the pattern already used for existing tools (todo, context search, etc.).
+    - 4. **Enhance Existing Context Search**
+    - Locate where the current `/mcp/context` or context search logic lives.
+    - Replace or chain it with a call to the GraphRAG service (prefer local mode for speed + grounding).
+    - Fall back to old behavior if GraphRAG is disabled or not indexed.
+    - Optionally return richer context (entities, communities) to improve LLM grounding.
+    - 5. **Typed Client Updates**
+    - 'Extend the existing MCP client library (SharpNinja.McpServer.Client NuGet):'
+    - '- Add methods matching the new endpoints/tools (e.g., IndexGraphRagAsync, QueryGraphRagAsync, GetGraphRagStatusAsync).'
+    - '- Publish updated package version.'
+    - 6. **Automation & Scripts**
+    - '- Update startup script(s) to initialize GraphRAG folders for new instances.'
+    - '- Add smoke tests in multi-instance test scripts (trigger index → query → verify citations).'
+    - '- Document new tools and configuration in main README/docs.'
+    - '- **Isolation** — Never share GraphRAG state across workspaces; use workspace-specific root paths.'
+    - '- **Cost & Safety** — Indexing is expensive → expose status tool so LLM can check before calling index.'
+    - Consider concurrency limits (one index job at a time per instance).
+    - '- **Citations & Traceability** — Always return full context (entities/relationships/communities) so LLM can cite sources.'
+    - '- **Fallback & Graceful Degradation** — If GraphRAG disabled or indexing fails → revert to basic context search.'
+    - '- **Security** — Reuse existing API key / auth model; add folder-level permission checks if needed.'
+    - '- **Scalability Notes** — LanceDB (default vector store) handles large corpora well; ignore output/ in git/templates.'
   - id: MCP-AGENTPOOL-SEED-001
     title: '[NEED PLAN] Seed Agent Pool with running instances per workspace per agent definition and route sessions correctly'
     note: 'Detailed implementation plan created. 7 phases: (1) Composite key refactor, (2) Startup seed IHostedService, (3) Workspace-aware job routing, (4) Voice session isolation, (5) API/DTO updates, (6) UI updates, (7) Tests. See session plan.md for full details.'
