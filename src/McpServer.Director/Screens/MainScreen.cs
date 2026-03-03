@@ -429,7 +429,7 @@ internal sealed class MainScreen : Window
 
         if (_directorContext.HasControlConnection && _authorizationPolicy.CanViewArea(McpArea.Health))
         {
-            _tabView.AddTab(new Tab { DisplayText = "Health", View = new HealthScreen(_healthVm, _directorContext.GetRequiredControlHttpClient()) }, andSelect: selectFirst);
+            _tabView.AddTab(new Tab { DisplayText = "Health", View = new HealthScreen(_healthVm) }, andSelect: selectFirst);
             selectFirst = false;
         }
 

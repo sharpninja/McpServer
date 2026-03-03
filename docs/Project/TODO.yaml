@@ -1540,7 +1540,7 @@ mvp-mcp:
     - task: 'Phase 4.2 — SessionLog missing handlers (2): Create SubmitSessionLogCommandHandler and AppendSessionLogDialogCommandHandler in UI.Core/Handlers/. Add SubmitSessionLogCommand and AppendSessionLogDialogCommand to SessionLogMessages.cs.'
       done: true
     - task: 'Phase 4.3 — Health screen cleanup: Remove raw McpHttpClient usage from HealthScreen — route workspace init through InitWorkspaceCommandHandler (already exists). Verify HealthScreen is fully ViewModel-driven.'
-      done: false
+      done: true
     - task: 'Phase 5.1 — Agent handlers (14): Create all 14 handlers in UI.Core/Handlers/: ListAgentDefinitionsQueryHandler, GetAgentDefinitionQueryHandler, UpsertAgentDefinitionCommandHandler, DeleteAgentDefinitionCommandHandler, SeedAgentDefaultsCommandHandler, ListWorkspaceAgentsQueryHandler, GetWorkspaceAgentQueryHandler, UpsertWorkspaceAgentCommandHandler, DeleteWorkspaceAgentCommandHandler, BanAgentCommandHandler, UnbanAgentCommandHandler, LogAgentEventCommandHandler, GetAgentEventsQueryHandler, ValidateAgentQueryHandler. Each injects IAgentApiClient.'
       done: true
     - task: 'Phase 5.2 — Agent ViewModels: Create AgentDefinitionListViewModel (AreaListViewModelBase), AgentDefinitionDetailViewModel (AreaDetailViewModelBase), WorkspaceAgentListViewModel (AreaListViewModelBase), WorkspaceAgentDetailViewModel (AreaDetailViewModelBase), AgentEventsViewModel. Register all in ServiceCollectionExtensions.AddUiCore().'
