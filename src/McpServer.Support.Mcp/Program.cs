@@ -382,6 +382,7 @@ if (!builder.Environment.IsEnvironment("Test"))
     builder.Services.AddHostedService<VectorIndexStartupService>();
     builder.Services.AddHostedService(sp => (WorkspaceProcessManager)sp.GetRequiredService<IWorkspaceProcessManager>());
     builder.Services.AddHostedService(sp => sp.GetRequiredService<TunnelRegistry>());
+    builder.Services.AddHostedService<AgentPoolSeedService>();
 }
 
 var mvcBuilder = builder.Services.AddControllers();
