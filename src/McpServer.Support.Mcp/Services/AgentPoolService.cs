@@ -177,7 +177,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                     new VoiceSessionCreateRequest
                     {
                         AgentName = state.Definition.AgentName,
-                        DeviceId = $"agent-pool-{state.Definition.AgentName}",
+                        DeviceId = $"agent-pool-{state.Definition.AgentName}@{Path.GetFileName(effectiveWorkspace)}",
                         ClientName = "agent-pool",
                         WorkspacePath = effectiveWorkspace,
                         AgentPath = state.Definition.AgentPath,
@@ -319,6 +319,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
         {
             EventType = "queued",
             AgentName = snapshot.AgentName,
+            WorkspacePath = snapshot.WorkspacePath,
             JobId = snapshot.JobId,
             LastRequestPrompt = snapshot.RenderedPrompt,
             Message = "One-shot request queued.",
@@ -389,6 +390,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
             {
                 EventType = updated.Status == "canceling" ? "canceling" : "canceled",
                 AgentName = updated.AgentName,
+                WorkspacePath = updated.WorkspacePath,
                 JobId = updated.JobId,
                 SessionId = updated.SessionId,
                 LastRequestPrompt = updated.RenderedPrompt,
@@ -781,6 +783,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                 {
                     EventType = "processing",
                     AgentName = job.AgentName,
+                    WorkspacePath = job.WorkspacePath,
                     JobId = job.JobId,
                     LastRequestPrompt = job.RenderedPrompt,
                     Message = "One-shot request is processing.",
@@ -899,6 +902,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                     {
                         EventType = terminalEventType,
                         AgentName = completedSnapshot.AgentName,
+                        WorkspacePath = completedSnapshot.WorkspacePath,
                         JobId = completedSnapshot.JobId,
                         SessionId = completedSnapshot.SessionId,
                         LastRequestPrompt = completedSnapshot.RenderedPrompt,
@@ -1092,6 +1096,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
         {
             EventType = "failed",
             AgentName = job.AgentName,
+            WorkspacePath = job.WorkspacePath,
             JobId = job.JobId,
             SessionId = job.SessionId,
             LastRequestPrompt = job.RenderedPrompt,
