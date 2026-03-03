@@ -262,6 +262,10 @@ templates:
     - name: apiKey
       description: Workspace API key
       required: true
+    - name: version
+      description: Application version (informational version including git SHA)
+      required: false
+      defaultValue: unknown
     - name: workspace
       description: WorkspaceDto object with Name, WorkspacePath, IsPrimary, etc.
       required: true
@@ -427,5 +431,10 @@ templates:
 
       Verify: session log is current, decisions are recorded, requirements are tracked, code compiles, action types are correct
       (see docs/context/action-types.md).
+
+
+      ---
+
+      MCP Server version: {{version}}
 
       '

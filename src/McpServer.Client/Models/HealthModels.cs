@@ -15,6 +15,12 @@ public sealed class HealthCheckResult
     public string? Status { get; set; }
 
     /// <summary>
+    /// Application version (informational version including git SHA).
+    /// </summary>
+    [JsonPropertyName("version")]
+    public string? Version { get; set; }
+
+    /// <summary>
     /// Individual health-check entries.
     /// </summary>
     [JsonPropertyName("checks")]

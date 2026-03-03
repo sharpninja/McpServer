@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Globalization;
+using System.Reflection;
 using HandlebarsDotNet;
 using Microsoft.Extensions.Logging;
 using YamlDotNet.Core;
@@ -116,6 +117,9 @@ public static class MarkerFileService
         ## Before Delivering Output
 
         Verify: session log is current, decisions are recorded, requirements are tracked, code compiles, action types are correct (see docs/context/action-types.md).
+
+        ---
+        MCP Server version: {{version}}
         """;
 
     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
@@ -303,10 +307,15 @@ public static class MarkerFileService
         string workspacePath,
         string workspaceName)
     {
+        var version = Assembly.GetEntryAssembly()
+            ?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+            ?.InformationalVersion ?? "unknown";
+
         return new Dictionary<string, object?>
         {
             ["baseUrl"] = baseUrl,
             ["apiKey"] = apiKey ?? string.Empty,
+            ["version"] = version,
             ["workspace"] = workspace is not null ? new Dictionary<string, object?>
             {
                 ["Name"] = workspace.Name,
