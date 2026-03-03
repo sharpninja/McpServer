@@ -62,6 +62,43 @@ internal sealed class SessionLogApiClientAdapter : ISessionLogApiClient
         }
     }
 
+    public async Task<SessionLogSubmitOutcome> SubmitSessionLogAsync(SubmitSessionLogCommand command, CancellationToken cancellationToken = default)
+    {
+        if (command is null)
+            throw new ArgumentNullException(nameof(command));
+
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+        var result = await client.SessionLog.SubmitAsync(MapSubmit(command.SessionLog), cancellationToken).ConfigureAwait(false);
+        return new SessionLogSubmitOutcome(result.Id, result.SourceType, result.SessionId);
+    }
+
+    public async Task<SessionLogDialogAppendOutcome> AppendSessionLogDialogAsync(AppendSessionLogDialogCommand command, CancellationToken cancellationToken = default)
+    {
+        if (command is null)
+            throw new ArgumentNullException(nameof(command));
+
+        var items = command.Items
+            .Select(item => new ProcessingDialogItemDto
+            {
+                Timestamp = item.Timestamp,
+                Role = item.Role,
+                Category = item.Category,
+                Content = item.Content
+            })
+            .ToList();
+
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+        var result = await client.SessionLog.AppendDialogAsync(
+                command.Agent,
+                command.SessionId,
+                command.RequestId,
+                items,
+                cancellationToken)
+            .ConfigureAwait(false);
+
+        return new SessionLogDialogAppendOutcome(result.Agent, result.SessionId, result.RequestId, result.TotalDialogCount);
+    }
+
     private static SessionLogSummary MapSummary(UnifiedSessionLogDto item)
         => new(
             SessionId: item.SessionId ?? string.Empty,
@@ -72,6 +109,98 @@ internal sealed class SessionLogApiClientAdapter : ISessionLogApiClient
             Started: item.Started,
             LastUpdated: item.LastUpdated,
             EntryCount: item.EntryCount);
+
+    private static UnifiedSessionLogDto MapSubmit(SessionLogDetail detail)
+        => new()
+        {
+            SessionId = detail.SessionId,
+            SourceType = detail.SourceType,
+            Title = detail.Title,
+            Status = detail.Status,
+            Model = detail.Model,
+            Started = detail.Started,
+            LastUpdated = detail.LastUpdated,
+            EntryCount = detail.EntryCount,
+            TotalTokens = detail.TotalTokens,
+            CursorSessionLabel = detail.CursorSessionLabel,
+            Workspace = detail.Workspace is null
+                ? null
+                : new WorkspaceInfoDto
+                {
+                    Project = detail.Workspace.Project,
+                    TargetFramework = detail.Workspace.TargetFramework,
+                    Repository = detail.Workspace.Repository,
+                    Branch = detail.Workspace.Branch
+                },
+            CopilotStatistics = detail.CopilotStatistics is null
+                ? null
+                : new CopilotStatisticsDto
+                {
+                    AverageSuccessScore = detail.CopilotStatistics.AverageSuccessScore,
+                    TotalNetTokens = detail.CopilotStatistics.TotalNetTokens,
+                    TotalNetPremiumRequests = detail.CopilotStatistics.TotalNetPremiumRequests,
+                    CompletedCount = detail.CopilotStatistics.CompletedCount,
+                    InProgressCount = detail.CopilotStatistics.InProgressCount
+                },
+            Entries = detail.Entries.Select(MapSubmitEntry).ToList()
+        };
+
+    private static UnifiedRequestEntryDto MapSubmitEntry(SessionLogEntryDetail entry)
+        => new()
+        {
+            RequestId = entry.RequestId,
+            Timestamp = entry.Timestamp,
+            QueryText = entry.QueryText,
+            QueryTitle = entry.QueryTitle,
+            Response = entry.Response,
+            Interpretation = entry.Interpretation,
+            Status = entry.Status,
+            Model = entry.Model,
+            ModelProvider = entry.ModelProvider,
+            TokenCount = entry.TokenCount,
+            FailureNote = entry.FailureNote,
+            Score = entry.Score,
+            IsPremium = entry.IsPremium,
+            Tags = entry.Tags.Where(static value => !string.IsNullOrWhiteSpace(value)).ToList(),
+            ContextList = entry.ContextList.Where(static value => !string.IsNullOrWhiteSpace(value)).ToList(),
+            DesignDecisions = entry.DesignDecisions.Where(static value => !string.IsNullOrWhiteSpace(value)).ToList(),
+            RequirementsDiscovered = entry.RequirementsDiscovered.Where(static value => !string.IsNullOrWhiteSpace(value)).ToList(),
+            FilesModified = entry.FilesModified.Where(static value => !string.IsNullOrWhiteSpace(value)).ToList(),
+            Blockers = entry.Blockers.Where(static value => !string.IsNullOrWhiteSpace(value)).ToList(),
+            Actions = entry.Actions.Select(MapSubmitAction).ToList(),
+            ProcessingDialog = entry.ProcessingDialog.Select(MapSubmitDialog).ToList(),
+            Commits = entry.Commits.Select(MapSubmitCommit).ToList()
+        };
+
+    private static UnifiedActionDto MapSubmitAction(SessionLogActionDetail action)
+        => new()
+        {
+            Order = action.Order,
+            Description = action.Description,
+            Type = action.Type,
+            Status = action.Status,
+            FilePath = action.FilePath
+        };
+
+    private static ProcessingDialogItemDto MapSubmitDialog(SessionLogDialogDetail dialog)
+        => new()
+        {
+            Timestamp = dialog.Timestamp,
+            Role = dialog.Role,
+            Category = dialog.Category,
+            Content = dialog.Content
+        };
+
+    private static SessionLogCommitDto MapSubmitCommit(SessionLogCommitDetail commit)
+        => new()
+        {
+            Sha = commit.Sha,
+            Branch = commit.Branch,
+            Message = commit.Message,
+            Author = commit.Author,
+            Timestamp = commit.Timestamp,
+            FilesChanged = commit.FilesChanged.Where(static value => !string.IsNullOrWhiteSpace(value)).ToList()
+        };
 
     private static SessionLogDetail MapDetail(UnifiedSessionLogDto item)
         => new(

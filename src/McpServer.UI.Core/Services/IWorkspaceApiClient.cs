@@ -38,4 +38,44 @@ public interface IWorkspaceApiClient
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Initialization summary.</returns>
     Task<WorkspaceInitInfo> InitWorkspaceAsync(string workspacePath, CancellationToken ct = default);
+
+    /// <summary>
+    /// Creates/registers a new workspace.
+    /// </summary>
+    Task<WorkspaceMutationOutcome> CreateWorkspaceAsync(CreateWorkspaceCommand command, CancellationToken ct = default);
+
+    /// <summary>
+    /// Updates an existing workspace.
+    /// </summary>
+    Task<WorkspaceMutationOutcome> UpdateWorkspaceAsync(UpdateWorkspaceCommand command, CancellationToken ct = default);
+
+    /// <summary>
+    /// Deletes an existing workspace.
+    /// </summary>
+    Task<WorkspaceMutationOutcome> DeleteWorkspaceAsync(string workspacePath, CancellationToken ct = default);
+
+    /// <summary>
+    /// Starts a workspace host.
+    /// </summary>
+    Task<WorkspaceRuntimeStatus> StartWorkspaceAsync(string workspacePath, CancellationToken ct = default);
+
+    /// <summary>
+    /// Stops a workspace host.
+    /// </summary>
+    Task<WorkspaceRuntimeStatus> StopWorkspaceAsync(string workspacePath, CancellationToken ct = default);
+
+    /// <summary>
+    /// Gets workspace host status.
+    /// </summary>
+    Task<WorkspaceRuntimeStatus> GetWorkspaceStatusAsync(string workspacePath, CancellationToken ct = default);
+
+    /// <summary>
+    /// Gets the global marker prompt template.
+    /// </summary>
+    Task<GlobalPromptInfo> GetGlobalPromptAsync(CancellationToken ct = default);
+
+    /// <summary>
+    /// Updates the global marker prompt template.
+    /// </summary>
+    Task<GlobalPromptInfo> UpdateGlobalPromptAsync(UpdateGlobalPromptCommand command, CancellationToken ct = default);
 }

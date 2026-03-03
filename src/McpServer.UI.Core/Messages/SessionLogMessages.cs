@@ -121,3 +121,23 @@ public sealed record SessionLogCommitDetail(
     string? Author,
     string? Timestamp,
     IReadOnlyList<string> FilesChanged);
+
+/// <summary>Command to submit (upsert) a session log.</summary>
+public sealed record SubmitSessionLogCommand(SessionLogDetail SessionLog) : ICommand<SessionLogSubmitOutcome>;
+
+/// <summary>Result of submitting a session log payload.</summary>
+public sealed record SessionLogSubmitOutcome(long Id, string? SourceType, string? SessionId);
+
+/// <summary>Command to append processing dialog items to a specific request entry.</summary>
+public sealed record AppendSessionLogDialogCommand(
+    string Agent,
+    string SessionId,
+    string RequestId,
+    IReadOnlyList<SessionLogDialogDetail> Items) : ICommand<SessionLogDialogAppendOutcome>;
+
+/// <summary>Result of appending session log dialog items.</summary>
+public sealed record SessionLogDialogAppendOutcome(
+    string? Agent,
+    string? SessionId,
+    string? RequestId,
+    int TotalDialogCount);
