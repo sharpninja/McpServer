@@ -64,6 +64,8 @@ internal static class DirectorServiceRegistration
         services.AddSingleton<ITodoApiClient>(_ => new TodoApiClientAdapter(directorContext));
         services.AddSingleton<ITunnelApiClient>(_ => new TunnelApiClientAdapter(directorContext));
         services.AddSingleton<ITemplateApiClient>(_ => new TemplateApiClientAdapter(directorContext));
+        services.AddSingleton<IAgentApiClient>(_ => new AgentApiClientAdapter(directorContext));
+        services.AddSingleton<IAgentPoolApiClient>(_ => new AgentPoolApiClientAdapter(directorContext));
 
         return directorContext;
     }

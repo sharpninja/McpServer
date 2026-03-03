@@ -1,4 +1,4 @@
-﻿using McpServer.UI.Core.Authorization;
+using McpServer.UI.Core.Authorization;
 
 namespace McpServer.Director.Auth;
 
@@ -57,6 +57,21 @@ internal sealed class DirectorAuthorizationPolicyService : IAuthorizationPolicyS
             [McpActionKeys.TodoPromptImplement] = McpRoles.Viewer,
             [McpActionKeys.TodoPromptPlan] = McpRoles.Viewer,
             ["agents.mutate"] = McpRoles.AgentManager,
+            [McpActionKeys.AgentDefinitionList] = McpRoles.AgentManager,
+            [McpActionKeys.AgentDefinitionGet] = McpRoles.AgentManager,
+            [McpActionKeys.AgentDefinitionUpsert] = McpRoles.AgentManager,
+            [McpActionKeys.AgentWorkspaceAssign] = McpRoles.AgentManager,
+            [McpActionKeys.AgentPoolAgentsList] = McpRoles.AgentManager,
+            [McpActionKeys.AgentPoolQueueList] = McpRoles.AgentManager,
+            [McpActionKeys.AgentPoolAgentStart] = McpRoles.AgentManager,
+            [McpActionKeys.AgentPoolAgentStop] = McpRoles.AgentManager,
+            [McpActionKeys.AgentPoolAgentRecycle] = McpRoles.AgentManager,
+            [McpActionKeys.AgentPoolAgentConnect] = McpRoles.AgentManager,
+            [McpActionKeys.AgentPoolQueueCancel] = McpRoles.AgentManager,
+            [McpActionKeys.AgentPoolQueueRemove] = McpRoles.AgentManager,
+            [McpActionKeys.AgentPoolQueueMove] = McpRoles.AgentManager,
+            [McpActionKeys.AgentPoolQueueResolve] = McpRoles.AgentManager,
+            [McpActionKeys.AgentPoolQueueEnqueue] = McpRoles.AgentManager,
             [McpActionKeys.TemplateList] = McpRoles.Viewer,
             [McpActionKeys.TemplateGet] = McpRoles.Viewer,
             [McpActionKeys.TemplateTest] = McpRoles.Viewer,

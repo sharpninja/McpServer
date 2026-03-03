@@ -246,14 +246,14 @@ public sealed class AgentClient : McpClientBase
     {
         if (string.IsNullOrWhiteSpace(workspacePath))
             return string.Empty;
-        return $"?workspace={Encode(workspacePath)}";
+        return $"?workspace={Encode(workspacePath!)}";
     }
 
     private static string BuildWorkspaceAndGlobalQuery(string? workspacePath, bool global)
     {
         var parts = new List<string>(2);
         if (!string.IsNullOrWhiteSpace(workspacePath))
-            parts.Add($"workspace={Encode(workspacePath)}");
+            parts.Add($"workspace={Encode(workspacePath!)}");
         parts.Add($"global={(global ? "true" : "false")}");
         return parts.Count == 0 ? string.Empty : "?" + string.Join("&", parts);
     }
@@ -262,7 +262,7 @@ public sealed class AgentClient : McpClientBase
     {
         var parts = new List<string>(2);
         if (!string.IsNullOrWhiteSpace(workspacePath))
-            parts.Add($"workspace={Encode(workspacePath)}");
+            parts.Add($"workspace={Encode(workspacePath!)}");
         if (limit > 0)
             parts.Add($"limit={limit}");
         return parts.Count == 0 ? string.Empty : "?" + string.Join("&", parts);

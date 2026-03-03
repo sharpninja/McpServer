@@ -96,6 +96,51 @@ public static class McpActionKeys
     /// <summary>Tunnel restart action.</summary>
     public const string TunnelRestart = "tunnel.restart";
 
+    /// <summary>Agent-definition list action.</summary>
+    public const string AgentDefinitionList = "agent.definition.list";
+
+    /// <summary>Agent-definition detail action.</summary>
+    public const string AgentDefinitionGet = "agent.definition.get";
+
+    /// <summary>Agent-definition upsert action.</summary>
+    public const string AgentDefinitionUpsert = "agent.definition.upsert";
+
+    /// <summary>Workspace-agent assignment action.</summary>
+    public const string AgentWorkspaceAssign = "agent.workspace.assign";
+
+    /// <summary>Agent-pool runtime list action.</summary>
+    public const string AgentPoolAgentsList = "agentpool.agents.list";
+
+    /// <summary>Agent-pool queue list action.</summary>
+    public const string AgentPoolQueueList = "agentpool.queue.list";
+
+    /// <summary>Agent-pool start action.</summary>
+    public const string AgentPoolAgentStart = "agentpool.agent.start";
+
+    /// <summary>Agent-pool stop action.</summary>
+    public const string AgentPoolAgentStop = "agentpool.agent.stop";
+
+    /// <summary>Agent-pool recycle action.</summary>
+    public const string AgentPoolAgentRecycle = "agentpool.agent.recycle";
+
+    /// <summary>Agent-pool connect action.</summary>
+    public const string AgentPoolAgentConnect = "agentpool.agent.connect";
+
+    /// <summary>Agent-pool queue cancel action.</summary>
+    public const string AgentPoolQueueCancel = "agentpool.queue.cancel";
+
+    /// <summary>Agent-pool queue remove action.</summary>
+    public const string AgentPoolQueueRemove = "agentpool.queue.remove";
+
+    /// <summary>Agent-pool queue reorder action.</summary>
+    public const string AgentPoolQueueMove = "agentpool.queue.move";
+
+    /// <summary>Agent-pool prompt resolve action.</summary>
+    public const string AgentPoolQueueResolve = "agentpool.queue.resolve";
+
+    /// <summary>Agent-pool enqueue action.</summary>
+    public const string AgentPoolQueueEnqueue = "agentpool.queue.enqueue";
+
     /// <summary>Template list query action.</summary>
     public const string TemplateList = "template.list";
 

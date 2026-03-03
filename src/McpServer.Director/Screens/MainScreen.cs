@@ -30,6 +30,7 @@ internal sealed class MainScreen : Window
     private readonly TunnelListViewModel _tunnelListVm;
     private readonly TemplateListViewModel _templateListVm;
     private readonly TemplateDetailViewModel _templateDetailVm;
+    private readonly AgentPoolViewModel _agentPoolVm;
     private readonly WorkspaceContextViewModel _workspaceContextVm;
     private Label _authLabel = null!;
     private TabView _tabView = null!;
@@ -53,6 +54,7 @@ internal sealed class MainScreen : Window
         TunnelListViewModel tunnelListVm,
         TemplateListViewModel templateListVm,
         TemplateDetailViewModel templateDetailVm,
+        AgentPoolViewModel agentPoolVm,
         WorkspaceContextViewModel workspaceContextVm,
         IAuthorizationPolicyService authorizationPolicy,
         IRoleContext roleContext,
@@ -72,6 +74,7 @@ internal sealed class MainScreen : Window
         _tunnelListVm = tunnelListVm;
         _templateListVm = templateListVm;
         _templateDetailVm = templateDetailVm;
+        _agentPoolVm = agentPoolVm;
         _workspaceContextVm = workspaceContextVm;
         _authorizationPolicy = authorizationPolicy;
         _roleContext = roleContext;
@@ -422,7 +425,7 @@ internal sealed class MainScreen : Window
 
         if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Agents))
         {
-            _tabView.AddTab(new Tab { DisplayText = "Agent Pool", View = new AgentPoolScreen(_directorContext) }, andSelect: selectFirst);
+            _tabView.AddTab(new Tab { DisplayText = "Agent Pool", View = new AgentPoolScreen(_agentPoolVm) }, andSelect: selectFirst);
             selectFirst = false;
         }
 

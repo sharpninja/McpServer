@@ -1,4 +1,4 @@
-﻿using System.CommandLine;
+using System.CommandLine;
 using McpServer.Cqrs.Mvvm;
 using McpServer.Director.Helpers;
 using McpServer.Director.Screens;
@@ -49,6 +49,7 @@ internal static class InteractiveCommand
             var tunnelListVm = sp.GetRequiredService<TunnelListViewModel>();
             var templateListVm = sp.GetRequiredService<TemplateListViewModel>();
             var templateDetailVm = sp.GetRequiredService<TemplateDetailViewModel>();
+            var agentPoolVm = sp.GetRequiredService<AgentPoolViewModel>();
             var workspaceContextVm = sp.GetRequiredService<WorkspaceContextViewModel>();
             var roleContext = sp.GetRequiredService<IRoleContext>();
             var authorizationPolicy = sp.GetRequiredService<IAuthorizationPolicyService>();
@@ -72,6 +73,7 @@ internal static class InteractiveCommand
                     tunnelListVm,
                     templateListVm,
                     templateDetailVm,
+                    agentPoolVm,
                     workspaceContextVm,
                     authorizationPolicy,
                     roleContext,
