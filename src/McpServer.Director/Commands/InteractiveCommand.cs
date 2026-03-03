@@ -131,7 +131,14 @@ internal static class InteractiveCommand
                     sp,
                     sp.GetRequiredService<ILoggerFactory>(),
                     sp.GetRequiredService<IBrowserLauncher>());
-                Terminal.Gui.Application.Run(mainScreen);
+                var logger = sp.GetRequiredService<ILoggerFactory>().CreateLogger("Director.UI");
+                Terminal.Gui.Application.Run(mainScreen, (ex) =>
+                {
+                    // Terminal.Gui v2 WordWrapManager.WrapModel throws ArgumentOutOfRangeException
+                    // on Tab key press with WordWrap enabled. Swallow the exception to keep running.
+                    logger.LogWarning(ex, "Unhandled UI exception (swallowed to keep app alive)");
+                    return true;
+                });
             }
             finally
             {
