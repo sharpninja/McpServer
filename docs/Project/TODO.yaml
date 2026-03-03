@@ -1468,7 +1468,7 @@ mvp-mcp:
   - id: MVP-MCP-003
     title: '[READY] Complete Director MVVM/CQRS endpoint coverage with per-area ViewModels, handlers, commands, and RBAC tab visibility'
     estimate: '"5-8 days AI-assisted"'
-    note: '"Audit 2026-03-01. Director has 2 handler files (AgentScreenHandler, LoginDialogAuthConfigHandler), 5 command files, 11 screen files, ViewModelBinder. Prior audit claimed 33/112 handlers (29%). Unverifiable from codebase - no handler manifest found. Structure suggests extensive work needed: most REST endpoints lack dedicated CQRS command/query handlers. Screens are functional but lack detail/drill-down views."'
+    note: 'Progress update: implemented and committed AgentClient full API coverage (11f9153) and Agent Pool tab migration to CQRS/MVVM/SSOT/no-code-behind via UI.Core ViewModel+handlers+adapters (0a05702).'
     done: false
     description:
     - Implement complete MCP Director administration coverage through the McpServer.UI.Core MVVM/CQRS layer.
@@ -1477,7 +1477,7 @@ mvp-mcp:
     - Add RBAC-aware tab and command visibility (viewer, agent-manager, admin), with hidden workspaces/admin features for non-admin users.
     - Director interactive screens should use ViewModels/CQRS only for covered areas (no direct endpoint calls in migrated tabs).
     - 'AUDIT SUMMARY (2026-02-27): 33/112 handlers (29%), 29 ViewModels, 10/14 API client interfaces, 10 Messages files. Phase 0+2.4+2.6 done, 4 phases partial, 4 phases not started.'
-    remaining: '"75 handlers, 4 McpServer.Client client classes, 4 UI.Core API client interfaces, 4 Director API adapter classes, ~20 ViewModels, ~15 Message files, 1 screen migration (AgentScreen), 6 new Director screens, UI.Core test project + tests, Director screen tests."'
+    remaining: Completed Phase 1.1 AgentClient endpoint parity and committed Agent Pool CQRS/MVVM migration phase. Remaining work is broader MVP endpoint coverage outside Agent Pool (Requirements/Voice/EventStream clients, additional adapters/handlers/screens, and coverage tests).
     technical-details:
     - 'Scope: all /mcpserver/* areas plus /auth/config and /health diagnostics/event views. ACTUAL endpoint count is 112 REST endpoints (not the originally estimated ~78). Excludes minimal-API endpoints (pairing, server-startup-utc, etc.) and MCP protocol tools.'
     - 'Handler granularity: strict 1:1 endpoint-to-handler mapping (query/command + handler + ViewModel async command).'
@@ -1504,7 +1504,7 @@ mvp-mcp:
     - task: 'Phase 2.6-DONE: Complete Sync run/status handlers with list/detail VMs and migrate Sync tab. [GetSyncStatusQueryHandler, RunSyncCommandHandler, SyncStatusViewModel, RunSyncViewModel, SyncScreen migrated]'
       done: true
     - task: 'Phase 1.1 — Create AgentClient in McpServer.Client: Add src/McpServer.Client/AgentClient.cs extending McpClientBase. Implement 14 methods: ListDefinitionsAsync, GetDefinitionAsync, UpsertDefinitionAsync, DeleteDefinitionAsync, SeedDefaultsAsync, ListWorkspaceAgentsAsync, GetWorkspaceAgentAsync, UpsertWorkspaceAgentAsync, DeleteWorkspaceAgentAsync, BanAgentAsync, UnbanAgentAsync, LogEventAsync, GetEventsAsync, ValidateAsync. Wire into McpServerClient as property Agents. Add AgentClient unit tests in tests/McpServer.Client.Tests/AgentClientTests.cs.'
-      done: false
+      done: true
     - task: 'Phase 1.2 — Create RequirementsClient in McpServer.Client: Add src/McpServer.Client/RequirementsClient.cs extending McpClientBase. Implement 20 methods: ListFrAsync, GetFrAsync, CreateFrAsync, UpdateFrAsync, DeleteFrAsync (×4 for TR, Test, Mapping), GenerateAsync. Wire into McpServerClient as property Requirements. Add tests in tests/McpServer.Client.Tests/RequirementsClientTests.cs.'
       done: false
     - task: 'Phase 1.3 — Create VoiceClient in McpServer.Client: Add src/McpServer.Client/VoiceClient.cs extending McpClientBase. Implement 6 methods: CreateSessionAsync, SubmitTurnAsync, InterruptAsync, GetStatusAsync, GetTranscriptAsync, DeleteSessionAsync. Wire into McpServerClient as property Voice. Add tests.'
@@ -1524,7 +1524,7 @@ mvp-mcp:
     - task: 'Phase 2.6 — Create IVoiceApiClient interface in UI.Core: Add src/McpServer.UI.Core/Services/IVoiceApiClient.cs with methods matching all 6 VoiceController endpoints. Create VoiceMessages.cs in Messages/ with command/query records.'
       done: false
     - task: 'Phase 3.1 — Create AgentApiClientAdapter in Director: Add src/McpServer.Director/AgentApiClientAdapter.cs implementing IAgentApiClient, delegating to McpServerClient.Agents (from McpServer.Client). Register as singleton in InteractiveCommand.cs DI block.'
-      done: false
+      done: true
     - task: 'Phase 3.2 — Create ToolRegistryApiClientAdapter in Director: Add src/McpServer.Director/ToolRegistryApiClientAdapter.cs implementing IToolRegistryApiClient, delegating to McpServerClient.Tools. Register in DI.'
       done: false
     - task: 'Phase 3.3 — Create GitHubApiClientAdapter in Director: Add src/McpServer.Director/GitHubApiClientAdapter.cs implementing IGitHubApiClient, delegating to McpServerClient.GitHub. Register in DI.'
@@ -1953,12 +1953,7 @@ Architecture:
       done: false
   - id: web-ui-cqrs-mvvm-compliance-audit
     title: '[NEED PLAN] Web UI CQRS + MVVM compliance remediation'
-    note: >-
-      Audit 2026-03-03: McpServer.Web currently uses API-client-driven code-behind pages rather than
-      UI.Core ViewModels + CQRS dispatch orchestration. Evidence snapshot: 14 pages total, 13 pages
-      inject I*ApiClient, 13 pages declare local _loading state, 13 generic catches across pages,
-      and 0 ViewModel/Dispatcher references in src/McpServer.Web/Pages. CQRS contracts and handlers
-      exist in UI.Core and adapters, but page-level orchestration bypasses them.
+    note: 'Audit 2026-03-03: McpServer.Web currently uses API-client-driven code-behind pages rather than UI.Core ViewModels + CQRS dispatch orchestration. Evidence snapshot: 14 pages total, 13 pages inject I*ApiClient, 13 pages declare local _loading state, 13 generic catches across pages, and 0 ViewModel/Dispatcher references in src/McpServer.Web/Pages. CQRS contracts and handlers exist in UI.Core and adapters, but page-level orchestration bypasses them.'
     done: false
     description:
     - Bring McpServer.Web into architectural compliance with CQRS and MVVM commitments.
@@ -1969,7 +1964,7 @@ Architecture:
     - 'Evidence files: src/McpServer.Web/Pages/*.razor inject I*ApiClient and run data-fetch logic in OnInitializedAsync/OnParametersSetAsync.'
     - 'No page-level ViewModel or Dispatcher usage: 0 matches for ViewModel/DispatchAsync in src/McpServer.Web/Pages.'
     - 'UI.Core already provides compliant primitives: ServiceCollectionExtensions.AddUiCore registers handlers and ViewModels (e.g., TodoListViewModel, SessionLogListViewModel, TemplateListViewModel).'
-    - 'Current Web setup partially aligns with CQRS at API contract level (command/query DTOs in adapter interfaces) but not at UI orchestration level.'
+    - Current Web setup partially aligns with CQRS at API contract level (command/query DTOs in adapter interfaces) but not at UI orchestration level.
     implementation-tasks:
     - task: Introduce per-page ViewModel injection/binding for Dashboard, Workspaces, Todos, Sessions, Templates, Context, Health, and Auth pages.
       done: false
@@ -2244,12 +2239,14 @@ Director:
     title: Agent Pool tab method inventory summary
     estimate: 7-10 days AI-assisted
     note: 'EXCRUCIATINGLY DETAILED IMPLEMENTATION PLAN: full migration of Director Agent Pool tab to CQRS + MVVM + no-code-behind + DI SSOT with file-level and handler-level decomposition, command-path parity checks, RBAC action key expansion, and verification gates.'
-    done: false
+    done: true
+    completed: 2026-03-03T03:00:55Z
     description:
     - Migrate Agent Pool tab from code-behind runtime orchestration to UI.Core CQRS/MVVM architecture with Director adapter indirection.
     - Eliminate direct calls from AgentPoolScreen to DirectorMcpContext, AgentScreenHandler, and McpServerClient/AgentPoolClient.
     - Move mutable tab state to DI-owned ViewModel(s) and make screen rendering/presentation-only.
     - Enforce command/query handler boundaries, action-key authorization checks, and test coverage for load/mutation/error/auth paths.
+    done-summary: 'Implemented Agent Pool migration to CQRS/MVVM/SSOT/no-code-behind in Director: added UI.Core services/messages/handlers/viewmodel, added Director API adapters, refactored AgentPoolScreen into passive ViewModel-bound UI, wired DI/MainScreen/InteractiveCommand authorization and action keys, and validated with clean builds (Client/UI.Core/Director) plus passing McpServer.Client tests.'
     remaining: Execution not started. All tasks below are pending and ordered for incremental delivery with rollback-safe checkpoints.
     technical-details:
     - 'Current non-compliant file: src/McpServer.Director/Screens/AgentPoolScreen.cs (direct API operations in UI code-behind).'
