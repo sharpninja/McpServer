@@ -335,8 +335,8 @@ saas:
   - id: saas-consolidated-roadmap
     title: SaaS planning and delivery roadmap (consolidated)
     estimate: 3-6 weeks
-    done: false
     note: 'Consolidated from former SAAS todo items into a single parked backlog item per prioritization request. Archived detail: docs/Project/SaaS-TODO-Archive-2026-03-03.yaml.'
+    done: false
     description:
     - Keep SaaS work tracked as one deferred stream until it is actively scheduled.
     - Cover business plan, hosted product architecture, go-to-market, client SDK distribution, and operations/compliance in one unified plan.
@@ -503,6 +503,22 @@ mvp-app:
       done: false
     - task: 'commit-todo-update: Mark done, update FR/TR docs, update session log'
       done: false
+  - id: MCP-NAMING-CONVENTIONS-001
+    title: '[NEED PLAN] Add naming conventions for TODO and Sessions to marker/context files'
+    done: false
+    description:
+    - Document standard naming conventions for TODO item IDs (e.g. prefix patterns, kebab-case rules, section scoping) and session log IDs (sessionId, requestId formats) in the marker file prompt and/or docs/context/ reference files so all agents follow consistent naming.
+  - id: MCP-GRAPHRAG-001
+    title: '[NEED PLAN] Integrate GraphRAG'
+    done: false
+    description:
+    - Integrate GraphRAG into the search/context pipeline to enable graph-based retrieval-augmented generation. Evaluate Microsoft GraphRAG or similar frameworks for building knowledge graphs from ingested workspace content, and combine with the existing hybrid search (FTS5 + HNSW vector) for richer, relationship-aware context retrieval.
+  - id: MCP-AGENTPOOL-SEED-001
+    title: '[NEED PLAN] Seed Agent Pool with running instances per workspace per agent definition and route sessions correctly'
+    note: 'Detailed implementation plan created. 7 phases: (1) Composite key refactor, (2) Startup seed IHostedService, (3) Workspace-aware job routing, (4) Voice session isolation, (5) API/DTO updates, (6) UI updates, (7) Tests. See session plan.md for full details.'
+    done: false
+    description:
+    - On startup, the Agent Pool should automatically seed a running agent instance for every (workspace × agent definition) combination. When an SSE or MCP session connects, route it to the agent instance that is bound to the correct workspace, ensuring workspace isolation. This prevents agents from operating against the wrong workspace context and eliminates the need for manual agent provisioning.
 mvp-mcp:
   high-priority:
   - id: MVP-MCP-002
@@ -523,7 +539,7 @@ mvp-mcp:
     - Add RBAC-aware tab and command visibility (viewer, agent-manager, admin), with hidden workspaces/admin features for non-admin users.
     - Director interactive screens should use ViewModels/CQRS only for covered areas (no direct endpoint calls in migrated tabs).
     - 'AUDIT SUMMARY (2026-02-27): 33/112 handlers (29%), 29 ViewModels, 10/14 API client interfaces, 10 Messages files. Phase 0+2.4+2.6 done, 4 phases partial, 4 phases not started.'
-    remaining: 'Automated closure work is complete. Manual interactive smoke validation scope was moved to MVP-MCP-011 for separate tracking.'
+    remaining: Automated closure work is complete. Manual interactive smoke validation scope was moved to MVP-MCP-011 for separate tracking.
     technical-details:
     - 'Scope: all /mcpserver/* areas plus /auth/config and /health diagnostics/event views. ACTUAL endpoint count is 112 REST endpoints (not the originally estimated ~78). Excludes minimal-API endpoints (pairing, server-startup-utc, etc.) and MCP protocol tools.'
     - 'Handler granularity: strict 1:1 endpoint-to-handler mapping (query/command + handler + ViewModel async command).'
@@ -836,50 +852,24 @@ mvp-mcp:
   - id: MVP-MCP-012
     title: Refactor Marker File Structure per Claude Context OS v4
     estimate: 3-4 days
-    note: >-
-      Current AGENTS-README-FIRST.yaml marker template is 568 lines with 23+ sections.
-      Claude Context OS v4 research shows LLMs reliably track only 5-10 rules, explanatory
-      prose interferes with instruction compliance, and emphatic language causes overtriggering
-      in Claude 4.x. Refactor to a lean ~50-80 line marker with 7 plain-imperative rules,
-      moving detailed schemas, examples, and conduct guidelines into docs/context/ for
-      on-demand loading via MCP context search.
-    done: false
+    note: Current AGENTS-README-FIRST.yaml marker template is 568 lines with 23+ sections. Claude Context OS v4 research shows LLMs reliably track only 5-10 rules, explanatory prose interferes with instruction compliance, and emphatic language causes overtriggering in Claude 4.x. Refactor to a lean ~50-80 line marker with 7 plain-imperative rules, moving detailed schemas, examples, and conduct guidelines into docs/context/ for on-demand loading via MCP context search.
+    done: true
     description:
-    - >-
-      Slim the marker file from 568 lines to ~50-80 lines following Claude Context OS v4
-      principles: 7 rules max, no explanatory prose, plain imperatives, just-in-time context
-      loading, verification checklist at end.
-    - >-
-      Move ~495 lines of content (session log schemas, todo schemas, module bootstrap examples,
-      API capabilities, compliance rules, action types, conduct guidelines) into docs/context/
-      reference documents and expanded AGENTS.md.
-    - >-
-      Agents retrieve detailed schemas and examples on-demand via MCP context_search or by
-      reading docs/context/ files directly, rather than receiving everything in the marker prompt.
+    - 'Slim the marker file from 568 lines to ~50-80 lines following Claude Context OS v4 principles: 7 rules max, no explanatory prose, plain imperatives, just-in-time context loading, verification checklist at end.'
+    - Move ~495 lines of content (session log schemas, todo schemas, module bootstrap examples, API capabilities, compliance rules, action types, conduct guidelines) into docs/context/ reference documents and expanded AGENTS.md.
+    - Agents retrieve detailed schemas and examples on-demand via MCP context_search or by reading docs/context/ files directly, rather than receiving everything in the marker prompt.
     technical-details:
-    - >-
-      Rewrite DefaultPromptTemplate in MarkerFileService.cs (lines 26-594) from 568-line
-      embedded Handlebars template to lean ~50-80 line template with: connection info, 7 rules,
-      Where Things Live section, context-file-to-task mapping, auth, verification at end.
-    - >-
-      Create docs/context/ directory with 6 Markdown reference docs: session-log-schema.md,
-      todo-schema.md, module-bootstrap.md, api-capabilities.md, compliance-rules.md, action-types.md.
-    - >-
-      Expand AGENTS.md with sections extracted from marker: Owner Values (5 subsections),
-      Requirements Tracking, Design Decision Logging, Session Continuity, Glossary.
-    - >-
-      Update templates/default-marker-prompt.hbs.yaml to match the new lean template.
-      Preserve all existing Handlebars variables (baseUrl, apiKey, workspace.*).
-    - >-
-      Conditional compliance sections (banned licenses, countries, orgs) become one-line
-      pointers in marker referencing docs/context/compliance-rules.md.
-    - >-
-      Ensure docs/context/ files are ingested by MCP context pipeline (FTS5 + vector).
+    - 'Rewrite DefaultPromptTemplate in MarkerFileService.cs (lines 26-594) from 568-line embedded Handlebars template to lean ~50-80 line template with: connection info, 7 rules, Where Things Live section, context-file-to-task mapping, auth, verification at end.'
+    - 'Create docs/context/ directory with 6 Markdown reference docs: session-log-schema.md, todo-schema.md, module-bootstrap.md, api-capabilities.md, compliance-rules.md, action-types.md.'
+    - 'Expand AGENTS.md with sections extracted from marker: Owner Values (5 subsections), Requirements Tracking, Design Decision Logging, Session Continuity, Glossary.'
+    - Update templates/default-marker-prompt.hbs.yaml to match the new lean template. Preserve all existing Handlebars variables (baseUrl, apiKey, workspace.*).
+    - Conditional compliance sections (banned licenses, countries, orgs) become one-line pointers in marker referencing docs/context/compliance-rules.md.
+    - Ensure docs/context/ files are ingested by MCP context pipeline (FTS5 + vector).
+    reference: https://github.com/Arkya-AI/claude-context-os
     functional-requirements:
     - FR-MCP-023
     technical-requirements:
     - TR-MCP-DRY-001
-    reference: https://github.com/Arkya-AI/claude-context-os
     implementation-tasks:
     - task: 'P1-01: Create docs/context/session-log-schema.md — extract SessionLog, RequestEntry, Action, DialogItem JSON schemas and McpSession module lifecycle examples.'
       done: false
@@ -923,7 +913,7 @@ mvp-mcp:
   - id: MVP-MCP-011
     title: Director manual TUI smoke validation follow-up
     estimate: 0.5-1 day AI-assisted
-    note: 'Moved from MVP-MCP-003 Phase 15.3 so endpoint-coverage delivery can be closed while manual interactive verification is tracked independently.'
+    note: Moved from MVP-MCP-003 Phase 15.3 so endpoint-coverage delivery can be closed while manual interactive verification is tracked independently.
     done: false
     description:
     - Launch Director interactive mode and run an end-to-end manual smoke pass for migrated tabs.
@@ -1093,6 +1083,8 @@ Architecture:
     - 'Example fix: TunnelRegistry refactored from manual Register() calls to constructor-injected IEnumerable<ITunnelProvider> (commit 0c307a9).'
     - 'Scope includes: all services, registries, managers, and providers across McpServer.Support.Mcp.'
     - Check for any remaining patterns where services are created outside DI or data is pushed between components.
+    depends-on:
+    - plan-audit-di-ssot-execution
     implementation-tasks:
     - task: Inventory all services created via ActivatorUtilities or manual new() outside DI
       done: false
@@ -1371,6 +1363,55 @@ Architecture:
       done: true
     - task: Run validation with dotnet build src\\McpServer.Support.Mcp -c Debug and targeted tests for Support.Mcp, Client, and Director changes
       done: true
+  - id: plan-audit-di-ssot-execution
+    title: '[PLAN] Execute full-code DI + SSOT + INotifyPropertyChanged compliance audit'
+    note: Plan generated 2026-03-03 from live code inventory (Program.cs, McpStdioHost.cs, TodoServiceResolver.cs, WorkspaceContextViewModel, AgentPoolService, UI.Core viewmodels/tests).
+    done: false
+    description:
+    - Deliver a full-repo compliance audit and remediation plan ensuring all mutable state has a single DI-owned source of truth.
+    - Eliminate stateful service creation outside DI, including ActivatorUtilities.CreateInstance and manual new() in runtime code paths.
+    - Enforce pull-based state consumption where producers only signal changes (INotifyPropertyChanged or domain notifications) and consumers re-read shared state.
+    - Audit spans server runtime (McpServer.Support.Mcp), UI core viewmodels, Director integration wiring, and supporting tests/docs.
+    technical-details:
+    - 'Primary registration surfaces: src/McpServer.Support.Mcp/Program.cs and src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs.'
+    - 'Known hot spots: ITodoService factory lambdas using ActivatorUtilities.CreateInstance (Program.cs lines ~267-277 and McpStdioHost.cs lines ~101-111).'
+    - 'Known manual instantiation hot spot: TodoServiceResolver.CreateForWorkspace(string workspacePath, WorkspaceContext ctx) creates TodoService/SqliteTodoService directly.'
+    - 'State container surfaces: src/McpServer.Support.Mcp/Services/WorkspaceContext.cs and src/McpServer.UI.Core/ViewModels/WorkspaceContextViewModel.cs.'
+    - 'Push-notification/event surfaces: src/McpServer.Support.Mcp/Notifications/*.cs, AgentPoolService publish/queue flows, EventStreamViewModel stream subscription lifecycle.'
+    - 'Observable-state baseline: UI.Core ViewModels inherit ObservableObject/Area*ViewModelBase and use [ObservableProperty] for PropertyChanged semantics.'
+    - Concurrency/race review targets include fire-and-forget call sites (_ = TryDispatchAsync, _ = InterruptAsync, _ = ProduceStreamingTurnAsync), lock-based gates, and cancellation ownership.
+    - 'DI exposure rule: shared mutable state must live in DI services with explicit lifetime; views/consumers read via injected dependencies and react to change notifications.'
+    - Testing updates must cover service registration, workspace switching behavior, dependency validation integrity, and no regression in TODO CRUD semantics.
+    - Documentation output must add/adjust technical requirements in docs/Project/Technical-Requirements.md and map to impacted FR/TR entries.
+    implementation-tasks:
+    - task: 'Task 01 (Inventory bootstrap): create audit inventory document in docs/context (or equivalent tracked artifact) listing scan commands and code owners; include rg patterns for ActivatorUtilities.CreateInstance, direct new Service/Provider/Registry/Manager, Task.Run fire-and-forget, and PropertyChanged subscriptions. Integration points: Program.cs, McpStdioHost.cs, TodoServiceResolver.cs, AgentPoolService.cs, VoiceConversationService.cs. Validation: reproduce inventory deterministically in one command session.'
+      done: false
+    - task: 'Task 02 (DI registration map): extract all registrations from Program.cs and McpStdioHost.cs into a normalized matrix (service -> impl -> lifetime -> stateful yes/no -> source file line range). Add explicit entries for ITodoService, TodoServiceResolver, WorkspaceContext, TunnelRegistry, IWorkspaceProcessManager. Test scenario: ensure each mutable singleton/scoped service has a single registration path and no hidden alternate constructor path.'
+      done: false
+    - task: 'Task 03 (Service creation violation scan): inspect runtime code for stateful services instantiated outside DI (exclude test constructors and immutable value objects). Start with TodoServiceResolver.CreateForWorkspace and controller-level new WorkspaceContext in TodoController.MoveAsync. Produce categorized findings: blocker, warning, acceptable factory boundary. Integration points: Services/TodoServiceResolver.cs, Controllers/TodoController.cs, Program.cs, McpStdioHost.cs.'
+      done: false
+    - task: 'Task 04 (SSOT data-source catalog): enumerate mutable state owners and access paths across server and UI layers. Required classes: WorkspaceContext, WorkspaceContextViewModel, AgentPoolService queue state, TunnelRegistry entries, VoiceConversationService session state, EventStreamViewModel retained Items. For each source, capture writer methods and reader methods with signatures; identify duplicate/shadow state risks.'
+      done: false
+    - task: 'Task 05 (Push-vs-pull pattern audit): inspect data propagation to ensure producers notify and consumers pull. Review PropertyChanged subscriptions in UI.Core viewmodels (TodoListViewModel, SessionLogListViewModel, EventStreamViewModel, WorkspacePolicyViewModel, etc.) and server event bus usage (IChangeEventBus.PublishAsync/SubscribeAsync). Flag payload-heavy event patterns where full mutable data is pushed instead of IDs/keys.'
+      done: false
+    - task: 'Task 06 (INotifyPropertyChanged compliance verification): build a verifiable inventory of observable classes in src/McpServer.UI.Core/ViewModels and src/McpServer.VsExtension.McpTodo.Vsix/ViewModels. Confirm each mutable bindable property is generated via [ObservableProperty] or equivalent explicit PropertyChanged implementation. Add/extend reflection-based tests in tests/McpServer.UI.Core.Tests (e.g., AreaViewModelBehaviorTests or a new ObservableComplianceTests) to fail on non-notifying mutable public properties.'
+      done: false
+    - task: 'Task 07 (Refactor design spec): write concrete refactor design for each confirmed violation before coding, including target interfaces, constructor signatures, and lifetime decisions. Minimum required specs: replace ITodoService ActivatorUtilities factory with DI-resolved strategy abstraction; replace TodoServiceResolver manual new with injected factory abstractions; preserve workspace-specific file/db path behavior. Include rollback plan and migration safety notes.'
+      done: false
+    - task: 'Task 08 (Implement DI strategy for TODO storage): introduce/modify abstractions so YAML/SQLite TODO service selection happens via DI-registered strategy/factory service, not runtime ActivatorUtilities.CreateInstance. Target files: Program.cs, McpStdioHost.cs, Services/ITodoService.cs, Services/TodoServiceResolver.cs (and any new factory interface file). Required method signatures in plan: ITodoStoreFactory.CreateForPrimary(), ITodoStoreFactory.CreateForWorkspace(WorkspaceContext ctx) or equivalent.'
+      done: false
+    - task: 'Task 09 (Implement workspace-scoped service creation fix): remove direct new TodoService/new SqliteTodoService from TodoServiceResolver by injecting typed factories that accept workspace context/path parameters while still owned by DI. Add unit tests in tests/McpServer.Support.Mcp.Tests (new TodoServiceResolverTests or extension of existing helper tests) verifying workspace-specific service reuse, disposal behavior, and parity with prior semantics.'
+      done: false
+    - task: 'Task 10 (Race-condition hardening to DI ownership): audit and remediate fire-and-forget + lock coordination hotspots where shared state may bypass DI synchronization contracts (AgentPoolService and VoiceConversationService first). Ensure cancellation/dispatch lifecycles are explicit, observable state is only mutated by owning DI service, and externally visible consumers pull latest state after notifications. Add targeted tests for queue cancel/interrupt and streaming lifecycle transitions.'
+      done: false
+    - task: 'Task 11 (Controller/API integration validation): verify TodoController behavior remains stable after DI factory refactors for Create/Update/Move workflows, including dependency validation and workspace routing. Extend tests under tests/McpServer.Support.Mcp.Tests/Controllers (TodoControllerTests, MultiTenantIntegrationTests, TodoLifecycleIntegrationTests) for both YAML and SQLite storage providers where feasible.'
+      done: false
+    - task: 'Task 12 (UI integration validation): verify WorkspaceContextViewModel singleton behavior remains SSOT-compliant and all dependent viewmodels refresh by PropertyChanged without direct data push from views. Add/extend tests in tests/McpServer.UI.Core.Tests/ViewModels (AreaViewModelBehaviorTests, VoiceViewModelIntegrationTests) to assert workspace switch rebind paths and no shadow copies of workspace path state.'
+      done: false
+    - task: 'Task 13 (Documentation + traceability): update docs/Project/Technical-Requirements.md with explicit SSOT/DI/INotify policy requirement(s), update mapping docs if new TR IDs are introduced, and ensure affected code XML docs reference relevant TR IDs. Include concrete anti-pattern examples (manual new stateful service, payload push) and approved pattern examples (DI-owned state + notification + pull).'
+      done: false
+    - task: 'Task 14 (Final compliance gate): run required builds/tests and produce final audit report checklist proving completion of all findings. Minimum commands: dotnet build src\McpServer.Support.Mcp -c Debug; dotnet build src\McpServer.Client -c Debug; dotnet test tests\McpServer.Support.Mcp.Tests -c Debug; dotnet test tests\McpServer.Client.Tests -c Debug; run targeted UI.Core tests impacted by observable/DI changes. Mark audit-di-ssot done only after zero unresolved blocker findings.'
+      done: false
 Director:
   high-priority:
   - id: director-sessionlog-details
@@ -1660,6 +1701,9 @@ Director:
       done: false
     - task: 'P9-08: Produce final implementation report mapping each completed task back to FR/TR compliance targets.'
       done: false
+  - id: ISS-DIRECTOR-001
+    title: Agent Pool Grid Not Populating
+    done: false
 mcpserver-ui:
   high-priority:
   - id: MCP-UI-CHAT-VM-ITEST-001

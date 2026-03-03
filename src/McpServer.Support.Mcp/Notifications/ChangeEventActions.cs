@@ -11,4 +11,10 @@ public static class ChangeEventActions
 
     /// <summary>Entity was deleted.</summary>
     public const string Deleted = "deleted";
+
+    /// <summary>Stream connection established.</summary>
+    public const string Connected = "connected";
+
+    /// <summary>Stream connection failed.</summary>
+    public const string ConnectionFailed = "connection_failed";
 }

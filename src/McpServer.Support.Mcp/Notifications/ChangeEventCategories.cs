@@ -29,4 +29,7 @@ public static class ChangeEventCategories
 
     /// <summary>Marker file regeneration.</summary>
     public const string Marker = "marker";
+
+    /// <summary>Connection lifecycle events (connected, disconnected).</summary>
+    public const string Connection = "connection";
 }

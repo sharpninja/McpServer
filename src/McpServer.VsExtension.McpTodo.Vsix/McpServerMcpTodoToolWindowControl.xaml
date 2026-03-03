@@ -1,4 +1,4 @@
-<UserControl x:Class="McpServer.VsExtension.McpTodo.McpServerMcpTodoToolWindowControl"
+﻿<UserControl x:Class="McpServer.VsExtension.McpTodo.McpServerMcpTodoToolWindowControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,6 +11,12 @@
              Background="{DynamicResource {x:Static vs:VsBrushes.ToolWindowBackgroundKey}}"
              Foreground="{DynamicResource {x:Static vs:VsBrushes.ToolWindowTextKey}}">
   <UserControl.Resources>
+    <!-- Grouped view over the ViewModel's FilteredItems -->
+    <CollectionViewSource x:Key="GroupedEntries" Source="{Binding FilteredItems}">
+      <CollectionViewSource.GroupDescriptions>
+        <PropertyGroupDescription PropertyName="PriorityGroup"/>
+      </CollectionViewSource.GroupDescriptions>
+    </CollectionViewSource>
     <!-- Button style matching VS theme -->
     <Style TargetType="Button">
       <Setter Property="Background" Value="{DynamicResource {x:Static vs:VsBrushes.ButtonFaceKey}}"/>
@@ -186,15 +192,15 @@
             BorderBrush="{DynamicResource {x:Static vs:VsBrushes.PanelBorderKey}}"
             BorderThickness="0,0,0,1">
       <WrapPanel Orientation="Horizontal" VerticalAlignment="Center">
-        <Button x:Name="NewTodoButton" Content="New" Click="NewTodoButton_Click" Margin="2" ToolTip="Create a new TODO"/>
-        <Button x:Name="RefreshButton" Content="Refresh" Click="RefreshButton_Click" Margin="2"/>
-        <Button x:Name="CopyIdButton" Content="Copy ID" Click="CopyIdButton_Click" Margin="2"/>
-        <Button x:Name="StopButton" Content="Stop" Click="StopButton_Click" Margin="2"
-                IsEnabled="False" ToolTip="Stop the running Copilot operation"/>
+        <Button Content="New" Command="{Binding NewTodoCommand}" Margin="2" ToolTip="Create a new TODO"/>
+        <Button Content="Refresh" Command="{Binding RefreshCommand}" Margin="2"/>
+        <Button Content="Copy ID" Command="{Binding CopyIdCommand}" Margin="2"/>
+        <Button Content="Stop" Command="{Binding StopCommand}" Margin="2"
+                IsEnabled="{Binding IsStopEnabled}" ToolTip="Stop the running Copilot operation"/>
         <Rectangle Width="1" Height="20" Margin="6,0"
                    Fill="{DynamicResource {x:Static vs:VsBrushes.PanelBorderKey}}"/>
-        <ComboBox x:Name="PriorityFilter" MinWidth="90" Margin="2" VerticalAlignment="Center"
-                  SelectionChanged="PriorityFilter_SelectionChanged">
+        <ComboBox MinWidth="90" Margin="2" VerticalAlignment="Center"
+                  SelectedValue="{Binding FilterPriority}" SelectedValuePath="Tag">
           <ComboBox.Resources>
             <!-- Override system colors used by the default ComboBox popup template -->
             <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}"
@@ -208,9 +214,14 @@
             <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
                              Color="{DynamicResource {x:Static vs:VsColors.ComboBoxBackgroundKey}}"/>
           </ComboBox.Resources>
+          <ComboBoxItem Content="All" Tag="" IsSelected="True"/>
+          <ComboBoxItem Content="High" Tag="high"/>
+          <ComboBoxItem Content="Medium" Tag="medium"/>
+          <ComboBoxItem Content="Low" Tag="low"/>
         </ComboBox>
-        <ComboBox x:Name="TextScopeFilter" MinWidth="70" Margin="2" VerticalAlignment="Center"
-                  ToolTip="Text filter scope" SelectionChanged="TextScopeFilter_SelectionChanged">
+        <ComboBox MinWidth="70" Margin="2" VerticalAlignment="Center"
+                  ToolTip="Text filter scope"
+                  SelectedValue="{Binding FilterTextScope}" SelectedValuePath="Tag">
           <ComboBox.Resources>
             <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}"
                              Color="{DynamicResource {x:Static vs:VsColors.WindowKey}}"/>
@@ -223,50 +234,59 @@
             <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
                              Color="{DynamicResource {x:Static vs:VsColors.ComboBoxBackgroundKey}}"/>
           </ComboBox.Resources>
+          <ComboBoxItem Content="TITLE" Tag="title" IsSelected="True"/>
+          <ComboBoxItem Content="ID" Tag="id"/>
+          <ComboBoxItem Content="ALL" Tag="all"/>
         </ComboBox>
-        <TextBox x:Name="TextFilter" MinWidth="120" Margin="2" Padding="4,2"
-                 VerticalAlignment="Center" ToolTip="Filter by text"/>
-        <Button x:Name="ClearFiltersButton" Content="Clear filters" Click="ClearFiltersButton_Click" Margin="2"/>
+        <TextBox MinWidth="120" Margin="2" Padding="4,2"
+                 VerticalAlignment="Center" ToolTip="Filter by text"
+                 Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Content="Clear filters" Command="{Binding ClearFiltersCommand}" Margin="2"/>
       </WrapPanel>
     </Border>
-    <TextBlock x:Name="StatusText" Grid.Row="1" Margin="6,4"
+    <TextBlock Grid.Row="1" Margin="6,4"
+               Text="{Binding StatusText}"
                Foreground="{DynamicResource {x:Static vs:VsBrushes.GrayTextKey}}"
                TextWrapping="Wrap"/>
-    <ListView x:Name="TodoList" Grid.Row="2" Margin="6,2,6,4" Padding="2"
+    <ListView Grid.Row="2" Margin="6,2,6,4" Padding="2"
               Background="{DynamicResource {x:Static vs:VsBrushes.WindowKey}}"
               Foreground="{DynamicResource {x:Static vs:VsBrushes.WindowTextKey}}"
               BorderBrush="{DynamicResource {x:Static vs:VsBrushes.ComboBoxBorderKey}}"
               DisplayMemberPath="DisplayLine" SelectedValuePath="Item"
-              MouseDoubleClick="TodoList_MouseDoubleClick"
-              SelectionChanged="TodoList_SelectionChanged">
+              ItemsSource="{Binding Source={StaticResource GroupedEntries}}"
+              SelectedItem="{Binding SelectedEntry}">
+      <ListView.InputBindings>
+        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding OpenItemCommand}"/>
+      </ListView.InputBindings>
       <ListView.ContextMenu>
         <ContextMenu
+            DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}"
             Background="{DynamicResource {x:Static vs:VsBrushes.WindowKey}}"
             Foreground="{DynamicResource {x:Static vs:VsBrushes.WindowTextKey}}"
             BorderBrush="{DynamicResource {x:Static vs:VsBrushes.ComboBoxBorderKey}}"
             theming:ImageThemingUtilities.ImageBackgroundColor="{DynamicResource {x:Static vs:VsColors.WindowKey}}">
-          <MenuItem Header="Open" Click="ContextMenu_Open_Click">
+          <MenuItem Header="Open" Command="{Binding OpenItemCommand}">
             <MenuItem.Icon>
               <imaging:CrispImage Width="16" Height="16" Moniker="{x:Static catalog:KnownMonikers.OpenFile}"/>
             </MenuItem.Icon>
           </MenuItem>
-          <MenuItem Header="Status" Click="ContextMenu_Status_Click">
+          <MenuItem Header="Status" Command="{Binding StatusPromptCommand}">
             <MenuItem.Icon>
               <imaging:CrispImage Width="16" Height="16" Moniker="{x:Static catalog:KnownMonikers.StatusInformation}"/>
             </MenuItem.Icon>
           </MenuItem>
-          <MenuItem Header="Implement" Click="ContextMenu_Implement_Click">
+          <MenuItem Header="Implement" Command="{Binding ImplementCommand}">
             <MenuItem.Icon>
               <imaging:CrispImage Width="16" Height="16" Moniker="{x:Static catalog:KnownMonikers.Run}"/>
             </MenuItem.Icon>
           </MenuItem>
-          <MenuItem Header="Plan" Click="ContextMenu_Plan_Click">
+          <MenuItem Header="Plan" Command="{Binding PlanCommand}">
             <MenuItem.Icon>
               <imaging:CrispImage Width="16" Height="16" Moniker="{x:Static catalog:KnownMonikers.Checklist}"/>
             </MenuItem.Icon>
           </MenuItem>
           <Separator/>
-          <MenuItem Header="Copy ID" Click="ContextMenu_CopyId_Click">
+          <MenuItem Header="Copy ID" Command="{Binding CopyIdCommand}">
             <MenuItem.Icon>
               <imaging:CrispImage Width="16" Height="16" Moniker="{x:Static catalog:KnownMonikers.Copy}"/>
             </MenuItem.Icon>

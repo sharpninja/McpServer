@@ -56,5 +56,10 @@
     <PackageVersion Include="Handlebars.Net" Version="2.1.6" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.7.0" />
     <PackageVersion Include="Terminal.Gui" Version="2.0.0" />
+    <!-- VS Extension SDK packages -->
+    <PackageVersion Include="Microsoft.VSSDK.BuildTools" Version="17.14.2120" />
+    <PackageVersion Include="Microsoft.VisualStudio.Shell.15.0" Version="17.14.40264" />
+    <PackageVersion Include="Microsoft.VisualStudio.Imaging" Version="17.14.40264" />
+    <PackageVersion Include="Microsoft.VisualStudio.ImageCatalog" Version="17.14.40260" />
   </ItemGroup>
 </Project>

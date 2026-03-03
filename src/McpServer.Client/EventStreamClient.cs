@@ -40,7 +40,30 @@ public sealed class EventStreamClient : McpClientBase
             ? "mcpserver/events"
             : $"mcpserver/events?category={Uri.EscapeDataString(category)}";
 
-        await foreach (var payload in StreamSseAsync(path, cancellationToken))
+        ChangeEvent? connectionFailedEvent = null;
+        IAsyncEnumerable<string>? sseStream = null;
+        try
+        {
+            sseStream = StreamSseAsync(path, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            connectionFailedEvent = new ChangeEvent
+            {
+                Category = "connection",
+                Action = "connection_failed",
+                EntityId = ex.Message,
+                Timestamp = DateTimeOffset.UtcNow
+            };
+        }
+
+        if (connectionFailedEvent is not null)
+        {
+            yield return connectionFailedEvent;
+            yield break;
+        }
+
+        await foreach (var payload in sseStream!.WithCancellation(cancellationToken))
         {
             ChangeEvent? changeEvent;
             try

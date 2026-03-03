@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using McpServer.UI;
 using Microsoft.VisualStudio.Shell;
 
 namespace McpServer.VsExtension.McpTodo;
@@ -9,6 +10,16 @@ public sealed class McpServerMcpTodoToolWindowPane : ToolWindowPane
     public McpServerMcpTodoToolWindowPane() : base(null)
     {
         Caption = "MCP Todo";
-        Content = new McpServerMcpTodoToolWindowControl();
+
+        var client = new McpTodoClient();
+        var editorService = TodoEditorService.Instance ?? new TodoEditorService(client);
+
+        var viewModel = new TodoToolWindowViewModel(
+            client,
+            editorService,
+            openFileInEditor: McpServerMcpTodoToolWindowControl.OpenFileInEditor,
+            showCompletionInfoBar: McpServerMcpTodoToolWindowControl.ShowCompletionInfoBar);
+
+        Content = new McpServerMcpTodoToolWindowControl(viewModel);
     }
 }
