@@ -58,6 +58,14 @@ internal static class InteractiveCommand
             var issueDetailVm = sp.GetRequiredService<IssueDetailViewModel>();
             var pullRequestListVm = sp.GetRequiredService<PullRequestListViewModel>();
             var gitHubSyncVm = sp.GetRequiredService<GitHubSyncViewModel>();
+            var frListVm = sp.GetRequiredService<FrListViewModel>();
+            var frDetailVm = sp.GetRequiredService<FrDetailViewModel>();
+            var trListVm = sp.GetRequiredService<TrListViewModel>();
+            var trDetailVm = sp.GetRequiredService<TrDetailViewModel>();
+            var testListVm = sp.GetRequiredService<TestListViewModel>();
+            var testDetailVm = sp.GetRequiredService<TestDetailViewModel>();
+            var mappingListVm = sp.GetRequiredService<MappingListViewModel>();
+            var requirementsGenerateVm = sp.GetRequiredService<RequirementsGenerateViewModel>();
             var agentDefinitionListVm = sp.GetRequiredService<AgentDefinitionListViewModel>();
             var agentDefinitionDetailVm = sp.GetRequiredService<AgentDefinitionDetailViewModel>();
             var workspaceAgentListVm = sp.GetRequiredService<WorkspaceAgentListViewModel>();
@@ -97,6 +105,14 @@ internal static class InteractiveCommand
                     issueDetailVm,
                     pullRequestListVm,
                     gitHubSyncVm,
+                    frListVm,
+                    frDetailVm,
+                    trListVm,
+                    trDetailVm,
+                    testListVm,
+                    testDetailVm,
+                    mappingListVm,
+                    requirementsGenerateVm,
                     agentDefinitionListVm,
                     agentDefinitionDetailVm,
                     workspaceAgentListVm,

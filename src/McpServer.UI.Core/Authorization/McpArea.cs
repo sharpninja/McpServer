@@ -38,6 +38,9 @@ public enum McpArea
     /// <summary>GitHub issues, pull requests, labels, and sync flows.</summary>
     GitHub,
 
+    /// <summary>Functional/technical/testing requirements and mappings.</summary>
+    Requirements,
+
     /// <summary>Live event stream viewer.</summary>
     Events,
 

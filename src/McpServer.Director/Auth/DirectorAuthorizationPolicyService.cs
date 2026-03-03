@@ -23,6 +23,7 @@ internal sealed class DirectorAuthorizationPolicyService : IAuthorizationPolicyS
         [McpArea.Repo] = McpRoles.Viewer,
         [McpArea.ToolRegistry] = McpRoles.Viewer,
         [McpArea.GitHub] = McpRoles.Viewer,
+        [McpArea.Requirements] = McpRoles.Viewer,
         [McpArea.Events] = McpRoles.Viewer,
         [McpArea.Diagnostic] = McpRoles.Viewer,
         [McpArea.AuthConfig] = McpRoles.Viewer,

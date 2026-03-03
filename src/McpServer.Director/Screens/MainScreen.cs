@@ -39,6 +39,14 @@ internal sealed class MainScreen : Window
     private readonly IssueDetailViewModel _issueDetailVm;
     private readonly PullRequestListViewModel _pullRequestListVm;
     private readonly GitHubSyncViewModel _gitHubSyncVm;
+    private readonly FrListViewModel _frListVm;
+    private readonly FrDetailViewModel _frDetailVm;
+    private readonly TrListViewModel _trListVm;
+    private readonly TrDetailViewModel _trDetailVm;
+    private readonly TestListViewModel _testListVm;
+    private readonly TestDetailViewModel _testDetailVm;
+    private readonly MappingListViewModel _mappingListVm;
+    private readonly RequirementsGenerateViewModel _requirementsGenerateVm;
     private readonly AgentDefinitionListViewModel _agentDefinitionListVm;
     private readonly AgentDefinitionDetailViewModel _agentDefinitionDetailVm;
     private readonly WorkspaceAgentListViewModel _workspaceAgentListVm;
@@ -78,6 +86,14 @@ internal sealed class MainScreen : Window
         IssueDetailViewModel issueDetailVm,
         PullRequestListViewModel pullRequestListVm,
         GitHubSyncViewModel gitHubSyncVm,
+        FrListViewModel frListVm,
+        FrDetailViewModel frDetailVm,
+        TrListViewModel trListVm,
+        TrDetailViewModel trDetailVm,
+        TestListViewModel testListVm,
+        TestDetailViewModel testDetailVm,
+        MappingListViewModel mappingListVm,
+        RequirementsGenerateViewModel requirementsGenerateVm,
         AgentDefinitionListViewModel agentDefinitionListVm,
         AgentDefinitionDetailViewModel agentDefinitionDetailVm,
         WorkspaceAgentListViewModel workspaceAgentListVm,
@@ -113,6 +129,14 @@ internal sealed class MainScreen : Window
         _issueDetailVm = issueDetailVm;
         _pullRequestListVm = pullRequestListVm;
         _gitHubSyncVm = gitHubSyncVm;
+        _frListVm = frListVm;
+        _frDetailVm = frDetailVm;
+        _trListVm = trListVm;
+        _trDetailVm = trDetailVm;
+        _testListVm = testListVm;
+        _testDetailVm = testDetailVm;
+        _mappingListVm = mappingListVm;
+        _requirementsGenerateVm = requirementsGenerateVm;
         _agentDefinitionListVm = agentDefinitionListVm;
         _agentDefinitionDetailVm = agentDefinitionDetailVm;
         _workspaceAgentListVm = workspaceAgentListVm;
@@ -448,6 +472,12 @@ internal sealed class MainScreen : Window
             return;
         }
 
+        if (view is RequirementsScreen requirements)
+        {
+            _ = Task.Run(requirements.LoadAllAsync);
+            return;
+        }
+
         if (view is EventStreamScreen events)
         {
             _ = Task.Run(events.LoadAsync);
@@ -584,6 +614,25 @@ internal sealed class MainScreen : Window
                     _issueDetailVm,
                     _pullRequestListVm,
                     _gitHubSyncVm)
+            }, andSelect: selectFirst);
+            selectFirst = false;
+        }
+
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) &&
+            _authorizationPolicy.CanViewArea(McpArea.Requirements))
+        {
+            _tabView.AddTab(new Tab
+            {
+                DisplayText = "Requirements",
+                View = new RequirementsScreen(
+                    _frListVm,
+                    _frDetailVm,
+                    _trListVm,
+                    _trDetailVm,
+                    _testListVm,
+                    _testDetailVm,
+                    _mappingListVm,
+                    _requirementsGenerateVm)
             }, andSelect: selectFirst);
             selectFirst = false;
         }
