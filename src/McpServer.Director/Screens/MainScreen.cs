@@ -35,6 +35,10 @@ internal sealed class MainScreen : Window
     private readonly ToolDetailViewModel _toolDetailVm;
     private readonly BucketListViewModel _bucketListVm;
     private readonly BucketDetailViewModel _bucketDetailVm;
+    private readonly IssueListViewModel _issueListVm;
+    private readonly IssueDetailViewModel _issueDetailVm;
+    private readonly PullRequestListViewModel _pullRequestListVm;
+    private readonly GitHubSyncViewModel _gitHubSyncVm;
     private readonly AgentDefinitionListViewModel _agentDefinitionListVm;
     private readonly AgentDefinitionDetailViewModel _agentDefinitionDetailVm;
     private readonly WorkspaceAgentListViewModel _workspaceAgentListVm;
@@ -70,6 +74,10 @@ internal sealed class MainScreen : Window
         ToolDetailViewModel toolDetailVm,
         BucketListViewModel bucketListVm,
         BucketDetailViewModel bucketDetailVm,
+        IssueListViewModel issueListVm,
+        IssueDetailViewModel issueDetailVm,
+        PullRequestListViewModel pullRequestListVm,
+        GitHubSyncViewModel gitHubSyncVm,
         AgentDefinitionListViewModel agentDefinitionListVm,
         AgentDefinitionDetailViewModel agentDefinitionDetailVm,
         WorkspaceAgentListViewModel workspaceAgentListVm,
@@ -101,6 +109,10 @@ internal sealed class MainScreen : Window
         _toolDetailVm = toolDetailVm;
         _bucketListVm = bucketListVm;
         _bucketDetailVm = bucketDetailVm;
+        _issueListVm = issueListVm;
+        _issueDetailVm = issueDetailVm;
+        _pullRequestListVm = pullRequestListVm;
+        _gitHubSyncVm = gitHubSyncVm;
         _agentDefinitionListVm = agentDefinitionListVm;
         _agentDefinitionDetailVm = agentDefinitionDetailVm;
         _workspaceAgentListVm = workspaceAgentListVm;
@@ -430,6 +442,12 @@ internal sealed class MainScreen : Window
             return;
         }
 
+        if (view is GitHubScreen github)
+        {
+            _ = Task.Run(github.LoadAllAsync);
+            return;
+        }
+
         if (view is EventStreamScreen events)
         {
             _ = Task.Run(events.LoadAsync);
@@ -551,6 +569,21 @@ internal sealed class MainScreen : Window
                     _toolDetailVm,
                     _bucketListVm,
                     _bucketDetailVm)
+            }, andSelect: selectFirst);
+            selectFirst = false;
+        }
+
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) &&
+            _authorizationPolicy.CanViewArea(McpArea.GitHub))
+        {
+            _tabView.AddTab(new Tab
+            {
+                DisplayText = "GitHub",
+                View = new GitHubScreen(
+                    _issueListVm,
+                    _issueDetailVm,
+                    _pullRequestListVm,
+                    _gitHubSyncVm)
             }, andSelect: selectFirst);
             selectFirst = false;
         }

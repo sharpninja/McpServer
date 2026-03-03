@@ -54,6 +54,10 @@ internal static class InteractiveCommand
             var toolDetailVm = sp.GetRequiredService<ToolDetailViewModel>();
             var bucketListVm = sp.GetRequiredService<BucketListViewModel>();
             var bucketDetailVm = sp.GetRequiredService<BucketDetailViewModel>();
+            var issueListVm = sp.GetRequiredService<IssueListViewModel>();
+            var issueDetailVm = sp.GetRequiredService<IssueDetailViewModel>();
+            var pullRequestListVm = sp.GetRequiredService<PullRequestListViewModel>();
+            var gitHubSyncVm = sp.GetRequiredService<GitHubSyncViewModel>();
             var agentDefinitionListVm = sp.GetRequiredService<AgentDefinitionListViewModel>();
             var agentDefinitionDetailVm = sp.GetRequiredService<AgentDefinitionDetailViewModel>();
             var workspaceAgentListVm = sp.GetRequiredService<WorkspaceAgentListViewModel>();
@@ -89,6 +93,10 @@ internal static class InteractiveCommand
                     toolDetailVm,
                     bucketListVm,
                     bucketDetailVm,
+                    issueListVm,
+                    issueDetailVm,
+                    pullRequestListVm,
+                    gitHubSyncVm,
                     agentDefinitionListVm,
                     agentDefinitionDetailVm,
                     workspaceAgentListVm,

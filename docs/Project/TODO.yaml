@@ -1556,9 +1556,9 @@ mvp-mcp:
     - task: 'Phase 7.1 — GitHub handlers (13): Create all 13 handlers in UI.Core/Handlers/: ListIssuesQueryHandler, GetIssueQueryHandler, CreateIssueCommandHandler, UpdateIssueCommandHandler, CloseIssueCommandHandler, ReopenIssueCommandHandler, CommentOnIssueCommandHandler, ListLabelsQueryHandler, ListPullsQueryHandler, CommentOnPullCommandHandler, SyncFromGitHubCommandHandler, SyncToGitHubCommandHandler, SyncSingleIssueCommandHandler. Each injects IGitHubApiClient.'
       done: true
     - task: 'Phase 7.2 — GitHub ViewModels: Create IssueListViewModel (AreaListViewModelBase), IssueDetailViewModel (AreaDetailViewModelBase), PullRequestListViewModel (AreaListViewModelBase), GitHubSyncViewModel. Register in AddUiCore().'
-      done: false
+      done: true
     - task: 'Phase 7.3 — Create GitHubScreen in Director: New src/McpServer.Director/Screens/GitHubScreen.cs with issue list, PR list, detail panes, create/comment actions, sync controls. Wire into MainScreen.RebuildTabs() with McpArea.GitHub auth check.'
-      done: false
+      done: true
     - task: 'Phase 8.1 — Requirements handlers (20): Create all 20 handlers in UI.Core/Handlers/: CRUD handlers for FR (5), TR (5), Test (5), Mapping (4), plus GenerateRequirementsQueryHandler. Each injects IRequirementsApiClient.'
       done: true
     - task: 'Phase 8.2 — Requirements ViewModels: Create FrListViewModel, FrDetailViewModel, TrListViewModel, TrDetailViewModel, TestListViewModel, TestDetailViewModel, MappingListViewModel, RequirementsGenerateViewModel. Register in AddUiCore().'

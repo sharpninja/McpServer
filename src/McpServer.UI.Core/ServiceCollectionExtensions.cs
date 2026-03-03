@@ -59,6 +59,10 @@ public static class ServiceCollectionExtensions
         services.AddTransient<ToolDetailViewModel>();
         services.AddTransient<BucketListViewModel>();
         services.AddTransient<BucketDetailViewModel>();
+        services.AddTransient<IssueListViewModel>();
+        services.AddTransient<IssueDetailViewModel>();
+        services.AddTransient<PullRequestListViewModel>();
+        services.AddTransient<GitHubSyncViewModel>();
         services.AddTransient<TodoListViewModel>();
         services.AddTransient<TodoDetailViewModel>();
         services.AddTransient<CreateTodoViewModel>();
