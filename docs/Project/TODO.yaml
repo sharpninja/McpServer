@@ -1568,7 +1568,7 @@ mvp-mcp:
     - task: 'Phase 9.1 — EventStream handler (1): Create SubscribeToEventsQueryHandler in UI.Core/Handlers/ injecting IEventStreamApiClient. Create EventStreamViewModel with ObservableCollection<ChangeEvent> and optional category filter.'
       done: false
     - task: 'Phase 9.2 — Create EventStreamScreen in Director: New src/McpServer.Director/Screens/EventStreamScreen.cs showing live SSE event feed in a scrollable ListView with category filter dropdown. Wire into MainScreen.RebuildTabs() with McpArea.Events auth check.'
-      done: false
+      done: true
     - task: 'Phase 9.3 — Voice handlers (6): Create all 6 handlers in UI.Core/Handlers/: CreateVoiceSessionCommandHandler, SubmitVoiceTurnCommandHandler, InterruptVoiceCommandHandler, GetVoiceStatusQueryHandler, GetVoiceTranscriptQueryHandler, DeleteVoiceSessionCommandHandler. Each injects IVoiceApiClient.'
       done: true
     - task: 'Phase 10.1 — Create ContextScreen in Director: UI.Core handlers and VMs already exist (4 handlers, 4 VMs: ContextSearchViewModel, ContextPackViewModel, ContextSourcesViewModel, ContextRebuildIndexViewModel). Create src/McpServer.Director/Screens/ContextScreen.cs with search input, results list, sources list, pack viewer, rebuild button. Wire into MainScreen.RebuildTabs() with McpArea.Context auth check.'

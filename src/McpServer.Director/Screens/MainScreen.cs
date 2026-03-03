@@ -391,6 +391,12 @@ internal sealed class MainScreen : Window
         if (view is RepoScreen repo)
         {
             _ = Task.Run(repo.LoadAsync);
+            return;
+        }
+
+        if (view is EventStreamScreen events)
+        {
+            _ = Task.Run(events.LoadAsync);
         }
     }
 
@@ -485,6 +491,16 @@ internal sealed class MainScreen : Window
             {
                 DisplayText = "Repo",
                 View = new RepoScreen(_dispatcher)
+            }, andSelect: selectFirst);
+            selectFirst = false;
+        }
+
+        if ((_directorContext.HasActiveWorkspaceConnection || _directorContext.HasControlConnection) && _authorizationPolicy.CanViewArea(McpArea.Events))
+        {
+            _tabView.AddTab(new Tab
+            {
+                DisplayText = "Events",
+                View = new EventStreamScreen(_dispatcher)
             }, andSelect: selectFirst);
             selectFirst = false;
         }
