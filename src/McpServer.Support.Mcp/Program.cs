@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Runtime.Versioning;
 using System.Text;
 using System.Text.Json;
+using McpServer.Common.Copilot;
 using McpServer.Common.Copilot.Extensions;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Indexing;
@@ -297,15 +298,16 @@ builder.Services.Configure<TodoPromptOptions>(options =>
 {
     if (primaryWorkspaceEntry is not null)
     {
-        options.StatusPrompt = primaryWorkspaceEntry.StatusPrompt;
-        options.ImplementPrompt = primaryWorkspaceEntry.ImplementPrompt;
-        options.PlanPrompt = primaryWorkspaceEntry.PlanPrompt;
+        options.StatusPrompt = string.IsNullOrWhiteSpace(primaryWorkspaceEntry.StatusPrompt) ? null : primaryWorkspaceEntry.StatusPrompt;
+        options.ImplementPrompt = string.IsNullOrWhiteSpace(primaryWorkspaceEntry.ImplementPrompt) ? null : primaryWorkspaceEntry.ImplementPrompt;
+        options.PlanPrompt = string.IsNullOrWhiteSpace(primaryWorkspaceEntry.PlanPrompt) ? null : primaryWorkspaceEntry.PlanPrompt;
         options.BaseUrl = $"http://{System.Net.Dns.GetHostName()}:{listenPort}";
         options.RunAs = primaryWorkspaceEntry.RunAs;
         options.GitHubToken = primaryWorkspaceEntry.GitHubToken;
         options.AgentPath = primaryWorkspaceEntry.AgentPath;
     }
 });
+builder.Services.AddSingleton<IProcessSpawner, DesktopProcessSpawner>();
 builder.Services.AddCopilotClient();
 builder.Services.AddScoped<ISessionLogService, SessionLogService>();
 builder.Services.AddScoped<Fts5SearchService>();

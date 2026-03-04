@@ -10,6 +10,7 @@ namespace McpServer.Common.Copilot;
 public sealed class CopilotClient(
     IOptionsMonitor<CopilotClientOptions> defaultOptions,
     IProcessEnvironmentService processEnvironment,
+    IProcessSpawner processSpawner,
     ILogger<CopilotClient> logger) : ICopilotClient
 {
 
@@ -59,9 +60,7 @@ public sealed class CopilotClient(
 
         logger.LogDebug("Launching interactive session: {Agent} in {Cwd}", opts.AgentPath, psi.WorkingDirectory);
 
-        var process = Process.Start(psi)
-            ?? throw new InvalidOperationException("Process.Start returned null for interactive session");
-
+        var process = processSpawner.Spawn(psi);
         return new CopilotInteractiveSession(process, logger);
     }
 
@@ -78,17 +77,17 @@ public sealed class CopilotClient(
 
         logger.LogDebug("Streaming: {Agent} in {Cwd}", opts.AgentPath, psi.WorkingDirectory);
 
-        Process? process;
+        ISpawnedProcess? proc;
         string? spawnError = null;
         try
         {
-            process = Process.Start(psi) ?? throw new InvalidOperationException("Process.Start returned null");
+            proc = processSpawner.Spawn(psi);
         }
         catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
         {
             logger.LogError(ex, "Failed to spawn streaming process: {Agent}", opts.AgentPath);
             spawnError = $"error: Failed to spawn Copilot CLI — {ex.Message}";
-            process = null;
+            proc = null;
         }
 
         if (spawnError is not null)
@@ -97,9 +96,6 @@ public sealed class CopilotClient(
             yield break;
         }
 
-        // process is guaranteed non-null when spawnError is null.
-        var proc = process!;
-
         try
         {
             using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
@@ -107,9 +103,10 @@ public sealed class CopilotClient(
                 timeoutCts.CancelAfter(opts.Timeout);
 
             // Drain stderr in background to prevent deadlocks and capture error output.
-            var stderrTask = proc.StandardError.ReadToEndAsync(timeoutCts.Token);
+            var stderrTask = proc!.StandardError.ReadToEndAsync(timeoutCts.Token);
 
             var reader = proc.StandardOutput;
+            var lineCount = 0;
             while (!timeoutCts.Token.IsCancellationRequested)
             {
                 string? line;
@@ -126,11 +123,12 @@ public sealed class CopilotClient(
                 if (line is null)
                     break;
 
+                lineCount++;
                 yield return LineSanitizer.Sanitize(line);
             }
 
             if (!proc.HasExited)
-                TryKillProcess(proc);
+                TryKill(proc);
 
             await proc.WaitForExitAsync(CancellationToken.None).ConfigureAwait(false);
 
@@ -138,10 +136,12 @@ public sealed class CopilotClient(
             var stderr = await ReadPartialAsync(stderrTask).ConfigureAwait(false);
             if (!string.IsNullOrWhiteSpace(stderr))
                 logger.LogWarning("Copilot CLI stderr: {Stderr}", stderr.Trim());
+
+            logger.LogInformation("Copilot CLI streaming finished: {LineCount} lines, exit code {ExitCode}", lineCount, proc.ExitCode);
         }
         finally
         {
-            proc.Dispose();
+            proc!.Dispose();
         }
     }
 
@@ -152,12 +152,12 @@ public sealed class CopilotClient(
     {
         var psi = BuildProcessStartInfo(opts, prompt);
 
-        logger.LogDebug("Spawning: {Agent} {Args} in {Cwd}", opts.AgentPath, psi.Arguments, psi.WorkingDirectory);
+        logger.LogDebug("Spawning: {Agent} in {Cwd}", opts.AgentPath, psi.WorkingDirectory);
 
-        Process process;
+        ISpawnedProcess proc;
         try
         {
-            process = Process.Start(psi) ?? throw new InvalidOperationException("Process.Start returned null");
+            proc = processSpawner.Spawn(psi);
         }
         catch (InvalidOperationException ex)
         {
@@ -181,8 +181,8 @@ public sealed class CopilotClient(
         try
         {
             // Read stdout and stderr concurrently to avoid deadlocks
-            var stdoutTask = process.StandardOutput.ReadToEndAsync(cancellationToken);
-            var stderrTask = process.StandardError.ReadToEndAsync(cancellationToken);
+            var stdoutTask = proc.StandardOutput.ReadToEndAsync(cancellationToken);
+            var stderrTask = proc.StandardError.ReadToEndAsync(cancellationToken);
 
             var timeout = opts.Timeout;
             var hasTimeout = timeout > TimeSpan.Zero && timeout != System.Threading.Timeout.InfiniteTimeSpan;
@@ -194,13 +194,13 @@ public sealed class CopilotClient(
 
                 try
                 {
-                    await process.WaitForExitAsync(cts.Token).ConfigureAwait(false);
+                    await proc.WaitForExitAsync(cts.Token).ConfigureAwait(false);
                 }
                 catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
                 {
                     // Timeout — kill process
                     logger.LogWarning("Copilot CLI timed out after {Timeout}", timeout);
-                    TryKillProcess(process);
+                    TryKill(proc);
                     var partialStdout = await ReadPartialAsync(stdoutTask).ConfigureAwait(false);
                     var partialStderr = await ReadPartialAsync(stderrTask).ConfigureAwait(false);
                     return new CopilotResult
@@ -213,7 +213,7 @@ public sealed class CopilotClient(
             }
             else
             {
-                await process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
+                await proc.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
             }
 
             var stdout = await stdoutTask.ConfigureAwait(false);
@@ -221,21 +221,21 @@ public sealed class CopilotClient(
             var body = stdout.Trim();
             var (contentType, parsed) = ContentParser.DetectAndParse(body);
 
-            logger.LogDebug("Copilot CLI exited with code {ExitCode}, content type: {ContentType}", process.ExitCode, contentType);
+            logger.LogDebug("Copilot CLI exited with code {ExitCode}, content type: {ContentType}", proc.ExitCode, contentType);
 
             return new CopilotResult
             {
-                State = process.ExitCode == 0 ? CopilotResultState.Success : CopilotResultState.Error,
+                State = proc.ExitCode == 0 ? CopilotResultState.Success : CopilotResultState.Error,
                 Body = body,
                 Stderr = stderr.Trim(),
-                ExitCode = process.ExitCode,
+                ExitCode = proc.ExitCode,
                 Parsed = parsed,
                 ContentType = contentType,
             };
         }
         finally
         {
-            process.Dispose();
+            proc.Dispose();
         }
     }
 
@@ -309,12 +309,12 @@ public sealed class CopilotClient(
         }
     }
 
-    private void TryKillProcess(Process process)
+    private void TryKill(ISpawnedProcess proc)
     {
         try
         {
-            if (!process.HasExited)
-                process.Kill(entireProcessTree: true);
+            if (!proc.HasExited)
+                proc.Kill();
         }
         catch (InvalidOperationException ex)
         {
