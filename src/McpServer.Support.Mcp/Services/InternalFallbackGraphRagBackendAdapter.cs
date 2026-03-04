@@ -17,6 +17,8 @@ internal sealed class InternalFallbackGraphRagBackendAdapter : IGraphRagBackendA
     /// <inheritdoc />
     public Task<GraphRagBackendIndexResult> IndexAsync(GraphRagBackendExecutionContext context, GraphRagIndexRequest? request, CancellationToken cancellationToken = default)
     {
+        _ = request;
+        _ = cancellationToken;
         var inputPath = Path.Combine(context.GraphRoot, "input");
         var docCount = Directory.Exists(inputPath)
             ? Directory.EnumerateFiles(inputPath, "*", SearchOption.AllDirectories).Count()
@@ -33,6 +35,12 @@ internal sealed class InternalFallbackGraphRagBackendAdapter : IGraphRagBackendA
         int maxChunks,
         CancellationToken cancellationToken = default)
     {
+        _ = context;
+        _ = request;
+        _ = query;
+        _ = mode;
+        _ = maxChunks;
+        _ = cancellationToken;
         // Internal adapter delegates query payload construction to orchestrator fallback path.
         return Task.FromResult<GraphRagQueryResponse?>(null);
     }

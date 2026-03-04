@@ -43,6 +43,7 @@ internal sealed class ExternalCommandGraphRagBackendAdapter(
         int maxChunks,
         CancellationToken cancellationToken = default)
     {
+        _ = request;
         try
         {
             var command = context.Options.BackendCommand!;

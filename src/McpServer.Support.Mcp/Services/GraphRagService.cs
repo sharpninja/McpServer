@@ -11,6 +11,9 @@ using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Services;
 
+/// <summary>
+/// Orchestrates workspace-scoped GraphRAG lifecycle and routes backend execution to adapter implementations.
+/// </summary>
 internal sealed class GraphRagService : IGraphRagService
 {
     private const string StatusFileName = "graphrag-status.json";
@@ -47,30 +50,31 @@ internal sealed class GraphRagService : IGraphRagService
         var workspacePath = ResolveWorkspacePath();
         var graphRoot = ResolveGraphRoot(workspacePath);
         var persisted = await TryReadStatusAsync(graphRoot, cancellationToken).ConfigureAwait(false);
+        var backend = SelectBackend();
         var initialized = HasInitializedStructure(graphRoot);
         var activeJobId = s_workspaceActiveJobs.TryGetValue(workspacePath, out var currentJobId) ? currentJobId : null;
         var isIndexedByArtifact = IsReadyArtifactPresent(graphRoot);
         var isIndexed = persisted?.IsIndexed == true && isIndexedByArtifact;
-        var backendAvailabilityIssue = GetBackendAvailabilityIssue();
+        var backendAvailabilityError = GetBackendAvailabilityError(backend);
 
         return new GraphRagStatusResponse
         {
             Enabled = _options.Enabled,
             WorkspacePath = workspacePath,
             GraphRoot = graphRoot,
-            State = ResolveState(_options.Enabled, initialized, isIndexed, activeJobId, backendAvailabilityIssue ?? persisted?.LastError),
+            State = ResolveState(_options.Enabled, initialized, isIndexed, activeJobId, backendAvailabilityError ?? persisted?.LastError),
             IsInitialized = initialized,
             IsIndexed = isIndexed,
             LastIndexedAtUtc = persisted?.LastIndexedAtUtc,
             LastSuccessAtUtc = persisted?.LastSuccessAtUtc,
             LastFailureAtUtc = persisted?.LastFailureAtUtc,
             ActiveJobId = activeJobId,
-            FailureCode = backendAvailabilityIssue is null ? persisted?.FailureCode : "backend_unavailable",
-            LastError = backendAvailabilityIssue ?? persisted?.LastError,
+            FailureCode = backendAvailabilityError is null ? persisted?.FailureCode : "backend_unavailable",
+            LastError = backendAvailabilityError ?? persisted?.LastError,
             ArtifactVersion = persisted?.ArtifactVersion ?? _options.ArtifactVersion,
             LastIndexDurationMs = persisted?.LastIndexDurationMs,
             LastIndexedDocumentCount = persisted?.LastIndexedDocumentCount,
-            Backend = ResolveBackendName()
+            Backend = backend.AdapterName
         };
     }
 
@@ -93,7 +97,7 @@ internal sealed class GraphRagService : IGraphRagService
             ArtifactVersion = _options.ArtifactVersion,
             LastIndexDurationMs = existing?.LastIndexDurationMs,
             LastIndexedDocumentCount = existing?.LastIndexedDocumentCount,
-            Backend = ResolveBackendName(),
+            Backend = SelectBackend().AdapterName,
         };
         await WriteStatusAsync(graphRoot, status, cancellationToken).ConfigureAwait(false);
 
@@ -145,7 +149,7 @@ internal sealed class GraphRagService : IGraphRagService
                 ArtifactVersion = _options.ArtifactVersion,
                 LastIndexDurationMs = (long)stopwatch.Elapsed.TotalMilliseconds,
                 LastIndexedDocumentCount = documentCount,
-                Backend = ResolveBackendName(),
+                Backend = backend.AdapterName,
             };
 
             await WriteStatusAsync(graphRoot, status, cancellationToken).ConfigureAwait(false);
@@ -168,7 +172,7 @@ internal sealed class GraphRagService : IGraphRagService
                 ArtifactVersion = _options.ArtifactVersion,
                 LastIndexDurationMs = (long)stopwatch.Elapsed.TotalMilliseconds,
                 LastIndexedDocumentCount = documentCount,
-                Backend = ResolveBackendName()
+                Backend = backend.AdapterName
             };
             await WriteStatusAsync(graphRoot, canceled, cancellationToken).ConfigureAwait(false);
             throw;
@@ -187,7 +191,7 @@ internal sealed class GraphRagService : IGraphRagService
                 ArtifactVersion = _options.ArtifactVersion,
                 LastIndexDurationMs = (long)stopwatch.Elapsed.TotalMilliseconds,
                 LastIndexedDocumentCount = documentCount,
-                Backend = ResolveBackendName(),
+                Backend = backend.AdapterName,
             };
             await WriteStatusAsync(graphRoot, failed, cancellationToken).ConfigureAwait(false);
             _logger.LogWarning(ex, "GraphRAG index failed");
@@ -263,7 +267,7 @@ internal sealed class GraphRagService : IGraphRagService
             FallbackUsed = fallbackUsed,
             FallbackReason = fallbackReason,
             FailureCode = fallbackUsed ? "query_fallback" : null,
-            Backend = ResolveBackendName()
+            Backend = SelectBackend().AdapterName
         };
     }
 
@@ -339,9 +343,9 @@ internal sealed class GraphRagService : IGraphRagService
 
     private bool IsExternalBackendConfigured() => string.Equals(SelectBackend().AdapterName, "external-command", StringComparison.OrdinalIgnoreCase);
 
-    private string? GetBackendAvailabilityIssue()
+    private string? GetBackendAvailabilityError(IGraphRagBackendAdapter backend)
     {
-        if (!IsExternalBackendConfigured())
+        if (!string.Equals(backend.AdapterName, "external-command", StringComparison.OrdinalIgnoreCase))
             return null;
 
         if (Path.IsPathRooted(_options.BackendCommand!) && !File.Exists(_options.BackendCommand))
@@ -376,6 +380,7 @@ internal sealed class GraphRagService : IGraphRagService
 
     private static void CleanupStaleArtifacts(string graphRoot)
     {
+        var maxAge = TimeSpan.FromHours(2);
         foreach (var folder in new[]
                  {
                      graphRoot,
@@ -388,18 +393,21 @@ internal sealed class GraphRagService : IGraphRagService
 
             foreach (var file in Directory.EnumerateFiles(folder, "*.tmp", SearchOption.AllDirectories))
             {
-                var age = DateTimeOffset.UtcNow - File.GetLastWriteTimeUtc(file);
-                if (age > TimeSpan.FromHours(2))
-                    File.Delete(file);
+                TryDeleteIfStale(file, maxAge);
             }
 
             foreach (var file in Directory.EnumerateFiles(folder, "*.partial", SearchOption.AllDirectories))
             {
-                var age = DateTimeOffset.UtcNow - File.GetLastWriteTimeUtc(file);
-                if (age > TimeSpan.FromHours(2))
-                    File.Delete(file);
+                TryDeleteIfStale(file, maxAge);
             }
         }
+    }
+
+    private static void TryDeleteIfStale(string filePath, TimeSpan maxAge)
+    {
+        var age = DateTimeOffset.UtcNow - File.GetLastWriteTimeUtc(filePath);
+        if (age > maxAge)
+            File.Delete(filePath);
     }
 
     private static IReadOnlyList<string> BuildEntitiesFromChunks(IReadOnlyList<ContextChunk> chunks, int? maxEntities)
@@ -437,9 +445,6 @@ internal sealed class GraphRagService : IGraphRagService
             .Select(static g => $"{g.Key} ({g.Count()})")
             .ToList();
     }
-
-    private string ResolveBackendName()
-        => SelectBackend().AdapterName;
 
     private static string GetStatusFilePath(string graphRoot)
         => Path.Combine(graphRoot, StatusFileName);
