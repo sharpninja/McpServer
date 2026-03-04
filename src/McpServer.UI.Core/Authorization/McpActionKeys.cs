@@ -36,11 +36,20 @@ public static class McpActionKeys
     /// <summary>Workspace process-status action.</summary>
     public const string WorkspaceStatus = "workspace.status";
 
+    /// <summary>Workspace health-probe action.</summary>
+    public const string WorkspaceHealth = "workspace.health";
+
     /// <summary>Global marker prompt read action.</summary>
     public const string WorkspacePromptGet = "workspace.prompt.get";
 
     /// <summary>Global marker prompt update action.</summary>
     public const string WorkspacePromptUpdate = "workspace.prompt.update";
+
+    /// <summary>Shared global prompt read action.</summary>
+    public const string WorkspaceGlobalPromptGet = WorkspacePromptGet;
+
+    /// <summary>Shared global prompt update action.</summary>
+    public const string WorkspaceGlobalPromptUpdate = WorkspacePromptUpdate;
 
     /// <summary>Session-log query action.</summary>
     public const string SessionLogQuery = "sessionlog.query";

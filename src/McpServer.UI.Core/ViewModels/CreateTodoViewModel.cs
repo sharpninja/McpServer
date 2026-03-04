@@ -25,9 +25,13 @@ public sealed partial class CreateTodoViewModel : ObservableObject
     [ObservableProperty] private string _priority = "medium";
     [ObservableProperty] private string? _estimate;
     [ObservableProperty] private string? _note;
+    [ObservableProperty] private string? _remaining;
     [ObservableProperty] private IReadOnlyList<string>? _description;
     [ObservableProperty] private IReadOnlyList<string>? _technicalDetails;
     [ObservableProperty] private IReadOnlyList<TodoTaskDetail>? _implementationTasks;
+    [ObservableProperty] private IReadOnlyList<string>? _dependsOn;
+    [ObservableProperty] private IReadOnlyList<string>? _functionalRequirements;
+    [ObservableProperty] private IReadOnlyList<string>? _technicalRequirements;
 
     /// <summary>Create command.</summary>
     public IAsyncRelayCommand CreateCommand => _createCommand;
@@ -46,8 +50,12 @@ public sealed partial class CreateTodoViewModel : ObservableObject
         Priority = Priority,
         Estimate = Estimate,
         Note = Note,
+        Remaining = Remaining,
         Description = Description,
         TechnicalDetails = TechnicalDetails,
         ImplementationTasks = ImplementationTasks,
+        DependsOn = DependsOn,
+        FunctionalRequirements = FunctionalRequirements,
+        TechnicalRequirements = TechnicalRequirements,
     };
 }

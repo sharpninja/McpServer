@@ -40,6 +40,8 @@ public static class ServiceCollectionExtensions
         // Register ViewModels as transient
         services.AddTransient<WorkspaceListViewModel>();
         services.AddTransient<WorkspaceDetailViewModel>();
+        services.AddTransient<WorkspaceHealthProbeViewModel>();
+        services.AddTransient<WorkspaceGlobalPromptViewModel>();
         services.AddTransient<WorkspacePolicyViewModel>();
         services.AddTransient<HealthSnapshotsViewModel>();
         services.AddTransient<SessionLogListViewModel>();

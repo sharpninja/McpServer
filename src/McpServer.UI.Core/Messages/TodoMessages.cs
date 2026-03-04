@@ -102,6 +102,9 @@ public sealed record CreateTodoCommand : ICommand<TodoMutationOutcome>
     /// <summary>Optional note.</summary>
     public string? Note { get; init; }
 
+    /// <summary>Optional remaining-work note.</summary>
+    public string? Remaining { get; init; }
+
     /// <summary>Optional description lines.</summary>
     public IReadOnlyList<string>? Description { get; init; }
 
@@ -110,6 +113,15 @@ public sealed record CreateTodoCommand : ICommand<TodoMutationOutcome>
 
     /// <summary>Optional implementation task checklist.</summary>
     public IReadOnlyList<TodoTaskDetail>? ImplementationTasks { get; init; }
+
+    /// <summary>Optional dependency IDs.</summary>
+    public IReadOnlyList<string>? DependsOn { get; init; }
+
+    /// <summary>Optional associated functional requirement IDs.</summary>
+    public IReadOnlyList<string>? FunctionalRequirements { get; init; }
+
+    /// <summary>Optional associated technical requirement IDs.</summary>
+    public IReadOnlyList<string>? TechnicalRequirements { get; init; }
 }
 
 /// <summary>Command to update an existing TODO item.</summary>
@@ -136,6 +148,15 @@ public sealed record UpdateTodoCommand : ICommand<TodoMutationOutcome>
     /// <summary>Updated note (null = no change).</summary>
     public string? Note { get; init; }
 
+    /// <summary>Updated completed date (null = no change).</summary>
+    public string? CompletedDate { get; init; }
+
+    /// <summary>Updated done summary (null = no change).</summary>
+    public string? DoneSummary { get; init; }
+
+    /// <summary>Updated remaining-work note (null = no change).</summary>
+    public string? Remaining { get; init; }
+
     /// <summary>Updated description lines (null = no change).</summary>
     public IReadOnlyList<string>? Description { get; init; }
 
@@ -144,6 +165,15 @@ public sealed record UpdateTodoCommand : ICommand<TodoMutationOutcome>
 
     /// <summary>Updated implementation tasks (null = no change).</summary>
     public IReadOnlyList<TodoTaskDetail>? ImplementationTasks { get; init; }
+
+    /// <summary>Updated dependency IDs (null = no change).</summary>
+    public IReadOnlyList<string>? DependsOn { get; init; }
+
+    /// <summary>Updated functional requirement IDs (null = no change).</summary>
+    public IReadOnlyList<string>? FunctionalRequirements { get; init; }
+
+    /// <summary>Updated technical requirement IDs (null = no change).</summary>
+    public IReadOnlyList<string>? TechnicalRequirements { get; init; }
 }
 
 /// <summary>Command to delete a TODO item.</summary>
