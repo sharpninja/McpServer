@@ -31,6 +31,8 @@ public sealed class ChannelChangeEventBusTests
 
         var sub1 = sut.SubscribeAsync(cts.Token).GetAsyncEnumerator(cts.Token);
         var sub2 = sut.SubscribeAsync(cts.Token).GetAsyncEnumerator(cts.Token);
+        var read1Task = sub1.MoveNextAsync().AsTask();
+        var read2Task = sub2.MoveNextAsync().AsTask();
 
         var evt = new ChangeEvent
         {
@@ -41,8 +43,8 @@ public sealed class ChannelChangeEventBusTests
 
         await sut.PublishAsync(evt, cts.Token).ConfigureAwait(true);
 
-        Assert.True(await sub1.MoveNextAsync().ConfigureAwait(true));
-        Assert.True(await sub2.MoveNextAsync().ConfigureAwait(true));
+        Assert.True(await read1Task.ConfigureAwait(true));
+        Assert.True(await read2Task.ConfigureAwait(true));
         Assert.Equal("TEST-002", sub1.Current.EntityId);
         Assert.Equal("TEST-002", sub2.Current.EntityId);
     }

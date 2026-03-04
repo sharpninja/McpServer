@@ -50,6 +50,7 @@ public sealed class EventPublishingServiceTests : IDisposable
         Assert.True(result.Success);
         await eventBus.Received(1).PublishAsync(
             Arg.Is<ChangeEvent>(e =>
+                e != null &&
                 e.Category == ChangeEventCategories.ToolRegistry &&
                 e.Action == ChangeEventActions.Created),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -87,6 +88,7 @@ public sealed class EventPublishingServiceTests : IDisposable
         Assert.True(result.Success);
         await eventBus.Received(1).PublishAsync(
             Arg.Is<ChangeEvent>(e =>
+                e != null &&
                 e.Category == ChangeEventCategories.Workspace &&
                 e.Action == ChangeEventActions.Created &&
                 e.EntityId == Path.GetFullPath(workspacePath)),
@@ -119,12 +121,14 @@ public sealed class EventPublishingServiceTests : IDisposable
 
         await eventBus.Received().PublishAsync(
             Arg.Is<ChangeEvent>(e =>
+                e != null &&
                 e.Category == ChangeEventCategories.Agent &&
                 e.Action == ChangeEventActions.Created &&
                 e.EntityId == "test-agent"),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
         await eventBus.Received().PublishAsync(
             Arg.Is<ChangeEvent>(e =>
+                e != null &&
                 e.Category == ChangeEventCategories.Agent &&
                 e.Action == ChangeEventActions.Updated &&
                 e.EntityId == "test-agent"),

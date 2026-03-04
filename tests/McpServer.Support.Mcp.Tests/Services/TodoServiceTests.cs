@@ -133,7 +133,8 @@ public sealed class TodoServiceTests : IDisposable
         Assert.Equal("created note", retrieved.Note);
         Assert.Equal("created remaining", retrieved.Remaining);
         await _eventBus.Received(1).PublishAsync(
-            Arg.Is<ChangeEvent>(e => e.Category == ChangeEventCategories.Todo
+            Arg.Is<ChangeEvent>(e => e != null
+                                     && e.Category == ChangeEventCategories.Todo
                                      && e.Action == ChangeEventActions.Created
                                      && e.EntityId == "TEST-NEW-001"),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -204,7 +205,8 @@ public sealed class TodoServiceTests : IDisposable
         Assert.Equal("Updated title", updated.Title);
         Assert.True(updated.Done);
         await _eventBus.Received(1).PublishAsync(
-            Arg.Is<ChangeEvent>(e => e.Category == ChangeEventCategories.Todo
+            Arg.Is<ChangeEvent>(e => e != null
+                                     && e.Category == ChangeEventCategories.Todo
                                      && e.Action == ChangeEventActions.Updated
                                      && e.EntityId == "TEST-001"),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -219,7 +221,8 @@ public sealed class TodoServiceTests : IDisposable
         var deleted = await _sut.GetByIdAsync("TEST-001").ConfigureAwait(true);
         Assert.Null(deleted);
         await _eventBus.Received(1).PublishAsync(
-            Arg.Is<ChangeEvent>(e => e.Category == ChangeEventCategories.Todo
+            Arg.Is<ChangeEvent>(e => e != null
+                                     && e.Category == ChangeEventCategories.Todo
                                      && e.Action == ChangeEventActions.Deleted
                                      && e.EntityId == "TEST-001"),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);

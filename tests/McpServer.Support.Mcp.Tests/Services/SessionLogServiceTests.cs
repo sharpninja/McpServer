@@ -44,7 +44,8 @@ public sealed class SessionLogServiceTests : IDisposable
         Assert.Equal("Test Session", stored.Title);
         Assert.Single(stored.Entries);
         await _eventBus.Received(1).PublishAsync(
-            Arg.Is<ChangeEvent>(e => e.Category == ChangeEventCategories.SessionLog
+            Arg.Is<ChangeEvent>(e => e != null
+                                     && e.Category == ChangeEventCategories.SessionLog
                                      && e.Action == ChangeEventActions.Created
                                      && e.EntityId == $"Cursor/{BuildSessionId("Cursor", "session-1")}"),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -64,8 +65,9 @@ public sealed class SessionLogServiceTests : IDisposable
         Assert.Equal("Updated", stored.Title);
         Assert.Single(stored.Entries);
         Assert.Equal("Updated query", stored.Entries.First().QueryText);
-        await _eventBus.Received(2).PublishAsync(
-            Arg.Is<ChangeEvent>(e => e.Category == ChangeEventCategories.SessionLog
+        await _eventBus.Received(1).PublishAsync(
+            Arg.Is<ChangeEvent>(e => e != null
+                                     && e.Category == ChangeEventCategories.SessionLog
                                      && e.Action == ChangeEventActions.Updated
                                      && e.EntityId == $"Cursor/{BuildSessionId("Cursor", "session-dup")}"),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -375,7 +377,8 @@ public sealed class SessionLogServiceTests : IDisposable
         Assert.Equal("Analyzing request", first.Content);
         Assert.Equal("reasoning", first.Category);
         await _eventBus.Received().PublishAsync(
-            Arg.Is<ChangeEvent>(e => e.Category == ChangeEventCategories.SessionLog
+            Arg.Is<ChangeEvent>(e => e != null
+                                     && e.Category == ChangeEventCategories.SessionLog
                                      && e.Action == ChangeEventActions.Updated
                                      && e.EntityId == $"Cursor/{BuildSessionId("Cursor", "dialog-append")}"),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);

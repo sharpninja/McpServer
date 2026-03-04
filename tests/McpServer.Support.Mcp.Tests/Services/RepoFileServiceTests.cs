@@ -94,7 +94,8 @@ public sealed class RepoFileServiceTests : IDisposable
         Assert.True(File.Exists(Path.Combine(_tempDir, "test_output.txt")));
         _auditLog.Received(1).RecordWrite("test_output.txt", Arg.Any<DateTime>());
         await _eventBus.Received(1).PublishAsync(
-            Arg.Is<ChangeEvent>(e => e.Category == ChangeEventCategories.Repo
+            Arg.Is<ChangeEvent>(e => e != null
+                                     && e.Category == ChangeEventCategories.Repo
                                      && e.Action == ChangeEventActions.Created
                                      && e.EntityId == "test_output.txt"),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);

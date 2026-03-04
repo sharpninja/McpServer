@@ -42,7 +42,8 @@ public sealed class SqliteTodoServiceTests : IDisposable
 
         Assert.True(result.Success);
         await _eventBus.Received(1).PublishAsync(
-            Arg.Is<ChangeEvent>(e => e.Category == ChangeEventCategories.Todo
+            Arg.Is<ChangeEvent>(e => e != null
+                                     && e.Category == ChangeEventCategories.Todo
                                      && e.Action == ChangeEventActions.Created
                                      && e.EntityId == "SQL-TODO-001"),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -82,7 +83,8 @@ public sealed class SqliteTodoServiceTests : IDisposable
         Assert.True(updated.Done);
         Assert.Equal("low", updated.Priority);
         await _eventBus.Received(1).PublishAsync(
-            Arg.Is<ChangeEvent>(e => e.Category == ChangeEventCategories.Todo
+            Arg.Is<ChangeEvent>(e => e != null
+                                     && e.Category == ChangeEventCategories.Todo
                                      && e.Action == ChangeEventActions.Updated
                                      && e.EntityId == "SQL-TODO-002"),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -91,7 +93,8 @@ public sealed class SqliteTodoServiceTests : IDisposable
         Assert.True(deleted.Success);
         Assert.Null(await _sut.GetByIdAsync("SQL-TODO-002").ConfigureAwait(true));
         await _eventBus.Received(1).PublishAsync(
-            Arg.Is<ChangeEvent>(e => e.Category == ChangeEventCategories.Todo
+            Arg.Is<ChangeEvent>(e => e != null
+                                     && e.Category == ChangeEventCategories.Todo
                                      && e.Action == ChangeEventActions.Deleted
                                      && e.EntityId == "SQL-TODO-002"),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);

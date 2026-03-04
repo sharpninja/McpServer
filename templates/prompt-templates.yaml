@@ -274,7 +274,6 @@ templates:
 
       ## Session Start
 
-
       1. Read this marker file for connection details and API key.
 
       2. Bootstrap helper modules from the Tool Registry (see docs/context/module-bootstrap.md).
@@ -286,6 +285,7 @@ templates:
 
       ## Rules
 
+      0. NEVER write to TODO.yaml directly.
 
       1. Post a session log entry before any work on a user request. Update it with results when done.
 
