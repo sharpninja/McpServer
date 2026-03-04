@@ -315,6 +315,8 @@ builder.Services.AddCopilotClient();
 builder.Services.AddScoped<ISessionLogService, SessionLogService>();
 builder.Services.AddScoped<Fts5SearchService>();
 builder.Services.AddScoped<IContextSearchService, HybridSearchService>();
+builder.Services.AddScoped<IGraphRagBackendAdapter, InternalFallbackGraphRagBackendAdapter>();
+builder.Services.AddScoped<IGraphRagBackendAdapter, ExternalCommandGraphRagBackendAdapter>();
 builder.Services.AddScoped<IGraphRagService, GraphRagService>();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();

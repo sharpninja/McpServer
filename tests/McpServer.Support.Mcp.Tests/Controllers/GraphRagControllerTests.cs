@@ -45,4 +45,16 @@ public sealed class GraphRagControllerTests : IClassFixture<CustomWebApplication
         var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/graphrag/query", UriKind.Relative), new { }).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
+
+    [Fact]
+    public async Task Query_WithInvalidMaxChunks_ReturnsBadRequest()
+    {
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/graphrag/query", UriKind.Relative), new
+        {
+            query = "auth",
+            maxChunks = 0
+        }).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
 }

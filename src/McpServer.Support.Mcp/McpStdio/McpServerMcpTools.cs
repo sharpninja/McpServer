@@ -195,8 +195,18 @@ public sealed class FwhMcpTools
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
-        var status = await _graphRagService.IndexAsync(new GraphRagIndexRequest { Force = force }, cancellationToken).ConfigureAwait(false);
-        return JsonSerializer.Serialize(status);
+        var statusBefore = await _graphRagService.GetStatusAsync(cancellationToken).ConfigureAwait(false);
+        if (!force && string.Equals(statusBefore.State, "indexing", StringComparison.OrdinalIgnoreCase))
+            return JsonSerializer.Serialize(new { error = "GraphRAG index already in progress for this workspace.", code = "index_conflict" });
+        try
+        {
+            var status = await _graphRagService.IndexAsync(new GraphRagIndexRequest { Force = force }, cancellationToken).ConfigureAwait(false);
+            return JsonSerializer.Serialize(status);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return JsonSerializer.Serialize(new { error = ex.Message, code = "index_conflict" });
+        }
     }
 
     /// <summary>Run a GraphRAG query with citations and optional context chunks.</summary>
@@ -207,6 +217,10 @@ public sealed class FwhMcpTools
         [Description("Query mode (local/global/drift), optional")] string? mode = null,
         [Description("Maximum context chunks to return (default 20)")] int maxChunks = 20,
         [Description("Include context chunks in response (default true)")] bool includeContextChunks = true,
+        [Description("Maximum entities to include (default service setting)")] int? maxEntities = null,
+        [Description("Maximum relationships to include (default service setting)")] int? maxRelationships = null,
+        [Description("Community depth for graph summarization (default service setting)")] int? communityDepth = null,
+        [Description("Response token budget hint (optional)")] int? responseTokenBudget = null,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -215,7 +229,11 @@ public sealed class FwhMcpTools
             Query = query,
             Mode = mode,
             MaxChunks = maxChunks,
-            IncludeContextChunks = includeContextChunks
+            IncludeContextChunks = includeContextChunks,
+            MaxEntities = maxEntities,
+            MaxRelationships = maxRelationships,
+            CommunityDepth = communityDepth,
+            ResponseTokenBudget = responseTokenBudget,
         }, cancellationToken).ConfigureAwait(false);
         return JsonSerializer.Serialize(result);
     }

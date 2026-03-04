@@ -123,6 +123,8 @@ public static class McpStdioHost
         builder.Services.AddScoped<ISessionLogService, SessionLogService>();
         builder.Services.AddScoped<Fts5SearchService>();
         builder.Services.AddScoped<IContextSearchService, Fts5SearchService>();
+        builder.Services.AddScoped<IGraphRagBackendAdapter, InternalFallbackGraphRagBackendAdapter>();
+        builder.Services.AddScoped<IGraphRagBackendAdapter, ExternalCommandGraphRagBackendAdapter>();
         builder.Services.AddScoped<IGraphRagService, GraphRagService>();
         builder.Services.AddScoped<FwhMcpTools>();
 

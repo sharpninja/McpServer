@@ -45,7 +45,7 @@ public sealed class ContextController : ControllerBase
         var limit = Math.Clamp(request?.Limit ?? 20, 1, 100);
         var sourceType = request?.SourceType;
 
-        if (_graphRagOptions.Enabled && _graphRagOptions.EnhanceContextSearch)
+        if (_graphRagOptions.Enabled && _graphRagOptions.EnhanceContextSearch && string.IsNullOrWhiteSpace(sourceType))
         {
             var graphResult = await _graphRagService.QueryAsync(new GraphRagQueryRequest
             {
@@ -81,7 +81,21 @@ public sealed class ContextController : ControllerBase
             TokenCount = c.TokenCount,
             ChunkIndex = c.ChunkIndex
         }).ToList();
-        return Ok(new { query, chunks, sourceKeys = result.SourceKeys });
+        return Ok(new
+        {
+            query,
+            chunks,
+            sourceKeys = result.SourceKeys,
+            graphRag = new
+            {
+                mode = _graphRagOptions.DefaultQueryMode,
+                fallbackUsed = true,
+                backend = "context-search",
+                reason = _graphRagOptions.Enabled && _graphRagOptions.EnhanceContextSearch && !string.IsNullOrWhiteSpace(sourceType)
+                    ? "sourceType_filter_forces_legacy_path"
+                    : "graphrag_disabled_or_not_enabled_for_context"
+            }
+        });
     }
 
     /// <summary>TR-PLANNED-013: Rebuild the FTS5 search index.</summary>

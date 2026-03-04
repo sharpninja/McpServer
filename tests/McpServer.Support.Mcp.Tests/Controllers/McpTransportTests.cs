@@ -66,4 +66,108 @@ public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactor
         var response = await _client.GetAsync("/health").ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
+
+    [Fact]
+    public async Task McpTransport_GraphRagStatusTool_ReturnsResultPayload()
+    {
+        await InitializeMcpAsync().ConfigureAwait(true);
+
+        var call = new
+        {
+            jsonrpc = "2.0",
+            id = 2,
+            method = "tools/call",
+            @params = new
+            {
+                name = "graphrag_status",
+                arguments = new
+                {
+                    workspacePath = @"E:\github\McpServer"
+                }
+            }
+        };
+
+        var body = await SendMcpRequestAsync(call).ConfigureAwait(true);
+        Assert.Contains("\"result\"", body, StringComparison.Ordinal);
+        Assert.Contains("GraphRoot", body, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task McpTransport_GraphRagIndexAndQueryTools_ReturnExpectedFields()
+    {
+        await InitializeMcpAsync().ConfigureAwait(true);
+
+        var indexCall = new
+        {
+            jsonrpc = "2.0",
+            id = 3,
+            method = "tools/call",
+            @params = new
+            {
+                name = "graphrag_index",
+                arguments = new
+                {
+                    workspacePath = @"E:\github\McpServer",
+                    force = false
+                }
+            }
+        };
+        var indexBody = await SendMcpRequestAsync(indexCall).ConfigureAwait(true);
+        Assert.Contains("IsIndexed", indexBody, StringComparison.Ordinal);
+
+        var queryCall = new
+        {
+            jsonrpc = "2.0",
+            id = 4,
+            method = "tools/call",
+            @params = new
+            {
+                name = "graphrag_query",
+                arguments = new
+                {
+                    query = "auth",
+                    workspacePath = @"E:\github\McpServer",
+                    mode = "local",
+                    maxChunks = 5
+                }
+            }
+        };
+        var queryBody = await SendMcpRequestAsync(queryCall).ConfigureAwait(true);
+        Assert.Contains("fallbackUsed", queryBody, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("answer", queryBody, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private async Task InitializeMcpAsync()
+    {
+        var initRequest = new
+        {
+            jsonrpc = "2.0",
+            id = 1,
+            method = "initialize",
+            @params = new
+            {
+                protocolVersion = "2025-03-26",
+                capabilities = new { },
+                clientInfo = new { name = "test-client", version = "1.0.0" }
+            }
+        };
+
+        var body = await SendMcpRequestAsync(initRequest).ConfigureAwait(true);
+        Assert.Contains("serverInfo", body, StringComparison.Ordinal);
+    }
+
+    private async Task<string> SendMcpRequestAsync(object payload)
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Post, "/mcp-transport");
+        request.Content = new StringContent(
+            JsonSerializer.Serialize(payload),
+            Encoding.UTF8,
+            "application/json");
+        request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+        request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("text/event-stream"));
+
+        var response = await _client.SendAsync(request).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        return await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+    }
 }

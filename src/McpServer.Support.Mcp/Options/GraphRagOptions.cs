@@ -42,6 +42,16 @@ public sealed class GraphRagOptions
 
     /// <summary>Optional arguments template for the external backend command.</summary>
     public string? BackendArgs { get; set; }
+
+    /// <summary>
+    /// Maximum concurrent index jobs per workspace. Current implementation supports one active job.
+    /// </summary>
+    public int MaxConcurrentIndexJobsPerWorkspace { get; set; } = 1;
+
+    /// <summary>
+    /// Optional artifact version label written into workspace GraphRAG status for compatibility checks.
+    /// </summary>
+    public string ArtifactVersion { get; set; } = "v1";
 }
 
 #pragma warning restore CS1591

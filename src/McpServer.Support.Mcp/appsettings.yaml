@@ -33,6 +33,8 @@ Mcp:
     DefaultMaxChunks: 20
     IndexTimeoutSeconds: 600
     QueryTimeoutSeconds: 120
+    MaxConcurrentIndexJobsPerWorkspace: 1
+    ArtifactVersion: v1
   Instances:
     default:
       DataDirectory: .

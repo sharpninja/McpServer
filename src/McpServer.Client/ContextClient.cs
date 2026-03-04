@@ -67,6 +67,10 @@ public sealed class ContextClient : McpClientBase
         string? mode = null,
         int? maxChunks = null,
         bool includeContextChunks = true,
+        int? maxEntities = null,
+        int? maxRelationships = null,
+        int? communityDepth = null,
+        int? responseTokenBudget = null,
         CancellationToken cancellationToken = default)
     {
         var request = new GraphRagQueryRequest
@@ -74,7 +78,11 @@ public sealed class ContextClient : McpClientBase
             Query = query,
             Mode = mode,
             MaxChunks = maxChunks,
-            IncludeContextChunks = includeContextChunks
+            IncludeContextChunks = includeContextChunks,
+            MaxEntities = maxEntities,
+            MaxRelationships = maxRelationships,
+            CommunityDepth = communityDepth,
+            ResponseTokenBudget = responseTokenBudget
         };
         return await PostAsync<GraphRagQueryResult>("mcpserver/graphrag/query", request, cancellationToken).ConfigureAwait(false);
     }
