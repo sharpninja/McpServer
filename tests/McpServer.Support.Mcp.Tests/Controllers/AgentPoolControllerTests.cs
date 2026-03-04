@@ -98,6 +98,42 @@ public sealed class AgentPoolControllerTests
         Assert.Contains("\"eventType\":\"completed\"", payload, StringComparison.Ordinal);
     }
 
+    [Fact]
+    public async Task EnqueueOneShotAsync_UsesWorkspaceFromContext()
+    {
+        var service = Substitute.For<IAgentPoolService>();
+        service.EnqueueOneShotAsync(Arg.Any<AgentPoolOneShotRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new AgentPoolEnqueueResult { Success = true, JobId = "job-1" }));
+
+        var controller = new AgentPoolController(service, CreateWorkspaceContext());
+        var request = new AgentPoolOneShotRequest
+        {
+            Context = AgentPoolOneShotContext.AdHoc,
+            PromptText = "Hello",
+            WorkspacePath = @"E:\different-workspace",
+        };
+
+        _ = await controller.EnqueueOneShotAsync(request, CancellationToken.None).ConfigureAwait(true);
+
+        await service.Received(1).EnqueueOneShotAsync(
+            Arg.Is<AgentPoolOneShotRequest>(r => r != null && r.WorkspacePath == @"E:\test-workspace"),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    [Fact]
+    public async Task GetAgentsAsync_IgnoresWorkspaceQueryAndUsesContext()
+    {
+        var service = Substitute.For<IAgentPoolService>();
+        service.GetAgentsAsync(@"E:\test-workspace", Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<IReadOnlyList<AgentPoolAgentStatusDto>>([]));
+
+        var controller = new AgentPoolController(service, CreateWorkspaceContext());
+        _ = await controller.GetAgentsAsync(@"E:\different-workspace", CancellationToken.None).ConfigureAwait(true);
+
+        await service.Received(1).GetAgentsAsync(@"E:\test-workspace", Arg.Any<CancellationToken>()).ConfigureAwait(true);
+        await service.DidNotReceive().GetAgentsAsync(@"E:\different-workspace", Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
     private static async IAsyncEnumerable<AgentPoolNotificationEventDto> NotificationStream()
     {
         yield return new AgentPoolNotificationEventDto

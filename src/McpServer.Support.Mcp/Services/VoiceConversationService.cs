@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -72,11 +72,14 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         var requestedModel = string.IsNullOrWhiteSpace(request?.AgentModel) ? opts.CopilotModel : request.AgentModel.Trim();
 
         var requestedAgentName = request?.AgentName;
+        var requestedWorkspacePath = request?.WorkspacePath;
         if (!string.IsNullOrWhiteSpace(requestedAgentName))
         {
             foreach (var existing in _sessions.Values)
             {
                 if (!string.Equals(existing.AgentName, requestedAgentName, StringComparison.OrdinalIgnoreCase))
+                    continue;
+                if (!string.Equals(existing.WorkspacePath, requestedWorkspacePath, StringComparison.OrdinalIgnoreCase))
                     continue;
                 if (existing.IsTurnActive)
                     continue;

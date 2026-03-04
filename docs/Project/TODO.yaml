@@ -427,21 +427,21 @@ mvp-app:
       done: true
     - task: 'Phase 5.5 - Extended service event publishing tests: Add at least one PublishAsync verification test for each of: ToolRegistryService (create publishes tool_registry/created), WorkspaceService (create publishes workspace/created), AgentService (upsert new publishes agent/created, upsert existing publishes agent/updated), RepoFileService (write new file publishes repo/created). NSubstitute mock pattern.'
       done: true
-    - task: "Phase 6.1 - Create FR-MCP-062 in Functional-Requirements.md for workspace change notifications with SSE delivery at GET /mcpserver/events."
+    - task: Phase 6.1 - Create FR-MCP-062 in Functional-Requirements.md for workspace change notifications with SSE delivery at GET /mcpserver/events.
       done: true
-    - task: 'Phase 6.2 - Create TR-MCP-EVT-001..005 in Technical-Requirements.md covering bus architecture, service-layer publishing, SSE delivery, event contract, and category coverage.'
+    - task: Phase 6.2 - Create TR-MCP-EVT-001..005 in Technical-Requirements.md covering bus architecture, service-layer publishing, SSE delivery, event contract, and category coverage.
       done: true
-    - task: 'Phase 6.3 - Create TEST-MCP-075..080 in Testing-Requirements.md for bus behavior, service publish verification, extended service verification, SSE integration, and category filtering.'
+    - task: Phase 6.3 - Create TEST-MCP-075..080 in Testing-Requirements.md for bus behavior, service publish verification, extended service verification, SSE integration, and category filtering.
       done: true
     - task: 'Phase 6.4 - Update TR-per-FR-Mapping.md: Add row FR-MCP-062 → TR-MCP-EVT-001..005.'
       done: true
-    - task: "Phase 6.5 - Update Requirements-Matrix.md with FR-MCP-062, TR-MCP-EVT-001..005, and TEST-MCP-075..080 statuses."
+    - task: Phase 6.5 - Update Requirements-Matrix.md with FR-MCP-062, TR-MCP-EVT-001..005, and TEST-MCP-075..080 statuses.
       done: true
     - task: 'Phase 7 - Build verification: dotnet build src\McpServer.Support.Mcp -c Debug must pass with zero warnings (TreatWarningsAsErrors). All new public types must have XML doc comments (CS1591). Verify no missing ConfigureAwait(false) on async calls.'
       done: true
     - task: 'Phase 8 - Test execution: dotnet test tests\McpServer.Support.Mcp.Tests -c Debug must pass all existing tests plus all new notification tests. Zero regressions. Run with --filter to verify each new test class independently.'
       done: true
-    - task: 'Phase 9 - SSE smoke validation covered by EventStreamIntegrationTests (stream content-type, todo category filter, and emitted event payload assertions).'
+    - task: Phase 9 - SSE smoke validation covered by EventStreamIntegrationTests (stream content-type, todo category filter, and emitted event payload assertions).
       done: true
   - id: MT-001
     title: Eliminate Multi-Instance Architecture - Single-Port Multi-Tenant
@@ -515,69 +515,172 @@ mvp-app:
     depends-on:
     - PLAN-NAMINGCONVENTIONS-001
   - id: MCP-GRAPHRAG-001
-    title: '[NEED PLAN] Integrate GraphRAG'
+    title: '[AUDITED+PLANNED] Integrate GraphRAG (from scaffold to production)'
+    estimate: 4-6 weeks
+    note: AUDITED on 2026-03-04. Existing GraphRAG implementation is partially complete (framework + integration points present) and now has a detailed execution plan with explicit completed-vs-remaining tasks.
     done: false
     description:
-    - Integrate GraphRAG into the search/context pipeline to enable graph-based retrieval-augmented generation. Evaluate Microsoft GraphRAG or similar frameworks for building knowledge graphs from ingested workspace content, and combine with the existing hybrid search (FTS5 + HNSW vector) for richer, relationship-aware context retrieval.
-    - Make GraphRAG the enhanced backend for knowledge retrieval in MCP Server, while exposing GraphRAG capabilities as native MCP tools. This upgrades existing context search and adds advanced graph-based querying (local/global/drift modes), citations, and on-demand indexing - all while preserving per-workspace isolation and existing features (todo, repo, gh, sync, sessionlog, etc.).
-    - 'Two complementary approaches (use both for maximum value):'
-    - 1. **Tight integration** - Replace/enhance the existing `/mcp/context/search` logic with GraphRAG-powered retrieval.
-    - 2. **Loose integration** - Expose dedicated MCP tools for explicit control (index, query, status).
-    - '- Treat GraphRAG as a library/dependency (via project references or future NuGet).'
-    - '- Ensure per-workspace isolation: each MCP instance/workspace gets its own isolated GraphRAG folder structure (typically containing input/, output/, cache/, and settings.yaml).'
-    - '- Add configuration section for GraphRAG (enabled flag, relative path for graphrag folder, default query method, concurrency limits for indexing).'
-    - '- On workspace creation or first use, auto-initialize the GraphRAG folder if missing (copy default settings.yaml with placeholders for LLM/embedding keys, create subfolders).'
-    - 1. **Dedicated Service Layer**
-    - Create a single service responsible for all GraphRAG interactions.
-    - 'Responsibilities:'
-    - '- Load per-workspace config.'
-    - '- Trigger indexing (wrap CLI or use programmatic API if available in your port).'
-    - '- Execute queries (select method: local/global/drift/basic, control token limits).'
-    - '- Return structured results (answer + context/entities/relationships for citations).'
-    - '- Check indexing status (e.g., existence and freshness of output artifacts).'
-    - Handle errors gracefully and log meaningfully.
-    - 2. **HTTP Endpoints (optional but recommended for debugging & typed client)**
-    - Add controller endpoints under a consistent prefix (e.g., `/mcp/graphrag/…`).
-    - 'Typical endpoints:'
-    - '- POST index (trigger indexing for a workspace).'
-    - '- POST query (method, query text, token limit → returns answer + context).'
-    - '- GET status (workspace indexing state and last run time).'
-    - Reuse the same service logic.
-    - 3. **Native MCP Tool Exposure**
-    - 'In the part of the codebase that handles tool discovery and execution (likely the STDIO handler or tool registry logic):'
-    - '- Register new tool definitions with: name, description, input schema (JSON Schema), and execution handler.'
-    - '- Example tools to expose:'
-    - '- `graphrag_query`: advanced knowledge-graph search with citations.'
-    - '- `graphrag_index`: trigger or re-trigger indexing.'
-    - '- `graphrag_status`: check if graph is indexed and ready.'
-    - '- In the execution handler: parse arguments, call the service, format results cleanly (include citations/provenance).'
-    - Mirror the pattern already used for existing tools (todo, context search, etc.).
-    - 4. **Enhance Existing Context Search**
-    - Locate where the current `/mcp/context` or context search logic lives.
-    - Replace or chain it with a call to the GraphRAG service (prefer local mode for speed + grounding).
-    - Fall back to old behavior if GraphRAG is disabled or not indexed.
-    - Optionally return richer context (entities, communities) to improve LLM grounding.
-    - 5. **Typed Client Updates**
-    - 'Extend the existing MCP client library (SharpNinja.McpServer.Client NuGet):'
-    - '- Add methods matching the new endpoints/tools (e.g., IndexGraphRagAsync, QueryGraphRagAsync, GetGraphRagStatusAsync).'
-    - '- Publish updated package version.'
-    - 6. **Automation & Scripts**
-    - '- Update startup script(s) to initialize GraphRAG folders for new instances.'
-    - '- Add smoke tests in multi-instance test scripts (trigger index → query → verify citations).'
-    - '- Document new tools and configuration in main README/docs.'
-    - '- **Isolation** - Never share GraphRAG state across workspaces; use workspace-specific root paths.'
-    - '- **Cost & Safety** - Indexing is expensive → expose status tool so LLM can check before calling index.'
-    - Consider concurrency limits (one index job at a time per instance).
-    - '- **Citations & Traceability** - Always return full context (entities/relationships/communities) so LLM can cite sources.'
-    - '- **Fallback & Graceful Degradation** - If GraphRAG disabled or indexing fails → revert to basic context search.'
-    - '- **Security** - Reuse existing API key / auth model; add folder-level permission checks if needed.'
-    - '- **Scalability Notes** - LanceDB (default vector store) handles large corpora well; ignore output/ in git/templates.'
+    - 'Audit result: GraphRAG scaffolding is already implemented across server, MCP tools, and client SDK, but runtime behavior is currently an internal fallback adapter rather than full graph construction/query execution.'
+    - 'Implemented today (verified in code): GraphRag options + DI registration, GraphRag service contract/implementation, GraphRag REST controller, MCP tools (graphrag_status/index/query), context-search integration hook, client methods/models, and baseline tests.'
+    - 'Primary gaps: indexing does not build a real graph, query modes (local/global/drift) are not semantically differentiated, backend command options are not executed, no per-workspace index job locking, and limited observability/contracts around readiness/errors/citations quality.'
+    - 'Goal for this TODO: evolve from fallback simulation to production-grade GraphRAG pipeline with deterministic workspace isolation, robust indexing lifecycle, explicit query-mode behavior, and strong tests + operational tooling.'
+    remaining: Scaffold is in place; execute Phases 1-10 to replace fallback-only behavior with real graph indexing/query orchestration and production-grade reliability.
+    technical-details:
+    - 'Code audited for current state: src/McpServer.Support.Mcp/Options/GraphRagOptions.cs, src/McpServer.Support.Mcp/Services/IGraphRagService.cs, src/McpServer.Support.Mcp/Services/GraphRagService.cs, src/McpServer.Support.Mcp/Controllers/GraphRagController.cs, src/McpServer.Support.Mcp/Controllers/ContextController.cs, src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs.'
+    - 'Client and tests audited: src/McpServer.Client/ContextClient.cs, src/McpServer.Client/Models/ContextModels.cs, tests/McpServer.Support.Mcp.Tests/Controllers/GraphRagControllerTests.cs, tests/McpServer.Client.Tests/ContextClientTests.cs.'
+    - 'Current GraphRagService behavior: IndexAsync marks status as indexed without constructing graph artifacts; QueryAsync always calls IContextSearchService and synthesizes answer/citations; backend command fields are present in options but not executed.'
+    - 'Config defaults currently disable GraphRAG by default and enable context-search enhancement when GraphRAG is enabled: src/McpServer.Support.Mcp/appsettings.json and src/McpServer.Support.Mcp/appsettings.yaml.'
+    - 'Key architectural constraint: all GraphRAG filesystem state must remain workspace-local and never leak across workspace boundaries, including status files, intermediate artifacts, caches, and index outputs.'
+    - 'Reference planning document: docs/Project/MCP-GRAPHRAG-001-Implementation-Plan.md (needs to stay synchronized with this TODO as execution proceeds).'
+    implementation-tasks:
+    - task: Phase 0 / Audit / Task 01 - Confirm GraphRAG option binding and DI registration in Program + McpStdioHost; verify no missing service registrations for IGraphRagService across HTTP and STDIO hosts.
+      done: true
+    - task: Phase 0 / Audit / Task 02 - Confirm GraphRAG endpoint surface (status/index/query) and validate request/response DTO alignment between server and client models.
+      done: true
+    - task: Phase 0 / Audit / Task 03 - Confirm MCP tool exposure for graphrag_status/graphrag_index/graphrag_query with workspace override path handling.
+      done: true
+    - task: Phase 0 / Audit / Task 04 - Confirm context search integration hook in ContextController and document fallback path behavior.
+      done: true
+    - task: Phase 0 / Audit / Task 05 - Capture implementation gap list (real indexing, query mode semantics, external backend execution, locking, telemetry depth).
+      done: true
+    - task: 'Phase 1 / Contracts / Task 06 - Define explicit GraphRAG backend contract in service layer: initialize, index, query, status, cancellation, timeout, and error taxonomy.'
+      done: false
+    - task: Phase 1 / Contracts / Task 07 - Introduce internal backend abstraction (e.g., IGraphRagBackendAdapter) to separate orchestration concerns from backend-specific execution.
+      done: false
+    - task: Phase 1 / Contracts / Task 08 - Extend status model with richer lifecycle fields (state enum, activeJobId, lastSuccessAt, lastFailureAt, failureCode, failureMessage, artifactVersion).
+      done: false
+    - task: Phase 1 / Contracts / Task 09 - Normalize query contract to include mode-specific controls (communityDepth, maxEntities, maxRelationships, responseTokenBudget).
+      done: false
+    - task: Phase 1 / Contracts / Task 10 - Add server-side validation rules for query/index payloads with deterministic HTTP 400 responses and stable error codes.
+      done: false
+    - task: Phase 2 / Workspace Filesystem / Task 11 - Implement deterministic workspace-local GraphRAG root resolver with guardrails against cross-workspace absolute path collisions.
+      done: false
+    - task: Phase 2 / Workspace Filesystem / Task 12 - Bootstrap required folder tree (input/output/cache/logs/config) and generate default settings template when missing.
+      done: false
+    - task: Phase 2 / Workspace Filesystem / Task 13 - Implement atomic status persistence (temp-file + replace) to avoid torn writes under concurrent status reads.
+      done: false
+    - task: Phase 2 / Workspace Filesystem / Task 14 - Add integrity check routine validating critical artifact presence/version before reporting IsIndexed=true.
+      done: false
+    - task: Phase 2 / Workspace Filesystem / Task 15 - Add cleanup policy for obsolete temporary artifacts and stale partial-index remnants.
+      done: false
+    - task: Phase 3 / Index Orchestration / Task 16 - Implement real index pipeline orchestration (prepare corpus input, invoke backend build, validate outputs, update status lifecycle).
+      done: false
+    - task: Phase 3 / Index Orchestration / Task 17 - Add per-workspace index mutex/lease to enforce single active index job; return clear conflict response for concurrent starts.
+      done: false
+    - task: Phase 3 / Index Orchestration / Task 18 - Implement force reindex semantics (clear selected artifacts safely, preserve immutable config, rebuild cleanly).
+      done: false
+    - task: Phase 3 / Index Orchestration / Task 19 - Implement index timeout and cancellation propagation through backend invocation stack.
+      done: false
+    - task: Phase 3 / Index Orchestration / Task 20 - Persist rich index execution diagnostics (duration, input counts, warnings, error stage, backend invocation metadata).
+      done: false
+    - task: Phase 4 / Query Execution / Task 21 - Implement mode-aware query execution paths (local/global/drift/basic) with explicit backend selection and runtime branching.
+      done: false
+    - task: 'Phase 4 / Query Execution / Task 22 - Map backend query outputs to normalized response shape: answer, citations, chunks, sourceKeys, entities, relationships, communities.'
+      done: false
+    - task: Phase 4 / Query Execution / Task 23 - Improve citation stitching to ensure every answer claim has traceable provenance and stable source identifiers.
+      done: false
+    - task: Phase 4 / Query Execution / Task 24 - Implement degraded-mode fallback policy matrix (disabled, not indexed, backend timeout, backend error) with reason codes.
+      done: false
+    - task: Phase 4 / Query Execution / Task 25 - Add query timeout controls and cancellation behavior per mode with deterministic fallback outcomes.
+      done: false
+    - task: Phase 5 / External Backend / Task 26 - Implement safe external command execution using configured BackendCommand/BackendArgs with strict argument templating and escaping.
+      done: false
+    - task: Phase 5 / External Backend / Task 27 - Capture backend stdout/stderr, parse structured outputs where available, and persist diagnostics for supportability.
+      done: false
+    - task: Phase 5 / External Backend / Task 28 - Add backend capability probing on startup/status call to report runtime readiness before index/query attempts.
+      done: false
+    - task: Phase 5 / External Backend / Task 29 - Introduce backend selection strategy (internal-fallback vs external-command) with explicit decision logging.
+      done: false
+    - task: Phase 5 / External Backend / Task 30 - Add secure handling guidance for backend secrets/config (do not persist secrets to status files or logs).
+      done: false
+    - task: Phase 6 / API and MCP Tooling / Task 31 - Expand GraphRagController payload contracts and OpenAPI metadata for new status/query fields and error codes.
+      done: false
+    - task: Phase 6 / API and MCP Tooling / Task 32 - Extend MCP graphrag tools to expose advanced query parameters while preserving backwards-compatible defaults.
+      done: false
+    - task: Phase 6 / API and MCP Tooling / Task 33 - Ensure all GraphRAG tool responses include explicit backend/fallback metadata for agent decision-making.
+      done: false
+    - task: Phase 6 / API and MCP Tooling / Task 34 - Add guardrail in tools to prevent expensive index calls when status indicates active indexing unless force override is explicit.
+      done: false
+    - task: Phase 6 / API and MCP Tooling / Task 35 - Add typed client model updates and ContextClient methods for any new GraphRAG fields/options.
+      done: false
+    - task: Phase 7 / Context Integration / Task 36 - Refine ContextController graph integration to preserve sourceType semantics and include deterministic graphRag metadata envelope.
+      done: false
+    - task: Phase 7 / Context Integration / Task 37 - Ensure context search response compatibility for existing consumers while augmenting with graph details only when enabled.
+      done: false
+    - task: Phase 7 / Context Integration / Task 38 - Add feature toggle matrix tests for Enabled/EnhanceContextSearch combinations and verify no regressions in baseline search.
+      done: false
+    - task: Phase 8 / Testing / Task 39 - Add GraphRagService unit tests for path resolution, directory bootstrap, status persistence, lock behavior, timeout/cancel paths, and fallback matrix.
+      done: false
+    - task: Phase 8 / Testing / Task 40 - Expand GraphRagController integration tests to cover happy-path query, invalid payloads, backend failures, and conflict responses.
+      done: false
+    - task: Phase 8 / Testing / Task 41 - Expand MCP tool tests for graphrag_status/index/query including workspace override correctness and schema validation.
+      done: false
+    - task: Phase 8 / Testing / Task 42 - Expand client tests for new GraphRAG fields/options and serialization compatibility.
+      done: false
+    - task: Phase 8 / Testing / Task 43 - Add multi-workspace isolation tests proving graph artifacts/status remain isolated across workspace boundaries.
+      done: false
+    - task: Phase 9 / Operations / Task 44 - Add scripts for GraphRAG bootstrap/index smoke validation in scripts/ with workspace parameterization and CI-friendly exit codes.
+      done: false
+    - task: Phase 9 / Operations / Task 45 - Document GraphRAG enablement, indexing lifecycle, query modes, troubleshooting, and rollout guidance in README/docs.
+      done: false
+    - task: Phase 9 / Operations / Task 46 - Add observability dashboards/queries guidance (index duration, query latency, fallback rate, failure reasons).
+      done: false
+    - task: Phase 9 / Operations / Task 47 - Define release checklist and staged rollout plan (disabled by default, pilot workspace, measured enablement).
+      done: false
+    - task: Phase 10 / Exit Criteria / Task 48 - Run full build + targeted tests, capture evidence in doneSummary, and only then mark MCP-GRAPHRAG-001 complete.
+      done: false
   - id: MCP-AGENTPOOL-SEED-001
-    title: '[NEED PLAN] Seed Agent Pool with running instances per workspace per agent definition and route sessions correctly'
-    note: 'Detailed implementation plan created. 7 phases: (1) Composite key refactor, (2) Startup seed IHostedService, (3) Workspace-aware job routing, (4) Voice session isolation, (5) API/DTO updates, (6) UI updates, (7) Tests. See session plan.md for full details.'
-    done: false
+    title: '[DONE] Seed Agent Pool per workspace/definition and enforce workspace-correct session routing'
+    note: 'Completion audit + remediation executed on 2026-03-04. Existing 7-phase implementation was largely complete; final closure addressed remaining isolation gaps (voice reuse scope, pooled device-id collisions, controller payload workspace override) and added targeted coverage for startup seeding and workspace-forced routing.'
+    done: true
     description:
     - On startup, the Agent Pool should automatically seed a running agent instance for every (workspace × agent definition) combination. When an SSE or MCP session connects, route it to the agent instance that is bound to the correct workspace, ensuring workspace isolation. This prevents agents from operating against the wrong workspace context and eliminates the need for manual agent provisioning.
+    technical-details:
+    - 'Audit baseline: verified existing composite runtime key in AgentPoolService (`AgentInstanceKey(agentName, workspacePath)`), startup host registration for AgentPoolSeedService in Program.cs, workspace-aware queue dispatch, and workspace-aware DTOs/controller wiring.'
+    - 'Gap A (voice isolation): VoiceConversationService.CreateSessionAsync reused idle sessions by agent name only; this allowed cross-workspace reuse for same agent definition.'
+    - 'Gap B (device identity collision): AgentPoolService.StartAgentAsync generated device IDs from workspace folder name only (`Path.GetFileName(workspace)`), allowing collisions across distinct workspaces with identical folder names.'
+    - 'Gap C (request override): AgentPoolController accepted caller-provided workspacePath in one-shot enqueue/resolve payloads, enabling workspace override instead of strict context-bound routing.'
+    - 'Remediation A: VoiceConversationService now reuses pooled sessions only when both agent name and workspace path match (case-insensitive), preserving same-workspace reuse while preventing cross-workspace bleed-through.'
+    - 'Remediation B: AgentPoolService now builds pooled device IDs using a deterministic SHA-256 hash of normalized workspace path (`agent-pool-{agent}@{workspaceHash}`), eliminating cross-workspace device collisions.'
+    - 'Remediation C: AgentPoolController now enforces workspace from WorkspaceContext for queue/resolve operations and agent runtime listing (ignores query/payload workspace overrides).'
+    - 'Validation scope includes unit coverage additions for startup seed behavior and controller workspace enforcement, plus updated voice-session reuse tests to prove workspace isolation semantics.'
+    implementation-tasks:
+    - task: 'Phase 1 Audit - Verify startup seeding, composite keying, workspace routing, API surface, and existing tests against MCP-AGENTPOOL-SEED-001 acceptance criteria.'
+      done: true
+    - task: 'Phase 1.1 Audit Evidence - Confirm AgentPoolSeedService is registered as hosted service and executes workspace×definition seeding flow.'
+      done: true
+    - task: 'Phase 1.2 Audit Evidence - Confirm AgentPoolService runtime instances are keyed by (agentName, workspacePath) and dispatch resolves by workspace.'
+      done: true
+    - task: 'Phase 1.3 Audit Gap Analysis - Identify remaining isolation risks not fully covered by current implementation/tests.'
+      done: true
+    - task: 'Phase 2 Remediation - Fix voice-session reuse isolation so idle pooled sessions cannot be reused across workspaces.'
+      done: true
+    - task: 'Phase 2.1 - Update VoiceConversationService.CreateSessionAsync matching predicate to include workspacePath in reuse criteria.'
+      done: true
+    - task: 'Phase 3 Remediation - Eliminate pooled device-id collisions across workspaces with same folder name.'
+      done: true
+    - task: 'Phase 3.1 - Introduce deterministic workspace-hash device-id builder in AgentPoolService and use it for pooled voice session creation.'
+      done: true
+    - task: 'Phase 4 Remediation - Enforce workspace-bound request routing in AgentPoolController.'
+      done: true
+    - task: 'Phase 4.1 - Force one-shot enqueue/resolve requests to active WorkspaceContext.WorkspacePath regardless of payload override.'
+      done: true
+    - task: 'Phase 4.2 - Force runtime agent listing to active workspace context (ignore workspace query override).'
+      done: true
+    - task: 'Phase 5 Tests - Expand unit tests for newly enforced workspace isolation semantics.'
+      done: true
+    - task: 'Phase 5.1 - Update VoiceConversationServiceTests: same agent+workspace reuses session; same agent+different workspace creates separate sessions.'
+      done: true
+    - task: 'Phase 5.2 - Add AgentPoolSeedServiceTests validating only enabled workspaces are seeded and disabled pool short-circuits seeding.'
+      done: true
+    - task: 'Phase 5.3 - Add AgentPoolControllerTests validating enqueue payload workspace override is ignored and context workspace is enforced.'
+      done: true
+    - task: 'Phase 5.4 - Add AgentPoolControllerTests validating runtime-list endpoint uses context workspace even when query provides another workspace.'
+      done: true
+    - task: 'Phase 6 Verification - Run builds/tests and resolve regressions introduced by MCP-AGENTPOOL-SEED-001 closure remediations.'
+      done: true
+    doneSummary: Completed startup-seed and workspace-routing closure for MCP-AGENTPOOL-SEED-001 by remediating remaining isolation gaps (voice reuse scope, pooled device-id collisions, and controller workspace override vectors) and adding targeted tests proving seeding and workspace enforcement behavior.
+    remaining: None.
   - id: web-ui-oidc-integration
     title: Web UI needs OIDC integration
     done: false
