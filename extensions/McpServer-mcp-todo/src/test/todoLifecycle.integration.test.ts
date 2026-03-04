@@ -5,7 +5,7 @@
  * These tests run against the live MCP server (http://localhost:7147).
  * They exercise the same code paths used by the extension:
  *   - todoMarkdown.ts: todoToMarkdown / markdownToUpdateBody
- *   - HTTP calls to GET/POST/PUT/DELETE /mcp/todo
+ *   - HTTP calls to GET/POST/PUT/DELETE /mcpserver/todo
  *
  * Run: cd extensions/fwh-mcp-todo && npm run compile && npm test
  * Requires: MCP server running on http://localhost:7147
@@ -76,12 +76,12 @@ async function createTodo(item: {
   priority: string;
   [key: string]: unknown;
 }): Promise<void> {
-  const res = await httpRequest('POST', '/mcp/todo', item);
+  const res = await httpRequest('POST', '/mcpserver/todo', item);
   assert.equal(res.status, 201, `Create ${item.id} failed: ${res.body}`);
 }
 
 async function getTodo(id: string): Promise<TodoFlatItem> {
-  const res = await httpRequest('GET', `/mcp/todo/${encodeURIComponent(id)}`);
+  const res = await httpRequest('GET', `/mcpserver/todo/${encodeURIComponent(id)}`);
   assert.equal(res.status, 200, `GET ${id} failed: ${res.body}`);
   const raw = JSON.parse(res.body) as Record<string, unknown>;
   // Normalize camelCase (API returns PascalCase)
@@ -138,7 +138,7 @@ async function updateTodo(
     FunctionalRequirements: body.functionalRequirements,
     TechnicalRequirements: body.technicalRequirements,
   };
-  const res = await httpRequest('PUT', `/mcp/todo/${encodeURIComponent(id)}`, payload);
+  const res = await httpRequest('PUT', `/mcpserver/todo/${encodeURIComponent(id)}`, payload);
   if (res.status >= 200 && res.status < 300) {
     return { success: true };
   }
@@ -153,14 +153,14 @@ async function updateTodo(
 }
 
 async function deleteTodo(id: string): Promise<void> {
-  await httpRequest('DELETE', `/mcp/todo/${encodeURIComponent(id)}`);
+  await httpRequest('DELETE', `/mcpserver/todo/${encodeURIComponent(id)}`);
 }
 
 async function listTodos(
   params?: Record<string, string>
 ): Promise<{ items: TodoFlatItem[]; totalCount: number }> {
   const qs = params ? '?' + new URLSearchParams(params).toString() : '';
-  const res = await httpRequest('GET', `/mcp/todo${qs}`);
+  const res = await httpRequest('GET', `/mcpserver/todo${qs}`);
   assert.equal(res.status, 200, `List failed: ${res.body}`);
   const data = JSON.parse(res.body) as {
     items?: TodoFlatItem[];
@@ -557,14 +557,14 @@ describe('Todo Lifecycle Integration Tests (VSCode extension paths)', () => {
       });
 
       // Verify exists
-      const res1 = await httpRequest('GET', `/mcp/todo/${encodeURIComponent(id)}`);
+      const res1 = await httpRequest('GET', `/mcpserver/todo/${encodeURIComponent(id)}`);
       assert.equal(res1.status, 200);
 
       // Delete
       await deleteTodo(id);
 
       // Verify gone
-      const res2 = await httpRequest('GET', `/mcp/todo/${encodeURIComponent(id)}`);
+      const res2 = await httpRequest('GET', `/mcpserver/todo/${encodeURIComponent(id)}`);
       assert.equal(res2.status, 404);
       // Don't add to createdIds since we already deleted
     });

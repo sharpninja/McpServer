@@ -53,7 +53,7 @@ export class TodoContentProvider implements vscode.TextDocumentContentProvider {
 }
 
 /**
- * Handles Save: writes go to MCP via PUT /mcp/todo/{id}.
+ * Handles Save: writes go to MCP via PUT /mcpserver/todo/{id}.
  */
 export class TodoFileSystemProvider implements vscode.FileSystemProvider {
   private _emitter = new vscode.EventEmitter<vscode.FileChangeEvent[]>();

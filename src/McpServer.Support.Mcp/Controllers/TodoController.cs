@@ -244,13 +244,14 @@ public sealed class TodoController : ControllerBase
     /// instructions to create a detailed implementation plan. Output is streamed line by line.
     /// </summary>
     /// <param name="id">The TODO item id.</param>
+    /// <param name="prompt">Optional prompt or additional instructions from the client (e.g. extension); appended to the plan template when provided.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     [HttpGet("{id}/prompt/plan")]
     [Produces("text/event-stream")]
-    public async Task StreamPlanPromptAsync(string id, CancellationToken cancellationToken)
+    public async Task StreamPlanPromptAsync(string id, [FromQuery] string? prompt, CancellationToken cancellationToken)
     {
         if (!await EnsureTodoExistsAsync(id, cancellationToken).ConfigureAwait(false)) return;
-        await StreamCopilotResponseAsync(_todoPromptService.StreamPlanAsync(id, cancellationToken), cancellationToken).ConfigureAwait(false);
+        await StreamCopilotResponseAsync(_todoPromptService.StreamPlanAsync(id, prompt, cancellationToken), cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>

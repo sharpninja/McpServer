@@ -1,14 +1,19 @@
 #Requires -Version 5.1
-# Install fwh-mcp-todo-0.1.0.vsix into VS Code and Cursor.
+# Install fwh-mcp-todo *.vsix from extensions\McpServer-mcp-todo into VS Code and Cursor.
 $ErrorActionPreference = 'Stop'
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $repoRoot = Split-Path -Parent $scriptDir
-$vsixPath = Join-Path $repoRoot "extensions\fwh-mcp-todo\fwh-mcp-todo-0.1.0.vsix"
+$extDir = Join-Path $repoRoot "extensions\McpServer-mcp-todo"
+$vsixPath = Get-ChildItem -Path $extDir -Filter "fwh-mcp-todo-*.vsix" -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1 -ExpandProperty FullName
 
-if (-not (Test-Path $vsixPath)) {
-    Write-Error "VSIX not found: $vsixPath. Run: cd extensions\fwh-mcp-todo; npm run compile; npx @vscode/vsce package"
+if (-not $vsixPath -or -not (Test-Path $vsixPath)) {
+    Write-Error "VSIX not found in $extDir. Run: cd extensions\McpServer-mcp-todo; npm run compile; npx @vscode/vsce package"
     exit 1
 }
+
+# Extract target dir name: fwh-mcp-todo-0.8.1.vsix -> FunWasHad.fwh-mcp-todo-0.8.1
+$vsixName = [System.IO.Path]::GetFileNameWithoutExtension($vsixPath)
+$extractTarget = "FunWasHad.$vsixName"
 
 # Uninstall existing, then remove leftover dirs so --install-extension does not hit ScanningExtension errors
 $codeCmd = Get-Command code -ErrorAction SilentlyContinue
@@ -16,12 +21,15 @@ $cursorCmd = Get-Command cursor -ErrorAction SilentlyContinue
 if ($codeCmd) { & code --uninstall-extension FunWasHad.fwh-mcp-todo 2>$null; Start-Sleep -Milliseconds 800 }
 if ($cursorCmd) { & cursor --uninstall-extension FunWasHad.fwh-mcp-todo 2>$null; Start-Sleep -Milliseconds 800 }
 
+# Remove any existing fwh-mcp-todo extension dirs (any version)
+$vscodeExtBase = Join-Path $env:USERPROFILE ".vscode\extensions"
+$cursorExtBase = Join-Path $env:USERPROFILE ".cursor\extensions"
 $extDirs = @(
-    (Join-Path $env:USERPROFILE ".vscode\extensions\funwashad.fwh-mcp-todo-0.1.0"),
-    (Join-Path $env:USERPROFILE ".vscode\extensions\FunWasHad.fwh-mcp-todo-0.1.0"),
-    (Join-Path $env:USERPROFILE ".cursor\extensions\funwashad.fwh-mcp-todo-0.1.0"),
-    (Join-Path $env:USERPROFILE ".cursor\extensions\FunWasHad.fwh-mcp-todo-0.1.0")
-)
+    (Get-ChildItem -Path $vscodeExtBase -Directory -Filter "funwashad.fwh-mcp-todo-*" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName),
+    (Get-ChildItem -Path $vscodeExtBase -Directory -Filter "FunWasHad.fwh-mcp-todo-*" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName),
+    (Get-ChildItem -Path $cursorExtBase -Directory -Filter "funwashad.fwh-mcp-todo-*" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName),
+    (Get-ChildItem -Path $cursorExtBase -Directory -Filter "FunWasHad.fwh-mcp-todo-*" -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName)
+) | Where-Object { $_ }
 foreach ($d in $extDirs) {
     if (Test-Path $d) {
         Write-Host "Removing leftover extension dir: $d" -ForegroundColor Yellow
@@ -34,7 +42,6 @@ Write-Host "Installing McpServer MCP Todo from $vsixPath" -ForegroundColor Cyan
 
 $vscodeExtDir = Join-Path $env:USERPROFILE ".vscode\extensions"
 $cursorExtDir = Join-Path $env:USERPROFILE ".cursor\extensions"
-$extractTarget = "FunWasHad.fwh-mcp-todo-0.1.0"
 
 function Install-VsixByExtract {
     param([string]$extensionsDir)
