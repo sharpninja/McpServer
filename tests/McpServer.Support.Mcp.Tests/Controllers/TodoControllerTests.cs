@@ -131,7 +131,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
     {
         var createRequest = new
         {
-            id = "NEW-001",
+            id = "NEW-TODO-001",
             title = "New test item",
             section = "mvp-app",
             priority = "low",
@@ -144,12 +144,12 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         var createResponse = await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
 
-        var getResponse = await _client.GetAsync(new Uri("/mcpserver/todo/NEW-001", UriKind.Relative)).ConfigureAwait(true);
+        var getResponse = await _client.GetAsync(new Uri("/mcpserver/todo/NEW-TODO-001", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
 
         var item = await getResponse.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
         Assert.NotNull(item);
-        Assert.Equal("NEW-001", item.Id);
+        Assert.Equal("NEW-TODO-001", item.Id);
         Assert.Equal("New test item", item.Title);
         Assert.Equal("mvp-app", item.Section);
         Assert.Equal("low", item.Priority);
@@ -205,17 +205,17 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         // First create an item to delete
         var createRequest = new
         {
-            id = "DEL-001",
+            id = "DEL-TODO-001",
             title = "To be deleted",
             section = "mvp-support",
             priority = "low"
         };
         await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
 
-        var deleteResponse = await _client.DeleteAsync(new Uri("/mcpserver/todo/DEL-001", UriKind.Relative)).ConfigureAwait(true);
+        var deleteResponse = await _client.DeleteAsync(new Uri("/mcpserver/todo/DEL-TODO-001", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
 
-        var getResponse = await _client.GetAsync(new Uri("/mcpserver/todo/DEL-001", UriKind.Relative)).ConfigureAwait(true);
+        var getResponse = await _client.GetAsync(new Uri("/mcpserver/todo/DEL-TODO-001", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, getResponse.StatusCode);
     }
 
@@ -233,7 +233,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
     {
         var request = new
         {
-            id = "BAD-001",
+            id = "BAD-SEC-001",
             title = "Bad section",
             section = "unknown-section",
             priority = "high"
@@ -249,7 +249,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
     {
         var request = new
         {
-            id = "FRTR-001",
+            id = "FRTR-TEST-001",
             title = "FR/TR test item",
             section = "mvp-app",
             priority = "low",
@@ -260,7 +260,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         var createResponse = await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), request).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
 
-        var getResponse = await _client.GetAsync(new Uri("/mcpserver/todo/FRTR-001", UriKind.Relative)).ConfigureAwait(true);
+        var getResponse = await _client.GetAsync(new Uri("/mcpserver/todo/FRTR-TEST-001", UriKind.Relative)).ConfigureAwait(true);
         var item = await getResponse.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
         Assert.NotNull(item);
         Assert.NotNull(item.FunctionalRequirements);
@@ -311,7 +311,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
     {
         var request = new
         {
-            id = "BAD-002",
+            id = "BAD-PRI-002",
             title = "Bad priority",
             section = "mvp-app",
             priority = "critical"

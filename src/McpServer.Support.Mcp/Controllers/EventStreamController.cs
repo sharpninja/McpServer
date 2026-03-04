@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Controllers;
 
 /// <summary>
-/// FR-MCP-031: Server-Sent Events stream for REST clients to receive change notifications.
+/// FR-MCP-045: Server-Sent Events stream for REST clients to receive change notifications.
 /// </summary>
 [Route("mcpserver/events")]
 [ApiController]

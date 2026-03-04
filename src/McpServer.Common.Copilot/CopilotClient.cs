@@ -127,10 +127,24 @@ public sealed class CopilotClient(
                 yield return LineSanitizer.Sanitize(line);
             }
 
+            var timedOut = timeoutCts.IsCancellationRequested && !cancellationToken.IsCancellationRequested;
+            if (timedOut)
+            {
+                logger.LogWarning("Copilot CLI streaming timed out after {Timeout}", opts.Timeout);
+                yield return $"error: Copilot CLI timed out after {opts.Timeout}.";
+            }
+
             if (!proc.HasExited)
                 TryKill(proc);
 
-            await proc.WaitForExitAsync(CancellationToken.None).ConfigureAwait(false);
+            try
+            {
+                await proc.WaitForExitAsync(CancellationToken.None).WaitAsync(TimeSpan.FromSeconds(5)).ConfigureAwait(false);
+            }
+            catch (TimeoutException ex)
+            {
+                logger.LogWarning(ex, "Copilot CLI process did not exit after kill within grace period.");
+            }
 
             // Log stderr if present (best-effort, don't block on timeout).
             var stderr = await ReadPartialAsync(stderrTask).ConfigureAwait(false);

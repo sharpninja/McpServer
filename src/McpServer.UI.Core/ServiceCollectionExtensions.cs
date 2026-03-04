@@ -55,6 +55,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<ContextSourcesViewModel>();
         services.AddTransient<ContextRebuildIndexViewModel>();
         services.AddTransient<AuthConfigViewModel>();
+        services.AddTransient<DashboardViewModel>();
         services.AddTransient<DiagnosticExecutionPathViewModel>();
         services.AddTransient<DiagnosticAppSettingsPathViewModel>();
         services.AddTransient<ToolListViewModel>();
@@ -86,6 +87,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<TunnelListViewModel>();
         services.AddTransient<TemplateListViewModel>();
         services.AddTransient<TemplateDetailViewModel>();
+        services.AddTransient<TemplateTestViewModel>();
         services.AddTransient<AgentDefinitionListViewModel>();
         services.AddTransient<AgentDefinitionDetailViewModel>();
         services.AddTransient<WorkspaceAgentListViewModel>();

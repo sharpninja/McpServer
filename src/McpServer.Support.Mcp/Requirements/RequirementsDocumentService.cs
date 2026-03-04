@@ -1,5 +1,6 @@
-﻿using System.IO.Compression;
+using System.IO.Compression;
 using System.Text;
+using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements.Models;
 using Microsoft.Extensions.Options;
@@ -14,6 +15,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     private static readonly UTF8Encoding s_utf8NoBom = new(false);
 
     private readonly RequirementsOptions _options;
+    private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<RequirementsDocumentService> _logger;
     private readonly SemaphoreSlim _gate = new(1, 1);
     private readonly List<FrEntry> _frEntries;
@@ -22,9 +24,10 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     private readonly List<FrTrMapping> _mappings;
 
     /// <summary>Initializes a new instance of the <see cref="RequirementsDocumentService"/> class.</summary>
-    public RequirementsDocumentService(IOptions<RequirementsOptions> options, ILogger<RequirementsDocumentService> logger)
+    public RequirementsDocumentService(IOptions<RequirementsOptions> options, ILogger<RequirementsDocumentService> logger, IChangeEventBus? eventBus = null)
     {
         _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+        _eventBus = eventBus;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         _frEntries = RequirementsDocumentParser.ParseFunctional(ReadFileIfExists(_options.FunctionalRequirementsPath)).ToList();
@@ -57,6 +60,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
             ThrowIfExists(_frEntries, entry.Id, static item => item.Id, "FR");
             _frEntries.Add(entry);
             await PersistFunctionalAsync(ct).ConfigureAwait(false);
+            await PublishRequirementsChangeSafeAsync(ChangeEventActions.Created, entry.Id, ct).ConfigureAwait(false);
         }
         finally
         {
@@ -74,6 +78,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
             var index = FindIndexOrThrow(_frEntries, entry.Id, static item => item.Id, "FR");
             _frEntries[index] = entry;
             await PersistFunctionalAsync(ct).ConfigureAwait(false);
+            await PublishRequirementsChangeSafeAsync(ChangeEventActions.Updated, entry.Id, ct).ConfigureAwait(false);
         }
         finally
         {
@@ -102,6 +107,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
             await PersistFunctionalAsync(ct).ConfigureAwait(false);
             if (mappingRemoved)
                 await PersistMappingAsync(ct).ConfigureAwait(false);
+            await PublishRequirementsChangeSafeAsync(ChangeEventActions.Deleted, id, ct).ConfigureAwait(false);
         }
         finally
         {
@@ -133,6 +139,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
             ThrowIfExists(_trEntries, entry.Id, static item => item.Id, "TR");
             _trEntries.Add(entry);
             await PersistTechnicalAsync(ct).ConfigureAwait(false);
+            await PublishRequirementsChangeSafeAsync(ChangeEventActions.Created, entry.Id, ct).ConfigureAwait(false);
         }
         finally
         {
@@ -150,6 +157,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
             var index = FindIndexOrThrow(_trEntries, entry.Id, static item => item.Id, "TR");
             _trEntries[index] = entry;
             await PersistTechnicalAsync(ct).ConfigureAwait(false);
+            await PublishRequirementsChangeSafeAsync(ChangeEventActions.Updated, entry.Id, ct).ConfigureAwait(false);
         }
         finally
         {
@@ -181,6 +189,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
             await PersistTechnicalAsync(ct).ConfigureAwait(false);
             if (mappingChanged)
                 await PersistMappingAsync(ct).ConfigureAwait(false);
+            await PublishRequirementsChangeSafeAsync(ChangeEventActions.Deleted, id, ct).ConfigureAwait(false);
         }
         finally
         {
@@ -212,6 +221,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
             ThrowIfExists(_testEntries, entry.Id, static item => item.Id, "TEST");
             _testEntries.Add(entry);
             await PersistTestingAsync(ct).ConfigureAwait(false);
+            await PublishRequirementsChangeSafeAsync(ChangeEventActions.Created, entry.Id, ct).ConfigureAwait(false);
         }
         finally
         {
@@ -229,6 +239,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
             var index = FindIndexOrThrow(_testEntries, entry.Id, static item => item.Id, "TEST");
             _testEntries[index] = entry;
             await PersistTestingAsync(ct).ConfigureAwait(false);
+            await PublishRequirementsChangeSafeAsync(ChangeEventActions.Updated, entry.Id, ct).ConfigureAwait(false);
         }
         finally
         {
@@ -246,6 +257,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
             var index = FindIndexOrThrow(_testEntries, id, static item => item.Id, "TEST");
             _testEntries.RemoveAt(index);
             await PersistTestingAsync(ct).ConfigureAwait(false);
+            await PublishRequirementsChangeSafeAsync(ChangeEventActions.Deleted, id, ct).ConfigureAwait(false);
         }
         finally
         {
@@ -290,6 +302,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
                 _mappings.Add(normalized);
 
             await PersistMappingAsync(ct).ConfigureAwait(false);
+            await PublishRequirementsChangeSafeAsync(ChangeEventActions.Updated, normalized.FrId, ct).ConfigureAwait(false);
         }
         finally
         {
@@ -307,6 +320,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
             var index = FindIndexOrThrow(_mappings, frId, static item => item.FrId, "mapping");
             _mappings.RemoveAt(index);
             await PersistMappingAsync(ct).ConfigureAwait(false);
+            await PublishRequirementsChangeSafeAsync(ChangeEventActions.Deleted, frId, ct).ConfigureAwait(false);
         }
         finally
         {
@@ -484,5 +498,28 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     {
         if (items.Any(item => IdEquals(getId(item), id)))
             throw new RequirementsConflictException($"{label} '{id}' already exists.");
+    }
+
+    private async Task PublishRequirementsChangeSafeAsync(string action, string entityId, CancellationToken ct)
+    {
+        if (_eventBus is null)
+            return;
+
+        try
+        {
+            await _eventBus.PublishAsync(
+                new ChangeEvent
+                {
+                    Category = ChangeEventCategories.Requirements,
+                    Action = action,
+                    EntityId = entityId,
+                    ResourceUri = $"mcp://workspace/requirements/{entityId}",
+                },
+                ct).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed publishing requirements change event for {EntityId}", entityId);
+        }
     }
 }

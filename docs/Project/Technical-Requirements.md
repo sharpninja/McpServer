@@ -525,3 +525,41 @@ Main shell rendering SHALL iterate registrations dynamically and avoid hardcoded
 - Automated validation must cover DI registration lifetimes and notification semantics for remediated services.
 
 **Status:** 🔴 Planned
+
+## TR-MCP-LOG-002
+
+**Identifier Naming Validation** — `TodoValidator` SHALL validate TODO IDs with regex `^[A-Z]+-[A-Z0-9]+-\d{3}$` for create/update dependency paths in both YAML and SQLite providers. `SessionLogIdentifierValidator` SHALL validate session/request IDs using canonical timestamped patterns and enforce exact source-type prefix parity (`SessionId` starts with `{sourceType}-` or `{agent}-`). Invalid values return HTTP 400 at controller boundaries and `ArgumentException` for direct service invocation.
+
+**Status:** ✅ Complete
+
+**Covered by:** `TodoValidator`, `TodoService`, `SqliteTodoService`, `SessionLogIdentifierValidator`, `SessionLogController`, `SessionLogService`
+
+## TR-MCP-EVT-001
+
+**In-Process Change Event Bus** — `ChannelChangeEventBus` SHALL be registered as a singleton `IChangeEventBus` and provide fan-out publish/subscribe semantics to independent subscribers using bounded channels (capacity 1000, `DropOldest` overflow mode).
+
+**Covered by:** `ChannelChangeEventBus`, `IChangeEventBus`, `Program.cs`
+
+## TR-MCP-EVT-002
+
+**Service-Layer Mutation Publishing** — Mutating service operations SHALL publish change events after successful persistence, with event emission wrapped in defensive try/catch and warning-level logging on publish failures.
+
+**Covered by:** `TodoService`, `SqliteTodoService`, `SessionLogService`, `RepoFileService`, `ToolRegistryService`, `ToolBucketService`, `WorkspaceService`, `AgentService`, `RequirementsDocumentService`, `IngestionCoordinator`, `WorkspaceProcessManager`
+
+## TR-MCP-EVT-003
+
+**SSE Delivery Endpoint** — `EventStreamController` SHALL stream notifications as `text/event-stream` with `Cache-Control: no-cache` and support optional category filtering via `?category=` query parameter.
+
+**Covered by:** `EventStreamController`
+
+## TR-MCP-EVT-004
+
+**Change Event Contract** — Change events SHALL include `Category`, `Action`, optional `EntityId`, optional `ResourceUri`, and UTC `Timestamp` to support correlation by consumers.
+
+**Covered by:** `ChangeEvent`, `ChangeEventActions`, `ChangeEventCategories`
+
+## TR-MCP-EVT-005
+
+**Workspace Notification Category Coverage** — The notification system SHALL support at minimum the categories: `todo`, `session_log`, `repo`, `context`, `tool_registry`, `tool_bucket`, `workspace`, `github`, `marker`, `agent`, and `requirements`.
+
+**Covered by:** `ChangeEventCategories` and all publishing call sites in mutation services/controllers

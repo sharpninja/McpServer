@@ -1,4 +1,5 @@
-﻿using McpServer.Support.Mcp.Ingestion;
+using McpServer.Support.Mcp.Ingestion;
+using McpServer.Support.Mcp.Notifications;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 
@@ -14,6 +15,7 @@ public sealed class RepoFileService : IRepoFileService
     private readonly IngestionOptions _options;
     private readonly WorkspaceContext _workspaceContext;
     private readonly IWriteAuditLog _auditLog;
+    private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<RepoFileService> _logger;
 
 
@@ -22,13 +24,15 @@ public sealed class RepoFileService : IRepoFileService
     /// <param name="workspaceContext">Per-request workspace context for multi-workspace resolution.</param>
     /// <param name="auditLog">Audit log for recording write operations.</param>
     /// <param name="logger">Logger instance.</param>
+    /// <param name="eventBus">Optional in-process bus for publishing repo change events.</param>
     public RepoFileService(IOptions<IngestionOptions> options, WorkspaceContext workspaceContext,
-        IWriteAuditLog auditLog, ILogger<RepoFileService> logger)
+        IWriteAuditLog auditLog, ILogger<RepoFileService> logger, IChangeEventBus? eventBus = null)
     {
         _logger = logger;
         _options = options?.Value ?? new IngestionOptions();
         _workspaceContext = workspaceContext;
         _auditLog = auditLog ?? throw new ArgumentNullException(nameof(auditLog));
+        _eventBus = eventBus;
     }
 
     /// <inheritdoc />
@@ -78,10 +82,15 @@ public sealed class RepoFileService : IRepoFileService
 
         try
         {
+            var existedBeforeWrite = File.Exists(fullPath);
             var dir = Path.GetDirectoryName(fullPath);
             if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
             await File.WriteAllTextAsync(fullPath, content, cancellationToken).ConfigureAwait(false);
             _auditLog.RecordWrite(normalized, DateTime.UtcNow);
+            await PublishChangeSafeAsync(
+                existedBeforeWrite ? ChangeEventActions.Updated : ChangeEventActions.Created,
+                normalized,
+                cancellationToken).ConfigureAwait(false);
             return new RepoWriteResult(true, null);
         }
         catch (IOException ex)
@@ -145,5 +154,28 @@ public sealed class RepoFileService : IRepoFileService
             }
         }
         return false;
+    }
+
+    private async Task PublishChangeSafeAsync(string action, string entityId, CancellationToken cancellationToken)
+    {
+        if (_eventBus is null)
+            return;
+
+        try
+        {
+            await _eventBus.PublishAsync(
+                new ChangeEvent
+                {
+                    Category = ChangeEventCategories.Repo,
+                    Action = action,
+                    EntityId = entityId,
+                    ResourceUri = $"mcp://workspace/repo/{entityId}",
+                },
+                cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed publishing repo change event for {EntityId}", entityId);
+        }
     }
 }

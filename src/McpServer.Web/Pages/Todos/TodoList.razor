@@ -1,6 +1,6 @@
 @page "/todos"
 
-@inject ITodoApiClient TodoApiClient
+@inject TodoListViewModel ViewModel
 
 <PageTitle>Todo List</PageTitle>
 
@@ -30,21 +30,21 @@
     </div>
 </form>
 
-@if (!string.IsNullOrWhiteSpace(_error))
+@if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
 {
-    <PrimerFlash Variant="danger" Title="Failed to load todos">@_error</PrimerFlash>
+    <PrimerFlash Variant="danger" Title="Failed to load todos">@ViewModel.ErrorMessage</PrimerFlash>
 }
-else if (_loading)
+else if (ViewModel.IsLoading)
 {
     <p class="color-fg-muted">Loading todos...</p>
 }
-else if (_items.Count == 0)
+else if (ViewModel.Items.Count == 0)
 {
     <PrimerBlankslate Heading="No todo items found" Description="Try changing the filters or create new TODO items." />
 }
 else
 {
-    <PrimerDataTable TItem="TodoListItem" Items="_items" ColumnCount="6" Class="Table--full-width">
+    <PrimerDataTable TItem="TodoListItem" Items="ViewModel.Items" ColumnCount="6" Class="Table--full-width">
         <HeaderTemplate>
             <tr>
                 <th>ID</th>
@@ -78,9 +78,6 @@ else
     [SupplyParameterFromQuery]
     public bool? Done { get; set; }
 
-    private IReadOnlyList<TodoListItem> _items = [];
-    private bool _loading;
-    private string? _error;
     private string? _lastQueryKey;
 
     protected override async Task OnParametersSetAsync()
@@ -90,28 +87,10 @@ else
             return;
 
         _lastQueryKey = queryKey;
-        _loading = true;
-        _error = null;
-
-        try
-        {
-            var result = await TodoApiClient.ListTodosAsync(new ListTodosQuery
-            {
-                Section = string.IsNullOrWhiteSpace(Section) ? null : Section,
-                Priority = string.IsNullOrWhiteSpace(Priority) ? null : Priority,
-                Done = Done,
-            }).ConfigureAwait(false);
-            _items = result.Items;
-        }
-        catch (Exception ex)
-        {
-            _error = ex.Message;
-            _items = [];
-        }
-        finally
-        {
-            _loading = false;
-        }
+        ViewModel.Section = Section;
+        ViewModel.Priority = Priority;
+        ViewModel.Done = Done;
+        await ViewModel.LoadAsync().ConfigureAwait(false);
     }
 
     private static string GetTodoDetailHref(string id)

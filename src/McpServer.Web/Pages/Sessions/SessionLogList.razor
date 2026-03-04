@@ -1,6 +1,6 @@
 @page "/sessions"
 
-@inject ISessionLogApiClient SessionLogApiClient
+@inject SessionLogListViewModel ViewModel
 
 <PageTitle>Session Logs</PageTitle>
 
@@ -26,22 +26,22 @@
     </div>
 </form>
 
-@if (!string.IsNullOrWhiteSpace(_error))
+@if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
 {
-    <PrimerFlash Variant="danger" Title="Failed to load session logs">@_error</PrimerFlash>
+    <PrimerFlash Variant="danger" Title="Failed to load session logs">@ViewModel.ErrorMessage</PrimerFlash>
 }
-else if (_loading)
+else if (ViewModel.IsLoading)
 {
     <p class="color-fg-muted">Loading session logs...</p>
 }
-else if (_items.Count == 0)
+else if (ViewModel.Items.Count == 0)
 {
     <PrimerBlankslate Heading="No session logs found" Description="No logs matched the current filter." />
 }
 else
 {
-    <p class="color-fg-muted">Showing @_items.Count of @_totalCount logs.</p>
-    <PrimerDataTable TItem="SessionLogSummary" Items="_items" ColumnCount="6" Class="Table--full-width">
+    <p class="color-fg-muted">Showing @ViewModel.Items.Count of @ViewModel.TotalCount logs.</p>
+    <PrimerDataTable TItem="SessionLogSummary" Items="ViewModel.Items" ColumnCount="6" Class="Table--full-width">
         <HeaderTemplate>
             <tr>
                 <th>Session ID</th>
@@ -76,10 +76,6 @@ else
     [SupplyParameterFromQuery]
     public string? Text { get; set; }
 
-    private IReadOnlyList<SessionLogSummary> _items = [];
-    private int _totalCount;
-    private bool _loading;
-    private string? _error;
     private string? _lastQueryKey;
 
     protected override async Task OnParametersSetAsync()
@@ -89,33 +85,12 @@ else
             return;
 
         _lastQueryKey = queryKey;
-        _loading = true;
-        _error = null;
-
-        try
-        {
-            var result = await SessionLogApiClient.ListSessionLogsAsync(new ListSessionLogsQuery
-            {
-                Agent = string.IsNullOrWhiteSpace(Agent) ? null : Agent,
-                Model = string.IsNullOrWhiteSpace(Model) ? null : Model,
-                Text = string.IsNullOrWhiteSpace(Text) ? null : Text,
-                Limit = 50,
-                Offset = 0,
-            }).ConfigureAwait(false);
-
-            _items = result.Items;
-            _totalCount = result.TotalCount;
-        }
-        catch (Exception ex)
-        {
-            _error = ex.Message;
-            _items = [];
-            _totalCount = 0;
-        }
-        finally
-        {
-            _loading = false;
-        }
+        ViewModel.Agent = Agent;
+        ViewModel.Model = Model;
+        ViewModel.Text = Text;
+        ViewModel.Limit = 50;
+        ViewModel.Offset = 0;
+        await ViewModel.LoadAsync().ConfigureAwait(false);
     }
 
     private static string GetDetailHref(string sessionId)

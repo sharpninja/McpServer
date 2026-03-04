@@ -13,6 +13,7 @@ using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Logging;
 using McpServer.Support.Mcp.McpStdio;
 using McpServer.Support.Mcp.Middleware;
+using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Controllers;
@@ -180,6 +181,7 @@ else
 }
 
 builder.Services.Configure<IngestionOptions>(builder.Configuration.GetSection("Mcp"));
+builder.Services.Configure<GraphRagOptions>(builder.Configuration.GetSection(GraphRagOptions.SectionName));
 builder.Services.Configure<MarkerPromptOptions>(builder.Configuration.GetSection(MarkerPromptOptions.SectionName));
 builder.Services.Configure<McpParseableOptions>(builder.Configuration.GetSection(McpParseableOptions.SectionName));
 builder.Services.Configure<McpInteractionLoggingOptions>(builder.Configuration.GetSection(McpInteractionLoggingOptions.SectionName));
@@ -246,6 +248,7 @@ builder.Services.AddHostedService<InteractionLogSubmissionService>();
 builder.Services.AddHttpClient("InteractionLogSubmission");
 builder.Services.AddSingleton<ISyncStatusStore, SyncStatusStore>();
 builder.Services.AddSingleton<IWriteAuditLog, WriteAuditLog>();
+builder.Services.AddSingleton<IChangeEventBus, ChannelChangeEventBus>();
 builder.Services.AddSingleton<Chunker>();
 builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
 builder.Services.Configure<ProcessRunnerOptions>(options =>
@@ -312,6 +315,7 @@ builder.Services.AddCopilotClient();
 builder.Services.AddScoped<ISessionLogService, SessionLogService>();
 builder.Services.AddScoped<Fts5SearchService>();
 builder.Services.AddScoped<IContextSearchService, HybridSearchService>();
+builder.Services.AddScoped<IGraphRagService, GraphRagService>();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
 builder.Services.AddScoped<IToolBucketService, ToolBucketService>();

@@ -1,4 +1,5 @@
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Notifications;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Xunit;
@@ -10,13 +11,14 @@ public sealed class TodoServiceTests : IDisposable
 {
     private readonly string _tempFile;
     private readonly IWriteAuditLog _auditLog = Substitute.For<IWriteAuditLog>();
+    private readonly IChangeEventBus _eventBus = Substitute.For<IChangeEventBus>();
     private readonly TodoService _sut;
 
     public TodoServiceTests()
     {
         _tempFile = Path.Combine(Path.GetTempPath(), $"todo_test_{Guid.NewGuid():N}.yaml");
         File.WriteAllText(_tempFile, SampleYaml);
-        _sut = new TodoService(_tempFile, _auditLog, NullLogger<TodoService>.Instance);
+        _sut = new TodoService(_tempFile, _auditLog, NullLogger<TodoService>.Instance, _eventBus);
     }
 
     public void Dispose()
@@ -130,6 +132,11 @@ public sealed class TodoServiceTests : IDisposable
         Assert.Equal("New test item", retrieved.Title);
         Assert.Equal("created note", retrieved.Note);
         Assert.Equal("created remaining", retrieved.Remaining);
+        await _eventBus.Received(1).PublishAsync(
+            Arg.Is<ChangeEvent>(e => e.Category == ChangeEventCategories.Todo
+                                     && e.Action == ChangeEventActions.Created
+                                     && e.EntityId == "TEST-NEW-001"),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     [Fact]
@@ -150,6 +157,41 @@ public sealed class TodoServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task CreateAsync_InvalidTodoId_ReturnsError()
+    {
+        var request = new TodoCreateRequest
+        {
+            Id = "bad-id",
+            Title = "Invalid id",
+            Section = "mvp-support",
+            Priority = "high"
+        };
+
+        var result = await _sut.CreateAsync(request).ConfigureAwait(true);
+
+        Assert.False(result.Success);
+        Assert.Contains("Todo id must match", result.Error ?? string.Empty);
+    }
+
+    [Fact]
+    public async Task CreateAsync_ValidThreeSegmentUppercaseId_Succeeds()
+    {
+        var request = new TodoCreateRequest
+        {
+            Id = "MCP-AUTH-001",
+            Title = "Valid id",
+            Section = "mvp-support",
+            Priority = "medium"
+        };
+
+        var result = await _sut.CreateAsync(request).ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        var stored = await _sut.GetByIdAsync("MCP-AUTH-001").ConfigureAwait(true);
+        Assert.NotNull(stored);
+    }
+
+    [Fact]
     public async Task UpdateAsync_ExistingId_UpdatesFields()
     {
         var request = new TodoUpdateRequest { Title = "Updated title", Done = true };
@@ -161,6 +203,11 @@ public sealed class TodoServiceTests : IDisposable
         Assert.NotNull(updated);
         Assert.Equal("Updated title", updated.Title);
         Assert.True(updated.Done);
+        await _eventBus.Received(1).PublishAsync(
+            Arg.Is<ChangeEvent>(e => e.Category == ChangeEventCategories.Todo
+                                     && e.Action == ChangeEventActions.Updated
+                                     && e.EntityId == "TEST-001"),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     [Fact]
@@ -171,5 +218,22 @@ public sealed class TodoServiceTests : IDisposable
         Assert.True(result.Success);
         var deleted = await _sut.GetByIdAsync("TEST-001").ConfigureAwait(true);
         Assert.Null(deleted);
+        await _eventBus.Received(1).PublishAsync(
+            Arg.Is<ChangeEvent>(e => e.Category == ChangeEventCategories.Todo
+                                     && e.Action == ChangeEventActions.Deleted
+                                     && e.EntityId == "TEST-001"),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_InvalidDependsOnId_ReturnsError()
+    {
+        var result = await _sut.UpdateAsync("TEST-001", new TodoUpdateRequest
+        {
+            DependsOn = ["bad-id"]
+        }).ConfigureAwait(true);
+
+        Assert.False(result.Success);
+        Assert.Contains("dependsOn contains invalid TODO id", result.Error ?? string.Empty);
     }
 }

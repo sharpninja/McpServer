@@ -62,6 +62,7 @@ public static class McpStdioHost
         }
 
         builder.Services.Configure<IngestionOptions>(builder.Configuration.GetSection("Mcp"));
+        builder.Services.Configure<GraphRagOptions>(builder.Configuration.GetSection(GraphRagOptions.SectionName));
         builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(TodoStorageOptions.SectionName));
         builder.Services.PostConfigure<VectorIndexOptions>(options =>
         {
@@ -122,6 +123,7 @@ public static class McpStdioHost
         builder.Services.AddScoped<ISessionLogService, SessionLogService>();
         builder.Services.AddScoped<Fts5SearchService>();
         builder.Services.AddScoped<IContextSearchService, Fts5SearchService>();
+        builder.Services.AddScoped<IGraphRagService, GraphRagService>();
         builder.Services.AddScoped<FwhMcpTools>();
 
         builder.Services

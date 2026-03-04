@@ -29,6 +29,7 @@ public sealed class FwhMcpTools
     private readonly IngestionCoordinator _coordinator;
     private readonly ISyncStatusStore _syncStatusStore;
     private readonly IContextSearchService _searchService;
+    private readonly IGraphRagService _graphRagService;
     private readonly WorkspaceServiceAccessor _workspaceAccessor;
     private readonly ITodoPromptService _todoPromptService;
     private readonly ISessionLogService _sessionLogService;
@@ -48,6 +49,7 @@ public sealed class FwhMcpTools
         IngestionCoordinator coordinator,
         ISyncStatusStore syncStatusStore,
         IContextSearchService searchService,
+        IGraphRagService graphRagService,
         WorkspaceServiceAccessor workspaceAccessor,
         ITodoPromptService todoPromptService,
         ISessionLogService sessionLogService,
@@ -66,6 +68,7 @@ public sealed class FwhMcpTools
         _coordinator = coordinator;
         _syncStatusStore = syncStatusStore;
         _searchService = searchService;
+        _graphRagService = graphRagService;
         _workspaceAccessor = workspaceAccessor;
         _todoPromptService = todoPromptService;
         _sessionLogService = sessionLogService;
@@ -171,6 +174,50 @@ public sealed class FwhMcpTools
             .Select(d => new { d.SourceKey, d.SourceType, d.IngestedAt })
             .ToListAsync(cancellationToken).ConfigureAwait(false);
         return JsonSerializer.Serialize(new { sources });
+    }
+
+    /// <summary>Get GraphRAG readiness status for the workspace.</summary>
+    [McpServerTool(Name = "graphrag_status"), Description("Get GraphRAG status for the workspace (initialized, indexed, backend, last index time).")]
+    public async Task<string> GraphRagStatus(
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var status = await _graphRagService.GetStatusAsync(cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(status);
+    }
+
+    /// <summary>Trigger GraphRAG indexing for the workspace.</summary>
+    [McpServerTool(Name = "graphrag_index"), Description("Initialize or rebuild GraphRAG index for the workspace.")]
+    public async Task<string> GraphRagIndex(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Force re-index if true")] bool force = false,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var status = await _graphRagService.IndexAsync(new GraphRagIndexRequest { Force = force }, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(status);
+    }
+
+    /// <summary>Run a GraphRAG query with citations and optional context chunks.</summary>
+    [McpServerTool(Name = "graphrag_query"), Description("Run a GraphRAG query for the workspace and return answer, citations, and optional context chunks.")]
+    public async Task<string> GraphRagQuery(
+        [Description("Query text")] string query,
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Query mode (local/global/drift), optional")] string? mode = null,
+        [Description("Maximum context chunks to return (default 20)")] int maxChunks = 20,
+        [Description("Include context chunks in response (default true)")] bool includeContextChunks = true,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.QueryAsync(new GraphRagQueryRequest
+        {
+            Query = query,
+            Mode = mode,
+            MaxChunks = maxChunks,
+            IncludeContextChunks = includeContextChunks
+        }, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(result);
     }
 
     /// <summary>Read file content by relative path from repo root.</summary>

@@ -360,7 +360,7 @@ mvp-app:
     - Include session log updates, context source changes, file modifications, and other relevant mutations within a workspace
     - 'Infrastructure audit (2026-02-27): ChangeEvent model (5 files in Notifications/), EventStreamController (GET /mcpserver/events SSE), InteractionLoggingMiddleware SSE bypass - all exist but bus is not in DI and nothing publishes events'
     - '52 mutation points across 12 services/controllers need PublishAsync calls: todo(4), session_log(2), repo(1), context(2), tool_registry(4), tool_bucket(3), workspace(7), github(9), marker(2), agent(8), requirements(11)'
-    remaining: '"Phase 1: DI registration + 2 new categories. Phase 2: Inject IChangeEventBus into 6 core services (TodoService, SqliteTodoService, SessionLogService, RepoFileService, ToolRegistryService, ToolBucketService) + add ~16 PublishAsync calls. Phase 3: Inject into 4 extended services (WorkspaceService, AgentService, RequirementsDocumentService, IngestionCoordinator) + ~20 PublishAsync calls. Phase 4: Controller-level publishing for GitHubController + MarkerFileService callers (~11 calls). Phase 5: Unit + integration tests (~8 test classes). Phase 6: Requirements docs (FR-MCP-045, TR-MCP-EVT-001..005, TEST-MCP-048..053)."'
+    remaining: '"Phase 5: Add dedicated notification test coverage (bus/service/controller). Phase 6: Add and map workspace-change notification requirements in requirements docs. Phase 9: Run manual SSE smoke validation against a live server stream."'
     technical-details:
     - 'ARCHITECTURE: In-process fan-out pub/sub via ChannelChangeEventBus (bounded channel, 1000-item buffer, drop-oldest). SSE delivery via EventStreamController at GET /mcpserver/events?category=xxx. Per-subscriber channels ensure independent consumption.'
     - 'DI REGISTRATION: builder.Services.AddSingleton<IChangeEventBus, ChannelChangeEventBus>() in Program.cs - MUST be singleton so all scoped services and the SSE controller share the same bus instance.'
@@ -384,39 +384,39 @@ mvp-app:
     - task: Phase 0 - Audit and document current state (ChangeEvent model, ChannelChangeEventBus, EventStreamController, InteractionLoggingMiddleware SSE bypass, SessionLogFileWatcher). Verify all 5 Notifications/ files compile. Verify EventStreamController would crash without DI registration.
       done: true
     - task: "Phase 1.1 - Register ChannelChangeEventBus in DI: Add \builder.Services.AddSingleton<IChangeEventBus, ChannelChangeEventBus>(); to Program.cs in the service registration block (after line ~269, near other singletons). Verify /mcpserver/events endpoint no longer crashes (returns empty SSE stream)."
-      done: false
+      done: true
     - task: "Phase 1.2 - Add new ChangeEventCategories: Add public const string Agent = \agent; and public const string Requirements ="
-      done: false
+      done: true
     - task: 'Phase 1.3 - Fix FR reference: Change EventStreamController.cs line 8 from FR-MCP-031 to FR-MCP-045.'
-      done: false
+      done: true
     - task: 'Phase 2.1 - TodoService: Add IChangeEventBus parameter to BOTH constructors (public DI constructor line 36 AND internal test constructor line 48). Store as private readonly IChangeEventBus _eventBus;. In CreateAsync after successful YAML write + audit log, call _eventBus.PublishAsync(new ChangeEvent { Category = ChangeEventCategories.Todo, Action = ChangeEventActions.Created, EntityId = item.Id, ResourceUri = $mcp://workspace/todo/{item.Id} }). Similarly for UpdateAsync (Action=Updated) and DeleteAsync (Action=Deleted). Wrap each PublishAsync in try/catch with _logger.LogWarning.'
-      done: false
+      done: true
     - task: 'Phase 2.2 - SqliteTodoService: Add IChangeEventBus parameter to constructor (line 21). Store as field. Add PublishAsync calls in CreateAsync (after INSERT + audit), UpdateAsync (after UPDATE + audit), DeleteAsync (after DELETE + audit) with same pattern as TodoService. Wrap in try/catch.'
-      done: false
+      done: true
     - task: 'Phase 2.3 - TodoService DI factory update: In Program.cs line ~226 (AddSingleton<ITodoService> factory delegate), pass sp.GetRequiredService<IChangeEventBus>() to both TodoService and SqliteTodoService constructors via ActivatorUtilities.CreateInstance.'
-      done: false
+      done: true
     - task: "Phase 2.4 - SessionLogService: Add IChangeEventBus parameter to constructor (line 23). Store as field. In SubmitAsync, detect create vs update (check if \existing == null before upsert), then PublishAsync with Category=SessionLog, Action=Created or Updated, EntityId={dto.SourceType}/{dto.SessionId}. In AppendProcessingDialogAsync, PublishAsync with Action=Updated. Wrap in try/catch."
-      done: false
+      done: true
     - task: 'Phase 2.5 - RepoFileService: Add IChangeEventBus parameter to constructor. In WriteAsync, check File.Exists before write to detect create vs update. After successful write, PublishAsync with Category=Repo, Action=Created or Updated, EntityId=relativePath. Wrap in try/catch.'
-      done: false
+      done: true
     - task: 'Phase 2.6 - ToolRegistryService: Add IChangeEventBus parameter to constructor (line 19). In CreateAsync after db.SaveChangesAsync, PublishAsync Category=ToolRegistry, Action=Created, EntityId=entity.Id.ToString(). In UpdateAsync after save, Action=Updated. In DeleteAsync after save, Action=Deleted. Wrap in try/catch.'
-      done: false
+      done: true
     - task: 'Phase 2.7 - ToolBucketService: Add IChangeEventBus parameter to constructor. In AddBucketAsync after save, PublishAsync Category=ToolBucket, Action=Created, EntityId=name. In RemoveBucketAsync after save, Action=Deleted (also emit ToolRegistry/Deleted for each tool if uninstallTools=true). In SyncAsync after completion, Action=Updated. Wrap in try/catch.'
-      done: false
+      done: true
     - task: 'Phase 3.1 - WorkspaceService: Add IChangeEventBus parameter to constructor. In CreateAsync after appsettings write, PublishAsync Category=Workspace, Action=Created, EntityId=workspace path. In UpdateAsync after save, Action=Updated. In DeleteAsync after removal, Action=Deleted. In InitAsync after init, Action=Updated. Wrap in try/catch.'
-      done: false
+      done: true
     - task: 'Phase 3.2 - WorkspaceController start/stop: Inject IChangeEventBus via [FromServices]. In StartAsync after successful start, PublishAsync Category=Workspace, Action=Updated, EntityId=workspace path. Same for StopAsync. In UpdateGlobalPromptAsync after write, PublishAsync Category=Workspace, Action=Updated, EntityId=global-prompt. Wrap in try/catch.'
-      done: false
+      done: true
     - task: 'Phase 3.3 - AgentService: Add IChangeEventBus parameter to constructor. In UpsertDefinitionAsync, detect create vs update, PublishAsync Category=Agent, Action=Created/Updated, EntityId=agentType. In DeleteDefinitionAsync, Action=Deleted. In SeedDefaultsAsync, Action=Created for each seed. In UpsertWorkspaceAgentAsync, detect create/update, EntityId=agentId. In DeleteWorkspaceAgentAsync, Action=Deleted. In BanAgentAsync/UnbanAgentAsync, Action=Updated. In LogEventAsync, Action=Created. Total: 8 PublishAsync calls. Wrap each in try/catch.'
-      done: false
+      done: true
     - task: 'Phase 3.4 - RequirementsDocumentService: Add IChangeEventBus parameter to primary constructor. In CreateFrAsync/UpdateFrAsync/DeleteFrAsync, PublishAsync Category=Requirements, EntityId=frId. Same pattern for TR (CreateTrAsync/UpdateTrAsync/DeleteTrAsync), TEST (CreateTestAsync/UpdateTestAsync/DeleteTestAsync), and Mapping (UpsertMappingAsync/DeleteMappingAsync). Total: 11 PublishAsync calls. Wrap each in try/catch.'
-      done: false
+      done: true
     - task: 'Phase 3.5 - IngestionCoordinator: Add IChangeEventBus parameter to constructor. In RunAsync after successful sync completion, PublishAsync Category=Context, Action=Updated, EntityId=null, ResourceUri=mcp://workspace/context/sync. Wrap in try/catch.'
-      done: false
+      done: true
     - task: 'Phase 4.1 - GitHubController: Inject IChangeEventBus via [FromServices] on each mutating action method. In CreateIssueAsync after successful gh cli call, PublishAsync Category=GitHub, Action=Created, EntityId=issue number. In UpdateIssueAsync/CloseIssueAsync/ReopenIssueAsync, Action=Updated. In CommentOnIssueAsync/CommentOnPullAsync, Action=Updated. In sync endpoints (SyncFromGitHubAsync/SyncToGitHubAsync/SyncSingleIssueAsync), Action=Updated. Total: 9 PublishAsync calls. Wrap each in try/catch.'
-      done: false
+      done: true
     - task: 'Phase 4.2 - MarkerFileService callers: MarkerFileService is static, so publish from WorkspaceProcessManager or wherever marker writes/deletes are triggered. PublishAsync Category=Marker, Action=Created/Updated on write, Action=Deleted on removal. Identify all call sites in WorkspaceProcessManager and MarkerFileService.WriteAsync/RemoveAsync callers. Wrap in try/catch.'
-      done: false
+      done: true
     - task: 'Phase 5.1 - ChannelChangeEventBusTests (unit test): Create tests/McpServer.Support.Mcp.Tests/Services/ChannelChangeEventBusTests.cs. Test cases: (1) PublishAsync_NoSubscribers_DoesNotThrow, (2) PublishAsync_SingleSubscriber_ReceivesEvent, (3) PublishAsync_MultipleSubscribers_AllReceiveEvent (fan-out), (4) SubscribeAsync_CancellationToken_StopsEnumeration, (5) PublishAsync_BufferFull_DropsOldest (publish 1001+ events to verify), (6) SubscribeAsync_SubscriberRemoved_AfterCancellation. Pattern: sealed class, _sut = new ChannelChangeEventBus(), Assert.*.'
       done: false
     - task: 'Phase 5.2 - TodoService event publishing tests: In existing TodoServiceTests.cs (or new file), add tests: (1) CreateAsync_Success_PublishesCreatedEvent, (2) UpdateAsync_Success_PublishesUpdatedEvent, (3) DeleteAsync_Success_PublishesDeletedEvent, (4) CreateAsync_Failure_DoesNotPublish. Mock IChangeEventBus with NSubstitute, verify Received().PublishAsync(Arg.Is<ChangeEvent>(e => e.Category == 	odo && e.Action == created)).'
@@ -438,9 +438,9 @@ mvp-app:
     - task: "Phase 6.5 - Update Requirements-Matrix.md: Add row for FR-MCP-045 with status \U0001F532 Planned (or ✅ Done after implementation). Add rows for each TR-MCP-EVT and TEST-MCP entry."
       done: false
     - task: 'Phase 7 - Build verification: dotnet build src\McpServer.Support.Mcp -c Debug must pass with zero warnings (TreatWarningsAsErrors). All new public types must have XML doc comments (CS1591). Verify no missing ConfigureAwait(false) on async calls.'
-      done: false
+      done: true
     - task: 'Phase 8 - Test execution: dotnet test tests\McpServer.Support.Mcp.Tests -c Debug must pass all existing tests plus all new notification tests. Zero regressions. Run with --filter to verify each new test class independently.'
-      done: false
+      done: true
     - task: 'Phase 9 - Manual SSE smoke test: Start server, curl GET http://localhost:7147/mcpserver/events, then POST a TODO mutation in another terminal, verify SSE event appears in the stream with correct category/action/entityId. Test with ?category=todo filter.'
       done: false
   - id: MT-001
@@ -504,9 +504,9 @@ mvp-app:
     - task: 'commit-todo-update: Mark done, update FR/TR docs, update session log'
       done: false
   - id: MCP-NAMING-CONVENTIONS-001
-    title: '[NEED PLAN] Add naming conventions for TODO and Sessions to marker/context files'
-    note: Implementation plan tracked in PLAN-NAMINGCONVENTIONS-001.
-    done: false
+    title: '[DONE] Add naming conventions for TODO and Sessions to marker/context files'
+    note: 'Implemented via PLAN-NAMINGCONVENTIONS-001: marker/template naming guidance, normative context docs, TODO + session/request ID validators, controller/service enforcement, expanded regression tests, and FR/TR/TEST traceability updates.'
+    done: true
     description:
     - Document standard naming conventions for TODO item IDs (e.g. prefix patterns, kebab-case rules, section scoping) and session log IDs (sessionId, requestId formats) in the marker file prompt and/or docs/context/ reference files so all agents follow consistent naming.
     - 'KEBAB-CASE: Yes, upper case only'
@@ -516,7 +516,8 @@ mvp-app:
     - PLAN-NAMINGCONVENTIONS-001
   - id: MCP-GRAPHRAG-001
     title: '[NEED PLAN] Integrate GraphRAG'
-    done: false
+    note: 'Detailed plan: docs/Project/MCP-GRAPHRAG-001-Implementation-Plan.md'
+    done: true
     description:
     - Integrate GraphRAG into the search/context pipeline to enable graph-based retrieval-augmented generation. Evaluate Microsoft GraphRAG or similar frameworks for building knowledge graphs from ingested workspace content, and combine with the existing hybrid search (FTS5 + HNSW vector) for richer, relationship-aware context retrieval.
     - Make GraphRAG the enhanced backend for knowledge retrieval in MCP Server, while exposing GraphRAG capabilities as native MCP tools. This upgrades existing context search and adds advanced graph-based querying (local/global/drift modes), citations, and on-demand indexing - all while preserving per-workspace isolation and existing features (todo, repo, gh, sync, sessionlog, etc.).
@@ -572,6 +573,27 @@ mvp-app:
     - '- **Fallback & Graceful Degradation** - If GraphRAG disabled or indexing fails → revert to basic context search.'
     - '- **Security** - Reuse existing API key / auth model; add folder-level permission checks if needed.'
     - '- **Scalability Notes** - LanceDB (default vector store) handles large corpora well; ignore output/ in git/templates.'
+    done-summary: Implemented GraphRAG phase-one integration with workspace-isolated service, REST endpoints, MCP tools, SDK updates, and passing server/client tests.
+    technical-details:
+    - Plan file authored in-repo with phased architecture and rollout details.
+    - GraphRAG will be implemented as optional and workspace-isolated with graceful fallback to existing context search.
+    - Delivery includes config, service, endpoints, MCP tools, SDK support, and test coverage.
+    - todo.yaml remains API-managed; no direct file edits.
+    implementation-tasks:
+    - task: Add GraphRag options and DI registrations for HTTP and STDIO hosts.
+      done: true
+    - task: Implement GraphRag models, service contract, and workspace-isolated GraphRagService with status persistence and fallback query path.
+      done: true
+    - task: 'Add /mcpserver/graphrag endpoints: status, index, query.'
+      done: true
+    - task: Integrate GraphRAG enhancement path into /mcpserver/context/search while preserving response compatibility and fallback behavior.
+      done: true
+    - task: 'Expose MCP stdio tools: graphrag_status, graphrag_index, graphrag_query.'
+      done: true
+    - task: Extend McpServer.Client ContextClient and models for GraphRAG endpoints.
+      done: true
+    - task: Add/update tests for controller and client GraphRAG behavior and run build/tests.
+      done: true
   - id: MCP-AGENTPOOL-SEED-001
     title: '[NEED PLAN] Seed Agent Pool with running instances per workspace per agent definition and route sessions correctly'
     note: 'Detailed implementation plan created. 7 phases: (1) Composite key refactor, (2) Startup seed IHostedService, (3) Workspace-aware job routing, (4) Voice session isolation, (5) API/DTO updates, (6) UI updates, (7) Tests. See session plan.md for full details.'
@@ -586,8 +608,8 @@ mvp-app:
     technical-details:
     - Integrate OIDC authentication flow in McpServer.Web and align with existing API auth model.
   - id: PLAN-NAMINGCONVENTIONS-001
-    title: '[READY] Naming conventions for TODO and session IDs in marker/context artifacts'
-    done: false
+    title: '[DONE] Naming conventions for TODO and session IDs in marker/context artifacts'
+    done: true
     description:
     - Detailed implementation plan for MCP-NAMING-CONVENTIONS-001, defining canonical identifier naming conventions for TODO IDs and session log IDs (sessionId/requestId).
     - Plan covers marker prompt, external prompt template, context reference docs, optional server-side validation, and regression tests.
@@ -616,39 +638,39 @@ mvp-app:
     - task: 'Task 03 - Define canonical session/request ID spec: sessionId format <Agent>-<yyyyMMddTHHmmssZ>-<suffix>; requestId format req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal>; include uniqueness and collision rules.'
       done: true
     - task: Task 04 - Update templates/prompt-templates.yaml default-marker-prompt content with a new Naming Conventions section that includes strict TODO/session ID examples and anti-examples.
-      done: false
+      done: true
     - task: Task 05 - Mirror the same Naming Conventions section in MarkerFileService.DefaultPromptTemplate in src/McpServer.Support.Mcp/Services/MarkerFileService.cs to preserve fallback behavior.
-      done: false
+      done: true
     - task: Task 06 - Validate marker generation integration by forcing marker regeneration path in WorkspaceProcessManager.RegenerateAllMarkersAsync(...) and confirming rendered AGENTS-README-FIRST.yaml includes naming guidance.
-      done: false
+      done: true
     - task: Task 07 - Update docs/context/todo-schema.md with normative TODO ID naming rules, examples, and dependency-id rules (dependsOn entries must use same convention when creating new items).
-      done: false
+      done: true
     - task: Task 08 - Update docs/context/session-log-schema.md with normative sessionId/requestId naming rules and examples aligned with marker template language.
-      done: false
+      done: true
     - task: Task 09 - Decide enforcement mode (documentation-only vs API validation) and log decision in session log with rationale and backward-compatibility impact.
-      done: false
+      done: true
     - task: 'Task 10 - If enforcing, add TodoValidator API: string? ValidateTodoId(string? id) and string? ValidateTodoIds(IEnumerable<string>? ids,string fieldName) in src/McpServer.Support.Mcp/Services/TodoValidator.cs.'
-      done: false
+      done: true
     - task: Task 11 - If enforcing, wire TODO ID validation into TodoService.CreateAsync(...) and SqliteTodoService.CreateAsync(...) before duplicate checks; return TodoMutationResult(false,<error>) for invalid IDs.
-      done: false
+      done: true
     - task: Task 12 - If enforcing, wire dependency ID validation into TodoService.UpdateAsync(...) and SqliteTodoService.UpdateAsync(...) when request.DependsOn is supplied.
-      done: false
+      done: true
     - task: Task 13 - If enforcing, add session log identifier validator (new class or static helper) and integrate in SessionLogController.SubmitAsync(...) and AppendDialogAsync(...) with HTTP 400 on invalid sessionId/requestId formats.
-      done: false
+      done: true
     - task: Task 14 - Update/extend MarkerFileServiceTests to assert default prompt includes the new Naming Conventions section and concrete examples for TODO/session identifiers.
-      done: false
+      done: true
     - task: Task 15 - Add/extend TodoServiceTests and SqliteTodoServiceTests covering create/update failures for invalid ID patterns, plus success for valid 3-segment uppercase IDs.
-      done: false
+      done: true
     - task: Task 16 - Add/extend SessionLogControllerTests and SessionLogServiceTests covering invalid/valid sessionId and requestId patterns, including AppendDialog route behavior.
-      done: false
+      done: true
     - task: 'Task 17 - Run full verification: dotnet build (Support.Mcp + Client) and dotnet test (Support.Mcp.Tests + Client.Tests), then fix only regressions introduced by naming-conventions work.'
-      done: false
+      done: true
     - task: Task 18 - If enforcement or behavior changed, update FR/TR/TEST docs and mapping matrix with new requirement IDs and link them back to MCP-NAMING-CONVENTIONS-001.
-      done: false
+      done: true
     - task: 'Task 19 - Final rollout check: verify marker prompt, context docs, and API behavior communicate the same naming contract without contradictions.'
-      done: false
+      done: true
     - task: Task 20 - Close out by updating MCP-NAMING-CONVENTIONS-001 implementationTasks/status notes to reference completion evidence and impacted files.
-      done: false
+      done: true
 mvp-mcp:
   high-priority:
   - id: MVP-MCP-002
@@ -1231,14 +1253,17 @@ Architecture:
     - task: Document the SSOT/DI pattern in Technical-Requirements.md
       done: false
   - id: web-ui-cqrs-mvvm-compliance-audit
-    title: '[NEED PLAN] Web UI CQRS + MVVM compliance remediation'
+    title: Web UI CQRS + MVVM compliance remediation
     note: 'Audit 2026-03-03: McpServer.Web currently uses API-client-driven code-behind pages rather than UI.Core ViewModels + CQRS dispatch orchestration. Evidence snapshot: 14 pages total, 13 pages inject I*ApiClient, 13 pages declare local _loading state, 13 generic catches across pages, and 0 ViewModel/Dispatcher references in src/McpServer.Web/Pages. CQRS contracts and handlers exist in UI.Core and adapters, but page-level orchestration bypasses them.'
-    done: false
+    done: true
+    completed: 2026-03-04T12:11:15.5096103Z
     description:
     - Bring McpServer.Web into architectural compliance with CQRS and MVVM commitments.
     - Replace page-level code-behind orchestration with UI.Core ViewModels as the single state and behavior owner.
     - Route page operations through CQRS Dispatcher + handlers instead of invoking API adapters directly from views.
     - Eliminate duplicated loading/error/state logic currently repeated across Razor pages.
+    done-summary: Completed CQRS/MVVM remediation for McpServer.Web by binding pages to UI.Core ViewModels, routing page operations through CQRS dispatch paths, and switching workspace selection updates to WorkspaceContextViewModel.
+    remaining: ''
     technical-details:
     - 'Evidence files: src/McpServer.Web/Pages/*.razor inject I*ApiClient and run data-fetch logic in OnInitializedAsync/OnParametersSetAsync.'
     - 'No page-level ViewModel or Dispatcher usage: 0 matches for ViewModel/DispatchAsync in src/McpServer.Web/Pages.'
@@ -1246,17 +1271,17 @@ Architecture:
     - Current Web setup partially aligns with CQRS at API contract level (command/query DTOs in adapter interfaces) but not at UI orchestration level.
     implementation-tasks:
     - task: Introduce per-page ViewModel injection/binding for Dashboard, Workspaces, Todos, Sessions, Templates, Context, Health, and Auth pages.
-      done: false
+      done: true
     - task: Refactor page lifecycle methods to call ViewModel LoadAsync/commands and bind to observable VM state instead of local _loading/_error/_items fields.
-      done: false
+      done: true
     - task: Ensure all mutations execute through CQRS command dispatch paths and all reads through CQRS query dispatch paths.
-      done: false
+      done: true
     - task: Replace direct WebMcpContext mutations in shared components with WorkspaceContextViewModel-driven updates.
-      done: false
+      done: true
     - task: Add focused tests proving page behavior is ViewModel-driven (state transitions, command invocation, workspace-change reloads).
-      done: false
+      done: true
     - task: Update web-ui TODO notes after remediation to reflect actual architecture and remove stale architecture claims.
-      done: false
+      done: true
   - id: agent-pool-runtime-orchestration
     title: Implement Agent Pool runtime orchestration and Director controls
     note: >-
@@ -1513,6 +1538,8 @@ Architecture:
     - 'DI exposure rule: shared mutable state must live in DI services with explicit lifetime; views/consumers read via injected dependencies and react to change notifications.'
     - Testing updates must cover service registration, workspace switching behavior, dependency validation integrity, and no regression in TODO CRUD semantics.
     - Documentation output must add/adjust technical requirements in docs/Project/Technical-Requirements.md and map to impacted FR/TR entries.
+    depends-on:
+    - PLAN-DISSOT-001
     implementation-tasks:
     - task: 'Task 01 (Inventory bootstrap): create audit inventory document in docs/context (or equivalent tracked artifact) listing scan commands and code owners; include rg patterns for ActivatorUtilities.CreateInstance, direct new Service/Provider/Registry/Manager, Task.Run fire-and-forget, and PropertyChanged subscriptions. Integration points: Program.cs, McpStdioHost.cs, TodoServiceResolver.cs, AgentPoolService.cs, VoiceConversationService.cs. Validation: reproduce inventory deterministically in one command session.'
       done: false
@@ -1541,6 +1568,64 @@ Architecture:
     - task: 'Task 13 (Documentation + traceability): update docs/Project/Technical-Requirements.md with explicit SSOT/DI/INotify policy requirement(s), update mapping docs if new TR IDs are introduced, and ensure affected code XML docs reference relevant TR IDs. Include concrete anti-pattern examples (manual new stateful service, payload push) and approved pattern examples (DI-owned state + notification + pull).'
       done: false
     - task: 'Task 14 (Final compliance gate): run required builds/tests and produce final audit report checklist proving completion of all findings. Minimum commands: dotnet build src\McpServer.Support.Mcp -c Debug; dotnet build src\McpServer.Client -c Debug; dotnet test tests\McpServer.Support.Mcp.Tests -c Debug; dotnet test tests\McpServer.Client.Tests -c Debug; run targeted UI.Core tests impacted by observable/DI changes. Mark audit-di-ssot done only after zero unresolved blocker findings.'
+      done: false
+  - id: PLAN-DISSOT-001
+    title: '[READY] Excruciating-detail execution plan for DI + SSOT + INotify compliance audit remediation'
+    note: Generated 2026-03-04 from plan-audit-di-ssot-execution; this TODO is the prerequisite execution blueprint.
+    done: false
+    description:
+    - Produce an execution-ready remediation plan for DI ownership, SSOT state management, and INotifyPropertyChanged pull-based synchronization compliance across McpServer runtime and UI layers.
+    - Split audit + remediation into focused, single-session tasks with explicit file targets, class/method signatures, test scenarios, and integration checkpoints.
+    - 'Define a deterministic compliance workflow: inventory -> registration map -> violation findings -> refactor spec -> implementation -> verification -> documentation traceability gate.'
+    - Ensure plan-audit-di-ssot-execution cannot start until this detailed plan TODO is complete and approved.
+    technical-details:
+    - 'Primary runtime composition surfaces: src/McpServer.Support.Mcp/Program.cs and src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs.'
+    - 'Known DI hot spots: ITodoService factory lambdas using ActivatorUtilities.CreateInstance; runtime resolver hot spot in src/McpServer.Support.Mcp/Services/TodoServiceResolver.cs.'
+    - 'State ownership surfaces: WorkspaceContext (server), WorkspaceContextViewModel (UI), AgentPoolService queue state, VoiceConversationService session/stream state, TunnelRegistry mutable entries.'
+    - 'Push/pull compliance surfaces: IChangeEventBus PublishAsync/SubscribeAsync usage, PropertyChanged subscription lifecycles in UI viewmodels, event payload size/content.'
+    - 'Concurrency surfaces: fire-and-forget call sites (_ = TryDispatchAsync / InterruptAsync / ProduceStreamingTurnAsync), lock gates, cancellation token ownership and disposal boundaries.'
+    - 'Required artifacts: deterministic inventory doc, DI matrix, violation catalog, refactor design spec, updated tests, and Technical Requirements traceability updates.'
+    - 'Acceptance gate: builds/tests for Support.Mcp + Client + targeted UI.Core tests pass with zero unresolved blocker findings.'
+    implementation-tasks:
+    - task: 'Task 01 - Create deterministic audit inventory artifact at docs/context/di-ssot-audit-inventory.md. Include reproducible command block using rg patterns: "ActivatorUtilities\\.CreateInstance", "new\\s+(TodoService|SqliteTodoService|.*Registry|.*Manager|.*Provider)", "_\\s*=\\s*(TryDispatchAsync|InterruptAsync|ProduceStreamingTurnAsync)", and "PropertyChanged\\s*\\+=". Integration points: Program.cs, McpStdioHost.cs, Services/TodoServiceResolver.cs, Services/AgentPoolService.cs, Services/VoiceConversationService.cs. Validation scenario: a single command session reproduces identical findings count on rerun.'
+      done: false
+    - task: 'Task 02 - Build DI registration matrix artifact at docs/context/di-ssot-registration-matrix.json mapping service->implementation->lifetime->stateful->sourceRange. File targets: src/McpServer.Support.Mcp/Program.cs and src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs. Include explicit entries for ITodoService, TodoServiceResolver, WorkspaceContext, TunnelRegistry, IWorkspaceProcessManager. Test scenario: detect duplicate/alternate registration path for any mutable service.'
+      done: false
+    - task: 'Task 03 - Implement analyzer helper script scripts/audit/Export-DiRegistrationMap.ps1 with function signature: Export-DiRegistrationMap([string]$WorkspacePath,[string]$OutputPath). Script must emit normalized JSON consumed by later audit steps. Integration point: docs/context/di-ssot-registration-matrix.json. Validation: script output is stable across two consecutive runs.'
+      done: false
+    - task: 'Task 04 - Perform service-creation violation scan and write docs/context/di-ssot-service-creation-findings.md with categories blocker/warning/acceptable-factory-boundary. Start classes/methods: TodoServiceResolver.CreateForWorkspace(string workspacePath, WorkspaceContext ctx) and TodoController.MoveAsync(...). Integration files: Services/TodoServiceResolver.cs, Controllers/TodoController.cs, Program.cs, McpStdioHost.cs. Test scenario: every runtime stateful service construction site is either DI-owned or justified with immutable/value-object exemption.'
+      done: false
+    - task: 'Task 05 - Build SSOT ownership catalog at docs/context/di-ssot-state-catalog.md. For each state owner, capture writer and reader method signatures: WorkspaceContext, WorkspaceContextViewModel, AgentPoolService, TunnelRegistry, VoiceConversationService, EventStreamViewModel. Include per-owner: authoritative source field/property, mutation methods, consumer read methods, and shadow-copy risk. Validation: each mutable state has exactly one authoritative owner.'
+      done: false
+    - task: 'Task 06 - Audit push-vs-pull event contracts and create docs/context/di-ssot-notification-contracts.md. Verify producers publish identifiers/deltas only; consumers re-read shared state from DI service/viewmodel. Required API signatures to inspect: IChangeEventBus.PublishAsync<TEvent>(TEvent evt, CancellationToken ct), IChangeEventBus.SubscribeAsync<TEvent>(...). UI target subscriptions: TodoListViewModel, SessionLogListViewModel, EventStreamViewModel, WorkspacePolicyViewModel. Test scenario: flag payload-heavy events carrying full mutable object graphs.'
+      done: false
+    - task: 'Task 07 - Create observable compliance test spec in tests/McpServer.UI.Core.Tests/ViewModels/ObservableComplianceTests.cs with reflection-based checks. Planned signatures: [Fact] public void MutablePublicSettableProperties_MustRaisePropertyChanged(); [Fact] public void ViewModels_WithObservableState_UseObservablePropertyOrExplicitNotification(). Scan targets: src/McpServer.UI.Core/ViewModels/** and src/McpServer.VsExtension.McpTodo.Vsix/ViewModels/**. Integration: existing AreaViewModelBehaviorTests baseline. Validation: intentional non-notifying mutable property should fail test.'
+      done: false
+    - task: 'Task 08 - Author refactor design spec at docs/context/di-ssot-refactor-design.md before code changes. Must include new abstractions, constructor contracts, lifetimes, migration/rollback. Required signatures to define: public interface ITodoStoreFactory { ITodoService CreateForPrimary(); ITodoService CreateForWorkspace(WorkspaceContext ctx); }. Integration points: Program.cs, McpStdioHost.cs, Services/TodoServiceResolver.cs. Validation: design covers both YAML and SQLite providers without behavior regression.'
+      done: false
+    - task: 'Task 09 - Add abstraction file src/McpServer.Support.Mcp/Services/ITodoStoreFactory.cs with XML docs and TR tag references. Method signatures: ITodoService CreateForPrimary(); ITodoService CreateForWorkspace(WorkspaceContext ctx);. Integration: injected into resolver and registration surfaces. Test scenario: compile-time enforcement that runtime code paths request ITodoService via factory abstraction only.'
+      done: false
+    - task: 'Task 10 - Implement src/McpServer.Support.Mcp/Services/TodoStoreFactory.cs (or provider-specific implementations) using DI-owned delegates/services for YAML/SQLite creation. Remove ActivatorUtilities.CreateInstance usage from Program.cs and McpStdioHost.cs lambdas. Integration method signatures to update: service registrations for ITodoService and factory dependencies. Validation: provider selection remains driven by Mcp:TodoStorage:Provider and workspace path semantics are preserved.'
+      done: false
+    - task: 'Task 11 - Refactor src/McpServer.Support.Mcp/Services/TodoServiceResolver.cs to eliminate direct new TodoService/new SqliteTodoService. Constructor signature target: public TodoServiceResolver(ITodoStoreFactory todoStoreFactory, ...existing deps...). Method target: public ITodoService CreateForWorkspace(string workspacePath, WorkspaceContext ctx). Integration: callers unchanged except DI wiring. Test scenario: resolver returns provider-consistent service for primary and workspace contexts.'
+      done: false
+    - task: 'Task 12 - Add resolver-focused tests at tests/McpServer.Support.Mcp.Tests/Services/TodoServiceResolverTests.cs. Required scenarios: (1) YAML provider primary/workspace parity, (2) SQLite provider parity, (3) workspace-specific path routing preserved, (4) no manual instantiation bypass. Suggested test signatures: [Fact] CreateForWorkspace_UsesInjectedFactory(); [Theory] CreateForWorkspace_ProviderSelection_PreservesSemantics(string provider).'
+      done: false
+    - task: 'Task 13 - Harden concurrency ownership in Services/AgentPoolService.cs by documenting and refactoring fire-and-forget sites to owned lifecycle paths. Candidate signatures to audit/adjust: TryDispatchAsync(...), InterruptAsync(...), queue mutation methods, cancellation registration/disposal methods. Integration: notification bus publishes only state-change signals. Test scenario: interrupt during dispatch leaves queue state consistent and observable from DI owner.'
+      done: false
+    - task: 'Task 14 - Harden streaming/session state ownership in Services/VoiceConversationService.cs. Audit _ = ProduceStreamingTurnAsync(...) and lock/cancellation boundaries. Introduce explicit state transition methods with signatures like SetConversationState(...), PublishConversationStateChangedAsync(...). Integration: consumers pull latest state after notification. Test scenario: cancel+restart streaming does not leak stale state to subscribers.'
+      done: false
+    - task: 'Task 15 - Validate controller integration in tests/McpServer.Support.Mcp.Tests/Controllers/TodoControllerTests.cs for Create/Update/Move flows after factory refactor. Include dependency validation and not-found/error behavior parity. Integration point methods: TodoController.CreateAsync(...), UpdateAsync(...), MoveAsync(...). Test scenario: move operation uses workspace-routed ITodoService without constructing mutable state locally.'
+      done: false
+    - task: 'Task 16 - Extend integration coverage in tests/McpServer.Support.Mcp.Tests/Controllers/MultiTenantIntegrationTests.cs and TodoLifecycleIntegrationTests.cs for both YAML and SQLite provider modes. Validate workspace routing + dependency validation integrity when dependsOn entries reference cross-item prerequisites. Test scenario: both providers return identical CRUD/dependency behavior under multi-workspace context.'
+      done: false
+    - task: 'Task 17 - Validate UI SSOT behavior in tests/McpServer.UI.Core.Tests/ViewModels/AreaViewModelBehaviorTests.cs and VoiceViewModelIntegrationTests.cs. Required checks: WorkspaceContextViewModel remains authoritative singleton; dependent viewmodels re-read context after PropertyChanged and do not retain shadow workspace path copies. Suggested signatures: WorkspaceSwitch_TriggersPullRefreshWithoutPushPayload().'
+      done: false
+    - task: 'Task 18 - Update requirement traceability docs: docs/Project/Technical-Requirements.md, docs/Project/TR-per-FR-Mapping.md, docs/Project/Requirements-Matrix.md, and docs/Project/Testing-Requirements.md if new TR/TEST IDs are introduced. Include explicit anti-pattern examples (manual new stateful service, payload push) and approved pattern (DI-owned state + notify + pull). Validation: mapping rows exist for each newly added requirement ID.'
+      done: false
+    - task: 'Task 19 - Update XML documentation on any modified public interfaces/classes with requirement IDs (e.g., TR-MCP-DI-SSOT-*). File targets include new/changed services in src/McpServer.Support.Mcp/Services/*.cs. Validation: dotnet build fails if CS1591/doc requirements are violated; ensure clean build with docs enabled.'
+      done: false
+    - task: 'Task 20 - Execute compliance gate commands and capture report artifact docs/context/di-ssot-final-audit-report.md. Required commands: dotnet build src\\McpServer.Support.Mcp -c Debug; dotnet build src\\McpServer.Client -c Debug; dotnet test tests\\McpServer.Support.Mcp.Tests -c Debug; dotnet test tests\\McpServer.Client.Tests -c Debug; targeted UI.Core tests for observable/DI changes. Completion criteria: zero unresolved blocker findings and all mandatory commands pass.'
       done: false
 Director:
   high-priority:

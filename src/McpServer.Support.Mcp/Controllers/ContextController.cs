@@ -1,8 +1,10 @@
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Controllers;
 
@@ -16,12 +18,20 @@ public sealed class ContextController : ControllerBase
 {
     private readonly McpDbContext _db;
     private readonly IContextSearchService _searchService;
+    private readonly IGraphRagService _graphRagService;
+    private readonly GraphRagOptions _graphRagOptions;
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
-    public ContextController(McpDbContext db, IContextSearchService searchService)
+    public ContextController(
+        McpDbContext db,
+        IContextSearchService searchService,
+        IGraphRagService graphRagService,
+        IOptions<GraphRagOptions> graphRagOptions)
     {
         _db = db;
         _searchService = searchService;
+        _graphRagService = graphRagService;
+        _graphRagOptions = graphRagOptions.Value;
     }
 
     /// <summary>TR-PLANNED-013: Hybrid search with filters (context.search).</summary>
@@ -34,6 +44,33 @@ public sealed class ContextController : ControllerBase
         var query = (request?.Query ?? string.Empty).Trim();
         var limit = Math.Clamp(request?.Limit ?? 20, 1, 100);
         var sourceType = request?.SourceType;
+
+        if (_graphRagOptions.Enabled && _graphRagOptions.EnhanceContextSearch)
+        {
+            var graphResult = await _graphRagService.QueryAsync(new GraphRagQueryRequest
+            {
+                Query = query,
+                Mode = _graphRagOptions.DefaultQueryMode,
+                MaxChunks = limit,
+                IncludeContextChunks = true
+            }, cancellationToken).ConfigureAwait(false);
+
+            var graphChunks = graphResult.Chunks.ToList();
+            return Ok(new
+            {
+                query,
+                chunks = graphChunks,
+                sourceKeys = graphResult.SourceKeys,
+                graphRag = new
+                {
+                    mode = graphResult.Mode,
+                    graphResult.FallbackUsed,
+                    graphResult.Backend,
+                    graphResult.Answer,
+                    graphResult.Citations
+                }
+            });
+        }
 
         var result = await _searchService.SearchAsync(query, limit, sourceType, cancellationToken).ConfigureAwait(false);
         var chunks = result.Chunks.Select(c => new ContextChunk

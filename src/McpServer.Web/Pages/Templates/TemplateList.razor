@@ -1,6 +1,6 @@
 @page "/templates"
 
-@inject ITemplateApiClient TemplateApiClient
+@inject TemplateListViewModel ViewModel
 
 <PageTitle>Template List</PageTitle>
 
@@ -26,21 +26,21 @@
     </div>
 </form>
 
-@if (!string.IsNullOrWhiteSpace(_error))
+@if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
 {
-    <PrimerFlash Variant="danger" Title="Failed to load templates">@_error</PrimerFlash>
+    <PrimerFlash Variant="danger" Title="Failed to load templates">@ViewModel.ErrorMessage</PrimerFlash>
 }
-else if (_loading)
+else if (ViewModel.IsLoading)
 {
     <p class="color-fg-muted">Loading templates...</p>
 }
-else if (_items.Count == 0)
+else if (ViewModel.Items.Count == 0)
 {
     <PrimerBlankslate Heading="No templates found" Description="No templates matched the current filter." />
 }
 else
 {
-    <PrimerDataTable TItem="TemplateListItem" Items="_items" ColumnCount="6" Class="Table--full-width">
+    <PrimerDataTable TItem="TemplateListItem" Items="ViewModel.Items" ColumnCount="6" Class="Table--full-width">
         <HeaderTemplate>
             <tr>
                 <th>ID</th>
@@ -77,9 +77,6 @@ else
     [SupplyParameterFromQuery]
     public string? Keyword { get; set; }
 
-    private IReadOnlyList<TemplateListItem> _items = [];
-    private bool _loading;
-    private string? _error;
     private string? _lastQueryKey;
 
     protected override async Task OnParametersSetAsync()
@@ -89,26 +86,10 @@ else
             return;
 
         _lastQueryKey = queryKey;
-        _loading = true;
-        _error = null;
-
-        try
-        {
-            var result = await TemplateApiClient.ListTemplatesAsync(
-                category: string.IsNullOrWhiteSpace(Category) ? null : Category,
-                tag: string.IsNullOrWhiteSpace(Tag) ? null : Tag,
-                keyword: string.IsNullOrWhiteSpace(Keyword) ? null : Keyword).ConfigureAwait(false);
-            _items = result.Items;
-        }
-        catch (Exception ex)
-        {
-            _error = ex.Message;
-            _items = [];
-        }
-        finally
-        {
-            _loading = false;
-        }
+        ViewModel.Category = Category;
+        ViewModel.Tag = Tag;
+        ViewModel.Keyword = Keyword;
+        await ViewModel.LoadAsync().ConfigureAwait(false);
     }
 
     private static string GetDetailHref(string templateId)

@@ -1,6 +1,6 @@
 @page "/context/search"
 
-@inject IContextApiClient ContextApiClient
+@inject ContextSearchViewModel ViewModel
 
 <PageTitle>Context Search</PageTitle>
 
@@ -17,7 +17,7 @@
                 <span class="text-small color-fg-muted">Source Type</span>
                 <select class="form-select" name="sourceType">
                     <option value="" selected="@string.IsNullOrWhiteSpace(SourceType)">All</option>
-                    @foreach (var sourceTypeOption in _sourceTypes)
+                    @foreach (var sourceTypeOption in ViewModel.SourceTypes)
                     {
                         <option value="@sourceTypeOption" selected="@string.Equals(SourceType, sourceTypeOption, StringComparison.OrdinalIgnoreCase)">
                             @sourceTypeOption
@@ -36,11 +36,11 @@
     </div>
 </form>
 
-@if (!string.IsNullOrWhiteSpace(_error))
+@if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
 {
-    <PrimerFlash Variant="danger" Title="Context search failed">@_error</PrimerFlash>
+    <PrimerFlash Variant="danger" Title="Context search failed">@ViewModel.ErrorMessage</PrimerFlash>
 }
-else if (_loading)
+else if (ViewModel.IsLoading)
 {
     <p class="color-fg-muted">Running search...</p>
 }
@@ -48,14 +48,14 @@ else if (string.IsNullOrWhiteSpace(Q))
 {
     <PrimerBlankslate Heading="Enter a search query" Description="Submit a query to search indexed context chunks." />
 }
-else if (_result is null || _result.Chunks.Count == 0)
+else if (ViewModel.SearchResult is null || ViewModel.SearchResult.Chunks.Count == 0)
 {
     <PrimerBlankslate Heading="No context results" Description="No chunks matched the search criteria." />
 }
 else
 {
-    <p class="color-fg-muted">Found @_result.Chunks.Count chunks.</p>
-    <PrimerDataTable TItem="ContextChunkView" Items="_result.Chunks" ColumnCount="4" Class="Table--full-width">
+    <p class="color-fg-muted">Found @ViewModel.SearchResult.Chunks.Count chunks.</p>
+    <PrimerDataTable TItem="ContextChunkView" Items="ViewModel.SearchResult.Chunks" ColumnCount="4" Class="Table--full-width">
         <HeaderTemplate>
             <tr>
                 <th>Document</th>
@@ -83,10 +83,6 @@ else
     [SupplyParameterFromQuery]
     public int? Limit { get; set; }
 
-    private ContextSearchPayload? _result;
-    private IReadOnlyList<string> _sourceTypes = [];
-    private bool _loading;
-    private string? _error;
     private string? _lastQueryKey;
 
     protected override async Task OnParametersSetAsync()
@@ -96,45 +92,14 @@ else
             return;
 
         _lastQueryKey = queryKey;
-        _loading = true;
-        _error = null;
+        var safeLimit = Limit.GetValueOrDefault(20);
+        if (safeLimit <= 0)
+            safeLimit = 20;
 
-        try
-        {
-            var sourcePayload = await ContextApiClient.ListSourcesAsync().ConfigureAwait(false);
-            _sourceTypes = sourcePayload.Sources
-                .Select(static source => source.SourceType)
-                .Where(static sourceType => !string.IsNullOrWhiteSpace(sourceType))
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .OrderBy(static sourceType => sourceType)
-                .ToList();
-
-            if (string.IsNullOrWhiteSpace(Q))
-            {
-                _result = null;
-                return;
-            }
-
-            var safeLimit = Limit.GetValueOrDefault(20);
-            if (safeLimit <= 0)
-                safeLimit = 20;
-
-            _result = await ContextApiClient.SearchAsync(new SearchContextQuery
-            {
-                Query = Q,
-                SourceType = string.IsNullOrWhiteSpace(SourceType) ? null : SourceType,
-                Limit = safeLimit,
-            }).ConfigureAwait(false);
-        }
-        catch (Exception ex)
-        {
-            _error = ex.Message;
-            _result = null;
-        }
-        finally
-        {
-            _loading = false;
-        }
+        ViewModel.Query = Q ?? string.Empty;
+        ViewModel.SourceType = string.IsNullOrWhiteSpace(SourceType) ? null : SourceType;
+        ViewModel.Limit = safeLimit;
+        await ViewModel.LoadAsync().ConfigureAwait(false);
     }
 
     private string GetLimitValue() => Limit?.ToString() ?? "20";

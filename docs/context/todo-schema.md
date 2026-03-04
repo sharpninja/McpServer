@@ -14,11 +14,20 @@ Load this file when you need to create, update, query, or manage project TODOs.
 - `GET /mcpserver/todo/{id}/prompt/status` — get status prompt
 - `POST /mcpserver/todo/{id}/requirements` — add requirements to a todo
 
+## Naming Conventions (Normative)
+
+- TODO IDs for new items must be uppercase kebab-case with exactly 3 segments:
+  `<SDLC-PHASE>-<AREA>-###`
+- Required regex: `^[A-Z]+-[A-Z0-9]+-\d{3}$`
+- Valid examples: `PLAN-NAMINGCONVENTIONS-001`, `MCP-API-042`
+- Invalid examples: `plan-api-001`, `MCP-API-42`, `MCPAPI001`
+- When creating/updating `dependsOn`, each dependency ID must follow the same TODO ID convention.
+
 ## TodoFlatItem (returned by GET)
 
 ```json
 {
-  "id": "string — unique kebab-case ID (e.g. 'add-jwt-auth')",
+  "id": "string — unique TODO ID in format <PHASE>-<AREA>-### (e.g. 'MCP-AUTH-001')",
   "title": "string — brief title",
   "section": "string — grouping category (e.g. 'Backend', 'Frontend', 'Infrastructure')",
   "priority": "string — 'critical', 'high', 'medium', or 'low'",
@@ -45,7 +54,7 @@ Load this file when you need to create, update, query, or manage project TODOs.
 
 ```json
 {
-  "id": "string — REQUIRED unique kebab-case ID",
+  "id": "string — REQUIRED TODO ID matching ^[A-Z]+-[A-Z0-9]+-\\d{3}$",
   "title": "string — REQUIRED brief title",
   "section": "string — REQUIRED grouping category",
   "priority": "string — REQUIRED: 'critical', 'high', 'medium', or 'low'",
@@ -90,27 +99,27 @@ Load this file when you need to create, update, query, or manage project TODOs.
 Get-McpTodo | Format-Table id, title, priority, done
 
 # Get a specific todo
-Get-McpTodo -Id "add-jwt-auth"
+Get-McpTodo -Id "MCP-AUTH-001"
 
 # Create a new todo
-New-McpTodo -Id "add-jwt-auth" -Title "Add JWT auth" -Section "Backend" -Priority high `
+New-McpTodo -Id "MCP-AUTH-001" -Title "Add JWT auth" -Section "Backend" -Priority high `
   -Description @("Implement JWT bearer tokens") -Estimate "4h"
 
 # Update fields
-Update-McpTodo -Id "add-jwt-auth" -Remaining "Need tests"
+Update-McpTodo -Id "MCP-AUTH-001" -Remaining "Need tests"
 
 # Mark complete
-Complete-McpTodo -Id "add-jwt-auth" -DoneSummary "JWT auth complete"
+Complete-McpTodo -Id "MCP-AUTH-001" -DoneSummary "JWT auth complete"
 
 # Get implementation guidance
-Get-McpTodoPrompt -Id "add-jwt-auth" -Type implement
+Get-McpTodoPrompt -Id "MCP-AUTH-001" -Type implement
 
 # Add requirements
-Add-McpTodoRequirements -Id "add-jwt-auth" -FunctionalRequirements @("FR-AUTH-001") `
+Add-McpTodoRequirements -Id "MCP-AUTH-001" -FunctionalRequirements @("FR-AUTH-001") `
   -TechnicalRequirements @("TR-AUTH-001")
 
 # Delete
-Remove-McpTodo -Id "add-jwt-auth"
+Remove-McpTodo -Id "MCP-AUTH-001"
 ```
 
 ## McpTodo Module — Bash Lifecycle
@@ -119,13 +128,13 @@ Remove-McpTodo -Id "add-jwt-auth"
 source ./mcp-todo.sh
 mcp_todo_init
 mcp_todo_list | jq '.items[] | {id, title, done}'
-mcp_todo_get "add-jwt-auth"
-mcp_todo_create "add-jwt-auth" "Add JWT auth" "Backend" "high" '{"estimate":"4h"}'
-mcp_todo_update "add-jwt-auth" '{"remaining":"Need tests"}'
-mcp_todo_complete "add-jwt-auth" "JWT auth complete"
-mcp_todo_prompt "add-jwt-auth" "implement"
-mcp_todo_add_requirements "add-jwt-auth" '{"functionalRequirements":["FR-AUTH-001"]}'
-mcp_todo_delete "add-jwt-auth"
+mcp_todo_get "MCP-AUTH-001"
+mcp_todo_create "MCP-AUTH-001" "Add JWT auth" "Backend" "high" '{"estimate":"4h"}'
+mcp_todo_update "MCP-AUTH-001" '{"remaining":"Need tests"}'
+mcp_todo_complete "MCP-AUTH-001" "JWT auth complete"
+mcp_todo_prompt "MCP-AUTH-001" "implement"
+mcp_todo_add_requirements "MCP-AUTH-001" '{"functionalRequirements":["FR-AUTH-001"]}'
+mcp_todo_delete "MCP-AUTH-001"
 ```
 
 ## Raw API (for understanding only — use modules)

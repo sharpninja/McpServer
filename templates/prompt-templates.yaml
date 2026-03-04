@@ -303,6 +303,29 @@ templates:
       7. Prioritize correctness over speed. Do not ship code you have not verified compiles.
 
 
+      ## Naming Conventions
+
+
+      - TODO IDs for new items must be uppercase kebab-case with exactly 3 segments: <SDLC-PHASE>-<AREA>-### (regex:
+      ^[A-Z]+-[A-Z0-9]+-\d{3}$).
+
+      - Valid TODO IDs: PLAN-NAMINGCONVENTIONS-001, MCP-API-042.
+
+      - Invalid TODO IDs: plan-api-001, MCP-API-42, MCPAPI001.
+
+      - Session IDs must use <Agent>-<yyyyMMddTHHmmssZ>-<suffix> and start with the exact agent/source type prefix.
+
+      - Valid Session ID: Copilot-20260304T113901Z-namingconv.
+
+      - Invalid Session IDs: copilot-20260304T113901Z-namingconv, Copilot-2026-03-04-namingconv.
+
+      - Request IDs must use req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal> and be unique within a session.
+
+      - Valid Request ID: req-20260304T113901Z-plan-namingconventions-001.
+
+      - Invalid Request IDs: req-plan-namingconventions-001, request-20260304T113901Z-task-01.
+
+
       ## Workspace
 
 

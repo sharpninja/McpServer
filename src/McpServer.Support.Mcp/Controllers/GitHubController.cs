@@ -1,6 +1,8 @@
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Controllers;
 
@@ -14,12 +16,16 @@ public sealed class GitHubController : ControllerBase
 {
     private readonly IGitHubCliService _gh;
     private readonly IIssueTodoSyncService? _syncService;
+    private readonly IChangeEventBus? _eventBus;
+    private readonly ILogger<GitHubController> _logger;
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
-    public GitHubController(IGitHubCliService gh, IIssueTodoSyncService? syncService = null)
+    public GitHubController(IGitHubCliService gh, IIssueTodoSyncService? syncService = null, IChangeEventBus? eventBus = null, ILogger<GitHubController>? logger = null)
     {
         _gh = gh;
         _syncService = syncService;
+        _eventBus = eventBus;
+        _logger = logger ?? Microsoft.Extensions.Logging.Abstractions.NullLogger<GitHubController>.Instance;
     }
 
     /// <summary>TR-PLANNED-013: List issues (gh.issues.list).</summary>
@@ -64,6 +70,7 @@ public sealed class GitHubController : ControllerBase
         var result = await _gh.CreateIssueAsync(request.Title, request.Body, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             return BadRequest(new { error = result.Error ?? "failed to create issue" });
+        await PublishGitHubChangeSafeAsync(ChangeEventActions.Created, result.Number?.ToString() ?? "issue", cancellationToken).ConfigureAwait(false);
         return Ok(new { number = result.Number, url = result.Url });
     }
 
@@ -82,6 +89,7 @@ public sealed class GitHubController : ControllerBase
         var result = await _gh.UpdateIssueAsync(number, request, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             return BadRequest(new { error = result.ErrorMessage ?? "failed to update issue" });
+        await PublishGitHubChangeSafeAsync(ChangeEventActions.Updated, number.ToString(), cancellationToken).ConfigureAwait(false);
         return Ok(new { success = true, url = result.Url });
     }
 
@@ -97,6 +105,7 @@ public sealed class GitHubController : ControllerBase
         var result = await _gh.CloseIssueAsync(number, reason, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             return BadRequest(new { error = result.ErrorMessage ?? "failed to close issue" });
+        await PublishGitHubChangeSafeAsync(ChangeEventActions.Updated, number.ToString(), cancellationToken).ConfigureAwait(false);
         return Ok(new { success = true, url = result.Url });
     }
 
@@ -111,6 +120,7 @@ public sealed class GitHubController : ControllerBase
         var result = await _gh.ReopenIssueAsync(number, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             return BadRequest(new { error = result.ErrorMessage ?? "failed to reopen issue" });
+        await PublishGitHubChangeSafeAsync(ChangeEventActions.Updated, number.ToString(), cancellationToken).ConfigureAwait(false);
         return Ok(new { success = true, url = result.Url });
     }
 
@@ -128,6 +138,7 @@ public sealed class GitHubController : ControllerBase
         var result = await _gh.CommentOnIssueAsync(id, body.Body, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             return BadRequest(new { error = result.Error ?? "failed to add comment" });
+        await PublishGitHubChangeSafeAsync(ChangeEventActions.Updated, id, cancellationToken).ConfigureAwait(false);
         return Ok(new { success = true });
     }
 
@@ -171,6 +182,7 @@ public sealed class GitHubController : ControllerBase
         var result = await _gh.CommentOnPullAsync(id, body.Body, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             return BadRequest(new { error = result.Error ?? "failed to add comment" });
+        await PublishGitHubChangeSafeAsync(ChangeEventActions.Updated, id, cancellationToken).ConfigureAwait(false);
         return Ok(new { success = true });
     }
 
@@ -186,6 +198,7 @@ public sealed class GitHubController : ControllerBase
         if (_syncService is null)
             return BadRequest(new { error = "Issue sync service not configured" });
         var result = await _syncService.SyncAllIssuesToTodosAsync(state, limit, cancellationToken).ConfigureAwait(false);
+        await PublishGitHubChangeSafeAsync(ChangeEventActions.Updated, "sync-from-github", cancellationToken).ConfigureAwait(false);
         return Ok(result);
     }
 
@@ -199,6 +212,7 @@ public sealed class GitHubController : ControllerBase
         if (_syncService is null)
             return BadRequest(new { error = "Issue sync service not configured" });
         var result = await _syncService.SyncAllTodosToIssuesAsync(cancellationToken).ConfigureAwait(false);
+        await PublishGitHubChangeSafeAsync(ChangeEventActions.Updated, "sync-to-github", cancellationToken).ConfigureAwait(false);
         return Ok(result);
     }
 
@@ -220,6 +234,7 @@ public sealed class GitHubController : ControllerBase
             var result = await _syncService.SyncTodoToIssueAsync(todoId, cancellationToken).ConfigureAwait(false);
             if (!result.Success)
                 return BadRequest(new { error = result.ErrorMessage });
+            await PublishGitHubChangeSafeAsync(ChangeEventActions.Updated, number.ToString(), cancellationToken).ConfigureAwait(false);
             return Ok(new { success = true, url = result.Url });
         }
         else
@@ -230,7 +245,31 @@ public sealed class GitHubController : ControllerBase
             var result = await _syncService.SyncIssueToTodoAsync(issueResult.Issue, cancellationToken).ConfigureAwait(false);
             if (!result.Success)
                 return BadRequest(new { error = result.Error });
+            await PublishGitHubChangeSafeAsync(ChangeEventActions.Updated, number.ToString(), cancellationToken).ConfigureAwait(false);
             return Ok(new { success = true, todoId = result.Item?.Id });
+        }
+    }
+
+    private async Task PublishGitHubChangeSafeAsync(string action, string entityId, CancellationToken cancellationToken)
+    {
+        if (_eventBus is null)
+            return;
+
+        try
+        {
+            await _eventBus.PublishAsync(
+                new ChangeEvent
+                {
+                    Category = ChangeEventCategories.GitHub,
+                    Action = action,
+                    EntityId = entityId,
+                    ResourceUri = $"mcp://workspace/gh/issues/{entityId}",
+                },
+                cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed publishing GitHub change event for {EntityId}", entityId);
         }
     }
 }
