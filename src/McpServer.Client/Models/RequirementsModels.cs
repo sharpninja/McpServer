@@ -164,3 +164,75 @@ public sealed class RequirementsGeneratedDocument
     /// <summary>Document media type.</summary>
     public string? ContentType { get; set; }
 }
+
+/// <summary>Request payload for bulk requirements ingest from markdown text.</summary>
+public sealed class RequirementsIngestRequest
+{
+    /// <summary>Functional requirements markdown content.</summary>
+    [JsonPropertyName("functionalMarkdown")]
+    public string? FunctionalMarkdown { get; set; }
+
+    /// <summary>Technical requirements markdown content.</summary>
+    [JsonPropertyName("technicalMarkdown")]
+    public string? TechnicalMarkdown { get; set; }
+
+    /// <summary>Testing requirements markdown content.</summary>
+    [JsonPropertyName("testingMarkdown")]
+    public string? TestingMarkdown { get; set; }
+
+    /// <summary>FR-to-TR mapping markdown content.</summary>
+    [JsonPropertyName("mappingMarkdown")]
+    public string? MappingMarkdown { get; set; }
+}
+
+/// <summary>Result of bulk requirements ingest.</summary>
+public sealed class RequirementsIngestResult
+{
+    /// <summary>Total FR entries parsed from input markdown.</summary>
+    [JsonPropertyName("functionalParsed")]
+    public int FunctionalParsed { get; set; }
+
+    /// <summary>Total FR entries added.</summary>
+    [JsonPropertyName("functionalAdded")]
+    public int FunctionalAdded { get; set; }
+
+    /// <summary>Total FR entries updated.</summary>
+    [JsonPropertyName("functionalUpdated")]
+    public int FunctionalUpdated { get; set; }
+
+    /// <summary>Total TR entries parsed from input markdown.</summary>
+    [JsonPropertyName("technicalParsed")]
+    public int TechnicalParsed { get; set; }
+
+    /// <summary>Total TR entries added.</summary>
+    [JsonPropertyName("technicalAdded")]
+    public int TechnicalAdded { get; set; }
+
+    /// <summary>Total TR entries updated.</summary>
+    [JsonPropertyName("technicalUpdated")]
+    public int TechnicalUpdated { get; set; }
+
+    /// <summary>Total TEST entries parsed from input markdown.</summary>
+    [JsonPropertyName("testingParsed")]
+    public int TestingParsed { get; set; }
+
+    /// <summary>Total TEST entries added.</summary>
+    [JsonPropertyName("testingAdded")]
+    public int TestingAdded { get; set; }
+
+    /// <summary>Total TEST entries updated.</summary>
+    [JsonPropertyName("testingUpdated")]
+    public int TestingUpdated { get; set; }
+
+    /// <summary>Total mapping rows parsed from input markdown.</summary>
+    [JsonPropertyName("mappingParsed")]
+    public int MappingParsed { get; set; }
+
+    /// <summary>Total mapping rows added.</summary>
+    [JsonPropertyName("mappingAdded")]
+    public int MappingAdded { get; set; }
+
+    /// <summary>Total mapping rows updated.</summary>
+    [JsonPropertyName("mappingUpdated")]
+    public int MappingUpdated { get; set; }
+}

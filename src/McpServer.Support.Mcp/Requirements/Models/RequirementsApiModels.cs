@@ -34,3 +34,65 @@ public sealed record UpdateTestRequest(string Condition);
 /// <summary>Request payload for creating or updating an FR-to-TR mapping row.</summary>
 /// <param name="TrIds">List of TR identifiers mapped to the FR row.</param>
 public sealed record UpsertFrTrMappingRequest(IReadOnlyList<string> TrIds);
+
+/// <summary>
+/// Request payload for bulk requirements ingest from Markdown content.
+/// Any null or empty field is skipped.
+/// </summary>
+public sealed class RequirementsIngestRequest
+{
+    /// <summary>Functional requirements markdown content.</summary>
+    public string? FunctionalMarkdown { get; init; }
+
+    /// <summary>Technical requirements markdown content.</summary>
+    public string? TechnicalMarkdown { get; init; }
+
+    /// <summary>Testing requirements markdown content.</summary>
+    public string? TestingMarkdown { get; init; }
+
+    /// <summary>FR-to-TR mapping markdown content.</summary>
+    public string? MappingMarkdown { get; init; }
+}
+
+/// <summary>
+/// Result payload for bulk requirements ingest.
+/// Includes parsed, added, and updated counts per document type.
+/// </summary>
+public sealed class RequirementsIngestResult
+{
+    /// <summary>Total FR entries parsed from input markdown.</summary>
+    public int FunctionalParsed { get; init; }
+
+    /// <summary>Total FR entries added to the requirements store.</summary>
+    public int FunctionalAdded { get; init; }
+
+    /// <summary>Total FR entries updated in the requirements store.</summary>
+    public int FunctionalUpdated { get; init; }
+
+    /// <summary>Total TR entries parsed from input markdown.</summary>
+    public int TechnicalParsed { get; init; }
+
+    /// <summary>Total TR entries added to the requirements store.</summary>
+    public int TechnicalAdded { get; init; }
+
+    /// <summary>Total TR entries updated in the requirements store.</summary>
+    public int TechnicalUpdated { get; init; }
+
+    /// <summary>Total TEST entries parsed from input markdown.</summary>
+    public int TestingParsed { get; init; }
+
+    /// <summary>Total TEST entries added to the requirements store.</summary>
+    public int TestingAdded { get; init; }
+
+    /// <summary>Total TEST entries updated in the requirements store.</summary>
+    public int TestingUpdated { get; init; }
+
+    /// <summary>Total mapping rows parsed from input markdown.</summary>
+    public int MappingParsed { get; init; }
+
+    /// <summary>Total mapping rows added to the requirements store.</summary>
+    public int MappingAdded { get; init; }
+
+    /// <summary>Total mapping rows updated in the requirements store.</summary>
+    public int MappingUpdated { get; init; }
+}

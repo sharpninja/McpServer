@@ -123,4 +123,25 @@ public sealed class RequirementsClientTests
         Assert.Contains("doc=all", handler.LastRequest!.RequestUri!.Query);
         Assert.Equal(HttpMethod.Get, handler.LastRequest.Method);
     }
+
+    [Fact]
+    public async System.Threading.Tasks.Task IngestAsync_PostsMarkdownPayload()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"functionalParsed":1,"functionalAdded":0,"functionalUpdated":1,"technicalParsed":0,"technicalAdded":0,"technicalUpdated":0,"testingParsed":0,"testingAdded":0,"testingUpdated":0,"mappingParsed":0,"mappingAdded":0,"mappingUpdated":0}""");
+        using var http = new HttpClient(handler);
+        var client = new RequirementsClient(http, DefaultOptions);
+
+        var result = await client.IngestAsync(new RequirementsIngestRequest
+        {
+            FunctionalMarkdown = "# Functional Requirements (MCP Server)\n\n## FR-MCP-001 Sample\n\nBody."
+        });
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/requirements/ingest", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("functionalMarkdown", handler.LastRequestBody!, StringComparison.Ordinal);
+        Assert.Equal(1, result.FunctionalParsed);
+        Assert.Equal(1, result.FunctionalUpdated);
+    }
 }

@@ -63,6 +63,8 @@ on:
 jobs:
   build-test-publish:
     runs-on: ubuntu-latest
+    outputs:
+      package_version: ${{ steps.version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -86,6 +88,26 @@ jobs:
       - name: Test
         run: dotnet test tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj -c Release --no-build --logger trx --results-directory TestResults
 
+      - name: Install GitVersion CLI
+        run: dotnet tool install --global GitVersion.Tool
+
+      - name: Compute version from GitVersion
+        id: version
+        shell: pwsh
+        run: |
+          $gvJson = dotnet-gitversion /output json | Out-String
+          $gv = $gvJson | ConvertFrom-Json
+          if ('${{ github.ref }}' -eq 'refs/heads/main') {
+            $version = $gv.MajorMinorPatch
+          }
+          else {
+            $version = $gv.SemVer
+          }
+          Write-Host "GitVersion FullSemVer: $($gv.FullSemVer)"
+          Write-Host "GitVersion SemVer: $($gv.SemVer)"
+          Write-Host "PackageVersion: $version"
+          "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8NoBOM -Append
+
       - name: Publish MCP Server
         run: dotnet publish src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj -c Release -o artifacts/mcp-server
 
@@ -93,7 +115,7 @@ jobs:
         run: dotnet build src/McpServer.Director/McpServer.Director.csproj -c Release
 
       - name: Pack Director tool
-        run: dotnet pack src/McpServer.Director/McpServer.Director.csproj -c Release --no-build -o artifacts/director-tool
+        run: dotnet pack src/McpServer.Director/McpServer.Director.csproj -c Release --no-build -p:PackageVersion=${{ steps.version.outputs.version }} -o artifacts/director-tool
 
       - name: Upload MCP publish artifact
         uses: actions/upload-artifact@v4
@@ -327,28 +349,8 @@ jobs:
         with:
           global-json-file: global.json
 
-      - name: Install GitVersion CLI
-        run: dotnet tool install --global GitVersion.Tool
-
-      - name: Compute version from GitVersion
-        id: version
-        shell: pwsh
-        run: |
-          $gvJson = dotnet-gitversion /output json | Out-String
-          $gv = $gvJson | ConvertFrom-Json
-          if ('${{ github.ref }}' -eq 'refs/heads/main') {
-            $version = $gv.MajorMinorPatch
-          }
-          else {
-            $version = $gv.SemVer
-          }
-          Write-Host "GitVersion FullSemVer: $($gv.FullSemVer)"
-          Write-Host "GitVersion SemVer: $($gv.SemVer)"
-          Write-Host "PackageVersion: $version"
-          "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8NoBOM -Append
-
       - name: Pack
-        run: dotnet pack src/McpServer.Client/McpServer.Client.csproj -c Release -p:PackageVersion=${{ steps.version.outputs.version }} -o ./nupkg
+        run: dotnet pack src/McpServer.Client/McpServer.Client.csproj -c Release -p:PackageVersion=${{ needs.build-test-publish.outputs.package_version }} -o ./nupkg
 
       - name: Download Director tool package artifact
         uses: actions/download-artifact@v4

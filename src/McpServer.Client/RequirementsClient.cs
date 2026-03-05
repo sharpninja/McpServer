@@ -151,4 +151,17 @@ public sealed class RequirementsClient : McpClientBase
             ContentType = contentType
         };
     }
+
+    /// <summary>
+    /// Bulk-ingests requirements markdown and upserts FR/TR/TEST/mapping entities.
+    /// </summary>
+    /// <param name="request">
+    /// Optional markdown payload. If null or empty fields are provided, server defaults may be used.
+    /// </param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Parsed, added, and updated counts per requirements document type.</returns>
+    public async Task<RequirementsIngestResult> IngestAsync(RequirementsIngestRequest? request = null, CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<RequirementsIngestResult>("mcpserver/requirements/ingest", request, cancellationToken).ConfigureAwait(false);
+    }
 }
