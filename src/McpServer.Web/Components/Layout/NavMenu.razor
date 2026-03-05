@@ -1,22 +1,34 @@
-<nav class="nav-menu">
-    <p class="text-uppercase color-fg-muted mb-2">McpServer</p>
-    <NavLink class="menu-link" href="/dashboard" Match="NavLinkMatch.All">Dashboard</NavLink>
-    <p class="menu-heading">Workspaces</p>
-    <NavLink class="menu-link" href="/workspaces">Workspace List</NavLink>
-    <p class="menu-heading">Todos</p>
-    <NavLink class="menu-link" href="/todos">Todo List</NavLink>
-    <p class="menu-heading">Sessions</p>
-    <NavLink class="menu-link" href="/sessions">Session Logs</NavLink>
-    <p class="menu-heading">Templates</p>
-    <NavLink class="menu-link" href="/templates">Template List</NavLink>
-    <NavLink class="menu-link" href="/templates/test">Template Test</NavLink>
-    <p class="menu-heading">Agents</p>
-    <NavLink class="menu-link" href="/agents">Agent List</NavLink>
-    <p class="menu-heading">Context</p>
-    <NavLink class="menu-link" href="/context/search">Context Search</NavLink>
-    <p class="menu-heading">System</p>
-    <NavLink class="menu-link" href="/health-dashboard">Health Dashboard</NavLink>
-    <AuthorizeView Roles="admin,agent-manager">
-        <NavLink class="menu-link" href="/auth/config">Auth Config</NavLink>
-    </AuthorizeView>
-</nav>
+<NavLink class="UnderlineNav-item" href="/dashboard" Match="NavLinkMatch.All">
+    <OcticonIcon Name="home" Size="16" Class="UnderlineNav-octicon" />
+    <span>Dashboard</span>
+</NavLink>
+<NavLink class="UnderlineNav-item" href="/workspaces">
+    <OcticonIcon Name="server" Size="16" Class="UnderlineNav-octicon" />
+    <span>Workspaces</span>
+</NavLink>
+<NavLink class="UnderlineNav-item" href="/todos">
+    <OcticonIcon Name="tasklist" Size="16" Class="UnderlineNav-octicon" />
+    <span>Todos</span>
+</NavLink>
+<NavLink class="UnderlineNav-item" href="/sessions">
+    <OcticonIcon Name="history" Size="16" Class="UnderlineNav-octicon" />
+    <span>Sessions</span>
+</NavLink>
+<NavLink class="UnderlineNav-item" href="/templates">
+    <OcticonIcon Name="file-code" Size="16" Class="UnderlineNav-octicon" />
+    <span>Templates</span>
+</NavLink>
+<NavLink class="UnderlineNav-item" href="/context/search">
+    <OcticonIcon Name="search" Size="16" Class="UnderlineNav-octicon" />
+    <span>Search</span>
+</NavLink>
+<NavLink class="UnderlineNav-item" href="/health-dashboard">
+    <OcticonIcon Name="check-circle" Size="16" Class="UnderlineNav-octicon" />
+    <span>Health</span>
+</NavLink>
+<AuthorizeView Roles="admin,agent-manager">
+    <NavLink class="UnderlineNav-item" href="/auth/config">
+        <OcticonIcon Name="shield-lock" Size="16" Class="UnderlineNav-octicon" />
+        <span>Auth</span>
+    </NavLink>
+</AuthorizeView>

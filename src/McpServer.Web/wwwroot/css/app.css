@@ -5,105 +5,53 @@ body {
     background-color: var(--bgColor-default, #ffffff);
 }
 
-/* ── Sidebar ── */
-aside.app-sidebar {
-    width: 260px !important;
-    min-width: 260px !important;
-    border-right: 1px solid var(--borderColor-default, #d0d7de) !important;
-    background-color: var(--bgColor-default, #ffffff) !important;
-    padding: 12px 8px !important;
-    overflow-y: auto;
+/* ── UnderlineNav tab bar ── */
+.UnderlineNav {
+    border-bottom: 1px solid var(--borderColor-default, #d0d7de);
+    padding-left: 24px;
+    padding-right: 24px;
+    background-color: var(--bgColor-default, #ffffff);
 }
 
-/* ── Nav list reset ── */
-.app-sidebar ul.mcp-nav-list {
-    list-style: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
+.UnderlineNav-body {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
 }
 
-.app-sidebar li.mcp-nav-item {
-    list-style: none !important;
-    position: relative;
-    border-radius: 6px;
-    margin: 1px 0;
-}
-
-/* ── Nav links (GitHub ActionList style) ── */
-.app-sidebar a.mcp-nav-link {
+.UnderlineNav-item {
     display: flex !important;
     align-items: center !important;
-    gap: 8px !important;
-    padding: 6px 8px !important;
-    border-radius: 6px !important;
-    color: var(--fgColor-default, #1f2328) !important;
-    text-decoration: none !important;
+    gap: 6px !important;
+    padding: 8px 16px !important;
     font-size: 14px !important;
     line-height: 20px !important;
-    cursor: pointer;
-    transition: background-color 80ms;
-}
-
-.app-sidebar a.mcp-nav-link:hover {
-    background-color: rgba(208, 215, 222, 0.32) !important;
-    text-decoration: none !important;
-}
-
-.app-sidebar a.mcp-nav-link.active {
-    background-color: rgba(208, 215, 222, 0.48) !important;
-    font-weight: 600 !important;
-}
-
-.app-sidebar li.mcp-nav-item a.mcp-nav-link.active::before {
-    content: "";
-    position: absolute;
-    top: calc(50% - 8px);
-    left: -4px;
-    width: 3px;
-    height: 16px;
-    border-radius: 6px;
-    background-color: var(--fgColor-accent, #0969da);
-}
-
-.app-sidebar .mcp-nav-icon {
-    display: flex !important;
-    align-items: center !important;
-    color: var(--fgColor-muted, #656d76) !important;
-    flex-shrink: 0;
-}
-
-.app-sidebar a.mcp-nav-link.active .mcp-nav-icon {
     color: var(--fgColor-default, #1f2328) !important;
-}
-
-.app-sidebar .mcp-nav-label {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    text-decoration: none !important;
+    border-bottom: 2px solid transparent;
     white-space: nowrap;
 }
 
-/* ── Section dividers ── */
-.app-sidebar li.mcp-nav-divider {
-    list-style: none !important;
-    padding: 6px 8px 4px !important;
-    margin-top: 8px !important;
+.UnderlineNav-item:hover {
+    color: var(--fgColor-default, #1f2328) !important;
+    border-bottom-color: var(--borderColor-neutral-muted, #d0d7de);
+    text-decoration: none !important;
+    transition: border-bottom-color 0.12s ease-out;
 }
 
-.app-sidebar li.mcp-nav-divider:first-child {
-    margin-top: 0 !important;
-}
-
-.app-sidebar li.mcp-nav-divider h3 {
-    font-size: 12px !important;
+.UnderlineNav-item.active {
     font-weight: 600 !important;
-    color: var(--fgColor-muted, #656d76) !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    line-height: 16px !important;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
+    border-bottom-color: var(--underlineNav-borderColor-active, #fd8c73) !important;
+}
+
+.UnderlineNav-octicon {
+    display: flex;
+    align-items: center;
+    color: var(--fgColor-muted, #656d76);
+}
+
+.UnderlineNav-item.active .UnderlineNav-octicon {
+    color: var(--fgColor-default, #1f2328);
 }
 
 /* ── Main content ── */
