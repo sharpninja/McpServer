@@ -1,5 +1,6 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Nodes;
+using McpServer.Support.Mcp.Notifications;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -17,13 +18,15 @@ public sealed class WorkspaceService : IWorkspaceService
 
     private readonly IConfiguration _configuration;
     private readonly IHostEnvironment _env;
+    private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<WorkspaceService> _logger;
 
     /// <summary>Initializes a new instance of the <see cref="WorkspaceService"/> class.</summary>
-    public WorkspaceService(IConfiguration configuration, IHostEnvironment env, ILogger<WorkspaceService> logger)
+    public WorkspaceService(IConfiguration configuration, IHostEnvironment env, ILogger<WorkspaceService> logger, IChangeEventBus? eventBus = null)
     {
         _configuration = configuration;
         _env = env;
+        _eventBus = eventBus;
         _logger = logger;
     }
 
@@ -79,6 +82,7 @@ public sealed class WorkspaceService : IWorkspaceService
             all.Add(entry);
             await WriteAllAsync(all, ct).ConfigureAwait(false);
             _logger.LogInformation("Workspace created: {Name} at {Path}", entry.Name, entry.WorkspacePath);
+            await PublishChangeSafeAsync(ChangeEventActions.Created, normalized, ct).ConfigureAwait(false);
             return new WorkspaceMutationResult(true, Workspace: ToDto(entry));
         }
         finally
@@ -125,6 +129,7 @@ public sealed class WorkspaceService : IWorkspaceService
 
             await WriteAllAsync(all, ct).ConfigureAwait(false);
             _logger.LogInformation("Workspace updated: {Name} at {Path}", entry.Name, entry.WorkspacePath);
+            await PublishChangeSafeAsync(ChangeEventActions.Updated, normalized, ct).ConfigureAwait(false);
             return new WorkspaceMutationResult(true, Workspace: ToDto(entry));
         }
         finally
@@ -148,6 +153,7 @@ public sealed class WorkspaceService : IWorkspaceService
             all.Remove(entry);
             await WriteAllAsync(all, ct).ConfigureAwait(false);
             _logger.LogInformation("Workspace deleted: {Name} at {Path}", dto.Name, dto.WorkspacePath);
+            await PublishChangeSafeAsync(ChangeEventActions.Deleted, normalized, ct).ConfigureAwait(false);
             return new WorkspaceMutationResult(true, Workspace: dto);
         }
         finally
@@ -194,6 +200,7 @@ public sealed class WorkspaceService : IWorkspaceService
                 filesCreated.Add(dbPath);
             }
             _logger.LogInformation("Workspace initialized: {Path}, {Count} files created", normalized, filesCreated.Count);
+            await PublishChangeSafeAsync(ChangeEventActions.Updated, normalized, ct).ConfigureAwait(false);
             return new WorkspaceInitResult(true, FilesCreated: filesCreated);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -248,7 +255,12 @@ public sealed class WorkspaceService : IWorkspaceService
     }
 
     private static string NormalizePath(string path)
-        => Path.GetFullPath(path.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return string.Empty;
+
+        return Path.GetFullPath(path.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+    }
 
     /// <summary>Returns null when the prompt value is empty/whitespace or matches the built-in default.</summary>
     private static string? StripIfDefault(string promptName, string? value)
@@ -275,6 +287,29 @@ public sealed class WorkspaceService : IWorkspaceService
         ImplementPrompt = e.ImplementPrompt ?? TodoPromptDefaults.ImplementPrompt,
         PlanPrompt = e.PlanPrompt ?? TodoPromptDefaults.PlanPrompt,
     };
+
+    private async Task PublishChangeSafeAsync(string action, string entityId, CancellationToken ct)
+    {
+        if (_eventBus is null)
+            return;
+
+        try
+        {
+            await _eventBus.PublishAsync(
+                new ChangeEvent
+                {
+                    Category = ChangeEventCategories.Workspace,
+                    Action = action,
+                    EntityId = entityId,
+                    ResourceUri = $"mcp://workspace/workspace/{entityId}",
+                },
+                ct).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed publishing workspace change event for {EntityId}", entityId);
+        }
+    }
 }
 
 /// <summary>Workspace entry as stored in <c>appsettings.json</c> under <c>Mcp:Workspaces</c>.</summary>
@@ -346,4 +381,3 @@ public sealed class WorkspaceConfigEntry
     /// <summary>When the workspace was last updated.</summary>
     public DateTimeOffset DateTimeModified { get; set; }
 }
-

@@ -1,0 +1,45 @@
+@page "/auth/config"
+
+@inject AuthConfigViewModel ViewModel
+
+<PageTitle>Auth Config</PageTitle>
+
+<h1 class="h2 mb-3">Auth Config</h1>
+
+@if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+{
+    <PrimerFlash Variant="danger" Title="Failed to load auth configuration">@ViewModel.ErrorMessage</PrimerFlash>
+}
+else if (ViewModel.IsLoading)
+{
+    <p class="color-fg-muted">Loading auth configuration...</p>
+}
+else if (ViewModel.Snapshot is null)
+{
+    <PrimerBlankslate Heading="No auth configuration available" Description="The server did not return auth configuration data." />
+}
+else
+{
+    <div class="Box">
+        <div class="Box-header">
+            <h2 class="h3 mb-0">Authentication Settings</h2>
+        </div>
+        <div class="Box-body">
+            <p><strong>Retrieved At:</strong> @ViewModel.Snapshot.RetrievedAt.ToString("u")</p>
+            <p><strong>Enabled:</strong> @(ViewModel.Snapshot.Enabled ? "Yes" : "No")</p>
+            <p><strong>Authority:</strong> @(ViewModel.Snapshot.Authority ?? "(not set)")</p>
+            <p><strong>Client ID:</strong> @(ViewModel.Snapshot.ClientId ?? "(not set)")</p>
+            <p><strong>Scopes:</strong> @(ViewModel.Snapshot.Scopes ?? "(not set)")</p>
+            <p><strong>Device Authorization Endpoint:</strong> @(ViewModel.Snapshot.DeviceAuthorizationEndpoint ?? "(not set)")</p>
+            <p><strong>Token Endpoint:</strong> @(ViewModel.Snapshot.TokenEndpoint ?? "(not set)")</p>
+        </div>
+    </div>
+}
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await ViewModel.LoadAsync().ConfigureAwait(false);
+    }
+}
+

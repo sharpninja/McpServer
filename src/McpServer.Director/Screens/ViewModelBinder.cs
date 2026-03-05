@@ -78,22 +78,39 @@ internal sealed class ViewModelBinder : IDisposable
         TableView tableView,
         Func<IReadOnlyList<T>, EnumerableTableSource<T>> sourceFactory)
     {
-        void Refresh()
+        void ApplySnapshot(List<T> snapshot)
         {
             Application.Invoke(() =>
             {
-                tableView.Table = sourceFactory(collection.ToList());
+                tableView.Table = sourceFactory(snapshot);
                 tableView.SetNeedsDraw();
             });
         }
 
-        void Handler(object? sender, NotifyCollectionChangedEventArgs e) => Refresh();
+        void Handler(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            // Snapshot immediately on the mutating thread to avoid
+            // race conditions when Application.Invoke runs later.
+            List<T> snapshot;
+            lock (collection)
+            {
+                snapshot = [.. collection];
+            }
+
+            ApplySnapshot(snapshot);
+        }
 
         collection.CollectionChanged += Handler;
         _cleanupActions.Add(() => collection.CollectionChanged -= Handler);
 
         // Initial sync
-        Refresh();
+        List<T> initial;
+        lock (collection)
+        {
+            initial = [.. collection];
+        }
+
+        ApplySnapshot(initial);
     }
 
     /// <summary>

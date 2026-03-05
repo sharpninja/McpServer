@@ -51,7 +51,7 @@ public sealed class ConfigurablePathIntegrationTests : IDisposable
 
         var createResult = await sut.CreateAsync(new TodoCreateRequest
         {
-            Id = "CFG-TODO-ABS-001",
+            Id = "CFG-ABS-001",
             Title = "Absolute path test",
             Section = "mvp-support",
             Priority = "high",

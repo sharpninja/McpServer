@@ -1,5 +1,6 @@
 using System.Text.Json;
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +15,14 @@ namespace McpServer.Support.Mcp.Services;
 public sealed class AgentService : IAgentService
 {
     private readonly McpDbContext _db;
+    private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<AgentService> _logger;
 
     /// <summary>Initializes a new instance of <see cref="AgentService"/>.</summary>
-    public AgentService(McpDbContext db, ILogger<AgentService> logger)
+    public AgentService(McpDbContext db, ILogger<AgentService> logger, IChangeEventBus? eventBus = null)
     {
         _db = db;
+        _eventBus = eventBus;
         _logger = logger;
     }
 
@@ -53,6 +56,7 @@ public sealed class AgentService : IAgentService
         var existing = await _db.AgentDefinitions.FindAsync([request.Id], ct).ConfigureAwait(false);
         var now = DateTime.UtcNow;
 
+        var created = existing is null;
         if (existing is not null)
         {
             existing.DisplayName = request.DisplayName;
@@ -82,6 +86,10 @@ public sealed class AgentService : IAgentService
 
         await _db.SaveChangesAsync(ct).ConfigureAwait(false);
         _logger.LogInformation("Upserted agent definition '{AgentId}'", request.Id);
+        await PublishChangeSafeAsync(
+            created ? ChangeEventActions.Created : ChangeEventActions.Updated,
+            request.Id,
+            ct).ConfigureAwait(false);
         return new AgentMutationResult { Success = true };
     }
 
@@ -97,6 +105,7 @@ public sealed class AgentService : IAgentService
         _db.AgentDefinitions.Remove(entity);
         await _db.SaveChangesAsync(ct).ConfigureAwait(false);
         _logger.LogInformation("Deleted agent definition '{AgentId}'", agentType);
+        await PublishChangeSafeAsync(ChangeEventActions.Deleted, agentType, ct).ConfigureAwait(false);
         return new AgentMutationResult { Success = true };
     }
 
@@ -105,6 +114,7 @@ public sealed class AgentService : IAgentService
     {
         var defaults = AgentDefaults.GetBuiltInDefaults();
         var seeded = 0;
+        var seededIds = new List<string>();
 
         foreach (var def in defaults)
         {
@@ -113,6 +123,7 @@ public sealed class AgentService : IAgentService
             {
                 _db.AgentDefinitions.Add(def);
                 seeded++;
+                seededIds.Add(def.Id);
             }
         }
 
@@ -120,6 +131,10 @@ public sealed class AgentService : IAgentService
         {
             await _db.SaveChangesAsync(ct).ConfigureAwait(false);
             _logger.LogInformation("Seeded {Count} built-in agent definitions", seeded);
+            foreach (var seededId in seededIds)
+            {
+                await PublishChangeSafeAsync(ChangeEventActions.Created, seededId, ct).ConfigureAwait(false);
+            }
         }
 
         return seeded;
@@ -170,6 +185,7 @@ public sealed class AgentService : IAgentService
             .FirstOrDefaultAsync(x => x.WorkspacePath == normalized && x.AgentDefinitionId == request.AgentId, ct)
             .ConfigureAwait(false);
 
+        var created = existing is null;
         if (existing is not null)
         {
             existing.Enabled = request.Enabled;
@@ -201,6 +217,10 @@ public sealed class AgentService : IAgentService
 
         await _db.SaveChangesAsync(ct).ConfigureAwait(false);
         _logger.LogInformation("Upserted workspace agent '{AgentId}' in '{Workspace}'", request.AgentId, normalized);
+        await PublishChangeSafeAsync(
+            created ? ChangeEventActions.Created : ChangeEventActions.Updated,
+            request.AgentId,
+            ct).ConfigureAwait(false);
         return new AgentMutationResult { Success = true };
     }
 
@@ -218,6 +238,7 @@ public sealed class AgentService : IAgentService
         _db.AgentWorkspaces.Remove(entity);
         await _db.SaveChangesAsync(ct).ConfigureAwait(false);
         _logger.LogInformation("Deleted workspace agent '{AgentId}' from '{Workspace}'", agentId, normalized);
+        await PublishChangeSafeAsync(ChangeEventActions.Deleted, agentId, ct).ConfigureAwait(false);
         return new AgentMutationResult { Success = true };
     }
 
@@ -262,6 +283,8 @@ public sealed class AgentService : IAgentService
             _logger.LogInformation("Banned agent '{AgentId}' in '{Workspace}'", agentId, normalized);
         }
 
+        await PublishChangeSafeAsync(ChangeEventActions.Updated, agentId, ct).ConfigureAwait(false);
+
         return new AgentMutationResult { Success = true };
     }
 
@@ -303,6 +326,8 @@ public sealed class AgentService : IAgentService
             _logger.LogInformation("Unbanned agent '{AgentId}' in '{Workspace}'", agentId, normalized);
         }
 
+        await PublishChangeSafeAsync(ChangeEventActions.Updated, agentId, ct).ConfigureAwait(false);
+
         return new AgentMutationResult { Success = true };
     }
 
@@ -337,6 +362,7 @@ public sealed class AgentService : IAgentService
         await _db.SaveChangesAsync(ct).ConfigureAwait(false);
         _logger.LogInformation("Logged {EventType} event for agent '{AgentId}' in '{Workspace}'",
             request.EventType, request.AgentId, normalized);
+        await PublishChangeSafeAsync(ChangeEventActions.Created, request.AgentId, ct).ConfigureAwait(false);
         return new AgentMutationResult { Success = true };
     }
 
@@ -418,4 +444,27 @@ public sealed class AgentService : IAgentService
 
     private static string NormalizePath(string path)
         => Path.GetFullPath(path.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+
+    private async Task PublishChangeSafeAsync(string action, string entityId, CancellationToken ct)
+    {
+        if (_eventBus is null)
+            return;
+
+        try
+        {
+            await _eventBus.PublishAsync(
+                new ChangeEvent
+                {
+                    Category = ChangeEventCategories.Agent,
+                    Action = action,
+                    EntityId = entityId,
+                    ResourceUri = $"mcp://workspace/agent/{entityId}",
+                },
+                ct).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed publishing agent change event for {EntityId}", entityId);
+        }
+    }
 }

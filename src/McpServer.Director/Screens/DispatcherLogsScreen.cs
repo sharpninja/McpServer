@@ -203,6 +203,20 @@ internal sealed class DispatcherLogsScreen : View
         if (!string.IsNullOrWhiteSpace(record.Error))
             lines.Add($"Error: {record.Error}");
 
+        if (!string.IsNullOrWhiteSpace(record.RequestData))
+        {
+            lines.Add("");
+            lines.Add("Request:");
+            lines.Add(record.RequestData);
+        }
+
+        if (!string.IsNullOrWhiteSpace(record.ResultData))
+        {
+            lines.Add("");
+            lines.Add("Result:");
+            lines.Add(record.ResultData);
+        }
+
         lines.Add("");
         lines.Add($"Entries ({record.Entries.Count}):");
 

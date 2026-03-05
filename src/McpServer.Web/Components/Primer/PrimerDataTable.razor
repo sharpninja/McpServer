@@ -1,0 +1,56 @@
+@typeparam TItem
+
+<table class="@this.CssClass" @attributes="AdditionalAttributes">
+    @if (this.HeaderTemplate is not null)
+    {
+        <thead>
+            @this.HeaderTemplate
+        </thead>
+    }
+    <tbody>
+        @if (this.RowTemplate is not null && this.Items is { Count: > 0 })
+        {
+            @foreach (var item in this.Items)
+            {
+                <tr>
+                    @this.RowTemplate(item)
+                </tr>
+            }
+        }
+        else if (this.EmptyContent is not null)
+        {
+            <tr>
+                <td colspan="@this.SafeColumnCount">
+                    @this.EmptyContent
+                </td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td colspan="@this.SafeColumnCount" class="color-fg-muted">No data available.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter] public IReadOnlyList<TItem>? Items { get; set; }
+
+    [Parameter] public RenderFragment? HeaderTemplate { get; set; }
+
+    [Parameter] public RenderFragment<TItem>? RowTemplate { get; set; }
+
+    [Parameter] public RenderFragment? EmptyContent { get; set; }
+
+    [Parameter] public int ColumnCount { get; set; } = 1;
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string CssClass => string.Join(' ', new[] { "Table", this.Class }.Where(static value => !string.IsNullOrWhiteSpace(value)));
+
+    private int SafeColumnCount => Math.Max(this.ColumnCount, 1);
+}
+

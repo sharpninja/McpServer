@@ -16,6 +16,8 @@ namespace McpServer.Cqrs;
 /// <param name="UserName">User name from the context, if populated.</param>
 /// <param name="Roles">User roles from the context, if populated.</param>
 /// <param name="Entries">Captured log entries for the dispatch.</param>
+/// <param name="RequestData">Serialized request parameters, if captured.</param>
+/// <param name="ResultData">Serialized result value from the Result monad, if captured.</param>
 public sealed record DispatchLogRecord(
     DateTimeOffset StartedAt,
     DateTimeOffset FinishedAt,
@@ -27,7 +29,9 @@ public sealed record DispatchLogRecord(
     string? UserId,
     string? UserName,
     IReadOnlyList<string> Roles,
-    IReadOnlyList<DispatchLogRecordEntry> Entries);
+    IReadOnlyList<DispatchLogRecordEntry> Entries,
+    string? RequestData = null,
+    string? ResultData = null);
 
 /// <summary>
 /// Lightweight serialized form of a <see cref="LogEntry"/> retained in dispatch history.

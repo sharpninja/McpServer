@@ -4,6 +4,7 @@ using McpServer.Director.Auth;
 using McpServer.Director.Helpers;
 using McpServer.UI.Core;
 using McpServer.UI.Core.Authorization;
+using McpServer.UI.Core.Navigation;
 using McpServer.UI.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -40,6 +41,7 @@ internal static class DirectorServiceRegistration
         services.RemoveAll<IAuthorizationPolicyService>();
         services.AddSingleton<IRoleContext, DirectorRoleContext>();
         services.AddSingleton<IAuthorizationPolicyService, DirectorAuthorizationPolicyService>();
+        services.AddSingleton<ITabRegistry, DirectorTabRegistry>();
 
         // Build HTTP clients for control-plane and active workspace
         var activeWorkspaceClient = McpHttpClient.FromMarkerOnly(workspace);
@@ -64,6 +66,13 @@ internal static class DirectorServiceRegistration
         services.AddSingleton<ITodoApiClient>(_ => new TodoApiClientAdapter(directorContext));
         services.AddSingleton<ITunnelApiClient>(_ => new TunnelApiClientAdapter(directorContext));
         services.AddSingleton<ITemplateApiClient>(_ => new TemplateApiClientAdapter(directorContext));
+        services.AddSingleton<IAgentApiClient>(_ => new AgentApiClientAdapter(directorContext));
+        services.AddSingleton<IAgentPoolApiClient>(_ => new AgentPoolApiClientAdapter(directorContext));
+        services.AddSingleton<IToolRegistryApiClient>(_ => new ToolRegistryApiClientAdapter(directorContext));
+        services.AddSingleton<IGitHubApiClient>(_ => new GitHubApiClientAdapter(directorContext));
+        services.AddSingleton<IRequirementsApiClient>(_ => new RequirementsApiClientAdapter(directorContext));
+        services.AddSingleton<IVoiceApiClient>(_ => new VoiceApiClientAdapter(directorContext));
+        services.AddSingleton<IEventStreamApiClient>(_ => new EventStreamApiClientAdapter(directorContext));
 
         return directorContext;
     }

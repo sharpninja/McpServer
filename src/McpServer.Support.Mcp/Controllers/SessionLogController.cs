@@ -47,6 +47,20 @@ public sealed class SessionLogController : ControllerBase
         if (string.IsNullOrWhiteSpace(dto.SessionId))
             return BadRequest(new { error = "SessionId is required." });
 
+        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(dto.SessionId, dto.SourceType);
+        if (sessionIdError is not null)
+            return BadRequest(new { error = sessionIdError });
+
+        if (dto.Entries is { Count: > 0 })
+        {
+            foreach (var entry in dto.Entries)
+            {
+                var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(entry.RequestId);
+                if (requestIdError is not null)
+                    return BadRequest(new { error = requestIdError });
+            }
+        }
+
         if (dto.Entries is { Count: > MaxEntryCount })
             return BadRequest(new { error = $"Entry count exceeds maximum of {MaxEntryCount}." });
 
@@ -119,6 +133,14 @@ public sealed class SessionLogController : ControllerBase
     {
         if (items is null or { Count: 0 })
             return BadRequest(new { error = "At least one dialog item is required." });
+
+        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, agent);
+        if (sessionIdError is not null)
+            return BadRequest(new { error = sessionIdError });
+
+        var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(requestId);
+        if (requestIdError is not null)
+            return BadRequest(new { error = requestIdError });
 
         try
         {

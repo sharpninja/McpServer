@@ -15,11 +15,6 @@ internal sealed class TemplatesScreen : View
     private readonly TemplateListViewModel _listVm;
     private readonly TemplateDetailViewModel _detailVm;
     private readonly ViewModelBinder _binder = new();
-    private readonly List<TemplateListItem> _rows = [];
-    private readonly SemaphoreSlim _detailLoadGate = new(1, 1);
-    private TemplateListItem? _selectedTemplate;
-    private string? _lastAutoDetailId;
-    private int _detailLoadRequestVersion;
     private TableView _tableView = null!;
     private Label _statusLabel = null!;
     private TextView _detailView = null!;
@@ -104,18 +99,7 @@ internal sealed class TemplatesScreen : View
         };
         _tableView.SelectedCellChanged += (_, e) =>
         {
-            var row = e.NewRow;
-            if (row < 0 || row >= _rows.Count) return;
-
-            var item = _rows[row];
-            _selectedTemplate = item;
-
-            // Dedup — skip if same template already loading/loaded (same as TodoScreen pattern)
-            if (string.Equals(_lastAutoDetailId, item.Id, StringComparison.Ordinal))
-                return;
-
-            _lastAutoDetailId = item.Id;
-            _ = Task.Run(() => LoadTemplateDetailAsync(item.Id));
+            _listVm.SelectedIndex = e.NewRow;
         };
         Add(_tableView);
 
@@ -182,10 +166,38 @@ internal sealed class TemplatesScreen : View
             countLabel.Text = $"Templates: {_listVm.TotalCount}";
         });
 
+        // SelectedItem drives detail load — pure MVVM, no race conditions
+        _binder.BindProperty(_listVm, nameof(_listVm.SelectedItem), () =>
+        {
+            var selected = _listVm.SelectedItem;
+            if (selected is null) return;
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _detailVm.LoadAsync(selected.Id).ConfigureAwait(false);
+                    var detail = _detailVm.Detail;
+                    Application.Invoke(() =>
+                    {
+                        _detailView.Text = detail?.Content ?? "(No content)";
+                        _detailView.SetNeedsDraw();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.TraceError(ex.ToString());
+                    Application.Invoke(() =>
+                    {
+                        _detailView.Text = $"Error: {ex.Message}";
+                        _detailView.SetNeedsDraw();
+                    });
+                }
+            });
+        });
+
         _binder.BindCollection(_listVm.Items, _tableView, items =>
         {
-            _rows.Clear();
-            _rows.AddRange(items);
             return new EnumerableTableSource<TemplateListItem>(
                 items,
                 new Dictionary<string, Func<TemplateListItem, object>>
@@ -202,54 +214,10 @@ internal sealed class TemplatesScreen : View
     /// <summary>Triggers initial data load.</summary>
     public async Task LoadAsync()
     {
-        _lastAutoDetailId = null; // Reset dedup so first selected row loads
         await _listVm.LoadAsync().ConfigureAwait(false);
     }
 
-    /// <summary>
-    /// Loads template detail with dedup, gate, and version counter.
-    /// Mirrors TodoScreen.LoadTodoDetailAsync pattern.
-    /// </summary>
-    private async Task LoadTemplateDetailAsync(string templateId)
-    {
-        var requestVersion = Interlocked.Increment(ref _detailLoadRequestVersion);
-        await _detailLoadGate.WaitAsync().ConfigureAwait(false);
-        try
-        {
-            if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
-                return;
-
-            await _detailVm.LoadAsync(templateId).ConfigureAwait(false);
-
-            if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
-                return;
-
-            var detail = _detailVm.Detail;
-            Application.Invoke(() =>
-            {
-                _detailView.Text = detail?.Content ?? "(No content)";
-                _detailView.SetNeedsDraw();
-            });
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Trace.TraceError(ex.ToString());
-            if (requestVersion == Volatile.Read(ref _detailLoadRequestVersion))
-            {
-                Application.Invoke(() =>
-                {
-                    _detailView.Text = $"Error loading template: {ex.Message}";
-                    _detailView.SetNeedsDraw();
-                });
-            }
-        }
-        finally
-        {
-            _detailLoadGate.Release();
-        }
-    }
-
-    private TemplateListItem? GetSelectedTemplate() => _selectedTemplate;
+    private TemplateListItem? GetSelectedTemplate() => _listVm.SelectedItem;
 
     private void ShowTemplateDialog(bool isNew)
     {
@@ -332,11 +300,19 @@ internal sealed class TemplatesScreen : View
             _detailVm.EditorDescription = descField.Text?.ToString() ?? "";
             _detailVm.EditorContent = contentField.Text?.ToString() ?? "";
 
-            Application.RequestStop();
             _ = Task.Run(async () =>
             {
                 var ok = await _detailVm.SaveAsync().ConfigureAwait(false);
-                if (ok) await LoadAsync().ConfigureAwait(false);
+                if (ok)
+                {
+                    Application.Invoke(() => Application.RequestStop());
+                    await LoadAsync().ConfigureAwait(false);
+                }
+                else
+                {
+                    var err = _detailVm.ErrorMessage ?? "Template save failed.";
+                    Application.Invoke(() => MessageBox.ErrorQuery("Save Failed", err, "OK"));
+                }
             });
         };
 

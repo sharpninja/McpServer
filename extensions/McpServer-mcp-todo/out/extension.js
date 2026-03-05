@@ -43,8 +43,9 @@ let activeCopilotAbort = null;
 /**
  * Streams a Copilot-generated prompt response from the MCP server via SSE.
  * Opens a temporary markdown file and appends each streamed line in real-time.
+ * For action "Plan", optional additionalPrompt is sent as the prompt query param so the server includes it in the request.
  */
-async function streamPromptToEditor(id, action) {
+async function streamPromptToEditor(id, action, additionalPrompt) {
     activeCopilotAbort?.abort();
     const abort = new AbortController();
     activeCopilotAbort = abort;
@@ -61,23 +62,41 @@ async function streamPromptToEditor(id, action) {
         const doc = await vscode.workspace.openTextDocument(mdPath);
         await vscode.window.showTextDocument(doc, { preview: false });
         let firstLine = true;
-        const sseUrl = `/mcp/todo/${encodeURIComponent(id)}/prompt/${action.toLowerCase()}`;
-        await (0, mcpClient_1.streamSSE)(sseUrl, (line) => {
-            try {
-                const edit = new vscode.WorkspaceEdit();
-                if (firstLine) {
-                    const fullRange = new vscode.Range(doc.positionAt(0), doc.positionAt(doc.getText().length));
-                    edit.replace(doc.uri, fullRange, `# ${action}: ${id}\n\n${line}\n`);
-                    firstLine = false;
+        const lineQueue = [];
+        let drainScheduled = false;
+        async function drainLineQueue() {
+            if (drainScheduled || lineQueue.length === 0)
+                return;
+            drainScheduled = true;
+            while (lineQueue.length > 0) {
+                const line = lineQueue.shift();
+                try {
+                    const edit = new vscode.WorkspaceEdit();
+                    if (firstLine) {
+                        const fullRange = new vscode.Range(doc.positionAt(0), doc.positionAt(doc.getText().length));
+                        edit.replace(doc.uri, fullRange, `# ${action}: ${id}\n\n${line}\n`);
+                        firstLine = false;
+                    }
+                    else {
+                        const endPos = doc.positionAt(doc.getText().length);
+                        edit.insert(doc.uri, endPos, line + '\n');
+                    }
+                    await vscode.workspace.applyEdit(edit);
                 }
-                else {
-                    const endPos = doc.positionAt(doc.getText().length);
-                    edit.insert(doc.uri, endPos, line + '\n');
-                }
-                vscode.workspace.applyEdit(edit);
+                catch { /* editor race — swallow */ }
             }
-            catch { /* editor race — swallow */ }
+            drainScheduled = false;
+        }
+        let sseUrl = `/mcpserver/todo/${encodeURIComponent(id)}/prompt/${action.toLowerCase()}`;
+        if (action.toLowerCase() === 'plan' && additionalPrompt?.trim()) {
+            sseUrl += `?prompt=${encodeURIComponent(additionalPrompt.trim())}`;
+        }
+        await (0, mcpClient_1.streamSSE)(sseUrl, (line) => {
+            lineQueue.push(line);
+            void drainLineQueue();
         }, abort.signal);
+        // Ensure any remaining queued lines are applied after stream ends
+        await drainLineQueue();
         fs.writeFileSync(mdPath, doc.getText());
         (0, logger_1.copilotLog)(`<<< SSE complete (${action} ${id})`);
         vscode.window.setStatusBarMessage(`McpServer MCP Todo: ${action} ${id} complete`, 5000);
@@ -202,7 +221,12 @@ function activate(context) {
             (0, logger_1.log)('Command fwhMcpTodo.plan invoked', { id });
             if (!id)
                 return;
-            await streamPromptToEditor(id, 'Plan');
+            const additional = await vscode.window.showInputBox({
+                title: 'Plan',
+                prompt: 'Additional instructions (optional). Included in the plan request to the server.',
+                placeHolder: 'e.g. Focus on test coverage first',
+            });
+            await streamPromptToEditor(id, 'Plan', additional ?? undefined);
         }));
         context.subscriptions.push(vscode.commands.registerCommand('fwhMcpTodo.showOutput', () => {
             (0, logger_1.log)('Command fwhMcpTodo.showOutput invoked');

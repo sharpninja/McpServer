@@ -19,8 +19,9 @@ let activeCopilotAbort: AbortController | null = null;
 /**
  * Streams a Copilot-generated prompt response from the MCP server via SSE.
  * Opens a temporary markdown file and appends each streamed line in real-time.
+ * For action "Plan", optional additionalPrompt is sent as the prompt query param so the server includes it in the request.
  */
-async function streamPromptToEditor(id: string, action: string): Promise<void> {
+async function streamPromptToEditor(id: string, action: string, additionalPrompt?: string): Promise<void> {
   activeCopilotAbort?.abort();
   const abort = new AbortController();
   activeCopilotAbort = abort;
@@ -41,22 +42,42 @@ async function streamPromptToEditor(id: string, action: string): Promise<void> {
     await vscode.window.showTextDocument(doc, { preview: false });
 
     let firstLine = true;
-    const sseUrl = `/mcp/todo/${encodeURIComponent(id)}/prompt/${action.toLowerCase()}`;
+    const lineQueue: string[] = [];
+    let drainScheduled = false;
+
+    async function drainLineQueue(): Promise<void> {
+      if (drainScheduled || lineQueue.length === 0) return;
+      drainScheduled = true;
+      while (lineQueue.length > 0) {
+        const line = lineQueue.shift()!;
+        try {
+          const edit = new vscode.WorkspaceEdit();
+          if (firstLine) {
+            const fullRange = new vscode.Range(doc.positionAt(0), doc.positionAt(doc.getText().length));
+            edit.replace(doc.uri, fullRange, `# ${action}: ${id}\n\n${line}\n`);
+            firstLine = false;
+          } else {
+            const endPos = doc.positionAt(doc.getText().length);
+            edit.insert(doc.uri, endPos, line + '\n');
+          }
+          await vscode.workspace.applyEdit(edit);
+        } catch { /* editor race — swallow */ }
+      }
+      drainScheduled = false;
+    }
+
+    let sseUrl = `/mcpserver/todo/${encodeURIComponent(id)}/prompt/${action.toLowerCase()}`;
+    if (action.toLowerCase() === 'plan' && additionalPrompt?.trim()) {
+      sseUrl += `?prompt=${encodeURIComponent(additionalPrompt.trim())}`;
+    }
 
     await streamSSE(sseUrl, (line: string) => {
-      try {
-        const edit = new vscode.WorkspaceEdit();
-        if (firstLine) {
-          const fullRange = new vscode.Range(doc.positionAt(0), doc.positionAt(doc.getText().length));
-          edit.replace(doc.uri, fullRange, `# ${action}: ${id}\n\n${line}\n`);
-          firstLine = false;
-        } else {
-          const endPos = doc.positionAt(doc.getText().length);
-          edit.insert(doc.uri, endPos, line + '\n');
-        }
-        vscode.workspace.applyEdit(edit);
-      } catch { /* editor race — swallow */ }
+      lineQueue.push(line);
+      void drainLineQueue();
     }, abort.signal);
+
+    // Ensure any remaining queued lines are applied after stream ends
+    await drainLineQueue();
 
     fs.writeFileSync(mdPath, doc.getText());
     copilotLog(`<<< SSE complete (${action} ${id})`);
@@ -215,7 +236,12 @@ export function activate(context: vscode.ExtensionContext): void {
         const id = typeof arg === 'string' ? arg : arg?.id;
         log('Command fwhMcpTodo.plan invoked', { id });
         if (!id) return;
-        await streamPromptToEditor(id, 'Plan');
+        const additional = await vscode.window.showInputBox({
+          title: 'Plan',
+          prompt: 'Additional instructions (optional). Included in the plan request to the server.',
+          placeHolder: 'e.g. Focus on test coverage first',
+        });
+        await streamPromptToEditor(id, 'Plan', additional ?? undefined);
       })
     );
 

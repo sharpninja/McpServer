@@ -1,0 +1,49 @@
+@if (this.TotalPages > 1)
+{
+    <nav class="@this.CssClass" aria-label="Pagination" @attributes="AdditionalAttributes">
+        <div class="pagination">
+            <button type="button" class="btn btn-sm" disabled="@this.IsFirstPage" @onclick="() => this.ChangePageAsync(this.SafeCurrentPage - 1)">Previous</button>
+
+            @for (var pageNumber = 1; pageNumber <= this.TotalPages; pageNumber++)
+            {
+                <button type="button"
+                        class="@this.GetPageButtonClass(pageNumber)"
+                        aria-current="@(pageNumber == this.SafeCurrentPage ? "page" : null)"
+                        @onclick="() => this.ChangePageAsync(pageNumber)">
+                    @pageNumber
+                </button>
+            }
+
+            <button type="button" class="btn btn-sm" disabled="@this.IsLastPage" @onclick="() => this.ChangePageAsync(this.SafeCurrentPage + 1)">Next</button>
+        </div>
+    </nav>
+}
+
+@code {
+    [Parameter] public int CurrentPage { get; set; } = 1;
+
+    [Parameter] public int TotalPages { get; set; } = 1;
+
+    [Parameter] public EventCallback<int> OnPageChanged { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private int SafeCurrentPage => Math.Clamp(this.CurrentPage, 1, Math.Max(this.TotalPages, 1));
+
+    private bool IsFirstPage => this.SafeCurrentPage <= 1;
+
+    private bool IsLastPage => this.SafeCurrentPage >= this.TotalPages;
+
+    private string CssClass => string.Join(' ', new[] { "paginate-container", this.Class }.Where(static value => !string.IsNullOrWhiteSpace(value)));
+
+    private string GetPageButtonClass(int page) => page == this.SafeCurrentPage ? "btn btn-sm btn-primary" : "btn btn-sm";
+
+    private Task ChangePageAsync(int page)
+    {
+        var nextPage = Math.Clamp(page, 1, Math.Max(this.TotalPages, 1));
+        return nextPage == this.SafeCurrentPage ? Task.CompletedTask : this.OnPageChanged.InvokeAsync(nextPage);
+    }
+}
+

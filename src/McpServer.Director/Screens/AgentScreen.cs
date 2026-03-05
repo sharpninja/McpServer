@@ -1,86 +1,79 @@
-using McpServer.Director.Handlers;
-using Terminal.Gui;
+using System.Text;
+using McpServer.UI.Core.Messages;
+using McpServer.UI.Core.ViewModels;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Terminal.Gui;
 
 namespace McpServer.Director.Screens;
 
+/// <summary>
+/// Terminal.Gui screen for agent definition and workspace-assignment management.
+/// Uses UI.Core ViewModels and CQRS only (no direct HTTP calls).
+/// </summary>
 internal sealed class AgentScreen : View
 {
-    private readonly DirectorMcpContext _context;
-    private readonly AgentScreenHandler _handler;
+    private readonly AgentDefinitionListViewModel _definitionListVm;
+    private readonly AgentDefinitionDetailViewModel _definitionDetailVm;
+    private readonly WorkspaceAgentListViewModel _workspaceAgentListVm;
+    private readonly WorkspaceAgentDetailViewModel _workspaceAgentDetailVm;
+    private readonly AgentEventsViewModel _eventsVm;
+    private readonly ILogger<AgentScreen> _logger;
+
+    private readonly List<AgentDefinitionSummaryItem> _definitionRows = [];
+    private readonly List<WorkspaceAgentItem> _workspaceRows = [];
+
     private TableView _defsTable = null!;
     private TableView _agentsTable = null!;
     private TextView _statusLabel = null!;
-    private FrameView _detailFrame = null!;
+    private TextView _detailView = null!;
 
-    private TextField _detailLevelField = null!;
-    private TextField _detailAgentIdField = null!;
-    private TextField _detailDisplayNameField = null!;
-    private CheckBox _detailBuiltInField = null!;
-    private TextField _detailWorkspaceField = null!;
-    private CheckBox _detailEnabledField = null!;
-    private TextField _detailIsolationField = null!;
-    private Button _detailIsolationToggleBtn = null!;
-    private CheckBox _detailBannedField = null!;
-    private TextField _detailBannedReasonField = null!;
-    private TextField _detailLaunchCommandOverrideField = null!;
-    private TextField _detailModelsOverrideField = null!;
-    private TextField _detailBranchStrategyOverrideField = null!;
-    private TextField _detailInstructionFilesOverrideField = null!;
-    private TextView _detailSeedPromptOverrideView = null!;
-    private TextView _detailMarkerAdditionsView = null!;
-
-    private List<AgentDefRow> _defRows = [];
-    private List<AgentRow> _agentRows = [];
-    private int _detailLoadVersion;
-    private string? _detailLoadedAgentId;
-    private bool _workspaceAgentDetailRefreshScheduled;
-    private bool _definitionDetailRefreshScheduled;
-    private AgentDetailLevel _detailLevel;
-    private static readonly object s_traceSync = new();
-    private readonly ILogger<AgentScreen> _logger;
-
-
-    public AgentScreen(DirectorMcpContext context,
+    public AgentScreen(
+        AgentDefinitionListViewModel definitionListVm,
+        AgentDefinitionDetailViewModel definitionDetailVm,
+        WorkspaceAgentListViewModel workspaceAgentListVm,
+        WorkspaceAgentDetailViewModel workspaceAgentDetailVm,
+        AgentEventsViewModel eventsVm,
         ILogger<AgentScreen>? logger = null)
     {
+        _definitionListVm = definitionListVm;
+        _definitionDetailVm = definitionDetailVm;
+        _workspaceAgentListVm = workspaceAgentListVm;
+        _workspaceAgentDetailVm = workspaceAgentDetailVm;
+        _eventsVm = eventsVm;
         _logger = logger ?? NullLogger<AgentScreen>.Instance;
-        _context = context;
-        _handler = new AgentScreenHandler(context);
+
         Title = "Agents";
         Width = Dim.Fill();
         Height = Dim.Fill();
         CanFocus = true;
-        TraceUi("ctor");
         BuildUi();
     }
 
     private void BuildUi()
     {
-        TraceUi("build-ui");
         var leftPane = new View
         {
             X = 0,
             Y = 0,
-            Width = Dim.Percent(54),
+            Width = Dim.Percent(55),
             Height = Dim.Fill(3),
         };
         Add(leftPane);
 
-        _detailFrame = new FrameView
+        var detailFrame = new FrameView
         {
-            Title = "Agent Details",
+            Title = "Detail",
             X = Pos.Right(leftPane),
             Y = 0,
             Width = Dim.Fill(),
             Height = Dim.Fill(3),
         };
-        Add(_detailFrame);
+        Add(detailFrame);
 
         var defsFrame = new FrameView
         {
-            Title = "Agent Definitions",
+            Title = "Global Definitions",
             X = 0,
             Y = 0,
             Width = Dim.Fill(),
@@ -95,16 +88,14 @@ internal sealed class AgentScreen : View
             FullRowSelect = true,
             MultiSelect = false,
         };
+        _defsTable.SelectedCellChanged += (_, _) => _ = Task.Run(RefreshDefinitionDetailAsync);
         _defsTable.KeyDown += (_, e) =>
         {
-            if (e.KeyCode == KeyCode.Enter)
-            {
-                _ = Task.Run(AssignSelectedDefinitionAsync);
-                e.Handled = true;
-            }
+            if (e.KeyCode != KeyCode.Enter)
+                return;
+            _ = Task.Run(AssignSelectedDefinitionAsync);
+            e.Handled = true;
         };
-        _defsTable.SelectedCellChanged += (_, _) => QueueSelectedDefinitionDetailRefreshOnTimeout();
-        _defsTable.MouseClick += (_, _) => QueueSelectedDefinitionDetailRefreshOnTimeout();
         defsFrame.Add(_defsTable);
         leftPane.Add(defsFrame);
 
@@ -125,20 +116,21 @@ internal sealed class AgentScreen : View
             FullRowSelect = true,
             MultiSelect = false,
         };
-        _agentsTable.SelectedCellChanged += (_, _) => QueueSelectedAgentDetailRefreshOnTimeout();
-        _agentsTable.SelectedCellChanged += (_, e) => TraceUi(
-            $"agents.selected-cell-changed old=({e.OldRow},{e.OldCol}) new=({e.NewRow},{e.NewCol}) selectedRow={_agentsTable.SelectedRow}");
-        _agentsTable.KeyDown += (_, e) => TraceUi($"agents.key-down key={e.KeyCode} selectedRow={_agentsTable.SelectedRow}");
-        _agentsTable.KeyDownNotHandled += (_, e) => TraceUi($"agents.key-down-not-handled key={e.KeyCode} selectedRow={_agentsTable.SelectedRow}");
-        _agentsTable.MouseClick += (_, e) =>
-        {
-            TraceUi($"agents.mouse-click flags={e.Flags} selectedRow={_agentsTable.SelectedRow}");
-            QueueSelectedAgentDetailRefreshOnTimeout();
-        };
+        _agentsTable.SelectedCellChanged += (_, _) => _ = Task.Run(RefreshWorkspaceDetailAsync);
         agentsFrame.Add(_agentsTable);
         leftPane.Add(agentsFrame);
 
-        BuildDetailPane(_detailFrame);
+        _detailView = new TextView
+        {
+            X = 0,
+            Y = 0,
+            Width = Dim.Fill(),
+            Height = Dim.Fill(),
+            ReadOnly = true,
+            WordWrap = true,
+            Text = "Select a definition or workspace agent to view details.",
+        };
+        detailFrame.Add(_detailView);
 
         _statusLabel = new TextView
         {
@@ -161,7 +153,13 @@ internal sealed class AgentScreen : View
         var addBtn = new Button { X = Pos.Right(assignBtn) + 1, Y = Pos.AnchorEnd(1), Text = "Add by ID" };
         addBtn.Accepting += (_, _) => ShowAddDialog();
 
-        var banBtn = new Button { X = Pos.Right(addBtn) + 1, Y = Pos.AnchorEnd(1), Text = "Ban" };
+        var editDefBtn = new Button { X = Pos.Right(addBtn) + 1, Y = Pos.AnchorEnd(1), Text = "Edit Def" };
+        editDefBtn.Accepting += (_, _) => ShowEditDefinitionDialog();
+
+        var editAgentBtn = new Button { X = Pos.Right(editDefBtn) + 1, Y = Pos.AnchorEnd(1), Text = "Edit Agent" };
+        editAgentBtn.Accepting += (_, _) => ShowEditWorkspaceAgentDialog();
+
+        var banBtn = new Button { X = Pos.Right(editAgentBtn) + 1, Y = Pos.AnchorEnd(1), Text = "Ban" };
         banBtn.Accepting += (_, _) => ShowBanDialog();
 
         var unbanBtn = new Button { X = Pos.Right(banBtn) + 1, Y = Pos.AnchorEnd(1), Text = "Unban" };
@@ -173,174 +171,55 @@ internal sealed class AgentScreen : View
         var validateBtn = new Button { X = Pos.Right(deleteBtn) + 1, Y = Pos.AnchorEnd(1), Text = "Validate" };
         validateBtn.Accepting += (_, _) => _ = Task.Run(ValidateAsync);
 
-        Add(refreshBtn, assignBtn, addBtn, banBtn, unbanBtn, deleteBtn, validateBtn);
-        ClearDetailEditor();
-    }
+        var eventsBtn = new Button { X = Pos.Right(validateBtn) + 1, Y = Pos.AnchorEnd(1), Text = "Events" };
+        eventsBtn.Accepting += (_, _) => _ = Task.Run(ShowEventsDialogAsync);
 
-    private void BuildDetailPane(FrameView parent)
-    {
-        var row = 0;
-
-        parent.Add(new Label { X = 0, Y = row, Text = "Level:" });
-        _detailLevelField = new TextField { X = 16, Y = row, Width = Dim.Fill(), ReadOnly = true, Text = "" };
-        parent.Add(_detailLevelField);
-        row++;
-
-        parent.Add(new Label { X = 0, Y = row, Text = "Agent ID:" });
-        _detailAgentIdField = new TextField { X = 16, Y = row, Width = Dim.Fill(), ReadOnly = true, Text = "" };
-        parent.Add(_detailAgentIdField);
-        row++;
-
-        parent.Add(new Label { X = 0, Y = row, Text = "Display Name:" });
-        _detailDisplayNameField = new TextField { X = 16, Y = row, Width = Dim.Fill(), Text = "" };
-        parent.Add(_detailDisplayNameField);
-        row++;
-
-        parent.Add(new Label { X = 0, Y = row, Text = "Built-In:" });
-        _detailBuiltInField = new CheckBox
-        {
-            X = 16,
-            Y = row,
-            Width = 12,
-            Text = "",
-            CheckedState = CheckState.UnChecked,
-            Enabled = false,
-        };
-        parent.Add(_detailBuiltInField);
-        row++;
-
-        parent.Add(new Label { X = 0, Y = row, Text = "Workspace:" });
-        _detailWorkspaceField = new TextField { X = 16, Y = row, Width = Dim.Fill(), ReadOnly = true, Text = "" };
-        parent.Add(_detailWorkspaceField);
-        row++;
-
-        parent.Add(new Label { X = 0, Y = row, Text = "Enabled:" });
-        _detailEnabledField = new CheckBox
-        {
-            X = 16,
-            Y = row,
-            Width = 12,
-            Text = "",
-            CheckedState = CheckState.Checked,
-        };
-        parent.Add(_detailEnabledField);
-        row++;
-
-        parent.Add(new Label { X = 0, Y = row, Text = "Isolation:" });
-        _detailIsolationField = new TextField
-        {
-            X = 16,
-            Y = row,
-            Width = Dim.Fill(8),
-            ReadOnly = true,
-            Text = "worktree",
-        };
-        parent.Add(_detailIsolationField);
-        _detailIsolationToggleBtn = new Button { X = Pos.Right(_detailIsolationField) + 1, Y = row, Text = "Toggle" };
-        _detailIsolationToggleBtn.Accepting += (_, _) =>
-        {
-            var current = _detailIsolationField.Text?.ToString();
-            _detailIsolationField.Text = NextIsolationValue(current);
-        };
-        parent.Add(_detailIsolationToggleBtn);
-        row++;
-
-        parent.Add(new Label { X = 0, Y = row, Text = "Banned:" });
-        _detailBannedField = new CheckBox
-        {
-            X = 16,
-            Y = row,
-            Width = 12,
-            Text = "",
-            CheckedState = CheckState.UnChecked,
-            Enabled = false,
-        };
-        parent.Add(_detailBannedField);
-        row++;
-
-        parent.Add(new Label { X = 0, Y = row, Text = "Ban Reason:" });
-        _detailBannedReasonField = new TextField { X = 16, Y = row, Width = Dim.Fill(), ReadOnly = true, Text = "" };
-        parent.Add(_detailBannedReasonField);
-        row++;
-
-        parent.Add(new Label { X = 0, Y = row, Text = "Launch Cmd:" });
-        _detailLaunchCommandOverrideField = new TextField { X = 16, Y = row, Width = Dim.Fill(), Text = "" };
-        parent.Add(_detailLaunchCommandOverrideField);
-        row++;
-
-        parent.Add(new Label { X = 0, Y = row, Text = "Models CSV:" });
-        _detailModelsOverrideField = new TextField { X = 16, Y = row, Width = Dim.Fill(), Text = "" };
-        parent.Add(_detailModelsOverrideField);
-        row++;
-
-        parent.Add(new Label { X = 0, Y = row, Text = "Branch:" });
-        _detailBranchStrategyOverrideField = new TextField { X = 16, Y = row, Width = Dim.Fill(), Text = "" };
-        parent.Add(_detailBranchStrategyOverrideField);
-        row++;
-
-        parent.Add(new Label { X = 0, Y = row, Text = "Instr CSV:" });
-        _detailInstructionFilesOverrideField = new TextField { X = 16, Y = row, Width = Dim.Fill(), Text = "" };
-        parent.Add(_detailInstructionFilesOverrideField);
-        row++;
-
-        parent.Add(new Label { X = 0, Y = row, Text = "Seed Prompt Override:" });
-        row++;
-
-        _detailSeedPromptOverrideView = new TextView { X = 0, Y = row, Width = Dim.Fill(), Height = 3, WordWrap = true, Text = "" };
-        parent.Add(_detailSeedPromptOverrideView);
-        row += 3;
-
-        parent.Add(new Label { X = 0, Y = row, Text = "Marker Additions:" });
-        row++;
-
-        _detailMarkerAdditionsView = new TextView { X = 0, Y = row, Width = Dim.Fill(), Height = Dim.Fill(2), WordWrap = true, Text = "" };
-        parent.Add(_detailMarkerAdditionsView);
-
-        ApplyEditableScheme(_detailDisplayNameField, _detailLaunchCommandOverrideField,
-            _detailModelsOverrideField, _detailBranchStrategyOverrideField,
-            _detailInstructionFilesOverrideField, _detailSeedPromptOverrideView,
-            _detailMarkerAdditionsView);
-
-        var saveDetailBtn = new Button { X = 0, Y = Pos.AnchorEnd(1), Text = "Save Detail" };
-        saveDetailBtn.Accepting += (_, _) => QueueSaveSelectedDetail();
-        var reloadDetailBtn = new Button { X = Pos.Right(saveDetailBtn) + 1, Y = Pos.AnchorEnd(1), Text = "Reload Detail" };
-        reloadDetailBtn.Accepting += (_, _) => QueueReloadSelectedDetail();
-        parent.Add(saveDetailBtn, reloadDetailBtn);
+        Add(refreshBtn, assignBtn, addBtn, editDefBtn, editAgentBtn, banBtn, unbanBtn, deleteBtn, validateBtn, eventsBtn);
     }
 
     public async Task LoadAllAsync()
     {
-        TraceUi("load-all.start");
+        SetStatus("Loading agent data...");
         await LoadDefinitionsAsync().ConfigureAwait(false);
         await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
-        TraceUi("load-all.end");
+
+        if (GetSelectedWorkspaceAgent() is not null)
+            await RefreshWorkspaceDetailAsync().ConfigureAwait(false);
+        else if (GetSelectedDefinition() is not null)
+            await RefreshDefinitionDetailAsync().ConfigureAwait(false);
+        else
+            SetDetail("No definitions or workspace agents are currently loaded.");
     }
 
     private async Task LoadDefinitionsAsync()
     {
-        SetStatus("Loading definitions...");
         try
         {
-            var definitions = await _handler.ListDefinitionsAsync().ConfigureAwait(false);
-            var rows = definitions
-                .Select(static item => new AgentDefRow(
-                    item.Id,
-                    item.DisplayName,
-                    item.IsBuiltIn ? "Yes" : "No"))
-                .ToList();
-
-            _defRows = rows;
+            await _definitionListVm.LoadAsync().ConfigureAwait(false);
             Application.Invoke(() =>
             {
-                _defsTable.Table = new EnumerableTableSource<AgentDefRow>(rows,
-                    new Dictionary<string, Func<AgentDefRow, object>>
+                _definitionRows.Clear();
+                _definitionRows.AddRange(_definitionListVm.Items);
+                _defsTable.Table = new EnumerableTableSource<AgentDefinitionSummaryItem>(
+                    _definitionRows,
+                    new Dictionary<string, Func<AgentDefinitionSummaryItem, object>>
                     {
-                        ["ID"] = r => r.Id,
-                        ["Display Name"] = r => r.DisplayName,
-                        ["Built-In"] = r => r.BuiltIn,
+                        ["ID"] = d => d.Id,
+                        ["Display Name"] = d => d.DisplayName,
+                        ["Built-In"] = d => d.IsBuiltIn ? "Yes" : "No",
                     });
+
+                if (_definitionRows.Count > 0 &&
+                    (_defsTable.SelectedRow < 0 || _defsTable.SelectedRow >= _definitionRows.Count))
+                {
+                    _defsTable.SelectedRow = 0;
+                }
             });
-            SetStatus($"{rows.Count} definitions loaded");
+
+            if (!string.IsNullOrWhiteSpace(_definitionListVm.ErrorMessage))
+                SetStatus(_definitionListVm.ErrorMessage);
+            else
+                SetStatus(_definitionListVm.StatusMessage ?? $"Loaded {_definitionRows.Count} definitions.");
         }
         catch (Exception ex)
         {
@@ -353,44 +232,32 @@ internal sealed class AgentScreen : View
     {
         try
         {
-            var workspacePath = GetRequiredActiveWorkspacePath();
-            var agents = await _handler.ListWorkspaceAgentsAsync(workspacePath).ConfigureAwait(false);
-            var rows = agents
-                .Select(static item => new AgentRow(
-                    item.AgentId,
-                    item.Enabled ? "Yes" : "No",
-                    item.Banned ? "Yes" : "No",
-                    item.AgentIsolation))
-                .ToList();
-
-            _agentRows = rows;
+            await _workspaceAgentListVm.LoadAsync().ConfigureAwait(false);
             Application.Invoke(() =>
             {
-                TraceUi($"load-workspace-agents.bind rows={rows.Count} selectedRow(before)={_agentsTable.SelectedRow}");
-                _agentsTable.Table = new EnumerableTableSource<AgentRow>(rows,
-                    new Dictionary<string, Func<AgentRow, object>>
+                _workspaceRows.Clear();
+                _workspaceRows.AddRange(_workspaceAgentListVm.Items);
+                _agentsTable.Table = new EnumerableTableSource<WorkspaceAgentItem>(
+                    _workspaceRows,
+                    new Dictionary<string, Func<WorkspaceAgentItem, object>>
                     {
-                        ["Agent ID"] = r => r.AgentId,
-                        ["Enabled"] = r => r.Enabled,
-                        ["Banned"] = r => r.Banned,
-                        ["Isolation"] = r => r.Isolation,
+                        ["Agent ID"] = a => a.AgentId,
+                        ["Enabled"] = a => a.Enabled ? "Yes" : "No",
+                        ["Banned"] = a => a.Banned ? "Yes" : "No",
+                        ["Isolation"] = a => a.AgentIsolation,
                     });
 
-                if (rows.Count == 0)
-                {
-                    ClearDetailEditor();
-                    return;
-                }
-
-                if (_agentsTable.SelectedRow < 0 || _agentsTable.SelectedRow >= rows.Count)
+                if (_workspaceRows.Count > 0 &&
+                    (_agentsTable.SelectedRow < 0 || _agentsTable.SelectedRow >= _workspaceRows.Count))
                 {
                     _agentsTable.SelectedRow = 0;
-                    TraceUi("load-workspace-agents.set-selected-row row=0");
                 }
-
-                TraceUi($"load-workspace-agents.queue-initial-detail selectedRow(after)={_agentsTable.SelectedRow}");
-                QueueSelectedAgentDetailRefresh();
             });
+
+            if (!string.IsNullOrWhiteSpace(_workspaceAgentListVm.ErrorMessage))
+                SetStatus(_workspaceAgentListVm.ErrorMessage);
+            else
+                SetStatus(_workspaceAgentListVm.StatusMessage ?? $"Loaded {_workspaceRows.Count} workspace agents.");
         }
         catch (Exception ex)
         {
@@ -399,690 +266,600 @@ internal sealed class AgentScreen : View
         }
     }
 
-    private string? GetSelectedAgentId()
-    {
-        var row = _agentsTable.SelectedRow;
-        TraceUi($"get-selected-agent-id row={row} rows={_agentRows.Count}");
-        if (row >= 0 && row < _agentRows.Count)
-            return _agentRows[row].AgentId;
-        return null;
-    }
-
-    private string? GetSelectedDefinitionId()
+    private AgentDefinitionSummaryItem? GetSelectedDefinition()
     {
         var row = _defsTable.SelectedRow;
-        if (row >= 0 && row < _defRows.Count)
-            return _defRows[row].Id;
-        return null;
+        return row >= 0 && row < _definitionRows.Count ? _definitionRows[row] : null;
     }
 
-    private string GetRequiredActiveWorkspacePath()
-        => _context.GetRequiredActiveWorkspaceHttpClient().WorkspacePath;
-
-    private void QueueSelectedDefinitionDetailRefresh()
-        => QueueDefinitionDetailRefresh(GetSelectedDefinitionId());
-
-    private void QueueSelectedDefinitionDetailRefreshOnTimeout()
+    private WorkspaceAgentItem? GetSelectedWorkspaceAgent()
     {
-        if (_definitionDetailRefreshScheduled)
+        var row = _agentsTable.SelectedRow;
+        return row >= 0 && row < _workspaceRows.Count ? _workspaceRows[row] : null;
+    }
+
+    private async Task RefreshDefinitionDetailAsync()
+    {
+        var selected = GetSelectedDefinition();
+        if (selected is null)
             return;
 
-        _definitionDetailRefreshScheduled = true;
-        Application.AddTimeout(TimeSpan.FromMilliseconds(1), () =>
+        var detail = await _definitionDetailVm.LoadAsync(selected.Id).ConfigureAwait(false);
+        if (detail is null)
         {
-            _definitionDetailRefreshScheduled = false;
-            QueueSelectedDefinitionDetailRefresh();
-            return false;
-        });
-    }
-
-    private void QueueSelectedAgentDetailRefresh()
-    {
-        TraceUi($"queue-selected-agent-detail-refresh selectedRow={_agentsTable.SelectedRow}");
-        QueueAgentDetailRefresh(GetSelectedAgentId());
-    }
-
-    private void QueueSelectedAgentDetailRefreshOnTimeout()
-    {
-        if (_workspaceAgentDetailRefreshScheduled)
-        {
-            TraceUi("queue-selected-agent-detail-refresh-on-timeout skipped(already-scheduled)");
+            SetStatus(_definitionDetailVm.ErrorMessage ?? $"Definition '{selected.Id}' not found.");
             return;
         }
 
-        _workspaceAgentDetailRefreshScheduled = true;
-        TraceUi($"queue-selected-agent-detail-refresh-on-timeout scheduled selectedRow={_agentsTable.SelectedRow}");
-        Application.AddTimeout(TimeSpan.FromMilliseconds(1), () =>
-        {
-            _workspaceAgentDetailRefreshScheduled = false;
-            TraceUi($"queue-selected-agent-detail-refresh-on-timeout run selectedRow={_agentsTable.SelectedRow}");
-            QueueSelectedAgentDetailRefresh();
-            return false;
-        });
+        SetDetail(FormatDefinitionDetail(detail));
+        SetStatus(_definitionDetailVm.StatusMessage ?? $"Loaded definition '{detail.Id}'.");
     }
 
-    private void QueueReloadSelectedDetail()
+    private async Task RefreshWorkspaceDetailAsync()
     {
-        var agentId = (_detailAgentIdField.Text?.ToString() ?? "").Trim();
-        if (string.IsNullOrWhiteSpace(agentId))
+        var selected = GetSelectedWorkspaceAgent();
+        if (selected is null)
+            return;
+
+        var detail = await _workspaceAgentDetailVm.LoadAsync(selected.AgentId, selected.WorkspacePath).ConfigureAwait(false);
+        if (detail is null)
         {
-            SetStatus("Select an agent definition or workspace agent first");
+            SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? $"Workspace agent '{selected.AgentId}' not found.");
             return;
         }
 
-        if (_detailLevel == AgentDetailLevel.Definition)
-        {
-            QueueDefinitionDetailRefresh(agentId);
-            return;
-        }
-
-        QueueAgentDetailRefresh(agentId);
-    }
-
-    private void QueueDefinitionDetailRefresh(string? agentId)
-    {
-        var version = System.Threading.Interlocked.Increment(ref _detailLoadVersion);
-        if (string.IsNullOrWhiteSpace(agentId))
-        {
-            Application.Invoke(ClearDetailEditor);
-            return;
-        }
-
-        _ = Task.Run(() => LoadDefinitionDetailAsync(agentId, version));
-    }
-
-    private void QueueAgentDetailRefresh(string? agentId)
-    {
-        var version = System.Threading.Interlocked.Increment(ref _detailLoadVersion);
-        TraceUi($"queue-agent-detail-refresh version={version} agentId={agentId ?? "(null)"}");
-        if (string.IsNullOrWhiteSpace(agentId))
-        {
-            Application.Invoke(ClearDetailEditor);
-            return;
-        }
-
-        _ = Task.Run(() => LoadAgentDetailAsync(agentId, version));
-    }
-
-    private async Task LoadAgentDetailAsync(string agentId, int version)
-    {
-        try
-        {
-            TraceUi($"load-agent-detail.start version={version} agentId={agentId}");
-            var workspacePath = GetRequiredActiveWorkspacePath();
-            var detail = await _handler.GetWorkspaceAgentDetailAsync(workspacePath, agentId).ConfigureAwait(false);
-
-            if (version != System.Threading.Volatile.Read(ref _detailLoadVersion))
-            {
-                TraceUi($"load-agent-detail.drop-stale version={version} latest={System.Threading.Volatile.Read(ref _detailLoadVersion)} agentId={agentId}");
-                return;
-            }
-
-            TraceUi($"load-agent-detail.apply version={version} agentId={detail.AgentId}");
-            Application.Invoke(() => ApplyDetailEditor(detail));
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("{ExceptionDetail}", ex.ToString());
-            if (version != System.Threading.Volatile.Read(ref _detailLoadVersion))
-                return;
-
-            SetStatus($"Load detail failed: {ex.Message}");
-        }
-    }
-
-    private async Task LoadDefinitionDetailAsync(string agentId, int version)
-    {
-        try
-        {
-            var detail = await _handler.GetDefinitionDetailAsync(agentId).ConfigureAwait(false);
-
-            if (version != System.Threading.Volatile.Read(ref _detailLoadVersion))
-                return;
-
-            Application.Invoke(() => ApplyDefinitionDetailEditor(detail));
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("{ExceptionDetail}", ex.ToString());
-            if (version != System.Threading.Volatile.Read(ref _detailLoadVersion))
-                return;
-
-            SetStatus($"Load definition detail failed: {ex.Message}");
-        }
-    }
-
-    private void ApplyDetailEditor(AgentDetailState detail)
-    {
-        TraceUi($"apply-detail-editor agentId={detail.AgentId}");
-        SetDetailLevel(AgentDetailLevel.WorkspaceAssignment);
-        _detailLoadedAgentId = detail.AgentId;
-        _detailLevelField.Text = "Workspace Assignment";
-        _detailAgentIdField.Text = detail.AgentId;
-        _detailDisplayNameField.Text = TryGetDefinitionDisplayName(detail.AgentId) ?? detail.AgentId;
-        _detailBuiltInField.CheckedState = TryIsBuiltInDefinition(detail.AgentId) ? CheckState.Checked : CheckState.UnChecked;
-        _detailWorkspaceField.Text = detail.WorkspacePath;
-        _detailEnabledField.CheckedState = detail.Enabled ? CheckState.Checked : CheckState.UnChecked;
-        _detailIsolationField.Text = NormalizeIsolationValue(detail.AgentIsolation);
-        _detailBannedField.CheckedState = detail.Banned ? CheckState.Checked : CheckState.UnChecked;
-        _detailBannedReasonField.Text = detail.BannedReason;
-        _detailLaunchCommandOverrideField.Text = detail.LaunchCommandOverride ?? "";
-        _detailModelsOverrideField.Text = JoinCsv(detail.ModelsOverride);
-        _detailBranchStrategyOverrideField.Text = detail.BranchStrategyOverride ?? "";
-        _detailInstructionFilesOverrideField.Text = JoinCsv(detail.InstructionFilesOverride);
-        _detailSeedPromptOverrideView.Text = detail.SeedPromptOverride ?? "";
-        _detailMarkerAdditionsView.Text = detail.MarkerAdditions ?? "";
-        ApplyDetailEditability();
-        SetNeedsDraw();
-        SuperView?.SetNeedsDraw();
-    }
-
-    private void ApplyDefinitionDetailEditor(AgentDefinitionDetailState detail)
-    {
-        SetDetailLevel(AgentDetailLevel.Definition);
-        _detailLoadedAgentId = detail.AgentId;
-        _detailLevelField.Text = "Global Definition";
-        _detailAgentIdField.Text = detail.AgentId;
-        _detailDisplayNameField.Text = detail.DisplayName;
-        _detailBuiltInField.CheckedState = detail.IsBuiltIn ? CheckState.Checked : CheckState.UnChecked;
-        _detailWorkspaceField.Text = "(global defaults)";
-        _detailEnabledField.CheckedState = CheckState.Checked;
-        _detailIsolationField.Text = "worktree";
-        _detailBannedField.CheckedState = CheckState.UnChecked;
-        _detailBannedReasonField.Text = "";
-        _detailLaunchCommandOverrideField.Text = detail.DefaultLaunchCommand;
-        _detailModelsOverrideField.Text = JoinCsv(detail.DefaultModels);
-        _detailBranchStrategyOverrideField.Text = detail.DefaultBranchStrategy;
-        _detailInstructionFilesOverrideField.Text = detail.DefaultInstructionFile;
-        _detailSeedPromptOverrideView.Text = detail.DefaultSeedPrompt;
-        _detailMarkerAdditionsView.Text = "";
-        ApplyDetailEditability();
-        SetNeedsDraw();
-        SuperView?.SetNeedsDraw();
-    }
-
-    private void ClearDetailEditor()
-    {
-        TraceUi("clear-detail-editor");
-        SetDetailLevel(AgentDetailLevel.None);
-        _detailLoadedAgentId = null;
-        _detailLevelField.Text = "";
-        _detailAgentIdField.Text = "";
-        _detailDisplayNameField.Text = "";
-        _detailBuiltInField.CheckedState = CheckState.UnChecked;
-        _detailWorkspaceField.Text = "";
-        _detailEnabledField.CheckedState = CheckState.Checked;
-        _detailIsolationField.Text = "worktree";
-        _detailBannedField.CheckedState = CheckState.UnChecked;
-        _detailBannedReasonField.Text = "";
-        _detailLaunchCommandOverrideField.Text = "";
-        _detailModelsOverrideField.Text = "";
-        _detailBranchStrategyOverrideField.Text = "";
-        _detailInstructionFilesOverrideField.Text = "";
-        _detailSeedPromptOverrideView.Text = "";
-        _detailMarkerAdditionsView.Text = "";
-        ApplyDetailEditability();
-        SetNeedsDraw();
-        SuperView?.SetNeedsDraw();
-    }
-
-    private void SetDetailLevel(AgentDetailLevel level)
-    {
-        _detailLevel = level;
-        _detailFrame.Title = level switch
-        {
-            AgentDetailLevel.Definition => "Agent Details (Global Definition)",
-            AgentDetailLevel.WorkspaceAssignment => "Agent Details (Workspace Assignment)",
-            _ => "Agent Details",
-        };
-    }
-
-    private void ApplyDetailEditability()
-    {
-        var definitionMode = _detailLevel == AgentDetailLevel.Definition;
-        var workspaceMode = _detailLevel == AgentDetailLevel.WorkspaceAssignment;
-
-        _detailDisplayNameField.ReadOnly = !definitionMode;
-
-        _detailWorkspaceField.ReadOnly = true;
-        _detailEnabledField.Enabled = workspaceMode;
-        _detailIsolationField.ReadOnly = true;
-        _detailIsolationToggleBtn.Enabled = workspaceMode;
-        _detailBannedField.Enabled = false;
-        _detailBannedReasonField.ReadOnly = true;
-
-        _detailLaunchCommandOverrideField.ReadOnly = !workspaceMode && !definitionMode;
-        _detailModelsOverrideField.ReadOnly = !workspaceMode && !definitionMode;
-        _detailBranchStrategyOverrideField.ReadOnly = !workspaceMode && !definitionMode;
-        _detailInstructionFilesOverrideField.ReadOnly = !workspaceMode && !definitionMode;
-        _detailSeedPromptOverrideView.ReadOnly = !workspaceMode && !definitionMode;
-
-        var markerEditable = workspaceMode;
-        _detailMarkerAdditionsView.ReadOnly = !markerEditable;
-    }
-
-    private string? TryGetDefinitionDisplayName(string agentId)
-    {
-        var row = _defRows.FirstOrDefault(x => string.Equals(x.Id, agentId, StringComparison.OrdinalIgnoreCase));
-        return row?.DisplayName;
-    }
-
-    private bool TryIsBuiltInDefinition(string agentId)
-    {
-        var row = _defRows.FirstOrDefault(x => string.Equals(x.Id, agentId, StringComparison.OrdinalIgnoreCase));
-        return string.Equals(row?.BuiltIn, "Yes", StringComparison.OrdinalIgnoreCase);
-    }
-
-    private void QueueSaveSelectedDetail()
-    {
-        if (_detailLevel == AgentDetailLevel.None)
-        {
-            SetStatus("Select an agent definition or workspace agent first");
-            return;
-        }
-
-        if (_detailLevel == AgentDetailLevel.Definition)
-        {
-            QueueSaveDefinitionDetail();
-            return;
-        }
-
-        AgentDetailSaveRequest? request = null;
-        string? error = null;
-
-        var agentId = (_detailAgentIdField.Text?.ToString() ?? "").Trim();
-        if (string.IsNullOrWhiteSpace(agentId))
-        {
-            error = "Select a workspace agent row first";
-        }
-        else
-        {
-            var enabled = _detailEnabledField.CheckedState == CheckState.Checked;
-
-            var isolation = NormalizeIsolationValue(_detailIsolationField.Text?.ToString());
-            if (!string.Equals(isolation, "worktree", StringComparison.OrdinalIgnoreCase) &&
-                !string.Equals(isolation, "clone", StringComparison.OrdinalIgnoreCase))
-            {
-                error = "Isolation must be one of: worktree, clone";
-            }
-            else
-            {
-                request = new AgentDetailSaveRequest(
-                    agentId,
-                    enabled,
-                    isolation,
-                    NullIfWhiteSpace(_detailLaunchCommandOverrideField.Text?.ToString()),
-                    ParseCsvOrNull(_detailModelsOverrideField.Text?.ToString()),
-                    NullIfWhiteSpace(_detailBranchStrategyOverrideField.Text?.ToString()),
-                    NullIfWhiteSpace(_detailSeedPromptOverrideView.Text?.ToString()),
-                    _detailMarkerAdditionsView.Text?.ToString() ?? "",
-                    ParseCsvOrNull(_detailInstructionFilesOverrideField.Text?.ToString()));
-            }
-        }
-
-        if (!string.IsNullOrWhiteSpace(error))
-        {
-            SetStatus(error);
-            return;
-        }
-
-        if (request is null)
-            return;
-
-        _ = Task.Run(() => SaveSelectedDetailAsync(request));
-    }
-
-    private void QueueSaveDefinitionDetail()
-    {
-        var agentId = (_detailAgentIdField.Text?.ToString() ?? "").Trim();
-        if (string.IsNullOrWhiteSpace(agentId))
-        {
-            SetStatus("Select an agent definition first");
-            return;
-        }
-
-        var displayName = (_detailDisplayNameField.Text?.ToString() ?? "").Trim();
-        if (string.IsNullOrWhiteSpace(displayName))
-        {
-            SetStatus("Display Name is required for agent definitions");
-            return;
-        }
-
-        var defaultModels = ParseCsvOrNull(_detailModelsOverrideField.Text?.ToString()) ?? [];
-        var defaultInstructionFile = FirstCsvOrNull(_detailInstructionFilesOverrideField.Text?.ToString()) ?? "";
-
-        var request = new AgentDefinitionSaveRequest(
-            agentId,
-            displayName,
-            _detailLaunchCommandOverrideField.Text?.ToString() ?? "",
-            defaultInstructionFile,
-            defaultModels,
-            _detailBranchStrategyOverrideField.Text?.ToString() ?? "",
-            _detailSeedPromptOverrideView.Text?.ToString() ?? "");
-
-        _ = Task.Run(() => SaveDefinitionDetailAsync(request));
-    }
-
-    private async Task SaveSelectedDetailAsync(AgentDetailSaveRequest request)
-    {
-        SetStatus($"Saving detail for '{request.AgentId}'...");
-        try
-        {
-            var workspacePath = GetRequiredActiveWorkspacePath();
-            await _handler.SaveWorkspaceAgentAsync(workspacePath, request).ConfigureAwait(false);
-            SetStatus($"Workspace agent '{request.AgentId}' updated");
-            await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
-            QueueAgentDetailRefresh(request.AgentId);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("{ExceptionDetail}", ex.ToString());
-            SetStatus($"Save detail failed: {ex.Message}");
-        }
-    }
-
-    private async Task SaveDefinitionDetailAsync(AgentDefinitionSaveRequest request)
-    {
-        SetStatus($"Saving global definition '{request.AgentId}'...");
-        try
-        {
-            await _handler.SaveDefinitionAsync(request).ConfigureAwait(false);
-            await LoadDefinitionsAsync().ConfigureAwait(false);
-            SetStatus($"Global definition '{request.AgentId}' updated");
-            QueueDefinitionDetailRefresh(request.AgentId);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("{ExceptionDetail}", ex.ToString());
-            SetStatus($"Save global definition failed: {ex.Message}");
-        }
+        SetDetail(FormatWorkspaceDetail(detail));
+        SetStatus(_workspaceAgentDetailVm.StatusMessage ?? $"Loaded workspace agent '{detail.AgentId}'.");
     }
 
     private async Task AssignSelectedDefinitionAsync()
     {
-        var agentId = GetSelectedDefinitionId();
-        if (string.IsNullOrWhiteSpace(agentId))
+        var selected = GetSelectedDefinition();
+        if (selected is null)
         {
-            SetStatus("Select an agent definition first (top grid), or use Add by ID");
+            SetStatus("Select a definition first.");
             return;
         }
 
-        SetStatus($"Assigning '{agentId}' to current workspace...");
-        try
+        var outcome = await _workspaceAgentDetailVm.AssignAsync(selected.Id).ConfigureAwait(false);
+        if (outcome is not { Success: true })
         {
-            var workspacePath = GetRequiredActiveWorkspacePath();
-            await _handler.AssignWorkspaceAgentAsync(workspacePath, agentId).ConfigureAwait(false);
-            SetStatus($"Agent '{agentId}' assigned to workspace");
-            await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
-            QueueAgentDetailRefresh(agentId);
+            SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? outcome?.Error ?? "Assign failed.");
+            return;
         }
-        catch (Exception ex)
-        {
-            _logger.LogError("{ExceptionDetail}", ex.ToString());
-            SetStatus($"Assign failed: {ex.Message}");
-        }
+
+        await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
+        SelectWorkspaceAgent(selected.Id);
+        await RefreshWorkspaceDetailAsync().ConfigureAwait(false);
+        SetStatus($"Assigned '{selected.Id}' to active workspace.");
     }
 
     private void ShowAddDialog()
     {
-        var dlg = new Dialog { Title = "Add Agent", Width = 58, Height = 11 };
-        var idLabel = new Label { X = 1, Y = 1, Text = "Agent ID:" };
-        var idField = new TextField { X = 12, Y = 1, Width = 42, Text = "" };
-        var helpLabel = new Label { X = 1, Y = 3, Text = "If the definition does not exist, create it first." };
-        dlg.Add(idLabel, idField, helpLabel);
-
-        var addBtn = new Button { Text = "Add" };
-        addBtn.Accepting += (_, _) =>
+        var dlg = new Dialog
         {
-            var agentId = idField.Text ?? "";
-            if (string.IsNullOrWhiteSpace(agentId))
-                return;
-            Application.RequestStop();
-            _ = Task.Run(() => AddAgentToCurrentWorkspaceAsync(agentId));
+            Title = "Add Agent by ID",
+            Width = 64,
+            Height = 11,
         };
 
-        var createDefBtn = new Button { Text = "Create Definition" };
-        createDefBtn.Accepting += (_, _) =>
+        var idLabel = new Label { X = 1, Y = 1, Text = "Agent ID:" };
+        var idField = new TextField { X = 12, Y = 1, Width = 46, Text = "" };
+        dlg.Add(idLabel, idField);
+
+        var addBtn = new Button { Text = "Assign" };
+        addBtn.Accepting += (_, _) =>
         {
-            var agentId = idField.Text ?? "";
+            var agentId = idField.Text?.ToString() ?? string.Empty;
             if (string.IsNullOrWhiteSpace(agentId))
-            {
-                SetStatus("Enter an agent ID first");
                 return;
-            }
-            _ = Task.Run(() => CreateAgentDefinitionAsync(agentId, refreshDefinitions: true));
+
+            Application.RequestStop();
+            _ = Task.Run(() => AddByIdAsync(agentId, createDefinition: false));
+        };
+
+        var createAndAddBtn = new Button { Text = "Create+Assign" };
+        createAndAddBtn.Accepting += (_, _) =>
+        {
+            var agentId = idField.Text?.ToString() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(agentId))
+                return;
+
+            Application.RequestStop();
+            _ = Task.Run(() => AddByIdAsync(agentId, createDefinition: true));
         };
 
         var cancelBtn = new Button { Text = "Cancel" };
         cancelBtn.Accepting += (_, _) => Application.RequestStop();
+
         dlg.AddButton(addBtn);
-        dlg.AddButton(createDefBtn);
+        dlg.AddButton(createAndAddBtn);
+        dlg.AddButton(cancelBtn);
+        Application.Run(dlg);
+    }
+
+    private async Task AddByIdAsync(string agentId, bool createDefinition)
+    {
+        var normalized = (agentId ?? string.Empty).Trim();
+        if (string.IsNullOrWhiteSpace(normalized))
+            return;
+
+        if (createDefinition)
+        {
+            var createOutcome = await _definitionDetailVm.CreateBasicAsync(normalized).ConfigureAwait(false);
+            if (createOutcome is not { Success: true })
+            {
+                SetStatus(_definitionDetailVm.ErrorMessage ?? createOutcome?.Error ?? "Create definition failed.");
+                return;
+            }
+
+            await LoadDefinitionsAsync().ConfigureAwait(false);
+        }
+
+        var assignOutcome = await _workspaceAgentDetailVm.AssignAsync(normalized).ConfigureAwait(false);
+        if (assignOutcome is not { Success: true })
+        {
+            SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? assignOutcome?.Error ?? "Assign failed.");
+            return;
+        }
+
+        await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
+        SelectWorkspaceAgent(normalized);
+        await RefreshWorkspaceDetailAsync().ConfigureAwait(false);
+        SetStatus($"Assigned '{normalized}'.");
+    }
+
+    private void ShowEditDefinitionDialog()
+    {
+        var selected = GetSelectedDefinition();
+        if (selected is null)
+        {
+            SetStatus("Select a definition first.");
+            return;
+        }
+
+        _ = Task.Run(async () =>
+        {
+            var detail = await _definitionDetailVm.LoadAsync(selected.Id).ConfigureAwait(false);
+            if (detail is null)
+            {
+                SetStatus(_definitionDetailVm.ErrorMessage ?? "Definition not found.");
+                return;
+            }
+
+            Application.Invoke(() => OpenDefinitionEditor(detail));
+        });
+    }
+
+    private void OpenDefinitionEditor(AgentDefinitionDetail detail)
+    {
+        var dlg = new Dialog
+        {
+            Title = $"Edit Definition: {detail.Id}",
+            Width = 92,
+            Height = 21,
+        };
+
+        var row = 1;
+        dlg.Add(new Label { X = 1, Y = row, Text = "ID:" });
+        var idField = new TextField { X = 20, Y = row, Width = Dim.Fill(2), Text = detail.Id, ReadOnly = true };
+        dlg.Add(idField);
+        row++;
+
+        dlg.Add(new Label { X = 1, Y = row, Text = "Display Name:" });
+        var displayNameField = new TextField { X = 20, Y = row, Width = Dim.Fill(2), Text = detail.DisplayName };
+        dlg.Add(displayNameField);
+        row++;
+
+        dlg.Add(new Label { X = 1, Y = row, Text = "Launch Cmd:" });
+        var launchField = new TextField { X = 20, Y = row, Width = Dim.Fill(2), Text = detail.DefaultLaunchCommand };
+        dlg.Add(launchField);
+        row++;
+
+        dlg.Add(new Label { X = 1, Y = row, Text = "Instruction File:" });
+        var instructionField = new TextField { X = 20, Y = row, Width = Dim.Fill(2), Text = detail.DefaultInstructionFile };
+        dlg.Add(instructionField);
+        row++;
+
+        dlg.Add(new Label { X = 1, Y = row, Text = "Models CSV:" });
+        var modelsField = new TextField { X = 20, Y = row, Width = Dim.Fill(2), Text = string.Join(", ", detail.DefaultModels) };
+        dlg.Add(modelsField);
+        row++;
+
+        dlg.Add(new Label { X = 1, Y = row, Text = "Branch Strategy:" });
+        var branchField = new TextField { X = 20, Y = row, Width = Dim.Fill(2), Text = detail.DefaultBranchStrategy };
+        dlg.Add(branchField);
+        row++;
+
+        dlg.Add(new Label { X = 1, Y = row, Text = "Seed Prompt:" });
+        var seedView = new TextView { X = 20, Y = row, Width = Dim.Fill(2), Height = 4, Text = detail.DefaultSeedPrompt, WordWrap = true };
+        dlg.Add(seedView);
+
+        var saveBtn = new Button { Text = "Save" };
+        saveBtn.Accepting += (_, _) =>
+        {
+            var command = new UpsertAgentDefinitionCommand
+            {
+                Id = detail.Id,
+                DisplayName = displayNameField.Text?.ToString()?.Trim() ?? detail.Id,
+                DefaultLaunchCommand = launchField.Text?.ToString() ?? string.Empty,
+                DefaultInstructionFile = instructionField.Text?.ToString() ?? string.Empty,
+                DefaultModels = ParseCsv(modelsField.Text?.ToString()),
+                DefaultBranchStrategy = branchField.Text?.ToString() ?? string.Empty,
+                DefaultSeedPrompt = seedView.Text?.ToString() ?? string.Empty,
+            };
+
+            Application.RequestStop();
+            _ = Task.Run(async () =>
+            {
+                var outcome = await _definitionDetailVm.UpsertAsync(command).ConfigureAwait(false);
+                if (outcome is not { Success: true })
+                {
+                    SetStatus(_definitionDetailVm.ErrorMessage ?? outcome?.Error ?? "Save failed.");
+                    return;
+                }
+
+                await LoadDefinitionsAsync().ConfigureAwait(false);
+                SelectDefinition(command.Id);
+                await RefreshDefinitionDetailAsync().ConfigureAwait(false);
+            });
+        };
+
+        var cancelBtn = new Button { Text = "Cancel" };
+        cancelBtn.Accepting += (_, _) => Application.RequestStop();
+        dlg.AddButton(saveBtn);
+        dlg.AddButton(cancelBtn);
+        Application.Run(dlg);
+    }
+
+    private void ShowEditWorkspaceAgentDialog()
+    {
+        var selected = GetSelectedWorkspaceAgent();
+        if (selected is null)
+        {
+            SetStatus("Select a workspace agent first.");
+            return;
+        }
+
+        _ = Task.Run(async () =>
+        {
+            var detail = await _workspaceAgentDetailVm.LoadAsync(selected.AgentId, selected.WorkspacePath).ConfigureAwait(false);
+            if (detail is null)
+            {
+                SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? "Workspace detail not found.");
+                return;
+            }
+
+            Application.Invoke(() => OpenWorkspaceAgentEditor(detail));
+        });
+    }
+
+    private void OpenWorkspaceAgentEditor(WorkspaceAgentDetail detail)
+    {
+        var dlg = new Dialog
+        {
+            Title = $"Edit Workspace Agent: {detail.AgentId}",
+            Width = 96,
+            Height = 25,
+        };
+
+        var row = 1;
+        dlg.Add(new Label { X = 1, Y = row, Text = "Agent ID:" });
+        var idField = new TextField { X = 20, Y = row, Width = Dim.Fill(2), Text = detail.AgentId, ReadOnly = true };
+        dlg.Add(idField);
+        row++;
+
+        dlg.Add(new Label { X = 1, Y = row, Text = "Workspace:" });
+        var workspaceField = new TextField { X = 20, Y = row, Width = Dim.Fill(2), Text = detail.WorkspacePath, ReadOnly = true };
+        dlg.Add(workspaceField);
+        row++;
+
+        dlg.Add(new Label { X = 1, Y = row, Text = "Enabled:" });
+        var enabledField = new CheckBox { X = 20, Y = row, CheckedState = detail.Enabled ? CheckState.Checked : CheckState.UnChecked };
+        dlg.Add(enabledField);
+        row++;
+
+        dlg.Add(new Label { X = 1, Y = row, Text = "Isolation:" });
+        var isolationField = new TextField { X = 20, Y = row, Width = Dim.Fill(2), Text = detail.AgentIsolation };
+        dlg.Add(isolationField);
+        row++;
+
+        dlg.Add(new Label { X = 1, Y = row, Text = "Launch Cmd:" });
+        var launchField = new TextField { X = 20, Y = row, Width = Dim.Fill(2), Text = detail.LaunchCommandOverride ?? string.Empty };
+        dlg.Add(launchField);
+        row++;
+
+        dlg.Add(new Label { X = 1, Y = row, Text = "Models CSV:" });
+        var modelsField = new TextField { X = 20, Y = row, Width = Dim.Fill(2), Text = string.Join(", ", detail.ModelsOverride) };
+        dlg.Add(modelsField);
+        row++;
+
+        dlg.Add(new Label { X = 1, Y = row, Text = "Branch Strategy:" });
+        var branchField = new TextField { X = 20, Y = row, Width = Dim.Fill(2), Text = detail.BranchStrategyOverride ?? string.Empty };
+        dlg.Add(branchField);
+        row++;
+
+        dlg.Add(new Label { X = 1, Y = row, Text = "Instructions CSV:" });
+        var instructionsField = new TextField { X = 20, Y = row, Width = Dim.Fill(2), Text = string.Join(", ", detail.InstructionFilesOverride) };
+        dlg.Add(instructionsField);
+        row++;
+
+        dlg.Add(new Label { X = 1, Y = row, Text = "Seed Prompt:" });
+        var seedView = new TextView { X = 20, Y = row, Width = Dim.Fill(2), Height = 3, Text = detail.SeedPromptOverride ?? string.Empty, WordWrap = true };
+        dlg.Add(seedView);
+        row += 3;
+
+        dlg.Add(new Label { X = 1, Y = row, Text = "Marker Additions:" });
+        var markerView = new TextView { X = 20, Y = row, Width = Dim.Fill(2), Height = 4, Text = detail.MarkerAdditions, WordWrap = true };
+        dlg.Add(markerView);
+
+        var saveBtn = new Button { Text = "Save" };
+        saveBtn.Accepting += (_, _) =>
+        {
+            var command = new UpsertWorkspaceAgentCommand
+            {
+                AgentId = detail.AgentId,
+                WorkspacePath = detail.WorkspacePath,
+                Enabled = enabledField.CheckedState == CheckState.Checked,
+                AgentIsolation = NormalizeIsolation(isolationField.Text?.ToString()),
+                LaunchCommandOverride = NullIfWhitespace(launchField.Text?.ToString()),
+                ModelsOverride = ParseCsvOrNull(modelsField.Text?.ToString()),
+                BranchStrategyOverride = NullIfWhitespace(branchField.Text?.ToString()),
+                SeedPromptOverride = NullIfWhitespace(seedView.Text?.ToString()),
+                MarkerAdditions = markerView.Text?.ToString() ?? string.Empty,
+                InstructionFilesOverride = ParseCsvOrNull(instructionsField.Text?.ToString()),
+            };
+
+            Application.RequestStop();
+            _ = Task.Run(async () =>
+            {
+                var outcome = await _workspaceAgentDetailVm.UpsertAsync(command).ConfigureAwait(false);
+                if (outcome is not { Success: true })
+                {
+                    SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? outcome?.Error ?? "Save failed.");
+                    return;
+                }
+
+                await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
+                SelectWorkspaceAgent(command.AgentId);
+                await RefreshWorkspaceDetailAsync().ConfigureAwait(false);
+            });
+        };
+
+        var cancelBtn = new Button { Text = "Cancel" };
+        cancelBtn.Accepting += (_, _) => Application.RequestStop();
+        dlg.AddButton(saveBtn);
         dlg.AddButton(cancelBtn);
         Application.Run(dlg);
     }
 
     private void ShowBanDialog()
     {
-        var agentId = GetSelectedAgentId();
-        if (agentId is null)
+        var selected = GetSelectedWorkspaceAgent();
+        if (selected is null)
         {
-            SetStatus("Select a workspace agent first");
+            SetStatus("Select a workspace agent first.");
             return;
         }
 
-        var dlg = new Dialog { Title = $"Ban {agentId}", Width = 50, Height = 10 };
+        var dlg = new Dialog
+        {
+            Title = $"Ban {selected.AgentId}",
+            Width = 60,
+            Height = 9,
+        };
+
         var reasonLabel = new Label { X = 1, Y = 1, Text = "Reason:" };
-        var reasonField = new TextField { X = 10, Y = 1, Width = 30, Text = "" };
+        var reasonField = new TextField { X = 10, Y = 1, Width = 46, Text = "" };
         dlg.Add(reasonLabel, reasonField);
 
-        var okBtn = new Button { Text = "Ban" };
-        okBtn.Accepting += (_, _) =>
+        var banBtn = new Button { Text = "Ban" };
+        banBtn.Accepting += (_, _) =>
         {
+            var reason = reasonField.Text?.ToString();
             Application.RequestStop();
             _ = Task.Run(async () =>
             {
-                SetStatus($"Banning {agentId}...");
-                try
+                var outcome = await _workspaceAgentDetailVm.BanAsync(selected.AgentId, reason, selected.WorkspacePath).ConfigureAwait(false);
+                if (outcome is not { Success: true })
                 {
-                    var workspacePath = GetRequiredActiveWorkspacePath();
-                    await _handler.BanWorkspaceAgentAsync(workspacePath, agentId, reasonField.Text?.ToString() ?? "").ConfigureAwait(false);
-                    SetStatus($"Agent '{agentId}' banned");
-                    await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
-                    QueueAgentDetailRefresh(agentId);
+                    SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? outcome?.Error ?? "Ban failed.");
+                    return;
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError("{ExceptionDetail}", ex.ToString());
-                    SetStatus($"Ban failed: {ex.Message}");
-                }
+
+                await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
+                SelectWorkspaceAgent(selected.AgentId);
+                await RefreshWorkspaceDetailAsync().ConfigureAwait(false);
             });
         };
 
         var cancelBtn = new Button { Text = "Cancel" };
         cancelBtn.Accepting += (_, _) => Application.RequestStop();
-        dlg.AddButton(okBtn);
+        dlg.AddButton(banBtn);
         dlg.AddButton(cancelBtn);
         Application.Run(dlg);
     }
 
     private async Task UnbanSelectedAsync()
     {
-        var agentId = GetSelectedAgentId();
-        if (agentId is null)
+        var selected = GetSelectedWorkspaceAgent();
+        if (selected is null)
         {
-            SetStatus("Select a workspace agent first");
+            SetStatus("Select a workspace agent first.");
             return;
         }
 
-        SetStatus($"Unbanning {agentId}...");
-        try
+        var outcome = await _workspaceAgentDetailVm.UnbanAsync(selected.AgentId, selected.WorkspacePath).ConfigureAwait(false);
+        if (outcome is not { Success: true })
         {
-            var workspacePath = GetRequiredActiveWorkspacePath();
-            await _handler.UnbanWorkspaceAgentAsync(workspacePath, agentId).ConfigureAwait(false);
-            SetStatus($"Agent '{agentId}' unbanned");
-            await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
-            QueueAgentDetailRefresh(agentId);
+            SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? outcome?.Error ?? "Unban failed.");
+            return;
         }
-        catch (Exception ex)
-        {
-            _logger.LogError("{ExceptionDetail}", ex.ToString());
-            SetStatus($"Unban failed: {ex.Message}");
-        }
+
+        await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
+        SelectWorkspaceAgent(selected.AgentId);
+        await RefreshWorkspaceDetailAsync().ConfigureAwait(false);
     }
 
     private async Task DeleteSelectedAsync()
     {
-        var agentId = GetSelectedAgentId();
-        if (agentId is null)
+        var selected = GetSelectedWorkspaceAgent();
+        if (selected is null)
         {
-            SetStatus("Select a workspace agent first");
+            SetStatus("Select a workspace agent first.");
             return;
         }
 
-        SetStatus($"Deleting {agentId}...");
-        try
+        var outcome = await _workspaceAgentDetailVm.DeleteAsync(selected.AgentId, selected.WorkspacePath).ConfigureAwait(false);
+        if (outcome is not { Success: true })
         {
-            var workspacePath = GetRequiredActiveWorkspacePath();
-            await _handler.DeleteWorkspaceAgentAsync(workspacePath, agentId).ConfigureAwait(false);
-            SetStatus($"Agent '{agentId}' removed");
-            await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
+            SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? outcome?.Error ?? "Delete failed.");
+            return;
         }
-        catch (Exception ex)
-        {
-            _logger.LogError("{ExceptionDetail}", ex.ToString());
-            SetStatus($"Delete failed: {ex.Message}");
-        }
+
+        await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
+        SetDetail("Workspace agent deleted.");
     }
 
     private async Task ValidateAsync()
     {
-        SetStatus("Validating agents.yaml...");
-        try
+        var outcome = await _workspaceAgentDetailVm.ValidateAsync().ConfigureAwait(false);
+        if (outcome is null)
         {
-            var workspacePath = GetRequiredActiveWorkspacePath();
-            var result = await _handler.ValidateWorkspaceAgentsAsync(workspacePath).ConfigureAwait(false);
-            SetStatus(result.Valid
-                ? "agents.yaml is valid"
-                : $"Validation failed: {result.Error ?? "unknown"}");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("{ExceptionDetail}", ex.ToString());
-            SetStatus($"Validate failed: {ex.Message}");
-        }
-    }
-
-    private void SetStatus(string text) => Application.Invoke(() => _statusLabel.Text = text);
-
-    private async Task AddAgentToCurrentWorkspaceAsync(string agentId)
-    {
-        SetStatus($"Adding {agentId}...");
-        try
-        {
-            var workspacePath = GetRequiredActiveWorkspacePath();
-            await _handler.AssignWorkspaceAgentAsync(workspacePath, agentId).ConfigureAwait(false);
-            SetStatus($"Agent '{agentId}' added");
-            await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
-            QueueAgentDetailRefresh(agentId);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("{ExceptionDetail}", ex.ToString());
-            var message = ex.Message.Contains("Create it first", StringComparison.OrdinalIgnoreCase)
-                ? $"{ex.Message} Use 'Create Definition' in Add by ID."
-                : ex.Message;
-            SetStatus($"Add failed: {message}");
-        }
-    }
-
-    private async Task CreateAgentDefinitionAsync(string agentId, bool refreshDefinitions)
-    {
-        SetStatus($"Creating definition '{agentId}'...");
-        try
-        {
-            await _handler.CreateDefinitionAsync(agentId).ConfigureAwait(false);
-            if (refreshDefinitions)
-                await LoadDefinitionsAsync().ConfigureAwait(false);
-            SetStatus($"Definition '{agentId}' created");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("{ExceptionDetail}", ex.ToString());
-            SetStatus($"Create definition failed: {ex.Message}");
-        }
-    }
-
-    private static string JoinCsv(IReadOnlyList<string>? items)
-        => items is null || items.Count == 0 ? "" : string.Join(", ", items);
-
-    private static string NormalizeIsolationValue(string? value)
-    {
-        var normalized = (value ?? "").Trim().ToLowerInvariant();
-        return normalized switch
-        {
-            "clone" => "clone",
-            _ => "worktree",
-        };
-    }
-
-    private static string NextIsolationValue(string? current)
-        => string.Equals(NormalizeIsolationValue(current), "worktree", StringComparison.Ordinal)
-            ? "clone"
-            : "worktree";
-
-    private static string? NullIfWhiteSpace(string? value)
-        => string.IsNullOrWhiteSpace(value) ? null : value.Trim();
-
-    private static string[]? ParseCsvOrNull(string? value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-            return null;
-        var items = value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-            .Where(s => !string.IsNullOrWhiteSpace(s))
-            .ToArray();
-        return items.Length == 0 ? null : items;
-    }
-
-    private static string? FirstCsvOrNull(string? value)
-    {
-        var items = ParseCsvOrNull(value);
-        return items is null || items.Length == 0 ? null : items[0];
-    }
-
-    private sealed record AgentDefRow(string Id, string DisplayName, string BuiltIn);
-    private sealed record AgentRow(string AgentId, string Enabled, string Banned, string Isolation);
-    private enum AgentDetailLevel
-    {
-        None,
-        Definition,
-        WorkspaceAssignment
-    }
-
-    private static void TraceUi(string message)
-    {
-        if (!string.Equals(Environment.GetEnvironmentVariable("DIRECTOR_AGENT_TRACE"), "1", StringComparison.Ordinal))
+            SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? "Validation failed.");
             return;
+        }
 
-        try
+        SetStatus(outcome.Valid
+            ? $"agents.yaml is valid ({outcome.Path ?? "no path reported"})."
+            : $"Validation failed: {outcome.Error ?? "unknown"}");
+    }
+
+    private async Task ShowEventsDialogAsync()
+    {
+        var selectedAgent = GetSelectedWorkspaceAgent()?.AgentId ?? GetSelectedDefinition()?.Id;
+        if (string.IsNullOrWhiteSpace(selectedAgent))
         {
-            var path = Path.Combine(Path.GetTempPath(), "director-agent-screen-trace.log");
-            var line = $"{DateTimeOffset.Now:O} [AgentScreen] {message}{Environment.NewLine}";
-            lock (s_traceSync)
+            SetStatus("Select an agent first.");
+            return;
+        }
+
+        var result = await _eventsVm.LoadAsync(selectedAgent).ConfigureAwait(false);
+        if (result is null)
+        {
+            SetStatus(_eventsVm.ErrorMessage ?? "Failed to load events.");
+            return;
+        }
+
+        var text = new StringBuilder();
+        foreach (var entry in result.Items)
+            text.AppendLine($"{entry.Timestamp:O}  type={entry.EventType}  user={entry.UserId ?? "-"}  {entry.Details ?? string.Empty}");
+
+        Application.Invoke(() =>
+        {
+            var dlg = new Dialog
             {
-                File.AppendAllText(path, line);
-            }
-        }
-        catch
-        {
-            // Ignore trace failures. This is diagnostic-only instrumentation.
-        }
+                Title = $"Events: {selectedAgent}",
+                Width = 100,
+                Height = 22,
+            };
+
+            var view = new TextView
+            {
+                X = 0,
+                Y = 0,
+                Width = Dim.Fill(),
+                Height = Dim.Fill(1),
+                ReadOnly = true,
+                WordWrap = true,
+                Text = text.Length == 0 ? "(No events)" : text.ToString(),
+            };
+            dlg.Add(view);
+
+            var closeBtn = new Button { Text = "Close" };
+            closeBtn.Accepting += (_, _) => Application.RequestStop();
+            dlg.AddButton(closeBtn);
+            Application.Run(dlg);
+        });
     }
 
-    private static void ApplyEditableScheme(params View[] views)
+    private void SelectDefinition(string agentId)
     {
-        if (!Colors.ColorSchemes.TryGetValue("Editable", out var scheme))
-            return;
-        foreach (var v in views)
-            v.ColorScheme = scheme;
+        var idx = _definitionRows.FindIndex(d => string.Equals(d.Id, agentId, StringComparison.OrdinalIgnoreCase));
+        if (idx >= 0)
+            Application.Invoke(() => _defsTable.SelectedRow = idx);
+    }
+
+    private void SelectWorkspaceAgent(string agentId)
+    {
+        var idx = _workspaceRows.FindIndex(a => string.Equals(a.AgentId, agentId, StringComparison.OrdinalIgnoreCase));
+        if (idx >= 0)
+            Application.Invoke(() => _agentsTable.SelectedRow = idx);
+    }
+
+    private static string FormatDefinitionDetail(AgentDefinitionDetail detail)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("Global Definition");
+        sb.AppendLine($"ID: {detail.Id}");
+        sb.AppendLine($"Display Name: {detail.DisplayName}");
+        sb.AppendLine($"Built-In: {(detail.IsBuiltIn ? "Yes" : "No")}");
+        sb.AppendLine($"Launch Command: {detail.DefaultLaunchCommand}");
+        sb.AppendLine($"Instruction File: {detail.DefaultInstructionFile}");
+        sb.AppendLine($"Models: {string.Join(", ", detail.DefaultModels)}");
+        sb.AppendLine($"Branch Strategy: {detail.DefaultBranchStrategy}");
+        sb.AppendLine("Seed Prompt:");
+        sb.AppendLine(detail.DefaultSeedPrompt);
+        return sb.ToString().TrimEnd();
+    }
+
+    private static string FormatWorkspaceDetail(WorkspaceAgentDetail detail)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("Workspace Assignment");
+        sb.AppendLine($"Agent: {detail.AgentId}");
+        sb.AppendLine($"Workspace: {detail.WorkspacePath}");
+        sb.AppendLine($"Enabled: {(detail.Enabled ? "Yes" : "No")}");
+        sb.AppendLine($"Banned: {(detail.Banned ? "Yes" : "No")}");
+        sb.AppendLine($"Ban Reason: {detail.BannedReason ?? string.Empty}");
+        sb.AppendLine($"Isolation: {detail.AgentIsolation}");
+        sb.AppendLine($"Launch Override: {detail.LaunchCommandOverride ?? string.Empty}");
+        sb.AppendLine($"Models Override: {string.Join(", ", detail.ModelsOverride)}");
+        sb.AppendLine($"Branch Override: {detail.BranchStrategyOverride ?? string.Empty}");
+        sb.AppendLine($"Instruction Overrides: {string.Join(", ", detail.InstructionFilesOverride)}");
+        sb.AppendLine("Seed Prompt Override:");
+        sb.AppendLine(detail.SeedPromptOverride ?? string.Empty);
+        sb.AppendLine("Marker Additions:");
+        sb.AppendLine(detail.MarkerAdditions);
+        return sb.ToString().TrimEnd();
+    }
+
+    private void SetStatus(string text)
+        => Application.Invoke(() => _statusLabel.Text = text);
+
+    private void SetDetail(string text)
+        => Application.Invoke(() => _detailView.Text = text);
+
+    private static string NormalizeIsolation(string? raw)
+    {
+        var value = (raw ?? string.Empty).Trim().ToLowerInvariant();
+        return value == "clone" ? "clone" : "worktree";
+    }
+
+    private static string? NullIfWhitespace(string? raw)
+        => string.IsNullOrWhiteSpace(raw) ? null : raw.Trim();
+
+    private static IReadOnlyList<string> ParseCsv(string? raw)
+        => string.IsNullOrWhiteSpace(raw)
+            ? []
+            : raw
+                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .Where(value => !string.IsNullOrWhiteSpace(value))
+                .ToArray();
+
+    private static IReadOnlyList<string>? ParseCsvOrNull(string? raw)
+    {
+        var values = ParseCsv(raw);
+        return values.Count == 0 ? null : values;
     }
 }

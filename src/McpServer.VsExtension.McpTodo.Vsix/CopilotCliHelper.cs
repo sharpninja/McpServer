@@ -59,7 +59,7 @@ internal static class CopilotCliHelper
             File.WriteAllText(tmpFile, prompt);
 
             var shell = "pwsh";
-            var agentCmd = $"copilot -p \"$(Get-Content -Raw '{tmpFile.Replace("'", "''")}')\" --model claude-opus-4.6 --allow-all";
+            var agentCmd = $"copilot -p \"$(Get-Content -Raw '{tmpFile.Replace("'", "''")}')\" --model gpt-5.3-codex --allow-all";
             var shellArgs = $"-NoProfile -Command \"{agentCmd}\"";
 
             CopilotOutputPane.Log($">>> Command: {shell} {shellArgs}");

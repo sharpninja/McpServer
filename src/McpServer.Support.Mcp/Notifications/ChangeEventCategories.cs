@@ -29,4 +29,13 @@ public static class ChangeEventCategories
 
     /// <summary>Marker file regeneration.</summary>
     public const string Marker = "marker";
+
+    /// <summary>Agent definitions and workspace agent state changes.</summary>
+    public const string Agent = "agent";
+
+    /// <summary>Requirements document and mapping changes.</summary>
+    public const string Requirements = "requirements";
+
+    /// <summary>Connection lifecycle events (connected, disconnected).</summary>
+    public const string Connection = "connection";
 }

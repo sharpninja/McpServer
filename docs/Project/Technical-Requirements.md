@@ -144,19 +144,19 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-AUTH-001
 
-**Keycloak OIDC JWT Bearer Authentication** — ASP.NET Core JWT Bearer middleware configured with Keycloak realm authority, audience (`mcp-server-api`), and client secret. `OidcAuthOptions` bound from `Mcp:Auth` configuration section. Management endpoints (agent mutations) require `[Authorize(Policy = "AgentManager")]`; read endpoints fall back to existing API key auth. `RequireHttpsMetadata` configurable for local development.
+**OIDC JWT Bearer Authentication** — ASP.NET Core JWT Bearer middleware configured with OIDC authority/issuer, audience (`mcp-server-api`), and optional client secret based on provider requirements. `OidcAuthOptions` bound from `Mcp:Auth` configuration section. Management endpoints (agent mutations) require `[Authorize(Policy = "AgentManager")]`; read endpoints fall back to existing API key auth. `RequireHttpsMetadata` configurable for local development.
 
 **Covered by:** `OidcAuthOptions`, `Program.cs`, `AgentController`
 
 ## TR-MCP-AUTH-002
 
-**GitHub Identity Provider in Keycloak** — Keycloak realm setup scripts configure GitHub as a social Identity Provider with `user:email read:org` scopes. First-login flow auto-creates Keycloak users from GitHub accounts. GitHub username mapped to `github_username` user attribute. Setup scripts accept `--GitHubClientId` / `--GitHubClientSecret` parameters; GitHub IdP is optional.
+**GitHub Federation via OIDC Provider** — OIDC provider setup may configure GitHub as a social Identity Provider with `user:email read:org` scopes. First-login flow may auto-create users from GitHub accounts. GitHub username mapped to `github_username` user attribute. Setup scripts accept `--GitHubClientId` / `--GitHubClientSecret` parameters; GitHub federation is optional.
 
 **Covered by:** `Setup-McpKeycloak.ps1`, `setup-mcp-keycloak.sh`
 
 ## TR-MCP-AUTH-003
 
-**Device Authorization Flow for CLI Clients** — Keycloak `mcp-director` client configured as public with OAuth 2.0 Device Authorization Grant enabled. Director CLI initiates device flow, displays user code and verification URI, polls for token completion. Audience mapper ensures `mcp-server-api` appears in token audience. Realm roles mapper includes `realm_roles` claim.
+**Device Authorization Flow for CLI Clients** — OIDC `mcp-director` client configured as public with OAuth 2.0 Device Authorization Grant enabled. Director CLI initiates device flow, displays user code and verification URI, polls for token completion. Provider claim mapping ensures `mcp-server-api` appears in token audience and includes `realm_roles`.
 
 **Covered by:** `Setup-McpKeycloak.ps1`, `setup-mcp-keycloak.sh`, `McpServer.Director`
 
@@ -228,7 +228,7 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-DIR-002
 
-**Director OIDC Authentication** — `OidcAuthService` implements Keycloak Device Authorization Flow. Initiates device flow, displays user code and verification URI, polls for token. Tokens cached to `~/.mcpserver/tokens.json` via `TokenCache`. `McpHttpClient.TrySetCachedBearerToken()` loads cached tokens on startup. CLI commands: `login`, `logout`, `whoami`. TUI: `LoginDialog` with Device Flow UI, authority/client-id fields, user code display, polling status, and whoami frame. Token includes `sub`, `preferred_username`, `email`, `realm_roles` claims.
+**Director OIDC Authentication** — `OidcAuthService` implements OIDC Device Authorization Flow against the configured provider. Initiates device flow, displays user code and verification URI, polls for token. Tokens cached to `~/.mcpserver/tokens.json` via `TokenCache`. `McpHttpClient.TrySetCachedBearerToken()` loads cached tokens on startup. CLI commands: `login`, `logout`, `whoami`. TUI: `LoginDialog` with Device Flow UI, authority/client-id fields, user code display, polling status, and whoami frame. Token includes `sub`, `preferred_username`, `email`, `realm_roles` claims.
 
 **Status:** ✅ Complete
 
@@ -371,3 +371,198 @@ Operational scripts for startup, health checks, packaging, config validation, an
 **System Template Externalization** — Three provider interfaces decouple system prompt templates from inline C# constants: (1) `IMarkerPromptProvider` / `FileMarkerPromptProvider` reads `templates/default-marker-prompt.hbs.yaml` with YAML deserialization and startup caching, returning `null` on file-missing for fallback to `MarkerFileService.DefaultPromptTemplate`. Injected into `WorkspaceProcessManager` with precedence: config override (`Mcp:MarkerPromptTemplate`) > file template > built-in default. (2) `ITodoPromptProvider` / `TodoPromptProvider` looks up templates from `IPromptTemplateService` by well-known IDs (`todo-status-prompt`, `todo-implement-prompt`, `todo-plan-prompt`), falling back to `TodoPromptDefaults` constants. Injected into `TodoPromptService` with precedence: `IOptionsMonitor<TodoPromptOptions>` > file template > built-in default. (3) `PairingHtmlRenderer` replaces static `PairingHtml` calls with DI-injected instance class, loading templates from `IPromptTemplateService` by well-known IDs (`pairing-login-page`, `pairing-key-page`, `pairing-not-configured-page`) using `string.Replace` token substitution (`{errorBanner}`, `{apiKey}`, `{serverUrl}`), falling back to `PairingHtml` static methods. Template YAML files ship via `.csproj` Content items and are preserved across deployments.
 
 **Covered by:** `IMarkerPromptProvider`, `FileMarkerPromptProvider`, `ITodoPromptProvider`, `TodoPromptProvider`, `PairingHtmlRenderer`, `templates/prompt-templates.yaml`
+
+## TR-MCP-CFG-005
+
+**System-Wide Default Copilot Model Propagation** — Setting the default Copilot model for all session types requires updates to three locations:
+
+- `CopilotClientOptions.Model` default value (in `McpServer.Common.Copilot`) — controls server-initiated CLI invocations via `ICopilotClient`. Configurable at runtime via `Mcp:Copilot:Model`.
+- `VoiceConversationOptions.CopilotModel` default value (in `McpServer.Support.Mcp/Options/`) — controls voice conversation session model. Configurable via `Mcp:Voice:CopilotModel`.
+- `AgentDefaults.GetBuiltInDefaults()` (in `McpServer.Support.Mcp/Services/`) — seed data for built-in agent type definitions including the `copilot` agent's `DefaultModelsJson`. Only affects new installations (existing agent definitions are not re-seeded).
+
+All three share the pattern of a compile-time default overridable via `IOptions<T>` configuration binding. No new infrastructure is required — this is a default-value update propagated through existing `IOptions`-based configuration (TR-MCP-CFG-001).
+
+**Status:** 🔴 Planned
+
+**Covered by:** `CopilotClientOptions`, `VoiceConversationOptions`, `AgentDefaults`
+
+## TR-MCP-AGENT-004
+
+**Agent Pool Configuration Contract** — Agent pool settings SHALL bind from configuration into a validated options model that includes `AgentName`, `AgentPath`, `AgentModel`, `AgentSeed`, `AgentParameters`, `IsInteractiveDefault`, `IsTodoPlanDefault`, `IsTodoStatusDefault`, and `IsTodoImplementDefault`.
+
+Validation SHALL enforce unique `AgentName` values (case-insensitive), required launch path, and unambiguous default-agent assignment for each intent-default flag.
+
+**Status:** 🔴 Planned
+
+**Covered by:** `AgentPoolOptions` *(planned)*, `AgentPoolDefinitionOptions` *(planned)*, `Program.cs` *(planned extension)*
+
+## TR-MCP-AGENT-005
+
+**Pooled Runtime and Queue Dispatcher** — All agent execution SHALL flow through a singleton pool runtime service that maintains lifecycle state per configured pooled agent and dispatches queued one-shot jobs to eligible idle agents.
+
+Pool runtime SHALL support start/stop/recycle operations, busy/idle transitions, one-shot queue states (`queued`, `processing`, `completed`, `failed`, `canceled`), and concurrent interactive attachment to agents currently processing one-shot requests.
+
+No alternate direct-launch path is permitted for pooled workloads; pooled agents launch through the voice interactive session mechanism.
+
+**Status:** 🔴 Planned
+
+**Covered by:** `IAgentPoolService` *(planned)*, `AgentPoolService` *(planned)*, `AgentPoolQueueService` *(planned)*
+
+## TR-MCP-API-002
+
+**One-Shot Submission Contract and Intent Routing** — One-shot APIs SHALL support explicit context values `Plan`, `Status`, `Implement`, and `AdHoc`.
+
+When `AgentName` is omitted, the runtime SHALL resolve request intent from context/prompt and select the configured default agent for that intent.
+
+Template-mode and ad-hoc-mode payload validation SHALL enforce:
+
+- `promptTemplateId` and ad-hoc prompt text cannot both be supplied in explicit mode.
+- At least one prompt source must be resolvable.
+- `id` is required for template-resolved requests and optional for ad-hoc requests.
+
+**Status:** 🔴 Planned
+
+**Covered by:** `AgentPoolController` *(planned)*, `AgentPoolIntentResolver` *(planned)*, request DTO validators *(planned)*
+
+## TR-MCP-TPL-006
+
+**Template Resolution for One-Shot Requests** — Template rendering SHALL support:
+
+- Explicit template mode: `promptTemplateId` + optional values dictionary.
+- Context resolution mode: context-based template selection when template ID is omitted.
+- Value precedence: caller-provided values override workspace-context-derived values on key collision.
+- Placeholder binding: request `id` injected into render variables for `{id}` substitution.
+
+For `AdHoc` context with no template ID, explicit ad-hoc prompt text is required.
+
+The server SHALL provide a prompt resolution endpoint returning the populated prompt for a given template ID and values dictionary.
+
+**Status:** 🔴 Planned
+
+**Covered by:** `PromptTemplateController` *(planned extension)*, `PromptTemplateRenderer`, `AgentPoolController` *(planned)*
+
+## TR-MCP-API-003
+
+**Agent Pool Monitoring and Control APIs** — REST endpoints SHALL provide:
+
+- Pooled agent availability snapshots.
+- Runtime controls (connect, start, stop, immediate recycle).
+- Queue operations (list, enqueue, cancel/remove, queued-item move up/down).
+- Separate SSE notification stream emitting queue/agent lifecycle transitions with payload fields `AgentName`, `LastRequestPrompt`, and `SessionId`.
+- Read-only response stream attachment supporting multiple concurrent subscribers.
+
+**Status:** 🔴 Planned
+
+**Covered by:** `AgentPoolController` *(planned)*, `AgentPoolNotificationService` *(planned)*, `AgentPoolStreamService` *(planned)*
+
+## TR-MCP-VOICE-004
+
+**Interactive Presence Signals on Stream State Changes** — On interactive stream disconnect, the runtime SHALL send `User is AFK.` to the associated interactive agent session.
+
+On interactive stream reconnect, after response stream establishment, the runtime SHALL send `User is here.` to the associated interactive agent session.
+
+Presence signaling SHALL be excluded from one-shot sessions.
+
+**Status:** 🔴 Planned
+
+**Covered by:** `VoiceConversationService` *(planned extension)*, `AgentPoolStreamService` *(planned)*
+
+## TR-MCP-DIR-004
+
+**Director Agent Pool Tab and Queue Controls** — Director interactive UI SHALL include an Agent Pool tab that renders pooled agent status, default-intent assignments, active work metadata, queue state, and notification events.
+
+Tab actions SHALL include connect, immediate recycle, stop/start, queued-item move up/down (queued items only), cancel/remove, and free-form one-shot enqueue.
+
+**Status:** 🔴 Planned
+
+**Covered by:** `AgentPoolScreen` *(planned)*, `AgentPoolViewModel` *(planned)*, `McpHttpClient` *(planned extension)*
+
+## TR-MCP-DIR-005
+
+**Director Endpoint-to-Handler Coverage Contract** — Every Director-administered MCP endpoint in covered areas SHALL be represented by a UI.Core command/query message and a corresponding CQRS handler that delegates to a UI.Core API-client abstraction (`I*ApiClient`) rather than direct screen-level HTTP calls.
+
+Director non-interactive command paths (`director` CLI commands and `director exec`) SHALL dispatch through the same CQRS handler layer used by interactive tabs to prevent duplicate business logic.
+
+**Status:** ✅ Complete
+
+**Covered by:** `McpServer.UI.Core/Messages/*Messages.cs`, `McpServer.UI.Core/Handlers/*Handlers.cs`, `McpServer.Director/*ApiClientAdapter.cs`, `McpServer.Director/Commands/DirectorCommands.cs`, `McpServer.Director/Commands/AuthCommands.cs`
+
+## TR-MCP-DIR-006
+
+**Director ViewModel Conventions for Area Workflows** — Covered administration areas SHALL expose ViewModel orchestration that owns UI-facing state (`Items`, `Detail`, `IsLoading/IsBusy`, `StatusMessage`, `ErrorMessage`) and uses `Dispatcher` for command/query execution.
+
+List/detail areas SHALL follow `AreaListViewModelBase<T>` / `AreaDetailViewModelBase<TDetail>` conventions where applicable; operation-centric areas may use focused `ObservableObject` ViewModels with explicit async workflow methods.
+
+**Status:** ✅ Complete
+
+**Covered by:** `McpServer.UI.Core/ViewModels/*ViewModel.cs`, `McpServer.UI.Core/ViewModels/Base/AreaListViewModelBase.cs`, `McpServer.UI.Core/ViewModels/Base/AreaDetailViewModelBase.cs`, `McpServer.Director/Screens/*Screen.cs`
+
+## TR-MCP-DIR-007
+
+**Director RBAC Visibility and Action Gating** — Tab visibility and action execution SHALL be enforced through `IAuthorizationPolicyService` using normalized `McpArea` and `McpActionKeys` contracts with role tiers (`viewer`, `agent-manager`, `admin`).
+
+Viewer-level users SHALL retain read access surfaces while admin-only surfaces (for example workspaces/policy mutation) remain hidden or blocked unless role requirements are satisfied.
+
+**Status:** ✅ Complete
+
+**Covered by:** `McpServer.UI.Core/Authorization/McpArea.cs`, `McpServer.UI.Core/Authorization/McpActionKeys.cs`, `McpServer.Director/Auth/DirectorAuthorizationPolicyService.cs`, `McpServer.Director/Screens/MainScreen.cs`, `McpServer.UI.Core/Handlers/*Handlers.cs`
+
+## TR-MCP-DIR-008
+
+**Declarative Director Tab Registry** — Director tab metadata SHALL be registered through a dedicated registry contract that captures area, caption, required role metadata, screen factory, and optional availability predicate.
+
+Main shell rendering SHALL iterate registrations dynamically and avoid hardcoded per-tab branching in the tab rebuild path.
+
+**Status:** ✅ Complete
+
+**Covered by:** `McpServer.UI.Core/Navigation/ITabRegistry.cs`, `McpServer.Director/DirectorTabRegistry.cs`, `McpServer.Director/Screens/MainScreen.cs`, `McpServer.Director/DirectorServiceRegistration.cs`
+
+## TR-MCP-ARCH-002
+
+**DI Single Source of Truth and Pull-Based Change Notification** — Architecture audit and remediation across `McpServer.Support.Mcp` SHALL enforce:
+
+- Stateful services, registries, managers, and providers must be DI-owned (`singleton` or `scoped`) and must not be instantiated via `new` or `ActivatorUtilities.CreateInstance` outside composition-root registration paths.
+- Authoritative mutable state must have a single owner in DI; peer services must pull current state from that owner instead of receiving pushed state payloads.
+- Observable state contracts must expose change signaling via `INotifyPropertyChanged` for data-availability/change notification, without embedding mutable payload transfer in event arguments.
+- Race-condition remediation must prioritize ownership/lifetime design in DI (single owner + pull model); fire-and-forget propagation and ad-hoc synchronization used as state-sharing mechanisms are prohibited.
+- Automated validation must cover DI registration lifetimes and notification semantics for remediated services.
+
+**Status:** 🔴 Planned
+
+## TR-MCP-LOG-002
+
+**Identifier Naming Validation** — `TodoValidator` SHALL validate TODO IDs with regex `^[A-Z]+-[A-Z0-9]+-\d{3}$` for create/update dependency paths in both YAML and SQLite providers. `SessionLogIdentifierValidator` SHALL validate session/request IDs using canonical timestamped patterns and enforce exact source-type prefix parity (`SessionId` starts with `{sourceType}-` or `{agent}-`). Invalid values return HTTP 400 at controller boundaries and `ArgumentException` for direct service invocation.
+
+**Status:** ✅ Complete
+
+**Covered by:** `TodoValidator`, `TodoService`, `SqliteTodoService`, `SessionLogIdentifierValidator`, `SessionLogController`, `SessionLogService`
+
+## TR-MCP-EVT-001
+
+**In-Process Change Event Bus** — `ChannelChangeEventBus` SHALL be registered as a singleton `IChangeEventBus` and provide fan-out publish/subscribe semantics to independent subscribers using bounded channels (capacity 1000, `DropOldest` overflow mode).
+
+**Covered by:** `ChannelChangeEventBus`, `IChangeEventBus`, `Program.cs`
+
+## TR-MCP-EVT-002
+
+**Service-Layer Mutation Publishing** — Mutating service operations SHALL publish change events after successful persistence, with event emission wrapped in defensive try/catch and warning-level logging on publish failures.
+
+**Covered by:** `TodoService`, `SqliteTodoService`, `SessionLogService`, `RepoFileService`, `ToolRegistryService`, `ToolBucketService`, `WorkspaceService`, `AgentService`, `RequirementsDocumentService`, `IngestionCoordinator`, `WorkspaceProcessManager`
+
+## TR-MCP-EVT-003
+
+**SSE Delivery Endpoint** — `EventStreamController` SHALL stream notifications as `text/event-stream` with `Cache-Control: no-cache` and support optional category filtering via `?category=` query parameter.
+
+**Covered by:** `EventStreamController`
+
+## TR-MCP-EVT-004
+
+**Change Event Contract** — Change events SHALL include `Category`, `Action`, optional `EntityId`, optional `ResourceUri`, and UTC `Timestamp` to support correlation by consumers.
+
+**Covered by:** `ChangeEvent`, `ChangeEventActions`, `ChangeEventCategories`
+
+## TR-MCP-EVT-005
+
+**Workspace Notification Category Coverage** — The notification system SHALL support at minimum the categories: `todo`, `session_log`, `repo`, `context`, `tool_registry`, `tool_bucket`, `workspace`, `github`, `marker`, `agent`, and `requirements`.
+
+**Covered by:** `ChangeEventCategories` and all publishing call sites in mutation services/controllers

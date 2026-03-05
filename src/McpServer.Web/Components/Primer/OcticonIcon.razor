@@ -1,0 +1,44 @@
+<svg class="@this.CssClass"
+     width="@this.Size"
+     height="@this.Size"
+     viewBox="0 0 16 16"
+     fill="currentColor"
+     role="@this.Role"
+     aria-label="@this.AriaLabel"
+     aria-hidden="@this.AriaHidden"
+     @attributes="AdditionalAttributes">
+    <path fill-rule="evenodd" d="@this.PathData"></path>
+</svg>
+
+@code {
+    [Parameter] public string Name { get; set; } = "dot-fill";
+
+    [Parameter] public string? Path { get; set; }
+
+    [Parameter] public int Size { get; set; } = 16;
+
+    [Parameter] public string? AriaLabel { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string CssClass => string.Join(' ', new[] { "octicon", this.Class }.Where(static value => !string.IsNullOrWhiteSpace(value)));
+
+    private string? Role => string.IsNullOrWhiteSpace(this.AriaLabel) ? null : "img";
+
+    private bool AriaHidden => string.IsNullOrWhiteSpace(this.AriaLabel);
+
+    private string PathData =>
+        !string.IsNullOrWhiteSpace(this.Path)
+            ? this.Path
+            : this.Name.ToLowerInvariant() switch
+            {
+                "x" => "M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 11-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06Z",
+                "check" => "M13.78 4.22a.75.75 0 010 1.06l-7 7a.75.75 0 01-1.06 0l-3-3a.75.75 0 111.06-1.06l2.47 2.47 6.47-6.47a.75.75 0 011.06 0Z",
+                "info" => "M8 1.5a6.5 6.5 0 110 13 6.5 6.5 0 010-13ZM8.75 4.75a.75.75 0 10-1.5 0 .75.75 0 001.5 0Zm-.75 2a.75.75 0 00-.75.75v3.75a.75.75 0 001.5 0V7.5A.75.75 0 008 6.75Z",
+                "alert" => "M6.457 1.047a1.75 1.75 0 012.986 0l6.082 10.555A1.75 1.75 0 0113.984 14H2.016a1.75 1.75 0 01-1.541-2.398L6.457 1.047ZM8 5a.75.75 0 00-.75.75v3a.75.75 0 001.5 0v-3A.75.75 0 008 5Zm.001 6a1 1 0 100-2 1 1 0 000 2Z",
+                _ => "M8 2a6 6 0 110 12A6 6 0 018 2Z",
+            };
+}
+

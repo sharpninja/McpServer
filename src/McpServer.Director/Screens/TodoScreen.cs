@@ -254,7 +254,16 @@ internal sealed class TodoScreen : View
         var detailBtn = new Button { X = Pos.Right(refreshBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Reload Detail" };
         detailBtn.Accepting += (_, _) => _ = Task.Run(LoadSelectedDetailAsync);
 
-        var newBtn = new Button { X = Pos.Right(detailBtn) + 2, Y = Pos.AnchorEnd(1), Text = "New" };
+        var planPromptBtn = new Button { X = Pos.Right(detailBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Plan" };
+        planPromptBtn.Accepting += (_, _) => ShowPromptResponseDialog("plan", _detailViewModel.GeneratePlanPromptAsync);
+
+        var implementPromptBtn = new Button { X = Pos.Right(planPromptBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Implement" };
+        implementPromptBtn.Accepting += (_, _) => ShowPromptResponseDialog("implement", _detailViewModel.GenerateImplementPromptAsync);
+
+        var statusPromptBtn = new Button { X = Pos.Right(implementPromptBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Status" };
+        statusPromptBtn.Accepting += (_, _) => ShowPromptResponseDialog("status", _detailViewModel.GenerateStatusPromptAsync);
+
+        var newBtn = new Button { X = Pos.Right(statusPromptBtn) + 2, Y = Pos.AnchorEnd(1), Text = "New" };
         newBtn.Accepting += (_, _) => BeginNewDraft();
 
         var saveBtn = new Button { X = Pos.Right(newBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Save" };
@@ -263,19 +272,13 @@ internal sealed class TodoScreen : View
         var deleteBtn = new Button { X = Pos.Right(saveBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Delete" };
         deleteBtn.Accepting += (_, _) => _ = Task.Run(DeleteEditorAsync);
 
-        var reqsBtn = new Button { X = Pos.Right(deleteBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Reqs" };
+        var moveBtn = new Button { X = Pos.Right(deleteBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Move" };
+        moveBtn.Accepting += (_, _) => _ = Task.Run(MoveSelectedTodoAsync);
+
+        var reqsBtn = new Button { X = Pos.Right(moveBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Reqs" };
         reqsBtn.Accepting += (_, _) => _ = Task.Run(AnalyzeRequirementsAsync);
 
-        var statusPromptBtn = new Button { X = Pos.Right(reqsBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Status" };
-        statusPromptBtn.Accepting += (_, _) => ShowPromptResponseDialog("status", _detailViewModel.GenerateStatusPromptAsync);
-
-        var implementPromptBtn = new Button { X = Pos.Right(statusPromptBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Implement" };
-        implementPromptBtn.Accepting += (_, _) => ShowPromptResponseDialog("implement", _detailViewModel.GenerateImplementPromptAsync);
-
-        var planPromptBtn = new Button { X = Pos.Right(implementPromptBtn) + 2, Y = Pos.AnchorEnd(1), Text = "Plan" };
-        planPromptBtn.Accepting += (_, _) => ShowPromptResponseDialog("plan", _detailViewModel.GeneratePlanPromptAsync);
-
-        Add(refreshBtn, detailBtn, newBtn, saveBtn, deleteBtn, reqsBtn, statusPromptBtn, implementPromptBtn, planPromptBtn);
+        Add(refreshBtn, detailBtn, planPromptBtn, implementPromptBtn, statusPromptBtn, newBtn, saveBtn, deleteBtn, moveBtn, reqsBtn);
     }
 
     public async Task LoadAsync()
@@ -469,6 +472,85 @@ internal sealed class TodoScreen : View
         await LoadTodoDetailAsync(todoId, autoLoaded: false).ConfigureAwait(false);
         ShowRequirementsInDetailPane(todoId, _detailViewModel.RequirementsAnalysis);
         SetStatus($"✓ Requirements analyzed for {todoId}");
+    }
+
+    public async Task MoveSelectedTodoAsync()
+    {
+        var todoId = GetSelectedTodoId();
+        if (string.IsNullOrWhiteSpace(todoId))
+        {
+            SetStatus("✗ Select a TODO row first.");
+            return;
+        }
+
+        if (_directorContext is null)
+        {
+            SetStatus("✗ Move requires an active Director workspace context.");
+            return;
+        }
+
+        IReadOnlyList<WorkspaceMoveTarget> targets;
+        try
+        {
+            targets = await GetMoveWorkspaceTargetsAsync(CancellationToken.None).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            SetStatus($"✗ Failed to load workspaces: {ex.Message}");
+            return;
+        }
+
+        if (targets.Count == 0)
+        {
+            SetStatus("✗ No target workspaces available.");
+            return;
+        }
+
+        string? targetWorkspacePath = null;
+        Application.Invoke(() => targetWorkspacePath = ShowMoveTargetDialog(todoId, targets));
+        if (string.IsNullOrWhiteSpace(targetWorkspacePath))
+        {
+            SetStatus("Move canceled.");
+            return;
+        }
+
+        var targetLabel = targets
+            .FirstOrDefault(t => string.Equals(t.WorkspacePath, targetWorkspacePath, StringComparison.OrdinalIgnoreCase))
+            ?.DisplayText ?? targetWorkspacePath;
+
+        var confirm = 1;
+        Application.Invoke(() =>
+            confirm = MessageBox.Query("Confirm Move",
+                $"Move TODO '{todoId}' to:{Environment.NewLine}{targetLabel}",
+                "Move",
+                "Cancel"));
+        if (confirm != 0)
+            return;
+
+        try
+        {
+            SetStatus($"⏳ Moving TODO '{todoId}'...");
+            var client = _directorContext.GetRequiredActiveWorkspaceHttpClient();
+            var result = await client.PostAsync<McpServer.Client.Models.TodoMutationResult>(
+                $"mcpserver/todo/{Uri.EscapeDataString(todoId)}/move",
+                new { targetWorkspacePath },
+                CancellationToken.None).ConfigureAwait(false);
+
+            if (result is null || !result.Success)
+            {
+                SetStatus($"✗ {result?.Error ?? "Move failed."}");
+                return;
+            }
+
+            await LoadAsync().ConfigureAwait(false);
+            SetStatus($"✓ Moved TODO '{todoId}' to {targetLabel}");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            SetStatus($"✗ {ex.Message}");
+        }
     }
 
     public Task GenerateStatusPromptAsync() => GeneratePromptAsync(
@@ -753,17 +835,76 @@ internal sealed class TodoScreen : View
             throw new InvalidOperationException("Prompt streaming requires a Director workspace context.");
 
         var client = await _directorContext.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var stream = promptType switch
+        var request = new McpServer.Client.Models.AgentPoolOneShotRequest
         {
-            "status" => client.Todo.StreamStatusAsync(todoId, cancellationToken),
-            "implement" => client.Todo.StreamImplementAsync(todoId, cancellationToken),
-            "plan" => client.Todo.StreamPlanAsync(todoId, cancellationToken),
+            Context = ToOneShotContext(promptType),
+            Id = todoId,
+            UseWorkspaceContext = true,
+        };
+
+        var resolved = await client.AgentPool.ResolvePromptAsync(request, cancellationToken).ConfigureAwait(false);
+        if (!resolved.Success)
+            throw new InvalidOperationException(resolved.Error ?? $"Failed to resolve {promptType} prompt.");
+
+        var queued = await client.AgentPool.EnqueueOneShotAsync(request, cancellationToken).ConfigureAwait(false);
+        if (!queued.Success || string.IsNullOrWhiteSpace(queued.JobId))
+            throw new InvalidOperationException(queued.Error ?? $"Failed to enqueue {promptType} prompt job.");
+
+        await foreach (var evt in client.AgentPool.StreamJobAsync(queued.JobId, cancellationToken)
+                           .WithCancellation(cancellationToken)
+                           .ConfigureAwait(false))
+        {
+            if (!string.IsNullOrWhiteSpace(evt.Text))
+            {
+                foreach (var line in SplitPromptOutputLines(evt.Text))
+                {
+                    if (IsPromptHeartbeatLine(line))
+                        continue;
+                    yield return line;
+                }
+            }
+
+            if (IsCompletedJobEvent(evt.EventType, evt.Status))
+                yield break;
+
+            if (IsCanceledJobEvent(evt.EventType, evt.Status))
+                throw new OperationCanceledException("Prompt job was canceled.");
+
+            if (IsFailedJobEvent(evt.EventType, evt.Status))
+                throw new InvalidOperationException(evt.Error ?? "Prompt job failed.");
+        }
+
+        throw new InvalidOperationException("Prompt job stream ended before completion.");
+    }
+
+    private static McpServer.Client.Models.AgentPoolOneShotContext ToOneShotContext(string promptType)
+        => promptType switch
+        {
+            "status" => McpServer.Client.Models.AgentPoolOneShotContext.Status,
+            "implement" => McpServer.Client.Models.AgentPoolOneShotContext.Implement,
+            "plan" => McpServer.Client.Models.AgentPoolOneShotContext.Plan,
             _ => throw new InvalidOperationException($"Unknown prompt type '{promptType}'."),
         };
 
-        await foreach (var line in stream.WithCancellation(cancellationToken).ConfigureAwait(false))
-            yield return line;
-    }
+    private static IEnumerable<string> SplitPromptOutputLines(string text)
+        => text.Replace("\r\n", "\n", StringComparison.Ordinal).Split('\n');
+
+    private static bool IsCompletedJobEvent(string? eventType, string? status)
+        => string.Equals(eventType, "completed", StringComparison.OrdinalIgnoreCase)
+           || (string.Equals(eventType, "snapshot", StringComparison.OrdinalIgnoreCase)
+               && string.Equals(status, "completed", StringComparison.OrdinalIgnoreCase));
+
+    private static bool IsFailedJobEvent(string? eventType, string? status)
+        => string.Equals(eventType, "failed", StringComparison.OrdinalIgnoreCase)
+           || (string.Equals(eventType, "snapshot", StringComparison.OrdinalIgnoreCase)
+               && string.Equals(status, "failed", StringComparison.OrdinalIgnoreCase));
+
+    private static bool IsCanceledJobEvent(string? eventType, string? status)
+        => string.Equals(eventType, "canceled", StringComparison.OrdinalIgnoreCase)
+           || string.Equals(eventType, "removed", StringComparison.OrdinalIgnoreCase)
+           || (string.Equals(eventType, "snapshot", StringComparison.OrdinalIgnoreCase)
+               && (string.Equals(status, "canceled", StringComparison.OrdinalIgnoreCase)
+                   || string.Equals(status, "removed", StringComparison.OrdinalIgnoreCase)));
 
     private static string GetPromptDisplayName(string promptType)
         => promptType switch
@@ -773,6 +914,92 @@ internal sealed class TodoScreen : View
             "plan" => "Plan",
             _ => promptType,
         };
+
+    private static bool IsPromptHeartbeatLine(string line)
+        => string.Equals(line, "…", StringComparison.Ordinal)
+           || string.Equals(line, "...", StringComparison.Ordinal)
+           || string.Equals(line, "Processing…", StringComparison.Ordinal)
+           || string.Equals(line, "Processing...", StringComparison.Ordinal);
+
+    private async Task<IReadOnlyList<WorkspaceMoveTarget>> GetMoveWorkspaceTargetsAsync(CancellationToken cancellationToken)
+    {
+        if (_directorContext is null)
+            return [];
+
+        var apiClient = _directorContext.HasControlConnection
+            ? await _directorContext.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(false)
+            : await _directorContext.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+
+        var activeWorkspacePath = _directorContext.ActiveWorkspacePath;
+        var workspaces = await apiClient.Workspace.ListAsync(cancellationToken).ConfigureAwait(false);
+        return workspaces.Items
+            .Where(ws => !string.Equals(ws.WorkspacePath, activeWorkspacePath, StringComparison.OrdinalIgnoreCase))
+            .OrderByDescending(ws => ws.IsPrimary)
+            .ThenBy(ws => ws.Name, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(ws => ws.WorkspacePath, StringComparer.OrdinalIgnoreCase)
+            .Select(ws => new WorkspaceMoveTarget(ws.WorkspacePath, BuildWorkspaceMoveLabel(ws)))
+            .ToList();
+    }
+
+    private string? ShowMoveTargetDialog(string todoId, IReadOnlyList<WorkspaceMoveTarget> targets)
+    {
+        var snapshot = new System.Collections.ObjectModel.ObservableCollection<WorkspaceMoveTarget>(targets.ToList());
+        if (snapshot.Count == 0)
+            return null;
+
+        string? chosenPath = null;
+        var dialog = new Dialog
+        {
+            Title = $"Move TODO '{todoId}'",
+            Width = 96,
+            Height = Math.Min(Math.Max(snapshot.Count + 6, 10), 22),
+        };
+
+        var listView = new ListView
+        {
+            X = 1,
+            Y = 1,
+            Width = Dim.Fill(2),
+            Height = Dim.Fill(2),
+        };
+        listView.SetSource(snapshot);
+        listView.SelectedItem = 0;
+        listView.EnsureSelectedItemVisible();
+        dialog.Add(listView);
+
+        void CommitSelection()
+        {
+            var index = listView.SelectedItem;
+            if (index < 0 || index >= snapshot.Count)
+                return;
+
+            chosenPath = snapshot[index].WorkspacePath;
+            Application.RequestStop();
+        }
+
+        listView.OpenSelectedItem += (_, _) => CommitSelection();
+
+        var moveButton = new Button { Text = "Move" };
+        moveButton.Accepting += (_, _) => CommitSelection();
+        dialog.AddButton(moveButton);
+
+        var cancelButton = new Button { Text = "Cancel" };
+        cancelButton.Accepting += (_, _) => Application.RequestStop();
+        dialog.AddButton(cancelButton);
+
+        listView.SetFocus();
+        Application.Run(dialog);
+        return chosenPath;
+    }
+
+    private static string BuildWorkspaceMoveLabel(McpServer.Client.Models.WorkspaceDto workspace)
+    {
+        var name = string.IsNullOrWhiteSpace(workspace.Name)
+            ? workspace.WorkspacePath
+            : workspace.Name;
+        var prefix = workspace.IsPrimary ? "* " : "  ";
+        return $"{prefix}{name} [{workspace.WorkspacePath}]";
+    }
 
     private void BeginNewDraft()
     {
@@ -1020,6 +1247,11 @@ internal sealed class TodoScreen : View
     }
 
     private sealed record TodoRow(string Id, string Title, string Section, string Priority, string Done);
+
+    private sealed record WorkspaceMoveTarget(string WorkspacePath, string DisplayText)
+    {
+        public override string ToString() => DisplayText;
+    }
 
     private enum SortField { Priority, Id }
 

@@ -140,4 +140,40 @@ public sealed class PromptTemplateController : ControllerBase
             return BadRequest(result);
         return Ok(result);
     }
+
+    /// <summary>Resolve a stored template by ID using a dictionary of values and return populated prompt text.</summary>
+    /// <param name="id">Template identifier.</param>
+    /// <param name="request">Resolve request with values dictionary.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Resolve result containing populated prompt text or validation error details.</returns>
+    [HttpPost("{id}/resolve")]
+    public async Task<ActionResult<PromptTemplateResolveResult>> Resolve(
+        string id,
+        [FromBody] PromptTemplateResolveRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var test = await _service.TestAsync(
+                id,
+                new PromptTemplateTestRequest { Variables = request.Values },
+                cancellationToken)
+            .ConfigureAwait(false);
+
+        if (!test.Success)
+        {
+            return BadRequest(new PromptTemplateResolveResult
+            {
+                Success = false,
+                TemplateId = id,
+                Error = test.Error,
+                MissingVariables = test.MissingVariables,
+            });
+        }
+
+        return Ok(new PromptTemplateResolveResult
+        {
+            Success = true,
+            TemplateId = id,
+            Prompt = test.RenderedContent,
+        });
+    }
 }

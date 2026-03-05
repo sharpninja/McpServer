@@ -1,0 +1,68 @@
+@page "/health-dashboard"
+
+@inject HealthSnapshotsViewModel ViewModel
+
+<PageTitle>Health Dashboard</PageTitle>
+
+<h1 class="h2 mb-3">Health Dashboard</h1>
+
+<p>
+    <a class="btn btn-sm" href="@GetRefreshHref()">Refresh</a>
+</p>
+
+@if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+{
+    <PrimerFlash Variant="danger" Title="Failed to load health snapshot">@ViewModel.ErrorMessage</PrimerFlash>
+}
+else if (ViewModel.IsLoading)
+{
+    <p class="color-fg-muted">Loading health status...</p>
+}
+else if (CurrentSnapshot is null)
+{
+    <PrimerBlankslate Heading="No health data" Description="Health check did not return data." />
+}
+else
+{
+    <div class="Box mb-3">
+        <div class="Box-header">
+            <h2 class="h3 mb-0">Current Status</h2>
+        </div>
+        <div class="Box-body">
+            <p><strong>Checked At:</strong> @CurrentSnapshot.CheckedAt.ToString("u")</p>
+            <p><strong>Base URL:</strong> @(CurrentSnapshot.ServerBaseUrl ?? "(not set)")</p>
+            <p>
+                <strong>Status:</strong>
+                <PrimerLabel Scheme="@GetHealthScheme(CurrentSnapshot.Status)" Text="@CurrentSnapshot.Status" />
+            </p>
+        </div>
+    </div>
+
+    <div class="Box">
+        <div class="Box-header">
+            <h3 class="h4 mb-0">Raw Payload</h3>
+        </div>
+        <div class="Box-body">
+            <pre class="mb-0">@CurrentSnapshot.RawPayload</pre>
+        </div>
+    </div>
+}
+
+@code {
+    [SupplyParameterFromQuery(Name = "refresh")]
+    public string? RefreshToken { get; set; }
+
+    private HealthSnapshot? CurrentSnapshot => ViewModel.Items.Count > 0 ? ViewModel.Items[0] : null;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await ViewModel.CheckAsync().ConfigureAwait(false);
+    }
+
+    private static string GetHealthScheme(string status)
+        => string.Equals(status, "healthy", StringComparison.OrdinalIgnoreCase) ? "success" : "attention";
+
+    private static string GetRefreshHref()
+        => $"/health-dashboard?refresh={DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}";
+}
+

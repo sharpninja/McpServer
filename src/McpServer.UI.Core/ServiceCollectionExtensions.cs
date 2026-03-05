@@ -40,9 +40,12 @@ public static class ServiceCollectionExtensions
         // Register ViewModels as transient
         services.AddTransient<WorkspaceListViewModel>();
         services.AddTransient<WorkspaceDetailViewModel>();
+        services.AddTransient<WorkspaceHealthProbeViewModel>();
+        services.AddTransient<WorkspaceGlobalPromptViewModel>();
         services.AddTransient<WorkspacePolicyViewModel>();
         services.AddTransient<HealthSnapshotsViewModel>();
         services.AddTransient<SessionLogListViewModel>();
+        services.AddTransient<SessionLogDetailViewModel>();
         services.AddTransient<DispatcherLogsViewModel>();
         services.AddTransient<RepoListViewModel>();
         services.AddTransient<RepoFileViewModel>();
@@ -52,8 +55,26 @@ public static class ServiceCollectionExtensions
         services.AddTransient<ContextSourcesViewModel>();
         services.AddTransient<ContextRebuildIndexViewModel>();
         services.AddTransient<AuthConfigViewModel>();
+        services.AddTransient<DashboardViewModel>();
         services.AddTransient<DiagnosticExecutionPathViewModel>();
         services.AddTransient<DiagnosticAppSettingsPathViewModel>();
+        services.AddTransient<ToolListViewModel>();
+        services.AddTransient<ToolDetailViewModel>();
+        services.AddTransient<BucketListViewModel>();
+        services.AddTransient<BucketDetailViewModel>();
+        services.AddTransient<IssueListViewModel>();
+        services.AddTransient<IssueDetailViewModel>();
+        services.AddTransient<PullRequestListViewModel>();
+        services.AddTransient<GitHubSyncViewModel>();
+        services.AddTransient<FrListViewModel>();
+        services.AddTransient<FrDetailViewModel>();
+        services.AddTransient<TrListViewModel>();
+        services.AddTransient<TrDetailViewModel>();
+        services.AddTransient<TestListViewModel>();
+        services.AddTransient<TestDetailViewModel>();
+        services.AddTransient<MappingListViewModel>();
+        services.AddTransient<RequirementsGenerateViewModel>();
+        services.AddTransient<VoiceViewModel>();
         services.AddTransient<TodoListViewModel>();
         services.AddTransient<TodoDetailViewModel>();
         services.AddTransient<CreateTodoViewModel>();
@@ -66,6 +87,14 @@ public static class ServiceCollectionExtensions
         services.AddTransient<TunnelListViewModel>();
         services.AddTransient<TemplateListViewModel>();
         services.AddTransient<TemplateDetailViewModel>();
+        services.AddTransient<TemplateTestViewModel>();
+        services.AddTransient<AgentDefinitionListViewModel>();
+        services.AddTransient<AgentDefinitionDetailViewModel>();
+        services.AddTransient<WorkspaceAgentListViewModel>();
+        services.AddTransient<WorkspaceAgentDetailViewModel>();
+        services.AddTransient<AgentEventsViewModel>();
+        services.AddTransient<AgentPoolViewModel>();
+        services.AddTransient<EventStreamViewModel>();
 
         // Register the ViewModelRegistry scanning this assembly + any extras
         var allAssemblies = new List<Assembly> { thisAssembly };

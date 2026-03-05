@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Template Detail Wireframe</title>
+  <link rel="stylesheet" href="../shared/wireframe.css" />
+</head>
+<body>
+  <main class="gh-content">
+    <h1 class="page-title">Template Detail</h1>
+    <p class="subtitle">Settings-like form + Monaco for template body editing.</p>
+
+    <section class="panel">
+      <div class="row"><label style="width:120px">Template ID</label><input class="input" style="width:300px" value="feature-plan" /></div>
+      <div class="row"><label style="width:120px">Category</label><input class="input" style="width:240px" value="planning" /></div>
+      <div class="row"><button class="btn btn-primary">Save template</button><button class="btn btn-danger">Delete</button></div>
+    </section>
+
+    <section class="panel">
+      <h2>Template Body (Monaco)</h2>
+      <div class="editor-shell"><div class="editor-toolbar"><strong>template.hbs</strong><span class="badge badge-muted">Handlebars</span></div><div class="editor-canvas">You are implementing {{feature}} in {{workspace}}...</div></div>
+    </section>
+
+    <p><a href="../index.html">Back to index</a></p>
+  </main>
+</body>
+</html>

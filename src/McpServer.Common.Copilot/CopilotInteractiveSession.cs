@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.Extensions.Logging;
@@ -14,13 +13,13 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
 {
     private const string Sentinel = "Esc to cancel";
 
-    private readonly Process _process;
+    private readonly ISpawnedProcess _process;
     private readonly ILogger _logger;
     private readonly SemaphoreSlim _gate = new(1, 1);
     private readonly Task _stderrDrainTask;
     private bool _disposed;
 
-    internal CopilotInteractiveSession(Process process, ILogger logger)
+    internal CopilotInteractiveSession(ISpawnedProcess process, ILogger logger)
     {
         _process = process;
         _logger = logger;
@@ -65,7 +64,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
 
                 if (line is null) break;
                 if (line.Contains(Sentinel, StringComparison.Ordinal)) break;
-                yield return line;
+                yield return LineSanitizer.Sanitize(line);
             }
         }
         finally
@@ -84,8 +83,8 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
         if (_process.HasExited) return;
 
         const string EscChars = "\x1B\x1B\x1B";
-        await _process.StandardInput.WriteAsync(EscChars.AsMemory(), ct).ConfigureAwait(false);
-        await _process.StandardInput.FlushAsync(ct).ConfigureAwait(false);
+        await _process.StandardInput!.WriteAsync(EscChars.AsMemory(), ct).ConfigureAwait(false);
+        await _process.StandardInput!.FlushAsync(ct).ConfigureAwait(false);
     }
 
     /// <summary>Sends a prompt via stdin and reads the response until the sentinel.</summary>
@@ -98,8 +97,8 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
         await _gate.WaitAsync(ct).ConfigureAwait(false);
         try
         {
-            await _process.StandardInput.WriteLineAsync(prompt.AsMemory(), ct).ConfigureAwait(false);
-            await _process.StandardInput.FlushAsync(ct).ConfigureAwait(false);
+            await _process.StandardInput!.WriteLineAsync(prompt.AsMemory(), ct).ConfigureAwait(false);
+            await _process.StandardInput!.FlushAsync(ct).ConfigureAwait(false);
             return await ReadUntilSentinelAsync(ct).ConfigureAwait(false);
         }
         finally
@@ -119,8 +118,8 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
         await _gate.WaitAsync(ct).ConfigureAwait(false);
         try
         {
-            await _process.StandardInput.WriteLineAsync(prompt.AsMemory(), ct).ConfigureAwait(false);
-            await _process.StandardInput.FlushAsync(ct).ConfigureAwait(false);
+            await _process.StandardInput!.WriteLineAsync(prompt.AsMemory(), ct).ConfigureAwait(false);
+            await _process.StandardInput!.FlushAsync(ct).ConfigureAwait(false);
 
             while (!ct.IsCancellationRequested)
             {
@@ -136,7 +135,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
 
                 if (line is null) break;
                 if (line.Contains(Sentinel, StringComparison.Ordinal)) break;
-                yield return line;
+                yield return LineSanitizer.Sanitize(line);
             }
         }
         finally
@@ -155,8 +154,8 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
 
         try
         {
-            await _process.StandardInput.WriteLineAsync("End Session");
-            await _process.StandardInput.FlushAsync();
+            await _process.StandardInput!.WriteLineAsync("End Session");
+            await _process.StandardInput!.FlushAsync();
 
             using var cts = new CancellationTokenSource(timeout);
             await ReadUntilSentinelAsync(cts.Token).ConfigureAwait(false);
@@ -273,7 +272,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
         try
         {
             if (!_process.HasExited)
-                _process.Kill(entireProcessTree: true);
+                _process.Kill();
         }
         catch (Exception ex)
         {

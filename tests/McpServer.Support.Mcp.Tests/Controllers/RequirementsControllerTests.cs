@@ -76,6 +76,65 @@ public sealed class RequirementsControllerTests : IClassFixture<RequirementsCont
             names);
     }
 
+    [Fact]
+    public async Task IngestEndpoint_ParsesAndUpsertsMarkdownPayload()
+    {
+        var payload = new
+        {
+            functionalMarkdown = """
+                # Functional Requirements (MCP Server)
+
+                ## FR-MCP-001 Seed Entry Updated
+
+                Updated FR body.
+
+                ## FR-MCP-777 New Entry
+
+                New FR body.
+                """,
+            technicalMarkdown = """
+                # Technical Requirements (MCP Server)
+
+                ## TR-MCP-001
+
+                **Updated Title** — Updated TR body.
+
+                ## TR-MCP-777
+
+                **New Title** — New TR body.
+                """,
+            testingMarkdown = """
+                # Testing Requirements (MCP Server)
+
+                - TEST-MCP-001: Updated test condition.
+                - TEST-MCP-777: New test condition.
+                """,
+            mappingMarkdown = """
+                # TR per FR Mapping (MCP Server)
+
+                | FR | Primary TRs |
+                | --- | --- |
+                | FR-MCP-001 | TR-MCP-001 |
+                | FR-MCP-777 | TR-MCP-777 |
+                """
+        };
+
+        var ingestResponse = await _client.PostAsJsonAsync("/mcpserver/requirements/ingest", payload).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, ingestResponse.StatusCode);
+
+        var fr = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-777").ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, fr.StatusCode);
+
+        var tr = await _client.GetAsync("/mcpserver/requirements/tr/TR-MCP-777").ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, tr.StatusCode);
+
+        var test = await _client.GetAsync("/mcpserver/requirements/test/TEST-MCP-777").ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, test.StatusCode);
+
+        var mapping = await _client.GetAsync("/mcpserver/requirements/mapping/FR-MCP-777").ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, mapping.StatusCode);
+    }
+
     /// <summary>WebApplicationFactory that seeds a temporary requirements docs workspace.</summary>
     public sealed class RequirementsWebFactory : WebApplicationFactory<McpApiEntryPoint>, IDisposable
     {

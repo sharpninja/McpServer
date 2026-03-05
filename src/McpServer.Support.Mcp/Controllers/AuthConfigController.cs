@@ -17,7 +17,7 @@ namespace McpServer.Support.Mcp.Controllers;
 [Route("auth")]
 public sealed class AuthConfigController : ControllerBase
 {
-    private const int MinimumOidcTokenLifetimeSeconds = 24 * 60 * 60;
+    private const int MinimumOidcTokenLifetimeSeconds = 1 * 60 * 60;
 
     /// <summary>
     /// Returns the public OIDC configuration for CLI clients.
@@ -267,7 +267,7 @@ public sealed class AuthConfigController : ControllerBase
         violationResult = StatusCode(StatusCodes.Status502BadGateway, new
         {
             error = "oidc_token_lifetime_too_short",
-            error_description = "OIDC tokens must be valid for at least 24 hours. Update Keycloak token lifespan settings.",
+            error_description = "OIDC tokens must be valid for at least 1 hour. Update Keycloak token lifespan settings.",
             minimumLifetimeSeconds = MinimumOidcTokenLifetimeSeconds,
             expiresIn = hasAccess ? (int?)accessExpiresInSeconds : null,
             refreshExpiresIn = hasRefresh ? (int?)refreshExpiresInSeconds : null

@@ -1,0 +1,33 @@
+@using McpServer.Web.Components.Auth
+
+<Router AppAssembly="@typeof(Program).Assembly">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+            <NotAuthorized>
+                @if (context.User.Identity?.IsAuthenticated == true)
+                {
+                    <LayoutView Layout="@typeof(MainLayout)">
+                        <PrimerBlankslate
+                            Heading="Access Denied"
+                            Description="You do not have permission to view this page.">
+                            <a class="btn btn-primary" href="/dashboard">Back to dashboard</a>
+                        </PrimerBlankslate>
+                    </LayoutView>
+                }
+                else
+                {
+                    <RedirectToLogin />
+                }
+            </NotAuthorized>
+        </AuthorizeRouteView>
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <PageTitle>Not found</PageTitle>
+            <PrimerBlankslate Heading="Page not found" Description="The requested route does not exist.">
+                <a class="btn btn-primary" href="/dashboard">Back to dashboard</a>
+            </PrimerBlankslate>
+        </LayoutView>
+    </NotFound>
+</Router>

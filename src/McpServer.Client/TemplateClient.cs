@@ -65,6 +65,12 @@ public sealed class TemplateClient : McpClientBase
         return await PostAsync<TemplateTestResult>("mcpserver/templates/test", request, cancellationToken).ConfigureAwait(false);
     }
 
+    /// <summary>Resolve a stored template by ID using a dictionary of values.</summary>
+    public async Task<TemplateResolveResult> ResolveAsync(string id, TemplateResolveRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<TemplateResolveResult>($"mcpserver/templates/{Encode(id)}/resolve", request, cancellationToken).ConfigureAwait(false);
+    }
+
     private static string Encode(string value) => System.Uri.EscapeDataString(value);
 
     private static string BuildQueryString(string? category, string? tag, string? keyword)

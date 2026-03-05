@@ -137,6 +137,7 @@ public sealed class VoiceController : ControllerBase
 
         _logger.LogInformation("SSE stream starting for session {SessionId}", sessionId);
         var eventCount = 0;
+        _ = await _voiceService.SendSessionMessageAsync(sessionId, "User is here.", cancellationToken).ConfigureAwait(false);
 
         try
         {
@@ -151,6 +152,10 @@ public sealed class VoiceController : ControllerBase
 
             _logger.LogInformation("SSE stream completed for session {SessionId}: {EventCount} events", sessionId, eventCount);
         }
+        catch (OperationCanceledException) when (HttpContext.RequestAborted.IsCancellationRequested)
+        {
+            _logger.LogInformation("SSE stream canceled by client disconnect for session {SessionId}", sessionId);
+        }
         catch (ArgumentException ex)
         {
             _logger.LogWarning(ex, "SSE stream argument error for session {SessionId} after {EventCount} events", sessionId, eventCount);
@@ -164,6 +169,11 @@ public sealed class VoiceController : ControllerBase
             var json = JsonSerializer.Serialize(new VoiceTurnStreamEvent { Type = "error", Message = "Voice turn processing failed." }, s_sseJsonOptions);
             await Response.WriteAsync($"data: {json}\n\n", cancellationToken).ConfigureAwait(false);
             await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            if (HttpContext.RequestAborted.IsCancellationRequested)
+                _ = await _voiceService.SendSessionMessageAsync(sessionId, "User is AFK.", CancellationToken.None).ConfigureAwait(false);
         }
     }
 

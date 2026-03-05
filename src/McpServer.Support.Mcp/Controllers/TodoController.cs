@@ -1,4 +1,6 @@
+using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace McpServer.Support.Mcp.Controllers;
@@ -16,15 +18,23 @@ public sealed class TodoController : ControllerBase
     private readonly IWorkspaceService _workspaceService;
     private readonly IRequirementsService _requirementsService;
     private readonly ITodoPromptService _todoPromptService;
+    private readonly IAgentPoolService? _agentPoolService;
 
     /// <summary>TR-PLANNED-013, TR-MCP-MT-001: Constructor. Resolves workspace-specific TODO service.</summary>
-    public TodoController(TodoServiceResolver todoServiceResolver, WorkspaceContext workspaceContext, IWorkspaceService workspaceService, IRequirementsService requirementsService, ITodoPromptService todoPromptService)
+    public TodoController(
+        TodoServiceResolver todoServiceResolver,
+        WorkspaceContext workspaceContext,
+        IWorkspaceService workspaceService,
+        IRequirementsService requirementsService,
+        ITodoPromptService todoPromptService,
+        IAgentPoolService? agentPoolService = null)
     {
         _todoServiceResolver = todoServiceResolver;
         _workspaceService = workspaceService;
         _todoService = todoServiceResolver.Resolve(workspaceContext);
         _requirementsService = requirementsService;
         _todoPromptService = todoPromptService;
+        _agentPoolService = agentPoolService;
     }
 
     /// <summary>TR-PLANNED-013: Query TODO items by keyword, priority, section, id, or done status.</summary>
@@ -234,13 +244,81 @@ public sealed class TodoController : ControllerBase
     /// instructions to create a detailed implementation plan. Output is streamed line by line.
     /// </summary>
     /// <param name="id">The TODO item id.</param>
+    /// <param name="prompt">Optional prompt or additional instructions from the client (e.g. extension); appended to the plan template when provided.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     [HttpGet("{id}/prompt/plan")]
     [Produces("text/event-stream")]
-    public async Task StreamPlanPromptAsync(string id, CancellationToken cancellationToken)
+    public async Task StreamPlanPromptAsync(string id, [FromQuery] string? prompt, CancellationToken cancellationToken)
     {
         if (!await EnsureTodoExistsAsync(id, cancellationToken).ConfigureAwait(false)) return;
-        await StreamCopilotResponseAsync(_todoPromptService.StreamPlanAsync(id, cancellationToken), cancellationToken).ConfigureAwait(false);
+        await StreamCopilotResponseAsync(_todoPromptService.StreamPlanAsync(id, prompt, cancellationToken), cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// FR-MCP-053: Enqueue a TODO status one-shot request through the Agent Pool queue.
+    /// </summary>
+    /// <param name="id">The TODO item id.</param>
+    /// <param name="request">Optional enqueue overrides such as agent name and template values.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    [HttpPost("{id}/prompt/status/queue")]
+    public async Task<ActionResult<AgentPoolEnqueueResult>> QueueStatusPromptAsync(
+        string id,
+        [FromBody] AgentPoolOneShotRequest? request,
+        CancellationToken cancellationToken)
+        => await QueueTodoPromptAsync(id, AgentPoolOneShotContext.Status, request, cancellationToken).ConfigureAwait(false);
+
+    /// <summary>
+    /// FR-MCP-053: Enqueue a TODO implement one-shot request through the Agent Pool queue.
+    /// </summary>
+    /// <param name="id">The TODO item id.</param>
+    /// <param name="request">Optional enqueue overrides such as agent name and template values.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    [HttpPost("{id}/prompt/implement/queue")]
+    public async Task<ActionResult<AgentPoolEnqueueResult>> QueueImplementPromptAsync(
+        string id,
+        [FromBody] AgentPoolOneShotRequest? request,
+        CancellationToken cancellationToken)
+        => await QueueTodoPromptAsync(id, AgentPoolOneShotContext.Implement, request, cancellationToken).ConfigureAwait(false);
+
+    /// <summary>
+    /// FR-MCP-053: Enqueue a TODO plan one-shot request through the Agent Pool queue.
+    /// </summary>
+    /// <param name="id">The TODO item id.</param>
+    /// <param name="request">Optional enqueue overrides such as agent name and template values.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    [HttpPost("{id}/prompt/plan/queue")]
+    public async Task<ActionResult<AgentPoolEnqueueResult>> QueuePlanPromptAsync(
+        string id,
+        [FromBody] AgentPoolOneShotRequest? request,
+        CancellationToken cancellationToken)
+        => await QueueTodoPromptAsync(id, AgentPoolOneShotContext.Plan, request, cancellationToken).ConfigureAwait(false);
+
+    private async Task<ActionResult<AgentPoolEnqueueResult>> QueueTodoPromptAsync(
+        string id,
+        AgentPoolOneShotContext context,
+        AgentPoolOneShotRequest? request,
+        CancellationToken cancellationToken)
+    {
+        if (_agentPoolService is null)
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new AgentPoolEnqueueResult { Success = false, Error = "Agent pool service unavailable." });
+
+        var item = await _todoService.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
+        if (item is null)
+            return NotFound(new AgentPoolEnqueueResult { Success = false, Error = $"TODO '{id}' not found." });
+
+        var enqueueRequest = new AgentPoolOneShotRequest
+        {
+            AgentName = request?.AgentName,
+            Context = context,
+            PromptTemplateId = request?.PromptTemplateId,
+            PromptText = request?.PromptText,
+            Id = id,
+            Values = request?.Values,
+            UseWorkspaceContext = request?.UseWorkspaceContext ?? true,
+        };
+
+        var result = await _agentPoolService.EnqueueOneShotAsync(enqueueRequest, cancellationToken).ConfigureAwait(false);
+        return result.Success ? Ok(result) : BadRequest(result);
     }
 
     /// <summary>Returns <c>true</c> if the item exists; writes a 404 JSON response and returns <c>false</c> otherwise.</summary>

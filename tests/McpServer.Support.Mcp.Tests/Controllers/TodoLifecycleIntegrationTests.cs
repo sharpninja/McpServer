@@ -44,7 +44,7 @@ public sealed class TodoLifecycleIntegrationTests
     [Fact]
     public async Task Lifecycle_Create_SerializeToMarkdown_ParseBack_Update_Verify()
     {
-        const string id = "LIFECYCLE-001";
+        const string id = "LIFECYCLE-TODO-001";
 
         // 1. CREATE the TODO via API (simulates "New Todo" in extension)
         var createRequest = new
@@ -190,7 +190,7 @@ public sealed class TodoLifecycleIntegrationTests
             priority = "low",
             functionalRequirements = new[] { "FR-WF-005", "FR-LOC-001" },
             technicalRequirements = new[] { "TR-MOBILE-001" },
-            dependsOn = new[] { "SEED-001" }
+            dependsOn = new[] { "SEED-TODO-001" }
         };
         var createResponse = await _client.PostAsJsonAsync(
             new Uri("/mcpserver/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
@@ -212,7 +212,7 @@ public sealed class TodoLifecycleIntegrationTests
         Assert.Contains("technical-requirements:", markdown);
         Assert.Contains("  - TR-MOBILE-001", markdown);
         Assert.Contains("depends-on:", markdown);
-        Assert.Contains("  - SEED-001", markdown);
+        Assert.Contains("  - SEED-TODO-001", markdown);
 
         // Parse back — FR/TR should survive
         var parsed = ParseMarkdownToUpdateBody(markdown);
@@ -224,7 +224,7 @@ public sealed class TodoLifecycleIntegrationTests
         Assert.Single(parsed.TechnicalRequirements);
         Assert.Equal("TR-MOBILE-001", parsed.TechnicalRequirements[0]);
         Assert.NotNull(parsed.DependsOn);
-        Assert.Contains("SEED-001", parsed.DependsOn);
+        Assert.Contains("SEED-TODO-001", parsed.DependsOn);
     }
 
     /// <summary>
@@ -235,7 +235,7 @@ public sealed class TodoLifecycleIntegrationTests
     [Fact]
     public async Task Lifecycle_TwoSaves_EachProducesCorrectState()
     {
-        const string id = "LIFECYCLE-2SAVE-001";
+        const string id = "LIFECYCLE-SAVE-001";
 
         // Create via API
         var createRequest = new
@@ -683,6 +683,7 @@ public sealed class TodoLifecycleIntegrationTests
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
                     { "Mcp:DataSource", ":memory:" },
+                    { "DataFolder", _tempDir },
                     { "Mcp:RepoRoot", _tempDir },
                     { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" }
                 });
@@ -698,7 +699,7 @@ public sealed class TodoLifecycleIntegrationTests
         private const string SeedYaml = """
             mvp-app:
               high-priority:
-                - id: SEED-001
+                - id: SEED-TODO-001
                   title: Seed item for lifecycle tests
                   done: false
                   description:

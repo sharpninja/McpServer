@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using McpServer.Support.Mcp.Options;
+using McpServer.Support.Mcp.Notifications;
 
 namespace McpServer.Support.Mcp.Services;
 
@@ -21,6 +22,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     private readonly IMarkerPromptProvider _markerPromptProvider;
     private readonly WorkspaceTokenService _tokenService;
     private readonly ServerRuntimeInfo _serverRuntimeInfo;
+    private readonly IChangeEventBus? _eventBus;
 
     private string? _primaryWorkspaceKey;
 
@@ -32,7 +34,8 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         IOptionsMonitor<MarkerPromptOptions> promptOptions,
         IMarkerPromptProvider markerPromptProvider,
         WorkspaceTokenService tokenService,
-        ServerRuntimeInfo serverRuntimeInfo)
+        ServerRuntimeInfo serverRuntimeInfo,
+        IChangeEventBus? eventBus = null)
     {
         _logger = logger;
         _serviceProvider = serviceProvider;
@@ -40,6 +43,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         _markerPromptProvider = markerPromptProvider;
         _tokenService = tokenService;
         _serverRuntimeInfo = serverRuntimeInfo;
+        _eventBus = eventBus;
         // loggerFactory kept in signature for backward compat (DI registration) but no longer needed
         _ = loggerFactory;
     }
@@ -62,6 +66,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         var name = DeriveWorkspaceName(key);
         await MarkerFileService.WriteMarkerAsync(key, port, name, _logger, ct,
             globalTemplate, workspace.PromptTemplate, token, workspace, _serverRuntimeInfo.StartedAtUtc).ConfigureAwait(false);
+        await PublishMarkerChangeSafeAsync(ChangeEventActions.Updated, key, ct).ConfigureAwait(false);
 
         _activeWorkspaces[key] = port;
 
@@ -70,13 +75,14 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     }
 
     /// <inheritdoc />
-    public Task<WorkspaceProcessStatus> StopAsync(string workspacePath, CancellationToken ct = default)
+    public async Task<WorkspaceProcessStatus> StopAsync(string workspacePath, CancellationToken ct = default)
     {
         var key = NormalizeKey(workspacePath);
         _activeWorkspaces.TryRemove(key, out _);
         MarkerFileService.RemoveMarker(key, _logger);
+        await PublishMarkerChangeSafeAsync(ChangeEventActions.Deleted, key, ct).ConfigureAwait(false);
         _logger.LogInformation("Workspace unregistered and marker removed: {Path}", key);
-        return Task.FromResult(new WorkspaceProcessStatus(false));
+        return new WorkspaceProcessStatus(false);
     }
 
     /// <inheritdoc />
@@ -121,6 +127,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             _ = _tokenService.GetDefaultToken(key) ?? _tokenService.GenerateDefaultToken(key);
             await MarkerFileService.WriteMarkerAsync(key, _serverRuntimeInfo.ListenPort, name, _logger, ct,
                 globalTemplate, ws.PromptTemplate, token, ws, _serverRuntimeInfo.StartedAtUtc).ConfigureAwait(false);
+            await PublishMarkerChangeSafeAsync(ChangeEventActions.Updated, key, ct).ConfigureAwait(false);
         }
 
         _logger.LogInformation("Regenerated marker files for all registered workspaces");
@@ -184,7 +191,10 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     public void Dispose()
     {
         foreach (var key in _activeWorkspaces.Keys)
+        {
             MarkerFileService.RemoveMarker(key, _logger);
+            _ = PublishMarkerChangeSafeAsync(ChangeEventActions.Deleted, key, CancellationToken.None);
+        }
         _activeWorkspaces.Clear();
     }
 
@@ -197,4 +207,27 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
 
     private static string DeriveWorkspaceName(string normalizedKey)
         => Path.GetFileName(normalizedKey.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+
+    private async Task PublishMarkerChangeSafeAsync(string action, string entityId, CancellationToken cancellationToken)
+    {
+        if (_eventBus is null)
+            return;
+
+        try
+        {
+            await _eventBus.PublishAsync(
+                new ChangeEvent
+                {
+                    Category = ChangeEventCategories.Marker,
+                    Action = action,
+                    EntityId = entityId,
+                    ResourceUri = $"mcp://workspace/marker/{entityId}",
+                },
+                cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed publishing marker change event for {EntityId}", entityId);
+        }
+    }
 }

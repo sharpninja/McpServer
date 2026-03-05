@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text.Json;
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -17,13 +18,15 @@ public sealed class SessionLogService : ISessionLogService
     private const int MaxLimit = 1000;
 
     private readonly McpDbContext _db;
+    private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<SessionLogService> _logger;
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
-    public SessionLogService(McpDbContext db, ILogger<SessionLogService> logger)
+    public SessionLogService(McpDbContext db, ILogger<SessionLogService> logger, IChangeEventBus? eventBus = null)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _eventBus = eventBus;
     }
 
     /// <inheritdoc />
@@ -35,9 +38,25 @@ public sealed class SessionLogService : ISessionLogService
             throw new ArgumentException("SourceType is required.", nameof(dto));
         if (string.IsNullOrWhiteSpace(dto.SessionId))
             throw new ArgumentException("SessionId is required.", nameof(dto));
+        if (string.IsNullOrWhiteSpace(sourceFilePath))
+        {
+            var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(dto.SessionId, dto.SourceType);
+            if (sessionIdError is not null)
+                throw new ArgumentException(sessionIdError, nameof(dto));
+            if (dto.Entries is { Count: > 0 })
+            {
+                foreach (var entry in dto.Entries)
+                {
+                    var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(entry.RequestId);
+                    if (requestIdError is not null)
+                        throw new ArgumentException(requestIdError, nameof(dto));
+                }
+            }
+        }
 
         var existing = await FindExistingSessionAsync(dto.SourceType, dto.SessionId, cancellationToken).ConfigureAwait(false);
 
+        var wasCreated = existing is null;
         if (existing != null)
         {
             MapDtoToEntity(dto, existing);
@@ -82,7 +101,14 @@ public sealed class SessionLogService : ISessionLogService
 
             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             _logger.LogInformation("Updated session log {SourceType}/{SessionId} (Id={Id}) after retry", dto.SourceType, dto.SessionId, existing.Id);
+            wasCreated = false;
         }
+
+        await PublishChangeSafeAsync(
+            wasCreated ? ChangeEventActions.Created : ChangeEventActions.Updated,
+            $"{dto.SourceType}/{dto.SessionId}",
+            $"mcp://workspace/sessionlog/{dto.SourceType}/{dto.SessionId}",
+            cancellationToken).ConfigureAwait(false);
 
         return existing.Id;
     }
@@ -134,6 +160,12 @@ public sealed class SessionLogService : ISessionLogService
         ArgumentNullException.ThrowIfNull(sessionId);
         ArgumentNullException.ThrowIfNull(requestId);
         ArgumentNullException.ThrowIfNull(items);
+        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);
+        if (sessionIdError is not null)
+            throw new ArgumentException(sessionIdError, nameof(sessionId));
+        var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(requestId);
+        if (requestIdError is not null)
+            throw new ArgumentException(requestIdError, nameof(requestId));
 
         var entry = await _db.SessionLogEntries
             .Include(e => e.ProcessingDialog)
@@ -164,6 +196,11 @@ public sealed class SessionLogService : ISessionLogService
         await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         _logger.LogDebug("Appended {Count} dialog items to {SourceType}/{SessionId}/{RequestId}",
             items.Count, sourceType, sessionId, requestId);
+        await PublishChangeSafeAsync(
+            ChangeEventActions.Updated,
+            $"{sourceType}/{sessionId}",
+            $"mcp://workspace/sessionlog/{sourceType}/{sessionId}",
+            cancellationToken).ConfigureAwait(false);
 
         return entry.ProcessingDialog.Count;
     }
@@ -493,8 +530,8 @@ public sealed class SessionLogService : ISessionLogService
             SessionId = entity.SessionId,
             Title = entity.Title,
             Model = entity.Model,
-            Started = entity.Started?.ToString("o", CultureInfo.InvariantCulture),
-            LastUpdated = entity.LastUpdated?.ToString("o", CultureInfo.InvariantCulture),
+            Started = entity.Started?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
+            LastUpdated = entity.LastUpdated?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
             Status = entity.Status,
             EntryCount = entity.EntryCount,
             TotalTokens = entity.TotalTokens,
@@ -522,7 +559,7 @@ public sealed class SessionLogService : ISessionLogService
             Entries = entity.Entries.Select(e => new UnifiedRequestEntryDto
             {
                 RequestId = e.RequestId,
-                Timestamp = e.Timestamp?.ToString("o", CultureInfo.InvariantCulture),
+                Timestamp = e.Timestamp?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
                 Model = e.Model,
                 ModelProvider = e.ModelProvider,
                 QueryText = e.QueryText,
@@ -553,7 +590,7 @@ public sealed class SessionLogService : ISessionLogService
                 ProcessingDialog = e.ProcessingDialog.Count > 0
                     ? e.ProcessingDialog.OrderBy(p => p.Ordinal).Select(p => new ProcessingDialogItemDto
                     {
-                        Timestamp = p.Timestamp.ToString("o", CultureInfo.InvariantCulture),
+                        Timestamp = p.Timestamp.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
                         Role = p.Role,
                         Content = p.Content,
                         Category = p.Category
@@ -566,7 +603,7 @@ public sealed class SessionLogService : ISessionLogService
                         Branch = c.Branch,
                         Message = c.Message,
                         Author = c.Author,
-                        Timestamp = c.CommitTimestamp?.ToString("o", CultureInfo.InvariantCulture),
+                        Timestamp = c.CommitTimestamp?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
                         FilesChanged = DeserializeStringList(c.FilesChangedJson)
                     }).ToList()
                     : null,
@@ -583,7 +620,7 @@ public sealed class SessionLogService : ISessionLogService
         if (string.IsNullOrWhiteSpace(value))
             return null;
         return DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var result)
-            ? result
+            ? result.ToUniversalTime()
             : null;
     }
 
@@ -616,6 +653,29 @@ public sealed class SessionLogService : ISessionLogService
         catch (JsonException)
         {
             return null;
+        }
+    }
+
+    private async Task PublishChangeSafeAsync(string action, string entityId, string resourceUri, CancellationToken cancellationToken)
+    {
+        if (_eventBus is null)
+            return;
+
+        try
+        {
+            await _eventBus.PublishAsync(
+                new ChangeEvent
+                {
+                    Category = ChangeEventCategories.SessionLog,
+                    Action = action,
+                    EntityId = entityId,
+                    ResourceUri = resourceUri,
+                },
+                cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed publishing session log change event for {EntityId}", entityId);
         }
     }
 }

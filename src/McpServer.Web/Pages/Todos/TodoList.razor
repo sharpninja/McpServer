@@ -1,0 +1,109 @@
+@page "/todos"
+
+@inject TodoListViewModel ViewModel
+
+<PageTitle>Todo List</PageTitle>
+
+<h1 class="h2 mb-3">Todo List</h1>
+
+<form method="get" class="Box p-3 mb-3">
+    <div class="d-flex flex-wrap gap-3">
+        <label class="d-flex flex-column">
+            <span class="text-small color-fg-muted">Section</span>
+            <input class="form-control" name="section" value="@Section" />
+        </label>
+        <label class="d-flex flex-column">
+            <span class="text-small color-fg-muted">Priority</span>
+            <input class="form-control" name="priority" value="@Priority" />
+        </label>
+        <label class="d-flex flex-column">
+            <span class="text-small color-fg-muted">Done</span>
+            <select class="form-select" name="done">
+                <option value="" selected="@(!Done.HasValue)">All</option>
+                <option value="true" selected="@(Done == true)">Done</option>
+                <option value="false" selected="@(Done == false)">Open</option>
+            </select>
+        </label>
+        <div class="d-flex flex-items-end">
+            <button class="btn btn-primary" type="submit">Apply</button>
+        </div>
+    </div>
+</form>
+
+@if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+{
+    <PrimerFlash Variant="danger" Title="Failed to load todos">@ViewModel.ErrorMessage</PrimerFlash>
+}
+else if (ViewModel.IsLoading)
+{
+    <p class="color-fg-muted">Loading todos...</p>
+}
+else if (ViewModel.Items.Count == 0)
+{
+    <PrimerBlankslate Heading="No todo items found" Description="Try changing the filters or create new TODO items." />
+}
+else
+{
+    <PrimerDataTable TItem="TodoListItem" Items="ViewModel.Items" ColumnCount="6" Class="Table--full-width">
+        <HeaderTemplate>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Section</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </HeaderTemplate>
+        <RowTemplate Context="item">
+            <td><code>@item.Id</code></td>
+            <td>@item.Title</td>
+            <td>@item.Section</td>
+            <td><PrimerLabel Scheme="@GetPriorityScheme(item.Priority)" Text="@item.Priority" /></td>
+            <td>
+                <PrimerLabel Scheme="@(item.Done ? "success" : "attention")" Text="@(item.Done ? "Done" : "Open")" />
+            </td>
+            <td><a class="btn btn-sm" href="@GetTodoDetailHref(item.Id)">Details</a></td>
+        </RowTemplate>
+    </PrimerDataTable>
+}
+
+@code {
+    [SupplyParameterFromQuery]
+    public string? Section { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string? Priority { get; set; }
+
+    [SupplyParameterFromQuery]
+    public bool? Done { get; set; }
+
+    private string? _lastQueryKey;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var queryKey = $"{Section}|{Priority}|{Done}";
+        if (string.Equals(queryKey, _lastQueryKey, StringComparison.Ordinal))
+            return;
+
+        _lastQueryKey = queryKey;
+        ViewModel.Section = Section;
+        ViewModel.Priority = Priority;
+        ViewModel.Done = Done;
+        await ViewModel.LoadAsync().ConfigureAwait(false);
+    }
+
+    private static string GetTodoDetailHref(string id)
+        => $"/todos/{Uri.EscapeDataString(id)}";
+
+    private static string GetPriorityScheme(string priority)
+        => priority.ToLowerInvariant() switch
+        {
+            "critical" => "danger",
+            "high" => "attention",
+            "medium" => "done",
+            "low" => "default",
+            _ => "default",
+        };
+}
+

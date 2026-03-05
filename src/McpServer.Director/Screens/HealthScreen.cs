@@ -11,19 +11,17 @@ namespace McpServer.Director.Screens;
 internal sealed class HealthScreen : View
 {
     private readonly HealthSnapshotsViewModel _viewModel;
-    private readonly McpHttpClient _client;
     private TextView _statusLabel = null!;
     private Label _serverLabel = null!;
+    private Label _workspaceLabel = null!;
     private TextView _detailView = null!;
     private readonly ILogger<HealthScreen> _logger;
 
 
-    public HealthScreen(HealthSnapshotsViewModel viewModel, McpHttpClient client,
-        ILogger<HealthScreen>? logger = null)
+    public HealthScreen(HealthSnapshotsViewModel viewModel, ILogger<HealthScreen>? logger = null)
     {
         _logger = logger ?? NullLogger<HealthScreen>.Instance;
         _viewModel = viewModel;
-        _client = client;
         Title = "Health";
         Width = Dim.Fill();
         Height = Dim.Fill();
@@ -33,13 +31,22 @@ internal sealed class HealthScreen : View
 
     private void BuildUi()
     {
-        _serverLabel = new Label { X = 0, Y = 0, Text = $"Server: {_client.BaseUrl}" };
+        _serverLabel = new Label { X = 0, Y = 0, Text = "Server: (unknown)" };
         Add(_serverLabel);
+
+        _workspaceLabel = new Label
+        {
+            X = 0,
+            Y = 1,
+            Width = Dim.Fill(),
+            Text = $"Workspace: {_viewModel.ActiveWorkspacePath ?? "(none)"}",
+        };
+        Add(_workspaceLabel);
 
         _statusLabel = new TextView
         {
             X = 0,
-            Y = 1,
+            Y = 2,
             Width = Dim.Fill(),
             Height = 1,
             ReadOnly = true,
@@ -50,7 +57,7 @@ internal sealed class HealthScreen : View
 
         _detailView = new TextView
         {
-            X = 0, Y = 3, Width = Dim.Fill(), Height = Dim.Fill(3),
+            X = 0, Y = 4, Width = Dim.Fill(), Height = Dim.Fill(4),
             ReadOnly = true, WordWrap = true, Text = "",
         };
         Add(_detailView);
@@ -77,9 +84,12 @@ internal sealed class HealthScreen : View
                 {
                     _statusLabel.Text = "✗ Health check failed";
                     _detailView.Text = _viewModel.ErrorMessage ?? "No health snapshot was returned.";
+                    _workspaceLabel.Text = $"Workspace: {_viewModel.ActiveWorkspacePath ?? "(none)"}";
                     return;
                 }
 
+                _serverLabel.Text = $"Server: {snapshot.ServerBaseUrl ?? "(unknown)"}";
+                _workspaceLabel.Text = $"Workspace: {_viewModel.ActiveWorkspacePath ?? "(none)"}";
                 _statusLabel.Text = $"✓ {snapshot.Status} ({_viewModel.Items.Count} checks)";
                 _detailView.Text = snapshot.RawPayload;
             });
@@ -100,7 +110,7 @@ internal sealed class HealthScreen : View
         Application.Invoke(() => _statusLabel.Text = "⏳ Initializing...");
         try
         {
-            var result = await _viewModel.InitializeWorkspaceAsync(_client.WorkspacePath).ConfigureAwait(false);
+            var result = await _viewModel.InitializeActiveWorkspaceAsync().ConfigureAwait(false);
             Application.Invoke(() =>
             {
                 if (!result.IsSuccess || result.Value is null)

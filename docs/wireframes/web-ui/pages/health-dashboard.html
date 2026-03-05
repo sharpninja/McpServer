@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Health Dashboard Wireframe</title>
+  <link rel="stylesheet" href="../shared/wireframe.css" />
+</head>
+<body>
+  <main class="gh-content">
+    <h1 class="page-title">Health Dashboard</h1>
+    <p class="subtitle">Status cards and checks in a GitHub-like diagnostics view.</p>
+
+    <section class="card-grid">
+      <div class="card"><div class="label">API</div><div class="value"><span class="badge badge-success">healthy</span></div></div>
+      <div class="card"><div class="label">Database</div><div class="value"><span class="badge badge-success">healthy</span></div></div>
+      <div class="card"><div class="label">Index</div><div class="value"><span class="badge badge-warn">degraded</span></div></div>
+      <div class="card"><div class="label">Session Log</div><div class="value"><span class="badge badge-success">healthy</span></div></div>
+    </section>
+
+    <section class="panel">
+      <h2>Check Details</h2>
+      <table class="table">
+        <thead><tr><th>Check</th><th>Status</th><th>Duration</th><th>Details</th></tr></thead>
+        <tbody>
+          <tr><td>self</td><td><span class="badge badge-success">healthy</span></td><td>0.10s</td><td>HTTP 200</td></tr>
+          <tr><td>vector-index</td><td><span class="badge badge-warn">degraded</span></td><td>0.22s</td><td>Rebuild pending</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <p><a href="../index.html">Back to index</a></p>
+  </main>
+</body>
+</html>

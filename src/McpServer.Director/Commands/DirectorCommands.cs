@@ -1,13 +1,14 @@
 using System.CommandLine;
-using System.Text.Json;
+using McpServer.Cqrs;
+using McpServer.UI.Core.Messages;
 using Spectre.Console;
 using static McpServer.Director.Commands.CommandHelpers;
 
 namespace McpServer.Director.Commands;
 
 /// <summary>
-/// FR-MCP-030: All Director CLI commands for agent management in workspaces.
-/// Commands: health, list, agents, add, ban, unban, delete, validate, init, todo, session-log.
+/// FR-MCP-030: Director CLI commands for health, workspace/agent operations, TODO, and session logs.
+/// All server interactions dispatch through UI.Core CQRS handlers.
 /// </summary>
 internal static class DirectorCommands
 {
@@ -31,71 +32,80 @@ internal static class DirectorCommands
         root.AddCommand(BuildSessionLogCommand());
     }
 
-    // ── health ──────────────────────────────────────────────────────────
-
     private static Command BuildHealthCommand()
     {
         var cmd = new Command("health", "Check MCP server health") { s_workspaceOption };
         cmd.SetHandler(async (string? workspace) =>
         {
-            using var client = ResolveClient(workspace);
-            if (client is null) return;
+            await RunWithDispatcherAsync(workspace, async (_, dispatcher, context) =>
+            {
+                try
+                {
+                    var result = await dispatcher.QueryAsync(new CheckHealthQuery()).ConfigureAwait(false);
+                    if (!result.IsSuccess || result.Value is null)
+                    {
+                        Error(result.Error ?? "Health check failed.");
+                        return;
+                    }
 
-            try
-            {
-                var json = await client.GetStringAsync("/health").ConfigureAwait(false);
-                Success($"Server healthy at {client.BaseUrl}");
-                AnsiConsole.MarkupLine($"[dim]{Markup.Escape(json)}[/]");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.TraceError(ex.ToString());
-                Error($"Server unreachable: {ex.Message}");
-            }
+                    var snapshot = result.Value;
+                    var server = snapshot.ServerBaseUrl
+                        ?? context.ControlClient?.BaseUrl
+                        ?? context.ActiveWorkspaceClient?.BaseUrl
+                        ?? "(unknown)";
+                    Success($"Server healthy at {server}");
+                    AnsiConsole.MarkupLine($"[dim]{Markup.Escape(snapshot.RawPayload)}[/]");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.TraceError(ex.ToString());
+                    Error($"Server unreachable: {ex.Message}");
+                }
+            }).ConfigureAwait(false);
         }, s_workspaceOption);
         return cmd;
     }
-
-    // ── list (workspaces) ───────────────────────────────────────────────
 
     private static Command BuildListCommand()
     {
         var cmd = new Command("list", "List all registered workspaces") { s_workspaceOption };
         cmd.SetHandler(async (string? workspace) =>
         {
-            using var client = ResolveClient(workspace);
-            if (client is null) return;
-
-            try
+            await RunWithDispatcherAsync(workspace, async (_, dispatcher, _) =>
             {
-                var result = await client.GetAsync<JsonElement>("/mcpserver/workspace").ConfigureAwait(false);
-                var items = result.GetProperty("items");
-
-                var table = new Table();
-                table.AddColumn("Name");
-                table.AddColumn("Path");
-                table.AddColumn("Enabled");
-
-                foreach (var item in items.EnumerateArray())
+                try
                 {
-                    table.AddRow(
-                        Markup.Escape(item.GetProperty("name").GetString() ?? ""),
-                        Markup.Escape(item.GetProperty("workspacePath").GetString() ?? ""),
-                        item.TryGetProperty("isEnabled", out var en) ? (en.GetBoolean() ? "[green]Yes[/]" : "[red]No[/]") : "-");
-                }
+                    var result = await dispatcher.QueryAsync(new ListWorkspacesQuery()).ConfigureAwait(false);
+                    if (!result.IsSuccess || result.Value is null)
+                    {
+                        Error(result.Error ?? "Workspace list failed.");
+                        return;
+                    }
 
-                AnsiConsole.Write(table);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.TraceError(ex.ToString());
-                Error(ex.Message);
-            }
+                    var table = new Table();
+                    table.AddColumn("Name");
+                    table.AddColumn("Path");
+                    table.AddColumn("Enabled");
+
+                    foreach (var item in result.Value.Items)
+                    {
+                        table.AddRow(
+                            Markup.Escape(item.Name),
+                            Markup.Escape(item.WorkspacePath),
+                            item.IsEnabled ? "[green]Yes[/]" : "[red]No[/]");
+                    }
+
+                    AnsiConsole.Write(table);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.TraceError(ex.ToString());
+                    Error(ex.Message);
+                }
+            }).ConfigureAwait(false);
         }, s_workspaceOption);
         return cmd;
     }
-
-    // ── agents ──────────────────────────────────────────────────────────
 
     private static Command BuildAgentsCommand()
     {
@@ -104,39 +114,30 @@ internal static class DirectorCommands
         defCmd.AddOption(s_workspaceOption);
         defCmd.SetHandler(async (string? workspace) =>
         {
-            using var client = ResolveClient(workspace);
-            if (client is null) return;
-
-            try
+            await RunWithDispatcherAsync(workspace, async (_, dispatcher, _) =>
             {
-                var result = await client.GetAsync<JsonElement>("/mcpserver/agents/definitions").ConfigureAwait(false);
-                var items = result.GetProperty("items");
+                var result = await dispatcher.QueryAsync(new ListAgentDefinitionsQuery()).ConfigureAwait(false);
+                if (!result.IsSuccess || result.Value is null)
+                {
+                    Error(result.Error ?? "Failed to load agent definitions.");
+                    return;
+                }
 
                 var table = new Table();
                 table.AddColumn("ID");
                 table.AddColumn("Display Name");
                 table.AddColumn("Built-In");
-                table.AddColumn("Default Models");
 
-                foreach (var item in items.EnumerateArray())
+                foreach (var item in result.Value.Items)
                 {
-                    var models = item.TryGetProperty("defaultModels", out var m)
-                        ? string.Join(", ", m.EnumerateArray().Select(x => x.GetString()))
-                        : "";
                     table.AddRow(
-                        Markup.Escape(item.GetProperty("id").GetString() ?? ""),
-                        Markup.Escape(item.GetProperty("displayName").GetString() ?? ""),
-                        item.TryGetProperty("isBuiltIn", out var bi) && bi.GetBoolean() ? "[green]Yes[/]" : "No",
-                        Markup.Escape(models));
+                        Markup.Escape(item.Id),
+                        Markup.Escape(item.DisplayName),
+                        item.IsBuiltIn ? "[green]Yes[/]" : "No");
                 }
 
                 AnsiConsole.Write(table);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.TraceError(ex.ToString());
-                Error(ex.Message);
-            }
+            }).ConfigureAwait(false);
         }, s_workspaceOption);
 
         var wsCmd = new Command("workspace", "List agents configured for this workspace");
@@ -144,32 +145,38 @@ internal static class DirectorCommands
         wsCmd.AddOption(s_workspaceOption);
         wsCmd.SetHandler(async (string? workspace) =>
         {
-            using var client = ResolveClient(workspace);
-            if (client is null) return;
-
-            var path = Uri.EscapeDataString(client.WorkspacePath);
-            var result = await client.GetAsync<JsonElement>($"/mcpserver/agents?workspace={path}").ConfigureAwait(false);
-            var items = result.GetProperty("items");
-
-            var table = new Table();
-            table.AddColumn("Agent ID");
-            table.AddColumn("Enabled");
-            table.AddColumn("Banned");
-            table.AddColumn("Isolation");
-            table.AddColumn("Last Launched");
-
-            foreach (var item in items.EnumerateArray())
+            await RunWithDispatcherAsync(workspace, async (_, dispatcher, context) =>
             {
-                var banned = item.TryGetProperty("banned", out var b) && b.GetBoolean();
-                table.AddRow(
-                    Markup.Escape(item.GetProperty("agentId").GetString() ?? ""),
-                    item.TryGetProperty("enabled", out var en) && en.GetBoolean() ? "[green]Yes[/]" : "[red]No[/]",
-                    banned ? $"[red]Yes[/] ({Markup.Escape(item.TryGetProperty("bannedReason", out var br) ? br.GetString() ?? "" : "")})" : "[green]No[/]",
-                    Markup.Escape(item.TryGetProperty("agentIsolation", out var iso) ? iso.GetString() ?? "worktree" : "worktree"),
-                    item.TryGetProperty("lastLaunchedAt", out var ll) && ll.ValueKind != JsonValueKind.Null ? ll.GetString() ?? "-" : "-");
-            }
+                var workspacePath = ResolveWorkspacePathOrError(context);
+                if (workspacePath is null)
+                    return;
 
-            AnsiConsole.Write(table);
+                var result = await dispatcher.QueryAsync(new ListWorkspaceAgentsQuery(workspacePath)).ConfigureAwait(false);
+                if (!result.IsSuccess || result.Value is null)
+                {
+                    Error(result.Error ?? "Failed to load workspace agents.");
+                    return;
+                }
+
+                var table = new Table();
+                table.AddColumn("Agent ID");
+                table.AddColumn("Enabled");
+                table.AddColumn("Banned");
+                table.AddColumn("Isolation");
+                table.AddColumn("Last Launched");
+
+                foreach (var item in result.Value.Items)
+                {
+                    table.AddRow(
+                        Markup.Escape(item.AgentId),
+                        item.Enabled ? "[green]Yes[/]" : "[red]No[/]",
+                        item.Banned ? $"[red]Yes[/] ({Markup.Escape(item.BannedReason ?? "")})" : "[green]No[/]",
+                        Markup.Escape(item.AgentIsolation),
+                        item.LastLaunchedAt?.ToString("O") ?? "-");
+                }
+
+                AnsiConsole.Write(table);
+            }).ConfigureAwait(false);
         }, s_workspaceOption);
 
         var eventsCmd = new Command("events", "Show agent lifecycle events");
@@ -180,29 +187,36 @@ internal static class DirectorCommands
         eventsCmd.AddOption(limitOpt);
         eventsCmd.SetHandler(async (string agentId, string? workspace, int limit) =>
         {
-            using var client = ResolveClient(workspace);
-            if (client is null) return;
-
-            var path = Uri.EscapeDataString(client.WorkspacePath);
-            var result = await client.GetAsync<JsonElement>($"/mcpserver/agents/{Uri.EscapeDataString(agentId)}/events?workspace={path}&limit={limit}").ConfigureAwait(false);
-            var items = result.GetProperty("items");
-
-            var table = new Table();
-            table.AddColumn("Timestamp");
-            table.AddColumn("Event");
-            table.AddColumn("User");
-            table.AddColumn("Details");
-
-            foreach (var item in items.EnumerateArray())
+            await RunWithDispatcherAsync(workspace, async (_, dispatcher, context) =>
             {
-                table.AddRow(
-                    item.TryGetProperty("timestamp", out var ts) ? ts.GetString() ?? "" : "",
-                    Markup.Escape(item.TryGetProperty("eventType", out var et) ? et.ToString() : ""),
-                    Markup.Escape(item.TryGetProperty("userId", out var uid) ? uid.GetString() ?? "-" : "-"),
-                    Markup.Escape(item.TryGetProperty("details", out var d) && d.ValueKind != JsonValueKind.Null ? d.GetString() ?? "" : ""));
-            }
+                var workspacePath = ResolveWorkspacePathOrError(context);
+                if (workspacePath is null)
+                    return;
 
-            AnsiConsole.Write(table);
+                var result = await dispatcher.QueryAsync(new GetAgentEventsQuery(agentId, workspacePath, limit)).ConfigureAwait(false);
+                if (!result.IsSuccess || result.Value is null)
+                {
+                    Error(result.Error ?? "Failed to load events.");
+                    return;
+                }
+
+                var table = new Table();
+                table.AddColumn("Timestamp");
+                table.AddColumn("Event");
+                table.AddColumn("User");
+                table.AddColumn("Details");
+
+                foreach (var item in result.Value.Items)
+                {
+                    table.AddRow(
+                        item.Timestamp.ToString("O"),
+                        Markup.Escape(item.EventType.ToString()),
+                        Markup.Escape(item.UserId ?? "-"),
+                        Markup.Escape(item.Details ?? ""));
+                }
+
+                AnsiConsole.Write(table);
+            }).ConfigureAwait(false);
         }, agentIdArg, s_workspaceOption, limitOpt);
 
         var agentsCmd = new Command("agents", "Manage agents (definitions, workspace configs, events)")
@@ -213,8 +227,6 @@ internal static class DirectorCommands
         };
         return agentsCmd;
     }
-
-    // ── add ─────────────────────────────────────────────────────────────
 
     private static Command BuildAddCommand()
     {
@@ -232,31 +244,26 @@ internal static class DirectorCommands
 
         cmd.SetHandler(async (string agentId, string? workspace, string isolation, bool enabled) =>
         {
-            using var client = ResolveClient(workspace);
-            if (client is null) return;
+            await RunWithDispatcherAsync(workspace, async (_, dispatcher, context) =>
+            {
+                var workspacePath = ResolveWorkspacePathOrError(context);
+                if (workspacePath is null)
+                    return;
 
-            var path = Uri.EscapeDataString(client.WorkspacePath);
-            try
-            {
-                var body = new { agentId, enabled, agentIsolation = isolation };
-                var result = await client.PostAsync<JsonElement>($"/mcpserver/agents/{Uri.EscapeDataString(agentId)}?workspace={path}", body).ConfigureAwait(false);
-                var success = result.TryGetProperty("success", out var s) && s.GetBoolean();
-                if (success)
-                    Success($"Agent '{agentId}' added to workspace.");
-                else
-                    Error(result.TryGetProperty("error", out var e) ? e.GetString() ?? "Unknown error" : "Unknown error");
-            }
-            catch (HttpRequestException ex)
-            {
-                System.Diagnostics.Trace.TraceError(ex.ToString());
-                Error(ex.Message);
-            }
+                var result = await dispatcher.SendAsync(new AssignWorkspaceAgentCommand
+                {
+                    AgentId = agentId,
+                    WorkspacePath = workspacePath,
+                    Enabled = enabled,
+                    AgentIsolation = isolation,
+                }).ConfigureAwait(false);
+
+                PrintAgentMutationOutcome(result, $"Agent '{agentId}' added to workspace.");
+            }).ConfigureAwait(false);
         }, agentIdArg, s_workspaceOption, isolationOpt, enabledOpt);
 
         return cmd;
     }
-
-    // ── ban ──────────────────────────────────────────────────────────────
 
     private static Command BuildBanCommand()
     {
@@ -276,31 +283,27 @@ internal static class DirectorCommands
 
         cmd.SetHandler(async (string agentId, string? workspace, string? reason, bool global, int? untilPr) =>
         {
-            using var client = ResolveClient(workspace);
-            if (client is null) return;
+            await RunWithDispatcherAsync(workspace, async (_, dispatcher, context) =>
+            {
+                var workspacePath = global ? null : ResolveWorkspacePathOrError(context);
+                if (!global && workspacePath is null)
+                    return;
 
-            var path = Uri.EscapeDataString(client.WorkspacePath);
-            try
-            {
-                var body = new { reason, global, bannedUntilPr = untilPr };
-                var result = await client.PostAsync<JsonElement>($"/mcpserver/agents/{Uri.EscapeDataString(agentId)}/ban?workspace={path}", body).ConfigureAwait(false);
-                var success = result.TryGetProperty("success", out var s) && s.GetBoolean();
-                if (success)
-                    Success($"Agent '{agentId}' banned{(global ? " globally" : "")}.");
-                else
-                    Error(result.TryGetProperty("error", out var e) ? e.GetString() ?? "Unknown error" : "Unknown error");
-            }
-            catch (HttpRequestException ex)
-            {
-                System.Diagnostics.Trace.TraceError(ex.ToString());
-                Error(ex.Message);
-            }
+                var result = await dispatcher.SendAsync(new BanAgentCommand
+                {
+                    AgentId = agentId,
+                    Reason = reason,
+                    Global = global,
+                    BannedUntilPr = untilPr,
+                    WorkspacePath = workspacePath,
+                }).ConfigureAwait(false);
+
+                PrintAgentMutationOutcome(result, $"Agent '{agentId}' banned{(global ? " globally" : "")}.");
+            }).ConfigureAwait(false);
         }, agentIdArg, s_workspaceOption, reasonOpt, globalOpt, prOpt);
 
         return cmd;
     }
-
-    // ── unban ────────────────────────────────────────────────────────────
 
     private static Command BuildUnbanCommand()
     {
@@ -316,30 +319,19 @@ internal static class DirectorCommands
 
         cmd.SetHandler(async (string agentId, string? workspace, bool global) =>
         {
-            using var client = ResolveClient(workspace);
-            if (client is null) return;
+            await RunWithDispatcherAsync(workspace, async (_, dispatcher, context) =>
+            {
+                var workspacePath = global ? null : ResolveWorkspacePathOrError(context);
+                if (!global && workspacePath is null)
+                    return;
 
-            var path = Uri.EscapeDataString(client.WorkspacePath);
-            try
-            {
-                var result = await client.PostAsync<JsonElement>($"/mcpserver/agents/{Uri.EscapeDataString(agentId)}/unban?workspace={path}&global={global}").ConfigureAwait(false);
-                var success = result.TryGetProperty("success", out var s) && s.GetBoolean();
-                if (success)
-                    Success($"Agent '{agentId}' unbanned{(global ? " globally" : "")}.");
-                else
-                    Error(result.TryGetProperty("error", out var e) ? e.GetString() ?? "Unknown error" : "Unknown error");
-            }
-            catch (HttpRequestException ex)
-            {
-                System.Diagnostics.Trace.TraceError(ex.ToString());
-                Error(ex.Message);
-            }
+                var result = await dispatcher.SendAsync(new UnbanAgentCommand(agentId, workspacePath, global)).ConfigureAwait(false);
+                PrintAgentMutationOutcome(result, $"Agent '{agentId}' unbanned{(global ? " globally" : "")}.");
+            }).ConfigureAwait(false);
         }, agentIdArg, s_workspaceOption, globalOpt);
 
         return cmd;
     }
-
-    // ── delete ───────────────────────────────────────────────────────────
 
     private static Command BuildDeleteCommand()
     {
@@ -353,96 +345,75 @@ internal static class DirectorCommands
 
         cmd.SetHandler(async (string agentId, string? workspace) =>
         {
-            using var client = ResolveClient(workspace);
-            if (client is null) return;
+            await RunWithDispatcherAsync(workspace, async (_, dispatcher, context) =>
+            {
+                var workspacePath = ResolveWorkspacePathOrError(context);
+                if (workspacePath is null)
+                    return;
 
-            var path = Uri.EscapeDataString(client.WorkspacePath);
-            try
-            {
-                var result = await client.DeleteAsync<JsonElement>($"/mcpserver/agents/{Uri.EscapeDataString(agentId)}?workspace={path}").ConfigureAwait(false);
-                var success = result.TryGetProperty("success", out var s) && s.GetBoolean();
-                if (success)
-                    Success($"Agent '{agentId}' removed from workspace.");
-                else
-                    Error(result.TryGetProperty("error", out var e) ? e.GetString() ?? "Unknown error" : "Unknown error");
-            }
-            catch (HttpRequestException ex)
-            {
-                System.Diagnostics.Trace.TraceError(ex.ToString());
-                Error(ex.Message);
-            }
+                var result = await dispatcher.SendAsync(new DeleteWorkspaceAgentCommand(agentId, workspacePath)).ConfigureAwait(false);
+                PrintAgentMutationOutcome(result, $"Agent '{agentId}' removed from workspace.");
+            }).ConfigureAwait(false);
         }, agentIdArg, s_workspaceOption);
 
         return cmd;
     }
-
-    // ── validate ─────────────────────────────────────────────────────────
 
     private static Command BuildValidateCommand()
     {
         var cmd = new Command("validate", "Validate the agents.yaml file for a workspace") { s_workspaceOption };
         cmd.SetHandler(async (string? workspace) =>
         {
-            using var client = ResolveClient(workspace);
-            if (client is null) return;
-
-            var path = Uri.EscapeDataString(client.WorkspacePath);
-            try
+            await RunWithDispatcherAsync(workspace, async (_, dispatcher, context) =>
             {
-                var result = await client.GetAsync<JsonElement>($"/mcpserver/agents/validate?workspace={path}").ConfigureAwait(false);
-                var valid = result.TryGetProperty("valid", out var v) && v.GetBoolean();
-                if (valid)
+                var workspacePath = ResolveWorkspacePathOrError(context);
+                if (workspacePath is null)
+                    return;
+
+                var result = await dispatcher.QueryAsync(new ValidateAgentQuery(workspacePath)).ConfigureAwait(false);
+                if (!result.IsSuccess || result.Value is null)
+                {
+                    Error(result.Error ?? "Validation failed.");
+                    return;
+                }
+
+                if (result.Value.Valid)
                     Success("agents.yaml is valid.");
                 else
                 {
                     Error("agents.yaml validation failed.");
-                    if (result.TryGetProperty("error", out var e))
-                        AnsiConsole.MarkupLine($"  [dim]{Markup.Escape(e.GetString() ?? "")}[/]");
+                    if (!string.IsNullOrWhiteSpace(result.Value.Error))
+                        AnsiConsole.MarkupLine($"  [dim]{Markup.Escape(result.Value.Error)}[/]");
                 }
-            }
-            catch (HttpRequestException ex)
-            {
-                System.Diagnostics.Trace.TraceError(ex.ToString());
-                Error(ex.Message);
-            }
+            }).ConfigureAwait(false);
         }, s_workspaceOption);
         return cmd;
     }
-
-    // ── init ─────────────────────────────────────────────────────────────
 
     private static Command BuildInitCommand()
     {
         var cmd = new Command("init", "Initialize the current workspace for agent management") { s_workspaceOption };
         cmd.SetHandler(async (string? workspace) =>
         {
-            using var client = ResolveClient(workspace);
-            if (client is null) return;
-
-            var path = Uri.EscapeDataString(client.WorkspacePath);
-            try
+            await RunWithDispatcherAsync(workspace, async (_, dispatcher, context) =>
             {
-                // Seed built-in agent definitions
-                await client.PostRawAsync("/mcpserver/agents/definitions/seed").ConfigureAwait(false);
-                Info("Built-in agent definitions seeded.");
+                var workspacePath = ResolveWorkspacePathOrError(context);
+                if (workspacePath is null)
+                    return;
 
-                // Log init event
-                // Server endpoint currently expects AgentEventType as a numeric enum value (Init = 7).
-                var body = new { agentId = "system", eventType = 7, details = "Workspace initialized via Director CLI" };
-                await client.PostAsync<JsonElement>($"/mcpserver/agents/system/events?workspace={path}", body).ConfigureAwait(false);
+                var result = await dispatcher.SendAsync(new InitWorkspaceCommand(workspacePath)).ConfigureAwait(false);
+                if (!result.IsSuccess || result.Value is null)
+                {
+                    Error(result.Error ?? "Workspace init failed.");
+                    return;
+                }
 
-                Success("Workspace initialized for agent management.");
-            }
-            catch (HttpRequestException ex)
-            {
-                System.Diagnostics.Trace.TraceError(ex.ToString());
-                Error(ex.Message);
-            }
+                var seededText = result.Value.SeededDefinitions is int seeded ? $" (seeded {seeded})" : "";
+                Success($"Workspace initialized for agent management{seededText}.");
+            }).ConfigureAwait(false);
         }, s_workspaceOption);
         return cmd;
     }
-
-    // ── todo ─────────────────────────────────────────────────────────────
 
     private static Command BuildTodoCommand()
     {
@@ -451,14 +422,14 @@ internal static class DirectorCommands
         listCmd.AddOption(sectionOpt);
         listCmd.SetHandler(async (string? workspace, string? section) =>
         {
-            using var client = ResolveClient(workspace);
-            if (client is null) return;
-
-            try
+            await RunWithDispatcherAsync(workspace, async (_, dispatcher, _) =>
             {
-                var url = "/mcpserver/todo" + (section is not null ? $"?section={Uri.EscapeDataString(section)}" : "");
-                var result = await client.GetAsync<JsonElement>(url).ConfigureAwait(false);
-                var items = result.GetProperty("items");
+                var result = await dispatcher.QueryAsync(new ListTodosQuery { Section = section }).ConfigureAwait(false);
+                if (!result.IsSuccess || result.Value is null)
+                {
+                    Error(result.Error ?? "TODO list failed.");
+                    return;
+                }
 
                 var table = new Table();
                 table.AddColumn("ID");
@@ -467,32 +438,24 @@ internal static class DirectorCommands
                 table.AddColumn("Priority");
                 table.AddColumn("Done");
 
-                foreach (var item in items.EnumerateArray())
+                foreach (var item in result.Value.Items)
                 {
-                    var done = item.TryGetProperty("done", out var d) && d.GetBoolean();
                     table.AddRow(
-                        Markup.Escape(item.TryGetProperty("id", out var id) ? id.GetString() ?? "" : ""),
-                        Markup.Escape(item.TryGetProperty("title", out var t) ? t.GetString() ?? "" : ""),
-                        Markup.Escape(item.TryGetProperty("section", out var s) ? s.GetString() ?? "" : ""),
-                        Markup.Escape(item.TryGetProperty("priority", out var p) ? p.GetString() ?? "" : ""),
-                        done ? "[green]✓[/]" : "○");
+                        Markup.Escape(item.Id),
+                        Markup.Escape(item.Title),
+                        Markup.Escape(item.Section),
+                        Markup.Escape(item.Priority),
+                        item.Done ? "[green]✓[/]" : "○");
                 }
 
                 AnsiConsole.Write(table);
-                Info($"{items.GetArrayLength()} items");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.TraceError(ex.ToString());
-                Error(ex.Message);
-            }
+                Info($"{result.Value.Items.Count} items");
+            }).ConfigureAwait(false);
         }, s_workspaceOption, sectionOpt);
 
         var todoCmd = new Command("todo", "Manage TODO items") { listCmd };
         return todoCmd;
     }
-
-    // ── session-log ──────────────────────────────────────────────────────
 
     private static Command BuildSessionLogCommand()
     {
@@ -501,14 +464,19 @@ internal static class DirectorCommands
         listCmd.AddOption(limitOpt);
         listCmd.SetHandler(async (string? workspace, int limit) =>
         {
-            using var client = ResolveClient(workspace);
-            if (client is null) return;
-
-            try
+            await RunWithDispatcherAsync(workspace, async (_, dispatcher, _) =>
             {
-                var body = new { limit, sortBy = "lastUpdated", sortDirection = "desc" };
-                var result = await client.PostAsync<JsonElement>("/mcpserver/sessionlog", body).ConfigureAwait(false);
-                var items = result.GetProperty("items");
+                var result = await dispatcher.QueryAsync(new ListSessionLogsQuery
+                {
+                    Limit = limit,
+                    Offset = 0
+                }).ConfigureAwait(false);
+
+                if (!result.IsSuccess || result.Value is null)
+                {
+                    Error(result.Error ?? "Session log query failed.");
+                    return;
+                }
 
                 var table = new Table();
                 table.AddColumn("ID");
@@ -517,28 +485,41 @@ internal static class DirectorCommands
                 table.AddColumn("Status");
                 table.AddColumn("Updated");
 
-                foreach (var item in items.EnumerateArray())
+                foreach (var item in result.Value.Items)
                 {
-                    var status = item.TryGetProperty("status", out var st) ? st.GetString() ?? "" : "";
                     table.AddRow(
-                        item.TryGetProperty("id", out var id) ? id.ToString() : "",
-                        Markup.Escape(item.TryGetProperty("sourceType", out var src) ? src.GetString() ?? "" : ""),
-                        Markup.Escape(item.TryGetProperty("title", out var t) ? t.GetString() ?? "" : ""),
-                        status == "completed" ? "[green]completed[/]" : $"[yellow]{Markup.Escape(status)}[/]",
-                        Markup.Escape(item.TryGetProperty("lastUpdated", out var lu) ? lu.GetString() ?? "" : ""));
+                        Markup.Escape(item.SessionId),
+                        Markup.Escape(item.SourceType),
+                        Markup.Escape(item.Title),
+                        string.Equals(item.Status, "completed", StringComparison.OrdinalIgnoreCase)
+                            ? "[green]completed[/]"
+                            : $"[yellow]{Markup.Escape(item.Status)}[/]",
+                        Markup.Escape(item.LastUpdated ?? string.Empty));
                 }
 
                 AnsiConsole.Write(table);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.TraceError(ex.ToString());
-                Error(ex.Message);
-            }
+            }).ConfigureAwait(false);
         }, s_workspaceOption, limitOpt);
 
         var slCmd = new Command("session-log", "View session logs") { listCmd };
         slCmd.AddAlias("sl");
         return slCmd;
+    }
+
+    private static void PrintAgentMutationOutcome(Result<AgentMutationOutcome> result, string successMessage)
+    {
+        if (!result.IsSuccess || result.Value is null)
+        {
+            Error(result.Error ?? "Operation failed.");
+            return;
+        }
+
+        if (result.Value.Success)
+        {
+            Success(successMessage);
+            return;
+        }
+
+        Error(result.Value.Error ?? "Operation failed.");
     }
 }

@@ -1,8 +1,10 @@
-﻿using System.CommandLine;
+using System.CommandLine;
+using McpServer.Cqrs;
 using McpServer.Cqrs.Mvvm;
 using McpServer.Director.Helpers;
 using McpServer.Director.Screens;
 using McpServer.UI.Core.Authorization;
+using McpServer.UI.Core.Navigation;
 using McpServer.UI.Core.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -43,14 +45,40 @@ internal static class InteractiveCommand
             var healthVm = sp.GetRequiredService<HealthSnapshotsViewModel>();
             var dispatcherLogsVm = sp.GetRequiredService<DispatcherLogsViewModel>();
             var sessionLogVm = sp.GetRequiredService<SessionLogListViewModel>();
+            var sessionLogDetailVm = sp.GetRequiredService<SessionLogDetailViewModel>();
             var todoVm = sp.GetRequiredService<TodoListViewModel>();
             var todoDetailVm = sp.GetRequiredService<TodoDetailViewModel>();
             var tunnelListVm = sp.GetRequiredService<TunnelListViewModel>();
             var templateListVm = sp.GetRequiredService<TemplateListViewModel>();
             var templateDetailVm = sp.GetRequiredService<TemplateDetailViewModel>();
+            var toolListVm = sp.GetRequiredService<ToolListViewModel>();
+            var toolDetailVm = sp.GetRequiredService<ToolDetailViewModel>();
+            var bucketListVm = sp.GetRequiredService<BucketListViewModel>();
+            var bucketDetailVm = sp.GetRequiredService<BucketDetailViewModel>();
+            var issueListVm = sp.GetRequiredService<IssueListViewModel>();
+            var issueDetailVm = sp.GetRequiredService<IssueDetailViewModel>();
+            var pullRequestListVm = sp.GetRequiredService<PullRequestListViewModel>();
+            var gitHubSyncVm = sp.GetRequiredService<GitHubSyncViewModel>();
+            var frListVm = sp.GetRequiredService<FrListViewModel>();
+            var frDetailVm = sp.GetRequiredService<FrDetailViewModel>();
+            var trListVm = sp.GetRequiredService<TrListViewModel>();
+            var trDetailVm = sp.GetRequiredService<TrDetailViewModel>();
+            var testListVm = sp.GetRequiredService<TestListViewModel>();
+            var testDetailVm = sp.GetRequiredService<TestDetailViewModel>();
+            var mappingListVm = sp.GetRequiredService<MappingListViewModel>();
+            var requirementsGenerateVm = sp.GetRequiredService<RequirementsGenerateViewModel>();
+            var agentDefinitionListVm = sp.GetRequiredService<AgentDefinitionListViewModel>();
+            var agentDefinitionDetailVm = sp.GetRequiredService<AgentDefinitionDetailViewModel>();
+            var workspaceAgentListVm = sp.GetRequiredService<WorkspaceAgentListViewModel>();
+            var workspaceAgentDetailVm = sp.GetRequiredService<WorkspaceAgentDetailViewModel>();
+            var agentEventsVm = sp.GetRequiredService<AgentEventsViewModel>();
+            var agentPoolVm = sp.GetRequiredService<AgentPoolViewModel>();
+            var eventStreamVm = sp.GetRequiredService<EventStreamViewModel>();
             var workspaceContextVm = sp.GetRequiredService<WorkspaceContextViewModel>();
             var roleContext = sp.GetRequiredService<IRoleContext>();
             var authorizationPolicy = sp.GetRequiredService<IAuthorizationPolicyService>();
+            var dispatcher = sp.GetRequiredService<Dispatcher>();
+            var tabRegistry = sp.GetRequiredService<ITabRegistry>();
 
             // Initialize Terminal.Gui
             Terminal.Gui.Application.Init();
@@ -65,18 +93,52 @@ internal static class InteractiveCommand
                     healthVm,
                     dispatcherLogsVm,
                     sessionLogVm,
+                    sessionLogDetailVm,
                     todoVm,
                     todoDetailVm,
                     tunnelListVm,
                     templateListVm,
                     templateDetailVm,
+                    toolListVm,
+                    toolDetailVm,
+                    bucketListVm,
+                    bucketDetailVm,
+                    issueListVm,
+                    issueDetailVm,
+                    pullRequestListVm,
+                    gitHubSyncVm,
+                    frListVm,
+                    frDetailVm,
+                    trListVm,
+                    trDetailVm,
+                    testListVm,
+                    testDetailVm,
+                    mappingListVm,
+                    requirementsGenerateVm,
+                    agentDefinitionListVm,
+                    agentDefinitionDetailVm,
+                    workspaceAgentListVm,
+                    workspaceAgentDetailVm,
+                    agentEventsVm,
+                    agentPoolVm,
+                    eventStreamVm,
                     workspaceContextVm,
                     authorizationPolicy,
                     roleContext,
                     directorContext,
+                    dispatcher,
+                    tabRegistry,
+                    sp,
                     sp.GetRequiredService<ILoggerFactory>(),
                     sp.GetRequiredService<IBrowserLauncher>());
-                Terminal.Gui.Application.Run(mainScreen);
+                var logger = sp.GetRequiredService<ILoggerFactory>().CreateLogger("Director.UI");
+                Terminal.Gui.Application.Run(mainScreen, (ex) =>
+                {
+                    // Terminal.Gui v2 WordWrapManager.WrapModel throws ArgumentOutOfRangeException
+                    // on Tab key press with WordWrap enabled. Swallow the exception to keep running.
+                    logger.LogWarning(ex, "Unhandled UI exception (swallowed to keep app alive)");
+                    return true;
+                });
             }
             finally
             {

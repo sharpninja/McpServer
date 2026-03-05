@@ -6,7 +6,7 @@
  * These tests run against the live MCP server (http://localhost:7147).
  * They exercise the same code paths used by the extension:
  *   - todoMarkdown.ts: todoToMarkdown / markdownToUpdateBody
- *   - HTTP calls to GET/POST/PUT/DELETE /mcp/todo
+ *   - HTTP calls to GET/POST/PUT/DELETE /mcpserver/todo
  *
  * Run: cd extensions/fwh-mcp-todo && npm run compile && npm test
  * Requires: MCP server running on http://localhost:7147
@@ -77,11 +77,11 @@ function httpRequest(method, path, body) {
     });
 }
 async function createTodo(item) {
-    const res = await httpRequest('POST', '/mcp/todo', item);
+    const res = await httpRequest('POST', '/mcpserver/todo', item);
     assert.equal(res.status, 201, `Create ${item.id} failed: ${res.body}`);
 }
 async function getTodo(id) {
-    const res = await httpRequest('GET', `/mcp/todo/${encodeURIComponent(id)}`);
+    const res = await httpRequest('GET', `/mcpserver/todo/${encodeURIComponent(id)}`);
     assert.equal(res.status, 200, `GET ${id} failed: ${res.body}`);
     const raw = JSON.parse(res.body);
     // Normalize camelCase (API returns PascalCase)
@@ -128,7 +128,7 @@ async function updateTodo(id, body) {
         FunctionalRequirements: body.functionalRequirements,
         TechnicalRequirements: body.technicalRequirements,
     };
-    const res = await httpRequest('PUT', `/mcp/todo/${encodeURIComponent(id)}`, payload);
+    const res = await httpRequest('PUT', `/mcpserver/todo/${encodeURIComponent(id)}`, payload);
     if (res.status >= 200 && res.status < 300) {
         return { success: true };
     }
@@ -141,11 +141,11 @@ async function updateTodo(id, body) {
     };
 }
 async function deleteTodo(id) {
-    await httpRequest('DELETE', `/mcp/todo/${encodeURIComponent(id)}`);
+    await httpRequest('DELETE', `/mcpserver/todo/${encodeURIComponent(id)}`);
 }
 async function listTodos(params) {
     const qs = params ? '?' + new URLSearchParams(params).toString() : '';
-    const res = await httpRequest('GET', `/mcp/todo${qs}`);
+    const res = await httpRequest('GET', `/mcpserver/todo${qs}`);
     assert.equal(res.status, 200, `List failed: ${res.body}`);
     const data = JSON.parse(res.body);
     const items = (data.items ?? data.Items ?? []);
@@ -475,12 +475,12 @@ async function listTodos(params) {
                 priority: 'low',
             });
             // Verify exists
-            const res1 = await httpRequest('GET', `/mcp/todo/${encodeURIComponent(id)}`);
+            const res1 = await httpRequest('GET', `/mcpserver/todo/${encodeURIComponent(id)}`);
             assert.equal(res1.status, 200);
             // Delete
             await deleteTodo(id);
             // Verify gone
-            const res2 = await httpRequest('GET', `/mcp/todo/${encodeURIComponent(id)}`);
+            const res2 = await httpRequest('GET', `/mcpserver/todo/${encodeURIComponent(id)}`);
             assert.equal(res2.status, 404);
             // Don't add to createdIds since we already deleted
         });

@@ -53,21 +53,15 @@ $ArchiveDir  = Join-Path $env:USERPROFILE 'McpServer-Backups'
 $ArchivePath = Join-Path $ArchiveDir "McpServer-backup-$Timestamp.zip"
 
 # Files to preserve across updates (glob patterns relative to InstallPath).
-# appsettings.json is the canonical service config; environment-specific appsettings
-# files are not preserved and should be removed from the install path.
+# appsettings files are restored into the service folder after deployment.
 $PreservePatterns = @(
     'appsettings.json',
-    'appsettings.yaml',
-    '*.db',
-    '*.db-shm',
-    '*.db-wal'
+    'appsettings.yaml'
 )
 
 # Directories containing runtime data that should survive updates.
 $PreserveDirectories = @(
     'logs',
-    'mcp-data',
-    'templates',
     'tools'
 )
 
@@ -142,6 +136,129 @@ function Test-HealthEndpoint {
         Content    = $null
         Error      = $lastError
     }
+}
+
+function Normalize-FullPath {
+    param(
+        [Parameter(Mandatory)]
+        [string]$PathValue
+    )
+
+    return [System.IO.Path]::GetFullPath($PathValue).TrimEnd('\','/')
+}
+
+function Get-ConfiguredDataFolder {
+    param(
+        [Parameter(Mandatory)]
+        [string]$InstallRoot
+    )
+
+    $yamlPath = Join-Path $InstallRoot 'appsettings.yaml'
+    $jsonPath = Join-Path $InstallRoot 'appsettings.json'
+    $configured = $null
+
+    if (Test-Path $yamlPath) {
+        try {
+            $yamlContent = Get-Content -Path $yamlPath -Raw
+            $match = [regex]::Match($yamlContent, '(?m)^\s*DataFolder\s*:\s*(.+?)\s*$')
+            if ($match.Success) {
+                $configured = $match.Groups[1].Value.Trim().Trim("'").Trim('"')
+            }
+        }
+        catch {
+            Write-Warning "Failed to parse DataFolder from appsettings.yaml: $($_.Exception.Message)"
+        }
+    }
+
+    if ([string]::IsNullOrWhiteSpace($configured) -and (Test-Path $jsonPath)) {
+        try {
+            $json = Get-Content -Path $jsonPath -Raw | ConvertFrom-Json
+            if ($null -ne $json.DataFolder) {
+                $configured = [string]$json.DataFolder
+            }
+        }
+        catch {
+            Write-Warning "Failed to parse DataFolder from appsettings.json: $($_.Exception.Message)"
+        }
+    }
+
+    if ([string]::IsNullOrWhiteSpace($configured)) {
+        $configured = '.'
+    }
+
+    if ([System.IO.Path]::IsPathRooted($configured)) {
+        return [System.IO.Path]::GetFullPath($configured)
+    }
+
+    return [System.IO.Path]::GetFullPath((Join-Path $InstallRoot $configured))
+}
+
+function Backup-DataFolderContents {
+    param(
+        [Parameter(Mandatory)]
+        [string]$DataFolderPath,
+        [Parameter(Mandatory)]
+        [string]$InstallRoot,
+        [Parameter(Mandatory)]
+        [string]$DestinationRoot
+    )
+
+    New-Item -ItemType Directory -Path $DestinationRoot -Force | Out-Null
+    $copiedItems = @()
+
+    $normalizedDataFolder = Normalize-FullPath -PathValue $DataFolderPath
+    $normalizedInstallRoot = Normalize-FullPath -PathValue $InstallRoot
+
+    if ($normalizedDataFolder -eq $normalizedInstallRoot) {
+        Write-Warning "Configured DataFolder resolves to install root; backing up legacy runtime data patterns only."
+        foreach ($pattern in @('*.db', '*.db-shm', '*.db-wal')) {
+            foreach ($file in Get-ChildItem -Path $InstallRoot -Filter $pattern -File -ErrorAction SilentlyContinue) {
+                Copy-Item -Path $file.FullName -Destination (Join-Path $DestinationRoot $file.Name) -Force
+                $copiedItems += $file.Name
+            }
+        }
+
+        foreach ($dirName in @('mcp-data', 'templates', 'tools', 'logs')) {
+            $sourceDir = Join-Path $InstallRoot $dirName
+            if (Test-Path $sourceDir) {
+                Copy-Item -Path $sourceDir -Destination $DestinationRoot -Recurse -Force
+                $copiedItems += $dirName
+            }
+        }
+    }
+    elseif (Test-Path $DataFolderPath) {
+        foreach ($item in Get-ChildItem -Path $DataFolderPath -Force -ErrorAction SilentlyContinue) {
+            Copy-Item -Path $item.FullName -Destination $DestinationRoot -Recurse -Force
+            $copiedItems += $item.Name
+        }
+    }
+    else {
+        Write-Warning "Configured data folder not found: $DataFolderPath"
+    }
+
+    return ,$copiedItems
+}
+
+function Restore-DataFolderContents {
+    param(
+        [Parameter(Mandatory)]
+        [string]$SourceRoot,
+        [Parameter(Mandatory)]
+        [string]$DestinationRoot
+    )
+
+    if (-not (Test-Path $SourceRoot)) {
+        return @()
+    }
+
+    New-Item -ItemType Directory -Path $DestinationRoot -Force | Out-Null
+    $restoredItems = @()
+    foreach ($item in Get-ChildItem -Path $SourceRoot -Force -ErrorAction SilentlyContinue) {
+        Copy-Item -Path $item.FullName -Destination $DestinationRoot -Recurse -Force
+        $restoredItems += $item.Name
+    }
+
+    return ,$restoredItems
 }
 
 function Remove-StaleInstallContent {
@@ -309,6 +426,8 @@ else {
 # 2. Backup preserved files
 Write-Step "2/8  Backing up config and data files ..."
 New-Item -ItemType Directory -Path $BackupDir -Force | Out-Null
+$configuredDataFolder = Get-ConfiguredDataFolder -InstallRoot $InstallPath
+$dataBackupDir = Join-Path $BackupDir 'data'
 $backedUp = @()
 foreach ($pattern in $PreservePatterns) {
     $files = Get-ChildItem -Path $InstallPath -Filter $pattern -ErrorAction SilentlyContinue
@@ -317,18 +436,25 @@ foreach ($pattern in $PreservePatterns) {
         $backedUp += $f.Name
     }
 }
+Write-Host "  Data folder: $configuredDataFolder" -ForegroundColor DarkGray
+$dataBackedUp = Backup-DataFolderContents -DataFolderPath $configuredDataFolder -InstallRoot $InstallPath -DestinationRoot $dataBackupDir
+if ($dataBackedUp.Count -gt 0) {
+    Write-Host "  Backed up data items: $($dataBackedUp -join ', ')" -ForegroundColor DarkGray
+}
 if ($backedUp.Count -gt 0) {
-    Write-Host "  Backed up: $($backedUp -join ', ')" -ForegroundColor DarkGray
+    Write-Host "  Backed up config files: $($backedUp -join ', ')" -ForegroundColor DarkGray
+}
+else {
+    Write-Host "  No config files matched preserve patterns." -ForegroundColor Yellow
+}
 
+if ($backedUp.Count -gt 0 -or $dataBackedUp.Count -gt 0) {
     # Archive to a timestamped zip in the user profile for safe keeping.
     if (-not (Test-Path $ArchiveDir)) {
         New-Item -ItemType Directory -Path $ArchiveDir -Force | Out-Null
     }
     Compress-Archive -Path "$BackupDir\*" -DestinationPath $ArchivePath -Force
     Write-Host "  Archived to: $ArchivePath" -ForegroundColor DarkGray
-}
-else {
-    Write-Host "  No files matched preserve patterns." -ForegroundColor Yellow
 }
 
 # 3. Build / Publish
@@ -373,13 +499,24 @@ if (-not (Test-Path $BackupDir) -and (Test-Path $ArchivePath)) {
     Expand-Archive -Path $ArchivePath -DestinationPath $BackupDir -Force
 }
 $restored = @()
-foreach ($f in (Get-ChildItem -Path $restoreSource -ErrorAction SilentlyContinue)) {
-    $target = Join-Path $InstallPath $f.Name
-    Copy-Item -Path $f.FullName -Destination $target -Force
-    $restored += $f.Name
+foreach ($name in @('appsettings.json', 'appsettings.yaml')) {
+    $sourcePath = Join-Path $restoreSource $name
+    if (Test-Path $sourcePath) {
+        $target = Join-Path $InstallPath $name
+        Copy-Item -Path $sourcePath -Destination $target -Force
+        $restored += $name
+    }
 }
 if ($restored.Count -gt 0) {
-    Write-Host "  Restored: $($restored -join ', ')" -ForegroundColor DarkGray
+    Write-Host "  Restored config files: $($restored -join ', ')" -ForegroundColor DarkGray
+}
+
+$restoredDataFolder = Get-ConfiguredDataFolder -InstallRoot $InstallPath
+$dataRestoreSource = Join-Path $restoreSource 'data'
+$dataRestored = Restore-DataFolderContents -SourceRoot $dataRestoreSource -DestinationRoot $restoredDataFolder
+if ($dataRestored.Count -gt 0) {
+    Write-Host "  Restored data folder: $restoredDataFolder" -ForegroundColor DarkGray
+    Write-Host "  Restored data items: $($dataRestored -join ', ')" -ForegroundColor DarkGray
 }
 
 $legacyConfigRemoved = Remove-LegacyEnvironmentAppSettings -InstallRoot $InstallPath
@@ -494,7 +631,8 @@ Write-Host "  Service : $ServiceName ($($svc.Status))"
 Write-Host "  Path    : $InstallPath"
 Write-Host "  Health  : $(if ($healthy) { 'OK' } else { 'FAILED' })"
 Write-Host "  WSHealth: $(if ($workspaceHealthFailed -eq 0) { 'OK' } else { 'WARN' }) ($workspaceHealthOk/$workspaceHealthChecked)"
-Write-Host "  Files   : $($restored.Count) preserved, $($backedUp.Count) backed up"
+Write-Host "  Config  : $($restored.Count) restored, $($backedUp.Count) backed up"
+Write-Host "  Data    : $($dataRestored.Count) restored item(s), $($dataBackedUp.Count) backed up item(s)"
 if (Test-Path $ArchivePath) {
     Write-Host "  Archive : $ArchivePath" -ForegroundColor DarkGray
 }

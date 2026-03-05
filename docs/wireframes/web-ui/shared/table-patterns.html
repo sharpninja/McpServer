@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Table Patterns</title>
+  <link rel="stylesheet" href="wireframe.css" />
+</head>
+<body>
+  <main class="gh-content">
+    <h1 class="page-title">Table/List Patterns</h1>
+    <p class="subtitle">List ergonomics align with GitHub issue/PR tables: dense rows, filter first, actions close to context.</p>
+
+    <section class="panel">
+      <h2>Filter Bar</h2>
+      <div class="row">
+        <input class="input" style="min-width:220px" placeholder="Filter by keyword" />
+        <select class="select"><option>Priority: all</option></select>
+        <select class="select"><option>Status: open</option></select>
+        <button class="btn">Clear</button>
+        <button class="btn btn-primary">New item</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Table</h2>
+      <table class="table">
+        <thead>
+          <tr><th>ID</th><th>Title</th><th>Status</th><th>Updated</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr><td>web-ui</td><td>McpServer Management Web UI</td><td><span class="badge badge-warn">in_progress</span></td><td>2026-03-01</td><td><button class="btn">View</button></td></tr>
+          <tr><td>tmpl-001</td><td>Template refresh</td><td><span class="badge badge-success">done</span></td><td>2026-03-01</td><td><button class="btn">View</button></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <p><a href="../index.html">Back to index</a></p>
+  </main>
+</body>
+</html>

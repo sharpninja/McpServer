@@ -1,8 +1,11 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Controllers;
@@ -170,6 +173,13 @@ public sealed class WorkspaceController : ControllerBase
             return NotFound(new WorkspaceProcessStatus(false, Error: "Workspace not found."));
 
         var status = await _processManager.StartAsync(workspace, ct).ConfigureAwait(false);
+        await PublishChangeSafeAsync(
+            HttpContext.RequestServices.GetService<IChangeEventBus>(),
+            HttpContext.RequestServices.GetRequiredService<ILogger<WorkspaceController>>(),
+            ChangeEventActions.Updated,
+            path,
+            $"mcp://workspace/workspace/{path}",
+            ct).ConfigureAwait(false);
         return Ok(status);
     }
 
@@ -182,6 +192,13 @@ public sealed class WorkspaceController : ControllerBase
             return BadRequest(new WorkspaceProcessStatus(false, Error: "Invalid workspace key."));
 
         var status = await _processManager.StopAsync(path, ct).ConfigureAwait(false);
+        await PublishChangeSafeAsync(
+            HttpContext.RequestServices.GetService<IChangeEventBus>(),
+            HttpContext.RequestServices.GetRequiredService<ILogger<WorkspaceController>>(),
+            ChangeEventActions.Updated,
+            path,
+            $"mcp://workspace/workspace/{path}",
+            ct).ConfigureAwait(false);
         return Ok(status);
     }
 
@@ -261,6 +278,13 @@ public sealed class WorkspaceController : ControllerBase
         // Regenerate all marker files so running workspaces pick up the new global prompt.
         // Pass the new template explicitly to avoid IOptionsMonitor staleness after reload.
         await _processManager.RegenerateAllMarkersAsync(ct, globalPromptOverride: newTemplate ?? string.Empty).ConfigureAwait(false);
+        await PublishChangeSafeAsync(
+            HttpContext.RequestServices.GetService<IChangeEventBus>(),
+            HttpContext.RequestServices.GetRequiredService<ILogger<WorkspaceController>>(),
+            ChangeEventActions.Updated,
+            "global-prompt",
+            "mcp://workspace/workspace/global-prompt",
+            ct).ConfigureAwait(false);
 
         var isDefault = newTemplate is null;
         return Ok(new GlobalPromptResult(
@@ -331,6 +355,35 @@ public sealed class WorkspaceController : ControllerBase
         catch
         {
             return null;
+        }
+    }
+
+    private static async Task PublishChangeSafeAsync(
+        IChangeEventBus? eventBus,
+        ILogger<WorkspaceController> logger,
+        string action,
+        string entityId,
+        string resourceUri,
+        CancellationToken ct)
+    {
+        if (eventBus is null)
+            return;
+
+        try
+        {
+            await eventBus.PublishAsync(
+                new ChangeEvent
+                {
+                    Category = ChangeEventCategories.Workspace,
+                    Action = action,
+                    EntityId = entityId,
+                    ResourceUri = resourceUri,
+                },
+                ct).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Failed publishing workspace controller change event for {EntityId}", entityId);
         }
     }
 }

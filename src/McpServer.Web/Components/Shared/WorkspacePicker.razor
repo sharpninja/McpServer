@@ -1,0 +1,58 @@
+@inject WorkspaceContextViewModel WorkspaceContext
+@inject WorkspaceListViewModel WorkspaceListViewModel
+
+<label class="f6 color-fg-muted mb-1 d-block" for="@this.inputId">@this.Label</label>
+<select id="@this.inputId"
+        class="@this.CssClass"
+        value="@this.CurrentWorkspacePathOrEmpty"
+        disabled="@this.Disabled"
+        @onchange="this.OnWorkspaceChanged"
+        @attributes="this.AdditionalAttributes">
+    @if (this.IncludeDefaultOption)
+    {
+        <option value="">(Default workspace)</option>
+    }
+    @foreach (var workspace in this.workspaces)
+    {
+        <option value="@workspace.WorkspacePath">@workspace.Name</option>
+    }
+</select>
+
+@code {
+    private readonly string inputId = $"workspace-picker-{Guid.NewGuid():N}";
+    private IReadOnlyList<WorkspaceSummary> workspaces = Array.Empty<WorkspaceSummary>();
+    private string? currentWorkspacePath;
+
+    [Parameter] public string Label { get; set; } = "Workspace";
+
+    [Parameter] public bool Disabled { get; set; }
+
+    [Parameter] public bool IncludeDefaultOption { get; set; } = true;
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter] public EventCallback<string?> SelectedWorkspaceChanged { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string CurrentWorkspacePathOrEmpty => this.currentWorkspacePath ?? string.Empty;
+
+    private string CssClass => string.Join(' ', new[] { "FormControl", this.Class }.Where(static value => !string.IsNullOrWhiteSpace(value)));
+
+    protected override async Task OnInitializedAsync()
+    {
+        await this.WorkspaceListViewModel.LoadAsync().ConfigureAwait(false);
+        this.workspaces = this.WorkspaceListViewModel.Workspaces.ToArray();
+        this.currentWorkspacePath = this.WorkspaceContext.ActiveWorkspacePath;
+    }
+
+    private async Task OnWorkspaceChanged(ChangeEventArgs args)
+    {
+        this.currentWorkspacePath = string.IsNullOrWhiteSpace(args.Value?.ToString())
+            ? null
+            : args.Value?.ToString();
+
+        this.WorkspaceContext.ActiveWorkspacePath = this.currentWorkspacePath;
+        await this.SelectedWorkspaceChanged.InvokeAsync(this.currentWorkspacePath).ConfigureAwait(false);
+    }
+}

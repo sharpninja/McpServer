@@ -1,0 +1,110 @@
+@page "/workspaces/detail"
+
+@inject WorkspaceDetailViewModel ViewModel
+
+<PageTitle>Workspace Detail</PageTitle>
+
+<h1 class="h2 mb-3">Workspace Detail</h1>
+<p><a href="/workspaces">← Back to workspace list</a></p>
+
+@if (string.IsNullOrWhiteSpace(WorkspacePath))
+{
+    <PrimerBlankslate Heading="No workspace selected" Description="Choose a workspace from the workspace list to view details." />
+}
+else if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+{
+    <PrimerFlash Variant="danger" Title="Failed to load workspace">@ViewModel.ErrorMessage</PrimerFlash>
+}
+else if (ViewModel.IsBusy)
+{
+    <p class="color-fg-muted">Loading workspace details...</p>
+}
+else if (ViewModel.Detail is null)
+{
+    <PrimerBlankslate Heading="Workspace not found" Description="The requested workspace could not be loaded." />
+}
+else
+{
+    <div class="Box">
+        <div class="Box-header">
+            <h2 class="h3 mb-0">@ViewModel.Detail.Name</h2>
+        </div>
+        <div class="Box-body">
+            <p><strong>Path:</strong> <code>@ViewModel.Detail.WorkspacePath</code></p>
+            <p><strong>Todo Path:</strong> <code>@ViewModel.Detail.TodoPath</code></p>
+            <p><strong>Data Directory:</strong> @(ViewModel.Detail.DataDirectory ?? "(not set)")</p>
+            <p><strong>Tunnel Provider:</strong> @(ViewModel.Detail.TunnelProvider ?? "(not set)")</p>
+            <p><strong>Run As:</strong> @(ViewModel.Detail.RunAs ?? "(not set)")</p>
+            <p><strong>Enabled:</strong> @(ViewModel.Detail.IsEnabled ? "Yes" : "No")</p>
+            <p><strong>Primary:</strong> @(ViewModel.Detail.IsPrimary ? "Yes" : "No")</p>
+            <p><strong>Created:</strong> @ViewModel.Detail.DateTimeCreated.ToString("u")</p>
+            <p><strong>Modified:</strong> @ViewModel.Detail.DateTimeModified.ToString("u")</p>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <h3 class="h4">Policy</h3>
+        <div class="d-flex flex-column gap-2">
+            <div>
+                <strong>Banned Licenses</strong>
+                @RenderStringList(ViewModel.Detail.BannedLicenses)
+            </div>
+            <div>
+                <strong>Banned Countries</strong>
+                @RenderStringList(ViewModel.Detail.BannedCountriesOfOrigin)
+            </div>
+            <div>
+                <strong>Banned Organizations</strong>
+                @RenderStringList(ViewModel.Detail.BannedOrganizations)
+            </div>
+            <div>
+                <strong>Banned Individuals</strong>
+                @RenderStringList(ViewModel.Detail.BannedIndividuals)
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [SupplyParameterFromQuery(Name = "path")]
+    public string? WorkspacePath { get; set; }
+
+    private string? _loadedPath;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (string.Equals(_loadedPath, WorkspacePath, StringComparison.Ordinal))
+            return;
+
+        _loadedPath = WorkspacePath;
+        if (string.IsNullOrWhiteSpace(WorkspacePath))
+            return;
+
+        ViewModel.WorkspacePath = WorkspacePath;
+        await ViewModel.LoadAsync().ConfigureAwait(false);
+    }
+
+    private static RenderFragment RenderStringList(IReadOnlyList<string> values) => builder =>
+    {
+        if (values.Count == 0)
+        {
+            builder.OpenElement(0, "p");
+            builder.AddAttribute(1, "class", "color-fg-muted mb-0");
+            builder.AddContent(2, "None");
+            builder.CloseElement();
+            return;
+        }
+
+        builder.OpenElement(3, "ul");
+        builder.AddAttribute(4, "class", "mb-0");
+        for (var i = 0; i < values.Count; i++)
+        {
+            builder.OpenElement(10 + i, "li");
+            builder.AddContent(20 + i, values[i]);
+            builder.CloseElement();
+        }
+
+        builder.CloseElement();
+    };
+}
+

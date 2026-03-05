@@ -1,0 +1,199 @@
+@page "/agents"
+
+@inject AgentDefinitionListViewModel DefinitionListViewModel
+@inject AgentDefinitionDetailViewModel DefinitionDetailViewModel
+@inject WorkspaceAgentListViewModel WorkspaceAgentListViewModel
+@inject WorkspaceAgentDetailViewModel WorkspaceAgentDetailViewModel
+
+<PageTitle>Agent List</PageTitle>
+
+<h1 class="h2 mb-3">Agent List</h1>
+
+<div class="Box p-3 mb-3">
+    <h2 class="h4 mb-2">Workspace Scope</h2>
+    <WorkspacePicker Label="Workspace"
+                     IncludeDefaultOption="false"
+                     Class="form-select"
+                     SelectedWorkspaceChanged="OnSelectedWorkspaceChanged" />
+</div>
+
+<div class="Box mb-3">
+    <div class="Box-header">
+        <h2 class="h3 mb-0">Global Agent Definitions</h2>
+    </div>
+    <div class="Box-body">
+        @if (!string.IsNullOrWhiteSpace(DefinitionListViewModel.ErrorMessage))
+        {
+            <PrimerFlash Variant="danger" Title="Failed to load global agents">@DefinitionListViewModel.ErrorMessage</PrimerFlash>
+        }
+        else if (DefinitionListViewModel.IsLoading)
+        {
+            <p class="color-fg-muted">Loading global agent definitions...</p>
+        }
+        else if (DefinitionListViewModel.Items.Count == 0)
+        {
+            <PrimerBlankslate Heading="No global agents found" Description="No global agent definitions were returned." />
+        }
+        else
+        {
+            <PrimerDataTable TItem="AgentDefinitionSummaryItem" Items="DefinitionListViewModel.Items" ColumnCount="4" Class="Table--full-width">
+                <HeaderTemplate>
+                    <tr>
+                        <th>Agent ID</th>
+                        <th>Display Name</th>
+                        <th>Built-in</th>
+                        <th></th>
+                    </tr>
+                </HeaderTemplate>
+                <RowTemplate Context="item">
+                    <td><code>@item.Id</code></td>
+                    <td>@item.DisplayName</td>
+                    <td><PrimerLabel Scheme="@(item.IsBuiltIn ? "done" : "default")" Text="@(item.IsBuiltIn ? "Yes" : "No")" /></td>
+                    <td>
+                        <button class="btn btn-sm" type="button" @onclick="() => LoadDefinitionDetailAsync(item.Id)">Details</button>
+                    </td>
+                </RowTemplate>
+            </PrimerDataTable>
+        }
+    </div>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(SelectedDefinitionId))
+{
+    <div class="Box mb-3">
+        <div class="Box-header">
+            <h3 class="h4 mb-0">Definition Detail - <code>@SelectedDefinitionId</code></h3>
+        </div>
+        <div class="Box-body">
+            @if (!string.IsNullOrWhiteSpace(DefinitionDetailViewModel.ErrorMessage))
+            {
+                <PrimerFlash Variant="danger" Title="Failed to load definition">@DefinitionDetailViewModel.ErrorMessage</PrimerFlash>
+            }
+            else if (DefinitionDetailViewModel.IsBusy)
+            {
+                <p class="color-fg-muted">Loading definition detail...</p>
+            }
+            else if (DefinitionDetailViewModel.Detail is null)
+            {
+                <PrimerBlankslate Heading="Definition not found" Description="No detail payload was returned for this agent." />
+            }
+            else
+            {
+                <p><strong>ID:</strong> <code>@DefinitionDetailViewModel.Detail.Id</code></p>
+                <p><strong>Display Name:</strong> @DefinitionDetailViewModel.Detail.DisplayName</p>
+                <p><strong>Launch Command:</strong> <code>@DefinitionDetailViewModel.Detail.DefaultLaunchCommand</code></p>
+                <p><strong>Instruction File:</strong> <code>@DefinitionDetailViewModel.Detail.DefaultInstructionFile</code></p>
+                <p><strong>Branch Strategy:</strong> <code>@DefinitionDetailViewModel.Detail.DefaultBranchStrategy</code></p>
+                <p><strong>Default Models:</strong> @(DefinitionDetailViewModel.Detail.DefaultModels.Count == 0 ? "(none)" : string.Join(", ", DefinitionDetailViewModel.Detail.DefaultModels))</p>
+            }
+        </div>
+    </div>
+}
+
+<div class="Box mb-3">
+    <div class="Box-header">
+        <h2 class="h3 mb-0">Workspace Agent Assignments</h2>
+    </div>
+    <div class="Box-body">
+        @if (!string.IsNullOrWhiteSpace(WorkspaceAgentListViewModel.ErrorMessage))
+        {
+            <PrimerFlash Variant="danger" Title="Failed to load workspace agents">@WorkspaceAgentListViewModel.ErrorMessage</PrimerFlash>
+        }
+        else if (WorkspaceAgentListViewModel.IsLoading)
+        {
+            <p class="color-fg-muted">Loading workspace agent assignments...</p>
+        }
+        else if (WorkspaceAgentListViewModel.Items.Count == 0)
+        {
+            <PrimerBlankslate Heading="No workspace agents found" Description="No workspace agent assignments were returned for the selected workspace." />
+        }
+        else
+        {
+            <PrimerDataTable TItem="WorkspaceAgentItem" Items="WorkspaceAgentListViewModel.Items" ColumnCount="6" Class="Table--full-width">
+                <HeaderTemplate>
+                    <tr>
+                        <th>Agent ID</th>
+                        <th>Workspace</th>
+                        <th>Enabled</th>
+                        <th>Banned</th>
+                        <th>Isolation</th>
+                        <th></th>
+                    </tr>
+                </HeaderTemplate>
+                <RowTemplate Context="item">
+                    <td><code>@item.AgentId</code></td>
+                    <td><code>@item.WorkspacePath</code></td>
+                    <td><PrimerLabel Scheme="@(item.Enabled ? "success" : "attention")" Text="@(item.Enabled ? "Yes" : "No")" /></td>
+                    <td><PrimerLabel Scheme="@(item.Banned ? "danger" : "done")" Text="@(item.Banned ? "Yes" : "No")" /></td>
+                    <td>@item.AgentIsolation</td>
+                    <td>
+                        <button class="btn btn-sm" type="button" @onclick="() => LoadWorkspaceAgentDetailAsync(item.AgentId, item.WorkspacePath)">Details</button>
+                    </td>
+                </RowTemplate>
+            </PrimerDataTable>
+        }
+    </div>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(SelectedWorkspaceAgentId))
+{
+    <div class="Box">
+        <div class="Box-header">
+            <h3 class="h4 mb-0">Workspace Assignment Detail - <code>@SelectedWorkspaceAgentId</code></h3>
+        </div>
+        <div class="Box-body">
+            @if (!string.IsNullOrWhiteSpace(WorkspaceAgentDetailViewModel.ErrorMessage))
+            {
+                <PrimerFlash Variant="danger" Title="Failed to load workspace assignment">@WorkspaceAgentDetailViewModel.ErrorMessage</PrimerFlash>
+            }
+            else if (WorkspaceAgentDetailViewModel.IsBusy)
+            {
+                <p class="color-fg-muted">Loading workspace assignment detail...</p>
+            }
+            else if (WorkspaceAgentDetailViewModel.Detail is null)
+            {
+                <PrimerBlankslate Heading="Assignment not found" Description="No detail payload was returned for this workspace assignment." />
+            }
+            else
+            {
+                <p><strong>Agent:</strong> <code>@WorkspaceAgentDetailViewModel.Detail.AgentId</code></p>
+                <p><strong>Workspace:</strong> <code>@WorkspaceAgentDetailViewModel.Detail.WorkspacePath</code></p>
+                <p><strong>Enabled:</strong> @(WorkspaceAgentDetailViewModel.Detail.Enabled ? "Yes" : "No")</p>
+                <p><strong>Banned:</strong> @(WorkspaceAgentDetailViewModel.Detail.Banned ? "Yes" : "No")</p>
+                <p><strong>Isolation:</strong> @WorkspaceAgentDetailViewModel.Detail.AgentIsolation</p>
+                <p><strong>Launch Override:</strong> @(WorkspaceAgentDetailViewModel.Detail.LaunchCommandOverride ?? "(none)")</p>
+                <p><strong>Models Override:</strong> @(WorkspaceAgentDetailViewModel.Detail.ModelsOverride.Count == 0 ? "(none)" : string.Join(", ", WorkspaceAgentDetailViewModel.Detail.ModelsOverride))</p>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private string? SelectedDefinitionId { get; set; }
+    private string? SelectedWorkspaceAgentId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await DefinitionListViewModel.LoadAsync().ConfigureAwait(false);
+        await WorkspaceAgentListViewModel.LoadAsync().ConfigureAwait(false);
+    }
+
+    private async Task OnSelectedWorkspaceChanged(string? workspacePath)
+    {
+        await WorkspaceAgentListViewModel.LoadAsync(workspacePath).ConfigureAwait(false);
+        SelectedWorkspaceAgentId = null;
+        WorkspaceAgentDetailViewModel.Detail = null;
+    }
+
+    private async Task LoadDefinitionDetailAsync(string agentId)
+    {
+        SelectedDefinitionId = agentId;
+        await DefinitionDetailViewModel.LoadAsync(agentId).ConfigureAwait(false);
+    }
+
+    private async Task LoadWorkspaceAgentDetailAsync(string agentId, string workspacePath)
+    {
+        SelectedWorkspaceAgentId = agentId;
+        await WorkspaceAgentDetailViewModel.LoadAsync(agentId, workspacePath).ConfigureAwait(false);
+    }
+}

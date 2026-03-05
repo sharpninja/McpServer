@@ -197,6 +197,10 @@ public static class ServiceDefaultsExtensions
     /// <summary>Response writer that logs the health result via ILogger (e.g. Serilog) then writes JSON.</summary>
     private static Func<HttpContext, HealthReport, Task> CreateHealthCheckResponseWriter(bool includeException)
     {
+        var version = Assembly.GetEntryAssembly()
+            ?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+            ?.InformationalVersion ?? "unknown";
+
         return async (context, report) =>
         {
             var path = context.Request.Path.Value ?? "/health";
@@ -213,6 +217,7 @@ public static class ServiceDefaultsExtensions
                 ? new
                 {
                     status = report.Status.ToString(),
+                    version,
                     checks = report.Entries.Select(e => new
                     {
                         name = e.Key,
@@ -225,6 +230,7 @@ public static class ServiceDefaultsExtensions
                 : new
                 {
                     status = report.Status.ToString(),
+                    version,
                     checks = report.Entries.Select(e => new
                     {
                         name = e.Key,

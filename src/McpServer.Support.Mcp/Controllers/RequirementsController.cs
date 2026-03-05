@@ -1,8 +1,10 @@
 using System.Text;
+using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Requirements.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Controllers;
 
@@ -14,15 +16,18 @@ namespace McpServer.Support.Mcp.Controllers;
 public sealed class RequirementsController : ControllerBase
 {
     private readonly IRequirementsDocumentService _requirements;
+    private readonly RequirementsOptions _requirementsOptions;
     private readonly ILogger<RequirementsController> _logger;
 
 
     /// <summary>Initializes a new instance of the <see cref="RequirementsController"/> class.</summary>
     public RequirementsController(IRequirementsDocumentService requirements,
+        IOptions<RequirementsOptions> requirementsOptions,
         ILogger<RequirementsController> logger)
     {
         _logger = logger;
         _requirements = requirements;
+        _requirementsOptions = requirementsOptions?.Value ?? throw new ArgumentNullException(nameof(requirementsOptions));
     }
 
     /// <summary>Gets all Functional Requirement entries.</summary>
@@ -322,6 +327,79 @@ public sealed class RequirementsController : ControllerBase
         return Ok(new { success = true });
     }
 
+    /// <summary>
+    /// Bulk-ingests requirements markdown and upserts FR/TR/TEST/mapping entities.
+    /// </summary>
+    /// <param name="request">Optional markdown payloads. When omitted, configured markdown files are read from disk.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    [HttpPost("ingest")]
+    public async Task<ActionResult<RequirementsIngestResult>> IngestAsync(
+        [FromBody] RequirementsIngestRequest? request,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var functionalMarkdown = request?.FunctionalMarkdown;
+            var technicalMarkdown = request?.TechnicalMarkdown;
+            var testingMarkdown = request?.TestingMarkdown;
+            var mappingMarkdown = request?.MappingMarkdown;
+
+            if (string.IsNullOrWhiteSpace(functionalMarkdown)
+                && string.IsNullOrWhiteSpace(technicalMarkdown)
+                && string.IsNullOrWhiteSpace(testingMarkdown)
+                && string.IsNullOrWhiteSpace(mappingMarkdown))
+            {
+                functionalMarkdown = ReadMarkdownFile(_requirementsOptions.FunctionalRequirementsPath);
+                technicalMarkdown = ReadMarkdownFile(_requirementsOptions.TechnicalRequirementsPath);
+                testingMarkdown = ReadMarkdownFile(_requirementsOptions.TestingRequirementsPath);
+                mappingMarkdown = ReadMarkdownFile(_requirementsOptions.MappingPath);
+            }
+
+            var frEntries = RequirementsDocumentParser.ParseFunctional(functionalMarkdown);
+            var trEntries = RequirementsDocumentParser.ParseTechnical(technicalMarkdown);
+            var testEntries = RequirementsDocumentParser.ParseTesting(testingMarkdown);
+            var mappingEntries = RequirementsDocumentParser.ParseMapping(mappingMarkdown);
+
+            var (frAdded, frUpdated) = await UpsertFunctionalAsync(frEntries, cancellationToken).ConfigureAwait(false);
+            var (trAdded, trUpdated) = await UpsertTechnicalAsync(trEntries, cancellationToken).ConfigureAwait(false);
+            var (testAdded, testUpdated) = await UpsertTestingAsync(testEntries, cancellationToken).ConfigureAwait(false);
+            var (mappingAdded, mappingUpdated) = await UpsertMappingAsync(mappingEntries, cancellationToken).ConfigureAwait(false);
+
+            var result = new RequirementsIngestResult
+            {
+                FunctionalParsed = frEntries.Count,
+                FunctionalAdded = frAdded,
+                FunctionalUpdated = frUpdated,
+                TechnicalParsed = trEntries.Count,
+                TechnicalAdded = trAdded,
+                TechnicalUpdated = trUpdated,
+                TestingParsed = testEntries.Count,
+                TestingAdded = testAdded,
+                TestingUpdated = testUpdated,
+                MappingParsed = mappingEntries.Count,
+                MappingAdded = mappingAdded,
+                MappingUpdated = mappingUpdated
+            };
+
+            return Ok(result);
+        }
+        catch (FileNotFoundException ex)
+        {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            return NotFound(new { error = ex.Message });
+        }
+        catch (IOException ex)
+        {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            return BadRequest(new { error = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
     /// <summary>Generates a requirements document as Markdown or ZIP.</summary>
     /// <param name="doc">Document selector: functional, technical, testing, mapping, or all.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
@@ -376,5 +454,114 @@ public sealed class RequirementsController : ControllerBase
                 docType = default;
                 return false;
         }
+    }
+
+    private string ReadMarkdownFile(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            throw new IOException("A configured requirements file path is missing.");
+        if (!System.IO.File.Exists(path))
+            throw new FileNotFoundException($"Requirements markdown file was not found: {path}", path);
+        return System.IO.File.ReadAllText(path);
+    }
+
+    private async Task<(int Added, int Updated)> UpsertFunctionalAsync(
+        IReadOnlyList<FrEntry> entries,
+        CancellationToken cancellationToken)
+    {
+        var existing = (await _requirements.GetAllFrAsync(cancellationToken).ConfigureAwait(false))
+            .ToDictionary(entry => entry.Id, StringComparer.OrdinalIgnoreCase);
+
+        var added = 0;
+        var updated = 0;
+        foreach (var entry in entries)
+        {
+            if (existing.ContainsKey(entry.Id))
+            {
+                await _requirements.UpdateFrAsync(entry, cancellationToken).ConfigureAwait(false);
+                updated++;
+            }
+            else
+            {
+                await _requirements.AddFrAsync(entry, cancellationToken).ConfigureAwait(false);
+                added++;
+            }
+        }
+
+        return (added, updated);
+    }
+
+    private async Task<(int Added, int Updated)> UpsertTechnicalAsync(
+        IReadOnlyList<TrEntry> entries,
+        CancellationToken cancellationToken)
+    {
+        var existing = (await _requirements.GetAllTrAsync(cancellationToken).ConfigureAwait(false))
+            .ToDictionary(entry => entry.Id, StringComparer.OrdinalIgnoreCase);
+
+        var added = 0;
+        var updated = 0;
+        foreach (var entry in entries)
+        {
+            if (existing.ContainsKey(entry.Id))
+            {
+                await _requirements.UpdateTrAsync(entry, cancellationToken).ConfigureAwait(false);
+                updated++;
+            }
+            else
+            {
+                await _requirements.AddTrAsync(entry, cancellationToken).ConfigureAwait(false);
+                added++;
+            }
+        }
+
+        return (added, updated);
+    }
+
+    private async Task<(int Added, int Updated)> UpsertTestingAsync(
+        IReadOnlyList<TestEntry> entries,
+        CancellationToken cancellationToken)
+    {
+        var existing = (await _requirements.GetAllTestAsync(cancellationToken).ConfigureAwait(false))
+            .ToDictionary(entry => entry.Id, StringComparer.OrdinalIgnoreCase);
+
+        var added = 0;
+        var updated = 0;
+        foreach (var entry in entries)
+        {
+            if (existing.ContainsKey(entry.Id))
+            {
+                await _requirements.UpdateTestAsync(entry, cancellationToken).ConfigureAwait(false);
+                updated++;
+            }
+            else
+            {
+                await _requirements.AddTestAsync(entry, cancellationToken).ConfigureAwait(false);
+                added++;
+            }
+        }
+
+        return (added, updated);
+    }
+
+    private async Task<(int Added, int Updated)> UpsertMappingAsync(
+        IReadOnlyList<FrTrMapping> entries,
+        CancellationToken cancellationToken)
+    {
+        var existing = (await _requirements.GetAllMappingsAsync(cancellationToken).ConfigureAwait(false))
+            .ToDictionary(entry => entry.FrId, StringComparer.OrdinalIgnoreCase);
+
+        var added = 0;
+        var updated = 0;
+        foreach (var entry in entries)
+        {
+            if (existing.ContainsKey(entry.FrId))
+                updated++;
+            else
+                added++;
+
+            await _requirements.UpsertMappingAsync(entry, cancellationToken).ConfigureAwait(false);
+        }
+
+        return (added, updated);
     }
 }

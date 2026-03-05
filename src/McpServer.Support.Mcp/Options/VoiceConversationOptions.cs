@@ -16,9 +16,9 @@ public sealed class VoiceConversationOptions
     public bool Enabled { get; set; } = true;
 
     /// <summary>
-    /// Claude-capable model identifier passed to Copilot CLI via <c>--model</c>.
+    /// Copilot model identifier passed to Copilot CLI via <c>--model</c>.
     /// </summary>
-    public string CopilotModel { get; set; } = "claude-opus-4.6";
+    public string CopilotModel { get; set; } = "gpt-5.3-codex";
 
     /// <summary>
     /// Maximum number of tool-call loop iterations per turn.

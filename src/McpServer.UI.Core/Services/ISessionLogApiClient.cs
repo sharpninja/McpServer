@@ -14,4 +14,22 @@ public interface ISessionLogApiClient
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Session log summaries for the requested page.</returns>
     Task<ListSessionLogsResult> ListSessionLogsAsync(ListSessionLogsQuery query, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Loads a single session log detail by its session identifier.
+    /// </summary>
+    /// <param name="sessionId">Session identifier to load.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Session log detail, or <see langword="null"/> when not found.</returns>
+    Task<SessionLogDetail?> GetSessionLogAsync(string sessionId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Submits (upserts) a session log payload.
+    /// </summary>
+    Task<SessionLogSubmitOutcome> SubmitSessionLogAsync(SubmitSessionLogCommand command, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Appends processing dialog items to a specific request entry.
+    /// </summary>
+    Task<SessionLogDialogAppendOutcome> AppendSessionLogDialogAsync(AppendSessionLogDialogCommand command, CancellationToken cancellationToken = default);
 }

@@ -66,7 +66,7 @@ public sealed partial class DispatcherLogsViewModel : AreaListViewModelBase<Disp
             Result = records;
 
             if (SelectedItem is null || !Items.Contains(SelectedItem))
-                SelectedItem = Items.FirstOrDefault();
+                SelectedIndex = Items.Count > 0 ? 0 : -1;
 
             StatusMessage = $"Loaded {records.Length} dispatch log(s); active: {ActiveDispatchCount}.";
         }

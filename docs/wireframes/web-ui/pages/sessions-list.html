@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Session Log List Wireframe</title>
+  <link rel="stylesheet" href="../shared/wireframe.css" />
+</head>
+<body>
+  <main class="gh-content">
+    <h1 class="page-title">Session Logs</h1>
+    <p class="subtitle">Search/filter-first list, comparable to GitHub activity lists.</p>
+
+    <section class="panel">
+      <div class="row">
+        <input class="input" placeholder="Agent" />
+        <input class="input" placeholder="Model" />
+        <input class="input" placeholder="Text" style="min-width:220px" />
+        <input class="input" type="date" />
+        <input class="input" type="date" />
+        <button class="btn">Apply</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <table class="table">
+        <thead><tr><th>Session</th><th>Source</th><th>Status</th><th>Updated</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>CopilotCLI-af8089...</td><td>CopilotCLI</td><td><span class="badge badge-warn">in_progress</span></td><td>2026-03-01</td><td><button class="btn">Open</button></td></tr>
+          <tr><td>Copilot-7e5d3...</td><td>Copilot</td><td><span class="badge badge-success">completed</span></td><td>2026-03-01</td><td><button class="btn">Open</button></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <p><a href="session-detail.html">Open session detail wireframe</a></p>
+    <p><a href="../index.html">Back to index</a></p>
+  </main>
+</body>
+</html>

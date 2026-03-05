@@ -150,9 +150,9 @@ One workspace is designated as the **primary** workspace — served by the host 
 
 Localization and internationalization support for the MCP server. *(Planned — implementation scope TBD.)*
 
-## FR-MCP-026 Keycloak OIDC Authentication
+## FR-MCP-026 OIDC Authentication
 
-The server shall support Keycloak OIDC JWT Bearer authentication for management endpoints, with GitHub as a social Identity Provider for user login. Users authenticating via GitHub shall have Keycloak accounts auto-created. Management endpoints (agent mutations) require JWT; read endpoints use existing API key auth.
+The server shall support standards-based OIDC JWT Bearer authentication for management endpoints using a configurable open-source .NET OIDC provider. Optional external identity federation (for example, GitHub) may be configured through that provider. Management endpoints (agent mutations) require JWT; read endpoints use existing API key auth.
 
 **Covered by:** `OidcAuthOptions`, `Program.cs`, `AgentController`, `Setup-McpKeycloak.ps1`, `setup-mcp-keycloak.sh`
 
@@ -164,7 +164,7 @@ The server shall provide CRUD operations for agent type definitions with built-i
 
 ## FR-MCP-028 Per-Workspace Agent Configuration
 
-The server shall support per-workspace agent configuration with overrides for launch command, models, branch strategy, seed prompt, and instruction files. Agents can be banned per-workspace or globally with optional PR-gated unbanning. All agent lifecycle events (add, launch, exit, ban, unban, delete, merge, init) are logged for audit.
+The server shall support per-workspace agent configuration with overrides for launch command, models, branch strategy, seed prompt, and instruction files. Agent pool definitions shall also support intent-default flags (`IsInteractiveDefault`, `IsTodoPlanDefault`, `IsTodoStatusDefault`, `IsTodoImplementDefault`) used for fallback routing when a request does not specify an agent name. Agents can be banned per-workspace or globally with optional PR-gated unbanning. All agent lifecycle events (add, launch, exit, ban, unban, delete, merge, init) are logged for audit.
 
 **Covered by:** `AgentController`, `AgentService`, `AgentWorkspaceEntity`, `AgentEventLogEntity`
 
@@ -180,21 +180,21 @@ A standalone CQRS framework (`McpServer.Cqrs`) shall provide async command/query
 
 ## FR-MCP-030 Director CLI
 
-A console application (`McpServer.Director`) shall provide agent orchestration commands (init, add, launch, ban, unban, delete, merge, login, list, agents, validate, interactive) dispatched through the CQRS framework. Authentication uses Keycloak Device Authorization Flow. Interactive mode uses Terminal.Gui v2 with ViewModel-bound screens.
+A console application (`McpServer.Director`) shall provide agent orchestration commands (init, add, launch, ban, unban, delete, merge, login, list, agents, validate, interactive) dispatched through the CQRS framework. Authentication uses OIDC Device Authorization Flow with the configured provider. Interactive mode uses Terminal.Gui v2 with ViewModel-bound screens.
 
 **Status:** ✅ Complete
 
 **Covered by:** `McpServer.Director` project — 15 source files: `Program.cs`, `McpHttpClient.cs`, `Auth/DirectorAuthOptions.cs`, `Auth/OidcAuthService.cs`, `Auth/TokenCache.cs`, `Commands/AuthCommands.cs`, `Commands/CommandHelpers.cs`, `Commands/DirectorCommands.cs`, `Commands/InteractiveCommand.cs`, `Screens/MainScreen.cs`, `Screens/HealthScreen.cs`, `Screens/AgentScreen.cs`, `Screens/TodoScreen.cs`, `Screens/SessionLogScreen.cs`, `Screens/WorkspaceListScreen.cs`, `Screens/WorkspacePolicyScreen.cs`, `Screens/LoginDialog.cs`, `Screens/ViewModelBinder.cs`
 
-**Implementation:** 17 CLI commands registered via System.CommandLine. All commands communicate with the MCP server via `McpHttpClient` (reads connection details from `AGENTS-README-FIRST.yaml`). Auth uses Keycloak Device Authorization Flow with token caching to `~/.mcpserver/tokens.json`. Interactive mode (`director interactive|tui|ui`) launches Terminal.Gui v2 with 6 tabs (Health, Workspaces, Agents, TODO, Sessions, Policy) plus a Login dialog, menu bar, auth status indicator, and keyboard shortcuts (F2 Login, F5 Refresh, Ctrl+Q Quit). ViewModels from `McpServer.UI.Core` are bound to Terminal.Gui controls via `ViewModelBinder` (INotifyPropertyChanged → Application.Invoke).
+**Implementation:** 17 CLI commands registered via System.CommandLine. All commands communicate with the MCP server via `McpHttpClient` (reads connection details from `AGENTS-README-FIRST.yaml`). Auth uses OIDC Device Authorization Flow with token caching to `~/.mcpserver/tokens.json`. Interactive mode (`director interactive|tui|ui`) launches Terminal.Gui v2 with 6 tabs (Health, Workspaces, Agents, TODO, Sessions, Policy) plus a Login dialog, menu bar, auth status indicator, and keyboard shortcuts (F2 Login, F5 Refresh, Ctrl+Q Quit). ViewModels from `McpServer.UI.Core` are bound to Terminal.Gui controls via `ViewModelBinder` (INotifyPropertyChanged → Application.Invoke).
 
 ## FR-MCP-031 McpServer Management Web UI
 
-A web-based management UI for McpServer providing workspace management, agent configuration, session log viewing, todo management, and system health monitoring. Integrates with Keycloak OIDC for authentication. *(Planned — tracked as high-priority TODO.)*
+A web-based management UI for McpServer providing workspace management, agent configuration, session log viewing, todo management, and system health monitoring. Integrates with the platform-wide open-source .NET OIDC provider for authentication. *(Planned — tracked as high-priority TODO.)*
 
 ## FR-MCP-032 Enhanced GitHub Integration
 
-Enhanced GitHub integration capabilities including GitHub as Keycloak Identity Provider for user authentication, and GitHub OAuth for agent workspace management and PR workflows. *(Planned — tracked as high-priority TODO.)*
+Enhanced GitHub integration capabilities including GitHub federation through the configured OIDC provider for user authentication, and GitHub OAuth for agent workspace management and PR workflows. *(Planned — tracked as high-priority TODO.)*
 
 ## FR-MCP-033 Natural Language Policy Management
 
@@ -276,7 +276,7 @@ The server shall support moving a TODO item from one workspace to another via RE
 
 ## FR-MCP-046 Voice Conversation Sessions
 
-The server shall provide voice-enabled agent interaction via Copilot CLI, supporting session creation with device binding, voice turn processing (synchronous and SSE streaming), transcript retrieval, session interruption, ESC-key injection for generation cancellation, and automatic idle session cleanup with configurable timeout. One active session per device is enforced.
+The server shall provide voice-enabled agent interaction via Copilot CLI, supporting session creation with device binding, voice turn processing (synchronous and SSE streaming), transcript retrieval, session interruption, ESC-key injection for generation cancellation, and automatic idle session cleanup with configurable timeout. Voice connections can attach to running pooled agents, including agents currently processing one-shot work. One active session per device is enforced.
 
 **Covered by:** `VoiceController`, `VoiceConversationService`, `VoiceConversationOptions`, `CopilotInteractiveSession`
 
@@ -303,3 +303,103 @@ The server shall provide a global prompt template registry with REST API endpoin
 The server shall load system prompt templates (marker prompt, TODO prompts, pairing HTML pages) from external YAML files via provider interfaces, with graceful fallback to built-in inline defaults when files are missing. Configuration overrides (`Mcp:MarkerPromptTemplate`, `Mcp:TodoPrompts`) take precedence over file-loaded templates. This enables runtime template customization without recompilation.
 
 **Covered by:** `IMarkerPromptProvider`, `FileMarkerPromptProvider`, `ITodoPromptProvider`, `TodoPromptProvider`, `PairingHtmlRenderer`
+
+## FR-MCP-051 System-Wide Default Copilot Model
+
+The server SHALL allow configuration of a system-wide default Copilot model (e.g., `gpt-5.3-codex`) that is applied consistently across all Copilot session types — server-initiated CLI invocations (`CopilotClientOptions.Model`), voice conversation sessions (`VoiceConversationOptions.CopilotModel`), and built-in agent type defaults (`AgentDefaults`). The configured model SHALL be overridable per-workspace via agent configuration and per-invocation via explicit parameters.
+
+**Technical Implementation:** [TR-MCP-CFG-005](./Technical-Requirements.md#tr-mcp-cfg-005) | [Details](./TR-per-FR-Mapping.md#fr-mcp-051)
+
+## FR-MCP-052 Agent Pool Runtime Orchestration
+
+The server shall maintain a configured pool of long-lived agent processes and route agent execution through pooled agents instead of independent ad-hoc launches.
+
+Agent pool definitions shall include: `AgentName`, `AgentPath`, `AgentModel`, `AgentSeed`, and `AgentParameters`.
+
+**Covered by:** `AgentPoolOptions` *(planned)*, `AgentPoolService` *(planned)*
+
+## FR-MCP-053 One-Shot Queueing and Deferred Attachment
+
+One-shot requests shall execute through the agent pool queue. If no eligible pooled agent is available, requests shall be queued and dequeued when an agent becomes available.
+
+One-shot requesters shall receive processing lifecycle notifications and may attach to the running agent via interactive voice session or read-only response stream.
+
+**Covered by:** `AgentPoolQueueService` *(planned)*, `AgentPoolController` *(planned)*
+
+## FR-MCP-054 Agent Pool Availability and Control Endpoints
+
+The server shall expose endpoints to list pooled agents and real-time availability, and provide runtime controls for connect, start, stop, recycle, queue inspection, queue cancel/remove, queue reorder (queued items only), and free-form one-shot enqueue.
+
+The server shall expose a dedicated Agent Pool notification SSE stream with payload fields `AgentName`, `LastRequestPrompt`, and `SessionId`.
+
+**Covered by:** `AgentPoolController` *(planned)*, `AgentPoolNotificationService` *(planned)*
+
+## FR-MCP-055 Default Agent Selection by Request Intent
+
+If a request omits `AgentName`, the server shall determine the request intent and select the configured default agent for that intent using intent-default flags.
+
+One-shot endpoint context values shall support: `Plan`, `Status`, `Implement`, and `AdHoc`.
+
+**Covered by:** `AgentPoolIntentResolver` *(planned)*, `AgentPoolService` *(planned)*
+
+## FR-MCP-056 Template-Aware One-Shot Prompt Resolution
+
+One-shot requests shall support template-driven and ad-hoc prompt modes. Template mode accepts `promptTemplateId` with optional values dictionary and workspace-context-derived values; caller-provided values override workspace context on key conflicts.
+
+The server shall expose an endpoint that accepts prompt template ID plus values dictionary and returns the rendered prompt.
+
+If context is provided without template ID, the server shall use current context-based template resolution. For `AdHoc` context without template ID, explicit ad-hoc prompt text is required.
+
+One-shot endpoint template rendering shall support an `id` parameter used to populate `{id}` placeholders in templates. `id` is required only for template-resolved requests.
+
+**Covered by:** `PromptTemplateController` *(planned extension)*, `AgentPoolController` *(planned)*
+
+## FR-MCP-057 Director Agent Pool Management UI
+
+Director shall provide an Agent Pool tab to monitor pooled agents and one-shot queue state, connect to an agent, recycle an agent immediately, stop/start an agent, cancel/remove/reorder queued requests, and enqueue free-form one-shot requests.
+
+**Covered by:** `AgentPoolScreen` *(planned)*, `AgentPoolViewModel` *(planned)*
+
+## FR-MCP-058 Interactive Presence Signaling
+
+When a user disconnects from an interactive response stream, the server shall send `User is AFK.` to the agent session.
+
+When a user reestablishes an interactive response stream connection, the server shall send `User is here.` to the agent after stream establishment.
+
+These presence messages do not apply to one-shot sessions.
+
+**Covered by:** `AgentPoolStreamService` *(planned)*, `VoiceConversationService` *(planned extension)*
+
+## FR-MCP-059 DI-Centered Single Source of Truth State Flow
+
+The system SHALL enforce a DI-centered Single Source of Truth architecture across `McpServer.Support.Mcp`: authoritative mutable data sources must be owned by DI-registered singleton or scoped services, services shall notify state availability/changes via `INotifyPropertyChanged`, and consumers shall pull current state from the owning service rather than receiving pushed data payloads.
+
+**Technical Implementation:** [TR-MCP-ARCH-002](./Technical-Requirements.md#tr-mcp-arch-002) | [Details](./TR-per-FR-Mapping.md#fr-mcp-059)
+
+## FR-MCP-060 Director MVVM/CQRS Full Endpoint Coverage
+
+Director SHALL expose complete administrative endpoint coverage through the shared `McpServer.UI.Core` MVVM/CQRS layer so interactive tabs and `director exec` operations use the same command/query contracts, handlers, and authorization rules.
+
+Each covered administration area SHALL provide ViewModel-first orchestration (list/detail or operation-focused ViewModel patterns), and Director screens SHALL remain presentation-only shells that delegate state and workflows to ViewModels and CQRS dispatch.
+
+Tab composition SHALL be role-aware and declarative, with registration metadata separated from shell rendering logic and enforced via shared authorization policy checks.
+
+**Technical Implementation:** [TR-MCP-DIR-005](./Technical-Requirements.md#tr-mcp-dir-005) | [TR-MCP-DIR-006](./Technical-Requirements.md#tr-mcp-dir-006) | [TR-MCP-DIR-007](./Technical-Requirements.md#tr-mcp-dir-007) | [TR-MCP-DIR-008](./Technical-Requirements.md#tr-mcp-dir-008) | [Details](./TR-per-FR-Mapping.md#fr-mcp-060)
+
+## FR-MCP-061 Canonical TODO and Session Identifier Conventions
+
+The server shall enforce canonical identifier conventions for newly created TODO and session log payloads:
+
+- TODO IDs must match `<SDLC-PHASE>-<AREA>-###` using uppercase kebab-case.
+- Session IDs must match `<Agent>-<yyyyMMddTHHmmssZ>-<suffix>` and be prefixed by the exact `sourceType`/`agent`.
+- Request IDs must match `req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal>`.
+
+Validation failures return client-visible errors without mutating persisted data.
+
+**Covered by:** `TodoValidator`, `TodoService`, `SqliteTodoService`, `SessionLogIdentifierValidator`, `SessionLogController`, `SessionLogService`
+
+## FR-MCP-062 Workspace Change Notifications
+
+The server shall provide a real-time workspace change notification system that publishes create/update/delete domain events for workspace mutations (TODOs, session logs, repo files, context sync, tool registry, tool buckets, workspaces, GitHub operations, marker lifecycle, agents, and requirements) over Server-Sent Events at `GET /mcpserver/events`, with optional category filtering.
+
+**Covered by:** `IChangeEventBus`, `ChannelChangeEventBus`, `EventStreamController`, `TodoService`, `SqliteTodoService`, `SessionLogService`, `RepoFileService`, `ToolRegistryService`, `ToolBucketService`, `WorkspaceService`, `WorkspaceController`, `AgentService`, `RequirementsDocumentService`, `IngestionCoordinator`, `GitHubController`, `WorkspaceProcessManager`

@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Text;
+
 namespace McpServer.Cqrs;
 
 /// <summary>
@@ -82,7 +85,33 @@ public readonly struct Result<T>
 
     /// <inheritdoc />
     public override string ToString()
-        => IsSuccess ? $"Success({Value})" : $"Failure({Error})";
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine(IsSuccess ? "Success" : "Failure");
+
+        if (Error is not null)
+            sb.AppendLine($"Error: {Error}");
+
+        if (Value is not null)
+        {
+            sb.AppendLine("Value:");
+            foreach (var line in Value.ToYaml().Split('\n'))
+                sb.AppendLine($"  {line}");
+        }
+
+        if (Exception is not null)
+        {
+            sb.AppendLine($"Exception: {Exception}");
+            if (Exception.Data.Count > 0)
+            {
+                sb.AppendLine("ExceptionData:");
+                foreach (DictionaryEntry entry in Exception.Data)
+                    sb.AppendLine($"  {entry.Key}: {entry.Value}");
+            }
+        }
+
+        return sb.ToString().TrimEnd();
+    }
 }
 
 /// <summary>

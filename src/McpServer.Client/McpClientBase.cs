@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -224,6 +224,99 @@ public abstract class McpClientBase
     /// <inheritdoc cref="SendAsync{T}(HttpMethod, string, object?, CancellationToken)" path="/exception"/>
     protected Task<T> DeleteAsync<T>(string path, CancellationToken cancellationToken)
         => SendAsync<T>(HttpMethod.Delete, path, null, cancellationToken);
+
+    /// <summary>
+    /// Sends an HTTP request and returns the raw successful response message.
+    /// Callers must dispose the returned response.
+    /// </summary>
+    /// <param name="method">HTTP method.</param>
+    /// <param name="path">Relative API path.</param>
+    /// <param name="body">Optional JSON body.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>A successful HTTP response.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when neither <see cref="ApiKey"/> nor <see cref="BearerToken"/> is set.</exception>
+    /// <exception cref="McpValidationException">HTTP 400 Bad Request.</exception>
+    /// <exception cref="McpUnauthorizedException">HTTP 401 Unauthorized.</exception>
+    /// <exception cref="McpNotFoundException">HTTP 404 Not Found.</exception>
+    /// <exception cref="McpConflictException">HTTP 409 Conflict.</exception>
+    /// <exception cref="McpServerException">Any other non-success HTTP status.</exception>
+    protected async Task<HttpResponseMessage> SendRawAsync(HttpMethod method, string path, object? body, CancellationToken cancellationToken)
+    {
+        EnsureAuthenticated();
+
+        var uri = new Uri($"{_scheme}://{_host}:{Port}/{path.TrimStart('/')}");
+        using var request = new HttpRequestMessage(method, uri);
+
+        if (!string.IsNullOrWhiteSpace(BearerToken))
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", BearerToken);
+        else if (!string.IsNullOrWhiteSpace(ApiKey))
+            request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
+
+        if (!string.IsNullOrWhiteSpace(WorkspacePath))
+            request.Headers.TryAddWithoutValidation("X-Workspace-Path", WorkspacePath);
+
+        if (body is not null)
+            request.Content = new StringContent(
+                JsonSerializer.Serialize(body, s_jsonOptions), Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response;
+        try
+        {
+            response = await _http.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger?.LogError(ex, "[McpClient] NETWORK ERROR {Method} {Uri}", method, uri);
+            throw;
+        }
+
+        if (response.IsSuccessStatusCode)
+            return response;
+
+        using (response)
+        {
+            var content = await response.Content.ReadAsStringAsync(
+#if !NETSTANDARD2_0
+                cancellationToken
+#endif
+            ).ConfigureAwait(false);
+            ThrowForStatus(response.StatusCode, content);
+        }
+
+        throw new McpServerException("Unexpected HTTP failure.", 500);
+    }
+
+    /// <summary>
+    /// Sends an HTTP request and returns only the successful status code.
+    /// </summary>
+    /// <param name="method">HTTP method.</param>
+    /// <param name="path">Relative API path.</param>
+    /// <param name="body">Optional JSON body.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Response status code.</returns>
+    protected async Task<HttpStatusCode> SendForStatusAsync(HttpMethod method, string path, object? body, CancellationToken cancellationToken)
+    {
+        using var response = await SendRawAsync(method, path, body, cancellationToken).ConfigureAwait(false);
+        return response.StatusCode;
+    }
+
+    /// <summary>
+    /// Sends a GET request and returns binary response content and content type.
+    /// </summary>
+    /// <param name="path">Relative API path.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Response bytes and media type.</returns>
+    protected async Task<(byte[] Content, string? ContentType)> GetBytesAsync(string path, CancellationToken cancellationToken)
+    {
+        using var response = await SendRawAsync(HttpMethod.Get, path, null, cancellationToken).ConfigureAwait(false);
+#if NETSTANDARD2_0
+        var bytes = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+#else
+        var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
+#endif
+        var mediaType = response.Content.Headers.ContentType?.MediaType;
+        return (bytes, mediaType);
+    }
 
     /// <summary>
     /// Pre-flight auth check called before every outbound request. Throws with a

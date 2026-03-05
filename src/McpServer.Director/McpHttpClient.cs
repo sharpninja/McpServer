@@ -1,4 +1,6 @@
-﻿using System.Net.Http.Json;
+﻿using System.Runtime.CompilerServices;
+using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -236,6 +238,43 @@ internal sealed class McpHttpClient : IDisposable
         var response = await _http.PostAsJsonAsync(path, body, s_jsonOpts, ct).ConfigureAwait(false);
         await EnsureSuccessOrThrowAsync(response, ct).ConfigureAwait(false);
         return response;
+    }
+
+    /// <summary>POST request with JSON body returning SSE data lines.</summary>
+    public async IAsyncEnumerable<string> PostSseAsync(
+        string path,
+        object? body = null,
+        [EnumeratorCancellation] CancellationToken ct = default)
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Post, path);
+        request.Headers.Accept.ParseAdd("text/event-stream");
+        if (body is not null)
+        {
+            request.Content = new StringContent(
+                JsonSerializer.Serialize(body, s_jsonOpts),
+                Encoding.UTF8,
+                "application/json");
+        }
+
+        using var response = await _http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct).ConfigureAwait(false);
+        await EnsureSuccessOrThrowAsync(response, ct).ConfigureAwait(false);
+        await using var stream = await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false);
+        using var reader = new StreamReader(stream, Encoding.UTF8);
+
+        while (!ct.IsCancellationRequested)
+        {
+            var line = await reader.ReadLineAsync(ct).ConfigureAwait(false);
+            if (line is null)
+                yield break;
+
+            if (line.StartsWith("data:", StringComparison.Ordinal))
+            {
+                var payload = line.Length > 5 && line[5] == ' '
+                    ? line[6..]
+                    : line[5..];
+                yield return payload;
+            }
+        }
     }
 
     /// <summary>DELETE request returning deserialized JSON.</summary>

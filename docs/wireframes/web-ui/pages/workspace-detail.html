@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Workspace Detail Wireframe</title>
+  <link rel="stylesheet" href="../shared/wireframe.css" />
+</head>
+<body>
+  <main class="gh-content">
+    <h1 class="page-title">Workspace Detail</h1>
+    <p class="subtitle">GitHub-style settings layout with grouped panels and explicit save points.</p>
+
+    <section class="panel">
+      <h2>General</h2>
+      <div class="row"><label style="width:140px">Name</label><input class="input" style="width:320px" value="McpServer" /></div>
+      <div class="row"><label style="width:140px">Workspace Path</label><input class="input" style="width:520px" value="E:\github\McpServer" /></div>
+      <div class="row"><button class="btn btn-primary">Save changes</button><button class="btn">Reset</button></div>
+    </section>
+
+    <section class="panel">
+      <h2>Marker Prompt (Monaco)</h2>
+      <div class="editor-shell">
+        <div class="editor-toolbar"><strong>prompt-template.hbs</strong><span class="badge badge-muted">Handlebars</span></div>
+        <div class="editor-canvas">{{workspaceName}} prompt body with GitHub-like guidance...</div>
+      </div>
+    </section>
+
+    <p><a href="../index.html">Back to index</a></p>
+  </main>
+</body>
+</html>

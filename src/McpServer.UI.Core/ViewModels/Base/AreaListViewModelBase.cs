@@ -25,9 +25,16 @@ public abstract partial class AreaListViewModelBase<TItem> : ObservableObject
     /// <summary>Items displayed in the list/grid.</summary>
     public ObservableCollection<TItem> Items { get; } = [];
 
-    /// <summary>Currently selected item.</summary>
+    /// <summary>Index of the currently selected row. Set by the view.</summary>
     [ObservableProperty]
-    private TItem? _selectedItem;
+    [NotifyPropertyChangedFor(nameof(SelectedItem))]
+    private int _selectedIndex = -1;
+
+    /// <summary>Currently selected item, derived from <see cref="SelectedIndex"/>.</summary>
+    public TItem? SelectedItem =>
+        SelectedIndex >= 0 && SelectedIndex < Items.Count
+            ? Items[SelectedIndex]
+            : null;
 
     /// <summary>Total item count from the last load.</summary>
     [ObservableProperty]

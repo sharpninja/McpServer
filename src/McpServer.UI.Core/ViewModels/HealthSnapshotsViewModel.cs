@@ -16,6 +16,7 @@ namespace McpServer.UI.Core.ViewModels;
 public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnapshot>
 {
     private readonly Dispatcher _dispatcher;
+    private readonly WorkspaceContextViewModel _workspaceContext;
     private readonly CqrsQueryCommand<HealthSnapshot> _checkHealthCommand;
     private readonly ILogger<HealthSnapshotsViewModel> _logger;
 
@@ -31,11 +32,13 @@ public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnaps
     {
         _logger = logger;
         _dispatcher = dispatcher;
+        _workspaceContext = workspaceContext;
         _checkHealthCommand = new CqrsQueryCommand<HealthSnapshot>(dispatcher, static () => new CheckHealthQuery());
         workspaceContext.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(WorkspaceContextViewModel.ActiveWorkspacePath))
             {
+                OnPropertyChanged(nameof(ActiveWorkspacePath));
                 _logger.LogInformation("Workspace changed to '{WorkspacePath}' — clearing health snapshots",
                     workspaceContext.ActiveWorkspacePath);
                 ClearItems();
@@ -53,6 +56,9 @@ public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnaps
 
     /// <summary>Last CQRS dispatch result.</summary>
     public Result<HealthSnapshot>? LastResult => _checkHealthCommand.LastResult;
+
+    /// <summary>Current active workspace path selected in the shared context.</summary>
+    public string? ActiveWorkspacePath => _workspaceContext.ActiveWorkspacePath;
 
     /// <summary>
     /// Executes the health check and appends the returned snapshot to the local history list.
@@ -75,7 +81,7 @@ public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnaps
             }
 
             Items.Insert(0, result.Value);
-            SelectedItem = result.Value;
+            SelectedIndex = 0;
             TotalCount = Items.Count;
             LastRefreshedAt = DateTimeOffset.UtcNow;
             StatusMessage = $"Health check recorded at {result.Value.CheckedAt:HH:mm:ss}.";
@@ -134,5 +140,18 @@ public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnaps
         {
             IsLoading = false;
         }
+    }
+
+    /// <summary>
+    /// Initializes the currently selected active workspace, if present.
+    /// </summary>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Dispatch result with initialization info on success.</returns>
+    public Task<Result<WorkspaceInitInfo>> InitializeActiveWorkspaceAsync(CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(ActiveWorkspacePath))
+            return Task.FromResult(Result<WorkspaceInitInfo>.Failure("No active workspace is selected."));
+
+        return InitializeWorkspaceAsync(ActiveWorkspacePath, ct);
     }
 }
