@@ -37,9 +37,9 @@
     Example: -PackProperty "IsPackable=true","PackAsTool=true","ToolCommandName=mcp-web"
 
 .EXAMPLE
-    .\Update-DirectorTool.ps1
-    .\Update-DirectorTool.ps1 -SkipVersionBump
-    .\Update-DirectorTool.ps1 -ProjectPath src\McpServer.Web\McpServer.Web.csproj -ToolId SharpNinja.McpServer.Web -ToolCommand mcp-web -SkipVersionBump -PackProperty "IsPackable=true","PackAsTool=true","ToolCommandName=mcp-web","PackageId=SharpNinja.McpServer.Web"
+    .\Update-DotnetTool.ps1
+    .\Update-DotnetTool.ps1 -SkipVersionBump
+    .\Update-DotnetTool.ps1 -ProjectPath src\McpServer.Web\McpServer.Web.csproj -ToolId SharpNinja.McpServer.Web -ToolCommand mcp-web -SkipVersionBump -PackProperty "IsPackable=true","PackAsTool=true","ToolCommandName=mcp-web","PackageId=SharpNinja.McpServer.Web"
 #>
 [CmdletBinding()]
 param(
@@ -86,17 +86,17 @@ function Write-Step {
 
 # 1. Bump version
 if (-not $SkipVersionBump) {
-    Write-Step "1/6  Bumping GitVersion next-version patch ..."
+    Write-Step "1/9  Bumping GitVersion next-version patch ..."
     $bumpResult = Bump-GitVersionPatch -RepoRoot $RepoRoot
     Write-Host "  $($bumpResult.OldVersion) -> $($bumpResult.NewVersion)" -ForegroundColor Green
 }
 else {
-    Write-Step "1/6  Skipping version bump."
+    Write-Step "1/9  Skipping version bump."
 }
 
 # 2. Compute package version
 if (-not $PackageVersion) {
-    Write-Step "2/6  Computing package version ..."
+    Write-Step "2/9  Computing package version ..."
     Push-Location $RepoRoot
     try {
         $gitVersionJson = dotnet gitversion /output json 2>&1
@@ -107,13 +107,13 @@ if (-not $PackageVersion) {
     finally { Pop-Location }
 }
 else {
-    Write-Step "2/6  Using provided package version."
+    Write-Step "2/9  Using provided package version."
 }
 Write-Host "  Package version: $packageVersion" -ForegroundColor Green
 
 # 3. Stop running command process
 if (-not $SkipProcessStop) {
-    Write-Step "3/6  Stopping running process '$ToolCommand' ..."
+    Write-Step "3/9  Stopping running process '$ToolCommand' ..."
     $procs = @(Get-Process -Name $ToolCommand -ErrorAction SilentlyContinue)
     if ($procs.Count -gt 0) {
         foreach ($p in $procs) { Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue }
@@ -125,20 +125,37 @@ if (-not $SkipProcessStop) {
     }
 }
 else {
-    Write-Step "3/6  Skipping process stop."
+    Write-Step "3/9  Skipping process stop."
 }
 
 # 4. Uninstall previous version
-Write-Step "4/6  Uninstalling previous version ..."
+Write-Step "4/9  Uninstalling previous version ..."
 dotnet tool uninstall --global $ToolId 2>&1 | Out-Null
 Write-Host "  Uninstalled (or was not installed)." -ForegroundColor DarkGray
 
-# 5. Pack
-Write-Step "5/6  Packing $ToolId v$packageVersion ..."
+# 5. Publish (produces wwwroot with RCL content for tool packaging)
+Write-Step "5/9  Publishing $ToolId (Release) ..."
+& dotnet publish $ResolvedProject -c Release
+if ($LASTEXITCODE -ne 0) { Write-Error "dotnet publish failed (exit code $LASTEXITCODE)" }
+Write-Host "  Publish complete." -ForegroundColor Green
+
+# 6. Verify publish output contains wwwroot
+$publishWwwroot = Join-Path (Split-Path $ResolvedProject) 'bin\Release\net9.0\publish\wwwroot'
+if (Test-Path $publishWwwroot) {
+    $fileCount = (Get-ChildItem $publishWwwroot -Recurse -File).Count
+    Write-Host "  Publish wwwroot: $fileCount file(s)" -ForegroundColor Green
+}
+else {
+    Write-Warning "Publish wwwroot not found at $publishWwwroot — tool may lack static assets."
+}
+
+# 7. Pack
+Write-Step "7/9  Packing $ToolId v$packageVersion ..."
 $packArgs = @(
     'pack',
     $ResolvedProject,
     '-c', 'Release',
+    '--no-build',
     '-o', $ResolvedNupkgDir,
     "/p:PackageVersion=$PackageVersion"
 )
@@ -150,8 +167,32 @@ foreach ($prop in $PackProperty) {
 if ($LASTEXITCODE -ne 0) { Write-Error "dotnet pack failed (exit code $LASTEXITCODE)" }
 Write-Host "  Pack complete." -ForegroundColor Green
 
-# 6. Install globally
-Write-Step "6/6  Installing globally ..."
+# 8. Inject publish wwwroot into nupkg (dotnet tool pack ignores extra content dirs)
+if (Test-Path $publishWwwroot) {
+    Write-Step "8/9  Injecting wwwroot into nupkg ..."
+    $nupkgFile = Join-Path $ResolvedNupkgDir "$ToolId.$PackageVersion.nupkg"
+    if (Test-Path $nupkgFile) {
+        $zip = [System.IO.Compression.ZipFile]::Open($nupkgFile, 'Update')
+        $files = Get-ChildItem $publishWwwroot -Recurse -File
+        foreach ($f in $files) {
+            $relativePath = $f.FullName.Substring($publishWwwroot.Length).TrimStart('\', '/') -replace '\\', '/'
+            $entryPath = "tools/net9.0/any/wwwroot/$relativePath"
+            $null = [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile(
+                $zip, $f.FullName, $entryPath, [System.IO.Compression.CompressionLevel]::Optimal)
+        }
+        $zip.Dispose()
+        Write-Host "  Injected $($files.Count) wwwroot file(s) into nupkg." -ForegroundColor Green
+    }
+    else {
+        Write-Warning "nupkg not found at $nupkgFile — skipping wwwroot injection."
+    }
+}
+else {
+    Write-Step "8/9  No publish wwwroot to inject — skipping."
+}
+
+# 9. Install globally
+Write-Step "9/9  Installing globally ..."
 dotnet tool install --global $ToolId --add-source $ResolvedNupkgDir --version $PackageVersion
 if ($LASTEXITCODE -ne 0) { Write-Error "dotnet tool install failed (exit code $LASTEXITCODE)" }
 

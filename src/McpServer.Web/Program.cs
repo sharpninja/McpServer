@@ -9,15 +9,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.IdentityModel.Tokens;
 
-var builder = WebApplication.CreateBuilder(args);
-
 // When running as a dotnet global tool, wwwroot is next to the assembly, not in CWD.
 var assemblyDir = Path.GetDirectoryName(typeof(Program).Assembly.Location);
 var toolWebRoot = assemblyDir is not null ? Path.Combine(assemblyDir, "wwwroot") : null;
-if (toolWebRoot is not null && Directory.Exists(toolWebRoot))
+var defaultWebRoot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+
+var options = new WebApplicationOptions { Args = args };
+if (toolWebRoot is not null && Directory.Exists(toolWebRoot) && !Directory.Exists(defaultWebRoot))
 {
-    builder.WebHost.UseWebRoot(toolWebRoot);
+    options = new WebApplicationOptions { Args = args, WebRootPath = toolWebRoot };
 }
+
+var builder = WebApplication.CreateBuilder(options);
 
 // Enable RCL static web assets in all environments (needed for BlazorMonaco, etc.).
 if (!builder.Environment.IsDevelopment())

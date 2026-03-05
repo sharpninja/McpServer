@@ -9,15 +9,9 @@
     <NoWarn>$(NoWarn);CA1515;CA1849;CA1031</NoWarn>
   </PropertyGroup>
 
-  <!-- Include wwwroot static files in the tool package -->
-  <Target Name="IncludeWwwrootInToolPack" AfterTargets="GenerateToolsSettingsFileInputCache"
-          Condition="'$(PackAsTool)' == 'true'"
-          DependsOnTargets="Publish">
-    <ItemGroup>
-      <TfmSpecificPackageFile Include="$(PublishDir)wwwroot\**\*"
-                              PackagePath="tools/$(TargetFramework)/any/wwwroot/%(RecursiveDir)%(Filename)%(Extension)" />
-    </ItemGroup>
-  </Target>
+  <!-- NOTE: wwwroot static assets for tool packaging are injected post-pack
+       by Update-DotnetTool.ps1 since the dotnet tool pack pipeline ignores
+       TfmSpecificPackageFile items for extra content directories. -->
 
   <ItemGroup>
     <PackageReference Include="BlazorMonaco" />
