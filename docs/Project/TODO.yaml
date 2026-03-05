@@ -2032,3 +2032,35 @@ mcpserver-ui:
     done: true
     description:
     - Cover end-to-end interactive chat scenarios through McpServer.UI ViewModels, including message lifecycle, command handling, and UI state synchronization.
+Documentation:
+  high-priority:
+  - id: MCP-USERDOCS-001
+    title: Create User Documentation
+    estimate: 3d
+    done: false
+    description:
+    - Author comprehensive user-facing documentation for the MCP Context Server.
+    - Covers installation, configuration, API reference, MCP tool catalogue, GraphRAG setup, agent pool usage, and troubleshooting.
+    technical-details:
+    - Publish to docs/ folder as Markdown; wire into README index.
+    - Include code samples for PowerShell helper modules (McpSession.psm1, McpTodo.psm1).
+    - Document all REST endpoints with request/response examples.
+    - Provide GraphRAG configuration reference and rollout checklist.
+    - Add agent pool and workspace multi-tenancy setup guide.
+    implementation-tasks:
+    - task: Write Installation & Prerequisites guide
+      done: false
+    - task: Write Configuration reference (appsettings + marker file)
+      done: false
+    - task: Write REST API reference (all controllers)
+      done: false
+    - task: Write MCP tool catalogue (all stdio tools)
+      done: false
+    - task: Write GraphRAG setup and usage guide
+      done: false
+    - task: Write Agent Pool and workspace multi-tenancy guide
+      done: false
+    - task: Write Troubleshooting / FAQ section
+      done: false
+    - task: Wire all docs into README index and docs/ folder
+      done: false
