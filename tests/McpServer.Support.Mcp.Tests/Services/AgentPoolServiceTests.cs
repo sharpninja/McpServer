@@ -1,5 +1,6 @@
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging.Abstractions;

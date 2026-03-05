@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using Xunit;
 
-namespace McpServer.Support.Mcp.Tests.Controllers;
+namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 public sealed class GraphRagControllerTests : IClassFixture<CustomWebApplicationFactory>
 {

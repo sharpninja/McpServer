@@ -73,6 +73,30 @@ public interface IGitHubCliService
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Labels result.</returns>
     Task<GitHubLabelsResult> ListIssueLabelsAsync(CancellationToken ct = default);
+
+    /// <summary>TR-MCP-GH-004: Lists GitHub Actions workflow runs (gh run list --json).</summary>
+    /// <param name="query">Optional workflow run filters.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Workflow run list result.</returns>
+    Task<GitHubWorkflowRunListResult> ListWorkflowRunsAsync(GitHubWorkflowRunQuery query, CancellationToken ct = default);
+
+    /// <summary>TR-MCP-GH-004: Gets a single workflow run detail (gh run view --json).</summary>
+    /// <param name="runId">Workflow run identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Workflow run detail result.</returns>
+    Task<GitHubWorkflowRunDetailResult> GetWorkflowRunAsync(long runId, CancellationToken ct = default);
+
+    /// <summary>TR-MCP-GH-004: Re-runs a workflow run (gh run rerun).</summary>
+    /// <param name="runId">Workflow run identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Mutation result.</returns>
+    Task<GitHubMutationResult> RerunWorkflowRunAsync(long runId, CancellationToken ct = default);
+
+    /// <summary>TR-MCP-GH-004: Cancels a running workflow run (gh run cancel).</summary>
+    /// <param name="runId">Workflow run identifier.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Mutation result.</returns>
+    Task<GitHubMutationResult> CancelWorkflowRunAsync(long runId, CancellationToken ct = default);
 }
 
 /// <summary>TR-PLANNED-013: Result of listing issues.</summary>
@@ -112,3 +136,114 @@ public sealed record GitHubCreateIssueResult(bool Success, int? Number, string? 
 /// <param name="Success">Whether the comment was added.</param>
 /// <param name="Error">Error message on failure.</param>
 public sealed record GitHubCommentResult(bool Success, string? Error);
+
+/// <summary>TR-MCP-GH-004: Query options when listing workflow runs.</summary>
+public sealed record GitHubWorkflowRunQuery
+{
+    /// <summary>Optional branch filter.</summary>
+    public string? Branch { get; init; }
+
+    /// <summary>Optional run status filter.</summary>
+    public string? Status { get; init; }
+
+    /// <summary>Optional trigger event filter.</summary>
+    public string? Event { get; init; }
+
+    /// <summary>Optional workflow name filter.</summary>
+    public string? Workflow { get; init; }
+
+    /// <summary>Maximum runs to return. Default 30.</summary>
+    public int Limit { get; init; } = 30;
+}
+
+/// <summary>TR-MCP-GH-004: Result of listing workflow runs.</summary>
+/// <param name="Success">Whether the query succeeded.</param>
+/// <param name="Runs">Workflow runs returned from GitHub.</param>
+/// <param name="ErrorMessage">Error details on failure.</param>
+public sealed record GitHubWorkflowRunListResult(bool Success, IReadOnlyList<GitHubWorkflowRunItem> Runs, string? ErrorMessage);
+
+/// <summary>TR-MCP-GH-004: Summary of a workflow run.</summary>
+/// <param name="RunId">Workflow run identifier.</param>
+/// <param name="WorkflowName">Workflow name.</param>
+/// <param name="DisplayTitle">Run display title.</param>
+/// <param name="HeadBranch">Branch associated with the run.</param>
+/// <param name="Status">Current run status.</param>
+/// <param name="Conclusion">Final run conclusion, if available.</param>
+/// <param name="Event">Triggering GitHub event.</param>
+/// <param name="Url">Run URL.</param>
+/// <param name="CreatedAt">Creation timestamp.</param>
+/// <param name="UpdatedAt">Last update timestamp.</param>
+public sealed record GitHubWorkflowRunItem(
+    long RunId,
+    string? WorkflowName,
+    string? DisplayTitle,
+    string? HeadBranch,
+    string? Status,
+    string? Conclusion,
+    string? Event,
+    string? Url,
+    string? CreatedAt,
+    string? UpdatedAt);
+
+/// <summary>TR-MCP-GH-004: Result of reading a workflow run detail.</summary>
+/// <param name="Success">Whether the query succeeded.</param>
+/// <param name="Run">Detailed run payload on success.</param>
+/// <param name="ErrorMessage">Error details on failure.</param>
+public sealed record GitHubWorkflowRunDetailResult(bool Success, GitHubWorkflowRunDetail? Run, string? ErrorMessage);
+
+/// <summary>TR-MCP-GH-004: Detailed workflow run payload.</summary>
+/// <param name="RunId">Workflow run identifier.</param>
+/// <param name="WorkflowName">Workflow name.</param>
+/// <param name="DisplayTitle">Run display title.</param>
+/// <param name="HeadBranch">Branch associated with the run.</param>
+/// <param name="HeadSha">Commit SHA associated with the run.</param>
+/// <param name="Status">Current run status.</param>
+/// <param name="Conclusion">Final run conclusion, if available.</param>
+/// <param name="Event">Triggering GitHub event.</param>
+/// <param name="Url">Run URL.</param>
+/// <param name="Attempt">Attempt number.</param>
+/// <param name="CreatedAt">Creation timestamp.</param>
+/// <param name="UpdatedAt">Last update timestamp.</param>
+/// <param name="Jobs">Jobs executed as part of this run.</param>
+public sealed record GitHubWorkflowRunDetail(
+    long RunId,
+    string? WorkflowName,
+    string? DisplayTitle,
+    string? HeadBranch,
+    string? HeadSha,
+    string? Status,
+    string? Conclusion,
+    string? Event,
+    string? Url,
+    int? Attempt,
+    string? CreatedAt,
+    string? UpdatedAt,
+    IReadOnlyList<GitHubWorkflowRunJob> Jobs);
+
+/// <summary>TR-MCP-GH-004: Workflow run job payload.</summary>
+/// <param name="Name">Job name.</param>
+/// <param name="Status">Job status.</param>
+/// <param name="Conclusion">Job conclusion.</param>
+/// <param name="StartedAt">Job start timestamp.</param>
+/// <param name="CompletedAt">Job completion timestamp.</param>
+/// <param name="Url">Job URL.</param>
+/// <param name="Steps">Job step details.</param>
+public sealed record GitHubWorkflowRunJob(
+    string? Name,
+    string? Status,
+    string? Conclusion,
+    string? StartedAt,
+    string? CompletedAt,
+    string? Url,
+    IReadOnlyList<GitHubWorkflowRunJobStep> Steps);
+
+/// <summary>TR-MCP-GH-004: Workflow job step payload.</summary>
+/// <param name="Name">Step name.</param>
+/// <param name="Status">Step status.</param>
+/// <param name="Conclusion">Step conclusion.</param>
+/// <param name="Number">Execution order.</param>
+public sealed record GitHubWorkflowRunJobStep(
+    string? Name,
+    string? Status,
+    string? Conclusion,
+    int? Number);

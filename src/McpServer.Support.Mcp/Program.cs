@@ -186,6 +186,7 @@ builder.Services.Configure<MarkerPromptOptions>(builder.Configuration.GetSection
 builder.Services.Configure<McpParseableOptions>(builder.Configuration.GetSection(McpParseableOptions.SectionName));
 builder.Services.Configure<McpInteractionLoggingOptions>(builder.Configuration.GetSection(McpInteractionLoggingOptions.SectionName));
 builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(TodoStorageOptions.SectionName));
+builder.Services.Configure<GitHubIntegrationOptions>(builder.Configuration.GetSection(GitHubIntegrationOptions.SectionName));
 builder.Services.Configure<AgentPoolOptions>(builder.Configuration.GetSection(AgentPoolOptions.SectionName));
 builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
 builder.Services.Configure<RequirementsOptions>(builder.Configuration.GetSection(RequirementsOptions.SectionName));
@@ -220,6 +221,12 @@ builder.Services.PostConfigure<TodoStorageOptions>(options =>
     options.SqliteDataSource = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TodoStorage:SqliteDataSource") ?? options.SqliteDataSource;
     options.SqliteDataSource = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.SqliteDataSource);
 });
+builder.Services.PostConfigure<GitHubIntegrationOptions>(options =>
+{
+    options.TokenStorePath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "GitHub:TokenStorePath")
+        ?? options.TokenStorePath;
+    options.TokenStorePath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.TokenStorePath);
+});
 builder.Services.PostConfigure<TemplateStorageOptions>(options =>
 {
     options.FilePath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TemplateStorage:FilePath") ?? options.FilePath;
@@ -250,7 +257,9 @@ builder.Services.AddSingleton<ISyncStatusStore, SyncStatusStore>();
 builder.Services.AddSingleton<IWriteAuditLog, WriteAuditLog>();
 builder.Services.AddSingleton<IChangeEventBus, ChannelChangeEventBus>();
 builder.Services.AddSingleton<Chunker>();
+builder.Services.AddDataProtection();
 builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
+builder.Services.AddSingleton<IGitHubWorkspaceTokenStore, FileGitHubWorkspaceTokenStore>();
 builder.Services.Configure<ProcessRunnerOptions>(options =>
 {
     if (primaryWorkspaceEntry is not null)

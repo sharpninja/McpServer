@@ -64,6 +64,7 @@ public static class McpStdioHost
         builder.Services.Configure<IngestionOptions>(builder.Configuration.GetSection("Mcp"));
         builder.Services.Configure<GraphRagOptions>(builder.Configuration.GetSection(GraphRagOptions.SectionName));
         builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(TodoStorageOptions.SectionName));
+        builder.Services.Configure<GitHubIntegrationOptions>(builder.Configuration.GetSection(GitHubIntegrationOptions.SectionName));
         builder.Services.PostConfigure<VectorIndexOptions>(options =>
         {
             var instanceIndexPath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "IndexPath");
@@ -94,10 +95,18 @@ public static class McpStdioHost
             options.SqliteDataSource = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TodoStorage:SqliteDataSource") ?? options.SqliteDataSource;
             options.SqliteDataSource = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.SqliteDataSource);
         });
+        builder.Services.PostConfigure<GitHubIntegrationOptions>(options =>
+        {
+            options.TokenStorePath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "GitHub:TokenStorePath")
+                ?? options.TokenStorePath;
+            options.TokenStorePath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.TokenStorePath);
+        });
         builder.Services.AddSingleton<ISyncStatusStore, SyncStatusStore>();
         builder.Services.AddSingleton<IWriteAuditLog, WriteAuditLog>();
         builder.Services.AddSingleton<Chunker>();
+        builder.Services.AddDataProtection();
         builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
+        builder.Services.AddSingleton<IGitHubWorkspaceTokenStore, FileGitHubWorkspaceTokenStore>();
         builder.Services.AddSingleton<IGitHubCliService, GitHubCliService>();
         builder.Services.AddSingleton<ITodoServiceFactory, TodoServiceFactory>();
         builder.Services.AddSingleton<ITodoService>(sp => sp.GetRequiredService<ITodoServiceFactory>().CreatePrimary());

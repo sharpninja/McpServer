@@ -1,25 +1,37 @@
 using System.Text.Json;
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Options;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013: Runs gh CLI for issues and PRs; parses JSON output.
-/// FR-SUPPORT-010: Local gh auth only; no API tokens.
+/// TR-PLANNED-013, TR-MCP-GH-003, TR-MCP-GH-004: Runs gh CLI for issues, PRs, and workflow runs.
 /// </summary>
 public sealed class GitHubCliService : IGitHubCliService
 {
     private const string GhExe = "gh";
     private readonly IProcessRunner _processRunner;
     private readonly ILogger<GitHubCliService> _logger;
-
+    private readonly IGitHubWorkspaceTokenStore? _tokenStore;
+    private readonly IHttpContextAccessor? _httpContextAccessor;
+    private readonly IOptionsMonitor<GitHubIntegrationOptions>? _githubOptions;
 
     /// <summary>TR-PLANNED-013: Constructor with IProcessRunner for testability.</summary>
-    public GitHubCliService(IProcessRunner processRunner,
-        ILogger<GitHubCliService> logger)
+    public GitHubCliService(
+        IProcessRunner processRunner,
+        ILogger<GitHubCliService> logger,
+        IGitHubWorkspaceTokenStore? tokenStore = null,
+        IHttpContextAccessor? httpContextAccessor = null,
+        IOptionsMonitor<GitHubIntegrationOptions>? githubOptions = null)
     {
         _logger = logger;
         _processRunner = processRunner;
+        _tokenStore = tokenStore;
+        _httpContextAccessor = httpContextAccessor;
+        _githubOptions = githubOptions;
     }
 
     /// <inheritdoc />
@@ -30,7 +42,7 @@ public sealed class GitHubCliService : IGitHubCliService
         {
             args += " --state " + state.Trim();
         }
-        var result = await _processRunner.RunAsync(GhExe, args, cancellationToken).ConfigureAwait(false);
+        var result = await RunGhAsync(args, cancellationToken).ConfigureAwait(false);
         if (result.ExitCode != 0)
         {
             return new GitHubIssueListResult(false, result.Stderr ?? "gh failed", Array.Empty<GitHubIssueItem>());
@@ -47,7 +59,7 @@ public sealed class GitHubCliService : IGitHubCliService
         {
             args += " --state " + state.Trim();
         }
-        var result = await _processRunner.RunAsync(GhExe, args, cancellationToken).ConfigureAwait(false);
+        var result = await RunGhAsync(args, cancellationToken).ConfigureAwait(false);
         if (result.ExitCode != 0)
         {
             return new GitHubPullListResult(false, result.Stderr ?? "gh failed", Array.Empty<GitHubPullItem>());
@@ -65,7 +77,7 @@ public sealed class GitHubCliService : IGitHubCliService
         {
             args += " --body \"" + EscapeArg(body) + "\"";
         }
-        var result = await _processRunner.RunAsync(GhExe, args, cancellationToken).ConfigureAwait(false);
+        var result = await RunGhAsync(args, cancellationToken).ConfigureAwait(false);
         if (result.ExitCode != 0)
         {
             return new GitHubCreateIssueResult(false, null, null, result.Stderr ?? "gh failed");
@@ -81,7 +93,7 @@ public sealed class GitHubCliService : IGitHubCliService
         ArgumentNullException.ThrowIfNull(issueId);
         ArgumentNullException.ThrowIfNull(body);
         var args = $"issue comment {issueId.Trim()} --body \"{EscapeArg(body)}\"";
-        var result = await _processRunner.RunAsync(GhExe, args, cancellationToken).ConfigureAwait(false);
+        var result = await RunGhAsync(args, cancellationToken).ConfigureAwait(false);
         return new GitHubCommentResult(result.ExitCode == 0, result.ExitCode != 0 ? result.Stderr : null);
     }
 
@@ -91,7 +103,7 @@ public sealed class GitHubCliService : IGitHubCliService
         ArgumentNullException.ThrowIfNull(prId);
         ArgumentNullException.ThrowIfNull(body);
         var args = $"pr comment {prId.Trim()} --body \"{EscapeArg(body)}\"";
-        var result = await _processRunner.RunAsync(GhExe, args, cancellationToken).ConfigureAwait(false);
+        var result = await RunGhAsync(args, cancellationToken).ConfigureAwait(false);
         return new GitHubCommentResult(result.ExitCode == 0, result.ExitCode != 0 ? result.Stderr : null);
     }
 
@@ -99,7 +111,7 @@ public sealed class GitHubCliService : IGitHubCliService
     public async Task<GitHubIssueDetailResult> GetIssueAsync(int issueNumber, CancellationToken ct = default)
     {
         var args = $"issue view {issueNumber} --json number,title,body,state,url,labels,assignees,milestone,createdAt,updatedAt,closedAt,author,comments";
-        var result = await _processRunner.RunAsync(GhExe, args, ct).ConfigureAwait(false);
+        var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubIssueDetailResult(false, null, result.Stderr ?? "gh failed");
         var issue = ParseIssueDetail(result.Stdout);
@@ -124,7 +136,7 @@ public sealed class GitHubCliService : IGitHubCliService
         if (request.RemoveAssignees is { Count: > 0 })
             foreach (var assignee in request.RemoveAssignees) args += $" --remove-assignee \"{EscapeArg(assignee)}\"";
         if (request.Milestone is not null) args += $" --milestone \"{EscapeArg(request.Milestone)}\"";
-        var result = await _processRunner.RunAsync(GhExe, args, ct).ConfigureAwait(false);
+        var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubMutationResult(false, null, result.Stderr ?? "gh failed");
         return new GitHubMutationResult(true, result.Stdout?.Trim(), null);
@@ -136,7 +148,7 @@ public sealed class GitHubCliService : IGitHubCliService
         var args = $"issue close {issueNumber}";
         if (!string.IsNullOrWhiteSpace(reason))
             args += $" --reason {reason.Trim()}";
-        var result = await _processRunner.RunAsync(GhExe, args, ct).ConfigureAwait(false);
+        var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubMutationResult(false, null, result.Stderr ?? "gh failed");
         return new GitHubMutationResult(true, result.Stdout?.Trim(), null);
@@ -146,7 +158,7 @@ public sealed class GitHubCliService : IGitHubCliService
     public async Task<GitHubMutationResult> ReopenIssueAsync(int issueNumber, CancellationToken ct = default)
     {
         var args = $"issue reopen {issueNumber}";
-        var result = await _processRunner.RunAsync(GhExe, args, ct).ConfigureAwait(false);
+        var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubMutationResult(false, null, result.Stderr ?? "gh failed");
         return new GitHubMutationResult(true, result.Stdout?.Trim(), null);
@@ -156,11 +168,62 @@ public sealed class GitHubCliService : IGitHubCliService
     public async Task<GitHubLabelsResult> ListIssueLabelsAsync(CancellationToken ct = default)
     {
         var args = "label list --json name,color,description --limit 100";
-        var result = await _processRunner.RunAsync(GhExe, args, ct).ConfigureAwait(false);
+        var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubLabelsResult(false, null, result.Stderr ?? "gh failed");
         var labels = ParseLabels(result.Stdout);
         return new GitHubLabelsResult(true, labels, null);
+    }
+
+    /// <inheritdoc />
+    public async Task<GitHubWorkflowRunListResult> ListWorkflowRunsAsync(GitHubWorkflowRunQuery query, CancellationToken ct = default)
+    {
+        query ??= new GitHubWorkflowRunQuery();
+        var args = $"run list --limit {Math.Clamp(query.Limit, 1, 100)} --json databaseId,workflowName,displayTitle,headBranch,status,conclusion,event,url,createdAt,updatedAt";
+        if (!string.IsNullOrWhiteSpace(query.Branch)) args += $" --branch \"{EscapeArg(query.Branch)}\"";
+        if (!string.IsNullOrWhiteSpace(query.Status)) args += $" --status \"{EscapeArg(query.Status)}\"";
+        if (!string.IsNullOrWhiteSpace(query.Event)) args += $" --event \"{EscapeArg(query.Event)}\"";
+        if (!string.IsNullOrWhiteSpace(query.Workflow)) args += $" --workflow \"{EscapeArg(query.Workflow)}\"";
+
+        var result = await RunGhAsync(args, ct).ConfigureAwait(false);
+        if (result.ExitCode != 0)
+            return new GitHubWorkflowRunListResult(false, Array.Empty<GitHubWorkflowRunItem>(), result.Stderr ?? "gh failed");
+
+        return new GitHubWorkflowRunListResult(true, ParseWorkflowRunList(result.Stdout), null);
+    }
+
+    /// <inheritdoc />
+    public async Task<GitHubWorkflowRunDetailResult> GetWorkflowRunAsync(long runId, CancellationToken ct = default)
+    {
+        var args = $"run view {runId} --json databaseId,workflowName,displayTitle,headBranch,headSha,status,conclusion,event,url,attempt,createdAt,updatedAt,jobs";
+        var result = await RunGhAsync(args, ct).ConfigureAwait(false);
+        if (result.ExitCode != 0)
+            return new GitHubWorkflowRunDetailResult(false, null, result.Stderr ?? "gh failed");
+
+        var run = ParseWorkflowRunDetail(result.Stdout);
+        return run is null
+            ? new GitHubWorkflowRunDetailResult(false, null, "Failed to parse workflow run detail")
+            : new GitHubWorkflowRunDetailResult(true, run, null);
+    }
+
+    /// <inheritdoc />
+    public async Task<GitHubMutationResult> RerunWorkflowRunAsync(long runId, CancellationToken ct = default)
+    {
+        var args = $"run rerun {runId}";
+        var result = await RunGhAsync(args, ct).ConfigureAwait(false);
+        if (result.ExitCode != 0)
+            return new GitHubMutationResult(false, null, result.Stderr ?? "gh failed");
+        return new GitHubMutationResult(true, result.Stdout?.Trim(), null);
+    }
+
+    /// <inheritdoc />
+    public async Task<GitHubMutationResult> CancelWorkflowRunAsync(long runId, CancellationToken ct = default)
+    {
+        var args = $"run cancel {runId}";
+        var result = await RunGhAsync(args, ct).ConfigureAwait(false);
+        if (result.ExitCode != 0)
+            return new GitHubMutationResult(false, null, result.Stderr ?? "gh failed");
+        return new GitHubMutationResult(true, result.Stdout?.Trim(), null);
     }
 
     private IReadOnlyList<GitHubIssueItem> ParseIssueList(string? json)
@@ -224,6 +287,57 @@ public sealed class GitHubCliService : IGitHubCliService
     private static string EscapeArg(string s)
     {
         return s.Replace("\\", "\\\\", StringComparison.Ordinal).Replace("\"", "\\\"", StringComparison.Ordinal);
+    }
+
+    private async Task<ProcessRunResult> RunGhAsync(string args, CancellationToken ct)
+    {
+        var preferStoredToken = _githubOptions?.CurrentValue.PreferStoredToken ?? true;
+        var allowFallback = _githubOptions?.CurrentValue.AllowCliFallback ?? true;
+
+        if (preferStoredToken)
+        {
+            var token = await TryResolveWorkspaceTokenAsync(ct).ConfigureAwait(false);
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                _logger.LogDebug("GitHub CLI auth mode: stored workspace token.");
+                return await _processRunner.RunAsync(new ProcessRunRequest(GhExe, args, token), ct).ConfigureAwait(false);
+            }
+        }
+
+        if (!allowFallback)
+        {
+            _logger.LogWarning("GitHub CLI auth mode: fallback disabled and no stored token is available.");
+            return new ProcessRunResult(-1, null, "No stored GitHub token and CLI fallback is disabled.");
+        }
+
+        _logger.LogDebug("GitHub CLI auth mode: CLI fallback.");
+        return await _processRunner.RunAsync(GhExe, args, ct).ConfigureAwait(false);
+    }
+
+    private async Task<string?> TryResolveWorkspaceTokenAsync(CancellationToken ct)
+    {
+        if (_tokenStore is null || _httpContextAccessor is null)
+            return null;
+
+        var requestServices = _httpContextAccessor.HttpContext?.RequestServices;
+        if (requestServices is null)
+            return null;
+
+        var workspacePath = requestServices.GetService<WorkspaceContext>()?.WorkspacePath;
+        if (string.IsNullOrWhiteSpace(workspacePath))
+            return null;
+
+        var record = await _tokenStore.GetAsync(workspacePath, ct).ConfigureAwait(false);
+        if (record is null)
+            return null;
+
+        if (record.ExpiresAtUtc is { } expiresAt && expiresAt <= DateTimeOffset.UtcNow)
+        {
+            _logger.LogWarning("Stored GitHub token is expired for workspace {WorkspacePath}.", workspacePath);
+            return null;
+        }
+
+        return record.AccessToken;
     }
 
     private GitHubIssueDetail? ParseIssueDetail(string? json)
@@ -316,5 +430,123 @@ public sealed class GitHubCliService : IGitHubCliService
             _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return Array.Empty<GitHubLabel>();
         }
+    }
+
+    private IReadOnlyList<GitHubWorkflowRunItem> ParseWorkflowRunList(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json)) return Array.Empty<GitHubWorkflowRunItem>();
+        try
+        {
+            using var doc = JsonDocument.Parse(json);
+            var list = new List<GitHubWorkflowRunItem>();
+            foreach (var el in doc.RootElement.EnumerateArray())
+            {
+                list.Add(new GitHubWorkflowRunItem(
+                    RunId: ReadLong(el, "databaseId"),
+                    WorkflowName: ReadString(el, "workflowName"),
+                    DisplayTitle: ReadString(el, "displayTitle"),
+                    HeadBranch: ReadString(el, "headBranch"),
+                    Status: ReadString(el, "status"),
+                    Conclusion: ReadString(el, "conclusion"),
+                    Event: ReadString(el, "event"),
+                    Url: ReadString(el, "url"),
+                    CreatedAt: ReadString(el, "createdAt"),
+                    UpdatedAt: ReadString(el, "updatedAt")));
+            }
+
+            return list;
+        }
+        catch (JsonException ex)
+        {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            return Array.Empty<GitHubWorkflowRunItem>();
+        }
+    }
+
+    private GitHubWorkflowRunDetail? ParseWorkflowRunDetail(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json)) return null;
+        try
+        {
+            using var doc = JsonDocument.Parse(json);
+            var root = doc.RootElement;
+            var jobs = new List<GitHubWorkflowRunJob>();
+            if (root.TryGetProperty("jobs", out var jobsElement) && jobsElement.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var jobElement in jobsElement.EnumerateArray())
+                {
+                    var steps = new List<GitHubWorkflowRunJobStep>();
+                    if (jobElement.TryGetProperty("steps", out var stepsElement) && stepsElement.ValueKind == JsonValueKind.Array)
+                    {
+                        foreach (var stepElement in stepsElement.EnumerateArray())
+                        {
+                            steps.Add(new GitHubWorkflowRunJobStep(
+                                Name: ReadString(stepElement, "name"),
+                                Status: ReadString(stepElement, "status"),
+                                Conclusion: ReadString(stepElement, "conclusion"),
+                                Number: ReadNullableInt(stepElement, "number")));
+                        }
+                    }
+
+                    jobs.Add(new GitHubWorkflowRunJob(
+                        Name: ReadString(jobElement, "name"),
+                        Status: ReadString(jobElement, "status"),
+                        Conclusion: ReadString(jobElement, "conclusion"),
+                        StartedAt: ReadString(jobElement, "startedAt"),
+                        CompletedAt: ReadString(jobElement, "completedAt"),
+                        Url: ReadString(jobElement, "url"),
+                        Steps: steps));
+                }
+            }
+
+            return new GitHubWorkflowRunDetail(
+                RunId: ReadLong(root, "databaseId"),
+                WorkflowName: ReadString(root, "workflowName"),
+                DisplayTitle: ReadString(root, "displayTitle"),
+                HeadBranch: ReadString(root, "headBranch"),
+                HeadSha: ReadString(root, "headSha"),
+                Status: ReadString(root, "status"),
+                Conclusion: ReadString(root, "conclusion"),
+                Event: ReadString(root, "event"),
+                Url: ReadString(root, "url"),
+                Attempt: ReadNullableInt(root, "attempt"),
+                CreatedAt: ReadString(root, "createdAt"),
+                UpdatedAt: ReadString(root, "updatedAt"),
+                Jobs: jobs);
+        }
+        catch (JsonException ex)
+        {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            return null;
+        }
+    }
+
+    private static string? ReadString(JsonElement parent, string propertyName)
+    {
+        return parent.TryGetProperty(propertyName, out var property) && property.ValueKind == JsonValueKind.String
+            ? property.GetString()
+            : null;
+    }
+
+    private static long ReadLong(JsonElement parent, string propertyName)
+    {
+        if (!parent.TryGetProperty(propertyName, out var property))
+            return 0;
+        if (property.ValueKind == JsonValueKind.Number && property.TryGetInt64(out var numeric))
+            return numeric;
+        if (property.ValueKind == JsonValueKind.String && long.TryParse(property.GetString(), out var parsed))
+            return parsed;
+        return 0;
+    }
+
+    private static int? ReadNullableInt(JsonElement parent, string propertyName)
+    {
+        if (!parent.TryGetProperty(propertyName, out var property))
+            return null;
+        if (property.ValueKind == JsonValueKind.Number && property.TryGetInt32(out var numeric))
+            return numeric;
+        if (property.ValueKind == JsonValueKind.String && int.TryParse(property.GetString(), out var parsed))
+            return parsed;
+        return null;
     }
 }

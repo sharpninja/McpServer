@@ -5,7 +5,7 @@ using McpServer.Support.Mcp.Notifications;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace McpServer.Support.Mcp.Tests.Controllers;
+namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>Integration tests for SSE change event stream endpoint.</summary>
 public sealed class EventStreamIntegrationTests : IClassFixture<CustomWebApplicationFactory>, IDisposable

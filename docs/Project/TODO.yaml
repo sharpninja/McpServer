@@ -1444,36 +1444,64 @@ infrastructure:
     - task: 'Phase 7.4: Requirements - Update FR-MCP-031 with implementation details. Create TR-MCP-WEB-001 (Blazor Server + Primer CSS), TR-MCP-WEB-002 (OIDC integration), TR-MCP-WEB-003 (SSE real-time), TR-MCP-WEB-004 (API adapter pattern). Update TODO.yaml.'
       done: false
   - id: github-integration
-    title: '[NEEDS PLAN] GitHub Integration'
+    title: '[IN PROGRESS] GitHub Integration'
     estimate: 2-3 weeks
-    note: '\\\"Audit 2026-03-01. Core GitHub integration is ~85% complete via gh CLI: 13 REST endpoints on GitHubController (issue CRUD, close/reopen, comments, labels, PRs, bi-directional sync), GitHubCliService (full gh CLI wrapper), IssueTodoSyncService (ISSUE-{n} mapping, label-to-priority). REMAINING GAP: OAuth/Keycloak IdP integration not implemented - currently relies on local gh CLI auth. Needs: GitHub OAuth app registration, Keycloak GitHub IdP setup, per-workspace OAuth token storage.\\\"'
+    note: '\\\\\\\"Audit 2026-03-01. Core GitHub integration is ~85% complete via gh CLI: 13 REST endpoints on GitHubController (issue CRUD, close/reopen, comments, labels, PRs, bi-directional sync), GitHubCliService (full gh CLI wrapper), IssueTodoSyncService (ISSUE-{n} mapping, label-to-priority). REMAINING GAP: OAuth/Keycloak IdP integration not implemented - currently relies on local gh CLI auth. Needs: GitHub OAuth app registration, Keycloak GitHub IdP setup, per-workspace OAuth token storage.\\\\\\\"'
     done: false
     description:
+    - '**NEW** Require Github API Token, integrate as a GitHub Application'
     - Enhance GitHub integration capabilities for McpServer.
     - Support GitHub as Keycloak Identity Provider for user authentication.
     - Integrate GitHub OAuth for agent workspace management and PR workflows.
     - Add GitHub Actions monitoring and control features with auditable operations.
-    remaining: Planned. Next step is Phase 1 baseline audit and config contract draft.
+    remaining: Plan published. Executing Phase 2 next (options + wiring), then secure token store, auth path, actions APIs, tests, and FR/TR audit.
     technical-details:
-    - 'Current state: gh CLI-based integration is functional; OAuth/Keycloak identity integration is the key missing capability.'
-    - 'Security requirements: encrypted token storage, token lifecycle management, and explicit fallback behavior.'
-    - 'Delivery strategy: phase implementation to preserve existing issue/PR sync behavior while introducing OAuth-first auth.'
+    - 'Current baseline: gh CLI issue/PR sync is functional and remains the compatibility path.'
+    - 'Execution focus: add OAuth bootstrap contract + secure per-workspace token persistence + authenticated gh execution + Actions controls.'
+    - 'Verification strategy: unit tests in McpServer.Support.Mcp.Tests and integration tests in McpServer.Support.Mcp.IntegrationTests with deterministic fakes.'
+    - 'Requirements discipline: FR/TR/TEST docs and mapping matrix updated during each design decision, not deferred.'
     implementation-tasks:
-    - task: 'Phase 1: Baseline audit and contract alignment (verify existing 13 GitHub endpoints, gh wrapper behavior, and sync semantics).'
+    - task: 'Phase 1.1 Baseline contract audit: confirm existing /mcpserver/gh endpoint behavior, error modes, and test coverage across server/client/integration suites.'
+      done: true
+    - task: 'Phase 1.2 Gap matrix: map remaining github-integration scope to concrete deliverables (OAuth config contract, secure token persistence, authenticated execution path, Actions monitoring/control).'
+      done: true
+    - task: Phase 2.1 Add GitHub integration options model under Mcp:GitHub (OAuth client/redirect/scopes, token store path, fallback policy flags).
       done: false
-    - task: 'Phase 2: GitHub OAuth app setup (create app, callback URLs, scopes, and environment-driven config model).'
+    - task: Phase 2.2 Wire options in Program/McpStdioHost with instance-aware path resolution and safe defaults for local/dev/test runtime.
       done: false
-    - task: 'Phase 3: Keycloak GitHub IdP integration (realm config, broker mappings, login flow, and token exchange).'
+    - task: Phase 3.1 Implement encrypted per-workspace GitHub token store interface + model contract (get/upsert/delete + metadata).
       done: false
-    - task: 'Phase 4: Workspace token persistence (secure per-workspace token storage, encryption at rest, rotation, and revoke support).'
+    - task: Phase 3.2 Implement persistent token store using Data Protection at rest with atomic file writes and workspace-key normalization.
       done: false
-    - task: 'Phase 5: Authenticated GitHub service path (prefer OAuth token flow, keep gh CLI fallback with explicit policy and telemetry).'
+    - task: Phase 3.3 Add API endpoints for token status, set token, and revoke token on /mcpserver/gh/auth/* with workspace-context enforcement.
       done: false
-    - task: 'Phase 6: Actions monitoring/control API (workflow runs list/detail/rerun/cancel mapped to MCP endpoints and client models).'
+    - task: Phase 4.1 Add OAuth app contract endpoints (/mcpserver/gh/oauth/config + authorize-url) for operator/app bootstrap and client UX alignment.
       done: false
-    - task: 'Phase 7: End-to-end tests (controller, service, auth integration, and issue/todo sync regression tests).'
+    - task: Phase 4.2 Validate OAuth config completeness and expose explicit misconfiguration diagnostics to avoid silent auth failures.
       done: false
-    - task: 'Phase 8: Documentation and rollout (operator setup guide, required secrets, migration steps, and troubleshooting).'
+    - task: Phase 5.1 Extend process execution contract to allow per-call GitHub token overrides without breaking existing IProcessRunner call sites.
+      done: false
+    - task: Phase 5.2 Update GitHubCliService to resolve workspace token, prefer secure stored token, and fall back to existing gh auth according to policy.
+      done: false
+    - task: Phase 5.3 Add telemetry/log signals for auth mode selection (stored token vs fallback) and token-resolution failures.
+      done: false
+    - task: Phase 6.1 Extend IGitHubCliService + models for GitHub Actions workflow runs list/detail/rerun/cancel operations.
+      done: false
+    - task: Phase 6.2 Implement gh CLI commands + JSON parsing for workflow run APIs with robust null/error handling.
+      done: false
+    - task: Phase 6.3 Add REST endpoints under /mcpserver/gh/actions/runs* for list/detail/rerun/cancel with consistent response contracts.
+      done: false
+    - task: Phase 6.4 Extend McpServer.Client GitHub models/client methods for actions + auth endpoints to keep typed-client parity.
+      done: false
+    - task: 'Phase 7.1 Unit tests (McpServer.Support.Mcp.Tests): token store persistence/encryption semantics, GitHubCliService auth-mode selection, and actions command parsing.'
+      done: false
+    - task: 'Phase 7.2 Integration tests (McpServer.Support.Mcp.IntegrationTests): auth endpoints + actions endpoints with service overrides/fakes for deterministic behavior.'
+      done: false
+    - task: 'Phase 8.1 Requirements updates: add FR/TR/TEST entries and mapping rows as decisions are finalized; include code coverage references.'
+      done: false
+    - task: 'Phase 8.2 Requirements audit before close: verify each newly declared FR/TR is implemented in code and exercised by tests.'
+      done: false
+    - task: 'Phase 8.3 Completion: run build + targeted unit/integration tests, update TODO doneSummary/remaining, and finalize session log evidence.'
       done: false
   medium-priority:
   - id: do-not-speak-tables
@@ -2285,3 +2313,56 @@ Documentation:
       done: false
     - task: Wire all docs into README index and docs/ folder
       done: false
+  - id: DOC-MARKETING-001
+    title: "Create Marketing Docs: What McpServer is, features, why it's needed, supported UI tooling"
+    note: >-
+      **Implementation Plan**
+
+
+      ## Output Artifacts (all in `docs/Marketing/`)
+
+
+      - `overview.md` — What McpServer is: one-liner, elevator pitch, origin story
+
+      - `features.md` — Feature inventory with benefit statements (10 key features)
+
+      - `why-needed.md` — Problem/solution narrative; why AI agents need a context server
+
+      - `ui-tooling.md` — Web UI, Director CLI/TUI, VS/VS Code extensions, Client NuGet, MCP STDIO
+
+      - `website-copy.md` — Section-by-section copy for Canva website (Hero → Footer, 8 sections)
+
+      - `presentation-outline.md` — 12-slide outline + speaker notes for Canva presentation
+
+      - `README.md` — Index linking all marketing docs
+
+
+      ## Audience
+
+
+      Technical decision-makers and developers evaluating AI-assisted development workflows. Tone: confident, direct, technically precise — not salesy.
+
+
+      ## Website Sections (Canva)
+
+      Hero · Problem · Solution · Features (3×2 grid) · UI Tooling · Architecture Diagram · Quick Start · Footer
+
+
+      ## Presentation Slides (Canva)
+
+      1. Title · 2. Problem · 3. Solution · 4. Architecture · 5. Context Search · 6. TODO & Sessions · 7. GitHub Sync · 8. GraphRAG · 9. UI Tooling · 10. Deployment · 11. Getting Started · 12. CTA
+
+
+      ## Key Content Areas
+
+      - What McpServer is: standalone ASP.NET Core 9 MCP context server for AI agents
+
+      - Core features: Hybrid FTS5+Vector search, TODO mgmt, session logging, GitHub sync, GraphRAG, multi-workspace, dual transport, requirements tracking, prompt templates, containerized deployment
+
+      - Value prop: single source of truth bridging AI agents (Copilot, Cursor, Codex, Claude) to workspace state
+
+      - UI tooling: Blazor Web UI, Director CLI/TUI, VS/VS Code VSIX extension, SharpNinja.McpServer.Client NuGet, MCP STDIO
+    done: false
+    description:
+    - Create marketing-oriented documentation for McpServer.
+    - "Cover: what McpServer is, key features, why it's needed, supported UI tooling (VS extension, Web UI, etc.), and value proposition for adopters."

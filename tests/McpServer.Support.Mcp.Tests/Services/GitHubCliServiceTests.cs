@@ -1,5 +1,9 @@
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
@@ -255,5 +259,126 @@ public sealed class GitHubCliServiceTests
 
         Assert.False(result.Success);
         Assert.Equal("not authenticated", result.ErrorMessage);
+    }
+
+    [Fact]
+    public async Task ListWorkflowRunsAsync_WhenGhSucceeds_ReturnsRuns()
+    {
+        var json = """[{"databaseId":101,"workflowName":"CI","displayTitle":"build","headBranch":"main","status":"completed","conclusion":"success","event":"push","url":"https://github.com/x/actions/runs/101","createdAt":"2026-03-01T00:00:00Z","updatedAt":"2026-03-01T00:05:00Z"}]""";
+        _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new ProcessRunResult(0, json, null));
+
+        var result = await _sut.ListWorkflowRunsAsync(new GitHubWorkflowRunQuery { Limit = 10 }).ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        Assert.Single(result.Runs);
+        Assert.Equal(101, result.Runs[0].RunId);
+        Assert.Equal("CI", result.Runs[0].WorkflowName);
+    }
+
+    [Fact]
+    public async Task GetWorkflowRunAsync_WhenGhSucceeds_ReturnsRun()
+    {
+        var json = """
+            {
+                "databaseId": 202,
+                "workflowName": "Deploy",
+                "displayTitle": "release",
+                "headBranch": "main",
+                "headSha": "abc123",
+                "status": "completed",
+                "conclusion": "success",
+                "event": "workflow_dispatch",
+                "url": "https://github.com/x/actions/runs/202",
+                "attempt": 1,
+                "createdAt": "2026-03-01T00:00:00Z",
+                "updatedAt": "2026-03-01T00:10:00Z",
+                "jobs": [
+                    {
+                        "name": "build",
+                        "status": "completed",
+                        "conclusion": "success",
+                        "startedAt": "2026-03-01T00:01:00Z",
+                        "completedAt": "2026-03-01T00:09:00Z",
+                        "url": "https://github.com/x/actions/runs/202/job/1",
+                        "steps": [
+                            { "name": "checkout", "status": "completed", "conclusion": "success", "number": 1 }
+                        ]
+                    }
+                ]
+            }
+            """;
+        _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new ProcessRunResult(0, json, null));
+
+        var result = await _sut.GetWorkflowRunAsync(202).ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        Assert.NotNull(result.Run);
+        Assert.Equal(202, result.Run.RunId);
+        Assert.Single(result.Run.Jobs);
+        Assert.Single(result.Run.Jobs[0].Steps);
+        Assert.Equal("checkout", result.Run.Jobs[0].Steps[0].Name);
+    }
+
+    [Fact]
+    public async Task RerunWorkflowRunAsync_UsesRerunCommand()
+    {
+        _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new ProcessRunResult(0, "", null));
+
+        var result = await _sut.RerunWorkflowRunAsync(303).ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        await _processRunner.Received(1).RunAsync("gh",
+            Arg.Is<string>(a => a is not null && a.Contains("run rerun 303", StringComparison.Ordinal)),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    [Fact]
+    public async Task CancelWorkflowRunAsync_UsesCancelCommand()
+    {
+        _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new ProcessRunResult(0, "", null));
+
+        var result = await _sut.CancelWorkflowRunAsync(404).ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        await _processRunner.Received(1).RunAsync("gh",
+            Arg.Is<string>(a => a is not null && a.Contains("run cancel 404", StringComparison.Ordinal)),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    [Fact]
+    public async Task ListIssuesAsync_WithStoredWorkspaceToken_UsesProcessRunRequestOverride()
+    {
+        var tokenStore = Substitute.For<IGitHubWorkspaceTokenStore>();
+        tokenStore.GetAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new GitHubWorkspaceTokenRecord("C:\\workspace", "gho_stored", DateTimeOffset.UtcNow, null));
+
+        var options = Substitute.For<IOptionsMonitor<GitHubIntegrationOptions>>();
+        options.CurrentValue.Returns(new GitHubIntegrationOptions
+        {
+            PreferStoredToken = true,
+            AllowCliFallback = true,
+        });
+
+        var services = new ServiceCollection();
+        services.AddScoped(_ => new WorkspaceContext { WorkspacePath = "C:\\workspace" });
+        using var provider = services.BuildServiceProvider();
+        using var scope = provider.CreateScope();
+        var accessor = Substitute.For<IHttpContextAccessor>();
+        accessor.HttpContext.Returns(new DefaultHttpContext { RequestServices = scope.ServiceProvider });
+
+        _processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new ProcessRunResult(0, "[]", null));
+
+        var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, tokenStore, accessor, options);
+        var result = await sut.ListIssuesAsync("open", 10).ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        await _processRunner.Received(1).RunAsync(
+            Arg.Is<ProcessRunRequest>(r => r.FileName == "gh" && r.GitHubTokenOverride == "gho_stored"),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 }

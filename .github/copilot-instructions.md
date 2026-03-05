@@ -12,9 +12,12 @@
 dotnet build src\McpServer.Support.Mcp -c Debug
 dotnet build src\McpServer.Client -c Debug
 
-# Run all tests
+# Run unit tests
 dotnet test tests\McpServer.Support.Mcp.Tests -c Debug
 dotnet test tests\McpServer.Client.Tests -c Debug
+
+# Run integration tests (uses CustomWebApplicationFactory, in-memory EF)
+dotnet test tests\McpServer.Support.Mcp.IntegrationTests -c Debug
 
 # Run a single test by fully-qualified name
 dotnet test tests\McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~TodoServiceTests.QueryAsync_NoFilters_ReturnsAllItems"
@@ -66,9 +69,9 @@ All async methods use `.ConfigureAwait(false)`. Controllers and services accept 
 ### Testing
 
 - **Framework**: xUnit v3 with NSubstitute for mocking.
-- **Integration tests** use `CustomWebApplicationFactory` (sets environment to `"Test"`, uses EF in-memory database).
-- **Unit tests** use temp files or in-memory state; always clean up in `Dispose`.
-- Test project has `InternalsVisibleTo` access to the main project.
+- **Integration tests** are isolated in `McpServer.Support.Mcp.IntegrationTests`; they use `CustomWebApplicationFactory` (sets environment to `"Test"`, uses EF in-memory database).
+- **Unit tests** live in `*Tests` projects; they use temp files or in-memory state; always clean up in `Dispose`.
+- Test projects have `InternalsVisibleTo` access to the main project.
 
 ### Controller Patterns
 

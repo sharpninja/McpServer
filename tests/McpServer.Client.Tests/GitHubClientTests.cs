@@ -189,4 +189,62 @@ public sealed class GitHubClientTests
         Assert.Contains("direction=from-github", handler.LastRequest.RequestUri.Query);
         Assert.True(result.Success);
     }
+
+    [Fact]
+    public async System.Threading.Tasks.Task GetAuthStatusAsync_GetsCorrectPath()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"workspacePath":"x","authMode":"stored_token","hasStoredToken":true}""");
+        using var http = new HttpClient(handler);
+        var client = new GitHubClient(http, DefaultOptions);
+
+        var result = await client.GetAuthStatusAsync();
+
+        Assert.Contains("/mcpserver/gh/auth/status", handler.LastRequest!.RequestUri!.AbsolutePath);
+        Assert.True(result.HasStoredToken);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task SetAuthTokenAsync_PutsJsonBody()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
+        using var http = new HttpClient(handler);
+        var client = new GitHubClient(http, DefaultOptions);
+
+        await client.SetAuthTokenAsync(new Models.GitHubAuthTokenUpsertRequest { AccessToken = "gho_test" });
+
+        Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/gh/auth/token", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("gho_test", handler.LastRequestBody!);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task ListWorkflowRunsAsync_SendsQueryParams()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"runs":[]}""");
+        using var http = new HttpClient(handler);
+        var client = new GitHubClient(http, DefaultOptions);
+
+        await client.ListWorkflowRunsAsync(branch: "main", status: "completed", eventName: "push", workflow: "ci", limit: 10);
+
+        var query = handler.LastRequest!.RequestUri!.Query;
+        Assert.Contains("branch=main", query);
+        Assert.Contains("status=completed", query);
+        Assert.Contains("event=push", query);
+        Assert.Contains("workflow=ci", query);
+        Assert.Contains("limit=10", query);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task RerunWorkflowRunAsync_PostsCorrectPath()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
+        using var http = new HttpClient(handler);
+        var client = new GitHubClient(http, DefaultOptions);
+
+        var result = await client.RerunWorkflowRunAsync(55);
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/gh/actions/runs/55/rerun", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.True(result.Success);
+    }
 }

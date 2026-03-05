@@ -1,5 +1,6 @@
 using McpServer.Common.Copilot;
 using McpServer.Support.Mcp.Ingestion;
+using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;

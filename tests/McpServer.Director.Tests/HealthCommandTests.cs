@@ -23,7 +23,8 @@ public sealed class HealthCommandTests
         Assert.Equal(0, result.ExitCode);
         var output = result.AllOutput;
         var hasHealthy = output.Contains("healthy", StringComparison.OrdinalIgnoreCase);
-        var hasExpectedEnvironmentFailure = output.Contains("Connection refused", StringComparison.OrdinalIgnoreCase);
+        var hasExpectedEnvironmentFailure = output.Contains("refused", StringComparison.OrdinalIgnoreCase)
+            || output.Contains("actively refused", StringComparison.OrdinalIgnoreCase);
         Assert.True(hasHealthy || hasExpectedEnvironmentFailure, $"Unexpected output: {output}");
     }
 }

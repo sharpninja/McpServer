@@ -27,22 +27,31 @@ public sealed class ProcessRunner(
 {
     /// <inheritdoc />
     public async Task<ProcessRunResult> RunAsync(string fileName, string arguments, CancellationToken ct = default)
+        => await RunAsync(new ProcessRunRequest(fileName, arguments), ct).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public async Task<ProcessRunResult> RunAsync(ProcessRunRequest request, CancellationToken ct = default)
     {
+        ArgumentNullException.ThrowIfNull(request);
+
         try
         {
             using var process = new Process();
-            process.StartInfo.FileName = fileName;
-            process.StartInfo.Arguments = arguments;
+            process.StartInfo.FileName = request.FileName;
+            process.StartInfo.Arguments = request.Arguments;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
 
             var opts = options.Value;
-            processEnvironment.ApplyAll(process.StartInfo, runAsUser: null, opts.GitHubToken);
-            process.StartInfo.FileName = processEnvironment.ResolveExecutable(process.StartInfo, fileName);
+            var token = string.IsNullOrWhiteSpace(request.GitHubTokenOverride)
+                ? opts.GitHubToken
+                : request.GitHubTokenOverride;
+            processEnvironment.ApplyAll(process.StartInfo, runAsUser: null, token);
+            process.StartInfo.FileName = processEnvironment.ResolveExecutable(process.StartInfo, request.FileName);
 
-            logger.LogDebug("Running {FileName} {Arguments}", fileName, arguments);
+            logger.LogDebug("Running {FileName} {Arguments}", request.FileName, request.Arguments);
             process.Start();
             var stdoutTask = process.StandardOutput.ReadToEndAsync(ct);
             var stderrTask = process.StandardError.ReadToEndAsync(ct);
@@ -53,12 +62,12 @@ public sealed class ProcessRunner(
         }
         catch (System.ComponentModel.Win32Exception ex)
         {
-            logger.LogWarning(ex, "Process {FileName} not found", fileName);
-            return new ProcessRunResult(-1, null, $"{fileName} not found.");
+            logger.LogWarning(ex, "Process {FileName} not found", request.FileName);
+            return new ProcessRunResult(-1, null, $"{request.FileName} not found.");
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Process {FileName} failed", fileName);
+            logger.LogError(ex, "Process {FileName} failed", request.FileName);
             return new ProcessRunResult(-1, null, ex.Message);
         }
     }

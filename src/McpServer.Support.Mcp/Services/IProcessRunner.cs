@@ -11,6 +11,14 @@ public interface IProcessRunner
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Process run result with exit code, stdout, and stderr.</returns>
     Task<ProcessRunResult> RunAsync(string fileName, string arguments, CancellationToken ct = default);
+
+    /// <summary>
+    /// TR-MCP-GH-003: Run an external process with optional per-call environment overrides.
+    /// </summary>
+    /// <param name="request">Structured process run request.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Process run result with exit code, stdout, and stderr.</returns>
+    Task<ProcessRunResult> RunAsync(ProcessRunRequest request, CancellationToken ct = default);
 }
 
 /// <summary>TR-PLANNED-013: Result of running an external process.</summary>
@@ -18,3 +26,11 @@ public interface IProcessRunner
 /// <param name="Stdout">Standard output text.</param>
 /// <param name="Stderr">Standard error text.</param>
 public sealed record ProcessRunResult(int ExitCode, string? Stdout, string? Stderr);
+
+/// <summary>
+/// TR-MCP-GH-003: Structured process run request with optional GitHub token override.
+/// </summary>
+/// <param name="FileName">Executable file name.</param>
+/// <param name="Arguments">Command-line arguments.</param>
+/// <param name="GitHubTokenOverride">Optional token override passed as <c>GH_TOKEN</c>.</param>
+public sealed record ProcessRunRequest(string FileName, string Arguments, string? GitHubTokenOverride = null);

@@ -17,7 +17,7 @@ public sealed class TodoServiceResolver : IDisposable
     private readonly string _primaryWorkspacePath;
 
     /// <summary>Initializes a new instance of the <see cref="TodoServiceResolver"/> class.</summary>
-    internal TodoServiceResolver(
+    public TodoServiceResolver(
         ITodoService primaryService,
         IOptions<IngestionOptions> ingestionOptions,
         ITodoServiceFactory todoServiceFactory)
