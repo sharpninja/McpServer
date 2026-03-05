@@ -18,6 +18,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddCqrsDispatcher(this IServiceCollection services)
     {
         services.AddSingleton<Dispatcher>();
+        services.AddSingleton<IDispatcher>(sp => sp.GetRequiredService<Dispatcher>());
         services.AddSingleton<ILoggerProvider>(sp => sp.GetRequiredService<Dispatcher>());
         return services;
     }

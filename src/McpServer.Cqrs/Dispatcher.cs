@@ -10,7 +10,7 @@ namespace McpServer.Cqrs;
 /// Resolves handlers from DI, wraps execution in pipeline behaviors, manages <see cref="CallContext"/>
 /// lifecycle, and implements <see cref="ILoggerProvider"/> for correlation-enriched logging.
 /// </summary>
-public sealed class Dispatcher : ILoggerProvider
+public sealed class Dispatcher : IDispatcher, ILoggerProvider
 {
     private const int MaxRetainedDispatchLogs = 200;
     private readonly IServiceProvider _services;
