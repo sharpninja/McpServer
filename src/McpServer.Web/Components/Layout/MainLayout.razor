@@ -1,5 +1,7 @@
 @inherits LayoutComponentBase
 @inject WorkspaceAutoSelector WorkspaceAutoSelector
+@inject BackendConnectionMonitor ConnectionMonitor
+@implements IDisposable
 
 <div class="d-flex flex-column" style="min-height: 100vh">
     <header class="Header">
@@ -16,6 +18,14 @@
         </div>
         <div class="Header-item Header-item--full"></div>
         <div class="Header-item">
+            @if (!_isConnected)
+            {
+                <span class="Label Label--danger mr-2" title="@_lastError">
+                    <OcticonIcon Name="alert" Class="mr-1" />Disconnected
+                </span>
+            }
+        </div>
+        <div class="Header-item">
             <AuthorizeView>
                 <Authorized>
                     <span class="color-fg-on-emphasis mr-2">@@context.User.Identity?.Name</span>
@@ -28,14 +38,49 @@
         </div>
     </header>
 
+    @if (!_isConnected)
+    {
+        <div class="flash flash-error" role="alert">
+            <OcticonIcon Name="alert" Class="mr-2" />
+            <strong>Backend unavailable</strong> — Cannot reach the MCP server at the configured address. Retrying automatically&hellip;
+            @if (!string.IsNullOrWhiteSpace(_lastError))
+            {
+                <span class="text-small ml-2">(@_lastError)</span>
+            }
+        </div>
+    }
+
     <main class="app-content flex-1">
         @Body
     </main>
 </div>
 
 @code {
+    private bool _isConnected = true;
+    private string? _lastError;
+
     protected override async Task OnInitializedAsync()
     {
+        ConnectionMonitor.PropertyChanged += OnConnectionChanged;
+        ConnectionMonitor.Start();
         await WorkspaceAutoSelector.EnsureWorkspaceSelectedAsync().ConfigureAwait(false);
+        _isConnected = ConnectionMonitor.IsConnected;
+        _lastError = ConnectionMonitor.LastError;
+    }
+
+    private void OnConnectionChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName is nameof(BackendConnectionMonitor.IsConnected)
+            or nameof(BackendConnectionMonitor.LastError))
+        {
+            _isConnected = ConnectionMonitor.IsConnected;
+            _lastError = ConnectionMonitor.LastError;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    public void Dispose()
+    {
+        ConnectionMonitor.PropertyChanged -= OnConnectionChanged;
     }
 }

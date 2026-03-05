@@ -9,7 +9,7 @@
 
     <!-- NuGet Package Metadata -->
     <PackageId>SharpNinja.McpServer.Cqrs</PackageId>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <Authors>SharpNinja</Authors>
     <Description>Lightweight async CQRS framework with Result monad, decimal correlation IDs, pipeline behaviors, and ILoggerProvider integration. Designed for McpServer but usable standalone.</Description>
     <PackageTags>cqrs;mediator;result-monad;correlation;pipeline;logging</PackageTags>

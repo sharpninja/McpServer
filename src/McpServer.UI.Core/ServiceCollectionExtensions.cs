@@ -2,6 +2,7 @@ using System.Reflection;
 using McpServer.Cqrs;
 using McpServer.Cqrs.Mvvm;
 using McpServer.UI.Core.Authorization;
+using McpServer.UI.Core.Behaviors;
 using McpServer.UI.Core.Services;
 using McpServer.UI.Core.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +41,12 @@ public static class ServiceCollectionExtensions
 
         // Shared workspace auto-selection (CWD → Primary → First enabled)
         services.AddSingleton<WorkspaceAutoSelector>();
+
+        // Backend connection monitor (tracks MCP server reachability with backoff probes)
+        services.AddSingleton<BackendConnectionMonitor>();
+
+        // Pipeline behavior: short-circuit API calls when backend is unreachable
+        services.AddCqrsBehavior<BackendConnectionBehavior>();
 
         // Register ViewModels as transient
         services.AddTransient<WorkspaceListViewModel>();

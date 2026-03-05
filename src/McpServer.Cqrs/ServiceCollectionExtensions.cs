@@ -11,7 +11,10 @@ namespace McpServer.Cqrs;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Registers the CQRS <see cref="Dispatcher"/> as a singleton and registers it as an <see cref="ILoggerProvider"/>.
+    /// Registers the CQRS <see cref="Dispatcher"/> as a singleton.
+    /// Call <see cref="AddCqrsLoggerProvider"/> separately if you want the Dispatcher
+    /// to also act as an <see cref="ILoggerProvider"/> (must be registered AFTER logging
+    /// infrastructure to avoid a circular dependency).
     /// </summary>
     /// <param name="services">The service collection.</param>
     /// <returns>The service collection for chaining.</returns>
@@ -19,6 +22,18 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<Dispatcher>();
         services.AddSingleton<IDispatcher>(sp => sp.GetRequiredService<Dispatcher>());
+        return services;
+    }
+
+    /// <summary>
+    /// Registers the <see cref="Dispatcher"/> as an <see cref="ILoggerProvider"/> for correlation-enriched logging.
+    /// Must be called AFTER <see cref="AddCqrsDispatcher"/> and AFTER logging is configured to avoid
+    /// a circular dependency (Dispatcher → ILogger → ILoggerFactory → ILoggerProvider → Dispatcher).
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <returns>The service collection for chaining.</returns>
+    public static IServiceCollection AddCqrsLoggerProvider(this IServiceCollection services)
+    {
         services.AddSingleton<ILoggerProvider>(sp => sp.GetRequiredService<Dispatcher>());
         return services;
     }
