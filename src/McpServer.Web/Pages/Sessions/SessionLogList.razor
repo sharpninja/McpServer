@@ -60,7 +60,7 @@ else
                 <PrimerLabel Scheme="@(string.Equals(item.Status, "completed", StringComparison.OrdinalIgnoreCase) ? "success" : "attention")"
                              Text="@item.Status" />
             </td>
-            <td>@(item.LastUpdated ?? "(unknown)")</td>
+            <td>@FormatTimestamp(item.LastUpdated)</td>
             <td><a class="btn btn-sm" href="@GetDetailHref(item.SessionId)">Details</a></td>
         </RowTemplate>
     </PrimerDataTable>
@@ -109,5 +109,8 @@ else
         if (!string.IsNullOrWhiteSpace(Text)) parts.Add($"text={Uri.EscapeDataString(Text)}");
         return string.Join("&", parts);
     }
+
+    private static string FormatTimestamp(string? value)
+        => DateTimeOffset.TryParse(value, out var dto) ? dto.ToLocalTime().ToString("g") : value ?? "(unknown)";
 }
 

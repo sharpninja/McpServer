@@ -146,11 +146,11 @@ else
                 </div>
                 <div>
                     <label class="text-small text-bold d-block">Created</label>
-                    <span>@ViewModel.Detail.DateTimeCreated.ToString("u")</span>
+                    <span>@ViewModel.Detail.DateTimeCreated.ToLocalTime().ToString("g")</span>
                 </div>
                 <div>
                     <label class="text-small text-bold d-block">Modified</label>
-                    <span>@ViewModel.Detail.DateTimeModified.ToString("u")</span>
+                    <span>@ViewModel.Detail.DateTimeModified.ToLocalTime().ToString("g")</span>
                 </div>
             </div>
         </div>

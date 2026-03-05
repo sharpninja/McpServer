@@ -29,7 +29,7 @@ else
             <h2 class="h3 mb-0">Current Status</h2>
         </div>
         <div class="Box-body">
-            <p><strong>Checked At:</strong> @CurrentSnapshot.CheckedAt.ToString("u")</p>
+            <p><strong>Checked At:</strong> @CurrentSnapshot.CheckedAt.ToLocalTime().ToString("g")</p>
             <p><strong>Base URL:</strong> @(CurrentSnapshot.ServerBaseUrl ?? "(not set)")</p>
             <p>
                 <strong>Status:</strong>

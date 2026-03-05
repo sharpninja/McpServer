@@ -46,8 +46,8 @@
                     <p><strong>Source Type:</strong> @ViewModel.Detail.SourceType</p>
                     <p><strong>Status:</strong> @ViewModel.Detail.Status</p>
                     <p><strong>Model:</strong> @(ViewModel.Detail.Model ?? "(not set)")</p>
-                    <p><strong>Started:</strong> @(ViewModel.Detail.Started ?? "(unknown)")</p>
-                    <p><strong>Last Updated:</strong> @(ViewModel.Detail.LastUpdated ?? "(unknown)")</p>
+                    <p><strong>Started:</strong> @FormatTimestamp(ViewModel.Detail.Started)</p>
+                    <p><strong>Last Updated:</strong> @FormatTimestamp(ViewModel.Detail.LastUpdated)</p>
                     <p><strong>Entry Count:</strong> @ViewModel.Detail.EntryCount</p>
                     <p><strong>Total Tokens:</strong> @(ViewModel.Detail.TotalTokens?.ToString() ?? "(unknown)")</p>
                     <p><strong>Cursor Session Label:</strong> @(ViewModel.Detail.CursorSessionLabel ?? "(none)")</p>
@@ -69,7 +69,7 @@
                         <div class="Box-body">
                             <p><strong>Request ID:</strong> <code>@entry.RequestId</code></p>
                             <p><strong>Status:</strong> @(entry.Status ?? "(unknown)")</p>
-                            <p><strong>Timestamp:</strong> @(entry.Timestamp ?? "(unknown)")</p>
+                            <p><strong>Timestamp:</strong> @FormatTimestamp(entry.Timestamp)</p>
                             @if (!string.IsNullOrWhiteSpace(entry.QueryText))
                             {
                                 <p><strong>Query:</strong> @entry.QueryText</p>
@@ -153,5 +153,8 @@
         if (!string.IsNullOrWhiteSpace(Text)) parts.Add($"text={Uri.EscapeDataString(Text)}");
         return string.Join("&", parts);
     }
+
+    private static string FormatTimestamp(string? value)
+        => DateTimeOffset.TryParse(value, out var dto) ? dto.ToLocalTime().ToString("g") : value ?? "(unknown)";
 }
 
