@@ -95,23 +95,6 @@ jobs:
       - name: Pack Director tool
         run: dotnet pack src/McpServer.Director/McpServer.Director.csproj -c Release --no-build -o artifacts/director-tool
 
-      - name: Generate OpenAPI artifact
-        shell: bash
-        run: |
-          set -euo pipefail
-          export ASPNETCORE_ENVIRONMENT=Development
-          dotnet artifacts/mcp-server/McpServer.Support.Mcp.dll > artifacts/mcp-server.log 2>&1 &
-          MCP_PID=$!
-          for i in {1..30}; do
-            if curl -fsS http://localhost:7147/swagger/v1/swagger.json -o artifacts/swagger-v1.json; then
-              break
-            fi
-            sleep 1
-          done
-          kill $MCP_PID || true
-          wait $MCP_PID || true
-          test -f artifacts/swagger-v1.json
-
       - name: Upload MCP publish artifact
         uses: actions/upload-artifact@v4
         with:
@@ -123,12 +106,6 @@ jobs:
         with:
           name: director-tool-nupkg
           path: artifacts/director-tool/*.nupkg
-
-      - name: Upload OpenAPI artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: mcp-server-openapi
-          path: artifacts/swagger-v1.json
 
       - name: Upload test results
         if: always()

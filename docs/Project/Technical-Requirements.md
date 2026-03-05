@@ -415,6 +415,7 @@ No alternate direct-launch path is permitted for pooled workloads; pooled agents
 When `AgentName` is omitted, the runtime SHALL resolve request intent from context/prompt and select the configured default agent for that intent.
 
 Template-mode and ad-hoc-mode payload validation SHALL enforce:
+
 - `promptTemplateId` and ad-hoc prompt text cannot both be supplied in explicit mode.
 - At least one prompt source must be resolvable.
 - `id` is required for template-resolved requests and optional for ad-hoc requests.
@@ -426,6 +427,7 @@ Template-mode and ad-hoc-mode payload validation SHALL enforce:
 ## TR-MCP-TPL-006
 
 **Template Resolution for One-Shot Requests** — Template rendering SHALL support:
+
 - Explicit template mode: `promptTemplateId` + optional values dictionary.
 - Context resolution mode: context-based template selection when template ID is omitted.
 - Value precedence: caller-provided values override workspace-context-derived values on key collision.
@@ -442,6 +444,7 @@ The server SHALL provide a prompt resolution endpoint returning the populated pr
 ## TR-MCP-API-003
 
 **Agent Pool Monitoring and Control APIs** — REST endpoints SHALL provide:
+
 - Pooled agent availability snapshots.
 - Runtime controls (connect, start, stop, immediate recycle).
 - Queue operations (list, enqueue, cancel/remove, queued-item move up/down).
