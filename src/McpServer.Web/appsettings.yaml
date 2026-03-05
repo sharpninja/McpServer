@@ -18,6 +18,7 @@ Authentication:
       LogoutPath: /logout
       AccessDeniedPath: /access-denied
     OpenIdConnect:
+      DiscoverAuthorityFromMcpAuthConfig: true
       Authority: https://example.invalid
       ClientId: placeholder-client-id
       ClientSecret: placeholder-client-secret

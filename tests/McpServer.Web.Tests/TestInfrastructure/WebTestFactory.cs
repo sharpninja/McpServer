@@ -87,6 +87,8 @@ internal sealed class McpWebTestFactory : WebApplicationFactory<Program>
             {
                 ["Authentication:Authorization:RequireAuthenticatedUserByDefault"] = "false",
                 ["Authentication:Schemes:OpenIdConnect:Authority"] = "https://test-oidc.invalid",
+                ["Authentication:Schemes:OpenIdConnect:ClientId"] = "test-web-client",
+                ["Authentication:Schemes:OpenIdConnect:DiscoverAuthorityFromMcpAuthConfig"] = "false",
             });
         });
 

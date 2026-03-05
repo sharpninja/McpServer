@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Net.Http;
+using System.Text.Json;
 using McpServer.Web;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using NetEscapades.Configuration.Yaml;
@@ -33,28 +35,57 @@ var cookieSection = authSchemesSection.GetSection("Cookie");
 var oidcSection = authSchemesSection.GetSection("OpenIdConnect");
 var claimMappingSection = oidcSection.GetSection("ClaimMapping");
 var authorizationSection = builder.Configuration.GetSection("Authentication:Authorization");
+var mcpServerBaseUrl = builder.Configuration["McpServer:BaseUrl"] ?? "http://localhost:7147";
+var oidcAuthority = oidcSection["Authority"];
+var oidcClientId = oidcSection["ClientId"];
+var oidcClientSecret = oidcSection["ClientSecret"];
+var discoverOidcAuthorityFromMcpAuthConfig = oidcSection.GetValue<bool?>("DiscoverAuthorityFromMcpAuthConfig") ?? true;
+if (discoverOidcAuthorityFromMcpAuthConfig)
+{
+    var discoveredOidcConfig = await TryDiscoverOidcConfigFromMcpAsync(mcpServerBaseUrl, bootstrapLogger);
+    if (discoveredOidcConfig is not null)
+    {
+        oidcAuthority = discoveredOidcConfig.Authority;
+        bootstrapLogger.LogInformation(
+            "Resolved OIDC authority from MCP /auth/config discovery: {Authority}",
+            oidcAuthority);
+    }
+}
+
+var oidcEnabled = IsOidcConfigurationUsable(oidcAuthority);
 
 builder.Services.AddCascadingAuthenticationState();
 bootstrapLogger.LogInformation("Authentication state cascading configured.");
 
-builder.Services
+var authenticationBuilder = builder.Services
     .AddAuthentication(options =>
     {
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-    })
+        if (oidcEnabled)
+        {
+            options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+        }
+    });
+
+authenticationBuilder
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
         options.Cookie.Name = cookieSection["CookieName"] ?? "McpServer.Web.Auth";
         options.LoginPath = cookieSection["LoginPath"] ?? "/login";
         options.LogoutPath = cookieSection["LogoutPath"] ?? "/logout";
         options.AccessDeniedPath = cookieSection["AccessDeniedPath"] ?? "/access-denied";
-    })
-    .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+    });
+
+if (oidcEnabled)
+{
+    authenticationBuilder.AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
     {
-        options.Authority = oidcSection["Authority"] ?? "https://example.invalid";
-        options.ClientId = oidcSection["ClientId"] ?? "placeholder-client-id";
-        options.ClientSecret = oidcSection["ClientSecret"] ?? "placeholder-client-secret";
+        options.Authority = oidcAuthority!;
+        options.ClientId = oidcClientId!;
+        if (!string.IsNullOrWhiteSpace(oidcClientSecret))
+        {
+            options.ClientSecret = oidcClientSecret;
+        }
         options.ResponseType = oidcSection["ResponseType"] ?? "code";
         options.CallbackPath = oidcSection["CallbackPath"] ?? "/signin-oidc";
         options.SignedOutCallbackPath = oidcSection["SignedOutCallbackPath"] ?? "/signout-callback-oidc";
@@ -81,7 +112,16 @@ builder.Services
             }
         }
     });
-bootstrapLogger.LogInformation("Authentication schemes configured.");
+}
+else
+{
+    bootstrapLogger.LogWarning(
+        "OpenID Connect is disabled because configuration is missing or placeholder. Authority='{Authority}', ClientId='{ClientId}'.",
+        oidcAuthority ?? "(null)",
+        oidcClientId ?? "(null)");
+}
+
+bootstrapLogger.LogInformation("Authentication schemes configured. OIDC enabled: {OidcEnabled}", oidcEnabled);
 
 var authorizationBuilder = builder.Services.AddAuthorizationBuilder();
 if (authorizationSection.GetValue<bool?>("RequireAuthenticatedUserByDefault") == true)
@@ -175,4 +215,96 @@ catch (Exception ex)
 finally
 {
     app.Logger.LogInformation("app.Run exited after {ElapsedMs}ms.", startupStopwatch.ElapsedMilliseconds);
+}
+
+static async Task<OidcDiscoveryConfigResponse?> TryDiscoverOidcConfigFromMcpAsync(
+    string? mcpServerBaseUrl,
+    ILogger logger,
+    CancellationToken cancellationToken = default)
+{
+    if (string.IsNullOrWhiteSpace(mcpServerBaseUrl) ||
+        !Uri.TryCreate(mcpServerBaseUrl, UriKind.Absolute, out var baseUri))
+    {
+        logger.LogWarning(
+            "Skipping OIDC discovery because McpServer:BaseUrl is not a valid absolute URL: {BaseUrl}",
+            mcpServerBaseUrl ?? "(null)");
+        return null;
+    }
+
+    var authConfigUri = new Uri(baseUri, "/auth/config");
+    try
+    {
+        using var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(3) };
+        using var response = await httpClient.GetAsync(authConfigUri, cancellationToken).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            logger.LogWarning(
+                "OIDC discovery call to {AuthConfigUri} returned HTTP {StatusCode}; falling back to local Web UI auth config.",
+                authConfigUri,
+                (int)response.StatusCode);
+            return null;
+        }
+
+        await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+        var discovered = await JsonSerializer.DeserializeAsync<OidcDiscoveryConfigResponse>(
+            stream,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true },
+            cancellationToken).ConfigureAwait(false);
+        if (discovered is null || !discovered.Enabled || string.IsNullOrWhiteSpace(discovered.Authority))
+        {
+            return null;
+        }
+
+        return discovered;
+    }
+    catch (Exception ex)
+    {
+        logger.LogWarning(
+            ex,
+            "OIDC discovery failed for {AuthConfigUri}; falling back to local Web UI auth config.",
+            authConfigUri);
+        return null;
+    }
+}
+
+static bool IsOidcConfigurationUsable(string? authority)
+{
+    if (IsPlaceholderOrEmpty(authority))
+    {
+        return false;
+    }
+
+    if (!Uri.TryCreate(authority, UriKind.Absolute, out var authorityUri))
+    {
+        return false;
+    }
+
+    var isHttpScheme = authorityUri.Scheme.Equals(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase)
+        || authorityUri.Scheme.Equals(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase);
+    if (!isHttpScheme)
+    {
+        return false;
+    }
+
+    return !authorityUri.Host.Equals("example.invalid", StringComparison.OrdinalIgnoreCase);
+}
+
+static bool IsPlaceholderOrEmpty(string? value)
+{
+    if (string.IsNullOrWhiteSpace(value))
+    {
+        return true;
+    }
+
+    var trimmed = value.Trim();
+    return trimmed.Contains("example.invalid", StringComparison.OrdinalIgnoreCase)
+           || trimmed.Contains("placeholder", StringComparison.OrdinalIgnoreCase)
+           || trimmed.Equals("change-me-in-user-secrets", StringComparison.OrdinalIgnoreCase);
+}
+
+file sealed class OidcDiscoveryConfigResponse
+{
+    public bool Enabled { get; set; }
+
+    public string? Authority { get; set; }
 }
