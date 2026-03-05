@@ -32,20 +32,10 @@
 .PARAMETER SkipProcessStop
     When set, skips stopping running processes for ToolCommand.
 
-.PARAMETER PackProperty
-    Additional pack MSBuild property values in KEY=VALUE format.
-    Example: -PackProperty "IsPackable=true","PackAsTool=true","ToolCommandName=mcp-web"
-
-.PARAMETER RuntimeIdentifier
-    RID for single-file publish. Defaults to win-x64.
-
-.PARAMETER SkipTrim
-    When set, skips PublishTrimmed (useful if trimming breaks reflection-heavy code).
-
 .EXAMPLE
     .\Update-DotnetTool.ps1
     .\Update-DotnetTool.ps1 -SkipVersionBump
-    .\Update-DotnetTool.ps1 -ProjectPath src\McpServer.Web\McpServer.Web.csproj -ToolId SharpNinja.McpServer.Web -ToolCommand mcp-web -SkipVersionBump -PackProperty "IsPackable=true","PackAsTool=true","ToolCommandName=mcp-web","PackageId=SharpNinja.McpServer.Web"
+    .\Update-DotnetTool.ps1 -ProjectPath src\McpServer.Web\McpServer.Web.csproj -ToolId SharpNinja.McpServer.Web -ToolCommand mcp-web -SkipVersionBump
 #>
 [CmdletBinding()]
 param(
@@ -55,10 +45,7 @@ param(
     [string]$ToolCommand = 'director',
     [string]$NupkgDir = 'nupkg',
     [string]$PackageVersion,
-    [switch]$SkipProcessStop,
-    [string[]]$PackProperty = @(),
-    [string]$RuntimeIdentifier = 'win-x64',
-    [switch]$SkipTrim
+    [switch]$SkipProcessStop
 )
 
 Set-StrictMode -Version Latest
@@ -94,17 +81,17 @@ function Write-Step {
 
 # 1. Bump version
 if (-not $SkipVersionBump) {
-    Write-Step "1/9  Bumping GitVersion next-version patch ..."
+    Write-Step "1/7  Bumping GitVersion next-version patch ..."
     $bumpResult = Bump-GitVersionPatch -RepoRoot $RepoRoot
     Write-Host "  $($bumpResult.OldVersion) -> $($bumpResult.NewVersion)" -ForegroundColor Green
 }
 else {
-    Write-Step "1/9  Skipping version bump."
+    Write-Step "1/7  Skipping version bump."
 }
 
 # 2. Compute package version
 if (-not $PackageVersion) {
-    Write-Step "2/9  Computing package version ..."
+    Write-Step "2/7  Computing package version ..."
     Push-Location $RepoRoot
     try {
         $gitVersionJson = dotnet gitversion /output json 2>&1
@@ -115,13 +102,13 @@ if (-not $PackageVersion) {
     finally { Pop-Location }
 }
 else {
-    Write-Step "2/9  Using provided package version."
+    Write-Step "2/7  Using provided package version."
 }
 Write-Host "  Package version: $packageVersion" -ForegroundColor Green
 
 # 3. Stop running command process
 if (-not $SkipProcessStop) {
-    Write-Step "3/9  Stopping running process '$ToolCommand' ..."
+    Write-Step "3/7  Stopping running process '$ToolCommand' ..."
     $procs = @(Get-Process -Name $ToolCommand -ErrorAction SilentlyContinue)
     if ($procs.Count -gt 0) {
         foreach ($p in $procs) { Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue }
@@ -133,84 +120,83 @@ if (-not $SkipProcessStop) {
     }
 }
 else {
-    Write-Step "3/9  Skipping process stop."
+    Write-Step "3/7  Skipping process stop."
 }
 
 # 4. Uninstall previous version
-Write-Step "4/9  Uninstalling previous version ..."
+Write-Step "4/7  Uninstalling previous version ..."
 dotnet tool uninstall --global $ToolId 2>&1 | Out-Null
 Write-Host "  Uninstalled (or was not installed)." -ForegroundColor DarkGray
 
-# 5. Publish — single-file + trimmed (produces wwwroot with RCL content for tool packaging)
-Write-Step "5/9  Publishing $ToolId (Release, SingleFile, Trimmed) ..."
-$publishArgs = @(
-    'publish', $ResolvedProject,
-    '-c', 'Release',
-    '-r', $RuntimeIdentifier,
-    '/p:PublishSingleFile=true',
-    '/p:SelfContained=true'
-)
-if (-not $SkipTrim) {
-    $publishArgs += '/p:PublishTrimmed=true'
-}
-& dotnet @publishArgs
+# 5. Publish (framework-dependent — produces DLLs + wwwroot with RCL content)
+Write-Step "5/7  Publishing $ToolId (Release) ..."
+$publishDir = Join-Path (Split-Path $ResolvedProject) 'bin\Release\net9.0\publish'
+& dotnet publish $ResolvedProject -c Release -o $publishDir
 if ($LASTEXITCODE -ne 0) { Write-Error "dotnet publish failed (exit code $LASTEXITCODE)" }
-Write-Host "  Publish complete." -ForegroundColor Green
+$publishFiles = (Get-ChildItem $publishDir -Recurse -File).Count
+Write-Host "  Publish complete — $publishFiles file(s)." -ForegroundColor Green
 
-# 6. Verify publish output contains wwwroot
-$publishWwwroot = Join-Path (Split-Path $ResolvedProject) "bin\Release\net9.0\$RuntimeIdentifier\publish\wwwroot"
-if (Test-Path $publishWwwroot) {
-    $fileCount = (Get-ChildItem $publishWwwroot -Recurse -File).Count
-    Write-Host "  Publish wwwroot: $fileCount file(s)" -ForegroundColor Green
-}
-else {
-    Write-Warning "Publish wwwroot not found at $publishWwwroot — tool may lack static assets."
-}
+# 6. Generate .nuspec and pack with nuget
+Write-Step "6/7  Packing $ToolId v$PackageVersion with nuget ..."
 
-# 7. Pack
-Write-Step "7/9  Packing $ToolId v$packageVersion ..."
-$packArgs = @(
-    'pack',
-    $ResolvedProject,
-    '-c', 'Release',
-    '--no-build',
-    '-o', $ResolvedNupkgDir,
-    "/p:PackageVersion=$PackageVersion"
-)
-foreach ($prop in $PackProperty) {
-    if ([string]::IsNullOrWhiteSpace($prop)) { continue }
-    $packArgs += "/p:$prop"
+# Read metadata from csproj
+[xml]$csproj = Get-Content $ResolvedProject
+$description = $ToolId
+$authors     = 'SharpNinja'
+$assemblyName = [System.IO.Path]::GetFileNameWithoutExtension($ResolvedProject)
+$toolCommandName = $ToolCommand
+foreach ($pg in $csproj.Project.PropertyGroup) {
+    $node = $null
+    $node = $pg.SelectSingleNode('Description');  if ($node) { $description = $node.InnerText }
+    $node = $pg.SelectSingleNode('Authors');      if ($node) { $authors = $node.InnerText }
+    $node = $pg.SelectSingleNode('AssemblyName'); if ($node) { $assemblyName = $node.InnerText }
+    $node = $pg.SelectSingleNode('ToolCommandName'); if ($node) { $toolCommandName = $node.InnerText }
 }
-& dotnet @packArgs
-if ($LASTEXITCODE -ne 0) { Write-Error "dotnet pack failed (exit code $LASTEXITCODE)" }
-Write-Host "  Pack complete." -ForegroundColor Green
+$entryPointDll = "$assemblyName.dll"
 
-# 8. Inject publish wwwroot into nupkg (dotnet tool pack ignores extra content dirs)
-if (Test-Path $publishWwwroot) {
-    Write-Step "8/9  Injecting wwwroot into nupkg ..."
-    $nupkgFile = Join-Path $ResolvedNupkgDir "$ToolId.$PackageVersion.nupkg"
-    if (Test-Path $nupkgFile) {
-        $zip = [System.IO.Compression.ZipFile]::Open($nupkgFile, 'Update')
-        $files = Get-ChildItem $publishWwwroot -Recurse -File
-        foreach ($f in $files) {
-            $relativePath = $f.FullName.Substring($publishWwwroot.Length).TrimStart('\', '/') -replace '\\', '/'
-            $entryPath = "tools/net9.0/any/wwwroot/$relativePath"
-            $null = [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile(
-                $zip, $f.FullName, $entryPath, [System.IO.Compression.CompressionLevel]::Optimal)
-        }
-        $zip.Dispose()
-        Write-Host "  Injected $($files.Count) wwwroot file(s) into nupkg." -ForegroundColor Green
-    }
-    else {
-        Write-Warning "nupkg not found at $nupkgFile — skipping wwwroot injection."
-    }
-}
-else {
-    Write-Step "8/9  No publish wwwroot to inject — skipping."
-}
+# Write DotnetToolSettings.xml into publish dir
+$toolSettingsPath = Join-Path $publishDir 'DotnetToolSettings.xml'
+@"
+<?xml version="1.0" encoding="utf-8"?>
+<DotNetCliTool Version="1">
+  <Commands>
+    <Command Name="$toolCommandName" EntryPoint="$entryPointDll" Runner="dotnet" />
+  </Commands>
+</DotNetCliTool>
+"@ | Set-Content -Path $toolSettingsPath -Encoding UTF8
 
-# 9. Install globally
-Write-Step "9/9  Installing globally ..."
+# Generate .nuspec
+$nuspecPath = Join-Path $ResolvedNupkgDir "$ToolId.nuspec"
+@"
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>$ToolId</id>
+    <version>$PackageVersion</version>
+    <authors>$authors</authors>
+    <description>$description</description>
+    <packageTypes>
+      <packageType name="DotnetTool" />
+    </packageTypes>
+  </metadata>
+  <files>
+    <file src="$publishDir\**" target="tools/net9.0/any" />
+  </files>
+</package>
+"@ | Set-Content -Path $nuspecPath -Encoding UTF8
+
+# Remove old nupkg if present
+$nupkgFile = Join-Path $ResolvedNupkgDir "$ToolId.$PackageVersion.nupkg"
+if (Test-Path $nupkgFile) { Remove-Item $nupkgFile -Force }
+
+& nuget pack $nuspecPath -OutputDirectory $ResolvedNupkgDir -NoPackageAnalysis
+if ($LASTEXITCODE -ne 0) { Write-Error "nuget pack failed (exit code $LASTEXITCODE)" }
+
+$nupkgSize = (Get-Item $nupkgFile).Length / 1MB
+Write-Host "  Pack complete — $("{0:N1}" -f $nupkgSize) MB." -ForegroundColor Green
+
+# 7. Install globally
+Write-Step "7/7  Installing globally ..."
 dotnet tool install --global $ToolId --add-source $ResolvedNupkgDir --version $PackageVersion
 if ($LASTEXITCODE -ne 0) { Write-Error "dotnet tool install failed (exit code $LASTEXITCODE)" }
 
