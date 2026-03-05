@@ -140,26 +140,10 @@ table.Table tbody tr:last-child {
 
 /* ── Monaco editor container ── */
 .monaco-editor-container {
-    width: 100% !important;
-    height: 600px !important;
-    min-height: 600px;
-    max-height: 600px;
-    overflow: hidden !important;
-    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
     border: 1px solid var(--borderColor-default, #d0d7de);
-}
-
-/*
- * Primer's global *, ::before, ::after { box-sizing: border-box } has specificity
- * 0,0,0 which Monaco's class-based selectors (0,2,0+) already beat. Do NOT override
- * all children with content-box as it breaks Monaco's own intentional border-box
- * rules on .view-line, .cursors-layer > .cursor, etc.
- *
- * Only the outer container needs content-box for Monaco's initial size calculation.
- */
-.monaco-editor-container,
-.monaco-editor-container > .monaco-editor {
-    box-sizing: content-box;
 }
 
 /* Force Monaco's textarea hidden (Primer global resets can leak browser defaults) */

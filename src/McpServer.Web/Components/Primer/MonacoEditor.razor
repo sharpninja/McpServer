@@ -1,12 +1,14 @@
 @using BlazorMonaco
 @using BlazorMonaco.Editor
 
-<StandaloneCodeEditor @ref="_editor"
-                      Id="@_elementId"
-                      ConstructionOptions="GetOptions"
-                      OnDidInit="OnEditorInit"
-                      OnDidChangeModelContent="OnContentChanged"
-                      CssClass="monaco-editor-container" />
+<div style="height: @(Height)px; position: relative;">
+    <StandaloneCodeEditor @ref="_editor"
+                          Id="@_elementId"
+                          ConstructionOptions="GetOptions"
+                          OnDidInit="OnEditorInit"
+                          OnDidChangeModelContent="OnContentChanged"
+                          CssClass="monaco-editor-container" />
+</div>
 
 @code {
     private StandaloneCodeEditor _editor = null!;

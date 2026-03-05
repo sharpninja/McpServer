@@ -1,6 +1,4 @@
 @page "/todos/{TodoId}"
-@using Microsoft.AspNetCore.Components.Web
-@rendermode @(new InteractiveServerRenderMode(prerender: false))
 
 @inject TodoDetailViewModel ViewModel
 @inject TodoListViewModel ListViewModel
@@ -11,12 +9,12 @@
 <div class="detail-layout">
     <aside class="detail-sidebar">
         <div class="sidebar-header">Todos</div>
-        @foreach (var item in ListViewModel?.Items ?? [])
+        @foreach (var item in ListViewModel.Items)
         {
             <a class="sidebar-item @(string.Equals(item.Id, TodoId, StringComparison.Ordinal) ? "active" : "")"
-               href="@GetDetailHref(item.Id)">
-                <span class="color-fg-muted f6">@item.Id</span>
-                <br />@item.Title
+               href="/todos/@Uri.EscapeDataString(item.Id)">
+                <span class="text-bold">@item.Id</span>
+                <br /><span class="color-fg-muted f6">@item.Title</span>
             </a>
         }
     </aside>
@@ -75,28 +73,16 @@
     [Parameter]
     public string TodoId { get; set; } = string.Empty;
 
-    [SupplyParameterFromQuery]
-    public string? Section { get; set; }
-
-    [SupplyParameterFromQuery]
-    public string? Priority { get; set; }
-
-    [SupplyParameterFromQuery]
-    public bool? Done { get; set; }
-
     private string? _loadedId;
-    private string? _lastFilterKey;
     private bool CanEdit => AuthPolicy.CanExecuteAction(McpServer.UI.Core.Authorization.McpActionKeys.TodoUpdate);
 
     protected override async Task OnParametersSetAsync()
     {
-        var filterKey = $"{Section}|{Priority}|{Done}";
-        if (!string.Equals(filterKey, _lastFilterKey, StringComparison.Ordinal))
+        // Ensure the shared ListViewModel has items (direct navigation without visiting list page first).
+        // Apply same defaults as TodoList.razor (Done=false shows open items).
+        if (ListViewModel.Items.Count == 0)
         {
-            _lastFilterKey = filterKey;
-            ListViewModel.Section = Section;
-            ListViewModel.Priority = Priority;
-            ListViewModel.Done = Done;
+            ListViewModel.Done = false;
             await ListViewModel.LoadAsync().ConfigureAwait(false);
         }
 
@@ -115,22 +101,5 @@
     }
 
     private async Task DeleteAsync() => await ViewModel.DeleteAsync().ConfigureAwait(false);
-
-    private string GetDetailHref(string id)
-    {
-        var qs = BuildFilterQueryString();
-        return string.IsNullOrEmpty(qs)
-            ? $"/todos/{Uri.EscapeDataString(id)}"
-            : $"/todos/{Uri.EscapeDataString(id)}?{qs}";
-    }
-
-    private string BuildFilterQueryString()
-    {
-        var parts = new List<string>();
-        if (!string.IsNullOrWhiteSpace(Section)) parts.Add($"section={Uri.EscapeDataString(Section)}");
-        if (!string.IsNullOrWhiteSpace(Priority)) parts.Add($"priority={Uri.EscapeDataString(Priority)}");
-        if (Done.HasValue) parts.Add($"done={Done.Value.ToString().ToLowerInvariant()}");
-        return string.Join("&", parts);
-    }
 }
 

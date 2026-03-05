@@ -86,7 +86,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<MappingListViewModel>();
         services.AddTransient<RequirementsGenerateViewModel>();
         services.AddTransient<VoiceViewModel>();
-        services.AddTransient<TodoListViewModel>();
+        services.AddScoped<TodoListViewModel>();
         services.AddTransient<TodoDetailViewModel>();
         services.AddTransient<CreateTodoViewModel>();
         services.AddTransient<UpdateTodoViewModel>();
