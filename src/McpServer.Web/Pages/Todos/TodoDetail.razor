@@ -1,6 +1,6 @@
 @page "/todos/{TodoId}"
-@using static Microsoft.AspNetCore.Components.Web.RenderMode
-@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.Web
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 
 @inject TodoDetailViewModel ViewModel
 @inject TodoListViewModel ListViewModel
@@ -11,7 +11,7 @@
 <div class="detail-layout">
     <aside class="detail-sidebar">
         <div class="sidebar-header">Todos</div>
-        @foreach (var item in ListViewModel.Items)
+        @foreach (var item in ListViewModel?.Items ?? [])
         {
             <a class="sidebar-item @(string.Equals(item.Id, TodoId, StringComparison.Ordinal) ? "active" : "")"
                href="@GetDetailHref(item.Id)">

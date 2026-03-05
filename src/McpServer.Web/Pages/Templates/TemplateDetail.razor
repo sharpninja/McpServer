@@ -9,7 +9,7 @@
 <div class="detail-layout">
     <aside class="detail-sidebar">
         <div class="sidebar-header">Templates</div>
-        @foreach (var item in ListViewModel.Items)
+        @foreach (var item in ListViewModel?.Items ?? [])
         {
             <a class="sidebar-item @(string.Equals(item.Id, TemplateId, StringComparison.Ordinal) ? "active" : "")"
                href="@GetDetailHref(item.Id)">

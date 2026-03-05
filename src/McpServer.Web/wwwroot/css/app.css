@@ -149,8 +149,50 @@ table.Table tbody tr:last-child {
     border: 1px solid var(--borderColor-default, #d0d7de);
 }
 
-/* ── Form field spacing (Primer 21 lacks gap-* on flex) ── */
-.form-group + .form-group,
-.Box-body .d-flex.flex-column > div + div {
-    margin-top: 16px;
+/*
+ * Primer's global *, ::before, ::after { box-sizing: border-box } has specificity
+ * 0,0,0 which Monaco's class-based selectors (0,2,0+) already beat. Do NOT override
+ * all children with content-box as it breaks Monaco's own intentional border-box
+ * rules on .view-line, .cursors-layer > .cursor, etc.
+ *
+ * Only the outer container needs content-box for Monaco's initial size calculation.
+ */
+.monaco-editor-container,
+.monaco-editor-container > .monaco-editor {
+    box-sizing: content-box;
+}
+
+/* Force Monaco's textarea hidden (Primer global resets can leak browser defaults) */
+.monaco-editor .ime-text-area {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    resize: none !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    outline: none !important;
+    z-index: -10 !important;
+}
+
+/* ── Form field spacing (Primer 21 gap-* unreliable on flex) ── */
+.form-group + .form-group {
+    margin-top: 16px !important;
+}
+
+.d-flex.flex-column.gap-2 > * + *,
+.d-flex.flex-column.gap-3 > * + * {
+    margin-top: 16px !important;
+}
+
+.d-flex.flex-wrap.gap-2 > * + *,
+.d-flex.flex-wrap.gap-3 > * + * {
+    margin-left: 16px;
+}
+
+.d-flex.gap-2:not(.flex-column):not(.flex-wrap),
+.d-flex.gap-3:not(.flex-column):not(.flex-wrap) {
+    column-gap: 16px;
 }
