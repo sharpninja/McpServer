@@ -111,8 +111,13 @@
     {
         ViewModel.ApplyMarkdownToEditor();
         await ViewModel.SaveAsync().ConfigureAwait(false);
+        await ListViewModel.LoadAsync().ConfigureAwait(false);
     }
 
-    private async Task DeleteAsync() => await ViewModel.DeleteAsync().ConfigureAwait(false);
+    private async Task DeleteAsync()
+    {
+        await ViewModel.DeleteAsync().ConfigureAwait(false);
+        await ListViewModel.LoadAsync().ConfigureAwait(false);
+    }
 }
 
