@@ -241,11 +241,7 @@ public sealed class McpServerClient
         var uri = new Uri($"{_options.BaseUrl.Scheme}://{_options.BaseUrl.Host}:{Port}/api-key");
         using var response = await _http.GetAsync(uri, cancellationToken).ConfigureAwait(false);
 
-        var content = await response.Content.ReadAsStringAsync(
-#if !NETSTANDARD2_0
-            cancellationToken
-#endif
-        ).ConfigureAwait(false);
+        var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
         if (!response.IsSuccessStatusCode)
             throw new McpServerException(

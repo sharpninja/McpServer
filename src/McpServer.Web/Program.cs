@@ -10,12 +10,12 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.IdentityModel.Tokens;
 
 // When running as a dotnet global tool, wwwroot is next to the assembly, not in CWD.
-var assemblyDir = Path.GetDirectoryName(typeof(Program).Assembly.Location);
-var toolWebRoot = assemblyDir is not null ? Path.Combine(assemblyDir, "wwwroot") : null;
+var assemblyDir = AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar);
+var toolWebRoot = Path.Combine(assemblyDir, "wwwroot");
 var defaultWebRoot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
 
 var options = new WebApplicationOptions { Args = args };
-if (toolWebRoot is not null && Directory.Exists(toolWebRoot) && !Directory.Exists(defaultWebRoot))
+if (Directory.Exists(toolWebRoot) && !Directory.Exists(defaultWebRoot))
 {
     options = new WebApplicationOptions { Args = args, WebRootPath = toolWebRoot };
 }

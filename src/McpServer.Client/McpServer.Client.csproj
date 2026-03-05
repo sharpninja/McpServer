@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net9.0;netstandard2.0</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Configurations>Debug;Release;Staging</Configurations>
@@ -30,11 +29,5 @@
     <PackageReference Include="Microsoft.Extensions.Options" />
     <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
-  </ItemGroup>
-
-  <!-- netstandard2.0 polyfills -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="System.Text.Json" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
   </ItemGroup>
 </Project>

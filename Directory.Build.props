@@ -6,6 +6,8 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- Suppress trim analysis warnings; projects use reflection-based DI, CQRS, and JSON -->
+    <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName.EndsWith('.IntegrationTests'))">

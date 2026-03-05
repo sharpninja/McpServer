@@ -36,6 +36,12 @@
     Additional pack MSBuild property values in KEY=VALUE format.
     Example: -PackProperty "IsPackable=true","PackAsTool=true","ToolCommandName=mcp-web"
 
+.PARAMETER RuntimeIdentifier
+    RID for single-file publish. Defaults to win-x64.
+
+.PARAMETER SkipTrim
+    When set, skips PublishTrimmed (useful if trimming breaks reflection-heavy code).
+
 .EXAMPLE
     .\Update-DotnetTool.ps1
     .\Update-DotnetTool.ps1 -SkipVersionBump
@@ -50,7 +56,9 @@ param(
     [string]$NupkgDir = 'nupkg',
     [string]$PackageVersion,
     [switch]$SkipProcessStop,
-    [string[]]$PackProperty = @()
+    [string[]]$PackProperty = @(),
+    [string]$RuntimeIdentifier = 'win-x64',
+    [switch]$SkipTrim
 )
 
 Set-StrictMode -Version Latest
@@ -133,14 +141,24 @@ Write-Step "4/9  Uninstalling previous version ..."
 dotnet tool uninstall --global $ToolId 2>&1 | Out-Null
 Write-Host "  Uninstalled (or was not installed)." -ForegroundColor DarkGray
 
-# 5. Publish (produces wwwroot with RCL content for tool packaging)
-Write-Step "5/9  Publishing $ToolId (Release) ..."
-& dotnet publish $ResolvedProject -c Release
+# 5. Publish — single-file + trimmed (produces wwwroot with RCL content for tool packaging)
+Write-Step "5/9  Publishing $ToolId (Release, SingleFile, Trimmed) ..."
+$publishArgs = @(
+    'publish', $ResolvedProject,
+    '-c', 'Release',
+    '-r', $RuntimeIdentifier,
+    '/p:PublishSingleFile=true',
+    '/p:SelfContained=true'
+)
+if (-not $SkipTrim) {
+    $publishArgs += '/p:PublishTrimmed=true'
+}
+& dotnet @publishArgs
 if ($LASTEXITCODE -ne 0) { Write-Error "dotnet publish failed (exit code $LASTEXITCODE)" }
 Write-Host "  Publish complete." -ForegroundColor Green
 
 # 6. Verify publish output contains wwwroot
-$publishWwwroot = Join-Path (Split-Path $ResolvedProject) 'bin\Release\net9.0\publish\wwwroot'
+$publishWwwroot = Join-Path (Split-Path $ResolvedProject) "bin\Release\net9.0\$RuntimeIdentifier\publish\wwwroot"
 if (Test-Path $publishWwwroot) {
     $fileCount = (Get-ChildItem $publishWwwroot -Recurse -File).Count
     Write-Host "  Publish wwwroot: $fileCount file(s)" -ForegroundColor Green

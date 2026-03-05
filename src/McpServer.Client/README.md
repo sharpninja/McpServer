@@ -54,7 +54,6 @@ var todos = await client.Todo.QueryAsync();
 | `Tools` | Tool registry search, CRUD, bucket management |
 | `AgentPool` | Pooled agent lifecycle, one-shot queueing, and SSE monitoring |
 
-## Target Frameworks
+## Target Framework
 
 - `net9.0`
-- `netstandard2.0` (for broad compatibility)

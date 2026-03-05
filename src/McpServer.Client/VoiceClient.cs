@@ -59,20 +59,12 @@ public sealed class VoiceClient : McpClientBase
             request,
             cancellationToken).ConfigureAwait(false);
 
-#if NETSTANDARD2_0
-        using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-#else
         using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
-#endif
         using var reader = new System.IO.StreamReader(stream);
 
         while (!cancellationToken.IsCancellationRequested)
         {
-#if NETSTANDARD2_0
-            var line = await reader.ReadLineAsync().ConfigureAwait(false);
-#else
             var line = await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false);
-#endif
             if (line is null)
                 yield break;
 
