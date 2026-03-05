@@ -85,6 +85,7 @@
     private static IEnumerable<IGrouping<string, TodoListItem>> GroupByPriority(
         IEnumerable<TodoListItem> items)
         => items
+            .OrderBy(i => i.Id, StringComparer.OrdinalIgnoreCase)
             .GroupBy(i => i.Priority ?? "low")
             .OrderBy(g => Array.IndexOf(PriorityOrder, g.Key.ToLowerInvariant()) is var idx && idx < 0 ? int.MaxValue : idx);
 

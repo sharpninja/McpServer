@@ -51,14 +51,14 @@ else
                 <PrimerLabel Scheme="@GetPriorityScheme(group.Key)" Text="@group.Key" />
                 <span class="color-fg-muted f5 ml-2">(@group.Count())</span>
             </h3>
-            <PrimerDataTable TItem="TodoListItem" Items="@(new System.Collections.ObjectModel.ObservableCollection<TodoListItem>(group))" ColumnCount="5" Class="Table--full-width">
+            <PrimerDataTable TItem="TodoListItem" Items="@(new System.Collections.ObjectModel.ObservableCollection<TodoListItem>(group))" ColumnCount="5" Class="Table--full-width" style="width:100%; table-layout:fixed;">
                 <HeaderTemplate>
                     <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Section</th>
-                        <th>Status</th>
-                        <th></th>
+                        <th style="width:15%">ID</th>
+                        <th style="width:45%">Title</th>
+                        <th style="width:15%">Section</th>
+                        <th style="width:10%">Status</th>
+                        <th style="width:15%"></th>
                     </tr>
                 </HeaderTemplate>
                 <RowTemplate Context="item">
@@ -122,6 +122,7 @@ else
     private static IEnumerable<IGrouping<string, TodoListItem>> GroupByPriority(
         IEnumerable<TodoListItem> items)
         => items
+            .OrderBy(i => i.Id, StringComparer.OrdinalIgnoreCase)
             .GroupBy(i => i.Priority ?? "low")
             .OrderBy(g => Array.IndexOf(PriorityOrder, g.Key.ToLowerInvariant()) is var idx && idx < 0 ? int.MaxValue : idx);
 
