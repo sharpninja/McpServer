@@ -1,7 +1,10 @@
 # Requirements Matrix (MCP Server)
 
+Traceability policy: see `Requirements-Traceability-Policy.md`.
+
 | Requirement | Status | Source Files |
-|-------------|--------|-------------|
+| --- | --- | --- |
+| FR-SUPPORT-010 | ✅ Complete | ContextController, TodoController, RepoController, SessionLogController, McpServerMcpTools, HybridSearchService, Fts5SearchService, VectorIndexService |
 | FR-MCP-001 | ✅ Complete | IngestionOptions, IOptions |
 | FR-MCP-002 | ✅ Complete | TodoController, TodoService, SqliteTodoService |
 | FR-MCP-003 | ✅ Complete | SessionLogController, SessionLogService |
@@ -30,6 +33,7 @@
 | TR-MCP-ARCH-001 | ✅ Complete | Core infrastructure |
 | TR-MCP-DATA-001–003 | ✅ Complete | Storage and indexing |
 | TR-MCP-CFG-001–002 | ✅ Complete | Configuration |
+| TR-MCP-CFG-003 | ✅ Complete | WorkspaceConfigEntry schema + appsettings.json patch workflow |
 | TR-MCP-INGEST-001–002 | ✅ Complete | Ingestion pipeline |
 | TR-MCP-API-001 | ✅ Complete | REST API |
 | TR-MCP-OPS-001 | ✅ Complete | Operational scripts |
@@ -51,13 +55,13 @@
 | FR-MCP-030 | ✅ Complete | McpServer.Director (Program, DirectorCommands, AuthCommands, InteractiveCommand, McpHttpClient, OidcAuthService, TokenCache, MainScreen, HealthScreen, AgentScreen, TodoScreen, SessionLogScreen, WorkspaceListScreen, WorkspacePolicyScreen, LoginDialog, ViewModelBinder) |
 | FR-MCP-031 | 🔲 Planned | — |
 | FR-MCP-032 | 🔲 Planned | — |
-| FR-MCP-033 | 🔲 Planned | — |
+| FR-MCP-033 | 🔲 Planned | PolicyManagementTool *(planned; tracked by REQ-GAP-001)* |
 | FR-MCP-034 | ✅ Complete | IWorkspaceService, MarkerFileService, WorkspaceModels |
 | FR-MCP-035 | ✅ Complete | MarkerFileService.DefaultPromptTemplate |
-| FR-MCP-036 | 🔲 Planned | — |
+| FR-MCP-036 | 🔲 Planned | AuditedCopilotClient *(planned; tracked by REQ-GAP-001)* |
 | FR-MCP-037 | ✅ Complete | McpServer.Director (Program exec/list-viewmodels), McpServer.Cqrs.Mvvm (IViewModelRegistry) |
 | FR-MCP-038 | ✅ Complete | MarkerFileService.DefaultPromptTemplate |
-| FR-MCP-039 | 🔲 Planned | — |
+| FR-MCP-039 | 🔲 Planned | Ingestion configuration + marker capability sync *(planned; tracked by REQ-GAP-001)* |
 | FR-MCP-040 | ✅ Complete | RequirementsController, RequirementsDocumentService, IRequirementsRepository |
 | FR-MCP-041 | ✅ Complete | RequirementsController (/mcpserver/requirements/generate), RequirementsDocumentService, RequirementsDocumentRenderer |
 | FR-MCP-042 | ✅ Complete | FwhMcpTools (requirements_* tools), RequirementsDocumentService |
@@ -76,7 +80,7 @@
 | TR-MCP-MT-002 | ✅ Complete | WorkspaceResolutionMiddleware, WorkspaceTokenService |
 | TR-MCP-MT-003 | ✅ Complete | McpDbContext (global query filter), all entities (WorkspaceId) |
 | FR-MCP-045 | ✅ Complete | TodoController.MoveAsync, FwhMcpTools.TodoMove, TodoMoveRequest |
-| FR-MCP-046 | 🔲 Planned | VoiceController, VoiceConversationService, VoiceConversationOptions, AgentPoolService *(planned)* |
+| FR-MCP-046 | ✅ Complete | VoiceController, VoiceConversationService, VoiceConversationOptions |
 | FR-MCP-047 | ✅ Complete | DesktopProcessLauncher, NativeMethods |
 | FR-MCP-048 | ✅ Complete | Program.cs (AddYamlFile), NetEscapades.Configuration.Yaml |
 | TR-MCP-TODO-002 | ✅ Complete | TodoController, FwhMcpTools, TodoServiceResolver |
@@ -111,6 +115,7 @@
 | FR-MCP-061 | ✅ Complete | TodoValidator, TodoService, SqliteTodoService, SessionLogIdentifierValidator, SessionLogController, SessionLogService |
 | TR-MCP-DIR-005–008 | ✅ Complete | Endpoint-to-handler parity, ViewModel conventions, RBAC visibility/action mapping, declarative tab registry |
 | TR-MCP-ARCH-002 | 🔲 Planned | DI lifetimes for state ownership, pull-notify flow via INotifyPropertyChanged, ActivatorUtilities remediation audit |
+| TR-MCP-LOG-001 | ✅ Complete | Exception logging policy enforced across catch blocks (LogError/LogWarning) |
 | TR-MCP-LOG-002 | ✅ Complete | TodoValidator, TodoService, SqliteTodoService, SessionLogIdentifierValidator, SessionLogController, SessionLogService |
 | TEST-MCP-074 | ✅ Complete | TodoServiceTests, SqliteTodoServiceTests, SessionLogControllerTests, SessionLogServiceTests, MarkerFileServiceTests |
 | FR-MCP-062 | ✅ Complete | IChangeEventBus, ChannelChangeEventBus, EventStreamController, mutation services/controllers/workspace process manager |
@@ -124,4 +129,4 @@
 | TEST-MCP-077 | ✅ Complete | EventPublishingServiceTests |
 | TEST-MCP-078 | ✅ Complete | EventStreamIntegrationTests |
 | TEST-MCP-079 | ✅ Complete | EventStreamIntegrationTests |
-| TEST-MCP-080 | 🟡 Partial | EventStreamIntegrationTests (filtered positive path verified) |
+| TEST-MCP-080 | ✅ Complete | EventStreamIntegrationTests (positive + non-matching category filter paths verified) |

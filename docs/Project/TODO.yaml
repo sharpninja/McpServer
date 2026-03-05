@@ -827,6 +827,88 @@ mvp-app:
       done: true
     - task: Task 20 - Close out by updating MCP-NAMING-CONVENTIONS-001 implementationTasks/status notes to reference completion evidence and impacted files.
       done: true
+  - id: AUDIT-REQS-001
+    title: Audit Requirements against Project State
+    estimate: 1-2 days
+    done: true
+    description:
+    - Audit requirements for redundancy.
+    - Audit requirements for gaps.
+    - Audit requirements for completion.
+    - Audit code for compliance with requirements.
+    done-summary: Audit completed end-to-end. Findings documented in docs/Project/AUDIT-REQS-001-Report.md. Follow-up remediation is tracked in REMED-REQS-001.
+    remaining: ''
+    technical-details:
+    - Identify requirement hotspots for non-compliance.
+    - Use session logs in addition to as-built code.
+    depends-on:
+    - REMED-REQS-001
+    implementation-tasks:
+    - task: Build requirements inventory from docs/Project (Functional, Technical, Testing, and mapping documents).
+      done: true
+    - task: Build as-built feature inventory from source and current endpoints/commands/components.
+      done: true
+    - task: Map each requirement to implementation evidence (file, symbol, endpoint, test), and flag missing links.
+      done: true
+    - task: 'Detect redundancy: identify duplicate/overlapping FR/TR/TEST entries and propose consolidation.'
+      done: true
+    - task: 'Detect gaps: identify implemented behavior without requirements and requirements without implementation.'
+      done: true
+    - task: Assess completion status per requirement (done, partial, not started, blocked) with rationale.
+      done: true
+    - task: Run compliance hotspot audit for high-risk areas and capture findings severity (blocker/warning/info).
+      done: true
+    - task: Cross-check session logs for decisions/changes that impact requirement intent or status.
+      done: true
+    - task: Produce audit report with actionable remediation list and prioritized follow-up TODOs.
+      done: true
+    - task: Update requirements matrix and TODOs to reflect approved remediation decisions.
+      done: true
+  - id: REMED-REQS-001
+    title: Requirements Audit Remediation Plan (from AUDIT-REQS-001)
+    estimate: 2-4 days
+    done: true
+    description:
+    - Reconcile requirement artifacts with as-built implementation and close audit findings from AUDIT-REQS-001.
+    - Prioritize status alignment, mapping completeness, DI/SSOT remediation sequencing, and test traceability completion.
+    done-summary: 'Implemented remediation scope: DI TODO-service factory abstraction added, requirement docs/matrix/mapping reconciled, missing FR mappings added, TEST-MCP-080 status updated with new negative filter test coverage, traceability policy + validator script added, and planned-gap linkage todo REQ-GAP-001 created.'
+    remaining: Follow-on delivery for planned requirements FR-MCP-033/036/039 is tracked in REQ-GAP-001.
+    technical-details:
+    - 'Source audit report: docs/Project/AUDIT-REQS-001-Report.md'
+    - 'Targets FR/TR areas: FR-MCP-033, FR-MCP-036, FR-MCP-039, FR-MCP-046, FR-MCP-059, TR-MCP-ARCH-002, TEST-MCP-080.'
+    depends-on:
+    - REQ-GAP-001
+    implementation-tasks:
+    - task: Align FR/TR narrative statuses and matrix statuses for voice/agent-pool and related completed features.
+      done: true
+    - task: Add missing mapping coverage for FR-SUPPORT-010 and FR-LOC-001 (or explicitly mark rationale if intentionally unmapped).
+      done: true
+    - task: Normalize Requirements-Matrix row strategy for machine traceability (explicit per-ID rows or documented range policy + validator).
+      done: true
+    - task: Create/refresh TODO linkage for planned requirements lacking implementation evidence (FR-MCP-033/036/039).
+      done: true
+    - task: Implement DI TODO-service factory remediation plan for FR-MCP-059/TR-MCP-ARCH-002 (eliminate runtime non-DI construction patterns).
+      done: true
+    - task: Expand tests to close TEST-MCP-080 partial status and link exact test evidence in matrix.
+      done: true
+    - task: Publish final requirements reconciliation changelog and update docs/Project matrices/mappings.
+      done: true
+  - id: REQ-GAP-001
+    title: Implement planned requirement gaps (FR-MCP-033/036/039)
+    estimate: 3-5 days
+    done: false
+    description:
+    - Deliver planned requirement gaps for FR-MCP-033 (policy management), FR-MCP-036 (audited copilot client), and FR-MCP-039 (context indexing capability contract).
+    - Produce implementation + tests + requirements status updates for each requirement.
+    implementation-tasks:
+    - task: Implement PolicyManagementTool and supporting endpoint/workspace mutation flow for FR-MCP-033/TR-MCP-POL-001.
+      done: false
+    - task: Implement AuditedCopilotClient decorator and DI wiring for FR-MCP-036/TR-MCP-AUDIT-001.
+      done: false
+    - task: Implement context indexing capability artifacts for FR-MCP-039/TR-MCP-CTX-001 and align marker prompt capability section.
+      done: false
+    - task: Add/extend tests and update Requirements-Matrix/TR-per-FR statuses after implementation.
+      done: false
 mvp-mcp:
   high-priority:
   - id: MVP-MCP-002
@@ -1362,13 +1444,37 @@ infrastructure:
     - task: 'Phase 7.4: Requirements - Update FR-MCP-031 with implementation details. Create TR-MCP-WEB-001 (Blazor Server + Primer CSS), TR-MCP-WEB-002 (OIDC integration), TR-MCP-WEB-003 (SSE real-time), TR-MCP-WEB-004 (API adapter pattern). Update TODO.yaml.'
       done: false
   - id: github-integration
-    title: '[NEED PLAN] Github Integration'
-    note: '"Audit 2026-03-01. Core GitHub integration is ~85% complete via gh CLI: 13 REST endpoints on GitHubController (issue CRUD, close/reopen, comments, labels, PRs, bi-directional sync), GitHubCliService (full gh CLI wrapper), IssueTodoSyncService (ISSUE-{n} mapping, label-to-priority). REMAINING GAP: OAuth/Keycloak IdP integration not implemented - currently relies on local gh CLI auth. Needs: GitHub OAuth app registration, Keycloak GitHub IdP setup, per-workspace OAuth token storage."'
+    title: '[NEEDS PLAN] GitHub Integration'
+    estimate: 2-3 weeks
+    note: '\\\"Audit 2026-03-01. Core GitHub integration is ~85% complete via gh CLI: 13 REST endpoints on GitHubController (issue CRUD, close/reopen, comments, labels, PRs, bi-directional sync), GitHubCliService (full gh CLI wrapper), IssueTodoSyncService (ISSUE-{n} mapping, label-to-priority). REMAINING GAP: OAuth/Keycloak IdP integration not implemented - currently relies on local gh CLI auth. Needs: GitHub OAuth app registration, Keycloak GitHub IdP setup, per-workspace OAuth token storage.\\\"'
     done: false
     description:
-    - Enhance GitHub integration capabilities for McpServer
-    - Support GitHub as Keycloak Identity Provider for user authentication
-    - Integrate with GitHub OAuth for agent workspace management and PR workflows
+    - Enhance GitHub integration capabilities for McpServer.
+    - Support GitHub as Keycloak Identity Provider for user authentication.
+    - Integrate GitHub OAuth for agent workspace management and PR workflows.
+    - Add GitHub Actions monitoring and control features with auditable operations.
+    remaining: Planned. Next step is Phase 1 baseline audit and config contract draft.
+    technical-details:
+    - 'Current state: gh CLI-based integration is functional; OAuth/Keycloak identity integration is the key missing capability.'
+    - 'Security requirements: encrypted token storage, token lifecycle management, and explicit fallback behavior.'
+    - 'Delivery strategy: phase implementation to preserve existing issue/PR sync behavior while introducing OAuth-first auth.'
+    implementation-tasks:
+    - task: 'Phase 1: Baseline audit and contract alignment (verify existing 13 GitHub endpoints, gh wrapper behavior, and sync semantics).'
+      done: false
+    - task: 'Phase 2: GitHub OAuth app setup (create app, callback URLs, scopes, and environment-driven config model).'
+      done: false
+    - task: 'Phase 3: Keycloak GitHub IdP integration (realm config, broker mappings, login flow, and token exchange).'
+      done: false
+    - task: 'Phase 4: Workspace token persistence (secure per-workspace token storage, encryption at rest, rotation, and revoke support).'
+      done: false
+    - task: 'Phase 5: Authenticated GitHub service path (prefer OAuth token flow, keep gh CLI fallback with explicit policy and telemetry).'
+      done: false
+    - task: 'Phase 6: Actions monitoring/control API (workflow runs list/detail/rerun/cancel mapped to MCP endpoints and client models).'
+      done: false
+    - task: 'Phase 7: End-to-end tests (controller, service, auth integration, and issue/todo sync regression tests).'
+      done: false
+    - task: 'Phase 8: Documentation and rollout (operator setup guide, required secrets, migration steps, and troubleshooting).'
+      done: false
   medium-priority:
   - id: do-not-speak-tables
     title: '[NEED PLAN] Do Not Speak Tables'
@@ -1378,7 +1484,8 @@ Architecture:
   - id: audit-di-ssot
     title: '[NEED PLAN] Audit ALL code for Single Source of Truth adherence and DI data exposure with INotifyPropertyChanged'
     note: '"Audit 2026-03-01. ViewModels use ObservableObject (CommunityToolkit.Mvvm) with [ObservableProperty] for INotifyPropertyChanged. WorkspaceContextViewModel is a singleton with mutable ActiveWorkspacePath. 7 implementation tasks all pending: inventory services outside DI, data sources not in DI, push-based patterns, verify INotifyPropertyChanged, refactor violations, update tests, document pattern. Status audit 2026-03-01T23:25:25.843Z: TODO metadata reviewed; implementation progress remains 0/7 complete. Blockers: no explicit dependency blockers recorded, but full-codebase inventory/refactor effort remains outstanding. Next steps: execute the 7 implementation tasks in order with DI registration and INotifyPropertyChanged verification first. Dependencies: none declared in DependsOn."'
-    done: false
+    done: true
+    completed: 2026-03-05T13:39:50.7473518Z
     description:
     - Audit the entire codebase to ensure every data source follows the Single Source of Truth principle.
     - All data sources must be registered in DI as singletons or scoped services.
@@ -1386,6 +1493,8 @@ Architecture:
     - Race conditions are solved by DI, not by manual synchronization or fire-and-forget patterns.
     - Identify and remediate any remaining ActivatorUtilities.CreateInstance patterns for stateful services.
     - Verify all observable state uses INotifyPropertyChanged for change notification.
+    done-summary: 'Completion audit verified DI/SSOT remediation for TODO service construction paths: Program.cs and McpStdioHost now resolve ITodoService via ITodoServiceFactory, TodoServiceResolver uses factory-owned workspace creation, and validation passed via build plus targeted resolver tests.'
+    remaining: ''
     technical-details:
     - 'Directive: DI is the solution to race conditions. Never push data. Notify services that data is available/changed and let them pull for single source of truth, which must live in DI.'
     - 'Example fix: TunnelRegistry refactored from manual Register() calls to constructor-injected IEnumerable<ITunnelProvider> (commit 0c307a9).'
@@ -1395,19 +1504,19 @@ Architecture:
     - plan-audit-di-ssot-execution
     implementation-tasks:
     - task: Inventory all services created via ActivatorUtilities or manual new() outside DI
-      done: false
+      done: true
     - task: Inventory all data sources not registered in DI container
-      done: false
+      done: true
     - task: Inventory all push-based data patterns (direct property sets, event args with data payloads)
-      done: false
+      done: true
     - task: Verify all observable state implements INotifyPropertyChanged
-      done: false
+      done: true
     - task: Refactor identified violations to use DI + notification pattern
-      done: false
+      done: true
     - task: Update tests to use DI injection instead of manual service creation
-      done: false
+      done: true
     - task: Document the SSOT/DI pattern in Technical-Requirements.md
-      done: false
+      done: true
   - id: web-ui-cqrs-mvvm-compliance-audit
     title: '[DONE] Web UI CQRS + MVVM compliance closure (delta audit)'
     estimate: 3-5d
@@ -1759,54 +1868,67 @@ Architecture:
     - task: Run validation with dotnet build src\\McpServer.Support.Mcp -c Debug and targeted tests for Support.Mcp, Client, and Director changes
       done: true
   - id: plan-audit-di-ssot-execution
-    title: '[READY] Execute full-code DI + SSOT + INotifyPropertyChanged compliance audit'
+    title: '[REFRESHED] Execute full-code DI + SSOT + INotifyPropertyChanged compliance audit (as-built)'
+    estimate: 1-2 weeks
     note: Plan generated 2026-03-03 from live code inventory (Program.cs, McpStdioHost.cs, TodoServiceResolver.cs, WorkspaceContextViewModel, AgentPoolService, UI.Core viewmodels/tests).
+    done: true
+    completed: 2026-03-05T03:22:48.3859900Z
+    description:
+    - Execute the DI + SSOT + INotifyPropertyChanged compliance audit against current as-built code, then remediate confirmed runtime violations.
+    - 'Primary scope: McpServer.Support.Mcp composition roots and TODO service resolution paths; secondary scope: UI.Core observable state surfaces.'
+    - 'Goal: DI-owned mutable state, notify-then-pull state propagation, and test-backed regression safety.'
+    done-summary: Implemented DI-owned ITodoServiceFactory, replaced ActivatorUtilities/new TODO service creation in Program/McpStdioHost/TodoServiceResolver, updated resolver-dependent tests, and passed build plus targeted test suite.
+    remaining: ''
+    technical-details:
+    - 'As-built refresh (2026-03-05): Program.cs and McpStdioHost.cs still select ITodoService via ActivatorUtilities.CreateInstance<TodoService/SqliteTodoService>.'
+    - 'As-built refresh (2026-03-05): Services/TodoServiceResolver.cs still manually instantiates TodoService and SqliteTodoService via new for workspace-specific paths.'
+    - 'As-built refresh (2026-03-05): UI WorkspaceContextViewModel remains ObservableObject with [ObservableProperty] ActiveWorkspacePath; baseline observable pattern is present.'
+    - 'Audit conclusion: plan is valid but must be rebased onto current code; remediation should prioritize ITodoService composition and TodoServiceResolver factory ownership.'
+    implementation-tasks:
+    - task: 'As-built refresh complete: re-validated key hotspots (Program.cs, McpStdioHost.cs, TodoServiceResolver.cs, WorkspaceContextViewModel).'
+      done: true
+    - task: Create DI registration matrix for mutable/stateful services (lifetime, owner, alternate construction paths).
+      done: true
+    - task: Design and implement ITodoService factory abstraction to replace ActivatorUtilities.CreateInstance in composition roots.
+      done: true
+    - task: Refactor TodoServiceResolver to remove manual new service creation using DI-owned typed factories.
+      done: true
+    - task: Add/extend tests for YAML and SQLITE provider parity, workspace switching behavior, and resolver cache/disposal semantics.
+      done: true
+    - task: Run compliance gate build/tests and publish final findings with blocker/warning/accepted classifications.
+      done: true
+  - id: ARCH-STORAGE-001
+    title: All Storage code should be in a Library
     done: false
     description:
-    - Deliver a full-repo compliance audit and remediation plan ensuring all mutable state has a single DI-owned source of truth.
-    - Eliminate stateful service creation outside DI, including ActivatorUtilities.CreateInstance and manual new() in runtime code paths.
-    - Enforce pull-based state consumption where producers only signal changes (INotifyPropertyChanged or domain notifications) and consumers re-read shared state.
-    - Audit spans server runtime (McpServer.Support.Mcp), UI core viewmodels, Director integration wiring, and supporting tests/docs.
-    technical-details:
-    - 'Primary registration surfaces: src/McpServer.Support.Mcp/Program.cs and src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs.'
-    - 'Known hot spots: ITodoService factory lambdas using ActivatorUtilities.CreateInstance (Program.cs lines ~267-277 and McpStdioHost.cs lines ~101-111).'
-    - 'Known manual instantiation hot spot: TodoServiceResolver.CreateForWorkspace(string workspacePath, WorkspaceContext ctx) creates TodoService/SqliteTodoService directly.'
-    - 'State container surfaces: src/McpServer.Support.Mcp/Services/WorkspaceContext.cs and src/McpServer.UI.Core/ViewModels/WorkspaceContextViewModel.cs.'
-    - 'Push-notification/event surfaces: src/McpServer.Support.Mcp/Notifications/*.cs, AgentPoolService publish/queue flows, EventStreamViewModel stream subscription lifecycle.'
-    - 'Observable-state baseline: UI.Core ViewModels inherit ObservableObject/Area*ViewModelBase and use [ObservableProperty] for PropertyChanged semantics.'
-    - Concurrency/race review targets include fire-and-forget call sites (_ = TryDispatchAsync, _ = InterruptAsync, _ = ProduceStreamingTurnAsync), lock-based gates, and cancellation ownership.
-    - 'DI exposure rule: shared mutable state must live in DI services with explicit lifetime; views/consumers read via injected dependencies and react to change notifications.'
-    - Testing updates must cover service registration, workspace switching behavior, dependency validation integrity, and no regression in TODO CRUD semantics.
-    - Documentation output must add/adjust technical requirements in docs/Project/Technical-Requirements.md and map to impacted FR/TR entries.
-    implementation-tasks:
-    - task: 'Task 01 (Inventory bootstrap): create audit inventory document in docs/context (or equivalent tracked artifact) listing scan commands and code owners; include rg patterns for ActivatorUtilities.CreateInstance, direct new Service/Provider/Registry/Manager, Task.Run fire-and-forget, and PropertyChanged subscriptions. Integration points: Program.cs, McpStdioHost.cs, TodoServiceResolver.cs, AgentPoolService.cs, VoiceConversationService.cs. Validation: reproduce inventory deterministically in one command session.'
-      done: false
-    - task: 'Task 02 (DI registration map): extract all registrations from Program.cs and McpStdioHost.cs into a normalized matrix (service -> impl -> lifetime -> stateful yes/no -> source file line range). Add explicit entries for ITodoService, TodoServiceResolver, WorkspaceContext, TunnelRegistry, IWorkspaceProcessManager. Test scenario: ensure each mutable singleton/scoped service has a single registration path and no hidden alternate constructor path.'
-      done: false
-    - task: 'Task 03 (Service creation violation scan): inspect runtime code for stateful services instantiated outside DI (exclude test constructors and immutable value objects). Start with TodoServiceResolver.CreateForWorkspace and controller-level new WorkspaceContext in TodoController.MoveAsync. Produce categorized findings: blocker, warning, acceptable factory boundary. Integration points: Services/TodoServiceResolver.cs, Controllers/TodoController.cs, Program.cs, McpStdioHost.cs.'
-      done: false
-    - task: 'Task 04 (SSOT data-source catalog): enumerate mutable state owners and access paths across server and UI layers. Required classes: WorkspaceContext, WorkspaceContextViewModel, AgentPoolService queue state, TunnelRegistry entries, VoiceConversationService session state, EventStreamViewModel retained Items. For each source, capture writer methods and reader methods with signatures; identify duplicate/shadow state risks.'
-      done: false
-    - task: 'Task 05 (Push-vs-pull pattern audit): inspect data propagation to ensure producers notify and consumers pull. Review PropertyChanged subscriptions in UI.Core viewmodels (TodoListViewModel, SessionLogListViewModel, EventStreamViewModel, WorkspacePolicyViewModel, etc.) and server event bus usage (IChangeEventBus.PublishAsync/SubscribeAsync). Flag payload-heavy event patterns where full mutable data is pushed instead of IDs/keys.'
-      done: false
-    - task: 'Task 06 (INotifyPropertyChanged compliance verification): build a verifiable inventory of observable classes in src/McpServer.UI.Core/ViewModels and src/McpServer.VsExtension.McpTodo.Vsix/ViewModels. Confirm each mutable bindable property is generated via [ObservableProperty] or equivalent explicit PropertyChanged implementation. Add/extend reflection-based tests in tests/McpServer.UI.Core.Tests (e.g., AreaViewModelBehaviorTests or a new ObservableComplianceTests) to fail on non-notifying mutable public properties.'
-      done: false
-    - task: 'Task 07 (Refactor design spec): write concrete refactor design for each confirmed violation before coding, including target interfaces, constructor signatures, and lifetime decisions. Minimum required specs: replace ITodoService ActivatorUtilities factory with DI-resolved strategy abstraction; replace TodoServiceResolver manual new with injected factory abstractions; preserve workspace-specific file/db path behavior. Include rollback plan and migration safety notes.'
-      done: false
-    - task: 'Task 08 (Implement DI strategy for TODO storage): introduce/modify abstractions so YAML/SQLite TODO service selection happens via DI-registered strategy/factory service, not runtime ActivatorUtilities.CreateInstance. Target files: Program.cs, McpStdioHost.cs, Services/ITodoService.cs, Services/TodoServiceResolver.cs (and any new factory interface file). Required method signatures in plan: ITodoStoreFactory.CreateForPrimary(), ITodoStoreFactory.CreateForWorkspace(WorkspaceContext ctx) or equivalent.'
-      done: false
-    - task: 'Task 09 (Implement workspace-scoped service creation fix): remove direct new TodoService/new SqliteTodoService from TodoServiceResolver by injecting typed factories that accept workspace context/path parameters while still owned by DI. Add unit tests in tests/McpServer.Support.Mcp.Tests (new TodoServiceResolverTests or extension of existing helper tests) verifying workspace-specific service reuse, disposal behavior, and parity with prior semantics.'
-      done: false
-    - task: 'Task 10 (Race-condition hardening to DI ownership): audit and remediate fire-and-forget + lock coordination hotspots where shared state may bypass DI synchronization contracts (AgentPoolService and VoiceConversationService first). Ensure cancellation/dispatch lifecycles are explicit, observable state is only mutated by owning DI service, and externally visible consumers pull latest state after notifications. Add targeted tests for queue cancel/interrupt and streaming lifecycle transitions.'
-      done: false
-    - task: 'Task 11 (Controller/API integration validation): verify TodoController behavior remains stable after DI factory refactors for Create/Update/Move workflows, including dependency validation and workspace routing. Extend tests under tests/McpServer.Support.Mcp.Tests/Controllers (TodoControllerTests, MultiTenantIntegrationTests, TodoLifecycleIntegrationTests) for both YAML and SQLite storage providers where feasible.'
-      done: false
-    - task: 'Task 12 (UI integration validation): verify WorkspaceContextViewModel singleton behavior remains SSOT-compliant and all dependent viewmodels refresh by PropertyChanged without direct data push from views. Add/extend tests in tests/McpServer.UI.Core.Tests/ViewModels (AreaViewModelBehaviorTests, VoiceViewModelIntegrationTests) to assert workspace switch rebind paths and no shadow copies of workspace path state.'
-      done: false
-    - task: 'Task 13 (Documentation + traceability): update docs/Project/Technical-Requirements.md with explicit SSOT/DI/INotify policy requirement(s), update mapping docs if new TR IDs are introduced, and ensure affected code XML docs reference relevant TR IDs. Include concrete anti-pattern examples (manual new stateful service, payload push) and approved pattern examples (DI-owned state + notification + pull).'
-      done: false
-    - task: 'Task 14 (Final compliance gate): run required builds/tests and produce final audit report checklist proving completion of all findings. Minimum commands: dotnet build src\McpServer.Support.Mcp -c Debug; dotnet build src\McpServer.Client -c Debug; dotnet test tests\McpServer.Support.Mcp.Tests -c Debug; dotnet test tests\McpServer.Client.Tests -c Debug; run targeted UI.Core tests impacted by observable/DI changes. Mark audit-di-ssot done only after zero unresolved blocker findings.'
-      done: false
+    - Extract all storage-related code into a dedicated library project.
+    - Storage abstractions, implementations, and persistence logic should live in a reusable library rather than being embedded in application projects.
+  - id: ARCH-SERVICES-001
+    title: All Services and Models should be in a Library
+    done: false
+    description:
+    - Extract all services and domain models into a dedicated library project.
+    - Business logic, domain models, and service implementations should live in a reusable library rather than in McpServer.Support.Mcp.
+    depends-on:
+    - ARCH-STORAGE-001
+  - id: ARCH-SUPPORT-001
+    title: McpServer.Support.Mcp should contain only controllers and MCP Framework code
+    done: false
+    description:
+    - Slim McpServer.Support.Mcp to only controllers and MCP Framework-specific code.
+    - 'After Storage, Services, and Models are extracted to libraries, Support.Mcp should host only: REST controllers, MCP transport/middleware, and framework-specific wiring.'
+    depends-on:
+    - ARCH-STORAGE-001
+    - ARCH-SERVICES-001
+    - ARCH-GRAPHRAG-001
+  - id: ARCH-GRAPHRAG-001
+    title: GraphRAG integration should be in a separate Library with CQRS Handlers
+    done: false
+    description:
+    - Extract GraphRAG integration into a dedicated library project.
+    - Wrap GraphRAG operations with CQRS handlers (commands/queries) for clear separation of concerns and consistent patterns with the rest of the codebase.
+    depends-on:
+    - ARCH-SERVICES-001
   medium-priority:
   - id: PLAN-WEBUI-001
     title: AgentList web parity integration

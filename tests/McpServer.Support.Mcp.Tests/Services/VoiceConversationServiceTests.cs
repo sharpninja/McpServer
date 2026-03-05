@@ -1,6 +1,5 @@
 using McpServer.Common.Copilot;
 using McpServer.Support.Mcp.Ingestion;
-using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -104,12 +103,13 @@ public sealed class VoiceConversationServiceTests
 
     private static WorkspaceServiceAccessor CreateWorkspaceAccessor()
     {
+        var todoService = Substitute.For<ITodoService>();
+        var todoFactory = Substitute.For<ITodoServiceFactory>();
+        todoFactory.CreateForWorkspace(Arg.Any<string>(), Arg.Any<WorkspaceContext>()).Returns(todoService);
         var resolver = new TodoServiceResolver(
-            Substitute.For<ITodoService>(),
+            todoService,
             Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = Environment.CurrentDirectory }),
-            Microsoft.Extensions.Options.Options.Create(new TodoStorageOptions { Provider = "yaml" }),
-            Substitute.For<IWriteAuditLog>(),
-            NullLoggerFactory.Instance);
+            todoFactory);
 
         return new WorkspaceServiceAccessor(
             resolver,

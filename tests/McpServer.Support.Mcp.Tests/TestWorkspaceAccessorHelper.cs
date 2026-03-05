@@ -1,9 +1,6 @@
 using McpServer.Support.Mcp.Ingestion;
-using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using NSubstitute;
 
 namespace McpServer.Support.Mcp.Tests;
@@ -18,11 +15,10 @@ internal static class TestWorkspaceAccessorHelper
     public static WorkspaceServiceAccessor Create(ITodoService todoService, string? repoRoot = null)
     {
         var ingestionOptions = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = repoRoot ?? "." });
-        var storageOptions = Microsoft.Extensions.Options.Options.Create(new TodoStorageOptions { Provider = "yaml" });
-        var auditLog = Substitute.For<IWriteAuditLog>();
-        var loggerFactory = NullLoggerFactory.Instance;
+        var todoFactory = Substitute.For<ITodoServiceFactory>();
+        todoFactory.CreateForWorkspace(Arg.Any<string>(), Arg.Any<WorkspaceContext>()).Returns(todoService);
 
-        var resolver = new TodoServiceResolver(todoService, ingestionOptions, storageOptions, auditLog, loggerFactory);
+        var resolver = new TodoServiceResolver(todoService, ingestionOptions, todoFactory);
 
         var httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         httpContextAccessor.HttpContext.Returns((HttpContext?)null);

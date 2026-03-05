@@ -99,18 +99,8 @@ public static class McpStdioHost
         builder.Services.AddSingleton<Chunker>();
         builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
         builder.Services.AddSingleton<IGitHubCliService, GitHubCliService>();
-        builder.Services.AddSingleton<ITodoService>(sp =>
-        {
-            var provider = (sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<TodoStorageOptions>>().Value.Provider ?? "yaml")
-                .Trim()
-                .ToUpperInvariant();
-
-            return provider switch
-            {
-                "SQLITE" => ActivatorUtilities.CreateInstance<SqliteTodoService>(sp),
-                _ => ActivatorUtilities.CreateInstance<TodoService>(sp),
-            };
-        });
+        builder.Services.AddSingleton<ITodoServiceFactory, TodoServiceFactory>();
+        builder.Services.AddSingleton<ITodoService>(sp => sp.GetRequiredService<ITodoServiceFactory>().CreatePrimary());
         builder.Services.AddSingleton<TodoServiceResolver>();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSingleton<WorkspaceServiceAccessor>();

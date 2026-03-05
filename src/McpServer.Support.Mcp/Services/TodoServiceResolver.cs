@@ -1,7 +1,5 @@
 using System.Collections.Concurrent;
 using McpServer.Support.Mcp.Ingestion;
-using McpServer.Support.Mcp.Options;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Services;
@@ -15,27 +13,20 @@ public sealed class TodoServiceResolver : IDisposable
 {
     private readonly ConcurrentDictionary<string, ITodoService> _cache = new(StringComparer.OrdinalIgnoreCase);
     private readonly ITodoService _primaryService;
+    private readonly ITodoServiceFactory _todoServiceFactory;
     private readonly string _primaryWorkspacePath;
-    private readonly string _storageProvider;
-    private readonly IWriteAuditLog _auditLog;
-    private readonly ILoggerFactory _loggerFactory;
 
     /// <summary>Initializes a new instance of the <see cref="TodoServiceResolver"/> class.</summary>
-    public TodoServiceResolver(
+    internal TodoServiceResolver(
         ITodoService primaryService,
         IOptions<IngestionOptions> ingestionOptions,
-        IOptions<TodoStorageOptions> storageOptions,
-        IWriteAuditLog auditLog,
-        ILoggerFactory loggerFactory)
+        ITodoServiceFactory todoServiceFactory)
     {
         _primaryService = primaryService ?? throw new ArgumentNullException(nameof(primaryService));
         ArgumentNullException.ThrowIfNull(ingestionOptions);
-        ArgumentNullException.ThrowIfNull(storageOptions);
-        _auditLog = auditLog ?? throw new ArgumentNullException(nameof(auditLog));
-        _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+        _todoServiceFactory = todoServiceFactory ?? throw new ArgumentNullException(nameof(todoServiceFactory));
 
         _primaryWorkspacePath = Path.GetFullPath(ingestionOptions.Value.RepoRoot ?? ".");
-        _storageProvider = (storageOptions.Value.Provider ?? "yaml").Trim().ToUpperInvariant();
     }
 
     /// <summary>
@@ -68,16 +59,6 @@ public sealed class TodoServiceResolver : IDisposable
 
     private ITodoService CreateForWorkspace(string workspacePath, WorkspaceContext ctx)
     {
-        if (_storageProvider == "SQLITE")
-        {
-            var dataDir = ctx.DataDirectory ?? workspacePath;
-            var dataSource = Path.GetFullPath(Path.Combine(dataDir, "mcp.db"));
-            return new SqliteTodoService(dataSource, _auditLog, _loggerFactory.CreateLogger<SqliteTodoService>());
-        }
-
-        var todoRelPath = ctx.TodoFilePath ?? "docs/Project/TODO.yaml";
-        var todoFullPath = Path.GetFullPath(
-            Path.IsPathRooted(todoRelPath) ? todoRelPath : Path.Combine(workspacePath, todoRelPath));
-        return new TodoService(todoFullPath, _auditLog, _loggerFactory.CreateLogger<TodoService>());
+        return _todoServiceFactory.CreateForWorkspace(workspacePath, ctx);
     }
 }
