@@ -1,12 +1,15 @@
 using System.Diagnostics;
 using McpServer.Web;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using NetEscapades.Configuration.Yaml;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddYamlFile("appsettings.yaml", optional: true, reloadOnChange: true);
+builder.Configuration.AddYamlFile($"appsettings.{builder.Environment.EnvironmentName}.yaml", optional: true, reloadOnChange: true);
 var startupStopwatch = Stopwatch.StartNew();
 using var bootstrapLoggerFactory = LoggerFactory.Create(static logging =>
 {

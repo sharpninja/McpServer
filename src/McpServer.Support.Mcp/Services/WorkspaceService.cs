@@ -3,13 +3,15 @@ using System.Text.Json.Nodes;
 using McpServer.Support.Mcp.Notifications;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// FR-MCP-009 / TR-MCP-WS-002: Workspace CRUD backed by <c>appsettings.json</c>.
-/// Workspaces are stored as an array at <c>Mcp:Workspaces</c> and persisted to
-/// <c>appsettings.json</c> in the content root on every mutation.
+/// FR-MCP-009 / TR-MCP-WS-002: Workspace CRUD backed by <c>appsettings.json</c> or <c>appsettings.yaml</c>.
+/// Workspaces are stored at <c>Mcp:Workspaces</c> and persisted to the appsettings file in the content root.
+/// Prefers <c>appsettings.yaml</c> when present.
 /// </summary>
 public sealed class WorkspaceService : IWorkspaceService
 {
@@ -216,14 +218,45 @@ public sealed class WorkspaceService : IWorkspaceService
     private async Task WriteAllAsync(List<WorkspaceConfigEntry> workspaces, CancellationToken ct)
     {
         var path = ResolveAppsettingsPath();
-        var jsonText = await File.ReadAllTextAsync(path, ct).ConfigureAwait(false);
-        var doc = JsonNode.Parse(jsonText, new JsonNodeOptions { PropertyNameCaseInsensitive = true })!;
-        var mcp = doc["Mcp"] as JsonObject ?? new JsonObject();
-        mcp["Workspaces"] = JsonSerializer.SerializeToNode(workspaces, s_jsonOptions);
-        doc["Mcp"] = mcp;
-        await File.WriteAllTextAsync(path, doc.ToJsonString(s_jsonOptions), ct).ConfigureAwait(false);
+        if (path.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
+        {
+            await WriteAllYamlAsync(path, workspaces, ct).ConfigureAwait(false);
+        }
+        else
+        {
+            var jsonText = await File.ReadAllTextAsync(path, ct).ConfigureAwait(false);
+            var doc = JsonNode.Parse(jsonText, new JsonNodeOptions { PropertyNameCaseInsensitive = true })!;
+            var mcp = doc["Mcp"] as JsonObject ?? new JsonObject();
+            mcp["Workspaces"] = JsonSerializer.SerializeToNode(workspaces, s_jsonOptions);
+            doc["Mcp"] = mcp;
+            await File.WriteAllTextAsync(path, doc.ToJsonString(s_jsonOptions), ct).ConfigureAwait(false);
+        }
+
         if (_configuration is IConfigurationRoot root)
             root.Reload();
+    }
+
+    private static async Task WriteAllYamlAsync(string path, List<WorkspaceConfigEntry> workspaces, CancellationToken ct)
+    {
+        var yamlText = await File.ReadAllTextAsync(path, ct).ConfigureAwait(false);
+        var deserializer = new DeserializerBuilder()
+            .WithNamingConvention(NullNamingConvention.Instance)
+            .IgnoreUnmatchedProperties()
+            .Build();
+        var serializer = new SerializerBuilder()
+            .WithNamingConvention(NullNamingConvention.Instance)
+            .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
+            .Build();
+
+        var data = deserializer.Deserialize<Dictionary<string, object>>(yamlText);
+        if (!data.TryGetValue("Mcp", out var mcpObj) || mcpObj is not IDictionary<object, object> mcpDict)
+        {
+            data["Mcp"] = mcpDict = new Dictionary<object, object>();
+        }
+
+        mcpDict["Workspaces"] = workspaces;
+        var output = serializer.Serialize(data);
+        await File.WriteAllTextAsync(path, output, ct).ConfigureAwait(false);
     }
 
     private static readonly JsonSerializerOptions s_jsonOptions = new()
@@ -233,19 +266,27 @@ public sealed class WorkspaceService : IWorkspaceService
     };
 
     /// <summary>
-    /// Resolves the path to <c>appsettings.json</c>, falling back to the application base directory
-    /// when the file does not exist under <see cref="IHostEnvironment.ContentRootPath"/>
-    /// (which may point to a workspace root rather than the install directory).
+    /// Resolves the path to <c>appsettings.yaml</c> or <c>appsettings.json</c>, preferring YAML when present.
+    /// Falls back to the application base directory when the file does not exist under the content root.
     /// </summary>
     internal string ResolveAppsettingsPath()
     {
-        var fromContentRoot = Path.Combine(_env.ContentRootPath, "appsettings.json");
-        if (File.Exists(fromContentRoot)) return fromContentRoot;
+        var contentRoot = _env.ContentRootPath;
+        var baseDir = AppContext.BaseDirectory;
 
-        var fromBaseDir = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
-        if (File.Exists(fromBaseDir)) return fromBaseDir;
+        var yamlContentRoot = Path.Combine(contentRoot, "appsettings.yaml");
+        if (File.Exists(yamlContentRoot)) return yamlContentRoot;
 
-        return fromContentRoot; // fallback — will throw a clear error on read
+        var yamlBaseDir = Path.Combine(baseDir, "appsettings.yaml");
+        if (File.Exists(yamlBaseDir)) return yamlBaseDir;
+
+        var jsonContentRoot = Path.Combine(contentRoot, "appsettings.json");
+        if (File.Exists(jsonContentRoot)) return jsonContentRoot;
+
+        var jsonBaseDir = Path.Combine(baseDir, "appsettings.json");
+        if (File.Exists(jsonBaseDir)) return jsonBaseDir;
+
+        return jsonContentRoot; // fallback — will throw a clear error on read
     }
 
     private static string DeriveNameFromPath(string path)

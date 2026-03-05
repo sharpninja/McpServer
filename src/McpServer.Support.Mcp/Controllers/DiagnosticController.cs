@@ -49,7 +49,9 @@ public sealed class DiagnosticController : ControllerBase
         var candidates = new[]
         {
             Path.Combine(root, "appsettings.json"),
+            Path.Combine(root, "appsettings.yaml"),
             Path.Combine(root, $"appsettings.{envName}.json"),
+            Path.Combine(root, $"appsettings.{envName}.yaml"),
         };
 
         var files = candidates.Select(p => new

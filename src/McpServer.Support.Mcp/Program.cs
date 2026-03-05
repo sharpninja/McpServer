@@ -57,8 +57,9 @@ bool IsStdioTransportRequested(string[] a)
 var builder = WebApplication.CreateBuilder(args);
 DisableEnvironmentSpecificJsonConfigForWindowsService(builder);
 
-// Load optional YAML configuration (overrides JSON settings when present).
+// Load YAML configuration (overrides JSON when present). Environment-specific YAML takes precedence.
 builder.Configuration.AddYamlFile("appsettings.yaml", optional: true, reloadOnChange: true);
+builder.Configuration.AddYamlFile($"appsettings.{builder.Environment.EnvironmentName}.yaml", optional: true, reloadOnChange: true);
 
 if (OperatingSystem.IsWindows())
 {

@@ -1,33 +1,45 @@
-AllowedHosts: '*'
-DataFolder: .
-applicationName: McpServer.Support.Mcp
-CommonProgramFiles: C:\Program Files\Common Files
-CommonProgramFiles(x86): C:\Program Files (x86)\Common Files
-CommonProgramW6432: C:\Program Files\Common Files
-ComSpec: C:\WINDOWS\system32\cmd.exe
-DriverData: C:\Windows\System32\Drivers\DriverData
-Embedding:
-  AutoDownload: True
-  Dimensions: 384
-  MaxSequenceLength: 128
 Logging:
   LogLevel:
-    Default: Debug
-    Microsoft.AspNetCore: Debug
+    Default: Information
+    Microsoft.AspNetCore: Warning
+
+Serilog:
+  MinimumLevel:
+    Default: Information
+    Override:
+      Microsoft.AspNetCore: Warning
+      McpServer.Support.Mcp.Logging: Verbose
+
+AllowedHosts: "*"
+DataFolder: "."
+
+Embedding:
+  Dimensions: 384
+  MaxSequenceLength: 128
+  AutoDownload: true
+
+VectorIndex:
+  Dimensions: 384
+  MaxElements: 100000
+  M: 16
+  EfConstruction: 200
+  EfSearch: 50
+  IndexPath: mcp-data/vector.idx
+
 Mcp:
   DatabaseProvider: sqlite
-  PostgresConnectionString: ''
-  # Auth:
-  #   Audience: mcp-server-api
-  #   Authority: http://localhost:7080/realms/mcpserver
-  #   ClientSecret: o8lRSMPX0BKFTq6dqy0CnHOI0of0EuOU
-  #   RequireHttpsMetadata: False
-  DataDirectory: .
+  PostgresConnectionString: ""
+  Port: 7147
   DataSource: mcp.db
+  DataDirectory: "."
+  RepoRoot: "."
+  TodoFilePath: docs/Project/TODO.yaml
+  SessionsPath: docs/sessions
+  UnifiedModelSchemaPath: docs/schemas/UnifiedModel.schema.json
   ExternalDocsPath: docs/external
   GraphRag:
-    Enabled: False
-    EnhanceContextSearch: True
+    Enabled: false
+    EnhanceContextSearch: true
     RootPath: mcp-data/graphrag
     DefaultQueryMode: local
     DefaultMaxChunks: 20
@@ -35,95 +47,67 @@ Mcp:
     QueryTimeoutSeconds: 120
     MaxConcurrentIndexJobsPerWorkspace: 1
     ArtifactVersion: v1
-  Instances:
-    default:
-      DataDirectory: .
-      DataSource: mcp.db
-      Port: 7147
-      RepoRoot: .
-      TodoFilePath: TODO.yaml
-      TodoStorage:
-        Provider: yaml
-        SqliteDataSource: mcp.db
-  # InteractionLogging:
-  #   IncludeQueryString: True
-  #   LoggingServiceUrl: http://localhost:8000/api/v1/ingest
-  #   QueueCapacity: 1000
-  # Parseable:
-  #   FallbackLogPath: logs/mcp-.log
-  #   IngestUrl: http://localhost:8000/api/v1/ingest
-  #   Password: admin
-  #   StreamName: mcp
-  #   Url: http://localhost:8000
-  #   Username: admin
-  Port: 7147
-  RepoRoot: .
-  SessionsPath: docs/sessions
-  TodoFilePath: TODO.yaml
   TodoStorage:
     Provider: yaml
     SqliteDataSource: mcp.db
+  Instances:
+    default:
+      Port: 7147
+      DataSource: mcp.db
+      DataDirectory: "."
+      RepoRoot: "."
+      TodoFilePath: docs/Project/TODO.yaml
+      TodoStorage:
+        Provider: yaml
+        SqliteDataSource: mcp.db
+    alt-local:
+      Port: 7157
+      DataSource: mcp-alt.db
+      DataDirectory: "."
+      RepoRoot: docs
+      TodoFilePath: docs/Project/TODO.yaml
+      TodoStorage:
+        Provider: sqlite
+        SqliteDataSource: mcp-alt.db
   ToolRegistry:
     DefaultBuckets:
-    - Branch: main
-      ManifestPath: /
-      Name: official
-      Owner: sharpninja
-      Repo: McpServerTools
+      - Name: official
+        Owner: sharpninja
+        Repo: McpServerTools
+        Branch: main
+        ManifestPath: /
   Tunnel:
+    Provider: ""
+    Port: 7147
+    Ngrok:
+      Enabled: false
+      Subdomain: ""
+      AuthToken: ""
+      Region: us
     Cloudflare:
-      Enabled: False
-      Hostname: ''
-      TunnelName: ''
+      Enabled: false
+      TunnelName: ""
+      Hostname: ""
     Frp:
       ServerAddress: 127.0.0.1
       ServerPort: 7000
-    Ngrok:
-      AuthToken: ''
-      Enabled: False
-      ExecutablePath: tools\ngrok.exe
-      Region: us
-      Subdomain: ''
-    Port: 7147
-    # Provider: Ngrok
-  UnifiedModelSchemaPath: docs/schemas/UnifiedModel.schema.json
+  InteractionLogging:
+    LoggingServiceUrl: ""
+    QueueCapacity: 1000
+    IncludeQueryString: false
+  Parseable:
+    Url: http://localhost:8000
+    IngestUrl: http://localhost:8000/api/v1/ingest
+    StreamName: mcp
+    Username: admin
+    Password: admin
+    FallbackLogPath: logs/mcp-.log
+  PairingUsers: []
   Workspaces:
-  # - DateTimeCreated: 2026-02-23T00:22:31.3876973-06:00
-  #   DateTimeModified: 2026-02-23T18:23:08.2213256-06:00
-  #   IsEnabled: True
-  #   IsPrimary: True
-  #   Name: DefaultProject
-  #   PlanPrompt: >-
-  #     Create an implementation plan in excruciating detail as a new TODO that TODO {id} depends on.
-
-  #     1. Analyze the TODO item below and break it into granular, actionable implementation tasks.
-  #        Each task should be small enough to complete in a single focused session.
-  #        Include file paths, class names, method signatures, test scenarios, and integration points.
-
-  #     2. Update {id} with the implementation plan.
-  #   StatusPrompt: >-
-  #     Get the current status of TODO {id}. Report the following in structured markdown:
-
-  #     - Title, priority, section, done status
-  #     - Description and technical details
-  #     - Implementation task completion progress (count done vs total)
-  #     - Any blockers or next steps
-  #     - Dependencies and their current status
-  #     - Update the contents of the {id} with status as appropriate.
-  #   TodoPath: <PATH>\docs\TODO.yaml
-  #   WorkspacePath: <PATH>
-Serilog:
-  MinimumLevel:
-    Default: Debug
-    Override:
-      McpServer.Support.Mcp.Logging: Debug
-      Microsoft.AspNetCore: Debug
-urls: http://+:7147
-VectorIndex:
-  Dimensions: 384
-  EfConstruction: 200
-  EfSearch: 50
-  IndexPath: mcp-data/vector.idx
-  M: 16
-  MaxElements: 100000
-windir: C:\WINDOWS
+    - WorkspacePath: E:\github\McpServer
+      Name: McpServer
+      TodoPath: docs/Project/TODO.yaml
+      IsPrimary: true
+      IsEnabled: true
+      DateTimeCreated: "2026-02-21T00:00:00+00:00"
+      DateTimeModified: "2026-02-23T00:00:00+00:00"
