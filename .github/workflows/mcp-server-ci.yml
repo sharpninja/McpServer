@@ -373,8 +373,11 @@ jobs:
       - name: Pack
         run: dotnet pack src/McpServer.Client/McpServer.Client.csproj -c Release -p:PackageVersion=${{ steps.version.outputs.version }} -o ./nupkg
 
-      - name: Pack Director tool
-        run: dotnet pack src/McpServer.Director/McpServer.Director.csproj -c Release -p:PackageVersion=${{ steps.version.outputs.version }} -o ./nupkg
+      - name: Download Director tool package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: director-tool-nupkg
+          path: nupkg
 
       - name: Push to NuGet (main only)
         if: github.ref == 'refs/heads/main'
