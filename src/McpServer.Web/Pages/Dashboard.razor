@@ -2,6 +2,8 @@
 @page "/dashboard"
 
 @inject DashboardViewModel ViewModel
+@inject WorkspaceListViewModel WorkspaceListVm
+@inject WorkspaceContextViewModel WorkspaceContext
 
 <PageTitle>Dashboard</PageTitle>
 
@@ -40,6 +42,54 @@ else
         <PrimerLabel Scheme="@GetHealthScheme(ViewModel.HealthStatus)" Text="@($"Health: {ViewModel.HealthStatus}")" />
     </div>
 
+    <div class="Box mt-4">
+        <div class="Box-header d-flex flex-justify-between flex-items-center">
+            <h2 class="h4 mb-0">Workspaces</h2>
+            <a class="btn btn-sm" href="/workspaces">View all</a>
+        </div>
+        @if (WorkspaceListVm.Workspaces.Count == 0)
+        {
+            <div class="Box-body color-fg-muted">No workspaces found.</div>
+        }
+        else
+        {
+            <PrimerDataTable TItem="WorkspaceSummary"
+                             Items="WorkspaceListVm.Workspaces"
+                             ColumnCount="3"
+                             Class="Table--full-width">
+                <HeaderTemplate>
+                    <tr>
+                        <th style="width:32px"></th>
+                        <th>Workspace</th>
+                        <th style="width:100px"></th>
+                    </tr>
+                </HeaderTemplate>
+                <RowTemplate Context="ws">
+                    <td>
+                        @if (IsActive(ws.WorkspacePath))
+                        {
+                            <OcticonIcon Name="check-circle" Size="16" Class="color-fg-success" AriaLabel="Active workspace" />
+                        }
+                    </td>
+                    <td>
+                        <span class="text-bold">@ws.Name</span>
+                        <span class="color-fg-muted f6 ml-2">@ws.WorkspacePath</span>
+                    </td>
+                    <td class="text-right">
+                        @if (IsActive(ws.WorkspacePath))
+                        {
+                            <span class="btn btn-sm btn-primary disabled" aria-disabled="true">Selected</span>
+                        }
+                        else
+                        {
+                            <button class="btn btn-sm" @onclick="() => SelectWorkspace(ws.WorkspacePath)">Select</button>
+                        }
+                    </td>
+                </RowTemplate>
+            </PrimerDataTable>
+        }
+    </div>
+
     <div class="mt-4 d-flex flex-wrap gap-2">
         <a class="btn btn-primary" href="/workspaces">Workspaces</a>
         <a class="btn" href="/todos">Todos</a>
@@ -53,6 +103,16 @@ else
     protected override async Task OnInitializedAsync()
     {
         await ViewModel.LoadAsync().ConfigureAwait(false);
+        await WorkspaceListVm.LoadAsync().ConfigureAwait(false);
+    }
+
+    private bool IsActive(string workspacePath)
+        => string.Equals(WorkspaceContext.ActiveWorkspacePath, workspacePath, StringComparison.OrdinalIgnoreCase);
+
+    private void SelectWorkspace(string workspacePath)
+    {
+        WorkspaceContext.ActiveWorkspacePath = workspacePath;
+        StateHasChanged();
     }
 
     private static string GetHealthScheme(string? status)
