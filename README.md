@@ -73,6 +73,7 @@ Important keys:
 - `Mcp:TodoFilePath`
 - `Mcp:TodoStorage:Provider` (`yaml` or `sqlite`)
 - `Mcp:TodoStorage:SqliteDataSource`
+- `Mcp:GraphRag:*` (GraphRAG enablement, query defaults, backend command, concurrency)
 - `Mcp:Instances:{name}:*` (per-instance overrides)
 
 Environment overrides:
@@ -139,8 +140,64 @@ Migrate todo data between backends:
 - `scripts/Update-McpService.ps1` - stop, publish Debug build, restore config/data, restart, health-check Windows service
 - `scripts/Validate-McpConfig.ps1` - config validation
 - `scripts/Test-McpMultiInstance.ps1` - two-instance smoke test
+- `scripts/Test-GraphRagSmoke.ps1` - GraphRAG status/index/query smoke validation
 - `scripts/Migrate-McpTodoStorage.ps1` - todo backend migration
 - `scripts/Package-McpServerMsix.ps1` - publish and package MSIX
+
+## GraphRAG
+
+GraphRAG is workspace-scoped and disabled by default. When enabled, it can enhance `/mcpserver/context/search` and is also exposed directly through:
+
+- `GET /mcpserver/graphrag/status`
+- `POST /mcpserver/graphrag/index`
+- `POST /mcpserver/graphrag/query`
+
+Key behavior:
+
+- Per-workspace GraphRAG state under `Mcp:GraphRag:RootPath`
+- Index locking per workspace (single active index job by default)
+- Explicit status lifecycle fields (`state`, `activeJobId`, failure metadata, artifact version)
+- Fallback to context search when GraphRAG is disabled, uninitialized, not indexed, or backend execution fails
+- Do not store backend secrets in repo config; inject runtime secrets via environment or secure host configuration
+
+Example config:
+
+```json
+{
+  "Mcp": {
+    "GraphRag": {
+      "Enabled": true,
+      "EnhanceContextSearch": true,
+      "RootPath": "mcp-data/graphrag",
+      "DefaultQueryMode": "local",
+      "DefaultMaxChunks": 20,
+      "IndexTimeoutSeconds": 600,
+      "QueryTimeoutSeconds": 120,
+      "BackendCommand": "",
+      "BackendArgs": "{operation} --graphRoot {graphRoot} --workspace {workspacePath}",
+      "MaxConcurrentIndexJobsPerWorkspace": 1,
+      "ArtifactVersion": "v1"
+    }
+  }
+}
+```
+
+### GraphRAG Observability
+
+Track these operational indicators during rollout:
+
+- Index duration (`lastIndexDurationMs`) and active job contention (`index_conflict`)
+- Fallback rate (`fallbackUsed` and `fallbackReason`) per query mode
+- Failure categories (`failureCode`) and backend stderr patterns
+- Indexed corpus drift (`lastIndexedDocumentCount` vs expected input volume)
+
+### GraphRAG Rollout Checklist
+
+1. Keep `Mcp:GraphRag:Enabled=false` in shared defaults.
+2. Enable GraphRAG in one pilot workspace and run `scripts/Test-GraphRagSmoke.ps1`.
+3. Verify fallback rate and failure codes remain acceptable under real workload.
+4. Expand enablement workspace-by-workspace.
+5. Keep external backend optional; if unavailable, ensure fallback path remains healthy.
 
 ## Build and Test
 

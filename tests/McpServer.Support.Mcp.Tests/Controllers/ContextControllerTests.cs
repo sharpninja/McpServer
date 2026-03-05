@@ -88,6 +88,35 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
         Assert.True(graphRag.TryGetProperty("backend", out _));
     }
 
+    [Fact]
+    public async Task Search_WhenGraphRagEnabledAndSourceTypeProvided_UsesLegacyPathReason()
+    {
+        using var factory = _factory.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureAppConfiguration((_, config) =>
+            {
+                config.AddInMemoryCollection(new Dictionary<string, string?>
+                {
+                    ["Mcp:GraphRag:Enabled"] = "true",
+                    ["Mcp:GraphRag:EnhanceContextSearch"] = "true"
+                });
+            });
+        });
+        using var client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
+
+        var response = await client.PostAsJsonAsync(
+            new Uri("/mcpserver/context/search", UriKind.Relative),
+            new { query = "test", limit = 5, sourceType = "repo" }).ConfigureAwait(true);
+        response.EnsureSuccessStatusCode();
+
+        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        using var doc = JsonDocument.Parse(json);
+        Assert.True(doc.RootElement.TryGetProperty("graphRag", out var graphRag));
+        Assert.True(graphRag.TryGetProperty("reason", out var reason));
+        Assert.Equal("sourceType_filter_forces_legacy_path", reason.GetString());
+    }
+
     /// <summary>FR-SUPPORT-010: Same request produces identical chunk IDs and order (deterministic context pack).</summary>
     [Fact]
     public async Task GetPack_CalledTwiceWithSameRequest_ReturnsIdenticalChunkIdsAndOrder()

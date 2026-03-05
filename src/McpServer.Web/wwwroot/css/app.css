@@ -9,6 +9,35 @@ body {
     display: flex;
 }
 
+.app-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1.5rem;
+    border-bottom: 1px solid var(--borderColor-default, #d0d7de);
+    background-color: var(--bgColor-default, #ffffff);
+    height: 48px;
+}
+
+.app-header-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--fgColor-default, #1f2328);
+}
+
+.app-header-auth {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .app-sidebar {
     width: 220px;
     border-right: 1px solid var(--borderColor-default, #d0d7de);
@@ -48,4 +77,5 @@ body {
 .app-content {
     flex: 1;
     padding: 1.5rem;
+    overflow-y: auto;
 }

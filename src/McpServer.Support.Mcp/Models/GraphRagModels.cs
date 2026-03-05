@@ -9,6 +9,10 @@ public sealed class GraphRagQueryRequest
     public string? Mode { get; set; }
     public int? MaxChunks { get; set; }
     public bool IncludeContextChunks { get; set; } = true;
+    public int? MaxEntities { get; set; }
+    public int? MaxRelationships { get; set; }
+    public int? CommunityDepth { get; set; }
+    public int? ResponseTokenBudget { get; set; }
 }
 
 /// <summary>Index request for GraphRAG.</summary>
@@ -23,10 +27,18 @@ public sealed class GraphRagStatusResponse
     public bool Enabled { get; set; }
     public string WorkspacePath { get; set; } = string.Empty;
     public string GraphRoot { get; set; } = string.Empty;
+    public string State { get; set; } = "disabled";
     public bool IsInitialized { get; set; }
     public bool IsIndexed { get; set; }
     public DateTimeOffset? LastIndexedAtUtc { get; set; }
+    public DateTimeOffset? LastSuccessAtUtc { get; set; }
+    public DateTimeOffset? LastFailureAtUtc { get; set; }
+    public string? ActiveJobId { get; set; }
+    public string? FailureCode { get; set; }
     public string? LastError { get; set; }
+    public string ArtifactVersion { get; set; } = "v1";
+    public long? LastIndexDurationMs { get; set; }
+    public int? LastIndexedDocumentCount { get; set; }
     public string Backend { get; set; } = "internal-fallback";
 }
 
@@ -47,7 +59,12 @@ public sealed class GraphRagQueryResponse
     public IReadOnlyList<GraphRagCitation> Citations { get; set; } = [];
     public IReadOnlyList<ContextChunk> Chunks { get; set; } = [];
     public IReadOnlyList<string> SourceKeys { get; set; } = [];
+    public IReadOnlyList<string> Entities { get; set; } = [];
+    public IReadOnlyList<string> Relationships { get; set; } = [];
+    public IReadOnlyList<string> Communities { get; set; } = [];
     public bool FallbackUsed { get; set; }
+    public string? FallbackReason { get; set; }
+    public string? FailureCode { get; set; }
     public string Backend { get; set; } = "internal-fallback";
 }
 

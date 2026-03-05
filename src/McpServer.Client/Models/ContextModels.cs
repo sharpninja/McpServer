@@ -127,6 +127,18 @@ public sealed class GraphRagQueryRequest
 
     [JsonPropertyName("includeContextChunks")]
     public bool IncludeContextChunks { get; set; } = true;
+
+    [JsonPropertyName("maxEntities")]
+    public int? MaxEntities { get; set; }
+
+    [JsonPropertyName("maxRelationships")]
+    public int? MaxRelationships { get; set; }
+
+    [JsonPropertyName("communityDepth")]
+    public int? CommunityDepth { get; set; }
+
+    [JsonPropertyName("responseTokenBudget")]
+    public int? ResponseTokenBudget { get; set; }
 }
 
 /// <summary>Request for GraphRAG index operation.</summary>
@@ -148,6 +160,9 @@ public sealed class GraphRagStatusResult
     [JsonPropertyName("graphRoot")]
     public string GraphRoot { get; set; } = string.Empty;
 
+    [JsonPropertyName("state")]
+    public string State { get; set; } = string.Empty;
+
     [JsonPropertyName("isInitialized")]
     public bool IsInitialized { get; set; }
 
@@ -157,8 +172,29 @@ public sealed class GraphRagStatusResult
     [JsonPropertyName("lastIndexedAtUtc")]
     public string? LastIndexedAtUtc { get; set; }
 
+    [JsonPropertyName("lastSuccessAtUtc")]
+    public string? LastSuccessAtUtc { get; set; }
+
+    [JsonPropertyName("lastFailureAtUtc")]
+    public string? LastFailureAtUtc { get; set; }
+
+    [JsonPropertyName("activeJobId")]
+    public string? ActiveJobId { get; set; }
+
+    [JsonPropertyName("failureCode")]
+    public string? FailureCode { get; set; }
+
     [JsonPropertyName("lastError")]
     public string? LastError { get; set; }
+
+    [JsonPropertyName("artifactVersion")]
+    public string ArtifactVersion { get; set; } = string.Empty;
+
+    [JsonPropertyName("lastIndexDurationMs")]
+    public long? LastIndexDurationMs { get; set; }
+
+    [JsonPropertyName("lastIndexedDocumentCount")]
+    public int? LastIndexedDocumentCount { get; set; }
 
     [JsonPropertyName("backend")]
     public string Backend { get; set; } = string.Empty;
@@ -198,8 +234,23 @@ public sealed class GraphRagQueryResult
     [JsonPropertyName("sourceKeys")]
     public IReadOnlyList<string> SourceKeys { get; set; } = [];
 
+    [JsonPropertyName("entities")]
+    public IReadOnlyList<string> Entities { get; set; } = [];
+
+    [JsonPropertyName("relationships")]
+    public IReadOnlyList<string> Relationships { get; set; } = [];
+
+    [JsonPropertyName("communities")]
+    public IReadOnlyList<string> Communities { get; set; } = [];
+
     [JsonPropertyName("fallbackUsed")]
     public bool FallbackUsed { get; set; }
+
+    [JsonPropertyName("fallbackReason")]
+    public string? FallbackReason { get; set; }
+
+    [JsonPropertyName("failureCode")]
+    public string? FailureCode { get; set; }
 
     [JsonPropertyName("backend")]
     public string Backend { get; set; } = string.Empty;

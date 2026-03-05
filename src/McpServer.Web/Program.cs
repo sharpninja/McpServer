@@ -22,7 +22,8 @@ bootstrapLogger.LogInformation("Bootstrap starting for McpServer.Web. PID {Proce
 builder.Services
     .AddRazorComponents()
     .AddInteractiveServerComponents();
-bootstrapLogger.LogInformation("Razor components configured.");
+builder.Services.AddRazorPages();
+bootstrapLogger.LogInformation("Razor components and pages configured.");
 
 var authSchemesSection = builder.Configuration.GetSection("Authentication:Schemes");
 var cookieSection = authSchemesSection.GetSection("Cookie");
@@ -119,6 +120,7 @@ app.UseAntiforgery();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapRazorPages();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
