@@ -6,7 +6,7 @@
     <Configurations>Debug;Release;Staging</Configurations>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <UserSecretsId>funwashad-support-mcp</UserSecretsId>
-    <NoWarn>$(NoWarn);CA1515;CA1849;CA1031;CA3003;CA1056;CA1054</NoWarn>
+    <NoWarn>$(NoWarn);CA1515;CA1849;CA1031;CA3003;CA1056;CA1054;CS0436</NoWarn>
     <RootNamespace>McpServer.Support.Mcp</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Staging'">
@@ -40,6 +40,9 @@
     <PackageReference Include="Handlebars.Net" />
     <ProjectReference Include="..\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj" />
     <ProjectReference Include="..\McpServer.Common.Copilot\McpServer.Common.Copilot.csproj" />
+    <ProjectReference Include="..\McpServer.Storage\McpServer.Storage.csproj" />
+    <ProjectReference Include="..\McpServer.Services\McpServer.Services.csproj" />
+    <ProjectReference Include="..\McpServer.GraphRag\McpServer.GraphRag.csproj" />
   </ItemGroup>
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
@@ -48,6 +51,17 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>McpServer.Support.Mcp.IntegrationTests</_Parameter1>
     </AssemblyAttribute>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Storage\**\*.cs" />
+    <Compile Remove="Indexing\**\*.cs" />
+    <Compile Remove="Services\**\*.cs" />
+    <Compile Remove="Models\**\*.cs" />
+    <Compile Remove="Options\**\*.cs" />
+    <Compile Remove="Ingestion\**\*.cs" />
+    <Compile Remove="Notifications\**\*.cs" />
+    <Compile Remove="Requirements\**\*.cs" />
+    <Compile Remove="Native\**\*.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\templates\**\*.yaml" Link="templates\%(RecursiveDir)%(Filename)%(Extension)">
