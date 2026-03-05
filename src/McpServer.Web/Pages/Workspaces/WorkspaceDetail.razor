@@ -1,12 +1,25 @@
 @page "/workspaces/detail"
 
 @inject WorkspaceDetailViewModel ViewModel
+@inject WorkspaceListViewModel ListViewModel
 @inject IAuthorizationPolicyService AuthPolicy
 
 <PageTitle>Workspace Detail</PageTitle>
 
-<h1 class="h2 mb-3">Workspace Detail</h1>
-<p><a href="/workspaces">← Back to workspace list</a></p>
+<div class="detail-layout">
+    <aside class="detail-sidebar">
+        <div class="sidebar-header">Workspaces</div>
+        @foreach (var ws in ListViewModel.Workspaces)
+        {
+            <a class="sidebar-item @(string.Equals(ws.WorkspacePath, WorkspacePath, StringComparison.OrdinalIgnoreCase) ? "active" : "")"
+               href="/workspaces/detail?path=@Uri.EscapeDataString(ws.WorkspacePath)">
+                <span class="color-fg-muted f6">@(ws.IsPrimary ? "Primary" : ws.IsEnabled ? "Enabled" : "Disabled")</span>
+                <br />@ws.Name
+            </a>
+        }
+    </aside>
+
+    <div class="detail-main">
 
 @if (string.IsNullOrWhiteSpace(WorkspacePath))
 {
@@ -175,6 +188,8 @@ else
         </div>
     }
 }
+    </div>
+</div>
 
 @code {
     [SupplyParameterFromQuery(Name = "path")]
@@ -182,6 +197,14 @@ else
 
     private string? _loadedPath;
     private bool CanEdit => AuthPolicy.CanExecuteAction(McpServer.UI.Core.Authorization.McpActionKeys.WorkspaceUpdate);
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ListViewModel.Workspaces.Count == 0)
+        {
+            await ListViewModel.LoadAsync().ConfigureAwait(false);
+        }
+    }
 
     protected override async Task OnParametersSetAsync()
     {

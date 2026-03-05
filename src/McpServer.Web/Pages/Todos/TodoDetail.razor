@@ -3,71 +3,73 @@
 @rendermode InteractiveServer
 
 @inject TodoDetailViewModel ViewModel
+@inject TodoListViewModel ListViewModel
 @inject IAuthorizationPolicyService AuthPolicy
 
 <PageTitle>Todo Detail</PageTitle>
 
-<h1 class="h2 mb-3">Todo Detail</h1>
-<p><a href="/todos">← Back to todo list</a></p>
+<div class="detail-layout">
+    <aside class="detail-sidebar">
+        <div class="sidebar-header">Todos</div>
+        @foreach (var item in ListViewModel.Items)
+        {
+            <a class="sidebar-item @(string.Equals(item.Id, TodoId, StringComparison.Ordinal) ? "active" : "")"
+               href="/todos/@item.Id">
+                <span class="color-fg-muted f6">@item.Id</span>
+                <br />@item.Title
+            </a>
+        }
+    </aside>
 
-@if (string.IsNullOrWhiteSpace(TodoId))
-{
-    <PrimerBlankslate Heading="No todo selected" Description="Choose a TODO from the list view." />
-}
-else if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
-{
-    <PrimerFlash Variant="danger" Title="Failed to load todo">@ViewModel.ErrorMessage</PrimerFlash>
-}
-else if (ViewModel.IsBusy)
-{
-    <p class="color-fg-muted">Loading todo details...</p>
-}
-else if (ViewModel.Detail is null)
-{
-    <PrimerBlankslate Heading="Todo not found" Description="The requested TODO item could not be found." />
-}
-else
-{
-    @if (!string.IsNullOrWhiteSpace(ViewModel.MutationMessage))
-    {
-        <PrimerFlash Variant="success" Title="Success">@ViewModel.MutationMessage</PrimerFlash>
-    }
-
-    <div class="Box mb-3">
-        <div class="Box-header d-flex flex-justify-between flex-items-center">
-            <h2 class="h3 mb-0">@ViewModel.Detail.Id — @ViewModel.Detail.Title</h2>
-            @if (CanEdit)
+    <div class="detail-main">
+        @if (string.IsNullOrWhiteSpace(TodoId))
+        {
+            <PrimerBlankslate Heading="No todo selected" Description="Choose a TODO from the sidebar." />
+        }
+        else if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+        {
+            <PrimerFlash Variant="danger" Title="Failed to load todo">@ViewModel.ErrorMessage</PrimerFlash>
+        }
+        else if (ViewModel.IsBusy)
+        {
+            <p class="color-fg-muted">Loading todo details...</p>
+        }
+        else if (ViewModel.Detail is null)
+        {
+            <PrimerBlankslate Heading="Todo not found" Description="The requested TODO item could not be found." />
+        }
+        else
+        {
+            @if (!string.IsNullOrWhiteSpace(ViewModel.MutationMessage))
             {
-                <div class="d-flex gap-2">
-                    <button class="btn btn-primary btn-sm" @onclick="SaveAsync" disabled="@ViewModel.IsBusy">
-                        <OcticonIcon Name="check-circle" Size="16" /> Save
-                    </button>
-                    <button class="btn btn-danger btn-sm" @onclick="DeleteAsync" disabled="@ViewModel.IsBusy">
-                        <OcticonIcon Name="trash" Size="16" /> Delete
-                    </button>
-                </div>
+                <PrimerFlash Variant="success" Title="Success">@ViewModel.MutationMessage</PrimerFlash>
             }
-        </div>
-        <div class="Box-body p-0">
-            <MonacoEditor @bind-Value="ViewModel.EditorMarkdownText"
-                          Language="markdown"
-                          ReadOnly="@(!CanEdit)"
-                          Height="600" />
-        </div>
-    </div>
 
-    @if (CanEdit)
-    {
-        <div class="d-flex gap-2 mb-3">
-            <button class="btn btn-primary" @onclick="SaveAsync" disabled="@ViewModel.IsBusy">
-                <OcticonIcon Name="check-circle" Size="16" /> Save
-            </button>
-            <button class="btn btn-danger" @onclick="DeleteAsync" disabled="@ViewModel.IsBusy">
-                <OcticonIcon Name="trash" Size="16" /> Delete
-            </button>
-        </div>
-    }
-}
+            <div class="Box mb-3">
+                <div class="Box-header d-flex flex-justify-between flex-items-center">
+                    <h2 class="h3 mb-0">@ViewModel.Detail.Id — @ViewModel.Detail.Title</h2>
+                    @if (CanEdit)
+                    {
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary btn-sm" @onclick="SaveAsync" disabled="@ViewModel.IsBusy">
+                                <OcticonIcon Name="check-circle" Size="16" /> Save
+                            </button>
+                            <button class="btn btn-danger btn-sm" @onclick="DeleteAsync" disabled="@ViewModel.IsBusy">
+                                <OcticonIcon Name="trash" Size="16" /> Delete
+                            </button>
+                        </div>
+                    }
+                </div>
+                <div class="Box-body p-0">
+                    <MonacoEditor @bind-Value="ViewModel.EditorMarkdownText"
+                                  Language="markdown"
+                                  ReadOnly="@(!CanEdit)"
+                                  Height="600" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
 
 @code {
     [Parameter]
@@ -75,6 +77,14 @@ else
 
     private string? _loadedId;
     private bool CanEdit => AuthPolicy.CanExecuteAction(McpServer.UI.Core.Authorization.McpActionKeys.TodoUpdate);
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ListViewModel.Items.Count == 0)
+        {
+            await ListViewModel.LoadAsync().ConfigureAwait(false);
+        }
+    }
 
     protected override async Task OnParametersSetAsync()
     {

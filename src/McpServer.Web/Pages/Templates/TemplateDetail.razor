@@ -1,172 +1,178 @@
 @page "/templates/{TemplateId}"
 
 @inject TemplateDetailViewModel ViewModel
+@inject TemplateListViewModel ListViewModel
 @inject IAuthorizationPolicyService AuthPolicy
 
 <PageTitle>Template Detail</PageTitle>
 
-<h1 class="h2 mb-3">Template Detail</h1>
-<p><a href="/templates">← Back to template list</a></p>
+<div class="detail-layout">
+    <aside class="detail-sidebar">
+        <div class="sidebar-header">Templates</div>
+        @foreach (var item in ListViewModel.Items)
+        {
+            <a class="sidebar-item @(string.Equals(item.Id, TemplateId, StringComparison.Ordinal) ? "active" : "")"
+               href="/templates/@item.Id">
+                <span class="color-fg-muted f6">@item.Category</span>
+                <br />@item.Title
+            </a>
+        }
+    </aside>
 
-@if (string.IsNullOrWhiteSpace(TemplateId))
-{
-    <PrimerBlankslate Heading="No template selected" Description="Choose a template from the list view." />
-}
-else if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
-{
-    <PrimerFlash Variant="danger" Title="Failed to load template">@ViewModel.ErrorMessage</PrimerFlash>
-}
-else if (ViewModel.IsBusy)
-{
-    <p class="color-fg-muted">Loading template details...</p>
-}
-else if (ViewModel.Detail is null)
-{
-    <PrimerBlankslate Heading="Template not found" Description="The requested template could not be loaded." />
-}
-else
-{
-    @if (!string.IsNullOrWhiteSpace(ViewModel.StatusMessage) && ViewModel.StatusMessage.Contains("Saved", StringComparison.OrdinalIgnoreCase))
-    {
-        <PrimerFlash Variant="success" Title="Success">@ViewModel.StatusMessage</PrimerFlash>
-    }
-
-    <div class="Box mb-3">
-        <div class="Box-header d-flex flex-justify-between flex-items-center">
-            <h2 class="h3 mb-0">@ViewModel.Detail.Title</h2>
-            @if (CanEdit)
+    <div class="detail-main">
+        @if (string.IsNullOrWhiteSpace(TemplateId))
+        {
+            <PrimerBlankslate Heading="No template selected" Description="Choose a template from the sidebar." />
+        }
+        else if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+        {
+            <PrimerFlash Variant="danger" Title="Failed to load template">@ViewModel.ErrorMessage</PrimerFlash>
+        }
+        else if (ViewModel.IsBusy)
+        {
+            <p class="color-fg-muted">Loading template details...</p>
+        }
+        else if (ViewModel.Detail is null)
+        {
+            <PrimerBlankslate Heading="Template not found" Description="The requested template could not be loaded." />
+        }
+        else
+        {
+            @if (!string.IsNullOrWhiteSpace(ViewModel.StatusMessage) && ViewModel.StatusMessage.Contains("Saved", StringComparison.OrdinalIgnoreCase))
             {
-                <div class="d-flex gap-2">
-                    <button class="btn btn-primary btn-sm" @onclick="SaveAsync" disabled="@ViewModel.IsBusy">Save</button>
-                    <button class="btn btn-danger btn-sm" @onclick="DeleteAsync" disabled="@ViewModel.IsBusy">Delete</button>
-                </div>
+                <PrimerFlash Variant="success" Title="Success">@ViewModel.StatusMessage</PrimerFlash>
             }
-        </div>
-        <div class="Box-body">
-            <div class="d-flex flex-column gap-3">
-                <div>
-                    <label class="text-small text-bold d-block">ID</label>
-                    <code>@ViewModel.Detail.Id</code>
-                </div>
-                <div>
-                    <label class="text-small text-bold d-block">Title</label>
+
+            <div class="Box mb-3">
+                <div class="Box-header d-flex flex-justify-between flex-items-center">
+                    <h2 class="h3 mb-0">@ViewModel.Detail.Title</h2>
                     @if (CanEdit)
                     {
-                        <input class="form-control" @bind="ViewModel.EditorTitle" />
-                    }
-                    else
-                    {
-                        <span>@ViewModel.Detail.Title</span>
-                    }
-                </div>
-                <div>
-                    <label class="text-small text-bold d-block">Category</label>
-                    @if (CanEdit)
-                    {
-                        <input class="form-control" @bind="ViewModel.EditorCategory" />
-                    }
-                    else
-                    {
-                        <span>@ViewModel.Detail.Category</span>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary btn-sm" @onclick="SaveAsync" disabled="@ViewModel.IsBusy">Save</button>
+                            <button class="btn btn-danger btn-sm" @onclick="DeleteAsync" disabled="@ViewModel.IsBusy">Delete</button>
+                        </div>
                     }
                 </div>
-                <div>
-                    <label class="text-small text-bold d-block">Engine</label>
-                    @if (CanEdit)
-                    {
-                        <input class="form-control" @bind="ViewModel.EditorEngine" />
-                    }
-                    else
-                    {
-                        <span>@ViewModel.Detail.Engine</span>
-                    }
-                </div>
-                <div>
-                    <label class="text-small text-bold d-block">Tags</label>
-                    @if (CanEdit)
-                    {
-                        <input class="form-control" placeholder="tag1, tag2, tag3" @bind="ViewModel.EditorTags" />
-                    }
-                    else
-                    {
-                        <span>@string.Join(", ", ViewModel.Detail.Tags)</span>
-                    }
-                </div>
-                <div>
-                    <label class="text-small text-bold d-block">Description</label>
-                    @if (CanEdit)
-                    {
-                        <textarea class="form-control" rows="3" @bind="ViewModel.EditorDescription"></textarea>
-                    }
-                    else
-                    {
-                        <span>@(ViewModel.Detail.Description ?? "(none)")</span>
-                    }
-                </div>
-                <div>
-                    <a class="btn btn-sm" href="@GetTestHref(ViewModel.Detail.Id)">Test this template</a>
+                <div class="Box-body">
+                    <div class="d-flex flex-column gap-3">
+                        <div>
+                            <label class="text-small text-bold d-block">ID</label>
+                            <code>@ViewModel.Detail.Id</code>
+                        </div>
+                        <div>
+                            <label class="text-small text-bold d-block">Title</label>
+                            @if (CanEdit)
+                            {
+                                <input class="form-control" @bind="ViewModel.EditorTitle" />
+                            }
+                            else
+                            {
+                                <span>@ViewModel.Detail.Title</span>
+                            }
+                        </div>
+                        <div>
+                            <label class="text-small text-bold d-block">Category</label>
+                            @if (CanEdit)
+                            {
+                                <input class="form-control" @bind="ViewModel.EditorCategory" />
+                            }
+                            else
+                            {
+                                <span>@ViewModel.Detail.Category</span>
+                            }
+                        </div>
+                        <div>
+                            <label class="text-small text-bold d-block">Engine</label>
+                            @if (CanEdit)
+                            {
+                                <input class="form-control" @bind="ViewModel.EditorEngine" />
+                            }
+                            else
+                            {
+                                <span>@ViewModel.Detail.Engine</span>
+                            }
+                        </div>
+                        <div>
+                            <label class="text-small text-bold d-block">Tags</label>
+                            @if (CanEdit)
+                            {
+                                <input class="form-control" placeholder="tag1, tag2, tag3" @bind="ViewModel.EditorTags" />
+                            }
+                            else
+                            {
+                                <span>@string.Join(", ", ViewModel.Detail.Tags)</span>
+                            }
+                        </div>
+                        <div>
+                            <label class="text-small text-bold d-block">Description</label>
+                            @if (CanEdit)
+                            {
+                                <textarea class="form-control" rows="3" @bind="ViewModel.EditorDescription"></textarea>
+                            }
+                            else
+                            {
+                                <span>@(ViewModel.Detail.Description ?? "(none)")</span>
+                            }
+                        </div>
+                        <div>
+                            <a class="btn btn-sm" href="@GetTestHref(ViewModel.Detail.Id)">Test this template</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div class="Box mb-3">
-        <div class="Box-header">
-            <h3 class="h4 mb-0">Variables</h3>
-        </div>
-        <div class="Box-body">
-            @if (ViewModel.Detail.Variables.Count == 0)
-            {
-                <p class="color-fg-muted mb-0">No variables declared.</p>
-            }
-            else
-            {
-                <PrimerDataTable TItem="TemplateVariableDetail" Items="ViewModel.Detail.Variables" ColumnCount="5" Class="Table--full-width">
-                    <HeaderTemplate>
-                        <tr>
-                            <th>Name</th>
-                            <th>Required</th>
-                            <th>Description</th>
-                            <th>Example</th>
-                            <th>Default</th>
-                        </tr>
-                    </HeaderTemplate>
-                    <RowTemplate Context="variable">
-                        <td><code>@variable.Name</code></td>
-                        <td>@(variable.Required ? "Yes" : "No")</td>
-                        <td>@(variable.Description ?? string.Empty)</td>
-                        <td><code>@(variable.Example ?? string.Empty)</code></td>
-                        <td><code>@(variable.DefaultValue ?? string.Empty)</code></td>
-                    </RowTemplate>
-                </PrimerDataTable>
-            }
-        </div>
-    </div>
+            <div class="Box mb-3">
+                <div class="Box-header">
+                    <h3 class="h4 mb-0">Variables</h3>
+                </div>
+                <div class="Box-body">
+                    @if (ViewModel.Detail.Variables.Count == 0)
+                    {
+                        <p class="color-fg-muted mb-0">No variables declared.</p>
+                    }
+                    else
+                    {
+                        <PrimerDataTable TItem="TemplateVariableDetail" Items="ViewModel.Detail.Variables" ColumnCount="5" Class="Table--full-width">
+                            <HeaderTemplate>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Required</th>
+                                    <th>Description</th>
+                                    <th>Example</th>
+                                    <th>Default</th>
+                                </tr>
+                            </HeaderTemplate>
+                            <RowTemplate Context="variable">
+                                <td><code>@variable.Name</code></td>
+                                <td>@(variable.Required ? "Yes" : "No")</td>
+                                <td>@(variable.Description ?? string.Empty)</td>
+                                <td><code>@(variable.Example ?? string.Empty)</code></td>
+                                <td><code>@(variable.DefaultValue ?? string.Empty)</code></td>
+                            </RowTemplate>
+                        </PrimerDataTable>
+                    }
+                </div>
+            </div>
 
-    <div class="Box mb-3">
-        <div class="Box-header">
-            <h3 class="h4 mb-0">Template Content</h3>
-        </div>
-        <div class="Box-body">
-            @if (CanEdit)
-            {
-                <textarea class="form-control font-mono" rows="15" @bind="ViewModel.EditorContent"></textarea>
-            }
-            else
-            {
-                <pre class="mb-0">@ViewModel.Detail.Content</pre>
-            }
-        </div>
+            <div class="Box mb-3">
+                <div class="Box-header">
+                    <h3 class="h4 mb-0">Template Content</h3>
+                </div>
+                <div class="Box-body">
+                    @if (CanEdit)
+                    {
+                        <textarea class="form-control font-mono" rows="15" @bind="ViewModel.EditorContent"></textarea>
+                    }
+                    else
+                    {
+                        <pre class="mb-0">@ViewModel.Detail.Content</pre>
+                    }
+                </div>
+            </div>
+        }
     </div>
-
-    @if (CanEdit)
-    {
-        <div class="d-flex gap-2 mb-3">
-            <button class="btn btn-primary" @onclick="SaveAsync" disabled="@ViewModel.IsBusy">Save</button>
-            <button class="btn btn-danger" @onclick="DeleteAsync" disabled="@ViewModel.IsBusy">Delete</button>
-        </div>
-    }
-}
+</div>
 
 @code {
     [Parameter]
@@ -174,6 +180,14 @@ else
 
     private string? _loadedTemplateId;
     private bool CanEdit => AuthPolicy.CanExecuteAction(McpServer.UI.Core.Authorization.McpActionKeys.TemplateUpdate);
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ListViewModel.Items.Count == 0)
+        {
+            await ListViewModel.LoadAsync().ConfigureAwait(false);
+        }
+    }
 
     protected override async Task OnParametersSetAsync()
     {
