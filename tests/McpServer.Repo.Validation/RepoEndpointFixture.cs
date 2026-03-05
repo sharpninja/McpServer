@@ -8,7 +8,7 @@ public sealed class RepoEndpointCollection : ICollectionFixture<RepoEndpointFixt
 public sealed class RepoEndpointFixture : IDisposable
 {
     public const string BaseUrl = "http://localhost:7147";
-    public const string RepoRoute = "/mcp/repo";
+    public const string RepoRoute = "/mcpserver/repo";
     public HttpClient Client { get; }
 
     public RepoEndpointFixture()

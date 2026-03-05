@@ -1,4 +1,5 @@
 using System.Text.Json;
+using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 public sealed class ToolBucketService : IToolBucketService
 {
-    private static readonly JsonSerializerOptions JsonOpts = new()
+    private static readonly JsonSerializerOptions s_jsonOpts = new()
     {
         PropertyNameCaseInsensitive = true,
         ReadCommentHandling = JsonCommentHandling.Skip,
@@ -21,6 +22,7 @@ public sealed class ToolBucketService : IToolBucketService
     };
 
     private readonly McpDbContext _db;
+    private readonly IChangeEventBus? _eventBus;
     private readonly IProcessRunner _processRunner;
     private readonly IToolRegistryService _toolRegistry;
     private readonly ILogger<ToolBucketService> _logger;
@@ -30,9 +32,11 @@ public sealed class ToolBucketService : IToolBucketService
         McpDbContext db,
         IProcessRunner processRunner,
         IToolRegistryService toolRegistry,
-        ILogger<ToolBucketService> logger)
+        ILogger<ToolBucketService> logger,
+        IChangeEventBus? eventBus = null)
     {
         _db = db;
+        _eventBus = eventBus;
         _processRunner = processRunner;
         _toolRegistry = toolRegistry;
         _logger = logger;
@@ -72,6 +76,7 @@ public sealed class ToolBucketService : IToolBucketService
 
         _db.ToolBuckets.Add(entity);
         await _db.SaveChangesAsync(ct).ConfigureAwait(false);
+        await PublishChangeSafeAsync(ChangeEventActions.Created, name, ct).ConfigureAwait(false);
 
         _logger.LogInformation("Bucket added: {Name} ({Owner}/{Repo})", name, entity.Owner, entity.Repo);
         return new BucketMutationResult(true, Bucket: ToDto(entity));
@@ -90,11 +95,16 @@ public sealed class ToolBucketService : IToolBucketService
             var tools = await _db.ToolDefinitions.Where(t => t.BucketName == name).ToListAsync(ct).ConfigureAwait(false);
             _db.ToolDefinitions.RemoveRange(tools);
             _logger.LogInformation("Uninstalled {Count} tools from bucket '{Name}'", tools.Count, name);
+            foreach (var tool in tools)
+            {
+                await PublishToolRegistryChangeSafeAsync(ChangeEventActions.Deleted, tool.Id.ToString(), ct).ConfigureAwait(false);
+            }
         }
 
         var dto = ToDto(entity);
         _db.ToolBuckets.Remove(entity);
         await _db.SaveChangesAsync(ct).ConfigureAwait(false);
+        await PublishChangeSafeAsync(ChangeEventActions.Deleted, name, ct).ConfigureAwait(false);
 
         _logger.LogInformation("Bucket removed: {Name}", name);
         return new BucketMutationResult(true, Bucket: dto);
@@ -211,6 +221,7 @@ public sealed class ToolBucketService : IToolBucketService
 
         bucket.DateTimeLastSynced = DateTimeOffset.UtcNow;
         await _db.SaveChangesAsync(ct).ConfigureAwait(false);
+        await PublishChangeSafeAsync(ChangeEventActions.Updated, name, ct).ConfigureAwait(false);
 
         _logger.LogInformation("Bucket sync '{Name}': {Updated} updated, {Unchanged} unchanged", name, updated, unchanged);
         return new BucketSyncResult(true, Updated: updated, Unchanged: unchanged);
@@ -231,7 +242,7 @@ public sealed class ToolBucketService : IToolBucketService
         JsonElement[] files;
         try
         {
-            files = JsonSerializer.Deserialize<JsonElement[]>(listResult.Stdout, JsonOpts) ?? [];
+            files = JsonSerializer.Deserialize<JsonElement[]>(listResult.Stdout, s_jsonOpts) ?? [];
         }
         catch (JsonException ex)
         {
@@ -257,7 +268,7 @@ public sealed class ToolBucketService : IToolBucketService
 
             try
             {
-                var manifest = JsonSerializer.Deserialize<ToolManifestFile>(fileResult.Stdout, JsonOpts);
+                var manifest = JsonSerializer.Deserialize<ToolManifestFile>(fileResult.Stdout, s_jsonOpts);
                 if (manifest is not null && !string.IsNullOrWhiteSpace(manifest.Name))
                 {
                     manifests.Add(new ToolManifest(
@@ -306,5 +317,51 @@ public sealed class ToolBucketService : IToolBucketService
 
         /// <summary>Command template.</summary>
         public string? CommandTemplate { get; set; }
+    }
+
+    private async Task PublishChangeSafeAsync(string action, string entityId, CancellationToken ct)
+    {
+        if (_eventBus is null)
+            return;
+
+        try
+        {
+            await _eventBus.PublishAsync(
+                new ChangeEvent
+                {
+                    Category = ChangeEventCategories.ToolBucket,
+                    Action = action,
+                    EntityId = entityId,
+                    ResourceUri = $"mcp://workspace/tool_bucket/{entityId}",
+                },
+                ct).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed publishing tool bucket change event for {EntityId}", entityId);
+        }
+    }
+
+    private async Task PublishToolRegistryChangeSafeAsync(string action, string entityId, CancellationToken ct)
+    {
+        if (_eventBus is null)
+            return;
+
+        try
+        {
+            await _eventBus.PublishAsync(
+                new ChangeEvent
+                {
+                    Category = ChangeEventCategories.ToolRegistry,
+                    Action = action,
+                    EntityId = entityId,
+                    ResourceUri = $"mcp://workspace/tool_registry/{entityId}",
+                },
+                ct).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed publishing tool registry change event for {EntityId}", entityId);
+        }
     }
 }

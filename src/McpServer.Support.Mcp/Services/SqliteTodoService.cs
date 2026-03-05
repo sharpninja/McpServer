@@ -1,6 +1,7 @@
 using System.Text.Json;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Options;
+using McpServer.Support.Mcp.Notifications;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
 
@@ -14,6 +15,7 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
 {
     private readonly string _dataSource;
     private readonly IWriteAuditLog _auditLog;
+    private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<SqliteTodoService> _logger;
     private readonly SemaphoreSlim _writeLock = new(1, 1);
     private readonly JsonSerializerOptions _json = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
@@ -22,12 +24,14 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
         IOptions<IngestionOptions> ingestionOptions,
         IOptions<TodoStorageOptions> storageOptions,
         IWriteAuditLog auditLog,
-        ILogger<SqliteTodoService> logger)
+        ILogger<SqliteTodoService> logger,
+        IChangeEventBus? eventBus = null)
     {
         ArgumentNullException.ThrowIfNull(ingestionOptions);
         ArgumentNullException.ThrowIfNull(storageOptions);
         _auditLog = auditLog ?? throw new ArgumentNullException(nameof(auditLog));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _eventBus = eventBus;
 
         var repoRoot = ingestionOptions.Value.RepoRoot ?? ".";
         var source = string.IsNullOrWhiteSpace(storageOptions.Value.SqliteDataSource) ? "mcp.db" : storageOptions.Value.SqliteDataSource;
@@ -35,11 +39,12 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
         EnsureSchema();
     }
 
-    internal SqliteTodoService(string dataSource, IWriteAuditLog auditLog, ILogger<SqliteTodoService> logger)
+    internal SqliteTodoService(string dataSource, IWriteAuditLog auditLog, ILogger<SqliteTodoService> logger, IChangeEventBus? eventBus = null)
     {
         _dataSource = dataSource ?? throw new ArgumentNullException(nameof(dataSource));
         _auditLog = auditLog ?? throw new ArgumentNullException(nameof(auditLog));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _eventBus = eventBus;
         EnsureSchema();
     }
 
@@ -72,6 +77,10 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
     public async Task<TodoMutationResult> CreateAsync(TodoCreateRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
+        var idError = TodoValidator.ValidateTodoId(request.Id);
+        if (idError is not null)
+            return new TodoMutationResult(false, idError);
+
         var priorityError = TodoValidator.ValidatePriority(request.Priority);
         if (priorityError is not null)
             return new TodoMutationResult(false, priorityError);
@@ -91,15 +100,20 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
                 Priority = request.Priority,
                 Done = false,
                 Estimate = request.Estimate,
+                Note = request.Note,
                 Description = request.Description,
                 TechnicalDetails = request.TechnicalDetails,
                 ImplementationTasks = request.ImplementationTasks,
+                Remaining = request.Remaining,
                 DependsOn = request.DependsOn,
                 FunctionalRequirements = request.FunctionalRequirements,
                 TechnicalRequirements = request.TechnicalRequirements,
             };
 
             var all = await GetAllAsync(cancellationToken).ConfigureAwait(false);
+            var depIdError = TodoValidator.ValidateDependencyIds(request.DependsOn, all, "dependsOn");
+            if (depIdError is not null)
+                return new TodoMutationResult(false, depIdError);
             var depError = TodoValidator.ValidateDependencies(request.Id, request.DependsOn?.ToList() ?? [], all);
             if (depError is not null)
                 return new TodoMutationResult(false, depError);
@@ -125,6 +139,7 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
 
             _auditLog.RecordWrite(_dataSource, DateTime.UtcNow);
             _logger.LogInformation("Created TODO item {Id} in sqlite", request.Id);
+            await PublishChangeSafeAsync(ChangeEventActions.Created, request.Id, cancellationToken).ConfigureAwait(false);
             return new TodoMutationResult(true, Item: candidate);
         }
         finally
@@ -169,6 +184,9 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
                 return new TodoMutationResult(false, priorityError);
 
             var all = await GetAllAsync(cancellationToken).ConfigureAwait(false);
+            var depIdError = TodoValidator.ValidateDependencyIds(updated.DependsOn, all, "dependsOn");
+            if (depIdError is not null)
+                return new TodoMutationResult(false, depIdError);
             var depError = TodoValidator.ValidateDependencies(id, updated.DependsOn?.ToList() ?? [], all);
             if (depError is not null)
                 return new TodoMutationResult(false, depError);
@@ -203,6 +221,7 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
 
             _auditLog.RecordWrite(_dataSource, DateTime.UtcNow);
             _logger.LogInformation("Updated TODO item {Id} in sqlite", id);
+            await PublishChangeSafeAsync(ChangeEventActions.Updated, id, cancellationToken).ConfigureAwait(false);
             return new TodoMutationResult(true, Item: updated);
         }
         finally
@@ -229,6 +248,7 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
 
             _auditLog.RecordWrite(_dataSource, DateTime.UtcNow);
             _logger.LogInformation("Deleted TODO item {Id} from sqlite", id);
+            await PublishChangeSafeAsync(ChangeEventActions.Deleted, id, cancellationToken).ConfigureAwait(false);
             return new TodoMutationResult(true);
         }
         finally
@@ -409,5 +429,28 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
         if (item.Remaining?.Contains(keyword, StringComparison.OrdinalIgnoreCase) == true) return true;
         if (item.ImplementationTasks?.Any(t => t.Task.Contains(keyword, StringComparison.OrdinalIgnoreCase)) == true) return true;
         return false;
+    }
+
+    private async Task PublishChangeSafeAsync(string action, string entityId, CancellationToken cancellationToken)
+    {
+        if (_eventBus is null)
+            return;
+
+        try
+        {
+            await _eventBus.PublishAsync(
+                new ChangeEvent
+                {
+                    Category = ChangeEventCategories.Todo,
+                    Action = action,
+                    EntityId = entityId,
+                    ResourceUri = $"mcp://workspace/todo/{entityId}",
+                },
+                cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed publishing sqlite TODO change event for {EntityId}", entityId);
+        }
     }
 }

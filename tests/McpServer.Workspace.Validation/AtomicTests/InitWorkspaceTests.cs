@@ -5,7 +5,7 @@ using Xunit;
 
 namespace McpServer.Workspace.Validation.AtomicTests;
 
-/// <summary>Audit: POST /mcp/workspace/{key}/init — Initialize workspace data files.</summary>
+/// <summary>Audit: POST /mcpserver/workspace/{key}/init — Initialize workspace data files.</summary>
 [Collection("WorkspaceEndpoint")]
 public sealed class InitWorkspaceTests : IAsyncLifetime
 {

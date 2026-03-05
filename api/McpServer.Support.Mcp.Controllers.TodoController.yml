@@ -35,13 +35,13 @@ items:
     content: >-
       [ApiController]
 
-      [Route("mcp/todo")]
+      [Route("mcpserver/todo")]
 
       public sealed class TodoController : ControllerBase
     content.vb: >-
       <ApiController>
 
-      <Route("mcp/todo")>
+      <Route("mcpserver/todo")>
 
       Public NotInheritable Class TodoController Inherits ControllerBase
   inheritance:

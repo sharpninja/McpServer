@@ -1,0 +1,58 @@
+@page "/workspaces"
+
+@inject WorkspaceListViewModel ViewModel
+
+<PageTitle>Workspace List</PageTitle>
+
+<h1 class="h2 mb-3">Workspace List</h1>
+
+@if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+{
+    <PrimerFlash Variant="danger" Title="Failed to load workspaces">@ViewModel.ErrorMessage</PrimerFlash>
+}
+else if (ViewModel.IsLoading)
+{
+    <p class="color-fg-muted">Loading workspaces...</p>
+}
+else if (ViewModel.Workspaces.Count == 0)
+{
+    <PrimerBlankslate Heading="No workspaces found" Description="No workspace records were returned by the server." />
+}
+else
+{
+    <PrimerDataTable TItem="WorkspaceSummary" Items="ViewModel.Workspaces" ColumnCount="5" Class="Table--full-width">
+        <HeaderTemplate>
+            <tr>
+                <th>Name</th>
+                <th>Path</th>
+                <th>Enabled</th>
+                <th>Primary</th>
+                <th></th>
+            </tr>
+        </HeaderTemplate>
+        <RowTemplate Context="item">
+            <td>@item.Name</td>
+            <td><code>@item.WorkspacePath</code></td>
+            <td>
+                <PrimerLabel Scheme="@(item.IsEnabled ? "success" : "attention")" Text="@(item.IsEnabled ? "Yes" : "No")" />
+            </td>
+            <td>
+                <PrimerLabel Scheme="@(item.IsPrimary ? "done" : "default")" Text="@(item.IsPrimary ? "Primary" : "Secondary")" />
+            </td>
+            <td>
+                <a class="btn btn-sm" href="@GetWorkspaceDetailHref(item.WorkspacePath)">Details</a>
+            </td>
+        </RowTemplate>
+    </PrimerDataTable>
+}
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await ViewModel.LoadAsync().ConfigureAwait(false);
+    }
+
+    private static string GetWorkspaceDetailHref(string workspacePath)
+        => $"/workspaces/detail?path={Uri.EscapeDataString(workspacePath)}";
+}
+

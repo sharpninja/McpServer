@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
+#pragma warning disable CS1591
+
 namespace McpServer.Client.Models;
 
 /// <summary>Request for context search.</summary>
@@ -110,3 +112,148 @@ public sealed class ContextSource
     [JsonPropertyName("ingestedAt")]
     public string? IngestedAt { get; set; }
 }
+
+/// <summary>Request for GraphRAG query.</summary>
+public sealed class GraphRagQueryRequest
+{
+    [JsonPropertyName("query")]
+    public string Query { get; set; } = string.Empty;
+
+    [JsonPropertyName("mode")]
+    public string? Mode { get; set; }
+
+    [JsonPropertyName("maxChunks")]
+    public int? MaxChunks { get; set; }
+
+    [JsonPropertyName("includeContextChunks")]
+    public bool IncludeContextChunks { get; set; } = true;
+
+    [JsonPropertyName("maxEntities")]
+    public int? MaxEntities { get; set; }
+
+    [JsonPropertyName("maxRelationships")]
+    public int? MaxRelationships { get; set; }
+
+    [JsonPropertyName("communityDepth")]
+    public int? CommunityDepth { get; set; }
+
+    [JsonPropertyName("responseTokenBudget")]
+    public int? ResponseTokenBudget { get; set; }
+}
+
+/// <summary>Request for GraphRAG index operation.</summary>
+public sealed class GraphRagIndexRequest
+{
+    [JsonPropertyName("force")]
+    public bool Force { get; set; }
+}
+
+/// <summary>GraphRAG status response.</summary>
+public sealed class GraphRagStatusResult
+{
+    [JsonPropertyName("enabled")]
+    public bool Enabled { get; set; }
+
+    [JsonPropertyName("workspacePath")]
+    public string WorkspacePath { get; set; } = string.Empty;
+
+    [JsonPropertyName("graphRoot")]
+    public string GraphRoot { get; set; } = string.Empty;
+
+    [JsonPropertyName("state")]
+    public string State { get; set; } = string.Empty;
+
+    [JsonPropertyName("isInitialized")]
+    public bool IsInitialized { get; set; }
+
+    [JsonPropertyName("isIndexed")]
+    public bool IsIndexed { get; set; }
+
+    [JsonPropertyName("lastIndexedAtUtc")]
+    public string? LastIndexedAtUtc { get; set; }
+
+    [JsonPropertyName("lastSuccessAtUtc")]
+    public string? LastSuccessAtUtc { get; set; }
+
+    [JsonPropertyName("lastFailureAtUtc")]
+    public string? LastFailureAtUtc { get; set; }
+
+    [JsonPropertyName("activeJobId")]
+    public string? ActiveJobId { get; set; }
+
+    [JsonPropertyName("failureCode")]
+    public string? FailureCode { get; set; }
+
+    [JsonPropertyName("lastError")]
+    public string? LastError { get; set; }
+
+    [JsonPropertyName("artifactVersion")]
+    public string ArtifactVersion { get; set; } = string.Empty;
+
+    [JsonPropertyName("lastIndexDurationMs")]
+    public long? LastIndexDurationMs { get; set; }
+
+    [JsonPropertyName("lastIndexedDocumentCount")]
+    public int? LastIndexedDocumentCount { get; set; }
+
+    [JsonPropertyName("backend")]
+    public string Backend { get; set; } = string.Empty;
+}
+
+/// <summary>GraphRAG citation entry.</summary>
+public sealed class GraphRagCitation
+{
+    [JsonPropertyName("sourceKey")]
+    public string SourceKey { get; set; } = string.Empty;
+
+    [JsonPropertyName("chunkId")]
+    public string? ChunkId { get; set; }
+
+    [JsonPropertyName("snippet")]
+    public string? Snippet { get; set; }
+}
+
+/// <summary>GraphRAG query response.</summary>
+public sealed class GraphRagQueryResult
+{
+    [JsonPropertyName("query")]
+    public string Query { get; set; } = string.Empty;
+
+    [JsonPropertyName("mode")]
+    public string Mode { get; set; } = string.Empty;
+
+    [JsonPropertyName("answer")]
+    public string Answer { get; set; } = string.Empty;
+
+    [JsonPropertyName("citations")]
+    public IReadOnlyList<GraphRagCitation> Citations { get; set; } = [];
+
+    [JsonPropertyName("chunks")]
+    public IReadOnlyList<ContextChunkResult> Chunks { get; set; } = [];
+
+    [JsonPropertyName("sourceKeys")]
+    public IReadOnlyList<string> SourceKeys { get; set; } = [];
+
+    [JsonPropertyName("entities")]
+    public IReadOnlyList<string> Entities { get; set; } = [];
+
+    [JsonPropertyName("relationships")]
+    public IReadOnlyList<string> Relationships { get; set; } = [];
+
+    [JsonPropertyName("communities")]
+    public IReadOnlyList<string> Communities { get; set; } = [];
+
+    [JsonPropertyName("fallbackUsed")]
+    public bool FallbackUsed { get; set; }
+
+    [JsonPropertyName("fallbackReason")]
+    public string? FallbackReason { get; set; }
+
+    [JsonPropertyName("failureCode")]
+    public string? FailureCode { get; set; }
+
+    [JsonPropertyName("backend")]
+    public string Backend { get; set; } = string.Empty;
+}
+
+#pragma warning restore CS1591

@@ -117,7 +117,7 @@ items:
   assemblies:
   - McpServer.Support.Mcp
   namespace: McpServer.Support.Mcp.Models
-  summary: Request path (e.g. /mcp/context/search).
+  summary: Request path (e.g. /mcpserver/context/search).
   example: []
   syntax:
     content: public string Path { get; set; }

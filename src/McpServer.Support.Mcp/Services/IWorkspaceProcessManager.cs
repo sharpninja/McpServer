@@ -1,20 +1,23 @@
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// FR-MCP-011 / TR-MCP-WS-003: Manages child MCP processes for workspaces.
+/// FR-MCP-011, TR-MCP-WS-003, TR-MCP-MT-001: Manages workspace registration, token generation, and marker file lifecycle.
+/// In the single-port multi-tenant model, all workspaces are served by one host application.
 /// </summary>
 public interface IWorkspaceProcessManager : IHostedService
 {
-    /// <summary>Start a hosted MCP instance for the given workspace.</summary>
-    Task<WorkspaceProcessStatus> StartAsync(string workspacePath, int port, CancellationToken ct = default, string? dataDirectory = null, string? workspacePromptTemplate = null);
+    /// <summary>Register a workspace: generate tokens and write marker file.</summary>
+    /// <param name="workspace">Full workspace definition (passed through to Handlebars prompt templates).</param>
+    /// <param name="ct">Cancellation token.</param>
+    Task<WorkspaceProcessStatus> StartAsync(WorkspaceDto workspace, CancellationToken ct = default);
 
-    /// <summary>Stop the hosted MCP instance for the given workspace.</summary>
+    /// <summary>Unregister a workspace and remove its marker file.</summary>
     Task<WorkspaceProcessStatus> StopAsync(string workspacePath, CancellationToken ct = default);
 
-    /// <summary>Get the process status of a workspace instance.</summary>
+    /// <summary>Get the registration status of a workspace.</summary>
     WorkspaceProcessStatus GetStatus(string workspacePath);
 
-    /// <summary>Stop all running workspace processes.</summary>
+    /// <summary>Unregister all workspaces and remove marker files.</summary>
     Task StopAllAsync(CancellationToken ct = default);
 
     /// <summary>Regenerate all marker files for running workspaces (e.g. after a prompt template change).</summary>

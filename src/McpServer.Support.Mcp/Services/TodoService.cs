@@ -1,5 +1,6 @@
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Notifications;
 using Microsoft.Extensions.Options;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -17,27 +18,29 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
     private readonly string _todoFilePath;
     private readonly string _todoAuditPath;
     private readonly IWriteAuditLog _auditLog;
+    private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<TodoService> _logger;
     private readonly SemaphoreSlim _fileLock = new(1, 1);
 
-    private static readonly IDeserializer Deserializer = new DeserializerBuilder()
+    private static readonly IDeserializer s_deserializer = new DeserializerBuilder()
         .WithNamingConvention(HyphenatedNamingConvention.Instance)
         .WithTypeConverter(new TodoFileYamlConverter())
         .IgnoreUnmatchedProperties()
         .Build();
 
-    private static readonly ISerializer Serializer = new SerializerBuilder()
+    private static readonly ISerializer s_serializer = new SerializerBuilder()
         .WithNamingConvention(HyphenatedNamingConvention.Instance)
         .WithTypeConverter(new TodoFileYamlConverter())
         .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
         .Build();
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
-    public TodoService(IOptions<IngestionOptions> options, IWriteAuditLog auditLog, ILogger<TodoService> logger)
+    public TodoService(IOptions<IngestionOptions> options, IWriteAuditLog auditLog, ILogger<TodoService> logger, IChangeEventBus? eventBus = null)
     {
         ArgumentNullException.ThrowIfNull(options);
         _auditLog = auditLog ?? throw new ArgumentNullException(nameof(auditLog));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _eventBus = eventBus;
         var repoRoot = options.Value.RepoRoot ?? ".";
         var todoPath = string.IsNullOrWhiteSpace(options.Value.TodoFilePath) ? DefaultTodoRelativePath : options.Value.TodoFilePath;
         _todoFilePath = Path.GetFullPath(Path.IsPathRooted(todoPath) ? todoPath : Path.Combine(repoRoot, todoPath));
@@ -45,12 +48,13 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
     }
 
     /// <summary>TR-PLANNED-013: Constructor accepting explicit file path (for testing).</summary>
-    internal TodoService(string todoFilePath, IWriteAuditLog auditLog, ILogger<TodoService> logger)
+    internal TodoService(string todoFilePath, IWriteAuditLog auditLog, ILogger<TodoService> logger, IChangeEventBus? eventBus = null)
     {
         _todoFilePath = todoFilePath ?? throw new ArgumentNullException(nameof(todoFilePath));
         _todoAuditPath = todoFilePath;
         _auditLog = auditLog ?? throw new ArgumentNullException(nameof(auditLog));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _eventBus = eventBus;
     }
 
     /// <inheritdoc />
@@ -87,6 +91,10 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
         {
             var file = await ReadFileAsync(cancellationToken).ConfigureAwait(false) ?? new TodoFile();
 
+            var idError = TodoValidator.ValidateTodoId(request.Id);
+            if (idError is not null)
+                return new TodoMutationResult(false, idError);
+
             // Check for duplicate id
             var existing = FlattenAll(file).Find(i => string.Equals(i.Id, request.Id, StringComparison.OrdinalIgnoreCase));
             if (existing is not null)
@@ -107,6 +115,8 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
                 Estimate = request.Estimate,
                 Description = request.Description?.ToList(),
                 TechnicalDetails = request.TechnicalDetails?.ToList(),
+                Note = request.Note,
+                Remaining = request.Remaining,
                 DependsOn = request.DependsOn?.ToList(),
                 FunctionalRequirements = request.FunctionalRequirements?.ToList(),
                 TechnicalRequirements = request.TechnicalRequirements?.ToList(),
@@ -117,6 +127,9 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
             if (item.DependsOn is { Count: > 0 })
             {
                 var allItems = FlattenAll(file);
+                var depIdError = TodoValidator.ValidateDependencyIds(item.DependsOn, allItems, "dependsOn");
+                if (depIdError is not null)
+                    return new TodoMutationResult(false, depIdError);
                 var depError = TodoValidator.ValidateDependencies(request.Id, item.DependsOn, allItems);
                 if (depError is not null)
                     return new TodoMutationResult(false, depError);
@@ -126,6 +139,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
             await WriteFileAsync(file, cancellationToken).ConfigureAwait(false);
             _auditLog.RecordWrite(_todoAuditPath, DateTime.UtcNow);
             _logger.LogInformation("Created TODO item {Id} in {Section}/{Priority}", request.Id, request.Section, request.Priority);
+            await PublishChangeSafeAsync(ChangeEventActions.Created, request.Id, cancellationToken).ConfigureAwait(false);
 
             var flat = ToFlat(item, request.Section, request.Priority);
             return new TodoMutationResult(true, Item: flat);
@@ -172,6 +186,9 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
             {
                 var allItems = FlattenAll(file);
                 var proposedDeps = request.DependsOn.ToList();
+                var depIdError = TodoValidator.ValidateDependencyIds(proposedDeps, allItems, "dependsOn");
+                if (depIdError is not null)
+                    return new TodoMutationResult(false, depIdError);
                 var depError = TodoValidator.ValidateDependencies(id, proposedDeps, allItems);
                 if (depError is not null)
                     return new TodoMutationResult(false, depError);
@@ -205,6 +222,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
             await WriteFileAsync(file, cancellationToken).ConfigureAwait(false);
             _auditLog.RecordWrite(_todoAuditPath, DateTime.UtcNow);
             _logger.LogInformation("Updated TODO item {Id}", id);
+            await PublishChangeSafeAsync(ChangeEventActions.Updated, id, cancellationToken).ConfigureAwait(false);
 
             var flat = ToFlat(item, section!, newPriority);
             return new TodoMutationResult(true, Item: flat);
@@ -234,6 +252,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
             await WriteFileAsync(file, cancellationToken).ConfigureAwait(false);
             _auditLog.RecordWrite(_todoAuditPath, DateTime.UtcNow);
             _logger.LogInformation("Deleted TODO item {Id}", id);
+            await PublishChangeSafeAsync(ChangeEventActions.Deleted, id, cancellationToken).ConfigureAwait(false);
 
             return new TodoMutationResult(true);
         }
@@ -254,7 +273,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
             }
 
             var yaml = await File.ReadAllTextAsync(_todoFilePath, cancellationToken).ConfigureAwait(false);
-            return Deserializer.Deserialize<TodoFile>(yaml);
+            return s_deserializer.Deserialize<TodoFile>(yaml);
         }
         catch (Exception ex)
         {
@@ -265,7 +284,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
 
     private async Task WriteFileAsync(TodoFile file, CancellationToken cancellationToken)
     {
-        var yaml = Serializer.Serialize(file);
+        var yaml = s_serializer.Serialize(file);
         var dir = Path.GetDirectoryName(_todoFilePath);
         if (!string.IsNullOrEmpty(dir))
             Directory.CreateDirectory(dir);
@@ -481,5 +500,28 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
     {
         var list = GetPriorityList(section, priority);
         list?.Add(item);
+    }
+
+    private async Task PublishChangeSafeAsync(string action, string entityId, CancellationToken cancellationToken)
+    {
+        if (_eventBus is null)
+            return;
+
+        try
+        {
+            await _eventBus.PublishAsync(
+                new ChangeEvent
+                {
+                    Category = ChangeEventCategories.Todo,
+                    Action = action,
+                    EntityId = entityId,
+                    ResourceUri = $"mcp://workspace/todo/{entityId}",
+                },
+                cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed publishing TODO change event for {EntityId}", entityId);
+        }
     }
 }

@@ -7,7 +7,7 @@ namespace McpServer.Support.Mcp.Controllers;
 /// Only registered in Debug builds and Staging environments — excluded from Release/Production.
 /// </summary>
 [ApiController]
-[Route("mcp/diagnostic")]
+[Route("mcpserver/diagnostic")]
 public sealed class DiagnosticController : ControllerBase
 {
     private readonly IWebHostEnvironment _env;

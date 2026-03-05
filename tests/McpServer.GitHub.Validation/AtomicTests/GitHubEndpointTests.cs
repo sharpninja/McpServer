@@ -14,7 +14,7 @@ public sealed class GitHubEndpointTests
 
     public GitHubEndpointTests(GitHubEndpointFixture fixture) => _fixture = fixture;
 
-    // --- GET /mcp/gh/issues ---
+    // --- GET /mcpserver/gh/issues ---
 
     [Fact]
     public async Task ListIssues_Returns200()
@@ -33,7 +33,7 @@ public sealed class GitHubEndpointTests
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
-    // --- GET /mcp/gh/issues/{number} ---
+    // --- GET /mcpserver/gh/issues/{number} ---
 
     [Fact]
     public async Task GetIssue_ExistingNumber_Returns200Or404()
@@ -44,7 +44,7 @@ public sealed class GitHubEndpointTests
             $"Expected 200 or 404, got {(int)response.StatusCode}");
     }
 
-    // --- POST /mcp/gh/issues (create) ---
+    // --- POST /mcpserver/gh/issues (create) ---
 
     [Fact]
     public async Task CreateIssue_MissingTitle_Returns400()
@@ -54,7 +54,7 @@ public sealed class GitHubEndpointTests
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
-    // --- PUT /mcp/gh/issues/{number} (update) ---
+    // --- PUT /mcpserver/gh/issues/{number} (update) ---
 
     [Fact]
     public async Task UpdateIssue_NullBody_Returns400()
@@ -63,7 +63,7 @@ public sealed class GitHubEndpointTests
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
-    // --- POST /mcp/gh/issues/{id}/comments ---
+    // --- POST /mcpserver/gh/issues/{id}/comments ---
 
     [Fact]
     public async Task CommentOnIssue_MissingBody_Returns400()
@@ -73,7 +73,7 @@ public sealed class GitHubEndpointTests
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
-    // --- GET /mcp/gh/labels ---
+    // --- GET /mcpserver/gh/labels ---
 
     [Fact]
     public async Task ListLabels_Returns200()
@@ -84,7 +84,7 @@ public sealed class GitHubEndpointTests
         Assert.True(json.TryGetProperty("labels", out _));
     }
 
-    // --- GET /mcp/gh/pulls ---
+    // --- GET /mcpserver/gh/pulls ---
 
     [Fact]
     public async Task ListPulls_Returns200()
@@ -103,7 +103,7 @@ public sealed class GitHubEndpointTests
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
-    // --- POST /mcp/gh/pulls/{id}/comments ---
+    // --- POST /mcpserver/gh/pulls/{id}/comments ---
 
     [Fact]
     public async Task CommentOnPull_MissingBody_Returns400()
@@ -113,7 +113,7 @@ public sealed class GitHubEndpointTests
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
-    // --- POST /mcp/gh/issues/{number}/close ---
+    // --- POST /mcpserver/gh/issues/{number}/close ---
 
     [Fact]
     public async Task CloseIssue_NonExistent_ReturnsBadRequestOr200()
@@ -124,7 +124,7 @@ public sealed class GitHubEndpointTests
             $"Expected 200 or 400, got {(int)response.StatusCode}");
     }
 
-    // --- POST /mcp/gh/issues/{number}/reopen ---
+    // --- POST /mcpserver/gh/issues/{number}/reopen ---
 
     [Fact]
     public async Task ReopenIssue_NonExistent_ReturnsBadRequestOr200()
@@ -134,7 +134,7 @@ public sealed class GitHubEndpointTests
             $"Expected 200 or 400, got {(int)response.StatusCode}");
     }
 
-    // --- POST /mcp/gh/issues/sync/from-github ---
+    // --- POST /mcpserver/gh/issues/sync/from-github ---
 
     [Fact]
     public async Task SyncFromGitHub_Returns200Or400()
@@ -144,7 +144,7 @@ public sealed class GitHubEndpointTests
             $"Expected 200 or 400, got {(int)response.StatusCode}");
     }
 
-    // --- POST /mcp/gh/issues/sync/to-github ---
+    // --- POST /mcpserver/gh/issues/sync/to-github ---
 
     [Fact]
     public async Task SyncToGitHub_Returns200Or400()
@@ -154,7 +154,7 @@ public sealed class GitHubEndpointTests
             $"Expected 200 or 400, got {(int)response.StatusCode}");
     }
 
-    // --- POST /mcp/gh/issues/{number}/sync ---
+    // --- POST /mcpserver/gh/issues/{number}/sync ---
 
     [Fact]
     public async Task SyncSingleIssue_Returns200Or400Or404()

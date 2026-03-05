@@ -1,21 +1,33 @@
 // TR-PLANNED-013 / FR-SUPPORT-010: MCP Context Unification - local MCP server for Cursor and Copilot.
 
 using System.Globalization;
+using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Runtime.Versioning;
 using System.Text;
+using System.Text.Json;
+using McpServer.Common.Copilot;
 using McpServer.Common.Copilot.Extensions;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Logging;
 using McpServer.Support.Mcp.McpStdio;
 using McpServer.Support.Mcp.Middleware;
+using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Options;
+using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Controllers;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Web;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Configuration.Json;
+using NetEscapades.Configuration.Yaml;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Hosting.WindowsServices;
+using Microsoft.IdentityModel.Tokens;
 using ModelContextProtocol.AspNetCore;
 using Serilog;
 using Serilog.Events;
@@ -27,6 +39,8 @@ if (IsStdioTransportRequested(args))
     await McpStdioHost.RunAsync(args, default).ConfigureAwait(false);
     return;
 }
+
+var serverStartupUtc = DateTimeOffset.UtcNow;
 
 bool IsStdioTransportRequested(string[] a)
 {
@@ -41,6 +55,11 @@ bool IsStdioTransportRequested(string[] a)
 }
 
 var builder = WebApplication.CreateBuilder(args);
+DisableEnvironmentSpecificJsonConfigForWindowsService(builder);
+
+// Load optional YAML configuration (overrides JSON settings when present).
+builder.Configuration.AddYamlFile("appsettings.yaml", optional: true, reloadOnChange: true);
+
 if (OperatingSystem.IsWindows())
 {
     builder.Host.UseWindowsService(options =>
@@ -56,18 +75,17 @@ McpInstanceResolver.ValidateTodoStorage(builder.Configuration, instanceName);
 // Resolve the primary workspace from Mcp:Workspaces config (FR-MCP-025).
 // Set ContentRootPath to the primary workspace's path so relative paths resolve correctly
 // and WorkspaceProcessManager can identify it.
+WorkspaceConfigEntry? primaryWorkspaceEntry = null;
 {
     var workspaces = builder.Configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
-    var primary = workspaces
+    primaryWorkspaceEntry = workspaces
         .Where(w => w.IsPrimary && w.IsEnabled)
-        .OrderBy(w => w.WorkspacePort)
         .FirstOrDefault();
-    primary ??= workspaces
+    primaryWorkspaceEntry ??= workspaces
         .Where(w => w.IsEnabled)
-        .OrderBy(w => w.WorkspacePort)
         .FirstOrDefault();
-    if (primary is not null)
-        builder.Environment.ContentRootPath = Path.GetFullPath(primary.WorkspacePath);
+    if (primaryWorkspaceEntry is not null)
+        builder.Environment.ContentRootPath = Path.GetFullPath(primaryWorkspaceEntry.WorkspacePath);
 }
 
 // TR-PLANNED-013: Serilog with optional Parseable (local Docker) sink.
@@ -79,6 +97,17 @@ builder.Host.UseSerilog((context, _, config) =>
 
     var parseable = context.Configuration.GetSection(McpParseableOptions.SectionName).Get<McpParseableOptions>()
         ?? new McpParseableOptions();
+    if (!context.HostingEnvironment.IsEnvironment("Test"))
+    {
+        var fileLogPath = ResolveSerilogFilePath(parseable.FallbackLogPath);
+        EnsureSerilogFileDirectory(fileLogPath);
+        config.WriteTo.File(
+            path: fileLogPath,
+            rollingInterval: RollingInterval.Day,
+            formatProvider: CultureInfo.InvariantCulture,
+            shared: true);
+    }
+
     if (!string.IsNullOrWhiteSpace(parseable.Url) && !context.HostingEnvironment.IsEnvironment("Test"))
     {
         var ingestUri = $"{parseable.Url!.TrimEnd('/')}/api/v1/ingest";
@@ -87,15 +116,13 @@ builder.Host.UseSerilog((context, _, config) =>
         config.WriteTo.Logger(lc => lc
             .Filter.ByExcluding(e => e.Properties.TryGetValue(ParseableHttpClient.ParseableMetaPropertyName, out var v) && v is ScalarValue s && (s.Value is true or "True"))
             .WriteTo.Http(requestUri: ingestUri, queueLimitBytes: null, textFormatter: new ParseableEventFormatter(), batchFormatter: new ParseableBatchFormatter(), httpClient: httpClient, restrictedToMinimumLevel: LogEventLevel.Verbose));
-
-        // TR-PLANNED-013: File-based fallback when publishing to Parseable fails (e.g. Parseable down).
-        var fallbackPath = !string.IsNullOrWhiteSpace(parseable.FallbackLogPath) ? parseable.FallbackLogPath!.Trim() : "logs/mcp-.log";
-        config.WriteTo.File(
-            path: fallbackPath,
-            rollingInterval: RollingInterval.Day,
-            formatProvider: CultureInfo.InvariantCulture);
     }
-});
+}, writeToProviders: true);
+
+if (OperatingSystem.IsWindows())
+{
+    ConfigureWindowsEventLogSource(builder);
+}
 
 var portFromEnv = Environment.GetEnvironmentVariable("PORT");
 var configuredPort = McpInstanceResolver.GetEffectiveMcpInt(builder.Configuration, instanceName, "Port", 7147);
@@ -125,18 +152,44 @@ if (builder.Environment.IsEnvironment("Test"))
 }
 else
 {
-    var dataSource = McpInstanceResolver.ResolveSqliteDataSource(builder.Configuration, instanceName);
-    builder.Services.AddDbContext<McpDbContext>(options =>
+    var databaseProvider = (McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "DatabaseProvider") ?? "sqlite")
+        .Trim()
+        .ToUpperInvariant();
+
+    if (databaseProvider is "POSTGRES" or "POSTGRESQL" or "NPGSQL")
     {
-        options.UseSqlite($"Data Source={dataSource}");
-    }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
+        var postgresConnectionString = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "PostgresConnectionString")
+            ?? builder.Configuration.GetConnectionString("Mcp");
+
+        if (string.IsNullOrWhiteSpace(postgresConnectionString))
+            throw new InvalidOperationException("Mcp:PostgresConnectionString (or ConnectionStrings:Mcp) is required when Mcp:DatabaseProvider is postgres.");
+
+        builder.Services.AddDbContext<McpDbContext>(options =>
+        {
+            options.UseNpgsql(postgresConnectionString);
+            options.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
+        }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
+    }
+    else
+    {
+        var dataSource = McpInstanceResolver.ResolveSqliteDataSource(builder.Configuration, instanceName);
+        builder.Services.AddDbContext<McpDbContext>(options =>
+        {
+            options.UseSqlite($"Data Source={dataSource}");
+        }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
+    }
 }
 
 builder.Services.Configure<IngestionOptions>(builder.Configuration.GetSection("Mcp"));
+builder.Services.Configure<GraphRagOptions>(builder.Configuration.GetSection(GraphRagOptions.SectionName));
 builder.Services.Configure<MarkerPromptOptions>(builder.Configuration.GetSection(MarkerPromptOptions.SectionName));
 builder.Services.Configure<McpParseableOptions>(builder.Configuration.GetSection(McpParseableOptions.SectionName));
 builder.Services.Configure<McpInteractionLoggingOptions>(builder.Configuration.GetSection(McpInteractionLoggingOptions.SectionName));
 builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(TodoStorageOptions.SectionName));
+builder.Services.Configure<AgentPoolOptions>(builder.Configuration.GetSection(AgentPoolOptions.SectionName));
+builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
+builder.Services.Configure<RequirementsOptions>(builder.Configuration.GetSection(RequirementsOptions.SectionName));
+builder.Services.AddSingleton<IValidateOptions<AgentPoolOptions>, AgentPoolOptionsValidator>();
 builder.Services.PostConfigure<VectorIndexOptions>(options =>
 {
     var instanceIndexPath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "IndexPath");
@@ -156,16 +209,37 @@ builder.Services.PostConfigure<IngestionOptions>(options =>
     options.SessionsPath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "SessionsPath") ?? options.SessionsPath;
     options.UnifiedModelSchemaPath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "UnifiedModelSchemaPath") ?? options.UnifiedModelSchemaPath;
     options.ExternalDocsPath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "ExternalDocsPath") ?? options.ExternalDocsPath;
+
+    options.TodoFilePath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.TodoFilePath);
+    options.SessionsPath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.SessionsPath);
+    options.UnifiedModelSchemaPath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.UnifiedModelSchemaPath);
 });
 builder.Services.PostConfigure<TodoStorageOptions>(options =>
 {
     options.Provider = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TodoStorage:Provider") ?? options.Provider;
     options.SqliteDataSource = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TodoStorage:SqliteDataSource") ?? options.SqliteDataSource;
-    if (!Path.IsPathRooted(options.SqliteDataSource))
-    {
-        var dataDirectory = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "DataDirectory") ?? ".";
-        options.SqliteDataSource = Path.GetFullPath(Path.Combine(dataDirectory, options.SqliteDataSource));
-    }
+    options.SqliteDataSource = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.SqliteDataSource);
+});
+builder.Services.PostConfigure<TemplateStorageOptions>(options =>
+{
+    options.FilePath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TemplateStorage:FilePath") ?? options.FilePath;
+    options.FilePath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.FilePath);
+});
+builder.Services.PostConfigure<RequirementsOptions>(options =>
+{
+    var repoRoot = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "RepoRoot")
+                  ?? builder.Environment.ContentRootPath;
+    repoRoot = Path.GetFullPath(repoRoot);
+
+    static string ResolvePath(string repoRootPath, string path) =>
+        Path.IsPathRooted(path)
+            ? Path.GetFullPath(path)
+            : Path.GetFullPath(Path.Combine(repoRootPath, path));
+
+    options.FunctionalRequirementsPath = ResolvePath(repoRoot, options.FunctionalRequirementsPath);
+    options.TechnicalRequirementsPath = ResolvePath(repoRoot, options.TechnicalRequirementsPath);
+    options.TestingRequirementsPath = ResolvePath(repoRoot, options.TestingRequirementsPath);
+    options.MappingPath = ResolvePath(repoRoot, options.MappingPath);
 });
 builder.Services.Configure<EmbeddingOptions>(builder.Configuration.GetSection("Embedding"));
 builder.Services.Configure<VectorIndexOptions>(builder.Configuration.GetSection("VectorIndex"));
@@ -174,8 +248,16 @@ builder.Services.AddHostedService<InteractionLogSubmissionService>();
 builder.Services.AddHttpClient("InteractionLogSubmission");
 builder.Services.AddSingleton<ISyncStatusStore, SyncStatusStore>();
 builder.Services.AddSingleton<IWriteAuditLog, WriteAuditLog>();
+builder.Services.AddSingleton<IChangeEventBus, ChannelChangeEventBus>();
 builder.Services.AddSingleton<Chunker>();
 builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
+builder.Services.Configure<ProcessRunnerOptions>(options =>
+{
+    if (primaryWorkspaceEntry is not null)
+    {
+        options.GitHubToken = primaryWorkspaceEntry.GitHubToken;
+    }
+});
 builder.Services.AddSingleton<IEmbeddingService, EmbeddingService>();
 builder.Services.AddSingleton<IVectorIndexService, VectorIndexService>();
 builder.Services.AddScoped<RepoIngestor>();
@@ -198,47 +280,117 @@ builder.Services.AddSingleton<ITodoService>(sp =>
         _ => ActivatorUtilities.CreateInstance<TodoService>(sp),
     };
 });
+builder.Services.AddSingleton<TodoServiceResolver>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<WorkspaceServiceAccessor>();
 builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
 builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
+builder.Services.AddSingleton<RequirementsDocumentService>();
+builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<RequirementsDocumentService>());
+builder.Services.AddSingleton<IRequirementsDocumentService>(sp => sp.GetRequiredService<RequirementsDocumentService>());
+builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
+builder.Services.AddSingleton<IVoiceConversationService, VoiceConversationService>();
+builder.Services.AddSingleton<IAgentPoolService, AgentPoolService>();
+builder.Services.AddSingleton<PromptTemplateRenderer>();
+builder.Services.Configure<TemplateStorageOptions>(builder.Configuration.GetSection(TemplateStorageOptions.SectionName));
+builder.Services.AddSingleton<IPromptTemplateService, PromptTemplateService>();
+builder.Services.AddSingleton<IMarkerPromptProvider, FileMarkerPromptProvider>();
+builder.Services.AddSingleton<ITodoPromptProvider, TodoPromptProvider>();
+builder.Services.AddSingleton<PairingHtmlRenderer>();
+builder.Services.Configure<TodoPromptOptions>(options =>
+{
+    if (primaryWorkspaceEntry is not null)
+    {
+        options.StatusPrompt = string.IsNullOrWhiteSpace(primaryWorkspaceEntry.StatusPrompt) ? null : primaryWorkspaceEntry.StatusPrompt;
+        options.ImplementPrompt = string.IsNullOrWhiteSpace(primaryWorkspaceEntry.ImplementPrompt) ? null : primaryWorkspaceEntry.ImplementPrompt;
+        options.PlanPrompt = string.IsNullOrWhiteSpace(primaryWorkspaceEntry.PlanPrompt) ? null : primaryWorkspaceEntry.PlanPrompt;
+        options.BaseUrl = $"http://{System.Net.Dns.GetHostName()}:{listenPort}";
+        options.RunAs = primaryWorkspaceEntry.RunAs;
+        options.GitHubToken = primaryWorkspaceEntry.GitHubToken;
+        options.AgentPath = primaryWorkspaceEntry.AgentPath;
+    }
+});
+builder.Services.AddSingleton<IProcessSpawner, DesktopProcessSpawner>();
 builder.Services.AddCopilotClient();
 builder.Services.AddScoped<ISessionLogService, SessionLogService>();
 builder.Services.AddScoped<Fts5SearchService>();
 builder.Services.AddScoped<IContextSearchService, HybridSearchService>();
+builder.Services.AddScoped<IGraphRagBackendAdapter, InternalFallbackGraphRagBackendAdapter>();
+builder.Services.AddScoped<IGraphRagBackendAdapter, ExternalCommandGraphRagBackendAdapter>();
+builder.Services.AddScoped<IGraphRagService, GraphRagService>();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
 builder.Services.AddScoped<IToolBucketService, ToolBucketService>();
+builder.Services.AddScoped<IAgentService, AgentService>();
+builder.Services.AddSingleton<WorkspaceTokenService>();
+builder.Services.AddScoped<WorkspaceContext>();
+builder.Services.AddSingleton(new ServerRuntimeInfo(serverStartupUtc, listenPort));
 builder.Services.AddSingleton<IWorkspaceProcessManager, WorkspaceProcessManager>();
 builder.Services.Configure<PairingOptions>(builder.Configuration.GetSection(PairingOptions.SectionName));
+builder.Services.Configure<OidcAuthOptions>(builder.Configuration.GetSection(OidcAuthOptions.SectionName));
 builder.Services.Configure<ToolRegistryOptions>(builder.Configuration.GetSection(ToolRegistryOptions.SectionName));
 builder.Services.AddSingleton<PairingSessionService>();
 
-// Tunnel strategy pattern — follows ITodoService provider-switch convention.
-var tunnelProvider = (builder.Configuration
-    .GetSection(TunnelOptions.SectionName)
-    .Get<TunnelOptions>()?.Provider ?? "")
-    .Trim().ToUpperInvariant();
+var oidcAuthBootstrap = builder.Configuration.GetSection(OidcAuthOptions.SectionName).Get<OidcAuthOptions>()
+    ?? new OidcAuthOptions();
 
-if (!string.IsNullOrEmpty(tunnelProvider))
+if (oidcAuthBootstrap.Enabled)
 {
-    builder.Services.Configure<TunnelOptions>(
-        builder.Configuration.GetSection(TunnelOptions.SectionName));
-    builder.Services.AddSingleton<ITunnelProvider>(sp => tunnelProvider switch
-    {
-        "NGROK" => ActivatorUtilities.CreateInstance<NgrokTunnelProvider>(sp),
-        "CLOUDFLARE" => ActivatorUtilities.CreateInstance<CloudflareTunnelProvider>(sp),
-        "FRP" => ActivatorUtilities.CreateInstance<FrpTunnelProvider>(sp),
-        _ => throw new InvalidOperationException($"Unknown tunnel provider: {tunnelProvider}"),
-    });
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.MapInboundClaims = false;
+            options.Authority = oidcAuthBootstrap.Authority;
+            options.Audience = oidcAuthBootstrap.Audience;
+            options.RequireHttpsMetadata = oidcAuthBootstrap.RequireHttpsMetadata;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                NameClaimType = "preferred_username",
+                RoleClaimType = "realm_roles",
+                ValidateAudience = !string.IsNullOrWhiteSpace(oidcAuthBootstrap.Audience),
+            };
+        });
 }
+else
+{
+    // Keep authorization available so [Authorize(Policy="AgentManager")] can fall back to API-key-only mode.
+    builder.Services.AddAuthentication();
+}
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AgentManager", policy =>
+    {
+        if (!oidcAuthBootstrap.Enabled)
+        {
+            policy.RequireAssertion(_ => true);
+            return;
+        }
+
+        policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+        policy.RequireAuthenticatedUser();
+        policy.RequireAssertion(ctx => HasAnyRole(ctx.User, "agent-manager", "admin"));
+    });
+});
+
+// Tunnel registry — providers registered via DI and started by the hosted service lifecycle.
+builder.Services.Configure<TunnelOptions>(
+    builder.Configuration.GetSection(TunnelOptions.SectionName));
+builder.Services.AddSingleton<NgrokTunnelProvider>();
+builder.Services.AddSingleton<ITunnelProvider>(sp => sp.GetRequiredService<NgrokTunnelProvider>());
+builder.Services.AddSingleton<CloudflareTunnelProvider>();
+builder.Services.AddSingleton<ITunnelProvider>(sp => sp.GetRequiredService<CloudflareTunnelProvider>());
+builder.Services.AddSingleton<FrpTunnelProvider>();
+builder.Services.AddSingleton<ITunnelProvider>(sp => sp.GetRequiredService<FrpTunnelProvider>());
+builder.Services.AddSingleton<TunnelRegistry>();
 
 if (!builder.Environment.IsEnvironment("Test"))
 {
     builder.Services.AddHostedService<SessionLogFileWatcher>();
     builder.Services.AddHostedService<VectorIndexStartupService>();
     builder.Services.AddHostedService(sp => (WorkspaceProcessManager)sp.GetRequiredService<IWorkspaceProcessManager>());
-
-    if (!string.IsNullOrEmpty(tunnelProvider))
-        builder.Services.AddHostedService(sp => sp.GetRequiredService<ITunnelProvider>());
+    builder.Services.AddHostedService(sp => sp.GetRequiredService<TunnelRegistry>());
+    builder.Services.AddHostedService<AgentPoolSeedService>();
 }
 
 var mvcBuilder = builder.Services.AddControllers();
@@ -260,12 +412,20 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+var serverProcessId = Environment.ProcessId;
+var serverCommandLine = Environment.CommandLine;
+
 // Log application version at startup for deployment verification.
 app.LogApplicationVersion();
+app.Logger.LogInformation(
+    "Server startup event: PID={ProcessId}; Command={CommandLine}",
+    serverProcessId,
+    serverCommandLine);
 
 if (!app.Environment.IsEnvironment("Test"))
 {
     var parseableOpts = app.Configuration.GetSection(McpParseableOptions.SectionName).Get<McpParseableOptions>() ?? new McpParseableOptions();
+    Log.Information("[Serilog] File sink enabled, path: {Path}", ResolveSerilogFilePath(parseableOpts.FallbackLogPath));
     if (!string.IsNullOrWhiteSpace(parseableOpts.Url))
         Log.Information("[Parseable] Sink enabled, ingestion URL: {Url}/api/v1/ingest (X-P-Stream: {Stream})", parseableOpts.Url.TrimEnd('/'), parseableOpts.StreamName);
     else
@@ -278,6 +438,15 @@ if (!app.Environment.IsEnvironment("Test"))
     {
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         await db.Database.MigrateAsync().ConfigureAwait(false);
+    }
+
+    // Seed built-in agent definitions on startup (idempotent).
+    using (var scope = app.Services.CreateScope())
+    {
+        var agentService = scope.ServiceProvider.GetRequiredService<IAgentService>();
+        var seededCount = await agentService.SeedBuiltInDefaultsAsync().ConfigureAwait(false);
+        if (seededCount > 0)
+            Log.Information("[Agents] Seeded {Count} built-in agent definitions", seededCount);
     }
 
     // Seed default tool buckets from configuration (idempotent — skips existing).
@@ -312,12 +481,58 @@ if (!app.Environment.IsEnvironment("Test"))
 
     app.Lifetime.ApplicationStopping.Register(() =>
     {
+        app.Logger.LogInformation(
+            "Graceful shutdown initiated: PID={ProcessId}; Command={CommandLine}",
+            serverProcessId,
+            serverCommandLine);
         MarkerFileService.RemoveMarker(primaryWorkspacePath);
+    });
+
+    app.Lifetime.ApplicationStopped.Register(() =>
+    {
+        app.Logger.LogInformation(
+            "Graceful shutdown completed: PID={ProcessId}; Command={CommandLine}",
+            serverProcessId,
+            serverCommandLine);
     });
 }
 
+// Seed primary-host API tokens eagerly so /api-key is ready even if workspace auto-start lags.
+{
+    var apiKeyWorkspacePath = ResolvePrimaryApiKeyWorkspacePath(app.Configuration, app.Environment, instanceName);
+    if (!string.IsNullOrWhiteSpace(apiKeyWorkspacePath))
+    {
+        var tokenService = app.Services.GetRequiredService<WorkspaceTokenService>();
+        var fullTokenExisted = tokenService.GetToken(apiKeyWorkspacePath) is not null;
+        var defaultTokenExisted = tokenService.GetDefaultToken(apiKeyWorkspacePath) is not null;
+
+        _ = tokenService.GetToken(apiKeyWorkspacePath) ?? tokenService.GenerateToken(apiKeyWorkspacePath);
+        _ = tokenService.GetDefaultToken(apiKeyWorkspacePath) ?? tokenService.GenerateDefaultToken(apiKeyWorkspacePath);
+
+        if (!fullTokenExisted || !defaultTokenExisted)
+        {
+            app.Logger.LogInformation(
+                "Primary host API tokens seeded: Workspace={WorkspacePath}; FullTokenExisted={FullTokenExisted}; DefaultTokenExisted={DefaultTokenExisted}",
+                apiKeyWorkspacePath,
+                fullTokenExisted,
+                defaultTokenExisted);
+        }
+    }
+}
+
+// Tunnel lifecycle is managed by TunnelRegistry as an IHostedService.
+// Only the shutdown hook remains for cleanup outside the hosted service scope.
+app.Lifetime.ApplicationStopping.Register(() =>
+    app.Services.GetRequiredService<TunnelRegistry>().StopAllAsync().GetAwaiter().GetResult());
+
 // TR-PLANNED-013: Structured interaction logging for all requests; optional async submission to LoggingServiceUrl.
 app.UseMiddleware<InteractionLoggingMiddleware>();
+
+// Per-workspace auth tokens: protect all /mcpserver/* REST routes.
+app.UseAuthentication();
+app.UseMiddleware<WorkspaceResolutionMiddleware>();
+app.UseMiddleware<WorkspaceAuthMiddleware>();
+app.UseAuthorization();
 
 app.MapDefaultEndpoints();
 
@@ -327,23 +542,56 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MCP Context
 app.MapGet("/", () => Results.Redirect("/swagger"))
     .ExcludeFromDescription();
 
+// Unprotected diagnostics endpoint for stale-marker detection and client troubleshooting.
+app.MapGet("/server-startup-utc", (ServerRuntimeInfo runtimeInfo) =>
+    MarkerDiagnosticsEndpointHelper.GetServerStartupResult(runtimeInfo))
+    .ExcludeFromDescription();
+
+// Unprotected diagnostics endpoint returning marker file timestamps for configured workspaces.
+app.MapGet("/marker-file-timestamp", (string? repoPath, IConfiguration configuration) =>
+    MarkerDiagnosticsEndpointHelper.GetMarkerFileTimestampResult(
+        repoPath,
+        configuration,
+        app.Environment.ContentRootPath,
+        restrictToCurrentRepoRoot: false))
+    .ExcludeFromDescription();
+
+// Unprotected endpoint returning the default (anonymous) API key for consumers without marker file access.
+app.MapGet("/api-key", (WorkspaceTokenService tokenService) =>
+{
+    var workspacePath = ResolvePrimaryApiKeyWorkspacePath(app.Configuration, app.Environment, instanceName) ?? string.Empty;
+    if (string.IsNullOrWhiteSpace(workspacePath))
+        return Results.Problem("No workspace configured.", statusCode: 503);
+
+    var defaultToken = tokenService.GetDefaultToken(workspacePath);
+    if (defaultToken is null)
+    {
+        defaultToken = tokenService.GenerateDefaultToken(workspacePath);
+        app.Logger.LogWarning(
+            "Default API token was missing during /api-key request and was generated on demand: Workspace={WorkspacePath}",
+            workspacePath);
+    }
+
+    return Results.Ok(new { apiKey = defaultToken });
+}).ExcludeFromDescription();
+
 app.MapMcp("/mcp-transport");
 app.MapControllers();
 
 // /pair web login flow — authenticate to view the API key.
-app.MapGet("/pair", (IOptions<PairingOptions> opts) =>
+app.MapGet("/pair", async (IOptions<PairingOptions> opts, PairingHtmlRenderer pairingRenderer) =>
 {
     var o = opts.Value;
     if (o.PairingUsers.Count == 0 || string.IsNullOrEmpty(o.ApiKey))
-        return Results.Content(PairingHtml.NotConfiguredPage(), "text/html");
-    return Results.Content(PairingHtml.LoginPage(), "text/html");
+        return Results.Content(await pairingRenderer.RenderNotConfiguredPageAsync().ConfigureAwait(false), "text/html");
+    return Results.Content(await pairingRenderer.RenderLoginPageAsync().ConfigureAwait(false), "text/html");
 }).ExcludeFromDescription();
 
-app.MapPost("/pair", async (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions) =>
+app.MapPost("/pair", async (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions, PairingHtmlRenderer pairingRenderer) =>
 {
     var o = opts.Value;
     if (o.PairingUsers.Count == 0 || string.IsNullOrEmpty(o.ApiKey))
-        return Results.Content(PairingHtml.NotConfiguredPage(), "text/html");
+        return Results.Content(await pairingRenderer.RenderNotConfiguredPageAsync().ConfigureAwait(false), "text/html");
 
     var form = await context.Request.ReadFormAsync().ConfigureAwait(false);
     var username = form["username"].ToString();
@@ -353,7 +601,7 @@ app.MapPost("/pair", async (HttpContext context, IOptions<PairingOptions> opts, 
         string.Equals(u.Username, username, StringComparison.OrdinalIgnoreCase));
 
     if (user is null || !VerifyPairingPassword(password, user.PasswordHash))
-        return Results.Content(PairingHtml.LoginPage(error: true), "text/html");
+        return Results.Content(await pairingRenderer.RenderLoginPageAsync(error: true).ConfigureAwait(false), "text/html");
 
     var token = sessions.CreateToken();
     context.Response.Cookies.Append("mcp_pair", token, new CookieOptions
@@ -366,7 +614,7 @@ app.MapPost("/pair", async (HttpContext context, IOptions<PairingOptions> opts, 
     return Results.Redirect("/pair/key");
 }).ExcludeFromDescription();
 
-app.MapGet("/pair/key", (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions) =>
+app.MapGet("/pair/key", async (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions, PairingHtmlRenderer pairingRenderer) =>
 {
     var token = context.Request.Cookies["mcp_pair"];
     if (!sessions.Validate(token))
@@ -375,7 +623,7 @@ app.MapGet("/pair/key", (HttpContext context, IOptions<PairingOptions> opts, Pai
     var o = opts.Value;
     var request = context.Request;
     var serverUrl = $"{request.Scheme}://{request.Host}";
-    return Results.Content(PairingHtml.KeyPage(o.ApiKey, serverUrl), "text/html");
+    return Results.Content(await pairingRenderer.RenderKeyPageAsync(o.ApiKey, serverUrl).ConfigureAwait(false), "text/html");
 }).ExcludeFromDescription();
 
 try
@@ -392,4 +640,149 @@ static bool VerifyPairingPassword(string plaintext, string expectedHash)
     var computed = SHA256.HashData(Encoding.UTF8.GetBytes(plaintext));
     var expected = Convert.FromHexString(expectedHash);
     return CryptographicOperations.FixedTimeEquals(computed, expected);
+}
+
+static void DisableEnvironmentSpecificJsonConfigForWindowsService(WebApplicationBuilder builder)
+{
+    if (!OperatingSystem.IsWindows() || !WindowsServiceHelpers.IsWindowsService())
+        return;
+
+    var environmentFileName = $"appsettings.{builder.Environment.EnvironmentName}.json";
+    var toRemove = builder.Configuration.Sources
+        .OfType<JsonConfigurationSource>()
+        .Where(source =>
+            string.Equals(
+                Path.GetFileName(source.Path ?? string.Empty),
+                environmentFileName,
+                StringComparison.OrdinalIgnoreCase))
+        .ToList();
+
+    if (toRemove.Count == 0)
+        return;
+
+    foreach (var source in toRemove)
+        builder.Configuration.Sources.Remove(source);
+
+    if (builder.Configuration is IConfigurationRoot configurationRoot)
+        configurationRoot.Reload();
+}
+
+[SupportedOSPlatform("windows")]
+static void ConfigureWindowsEventLogSource(WebApplicationBuilder builder)
+{
+#pragma warning disable CA1416
+    builder.Logging.AddEventLog(settings =>
+    {
+        settings.SourceName = "McpServer";
+        settings.LogName = "Application";
+        settings.Filter = (_, level) => level >= LogLevel.Information;
+    });
+#pragma warning restore CA1416
+}
+
+static string ResolveSerilogFilePath(string? configuredPath)
+{
+    var rawPath = !string.IsNullOrWhiteSpace(configuredPath) ? configuredPath.Trim() : "logs/mcp-.log";
+    return Path.IsPathRooted(rawPath)
+        ? rawPath
+        : Path.GetFullPath(rawPath, AppContext.BaseDirectory);
+}
+
+static void EnsureSerilogFileDirectory(string filePath)
+{
+    var directory = Path.GetDirectoryName(filePath);
+    if (!string.IsNullOrWhiteSpace(directory))
+        Directory.CreateDirectory(directory);
+}
+
+static bool HasAnyRole(ClaimsPrincipal user, params string[] requiredRoles)
+{
+    if (user.Identity?.IsAuthenticated != true)
+        return false;
+
+    var required = new HashSet<string>(requiredRoles, StringComparer.OrdinalIgnoreCase);
+    foreach (var claim in user.Claims)
+    {
+        if (!string.Equals(claim.Type, "realm_roles", StringComparison.OrdinalIgnoreCase) &&
+            !string.Equals(claim.Type, "roles", StringComparison.OrdinalIgnoreCase) &&
+            !string.Equals(claim.Type, ClaimTypes.Role, StringComparison.OrdinalIgnoreCase))
+        {
+            continue;
+        }
+
+        if (ContainsRequiredRole(claim.Value, required))
+            return true;
+    }
+
+    return false;
+}
+
+static string? ResolvePrimaryApiKeyWorkspacePath(IConfiguration configuration, IHostEnvironment environment, string? instanceName)
+{
+    var effectiveRepoRoot = McpInstanceResolver.GetEffectiveMcpValue(configuration, instanceName, "RepoRoot");
+    if (!string.IsNullOrWhiteSpace(effectiveRepoRoot))
+        return NormalizeWorkspacePathForToken(effectiveRepoRoot, environment.ContentRootPath);
+
+    var workspaces = configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
+    var primary = workspaces
+        .Where(w => w.IsPrimary && w.IsEnabled)
+        .FirstOrDefault();
+    primary ??= workspaces
+        .Where(w => w.IsEnabled)
+        .FirstOrDefault();
+
+    return string.IsNullOrWhiteSpace(primary?.WorkspacePath)
+        ? null
+        : NormalizeWorkspacePathForToken(primary.WorkspacePath, environment.ContentRootPath);
+}
+
+static string NormalizeWorkspacePathForToken(string workspacePath, string contentRootPath)
+{
+    var trimmed = workspacePath.Trim();
+    var absolute = Path.IsPathRooted(trimmed)
+        ? Path.GetFullPath(trimmed)
+        : Path.GetFullPath(Path.Combine(contentRootPath, trimmed));
+
+    return absolute.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+}
+
+static bool ContainsRequiredRole(string? claimValue, ISet<string> requiredRoles)
+{
+    if (string.IsNullOrWhiteSpace(claimValue))
+        return false;
+
+    var trimmed = claimValue.Trim();
+    if (requiredRoles.Contains(trimmed))
+        return true;
+
+    if (trimmed.StartsWith("[", StringComparison.Ordinal))
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(trimmed);
+            if (doc.RootElement.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var element in doc.RootElement.EnumerateArray())
+                {
+                    var role = element.GetString();
+                    if (!string.IsNullOrWhiteSpace(role) && requiredRoles.Contains(role))
+                        return true;
+                }
+            }
+        }
+        catch (JsonException ex)
+        {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+            // Fall back to delimited parsing below.
+        }
+    }
+
+    foreach (var token in trimmed.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+    {
+        var normalized = token.Trim('"');
+        if (requiredRoles.Contains(normalized))
+            return true;
+    }
+
+    return false;
 }

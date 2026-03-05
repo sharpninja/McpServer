@@ -27,4 +27,28 @@ public interface ICopilotClient
         string prompt,
         CopilotClientOptions? options = null,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Invoke the Copilot CLI agent and stream stdout lines as they are produced.
+    /// </summary>
+    /// <param name="prompt">The prompt text to send to the agent.</param>
+    /// <param name="options">Optional per-call configuration overrides.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>An async enumerable of stdout lines.</returns>
+    IAsyncEnumerable<string> InvokeStreamingAsync(
+        string prompt,
+        CopilotClientOptions? options = null,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Creates a persistent interactive Copilot CLI session using <c>-i</c>.
+    /// The <paramref name="initialPrompt"/> is passed as the <c>-i</c> argument value.
+    /// Subsequent prompts are written to the process's stdin.
+    /// </summary>
+    /// <param name="initialPrompt">The seed prompt passed to <c>-i</c>.</param>
+    /// <param name="options">Optional per-call configuration overrides.</param>
+    /// <returns>An interactive session that must be disposed when no longer needed.</returns>
+    CopilotInteractiveSession CreateInteractiveSession(
+        string initialPrompt,
+        CopilotClientOptions? options = null);
 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -15,7 +15,7 @@ namespace McpServer.VsExtension.McpTodo;
 /// </summary>
 internal static class CopilotCliHelper
 {
-    private static readonly Regex AnsiEscapePattern = new(@"\x1B\[[0-9;]*[A-Za-z]", RegexOptions.Compiled);
+    private static readonly Regex s_ansiEscapePattern = new(@"\x1B\[[0-9;]*[A-Za-z]", RegexOptions.Compiled);
 
     /// <summary>
     /// Working directory for the Copilot CLI process. Set to the solution directory
@@ -59,7 +59,7 @@ internal static class CopilotCliHelper
             File.WriteAllText(tmpFile, prompt);
 
             var shell = "pwsh";
-            var agentCmd = $"copilot -p \"$(Get-Content -Raw '{tmpFile.Replace("'", "''")}')\" --allow-all";
+            var agentCmd = $"copilot -p \"$(Get-Content -Raw '{tmpFile.Replace("'", "''")}')\" --model gpt-5.3-codex --allow-all";
             var shellArgs = $"-NoProfile -Command \"{agentCmd}\"";
 
             CopilotOutputPane.Log($">>> Command: {shell} {shellArgs}");
@@ -101,7 +101,7 @@ internal static class CopilotCliHelper
                     while ((line = await process.StandardOutput.ReadLineAsync().ConfigureAwait(false)) != null)
                     {
                         stdoutBuf.AppendLine(line);
-                        onStdoutLine?.Invoke(AnsiEscapePattern.Replace(line, ""));
+                        onStdoutLine?.Invoke(s_ansiEscapePattern.Replace(line, ""));
                     }
                 }
 
@@ -137,6 +137,7 @@ internal static class CopilotCliHelper
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             CopilotOutputPane.Log($"<<< SpawnError: {ex.Message}");
             return new CopilotCliResult { State = "spawnError", Body = ex.Message };
         }
@@ -150,15 +151,27 @@ internal static class CopilotCliHelper
     private static void TryKillProcess(Process process)
     {
         try { if (!process.HasExited) process.Kill(); }
-        catch (InvalidOperationException) { }
-        catch (System.ComponentModel.Win32Exception) { }
+        catch (InvalidOperationException ex)
+        {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+        }
+        catch (System.ComponentModel.Win32Exception ex)
+        {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+        }
     }
 
     private static void TryDeleteFile(string path)
     {
         try { File.Delete(path); }
-        catch (IOException) { }
-        catch (UnauthorizedAccessException) { }
+        catch (IOException ex)
+        {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            System.Diagnostics.Trace.TraceWarning(ex.ToString());
+        }
     }
 }
 

@@ -1,5 +1,10 @@
 # Copilot Instructions — McpServer
 
+## Response Formatting
+
+- Do not use table-style output in responses.
+- Use concise bullets or short paragraphs instead.
+
 ## Build, Test, Lint
 
 ```powershell
@@ -28,7 +33,7 @@ pwsh ./scripts/Validate-McpConfig.ps1
 
 **McpServer** is a standalone ASP.NET Core 9 server providing context retrieval, TODO management, session logging, repository operations, and GitHub issue sync for AI agents. It exposes functionality via two transports:
 
-- **HTTP REST API** — Controllers under `src/McpServer.Support.Mcp/Controllers/` (routes at `/mcp/*`).
+- **HTTP REST API** — Controllers under `src/McpServer.Support.Mcp/Controllers/` (routes at `/mcpserver/*`).
 - **MCP Streamable HTTP** — `app.MapMcp("/mcp-transport")` using ModelContextProtocol.AspNetCore.
 - **MCP STDIO** — `--transport stdio` flag; same tools as HTTP via `McpStdio/FwhMcpTools.cs`.
 
@@ -48,11 +53,11 @@ pwsh ./scripts/Validate-McpConfig.ps1
 
 ### Requirement Traceability Comments
 
-All source files reference their FR/TR requirement IDs in doc comments (e.g., `/// <summary>TR-PLANNED-013: Constructor.</summary>`). When adding new functionality, reference the relevant requirement ID from `docs/REQUIREMENTS.md`.
+All source files reference their FR/TR requirement IDs in doc comments (e.g., `/// <summary>TR-PLANNED-013: Constructor.</summary>`). When adding new functionality, reference the relevant requirement ID from `docs/Project/Functional-Requirements.md` and `docs/Project/Technical-Requirements.md`.
 
 ### DRY — No Duplication (TR-MCP-DRY-001)
 
-Shared logic must be extracted to a single reusable location. No copy-pasted logic across files or scripts. See `docs/REQUIREMENTS.md` § TR-MCP-DRY-001.
+Shared logic must be extracted to a single reusable location. No copy-pasted logic across files or scripts. See `docs/Project/Technical-Requirements.md` § TR-MCP-DRY-001.
 
 ### Async Patterns
 
@@ -67,7 +72,7 @@ All async methods use `.ConfigureAwait(false)`. Controllers and services accept 
 
 ### Controller Patterns
 
-Controllers are `sealed`, use `[ApiController]` + `[Route("mcp/...")]`. Mutating endpoints return `TodoMutationResult`-style result objects. Not-found returns 404 with the result; validation errors return 400/409.
+Controllers are `sealed`, use `[ApiController]` + `[Route("mcpserver/...")]`. Mutating endpoints return `TodoMutationResult`-style result objects. Not-found returns 404 with the result; validation errors return 400/409.
 
 ### Service Registration
 

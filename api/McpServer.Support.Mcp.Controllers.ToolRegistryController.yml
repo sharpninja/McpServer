@@ -45,13 +45,13 @@ items:
     content: >-
       [ApiController]
 
-      [Route("mcp/tools")]
+      [Route("mcpserver/tools")]
 
       public sealed class ToolRegistryController : ControllerBase
     content.vb: >-
       <ApiController>
 
-      <Route("mcp/tools")>
+      <Route("mcpserver/tools")>
 
       Public NotInheritable Class ToolRegistryController Inherits ControllerBase
   inheritance:

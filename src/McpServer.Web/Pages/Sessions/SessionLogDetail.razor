@@ -1,0 +1,104 @@
+@page "/sessions/{SessionId}"
+
+@inject SessionLogDetailViewModel ViewModel
+
+<PageTitle>Session Log Detail</PageTitle>
+
+<h1 class="h2 mb-3">Session Log Detail</h1>
+<p><a href="/sessions">← Back to session log list</a></p>
+
+@if (string.IsNullOrWhiteSpace(SessionId))
+{
+    <PrimerBlankslate Heading="No session selected" Description="Open this page from the session log list." />
+}
+else if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+{
+    <PrimerFlash Variant="danger" Title="Failed to load session">@ViewModel.ErrorMessage</PrimerFlash>
+}
+else if (ViewModel.IsBusy)
+{
+    <p class="color-fg-muted">Loading session details...</p>
+}
+else if (ViewModel.Detail is null)
+{
+    <PrimerBlankslate Heading="Session not found" Description="The requested session could not be located." />
+}
+else
+{
+    <div class="Box mb-3">
+        <div class="Box-header">
+            <h2 class="h3 mb-0">@ViewModel.Detail.Title</h2>
+        </div>
+        <div class="Box-body">
+            <p><strong>Session ID:</strong> <code>@ViewModel.Detail.SessionId</code></p>
+            <p><strong>Source Type:</strong> @ViewModel.Detail.SourceType</p>
+            <p><strong>Status:</strong> @ViewModel.Detail.Status</p>
+            <p><strong>Model:</strong> @(ViewModel.Detail.Model ?? "(not set)")</p>
+            <p><strong>Started:</strong> @(ViewModel.Detail.Started ?? "(unknown)")</p>
+            <p><strong>Last Updated:</strong> @(ViewModel.Detail.LastUpdated ?? "(unknown)")</p>
+            <p><strong>Entry Count:</strong> @ViewModel.Detail.EntryCount</p>
+            <p><strong>Total Tokens:</strong> @(ViewModel.Detail.TotalTokens?.ToString() ?? "(unknown)")</p>
+            <p><strong>Cursor Session Label:</strong> @(ViewModel.Detail.CursorSessionLabel ?? "(none)")</p>
+        </div>
+    </div>
+
+    @if (ViewModel.Detail.Entries.Count == 0)
+    {
+        <PrimerBlankslate Heading="No entries" Description="This session does not have request entries." />
+    }
+    else
+    {
+        @foreach (var entry in ViewModel.Detail.Entries)
+        {
+            <div class="Box mb-3">
+                <div class="Box-header">
+                    <h3 class="h4 mb-0">@GetEntryHeading(entry)</h3>
+                </div>
+                <div class="Box-body">
+                    <p><strong>Request ID:</strong> <code>@entry.RequestId</code></p>
+                    <p><strong>Status:</strong> @(entry.Status ?? "(unknown)")</p>
+                    <p><strong>Timestamp:</strong> @(entry.Timestamp ?? "(unknown)")</p>
+                    @if (!string.IsNullOrWhiteSpace(entry.QueryText))
+                    {
+                        <p><strong>Query:</strong> @entry.QueryText</p>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(entry.Response))
+                    {
+                        <p><strong>Response:</strong> @entry.Response</p>
+                    }
+                    @if (entry.Actions.Count > 0)
+                    {
+                        <p><strong>Actions:</strong></p>
+                        <ul>
+                            @foreach (var action in entry.Actions)
+                            {
+                                <li>@action.Order. @action.Type - @action.Description</li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+        }
+    }
+}
+
+@code {
+    [Parameter]
+    public string SessionId { get; set; } = string.Empty;
+
+    private string? _loadedSessionId;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (string.Equals(_loadedSessionId, SessionId, StringComparison.Ordinal))
+            return;
+
+        _loadedSessionId = SessionId;
+        ViewModel.SessionId = SessionId;
+        await ViewModel.LoadAsync().ConfigureAwait(false);
+    }
+
+    private static string GetEntryHeading(McpServer.UI.Core.Messages.SessionLogEntryDetail entry)
+        => string.IsNullOrWhiteSpace(entry.QueryTitle) ? "Request Entry" : entry.QueryTitle;
+}
+

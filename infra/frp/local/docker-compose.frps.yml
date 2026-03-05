@@ -1,0 +1,13 @@
+services:
+  frps:
+    build:
+      context: ../railway
+    environment:
+      FRP_TOKEN: dev-token-change-me
+      FRPS_BIND_PORT: 7000
+      FRPS_VHOST_HTTP_PORT: 8080
+      FRPS_LOG_LEVEL: info
+    ports:
+      - "7000:7000"
+      - "8080:8080"
+    restart: unless-stopped

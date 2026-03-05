@@ -29,7 +29,7 @@ public sealed class WorkspaceErrorTests
     [InlineData("")]
     public async Task Get_InvalidKey_Returns400(string badKey)
     {
-        // Empty key will hit the List endpoint (GET /mcp/workspace) returning 200,
+        // Empty key will hit the List endpoint (GET /mcpserver/workspace) returning 200,
         // so only test non-empty invalid keys.
         if (string.IsNullOrEmpty(badKey)) return;
 

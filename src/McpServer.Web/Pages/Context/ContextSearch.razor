@@ -1,0 +1,116 @@
+@page "/context/search"
+
+@inject ContextSearchViewModel ViewModel
+
+<PageTitle>Context Search</PageTitle>
+
+<h1 class="h2 mb-3">Context Search</h1>
+
+<form method="get" class="Box p-3 mb-3">
+    <div class="d-flex flex-column gap-2">
+        <label class="d-flex flex-column">
+            <span class="text-small color-fg-muted">Query</span>
+            <input class="form-control" name="q" value="@Q" />
+        </label>
+        <div class="d-flex flex-wrap gap-3">
+            <label class="d-flex flex-column">
+                <span class="text-small color-fg-muted">Source Type</span>
+                <select class="form-select" name="sourceType">
+                    <option value="" selected="@string.IsNullOrWhiteSpace(SourceType)">All</option>
+                    @foreach (var sourceTypeOption in ViewModel.SourceTypes)
+                    {
+                        <option value="@sourceTypeOption" selected="@string.Equals(SourceType, sourceTypeOption, StringComparison.OrdinalIgnoreCase)">
+                            @sourceTypeOption
+                        </option>
+                    }
+                </select>
+            </label>
+            <label class="d-flex flex-column">
+                <span class="text-small color-fg-muted">Limit</span>
+                <input class="form-control" name="limit" value="@GetLimitValue()" />
+            </label>
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </div>
+</form>
+
+@if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+{
+    <PrimerFlash Variant="danger" Title="Context search failed">@ViewModel.ErrorMessage</PrimerFlash>
+}
+else if (ViewModel.IsLoading)
+{
+    <p class="color-fg-muted">Running search...</p>
+}
+else if (string.IsNullOrWhiteSpace(Q))
+{
+    <PrimerBlankslate Heading="Enter a search query" Description="Submit a query to search indexed context chunks." />
+}
+else if (ViewModel.SearchResult is null || ViewModel.SearchResult.Chunks.Count == 0)
+{
+    <PrimerBlankslate Heading="No context results" Description="No chunks matched the search criteria." />
+}
+else
+{
+    <p class="color-fg-muted">Found @ViewModel.SearchResult.Chunks.Count chunks.</p>
+    <PrimerDataTable TItem="ContextChunkView" Items="ViewModel.SearchResult.Chunks" ColumnCount="4" Class="Table--full-width">
+        <HeaderTemplate>
+            <tr>
+                <th>Document</th>
+                <th>Chunk</th>
+                <th>Score</th>
+                <th>Content</th>
+            </tr>
+        </HeaderTemplate>
+        <RowTemplate Context="chunk">
+            <td><code>@chunk.DocumentId</code></td>
+            <td>@chunk.ChunkIndex</td>
+            <td>@chunk.Score.ToString("0.000")</td>
+            <td>@GetExcerpt(chunk.Content)</td>
+        </RowTemplate>
+    </PrimerDataTable>
+}
+
+@code {
+    [SupplyParameterFromQuery(Name = "q")]
+    public string? Q { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string? SourceType { get; set; }
+
+    [SupplyParameterFromQuery]
+    public int? Limit { get; set; }
+
+    private string? _lastQueryKey;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var queryKey = $"{Q}|{SourceType}|{Limit}";
+        if (string.Equals(queryKey, _lastQueryKey, StringComparison.Ordinal))
+            return;
+
+        _lastQueryKey = queryKey;
+        var safeLimit = Limit.GetValueOrDefault(20);
+        if (safeLimit <= 0)
+            safeLimit = 20;
+
+        ViewModel.Query = Q ?? string.Empty;
+        ViewModel.SourceType = string.IsNullOrWhiteSpace(SourceType) ? null : SourceType;
+        ViewModel.Limit = safeLimit;
+        await ViewModel.LoadAsync().ConfigureAwait(false);
+    }
+
+    private string GetLimitValue() => Limit?.ToString() ?? "20";
+
+    private static string GetExcerpt(string content)
+    {
+        if (string.IsNullOrWhiteSpace(content))
+            return string.Empty;
+
+        const int maxLength = 220;
+        return content.Length <= maxLength ? content : $"{content[..maxLength]}...";
+    }
+}
+

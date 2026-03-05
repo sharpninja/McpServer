@@ -31,13 +31,13 @@ items:
     content: >-
       [ApiController]
 
-      [Route("mcp/sync")]
+      [Route("mcpserver/sync")]
 
       public sealed class SyncController : ControllerBase
     content.vb: >-
       <ApiController>
 
-      <Route("mcp/sync")>
+      <Route("mcpserver/sync")>
 
       Public NotInheritable Class SyncController Inherits ControllerBase
   inheritance:

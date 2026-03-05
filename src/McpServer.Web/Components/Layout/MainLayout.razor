@@ -1,0 +1,26 @@
+@inherits LayoutComponentBase
+
+<div class="app-shell">
+    <aside class="app-sidebar">
+        <NavMenu />
+    </aside>
+    <div class="app-main">
+        <header class="app-header">
+            <span class="app-header-title">McpServer</span>
+            <div class="app-header-auth">
+                <AuthorizeView>
+                    <Authorized>
+                        <span class="color-fg-muted mr-2">@context.User.Identity?.Name</span>
+                        <a class="btn btn-sm" href="/logout">Sign out</a>
+                    </Authorized>
+                    <NotAuthorized>
+                        <a class="btn btn-sm btn-primary" href="/login">Sign in</a>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+        </header>
+        <main class="app-content">
+            @Body
+        </main>
+    </div>
+</div>

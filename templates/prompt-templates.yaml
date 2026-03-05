@@ -1,0 +1,463 @@
+templates:
+  example-greeting:
+    title: Example Greeting Template
+    category: custom
+    tags:
+    - example
+    - getting-started
+    description: A simple greeting template demonstrating Handlebars syntax.
+    engine: handlebars
+    variables:
+    - name: name
+      description: Name of the person to greet
+      required: true
+      example: Alice
+    - name: role
+      description: Role or title of the person
+      required: false
+      defaultValue: developer
+    content: 'Hello, {{name}}!
+
+      {{#if role}}You are a {{role}}.{{/if}}
+
+      Welcome to the MCP Server template system.
+
+      '
+  example-agent-briefing:
+    title: Agent Briefing Template
+    category: agent
+    tags:
+    - agent
+    - onboarding
+    - example
+    description: Template for briefing an AI agent about a workspace context.
+    engine: handlebars
+    variables:
+    - name: agentName
+      description: Name of the AI agent
+      required: true
+      example: Copilot
+    - name: workspaceName
+      description: Name of the current workspace
+      required: true
+      example: McpServer
+    - name: objectives
+      description: List of objectives for the agent
+      required: false
+    content: '## Agent Briefing: {{agentName}}
+
+
+      You are operating in the **{{workspaceName}}** workspace.
+
+
+      {{#if objectives}}
+
+      ### Objectives
+
+      {{#each objectives}}
+
+      - {{this}}
+
+      {{/each}}
+
+      {{else}}
+
+      No specific objectives have been set. Await instructions.
+
+      {{/if}}
+
+
+      Please follow all workspace conventions and log your actions.
+
+      '
+  todo-status-prompt:
+    title: TODO Status Prompt
+    category: system
+    tags:
+    - todo
+    - prompt
+    - status
+    description: 'Prompt template for generating TODO status reports. Placeholders: {id}, {title}, {baseUrl}.'
+    engine: none
+    variables:
+    - name: id
+      description: TODO item ID
+      required: true
+      example: MVP-MCP-004
+    - name: title
+      description: TODO item title
+      required: false
+    - name: baseUrl
+      description: Server base URL
+      required: false
+      default-value: http://localhost:7147
+    content: 'Get the current status of TODO {id}. Report the following in structured markdown:
+
+
+      - Title, priority, section, done status
+
+      - Description and technical details
+
+      - Implementation task completion progress (count done vs total)
+
+      - Any blockers or next steps
+
+      - Dependencies and their current status
+
+      '
+  todo-implement-prompt:
+    title: TODO Implement Prompt
+    category: system
+    tags:
+    - todo
+    - prompt
+    - implement
+    description: 'Prompt template for driving Copilot to implement a TODO item. Placeholders: {id}, {title}, {baseUrl}.'
+    engine: none
+    variables:
+    - name: id
+      description: TODO item ID
+      required: true
+      example: MVP-MCP-004
+    - name: title
+      description: TODO item title
+      required: true
+    - name: baseUrl
+      description: Server base URL
+      required: true
+      default-value: http://localhost:7147
+    content: "Implement TODO {id}: {title}\n\nFollow this procedure:\n\n1. IMPLEMENT TASKS: Work through each implementation\
+      \ task that is not yet done.\n   After completing each task, immediately update the TODO via:\n   curl -X PUT {baseUrl}/mcpserver/todo/{id}\
+      \ \\\n     -H \"Content-Type: application/json\" \\\n     -d '{\"implementationTasks\": [ ...full array with updated\
+      \ done flags... ]}'\n   This makes progress visible in real time.\n\n2. UPDATE DEPENDENTS: After all tasks are complete,\
+      \ query all TODOs:\n   curl {baseUrl}/mcpserver/todo\n   Find any TODO whose dependsOn array contains \"{id}\". For\
+      \ each dependent:\n   - Update its technicalDetails or note to reflect that {id} is now complete.\n   - If all of the\
+      \ dependent's own dependencies are satisfied, update its\n     remaining estimate and note accordingly.\n\n3. MARK DONE:\
+      \ When all implementationTasks are done, mark the TODO itself done:\n   curl -X PUT {baseUrl}/mcpserver/todo/{id} \\\
+      \n     -H \"Content-Type: application/json\" \\\n     -d '{\"done\": true}'\n\n4. Update the session log throughout.\
+      \ Run to completion, do not wait for user.\n"
+  todo-plan-prompt:
+    title: TODO Plan Prompt
+    category: system
+    tags:
+    - todo
+    - prompt
+    - plan
+    description: 'Prompt template for creating detailed implementation plans. Placeholders: {id}, {title}, {baseUrl}.'
+    engine: none
+    variables:
+    - name: id
+      description: TODO item ID
+      required: true
+      example: MVP-MCP-004
+    - name: title
+      description: TODO item title
+      required: false
+    - name: baseUrl
+      description: Server base URL
+      required: true
+      default-value: http://localhost:7147
+    content: "Create an implementation plan in excruciating detail as a new TODO that TODO {id} depends on.\n\n1. Analyze\
+      \ the TODO item below and break it into granular, actionable implementation tasks.\n   Each task should be small enough\
+      \ to complete in a single focused session.\n   Include file paths, class names, method signatures, test scenarios, and\
+      \ integration points.\n\n2. Create a new TODO via:\n   POST {baseUrl}/mcpserver/todo\n   with the detailed plan as the\
+      \ body (id, title, section, priority, description,\n   technicalDetails, implementationTasks).\n\n3. Update {id} via\
+      \ PUT {baseUrl}/mcpserver/todo/{id}\n   to add the new plan TODO as a dependency in its dependsOn array.\n\nFinally,\
+      \ update the todo with the plan.\n"
+  pairing-login-page:
+    title: Pairing Login Page
+    category: system
+    tags:
+    - pairing
+    - html
+    - login
+    description: 'HTML template for the /pair login form. Placeholder: {errorBanner} (empty string or error div).'
+    engine: none
+    variables:
+    - name: errorBanner
+      description: HTML error banner string (empty for no error)
+      required: false
+      default-value: ''
+    content: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"/>\n  <meta name=\"viewport\" content=\"\
+      width=device-width,initial-scale=1\"/>\n  <title>MCP Server — Pair</title>\n  <style>\n    *{box-sizing:border-box;margin:0;padding:0}\n\
+      \    body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f5;display:flex;align-items:center;justify-content:center;min-height:100vh}\n\
+      \    .card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:32px;width:100%;max-width:380px}\n\
+      \    h1{font-size:1.3rem;margin-bottom:4px;color:#111}\n    .sub{font-size:.85rem;color:#666;margin-bottom:20px}\n \
+      \   label{display:block;font-size:.85rem;font-weight:600;margin-bottom:4px;color:#333}\n    input[type=text],input[type=password]{width:100%;padding:10px\
+      \ 12px;border:1px solid #ddd;border-radius:6px;font-size:.95rem;margin-bottom:14px}\n    input:focus{outline:none;border-color:#0969da;box-shadow:0\
+      \ 0 0 3px rgba(9,105,218,.15)}\n    button{width:100%;padding:10px;background:#0969da;color:#fff;border:none;border-radius:6px;font-size:.95rem;font-weight:600;cursor:pointer}\n\
+      \    button:hover{background:#0860c4}\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h1>\U0001F517 MCP Server\
+      \ Pairing</h1>\n    <p class=\"sub\">Sign in to view your API key.</p>\n    {errorBanner}\n    <form method=\"post\"\
+      \ action=\"/pair\">\n      <label for=\"username\">Username</label>\n      <input type=\"text\" id=\"username\" name=\"\
+      username\" autocomplete=\"username\" required autofocus/>\n      <label for=\"password\">Password</label>\n      <input\
+      \ type=\"password\" id=\"password\" name=\"password\" autocomplete=\"current-password\" required/>\n      <button type=\"\
+      submit\">Sign In</button>\n    </form>\n  </div>\n</body>\n</html>\n"
+  pairing-key-page:
+    title: Pairing Key Page
+    category: system
+    tags:
+    - pairing
+    - html
+    - apikey
+    description: 'HTML template showing the API key after login. Placeholders: {apiKey}, {serverUrl}.'
+    engine: none
+    variables:
+    - name: apiKey
+      description: The server API key to display
+      required: true
+    - name: serverUrl
+      description: The server base URL
+      required: true
+      example: http://localhost:7147
+    content: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"/>\n  <meta name=\"viewport\" content=\"\
+      width=device-width,initial-scale=1\"/>\n  <title>MCP Server — API Key</title>\n  <style>\n    *{box-sizing:border-box;margin:0;padding:0}\n\
+      \    body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f5;display:flex;align-items:center;justify-content:center;min-height:100vh}\n\
+      \    .card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:32px;width:100%;max-width:480px}\n\
+      \    h1{font-size:1.3rem;margin-bottom:4px;color:#111}\n    .sub{font-size:.85rem;color:#666;margin-bottom:20px}\n \
+      \   .key-box{background:#f6f8fa;border:1px solid #d0d7de;border-radius:6px;padding:14px 16px;font-family:'Cascadia Code','Fira\
+      \ Code',monospace;font-size:.95rem;word-break:break-all;margin-bottom:16px;position:relative}\n    .copy-btn{position:absolute;top:8px;right:8px;background:#0969da;color:#fff;border:none;border-radius:4px;padding:4px\
+      \ 10px;font-size:.8rem;cursor:pointer}\n    .copy-btn:hover{background:#0860c4}\n    .section{margin-bottom:20px}\n\
+      \    .section h2{font-size:1rem;margin-bottom:8px;color:#333}\n    pre{background:#f6f8fa;border:1px solid #d0d7de;border-radius:6px;padding:14px\
+      \ 16px;font-size:.82rem;overflow-x:auto;line-height:1.5}\n    .warn{font-size:.8rem;color:#888;margin-top:12px}\n  </style>\n\
+      </head>\n<body>\n  <div class=\"card\">\n    <h1>\U0001F511 Your API Key</h1>\n    <p class=\"sub\">Use this key to\
+      \ authenticate mutating API calls.</p>\n    <div class=\"key-box\">\n      <span id=\"key\">{apiKey}</span>\n      <button\
+      \ class=\"copy-btn\" onclick=\"navigator.clipboard.writeText(document.getElementById('key').textContent)\">Copy</button>\n\
+      \    </div>\n    <div class=\"section\">\n      <h2>MCP Client Config</h2>\n      <pre>{\n  \"mcpServers\": {\n    \"\
+      mcp-server\": {\n      \"url\": \"{serverUrl}/mcp-transport\"\n    }\n  }\n}</pre>\n    </div>\n    <div class=\"section\"\
+      >\n      <h2>cURL Example</h2>\n      <pre>curl {serverUrl}/mcpserver/workspace \\\n  -H \"X-Api-Key: {apiKey}\"</pre>\n\
+      \    </div>\n    <p class=\"warn\">Keep this key secret. It grants write access to workspace and tool endpoints.</p>\n\
+      \  </div>\n</body>\n</html>\n"
+  pairing-not-configured-page:
+    title: Pairing Not Configured Page
+    category: system
+    tags:
+    - pairing
+    - html
+    - error
+    description: HTML template shown when pairing is not configured. No placeholders.
+    engine: none
+    content: "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\"/>\n  <meta name=\"viewport\" content=\"\
+      width=device-width,initial-scale=1\"/>\n  <title>MCP Server — Pairing Not Configured</title>\n  <style>\n    *{box-sizing:border-box;margin:0;padding:0}\n\
+      \    body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f5;display:flex;align-items:center;justify-content:center;min-height:100vh}\n\
+      \    .card{background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:32px;width:100%;max-width:380px;text-align:center}\n\
+      \    h1{font-size:1.3rem;margin-bottom:12px;color:#111}\n    p{color:#666;font-size:.9rem;line-height:1.5}\n    code{background:#f6f8fa;padding:2px\
+      \ 6px;border-radius:4px;font-size:.85rem}\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h1>⚠️ Pairing Not\
+      \ Configured</h1>\n    <p>To enable the pairing page, add one or more users to\n    <code>Mcp:PairingUsers</code> in\
+      \ your configuration and set\n    <code>Mcp:ApiKey</code> to a non-empty value.</p>\n  </div>\n</body>\n</html>\n"
+  default-marker-prompt:
+    title: Default Marker File Prompt
+    category: system
+    tags:
+    - marker
+    - agent-instructions
+    - system
+    description: The default AGENTS-README-FIRST.yaml prompt template. Rendered with baseUrl, apiKey, and workspace context
+      variables.
+    engine: handlebars
+    variables:
+    - name: baseUrl
+      description: Server base URL
+      required: true
+      example: http://localhost:7147
+    - name: apiKey
+      description: Workspace API key
+      required: true
+    - name: version
+      description: Application version (informational version including git SHA)
+      required: false
+      defaultValue: unknown
+    - name: workspace
+      description: WorkspaceDto object with Name, WorkspacePath, IsPrimary, etc.
+      required: true
+    content: 'You are connected to an MCP Context Server at {{baseUrl}}. Use this server to coordinate your work.
+
+
+      ## Session Start
+
+      1. Read this marker file for connection details and API key.
+
+      2. Bootstrap helper modules from the Tool Registry (see docs/context/module-bootstrap.md).
+
+      3. Review recent session history and current TODOs.
+
+      4. Post a session log entry before starting work on the user''s request.
+
+
+      ## Rules
+
+      0. NEVER write to TODO.yaml directly.
+
+      1. Post a session log entry before any work on a user request. Update it with results when done.
+
+      2. Use helper modules for session log and TODO operations — they handle workspace routing automatically. Do not use
+      raw API calls.
+
+      3. Write decisions, requirements, and state to the session log, not just conversation.
+
+      4. Follow workspace conventions in AGENTS.md and .github/copilot-instructions.md.
+
+      5. When you need API schemas, module examples, or compliance rules, load them from docs/context/ or use context_search.
+
+      6. Do not fabricate information. Acknowledge mistakes. Distinguish facts from speculation.
+
+      7. Prioritize correctness over speed. Do not ship code you have not verified compiles.
+
+
+      ## Naming Conventions
+
+
+      - TODO IDs for new items must be uppercase kebab-case with exactly 3 segments: <SDLC-PHASE>-<AREA>-### (regex:
+      ^[A-Z]+-[A-Z0-9]+-\d{3}$).
+
+      - Valid TODO IDs: PLAN-NAMINGCONVENTIONS-001, MCP-API-042.
+
+      - Invalid TODO IDs: plan-api-001, MCP-API-42, MCPAPI001.
+
+      - Session IDs must use <Agent>-<yyyyMMddTHHmmssZ>-<suffix> and start with the exact agent/source type prefix.
+
+      - Valid Session ID: Copilot-20260304T113901Z-namingconv.
+
+      - Invalid Session IDs: copilot-20260304T113901Z-namingconv, Copilot-2026-03-04-namingconv.
+
+      - Request IDs must use req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal> and be unique within a session.
+
+      - Valid Request ID: req-20260304T113901Z-plan-namingconventions-001.
+
+      - Invalid Request IDs: req-plan-namingconventions-001, request-20260304T113901Z-task-01.
+
+
+      ## Workspace
+
+
+      - Name: {{workspace.Name}}
+
+      - Path: {{workspace.WorkspacePath}}
+
+      - Primary: {{workspace.IsPrimary}}
+
+      - Data Directory: {{workspace.DataDirectory}}
+
+      - Todo Path: {{workspace.TodoPath}}
+
+
+      ## Authentication
+
+
+      All /mcpserver/* endpoints require a per-workspace auth token:
+
+      - Header: X-Api-Key: {{apiKey}}
+
+      - Or query param: ?api_key={{apiKey}}
+
+      If you receive a 401, re-read this marker file — the token rotates on each server restart.
+
+
+      ## Where Things Live
+
+
+      - AGENTS.md — agent conduct, requirements tracking, session continuity, glossary
+
+      - .github/copilot-instructions.md — build/test commands, architecture, coding conventions
+
+      - docs/context/ — on-demand reference (schemas, module docs, compliance rules, action types)
+
+      - docs/Project/ — requirements docs, TODO.yaml, mapping matrices
+
+      - templates/ — prompt templates
+
+
+      ## Context Loading by Task Type
+
+
+      - Session logging → docs/context/session-log-schema.md + docs/context/module-bootstrap.md
+
+      - TODO management → docs/context/todo-schema.md + docs/context/module-bootstrap.md
+
+      - API integration → docs/context/api-capabilities.md (or GET {{baseUrl}}/swagger/v1/swagger.json)
+
+      - Adding dependencies → docs/context/compliance-rules.md
+
+      - Logging actions → docs/context/action-types.md
+
+
+      ## Protocols
+
+
+      - REST API: {{baseUrl}}/mcpserver/* (requires X-Api-Key). Swagger UI: {{baseUrl}}/swagger
+
+      - MCP Streamable HTTP: POST {{baseUrl}}/mcp-transport (no API key required)
+
+      - Health: GET {{baseUrl}}/health
+
+
+      {{#if workspace.BannedLicenses}}
+
+      ## Compliance Restrictions
+
+
+      This workspace has license, origin, or entity restrictions. Read docs/context/compliance-rules.md before adding any
+      dependency.
+
+
+      Banned licenses:
+
+      {{#each workspace.BannedLicenses}}
+
+      - {{this}}
+
+      {{/each}}
+
+      {{/if}}
+
+
+      {{#if workspace.BannedCountriesOfOrigin}}
+
+      Banned countries of origin:
+
+      {{#each workspace.BannedCountriesOfOrigin}}
+
+      - {{this}}
+
+      {{/each}}
+
+      {{/if}}
+
+
+      {{#if workspace.BannedOrganizations}}
+
+      Banned organizations:
+
+      {{#each workspace.BannedOrganizations}}
+
+      - {{this}}
+
+      {{/each}}
+
+      {{/if}}
+
+
+      {{#if workspace.BannedIndividuals}}
+
+      Banned individuals:
+
+      {{#each workspace.BannedIndividuals}}
+
+      - {{this}}
+
+      {{/each}}
+
+      {{/if}}
+
+
+      ## Before Delivering Output
+
+
+      Verify: session log is current, decisions are recorded, requirements are tracked, code compiles, action types are correct
+      (see docs/context/action-types.md).
+
+
+      ---
+
+      MCP Server version: {{version}}
+
+      '

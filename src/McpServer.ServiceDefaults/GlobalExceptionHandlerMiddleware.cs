@@ -30,8 +30,9 @@ internal sealed partial class GlobalExceptionHandlerMiddleware
         {
             await _next(context).ConfigureAwait(false);
         }
-        catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
+        catch (OperationCanceledException ex) when (context.RequestAborted.IsCancellationRequested)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // Client disconnected — not an error worth logging at Error level.
             Log.RequestCancelled(_logger, context.Request.Method, context.Request.Path);
         }
@@ -40,6 +41,7 @@ internal sealed partial class GlobalExceptionHandlerMiddleware
         catch (Exception ex)
 #pragma warning restore CA1031
         {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             Log.UnhandledException(_logger, ex, context.Request.Method, context.Request.Path);
 
             // Only write a response if one hasn't already started.

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Form Patterns</title>
+  <link rel="stylesheet" href="wireframe.css" />
+</head>
+<body>
+  <main class="gh-content">
+    <h1 class="page-title">Form Patterns (GitHub-like)</h1>
+    <p class="subtitle">Spacing, helper text, and error treatment should match GitHub settings forms.</p>
+
+    <section class="panel">
+      <h2>Field Group</h2>
+      <div class="row"><label style="width:100%">Name</label><input class="input" style="width:100%" value="McpServer" /></div>
+      <div class="row"><label style="width:100%">Section</label><select class="select" style="width:240px"><option>infrastructure</option></select></div>
+      <div class="row"><label style="width:100%">Description</label><textarea class="textarea">Wireframe form pattern text...</textarea></div>
+      <div class="row"><span class="badge badge-danger">Validation error</span><span class="subtitle">Name is required.</span></div>
+    </section>
+
+    <section class="panel">
+      <h2>Form Actions</h2>
+      <div class="row">
+        <button class="btn btn-primary">Save</button>
+        <button class="btn">Cancel</button>
+        <button class="btn btn-danger">Delete</button>
+      </div>
+    </section>
+
+    <p><a href="../index.html">Back to index</a></p>
+  </main>
+</body>
+</html>

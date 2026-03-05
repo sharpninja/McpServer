@@ -8,7 +8,7 @@ public sealed class GitHubEndpointCollection : ICollectionFixture<GitHubEndpoint
 public sealed class GitHubEndpointFixture : IDisposable
 {
     public const string BaseUrl = "http://localhost:7147";
-    public const string GhRoute = "/mcp/gh";
+    public const string GhRoute = "/mcpserver/gh";
     public HttpClient Client { get; }
 
     public GitHubEndpointFixture()

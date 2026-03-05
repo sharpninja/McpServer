@@ -13,6 +13,9 @@ public sealed class ContextChunkEntity
     [MaxLength(256)]
     public required string Id { get; set; }
 
+    /// <summary>TR-MCP-MT-003: Workspace discriminator for multi-tenant data isolation.</summary>
+    public string WorkspaceId { get; set; } = string.Empty;
+
     /// <summary>TR-PLANNED-013: Parent document identifier.</summary>
     [Required]
     [MaxLength(256)]

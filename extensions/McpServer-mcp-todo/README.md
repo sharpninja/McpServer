@@ -3,7 +3,7 @@
 Shows TODO items from the FunWasHad MCP server in the Explorer sidebar.
 
 - **View:** Explorer → **MCP Todo**
-- **Data:** Fetched from `GET /mcp/todo` (default base URL: `http://localhost:7147`). Ensure the MCP server is running (e.g. `.\scripts\Start-McpServer.ps1`).
+- **Data:** Fetched from `GET /mcpserver/todo` (default base URL: `http://localhost:7147`). Ensure the MCP server is running (e.g. `.\scripts\Start-McpServer.ps1`).
 - **List:** Each row is a todo item showing its **ID** at all times; items are **collapsed by default**. Expand a row to see the body (title, description, technical details, implementation tasks, etc.).
 - **Copy ID:** Double-click a todo row (or use the context menu **McpServer MCP Todo: Copy ID to clipboard**) to copy that item’s ID to the clipboard.
 - **Refresh:** Use the refresh icon on the view title bar or the context menu to reload the list.

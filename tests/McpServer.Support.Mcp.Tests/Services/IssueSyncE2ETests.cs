@@ -15,7 +15,8 @@ public sealed class IssueSyncE2ETests
 
     public IssueSyncE2ETests()
     {
-        _sut = new IssueTodoSyncService(_github, _todoService, NullLogger<IssueTodoSyncService>.Instance);
+        var accessor = TestWorkspaceAccessorHelper.Create(_todoService);
+        _sut = new IssueTodoSyncService(_github, accessor, NullLogger<IssueTodoSyncService>.Instance);
     }
 
     /// <summary>Full cycle: Sync issue from GitHub -> modify TODO -> sync back to GitHub.</summary>

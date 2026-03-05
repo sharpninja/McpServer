@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>App Shell Wireframe</title>
+  <link rel="stylesheet" href="../shared/wireframe.css" />
+</head>
+<body>
+  <header class="gh-header">
+    <strong>McpServer</strong>
+    <div class="row">
+      <input class="input" placeholder="Type / to search" />
+      <button class="btn">Workspace: McpServer</button>
+      <button class="btn">Profile</button>
+    </div>
+  </header>
+
+  <div class="gh-layout">
+    <aside class="gh-sidebar">
+      <a class="gh-nav-link active" href="#">Dashboard</a>
+      <a class="gh-nav-link" href="#">Workspaces</a>
+      <a class="gh-nav-link" href="#">Todos</a>
+      <a class="gh-nav-link" href="#">Sessions</a>
+      <a class="gh-nav-link" href="#">Templates</a>
+      <a class="gh-nav-link" href="#">Agents</a>
+      <a class="gh-nav-link" href="#">Context</a>
+      <a class="gh-nav-link" href="#">Health</a>
+      <a class="gh-nav-link" href="#">Auth</a>
+      <div class="footer-links"><a href="../index.html">Back to index</a></div>
+    </aside>
+
+    <main class="gh-content">
+      <h1 class="page-title">App Shell</h1>
+      <p class="subtitle">GitHub-like top bar + side nav, with dense action layout and predictable placement.</p>
+
+      <section class="panel">
+        <h2>Header Behavior Notes</h2>
+        <ul>
+          <li>Primary actions stay right aligned.</li>
+          <li>Search is always visible, keyboard-first (<span class="kbd">/</span>).</li>
+          <li>Workspace picker behaves like GitHub scope selectors.</li>
+        </ul>
+      </section>
+
+      <section class="panel">
+        <h2>Content Region Contract</h2>
+        <p>All pages use panel blocks, action rows, and table/form patterns from shared wireframes. Buttons must preserve GitHub hover, focus-visible, and disabled/busy states.</p>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

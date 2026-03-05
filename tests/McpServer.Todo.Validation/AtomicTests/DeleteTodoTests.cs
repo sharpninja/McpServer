@@ -5,7 +5,7 @@ using Xunit;
 
 namespace McpServer.Todo.Validation.AtomicTests;
 
-/// <summary>Audit: DELETE /mcp/todo/{id} — Delete a TODO item.</summary>
+/// <summary>Audit: DELETE /mcpserver/todo/{id} — Delete a TODO item.</summary>
 [Collection("TodoEndpoint")]
 public sealed class DeleteTodoTests
 {

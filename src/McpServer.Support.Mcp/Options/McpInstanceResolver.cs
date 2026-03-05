@@ -47,17 +47,47 @@ public static class McpInstanceResolver
     }
 
     /// <summary>
-    /// Resolves a configured sqlite datasource against Mcp:DataDirectory when the datasource is relative.
+    /// Resolves a configured sqlite datasource against the effective data folder when the datasource is relative.
     /// Instance-scoped overrides are honored.
     /// </summary>
     public static string ResolveSqliteDataSource(IConfiguration configuration, string? instanceName)
     {
         var dataSource = GetEffectiveMcpValue(configuration, instanceName, "DataSource") ?? "mcp.db";
-        if (Path.IsPathRooted(dataSource))
-            return dataSource;
+        return ResolveDataPath(configuration, instanceName, dataSource);
+    }
 
-        var dataDirectory = GetEffectiveMcpValue(configuration, instanceName, "DataDirectory") ?? ".";
-        return Path.GetFullPath(Path.Combine(dataDirectory, dataSource));
+    /// <summary>
+    /// Resolves the effective data folder from root-level <c>DataFolder</c>,
+    /// falling back to legacy <c>Mcp:DataDirectory</c> for backward compatibility.
+    /// </summary>
+    public static string GetEffectiveDataFolder(IConfiguration configuration, string? instanceName)
+    {
+        ArgumentNullException.ThrowIfNull(configuration);
+
+        var rootDataFolder = configuration["DataFolder"];
+        if (!string.IsNullOrWhiteSpace(rootDataFolder))
+            return ResolveFullPath(rootDataFolder);
+
+        var legacyDataDirectory = GetEffectiveMcpValue(configuration, instanceName, "DataDirectory");
+        if (!string.IsNullOrWhiteSpace(legacyDataDirectory))
+            return ResolveFullPath(legacyDataDirectory);
+
+        return ResolveFullPath(".");
+    }
+
+    /// <summary>
+    /// Resolves a configured path against the effective data folder when the path is relative.
+    /// </summary>
+    public static string ResolveDataPath(IConfiguration configuration, string? instanceName, string configuredPath)
+    {
+        ArgumentNullException.ThrowIfNull(configuration);
+        ArgumentNullException.ThrowIfNull(configuredPath);
+
+        if (Path.IsPathRooted(configuredPath))
+            return ResolveFullPath(configuredPath);
+
+        var dataFolder = GetEffectiveDataFolder(configuration, instanceName);
+        return ResolveFullPath(Path.Combine(dataFolder, configuredPath));
     }
 
     /// <summary>
@@ -122,6 +152,7 @@ public static class McpInstanceResolver
         }
         catch (Exception ex) when (ex is ArgumentException or NotSupportedException or PathTooLongException)
         {
+            System.Diagnostics.Trace.TraceError(ex.ToString());
             throw new InvalidOperationException($"Invalid path '{path}'.", ex);
         }
     }

@@ -14,8 +14,8 @@ public sealed class TodoStorageOptions
     public string Provider { get; set; } = "yaml";
 
     /// <summary>
-    /// SQLite datasource path for TODO storage when provider=sqlite.
-    /// Relative paths are resolved under RepoRoot.
-    /// </summary>
+     /// SQLite datasource path for TODO storage when provider=sqlite.
+    /// Relative paths are resolved under the effective data folder.
+     /// </summary>
     public string SqliteDataSource { get; set; } = "mcp.db";
 }

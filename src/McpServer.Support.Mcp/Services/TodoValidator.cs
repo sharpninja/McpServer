@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
@@ -6,6 +8,10 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 internal static class TodoValidator
 {
+    private static readonly Regex s_todoIdRegex = new(
+        "^[A-Z]+-[A-Z0-9]+-\\d{3}$",
+        RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
     private static readonly HashSet<string> s_validPriorities =
         new(StringComparer.OrdinalIgnoreCase) { "high", "medium", "low" };
 
@@ -16,6 +22,64 @@ internal static class TodoValidator
     /// <summary>Returns an error message if priority is invalid, otherwise <see langword="null"/>.</summary>
     public static string? ValidatePriority(string? priority)
         => IsValidPriority(priority) ? null : "Unknown priority. Use high, medium, or low.";
+
+    /// <summary>
+    /// Returns an error message when the TODO identifier is null, empty, or does not match
+    /// the canonical format <c>&lt;PHASE&gt;-&lt;AREA&gt;-###</c>.
+    /// </summary>
+    public static string? ValidateTodoId(string? id)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            return "Todo id is required.";
+
+        if (!s_todoIdRegex.IsMatch(id))
+            return "Todo id must match <PHASE>-<AREA>-### using uppercase kebab-case (regex: ^[A-Z]+-[A-Z0-9]+-\\d{3}$).";
+
+        return null;
+    }
+
+    /// <summary>
+    /// Validates an enumerable of TODO identifiers. Returns the first error found or <see langword="null"/>.
+    /// </summary>
+    public static string? ValidateTodoIds(IEnumerable<string>? ids, string fieldName)
+    {
+        if (ids is null)
+            return null;
+
+        foreach (var id in ids)
+        {
+            var error = ValidateTodoId(id);
+            if (error is not null)
+                return $"{fieldName} contains invalid TODO id '{id}'. {error}";
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Validates dependency identifiers with backward compatibility:
+    /// canonical IDs are always valid; legacy IDs are allowed only when they
+    /// already exist in the current TODO set.
+    /// </summary>
+    public static string? ValidateDependencyIds(IEnumerable<string>? ids, IReadOnlyList<TodoFlatItem> allItems, string fieldName)
+    {
+        if (ids is null)
+            return null;
+
+        var knownIds = new HashSet<string>(allItems.Select(i => i.Id), StringComparer.OrdinalIgnoreCase);
+        foreach (var id in ids)
+        {
+            if (ValidateTodoId(id) is null)
+                continue;
+
+            if (knownIds.Contains(id))
+                continue;
+
+            return $"{fieldName} contains invalid TODO id '{id}'. Todo id must match <PHASE>-<AREA>-### using uppercase kebab-case (regex: ^[A-Z]+-[A-Z0-9]+-\\d{3}$).";
+        }
+
+        return null;
+    }
 
     /// <summary>
     /// Validates that proposed dependencies are not self-referential, all exist, and introduce no cycles.

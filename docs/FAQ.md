@@ -35,7 +35,7 @@ The default port is **7147**. Configure it with:
 - `PORT` environment variable
 - `--urls http://+:PORT` command-line argument
 
-Workspace instances are hosted as in-process Kestrel listeners starting at port **7148**.
+Workspace instances are hosted as in-process Kestrel listeners starting at port **7147**.
 
 ### How do I connect an MCP client?
 
@@ -87,9 +87,9 @@ IDs follow a `SECTION-NNN` pattern (e.g., `APP-001`, `SUPPORT-042`). GitHub-sync
 
 Yes. Bidirectional sync is available:
 
-- **GitHub → TODO**: `POST /mcp/gh/issues/sync/from-github`
-- **TODO → GitHub**: `POST /mcp/gh/issues/sync/to-github`
-- **Single issue**: `POST /mcp/gh/issues/{number}/sync`
+- **GitHub → TODO**: `POST /mcpserver/gh/issues/sync/from-github`
+- **TODO → GitHub**: `POST /mcpserver/gh/issues/sync/to-github`
+- **Single issue**: `POST /mcpserver/gh/issues/{number}/sync`
 
 Synced items get `ISSUE-{number}` IDs. Status changes (done ↔ closed) propagate in both directions.
 
@@ -107,17 +107,17 @@ via the REST API.
 ### How do I create a workspace?
 
 ```bash
-curl -X POST http://localhost:7147/mcp/workspace \
+curl -X POST http://localhost:7147/mcpserver/workspace \
   -H "Content-Type: application/json" \
   -H "X-Api-Key: YOUR_KEY" \
   -d '{"workspacePath": "E:\\github\\MyProject"}'
 ```
 
-Defaults are applied automatically: name from last path segment, port auto-assigned from 7148+, TodoPath defaults to `docs/todo.yaml`.
+Defaults are applied automatically: name from last path segment, port auto-assigned from 7147+, TodoPath defaults to `docs/todo.yaml`.
 
 ### What does the init endpoint do?
 
-`POST /mcp/workspace/{key}/init` scaffolds the workspace directory with:
+`POST /mcpserver/workspace/{key}/init` scaffolds the workspace directory with:
 
 - Creates directories as needed
 - Creates an empty `todo.yaml` at the configured TodoPath
@@ -133,7 +133,7 @@ The `{key}` URL parameter is the Base64URL-encoded `WorkspacePath`. For example,
 
 ### How does tool search work?
 
-`GET /mcp/tools/search?keyword=screenshot` searches across:
+`GET /mcpserver/tools/search?keyword=screenshot` searches across:
 
 1. **Tags** — bidirectional contains match (handles singular/plural, e.g., `screenshot` matches `screenshots`)
 2. **Tool name** — case-insensitive contains
@@ -145,10 +145,10 @@ Results include both **global** tools (no workspace scope) and **workspace-speci
 
 Buckets are GitHub repositories that serve as package registries for tool definitions, similar to Scoop buckets. They contain JSON manifest files describing tools. You can:
 
-- **Add a bucket**: `POST /mcp/tools/buckets` with `{owner, repo, branch, path}`
-- **Browse tools**: `GET /mcp/tools/buckets/{name}/browse`
-- **Install a tool**: `POST /mcp/tools/buckets/{name}/install?tool=mytool`
-- **Sync all**: `POST /mcp/tools/buckets/{name}/sync`
+- **Add a bucket**: `POST /mcpserver/tools/buckets` with `{owner, repo, branch, path}`
+- **Browse tools**: `GET /mcpserver/tools/buckets/{name}/browse`
+- **Install a tool**: `POST /mcpserver/tools/buckets/{name}/install?tool=mytool`
+- **Sync all**: `POST /mcpserver/tools/buckets/{name}/sync`
 
 Buckets use the `gh` CLI to read repository contents.
 
@@ -158,12 +158,12 @@ Buckets use the `gh` CLI to read repository contents.
 
 ### How does API key authentication work?
 
-Set `Mcp:ApiKey` in configuration. Mutating endpoints require the key via:
+Per-workspace auth tokens are generated on each service restart and written into the `AGENTS-README-FIRST.yaml` marker file in each workspace root. All `/mcpserver/*` endpoints require the token via:
 
-- Header: `X-Api-Key: YOUR_KEY`
-- Query parameter: `?api_key=YOUR_KEY`
+- Header: `X-Api-Key: YOUR_TOKEN`
+- Query parameter: `?api_key=YOUR_TOKEN`
 
-Read-only endpoints (GET) are public by default (marked `[SkipApiKeyAuth]`).
+Agents read the token from the marker file and include it in requests. Tokens are not persisted — they rotate automatically on restart.
 
 ### What is the pairing web UI?
 
@@ -175,8 +175,8 @@ Passwords are stored as SHA-256 hashes and verified with constant-time compariso
 
 | Controller | Public Endpoints |
 |------------|------------------|
-| Workspace | `GET /mcp/workspace`, `GET /mcp/workspace/{key}`, `GET /mcp/workspace/{key}/status` |
-| Tool Registry | `GET /mcp/tools/search`, `GET /mcp/tools`, `GET /mcp/tools/{id}` |
+| Workspace | `GET /mcpserver/workspace`, `GET /mcpserver/workspace/{key}`, `GET /mcpserver/workspace/{key}/status` |
+| Tool Registry | `GET /mcpserver/tools/search`, `GET /mcpserver/tools`, `GET /mcpserver/tools/{id}` |
 | Health | `GET /health`, `GET /alive` |
 
 ---
@@ -192,6 +192,12 @@ Passwords are stored as SHA-256 hashes and verified with constant-time compariso
 | **FRP** | `frp` | Fully self-hosted, open-source (Apache-2.0) |
 
 Configure via `Mcp:Tunnel:Provider` in `appsettings.json`.
+
+Detailed runbooks:
+
+- `docs/Operations/Tunnel-Ngrok.md`
+- `docs/Operations/Tunnel-Cloudflare.md`
+- `docs/Operations/Tunnel-FRP-Railway.md`
 
 ### How do I self-host with FRP?
 
@@ -214,7 +220,7 @@ Yes. The auth token is passed via the `NGROK_AUTHTOKEN` environment variable, no
 
 ### How does hybrid search work?
 
-The context search endpoint (`POST /mcp/context/search`) combines:
+The context search endpoint (`POST /mcpserver/context/search`) combines:
 
 1. **FTS5 full-text search** — BM25-ranked SQLite FTS5 with snippet extraction
 2. **HNSW vector search** — cosine-similarity nearest-neighbor using all-MiniLM-L6-v2 embeddings (384 dimensions)
@@ -231,11 +237,11 @@ The ingestion pipeline indexes:
 - GitHub issues and PRs (via `gh` CLI)
 - External docs (from cached `docs/external/` path)
 
-Trigger a full re-index with `POST /mcp/sync/run`.
+Trigger a full re-index with `POST /mcpserver/sync/run`.
 
 ### What is a context pack?
 
-`POST /mcp/context/pack` produces a deterministic collection of ranked context chunks — a curated bundle of relevant content for an AI agent's prompt context.
+`POST /mcpserver/context/pack` produces a deterministic collection of ranked context chunks — a curated bundle of relevant content for an AI agent's prompt context.
 
 ---
 
@@ -243,7 +249,7 @@ Trigger a full re-index with `POST /mcp/sync/run`.
 
 ### What's the difference between REST and MCP transport?
 
-| Feature | REST API (`/mcp/*`) | MCP Transport (`/mcp-transport`) |
+| Feature | REST API (`/mcpserver/*`) | MCP Transport (`/mcp-transport`) |
 |---------|--------------------|---------------------------------|
 | Protocol | Standard HTTP/JSON | MCP Streamable HTTP (JSON-RPC) |
 | Clients | Any HTTP client, curl, Swagger | Claude Desktop, VS Code Copilot, Cursor |
@@ -325,7 +331,7 @@ The `/mcp-transport` endpoint requires the header:
 Accept: application/json, text/event-stream
 ```
 
-Ensure your MCP client sends this header. Standard REST clients should use the `/mcp/*` endpoints instead.
+Ensure your MCP client sends this header. Standard REST clients should use the `/mcpserver/*` endpoints instead.
 
 ### The health endpoint returns unhealthy
 
@@ -345,3 +351,25 @@ gh auth login
 ```
 
 The server uses the local `gh` CLI authentication — no API tokens are configured separately.
+
+## Multi-Tenant Workspace Resolution
+
+### How does workspace resolution work?
+
+The server uses a three-tier resolution chain to determine which workspace a request targets:
+
+1. **`X-Workspace-Path` header** (highest priority) — Send the absolute workspace path in this header. Returns 400 if the path is not a registered workspace.
+2. **API key reverse lookup** — The `X-Api-Key` token is mapped back to its generating workspace via `WorkspaceTokenService`.
+3. **Default workspace** (lowest priority) — Falls back to the primary workspace from configuration.
+
+### Can I still use per-workspace ports?
+
+No. All workspaces are served on a single shared port. Use the `X-Workspace-Path` header to target a specific workspace. Each workspace still gets its own API key in its marker file, which can also be used for workspace resolution.
+
+### How does the Director switch workspaces?
+
+The Director TUI reuses the same base URL for all workspaces and changes only the `X-Workspace-Path` header when switching workspaces. No need to re-read marker files for workspace switching after the initial connection.
+
+### How is workspace data isolated?
+
+All workspace data is stored in a single shared SQLite database. Each entity table has a `WorkspaceId` column, and EF Core global query filters automatically scope all queries to the active workspace. Admin operations can use `IgnoreQueryFilters()` for cross-workspace queries.

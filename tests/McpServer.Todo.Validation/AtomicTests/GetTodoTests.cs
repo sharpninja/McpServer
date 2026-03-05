@@ -5,7 +5,7 @@ using Xunit;
 
 namespace McpServer.Todo.Validation.AtomicTests;
 
-/// <summary>Audit: GET /mcp/todo/{id} — Get a single TODO item by id.</summary>
+/// <summary>Audit: GET /mcpserver/todo/{id} — Get a single TODO item by id.</summary>
 [Collection("TodoEndpoint")]
 public sealed class GetTodoTests : IAsyncLifetime
 {

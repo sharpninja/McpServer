@@ -51,7 +51,7 @@ public sealed class ConfigurablePathIntegrationTests : IDisposable
 
         var createResult = await sut.CreateAsync(new TodoCreateRequest
         {
-            Id = "CFG-TODO-ABS-001",
+            Id = "CFG-ABS-001",
             Title = "Absolute path test",
             Section = "mvp-support",
             Priority = "high",
@@ -69,7 +69,7 @@ public sealed class ConfigurablePathIntegrationTests : IDisposable
         Directory.CreateDirectory(repoFolder);
         await File.WriteAllTextAsync(Path.Combine(repoFolder, "readme.md"), "# relative root").ConfigureAwait(true);
 
-        var sut = new RepoIngestor(new Chunker(), Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = relativeRepoRoot }));
+        var sut = new RepoIngestor(new Chunker(), Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = relativeRepoRoot }), NullLogger<RepoIngestor>.Instance);
 
         var results = await sut.IngestAsync().ConfigureAwait(true);
 

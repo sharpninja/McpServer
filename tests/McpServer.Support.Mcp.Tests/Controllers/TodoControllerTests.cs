@@ -19,15 +19,16 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
     {
         _factory = factory;
         _client = factory.CreateClient();
+        _client.DefaultRequestHeaders.TryAddWithoutValidation("X-Api-Key", factory.GetFullWorkspaceApiKey());
     }
 
     public void Dispose() => _client.Dispose();
 
-    /// <summary>GET /mcp/todo returns 200 with items from seed YAML.</summary>
+    /// <summary>GET /mcpserver/todo returns 200 with items from seed YAML.</summary>
     [Fact]
     public async Task Query_ReturnsOkWithItems()
     {
-        var response = await _client.GetAsync(new Uri("/mcp/todo", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/todo", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var result = await response.Content.ReadFromJsonAsync<QueryResult>().ConfigureAwait(true);
@@ -35,11 +36,11 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         Assert.True(result.TotalCount > 0, "Expected at least one TODO item from seed file.");
     }
 
-    /// <summary>GET /mcp/todo?keyword=Blazor filters by keyword.</summary>
+    /// <summary>GET /mcpserver/todo?keyword=Blazor filters by keyword.</summary>
     [Fact]
     public async Task Query_ByKeyword_FiltersResults()
     {
-        var response = await _client.GetAsync(new Uri("/mcp/todo?keyword=Blazor", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/todo?keyword=Blazor", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var result = await response.Content.ReadFromJsonAsync<QueryResult>().ConfigureAwait(true);
@@ -53,11 +54,11 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         });
     }
 
-    /// <summary>GET /mcp/todo?priority=high filters by priority.</summary>
+    /// <summary>GET /mcpserver/todo?priority=high filters by priority.</summary>
     [Fact]
     public async Task Query_ByPriority_FiltersResults()
     {
-        var response = await _client.GetAsync(new Uri("/mcp/todo?priority=high", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/todo?priority=high", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var result = await response.Content.ReadFromJsonAsync<QueryResult>().ConfigureAwait(true);
@@ -66,11 +67,11 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
             Assert.Equal("high", item.Priority, StringComparer.OrdinalIgnoreCase));
     }
 
-    /// <summary>GET /mcp/todo?id=TEST-001 filters by id.</summary>
+    /// <summary>GET /mcpserver/todo?id=TEST-001 filters by id.</summary>
     [Fact]
     public async Task Query_ById_FiltersResults()
     {
-        var response = await _client.GetAsync(new Uri("/mcp/todo?id=TEST-001", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/todo?id=TEST-001", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var result = await response.Content.ReadFromJsonAsync<QueryResult>().ConfigureAwait(true);
@@ -79,11 +80,11 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         Assert.Equal("TEST-001", result.Items[0].Id);
     }
 
-    /// <summary>GET /mcp/todo?section=mvp-app filters by section.</summary>
+    /// <summary>GET /mcpserver/todo?section=mvp-app filters by section.</summary>
     [Fact]
     public async Task Query_BySection_FiltersResults()
     {
-        var response = await _client.GetAsync(new Uri("/mcp/todo?section=mvp-app", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/todo?section=mvp-app", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var result = await response.Content.ReadFromJsonAsync<QueryResult>().ConfigureAwait(true);
@@ -92,11 +93,11 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
             Assert.Equal("mvp-app", item.Section, StringComparer.OrdinalIgnoreCase));
     }
 
-    /// <summary>GET /mcp/todo?done=false filters by done status.</summary>
+    /// <summary>GET /mcpserver/todo?done=false filters by done status.</summary>
     [Fact]
     public async Task Query_ByDoneStatus_FiltersResults()
     {
-        var response = await _client.GetAsync(new Uri("/mcp/todo?done=false", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/todo?done=false", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var result = await response.Content.ReadFromJsonAsync<QueryResult>().ConfigureAwait(true);
@@ -104,11 +105,11 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         Assert.All(result.Items, item => Assert.False(item.Done));
     }
 
-    /// <summary>GET /mcp/todo/{id} returns 200 for existing item.</summary>
+    /// <summary>GET /mcpserver/todo/{id} returns 200 for existing item.</summary>
     [Fact]
     public async Task GetById_ExistingItem_ReturnsOk()
     {
-        var response = await _client.GetAsync(new Uri("/mcp/todo/TEST-001", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/todo/TEST-001", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var item = await response.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
@@ -116,43 +117,47 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         Assert.Equal("TEST-001", item.Id);
     }
 
-    /// <summary>GET /mcp/todo/{id} returns 404 for missing item.</summary>
+    /// <summary>GET /mcpserver/todo/{id} returns 404 for missing item.</summary>
     [Fact]
     public async Task GetById_MissingItem_ReturnsNotFound()
     {
-        var response = await _client.GetAsync(new Uri("/mcp/todo/NONEXISTENT-999", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/todo/NONEXISTENT-999", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
-    /// <summary>POST /mcp/todo creates a new item and GET retrieves it.</summary>
+    /// <summary>POST /mcpserver/todo creates a new item and GET retrieves it.</summary>
     [Fact]
     public async Task Create_ThenGetById_ReturnsCreatedItem()
     {
         var createRequest = new
         {
-            id = "NEW-001",
+            id = "NEW-TODO-001",
             title = "New test item",
             section = "mvp-app",
             priority = "low",
             estimate = "8-16 hours",
+            note = "Create note",
+            remaining = "Remaining from create",
             description = new[] { "First line", "Second line" }
         };
 
-        var createResponse = await _client.PostAsJsonAsync(new Uri("/mcp/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
+        var createResponse = await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
 
-        var getResponse = await _client.GetAsync(new Uri("/mcp/todo/NEW-001", UriKind.Relative)).ConfigureAwait(true);
+        var getResponse = await _client.GetAsync(new Uri("/mcpserver/todo/NEW-TODO-001", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
 
         var item = await getResponse.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
         Assert.NotNull(item);
-        Assert.Equal("NEW-001", item.Id);
+        Assert.Equal("NEW-TODO-001", item.Id);
         Assert.Equal("New test item", item.Title);
         Assert.Equal("mvp-app", item.Section);
         Assert.Equal("low", item.Priority);
+        Assert.Equal("Create note", item.Note);
+        Assert.Equal("Remaining from create", item.Remaining);
     }
 
-    /// <summary>POST /mcp/todo with duplicate id returns 409 Conflict.</summary>
+    /// <summary>POST /mcpserver/todo with duplicate id returns 409 Conflict.</summary>
     [Fact]
     public async Task Create_DuplicateId_ReturnsConflict()
     {
@@ -164,87 +169,87 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
             priority = "high"
         };
 
-        var response = await _client.PostAsJsonAsync(new Uri("/mcp/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
     }
 
-    /// <summary>PUT /mcp/todo/{id} updates the item fields.</summary>
+    /// <summary>PUT /mcpserver/todo/{id} updates the item fields.</summary>
     [Fact]
     public async Task Update_ExistingItem_ReturnsOk()
     {
         var updateRequest = new { title = "Updated Title", done = true };
 
-        var response = await _client.PutAsJsonAsync(new Uri("/mcp/todo/TEST-002", UriKind.Relative), updateRequest).ConfigureAwait(true);
+        var response = await _client.PutAsJsonAsync(new Uri("/mcpserver/todo/TEST-002", UriKind.Relative), updateRequest).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var getResponse = await _client.GetAsync(new Uri("/mcp/todo/TEST-002", UriKind.Relative)).ConfigureAwait(true);
+        var getResponse = await _client.GetAsync(new Uri("/mcpserver/todo/TEST-002", UriKind.Relative)).ConfigureAwait(true);
         var item = await getResponse.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
         Assert.NotNull(item);
         Assert.Equal("Updated Title", item.Title);
         Assert.True(item.Done);
     }
 
-    /// <summary>PUT /mcp/todo/{id} for missing item returns 404.</summary>
+    /// <summary>PUT /mcpserver/todo/{id} for missing item returns 404.</summary>
     [Fact]
     public async Task Update_MissingItem_ReturnsNotFound()
     {
         var updateRequest = new { title = "Does not matter" };
-        var response = await _client.PutAsJsonAsync(new Uri("/mcp/todo/NONEXISTENT-999", UriKind.Relative), updateRequest).ConfigureAwait(true);
+        var response = await _client.PutAsJsonAsync(new Uri("/mcpserver/todo/NONEXISTENT-999", UriKind.Relative), updateRequest).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
-    /// <summary>DELETE /mcp/todo/{id} removes the item.</summary>
+    /// <summary>DELETE /mcpserver/todo/{id} removes the item.</summary>
     [Fact]
     public async Task Delete_ExistingItem_ReturnsOkAndRemoves()
     {
         // First create an item to delete
         var createRequest = new
         {
-            id = "DEL-001",
+            id = "DEL-TODO-001",
             title = "To be deleted",
             section = "mvp-support",
             priority = "low"
         };
-        await _client.PostAsJsonAsync(new Uri("/mcp/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
 
-        var deleteResponse = await _client.DeleteAsync(new Uri("/mcp/todo/DEL-001", UriKind.Relative)).ConfigureAwait(true);
+        var deleteResponse = await _client.DeleteAsync(new Uri("/mcpserver/todo/DEL-TODO-001", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
 
-        var getResponse = await _client.GetAsync(new Uri("/mcp/todo/DEL-001", UriKind.Relative)).ConfigureAwait(true);
+        var getResponse = await _client.GetAsync(new Uri("/mcpserver/todo/DEL-TODO-001", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, getResponse.StatusCode);
     }
 
-    /// <summary>DELETE /mcp/todo/{id} for missing item returns 404.</summary>
+    /// <summary>DELETE /mcpserver/todo/{id} for missing item returns 404.</summary>
     [Fact]
     public async Task Delete_MissingItem_ReturnsNotFound()
     {
-        var response = await _client.DeleteAsync(new Uri("/mcp/todo/NONEXISTENT-999", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.DeleteAsync(new Uri("/mcpserver/todo/NONEXISTENT-999", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
-    /// <summary>POST /mcp/todo with any section creates item (sections are now arbitrary).</summary>
+    /// <summary>POST /mcpserver/todo with any section creates item (sections are now arbitrary).</summary>
     [Fact]
     public async Task Create_UnknownSection_ReturnsConflict()
     {
         var request = new
         {
-            id = "BAD-001",
+            id = "BAD-SEC-001",
             title = "Bad section",
             section = "unknown-section",
             priority = "high"
         };
 
-        var response = await _client.PostAsJsonAsync(new Uri("/mcp/todo", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), request).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 
-    /// <summary>POST /mcp/todo with FR/TR creates item with requirement IDs.</summary>
+    /// <summary>POST /mcpserver/todo with FR/TR creates item with requirement IDs.</summary>
     [Fact]
     public async Task Create_WithFrTr_ReturnsCreatedItemWithRequirements()
     {
         var request = new
         {
-            id = "FRTR-001",
+            id = "FRTR-TEST-001",
             title = "FR/TR test item",
             section = "mvp-app",
             priority = "low",
@@ -252,10 +257,10 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
             technicalRequirements = new[] { "TR-API-001" }
         };
 
-        var createResponse = await _client.PostAsJsonAsync(new Uri("/mcp/todo", UriKind.Relative), request).ConfigureAwait(true);
+        var createResponse = await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), request).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
 
-        var getResponse = await _client.GetAsync(new Uri("/mcp/todo/FRTR-001", UriKind.Relative)).ConfigureAwait(true);
+        var getResponse = await _client.GetAsync(new Uri("/mcpserver/todo/FRTR-TEST-001", UriKind.Relative)).ConfigureAwait(true);
         var item = await getResponse.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
         Assert.NotNull(item);
         Assert.NotNull(item.FunctionalRequirements);
@@ -267,7 +272,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         Assert.Equal("TR-API-001", item.TechnicalRequirements[0]);
     }
 
-    /// <summary>PUT /mcp/todo/{id} updates FR/TR fields.</summary>
+    /// <summary>PUT /mcpserver/todo/{id} updates FR/TR fields.</summary>
     [Fact]
     public async Task Update_WithFrTr_UpdatesRequirements()
     {
@@ -279,7 +284,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
             section = "mvp-app",
             priority = "low"
         };
-        await _client.PostAsJsonAsync(new Uri("/mcp/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
 
         // Update with FR/TR
         var updateRequest = new
@@ -287,10 +292,10 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
             functionalRequirements = new[] { "FR-WF-005" },
             technicalRequirements = new[] { "TR-MOBILE-001", "TR-MOBILE-002" }
         };
-        var response = await _client.PutAsJsonAsync(new Uri("/mcp/todo/FRTR-UPD-001", UriKind.Relative), updateRequest).ConfigureAwait(true);
+        var response = await _client.PutAsJsonAsync(new Uri("/mcpserver/todo/FRTR-UPD-001", UriKind.Relative), updateRequest).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-        var getResponse = await _client.GetAsync(new Uri("/mcp/todo/FRTR-UPD-001", UriKind.Relative)).ConfigureAwait(true);
+        var getResponse = await _client.GetAsync(new Uri("/mcpserver/todo/FRTR-UPD-001", UriKind.Relative)).ConfigureAwait(true);
         var item = await getResponse.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
         Assert.NotNull(item);
         Assert.NotNull(item.FunctionalRequirements);
@@ -300,27 +305,27 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         Assert.Equal(2, item.TechnicalRequirements.Length);
     }
 
-    /// <summary>POST /mcp/todo with unknown priority returns 409.</summary>
+    /// <summary>POST /mcpserver/todo with unknown priority returns 409.</summary>
     [Fact]
     public async Task Create_UnknownPriority_ReturnsConflict()
     {
         var request = new
         {
-            id = "BAD-002",
+            id = "BAD-PRI-002",
             title = "Bad priority",
             section = "mvp-app",
             priority = "critical"
         };
 
-        var response = await _client.PostAsJsonAsync(new Uri("/mcp/todo", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), request).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
     }
 
-    /// <summary>GET /mcp/todo/{id} returns FR/TR for item with requirements in seed YAML.</summary>
+    /// <summary>GET /mcpserver/todo/{id} returns FR/TR for item with requirements in seed YAML.</summary>
     [Fact]
     public async Task GetById_ItemWithFrTr_ReturnsRequirements()
     {
-        var response = await _client.GetAsync(new Uri("/mcp/todo/TEST-001", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/todo/TEST-001", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var item = await response.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
@@ -334,11 +339,11 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         Assert.Contains("TR-API-002", item.TechnicalRequirements);
     }
 
-    /// <summary>GET /mcp/todo/{id} returns DependsOn for item with dependencies.</summary>
+    /// <summary>GET /mcpserver/todo/{id} returns DependsOn for item with dependencies.</summary>
     [Fact]
     public async Task GetById_ItemWithDependsOn_ReturnsDeps()
     {
-        var response = await _client.GetAsync(new Uri("/mcp/todo/TEST-002", UriKind.Relative)).ConfigureAwait(true);
+        var response = await _client.GetAsync(new Uri("/mcpserver/todo/TEST-002", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var item = await response.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
@@ -347,7 +352,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         Assert.Contains("TEST-001", item.DependsOn);
     }
 
-    /// <summary>POST /mcp/todo with valid depends-on succeeds.</summary>
+    /// <summary>POST /mcpserver/todo with valid depends-on succeeds.</summary>
     [Fact]
     public async Task Create_WithValidDependsOn_Succeeds()
     {
@@ -360,16 +365,16 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
             dependsOn = new[] { "TEST-001" }
         };
 
-        var response = await _client.PostAsJsonAsync(new Uri("/mcp/todo", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), request).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
-        var getResponse = await _client.GetAsync(new Uri("/mcp/todo/DEP-VALID-001", UriKind.Relative)).ConfigureAwait(true);
+        var getResponse = await _client.GetAsync(new Uri("/mcpserver/todo/DEP-VALID-001", UriKind.Relative)).ConfigureAwait(true);
         var item = await getResponse.Content.ReadFromJsonAsync<FlatItem>().ConfigureAwait(true);
         Assert.NotNull(item?.DependsOn);
         Assert.Contains("TEST-001", item.DependsOn);
     }
 
-    /// <summary>POST /mcp/todo with self-dependency returns 409.</summary>
+    /// <summary>POST /mcpserver/todo with self-dependency returns 409.</summary>
     [Fact]
     public async Task Create_WithSelfDependency_ReturnsConflict()
     {
@@ -382,11 +387,11 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
             dependsOn = new[] { "DEP-SELF-001" }
         };
 
-        var response = await _client.PostAsJsonAsync(new Uri("/mcp/todo", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), request).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
     }
 
-    /// <summary>POST /mcp/todo with nonexistent dependency returns 409.</summary>
+    /// <summary>POST /mcpserver/todo with nonexistent dependency returns 409.</summary>
     [Fact]
     public async Task Create_WithNonexistentDependency_ReturnsConflict()
     {
@@ -399,17 +404,17 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
             dependsOn = new[] { "DOES-NOT-EXIST" }
         };
 
-        var response = await _client.PostAsJsonAsync(new Uri("/mcp/todo", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), request).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
     }
 
-    /// <summary>PUT /mcp/todo/{id} with circular dependency returns 404 (rejected).</summary>
+    /// <summary>PUT /mcpserver/todo/{id} with circular dependency returns 404 (rejected).</summary>
     [Fact]
     public async Task Update_WithCircularDependency_ReturnsNotFound()
     {
         // TEST-002 depends on TEST-001. If we make TEST-001 depend on TEST-002, that's circular.
         var request = new { dependsOn = new[] { "TEST-002" } };
-        var response = await _client.PutAsJsonAsync(new Uri("/mcp/todo/TEST-001", UriKind.Relative), request).ConfigureAwait(true);
+        var response = await _client.PutAsJsonAsync(new Uri("/mcpserver/todo/TEST-001", UriKind.Relative), request).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
         var result = await response.Content.ReadFromJsonAsync<MutationResult>().ConfigureAwait(true);
@@ -465,9 +470,18 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
                     { "Mcp:DataSource", ":memory:" },
-                    { "Mcp:RepoRoot", _tempDir }
+                    { "DataFolder", _tempDir },
+                    { "Mcp:RepoRoot", _tempDir },
+                    { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" }
                 });
             });
+        }
+
+        public string GetFullWorkspaceApiKey()
+        {
+            var tokenService = Services.GetRequiredService<WorkspaceTokenService>();
+            return tokenService.GetToken(_tempDir)
+                   ?? throw new InvalidOperationException("Workspace full API key was not generated for test host.");
         }
 
         private new void Dispose()

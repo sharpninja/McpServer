@@ -40,89 +40,78 @@ const todoDocument_1 = require("./todoDocument");
 const logger_1 = require("./logger");
 const mcpClient_1 = require("./mcpClient");
 let activeCopilotAbort = null;
-async function sendCopilotPrompt(id, action, prompt) {
-    let invokeCopilot;
-    let CopilotResultState;
-    try {
-        const client = await Promise.resolve().then(() => __importStar(require('fwh-copilot-client')));
-        invokeCopilot = client.invokeCopilot;
-        CopilotResultState = client.CopilotResultState;
-    }
-    catch (e) {
-        const msg = e instanceof Error ? e.message : String(e);
-        (0, logger_1.log)('fwh-copilot-client failed to load', msg);
-        (0, logger_1.copilotLog)(`Copilot unavailable: ${msg}`);
-        vscode.window.showErrorMessage(`McpServer MCP Todo: Copilot client failed to load. ${msg}`);
-        return;
-    }
-    // Cancel any previously running operation
+/**
+ * Streams a Copilot-generated prompt response from the MCP server via SSE.
+ * Opens a temporary markdown file and appends each streamed line in real-time.
+ * For action "Plan", optional additionalPrompt is sent as the prompt query param so the server includes it in the request.
+ */
+async function streamPromptToEditor(id, action, additionalPrompt) {
     activeCopilotAbort?.abort();
     const abort = new AbortController();
     activeCopilotAbort = abort;
     vscode.commands.executeCommand('setContext', 'fwhMcpTodo.copilotRunning', true);
     try {
-        (0, logger_1.copilotLog)(`>>> Prompt (${action} ${id}):\n${prompt}`);
+        (0, logger_1.copilotLog)(`>>> SSE stream (${action} ${id})`);
         vscode.window.setStatusBarMessage(`McpServer MCP Todo: ${action} ${id}…`, 5000);
-        // Create a temp markdown file for live output
+        // Create temp markdown file for live output
         const tempDir = path.join(os.tmpdir(), 'McpServer-McpTodo');
         fs.mkdirSync(tempDir, { recursive: true });
         const mdPath = path.join(tempDir, `${action}-${id}-${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}.md`);
         const header = `# ${action}: ${id}\n\n_Running…_\n`;
         fs.writeFileSync(mdPath, header);
-        // Open the file in VS Code editor
         const doc = await vscode.workspace.openTextDocument(mdPath);
         await vscode.window.showTextDocument(doc, { preview: false });
         let firstLine = true;
-        const workspaceDir = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
-        const result = await invokeCopilot(prompt, {
-            timeoutMs: 120_000,
-            cwd: workspaceDir,
-            signal: abort.signal,
-            log: (msg) => (0, logger_1.copilotLog)(msg),
-            onStdoutLine: (line) => {
+        const lineQueue = [];
+        let drainScheduled = false;
+        async function drainLineQueue() {
+            if (drainScheduled || lineQueue.length === 0)
+                return;
+            drainScheduled = true;
+            while (lineQueue.length > 0) {
+                const line = lineQueue.shift();
                 try {
                     const edit = new vscode.WorkspaceEdit();
                     if (firstLine) {
-                        // Replace "Running…" placeholder with first real line
                         const fullRange = new vscode.Range(doc.positionAt(0), doc.positionAt(doc.getText().length));
                         edit.replace(doc.uri, fullRange, `# ${action}: ${id}\n\n${line}\n`);
                         firstLine = false;
                     }
                     else {
-                        // Append at end of document
                         const endPos = doc.positionAt(doc.getText().length);
                         edit.insert(doc.uri, endPos, line + '\n');
                     }
-                    vscode.workspace.applyEdit(edit);
+                    await vscode.workspace.applyEdit(edit);
                 }
                 catch { /* editor race — swallow */ }
-            },
-        });
-        // Write final content to disk so file is saved
+            }
+            drainScheduled = false;
+        }
+        let sseUrl = `/mcpserver/todo/${encodeURIComponent(id)}/prompt/${action.toLowerCase()}`;
+        if (action.toLowerCase() === 'plan' && additionalPrompt?.trim()) {
+            sseUrl += `?prompt=${encodeURIComponent(additionalPrompt.trim())}`;
+        }
+        await (0, mcpClient_1.streamSSE)(sseUrl, (line) => {
+            lineQueue.push(line);
+            void drainLineQueue();
+        }, abort.signal);
+        // Ensure any remaining queued lines are applied after stream ends
+        await drainLineQueue();
         fs.writeFileSync(mdPath, doc.getText());
-        (0, logger_1.copilotLog)(`<<< ${result.state} (${action} ${id}):\n${result.body}`);
-        if (result.stderr)
-            (0, logger_1.copilotLog)(`<<< Stderr:\n${result.stderr}`);
-        if (result.state === CopilotResultState.Cancelled) {
-            vscode.window.setStatusBarMessage(`McpServer MCP Todo: ${action} ${id} stopped`, 5000);
-        }
-        else if (result.state === CopilotResultState.Success) {
-            vscode.window.setStatusBarMessage(`McpServer MCP Todo: ${action} ${id} complete`, 5000);
-            const logUri = vscode.Uri.file(mdPath);
-            vscode.window.showInformationMessage(`${action} ${id} complete`, 'Show Log').then((choice) => {
-                if (choice === 'Show Log') {
-                    vscode.workspace.openTextDocument(logUri).then((d) => vscode.window.showTextDocument(d, { preview: false }), () => { });
-                }
-            });
-        }
-        else {
-            (0, logger_1.copilotLog)(`<<< Warning (${action} ${id}): ${result.stderr || result.body}`);
-        }
+        (0, logger_1.copilotLog)(`<<< SSE complete (${action} ${id})`);
+        vscode.window.setStatusBarMessage(`McpServer MCP Todo: ${action} ${id} complete`, 5000);
     }
     catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
-        (0, logger_1.copilotLog)(`<<< Error (${action} ${id}): ${msg}`);
-        (0, logger_1.log)(`sendCopilotPrompt(${action}) error`, msg);
+        if (msg === 'Aborted') {
+            (0, logger_1.copilotLog)(`<<< Cancelled (${action} ${id})`);
+            vscode.window.setStatusBarMessage(`McpServer MCP Todo: ${action} ${id} stopped`, 5000);
+        }
+        else {
+            (0, logger_1.copilotLog)(`<<< Error (${action} ${id}): ${msg}`);
+            (0, logger_1.log)(`streamPromptToEditor(${action}) error`, msg);
+            vscode.window.showErrorMessage(`McpServer MCP Todo: ${action} failed — ${msg}`);
+        }
     }
     finally {
         if (activeCopilotAbort === abort) {
@@ -134,14 +123,12 @@ async function sendCopilotPrompt(id, action, prompt) {
 function activate(context) {
     // Create output channel and log immediately so we know activation ran
     (0, logger_1.log)('activate() called');
-    // Only fully initialise when the FunWasHad solution is in the workspace
-    const isFunWasHad = vscode.workspace.workspaceFolders?.some((f) => {
-        const fs = require('fs');
-        const path = require('path');
-        return fs.existsSync(path.join(f.uri.fsPath, 'FunWasHad.sln'));
+    // Only fully initialise when the AGENTS-README-FIRST.yaml marker file is in a workspace root
+    const hasMarker = vscode.workspace.workspaceFolders?.some((f) => {
+        return fs.existsSync(path.join(f.uri.fsPath, 'AGENTS-README-FIRST.yaml'));
     });
-    if (!isFunWasHad) {
-        (0, logger_1.log)('FunWasHad.sln not found in workspace — extension inactive.');
+    if (!hasMarker) {
+        (0, logger_1.log)('AGENTS-README-FIRST.yaml not found in workspace — extension inactive.');
         return;
     }
     try {
@@ -160,7 +147,7 @@ function activate(context) {
                 parts.push(`Text: "${t}"`);
             treeView.description = parts.length ? parts.join(' · ') : undefined;
         };
-        const filterPanel = new filterPanel_1.FilterPanelProvider(context, provider, updateFilterDescription);
+        const filterPanel = new filterPanel_1.FilterPanelProvider(provider, updateFilterDescription);
         context.subscriptions.push(vscode.window.registerWebviewViewProvider('fwhMcpTodo.filters', filterPanel));
         (0, logger_1.log)('Tree view created for fwhMcpTodo.todoList');
         // Auto-refresh when view becomes visible so data loads even if title-bar refresh isn’t triggered
@@ -220,53 +207,26 @@ function activate(context) {
             (0, logger_1.log)('Command fwhMcpTodo.status invoked', { id });
             if (!id)
                 return;
-            const prompt = `Get the current status of TODO ${id} from the local MCP server at http://localhost:7147. Use: curl http://localhost:7147/mcp/todo/${id} to retrieve the item. Report the title, priority, section, done status, description, technical details, implementation tasks with completion status, and any blockers or next steps.`;
-            await sendCopilotPrompt(id, 'Status', prompt);
+            await streamPromptToEditor(id, 'Status');
         }));
         context.subscriptions.push(vscode.commands.registerCommand('fwhMcpTodo.implement', async (arg) => {
             const id = typeof arg === 'string' ? arg : arg?.id;
             (0, logger_1.log)('Command fwhMcpTodo.implement invoked', { id });
             if (!id)
                 return;
-            const prompt = [
-                `Implement TODO ${id}. Follow this procedure:`,
-                ``,
-                `1. RETRIEVE: Fetch the full TODO from the local MCP server:`,
-                `   curl http://localhost:7147/mcp/todo/${id}`,
-                `   Note the implementationTasks array — each entry has { task, done }.`,
-                ``,
-                `2. IMPLEMENT TASKS: Work through each implementationTask that has done=false.`,
-                `   After completing each task, immediately update the TODO via PUT to mark`,
-                `   that specific task done. Send the FULL implementationTasks array with the`,
-                `   completed task's done field set to true:`,
-                `   curl -X PUT http://localhost:7147/mcp/todo/${id} \\`,
-                `     -H "Content-Type: application/json" \\`,
-                `     -d '{"implementationTasks": [ ...full array with updated done flags... ]}'`,
-                `   This makes progress visible in the tree view in real time.`,
-                ``,
-                `3. UPDATE DEPENDENTS: After all tasks are complete, query all TODOs:`,
-                `   curl http://localhost:7147/mcp/todo`,
-                `   Find any TODO whose dependsOn array contains "${id}". For each dependent:`,
-                `   - Update its technicalDetails or note to reflect that ${id} is now complete.`,
-                `   - If all of the dependent's own dependencies are satisfied, update its`,
-                `     remaining estimate and note accordingly.`,
-                ``,
-                `4. MARK DONE: When all implementationTasks are done, mark the TODO itself done:`,
-                `   curl -X PUT http://localhost:7147/mcp/todo/${id} \\`,
-                `     -H "Content-Type: application/json" \\`,
-                `     -d '{"done": true}'`,
-                ``,
-                `5. Update the session log throughout. Run to completion, do not wait for user.`,
-            ].join('\n');
-            await sendCopilotPrompt(id, 'Implement', prompt);
+            await streamPromptToEditor(id, 'Implement');
         }));
         context.subscriptions.push(vscode.commands.registerCommand('fwhMcpTodo.plan', async (arg) => {
             const id = typeof arg === 'string' ? arg : arg?.id;
             (0, logger_1.log)('Command fwhMcpTodo.plan invoked', { id });
             if (!id)
                 return;
-            const prompt = `Create an implementation plan in excruciating detail as a new TODO that TODO ${id} depends on. First retrieve the full details of ${id} from the local MCP server using: curl http://localhost:7147/mcp/todo/${id}. Then create a new TODO via POST http://localhost:7147/mcp/todo with the detailed plan. Finally update ${id} via PUT http://localhost:7147/mcp/todo/${id} to add the new plan TODO as a dependency.`;
-            await sendCopilotPrompt(id, 'Plan', prompt);
+            const additional = await vscode.window.showInputBox({
+                title: 'Plan',
+                prompt: 'Additional instructions (optional). Included in the plan request to the server.',
+                placeHolder: 'e.g. Focus on test coverage first',
+            });
+            await streamPromptToEditor(id, 'Plan', additional ?? undefined);
         }));
         context.subscriptions.push(vscode.commands.registerCommand('fwhMcpTodo.showOutput', () => {
             (0, logger_1.log)('Command fwhMcpTodo.showOutput invoked');

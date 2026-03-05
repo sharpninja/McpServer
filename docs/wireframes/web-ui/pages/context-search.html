@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Context Search Wireframe</title>
+  <link rel="stylesheet" href="../shared/wireframe.css" />
+</head>
+<body>
+  <main class="gh-content">
+    <h1 class="page-title">Context Search</h1>
+    <p class="subtitle">Search experience modeled after GitHub code search ergonomics.</p>
+
+    <section class="panel">
+      <div class="row">
+        <input class="input" style="min-width:360px" placeholder="Search context chunks" />
+        <select class="select"><option>Mode: search</option></select>
+        <button class="btn btn-primary">Search</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <table class="table">
+        <thead><tr><th>Source</th><th>Snippet</th><th>Score</th></tr></thead>
+        <tbody>
+          <tr><td>docs/Project/TODO.yaml</td><td>Blazor Server app using Primer CSS...</td><td>0.93</td></tr>
+          <tr><td>src/McpServer.UI.Core/ViewModels/TodoListViewModel.cs</td><td>LoadAsync called - building query...</td><td>0.87</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <p><a href="../index.html">Back to index</a></p>
+  </main>
+</body>
+</html>

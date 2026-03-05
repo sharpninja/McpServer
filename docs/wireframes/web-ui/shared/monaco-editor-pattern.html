@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Monaco Editor Pattern</title>
+  <link rel="stylesheet" href="wireframe.css" />
+</head>
+<body>
+  <main class="gh-content">
+    <h1 class="page-title">Monaco Editor Pattern</h1>
+    <p class="subtitle">All rich text/code-like editing surfaces in the web UI should use Monaco behavior patterns.</p>
+
+    <section class="panel">
+      <h2>Editor Shell</h2>
+      <div class="editor-shell">
+        <div class="editor-toolbar">
+          <div class="row">
+            <button class="btn">Format</button>
+            <button class="btn">Word Wrap</button>
+          </div>
+          <div><span class="badge badge-muted">JSON</span> Ln 12, Col 8</div>
+        </div>
+        <div class="editor-canvas">{
+  "id": "web-ui",
+  "title": "McpServer Management Web UI",
+  "priority": "high"
+}</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Required Behaviors</h2>
+      <ul>
+        <li>Keyboard-first editing with familiar shortcuts (<span class="kbd">Ctrl+F</span>, <span class="kbd">Ctrl+Space</span>).</li>
+        <li>Cursor position visibility and status line.</li>
+        <li>Consistent focus ring + disabled/read-only treatment matching GitHub editors.</li>
+      </ul>
+      <div class="note">Implementation target: Monaco in Blazor via JS interop and deterministic two-way binding rules.</div>
+    </section>
+
+    <p><a href="../index.html">Back to index</a></p>
+  </main>
+</body>
+</html>

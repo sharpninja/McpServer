@@ -12,7 +12,7 @@ public sealed class InteractionLogEntry
     /// <summary>HTTP method (e.g. GET, POST).</summary>
     public string Method { get; set; } = string.Empty;
 
-    /// <summary>Request path (e.g. /mcp/context/search).</summary>
+    /// <summary>Request path (e.g. /mcpserver/context/search).</summary>
     public string Path { get; set; } = string.Empty;
 
     /// <summary>Optional query string (may be omitted if sensitive or large).</summary>

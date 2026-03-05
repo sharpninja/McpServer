@@ -1,0 +1,2 @@
+# Bash scripts must use LF line endings for WSL/Linux compatibility
+tools/bash/*.sh text eol=lf

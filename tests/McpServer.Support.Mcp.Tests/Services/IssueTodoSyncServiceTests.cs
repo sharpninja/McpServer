@@ -15,7 +15,8 @@ public sealed class IssueTodoSyncServiceTests
 
     public IssueTodoSyncServiceTests()
     {
-        _sut = new IssueTodoSyncService(_github, _todoService, NullLogger<IssueTodoSyncService>.Instance);
+        var accessor = TestWorkspaceAccessorHelper.Create(_todoService);
+        _sut = new IssueTodoSyncService(_github, accessor, NullLogger<IssueTodoSyncService>.Instance);
     }
 
     [Fact]

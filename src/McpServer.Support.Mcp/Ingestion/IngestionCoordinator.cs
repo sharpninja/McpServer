@@ -1,4 +1,6 @@
 using McpServer.Support.Mcp.Indexing;
+using McpServer.Support.Mcp.Notifications;
+using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,8 @@ public sealed class IngestionCoordinator
     private readonly ISyncStatusStore _syncStatusStore;
     private readonly IEmbeddingService _embeddingService;
     private readonly IVectorIndexService _vectorIndexService;
+    private readonly IChangeEventBus? _eventBus;
+    private readonly WorkspaceContext _workspaceContext;
     private readonly ILogger<IngestionCoordinator> _logger;
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
@@ -34,6 +38,8 @@ public sealed class IngestionCoordinator
         ISyncStatusStore syncStatusStore,
         IEmbeddingService embeddingService,
         IVectorIndexService vectorIndexService,
+        IChangeEventBus? eventBus,
+        WorkspaceContext workspaceContext,
         ILogger<IngestionCoordinator> logger)
     {
         _db = db;
@@ -45,6 +51,8 @@ public sealed class IngestionCoordinator
         _syncStatusStore = syncStatusStore;
         _embeddingService = embeddingService;
         _vectorIndexService = vectorIndexService;
+        _eventBus = eventBus;
+        _workspaceContext = workspaceContext;
         _logger = logger;
     }
 
@@ -55,7 +63,7 @@ public sealed class IngestionCoordinator
     {
         var runId = Guid.NewGuid().ToString("N");
         var started = DateTime.UtcNow;
-        _syncStatusStore.SetLast(new SyncRunResult
+        StoreSyncResult(new SyncRunResult
         {
             RunId = runId,
             StartedAt = started,
@@ -125,6 +133,8 @@ public sealed class IngestionCoordinator
                 SessionLogsImported = sessionLogResult.Imported
             };
             _syncStatusStore.SetLast(result);
+            StoreSyncResult(result);
+            await PublishContextSyncUpdatedAsync(cancellationToken).ConfigureAwait(false);
             return result;
         }
         catch (OperationCanceledException)
@@ -139,7 +149,7 @@ public sealed class IngestionCoordinator
                 DocumentsIngested = docsIngested,
                 ChunksWritten = chunksWritten
             };
-            _syncStatusStore.SetLast(cancelled);
+            StoreSyncResult(cancelled);
             throw;
         }
         catch (Exception ex)
@@ -158,9 +168,41 @@ public sealed class IngestionCoordinator
                 DocumentsIngested = docsIngested,
                 ChunksWritten = chunksWritten
             };
-            _syncStatusStore.SetLast(result);
+            StoreSyncResult(result);
             return result;
         }
+    }
+
+    private async Task PublishContextSyncUpdatedAsync(CancellationToken cancellationToken)
+    {
+        if (_eventBus is null)
+            return;
+
+        try
+        {
+            await _eventBus.PublishAsync(
+                new ChangeEvent
+                {
+                    Category = ChangeEventCategories.Context,
+                    Action = ChangeEventActions.Updated,
+                    EntityId = "sync",
+                    ResourceUri = "mcp://workspace/context/sync",
+                },
+                cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed publishing context sync change event");
+        }
+    }
+
+    /// <summary>Stores result in both global and workspace-keyed store.</summary>
+    private void StoreSyncResult(SyncRunResult result)
+    {
+        _syncStatusStore.SetLast(result);
+        var wsId = _workspaceContext.WorkspacePath;
+        if (!string.IsNullOrEmpty(wsId))
+            _syncStatusStore.SetLast(wsId, result);
     }
 
     private async Task UpsertDocumentAndChunksAsync(

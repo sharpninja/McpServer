@@ -13,6 +13,9 @@ public sealed class ToolDefinitionTagEntity
     [Key]
     public int Id { get; set; }
 
+    /// <summary>TR-MCP-MT-003: Workspace discriminator for multi-tenant data isolation.</summary>
+    public string WorkspaceId { get; set; } = string.Empty;
+
     /// <summary>Foreign key to the parent tool definition.</summary>
     public int ToolDefinitionId { get; set; }
 

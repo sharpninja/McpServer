@@ -13,6 +13,9 @@ public sealed class ContextDocumentEntity
     [MaxLength(256)]
     public required string Id { get; set; }
 
+    /// <summary>TR-MCP-MT-003: Workspace discriminator for multi-tenant data isolation.</summary>
+    public string WorkspaceId { get; set; } = string.Empty;
+
     /// <summary>FR-SUPPORT-010: Source type (repo, session-log, external-doc, issue, pr).</summary>
     [Required]
     [MaxLength(64)]

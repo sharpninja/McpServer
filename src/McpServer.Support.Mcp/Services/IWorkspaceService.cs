@@ -33,9 +33,6 @@ public sealed record WorkspaceCreateRequest
     /// <summary>Human-readable workspace name. Default: last segment of WorkspacePath.</summary>
     public string? Name { get; init; }
 
-    /// <summary>HTTP port for this workspace's hosted instance. 0 = auto-assign (starting at 7148).</summary>
-    public int WorkspacePort { get; init; }
-
     /// <summary>Relative path to todo file within workspace. Default: docs/todo.yaml.</summary>
     public string? TodoPath { get; init; }
 
@@ -63,6 +60,27 @@ public sealed record WorkspaceCreateRequest
     /// Supports <c>{baseUrl}</c> placeholder.
     /// </summary>
     public string? PromptTemplate { get; init; }
+
+    /// <summary>Override for the Copilot status prompt. Null = use built-in default.</summary>
+    public string? StatusPrompt { get; init; }
+
+    /// <summary>Override for the Copilot implement prompt. Null = use built-in default.</summary>
+    public string? ImplementPrompt { get; init; }
+
+    /// <summary>Override for the Copilot plan prompt. Null = use built-in default.</summary>
+    public string? PlanPrompt { get; init; }
+
+    /// <summary>SPDX license identifiers banned in this workspace (e.g. "GPL-3.0", "AGPL-3.0").</summary>
+    public List<string>? BannedLicenses { get; init; }
+
+    /// <summary>ISO 3166-1 alpha-2 country codes banned as dependency origin (e.g. "CN", "RU").</summary>
+    public List<string>? BannedCountriesOfOrigin { get; init; }
+
+    /// <summary>Organization/company names whose code and libraries are banned.</summary>
+    public List<string>? BannedOrganizations { get; init; }
+
+    /// <summary>Individual names/handles whose code and libraries are banned.</summary>
+    public List<string>? BannedIndividuals { get; init; }
 }
 
 /// <summary>Request to update a workspace. Null fields are not changed.</summary>
@@ -79,9 +97,6 @@ public sealed record WorkspaceUpdateRequest
     /// </summary>
     public string? DataDirectory { get; init; }
 
-    /// <summary>Updated port (null = no change, 0 = auto-assign).</summary>
-    public int? WorkspacePort { get; init; }
-
     /// <summary>Updated tunnel provider (null = no change, empty string = disable tunnel).</summary>
     public string? TunnelProvider { get; init; }
 
@@ -96,6 +111,27 @@ public sealed record WorkspaceUpdateRequest
 
     /// <summary>Updated workspace prompt template (null = no change, empty string = remove).</summary>
     public string? PromptTemplate { get; init; }
+
+    /// <summary>Updated status prompt (null = no change, empty string = revert to default).</summary>
+    public string? StatusPrompt { get; init; }
+
+    /// <summary>Updated implement prompt (null = no change, empty string = revert to default).</summary>
+    public string? ImplementPrompt { get; init; }
+
+    /// <summary>Updated plan prompt (null = no change, empty string = revert to default).</summary>
+    public string? PlanPrompt { get; init; }
+
+    /// <summary>Updated banned licenses (null = no change, empty list = clear all).</summary>
+    public List<string>? BannedLicenses { get; init; }
+
+    /// <summary>Updated banned countries of origin (null = no change, empty list = clear all).</summary>
+    public List<string>? BannedCountriesOfOrigin { get; init; }
+
+    /// <summary>Updated banned organizations (null = no change, empty list = clear all).</summary>
+    public List<string>? BannedOrganizations { get; init; }
+
+    /// <summary>Updated banned individuals (null = no change, empty list = clear all).</summary>
+    public List<string>? BannedIndividuals { get; init; }
 }
 
 /// <summary>Read-only workspace view.</summary>
@@ -115,9 +151,6 @@ public sealed record WorkspaceDto
     /// Null = <see cref="WorkspacePath"/> is used as the data directory.
     /// </summary>
     public string? DataDirectory { get; init; }
-
-    /// <summary>HTTP port for this workspace's hosted instance.</summary>
-    public required int WorkspacePort { get; init; }
 
     /// <summary>Tunnel provider key or null.</summary>
     public string? TunnelProvider { get; init; }
@@ -142,6 +175,27 @@ public sealed record WorkspaceDto
     /// Supports <c>{baseUrl}</c> placeholder.
     /// </summary>
     public string? PromptTemplate { get; init; }
+
+    /// <summary>Effective Copilot status prompt (custom override or built-in default).</summary>
+    public required string StatusPrompt { get; init; }
+
+    /// <summary>Effective Copilot implement prompt (custom override or built-in default).</summary>
+    public required string ImplementPrompt { get; init; }
+
+    /// <summary>Effective Copilot plan prompt (custom override or built-in default).</summary>
+    public required string PlanPrompt { get; init; }
+
+    /// <summary>SPDX license identifiers banned in this workspace (e.g. "GPL-3.0", "AGPL-3.0").</summary>
+    public List<string> BannedLicenses { get; init; } = [];
+
+    /// <summary>ISO 3166-1 alpha-2 country codes banned as dependency origin (e.g. "CN", "RU").</summary>
+    public List<string> BannedCountriesOfOrigin { get; init; } = [];
+
+    /// <summary>Organization/company names whose code and libraries are banned.</summary>
+    public List<string> BannedOrganizations { get; init; } = [];
+
+    /// <summary>Individual names/handles whose code and libraries are banned.</summary>
+    public List<string> BannedIndividuals { get; init; } = [];
 }
 
 /// <summary>Result of listing workspaces.</summary>

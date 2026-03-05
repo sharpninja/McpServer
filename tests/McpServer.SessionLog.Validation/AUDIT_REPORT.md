@@ -10,13 +10,13 @@
 
 | # | Method | Route | Auth | Status |
 |---|--------|-------|------|--------|
-| 1 | `POST` | `/mcp/sessionlog` | None | ✅ |
-| 2 | `GET` | `/mcp/sessionlog` | None | ✅ |
-| 3 | `POST` | `/mcp/sessionlog/{agent}/{sessionId}/{requestId}/dialog` | None | ✅ |
+| 1 | `POST` | `/mcpserver/sessionlog` | None | ✅ |
+| 2 | `GET` | `/mcpserver/sessionlog` | None | ✅ |
+| 3 | `POST` | `/mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog` | None | ✅ |
 
 ## Test Summary
 
-### Submit (POST /mcp/sessionlog) — 4 tests
+### Submit (POST /mcpserver/sessionlog) — 4 tests
 | Test | Result |
 |------|--------|
 | Submit_MinimalSessionLog_Returns201 | ✅ Passed |
@@ -24,7 +24,7 @@
 | Submit_UpsertSameSession_Returns201WithUpdatedData | ✅ Passed |
 | Submit_WithProcessingDialog_Returns201 | ✅ Passed |
 
-### Query (GET /mcp/sessionlog) — 7 tests
+### Query (GET /mcpserver/sessionlog) — 7 tests
 | Test | Result |
 |------|--------|
 | Query_NoFilters_Returns200WithResults | ✅ Passed |

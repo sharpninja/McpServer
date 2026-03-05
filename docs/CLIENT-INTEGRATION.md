@@ -21,7 +21,7 @@ In VS Code `settings.json`:
 ```json
 {
   "mcpServer.url": "http://localhost:7147",
-  "mcpServer.todoEndpoint": "/mcp/todo"
+  "mcpServer.todoEndpoint": "/mcpserver/todo"
 }
 ```
 
@@ -86,18 +86,36 @@ Key tool categories:
 - **Session Logs**: `sessionlog_submit`, `sessionlog_query`, `sessionlog_dialog`
 - **GitHub**: `github_list_issues`, `github_list_pulls`, `github_create_issue`, `github_comment_issue`, `github_comment_pull`
 
-## Multi-Instance
+## Workspace Targeting
 
-When running multiple MCP instances (e.g., for different workspaces), each instance
-runs on a different port. Update client configuration to point to the correct port:
+All workspaces share a single port. To target a specific workspace, send the `X-Workspace-Path` header:
 
-```json
-{
-  "mcpServer.url": "http://localhost:7157"
-}
+```bash
+curl http://localhost:7147/mcpserver/todo \
+  -H "X-Api-Key: <token>" \
+  -H "X-Workspace-Path: E:\\github\\MyProject"
 ```
 
-See `appsettings.json` → `Mcp:Instances` for instance configuration.
+Resolution chain: `X-Workspace-Path` header → API key reverse lookup → default workspace.
+
+### Typed Client Library
+
+```csharp
+var client = McpServerClientFactory.Create(new McpServerClientOptions
+{
+    BaseUrl = new Uri("http://localhost:7147"),
+    ApiKey = "token-from-marker",
+    WorkspacePath = @"E:\github\MyProject",
+});
+// All requests include both X-Api-Key and X-Workspace-Path headers
+var todos = await client.Todo.QueryAsync();
+```
+
+Switch workspace at runtime:
+
+```csharp
+client.WorkspacePath = @"E:\github\OtherProject";
+```
 
 ## Health Check
 

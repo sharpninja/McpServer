@@ -17,6 +17,7 @@ RUN dotnet restore src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj
 COPY src/McpServer.Support.Mcp/ src/McpServer.Support.Mcp/
 COPY src/McpServer.ServiceDefaults/ src/McpServer.ServiceDefaults/
 COPY src/McpServer.Common.Copilot/ src/McpServer.Common.Copilot/
+COPY templates/ templates/
 
 # Publish
 RUN dotnet publish src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj \

@@ -1,6 +1,9 @@
 using System.Diagnostics;
 using System.Globalization;
+using System.Reflection;
+using HandlebarsDotNet;
 using Microsoft.Extensions.Logging;
+using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -9,6 +12,7 @@ namespace McpServer.Support.Mcp.Services;
 /// <summary>
 /// Writes and removes <c>AGENTS-README-FIRST.yaml</c> marker files in workspace roots so that
 /// agents can discover the correct port and endpoints for calling the MCP server.
+/// Prompt templates use Handlebars syntax with the full workspace definition available as context.
 /// </summary>
 public static class MarkerFileService
 {
@@ -16,74 +20,126 @@ public static class MarkerFileService
     public const string MarkerFileName = "AGENTS-README-FIRST.yaml";
 
     /// <summary>
-    /// Built-in default prompt template with <c>{baseUrl}</c> placeholders.
+    /// Built-in default prompt template using Handlebars syntax.
+    /// Available context: <c>{{baseUrl}}</c>, <c>{{apiKey}}</c>, <c>{{workspace.*}}</c> (all WorkspaceDto fields).
     /// Used when no <c>Mcp:MarkerPromptTemplate</c> is configured.
     /// </summary>
     public const string DefaultPromptTemplate =
         """
-        You are connected to an MCP Context Server at {baseUrl}. Use this server to coordinate your work.
+        You are connected to an MCP Context Server at {{baseUrl}}. Use this server to coordinate your work.
 
-        ## Server Health
-        Before making API calls, verify the server is running: GET {baseUrl}/health — returns {"status":"healthy"}.
+        ## Session Start
 
-        ## API Discovery
-        The full OpenAPI spec is at GET {baseUrl}/swagger/v1/swagger.json. The interactive Swagger UI is at {baseUrl}/swagger. Use the spec to understand request/response schemas before calling endpoints.
+        1. Read this marker file for connection details and API key.
+        2. Bootstrap helper modules from the Tool Registry (see docs/context/module-bootstrap.md).
+        3. Review recent session history and current TODOs.
+        4. Post a session log entry before starting work on the user's request.
 
-        ## Session Logging (REQUIRED)
-        You MUST log every request you process to the session log endpoint. This is critical for audit, continuity, and team visibility.
+        ## Rules
 
-        For each task or conversation turn:
-        1. POST {baseUrl}/mcp/sessionlog with a JSON body containing:
-           - sourceType: YOUR agent identifier (e.g. "Cline", "Cursor", "Copilot")
-           - sessionId: a stable identifier for your current session that is prefixed with YOUR agent identifier.  Do not reuse sessions from different agent sessions.
-           - title: a brief summary of the session's purpose.  Keep up-to-date.
-           - model: the AI model you are using (e.g. "claude-sonnet-4-20250514").  Create a new session log if changing models.
-           - started: ISO 8601 timestamp when the session began
-           - lastUpdated: ISO 8601 timestamp of the latest activity
-           - status: "in_progress" or "completed"
-           - entries: array of request entries, each with:
-             - [REQUIRED] requestId: unique ID for this request within the session
-             - [REQUIRED] timestamp: ISO 8601 timestamp
-             - [REQUIRED] queryText: the full user query or task description
-             - [REQUIRED] queryTitle: short summary of the query
-             - [REQUIRED] response: your response text (verbatim, not summarized)
-             - [REQUIRED] interpretation: your understanding of what was asked
-             - [REQUIRED] status: "completed" or "in_progress"
-             - [REQUIRED] actions: array of { order, description, type, status, filePath } for each action taken
-             - [REQUIRED] model: the model used for this specific entry
-             - [RECOMMENDED] tokenCount: approximate token count if available
-             - [REQUIRED] tags: relevant tags (e.g. ["refactor", "bugfix", "feature"]) Update as needed.
-             - [REQUIRED] contextList: files or resources referenced
-             - [REQUIRED] Processing Dialog/Decisons.  See #2 below
+        1. Post a session log entry before any work on a user request. Update it with results when done.
+        2. Use helper modules for session log and TODO operations — they handle workspace routing automatically. Do not use raw API calls.
+        3. Write decisions, requirements, and state to the session log, not just conversation.
+        4. Follow workspace conventions in AGENTS.md and .github/copilot-instructions.md.
+        5. When you need API schemas, module examples, or compliance rules, load them from docs/context/ or use context_search.
+        6. Do not fabricate information. Acknowledge mistakes. Distinguish facts from speculation.
+        7. Prioritize correctness over speed. Do not ship code you have not verified compiles.
 
-        2. For all requests, stream your reasoning in real-time via:
-           POST {baseUrl}/mcp/sessionlog/{agent}/{sessionId}/{requestId}/dialog
-           Send an array of dialog items, each with:
-           - timestamp: ISO 8601
-           - role: "model", "tool", "system", or "user"
-           - content: the reasoning text, tool output, or observation
-           - category: "reasoning", "tool_call", "tool_result", "observation", or "decision"
+        ## Naming Conventions
 
-        3. At the end of each session or task, POST the final session log with status "completed" and all entries filled in.
+        - TODO IDs for new items must be uppercase kebab-case with exactly 3 segments: <SDLC-PHASE>-<AREA>-### (regex: ^[A-Z]+-[A-Z0-9]+-\d{3}$).
+        - Valid TODO IDs: PLAN-NAMINGCONVENTIONS-001, MCP-API-042.
+        - Invalid TODO IDs: plan-api-001, MCP-API-42, MCPAPI001.
+        - Session IDs must use <Agent>-<yyyyMMddTHHmmssZ>-<suffix> and start with the exact agent/source type prefix.
+        - Valid Session ID: Copilot-20260304T113901Z-namingconv.
+        - Invalid Session IDs: copilot-20260304T113901Z-namingconv, Copilot-2026-03-04-namingconv.
+        - Request IDs must use req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal> and be unique within a session.
+        - Valid Request ID: req-20260304T113901Z-plan-namingconventions-001.
+        - Invalid Request IDs: req-plan-namingconventions-001, request-20260304T113901Z-task-01.
 
-        ## Available Capabilities
-        - Context Search: POST {baseUrl}/mcp/context/search — semantic + full-text hybrid search over indexed project documents
-        - Context Pack: POST {baseUrl}/mcp/context/pack — retrieve ordered context chunks for a topic
-        - Context Sources: GET {baseUrl}/mcp/context/sources — list all indexed document sources
-        - Todo Management: GET/POST/PUT/DELETE {baseUrl}/mcp/todo — query, create, update, and delete project tasks
-        - Repo Files: GET {baseUrl}/mcp/repo/file, POST {baseUrl}/mcp/repo/file, GET {baseUrl}/mcp/repo/list — read, write, and list repository files
-        - GitHub Integration: {baseUrl}/mcp/gh/issues, {baseUrl}/mcp/gh/pulls, {baseUrl}/mcp/gh/labels — issue, PR, and label management
-        - Sync: POST {baseUrl}/mcp/sync/run — trigger full ingestion sync; GET {baseUrl}/mcp/sync/status — check sync status
-        - Tool Registry: GET {baseUrl}/mcp/tools/search — discover available tools; GET/POST {baseUrl}/mcp/tools — manage tool definitions
-        - MCP Protocol: {baseUrl}/mcp-transport — Model Context Protocol streamable HTTP transport endpoint
+        ## Workspace
 
-        **THESE RULES MUST BE ADHERED TO AND THIS MARKER READ ON EACH NEW REQUEST BY THE USER.**
+        - Name: {{workspace.Name}}
+        - Path: {{workspace.WorkspacePath}}
+        - Primary: {{workspace.IsPrimary}}
+        - Data Directory: {{workspace.DataDirectory}}
+        - Todo Path: {{workspace.TodoPath}}
+
+        ## Authentication
+
+        All /mcpserver/* endpoints require a per-workspace auth token:
+        - Header: X-Api-Key: {{apiKey}}
+        - Or query param: ?api_key={{apiKey}}
+        If you receive a 401, re-read this marker file — the token rotates on each server restart.
+
+        ## Where Things Live
+
+        - AGENTS.md — agent conduct, requirements tracking, session continuity, glossary
+        - .github/copilot-instructions.md — build/test commands, architecture, coding conventions
+        - docs/context/ — on-demand reference (schemas, module docs, compliance rules, action types)
+        - docs/Project/ — requirements docs, TODO.yaml, mapping matrices
+        - templates/ — prompt templates
+
+        ## Context Loading by Task Type
+
+        - Session logging → docs/context/session-log-schema.md + docs/context/module-bootstrap.md
+        - TODO management → docs/context/todo-schema.md + docs/context/module-bootstrap.md
+        - API integration → docs/context/api-capabilities.md (or GET {{baseUrl}}/swagger/v1/swagger.json)
+        - Adding dependencies → docs/context/compliance-rules.md
+        - Logging actions → docs/context/action-types.md
+
+        ## Protocols
+
+        - REST API: {{baseUrl}}/mcpserver/* (requires X-Api-Key). Swagger UI: {{baseUrl}}/swagger
+        - MCP Streamable HTTP: POST {{baseUrl}}/mcp-transport (no API key required)
+        - Health: GET {{baseUrl}}/health
+
+        {{#if workspace.BannedLicenses}}
+        ## Compliance Restrictions
+
+        This workspace has license, origin, or entity restrictions. Read docs/context/compliance-rules.md before adding any dependency.
+
+        Banned licenses:
+        {{#each workspace.BannedLicenses}}
+        - {{this}}
+        {{/each}}
+        {{/if}}
+
+        {{#if workspace.BannedCountriesOfOrigin}}
+        Banned countries of origin:
+        {{#each workspace.BannedCountriesOfOrigin}}
+        - {{this}}
+        {{/each}}
+        {{/if}}
+
+        {{#if workspace.BannedOrganizations}}
+        Banned organizations:
+        {{#each workspace.BannedOrganizations}}
+        - {{this}}
+        {{/each}}
+        {{/if}}
+
+        {{#if workspace.BannedIndividuals}}
+        Banned individuals:
+        {{#each workspace.BannedIndividuals}}
+        - {{this}}
+        {{/each}}
+        {{/if}}
+
+        ## Before Delivering Output
+
+        Verify: session log is current, decisions are recorded, requirements are tracked, code compiles, action types are correct (see docs/context/action-types.md).
+
+        ---
+        MCP Server version: {{version}}
         """;
 
     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
         .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
         .Build();
+
+    private static readonly IHandlebars s_handlebars = Handlebars.Create();
 
     /// <summary>
     /// Writes the <c>AGENTS-README-FIRST.yaml</c> marker file to <paramref name="workspacePath"/>.
@@ -94,12 +150,23 @@ public static class MarkerFileService
     /// <param name="logger">Optional logger for diagnostics.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <param name="globalPromptTemplate">
-    /// Optional global prompt template with <c>{baseUrl}</c> placeholder.
+    /// Optional global Handlebars prompt template.
     /// When <see langword="null"/> or empty, the built-in default prompt is used.
     /// </param>
     /// <param name="workspacePromptTemplate">
-    /// Optional per-workspace prompt template with <c>{baseUrl}</c> placeholder.
+    /// Optional per-workspace Handlebars prompt template.
     /// When non-null, the resolved text is appended to the global prompt.
+    /// </param>
+    /// <param name="apiKey">
+    /// Per-workspace auth token to include in the marker file.
+    /// Agents read this value and send it as the <c>X-Api-Key</c> header.
+    /// </param>
+    /// <param name="workspace">
+    /// Full workspace definition. All properties are available in Handlebars templates as <c>{{workspace.*}}</c>.
+    /// </param>
+    /// <param name="serverStartedAtUtc">
+    /// Optional server startup UTC timestamp to embed in the marker for stale-marker detection.
+    /// When omitted, the current UTC timestamp is used.
     /// </param>
     public static async Task WriteMarkerAsync(
         string workspacePath,
@@ -108,38 +175,53 @@ public static class MarkerFileService
         ILogger? logger = null,
         CancellationToken ct = default,
         string? globalPromptTemplate = null,
-        string? workspacePromptTemplate = null)
+        string? workspacePromptTemplate = null,
+        string? apiKey = null,
+        WorkspaceDto? workspace = null,
+        DateTimeOffset? serverStartedAtUtc = null)
     {
-        var baseUrl = $"http://localhost:{port.ToString(CultureInfo.InvariantCulture)}";
+        var baseUrl = $"http://{System.Net.Dns.GetHostName()}:{port.ToString(CultureInfo.InvariantCulture)}";
         var markerPath = Path.Combine(workspacePath, MarkerFileName);
+        var markerWrittenAtUtc = DateTimeOffset.UtcNow;
+        var resolvedServerStartedAtUtc = (serverStartedAtUtc ?? markerWrittenAtUtc).ToUniversalTime();
+        var markerWrittenAtUtcText = markerWrittenAtUtc.ToString("o", CultureInfo.InvariantCulture);
+        var serverStartedAtUtcText = resolvedServerStartedAtUtc.ToString("o", CultureInfo.InvariantCulture);
+
+        var templateContext = BuildTemplateContext(baseUrl, apiKey, workspace, workspacePath, workspaceName);
+        templateContext["markerWrittenAtUtc"] = markerWrittenAtUtcText;
+        templateContext["serverStartedAtUtc"] = serverStartedAtUtcText;
 
         var marker = new MarkerFile
         {
             Port = port,
             BaseUrl = baseUrl,
+            ApiKey = apiKey ?? string.Empty,
             Endpoints = new MarkerEndpoints
             {
                 Health = "/health",
                 Swagger = "/swagger/v1/swagger.json",
                 SwaggerUi = "/swagger",
                 McpTransport = "/mcp-transport",
-                SessionLog = "/mcp/sessionlog",
-                SessionLogDialog = "/mcp/sessionlog/{agent}/{sessionId}/{requestId}/dialog",
-                ContextSearch = "/mcp/context/search",
-                ContextPack = "/mcp/context/pack",
-                ContextSources = "/mcp/context/sources",
-                Todo = "/mcp/todo",
-                Repo = "/mcp/repo",
-                Sync = "/mcp/sync",
-                GitHub = "/mcp/gh",
-                Tools = "/mcp/tools",
-                Workspace = "/mcp/workspace",
+                SessionLog = "/mcpserver/sessionlog",
+                SessionLogDialog = "/mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog",
+                ContextSearch = "/mcpserver/context/search",
+                ContextPack = "/mcpserver/context/pack",
+                ContextSources = "/mcpserver/context/sources",
+                Todo = "/mcpserver/todo",
+                Repo = "/mcpserver/repo",
+                GitHub = "/mcpserver/gh",
+                Tools = "/mcpserver/tools",
+                Workspace = "/mcpserver/workspace",
+                ServerStartupUtc = "/server-startup-utc",
+                MarkerFileTimestamp = "/marker-file-timestamp?repoPath={workspacePath}",
             },
             Workspace = workspaceName,
             WorkspacePath = workspacePath,
             Pid = Environment.ProcessId,
-            StartedAt = DateTimeOffset.UtcNow.ToString("o", CultureInfo.InvariantCulture),
-            Prompt = ResolvePrompt(baseUrl, globalPromptTemplate, workspacePromptTemplate),
+            StartedAt = markerWrittenAtUtcText,
+            MarkerWrittenAtUtc = markerWrittenAtUtcText,
+            ServerStartedAtUtc = serverStartedAtUtcText,
+            Prompt = ResolvePrompt(templateContext, globalPromptTemplate, workspacePromptTemplate),
         };
 
         try
@@ -206,24 +288,91 @@ public static class MarkerFileService
     }
 
     /// <summary>
-    /// Resolves the final prompt from the global template, workspace template, and built-in default.
-    /// Visible for testing.
+    /// Resolves the final prompt by compiling global and workspace Handlebars templates
+    /// against the supplied context. Visible for testing.
     /// </summary>
-    internal static string ResolvePrompt(string baseUrl, string? globalPromptTemplate, string? workspacePromptTemplate)
+    internal static string ResolvePrompt(
+        Dictionary<string, object?> templateContext,
+        string? globalPromptTemplate,
+        string? workspacePromptTemplate)
     {
-        var global = string.IsNullOrWhiteSpace(globalPromptTemplate)
-            ? BuildDefaultPrompt(baseUrl)
-            : globalPromptTemplate.Replace("{baseUrl}", baseUrl, StringComparison.Ordinal);
+        var globalSource = string.IsNullOrWhiteSpace(globalPromptTemplate)
+            ? DefaultPromptTemplate
+            : globalPromptTemplate;
+
+        var global = RenderHandlebars(globalSource, templateContext);
 
         if (string.IsNullOrWhiteSpace(workspacePromptTemplate))
             return global;
 
-        var workspace = workspacePromptTemplate.Replace("{baseUrl}", baseUrl, StringComparison.Ordinal);
+        var workspace = RenderHandlebars(workspacePromptTemplate, templateContext);
         return global + "\n\n" + workspace;
     }
 
-    private static string BuildDefaultPrompt(string baseUrl) =>
-        DefaultPromptTemplate.Replace("{baseUrl}", baseUrl, StringComparison.Ordinal);
+    /// <summary>
+    /// Builds the Handlebars template context dictionary from the workspace definition and runtime values.
+    /// </summary>
+    internal static Dictionary<string, object?> BuildTemplateContext(
+        string baseUrl,
+        string? apiKey,
+        WorkspaceDto? workspace,
+        string workspacePath,
+        string workspaceName)
+    {
+        var version = Assembly.GetEntryAssembly()
+            ?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+            ?.InformationalVersion ?? "unknown";
+
+        return new Dictionary<string, object?>
+        {
+            ["baseUrl"] = baseUrl,
+            ["apiKey"] = apiKey ?? string.Empty,
+            ["version"] = version,
+            ["workspace"] = workspace is not null ? new Dictionary<string, object?>
+            {
+                ["Name"] = workspace.Name,
+                ["WorkspacePath"] = workspace.WorkspacePath,
+                ["TodoPath"] = workspace.TodoPath,
+                ["DataDirectory"] = workspace.DataDirectory ?? workspace.WorkspacePath,
+                ["TunnelProvider"] = workspace.TunnelProvider ?? "none",
+                ["IsPrimary"] = workspace.IsPrimary,
+                ["IsEnabled"] = workspace.IsEnabled,
+                ["DateTimeCreated"] = workspace.DateTimeCreated.ToString("o", CultureInfo.InvariantCulture),
+                ["DateTimeModified"] = workspace.DateTimeModified.ToString("o", CultureInfo.InvariantCulture),
+                ["RunAs"] = workspace.RunAs ?? "default",
+                ["PromptTemplate"] = workspace.PromptTemplate ?? string.Empty,
+                ["BannedLicenses"] = workspace.BannedLicenses.Count > 0 ? workspace.BannedLicenses : null,
+                ["BannedCountriesOfOrigin"] = workspace.BannedCountriesOfOrigin.Count > 0 ? workspace.BannedCountriesOfOrigin : null,
+                ["BannedOrganizations"] = workspace.BannedOrganizations.Count > 0 ? workspace.BannedOrganizations : null,
+                ["BannedIndividuals"] = workspace.BannedIndividuals.Count > 0 ? workspace.BannedIndividuals : null,
+            } : new Dictionary<string, object?>
+            {
+                ["Name"] = workspaceName,
+                ["WorkspacePath"] = workspacePath,
+                ["TodoPath"] = string.Empty,
+                ["DataDirectory"] = workspacePath,
+                ["TunnelProvider"] = "none",
+                ["IsPrimary"] = false,
+                ["IsEnabled"] = true,
+                ["DateTimeCreated"] = string.Empty,
+                ["DateTimeModified"] = string.Empty,
+                ["RunAs"] = "default",
+                ["PromptTemplate"] = string.Empty,
+                ["BannedLicenses"] = null,
+                ["BannedCountriesOfOrigin"] = null,
+                ["BannedOrganizations"] = null,
+                ["BannedIndividuals"] = null,
+            },
+        };
+    }
+
+    private static string RenderHandlebars(string template, Dictionary<string, object?> context)
+    {
+        // Normalize to LF before and after — CRLF in templates confuses Handlebars
+        // standalone-line detection, and YAML folded scalars treat \r as extra blank lines.
+        var compiled = s_handlebars.Compile(template.ReplaceLineEndings("\n"));
+        return compiled(context).ReplaceLineEndings("\n");
+    }
 }
 
 /// <summary>Serialization model for the <c>AGENTS-README-FIRST.yaml</c> marker file.</summary>
@@ -231,11 +380,16 @@ internal sealed class MarkerFile
 {
     public int Port { get; set; }
     public string BaseUrl { get; set; } = string.Empty;
+    public string ApiKey { get; set; } = string.Empty;
     public MarkerEndpoints Endpoints { get; set; } = new();
     public string Workspace { get; set; } = string.Empty;
     public string WorkspacePath { get; set; } = string.Empty;
     public int Pid { get; set; }
+    // Backward-compatible marker write timestamp retained for existing consumers.
     public string StartedAt { get; set; } = string.Empty;
+    public string MarkerWrittenAtUtc { get; set; } = string.Empty;
+    public string ServerStartedAtUtc { get; set; } = string.Empty;
+    [YamlMember(ScalarStyle = ScalarStyle.Literal)]
     public string Prompt { get; set; } = string.Empty;
 }
 
@@ -253,8 +407,9 @@ internal sealed class MarkerEndpoints
     public string ContextSources { get; set; } = string.Empty;
     public string Todo { get; set; } = string.Empty;
     public string Repo { get; set; } = string.Empty;
-    public string Sync { get; set; } = string.Empty;
     public string GitHub { get; set; } = string.Empty;
     public string Tools { get; set; } = string.Empty;
     public string Workspace { get; set; } = string.Empty;
+    public string ServerStartupUtc { get; set; } = string.Empty;
+    public string MarkerFileTimestamp { get; set; } = string.Empty;
 }

@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using McpServer.Support.Mcp.Notifications;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -12,19 +13,20 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 public sealed class WorkspaceService : IWorkspaceService
 {
-    private static readonly SemaphoreSlim _writeLock = new(1, 1);
-    private const int BaseAutoPort = 7148;
+    private static readonly SemaphoreSlim s_writeLock = new(1, 1);
     private const string DefaultTodoPath = "docs/todo.yaml";
 
     private readonly IConfiguration _configuration;
     private readonly IHostEnvironment _env;
+    private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<WorkspaceService> _logger;
 
     /// <summary>Initializes a new instance of the <see cref="WorkspaceService"/> class.</summary>
-    public WorkspaceService(IConfiguration configuration, IHostEnvironment env, ILogger<WorkspaceService> logger)
+    public WorkspaceService(IConfiguration configuration, IHostEnvironment env, ILogger<WorkspaceService> logger, IChangeEventBus? eventBus = null)
     {
         _configuration = configuration;
         _env = env;
+        _eventBus = eventBus;
         _logger = logger;
     }
 
@@ -52,16 +54,12 @@ public sealed class WorkspaceService : IWorkspaceService
         if (!Path.IsPathRooted(normalized))
             return new WorkspaceMutationResult(false, "WorkspacePath must be an absolute path.");
 
-        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        await s_writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
             var all = ReadAll();
             if (all.Any(w => NormalizePath(w.WorkspacePath) == normalized))
                 return new WorkspaceMutationResult(false, $"Workspace already registered: {normalized}");
-
-            var port = request.WorkspacePort > 0 ? request.WorkspacePort : GetNextAvailablePort(all);
-            if (request.WorkspacePort > 0 && all.Any(w => w.WorkspacePort == port))
-                return new WorkspaceMutationResult(false, $"Port {port} is already in use by another workspace.");
 
             var now = DateTimeOffset.UtcNow;
             var entry = new WorkspaceConfigEntry
@@ -70,10 +68,12 @@ public sealed class WorkspaceService : IWorkspaceService
                 Name = !string.IsNullOrWhiteSpace(request.Name) ? request.Name.Trim() : DeriveNameFromPath(normalized),
                 TodoPath = !string.IsNullOrWhiteSpace(request.TodoPath) ? request.TodoPath.Trim() : DefaultTodoPath,
                 DataDirectory = string.IsNullOrWhiteSpace(request.DataDirectory) ? null : Path.GetFullPath(request.DataDirectory.Trim()),
-                WorkspacePort = port,
                 TunnelProvider = string.IsNullOrWhiteSpace(request.TunnelProvider) ? null : request.TunnelProvider.Trim(),
                 RunAs = string.IsNullOrWhiteSpace(request.RunAs) ? null : request.RunAs.Trim(),
                 PromptTemplate = string.IsNullOrWhiteSpace(request.PromptTemplate) ? null : request.PromptTemplate.Trim(),
+                StatusPrompt = StripIfDefault(nameof(TodoPromptDefaults.StatusPrompt), request.StatusPrompt),
+                ImplementPrompt = StripIfDefault(nameof(TodoPromptDefaults.ImplementPrompt), request.ImplementPrompt),
+                PlanPrompt = StripIfDefault(nameof(TodoPromptDefaults.PlanPrompt), request.PlanPrompt),
                 IsPrimary = request.IsPrimary,
                 IsEnabled = request.IsEnabled,
                 DateTimeCreated = now,
@@ -81,12 +81,13 @@ public sealed class WorkspaceService : IWorkspaceService
             };
             all.Add(entry);
             await WriteAllAsync(all, ct).ConfigureAwait(false);
-            _logger.LogInformation("Workspace created: {Name} at {Path} on port {Port}", entry.Name, entry.WorkspacePath, entry.WorkspacePort);
+            _logger.LogInformation("Workspace created: {Name} at {Path}", entry.Name, entry.WorkspacePath);
+            await PublishChangeSafeAsync(ChangeEventActions.Created, normalized, ct).ConfigureAwait(false);
             return new WorkspaceMutationResult(true, Workspace: ToDto(entry));
         }
         finally
         {
-            _writeLock.Release();
+            s_writeLock.Release();
         }
     }
 
@@ -94,7 +95,7 @@ public sealed class WorkspaceService : IWorkspaceService
     public async Task<WorkspaceMutationResult> UpdateAsync(string workspacePath, WorkspaceUpdateRequest request, CancellationToken ct = default)
     {
         var normalized = NormalizePath(workspacePath);
-        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        await s_writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
             var all = ReadAll();
@@ -106,14 +107,6 @@ public sealed class WorkspaceService : IWorkspaceService
                 entry.Name = string.IsNullOrWhiteSpace(request.Name) ? DeriveNameFromPath(normalized) : request.Name.Trim();
             if (request.TodoPath is not null)
                 entry.TodoPath = string.IsNullOrWhiteSpace(request.TodoPath) ? DefaultTodoPath : request.TodoPath.Trim();
-            if (request.WorkspacePort is not null)
-            {
-                var newPort = request.WorkspacePort.Value <= 0 ? GetNextAvailablePort(all) : request.WorkspacePort.Value;
-                if (request.WorkspacePort.Value > 0 && newPort != entry.WorkspacePort
-                    && all.Any(w => w.WorkspacePort == newPort && NormalizePath(w.WorkspacePath) != normalized))
-                    return new WorkspaceMutationResult(false, $"Port {newPort} is already in use by another workspace.");
-                entry.WorkspacePort = newPort;
-            }
             if (request.TunnelProvider is not null)
                 entry.TunnelProvider = string.IsNullOrWhiteSpace(request.TunnelProvider) ? null : request.TunnelProvider.Trim();
             if (request.RunAs is not null)
@@ -126,15 +119,22 @@ public sealed class WorkspaceService : IWorkspaceService
                 entry.IsEnabled = request.IsEnabled.Value;
             if (request.PromptTemplate is not null)
                 entry.PromptTemplate = string.IsNullOrWhiteSpace(request.PromptTemplate) ? null : request.PromptTemplate.Trim();
+            if (request.StatusPrompt is not null)
+                entry.StatusPrompt = StripIfDefault(nameof(TodoPromptDefaults.StatusPrompt), request.StatusPrompt);
+            if (request.ImplementPrompt is not null)
+                entry.ImplementPrompt = StripIfDefault(nameof(TodoPromptDefaults.ImplementPrompt), request.ImplementPrompt);
+            if (request.PlanPrompt is not null)
+                entry.PlanPrompt = StripIfDefault(nameof(TodoPromptDefaults.PlanPrompt), request.PlanPrompt);
             entry.DateTimeModified = DateTimeOffset.UtcNow;
 
             await WriteAllAsync(all, ct).ConfigureAwait(false);
             _logger.LogInformation("Workspace updated: {Name} at {Path}", entry.Name, entry.WorkspacePath);
+            await PublishChangeSafeAsync(ChangeEventActions.Updated, normalized, ct).ConfigureAwait(false);
             return new WorkspaceMutationResult(true, Workspace: ToDto(entry));
         }
         finally
         {
-            _writeLock.Release();
+            s_writeLock.Release();
         }
     }
 
@@ -142,7 +142,7 @@ public sealed class WorkspaceService : IWorkspaceService
     public async Task<WorkspaceMutationResult> DeleteAsync(string workspacePath, CancellationToken ct = default)
     {
         var normalized = NormalizePath(workspacePath);
-        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        await s_writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
             var all = ReadAll();
@@ -153,11 +153,12 @@ public sealed class WorkspaceService : IWorkspaceService
             all.Remove(entry);
             await WriteAllAsync(all, ct).ConfigureAwait(false);
             _logger.LogInformation("Workspace deleted: {Name} at {Path}", dto.Name, dto.WorkspacePath);
+            await PublishChangeSafeAsync(ChangeEventActions.Deleted, normalized, ct).ConfigureAwait(false);
             return new WorkspaceMutationResult(true, Workspace: dto);
         }
         finally
         {
-            _writeLock.Release();
+            s_writeLock.Release();
         }
     }
 
@@ -199,6 +200,7 @@ public sealed class WorkspaceService : IWorkspaceService
                 filesCreated.Add(dbPath);
             }
             _logger.LogInformation("Workspace initialized: {Path}, {Count} files created", normalized, filesCreated.Count);
+            await PublishChangeSafeAsync(ChangeEventActions.Updated, normalized, ct).ConfigureAwait(false);
             return new WorkspaceInitResult(true, FilesCreated: filesCreated);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -217,14 +219,14 @@ public sealed class WorkspaceService : IWorkspaceService
         var jsonText = await File.ReadAllTextAsync(path, ct).ConfigureAwait(false);
         var doc = JsonNode.Parse(jsonText, new JsonNodeOptions { PropertyNameCaseInsensitive = true })!;
         var mcp = doc["Mcp"] as JsonObject ?? new JsonObject();
-        mcp["Workspaces"] = JsonSerializer.SerializeToNode(workspaces, _jsonOptions);
+        mcp["Workspaces"] = JsonSerializer.SerializeToNode(workspaces, s_jsonOptions);
         doc["Mcp"] = mcp;
-        await File.WriteAllTextAsync(path, doc.ToJsonString(_jsonOptions), ct).ConfigureAwait(false);
+        await File.WriteAllTextAsync(path, doc.ToJsonString(s_jsonOptions), ct).ConfigureAwait(false);
         if (_configuration is IConfigurationRoot root)
             root.Reload();
     }
 
-    private static readonly JsonSerializerOptions _jsonOptions = new()
+    private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
         WriteIndented = true,
         DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
@@ -246,12 +248,6 @@ public sealed class WorkspaceService : IWorkspaceService
         return fromContentRoot; // fallback — will throw a clear error on read
     }
 
-    private static int GetNextAvailablePort(List<WorkspaceConfigEntry> all)
-    {
-        var maxPort = all.Count > 0 ? all.Max(w => w.WorkspacePort) : 0;
-        return maxPort >= BaseAutoPort ? maxPort + 1 : BaseAutoPort;
-    }
-
     private static string DeriveNameFromPath(string path)
     {
         var name = Path.GetFileName(path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
@@ -259,7 +255,20 @@ public sealed class WorkspaceService : IWorkspaceService
     }
 
     private static string NormalizePath(string path)
-        => Path.GetFullPath(path.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return string.Empty;
+
+        return Path.GetFullPath(path.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+    }
+
+    /// <summary>Returns null when the prompt value is empty/whitespace or matches the built-in default.</summary>
+    private static string? StripIfDefault(string promptName, string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return null;
+        return TodoPromptDefaults.IsDefault(promptName, value) ? null : value.Trim();
+    }
 
     private static WorkspaceDto ToDto(WorkspaceConfigEntry e) => new()
     {
@@ -267,7 +276,6 @@ public sealed class WorkspaceService : IWorkspaceService
         Name = e.Name,
         TodoPath = e.TodoPath,
         DataDirectory = string.IsNullOrWhiteSpace(e.DataDirectory) ? null : e.DataDirectory,
-        WorkspacePort = e.WorkspacePort,
         TunnelProvider = string.IsNullOrWhiteSpace(e.TunnelProvider) ? null : e.TunnelProvider,
         IsPrimary = e.IsPrimary,
         IsEnabled = e.IsEnabled,
@@ -275,11 +283,37 @@ public sealed class WorkspaceService : IWorkspaceService
         DateTimeModified = e.DateTimeModified,
         RunAs = string.IsNullOrWhiteSpace(e.RunAs) ? null : e.RunAs,
         PromptTemplate = string.IsNullOrWhiteSpace(e.PromptTemplate) ? null : e.PromptTemplate,
+        StatusPrompt = e.StatusPrompt ?? TodoPromptDefaults.StatusPrompt,
+        ImplementPrompt = e.ImplementPrompt ?? TodoPromptDefaults.ImplementPrompt,
+        PlanPrompt = e.PlanPrompt ?? TodoPromptDefaults.PlanPrompt,
     };
+
+    private async Task PublishChangeSafeAsync(string action, string entityId, CancellationToken ct)
+    {
+        if (_eventBus is null)
+            return;
+
+        try
+        {
+            await _eventBus.PublishAsync(
+                new ChangeEvent
+                {
+                    Category = ChangeEventCategories.Workspace,
+                    Action = action,
+                    EntityId = entityId,
+                    ResourceUri = $"mcp://workspace/workspace/{entityId}",
+                },
+                ct).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed publishing workspace change event for {EntityId}", entityId);
+        }
+    }
 }
 
 /// <summary>Workspace entry as stored in <c>appsettings.json</c> under <c>Mcp:Workspaces</c>.</summary>
-internal sealed class WorkspaceConfigEntry
+public sealed class WorkspaceConfigEntry
 {
     /// <summary>Absolute path to the workspace root folder (primary key).</summary>
     public string WorkspacePath { get; set; } = string.Empty;
@@ -296,9 +330,6 @@ internal sealed class WorkspaceConfigEntry
     /// </summary>
     public string? DataDirectory { get; set; }
 
-    /// <summary>HTTP port for this workspace's hosted MCP instance.</summary>
-    public int WorkspacePort { get; set; }
-
     /// <summary>Tunnel provider key (ngrok, cloudflare, frp) or null if disabled.</summary>
     public string? TunnelProvider { get; set; }
 
@@ -306,8 +337,15 @@ internal sealed class WorkspaceConfigEntry
     public string? RunAs { get; set; }
 
     /// <summary>
+    /// GitHub personal access token or OAuth token passed as <c>GH_TOKEN</c> to
+    /// the Copilot CLI process. Required when the service runs as a system account
+    /// that cannot access the user's Windows keyring. Null = default auth discovery.
+    /// </summary>
+    public string? GitHubToken { get; set; }
+
+    /// <summary>
     /// When true, this workspace is the primary instance — the host process serves it directly
-    /// and no child app is spun up. The primary workspace with the lowest port wins at startup.
+    /// and no child app is spun up.
     /// </summary>
     public bool IsPrimary { get; set; }
 
@@ -322,10 +360,24 @@ internal sealed class WorkspaceConfigEntry
     /// </summary>
     public string? PromptTemplate { get; set; }
 
+    /// <summary>Override for the Copilot status prompt. Null = use built-in default.</summary>
+    public string? StatusPrompt { get; set; }
+
+    /// <summary>Override for the Copilot implement prompt. Null = use built-in default.</summary>
+    public string? ImplementPrompt { get; set; }
+
+    /// <summary>Override for the Copilot plan prompt. Null = use built-in default.</summary>
+    public string? PlanPrompt { get; set; }
+
+    /// <summary>
+    /// Absolute path to the Copilot CLI agent executable.
+    /// Null = use the default (<c>copilot</c>).
+    /// </summary>
+    public string? AgentPath { get; set; }
+
     /// <summary>When the workspace was registered.</summary>
     public DateTimeOffset DateTimeCreated { get; set; }
 
     /// <summary>When the workspace was last updated.</summary>
     public DateTimeOffset DateTimeModified { get; set; }
 }
-

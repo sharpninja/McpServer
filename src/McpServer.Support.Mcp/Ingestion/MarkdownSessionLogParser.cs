@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using McpServer.Support.Mcp.Models;
@@ -12,7 +12,7 @@ namespace McpServer.Support.Mcp.Ingestion;
 internal sealed partial class MarkdownSessionLogParser
 {
     /// <summary>Well-known section names in session log Markdown files.</summary>
-    private static readonly string[] KnownSections =
+    private static readonly string[] s_knownSections =
     [
         "Session Overview", "Changes Made", "Technical Requirements",
         "Testing", "Documentation", "Files Summary",
@@ -135,7 +135,7 @@ internal sealed partial class MarkdownSessionLogParser
         if (statusMatch.Success) sb.Append("Status: ").AppendLine(statusMatch.Groups[1].Value.Trim());
 
         // Extract and append each known section
-        foreach (var sectionName in KnownSections)
+        foreach (var sectionName in s_knownSections)
         {
             var sectionContent = ExtractSection(markdownContent, sectionName);
             if (!string.IsNullOrWhiteSpace(sectionContent))
@@ -183,7 +183,7 @@ internal sealed partial class MarkdownSessionLogParser
         if (!string.IsNullOrWhiteSpace(duration))
             sb.Append("Duration: ").AppendLine(duration);
 
-        foreach (var sectionName in KnownSections)
+        foreach (var sectionName in s_knownSections)
         {
             var sectionContent = ExtractSection(content, sectionName);
             if (!string.IsNullOrWhiteSpace(sectionContent))

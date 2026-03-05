@@ -1,5 +1,6 @@
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
+using McpServer.Support.Mcp.Notifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -13,13 +14,15 @@ namespace McpServer.Support.Mcp.Services;
 public sealed class ToolRegistryService : IToolRegistryService
 {
     private readonly McpDbContext _db;
+    private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<ToolRegistryService> _logger;
 
     /// <summary>Initializes a new instance of the <see cref="ToolRegistryService"/> class.</summary>
-    public ToolRegistryService(McpDbContext db, ILogger<ToolRegistryService> logger)
+    public ToolRegistryService(McpDbContext db, ILogger<ToolRegistryService> logger, IChangeEventBus? eventBus = null)
     {
         _db = db;
         _logger = logger;
+        _eventBus = eventBus;
     }
 
     /// <inheritdoc />
@@ -97,6 +100,7 @@ public sealed class ToolRegistryService : IToolRegistryService
 
         _db.ToolDefinitions.Add(entity);
         await _db.SaveChangesAsync(ct).ConfigureAwait(false);
+        await PublishChangeSafeAsync(ChangeEventActions.Created, entity.Id.ToString(), ct).ConfigureAwait(false);
 
         _logger.LogInformation("Tool created: {Name} (scope: {Scope})", name, wsPath ?? "global");
         return new ToolMutationResult(true, Tool: ToDto(entity));
@@ -139,6 +143,7 @@ public sealed class ToolRegistryService : IToolRegistryService
 
         entity.DateTimeModified = DateTimeOffset.UtcNow;
         await _db.SaveChangesAsync(ct).ConfigureAwait(false);
+        await PublishChangeSafeAsync(ChangeEventActions.Updated, entity.Id.ToString(), ct).ConfigureAwait(false);
 
         _logger.LogInformation("Tool updated: {Name} (id: {Id})", entity.Name, entity.Id);
         return new ToolMutationResult(true, Tool: ToDto(entity));
@@ -155,6 +160,7 @@ public sealed class ToolRegistryService : IToolRegistryService
         var dto = ToDto(entity);
         _db.ToolDefinitions.Remove(entity);
         await _db.SaveChangesAsync(ct).ConfigureAwait(false);
+        await PublishChangeSafeAsync(ChangeEventActions.Deleted, dto.Id.ToString(), ct).ConfigureAwait(false);
 
         _logger.LogInformation("Tool deleted: {Name} (id: {Id})", dto.Name, dto.Id);
         return new ToolMutationResult(true, Tool: dto);
@@ -194,4 +200,27 @@ public sealed class ToolRegistryService : IToolRegistryService
         e.WorkspacePath,
         e.DateTimeCreated,
         e.DateTimeModified);
+
+    private async Task PublishChangeSafeAsync(string action, string entityId, CancellationToken ct)
+    {
+        if (_eventBus is null)
+            return;
+
+        try
+        {
+            await _eventBus.PublishAsync(
+                new ChangeEvent
+                {
+                    Category = ChangeEventCategories.ToolRegistry,
+                    Action = action,
+                    EntityId = entityId,
+                    ResourceUri = $"mcp://workspace/tool_registry/{entityId}",
+                },
+                ct).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed publishing tool registry change event for {EntityId}", entityId);
+        }
+    }
 }

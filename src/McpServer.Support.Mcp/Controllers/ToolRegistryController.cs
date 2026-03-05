@@ -1,4 +1,3 @@
-using McpServer.Support.Mcp.Middleware;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,8 +11,7 @@ namespace McpServer.Support.Mcp.Controllers;
 /// from GitHub-backed bucket repositories (similar to Scoop package manager).
 /// </summary>
 [ApiController]
-[Route("mcp/tools")]
-[ApiKeyAuthFilter]
+[Route("mcpserver/tools")]
 public sealed class ToolRegistryController : ControllerBase
 {
     private readonly IToolRegistryService _registry;
@@ -34,7 +32,6 @@ public sealed class ToolRegistryController : ControllerBase
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Matching tool definitions.</returns>
     [HttpGet("search")]
-    [SkipApiKeyAuth]
     [ProducesResponseType(typeof(ToolSearchResult), StatusCodes.Status200OK)]
     public async Task<ActionResult<ToolSearchResult>> SearchAsync(
         [FromQuery] string keyword,
@@ -49,7 +46,6 @@ public sealed class ToolRegistryController : ControllerBase
     /// <param name="workspace">Optional workspace path to include workspace-scoped tools.</param>
     /// <param name="ct">Cancellation token.</param>
     [HttpGet]
-    [SkipApiKeyAuth]
     [ProducesResponseType(typeof(ToolSearchResult), StatusCodes.Status200OK)]
     public async Task<ActionResult<ToolSearchResult>> ListAsync(
         [FromQuery] string? workspace = null,
@@ -63,7 +59,6 @@ public sealed class ToolRegistryController : ControllerBase
     /// <param name="id">Tool definition id.</param>
     /// <param name="ct">Cancellation token.</param>
     [HttpGet("{id:int}")]
-    [SkipApiKeyAuth]
     [ProducesResponseType(typeof(ToolDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ToolDto>> GetAsync(int id, CancellationToken ct = default)
@@ -87,7 +82,7 @@ public sealed class ToolRegistryController : ControllerBase
         var result = await _registry.CreateAsync(request, ct).ConfigureAwait(false);
         if (!result.Success)
             return Conflict(result);
-        return Created(new Uri($"/mcp/tools/{result.Tool!.Id}", UriKind.Relative), result);
+        return Created(new Uri($"/mcpserver/tools/{result.Tool!.Id}", UriKind.Relative), result);
     }
 
     /// <summary>Update an existing tool definition. Null fields are left unchanged.</summary>
@@ -129,7 +124,6 @@ public sealed class ToolRegistryController : ControllerBase
     /// <summary>List all registered tool buckets.</summary>
     /// <param name="ct">Cancellation token.</param>
     [HttpGet("buckets")]
-    [SkipApiKeyAuth]
     [ProducesResponseType(typeof(BucketListResult), StatusCodes.Status200OK)]
     public async Task<ActionResult<BucketListResult>> ListBucketsAsync(CancellationToken ct = default)
     {
@@ -150,7 +144,7 @@ public sealed class ToolRegistryController : ControllerBase
         var result = await _bucketService.AddBucketAsync(request, ct).ConfigureAwait(false);
         if (!result.Success)
             return Conflict(result);
-        return Created(new Uri($"/mcp/tools/buckets", UriKind.Relative), result);
+        return Created(new Uri($"/mcpserver/tools/buckets", UriKind.Relative), result);
     }
 
     /// <summary>Remove a bucket and optionally uninstall all tools installed from it.</summary>
@@ -175,7 +169,6 @@ public sealed class ToolRegistryController : ControllerBase
     /// <param name="name">Bucket name.</param>
     /// <param name="ct">Cancellation token.</param>
     [HttpGet("buckets/{name}/browse")]
-    [SkipApiKeyAuth]
     [ProducesResponseType(typeof(BucketBrowseResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(BucketBrowseResult), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<BucketBrowseResult>> BrowseBucketAsync(
@@ -210,7 +203,7 @@ public sealed class ToolRegistryController : ControllerBase
                 return NotFound(result);
             return Conflict(result);
         }
-        return Created(new Uri($"/mcp/tools/{result.Tool!.Id}", UriKind.Relative), result);
+        return Created(new Uri($"/mcpserver/tools/{result.Tool!.Id}", UriKind.Relative), result);
     }
 
     /// <summary>Sync all installed tools from a bucket to pick up manifest changes.</summary>

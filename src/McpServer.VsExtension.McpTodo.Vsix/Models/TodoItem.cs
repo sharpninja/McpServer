@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace McpServer.VsExtension.McpTodo.Models;
 
-/// <summary>Flat TODO item from MCP GET /mcp/todo.</summary>
+/// <summary>Flat TODO item from MCP GET /mcpserver/todo.</summary>
 public sealed class TodoFlatItem
 {
     public string Id { get; set; } = "";
@@ -37,7 +37,7 @@ public sealed class TodoQueryResult
     public int TotalCount { get; set; }
 }
 
-/// <summary>Body for PUT /mcp/todo/{id}.</summary>
+/// <summary>Body for PUT /mcpserver/todo/{id}.</summary>
 public sealed class TodoUpdateBody
 {
     public string? Title { get; set; }

@@ -47,7 +47,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
         var middleware = new McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware(next, logger, options, channel);
 
-        var context = CreateContext("POST", "/mcp/context/search");
+        var context = CreateContext("POST", "/mcpserver/context/search");
         context.Response.StatusCode = 200;
 
         await middleware.InvokeAsync(context).ConfigureAwait(true);
@@ -57,7 +57,7 @@ public sealed class InteractionLoggingMiddlewareTests
         channel.Received(1).TryEnqueue(Arg.Is<InteractionLogEntry>(e =>
             e != null &&
             e.Method == "POST" &&
-            e.Path == "/mcp/context/search" &&
+            e.Path == "/mcpserver/context/search" &&
             e.StatusCode == 200 &&
             e.RequestId == requestId));
     }
@@ -115,7 +115,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
         var middleware = new McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware(next, logger, options, channel);
 
-        var context = CreateContext("POST", "/mcp/context/search");
+        var context = CreateContext("POST", "/mcpserver/context/search");
         var bodyBytes = Encoding.UTF8.GetBytes("{\"query\":\"test\"}");
         context.Request.Body = new MemoryStream(bodyBytes);
         context.Request.ContentLength = bodyBytes.Length;
@@ -151,7 +151,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
         var middleware = new McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware(next, logger, options, channel);
 
-        var context = CreateContext("GET", "/mcp/context/sources");
+        var context = CreateContext("GET", "/mcpserver/context/sources");
 
         await middleware.InvokeAsync(context).ConfigureAwait(true);
 
@@ -182,7 +182,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
         var middleware = new McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware(next, logger, options, channel);
 
-        var context = CreateContext("POST", "/mcp/sync/run");
+        var context = CreateContext("POST", "/mcpserver/repo/file");
         var bodyBytes = Encoding.UTF8.GetBytes("{\"force\":true}");
         context.Request.Body = new MemoryStream(bodyBytes);
         context.Request.ContentLength = bodyBytes.Length;
@@ -215,7 +215,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
         var middleware = new McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware(next, logger, options, channel);
 
-        var context = CreateContext("POST", "/mcp/repo/file");
+        var context = CreateContext("POST", "/mcpserver/repo/file");
         var bodyBytes = Encoding.UTF8.GetBytes("{\"path\":\"README.md\"}");
         context.Request.Body = new MemoryStream(bodyBytes);
         context.Request.ContentLength = bodyBytes.Length;
@@ -247,7 +247,7 @@ public sealed class InteractionLoggingMiddlewareTests
 
         var middleware = new McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware(next, logger, options, channel);
 
-        var context = CreateContext("POST", "/mcp/context/search");
+        var context = CreateContext("POST", "/mcpserver/context/search");
         var bodyBytes = Encoding.UTF8.GetBytes(largePayload);
         context.Request.Body = new MemoryStream(bodyBytes);
         context.Request.ContentLength = bodyBytes.Length;
@@ -280,7 +280,7 @@ public sealed class InteractionLoggingMiddlewareTests
         var middleware = new McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware(next, logger, options);
 
         var originalBody = new MemoryStream();
-        var context = CreateContext("GET", "/mcp/sync/status");
+        var context = CreateContext("GET", "/mcpserver/repo/list");
         context.Response.Body = originalBody;
 
         await middleware.InvokeAsync(context).ConfigureAwait(true);

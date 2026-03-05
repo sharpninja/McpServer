@@ -33,13 +33,13 @@ items:
     content: >-
       [ApiController]
 
-      [Route("mcp/context")]
+      [Route("mcpserver/context")]
 
       public sealed class ContextController : ControllerBase
     content.vb: >-
       <ApiController>
 
-      <Route("mcp/context")>
+      <Route("mcpserver/context")>
 
       Public NotInheritable Class ContextController Inherits ControllerBase
   inheritance:

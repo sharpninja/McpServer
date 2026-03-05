@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Todo List Wireframe</title>
+  <link rel="stylesheet" href="../shared/wireframe.css" />
+</head>
+<body>
+  <main class="gh-content">
+    <h1 class="page-title">TODOs</h1>
+    <p class="subtitle">Issue-list style layout adapted to TODO management.</p>
+
+    <section class="panel">
+      <div class="row">
+        <input class="input" style="min-width:220px" placeholder="Search TODOs" />
+        <select class="select"><option>Priority: all</option></select>
+        <select class="select"><option>Section: all</option></select>
+        <select class="select"><option>Done: open</option></select>
+        <button class="btn">Clear</button>
+        <button class="btn btn-primary">New TODO</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <table class="table">
+        <thead><tr><th>ID</th><th>Title</th><th>Priority</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>web-ui</td><td>McpServer Management Web UI</td><td><span class="badge badge-danger">high</span></td><td><span class="badge badge-warn">in_progress</span></td><td><button class="btn">Open</button></td></tr>
+          <tr><td>github-integration</td><td>Github Integration</td><td><span class="badge badge-danger">high</span></td><td><span class="badge badge-muted">pending</span></td><td><button class="btn">Open</button></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <p><a href="todo-detail.html">Open todo detail wireframe</a></p>
+    <p><a href="../index.html">Back to index</a></p>
+  </main>
+</body>
+</html>

@@ -8,7 +8,7 @@ namespace McpServer.SessionLog.Validation;
 public sealed class SessionLogEndpointFixture : IDisposable
 {
     public const string BaseUrl = "http://localhost:7147";
-    public const string SessionLogRoute = "/mcp/sessionlog";
+    public const string SessionLogRoute = "/mcpserver/sessionlog";
 
     public HttpClient Client { get; }
     public string? ApiKey { get; }

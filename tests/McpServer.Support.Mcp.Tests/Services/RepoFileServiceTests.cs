@@ -1,6 +1,8 @@
 using McpServer.Support.Mcp.Ingestion;
+using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Services;
 using NSubstitute;
+using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Services;
@@ -10,6 +12,7 @@ public sealed class RepoFileServiceTests : IDisposable
 {
     private readonly string _tempDir;
     private readonly IWriteAuditLog _auditLog = Substitute.For<IWriteAuditLog>();
+    private readonly IChangeEventBus _eventBus = Substitute.For<IChangeEventBus>();
     private readonly RepoFileService _sut;
 
     public RepoFileServiceTests()
@@ -21,7 +24,8 @@ public sealed class RepoFileServiceTests : IDisposable
         File.WriteAllText(Path.Combine(_tempDir, "src", "code.cs"), "class Foo {}");
 
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir });
-        _sut = new RepoFileService(options, _auditLog);
+        var workspaceContext = new WorkspaceContext();
+        _sut = new RepoFileService(options, workspaceContext, _auditLog, NullLogger<RepoFileService>.Instance, _eventBus);
     }
 
     public void Dispose()
@@ -56,7 +60,7 @@ public sealed class RepoFileServiceTests : IDisposable
             RepoRoot = _tempDir,
             RepoAllowlist = new[] { "*.md" }
         });
-        var sut = new RepoFileService(options, _auditLog);
+        var sut = new RepoFileService(options, new WorkspaceContext(), _auditLog, NullLogger<RepoFileService>.Instance);
 
         var result = await sut.ReadAsync("src/code.cs").ConfigureAwait(true);
 
@@ -89,6 +93,12 @@ public sealed class RepoFileServiceTests : IDisposable
         Assert.True(result.Written);
         Assert.True(File.Exists(Path.Combine(_tempDir, "test_output.txt")));
         _auditLog.Received(1).RecordWrite("test_output.txt", Arg.Any<DateTime>());
+        await _eventBus.Received(1).PublishAsync(
+            Arg.Is<ChangeEvent>(e => e != null
+                                     && e.Category == ChangeEventCategories.Repo
+                                     && e.Action == ChangeEventActions.Created
+                                     && e.EntityId == "test_output.txt"),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     [Fact]
@@ -99,7 +109,7 @@ public sealed class RepoFileServiceTests : IDisposable
             RepoRoot = _tempDir,
             RepoAllowlist = new[] { "*.md" }
         });
-        var sut = new RepoFileService(options, _auditLog);
+        var sut = new RepoFileService(options, new WorkspaceContext(), _auditLog, NullLogger<RepoFileService>.Instance);
 
         var result = await sut.WriteAsync("secret.txt", "data").ConfigureAwait(true);
 

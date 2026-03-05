@@ -10,15 +10,15 @@
 
 | # | Method | Route | Auth | Status |
 |---|--------|-------|------|--------|
-| 1 | `GET` | `/mcp/workspace` | None | ✅ |
-| 2 | `POST` | `/mcp/workspace` | None | ✅ |
-| 3 | `GET` | `/mcp/workspace/{key}` | None | ✅ |
-| 4 | `PUT` | `/mcp/workspace/{key}` | None | ✅ |
-| 5 | `DELETE` | `/mcp/workspace/{key}` | None | ✅ |
-| 6 | `POST` | `/mcp/workspace/{key}/init` | None | ✅ |
-| 7 | `POST` | `/mcp/workspace/{key}/start` | None | ✅ |
-| 8 | `POST` | `/mcp/workspace/{key}/stop` | None | ✅ |
-| 9 | `GET` | `/mcp/workspace/{key}/status` | None | ✅ |
+| 1 | `GET` | `/mcpserver/workspace` | None | ✅ |
+| 2 | `POST` | `/mcpserver/workspace` | None | ✅ |
+| 3 | `GET` | `/mcpserver/workspace/{key}` | None | ✅ |
+| 4 | `PUT` | `/mcpserver/workspace/{key}` | None | ✅ |
+| 5 | `DELETE` | `/mcpserver/workspace/{key}` | None | ✅ |
+| 6 | `POST` | `/mcpserver/workspace/{key}/init` | None | ✅ |
+| 7 | `POST` | `/mcpserver/workspace/{key}/start` | None | ✅ |
+| 8 | `POST` | `/mcpserver/workspace/{key}/stop` | None | ✅ |
+| 9 | `GET` | `/mcpserver/workspace/{key}/status` | None | ✅ |
 
 ## Key Findings
 

@@ -1,7 +1,8 @@
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Models;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Ingestion;
 
@@ -11,15 +12,20 @@ namespace McpServer.Support.Mcp.Ingestion;
 /// </summary>
 public sealed class RepoIngestor
 {
-    private static readonly char[] TrimSlashChars = { '/' };
+    private static readonly char[] s_trimSlashChars = { '/' };
     private readonly Chunker _chunker;
     private readonly IngestionOptions _options;
+    private readonly ILogger<RepoIngestor> _logger;
+
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
     /// <param name="chunker">Chunker for splitting content.</param>
     /// <param name="options">Ingestion options providing repo root and allowlist.</param>
-    public RepoIngestor(Chunker chunker, Microsoft.Extensions.Options.IOptions<IngestionOptions> options)
+    /// <param name="logger">Logger instance.</param>
+    public RepoIngestor(Chunker chunker, Microsoft.Extensions.Options.IOptions<IngestionOptions> options,
+        ILogger<RepoIngestor> logger)
     {
+        _logger = logger;
         _chunker = chunker;
         _options = options?.Value ?? new IngestionOptions();
     }
@@ -69,12 +75,14 @@ public sealed class RepoIngestor
                 var chunks = _chunker.Chunk(documentId, content);
                 results.Add((doc, chunks));
             }
-            catch (IOException)
+            catch (IOException ex)
             {
+                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
                 // Skip unreadable files
             }
-            catch (UnauthorizedAccessException)
+            catch (UnauthorizedAccessException ex)
             {
+                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
                 // Skip inaccessible files
             }
         }
@@ -126,7 +134,7 @@ public sealed class RepoIngestor
         {
             if (p.Contains("**", StringComparison.Ordinal))
             {
-                var prefix = p.Replace("**", string.Empty, StringComparison.Ordinal).TrimEnd(TrimSlashChars);
+                var prefix = p.Replace("**", string.Empty, StringComparison.Ordinal).TrimEnd(s_trimSlashChars);
                 if (relativePath.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) return true;
             }
             else if (p.StartsWith("*.", StringComparison.Ordinal))

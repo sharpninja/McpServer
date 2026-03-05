@@ -1,8 +1,10 @@
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Controllers;
 
@@ -11,17 +13,25 @@ namespace McpServer.Support.Mcp.Controllers;
 /// FR-SUPPORT-010: Hybrid search and deterministic context packs.
 /// </summary>
 [ApiController]
-[Route("mcp/context")]
+[Route("mcpserver/context")]
 public sealed class ContextController : ControllerBase
 {
     private readonly McpDbContext _db;
     private readonly IContextSearchService _searchService;
+    private readonly IGraphRagService _graphRagService;
+    private readonly GraphRagOptions _graphRagOptions;
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
-    public ContextController(McpDbContext db, IContextSearchService searchService)
+    public ContextController(
+        McpDbContext db,
+        IContextSearchService searchService,
+        IGraphRagService graphRagService,
+        IOptions<GraphRagOptions> graphRagOptions)
     {
         _db = db;
         _searchService = searchService;
+        _graphRagService = graphRagService;
+        _graphRagOptions = graphRagOptions.Value;
     }
 
     /// <summary>TR-PLANNED-013: Hybrid search with filters (context.search).</summary>
@@ -35,6 +45,33 @@ public sealed class ContextController : ControllerBase
         var limit = Math.Clamp(request?.Limit ?? 20, 1, 100);
         var sourceType = request?.SourceType;
 
+        if (_graphRagOptions.Enabled && _graphRagOptions.EnhanceContextSearch && string.IsNullOrWhiteSpace(sourceType))
+        {
+            var graphResult = await _graphRagService.QueryAsync(new GraphRagQueryRequest
+            {
+                Query = query,
+                Mode = _graphRagOptions.DefaultQueryMode,
+                MaxChunks = limit,
+                IncludeContextChunks = true
+            }, cancellationToken).ConfigureAwait(false);
+
+            var graphChunks = graphResult.Chunks.ToList();
+            return Ok(new
+            {
+                query,
+                chunks = graphChunks,
+                sourceKeys = graphResult.SourceKeys,
+                graphRag = new
+                {
+                    mode = graphResult.Mode,
+                    graphResult.FallbackUsed,
+                    graphResult.Backend,
+                    graphResult.Answer,
+                    graphResult.Citations
+                }
+            });
+        }
+
         var result = await _searchService.SearchAsync(query, limit, sourceType, cancellationToken).ConfigureAwait(false);
         var chunks = result.Chunks.Select(c => new ContextChunk
         {
@@ -44,7 +81,21 @@ public sealed class ContextController : ControllerBase
             TokenCount = c.TokenCount,
             ChunkIndex = c.ChunkIndex
         }).ToList();
-        return Ok(new { query, chunks, sourceKeys = result.SourceKeys });
+        return Ok(new
+        {
+            query,
+            chunks,
+            sourceKeys = result.SourceKeys,
+            graphRag = new
+            {
+                mode = _graphRagOptions.DefaultQueryMode,
+                fallbackUsed = true,
+                backend = "context-search",
+                reason = _graphRagOptions.Enabled && _graphRagOptions.EnhanceContextSearch && !string.IsNullOrWhiteSpace(sourceType)
+                    ? "sourceType_filter_forces_legacy_path"
+                    : "graphrag_disabled_or_not_enabled_for_context"
+            }
+        });
     }
 
     /// <summary>TR-PLANNED-013: Rebuild the FTS5 search index.</summary>

@@ -1,6 +1,7 @@
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
 using NSubstitute;
+using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Services;
@@ -13,7 +14,7 @@ public sealed class GitHubCliServiceTests
 
     public GitHubCliServiceTests()
     {
-        _sut = new GitHubCliService(_processRunner);
+        _sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance);
     }
 
     [Fact]

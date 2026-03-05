@@ -1,0 +1,116 @@
+@page "/templates/test"
+
+@inject TemplateTestViewModel ViewModel
+
+<PageTitle>Template Test</PageTitle>
+
+<h1 class="h2 mb-3">Template Test</h1>
+<p><a href="/templates">← Back to template list</a></p>
+
+<form method="get" class="Box p-3 mb-3">
+    <div class="d-flex flex-column gap-2">
+        <label class="d-flex flex-column">
+            <span class="text-small color-fg-muted">Template ID (optional when using inline template)</span>
+            <input class="form-control" name="templateId" value="@TemplateId" />
+        </label>
+        <label class="d-flex flex-column">
+            <span class="text-small color-fg-muted">Inline Template (optional)</span>
+            <textarea class="form-control" name="inline" rows="6">@InlineTemplate</textarea>
+        </label>
+        <label class="d-flex flex-column">
+            <span class="text-small color-fg-muted">Variables JSON</span>
+            <textarea class="form-control" name="variables" rows="6">@EffectiveVariablesJson</textarea>
+        </label>
+        <div>
+            <button class="btn btn-primary" type="submit">Run Test</button>
+        </div>
+    </div>
+</form>
+
+@if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+{
+    <PrimerFlash Variant="danger" Title="Template test failed">@ViewModel.ErrorMessage</PrimerFlash>
+}
+else if (ViewModel.IsLoading)
+{
+    <p class="color-fg-muted">Running template test...</p>
+}
+else if (ViewModel.Result is null)
+{
+    <PrimerBlankslate Heading="No test executed"
+                      Description="Provide a template ID or inline template and submit to run a test render." />
+}
+else
+{
+    <PrimerFlash Variant="@(ViewModel.Result.Success ? "success" : "danger")"
+                Title="@(ViewModel.Result.Success ? "Template rendered" : "Template test failed")">
+        @if (!string.IsNullOrWhiteSpace(ViewModel.Result.Error))
+        {
+            <span>@ViewModel.Result.Error</span>
+        }
+        else
+        {
+            <span>Render completed successfully.</span>
+        }
+    </PrimerFlash>
+
+    @if (ViewModel.Result.MissingVariables is { Count: > 0 })
+    {
+        <div class="Box mb-3">
+            <div class="Box-header"><h3 class="h4 mb-0">Missing Variables</h3></div>
+            <div class="Box-body">
+                <ul class="mb-0">
+                    @foreach (var variable in ViewModel.Result.MissingVariables)
+                    {
+                        <li><code>@variable</code></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+
+    <div class="Box">
+        <div class="Box-header"><h3 class="h4 mb-0">Rendered Content</h3></div>
+        <div class="Box-body">
+            <pre class="mb-0">@(ViewModel.Result.RenderedContent ?? string.Empty)</pre>
+        </div>
+    </div>
+}
+
+@code {
+    [SupplyParameterFromQuery(Name = "templateId")]
+    public string? TemplateId { get; set; }
+
+    [SupplyParameterFromQuery(Name = "inline")]
+    public string? InlineTemplate { get; set; }
+
+    [SupplyParameterFromQuery(Name = "variables")]
+    public string? VariablesJson { get; set; }
+
+    private string EffectiveVariablesJson { get; set; } = "{}";
+    private string? _lastRequestKey;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        EffectiveVariablesJson = string.IsNullOrWhiteSpace(VariablesJson) ? "{}" : VariablesJson;
+
+        if (string.IsNullOrWhiteSpace(TemplateId) && string.IsNullOrWhiteSpace(InlineTemplate))
+        {
+            ViewModel.Result = null;
+            ViewModel.ErrorMessage = null;
+            _lastRequestKey = null;
+            return;
+        }
+
+        var requestKey = $"{TemplateId}|{InlineTemplate}|{EffectiveVariablesJson}";
+        if (string.Equals(_lastRequestKey, requestKey, StringComparison.Ordinal))
+            return;
+
+        _lastRequestKey = requestKey;
+        ViewModel.TemplateId = TemplateId;
+        ViewModel.InlineTemplate = InlineTemplate;
+        ViewModel.VariablesJson = EffectiveVariablesJson;
+        await ViewModel.RunAsync().ConfigureAwait(false);
+    }
+}
+

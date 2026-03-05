@@ -13,7 +13,7 @@ public sealed class WorkspaceEndpointFixture : IDisposable
     public const string BaseUrl = "http://localhost:7147";
 
     /// <summary>Route prefix for workspace endpoints.</summary>
-    public const string WorkspaceRoute = "/mcp/workspace";
+    public const string WorkspaceRoute = "/mcpserver/workspace";
 
     /// <summary>Pre-configured HTTP client targeting the live service.</summary>
     public HttpClient Client { get; }

@@ -1,0 +1,55 @@
+@if (this.Visible)
+{
+    <div class="Overlay Overlay--backdrop" @attributes="AdditionalAttributes">
+        <div class="@this.DialogClass" role="dialog" aria-modal="true" aria-labelledby="@this.titleId">
+            @if (this.ShowHeader)
+            {
+                <div class="Box-header d-flex flex-items-center">
+                    <h3 class="Box-title flex-auto" id="@this.titleId">@this.Title</h3>
+                    @if (this.ShowCloseButton)
+                    {
+                        <button type="button" class="btn-octicon" aria-label="Close dialog" @onclick="this.OnClose">
+                            <OcticonIcon Name="x" />
+                        </button>
+                    }
+                </div>
+            }
+
+            <div class="Box-body">
+                @this.ChildContent
+            </div>
+
+            @if (this.FooterContent is not null)
+            {
+                <div class="Box-footer">
+                    @this.FooterContent
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private readonly string titleId = $"primer-dialog-{Guid.NewGuid():N}";
+
+    [Parameter] public bool Visible { get; set; }
+
+    [Parameter] public string? Title { get; set; }
+
+    [Parameter] public bool ShowCloseButton { get; set; } = true;
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public RenderFragment? FooterContent { get; set; }
+
+    [Parameter] public EventCallback<MouseEventArgs> OnClose { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private bool ShowHeader => !string.IsNullOrWhiteSpace(this.Title) || this.ShowCloseButton;
+
+    private string DialogClass => string.Join(' ', new[] { "Overlay-body Overlay-body--small Box", this.Class }.Where(static value => !string.IsNullOrWhiteSpace(value)));
+}
+

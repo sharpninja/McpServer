@@ -32,13 +32,13 @@ items:
     content: >-
       [ApiController]
 
-      [Route("mcp/repo")]
+      [Route("mcpserver/repo")]
 
       public sealed class RepoController : ControllerBase
     content.vb: >-
       <ApiController>
 
-      <Route("mcp/repo")>
+      <Route("mcpserver/repo")>
 
       Public NotInheritable Class RepoController Inherits ControllerBase
   inheritance:

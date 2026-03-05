@@ -1,0 +1,142 @@
+@page "/todos/{TodoId}"
+
+@inject TodoDetailViewModel ViewModel
+
+<PageTitle>Todo Detail</PageTitle>
+
+<h1 class="h2 mb-3">Todo Detail</h1>
+<p><a href="/todos">← Back to todo list</a></p>
+
+@if (string.IsNullOrWhiteSpace(TodoId))
+{
+    <PrimerBlankslate Heading="No todo selected" Description="Choose a TODO from the list view." />
+}
+else if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+{
+    <PrimerFlash Variant="danger" Title="Failed to load todo">@ViewModel.ErrorMessage</PrimerFlash>
+}
+else if (ViewModel.IsBusy)
+{
+    <p class="color-fg-muted">Loading todo details...</p>
+}
+else if (ViewModel.Detail is null)
+{
+    <PrimerBlankslate Heading="Todo not found" Description="The requested TODO item could not be found." />
+}
+else
+{
+    <div class="Box mb-3">
+        <div class="Box-header">
+            <h2 class="h3 mb-0">@ViewModel.Detail.Title</h2>
+        </div>
+        <div class="Box-body">
+            <p><strong>ID:</strong> <code>@ViewModel.Detail.Id</code></p>
+            <p><strong>Section:</strong> @ViewModel.Detail.Section</p>
+            <p><strong>Priority:</strong> <PrimerLabel Scheme="@GetPriorityScheme(ViewModel.Detail.Priority)" Text="@ViewModel.Detail.Priority" /></p>
+            <p><strong>Status:</strong> <PrimerLabel Scheme="@(ViewModel.Detail.Done ? "success" : "attention")" Text="@(ViewModel.Detail.Done ? "Done" : "Open")" /></p>
+            <p><strong>Estimate:</strong> @(ViewModel.Detail.Estimate ?? "(none)")</p>
+            <p><strong>Note:</strong> @(ViewModel.Detail.Note ?? "(none)")</p>
+            <p><strong>Completed Date:</strong> @(ViewModel.Detail.CompletedDate ?? "(not completed)")</p>
+            <p><strong>Done Summary:</strong> @(ViewModel.Detail.DoneSummary ?? "(none)")</p>
+            <p><strong>Remaining:</strong> @(ViewModel.Detail.Remaining ?? "(none)")</p>
+            <p><strong>Priority Note:</strong> @(ViewModel.Detail.PriorityNote ?? "(none)")</p>
+            <p><strong>Reference:</strong> @(ViewModel.Detail.Reference ?? "(none)")</p>
+        </div>
+    </div>
+
+    <div class="Box mb-3">
+        <div class="Box-header"><h3 class="h4 mb-0">Description</h3></div>
+        <div class="Box-body">
+            @RenderStringList(ViewModel.Detail.Description)
+        </div>
+    </div>
+
+    <div class="Box mb-3">
+        <div class="Box-header"><h3 class="h4 mb-0">Technical Details</h3></div>
+        <div class="Box-body">
+            @RenderStringList(ViewModel.Detail.TechnicalDetails)
+        </div>
+    </div>
+
+    <div class="Box mb-3">
+        <div class="Box-header"><h3 class="h4 mb-0">Implementation Tasks</h3></div>
+        <div class="Box-body">
+            @if (ViewModel.Detail.ImplementationTasks.Count == 0)
+            {
+                <p class="color-fg-muted mb-0">No implementation tasks.</p>
+            }
+            else
+            {
+                <ul class="mb-0">
+                    @foreach (var task in ViewModel.Detail.ImplementationTasks)
+                    {
+                        <li>@(task.Done ? "✅" : "⬜") @task.Task</li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+
+    <div class="Box">
+        <div class="Box-header"><h3 class="h4 mb-0">Dependencies & Requirements</h3></div>
+        <div class="Box-body">
+            <p><strong>Depends On:</strong></p>
+            @RenderStringList(ViewModel.Detail.DependsOn)
+            <p class="mt-2"><strong>Functional Requirements:</strong></p>
+            @RenderStringList(ViewModel.Detail.FunctionalRequirements)
+            <p class="mt-2"><strong>Technical Requirements:</strong></p>
+            @RenderStringList(ViewModel.Detail.TechnicalRequirements)
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string TodoId { get; set; } = string.Empty;
+
+    private string? _loadedId;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (string.Equals(_loadedId, TodoId, StringComparison.Ordinal))
+            return;
+
+        _loadedId = TodoId;
+        ViewModel.TodoId = TodoId;
+        await ViewModel.LoadAsync().ConfigureAwait(false);
+    }
+
+    private static string GetPriorityScheme(string priority)
+        => priority.ToLowerInvariant() switch
+        {
+            "critical" => "danger",
+            "high" => "attention",
+            "medium" => "done",
+            "low" => "default",
+            _ => "default",
+        };
+
+    private static RenderFragment RenderStringList(IReadOnlyList<string> values) => builder =>
+    {
+        if (values.Count == 0)
+        {
+            builder.OpenElement(0, "p");
+            builder.AddAttribute(1, "class", "color-fg-muted mb-0");
+            builder.AddContent(2, "None");
+            builder.CloseElement();
+            return;
+        }
+
+        builder.OpenElement(3, "ul");
+        builder.AddAttribute(4, "class", "mb-0");
+        for (var i = 0; i < values.Count; i++)
+        {
+            builder.OpenElement(10 + i, "li");
+            builder.AddContent(20 + i, values[i]);
+            builder.CloseElement();
+        }
+
+        builder.CloseElement();
+    };
+}
+

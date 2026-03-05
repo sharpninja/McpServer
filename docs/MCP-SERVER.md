@@ -88,40 +88,46 @@ Each workspace entry has:
 |-------|----------|-------------|
 | `WorkspacePath` | ✅ | Absolute path to the project folder |
 | `Name` | auto | Defaults to the last path segment |
-| `WorkspacePort` | auto | Auto-assigned from 7148+ |
+| `WorkspacePort` | auto | Shared with host port |
 | `TodoPath` | auto | Defaults to `docs/todo.yaml` within `WorkspacePath` |
 | `TunnelProvider` | optional | `ngrok`, `cloudflare`, or `frp` |
-| `RunAs` | optional | User account for the child process |
 
 Create a workspace:
 
 ```bash
-curl -X POST http://localhost:7147/mcp/workspace \
+curl -X POST http://localhost:7147/mcpserver/workspace \
   -H "Content-Type: application/json" \
   -d '{"workspacePath": "E:\\github\\MyProject"}'
 ```
 
-The child MCP instance starts automatically and is accessible at the assigned port (e.g., `http://localhost:7148`).
+The workspace is immediately accessible on the shared host port. Target it with the `X-Workspace-Path` header:
+
+```bash
+curl http://localhost:7147/mcpserver/todo \
+  -H "X-Api-Key: <token>" \
+  -H "X-Workspace-Path: E:\\github\\MyProject"
+```
+
+### Workspace Resolution
+
+All workspaces share a single port. Per-request workspace identity is resolved via a three-tier chain:
+
+1. **`X-Workspace-Path` header** — highest priority. Send the absolute workspace path.
+2. **API key reverse lookup** — the `X-Api-Key` token maps back to its workspace.
+3. **Default workspace** — falls back to the primary workspace from configuration.
+
+This eliminates per-workspace ports and simplifies agent connectivity.
 
 Workspace state is written to `{ContentRootPath}/appsettings.json` by the running process.
 For the Windows service this is `C:\ProgramData\McpServer\appsettings.json`.
 
 ## Production Deployment (Windows Service)
 
-`appsettings.Production.json` (in `src/McpServer.Support.Mcp/`) overrides paths to absolute
-locations so the service never resolves files relative to the working directory:
+`C:\ProgramData\McpServer\appsettings.json` is the canonical Windows service configuration.
+Environment-specific appsettings files (such as `appsettings.Production.json`) are not used by
+the Windows service and should not be relied on for runtime configuration.
 
-```json
-{
-  "Mcp": {
-    "DataDirectory": "C:\\ProgramData\\McpServer",
-    "RepoRoot": "C:\\ProgramData\\McpServer",
-    "TodoStorage": { "SqliteDataSource": "C:\\ProgramData\\McpServer\\mcp.db" }
-  }
-}
-```
-
-Update the service in-place (preserves all `*.json` and `*.db*` files):
+Update the service in-place (preserves `appsettings.json` and `*.db*` files):
 
 ```powershell
 gsudo .\scripts\Update-McpService.ps1
@@ -136,8 +142,8 @@ Available in Debug builds and `Staging` environment; excluded in Production Rele
 
 | Method | Route | Returns |
 |--------|-------|---------|
-| `GET` | `/mcp/diagnostic/execution-path` | `{ processPath, baseDirectory }` |
-| `GET` | `/mcp/diagnostic/appsettings-path` | `{ environmentName, contentRootPath, files[] }` |
+| `GET` | `/mcpserver/diagnostic/execution-path` | `{ processPath, baseDirectory }` |
+| `GET` | `/mcpserver/diagnostic/appsettings-path` | `{ environmentName, contentRootPath, files[] }` |
 
 Use these to verify which binary and which `appsettings.json` a running instance has loaded.
 
@@ -223,12 +229,12 @@ Migrate between backends:
 
 Primary controllers:
 
-- `/mcp/todo`
-- `/mcp/sessionlog`
-- `/mcp/context`
-- `/mcp/repo`
-- `/mcp/gh`
-- `/mcp/sync`
+- `/mcpserver/todo`
+- `/mcpserver/sessionlog`
+- `/mcpserver/context`
+- `/mcpserver/repo`
+- `/mcpserver/gh`
+- `/mcpserver/sync`
 
 Swagger:
 
@@ -245,8 +251,8 @@ gsudo .\scripts\Update-McpService.ps1
 Health checks:
 
 1. Open `/swagger` and `/health`.
-2. Test todo read/write with `/mcp/todo`.
-3. Test context search with `/mcp/context/search`.
+2. Test todo read/write with `/mcpserver/todo`.
+3. Test context search with `/mcpserver/context/search`.
 4. For GitHub integration, run `gh auth status` on the host.
 
 Log signals:

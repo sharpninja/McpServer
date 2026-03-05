@@ -14,7 +14,7 @@ public sealed class RepoEndpointTests
 
     public RepoEndpointTests(RepoEndpointFixture fixture) => _fixture = fixture;
 
-    // --- GET /mcp/repo/list ---
+    // --- GET /mcpserver/repo/list ---
 
     [Fact]
     public async Task List_RootPath_Returns200WithEntries()
@@ -36,7 +36,7 @@ public sealed class RepoEndpointTests
         Assert.True(json.TryGetProperty("entries", out _));
     }
 
-    // --- GET /mcp/repo/file ---
+    // --- GET /mcpserver/repo/file ---
 
     [Fact]
     public async Task ReadFile_MissingPath_Returns400()
@@ -65,7 +65,7 @@ public sealed class RepoEndpointTests
             $"Expected 200 or 400, got {(int)response.StatusCode}");
     }
 
-    // --- POST /mcp/repo/file ---
+    // --- POST /mcpserver/repo/file ---
 
     [Fact]
     public async Task WriteFile_MissingPath_Returns400()

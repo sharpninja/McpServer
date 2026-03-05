@@ -34,6 +34,7 @@ internal sealed class TodoEditorService : IVsRunningDocTableEvents3, IDisposable
     /// <summary>Triggers a refresh of the todo list (e.g. after MCP server becomes healthy).</summary>
     internal void NotifyRefresh() => TodoSaved?.Invoke();
 
+
     internal TodoEditorService(McpTodoClient client)
     {
         _client = client;
@@ -103,6 +104,7 @@ internal sealed class TodoEditorService : IVsRunningDocTableEvents3, IDisposable
         }
         catch (Exception ex)
         {
+            CopilotOutputPane.Log($"OpenTodo error: {ex}");
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             CopilotOutputPane.Log($"Failed to open {todoId}: {ex.Message}");
         }
@@ -178,7 +180,7 @@ internal sealed class TodoEditorService : IVsRunningDocTableEvents3, IDisposable
             }
             catch (Exception ex)
             {
-                CopilotOutputPane.Log($"Copilot CLI failed (New Todo): {ex.Message}");
+                CopilotOutputPane.Log($"Copilot CLI failed (New Todo): {ex}");
             }
         }
         else
@@ -201,7 +203,7 @@ internal sealed class TodoEditorService : IVsRunningDocTableEvents3, IDisposable
             }
             catch (Exception ex)
             {
-                CopilotOutputPane.Log($"Failed to update {todoId}: {ex.Message}");
+                CopilotOutputPane.Log($"Failed to update {todoId}: {ex}");
             }
         }
     }
@@ -245,11 +247,11 @@ internal sealed class TodoEditorService : IVsRunningDocTableEvents3, IDisposable
         return Path.Combine(dir, name + ".md");
     }
 
-    private static void TryDeleteFile(string path)
+    private void TryDeleteFile(string path)
     {
         try { if (File.Exists(path)) File.Delete(path); }
-        catch (IOException) { }
-        catch (UnauthorizedAccessException) { }
+        catch (IOException) { /* best-effort */ }
+        catch (UnauthorizedAccessException) { /* best-effort */ }
     }
 
     public void Dispose()

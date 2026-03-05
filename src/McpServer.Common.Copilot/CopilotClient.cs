@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -7,7 +8,9 @@ namespace McpServer.Common.Copilot;
 
 /// <summary>TR-CLI-001: Invokes the Copilot CLI agent, captures output, and returns structured results.</summary>
 public sealed class CopilotClient(
-    IOptions<CopilotClientOptions> defaultOptions,
+    IOptionsMonitor<CopilotClientOptions> defaultOptions,
+    IProcessEnvironmentService processEnvironment,
+    IProcessSpawner processSpawner,
     ILogger<CopilotClient> logger) : ICopilotClient
 {
 
@@ -18,7 +21,7 @@ public sealed class CopilotClient(
         CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt);
-        var opts = options ?? defaultOptions.Value;
+        var opts = options ?? defaultOptions.CurrentValue;
         return await RunProcessAsync(prompt, opts, cancellationToken).ConfigureAwait(false);
     }
 
@@ -29,7 +32,7 @@ public sealed class CopilotClient(
         CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt);
-        var opts = options ?? defaultOptions.Value;
+        var opts = options ?? defaultOptions.CurrentValue;
         var result = await RunProcessAsync(prompt, opts, cancellationToken).ConfigureAwait(false);
 
         // Attempt typed deserialization
@@ -46,98 +49,133 @@ public sealed class CopilotClient(
         };
     }
 
+    /// <inheritdoc />
+    public CopilotInteractiveSession CreateInteractiveSession(
+        string initialPrompt,
+        CopilotClientOptions? options = null)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(initialPrompt);
+        var opts = options ?? defaultOptions.CurrentValue;
+        var psi = BuildProcessStartInfo(opts, initialPrompt, interactive: true);
+
+        logger.LogDebug("Launching interactive session: {Agent} in {Cwd}", opts.AgentPath, psi.WorkingDirectory);
+
+        var process = processSpawner.Spawn(psi);
+        return new CopilotInteractiveSession(process, logger);
+    }
+
+    /// <inheritdoc />
+    public async IAsyncEnumerable<string> InvokeStreamingAsync(
+        string prompt,
+        CopilotClientOptions? options = null,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(prompt);
+        var opts = options ?? defaultOptions.CurrentValue;
+
+        var psi = BuildProcessStartInfo(opts, prompt);
+
+        logger.LogDebug("Streaming: {Agent} in {Cwd}", opts.AgentPath, psi.WorkingDirectory);
+
+        ISpawnedProcess? proc;
+        string? spawnError = null;
+        try
+        {
+            proc = processSpawner.Spawn(psi);
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
+        {
+            logger.LogError(ex, "Failed to spawn streaming process: {Agent}", opts.AgentPath);
+            spawnError = $"error: Failed to spawn Copilot CLI — {ex.Message}";
+            proc = null;
+        }
+
+        if (spawnError is not null)
+        {
+            yield return spawnError;
+            yield break;
+        }
+
+        try
+        {
+            using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            if (opts.Timeout > TimeSpan.Zero && opts.Timeout != System.Threading.Timeout.InfiniteTimeSpan)
+                timeoutCts.CancelAfter(opts.Timeout);
+
+            // Drain stderr in background to prevent deadlocks and capture error output.
+            var stderrTask = proc!.StandardError.ReadToEndAsync(timeoutCts.Token);
+
+            var reader = proc.StandardOutput;
+            var lineCount = 0;
+            while (!timeoutCts.Token.IsCancellationRequested)
+            {
+                string? line;
+                try
+                {
+                    line = await reader.ReadLineAsync(timeoutCts.Token).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException ex)
+                {
+                    logger.LogWarning("{ExceptionDetail}", ex.ToString());
+                    break;
+                }
+
+                if (line is null)
+                    break;
+
+                lineCount++;
+                yield return LineSanitizer.Sanitize(line);
+            }
+
+            var timedOut = timeoutCts.IsCancellationRequested && !cancellationToken.IsCancellationRequested;
+            if (timedOut)
+            {
+                logger.LogWarning("Copilot CLI streaming timed out after {Timeout}", opts.Timeout);
+                yield return $"error: Copilot CLI timed out after {opts.Timeout}.";
+            }
+
+            if (!proc.HasExited)
+                TryKill(proc);
+
+            try
+            {
+                await proc.WaitForExitAsync(CancellationToken.None).WaitAsync(TimeSpan.FromSeconds(5)).ConfigureAwait(false);
+            }
+            catch (TimeoutException ex)
+            {
+                logger.LogWarning(ex, "Copilot CLI process did not exit after kill within grace period.");
+            }
+
+            // Log stderr if present (best-effort, don't block on timeout).
+            var stderr = await ReadPartialAsync(stderrTask).ConfigureAwait(false);
+            if (!string.IsNullOrWhiteSpace(stderr))
+                logger.LogWarning("Copilot CLI stderr: {Stderr}", stderr.Trim());
+
+            logger.LogInformation("Copilot CLI streaming finished: {LineCount} lines, exit code {ExitCode}", lineCount, proc.ExitCode);
+        }
+        finally
+        {
+            proc!.Dispose();
+        }
+    }
+
     private async Task<CopilotResult> RunProcessAsync(
         string prompt,
         CopilotClientOptions opts,
         CancellationToken cancellationToken)
     {
-        var agentPath = opts.AgentPath;
-        var model = opts.Model;
-        var outputFormat = opts.OutputFormat;
-        var cwd = opts.WorkingDirectory ?? Environment.CurrentDirectory;
-        var isWindows = OperatingSystem.IsWindows();
+        var psi = BuildProcessStartInfo(opts, prompt);
 
-        // Write prompt to temp file to avoid shell escaping issues
-        var tmpFile = Path.Combine(Path.GetTempPath(), $"fwh-copilot-{Environment.TickCount64}-{Guid.NewGuid():N}.txt");
+        logger.LogDebug("Spawning: {Agent} in {Cwd}", opts.AgentPath, psi.WorkingDirectory);
+
+        ISpawnedProcess proc;
         try
         {
-            await File.WriteAllTextAsync(tmpFile, prompt, Encoding.UTF8, cancellationToken).ConfigureAwait(false);
-        }
-        catch (IOException ex)
-        {
-            logger.LogError(ex, "Failed to write prompt to temp file {TmpFile}", tmpFile);
-            return new CopilotResult
-            {
-                State = CopilotResultState.SpawnError,
-                Stderr = $"Failed to write prompt to temp file: {ex.Message}",
-            };
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            logger.LogError(ex, "Failed to write prompt to temp file {TmpFile}", tmpFile);
-            return new CopilotResult
-            {
-                State = CopilotResultState.SpawnError,
-                Stderr = $"Failed to write prompt to temp file: {ex.Message}",
-            };
-        }
-
-        try
-        {
-            return await SpawnAgentAsync(agentPath, model, outputFormat, tmpFile, cwd, opts, cancellationToken).ConfigureAwait(false);
-        }
-        finally
-        {
-            TryDeleteFile(tmpFile);
-        }
-    }
-
-    private async Task<CopilotResult> SpawnAgentAsync(
-        string agentPath,
-        string model,
-        string outputFormat,
-        string tmpFile,
-        string cwd,
-        CopilotClientOptions opts,
-        CancellationToken cancellationToken)
-    {
-        var isWindows = OperatingSystem.IsWindows();
-        var readCmd = isWindows
-            ? $"Get-Content -Raw '{tmpFile.Replace("'", "''", StringComparison.Ordinal)}'"
-            : $"cat '{tmpFile.Replace("'", "'\\''", StringComparison.Ordinal)}'";
-        var modelArg = string.Equals(model, "auto", StringComparison.OrdinalIgnoreCase) ? "" : $" --model {model}";
-        var agentCmd = $"{agentPath} -p \"$({readCmd})\"{modelArg} --output-format {outputFormat} 2>&1";
-
-        var shell = isWindows ? "pwsh" : "sh";
-        var shellArgs = isWindows ? $"-NoProfile -Command {agentCmd}" : $"-c {agentCmd}";
-
-        logger.LogDebug("Spawning: {Shell} {Args} in {Cwd}", shell, shellArgs, cwd);
-
-        var psi = new ProcessStartInfo
-        {
-            FileName = shell,
-            Arguments = shellArgs,
-            WorkingDirectory = cwd,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-        };
-
-        if (opts.EnvironmentVariables is { Count: > 0 } envVars)
-        {
-            foreach (var (key, value) in envVars)
-                psi.Environment[key] = value;
-        }
-
-        Process process;
-        try
-        {
-            process = Process.Start(psi) ?? throw new InvalidOperationException("Process.Start returned null");
+            proc = processSpawner.Spawn(psi);
         }
         catch (InvalidOperationException ex)
         {
-            logger.LogError(ex, "Failed to spawn process: {Shell}", shell);
+            logger.LogError(ex, "Failed to spawn process: {Agent}", opts.AgentPath);
             return new CopilotResult
             {
                 State = CopilotResultState.SpawnError,
@@ -146,7 +184,7 @@ public sealed class CopilotClient(
         }
         catch (System.ComponentModel.Win32Exception ex)
         {
-            logger.LogError(ex, "Failed to spawn process: {Shell}", shell);
+            logger.LogError(ex, "Failed to spawn process: {Agent}", opts.AgentPath);
             return new CopilotResult
             {
                 State = CopilotResultState.SpawnError,
@@ -157,8 +195,8 @@ public sealed class CopilotClient(
         try
         {
             // Read stdout and stderr concurrently to avoid deadlocks
-            var stdoutTask = process.StandardOutput.ReadToEndAsync(cancellationToken);
-            var stderrTask = process.StandardError.ReadToEndAsync(cancellationToken);
+            var stdoutTask = proc.StandardOutput.ReadToEndAsync(cancellationToken);
+            var stderrTask = proc.StandardError.ReadToEndAsync(cancellationToken);
 
             var timeout = opts.Timeout;
             var hasTimeout = timeout > TimeSpan.Zero && timeout != System.Threading.Timeout.InfiniteTimeSpan;
@@ -170,13 +208,13 @@ public sealed class CopilotClient(
 
                 try
                 {
-                    await process.WaitForExitAsync(cts.Token).ConfigureAwait(false);
+                    await proc.WaitForExitAsync(cts.Token).ConfigureAwait(false);
                 }
                 catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
                 {
                     // Timeout — kill process
                     logger.LogWarning("Copilot CLI timed out after {Timeout}", timeout);
-                    TryKillProcess(process);
+                    TryKill(proc);
                     var partialStdout = await ReadPartialAsync(stdoutTask).ConfigureAwait(false);
                     var partialStderr = await ReadPartialAsync(stderrTask).ConfigureAwait(false);
                     return new CopilotResult
@@ -189,7 +227,7 @@ public sealed class CopilotClient(
             }
             else
             {
-                await process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
+                await proc.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
             }
 
             var stdout = await stdoutTask.ConfigureAwait(false);
@@ -197,61 +235,110 @@ public sealed class CopilotClient(
             var body = stdout.Trim();
             var (contentType, parsed) = ContentParser.DetectAndParse(body);
 
-            logger.LogDebug("Copilot CLI exited with code {ExitCode}, content type: {ContentType}", process.ExitCode, contentType);
+            logger.LogDebug("Copilot CLI exited with code {ExitCode}, content type: {ContentType}", proc.ExitCode, contentType);
 
             return new CopilotResult
             {
-                State = process.ExitCode == 0 ? CopilotResultState.Success : CopilotResultState.Error,
+                State = proc.ExitCode == 0 ? CopilotResultState.Success : CopilotResultState.Error,
                 Body = body,
                 Stderr = stderr.Trim(),
-                ExitCode = process.ExitCode,
+                ExitCode = proc.ExitCode,
                 Parsed = parsed,
                 ContentType = contentType,
             };
         }
         finally
         {
-            process.Dispose();
+            proc.Dispose();
         }
     }
 
-    private static async Task<string> ReadPartialAsync(Task<string> readTask)
+    /// <summary>
+    /// Builds a <see cref="ProcessStartInfo"/> that invokes the agent binary directly
+    /// (no shell wrapper), using <see cref="ProcessStartInfo.ArgumentList"/> for safe escaping.
+    /// This avoids PowerShell/sh buffering so stdout streams in real time.
+    /// </summary>
+    private ProcessStartInfo BuildProcessStartInfo(CopilotClientOptions opts, string prompt, bool interactive = false)
+    {
+        var cwd = opts.WorkingDirectory ?? Environment.CurrentDirectory;
+
+        var psi = new ProcessStartInfo
+        {
+            FileName = opts.AgentPath,
+            WorkingDirectory = cwd,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            RedirectStandardInput = interactive,
+        };
+
+        psi.ArgumentList.Add(interactive ? "-i" : "-p");
+        psi.ArgumentList.Add(prompt);
+
+        if (!string.Equals(opts.Model, "auto", StringComparison.OrdinalIgnoreCase))
+        {
+            psi.ArgumentList.Add("--model");
+            psi.ArgumentList.Add(opts.Model);
+        }
+
+        // Don't suppress interactive prompts — the sentinel is needed for turn detection.
+        if (opts.Silent && !interactive)
+            psi.ArgumentList.Add("--silent");
+
+        // Force streaming even when stdout is a pipe (not a TTY).
+        psi.ArgumentList.Add("--stream");
+        psi.ArgumentList.Add("on");
+
+        // Auto-confirm tool invocations without user prompts.
+        psi.ArgumentList.Add("--yolo");
+
+        processEnvironment.ApplyAll(psi, opts.RunAs, opts.GitHubToken);
+        psi.FileName = processEnvironment.ResolveExecutable(psi, opts.AgentPath);
+
+        if (opts.EnvironmentVariables is { Count: > 0 } envVars)
+        {
+            foreach (var (key, value) in envVars)
+                psi.Environment[key] = value;
+        }
+
+        return psi;
+    }
+
+    private async Task<string> ReadPartialAsync(Task<string> readTask)
     {
         try
         {
             return await readTask.WaitAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
         }
-        catch (TimeoutException)
+        catch (TimeoutException ex)
         {
+            logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return string.Empty;
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException ex)
         {
+            logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return string.Empty;
         }
     }
 
-    private static void TryKillProcess(Process process)
+    private void TryKill(ISpawnedProcess proc)
     {
         try
         {
-            if (!process.HasExited)
-                process.Kill(entireProcessTree: true);
+            if (!proc.HasExited)
+                proc.Kill();
         }
-        catch (InvalidOperationException)
+        catch (InvalidOperationException ex)
         {
+            logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // Process already exited
         }
-        catch (System.ComponentModel.Win32Exception)
+        catch (System.ComponentModel.Win32Exception ex)
         {
+            logger.LogWarning("{ExceptionDetail}", ex.ToString());
             // Access denied or other OS error
         }
-    }
-
-    private static void TryDeleteFile(string path)
-    {
-        try { File.Delete(path); }
-        catch (IOException) { /* Best-effort cleanup */ }
-        catch (UnauthorizedAccessException) { /* Best-effort cleanup */ }
     }
 }

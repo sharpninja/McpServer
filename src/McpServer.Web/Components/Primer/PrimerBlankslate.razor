@@ -1,0 +1,35 @@
+<div class="@this.CssClass" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrWhiteSpace(this.IconName))
+    {
+        <OcticonIcon Name="@this.IconName" Class="mb-3 color-fg-muted" Size="24" />
+    }
+
+    @if (!string.IsNullOrWhiteSpace(this.Heading))
+    {
+        <h3>@this.Heading</h3>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(this.Description))
+    {
+        <p>@this.Description</p>
+    }
+
+    @this.ChildContent
+</div>
+
+@code {
+    [Parameter] public string? Heading { get; set; }
+
+    [Parameter] public string? Description { get; set; }
+
+    [Parameter] public string? IconName { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string CssClass => string.Join(' ', new[] { "blankslate", this.Class }.Where(static value => !string.IsNullOrWhiteSpace(value)));
+}
+

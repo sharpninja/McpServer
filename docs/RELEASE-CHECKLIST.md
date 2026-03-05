@@ -16,12 +16,14 @@
 - [ ] TODO YAML schema compatible (test with existing `docs/Project/TODO.yaml`)
 - [ ] ISSUE-* frontmatter parse/serialize stable
 - [ ] Session log schema compatible (test with existing session logs)
-- [ ] Multi-instance configuration validated (`scripts/Test-McpMultiInstance.ps1`)
+- [ ] Multi-tenant workspace resolution tested with `X-Workspace-Path` header
+- [ ] Director workspace switching via header verified
+- [ ] EF Core global query filter workspace isolation verified
 
 ### Configuration
 
 - [ ] `appsettings.json` has all required keys with sensible defaults
-- [ ] `appsettings.Production.json` absolute paths are correct for `C:\ProgramData\McpServer`
+- [ ] `C:\ProgramData\McpServer\appsettings.json` is the canonical Windows service config (no `appsettings.Production.json` override)
 - [ ] Environment variable overrides work (Mcp__Port, Mcp__RepoRoot, etc.)
 - [ ] Feature toggles (Embedding:Enabled, VectorIndex:Enabled) respect settings
 - [ ] Per-instance TODO storage backend selection works (YAML and SQLite)

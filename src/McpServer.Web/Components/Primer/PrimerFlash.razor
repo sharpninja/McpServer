@@ -1,0 +1,43 @@
+<div class="@CssClass" role="alert" @attributes="AdditionalAttributes">
+    @if (!string.IsNullOrWhiteSpace(this.Title))
+    {
+        <strong class="mr-2">@this.Title</strong>
+    }
+
+    @this.ChildContent
+
+    @if (this.Dismissible)
+    {
+        <button type="button" class="flash-close" aria-label="Close" @onclick="this.OnDismiss">
+            <OcticonIcon Name="x" />
+        </button>
+    }
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public string? Title { get; set; }
+
+    [Parameter] public string Variant { get; set; } = "default";
+
+    [Parameter] public bool Dismissible { get; set; }
+
+    [Parameter] public EventCallback<MouseEventArgs> OnDismiss { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string CssClass => string.Join(' ', new[] { this.ResolveVariantClass(), this.Class }.Where(static value => !string.IsNullOrWhiteSpace(value)));
+
+    private string ResolveVariantClass() =>
+        this.Variant.ToLowerInvariant() switch
+        {
+            "success" => "flash flash-success",
+            "warning" => "flash flash-warn",
+            "danger" => "flash flash-error",
+            _ => "flash",
+        };
+}
+

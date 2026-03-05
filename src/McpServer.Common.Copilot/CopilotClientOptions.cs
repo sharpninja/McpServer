@@ -4,21 +4,22 @@ namespace McpServer.Common.Copilot;
 public sealed class CopilotClientOptions
 {
     /// <summary>
-    /// Path to the CLI agent binary. Defaults to "agent" (must be on PATH).
+    /// Path to the CLI agent binary. Defaults to "copilot" (GitHub Copilot CLI, must be on PATH).
     /// </summary>
-    public string AgentPath { get; set; } = "agent";
+    public string AgentPath { get; set; } = "copilot";
 
     /// <summary>
     /// Model to use for the agent via --model.
-    /// Defaults to "auto".
+    /// Defaults to "gpt-5.3-codex".
     /// </summary>
-    public string Model { get; set; } = "auto";
+    public string Model { get; set; } = "gpt-5.3-codex";
 
     /// <summary>
-    /// Output format passed to the agent via --output-format.
-    /// Defaults to "text".
+    /// When <c>true</c>, passes <c>--silent</c> to the Copilot CLI so only the
+    /// agent response is emitted (no statistics or progress lines).
+    /// Defaults to <c>true</c>.
     /// </summary>
-    public string OutputFormat { get; set; } = "text";
+    public bool Silent { get; set; } = true;
 
     /// <summary>
     /// Timeout for the CLI process. Defaults to 2 minutes.
@@ -36,4 +37,22 @@ public sealed class CopilotClientOptions
     /// Additional environment variables to pass to the spawned process.
     /// </summary>
     public Dictionary<string, string> EnvironmentVariables { get; } = [];
+
+    /// <summary>
+    /// Windows user identity whose profile environment is loaded before spawning
+    /// the CLI process. When running as a Windows service (<c>LocalSystem</c>), this
+    /// ensures the spawned process inherits the user's <c>PATH</c> (so the CLI binary
+    /// is discoverable) and profile directories (<c>USERPROFILE</c>, <c>APPDATA</c>,
+    /// <c>LOCALAPPDATA</c>) so the CLI can access cached authentication tokens.
+    /// Null or empty = inherit the current process environment.
+    /// </summary>
+    public string? RunAs { get; set; }
+
+    /// <summary>
+    /// GitHub personal access token or OAuth token passed as <c>GH_TOKEN</c> to the
+    /// spawned Copilot CLI process. Required when running as a service account that
+    /// cannot access the user's Windows Credential Manager (keyring).
+    /// Null or empty = rely on the CLI's default auth discovery.
+    /// </summary>
+    public string? GitHubToken { get; set; }
 }

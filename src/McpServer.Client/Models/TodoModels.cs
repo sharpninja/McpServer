@@ -126,6 +126,14 @@ public sealed class TodoCreateRequest
     [JsonPropertyName("implementationTasks")]
     public IReadOnlyList<TodoFlatTask>? ImplementationTasks { get; set; }
 
+    /// <summary>Free-text note.</summary>
+    [JsonPropertyName("note")]
+    public string? Note { get; set; }
+
+    /// <summary>Remaining work description.</summary>
+    [JsonPropertyName("remaining")]
+    public string? Remaining { get; set; }
+
     /// <summary>IDs of items this depends on.</summary>
     [JsonPropertyName("dependsOn")]
     public IReadOnlyList<string>? DependsOn { get; set; }

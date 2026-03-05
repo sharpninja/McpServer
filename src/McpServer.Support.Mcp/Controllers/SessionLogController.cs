@@ -1,6 +1,7 @@
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Controllers;
 
@@ -9,16 +10,20 @@ namespace McpServer.Support.Mcp.Controllers;
 /// FR-SUPPORT-010: Agents POST session log payloads; clients GET with optional filters.
 /// </summary>
 [ApiController]
-[Route("mcp/sessionlog")]
+[Route("mcpserver/sessionlog")]
 public sealed class SessionLogController : ControllerBase
 {
     private const int MaxEntryCount = 5000;
 
     private readonly ISessionLogService _service;
+    private readonly ILogger<SessionLogController> _logger;
+
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
-    public SessionLogController(ISessionLogService service)
+    public SessionLogController(ISessionLogService service,
+        ILogger<SessionLogController> logger)
     {
+        _logger = logger;
         _service = service ?? throw new ArgumentNullException(nameof(service));
     }
 
@@ -42,13 +47,27 @@ public sealed class SessionLogController : ControllerBase
         if (string.IsNullOrWhiteSpace(dto.SessionId))
             return BadRequest(new { error = "SessionId is required." });
 
+        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(dto.SessionId, dto.SourceType);
+        if (sessionIdError is not null)
+            return BadRequest(new { error = sessionIdError });
+
+        if (dto.Entries is { Count: > 0 })
+        {
+            foreach (var entry in dto.Entries)
+            {
+                var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(entry.RequestId);
+                if (requestIdError is not null)
+                    return BadRequest(new { error = requestIdError });
+            }
+        }
+
         if (dto.Entries is { Count: > MaxEntryCount })
             return BadRequest(new { error = $"Entry count exceeds maximum of {MaxEntryCount}." });
 
         var id = await _service.SubmitAsync(dto, sourceFilePath: null, contentHash: null, cancellationToken).ConfigureAwait(false);
 
         return Created(
-            new Uri($"/mcp/sessionlog?agent={Uri.EscapeDataString(dto.SourceType)}&sessionId={Uri.EscapeDataString(dto.SessionId)}", UriKind.Relative),
+            new Uri($"/mcpserver/sessionlog?agent={Uri.EscapeDataString(dto.SourceType)}&sessionId={Uri.EscapeDataString(dto.SessionId)}", UriKind.Relative),
             new { id, sourceType = dto.SourceType, sessionId = dto.SessionId });
     }
 
@@ -115,6 +134,14 @@ public sealed class SessionLogController : ControllerBase
         if (items is null or { Count: 0 })
             return BadRequest(new { error = "At least one dialog item is required." });
 
+        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, agent);
+        if (sessionIdError is not null)
+            return BadRequest(new { error = sessionIdError });
+
+        var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(requestId);
+        if (requestIdError is not null)
+            return BadRequest(new { error = requestIdError });
+
         try
         {
             var totalCount = await _service.AppendProcessingDialogAsync(
@@ -123,6 +150,7 @@ public sealed class SessionLogController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return NotFound(new { error = ex.Message });
         }
     }

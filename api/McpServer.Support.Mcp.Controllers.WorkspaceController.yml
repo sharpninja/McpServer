@@ -40,13 +40,13 @@ items:
     content: >-
       [ApiController]
 
-      [Route("mcp/workspace")]
+      [Route("mcpserver/workspace")]
 
       public sealed class WorkspaceController : ControllerBase
     content.vb: >-
       <ApiController>
 
-      <Route("mcp/workspace")>
+      <Route("mcpserver/workspace")>
 
       Public NotInheritable Class WorkspaceController Inherits ControllerBase
   inheritance:

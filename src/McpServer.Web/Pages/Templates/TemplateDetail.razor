@@ -1,0 +1,103 @@
+@page "/templates/{TemplateId}"
+
+@inject TemplateDetailViewModel ViewModel
+
+<PageTitle>Template Detail</PageTitle>
+
+<h1 class="h2 mb-3">Template Detail</h1>
+<p><a href="/templates">← Back to template list</a></p>
+
+@if (string.IsNullOrWhiteSpace(TemplateId))
+{
+    <PrimerBlankslate Heading="No template selected" Description="Choose a template from the list view." />
+}
+else if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+{
+    <PrimerFlash Variant="danger" Title="Failed to load template">@ViewModel.ErrorMessage</PrimerFlash>
+}
+else if (ViewModel.IsBusy)
+{
+    <p class="color-fg-muted">Loading template details...</p>
+}
+else if (ViewModel.Detail is null)
+{
+    <PrimerBlankslate Heading="Template not found" Description="The requested template could not be loaded." />
+}
+else
+{
+    <div class="Box mb-3">
+        <div class="Box-header">
+            <h2 class="h3 mb-0">@ViewModel.Detail.Title</h2>
+        </div>
+        <div class="Box-body">
+            <p><strong>ID:</strong> <code>@ViewModel.Detail.Id</code></p>
+            <p><strong>Category:</strong> @ViewModel.Detail.Category</p>
+            <p><strong>Engine:</strong> @ViewModel.Detail.Engine</p>
+            <p><strong>Tags:</strong> @string.Join(", ", ViewModel.Detail.Tags)</p>
+            <p><strong>Description:</strong> @(ViewModel.Detail.Description ?? "(none)")</p>
+            <p><a class="btn btn-sm btn-primary" href="@GetTestHref(ViewModel.Detail.Id)">Test this template</a></p>
+        </div>
+    </div>
+
+    <div class="Box mb-3">
+        <div class="Box-header">
+            <h3 class="h4 mb-0">Variables</h3>
+        </div>
+        <div class="Box-body">
+            @if (ViewModel.Detail.Variables.Count == 0)
+            {
+                <p class="color-fg-muted mb-0">No variables declared.</p>
+            }
+            else
+            {
+                <PrimerDataTable TItem="TemplateVariableDetail" Items="ViewModel.Detail.Variables" ColumnCount="5" Class="Table--full-width">
+                    <HeaderTemplate>
+                        <tr>
+                            <th>Name</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                            <th>Default</th>
+                        </tr>
+                    </HeaderTemplate>
+                    <RowTemplate Context="variable">
+                        <td><code>@variable.Name</code></td>
+                        <td>@(variable.Required ? "Yes" : "No")</td>
+                        <td>@(variable.Description ?? string.Empty)</td>
+                        <td><code>@(variable.Example ?? string.Empty)</code></td>
+                        <td><code>@(variable.DefaultValue ?? string.Empty)</code></td>
+                    </RowTemplate>
+                </PrimerDataTable>
+            }
+        </div>
+    </div>
+
+    <div class="Box">
+        <div class="Box-header">
+            <h3 class="h4 mb-0">Template Content</h3>
+        </div>
+        <div class="Box-body">
+            <pre class="mb-0">@ViewModel.Detail.Content</pre>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string TemplateId { get; set; } = string.Empty;
+
+    private string? _loadedTemplateId;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (string.Equals(_loadedTemplateId, TemplateId, StringComparison.Ordinal))
+            return;
+
+        _loadedTemplateId = TemplateId;
+        await ViewModel.LoadAsync(TemplateId).ConfigureAwait(false);
+    }
+
+    private static string GetTestHref(string templateId)
+        => $"/templates/test?templateId={Uri.EscapeDataString(templateId)}";
+}
+

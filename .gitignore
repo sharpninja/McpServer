@@ -499,5 +499,6 @@ _site/
 # Local scratch files
 _tmp*
 _temp*
+.version
 
 AGENTS-README-FIRST.yaml
