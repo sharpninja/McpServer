@@ -76,9 +76,10 @@ internal sealed class WebMcpContext
 
     public async Task<McpServerClient> GetRequiredActiveWorkspaceApiClientAsync(CancellationToken cancellationToken = default)
     {
-        // Ensure workspace path is synced from the context VM (may have been set after construction).
+        // Always pull from the singleton source of truth — WorkspaceContextViewModel owns the active workspace.
         var contextPath = _workspaceContext.ActiveWorkspacePath;
-        if (!string.IsNullOrWhiteSpace(contextPath) && string.IsNullOrWhiteSpace(_activeWorkspaceApiClient.WorkspacePath))
+        if (!string.IsNullOrWhiteSpace(contextPath) &&
+            !string.Equals(_activeWorkspaceApiClient.WorkspacePath, contextPath, StringComparison.Ordinal))
         {
             lock (_gate)
             {
