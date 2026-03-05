@@ -1444,65 +1444,76 @@ infrastructure:
     - task: 'Phase 7.4: Requirements - Update FR-MCP-031 with implementation details. Create TR-MCP-WEB-001 (Blazor Server + Primer CSS), TR-MCP-WEB-002 (OIDC integration), TR-MCP-WEB-003 (SSE real-time), TR-MCP-WEB-004 (API adapter pattern). Update TODO.yaml.'
       done: false
   - id: github-integration
-    title: '[IN PROGRESS] GitHub Integration'
+    title: '[DONE] GitHub Integration'
     estimate: 2-3 weeks
     note: '\\\\\\\"Audit 2026-03-01. Core GitHub integration is ~85% complete via gh CLI: 13 REST endpoints on GitHubController (issue CRUD, close/reopen, comments, labels, PRs, bi-directional sync), GitHubCliService (full gh CLI wrapper), IssueTodoSyncService (ISSUE-{n} mapping, label-to-priority). REMAINING GAP: OAuth/Keycloak IdP integration not implemented - currently relies on local gh CLI auth. Needs: GitHub OAuth app registration, Keycloak GitHub IdP setup, per-workspace OAuth token storage.\\\\\\\"'
-    done: false
+    done: true
+    completed: 2026-03-05T14:19:50.8747006Z
     description:
     - '**NEW** Require Github API Token, integrate as a GitHub Application'
     - Enhance GitHub integration capabilities for McpServer.
     - Support GitHub as Keycloak Identity Provider for user authentication.
     - Integrate GitHub OAuth for agent workspace management and PR workflows.
     - Add GitHub Actions monitoring and control features with auditable operations.
-    remaining: Plan published. Executing Phase 2 next (options + wiring), then secure token store, auth path, actions APIs, tests, and FR/TR audit.
+    done-summary: 'Completed phased implementation for GitHub integration scope: added GitHub options/OAuth bootstrap endpoints, encrypted per-workspace token lifecycle store, policy-governed authenticated gh execution path with token override support, GitHub Actions workflow run APIs (list/detail/rerun/cancel), typed client parity updates, unit+integration coverage, and FR/TR/TEST traceability updates with audit evidence. Validation: McpServer.Support.Mcp.Tests 351 passed; McpServer.Client.Tests 122 passed; McpServer.Support.Mcp.IntegrationTests 144 passed (serial run). Reconciliation update (2026-03-05): audited FR/TR/TEST traceability against code, reconciled partial storage extraction compatibility needed for current worktree verification, and re-ran build/unit/integration suites successfully.'
+    remaining: ''
     technical-details:
     - 'Current baseline: gh CLI issue/PR sync is functional and remains the compatibility path.'
     - 'Execution focus: add OAuth bootstrap contract + secure per-workspace token persistence + authenticated gh execution + Actions controls.'
     - 'Verification strategy: unit tests in McpServer.Support.Mcp.Tests and integration tests in McpServer.Support.Mcp.IntegrationTests with deterministic fakes.'
     - 'Requirements discipline: FR/TR/TEST docs and mapping matrix updated during each design decision, not deferred.'
+    functional-requirements:
+    - FR-MCP-032
+    - FR-MCP-063
+    technical-requirements:
+    - TR-MCP-AUTH-002
+    - TR-MCP-GH-001
+    - TR-MCP-GH-002
+    - TR-MCP-GH-003
+    - TR-MCP-GH-004
     implementation-tasks:
     - task: 'Phase 1.1 Baseline contract audit: confirm existing /mcpserver/gh endpoint behavior, error modes, and test coverage across server/client/integration suites.'
       done: true
     - task: 'Phase 1.2 Gap matrix: map remaining github-integration scope to concrete deliverables (OAuth config contract, secure token persistence, authenticated execution path, Actions monitoring/control).'
       done: true
     - task: Phase 2.1 Add GitHub integration options model under Mcp:GitHub (OAuth client/redirect/scopes, token store path, fallback policy flags).
-      done: false
+      done: true
     - task: Phase 2.2 Wire options in Program/McpStdioHost with instance-aware path resolution and safe defaults for local/dev/test runtime.
-      done: false
+      done: true
     - task: Phase 3.1 Implement encrypted per-workspace GitHub token store interface + model contract (get/upsert/delete + metadata).
-      done: false
+      done: true
     - task: Phase 3.2 Implement persistent token store using Data Protection at rest with atomic file writes and workspace-key normalization.
-      done: false
+      done: true
     - task: Phase 3.3 Add API endpoints for token status, set token, and revoke token on /mcpserver/gh/auth/* with workspace-context enforcement.
-      done: false
+      done: true
     - task: Phase 4.1 Add OAuth app contract endpoints (/mcpserver/gh/oauth/config + authorize-url) for operator/app bootstrap and client UX alignment.
-      done: false
+      done: true
     - task: Phase 4.2 Validate OAuth config completeness and expose explicit misconfiguration diagnostics to avoid silent auth failures.
-      done: false
+      done: true
     - task: Phase 5.1 Extend process execution contract to allow per-call GitHub token overrides without breaking existing IProcessRunner call sites.
-      done: false
+      done: true
     - task: Phase 5.2 Update GitHubCliService to resolve workspace token, prefer secure stored token, and fall back to existing gh auth according to policy.
-      done: false
+      done: true
     - task: Phase 5.3 Add telemetry/log signals for auth mode selection (stored token vs fallback) and token-resolution failures.
-      done: false
+      done: true
     - task: Phase 6.1 Extend IGitHubCliService + models for GitHub Actions workflow runs list/detail/rerun/cancel operations.
-      done: false
+      done: true
     - task: Phase 6.2 Implement gh CLI commands + JSON parsing for workflow run APIs with robust null/error handling.
-      done: false
+      done: true
     - task: Phase 6.3 Add REST endpoints under /mcpserver/gh/actions/runs* for list/detail/rerun/cancel with consistent response contracts.
-      done: false
+      done: true
     - task: Phase 6.4 Extend McpServer.Client GitHub models/client methods for actions + auth endpoints to keep typed-client parity.
-      done: false
+      done: true
     - task: 'Phase 7.1 Unit tests (McpServer.Support.Mcp.Tests): token store persistence/encryption semantics, GitHubCliService auth-mode selection, and actions command parsing.'
-      done: false
+      done: true
     - task: 'Phase 7.2 Integration tests (McpServer.Support.Mcp.IntegrationTests): auth endpoints + actions endpoints with service overrides/fakes for deterministic behavior.'
-      done: false
+      done: true
     - task: 'Phase 8.1 Requirements updates: add FR/TR/TEST entries and mapping rows as decisions are finalized; include code coverage references.'
-      done: false
+      done: true
     - task: 'Phase 8.2 Requirements audit before close: verify each newly declared FR/TR is implemented in code and exercised by tests.'
-      done: false
+      done: true
     - task: 'Phase 8.3 Completion: run build + targeted unit/integration tests, update TODO doneSummary/remaining, and finalize session log evidence.'
-      done: false
+      done: true
   medium-priority:
   - id: do-not-speak-tables
     title: '[NEED PLAN] Do Not Speak Tables'

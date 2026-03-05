@@ -331,7 +331,7 @@ public sealed class GitHubCliServiceTests
 
         Assert.True(result.Success);
         await _processRunner.Received(1).RunAsync("gh",
-            Arg.Is<string>(a => a is not null && a.Contains("run rerun 303", StringComparison.Ordinal)),
+            Arg.Is<string>(a => a != null && a.Contains("run rerun 303", StringComparison.Ordinal)),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
@@ -345,7 +345,7 @@ public sealed class GitHubCliServiceTests
 
         Assert.True(result.Success);
         await _processRunner.Received(1).RunAsync("gh",
-            Arg.Is<string>(a => a is not null && a.Contains("run cancel 404", StringComparison.Ordinal)),
+            Arg.Is<string>(a => a != null && a.Contains("run cancel 404", StringComparison.Ordinal)),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
@@ -378,7 +378,7 @@ public sealed class GitHubCliServiceTests
 
         Assert.True(result.Success);
         await _processRunner.Received(1).RunAsync(
-            Arg.Is<ProcessRunRequest>(r => r.FileName == "gh" && r.GitHubTokenOverride == "gho_stored"),
+            Arg.Is<ProcessRunRequest>(r => r != null && r.FileName == "gh" && r.GitHubTokenOverride == "gho_stored"),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 }

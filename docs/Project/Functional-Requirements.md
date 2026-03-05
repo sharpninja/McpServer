@@ -403,3 +403,19 @@ Validation failures return client-visible errors without mutating persisted data
 The server shall provide a real-time workspace change notification system that publishes create/update/delete domain events for workspace mutations (TODOs, session logs, repo files, context sync, tool registry, tool buckets, workspaces, GitHub operations, marker lifecycle, agents, and requirements) over Server-Sent Events at `GET /mcpserver/events`, with optional category filtering.
 
 **Covered by:** `IChangeEventBus`, `ChannelChangeEventBus`, `EventStreamController`, `TodoService`, `SqliteTodoService`, `SessionLogService`, `RepoFileService`, `ToolRegistryService`, `ToolBucketService`, `WorkspaceService`, `WorkspaceController`, `AgentService`, `RequirementsDocumentService`, `IngestionCoordinator`, `GitHubController`, `WorkspaceProcessManager`
+
+## FR-MCP-063 Workspace GitHub OAuth Bootstrap, Token Lifecycle, and Actions Control
+
+The server shall provide workspace-scoped GitHub authentication controls and workflow operations that support OAuth bootstrap and secure token usage without breaking existing gh CLI compatibility.
+
+Functional behavior shall include:
+
+- OAuth bootstrap discovery endpoints exposing configured client ID, redirect URI, authorize endpoint, and scopes.
+- Workspace-scoped token lifecycle endpoints to set, inspect, and revoke GitHub tokens.
+- Authenticated GitHub execution path that prefers stored workspace token credentials and falls back to ambient gh auth only when policy allows it.
+- GitHub Actions workflow run management endpoints for list/detail/rerun/cancel operations.
+- Typed client parity for all new GitHub auth and workflow run endpoints.
+
+**Technical Implementation:** [TR-MCP-GH-001](./Technical-Requirements.md#tr-mcp-gh-001) | [TR-MCP-GH-002](./Technical-Requirements.md#tr-mcp-gh-002) | [TR-MCP-GH-003](./Technical-Requirements.md#tr-mcp-gh-003) | [TR-MCP-GH-004](./Technical-Requirements.md#tr-mcp-gh-004)
+
+**Covered by:** `GitHubIntegrationOptions`, `FileGitHubWorkspaceTokenStore`, `GitHubController`, `GitHubCliService`, `ProcessRunner`, `GitHubClient`

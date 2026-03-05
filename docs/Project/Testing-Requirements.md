@@ -70,3 +70,7 @@
 - TEST-MCP-078: Given `GET /mcpserver/events`, when a client subscribes, then the response content type is `text/event-stream`.
 - TEST-MCP-079: Given `GET /mcpserver/events?category=todo`, when a TODO change event is published, then the stream includes an `event: todo` payload containing the matching entity ID.
 - TEST-MCP-080: Given category filtering on `/mcpserver/events`, when non-matching categories are published, then filtered subscribers do not receive those non-matching domain events.
+- TEST-MCP-081: Given workspace-scoped GitHub auth endpoints, when a token is set via `PUT /mcpserver/gh/auth/token`, then `GET /mcpserver/gh/auth/status` reports `hasStoredToken=true`; when `DELETE /mcpserver/gh/auth/token` is called, the token is removed.
+- TEST-MCP-082: Given GitHub OAuth bootstrap endpoints, when `GET /mcpserver/gh/oauth/config` is called, then effective configuration fields are returned; when OAuth is not fully configured, `GET /mcpserver/gh/oauth/authorize-url` returns 400 with a clear error.
+- TEST-MCP-083: Given `GitHubCliService` with a stored workspace token, when GitHub commands are executed, then `IProcessRunner` receives a `ProcessRunRequest` containing `GitHubTokenOverride`; when no token exists and fallback is enabled, standard CLI execution is used.
+- TEST-MCP-084: Given GitHub Actions workflow operations, when list/detail/rerun/cancel paths are invoked, then gh CLI commands and REST/client contracts for `/mcpserver/gh/actions/runs*` remain consistent and parse expected run/job/step metadata.
