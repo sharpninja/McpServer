@@ -119,7 +119,7 @@ internal sealed class DesktopProcessLauncher
         string? workingDirectory = null,
         Dictionary<string, string>? environmentVariables = null)
     {
-        // Resolve symlinks — CreateProcessWithTokenW may not follow them (e.g. WinGet shims)
+        // Resolve symlinks — CreateProcessAsUser may not follow them (e.g. WinGet shims)
         executablePath = ResolveSymlinks(executablePath);
 
         // Create pipes for stdin, stdout, stderr
@@ -127,11 +127,27 @@ internal sealed class DesktopProcessLauncher
         CreatePipeWithInheritance(out var stdoutRead, out var stdoutWrite, inheritRead: false);
         CreatePipeWithInheritance(out var stderrRead, out var stderrWrite, inheritRead: false);
 
-        IntPtr duplicatedToken = IntPtr.Zero;
+        IntPtr token = IntPtr.Zero;
+        var useCreateProcessAsUser = false;
 
         try
         {
-            duplicatedToken = GetConsoleSessionUserToken();
+            // Try WTSQueryUserToken first — gives a token bound to the console session.
+            // CreateProcessAsUser with this token launches directly in that session
+            // without creating a new logon (avoids STATUS_DLL_INIT_FAILED).
+            var consoleSessionId = NativeMethods.WTSGetActiveConsoleSessionId();
+            if (consoleSessionId != -1 &&
+                NativeMethods.WTSQueryUserToken(consoleSessionId, out var userToken))
+            {
+                _logger.LogDebug("Acquired console session {SessionId} user token via WTSQueryUserToken", consoleSessionId);
+                token = userToken;
+                useCreateProcessAsUser = true;
+            }
+            else
+            {
+                // Fallback: duplicate current process token
+                token = GetConsoleSessionUserToken();
+            }
 
             var si = new NativeStructs.STARTUPINFO
             {
@@ -143,30 +159,53 @@ internal sealed class DesktopProcessLauncher
                 hStdError = stderrWrite
             };
 
-            var creationFlags = NativeConstants.CREATE_UNICODE_ENVIRONMENT | NativeConstants.CREATE_NEW_CONSOLE;
+            var creationFlags = NativeConstants.CREATE_UNICODE_ENVIRONMENT | NativeConstants.CREATE_NO_WINDOW;
             var envBlock = BuildEnvironmentBlock(environmentVariables);
 
             var commandLine = BuildCommandLine(executablePath, arguments);
 
             _logger.LogDebug(
-                "Launching desktop process: {CommandLine} in {WorkingDirectory}",
+                "Launching desktop process ({Method}): {CommandLine} in {WorkingDirectory}",
+                useCreateProcessAsUser ? "CreateProcessAsUser" : "CreateProcessWithTokenW",
                 commandLine, workingDirectory ?? "(default)");
 
-            var success = NativeMethods.CreateProcessWithTokenW(
-                duplicatedToken,
-                NativeConstants.LOGON_WITH_PROFILE,
-                null,
-                commandLine,
-                creationFlags,
-                envBlock,
-                workingDirectory,
-                ref si,
-                out var pi);
+            bool success;
+            NativeStructs.PROCESS_INFORMATION pi;
+
+            if (useCreateProcessAsUser)
+            {
+                success = NativeMethods.CreateProcessAsUser(
+                    token,
+                    null,
+                    commandLine,
+                    IntPtr.Zero,
+                    IntPtr.Zero,
+                    true, // bInheritHandles — required for stdio pipes
+                    creationFlags,
+                    envBlock,
+                    workingDirectory,
+                    ref si,
+                    out pi);
+            }
+            else
+            {
+                success = NativeMethods.CreateProcessWithTokenW(
+                    token,
+                    NativeConstants.LOGON_WITH_PROFILE,
+                    null,
+                    commandLine,
+                    creationFlags,
+                    envBlock,
+                    workingDirectory,
+                    ref si,
+                    out pi);
+            }
 
             if (!success)
             {
                 var errorCode = Marshal.GetLastWin32Error();
-                throw new Win32Exception(errorCode, $"CreateProcessWithTokenW failed for '{executablePath}'.");
+                var method = useCreateProcessAsUser ? "CreateProcessAsUser" : "CreateProcessWithTokenW";
+                throw new Win32Exception(errorCode, $"{method} failed for '{executablePath}'.");
             }
 
             // Close the child-side pipe ends (they're inherited by the child process)
@@ -208,7 +247,7 @@ internal sealed class DesktopProcessLauncher
             CloseIfValid(stdoutWrite);
             CloseIfValid(stderrRead);
             CloseIfValid(stderrWrite);
-            CloseIfValid(duplicatedToken);
+            CloseIfValid(token);
             throw;
         }
     }

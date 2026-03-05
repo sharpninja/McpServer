@@ -32,50 +32,55 @@ public interface IWorkspaceApiClient
     Task<bool> UpdateWorkspacePolicyAsync(UpdateWorkspacePolicyCommand command, CancellationToken ct = default);
 
     /// <summary>
+    /// Creates a new workspace registration.
+    /// </summary>
+    Task<WorkspaceMutationOutcome> CreateWorkspaceAsync(CreateWorkspaceCommand command, CancellationToken ct = default);
+
+    /// <summary>
+    /// Updates an existing workspace registration.
+    /// </summary>
+    Task<WorkspaceMutationOutcome> UpdateWorkspaceAsync(UpdateWorkspaceCommand command, CancellationToken ct = default);
+
+    /// <summary>
+    /// Deletes a workspace registration.
+    /// </summary>
+    Task<WorkspaceMutationOutcome> DeleteWorkspaceAsync(DeleteWorkspaceCommand command, CancellationToken ct = default);
+
+    /// <summary>
+    /// Gets the workspace host process state.
+    /// </summary>
+    Task<WorkspaceProcessState> GetWorkspaceStatusAsync(string workspacePath, CancellationToken ct = default);
+
+    /// <summary>
+    /// Starts the workspace host process.
+    /// </summary>
+    Task<WorkspaceProcessState> StartWorkspaceAsync(string workspacePath, CancellationToken ct = default);
+
+    /// <summary>
+    /// Stops the workspace host process.
+    /// </summary>
+    Task<WorkspaceProcessState> StopWorkspaceAsync(string workspacePath, CancellationToken ct = default);
+
+    /// <summary>
+    /// Probes the health endpoint for the specified workspace host.
+    /// </summary>
+    Task<WorkspaceHealthState> CheckWorkspaceHealthAsync(string workspacePath, CancellationToken ct = default);
+
+    /// <summary>
+    /// Reads the shared global marker prompt template.
+    /// </summary>
+    Task<WorkspaceGlobalPromptState> GetWorkspaceGlobalPromptAsync(CancellationToken ct = default);
+
+    /// <summary>
+    /// Updates the shared global marker prompt template.
+    /// </summary>
+    Task<WorkspaceGlobalPromptState> UpdateWorkspaceGlobalPromptAsync(UpdateWorkspaceGlobalPromptCommand command, CancellationToken ct = default);
+
+    /// <summary>
     /// Runs the Director workspace-initialization workflow for the specified workspace.
     /// </summary>
     /// <param name="workspacePath">Absolute workspace path.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Initialization summary.</returns>
     Task<WorkspaceInitInfo> InitWorkspaceAsync(string workspacePath, CancellationToken ct = default);
-
-    /// <summary>
-    /// Creates/registers a new workspace.
-    /// </summary>
-    Task<WorkspaceMutationOutcome> CreateWorkspaceAsync(CreateWorkspaceCommand command, CancellationToken ct = default);
-
-    /// <summary>
-    /// Updates an existing workspace.
-    /// </summary>
-    Task<WorkspaceMutationOutcome> UpdateWorkspaceAsync(UpdateWorkspaceCommand command, CancellationToken ct = default);
-
-    /// <summary>
-    /// Deletes an existing workspace.
-    /// </summary>
-    Task<WorkspaceMutationOutcome> DeleteWorkspaceAsync(string workspacePath, CancellationToken ct = default);
-
-    /// <summary>
-    /// Starts a workspace host.
-    /// </summary>
-    Task<WorkspaceRuntimeStatus> StartWorkspaceAsync(string workspacePath, CancellationToken ct = default);
-
-    /// <summary>
-    /// Stops a workspace host.
-    /// </summary>
-    Task<WorkspaceRuntimeStatus> StopWorkspaceAsync(string workspacePath, CancellationToken ct = default);
-
-    /// <summary>
-    /// Gets workspace host status.
-    /// </summary>
-    Task<WorkspaceRuntimeStatus> GetWorkspaceStatusAsync(string workspacePath, CancellationToken ct = default);
-
-    /// <summary>
-    /// Gets the global marker prompt template.
-    /// </summary>
-    Task<GlobalPromptInfo> GetGlobalPromptAsync(CancellationToken ct = default);
-
-    /// <summary>
-    /// Updates the global marker prompt template.
-    /// </summary>
-    Task<GlobalPromptInfo> UpdateGlobalPromptAsync(UpdateGlobalPromptCommand command, CancellationToken ct = default);
 }

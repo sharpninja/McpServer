@@ -30,7 +30,8 @@ public interface ITodoPromptService
     /// output lines as they are produced.
     /// </summary>
     /// <param name="id">The TODO item id.</param>
+    /// <param name="additionalPrompt">Optional prompt text from the client (e.g. extension); appended to the template prompt when provided.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Async enumerable of output lines.</returns>
-    IAsyncEnumerable<string> StreamPlanAsync(string id, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<string> StreamPlanAsync(string id, string? additionalPrompt = null, CancellationToken cancellationToken = default);
 }

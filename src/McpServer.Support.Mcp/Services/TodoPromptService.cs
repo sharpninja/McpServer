@@ -68,6 +68,7 @@ public sealed class TodoPromptService(
     /// <inheritdoc />
     public async IAsyncEnumerable<string> StreamPlanAsync(
         string id,
+        string? additionalPrompt = null,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var item = await workspaceAccessor.GetTodoService().GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
@@ -78,6 +79,8 @@ public sealed class TodoPromptService(
         }
 
         var prompt = BuildPrompt(await GetEffectivePlanPromptAsync(cancellationToken).ConfigureAwait(false), item);
+        if (!string.IsNullOrWhiteSpace(additionalPrompt))
+            prompt = prompt + "\n\n--- ADDITIONAL INSTRUCTIONS ---\n" + additionalPrompt.Trim();
         logger.LogInformation("Streaming Copilot plan for TODO {Id} in {Cwd}", id, workspaceAccessor.GetWorkspacePath());
 
         foreach (var line in FormatPromptLines(prompt))
@@ -88,13 +91,19 @@ public sealed class TodoPromptService(
     }
 
     private async Task<string> GetEffectiveStatusPromptAsync(CancellationToken ct) =>
-        promptOptions.CurrentValue.StatusPrompt ?? await todoPromptProvider.GetStatusPromptAsync(ct).ConfigureAwait(false);
+        !string.IsNullOrWhiteSpace(promptOptions.CurrentValue.StatusPrompt)
+            ? promptOptions.CurrentValue.StatusPrompt!
+            : await todoPromptProvider.GetStatusPromptAsync(ct).ConfigureAwait(false);
 
     private async Task<string> GetEffectiveImplementPromptAsync(CancellationToken ct) =>
-        promptOptions.CurrentValue.ImplementPrompt ?? await todoPromptProvider.GetImplementPromptAsync(ct).ConfigureAwait(false);
+        !string.IsNullOrWhiteSpace(promptOptions.CurrentValue.ImplementPrompt)
+            ? promptOptions.CurrentValue.ImplementPrompt!
+            : await todoPromptProvider.GetImplementPromptAsync(ct).ConfigureAwait(false);
 
     private async Task<string> GetEffectivePlanPromptAsync(CancellationToken ct) =>
-        promptOptions.CurrentValue.PlanPrompt ?? await todoPromptProvider.GetPlanPromptAsync(ct).ConfigureAwait(false);
+        !string.IsNullOrWhiteSpace(promptOptions.CurrentValue.PlanPrompt)
+            ? promptOptions.CurrentValue.PlanPrompt!
+            : await todoPromptProvider.GetPlanPromptAsync(ct).ConfigureAwait(false);
 
     private IAsyncEnumerable<string> InvokeCopilotStreaming(string prompt, TimeSpan timeout, CancellationToken cancellationToken)
     {

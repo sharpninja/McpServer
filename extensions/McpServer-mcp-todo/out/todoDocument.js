@@ -79,7 +79,7 @@ class TodoContentProvider {
 }
 exports.TodoContentProvider = TodoContentProvider;
 /**
- * Handles Save: writes go to MCP via PUT /mcp/todo/{id}.
+ * Handles Save: writes go to MCP via PUT /mcpserver/todo/{id}.
  */
 class TodoFileSystemProvider {
     _emitter = new vscode.EventEmitter();

@@ -38,7 +38,7 @@ public sealed class MixedTodoStorageIsolationTests : IDisposable
     {
         var yamlCreate = _yamlStore.CreateAsync(new TodoCreateRequest
         {
-            Id = "MIXED-001",
+            Id = "MIXED-TODO-001",
             Title = "YAML item",
             Section = "mvp-support",
             Priority = "high",
@@ -46,7 +46,7 @@ public sealed class MixedTodoStorageIsolationTests : IDisposable
 
         var sqliteCreate = _sqliteStore.CreateAsync(new TodoCreateRequest
         {
-            Id = "MIXED-001",
+            Id = "MIXED-TODO-001",
             Title = "SQLite item",
             Section = "mvp-app",
             Priority = "low",
@@ -54,8 +54,8 @@ public sealed class MixedTodoStorageIsolationTests : IDisposable
 
         await Task.WhenAll(yamlCreate, sqliteCreate).ConfigureAwait(true);
 
-        var yamlItem = await _yamlStore.GetByIdAsync("MIXED-001").ConfigureAwait(true);
-        var sqliteItem = await _sqliteStore.GetByIdAsync("MIXED-001").ConfigureAwait(true);
+        var yamlItem = await _yamlStore.GetByIdAsync("MIXED-TODO-001").ConfigureAwait(true);
+        var sqliteItem = await _sqliteStore.GetByIdAsync("MIXED-TODO-001").ConfigureAwait(true);
 
         Assert.NotNull(yamlItem);
         Assert.NotNull(sqliteItem);

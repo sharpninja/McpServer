@@ -26,9 +26,15 @@ public sealed partial class UpdateTodoViewModel : ObservableObject
     [ObservableProperty] private bool? _done;
     [ObservableProperty] private string? _estimate;
     [ObservableProperty] private string? _note;
+    [ObservableProperty] private string? _completedDate;
+    [ObservableProperty] private string? _doneSummary;
+    [ObservableProperty] private string? _remaining;
     [ObservableProperty] private IReadOnlyList<string>? _description;
     [ObservableProperty] private IReadOnlyList<string>? _technicalDetails;
     [ObservableProperty] private IReadOnlyList<TodoTaskDetail>? _implementationTasks;
+    [ObservableProperty] private IReadOnlyList<string>? _dependsOn;
+    [ObservableProperty] private IReadOnlyList<string>? _functionalRequirements;
+    [ObservableProperty] private IReadOnlyList<string>? _technicalRequirements;
 
     /// <summary>Update command.</summary>
     public IAsyncRelayCommand UpdateCommand => _updateCommand;
@@ -48,8 +54,14 @@ public sealed partial class UpdateTodoViewModel : ObservableObject
         Done = Done,
         Estimate = Estimate,
         Note = Note,
+        CompletedDate = CompletedDate,
+        DoneSummary = DoneSummary,
+        Remaining = Remaining,
         Description = Description,
         TechnicalDetails = TechnicalDetails,
         ImplementationTasks = ImplementationTasks,
+        DependsOn = DependsOn,
+        FunctionalRequirements = FunctionalRequirements,
+        TechnicalRequirements = TechnicalRequirements,
     };
 }

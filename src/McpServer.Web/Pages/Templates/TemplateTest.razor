@@ -1,6 +1,6 @@
 @page "/templates/test"
 
-@inject ITemplateApiClient TemplateApiClient
+@inject TemplateTestViewModel ViewModel
 
 <PageTitle>Template Test</PageTitle>
 
@@ -19,7 +19,7 @@
         </label>
         <label class="d-flex flex-column">
             <span class="text-small color-fg-muted">Variables JSON</span>
-            <textarea class="form-control" name="variables" rows="6">@_effectiveVariablesJson</textarea>
+            <textarea class="form-control" name="variables" rows="6">@EffectiveVariablesJson</textarea>
         </label>
         <div>
             <button class="btn btn-primary" type="submit">Run Test</button>
@@ -27,26 +27,26 @@
     </div>
 </form>
 
-@if (!string.IsNullOrWhiteSpace(_error))
+@if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
 {
-    <PrimerFlash Variant="danger" Title="Template test failed">@_error</PrimerFlash>
+    <PrimerFlash Variant="danger" Title="Template test failed">@ViewModel.ErrorMessage</PrimerFlash>
 }
-else if (_loading)
+else if (ViewModel.IsLoading)
 {
     <p class="color-fg-muted">Running template test...</p>
 }
-else if (_result is null)
+else if (ViewModel.Result is null)
 {
     <PrimerBlankslate Heading="No test executed"
                       Description="Provide a template ID or inline template and submit to run a test render." />
 }
 else
 {
-    <PrimerFlash Variant="@(_result.Success ? "success" : "danger")"
-                Title="@(_result.Success ? "Template rendered" : "Template test failed")">
-        @if (!string.IsNullOrWhiteSpace(_result.Error))
+    <PrimerFlash Variant="@(ViewModel.Result.Success ? "success" : "danger")"
+                Title="@(ViewModel.Result.Success ? "Template rendered" : "Template test failed")">
+        @if (!string.IsNullOrWhiteSpace(ViewModel.Result.Error))
         {
-            <span>@_result.Error</span>
+            <span>@ViewModel.Result.Error</span>
         }
         else
         {
@@ -54,13 +54,13 @@ else
         }
     </PrimerFlash>
 
-    @if (_result.MissingVariables is { Count: > 0 })
+    @if (ViewModel.Result.MissingVariables is { Count: > 0 })
     {
         <div class="Box mb-3">
             <div class="Box-header"><h3 class="h4 mb-0">Missing Variables</h3></div>
             <div class="Box-body">
                 <ul class="mb-0">
-                    @foreach (var variable in _result.MissingVariables)
+                    @foreach (var variable in ViewModel.Result.MissingVariables)
                     {
                         <li><code>@variable</code></li>
                     }
@@ -72,7 +72,7 @@ else
     <div class="Box">
         <div class="Box-header"><h3 class="h4 mb-0">Rendered Content</h3></div>
         <div class="Box-body">
-            <pre class="mb-0">@(_result.RenderedContent ?? string.Empty)</pre>
+            <pre class="mb-0">@(ViewModel.Result.RenderedContent ?? string.Empty)</pre>
         </div>
     </div>
 }
@@ -87,51 +87,30 @@ else
     [SupplyParameterFromQuery(Name = "variables")]
     public string? VariablesJson { get; set; }
 
-    private TemplateTestOutcome? _result;
-    private bool _loading;
-    private string? _error;
-    private string _effectiveVariablesJson = "{}";
+    private string EffectiveVariablesJson { get; set; } = "{}";
     private string? _lastRequestKey;
 
     protected override async Task OnParametersSetAsync()
     {
-        _effectiveVariablesJson = string.IsNullOrWhiteSpace(VariablesJson) ? "{}" : VariablesJson;
+        EffectiveVariablesJson = string.IsNullOrWhiteSpace(VariablesJson) ? "{}" : VariablesJson;
 
         if (string.IsNullOrWhiteSpace(TemplateId) && string.IsNullOrWhiteSpace(InlineTemplate))
         {
-            _result = null;
-            _error = null;
-            _loading = false;
+            ViewModel.Result = null;
+            ViewModel.ErrorMessage = null;
             _lastRequestKey = null;
             return;
         }
 
-        var requestKey = $"{TemplateId}|{InlineTemplate}|{_effectiveVariablesJson}";
+        var requestKey = $"{TemplateId}|{InlineTemplate}|{EffectiveVariablesJson}";
         if (string.Equals(_lastRequestKey, requestKey, StringComparison.Ordinal))
             return;
 
         _lastRequestKey = requestKey;
-        _loading = true;
-        _error = null;
-        _result = null;
-
-        try
-        {
-            _result = await TemplateApiClient.TestTemplateAsync(new TestTemplateQuery
-            {
-                TemplateId = string.IsNullOrWhiteSpace(TemplateId) ? null : TemplateId,
-                InlineTemplate = string.IsNullOrWhiteSpace(InlineTemplate) ? null : InlineTemplate,
-                VariablesJson = _effectiveVariablesJson,
-            }).ConfigureAwait(false);
-        }
-        catch (Exception ex)
-        {
-            _error = ex.Message;
-        }
-        finally
-        {
-            _loading = false;
-        }
+        ViewModel.TemplateId = TemplateId;
+        ViewModel.InlineTemplate = InlineTemplate;
+        ViewModel.VariablesJson = EffectiveVariablesJson;
+        await ViewModel.RunAsync().ConfigureAwait(false);
     }
 }
 

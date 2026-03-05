@@ -14,7 +14,8 @@ public sealed record AgentPoolRuntimeAgentSnapshot(
     string Lifecycle,
     string? SessionId,
     string? ActiveJobId,
-    int ActiveVoiceLinks);
+    int ActiveVoiceLinks,
+    string? WorkspacePath);
 
 /// <summary>Query to list pooled queue items.</summary>
 public sealed record ListAgentPoolQueueQuery : IQuery<ListAgentPoolQueueResult>;
@@ -28,7 +29,8 @@ public sealed record AgentPoolQueueItemSnapshot(
     string? AgentName,
     string Status,
     string? Context,
-    string? RenderedPrompt);
+    string? RenderedPrompt,
+    string? WorkspacePath);
 
 /// <summary>Command to start a pooled runtime agent.</summary>
 public sealed record StartAgentPoolAgentCommand(string AgentName) : ICommand<AgentPoolMutationOutcome>;

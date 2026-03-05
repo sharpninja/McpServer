@@ -8,12 +8,26 @@ Load this file when you need to create, update, or query session logs.
 - `GET /mcpserver/sessionlog?limit=N&offset=M` — query recent session logs
 - `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog` — stream reasoning dialog
 
+## Naming Conventions (Normative)
+
+- `sessionId` must match `<Agent>-<yyyyMMddTHHmmssZ>-<suffix>`.
+- `sessionId` regex: `^[A-Z][A-Za-z0-9]*-\d{8}T\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$`
+- `sessionId` must start with the exact `sourceType`/`agent` prefix (case-sensitive).
+- `requestId` must match `req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal>`.
+- `requestId` regex: `^req-\d{8}T\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$`
+- Valid IDs:
+  - `sessionId`: `Copilot-20260304T113901Z-namingconv`
+  - `requestId`: `req-20260304T113901Z-plan-namingconventions-001`
+- Invalid IDs:
+  - `sessionId`: `copilot-20260304T113901Z-namingconv`, `Copilot-2026-03-04-namingconv`
+  - `requestId`: `req-plan-namingconventions-001`, `request-20260304T113901Z-task-01`
+
 ## SessionLog (POST body)
 
 ```json
 {
   "sourceType": "string — YOUR agent name (e.g. 'Copilot', 'Cline', 'Cursor')",
-  "sessionId": "string — stable session ID prefixed with agent name (e.g. 'Copilot-abc123')",
+  "sessionId": "string — required format <Agent>-<yyyyMMddTHHmmssZ>-<suffix> (e.g. 'Copilot-20260304T113901Z-feature-audit')",
   "title": "string — brief session summary, keep updated",
   "model": "string — AI model name (e.g. 'claude-sonnet-4-20250514')",
   "started": "string — ISO 8601 timestamp when session began",
@@ -27,7 +41,7 @@ Load this file when you need to create, update, or query session logs.
 
 ```json
 {
-  "requestId": "string — unique ID for this request within the session",
+  "requestId": "string — required format req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal>",
   "timestamp": "string — ISO 8601",
   "queryText": "string — full user query or task description",
   "queryTitle": "string — short summary of the query",

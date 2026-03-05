@@ -1,30 +1,45 @@
 using McpServer.Client;
+using McpServer.UI.Core.ViewModels;
 
 namespace McpServer.Web;
 
 internal sealed class WebMcpContext
 {
     private readonly object _gate = new();
+    private readonly WorkspaceContextViewModel _workspaceContext;
     private readonly McpServerClient _controlApiClient;
     private readonly McpServerClient _activeWorkspaceApiClient;
     private string? _apiKey;
 
-    public WebMcpContext(IConfiguration configuration)
+    public WebMcpContext(IConfiguration configuration, WorkspaceContextViewModel workspaceContext)
     {
+        _workspaceContext = workspaceContext;
         var baseUrl = configuration["McpServer:BaseUrl"] ?? "http://localhost:7147";
         _apiKey = configuration["McpServer:ApiKey"];
-        ActiveWorkspacePath = NormalizeWorkspacePath(configuration["McpServer:WorkspacePath"]);
+        var configuredWorkspacePath = NormalizeWorkspacePath(configuration["McpServer:WorkspacePath"]);
+        ActiveWorkspacePath = configuredWorkspacePath;
         BaseUrl = new Uri(baseUrl, UriKind.Absolute);
 
         _controlApiClient = CreateTypedClient(BaseUrl, _apiKey, workspacePath: null);
         _activeWorkspaceApiClient = CreateTypedClient(BaseUrl, _apiKey, ActiveWorkspacePath);
+
+        if (string.IsNullOrWhiteSpace(_workspaceContext.ActiveWorkspacePath))
+            _workspaceContext.ActiveWorkspacePath = configuredWorkspacePath;
+        else
+            TrySetActiveWorkspace(_workspaceContext.ActiveWorkspacePath);
+
+        _workspaceContext.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(WorkspaceContextViewModel.ActiveWorkspacePath))
+                TrySetActiveWorkspace(_workspaceContext.ActiveWorkspacePath, updateViewModel: false);
+        };
     }
 
     public Uri BaseUrl { get; }
 
     public string? ActiveWorkspacePath { get; private set; }
 
-    public bool TrySetActiveWorkspace(string? workspacePath)
+    public bool TrySetActiveWorkspace(string? workspacePath, bool updateViewModel = true)
     {
         var normalizedWorkspacePath = NormalizeWorkspacePath(workspacePath);
 
@@ -32,8 +47,15 @@ internal sealed class WebMcpContext
         {
             ActiveWorkspacePath = normalizedWorkspacePath;
             _activeWorkspaceApiClient.WorkspacePath = normalizedWorkspacePath ?? string.Empty;
-            return true;
         }
+
+        if (updateViewModel &&
+            !string.Equals(_workspaceContext.ActiveWorkspacePath, normalizedWorkspacePath, StringComparison.Ordinal))
+        {
+            _workspaceContext.ActiveWorkspacePath = normalizedWorkspacePath;
+        }
+
+        return true;
     }
 
     public Task<McpServerClient> GetApiClientAsync(CancellationToken cancellationToken = default)

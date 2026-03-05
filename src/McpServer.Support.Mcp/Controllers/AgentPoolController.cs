@@ -26,11 +26,11 @@ public sealed class AgentPoolController : ControllerBase
     }
 
     /// <summary>
-    /// Returns pooled runtime state for all configured agents, optionally filtered by workspace.
+    /// Returns pooled runtime state for the active workspace.
     /// </summary>
     [HttpGet("agents")]
     public async Task<ActionResult<IReadOnlyList<AgentPoolAgentStatusDto>>> GetAgentsAsync([FromQuery] string? workspace, CancellationToken cancellationToken)
-        => Ok(await _agentPoolService.GetAgentsAsync(workspace ?? _workspaceContext.WorkspacePath, cancellationToken).ConfigureAwait(false));
+        => Ok(await _agentPoolService.GetAgentsAsync(_workspaceContext.WorkspacePath, cancellationToken).ConfigureAwait(false));
 
     /// <summary>
     /// Starts a pooled agent.
@@ -88,7 +88,8 @@ public sealed class AgentPoolController : ControllerBase
         [FromBody] AgentPoolOneShotRequest request,
         CancellationToken cancellationToken)
     {
-        var result = await _agentPoolService.EnqueueOneShotAsync(request, cancellationToken).ConfigureAwait(false);
+        var scopedRequest = request with { WorkspacePath = _workspaceContext.WorkspacePath };
+        var result = await _agentPoolService.EnqueueOneShotAsync(scopedRequest, cancellationToken).ConfigureAwait(false);
         return result.Success ? Ok(result) : BadRequest(result);
     }
 
@@ -128,7 +129,8 @@ public sealed class AgentPoolController : ControllerBase
         [FromBody] AgentPoolOneShotRequest request,
         CancellationToken cancellationToken)
     {
-        var result = await _agentPoolService.ResolvePromptAsync(request, cancellationToken).ConfigureAwait(false);
+        var scopedRequest = request with { WorkspacePath = _workspaceContext.WorkspacePath };
+        var result = await _agentPoolService.ResolvePromptAsync(scopedRequest, cancellationToken).ConfigureAwait(false);
         return result.Success ? Ok(result) : BadRequest(result);
     }
 

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
 using McpServer.Support.Mcp.Models;
@@ -22,7 +23,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     [Fact]
     public async Task WhenPostingValidSessionThenReturns201Created()
     {
-        var dto = CreateTestDto("Cursor", $"int-{Guid.NewGuid():N}");
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", $"int-{Guid.NewGuid():N}"));
 
         var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto).ConfigureAwait(true);
 
@@ -33,7 +34,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     [Fact]
     public async Task WhenPostingWithoutSourceTypeThenReturns400()
     {
-        var dto = new UnifiedSessionLogDto { SourceType = null, SessionId = "test" };
+        var dto = new UnifiedSessionLogDto { SourceType = null, SessionId = BuildSessionId("Cursor", "test") };
 
         var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto).ConfigureAwait(true);
 
@@ -54,7 +55,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     public async Task WhenGettingWithNoParamsThenReturns200WithArray()
     {
         // Submit a session first so there's data
-        var dto = CreateTestDto("Copilot", $"get-{Guid.NewGuid():N}");
+        var dto = CreateTestDto("Copilot", BuildSessionId("Copilot", $"get-{Guid.NewGuid():N}"));
         await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto).ConfigureAwait(true);
 
         var response = await _client.GetAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative)).ConfigureAwait(true);
@@ -69,8 +70,8 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     public async Task WhenGettingByAgentThenReturnsOnlyMatchingSessions()
     {
         var id = Guid.NewGuid().ToString("N");
-        await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), CreateTestDto("CursorFilter", $"f-{id}")).ConfigureAwait(true);
-        await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), CreateTestDto("CopilotFilter", $"f2-{id}")).ConfigureAwait(true);
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), CreateTestDto("CursorFilter", BuildSessionId("CursorFilter", $"f-{id}"))).ConfigureAwait(true);
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), CreateTestDto("CopilotFilter", BuildSessionId("CopilotFilter", $"f2-{id}"))).ConfigureAwait(true);
 
         var response = await _client.GetAsync(new Uri("/mcpserver/sessionlog?agent=CursorFilter", UriKind.Relative)).ConfigureAwait(true);
 
@@ -83,7 +84,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     [Fact]
     public async Task WhenPostingSameSessionTwiceThenSessionIsUpserted()
     {
-        var sessionId = $"upsert-{Guid.NewGuid():N}";
+        var sessionId = BuildSessionId("Cursor", $"upsert-{Guid.NewGuid():N}");
         var dto1 = CreateTestDto("Cursor", sessionId);
         dto1.Title = "Original";
         await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto1).ConfigureAwait(true);
@@ -105,7 +106,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     [Fact]
     public async Task WhenAppendingDialogToValidEntryThenReturns200()
     {
-        var sessionId = $"dialog-{Guid.NewGuid():N}";
+        var sessionId = BuildSessionId("Cursor", $"dialog-{Guid.NewGuid():N}");
         var dto = CreateTestDto("Cursor", sessionId);
         await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto).ConfigureAwait(true);
 
@@ -115,7 +116,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         };
 
         var response = await _client.PostAsJsonAsync(
-            new Uri($"/mcpserver/sessionlog/Cursor/{sessionId}/req-{sessionId}-1/dialog", UriKind.Relative), items).ConfigureAwait(true);
+            new Uri($"/mcpserver/sessionlog/Cursor/{sessionId}/req-20260212T100100Z-entry-001/dialog", UriKind.Relative), items).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -129,7 +130,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         };
 
         var response = await _client.PostAsJsonAsync(
-            new Uri("/mcpserver/sessionlog/Cursor/nonexistent/req-1/dialog", UriKind.Relative), items).ConfigureAwait(true);
+            new Uri("/mcpserver/sessionlog/Cursor/Cursor-20260304T113901Z-nonexistent/req-20260304T113901Z-001/dialog", UriKind.Relative), items).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -140,7 +141,38 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         var items = Array.Empty<ProcessingDialogItemDto>();
 
         var response = await _client.PostAsJsonAsync(
-            new Uri("/mcpserver/sessionlog/Cursor/any/req-1/dialog", UriKind.Relative), items).ConfigureAwait(true);
+            new Uri("/mcpserver/sessionlog/Cursor/Cursor-20260304T113901Z-any/req-20260304T113901Z-001/dialog", UriKind.Relative), items).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task WhenPostingWithInvalidSessionIdFormatThenReturns400()
+    {
+        var dto = CreateTestDto("Cursor", "cursor-invalid");
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task WhenPostingWithInvalidRequestIdFormatThenReturns400()
+    {
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "bad-request-id"));
+        dto.Entries![0].RequestId = "req-bad";
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task WhenAppendingDialogWithInvalidIdsThenReturns400()
+    {
+        var items = new[]
+        {
+            new ProcessingDialogItemDto { Role = "model", Content = "test" }
+        };
+
+        var response = await _client.PostAsJsonAsync(
+            new Uri("/mcpserver/sessionlog/Cursor/not-a-session/req-1/dialog", UriKind.Relative), items).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -161,7 +193,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
             [
                 new UnifiedRequestEntryDto
                 {
-                    RequestId = $"req-{sessionId}-1",
+                    RequestId = "req-20260212T100100Z-entry-001",
                     Timestamp = "2026-02-12T10:01:00Z",
                     QueryText = "Test query",
                     Response = "Test response",
@@ -169,5 +201,17 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
                 }
             ]
         };
+    }
+
+    private static string BuildSessionId(string agent, string suffix)
+    {
+        var normalized = new string((suffix ?? string.Empty)
+            .ToLowerInvariant()
+            .Select(c => char.IsLetterOrDigit(c) ? c : '-')
+            .ToArray())
+            .Trim('-');
+        if (string.IsNullOrWhiteSpace(normalized))
+            normalized = "session";
+        return $"{agent}-20260304T113901Z-{normalized}";
     }
 }

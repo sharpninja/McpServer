@@ -177,7 +177,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                     new VoiceSessionCreateRequest
                     {
                         AgentName = state.Definition.AgentName,
-                        DeviceId = $"agent-pool-{state.Definition.AgentName}@{Path.GetFileName(effectiveWorkspace)}",
+                        DeviceId = BuildPooledDeviceId(state.Definition.AgentName, effectiveWorkspace),
                         ClientName = "agent-pool",
                         WorkspacePath = effectiveWorkspace,
                         AgentPath = state.Definition.AgentPath,
@@ -1073,6 +1073,20 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
         }
 
         return rendered;
+    }
+
+    /// <summary>
+    /// Builds a deterministic per-workspace pooled device identifier.
+    /// Prevents cross-workspace collisions when folder names are identical.
+    /// </summary>
+    private static string BuildPooledDeviceId(string agentName, string workspacePath)
+    {
+        var normalizedWorkspace = Path.GetFullPath(workspacePath)
+            .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        var workspaceHash = Convert.ToHexString(
+            System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(normalizedWorkspace)))
+            .ToLowerInvariant()[..12];
+        return $"agent-pool-{agentName}@{workspaceHash}";
     }
 
     private void PublishNotification(AgentPoolNotificationEventDto notification)

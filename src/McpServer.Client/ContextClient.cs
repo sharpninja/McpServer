@@ -48,6 +48,36 @@ public sealed class ContextClient : McpClientBase
     {
         return await GetAsync<ContextSourcesResult>("mcpserver/context/sources", cancellationToken).ConfigureAwait(false);
     }
+
+    /// <summary>Get GraphRAG status for the active workspace.</summary>
+    public async Task<GraphRagStatusResult> GraphRagStatusAsync(CancellationToken cancellationToken = default)
+    {
+        return await GetAsync<GraphRagStatusResult>("mcpserver/graphrag/status", cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>Trigger GraphRAG indexing for the active workspace.</summary>
+    public async Task<GraphRagStatusResult> GraphRagIndexAsync(bool force = false, CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<GraphRagStatusResult>("mcpserver/graphrag/index", new GraphRagIndexRequest { Force = force }, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>Run a GraphRAG query for the active workspace.</summary>
+    public async Task<GraphRagQueryResult> GraphRagQueryAsync(
+        string query,
+        string? mode = null,
+        int? maxChunks = null,
+        bool includeContextChunks = true,
+        CancellationToken cancellationToken = default)
+    {
+        var request = new GraphRagQueryRequest
+        {
+            Query = query,
+            Mode = mode,
+            MaxChunks = maxChunks,
+            IncludeContextChunks = includeContextChunks
+        };
+        return await PostAsync<GraphRagQueryResult>("mcpserver/graphrag/query", request, cancellationToken).ConfigureAwait(false);
+    }
 }
 
 /// <summary>Result of a <see cref="ContextClient.RebuildIndexAsync"/> operation.</summary>

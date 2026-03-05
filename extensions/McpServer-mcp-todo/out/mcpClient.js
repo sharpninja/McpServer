@@ -31,6 +31,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getMcpBaseUrl = getMcpBaseUrl;
 exports.getApiKey = getApiKey;
 exports.clearApiKeyCache = clearApiKeyCache;
+exports.getWorkspacePath = getWorkspacePath;
 exports.fetchTodoList = fetchTodoList;
 exports.fetchTodoById = fetchTodoById;
 exports.updateTodo = updateTodo;
@@ -93,13 +94,33 @@ function getApiKey() {
 function clearApiKeyCache() {
     _cachedApiKey = null;
 }
-/** Builds common request options with API key header. */
+/**
+ * Returns the workspace root path (folder containing AGENTS-README-FIRST.yaml, or first folder).
+ * Used as X-Workspace-Path so the server resolves the correct workspace and prompt templates.
+ */
+function getWorkspacePath() {
+    const folders = vscode.workspace.workspaceFolders;
+    if (!folders?.length)
+        return null;
+    for (const folder of folders) {
+        const markerPath = path.join(folder.uri.fsPath, markerFileName);
+        if (fs.existsSync(markerPath))
+            return folder.uri.fsPath;
+    }
+    return folders[0].uri.fsPath;
+}
+/** Builds common request options with API key and workspace headers. */
 function buildRequestOpts(url, opts) {
     const isHttps = url.protocol === 'https:';
     const headers = { Accept: opts.accept ?? 'application/json' };
     const apiKey = getApiKey();
     if (apiKey)
         headers['X-Api-Key'] = apiKey;
+    // When API key is present, server resolves workspace via Tier 2 (key → workspace). Only send
+    // X-Workspace-Path when we have no key so Tier 1 path lookup is used (avoids path casing mismatch).
+    const workspacePath = getWorkspacePath();
+    if (workspacePath && !apiKey)
+        headers['X-Workspace-Path'] = workspacePath;
     if (opts.body !== undefined) {
         headers['Content-Type'] = 'application/json';
         headers['Content-Length'] = Buffer.byteLength(opts.body, 'utf8');
@@ -163,7 +184,7 @@ function assertSuccess(body, statusCode, label) {
 }
 // ─── Public API ──────────────────────────────────────────────────────────────
 /**
- * GET /mcp/todo with optional query params. Returns items and totalCount.
+ * GET /mcpserver/todo with optional query params. Returns items and totalCount.
  */
 function fetchTodoList(options) {
     const params = new URLSearchParams();
@@ -178,7 +199,7 @@ function fetchTodoList(options) {
     if (options?.done !== undefined)
         params.set('done', String(options.done));
     const qs = params.toString();
-    const urlPath = qs ? `/mcp/todo?${qs}` : '/mcp/todo';
+    const urlPath = qs ? `/mcpserver/todo?${qs}` : '/mcpserver/todo';
     return jsonRequest('GET', urlPath, undefined, (body, status) => {
         assertSuccess(body, status, 'fetchTodoList');
         const data = JSON.parse(body);
@@ -188,10 +209,10 @@ function fetchTodoList(options) {
     }, 'fetchTodoList');
 }
 /**
- * GET /mcp/todo/{id}. Returns a single todo or null if not found.
+ * GET /mcpserver/todo/{id}. Returns a single todo or null if not found.
  */
 function fetchTodoById(id) {
-    const urlPath = `/mcp/todo/${encodeURIComponent(id)}`;
+    const urlPath = `/mcpserver/todo/${encodeURIComponent(id)}`;
     return jsonRequest('GET', urlPath, undefined, (body, status) => {
         if (status === 404)
             return null;
@@ -219,10 +240,10 @@ function fetchTodoById(id) {
     }, 'fetchTodoById');
 }
 /**
- * PUT /mcp/todo/{id}. Updates an existing todo. Body fields are optional.
+ * PUT /mcpserver/todo/{id}. Updates an existing todo. Body fields are optional.
  */
 function updateTodo(id, body) {
-    const urlPath = `/mcp/todo/${encodeURIComponent(id)}`;
+    const urlPath = `/mcpserver/todo/${encodeURIComponent(id)}`;
     const payload = JSON.stringify({
         Title: body.title,
         Priority: body.priority,
@@ -315,25 +336,51 @@ function streamSSE(urlPath, onLine, signal) {
         req.end();
     });
 }
+/** Parse one SSE line: if it's "data:" or "data: ...", return payload; if "event: done" return null (signal done); otherwise undefined. */
+function parseSseLine(trimmed) {
+    if (trimmed.startsWith('event: done'))
+        return null;
+    if (trimmed.startsWith('data:')) {
+        const payload = trimmed.slice(5).replace(/^\s+/, '');
+        return payload;
+    }
+    return undefined;
+}
 function handleSseStream(res, onLine, resolve, reject) {
     let buffer = '';
     res.setEncoding('utf8');
+    function processLine(trimmed) {
+        const result = parseSseLine(trimmed);
+        if (result === null)
+            return true; // event: done
+        if (result !== undefined)
+            onLine(result);
+        return false;
+    }
     res.on('data', (chunk) => {
         buffer += chunk;
         const parts = buffer.split('\n');
         buffer = parts.pop() ?? '';
         for (const part of parts) {
             const trimmed = part.trim();
-            if (trimmed.startsWith('event: done')) {
+            if (processLine(trimmed)) {
                 res.destroy();
                 resolve();
                 return;
             }
-            if (trimmed.startsWith('data: '))
-                onLine(trimmed.substring(6));
         }
     });
-    res.on('end', resolve);
+    res.on('end', () => {
+        // Flush remaining buffer so last line isn't dropped (e.g. "data: last" without trailing \n\n)
+        if (buffer.length > 0) {
+            const trimmed = buffer.trim();
+            if (processLine(trimmed)) {
+                resolve();
+                return;
+            }
+        }
+        resolve();
+    });
     res.on('error', reject);
 }
 // ─── Server lifecycle ────────────────────────────────────────────────────────

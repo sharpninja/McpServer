@@ -135,6 +135,106 @@ public sealed class AgentPoolServiceTests
         _ = await WaitForJobStatusAsync(service, first.JobId!, "completed").ConfigureAwait(true);
     }
 
+    [Fact]
+    public async Task StartAgentAsync_WithWorkspacePath_CreatesWorkspaceScopedInstance()
+    {
+        using var service = CreateService(out _);
+
+        var result = await service.StartAgentAsync("planner", @"C:\workspace-a").ConfigureAwait(true);
+        Assert.True(result.Success);
+
+        var agents = await service.GetAgentsAsync(@"C:\workspace-a").ConfigureAwait(true);
+        Assert.Single(agents);
+        Assert.Equal("planner", agents[0].AgentName);
+        Assert.Equal(@"C:\workspace-a", agents[0].WorkspacePath);
+    }
+
+    [Fact]
+    public async Task GetAgentsAsync_FiltersByWorkspace()
+    {
+        using var service = CreateService(out _);
+
+        await service.StartAgentAsync("planner", @"C:\ws-a").ConfigureAwait(true);
+        await service.StartAgentAsync("planner", @"C:\ws-b").ConfigureAwait(true);
+
+        var all = await service.GetAgentsAsync().ConfigureAwait(true);
+        Assert.Equal(2, all.Count);
+
+        var wsA = await service.GetAgentsAsync(@"C:\ws-a").ConfigureAwait(true);
+        Assert.Single(wsA);
+        Assert.Equal(@"C:\ws-a", wsA[0].WorkspacePath);
+
+        var wsB = await service.GetAgentsAsync(@"C:\ws-b").ConfigureAwait(true);
+        Assert.Single(wsB);
+        Assert.Equal(@"C:\ws-b", wsB[0].WorkspacePath);
+    }
+
+    [Fact]
+    public async Task StopAgentAsync_StopsOnlyInSpecifiedWorkspace()
+    {
+        using var service = CreateService(out _);
+
+        await service.StartAgentAsync("planner", @"C:\ws-a").ConfigureAwait(true);
+        await service.StartAgentAsync("planner", @"C:\ws-b").ConfigureAwait(true);
+
+        var stop = await service.StopAgentAsync("planner", @"C:\ws-a").ConfigureAwait(true);
+        Assert.True(stop.Success);
+
+        var wsA = await service.GetAgentsAsync(@"C:\ws-a").ConfigureAwait(true);
+        Assert.Single(wsA);
+        Assert.Equal("offline", wsA[0].Lifecycle);
+
+        var wsB = await service.GetAgentsAsync(@"C:\ws-b").ConfigureAwait(true);
+        Assert.Single(wsB);
+        Assert.Equal("idle", wsB[0].Lifecycle);
+    }
+
+    [Fact]
+    public async Task SeedWorkspaceAgentsAsync_CreatesInstancesForAllDefinitions()
+    {
+        using var service = CreateService(out _);
+
+        await service.SeedWorkspaceAgentsAsync(@"C:\my-workspace").ConfigureAwait(true);
+
+        var agents = await service.GetAgentsAsync(@"C:\my-workspace").ConfigureAwait(true);
+        Assert.Single(agents);
+        Assert.Equal("planner", agents[0].AgentName);
+        Assert.Equal(@"C:\my-workspace", agents[0].WorkspacePath);
+        Assert.Equal("idle", agents[0].Lifecycle);
+    }
+
+    [Fact]
+    public async Task ConnectInteractiveAsync_RejectsWrongWorkspace()
+    {
+        using var service = CreateService(out _);
+
+        await service.StartAgentAsync("planner", @"C:\ws-a").ConfigureAwait(true);
+
+        var result = await service.ConnectInteractiveAsync("planner", @"C:\ws-nonexistent").ConfigureAwait(true);
+        Assert.True(result.Success);
+
+        var agents = await service.GetAgentsAsync(@"C:\ws-nonexistent").ConfigureAwait(true);
+        Assert.Single(agents);
+    }
+
+    [Fact]
+    public async Task EnqueueOneShotAsync_IncludesWorkspaceInQueueItem()
+    {
+        using var service = CreateService(out _);
+
+        var enqueue = await service.EnqueueOneShotAsync(new AgentPoolOneShotRequest
+        {
+            Context = AgentPoolOneShotContext.AdHoc,
+            PromptText = "Test prompt",
+            WorkspacePath = @"C:\ws-test",
+        }).ConfigureAwait(true);
+
+        Assert.True(enqueue.Success);
+
+        var completed = await WaitForJobStatusAsync(service, enqueue.JobId!, "completed").ConfigureAwait(true);
+        Assert.Equal(@"C:\ws-test", completed.WorkspacePath);
+    }
+
     private static VoiceTurnResponse CreateCompletedTurn(string sessionId)
     {
         return new VoiceTurnResponse

@@ -1,8 +1,11 @@
+using System.Linq;
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
+using NSubstitute;
 using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Services;
@@ -11,6 +14,7 @@ namespace McpServer.Support.Mcp.Tests.Services;
 public sealed class SessionLogServiceTests : IDisposable
 {
     private readonly McpDbContext _db;
+    private readonly IChangeEventBus _eventBus;
     private readonly SessionLogService _sut;
 
     public SessionLogServiceTests()
@@ -20,7 +24,8 @@ public sealed class SessionLogServiceTests : IDisposable
             .Options;
         _db = new McpDbContext(options);
         _db.Database.EnsureCreated();
-        _sut = new SessionLogService(_db, NullLogger<SessionLogService>.Instance);
+        _eventBus = Substitute.For<IChangeEventBus>();
+        _sut = new SessionLogService(_db, NullLogger<SessionLogService>.Instance, _eventBus);
     }
 
     public void Dispose() => _db.Dispose();
@@ -28,25 +33,31 @@ public sealed class SessionLogServiceTests : IDisposable
     [Fact]
     public async Task WhenSubmittingNewSessionThenSessionIsCreated()
     {
-        var dto = CreateTestDto("Cursor", "session-1");
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "session-1"));
 
         var id = await _sut.SubmitAsync(dto).ConfigureAwait(true);
 
         Assert.True(id > 0);
         var stored = await _db.SessionLogs.Include(s => s.Entries).FirstAsync(s => s.Id == id).ConfigureAwait(true);
         Assert.Equal("Cursor", stored.SourceType);
-        Assert.Equal("session-1", stored.SessionId);
+        Assert.Equal(BuildSessionId("Cursor", "session-1"), stored.SessionId);
         Assert.Equal("Test Session", stored.Title);
         Assert.Single(stored.Entries);
+        await _eventBus.Received(1).PublishAsync(
+            Arg.Is<ChangeEvent>(e => e != null
+                                     && e.Category == ChangeEventCategories.SessionLog
+                                     && e.Action == ChangeEventActions.Created
+                                     && e.EntityId == $"Cursor/{BuildSessionId("Cursor", "session-1")}"),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     [Fact]
     public async Task WhenSubmittingSameSessionTwiceThenSessionIsUpdated()
     {
-        var dto1 = CreateTestDto("Cursor", "session-dup", title: "Original");
+        var dto1 = CreateTestDto("Cursor", BuildSessionId("Cursor", "session-dup"), title: "Original");
         await _sut.SubmitAsync(dto1).ConfigureAwait(true);
 
-        var dto2 = CreateTestDto("Cursor", "session-dup", title: "Updated");
+        var dto2 = CreateTestDto("Cursor", BuildSessionId("Cursor", "session-dup"), title: "Updated");
         dto2.Entries![0].QueryText = "Updated query";
         var id = await _sut.SubmitAsync(dto2).ConfigureAwait(true);
 
@@ -54,12 +65,18 @@ public sealed class SessionLogServiceTests : IDisposable
         Assert.Equal("Updated", stored.Title);
         Assert.Single(stored.Entries);
         Assert.Equal("Updated query", stored.Entries.First().QueryText);
+        await _eventBus.Received(1).PublishAsync(
+            Arg.Is<ChangeEvent>(e => e != null
+                                     && e.Category == ChangeEventCategories.SessionLog
+                                     && e.Action == ChangeEventActions.Updated
+                                     && e.EntityId == $"Cursor/{BuildSessionId("Cursor", "session-dup")}"),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     [Fact]
     public async Task WhenSubmittingWithCopilotStatisticsThenStatisticsArePersisted()
     {
-        var dto = CreateTestDto("Copilot", "stats-session");
+        var dto = CreateTestDto("Copilot", BuildSessionId("Copilot", "stats-session"));
         dto.CopilotStatistics = new CopilotStatisticsDto
         {
             AverageSuccessScore = 0.85,
@@ -82,7 +99,7 @@ public sealed class SessionLogServiceTests : IDisposable
     [Fact]
     public async Task WhenSubmittingWithWorkspaceThenWorkspaceIsPersisted()
     {
-        var dto = CreateTestDto("Cursor", "ws-session");
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "ws-session"));
         dto.Workspace = new WorkspaceInfoDto
         {
             Project = "FunWasHad",
@@ -103,7 +120,7 @@ public sealed class SessionLogServiceTests : IDisposable
     [Fact]
     public async Task WhenSubmittingWithTagsAndContextThenMultiValuedEntitiesArePersisted()
     {
-        var dto = CreateTestDto("Cursor", "multi-valued");
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "multi-valued"));
         dto.Entries![0].Tags = ["csharp", "ef-core"];
         dto.Entries[0].ContextList = ["src/Program.cs", "docs/README.md"];
 
@@ -122,8 +139,8 @@ public sealed class SessionLogServiceTests : IDisposable
     [Fact]
     public async Task WhenQueryingWithNoFiltersThenAllSessionsAreReturned()
     {
-        await _sut.SubmitAsync(CreateTestDto("Cursor", "q1")).ConfigureAwait(true);
-        await _sut.SubmitAsync(CreateTestDto("Copilot", "q2")).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "q1"))).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Copilot", BuildSessionId("Copilot", "q2"))).ConfigureAwait(true);
 
         var result = await _sut.QueryAsync(new SessionLogQueryRequest()).ConfigureAwait(true);
 
@@ -134,8 +151,8 @@ public sealed class SessionLogServiceTests : IDisposable
     [Fact]
     public async Task WhenQueryingByAgentThenOnlyMatchingSessionsAreReturned()
     {
-        await _sut.SubmitAsync(CreateTestDto("Cursor", "agent-1")).ConfigureAwait(true);
-        await _sut.SubmitAsync(CreateTestDto("Copilot", "agent-2")).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "agent-1"))).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Copilot", BuildSessionId("Copilot", "agent-2"))).ConfigureAwait(true);
 
         var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "Cursor" }).ConfigureAwait(true);
 
@@ -146,12 +163,12 @@ public sealed class SessionLogServiceTests : IDisposable
     [Fact]
     public async Task WhenQueryingByDateRangeThenOnlyMatchingSessionsAreReturned()
     {
-        var early = CreateTestDto("Cursor", "early");
+        var early = CreateTestDto("Cursor", BuildSessionId("Cursor", "early"));
         early.Started = "2026-01-01T00:00:00Z";
         early.LastUpdated = "2026-01-01T12:00:00Z";
         await _sut.SubmitAsync(early).ConfigureAwait(true);
 
-        var late = CreateTestDto("Cursor", "late");
+        var late = CreateTestDto("Cursor", BuildSessionId("Cursor", "late"));
         late.Started = "2026-02-01T00:00:00Z";
         late.LastUpdated = "2026-02-01T12:00:00Z";
         await _sut.SubmitAsync(late).ConfigureAwait(true);
@@ -162,7 +179,7 @@ public sealed class SessionLogServiceTests : IDisposable
         }).ConfigureAwait(true);
 
         Assert.Equal(1, result.TotalCount);
-        Assert.Equal("late", result.Items[0].SessionId);
+        Assert.Equal(BuildSessionId("Cursor", "late"), result.Items[0].SessionId);
     }
 
     [Fact]
@@ -170,7 +187,7 @@ public sealed class SessionLogServiceTests : IDisposable
     {
         for (var i = 0; i < 5; i++)
         {
-            var dto = CreateTestDto("Cursor", $"page-{i}");
+            var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", $"page-{i}"));
             dto.Started = $"2026-01-{(i + 1):D2}T00:00:00Z";
             await _sut.SubmitAsync(dto).ConfigureAwait(true);
         }
@@ -186,7 +203,7 @@ public sealed class SessionLogServiceTests : IDisposable
     [Fact]
     public async Task WhenQueryingWithLimitExceedingMaxThenLimitIsClamped()
     {
-        await _sut.SubmitAsync(CreateTestDto("Cursor", "clamp")).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "clamp"))).ConfigureAwait(true);
 
         var result = await _sut.QueryAsync(new SessionLogQueryRequest { Limit = 9999 }).ConfigureAwait(true);
 
@@ -210,9 +227,24 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task WhenSubmittingWithInvalidSessionIdFormatThenArgumentExceptionIsThrown()
+    {
+        var dto = CreateTestDto("Cursor", "cursor-invalid");
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto)).ConfigureAwait(true);
+    }
+
+    [Fact]
+    public async Task WhenSubmittingWithInvalidRequestIdFormatThenArgumentExceptionIsThrown()
+    {
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "bad-request-id"));
+        dto.Entries![0].RequestId = "bad";
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto)).ConfigureAwait(true);
+    }
+
+    [Fact]
     public async Task WhenQueryResultMappedThenDtoIncludesWorkspaceAndStatistics()
     {
-        var dto = CreateTestDto("Copilot", "round-trip");
+        var dto = CreateTestDto("Copilot", BuildSessionId("Copilot", "round-trip"));
         dto.Workspace = new WorkspaceInfoDto { Project = "TestProject", Branch = "main" };
         dto.CopilotStatistics = new CopilotStatisticsDto { CompletedCount = 5 };
         dto.TotalTokens = 1234;
@@ -231,14 +263,15 @@ public sealed class SessionLogServiceTests : IDisposable
     [Fact]
     public async Task WhenSubmittingOffsetTimestampsThenRoundTripUpdateSucceeds()
     {
-        var dto = CreateTestDto("Cursor", "offset-roundtrip");
+        var sessionId = BuildSessionId("Cursor", "offset-roundtrip");
+        var dto = CreateTestDto("Cursor", sessionId);
         dto.Started = "2026-03-03T12:49:58.717102-06:00";
         dto.LastUpdated = "2026-03-03T12:50:58.717102-06:00";
         dto.Entries![0].Timestamp = "2026-03-03T12:50:12.717102-06:00";
         await _sut.SubmitAsync(dto).ConfigureAwait(true);
 
         var queried = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "Cursor" }).ConfigureAwait(true);
-        var session = queried.Items.Single(i => i.SessionId == "offset-roundtrip");
+        var session = queried.Items.Single(i => i.SessionId == sessionId);
 
         // Regression coverage: previously, pushing a queried session containing
         // offset timestamps could fail with a server-side 500.
@@ -247,7 +280,7 @@ public sealed class SessionLogServiceTests : IDisposable
 
         var stored = await _db.SessionLogs
             .Include(s => s.Entries)
-            .SingleAsync(s => s.SessionId == "offset-roundtrip")
+            .SingleAsync(s => s.SessionId == sessionId)
             .ConfigureAwait(true);
         Assert.Equal(TimeSpan.Zero, stored.Started?.Offset);
         Assert.Equal(TimeSpan.Zero, stored.LastUpdated?.Offset);
@@ -257,14 +290,14 @@ public sealed class SessionLogServiceTests : IDisposable
     [Fact]
     public async Task WhenUpsertingWithNewEntryThenEntryIsAddedWithoutRemovingExisting()
     {
-        var dto1 = CreateTestDto("Cursor", "keyed-add");
+        var dto1 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-add"));
         await _sut.SubmitAsync(dto1).ConfigureAwait(true);
 
         // Submit again with original entry plus a new one
-        var dto2 = CreateTestDto("Cursor", "keyed-add");
+        var dto2 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-add"));
         dto2.Entries!.Add(new UnifiedRequestEntryDto
         {
-            RequestId = "req-keyed-add-2",
+            RequestId = "req-20260211T100200Z-entry-002",
             QueryText = "New entry",
             Status = "completed"
         });
@@ -278,13 +311,13 @@ public sealed class SessionLogServiceTests : IDisposable
     [Fact]
     public async Task WhenUpsertingExistingEntryThenEntryIsUpdatedInPlace()
     {
-        var dto1 = CreateTestDto("Cursor", "keyed-update");
+        var dto1 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-update"));
         var id = await _sut.SubmitAsync(dto1).ConfigureAwait(true);
 
         var originalEntryId = (await _db.SessionLogEntries.FirstAsync(e => e.SessionLogId == id).ConfigureAwait(true)).Id;
 
         // Submit with same RequestId but different content
-        var dto2 = CreateTestDto("Cursor", "keyed-update");
+        var dto2 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-update"));
         dto2.Entries![0].QueryText = "Updated query text";
         dto2.Entries[0].Response = "Updated response";
         await _sut.SubmitAsync(dto2).ConfigureAwait(true);
@@ -298,10 +331,10 @@ public sealed class SessionLogServiceTests : IDisposable
     [Fact]
     public async Task WhenUpsertingWithRemovedEntryThenStaleEntryIsDeleted()
     {
-        var dto1 = CreateTestDto("Cursor", "keyed-remove");
+        var dto1 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-remove"));
         dto1.Entries!.Add(new UnifiedRequestEntryDto
         {
-            RequestId = "req-keyed-remove-2",
+            RequestId = "req-20260211T100200Z-entry-002",
             QueryText = "Will be removed",
             Status = "completed"
         });
@@ -310,19 +343,19 @@ public sealed class SessionLogServiceTests : IDisposable
         Assert.Equal(2, await _db.SessionLogEntries.CountAsync(e => e.SessionLogId == id).ConfigureAwait(true));
 
         // Submit with only the first entry — second should be removed
-        var dto2 = CreateTestDto("Cursor", "keyed-remove");
+        var dto2 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-remove"));
         dto2.EntryCount = 1;
         await _sut.SubmitAsync(dto2).ConfigureAwait(true);
 
         Assert.Equal(1, await _db.SessionLogEntries.CountAsync(e => e.SessionLogId == id).ConfigureAwait(true));
         var remaining = await _db.SessionLogEntries.FirstAsync(e => e.SessionLogId == id).ConfigureAwait(true);
-        Assert.Equal("req-keyed-remove-1", remaining.RequestId);
+        Assert.Equal("req-20260211T100100Z-entry-001", remaining.RequestId);
     }
 
     [Fact]
     public async Task WhenAppendingDialogItemsThenItemsAreAdded()
     {
-        var dto = CreateTestDto("Cursor", "dialog-append");
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "dialog-append"));
         await _sut.SubmitAsync(dto).ConfigureAwait(true);
 
         var items = new List<ProcessingDialogItemDto>
@@ -331,36 +364,42 @@ public sealed class SessionLogServiceTests : IDisposable
             new() { Timestamp = "2026-02-12T10:00:01Z", Role = "tool", Content = "get_file(Program.cs)", Category = "tool_call" }
         };
 
-        var count = await _sut.AppendProcessingDialogAsync("Cursor", "dialog-append", "req-dialog-append-1", items).ConfigureAwait(true);
+        var count = await _sut.AppendProcessingDialogAsync("Cursor", BuildSessionId("Cursor", "dialog-append"), "req-20260211T100100Z-entry-001", items).ConfigureAwait(true);
 
         Assert.Equal(2, count);
         var entry = await _db.SessionLogEntries
             .Include(e => e.ProcessingDialog)
-            .FirstAsync(e => e.RequestId == "req-dialog-append-1")
+            .FirstAsync(e => e.RequestId == "req-20260211T100100Z-entry-001")
             .ConfigureAwait(true);
         Assert.Equal(2, entry.ProcessingDialog.Count);
         var first = entry.ProcessingDialog.OrderBy(p => p.Ordinal).First();
         Assert.Equal("model", first.Role);
         Assert.Equal("Analyzing request", first.Content);
         Assert.Equal("reasoning", first.Category);
+        await _eventBus.Received().PublishAsync(
+            Arg.Is<ChangeEvent>(e => e != null
+                                     && e.Category == ChangeEventCategories.SessionLog
+                                     && e.Action == ChangeEventActions.Updated
+                                     && e.EntityId == $"Cursor/{BuildSessionId("Cursor", "dialog-append")}"),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     [Fact]
     public async Task WhenAppendingDialogMultipleTimesThenOrdinalsAreContinuous()
     {
-        var dto = CreateTestDto("Cursor", "dialog-multi");
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "dialog-multi"));
         await _sut.SubmitAsync(dto).ConfigureAwait(true);
 
-        await _sut.AppendProcessingDialogAsync("Cursor", "dialog-multi", "req-dialog-multi-1",
+        await _sut.AppendProcessingDialogAsync("Cursor", BuildSessionId("Cursor", "dialog-multi"), "req-20260211T100100Z-entry-001",
             [new ProcessingDialogItemDto { Role = "model", Content = "First batch" }]).ConfigureAwait(true);
 
-        var count = await _sut.AppendProcessingDialogAsync("Cursor", "dialog-multi", "req-dialog-multi-1",
+        var count = await _sut.AppendProcessingDialogAsync("Cursor", BuildSessionId("Cursor", "dialog-multi"), "req-20260211T100100Z-entry-001",
             [new ProcessingDialogItemDto { Role = "model", Content = "Second batch" }]).ConfigureAwait(true);
 
         Assert.Equal(2, count);
         var entry = await _db.SessionLogEntries
             .Include(e => e.ProcessingDialog)
-            .FirstAsync(e => e.RequestId == "req-dialog-multi-1")
+            .FirstAsync(e => e.RequestId == "req-20260211T100100Z-entry-001")
             .ConfigureAwait(true);
         var ordinals = entry.ProcessingDialog.OrderBy(p => p.Ordinal).Select(p => p.Ordinal).ToList();
         Assert.Equal([0, 1], ordinals);
@@ -370,14 +409,14 @@ public sealed class SessionLogServiceTests : IDisposable
     public async Task WhenAppendingDialogToNonexistentEntryThenThrowsInvalidOperation()
     {
         await Assert.ThrowsAsync<InvalidOperationException>(
-            () => _sut.AppendProcessingDialogAsync("Cursor", "nonexistent", "req-1",
+            () => _sut.AppendProcessingDialogAsync("Cursor", BuildSessionId("Cursor", "nonexistent"), "req-20260211T100100Z-entry-001",
                 [new ProcessingDialogItemDto { Role = "model", Content = "test" }])).ConfigureAwait(true);
     }
 
     [Fact]
     public async Task WhenQueryingSessionWithDialogThenDialogIsIncludedInDto()
     {
-        var dto = CreateTestDto("Copilot", "dialog-query");
+        var dto = CreateTestDto("Copilot", BuildSessionId("Copilot", "dialog-query"));
         dto.Entries![0].ProcessingDialog =
         [
             new ProcessingDialogItemDto { Timestamp = "2026-02-12T10:00:00Z", Role = "model", Content = "Thinking...", Category = "reasoning" }
@@ -386,7 +425,7 @@ public sealed class SessionLogServiceTests : IDisposable
 
         var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "Copilot" }).ConfigureAwait(true);
 
-        var entry = result.Items.First(i => i.SessionId == "dialog-query").Entries!.First();
+        var entry = result.Items.First(i => i.SessionId == BuildSessionId("Copilot", "dialog-query")).Entries!.First();
         Assert.NotNull(entry.ProcessingDialog);
         Assert.Single(entry.ProcessingDialog!);
         Assert.Equal("model", entry.ProcessingDialog![0].Role);
@@ -409,7 +448,7 @@ public sealed class SessionLogServiceTests : IDisposable
             [
                 new UnifiedRequestEntryDto
                 {
-                    RequestId = $"req-{sessionId}-1",
+                    RequestId = "req-20260211T100100Z-entry-001",
                     Timestamp = "2026-02-11T10:01:00Z",
                     QueryText = "How do I configure EF Core?",
                     QueryTitle = "EF Core Config",
@@ -418,5 +457,17 @@ public sealed class SessionLogServiceTests : IDisposable
                 }
             ]
         };
+    }
+
+    private static string BuildSessionId(string agent, string suffix)
+    {
+        var normalized = new string((suffix ?? string.Empty)
+            .ToLowerInvariant()
+            .Select(c => char.IsLetterOrDigit(c) ? c : '-')
+            .ToArray())
+            .Trim('-');
+        if (string.IsNullOrWhiteSpace(normalized))
+            normalized = "session";
+        return $"{agent}-20260304T113901Z-{normalized}";
     }
 }

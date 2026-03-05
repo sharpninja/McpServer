@@ -1,6 +1,6 @@
 @page "/todos/{TodoId}"
 
-@inject ITodoApiClient TodoApiClient
+@inject TodoDetailViewModel ViewModel
 
 <PageTitle>Todo Detail</PageTitle>
 
@@ -11,15 +11,15 @@
 {
     <PrimerBlankslate Heading="No todo selected" Description="Choose a TODO from the list view." />
 }
-else if (!string.IsNullOrWhiteSpace(_error))
+else if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
 {
-    <PrimerFlash Variant="danger" Title="Failed to load todo">@_error</PrimerFlash>
+    <PrimerFlash Variant="danger" Title="Failed to load todo">@ViewModel.ErrorMessage</PrimerFlash>
 }
-else if (_loading)
+else if (ViewModel.IsBusy)
 {
     <p class="color-fg-muted">Loading todo details...</p>
 }
-else if (_item is null)
+else if (ViewModel.Detail is null)
 {
     <PrimerBlankslate Heading="Todo not found" Description="The requested TODO item could not be found." />
 }
@@ -27,48 +27,48 @@ else
 {
     <div class="Box mb-3">
         <div class="Box-header">
-            <h2 class="h3 mb-0">@_item.Title</h2>
+            <h2 class="h3 mb-0">@ViewModel.Detail.Title</h2>
         </div>
         <div class="Box-body">
-            <p><strong>ID:</strong> <code>@_item.Id</code></p>
-            <p><strong>Section:</strong> @_item.Section</p>
-            <p><strong>Priority:</strong> <PrimerLabel Scheme="@GetPriorityScheme(_item.Priority)" Text="@_item.Priority" /></p>
-            <p><strong>Status:</strong> <PrimerLabel Scheme="@(_item.Done ? "success" : "attention")" Text="@(_item.Done ? "Done" : "Open")" /></p>
-            <p><strong>Estimate:</strong> @(_item.Estimate ?? "(none)")</p>
-            <p><strong>Note:</strong> @(_item.Note ?? "(none)")</p>
-            <p><strong>Completed Date:</strong> @(_item.CompletedDate ?? "(not completed)")</p>
-            <p><strong>Done Summary:</strong> @(_item.DoneSummary ?? "(none)")</p>
-            <p><strong>Remaining:</strong> @(_item.Remaining ?? "(none)")</p>
-            <p><strong>Priority Note:</strong> @(_item.PriorityNote ?? "(none)")</p>
-            <p><strong>Reference:</strong> @(_item.Reference ?? "(none)")</p>
+            <p><strong>ID:</strong> <code>@ViewModel.Detail.Id</code></p>
+            <p><strong>Section:</strong> @ViewModel.Detail.Section</p>
+            <p><strong>Priority:</strong> <PrimerLabel Scheme="@GetPriorityScheme(ViewModel.Detail.Priority)" Text="@ViewModel.Detail.Priority" /></p>
+            <p><strong>Status:</strong> <PrimerLabel Scheme="@(ViewModel.Detail.Done ? "success" : "attention")" Text="@(ViewModel.Detail.Done ? "Done" : "Open")" /></p>
+            <p><strong>Estimate:</strong> @(ViewModel.Detail.Estimate ?? "(none)")</p>
+            <p><strong>Note:</strong> @(ViewModel.Detail.Note ?? "(none)")</p>
+            <p><strong>Completed Date:</strong> @(ViewModel.Detail.CompletedDate ?? "(not completed)")</p>
+            <p><strong>Done Summary:</strong> @(ViewModel.Detail.DoneSummary ?? "(none)")</p>
+            <p><strong>Remaining:</strong> @(ViewModel.Detail.Remaining ?? "(none)")</p>
+            <p><strong>Priority Note:</strong> @(ViewModel.Detail.PriorityNote ?? "(none)")</p>
+            <p><strong>Reference:</strong> @(ViewModel.Detail.Reference ?? "(none)")</p>
         </div>
     </div>
 
     <div class="Box mb-3">
         <div class="Box-header"><h3 class="h4 mb-0">Description</h3></div>
         <div class="Box-body">
-            @RenderStringList(_item.Description)
+            @RenderStringList(ViewModel.Detail.Description)
         </div>
     </div>
 
     <div class="Box mb-3">
         <div class="Box-header"><h3 class="h4 mb-0">Technical Details</h3></div>
         <div class="Box-body">
-            @RenderStringList(_item.TechnicalDetails)
+            @RenderStringList(ViewModel.Detail.TechnicalDetails)
         </div>
     </div>
 
     <div class="Box mb-3">
         <div class="Box-header"><h3 class="h4 mb-0">Implementation Tasks</h3></div>
         <div class="Box-body">
-            @if (_item.ImplementationTasks.Count == 0)
+            @if (ViewModel.Detail.ImplementationTasks.Count == 0)
             {
                 <p class="color-fg-muted mb-0">No implementation tasks.</p>
             }
             else
             {
                 <ul class="mb-0">
-                    @foreach (var task in _item.ImplementationTasks)
+                    @foreach (var task in ViewModel.Detail.ImplementationTasks)
                     {
                         <li>@(task.Done ? "✅" : "⬜") @task.Task</li>
                     }
@@ -81,11 +81,11 @@ else
         <div class="Box-header"><h3 class="h4 mb-0">Dependencies & Requirements</h3></div>
         <div class="Box-body">
             <p><strong>Depends On:</strong></p>
-            @RenderStringList(_item.DependsOn)
+            @RenderStringList(ViewModel.Detail.DependsOn)
             <p class="mt-2"><strong>Functional Requirements:</strong></p>
-            @RenderStringList(_item.FunctionalRequirements)
+            @RenderStringList(ViewModel.Detail.FunctionalRequirements)
             <p class="mt-2"><strong>Technical Requirements:</strong></p>
-            @RenderStringList(_item.TechnicalRequirements)
+            @RenderStringList(ViewModel.Detail.TechnicalRequirements)
         </div>
     </div>
 }
@@ -94,9 +94,6 @@ else
     [Parameter]
     public string TodoId { get; set; } = string.Empty;
 
-    private McpServer.UI.Core.Messages.TodoDetail? _item;
-    private bool _loading;
-    private string? _error;
     private string? _loadedId;
 
     protected override async Task OnParametersSetAsync()
@@ -105,22 +102,8 @@ else
             return;
 
         _loadedId = TodoId;
-        _loading = true;
-        _error = null;
-        _item = null;
-
-        try
-        {
-            _item = await TodoApiClient.GetTodoAsync(TodoId).ConfigureAwait(false);
-        }
-        catch (Exception ex)
-        {
-            _error = ex.Message;
-        }
-        finally
-        {
-            _loading = false;
-        }
+        ViewModel.TodoId = TodoId;
+        await ViewModel.LoadAsync().ConfigureAwait(false);
     }
 
     private static string GetPriorityScheme(string priority)

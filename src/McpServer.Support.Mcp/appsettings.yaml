@@ -25,6 +25,14 @@ Mcp:
   DataDirectory: .
   DataSource: mcp.db
   ExternalDocsPath: docs/external
+  GraphRag:
+    Enabled: False
+    EnhanceContextSearch: True
+    RootPath: mcp-data/graphrag
+    DefaultQueryMode: local
+    DefaultMaxChunks: 20
+    IndexTimeoutSeconds: 600
+    QueryTimeoutSeconds: 120
   Instances:
     default:
       DataDirectory: .

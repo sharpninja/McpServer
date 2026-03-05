@@ -15,7 +15,7 @@ namespace McpServer.Support.Mcp.Tests.Services;
 public sealed class VoiceConversationServiceTests
 {
     [Fact]
-    public async Task CreateSessionAsync_SameAgent_ReusesExistingIdleSession()
+    public async Task CreateSessionAsync_SameAgentAndWorkspace_ReusesExistingIdleSession()
     {
         using var service = CreateService();
 
@@ -23,6 +23,7 @@ public sealed class VoiceConversationServiceTests
         {
             AgentName = "planner",
             AgentModel = "gpt-5.3-codex",
+            WorkspacePath = @"E:\ws-a",
             OneShotSession = false,
         }).ConfigureAwait(true);
 
@@ -30,10 +31,35 @@ public sealed class VoiceConversationServiceTests
         {
             AgentName = "planner",
             AgentModel = "gpt-5.3-codex",
+            WorkspacePath = @"E:\ws-a",
             OneShotSession = false,
         }).ConfigureAwait(true);
 
         Assert.Equal(first.SessionId, second.SessionId);
+    }
+
+    [Fact]
+    public async Task CreateSessionAsync_SameAgentDifferentWorkspace_DoesNotReuseSession()
+    {
+        using var service = CreateService();
+
+        var first = await service.CreateSessionAsync(new VoiceSessionCreateRequest
+        {
+            AgentName = "planner",
+            AgentModel = "gpt-5.3-codex",
+            WorkspacePath = @"E:\ws-a",
+            OneShotSession = false,
+        }).ConfigureAwait(true);
+
+        var second = await service.CreateSessionAsync(new VoiceSessionCreateRequest
+        {
+            AgentName = "planner",
+            AgentModel = "gpt-5.3-codex",
+            WorkspacePath = @"E:\ws-b",
+            OneShotSession = false,
+        }).ConfigureAwait(true);
+
+        Assert.NotEqual(first.SessionId, second.SessionId);
     }
 
     [Fact]

@@ -29,7 +29,8 @@ internal sealed class AgentPoolApiClientAdapter : IAgentPoolApiClient
                 i.Lifecycle,
                 i.SessionId,
                 i.ActiveJobId,
-                i.ActiveVoiceLinks))
+                i.ActiveVoiceLinks,
+                i.WorkspacePath))
             .ToList();
 
         return new ListAgentPoolAgentsResult(items, items.Count);
@@ -46,7 +47,8 @@ internal sealed class AgentPoolApiClientAdapter : IAgentPoolApiClient
                 i.AgentName,
                 i.Status,
                 i.Context?.ToString(),
-                i.RenderedPrompt))
+                i.RenderedPrompt,
+                i.WorkspacePath))
             .ToList();
 
         return new ListAgentPoolQueueResult(items, items.Count);

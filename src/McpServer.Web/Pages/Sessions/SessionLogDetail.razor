@@ -1,6 +1,6 @@
 @page "/sessions/{SessionId}"
 
-@inject ISessionLogApiClient SessionLogApiClient
+@inject SessionLogDetailViewModel ViewModel
 
 <PageTitle>Session Log Detail</PageTitle>
 
@@ -11,15 +11,15 @@
 {
     <PrimerBlankslate Heading="No session selected" Description="Open this page from the session log list." />
 }
-else if (!string.IsNullOrWhiteSpace(_error))
+else if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
 {
-    <PrimerFlash Variant="danger" Title="Failed to load session">@_error</PrimerFlash>
+    <PrimerFlash Variant="danger" Title="Failed to load session">@ViewModel.ErrorMessage</PrimerFlash>
 }
-else if (_loading)
+else if (ViewModel.IsBusy)
 {
     <p class="color-fg-muted">Loading session details...</p>
 }
-else if (_item is null)
+else if (ViewModel.Detail is null)
 {
     <PrimerBlankslate Heading="Session not found" Description="The requested session could not be located." />
 }
@@ -27,28 +27,28 @@ else
 {
     <div class="Box mb-3">
         <div class="Box-header">
-            <h2 class="h3 mb-0">@_item.Title</h2>
+            <h2 class="h3 mb-0">@ViewModel.Detail.Title</h2>
         </div>
         <div class="Box-body">
-            <p><strong>Session ID:</strong> <code>@_item.SessionId</code></p>
-            <p><strong>Source Type:</strong> @_item.SourceType</p>
-            <p><strong>Status:</strong> @_item.Status</p>
-            <p><strong>Model:</strong> @(_item.Model ?? "(not set)")</p>
-            <p><strong>Started:</strong> @(_item.Started ?? "(unknown)")</p>
-            <p><strong>Last Updated:</strong> @(_item.LastUpdated ?? "(unknown)")</p>
-            <p><strong>Entry Count:</strong> @_item.EntryCount</p>
-            <p><strong>Total Tokens:</strong> @(_item.TotalTokens?.ToString() ?? "(unknown)")</p>
-            <p><strong>Cursor Session Label:</strong> @(_item.CursorSessionLabel ?? "(none)")</p>
+            <p><strong>Session ID:</strong> <code>@ViewModel.Detail.SessionId</code></p>
+            <p><strong>Source Type:</strong> @ViewModel.Detail.SourceType</p>
+            <p><strong>Status:</strong> @ViewModel.Detail.Status</p>
+            <p><strong>Model:</strong> @(ViewModel.Detail.Model ?? "(not set)")</p>
+            <p><strong>Started:</strong> @(ViewModel.Detail.Started ?? "(unknown)")</p>
+            <p><strong>Last Updated:</strong> @(ViewModel.Detail.LastUpdated ?? "(unknown)")</p>
+            <p><strong>Entry Count:</strong> @ViewModel.Detail.EntryCount</p>
+            <p><strong>Total Tokens:</strong> @(ViewModel.Detail.TotalTokens?.ToString() ?? "(unknown)")</p>
+            <p><strong>Cursor Session Label:</strong> @(ViewModel.Detail.CursorSessionLabel ?? "(none)")</p>
         </div>
     </div>
 
-    @if (_item.Entries.Count == 0)
+    @if (ViewModel.Detail.Entries.Count == 0)
     {
         <PrimerBlankslate Heading="No entries" Description="This session does not have request entries." />
     }
     else
     {
-        @foreach (var entry in _item.Entries)
+        @foreach (var entry in ViewModel.Detail.Entries)
         {
             <div class="Box mb-3">
                 <div class="Box-header">
@@ -86,9 +86,6 @@ else
     [Parameter]
     public string SessionId { get; set; } = string.Empty;
 
-    private McpServer.UI.Core.Messages.SessionLogDetail? _item;
-    private bool _loading;
-    private string? _error;
     private string? _loadedSessionId;
 
     protected override async Task OnParametersSetAsync()
@@ -97,22 +94,8 @@ else
             return;
 
         _loadedSessionId = SessionId;
-        _loading = true;
-        _error = null;
-        _item = null;
-
-        try
-        {
-            _item = await SessionLogApiClient.GetSessionLogAsync(SessionId).ConfigureAwait(false);
-        }
-        catch (Exception ex)
-        {
-            _error = ex.Message;
-        }
-        finally
-        {
-            _loading = false;
-        }
+        ViewModel.SessionId = SessionId;
+        await ViewModel.LoadAsync().ConfigureAwait(false);
     }
 
     private static string GetEntryHeading(McpServer.UI.Core.Messages.SessionLogEntryDetail entry)

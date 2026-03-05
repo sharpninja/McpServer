@@ -385,3 +385,21 @@ Each covered administration area SHALL provide ViewModel-first orchestration (li
 Tab composition SHALL be role-aware and declarative, with registration metadata separated from shell rendering logic and enforced via shared authorization policy checks.
 
 **Technical Implementation:** [TR-MCP-DIR-005](./Technical-Requirements.md#tr-mcp-dir-005) | [TR-MCP-DIR-006](./Technical-Requirements.md#tr-mcp-dir-006) | [TR-MCP-DIR-007](./Technical-Requirements.md#tr-mcp-dir-007) | [TR-MCP-DIR-008](./Technical-Requirements.md#tr-mcp-dir-008) | [Details](./TR-per-FR-Mapping.md#fr-mcp-060)
+
+## FR-MCP-061 Canonical TODO and Session Identifier Conventions
+
+The server shall enforce canonical identifier conventions for newly created TODO and session log payloads:
+
+- TODO IDs must match `<SDLC-PHASE>-<AREA>-###` using uppercase kebab-case.
+- Session IDs must match `<Agent>-<yyyyMMddTHHmmssZ>-<suffix>` and be prefixed by the exact `sourceType`/`agent`.
+- Request IDs must match `req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal>`.
+
+Validation failures return client-visible errors without mutating persisted data.
+
+**Covered by:** `TodoValidator`, `TodoService`, `SqliteTodoService`, `SessionLogIdentifierValidator`, `SessionLogController`, `SessionLogService`
+
+## FR-MCP-062 Workspace Change Notifications
+
+The server shall provide a real-time workspace change notification system that publishes create/update/delete domain events for workspace mutations (TODOs, session logs, repo files, context sync, tool registry, tool buckets, workspaces, GitHub operations, marker lifecycle, agents, and requirements) over Server-Sent Events at `GET /mcpserver/events`, with optional category filtering.
+
+**Covered by:** `IChangeEventBus`, `ChannelChangeEventBus`, `EventStreamController`, `TodoService`, `SqliteTodoService`, `SessionLogService`, `RepoFileService`, `ToolRegistryService`, `ToolBucketService`, `WorkspaceService`, `WorkspaceController`, `AgentService`, `RequirementsDocumentService`, `IngestionCoordinator`, `GitHubController`, `WorkspaceProcessManager`

@@ -44,6 +44,7 @@ internal sealed class DirectorAuthorizationPolicyService : IAuthorizationPolicyS
             [McpActionKeys.WorkspaceStart] = McpRoles.Admin,
             [McpActionKeys.WorkspaceStop] = McpRoles.Admin,
             [McpActionKeys.WorkspaceStatus] = McpRoles.Admin,
+            [McpActionKeys.WorkspaceHealth] = McpRoles.Admin,
             [McpActionKeys.WorkspacePromptGet] = McpRoles.Admin,
             [McpActionKeys.WorkspacePromptUpdate] = McpRoles.Admin,
             [McpActionKeys.SessionLogQuery] = McpRoles.Viewer,

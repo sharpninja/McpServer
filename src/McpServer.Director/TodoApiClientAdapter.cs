@@ -74,6 +74,8 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
                 Section = command.Section,
                 Priority = command.Priority,
                 Estimate = command.Estimate,
+                Note = command.Note,
+                Remaining = command.Remaining,
                 Description = command.Description,
                 TechnicalDetails = command.TechnicalDetails,
                 ImplementationTasks = command.ImplementationTasks?.Select(t => new TodoFlatTask
@@ -81,6 +83,9 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
                     Task = t.Task,
                     Done = t.Done,
                 }).ToList(),
+                DependsOn = command.DependsOn,
+                FunctionalRequirements = command.FunctionalRequirements,
+                TechnicalRequirements = command.TechnicalRequirements,
             }, cancellationToken).ConfigureAwait(false);
 
             return MapMutationOutcome(result);
@@ -110,6 +115,9 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
                 Done = command.Done,
                 Estimate = command.Estimate,
                 Note = command.Note,
+                CompletedDate = command.CompletedDate,
+                DoneSummary = command.DoneSummary,
+                Remaining = command.Remaining,
                 Description = command.Description,
                 TechnicalDetails = command.TechnicalDetails,
                 ImplementationTasks = command.ImplementationTasks?.Select(t => new TodoFlatTask
@@ -117,6 +125,9 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
                     Task = t.Task,
                     Done = t.Done,
                 }).ToList(),
+                DependsOn = command.DependsOn,
+                FunctionalRequirements = command.FunctionalRequirements,
+                TechnicalRequirements = command.TechnicalRequirements,
             }, cancellationToken).ConfigureAwait(false);
 
             return MapMutationOutcome(result);

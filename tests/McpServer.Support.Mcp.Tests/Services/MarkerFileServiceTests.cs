@@ -95,9 +95,20 @@ public sealed class MarkerFileServiceTests
     {
         var template = MarkerFileService.DefaultPromptTemplate;
         Assert.Contains("## Rules", template);
+        Assert.Contains("## Naming Conventions", template);
         Assert.Contains("## Where Things Live", template);
         Assert.Contains("## Context Loading by Task Type", template);
         Assert.Contains("## Protocols", template);
+    }
+
+    [Fact]
+    public void DefaultPromptTemplate_ContainsNamingConventionExamples()
+    {
+        var template = MarkerFileService.DefaultPromptTemplate;
+        Assert.Contains("^[A-Z]+-[A-Z0-9]+-\\d{3}$", template);
+        Assert.Contains("PLAN-NAMINGCONVENTIONS-001", template);
+        Assert.Contains("Copilot-20260304T113901Z-namingconv", template);
+        Assert.Contains("req-20260304T113901Z-plan-namingconventions-001", template);
     }
 
     [Fact]

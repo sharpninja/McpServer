@@ -1,26 +1,26 @@
 @page "/workspaces"
 
-@inject IWorkspaceApiClient WorkspaceApiClient
+@inject WorkspaceListViewModel ViewModel
 
 <PageTitle>Workspace List</PageTitle>
 
 <h1 class="h2 mb-3">Workspace List</h1>
 
-@if (!string.IsNullOrWhiteSpace(_error))
+@if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
 {
-    <PrimerFlash Variant="danger" Title="Failed to load workspaces">@_error</PrimerFlash>
+    <PrimerFlash Variant="danger" Title="Failed to load workspaces">@ViewModel.ErrorMessage</PrimerFlash>
 }
-else if (_loading)
+else if (ViewModel.IsLoading)
 {
     <p class="color-fg-muted">Loading workspaces...</p>
 }
-else if (_items.Count == 0)
+else if (ViewModel.Workspaces.Count == 0)
 {
     <PrimerBlankslate Heading="No workspaces found" Description="No workspace records were returned by the server." />
 }
 else
 {
-    <PrimerDataTable TItem="WorkspaceSummary" Items="_items" ColumnCount="5" Class="Table--full-width">
+    <PrimerDataTable TItem="WorkspaceSummary" Items="ViewModel.Workspaces" ColumnCount="5" Class="Table--full-width">
         <HeaderTemplate>
             <tr>
                 <th>Name</th>
@@ -47,25 +47,9 @@ else
 }
 
 @code {
-    private IReadOnlyList<WorkspaceSummary> _items = [];
-    private bool _loading = true;
-    private string? _error;
-
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
-            var result = await WorkspaceApiClient.ListWorkspacesAsync().ConfigureAwait(false);
-            _items = result.Items;
-        }
-        catch (Exception ex)
-        {
-            _error = ex.Message;
-        }
-        finally
-        {
-            _loading = false;
-        }
+        await ViewModel.LoadAsync().ConfigureAwait(false);
     }
 
     private static string GetWorkspaceDetailHref(string workspacePath)

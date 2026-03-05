@@ -87,6 +87,18 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
     [ObservableProperty]
     private string? _editorNote;
 
+    /// <summary>Editor completed-date string.</summary>
+    [ObservableProperty]
+    private string? _editorCompletedDate;
+
+    /// <summary>Editor done-summary string.</summary>
+    [ObservableProperty]
+    private string? _editorDoneSummary;
+
+    /// <summary>Editor remaining-work string.</summary>
+    [ObservableProperty]
+    private string? _editorRemaining;
+
     /// <summary>Editor description lines as multi-line text.</summary>
     [ObservableProperty]
     private string? _editorDescriptionText;
@@ -98,6 +110,18 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
     /// <summary>Editor implementation tasks as multi-line text.</summary>
     [ObservableProperty]
     private string? _editorImplementationTasksText;
+
+    /// <summary>Editor dependency IDs as multi-line text.</summary>
+    [ObservableProperty]
+    private string? _editorDependsOnText;
+
+    /// <summary>Editor functional requirement IDs as multi-line text.</summary>
+    [ObservableProperty]
+    private string? _editorFunctionalRequirementsText;
+
+    /// <summary>Editor technical requirement IDs as multi-line text.</summary>
+    [ObservableProperty]
+    private string? _editorTechnicalRequirementsText;
 
     /// <summary>Whether the editor is currently a new-item draft.</summary>
     [ObservableProperty]
@@ -181,9 +205,15 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         EditorDone = false;
         EditorEstimate = null;
         EditorNote = null;
+        EditorCompletedDate = null;
+        EditorDoneSummary = null;
+        EditorRemaining = null;
         EditorDescriptionText = null;
         EditorTechnicalDetailsText = null;
         EditorImplementationTasksText = null;
+        EditorDependsOnText = null;
+        EditorFunctionalRequirementsText = null;
+        EditorTechnicalRequirementsText = null;
         RequirementsAnalysis = null;
         PromptOutput = null;
         IsDirty = true;
@@ -426,9 +456,13 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         Priority = RequireTrimmed(EditorPriority),
         Estimate = Normalize(EditorEstimate),
         Note = Normalize(EditorNote),
+        Remaining = Normalize(EditorRemaining),
         Description = ParseLines(EditorDescriptionText),
         TechnicalDetails = ParseLines(EditorTechnicalDetailsText),
         ImplementationTasks = ParseTasks(EditorImplementationTasksText),
+        DependsOn = ParseLines(EditorDependsOnText),
+        FunctionalRequirements = ParseLines(EditorFunctionalRequirementsText),
+        TechnicalRequirements = ParseLines(EditorTechnicalRequirementsText),
     };
 
     private UpdateTodoCommand BuildUpdateCommand() => new()
@@ -440,9 +474,15 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         Done = EditorDone,
         Estimate = Normalize(EditorEstimate),
         Note = Normalize(EditorNote),
+        CompletedDate = Normalize(EditorCompletedDate),
+        DoneSummary = Normalize(EditorDoneSummary),
+        Remaining = Normalize(EditorRemaining),
         Description = ParseLines(EditorDescriptionText),
         TechnicalDetails = ParseLines(EditorTechnicalDetailsText),
         ImplementationTasks = ParseTasks(EditorImplementationTasksText),
+        DependsOn = ParseLines(EditorDependsOnText),
+        FunctionalRequirements = ParseLines(EditorFunctionalRequirementsText),
+        TechnicalRequirements = ParseLines(EditorTechnicalRequirementsText),
     };
 
     private DeleteTodoCommand BuildDeleteCommand() => new(RequireTrimmed(EditorId));
@@ -465,9 +505,15 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         EditorDone = detail.Done;
         EditorEstimate = detail.Estimate;
         EditorNote = detail.Note;
+        EditorCompletedDate = detail.CompletedDate;
+        EditorDoneSummary = detail.DoneSummary;
+        EditorRemaining = detail.Remaining;
         EditorDescriptionText = FormatLines(detail.Description);
         EditorTechnicalDetailsText = FormatLines(detail.TechnicalDetails);
         EditorImplementationTasksText = FormatTasks(detail.ImplementationTasks);
+        EditorDependsOnText = FormatLines(detail.DependsOn);
+        EditorFunctionalRequirementsText = FormatLines(detail.FunctionalRequirements);
+        EditorTechnicalRequirementsText = FormatLines(detail.TechnicalRequirements);
     }
 
     private string GetActiveTodoId()
