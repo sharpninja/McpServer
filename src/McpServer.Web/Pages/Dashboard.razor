@@ -4,6 +4,8 @@
 @inject DashboardViewModel ViewModel
 @inject WorkspaceListViewModel WorkspaceListVm
 @inject WorkspaceContextViewModel WorkspaceContext
+@inject TodoListViewModel TodoListVm
+@inject SessionLogListViewModel SessionLogListVm
 
 <PageTitle>Dashboard</PageTitle>
 
@@ -90,6 +92,85 @@ else
         }
     </div>
 
+    <div class="d-flex flex-wrap gap-4 mt-4" style="display: grid !important; grid-template-columns: 1fr 1fr; gap: 16px;">
+        @* ── Open Todos ── *@
+        <div class="Box">
+            <div class="Box-header d-flex flex-justify-between flex-items-center">
+                <h2 class="h4 mb-0">Open Todos</h2>
+                <a class="btn btn-sm" href="/todos">View all</a>
+            </div>
+            @if (TodoListVm.IsLoading)
+            {
+                <div class="Box-body color-fg-muted">Loading...</div>
+            }
+            else if (TodoListVm.Items.Count == 0)
+            {
+                <div class="Box-body color-fg-muted">No open todos.</div>
+            }
+            else
+            {
+                <ul class="ActionList">
+                    @foreach (var todo in TodoListVm.Items.Take(10))
+                    {
+                        <li class="ActionList-item">
+                            <a class="ActionList-content" href="/todos/@Uri.EscapeDataString(todo.Id)">
+                                <span class="ActionList-item-label">
+                                    <code class="f6">@todo.Id</code>
+                                    <span class="ml-2">@todo.Title</span>
+                                </span>
+                                <span class="ActionList-item-visual ActionList-item-visual--trailing">
+                                    <PrimerLabel Scheme="@GetPriorityScheme(todo.Priority)" Text="@todo.Priority" />
+                                </span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+                @if (TodoListVm.TotalCount > 10)
+                {
+                    <div class="Box-footer color-fg-muted f6">Showing 10 of @TodoListVm.TotalCount</div>
+                }
+            }
+        </div>
+
+        @* ── Recent Sessions ── *@
+        <div class="Box">
+            <div class="Box-header d-flex flex-justify-between flex-items-center">
+                <h2 class="h4 mb-0">Recent Sessions</h2>
+                <a class="btn btn-sm" href="/sessions">View all</a>
+            </div>
+            @if (SessionLogListVm.IsLoading)
+            {
+                <div class="Box-body color-fg-muted">Loading...</div>
+            }
+            else if (SessionLogListVm.Items.Count == 0)
+            {
+                <div class="Box-body color-fg-muted">No session logs.</div>
+            }
+            else
+            {
+                <ul class="ActionList">
+                    @foreach (var log in SessionLogListVm.Items.Take(10))
+                    {
+                        <li class="ActionList-item">
+                            <a class="ActionList-content" href="/sessions/@Uri.EscapeDataString(log.SessionId)">
+                                <span class="ActionList-item-label">
+                                    <span>@log.Title</span>
+                                </span>
+                                <span class="ActionList-item-visual ActionList-item-visual--trailing">
+                                    <span class="color-fg-muted f6">@FormatTimestamp(log.LastUpdated)</span>
+                                </span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+                @if (SessionLogListVm.TotalCount > 10)
+                {
+                    <div class="Box-footer color-fg-muted f6">Showing 10 of @SessionLogListVm.TotalCount</div>
+                }
+            }
+        </div>
+    </div>
+
     <div class="mt-4 d-flex flex-wrap gap-2">
         <a class="btn btn-primary" href="/workspaces">Workspaces</a>
         <a class="btn" href="/todos">Todos</a>
@@ -104,18 +185,43 @@ else
     {
         await ViewModel.LoadAsync().ConfigureAwait(false);
         await WorkspaceListVm.LoadAsync().ConfigureAwait(false);
+        await LoadWorkspaceDataAsync().ConfigureAwait(false);
+    }
+
+    private async Task LoadWorkspaceDataAsync()
+    {
+        TodoListVm.Done = false;
+        SessionLogListVm.Limit = 10;
+        await Task.WhenAll(
+            TodoListVm.LoadAsync(),
+            SessionLogListVm.LoadAsync()
+        ).ConfigureAwait(false);
     }
 
     private bool IsActive(string workspacePath)
         => string.Equals(WorkspaceContext.ActiveWorkspacePath, workspacePath, StringComparison.OrdinalIgnoreCase);
 
-    private void SelectWorkspace(string workspacePath)
+    private async Task SelectWorkspace(string workspacePath)
     {
         WorkspaceContext.ActiveWorkspacePath = workspacePath;
+        await LoadWorkspaceDataAsync().ConfigureAwait(false);
         StateHasChanged();
     }
 
     private static string GetHealthScheme(string? status)
         => string.Equals(status, "healthy", StringComparison.OrdinalIgnoreCase) ? "success" : "attention";
+
+    private static string GetPriorityScheme(string priority)
+        => priority.ToLowerInvariant() switch
+        {
+            "critical" => "danger",
+            "high" => "attention",
+            "medium" => "done",
+            "low" => "default",
+            _ => "default",
+        };
+
+    private static string FormatTimestamp(string? value)
+        => DateTimeOffset.TryParse(value, out var dto) ? dto.ToLocalTime().ToString("g") : value ?? "";
 }
 
