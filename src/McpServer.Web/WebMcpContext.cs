@@ -1,5 +1,6 @@
 using McpServer.Client;
 using McpServer.UI.Core.ViewModels;
+using McpServer.Web.Authorization;
 
 namespace McpServer.Web;
 
@@ -9,11 +10,17 @@ internal sealed class WebMcpContext
     private readonly WorkspaceContextViewModel _workspaceContext;
     private readonly McpServerClient _controlApiClient;
     private readonly McpServerClient _activeWorkspaceApiClient;
+    private readonly BearerTokenAccessor _bearerTokenAccessor;
     private string? _apiKey;
 
-    public WebMcpContext(IConfiguration configuration, WorkspaceContextViewModel workspaceContext)
+    public WebMcpContext(
+        IConfiguration configuration,
+        WorkspaceContextViewModel workspaceContext,
+        BearerTokenAccessor bearerTokenAccessor)
     {
         _workspaceContext = workspaceContext;
+        _bearerTokenAccessor = bearerTokenAccessor;
+
         var baseUrl = configuration["McpServer:BaseUrl"] ?? "http://localhost:7147";
         _apiKey = configuration["McpServer:ApiKey"];
         var configuredWorkspacePath = NormalizeWorkspacePath(configuration["McpServer:WorkspacePath"]);
@@ -75,9 +82,23 @@ internal sealed class WebMcpContext
 
     private async Task EnsureInitializedAsync(McpServerClient client, CancellationToken cancellationToken)
     {
+        // If the user is authenticated, prefer their OIDC access token over the static API key.
+        var bearerToken = await _bearerTokenAccessor.GetAccessTokenAsync(cancellationToken).ConfigureAwait(false);
+        if (!string.IsNullOrWhiteSpace(bearerToken))
+        {
+            lock (_gate)
+            {
+                _controlApiClient.BearerToken = bearerToken;
+                _activeWorkspaceApiClient.BearerToken = bearerToken;
+            }
+            return;
+        }
+
+        // Already initialized with a static API key or previously discovered key.
         if (!string.IsNullOrWhiteSpace(client.ApiKey) || !string.IsNullOrWhiteSpace(client.BearerToken))
             return;
 
+        // Auto-discover the API key from the McpServer AGENTS-README-FIRST.yaml initialization endpoint.
         var apiKey = await client.InitializeAsync(cancellationToken).ConfigureAwait(false);
         lock (_gate)
         {

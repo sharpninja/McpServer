@@ -1,0 +1,11 @@
+@inject NavigationManager NavigationManager
+
+@code {
+    protected override void OnInitialized()
+    {
+        // Force a full-page load so the non-circuit Razor Page at /login can execute
+        // and issue the OIDC challenge via HttpContext.ChallengeAsync.
+        var returnUrl = Uri.EscapeDataString(NavigationManager.Uri);
+        NavigationManager.NavigateTo($"/login?returnUrl={returnUrl}", forceLoad: true);
+    }
+}

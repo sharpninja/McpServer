@@ -683,12 +683,86 @@ mvp-app:
     - task: Phase 6 Verification - Run builds/tests and resolve regressions introduced by MCP-AGENTPOOL-SEED-001 closure remediations.
       done: true
   - id: web-ui-oidc-integration
-    title: Web UI needs OIDC integration
+    title: Web UI OIDC integration - full login/logout flow, AuthorizeRouteView, RoleContext, token forwarding, and tests
+    estimate: 3-4 days AI-assisted
+    note: 'AUDIT (2026-03-05): McpServer.Web has the OIDC middleware wired in Program.cs (AddAuthentication/AddCookie/AddOpenIdConnect, UseAuthentication/UseAuthorization, AddCascadingAuthenticationState), a correct appsettings.json Authentication section, the AuthConfig read-only display page (Phase 3.1/Phase 5), and service registrations. However the following are MISSING and must be built: (1) Login/Logout/AccessDenied pages (app cannot authenticate at all without these -- requests to /login/logout 404), (2) Routes.razor AuthorizeRouteView upgrade (Authorize attributes are currently ignored), (3) User identity header in MainLayout/NavMenu, (4) WebRoleContext connecting ClaimsPrincipal roles to IAuthorizationPolicyService, (5) WebMcpContext access-token forwarding to the McpServer API, (6) McpServer section in appsettings.json, (7) McpServer.Web.Tests tests. FR-MCP-031 is the primary requirement.'
     done: false
     description:
-    - Web UI needs OIDC integration.
+    - 'Web UI needs a complete OIDC authentication integration: login challenge, logout, access-denied, AuthorizeRouteView, user identity display in nav, WebRoleContext wired to ClaimsPrincipal, bearer token forwarding from the Blazor session to the McpServer API, and end-to-end tests.'
+    - 'AUDIT STATUS (2026-03-05): OIDC middleware is registered in Program.cs and appsettings.json has all required config fields with placeholder values. The following are MISSING and block auth from working: Login page, Logout endpoint, AccessDenied page, AuthorizeRouteView in Routes.razor, user identity display, WebRoleContext, bearer token forwarding, McpServer config section, and Web.Tests content.'
+    - The McpServer.Web project already has AuthConfig display (read-only), Primer CSS layout, all feature pages (Todos/Sessions/Templates/Context/Health/Agents/Workspaces), SSE subscription, and adapter infrastructure. This TODO covers only the remaining auth wiring.
     technical-details:
-    - Integrate OIDC authentication flow in McpServer.Web and align with existing API auth model.
+    - 'DONE - Program.cs: AddAuthentication().AddCookie().AddOpenIdConnect() fully config-driven from Authentication:Schemes section. UseAuthentication() and UseAuthorization() in pipeline. AddCascadingAuthenticationState() registered. Authorization policies (AgentManager/Admin) driven from Authentication:Authorization:Policies.'
+    - 'DONE - appsettings.json: full Authentication section with Cookie (CookieName/LoginPath/LogoutPath/AccessDeniedPath), OpenIdConnect (Authority/ClientId/ClientSecret/ResponseType/CallbackPath/SignedOutCallbackPath/MapInboundClaims/GetClaimsFromUserInfoEndpoint/ClaimMapping/Scope), Authorization (RequireAuthenticatedUserByDefault:false, Policies).'
+    - 'DONE - Pages/Auth/AuthConfig.razor: read-only display of server OIDC config via AuthConfigViewModel. NavMenu links to /auth/config.'
+    - 'DONE - _Imports.razor: imports Microsoft.AspNetCore.Components.Authorization and Microsoft.AspNetCore.Authorization. CascadingAuthenticationState is registered and cascades to all components.'
+    - 'DONE - WebServiceRegistration.cs: IAuthConfigApiClient scoped. AddUiCore() fallback registers AllowAllRoleContext and AllowAllAuthorizationPolicyService.'
+    - 'MISSING - Login flow: CookieAuthenticationDefaults.LoginPath=/login but no page exists. Must be a non-interactive Razor Page (not Blazor component) because HttpContext.ChallengeAsync() requires a non-circuit HTTP context. File: src/McpServer.Web/Pages/Auth/Login.cshtml + Login.cshtml.cs. Must add AddRazorPages() + MapRazorPages() to Program.cs.'
+    - 'MISSING - Logout flow: CookieAuthenticationDefaults.LogoutPath=/logout but no page exists. Razor Page that calls HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme) then HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme) to trigger provider end_session redirect. File: src/McpServer.Web/Pages/Auth/Logout.cshtml + Logout.cshtml.cs.'
+    - 'MISSING - AccessDenied page: AccessDeniedPath=/access-denied but no page exists. A simple Blazor component page (Pages/Auth/AccessDenied.razor) with Primer CSS styling and a link back to dashboard. No HttpContext needed.'
+    - 'MISSING - Routes.razor: Uses RouteView which ignores [Authorize] attributes. Must switch to AuthorizeRouteView with a NotAuthorized block that redirects to /login for unauthenticated users and shows access-denied for authenticated-but-unauthorized users.'
+    - "MISSING - User identity display: MainLayout.razor and NavMenu.razor have no user identity section. Need an AuthorizeView-based header/nav block showing the logged-in username (from context.User.Identity.Name or 'name' claim) and a logout link when authenticated, plus a login link when anonymous."
+    - 'MISSING - WebRoleContext: ServiceCollectionExtensions.AddUiCore() defaults to AllowAllRoleContext. McpServer.Web must register a concrete WebRoleContext : IRoleContext that reads from IHttpContextAccessor.HttpContext.User (IsAuthenticated, ClaimsPrincipal.IsInRole). File: src/McpServer.Web/Authorization/WebRoleContext.cs. Register before AddUiCore() in WebServiceRegistration.cs via services.AddHttpContextAccessor() + services.TryAddSingleton<IRoleContext, WebRoleContext>().'
+    - "MISSING - WebMcpContext token forwarding: EnsureInitializedAsync currently auto-discovers API key via client.InitializeAsync(). When a user is authenticated, their OIDC access_token (saved via options.SaveTokens=true) should be forwarded as Bearer token to the McpServer API. Inject IHttpContextAccessor, call HttpContext.GetTokenAsync('access_token') on each scoped request, and set client.BearerToken. The BearerToken check in EnsureInitializedAsync already short-circuits initialization if a bearer token is set."
+    - 'MISSING - appsettings.json McpServer section: WebMcpContext reads McpServer:BaseUrl, McpServer:ApiKey, McpServer:WorkspacePath from IConfiguration but appsettings.json has no McpServer section. Add defaults: BaseUrl=http://localhost:7147, ApiKey=(empty), WorkspacePath=(empty).'
+    - 'MISSING - appsettings.Development.json: Create with Authority overriding to http://localhost:7080/realms/mcp (Keycloak dev), ClientId=mcp-web, and RequireAuthenticatedUserByDefault=true for dev.'
+    - 'MISSING - McpServer.Web.Tests: tests/McpServer.Web.Tests/ directory is empty. McpServer.Web.Tests.csproj exists per commit history but has no content. Need WebApplicationFactory-based or Bunit-based tests covering: Login challenge redirect, Logout sign-out, AccessDenied rendering, AuthorizeRouteView blocking, WebRoleContext claim reading, bearer token forwarding.'
+    - 'Build verification: dotnet build src/McpServer.Web -c Debug. Test verification: dotnet test tests/McpServer.Web.Tests -c Debug. Must fix all compilation errors before marking done.'
+    - 'Keycloak integration context: Keycloak is on :7080, MCP API on :7147, MCP Web (Blazor) on :7100 or similar separate port. OIDC proxy routes (/auth/config, /auth/device, /auth/token) on the MCP API server are for Android/device-flow clients, not the web browser flow. Web UI uses standard browser-based Authorization Code flow (PKCE optional, code response type already configured).'
+    - "Role claim mapping: MapInboundClaims=false, RoleClaimType='role' (per appsettings.json ClaimMapping). Keycloak emits realm roles as 'realm_access.roles' by default. An OnTokenValidated event handler may be needed to flatten realm_access.roles into individual 'role' claims - or configure Keycloak client to include roles as flat claims. This is a Keycloak client mapper configuration concern, but must be tested."
+    functional-requirements:
+    - FR-MCP-031
+    implementation-tasks:
+    - task: 'Task A1 - Add Razor Pages infrastructure: in Program.cs add builder.Services.AddRazorPages() BEFORE builder.Build(), and add app.MapRazorPages() AFTER app.UseAuthorization(). This is required to host the non-interactive Login.cshtml and Logout.cshtml pages that need HttpContext.ChallengeAsync/SignOutAsync.'
+      done: true
+    - task: "Task A2 - Create src/McpServer.Web/Pages/Auth/Login.cshtml: non-interactive Razor Page. PageModel.OnGet() calls Challenge(new AuthenticationProperties { RedirectUri = returnUrl ?? '/' }, OpenIdConnectDefaults.AuthenticationScheme) and returns the challenge result. Accepts optional 'returnUrl' query param and validates it is local. Add @page '/login' directive."
+      done: true
+    - task: 'Task A3 - Create src/McpServer.Web/Pages/Auth/Login.cshtml.cs: LoginModel : PageModel. Inject nothing beyond PageModel. OnGet(string? returnUrl) validates returnUrl is a local URL (Url.IsLocalUrl), constructs AuthenticationProperties with RedirectUri, returns Challenge(properties, OpenIdConnectDefaults.AuthenticationScheme). No Blazor component - must be a pure Razor Page.'
+      done: true
+    - task: "Task A4 - Create src/McpServer.Web/Pages/Auth/Logout.cshtml: non-interactive Razor Page. PageModel.OnGet() calls HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme) then HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = '/' }). This triggers the provider end_session redirect if configured. Add @page '/logout' directive."
+      done: true
+    - task: "Task A5 - Create src/McpServer.Web/Pages/Auth/Logout.cshtml.cs: LogoutModel : PageModel. OnGetAsync() calls await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme) then returns await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = '/' }). Both schemes must be signed out."
+      done: true
+    - task: "Task A6 - Create src/McpServer.Web/Pages/Auth/AccessDenied.razor: standard Blazor @page '/access-denied' component. Shows PrimerBlankslate with Heading='Access Denied' Description='You do not have permission to view this page.' and a link back to /dashboard. No [Authorize] on this page itself (it must be accessible without auth). No code-behind needed."
+      done: true
+    - task: "Task B1 - Update src/McpServer.Web/Routes.razor: change <RouteView RouteData='@routeData' DefaultLayout='@typeof(MainLayout)' /> to <AuthorizeRouteView RouteData='@routeData' DefaultLayout='@typeof(MainLayout)'><NotAuthorized><RedirectToLogin /></NotAuthorized></AuthorizeRouteView>. The NotAuthorized block should differentiate: if context.User.Identity?.IsAuthenticated == true redirect to /access-denied else redirect to /login with returnUrl."
+      done: true
+    - task: "Task B2 - Create src/McpServer.Web/Components/Auth/RedirectToLogin.razor: a parameter-less component that on OnInitializedAsync calls NavigationManager.NavigateTo('/login?returnUrl=' + Uri.EscapeDataString(NavigationManager.Uri), forceLoad: true). This is required because NavigateTo from inside AuthorizeRouteView must force a full page load to allow the non-circuit Razor Page to execute."
+      done: true
+    - task: "Task C1 - Update src/McpServer.Web/Components/Layout/MainLayout.razor: add <AuthorizeView> block at the top of the shell. In <Authorized> show context.User.Identity?.Name (falling back to 'name' claim) and a link to /logout. In <NotAuthorized> show a login link to /login. Add the new auth header above the <aside>/<main> app-shell structure using Primer CSS d-flex/flex-items-center/Header patterns."
+      done: true
+    - task: "Task C2 - Update src/McpServer.Web/Components/Layout/NavMenu.razor: add @inject AuthenticationStateProvider AuthStateProvider. Wrap admin-only nav sections (e.g. Auth Config, future admin areas) in <AuthorizeView Roles='admin'> to hide them from non-admin users. Add a top-level user display name and logout link at the bottom of the sidebar using Primer CSS."
+      done: true
+    - task: "Task D1 - Create src/McpServer.Web/Authorization/WebRoleContext.cs: public sealed class WebRoleContext : IRoleContext. Inject IHttpContextAccessor. IsAuthenticated returns _accessor.HttpContext?.User.Identity?.IsAuthenticated ?? false. Roles returns (_accessor.HttpContext?.User.Claims.Where(c => c.Type == 'role').Select(c => c.Value) ?? []).ToList(). HasRole(string role) uses case-insensitive Contains on Roles list. Add XML doc comments."
+      done: true
+    - task: 'Task D2 - Update src/McpServer.Web/WebServiceRegistration.cs: add services.AddHttpContextAccessor() and services.TryAddSingleton<IRoleContext, WebRoleContext>() BEFORE the call to services.AddUiCore(). This ensures the real WebRoleContext wins over AllowAllRoleContext from the TryAdd fallback inside AddUiCore. Import McpServer.Web.Authorization and McpServer.UI.Core.Authorization namespaces.'
+      done: true
+    - task: "Task E1 - Create src/McpServer.Web/Authorization/BearerTokenAccessor.cs: internal sealed class BearerTokenAccessor. Inject IHttpContextAccessor. Method: Task<string?> GetAccessTokenAsync(CancellationToken ct) calls await _accessor.HttpContext.GetTokenAsync('access_token') returning null when not authenticated. This isolates the token retrieval from WebMcpContext."
+      done: true
+    - task: 'Task E2 - Update src/McpServer.Web/WebMcpContext.cs: inject BearerTokenAccessor. In EnsureInitializedAsync, before the API key check, try var bearerToken = await _bearerTokenAccessor.GetAccessTokenAsync(cancellationToken). If non-null/non-whitespace, set client.BearerToken = bearerToken and return (skip InitializeAsync). The existing EnsureInitializedAsync early return for non-empty BearerToken already handles the short-circuit correctly.'
+      done: true
+    - task: "Task E3 - Update src/McpServer.Web/appsettings.json: add McpServer section at root level: { 'McpServer': { 'BaseUrl': 'http://localhost:7147', 'ApiKey': '', 'WorkspacePath': '' } }. These are development defaults. Production overrides go in environment variables or appsettings.Production.json."
+      done: true
+    - task: "Task E4 - Create src/McpServer.Web/appsettings.Development.json: override Authentication:Schemes:OpenIdConnect:Authority with 'http://localhost:7080/realms/mcp', ClientId with 'mcp-web', and Authentication:Authorization:RequireAuthenticatedUserByDefault with true. This makes dev require login by default while prod stays false until explicitly configured."
+      done: true
+    - task: 'Task F1 - Create tests/McpServer.Web.Tests/McpServer.Web.Tests.csproj: net9.0 class library targeting McpServer.Web. Add PackageReferences for: Microsoft.AspNetCore.Mvc.Testing (for WebApplicationFactory), xunit, xunit.runner.visualstudio, coverlet.collector, Microsoft.NET.Test.Sdk. Add ProjectReference to src/McpServer.Web/McpServer.Web.csproj.'
+      done: true
+    - task: 'Task F2 - Create tests/McpServer.Web.Tests/Auth/LoginPageTests.cs: WebApplicationFactory<Program> test. Test: GET /login returns 302 redirect to OIDC authority (or challenges). Mock the OIDC handler or use TestAuthHandler to simulate the challenge. Verify IActionResult is a ChallengeResult or that Location header points to OIDC authority. Use builder.ConfigureServices() to stub the OIDC metadata.'
+      done: true
+    - task: "Task F3 - Create tests/McpServer.Web.Tests/Auth/LogoutPageTests.cs: WebApplicationFactory test. Test: GET /logout when authenticated returns 302 to OIDC provider's end_session endpoint or to /. Verify cookie is cleared (response does not include auth cookie or sets it to empty). Use TestAuthHandler to pre-authenticate the request."
+      done: true
+    - task: "Task F4 - Create tests/McpServer.Web.Tests/Auth/AccessDeniedPageTests.cs: verify GET /access-denied returns 200 and the page contains 'Access Denied' heading without requiring authentication."
+      done: true
+    - task: 'Task F5 - Create tests/McpServer.Web.Tests/Auth/AuthorizeRouteViewTests.cs: Bunit or WebApplicationFactory test. Verify that a page with [Authorize] attribute redirects unauthenticated users to /login and allows authenticated users through. Use TestAuthHandler with pre-seeded ClaimsPrincipal.'
+      done: true
+    - task: "Task F6 - Create tests/McpServer.Web.Tests/Authorization/WebRoleContextTests.cs: unit tests. Test IsAuthenticated returns false when IHttpContextAccessor.HttpContext is null. Test IsAuthenticated returns true when HttpContext.User.Identity.IsAuthenticated is true. Test Roles enumerates 'role' typed claims from HttpContext.User. Test HasRole('admin') returns true/false correctly with case-insensitive comparison."
+      done: true
+    - task: 'Task F7 - Create tests/McpServer.Web.Tests/WebMcpContextTests.cs: unit tests. Test EnsureInitializedAsync sets client.BearerToken when BearerTokenAccessor returns a non-empty token. Test EnsureInitializedAsync calls InitializeAsync when no token is available. Use fake IConfiguration and mock BearerTokenAccessor.'
+      done: true
+    - task: "Task G1 - Build verification: run 'dotnet build src/McpServer.Web -c Debug' and 'dotnet build tests/McpServer.Web.Tests -c Debug'. Fix all compilation errors introduced by the new auth pages, WebRoleContext, BearerTokenAccessor, and updated WebMcpContext. Verify no CA/nullable warnings become errors."
+      done: true
+    - task: "Task G2 - Test verification: run 'dotnet test tests/McpServer.Web.Tests -c Debug'. All new tests must pass. Fix any test failures."
+      done: true
   - id: PLAN-NAMINGCONVENTIONS-001
     title: '[DONE] Naming conventions for TODO and session IDs in marker/context artifacts'
     done: true

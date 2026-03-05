@@ -16,5 +16,7 @@
     <NavLink class="menu-link" href="/context/search">Context Search</NavLink>
     <p class="menu-heading">System</p>
     <NavLink class="menu-link" href="/health-dashboard">Health Dashboard</NavLink>
-    <NavLink class="menu-link" href="/auth/config">Auth Config</NavLink>
+    <AuthorizeView Roles="admin,agent-manager">
+        <NavLink class="menu-link" href="/auth/config">Auth Config</NavLink>
+    </AuthorizeView>
 </nav>

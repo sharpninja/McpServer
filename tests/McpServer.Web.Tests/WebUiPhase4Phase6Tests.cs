@@ -5,11 +5,14 @@ using McpServer.UI.Core.Messages;
 using McpServer.UI.Core.Services;
 using McpServer.UI.Core.ViewModels;
 using McpServer.Web;
+using McpServer.Web.Authorization;
 using McpServer.Web.Components.Shared;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using NSubstitute;
 using Xunit;
 
 namespace McpServer.Web.Tests;
@@ -29,7 +32,10 @@ public sealed class WebUiPhase4Phase6Tests
             .Build();
 
         var workspaceContext = new WorkspaceContextViewModel();
-        var webContext = new WebMcpContext(config, workspaceContext);
+        var httpAccessor = Substitute.For<IHttpContextAccessor>();
+        httpAccessor.HttpContext.Returns((HttpContext?)null);
+        var bearerTokenAccessor = new BearerTokenAccessor(httpAccessor);
+        var webContext = new WebMcpContext(config, workspaceContext, bearerTokenAccessor);
 
         var initialClient = await webContext.GetRequiredActiveWorkspaceApiClientAsync();
         Assert.Equal("E:/ws/default", webContext.ActiveWorkspacePath);
