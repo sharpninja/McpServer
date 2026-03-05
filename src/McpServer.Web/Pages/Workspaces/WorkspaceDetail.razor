@@ -1,6 +1,7 @@
 @page "/workspaces/detail"
 
 @inject WorkspaceDetailViewModel ViewModel
+@inject IAuthorizationPolicyService AuthPolicy
 
 <PageTitle>Workspace Detail</PageTitle>
 
@@ -25,44 +26,154 @@ else if (ViewModel.Detail is null)
 }
 else
 {
-    <div class="Box">
-        <div class="Box-header">
+    @if (!string.IsNullOrWhiteSpace(ViewModel.MutationMessage))
+    {
+        <PrimerFlash Variant="@(ViewModel.MutationMessage.Contains("failed", StringComparison.OrdinalIgnoreCase) ? "danger" : "success")" Title="Result">@ViewModel.MutationMessage</PrimerFlash>
+    }
+
+    <div class="Box mb-3">
+        <div class="Box-header d-flex flex-justify-between flex-items-center">
             <h2 class="h3 mb-0">@ViewModel.Detail.Name</h2>
+            @if (CanEdit)
+            {
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary btn-sm" @onclick="SaveAsync" disabled="@ViewModel.IsBusy">Save</button>
+                    <button class="btn btn-danger btn-sm" @onclick="DeleteAsync" disabled="@ViewModel.IsBusy">Delete</button>
+                </div>
+            }
         </div>
         <div class="Box-body">
-            <p><strong>Path:</strong> <code>@ViewModel.Detail.WorkspacePath</code></p>
-            <p><strong>Todo Path:</strong> <code>@ViewModel.Detail.TodoPath</code></p>
-            <p><strong>Data Directory:</strong> @(ViewModel.Detail.DataDirectory ?? "(not set)")</p>
-            <p><strong>Tunnel Provider:</strong> @(ViewModel.Detail.TunnelProvider ?? "(not set)")</p>
-            <p><strong>Run As:</strong> @(ViewModel.Detail.RunAs ?? "(not set)")</p>
-            <p><strong>Enabled:</strong> @(ViewModel.Detail.IsEnabled ? "Yes" : "No")</p>
-            <p><strong>Primary:</strong> @(ViewModel.Detail.IsPrimary ? "Yes" : "No")</p>
-            <p><strong>Created:</strong> @ViewModel.Detail.DateTimeCreated.ToString("u")</p>
-            <p><strong>Modified:</strong> @ViewModel.Detail.DateTimeModified.ToString("u")</p>
+            <div class="d-flex flex-column gap-3">
+                <div>
+                    <label class="text-small text-bold d-block">Path</label>
+                    <code>@ViewModel.Detail.WorkspacePath</code>
+                </div>
+                <div>
+                    <label class="text-small text-bold d-block">Name</label>
+                    @if (CanEdit)
+                    {
+                        <input class="form-control" @bind="ViewModel.EditorName" />
+                    }
+                    else
+                    {
+                        <span>@ViewModel.Detail.Name</span>
+                    }
+                </div>
+                <div>
+                    <label class="text-small text-bold d-block">Todo Path</label>
+                    @if (CanEdit)
+                    {
+                        <input class="form-control" @bind="ViewModel.EditorTodoPath" />
+                    }
+                    else
+                    {
+                        <code>@ViewModel.Detail.TodoPath</code>
+                    }
+                </div>
+                <div>
+                    <label class="text-small text-bold d-block">Data Directory</label>
+                    @if (CanEdit)
+                    {
+                        <input class="form-control" @bind="ViewModel.EditorDataDirectory" />
+                    }
+                    else
+                    {
+                        <span>@(ViewModel.Detail.DataDirectory ?? "(not set)")</span>
+                    }
+                </div>
+                <div>
+                    <label class="text-small text-bold d-block">Tunnel Provider</label>
+                    @if (CanEdit)
+                    {
+                        <input class="form-control" @bind="ViewModel.EditorTunnelProvider" />
+                    }
+                    else
+                    {
+                        <span>@(ViewModel.Detail.TunnelProvider ?? "(not set)")</span>
+                    }
+                </div>
+                <div>
+                    <label class="text-small text-bold d-block">Run As</label>
+                    @if (CanEdit)
+                    {
+                        <input class="form-control" @bind="ViewModel.EditorRunAs" />
+                    }
+                    else
+                    {
+                        <span>@(ViewModel.Detail.RunAs ?? "(not set)")</span>
+                    }
+                </div>
+                <div class="d-flex gap-4">
+                    <div>
+                        <label class="text-small text-bold d-block">Enabled</label>
+                        @if (CanEdit)
+                        {
+                            <label class="d-flex flex-items-center gap-2">
+                                <input type="checkbox" @bind="ViewModel.EditorIsEnabled" /> Enabled
+                            </label>
+                        }
+                        else
+                        {
+                            <span>@(ViewModel.Detail.IsEnabled ? "Yes" : "No")</span>
+                        }
+                    </div>
+                    <div>
+                        <label class="text-small text-bold d-block">Primary</label>
+                        @if (CanEdit)
+                        {
+                            <label class="d-flex flex-items-center gap-2">
+                                <input type="checkbox" @bind="ViewModel.EditorIsPrimary" /> Primary
+                            </label>
+                        }
+                        else
+                        {
+                            <span>@(ViewModel.Detail.IsPrimary ? "Yes" : "No")</span>
+                        }
+                    </div>
+                </div>
+                <div>
+                    <label class="text-small text-bold d-block">Created</label>
+                    <span>@ViewModel.Detail.DateTimeCreated.ToString("u")</span>
+                </div>
+                <div>
+                    <label class="text-small text-bold d-block">Modified</label>
+                    <span>@ViewModel.Detail.DateTimeModified.ToString("u")</span>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="mt-3">
-        <h3 class="h4">Policy</h3>
-        <div class="d-flex flex-column gap-2">
-            <div>
-                <strong>Banned Licenses</strong>
-                @RenderStringList(ViewModel.Detail.BannedLicenses)
-            </div>
-            <div>
-                <strong>Banned Countries</strong>
-                @RenderStringList(ViewModel.Detail.BannedCountriesOfOrigin)
-            </div>
-            <div>
-                <strong>Banned Organizations</strong>
-                @RenderStringList(ViewModel.Detail.BannedOrganizations)
-            </div>
-            <div>
-                <strong>Banned Individuals</strong>
-                @RenderStringList(ViewModel.Detail.BannedIndividuals)
+    <div class="Box mb-3">
+        <div class="Box-header"><h3 class="h4 mb-0">Policy</h3></div>
+        <div class="Box-body">
+            <div class="d-flex flex-column gap-2">
+                <div>
+                    <strong>Banned Licenses</strong>
+                    @RenderStringList(ViewModel.Detail.BannedLicenses)
+                </div>
+                <div>
+                    <strong>Banned Countries</strong>
+                    @RenderStringList(ViewModel.Detail.BannedCountriesOfOrigin)
+                </div>
+                <div>
+                    <strong>Banned Organizations</strong>
+                    @RenderStringList(ViewModel.Detail.BannedOrganizations)
+                </div>
+                <div>
+                    <strong>Banned Individuals</strong>
+                    @RenderStringList(ViewModel.Detail.BannedIndividuals)
+                </div>
             </div>
         </div>
     </div>
+
+    @if (CanEdit)
+    {
+        <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-primary" @onclick="SaveAsync" disabled="@ViewModel.IsBusy">Save</button>
+            <button class="btn btn-danger" @onclick="DeleteAsync" disabled="@ViewModel.IsBusy">Delete</button>
+        </div>
+    }
 }
 
 @code {
@@ -70,6 +181,7 @@ else
     public string? WorkspacePath { get; set; }
 
     private string? _loadedPath;
+    private bool CanEdit => AuthPolicy.CanExecuteAction(McpServer.UI.Core.Authorization.McpActionKeys.WorkspaceUpdate);
 
     protected override async Task OnParametersSetAsync()
     {
@@ -83,6 +195,10 @@ else
         ViewModel.WorkspacePath = WorkspacePath;
         await ViewModel.LoadAsync().ConfigureAwait(false);
     }
+
+    private async Task SaveAsync() => await ViewModel.SaveAsync().ConfigureAwait(false);
+
+    private async Task DeleteAsync() => await ViewModel.DeleteAsync().ConfigureAwait(false);
 
     private static RenderFragment RenderStringList(IReadOnlyList<string> values) => builder =>
     {

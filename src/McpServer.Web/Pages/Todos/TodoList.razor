@@ -19,9 +19,9 @@
         <label class="d-flex flex-column">
             <span class="text-small color-fg-muted">Done</span>
             <select class="form-select" name="done">
-                <option value="" selected="@(!Done.HasValue)">All</option>
+                <option value="">All</option>
                 <option value="true" selected="@(Done == true)">Done</option>
-                <option value="false" selected="@(Done == false)">Open</option>
+                <option value="false" selected="@(Done != true)">Open</option>
             </select>
         </label>
         <div class="d-flex flex-items-end">
@@ -89,7 +89,7 @@ else
         _lastQueryKey = queryKey;
         ViewModel.Section = Section;
         ViewModel.Priority = Priority;
-        ViewModel.Done = Done;
+        ViewModel.Done = Done ?? false;
         await ViewModel.LoadAsync().ConfigureAwait(false);
     }
 

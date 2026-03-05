@@ -1,6 +1,7 @@
 @page "/templates/{TemplateId}"
 
 @inject TemplateDetailViewModel ViewModel
+@inject IAuthorizationPolicyService AuthPolicy
 
 <PageTitle>Template Detail</PageTitle>
 
@@ -25,17 +26,87 @@ else if (ViewModel.Detail is null)
 }
 else
 {
+    @if (!string.IsNullOrWhiteSpace(ViewModel.StatusMessage) && ViewModel.StatusMessage.Contains("Saved", StringComparison.OrdinalIgnoreCase))
+    {
+        <PrimerFlash Variant="success" Title="Success">@ViewModel.StatusMessage</PrimerFlash>
+    }
+
     <div class="Box mb-3">
-        <div class="Box-header">
+        <div class="Box-header d-flex flex-justify-between flex-items-center">
             <h2 class="h3 mb-0">@ViewModel.Detail.Title</h2>
+            @if (CanEdit)
+            {
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary btn-sm" @onclick="SaveAsync" disabled="@ViewModel.IsBusy">Save</button>
+                    <button class="btn btn-danger btn-sm" @onclick="DeleteAsync" disabled="@ViewModel.IsBusy">Delete</button>
+                </div>
+            }
         </div>
         <div class="Box-body">
-            <p><strong>ID:</strong> <code>@ViewModel.Detail.Id</code></p>
-            <p><strong>Category:</strong> @ViewModel.Detail.Category</p>
-            <p><strong>Engine:</strong> @ViewModel.Detail.Engine</p>
-            <p><strong>Tags:</strong> @string.Join(", ", ViewModel.Detail.Tags)</p>
-            <p><strong>Description:</strong> @(ViewModel.Detail.Description ?? "(none)")</p>
-            <p><a class="btn btn-sm btn-primary" href="@GetTestHref(ViewModel.Detail.Id)">Test this template</a></p>
+            <div class="d-flex flex-column gap-3">
+                <div>
+                    <label class="text-small text-bold d-block">ID</label>
+                    <code>@ViewModel.Detail.Id</code>
+                </div>
+                <div>
+                    <label class="text-small text-bold d-block">Title</label>
+                    @if (CanEdit)
+                    {
+                        <input class="form-control" @bind="ViewModel.EditorTitle" />
+                    }
+                    else
+                    {
+                        <span>@ViewModel.Detail.Title</span>
+                    }
+                </div>
+                <div>
+                    <label class="text-small text-bold d-block">Category</label>
+                    @if (CanEdit)
+                    {
+                        <input class="form-control" @bind="ViewModel.EditorCategory" />
+                    }
+                    else
+                    {
+                        <span>@ViewModel.Detail.Category</span>
+                    }
+                </div>
+                <div>
+                    <label class="text-small text-bold d-block">Engine</label>
+                    @if (CanEdit)
+                    {
+                        <input class="form-control" @bind="ViewModel.EditorEngine" />
+                    }
+                    else
+                    {
+                        <span>@ViewModel.Detail.Engine</span>
+                    }
+                </div>
+                <div>
+                    <label class="text-small text-bold d-block">Tags</label>
+                    @if (CanEdit)
+                    {
+                        <input class="form-control" placeholder="tag1, tag2, tag3" @bind="ViewModel.EditorTags" />
+                    }
+                    else
+                    {
+                        <span>@string.Join(", ", ViewModel.Detail.Tags)</span>
+                    }
+                </div>
+                <div>
+                    <label class="text-small text-bold d-block">Description</label>
+                    @if (CanEdit)
+                    {
+                        <textarea class="form-control" rows="3" @bind="ViewModel.EditorDescription"></textarea>
+                    }
+                    else
+                    {
+                        <span>@(ViewModel.Detail.Description ?? "(none)")</span>
+                    }
+                </div>
+                <div>
+                    <a class="btn btn-sm" href="@GetTestHref(ViewModel.Detail.Id)">Test this template</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -72,14 +143,29 @@ else
         </div>
     </div>
 
-    <div class="Box">
+    <div class="Box mb-3">
         <div class="Box-header">
             <h3 class="h4 mb-0">Template Content</h3>
         </div>
         <div class="Box-body">
-            <pre class="mb-0">@ViewModel.Detail.Content</pre>
+            @if (CanEdit)
+            {
+                <textarea class="form-control font-mono" rows="15" @bind="ViewModel.EditorContent"></textarea>
+            }
+            else
+            {
+                <pre class="mb-0">@ViewModel.Detail.Content</pre>
+            }
         </div>
     </div>
+
+    @if (CanEdit)
+    {
+        <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-primary" @onclick="SaveAsync" disabled="@ViewModel.IsBusy">Save</button>
+            <button class="btn btn-danger" @onclick="DeleteAsync" disabled="@ViewModel.IsBusy">Delete</button>
+        </div>
+    }
 }
 
 @code {
@@ -87,6 +173,7 @@ else
     public string TemplateId { get; set; } = string.Empty;
 
     private string? _loadedTemplateId;
+    private bool CanEdit => AuthPolicy.CanExecuteAction(McpServer.UI.Core.Authorization.McpActionKeys.TemplateUpdate);
 
     protected override async Task OnParametersSetAsync()
     {
@@ -95,7 +182,12 @@ else
 
         _loadedTemplateId = TemplateId;
         await ViewModel.LoadAsync(TemplateId).ConfigureAwait(false);
+        ViewModel.PopulateEditorFromDetail();
     }
+
+    private async Task SaveAsync() => await ViewModel.SaveAsync().ConfigureAwait(false);
+
+    private async Task DeleteAsync() => await ViewModel.DeleteAsync().ConfigureAwait(false);
 
     private static string GetTestHref(string templateId)
         => $"/templates/test?templateId={Uri.EscapeDataString(templateId)}";

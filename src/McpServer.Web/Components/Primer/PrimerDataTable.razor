@@ -12,7 +12,7 @@
         {
             @foreach (var item in this.Items)
             {
-                <tr>
+                <tr class="@this.RowClass?.Invoke(item)">
                     @this.RowTemplate(item)
                 </tr>
             }
@@ -46,6 +46,9 @@
     [Parameter] public int ColumnCount { get; set; } = 1;
 
     [Parameter] public string? Class { get; set; }
+
+    /// <summary>Optional callback to compute a CSS class for each row's <c>&lt;tr&gt;</c> element.</summary>
+    [Parameter] public Func<TItem, string?>? RowClass { get; set; }
 
     [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object>? AdditionalAttributes { get; set; }
 
