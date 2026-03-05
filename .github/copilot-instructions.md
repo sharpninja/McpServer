@@ -1,5 +1,7 @@
 # Copilot Instructions — McpServer
 
+**Agent Identity:** When posting to the MCP session log, use `sourceType: copilotcli`.
+
 ## Response Formatting
 
 - Do not use table-style output in responses.

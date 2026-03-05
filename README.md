@@ -271,3 +271,5 @@ Source: `src/McpServer.Client/` — see the [package README](src/McpServer.Clien
 ## Additional Documentation
 
 - Full server guide: `docs/MCP-SERVER.md`
+- User documentation: `docs/USER-GUIDE.md`
+- Documentation index: `docs/README.md`

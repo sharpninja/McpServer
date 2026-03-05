@@ -4,6 +4,7 @@ using McpServer.Director.Auth;
 using McpServer.Director.Helpers;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Navigation;
+using McpServer.UI.Core.Services;
 using McpServer.UI.Core.ViewModels;
 using Microsoft.Extensions.Logging;
 using Terminal.Gui;
@@ -875,12 +876,7 @@ internal sealed class MainScreen : Window
         if (_workspacePickerSource.Count == 0)
             return;
 
-        // Prefer the workspace matching CWD over the primary workspace.
-        var cwd = Directory.GetCurrentDirectory();
-        var preferred = _workspaceListVm.Workspaces.FirstOrDefault(w =>
-                            string.Equals(w.WorkspacePath, cwd, StringComparison.OrdinalIgnoreCase))?.WorkspacePath
-                        ?? _workspaceListVm.Workspaces.FirstOrDefault(w => w.IsPrimary)?.WorkspacePath
-                        ?? _workspaceListVm.Workspaces.FirstOrDefault()?.WorkspacePath;
+        var preferred = WorkspaceAutoSelector.SelectPreferred(_workspaceListVm.Workspaces.ToList());
         if (string.IsNullOrWhiteSpace(preferred))
             return;
 

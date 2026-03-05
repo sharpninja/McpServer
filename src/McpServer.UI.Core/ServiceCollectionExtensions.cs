@@ -2,6 +2,7 @@ using System.Reflection;
 using McpServer.Cqrs;
 using McpServer.Cqrs.Mvvm;
 using McpServer.UI.Core.Authorization;
+using McpServer.UI.Core.Services;
 using McpServer.UI.Core.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -36,6 +37,9 @@ public static class ServiceCollectionExtensions
 
         // Register shared workspace context as singleton so all ViewModels observe the same instance
         services.AddSingleton<WorkspaceContextViewModel>();
+
+        // Shared workspace auto-selection (CWD → Primary → First enabled)
+        services.AddSingleton<WorkspaceAutoSelector>();
 
         // Register ViewModels as transient
         services.AddTransient<WorkspaceListViewModel>();

@@ -2,6 +2,10 @@
 
 ## Overview
 
+## Documentation
+
+- [User Documentation](USER-GUIDE.md)
+- [Documentation Index](README.md)
 `McpServer.Support.Mcp` is the local MCP context server for todo data,
 session logs, context search, repo file operations, and GitHub issue sync.
 
@@ -290,3 +294,4 @@ Script:
 
 The script publishes output, writes a minimal Appx manifest, and creates an
 `.msix` package with `makeappx.exe`.
+

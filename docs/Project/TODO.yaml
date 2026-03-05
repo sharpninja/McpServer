@@ -911,6 +911,11 @@ mvp-app:
       done: true
     - task: Add/extend tests and update Requirements-Matrix/TR-per-FR statuses after implementation.
       done: true
+  - id: MVP-APP-007
+    title: Add git remote URL property to workspace DTO for GitHub ref identification at runtime
+    done: false
+    description:
+    - Read the git remote (origin) URL for each workspace directory and expose it as a property on the workspace DTO (WorkspaceDetail/WorkspaceSummary). This allows consuming code to identify GitHub repository refs (owner/repo) at runtime without shelling out to git. Implementation should read the remote during workspace registration or on-demand via git config/CLI, and persist or cache the value.
 mvp-mcp:
   high-priority:
   - id: MVP-MCP-002
