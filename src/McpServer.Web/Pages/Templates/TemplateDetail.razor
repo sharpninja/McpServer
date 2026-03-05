@@ -55,7 +55,7 @@
                     }
                 </div>
                 <div class="Box-body">
-                    <div class="d-flex flex-column gap-3">
+                    <div class="d-flex flex-wrap gap-3" style="display: grid !important; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div>
                             <label class="text-small text-bold d-block">ID</label>
                             <code>@ViewModel.Detail.Id</code>
@@ -64,7 +64,7 @@
                             <label class="text-small text-bold d-block">Title</label>
                             @if (CanEdit)
                             {
-                                <input class="form-control" @bind="ViewModel.EditorTitle" />
+                                <input class="form-control width-full" @bind="ViewModel.EditorTitle" />
                             }
                             else
                             {
@@ -75,7 +75,7 @@
                             <label class="text-small text-bold d-block">Category</label>
                             @if (CanEdit)
                             {
-                                <input class="form-control" @bind="ViewModel.EditorCategory" />
+                                <input class="form-control width-full" @bind="ViewModel.EditorCategory" />
                             }
                             else
                             {
@@ -86,7 +86,7 @@
                             <label class="text-small text-bold d-block">Engine</label>
                             @if (CanEdit)
                             {
-                                <input class="form-control" @bind="ViewModel.EditorEngine" />
+                                <input class="form-control width-full" @bind="ViewModel.EditorEngine" />
                             }
                             else
                             {
@@ -97,7 +97,7 @@
                             <label class="text-small text-bold d-block">Tags</label>
                             @if (CanEdit)
                             {
-                                <input class="form-control" placeholder="tag1, tag2, tag3" @bind="ViewModel.EditorTags" />
+                                <input class="form-control width-full" placeholder="tag1, tag2, tag3" @bind="ViewModel.EditorTags" />
                             }
                             else
                             {
@@ -108,16 +108,16 @@
                             <label class="text-small text-bold d-block">Description</label>
                             @if (CanEdit)
                             {
-                                <textarea class="form-control" rows="3" @bind="ViewModel.EditorDescription"></textarea>
+                                <textarea class="form-control width-full" rows="3" @bind="ViewModel.EditorDescription"></textarea>
                             }
                             else
                             {
                                 <span>@(ViewModel.Detail.Description ?? "(none)")</span>
                             }
                         </div>
-                        <div>
-                            <a class="btn btn-sm" href="@GetTestHref(ViewModel.Detail.Id)">Test this template</a>
-                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a class="btn btn-sm" href="@GetTestHref(ViewModel.Detail.Id)">Test this template</a>
                     </div>
                 </div>
             </div>
@@ -159,15 +159,11 @@
                 <div class="Box-header">
                     <h3 class="h4 mb-0">Template Content</h3>
                 </div>
-                <div class="Box-body">
-                    @if (CanEdit)
-                    {
-                        <textarea class="form-control font-mono" rows="15" @bind="ViewModel.EditorContent"></textarea>
-                    }
-                    else
-                    {
-                        <pre class="mb-0">@ViewModel.Detail.Content</pre>
-                    }
+                <div class="Box-body p-0">
+                    <MonacoEditor @bind-Value="ViewModel.EditorContent"
+                                  Language="handlebars"
+                                  ReadOnly="@(!CanEdit)"
+                                  Height="500" />
                 </div>
             </div>
         }
