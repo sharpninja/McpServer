@@ -4,6 +4,7 @@ using McpServer.Cqrs;
 using McpServer.Cqrs.Mvvm;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
+using McpServer.UI.Core.Services;
 using McpServer.UI.Core.ViewModels.Base;
 using Microsoft.Extensions.Logging;
 
@@ -23,6 +24,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
     private readonly CqrsQueryCommand<TodoPromptOutput> _statusPromptCommand;
     private readonly CqrsQueryCommand<TodoPromptOutput> _implementPromptCommand;
     private readonly CqrsQueryCommand<TodoPromptOutput> _planPromptCommand;
+    private readonly ITodoApiClient? _todoApiClient;
     private readonly ILogger<TodoDetailViewModel> _logger;
 
 
@@ -30,12 +32,15 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
     /// <param name="dispatcher">CQRS dispatcher.</param>
     /// <param name="workspaceContext">Shared workspace context for reacting to workspace changes.</param>
     /// <param name="logger">Logger instance.</param>
+    /// <param name="todoApiClient">Optional streaming-capable TODO API client for incremental prompt output.</param>
     public TodoDetailViewModel(Dispatcher dispatcher,
         WorkspaceContextViewModel workspaceContext,
-        ILogger<TodoDetailViewModel> logger)
+        ILogger<TodoDetailViewModel> logger,
+        ITodoApiClient? todoApiClient = null)
         : base(McpArea.Todo)
     {
         _logger = logger;
+        _todoApiClient = todoApiClient;
         _loadCommand = new CqrsQueryCommand<TodoDetail?>(dispatcher, BuildQuery);
         _createCommand = new CqrsRelayCommand<TodoMutationOutcome>(dispatcher, BuildCreateCommand);
         _updateCommand = new CqrsRelayCommand<TodoMutationOutcome>(dispatcher, BuildUpdateCommand);
@@ -138,6 +143,14 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
     /// <summary>Last aggregated prompt output (status/implement/plan).</summary>
     [ObservableProperty]
     private TodoPromptOutput? _promptOutput;
+
+    /// <summary>
+    /// Incrementally updated prompt text while a streaming prompt is in progress.
+    /// Bound by the UI to show lines as they arrive from the Copilot CLI.
+    /// Reset to <see langword="null"/> when a new prompt starts.
+    /// </summary>
+    [ObservableProperty]
+    private string? _streamingPromptText;
 
     /// <summary>Load command (also primary command for exec).</summary>
     public IAsyncRelayCommand LoadCommand => _loadCommand;
@@ -298,15 +311,21 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
 
     /// <summary>Generates a status prompt for the active TODO item.</summary>
     public Task GenerateStatusPromptAsync(CancellationToken ct = default)
-        => RunPromptAsync(_statusPromptCommand, "Generating status prompt...", ct);
+        => _todoApiClient is not null
+            ? RunStreamingPromptAsync("status", _todoApiClient.StreamTodoStatusPromptAsync(GetActiveTodoId(), ct), ct)
+            : RunPromptAsync(_statusPromptCommand, "Generating status prompt...", ct);
 
     /// <summary>Generates an implementation prompt for the active TODO item.</summary>
     public Task GenerateImplementPromptAsync(CancellationToken ct = default)
-        => RunPromptAsync(_implementPromptCommand, "Generating implement prompt...", ct);
+        => _todoApiClient is not null
+            ? RunStreamingPromptAsync("implement", _todoApiClient.StreamTodoImplementPromptAsync(GetActiveTodoId(), ct), ct)
+            : RunPromptAsync(_implementPromptCommand, "Generating implement prompt...", ct);
 
     /// <summary>Generates a plan prompt for the active TODO item.</summary>
     public Task GeneratePlanPromptAsync(CancellationToken ct = default)
-        => RunPromptAsync(_planPromptCommand, "Generating plan prompt...", ct);
+        => _todoApiClient is not null
+            ? RunStreamingPromptAsync("plan", _todoApiClient.StreamTodoPlanPromptAsync(GetActiveTodoId(), ct), ct)
+            : RunPromptAsync(_planPromptCommand, "Generating plan prompt...", ct);
 
     private async Task RunMutationAsync(
         CqrsRelayCommand<TodoMutationOutcome> command,
@@ -433,6 +452,61 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
             StatusMessage = result.Value is null
                 ? "Prompt output not available."
                 : $"Generated {result.Value.PromptType} prompt for {result.Value.TodoId}.";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            ErrorMessage = ex.Message;
+            StatusMessage = "TODO prompt generation failed.";
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    /// <summary>
+    /// Streams prompt lines from the API client, updating <see cref="StreamingPromptText"/>
+    /// incrementally as each line arrives. Sets <see cref="PromptOutput"/> on completion.
+    /// </summary>
+    private async Task RunStreamingPromptAsync(string promptType, IAsyncEnumerable<string> stream, CancellationToken ct)
+    {
+        var todoId = GetActiveTodoId();
+        IsBusy = true;
+        ErrorMessage = null;
+        StreamingPromptText = null;
+        PromptOutput = null;
+        StatusMessage = $"Generating {promptType} prompt (streaming)...";
+
+        try
+        {
+            var lines = new List<string>();
+            await foreach (var line in stream.WithCancellation(ct).ConfigureAwait(false))
+            {
+                // Skip SSE heartbeat / thinking lines — they are keep-alive signals, not content.
+                if (line is "…" or "Processing…" or "\u2026" or "Processing\u2026")
+                {
+                    StatusMessage = $"Generating {promptType} prompt (waiting for Copilot)...";
+                    continue;
+                }
+
+                lines.Add(line);
+                StreamingPromptText = string.Join(Environment.NewLine, lines);
+            }
+
+            var output = new TodoPromptOutput(
+                TodoId: todoId,
+                PromptType: promptType,
+                Lines: lines,
+                Text: string.Join(Environment.NewLine, lines));
+
+            PromptOutput = output;
+            LastUpdatedAt = DateTimeOffset.UtcNow;
+            StatusMessage = $"Generated {promptType} prompt for {todoId}.";
+        }
+        catch (OperationCanceledException)
+        {
+            StatusMessage = "Prompt generation canceled.";
         }
         catch (Exception ex)
         {
