@@ -4,6 +4,7 @@ using McpServer.Cqrs;
 using McpServer.Cqrs.Mvvm;
 using McpServer.UI.Core.Authorization;
 using McpServer.UI.Core.Messages;
+using McpServer.UI.Core.Services;
 using McpServer.UI.Core.ViewModels.Base;
 using Microsoft.Extensions.Logging;
 
@@ -123,6 +124,10 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
     [ObservableProperty]
     private string? _editorTechnicalRequirementsText;
 
+    /// <summary>Full TODO as editable Markdown text (used by Monaco editor).</summary>
+    [ObservableProperty]
+    private string? _editorMarkdownText;
+
     /// <summary>Whether the editor is currently a new-item draft.</summary>
     [ObservableProperty]
     private bool _isNewDraft = true;
@@ -214,6 +219,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         EditorDependsOnText = null;
         EditorFunctionalRequirementsText = null;
         EditorTechnicalRequirementsText = null;
+        EditorMarkdownText = null;
         RequirementsAnalysis = null;
         PromptOutput = null;
         IsDirty = true;
@@ -514,6 +520,29 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         EditorDependsOnText = FormatLines(detail.DependsOn);
         EditorFunctionalRequirementsText = FormatLines(detail.FunctionalRequirements);
         EditorTechnicalRequirementsText = FormatLines(detail.TechnicalRequirements);
+        EditorMarkdownText = TodoMarkdownSerializer.Serialize(detail);
+    }
+
+    /// <summary>Applies the current Markdown text back into individual editor fields.</summary>
+    public void ApplyMarkdownToEditor()
+    {
+        if (string.IsNullOrWhiteSpace(EditorMarkdownText))
+            return;
+
+        var fields = TodoMarkdownSerializer.Deserialize(EditorMarkdownText);
+        if (fields.Title is not null) EditorTitle = fields.Title;
+        if (fields.Id is not null) EditorId = fields.Id;
+        if (fields.Section is not null) EditorSection = fields.Section;
+        if (fields.Priority is not null) EditorPriority = fields.Priority;
+        EditorDone = fields.Done;
+        EditorEstimate = fields.Estimate;
+        EditorNote = fields.Note;
+        EditorDescriptionText = fields.DescriptionText;
+        EditorTechnicalDetailsText = fields.TechnicalDetailsText;
+        EditorImplementationTasksText = fields.ImplementationTasksText;
+        EditorDependsOnText = fields.DependsOnText;
+        EditorFunctionalRequirementsText = fields.FunctionalRequirementsText;
+        EditorTechnicalRequirementsText = fields.TechnicalRequirementsText;
     }
 
     private string GetActiveTodoId()

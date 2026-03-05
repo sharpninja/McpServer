@@ -2,80 +2,145 @@ html,
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
-}
-
-.app-shell {
-    min-height: 100vh;
-    display: flex;
-}
-
-.app-main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.app-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem 1.5rem;
-    border-bottom: 1px solid var(--borderColor-default, #d0d7de);
     background-color: var(--bgColor-default, #ffffff);
-    height: 48px;
 }
 
-.app-header-title {
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--fgColor-default, #1f2328);
+/* ── Sidebar ── */
+aside.app-sidebar {
+    width: 260px !important;
+    min-width: 260px !important;
+    border-right: 1px solid var(--borderColor-default, #d0d7de) !important;
+    background-color: var(--bgColor-default, #ffffff) !important;
+    padding: 12px 8px !important;
+    overflow-y: auto;
 }
 
-.app-header-auth {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+/* ── Nav list reset ── */
+.app-sidebar ul.mcp-nav-list {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
-.app-sidebar {
-    width: 220px;
-    border-right: 1px solid var(--borderColor-default, #d0d7de);
-    background-color: var(--bgColor-muted, #f6f8fa);
+.app-sidebar li.mcp-nav-item {
+    list-style: none !important;
+    position: relative;
+    border-radius: 6px;
+    margin: 1px 0;
 }
 
-.nav-menu {
-    padding: 1rem;
+/* ── Nav links (GitHub ActionList style) ── */
+.app-sidebar a.mcp-nav-link {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 6px 8px !important;
+    border-radius: 6px !important;
+    color: var(--fgColor-default, #1f2328) !important;
+    text-decoration: none !important;
+    font-size: 14px !important;
+    line-height: 20px !important;
+    cursor: pointer;
+    transition: background-color 80ms;
 }
 
-.menu-link {
-    display: block;
-    padding: 0.375rem 0.5rem;
-    color: inherit;
-    text-decoration: none;
-    border-radius: 0.375rem;
-    margin-bottom: 0.125rem;
+.app-sidebar a.mcp-nav-link:hover {
+    background-color: rgba(208, 215, 222, 0.32) !important;
+    text-decoration: none !important;
 }
 
-.menu-link:hover {
-    background-color: var(--button-default-bgColor-hover, #f3f4f6);
+.app-sidebar a.mcp-nav-link.active {
+    background-color: rgba(208, 215, 222, 0.48) !important;
+    font-weight: 600 !important;
 }
 
-.menu-link.active {
-    background-color: var(--bgColor-accent-muted, #ddf4ff);
-    color: var(--fgColor-accent, #0969da);
-    font-weight: 600;
+.app-sidebar li.mcp-nav-item a.mcp-nav-link.active::before {
+    content: "";
+    position: absolute;
+    top: calc(50% - 8px);
+    left: -4px;
+    width: 3px;
+    height: 16px;
+    border-radius: 6px;
+    background-color: var(--fgColor-accent, #0969da);
 }
 
-.menu-heading {
-    margin: 0.75rem 0 0.25rem;
-    font-size: 0.75rem;
+.app-sidebar .mcp-nav-icon {
+    display: flex !important;
+    align-items: center !important;
+    color: var(--fgColor-muted, #656d76) !important;
+    flex-shrink: 0;
+}
+
+.app-sidebar a.mcp-nav-link.active .mcp-nav-icon {
+    color: var(--fgColor-default, #1f2328) !important;
+}
+
+.app-sidebar .mcp-nav-label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ── Section dividers ── */
+.app-sidebar li.mcp-nav-divider {
+    list-style: none !important;
+    padding: 6px 8px 4px !important;
+    margin-top: 8px !important;
+}
+
+.app-sidebar li.mcp-nav-divider:first-child {
+    margin-top: 0 !important;
+}
+
+.app-sidebar li.mcp-nav-divider h3 {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: var(--fgColor-muted, #656d76) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 16px !important;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
-    color: var(--fgColor-muted, #57606a);
 }
 
+/* ── Main content ── */
 .app-content {
     flex: 1;
-    padding: 1.5rem;
+    padding: 24px 32px;
     overflow-y: auto;
+    min-width: 0;
+}
+
+/* ── Active workspace row highlight ── */
+tr.active-workspace-row {
+    background-color: var(--bgColor-accent-muted, #ddf4ff) !important;
+}
+
+/* ── Table cell padding ── */
+table.Table th,
+table.Table td {
+    padding: 8px 16px !important;
+}
+
+table.Table th {
+    font-weight: 600 !important;
+    border-bottom: 1px solid var(--borderColor-default, #d0d7de) !important;
+}
+
+table.Table tbody tr {
+    border-bottom: 1px solid var(--borderColor-muted, #d8dee4) !important;
+}
+
+table.Table tbody tr:last-child {
+    border-bottom: none !important;
+}
+
+/* ── Monaco editor container ── */
+.monaco-editor-container {
+    width: 100% !important;
+    height: 600px;
+    border: 1px solid var(--borderColor-default, #d0d7de);
 }

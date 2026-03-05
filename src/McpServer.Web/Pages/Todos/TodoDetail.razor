@@ -1,6 +1,9 @@
 @page "/todos/{TodoId}"
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode InteractiveServer
 
 @inject TodoDetailViewModel ViewModel
+@inject IAuthorizationPolicyService AuthPolicy
 
 <PageTitle>Todo Detail</PageTitle>
 
@@ -25,69 +28,45 @@ else if (ViewModel.Detail is null)
 }
 else
 {
-    <div class="Box mb-3">
-        <div class="Box-header">
-            <h2 class="h3 mb-0">@ViewModel.Detail.Title</h2>
-        </div>
-        <div class="Box-body">
-            <p><strong>ID:</strong> <code>@ViewModel.Detail.Id</code></p>
-            <p><strong>Section:</strong> @ViewModel.Detail.Section</p>
-            <p><strong>Priority:</strong> <PrimerLabel Scheme="@GetPriorityScheme(ViewModel.Detail.Priority)" Text="@ViewModel.Detail.Priority" /></p>
-            <p><strong>Status:</strong> <PrimerLabel Scheme="@(ViewModel.Detail.Done ? "success" : "attention")" Text="@(ViewModel.Detail.Done ? "Done" : "Open")" /></p>
-            <p><strong>Estimate:</strong> @(ViewModel.Detail.Estimate ?? "(none)")</p>
-            <p><strong>Note:</strong> @(ViewModel.Detail.Note ?? "(none)")</p>
-            <p><strong>Completed Date:</strong> @(ViewModel.Detail.CompletedDate ?? "(not completed)")</p>
-            <p><strong>Done Summary:</strong> @(ViewModel.Detail.DoneSummary ?? "(none)")</p>
-            <p><strong>Remaining:</strong> @(ViewModel.Detail.Remaining ?? "(none)")</p>
-            <p><strong>Priority Note:</strong> @(ViewModel.Detail.PriorityNote ?? "(none)")</p>
-            <p><strong>Reference:</strong> @(ViewModel.Detail.Reference ?? "(none)")</p>
-        </div>
-    </div>
+    @if (!string.IsNullOrWhiteSpace(ViewModel.MutationMessage))
+    {
+        <PrimerFlash Variant="success" Title="Success">@ViewModel.MutationMessage</PrimerFlash>
+    }
 
     <div class="Box mb-3">
-        <div class="Box-header"><h3 class="h4 mb-0">Description</h3></div>
-        <div class="Box-body">
-            @RenderStringList(ViewModel.Detail.Description)
-        </div>
-    </div>
-
-    <div class="Box mb-3">
-        <div class="Box-header"><h3 class="h4 mb-0">Technical Details</h3></div>
-        <div class="Box-body">
-            @RenderStringList(ViewModel.Detail.TechnicalDetails)
-        </div>
-    </div>
-
-    <div class="Box mb-3">
-        <div class="Box-header"><h3 class="h4 mb-0">Implementation Tasks</h3></div>
-        <div class="Box-body">
-            @if (ViewModel.Detail.ImplementationTasks.Count == 0)
+        <div class="Box-header d-flex flex-justify-between flex-items-center">
+            <h2 class="h3 mb-0">@ViewModel.Detail.Id — @ViewModel.Detail.Title</h2>
+            @if (CanEdit)
             {
-                <p class="color-fg-muted mb-0">No implementation tasks.</p>
-            }
-            else
-            {
-                <ul class="mb-0">
-                    @foreach (var task in ViewModel.Detail.ImplementationTasks)
-                    {
-                        <li>@(task.Done ? "✅" : "⬜") @task.Task</li>
-                    }
-                </ul>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary btn-sm" @onclick="SaveAsync" disabled="@ViewModel.IsBusy">
+                        <OcticonIcon Name="check-circle" Size="16" /> Save
+                    </button>
+                    <button class="btn btn-danger btn-sm" @onclick="DeleteAsync" disabled="@ViewModel.IsBusy">
+                        <OcticonIcon Name="trash" Size="16" /> Delete
+                    </button>
+                </div>
             }
         </div>
-    </div>
-
-    <div class="Box">
-        <div class="Box-header"><h3 class="h4 mb-0">Dependencies & Requirements</h3></div>
-        <div class="Box-body">
-            <p><strong>Depends On:</strong></p>
-            @RenderStringList(ViewModel.Detail.DependsOn)
-            <p class="mt-2"><strong>Functional Requirements:</strong></p>
-            @RenderStringList(ViewModel.Detail.FunctionalRequirements)
-            <p class="mt-2"><strong>Technical Requirements:</strong></p>
-            @RenderStringList(ViewModel.Detail.TechnicalRequirements)
+        <div class="Box-body p-0">
+            <MonacoEditor @bind-Value="ViewModel.EditorMarkdownText"
+                          Language="markdown"
+                          ReadOnly="@(!CanEdit)"
+                          Height="600" />
         </div>
     </div>
+
+    @if (CanEdit)
+    {
+        <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-primary" @onclick="SaveAsync" disabled="@ViewModel.IsBusy">
+                <OcticonIcon Name="check-circle" Size="16" /> Save
+            </button>
+            <button class="btn btn-danger" @onclick="DeleteAsync" disabled="@ViewModel.IsBusy">
+                <OcticonIcon Name="trash" Size="16" /> Delete
+            </button>
+        </div>
+    }
 }
 
 @code {
@@ -95,6 +74,7 @@ else
     public string TodoId { get; set; } = string.Empty;
 
     private string? _loadedId;
+    private bool CanEdit => AuthPolicy.CanExecuteAction(McpServer.UI.Core.Authorization.McpActionKeys.TodoUpdate);
 
     protected override async Task OnParametersSetAsync()
     {
@@ -106,37 +86,12 @@ else
         await ViewModel.LoadAsync().ConfigureAwait(false);
     }
 
-    private static string GetPriorityScheme(string priority)
-        => priority.ToLowerInvariant() switch
-        {
-            "critical" => "danger",
-            "high" => "attention",
-            "medium" => "done",
-            "low" => "default",
-            _ => "default",
-        };
-
-    private static RenderFragment RenderStringList(IReadOnlyList<string> values) => builder =>
+    private async Task SaveAsync()
     {
-        if (values.Count == 0)
-        {
-            builder.OpenElement(0, "p");
-            builder.AddAttribute(1, "class", "color-fg-muted mb-0");
-            builder.AddContent(2, "None");
-            builder.CloseElement();
-            return;
-        }
+        ViewModel.ApplyMarkdownToEditor();
+        await ViewModel.SaveAsync().ConfigureAwait(false);
+    }
 
-        builder.OpenElement(3, "ul");
-        builder.AddAttribute(4, "class", "mb-0");
-        for (var i = 0; i < values.Count; i++)
-        {
-            builder.OpenElement(10 + i, "li");
-            builder.AddContent(20 + i, values[i]);
-            builder.CloseElement();
-        }
-
-        builder.CloseElement();
-    };
+    private async Task DeleteAsync() => await ViewModel.DeleteAsync().ConfigureAwait(false);
 }
 
