@@ -200,7 +200,7 @@ Enhanced GitHub integration capabilities including GitHub federation through the
 
 A Copilot-integrated prompt tool that accepts natural language policy directives (e.g. "Ban chinese sources from all workspaces") and translates them into workspace configuration changes across all or targeted workspaces. Each policy change is session-logged per affected workspace with action type `policy_change`.
 
-**Covered by:** `PolicyManagementTool` in `McpServer.Support.Mcp` *(planned; tracked by TODO `REQ-GAP-001`)*
+**Covered by:** `WorkspaceController` (`POST /mcpserver/workspace/policy`), `WorkspacePolicyService`, `WorkspacePolicyDirectiveParser`, `McpServerMcpTools.workspace_policy_apply`
 
 ## FR-MCP-034 Workspace Compliance Configuration
 
@@ -218,7 +218,7 @@ The marker prompt shall include mandatory sections for: absolute honesty, correc
 
 Every server-initiated Copilot interaction must be session-logged in every affected workspace. An `AuditedCopilotClient` decorator wraps `ICopilotClient` to create session log entries before and after each call, with action type `copilot_invocation`.
 
-**Covered by:** `AuditedCopilotClient` decorator *(planned; tracked by TODO `REQ-GAP-001`)*
+**Covered by:** `AuditedCopilotClient`, `Program.cs` DI registration, `McpStdioHost` DI registration, `CopilotServiceCollectionExtensions`
 
 ## FR-MCP-037 Director CLI Exec Command
 
@@ -236,7 +236,7 @@ Agents must follow a session continuity protocol: at session start, read the mar
 
 All source files from `McpServer.Cqrs`, `McpServer.Cqrs.Mvvm`, `McpServer.UI.Core`, and `McpServer.Director` shall be indexed into the MCP context store for semantic search. The marker prompt lists these projects in the Available Capabilities section.
 
-**Covered by:** Ingestion configuration, `MarkerFileService.DefaultPromptTemplate` *(planned; tracked by TODO `REQ-GAP-001`)*
+**Covered by:** `Program.cs` / `McpStdioHost` `PostConfigure<IngestionOptions>` allowlist merge, `appsettings.yaml` `Mcp:RepoAllowlist`, `MarkerFileService.DefaultPromptTemplate`
 
 ## FR-MCP-040 Requirements Document CRUD Management
 
@@ -419,3 +419,7 @@ Functional behavior shall include:
 **Technical Implementation:** [TR-MCP-GH-001](./Technical-Requirements.md#tr-mcp-gh-001) | [TR-MCP-GH-002](./Technical-Requirements.md#tr-mcp-gh-002) | [TR-MCP-GH-003](./Technical-Requirements.md#tr-mcp-gh-003) | [TR-MCP-GH-004](./Technical-Requirements.md#tr-mcp-gh-004)
 
 **Covered by:** `GitHubIntegrationOptions`, `FileGitHubWorkspaceTokenStore`, `GitHubController`, `GitHubCliService`, `ProcessRunner`, `GitHubClient`
+
+#### FR-MCP-064: Marketing and Adoption Documentation
+The system SHALL provide marketing-oriented documentation that clearly explains what McpServer is, its key feature set, why adopters need it, and the currently supported UI tooling surfaces (including VS extension and Web UI experiences).
+**Technical Implementation:** [TR-MCP-DOC-001](./Technical-Requirements.md#tr-mcp-doc-001) | [Details](./TR-per-FR-Mapping.md#fr-mcp-064)

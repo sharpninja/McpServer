@@ -13,7 +13,8 @@ public static class CopilotServiceCollectionExtensions
         services.AddOptions<CopilotClientOptions>();
         services.AddSingleton<IProcessEnvironmentService, ProcessEnvironmentService>();
         services.TryAddSingleton<IProcessSpawner, DefaultProcessSpawner>();
-        services.AddSingleton<ICopilotClient, CopilotClient>();
+        services.TryAddSingleton<CopilotClient>();
+        services.AddSingleton<ICopilotClient>(sp => sp.GetRequiredService<CopilotClient>());
         return services;
     }
 
@@ -24,7 +25,8 @@ public static class CopilotServiceCollectionExtensions
             .Configure(configure);
         services.AddSingleton<IProcessEnvironmentService, ProcessEnvironmentService>();
         services.TryAddSingleton<IProcessSpawner, DefaultProcessSpawner>();
-        services.AddSingleton<ICopilotClient, CopilotClient>();
+        services.TryAddSingleton<CopilotClient>();
+        services.AddSingleton<ICopilotClient>(sp => sp.GetRequiredService<CopilotClient>());
         return services;
     }
 }

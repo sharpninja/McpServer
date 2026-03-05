@@ -45,6 +45,12 @@ public sealed class WorkspaceClient : McpClientBase
         return await PutAsync<WorkspaceMutationResult>($"mcpserver/workspace/{Uri.EscapeDataString(key)}", request, cancellationToken).ConfigureAwait(false);
     }
 
+    /// <summary>Apply a natural-language workspace policy directive.</summary>
+    public async Task<WorkspacePolicyApplyResult> ApplyPolicyAsync(WorkspacePolicyApplyRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<WorkspacePolicyApplyResult>("mcpserver/workspace/policy", request, cancellationToken).ConfigureAwait(false);
+    }
+
     /// <summary>Delete a workspace.</summary>
     public async Task<WorkspaceMutationResult> DeleteAsync(string key, CancellationToken cancellationToken = default)
     {

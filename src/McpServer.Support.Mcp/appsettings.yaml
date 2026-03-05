@@ -2,22 +2,18 @@ Logging:
   LogLevel:
     Default: Information
     Microsoft.AspNetCore: Warning
-
 Serilog:
   MinimumLevel:
     Default: Information
     Override:
       Microsoft.AspNetCore: Warning
       McpServer.Support.Mcp.Logging: Verbose
-
-AllowedHosts: "*"
-DataFolder: "."
-
+AllowedHosts: '*'
+DataFolder: .
 Embedding:
   Dimensions: 384
   MaxSequenceLength: 128
   AutoDownload: true
-
 VectorIndex:
   Dimensions: 384
   MaxElements: 100000
@@ -25,18 +21,22 @@ VectorIndex:
   EfConstruction: 200
   EfSearch: 50
   IndexPath: mcp-data/vector.idx
-
 Mcp:
   DatabaseProvider: sqlite
-  PostgresConnectionString: ""
+  PostgresConnectionString: ''
   Port: 7147
   DataSource: mcp.db
-  DataDirectory: "."
-  RepoRoot: "."
+  DataDirectory: .
+  RepoRoot: .
   TodoFilePath: docs/Project/TODO.yaml
   SessionsPath: docs/sessions
   UnifiedModelSchemaPath: docs/schemas/UnifiedModel.schema.json
   ExternalDocsPath: docs/external
+  RepoAllowlist:
+  - src/McpServer.Cqrs/**/*.cs
+  - src/McpServer.Cqrs.Mvvm/**/*.cs
+  - src/McpServer.UI.Core/**/*.cs
+  - src/McpServer.Director/**/*.cs
   GraphRag:
     Enabled: false
     EnhanceContextSearch: true
@@ -54,8 +54,8 @@ Mcp:
     default:
       Port: 7147
       DataSource: mcp.db
-      DataDirectory: "."
-      RepoRoot: "."
+      DataDirectory: .
+      RepoRoot: .
       TodoFilePath: docs/Project/TODO.yaml
       TodoStorage:
         Provider: yaml
@@ -63,7 +63,7 @@ Mcp:
     alt-local:
       Port: 7157
       DataSource: mcp-alt.db
-      DataDirectory: "."
+      DataDirectory: .
       RepoRoot: docs
       TodoFilePath: docs/Project/TODO.yaml
       TodoStorage:
@@ -71,28 +71,28 @@ Mcp:
         SqliteDataSource: mcp-alt.db
   ToolRegistry:
     DefaultBuckets:
-      - Name: official
-        Owner: sharpninja
-        Repo: McpServerTools
-        Branch: main
-        ManifestPath: /
+    - Name: official
+      Owner: sharpninja
+      Repo: McpServerTools
+      Branch: main
+      ManifestPath: /
   Tunnel:
-    Provider: ""
+    Provider: ''
     Port: 7147
     Ngrok:
       Enabled: false
-      Subdomain: ""
-      AuthToken: ""
+      Subdomain: ''
+      AuthToken: ''
       Region: us
     Cloudflare:
       Enabled: false
-      TunnelName: ""
-      Hostname: ""
+      TunnelName: ''
+      Hostname: ''
     Frp:
       ServerAddress: 127.0.0.1
       ServerPort: 7000
   InteractionLogging:
-    LoggingServiceUrl: ""
+    LoggingServiceUrl: ''
     QueueCapacity: 1000
     IncludeQueryString: false
   Parseable:
@@ -104,10 +104,44 @@ Mcp:
     FallbackLogPath: logs/mcp-.log
   PairingUsers: []
   Workspaces:
-    - WorkspacePath: E:\github\McpServer
-      Name: McpServer
-      TodoPath: docs/Project/TODO.yaml
-      IsPrimary: true
-      IsEnabled: true
-      DateTimeCreated: "2026-02-21T00:00:00+00:00"
-      DateTimeModified: "2026-02-23T00:00:00+00:00"
+  - WorkspacePath: E:\github\McpServer
+    Name: McpServer
+    TodoPath: docs/Project/TODO.yaml
+    IsPrimary: true
+    IsEnabled: true
+    DateTimeCreated: &o0
+      DateTime: 0001-01-01T00:00:00.0000000
+      UtcDateTime: 0001-01-01T00:00:00.0000000Z
+      LocalDateTime: 0001-01-01T00:00:00.0000000-06:00
+      Date: 0001-01-01T00:00:00.0000000
+      Day: 1
+      DayOfWeek: Monday
+      DayOfYear: 1
+      Hour: 0
+      Millisecond: 0
+      Microsecond: 0
+      Nanosecond: 0
+      Minute: 0
+      Month: 1
+      Offset: 00:00:00
+      TotalOffsetMinutes: 0
+      Second: 0
+      Ticks: 0
+      UtcTicks: 0
+      TimeOfDay: 00:00:00
+      Year: 1
+    DateTimeModified: *o0
+  - WorkspacePath: C:\Users\kingd\AppData\Local\Temp\ws_policy_080c19bf5114467f8875a03f829d1db6
+    Name: ws_policy_080c19bf5114467f8875a03f829d1db6
+    TodoPath: docs/todo.yaml
+    IsPrimary: false
+    IsEnabled: true
+    DateTimeCreated: *o0
+    DateTimeModified: *o0
+  - WorkspacePath: C:\Users\kingd\AppData\Local\Temp\ws_policy_c43d29c948994fe3a042c0cae69bf917
+    Name: ws_policy_c43d29c948994fe3a042c0cae69bf917
+    TodoPath: docs/todo.yaml
+    IsPrimary: false
+    IsEnabled: true
+    DateTimeCreated: *o0
+    DateTimeModified: *o0

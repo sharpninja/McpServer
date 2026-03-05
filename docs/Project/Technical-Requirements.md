@@ -256,13 +256,17 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **Audited Copilot Client** — `AuditedCopilotClient` decorates `ICopilotClient`. Before each Copilot invocation: determines affected workspaces, creates `in_progress` session log entries per workspace. After invocation: logs `completed` entries with result and actions taken. Action type: `copilot_invocation`. Registered as DI decorator so all server-initiated Copilot calls are audited.
 
-**Covered by:** `AuditedCopilotClient` (planned)
+**Status:** ✅ Complete
+
+**Covered by:** `AuditedCopilotClient`, `Program.cs` (`ICopilotClient` decorator wiring), `McpStdioHost` (`ICopilotClient` decorator wiring), `CopilotServiceCollectionExtensions`
 
 ## TR-MCP-POL-001
 
 **Natural Language Policy Management** — `PolicyManagementTool` MCP STDIO tool + `POST /mcpserver/workspace/policy` REST endpoint. Accepts natural language directives, parses intent (action, category, value, scope) via LLM, applies workspace config mutations via `IWorkspaceService.UpdateAsync`, logs `policy_change` actions per affected workspace session log.
 
-**Covered by:** `PolicyManagementTool` (planned)
+**Status:** ✅ Complete
+
+**Covered by:** `WorkspaceController` (`POST /mcpserver/workspace/policy`), `WorkspacePolicyService`, `WorkspacePolicyDirectiveParser`, `McpServerMcpTools.workspace_policy_apply`
 
 ## TR-MCP-DIR-003
 
@@ -282,7 +286,9 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **New Project Context Indexing** — Ingestion configuration must include `src/McpServer.Cqrs/**/*.cs`, `src/McpServer.Cqrs.Mvvm/**/*.cs`, `src/McpServer.UI.Core/**/*.cs`, and `src/McpServer.Director/**/*.cs` in file patterns. Marker prompt Available Capabilities section lists all four projects with descriptions.
 
-**Covered by:** Ingestion configuration (planned)
+**Status:** ✅ Complete
+
+**Covered by:** `Program.cs` / `McpStdioHost` `PostConfigure<IngestionOptions>` required-pattern merge, `appsettings.yaml` `Mcp:RepoAllowlist`, `MarkerFileService.DefaultPromptTemplate`
 
 ## TR-MCP-MT-001
 
@@ -598,3 +604,10 @@ Main shell rendering SHALL iterate registrations dynamically and avoid hardcoded
 **Status:** ✅ Complete
 
 **Covered by:** `IGitHubCliService`, `GitHubCliService`, `GitHubController` actions endpoints, `McpServer.Client` (`GitHubClient`, `Models/GitHubModels.cs`)
+
+### TR-MCP-DOC-001: Marketing Documentation Coverage
+- Define a marketing-focused McpServer narrative that explains platform purpose, problem/need, and adopter value proposition.
+- Document key capabilities and differentiators in concise adoption-oriented language aligned with existing FR feature areas.
+- Maintain a supported UI tooling section covering available user surfaces (including VS extension, Web UI, and Director/TUI where applicable) with current support status.
+- Keep the documentation in version control under `docs/` so updates are reviewed and traceable with product changes.
+**Status:** 🔴 Planned

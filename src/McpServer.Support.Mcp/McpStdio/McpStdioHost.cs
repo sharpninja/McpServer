@@ -3,13 +3,19 @@
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Options;
+using McpServer.Common.Copilot;
+using McpServer.Common.Copilot.Extensions;
+using McpServer.GraphRag;
+using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using ModelContextProtocol.Server;
 
 namespace McpServer.Support.Mcp.McpStdio;
@@ -65,6 +71,15 @@ public static class McpStdioHost
         builder.Services.Configure<GraphRagOptions>(builder.Configuration.GetSection(GraphRagOptions.SectionName));
         builder.Services.Configure<TodoStorageOptions>(builder.Configuration.GetSection(TodoStorageOptions.SectionName));
         builder.Services.Configure<GitHubIntegrationOptions>(builder.Configuration.GetSection(GitHubIntegrationOptions.SectionName));
+        builder.Services.Configure<TodoPromptOptions>(builder.Configuration.GetSection(TodoPromptOptions.SectionName));
+        builder.Services.Configure<TemplateStorageOptions>(builder.Configuration.GetSection(TemplateStorageOptions.SectionName));
+        var requiredRepoAllowlistPatterns = new[]
+        {
+            "src/McpServer.Cqrs/**/*.cs",
+            "src/McpServer.Cqrs.Mvvm/**/*.cs",
+            "src/McpServer.UI.Core/**/*.cs",
+            "src/McpServer.Director/**/*.cs",
+        };
         builder.Services.PostConfigure<VectorIndexOptions>(options =>
         {
             var instanceIndexPath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "IndexPath");
@@ -88,6 +103,15 @@ public static class McpStdioHost
             options.TodoFilePath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.TodoFilePath);
             options.SessionsPath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.SessionsPath);
             options.UnifiedModelSchemaPath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.UnifiedModelSchemaPath);
+
+            var allowlist = options.RepoAllowlist?.ToList() ?? [];
+            foreach (var pattern in requiredRepoAllowlistPatterns)
+            {
+                if (!allowlist.Contains(pattern, StringComparer.OrdinalIgnoreCase))
+                    allowlist.Add(pattern);
+            }
+
+            options.RepoAllowlist = allowlist;
         });
         builder.Services.PostConfigure<TodoStorageOptions>(options =>
         {
@@ -106,6 +130,7 @@ public static class McpStdioHost
         builder.Services.AddSingleton<Chunker>();
         builder.Services.AddDataProtection();
         builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
+        builder.Services.AddSingleton<IProcessSpawner, DefaultProcessSpawner>();
         builder.Services.AddSingleton<IGitHubWorkspaceTokenStore, FileGitHubWorkspaceTokenStore>();
         builder.Services.AddSingleton<IGitHubCliService, GitHubCliService>();
         builder.Services.AddSingleton<ITodoServiceFactory, TodoServiceFactory>();
@@ -113,6 +138,23 @@ public static class McpStdioHost
         builder.Services.AddSingleton<TodoServiceResolver>();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddSingleton<WorkspaceServiceAccessor>();
+        builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
+        builder.Services.AddSingleton<RequirementsDocumentService>();
+        builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<RequirementsDocumentService>());
+        builder.Services.AddSingleton<IRequirementsDocumentService>(sp => sp.GetRequiredService<RequirementsDocumentService>());
+        builder.Services.AddSingleton<PromptTemplateRenderer>();
+        builder.Services.AddSingleton<IPromptTemplateService, PromptTemplateService>();
+        builder.Services.AddSingleton<ITodoPromptProvider, TodoPromptProvider>();
+        builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
+        builder.Services.AddCopilotClient();
+        builder.Services.RemoveAll<ICopilotClient>();
+        builder.Services.AddSingleton<ICopilotClient>(sp =>
+            new AuditedCopilotClient(
+                sp.GetRequiredService<CopilotClient>(),
+                sp.GetRequiredService<IServiceScopeFactory>(),
+                sp.GetRequiredService<IHttpContextAccessor>(),
+                sp.GetRequiredService<IOptions<IngestionOptions>>(),
+                sp.GetRequiredService<ILogger<AuditedCopilotClient>>()));
         builder.Services.AddScoped<RepoIngestor>();
         builder.Services.AddScoped<SessionLogIngestor>();
         builder.Services.AddScoped<ExternalDocsIngestor>();
@@ -122,9 +164,10 @@ public static class McpStdioHost
         builder.Services.AddScoped<ISessionLogService, SessionLogService>();
         builder.Services.AddScoped<Fts5SearchService>();
         builder.Services.AddScoped<IContextSearchService, Fts5SearchService>();
-        builder.Services.AddScoped<IGraphRagBackendAdapter, InternalFallbackGraphRagBackendAdapter>();
-        builder.Services.AddScoped<IGraphRagBackendAdapter, ExternalCommandGraphRagBackendAdapter>();
-        builder.Services.AddScoped<IGraphRagService, GraphRagService>();
+        builder.Services.AddMcpGraphRag();
+        builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
+        builder.Services.AddScoped<IWorkspacePolicyDirectiveParser, WorkspacePolicyDirectiveParser>();
+        builder.Services.AddScoped<IWorkspacePolicyService, WorkspacePolicyService>();
         builder.Services.AddScoped<FwhMcpTools>();
 
         builder.Services

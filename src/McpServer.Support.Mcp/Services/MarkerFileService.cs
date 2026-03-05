@@ -88,6 +88,13 @@ public static class MarkerFileService
         - Adding dependencies → docs/context/compliance-rules.md
         - Logging actions → docs/context/action-types.md
 
+        ## Available Capabilities
+
+        - src/McpServer.Cqrs/**/*.cs — CQRS contracts, dispatcher pipeline, and result primitives.
+        - src/McpServer.Cqrs.Mvvm/**/*.cs — MVVM integration layer for command/query-driven UI workflows.
+        - src/McpServer.UI.Core/**/*.cs — shared UI handlers, view models, and authorization abstractions.
+        - src/McpServer.Director/**/*.cs — Director CLI/TUI orchestration for workspace and policy operations.
+
         ## Protocols
 
         - REST API: {{baseUrl}}/mcpserver/* (requires X-Api-Key). Swagger UI: {{baseUrl}}/swagger

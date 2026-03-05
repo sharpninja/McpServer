@@ -212,6 +212,94 @@ public sealed class WorkspaceUpdateRequest
     public List<string>? BannedIndividuals { get; set; }
 }
 
+/// <summary>Request to apply a natural-language workspace policy directive.</summary>
+public sealed class WorkspacePolicyApplyRequest
+{
+    /// <summary>Natural-language directive text (for example, "Ban GPL-3.0 in this workspace").</summary>
+    [JsonPropertyName("directive")]
+    public string Directive { get; set; } = string.Empty;
+
+    /// <summary>Optional workspace path hint used for "current workspace" scope resolution.</summary>
+    [JsonPropertyName("workspacePath")]
+    public string? WorkspacePath { get; set; }
+}
+
+/// <summary>Structured policy directive parsed from natural language.</summary>
+public sealed class WorkspacePolicyDirective
+{
+    /// <summary>Mutation action: add, remove, or clear.</summary>
+    [JsonPropertyName("action")]
+    public string Action { get; set; } = string.Empty;
+
+    /// <summary>Target category: license, country_of_origin, organization, or individual.</summary>
+    [JsonPropertyName("category")]
+    public string Category { get; set; } = string.Empty;
+
+    /// <summary>Values affected by this directive.</summary>
+    [JsonPropertyName("values")]
+    public IReadOnlyList<string> Values { get; set; } = [];
+
+    /// <summary>Scope: current, workspace, or all.</summary>
+    [JsonPropertyName("scope")]
+    public string Scope { get; set; } = string.Empty;
+
+    /// <summary>Explicit workspace path when scope is workspace.</summary>
+    [JsonPropertyName("scopeWorkspacePath")]
+    public string? ScopeWorkspacePath { get; set; }
+
+    /// <summary>Parser that produced this directive (for example, copilot or fallback).</summary>
+    [JsonPropertyName("parser")]
+    public string? Parser { get; set; }
+}
+
+/// <summary>Per-workspace policy mutation result.</summary>
+public sealed class WorkspacePolicyMutationResult
+{
+    /// <summary>Workspace root path.</summary>
+    [JsonPropertyName("workspacePath")]
+    public string WorkspacePath { get; set; } = string.Empty;
+
+    /// <summary>Workspace name.</summary>
+    [JsonPropertyName("workspaceName")]
+    public string WorkspaceName { get; set; } = string.Empty;
+
+    /// <summary>Whether the mutation succeeded for this workspace.</summary>
+    [JsonPropertyName("success")]
+    public bool Success { get; set; }
+
+    /// <summary>Error message when the mutation failed.</summary>
+    [JsonPropertyName("error")]
+    public string? Error { get; set; }
+
+    /// <summary>Category values before mutation.</summary>
+    [JsonPropertyName("beforeValues")]
+    public IReadOnlyList<string> BeforeValues { get; set; } = [];
+
+    /// <summary>Category values after mutation.</summary>
+    [JsonPropertyName("afterValues")]
+    public IReadOnlyList<string> AfterValues { get; set; } = [];
+}
+
+/// <summary>Aggregate result for a policy-apply request.</summary>
+public sealed class WorkspacePolicyApplyResult
+{
+    /// <summary>True when parse and all targeted mutations succeeded.</summary>
+    [JsonPropertyName("success")]
+    public bool Success { get; set; }
+
+    /// <summary>Error summary when unsuccessful.</summary>
+    [JsonPropertyName("error")]
+    public string? Error { get; set; }
+
+    /// <summary>Parsed directive representation.</summary>
+    [JsonPropertyName("parsedDirective")]
+    public WorkspacePolicyDirective? ParsedDirective { get; set; }
+
+    /// <summary>Per-workspace outcomes.</summary>
+    [JsonPropertyName("workspaceResults")]
+    public IReadOnlyList<WorkspacePolicyMutationResult> WorkspaceResults { get; set; } = [];
+}
+
 /// <summary>Result of reading the global marker prompt template.</summary>
 public sealed class GlobalPromptResult
 {

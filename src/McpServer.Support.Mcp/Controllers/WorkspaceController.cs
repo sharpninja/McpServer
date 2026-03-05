@@ -21,6 +21,7 @@ namespace McpServer.Support.Mcp.Controllers;
 public sealed class WorkspaceController : ControllerBase
 {
     private readonly IWorkspaceService _workspaceService;
+    private readonly IWorkspacePolicyService _workspacePolicyService;
     private readonly IWorkspaceProcessManager _processManager;
     private readonly IConfiguration _configuration;
     private readonly IWebHostEnvironment _env;
@@ -29,12 +30,14 @@ public sealed class WorkspaceController : ControllerBase
     /// <summary>Initializes a new instance of the <see cref="WorkspaceController"/> class.</summary>
     public WorkspaceController(
         IWorkspaceService workspaceService,
+        IWorkspacePolicyService workspacePolicyService,
         IWorkspaceProcessManager processManager,
         IConfiguration configuration,
         IWebHostEnvironment env,
         IOptionsMonitor<MarkerPromptOptions> promptOptions)
     {
         _workspaceService = workspaceService;
+        _workspacePolicyService = workspacePolicyService;
         _processManager = processManager;
         _configuration = configuration;
         _env = env;
@@ -123,6 +126,36 @@ public sealed class WorkspaceController : ControllerBase
             await _processManager.RegenerateAllMarkersAsync(ct).ConfigureAwait(false);
 
         return Ok(result);
+    }
+
+    /// <summary>
+    /// Applies a natural-language policy directive to one or more workspaces.
+    /// </summary>
+    [HttpPost("policy")]
+    public async Task<ActionResult<WorkspacePolicyApplyResult>> ApplyPolicyAsync(
+        [FromBody] WorkspacePolicyApplyRequest? request,
+        CancellationToken ct)
+    {
+        if (request is null)
+        {
+            return BadRequest(new WorkspacePolicyApplyResult
+            {
+                Success = false,
+                Error = "Request body is required.",
+            });
+        }
+
+        var result = await _workspacePolicyService.ApplyAsync(request, ct).ConfigureAwait(false);
+        if (result.Success)
+            return Ok(result);
+
+        if (!string.IsNullOrWhiteSpace(result.Error)
+            && result.Error.Contains("No target workspaces", StringComparison.OrdinalIgnoreCase))
+        {
+            return NotFound(result);
+        }
+
+        return BadRequest(result);
     }
 
     /// <summary>Delete a workspace registration by Base64URL-encoded path key.</summary>

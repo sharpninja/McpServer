@@ -76,6 +76,10 @@ public sealed class WorkspaceService : IWorkspaceService
                 StatusPrompt = StripIfDefault(nameof(TodoPromptDefaults.StatusPrompt), request.StatusPrompt),
                 ImplementPrompt = StripIfDefault(nameof(TodoPromptDefaults.ImplementPrompt), request.ImplementPrompt),
                 PlanPrompt = StripIfDefault(nameof(TodoPromptDefaults.PlanPrompt), request.PlanPrompt),
+                BannedLicenses = NormalizePolicyList(request.BannedLicenses),
+                BannedCountriesOfOrigin = NormalizePolicyList(request.BannedCountriesOfOrigin, toUpperInvariant: true),
+                BannedOrganizations = NormalizePolicyList(request.BannedOrganizations),
+                BannedIndividuals = NormalizePolicyList(request.BannedIndividuals),
                 IsPrimary = request.IsPrimary,
                 IsEnabled = request.IsEnabled,
                 DateTimeCreated = now,
@@ -127,6 +131,14 @@ public sealed class WorkspaceService : IWorkspaceService
                 entry.ImplementPrompt = StripIfDefault(nameof(TodoPromptDefaults.ImplementPrompt), request.ImplementPrompt);
             if (request.PlanPrompt is not null)
                 entry.PlanPrompt = StripIfDefault(nameof(TodoPromptDefaults.PlanPrompt), request.PlanPrompt);
+            if (request.BannedLicenses is not null)
+                entry.BannedLicenses = NormalizePolicyList(request.BannedLicenses);
+            if (request.BannedCountriesOfOrigin is not null)
+                entry.BannedCountriesOfOrigin = NormalizePolicyList(request.BannedCountriesOfOrigin, toUpperInvariant: true);
+            if (request.BannedOrganizations is not null)
+                entry.BannedOrganizations = NormalizePolicyList(request.BannedOrganizations);
+            if (request.BannedIndividuals is not null)
+                entry.BannedIndividuals = NormalizePolicyList(request.BannedIndividuals);
             entry.DateTimeModified = DateTimeOffset.UtcNow;
 
             await WriteAllAsync(all, ct).ConfigureAwait(false);
@@ -311,6 +323,31 @@ public sealed class WorkspaceService : IWorkspaceService
         return TodoPromptDefaults.IsDefault(promptName, value) ? null : value.Trim();
     }
 
+    private static List<string>? NormalizePolicyList(List<string>? source, bool toUpperInvariant = false)
+    {
+        if (source is null)
+            return null;
+
+        var comparer = toUpperInvariant ? StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase;
+        var seen = new HashSet<string>(comparer);
+        var normalized = new List<string>(source.Count);
+
+        foreach (var value in source)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                continue;
+
+            var candidate = value.Trim();
+            if (toUpperInvariant)
+                candidate = candidate.ToUpperInvariant();
+
+            if (seen.Add(candidate))
+                normalized.Add(candidate);
+        }
+
+        return normalized;
+    }
+
     private static WorkspaceDto ToDto(WorkspaceConfigEntry e) => new()
     {
         WorkspacePath = e.WorkspacePath,
@@ -327,6 +364,10 @@ public sealed class WorkspaceService : IWorkspaceService
         StatusPrompt = e.StatusPrompt ?? TodoPromptDefaults.StatusPrompt,
         ImplementPrompt = e.ImplementPrompt ?? TodoPromptDefaults.ImplementPrompt,
         PlanPrompt = e.PlanPrompt ?? TodoPromptDefaults.PlanPrompt,
+        BannedLicenses = NormalizePolicyList(e.BannedLicenses) ?? [],
+        BannedCountriesOfOrigin = NormalizePolicyList(e.BannedCountriesOfOrigin, toUpperInvariant: true) ?? [],
+        BannedOrganizations = NormalizePolicyList(e.BannedOrganizations) ?? [],
+        BannedIndividuals = NormalizePolicyList(e.BannedIndividuals) ?? [],
     };
 
     private async Task PublishChangeSafeAsync(string action, string entityId, CancellationToken ct)
@@ -409,6 +450,18 @@ public sealed class WorkspaceConfigEntry
 
     /// <summary>Override for the Copilot plan prompt. Null = use built-in default.</summary>
     public string? PlanPrompt { get; set; }
+
+    /// <summary>SPDX license identifiers banned in this workspace (e.g. "GPL-3.0", "AGPL-3.0").</summary>
+    public List<string>? BannedLicenses { get; set; }
+
+    /// <summary>ISO 3166-1 alpha-2 country codes banned as dependency origin (e.g. "CN", "RU").</summary>
+    public List<string>? BannedCountriesOfOrigin { get; set; }
+
+    /// <summary>Organization/company names whose code and libraries are banned.</summary>
+    public List<string>? BannedOrganizations { get; set; }
+
+    /// <summary>Individual names/handles whose code and libraries are banned.</summary>
+    public List<string>? BannedIndividuals { get; set; }
 
     /// <summary>
     /// Absolute path to the Copilot CLI agent executable.

@@ -872,7 +872,7 @@ mvp-app:
     - Reconcile requirement artifacts with as-built implementation and close audit findings from AUDIT-REQS-001.
     - Prioritize status alignment, mapping completeness, DI/SSOT remediation sequencing, and test traceability completion.
     done-summary: 'Implemented remediation scope: DI TODO-service factory abstraction added, requirement docs/matrix/mapping reconciled, missing FR mappings added, TEST-MCP-080 status updated with new negative filter test coverage, traceability policy + validator script added, and planned-gap linkage todo REQ-GAP-001 created.'
-    remaining: Follow-on delivery for planned requirements FR-MCP-033/036/039 is tracked in REQ-GAP-001.
+    remaining: None. Follow-on delivery for FR-MCP-033/036/039 was completed in REQ-GAP-001 on 2026-03-05.
     technical-details:
     - 'Source audit report: docs/Project/AUDIT-REQS-001-Report.md'
     - 'Targets FR/TR areas: FR-MCP-033, FR-MCP-036, FR-MCP-039, FR-MCP-046, FR-MCP-059, TR-MCP-ARCH-002, TEST-MCP-080.'
@@ -896,19 +896,21 @@ mvp-app:
   - id: REQ-GAP-001
     title: Implement planned requirement gaps (FR-MCP-033/036/039)
     estimate: 3-5 days
-    done: false
+    done: true
+    completed: 2026-03-05
     description:
     - Deliver planned requirement gaps for FR-MCP-033 (policy management), FR-MCP-036 (audited copilot client), and FR-MCP-039 (context indexing capability contract).
     - Produce implementation + tests + requirements status updates for each requirement.
+    done-summary: Implemented natural-language workspace policy apply flow (REST + MCP tool + parser/service), wired audited copilot decorator for HTTP and STDIO hosts with session-log action emission, enforced required context-indexing allowlist patterns and marker capabilities section, and completed client/server/unit/integration test coverage with requirements matrix/status updates.
     implementation-tasks:
     - task: Implement PolicyManagementTool and supporting endpoint/workspace mutation flow for FR-MCP-033/TR-MCP-POL-001.
-      done: false
+      done: true
     - task: Implement AuditedCopilotClient decorator and DI wiring for FR-MCP-036/TR-MCP-AUDIT-001.
-      done: false
+      done: true
     - task: Implement context indexing capability artifacts for FR-MCP-039/TR-MCP-CTX-001 and align marker prompt capability section.
-      done: false
+      done: true
     - task: Add/extend tests and update Requirements-Matrix/TR-per-FR statuses after implementation.
-      done: false
+      done: true
 mvp-mcp:
   high-priority:
   - id: MVP-MCP-002
@@ -1938,13 +1940,15 @@ Architecture:
       done: true
   - id: ARCH-STORAGE-001
     title: All Storage code should be in a Library
-    done: false
+    note: 'Implemented: extracted Storage->McpServer.Storage, Services/Models->McpServer.Services, GraphRAG->McpServer.GraphRag. Support.Mcp slimmed with Compile Remove. Build passes, 3 new projects added to solution. All tests pass except 4 pre-existing Director tests (environment-dependent). New unit tests added for AuditedCopilotClient and WorkspacePolicyService.'
+    done: true
     description:
     - Extract all storage-related code into a dedicated library project.
     - Storage abstractions, implementations, and persistence logic should live in a reusable library rather than being embedded in application projects.
   - id: ARCH-SERVICES-001
     title: All Services and Models should be in a Library
-    done: false
+    note: 'Implemented: extracted Storage->McpServer.Storage, Services/Models->McpServer.Services, GraphRAG->McpServer.GraphRag. Support.Mcp slimmed with Compile Remove. Build passes, 3 new projects added to solution. All tests pass except 4 pre-existing Director tests (environment-dependent). New unit tests added for AuditedCopilotClient and WorkspacePolicyService.'
+    done: true
     description:
     - Extract all services and domain models into a dedicated library project.
     - Business logic, domain models, and service implementations should live in a reusable library rather than in McpServer.Support.Mcp.
@@ -1952,7 +1956,8 @@ Architecture:
     - ARCH-STORAGE-001
   - id: ARCH-SUPPORT-001
     title: McpServer.Support.Mcp should contain only controllers and MCP Framework code
-    done: false
+    note: 'Implemented: extracted Storage->McpServer.Storage, Services/Models->McpServer.Services, GraphRAG->McpServer.GraphRag. Support.Mcp slimmed with Compile Remove. Build passes, 3 new projects added to solution. All tests pass except 4 pre-existing Director tests (environment-dependent). New unit tests added for AuditedCopilotClient and WorkspacePolicyService.'
+    done: true
     description:
     - Slim McpServer.Support.Mcp to only controllers and MCP Framework-specific code.
     - 'After Storage, Services, and Models are extracted to libraries, Support.Mcp should host only: REST controllers, MCP transport/middleware, and framework-specific wiring.'
@@ -1962,7 +1967,8 @@ Architecture:
     - ARCH-GRAPHRAG-001
   - id: ARCH-GRAPHRAG-001
     title: GraphRAG integration should be in a separate Library with CQRS Handlers
-    done: false
+    note: 'Implemented: extracted Storage->McpServer.Storage, Services/Models->McpServer.Services, GraphRAG->McpServer.GraphRag. Support.Mcp slimmed with Compile Remove. Build passes, 3 new projects added to solution. All tests pass except 4 pre-existing Director tests (environment-dependent). New unit tests added for AuditedCopilotClient and WorkspacePolicyService.'
+    done: true
     description:
     - Extract GraphRAG integration into a dedicated library project.
     - Wrap GraphRAG operations with CQRS handlers (commands/queries) for clear separation of concerns and consistent patterns with the rest of the codebase.
@@ -2326,53 +2332,7 @@ Documentation:
       done: false
   - id: DOC-MARKETING-001
     title: "Create Marketing Docs: What McpServer is, features, why it's needed, supported UI tooling"
-    note: >-
-      **Implementation Plan**
-
-
-      ## Output Artifacts (all in `docs/Marketing/`)
-
-
-      - `overview.md` — What McpServer is: one-liner, elevator pitch, origin story
-
-      - `features.md` — Feature inventory with benefit statements (10 key features)
-
-      - `why-needed.md` — Problem/solution narrative; why AI agents need a context server
-
-      - `ui-tooling.md` — Web UI, Director CLI/TUI, VS/VS Code extensions, Client NuGet, MCP STDIO
-
-      - `website-copy.md` — Section-by-section copy for Canva website (Hero → Footer, 8 sections)
-
-      - `presentation-outline.md` — 12-slide outline + speaker notes for Canva presentation
-
-      - `README.md` — Index linking all marketing docs
-
-
-      ## Audience
-
-
-      Technical decision-makers and developers evaluating AI-assisted development workflows. Tone: confident, direct, technically precise — not salesy.
-
-
-      ## Website Sections (Canva)
-
-      Hero · Problem · Solution · Features (3×2 grid) · UI Tooling · Architecture Diagram · Quick Start · Footer
-
-
-      ## Presentation Slides (Canva)
-
-      1. Title · 2. Problem · 3. Solution · 4. Architecture · 5. Context Search · 6. TODO & Sessions · 7. GitHub Sync · 8. GraphRAG · 9. UI Tooling · 10. Deployment · 11. Getting Started · 12. CTA
-
-
-      ## Key Content Areas
-
-      - What McpServer is: standalone ASP.NET Core 9 MCP context server for AI agents
-
-      - Core features: Hybrid FTS5+Vector search, TODO mgmt, session logging, GitHub sync, GraphRAG, multi-workspace, dual transport, requirements tracking, prompt templates, containerized deployment
-
-      - Value prop: single source of truth bridging AI agents (Copilot, Cursor, Codex, Claude) to workspace state
-
-      - UI tooling: Blazor Web UI, Director CLI/TUI, VS/VS Code VSIX extension, SharpNinja.McpServer.Client NuGet, MCP STDIO
+    note: '"**Implementation Plan**'
     done: false
     description:
     - Create marketing-oriented documentation for McpServer.

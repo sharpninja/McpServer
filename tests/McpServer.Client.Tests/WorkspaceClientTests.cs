@@ -111,6 +111,23 @@ public sealed class WorkspaceClientTests
     }
 
     [Fact]
+    public async System.Threading.Tasks.Task ApplyPolicyAsync_PostsPolicyDirective()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"workspaceResults":[]}""");
+        using var http = new HttpClient(handler);
+        var client = new WorkspaceClient(http, DefaultOptions);
+
+        var result = await client.ApplyPolicyAsync(new Models.WorkspacePolicyApplyRequest
+        {
+            Directive = "Ban GPL-3.0 in this workspace"
+        });
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/workspace/policy", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.True(result.Success);
+    }
+
+    [Fact]
     public async System.Threading.Tasks.Task DeleteAsync_DeletesWorkspace()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");

@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using McpServer.Common.Copilot;
 using McpServer.Common.Copilot.Extensions;
+using McpServer.GraphRag;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Logging;
@@ -27,6 +28,7 @@ using Microsoft.Extensions.Configuration.Json;
 using NetEscapades.Configuration.Yaml;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Hosting.WindowsServices;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using ModelContextProtocol.AspNetCore;
 using Serilog;
@@ -192,6 +194,13 @@ builder.Services.Configure<AgentPoolOptions>(builder.Configuration.GetSection(Ag
 builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
 builder.Services.Configure<RequirementsOptions>(builder.Configuration.GetSection(RequirementsOptions.SectionName));
 builder.Services.AddSingleton<IValidateOptions<AgentPoolOptions>, AgentPoolOptionsValidator>();
+var requiredRepoAllowlistPatterns = new[]
+{
+    "src/McpServer.Cqrs/**/*.cs",
+    "src/McpServer.Cqrs.Mvvm/**/*.cs",
+    "src/McpServer.UI.Core/**/*.cs",
+    "src/McpServer.Director/**/*.cs",
+};
 builder.Services.PostConfigure<VectorIndexOptions>(options =>
 {
     var instanceIndexPath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "IndexPath");
@@ -215,6 +224,15 @@ builder.Services.PostConfigure<IngestionOptions>(options =>
     options.TodoFilePath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.TodoFilePath);
     options.SessionsPath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.SessionsPath);
     options.UnifiedModelSchemaPath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.UnifiedModelSchemaPath);
+
+    var allowlist = options.RepoAllowlist?.ToList() ?? [];
+    foreach (var pattern in requiredRepoAllowlistPatterns)
+    {
+        if (!allowlist.Contains(pattern, StringComparer.OrdinalIgnoreCase))
+            allowlist.Add(pattern);
+    }
+
+    options.RepoAllowlist = allowlist;
 });
 builder.Services.PostConfigure<TodoStorageOptions>(options =>
 {
@@ -312,13 +330,21 @@ builder.Services.Configure<TodoPromptOptions>(options =>
 });
 builder.Services.AddSingleton<IProcessSpawner, DesktopProcessSpawner>();
 builder.Services.AddCopilotClient();
+builder.Services.RemoveAll<ICopilotClient>();
+builder.Services.AddSingleton<ICopilotClient>(sp =>
+    new AuditedCopilotClient(
+        sp.GetRequiredService<CopilotClient>(),
+        sp.GetRequiredService<IServiceScopeFactory>(),
+        sp.GetRequiredService<IHttpContextAccessor>(),
+        sp.GetRequiredService<IOptions<IngestionOptions>>(),
+        sp.GetRequiredService<ILogger<AuditedCopilotClient>>()));
 builder.Services.AddScoped<ISessionLogService, SessionLogService>();
 builder.Services.AddScoped<Fts5SearchService>();
 builder.Services.AddScoped<IContextSearchService, HybridSearchService>();
-builder.Services.AddScoped<IGraphRagBackendAdapter, InternalFallbackGraphRagBackendAdapter>();
-builder.Services.AddScoped<IGraphRagBackendAdapter, ExternalCommandGraphRagBackendAdapter>();
-builder.Services.AddScoped<IGraphRagService, GraphRagService>();
+builder.Services.AddMcpGraphRag();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
+builder.Services.AddScoped<IWorkspacePolicyDirectiveParser, WorkspacePolicyDirectiveParser>();
+builder.Services.AddScoped<IWorkspacePolicyService, WorkspacePolicyService>();
 builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
 builder.Services.AddScoped<IToolBucketService, ToolBucketService>();
 builder.Services.AddScoped<IAgentService, AgentService>();

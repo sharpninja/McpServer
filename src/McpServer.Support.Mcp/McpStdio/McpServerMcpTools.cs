@@ -38,6 +38,7 @@ public sealed class FwhMcpTools
     private readonly IProcessRunner _processRunner;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IWorkspaceService _workspaceService;
+    private readonly IWorkspacePolicyService _workspacePolicyService;
     private readonly TodoServiceResolver _todoServiceResolver;
     private readonly IPromptTemplateService _promptTemplateService;
     private readonly ILogger<FwhMcpTools> _logger;
@@ -58,6 +59,7 @@ public sealed class FwhMcpTools
         IProcessRunner processRunner,
         IHttpContextAccessor httpContextAccessor,
         IWorkspaceService workspaceService,
+        IWorkspacePolicyService workspacePolicyService,
         TodoServiceResolver todoServiceResolver,
         IPromptTemplateService promptTemplateService,
         ILogger<FwhMcpTools> logger)
@@ -77,6 +79,7 @@ public sealed class FwhMcpTools
         _processRunner = processRunner;
         _httpContextAccessor = httpContextAccessor;
         _workspaceService = workspaceService;
+        _workspacePolicyService = workspacePolicyService;
         _todoServiceResolver = todoServiceResolver;
         _promptTemplateService = promptTemplateService;
     }
@@ -93,6 +96,30 @@ public sealed class FwhMcpTools
             ctx.WorkspacePath = workspacePath;
 
         _db.OverrideWorkspaceId(workspacePath);
+    }
+
+    /// <summary>Applies a natural-language workspace policy directive.</summary>
+    [McpServerTool(Name = "workspace_policy_apply"), Description("Apply a natural-language workspace policy directive (ban/unban/clear for licenses, countries, organizations, or individuals).")]
+    public async Task<string> WorkspacePolicyApply(
+        [Description("Workspace path hint for current-scope resolution (required)")] string workspacePath,
+        [Description("Natural-language policy directive")] string directive,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(workspacePath))
+            return JsonSerializer.Serialize(new { success = false, error = "workspacePath is required." });
+        if (string.IsNullOrWhiteSpace(directive))
+            return JsonSerializer.Serialize(new { success = false, error = "directive is required." });
+
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _workspacePolicyService.ApplyAsync(
+            new WorkspacePolicyApplyRequest
+            {
+                WorkspacePath = workspacePath,
+                Directive = directive,
+            },
+            cancellationToken).ConfigureAwait(false);
+
+        return JsonSerializer.Serialize(result);
     }
 
     /// <summary>Search indexed context chunks by query text.</summary>
