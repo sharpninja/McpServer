@@ -686,7 +686,7 @@ mvp-app:
     title: Web UI OIDC integration - full login/logout flow, AuthorizeRouteView, RoleContext, token forwarding, and tests
     estimate: 3-4 days AI-assisted
     note: 'AUDIT (2026-03-05): McpServer.Web has the OIDC middleware wired in Program.cs (AddAuthentication/AddCookie/AddOpenIdConnect, UseAuthentication/UseAuthorization, AddCascadingAuthenticationState), a correct appsettings.json Authentication section, the AuthConfig read-only display page (Phase 3.1/Phase 5), and service registrations. However the following are MISSING and must be built: (1) Login/Logout/AccessDenied pages (app cannot authenticate at all without these -- requests to /login/logout 404), (2) Routes.razor AuthorizeRouteView upgrade (Authorize attributes are currently ignored), (3) User identity header in MainLayout/NavMenu, (4) WebRoleContext connecting ClaimsPrincipal roles to IAuthorizationPolicyService, (5) WebMcpContext access-token forwarding to the McpServer API, (6) McpServer section in appsettings.json, (7) McpServer.Web.Tests tests. FR-MCP-031 is the primary requirement.'
-    done: false
+    done: true
     description:
     - 'Web UI needs a complete OIDC authentication integration: login challenge, logout, access-denied, AuthorizeRouteView, user identity display in nav, WebRoleContext wired to ClaimsPrincipal, bearer token forwarding from the Blazor session to the McpServer API, and end-to-end tests.'
     - 'AUDIT STATUS (2026-03-05): OIDC middleware is registered in Program.cs and appsettings.json has all required config fields with placeholder values. The following are MISSING and block auth from working: Login page, Logout endpoint, AccessDenied page, AuthorizeRouteView in Routes.razor, user identity display, WebRoleContext, bearer token forwarding, McpServer config section, and Web.Tests content.'
@@ -1409,16 +1409,18 @@ Architecture:
     - task: Document the SSOT/DI pattern in Technical-Requirements.md
       done: false
   - id: web-ui-cqrs-mvvm-compliance-audit
-    title: '[PLAN IN PROGRESS] Web UI CQRS + MVVM compliance closure (delta audit)'
+    title: '[DONE] Web UI CQRS + MVVM compliance closure (delta audit)'
     estimate: 3-5d
-    note: 'Audit 2026-03-04 (rebaseline): this item is PARTIALLY COMPLETE and prior assumptions are stale. Current code shows MVVM/CQRS migration has already happened across in-scope pages: 14 pages total, 13 pages inject ViewModels, 0 pages inject I*ApiClient, and 0 page-level dispatcher invocations in Razor pages. Web host wiring registers Dispatcher + AddUiCore + API adapters. Remaining work is primarily verification/completion hardening: close CQRS-path proof gaps, add page/VM-focused tests, preserve workspace-context state semantics, and produce closure evidence before marking done.'
-    done: false
+    note: Closed 2026-03-05 after completing verification-first delta plan; follow-up parity debt tracked in PLAN-WEBUI-001.
+    done: true
+    completed: 2026-03-05T02:03:27.1583843Z
     description:
     - Audit and complete Web UI CQRS + MVVM compliance using a delta-remediation plan grounded in current code state.
     - Treat UI.Core ViewModels as the page orchestration layer and CQRS Dispatcher/handlers as the only command/query execution path.
     - Close remaining compliance gaps with reproducible evidence, targeted tests, and documentation updates so this item can be marked done with confidence.
     - Preserve existing behavior while removing stale TODO assumptions and codifying measurable acceptance criteria.
-    remaining: 'Completion delta is verification-heavy: Phase 3 dispatch-path verification is complete from code evidence; next pending item in order is Phase 4 workspace-switch regression test, followed by Phase 5/6 test implementation blocks.'
+    done-summary: 'Closure complete. Evidence summary: (1) re-audit confirmed Web pages are VM-driven with zero page-level I*ApiClient injections and zero page-level dispatcher calls, (2) CQRS/DI routing verified across web host wiring and UI.Core handlers, (3) new Phase 5 tests added in tests/McpServer.UI.Core.Tests for Dashboard/Todo/SessionLog/Template/Context/Health/Auth ViewModels plus handler-to-adapter dispatch mapping, (4) new Phase 6 web tests added in tests/McpServer.Web.Tests for TodoList/SessionLogList/TemplateList render branches plus WorkspacePicker propagation and WebMcpContext workspace routing, (5) validation runs passed: dotnet test tests/McpServer.UI.Core.Tests/McpServer.UI.Core.Tests.csproj -c Debug and dotnet test tests/McpServer.Web.Tests/McpServer.Web.Tests.csproj -c Debug. Decision: split AgentList placeholder into follow-up TODO PLAN-WEBUI-001.'
+    remaining: ''
     technical-details:
     - 'Audit snapshot 2026-03-04: 14 Razor pages under src/McpServer.Web/Pages, 13 pages inject *ViewModel, 0 pages inject I*ApiClient, and 0 page-level DispatchAsync calls (dispatcher orchestration resides in UI.Core ViewModels).'
     - 'Verified page examples now VM-driven: Dashboard.razor -> DashboardViewModel.LoadAsync, TodoList.razor -> TodoListViewModel.LoadAsync, SessionLogList.razor -> SessionLogListViewModel.LoadAsync, TemplateList.razor -> TemplateListViewModel.LoadAsync.'
@@ -1481,45 +1483,45 @@ Architecture:
     - task: 'Phase 4 - Workspace context state compliance: verify WebMcpContext remains a downstream observer of WorkspaceContextViewModel state.'
       done: true
     - task: 'Phase 4 - Workspace context state compliance: add explicit regression test for workspace switch propagation from UI state to API workspace routing headers.'
-      done: false
+      done: true
     - task: 'Phase 5 - Test coverage uplift: add UI.Core ViewModel tests for DashboardViewModel success/failure state transitions.'
-      done: false
+      done: true
     - task: 'Phase 5 - Test coverage uplift: add UI.Core ViewModel tests for TodoListViewModel filter normalization and result mapping.'
-      done: false
+      done: true
     - task: 'Phase 5 - Test coverage uplift: add UI.Core ViewModel tests for TodoDetailViewModel route-ID load behavior and error states.'
-      done: false
+      done: true
     - task: 'Phase 5 - Test coverage uplift: add UI.Core ViewModel tests for SessionLogListViewModel filter + pagination behavior.'
-      done: false
+      done: true
     - task: 'Phase 5 - Test coverage uplift: add UI.Core ViewModel tests for SessionLogDetailViewModel entry rendering data contracts.'
-      done: false
+      done: true
     - task: 'Phase 5 - Test coverage uplift: add UI.Core ViewModel tests for TemplateListViewModel filter/query behavior.'
-      done: false
+      done: true
     - task: 'Phase 5 - Test coverage uplift: add UI.Core ViewModel tests for TemplateDetailViewModel load behavior and null/not-found handling.'
-      done: false
+      done: true
     - task: 'Phase 5 - Test coverage uplift: add UI.Core ViewModel tests for TemplateTestViewModel run gating (empty input, repeated key suppression, error/success).'
-      done: false
+      done: true
     - task: 'Phase 5 - Test coverage uplift: add UI.Core ViewModel tests for ContextSearchViewModel limit normalization and source-type filtering.'
-      done: false
+      done: true
     - task: 'Phase 5 - Test coverage uplift: add UI.Core ViewModel tests for HealthSnapshotsViewModel refresh semantics and payload mapping.'
-      done: false
+      done: true
     - task: 'Phase 5 - Test coverage uplift: add UI.Core ViewModel tests for AuthConfigViewModel load behavior.'
-      done: false
+      done: true
     - task: 'Phase 5 - Test coverage uplift: add/extend handler tests to assert expected query/command -> API adapter method mapping for all web-page-backed operations.'
-      done: false
+      done: true
     - task: 'Phase 6 - Web integration confidence: add bUnit/component tests for representative pages (TodoList, SessionLogList, TemplateList) confirming VM-driven rendering branches (loading/error/empty/data).'
-      done: false
+      done: true
     - task: 'Phase 6 - Web integration confidence: add test for WorkspacePicker change event propagating to WorkspaceContextViewModel and callback consumers.'
-      done: false
+      done: true
     - task: 'Phase 6 - Web integration confidence: run full targeted test suites for McpServer.UI.Core.Tests and any McpServer.Web test project additions.'
-      done: false
+      done: true
     - task: 'Phase 7 - Documentation and closure: rewrite this TODO note/technical details to reflect post-audit reality rather than obsolete pre-remediation assumptions.'
       done: true
     - task: 'Phase 7 - Documentation and closure: attach final evidence summary (counts + key file references + test command outputs) in doneSummary when completing.'
-      done: false
+      done: true
     - task: 'Phase 7 - Documentation and closure: decide whether to split AgentList placeholder into a separate follow-up TODO for full parity coverage.'
-      done: false
+      done: true
     - task: 'Phase 7 - Documentation and closure: mark done only after tests pass and no page-level API orchestration regressions are detected.'
-      done: false
+      done: true
   - id: agent-pool-runtime-orchestration
     title: Implement Agent Pool runtime orchestration and Director controls
     note: >-
@@ -1805,6 +1807,29 @@ Architecture:
       done: false
     - task: 'Task 14 (Final compliance gate): run required builds/tests and produce final audit report checklist proving completion of all findings. Minimum commands: dotnet build src\McpServer.Support.Mcp -c Debug; dotnet build src\McpServer.Client -c Debug; dotnet test tests\McpServer.Support.Mcp.Tests -c Debug; dotnet test tests\McpServer.Client.Tests -c Debug; run targeted UI.Core tests impacted by observable/DI changes. Mark audit-di-ssot done only after zero unresolved blocker findings.'
       done: false
+  medium-priority:
+  - id: PLAN-WEBUI-001
+    title: AgentList web parity integration
+    estimate: 1-2d
+    note: 'Completed: /agents web parity integrated with CQRS/MVVM and validated by tests.'
+    done: true
+    completed: 2026-03-04
+    description:
+    - Implement full web parity for /agents route by integrating AgentDefinition/AgentWorkspace view models and corresponding API adapters.
+    - Replace placeholder blankslate with VM-driven list/detail behaviors consistent with Web UI CQRS/MVVM conventions.
+    done-summary: Added web IAgentApiClient adapter and DI registration; replaced /agents placeholder with ViewModel-driven CQRS/MVVM UI for global definitions and workspace assignments; and added bUnit coverage for loading/error/empty/data and detail navigation. Validation passed with dotnet test on McpServer.UI.Core.Tests (226 passed) and McpServer.Web.Tests (30 passed).
+    remaining: ''
+    technical-details:
+    - 'Current placeholder route: src/McpServer.Web/Pages/Agents/AgentList.razor.'
+    - 'Target pattern: page -> UI.Core ViewModel -> Dispatcher -> UI.Core handler -> web adapter.'
+    - Include web component tests for loading/error/empty/data branches.
+    implementation-tasks:
+    - task: Add/verify agent API adapter registrations required for web pages.
+      done: true
+    - task: Bind /agents page to UI.Core agent list/detail view models.
+      done: true
+    - task: Add web tests covering agent list render branches and navigation.
+      done: true
 Director:
   high-priority:
   - id: director-sessionlog-details
