@@ -148,3 +148,9 @@ table.Table tbody tr:last-child {
     position: relative;
     border: 1px solid var(--borderColor-default, #d0d7de);
 }
+
+/* ── Form field spacing (Primer 21 lacks gap-* on flex) ── */
+.form-group + .form-group,
+.Box-body .d-flex.flex-column > div + div {
+    margin-top: 16px;
+}

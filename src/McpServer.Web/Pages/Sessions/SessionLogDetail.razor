@@ -11,7 +11,7 @@
         @foreach (var item in ListViewModel.Items)
         {
             <a class="sidebar-item @(string.Equals(item.SessionId, SessionId, StringComparison.Ordinal) ? "active" : "")"
-               href="/sessions/@item.SessionId">
+               href="@GetDetailHref(item.SessionId)">
                 <span class="color-fg-muted f6">@item.SourceType · @item.Status</span>
                 <br />@item.Title
             </a>
@@ -100,18 +100,32 @@
     [Parameter]
     public string SessionId { get; set; } = string.Empty;
 
-    private string? _loadedSessionId;
+    [SupplyParameterFromQuery]
+    public string? Agent { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        if (ListViewModel.Items.Count == 0)
-        {
-            await ListViewModel.LoadAsync().ConfigureAwait(false);
-        }
-    }
+    [SupplyParameterFromQuery]
+    public string? Model { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string? Text { get; set; }
+
+    private string? _loadedSessionId;
+    private string? _lastFilterKey;
 
     protected override async Task OnParametersSetAsync()
     {
+        var filterKey = $"{Agent}|{Model}|{Text}";
+        if (!string.Equals(filterKey, _lastFilterKey, StringComparison.Ordinal))
+        {
+            _lastFilterKey = filterKey;
+            ListViewModel.Agent = Agent;
+            ListViewModel.Model = Model;
+            ListViewModel.Text = Text;
+            ListViewModel.Limit = 50;
+            ListViewModel.Offset = 0;
+            await ListViewModel.LoadAsync().ConfigureAwait(false);
+        }
+
         if (string.Equals(_loadedSessionId, SessionId, StringComparison.Ordinal))
             return;
 
@@ -122,5 +136,22 @@
 
     private static string GetEntryHeading(McpServer.UI.Core.Messages.SessionLogEntryDetail entry)
         => string.IsNullOrWhiteSpace(entry.QueryTitle) ? "Request Entry" : entry.QueryTitle;
+
+    private string GetDetailHref(string sessionId)
+    {
+        var qs = BuildFilterQueryString();
+        return string.IsNullOrEmpty(qs)
+            ? $"/sessions/{Uri.EscapeDataString(sessionId)}"
+            : $"/sessions/{Uri.EscapeDataString(sessionId)}?{qs}";
+    }
+
+    private string BuildFilterQueryString()
+    {
+        var parts = new List<string>();
+        if (!string.IsNullOrWhiteSpace(Agent)) parts.Add($"agent={Uri.EscapeDataString(Agent)}");
+        if (!string.IsNullOrWhiteSpace(Model)) parts.Add($"model={Uri.EscapeDataString(Model)}");
+        if (!string.IsNullOrWhiteSpace(Text)) parts.Add($"text={Uri.EscapeDataString(Text)}");
+        return string.Join("&", parts);
+    }
 }
 

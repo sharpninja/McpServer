@@ -12,7 +12,7 @@
         @foreach (var item in ListViewModel.Items)
         {
             <a class="sidebar-item @(string.Equals(item.Id, TemplateId, StringComparison.Ordinal) ? "active" : "")"
-               href="/templates/@item.Id">
+               href="@GetDetailHref(item.Id)">
                 <span class="color-fg-muted f6">@item.Category</span>
                 <br />@item.Title
             </a>
@@ -178,19 +178,31 @@
     [Parameter]
     public string TemplateId { get; set; } = string.Empty;
 
-    private string? _loadedTemplateId;
-    private bool CanEdit => AuthPolicy.CanExecuteAction(McpServer.UI.Core.Authorization.McpActionKeys.TemplateUpdate);
+    [SupplyParameterFromQuery]
+    public string? Category { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        if (ListViewModel.Items.Count == 0)
-        {
-            await ListViewModel.LoadAsync().ConfigureAwait(false);
-        }
-    }
+    [SupplyParameterFromQuery]
+    public string? Tag { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string? Keyword { get; set; }
+
+    private string? _loadedTemplateId;
+    private string? _lastFilterKey;
+    private bool CanEdit => AuthPolicy.CanExecuteAction(McpServer.UI.Core.Authorization.McpActionKeys.TemplateUpdate);
 
     protected override async Task OnParametersSetAsync()
     {
+        var filterKey = $"{Category}|{Tag}|{Keyword}";
+        if (!string.Equals(filterKey, _lastFilterKey, StringComparison.Ordinal))
+        {
+            _lastFilterKey = filterKey;
+            ListViewModel.Category = Category;
+            ListViewModel.Tag = Tag;
+            ListViewModel.Keyword = Keyword;
+            await ListViewModel.LoadAsync().ConfigureAwait(false);
+        }
+
         if (string.Equals(_loadedTemplateId, TemplateId, StringComparison.Ordinal))
             return;
 
@@ -203,7 +215,24 @@
 
     private async Task DeleteAsync() => await ViewModel.DeleteAsync().ConfigureAwait(false);
 
+    private string GetDetailHref(string templateId)
+    {
+        var qs = BuildFilterQueryString();
+        return string.IsNullOrEmpty(qs)
+            ? $"/templates/{Uri.EscapeDataString(templateId)}"
+            : $"/templates/{Uri.EscapeDataString(templateId)}?{qs}";
+    }
+
     private static string GetTestHref(string templateId)
         => $"/templates/test?templateId={Uri.EscapeDataString(templateId)}";
+
+    private string BuildFilterQueryString()
+    {
+        var parts = new List<string>();
+        if (!string.IsNullOrWhiteSpace(Category)) parts.Add($"category={Uri.EscapeDataString(Category)}");
+        if (!string.IsNullOrWhiteSpace(Tag)) parts.Add($"tag={Uri.EscapeDataString(Tag)}");
+        if (!string.IsNullOrWhiteSpace(Keyword)) parts.Add($"keyword={Uri.EscapeDataString(Keyword)}");
+        return string.Join("&", parts);
+    }
 }
 

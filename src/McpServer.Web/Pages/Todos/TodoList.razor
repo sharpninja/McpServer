@@ -93,8 +93,22 @@ else
         await ViewModel.LoadAsync().ConfigureAwait(false);
     }
 
-    private static string GetTodoDetailHref(string id)
-        => $"/todos/{Uri.EscapeDataString(id)}";
+    private string GetTodoDetailHref(string id)
+    {
+        var qs = BuildFilterQueryString();
+        return string.IsNullOrEmpty(qs)
+            ? $"/todos/{Uri.EscapeDataString(id)}"
+            : $"/todos/{Uri.EscapeDataString(id)}?{qs}";
+    }
+
+    private string BuildFilterQueryString()
+    {
+        var parts = new List<string>();
+        if (!string.IsNullOrWhiteSpace(Section)) parts.Add($"section={Uri.EscapeDataString(Section)}");
+        if (!string.IsNullOrWhiteSpace(Priority)) parts.Add($"priority={Uri.EscapeDataString(Priority)}");
+        if (Done.HasValue) parts.Add($"done={Done.Value.ToString().ToLowerInvariant()}");
+        return string.Join("&", parts);
+    }
 
     private static string GetPriorityScheme(string priority)
         => priority.ToLowerInvariant() switch
