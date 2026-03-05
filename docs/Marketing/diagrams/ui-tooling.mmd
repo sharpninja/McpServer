@@ -1,0 +1,35 @@
+---
+config:
+  theme: base
+  themeVariables:
+    primaryColor: "#0969da"
+    primaryTextColor: "#ffffff"
+    primaryBorderColor: "#0550ae"
+    lineColor: "#57606a"
+    secondaryColor: "#f6f8fa"
+    tertiaryColor: "#ddf4ff"
+    background: "#ffffff"
+    fontSize: "15px"
+---
+graph LR
+    MCP["McpServer\nhttp://localhost:7147"]
+    subgraph GUI["GUI Interfaces"]
+        WEB["Blazor Web UI\nBrowser Dashboard"]
+        TUI["Director TUI\ndirector ui"]
+    end
+    subgraph CLI_TOOLS["CLI Tools"]
+        CLI["Director CLI\nSharpNinja.McpServer.Director"]
+    end
+    subgraph IDE["IDE Extensions"]
+        VSIX["VS / VS Code Extension\nMcpServer-mcp-todo"]
+    end
+    subgraph CODE["Code and Agent"]
+        NUGET["Client NuGet\nSharpNinja.McpServer.Client"]
+        STDIO["MCP STDIO / HTTP\nCopilot, Cursor, Codex, Claude"]
+    end
+    WEB -->|"HTTP REST"| MCP
+    TUI -->|"via Director"| CLI
+    CLI -->|"HTTP REST + API Key"| MCP
+    VSIX -->|"HTTP REST"| MCP
+    NUGET -->|"HTTP REST + DI"| MCP
+    STDIO -->|"MCP STDIO or /mcp-transport"| MCP

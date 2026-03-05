@@ -1,0 +1,39 @@
+---
+config:
+  theme: base
+  themeVariables:
+    primaryColor: "#0969da"
+    primaryTextColor: "#ffffff"
+    primaryBorderColor: "#0550ae"
+    lineColor: "#57606a"
+    secondaryColor: "#f6f8fa"
+    tertiaryColor: "#ddf4ff"
+    background: "#ffffff"
+    fontSize: "14px"
+---
+sequenceDiagram
+    participant Agent as AI Agent
+    participant MCP as McpServer
+    participant WS as Workspace
+    Note over Agent,WS: Session Start
+    Agent->>MCP: Read AGENTS-README-FIRST.yaml
+    MCP-->>Agent: API key, base URL, workspace path
+    Note over Agent,WS: Context Retrieval
+    Agent->>MCP: POST /mcpserver/context/search
+    MCP->>WS: FTS5 + HNSW vector search
+    WS-->>MCP: Matching code chunks
+    MCP-->>Agent: Ranked context pack
+    Note over Agent,WS: Task Management
+    Agent->>MCP: GET /mcpserver/todo?section=backlog
+    MCP-->>Agent: TODO item list
+    Agent->>MCP: PUT /mcpserver/todo/{id}
+    MCP->>WS: Write TODO.yaml / SQLite
+    MCP-->>Agent: Updated item
+    Note over Agent,WS: Session Logging
+    Agent->>MCP: POST /mcpserver/sessionlog
+    MCP->>WS: Persist session entry
+    MCP-->>Agent: Session ID confirmed
+    Note over Agent,WS: GitHub Sync
+    Agent->>MCP: POST /mcpserver/sync
+    MCP->>WS: Sync TODOs with GitHub Issues
+    MCP-->>Agent: Sync result

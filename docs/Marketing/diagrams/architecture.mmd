@@ -1,0 +1,50 @@
+---
+config:
+  theme: base
+  themeVariables:
+    primaryColor: "#0969da"
+    primaryTextColor: "#ffffff"
+    primaryBorderColor: "#0550ae"
+    lineColor: "#57606a"
+    secondaryColor: "#f6f8fa"
+    tertiaryColor: "#eaeef2"
+    background: "#ffffff"
+    fontSize: "16px"
+---
+graph TB
+    subgraph AGENTS["AI Agents"]
+        A1["GitHub Copilot"]
+        A2["Cursor"]
+        A3["Codex"]
+        A4["Claude / Custom"]
+    end
+    subgraph TRANSPORTS["Transport Layer"]
+        T1["MCP STDIO"]
+        T2["MCP Streamable HTTP\n/mcp-transport"]
+        T3["REST API\n/mcpserver/*"]
+    end
+    subgraph MCPSERVER["McpServer"]
+        direction TB
+        C1["Hybrid Context Search\nFTS5 + HNSW Vector"]
+        C2["TODO Management\nYAML / SQLite"]
+        C3["Session Logging\nAudit Trail"]
+        C4["GitHub Issue Sync"]
+        C5["GraphRAG\nKnowledge Graph"]
+        C6["Requirements Tracking"]
+        C7["Prompt Templates"]
+        C8["Multi-Workspace\nRouting"]
+    end
+    subgraph WORKSPACE["Your Workspace"]
+        W1["Source Code"]
+        W2["Documentation"]
+        W3["TODO.yaml"]
+        W4["GitHub Issues"]
+        W5["Session Logs"]
+    end
+    A1 & A2 & A3 & A4 --> T1 & T2 & T3
+    T1 & T2 & T3 --> C8
+    C8 --> C1 & C2 & C3 & C4 & C5 & C6 & C7
+    C1 & C2 & C3 --> WORKSPACE
+    C4 --> W4
+    C5 & C6 --> W1 & W2
+    C7 --> W3
