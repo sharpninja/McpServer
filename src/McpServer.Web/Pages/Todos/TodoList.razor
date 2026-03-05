@@ -44,28 +44,35 @@ else if (ViewModel.Items.Count == 0)
 }
 else
 {
-    <PrimerDataTable TItem="TodoListItem" Items="ViewModel.Items" ColumnCount="6" Class="Table--full-width">
-        <HeaderTemplate>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Section</th>
-                <th>Priority</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-        </HeaderTemplate>
-        <RowTemplate Context="item">
-            <td><code>@item.Id</code></td>
-            <td>@item.Title</td>
-            <td>@item.Section</td>
-            <td><PrimerLabel Scheme="@GetPriorityScheme(item.Priority)" Text="@item.Priority" /></td>
-            <td>
-                <PrimerLabel Scheme="@(item.Done ? "success" : "attention")" Text="@(item.Done ? "Done" : "Open")" />
-            </td>
-            <td><a class="btn btn-sm" href="@GetTodoDetailHref(item.Id)">Details</a></td>
-        </RowTemplate>
-    </PrimerDataTable>
+    @foreach (var group in GroupByPriority(ViewModel.Items))
+    {
+        <div class="mb-4">
+            <h3 class="h4 mb-2">
+                <PrimerLabel Scheme="@GetPriorityScheme(group.Key)" Text="@group.Key" />
+                <span class="color-fg-muted f5 ml-2">(@group.Count())</span>
+            </h3>
+            <PrimerDataTable TItem="TodoListItem" Items="@(new System.Collections.ObjectModel.ObservableCollection<TodoListItem>(group))" ColumnCount="5" Class="Table--full-width">
+                <HeaderTemplate>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Section</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </HeaderTemplate>
+                <RowTemplate Context="item">
+                    <td><code>@item.Id</code></td>
+                    <td>@item.Title</td>
+                    <td>@item.Section</td>
+                    <td>
+                        <PrimerLabel Scheme="@(item.Done ? "success" : "attention")" Text="@(item.Done ? "Done" : "Open")" />
+                    </td>
+                    <td><a class="btn btn-sm" href="@GetTodoDetailHref(item.Id)">Details</a></td>
+                </RowTemplate>
+            </PrimerDataTable>
+        </div>
+    }
 }
 
 @code {
@@ -109,6 +116,14 @@ else
         if (Done.HasValue) parts.Add($"done={Done.Value.ToString().ToLowerInvariant()}");
         return string.Join("&", parts);
     }
+
+    private static readonly string[] PriorityOrder = ["critical", "high", "medium", "low"];
+
+    private static IEnumerable<IGrouping<string, TodoListItem>> GroupByPriority(
+        IEnumerable<TodoListItem> items)
+        => items
+            .GroupBy(i => i.Priority ?? "low")
+            .OrderBy(g => Array.IndexOf(PriorityOrder, g.Key.ToLowerInvariant()) is var idx && idx < 0 ? int.MaxValue : idx);
 
     private static string GetPriorityScheme(string priority)
         => priority.ToLowerInvariant() switch

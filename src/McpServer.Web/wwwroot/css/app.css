@@ -84,6 +84,17 @@ body {
     border-bottom: 1px solid var(--borderColor-default, #d0d7de);
 }
 
+.detail-sidebar .sidebar-group-header {
+    padding: 8px 16px 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--fgColor-muted, #656d76);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background-color: var(--bgColor-neutral-muted, #f6f8fa);
+    border-bottom: 1px solid var(--borderColor-muted, #d8dee4);
+}
+
 .detail-sidebar .sidebar-item {
     display: block;
     padding: 8px 16px;

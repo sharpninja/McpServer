@@ -9,13 +9,17 @@
 <div class="detail-layout">
     <aside class="detail-sidebar">
         <div class="sidebar-header">Todos</div>
-        @foreach (var item in ListViewModel.Items)
+        @foreach (var group in GroupByPriority(ListViewModel.Items))
         {
-            <a class="sidebar-item @(string.Equals(item.Id, TodoId, StringComparison.Ordinal) ? "active" : "")"
-               href="/todos/@Uri.EscapeDataString(item.Id)">
-                <span class="text-bold">@item.Id</span>
-                <br /><span class="color-fg-muted f6">@item.Title</span>
-            </a>
+            <div class="sidebar-group-header color-fg-muted f6 text-uppercase px-3 pt-2 pb-1">@group.Key</div>
+            @foreach (var item in group)
+            {
+                <a class="sidebar-item @(string.Equals(item.Id, TodoId, StringComparison.Ordinal) ? "active" : "")"
+                   href="/todos/@Uri.EscapeDataString(item.Id)">
+                    <span class="text-bold">@item.Id</span>
+                    <br /><span class="color-fg-muted f6">@item.Title</span>
+                </a>
+            }
         }
     </aside>
 
@@ -75,6 +79,14 @@
 
     private string? _loadedId;
     private bool CanEdit => AuthPolicy.CanExecuteAction(McpServer.UI.Core.Authorization.McpActionKeys.TodoUpdate);
+
+    private static readonly string[] PriorityOrder = ["critical", "high", "medium", "low"];
+
+    private static IEnumerable<IGrouping<string, TodoListItem>> GroupByPriority(
+        IEnumerable<TodoListItem> items)
+        => items
+            .GroupBy(i => i.Priority ?? "low")
+            .OrderBy(g => Array.IndexOf(PriorityOrder, g.Key.ToLowerInvariant()) is var idx && idx < 0 ? int.MaxValue : idx);
 
     protected override async Task OnParametersSetAsync()
     {
