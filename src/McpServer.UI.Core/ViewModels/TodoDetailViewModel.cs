@@ -481,7 +481,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         try
         {
             var lines = new List<string>();
-            await foreach (var line in stream.WithCancellation(ct).ConfigureAwait(false))
+            await foreach (var line in stream.WithCancellation(ct))
             {
                 // Skip SSE heartbeat / thinking lines — they are keep-alive signals, not content.
                 if (line is "…" or "Processing…" or "\u2026" or "Processing\u2026")
