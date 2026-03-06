@@ -35,8 +35,6 @@ Mcp:
   RepoAllowlist:
   - src/McpServer.Cqrs/**/*.cs
   - src/McpServer.Cqrs.Mvvm/**/*.cs
-  - src/McpServer.UI.Core/**/*.cs
-  - src/McpServer.Director/**/*.cs
   GraphRag:
     Enabled: false
     EnhanceContextSearch: true

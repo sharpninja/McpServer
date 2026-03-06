@@ -15,8 +15,6 @@ public sealed class IngestionAllowlistContractTests
 
         Assert.Contains("src/McpServer.Cqrs/**/*.cs", yaml);
         Assert.Contains("src/McpServer.Cqrs.Mvvm/**/*.cs", yaml);
-        Assert.Contains("src/McpServer.UI.Core/**/*.cs", yaml);
-        Assert.Contains("src/McpServer.Director/**/*.cs", yaml);
     }
 
     private static string FindFileFromRepoRoot(params string[] segments)

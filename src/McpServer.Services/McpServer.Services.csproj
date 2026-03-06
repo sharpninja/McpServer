@@ -34,5 +34,8 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>McpServer.Support.Mcp.IntegrationTests</_Parameter1>
     </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>McpServer.SpecFlow.Tests</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 </Project>
