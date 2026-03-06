@@ -36,6 +36,7 @@ public sealed class SessionLogIngestor
 {
     private readonly Chunker _chunker;
     private readonly IngestionOptions _options;
+    private readonly WorkspaceContext _workspaceContext;
     private readonly ISessionLogService _sessionLogService;
     private readonly ILogger<SessionLogIngestor> _logger;
     private static readonly JsonSerializerOptions s_jsonOptions = new() { PropertyNameCaseInsensitive = true };
@@ -43,16 +44,19 @@ public sealed class SessionLogIngestor
     /// <summary>TR-PLANNED-013: Constructor.</summary>
     /// <param name="chunker">Chunker for splitting content.</param>
     /// <param name="options">Ingestion options providing sessions path.</param>
+    /// <param name="workspaceContext">Resolved workspace context for per-workspace ingestion.</param>
     /// <param name="sessionLogService">Service for persisting session logs to 4NF tables.</param>
     /// <param name="logger">Logger for diagnostic output.</param>
     public SessionLogIngestor(
         Chunker chunker,
         Microsoft.Extensions.Options.IOptions<IngestionOptions> options,
+        WorkspaceContext workspaceContext,
         ISessionLogService sessionLogService,
         ILogger<SessionLogIngestor> logger)
     {
         _chunker = chunker;
         _options = options?.Value ?? new IngestionOptions();
+        _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
         _sessionLogService = sessionLogService ?? throw new ArgumentNullException(nameof(sessionLogService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
@@ -63,11 +67,9 @@ public sealed class SessionLogIngestor
     public async Task<IReadOnlyList<(ContextDocument Doc, IReadOnlyList<ContextChunk> Chunks)>> IngestAsync(
         CancellationToken cancellationToken = default)
     {
-        var repoRoot = Path.GetFullPath(_options.RepoRoot);
-        var sessionsDir = Path.IsPathRooted(_options.SessionsPath)
-            ? Path.GetFullPath(_options.SessionsPath)
-            : Path.GetFullPath(Path.Combine(repoRoot, _options.SessionsPath.TrimStart('.', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)));
-        var sourceRoot = Path.IsPathRooted(_options.SessionsPath) ? sessionsDir : repoRoot;
+        var repoRoot = ResolveRepoRoot();
+        var sessionsDir = ResolveSessionsDirectory(repoRoot);
+        var sourceRoot = IsUnderPath(sessionsDir, repoRoot) ? repoRoot : sessionsDir;
         if (!Directory.Exists(sessionsDir))
         {
             return Array.Empty<(ContextDocument, IReadOnlyList<ContextChunk>)>();
@@ -97,7 +99,7 @@ public sealed class SessionLogIngestor
                     : NormalizeMarkdownSessionLog(content);
                 var contentHash = ComputeHash(content);
                 var relativePath = Path.GetRelativePath(sourceRoot, path).Replace('\\', '/');
-                var documentId = "session-log:" + relativePath.Replace("/", "-", StringComparison.Ordinal).Replace(":", "-", StringComparison.Ordinal);
+                var documentId = BuildWorkspaceScopedDocumentId("session-log", repoRoot, relativePath);
                 var doc = new ContextDocument
                 {
                     Id = documentId,
@@ -170,10 +172,8 @@ public sealed class SessionLogIngestor
     /// <returns>Import statistics including files scanned, imported, skipped, failed, and total entries.</returns>
     public async Task<SessionLogImportResult> ImportToSessionLogTablesAsync(CancellationToken cancellationToken = default)
     {
-        var repoRoot = Path.GetFullPath(_options.RepoRoot);
-        var sessionsDir = Path.IsPathRooted(_options.SessionsPath)
-            ? Path.GetFullPath(_options.SessionsPath)
-            : Path.GetFullPath(Path.Combine(repoRoot, _options.SessionsPath.TrimStart('.', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)));
+        var repoRoot = ResolveRepoRoot();
+        var sessionsDir = ResolveSessionsDirectory(repoRoot);
         if (!Directory.Exists(sessionsDir))
         {
             _logger.LogWarning("Sessions directory not found: {SessionsDir}", sessionsDir);
@@ -337,5 +337,41 @@ public sealed class SessionLogIngestor
         }
 
         return dto;
+    }
+
+    private string ResolveRepoRoot()
+    {
+        var candidate = _workspaceContext.WorkspacePath;
+        if (string.IsNullOrWhiteSpace(candidate))
+            candidate = _options.RepoRoot;
+        return Path.GetFullPath(candidate);
+    }
+
+    private string ResolveSessionsDirectory(string repoRoot)
+    {
+        var sessionsPath = !string.IsNullOrWhiteSpace(_workspaceContext.SessionsPath)
+            ? _workspaceContext.SessionsPath!
+            : _options.SessionsPath;
+
+        return Path.IsPathRooted(sessionsPath)
+            ? Path.GetFullPath(sessionsPath)
+            : Path.GetFullPath(Path.Combine(repoRoot, sessionsPath.TrimStart('.', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)));
+    }
+
+    private static bool IsUnderPath(string candidatePath, string rootPath)
+    {
+        var normalizedCandidate = Path.GetFullPath(candidatePath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        var normalizedRoot = Path.GetFullPath(rootPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        if (normalizedCandidate.Equals(normalizedRoot, StringComparison.OrdinalIgnoreCase))
+            return true;
+        var rootWithSep = normalizedRoot + Path.DirectorySeparatorChar;
+        return normalizedCandidate.StartsWith(rootWithSep, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string BuildWorkspaceScopedDocumentId(string sourcePrefix, string workspaceRoot, string relativePath)
+    {
+        var scope = ComputeHash(workspaceRoot).Substring(0, 16).ToLowerInvariant();
+        var normalizedPath = relativePath.Replace("/", "-", StringComparison.Ordinal).Replace(":", "-", StringComparison.Ordinal);
+        return $"{sourcePrefix}:{scope}:{normalizedPath}";
     }
 }

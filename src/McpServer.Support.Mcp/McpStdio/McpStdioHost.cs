@@ -79,6 +79,13 @@ public static class McpStdioHost
             "src/McpServer.Cqrs.Mvvm/**/*.cs",
             "src/McpServer.UI.Core/**/*.cs",
             "src/McpServer.Director/**/*.cs",
+            "docs/README.md",
+            "docs/MCP-SERVER.md",
+            "docs/USER-GUIDE.md",
+            "docs/FAQ.md",
+            "docs/CLIENT-INTEGRATION.md",
+            "docs/RELEASE-CHECKLIST.md",
+            "docs/Operations/**/*.md",
         };
         builder.Services.PostConfigure<VectorIndexOptions>(options =>
         {
