@@ -15,6 +15,7 @@ public sealed class WorkspaceErrorTests
     private readonly WorkspaceEndpointFixture _fixture;
     private readonly ITestOutputHelper _output;
 
+    /// <summary>Initializes a new instance.</summary>
     public WorkspaceErrorTests(WorkspaceEndpointFixture fixture, ITestOutputHelper output)
     {
         _fixture = fixture;
@@ -23,6 +24,7 @@ public sealed class WorkspaceErrorTests
 
     // ── Invalid Base64URL key tests ──────────────────────────────────────
 
+    /// <summary>Returns 400 for invalid key in GET.</summary>
     [Theory]
     [InlineData("!!!invalid!!!")]
     [InlineData("not-valid-base64-@#$")]
@@ -39,6 +41,7 @@ public sealed class WorkspaceErrorTests
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    /// <summary>Returns 400 for invalid key in PUT.</summary>
     [Theory]
     [InlineData("!!!invalid!!!")]
     [InlineData("not-valid-base64-@#$")]
@@ -51,6 +54,7 @@ public sealed class WorkspaceErrorTests
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    /// <summary>Returns 400 for invalid key in DELETE.</summary>
     [Theory]
     [InlineData("!!!invalid!!!")]
     [InlineData("not-valid-base64-@#$")]
@@ -64,6 +68,7 @@ public sealed class WorkspaceErrorTests
 
     // ── Missing resource tests ───────────────────────────────────────────
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Get_NonExistent_Returns404()
     {
@@ -73,6 +78,7 @@ public sealed class WorkspaceErrorTests
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Update_NonExistent_Returns404()
     {
@@ -83,6 +89,7 @@ public sealed class WorkspaceErrorTests
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Delete_NonExistent_Returns404()
     {
@@ -92,6 +99,7 @@ public sealed class WorkspaceErrorTests
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Start_NonExistent_Returns404()
     {
@@ -103,6 +111,7 @@ public sealed class WorkspaceErrorTests
 
     // ── Duplicate create test ────────────────────────────────────────────
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Create_Duplicate_Returns409()
     {
@@ -131,6 +140,7 @@ public sealed class WorkspaceErrorTests
 
     // ── Missing/empty body tests ─────────────────────────────────────────
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Create_EmptyBody_ReturnsBadRequest()
     {
@@ -145,6 +155,7 @@ public sealed class WorkspaceErrorTests
             $"Expected 400/422 but got {(int)response.StatusCode}.");
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Update_NullBody_ReturnsBadRequest()
     {
@@ -163,6 +174,7 @@ public sealed class WorkspaceErrorTests
 
     // ── Method not allowed ───────────────────────────────────────────────
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Patch_NotSupported_Returns405()
     {

@@ -1,11 +1,18 @@
 # Copilot Instructions — McpServer
 
 **Agent Identity:** When posting to the MCP session log, use `sourceType: copilotcli`.
+For specific operational instructions (session bootstrap, turn logging lifecycle, helper command order), follow `AGENTS-README-FIRST.yaml`.
 
 ## Response Formatting
 
 - Do not use table-style output in responses.
 - Use concise bullets or short paragraphs instead.
+
+## Terminal Usage
+
+- Do NOT set focus to the terminal window.
+- Do NOT write multiline commands to the terminal; use temporary scripts instead.
+- Always use non-login pwsh and PowerShell commands.
 
 ## Build, Test, Lint
 
@@ -54,51 +61,8 @@ pwsh ./scripts/Validate-McpConfig.ps1
 
 ### XML Documentation Required
 
-`TreatWarningsAsErrors` and `GenerateDocumentationFile` are enabled globally in `Directory.Build.props`. All public types and members must have XML doc comments or the build fails (CS1591). Use `/// <inheritdoc />` for interface implementations. Test projects are exempt.
+`TreatWarningsAsErrors` and `GenerateDocumentationFile` are enabled globally in `Directory.Build.props`. All public types and members must have XML doc comments or the build fails (CS1591). Use `/// <inheritdoc />` for interface implementations. Test projects are not exempt: test classes and test methods must include XML docs that state what is being tested, what data/fixtures are used, why that data/fixtures are used, and which requirement IDs are validated.
 
 ### Requirement Traceability Comments
 
 All source files reference their FR/TR requirement IDs in doc comments (e.g., `/// <summary>TR-PLANNED-013: Constructor.</summary>`). When adding new functionality, reference the relevant requirement ID from `docs/Project/Functional-Requirements.md` and `docs/Project/Technical-Requirements.md`.
-
-### DRY — No Duplication (TR-MCP-DRY-001)
-
-Shared logic must be extracted to a single reusable location. No copy-pasted logic across files or scripts. See `docs/Project/Technical-Requirements.md` § TR-MCP-DRY-001.
-
-### Async Patterns
-
-All async methods use `.ConfigureAwait(false)`. Controllers and services accept `CancellationToken` parameters.
-
-### Testing
-
-- **Framework**: xUnit v3 with NSubstitute for mocking.
-- **Integration tests** are isolated in `McpServer.Support.Mcp.IntegrationTests`; they use `CustomWebApplicationFactory` (sets environment to `"Test"`, uses EF in-memory database).
-- **Unit tests** live in `*Tests` projects; they use temp files or in-memory state; always clean up in `Dispose`.
-- Test projects have `InternalsVisibleTo` access to the main project.
-
-### Controller Patterns
-
-Controllers are `sealed`, use `[ApiController]` + `[Route("mcpserver/...")]`. Mutating endpoints return `TodoMutationResult`-style result objects. Not-found returns 404 with the result; validation errors return 400/409.
-
-### Service Registration
-
-Services follow interface + implementation pairs (`ITodoService`/`TodoService`). Strategy-pattern switching (TODO storage, tunnel providers) is done via factory delegates in `Program.cs` using `ActivatorUtilities.CreateInstance`.
-
-### API Key Auth
-
-`[ApiKeyAuthFilter]` protects mutating endpoints; `[SkipApiKeyAuth]` bypasses for read-only endpoints. When `Mcp:ApiKey` is empty, all requests pass (open mode).
-
-### Marker File
-
-On workspace start, `MarkerFileService` writes `AGENTS-README-FIRST.yaml` to the workspace root with port, endpoints, and connection prompt. Removed on stop. This is how AI agents discover the running server.
-
-### Configuration Hierarchy
-
-`PORT` env var → `Mcp:Instances:{name}:Port` → `Mcp:Port` → default 7147. Instance-level config always overrides base-level for all `Mcp:*` keys.
-
-### Central Package Management
-
-Package versions are managed in `Directory.Packages.props`. Project files use `<PackageReference Include="..." />` without version attributes.
-
-### Logging
-
-Serilog with console + optional Parseable HTTP sink + file fallback. Configuration in `Mcp:Parseable` section.

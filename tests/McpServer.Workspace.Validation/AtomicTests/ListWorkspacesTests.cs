@@ -11,8 +11,10 @@ public sealed class ListWorkspacesTests
 {
     private readonly WorkspaceEndpointFixture _fixture;
 
+    /// <summary>Initializes a new instance.</summary>
     public ListWorkspacesTests(WorkspaceEndpointFixture fixture) => _fixture = fixture;
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task List_Returns200_WithValidStructure()
     {
@@ -27,6 +29,7 @@ public sealed class ListWorkspacesTests
         Assert.Equal(result.Items.Count, result.TotalCount);
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task List_ResponseIsJson()
     {

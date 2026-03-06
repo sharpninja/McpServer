@@ -13,6 +13,7 @@ public sealed class UpdateWorkspaceTests : IAsyncLifetime
     private readonly string _testPath;
     private readonly string _testKey;
 
+    /// <summary>Initializes a new instance.</summary>
     public UpdateWorkspaceTests(WorkspaceEndpointFixture fixture)
     {
         _fixture = fixture;
@@ -20,6 +21,7 @@ public sealed class UpdateWorkspaceTests : IAsyncLifetime
         _testKey = WorkspaceEndpointFixture.EncodeKey(_testPath);
     }
 
+    /// <summary>Initializes resources asynchronously.</summary>
     public async ValueTask InitializeAsync()
     {
         var body = new { WorkspacePath = _testPath, Name = "AuditUpdateOriginal" };
@@ -27,11 +29,13 @@ public sealed class UpdateWorkspaceTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 
+    /// <summary>Disposes resources asynchronously.</summary>
     public async ValueTask DisposeAsync()
     {
         await _fixture.Client.DeleteAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}");
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Update_ChangeName_Returns200()
     {
@@ -48,6 +52,7 @@ public sealed class UpdateWorkspaceTests : IAsyncLifetime
         Assert.Equal("AuditUpdateRenamed", result.Workspace.Name);
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Update_ChangeTodoPath_Returns200()
     {
@@ -64,6 +69,7 @@ public sealed class UpdateWorkspaceTests : IAsyncLifetime
         Assert.Equal("custom/todo.yaml", result.Workspace.TodoPath);
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Update_NonExistentKey_Returns404()
     {

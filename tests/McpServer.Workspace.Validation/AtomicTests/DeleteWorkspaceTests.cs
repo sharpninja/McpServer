@@ -11,8 +11,10 @@ public sealed class DeleteWorkspaceTests
 {
     private readonly WorkspaceEndpointFixture _fixture;
 
+    /// <summary>Initializes a new instance.</summary>
     public DeleteWorkspaceTests(WorkspaceEndpointFixture fixture) => _fixture = fixture;
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Delete_ExistingWorkspace_Returns200()
     {
@@ -40,6 +42,7 @@ public sealed class DeleteWorkspaceTests
         Assert.Equal(HttpStatusCode.NotFound, getResponse.StatusCode);
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Delete_NonExistentWorkspace_Returns404()
     {
@@ -55,6 +58,7 @@ public sealed class DeleteWorkspaceTests
         Assert.False(result.Success);
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Delete_InvalidKey_Returns400()
     {
