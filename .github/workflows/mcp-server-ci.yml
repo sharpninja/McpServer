@@ -112,9 +112,11 @@ jobs:
         run: dotnet publish src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj -c Release -o artifacts/mcp-server
 
       - name: Build Director tool
+        if: ${{ hashFiles('src/McpServer.Director/McpServer.Director.csproj') != '' }}
         run: dotnet build src/McpServer.Director/McpServer.Director.csproj -c Release
 
       - name: Pack Director tool
+        if: ${{ hashFiles('src/McpServer.Director/McpServer.Director.csproj') != '' }}
         run: dotnet pack src/McpServer.Director/McpServer.Director.csproj -c Release --no-build -p:PackageVersion=${{ steps.version.outputs.version }} -o artifacts/director-tool
 
       - name: Upload MCP publish artifact
@@ -124,6 +126,7 @@ jobs:
           path: artifacts/mcp-server
 
       - name: Upload Director tool package artifact
+        if: ${{ hashFiles('src/McpServer.Director/McpServer.Director.csproj') != '' }}
         uses: actions/upload-artifact@v4
         with:
           name: director-tool-nupkg
