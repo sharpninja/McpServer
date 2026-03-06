@@ -502,3 +502,6 @@ _temp*
 .version
 
 AGENTS-README-FIRST.yaml
+
+# MCP Data
+mcp-data/

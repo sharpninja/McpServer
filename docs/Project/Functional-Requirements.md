@@ -80,9 +80,7 @@ The server shall protect all `/mcpserver/*` API endpoints with per-workspace cry
 
 ## FR-MCP-014 Pairing Web UI
 
-The server shall provide a browser-based login flow for authorized users to retrieve the server API key for MCP client configuration, backed by SHA-256 constant-time password verification and HttpOnly session cookies.
-
-**Covered by:** `PairingHtml`, `PairingOptions`, `PairingSessionService`
+*Moved to [Requirements-WebUI.md](Requirements-WebUI.md#fr-mcp-014-pairing-web-ui)*
 
 ## FR-MCP-015 Tunnel Providers
 
@@ -180,17 +178,11 @@ A standalone CQRS framework (`McpServer.Cqrs`) shall provide async command/query
 
 ## FR-MCP-030 Director CLI
 
-A console application (`McpServer.Director`) shall provide agent orchestration commands (init, add, launch, ban, unban, delete, merge, login, list, agents, validate, interactive) dispatched through the CQRS framework. Authentication uses OIDC Device Authorization Flow with the configured provider. Interactive mode uses Terminal.Gui v2 with ViewModel-bound screens.
-
-**Status:** ✅ Complete
-
-**Covered by:** `McpServer.Director` project — 15 source files: `Program.cs`, `McpHttpClient.cs`, `Auth/DirectorAuthOptions.cs`, `Auth/OidcAuthService.cs`, `Auth/TokenCache.cs`, `Commands/AuthCommands.cs`, `Commands/CommandHelpers.cs`, `Commands/DirectorCommands.cs`, `Commands/InteractiveCommand.cs`, `Screens/MainScreen.cs`, `Screens/HealthScreen.cs`, `Screens/AgentScreen.cs`, `Screens/TodoScreen.cs`, `Screens/SessionLogScreen.cs`, `Screens/WorkspaceListScreen.cs`, `Screens/WorkspacePolicyScreen.cs`, `Screens/LoginDialog.cs`, `Screens/ViewModelBinder.cs`
-
-**Implementation:** 17 CLI commands registered via System.CommandLine. All commands communicate with the MCP server via `McpHttpClient` (reads connection details from `AGENTS-README-FIRST.yaml`). Auth uses OIDC Device Authorization Flow with token caching to `~/.mcpserver/tokens.json`. Interactive mode (`director interactive|tui|ui`) launches Terminal.Gui v2 with 6 tabs (Health, Workspaces, Agents, TODO, Sessions, Policy) plus a Login dialog, menu bar, auth status indicator, and keyboard shortcuts (F2 Login, F5 Refresh, Ctrl+Q Quit). ViewModels from `McpServer.UI.Core` are bound to Terminal.Gui controls via `ViewModelBinder` (INotifyPropertyChanged → Application.Invoke).
+*Moved to [Requirements-Director.md](Requirements-Director.md#fr-mcp-030-director-cli)*
 
 ## FR-MCP-031 McpServer Management Web UI
 
-A web-based management UI for McpServer providing workspace management, agent configuration, session log viewing, todo management, and system health monitoring. Integrates with the platform-wide open-source .NET OIDC provider for authentication. *(Planned — tracked as high-priority TODO.)*
+*Moved to [Requirements-WebUI.md](Requirements-WebUI.md#fr-mcp-031-mcpserver-management-web-ui)*
 
 ## FR-MCP-032 Enhanced GitHub Integration
 
@@ -222,9 +214,7 @@ Every server-initiated Copilot interaction must be session-logged in every affec
 
 ## FR-MCP-037 Director CLI Exec Command
 
-The Director CLI shall support a `director exec <ViewModelName>` command that instantiates the named ViewModel from the registry, populates properties from JSON input (stdin or `--input` flag), executes the primary `IRelayCommand`, and returns the result as JSON to stdout. Exit code 0 = success, 1 = failure.
-
-**Covered by:** `McpServer.Director` project, `IViewModelRegistry`
+*Moved to [Requirements-Director.md](Requirements-Director.md#fr-mcp-037-director-cli-exec-command)*
 
 ## FR-MCP-038 Session Continuity Protocol
 
@@ -356,9 +346,7 @@ One-shot endpoint template rendering shall support an `id` parameter used to pop
 
 ## FR-MCP-057 Director Agent Pool Management UI
 
-Director shall provide an Agent Pool tab to monitor pooled agents and one-shot queue state, connect to an agent, recycle an agent immediately, stop/start an agent, cancel/remove/reorder queued requests, and enqueue free-form one-shot requests.
-
-**Covered by:** `AgentPoolScreen` *(planned)*, `AgentPoolViewModel` *(planned)*
+*Moved to [Requirements-Director.md](Requirements-Director.md#fr-mcp-057-director-agent-pool-management-ui)*
 
 ## FR-MCP-058 Interactive Presence Signaling
 
@@ -378,13 +366,7 @@ The system SHALL enforce a DI-centered Single Source of Truth architecture acros
 
 ## FR-MCP-060 Director MVVM/CQRS Full Endpoint Coverage
 
-Director SHALL expose complete administrative endpoint coverage through the shared `McpServer.UI.Core` MVVM/CQRS layer so interactive tabs and `director exec` operations use the same command/query contracts, handlers, and authorization rules.
-
-Each covered administration area SHALL provide ViewModel-first orchestration (list/detail or operation-focused ViewModel patterns), and Director screens SHALL remain presentation-only shells that delegate state and workflows to ViewModels and CQRS dispatch.
-
-Tab composition SHALL be role-aware and declarative, with registration metadata separated from shell rendering logic and enforced via shared authorization policy checks.
-
-**Technical Implementation:** [TR-MCP-DIR-005](./Technical-Requirements.md#tr-mcp-dir-005) | [TR-MCP-DIR-006](./Technical-Requirements.md#tr-mcp-dir-006) | [TR-MCP-DIR-007](./Technical-Requirements.md#tr-mcp-dir-007) | [TR-MCP-DIR-008](./Technical-Requirements.md#tr-mcp-dir-008) | [Details](./TR-per-FR-Mapping.md#fr-mcp-060)
+*Moved to [Requirements-Director.md](Requirements-Director.md#fr-mcp-060-director-mvvmcqrs-full-endpoint-coverage)*
 
 ## FR-MCP-061 Canonical TODO and Session Identifier Conventions
 

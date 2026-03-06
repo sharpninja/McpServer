@@ -912,8 +912,8 @@ mvp-app:
     - task: Add/extend tests and update Requirements-Matrix/TR-per-FR statuses after implementation.
       done: true
   - id: MVP-APP-007
-    title: '[NEED PLAN] Add git remote URL property to workspace DTO for GitHub ref identification at runtime'
-    note: Plan created in plan.md
+    title: '[READY] Add git remote URL property to workspace DTO for GitHub ref identification at runtime'
+    note: '"Plan created in plan.md"'
     done: false
     description:
     - Read the git remote (origin) URL for each workspace directory and expose it as a property on the workspace DTO (WorkspaceDetail/WorkspaceSummary). This allows consuming code to identify GitHub repository refs (owner/repo) at runtime without shelling out to git. Implementation should read the remote during workspace registration or on-demand via git config/CLI, and persist or cache the value.
@@ -1329,8 +1329,8 @@ mvp-mcp:
   medium-priority:
   - id: MVP-MCP-011
     title: Director manual TUI smoke validation follow-up
-    estimate: 0.5-1 day AI-assisted
-    note: Moved from MVP-MCP-003 Phase 15.3 so endpoint-coverage delivery can be closed while manual interactive verification is tracked independently.
+    estimate: '"0.5-1 day AI-assisted"'
+    note: '"Moved from MVP-MCP-003 Phase 15.3 so endpoint-coverage delivery can be closed while manual interactive verification is tracked independently."'
     done: false
     description:
     - Launch Director interactive mode and run an end-to-end manual smoke pass for migrated tabs.
@@ -2326,7 +2326,7 @@ mcpserver-ui:
 Documentation:
   high-priority:
   - id: MCP-USERDOCS-001
-    title: Create User Documentation
+    title: '[READY] Create User Documentation'
     estimate: 3d
     done: false
     description:
