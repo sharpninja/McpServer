@@ -72,7 +72,7 @@ public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnaps
 
         try
         {
-            var result = await _checkHealthCommand.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await _checkHealthCommand.DispatchAsync(ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Unknown error checking health.";
@@ -115,7 +115,7 @@ public sealed class HealthSnapshotsViewModel : AreaListViewModelBase<HealthSnaps
 
         try
         {
-            var result = await _dispatcher.SendAsync(new InitWorkspaceCommand(workspacePath), ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(new InitWorkspaceCommand(workspacePath), ct);
             if (result.IsSuccess)
             {
                 StatusMessage = "Workspace initialization completed.";

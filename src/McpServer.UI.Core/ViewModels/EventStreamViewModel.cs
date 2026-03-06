@@ -81,7 +81,7 @@ public sealed partial class EventStreamViewModel : AreaListViewModelBase<ChangeE
         try
         {
             var category = string.IsNullOrWhiteSpace(CategoryFilter) ? null : CategoryFilter.Trim();
-            var result = await _dispatcher.QueryAsync(new SubscribeToEventsQuery(category), linkedCts.Token).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new SubscribeToEventsQuery(category), linkedCts.Token);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Failed to subscribe to events.";

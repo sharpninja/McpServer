@@ -29,37 +29,37 @@ public sealed class TodoClient : McpClientBase
         string? id = null, bool? done = null, CancellationToken cancellationToken = default)
     {
         var qs = BuildQueryString(keyword, priority, section, id, done);
-        return await GetAsync<TodoQueryResult>($"mcpserver/todo{qs}", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<TodoQueryResult>($"mcpserver/todo{qs}", cancellationToken);
     }
 
     /// <summary>Get a single TODO item by ID.</summary>
     public async Task<TodoFlatItem> GetAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<TodoFlatItem>($"mcpserver/todo/{Encode(id)}", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<TodoFlatItem>($"mcpserver/todo/{Encode(id)}", cancellationToken);
     }
 
     /// <summary>Create a new TODO item.</summary>
     public async Task<TodoMutationResult> CreateAsync(TodoCreateRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TodoMutationResult>("mcpserver/todo", request, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<TodoMutationResult>("mcpserver/todo", request, cancellationToken);
     }
 
     /// <summary>Update an existing TODO item.</summary>
     public async Task<TodoMutationResult> UpdateAsync(string id, TodoUpdateRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<TodoMutationResult>($"mcpserver/todo/{Encode(id)}", request, cancellationToken).ConfigureAwait(false);
+        return await PutAsync<TodoMutationResult>($"mcpserver/todo/{Encode(id)}", request, cancellationToken);
     }
 
     /// <summary>Delete a TODO item.</summary>
     public async Task<TodoMutationResult> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await DeleteAsync<TodoMutationResult>($"mcpserver/todo/{Encode(id)}", cancellationToken).ConfigureAwait(false);
+        return await DeleteAsync<TodoMutationResult>($"mcpserver/todo/{Encode(id)}", cancellationToken);
     }
 
     /// <summary>Analyze requirements for a TODO item via Copilot.</summary>
     public async Task<RequirementsAnalysisResult> AnalyzeRequirementsAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<RequirementsAnalysisResult>($"mcpserver/todo/{Encode(id)}/requirements", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<RequirementsAnalysisResult>($"mcpserver/todo/{Encode(id)}/requirements", null, cancellationToken);
     }
 
     /// <summary>

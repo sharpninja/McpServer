@@ -46,7 +46,7 @@ internal sealed class CreateTodoCommandHandler : ICommandHandler<CreateTodoComma
 
         try
         {
-            var result = await _todoApiClient.CreateTodoAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _todoApiClient.CreateTodoAsync(command, context.CancellationToken);
             return Result<TodoMutationOutcome>.Success(result);
         }
         catch (Exception ex)

@@ -38,7 +38,7 @@ internal sealed class ListTodosQueryHandler : IQueryHandler<ListTodosQuery, List
 
         try
         {
-            var result = await _todoApiClient.ListTodosAsync(query, context.CancellationToken).ConfigureAwait(false);
+            var result = await _todoApiClient.ListTodosAsync(query, context.CancellationToken);
             return Result<ListTodosResult>.Success(result);
         }
         catch (Exception ex)

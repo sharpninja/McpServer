@@ -33,7 +33,7 @@ internal sealed class GetAuthConfigQueryHandler : IQueryHandler<GetAuthConfigQue
 
         try
         {
-            var result = await _authConfigApiClient.GetAuthConfigAsync(context.CancellationToken).ConfigureAwait(false);
+            var result = await _authConfigApiClient.GetAuthConfigAsync(context.CancellationToken);
             return Result<AuthConfigSnapshot>.Success(result);
         }
         catch (Exception ex)

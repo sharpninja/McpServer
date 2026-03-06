@@ -70,7 +70,7 @@ public sealed class BucketDetailViewModel : AreaDetailViewModelBase<BucketDetail
         StatusMessage = $"Browsing bucket '{name}'...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new BrowseBucketQuery(name), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new BrowseBucketQuery(name), ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Bucket browse failed.";
@@ -118,7 +118,7 @@ public sealed class BucketDetailViewModel : AreaDetailViewModelBase<BucketDetail
         StatusMessage = $"Syncing bucket '{name}'...";
         try
         {
-            var result = await _dispatcher.SendAsync(new SyncBucketCommand(name), ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(new SyncBucketCommand(name), ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Bucket sync failed.";
@@ -164,7 +164,7 @@ public sealed class BucketDetailViewModel : AreaDetailViewModelBase<BucketDetail
         try
         {
             var command = new InstallFromBucketCommand(bucketName, toolName, _workspaceContext.ActiveWorkspacePath);
-            var result = await _dispatcher.SendAsync(command, ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(command, ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Install failed.";
@@ -203,7 +203,7 @@ public sealed class BucketDetailViewModel : AreaDetailViewModelBase<BucketDetail
         StatusMessage = pendingStatus;
         try
         {
-            var result = await _dispatcher.SendAsync(command, ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(command, ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Bucket mutation failed.";

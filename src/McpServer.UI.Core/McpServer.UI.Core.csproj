@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>McpServer.UI.Core</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);CA1515;CA1849;CA1031</NoWarn>
+    <NoWarn>$(NoWarn);CA1515;CA1849;CA1031;CS1591</NoWarn>
 
     <PackageId>SharpNinja.McpServer.UI.Core</PackageId>
     <Version>0.1.0</Version>
@@ -19,10 +19,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Avalonia" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\McpServer.Client\McpServer.Client.csproj" />
     <ProjectReference Include="..\McpServer.Cqrs.Mvvm\McpServer.Cqrs.Mvvm.csproj" />
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,7 @@ namespace McpServer.UI;
 
 /// <summary>
 /// ViewModel for the MCP TODO tool window, following the MVVM pattern
-/// from McpServer.UI.Core with CommunityToolkit.Mvvm RelayCommands.
+/// from McpServer.UI.Core with explicit command properties.
 /// </summary>
 internal sealed partial class TodoToolWindowViewModel : ObservableObject
 {
@@ -47,6 +47,16 @@ internal sealed partial class TodoToolWindowViewModel : ObservableObject
         _showCompletionInfoBar = showCompletionInfoBar;
 
         _editorService.TodoSaved += OnTodoSaved;
+
+        RefreshCommand = new AsyncRelayCommand(RefreshAsync);
+        NewTodoCommand = new RelayCommand(NewTodo);
+        CopyIdCommand = new RelayCommand(CopyId);
+        StopCommand = new RelayCommand(Stop);
+        ClearFiltersCommand = new RelayCommand(ClearFilters);
+        OpenItemCommand = new AsyncRelayCommand(OpenItemAsync);
+        StatusPromptCommand = new AsyncRelayCommand(StatusPromptAsync);
+        ImplementCommand = new AsyncRelayCommand(ImplementAsync);
+        PlanCommand = new AsyncRelayCommand(PlanAsync);
     }
 
     // ────── Observable properties ──────
@@ -85,9 +95,17 @@ internal sealed partial class TodoToolWindowViewModel : ObservableObject
     partial void OnFilterTextScopeChanged(string value) => ApplyFilters();
 
     // ────── Commands ──────
+    public IAsyncRelayCommand RefreshCommand { get; }
+    public IRelayCommand NewTodoCommand { get; }
+    public IRelayCommand CopyIdCommand { get; }
+    public IRelayCommand StopCommand { get; }
+    public IRelayCommand ClearFiltersCommand { get; }
+    public IAsyncRelayCommand OpenItemCommand { get; }
+    public IAsyncRelayCommand StatusPromptCommand { get; }
+    public IAsyncRelayCommand ImplementCommand { get; }
+    public IAsyncRelayCommand PlanCommand { get; }
 
     /// <summary>Reload TODO items from the MCP server.</summary>
-    [RelayCommand]
     private async System.Threading.Tasks.Task RefreshAsync()
     {
         StatusText = "Loading\u2026";
@@ -110,7 +128,6 @@ internal sealed partial class TodoToolWindowViewModel : ObservableObject
     }
 
     /// <summary>Open a new-todo editor template.</summary>
-    [RelayCommand]
     private void NewTodo()
     {
         ThreadHelper.ThrowIfNotOnUIThread();
@@ -118,7 +135,6 @@ internal sealed partial class TodoToolWindowViewModel : ObservableObject
     }
 
     /// <summary>Copy the selected item's ID to the clipboard.</summary>
-    [RelayCommand]
     private void CopyId()
     {
         if (SelectedEntry?.Item == null) return;
@@ -127,14 +143,12 @@ internal sealed partial class TodoToolWindowViewModel : ObservableObject
     }
 
     /// <summary>Cancel the running Copilot CLI operation.</summary>
-    [RelayCommand]
     private void Stop()
     {
         _copilotCts?.Cancel();
     }
 
     /// <summary>Reset all filter controls to defaults.</summary>
-    [RelayCommand]
     private void ClearFilters()
     {
         // Suppress re-filtering until all values are set
@@ -144,7 +158,6 @@ internal sealed partial class TodoToolWindowViewModel : ObservableObject
     }
 
     /// <summary>Open the selected TODO item in the VS editor.</summary>
-    [RelayCommand]
     private async System.Threading.Tasks.Task OpenItemAsync()
     {
         if (SelectedEntry?.Item == null) return;
@@ -152,7 +165,6 @@ internal sealed partial class TodoToolWindowViewModel : ObservableObject
     }
 
     /// <summary>Invoke Copilot CLI to report the status of the selected TODO.</summary>
-    [RelayCommand]
     private async System.Threading.Tasks.Task StatusPromptAsync()
     {
         if (SelectedEntry?.Item == null) return;
@@ -165,7 +177,6 @@ internal sealed partial class TodoToolWindowViewModel : ObservableObject
     }
 
     /// <summary>Invoke Copilot CLI to implement the selected TODO.</summary>
-    [RelayCommand]
     private async System.Threading.Tasks.Task ImplementAsync()
     {
         if (SelectedEntry?.Item == null) return;
@@ -203,7 +214,6 @@ internal sealed partial class TodoToolWindowViewModel : ObservableObject
     }
 
     /// <summary>Invoke Copilot CLI to create an implementation plan for the selected TODO.</summary>
-    [RelayCommand]
     private async System.Threading.Tasks.Task PlanAsync()
     {
         if (SelectedEntry?.Item == null) return;

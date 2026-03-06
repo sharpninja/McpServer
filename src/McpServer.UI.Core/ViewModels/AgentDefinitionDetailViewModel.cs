@@ -49,7 +49,7 @@ public sealed class AgentDefinitionDetailViewModel : AreaDetailViewModelBase<Age
         StatusMessage = $"Loading definition '{agentId}'...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new GetAgentDefinitionQuery(agentId), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new GetAgentDefinitionQuery(agentId), ct);
             if (!result.IsSuccess)
             {
                 ErrorMessage = result.Error ?? "Failed to load definition.";
@@ -90,7 +90,7 @@ public sealed class AgentDefinitionDetailViewModel : AreaDetailViewModelBase<Age
         StatusMessage = $"Saving definition '{command.Id}'...";
         try
         {
-            var result = await _dispatcher.SendAsync(command, ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(command, ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Failed to save definition.";
@@ -105,7 +105,7 @@ public sealed class AgentDefinitionDetailViewModel : AreaDetailViewModelBase<Age
                 return result.Value;
             }
 
-            await LoadAsync(command.Id, ct).ConfigureAwait(false);
+            await LoadAsync(command.Id, ct);
             StatusMessage = $"Saved definition '{command.Id}'.";
             return result.Value;
         }
@@ -156,7 +156,7 @@ public sealed class AgentDefinitionDetailViewModel : AreaDetailViewModelBase<Age
         StatusMessage = $"Deleting definition '{agentId}'...";
         try
         {
-            var result = await _dispatcher.SendAsync(new DeleteAgentDefinitionCommand(agentId), ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(new DeleteAgentDefinitionCommand(agentId), ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Failed to delete definition.";
@@ -202,7 +202,7 @@ public sealed class AgentDefinitionDetailViewModel : AreaDetailViewModelBase<Age
         StatusMessage = "Seeding built-in definitions...";
         try
         {
-            var result = await _dispatcher.SendAsync(new SeedAgentDefaultsCommand(), ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(new SeedAgentDefaultsCommand(), ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Failed to seed definitions.";

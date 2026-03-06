@@ -35,7 +35,7 @@ internal sealed class WriteRepoFileCommandHandler : ICommandHandler<WriteRepoFil
 
         try
         {
-            var result = await _repoApiClient.WriteFileAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _repoApiClient.WriteFileAsync(command, context.CancellationToken);
             return Result<RepoWriteOutcome>.Success(result);
         }
         catch (Exception ex)

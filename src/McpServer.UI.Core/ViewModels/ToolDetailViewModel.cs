@@ -43,7 +43,7 @@ public sealed class ToolDetailViewModel : AreaDetailViewModelBase<ToolDetail>
         StatusMessage = $"Loading tool #{toolId}...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new GetToolQuery(toolId), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new GetToolQuery(toolId), ct);
             if (!result.IsSuccess)
             {
                 ErrorMessage = result.Error ?? "Failed to load tool detail.";
@@ -104,7 +104,7 @@ public sealed class ToolDetailViewModel : AreaDetailViewModelBase<ToolDetail>
         StatusMessage = pendingStatus;
         try
         {
-            var result = await _dispatcher.SendAsync(command, ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(command, ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Tool mutation failed.";

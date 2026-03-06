@@ -41,7 +41,7 @@ internal sealed class UpdateTemplateCommandHandler : ICommandHandler<UpdateTempl
 
         try
         {
-            var result = await _client.UpdateTemplateAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.UpdateTemplateAsync(command, context.CancellationToken);
             return Result<TemplateMutationOutcome>.Success(result);
         }
         catch (Exception ex)

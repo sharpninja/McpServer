@@ -41,7 +41,7 @@ public sealed class TrListViewModel : AreaListViewModelBase<TechnicalRequirement
         StatusMessage = "Loading technical requirements...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new ListTechnicalRequirementsQuery(), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new ListTechnicalRequirementsQuery(), ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Technical requirements load failed.";

@@ -44,7 +44,7 @@ public sealed class BucketListViewModel : AreaListViewModelBase<BucketDetail>
         StatusMessage = "Loading buckets...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new ListBucketsQuery(), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new ListBucketsQuery(), ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Failed to load buckets.";

@@ -56,7 +56,7 @@ public sealed partial class IssueListViewModel : AreaListViewModelBase<GitHubIss
             var query = new ListIssuesQuery(
                 string.IsNullOrWhiteSpace(StateFilter) ? null : StateFilter.Trim(),
                 Limit <= 0 ? 30 : Limit);
-            var result = await _dispatcher.QueryAsync(query, ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(query, ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Issue list failed.";

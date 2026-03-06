@@ -112,7 +112,7 @@ public sealed partial class AgentPoolViewModel : ObservableObject
 
         try
         {
-            var definitionsResult = await _dispatcher.QueryAsync(new ListAgentDefinitionsQuery(), ct).ConfigureAwait(false);
+            var definitionsResult = await _dispatcher.QueryAsync(new ListAgentDefinitionsQuery(), ct);
             if (!definitionsResult.IsSuccess || definitionsResult.Value is null)
             {
                 ErrorMessage = definitionsResult.Error ?? "Failed to load configured agents.";
@@ -120,7 +120,7 @@ public sealed partial class AgentPoolViewModel : ObservableObject
                 return;
             }
 
-            var runtimeResult = await _dispatcher.QueryAsync(new ListAgentPoolAgentsQuery(), ct).ConfigureAwait(false);
+            var runtimeResult = await _dispatcher.QueryAsync(new ListAgentPoolAgentsQuery(), ct);
             if (!runtimeResult.IsSuccess || runtimeResult.Value is null)
             {
                 ErrorMessage = runtimeResult.Error ?? "Failed to load runtime agents.";
@@ -128,7 +128,7 @@ public sealed partial class AgentPoolViewModel : ObservableObject
                 return;
             }
 
-            var queueResult = await _dispatcher.QueryAsync(new ListAgentPoolQueueQuery(), ct).ConfigureAwait(false);
+            var queueResult = await _dispatcher.QueryAsync(new ListAgentPoolQueueQuery(), ct);
             if (!queueResult.IsSuccess || queueResult.Value is null)
             {
                 ErrorMessage = queueResult.Error ?? "Failed to load queue entries.";
@@ -162,7 +162,7 @@ public sealed partial class AgentPoolViewModel : ObservableObject
         if (string.IsNullOrWhiteSpace(agentType))
             return null;
 
-        var result = await _dispatcher.QueryAsync(new GetAgentDefinitionQuery(agentType), ct).ConfigureAwait(false);
+        var result = await _dispatcher.QueryAsync(new GetAgentDefinitionQuery(agentType), ct);
         if (!result.IsSuccess)
         {
             ErrorMessage = result.Error ?? "Failed to load agent definition.";
@@ -220,7 +220,7 @@ public sealed partial class AgentPoolViewModel : ObservableObject
             DefaultLaunchCommand = agentPath,
             DefaultModels = [agentModel],
             DefaultSeedPrompt = agentSeed ?? string.Empty
-        }, ct).ConfigureAwait(false);
+        }, ct);
 
         if (!upsertDefinition.IsSuccess || upsertDefinition.Value is null)
         {
@@ -243,7 +243,7 @@ public sealed partial class AgentPoolViewModel : ObservableObject
             WorkspacePath = workspacePath,
             Enabled = true,
             AgentIsolation = "worktree"
-        }, ct).ConfigureAwait(false);
+        }, ct);
 
         if (!assignResult.IsSuccess || assignResult.Value is null)
         {
@@ -260,7 +260,7 @@ public sealed partial class AgentPoolViewModel : ObservableObject
         }
 
         StatusMessage = $"Starting '{agentName}'...";
-        var startResult = await _dispatcher.SendAsync(new StartAgentPoolAgentCommand(agentName), ct).ConfigureAwait(false);
+        var startResult = await _dispatcher.SendAsync(new StartAgentPoolAgentCommand(agentName), ct);
         if (!startResult.IsSuccess || startResult.Value is null)
         {
             ErrorMessage = startResult.Error ?? "Failed to start pooled agent.";
@@ -274,12 +274,12 @@ public sealed partial class AgentPoolViewModel : ObservableObject
         {
             ErrorMessage = startResult.Value.Error;
             StatusMessage = $"Agent '{agentName}' created and assigned, but start failed: {startResult.Value.Error ?? "unknown error"}";
-            await LoadAsync(ct).ConfigureAwait(false);
+            await LoadAsync(ct);
             return;
         }
 
         AgentNameInput = agentName;
-        await LoadAsync(ct).ConfigureAwait(false);
+        await LoadAsync(ct);
         StatusMessage = $"Agent '{agentName}' created, assigned, and started.";
     }
 
@@ -322,7 +322,7 @@ public sealed partial class AgentPoolViewModel : ObservableObject
 
         ErrorMessage = null;
         StatusMessage = $"Connecting to '{agentName}'...";
-        var result = await _dispatcher.SendAsync(new ConnectAgentPoolAgentCommand(agentName), ct).ConfigureAwait(false);
+        var result = await _dispatcher.SendAsync(new ConnectAgentPoolAgentCommand(agentName), ct);
         if (!result.IsSuccess || result.Value is null)
         {
             ErrorMessage = result.Error ?? "Connect failed.";
@@ -337,7 +337,7 @@ public sealed partial class AgentPoolViewModel : ObservableObject
             return;
         }
 
-        await LoadAsync(ct).ConfigureAwait(false);
+        await LoadAsync(ct);
         StatusMessage = $"Connected '{agentName}' (session {result.Value.SessionId ?? "n/a"}).";
     }
 
@@ -397,7 +397,7 @@ public sealed partial class AgentPoolViewModel : ObservableObject
         };
 
         StatusMessage = "Resolving ad-hoc prompt...";
-        var resolveResult = await _dispatcher.SendAsync(new ResolveAgentPoolPromptCommand(request), ct).ConfigureAwait(false);
+        var resolveResult = await _dispatcher.SendAsync(new ResolveAgentPoolPromptCommand(request), ct);
         if (!resolveResult.IsSuccess || resolveResult.Value is null)
         {
             ErrorMessage = resolveResult.Error ?? "Resolve failed.";
@@ -413,7 +413,7 @@ public sealed partial class AgentPoolViewModel : ObservableObject
         }
 
         StatusMessage = "Queueing ad-hoc prompt...";
-        var enqueueResult = await _dispatcher.SendAsync(new EnqueueAgentPoolPromptCommand(request), ct).ConfigureAwait(false);
+        var enqueueResult = await _dispatcher.SendAsync(new EnqueueAgentPoolPromptCommand(request), ct);
         if (!enqueueResult.IsSuccess || enqueueResult.Value is null)
         {
             ErrorMessage = enqueueResult.Error ?? "Enqueue failed.";
@@ -429,7 +429,7 @@ public sealed partial class AgentPoolViewModel : ObservableObject
         }
 
         PromptInput = string.Empty;
-        await LoadAsync(ct).ConfigureAwait(false);
+        await LoadAsync(ct);
         StatusMessage = $"Queued '{enqueueResult.Value.JobId ?? "unknown"}' for agent '{enqueueResult.Value.AgentName ?? "auto"}'.";
     }
 
@@ -456,7 +456,7 @@ public sealed partial class AgentPoolViewModel : ObservableObject
 
         ErrorMessage = null;
         StatusMessage = pendingMessage(agentName);
-        var result = await _dispatcher.SendAsync(commandFactory(agentName), ct).ConfigureAwait(false);
+        var result = await _dispatcher.SendAsync(commandFactory(agentName), ct);
         if (!result.IsSuccess || result.Value is null)
         {
             ErrorMessage = result.Error ?? "Operation failed.";
@@ -471,7 +471,7 @@ public sealed partial class AgentPoolViewModel : ObservableObject
             return;
         }
 
-        await LoadAsync(ct).ConfigureAwait(false);
+        await LoadAsync(ct);
         StatusMessage = successMessage(agentName);
     }
 
@@ -491,7 +491,7 @@ public sealed partial class AgentPoolViewModel : ObservableObject
 
         ErrorMessage = null;
         StatusMessage = pendingMessage(jobId);
-        var result = await _dispatcher.SendAsync(commandFactory(jobId), ct).ConfigureAwait(false);
+        var result = await _dispatcher.SendAsync(commandFactory(jobId), ct);
         if (!result.IsSuccess || result.Value is null)
         {
             ErrorMessage = result.Error ?? "Operation failed.";
@@ -506,7 +506,7 @@ public sealed partial class AgentPoolViewModel : ObservableObject
             return;
         }
 
-        await LoadAsync(ct).ConfigureAwait(false);
+        await LoadAsync(ct);
         StatusMessage = successMessage(jobId);
     }
 

@@ -35,7 +35,7 @@ internal sealed class GetRepoFileQueryHandler : IQueryHandler<GetRepoFileQuery, 
 
         try
         {
-            var result = await _repoApiClient.ReadFileAsync(query.Path, context.CancellationToken).ConfigureAwait(false);
+            var result = await _repoApiClient.ReadFileAsync(query.Path, context.CancellationToken);
             return Result<RepoFileDetail>.Success(result);
         }
         catch (Exception ex)

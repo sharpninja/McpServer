@@ -23,42 +23,42 @@ public sealed class TunnelClient : McpClientBase
     /// <summary>List all registered tunnel providers.</summary>
     public async Task<List<TunnelProviderInfo>> ListAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<List<TunnelProviderInfo>>("mcpserver/tunnel/list", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<List<TunnelProviderInfo>>("mcpserver/tunnel/list", cancellationToken);
     }
 
     /// <summary>Get the status of a specific tunnel provider.</summary>
     public async Task<TunnelProviderInfo> GetStatusAsync(string providerName, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<TunnelProviderInfo>($"mcpserver/tunnel/{providerName}/status", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<TunnelProviderInfo>($"mcpserver/tunnel/{providerName}/status", cancellationToken);
     }
 
     /// <summary>Enable a tunnel provider.</summary>
     public async Task<TunnelProviderInfo> EnableAsync(string providerName, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TunnelProviderInfo>($"mcpserver/tunnel/{providerName}/enable", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<TunnelProviderInfo>($"mcpserver/tunnel/{providerName}/enable", null, cancellationToken);
     }
 
     /// <summary>Disable a tunnel provider.</summary>
     public async Task<TunnelProviderInfo> DisableAsync(string providerName, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TunnelProviderInfo>($"mcpserver/tunnel/{providerName}/disable", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<TunnelProviderInfo>($"mcpserver/tunnel/{providerName}/disable", null, cancellationToken);
     }
 
     /// <summary>Start a tunnel provider.</summary>
     public async Task<TunnelProviderInfo> StartAsync(string providerName, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TunnelProviderInfo>($"mcpserver/tunnel/{providerName}/start", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<TunnelProviderInfo>($"mcpserver/tunnel/{providerName}/start", null, cancellationToken);
     }
 
     /// <summary>Stop a tunnel provider.</summary>
     public async Task<TunnelProviderInfo> StopAsync(string providerName, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TunnelProviderInfo>($"mcpserver/tunnel/{providerName}/stop", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<TunnelProviderInfo>($"mcpserver/tunnel/{providerName}/stop", null, cancellationToken);
     }
 
     /// <summary>Restart a tunnel provider (stop then start).</summary>
     public async Task<TunnelProviderInfo> RestartAsync(string providerName, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TunnelProviderInfo>($"mcpserver/tunnel/{providerName}/restart", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<TunnelProviderInfo>($"mcpserver/tunnel/{providerName}/restart", null, cancellationToken);
     }
 }

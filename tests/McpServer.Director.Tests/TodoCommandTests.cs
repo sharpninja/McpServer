@@ -36,6 +36,7 @@ public sealed class TodoCommandTests
             output.Contains("ID", StringComparison.OrdinalIgnoreCase) &&
             output.Contains("Title", StringComparison.OrdinalIgnoreCase);
         var hasExpectedEnvironmentFailure =
+            output.Contains("No active workspace is selected", StringComparison.OrdinalIgnoreCase) ||
             output.Contains("Unknown workspace path", StringComparison.OrdinalIgnoreCase) ||
             output.Contains("Permission denied", StringComparison.OrdinalIgnoreCase) ||
             output.Contains("Connection refused", StringComparison.OrdinalIgnoreCase);

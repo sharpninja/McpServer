@@ -67,7 +67,7 @@ public sealed partial class TemplateDetailViewModel : AreaDetailViewModelBase<Te
         {
             var result = await _dispatcher
                 .QueryAsync(new GetTemplateQuery(templateId), ct)
-                .ConfigureAwait(false);
+                ;
 
             if (!result.IsSuccess)
             {
@@ -107,7 +107,7 @@ public sealed partial class TemplateDetailViewModel : AreaDetailViewModelBase<Te
         {
             var result = await _dispatcher
                 .SendAsync(new DeleteTemplateCommand(Detail.Id), ct)
-                .ConfigureAwait(false);
+                ;
 
             if (!result.IsSuccess || result.Value is null || !result.Value.Success)
             {
@@ -153,7 +153,7 @@ public sealed partial class TemplateDetailViewModel : AreaDetailViewModelBase<Te
 
             var result = await _dispatcher
                 .QueryAsync(query, ct)
-                .ConfigureAwait(false);
+                ;
 
             if (!result.IsSuccess || result.Value is null || !result.Value.Success)
             {
@@ -206,7 +206,7 @@ public sealed partial class TemplateDetailViewModel : AreaDetailViewModelBase<Te
                     Engine = string.IsNullOrWhiteSpace(EditorEngine) ? null : EditorEngine,
                 };
 
-                var result = await _dispatcher.SendAsync(cmd, ct).ConfigureAwait(false);
+                var result = await _dispatcher.SendAsync(cmd, ct);
 
                 if (!result.IsSuccess || result.Value is null || !result.Value.Success)
                 {
@@ -233,7 +233,7 @@ public sealed partial class TemplateDetailViewModel : AreaDetailViewModelBase<Te
                     Engine = string.IsNullOrWhiteSpace(EditorEngine) ? null : EditorEngine,
                 };
 
-                var result = await _dispatcher.SendAsync(cmd, ct).ConfigureAwait(false);
+                var result = await _dispatcher.SendAsync(cmd, ct);
 
                 if (!result.IsSuccess || result.Value is null || !result.Value.Success)
                 {

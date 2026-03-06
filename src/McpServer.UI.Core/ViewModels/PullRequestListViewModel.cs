@@ -56,7 +56,7 @@ public sealed partial class PullRequestListViewModel : AreaListViewModelBase<Git
             var query = new ListPullsQuery(
                 string.IsNullOrWhiteSpace(StateFilter) ? null : StateFilter.Trim(),
                 Limit <= 0 ? 30 : Limit);
-            var result = await _dispatcher.QueryAsync(query, ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(query, ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Pull request list failed.";
@@ -100,7 +100,7 @@ public sealed partial class PullRequestListViewModel : AreaListViewModelBase<Git
         StatusMessage = $"Commenting on PR #{number}...";
         try
         {
-            var result = await _dispatcher.SendAsync(new CommentOnPullCommand(number, body), ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(new CommentOnPullCommand(number, body), ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "PR comment failed.";

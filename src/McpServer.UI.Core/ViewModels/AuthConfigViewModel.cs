@@ -54,7 +54,7 @@ public sealed partial class AuthConfigViewModel : ObservableObject
 
         try
         {
-            var result = await _command.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await _command.DispatchAsync(ct);
             if (!result.IsSuccess)
             {
                 Snapshot = null;

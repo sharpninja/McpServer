@@ -65,7 +65,7 @@ public sealed partial class TemplateTestViewModel : ObservableObject
                 VariablesJson = string.IsNullOrWhiteSpace(VariablesJson) ? "{}" : VariablesJson,
             };
 
-            var dispatchResult = await _dispatcher.QueryAsync(query, ct).ConfigureAwait(false);
+            var dispatchResult = await _dispatcher.QueryAsync(query, ct);
             if (!dispatchResult.IsSuccess)
             {
                 ErrorMessage = dispatchResult.Error ?? "Unknown error running template test.";

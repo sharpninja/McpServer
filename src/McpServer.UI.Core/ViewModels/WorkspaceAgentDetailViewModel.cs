@@ -63,7 +63,7 @@ public sealed class WorkspaceAgentDetailViewModel : AreaDetailViewModelBase<Work
         StatusMessage = $"Loading workspace agent '{agentId}'...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new GetWorkspaceAgentQuery(agentId, targetWorkspace), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new GetWorkspaceAgentQuery(agentId, targetWorkspace), ct);
             if (!result.IsSuccess)
             {
                 ErrorMessage = result.Error ?? "Failed to load workspace agent detail.";
@@ -122,7 +122,7 @@ public sealed class WorkspaceAgentDetailViewModel : AreaDetailViewModelBase<Work
             },
             $"Assigning '{agentId}'...",
             $"Assigned '{agentId}'.",
-            ct).ConfigureAwait(false);
+            ct);
     }
 
     /// <summary>
@@ -150,10 +150,10 @@ public sealed class WorkspaceAgentDetailViewModel : AreaDetailViewModelBase<Work
             command,
             $"Saving '{command.AgentId}'...",
             $"Saved '{command.AgentId}'.",
-            ct).ConfigureAwait(false);
+            ct);
 
         if (outcome is { Success: true })
-            await LoadAsync(command.AgentId, targetWorkspace, ct).ConfigureAwait(false);
+            await LoadAsync(command.AgentId, targetWorkspace, ct);
 
         return outcome;
     }
@@ -240,7 +240,7 @@ public sealed class WorkspaceAgentDetailViewModel : AreaDetailViewModelBase<Work
         StatusMessage = "Validating agents.yaml...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new ValidateAgentQuery(targetWorkspace), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new ValidateAgentQuery(targetWorkspace), ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Validation failed.";
@@ -281,7 +281,7 @@ public sealed class WorkspaceAgentDetailViewModel : AreaDetailViewModelBase<Work
         StatusMessage = pendingStatus;
         try
         {
-            var result = await _dispatcher.SendAsync(command, ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(command, ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Mutation failed.";

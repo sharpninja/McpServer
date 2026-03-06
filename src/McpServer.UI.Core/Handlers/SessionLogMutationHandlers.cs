@@ -33,7 +33,7 @@ internal sealed class SubmitSessionLogCommandHandler : ICommandHandler<SubmitSes
 
         try
         {
-            var result = await _client.SubmitSessionLogAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.SubmitSessionLogAsync(command, context.CancellationToken);
             return Result<SessionLogSubmitOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -71,7 +71,7 @@ internal sealed class AppendSessionLogDialogCommandHandler : ICommandHandler<App
 
         try
         {
-            var result = await _client.AppendSessionLogDialogAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.AppendSessionLogDialogAsync(command, context.CancellationToken);
             return Result<SessionLogDialogAppendOutcome>.Success(result);
         }
         catch (Exception ex)

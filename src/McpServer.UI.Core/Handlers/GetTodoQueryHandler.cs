@@ -41,7 +41,7 @@ internal sealed class GetTodoQueryHandler : IQueryHandler<GetTodoQuery, TodoDeta
 
         try
         {
-            var result = await _todoApiClient.GetTodoAsync(query.TodoId, context.CancellationToken).ConfigureAwait(false);
+            var result = await _todoApiClient.GetTodoAsync(query.TodoId, context.CancellationToken);
             return Result<TodoDetail?>.Success(result);
         }
         catch (Exception ex)

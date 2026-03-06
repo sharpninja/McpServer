@@ -33,7 +33,7 @@ internal sealed class SearchContextQueryHandler : IQueryHandler<SearchContextQue
 
         try
         {
-            var result = await _contextApiClient.SearchAsync(query, context.CancellationToken).ConfigureAwait(false);
+            var result = await _contextApiClient.SearchAsync(query, context.CancellationToken);
             return Result<ContextSearchPayload>.Success(result);
         }
         catch (Exception ex)

@@ -38,7 +38,7 @@ internal sealed class GenerateTodoImplementPromptQueryHandler : IQueryHandler<Ge
 
         try
         {
-            var result = await _todoApiClient.GenerateTodoImplementPromptAsync(query.TodoId, context.CancellationToken).ConfigureAwait(false);
+            var result = await _todoApiClient.GenerateTodoImplementPromptAsync(query.TodoId, context.CancellationToken);
             return Result<TodoPromptOutput>.Success(result);
         }
         catch (Exception ex)

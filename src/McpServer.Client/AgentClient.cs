@@ -30,7 +30,7 @@ public sealed class AgentClient : McpClientBase
     public async Task<AgentDefinitionListResult> ListDefinitionsAsync(CancellationToken cancellationToken = default)
     {
         return await GetAsync<AgentDefinitionListResult>("mcpserver/agents/definitions", cancellationToken)
-            .ConfigureAwait(false);
+            ;
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ public sealed class AgentClient : McpClientBase
     public async Task<AgentDefinition> GetDefinitionAsync(string agentType, CancellationToken cancellationToken = default)
     {
         return await GetAsync<AgentDefinition>($"mcpserver/agents/definitions/{Encode(agentType)}", cancellationToken)
-            .ConfigureAwait(false);
+            ;
     }
 
     /// <summary>
@@ -52,7 +52,7 @@ public sealed class AgentClient : McpClientBase
         CancellationToken cancellationToken = default)
     {
         return await PostAsync<AgentMutationResult>("mcpserver/agents/definitions", request, cancellationToken)
-            .ConfigureAwait(false);
+            ;
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public sealed class AgentClient : McpClientBase
     public async Task<AgentMutationResult> DeleteDefinitionAsync(string agentType, CancellationToken cancellationToken = default)
     {
         return await DeleteAsync<AgentMutationResult>($"mcpserver/agents/definitions/{Encode(agentType)}", cancellationToken)
-            .ConfigureAwait(false);
+            ;
     }
 
     /// <summary>
@@ -72,7 +72,7 @@ public sealed class AgentClient : McpClientBase
     public async Task<AgentSeedDefaultsResult> SeedDefaultsAsync(CancellationToken cancellationToken = default)
     {
         return await PostAsync<AgentSeedDefaultsResult>("mcpserver/agents/definitions/seed", null, cancellationToken)
-            .ConfigureAwait(false);
+            ;
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ public sealed class AgentClient : McpClientBase
     /// </summary>
     public async Task<AgentSeedDefaultsResult> SeedDefinitionsAsync(CancellationToken cancellationToken = default)
     {
-        return await SeedDefaultsAsync(cancellationToken).ConfigureAwait(false);
+        return await SeedDefaultsAsync(cancellationToken);
     }
 
     /// <summary>
@@ -94,7 +94,7 @@ public sealed class AgentClient : McpClientBase
         CancellationToken cancellationToken = default)
     {
         return await GetAsync<AgentWorkspaceListResult>($"mcpserver/agents{BuildWorkspaceQuery(workspacePath)}", cancellationToken)
-            .ConfigureAwait(false);
+            ;
     }
 
     /// <summary>
@@ -111,7 +111,7 @@ public sealed class AgentClient : McpClientBase
         return await GetAsync<AgentWorkspaceConfig>(
                 $"mcpserver/agents/{Encode(agentId)}{BuildWorkspaceQuery(workspacePath)}",
                 cancellationToken)
-            .ConfigureAwait(false);
+            ;
     }
 
     /// <summary>
@@ -131,7 +131,7 @@ public sealed class AgentClient : McpClientBase
                 $"mcpserver/agents/{Encode(agentId)}{BuildWorkspaceQuery(workspacePath)}",
                 request,
                 cancellationToken)
-            .ConfigureAwait(false);
+            ;
     }
 
     /// <summary>
@@ -148,7 +148,7 @@ public sealed class AgentClient : McpClientBase
         return await DeleteAsync<AgentMutationResult>(
                 $"mcpserver/agents/{Encode(agentId)}{BuildWorkspaceQuery(workspacePath)}",
                 cancellationToken)
-            .ConfigureAwait(false);
+            ;
     }
 
     /// <summary>
@@ -168,7 +168,7 @@ public sealed class AgentClient : McpClientBase
                 $"mcpserver/agents/{Encode(agentId)}/ban{BuildWorkspaceQuery(workspacePath)}",
                 request,
                 cancellationToken)
-            .ConfigureAwait(false);
+            ;
     }
 
     /// <summary>
@@ -188,7 +188,7 @@ public sealed class AgentClient : McpClientBase
                 $"mcpserver/agents/{Encode(agentId)}/unban{BuildWorkspaceAndGlobalQuery(workspacePath, global)}",
                 null,
                 cancellationToken)
-            .ConfigureAwait(false);
+            ;
     }
 
     /// <summary>
@@ -205,7 +205,7 @@ public sealed class AgentClient : McpClientBase
         CancellationToken cancellationToken = default)
     {
         var path = $"mcpserver/agents/{Encode(agentId)}/events{BuildWorkspaceQuery(workspacePath)}";
-        return await PostAsync<AgentMutationResult>(path, request, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<AgentMutationResult>(path, request, cancellationToken);
     }
 
     /// <summary>
@@ -224,7 +224,7 @@ public sealed class AgentClient : McpClientBase
         return await GetAsync<AgentEventListResult>(
                 $"mcpserver/agents/{Encode(agentId)}/events{BuildWorkspaceAndLimitQuery(workspacePath, limit)}",
                 cancellationToken)
-            .ConfigureAwait(false);
+            ;
     }
 
     /// <summary>
@@ -237,7 +237,7 @@ public sealed class AgentClient : McpClientBase
         CancellationToken cancellationToken = default)
     {
         return await GetAsync<AgentValidateResult>($"mcpserver/agents/validate{BuildWorkspaceQuery(workspacePath)}", cancellationToken)
-            .ConfigureAwait(false);
+            ;
     }
 
     private static string Encode(string value) => Uri.EscapeDataString(value);

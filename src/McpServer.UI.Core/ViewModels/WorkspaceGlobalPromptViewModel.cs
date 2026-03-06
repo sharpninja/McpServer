@@ -79,7 +79,7 @@ public sealed partial class WorkspaceGlobalPromptViewModel : ObservableObject
 
         try
         {
-            var result = await _loadCommand.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await _loadCommand.DispatchAsync(ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Unknown error loading workspace global prompt.";
@@ -116,7 +116,7 @@ public sealed partial class WorkspaceGlobalPromptViewModel : ObservableObject
 
         try
         {
-            var result = await _saveCommand.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await _saveCommand.DispatchAsync(ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Unknown error saving workspace global prompt.";
@@ -147,6 +147,6 @@ public sealed partial class WorkspaceGlobalPromptViewModel : ObservableObject
     public async Task ResetAsync()
     {
         TemplateText = string.Empty;
-        await SaveAsync().ConfigureAwait(false);
+        await SaveAsync();
     }
 }

@@ -29,79 +29,79 @@ public sealed class AgentPoolClient : McpClientBase
     /// <summary>Gets runtime status for all configured pooled agents.</summary>
     public async Task<IReadOnlyList<AgentPoolAgentStatus>> GetAgentsAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<IReadOnlyList<AgentPoolAgentStatus>>("mcpserver/agent-pool/agents", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<IReadOnlyList<AgentPoolAgentStatus>>("mcpserver/agent-pool/agents", cancellationToken);
     }
 
     /// <summary>Starts a pooled agent session.</summary>
     public async Task<AgentPoolMutationResult> StartAgentAsync(string agentName, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<AgentPoolMutationResult>($"mcpserver/agent-pool/agents/{Encode(agentName)}/start", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<AgentPoolMutationResult>($"mcpserver/agent-pool/agents/{Encode(agentName)}/start", null, cancellationToken);
     }
 
     /// <summary>Stops a pooled agent session.</summary>
     public async Task<AgentPoolMutationResult> StopAgentAsync(string agentName, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<AgentPoolMutationResult>($"mcpserver/agent-pool/agents/{Encode(agentName)}/stop", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<AgentPoolMutationResult>($"mcpserver/agent-pool/agents/{Encode(agentName)}/stop", null, cancellationToken);
     }
 
     /// <summary>Recycles a pooled agent session.</summary>
     public async Task<AgentPoolMutationResult> RecycleAgentAsync(string agentName, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<AgentPoolMutationResult>($"mcpserver/agent-pool/agents/{Encode(agentName)}/recycle", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<AgentPoolMutationResult>($"mcpserver/agent-pool/agents/{Encode(agentName)}/recycle", null, cancellationToken);
     }
 
     /// <summary>Connects to a specific pooled interactive session.</summary>
     public async Task<AgentPoolConnectResult> ConnectAsync(string agentName, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<AgentPoolConnectResult>($"mcpserver/agent-pool/agents/{Encode(agentName)}/connect", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<AgentPoolConnectResult>($"mcpserver/agent-pool/agents/{Encode(agentName)}/connect", null, cancellationToken);
     }
 
     /// <summary>Connects to the default pooled interactive session.</summary>
     public async Task<AgentPoolConnectResult> ConnectDefaultAsync(CancellationToken cancellationToken = default)
     {
-        return await PostAsync<AgentPoolConnectResult>("mcpserver/agent-pool/connect", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<AgentPoolConnectResult>("mcpserver/agent-pool/connect", null, cancellationToken);
     }
 
     /// <summary>Lists queue items.</summary>
     public async Task<IReadOnlyList<AgentPoolQueueItem>> GetQueueAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<IReadOnlyList<AgentPoolQueueItem>>("mcpserver/agent-pool/queue", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<IReadOnlyList<AgentPoolQueueItem>>("mcpserver/agent-pool/queue", cancellationToken);
     }
 
     /// <summary>Enqueues a one-shot request.</summary>
     public async Task<AgentPoolEnqueueResult> EnqueueOneShotAsync(AgentPoolOneShotRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<AgentPoolEnqueueResult>("mcpserver/agent-pool/queue/one-shot", request, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<AgentPoolEnqueueResult>("mcpserver/agent-pool/queue/one-shot", request, cancellationToken);
     }
 
     /// <summary>Cancels a queued or processing one-shot request.</summary>
     public async Task<AgentPoolMutationResult> CancelQueueItemAsync(string jobId, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<AgentPoolMutationResult>($"mcpserver/agent-pool/queue/{Encode(jobId)}/cancel", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<AgentPoolMutationResult>($"mcpserver/agent-pool/queue/{Encode(jobId)}/cancel", null, cancellationToken);
     }
 
     /// <summary>Removes a queue item.</summary>
     public async Task<AgentPoolMutationResult> RemoveQueueItemAsync(string jobId, CancellationToken cancellationToken = default)
     {
-        return await DeleteAsync<AgentPoolMutationResult>($"mcpserver/agent-pool/queue/{Encode(jobId)}", cancellationToken).ConfigureAwait(false);
+        return await DeleteAsync<AgentPoolMutationResult>($"mcpserver/agent-pool/queue/{Encode(jobId)}", cancellationToken);
     }
 
     /// <summary>Moves a queued one-shot item up by one position.</summary>
     public async Task<AgentPoolMutationResult> MoveQueueItemUpAsync(string jobId, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<AgentPoolMutationResult>($"mcpserver/agent-pool/queue/{Encode(jobId)}/move-up", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<AgentPoolMutationResult>($"mcpserver/agent-pool/queue/{Encode(jobId)}/move-up", null, cancellationToken);
     }
 
     /// <summary>Moves a queued one-shot item down by one position.</summary>
     public async Task<AgentPoolMutationResult> MoveQueueItemDownAsync(string jobId, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<AgentPoolMutationResult>($"mcpserver/agent-pool/queue/{Encode(jobId)}/move-down", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<AgentPoolMutationResult>($"mcpserver/agent-pool/queue/{Encode(jobId)}/move-down", null, cancellationToken);
     }
 
     /// <summary>Resolves one-shot prompt text without enqueuing.</summary>
     public async Task<AgentPoolPromptResolutionResult> ResolvePromptAsync(AgentPoolOneShotRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<AgentPoolPromptResolutionResult>("mcpserver/agent-pool/queue/resolve", request, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<AgentPoolPromptResolutionResult>("mcpserver/agent-pool/queue/resolve", request, cancellationToken);
     }
 
     /// <summary>Streams global pooled-runtime notifications via SSE.</summary>
@@ -117,7 +117,7 @@ public sealed class AgentPoolClient : McpClientBase
     private async IAsyncEnumerable<T> StreamJsonSseAsync<T>(string path, [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
         where T : class
     {
-        await foreach (var line in StreamSseAsync(path, cancellationToken).ConfigureAwait(false))
+        await foreach (var line in StreamSseAsync(path, cancellationToken))
         {
             if (string.IsNullOrWhiteSpace(line))
                 continue;

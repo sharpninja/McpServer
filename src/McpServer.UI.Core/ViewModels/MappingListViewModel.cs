@@ -41,7 +41,7 @@ public sealed class MappingListViewModel : AreaListViewModelBase<RequirementMapp
         StatusMessage = "Loading mappings...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new ListRequirementMappingsQuery(), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new ListRequirementMappingsQuery(), ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Mapping load failed.";
@@ -79,7 +79,7 @@ public sealed class MappingListViewModel : AreaListViewModelBase<RequirementMapp
         try
         {
             var command = new UpsertRequirementMappingCommand(frId, trIds);
-            var result = await _dispatcher.SendAsync(command, ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(command, ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Mapping save failed.";
@@ -87,7 +87,7 @@ public sealed class MappingListViewModel : AreaListViewModelBase<RequirementMapp
                 return null;
             }
 
-            await LoadAsync(ct).ConfigureAwait(false);
+            await LoadAsync(ct);
             StatusMessage = $"Saved mapping for {frId}.";
             return result.Value;
         }
@@ -117,7 +117,7 @@ public sealed class MappingListViewModel : AreaListViewModelBase<RequirementMapp
         StatusMessage = $"Deleting mapping for {frId}...";
         try
         {
-            var result = await _dispatcher.SendAsync(new DeleteRequirementMappingCommand(frId), ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(new DeleteRequirementMappingCommand(frId), ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Mapping delete failed.";
@@ -132,7 +132,7 @@ public sealed class MappingListViewModel : AreaListViewModelBase<RequirementMapp
                 return result.Value;
             }
 
-            await LoadAsync(ct).ConfigureAwait(false);
+            await LoadAsync(ct);
             StatusMessage = $"Deleted mapping for {frId}.";
             return result.Value;
         }

@@ -39,7 +39,7 @@ internal sealed class ListTemplatesQueryHandler : IQueryHandler<ListTemplatesQue
         try
         {
             var result = await _client.ListTemplatesAsync(
-                query.Category, query.Tag, query.Keyword, context.CancellationToken).ConfigureAwait(false);
+                query.Category, query.Tag, query.Keyword, context.CancellationToken);
             return Result<ListTemplatesResult>.Success(result);
         }
         catch (Exception ex)

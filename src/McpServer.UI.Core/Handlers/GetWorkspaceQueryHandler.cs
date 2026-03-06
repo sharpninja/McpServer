@@ -39,7 +39,7 @@ internal sealed class GetWorkspaceQueryHandler : IQueryHandler<GetWorkspaceQuery
         try
         {
             var result = await _workspaceApiClient.GetWorkspaceAsync(query.WorkspacePath, context.CancellationToken)
-                .ConfigureAwait(false);
+                ;
             return Result<WorkspaceDetail?>.Success(result);
         }
         catch (Exception ex)

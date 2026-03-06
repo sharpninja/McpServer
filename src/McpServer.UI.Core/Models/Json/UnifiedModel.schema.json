@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mcpservermanager/schemas/unified-model.json",
+  "title": "Unified Session Log",
+  "description": "Unified log format for AI request sessions (Copilot, Cursor, etc.)",
+  "type": "object",
+  "properties": {
+    "sourceType": { "type": "string", "description": "Provider: Copilot, Cursor, Aggregated" },
+    "sessionId": { "type": "string" },
+    "title": { "type": "string" },
+    "started": { "type": "string", "format": "date-time" },
+    "lastUpdated": { "type": "string", "format": "date-time" },
+    "status": { "type": "string" },
+    "entryCount": { "type": "integer" },
+    "totalTokens": { "type": "integer" },
+    "workspace": { "$ref": "#/$defs/WorkspaceInfo" },
+    "entries": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/UnifiedRequestEntry" }
+    },
+    "copilotStatistics": { "$ref": "#/$defs/StatisticsInfo" },
+    "cursorSessionLabel": { "type": "string" }
+  },
+  "$defs": {
+    "UnifiedRequestEntry": {
+      "type": "object",
+      "description": "Single request/entry in a session",
+      "properties": {
+        "requestId": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "model": { "type": "string" },
+        "modelProvider": { "type": "string" },
+        "queryText": { "type": "string" },
+        "queryTitle": { "type": "string" },
+        "response": { "type": "string" },
+        "contextList": { "type": "array", "items": { "type": "string" } },
+        "rawContext": {},
+        "tokenCount": { "type": "integer" },
+        "isPremium": { "type": "boolean" },
+        "score": { "type": "number" },
+        "status": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "failureNote": { "type": "string" },
+        "interpretation": { "type": "string" },
+        "actions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/UnifiedAction" }
+        },
+        "originalEntry": {}
+      }
+    },
+    "UnifiedAction": {
+      "type": "object",
+      "description": "Structured action (e.g. tool use, edit)",
+      "properties": {
+        "order": { "type": "integer" },
+        "description": { "type": "string" },
+        "type": { "type": "string" },
+        "status": { "type": "string" },
+        "filePath": { "type": "string" }
+      }
+    },
+    "WorkspaceInfo": {
+      "type": "object",
+      "properties": {
+        "project": { "type": "string" },
+        "targetFramework": { "type": "string" },
+        "repository": { "type": "string" },
+        "branch": { "type": "string" }
+      }
+    },
+    "StatisticsInfo": {
+      "type": "object",
+      "properties": {
+        "averageSuccessScore": { "type": "number" },
+        "totalNetTokens": { "type": "number" },
+        "totalNetPremiumRequests": { "type": "number" },
+        "completedCount": { "type": "integer" },
+        "inProgressCount": { "type": "integer" }
+      }
+    }
+  }
+}
+

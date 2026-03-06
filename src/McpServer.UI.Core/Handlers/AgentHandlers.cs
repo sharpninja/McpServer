@@ -33,7 +33,7 @@ internal sealed class ListAgentDefinitionsQueryHandler : IQueryHandler<ListAgent
 
         try
         {
-            var result = await _client.ListDefinitionsAsync(context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.ListDefinitionsAsync(context.CancellationToken);
             return Result<ListAgentDefinitionsResult>.Success(result);
         }
         catch (Exception ex)
@@ -71,7 +71,7 @@ internal sealed class GetAgentDefinitionQueryHandler : IQueryHandler<GetAgentDef
 
         try
         {
-            var result = await _client.GetDefinitionAsync(query.AgentType, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.GetDefinitionAsync(query.AgentType, context.CancellationToken);
             return Result<AgentDefinitionDetail?>.Success(result);
         }
         catch (Exception ex)
@@ -109,7 +109,7 @@ internal sealed class UpsertAgentDefinitionCommandHandler : ICommandHandler<Upse
 
         try
         {
-            var result = await _client.UpsertDefinitionAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.UpsertDefinitionAsync(command, context.CancellationToken);
             return Result<AgentMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -147,7 +147,7 @@ internal sealed class AssignWorkspaceAgentCommandHandler : ICommandHandler<Assig
 
         try
         {
-            var result = await _client.AssignWorkspaceAgentAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.AssignWorkspaceAgentAsync(command, context.CancellationToken);
             return Result<AgentMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -185,7 +185,7 @@ internal sealed class DeleteAgentDefinitionCommandHandler : ICommandHandler<Dele
 
         try
         {
-            var result = await _client.DeleteDefinitionAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.DeleteDefinitionAsync(command, context.CancellationToken);
             return Result<AgentMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -223,7 +223,7 @@ internal sealed class SeedAgentDefaultsCommandHandler : ICommandHandler<SeedAgen
 
         try
         {
-            var result = await _client.SeedDefaultsAsync(context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.SeedDefaultsAsync(context.CancellationToken);
             return Result<AgentSeedOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -261,7 +261,7 @@ internal sealed class ListWorkspaceAgentsQueryHandler : IQueryHandler<ListWorksp
 
         try
         {
-            var result = await _client.ListWorkspaceAgentsAsync(query, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.ListWorkspaceAgentsAsync(query, context.CancellationToken);
             return Result<ListWorkspaceAgentsResult>.Success(result);
         }
         catch (Exception ex)
@@ -299,7 +299,7 @@ internal sealed class GetWorkspaceAgentQueryHandler : IQueryHandler<GetWorkspace
 
         try
         {
-            var result = await _client.GetWorkspaceAgentAsync(query, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.GetWorkspaceAgentAsync(query, context.CancellationToken);
             return Result<WorkspaceAgentDetail?>.Success(result);
         }
         catch (Exception ex)
@@ -337,7 +337,7 @@ internal sealed class UpsertWorkspaceAgentCommandHandler : ICommandHandler<Upser
 
         try
         {
-            var result = await _client.UpsertWorkspaceAgentAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.UpsertWorkspaceAgentAsync(command, context.CancellationToken);
             return Result<AgentMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -375,7 +375,7 @@ internal sealed class DeleteWorkspaceAgentCommandHandler : ICommandHandler<Delet
 
         try
         {
-            var result = await _client.DeleteWorkspaceAgentAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.DeleteWorkspaceAgentAsync(command, context.CancellationToken);
             return Result<AgentMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -413,7 +413,7 @@ internal sealed class BanAgentCommandHandler : ICommandHandler<BanAgentCommand, 
 
         try
         {
-            var result = await _client.BanAgentAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.BanAgentAsync(command, context.CancellationToken);
             return Result<AgentMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -451,7 +451,7 @@ internal sealed class UnbanAgentCommandHandler : ICommandHandler<UnbanAgentComma
 
         try
         {
-            var result = await _client.UnbanAgentAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.UnbanAgentAsync(command, context.CancellationToken);
             return Result<AgentMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -489,7 +489,7 @@ internal sealed class LogAgentEventCommandHandler : ICommandHandler<LogAgentEven
 
         try
         {
-            var result = await _client.LogEventAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.LogEventAsync(command, context.CancellationToken);
             return Result<AgentMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -527,7 +527,7 @@ internal sealed class GetAgentEventsQueryHandler : IQueryHandler<GetAgentEventsQ
 
         try
         {
-            var result = await _client.GetEventsAsync(query, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.GetEventsAsync(query, context.CancellationToken);
             return Result<AgentEventsResult>.Success(result);
         }
         catch (Exception ex)
@@ -565,7 +565,7 @@ internal sealed class ValidateAgentQueryHandler : IQueryHandler<ValidateAgentQue
 
         try
         {
-            var result = await _client.ValidateAsync(query, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.ValidateAsync(query, context.CancellationToken);
             return Result<AgentValidateOutcome>.Success(result);
         }
         catch (Exception ex)

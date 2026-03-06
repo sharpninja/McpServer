@@ -38,7 +38,7 @@ internal sealed class GenerateTodoStatusPromptQueryHandler : IQueryHandler<Gener
 
         try
         {
-            var result = await _todoApiClient.GenerateTodoStatusPromptAsync(query.TodoId, context.CancellationToken).ConfigureAwait(false);
+            var result = await _todoApiClient.GenerateTodoStatusPromptAsync(query.TodoId, context.CancellationToken);
             return Result<TodoPromptOutput>.Success(result);
         }
         catch (Exception ex)

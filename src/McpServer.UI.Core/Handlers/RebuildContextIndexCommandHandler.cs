@@ -33,7 +33,7 @@ internal sealed class RebuildContextIndexCommandHandler : ICommandHandler<Rebuil
 
         try
         {
-            var result = await _contextApiClient.RebuildIndexAsync(context.CancellationToken).ConfigureAwait(false);
+            var result = await _contextApiClient.RebuildIndexAsync(context.CancellationToken);
             return Result<ContextRebuildResult>.Success(result);
         }
         catch (Exception ex)

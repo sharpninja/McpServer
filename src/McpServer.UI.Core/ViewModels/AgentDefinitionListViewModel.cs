@@ -44,7 +44,7 @@ public sealed class AgentDefinitionListViewModel : AreaListViewModelBase<AgentDe
         StatusMessage = "Loading agent definitions...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new ListAgentDefinitionsQuery(), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new ListAgentDefinitionsQuery(), ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Failed to load agent definitions.";

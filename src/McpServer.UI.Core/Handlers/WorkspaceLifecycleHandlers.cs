@@ -35,7 +35,7 @@ internal sealed class CreateWorkspaceCommandHandler : ICommandHandler<CreateWork
 
         try
         {
-            var result = await _workspaceApiClient.CreateWorkspaceAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _workspaceApiClient.CreateWorkspaceAsync(command, context.CancellationToken);
             return Result<WorkspaceMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -75,7 +75,7 @@ internal sealed class UpdateWorkspaceCommandHandler : ICommandHandler<UpdateWork
 
         try
         {
-            var result = await _workspaceApiClient.UpdateWorkspaceAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _workspaceApiClient.UpdateWorkspaceAsync(command, context.CancellationToken);
             return Result<WorkspaceMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -115,7 +115,7 @@ internal sealed class DeleteWorkspaceCommandHandler : ICommandHandler<DeleteWork
 
         try
         {
-            var result = await _workspaceApiClient.DeleteWorkspaceAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _workspaceApiClient.DeleteWorkspaceAsync(command, context.CancellationToken);
             return Result<WorkspaceMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -156,7 +156,7 @@ internal sealed class GetWorkspaceStatusQueryHandler : IQueryHandler<GetWorkspac
         try
         {
             var result = await _workspaceApiClient.GetWorkspaceStatusAsync(query.WorkspacePath, context.CancellationToken)
-                .ConfigureAwait(false);
+                ;
             return Result<WorkspaceProcessState>.Success(result);
         }
         catch (Exception ex)
@@ -197,7 +197,7 @@ internal sealed class StartWorkspaceCommandHandler : ICommandHandler<StartWorksp
         try
         {
             var result = await _workspaceApiClient.StartWorkspaceAsync(command.WorkspacePath, context.CancellationToken)
-                .ConfigureAwait(false);
+                ;
             return Result<WorkspaceProcessState>.Success(result);
         }
         catch (Exception ex)
@@ -238,7 +238,7 @@ internal sealed class StopWorkspaceCommandHandler : ICommandHandler<StopWorkspac
         try
         {
             var result = await _workspaceApiClient.StopWorkspaceAsync(command.WorkspacePath, context.CancellationToken)
-                .ConfigureAwait(false);
+                ;
             return Result<WorkspaceProcessState>.Success(result);
         }
         catch (Exception ex)
@@ -279,7 +279,7 @@ internal sealed class CheckWorkspaceHealthQueryHandler : IQueryHandler<CheckWork
         try
         {
             var result = await _workspaceApiClient.CheckWorkspaceHealthAsync(query.WorkspacePath, context.CancellationToken)
-                .ConfigureAwait(false);
+                ;
             return Result<WorkspaceHealthState>.Success(result);
         }
         catch (Exception ex)
@@ -317,7 +317,7 @@ internal sealed class GetWorkspaceGlobalPromptQueryHandler : IQueryHandler<GetWo
         try
         {
             var result = await _workspaceApiClient.GetWorkspaceGlobalPromptAsync(context.CancellationToken)
-                .ConfigureAwait(false);
+                ;
             return Result<WorkspaceGlobalPromptState>.Success(result);
         }
         catch (Exception ex)
@@ -355,7 +355,7 @@ internal sealed class UpdateWorkspaceGlobalPromptCommandHandler : ICommandHandle
         try
         {
             var result = await _workspaceApiClient.UpdateWorkspaceGlobalPromptAsync(command, context.CancellationToken)
-                .ConfigureAwait(false);
+                ;
             return Result<WorkspaceGlobalPromptState>.Success(result);
         }
         catch (Exception ex)

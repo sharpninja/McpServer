@@ -262,7 +262,7 @@ public abstract class McpClientBase
         HttpResponseMessage response;
         try
         {
-            response = await _http.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            response = await _http.SendAsync(request, cancellationToken);
         }
         catch (Exception ex)
         {
@@ -279,7 +279,7 @@ public abstract class McpClientBase
 #if !NETSTANDARD2_0
                 cancellationToken
 #endif
-            ).ConfigureAwait(false);
+            );
             ThrowForStatus(response.StatusCode, content);
         }
 
@@ -296,7 +296,7 @@ public abstract class McpClientBase
     /// <returns>Response status code.</returns>
     protected async Task<HttpStatusCode> SendForStatusAsync(HttpMethod method, string path, object? body, CancellationToken cancellationToken)
     {
-        using var response = await SendRawAsync(method, path, body, cancellationToken).ConfigureAwait(false);
+        using var response = await SendRawAsync(method, path, body, cancellationToken);
         return response.StatusCode;
     }
 
@@ -308,11 +308,11 @@ public abstract class McpClientBase
     /// <returns>Response bytes and media type.</returns>
     protected async Task<(byte[] Content, string? ContentType)> GetBytesAsync(string path, CancellationToken cancellationToken)
     {
-        using var response = await SendRawAsync(HttpMethod.Get, path, null, cancellationToken).ConfigureAwait(false);
+        using var response = await SendRawAsync(HttpMethod.Get, path, null, cancellationToken);
 #if NETSTANDARD2_0
-        var bytes = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+        var bytes = await response.Content.ReadAsByteArrayAsync();
 #else
-        var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
+        var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken);
 #endif
         var mediaType = response.Content.Headers.ContentType?.MediaType;
         return (bytes, mediaType);
@@ -387,7 +387,7 @@ public abstract class McpClientBase
         HttpResponseMessage response;
         try
         {
-            response = await _http.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            response = await _http.SendAsync(request, cancellationToken);
         }
         catch (Exception ex)
         {
@@ -399,7 +399,7 @@ public abstract class McpClientBase
         {
             _logger?.LogInformation("[McpClient] {Method} {Uri} → HTTP {StatusCode}",
                 method, uri, (int)response.StatusCode);
-            return await ReadResponseAsync<T>(response, cancellationToken).ConfigureAwait(false);
+            return await ReadResponseAsync<T>(response, cancellationToken);
         }
     }
 
@@ -429,7 +429,7 @@ public abstract class McpClientBase
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));
 
         using var response = await _http.SendAsync(
-            request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+            request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -437,23 +437,23 @@ public abstract class McpClientBase
 #if !NETSTANDARD2_0
                 cancellationToken
 #endif
-            ).ConfigureAwait(false);
+            );
             ThrowForStatus(response.StatusCode, body);
         }
 
 #if NETSTANDARD2_0
-        using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+        using var stream = await response.Content.ReadAsStreamAsync();
 #else
-        using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+        using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
 #endif
         using var reader = new StreamReader(stream, Encoding.UTF8);
 
         while (!cancellationToken.IsCancellationRequested)
         {
 #if NETSTANDARD2_0
-            var line = await reader.ReadLineAsync().ConfigureAwait(false);
+            var line = await reader.ReadLineAsync();
 #else
-            var line = await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false);
+            var line = await reader.ReadLineAsync(cancellationToken);
 #endif
             if (line is null) break; // stream closed
 
@@ -471,7 +471,7 @@ public abstract class McpClientBase
 #if !NETSTANDARD2_0
             cancellationToken
 #endif
-        ).ConfigureAwait(false);
+        );
 
         if (!response.IsSuccessStatusCode)
             ThrowForStatus(response.StatusCode, content);

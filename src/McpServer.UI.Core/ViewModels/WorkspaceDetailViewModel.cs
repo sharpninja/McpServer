@@ -180,7 +180,7 @@ public sealed partial class WorkspaceDetailViewModel : AreaDetailViewModelBase<W
                 return;
             }
 
-            var result = await _loadCommand.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await _loadCommand.DispatchAsync(ct);
             if (!result.IsSuccess)
             {
                 Detail = null;
@@ -219,7 +219,7 @@ public sealed partial class WorkspaceDetailViewModel : AreaDetailViewModelBase<W
     public async Task CreateAsync(CancellationToken ct = default)
     {
         await RunMutationAsync(_createCommand, "Creating workspace...", "Workspace created.", ct, updateWorkspacePathFromItem: true)
-            .ConfigureAwait(false);
+            ;
     }
 
     /// <summary>Saves the current workspace editor state.</summary>
@@ -227,11 +227,11 @@ public sealed partial class WorkspaceDetailViewModel : AreaDetailViewModelBase<W
     {
         if (IsNewDraft)
         {
-            await CreateAsync(ct).ConfigureAwait(false);
+            await CreateAsync(ct);
             return;
         }
 
-        await RunMutationAsync(_updateCommand, "Saving workspace...", "Workspace saved.", ct).ConfigureAwait(false);
+        await RunMutationAsync(_updateCommand, "Saving workspace...", "Workspace saved.", ct);
     }
 
     /// <summary>Deletes the current workspace registration.</summary>
@@ -241,7 +241,7 @@ public sealed partial class WorkspaceDetailViewModel : AreaDetailViewModelBase<W
             return;
 
         await RunMutationAsync(_deleteCommand, "Deleting workspace...", "Workspace deleted.", ct, clearOnDelete: true)
-            .ConfigureAwait(false);
+            ;
     }
 
     private async Task RunMutationAsync(
@@ -259,7 +259,7 @@ public sealed partial class WorkspaceDetailViewModel : AreaDetailViewModelBase<W
 
         try
         {
-            var result = await command.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await command.DispatchAsync(ct);
             if (!result.IsSuccess || result.Value is null || !result.Value.Success)
             {
                 ErrorMessage = result.Error ?? result.Value?.Error ?? "Workspace mutation failed.";

@@ -33,7 +33,7 @@ internal sealed class ListToolsQueryHandler : IQueryHandler<ListToolsQuery, List
 
         try
         {
-            var result = await _client.ListToolsAsync(query, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.ListToolsAsync(query, context.CancellationToken);
             return Result<ListToolsResult>.Success(result);
         }
         catch (Exception ex)
@@ -71,7 +71,7 @@ internal sealed class SearchToolsQueryHandler : IQueryHandler<SearchToolsQuery, 
 
         try
         {
-            var result = await _client.SearchToolsAsync(query, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.SearchToolsAsync(query, context.CancellationToken);
             return Result<ListToolsResult>.Success(result);
         }
         catch (Exception ex)
@@ -109,7 +109,7 @@ internal sealed class GetToolQueryHandler : IQueryHandler<GetToolQuery, ToolDeta
 
         try
         {
-            var result = await _client.GetToolAsync(query.ToolId, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.GetToolAsync(query.ToolId, context.CancellationToken);
             return Result<ToolDetail?>.Success(result);
         }
         catch (Exception ex)
@@ -147,7 +147,7 @@ internal sealed class CreateToolCommandHandler : ICommandHandler<CreateToolComma
 
         try
         {
-            var result = await _client.CreateToolAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.CreateToolAsync(command, context.CancellationToken);
             return Result<ToolMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -185,7 +185,7 @@ internal sealed class UpdateToolCommandHandler : ICommandHandler<UpdateToolComma
 
         try
         {
-            var result = await _client.UpdateToolAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.UpdateToolAsync(command, context.CancellationToken);
             return Result<ToolMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -223,7 +223,7 @@ internal sealed class DeleteToolCommandHandler : ICommandHandler<DeleteToolComma
 
         try
         {
-            var result = await _client.DeleteToolAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.DeleteToolAsync(command, context.CancellationToken);
             return Result<ToolMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -261,7 +261,7 @@ internal sealed class ListBucketsQueryHandler : IQueryHandler<ListBucketsQuery, 
 
         try
         {
-            var result = await _client.ListBucketsAsync(context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.ListBucketsAsync(context.CancellationToken);
             return Result<ListBucketsResult>.Success(result);
         }
         catch (Exception ex)
@@ -299,7 +299,7 @@ internal sealed class AddBucketCommandHandler : ICommandHandler<AddBucketCommand
 
         try
         {
-            var result = await _client.AddBucketAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.AddBucketAsync(command, context.CancellationToken);
             return Result<BucketMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -337,7 +337,7 @@ internal sealed class RemoveBucketCommandHandler : ICommandHandler<RemoveBucketC
 
         try
         {
-            var result = await _client.RemoveBucketAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.RemoveBucketAsync(command, context.CancellationToken);
             return Result<BucketMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -375,7 +375,7 @@ internal sealed class BrowseBucketQueryHandler : IQueryHandler<BrowseBucketQuery
 
         try
         {
-            var result = await _client.BrowseBucketAsync(query, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.BrowseBucketAsync(query, context.CancellationToken);
             return Result<BucketBrowseOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -413,7 +413,7 @@ internal sealed class InstallFromBucketCommandHandler : ICommandHandler<InstallF
 
         try
         {
-            var result = await _client.InstallFromBucketAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.InstallFromBucketAsync(command, context.CancellationToken);
             return Result<ToolMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -451,7 +451,7 @@ internal sealed class SyncBucketCommandHandler : ICommandHandler<SyncBucketComma
 
         try
         {
-            var result = await _client.SyncBucketAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.SyncBucketAsync(command, context.CancellationToken);
             return Result<BucketSyncOutcome>.Success(result);
         }
         catch (Exception ex)

@@ -38,7 +38,7 @@ public sealed class TestDetailViewModel : AreaDetailViewModelBase<TestingRequire
         StatusMessage = $"Loading {id}...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new GetTestingRequirementQuery(id), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new GetTestingRequirementQuery(id), ct);
             if (!result.IsSuccess)
             {
                 ErrorMessage = result.Error ?? "Load failed.";
@@ -88,7 +88,7 @@ public sealed class TestDetailViewModel : AreaDetailViewModelBase<TestingRequire
         StatusMessage = $"Deleting {id}...";
         try
         {
-            var result = await _dispatcher.SendAsync(new DeleteTestingRequirementCommand(id), ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(new DeleteTestingRequirementCommand(id), ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Delete failed.";
@@ -133,7 +133,7 @@ public sealed class TestDetailViewModel : AreaDetailViewModelBase<TestingRequire
         StatusMessage = pendingStatus;
         try
         {
-            var result = await _dispatcher.SendAsync(command, ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(command, ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Save failed.";

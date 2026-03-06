@@ -33,7 +33,7 @@ internal sealed class ListAgentPoolAgentsQueryHandler : IQueryHandler<ListAgentP
 
         try
         {
-            var result = await _client.ListAgentsAsync(context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.ListAgentsAsync(context.CancellationToken);
             return Result<ListAgentPoolAgentsResult>.Success(result);
         }
         catch (Exception ex)
@@ -71,7 +71,7 @@ internal sealed class ListAgentPoolQueueQueryHandler : IQueryHandler<ListAgentPo
 
         try
         {
-            var result = await _client.ListQueueAsync(context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.ListQueueAsync(context.CancellationToken);
             return Result<ListAgentPoolQueueResult>.Success(result);
         }
         catch (Exception ex)
@@ -105,7 +105,7 @@ internal sealed class StartAgentPoolAgentCommandHandler : ICommandHandler<StartA
             McpActionKeys.AgentPoolAgentStart,
             () => _client.StartAgentAsync(command.AgentName, context.CancellationToken),
             _authorizationPolicy,
-            _logger).ConfigureAwait(false);
+            _logger);
     }
 }
 
@@ -132,7 +132,7 @@ internal sealed class StopAgentPoolAgentCommandHandler : ICommandHandler<StopAge
             McpActionKeys.AgentPoolAgentStop,
             () => _client.StopAgentAsync(command.AgentName, context.CancellationToken),
             _authorizationPolicy,
-            _logger).ConfigureAwait(false);
+            _logger);
     }
 }
 
@@ -159,7 +159,7 @@ internal sealed class RecycleAgentPoolAgentCommandHandler : ICommandHandler<Recy
             McpActionKeys.AgentPoolAgentRecycle,
             () => _client.RecycleAgentAsync(command.AgentName, context.CancellationToken),
             _authorizationPolicy,
-            _logger).ConfigureAwait(false);
+            _logger);
     }
 }
 
@@ -190,7 +190,7 @@ internal sealed class ConnectAgentPoolAgentCommandHandler : ICommandHandler<Conn
 
         try
         {
-            var result = await _client.ConnectAsync(command.AgentName, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.ConnectAsync(command.AgentName, context.CancellationToken);
             return Result<AgentPoolConnectOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -224,7 +224,7 @@ internal sealed class CancelAgentPoolQueueItemCommandHandler : ICommandHandler<C
             McpActionKeys.AgentPoolQueueCancel,
             () => _client.CancelQueueItemAsync(command.JobId, context.CancellationToken),
             _authorizationPolicy,
-            _logger).ConfigureAwait(false);
+            _logger);
     }
 }
 
@@ -251,7 +251,7 @@ internal sealed class RemoveAgentPoolQueueItemCommandHandler : ICommandHandler<R
             McpActionKeys.AgentPoolQueueRemove,
             () => _client.RemoveQueueItemAsync(command.JobId, context.CancellationToken),
             _authorizationPolicy,
-            _logger).ConfigureAwait(false);
+            _logger);
     }
 }
 
@@ -278,7 +278,7 @@ internal sealed class MoveAgentPoolQueueItemUpCommandHandler : ICommandHandler<M
             McpActionKeys.AgentPoolQueueMove,
             () => _client.MoveQueueItemUpAsync(command.JobId, context.CancellationToken),
             _authorizationPolicy,
-            _logger).ConfigureAwait(false);
+            _logger);
     }
 }
 
@@ -305,7 +305,7 @@ internal sealed class MoveAgentPoolQueueItemDownCommandHandler : ICommandHandler
             McpActionKeys.AgentPoolQueueMove,
             () => _client.MoveQueueItemDownAsync(command.JobId, context.CancellationToken),
             _authorizationPolicy,
-            _logger).ConfigureAwait(false);
+            _logger);
     }
 }
 
@@ -336,7 +336,7 @@ internal sealed class ResolveAgentPoolPromptCommandHandler : ICommandHandler<Res
 
         try
         {
-            var result = await _client.ResolvePromptAsync(command.Request, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.ResolvePromptAsync(command.Request, context.CancellationToken);
             return Result<AgentPoolPromptResolutionOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -374,7 +374,7 @@ internal sealed class EnqueueAgentPoolPromptCommandHandler : ICommandHandler<Enq
 
         try
         {
-            var result = await _client.EnqueueOneShotAsync(command.Request, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.EnqueueOneShotAsync(command.Request, context.CancellationToken);
             return Result<AgentPoolEnqueueOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -401,7 +401,7 @@ internal static class AgentPoolHandlerHelpers
 
         try
         {
-            var result = await operation().ConfigureAwait(false);
+            var result = await operation();
             return Result<AgentPoolMutationOutcome>.Success(result);
         }
         catch (Exception ex)

@@ -38,7 +38,7 @@ public sealed class FrDetailViewModel : AreaDetailViewModelBase<FunctionalRequir
         StatusMessage = $"Loading {id}...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new GetFunctionalRequirementQuery(id), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new GetFunctionalRequirementQuery(id), ct);
             if (!result.IsSuccess)
             {
                 ErrorMessage = result.Error ?? "Load failed.";
@@ -72,7 +72,7 @@ public sealed class FrDetailViewModel : AreaDetailViewModelBase<FunctionalRequir
                 $"Creating {id}...",
                 id,
                 ct)
-            .ConfigureAwait(false);
+            ;
     }
 
     /// <summary>Updates a functional requirement.</summary>
@@ -83,7 +83,7 @@ public sealed class FrDetailViewModel : AreaDetailViewModelBase<FunctionalRequir
                 $"Saving {id}...",
                 id,
                 ct)
-            .ConfigureAwait(false);
+            ;
     }
 
     /// <summary>Deletes a functional requirement.</summary>
@@ -94,7 +94,7 @@ public sealed class FrDetailViewModel : AreaDetailViewModelBase<FunctionalRequir
         StatusMessage = $"Deleting {id}...";
         try
         {
-            var result = await _dispatcher.SendAsync(new DeleteFunctionalRequirementCommand(id), ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(new DeleteFunctionalRequirementCommand(id), ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Delete failed.";
@@ -139,7 +139,7 @@ public sealed class FrDetailViewModel : AreaDetailViewModelBase<FunctionalRequir
         StatusMessage = pendingStatus;
         try
         {
-            var result = await _dispatcher.SendAsync(command, ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(command, ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Save failed.";

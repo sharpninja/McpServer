@@ -35,7 +35,7 @@ internal sealed class ListWorkspacesQueryHandler : IQueryHandler<ListWorkspacesQ
 
         try
         {
-            var result = await _workspaceApiClient.ListWorkspacesAsync(context.CancellationToken).ConfigureAwait(false);
+            var result = await _workspaceApiClient.ListWorkspacesAsync(context.CancellationToken);
             return Result<ListWorkspacesResult>.Success(result);
         }
         catch (Exception ex)

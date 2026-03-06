@@ -152,6 +152,13 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
     [ObservableProperty]
     private string? _streamingPromptText;
 
+    /// <summary>
+    /// UTC timestamp of the last SSE heartbeat received during a streaming prompt.
+    /// Hosts can monitor this to detect stalled connections.
+    /// </summary>
+    [ObservableProperty]
+    private DateTimeOffset? _lastHeartbeatUtc;
+
     /// <summary>Load command (also primary command for exec).</summary>
     public IAsyncRelayCommand LoadCommand => _loadCommand;
 
@@ -244,7 +251,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
 
         try
         {
-            var result = await _loadCommand.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await _loadCommand.DispatchAsync(ct);
             if (!result.IsSuccess)
             {
                 Detail = null;
@@ -282,7 +289,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
     /// <summary>Creates a TODO item from the current editor fields.</summary>
     public async Task CreateAsync(CancellationToken ct = default)
     {
-        await RunMutationAsync(_createCommand, "Creating TODO...", "TODO created.", ct).ConfigureAwait(false);
+        await RunMutationAsync(_createCommand, "Creating TODO...", "TODO created.", ct);
     }
 
     /// <summary>Updates the current TODO item from the editor fields.</summary>
@@ -290,23 +297,23 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
     {
         if (IsNewDraft)
         {
-            await CreateAsync(ct).ConfigureAwait(false);
+            await CreateAsync(ct);
             return;
         }
 
-        await RunMutationAsync(_updateCommand, "Saving TODO...", "TODO saved.", ct).ConfigureAwait(false);
+        await RunMutationAsync(_updateCommand, "Saving TODO...", "TODO saved.", ct);
     }
 
     /// <summary>Deletes the current TODO item.</summary>
     public async Task DeleteAsync(CancellationToken ct = default)
     {
-        await RunMutationAsync(_deleteCommand, "Deleting TODO...", "TODO deleted.", ct, clearOnDelete: true).ConfigureAwait(false);
+        await RunMutationAsync(_deleteCommand, "Deleting TODO...", "TODO deleted.", ct, clearOnDelete: true);
     }
 
     /// <summary>Runs requirements analysis for the active TODO item.</summary>
     public async Task AnalyzeRequirementsAsync(CancellationToken ct = default)
     {
-        await RunRequirementsAsync(ct).ConfigureAwait(false);
+        await RunRequirementsAsync(ct);
     }
 
     /// <summary>Generates a status prompt for the active TODO item.</summary>
@@ -341,7 +348,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
 
         try
         {
-            var result = await command.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await command.DispatchAsync(ct);
             if (!result.IsSuccess)
             {
                 ErrorMessage = result.Error ?? "Unknown TODO mutation error.";
@@ -399,7 +406,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
 
         try
         {
-            var result = await _analyzeRequirementsCommand.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await _analyzeRequirementsCommand.DispatchAsync(ct);
             if (!result.IsSuccess)
             {
                 ErrorMessage = result.Error ?? "TODO requirements analysis failed.";
@@ -439,7 +446,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
 
         try
         {
-            var result = await command.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await command.DispatchAsync(ct);
             if (!result.IsSuccess)
             {
                 ErrorMessage = result.Error ?? "TODO prompt generation failed.";
@@ -476,29 +483,48 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         ErrorMessage = null;
         StreamingPromptText = null;
         PromptOutput = null;
+        LastHeartbeatUtc = null;
         StatusMessage = $"Generating {promptType} prompt (streaming)...";
 
         try
         {
             var lines = new List<string>();
+            var sb = new System.Text.StringBuilder();
+            var lastUiUpdate = Environment.TickCount64;
+
             await foreach (var line in stream.WithCancellation(ct))
             {
                 // Skip SSE heartbeat / thinking lines — they are keep-alive signals, not content.
                 if (line is "…" or "Processing…" or "\u2026" or "Processing\u2026")
                 {
+                    LastHeartbeatUtc = DateTimeOffset.UtcNow;
                     StatusMessage = $"Generating {promptType} prompt (waiting for Copilot)...";
                     continue;
                 }
 
+                if (sb.Length > 0) sb.AppendLine();
+                sb.Append(line);
                 lines.Add(line);
-                StreamingPromptText = string.Join(Environment.NewLine, lines);
+
+                // Throttle UI updates: publish at most every 80ms so the UI can render
+                var now = Environment.TickCount64;
+                if (now - lastUiUpdate >= 80)
+                {
+                    StreamingPromptText = sb.ToString();
+                    lastUiUpdate = now;
+                    await Task.Yield();
+                }
             }
+
+            // Final update with complete text
+            var fullText = sb.ToString();
+            StreamingPromptText = fullText;
 
             var output = new TodoPromptOutput(
                 TodoId: todoId,
                 PromptType: promptType,
                 Lines: lines,
-                Text: string.Join(Environment.NewLine, lines));
+                Text: fullText);
 
             PromptOutput = output;
             LastUpdatedAt = DateTimeOffset.UtcNow;
@@ -516,6 +542,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
         }
         finally
         {
+            LastHeartbeatUtc = null;
             IsBusy = false;
         }
     }

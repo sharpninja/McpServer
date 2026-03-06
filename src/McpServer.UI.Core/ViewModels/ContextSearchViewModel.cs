@@ -51,7 +51,7 @@ public sealed partial class ContextSearchViewModel : ObservableObject
 
         try
         {
-            await LoadSourcesAsync(ct).ConfigureAwait(false);
+            await LoadSourcesAsync(ct);
 
             if (string.IsNullOrWhiteSpace(Query))
             {
@@ -59,7 +59,7 @@ public sealed partial class ContextSearchViewModel : ObservableObject
                 return;
             }
 
-            var result = await _searchCommand.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await _searchCommand.DispatchAsync(ct);
             if (!result.IsSuccess)
             {
                 SearchResult = null;
@@ -83,7 +83,7 @@ public sealed partial class ContextSearchViewModel : ObservableObject
 
     private async Task LoadSourcesAsync(CancellationToken ct)
     {
-        var result = await _sourcesCommand.DispatchAsync(ct).ConfigureAwait(false);
+        var result = await _sourcesCommand.DispatchAsync(ct);
         if (!result.IsSuccess || result.Value is null)
         {
             SourceTypes = Array.Empty<string>();

@@ -40,7 +40,7 @@ internal sealed class UpdateTodoCommandHandler : ICommandHandler<UpdateTodoComma
 
         try
         {
-            var result = await _todoApiClient.UpdateTodoAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _todoApiClient.UpdateTodoAsync(command, context.CancellationToken);
             return Result<TodoMutationOutcome>.Success(result);
         }
         catch (Exception ex)

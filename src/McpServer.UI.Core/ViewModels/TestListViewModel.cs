@@ -41,7 +41,7 @@ public sealed class TestListViewModel : AreaListViewModelBase<TestingRequirement
         StatusMessage = "Loading testing requirements...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new ListTestingRequirementsQuery(), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new ListTestingRequirementsQuery(), ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Testing requirements load failed.";

@@ -41,7 +41,7 @@ internal sealed class TestTemplateQueryHandler : IQueryHandler<TestTemplateQuery
 
         try
         {
-            var result = await _client.TestTemplateAsync(query, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.TestTemplateAsync(query, context.CancellationToken);
             return Result<TemplateTestOutcome>.Success(result);
         }
         catch (Exception ex)

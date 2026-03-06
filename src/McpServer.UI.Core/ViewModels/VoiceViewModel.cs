@@ -123,7 +123,7 @@ public sealed partial class VoiceViewModel : ObservableObject
                     AgentName = Normalize(AgentName),
                     AgentModel = Normalize(AgentModel)
                 },
-                ct).ConfigureAwait(false);
+                ct);
 
             if (!result.IsSuccess || result.Value is null)
             {
@@ -188,7 +188,7 @@ public sealed partial class VoiceViewModel : ObservableObject
                     SessionId = currentSessionId,
                     UserTranscriptText = text
                 },
-                ct).ConfigureAwait(false);
+                ct);
 
             if (!result.IsSuccess || result.Value is null)
             {
@@ -235,7 +235,7 @@ public sealed partial class VoiceViewModel : ObservableObject
         StatusMessage = $"Interrupting '{currentSessionId}'...";
         try
         {
-            var result = await _dispatcher.SendAsync(new InterruptVoiceCommand(currentSessionId), ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(new InterruptVoiceCommand(currentSessionId), ct);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Interrupt failed.";
@@ -281,7 +281,7 @@ public sealed partial class VoiceViewModel : ObservableObject
         StatusMessage = $"Loading status for '{currentSessionId}'...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new GetVoiceStatusQuery(currentSessionId), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new GetVoiceStatusQuery(currentSessionId), ct);
             if (!result.IsSuccess)
             {
                 ErrorMessage = result.Error ?? "Status load failed.";
@@ -331,7 +331,7 @@ public sealed partial class VoiceViewModel : ObservableObject
         StatusMessage = $"Loading transcript for '{currentSessionId}'...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new GetVoiceTranscriptQuery(currentSessionId), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new GetVoiceTranscriptQuery(currentSessionId), ct);
             if (!result.IsSuccess)
             {
                 ErrorMessage = result.Error ?? "Transcript load failed.";
@@ -382,7 +382,7 @@ public sealed partial class VoiceViewModel : ObservableObject
         StatusMessage = $"Deleting session '{currentSessionId}'...";
         try
         {
-            var result = await _dispatcher.SendAsync(new DeleteVoiceSessionCommand(currentSessionId), ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(new DeleteVoiceSessionCommand(currentSessionId), ct);
             if (!result.IsSuccess)
             {
                 ErrorMessage = result.Error ?? "Delete session failed.";

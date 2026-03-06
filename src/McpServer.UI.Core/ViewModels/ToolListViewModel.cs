@@ -63,13 +63,13 @@ public sealed partial class ToolListViewModel : AreaListViewModelBase<ToolListIt
             if (string.IsNullOrWhiteSpace(effectiveKeyword))
             {
                 result = await _dispatcher.QueryAsync(new ListToolsQuery(_workspaceContext.ActiveWorkspacePath), ct)
-                    .ConfigureAwait(false);
+                    ;
             }
             else
             {
                 result = await _dispatcher.QueryAsync(
                         new SearchToolsQuery(effectiveKeyword.Trim(), _workspaceContext.ActiveWorkspacePath), ct)
-                    .ConfigureAwait(false);
+                    ;
             }
 
             if (!result.IsSuccess || result.Value is null)

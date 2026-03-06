@@ -39,7 +39,7 @@ internal sealed class UpdateWorkspacePolicyCommandHandler : ICommandHandler<Upda
         try
         {
             var success = await _workspaceApiClient.UpdateWorkspacePolicyAsync(command, context.CancellationToken)
-                .ConfigureAwait(false);
+                ;
 
             return success
                 ? Result<bool>.Success(true)
