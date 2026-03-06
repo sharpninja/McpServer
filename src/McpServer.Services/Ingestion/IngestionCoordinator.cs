@@ -210,15 +210,39 @@ public sealed class IngestionCoordinator
         IReadOnlyList<Models.ContextChunk> chunks,
         CancellationToken cancellationToken)
     {
-        var existing = await _db.Documents.FindAsync(new object[] { doc.Id }, cancellationToken).ConfigureAwait(false);
-        if (existing != null)
+        var existingDocs = await _db.Documents
+            .Where(d => d.SourceType == doc.SourceType && d.SourceKey == doc.SourceKey)
+            .ToListAsync(cancellationToken).ConfigureAwait(false);
+
+        if (existingDocs.Count > 0)
         {
-            existing.SourceType = doc.SourceType;
-            existing.SourceKey = doc.SourceKey;
-            existing.IngestedAt = doc.IngestedAt;
-            existing.ContentHash = doc.ContentHash;
-            var toRemove = await _db.Chunks.Where(c => c.DocumentId == doc.Id).ToListAsync(cancellationToken).ConfigureAwait(false);
+            var existingIds = existingDocs.Select(d => d.Id).ToList();
+            var toRemove = await _db.Chunks
+                .Where(c => existingIds.Contains(c.DocumentId))
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
             _db.Chunks.RemoveRange(toRemove);
+
+            if (existingDocs.Count == 1 && existingDocs[0].Id == doc.Id)
+            {
+                var existing = existingDocs[0];
+                existing.SourceType = doc.SourceType;
+                existing.SourceKey = doc.SourceKey;
+                existing.IngestedAt = doc.IngestedAt;
+                existing.ContentHash = doc.ContentHash;
+            }
+            else
+            {
+                _db.Documents.RemoveRange(existingDocs);
+                _db.Documents.Add(new ContextDocumentEntity
+                {
+                    Id = doc.Id,
+                    SourceType = doc.SourceType,
+                    SourceKey = doc.SourceKey,
+                    IngestedAt = doc.IngestedAt,
+                    ContentHash = doc.ContentHash
+                });
+            }
         }
         else
         {
