@@ -20,6 +20,15 @@ public sealed class RequirementsSteps
         set => _scenarioContext.Set(value, "CopilotResponseBody");
     }
 
+    private RequirementsService CreateService()
+    {
+        return new RequirementsService(
+            null!,
+            null!,
+            null!,
+            Microsoft.Extensions.Logging.Abstractions.NullLogger<RequirementsService>.Instance);
+    }
+
     private List<string> ExtractedIds
     {
         get => _scenarioContext.TryGetValue("ExtractedIds", out List<string>? ids) ? ids! : [];
@@ -35,7 +44,7 @@ public sealed class RequirementsSteps
     [When("I extract requirement IDs from the JSON block response")]
     public void WhenIExtractRequirementIdsFromJsonBlock()
     {
-        var (frIds, trIds) = RequirementsService.ExtractRequirementIds(CopilotResponseBody);
+        var (frIds, trIds) = CreateService().ExtractRequirementIds(CopilotResponseBody);
         var all = frIds.Concat(trIds).ToList();
         ExtractedIds = all;
         _scenarioContext.Set(frIds, "ExtractedFrIds");
@@ -45,7 +54,7 @@ public sealed class RequirementsSteps
     [When("I extract requirement IDs using regex fallback")]
     public void WhenIExtractRequirementIdsUsingRegexFallback()
     {
-        var (frIds, trIds) = RequirementsService.ExtractRequirementIds(CopilotResponseBody);
+        var (frIds, trIds) = CreateService().ExtractRequirementIds(CopilotResponseBody);
         var all = frIds.Concat(trIds).ToList();
         ExtractedIds = all;
         _scenarioContext.Set(frIds, "ExtractedFrIds");
@@ -57,7 +66,7 @@ public sealed class RequirementsSteps
     {
         // Simulate merging: the existing TODO's FR/TR IDs are the seed.
         // The Copilot response is already stored, extraction happened above.
-        var (frIds, trIds) = RequirementsService.ExtractRequirementIds(CopilotResponseBody);
+        var (frIds, trIds) = CreateService().ExtractRequirementIds(CopilotResponseBody);
         ExtractedIds = frIds.Concat(trIds).ToList();
     }
 

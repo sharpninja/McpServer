@@ -23,6 +23,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\McpServer.Cqrs\McpServer.Cqrs.csproj" />
     <ProjectReference Include="..\..\src\McpServer.Cqrs.Mvvm\McpServer.Cqrs.Mvvm.csproj" />
-    <ProjectReference Include="..\..\src\McpServer.UI.Core\McpServer.UI.Core.csproj" />
+
   </ItemGroup>
 </Project>

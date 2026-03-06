@@ -75,8 +75,9 @@ public sealed class EventPublishingServiceTests : IDisposable
             .Build();
         var env = Substitute.For<IHostEnvironment>();
         env.ContentRootPath.Returns(_tempRoot);
+        var processRunner = Substitute.For<IProcessRunner>();
 
-        var sut = new WorkspaceService(config, env, NullLogger<WorkspaceService>.Instance, eventBus);
+        var sut = new WorkspaceService(config, env, processRunner, NullLogger<WorkspaceService>.Instance, eventBus);
         var workspacePath = Path.Combine(_tempRoot, "workspace-one");
 
         var result = await sut.CreateAsync(new WorkspaceCreateRequest
