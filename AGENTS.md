@@ -15,11 +15,12 @@ On every subsequent user message:
 1. `templates/prompt-templates.yaml` (`default-marker-prompt`) is the source of truth for specific agent instructions. `AGENTS-README-FIRST.yaml` is the rendered runtime instruction set.
 2. Keep this file focused on durable workspace policy and conventions; avoid duplicating marker-file operational procedures.
 3. Use helper modules for session log and TODO operations. Do not make raw API calls.
-4. Write decisions, requirements, and state to the session log, not just conversation.
-5. Follow workspace conventions in `.github/copilot-instructions.md` for build, test, and architecture guidance.
-6. When you need API schemas, module examples, or compliance rules, load them from `docs/context/` or use `context_search`.
-7. Do not fabricate information. If you made a mistake, acknowledge it. Distinguish facts from speculation.
-8. Prioritize correctness over speed. Do not ship code you have not verified compiles and is logically sound.
+4. Persist session log updates immediately after each meaningful change (turn creation, action append, decision, requirement, blocker, file/context update). Do not defer saves.
+5. Capture rich turn detail: interpretation, response, status, actions (type/status/filePath), contextList, filesModified, designDecisions, requirementsDiscovered, blockers, and relevant processing dialog.
+6. Follow workspace conventions in `.github/copilot-instructions.md` for build, test, and architecture guidance.
+7. When you need API schemas, module examples, or compliance rules, load them from `docs/context/` or use `context_search`.
+8. Do not fabricate information. If you made a mistake, acknowledge it. Distinguish facts from speculation.
+9. Prioritize correctness over speed. Do not ship code you have not verified compiles and is logically sound.
 
 ## Where Things Live
 

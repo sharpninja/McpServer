@@ -14,6 +14,12 @@ For specific operational instructions (session bootstrap, turn logging lifecycle
 - Do NOT write multiline commands to the terminal; use temporary scripts instead.
 - Always use non-login pwsh and PowerShell commands.
 
+## Session Logging Requirements
+
+- Follow `AGENTS-README-FIRST.yaml` for workflow and helper command order.
+- Persist session log changes immediately after each meaningful update; do not batch unsaved turn changes.
+- For each turn, include as much detail as available: interpretation, response/status, actions (type/status/filePath), files modified, design decisions, requirements discovered, blockers, and context references.
+
 ## Build, Test, Lint
 
 ```powershell

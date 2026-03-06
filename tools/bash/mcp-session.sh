@@ -6,7 +6,7 @@
 #   source ./mcp-session.sh
 #   mcp_session_init                                  # reads marker, sets vars
 #   mcp_session_create "Copilot" "My session" "claude-sonnet-4"  # creates session
-#   mcp_session_add_entry "req-001" "Fix bug" "Fix the auth bug" "in_progress"
+#   mcp_session_add_turn "req-001" "Fix bug" "Fix the auth bug" "in_progress"
 #   mcp_session_send_dialog "req-001" "Analyzing the issue..." "reasoning"
 #   mcp_session_update                                # pushes to server
 # ─────────────────────────────────────────────────────────────────────────────
@@ -41,7 +41,10 @@ mcp_session_init() {
 
     MCP_BASE_URL=$(grep -oP 'baseUrl:\s*\K\S+' "$marker")
     MCP_API_KEY=$(grep -oP 'apiKey:\s*\K\S+' "$marker")
-    MCP_WORKSPACE_PATH=$(grep -oP 'workspacePath:\s*\K.+' "$marker" | sed 's/[[:space:]]*$//')
+    MCP_WORKSPACE_PATH=$(grep -oP 'workspacePath:\s*\K.+' "$marker" | sed 's/[[:space:]]*$//' || true)
+    if [[ -z "$MCP_WORKSPACE_PATH" ]]; then
+        MCP_WORKSPACE_PATH=$(dirname "$marker")
+    fi
     MCP_SESSION_FILE=$(mktemp /tmp/mcp-session-XXXXXX.json)
 
     # Verify connectivity
@@ -70,6 +73,8 @@ mcp_session_create() {
   "started": "${now}",
   "lastUpdated": "${now}",
   "status": "in_progress",
+  "entryCount": 0,
+  "totalTokens": 0,
   "entries": []
 }
 EOF
@@ -109,10 +114,10 @@ mcp_session_query() {
         "${MCP_BASE_URL}/mcpserver/sessionlog?limit=${limit}"
 }
 
-# ─── Entries ─────────────────────────────────────────────────────────────────
+# ─── Turns ───────────────────────────────────────────────────────────────────
 
-mcp_session_add_entry() {
-    # Usage: mcp_session_add_entry <requestId> <queryTitle> <queryText> <status> [response] [interpretation]
+mcp_session_add_turn() {
+    # Usage: mcp_session_add_turn <requestId> <queryTitle> <queryText> <status> [response] [interpretation]
     local req_id="$1" query_title="$2" query_text="$3" status="$4"
     local response="${5:-}" interpretation="${6:-}"
     local now; now=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
@@ -151,8 +156,8 @@ mcp_session_add_entry() {
     _mcp_session_push
 }
 
-mcp_session_update_entry() {
-    # Usage: mcp_session_update_entry <requestId> <field> <value>
+mcp_session_update_turn() {
+    # Usage: mcp_session_update_turn <requestId> <field> <value>
     # Fields: response, status, interpretation
     local req_id="$1" field="$2" value="$3"
 
@@ -193,6 +198,8 @@ mcp_session_add_action() {
           else . end
         )
        ' "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
+
+    _mcp_session_push
 }
 
 mcp_session_add_file() {
@@ -203,6 +210,8 @@ mcp_session_add_file() {
     jq --arg rid "$req_id" --arg fp "$file_path" \
        '.entries |= map(if .requestId == $rid then .filesModified += [$fp] else . end)' \
        "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
+
+    _mcp_session_push
 }
 
 mcp_session_add_tag() {
@@ -213,6 +222,56 @@ mcp_session_add_tag() {
     jq --arg rid "$req_id" --arg tag "$tag" \
        '.entries |= map(if .requestId == $rid then .tags += [$tag] else . end)' \
        "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
+
+    _mcp_session_push
+}
+
+mcp_session_add_context() {
+    # Usage: mcp_session_add_context <requestId> <contextItem>
+    local req_id="$1" context_item="$2"
+
+    local tmp; tmp=$(mktemp)
+    jq --arg rid "$req_id" --arg item "$context_item" \
+       '.entries |= map(if .requestId == $rid then .contextList += [$item] else . end)' \
+       "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
+
+    _mcp_session_push
+}
+
+mcp_session_add_decision() {
+    # Usage: mcp_session_add_decision <requestId> <decisionText>
+    local req_id="$1" decision="$2"
+
+    local tmp; tmp=$(mktemp)
+    jq --arg rid "$req_id" --arg decision "$decision" \
+       '.entries |= map(if .requestId == $rid then .designDecisions += [$decision] else . end)' \
+       "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
+
+    _mcp_session_push
+}
+
+mcp_session_add_requirement() {
+    # Usage: mcp_session_add_requirement <requestId> <requirementIdOrText>
+    local req_id="$1" requirement="$2"
+
+    local tmp; tmp=$(mktemp)
+    jq --arg rid "$req_id" --arg requirement "$requirement" \
+       '.entries |= map(if .requestId == $rid then .requirementsDiscovered += [$requirement] else . end)' \
+       "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
+
+    _mcp_session_push
+}
+
+mcp_session_add_blocker() {
+    # Usage: mcp_session_add_blocker <requestId> <blockerText>
+    local req_id="$1" blocker="$2"
+
+    local tmp; tmp=$(mktemp)
+    jq --arg rid "$req_id" --arg blocker "$blocker" \
+       '.entries |= map(if .requestId == $rid then .blockers += [$blocker] else . end)' \
+       "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
+
+    _mcp_session_push
 }
 
 # ─── Dialog ──────────────────────────────────────────────────────────────────
@@ -241,6 +300,7 @@ mcp_session_send_dialog() {
 # ─── Internal ────────────────────────────────────────────────────────────────
 
 _mcp_session_push() {
+    _mcp_session_normalize
     curl -sf -X POST \
         -H "X-Api-Key: ${MCP_API_KEY}" \
         -H "X-Workspace-Path: ${MCP_WORKSPACE_PATH}" \
@@ -248,4 +308,17 @@ _mcp_session_push() {
         -d @"$MCP_SESSION_FILE" \
         "${MCP_BASE_URL}/mcpserver/sessionlog" \
         > /dev/null
+}
+
+_mcp_session_normalize() {
+    local tmp; tmp=$(mktemp)
+    jq '
+        if (.entries | type) == "array" then .
+        elif (.turns | type) == "array" then . + { entries: .turns }
+        else . + { entries: [] }
+        end
+        | del(.turns)
+        | .entryCount = (.entries | length)
+        | .totalTokens = (([.entries[]?.tokenCount // 0] | add) // 0)
+    ' "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
 }

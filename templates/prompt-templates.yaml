@@ -280,19 +280,19 @@ templates:
 
       3. Review recent session history and current TODOs.
 
-      4. Post a session log entry before starting work on the user''s request.
+      4. Post a session log turn before starting work on the user''s request.
 
 
       ## Rules
 
       0. NEVER write to TODO.yaml directly.
 
-      1. Post a session log entry before any work on a user request. Update it with results when done.
+      1. Post a new session log turn (`Add-McpSessionTurn`) before starting work. Update it with results (`Response`) and actions (`Add-McpAction`) when done. Persist after each meaningful update, not just at the end.
 
       2. Use helper modules for session log and TODO operations — they handle workspace routing automatically. Do not use
       raw API calls.
 
-      3. Write decisions, requirements, and state to the session log, not just conversation.
+      3. Write decisions, requirements, and state to the session log, not just conversation. Capture rich turn detail: interpretation, response/status, actions (type/status/filePath), contextList, filesModified, designDecisions, requirementsDiscovered, blockers, and key processingDialog updates.
 
       4. Follow workspace conventions in AGENTS.md and .github/copilot-instructions.md.
 
@@ -454,6 +454,20 @@ templates:
 
       Verify: session log is current, decisions are recorded, requirements are tracked, code compiles, action types are correct
       (see docs/context/action-types.md).
+
+
+      ## Available Capabilities
+
+
+      The following core libraries are indexed and available for semantic search/context retrieval:
+
+      - McpServer.Cqrs (CQRS framework)
+
+      - McpServer.Cqrs.Mvvm (MVVM support)
+
+      - McpServer.UI.Core (Core UI logic)
+
+      - McpServer.Director (Director CLI)
 
 
       ---

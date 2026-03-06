@@ -149,11 +149,11 @@ it "returns the session ID" \
         rm -f \"\$MCP_SESSION_FILE\"
     "
 
-# -- mcp_session_add_entry --
+# -- mcp_session_add_turn --
 
-describe "mcp_session_add_entry"
+describe "mcp_session_add_turn"
 
-it "adds entry with correct requestId and queryTitle" \
+it "adds turn with correct requestId and queryTitle" \
     bash -c "
         source '$SCRIPT_DIR/mcp-session.sh'
         curl() { :; }
@@ -161,14 +161,14 @@ it "adds entry with correct requestId and queryTitle" \
         MCP_API_KEY='key'
         MCP_SESSION_FILE=\$(mktemp /tmp/mcp-test-XXXXXX.json)
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
-        mcp_session_add_entry 'req-001' 'Fix bug' 'Fix the auth bug' 'in_progress'
+        mcp_session_add_turn 'req-001' 'Fix bug' 'Fix the auth bug' 'in_progress'
         rid=\$(jq -r '.entries[0].requestId' \"\$MCP_SESSION_FILE\")
         qt=\$(jq -r '.entries[0].queryTitle' \"\$MCP_SESSION_FILE\")
         [[ \"\$rid\" == 'req-001' && \"\$qt\" == 'Fix bug' ]]
         rm -f \"\$MCP_SESSION_FILE\"
     "
 
-it "sets entry status correctly" \
+it "sets turn status correctly" \
     bash -c "
         source '$SCRIPT_DIR/mcp-session.sh'
         curl() { :; }
@@ -176,13 +176,13 @@ it "sets entry status correctly" \
         MCP_API_KEY='key'
         MCP_SESSION_FILE=\$(mktemp /tmp/mcp-test-XXXXXX.json)
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
-        mcp_session_add_entry 'r1' 'title' 'text' 'completed'
+        mcp_session_add_turn 'r1' 'title' 'text' 'completed'
         st=\$(jq -r '.entries[0].status' \"\$MCP_SESSION_FILE\")
         [[ \"\$st\" == 'completed' ]]
         rm -f \"\$MCP_SESSION_FILE\"
     "
 
-it "initializes empty collections on entry" \
+it "initializes empty collections on turn" \
     bash -c "
         source '$SCRIPT_DIR/mcp-session.sh'
         curl() { :; }
@@ -190,14 +190,14 @@ it "initializes empty collections on entry" \
         MCP_API_KEY='key'
         MCP_SESSION_FILE=\$(mktemp /tmp/mcp-test-XXXXXX.json)
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
-        mcp_session_add_entry 'r1' 'title' 'text' 'in_progress'
+        mcp_session_add_turn 'r1' 'title' 'text' 'in_progress'
         jq -e '.entries[0].actions | length == 0' \"\$MCP_SESSION_FILE\" > /dev/null &&
         jq -e '.entries[0].filesModified | length == 0' \"\$MCP_SESSION_FILE\" > /dev/null &&
         jq -e '.entries[0].designDecisions | length == 0' \"\$MCP_SESSION_FILE\" > /dev/null
         rm -f \"\$MCP_SESSION_FILE\"
     "
 
-it "appends multiple entries" \
+it "appends multiple turns" \
     bash -c "
         source '$SCRIPT_DIR/mcp-session.sh'
         curl() { :; }
@@ -205,18 +205,18 @@ it "appends multiple entries" \
         MCP_API_KEY='key'
         MCP_SESSION_FILE=\$(mktemp /tmp/mcp-test-XXXXXX.json)
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
-        mcp_session_add_entry 'r1' 'First' 'text1' 'in_progress'
-        mcp_session_add_entry 'r2' 'Second' 'text2' 'completed'
+        mcp_session_add_turn 'r1' 'First' 'text1' 'in_progress'
+        mcp_session_add_turn 'r2' 'Second' 'text2' 'completed'
         count=\$(jq '.entries | length' \"\$MCP_SESSION_FILE\")
         [[ \"\$count\" == '2' ]]
         rm -f \"\$MCP_SESSION_FILE\"
     "
 
-# -- mcp_session_update_entry --
+# -- mcp_session_update_turn --
 
-describe "mcp_session_update_entry"
+describe "mcp_session_update_turn"
 
-it "updates entry response field" \
+it "updates turn response field" \
     bash -c "
         source '$SCRIPT_DIR/mcp-session.sh'
         curl() { :; }
@@ -224,14 +224,14 @@ it "updates entry response field" \
         MCP_API_KEY='key'
         MCP_SESSION_FILE=\$(mktemp /tmp/mcp-test-XXXXXX.json)
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
-        mcp_session_add_entry 'r1' 'title' 'text' 'in_progress'
-        mcp_session_update_entry 'r1' 'response' 'All done!'
+        mcp_session_add_turn 'r1' 'title' 'text' 'in_progress'
+        mcp_session_update_turn 'r1' 'response' 'All done!'
         resp=\$(jq -r '.entries[0].response' \"\$MCP_SESSION_FILE\")
         [[ \"\$resp\" == 'All done!' ]]
         rm -f \"\$MCP_SESSION_FILE\"
     "
 
-it "updates entry status field" \
+it "updates turn status field" \
     bash -c "
         source '$SCRIPT_DIR/mcp-session.sh'
         curl() { :; }
@@ -239,8 +239,8 @@ it "updates entry status field" \
         MCP_API_KEY='key'
         MCP_SESSION_FILE=\$(mktemp /tmp/mcp-test-XXXXXX.json)
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
-        mcp_session_add_entry 'r1' 'title' 'text' 'in_progress'
-        mcp_session_update_entry 'r1' 'status' 'completed'
+        mcp_session_add_turn 'r1' 'title' 'text' 'in_progress'
+        mcp_session_update_turn 'r1' 'status' 'completed'
         st=\$(jq -r '.entries[0].status' \"\$MCP_SESSION_FILE\")
         [[ \"\$st\" == 'completed' ]]
         rm -f \"\$MCP_SESSION_FILE\"
@@ -258,7 +258,7 @@ it "adds action with correct fields" \
         MCP_API_KEY='key'
         MCP_SESSION_FILE=\$(mktemp /tmp/mcp-test-XXXXXX.json)
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
-        mcp_session_add_entry 'r1' 'title' 'text' 'in_progress'
+        mcp_session_add_turn 'r1' 'title' 'text' 'in_progress'
         mcp_session_add_action 'r1' 'Created file' 'create' 'new.cs' 'completed'
         desc=\$(jq -r '.entries[0].actions[0].description' \"\$MCP_SESSION_FILE\")
         atype=\$(jq -r '.entries[0].actions[0].type' \"\$MCP_SESSION_FILE\")
@@ -275,13 +275,29 @@ it "auto-increments action order" \
         MCP_API_KEY='key'
         MCP_SESSION_FILE=\$(mktemp /tmp/mcp-test-XXXXXX.json)
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
-        mcp_session_add_entry 'r1' 'title' 'text' 'in_progress'
+        mcp_session_add_turn 'r1' 'title' 'text' 'in_progress'
         mcp_session_add_action 'r1' 'First' 'edit' 'a.cs'
         mcp_session_add_action 'r1' 'Second' 'edit' 'b.cs'
         o1=\$(jq '.entries[0].actions[0].order' \"\$MCP_SESSION_FILE\")
         o2=\$(jq '.entries[0].actions[1].order' \"\$MCP_SESSION_FILE\")
         [[ \"\$o1\" == '1' && \"\$o2\" == '2' ]]
         rm -f \"\$MCP_SESSION_FILE\"
+    "
+
+it "pushes immediately after adding an action" \
+    bash -c "
+        source '$SCRIPT_DIR/mcp-session.sh'
+        call_log=\$(mktemp /tmp/mcp-curl-log-XXXXXX)
+        curl() { echo called >> \"\$call_log\"; }
+        MCP_BASE_URL='http://test:9999'
+        MCP_API_KEY='key'
+        MCP_SESSION_FILE=\$(mktemp /tmp/mcp-test-XXXXXX.json)
+        mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
+        mcp_session_add_turn 'r1' 'title' 'text' 'in_progress'
+        mcp_session_add_action 'r1' 'Tracked change' 'edit' 'src/a.cs'
+        calls=\$(wc -l < \"\$call_log\")
+        [[ \"\$calls\" -ge 3 ]]
+        rm -f \"\$MCP_SESSION_FILE\" \"\$call_log\"
     "
 
 # -- mcp_session_add_file / mcp_session_add_tag --
@@ -296,7 +312,7 @@ it "appends file to filesModified" \
         MCP_API_KEY='key'
         MCP_SESSION_FILE=\$(mktemp /tmp/mcp-test-XXXXXX.json)
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
-        mcp_session_add_entry 'r1' 'title' 'text' 'in_progress'
+        mcp_session_add_turn 'r1' 'title' 'text' 'in_progress'
         mcp_session_add_file 'r1' 'src/main.cs'
         mcp_session_add_file 'r1' 'src/test.cs'
         count=\$(jq '.entries[0].filesModified | length' \"\$MCP_SESSION_FILE\")
@@ -313,7 +329,7 @@ it "appends tag to tags array" \
         MCP_API_KEY='key'
         MCP_SESSION_FILE=\$(mktemp /tmp/mcp-test-XXXXXX.json)
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
-        mcp_session_add_entry 'r1' 'title' 'text' 'in_progress'
+        mcp_session_add_turn 'r1' 'title' 'text' 'in_progress'
         mcp_session_add_tag 'r1' 'bugfix'
         tag=\$(jq -r '.entries[0].tags[0]' \"\$MCP_SESSION_FILE\")
         [[ \"\$tag\" == 'bugfix' ]]

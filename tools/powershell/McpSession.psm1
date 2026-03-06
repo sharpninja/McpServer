@@ -10,7 +10,7 @@
     Usage:  Import-Module ./McpSession.psm1
             Initialize-McpSession                          # reads marker, sets connection
             $s = New-McpSessionLog -Title "My session"     # creates session
-            Add-McpSessionEntry -Session $s -QueryTitle "Fix bug" -QueryText "Fix the auth bug" -Status in_progress
+            Add-McpSessionTurn -Session $s -QueryTitle "Fix bug" -QueryText "Fix the auth bug" -Status in_progress
             Send-McpDialog -Session $s -RequestId req-001 -Content "Analyzing the issue..." -Category reasoning
             Update-McpSessionLog -Session $s               # pushes to server
 #>
@@ -107,8 +107,12 @@ function New-McpSessionLog {
         started     = $now
         lastUpdated = $now
         status      = "in_progress"
+        entryCount  = 0
+        totalTokens = 0
         entries     = [System.Collections.Generic.List[object]]::new()
     }
+    # Keep legacy "turns" alias in-memory for older scripts/tests.
+    $session | Add-Member -NotePropertyName turns -NotePropertyValue $session.entries -Force
 
     Push-SessionLog $session
     return $session
@@ -129,7 +133,13 @@ function Update-McpSessionLog {
     )
     Assert-Initialized
 
+    $turns = Get-McpSessionTurnList -Session $Session
     $Session.lastUpdated = (Get-Date).ToUniversalTime().ToString("o")
+    $Session.entryCount = $turns.Count
+    $totalTokens = @($turns | ForEach-Object {
+        if ($_.PSObject.Properties.Name -contains "tokenCount" -and $null -ne $_.tokenCount) { [int]$_.tokenCount } else { 0 }
+    } | Measure-Object -Sum).Sum
+    $Session.totalTokens = if ($null -eq $totalTokens) { 0 } else { [int]$totalTokens }
     if ($Status) { $Session.status = $Status }
     if ($Title)  { $Session.title  = $Title }
 
@@ -152,11 +162,42 @@ function Get-McpSessionLog {
     return Invoke-RestMethod -Uri $uri -Headers $script:McpHeaders
 }
 
-# ─── Entries ─────────────────────────────────────────────────────────────────
+# ─── Turns ───────────────────────────────────────────────────────────────────
 
-function Add-McpSessionEntry {
+function Get-McpSessionTurnList {
     <#
-    .SYNOPSIS  Add a request entry to the session and push to server.
+    .SYNOPSIS  Ensure the session object exposes a "turns" list and return it.
+    .PARAMETER Session  The session object.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][PSCustomObject]$Session
+    )
+
+    if ($Session.PSObject.Properties.Name -contains "entries") {
+        if (-not ($Session.PSObject.Properties.Name -contains "turns")) {
+            $Session | Add-Member -NotePropertyName turns -NotePropertyValue $Session.entries -Force
+        } else {
+            $Session.turns = $Session.entries
+        }
+        return ,$Session.entries
+    }
+
+    $entries = [System.Collections.Generic.List[object]]::new()
+    if ($Session.PSObject.Properties.Name -contains "turns") {
+        foreach ($item in @($Session.turns)) {
+            [void]$entries.Add($item)
+        }
+    }
+
+    $Session | Add-Member -NotePropertyName entries -NotePropertyValue $entries -Force
+    $Session | Add-Member -NotePropertyName turns -NotePropertyValue $entries -Force
+    return ,$Session.entries
+}
+
+function Add-McpSessionTurn {
+    <#
+    .SYNOPSIS  Add a request turn to the session and push to server.
     .PARAMETER Session        The session object.
     .PARAMETER RequestId      Unique ID for this request. Auto-generated if omitted.
     .PARAMETER QueryTitle     Short summary of the query.
@@ -164,7 +205,7 @@ function Add-McpSessionEntry {
     .PARAMETER Interpretation Your understanding of what was asked.
     .PARAMETER Response       Your response text.
     .PARAMETER Status         "in_progress" or "completed".
-    .PARAMETER Model          Model used for this entry. Defaults to session model.
+    .PARAMETER Model          Model used for this turn. Defaults to session model.
     .PARAMETER Tags           Array of tags (e.g. "refactor", "bugfix").
     .PARAMETER ContextList    Array of files or resources referenced.
     .PARAMETER Push           If set, immediately push to server. Default: true.
@@ -181,13 +222,23 @@ function Add-McpSessionEntry {
         [string]$Model,
         [string[]]$Tags = @(),
         [string[]]$ContextList = @(),
+        [Nullable[int]]$TokenCount,
+        [string]$ModelProvider = "",
+        [string]$FailureNote = "",
+        [Nullable[double]]$Score,
+        [Nullable[bool]]$IsPremium,
+        [string[]]$DesignDecisions = @(),
+        [string[]]$RequirementsDiscovered = @(),
+        [string[]]$FilesModified = @(),
+        [string[]]$Blockers = @(),
         [switch]$NoPush
     )
 
-    if (-not $RequestId) { $RequestId = "req-$('{0:D3}' -f ($Session.entries.Count + 1))" }
+    $turns = Get-McpSessionTurnList -Session $Session
+    if (-not $RequestId) { $RequestId = "req-$('{0:D3}' -f ($turns.Count + 1))" }
     if (-not $Model) { $Model = $Session.model }
 
-    $entry = [PSCustomObject]@{
+    $turn = [PSCustomObject]@{
         requestId              = $RequestId
         timestamp              = (Get-Date).ToUniversalTime().ToString("o")
         queryText              = $QueryText
@@ -196,47 +247,90 @@ function Add-McpSessionEntry {
         interpretation         = $Interpretation
         status                 = $Status
         model                  = $Model
-        tags                   = $Tags
-        contextList            = $ContextList
-        designDecisions        = [System.Collections.Generic.List[string]]::new()
-        requirementsDiscovered = [System.Collections.Generic.List[string]]::new()
-        filesModified          = [System.Collections.Generic.List[string]]::new()
-        blockers               = [System.Collections.Generic.List[string]]::new()
+        modelProvider          = $ModelProvider
+        tokenCount             = if ($TokenCount.HasValue) { $TokenCount.Value } else { $null }
+        failureNote            = if ([string]::IsNullOrWhiteSpace($FailureNote)) { $null } else { $FailureNote }
+        score                  = if ($Score.HasValue) { $Score.Value } else { $null }
+        isPremium              = if ($IsPremium.HasValue) { $IsPremium.Value } else { $null }
+        tags                   = [System.Collections.Generic.List[string]]::new($Tags)
+        contextList            = [System.Collections.Generic.List[string]]::new($ContextList)
+        designDecisions        = [System.Collections.Generic.List[string]]::new($DesignDecisions)
+        requirementsDiscovered = [System.Collections.Generic.List[string]]::new($RequirementsDiscovered)
+        filesModified          = [System.Collections.Generic.List[string]]::new($FilesModified)
+        blockers               = [System.Collections.Generic.List[string]]::new($Blockers)
         actions                = [System.Collections.Generic.List[object]]::new()
         processingDialog       = [System.Collections.Generic.List[object]]::new()
     }
 
-    $Session.entries.Add($entry)
+    [void]$turns.Add($turn)
 
     if (-not $NoPush) {
         Update-McpSessionLog -Session $Session
     }
-    return $entry
+    return $turn
 }
 
-function Set-McpSessionEntry {
+function Set-McpSessionTurn {
     <#
-    .SYNOPSIS  Update fields on an existing entry and optionally push.
-    .PARAMETER Entry     The entry object returned by Add-McpSessionEntry.
+    .SYNOPSIS  Update fields on an existing turn and optionally push.
+    .PARAMETER Turn      The turn object returned by Add-McpSessionTurn.
     .PARAMETER Session   The parent session object.
     .PARAMETER Response  Updated response text.
     .PARAMETER Status    Updated status.
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory)][PSCustomObject]$Entry,
+        [Parameter(Mandatory)][PSCustomObject]$Turn,
         [PSCustomObject]$Session,
         [string]$Response,
+        [string]$Interpretation,
         [ValidateSet("in_progress","completed")][string]$Status,
+        [Nullable[int]]$TokenCount,
+        [string]$ModelProvider,
+        [string]$FailureNote,
+        [Nullable[double]]$Score,
+        [Nullable[bool]]$IsPremium,
+        [string[]]$Tags,
+        [string[]]$ContextList,
         [string[]]$FilesModified,
         [string[]]$DesignDecisions,
+        [string[]]$RequirementsDiscovered,
+        [string[]]$Blockers,
         [switch]$NoPush
     )
 
-    if ($Response)         { $Entry.response = $Response }
-    if ($Status)           { $Entry.status   = $Status }
-    if ($FilesModified)    { foreach ($f in $FilesModified)    { $Entry.filesModified.Add($f) } }
-    if ($DesignDecisions)  { foreach ($d in $DesignDecisions)  { $Entry.designDecisions.Add($d) } }
+    if ($Response)        { $Turn.response = $Response }
+    if ($Interpretation)  { $Turn.interpretation = $Interpretation }
+    if ($Status)          { $Turn.status = $Status }
+    if ($TokenCount.HasValue) { $Turn.tokenCount = $TokenCount.Value }
+    if ($ModelProvider)   { $Turn.modelProvider = $ModelProvider }
+    if ($FailureNote)     { $Turn.failureNote = $FailureNote }
+    if ($Score.HasValue)  { $Turn.score = $Score.Value }
+    if ($IsPremium.HasValue) { $Turn.isPremium = $IsPremium.Value }
+    if ($Tags) {
+        $list = Get-McpSessionTurnStringList -Turn $Turn -Field "tags"
+        foreach ($t in $Tags) { $list.Add($t) }
+    }
+    if ($ContextList) {
+        $list = Get-McpSessionTurnStringList -Turn $Turn -Field "contextList"
+        foreach ($c in $ContextList) { $list.Add($c) }
+    }
+    if ($FilesModified) {
+        $list = Get-McpSessionTurnStringList -Turn $Turn -Field "filesModified"
+        foreach ($f in $FilesModified) { $list.Add($f) }
+    }
+    if ($DesignDecisions) {
+        $list = Get-McpSessionTurnStringList -Turn $Turn -Field "designDecisions"
+        foreach ($d in $DesignDecisions) { $list.Add($d) }
+    }
+    if ($RequirementsDiscovered) {
+        $list = Get-McpSessionTurnStringList -Turn $Turn -Field "requirementsDiscovered"
+        foreach ($r in $RequirementsDiscovered) { $list.Add($r) }
+    }
+    if ($Blockers) {
+        $list = Get-McpSessionTurnStringList -Turn $Turn -Field "blockers"
+        foreach ($b in $Blockers) { $list.Add($b) }
+    }
 
     if ($Session -and -not $NoPush) {
         Update-McpSessionLog -Session $Session
@@ -247,8 +341,8 @@ function Set-McpSessionEntry {
 
 function Add-McpAction {
     <#
-    .SYNOPSIS  Add an action to a session entry.
-    .PARAMETER Entry        The entry object.
+    .SYNOPSIS  Add an action to a session turn.
+    .PARAMETER Turn         The turn object.
     .PARAMETER Description  What was done.
     .PARAMETER Type         Action type: edit, create, delete, commit, design_decision, etc.
     .PARAMETER FilePath     Affected file path (empty string if N/A).
@@ -256,7 +350,7 @@ function Add-McpAction {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory)][PSCustomObject]$Entry,
+        [Parameter(Mandatory)][PSCustomObject]$Turn,
         [Parameter(Mandatory)][string]$Description,
         [Parameter(Mandatory)][ValidateSet(
             "edit","create","delete","design_decision","commit",
@@ -264,19 +358,53 @@ function Add-McpAction {
             "dependency_add","license_violation","origin_violation",
             "origin_review","entity_violation","copilot_invocation","policy_change"
         )][string]$Type,
+        [PSCustomObject]$Session,
         [string]$FilePath = "",
-        [ValidateSet("completed","in_progress","failed")][string]$Status = "completed"
+        [ValidateSet("completed","in_progress","failed")][string]$Status = "completed",
+        [switch]$NoPush
     )
 
     $action = [PSCustomObject]@{
-        order       = $Entry.actions.Count + 1
+        order       = $Turn.actions.Count + 1
         description = $Description
         type        = $Type
         status      = $Status
         filePath    = $FilePath
     }
-    $Entry.actions.Add($action)
+    $Turn.actions.Add($action)
+    if ($Session -and -not $NoPush) {
+        Update-McpSessionLog -Session $Session
+    }
     return $action
+}
+
+function Add-McpTurnDetail {
+    <#
+    .SYNOPSIS  Append detail text to a turn list field and optionally push.
+    .PARAMETER Turn      The turn object.
+    .PARAMETER Field     One of tags/contextList/designDecisions/requirementsDiscovered/filesModified/blockers.
+    .PARAMETER Value     Detail string to append.
+    .PARAMETER Session   Optional parent session for immediate persistence.
+    .PARAMETER NoPush    When set, do not push even when Session is provided.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][PSCustomObject]$Turn,
+        [Parameter(Mandatory)][ValidateSet("tags","contextList","designDecisions","requirementsDiscovered","filesModified","blockers")][string]$Field,
+        [Parameter(Mandatory)][string]$Value,
+        [PSCustomObject]$Session,
+        [switch]$NoPush
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Value)) {
+        return
+    }
+
+    $list = Get-McpSessionTurnStringList -Turn $Turn -Field $Field
+    $list.Add($Value)
+    if ($Session -and -not $NoPush) {
+        Update-McpSessionLog -Session $Session
+    }
 }
 
 # ─── Dialog ──────────────────────────────────────────────────────────────────
@@ -285,7 +413,7 @@ function Send-McpDialog {
     <#
     .SYNOPSIS  Post reasoning dialog items to the session log dialog endpoint.
     .PARAMETER Session    The session object.
-    .PARAMETER RequestId  The request entry ID.
+    .PARAMETER RequestId  The request turn ID.
     .PARAMETER Content    The reasoning text or observation.
     .PARAMETER Role       "model", "tool", "system", or "user".
     .PARAMETER Category   "reasoning", "tool_call", "tool_result", "observation", or "decision".
@@ -320,9 +448,43 @@ function Assert-Initialized {
     }
 }
 
+function Get-McpSessionTurnStringList {
+    param(
+        [Parameter(Mandatory)][PSCustomObject]$Turn,
+        [Parameter(Mandatory)][string]$Field
+    )
+
+    $current = $Turn.$Field
+    if ($current -is [System.Collections.Generic.List[string]]) {
+        return ,$current
+    }
+
+    $list = [System.Collections.Generic.List[string]]::new()
+    foreach ($value in @($current)) {
+        if ($null -ne $value) {
+            [void]$list.Add([string]$value)
+        }
+    }
+    $Turn.$Field = $list
+    return ,$list
+}
+
 function Push-SessionLog {
     param([PSCustomObject]$Session)
-    $body = $Session | ConvertTo-Json -Depth 10
+    $turns = Get-McpSessionTurnList -Session $Session
+    $payload = [ordered]@{}
+    foreach ($property in $Session.PSObject.Properties) {
+        if ($property.Name -ne "turns") {
+            $payload[$property.Name] = $property.Value
+        }
+    }
+    $payload.entries = $turns
+    $payload.entryCount = $turns.Count
+    $totalTokens = @($turns | ForEach-Object {
+        if ($_.PSObject.Properties.Name -contains "tokenCount" -and $null -ne $_.tokenCount) { [int]$_.tokenCount } else { 0 }
+    } | Measure-Object -Sum).Sum
+    $payload.totalTokens = if ($null -eq $totalTokens) { 0 } else { [int]$totalTokens }
+    $body = $payload | ConvertTo-Json -Depth 12
     Invoke-RestMethod -Uri "$($script:McpBaseUrl)/mcpserver/sessionlog" -Method Post -Headers $script:McpHeaders -Body $body | Out-Null
 }
 
@@ -332,8 +494,9 @@ Export-ModuleMember -Function @(
     'New-McpSessionLog',
     'Update-McpSessionLog',
     'Get-McpSessionLog',
-    'Add-McpSessionEntry',
-    'Set-McpSessionEntry',
+    'Add-McpSessionTurn',
+    'Set-McpSessionTurn',
     'Add-McpAction',
+    'Add-McpTurnDetail',
     'Send-McpDialog'
 )
