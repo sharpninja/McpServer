@@ -222,10 +222,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Detect web UI Dockerfile
+        id: webui
+        shell: bash
+        run: |
+          if [ -f src/McpServer.Web/Dockerfile ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "Web UI Dockerfile not found; skipping image publish."
+          fi
+
       - name: Set up Docker Buildx
+        if: steps.webui.outputs.enabled == 'true'
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to GHCR
+        if: steps.webui.outputs.enabled == 'true'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -233,6 +246,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract Docker metadata
+        if: steps.webui.outputs.enabled == 'true'
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -243,6 +257,7 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build and push web UI image
+        if: steps.webui.outputs.enabled == 'true'
         uses: docker/build-push-action@v6
         with:
           context: .
