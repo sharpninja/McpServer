@@ -57,4 +57,19 @@ public interface ITodoApiClient
     /// Generates and aggregates the TODO plan prompt stream.
     /// </summary>
     Task<TodoPromptOutput> GenerateTodoPlanPromptAsync(string todoId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Streams TODO status prompt lines incrementally as they arrive from the server.
+    /// </summary>
+    IAsyncEnumerable<string> StreamTodoStatusPromptAsync(string todoId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Streams TODO implement prompt lines incrementally as they arrive from the server.
+    /// </summary>
+    IAsyncEnumerable<string> StreamTodoImplementPromptAsync(string todoId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Streams TODO plan prompt lines incrementally as they arrive from the server.
+    /// </summary>
+    IAsyncEnumerable<string> StreamTodoPlanPromptAsync(string todoId, CancellationToken cancellationToken = default);
 }

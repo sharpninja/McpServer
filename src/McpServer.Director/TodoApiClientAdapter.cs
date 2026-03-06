@@ -180,6 +180,15 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
     public Task<TodoPromptOutput> GenerateTodoPlanPromptAsync(string todoId, CancellationToken cancellationToken = default)
         => AggregatePromptAsync(todoId, "plan", GetPromptStreamAsync(c => c.Todo.StreamPlanAsync(todoId, cancellationToken), cancellationToken), cancellationToken);
 
+    public IAsyncEnumerable<string> StreamTodoStatusPromptAsync(string todoId, CancellationToken cancellationToken = default)
+        => GetPromptStreamAsync(c => c.Todo.StreamStatusAsync(todoId, cancellationToken), cancellationToken);
+
+    public IAsyncEnumerable<string> StreamTodoImplementPromptAsync(string todoId, CancellationToken cancellationToken = default)
+        => GetPromptStreamAsync(c => c.Todo.StreamImplementAsync(todoId, cancellationToken), cancellationToken);
+
+    public IAsyncEnumerable<string> StreamTodoPlanPromptAsync(string todoId, CancellationToken cancellationToken = default)
+        => GetPromptStreamAsync(c => c.Todo.StreamPlanAsync(todoId, cancellationToken), cancellationToken);
+
     private static TodoDetail MapTodoDetail(TodoFlatItem item)
     {
         return new TodoDetail(

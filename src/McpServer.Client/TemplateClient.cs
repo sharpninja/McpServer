@@ -26,49 +26,49 @@ public sealed class TemplateClient : McpClientBase
         CancellationToken cancellationToken = default)
     {
         var qs = BuildQueryString(category, tag, keyword);
-        return await GetAsync<TemplateQueryResult>($"mcpserver/templates{qs}", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<TemplateQueryResult>($"mcpserver/templates{qs}", cancellationToken);
     }
 
     /// <summary>Get a single template by ID.</summary>
     public async Task<TemplateItem> GetAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<TemplateItem>($"mcpserver/templates/{Encode(id)}", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<TemplateItem>($"mcpserver/templates/{Encode(id)}", cancellationToken);
     }
 
     /// <summary>Create a new template.</summary>
     public async Task<TemplateMutationResult> CreateAsync(TemplateCreateRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TemplateMutationResult>("mcpserver/templates", request, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<TemplateMutationResult>("mcpserver/templates", request, cancellationToken);
     }
 
     /// <summary>Update an existing template.</summary>
     public async Task<TemplateMutationResult> UpdateAsync(string id, TemplateUpdateRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<TemplateMutationResult>($"mcpserver/templates/{Encode(id)}", request, cancellationToken).ConfigureAwait(false);
+        return await PutAsync<TemplateMutationResult>($"mcpserver/templates/{Encode(id)}", request, cancellationToken);
     }
 
     /// <summary>Delete a template.</summary>
     public async Task<TemplateMutationResult> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
-        return await DeleteAsync<TemplateMutationResult>($"mcpserver/templates/{Encode(id)}", cancellationToken).ConfigureAwait(false);
+        return await DeleteAsync<TemplateMutationResult>($"mcpserver/templates/{Encode(id)}", cancellationToken);
     }
 
     /// <summary>Test/render a stored template with sample data.</summary>
     public async Task<TemplateTestResult> TestAsync(string id, TemplateTestRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TemplateTestResult>($"mcpserver/templates/{Encode(id)}/test", request, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<TemplateTestResult>($"mcpserver/templates/{Encode(id)}/test", request, cancellationToken);
     }
 
     /// <summary>Test/render an inline template (without saving).</summary>
     public async Task<TemplateTestResult> TestInlineAsync(TemplateTestRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TemplateTestResult>("mcpserver/templates/test", request, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<TemplateTestResult>("mcpserver/templates/test", request, cancellationToken);
     }
 
     /// <summary>Resolve a stored template by ID using a dictionary of values.</summary>
     public async Task<TemplateResolveResult> ResolveAsync(string id, TemplateResolveRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<TemplateResolveResult>($"mcpserver/templates/{Encode(id)}/resolve", request, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<TemplateResolveResult>($"mcpserver/templates/{Encode(id)}/resolve", request, cancellationToken);
     }
 
     private static string Encode(string value) => System.Uri.EscapeDataString(value);

@@ -25,7 +25,7 @@ public sealed class SessionLogClient : McpClientBase
     /// <summary>Submit (upsert) a session log entry. Creates or updates based on session ID.</summary>
     public async Task<SessionLogSubmitResult> SubmitAsync(UnifiedSessionLogDto sessionLog, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<SessionLogSubmitResult>("mcpserver/sessionlog", sessionLog, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<SessionLogSubmitResult>("mcpserver/sessionlog", sessionLog, cancellationToken);
     }
 
     /// <summary>Query session logs with optional filters.</summary>
@@ -43,7 +43,7 @@ public sealed class SessionLogClient : McpClientBase
         if (limit != 100) parts.Add($"limit={limit}");
         if (offset != 0) parts.Add($"offset={offset}");
         var qs = parts.Count > 0 ? "?" + string.Join("&", parts) : string.Empty;
-        return await GetAsync<SessionLogQueryResult>($"mcpserver/sessionlog{qs}", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<SessionLogQueryResult>($"mcpserver/sessionlog{qs}", cancellationToken);
     }
 
     /// <summary>Append processing dialog items to a session log entry.</summary>
@@ -52,6 +52,6 @@ public sealed class SessionLogClient : McpClientBase
         List<ProcessingDialogItemDto> items, CancellationToken cancellationToken = default)
     {
         var path = $"mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}/{Uri.EscapeDataString(requestId)}/dialog";
-        return await PostAsync<DialogAppendResult>(path, items, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<DialogAppendResult>(path, items, cancellationToken);
     }
 }

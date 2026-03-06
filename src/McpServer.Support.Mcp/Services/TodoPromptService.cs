@@ -39,7 +39,7 @@ public sealed class TodoPromptService(
         foreach (var line in FormatPromptLines(prompt))
             yield return line;
 
-        await foreach (var line in InvokeCopilotStreaming(prompt, TimeSpan.FromMinutes(3), cancellationToken).ConfigureAwait(false))
+        await foreach (var line in InvokeCopilotStreaming(prompt, cancellationToken).ConfigureAwait(false))
             yield return line;
     }
 
@@ -61,7 +61,7 @@ public sealed class TodoPromptService(
         foreach (var line in FormatPromptLines(prompt))
             yield return line;
 
-        await foreach (var line in InvokeCopilotStreaming(prompt, TimeSpan.FromMinutes(5), cancellationToken).ConfigureAwait(false))
+        await foreach (var line in InvokeCopilotStreaming(prompt, cancellationToken).ConfigureAwait(false))
             yield return line;
     }
 
@@ -86,7 +86,7 @@ public sealed class TodoPromptService(
         foreach (var line in FormatPromptLines(prompt))
             yield return line;
 
-        await foreach (var line in InvokeCopilotStreaming(prompt, TimeSpan.FromMinutes(5), cancellationToken).ConfigureAwait(false))
+        await foreach (var line in InvokeCopilotStreaming(prompt, cancellationToken).ConfigureAwait(false))
             yield return line;
     }
 
@@ -105,12 +105,11 @@ public sealed class TodoPromptService(
             ? promptOptions.CurrentValue.PlanPrompt!
             : await todoPromptProvider.GetPlanPromptAsync(ct).ConfigureAwait(false);
 
-    private IAsyncEnumerable<string> InvokeCopilotStreaming(string prompt, TimeSpan timeout, CancellationToken cancellationToken)
+    private IAsyncEnumerable<string> InvokeCopilotStreaming(string prompt, CancellationToken cancellationToken)
     {
         var current = promptOptions.CurrentValue;
         var options = new CopilotClientOptions
         {
-            Timeout = timeout,
             WorkingDirectory = workspaceAccessor.GetWorkspacePath(),
             RunAs = current.RunAs,
             GitHubToken = current.GitHubToken,

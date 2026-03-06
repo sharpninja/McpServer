@@ -35,6 +35,14 @@ public static class ServiceCollectionExtensions
         // Default permissive auth services (hosts should override with real RBAC implementations)
         services.TryAddSingleton<IRoleContext, AllowAllRoleContext>();
         services.TryAddSingleton<IAuthorizationPolicyService, AllowAllAuthorizationPolicyService>();
+        services.TryAddSingleton<Services.IClipboardService, Services.NoOpClipboardService>();
+        services.TryAddSingleton<Services.IAppLogService, Services.NoOpAppLogService>();
+        services.TryAddSingleton<Services.ISpeechFilterService, Services.NoOpSpeechFilterService>();
+        services.TryAddSingleton<Services.IUiDispatcherService, Services.ImmediateUiDispatcherService>();
+        services.TryAddSingleton<Services.IConnectionAuthService, Services.NoOpConnectionAuthService>();
+        services.TryAddSingleton<Services.IChatWindowService, Services.NoOpChatWindowService>();
+        services.TryAddSingleton<Services.IVoiceConversationService, Services.NoOpVoiceConversationService>();
+        services.TryAddSingleton<Services.ITimerService, Services.NoOpTimerService>();
 
         // Register shared workspace context as singleton so all ViewModels observe the same instance
         services.AddSingleton<WorkspaceContextViewModel>();
@@ -86,7 +94,8 @@ public static class ServiceCollectionExtensions
         services.AddTransient<MappingListViewModel>();
         services.AddTransient<RequirementsGenerateViewModel>();
         services.AddTransient<VoiceViewModel>();
-        services.AddScoped<TodoListViewModel>();
+        services.AddTransient<TodoListViewModel>();
+        services.AddTransient<TodoListHostViewModel>();
         services.AddTransient<TodoDetailViewModel>();
         services.AddTransient<CreateTodoViewModel>();
         services.AddTransient<UpdateTodoViewModel>();
@@ -106,6 +115,15 @@ public static class ServiceCollectionExtensions
         services.AddTransient<AgentEventsViewModel>();
         services.AddTransient<AgentPoolViewModel>();
         services.AddTransient<EventStreamViewModel>();
+        services.AddTransient<MainWindowViewModel>();
+        services.AddTransient<WorkspaceViewModel>();
+        services.AddTransient<VoiceConversationViewModel>();
+        services.AddTransient<ConnectionViewModel>();
+        services.AddTransient<SettingsViewModel>();
+        services.AddTransient<LogViewModel>();
+        services.AddTransient<ChatWindowViewModel>();
+        services.AddTransient<EditorTab>();
+        services.AddTransient<ViewModelBase>();
 
         // Register the ViewModelRegistry scanning this assembly + any extras
         var allAssemblies = new List<Assembly> { thisAssembly };

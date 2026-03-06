@@ -262,7 +262,7 @@ public abstract class McpClientBase
         HttpResponseMessage response;
         try
         {
-            response = await _http.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            response = await _http.SendAsync(request, cancellationToken);
         }
         catch (Exception ex)
         {
@@ -292,7 +292,7 @@ public abstract class McpClientBase
     /// <returns>Response status code.</returns>
     protected async Task<HttpStatusCode> SendForStatusAsync(HttpMethod method, string path, object? body, CancellationToken cancellationToken)
     {
-        using var response = await SendRawAsync(method, path, body, cancellationToken).ConfigureAwait(false);
+        using var response = await SendRawAsync(method, path, body, cancellationToken);
         return response.StatusCode;
     }
 
@@ -379,7 +379,7 @@ public abstract class McpClientBase
         HttpResponseMessage response;
         try
         {
-            response = await _http.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            response = await _http.SendAsync(request, cancellationToken);
         }
         catch (Exception ex)
         {
@@ -391,7 +391,7 @@ public abstract class McpClientBase
         {
             _logger?.LogInformation("[McpClient] {Method} {Uri} → HTTP {StatusCode}",
                 method, uri, (int)response.StatusCode);
-            return await ReadResponseAsync<T>(response, cancellationToken).ConfigureAwait(false);
+            return await ReadResponseAsync<T>(response, cancellationToken);
         }
     }
 
@@ -421,7 +421,7 @@ public abstract class McpClientBase
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));
 
         using var response = await _http.SendAsync(
-            request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+            request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {

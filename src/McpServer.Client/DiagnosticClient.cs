@@ -22,7 +22,7 @@ public sealed class DiagnosticClient : McpClientBase
     {
         return await GetAsync<DiagnosticExecutionPathResult>(
             "mcpserver/diagnostic/execution-path",
-            cancellationToken).ConfigureAwait(false);
+            cancellationToken);
     }
 
     /// <summary>Gets resolved appsettings-path diagnostic details.</summary>
@@ -30,6 +30,6 @@ public sealed class DiagnosticClient : McpClientBase
     {
         return await GetAsync<DiagnosticAppSettingsPathResult>(
             "mcpserver/diagnostic/appsettings-path",
-            cancellationToken).ConfigureAwait(false);
+            cancellationToken);
     }
 }

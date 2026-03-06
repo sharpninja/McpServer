@@ -20,6 +20,6 @@ public sealed class AuthConfigClient : McpClientBase
     /// <summary>Gets public OIDC configuration metadata.</summary>
     public async Task<AuthConfigResponse> GetConfigAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<AuthConfigResponse>("auth/config", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<AuthConfigResponse>("auth/config", cancellationToken);
     }
 }

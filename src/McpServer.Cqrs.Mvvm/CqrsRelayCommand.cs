@@ -12,7 +12,8 @@ namespace McpServer.Cqrs.Mvvm;
 public sealed class CqrsRelayCommand<TResult> : IAsyncRelayCommand, INotifyPropertyChanged
 {
     private readonly Dispatcher _dispatcher;
-    private readonly Func<ICommand<TResult>> _commandFactory;
+    private readonly Func<object?, ICommand<TResult>> _commandFactory;
+    private readonly Predicate<object?>? _canExecute;
     private Task? _executionTask;
     private bool _isRunning;
 
@@ -26,9 +27,28 @@ public sealed class CqrsRelayCommand<TResult> : IAsyncRelayCommand, INotifyPrope
     /// <param name="dispatcher">The CQRS dispatcher.</param>
     /// <param name="commandFactory">Factory that creates the command message from current ViewModel state.</param>
     public CqrsRelayCommand(Dispatcher dispatcher, Func<ICommand<TResult>> commandFactory)
+        : this(dispatcher, _ => commandFactory(), null)
+    {
+    }
+
+    /// <summary>Initializes a new <see cref="CqrsRelayCommand{TResult}"/>.</summary>
+    /// <param name="dispatcher">The CQRS dispatcher.</param>
+    /// <param name="commandFactory">Factory that creates the command message from current ViewModel state.</param>
+    /// <param name="canExecute">Optional parameterless can-execute predicate.</param>
+    public CqrsRelayCommand(Dispatcher dispatcher, Func<ICommand<TResult>> commandFactory, Func<bool>? canExecute)
+        : this(dispatcher, _ => commandFactory(), canExecute is null ? null : new Predicate<object?>(_ => canExecute()))
+    {
+    }
+
+    /// <summary>Initializes a new <see cref="CqrsRelayCommand{TResult}"/>.</summary>
+    /// <param name="dispatcher">The CQRS dispatcher.</param>
+    /// <param name="commandFactory">Factory that creates the command message from the command parameter.</param>
+    /// <param name="canExecute">Optional parameter-aware can-execute predicate.</param>
+    public CqrsRelayCommand(Dispatcher dispatcher, Func<object?, ICommand<TResult>> commandFactory, Predicate<object?>? canExecute = null)
     {
         _dispatcher = dispatcher;
         _commandFactory = commandFactory;
+        _canExecute = canExecute;
     }
 
     /// <summary>The result of the last dispatch, or <c>null</c> if not yet executed.</summary>
@@ -56,13 +76,13 @@ public sealed class CqrsRelayCommand<TResult> : IAsyncRelayCommand, INotifyPrope
     public bool IsCancellationRequested => false;
 
     /// <inheritdoc />
-    public bool CanExecute(object? parameter) => !_isRunning;
+    public bool CanExecute(object? parameter) => !_isRunning && (_canExecute?.Invoke(parameter) ?? true);
 
     /// <inheritdoc />
     public void Execute(object? parameter) => ExecuteAsync(parameter);
 
     /// <inheritdoc />
-    public Task ExecuteAsync(object? parameter) => DispatchAsync(CancellationToken.None);
+    public Task ExecuteAsync(object? parameter) => DispatchAsync(parameter, CancellationToken.None);
 
     /// <inheritdoc />
     public void NotifyCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
@@ -75,7 +95,16 @@ public sealed class CqrsRelayCommand<TResult> : IAsyncRelayCommand, INotifyPrope
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>The dispatch result.</returns>
-    public async Task<Result<TResult>> DispatchAsync(CancellationToken ct = default)
+    public Task<Result<TResult>> DispatchAsync(CancellationToken ct = default)
+        => DispatchAsync(null, ct);
+
+    /// <summary>
+    /// Dispatches the CQRS command through the Dispatcher and stores the result.
+    /// </summary>
+    /// <param name="parameter">Command parameter passed from the command source.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>The dispatch result.</returns>
+    public async Task<Result<TResult>> DispatchAsync(object? parameter, CancellationToken ct = default)
     {
         _isRunning = true;
         OnPropertyChanged(nameof(IsRunning));
@@ -83,7 +112,7 @@ public sealed class CqrsRelayCommand<TResult> : IAsyncRelayCommand, INotifyPrope
 
         try
         {
-            var command = _commandFactory();
+            var command = _commandFactory(parameter);
             _executionTask = Task.Run(async () =>
             {
                 LastResult = await _dispatcher.SendAsync(command, ct).ConfigureAwait(false);
@@ -115,7 +144,8 @@ public sealed class CqrsRelayCommand<TResult> : IAsyncRelayCommand, INotifyPrope
 public sealed class CqrsQueryCommand<TResult> : IAsyncRelayCommand, INotifyPropertyChanged
 {
     private readonly Dispatcher _dispatcher;
-    private readonly Func<IQuery<TResult>> _queryFactory;
+    private readonly Func<object?, IQuery<TResult>> _queryFactory;
+    private readonly Predicate<object?>? _canExecute;
     private Task? _executionTask;
     private bool _isRunning;
 
@@ -129,9 +159,28 @@ public sealed class CqrsQueryCommand<TResult> : IAsyncRelayCommand, INotifyPrope
     /// <param name="dispatcher">The CQRS dispatcher.</param>
     /// <param name="queryFactory">Factory that creates the query message from current ViewModel state.</param>
     public CqrsQueryCommand(Dispatcher dispatcher, Func<IQuery<TResult>> queryFactory)
+        : this(dispatcher, _ => queryFactory(), null)
+    {
+    }
+
+    /// <summary>Initializes a new <see cref="CqrsQueryCommand{TResult}"/>.</summary>
+    /// <param name="dispatcher">The CQRS dispatcher.</param>
+    /// <param name="queryFactory">Factory that creates the query message from current ViewModel state.</param>
+    /// <param name="canExecute">Optional parameterless can-execute predicate.</param>
+    public CqrsQueryCommand(Dispatcher dispatcher, Func<IQuery<TResult>> queryFactory, Func<bool>? canExecute)
+        : this(dispatcher, _ => queryFactory(), canExecute is null ? null : new Predicate<object?>(_ => canExecute()))
+    {
+    }
+
+    /// <summary>Initializes a new <see cref="CqrsQueryCommand{TResult}"/>.</summary>
+    /// <param name="dispatcher">The CQRS dispatcher.</param>
+    /// <param name="queryFactory">Factory that creates the query message from the command parameter.</param>
+    /// <param name="canExecute">Optional parameter-aware can-execute predicate.</param>
+    public CqrsQueryCommand(Dispatcher dispatcher, Func<object?, IQuery<TResult>> queryFactory, Predicate<object?>? canExecute = null)
     {
         _dispatcher = dispatcher;
         _queryFactory = queryFactory;
+        _canExecute = canExecute;
     }
 
     /// <summary>The result of the last dispatch, or <c>null</c> if not yet executed.</summary>
@@ -159,13 +208,13 @@ public sealed class CqrsQueryCommand<TResult> : IAsyncRelayCommand, INotifyPrope
     public bool IsCancellationRequested => false;
 
     /// <inheritdoc />
-    public bool CanExecute(object? parameter) => !_isRunning;
+    public bool CanExecute(object? parameter) => !_isRunning && (_canExecute?.Invoke(parameter) ?? true);
 
     /// <inheritdoc />
     public void Execute(object? parameter) => ExecuteAsync(parameter);
 
     /// <inheritdoc />
-    public Task ExecuteAsync(object? parameter) => DispatchAsync(CancellationToken.None);
+    public Task ExecuteAsync(object? parameter) => DispatchAsync(parameter, CancellationToken.None);
 
     /// <inheritdoc />
     public void NotifyCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
@@ -178,7 +227,16 @@ public sealed class CqrsQueryCommand<TResult> : IAsyncRelayCommand, INotifyPrope
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>The dispatch result.</returns>
-    public async Task<Result<TResult>> DispatchAsync(CancellationToken ct = default)
+    public Task<Result<TResult>> DispatchAsync(CancellationToken ct = default)
+        => DispatchAsync(null, ct);
+
+    /// <summary>
+    /// Dispatches the CQRS query through the Dispatcher and stores the result.
+    /// </summary>
+    /// <param name="parameter">Command parameter passed from the command source.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>The dispatch result.</returns>
+    public async Task<Result<TResult>> DispatchAsync(object? parameter, CancellationToken ct = default)
     {
         _isRunning = true;
         OnPropertyChanged(nameof(IsRunning));
@@ -186,7 +244,7 @@ public sealed class CqrsQueryCommand<TResult> : IAsyncRelayCommand, INotifyPrope
 
         try
         {
-            var query = _queryFactory();
+            var query = _queryFactory(parameter);
             _executionTask = Task.Run(async () =>
             {
                 LastResult = await _dispatcher.QueryAsync(query, ct).ConfigureAwait(false);

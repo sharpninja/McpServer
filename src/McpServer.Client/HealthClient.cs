@@ -27,6 +27,6 @@ public sealed class HealthClient : McpClientBase
     /// </summary>
     public async Task<HealthCheckResult> GetAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<HealthCheckResult>("health", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<HealthCheckResult>("health", cancellationToken);
     }
 }

@@ -26,13 +26,13 @@ public sealed class ContextClient : McpClientBase
         string query, string? sourceType = null, int limit = 20, CancellationToken cancellationToken = default)
     {
         var request = new ContextSearchRequest { Query = query, SourceType = sourceType, Limit = limit };
-        return await PostAsync<ContextSearchResult>("mcpserver/context/search", request, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<ContextSearchResult>("mcpserver/context/search", request, cancellationToken);
     }
 
     /// <summary>Trigger a full index rebuild.</summary>
     public async Task<RebuildIndexResult> RebuildIndexAsync(CancellationToken cancellationToken = default)
     {
-        return await PostAsync<RebuildIndexResult>("mcpserver/context/rebuild-index", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<RebuildIndexResult>("mcpserver/context/rebuild-index", null, cancellationToken);
     }
 
     /// <summary>Get a deterministic context pack for a query.</summary>
@@ -40,25 +40,25 @@ public sealed class ContextClient : McpClientBase
         string query, string? queryId = null, int limit = 20, CancellationToken cancellationToken = default)
     {
         var request = new ContextPackRequest { Query = query, QueryId = queryId, Limit = limit };
-        return await PostAsync<ContextPack>("mcpserver/context/pack", request, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<ContextPack>("mcpserver/context/pack", request, cancellationToken);
     }
 
     /// <summary>List all indexed document sources.</summary>
     public async Task<ContextSourcesResult> ListSourcesAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<ContextSourcesResult>("mcpserver/context/sources", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<ContextSourcesResult>("mcpserver/context/sources", cancellationToken);
     }
 
     /// <summary>Get GraphRAG status for the active workspace.</summary>
     public async Task<GraphRagStatusResult> GraphRagStatusAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<GraphRagStatusResult>("mcpserver/graphrag/status", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<GraphRagStatusResult>("mcpserver/graphrag/status", cancellationToken);
     }
 
     /// <summary>Trigger GraphRAG indexing for the active workspace.</summary>
     public async Task<GraphRagStatusResult> GraphRagIndexAsync(bool force = false, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<GraphRagStatusResult>("mcpserver/graphrag/index", new GraphRagIndexRequest { Force = force }, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<GraphRagStatusResult>("mcpserver/graphrag/index", new GraphRagIndexRequest { Force = force }, cancellationToken);
     }
 
     /// <summary>Run a GraphRAG query for the active workspace.</summary>
@@ -84,7 +84,7 @@ public sealed class ContextClient : McpClientBase
             CommunityDepth = communityDepth,
             ResponseTokenBudget = responseTokenBudget
         };
-        return await PostAsync<GraphRagQueryResult>("mcpserver/graphrag/query", request, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<GraphRagQueryResult>("mcpserver/graphrag/query", request, cancellationToken);
     }
 }
 

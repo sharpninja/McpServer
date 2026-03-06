@@ -24,72 +24,72 @@ public sealed class WorkspaceClient : McpClientBase
     /// <summary>List all registered workspaces.</summary>
     public async Task<WorkspaceListResult> ListAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<WorkspaceListResult>("mcpserver/workspace", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<WorkspaceListResult>("mcpserver/workspace", cancellationToken);
     }
 
     /// <summary>Get a workspace by its Base64URL-encoded path key.</summary>
     public async Task<WorkspaceDto> GetAsync(string key, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<WorkspaceDto>($"mcpserver/workspace/{Uri.EscapeDataString(key)}", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<WorkspaceDto>($"mcpserver/workspace/{Uri.EscapeDataString(key)}", cancellationToken);
     }
 
     /// <summary>Register a new workspace.</summary>
     public async Task<WorkspaceMutationResult> CreateAsync(WorkspaceCreateRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<WorkspaceMutationResult>("mcpserver/workspace", request, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<WorkspaceMutationResult>("mcpserver/workspace", request, cancellationToken);
     }
 
     /// <summary>Update a workspace.</summary>
     public async Task<WorkspaceMutationResult> UpdateAsync(string key, WorkspaceUpdateRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<WorkspaceMutationResult>($"mcpserver/workspace/{Uri.EscapeDataString(key)}", request, cancellationToken).ConfigureAwait(false);
+        return await PutAsync<WorkspaceMutationResult>($"mcpserver/workspace/{Uri.EscapeDataString(key)}", request, cancellationToken);
     }
 
     /// <summary>Apply a natural-language workspace policy directive.</summary>
     public async Task<WorkspacePolicyApplyResult> ApplyPolicyAsync(WorkspacePolicyApplyRequest request, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<WorkspacePolicyApplyResult>("mcpserver/workspace/policy", request, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<WorkspacePolicyApplyResult>("mcpserver/workspace/policy", request, cancellationToken);
     }
 
     /// <summary>Delete a workspace.</summary>
     public async Task<WorkspaceMutationResult> DeleteAsync(string key, CancellationToken cancellationToken = default)
     {
-        return await DeleteAsync<WorkspaceMutationResult>($"mcpserver/workspace/{Uri.EscapeDataString(key)}", cancellationToken).ConfigureAwait(false);
+        return await DeleteAsync<WorkspaceMutationResult>($"mcpserver/workspace/{Uri.EscapeDataString(key)}", cancellationToken);
     }
 
     /// <summary>Initialize workspace directory scaffold.</summary>
     public async Task<WorkspaceInitResult> InitAsync(string key, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<WorkspaceInitResult>($"mcpserver/workspace/{Uri.EscapeDataString(key)}/init", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<WorkspaceInitResult>($"mcpserver/workspace/{Uri.EscapeDataString(key)}/init", null, cancellationToken);
     }
 
     /// <summary>Start a workspace Kestrel host.</summary>
     public async Task<WorkspaceProcessStatus> StartAsync(string key, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<WorkspaceProcessStatus>($"mcpserver/workspace/{Uri.EscapeDataString(key)}/start", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<WorkspaceProcessStatus>($"mcpserver/workspace/{Uri.EscapeDataString(key)}/start", null, cancellationToken);
     }
 
     /// <summary>Stop a workspace Kestrel host.</summary>
     public async Task<WorkspaceProcessStatus> StopAsync(string key, CancellationToken cancellationToken = default)
     {
-        return await PostAsync<WorkspaceProcessStatus>($"mcpserver/workspace/{Uri.EscapeDataString(key)}/stop", null, cancellationToken).ConfigureAwait(false);
+        return await PostAsync<WorkspaceProcessStatus>($"mcpserver/workspace/{Uri.EscapeDataString(key)}/stop", null, cancellationToken);
     }
 
     /// <summary>Get workspace process status.</summary>
     public async Task<WorkspaceProcessStatus> GetStatusAsync(string key, CancellationToken cancellationToken = default)
     {
-        return await GetAsync<WorkspaceProcessStatus>($"mcpserver/workspace/{Uri.EscapeDataString(key)}/status", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<WorkspaceProcessStatus>($"mcpserver/workspace/{Uri.EscapeDataString(key)}/status", cancellationToken);
     }
 
     /// <summary>Get the global marker prompt template. Only available on the primary workspace.</summary>
     public async Task<GlobalPromptResult> GetGlobalPromptAsync(CancellationToken cancellationToken = default)
     {
-        return await GetAsync<GlobalPromptResult>("mcpserver/workspace/prompt", cancellationToken).ConfigureAwait(false);
+        return await GetAsync<GlobalPromptResult>("mcpserver/workspace/prompt", cancellationToken);
     }
 
     /// <summary>Update the global marker prompt template. Only available on the primary workspace.</summary>
     public async Task<GlobalPromptResult> UpdateGlobalPromptAsync(GlobalPromptUpdateRequest request, CancellationToken cancellationToken = default)
     {
-        return await PutAsync<GlobalPromptResult>("mcpserver/workspace/prompt", request, cancellationToken).ConfigureAwait(false);
+        return await PutAsync<GlobalPromptResult>("mcpserver/workspace/prompt", request, cancellationToken);
     }
 }

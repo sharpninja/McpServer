@@ -22,10 +22,11 @@ public sealed class CopilotClientOptions
     public bool Silent { get; set; } = true;
 
     /// <summary>
-    /// Timeout for the CLI process. Defaults to 2 minutes.
-    /// Set to <see cref="System.Threading.Timeout.InfiniteTimeSpan"/> for no timeout.
+    /// Timeout for the CLI process. Defaults to <see cref="System.Threading.Timeout.InfiniteTimeSpan"/> (no timeout).
+    /// Copilot requests can take hours and results arrive all at once, so a wallclock
+    /// timeout is inappropriate. Callers may still cancel via <see cref="CancellationToken"/>.
     /// </summary>
-    public TimeSpan Timeout { get; set; } = TimeSpan.FromMinutes(2);
+    public TimeSpan Timeout { get; set; } = System.Threading.Timeout.InfiniteTimeSpan;
 
     /// <summary>
     /// Working directory for the spawned process.

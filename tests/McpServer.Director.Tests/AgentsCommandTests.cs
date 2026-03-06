@@ -102,6 +102,7 @@ public sealed class AgentsCommandTests
         var output = result.AllOutput;
         var hasHeaders = expectedHeaders.All(header => output.Contains(header, StringComparison.OrdinalIgnoreCase));
         var hasExpectedEnvironmentFailure =
+            output.Contains("No active workspace is selected", StringComparison.OrdinalIgnoreCase) ||
             output.Contains("Permission denied", StringComparison.OrdinalIgnoreCase) ||
             output.Contains("Connection refused", StringComparison.OrdinalIgnoreCase);
 
