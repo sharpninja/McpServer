@@ -68,7 +68,7 @@ public sealed class WorkspaceAgentListViewModel : AreaListViewModelBase<Workspac
         StatusMessage = $"Loading workspace agents for '{targetWorkspace}'...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new ListWorkspaceAgentsQuery(targetWorkspace), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new ListWorkspaceAgentsQuery(targetWorkspace), ct).ConfigureAwait(true);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Failed to load workspace agents.";

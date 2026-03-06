@@ -101,7 +101,7 @@ internal sealed class DispatcherLogsScreen : View
         SetStatus("⏳ Loading dispatcher logs...");
         try
         {
-            await _viewModel.LoadAsync().ConfigureAwait(false);
+            await _viewModel.LoadAsync().ConfigureAwait(true);
 
             var rows = _viewModel.Items
                 .Select(r => new DispatchRow(

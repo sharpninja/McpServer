@@ -39,7 +39,7 @@ else
 @code {
     protected override async Task OnInitializedAsync()
     {
-        await ViewModel.LoadAsync().ConfigureAwait(false);
+        await ViewModel.LoadAsync().ConfigureAwait(true);
     }
 }
 

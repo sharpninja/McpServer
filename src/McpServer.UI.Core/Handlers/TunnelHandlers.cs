@@ -32,7 +32,7 @@ internal sealed class ListTunnelsQueryHandler : IQueryHandler<ListTunnelsQuery, 
 
         try
         {
-            var result = await _client.ListAsync(context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.ListAsync(context.CancellationToken).ConfigureAwait(true);
             return Result<TunnelListSnapshot>.Success(result);
         }
         catch (Exception ex)
@@ -74,7 +74,7 @@ internal sealed class EnableTunnelCommandHandler : ICommandHandler<EnableTunnelC
 
         try
         {
-            var result = await _client.EnableAsync(command.ProviderName, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.EnableAsync(command.ProviderName, context.CancellationToken).ConfigureAwait(true);
             return Result<TunnelProviderSnapshot>.Success(result);
         }
         catch (Exception ex)
@@ -116,7 +116,7 @@ internal sealed class DisableTunnelCommandHandler : ICommandHandler<DisableTunne
 
         try
         {
-            var result = await _client.DisableAsync(command.ProviderName, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.DisableAsync(command.ProviderName, context.CancellationToken).ConfigureAwait(true);
             return Result<TunnelProviderSnapshot>.Success(result);
         }
         catch (Exception ex)
@@ -158,7 +158,7 @@ internal sealed class StartTunnelCommandHandler : ICommandHandler<StartTunnelCom
 
         try
         {
-            var result = await _client.StartAsync(command.ProviderName, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.StartAsync(command.ProviderName, context.CancellationToken).ConfigureAwait(true);
             return Result<TunnelProviderSnapshot>.Success(result);
         }
         catch (Exception ex)
@@ -200,7 +200,7 @@ internal sealed class StopTunnelCommandHandler : ICommandHandler<StopTunnelComma
 
         try
         {
-            var result = await _client.StopAsync(command.ProviderName, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.StopAsync(command.ProviderName, context.CancellationToken).ConfigureAwait(true);
             return Result<TunnelProviderSnapshot>.Success(result);
         }
         catch (Exception ex)
@@ -242,7 +242,7 @@ internal sealed class RestartTunnelCommandHandler : ICommandHandler<RestartTunne
 
         try
         {
-            var result = await _client.RestartAsync(command.ProviderName, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.RestartAsync(command.ProviderName, context.CancellationToken).ConfigureAwait(true);
             return Result<TunnelProviderSnapshot>.Success(result);
         }
         catch (Exception ex)

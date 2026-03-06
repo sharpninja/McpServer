@@ -58,7 +58,7 @@ public sealed partial class DashboardViewModel : ObservableObject
             var templateTask = _dispatcher.QueryAsync(new ListTemplatesQuery(), ct);
             var healthTask = _dispatcher.QueryAsync(new CheckHealthQuery(), ct);
 
-            await Task.WhenAll(workspaceTask, todoTask, sessionTask, templateTask, healthTask).ConfigureAwait(false);
+            await Task.WhenAll(workspaceTask, todoTask, sessionTask, templateTask, healthTask).ConfigureAwait(true);
 
             WorkspaceCount = workspaceTask.Result.IsSuccess && workspaceTask.Result.Value is not null
                 ? workspaceTask.Result.Value.TotalCount

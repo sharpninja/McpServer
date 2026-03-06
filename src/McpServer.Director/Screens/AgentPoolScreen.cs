@@ -307,7 +307,7 @@ internal sealed class AgentPoolScreen : View
         {
             _ = Task.Run(async () =>
             {
-                var detail = await _vm.GetDefinitionAsync(agentId).ConfigureAwait(false);
+                var detail = await _vm.GetDefinitionAsync(agentId).ConfigureAwait(true);
                 if (detail is null)
                     return;
 

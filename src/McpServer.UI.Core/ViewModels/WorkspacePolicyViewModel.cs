@@ -84,7 +84,7 @@ public partial class WorkspacePolicyViewModel : ObservableObject
         SaveSucceeded = false;
         try
         {
-            var result = await SaveCommand.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await SaveCommand.DispatchAsync(ct).ConfigureAwait(true);
             if (result.IsSuccess)
             {
                 SaveSucceeded = true;

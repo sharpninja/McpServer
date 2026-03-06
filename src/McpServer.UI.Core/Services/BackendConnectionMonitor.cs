@@ -127,7 +127,7 @@ public sealed partial class BackendConnectionMonitor : ObservableObject, IDispos
             var delay = IsConnected ? ConnectedProbeInterval : _currentRetryInterval;
             try
             {
-                await Task.Delay(delay, ct).ConfigureAwait(false);
+                await Task.Delay(delay, ct).ConfigureAwait(true);
             }
             catch (OperationCanceledException)
             {
@@ -136,7 +136,7 @@ public sealed partial class BackendConnectionMonitor : ObservableObject, IDispos
 
             try
             {
-                await _healthApiClient.CheckHealthAsync(ct).ConfigureAwait(false);
+                await _healthApiClient.CheckHealthAsync(ct).ConfigureAwait(true);
                 ReportConnected();
             }
             catch (OperationCanceledException)

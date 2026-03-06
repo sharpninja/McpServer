@@ -96,7 +96,7 @@
         if (ListViewModel.Items.Count == 0)
         {
             ListViewModel.Done = false;
-            await ListViewModel.LoadAsync().ConfigureAwait(false);
+            await ListViewModel.LoadAsync().ConfigureAwait(true);
         }
 
         if (string.Equals(_loadedId, TodoId, StringComparison.Ordinal))
@@ -104,20 +104,20 @@
 
         _loadedId = TodoId;
         ViewModel.TodoId = TodoId;
-        await ViewModel.LoadAsync().ConfigureAwait(false);
+        await ViewModel.LoadAsync().ConfigureAwait(true);
     }
 
     private async Task SaveAsync()
     {
         ViewModel.ApplyMarkdownToEditor();
-        await ViewModel.SaveAsync().ConfigureAwait(false);
-        await ListViewModel.LoadAsync().ConfigureAwait(false);
+        await ViewModel.SaveAsync().ConfigureAwait(true);
+        await ListViewModel.LoadAsync().ConfigureAwait(true);
     }
 
     private async Task DeleteAsync()
     {
-        await ViewModel.DeleteAsync().ConfigureAwait(false);
-        await ListViewModel.LoadAsync().ConfigureAwait(false);
+        await ViewModel.DeleteAsync().ConfigureAwait(true);
+        await ListViewModel.LoadAsync().ConfigureAwait(true);
     }
 }
 

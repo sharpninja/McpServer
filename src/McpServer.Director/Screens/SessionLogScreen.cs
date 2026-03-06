@@ -113,10 +113,10 @@ internal sealed class SessionLogScreen : View
         try
         {
             _isLoadingExplicitly = true;
-            await _listViewModel.LoadAsync().ConfigureAwait(false);
+            await _listViewModel.LoadAsync().ConfigureAwait(true);
             RebuildTableFromViewModel();
             if (_rows.Count > 0)
-                await LoadSelectedDetailAsync(fallbackToFirst: true).ConfigureAwait(false);
+                await LoadSelectedDetailAsync(fallbackToFirst: true).ConfigureAwait(true);
             else
                 ClearDetail("Detail: (no session logs)");
         }
@@ -170,11 +170,11 @@ internal sealed class SessionLogScreen : View
         var requestVersion = Interlocked.Increment(ref _detailLoadRequestVersion);
         _ = Task.Run(async () =>
         {
-            await Task.Delay(120).ConfigureAwait(false);
+            await Task.Delay(120).ConfigureAwait(true);
             if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
                 return;
 
-            await LoadSelectedDetailAsync(fallbackToFirst: false).ConfigureAwait(false);
+            await LoadSelectedDetailAsync(fallbackToFirst: false).ConfigureAwait(true);
         });
     }
 
@@ -195,14 +195,14 @@ internal sealed class SessionLogScreen : View
 
         var selected = _rows[row];
         var requestVersion = Interlocked.Increment(ref _detailLoadRequestVersion);
-        await _detailLoadGate.WaitAsync().ConfigureAwait(false);
+        await _detailLoadGate.WaitAsync().ConfigureAwait(true);
         try
         {
             if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
                 return;
 
             _detailViewModel.SessionId = selected.Id;
-            await _detailViewModel.LoadAsync().ConfigureAwait(false);
+            await _detailViewModel.LoadAsync().ConfigureAwait(true);
 
             if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
                 return;

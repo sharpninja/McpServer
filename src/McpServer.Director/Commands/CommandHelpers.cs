@@ -52,7 +52,7 @@ internal static class CommandHelpers
         var directorContext = DirectorServiceRegistration.Configure(services, workspace);
         using var sp = DirectorServiceRegistration.BuildAndFinalize(services);
         var dispatcher = sp.GetRequiredService<Dispatcher>();
-        await action(sp, dispatcher, directorContext).ConfigureAwait(false);
+        await action(sp, dispatcher, directorContext).ConfigureAwait(true);
     }
 
     /// <summary>

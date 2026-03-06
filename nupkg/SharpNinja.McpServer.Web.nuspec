@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>SharpNinja.McpServer.Web</id>
-    <version>0.2.56-beta.330</version>
+    <version>0.2.56-beta.341</version>
     <authors>SharpNinja</authors>
     <description>SharpNinja.McpServer.Web</description>
     <packageTypes>

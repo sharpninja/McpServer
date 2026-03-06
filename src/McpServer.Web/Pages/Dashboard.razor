@@ -9,7 +9,16 @@
 
 <PageTitle>Dashboard</PageTitle>
 
-<h1 class="h2 mb-3">Dashboard</h1>
+<div class="d-flex flex-items-center flex-justify-between mb-3">
+    <h1 class="h2 mb-0">Dashboard</h1>
+    @if (!string.IsNullOrWhiteSpace(WorkspaceContext.ActiveWorkspacePath))
+    {
+        <span class="text-small color-fg-muted d-flex flex-items-center">
+            <OcticonIcon Name="check-circle" Size="16" Class="color-fg-success mr-1" />
+            Active: <strong class="ml-1">@ActiveWorkspaceName</strong>
+        </span>
+    }
+</div>
 
 @if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
 {
@@ -21,20 +30,20 @@ else if (ViewModel.IsLoading)
 }
 else
 {
-    <div class="d-flex flex-wrap gap-3">
-        <div class="Box p-3">
+    <div class="dashboard-metrics">
+        <div class="Box p-3 dashboard-metric">
             <div class="h2 mb-1">@ViewModel.WorkspaceCount</div>
             <div class="color-fg-muted">Workspaces</div>
         </div>
-        <div class="Box p-3">
+        <div class="Box p-3 dashboard-metric">
             <div class="h2 mb-1">@ViewModel.TodoCount</div>
             <div class="color-fg-muted">Todos</div>
         </div>
-        <div class="Box p-3">
+        <div class="Box p-3 dashboard-metric">
             <div class="h2 mb-1">@ViewModel.SessionLogCount</div>
             <div class="color-fg-muted">Session logs</div>
         </div>
-        <div class="Box p-3">
+        <div class="Box p-3 dashboard-metric">
             <div class="h2 mb-1">@ViewModel.TemplateCount</div>
             <div class="color-fg-muted">Templates</div>
         </div>
@@ -58,12 +67,14 @@ else
             <PrimerDataTable TItem="WorkspaceSummary"
                              Items="WorkspaceListVm.Workspaces"
                              ColumnCount="3"
-                             Class="Table--full-width">
+                             Class="Table--full-width"
+                             RowClass="GetWorkspaceRowClass"
+                             style="width:100%; table-layout:fixed;">
                 <HeaderTemplate>
                     <tr>
-                        <th style="width:32px"></th>
+                        <th style="width:40px"></th>
                         <th>Workspace</th>
-                        <th style="width:100px"></th>
+                        <th style="width:120px"></th>
                     </tr>
                 </HeaderTemplate>
                 <RowTemplate Context="ws">
@@ -74,8 +85,10 @@ else
                         }
                     </td>
                     <td>
-                        <span class="text-bold">@ws.Name</span>
-                        <span class="color-fg-muted f6 ml-2">@ws.WorkspacePath</span>
+                        <div class="dashboard-workspace-cell">
+                            <span class="text-bold">@ws.Name</span>
+                            <span class="dashboard-workspace-path color-fg-muted f6" title="@ws.WorkspacePath">@ws.WorkspacePath</span>
+                        </div>
                     </td>
                     <td class="text-right">
                         @if (IsActive(ws.WorkspacePath))
@@ -92,7 +105,7 @@ else
         }
     </div>
 
-    <div class="d-flex flex-wrap gap-4 mt-4" style="display: grid !important; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <div class="dashboard-panels mt-4">
         @* ── Open Todos ── *@
         <div class="Box">
             <div class="Box-header d-flex flex-justify-between flex-items-center">
@@ -109,22 +122,38 @@ else
             }
             else
             {
-                <ul class="ActionList">
-                    @foreach (var todo in TodoListVm.Items.Take(10))
-                    {
-                        <li class="ActionList-item">
-                            <a class="ActionList-content" href="/todos/@Uri.EscapeDataString(todo.Id)">
-                                <span class="ActionList-item-label">
-                                    <code class="f6">@todo.Id</code>
-                                    <span class="ml-2">@todo.Title</span>
-                                </span>
-                                <span class="ActionList-item-visual ActionList-item-visual--trailing">
-                                    <PrimerLabel Scheme="@GetPriorityScheme(todo.Priority)" Text="@todo.Priority" />
-                                </span>
+                <PrimerDataTable TItem="TodoListItem"
+                                 Items="GetDashboardTodoItems()"
+                                 ColumnCount="4"
+                                 Class="Table--full-width"
+                                 style="width:100%; table-layout:fixed;">
+                    <HeaderTemplate>
+                        <tr>
+                            <th style="width:110px;">ID</th>
+                            <th>Title</th>
+                            <th style="width:100px;">Priority</th>
+                            <th style="width:90px;"></th>
+                        </tr>
+                    </HeaderTemplate>
+                    <RowTemplate Context="todo">
+                        <td>
+                            <a class="Link--primary" href="@GetTodoDetailHref(todo.Id)">
+                                <code class="f6">@todo.Id</code>
                             </a>
-                        </li>
-                    }
-                </ul>
+                        </td>
+                        <td>
+                            <a class="Link--primary dashboard-link-truncate" href="@GetTodoDetailHref(todo.Id)" title="@todo.Title">
+                                @todo.Title
+                            </a>
+                        </td>
+                        <td>
+                            <PrimerLabel Scheme="@GetPriorityScheme(todo.Priority)" Text="@todo.Priority" />
+                        </td>
+                        <td class="text-right">
+                            <a class="btn btn-sm" href="@GetTodoDetailHref(todo.Id)">Details</a>
+                        </td>
+                    </RowTemplate>
+                </PrimerDataTable>
                 @if (TodoListVm.TotalCount > 10)
                 {
                     <div class="Box-footer color-fg-muted f6">Showing 10 of @TodoListVm.TotalCount</div>
@@ -148,21 +177,32 @@ else
             }
             else
             {
-                <ul class="ActionList">
-                    @foreach (var log in SessionLogListVm.Items.Take(10))
-                    {
-                        <li class="ActionList-item">
-                            <a class="ActionList-content" href="/sessions/@Uri.EscapeDataString(log.SessionId)">
-                                <span class="ActionList-item-label">
-                                    <span>@log.Title</span>
-                                </span>
-                                <span class="ActionList-item-visual ActionList-item-visual--trailing">
-                                    <span class="color-fg-muted f6">@FormatTimestamp(log.LastUpdated)</span>
-                                </span>
+                <PrimerDataTable TItem="SessionLogSummary"
+                                 Items="GetDashboardSessionItems()"
+                                 ColumnCount="3"
+                                 Class="Table--full-width"
+                                 style="width:100%; table-layout:fixed;">
+                    <HeaderTemplate>
+                        <tr>
+                            <th>Session</th>
+                            <th style="width:150px;">Updated</th>
+                            <th style="width:90px;"></th>
+                        </tr>
+                    </HeaderTemplate>
+                    <RowTemplate Context="log">
+                        <td>
+                            <a class="Link--primary dashboard-link-truncate" href="@GetSessionDetailHref(log.SessionId)" title="@log.Title">
+                                @log.Title
                             </a>
-                        </li>
-                    }
-                </ul>
+                        </td>
+                        <td>
+                            <span class="color-fg-muted f6">@FormatTimestamp(log.LastUpdated)</span>
+                        </td>
+                        <td class="text-right">
+                            <a class="btn btn-sm" href="@GetSessionDetailHref(log.SessionId)">Details</a>
+                        </td>
+                    </RowTemplate>
+                </PrimerDataTable>
                 @if (SessionLogListVm.TotalCount > 10)
                 {
                     <div class="Box-footer color-fg-muted f6">Showing 10 of @SessionLogListVm.TotalCount</div>
@@ -171,41 +211,63 @@ else
         </div>
     </div>
 
-    <div class="mt-4 d-flex flex-wrap gap-2">
-        <a class="btn btn-primary" href="/workspaces">Workspaces</a>
-        <a class="btn" href="/todos">Todos</a>
-        <a class="btn" href="/sessions">Session Logs</a>
-        <a class="btn" href="/templates">Templates</a>
-        <a class="btn" href="/context/search">Context Search</a>
-    </div>
 }
 
 @code {
     protected override async Task OnInitializedAsync()
     {
-        await ViewModel.LoadAsync().ConfigureAwait(false);
-        await WorkspaceListVm.LoadAsync().ConfigureAwait(false);
-        await LoadWorkspaceDataAsync().ConfigureAwait(false);
+        await ViewModel.LoadAsync();
+        await WorkspaceListVm.LoadAsync();
+        await LoadWorkspaceDataAsync();
     }
 
     private async Task LoadWorkspaceDataAsync()
     {
-        TodoListVm.Done = false;
-        SessionLogListVm.Limit = 10;
+        TodoListVm.Done ??= false;
+        SessionLogListVm.Limit = 50;
+        SessionLogListVm.Offset = 0;
         await Task.WhenAll(
             TodoListVm.LoadAsync(),
             SessionLogListVm.LoadAsync()
-        ).ConfigureAwait(false);
+        );
+    }
+
+    private static readonly string[] PriorityOrder = ["critical", "high", "medium", "low"];
+
+    private IReadOnlyList<TodoListItem> GetDashboardTodoItems()
+        => TodoListVm.Items
+            .OrderBy(item => GetPriorityRank(item.Priority))
+            .ThenBy(item => item.Id, StringComparer.OrdinalIgnoreCase)
+            .Take(10)
+            .ToList();
+
+    private IReadOnlyList<SessionLogSummary> GetDashboardSessionItems()
+        => SessionLogListVm.Items
+            .Take(10)
+            .ToList();
+
+    private static int GetPriorityRank(string? priority)
+    {
+        var value = priority ?? "low";
+        var index = Array.IndexOf(PriorityOrder, value.ToLowerInvariant());
+        return index < 0 ? int.MaxValue : index;
     }
 
     private bool IsActive(string workspacePath)
         => string.Equals(WorkspaceContext.ActiveWorkspacePath, workspacePath, StringComparison.OrdinalIgnoreCase);
 
+    private string? GetWorkspaceRowClass(WorkspaceSummary workspace)
+        => IsActive(workspace.WorkspacePath) ? "active-workspace-row" : null;
+
+    private string? ActiveWorkspaceName =>
+        WorkspaceListVm.Workspaces
+            .FirstOrDefault(w => IsActive(w.WorkspacePath))
+            ?.Name ?? WorkspaceContext.ActiveWorkspacePath;
+
     private async Task SelectWorkspace(string workspacePath)
     {
         WorkspaceContext.ActiveWorkspacePath = workspacePath;
-        await LoadWorkspaceDataAsync().ConfigureAwait(false);
-        StateHasChanged();
+        await LoadWorkspaceDataAsync();
     }
 
     private static string GetHealthScheme(string? status)
@@ -220,6 +282,28 @@ else
             "low" => "default",
             _ => "default",
         };
+
+    private string GetTodoDetailHref(string id)
+    {
+        var parts = new List<string>();
+        if (!string.IsNullOrWhiteSpace(TodoListVm.Section)) parts.Add($"section={Uri.EscapeDataString(TodoListVm.Section)}");
+        if (!string.IsNullOrWhiteSpace(TodoListVm.Priority)) parts.Add($"priority={Uri.EscapeDataString(TodoListVm.Priority)}");
+        if (TodoListVm.Done.HasValue) parts.Add($"done={TodoListVm.Done.Value.ToString().ToLowerInvariant()}");
+        var qs = string.Join("&", parts);
+        var path = $"/todos/{Uri.EscapeDataString(id)}";
+        return string.IsNullOrEmpty(qs) ? path : $"{path}?{qs}";
+    }
+
+    private string GetSessionDetailHref(string sessionId)
+    {
+        var parts = new List<string>();
+        if (!string.IsNullOrWhiteSpace(SessionLogListVm.Agent)) parts.Add($"agent={Uri.EscapeDataString(SessionLogListVm.Agent)}");
+        if (!string.IsNullOrWhiteSpace(SessionLogListVm.Model)) parts.Add($"model={Uri.EscapeDataString(SessionLogListVm.Model)}");
+        if (!string.IsNullOrWhiteSpace(SessionLogListVm.Text)) parts.Add($"text={Uri.EscapeDataString(SessionLogListVm.Text)}");
+        var qs = string.Join("&", parts);
+        var path = $"/sessions/{Uri.EscapeDataString(sessionId)}";
+        return string.IsNullOrEmpty(qs) ? path : $"{path}?{qs}";
+    }
 
     private static string FormatTimestamp(string? value)
         => DateTimeOffset.TryParse(value, out var dto) ? dto.ToLocalTime().ToString("g") : value ?? "";

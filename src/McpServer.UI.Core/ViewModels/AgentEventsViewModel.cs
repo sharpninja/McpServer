@@ -69,7 +69,7 @@ public sealed partial class AgentEventsViewModel : AreaListViewModelBase<AgentEv
                     effectiveAgent,
                     _workspaceContext.ActiveWorkspacePath,
                     Limit <= 0 ? 50 : Limit),
-                ct).ConfigureAwait(false);
+                ct).ConfigureAwait(true);
 
             if (!result.IsSuccess || result.Value is null)
             {
@@ -126,7 +126,7 @@ public sealed partial class AgentEventsViewModel : AreaListViewModelBase<AgentEv
                 EventType = eventType,
                 Details = details,
                 WorkspacePath = _workspaceContext.ActiveWorkspacePath
-            }, ct).ConfigureAwait(false);
+            }, ct).ConfigureAwait(true);
 
             if (!result.IsSuccess || result.Value is null)
             {

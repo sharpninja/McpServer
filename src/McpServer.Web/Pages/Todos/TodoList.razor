@@ -97,7 +97,7 @@ else
         ViewModel.Section = Section;
         ViewModel.Priority = Priority;
         ViewModel.Done = Done ?? false;
-        await ViewModel.LoadAsync().ConfigureAwait(false);
+        await ViewModel.LoadAsync().ConfigureAwait(true);
     }
 
     private string GetTodoDetailHref(string id)

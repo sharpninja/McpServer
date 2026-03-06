@@ -196,6 +196,9 @@ public sealed record WorkspaceDto
 
     /// <summary>Individual names/handles whose code and libraries are banned.</summary>
     public List<string> BannedIndividuals { get; init; } = [];
+
+    /// <summary>Git remote URL (origin) for this workspace.</summary>
+    public string? GitRemoteUrl { get; init; }
 }
 
 /// <summary>Result of listing workspaces.</summary>

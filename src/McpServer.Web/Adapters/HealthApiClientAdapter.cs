@@ -15,8 +15,8 @@ internal sealed class HealthApiClientAdapter : IHealthApiClient
 
     public async Task<HealthSnapshot> CheckHealthAsync(CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var health = await client.Health.GetAsync(cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var health = await client.Health.GetAsync(cancellationToken).ConfigureAwait(true);
         var raw = JsonSerializer.Serialize(health);
         var status = string.IsNullOrWhiteSpace(health.Status) ? "unknown" : health.Status;
 

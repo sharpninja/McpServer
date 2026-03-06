@@ -24,7 +24,7 @@ internal sealed class HealthApiClientAdapter : IHealthApiClient
         if (_client is null)
             throw new InvalidOperationException("Health API client is unavailable. No workspace marker file was found.");
 
-        var raw = await _client.GetStringAsync("/health", cancellationToken).ConfigureAwait(false);
+        var raw = await _client.GetStringAsync("/health", cancellationToken).ConfigureAwait(true);
         var status = TryParseStatus(raw) ?? "unknown";
 
         return new HealthSnapshot(

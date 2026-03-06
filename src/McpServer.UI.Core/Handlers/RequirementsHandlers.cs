@@ -24,7 +24,7 @@ internal sealed class ListFunctionalRequirementsQueryHandler : IQueryHandler<Lis
         => await RequirementsHandlerHelpers.ReadAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.ListFunctionalRequirementsAsync(context.CancellationToken)).ConfigureAwait(false);
+            () => _client.ListFunctionalRequirementsAsync(context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="GetFunctionalRequirementQuery"/>.</summary>
@@ -45,7 +45,7 @@ internal sealed class GetFunctionalRequirementQueryHandler : IQueryHandler<GetFu
         => await RequirementsHandlerHelpers.ReadAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.GetFunctionalRequirementAsync(query.Id, context.CancellationToken)).ConfigureAwait(false);
+            () => _client.GetFunctionalRequirementAsync(query.Id, context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="CreateFunctionalRequirementCommand"/>.</summary>
@@ -66,7 +66,7 @@ internal sealed class CreateFunctionalRequirementCommandHandler : ICommandHandle
         => await RequirementsHandlerHelpers.WriteAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.CreateFunctionalRequirementAsync(command, context.CancellationToken)).ConfigureAwait(false);
+            () => _client.CreateFunctionalRequirementAsync(command, context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="UpdateFunctionalRequirementCommand"/>.</summary>
@@ -87,7 +87,7 @@ internal sealed class UpdateFunctionalRequirementCommandHandler : ICommandHandle
         => await RequirementsHandlerHelpers.WriteAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.UpdateFunctionalRequirementAsync(command, context.CancellationToken)).ConfigureAwait(false);
+            () => _client.UpdateFunctionalRequirementAsync(command, context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="DeleteFunctionalRequirementCommand"/>.</summary>
@@ -108,7 +108,7 @@ internal sealed class DeleteFunctionalRequirementCommandHandler : ICommandHandle
         => await RequirementsHandlerHelpers.WriteAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.DeleteFunctionalRequirementAsync(command, context.CancellationToken)).ConfigureAwait(false);
+            () => _client.DeleteFunctionalRequirementAsync(command, context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="ListTechnicalRequirementsQuery"/>.</summary>
@@ -129,7 +129,7 @@ internal sealed class ListTechnicalRequirementsQueryHandler : IQueryHandler<List
         => await RequirementsHandlerHelpers.ReadAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.ListTechnicalRequirementsAsync(context.CancellationToken)).ConfigureAwait(false);
+            () => _client.ListTechnicalRequirementsAsync(context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="GetTechnicalRequirementQuery"/>.</summary>
@@ -150,7 +150,7 @@ internal sealed class GetTechnicalRequirementQueryHandler : IQueryHandler<GetTec
         => await RequirementsHandlerHelpers.ReadAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.GetTechnicalRequirementAsync(query.Id, context.CancellationToken)).ConfigureAwait(false);
+            () => _client.GetTechnicalRequirementAsync(query.Id, context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="CreateTechnicalRequirementCommand"/>.</summary>
@@ -171,7 +171,7 @@ internal sealed class CreateTechnicalRequirementCommandHandler : ICommandHandler
         => await RequirementsHandlerHelpers.WriteAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.CreateTechnicalRequirementAsync(command, context.CancellationToken)).ConfigureAwait(false);
+            () => _client.CreateTechnicalRequirementAsync(command, context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="UpdateTechnicalRequirementCommand"/>.</summary>
@@ -192,7 +192,7 @@ internal sealed class UpdateTechnicalRequirementCommandHandler : ICommandHandler
         => await RequirementsHandlerHelpers.WriteAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.UpdateTechnicalRequirementAsync(command, context.CancellationToken)).ConfigureAwait(false);
+            () => _client.UpdateTechnicalRequirementAsync(command, context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="DeleteTechnicalRequirementCommand"/>.</summary>
@@ -213,7 +213,7 @@ internal sealed class DeleteTechnicalRequirementCommandHandler : ICommandHandler
         => await RequirementsHandlerHelpers.WriteAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.DeleteTechnicalRequirementAsync(command, context.CancellationToken)).ConfigureAwait(false);
+            () => _client.DeleteTechnicalRequirementAsync(command, context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="ListTestingRequirementsQuery"/>.</summary>
@@ -234,7 +234,7 @@ internal sealed class ListTestingRequirementsQueryHandler : IQueryHandler<ListTe
         => await RequirementsHandlerHelpers.ReadAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.ListTestingRequirementsAsync(context.CancellationToken)).ConfigureAwait(false);
+            () => _client.ListTestingRequirementsAsync(context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="GetTestingRequirementQuery"/>.</summary>
@@ -255,7 +255,7 @@ internal sealed class GetTestingRequirementQueryHandler : IQueryHandler<GetTesti
         => await RequirementsHandlerHelpers.ReadAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.GetTestingRequirementAsync(query.Id, context.CancellationToken)).ConfigureAwait(false);
+            () => _client.GetTestingRequirementAsync(query.Id, context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="CreateTestingRequirementCommand"/>.</summary>
@@ -276,7 +276,7 @@ internal sealed class CreateTestingRequirementCommandHandler : ICommandHandler<C
         => await RequirementsHandlerHelpers.WriteAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.CreateTestingRequirementAsync(command, context.CancellationToken)).ConfigureAwait(false);
+            () => _client.CreateTestingRequirementAsync(command, context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="UpdateTestingRequirementCommand"/>.</summary>
@@ -297,7 +297,7 @@ internal sealed class UpdateTestingRequirementCommandHandler : ICommandHandler<U
         => await RequirementsHandlerHelpers.WriteAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.UpdateTestingRequirementAsync(command, context.CancellationToken)).ConfigureAwait(false);
+            () => _client.UpdateTestingRequirementAsync(command, context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="DeleteTestingRequirementCommand"/>.</summary>
@@ -318,7 +318,7 @@ internal sealed class DeleteTestingRequirementCommandHandler : ICommandHandler<D
         => await RequirementsHandlerHelpers.WriteAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.DeleteTestingRequirementAsync(command, context.CancellationToken)).ConfigureAwait(false);
+            () => _client.DeleteTestingRequirementAsync(command, context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="ListRequirementMappingsQuery"/>.</summary>
@@ -339,7 +339,7 @@ internal sealed class ListRequirementMappingsQueryHandler : IQueryHandler<ListRe
         => await RequirementsHandlerHelpers.ReadAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.ListMappingsAsync(context.CancellationToken)).ConfigureAwait(false);
+            () => _client.ListMappingsAsync(context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="GetRequirementMappingQuery"/>.</summary>
@@ -360,7 +360,7 @@ internal sealed class GetRequirementMappingQueryHandler : IQueryHandler<GetRequi
         => await RequirementsHandlerHelpers.ReadAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.GetMappingAsync(query.FrId, context.CancellationToken)).ConfigureAwait(false);
+            () => _client.GetMappingAsync(query.FrId, context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="UpsertRequirementMappingCommand"/>.</summary>
@@ -381,7 +381,7 @@ internal sealed class UpsertRequirementMappingCommandHandler : ICommandHandler<U
         => await RequirementsHandlerHelpers.WriteAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.UpsertMappingAsync(command, context.CancellationToken)).ConfigureAwait(false);
+            () => _client.UpsertMappingAsync(command, context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="DeleteRequirementMappingCommand"/>.</summary>
@@ -402,7 +402,7 @@ internal sealed class DeleteRequirementMappingCommandHandler : ICommandHandler<D
         => await RequirementsHandlerHelpers.WriteAsync(
             _authorizationPolicy,
             _logger,
-            () => _client.DeleteMappingAsync(command, context.CancellationToken)).ConfigureAwait(false);
+            () => _client.DeleteMappingAsync(command, context.CancellationToken)).ConfigureAwait(true);
 }
 
 /// <summary>Handles <see cref="GenerateRequirementsDocumentQuery"/>.</summary>
@@ -429,7 +429,7 @@ internal sealed class GenerateRequirementsDocumentQueryHandler : IQueryHandler<G
 
         try
         {
-            var result = await _client.GenerateAsync(query, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.GenerateAsync(query, context.CancellationToken).ConfigureAwait(true);
             return Result<GeneratedRequirementsDocument>.Success(result);
         }
         catch (Exception ex)
@@ -455,7 +455,7 @@ internal static class RequirementsHandlerHelpers
 
         try
         {
-            return Result<T>.Success(await operation().ConfigureAwait(false));
+            return Result<T>.Success(await operation().ConfigureAwait(true));
         }
         catch (Exception ex)
         {
@@ -477,7 +477,7 @@ internal static class RequirementsHandlerHelpers
 
         try
         {
-            return Result<T>.Success(await operation().ConfigureAwait(false));
+            return Result<T>.Success(await operation().ConfigureAwait(true));
         }
         catch (Exception ex)
         {

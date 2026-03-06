@@ -45,7 +45,7 @@ internal sealed class OidcAuthService : IDisposable
             return new LoginResult(false, "Keycloak authority not configured. Set Mcp:Auth:Authority in appsettings.json or environment.");
 
         // Step 1: Request device authorization
-        var deviceResponse = await RequestDeviceAuthorizationAsync(ct).ConfigureAwait(false);
+        var deviceResponse = await RequestDeviceAuthorizationAsync(ct).ConfigureAwait(true);
         if (deviceResponse is null)
             return new LoginResult(false, "Failed to initiate device authorization flow.");
 
@@ -61,9 +61,9 @@ internal sealed class OidcAuthService : IDisposable
 
         while (DateTime.UtcNow < deadline && !ct.IsCancellationRequested)
         {
-            await Task.Delay(TimeSpan.FromSeconds(interval), ct).ConfigureAwait(false);
+            await Task.Delay(TimeSpan.FromSeconds(interval), ct).ConfigureAwait(true);
 
-            var tokenResult = await PollForTokenAsync(deviceResponse.DeviceCode, ct).ConfigureAwait(false);
+            var tokenResult = await PollForTokenAsync(deviceResponse.DeviceCode, ct).ConfigureAwait(true);
 
             if (tokenResult.IsSuccess)
             {
@@ -115,7 +115,7 @@ internal sealed class OidcAuthService : IDisposable
         if (string.IsNullOrWhiteSpace(cached.RefreshToken))
             return null;
 
-        var refreshed = await RefreshTokenAsync(cached.RefreshToken, ct).ConfigureAwait(false);
+        var refreshed = await RefreshTokenAsync(cached.RefreshToken, ct).ConfigureAwait(true);
         if (refreshed is null || !refreshed.IsSuccess)
         {
             TokenCache.Clear();
@@ -188,11 +188,11 @@ internal sealed class OidcAuthService : IDisposable
 
         try
         {
-            var response = await _http.PostAsync(_options.GetDeviceAuthorizationEndpoint(), content, ct).ConfigureAwait(false);
+            var response = await _http.PostAsync(_options.GetDeviceAuthorizationEndpoint(), content, ct).ConfigureAwait(true);
             if (!response.IsSuccessStatusCode)
                 return null;
 
-            var json = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
+            var json = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(true);
             return JsonSerializer.Deserialize<DeviceAuthResponse>(json, s_jsonOpts);
         }
         catch
@@ -212,8 +212,8 @@ internal sealed class OidcAuthService : IDisposable
 
         try
         {
-            var response = await _http.PostAsync(_options.GetTokenEndpoint(), content, ct).ConfigureAwait(false);
-            var json = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
+            var response = await _http.PostAsync(_options.GetTokenEndpoint(), content, ct).ConfigureAwait(true);
+            var json = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(true);
             return JsonSerializer.Deserialize<TokenResponse>(json, s_jsonOpts) ?? new TokenResponse { Error = "deserialization_failed" };
         }
         catch (Exception ex)
@@ -234,8 +234,8 @@ internal sealed class OidcAuthService : IDisposable
 
         try
         {
-            var response = await _http.PostAsync(_options.GetTokenEndpoint(), content, ct).ConfigureAwait(false);
-            var json = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
+            var response = await _http.PostAsync(_options.GetTokenEndpoint(), content, ct).ConfigureAwait(true);
+            var json = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(true);
             return JsonSerializer.Deserialize<TokenResponse>(json, s_jsonOpts);
         }
         catch

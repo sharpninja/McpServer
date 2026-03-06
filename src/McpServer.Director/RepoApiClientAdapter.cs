@@ -15,8 +15,8 @@ internal sealed class RepoApiClientAdapter : IRepoApiClient
 
     public async Task<RepoListResultView> ListAsync(ListRepoEntriesQuery query, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Repo.ListAsync(query.Path, cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Repo.ListAsync(query.Path, cancellationToken).ConfigureAwait(true);
         return new RepoListResultView(
             result.Path,
             result.Entries.Select(e => new RepoEntrySummary(e.Name, e.IsDirectory)).ToList());
@@ -24,15 +24,15 @@ internal sealed class RepoApiClientAdapter : IRepoApiClient
 
     public async Task<RepoFileDetail> ReadFileAsync(string path, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Repo.ReadFileAsync(path, cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Repo.ReadFileAsync(path, cancellationToken).ConfigureAwait(true);
         return new RepoFileDetail(result.Path, result.Content, result.Exists);
     }
 
     public async Task<RepoWriteOutcome> WriteFileAsync(WriteRepoFileCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Repo.WriteFileAsync(command.Path, command.Content, cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Repo.WriteFileAsync(command.Path, command.Content, cancellationToken).ConfigureAwait(true);
         return new RepoWriteOutcome(result.Path, result.Written);
     }
 }

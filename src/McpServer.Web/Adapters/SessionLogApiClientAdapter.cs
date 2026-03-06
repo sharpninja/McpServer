@@ -16,14 +16,14 @@ internal sealed class SessionLogApiClientAdapter : ISessionLogApiClient
 
     public async Task<ListSessionLogsResult> ListSessionLogsAsync(ListSessionLogsQuery query, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
         var result = await client.SessionLog.QueryAsync(
             agent: string.IsNullOrWhiteSpace(query.Agent) ? null : query.Agent,
             model: string.IsNullOrWhiteSpace(query.Model) ? null : query.Model,
             text: string.IsNullOrWhiteSpace(query.Text) ? null : query.Text,
             limit: Math.Max(1, query.Limit),
             offset: Math.Max(0, query.Offset),
-            cancellationToken: cancellationToken).ConfigureAwait(false);
+            cancellationToken: cancellationToken).ConfigureAwait(true);
 
         var items = result.Items
             .Select(MapSummary)
@@ -40,7 +40,7 @@ internal sealed class SessionLogApiClientAdapter : ISessionLogApiClient
         if (string.IsNullOrWhiteSpace(sessionId))
             throw new ArgumentException("SessionId is required.", nameof(sessionId));
 
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
         var offset = 0;
 
         while (true)
@@ -49,7 +49,7 @@ internal sealed class SessionLogApiClientAdapter : ISessionLogApiClient
                     limit: DetailPageSize,
                     offset: offset,
                     cancellationToken: cancellationToken)
-                .ConfigureAwait(false);
+                .ConfigureAwait(true);
 
             var match = page.Items.FirstOrDefault(item => string.Equals(item.SessionId, sessionId, StringComparison.Ordinal));
             if (match is not null)
@@ -67,8 +67,8 @@ internal sealed class SessionLogApiClientAdapter : ISessionLogApiClient
         if (command is null)
             throw new ArgumentNullException(nameof(command));
 
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.SessionLog.SubmitAsync(MapSubmit(command.SessionLog), cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.SessionLog.SubmitAsync(MapSubmit(command.SessionLog), cancellationToken).ConfigureAwait(true);
         return new SessionLogSubmitOutcome(result.Id, result.SourceType, result.SessionId);
     }
 
@@ -87,14 +87,14 @@ internal sealed class SessionLogApiClientAdapter : ISessionLogApiClient
             })
             .ToList();
 
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
         var result = await client.SessionLog.AppendDialogAsync(
                 command.Agent,
                 command.SessionId,
                 command.RequestId,
                 items,
                 cancellationToken)
-            .ConfigureAwait(false);
+            .ConfigureAwait(true);
 
         return new SessionLogDialogAppendOutcome(result.Agent, result.SessionId, result.RequestId, result.TotalDialogCount);
     }

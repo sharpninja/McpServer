@@ -79,7 +79,7 @@ public sealed class WorkspaceAutoSelector
     {
         try
         {
-            var result = await _dispatcher.QueryAsync(new ListWorkspacesQuery(), cancellationToken).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new ListWorkspacesQuery(), cancellationToken).ConfigureAwait(true);
             if (!result.IsSuccess || result.Value is null || result.Value.Items.Count == 0)
             {
                 _logger.LogWarning("Workspace auto-selection: no workspaces available.");

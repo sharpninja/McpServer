@@ -35,9 +35,9 @@ public sealed class LogoutModel : PageModel
     public async Task<IActionResult> OnGetAsync()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme)
-            .ConfigureAwait(false);
+            .ConfigureAwait(true);
 
-        var oidcScheme = await _schemeProvider.GetSchemeAsync(OpenIdConnectDefaults.AuthenticationScheme).ConfigureAwait(false);
+        var oidcScheme = await _schemeProvider.GetSchemeAsync(OpenIdConnectDefaults.AuthenticationScheme).ConfigureAwait(true);
         if (oidcScheme is null)
         {
             _logger.LogInformation("Logout requested while OpenID Connect authentication is disabled; completed cookie sign-out only.");

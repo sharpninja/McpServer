@@ -90,7 +90,7 @@ else
         ViewModel.Text = Text;
         ViewModel.Limit = 50;
         ViewModel.Offset = 0;
-        await ViewModel.LoadAsync().ConfigureAwait(false);
+        await ViewModel.LoadAsync().ConfigureAwait(true);
     }
 
     private string GetDetailHref(string sessionId)

@@ -70,7 +70,7 @@ internal sealed class WebMcpContext
 
     public async Task<McpServerClient> GetRequiredControlApiClientAsync(CancellationToken cancellationToken = default)
     {
-        await EnsureInitializedAsync(_controlApiClient, cancellationToken).ConfigureAwait(false);
+        await EnsureInitializedAsync(_controlApiClient, cancellationToken).ConfigureAwait(true);
         return _controlApiClient;
     }
 
@@ -88,14 +88,14 @@ internal sealed class WebMcpContext
             }
         }
 
-        await EnsureInitializedAsync(_activeWorkspaceApiClient, cancellationToken).ConfigureAwait(false);
+        await EnsureInitializedAsync(_activeWorkspaceApiClient, cancellationToken).ConfigureAwait(true);
         return _activeWorkspaceApiClient;
     }
 
     private async Task EnsureInitializedAsync(McpServerClient client, CancellationToken cancellationToken)
     {
         // If the user is authenticated, prefer their OIDC access token over the static API key.
-        var bearerToken = await _bearerTokenAccessor.GetAccessTokenAsync(cancellationToken).ConfigureAwait(false);
+        var bearerToken = await _bearerTokenAccessor.GetAccessTokenAsync(cancellationToken).ConfigureAwait(true);
         if (!string.IsNullOrWhiteSpace(bearerToken))
         {
             lock (_gate)
@@ -111,7 +111,7 @@ internal sealed class WebMcpContext
             return;
 
         // Auto-discover the API key from the McpServer AGENTS-README-FIRST.yaml initialization endpoint.
-        var apiKey = await client.InitializeAsync(cancellationToken).ConfigureAwait(false);
+        var apiKey = await client.InitializeAsync(cancellationToken).ConfigureAwait(true);
         lock (_gate)
         {
             _apiKey = apiKey;

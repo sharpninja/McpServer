@@ -78,6 +78,10 @@ public sealed class WorkspaceDto
     /// <summary>Individual names/handles banned in this workspace.</summary>
     [JsonPropertyName("bannedIndividuals")]
     public List<string> BannedIndividuals { get; set; } = [];
+
+    /// <summary>Git remote URL (origin) for this workspace.</summary>
+    [JsonPropertyName("gitRemoteUrl")]
+    public string? GitRemoteUrl { get; set; }
 }
 
 /// <summary>Request to create a workspace.</summary>

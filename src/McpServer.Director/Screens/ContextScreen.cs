@@ -99,14 +99,14 @@ internal sealed class ContextScreen : View
 
     public async Task LoadAsync()
     {
-        await ListSourcesAsync().ConfigureAwait(false);
+        await ListSourcesAsync().ConfigureAwait(true);
     }
 
     private async Task SearchAsync()
     {
         var query = BuildSearchQuery();
         SetStatus("Searching context...");
-        var result = await _dispatcher.QueryAsync(query).ConfigureAwait(false);
+        var result = await _dispatcher.QueryAsync(query).ConfigureAwait(true);
 
         var text = FormatSearchResult(result);
         Application.Invoke(() =>
@@ -120,7 +120,7 @@ internal sealed class ContextScreen : View
     {
         var query = BuildPackQuery();
         SetStatus("Building context pack...");
-        var result = await _dispatcher.QueryAsync(query).ConfigureAwait(false);
+        var result = await _dispatcher.QueryAsync(query).ConfigureAwait(true);
 
         var text = FormatPackResult(result);
         Application.Invoke(() =>
@@ -133,7 +133,7 @@ internal sealed class ContextScreen : View
     private async Task ListSourcesAsync()
     {
         SetStatus("Loading context sources...");
-        var result = await _dispatcher.QueryAsync(new ListContextSourcesQuery()).ConfigureAwait(false);
+        var result = await _dispatcher.QueryAsync(new ListContextSourcesQuery()).ConfigureAwait(true);
 
         var text = FormatSourcesResult(result);
         Application.Invoke(() =>
@@ -146,7 +146,7 @@ internal sealed class ContextScreen : View
     private async Task RebuildIndexAsync()
     {
         SetStatus("Rebuilding context index...");
-        var result = await _dispatcher.SendAsync(new RebuildContextIndexCommand()).ConfigureAwait(false);
+        var result = await _dispatcher.SendAsync(new RebuildContextIndexCommand()).ConfigureAwait(true);
 
         var text = FormatRebuildResult(result);
         Application.Invoke(() =>

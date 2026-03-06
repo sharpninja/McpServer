@@ -27,8 +27,8 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
     /// <inheritdoc />
     public async Task<ListAgentDefinitionsResult> ListDefinitionsAsync(CancellationToken cancellationToken = default)
     {
-        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(false);
-        var response = await client.Agent.ListDefinitionsAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(true);
+        var response = await client.Agent.ListDefinitionsAsync(cancellationToken).ConfigureAwait(true);
         var items = response.Items
             .Select(i => new AgentDefinitionSummaryItem(i.Id, i.DisplayName, i.IsBuiltIn))
             .ToList();
@@ -40,8 +40,8 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
     {
         try
         {
-            var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(false);
-            var item = await client.Agent.GetDefinitionAsync(agentType, cancellationToken).ConfigureAwait(false);
+            var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(true);
+            var item = await client.Agent.GetDefinitionAsync(agentType, cancellationToken).ConfigureAwait(true);
             return new AgentDefinitionDetail(
                 item.Id,
                 item.DisplayName,
@@ -64,7 +64,7 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
         UpsertAgentDefinitionCommand command,
         CancellationToken cancellationToken = default)
     {
-        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(true);
         var result = await client.Agent.UpsertDefinitionAsync(new AgentDefinitionRequest
         {
             Id = command.Id,
@@ -74,7 +74,7 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
             DefaultModels = command.DefaultModels.ToList(),
             DefaultBranchStrategy = command.DefaultBranchStrategy,
             DefaultSeedPrompt = command.DefaultSeedPrompt
-        }, cancellationToken).ConfigureAwait(false);
+        }, cancellationToken).ConfigureAwait(true);
 
         return new AgentMutationOutcome(result.Success, result.Error);
     }
@@ -84,16 +84,16 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
         DeleteAgentDefinitionCommand command,
         CancellationToken cancellationToken = default)
     {
-        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Agent.DeleteDefinitionAsync(command.AgentType, cancellationToken).ConfigureAwait(false);
+        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Agent.DeleteDefinitionAsync(command.AgentType, cancellationToken).ConfigureAwait(true);
         return new AgentMutationOutcome(result.Success, result.Error);
     }
 
     /// <inheritdoc />
     public async Task<AgentSeedOutcome> SeedDefaultsAsync(CancellationToken cancellationToken = default)
     {
-        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Agent.SeedDefaultsAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Agent.SeedDefaultsAsync(cancellationToken).ConfigureAwait(true);
         return new AgentSeedOutcome(result.Seeded);
     }
 
@@ -102,8 +102,8 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
         ListWorkspaceAgentsQuery query,
         CancellationToken cancellationToken = default)
     {
-        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Agent.ListWorkspaceAgentsAsync(query.WorkspacePath, cancellationToken).ConfigureAwait(false);
+        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Agent.ListWorkspaceAgentsAsync(query.WorkspacePath, cancellationToken).ConfigureAwait(true);
         return new ListWorkspaceAgentsResult(result.Items.Select(MapWorkspaceAgentItem).ToList(), result.TotalCount);
     }
 
@@ -114,8 +114,8 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
     {
         try
         {
-            var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(false);
-            var result = await client.Agent.GetWorkspaceAgentAsync(query.AgentId, query.WorkspacePath, cancellationToken).ConfigureAwait(false);
+            var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(true);
+            var result = await client.Agent.GetWorkspaceAgentAsync(query.AgentId, query.WorkspacePath, cancellationToken).ConfigureAwait(true);
             return MapWorkspaceAgentDetail(result);
         }
         catch (McpNotFoundException ex)
@@ -130,7 +130,7 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
         UpsertWorkspaceAgentCommand command,
         CancellationToken cancellationToken = default)
     {
-        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(true);
         var result = await client.Agent.UpsertWorkspaceAgentAsync(
             command.AgentId,
             new AgentWorkspaceRequest
@@ -146,7 +146,7 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
                 InstructionFilesOverride = command.InstructionFilesOverride
             },
             command.WorkspacePath,
-            cancellationToken).ConfigureAwait(false);
+            cancellationToken).ConfigureAwait(true);
 
         return new AgentMutationOutcome(result.Success, result.Error);
     }
@@ -156,7 +156,7 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
         AssignWorkspaceAgentCommand command,
         CancellationToken cancellationToken = default)
     {
-        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(true);
         var result = await client.Agent.UpsertWorkspaceAgentAsync(
             command.AgentId,
             new AgentWorkspaceRequest
@@ -166,7 +166,7 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
                 AgentIsolation = command.AgentIsolation
             },
             command.WorkspacePath,
-            cancellationToken).ConfigureAwait(false);
+            cancellationToken).ConfigureAwait(true);
 
         return new AgentMutationOutcome(result.Success, result.Error);
     }
@@ -176,8 +176,8 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
         DeleteWorkspaceAgentCommand command,
         CancellationToken cancellationToken = default)
     {
-        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Agent.DeleteWorkspaceAgentAsync(command.AgentId, command.WorkspacePath, cancellationToken).ConfigureAwait(false);
+        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Agent.DeleteWorkspaceAgentAsync(command.AgentId, command.WorkspacePath, cancellationToken).ConfigureAwait(true);
         return new AgentMutationOutcome(result.Success, result.Error);
     }
 
@@ -186,7 +186,7 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
         BanAgentCommand command,
         CancellationToken cancellationToken = default)
     {
-        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(true);
         var result = await client.Agent.BanAgentAsync(
             command.AgentId,
             new AgentBanRequest
@@ -196,7 +196,7 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
                 Global = command.Global
             },
             command.WorkspacePath,
-            cancellationToken).ConfigureAwait(false);
+            cancellationToken).ConfigureAwait(true);
         return new AgentMutationOutcome(result.Success, result.Error);
     }
 
@@ -205,12 +205,12 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
         UnbanAgentCommand command,
         CancellationToken cancellationToken = default)
     {
-        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(true);
         var result = await client.Agent.UnbanAgentAsync(
             command.AgentId,
             command.WorkspacePath,
             command.Global,
-            cancellationToken).ConfigureAwait(false);
+            cancellationToken).ConfigureAwait(true);
         return new AgentMutationOutcome(result.Success, result.Error);
     }
 
@@ -219,7 +219,7 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
         LogAgentEventCommand command,
         CancellationToken cancellationToken = default)
     {
-        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(true);
         var result = await client.Agent.LogEventAsync(
             command.AgentId,
             new AgentEventRequest
@@ -229,7 +229,7 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
                 Details = command.Details
             },
             command.WorkspacePath,
-            cancellationToken).ConfigureAwait(false);
+            cancellationToken).ConfigureAwait(true);
         return new AgentMutationOutcome(result.Success, result.Error);
     }
 
@@ -238,8 +238,8 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
         GetAgentEventsQuery query,
         CancellationToken cancellationToken = default)
     {
-        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Agent.GetEventsAsync(query.AgentId, query.WorkspacePath, query.Limit, cancellationToken).ConfigureAwait(false);
+        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Agent.GetEventsAsync(query.AgentId, query.WorkspacePath, query.Limit, cancellationToken).ConfigureAwait(true);
         var items = result.Items
             .Select(e => new AgentEventItem(e.Id, e.AgentId, e.WorkspacePath, e.EventType, e.UserId, e.Details, e.Timestamp))
             .ToList();
@@ -251,16 +251,16 @@ internal sealed class AgentApiClientAdapter : IAgentApiClient
         ValidateAgentQuery query,
         CancellationToken cancellationToken = default)
     {
-        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Agent.ValidateAsync(query.WorkspacePath, cancellationToken).ConfigureAwait(false);
+        var client = await GetAgentManagementClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Agent.ValidateAsync(query.WorkspacePath, cancellationToken).ConfigureAwait(true);
         return new AgentValidateOutcome(result.Valid, result.Error, result.Path);
     }
 
     private async Task<McpServerClient> GetAgentManagementClientAsync(CancellationToken cancellationToken)
     {
         if (_context.HasControlConnection)
-            return await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(false);
-        return await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+            return await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(true);
+        return await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
     }
 
     private static WorkspaceAgentItem MapWorkspaceAgentItem(AgentWorkspaceConfig item)

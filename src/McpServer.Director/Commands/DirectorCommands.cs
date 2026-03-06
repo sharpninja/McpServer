@@ -41,7 +41,7 @@ internal static class DirectorCommands
             {
                 try
                 {
-                    var result = await dispatcher.QueryAsync(new CheckHealthQuery()).ConfigureAwait(false);
+                    var result = await dispatcher.QueryAsync(new CheckHealthQuery()).ConfigureAwait(true);
                     if (!result.IsSuccess || result.Value is null)
                     {
                         Error(result.Error ?? "Health check failed.");
@@ -61,7 +61,7 @@ internal static class DirectorCommands
                     System.Diagnostics.Trace.TraceError(ex.ToString());
                     Error($"Server unreachable: {ex.Message}");
                 }
-            }).ConfigureAwait(false);
+            }).ConfigureAwait(true);
         }, s_workspaceOption);
         return cmd;
     }
@@ -75,7 +75,7 @@ internal static class DirectorCommands
             {
                 try
                 {
-                    var result = await dispatcher.QueryAsync(new ListWorkspacesQuery()).ConfigureAwait(false);
+                    var result = await dispatcher.QueryAsync(new ListWorkspacesQuery()).ConfigureAwait(true);
                     if (!result.IsSuccess || result.Value is null)
                     {
                         Error(result.Error ?? "Workspace list failed.");
@@ -102,7 +102,7 @@ internal static class DirectorCommands
                     System.Diagnostics.Trace.TraceError(ex.ToString());
                     Error(ex.Message);
                 }
-            }).ConfigureAwait(false);
+            }).ConfigureAwait(true);
         }, s_workspaceOption);
         return cmd;
     }
@@ -116,7 +116,7 @@ internal static class DirectorCommands
         {
             await RunWithDispatcherAsync(workspace, async (_, dispatcher, _) =>
             {
-                var result = await dispatcher.QueryAsync(new ListAgentDefinitionsQuery()).ConfigureAwait(false);
+                var result = await dispatcher.QueryAsync(new ListAgentDefinitionsQuery()).ConfigureAwait(true);
                 if (!result.IsSuccess || result.Value is null)
                 {
                     Error(result.Error ?? "Failed to load agent definitions.");
@@ -137,7 +137,7 @@ internal static class DirectorCommands
                 }
 
                 AnsiConsole.Write(table);
-            }).ConfigureAwait(false);
+            }).ConfigureAwait(true);
         }, s_workspaceOption);
 
         var wsCmd = new Command("workspace", "List agents configured for this workspace");
@@ -151,7 +151,7 @@ internal static class DirectorCommands
                 if (workspacePath is null)
                     return;
 
-                var result = await dispatcher.QueryAsync(new ListWorkspaceAgentsQuery(workspacePath)).ConfigureAwait(false);
+                var result = await dispatcher.QueryAsync(new ListWorkspaceAgentsQuery(workspacePath)).ConfigureAwait(true);
                 if (!result.IsSuccess || result.Value is null)
                 {
                     Error(result.Error ?? "Failed to load workspace agents.");
@@ -176,7 +176,7 @@ internal static class DirectorCommands
                 }
 
                 AnsiConsole.Write(table);
-            }).ConfigureAwait(false);
+            }).ConfigureAwait(true);
         }, s_workspaceOption);
 
         var eventsCmd = new Command("events", "Show agent lifecycle events");
@@ -193,7 +193,7 @@ internal static class DirectorCommands
                 if (workspacePath is null)
                     return;
 
-                var result = await dispatcher.QueryAsync(new GetAgentEventsQuery(agentId, workspacePath, limit)).ConfigureAwait(false);
+                var result = await dispatcher.QueryAsync(new GetAgentEventsQuery(agentId, workspacePath, limit)).ConfigureAwait(true);
                 if (!result.IsSuccess || result.Value is null)
                 {
                     Error(result.Error ?? "Failed to load events.");
@@ -216,7 +216,7 @@ internal static class DirectorCommands
                 }
 
                 AnsiConsole.Write(table);
-            }).ConfigureAwait(false);
+            }).ConfigureAwait(true);
         }, agentIdArg, s_workspaceOption, limitOpt);
 
         var agentsCmd = new Command("agents", "Manage agents (definitions, workspace configs, events)")
@@ -256,10 +256,10 @@ internal static class DirectorCommands
                     WorkspacePath = workspacePath,
                     Enabled = enabled,
                     AgentIsolation = isolation,
-                }).ConfigureAwait(false);
+                }).ConfigureAwait(true);
 
                 PrintAgentMutationOutcome(result, $"Agent '{agentId}' added to workspace.");
-            }).ConfigureAwait(false);
+            }).ConfigureAwait(true);
         }, agentIdArg, s_workspaceOption, isolationOpt, enabledOpt);
 
         return cmd;
@@ -296,10 +296,10 @@ internal static class DirectorCommands
                     Global = global,
                     BannedUntilPr = untilPr,
                     WorkspacePath = workspacePath,
-                }).ConfigureAwait(false);
+                }).ConfigureAwait(true);
 
                 PrintAgentMutationOutcome(result, $"Agent '{agentId}' banned{(global ? " globally" : "")}.");
-            }).ConfigureAwait(false);
+            }).ConfigureAwait(true);
         }, agentIdArg, s_workspaceOption, reasonOpt, globalOpt, prOpt);
 
         return cmd;
@@ -325,9 +325,9 @@ internal static class DirectorCommands
                 if (!global && workspacePath is null)
                     return;
 
-                var result = await dispatcher.SendAsync(new UnbanAgentCommand(agentId, workspacePath, global)).ConfigureAwait(false);
+                var result = await dispatcher.SendAsync(new UnbanAgentCommand(agentId, workspacePath, global)).ConfigureAwait(true);
                 PrintAgentMutationOutcome(result, $"Agent '{agentId}' unbanned{(global ? " globally" : "")}.");
-            }).ConfigureAwait(false);
+            }).ConfigureAwait(true);
         }, agentIdArg, s_workspaceOption, globalOpt);
 
         return cmd;
@@ -351,9 +351,9 @@ internal static class DirectorCommands
                 if (workspacePath is null)
                     return;
 
-                var result = await dispatcher.SendAsync(new DeleteWorkspaceAgentCommand(agentId, workspacePath)).ConfigureAwait(false);
+                var result = await dispatcher.SendAsync(new DeleteWorkspaceAgentCommand(agentId, workspacePath)).ConfigureAwait(true);
                 PrintAgentMutationOutcome(result, $"Agent '{agentId}' removed from workspace.");
-            }).ConfigureAwait(false);
+            }).ConfigureAwait(true);
         }, agentIdArg, s_workspaceOption);
 
         return cmd;
@@ -370,7 +370,7 @@ internal static class DirectorCommands
                 if (workspacePath is null)
                     return;
 
-                var result = await dispatcher.QueryAsync(new ValidateAgentQuery(workspacePath)).ConfigureAwait(false);
+                var result = await dispatcher.QueryAsync(new ValidateAgentQuery(workspacePath)).ConfigureAwait(true);
                 if (!result.IsSuccess || result.Value is null)
                 {
                     Error(result.Error ?? "Validation failed.");
@@ -385,7 +385,7 @@ internal static class DirectorCommands
                     if (!string.IsNullOrWhiteSpace(result.Value.Error))
                         AnsiConsole.MarkupLine($"  [dim]{Markup.Escape(result.Value.Error)}[/]");
                 }
-            }).ConfigureAwait(false);
+            }).ConfigureAwait(true);
         }, s_workspaceOption);
         return cmd;
     }
@@ -401,7 +401,7 @@ internal static class DirectorCommands
                 if (workspacePath is null)
                     return;
 
-                var result = await dispatcher.SendAsync(new InitWorkspaceCommand(workspacePath)).ConfigureAwait(false);
+                var result = await dispatcher.SendAsync(new InitWorkspaceCommand(workspacePath)).ConfigureAwait(true);
                 if (!result.IsSuccess || result.Value is null)
                 {
                     Error(result.Error ?? "Workspace init failed.");
@@ -410,7 +410,7 @@ internal static class DirectorCommands
 
                 var seededText = result.Value.SeededDefinitions is int seeded ? $" (seeded {seeded})" : "";
                 Success($"Workspace initialized for agent management{seededText}.");
-            }).ConfigureAwait(false);
+            }).ConfigureAwait(true);
         }, s_workspaceOption);
         return cmd;
     }
@@ -424,7 +424,7 @@ internal static class DirectorCommands
         {
             await RunWithDispatcherAsync(workspace, async (_, dispatcher, _) =>
             {
-                var result = await dispatcher.QueryAsync(new ListTodosQuery { Section = section }).ConfigureAwait(false);
+                var result = await dispatcher.QueryAsync(new ListTodosQuery { Section = section }).ConfigureAwait(true);
                 if (!result.IsSuccess || result.Value is null)
                 {
                     Error(result.Error ?? "TODO list failed.");
@@ -450,7 +450,7 @@ internal static class DirectorCommands
 
                 AnsiConsole.Write(table);
                 Info($"{result.Value.Items.Count} items");
-            }).ConfigureAwait(false);
+            }).ConfigureAwait(true);
         }, s_workspaceOption, sectionOpt);
 
         var todoCmd = new Command("todo", "Manage TODO items") { listCmd };
@@ -470,7 +470,7 @@ internal static class DirectorCommands
                 {
                     Limit = limit,
                     Offset = 0
-                }).ConfigureAwait(false);
+                }).ConfigureAwait(true);
 
                 if (!result.IsSuccess || result.Value is null)
                 {
@@ -498,7 +498,7 @@ internal static class DirectorCommands
                 }
 
                 AnsiConsole.Write(table);
-            }).ConfigureAwait(false);
+            }).ConfigureAwait(true);
         }, s_workspaceOption, limitOpt);
 
         var slCmd = new Command("session-log", "View session logs") { listCmd };

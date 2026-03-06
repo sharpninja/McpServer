@@ -42,20 +42,20 @@
 
     private async Task OnConfirmAsync(MouseEventArgs _)
     {
-        await this.Confirmed.InvokeAsync().ConfigureAwait(false);
-        await this.CloseAsync(true).ConfigureAwait(false);
+        await this.Confirmed.InvokeAsync().ConfigureAwait(true);
+        await this.CloseAsync(true).ConfigureAwait(true);
     }
 
     private async Task OnCancelAsync(MouseEventArgs _)
     {
-        await this.Canceled.InvokeAsync().ConfigureAwait(false);
-        await this.CloseAsync(false).ConfigureAwait(false);
+        await this.Canceled.InvokeAsync().ConfigureAwait(true);
+        await this.CloseAsync(false).ConfigureAwait(true);
     }
 
     private async Task CloseAsync(bool confirmed)
     {
         this.Visible = false;
-        await this.VisibleChanged.InvokeAsync(false).ConfigureAwait(false);
+        await this.VisibleChanged.InvokeAsync(false).ConfigureAwait(true);
         this.pendingConfirmation?.TrySetResult(confirmed);
         this.pendingConfirmation = null;
     }

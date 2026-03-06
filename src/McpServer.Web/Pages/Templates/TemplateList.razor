@@ -89,7 +89,7 @@ else
         ViewModel.Category = Category;
         ViewModel.Tag = Tag;
         ViewModel.Keyword = Keyword;
-        await ViewModel.LoadAsync().ConfigureAwait(false);
+        await ViewModel.LoadAsync().ConfigureAwait(true);
     }
 
     private static string GetDetailHref(string templateId)

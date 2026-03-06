@@ -25,7 +25,7 @@ internal sealed class VoiceApiClientAdapter : IVoiceApiClient
 
     public async Task<VoiceSessionInfo> CreateSessionAsync(CreateVoiceSessionCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
         var result = await client.Voice.CreateSessionAsync(
             new VoiceSessionCreateRequest
             {
@@ -41,7 +41,7 @@ internal sealed class VoiceApiClientAdapter : IVoiceApiClient
                 AgentParameters = command.AgentParameters,
                 OneShotSession = command.OneShotSession
             },
-            cancellationToken).ConfigureAwait(false);
+            cancellationToken).ConfigureAwait(true);
 
         return new VoiceSessionInfo(
             result.SessionId,
@@ -53,7 +53,7 @@ internal sealed class VoiceApiClientAdapter : IVoiceApiClient
 
     public async Task<VoiceTurnInfo> SubmitTurnAsync(SubmitVoiceTurnCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
         var result = await client.Voice.SubmitTurnAsync(
             command.SessionId,
             new VoiceTurnRequest
@@ -62,7 +62,7 @@ internal sealed class VoiceApiClientAdapter : IVoiceApiClient
                 Language = command.Language,
                 ClientTimestampUtc = command.ClientTimestampUtc
             },
-            cancellationToken).ConfigureAwait(false);
+            cancellationToken).ConfigureAwait(true);
 
         var toolCalls = result.ToolCalls?.Select(MapToolCall).ToList() ?? [];
         return new VoiceTurnInfo(
@@ -80,8 +80,8 @@ internal sealed class VoiceApiClientAdapter : IVoiceApiClient
 
     public async Task<VoiceInterruptInfo> InterruptAsync(InterruptVoiceCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Voice.InterruptAsync(command.SessionId, cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Voice.InterruptAsync(command.SessionId, cancellationToken).ConfigureAwait(true);
         return new VoiceInterruptInfo(result.SessionId, result.Interrupted, result.Status);
     }
 
@@ -89,8 +89,8 @@ internal sealed class VoiceApiClientAdapter : IVoiceApiClient
     {
         try
         {
-            var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-            var result = await client.Voice.GetStatusAsync(sessionId, cancellationToken).ConfigureAwait(false);
+            var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+            var result = await client.Voice.GetStatusAsync(sessionId, cancellationToken).ConfigureAwait(true);
             return new VoiceSessionStatusInfo(
                 result.SessionId,
                 result.Status,
@@ -114,8 +114,8 @@ internal sealed class VoiceApiClientAdapter : IVoiceApiClient
     {
         try
         {
-            var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-            var result = await client.Voice.GetTranscriptAsync(sessionId, cancellationToken).ConfigureAwait(false);
+            var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+            var result = await client.Voice.GetTranscriptAsync(sessionId, cancellationToken).ConfigureAwait(true);
             return new VoiceTranscriptInfo(
                 result.SessionId,
                 result.Items.Select(i => new VoiceTranscriptEntryInfo(i.TimestampUtc, i.TurnId, i.Role, i.Category, i.Text)).ToList());
@@ -129,15 +129,15 @@ internal sealed class VoiceApiClientAdapter : IVoiceApiClient
 
     public async Task<bool> DeleteSessionAsync(string sessionId, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        return await client.Voice.DeleteSessionAsync(sessionId, cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        return await client.Voice.DeleteSessionAsync(sessionId, cancellationToken).ConfigureAwait(true);
     }
 
     private async Task<McpServerClient> GetClientAsync(CancellationToken cancellationToken)
     {
         if (_context.HasControlConnection)
-            return await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(false);
-        return await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+            return await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(true);
+        return await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
     }
 
     private static VoiceToolCallInfo MapToolCall(VoiceToolCallRecord call)

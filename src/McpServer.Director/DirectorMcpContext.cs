@@ -145,7 +145,7 @@ internal sealed class DirectorMcpContext : IDisposable
                 "or run Director from a workspace with AGENTS-README-FIRST.yaml.");
 
         TrySeedControlApiKeyFromPrimaryWorkspaceMarker(client);
-        await EnsureInitializedAsync(client, cancellationToken).ConfigureAwait(false);
+        await EnsureInitializedAsync(client, cancellationToken).ConfigureAwait(true);
         return client;
     }
 
@@ -160,7 +160,7 @@ internal sealed class DirectorMcpContext : IDisposable
                 "No active workspace is selected. Select a workspace from the bottom workspace picker " +
                 "or run Director from a workspace with AGENTS-README-FIRST.yaml.");
 
-        await EnsureInitializedAsync(client, cancellationToken).ConfigureAwait(false);
+        await EnsureInitializedAsync(client, cancellationToken).ConfigureAwait(true);
         return client;
     }
 
@@ -183,7 +183,7 @@ internal sealed class DirectorMcpContext : IDisposable
         if (!string.IsNullOrWhiteSpace(client.BearerToken))
             return;
 
-        await client.InitializeAsync(cancellationToken).ConfigureAwait(false);
+        await client.InitializeAsync(cancellationToken).ConfigureAwait(true);
     }
 
     private static McpServerClient? CreateTypedClient(McpHttpClient? client)

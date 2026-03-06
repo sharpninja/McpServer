@@ -19,7 +19,7 @@ internal sealed class EventStreamApiClientAdapter : IEventStreamApiClient
 
     public async Task<IAsyncEnumerable<ChangeEventItem>> SubscribeAsync(string? category = null, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
         var stream = client.Events.SubscribeAsync(category, cancellationToken);
         return MapAsync(stream);
     }
@@ -27,8 +27,8 @@ internal sealed class EventStreamApiClientAdapter : IEventStreamApiClient
     private async Task<McpServerClient> GetClientAsync(CancellationToken cancellationToken)
     {
         if (_context.HasControlConnection)
-            return await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(false);
-        return await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+            return await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(true);
+        return await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
     }
 
     private static async IAsyncEnumerable<ChangeEventItem> MapAsync(IAsyncEnumerable<McpServer.Client.Models.ChangeEvent> stream)

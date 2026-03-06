@@ -427,7 +427,7 @@ internal sealed class MainScreen : Window
                     .OfType<DispatcherLogsScreen>()
                     .FirstOrDefault();
                 if (logsScreen is not null)
-                    await logsScreen.LoadAsync().ConfigureAwait(false);
+                    await logsScreen.LoadAsync().ConfigureAwait(true);
 
                 if (!_directorContext.HasControlConnection)
                     return;
@@ -435,7 +435,7 @@ internal sealed class MainScreen : Window
                 // Load workspaces and auto-select context first
                 if (_authorizationPolicy.CanViewArea(McpArea.Workspaces))
                 {
-                    await _workspaceListVm.LoadAsync().ConfigureAwait(false);
+                    await _workspaceListVm.LoadAsync().ConfigureAwait(true);
                     Application.Invoke(() =>
                     {
                         RefreshWorkspacePickerItems();

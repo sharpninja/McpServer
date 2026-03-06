@@ -99,7 +99,7 @@ else
         ViewModel.Query = Q ?? string.Empty;
         ViewModel.SourceType = string.IsNullOrWhiteSpace(SourceType) ? null : SourceType;
         ViewModel.Limit = safeLimit;
-        await ViewModel.LoadAsync().ConfigureAwait(false);
+        await ViewModel.LoadAsync().ConfigureAwait(true);
     }
 
     private string GetLimitValue() => Limit?.ToString() ?? "20";

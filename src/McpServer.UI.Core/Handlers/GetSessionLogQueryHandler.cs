@@ -42,7 +42,7 @@ internal sealed class GetSessionLogQueryHandler : IQueryHandler<GetSessionLogQue
         try
         {
             var result = await _sessionLogApiClient.GetSessionLogAsync(query.SessionId, context.CancellationToken)
-                .ConfigureAwait(false);
+                .ConfigureAwait(true);
             return Result<SessionLogDetail?>.Success(result);
         }
         catch (Exception ex)

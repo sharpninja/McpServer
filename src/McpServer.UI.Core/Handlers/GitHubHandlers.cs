@@ -27,7 +27,7 @@ internal sealed class ListIssuesQueryHandler : IQueryHandler<ListIssuesQuery, Gi
 
         try
         {
-            var result = await _client.ListIssuesAsync(query, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.ListIssuesAsync(query, context.CancellationToken).ConfigureAwait(true);
             return Result<GitHubIssueListResult>.Success(result);
         }
         catch (Exception ex)
@@ -59,7 +59,7 @@ internal sealed class GetIssueQueryHandler : IQueryHandler<GetIssueQuery, GitHub
 
         try
         {
-            var result = await _client.GetIssueAsync(query.Number, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.GetIssueAsync(query.Number, context.CancellationToken).ConfigureAwait(true);
             return Result<GitHubIssueDetail?>.Success(result);
         }
         catch (Exception ex)
@@ -91,7 +91,7 @@ internal sealed class CreateIssueCommandHandler : ICommandHandler<CreateIssueCom
 
         try
         {
-            var result = await _client.CreateIssueAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.CreateIssueAsync(command, context.CancellationToken).ConfigureAwait(true);
             return Result<GitHubCreateIssueOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -123,7 +123,7 @@ internal sealed class UpdateIssueCommandHandler : ICommandHandler<UpdateIssueCom
 
         try
         {
-            var result = await _client.UpdateIssueAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.UpdateIssueAsync(command, context.CancellationToken).ConfigureAwait(true);
             return Result<GitHubMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -155,7 +155,7 @@ internal sealed class CloseIssueCommandHandler : ICommandHandler<CloseIssueComma
 
         try
         {
-            var result = await _client.CloseIssueAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.CloseIssueAsync(command, context.CancellationToken).ConfigureAwait(true);
             return Result<GitHubMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -187,7 +187,7 @@ internal sealed class ReopenIssueCommandHandler : ICommandHandler<ReopenIssueCom
 
         try
         {
-            var result = await _client.ReopenIssueAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.ReopenIssueAsync(command, context.CancellationToken).ConfigureAwait(true);
             return Result<GitHubMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -219,7 +219,7 @@ internal sealed class CommentOnIssueCommandHandler : ICommandHandler<CommentOnIs
 
         try
         {
-            var result = await _client.CommentOnIssueAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.CommentOnIssueAsync(command, context.CancellationToken).ConfigureAwait(true);
             return Result<GitHubMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -251,7 +251,7 @@ internal sealed class ListLabelsQueryHandler : IQueryHandler<ListLabelsQuery, Gi
 
         try
         {
-            var result = await _client.ListLabelsAsync(context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.ListLabelsAsync(context.CancellationToken).ConfigureAwait(true);
             return Result<GitHubLabelsResult>.Success(result);
         }
         catch (Exception ex)
@@ -283,7 +283,7 @@ internal sealed class ListPullsQueryHandler : IQueryHandler<ListPullsQuery, GitH
 
         try
         {
-            var result = await _client.ListPullsAsync(query, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.ListPullsAsync(query, context.CancellationToken).ConfigureAwait(true);
             return Result<GitHubPullListResult>.Success(result);
         }
         catch (Exception ex)
@@ -315,7 +315,7 @@ internal sealed class CommentOnPullCommandHandler : ICommandHandler<CommentOnPul
 
         try
         {
-            var result = await _client.CommentOnPullAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.CommentOnPullAsync(command, context.CancellationToken).ConfigureAwait(true);
             return Result<GitHubMutationOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -347,7 +347,7 @@ internal sealed class SyncFromGitHubCommandHandler : ICommandHandler<SyncFromGit
 
         try
         {
-            var result = await _client.SyncFromGitHubAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.SyncFromGitHubAsync(command, context.CancellationToken).ConfigureAwait(true);
             return Result<GitHubSyncOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -379,7 +379,7 @@ internal sealed class SyncToGitHubCommandHandler : ICommandHandler<SyncToGitHubC
 
         try
         {
-            var result = await _client.SyncToGitHubAsync(context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.SyncToGitHubAsync(context.CancellationToken).ConfigureAwait(true);
             return Result<GitHubSyncOutcome>.Success(result);
         }
         catch (Exception ex)
@@ -411,7 +411,7 @@ internal sealed class SyncSingleIssueCommandHandler : ICommandHandler<SyncSingle
 
         try
         {
-            var result = await _client.SyncSingleIssueAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.SyncSingleIssueAsync(command, context.CancellationToken).ConfigureAwait(true);
             return Result<GitHubSingleIssueSyncOutcome>.Success(result);
         }
         catch (Exception ex)

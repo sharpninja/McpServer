@@ -130,7 +130,7 @@ internal sealed class TunnelScreen : View
     /// <summary>Triggers initial data load.</summary>
     public async Task LoadAsync()
     {
-        await _vm.LoadAsync().ConfigureAwait(false);
+        await _vm.LoadAsync().ConfigureAwait(true);
         Application.Invoke(UpdateActionButtons);
     }
 
@@ -166,9 +166,9 @@ internal sealed class TunnelScreen : View
         if (selected is null) return;
 
         if (selected.Enabled)
-            await _vm.DisableAsync(selected.Provider).ConfigureAwait(false);
+            await _vm.DisableAsync(selected.Provider).ConfigureAwait(true);
         else
-            await _vm.EnableAsync(selected.Provider).ConfigureAwait(false);
+            await _vm.EnableAsync(selected.Provider).ConfigureAwait(true);
 
         Application.Invoke(UpdateActionButtons);
     }
@@ -179,9 +179,9 @@ internal sealed class TunnelScreen : View
         if (selected is null) return;
 
         if (selected.IsRunning)
-            await _vm.StopAsync(selected.Provider).ConfigureAwait(false);
+            await _vm.StopAsync(selected.Provider).ConfigureAwait(true);
         else
-            await _vm.StartAsync(selected.Provider).ConfigureAwait(false);
+            await _vm.StartAsync(selected.Provider).ConfigureAwait(true);
 
         Application.Invoke(UpdateActionButtons);
     }
@@ -191,7 +191,7 @@ internal sealed class TunnelScreen : View
         var selected = GetSelectedProvider();
         if (selected is null) return;
 
-        await _vm.RestartAsync(selected.Provider).ConfigureAwait(false);
+        await _vm.RestartAsync(selected.Provider).ConfigureAwait(true);
         Application.Invoke(UpdateActionButtons);
     }
 

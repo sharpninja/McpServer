@@ -196,20 +196,20 @@
             ListViewModel.Category = Category;
             ListViewModel.Tag = Tag;
             ListViewModel.Keyword = Keyword;
-            await ListViewModel.LoadAsync().ConfigureAwait(false);
+            await ListViewModel.LoadAsync().ConfigureAwait(true);
         }
 
         if (string.Equals(_loadedTemplateId, TemplateId, StringComparison.Ordinal))
             return;
 
         _loadedTemplateId = TemplateId;
-        await ViewModel.LoadAsync(TemplateId).ConfigureAwait(false);
+        await ViewModel.LoadAsync(TemplateId).ConfigureAwait(true);
         ViewModel.PopulateEditorFromDetail();
     }
 
-    private async Task SaveAsync() => await ViewModel.SaveAsync().ConfigureAwait(false);
+    private async Task SaveAsync() => await ViewModel.SaveAsync().ConfigureAwait(true);
 
-    private async Task DeleteAsync() => await ViewModel.DeleteAsync().ConfigureAwait(false);
+    private async Task DeleteAsync() => await ViewModel.DeleteAsync().ConfigureAwait(true);
 
     private string GetDetailHref(string templateId)
     {

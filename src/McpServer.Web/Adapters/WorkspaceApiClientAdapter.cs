@@ -22,8 +22,8 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
 
     public async Task<ListWorkspacesResult> ListWorkspacesAsync(CancellationToken ct = default)
     {
-        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(false);
-        var response = await client.Workspace.ListAsync(ct).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(true);
+        var response = await client.Workspace.ListAsync(ct).ConfigureAwait(true);
 
         var items = response.Items
             .Select(ws => new WorkspaceSummary(
@@ -41,8 +41,8 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
         var key = EncodeWorkspaceKey(workspacePath);
         try
         {
-            var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(false);
-            var dto = await client.Workspace.GetAsync(key, ct).ConfigureAwait(false);
+            var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(true);
+            var dto = await client.Workspace.GetAsync(key, ct).ConfigureAwait(true);
             return MapWorkspaceDetail(dto);
         }
         catch (McpNotFoundException ex)
@@ -64,7 +64,7 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
                     BannedIndividuals = command.BannedIndividuals,
                 },
                 ct)
-            .ConfigureAwait(false);
+            .ConfigureAwait(true);
 
         return result.Success;
     }
@@ -74,8 +74,8 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
         if (string.IsNullOrWhiteSpace(workspacePath))
             throw new ArgumentException("Workspace path is required.", nameof(workspacePath));
 
-        var controlClient = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(false);
-        var seedResult = await controlClient.Agent.SeedDefinitionsAsync(ct).ConfigureAwait(false);
+        var controlClient = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(true);
+        var seedResult = await controlClient.Agent.SeedDefinitionsAsync(ct).ConfigureAwait(true);
         _ = await controlClient.Agent.LogEventAsync(
             "system",
             new AgentEventRequest
@@ -85,7 +85,7 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
                 Details = "Workspace initialized via Web UI",
             },
             workspacePath,
-            ct).ConfigureAwait(false);
+            ct).ConfigureAwait(true);
 
         int? seeded = seedResult.Seeded;
         return new WorkspaceInitInfo(workspacePath, seeded);
@@ -93,7 +93,7 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
 
     public async Task<WorkspaceMutationOutcome> CreateWorkspaceAsync(CreateWorkspaceCommand command, CancellationToken ct = default)
     {
-        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(true);
         var result = await client.Workspace.CreateAsync(
             new WorkspaceCreateRequest
             {
@@ -114,7 +114,7 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
                 BannedOrganizations = command.BannedOrganizations?.ToList(),
                 BannedIndividuals = command.BannedIndividuals?.ToList()
             },
-            ct).ConfigureAwait(false);
+            ct).ConfigureAwait(true);
 
         return MapMutationOutcome(result);
     }
@@ -122,7 +122,7 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
     public async Task<WorkspaceMutationOutcome> UpdateWorkspaceAsync(UpdateWorkspaceCommand command, CancellationToken ct = default)
     {
         var key = EncodeWorkspaceKey(command.WorkspacePath);
-        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(true);
         var result = await client.Workspace.UpdateAsync(
             key,
             new WorkspaceUpdateRequest
@@ -143,43 +143,43 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
                 BannedOrganizations = command.BannedOrganizations?.ToList(),
                 BannedIndividuals = command.BannedIndividuals?.ToList()
             },
-            ct).ConfigureAwait(false);
+            ct).ConfigureAwait(true);
 
         return MapMutationOutcome(result);
     }
 
     public async Task<WorkspaceMutationOutcome> DeleteWorkspaceAsync(DeleteWorkspaceCommand command, CancellationToken ct = default)
     {
-        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(false);
-        var result = await client.Workspace.DeleteAsync(EncodeWorkspaceKey(command.WorkspacePath), ct).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(true);
+        var result = await client.Workspace.DeleteAsync(EncodeWorkspaceKey(command.WorkspacePath), ct).ConfigureAwait(true);
         return MapMutationOutcome(result);
     }
 
     public async Task<WorkspaceProcessState> StartWorkspaceAsync(string workspacePath, CancellationToken ct = default)
     {
-        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(false);
-        var result = await client.Workspace.StartAsync(EncodeWorkspaceKey(workspacePath), ct).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(true);
+        var result = await client.Workspace.StartAsync(EncodeWorkspaceKey(workspacePath), ct).ConfigureAwait(true);
         return MapProcessState(result);
     }
 
     public async Task<WorkspaceProcessState> StopWorkspaceAsync(string workspacePath, CancellationToken ct = default)
     {
-        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(false);
-        var result = await client.Workspace.StopAsync(EncodeWorkspaceKey(workspacePath), ct).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(true);
+        var result = await client.Workspace.StopAsync(EncodeWorkspaceKey(workspacePath), ct).ConfigureAwait(true);
         return MapProcessState(result);
     }
 
     public async Task<WorkspaceProcessState> GetWorkspaceStatusAsync(string workspacePath, CancellationToken ct = default)
     {
-        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(false);
-        var result = await client.Workspace.GetStatusAsync(EncodeWorkspaceKey(workspacePath), ct).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(true);
+        var result = await client.Workspace.GetStatusAsync(EncodeWorkspaceKey(workspacePath), ct).ConfigureAwait(true);
         return MapProcessState(result);
     }
 
     public async Task<WorkspaceHealthState> CheckWorkspaceHealthAsync(string workspacePath, CancellationToken ct = default)
     {
-        var client = await ResolveHealthClientAsync(workspacePath, ct).ConfigureAwait(false);
-        var result = await client.Health.GetAsync(ct).ConfigureAwait(false);
+        var client = await ResolveHealthClientAsync(workspacePath, ct).ConfigureAwait(true);
+        var result = await client.Health.GetAsync(ct).ConfigureAwait(true);
         return new WorkspaceHealthState(
             Success: string.Equals(result.Status, "Healthy", StringComparison.OrdinalIgnoreCase),
             StatusCode: 200,
@@ -192,17 +192,17 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
 
     public async Task<WorkspaceGlobalPromptState> GetWorkspaceGlobalPromptAsync(CancellationToken ct = default)
     {
-        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(false);
-        var result = await client.Workspace.GetGlobalPromptAsync(ct).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(true);
+        var result = await client.Workspace.GetGlobalPromptAsync(ct).ConfigureAwait(true);
         return new WorkspaceGlobalPromptState(result.Template, result.IsDefault);
     }
 
     public async Task<WorkspaceGlobalPromptState> UpdateWorkspaceGlobalPromptAsync(UpdateWorkspaceGlobalPromptCommand command, CancellationToken ct = default)
     {
-        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(true);
         var result = await client.Workspace.UpdateGlobalPromptAsync(
             new GlobalPromptUpdateRequest { Template = command.Template },
-            ct).ConfigureAwait(false);
+            ct).ConfigureAwait(true);
         return new WorkspaceGlobalPromptState(result.Template, result.IsDefault);
     }
 
@@ -250,10 +250,10 @@ internal sealed class WorkspaceApiClientAdapter : IWorkspaceApiClient
         if (!string.IsNullOrWhiteSpace(_context.ActiveWorkspacePath) &&
             string.Equals(_context.ActiveWorkspacePath, workspacePath, StringComparison.OrdinalIgnoreCase))
         {
-            return await _context.GetRequiredActiveWorkspaceApiClientAsync(ct).ConfigureAwait(false);
+            return await _context.GetRequiredActiveWorkspaceApiClientAsync(ct).ConfigureAwait(true);
         }
 
-        var controlClient = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(false);
+        var controlClient = await _context.GetRequiredControlApiClientAsync(ct).ConfigureAwait(true);
         return McpServerClientFactory.Create(new McpServerClientOptions
         {
             BaseUrl = _context.BaseUrl,

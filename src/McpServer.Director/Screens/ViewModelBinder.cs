@@ -124,7 +124,7 @@ internal sealed class ViewModelBinder : IDisposable
             {
                 try
                 {
-                    await asyncAction().ConfigureAwait(false);
+                    await asyncAction().ConfigureAwait(true);
                 }
                 catch (Exception ex)
                 {

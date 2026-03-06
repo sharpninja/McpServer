@@ -38,7 +38,7 @@ public sealed class TrDetailViewModel : AreaDetailViewModelBase<TechnicalRequire
         StatusMessage = $"Loading {id}...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new GetTechnicalRequirementQuery(id), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new GetTechnicalRequirementQuery(id), ct).ConfigureAwait(true);
             if (!result.IsSuccess)
             {
                 ErrorMessage = result.Error ?? "Load failed.";
@@ -88,7 +88,7 @@ public sealed class TrDetailViewModel : AreaDetailViewModelBase<TechnicalRequire
         StatusMessage = $"Deleting {id}...";
         try
         {
-            var result = await _dispatcher.SendAsync(new DeleteTechnicalRequirementCommand(id), ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(new DeleteTechnicalRequirementCommand(id), ct).ConfigureAwait(true);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Delete failed.";
@@ -133,7 +133,7 @@ public sealed class TrDetailViewModel : AreaDetailViewModelBase<TechnicalRequire
         StatusMessage = pendingStatus;
         try
         {
-            var result = await _dispatcher.SendAsync(command, ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(command, ct).ConfigureAwait(true);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Save failed.";

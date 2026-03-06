@@ -21,8 +21,8 @@ internal sealed class AgentPoolApiClientAdapter : IAgentPoolApiClient
     /// <inheritdoc />
     public async Task<ListAgentPoolAgentsResult> ListAgentsAsync(CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var response = await client.AgentPool.GetAgentsAsync(cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var response = await client.AgentPool.GetAgentsAsync(cancellationToken).ConfigureAwait(true);
         var items = response
             .Select(i => new AgentPoolRuntimeAgentSnapshot(
                 i.AgentName,
@@ -39,8 +39,8 @@ internal sealed class AgentPoolApiClientAdapter : IAgentPoolApiClient
     /// <inheritdoc />
     public async Task<ListAgentPoolQueueResult> ListQueueAsync(CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var response = await client.AgentPool.GetQueueAsync(cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var response = await client.AgentPool.GetQueueAsync(cancellationToken).ConfigureAwait(true);
         var items = response
             .Select(i => new AgentPoolQueueItemSnapshot(
                 i.JobId,
@@ -57,32 +57,32 @@ internal sealed class AgentPoolApiClientAdapter : IAgentPoolApiClient
     /// <inheritdoc />
     public async Task<AgentPoolMutationOutcome> StartAgentAsync(string agentName, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.AgentPool.StartAgentAsync(agentName, cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.AgentPool.StartAgentAsync(agentName, cancellationToken).ConfigureAwait(true);
         return MapMutation(result);
     }
 
     /// <inheritdoc />
     public async Task<AgentPoolMutationOutcome> StopAgentAsync(string agentName, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.AgentPool.StopAgentAsync(agentName, cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.AgentPool.StopAgentAsync(agentName, cancellationToken).ConfigureAwait(true);
         return MapMutation(result);
     }
 
     /// <inheritdoc />
     public async Task<AgentPoolMutationOutcome> RecycleAgentAsync(string agentName, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.AgentPool.RecycleAgentAsync(agentName, cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.AgentPool.RecycleAgentAsync(agentName, cancellationToken).ConfigureAwait(true);
         return MapMutation(result);
     }
 
     /// <inheritdoc />
     public async Task<AgentPoolConnectOutcome> ConnectAsync(string agentName, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.AgentPool.ConnectAsync(agentName, cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.AgentPool.ConnectAsync(agentName, cancellationToken).ConfigureAwait(true);
         return new AgentPoolConnectOutcome(
             result.Success,
             result.Error,
@@ -95,32 +95,32 @@ internal sealed class AgentPoolApiClientAdapter : IAgentPoolApiClient
     /// <inheritdoc />
     public async Task<AgentPoolMutationOutcome> CancelQueueItemAsync(string jobId, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.AgentPool.CancelQueueItemAsync(jobId, cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.AgentPool.CancelQueueItemAsync(jobId, cancellationToken).ConfigureAwait(true);
         return MapMutation(result);
     }
 
     /// <inheritdoc />
     public async Task<AgentPoolMutationOutcome> RemoveQueueItemAsync(string jobId, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.AgentPool.RemoveQueueItemAsync(jobId, cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.AgentPool.RemoveQueueItemAsync(jobId, cancellationToken).ConfigureAwait(true);
         return MapMutation(result);
     }
 
     /// <inheritdoc />
     public async Task<AgentPoolMutationOutcome> MoveQueueItemUpAsync(string jobId, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.AgentPool.MoveQueueItemUpAsync(jobId, cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.AgentPool.MoveQueueItemUpAsync(jobId, cancellationToken).ConfigureAwait(true);
         return MapMutation(result);
     }
 
     /// <inheritdoc />
     public async Task<AgentPoolMutationOutcome> MoveQueueItemDownAsync(string jobId, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.AgentPool.MoveQueueItemDownAsync(jobId, cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.AgentPool.MoveQueueItemDownAsync(jobId, cancellationToken).ConfigureAwait(true);
         return MapMutation(result);
     }
 
@@ -129,8 +129,8 @@ internal sealed class AgentPoolApiClientAdapter : IAgentPoolApiClient
         AgentPoolEnqueueDraft request,
         CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.AgentPool.ResolvePromptAsync(MapRequest(request), cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.AgentPool.ResolvePromptAsync(MapRequest(request), cancellationToken).ConfigureAwait(true);
         return new AgentPoolPromptResolutionOutcome(
             result.Success,
             result.Error,
@@ -145,8 +145,8 @@ internal sealed class AgentPoolApiClientAdapter : IAgentPoolApiClient
         AgentPoolEnqueueDraft request,
         CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.AgentPool.EnqueueOneShotAsync(MapRequest(request), cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.AgentPool.EnqueueOneShotAsync(MapRequest(request), cancellationToken).ConfigureAwait(true);
         return new AgentPoolEnqueueOutcome(result.Success, result.Error, result.JobId, result.AgentName);
     }
 

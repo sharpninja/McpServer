@@ -30,7 +30,7 @@ internal sealed class CreateVoiceSessionCommandHandler : ICommandHandler<CreateV
 
         try
         {
-            var result = await _client.CreateSessionAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.CreateSessionAsync(command, context.CancellationToken).ConfigureAwait(true);
             return Result<VoiceSessionInfo>.Success(result);
         }
         catch (Exception ex)
@@ -65,7 +65,7 @@ internal sealed class SubmitVoiceTurnCommandHandler : ICommandHandler<SubmitVoic
 
         try
         {
-            var result = await _client.SubmitTurnAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.SubmitTurnAsync(command, context.CancellationToken).ConfigureAwait(true);
             return Result<VoiceTurnInfo>.Success(result);
         }
         catch (Exception ex)
@@ -100,7 +100,7 @@ internal sealed class InterruptVoiceCommandHandler : ICommandHandler<InterruptVo
 
         try
         {
-            var result = await _client.InterruptAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.InterruptAsync(command, context.CancellationToken).ConfigureAwait(true);
             return Result<VoiceInterruptInfo>.Success(result);
         }
         catch (Exception ex)
@@ -135,7 +135,7 @@ internal sealed class GetVoiceStatusQueryHandler : IQueryHandler<GetVoiceStatusQ
 
         try
         {
-            var result = await _client.GetStatusAsync(query.SessionId, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.GetStatusAsync(query.SessionId, context.CancellationToken).ConfigureAwait(true);
             return Result<VoiceSessionStatusInfo?>.Success(result);
         }
         catch (Exception ex)
@@ -170,7 +170,7 @@ internal sealed class GetVoiceTranscriptQueryHandler : IQueryHandler<GetVoiceTra
 
         try
         {
-            var result = await _client.GetTranscriptAsync(query.SessionId, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.GetTranscriptAsync(query.SessionId, context.CancellationToken).ConfigureAwait(true);
             return Result<VoiceTranscriptInfo?>.Success(result);
         }
         catch (Exception ex)
@@ -205,7 +205,7 @@ internal sealed class DeleteVoiceSessionCommandHandler : ICommandHandler<DeleteV
 
         try
         {
-            var deleted = await _client.DeleteSessionAsync(command.SessionId, context.CancellationToken).ConfigureAwait(false);
+            var deleted = await _client.DeleteSessionAsync(command.SessionId, context.CancellationToken).ConfigureAwait(true);
             return Result<bool>.Success(deleted);
         }
         catch (Exception ex)

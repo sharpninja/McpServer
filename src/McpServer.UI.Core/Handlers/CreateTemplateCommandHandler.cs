@@ -47,7 +47,7 @@ internal sealed class CreateTemplateCommandHandler : ICommandHandler<CreateTempl
 
         try
         {
-            var result = await _client.CreateTemplateAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.CreateTemplateAsync(command, context.CancellationToken).ConfigureAwait(true);
             return Result<TemplateMutationOutcome>.Success(result);
         }
         catch (Exception ex)

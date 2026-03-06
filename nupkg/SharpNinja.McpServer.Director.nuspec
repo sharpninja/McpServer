@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>SharpNinja.McpServer.Director</id>
+    <version>0.2.56-beta.341</version>
+    <authors>SharpNinja</authors>
+    <description>CLI management tool for McpServer. Provides workspace management, agent orchestration, compliance policy editing, Keycloak OIDC auth, and an interactive Terminal.Gui TUI with 7 tabbed screens. 18 CLI commands via System.CommandLine.</description>
+    <packageTypes>
+      <packageType name="DotnetTool" />
+    </packageTypes>
+  </metadata>
+  <files>
+    <file src="E:\github\McpServer\src\McpServer.Director\bin\Release\net9.0\publish\**" target="tools/net9.0/any" />
+  </files>
+</package>

@@ -33,7 +33,7 @@ public sealed class LoginModel : PageModel
     /// <param name="returnUrl">Optional local URL to return to after login. Non-local URLs are ignored.</param>
     public async Task<IActionResult> OnGetAsync(string? returnUrl)
     {
-        var oidcScheme = await _schemeProvider.GetSchemeAsync(OpenIdConnectDefaults.AuthenticationScheme).ConfigureAwait(false);
+        var oidcScheme = await _schemeProvider.GetSchemeAsync(OpenIdConnectDefaults.AuthenticationScheme).ConfigureAwait(true);
         if (oidcScheme is null)
         {
             _logger.LogWarning("Login requested but OpenID Connect authentication is not configured.");

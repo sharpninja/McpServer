@@ -15,15 +15,15 @@ internal sealed class DiagnosticApiClientAdapter : IDiagnosticApiClient
 
     public async Task<DiagnosticExecutionPathSnapshot> GetExecutionPathAsync(CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Diagnostic.GetExecutionPathAsync(cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Diagnostic.GetExecutionPathAsync(cancellationToken).ConfigureAwait(true);
         return new DiagnosticExecutionPathSnapshot(result.ProcessPath, result.BaseDirectory, DateTimeOffset.UtcNow);
     }
 
     public async Task<DiagnosticAppSettingsSnapshot> GetAppSettingsPathAsync(CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Diagnostic.GetAppSettingsPathAsync(cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Diagnostic.GetAppSettingsPathAsync(cancellationToken).ConfigureAwait(true);
         return new DiagnosticAppSettingsSnapshot(
             result.EnvironmentName,
             result.ContentRootPath,

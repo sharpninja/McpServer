@@ -114,7 +114,7 @@ internal sealed class LoginDialog : Dialog
                         _uriField.Text = $"{_currentVerificationUri}";
                         _statusLabel.Text = "⏳ Browser opened — complete authentication there...";
                     });
-                }).ConfigureAwait(false);
+                }).ConfigureAwait(true);
 
                 Application.Invoke(() =>
                 {
@@ -189,7 +189,7 @@ internal sealed class LoginDialog : Dialog
     {
         _ = Task.Run(async () =>
         {
-            var config = await _authConfigHandler.DiscoverAuthConfigAsync().ConfigureAwait(false);
+            var config = await _authConfigHandler.DiscoverAuthConfigAsync().ConfigureAwait(true);
             if (config is null || !config.Enabled)
                 return;
 

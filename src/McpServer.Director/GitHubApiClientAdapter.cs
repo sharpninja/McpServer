@@ -24,8 +24,8 @@ internal sealed class GitHubApiClientAdapter : IGitHubApiClient
 
     public async Task<GitHubIssueListResult> ListIssuesAsync(ListIssuesQuery query, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.GitHub.ListIssuesAsync(query.State, query.Limit, cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.GitHub.ListIssuesAsync(query.State, query.Limit, cancellationToken).ConfigureAwait(true);
         return new GitHubIssueListResult(result.Issues.Select(MapIssueSummary).ToList(), result.Error);
     }
 
@@ -33,8 +33,8 @@ internal sealed class GitHubApiClientAdapter : IGitHubApiClient
     {
         try
         {
-            var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-            var result = await client.GitHub.GetIssueAsync(number, cancellationToken).ConfigureAwait(false);
+            var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+            var result = await client.GitHub.GetIssueAsync(number, cancellationToken).ConfigureAwait(true);
             return MapIssueDetail(result);
         }
         catch (McpNotFoundException ex)
@@ -46,20 +46,20 @@ internal sealed class GitHubApiClientAdapter : IGitHubApiClient
 
     public async Task<GitHubCreateIssueOutcome> CreateIssueAsync(CreateIssueCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
         var result = await client.GitHub.CreateIssueAsync(
             new McpServer.Client.Models.GitHubIssueRequest
             {
                 Title = command.Title,
                 Body = command.Body
             },
-            cancellationToken).ConfigureAwait(false);
+            cancellationToken).ConfigureAwait(true);
         return new GitHubCreateIssueOutcome(result.Number, result.Url);
     }
 
     public async Task<GitHubMutationOutcome> UpdateIssueAsync(UpdateIssueCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
         var result = await client.GitHub.UpdateIssueAsync(
             command.Number,
             new McpServer.Client.Models.GitHubIssueUpdateRequest
@@ -72,35 +72,35 @@ internal sealed class GitHubApiClientAdapter : IGitHubApiClient
                 RemoveAssignees = command.RemoveAssignees,
                 Milestone = command.Milestone
             },
-            cancellationToken).ConfigureAwait(false);
+            cancellationToken).ConfigureAwait(true);
         return MapMutation(result);
     }
 
     public async Task<GitHubMutationOutcome> CloseIssueAsync(CloseIssueCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.GitHub.CloseIssueAsync(command.Number, command.Reason, cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.GitHub.CloseIssueAsync(command.Number, command.Reason, cancellationToken).ConfigureAwait(true);
         return MapMutation(result);
     }
 
     public async Task<GitHubMutationOutcome> ReopenIssueAsync(ReopenIssueCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.GitHub.ReopenIssueAsync(command.Number, cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.GitHub.ReopenIssueAsync(command.Number, cancellationToken).ConfigureAwait(true);
         return MapMutation(result);
     }
 
     public async Task<GitHubMutationOutcome> CommentOnIssueAsync(CommentOnIssueCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.GitHub.CommentOnIssueAsync(command.Number, command.Body, cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.GitHub.CommentOnIssueAsync(command.Number, command.Body, cancellationToken).ConfigureAwait(true);
         return MapMutation(result);
     }
 
     public async Task<GitHubLabelsResult> ListLabelsAsync(CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.GitHub.ListLabelsAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.GitHub.ListLabelsAsync(cancellationToken).ConfigureAwait(true);
         return new GitHubLabelsResult(
             (result.Labels ?? []).Select(MapLabel).ToList(),
             result.Error);
@@ -108,8 +108,8 @@ internal sealed class GitHubApiClientAdapter : IGitHubApiClient
 
     public async Task<GitHubPullListResult> ListPullsAsync(ListPullsQuery query, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.GitHub.ListPullsAsync(query.State, query.Limit, cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.GitHub.ListPullsAsync(query.State, query.Limit, cancellationToken).ConfigureAwait(true);
         return new GitHubPullListResult(
             result.Pulls.Select(p => new GitHubPullSummary(p.Number, p.Title, p.State, p.Url)).ToList(),
             result.Error);
@@ -117,37 +117,37 @@ internal sealed class GitHubApiClientAdapter : IGitHubApiClient
 
     public async Task<GitHubMutationOutcome> CommentOnPullAsync(CommentOnPullCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.GitHub.CommentOnPullAsync(command.Number, command.Body, cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.GitHub.CommentOnPullAsync(command.Number, command.Body, cancellationToken).ConfigureAwait(true);
         return MapMutation(result);
     }
 
     public async Task<GitHubSyncOutcome> SyncFromGitHubAsync(SyncFromGitHubCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.GitHub.SyncFromGitHubAsync(command.State, command.Limit, cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.GitHub.SyncFromGitHubAsync(command.State, command.Limit, cancellationToken).ConfigureAwait(true);
         return new GitHubSyncOutcome(result.Synced, result.Skipped, result.Failed, result.Errors);
     }
 
     public async Task<GitHubSyncOutcome> SyncToGitHubAsync(CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.GitHub.SyncToGitHubAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.GitHub.SyncToGitHubAsync(cancellationToken).ConfigureAwait(true);
         return new GitHubSyncOutcome(result.Synced, result.Skipped, result.Failed, result.Errors);
     }
 
     public async Task<GitHubSingleIssueSyncOutcome> SyncSingleIssueAsync(SyncSingleIssueCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.GitHub.SyncIssueAsync(command.Number, command.Direction, cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.GitHub.SyncIssueAsync(command.Number, command.Direction, cancellationToken).ConfigureAwait(true);
         return new GitHubSingleIssueSyncOutcome(result.Success, result.Url, result.TodoId);
     }
 
     private async Task<McpServerClient> GetClientAsync(CancellationToken cancellationToken)
     {
         if (_context.HasControlConnection)
-            return await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(false);
-        return await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+            return await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(true);
+        return await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
     }
 
     private static GitHubIssueSummary MapIssueSummary(McpServer.Client.Models.GitHubIssueItem issue)

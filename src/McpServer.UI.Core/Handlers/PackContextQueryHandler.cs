@@ -33,7 +33,7 @@ internal sealed class PackContextQueryHandler : IQueryHandler<PackContextQuery, 
 
         try
         {
-            var result = await _contextApiClient.PackAsync(query, context.CancellationToken).ConfigureAwait(false);
+            var result = await _contextApiClient.PackAsync(query, context.CancellationToken).ConfigureAwait(true);
             return Result<ContextPackPayload>.Success(result);
         }
         catch (Exception ex)

@@ -56,7 +56,7 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        await ViewModel.CheckAsync().ConfigureAwait(false);
+        await ViewModel.CheckAsync().ConfigureAwait(true);
     }
 
     private static string GetHealthScheme(string status)

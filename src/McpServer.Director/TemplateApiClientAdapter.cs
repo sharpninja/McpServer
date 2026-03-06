@@ -31,8 +31,8 @@ internal sealed class TemplateApiClientAdapter : ITemplateApiClient
         string? category, string? tag, string? keyword,
         CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var response = await client.Template.QueryAsync(category, tag, keyword, cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var response = await client.Template.QueryAsync(category, tag, keyword, cancellationToken).ConfigureAwait(true);
 
         var items = response.Items
             .Select(i => new TemplateListItem(i.Id, i.Title, i.Category, i.Tags.ToList(), i.Description))
@@ -46,8 +46,8 @@ internal sealed class TemplateApiClientAdapter : ITemplateApiClient
     {
         try
         {
-            var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-            var item = await client.Template.GetAsync(templateId, cancellationToken).ConfigureAwait(false);
+            var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+            var item = await client.Template.GetAsync(templateId, cancellationToken).ConfigureAwait(true);
             return MapDetail(item);
         }
         catch (McpNotFoundException ex)
@@ -63,7 +63,7 @@ internal sealed class TemplateApiClientAdapter : ITemplateApiClient
     {
         try
         {
-            var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+            var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
             var result = await client.Template.CreateAsync(new TemplateCreateRequest
             {
                 Id = command.Id,
@@ -73,7 +73,7 @@ internal sealed class TemplateApiClientAdapter : ITemplateApiClient
                 Tags = command.Tags?.ToList(),
                 Description = command.Description,
                 Engine = command.Engine,
-            }, cancellationToken).ConfigureAwait(false);
+            }, cancellationToken).ConfigureAwait(true);
 
             return MapMutationOutcome(result);
         }
@@ -95,7 +95,7 @@ internal sealed class TemplateApiClientAdapter : ITemplateApiClient
     {
         try
         {
-            var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+            var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
             var result = await client.Template.UpdateAsync(command.TemplateId, new TemplateUpdateRequest
             {
                 Title = command.Title,
@@ -104,7 +104,7 @@ internal sealed class TemplateApiClientAdapter : ITemplateApiClient
                 Tags = command.Tags?.ToList(),
                 Description = command.Description,
                 Engine = command.Engine,
-            }, cancellationToken).ConfigureAwait(false);
+            }, cancellationToken).ConfigureAwait(true);
 
             return MapMutationOutcome(result);
         }
@@ -126,8 +126,8 @@ internal sealed class TemplateApiClientAdapter : ITemplateApiClient
     {
         try
         {
-            var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-            var result = await client.Template.DeleteAsync(templateId, cancellationToken).ConfigureAwait(false);
+            var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+            var result = await client.Template.DeleteAsync(templateId, cancellationToken).ConfigureAwait(true);
             return MapMutationOutcome(result);
         }
         catch (McpNotFoundException ex)
@@ -141,7 +141,7 @@ internal sealed class TemplateApiClientAdapter : ITemplateApiClient
     public async Task<TemplateTestOutcome> TestTemplateAsync(
         TestTemplateQuery query, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
         var variables = string.IsNullOrWhiteSpace(query.VariablesJson)
             ? new Dictionary<string, object?>()
             : JsonSerializer.Deserialize<Dictionary<string, object?>>(query.VariablesJson) ?? new();
@@ -151,11 +151,11 @@ internal sealed class TemplateApiClientAdapter : ITemplateApiClient
         TemplateTestResult result;
         if (!string.IsNullOrWhiteSpace(query.TemplateId))
         {
-            result = await client.Template.TestAsync(query.TemplateId, request, cancellationToken).ConfigureAwait(false);
+            result = await client.Template.TestAsync(query.TemplateId, request, cancellationToken).ConfigureAwait(true);
         }
         else
         {
-            result = await client.Template.TestInlineAsync(request, cancellationToken).ConfigureAwait(false);
+            result = await client.Template.TestInlineAsync(request, cancellationToken).ConfigureAwait(true);
         }
 
         return new TemplateTestOutcome(

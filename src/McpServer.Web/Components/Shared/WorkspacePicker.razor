@@ -41,7 +41,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await this.WorkspaceListViewModel.LoadAsync().ConfigureAwait(false);
+        await this.WorkspaceListViewModel.LoadAsync().ConfigureAwait(true);
         this.workspaces = this.WorkspaceListViewModel.Workspaces.ToArray();
         this.currentWorkspacePath = this.WorkspaceContext.ActiveWorkspacePath;
     }
@@ -53,6 +53,6 @@
             : args.Value?.ToString();
 
         this.WorkspaceContext.ActiveWorkspacePath = this.currentWorkspacePath;
-        await this.SelectedWorkspaceChanged.InvokeAsync(this.currentWorkspacePath).ConfigureAwait(false);
+        await this.SelectedWorkspaceChanged.InvokeAsync(this.currentWorkspacePath).ConfigureAwait(true);
     }
 }

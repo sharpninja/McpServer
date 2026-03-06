@@ -163,7 +163,7 @@ internal sealed class WorkspaceListScreen : View
     /// <summary>Triggers initial data load.</summary>
     public async Task LoadAsync()
     {
-        await _listVm.LoadAsync().ConfigureAwait(false);
+        await _listVm.LoadAsync().ConfigureAwait(true);
 
         if (!string.IsNullOrWhiteSpace(_listVm.ErrorMessage))
         {
@@ -178,7 +178,7 @@ internal sealed class WorkspaceListScreen : View
         }
 
         _lastAutoDetailWorkspacePath = null;
-        await LoadSelectedDetailAsync(fallbackToFirst: true).ConfigureAwait(false);
+        await LoadSelectedDetailAsync(fallbackToFirst: true).ConfigureAwait(true);
     }
 
     private async Task LoadSelectedDetailAsync(bool fallbackToFirst = true, bool forceStatusMessage = false)
@@ -198,14 +198,14 @@ internal sealed class WorkspaceListScreen : View
 
         var selected = _rows[row];
         var requestVersion = Interlocked.Increment(ref _detailLoadRequestVersion);
-        await _detailLoadGate.WaitAsync().ConfigureAwait(false);
+        await _detailLoadGate.WaitAsync().ConfigureAwait(true);
         try
         {
             if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
                 return;
 
             _detailVm.WorkspacePath = selected.WorkspacePath;
-            await _detailVm.LoadAsync().ConfigureAwait(false);
+            await _detailVm.LoadAsync().ConfigureAwait(true);
 
             if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
                 return;

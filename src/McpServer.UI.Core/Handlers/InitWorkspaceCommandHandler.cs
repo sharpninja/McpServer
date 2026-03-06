@@ -39,7 +39,7 @@ internal sealed class InitWorkspaceCommandHandler : ICommandHandler<InitWorkspac
         try
         {
             var result = await _workspaceApiClient.InitWorkspaceAsync(command.WorkspacePath, context.CancellationToken)
-                .ConfigureAwait(false);
+                .ConfigureAwait(true);
             return Result<WorkspaceInitInfo>.Success(result);
         }
         catch (Exception ex)

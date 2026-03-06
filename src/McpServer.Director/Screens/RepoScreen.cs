@@ -97,7 +97,7 @@ internal sealed class RepoScreen : View
 
     public async Task LoadAsync()
     {
-        await ListAsync().ConfigureAwait(false);
+        await ListAsync().ConfigureAwait(true);
     }
 
     private async Task ListAsync()
@@ -107,7 +107,7 @@ internal sealed class RepoScreen : View
             : _listPathField.Text?.ToString();
 
         SetStatus("Listing repository entries...");
-        var result = await _dispatcher.QueryAsync(new ListRepoEntriesQuery { Path = path }).ConfigureAwait(false);
+        var result = await _dispatcher.QueryAsync(new ListRepoEntriesQuery { Path = path }).ConfigureAwait(true);
 
         if (result.IsFailure || result.Value is null)
         {
@@ -154,7 +154,7 @@ internal sealed class RepoScreen : View
         }
 
         SetStatus($"Reading '{path}'...");
-        var result = await _dispatcher.QueryAsync(new GetRepoFileQuery(path)).ConfigureAwait(false);
+        var result = await _dispatcher.QueryAsync(new GetRepoFileQuery(path)).ConfigureAwait(true);
 
         if (result.IsFailure || result.Value is null)
         {
@@ -179,7 +179,7 @@ internal sealed class RepoScreen : View
 
         var content = _contentView.Text?.ToString() ?? string.Empty;
         SetStatus($"Writing '{path}'...");
-        var result = await _dispatcher.SendAsync(new WriteRepoFileCommand(path, content)).ConfigureAwait(false);
+        var result = await _dispatcher.SendAsync(new WriteRepoFileCommand(path, content)).ConfigureAwait(true);
 
         if (result.IsFailure || result.Value is null)
         {

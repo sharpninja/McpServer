@@ -33,7 +33,7 @@ internal sealed class ListContextSourcesQueryHandler : IQueryHandler<ListContext
 
         try
         {
-            var result = await _contextApiClient.ListSourcesAsync(context.CancellationToken).ConfigureAwait(false);
+            var result = await _contextApiClient.ListSourcesAsync(context.CancellationToken).ConfigureAwait(true);
             return Result<ContextSourcesPayload>.Success(result);
         }
         catch (Exception ex)

@@ -29,7 +29,7 @@ internal sealed class LoginDialogAuthConfigHandler
     {
         try
         {
-            return await _discoverAuthConfigAsync(ct).ConfigureAwait(false);
+            return await _discoverAuthConfigAsync(ct).ConfigureAwait(true);
         }
         catch
         {
@@ -43,6 +43,6 @@ internal sealed class LoginDialogAuthConfigHandler
         if (client is null)
             return null;
 
-        return await client.GetAuthConfigAsync(ct).ConfigureAwait(false);
+        return await client.GetAuthConfigAsync(ct).ConfigureAwait(true);
     }
 }

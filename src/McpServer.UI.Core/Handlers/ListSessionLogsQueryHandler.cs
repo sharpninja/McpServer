@@ -38,7 +38,7 @@ internal sealed class ListSessionLogsQueryHandler : IQueryHandler<ListSessionLog
 
         try
         {
-            var result = await _sessionLogApiClient.ListSessionLogsAsync(query, context.CancellationToken).ConfigureAwait(false);
+            var result = await _sessionLogApiClient.ListSessionLogsAsync(query, context.CancellationToken).ConfigureAwait(true);
             return Result<ListSessionLogsResult>.Success(result);
         }
         catch (Exception ex)

@@ -67,7 +67,7 @@ public sealed partial class RequirementsGenerateViewModel : ObservableObject
         StatusMessage = $"Generating requirements doc '{selector}'...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new GenerateRequirementsDocumentQuery(selector), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new GenerateRequirementsDocumentQuery(selector), ct).ConfigureAwait(true);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Requirements generation failed.";

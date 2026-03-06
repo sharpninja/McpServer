@@ -180,13 +180,13 @@ internal sealed class AgentScreen : View
     public async Task LoadAllAsync()
     {
         SetStatus("Loading agent data...");
-        await LoadDefinitionsAsync().ConfigureAwait(false);
-        await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
+        await LoadDefinitionsAsync().ConfigureAwait(true);
+        await LoadWorkspaceAgentsAsync().ConfigureAwait(true);
 
         if (GetSelectedWorkspaceAgent() is not null)
-            await RefreshWorkspaceDetailAsync().ConfigureAwait(false);
+            await RefreshWorkspaceDetailAsync().ConfigureAwait(true);
         else if (GetSelectedDefinition() is not null)
-            await RefreshDefinitionDetailAsync().ConfigureAwait(false);
+            await RefreshDefinitionDetailAsync().ConfigureAwait(true);
         else
             SetDetail("No definitions or workspace agents are currently loaded.");
     }
@@ -195,7 +195,7 @@ internal sealed class AgentScreen : View
     {
         try
         {
-            await _definitionListVm.LoadAsync().ConfigureAwait(false);
+            await _definitionListVm.LoadAsync().ConfigureAwait(true);
             Application.Invoke(() =>
             {
                 _definitionRows.Clear();
@@ -232,7 +232,7 @@ internal sealed class AgentScreen : View
     {
         try
         {
-            await _workspaceAgentListVm.LoadAsync().ConfigureAwait(false);
+            await _workspaceAgentListVm.LoadAsync().ConfigureAwait(true);
             Application.Invoke(() =>
             {
                 _workspaceRows.Clear();
@@ -284,7 +284,7 @@ internal sealed class AgentScreen : View
         if (selected is null)
             return;
 
-        var detail = await _definitionDetailVm.LoadAsync(selected.Id).ConfigureAwait(false);
+        var detail = await _definitionDetailVm.LoadAsync(selected.Id).ConfigureAwait(true);
         if (detail is null)
         {
             SetStatus(_definitionDetailVm.ErrorMessage ?? $"Definition '{selected.Id}' not found.");
@@ -301,7 +301,7 @@ internal sealed class AgentScreen : View
         if (selected is null)
             return;
 
-        var detail = await _workspaceAgentDetailVm.LoadAsync(selected.AgentId, selected.WorkspacePath).ConfigureAwait(false);
+        var detail = await _workspaceAgentDetailVm.LoadAsync(selected.AgentId, selected.WorkspacePath).ConfigureAwait(true);
         if (detail is null)
         {
             SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? $"Workspace agent '{selected.AgentId}' not found.");
@@ -321,16 +321,16 @@ internal sealed class AgentScreen : View
             return;
         }
 
-        var outcome = await _workspaceAgentDetailVm.AssignAsync(selected.Id).ConfigureAwait(false);
+        var outcome = await _workspaceAgentDetailVm.AssignAsync(selected.Id).ConfigureAwait(true);
         if (outcome is not { Success: true })
         {
             SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? outcome?.Error ?? "Assign failed.");
             return;
         }
 
-        await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
+        await LoadWorkspaceAgentsAsync().ConfigureAwait(true);
         SelectWorkspaceAgent(selected.Id);
-        await RefreshWorkspaceDetailAsync().ConfigureAwait(false);
+        await RefreshWorkspaceDetailAsync().ConfigureAwait(true);
         SetStatus($"Assigned '{selected.Id}' to active workspace.");
     }
 
@@ -386,26 +386,26 @@ internal sealed class AgentScreen : View
 
         if (createDefinition)
         {
-            var createOutcome = await _definitionDetailVm.CreateBasicAsync(normalized).ConfigureAwait(false);
+            var createOutcome = await _definitionDetailVm.CreateBasicAsync(normalized).ConfigureAwait(true);
             if (createOutcome is not { Success: true })
             {
                 SetStatus(_definitionDetailVm.ErrorMessage ?? createOutcome?.Error ?? "Create definition failed.");
                 return;
             }
 
-            await LoadDefinitionsAsync().ConfigureAwait(false);
+            await LoadDefinitionsAsync().ConfigureAwait(true);
         }
 
-        var assignOutcome = await _workspaceAgentDetailVm.AssignAsync(normalized).ConfigureAwait(false);
+        var assignOutcome = await _workspaceAgentDetailVm.AssignAsync(normalized).ConfigureAwait(true);
         if (assignOutcome is not { Success: true })
         {
             SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? assignOutcome?.Error ?? "Assign failed.");
             return;
         }
 
-        await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
+        await LoadWorkspaceAgentsAsync().ConfigureAwait(true);
         SelectWorkspaceAgent(normalized);
-        await RefreshWorkspaceDetailAsync().ConfigureAwait(false);
+        await RefreshWorkspaceDetailAsync().ConfigureAwait(true);
         SetStatus($"Assigned '{normalized}'.");
     }
 
@@ -420,7 +420,7 @@ internal sealed class AgentScreen : View
 
         _ = Task.Run(async () =>
         {
-            var detail = await _definitionDetailVm.LoadAsync(selected.Id).ConfigureAwait(false);
+            var detail = await _definitionDetailVm.LoadAsync(selected.Id).ConfigureAwait(true);
             if (detail is null)
             {
                 SetStatus(_definitionDetailVm.ErrorMessage ?? "Definition not found.");
@@ -492,16 +492,16 @@ internal sealed class AgentScreen : View
             Application.RequestStop();
             _ = Task.Run(async () =>
             {
-                var outcome = await _definitionDetailVm.UpsertAsync(command).ConfigureAwait(false);
+                var outcome = await _definitionDetailVm.UpsertAsync(command).ConfigureAwait(true);
                 if (outcome is not { Success: true })
                 {
                     SetStatus(_definitionDetailVm.ErrorMessage ?? outcome?.Error ?? "Save failed.");
                     return;
                 }
 
-                await LoadDefinitionsAsync().ConfigureAwait(false);
+                await LoadDefinitionsAsync().ConfigureAwait(true);
                 SelectDefinition(command.Id);
-                await RefreshDefinitionDetailAsync().ConfigureAwait(false);
+                await RefreshDefinitionDetailAsync().ConfigureAwait(true);
             });
         };
 
@@ -523,7 +523,7 @@ internal sealed class AgentScreen : View
 
         _ = Task.Run(async () =>
         {
-            var detail = await _workspaceAgentDetailVm.LoadAsync(selected.AgentId, selected.WorkspacePath).ConfigureAwait(false);
+            var detail = await _workspaceAgentDetailVm.LoadAsync(selected.AgentId, selected.WorkspacePath).ConfigureAwait(true);
             if (detail is null)
             {
                 SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? "Workspace detail not found.");
@@ -613,16 +613,16 @@ internal sealed class AgentScreen : View
             Application.RequestStop();
             _ = Task.Run(async () =>
             {
-                var outcome = await _workspaceAgentDetailVm.UpsertAsync(command).ConfigureAwait(false);
+                var outcome = await _workspaceAgentDetailVm.UpsertAsync(command).ConfigureAwait(true);
                 if (outcome is not { Success: true })
                 {
                     SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? outcome?.Error ?? "Save failed.");
                     return;
                 }
 
-                await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
+                await LoadWorkspaceAgentsAsync().ConfigureAwait(true);
                 SelectWorkspaceAgent(command.AgentId);
-                await RefreshWorkspaceDetailAsync().ConfigureAwait(false);
+                await RefreshWorkspaceDetailAsync().ConfigureAwait(true);
             });
         };
 
@@ -660,16 +660,16 @@ internal sealed class AgentScreen : View
             Application.RequestStop();
             _ = Task.Run(async () =>
             {
-                var outcome = await _workspaceAgentDetailVm.BanAsync(selected.AgentId, reason, selected.WorkspacePath).ConfigureAwait(false);
+                var outcome = await _workspaceAgentDetailVm.BanAsync(selected.AgentId, reason, selected.WorkspacePath).ConfigureAwait(true);
                 if (outcome is not { Success: true })
                 {
                     SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? outcome?.Error ?? "Ban failed.");
                     return;
                 }
 
-                await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
+                await LoadWorkspaceAgentsAsync().ConfigureAwait(true);
                 SelectWorkspaceAgent(selected.AgentId);
-                await RefreshWorkspaceDetailAsync().ConfigureAwait(false);
+                await RefreshWorkspaceDetailAsync().ConfigureAwait(true);
             });
         };
 
@@ -689,16 +689,16 @@ internal sealed class AgentScreen : View
             return;
         }
 
-        var outcome = await _workspaceAgentDetailVm.UnbanAsync(selected.AgentId, selected.WorkspacePath).ConfigureAwait(false);
+        var outcome = await _workspaceAgentDetailVm.UnbanAsync(selected.AgentId, selected.WorkspacePath).ConfigureAwait(true);
         if (outcome is not { Success: true })
         {
             SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? outcome?.Error ?? "Unban failed.");
             return;
         }
 
-        await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
+        await LoadWorkspaceAgentsAsync().ConfigureAwait(true);
         SelectWorkspaceAgent(selected.AgentId);
-        await RefreshWorkspaceDetailAsync().ConfigureAwait(false);
+        await RefreshWorkspaceDetailAsync().ConfigureAwait(true);
     }
 
     private async Task DeleteSelectedAsync()
@@ -710,20 +710,20 @@ internal sealed class AgentScreen : View
             return;
         }
 
-        var outcome = await _workspaceAgentDetailVm.DeleteAsync(selected.AgentId, selected.WorkspacePath).ConfigureAwait(false);
+        var outcome = await _workspaceAgentDetailVm.DeleteAsync(selected.AgentId, selected.WorkspacePath).ConfigureAwait(true);
         if (outcome is not { Success: true })
         {
             SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? outcome?.Error ?? "Delete failed.");
             return;
         }
 
-        await LoadWorkspaceAgentsAsync().ConfigureAwait(false);
+        await LoadWorkspaceAgentsAsync().ConfigureAwait(true);
         SetDetail("Workspace agent deleted.");
     }
 
     private async Task ValidateAsync()
     {
-        var outcome = await _workspaceAgentDetailVm.ValidateAsync().ConfigureAwait(false);
+        var outcome = await _workspaceAgentDetailVm.ValidateAsync().ConfigureAwait(true);
         if (outcome is null)
         {
             SetStatus(_workspaceAgentDetailVm.ErrorMessage ?? "Validation failed.");
@@ -744,7 +744,7 @@ internal sealed class AgentScreen : View
             return;
         }
 
-        var result = await _eventsVm.LoadAsync(selectedAgent).ConfigureAwait(false);
+        var result = await _eventsVm.LoadAsync(selectedAgent).ConfigureAwait(true);
         if (result is null)
         {
             SetStatus(_eventsVm.ErrorMessage ?? "Failed to load events.");

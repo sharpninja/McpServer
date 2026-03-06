@@ -110,7 +110,7 @@ else
         ViewModel.TemplateId = TemplateId;
         ViewModel.InlineTemplate = InlineTemplate;
         ViewModel.VariablesJson = EffectiveVariablesJson;
-        await ViewModel.RunAsync().ConfigureAwait(false);
+        await ViewModel.RunAsync().ConfigureAwait(true);
     }
 }
 

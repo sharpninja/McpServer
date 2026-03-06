@@ -102,7 +102,7 @@ internal sealed class WorkspacePolicyScreen : View
             SyncTextToCollection(countriesView, _vm.BannedCountriesOfOrigin);
             SyncTextToCollection(orgsView, _vm.BannedOrganizations);
             SyncTextToCollection(individualsView, _vm.BannedIndividuals);
-            await _vm.SaveAsync().ConfigureAwait(false);
+            await _vm.SaveAsync().ConfigureAwait(true);
         });
     }
 

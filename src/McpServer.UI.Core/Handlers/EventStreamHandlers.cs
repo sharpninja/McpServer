@@ -36,7 +36,7 @@ internal sealed class SubscribeToEventsQueryHandler : IQueryHandler<SubscribeToE
 
         try
         {
-            var stream = await _client.SubscribeAsync(query.Category, context.CancellationToken).ConfigureAwait(false);
+            var stream = await _client.SubscribeAsync(query.Category, context.CancellationToken).ConfigureAwait(true);
             return Result<IAsyncEnumerable<ChangeEventItem>>.Success(stream);
         }
         catch (Exception ex)

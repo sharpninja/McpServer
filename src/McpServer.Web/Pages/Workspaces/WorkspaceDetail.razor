@@ -202,7 +202,7 @@ else
     {
         if (ListViewModel.Workspaces.Count == 0)
         {
-            await ListViewModel.LoadAsync().ConfigureAwait(false);
+            await ListViewModel.LoadAsync().ConfigureAwait(true);
         }
     }
 
@@ -216,12 +216,12 @@ else
             return;
 
         ViewModel.WorkspacePath = WorkspacePath;
-        await ViewModel.LoadAsync().ConfigureAwait(false);
+        await ViewModel.LoadAsync().ConfigureAwait(true);
     }
 
-    private async Task SaveAsync() => await ViewModel.SaveAsync().ConfigureAwait(false);
+    private async Task SaveAsync() => await ViewModel.SaveAsync().ConfigureAwait(true);
 
-    private async Task DeleteAsync() => await ViewModel.DeleteAsync().ConfigureAwait(false);
+    private async Task DeleteAsync() => await ViewModel.DeleteAsync().ConfigureAwait(true);
 
     private static RenderFragment RenderStringList(IReadOnlyList<string> values) => builder =>
     {

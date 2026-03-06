@@ -69,7 +69,7 @@ public sealed partial class GitHubSyncViewModel : ObservableObject
         StatusMessage = "Loading labels...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new ListLabelsQuery(), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new ListLabelsQuery(), ct).ConfigureAwait(true);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Label load failed.";
@@ -118,7 +118,7 @@ public sealed partial class GitHubSyncViewModel : ObservableObject
         StatusMessage = "Syncing from GitHub...";
         try
         {
-            var result = await _dispatcher.SendAsync(new SyncFromGitHubCommand(state, limit), ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(new SyncFromGitHubCommand(state, limit), ct).ConfigureAwait(true);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Sync from GitHub failed.";
@@ -155,7 +155,7 @@ public sealed partial class GitHubSyncViewModel : ObservableObject
         StatusMessage = "Syncing to GitHub...";
         try
         {
-            var result = await _dispatcher.SendAsync(new SyncToGitHubCommand(), ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(new SyncToGitHubCommand(), ct).ConfigureAwait(true);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Sync to GitHub failed.";
@@ -194,7 +194,7 @@ public sealed partial class GitHubSyncViewModel : ObservableObject
         StatusMessage = $"Syncing issue #{number} ({direction})...";
         try
         {
-            var result = await _dispatcher.SendAsync(new SyncSingleIssueCommand(number, direction), ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(new SyncSingleIssueCommand(number, direction), ct).ConfigureAwait(true);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Single issue sync failed.";

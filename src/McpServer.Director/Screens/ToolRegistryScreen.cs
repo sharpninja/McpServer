@@ -177,8 +177,8 @@ internal sealed class ToolRegistryScreen : View
 
     public async Task LoadAllAsync()
     {
-        await LoadToolsAsync(_searchField.Text?.ToString()).ConfigureAwait(false);
-        await LoadBucketsAsync().ConfigureAwait(false);
+        await LoadToolsAsync(_searchField.Text?.ToString()).ConfigureAwait(true);
+        await LoadBucketsAsync().ConfigureAwait(true);
     }
 
     private Task SearchAsync()
@@ -188,7 +188,7 @@ internal sealed class ToolRegistryScreen : View
     {
         try
         {
-            await _toolListVm.LoadAsync(keyword).ConfigureAwait(false);
+            await _toolListVm.LoadAsync(keyword).ConfigureAwait(true);
             Application.Invoke(() =>
             {
                 _toolRows.Clear();
@@ -226,7 +226,7 @@ internal sealed class ToolRegistryScreen : View
     {
         try
         {
-            await _bucketListVm.LoadAsync().ConfigureAwait(false);
+            await _bucketListVm.LoadAsync().ConfigureAwait(true);
             Application.Invoke(() =>
             {
                 _bucketRows.Clear();
@@ -278,7 +278,7 @@ internal sealed class ToolRegistryScreen : View
         if (selected is null)
             return;
 
-        var detail = await _toolDetailVm.LoadAsync(selected.Id).ConfigureAwait(false);
+        var detail = await _toolDetailVm.LoadAsync(selected.Id).ConfigureAwait(true);
         if (detail is null)
         {
             SetStatus(_toolDetailVm.ErrorMessage ?? "Tool detail load failed.");
@@ -326,14 +326,14 @@ internal sealed class ToolRegistryScreen : View
             Application.RequestStop();
             _ = Task.Run(async () =>
             {
-                var outcome = await _toolDetailVm.CreateAsync(cmd).ConfigureAwait(false);
+                var outcome = await _toolDetailVm.CreateAsync(cmd).ConfigureAwait(true);
                 if (outcome is not { Success: true })
                 {
                     SetStatus(_toolDetailVm.ErrorMessage ?? outcome?.Error ?? "Tool create failed.");
                     return;
                 }
 
-                await LoadToolsAsync(_searchField.Text?.ToString()).ConfigureAwait(false);
+                await LoadToolsAsync(_searchField.Text?.ToString()).ConfigureAwait(true);
             });
         };
 
@@ -355,7 +355,7 @@ internal sealed class ToolRegistryScreen : View
 
         _ = Task.Run(async () =>
         {
-            var detail = await _toolDetailVm.LoadAsync(selected.Id).ConfigureAwait(false);
+            var detail = await _toolDetailVm.LoadAsync(selected.Id).ConfigureAwait(true);
             if (detail is null)
             {
                 SetStatus(_toolDetailVm.ErrorMessage ?? "Tool detail load failed.");
@@ -389,15 +389,15 @@ internal sealed class ToolRegistryScreen : View
             Application.RequestStop();
             _ = Task.Run(async () =>
             {
-                var outcome = await _toolDetailVm.UpdateAsync(cmd).ConfigureAwait(false);
+                var outcome = await _toolDetailVm.UpdateAsync(cmd).ConfigureAwait(true);
                 if (outcome is not { Success: true })
                 {
                     SetStatus(_toolDetailVm.ErrorMessage ?? outcome?.Error ?? "Tool save failed.");
                     return;
                 }
 
-                await LoadToolsAsync(_searchField.Text?.ToString()).ConfigureAwait(false);
-                await RefreshSelectedToolDetailAsync().ConfigureAwait(false);
+                await LoadToolsAsync(_searchField.Text?.ToString()).ConfigureAwait(true);
+                await RefreshSelectedToolDetailAsync().ConfigureAwait(true);
             });
         };
 
@@ -417,14 +417,14 @@ internal sealed class ToolRegistryScreen : View
             return;
         }
 
-        var outcome = await _toolDetailVm.DeleteAsync(selected.Id).ConfigureAwait(false);
+        var outcome = await _toolDetailVm.DeleteAsync(selected.Id).ConfigureAwait(true);
         if (outcome is not { Success: true })
         {
             SetStatus(_toolDetailVm.ErrorMessage ?? outcome?.Error ?? "Tool delete failed.");
             return;
         }
 
-        await LoadToolsAsync(_searchField.Text?.ToString()).ConfigureAwait(false);
+        await LoadToolsAsync(_searchField.Text?.ToString()).ConfigureAwait(true);
         SetDetail("Tool deleted.");
     }
 
@@ -479,14 +479,14 @@ internal sealed class ToolRegistryScreen : View
             Application.RequestStop();
             _ = Task.Run(async () =>
             {
-                var outcome = await _bucketDetailVm.AddAsync(cmd).ConfigureAwait(false);
+                var outcome = await _bucketDetailVm.AddAsync(cmd).ConfigureAwait(true);
                 if (outcome is not { Success: true })
                 {
                     SetStatus(_bucketDetailVm.ErrorMessage ?? outcome?.Error ?? "Add bucket failed.");
                     return;
                 }
 
-                await LoadBucketsAsync().ConfigureAwait(false);
+                await LoadBucketsAsync().ConfigureAwait(true);
             });
         };
 
@@ -506,14 +506,14 @@ internal sealed class ToolRegistryScreen : View
             return;
         }
 
-        var outcome = await _bucketDetailVm.RemoveAsync(selected.Name, uninstallTools: false).ConfigureAwait(false);
+        var outcome = await _bucketDetailVm.RemoveAsync(selected.Name, uninstallTools: false).ConfigureAwait(true);
         if (outcome is not { Success: true })
         {
             SetStatus(_bucketDetailVm.ErrorMessage ?? outcome?.Error ?? "Remove bucket failed.");
             return;
         }
 
-        await LoadBucketsAsync().ConfigureAwait(false);
+        await LoadBucketsAsync().ConfigureAwait(true);
         SetDetail("Bucket removed.");
     }
 
@@ -526,14 +526,14 @@ internal sealed class ToolRegistryScreen : View
             return;
         }
 
-        var outcome = await _bucketDetailVm.SyncAsync(selected.Name).ConfigureAwait(false);
+        var outcome = await _bucketDetailVm.SyncAsync(selected.Name).ConfigureAwait(true);
         if (outcome is null || !outcome.Success)
         {
             SetStatus(_bucketDetailVm.ErrorMessage ?? outcome?.Error ?? "Bucket sync failed.");
             return;
         }
 
-        await LoadBucketsAsync().ConfigureAwait(false);
+        await LoadBucketsAsync().ConfigureAwait(true);
     }
 
     private async Task BrowseSelectedBucketAsync()
@@ -545,7 +545,7 @@ internal sealed class ToolRegistryScreen : View
             return;
         }
 
-        var outcome = await _bucketDetailVm.BrowseAsync(selected.Name).ConfigureAwait(false);
+        var outcome = await _bucketDetailVm.BrowseAsync(selected.Name).ConfigureAwait(true);
         if (outcome is null || !outcome.Success)
         {
             SetStatus(_bucketDetailVm.ErrorMessage ?? outcome?.Error ?? "Bucket browse failed.");
@@ -586,14 +586,14 @@ internal sealed class ToolRegistryScreen : View
             Application.RequestStop();
             _ = Task.Run(async () =>
             {
-                var installOutcome = await _bucketDetailVm.InstallAsync(bucketName, tool.Name).ConfigureAwait(false);
+                var installOutcome = await _bucketDetailVm.InstallAsync(bucketName, tool.Name).ConfigureAwait(true);
                 if (installOutcome is not { Success: true })
                 {
                     SetStatus(_bucketDetailVm.ErrorMessage ?? installOutcome?.Error ?? "Install failed.");
                     return;
                 }
 
-                await LoadToolsAsync(_searchField.Text?.ToString()).ConfigureAwait(false);
+                await LoadToolsAsync(_searchField.Text?.ToString()).ConfigureAwait(true);
                 SetStatus($"Installed '{tool.Name}' from '{bucketName}'.");
             });
         };

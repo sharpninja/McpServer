@@ -43,7 +43,7 @@ public sealed class IssueDetailViewModel : AreaDetailViewModelBase<GitHubIssueDe
         StatusMessage = $"Loading issue #{number}...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new GetIssueQuery(number), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new GetIssueQuery(number), ct).ConfigureAwait(true);
             if (!result.IsSuccess)
             {
                 ErrorMessage = result.Error ?? "Issue load failed.";
@@ -84,7 +84,7 @@ public sealed class IssueDetailViewModel : AreaDetailViewModelBase<GitHubIssueDe
         try
         {
             var command = new CreateIssueCommand { Title = title, Body = body };
-            var result = await _dispatcher.SendAsync(command, ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(command, ct).ConfigureAwait(true);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Issue create failed.";
@@ -93,7 +93,7 @@ public sealed class IssueDetailViewModel : AreaDetailViewModelBase<GitHubIssueDe
             }
 
             StatusMessage = $"Created issue #{result.Value.Number}.";
-            await LoadAsync(result.Value.Number, ct).ConfigureAwait(false);
+            await LoadAsync(result.Value.Number, ct).ConfigureAwait(true);
             return result.Value;
         }
         catch (Exception ex)
@@ -117,9 +117,9 @@ public sealed class IssueDetailViewModel : AreaDetailViewModelBase<GitHubIssueDe
     /// <returns>Mutation result on success, otherwise null.</returns>
     public async Task<GitHubMutationOutcome?> UpdateAsync(UpdateIssueCommand command, CancellationToken ct = default)
     {
-        var outcome = await SendMutationAsync(command, $"Saving issue #{command.Number}...", ct).ConfigureAwait(false);
+        var outcome = await SendMutationAsync(command, $"Saving issue #{command.Number}...", ct).ConfigureAwait(true);
         if (outcome is { Success: true })
-            await LoadAsync(command.Number, ct).ConfigureAwait(false);
+            await LoadAsync(command.Number, ct).ConfigureAwait(true);
         return outcome;
     }
 
@@ -133,9 +133,9 @@ public sealed class IssueDetailViewModel : AreaDetailViewModelBase<GitHubIssueDe
     public async Task<GitHubMutationOutcome?> CloseAsync(int number, string? reason = null, CancellationToken ct = default)
     {
         var outcome = await SendMutationAsync(new CloseIssueCommand(number, reason), $"Closing issue #{number}...", ct)
-            .ConfigureAwait(false);
+            .ConfigureAwait(true);
         if (outcome is { Success: true })
-            await LoadAsync(number, ct).ConfigureAwait(false);
+            await LoadAsync(number, ct).ConfigureAwait(true);
         return outcome;
     }
 
@@ -148,9 +148,9 @@ public sealed class IssueDetailViewModel : AreaDetailViewModelBase<GitHubIssueDe
     public async Task<GitHubMutationOutcome?> ReopenAsync(int number, CancellationToken ct = default)
     {
         var outcome = await SendMutationAsync(new ReopenIssueCommand(number), $"Reopening issue #{number}...", ct)
-            .ConfigureAwait(false);
+            .ConfigureAwait(true);
         if (outcome is { Success: true })
-            await LoadAsync(number, ct).ConfigureAwait(false);
+            await LoadAsync(number, ct).ConfigureAwait(true);
         return outcome;
     }
 
@@ -164,9 +164,9 @@ public sealed class IssueDetailViewModel : AreaDetailViewModelBase<GitHubIssueDe
     public async Task<GitHubMutationOutcome?> CommentAsync(int number, string body, CancellationToken ct = default)
     {
         var outcome = await SendMutationAsync(new CommentOnIssueCommand(number, body), $"Commenting on issue #{number}...", ct)
-            .ConfigureAwait(false);
+            .ConfigureAwait(true);
         if (outcome is { Success: true })
-            await LoadAsync(number, ct).ConfigureAwait(false);
+            await LoadAsync(number, ct).ConfigureAwait(true);
         return outcome;
     }
 
@@ -178,7 +178,7 @@ public sealed class IssueDetailViewModel : AreaDetailViewModelBase<GitHubIssueDe
         StatusMessage = pendingStatus;
         try
         {
-            var result = await _dispatcher.SendAsync(command, ct).ConfigureAwait(false);
+            var result = await _dispatcher.SendAsync(command, ct).ConfigureAwait(true);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Issue mutation failed.";

@@ -77,7 +77,7 @@ public sealed partial class SessionLogListViewModel : AreaListViewModelBase<Sess
 
         try
         {
-            var result = await _refreshCommand.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await _refreshCommand.DispatchAsync(ct).ConfigureAwait(true);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Unknown error loading session logs.";

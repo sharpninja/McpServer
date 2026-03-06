@@ -25,15 +25,15 @@ internal sealed class ToolRegistryApiClientAdapter : IToolRegistryApiClient
 
     public async Task<ListToolsResult> ListToolsAsync(ListToolsQuery query, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Tools.ListAsync(query.WorkspacePath, cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Tools.ListAsync(query.WorkspacePath, cancellationToken).ConfigureAwait(true);
         return new ListToolsResult(result.Tools.Select(MapToolListItem).ToList(), result.TotalCount);
     }
 
     public async Task<ListToolsResult> SearchToolsAsync(SearchToolsQuery query, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Tools.SearchAsync(query.Keyword, query.WorkspacePath, cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Tools.SearchAsync(query.Keyword, query.WorkspacePath, cancellationToken).ConfigureAwait(true);
         return new ListToolsResult(result.Tools.Select(MapToolListItem).ToList(), result.TotalCount);
     }
 
@@ -41,8 +41,8 @@ internal sealed class ToolRegistryApiClientAdapter : IToolRegistryApiClient
     {
         try
         {
-            var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-            var result = await client.Tools.GetAsync(toolId, cancellationToken).ConfigureAwait(false);
+            var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+            var result = await client.Tools.GetAsync(toolId, cancellationToken).ConfigureAwait(true);
             return MapToolDetail(result);
         }
         catch (McpNotFoundException ex)
@@ -54,7 +54,7 @@ internal sealed class ToolRegistryApiClientAdapter : IToolRegistryApiClient
 
     public async Task<ToolMutationOutcome> CreateToolAsync(CreateToolCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
         var result = await client.Tools.CreateAsync(new ToolCreateRequest
         {
             Name = command.Name,
@@ -63,14 +63,14 @@ internal sealed class ToolRegistryApiClientAdapter : IToolRegistryApiClient
             ParameterSchema = command.ParameterSchema,
             CommandTemplate = command.CommandTemplate,
             WorkspacePath = command.WorkspacePath
-        }, cancellationToken).ConfigureAwait(false);
+        }, cancellationToken).ConfigureAwait(true);
 
         return new ToolMutationOutcome(result.Success, result.Error, result.Tool is null ? null : MapToolDetail(result.Tool));
     }
 
     public async Task<ToolMutationOutcome> UpdateToolAsync(UpdateToolCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
         var result = await client.Tools.UpdateAsync(command.ToolId, new ToolUpdateRequest
         {
             Name = command.Name,
@@ -79,28 +79,28 @@ internal sealed class ToolRegistryApiClientAdapter : IToolRegistryApiClient
             ParameterSchema = command.ParameterSchema,
             CommandTemplate = command.CommandTemplate,
             WorkspacePath = command.WorkspacePath
-        }, cancellationToken).ConfigureAwait(false);
+        }, cancellationToken).ConfigureAwait(true);
 
         return new ToolMutationOutcome(result.Success, result.Error, result.Tool is null ? null : MapToolDetail(result.Tool));
     }
 
     public async Task<ToolMutationOutcome> DeleteToolAsync(DeleteToolCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Tools.DeleteAsync(command.ToolId, cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Tools.DeleteAsync(command.ToolId, cancellationToken).ConfigureAwait(true);
         return new ToolMutationOutcome(result.Success, result.Error, result.Tool is null ? null : MapToolDetail(result.Tool));
     }
 
     public async Task<ListBucketsResult> ListBucketsAsync(CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Tools.ListBucketsAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Tools.ListBucketsAsync(cancellationToken).ConfigureAwait(true);
         return new ListBucketsResult(result.Buckets.Select(MapBucketDetail).ToList(), result.TotalCount);
     }
 
     public async Task<BucketMutationOutcome> AddBucketAsync(AddBucketCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
         var result = await client.Tools.AddBucketAsync(new BucketAddRequest
         {
             Name = command.Name,
@@ -108,22 +108,22 @@ internal sealed class ToolRegistryApiClientAdapter : IToolRegistryApiClient
             Repo = command.Repo,
             Branch = command.Branch,
             ManifestPath = command.ManifestPath
-        }, cancellationToken).ConfigureAwait(false);
+        }, cancellationToken).ConfigureAwait(true);
 
         return new BucketMutationOutcome(result.Success, result.Error, result.Bucket is null ? null : MapBucketDetail(result.Bucket));
     }
 
     public async Task<BucketMutationOutcome> RemoveBucketAsync(RemoveBucketCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Tools.DeleteBucketAsync(command.Name, command.UninstallTools, cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Tools.DeleteBucketAsync(command.Name, command.UninstallTools, cancellationToken).ConfigureAwait(true);
         return new BucketMutationOutcome(result.Success, result.Error, result.Bucket is null ? null : MapBucketDetail(result.Bucket));
     }
 
     public async Task<BucketBrowseOutcome> BrowseBucketAsync(BrowseBucketQuery query, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Tools.BrowseBucketAsync(query.Name, cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Tools.BrowseBucketAsync(query.Name, cancellationToken).ConfigureAwait(true);
         return new BucketBrowseOutcome(
             result.Success,
             result.Error,
@@ -138,23 +138,23 @@ internal sealed class ToolRegistryApiClientAdapter : IToolRegistryApiClient
 
     public async Task<ToolMutationOutcome> InstallFromBucketAsync(InstallFromBucketCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Tools.InstallFromBucketAsync(command.BucketName, command.ToolName, command.WorkspacePath, cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Tools.InstallFromBucketAsync(command.BucketName, command.ToolName, command.WorkspacePath, cancellationToken).ConfigureAwait(true);
         return new ToolMutationOutcome(result.Success, result.Error, result.Tool is null ? null : MapToolDetail(result.Tool));
     }
 
     public async Task<BucketSyncOutcome> SyncBucketAsync(SyncBucketCommand command, CancellationToken cancellationToken = default)
     {
-        var client = await GetClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Tools.SyncBucketAsync(command.Name, cancellationToken).ConfigureAwait(false);
+        var client = await GetClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Tools.SyncBucketAsync(command.Name, cancellationToken).ConfigureAwait(true);
         return new BucketSyncOutcome(result.Success, result.Error, result.Updated, result.Added, result.Unchanged);
     }
 
     private async Task<McpServerClient> GetClientAsync(CancellationToken cancellationToken)
     {
         if (_context.HasControlConnection)
-            return await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(false);
-        return await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+            return await _context.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(true);
+        return await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
     }
 
     private static ToolListItem MapToolListItem(ToolDto dto)

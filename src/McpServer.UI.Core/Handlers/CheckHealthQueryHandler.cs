@@ -39,7 +39,7 @@ internal sealed class CheckHealthQueryHandler : IQueryHandler<CheckHealthQuery, 
 
         try
         {
-            var snapshot = await _healthApiClient.CheckHealthAsync(context.CancellationToken).ConfigureAwait(false);
+            var snapshot = await _healthApiClient.CheckHealthAsync(context.CancellationToken).ConfigureAwait(true);
             return Result<HealthSnapshot>.Success(snapshot);
         }
         catch (Exception ex)

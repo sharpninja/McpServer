@@ -264,17 +264,17 @@ internal sealed class RequirementsScreen : View
 
     public async Task LoadAllAsync()
     {
-        await LoadFrAsync().ConfigureAwait(false);
-        await LoadTrAsync().ConfigureAwait(false);
-        await LoadTestAsync().ConfigureAwait(false);
-        await LoadMappingAsync().ConfigureAwait(false);
+        await LoadFrAsync().ConfigureAwait(true);
+        await LoadTrAsync().ConfigureAwait(true);
+        await LoadTestAsync().ConfigureAwait(true);
+        await LoadMappingAsync().ConfigureAwait(true);
     }
 
     private async Task LoadFrAsync()
     {
         try
         {
-            await _frListVm.LoadAsync().ConfigureAwait(false);
+            await _frListVm.LoadAsync().ConfigureAwait(true);
             Application.Invoke(() =>
             {
                 _frRows.Clear();
@@ -302,7 +302,7 @@ internal sealed class RequirementsScreen : View
     {
         try
         {
-            await _trListVm.LoadAsync().ConfigureAwait(false);
+            await _trListVm.LoadAsync().ConfigureAwait(true);
             Application.Invoke(() =>
             {
                 _trRows.Clear();
@@ -330,7 +330,7 @@ internal sealed class RequirementsScreen : View
     {
         try
         {
-            await _testListVm.LoadAsync().ConfigureAwait(false);
+            await _testListVm.LoadAsync().ConfigureAwait(true);
             Application.Invoke(() =>
             {
                 _testRows.Clear();
@@ -358,7 +358,7 @@ internal sealed class RequirementsScreen : View
     {
         try
         {
-            await _mappingListVm.LoadAsync().ConfigureAwait(false);
+            await _mappingListVm.LoadAsync().ConfigureAwait(true);
             Application.Invoke(() =>
             {
                 _mappingRows.Clear();
@@ -456,16 +456,16 @@ internal sealed class RequirementsScreen : View
             saveAction: async (id, title, body) =>
             {
                 if (createMode)
-                    await _frDetailVm.CreateAsync(id, title, body).ConfigureAwait(false);
+                    await _frDetailVm.CreateAsync(id, title, body).ConfigureAwait(true);
                 else
-                    await _frDetailVm.UpdateAsync(id, title, body).ConfigureAwait(false);
+                    await _frDetailVm.UpdateAsync(id, title, body).ConfigureAwait(true);
 
                 if (!string.IsNullOrWhiteSpace(_frDetailVm.ErrorMessage))
                 {
                     SetStatus(_frDetailVm.ErrorMessage);
                     return;
                 }
-                await LoadFrAsync().ConfigureAwait(false);
+                await LoadFrAsync().ConfigureAwait(true);
             });
     }
 
@@ -487,16 +487,16 @@ internal sealed class RequirementsScreen : View
             saveAction: async (id, title, body) =>
             {
                 if (createMode)
-                    await _trDetailVm.CreateAsync(id, title, body).ConfigureAwait(false);
+                    await _trDetailVm.CreateAsync(id, title, body).ConfigureAwait(true);
                 else
-                    await _trDetailVm.UpdateAsync(id, title, body).ConfigureAwait(false);
+                    await _trDetailVm.UpdateAsync(id, title, body).ConfigureAwait(true);
 
                 if (!string.IsNullOrWhiteSpace(_trDetailVm.ErrorMessage))
                 {
                     SetStatus(_trDetailVm.ErrorMessage);
                     return;
                 }
-                await LoadTrAsync().ConfigureAwait(false);
+                await LoadTrAsync().ConfigureAwait(true);
             });
     }
 
@@ -546,15 +546,15 @@ internal sealed class RequirementsScreen : View
             _ = Task.Run(async () =>
             {
                 if (createMode)
-                    await _testDetailVm.CreateAsync(id, condition).ConfigureAwait(false);
+                    await _testDetailVm.CreateAsync(id, condition).ConfigureAwait(true);
                 else
-                    await _testDetailVm.UpdateAsync(id, condition).ConfigureAwait(false);
+                    await _testDetailVm.UpdateAsync(id, condition).ConfigureAwait(true);
                 if (!string.IsNullOrWhiteSpace(_testDetailVm.ErrorMessage))
                 {
                     SetStatus(_testDetailVm.ErrorMessage);
                     return;
                 }
-                await LoadTestAsync().ConfigureAwait(false);
+                await LoadTestAsync().ConfigureAwait(true);
             });
         };
         var cancelBtn = new Button { Text = "Cancel" };
@@ -588,13 +588,13 @@ internal sealed class RequirementsScreen : View
             Application.RequestStop();
             _ = Task.Run(async () =>
             {
-                await _mappingListVm.UpsertAsync(frId, trIds).ConfigureAwait(false);
+                await _mappingListVm.UpsertAsync(frId, trIds).ConfigureAwait(true);
                 if (!string.IsNullOrWhiteSpace(_mappingListVm.ErrorMessage))
                 {
                     SetStatus(_mappingListVm.ErrorMessage);
                     return;
                 }
-                await LoadMappingAsync().ConfigureAwait(false);
+                await LoadMappingAsync().ConfigureAwait(true);
             });
         };
         var cancelBtn = new Button { Text = "Cancel" };
@@ -613,13 +613,13 @@ internal sealed class RequirementsScreen : View
             return;
         }
 
-        await _frDetailVm.DeleteAsync(selected.Id).ConfigureAwait(false);
+        await _frDetailVm.DeleteAsync(selected.Id).ConfigureAwait(true);
         if (!string.IsNullOrWhiteSpace(_frDetailVm.ErrorMessage))
         {
             SetStatus(_frDetailVm.ErrorMessage);
             return;
         }
-        await LoadFrAsync().ConfigureAwait(false);
+        await LoadFrAsync().ConfigureAwait(true);
     }
 
     private async Task DeleteSelectedTrAsync()
@@ -631,13 +631,13 @@ internal sealed class RequirementsScreen : View
             return;
         }
 
-        await _trDetailVm.DeleteAsync(selected.Id).ConfigureAwait(false);
+        await _trDetailVm.DeleteAsync(selected.Id).ConfigureAwait(true);
         if (!string.IsNullOrWhiteSpace(_trDetailVm.ErrorMessage))
         {
             SetStatus(_trDetailVm.ErrorMessage);
             return;
         }
-        await LoadTrAsync().ConfigureAwait(false);
+        await LoadTrAsync().ConfigureAwait(true);
     }
 
     private async Task DeleteSelectedTestAsync()
@@ -649,13 +649,13 @@ internal sealed class RequirementsScreen : View
             return;
         }
 
-        await _testDetailVm.DeleteAsync(selected.Id).ConfigureAwait(false);
+        await _testDetailVm.DeleteAsync(selected.Id).ConfigureAwait(true);
         if (!string.IsNullOrWhiteSpace(_testDetailVm.ErrorMessage))
         {
             SetStatus(_testDetailVm.ErrorMessage);
             return;
         }
-        await LoadTestAsync().ConfigureAwait(false);
+        await LoadTestAsync().ConfigureAwait(true);
     }
 
     private async Task DeleteSelectedMappingAsync()
@@ -667,19 +667,19 @@ internal sealed class RequirementsScreen : View
             return;
         }
 
-        await _mappingListVm.DeleteAsync(selected.FrId).ConfigureAwait(false);
+        await _mappingListVm.DeleteAsync(selected.FrId).ConfigureAwait(true);
         if (!string.IsNullOrWhiteSpace(_mappingListVm.ErrorMessage))
         {
             SetStatus(_mappingListVm.ErrorMessage);
             return;
         }
-        await LoadMappingAsync().ConfigureAwait(false);
+        await LoadMappingAsync().ConfigureAwait(true);
     }
 
     private async Task GenerateAsync()
     {
         var selector = _docSelectorField.Text?.ToString() ?? "all";
-        var result = await _generateVm.GenerateAsync(selector).ConfigureAwait(false);
+        var result = await _generateVm.GenerateAsync(selector).ConfigureAwait(true);
         if (result is null)
         {
             SetStatus(_generateVm.ErrorMessage ?? "Generation failed.");

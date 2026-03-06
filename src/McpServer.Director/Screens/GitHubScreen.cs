@@ -183,8 +183,8 @@ internal sealed class GitHubScreen : View
 
     public async Task LoadAllAsync()
     {
-        await LoadIssuesAsync().ConfigureAwait(false);
-        await LoadPullsAsync().ConfigureAwait(false);
+        await LoadIssuesAsync().ConfigureAwait(true);
+        await LoadPullsAsync().ConfigureAwait(true);
     }
 
     private async Task LoadIssuesAsync()
@@ -192,7 +192,7 @@ internal sealed class GitHubScreen : View
         try
         {
             _issueListVm.StateFilter = _issueStateField.Text?.ToString();
-            await _issueListVm.LoadAsync().ConfigureAwait(false);
+            await _issueListVm.LoadAsync().ConfigureAwait(true);
             Application.Invoke(() =>
             {
                 _issueRows.Clear();
@@ -230,7 +230,7 @@ internal sealed class GitHubScreen : View
         try
         {
             _pullListVm.StateFilter = _pullStateField.Text?.ToString();
-            await _pullListVm.LoadAsync().ConfigureAwait(false);
+            await _pullListVm.LoadAsync().ConfigureAwait(true);
             Application.Invoke(() =>
             {
                 _pullRows.Clear();
@@ -281,7 +281,7 @@ internal sealed class GitHubScreen : View
         if (selected is null)
             return;
 
-        var detail = await _issueDetailVm.LoadAsync(selected.Number).ConfigureAwait(false);
+        var detail = await _issueDetailVm.LoadAsync(selected.Number).ConfigureAwait(true);
         if (detail is null)
         {
             SetStatus(_issueDetailVm.ErrorMessage ?? "Issue detail load failed.");
@@ -326,16 +326,16 @@ internal sealed class GitHubScreen : View
             Application.RequestStop();
             _ = Task.Run(async () =>
             {
-                var create = await _issueDetailVm.CreateAsync(title, body).ConfigureAwait(false);
+                var create = await _issueDetailVm.CreateAsync(title, body).ConfigureAwait(true);
                 if (create is null)
                 {
                     SetStatus(_issueDetailVm.ErrorMessage ?? "Issue create failed.");
                     return;
                 }
 
-                await LoadIssuesAsync().ConfigureAwait(false);
+                await LoadIssuesAsync().ConfigureAwait(true);
                 SelectIssue(create.Number);
-                await RefreshSelectedIssueDetailAsync().ConfigureAwait(false);
+                await RefreshSelectedIssueDetailAsync().ConfigureAwait(true);
             });
         };
 
@@ -357,7 +357,7 @@ internal sealed class GitHubScreen : View
 
         _ = Task.Run(async () =>
         {
-            var detail = await _issueDetailVm.LoadAsync(selected.Number).ConfigureAwait(false);
+            var detail = await _issueDetailVm.LoadAsync(selected.Number).ConfigureAwait(true);
             if (detail is null)
             {
                 SetStatus(_issueDetailVm.ErrorMessage ?? "Issue detail load failed.");
@@ -410,16 +410,16 @@ internal sealed class GitHubScreen : View
             Application.RequestStop();
             _ = Task.Run(async () =>
             {
-                var outcome = await _issueDetailVm.UpdateAsync(command).ConfigureAwait(false);
+                var outcome = await _issueDetailVm.UpdateAsync(command).ConfigureAwait(true);
                 if (outcome is not { Success: true })
                 {
                     SetStatus(_issueDetailVm.ErrorMessage ?? outcome?.ErrorMessage ?? "Issue save failed.");
                     return;
                 }
 
-                await LoadIssuesAsync().ConfigureAwait(false);
+                await LoadIssuesAsync().ConfigureAwait(true);
                 SelectIssue(detail.Number);
-                await RefreshSelectedIssueDetailAsync().ConfigureAwait(false);
+                await RefreshSelectedIssueDetailAsync().ConfigureAwait(true);
             });
         };
 
@@ -441,14 +441,14 @@ internal sealed class GitHubScreen : View
 
         ShowCommentDialog($"Issue #{selected.Number} Comment", async text =>
         {
-            var outcome = await _issueDetailVm.CommentAsync(selected.Number, text).ConfigureAwait(false);
+            var outcome = await _issueDetailVm.CommentAsync(selected.Number, text).ConfigureAwait(true);
             if (outcome is not { Success: true })
             {
                 SetStatus(_issueDetailVm.ErrorMessage ?? outcome?.ErrorMessage ?? "Issue comment failed.");
                 return;
             }
 
-            await RefreshSelectedIssueDetailAsync().ConfigureAwait(false);
+            await RefreshSelectedIssueDetailAsync().ConfigureAwait(true);
         });
     }
 
@@ -461,16 +461,16 @@ internal sealed class GitHubScreen : View
             return;
         }
 
-        var outcome = await _issueDetailVm.CloseAsync(selected.Number).ConfigureAwait(false);
+        var outcome = await _issueDetailVm.CloseAsync(selected.Number).ConfigureAwait(true);
         if (outcome is not { Success: true })
         {
             SetStatus(_issueDetailVm.ErrorMessage ?? outcome?.ErrorMessage ?? "Issue close failed.");
             return;
         }
 
-        await LoadIssuesAsync().ConfigureAwait(false);
+        await LoadIssuesAsync().ConfigureAwait(true);
         SelectIssue(selected.Number);
-        await RefreshSelectedIssueDetailAsync().ConfigureAwait(false);
+        await RefreshSelectedIssueDetailAsync().ConfigureAwait(true);
     }
 
     private async Task ReopenSelectedIssueAsync()
@@ -482,16 +482,16 @@ internal sealed class GitHubScreen : View
             return;
         }
 
-        var outcome = await _issueDetailVm.ReopenAsync(selected.Number).ConfigureAwait(false);
+        var outcome = await _issueDetailVm.ReopenAsync(selected.Number).ConfigureAwait(true);
         if (outcome is not { Success: true })
         {
             SetStatus(_issueDetailVm.ErrorMessage ?? outcome?.ErrorMessage ?? "Issue reopen failed.");
             return;
         }
 
-        await LoadIssuesAsync().ConfigureAwait(false);
+        await LoadIssuesAsync().ConfigureAwait(true);
         SelectIssue(selected.Number);
-        await RefreshSelectedIssueDetailAsync().ConfigureAwait(false);
+        await RefreshSelectedIssueDetailAsync().ConfigureAwait(true);
     }
 
     private void ShowPullCommentDialog()
@@ -505,7 +505,7 @@ internal sealed class GitHubScreen : View
 
         ShowCommentDialog($"PR #{selected.Number} Comment", async text =>
         {
-            var outcome = await _pullListVm.CommentAsync(selected.Number, text).ConfigureAwait(false);
+            var outcome = await _pullListVm.CommentAsync(selected.Number, text).ConfigureAwait(true);
             if (outcome is not { Success: true })
             {
                 SetStatus(_pullListVm.ErrorMessage ?? outcome?.ErrorMessage ?? "PR comment failed.");
@@ -550,27 +550,27 @@ internal sealed class GitHubScreen : View
 
     private async Task SyncFromGitHubAsync()
     {
-        var outcome = await _syncVm.SyncFromGitHubAsync("open", 30).ConfigureAwait(false);
+        var outcome = await _syncVm.SyncFromGitHubAsync("open", 30).ConfigureAwait(true);
         if (outcome is null)
         {
             SetStatus(_syncVm.ErrorMessage ?? "Sync from GitHub failed.");
             return;
         }
 
-        await LoadIssuesAsync().ConfigureAwait(false);
+        await LoadIssuesAsync().ConfigureAwait(true);
         SetStatus(_syncVm.StatusMessage ?? "Sync from GitHub completed.");
     }
 
     private async Task SyncToGitHubAsync()
     {
-        var outcome = await _syncVm.SyncToGitHubAsync().ConfigureAwait(false);
+        var outcome = await _syncVm.SyncToGitHubAsync().ConfigureAwait(true);
         if (outcome is null)
         {
             SetStatus(_syncVm.ErrorMessage ?? "Sync to GitHub failed.");
             return;
         }
 
-        await LoadIssuesAsync().ConfigureAwait(false);
+        await LoadIssuesAsync().ConfigureAwait(true);
         SetStatus(_syncVm.StatusMessage ?? "Sync to GitHub completed.");
     }
 
@@ -601,14 +601,14 @@ internal sealed class GitHubScreen : View
             Application.RequestStop();
             _ = Task.Run(async () =>
             {
-                var outcome = await _syncVm.SyncSingleIssueAsync(issueNumber, direction).ConfigureAwait(false);
+                var outcome = await _syncVm.SyncSingleIssueAsync(issueNumber, direction).ConfigureAwait(true);
                 if (outcome is null || !outcome.Success)
                 {
                     SetStatus(_syncVm.ErrorMessage ?? "Single issue sync failed.");
                     return;
                 }
 
-                await LoadIssuesAsync().ConfigureAwait(false);
+                await LoadIssuesAsync().ConfigureAwait(true);
                 SelectIssue(issueNumber);
                 SetStatus(_syncVm.StatusMessage ?? "Single issue sync completed.");
             });
@@ -623,7 +623,7 @@ internal sealed class GitHubScreen : View
 
     private async Task ShowLabelsDialogAsync()
     {
-        var labels = await _syncVm.LoadLabelsAsync().ConfigureAwait(false);
+        var labels = await _syncVm.LoadLabelsAsync().ConfigureAwait(true);
         if (labels is null)
         {
             SetStatus(_syncVm.ErrorMessage ?? "Label load failed.");

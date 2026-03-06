@@ -33,7 +33,7 @@ internal sealed class GetDiagnosticAppSettingsPathQueryHandler : IQueryHandler<G
 
         try
         {
-            var result = await _diagnosticApiClient.GetAppSettingsPathAsync(context.CancellationToken).ConfigureAwait(false);
+            var result = await _diagnosticApiClient.GetAppSettingsPathAsync(context.CancellationToken).ConfigureAwait(true);
             return Result<DiagnosticAppSettingsSnapshot>.Success(result);
         }
         catch (Exception ex)

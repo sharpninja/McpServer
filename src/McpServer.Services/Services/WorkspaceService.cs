@@ -20,31 +20,38 @@ public sealed class WorkspaceService : IWorkspaceService
 
     private readonly IConfiguration _configuration;
     private readonly IHostEnvironment _env;
+    private readonly IProcessRunner _processRunner;
     private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<WorkspaceService> _logger;
 
     /// <summary>Initializes a new instance of the <see cref="WorkspaceService"/> class.</summary>
-    public WorkspaceService(IConfiguration configuration, IHostEnvironment env, ILogger<WorkspaceService> logger, IChangeEventBus? eventBus = null)
+    public WorkspaceService(IConfiguration configuration, IHostEnvironment env, IProcessRunner processRunner, ILogger<WorkspaceService> logger, IChangeEventBus? eventBus = null)
     {
         _configuration = configuration;
         _env = env;
+        _processRunner = processRunner;
         _eventBus = eventBus;
         _logger = logger;
     }
 
     /// <inheritdoc />
-    public Task<WorkspaceListResult> ListAsync(CancellationToken ct = default)
+    public async Task<WorkspaceListResult> ListAsync(CancellationToken ct = default)
     {
-        var items = ReadAll().Select(ToDto).OrderBy(w => w.Name).ToList();
-        return Task.FromResult(new WorkspaceListResult(items, items.Count));
+        var all = ReadAll();
+        var dtos = new List<WorkspaceDto>(all.Count);
+        foreach (var entry in all.OrderBy(w => w.Name))
+        {
+            dtos.Add(await ToDtoAsync(entry, ct).ConfigureAwait(false));
+        }
+        return new WorkspaceListResult(dtos, dtos.Count);
     }
 
     /// <inheritdoc />
-    public Task<WorkspaceDto?> GetAsync(string workspacePath, CancellationToken ct = default)
+    public async Task<WorkspaceDto?> GetAsync(string workspacePath, CancellationToken ct = default)
     {
         var normalized = NormalizePath(workspacePath);
         var entry = ReadAll().FirstOrDefault(w => NormalizePath(w.WorkspacePath) == normalized);
-        return Task.FromResult(entry is null ? (WorkspaceDto?)null : ToDto(entry));
+        return entry is null ? null : await ToDtoAsync(entry, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -89,7 +96,7 @@ public sealed class WorkspaceService : IWorkspaceService
             await WriteAllAsync(all, ct).ConfigureAwait(false);
             _logger.LogInformation("Workspace created: {Name} at {Path}", entry.Name, entry.WorkspacePath);
             await PublishChangeSafeAsync(ChangeEventActions.Created, normalized, ct).ConfigureAwait(false);
-            return new WorkspaceMutationResult(true, Workspace: ToDto(entry));
+            return new WorkspaceMutationResult(true, Workspace: await ToDtoAsync(entry, ct).ConfigureAwait(false));
         }
         finally
         {
@@ -144,7 +151,7 @@ public sealed class WorkspaceService : IWorkspaceService
             await WriteAllAsync(all, ct).ConfigureAwait(false);
             _logger.LogInformation("Workspace updated: {Name} at {Path}", entry.Name, entry.WorkspacePath);
             await PublishChangeSafeAsync(ChangeEventActions.Updated, normalized, ct).ConfigureAwait(false);
-            return new WorkspaceMutationResult(true, Workspace: ToDto(entry));
+            return new WorkspaceMutationResult(true, Workspace: await ToDtoAsync(entry, ct).ConfigureAwait(false));
         }
         finally
         {
@@ -163,7 +170,7 @@ public sealed class WorkspaceService : IWorkspaceService
             var entry = all.FirstOrDefault(w => NormalizePath(w.WorkspacePath) == normalized);
             if (entry is null)
                 return new WorkspaceMutationResult(false, $"Workspace not found: {normalized}");
-            var dto = ToDto(entry);
+            var dto = await ToDtoAsync(entry, ct).ConfigureAwait(false);
             all.Remove(entry);
             await WriteAllAsync(all, ct).ConfigureAwait(false);
             _logger.LogInformation("Workspace deleted: {Name} at {Path}", dto.Name, dto.WorkspacePath);
@@ -348,27 +355,55 @@ public sealed class WorkspaceService : IWorkspaceService
         return normalized;
     }
 
-    private static WorkspaceDto ToDto(WorkspaceConfigEntry e) => new()
+    private async Task<WorkspaceDto> ToDtoAsync(WorkspaceConfigEntry e, CancellationToken ct)
     {
-        WorkspacePath = e.WorkspacePath,
-        Name = e.Name,
-        TodoPath = e.TodoPath,
-        DataDirectory = string.IsNullOrWhiteSpace(e.DataDirectory) ? null : e.DataDirectory,
-        TunnelProvider = string.IsNullOrWhiteSpace(e.TunnelProvider) ? null : e.TunnelProvider,
-        IsPrimary = e.IsPrimary,
-        IsEnabled = e.IsEnabled,
-        DateTimeCreated = e.DateTimeCreated,
-        DateTimeModified = e.DateTimeModified,
-        RunAs = string.IsNullOrWhiteSpace(e.RunAs) ? null : e.RunAs,
-        PromptTemplate = string.IsNullOrWhiteSpace(e.PromptTemplate) ? null : e.PromptTemplate,
-        StatusPrompt = e.StatusPrompt ?? TodoPromptDefaults.StatusPrompt,
-        ImplementPrompt = e.ImplementPrompt ?? TodoPromptDefaults.ImplementPrompt,
-        PlanPrompt = e.PlanPrompt ?? TodoPromptDefaults.PlanPrompt,
-        BannedLicenses = NormalizePolicyList(e.BannedLicenses) ?? [],
-        BannedCountriesOfOrigin = NormalizePolicyList(e.BannedCountriesOfOrigin, toUpperInvariant: true) ?? [],
-        BannedOrganizations = NormalizePolicyList(e.BannedOrganizations) ?? [],
-        BannedIndividuals = NormalizePolicyList(e.BannedIndividuals) ?? [],
-    };
+        var dto = new WorkspaceDto
+        {
+            WorkspacePath = e.WorkspacePath,
+            Name = e.Name,
+            TodoPath = e.TodoPath,
+            DataDirectory = string.IsNullOrWhiteSpace(e.DataDirectory) ? null : e.DataDirectory,
+            TunnelProvider = string.IsNullOrWhiteSpace(e.TunnelProvider) ? null : e.TunnelProvider,
+            IsPrimary = e.IsPrimary,
+            IsEnabled = e.IsEnabled,
+            DateTimeCreated = e.DateTimeCreated,
+            DateTimeModified = e.DateTimeModified,
+            RunAs = string.IsNullOrWhiteSpace(e.RunAs) ? null : e.RunAs,
+            PromptTemplate = string.IsNullOrWhiteSpace(e.PromptTemplate) ? null : e.PromptTemplate,
+            StatusPrompt = e.StatusPrompt ?? TodoPromptDefaults.StatusPrompt,
+            ImplementPrompt = e.ImplementPrompt ?? TodoPromptDefaults.ImplementPrompt,
+            PlanPrompt = e.PlanPrompt ?? TodoPromptDefaults.PlanPrompt,
+            BannedLicenses = NormalizePolicyList(e.BannedLicenses) ?? [],
+            BannedCountriesOfOrigin = NormalizePolicyList(e.BannedCountriesOfOrigin, toUpperInvariant: true) ?? [],
+            BannedOrganizations = NormalizePolicyList(e.BannedOrganizations) ?? [],
+            BannedIndividuals = NormalizePolicyList(e.BannedIndividuals) ?? [],
+            GitRemoteUrl = await GetGitRemoteUrlAsync(e.WorkspacePath, ct).ConfigureAwait(false),
+        };
+        return dto;
+    }
+
+    private async Task<string?> GetGitRemoteUrlAsync(string workspacePath, CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(workspacePath) || !Directory.Exists(workspacePath))
+            return null;
+
+        try
+        {
+            // Use IProcessRunner to call: git -C <path> config --get remote.origin.url
+            var request = new ProcessRunRequest("git", $"-C \"{workspacePath}\" config --get remote.origin.url");
+
+            var result = await _processRunner.RunAsync(request, ct).ConfigureAwait(false);
+            if (result.ExitCode != 0)
+                return null;
+
+            return result.Stdout?.Trim();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to resolve git remote URL for workspace {Path}", workspacePath);
+            return null;
+        }
+    }
 
     private async Task PublishChangeSafeAsync(string action, string entityId, CancellationToken ct)
     {

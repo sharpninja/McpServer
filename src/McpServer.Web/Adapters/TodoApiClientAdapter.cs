@@ -20,14 +20,14 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
 
     public async Task<ListTodosResult> ListTodosAsync(ListTodosQuery query, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
         var response = await client.Todo.QueryAsync(
             keyword: query.Keyword,
             priority: query.Priority,
             section: query.Section,
             id: query.Id,
             done: query.Done,
-            cancellationToken: cancellationToken).ConfigureAwait(false);
+            cancellationToken: cancellationToken).ConfigureAwait(true);
 
         var items = response.Items
             .Select(item => new TodoListItem(
@@ -46,8 +46,8 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
     {
         try
         {
-            var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-            var item = await client.Todo.GetAsync(todoId, cancellationToken).ConfigureAwait(false);
+            var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+            var item = await client.Todo.GetAsync(todoId, cancellationToken).ConfigureAwait(true);
             return MapTodoDetail(item);
         }
         catch (McpNotFoundException ex)
@@ -61,7 +61,7 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
     {
         try
         {
-            var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+            var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
             var result = await client.Todo.CreateAsync(new TodoCreateRequest
             {
                 Id = command.Id,
@@ -76,7 +76,7 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
                     Task = t.Task,
                     Done = t.Done,
                 }).ToList(),
-            }, cancellationToken).ConfigureAwait(false);
+            }, cancellationToken).ConfigureAwait(true);
 
             return MapMutationOutcome(result);
         }
@@ -96,7 +96,7 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
     {
         try
         {
-            var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+            var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
             var result = await client.Todo.UpdateAsync(command.TodoId, new TodoUpdateRequest
             {
                 Title = command.Title,
@@ -112,7 +112,7 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
                     Task = t.Task,
                     Done = t.Done,
                 }).ToList(),
-            }, cancellationToken).ConfigureAwait(false);
+            }, cancellationToken).ConfigureAwait(true);
 
             return MapMutationOutcome(result);
         }
@@ -132,8 +132,8 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
     {
         try
         {
-            var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-            var result = await client.Todo.DeleteAsync(command.TodoId, cancellationToken).ConfigureAwait(false);
+            var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+            var result = await client.Todo.DeleteAsync(command.TodoId, cancellationToken).ConfigureAwait(true);
             return MapMutationOutcome(result);
         }
         catch (McpNotFoundException ex)
@@ -145,8 +145,8 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
 
     public async Task<TodoRequirementsAnalysis> AnalyzeTodoRequirementsAsync(string todoId, CancellationToken cancellationToken = default)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        var result = await client.Todo.AnalyzeRequirementsAsync(todoId, cancellationToken).ConfigureAwait(false);
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        var result = await client.Todo.AnalyzeRequirementsAsync(todoId, cancellationToken).ConfigureAwait(true);
         return new TodoRequirementsAnalysis(
             Success: result.Success,
             FunctionalRequirements: result.FunctionalRequirements?.ToList() ?? [],
@@ -197,8 +197,8 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
         Func<McpServerClient, IAsyncEnumerable<string>> getStream,
         [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
-        await foreach (var line in getStream(client).WithCancellation(cancellationToken).ConfigureAwait(false))
+        var client = await _context.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
+        await foreach (var line in getStream(client).WithCancellation(cancellationToken).ConfigureAwait(true))
             yield return line;
     }
 
@@ -209,7 +209,7 @@ internal sealed class TodoApiClientAdapter : ITodoApiClient
         CancellationToken cancellationToken)
     {
         var lines = new List<string>();
-        await foreach (var line in stream.WithCancellation(cancellationToken).ConfigureAwait(false))
+        await foreach (var line in stream.WithCancellation(cancellationToken).ConfigureAwait(true))
             lines.Add(line);
 
         return new TodoPromptOutput(

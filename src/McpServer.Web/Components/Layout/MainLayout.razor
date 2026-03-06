@@ -4,7 +4,7 @@
 @implements IDisposable
 
 <div class="d-flex flex-column" style="min-height: 100vh">
-    <header class="Header">
+    <header class="Header app-header-sticky">
         <div class="Header-item">
             <a href="/" class="Header-link f4 d-flex flex-items-center">
                 <OcticonIcon Name="server" Class="mr-2" />
@@ -63,7 +63,7 @@
     {
         ConnectionMonitor.PropertyChanged += OnConnectionChanged;
         ConnectionMonitor.Start();
-        await WorkspaceAutoSelector.EnsureWorkspaceSelectedAsync().ConfigureAwait(false);
+        await WorkspaceAutoSelector.EnsureWorkspaceSelectedAsync().ConfigureAwait(true);
         _isConnected = ConnectionMonitor.IsConnected;
         _lastError = ConnectionMonitor.LastError;
     }

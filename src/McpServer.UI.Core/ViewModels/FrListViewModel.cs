@@ -44,7 +44,7 @@ public sealed class FrListViewModel : AreaListViewModelBase<FunctionalRequiremen
         StatusMessage = "Loading functional requirements...";
         try
         {
-            var result = await _dispatcher.QueryAsync(new ListFunctionalRequirementsQuery(), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new ListFunctionalRequirementsQuery(), ct).ConfigureAwait(true);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Functional requirements load failed.";

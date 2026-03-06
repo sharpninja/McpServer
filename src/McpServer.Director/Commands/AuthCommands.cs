@@ -47,7 +47,7 @@ internal static class AuthCommands
             // Try auto-discovery from MCP server if no authority specified
             if (string.IsNullOrWhiteSpace(resolvedAuthority))
             {
-                var serverConfig = await DiscoverAuthConfigAsync().ConfigureAwait(false);
+                var serverConfig = await DiscoverAuthConfigAsync().ConfigureAwait(true);
                 if (serverConfig is not null && serverConfig.Enabled)
                 {
                     options.PopulateFrom(serverConfig);
@@ -103,7 +103,7 @@ internal static class AuthCommands
 
                 if (browserLauncher.TryOpenUrl(targetUrl))
                     AnsiConsole.MarkupLine("[dim]Browser opened automatically.[/]");
-            }).ConfigureAwait(false);
+            }).ConfigureAwait(true);
 
             if (result.IsSuccess)
             {
@@ -179,7 +179,7 @@ internal static class AuthCommands
         AuthConfigResponse? discovered = null;
         await RunWithDispatcherAsync(null, async (_, dispatcher, _) =>
         {
-            var result = await dispatcher.QueryAsync(new GetAuthConfigQuery()).ConfigureAwait(false);
+            var result = await dispatcher.QueryAsync(new GetAuthConfigQuery()).ConfigureAwait(true);
             if (!result.IsSuccess || result.Value is null)
                 return;
 
@@ -192,7 +192,7 @@ internal static class AuthCommands
                 DeviceAuthorizationEndpoint = result.Value.DeviceAuthorizationEndpoint ?? string.Empty,
                 TokenEndpoint = result.Value.TokenEndpoint ?? string.Empty,
             };
-        }).ConfigureAwait(false);
+        }).ConfigureAwait(true);
 
         return discovered;
     }

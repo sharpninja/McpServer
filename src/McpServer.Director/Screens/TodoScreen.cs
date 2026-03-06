@@ -288,8 +288,8 @@ internal sealed class TodoScreen : View
         {
             _isLoadingExplicitly = true;
             _listViewModel.Section = _sectionFilter?.Text;
-            await _listViewModel.LoadAsync().ConfigureAwait(false);
-            await RebuildTableFromViewModelAsync().ConfigureAwait(false);
+            await _listViewModel.LoadAsync().ConfigureAwait(true);
+            await RebuildTableFromViewModelAsync().ConfigureAwait(true);
         }
         catch (Exception ex)
         {
@@ -356,7 +356,7 @@ internal sealed class TodoScreen : View
 
         if (_listViewModel.ErrorMessage is null && rows.Count > 0)
         {
-            await LoadTodoDetailAsync(rows[selectedRow].Id, autoLoaded: true).ConfigureAwait(false);
+            await LoadTodoDetailAsync(rows[selectedRow].Id, autoLoaded: true).ConfigureAwait(true);
         }
         else if (rows.Count == 0)
         {
@@ -377,7 +377,7 @@ internal sealed class TodoScreen : View
         }
 
         _lastAutoDetailTodoId = todoId;
-        await LoadTodoDetailAsync(todoId, autoLoaded: false).ConfigureAwait(false);
+        await LoadTodoDetailAsync(todoId, autoLoaded: false).ConfigureAwait(true);
     }
 
     public async Task SaveEditorAsync()
@@ -390,7 +390,7 @@ internal sealed class TodoScreen : View
             return;
         }
 
-        await _detailViewModel.SaveAsync().ConfigureAwait(false);
+        await _detailViewModel.SaveAsync().ConfigureAwait(true);
         if (!string.IsNullOrWhiteSpace(_detailViewModel.ErrorMessage))
         {
             SetStatus($"✗ {_detailViewModel.ErrorMessage}");
@@ -408,12 +408,12 @@ internal sealed class TodoScreen : View
         }
 
         SetStatus(_detailViewModel.MutationMessage ?? "✓ TODO saved.");
-        await LoadAsync().ConfigureAwait(false);
+        await LoadAsync().ConfigureAwait(true);
 
         // Re-load the edited item after list refresh so the detail pane stays on the target.
         var finalId = _detailViewModel.EditorId;
         if (!string.IsNullOrWhiteSpace(finalId))
-            await LoadTodoDetailAsync(finalId, autoLoaded: false).ConfigureAwait(false);
+            await LoadTodoDetailAsync(finalId, autoLoaded: false).ConfigureAwait(true);
     }
 
     public async Task DeleteEditorAsync()
@@ -432,7 +432,7 @@ internal sealed class TodoScreen : View
         if (confirm != 0)
             return;
 
-        await _detailViewModel.DeleteAsync().ConfigureAwait(false);
+        await _detailViewModel.DeleteAsync().ConfigureAwait(true);
         if (!string.IsNullOrWhiteSpace(_detailViewModel.ErrorMessage))
         {
             SetStatus($"✗ {_detailViewModel.ErrorMessage}");
@@ -442,7 +442,7 @@ internal sealed class TodoScreen : View
         SyncEditorFieldsFromViewModel();
         ClearDetailPane("Detail: (deleted)");
         SetStatus(_detailViewModel.MutationMessage ?? "✓ TODO deleted.");
-        await LoadAsync().ConfigureAwait(false);
+        await LoadAsync().ConfigureAwait(true);
     }
 
     public async Task AnalyzeRequirementsAsync()
@@ -455,7 +455,7 @@ internal sealed class TodoScreen : View
             return;
         }
 
-        await _detailViewModel.AnalyzeRequirementsAsync().ConfigureAwait(false);
+        await _detailViewModel.AnalyzeRequirementsAsync().ConfigureAwait(true);
         if (!string.IsNullOrWhiteSpace(_detailViewModel.ErrorMessage))
         {
             SetStatus($"✗ {_detailViewModel.ErrorMessage}");
@@ -469,7 +469,7 @@ internal sealed class TodoScreen : View
         }
 
         // Refresh detail to show any server-updated FR/TR associations on the TODO item.
-        await LoadTodoDetailAsync(todoId, autoLoaded: false).ConfigureAwait(false);
+        await LoadTodoDetailAsync(todoId, autoLoaded: false).ConfigureAwait(true);
         ShowRequirementsInDetailPane(todoId, _detailViewModel.RequirementsAnalysis);
         SetStatus($"✓ Requirements analyzed for {todoId}");
     }
@@ -492,7 +492,7 @@ internal sealed class TodoScreen : View
         IReadOnlyList<WorkspaceMoveTarget> targets;
         try
         {
-            targets = await GetMoveWorkspaceTargetsAsync(CancellationToken.None).ConfigureAwait(false);
+            targets = await GetMoveWorkspaceTargetsAsync(CancellationToken.None).ConfigureAwait(true);
         }
         catch (Exception ex)
         {
@@ -535,7 +535,7 @@ internal sealed class TodoScreen : View
             var result = await client.PostAsync<McpServer.Client.Models.TodoMutationResult>(
                 $"mcpserver/todo/{Uri.EscapeDataString(todoId)}/move",
                 new { targetWorkspacePath },
-                CancellationToken.None).ConfigureAwait(false);
+                CancellationToken.None).ConfigureAwait(true);
 
             if (result is null || !result.Success)
             {
@@ -543,7 +543,7 @@ internal sealed class TodoScreen : View
                 return;
             }
 
-            await LoadAsync().ConfigureAwait(false);
+            await LoadAsync().ConfigureAwait(true);
             SetStatus($"✓ Moved TODO '{todoId}' to {targetLabel}");
         }
         catch (Exception ex)
@@ -568,7 +568,7 @@ internal sealed class TodoScreen : View
     private async Task LoadTodoDetailAsync(string todoId, bool autoLoaded)
     {
         var requestVersion = Interlocked.Increment(ref _detailLoadRequestVersion);
-        await _detailLoadGate.WaitAsync().ConfigureAwait(false);
+        await _detailLoadGate.WaitAsync().ConfigureAwait(true);
         try
         {
             if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
@@ -576,7 +576,7 @@ internal sealed class TodoScreen : View
 
             SetStatus(autoLoaded ? $"⏳ Loading detail for {todoId}..." : $"⏳ Loading selected detail ({todoId})...");
             _detailViewModel.TodoId = todoId;
-            await _detailViewModel.LoadAsync().ConfigureAwait(false);
+            await _detailViewModel.LoadAsync().ConfigureAwait(true);
 
             if (requestVersion != Volatile.Read(ref _detailLoadRequestVersion))
                 return;
@@ -655,7 +655,7 @@ internal sealed class TodoScreen : View
         try
         {
             SetStatus($"⏳ Generating {promptType} prompt for {todoId}...");
-            await generateAsync(CancellationToken.None).ConfigureAwait(false);
+            await generateAsync(CancellationToken.None).ConfigureAwait(true);
             if (!string.IsNullOrWhiteSpace(_detailViewModel.ErrorMessage))
             {
                 SetStatus($"✗ {_detailViewModel.ErrorMessage}");
@@ -766,7 +766,7 @@ internal sealed class TodoScreen : View
             try
             {
                 var lines = new List<string>();
-                await foreach (var line in StreamPromptLinesAsync(todoId, promptType, cts.Token).WithCancellation(cts.Token).ConfigureAwait(false))
+                await foreach (var line in StreamPromptLinesAsync(todoId, promptType, cts.Token).WithCancellation(cts.Token).ConfigureAwait(true))
                 {
                     lines.Add(line);
                     var currentText = string.Join(Environment.NewLine, lines);
@@ -834,7 +834,7 @@ internal sealed class TodoScreen : View
         if (_directorContext is null)
             throw new InvalidOperationException("Prompt streaming requires a Director workspace context.");
 
-        var client = await _directorContext.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+        var client = await _directorContext.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
         var request = new McpServer.Client.Models.AgentPoolOneShotRequest
         {
             Context = ToOneShotContext(promptType),
@@ -842,17 +842,17 @@ internal sealed class TodoScreen : View
             UseWorkspaceContext = true,
         };
 
-        var resolved = await client.AgentPool.ResolvePromptAsync(request, cancellationToken).ConfigureAwait(false);
+        var resolved = await client.AgentPool.ResolvePromptAsync(request, cancellationToken).ConfigureAwait(true);
         if (!resolved.Success)
             throw new InvalidOperationException(resolved.Error ?? $"Failed to resolve {promptType} prompt.");
 
-        var queued = await client.AgentPool.EnqueueOneShotAsync(request, cancellationToken).ConfigureAwait(false);
+        var queued = await client.AgentPool.EnqueueOneShotAsync(request, cancellationToken).ConfigureAwait(true);
         if (!queued.Success || string.IsNullOrWhiteSpace(queued.JobId))
             throw new InvalidOperationException(queued.Error ?? $"Failed to enqueue {promptType} prompt job.");
 
         await foreach (var evt in client.AgentPool.StreamJobAsync(queued.JobId, cancellationToken)
                            .WithCancellation(cancellationToken)
-                           .ConfigureAwait(false))
+                           .ConfigureAwait(true))
         {
             if (!string.IsNullOrWhiteSpace(evt.Text))
             {
@@ -927,11 +927,11 @@ internal sealed class TodoScreen : View
             return [];
 
         var apiClient = _directorContext.HasControlConnection
-            ? await _directorContext.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(false)
-            : await _directorContext.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(false);
+            ? await _directorContext.GetRequiredControlApiClientAsync(cancellationToken).ConfigureAwait(true)
+            : await _directorContext.GetRequiredActiveWorkspaceApiClientAsync(cancellationToken).ConfigureAwait(true);
 
         var activeWorkspacePath = _directorContext.ActiveWorkspacePath;
-        var workspaces = await apiClient.Workspace.ListAsync(cancellationToken).ConfigureAwait(false);
+        var workspaces = await apiClient.Workspace.ListAsync(cancellationToken).ConfigureAwait(true);
         return workspaces.Items
             .Where(ws => !string.Equals(ws.WorkspacePath, activeWorkspacePath, StringComparison.OrdinalIgnoreCase))
             .OrderByDescending(ws => ws.IsPrimary)

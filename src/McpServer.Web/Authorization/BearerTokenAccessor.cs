@@ -32,6 +32,6 @@ internal sealed class BearerTokenAccessor
         if (httpContext.User.Identity?.IsAuthenticated != true)
             return null;
 
-        return await httpContext.GetTokenAsync("access_token").ConfigureAwait(false);
+        return await httpContext.GetTokenAsync("access_token").ConfigureAwait(true);
     }
 }

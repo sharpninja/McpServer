@@ -76,7 +76,7 @@ internal sealed class HealthScreen : View
         Application.Invoke(() => _statusLabel.Text = "⏳ Checking...");
         try
         {
-            await _viewModel.CheckAsync().ConfigureAwait(false);
+            await _viewModel.CheckAsync().ConfigureAwait(true);
             Application.Invoke(() =>
             {
                 var snapshot = _viewModel.SelectedItem;
@@ -110,7 +110,7 @@ internal sealed class HealthScreen : View
         Application.Invoke(() => _statusLabel.Text = "⏳ Initializing...");
         try
         {
-            var result = await _viewModel.InitializeActiveWorkspaceAsync().ConfigureAwait(false);
+            var result = await _viewModel.InitializeActiveWorkspaceAsync().ConfigureAwait(true);
             Application.Invoke(() =>
             {
                 if (!result.IsSuccess || result.Value is null)

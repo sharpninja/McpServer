@@ -35,7 +35,7 @@ internal sealed class ListRepoEntriesQueryHandler : IQueryHandler<ListRepoEntrie
 
         try
         {
-            var result = await _repoApiClient.ListAsync(query, context.CancellationToken).ConfigureAwait(false);
+            var result = await _repoApiClient.ListAsync(query, context.CancellationToken).ConfigureAwait(true);
             return Result<RepoListResultView>.Success(result);
         }
         catch (Exception ex)

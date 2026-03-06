@@ -43,7 +43,7 @@ internal static class Program
         var listCommand = BuildListCommand();
         rootCommand.AddCommand(listCommand);
 
-        return await rootCommand.InvokeAsync(args).ConfigureAwait(false);
+        return await rootCommand.InvokeAsync(args).ConfigureAwait(true);
     }
 
     private static ServiceProvider BuildServiceProvider(string? workspace = null)
@@ -96,7 +96,7 @@ internal static class Program
                 var command = registry.GetPrimaryCommand(vm);
                 AnsiConsole.MarkupLine("[yellow]Executing...[/]");
 
-                await command.ExecuteAsync(null).ConfigureAwait(false);
+                await command.ExecuteAsync(null).ConfigureAwait(true);
 
                 // Get and display result
                 var result = registry.GetResult(vm);

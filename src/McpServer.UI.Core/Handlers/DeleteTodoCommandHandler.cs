@@ -40,7 +40,7 @@ internal sealed class DeleteTodoCommandHandler : ICommandHandler<DeleteTodoComma
 
         try
         {
-            var result = await _todoApiClient.DeleteTodoAsync(command, context.CancellationToken).ConfigureAwait(false);
+            var result = await _todoApiClient.DeleteTodoAsync(command, context.CancellationToken).ConfigureAwait(true);
             return Result<TodoMutationOutcome>.Success(result);
         }
         catch (Exception ex)

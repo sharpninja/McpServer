@@ -237,7 +237,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
 
         try
         {
-            var result = await _loadCommand.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await _loadCommand.DispatchAsync(ct).ConfigureAwait(true);
             if (!result.IsSuccess)
             {
                 Detail = null;
@@ -275,7 +275,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
     /// <summary>Creates a TODO item from the current editor fields.</summary>
     public async Task CreateAsync(CancellationToken ct = default)
     {
-        await RunMutationAsync(_createCommand, "Creating TODO...", "TODO created.", ct).ConfigureAwait(false);
+        await RunMutationAsync(_createCommand, "Creating TODO...", "TODO created.", ct).ConfigureAwait(true);
     }
 
     /// <summary>Updates the current TODO item from the editor fields.</summary>
@@ -283,23 +283,23 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
     {
         if (IsNewDraft)
         {
-            await CreateAsync(ct).ConfigureAwait(false);
+            await CreateAsync(ct).ConfigureAwait(true);
             return;
         }
 
-        await RunMutationAsync(_updateCommand, "Saving TODO...", "TODO saved.", ct).ConfigureAwait(false);
+        await RunMutationAsync(_updateCommand, "Saving TODO...", "TODO saved.", ct).ConfigureAwait(true);
     }
 
     /// <summary>Deletes the current TODO item.</summary>
     public async Task DeleteAsync(CancellationToken ct = default)
     {
-        await RunMutationAsync(_deleteCommand, "Deleting TODO...", "TODO deleted.", ct, clearOnDelete: true).ConfigureAwait(false);
+        await RunMutationAsync(_deleteCommand, "Deleting TODO...", "TODO deleted.", ct, clearOnDelete: true).ConfigureAwait(true);
     }
 
     /// <summary>Runs requirements analysis for the active TODO item.</summary>
     public async Task AnalyzeRequirementsAsync(CancellationToken ct = default)
     {
-        await RunRequirementsAsync(ct).ConfigureAwait(false);
+        await RunRequirementsAsync(ct).ConfigureAwait(true);
     }
 
     /// <summary>Generates a status prompt for the active TODO item.</summary>
@@ -328,7 +328,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
 
         try
         {
-            var result = await command.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await command.DispatchAsync(ct).ConfigureAwait(true);
             if (!result.IsSuccess)
             {
                 ErrorMessage = result.Error ?? "Unknown TODO mutation error.";
@@ -386,7 +386,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
 
         try
         {
-            var result = await _analyzeRequirementsCommand.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await _analyzeRequirementsCommand.DispatchAsync(ct).ConfigureAwait(true);
             if (!result.IsSuccess)
             {
                 ErrorMessage = result.Error ?? "TODO requirements analysis failed.";
@@ -426,7 +426,7 @@ public sealed partial class TodoDetailViewModel : AreaDetailViewModelBase<TodoDe
 
         try
         {
-            var result = await command.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await command.DispatchAsync(ct).ConfigureAwait(true);
             if (!result.IsSuccess)
             {
                 ErrorMessage = result.Error ?? "TODO prompt generation failed.";

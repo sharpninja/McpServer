@@ -77,7 +77,7 @@ public sealed partial class SessionLogDetailViewModel : AreaDetailViewModelBase<
                 return;
             }
 
-            var result = await _loadCommand.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await _loadCommand.DispatchAsync(ct).ConfigureAwait(true);
             if (!result.IsSuccess)
             {
                 Detail = null;

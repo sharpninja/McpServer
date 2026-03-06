@@ -280,7 +280,7 @@ static async Task<OidcDiscoveryConfigResponse?> TryDiscoverOidcConfigFromMcpAsyn
     try
     {
         using var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(3) };
-        using var response = await httpClient.GetAsync(authConfigUri, cancellationToken).ConfigureAwait(false);
+        using var response = await httpClient.GetAsync(authConfigUri, cancellationToken).ConfigureAwait(true);
         if (!response.IsSuccessStatusCode)
         {
             logger.LogWarning(
@@ -290,11 +290,11 @@ static async Task<OidcDiscoveryConfigResponse?> TryDiscoverOidcConfigFromMcpAsyn
             return null;
         }
 
-        await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+        await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(true);
         var discovered = await JsonSerializer.DeserializeAsync<OidcDiscoveryConfigResponse>(
             stream,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true },
-            cancellationToken).ConfigureAwait(false);
+            cancellationToken).ConfigureAwait(true);
         if (discovered is null || !discovered.Enabled || string.IsNullOrWhiteSpace(discovered.Authority))
         {
             return null;

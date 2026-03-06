@@ -65,7 +65,7 @@ public partial class WorkspaceListViewModel : ObservableObject
         });
         try
         {
-            var result = await RefreshCommand.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await RefreshCommand.DispatchAsync(ct).ConfigureAwait(true);
             if (result.IsSuccess && result.Value is not null)
             {
                 var items = result.Value.Items.ToArray();

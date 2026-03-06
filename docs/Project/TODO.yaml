@@ -912,10 +912,30 @@ mvp-app:
     - task: Add/extend tests and update Requirements-Matrix/TR-per-FR statuses after implementation.
       done: true
   - id: MVP-APP-007
-    title: Add git remote URL property to workspace DTO for GitHub ref identification at runtime
+    title: '[NEED PLAN] Add git remote URL property to workspace DTO for GitHub ref identification at runtime'
+    note: Plan created in plan.md
     done: false
     description:
     - Read the git remote (origin) URL for each workspace directory and expose it as a property on the workspace DTO (WorkspaceDetail/WorkspaceSummary). This allows consuming code to identify GitHub repository refs (owner/repo) at runtime without shelling out to git. Implementation should read the remote during workspace registration or on-demand via git config/CLI, and persist or cache the value.
+    technical-details:
+    - Use IProcessRunner to execute 'git config --get remote.origin.url'
+    - Handle non-zero exit codes gracefully (return null)
+    - Update ToDto from sync to async to accommodate IProcessRunner
+    implementation-tasks:
+    - task: 'Server: Add GitRemoteUrl to WorkspaceDto in IWorkspaceService.cs'
+      done: false
+    - task: 'Client: Add GitRemoteUrl to WorkspaceDto in WorkspaceModels.cs'
+      done: false
+    - task: 'Service: Inject IProcessRunner into WorkspaceService'
+      done: false
+    - task: 'Service: Implement GetGitRemoteUrlAsync helper'
+      done: false
+    - task: 'Service: Update ToDtoAsync to populate GitRemoteUrl'
+      done: false
+    - task: 'Service: Update Async methods (List, Get, Create, Update, Delete)'
+      done: false
+    - task: 'Verification: Build and Test'
+      done: false
 mvp-mcp:
   high-priority:
   - id: MVP-MCP-002
@@ -2292,7 +2312,7 @@ Director:
     - task: 'P9-08: Produce final implementation report mapping each completed task back to FR/TR compliance targets.'
       done: false
   - id: ISS-DIRECTOR-001
-    title: Agent Pool Grid Not Populating
+    title: '[TRIAGE] Agent Pool Grid Not Populating'
     done: false
 mcpserver-ui:
   high-priority:
@@ -2338,7 +2358,7 @@ Documentation:
   - id: DOC-MARKETING-001
     title: "Create Marketing Docs: What McpServer is, features, why it's needed, supported UI tooling"
     note: '"**Implementation Plan**'
-    done: false
+    done: true
     description:
     - Create marketing-oriented documentation for McpServer.
     - "Cover: what McpServer is, key features, why it's needed, supported UI tooling (VS extension, Web UI, etc.), and value proposition for adopters."

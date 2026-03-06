@@ -174,13 +174,13 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await DefinitionListViewModel.LoadAsync().ConfigureAwait(false);
-        await WorkspaceAgentListViewModel.LoadAsync().ConfigureAwait(false);
+        await DefinitionListViewModel.LoadAsync().ConfigureAwait(true);
+        await WorkspaceAgentListViewModel.LoadAsync().ConfigureAwait(true);
     }
 
     private async Task OnSelectedWorkspaceChanged(string? workspacePath)
     {
-        await WorkspaceAgentListViewModel.LoadAsync(workspacePath).ConfigureAwait(false);
+        await WorkspaceAgentListViewModel.LoadAsync(workspacePath).ConfigureAwait(true);
         SelectedWorkspaceAgentId = null;
         WorkspaceAgentDetailViewModel.Detail = null;
     }
@@ -188,12 +188,12 @@
     private async Task LoadDefinitionDetailAsync(string agentId)
     {
         SelectedDefinitionId = agentId;
-        await DefinitionDetailViewModel.LoadAsync(agentId).ConfigureAwait(false);
+        await DefinitionDetailViewModel.LoadAsync(agentId).ConfigureAwait(true);
     }
 
     private async Task LoadWorkspaceAgentDetailAsync(string agentId, string workspacePath)
     {
         SelectedWorkspaceAgentId = agentId;
-        await WorkspaceAgentDetailViewModel.LoadAsync(agentId, workspacePath).ConfigureAwait(false);
+        await WorkspaceAgentDetailViewModel.LoadAsync(agentId, workspacePath).ConfigureAwait(true);
     }
 }

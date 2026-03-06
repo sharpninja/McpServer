@@ -38,7 +38,7 @@ internal sealed class AnalyzeTodoRequirementsCommandHandler : ICommandHandler<An
 
         try
         {
-            var result = await _todoApiClient.AnalyzeTodoRequirementsAsync(command.TodoId, context.CancellationToken).ConfigureAwait(false);
+            var result = await _todoApiClient.AnalyzeTodoRequirementsAsync(command.TodoId, context.CancellationToken).ConfigureAwait(true);
             return Result<TodoRequirementsAnalysis>.Success(result);
         }
         catch (Exception ex)

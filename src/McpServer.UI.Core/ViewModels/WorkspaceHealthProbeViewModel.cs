@@ -125,7 +125,7 @@ public sealed partial class WorkspaceHealthProbeViewModel : ObservableObject
                 () => _getStatusCommand.DispatchAsync(ct),
                 "Loading workspace status...",
                 successMessagePrefix: "Workspace status loaded.")
-            .ConfigureAwait(false);
+            .ConfigureAwait(true);
     }
 
     /// <summary>Runs the workspace initialization workflow.</summary>
@@ -141,7 +141,7 @@ public sealed partial class WorkspaceHealthProbeViewModel : ObservableObject
 
         try
         {
-            var result = await _initializeCommand.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await _initializeCommand.DispatchAsync(ct).ConfigureAwait(true);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Unknown error initializing workspace.";
@@ -173,7 +173,7 @@ public sealed partial class WorkspaceHealthProbeViewModel : ObservableObject
                 () => _startCommand.DispatchAsync(ct),
                 "Starting workspace...",
                 successMessagePrefix: "Workspace start completed.")
-            .ConfigureAwait(false);
+            .ConfigureAwait(true);
     }
 
     /// <summary>Stops the workspace host.</summary>
@@ -184,7 +184,7 @@ public sealed partial class WorkspaceHealthProbeViewModel : ObservableObject
                 () => _stopCommand.DispatchAsync(ct),
                 "Stopping workspace...",
                 successMessagePrefix: "Workspace stop completed.")
-            .ConfigureAwait(false);
+            .ConfigureAwait(true);
     }
 
     /// <summary>Probes the workspace health endpoint.</summary>
@@ -200,7 +200,7 @@ public sealed partial class WorkspaceHealthProbeViewModel : ObservableObject
 
         try
         {
-            var result = await _checkHealthCommand.DispatchAsync(ct).ConfigureAwait(false);
+            var result = await _checkHealthCommand.DispatchAsync(ct).ConfigureAwait(true);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Unknown error checking workspace health.";
@@ -241,7 +241,7 @@ public sealed partial class WorkspaceHealthProbeViewModel : ObservableObject
 
         try
         {
-            var result = await action().ConfigureAwait(false);
+            var result = await action().ConfigureAwait(true);
             if (!result.IsSuccess || result.Value is null)
             {
                 ErrorMessage = result.Error ?? "Unknown workspace runtime error.";

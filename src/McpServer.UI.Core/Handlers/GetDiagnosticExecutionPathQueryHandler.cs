@@ -33,7 +33,7 @@ internal sealed class GetDiagnosticExecutionPathQueryHandler : IQueryHandler<Get
 
         try
         {
-            var result = await _diagnosticApiClient.GetExecutionPathAsync(context.CancellationToken).ConfigureAwait(false);
+            var result = await _diagnosticApiClient.GetExecutionPathAsync(context.CancellationToken).ConfigureAwait(true);
             return Result<DiagnosticExecutionPathSnapshot>.Success(result);
         }
         catch (Exception ex)

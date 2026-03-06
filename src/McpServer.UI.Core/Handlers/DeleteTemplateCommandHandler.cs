@@ -41,7 +41,7 @@ internal sealed class DeleteTemplateCommandHandler : ICommandHandler<DeleteTempl
 
         try
         {
-            var result = await _client.DeleteTemplateAsync(command.TemplateId, context.CancellationToken).ConfigureAwait(false);
+            var result = await _client.DeleteTemplateAsync(command.TemplateId, context.CancellationToken).ConfigureAwait(true);
             return Result<TemplateMutationOutcome>.Success(result);
         }
         catch (Exception ex)

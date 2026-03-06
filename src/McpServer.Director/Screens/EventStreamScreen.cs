@@ -87,7 +87,7 @@ internal sealed class EventStreamScreen : View
         _viewModel.CategoryFilter = string.IsNullOrWhiteSpace(_categoryField.Text?.ToString())
             ? null
             : _categoryField.Text?.ToString();
-        await _viewModel.StartAsync().ConfigureAwait(false);
+        await _viewModel.StartAsync().ConfigureAwait(true);
     }
 
     private void Clear()

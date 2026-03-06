@@ -33,7 +33,7 @@ internal sealed class BackendConnectionBehavior : IPipelineBehavior
             return Result<T>.Failure($"Backend unavailable: {_monitor.LastError ?? "connection lost"}");
         }
 
-        var result = await next().ConfigureAwait(false);
+        var result = await next().ConfigureAwait(true);
 
         // Detect connectivity failures from result exceptions
         if (result.IsFailure && BackendConnectionMonitor.IsConnectivityException(result.Exception))

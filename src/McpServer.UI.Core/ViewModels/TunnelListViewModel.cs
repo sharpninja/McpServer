@@ -38,7 +38,7 @@ public sealed partial class TunnelListViewModel : AreaListViewModelBase<TunnelPr
 
         try
         {
-            var result = await _dispatcher.QueryAsync(new ListTunnelsQuery(), ct).ConfigureAwait(false);
+            var result = await _dispatcher.QueryAsync(new ListTunnelsQuery(), ct).ConfigureAwait(true);
             if (result.IsSuccess && result.Value is not null)
             {
                 SetItems(result.Value.Providers, result.Value.Providers.Count);
@@ -62,35 +62,35 @@ public sealed partial class TunnelListViewModel : AreaListViewModelBase<TunnelPr
     /// <summary>Enable a provider and refresh list.</summary>
     public async Task EnableAsync(string providerName, CancellationToken ct = default)
     {
-        await _dispatcher.SendAsync(new EnableTunnelCommand(providerName), ct).ConfigureAwait(false);
-        await LoadAsync(ct).ConfigureAwait(false);
+        await _dispatcher.SendAsync(new EnableTunnelCommand(providerName), ct).ConfigureAwait(true);
+        await LoadAsync(ct).ConfigureAwait(true);
     }
 
     /// <summary>Disable a provider and refresh list.</summary>
     public async Task DisableAsync(string providerName, CancellationToken ct = default)
     {
-        await _dispatcher.SendAsync(new DisableTunnelCommand(providerName), ct).ConfigureAwait(false);
-        await LoadAsync(ct).ConfigureAwait(false);
+        await _dispatcher.SendAsync(new DisableTunnelCommand(providerName), ct).ConfigureAwait(true);
+        await LoadAsync(ct).ConfigureAwait(true);
     }
 
     /// <summary>Start a provider and refresh list.</summary>
     public async Task StartAsync(string providerName, CancellationToken ct = default)
     {
-        await _dispatcher.SendAsync(new StartTunnelCommand(providerName), ct).ConfigureAwait(false);
-        await LoadAsync(ct).ConfigureAwait(false);
+        await _dispatcher.SendAsync(new StartTunnelCommand(providerName), ct).ConfigureAwait(true);
+        await LoadAsync(ct).ConfigureAwait(true);
     }
 
     /// <summary>Stop a provider and refresh list.</summary>
     public async Task StopAsync(string providerName, CancellationToken ct = default)
     {
-        await _dispatcher.SendAsync(new StopTunnelCommand(providerName), ct).ConfigureAwait(false);
-        await LoadAsync(ct).ConfigureAwait(false);
+        await _dispatcher.SendAsync(new StopTunnelCommand(providerName), ct).ConfigureAwait(true);
+        await LoadAsync(ct).ConfigureAwait(true);
     }
 
     /// <summary>Restart a provider and refresh list.</summary>
     public async Task RestartAsync(string providerName, CancellationToken ct = default)
     {
-        await _dispatcher.SendAsync(new RestartTunnelCommand(providerName), ct).ConfigureAwait(false);
-        await LoadAsync(ct).ConfigureAwait(false);
+        await _dispatcher.SendAsync(new RestartTunnelCommand(providerName), ct).ConfigureAwait(true);
+        await LoadAsync(ct).ConfigureAwait(true);
     }
 }

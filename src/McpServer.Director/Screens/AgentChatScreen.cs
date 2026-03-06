@@ -43,11 +43,11 @@ internal sealed class AgentChatScreen : View
 
     public async Task LoadAsync()
     {
-        await RefreshAgentAndSessionPickersAsync().ConfigureAwait(false);
+        await RefreshAgentAndSessionPickersAsync().ConfigureAwait(true);
         if (GetSessionIdOrNull() is null)
             SetStatus("Select an agent/session from the dropdowns or create/connect.");
         else
-            await RefreshStatusAsync().ConfigureAwait(false);
+            await RefreshStatusAsync().ConfigureAwait(true);
     }
 
     private void BuildUi()
@@ -149,11 +149,11 @@ internal sealed class AgentChatScreen : View
         SetStatus("Connecting to pooled agent...");
         try
         {
-            var api = await _directorContext.GetRequiredActiveWorkspaceApiClientAsync().ConfigureAwait(false);
+            var api = await _directorContext.GetRequiredActiveWorkspaceApiClientAsync().ConfigureAwait(true);
             var agentName = GetAgentNameOrNull();
             AgentPoolConnectResult result = string.IsNullOrWhiteSpace(agentName)
-                ? await api.AgentPool.ConnectDefaultAsync().ConfigureAwait(false)
-                : await api.AgentPool.ConnectAsync(agentName).ConfigureAwait(false);
+                ? await api.AgentPool.ConnectDefaultAsync().ConfigureAwait(true)
+                : await api.AgentPool.ConnectAsync(agentName).ConfigureAwait(true);
 
             if (!result.Success || string.IsNullOrWhiteSpace(result.SessionId))
             {
@@ -163,7 +163,7 @@ internal sealed class AgentChatScreen : View
 
             SetAgentName(result.AgentName);
             SetSessionId(result.SessionId);
-            await RefreshAgentAndSessionPickersAsync(result.AgentName, result.SessionId).ConfigureAwait(false);
+            await RefreshAgentAndSessionPickersAsync(result.AgentName, result.SessionId).ConfigureAwait(true);
             AppendTranscriptLine($"[system] Connected '{result.AgentName ?? "default"}' session {result.SessionId}.");
             SetStatus($"Connected session {result.SessionId}.");
         }
@@ -187,7 +187,7 @@ internal sealed class AgentChatScreen : View
                     ClientName = "McpServer.Director",
                     DeviceId = Environment.MachineName,
                     WorkspacePath = _directorContext.ActiveWorkspacePath,
-                }).ConfigureAwait(false);
+                }).ConfigureAwait(true);
 
             if (response is null || string.IsNullOrWhiteSpace(response.SessionId))
             {
@@ -197,7 +197,7 @@ internal sealed class AgentChatScreen : View
 
             SetAgentName(GetAgentNameOrNull());
             SetSessionId(response.SessionId);
-            await RefreshAgentAndSessionPickersAsync(GetAgentNameOrNull(), response.SessionId).ConfigureAwait(false);
+            await RefreshAgentAndSessionPickersAsync(GetAgentNameOrNull(), response.SessionId).ConfigureAwait(true);
             AppendTranscriptLine($"[system] Created session {response.SessionId}.");
             SetStatus($"Session {response.SessionId} ready ({response.Status}).");
         }
@@ -220,7 +220,7 @@ internal sealed class AgentChatScreen : View
         {
             var client = _directorContext.GetRequiredActiveWorkspaceHttpClient();
             var status = await client.GetAsync<VoiceSessionStatusDto>(
-                $"/mcpserver/voice/session/{Uri.EscapeDataString(sessionId)}").ConfigureAwait(false);
+                $"/mcpserver/voice/session/{Uri.EscapeDataString(sessionId)}").ConfigureAwait(true);
 
             if (status is null)
             {
@@ -270,7 +270,7 @@ internal sealed class AgentChatScreen : View
             await foreach (var payload in client.PostSseAsync(
                 $"/mcpserver/voice/session/{Uri.EscapeDataString(sessionId)}/turn/stream",
                 new VoiceTurnRequestDto { UserTranscriptText = prompt },
-                token).ConfigureAwait(false))
+                token).ConfigureAwait(true))
             {
                 VoiceTurnStreamEventDto? evt;
                 try
@@ -366,7 +366,7 @@ internal sealed class AgentChatScreen : View
             var client = _directorContext.GetRequiredActiveWorkspaceHttpClient();
             await client.PostAsync<VoiceInterruptResponseDto>(
                 $"/mcpserver/voice/session/{Uri.EscapeDataString(sessionId)}/interrupt",
-                null).ConfigureAwait(false);
+                null).ConfigureAwait(true);
             AppendTranscriptLine("[system] Interrupt signaled.");
             SetStatus("Interrupt sent.");
         }
@@ -390,7 +390,7 @@ internal sealed class AgentChatScreen : View
             var client = _directorContext.GetRequiredActiveWorkspaceHttpClient();
             var response = await client.PostAsync<VoiceEscapeResponseDto>(
                 $"/mcpserver/voice/session/{Uri.EscapeDataString(sessionId)}/escape",
-                null).ConfigureAwait(false);
+                null).ConfigureAwait(true);
             var sent = response?.Sent == true ? "sent" : "not sent";
             AppendTranscriptLine($"[system] ESC {sent}.");
             SetStatus($"ESC {sent}.");
@@ -403,16 +403,16 @@ internal sealed class AgentChatScreen : View
 
     private async Task RefreshPickersAndStatusAsync()
     {
-        await RefreshAgentAndSessionPickersAsync().ConfigureAwait(false);
-        await RefreshStatusAsync().ConfigureAwait(false);
+        await RefreshAgentAndSessionPickersAsync().ConfigureAwait(true);
+        await RefreshStatusAsync().ConfigureAwait(true);
     }
 
     private async Task RefreshAgentAndSessionPickersAsync(string? preferredAgent = null, string? preferredSessionId = null)
     {
         try
         {
-            var api = await _directorContext.GetRequiredActiveWorkspaceApiClientAsync().ConfigureAwait(false);
-            var agents = await api.AgentPool.GetAgentsAsync().ConfigureAwait(false);
+            var api = await _directorContext.GetRequiredActiveWorkspaceApiClientAsync().ConfigureAwait(true);
+            var agents = await api.AgentPool.GetAgentsAsync().ConfigureAwait(true);
 
             var selectedAgent = string.IsNullOrWhiteSpace(preferredAgent)
                 ? GetAgentNameOrNull()

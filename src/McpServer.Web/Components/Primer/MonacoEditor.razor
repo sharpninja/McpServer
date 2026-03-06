@@ -65,11 +65,11 @@
 
         try
         {
-            var current = await _editor.GetValue().ConfigureAwait(false);
+            var current = await _editor.GetValue().ConfigureAwait(true);
             if (!string.Equals(current, Value, StringComparison.Ordinal))
             {
                 _suppressChange = true;
-                await _editor.SetValue(Value ?? string.Empty).ConfigureAwait(false);
+                await _editor.SetValue(Value ?? string.Empty).ConfigureAwait(true);
                 _suppressChange = false;
             }
         }
@@ -84,7 +84,7 @@
         if (_suppressChange)
             return;
 
-        var value = await _editor.GetValue().ConfigureAwait(false);
-        await ValueChanged.InvokeAsync(value).ConfigureAwait(false);
+        var value = await _editor.GetValue().ConfigureAwait(true);
+        await ValueChanged.InvokeAsync(value).ConfigureAwait(true);
     }
 }
