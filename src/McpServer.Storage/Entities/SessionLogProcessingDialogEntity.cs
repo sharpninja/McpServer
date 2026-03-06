@@ -17,7 +17,7 @@ public sealed class SessionLogProcessingDialogEntity
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>TR-PLANNED-013: Foreign key to parent entry.</summary>
-    public long SessionLogEntryId { get; set; }
+    public long SessionLogTurnId { get; set; }
 
     /// <summary>TR-PLANNED-013: Ordinal position within the dialog sequence.</summary>
     public int Ordinal { get; set; }
@@ -39,5 +39,6 @@ public sealed class SessionLogProcessingDialogEntity
     public string? Category { get; set; }
 
     /// <summary>TR-PLANNED-013: Navigation to parent entry.</summary>
-    public SessionLogEntryEntity? SessionLogEntry { get; set; }
+    public SessionLogTurnEntity? SessionLogTurn { get; set; }
 }
+

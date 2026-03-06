@@ -117,9 +117,10 @@ workspace: demo
             $s.status     | Should -Be 'in_progress'
         }
 
-        It 'initializes empty entries list' {
+        It 'initializes empty turns list' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
-            $s.entries.GetType().Name | Should -BeLike 'List*'
+            $s.turns.GetType().Name | Should -BeLike 'List*'
+            $s.turns.Count | Should -Be 0
             $s.entries.Count | Should -Be 0
         }
 
@@ -146,34 +147,49 @@ workspace: demo
                 $Method -eq 'Post' -and $Uri -like '*/mcpserver/sessionlog'
             }
         }
+
+        It 'posts canonical entries payload (not turns) to server' {
+            $script:capturedBody = $null
+            Mock Invoke-RestMethod {
+                param($Uri, $Method, $Body)
+                if ($Method -eq 'Post' -and $Uri -like '*/mcpserver/sessionlog') {
+                    $script:capturedBody = $Body
+                }
+                return $null
+            } -ModuleName McpSession
+
+            New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm' | Out-Null
+            $script:capturedBody | Should -Match '"entries"'
+            $script:capturedBody | Should -Not -Match '"turns"'
+        }
     }
 
-    # ── Add-McpSessionEntry ───────────────────────────────────────────────────
+    # ── Add-McpSessionTurn ───────────────────────────────────────────────────
 
-    Describe 'Add-McpSessionEntry' {
+    Describe 'Add-McpSessionTurn' {
         BeforeEach {
             Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
         }
 
-        It 'adds entry to session entries list' {
+        It 'adds turn to session turns list' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
-            $e = Add-McpSessionEntry -Session $s -QueryTitle 'Fix bug' -QueryText 'Fix the auth bug'
-            $s.entries.Count | Should -Be 1
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'Fix bug' -QueryText 'Fix the auth bug'
+            $s.turns.Count | Should -Be 1
             $e.queryTitle    | Should -Be 'Fix bug'
             $e.queryText     | Should -Be 'Fix the auth bug'
         }
 
         It 'defaults status to in_progress' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
-            $e = Add-McpSessionEntry -Session $s -QueryTitle 'q' -QueryText 'q'
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q'
             $e.status | Should -Be 'in_progress'
         }
 
         It 'auto-generates sequential requestIds' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
-            $e1 = Add-McpSessionEntry -Session $s -QueryTitle 'First' -QueryText 'q1' -NoPush
-            $e2 = Add-McpSessionEntry -Session $s -QueryTitle 'Second' -QueryText 'q2' -NoPush
-            $e3 = Add-McpSessionEntry -Session $s -QueryTitle 'Third' -QueryText 'q3' -NoPush
+            $e1 = Add-McpSessionTurn -Session $s -QueryTitle 'First' -QueryText 'q1' -NoPush
+            $e2 = Add-McpSessionTurn -Session $s -QueryTitle 'Second' -QueryText 'q2' -NoPush
+            $e3 = Add-McpSessionTurn -Session $s -QueryTitle 'Third' -QueryText 'q3' -NoPush
             $e1.requestId | Should -Be 'req-001'
             $e2.requestId | Should -Be 'req-002'
             $e3.requestId | Should -Be 'req-003'
@@ -181,19 +197,19 @@ workspace: demo
 
         It 'inherits model from session' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'claude-sonnet'
-            $e = Add-McpSessionEntry -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
             $e.model | Should -Be 'claude-sonnet'
         }
 
         It 'accepts explicit model override' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'default'
-            $e = Add-McpSessionEntry -Session $s -QueryTitle 'q' -QueryText 'q' -Model 'override' -NoPush
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -Model 'override' -NoPush
             $e.model | Should -Be 'override'
         }
 
         It 'initializes empty mutable collections' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
-            $e = Add-McpSessionEntry -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
             $e.designDecisions.Count        | Should -Be 0
             $e.requirementsDiscovered.Count | Should -Be 0
             $e.filesModified.Count          | Should -Be 0
@@ -202,60 +218,60 @@ workspace: demo
             $e.processingDialog.Count       | Should -Be 0
         }
 
-        It 'adds entry locally without extra push when -NoPush is set' {
+        It 'adds turn locally without extra push when -NoPush is set' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
             $originalUpdated = $s.lastUpdated
-            Add-McpSessionEntry -Session $s -QueryTitle 'NoPush test' -QueryText 'test' -NoPush
-            # Entry was added to in-memory list
-            $s.entries.Count | Should -Be 1
-            $s.entries[0].queryTitle | Should -Be 'NoPush test'
+            Add-McpSessionTurn -Session $s -QueryTitle 'NoPush test' -QueryText 'test' -NoPush
+            # Turn was added to in-memory list
+            $s.turns.Count | Should -Be 1
+            $s.turns[0].queryTitle | Should -Be 'NoPush test'
             # lastUpdated should NOT have been bumped (Update-McpSessionLog was not called)
             $s.lastUpdated | Should -Be $originalUpdated
         }
     }
 
-    # ── Set-McpSessionEntry ───────────────────────────────────────────────────
+    # ── Set-McpSessionTurn ───────────────────────────────────────────────────
 
-    Describe 'Set-McpSessionEntry' {
+    Describe 'Set-McpSessionTurn' {
         BeforeEach {
             Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
         }
 
         It 'updates response field' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
-            $e = Add-McpSessionEntry -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
-            Set-McpSessionEntry -Entry $e -Response 'All done!' -NoPush
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
+            Set-McpSessionTurn -Turn $e -Response 'All done!' -NoPush
             $e.response | Should -Be 'All done!'
         }
 
         It 'updates status field' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
-            $e = Add-McpSessionEntry -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
-            Set-McpSessionEntry -Entry $e -Status completed -NoPush
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
+            Set-McpSessionTurn -Turn $e -Status completed -NoPush
             $e.status | Should -Be 'completed'
         }
 
         It 'appends to filesModified' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
-            $e = Add-McpSessionEntry -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
-            Set-McpSessionEntry -Entry $e -FilesModified @('a.cs', 'b.cs') -NoPush
-            Set-McpSessionEntry -Entry $e -FilesModified @('c.cs') -NoPush
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
+            Set-McpSessionTurn -Turn $e -FilesModified @('a.cs', 'b.cs') -NoPush
+            Set-McpSessionTurn -Turn $e -FilesModified @('c.cs') -NoPush
             $e.filesModified.Count | Should -Be 3
             $e.filesModified[2]    | Should -Be 'c.cs'
         }
 
         It 'appends to designDecisions' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
-            $e = Add-McpSessionEntry -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
-            Set-McpSessionEntry -Entry $e -DesignDecisions @('Use JWT', 'Skip caching') -NoPush
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
+            Set-McpSessionTurn -Turn $e -DesignDecisions @('Use JWT', 'Skip caching') -NoPush
             $e.designDecisions.Count | Should -Be 2
         }
 
         It 'pushes to server when Session is provided and NoPush is not set' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
-            $e = Add-McpSessionEntry -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
             Mock Invoke-RestMethod { $null } -ModuleName McpSession
-            Set-McpSessionEntry -Entry $e -Session $s -Response 'done'
+            Set-McpSessionTurn -Turn $e -Session $s -Response 'done'
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
                 $Method -eq 'Post' -and $Uri -like '*/mcpserver/sessionlog'
             }
@@ -271,10 +287,10 @@ workspace: demo
 
         It 'adds action with auto-incrementing order' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
-            $e = Add-McpSessionEntry -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
-            $a1 = Add-McpAction -Entry $e -Description 'Created file' -Type create -FilePath 'new.cs'
-            $a2 = Add-McpAction -Entry $e -Description 'Edited file' -Type edit -FilePath 'old.cs'
-            $a3 = Add-McpAction -Entry $e -Description 'Committed' -Type commit
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
+            $a1 = Add-McpAction -Turn $e -Description 'Created file' -Type create -FilePath 'new.cs'
+            $a2 = Add-McpAction -Turn $e -Description 'Edited file' -Type edit -FilePath 'old.cs'
+            $a3 = Add-McpAction -Turn $e -Description 'Committed' -Type commit
             $e.actions.Count | Should -Be 3
             $a1.order | Should -Be 1
             $a2.order | Should -Be 2
@@ -283,8 +299,8 @@ workspace: demo
 
         It 'sets correct type and description' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
-            $e = Add-McpSessionEntry -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
-            $a = Add-McpAction -Entry $e -Description 'Deleted unused file' -Type delete -FilePath 'old.txt'
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
+            $a = Add-McpAction -Turn $e -Description 'Deleted unused file' -Type delete -FilePath 'old.txt'
             $a.description | Should -Be 'Deleted unused file'
             $a.type        | Should -Be 'delete'
             $a.filePath    | Should -Be 'old.txt'
@@ -292,23 +308,33 @@ workspace: demo
 
         It 'defaults status to completed' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
-            $e = Add-McpSessionEntry -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
-            $a = Add-McpAction -Entry $e -Description 'test' -Type edit
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
+            $a = Add-McpAction -Turn $e -Description 'test' -Type edit
             $a.status | Should -Be 'completed'
         }
 
         It 'accepts explicit status' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
-            $e = Add-McpSessionEntry -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
-            $a = Add-McpAction -Entry $e -Description 'WIP' -Type edit -Status in_progress
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
+            $a = Add-McpAction -Turn $e -Description 'WIP' -Type edit -Status in_progress
             $a.status | Should -Be 'in_progress'
         }
 
         It 'defaults filePath to empty string' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
-            $e = Add-McpSessionEntry -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
-            $a = Add-McpAction -Entry $e -Description 'Design choice' -Type design_decision
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
+            $a = Add-McpAction -Turn $e -Description 'Design choice' -Type design_decision
             $a.filePath | Should -Be ''
+        }
+
+        It 'pushes to server when Session is provided and NoPush is not set' {
+            $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
+            Mock Invoke-RestMethod { $null } -ModuleName McpSession
+            Add-McpAction -Turn $e -Session $s -Description 'Tracked change' -Type edit -FilePath 'src/a.cs' | Out-Null
+            Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
+                $Method -eq 'Post' -and $Uri -like '*/mcpserver/sessionlog'
+            }
         }
     }
 

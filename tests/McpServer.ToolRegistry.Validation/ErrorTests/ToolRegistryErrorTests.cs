@@ -10,8 +10,24 @@ namespace McpServer.ToolRegistry.Validation.ErrorTests;
 public sealed class ToolRegistryErrorTests
 {
     private readonly ToolRegistryFixture _f;
+    /// <summary>
+    /// Initializes a new instance of ToolRegistryErrorTests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     public ToolRegistryErrorTests(ToolRegistryFixture f) => _f = f;
 
+    /// <summary>
+    /// Validates the <c>Get_NonExistentTool_Returns404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Get_NonExistentTool_Returns404()
     {
@@ -19,6 +35,14 @@ public sealed class ToolRegistryErrorTests
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>Update_NonExistentTool_Returns404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Update_NonExistentTool_Returns404()
     {
@@ -26,6 +50,14 @@ public sealed class ToolRegistryErrorTests
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>Delete_NonExistentTool_Returns404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Delete_NonExistentTool_Returns404()
     {
@@ -33,6 +65,14 @@ public sealed class ToolRegistryErrorTests
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>RemoveBucket_NonExistent_Returns404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task RemoveBucket_NonExistent_Returns404()
     {
@@ -40,6 +80,14 @@ public sealed class ToolRegistryErrorTests
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>BrowseBucket_NonExistent_Returns404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task BrowseBucket_NonExistent_Returns404()
     {
@@ -47,6 +95,14 @@ public sealed class ToolRegistryErrorTests
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>SyncBucket_NonExistent_Returns404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task SyncBucket_NonExistent_Returns404()
     {
@@ -54,6 +110,14 @@ public sealed class ToolRegistryErrorTests
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>InstallFromBucket_NonExistent_Returns404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task InstallFromBucket_NonExistent_Returns404()
     {
@@ -62,6 +126,14 @@ public sealed class ToolRegistryErrorTests
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>Patch_NotSupported_Returns405</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Patch_NotSupported_Returns405()
     {
@@ -73,6 +145,14 @@ public sealed class ToolRegistryErrorTests
         Assert.Equal(HttpStatusCode.MethodNotAllowed, r.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>Get_InvalidIdFormat_Returns404Or400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Get_InvalidIdFormat_Returns404Or400()
     {
@@ -83,6 +163,14 @@ public sealed class ToolRegistryErrorTests
             $"Expected 404/400 but got {(int)r.StatusCode}.");
     }
 
+    /// <summary>
+    /// Validates the <c>Create_DuplicateName_Returns409</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Create_DuplicateName_Returns409()
     {
@@ -107,6 +195,14 @@ public sealed class ToolRegistryErrorTests
         }
     }
 
+    /// <summary>
+    /// Validates the <c>AddBucket_Duplicate_Returns409</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task AddBucket_Duplicate_Returns409()
     {
@@ -126,6 +222,14 @@ public sealed class ToolRegistryErrorTests
         }
     }
 
+    /// <summary>
+    /// Validates the <c>Search_WithWorkspace_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Search_WithWorkspace_Returns200()
     {
@@ -134,6 +238,14 @@ public sealed class ToolRegistryErrorTests
         Assert.Equal(HttpStatusCode.OK, r.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>List_WithWorkspace_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task List_WithWorkspace_Returns200()
     {

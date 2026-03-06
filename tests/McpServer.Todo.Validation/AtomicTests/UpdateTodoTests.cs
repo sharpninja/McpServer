@@ -12,12 +12,28 @@ public sealed class UpdateTodoTests : IAsyncLifetime
     private readonly TodoEndpointFixture _fixture;
     private readonly string _testId;
 
+    /// <summary>
+    /// Initializes a new instance of UpdateTodoTests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     public UpdateTodoTests(TodoEndpointFixture fixture)
     {
         _fixture = fixture;
         _testId = TodoEndpointFixture.GenerateTestId();
     }
 
+    /// <summary>
+    /// Initializes test state for validation execution.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     public async ValueTask InitializeAsync()
     {
         var body = new { Id = _testId, Title = "AuditUpdateOriginal", Section = "mvp-support", Priority = "low" };
@@ -25,11 +41,27 @@ public sealed class UpdateTodoTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 
+    /// <summary>
+    /// Releases resources used by validation tests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     public async ValueTask DisposeAsync()
     {
         await _fixture.Client.DeleteAsync($"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(_testId)}");
     }
 
+    /// <summary>
+    /// Validates the <c>Update_ChangeTitle_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Update_ChangeTitle_Returns200()
     {
@@ -46,6 +78,14 @@ public sealed class UpdateTodoTests : IAsyncLifetime
         Assert.Equal("AuditUpdateRenamed", result.Item.Title);
     }
 
+    /// <summary>
+    /// Validates the <c>Update_ToggleDone_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Update_ToggleDone_Returns200()
     {
@@ -62,6 +102,14 @@ public sealed class UpdateTodoTests : IAsyncLifetime
         Assert.True(result.Item.Done, "Item should now be marked done.");
     }
 
+    /// <summary>
+    /// Validates the <c>Update_ChangePriority_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Update_ChangePriority_Returns200()
     {
@@ -78,6 +126,14 @@ public sealed class UpdateTodoTests : IAsyncLifetime
         Assert.Equal("high", result.Item.Priority);
     }
 
+    /// <summary>
+    /// Validates the <c>Update_NonExistentId_Returns404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Update_NonExistentId_Returns404()
     {
@@ -89,6 +145,14 @@ public sealed class UpdateTodoTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>Update_NullBody_Returns400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Update_NullBody_Returns400()
     {

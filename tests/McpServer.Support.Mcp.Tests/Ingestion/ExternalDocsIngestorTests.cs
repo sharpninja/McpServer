@@ -1,5 +1,6 @@
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Ingestion;
+using McpServer.Support.Mcp.Services;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
@@ -31,7 +32,7 @@ public sealed class ExternalDocsIngestorTests : IDisposable
         File.WriteAllText(Path.Combine(_externalDir, "tutorial.txt"), "Step 1: do something");
 
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir, ExternalDocsPath = "docs/external" });
-        var sut = new ExternalDocsIngestor(new Chunker(), options, NullLogger<ExternalDocsIngestor>.Instance);
+        var sut = new ExternalDocsIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<ExternalDocsIngestor>.Instance);
 
         var results = await sut.IngestAsync().ConfigureAwait(true);
 
@@ -55,7 +56,7 @@ public sealed class ExternalDocsIngestorTests : IDisposable
             ExternalDocsPath = "docs/external",
             MaxFileSizeBytes = 1024 * 1024
         });
-        var sut = new ExternalDocsIngestor(new Chunker(), options, NullLogger<ExternalDocsIngestor>.Instance);
+        var sut = new ExternalDocsIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<ExternalDocsIngestor>.Instance);
 
         var results = await sut.IngestAsync().ConfigureAwait(true);
 
@@ -70,7 +71,7 @@ public sealed class ExternalDocsIngestorTests : IDisposable
         Directory.CreateDirectory(emptyDir);
 
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir, ExternalDocsPath = "empty_ext" });
-        var sut = new ExternalDocsIngestor(new Chunker(), options, NullLogger<ExternalDocsIngestor>.Instance);
+        var sut = new ExternalDocsIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<ExternalDocsIngestor>.Instance);
 
         var results = await sut.IngestAsync().ConfigureAwait(true);
 
@@ -81,7 +82,7 @@ public sealed class ExternalDocsIngestorTests : IDisposable
     public async Task IngestAsync_NonexistentDirectory_ReturnsEmpty()
     {
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir, ExternalDocsPath = "nonexistent" });
-        var sut = new ExternalDocsIngestor(new Chunker(), options, NullLogger<ExternalDocsIngestor>.Instance);
+        var sut = new ExternalDocsIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<ExternalDocsIngestor>.Instance);
 
         var results = await sut.IngestAsync().ConfigureAwait(true);
 

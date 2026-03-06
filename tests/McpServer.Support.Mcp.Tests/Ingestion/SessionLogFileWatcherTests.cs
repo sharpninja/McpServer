@@ -37,6 +37,11 @@ public sealed class SessionLogFileWatcherTests : IDisposable
         services.AddSingleton(typeof(Microsoft.Extensions.Logging.ILogger<>), typeof(NullLogger<>));
         services.AddSingleton<McpServer.Support.Mcp.Indexing.Chunker>();
         services.AddScoped<ISessionLogService, SessionLogService>();
+        services.AddScoped(_ => new WorkspaceContext
+        {
+            WorkspacePath = _tempDir,
+            SessionsPath = "docs/sessions"
+        });
         services.AddScoped<SessionLogIngestor>();
 
         _serviceProvider = services.BuildServiceProvider();

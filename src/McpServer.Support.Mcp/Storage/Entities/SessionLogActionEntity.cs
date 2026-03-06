@@ -16,7 +16,7 @@ public sealed class SessionLogActionEntity
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>TR-PLANNED-013: Foreign key to parent entry.</summary>
-    public long SessionLogEntryId { get; set; }
+    public long SessionLogTurnId { get; set; }
 
     /// <summary>TR-PLANNED-013: Execution order within the request.</summary>
     public int Order { get; set; }
@@ -37,5 +37,6 @@ public sealed class SessionLogActionEntity
     public string? FilePath { get; set; }
 
     /// <summary>TR-PLANNED-013: Navigation to parent entry.</summary>
-    public SessionLogEntryEntity? SessionLogEntry { get; set; }
+    public SessionLogTurnEntity? SessionLogTurn { get; set; }
 }
+

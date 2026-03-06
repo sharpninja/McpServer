@@ -11,8 +11,24 @@ public sealed class DeleteTodoTests
 {
     private readonly TodoEndpointFixture _fixture;
 
+    /// <summary>
+    /// Initializes a new instance of DeleteTodoTests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     public DeleteTodoTests(TodoEndpointFixture fixture) => _fixture = fixture;
 
+    /// <summary>
+    /// Validates the <c>Delete_ExistingItem_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Delete_ExistingItem_Returns200()
     {
@@ -36,6 +52,14 @@ public sealed class DeleteTodoTests
         Assert.Equal(HttpStatusCode.NotFound, getResponse.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>Delete_NonExistentItem_Returns404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Delete_NonExistentItem_Returns404()
     {

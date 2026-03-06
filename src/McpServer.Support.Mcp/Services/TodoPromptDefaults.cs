@@ -45,7 +45,10 @@ public static class TodoPromptDefaults
              -H "Content-Type: application/json" \
              -d '{"done": true}'
 
-        4. Update the session log throughout. Run to completion, do not wait for user.
+        4. Update the session log throughout and persist after each meaningful update.
+           Include detailed turn metadata: interpretation, response/status, actions with file paths,
+           filesModified, designDecisions, requirementsDiscovered, blockers, and contextList.
+           Run to completion, do not wait for user.
         """;
 
     /// <summary>Default plan prompt template.</summary>

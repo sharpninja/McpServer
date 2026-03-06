@@ -5,16 +5,40 @@ using Xunit;
 
 namespace McpServer.Context.Validation.AtomicTests;
 
+/// <summary>
+/// Validation tests for <c>ContextEndpointTests</c>.
+/// </summary>
+/// <remarks>
+/// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
+/// Test data: Fixture HTTP calls with context query payloads (empty, filtered, bounded, and queryId-based inputs).
+/// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
+/// </remarks>
 [Collection("ContextEndpoint")]
 public sealed class ContextEndpointTests
 {
     private readonly ContextEndpointFixture _fixture;
     private static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
 
+    /// <summary>
+    /// Initializes a new instance of ContextEndpointTests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
+    /// Test data: Fixture HTTP calls with context query payloads (empty, filtered, bounded, and queryId-based inputs).
+    /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
+    /// </remarks>
     public ContextEndpointTests(ContextEndpointFixture fixture) => _fixture = fixture;
 
     // --- GET /mcpserver/context/sources ---
 
+    /// <summary>
+    /// Validates the <c>Sources_Returns200WithSourcesArray</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
+    /// Test data: Fixture HTTP calls with context query payloads (empty, filtered, bounded, and queryId-based inputs).
+    /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
+    /// </remarks>
     [Fact]
     public async Task Sources_Returns200WithSourcesArray()
     {
@@ -27,6 +51,14 @@ public sealed class ContextEndpointTests
 
     // --- POST /mcpserver/context/search ---
 
+    /// <summary>
+    /// Validates the <c>Search_EmptyQuery_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
+    /// Test data: Fixture HTTP calls with context query payloads (empty, filtered, bounded, and queryId-based inputs).
+    /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
+    /// </remarks>
     [Fact]
     public async Task Search_EmptyQuery_Returns200()
     {
@@ -38,6 +70,14 @@ public sealed class ContextEndpointTests
         Assert.Equal(JsonValueKind.Array, chunks.ValueKind);
     }
 
+    /// <summary>
+    /// Validates the <c>Search_WithQuery_Returns200WithResults</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
+    /// Test data: Fixture HTTP calls with context query payloads (empty, filtered, bounded, and queryId-based inputs).
+    /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
+    /// </remarks>
     [Fact]
     public async Task Search_WithQuery_Returns200WithResults()
     {
@@ -50,6 +90,14 @@ public sealed class ContextEndpointTests
         Assert.True(json.TryGetProperty("sourceKeys", out _));
     }
 
+    /// <summary>
+    /// Validates the <c>Search_WithSourceTypeFilter_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
+    /// Test data: Fixture HTTP calls with context query payloads (empty, filtered, bounded, and queryId-based inputs).
+    /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
+    /// </remarks>
     [Fact]
     public async Task Search_WithSourceTypeFilter_Returns200()
     {
@@ -58,6 +106,14 @@ public sealed class ContextEndpointTests
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>Search_LimitClamped_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
+    /// Test data: Fixture HTTP calls with context query payloads (empty, filtered, bounded, and queryId-based inputs).
+    /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
+    /// </remarks>
     [Fact]
     public async Task Search_LimitClamped_Returns200()
     {
@@ -68,6 +124,14 @@ public sealed class ContextEndpointTests
 
     // --- POST /mcpserver/context/pack ---
 
+    /// <summary>
+    /// Validates the <c>Pack_EmptyQuery_Returns200WithPack</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
+    /// Test data: Fixture HTTP calls with context query payloads (empty, filtered, bounded, and queryId-based inputs).
+    /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
+    /// </remarks>
     [Fact]
     public async Task Pack_EmptyQuery_Returns200WithPack()
     {
@@ -80,6 +144,14 @@ public sealed class ContextEndpointTests
         Assert.True(json.TryGetProperty("sourceKeys", out _));
     }
 
+    /// <summary>
+    /// Validates the <c>Pack_WithQueryId_Returns200WithSameQueryId</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
+    /// Test data: Fixture HTTP calls with context query payloads (empty, filtered, bounded, and queryId-based inputs).
+    /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
+    /// </remarks>
     [Fact]
     public async Task Pack_WithQueryId_Returns200WithSameQueryId()
     {
@@ -91,6 +163,14 @@ public sealed class ContextEndpointTests
         Assert.Equal(queryId, json.GetProperty("queryId").GetString());
     }
 
+    /// <summary>
+    /// Validates the <c>Pack_WithQuery_ReturnsFilteredChunks</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
+    /// Test data: Fixture HTTP calls with context query payloads (empty, filtered, bounded, and queryId-based inputs).
+    /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
+    /// </remarks>
     [Fact]
     public async Task Pack_WithQuery_ReturnsFilteredChunks()
     {
@@ -101,6 +181,14 @@ public sealed class ContextEndpointTests
 
     // --- POST /mcpserver/context/rebuild-index ---
 
+    /// <summary>
+    /// Validates the <c>RebuildIndex_Returns200Or500</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-004, FR-MCP-004, TR-MCP-DATA-002, TR-MCP-DATA-003.
+    /// Test data: Fixture HTTP calls with context query payloads (empty, filtered, bounded, and queryId-based inputs).
+    /// Data rationale: These inputs verify context endpoint contracts across normal, boundary, and filtering scenarios.
+    /// </remarks>
     [Fact]
     public async Task RebuildIndex_Returns200Or500()
     {

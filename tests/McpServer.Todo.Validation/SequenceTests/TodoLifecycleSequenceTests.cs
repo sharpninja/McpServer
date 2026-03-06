@@ -15,12 +15,28 @@ public sealed class TodoLifecycleSequenceTests
     private readonly TodoEndpointFixture _fixture;
     private readonly ITestOutputHelper _output;
 
+    /// <summary>
+    /// Initializes a new instance of TodoLifecycleSequenceTests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     public TodoLifecycleSequenceTests(TodoEndpointFixture fixture, ITestOutputHelper output)
     {
         _fixture = fixture;
         _output = output;
     }
 
+    /// <summary>
+    /// Validates the <c>FullLifecycle_CreateThroughDelete</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task FullLifecycle_CreateThroughDelete()
     {

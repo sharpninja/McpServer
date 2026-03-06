@@ -99,7 +99,7 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<int>("Order")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("SessionLogEntryId")
+                    b.Property<long>("SessionLogTurnId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Status")
@@ -112,7 +112,7 @@ namespace McpServer.Support.Mcp.Storage.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SessionLogEntryId");
+                    b.HasIndex("SessionLogTurnId");
 
                     b.ToTable("SessionLogActions");
                 });
@@ -214,7 +214,7 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.ToTable("SessionLogs");
                 });
 
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntryContextEntity", b =>
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnContextEntity", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -228,17 +228,17 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<int>("Ordinal")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("SessionLogEntryId")
+                    b.Property<long>("SessionLogTurnId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SessionLogEntryId");
+                    b.HasIndex("SessionLogTurnId");
 
-                    b.ToTable("SessionLogEntryContexts");
+                    b.ToTable("SessionLogTurnContexts");
                 });
 
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity", b =>
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnEntity", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -302,16 +302,16 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.HasIndex("SessionLogId", "RequestId")
                         .IsUnique();
 
-                    b.ToTable("SessionLogEntries");
+                    b.ToTable("SessionLogTurns");
                 });
 
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntryTagEntity", b =>
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnTagEntity", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("SessionLogEntryId")
+                    b.Property<long>("SessionLogTurnId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Tag")
@@ -321,9 +321,9 @@ namespace McpServer.Support.Mcp.Storage.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SessionLogEntryId");
+                    b.HasIndex("SessionLogTurnId");
 
-                    b.ToTable("SessionLogEntryTags");
+                    b.ToTable("SessionLogTurnTags");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity", b =>
@@ -339,27 +339,27 @@ namespace McpServer.Support.Mcp.Storage.Migrations
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogActionEntity", b =>
                 {
-                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity", "SessionLogEntry")
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnEntity", "SessionLogTurn")
                         .WithMany("Actions")
-                        .HasForeignKey("SessionLogEntryId")
+                        .HasForeignKey("SessionLogTurnId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("SessionLogEntry");
+                    b.Navigation("SessionLogTurn");
                 });
 
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntryContextEntity", b =>
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnContextEntity", b =>
                 {
-                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity", "SessionLogEntry")
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnEntity", "SessionLogTurn")
                         .WithMany("ContextItems")
-                        .HasForeignKey("SessionLogEntryId")
+                        .HasForeignKey("SessionLogTurnId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("SessionLogEntry");
+                    b.Navigation("SessionLogTurn");
                 });
 
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity", b =>
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.SessionLogEntity", "SessionLog")
                         .WithMany("Entries")
@@ -370,15 +370,15 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Navigation("SessionLog");
                 });
 
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntryTagEntity", b =>
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnTagEntity", b =>
                 {
-                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity", "SessionLogEntry")
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnEntity", "SessionLogTurn")
                         .WithMany("Tags")
-                        .HasForeignKey("SessionLogEntryId")
+                        .HasForeignKey("SessionLogTurnId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("SessionLogEntry");
+                    b.Navigation("SessionLogTurn");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity", b =>
@@ -391,7 +391,7 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Navigation("Entries");
                 });
 
-            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntryEntity", b =>
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnEntity", b =>
                 {
                     b.Navigation("Actions");
 
@@ -403,3 +403,4 @@ namespace McpServer.Support.Mcp.Storage.Migrations
         }
     }
 }
+

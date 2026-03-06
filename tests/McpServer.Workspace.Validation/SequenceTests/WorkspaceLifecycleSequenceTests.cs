@@ -16,12 +16,14 @@ public sealed class WorkspaceLifecycleSequenceTests
     private readonly WorkspaceEndpointFixture _fixture;
     private readonly ITestOutputHelper _output;
 
+    /// <summary>Initializes a new instance.</summary>
     public WorkspaceLifecycleSequenceTests(WorkspaceEndpointFixture fixture, ITestOutputHelper output)
     {
         _fixture = fixture;
         _output = output;
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task FullLifecycle_CreateThroughDelete()
     {

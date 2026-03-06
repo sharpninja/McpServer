@@ -6,14 +6,38 @@ using Xunit;
 
 namespace McpServer.SessionLog.Validation.SequenceTests;
 
+/// <summary>
+/// Validation tests for <c>SessionLogLifecycleTests</c>.
+/// </summary>
+/// <remarks>
+/// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+/// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+/// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+/// </remarks>
 [Collection("SessionLogEndpoint")]
 public sealed class SessionLogLifecycleTests
 {
     private readonly SessionLogEndpointFixture _fixture;
     private static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
 
+    /// <summary>
+    /// Initializes a new instance of SessionLogLifecycleTests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     public SessionLogLifecycleTests(SessionLogEndpointFixture fixture) => _fixture = fixture;
 
+    /// <summary>
+    /// Validates the <c>FullLifecycle_Submit_Query_AppendDialog_Requery</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task FullLifecycle_Submit_Query_AppendDialog_Requery()
     {

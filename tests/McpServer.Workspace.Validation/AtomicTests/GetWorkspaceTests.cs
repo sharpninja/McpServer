@@ -13,6 +13,7 @@ public sealed class GetWorkspaceTests : IAsyncLifetime
     private readonly string _testPath;
     private readonly string _testKey;
 
+    /// <summary>Initializes a new instance.</summary>
     public GetWorkspaceTests(WorkspaceEndpointFixture fixture)
     {
         _fixture = fixture;
@@ -20,6 +21,7 @@ public sealed class GetWorkspaceTests : IAsyncLifetime
         _testKey = WorkspaceEndpointFixture.EncodeKey(_testPath);
     }
 
+    /// <summary>Initializes resources asynchronously.</summary>
     public async ValueTask InitializeAsync()
     {
         var body = new { WorkspacePath = _testPath, Name = "AuditGetTest" };
@@ -27,11 +29,13 @@ public sealed class GetWorkspaceTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 
+    /// <summary>Disposes resources asynchronously.</summary>
     public async ValueTask DisposeAsync()
     {
         await _fixture.Client.DeleteAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}");
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Get_ValidKey_Returns200WithWorkspace()
     {
@@ -45,6 +49,7 @@ public sealed class GetWorkspaceTests : IAsyncLifetime
         Assert.Equal("AuditGetTest", dto.Name);
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Get_NonExistentKey_Returns404()
     {
@@ -54,6 +59,7 @@ public sealed class GetWorkspaceTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Get_InvalidBase64Key_Returns400()
     {

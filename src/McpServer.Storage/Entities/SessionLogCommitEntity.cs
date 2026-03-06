@@ -16,7 +16,7 @@ public sealed class SessionLogCommitEntity
     public string WorkspaceId { get; set; } = string.Empty;
 
     /// <summary>TR-PLANNED-013: Foreign key to parent entry.</summary>
-    public long SessionLogEntryId { get; set; }
+    public long SessionLogTurnId { get; set; }
 
     /// <summary>Ordinal position within the entry's commit list.</summary>
     public int Ordinal { get; set; }
@@ -43,5 +43,6 @@ public sealed class SessionLogCommitEntity
     public string? FilesChangedJson { get; set; }
 
     /// <summary>TR-PLANNED-013: Navigation to parent entry.</summary>
-    public SessionLogEntryEntity? SessionLogEntry { get; set; }
+    public SessionLogTurnEntity? SessionLogTurn { get; set; }
 }
+

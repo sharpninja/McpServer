@@ -12,19 +12,51 @@ public sealed class CreateTodoTests : IAsyncLifetime
     private readonly TodoEndpointFixture _fixture;
     private readonly string _testId;
 
+    /// <summary>
+    /// Initializes a new instance of CreateTodoTests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     public CreateTodoTests(TodoEndpointFixture fixture)
     {
         _fixture = fixture;
         _testId = TodoEndpointFixture.GenerateTestId();
     }
 
+    /// <summary>
+    /// Initializes test state for validation execution.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     public ValueTask InitializeAsync() => ValueTask.CompletedTask;
 
+    /// <summary>
+    /// Releases resources used by validation tests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     public async ValueTask DisposeAsync()
     {
         await _fixture.Client.DeleteAsync($"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(_testId)}");
     }
 
+    /// <summary>
+    /// Validates the <c>Create_ValidRequest_Returns201</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Create_ValidRequest_Returns201()
     {
@@ -58,6 +90,14 @@ public sealed class CreateTodoTests : IAsyncLifetime
         Assert.Contains(Uri.EscapeDataString(_testId), response.Headers.Location.ToString());
     }
 
+    /// <summary>
+    /// Validates the <c>Create_DuplicateId_Returns409</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Create_DuplicateId_Returns409()
     {
@@ -73,6 +113,14 @@ public sealed class CreateTodoTests : IAsyncLifetime
         Assert.False(result.Success);
     }
 
+    /// <summary>
+    /// Validates the <c>Create_NullBody_Returns400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Create_NullBody_Returns400()
     {
@@ -87,6 +135,14 @@ public sealed class CreateTodoTests : IAsyncLifetime
             $"Expected 400/422 but got {(int)response.StatusCode}.");
     }
 
+    /// <summary>
+    /// Validates the <c>Create_WithImplementationTasks_Returns201</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Create_WithImplementationTasks_Returns201()
     {

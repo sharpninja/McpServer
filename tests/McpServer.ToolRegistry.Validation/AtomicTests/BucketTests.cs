@@ -10,10 +10,26 @@ namespace McpServer.ToolRegistry.Validation.AtomicTests;
 public sealed class BucketTests
 {
     private readonly ToolRegistryFixture _f;
+    /// <summary>
+    /// Initializes a new instance of BucketTests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     public BucketTests(ToolRegistryFixture f) => _f = f;
 
     // ── List Buckets ─────────────────────────────────────────────────────
 
+    /// <summary>
+    /// Validates the <c>ListBuckets_Returns200WithValidStructure</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task ListBuckets_Returns200WithValidStructure()
     {
@@ -27,6 +43,14 @@ public sealed class BucketTests
 
     // ── Add Bucket ───────────────────────────────────────────────────────
 
+    /// <summary>
+    /// Validates the <c>AddBucket_ValidRequest_Returns201</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task AddBucket_ValidRequest_Returns201()
     {
@@ -48,6 +72,14 @@ public sealed class BucketTests
         await _f.Client.DeleteAsync($"{ToolRegistryFixture.BucketRoute}/{name}");
     }
 
+    /// <summary>
+    /// Validates the <c>AddBucket_Duplicate_Returns409</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task AddBucket_Duplicate_Returns409()
     {
@@ -69,6 +101,14 @@ public sealed class BucketTests
 
     // ── Remove Bucket ────────────────────────────────────────────────────
 
+    /// <summary>
+    /// Validates the <c>RemoveBucket_Existing_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task RemoveBucket_Existing_Returns200()
     {
@@ -83,6 +123,14 @@ public sealed class BucketTests
         Assert.True(res.Success);
     }
 
+    /// <summary>
+    /// Validates the <c>RemoveBucket_NonExistent_Returns404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task RemoveBucket_NonExistent_Returns404()
     {
@@ -92,6 +140,14 @@ public sealed class BucketTests
 
     // ── Browse Bucket ────────────────────────────────────────────────────
 
+    /// <summary>
+    /// Validates the <c>BrowseBucket_NonExistent_Returns404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task BrowseBucket_NonExistent_Returns404()
     {
@@ -99,6 +155,14 @@ public sealed class BucketTests
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>BrowseBucket_Existing_ReturnsResult</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task BrowseBucket_Existing_ReturnsResult()
     {
@@ -122,6 +186,14 @@ public sealed class BucketTests
 
     // ── Install from Bucket ──────────────────────────────────────────────
 
+    /// <summary>
+    /// Validates the <c>InstallFromBucket_NonExistentBucket_Returns404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task InstallFromBucket_NonExistentBucket_Returns404()
     {
@@ -132,6 +204,14 @@ public sealed class BucketTests
 
     // ── Sync Bucket ──────────────────────────────────────────────────────
 
+    /// <summary>
+    /// Validates the <c>SyncBucket_NonExistentBucket_Returns404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task SyncBucket_NonExistentBucket_Returns404()
     {
@@ -140,6 +220,14 @@ public sealed class BucketTests
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>SyncBucket_Existing_Returns200Or404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task SyncBucket_Existing_Returns200Or404()
     {

@@ -6,14 +6,38 @@ using Xunit;
 
 namespace McpServer.SessionLog.Validation.AtomicTests;
 
+/// <summary>
+/// Validation tests for <c>SubmitSessionLogTests</c>.
+/// </summary>
+/// <remarks>
+/// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+/// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+/// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+/// </remarks>
 [Collection("SessionLogEndpoint")]
 public sealed class SubmitSessionLogTests
 {
     private readonly SessionLogEndpointFixture _fixture;
     private static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
 
+    /// <summary>
+    /// Initializes a new instance of SubmitSessionLogTests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     public SubmitSessionLogTests(SessionLogEndpointFixture fixture) => _fixture = fixture;
 
+    /// <summary>
+    /// Validates the <c>Submit_MinimalSessionLog_Returns201</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task Submit_MinimalSessionLog_Returns201()
     {
@@ -40,6 +64,14 @@ public sealed class SubmitSessionLogTests
         Assert.Equal(sessionId, result.SessionId);
     }
 
+    /// <summary>
+    /// Validates the <c>Submit_FullSessionLogWithEntries_Returns201</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task Submit_FullSessionLogWithEntries_Returns201()
     {
@@ -90,6 +122,14 @@ public sealed class SubmitSessionLogTests
         Assert.True(result!.Id > 0);
     }
 
+    /// <summary>
+    /// Validates the <c>Submit_UpsertSameSession_Returns201WithUpdatedData</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task Submit_UpsertSameSession_Returns201WithUpdatedData()
     {
@@ -131,6 +171,14 @@ public sealed class SubmitSessionLogTests
         Assert.Equal(result1!.Id, result2!.Id);
     }
 
+    /// <summary>
+    /// Validates the <c>Submit_WithProcessingDialog_Returns201</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task Submit_WithProcessingDialog_Returns201()
     {

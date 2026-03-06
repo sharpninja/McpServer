@@ -45,7 +45,7 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SessionLogEntries",
+                name: "SessionLogTurns",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
@@ -69,9 +69,9 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SessionLogEntries", x => x.Id);
+                    table.PrimaryKey("PK_SessionLogTurns", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SessionLogEntries_SessionLogs_SessionLogId",
+                        name: "FK_SessionLogTurns_SessionLogs_SessionLogId",
                         column: x => x.SessionLogId,
                         principalTable: "SessionLogs",
                         principalColumn: "Id",
@@ -84,7 +84,7 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    SessionLogEntryId = table.Column<long>(type: "INTEGER", nullable: false),
+                    SessionLogTurnId = table.Column<long>(type: "INTEGER", nullable: false),
                     Order = table.Column<int>(type: "INTEGER", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     Type = table.Column<string>(type: "TEXT", maxLength: 64, nullable: true),
@@ -95,74 +95,74 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                 {
                     table.PrimaryKey("PK_SessionLogActions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SessionLogActions_SessionLogEntries_SessionLogEntryId",
-                        column: x => x.SessionLogEntryId,
-                        principalTable: "SessionLogEntries",
+                        name: "FK_SessionLogActions_SessionLogTurns_SessionLogTurnId",
+                        column: x => x.SessionLogTurnId,
+                        principalTable: "SessionLogTurns",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "SessionLogEntryContexts",
+                name: "SessionLogTurnContexts",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    SessionLogEntryId = table.Column<long>(type: "INTEGER", nullable: false),
+                    SessionLogTurnId = table.Column<long>(type: "INTEGER", nullable: false),
                     Ordinal = table.Column<int>(type: "INTEGER", nullable: false),
                     ContextItem = table.Column<string>(type: "TEXT", maxLength: 2048, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SessionLogEntryContexts", x => x.Id);
+                    table.PrimaryKey("PK_SessionLogTurnContexts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SessionLogEntryContexts_SessionLogEntries_SessionLogEntryId",
-                        column: x => x.SessionLogEntryId,
-                        principalTable: "SessionLogEntries",
+                        name: "FK_SessionLogTurnContexts_SessionLogTurns_SessionLogTurnId",
+                        column: x => x.SessionLogTurnId,
+                        principalTable: "SessionLogTurns",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "SessionLogEntryTags",
+                name: "SessionLogTurnTags",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    SessionLogEntryId = table.Column<long>(type: "INTEGER", nullable: false),
+                    SessionLogTurnId = table.Column<long>(type: "INTEGER", nullable: false),
                     Tag = table.Column<string>(type: "TEXT", maxLength: 256, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SessionLogEntryTags", x => x.Id);
+                    table.PrimaryKey("PK_SessionLogTurnTags", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SessionLogEntryTags_SessionLogEntries_SessionLogEntryId",
-                        column: x => x.SessionLogEntryId,
-                        principalTable: "SessionLogEntries",
+                        name: "FK_SessionLogTurnTags_SessionLogTurns_SessionLogTurnId",
+                        column: x => x.SessionLogTurnId,
+                        principalTable: "SessionLogTurns",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_SessionLogActions_SessionLogEntryId",
+                name: "IX_SessionLogActions_SessionLogTurnId",
                 table: "SessionLogActions",
-                column: "SessionLogEntryId");
+                column: "SessionLogTurnId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SessionLogEntries_SessionLogId_RequestId",
-                table: "SessionLogEntries",
+                name: "IX_SessionLogTurns_SessionLogId_RequestId",
+                table: "SessionLogTurns",
                 columns: new[] { "SessionLogId", "RequestId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_SessionLogEntryContexts_SessionLogEntryId",
-                table: "SessionLogEntryContexts",
-                column: "SessionLogEntryId");
+                name: "IX_SessionLogTurnContexts_SessionLogTurnId",
+                table: "SessionLogTurnContexts",
+                column: "SessionLogTurnId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SessionLogEntryTags_SessionLogEntryId",
-                table: "SessionLogEntryTags",
-                column: "SessionLogEntryId");
+                name: "IX_SessionLogTurnTags_SessionLogTurnId",
+                table: "SessionLogTurnTags",
+                column: "SessionLogTurnId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SessionLogs_LastUpdated",
@@ -193,16 +193,17 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                 name: "SessionLogActions");
 
             migrationBuilder.DropTable(
-                name: "SessionLogEntryContexts");
+                name: "SessionLogTurnContexts");
 
             migrationBuilder.DropTable(
-                name: "SessionLogEntryTags");
+                name: "SessionLogTurnTags");
 
             migrationBuilder.DropTable(
-                name: "SessionLogEntries");
+                name: "SessionLogTurns");
 
             migrationBuilder.DropTable(
                 name: "SessionLogs");
         }
     }
 }
+

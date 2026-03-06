@@ -12,10 +12,26 @@ public sealed class RepoEndpointTests
     private readonly RepoEndpointFixture _fixture;
     private static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
 
+    /// <summary>
+    /// Initializes a new instance of RepoEndpointTests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-001, FR-SUPPORT-010, TR-MCP-API-001.
+    /// Test data: Fixture HTTP calls with repo list/read/write routes, path query values, and write payload objects.
+    /// Data rationale: These inputs verify repository endpoint contract behavior, validation checks, and route correctness.
+    /// </remarks>
     public RepoEndpointTests(RepoEndpointFixture fixture) => _fixture = fixture;
 
     // --- GET /mcpserver/repo/list ---
 
+    /// <summary>
+    /// Validates the <c>List_RootPath_Returns200WithEntries</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-001, FR-SUPPORT-010, TR-MCP-API-001.
+    /// Test data: Fixture HTTP calls with repo list/read/write routes, path query values, and write payload objects.
+    /// Data rationale: These inputs verify repository endpoint contract behavior, validation checks, and route correctness.
+    /// </remarks>
     [Fact]
     public async Task List_RootPath_Returns200WithEntries()
     {
@@ -26,6 +42,14 @@ public sealed class RepoEndpointTests
         Assert.Equal(JsonValueKind.Array, entries.ValueKind);
     }
 
+    /// <summary>
+    /// Validates the <c>List_WithPath_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-001, FR-SUPPORT-010, TR-MCP-API-001.
+    /// Test data: Fixture HTTP calls with repo list/read/write routes, path query values, and write payload objects.
+    /// Data rationale: These inputs verify repository endpoint contract behavior, validation checks, and route correctness.
+    /// </remarks>
     [Fact]
     public async Task List_WithPath_Returns200()
     {
@@ -38,6 +62,14 @@ public sealed class RepoEndpointTests
 
     // --- GET /mcpserver/repo/file ---
 
+    /// <summary>
+    /// Validates the <c>ReadFile_MissingPath_Returns400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-001, FR-SUPPORT-010, TR-MCP-API-001.
+    /// Test data: Fixture HTTP calls with repo list/read/write routes, path query values, and write payload objects.
+    /// Data rationale: These inputs verify repository endpoint contract behavior, validation checks, and route correctness.
+    /// </remarks>
     [Fact]
     public async Task ReadFile_MissingPath_Returns400()
     {
@@ -47,6 +79,14 @@ public sealed class RepoEndpointTests
         Assert.Equal("path is required", json.GetProperty("error").GetString());
     }
 
+    /// <summary>
+    /// Validates the <c>ReadFile_ExistingFile_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-001, FR-SUPPORT-010, TR-MCP-API-001.
+    /// Test data: Fixture HTTP calls with repo list/read/write routes, path query values, and write payload objects.
+    /// Data rationale: These inputs verify repository endpoint contract behavior, validation checks, and route correctness.
+    /// </remarks>
     [Fact]
     public async Task ReadFile_ExistingFile_Returns200()
     {
@@ -56,6 +96,14 @@ public sealed class RepoEndpointTests
             $"Expected 200 or 400, got {(int)response.StatusCode}");
     }
 
+    /// <summary>
+    /// Validates the <c>ReadFile_NonExistentFile_Returns200Or400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-001, FR-SUPPORT-010, TR-MCP-API-001.
+    /// Test data: Fixture HTTP calls with repo list/read/write routes, path query values, and write payload objects.
+    /// Data rationale: These inputs verify repository endpoint contract behavior, validation checks, and route correctness.
+    /// </remarks>
     [Fact]
     public async Task ReadFile_NonExistentFile_Returns200Or400()
     {
@@ -67,6 +115,14 @@ public sealed class RepoEndpointTests
 
     // --- POST /mcpserver/repo/file ---
 
+    /// <summary>
+    /// Validates the <c>WriteFile_MissingPath_Returns400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-001, FR-SUPPORT-010, TR-MCP-API-001.
+    /// Test data: Fixture HTTP calls with repo list/read/write routes, path query values, and write payload objects.
+    /// Data rationale: These inputs verify repository endpoint contract behavior, validation checks, and route correctness.
+    /// </remarks>
     [Fact]
     public async Task WriteFile_MissingPath_Returns400()
     {
@@ -75,6 +131,14 @@ public sealed class RepoEndpointTests
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>WriteFile_NullBody_Returns400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-001, FR-SUPPORT-010, TR-MCP-API-001.
+    /// Test data: Fixture HTTP calls with repo list/read/write routes, path query values, and write payload objects.
+    /// Data rationale: These inputs verify repository endpoint contract behavior, validation checks, and route correctness.
+    /// </remarks>
     [Fact]
     public async Task WriteFile_NullBody_Returns400()
     {
@@ -82,6 +146,14 @@ public sealed class RepoEndpointTests
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>WriteFile_ValidPath_Returns200Or400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-001, FR-SUPPORT-010, TR-MCP-API-001.
+    /// Test data: Fixture HTTP calls with repo list/read/write routes, path query values, and write payload objects.
+    /// Data rationale: These inputs verify repository endpoint contract behavior, validation checks, and route correctness.
+    /// </remarks>
     [Fact]
     public async Task WriteFile_ValidPath_Returns200Or400()
     {

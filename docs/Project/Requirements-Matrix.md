@@ -47,6 +47,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-REQ-002 | ✅ Complete | RequirementsDocumentService, RequirementsDocumentParser, RequirementsDocumentRenderer, RequirementsOptions |
 | TR-MCP-REQ-003 | ✅ Complete | RequirementsController, FwhMcpTools, Program.cs (requirements DI/config) |
 | TR-MCP-DRY-001 | ✅ Active directive | All code and scripts |
+| TR-MCP-DOC-002 | ✅ Active directive | .github/copilot-instructions.md, AGENTS.md |
 | TR-LOC-001 | 🔲 Planned | — |
 | FR-MCP-026 | ✅ Complete | OidcAuthOptions, Program.cs (JWT Bearer + AgentManager policy), WorkspaceAuthMiddleware, AgentController, AuthConfigController, Setup-McpKeycloak.ps1, setup-mcp-keycloak.sh, McpServer.Director (AuthCommands, OidcAuthService, LoginDialog) |
 | FR-MCP-027 | ✅ Complete | Program.cs (startup built-in seeding), AgentController, AgentService, AgentDefaults, AgentDefinitionEntity |
@@ -57,11 +58,11 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-032 | 🔲 Planned | — |
 | FR-MCP-033 | ✅ Complete | WorkspaceController (POST /mcpserver/workspace/policy), WorkspacePolicyService, WorkspacePolicyDirectiveParser, McpServerMcpTools.workspace_policy_apply |
 | FR-MCP-034 | ✅ Complete | IWorkspaceService, MarkerFileService, WorkspaceModels |
-| FR-MCP-035 | ✅ Complete | MarkerFileService.DefaultPromptTemplate |
+| FR-MCP-035 | ✅ Complete | templates/prompt-templates.yaml |
 | FR-MCP-036 | ✅ Complete | AuditedCopilotClient, Program.cs (ICopilotClient decorator), McpStdioHost (ICopilotClient decorator), CopilotServiceCollectionExtensions |
 | FR-MCP-037 | ✅ Complete | McpServer.Director (Program exec/list-viewmodels), McpServer.Cqrs.Mvvm (IViewModelRegistry) |
-| FR-MCP-038 | ✅ Complete | MarkerFileService.DefaultPromptTemplate |
-| FR-MCP-039 | ✅ Complete | Program.cs + McpStdioHost PostConfigure<IngestionOptions>, appsettings.yaml RepoAllowlist, MarkerFileService.DefaultPromptTemplate |
+| FR-MCP-038 | ✅ Complete | templates/prompt-templates.yaml |
+| FR-MCP-039 | ✅ Complete | Program.cs + McpStdioHost PostConfigure<IngestionOptions>, appsettings.yaml RepoAllowlist, templates/prompt-templates.yaml |
 | FR-MCP-040 | ✅ Complete | RequirementsController, RequirementsDocumentService, IRequirementsRepository |
 | FR-MCP-041 | ✅ Complete | RequirementsController (/mcpserver/requirements/generate), RequirementsDocumentService, RequirementsDocumentRenderer |
 | FR-MCP-042 | ✅ Complete | FwhMcpTools (requirements_* tools), RequirementsDocumentService |
@@ -75,7 +76,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-AUDIT-001 | ✅ Complete | AuditedCopilotClient, Program.cs decorator wiring, McpStdioHost decorator wiring |
 | TR-MCP-POL-001 | ✅ Complete | WorkspacePolicyService, WorkspacePolicyDirectiveParser, WorkspaceController policy endpoint, McpServerMcpTools.workspace_policy_apply |
 | TR-MCP-DTO-001 | ✅ Complete | UnifiedSessionLogDto |
-| TR-MCP-CTX-001 | ✅ Complete | Program.cs + McpStdioHost PostConfigure<IngestionOptions>, appsettings.yaml RepoAllowlist, MarkerFileService.DefaultPromptTemplate |
+| TR-MCP-CTX-001 | ✅ Complete | Program.cs + McpStdioHost PostConfigure<IngestionOptions>, appsettings.yaml RepoAllowlist, templates/prompt-templates.yaml |
 | TR-MCP-MT-001 | ✅ Complete | WorkspaceContext, WorkspaceResolutionMiddleware |
 | TR-MCP-MT-002 | ✅ Complete | WorkspaceResolutionMiddleware, WorkspaceTokenService |
 | TR-MCP-MT-003 | ✅ Complete | McpDbContext (global query filter), all entities (WorkspaceId) |
@@ -141,4 +142,4 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-084 | ✅ Complete | GitHubCliServiceTests workflow run tests, GitHubControllerTests.ListWorkflowRuns_ReturnsOk, GitHubClientTests workflow/auth tests |
 | TEST-MCP-085 | ✅ Complete | WorkspaceControllerTests.ApplyPolicy_ValidDirective_UpdatesWorkspaceBanList, WorkspaceControllerTests.ApplyPolicy_InvalidDirective_ReturnsBadRequest, WorkspacePolicyServiceTests |
 | TEST-MCP-086 | ✅ Complete | AuditedCopilotClientTests, WorkspacePolicyDirectiveParserTests |
-| TEST-MCP-087 | ✅ Complete | IngestionAllowlistContractTests, MarkerFileServiceTests.DefaultPromptTemplate_IncludesAvailableCapabilitiesSection |
+| TEST-MCP-087 | ✅ Complete | IngestionAllowlistContractTests.MarkerPromptTemplate_ContainsAvailableCapabilitiesSection |

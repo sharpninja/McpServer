@@ -7,14 +7,38 @@ using Xunit;
 
 namespace McpServer.SessionLog.Validation.ErrorTests;
 
+/// <summary>
+/// Validation tests for <c>SessionLogErrorTests</c>.
+/// </summary>
+/// <remarks>
+/// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+/// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+/// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+/// </remarks>
 [Collection("SessionLogEndpoint")]
 public sealed class SessionLogErrorTests
 {
     private readonly SessionLogEndpointFixture _fixture;
     private static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
 
+    /// <summary>
+    /// Initializes a new instance of SessionLogErrorTests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     public SessionLogErrorTests(SessionLogEndpointFixture fixture) => _fixture = fixture;
 
+    /// <summary>
+    /// Validates the <c>Submit_MissingSourceType_Returns400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task Submit_MissingSourceType_Returns400()
     {
@@ -33,6 +57,14 @@ public sealed class SessionLogErrorTests
         Assert.Contains("SourceType", err!.Error!, StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// Validates the <c>Submit_MissingSessionId_Returns400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task Submit_MissingSessionId_Returns400()
     {
@@ -51,6 +83,14 @@ public sealed class SessionLogErrorTests
         Assert.Contains("SessionId", err!.Error!, StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// Validates the <c>Submit_EmptySourceType_Returns400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task Submit_EmptySourceType_Returns400()
     {
@@ -66,6 +106,14 @@ public sealed class SessionLogErrorTests
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>Submit_EmptySessionId_Returns400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task Submit_EmptySessionId_Returns400()
     {
@@ -81,6 +129,14 @@ public sealed class SessionLogErrorTests
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>AppendDialog_EmptyItemsList_Returns400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task AppendDialog_EmptyItemsList_Returns400()
     {
@@ -90,6 +146,14 @@ public sealed class SessionLogErrorTests
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>Submit_InvalidJsonBody_Returns400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task Submit_InvalidJsonBody_Returns400()
     {

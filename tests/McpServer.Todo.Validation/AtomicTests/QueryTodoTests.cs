@@ -11,8 +11,24 @@ public sealed class QueryTodoTests
 {
     private readonly TodoEndpointFixture _fixture;
 
+    /// <summary>
+    /// Initializes a new instance of QueryTodoTests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     public QueryTodoTests(TodoEndpointFixture fixture) => _fixture = fixture;
 
+    /// <summary>
+    /// Validates the <c>Query_NoFilters_Returns200WithValidStructure</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Query_NoFilters_Returns200WithValidStructure()
     {
@@ -27,6 +43,14 @@ public sealed class QueryTodoTests
         Assert.Equal(result.Items.Count, result.TotalCount);
     }
 
+    /// <summary>
+    /// Validates the <c>Query_ResponseIsJson</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Query_ResponseIsJson()
     {
@@ -36,6 +60,14 @@ public sealed class QueryTodoTests
         Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
     }
 
+    /// <summary>
+    /// Validates the <c>Query_ByPriority_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Query_ByPriority_Returns200()
     {
@@ -51,6 +83,14 @@ public sealed class QueryTodoTests
         }
     }
 
+    /// <summary>
+    /// Validates the <c>Query_ByDoneStatus_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Query_ByDoneStatus_Returns200()
     {
@@ -65,6 +105,14 @@ public sealed class QueryTodoTests
         }
     }
 
+    /// <summary>
+    /// Validates the <c>Query_ByKeyword_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Query_ByKeyword_Returns200()
     {
@@ -77,6 +125,14 @@ public sealed class QueryTodoTests
         Assert.NotNull(result.Items);
     }
 
+    /// <summary>
+    /// Validates the <c>Query_BySection_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Query_BySection_Returns200()
     {
@@ -91,6 +147,14 @@ public sealed class QueryTodoTests
         }
     }
 
+    /// <summary>
+    /// Validates the <c>Query_ById_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Query_ById_Returns200()
     {
@@ -110,6 +174,14 @@ public sealed class QueryTodoTests
         Assert.Contains(result.Items, i => i.Id == knownId);
     }
 
+    /// <summary>
+    /// Validates the <c>Query_NonMatchingKeyword_ReturnsEmptyList</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-002, TEST-MCP-074, FR-MCP-002, TR-MCP-TODO-002.
+    /// Test data: Generated TODO IDs and endpoint payloads for create/update/query/error combinations.
+    /// Data rationale: These inputs verify TODO endpoint contract stability, mutation behavior, and validation/error handling paths.
+    /// </remarks>
     [Fact]
     public async Task Query_NonMatchingKeyword_ReturnsEmptyList()
     {

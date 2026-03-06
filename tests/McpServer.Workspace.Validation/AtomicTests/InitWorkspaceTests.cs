@@ -13,6 +13,7 @@ public sealed class InitWorkspaceTests : IAsyncLifetime
     private readonly string _testPath;
     private readonly string _testKey;
 
+    /// <summary>Initializes a new instance.</summary>
     public InitWorkspaceTests(WorkspaceEndpointFixture fixture)
     {
         _fixture = fixture;
@@ -20,6 +21,7 @@ public sealed class InitWorkspaceTests : IAsyncLifetime
         _testKey = WorkspaceEndpointFixture.EncodeKey(_testPath);
     }
 
+    /// <summary>Initializes resources asynchronously.</summary>
     public async ValueTask InitializeAsync()
     {
         var body = new { WorkspacePath = _testPath, Name = "AuditInitTest" };
@@ -27,11 +29,13 @@ public sealed class InitWorkspaceTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
     }
 
+    /// <summary>Disposes resources asynchronously.</summary>
     public async ValueTask DisposeAsync()
     {
         await _fixture.Client.DeleteAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}");
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Init_RegisteredWorkspace_ReturnsResult()
     {
@@ -58,6 +62,7 @@ public sealed class InitWorkspaceTests : IAsyncLifetime
         }
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Init_InvalidKey_Returns400()
     {

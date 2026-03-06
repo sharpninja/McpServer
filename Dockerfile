@@ -5,19 +5,12 @@ WORKDIR /src
 # Copy build infrastructure
 COPY Directory.Build.props Directory.Build.targets Directory.Packages.props NuGet.config global.json ./
 
-# Copy project files for restore
-COPY src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj src/McpServer.Support.Mcp/
-COPY src/McpServer.ServiceDefaults/McpServer.ServiceDefaults.csproj src/McpServer.ServiceDefaults/
-COPY src/McpServer.Common.Copilot/McpServer.Common.Copilot.csproj src/McpServer.Common.Copilot/
+# Copy source and templates
+COPY src/ src/
+COPY templates/ templates/
 
 # Restore (cached layer)
 RUN dotnet restore src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj
-
-# Copy source code
-COPY src/McpServer.Support.Mcp/ src/McpServer.Support.Mcp/
-COPY src/McpServer.ServiceDefaults/ src/McpServer.ServiceDefaults/
-COPY src/McpServer.Common.Copilot/ src/McpServer.Common.Copilot/
-COPY templates/ templates/
 
 # Publish
 RUN dotnet publish src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj \

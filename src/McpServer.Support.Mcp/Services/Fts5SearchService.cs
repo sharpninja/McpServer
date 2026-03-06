@@ -12,12 +12,14 @@ internal sealed class Fts5SearchService : IContextSearchService
 {
     private readonly McpDbContext _db;
     private readonly ILogger<Fts5SearchService> _logger;
+    private readonly bool _isSqliteProvider;
 
     /// <summary>TR-PLANNED-013: Constructor for DI.</summary>
     public Fts5SearchService(McpDbContext db, ILogger<Fts5SearchService> logger)
     {
         _db = db;
         _logger = logger;
+        _isSqliteProvider = _db.Database.ProviderName?.Contains("Sqlite", StringComparison.OrdinalIgnoreCase) == true;
     }
 
     /// <inheritdoc />
@@ -29,6 +31,12 @@ internal sealed class Fts5SearchService : IContextSearchService
         if (string.IsNullOrEmpty(q))
         {
             return new ContextSearchResult([], []);
+        }
+
+        // FTS5 SQL is SQLite-specific. For other providers (e.g., PostgreSQL), use fallback search.
+        if (!_isSqliteProvider)
+        {
+            return await FallbackSearchAsync(q, lim, sourceType, ct).ConfigureAwait(false);
         }
 
         // Escape FTS5 special characters and form a simple prefix query
@@ -128,6 +136,14 @@ internal sealed class Fts5SearchService : IContextSearchService
     /// <inheritdoc />
     public async Task RebuildAsync(CancellationToken ct = default)
     {
+        if (!_isSqliteProvider)
+        {
+            _logger.LogInformation(
+                "Skipping FTS5 rebuild for non-SQLite provider: {ProviderName}",
+                _db.Database.ProviderName ?? "<unknown>");
+            return;
+        }
+
         try
         {
             var conn = _db.Database.GetDbConnection();
@@ -163,7 +179,10 @@ internal sealed class Fts5SearchService : IContextSearchService
             var docIds = await _db.Documents.Where(d => d.SourceType == sourceType).Select(d => d.Id).ToListAsync(ct).ConfigureAwait(false);
             chunksQuery = chunksQuery.Where(c => docIds.Contains(c.DocumentId));
         }
-        chunksQuery = chunksQuery.Where(c => c.Content != null && c.Content.Contains(query));
+        if (_isSqliteProvider)
+            chunksQuery = chunksQuery.Where(c => c.Content != null && c.Content.Contains(query));
+        else
+            chunksQuery = chunksQuery.Where(c => c.Content != null && EF.Functions.ILike(c.Content, $"%{query}%"));
 
         var chunkList = await chunksQuery
             .OrderBy(c => c.DocumentId)

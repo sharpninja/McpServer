@@ -25,29 +25,32 @@ public sealed class FileMarkerPromptProvider : IMarkerPromptProvider
     }
 
     /// <inheritdoc />
-    public async Task<string?> GetGlobalPromptTemplateAsync(CancellationToken cancellationToken = default)
+    public async Task<string> GetGlobalPromptTemplateAsync(CancellationToken cancellationToken = default)
     {
         if (_loaded)
-            return _cached;
+            return _cached!;
 
         try
         {
             var template = await _templateService.GetByIdAsync(TemplateId, cancellationToken).ConfigureAwait(false);
-            _cached = template?.Content;
+            
+            if (template is null)
+            {
+                var msg = $"CRITICAL: Marker prompt template '{TemplateId}' not found in prompt-templates.yaml. Server cannot start without it.";
+                _logger.LogCritical(msg);
+                throw new InvalidOperationException(msg);
+            }
+
+            _cached = template.Content;
             _loaded = true;
 
-            if (_cached is not null)
-                _logger.LogInformation("Loaded marker prompt template '{Id}' ({Length} chars)", TemplateId, _cached.Length);
-            else
-                _logger.LogDebug("Marker prompt template '{Id}' not found, using built-in default", TemplateId);
-
+            _logger.LogInformation("Loaded marker prompt template '{Id}' ({Length} chars)", TemplateId, _cached.Length);
             return _cached;
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not InvalidOperationException)
         {
-            _logger.LogError(ex, "Failed to load marker prompt template '{Id}'", TemplateId);
-            _loaded = true;
-            return null;
+            _logger.LogCritical(ex, "Failed to load marker prompt template '{Id}'", TemplateId);
+            throw;
         }
     }
 }

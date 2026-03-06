@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -11,10 +11,10 @@ namespace McpServer.Support.Mcp.Storage.Migrations
         private static readonly string[] s_postgresIdentityTables =
         {
             "SessionLogs",
-            "SessionLogEntries",
+            "SessionLogTurns",
             "SessionLogActions",
-            "SessionLogEntryContexts",
-            "SessionLogEntryTags",
+            "SessionLogTurnContexts",
+            "SessionLogTurnTags",
             "SessionLogProcessingDialogs",
             "ToolBuckets",
             "ToolDefinitions",
@@ -22,14 +22,14 @@ namespace McpServer.Support.Mcp.Storage.Migrations
             "AgentEventLogs",
             "AgentWorkspaces",
             "SessionLogCommits",
-            "SessionLogEntryStringLists",
+            "SessionLogTurnStringLists",
         };
 
         private static readonly (string Table, string Column)[] s_postgresTimestampColumns =
         {
             ("AgentEventLogs", "Timestamp"),
             ("SessionLogCommits", "CommitTimestamp"),
-            ("SessionLogEntries", "Timestamp"),
+            ("SessionLogTurns", "Timestamp"),
             ("SessionLogProcessingDialogs", "Timestamp"),
             ("SessionLogs", "Started"),
             ("SessionLogs", "LastUpdated"),
@@ -44,7 +44,7 @@ namespace McpServer.Support.Mcp.Storage.Migrations
         {
             ("AgentDefinitions", "IsBuiltIn"),
             ("AgentWorkspaces", "Enabled"),
-            ("SessionLogEntries", "IsPremium"),
+            ("SessionLogTurns", "IsPremium"),
         };
 
         /// <inheritdoc />
@@ -57,7 +57,7 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     WorkspaceId = table.Column<string>(type: "TEXT", nullable: false),
-                    SessionLogEntryId = table.Column<long>(type: "INTEGER", nullable: false),
+                    SessionLogTurnId = table.Column<long>(type: "INTEGER", nullable: false),
                     Ordinal = table.Column<int>(type: "INTEGER", nullable: false),
                     Sha = table.Column<string>(type: "TEXT", maxLength: 64, nullable: true),
                     Branch = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
@@ -70,45 +70,45 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                 {
                     table.PrimaryKey("PK_SessionLogCommits", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SessionLogCommits_SessionLogEntries_SessionLogEntryId",
-                        column: x => x.SessionLogEntryId,
-                        principalTable: "SessionLogEntries",
+                        name: "FK_SessionLogCommits_SessionLogTurns_SessionLogTurnId",
+                        column: x => x.SessionLogTurnId,
+                        principalTable: "SessionLogTurns",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "SessionLogEntryStringLists",
+                name: "SessionLogTurnStringLists",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     WorkspaceId = table.Column<string>(type: "TEXT", nullable: false),
-                    SessionLogEntryId = table.Column<long>(type: "INTEGER", nullable: false),
+                    SessionLogTurnId = table.Column<long>(type: "INTEGER", nullable: false),
                     ListType = table.Column<string>(type: "TEXT", maxLength: 32, nullable: false),
                     Ordinal = table.Column<int>(type: "INTEGER", nullable: false),
                     Value = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SessionLogEntryStringLists", x => x.Id);
+                    table.PrimaryKey("PK_SessionLogTurnStringLists", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SessionLogEntryStringLists_SessionLogEntries_SessionLogEntryId",
-                        column: x => x.SessionLogEntryId,
-                        principalTable: "SessionLogEntries",
+                        name: "FK_SessionLogTurnStringLists_SessionLogTurns_SessionLogTurnId",
+                        column: x => x.SessionLogTurnId,
+                        principalTable: "SessionLogTurns",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_SessionLogCommits_SessionLogEntryId",
+                name: "IX_SessionLogCommits_SessionLogTurnId",
                 table: "SessionLogCommits",
-                column: "SessionLogEntryId");
+                column: "SessionLogTurnId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SessionLogEntryStringLists_SessionLogEntryId_ListType",
-                table: "SessionLogEntryStringLists",
-                columns: new[] { "SessionLogEntryId", "ListType" });
+                name: "IX_SessionLogTurnStringLists_SessionLogTurnId_ListType",
+                table: "SessionLogTurnStringLists",
+                columns: new[] { "SessionLogTurnId", "ListType" });
 
             if (ActiveProvider.Contains("Npgsql", StringComparison.Ordinal))
             {
@@ -136,7 +136,7 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                 name: "SessionLogCommits");
 
             migrationBuilder.DropTable(
-                name: "SessionLogEntryStringLists");
+                name: "SessionLogTurnStringLists");
         }
 
         private static void EnsurePostgresIdentity(MigrationBuilder migrationBuilder, string tableName)
@@ -207,3 +207,4 @@ namespace McpServer.Support.Mcp.Storage.Migrations
         }
     }
 }
+

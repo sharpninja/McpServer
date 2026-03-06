@@ -13,6 +13,7 @@ public sealed class CreateWorkspaceTests : IAsyncLifetime
     private readonly string _testPath;
     private readonly string _testKey;
 
+    /// <summary>Initializes a new instance.</summary>
     public CreateWorkspaceTests(WorkspaceEndpointFixture fixture)
     {
         _fixture = fixture;
@@ -20,14 +21,17 @@ public sealed class CreateWorkspaceTests : IAsyncLifetime
         _testKey = WorkspaceEndpointFixture.EncodeKey(_testPath);
     }
 
+    /// <summary>Initializes resources asynchronously.</summary>
     public ValueTask InitializeAsync() => ValueTask.CompletedTask;
 
+    /// <summary>Disposes resources asynchronously.</summary>
     public async ValueTask DisposeAsync()
     {
         // Clean up: delete the test workspace if it was created.
         await _fixture.Client.DeleteAsync($"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}");
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Create_ValidRequest_Returns201()
     {
@@ -50,6 +54,7 @@ public sealed class CreateWorkspaceTests : IAsyncLifetime
         Assert.Contains(_testKey, response.Headers.Location.ToString());
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Create_DuplicatePath_Returns409()
     {
@@ -66,6 +71,7 @@ public sealed class CreateWorkspaceTests : IAsyncLifetime
         Assert.False(result.Success);
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Create_NoName_DerivesFromPath()
     {
@@ -81,6 +87,7 @@ public sealed class CreateWorkspaceTests : IAsyncLifetime
         Assert.False(string.IsNullOrWhiteSpace(result.Workspace.Name));
     }
 
+    /// <summary>Test method.</summary>
     [Fact]
     public async Task Create_NullBody_Returns400()
     {

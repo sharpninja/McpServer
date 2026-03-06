@@ -21,6 +21,7 @@ public sealed class WorkspaceEndpointFixture : IDisposable
     /// <summary>Optional API key. Set via MCPSERVER_APIKEY environment variable.</summary>
     public string? ApiKey { get; }
 
+    /// <summary>Initializes a new instance.</summary>
     public WorkspaceEndpointFixture()
     {
         Client = new HttpClient { BaseAddress = new Uri(BaseUrl) };
@@ -44,6 +45,7 @@ public sealed class WorkspaceEndpointFixture : IDisposable
         return $@"C:\Temp\McpAuditTest_{Guid.NewGuid():N}";
     }
 
+    /// <summary>Disposes resources.</summary>
     public void Dispose() => Client.Dispose();
 }
 
