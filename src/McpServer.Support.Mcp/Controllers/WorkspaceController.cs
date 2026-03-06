@@ -26,6 +26,7 @@ public sealed class WorkspaceController : ControllerBase
     private readonly IConfiguration _configuration;
     private readonly IWebHostEnvironment _env;
     private readonly IOptionsMonitor<MarkerPromptOptions> _promptOptions;
+    private readonly IMarkerPromptProvider _markerPromptProvider;
 
     /// <summary>Initializes a new instance of the <see cref="WorkspaceController"/> class.</summary>
     public WorkspaceController(
@@ -34,7 +35,8 @@ public sealed class WorkspaceController : ControllerBase
         IWorkspaceProcessManager processManager,
         IConfiguration configuration,
         IWebHostEnvironment env,
-        IOptionsMonitor<MarkerPromptOptions> promptOptions)
+        IOptionsMonitor<MarkerPromptOptions> promptOptions,
+        IMarkerPromptProvider markerPromptProvider)
     {
         _workspaceService = workspaceService;
         _workspacePolicyService = workspacePolicyService;
@@ -42,6 +44,7 @@ public sealed class WorkspaceController : ControllerBase
         _configuration = configuration;
         _env = env;
         _promptOptions = promptOptions;
+        _markerPromptProvider = markerPromptProvider;
     }
 
     /// <summary>
@@ -266,8 +269,19 @@ public sealed class WorkspaceController : ControllerBase
 
         var template = _promptOptions.CurrentValue.MarkerPromptTemplate;
         var isDefault = string.IsNullOrWhiteSpace(template);
+
+        string effectiveTemplate;
+        if (isDefault)
+        {
+            effectiveTemplate = await _markerPromptProvider.GetGlobalPromptTemplateAsync(ct).ConfigureAwait(false);
+        }
+        else
+        {
+            effectiveTemplate = template!;
+        }
+
         return Ok(new GlobalPromptResult(
-            Template: isDefault ? MarkerFileService.DefaultPromptTemplate : template!,
+            Template: effectiveTemplate,
             IsDefault: isDefault));
     }
 
@@ -326,8 +340,18 @@ public sealed class WorkspaceController : ControllerBase
             ct).ConfigureAwait(false);
 
         var isDefault = newTemplate is null;
+        string effectiveTemplate;
+        if (isDefault)
+        {
+            effectiveTemplate = await _markerPromptProvider.GetGlobalPromptTemplateAsync(ct).ConfigureAwait(false);
+        }
+        else
+        {
+            effectiveTemplate = newTemplate!;
+        }
+
         return Ok(new GlobalPromptResult(
-            Template: isDefault ? MarkerFileService.DefaultPromptTemplate : newTemplate!,
+            Template: effectiveTemplate,
             IsDefault: isDefault));
     }
 

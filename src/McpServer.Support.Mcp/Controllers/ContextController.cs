@@ -122,7 +122,10 @@ public sealed class ContextController : ControllerBase
         IQueryable<Storage.Entities.ContextChunkEntity> chunksQuery = _db.Chunks.AsNoTracking();
         if (!string.IsNullOrEmpty(query))
         {
-            chunksQuery = chunksQuery.Where(c => c.Content != null && c.Content.Contains(query));
+            var isSqlite = _db.Database.ProviderName?.Contains("Sqlite", StringComparison.OrdinalIgnoreCase) == true;
+            chunksQuery = isSqlite
+                ? chunksQuery.Where(c => c.Content != null && c.Content.Contains(query))
+                : chunksQuery.Where(c => c.Content != null && EF.Functions.ILike(c.Content, $"%{query}%"));
         }
         var chunkEntities = await chunksQuery
             .OrderBy(c => c.DocumentId)

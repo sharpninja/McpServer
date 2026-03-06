@@ -37,6 +37,7 @@ public sealed class FwhMcpTools
     private readonly IRequirementsDocumentService _requirementsDocumentService;
     private readonly IProcessRunner _processRunner;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly WorkspaceContext _workspaceContext;
     private readonly IWorkspaceService _workspaceService;
     private readonly IWorkspacePolicyService _workspacePolicyService;
     private readonly TodoServiceResolver _todoServiceResolver;
@@ -58,6 +59,7 @@ public sealed class FwhMcpTools
         IRequirementsDocumentService requirementsDocumentService,
         IProcessRunner processRunner,
         IHttpContextAccessor httpContextAccessor,
+        WorkspaceContext workspaceContext,
         IWorkspaceService workspaceService,
         IWorkspacePolicyService workspacePolicyService,
         TodoServiceResolver todoServiceResolver,
@@ -78,6 +80,7 @@ public sealed class FwhMcpTools
         _requirementsDocumentService = requirementsDocumentService;
         _processRunner = processRunner;
         _httpContextAccessor = httpContextAccessor;
+        _workspaceContext = workspaceContext;
         _workspaceService = workspaceService;
         _workspacePolicyService = workspacePolicyService;
         _todoServiceResolver = todoServiceResolver;
@@ -91,9 +94,17 @@ public sealed class FwhMcpTools
     /// </summary>
     private void ApplyWorkspaceOverride(string workspacePath)
     {
+        _workspaceContext.WorkspacePath = workspacePath;
+        _workspaceContext.SessionsPath = Path.Combine(workspacePath, "docs", "sessions");
+        _workspaceContext.ExternalDocsPath = Path.Combine(workspacePath, "docs", "external");
+
         var ctx = _httpContextAccessor.HttpContext?.RequestServices.GetService<WorkspaceContext>();
         if (ctx is not null)
+        {
             ctx.WorkspacePath = workspacePath;
+            ctx.SessionsPath = _workspaceContext.SessionsPath;
+            ctx.ExternalDocsPath = _workspaceContext.ExternalDocsPath;
+        }
 
         _db.OverrideWorkspaceId(workspacePath);
     }
@@ -1410,3 +1421,4 @@ public sealed class FwhMcpTools
         }
     }
 }
+

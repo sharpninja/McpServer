@@ -10,10 +10,26 @@ namespace McpServer.ToolRegistry.Validation.AtomicTests;
 public sealed class ToolCrudTests
 {
     private readonly ToolRegistryFixture _f;
+    /// <summary>
+    /// Initializes a new instance of ToolCrudTests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     public ToolCrudTests(ToolRegistryFixture f) => _f = f;
 
     // ── List ─────────────────────────────────────────────────────────────
 
+    /// <summary>
+    /// Validates the <c>List_Returns200WithValidStructure</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task List_Returns200WithValidStructure()
     {
@@ -25,6 +41,14 @@ public sealed class ToolCrudTests
         Assert.True(res.TotalCount >= 0);
     }
 
+    /// <summary>
+    /// Validates the <c>List_ResponseIsJson</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task List_ResponseIsJson()
     {
@@ -34,6 +58,14 @@ public sealed class ToolCrudTests
 
     // ── Search ───────────────────────────────────────────────────────────
 
+    /// <summary>
+    /// Validates the <c>Search_WithKeyword_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Search_WithKeyword_Returns200()
     {
@@ -43,6 +75,14 @@ public sealed class ToolCrudTests
         Assert.NotNull(res);
     }
 
+    /// <summary>
+    /// Validates the <c>Search_NonMatchingKeyword_ReturnsEmpty</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Search_NonMatchingKeyword_ReturnsEmpty()
     {
@@ -56,6 +96,14 @@ public sealed class ToolCrudTests
 
     // ── Create + Get + Update + Delete (full mini-cycle) ─────────────────
 
+    /// <summary>
+    /// Validates the <c>Create_ValidTool_Returns201</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Create_ValidTool_Returns201()
     {
@@ -88,6 +136,14 @@ public sealed class ToolCrudTests
         catch { /* best effort */ }
     }
 
+    /// <summary>
+    /// Validates the <c>Create_DuplicateName_Returns409</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Create_DuplicateName_Returns409()
     {
@@ -109,6 +165,14 @@ public sealed class ToolCrudTests
         }
     }
 
+    /// <summary>
+    /// Validates the <c>Get_ExistingTool_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Get_ExistingTool_Returns200()
     {
@@ -132,6 +196,14 @@ public sealed class ToolCrudTests
         }
     }
 
+    /// <summary>
+    /// Validates the <c>Get_NonExistentId_Returns404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Get_NonExistentId_Returns404()
     {
@@ -139,6 +211,14 @@ public sealed class ToolCrudTests
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>Update_ChangeName_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Update_ChangeName_Returns200()
     {
@@ -166,6 +246,14 @@ public sealed class ToolCrudTests
         }
     }
 
+    /// <summary>
+    /// Validates the <c>Update_NonExistentId_Returns404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Update_NonExistentId_Returns404()
     {
@@ -174,6 +262,14 @@ public sealed class ToolCrudTests
         Assert.Equal(HttpStatusCode.NotFound, r.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>Delete_ExistingTool_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Delete_ExistingTool_Returns200()
     {
@@ -194,6 +290,14 @@ public sealed class ToolCrudTests
         Assert.Equal(HttpStatusCode.NotFound, get.StatusCode);
     }
 
+    /// <summary>
+    /// Validates the <c>Delete_NonExistentId_Returns404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Delete_NonExistentId_Returns404()
     {
@@ -203,6 +307,14 @@ public sealed class ToolCrudTests
 
     // ── Search by created tool tag ───────────────────────────────────────
 
+    /// <summary>
+    /// Validates the <c>Search_ByTag_FindsCreatedTool</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-008, FR-MCP-012, TR-MCP-TR-001, TR-MCP-TR-002, TR-MCP-TR-003.
+    /// Test data: Generated tool/bucket names and CRUD/search/browse/sync payload objects for registry endpoints.
+    /// Data rationale: These inputs verify tool-registry bucket/tool lifecycle endpoints and search/sync behavior.
+    /// </remarks>
     [Fact]
     public async Task Search_ByTag_FindsCreatedTool()
     {

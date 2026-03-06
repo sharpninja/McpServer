@@ -272,15 +272,32 @@ templates:
     content: 'You are connected to an MCP Context Server at {{baseUrl}}. Use this server to coordinate your work.
 
 
-      ## Session Start
+      ## Session Start (Run Once Per Session)
 
       1. Read this marker file for connection details and API key.
 
-      2. Bootstrap helper modules from the Tool Registry (see docs/context/module-bootstrap.md).
+      2. Bootstrap helper modules from the Tool Registry (load docs/context/module-bootstrap.md from MCP context via context_search/context_pack; do not treat it as a local file path).
 
-      3. Review recent session history and current TODOs.
+      3. Verify server health, then review recent session history and current TODOs.
 
-      4. Post a session log turn before starting work on the user''s request.
+      4. Post an initial session log turn for the session.
+
+
+      ## Per User Message
+
+      1. Post a new session log turn before starting work.
+
+      2. Complete the user''s request.
+
+      3. Update the turn with results and actions when done.
+
+
+      ## Re-run Full Session Start Only If
+
+      - The user explicitly says "Start Session".
+      - /health fails.
+      - Any /mcpserver/* call returns 401.
+      - The marker endpoint/key changes after a server restart.
 
 
       ## Rules
@@ -369,9 +386,9 @@ templates:
       ## Context Loading by Task Type
 
 
-      - Session logging → docs/context/session-log-schema.md + docs/context/module-bootstrap.md
+      - Session logging → docs/context/session-log-schema.md + docs/context/module-bootstrap.md (pull module-bootstrap via MCP context)
 
-      - TODO management → docs/context/todo-schema.md + docs/context/module-bootstrap.md
+      - TODO management → docs/context/todo-schema.md + docs/context/module-bootstrap.md (pull module-bootstrap via MCP context)
 
       - API integration → docs/context/api-capabilities.md (or GET {{baseUrl}}/swagger/v1/swagger.json)
 

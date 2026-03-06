@@ -204,7 +204,7 @@ Per-workspace compliance configuration supporting four ban lists: `BannedLicense
 
 The marker prompt shall include mandatory sections for: absolute honesty, correctness above speed, complete decision documentation, professional representation and audit trail (commits, PRs, issues logged in full), and source attribution (web references logged). These are non-configurable and always present.
 
-**Covered by:** `MarkerFileService.DefaultPromptTemplate`
+**Covered by:** `templates/prompt-templates.yaml` (default-marker-prompt)
 
 ## FR-MCP-036 Audited Copilot Interactions
 
@@ -220,13 +220,13 @@ Every server-initiated Copilot interaction must be session-logged in every affec
 
 Agents must follow a session continuity protocol: at session start, read the marker file, query recent session logs (limit=5), query current TODOs, and read Requirements-Matrix.md. During long sessions, post updated session logs every ~10 interactions. Requirements and design decisions must be captured as they emerge, not deferred.
 
-**Covered by:** `MarkerFileService.DefaultPromptTemplate`
+**Covered by:** `templates/prompt-templates.yaml` (default-marker-prompt)
 
 ## FR-MCP-039 MCP Context Indexing for New Projects
 
 All source files from `McpServer.Cqrs`, `McpServer.Cqrs.Mvvm`, `McpServer.UI.Core`, and `McpServer.Director` shall be indexed into the MCP context store for semantic search. The marker prompt lists these projects in the Available Capabilities section.
 
-**Covered by:** `Program.cs` / `McpStdioHost` `PostConfigure<IngestionOptions>` allowlist merge, `appsettings.yaml` `Mcp:RepoAllowlist`, `MarkerFileService.DefaultPromptTemplate`
+**Covered by:** `Program.cs` / `McpStdioHost` `PostConfigure<IngestionOptions>` allowlist merge, `appsettings.yaml` `Mcp:RepoAllowlist`, `templates/prompt-templates.yaml` (default-marker-prompt)
 
 ## FR-MCP-040 Requirements Document CRUD Management
 
@@ -290,7 +290,7 @@ The server shall provide a global prompt template registry with REST API endpoin
 
 ## FR-MCP-050 Template Externalization
 
-The server shall load system prompt templates (marker prompt, TODO prompts, pairing HTML pages) from external YAML files via provider interfaces, with graceful fallback to built-in inline defaults when files are missing. Configuration overrides (`Mcp:MarkerPromptTemplate`, `Mcp:TodoPrompts`) take precedence over file-loaded templates. This enables runtime template customization without recompilation.
+The server shall load system prompt templates (marker prompt, TODO prompts, pairing HTML pages) from external YAML files via provider interfaces. The marker prompt template is required to exist in the external file; the server shall fail critically if it is missing. Configuration overrides (`Mcp:MarkerPromptTemplate`, `Mcp:TodoPrompts`) take precedence over file-loaded templates. This enables runtime template customization without recompilation.
 
 **Covered by:** `IMarkerPromptProvider`, `FileMarkerPromptProvider`, `ITodoPromptProvider`, `TodoPromptProvider`, `PairingHtmlRenderer`
 

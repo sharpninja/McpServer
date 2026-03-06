@@ -126,7 +126,7 @@ public sealed class SessionLogServiceTests : IDisposable
 
         var id = await _sut.SubmitAsync(dto).ConfigureAwait(true);
 
-        var entry = await _db.SessionLogEntries
+        var entry = await _db.SessionLogTurns
             .Include(e => e.Tags)
             .Include(e => e.ContextItems)
             .FirstAsync(e => e.SessionLogId == id)
@@ -314,7 +314,7 @@ public sealed class SessionLogServiceTests : IDisposable
         var dto1 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-update"));
         var id = await _sut.SubmitAsync(dto1).ConfigureAwait(true);
 
-        var originalEntryId = (await _db.SessionLogEntries.FirstAsync(e => e.SessionLogId == id).ConfigureAwait(true)).Id;
+        var originalEntryId = (await _db.SessionLogTurns.FirstAsync(e => e.SessionLogId == id).ConfigureAwait(true)).Id;
 
         // Submit with same RequestId but different content
         var dto2 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-update"));
@@ -322,7 +322,7 @@ public sealed class SessionLogServiceTests : IDisposable
         dto2.Entries[0].Response = "Updated response";
         await _sut.SubmitAsync(dto2).ConfigureAwait(true);
 
-        var updatedEntry = await _db.SessionLogEntries.FirstAsync(e => e.SessionLogId == id).ConfigureAwait(true);
+        var updatedEntry = await _db.SessionLogTurns.FirstAsync(e => e.SessionLogId == id).ConfigureAwait(true);
         Assert.Equal(originalEntryId, updatedEntry.Id); // Same row, updated in place
         Assert.Equal("Updated query text", updatedEntry.QueryText);
         Assert.Equal("Updated response", updatedEntry.Response);
@@ -340,15 +340,15 @@ public sealed class SessionLogServiceTests : IDisposable
         });
         dto1.EntryCount = 2;
         var id = await _sut.SubmitAsync(dto1).ConfigureAwait(true);
-        Assert.Equal(2, await _db.SessionLogEntries.CountAsync(e => e.SessionLogId == id).ConfigureAwait(true));
+        Assert.Equal(2, await _db.SessionLogTurns.CountAsync(e => e.SessionLogId == id).ConfigureAwait(true));
 
         // Submit with only the first entry — second should be removed
         var dto2 = CreateTestDto("Cursor", BuildSessionId("Cursor", "keyed-remove"));
         dto2.EntryCount = 1;
         await _sut.SubmitAsync(dto2).ConfigureAwait(true);
 
-        Assert.Equal(1, await _db.SessionLogEntries.CountAsync(e => e.SessionLogId == id).ConfigureAwait(true));
-        var remaining = await _db.SessionLogEntries.FirstAsync(e => e.SessionLogId == id).ConfigureAwait(true);
+        Assert.Equal(1, await _db.SessionLogTurns.CountAsync(e => e.SessionLogId == id).ConfigureAwait(true));
+        var remaining = await _db.SessionLogTurns.FirstAsync(e => e.SessionLogId == id).ConfigureAwait(true);
         Assert.Equal("req-20260211T100100Z-entry-001", remaining.RequestId);
     }
 
@@ -367,7 +367,7 @@ public sealed class SessionLogServiceTests : IDisposable
         var count = await _sut.AppendProcessingDialogAsync("Cursor", BuildSessionId("Cursor", "dialog-append"), "req-20260211T100100Z-entry-001", items).ConfigureAwait(true);
 
         Assert.Equal(2, count);
-        var entry = await _db.SessionLogEntries
+        var entry = await _db.SessionLogTurns
             .Include(e => e.ProcessingDialog)
             .FirstAsync(e => e.RequestId == "req-20260211T100100Z-entry-001")
             .ConfigureAwait(true);
@@ -397,7 +397,7 @@ public sealed class SessionLogServiceTests : IDisposable
             [new ProcessingDialogItemDto { Role = "model", Content = "Second batch" }]).ConfigureAwait(true);
 
         Assert.Equal(2, count);
-        var entry = await _db.SessionLogEntries
+        var entry = await _db.SessionLogTurns
             .Include(e => e.ProcessingDialog)
             .FirstAsync(e => e.RequestId == "req-20260211T100100Z-entry-001")
             .ConfigureAwait(true);
@@ -471,3 +471,4 @@ public sealed class SessionLogServiceTests : IDisposable
         return $"{agent}-20260304T113901Z-{normalized}";
     }
 }
+

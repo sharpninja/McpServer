@@ -167,7 +167,7 @@ public sealed class SessionLogService : ISessionLogService
         if (requestIdError is not null)
             throw new ArgumentException(requestIdError, nameof(requestId));
 
-        var entry = await _db.SessionLogEntries
+        var entry = await _db.SessionLogTurns
             .Include(e => e.ProcessingDialog)
             .FirstOrDefaultAsync(e =>
                 e.SessionLog!.SourceType == sourceType
@@ -367,14 +367,14 @@ public sealed class SessionLogService : ISessionLogService
             .ToList();
         if (stale.Count > 0)
         {
-            _db.SessionLogEntries.RemoveRange(stale);
+            _db.SessionLogTurns.RemoveRange(stale);
         }
     }
 
     /// <summary>
     /// Updates an existing entry entity from a DTO, replacing its child collections.
     /// </summary>
-    private void UpdateEntryFromDto(SessionLogEntryEntity entity, UnifiedRequestEntryDto dto)
+    private void UpdateEntryFromDto(SessionLogTurnEntity entity, UnifiedRequestEntryDto dto)
     {
         entity.Timestamp = ParseDateTimeOffset(dto.Timestamp);
         entity.Model = dto.Model;
@@ -393,11 +393,11 @@ public sealed class SessionLogService : ISessionLogService
 
         // Replace child collections (cascade delete handles old rows)
         _db.SessionLogActions.RemoveRange(entity.Actions);
-        _db.SessionLogEntryTags.RemoveRange(entity.Tags);
-        _db.SessionLogEntryContexts.RemoveRange(entity.ContextItems);
+        _db.SessionLogTurnTags.RemoveRange(entity.Tags);
+        _db.SessionLogTurnContexts.RemoveRange(entity.ContextItems);
         _db.SessionLogProcessingDialogs.RemoveRange(entity.ProcessingDialog);
         _db.SessionLogCommits.RemoveRange(entity.Commits);
-        _db.SessionLogEntryStringLists.RemoveRange(entity.StringListItems);
+        _db.SessionLogTurnStringLists.RemoveRange(entity.StringListItems);
 
         entity.Actions = MapActions(dto.Actions);
         entity.Tags = MapTags(dto.Tags);
@@ -407,7 +407,7 @@ public sealed class SessionLogService : ISessionLogService
         entity.StringListItems = MapStringListItems(dto);
     }
 
-    private static List<SessionLogEntryEntity> MapNewEntries(List<UnifiedRequestEntryDto>? entries)
+    private static List<SessionLogTurnEntity> MapNewEntries(List<UnifiedRequestEntryDto>? entries)
     {
         if (entries is null or { Count: 0 })
             return [];
@@ -415,9 +415,9 @@ public sealed class SessionLogService : ISessionLogService
         return entries.Select(MapSingleEntry).ToList();
     }
 
-    private static SessionLogEntryEntity MapSingleEntry(UnifiedRequestEntryDto e)
+    private static SessionLogTurnEntity MapSingleEntry(UnifiedRequestEntryDto e)
     {
-        return new SessionLogEntryEntity
+        return new SessionLogTurnEntity
         {
             RequestId = e.RequestId,
             Timestamp = ParseDateTimeOffset(e.Timestamp),
@@ -455,14 +455,14 @@ public sealed class SessionLogService : ISessionLogService
         }).ToList() ?? [];
     }
 
-    private static List<SessionLogEntryTagEntity> MapTags(List<string>? tags)
+    private static List<SessionLogTurnTagEntity> MapTags(List<string>? tags)
     {
-        return tags?.Select(t => new SessionLogEntryTagEntity { Tag = t }).ToList() ?? [];
+        return tags?.Select(t => new SessionLogTurnTagEntity { Tag = t }).ToList() ?? [];
     }
 
-    private static List<SessionLogEntryContextEntity> MapContextItems(List<string>? contextList)
+    private static List<SessionLogTurnContextEntity> MapContextItems(List<string>? contextList)
     {
-        return contextList?.Select((c, i) => new SessionLogEntryContextEntity
+        return contextList?.Select((c, i) => new SessionLogTurnContextEntity
         {
             Ordinal = i,
             ContextItem = c
@@ -497,9 +497,9 @@ public sealed class SessionLogService : ISessionLogService
         }).ToList() ?? [];
     }
 
-    private static List<SessionLogEntryStringListEntity> MapStringListItems(UnifiedRequestEntryDto dto)
+    private static List<SessionLogTurnStringListEntity> MapStringListItems(UnifiedRequestEntryDto dto)
     {
-        var items = new List<SessionLogEntryStringListEntity>();
+        var items = new List<SessionLogTurnStringListEntity>();
         AddStringListItems(items, "DesignDecision", dto.DesignDecisions);
         AddStringListItems(items, "Requirement", dto.RequirementsDiscovered);
         AddStringListItems(items, "FileModified", dto.FilesModified);
@@ -507,13 +507,13 @@ public sealed class SessionLogService : ISessionLogService
         return items;
     }
 
-    private static void AddStringListItems(List<SessionLogEntryStringListEntity> items, string listType, List<string>? values)
+    private static void AddStringListItems(List<SessionLogTurnStringListEntity> items, string listType, List<string>? values)
     {
         if (values is not { Count: > 0 })
             return;
         for (int i = 0; i < values.Count; i++)
         {
-            items.Add(new SessionLogEntryStringListEntity
+            items.Add(new SessionLogTurnStringListEntity
             {
                 ListType = listType,
                 Ordinal = i,
@@ -636,7 +636,7 @@ public sealed class SessionLogService : ISessionLogService
         return JsonSerializer.Deserialize<object>(json);
     }
 
-    private static List<string>? MapStringListToDto(ICollection<SessionLogEntryStringListEntity> items, string listType)
+    private static List<string>? MapStringListToDto(ICollection<SessionLogTurnStringListEntity> items, string listType)
     {
         var filtered = items.Where(i => i.ListType == listType).OrderBy(i => i.Ordinal).Select(i => i.Value).ToList();
         return filtered.Count > 0 ? filtered : null;
@@ -679,3 +679,4 @@ public sealed class SessionLogService : ISessionLogService
         }
     }
 }
+

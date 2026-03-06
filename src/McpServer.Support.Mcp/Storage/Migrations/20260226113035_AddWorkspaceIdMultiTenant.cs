@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -47,21 +47,21 @@ namespace McpServer.Support.Mcp.Storage.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "WorkspaceId",
-                table: "SessionLogEntryTags",
+                table: "SessionLogTurnTags",
                 type: "TEXT",
                 nullable: false,
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
                 name: "WorkspaceId",
-                table: "SessionLogEntryContexts",
+                table: "SessionLogTurnContexts",
                 type: "TEXT",
                 nullable: false,
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
                 name: "WorkspaceId",
-                table: "SessionLogEntries",
+                table: "SessionLogTurns",
                 type: "TEXT",
                 nullable: false,
                 defaultValue: "");
@@ -134,18 +134,18 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                 column: "WorkspaceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SessionLogEntryTags_WorkspaceId",
-                table: "SessionLogEntryTags",
+                name: "IX_SessionLogTurnTags_WorkspaceId",
+                table: "SessionLogTurnTags",
                 column: "WorkspaceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SessionLogEntryContexts_WorkspaceId",
-                table: "SessionLogEntryContexts",
+                name: "IX_SessionLogTurnContexts_WorkspaceId",
+                table: "SessionLogTurnContexts",
                 column: "WorkspaceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SessionLogEntries_WorkspaceId",
-                table: "SessionLogEntries",
+                name: "IX_SessionLogTurns_WorkspaceId",
+                table: "SessionLogTurns",
                 column: "WorkspaceId");
 
             migrationBuilder.CreateIndex(
@@ -203,16 +203,16 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                 table: "SessionLogProcessingDialogs");
 
             migrationBuilder.DropIndex(
-                name: "IX_SessionLogEntryTags_WorkspaceId",
-                table: "SessionLogEntryTags");
+                name: "IX_SessionLogTurnTags_WorkspaceId",
+                table: "SessionLogTurnTags");
 
             migrationBuilder.DropIndex(
-                name: "IX_SessionLogEntryContexts_WorkspaceId",
-                table: "SessionLogEntryContexts");
+                name: "IX_SessionLogTurnContexts_WorkspaceId",
+                table: "SessionLogTurnContexts");
 
             migrationBuilder.DropIndex(
-                name: "IX_SessionLogEntries_WorkspaceId",
-                table: "SessionLogEntries");
+                name: "IX_SessionLogTurns_WorkspaceId",
+                table: "SessionLogTurns");
 
             migrationBuilder.DropIndex(
                 name: "IX_SessionLogActions_WorkspaceId",
@@ -260,15 +260,15 @@ namespace McpServer.Support.Mcp.Storage.Migrations
 
             migrationBuilder.DropColumn(
                 name: "WorkspaceId",
-                table: "SessionLogEntryTags");
+                table: "SessionLogTurnTags");
 
             migrationBuilder.DropColumn(
                 name: "WorkspaceId",
-                table: "SessionLogEntryContexts");
+                table: "SessionLogTurnContexts");
 
             migrationBuilder.DropColumn(
                 name: "WorkspaceId",
-                table: "SessionLogEntries");
+                table: "SessionLogTurns");
 
             migrationBuilder.DropColumn(
                 name: "WorkspaceId",
@@ -296,3 +296,4 @@ namespace McpServer.Support.Mcp.Storage.Migrations
         }
     }
 }
+

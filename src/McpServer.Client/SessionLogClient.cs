@@ -55,3 +55,4 @@ public sealed class SessionLogClient : McpClientBase
         return await PostAsync<DialogAppendResult>(path, items, cancellationToken);
     }
 }
+

@@ -19,128 +19,6 @@ public static class MarkerFileService
     /// <summary>Well-known marker file name placed at the workspace root.</summary>
     public const string MarkerFileName = "AGENTS-README-FIRST.yaml";
 
-    /// <summary>
-    /// Built-in default prompt template using Handlebars syntax.
-    /// Available context: <c>{{baseUrl}}</c>, <c>{{apiKey}}</c>, <c>{{workspace.*}}</c> (all WorkspaceDto fields).
-    /// Used when no <c>Mcp:MarkerPromptTemplate</c> is configured.
-    /// </summary>
-    public const string DefaultPromptTemplate =
-        """
-        You are connected to an MCP Context Server at {{baseUrl}}. Use this server to coordinate your work.
-
-        ## Session Start
-
-        1. Read this marker file for connection details and API key.
-        2. Bootstrap helper modules from the Tool Registry (see docs/context/module-bootstrap.md).
-        3. Review recent session history and current TODOs.
-        4. Post a session log entry before starting work on the user's request.
-
-        ## Rules
-
-        1. Post a session log entry before any work on a user request. Update it with results when done.
-        2. Use helper modules for session log and TODO operations — they handle workspace routing automatically. Do not use raw API calls.
-        3. Write decisions, requirements, and state to the session log, not just conversation.
-        4. Follow workspace conventions in AGENTS.md and .github/copilot-instructions.md.
-        5. When you need API schemas, module examples, or compliance rules, load them from docs/context/ or use context_search.
-        6. Do not fabricate information. Acknowledge mistakes. Distinguish facts from speculation.
-        7. Prioritize correctness over speed. Do not ship code you have not verified compiles.
-
-        ## Naming Conventions
-
-        - TODO IDs for new items must be uppercase kebab-case with exactly 3 segments: <SDLC-PHASE>-<AREA>-### (regex: ^[A-Z]+-[A-Z0-9]+-\d{3}$).
-        - Valid TODO IDs: PLAN-NAMINGCONVENTIONS-001, MCP-API-042.
-        - Invalid TODO IDs: plan-api-001, MCP-API-42, MCPAPI001.
-        - Session IDs must use <Agent>-<yyyyMMddTHHmmssZ>-<suffix> and start with the exact agent/source type prefix.
-        - Valid Session ID: Copilot-20260304T113901Z-namingconv.
-        - Invalid Session IDs: copilot-20260304T113901Z-namingconv, Copilot-2026-03-04-namingconv.
-        - Request IDs must use req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal> and be unique within a session.
-        - Valid Request ID: req-20260304T113901Z-plan-namingconventions-001.
-        - Invalid Request IDs: req-plan-namingconventions-001, request-20260304T113901Z-task-01.
-
-        ## Workspace
-
-        - Name: {{workspace.Name}}
-        - Path: {{workspace.WorkspacePath}}
-        - Primary: {{workspace.IsPrimary}}
-        - Data Directory: {{workspace.DataDirectory}}
-        - Todo Path: {{workspace.TodoPath}}
-
-        ## Authentication
-
-        All /mcpserver/* endpoints require a per-workspace auth token:
-        - Header: X-Api-Key: {{apiKey}}
-        - Or query param: ?api_key={{apiKey}}
-        If you receive a 401, re-read this marker file — the token rotates on each server restart.
-
-        ## Where Things Live
-
-        - AGENTS.md — agent conduct, requirements tracking, session continuity, glossary
-        - .github/copilot-instructions.md — build/test commands, architecture, coding conventions
-        - docs/context/ — on-demand reference (schemas, module docs, compliance rules, action types)
-        - docs/Project/ — requirements docs, TODO.yaml, mapping matrices
-        - templates/ — prompt templates
-
-        ## Context Loading by Task Type
-
-        - Session logging → docs/context/session-log-schema.md + docs/context/module-bootstrap.md
-        - TODO management → docs/context/todo-schema.md + docs/context/module-bootstrap.md
-        - API integration → docs/context/api-capabilities.md (or GET {{baseUrl}}/swagger/v1/swagger.json)
-        - Adding dependencies → docs/context/compliance-rules.md
-        - Logging actions → docs/context/action-types.md
-
-        ## Available Capabilities
-
-        - src/McpServer.Cqrs/**/*.cs — CQRS contracts, dispatcher pipeline, and result primitives.
-        - src/McpServer.Cqrs.Mvvm/**/*.cs — MVVM integration layer for command/query-driven UI workflows.
-        - src/McpServer.UI.Core/**/*.cs — shared UI handlers, view models, and authorization abstractions.
-        - src/McpServer.Director/**/*.cs — Director CLI/TUI orchestration for workspace and policy operations.
-
-        ## Protocols
-
-        - REST API: {{baseUrl}}/mcpserver/* (requires X-Api-Key). Swagger UI: {{baseUrl}}/swagger
-        - MCP Streamable HTTP: POST {{baseUrl}}/mcp-transport (no API key required)
-        - Health: GET {{baseUrl}}/health
-
-        {{#if workspace.BannedLicenses}}
-        ## Compliance Restrictions
-
-        This workspace has license, origin, or entity restrictions. Read docs/context/compliance-rules.md before adding any dependency.
-
-        Banned licenses:
-        {{#each workspace.BannedLicenses}}
-        - {{this}}
-        {{/each}}
-        {{/if}}
-
-        {{#if workspace.BannedCountriesOfOrigin}}
-        Banned countries of origin:
-        {{#each workspace.BannedCountriesOfOrigin}}
-        - {{this}}
-        {{/each}}
-        {{/if}}
-
-        {{#if workspace.BannedOrganizations}}
-        Banned organizations:
-        {{#each workspace.BannedOrganizations}}
-        - {{this}}
-        {{/each}}
-        {{/if}}
-
-        {{#if workspace.BannedIndividuals}}
-        Banned individuals:
-        {{#each workspace.BannedIndividuals}}
-        - {{this}}
-        {{/each}}
-        {{/if}}
-
-        ## Before Delivering Output
-
-        Verify: session log is current, decisions are recorded, requirements are tracked, code compiles, action types are correct (see docs/context/action-types.md).
-
-        ---
-        MCP Server version: {{version}}
-        """;
-
     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
         .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
@@ -157,8 +35,8 @@ public static class MarkerFileService
     /// <param name="logger">Optional logger for diagnostics.</param>
     /// <param name="ct">Cancellation token.</param>
     /// <param name="globalPromptTemplate">
-    /// Optional global Handlebars prompt template.
-    /// When <see langword="null"/> or empty, the built-in default prompt is used.
+    /// Global Handlebars prompt template.
+    /// Must be provided; otherwise an exception is thrown.
     /// </param>
     /// <param name="workspacePromptTemplate">
     /// Optional per-workspace Handlebars prompt template.
@@ -303,11 +181,10 @@ public static class MarkerFileService
         string? globalPromptTemplate,
         string? workspacePromptTemplate)
     {
-        var globalSource = string.IsNullOrWhiteSpace(globalPromptTemplate)
-            ? DefaultPromptTemplate
-            : globalPromptTemplate;
+        if (string.IsNullOrWhiteSpace(globalPromptTemplate))
+            throw new ArgumentException("Global prompt template must be provided.", nameof(globalPromptTemplate));
 
-        var global = RenderHandlebars(globalSource, templateContext);
+        var global = RenderHandlebars(globalPromptTemplate, templateContext);
 
         if (string.IsNullOrWhiteSpace(workspacePromptTemplate))
             return global;

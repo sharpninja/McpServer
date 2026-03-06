@@ -34,16 +34,16 @@ public sealed class McpDbContext : DbContext
     public DbSet<SessionLogEntity> SessionLogs => Set<SessionLogEntity>();
 
     /// <summary>TR-PLANNED-013: Session log entries (MVP-SUPPORT-011).</summary>
-    public DbSet<SessionLogEntryEntity> SessionLogEntries => Set<SessionLogEntryEntity>();
+    public DbSet<SessionLogTurnEntity> SessionLogTurns => Set<SessionLogTurnEntity>();
 
     /// <summary>TR-PLANNED-013: Session log entry actions (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogActionEntity> SessionLogActions => Set<SessionLogActionEntity>();
 
     /// <summary>TR-PLANNED-013: Session log entry tags (MVP-SUPPORT-011).</summary>
-    public DbSet<SessionLogEntryTagEntity> SessionLogEntryTags => Set<SessionLogEntryTagEntity>();
+    public DbSet<SessionLogTurnTagEntity> SessionLogTurnTags => Set<SessionLogTurnTagEntity>();
 
     /// <summary>TR-PLANNED-013: Session log entry context items (MVP-SUPPORT-011).</summary>
-    public DbSet<SessionLogEntryContextEntity> SessionLogEntryContexts => Set<SessionLogEntryContextEntity>();
+    public DbSet<SessionLogTurnContextEntity> SessionLogTurnContexts => Set<SessionLogTurnContextEntity>();
 
     /// <summary>TR-PLANNED-013: Session log entry processing dialog items (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogProcessingDialogEntity> SessionLogProcessingDialogs => Set<SessionLogProcessingDialogEntity>();
@@ -52,7 +52,7 @@ public sealed class McpDbContext : DbContext
     public DbSet<SessionLogCommitEntity> SessionLogCommits => Set<SessionLogCommitEntity>();
 
     /// <summary>TR-PLANNED-013: Session log entry string-list items (design decisions, requirements, files modified, blockers).</summary>
-    public DbSet<SessionLogEntryStringListEntity> SessionLogEntryStringLists => Set<SessionLogEntryStringListEntity>();
+    public DbSet<SessionLogTurnStringListEntity> SessionLogTurnStringLists => Set<SessionLogTurnStringListEntity>();
 
     /// <summary>Tool definitions discoverable by keyword search.</summary>
     public DbSet<ToolDefinitionEntity> ToolDefinitions => Set<ToolDefinitionEntity>();
@@ -100,7 +100,7 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => x.LastUpdated);
         });
 
-        modelBuilder.Entity<SessionLogEntryEntity>(e =>
+        modelBuilder.Entity<SessionLogTurnEntity>(e =>
         {
             e.HasIndex(x => new { x.SessionLogId, x.RequestId }).IsUnique();
             e.HasOne(x => x.SessionLog)
@@ -111,51 +111,51 @@ public sealed class McpDbContext : DbContext
 
         modelBuilder.Entity<SessionLogActionEntity>(e =>
         {
-            e.HasOne(x => x.SessionLogEntry)
+            e.HasOne(x => x.SessionLogTurn)
                 .WithMany(x => x.Actions)
-                .HasForeignKey(x => x.SessionLogEntryId)
+                .HasForeignKey(x => x.SessionLogTurnId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        modelBuilder.Entity<SessionLogEntryTagEntity>(e =>
+        modelBuilder.Entity<SessionLogTurnTagEntity>(e =>
         {
-            e.HasOne(x => x.SessionLogEntry)
+            e.HasOne(x => x.SessionLogTurn)
                 .WithMany(x => x.Tags)
-                .HasForeignKey(x => x.SessionLogEntryId)
+                .HasForeignKey(x => x.SessionLogTurnId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        modelBuilder.Entity<SessionLogEntryContextEntity>(e =>
+        modelBuilder.Entity<SessionLogTurnContextEntity>(e =>
         {
-            e.HasOne(x => x.SessionLogEntry)
+            e.HasOne(x => x.SessionLogTurn)
                 .WithMany(x => x.ContextItems)
-                .HasForeignKey(x => x.SessionLogEntryId)
+                .HasForeignKey(x => x.SessionLogTurnId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<SessionLogProcessingDialogEntity>(e =>
         {
-            e.HasOne(x => x.SessionLogEntry)
+            e.HasOne(x => x.SessionLogTurn)
                 .WithMany(x => x.ProcessingDialog)
-                .HasForeignKey(x => x.SessionLogEntryId)
+                .HasForeignKey(x => x.SessionLogTurnId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<SessionLogCommitEntity>(e =>
         {
-            e.HasOne(x => x.SessionLogEntry)
+            e.HasOne(x => x.SessionLogTurn)
                 .WithMany(x => x.Commits)
-                .HasForeignKey(x => x.SessionLogEntryId)
+                .HasForeignKey(x => x.SessionLogTurnId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        modelBuilder.Entity<SessionLogEntryStringListEntity>(e =>
+        modelBuilder.Entity<SessionLogTurnStringListEntity>(e =>
         {
-            e.HasOne(x => x.SessionLogEntry)
+            e.HasOne(x => x.SessionLogTurn)
                 .WithMany(x => x.StringListItems)
-                .HasForeignKey(x => x.SessionLogEntryId)
+                .HasForeignKey(x => x.SessionLogTurnId)
                 .OnDelete(DeleteBehavior.Cascade);
-            e.HasIndex(x => new { x.SessionLogEntryId, x.ListType });
+            e.HasIndex(x => new { x.SessionLogTurnId, x.ListType });
         });
 
         modelBuilder.Entity<ToolDefinitionEntity>(e =>
@@ -211,13 +211,13 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<ContextDocumentEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<SessionLogEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogEntryEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogTurnEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<SessionLogActionEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogEntryTagEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogEntryContextEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogTurnTagEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogTurnContextEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<SessionLogProcessingDialogEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<SessionLogCommitEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogEntryStringListEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogTurnStringListEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<ToolDefinitionEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<ToolDefinitionTagEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<ToolBucketEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
@@ -229,10 +229,10 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<ContextDocumentEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<SessionLogEntity>().HasIndex(e => e.WorkspaceId);
-        modelBuilder.Entity<SessionLogEntryEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<SessionLogTurnEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<SessionLogActionEntity>().HasIndex(e => e.WorkspaceId);
-        modelBuilder.Entity<SessionLogEntryTagEntity>().HasIndex(e => e.WorkspaceId);
-        modelBuilder.Entity<SessionLogEntryContextEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<SessionLogTurnTagEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<SessionLogTurnContextEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<SessionLogProcessingDialogEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<ToolDefinitionEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<ToolDefinitionTagEntity>().HasIndex(e => e.WorkspaceId);
@@ -299,3 +299,4 @@ public sealed class McpDbContext : DbContext
         }
     }
 }
+

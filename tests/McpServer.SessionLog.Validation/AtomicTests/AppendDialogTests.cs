@@ -6,14 +6,38 @@ using Xunit;
 
 namespace McpServer.SessionLog.Validation.AtomicTests;
 
+/// <summary>
+/// Validation tests for <c>AppendDialogTests</c>.
+/// </summary>
+/// <remarks>
+/// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+/// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+/// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+/// </remarks>
 [Collection("SessionLogEndpoint")]
 public sealed class AppendDialogTests
 {
     private readonly SessionLogEndpointFixture _fixture;
     private static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
 
+    /// <summary>
+    /// Initializes a new instance of AppendDialogTests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     public AppendDialogTests(SessionLogEndpointFixture fixture) => _fixture = fixture;
 
+    /// <summary>
+    /// Validates the <c>AppendDialog_ToExistingEntry_Returns200WithCount</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task AppendDialog_ToExistingEntry_Returns200WithCount()
     {
@@ -66,6 +90,14 @@ public sealed class AppendDialogTests
         Assert.Equal(2, result.TotalDialogCount);
     }
 
+    /// <summary>
+    /// Validates the <c>AppendDialog_MultipleAppends_AccumulatesCount</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task AppendDialog_MultipleAppends_AccumulatesCount()
     {
@@ -111,6 +143,14 @@ public sealed class AppendDialogTests
         Assert.Equal(2, res2!.TotalDialogCount);
     }
 
+    /// <summary>
+    /// Validates the <c>AppendDialog_NonExistentSession_Returns404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task AppendDialog_NonExistentSession_Returns404()
     {

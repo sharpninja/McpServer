@@ -1,7 +1,9 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Services;
 using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Ingestion;
@@ -12,22 +14,25 @@ namespace McpServer.Support.Mcp.Ingestion;
 /// </summary>
 public sealed class RepoIngestor
 {
-    private static readonly char[] s_trimSlashChars = { '/' };
     private readonly Chunker _chunker;
     private readonly IngestionOptions _options;
+    private readonly WorkspaceContext _workspaceContext;
     private readonly ILogger<RepoIngestor> _logger;
 
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
     /// <param name="chunker">Chunker for splitting content.</param>
     /// <param name="options">Ingestion options providing repo root and allowlist.</param>
+    /// <param name="workspaceContext">Resolved workspace context for per-workspace ingestion.</param>
     /// <param name="logger">Logger instance.</param>
     public RepoIngestor(Chunker chunker, Microsoft.Extensions.Options.IOptions<IngestionOptions> options,
+        WorkspaceContext workspaceContext,
         ILogger<RepoIngestor> logger)
     {
         _logger = logger;
         _chunker = chunker;
         _options = options?.Value ?? new IngestionOptions();
+        _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
     }
 
     /// <summary>TR-PLANNED-013: Ingests allowlisted files under RepoRoot; returns documents and chunks.</summary>
@@ -36,7 +41,7 @@ public sealed class RepoIngestor
     public async Task<IReadOnlyList<(ContextDocument Doc, IReadOnlyList<ContextChunk> Chunks)>> IngestAsync(
         CancellationToken cancellationToken = default)
     {
-        var repoRoot = Path.GetFullPath(_options.RepoRoot);
+        var repoRoot = ResolveRepoRoot();
         if (!Directory.Exists(repoRoot))
         {
             return Array.Empty<(ContextDocument, IReadOnlyList<ContextChunk>)>();
@@ -63,7 +68,7 @@ public sealed class RepoIngestor
                 }
 
                 var contentHash = ComputeHash(content);
-                var documentId = "repo:" + relativePath.Replace("/", "-", StringComparison.Ordinal).Replace(":", "-", StringComparison.Ordinal);
+                var documentId = BuildWorkspaceScopedDocumentId("repo", repoRoot, relativePath);
                 var doc = new ContextDocument
                 {
                     Id = documentId,
@@ -130,19 +135,25 @@ public sealed class RepoIngestor
 
     private static bool MatchesAllowlist(string relativePath, IReadOnlyList<string> patterns)
     {
+        var normalizedPath = relativePath.Replace('\\', '/');
         foreach (var p in patterns)
         {
-            if (p.Contains("**", StringComparison.Ordinal))
+            if (string.IsNullOrWhiteSpace(p))
             {
-                var prefix = p.Replace("**", string.Empty, StringComparison.Ordinal).TrimEnd(s_trimSlashChars);
-                if (relativePath.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) return true;
+                continue;
             }
-            else if (p.StartsWith("*.", StringComparison.Ordinal))
+
+            var pattern = p.Replace('\\', '/').TrimStart('/');
+            if (pattern.StartsWith("*.", StringComparison.Ordinal))
             {
-                var suffix = p[1..];
-                if (relativePath.EndsWith(suffix, StringComparison.OrdinalIgnoreCase)) return true;
+                var suffix = pattern[1..];
+                if (normalizedPath.EndsWith(suffix, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
             }
-            else if (relativePath.StartsWith(p.TrimStart('/'), StringComparison.OrdinalIgnoreCase))
+
+            if (GlobMatches(normalizedPath, pattern))
             {
                 return true;
             }
@@ -160,5 +171,76 @@ public sealed class RepoIngestor
     {
         var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(content));
         return Convert.ToHexString(bytes).ToUpperInvariant();
+    }
+
+    private static bool GlobMatches(string path, string pattern)
+    {
+        var regexPattern = GlobToRegex(pattern);
+        return Regex.IsMatch(
+            path,
+            regexPattern,
+            RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+    }
+
+    private static string GlobToRegex(string pattern)
+    {
+        var sb = new StringBuilder("^");
+        for (var i = 0; i < pattern.Length; i++)
+        {
+            var c = pattern[i];
+            if (c == '*')
+            {
+                var isDoubleStar = i + 1 < pattern.Length && pattern[i + 1] == '*';
+                if (isDoubleStar)
+                {
+                    var followedBySlash = i + 2 < pattern.Length &&
+                        (pattern[i + 2] == '/' || pattern[i + 2] == '\\');
+                    if (followedBySlash)
+                    {
+                        sb.Append("(?:.*/)?");
+                        i += 2;
+                    }
+                    else
+                    {
+                        sb.Append(".*");
+                        i += 1;
+                    }
+                }
+                else
+                {
+                    sb.Append("[^/]*");
+                }
+            }
+            else if (c == '?')
+            {
+                sb.Append("[^/]");
+            }
+            else if (c == '/' || c == '\\')
+            {
+                sb.Append('/');
+            }
+            else
+            {
+                sb.Append(Regex.Escape(c.ToString()));
+            }
+        }
+
+        sb.Append('$');
+        return sb.ToString();
+    }
+
+    private string ResolveRepoRoot()
+    {
+        var candidate = _workspaceContext.WorkspacePath;
+        if (string.IsNullOrWhiteSpace(candidate))
+            candidate = _options.RepoRoot;
+        return Path.GetFullPath(candidate);
+    }
+
+    private static string BuildWorkspaceScopedDocumentId(string sourcePrefix, string workspaceRoot, string relativePath)
+    {
+        var scope = ComputeHash(workspaceRoot).Substring(0, 16).ToLowerInvariant();
+        var normalizedPath = relativePath.Replace("/", "-", StringComparison.Ordinal).Replace(":", "-", StringComparison.Ordinal);
+        return $"{sourcePrefix}:{scope}:{normalizedPath}";
     }
 }

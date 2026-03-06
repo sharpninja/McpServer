@@ -110,9 +110,9 @@ Sample session log flow:
 
 ```powershell
 $s = New-McpSessionLog -SourceType "Copilot" -Title "MCP docs update" -Model "gpt-5.3-codex"
-$e = Add-McpSessionEntry -Session $s -QueryTitle "Update docs" -QueryText "Create user docs" -Status in_progress
-Add-McpAction -Entry $e -Description "Created docs\\USER-GUIDE.md" -Type edit -FilePath "docs/USER-GUIDE.md"
-Set-McpSessionEntry -Session $s -Entry $e -Response "Docs complete" -Status completed
+$t = Add-McpSessionTurn -Session $s -QueryTitle "Update docs" -QueryText "Create user docs" -Status in_progress
+Add-McpAction -Turn $t -Description "Created docs\\USER-GUIDE.md" -Type edit -FilePath "docs/USER-GUIDE.md"
+Set-McpSessionTurn -Session $s -Turn $t -Response "Docs complete" -Status completed
 Update-McpSessionLog -Session $s -Status completed
 ```
 
@@ -262,7 +262,7 @@ Submit example:
   "started": "2026-03-05T16:00:00Z",
   "lastUpdated": "2026-03-05T16:00:00Z",
   "status": "in_progress",
-  "entries": []
+  "turns": []
 }
 ```
 

@@ -6,14 +6,38 @@ using Xunit;
 
 namespace McpServer.SessionLog.Validation.AtomicTests;
 
+/// <summary>
+/// Validation tests for <c>QuerySessionLogTests</c>.
+/// </summary>
+/// <remarks>
+/// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+/// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+/// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+/// </remarks>
 [Collection("SessionLogEndpoint")]
 public sealed class QuerySessionLogTests
 {
     private readonly SessionLogEndpointFixture _fixture;
     private static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
 
+    /// <summary>
+    /// Initializes a new instance of QuerySessionLogTests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     public QuerySessionLogTests(SessionLogEndpointFixture fixture) => _fixture = fixture;
 
+    /// <summary>
+    /// Validates the <c>Query_NoFilters_Returns200WithResults</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task Query_NoFilters_Returns200WithResults()
     {
@@ -26,6 +50,14 @@ public sealed class QuerySessionLogTests
         Assert.NotNull(result.Items);
     }
 
+    /// <summary>
+    /// Validates the <c>Query_FilterByAgent_Returns200Filtered</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task Query_FilterByAgent_Returns200Filtered()
     {
@@ -53,6 +85,14 @@ public sealed class QuerySessionLogTests
         Assert.All(result.Items!, s => Assert.Equal("QueryAgentTest", s.SourceType));
     }
 
+    /// <summary>
+    /// Validates the <c>Query_FilterByModel_Returns200Filtered</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task Query_FilterByModel_Returns200Filtered()
     {
@@ -78,6 +118,14 @@ public sealed class QuerySessionLogTests
         Assert.True(result!.TotalCount >= 1);
     }
 
+    /// <summary>
+    /// Validates the <c>Query_FilterByDateRange_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task Query_FilterByDateRange_Returns200()
     {
@@ -91,6 +139,14 @@ public sealed class QuerySessionLogTests
         Assert.NotNull(result);
     }
 
+    /// <summary>
+    /// Validates the <c>Query_WithPagination_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task Query_WithPagination_Returns200()
     {
@@ -103,6 +159,14 @@ public sealed class QuerySessionLogTests
         Assert.True(result.Items!.Count <= 2);
     }
 
+    /// <summary>
+    /// Validates the <c>Query_NonMatchingAgent_ReturnsEmptyResults</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task Query_NonMatchingAgent_ReturnsEmptyResults()
     {
@@ -115,6 +179,14 @@ public sealed class QuerySessionLogTests
         Assert.Equal(0, result!.TotalCount);
     }
 
+    /// <summary>
+    /// Validates the <c>Query_FilterByText_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
+    /// Test data: Generated session/request IDs plus submit/query/dialog payloads serialized as endpoint JSON bodies.
+    /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
+    /// </remarks>
     [Fact]
     public async Task Query_FilterByText_Returns200()
     {

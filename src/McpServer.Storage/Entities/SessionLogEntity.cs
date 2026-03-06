@@ -99,5 +99,6 @@ public sealed class SessionLogEntity
 
     /// <summary>TR-PLANNED-013: Navigation to session log entries.</summary>
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "EF Core navigation collection")]
-    public ICollection<SessionLogEntryEntity> Entries { get; set; } = new List<SessionLogEntryEntity>();
+    public ICollection<SessionLogTurnEntity> Entries { get; set; } = new List<SessionLogTurnEntity>();
 }
+

@@ -1,6 +1,7 @@
 # Session Log Schema Reference
 
 Load this file when you need to create, update, or query session logs.
+For specific agent operational instructions, follow `AGENTS-README-FIRST.yaml`.
 
 ## Endpoints
 
@@ -33,11 +34,11 @@ Load this file when you need to create, update, or query session logs.
   "started": "string — ISO 8601 timestamp when session began",
   "lastUpdated": "string — ISO 8601 timestamp of latest activity",
   "status": "string — 'in_progress' or 'completed'",
-  "entries": [ "array of RequestEntry objects (see below)" ]
+  "turns": [ "array of RequestTurn objects (see below)" ]
 }
 ```
 
-## RequestEntry (each element in `entries`)
+## RequestTurn (each element in `turns`)
 
 ```json
 {
@@ -48,11 +49,11 @@ Load this file when you need to create, update, or query session logs.
   "response": "string — your response text",
   "interpretation": "string — your understanding of what was asked",
   "status": "string — 'completed' or 'in_progress'",
-  "model": "string — model used for this entry",
+  "model": "string — model used for this turn",
   "tokenCount": "integer|null — approximate token count",
   "tags": ["string array — e.g. 'refactor', 'bugfix', 'feature'"],
   "contextList": ["string array — files or resources referenced"],
-  "designDecisions": ["string array — decisions made during this interaction"],
+  "designDecisions": ["string array — decisions made during this turn"],
   "requirementsDiscovered": ["string array — requirement IDs e.g. 'TR-MCP-001'"],
   "filesModified": ["string array — file paths changed"],
   "blockers": ["string array — issues preventing progress"],
@@ -93,17 +94,17 @@ Get-McpSessionLog -Limit 5
 # Create session
 $s = New-McpSessionLog -SourceType "Copilot" -Title "Implementing feature X" -Model "claude-sonnet-4"
 
-# Add entry for each user request
-$e = Add-McpSessionEntry -Session $s -QueryTitle "Add auth" -QueryText "Add JWT authentication"
+# Add turn for each user request
+$t = Add-McpSessionTurn -Session $s -QueryTitle "Add auth" -QueryText "Add JWT authentication"
 
 # Record actions during work
-Add-McpAction -Entry $e -Description "Created TokenService" -Type create -FilePath "src/TokenService.cs"
+Add-McpAction -Turn $t -Description "Created TokenService" -Type create -FilePath "src/TokenService.cs"
 
 # Stream reasoning dialog as you work
-Send-McpDialog -Session $s -RequestId $e.requestId -Content "Analyzing the issue..." -Category reasoning
+Send-McpDialog -Session $s -RequestId $t.requestId -Content "Analyzing the issue..." -Category reasoning
 
-# Complete the entry
-Set-McpSessionEntry -Entry $e -Session $s -Response "Done" -Status completed
+# Complete the turn
+Set-McpSessionTurn -Turn $t -Session $s -Response "Done" -Status completed
 
 # Final push at session end
 Update-McpSessionLog -Session $s -Status completed
@@ -118,10 +119,10 @@ mcp_session_query 5
 # Create session
 mcp_session_create "Copilot" "Implementing feature X" "claude-sonnet-4"
 
-# Add entry, record actions, stream dialog, complete
-mcp_session_add_entry "req-001" "Add auth" "Add JWT authentication" "in_progress"
+# Add turn, record actions, stream dialog, complete
+mcp_session_add_turn "req-001" "Add auth" "Add JWT authentication" "in_progress"
 mcp_session_add_action "req-001" "Created TokenService" "create" "src/TokenService.cs"
 mcp_session_send_dialog "req-001" "Analyzing the issue..." "reasoning"
-mcp_session_update_entry "req-001" "status" "completed"
+mcp_session_update_turn "req-001" "status" "completed"
 mcp_session_complete
 ```

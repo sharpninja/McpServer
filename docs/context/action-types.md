@@ -1,6 +1,6 @@
 # Recognized Action Types
 
-Use these standardized type values when logging actions in session log entries.
+Use these standardized type values when logging actions in session log turns.
 
 - `edit` — file modification
 - `create` — new file creation

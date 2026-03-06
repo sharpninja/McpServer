@@ -54,7 +54,7 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-WS-005
 
-**Marker File Service** — `MarkerFileService.WriteMarkerAsync` writes `AGENTS-README-FIRST.yaml` to the workspace root. All markers point to the same shared host port. Uses Handlebars.Net templating with full workspace context. The YAML file contains port, `baseUrl`, all endpoint paths, process PID, `startedAt` timestamp, workspace name, per-workspace auth token (`apiKey`), and a machine-readable `prompt` block. Agents should send `X-Workspace-Path` header for workspace targeting.
+**Marker File Service** — `MarkerFileService.WriteMarkerAsync` writes `AGENTS-README-FIRST.yaml` to the workspace root. All markers point to the same shared host port. Uses Handlebars.Net templating with full workspace context. The marker template MUST be loaded from `templates/prompt-templates.yaml` via `PromptTemplateService` (id: `default-marker-prompt`). **CRITICAL**: If the template cannot be loaded (missing file, invalid YAML, or missing ID), the service must log a critical error and shut down the server immediately. Fallback to hardcoded templates is PROHIBITED. The YAML file contains port, `baseUrl`, all endpoint paths, process PID, `startedAt` timestamp, workspace name, per-workspace auth token (`apiKey`), and a machine-readable `prompt` block. Agents should send `X-Workspace-Path` header for workspace targeting.
 
 ## TR-MCP-WS-006
 
@@ -240,9 +240,9 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-COMP-003
 
-**Session Continuity Protocol** — `DefaultPromptTemplate` includes Requirements Tracking, Design Decision Logging, and Session Continuity sections. Agents must: read marker file at session start, query recent session logs, query TODOs, read Requirements-Matrix.md, post updated session logs every ~10 interactions, and capture requirements/decisions as they emerge.
+**Session Continuity Protocol** — The `default-marker-prompt` template (YAML) includes Requirements Tracking, Design Decision Logging, and Session Continuity sections. Agents must: read marker file at session start, query recent session logs, query TODOs, read Requirements-Matrix.md, post updated session logs every ~10 interactions, and capture requirements/decisions as they emerge.
 
-**Covered by:** `MarkerFileService.DefaultPromptTemplate`
+**Covered by:** `templates/prompt-templates.yaml` (`default-marker-prompt`), `PromptTemplateService`
 
 ## TR-MCP-AUDIT-001
 
@@ -362,7 +362,7 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-TPL-005
 
-**System Template Externalization** — Three provider interfaces decouple system prompt templates from inline C# constants: (1) `IMarkerPromptProvider` / `FileMarkerPromptProvider` reads `templates/default-marker-prompt.hbs.yaml` with YAML deserialization and startup caching, returning `null` on file-missing for fallback to `MarkerFileService.DefaultPromptTemplate`. Injected into `WorkspaceProcessManager` with precedence: config override (`Mcp:MarkerPromptTemplate`) > file template > built-in default. (2) `ITodoPromptProvider` / `TodoPromptProvider` looks up templates from `IPromptTemplateService` by well-known IDs (`todo-status-prompt`, `todo-implement-prompt`, `todo-plan-prompt`), falling back to `TodoPromptDefaults` constants. Injected into `TodoPromptService` with precedence: `IOptionsMonitor<TodoPromptOptions>` > file template > built-in default. (3) `PairingHtmlRenderer` replaces static `PairingHtml` calls with DI-injected instance class, loading templates from `IPromptTemplateService` by well-known IDs (`pairing-login-page`, `pairing-key-page`, `pairing-not-configured-page`) using `string.Replace` token substitution (`{errorBanner}`, `{apiKey}`, `{serverUrl}`), falling back to `PairingHtml` static methods. Template YAML files ship via `.csproj` Content items and are preserved across deployments.
+**System Template Externalization** — Three provider interfaces decouple system prompt templates from inline C# constants: (1) `IMarkerPromptProvider` / `FileMarkerPromptProvider` reads `templates/prompt-templates.yaml` via `IPromptTemplateService` (id: `default-marker-prompt`), throwing a critical exception on file-missing. Fallback to `MarkerFileService.DefaultPromptTemplate` is REMOVED. Injected into `WorkspaceProcessManager` with precedence: config override (`Mcp:MarkerPromptTemplate`) > file template. (2) `ITodoPromptProvider` / `TodoPromptProvider` looks up templates from `IPromptTemplateService` by well-known IDs (`todo-status-prompt`, `todo-implement-prompt`, `todo-plan-prompt`), falling back to `TodoPromptDefaults` constants. Injected into `TodoPromptService` with precedence: `IOptionsMonitor<TodoPromptOptions>` > file template > built-in default. (3) `PairingHtmlRenderer` replaces static `PairingHtml` calls with DI-injected instance class, loading templates from `IPromptTemplateService` by well-known IDs (`pairing-login-page`, `pairing-key-page`, `pairing-not-configured-page`) using `string.Replace` token substitution (`{errorBanner}`, `{apiKey}`, `{serverUrl}`), falling back to `PairingHtml` static methods. Template YAML files ship via `.csproj` Content items and are preserved across deployments.
 
 **Covered by:** `IMarkerPromptProvider`, `FileMarkerPromptProvider`, `ITodoPromptProvider`, `TodoPromptProvider`, `PairingHtmlRenderer`, `templates/prompt-templates.yaml`
 
@@ -569,3 +569,11 @@ Presence signaling SHALL be excluded from one-shot sessions.
 - Maintain a supported UI tooling section covering available user surfaces (including VS extension, Web UI, and Director/TUI where applicable) with current support status.
 - Keep the documentation in version control under `docs/` so updates are reviewed and traceable with product changes.
 **Status:** 🔴 Planned
+
+## TR-MCP-DOC-002
+
+**Test XML Documentation Completeness** *(DIRECTIVE)* — All test projects SHALL include XML documentation comments on test classes and test methods. Each test XML doc SHALL explicitly specify: what behavior is being tested, what test data/fixtures are used, why that data/fixtures are used, and which requirement IDs are being validated. No test project is exempt from this requirement.
+
+**Status:** ✅ Active directive
+
+**Covered by:** `.github/copilot-instructions.md`, `AGENTS.md`

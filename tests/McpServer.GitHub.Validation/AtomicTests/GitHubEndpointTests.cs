@@ -12,10 +12,26 @@ public sealed class GitHubEndpointTests
     private readonly GitHubEndpointFixture _fixture;
     private static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
 
+    /// <summary>
+    /// Initializes a new instance of GitHubEndpointTests.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
+    /// Test data: Fixture HTTP calls with issue/pull/label/comment/sync payloads and existing/non-existing identifiers.
+    /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
+    /// </remarks>
     public GitHubEndpointTests(GitHubEndpointFixture fixture) => _fixture = fixture;
 
     // --- GET /mcpserver/gh/issues ---
 
+    /// <summary>
+    /// Validates the <c>ListIssues_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
+    /// Test data: Fixture HTTP calls with issue/pull/label/comment/sync payloads and existing/non-existing identifiers.
+    /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
+    /// </remarks>
     [Fact]
     public async Task ListIssues_Returns200()
     {
@@ -26,6 +42,14 @@ public sealed class GitHubEndpointTests
         Assert.Equal(JsonValueKind.Array, issues.ValueKind);
     }
 
+    /// <summary>
+    /// Validates the <c>ListIssues_WithState_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
+    /// Test data: Fixture HTTP calls with issue/pull/label/comment/sync payloads and existing/non-existing identifiers.
+    /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
+    /// </remarks>
     [Fact]
     public async Task ListIssues_WithState_Returns200()
     {
@@ -35,6 +59,14 @@ public sealed class GitHubEndpointTests
 
     // --- GET /mcpserver/gh/issues/{number} ---
 
+    /// <summary>
+    /// Validates the <c>GetIssue_ExistingNumber_Returns200Or404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
+    /// Test data: Fixture HTTP calls with issue/pull/label/comment/sync payloads and existing/non-existing identifiers.
+    /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
+    /// </remarks>
     [Fact]
     public async Task GetIssue_ExistingNumber_Returns200Or404()
     {
@@ -46,6 +78,14 @@ public sealed class GitHubEndpointTests
 
     // --- POST /mcpserver/gh/issues (create) ---
 
+    /// <summary>
+    /// Validates the <c>CreateIssue_MissingTitle_Returns400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
+    /// Test data: Fixture HTTP calls with issue/pull/label/comment/sync payloads and existing/non-existing identifiers.
+    /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
+    /// </remarks>
     [Fact]
     public async Task CreateIssue_MissingTitle_Returns400()
     {
@@ -56,6 +96,14 @@ public sealed class GitHubEndpointTests
 
     // --- PUT /mcpserver/gh/issues/{number} (update) ---
 
+    /// <summary>
+    /// Validates the <c>UpdateIssue_NullBody_Returns400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
+    /// Test data: Fixture HTTP calls with issue/pull/label/comment/sync payloads and existing/non-existing identifiers.
+    /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
+    /// </remarks>
     [Fact]
     public async Task UpdateIssue_NullBody_Returns400()
     {
@@ -65,6 +113,14 @@ public sealed class GitHubEndpointTests
 
     // --- POST /mcpserver/gh/issues/{id}/comments ---
 
+    /// <summary>
+    /// Validates the <c>CommentOnIssue_MissingBody_Returns400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
+    /// Test data: Fixture HTTP calls with issue/pull/label/comment/sync payloads and existing/non-existing identifiers.
+    /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
+    /// </remarks>
     [Fact]
     public async Task CommentOnIssue_MissingBody_Returns400()
     {
@@ -75,6 +131,14 @@ public sealed class GitHubEndpointTests
 
     // --- GET /mcpserver/gh/labels ---
 
+    /// <summary>
+    /// Validates the <c>ListLabels_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
+    /// Test data: Fixture HTTP calls with issue/pull/label/comment/sync payloads and existing/non-existing identifiers.
+    /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
+    /// </remarks>
     [Fact]
     public async Task ListLabels_Returns200()
     {
@@ -86,6 +150,14 @@ public sealed class GitHubEndpointTests
 
     // --- GET /mcpserver/gh/pulls ---
 
+    /// <summary>
+    /// Validates the <c>ListPulls_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
+    /// Test data: Fixture HTTP calls with issue/pull/label/comment/sync payloads and existing/non-existing identifiers.
+    /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
+    /// </remarks>
     [Fact]
     public async Task ListPulls_Returns200()
     {
@@ -96,6 +168,14 @@ public sealed class GitHubEndpointTests
         Assert.Equal(JsonValueKind.Array, pulls.ValueKind);
     }
 
+    /// <summary>
+    /// Validates the <c>ListPulls_WithState_Returns200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
+    /// Test data: Fixture HTTP calls with issue/pull/label/comment/sync payloads and existing/non-existing identifiers.
+    /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
+    /// </remarks>
     [Fact]
     public async Task ListPulls_WithState_Returns200()
     {
@@ -105,6 +185,14 @@ public sealed class GitHubEndpointTests
 
     // --- POST /mcpserver/gh/pulls/{id}/comments ---
 
+    /// <summary>
+    /// Validates the <c>CommentOnPull_MissingBody_Returns400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
+    /// Test data: Fixture HTTP calls with issue/pull/label/comment/sync payloads and existing/non-existing identifiers.
+    /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
+    /// </remarks>
     [Fact]
     public async Task CommentOnPull_MissingBody_Returns400()
     {
@@ -115,6 +203,14 @@ public sealed class GitHubEndpointTests
 
     // --- POST /mcpserver/gh/issues/{number}/close ---
 
+    /// <summary>
+    /// Validates the <c>CloseIssue_NonExistent_ReturnsBadRequestOr200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
+    /// Test data: Fixture HTTP calls with issue/pull/label/comment/sync payloads and existing/non-existing identifiers.
+    /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
+    /// </remarks>
     [Fact]
     public async Task CloseIssue_NonExistent_ReturnsBadRequestOr200()
     {
@@ -126,6 +222,14 @@ public sealed class GitHubEndpointTests
 
     // --- POST /mcpserver/gh/issues/{number}/reopen ---
 
+    /// <summary>
+    /// Validates the <c>ReopenIssue_NonExistent_ReturnsBadRequestOr200</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
+    /// Test data: Fixture HTTP calls with issue/pull/label/comment/sync payloads and existing/non-existing identifiers.
+    /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
+    /// </remarks>
     [Fact]
     public async Task ReopenIssue_NonExistent_ReturnsBadRequestOr200()
     {
@@ -136,6 +240,14 @@ public sealed class GitHubEndpointTests
 
     // --- POST /mcpserver/gh/issues/sync/from-github ---
 
+    /// <summary>
+    /// Validates the <c>SyncFromGitHub_Returns200Or400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
+    /// Test data: Fixture HTTP calls with issue/pull/label/comment/sync payloads and existing/non-existing identifiers.
+    /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
+    /// </remarks>
     [Fact]
     public async Task SyncFromGitHub_Returns200Or400()
     {
@@ -146,6 +258,14 @@ public sealed class GitHubEndpointTests
 
     // --- POST /mcpserver/gh/issues/sync/to-github ---
 
+    /// <summary>
+    /// Validates the <c>SyncToGitHub_Returns200Or400</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
+    /// Test data: Fixture HTTP calls with issue/pull/label/comment/sync payloads and existing/non-existing identifiers.
+    /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
+    /// </remarks>
     [Fact]
     public async Task SyncToGitHub_Returns200Or400()
     {
@@ -156,6 +276,14 @@ public sealed class GitHubEndpointTests
 
     // --- POST /mcpserver/gh/issues/{number}/sync ---
 
+    /// <summary>
+    /// Validates the <c>SyncSingleIssue_Returns200Or400Or404</c> scenario.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: TEST-MCP-081, TEST-MCP-082, TEST-MCP-083, TEST-MCP-084, FR-MCP-063, TR-MCP-GH-001, TR-MCP-GH-004.
+    /// Test data: Fixture HTTP calls with issue/pull/label/comment/sync payloads and existing/non-existing identifiers.
+    /// Data rationale: These inputs verify GitHub integration contracts and expected status behavior on valid and invalid requests.
+    /// </remarks>
     [Fact]
     public async Task SyncSingleIssue_Returns200Or400Or404()
     {
