@@ -287,7 +287,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
             RepoRoot = _tempDir,
             SessionsPath = "docs/sessions"
         });
-        return new SessionLogIngestor(new Chunker(), opts, _service, NullLogger<SessionLogIngestor>.Instance);
+        return new SessionLogIngestor(new Chunker(), opts, new WorkspaceContext(), _service, NullLogger<SessionLogIngestor>.Instance);
     }
 
     private void WriteSessionFile(string filename, UnifiedSessionLogDto dto)

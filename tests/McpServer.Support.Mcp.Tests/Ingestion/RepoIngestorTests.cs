@@ -1,5 +1,6 @@
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Ingestion;
+using McpServer.Support.Mcp.Services;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
@@ -29,7 +30,7 @@ public sealed class RepoIngestorTests : IDisposable
         File.WriteAllText(Path.Combine(_tempDir, "code.cs"), "class Foo { }");
 
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir });
-        var sut = new RepoIngestor(new Chunker(), options, NullLogger<RepoIngestor>.Instance);
+        var sut = new RepoIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<RepoIngestor>.Instance);
 
         var results = await sut.IngestAsync().ConfigureAwait(true);
 
@@ -53,7 +54,7 @@ public sealed class RepoIngestorTests : IDisposable
         File.WriteAllText(Path.Combine(_tempDir, "keep.md"), "# Keep");
 
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir });
-        var sut = new RepoIngestor(new Chunker(), options, NullLogger<RepoIngestor>.Instance);
+        var sut = new RepoIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<RepoIngestor>.Instance);
 
         var results = await sut.IngestAsync().ConfigureAwait(true);
 
@@ -69,7 +70,7 @@ public sealed class RepoIngestorTests : IDisposable
         Directory.CreateDirectory(emptyDir);
 
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = emptyDir });
-        var sut = new RepoIngestor(new Chunker(), options, NullLogger<RepoIngestor>.Instance);
+        var sut = new RepoIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<RepoIngestor>.Instance);
 
         var results = await sut.IngestAsync().ConfigureAwait(true);
 
@@ -82,7 +83,7 @@ public sealed class RepoIngestorTests : IDisposable
         File.WriteAllText(Path.Combine(_tempDir, "file.txt"), "deterministic content");
 
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir });
-        var sut = new RepoIngestor(new Chunker(), options, NullLogger<RepoIngestor>.Instance);
+        var sut = new RepoIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<RepoIngestor>.Instance);
 
         var results1 = await sut.IngestAsync().ConfigureAwait(true);
         var results2 = await sut.IngestAsync().ConfigureAwait(true);
@@ -100,7 +101,7 @@ public sealed class RepoIngestorTests : IDisposable
         File.WriteAllText(Path.Combine(_tempDir, "small.txt"), "small");
 
         var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir, MaxFileSizeBytes = 1024 * 1024 });
-        var sut = new RepoIngestor(new Chunker(), options, NullLogger<RepoIngestor>.Instance);
+        var sut = new RepoIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<RepoIngestor>.Instance);
 
         var results = await sut.IngestAsync().ConfigureAwait(true);
 
