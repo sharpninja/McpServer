@@ -111,26 +111,11 @@ jobs:
       - name: Publish MCP Server
         run: dotnet publish src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj -c Release -o artifacts/mcp-server
 
-      - name: Build Director tool
-        if: ${{ hashFiles('src/McpServer.Director/McpServer.Director.csproj') != '' }}
-        run: dotnet build src/McpServer.Director/McpServer.Director.csproj -c Release
-
-      - name: Pack Director tool
-        if: ${{ hashFiles('src/McpServer.Director/McpServer.Director.csproj') != '' }}
-        run: dotnet pack src/McpServer.Director/McpServer.Director.csproj -c Release --no-build -p:PackageVersion=${{ steps.version.outputs.version }} -o artifacts/director-tool
-
       - name: Upload MCP publish artifact
         uses: actions/upload-artifact@v4
         with:
           name: mcp-server-publish
           path: artifacts/mcp-server
-
-      - name: Upload Director tool package artifact
-        if: ${{ hashFiles('src/McpServer.Director/McpServer.Director.csproj') != '' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: director-tool-nupkg
-          path: artifacts/director-tool/*.nupkg
 
       - name: Upload test results
         if: always()
@@ -214,57 +199,6 @@ jobs:
       - name: Cleanup
         if: always()
         run: docker stop mcp-ci && docker rm mcp-ci || true
-
-  publish-web-ui-docker:
-    runs-on: ubuntu-latest
-    needs: [build-test-publish, docker-smoke]
-    if: github.event_name == 'push'
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Detect web UI Dockerfile
-        id: webui
-        shell: bash
-        run: |
-          if [ -f src/McpServer.Web/Dockerfile ]; then
-            echo "enabled=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "enabled=false" >> "$GITHUB_OUTPUT"
-            echo "Web UI Dockerfile not found; skipping image publish."
-          fi
-
-      - name: Set up Docker Buildx
-        if: steps.webui.outputs.enabled == 'true'
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to GHCR
-        if: steps.webui.outputs.enabled == 'true'
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract Docker metadata
-        if: steps.webui.outputs.enabled == 'true'
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/${{ github.repository_owner }}/mcpserver-web
-          tags: |
-            type=ref,event=branch
-            type=sha
-            type=raw,value=latest,enable={{is_default_branch}}
-
-      - name: Build and push web UI image
-        if: steps.webui.outputs.enabled == 'true'
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: src/McpServer.Web/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
 
   release-main:
     runs-on: ubuntu-latest
@@ -370,13 +304,6 @@ jobs:
 
       - name: Pack
         run: dotnet pack src/McpServer.Client/McpServer.Client.csproj -c Release -p:PackageVersion=${{ needs.build-test-publish.outputs.package_version }} -o ./nupkg
-
-      - name: Download Director tool package artifact
-        if: ${{ hashFiles('src/McpServer.Director/McpServer.Director.csproj') != '' }}
-        uses: actions/download-artifact@v4
-        with:
-          name: director-tool-nupkg
-          path: nupkg
 
       - name: Push to NuGet (main only)
         if: github.ref == 'refs/heads/main'
