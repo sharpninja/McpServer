@@ -115,7 +115,22 @@ public sealed class DesktopProcessSpawner : IProcessSpawner
         public int Id => handle.ProcessId;
 
         /// <inheritdoc />
-        public bool HasExited => _exited;
+        public bool HasExited
+        {
+            get
+            {
+                if (_exited)
+                    return true;
+
+                if (TryProbeExitCode(out var exitCode))
+                {
+                    _exitCode = exitCode;
+                    _exited = true;
+                }
+
+                return _exited;
+            }
+        }
 
         /// <inheritdoc />
         public int ExitCode => _exitCode;
@@ -148,5 +163,32 @@ public sealed class DesktopProcessSpawner : IProcessSpawner
 
         /// <inheritdoc />
         public void Dispose() => handle.Dispose();
+
+        private bool TryProbeExitCode(out int exitCode)
+        {
+            try
+            {
+                using var process = Process.GetProcessById(handle.ProcessId);
+                if (!process.HasExited)
+                {
+                    exitCode = _exitCode;
+                    return false;
+                }
+
+                exitCode = process.ExitCode;
+                return true;
+            }
+            catch (ArgumentException)
+            {
+                // Process no longer exists.
+                exitCode = _exitCode;
+                return true;
+            }
+            catch (InvalidOperationException)
+            {
+                exitCode = _exitCode;
+                return true;
+            }
+        }
     }
 }

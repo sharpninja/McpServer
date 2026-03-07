@@ -332,9 +332,20 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         if (session is null || !session.IsAlive)
             return false;
 
-        var response = await session.SendAsync(message, cancellationToken).ConfigureAwait(false);
-        state.LastUpdatedUtc = DateTimeOffset.UtcNow;
-        return response.State == CopilotResultState.Success;
+        try
+        {
+            var response = await session.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            state.LastUpdatedUtc = DateTimeOffset.UtcNow;
+            return response.State == CopilotResultState.Success;
+        }
+        catch (Exception ex) when (ex is IOException or ObjectDisposedException or InvalidOperationException)
+        {
+            _logger.LogWarning(
+                ex,
+                "Failed to send session message to interactive Copilot session: SessionId={SessionId}",
+                sessionId);
+            return false;
+        }
     }
 
     /// <inheritdoc />

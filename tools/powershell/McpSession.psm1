@@ -77,6 +77,55 @@ function Initialize-McpSession {
 
 # ─── Session object ──────────────────────────────────────────────────────────
 
+function ConvertTo-McpSessionSlugToken {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][string]$Value
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Value)) {
+        throw "Model is required."
+    }
+
+    $token = $Value.Trim().ToLowerInvariant()
+    $token = $token -replace '[^a-z0-9]+', '-'
+    $token = $token.Trim('-')
+
+    if ([string]::IsNullOrWhiteSpace($token)) {
+        throw "Model '$Value' did not contain any valid slug characters."
+    }
+
+    return $token
+}
+
+function New-McpSessionLogSlug {
+    <#
+    .SYNOPSIS  Build a canonical session ID slug in the form <agent>-<timestamp>-<model>.
+    .PARAMETER Agent         Agent/source prefix (must match ^[A-Z][A-Za-z0-9]*$).
+    .PARAMETER Model         Model identifier used to build the suffix slug.
+    .PARAMETER TimestampUtc  Optional UTC timestamp; defaults to now.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][string]$Agent,
+        [Parameter(Mandatory)][string]$Model,
+        [datetime]$TimestampUtc = (Get-Date).ToUniversalTime()
+    )
+
+    if ([string]::IsNullOrWhiteSpace($Agent)) {
+        throw "Agent is required."
+    }
+
+    $agentToken = $Agent.Trim()
+    if ($agentToken -cnotmatch '^[A-Z][A-Za-z0-9]*$') {
+        throw "Agent '$Agent' must match ^[A-Z][A-Za-z0-9]*$ to build a valid SessionId prefix."
+    }
+
+    $modelToken = ConvertTo-McpSessionSlugToken -Value $Model
+    $stamp = $TimestampUtc.ToUniversalTime().ToString('yyyyMMddTHHmmssZ')
+    return "$agentToken-$stamp-$modelToken"
+}
+
 function New-McpSessionLog {
     <#
     .SYNOPSIS  Create a new session log object and POST it to the server.
@@ -95,7 +144,7 @@ function New-McpSessionLog {
     Assert-Initialized
 
     if (-not $SessionId) {
-        $SessionId = "$SourceType-$(New-Guid)"
+        $SessionId = New-McpSessionLogSlug -Agent $SourceType -Model $Model
     }
 
     $now = (Get-Date).ToUniversalTime().ToString("o")
@@ -491,6 +540,7 @@ function Push-SessionLog {
 # ─── Exports ─────────────────────────────────────────────────────────────────
 Export-ModuleMember -Function @(
     'Initialize-McpSession',
+    'New-McpSessionLogSlug',
     'New-McpSessionLog',
     'Update-McpSessionLog',
     'Get-McpSessionLog',

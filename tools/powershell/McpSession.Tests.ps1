@@ -104,6 +104,18 @@ workspace: demo
 
     # ── New-McpSessionLog ─────────────────────────────────────────────────────
 
+    Describe 'New-McpSessionLogSlug' {
+        It 'builds canonical slug from agent, timestamp, and model' {
+            $timestamp = [datetime]::Parse('2026-03-07T13:58:44Z')
+            $slug = New-McpSessionLogSlug -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -TimestampUtc $timestamp
+            $slug | Should -Be 'Copilotcli-20260307T135844Z-gpt-5-3-codex'
+        }
+
+        It 'throws when agent is not in canonical form' {
+            { New-McpSessionLogSlug -Agent 'copilot' -Model 'gpt-5.3-codex' } | Should -Throw '*must match*'
+        }
+    }
+
     Describe 'New-McpSessionLog' {
         BeforeEach {
             Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
@@ -126,7 +138,7 @@ workspace: demo
 
         It 'auto-generates sessionId with source prefix' {
             $s = New-McpSessionLog -SourceType 'Copilot' -Title 't' -Model 'm'
-            $s.sessionId | Should -BeLike 'Copilot-*'
+            $s.sessionId | Should -Match '^Copilot-\d{8}T\d{6}Z-m$'
             $s.sessionId.Length | Should -BeGreaterThan 10
         }
 

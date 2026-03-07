@@ -137,10 +137,11 @@ public sealed class VoiceController : ControllerBase
 
         _logger.LogInformation("SSE stream starting for session {SessionId}", sessionId);
         var eventCount = 0;
-        _ = await _voiceService.SendSessionMessageAsync(sessionId, "User is here.", cancellationToken).ConfigureAwait(false);
 
         try
         {
+            _ = await _voiceService.SendSessionMessageAsync(sessionId, "User is here.", cancellationToken).ConfigureAwait(false);
+
             await foreach (var evt in _voiceService.SubmitTurnStreamingAsync(sessionId, request, cancellationToken).ConfigureAwait(false))
             {
                 eventCount++;
@@ -173,7 +174,16 @@ public sealed class VoiceController : ControllerBase
         finally
         {
             if (HttpContext.RequestAborted.IsCancellationRequested)
-                _ = await _voiceService.SendSessionMessageAsync(sessionId, "User is AFK.", CancellationToken.None).ConfigureAwait(false);
+            {
+                try
+                {
+                    _ = await _voiceService.SendSessionMessageAsync(sessionId, "User is AFK.", CancellationToken.None).ConfigureAwait(false);
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException)
+                {
+                    _logger.LogWarning(ex, "Failed to send AFK presence message for session {SessionId}", sessionId);
+                }
+            }
         }
     }
 

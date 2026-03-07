@@ -914,28 +914,31 @@ mvp-app:
   - id: MVP-APP-007
     title: '[READY] Add git remote URL property to workspace DTO for GitHub ref identification at runtime'
     note: '"Plan created in plan.md"'
-    done: false
+    done: true
+    completed: 2026-03-07T15:56:35.3220222Z
     description:
     - Read the git remote (origin) URL for each workspace directory and expose it as a property on the workspace DTO (WorkspaceDetail/WorkspaceSummary). This allows consuming code to identify GitHub repository refs (owner/repo) at runtime without shelling out to git. Implementation should read the remote during workspace registration or on-demand via git config/CLI, and persist or cache the value.
+    done-summary: 'Implemented to completion: Workspace DTO now exposes gitRemoteUrl resolved from git remote.origin.url via IProcessRunner in WorkspaceService, async DTO mapping paths are wired across workspace CRUD/list/get, client WorkspaceDto includes gitRemoteUrl, and WorkspaceServiceGitRemoteTests validate success/failure/missing-directory behavior. Validation passed with server/client builds plus Support.Mcp and Client test runs.'
+    remaining: None.
     technical-details:
     - Use IProcessRunner to execute 'git config --get remote.origin.url'
     - Handle non-zero exit codes gracefully (return null)
     - Update ToDto from sync to async to accommodate IProcessRunner
     implementation-tasks:
     - task: 'Server: Add GitRemoteUrl to WorkspaceDto in IWorkspaceService.cs'
-      done: false
+      done: true
     - task: 'Client: Add GitRemoteUrl to WorkspaceDto in WorkspaceModels.cs'
-      done: false
+      done: true
     - task: 'Service: Inject IProcessRunner into WorkspaceService'
-      done: false
+      done: true
     - task: 'Service: Implement GetGitRemoteUrlAsync helper'
-      done: false
+      done: true
     - task: 'Service: Update ToDtoAsync to populate GitRemoteUrl'
-      done: false
+      done: true
     - task: 'Service: Update Async methods (List, Get, Create, Update, Delete)'
-      done: false
+      done: true
     - task: 'Verification: Build and Test'
-      done: false
+      done: true
 mvp-mcp:
   high-priority:
   - id: MVP-MCP-002
@@ -1325,6 +1328,56 @@ mvp-mcp:
     - task: 'P6-03: Regenerate marker file and verify ~50-80 lines of prompt content.'
       done: false
     - task: 'P6-04: Verify context docs are searchable via MCP context endpoints.'
+      done: false
+  - id: MVP-MCP-013
+    title: '[READY] Allow website URL ingestion into GraphRAG without pre-downloading content'
+    estimate: 24-32 hours
+    note: Detailed implementation plan captured on 2026-03-07 for direct website URL ingestion into GraphRAG.
+    done: false
+    description:
+    - Allow ingestion from a website URL directly into GraphRAG, so users do not need to download and stage site content first.
+    remaining: Implement the planned ingestion API/service/tooling changes, then validate end-to-end GraphRAG indexing from direct website URLs.
+    technical-details:
+    - 'Scope: add first-class website URL ingestion so GraphRAG can index remote pages without pre-staging files in docs/external.'
+    - 'API contract: add a typed request/response for URL ingestion (url, includeSubpages, maxPages, maxDepth, maxBytesPerPage, forceRefresh, triggerGraphRagIndex).'
+    - 'Service design: add a WebsiteIngestor in src\\McpServer.Services\\Ingestion using IHttpClientFactory, with canonical URL normalization and deterministic source keys.'
+    - 'Security: enforce http/https only, block localhost/private/link-local targets, constrain redirects, and cap downloaded bytes/pages to prevent SSRF and resource abuse.'
+    - 'Content extraction: parse HTML to text (strip script/style/nav boilerplate), preserve title + headings, and support non-HTML text payloads via content-type fallback.'
+    - 'Indexing integration: convert fetched pages to ContextDocument/ContextChunk with SourceType=external-web and upsert via IngestionCoordinator using existing embedding/vector flow.'
+    - 'Operational behavior: return per-URL outcome (ingested/skipped/error), total docs/chunks written, and explicit partial-failure diagnostics instead of silent skips.'
+    - 'Transport surface: expose capability in both REST and MCP tools so Director/CLI/agents can ingest website URLs directly.'
+    - 'Client surface: extend McpServer.Client ContextClient + models to call the new endpoint and deserialize ingestion results.'
+    - 'Traceability: add/append FR/TR/TEST mappings for website ingestion and include requirement IDs in new code XML docs and tests.'
+    - 'Docs: update docs/context and user/API docs with request limits, security behavior, and examples for single-page vs bounded crawl ingestion.'
+    - 'Validation: cover unit/integration/client tests and run existing build/tests for Support.Mcp + Client + ingestion-related suites.'
+    implementation-tasks:
+    - task: Define request/response models for website ingestion and validation rules (URL scheme, limits, crawl options) in Models and controller contracts.
+      done: false
+    - task: Add WebsiteIngestor service under src\\McpServer.Services\\Ingestion with URL normalization, HTTP fetch, HTML-to-text extraction, and content hashing.
+      done: false
+    - task: Register WebsiteIngestor and dedicated HttpClient in Program.cs with timeout, user-agent, redirect, and max-response safeguards.
+      done: false
+    - task: Extend IngestionOptions with website ingestion limits (max pages, max depth, max bytes/page, allowed schemes/hosts) and bind defaults from appsettings.
+      done: false
+    - task: Add IngestionCoordinator path for on-demand website ingestion that reuses UpsertDocumentAndChunksAsync and emits structured SyncRun-like result data.
+      done: false
+    - task: Implement REST endpoint (e.g., POST /mcpserver/context/ingest-website) in ContextController with robust validation and explicit error responses.
+      done: false
+    - task: Expose MCP tool in McpServerMcpTools (e.g., context_ingest_website) mapped to the same coordinator path for agent workflows.
+      done: false
+    - task: Extend McpServer.Client ContextModels + ContextClient with WebsiteIngest request/result types and a strongly typed API method.
+      done: false
+    - task: Add SSRF-focused guards and tests for blocked targets (localhost, 127.0.0.0/8, RFC1918, link-local) and redirect handling.
+      done: false
+    - task: Add unit tests for WebsiteIngestor content extraction, size/page limit enforcement, canonical source key generation, and dedup/update behavior.
+      done: false
+    - task: Add integration tests for new REST endpoint success and failure paths plus source visibility in /mcpserver/context/sources.
+      done: false
+    - task: Add MCP transport/tool contract tests validating new tool registration, parameter validation, and serialized result shape.
+      done: false
+    - task: Update docs/Project requirements + testing mappings and docs/stdio-tool-contract.json / user docs to document the new capability.
+      done: false
+    - task: 'Run validation commands: dotnet build src\\McpServer.Support.Mcp, dotnet build src\\McpServer.Client, and targeted ingestion/client tests.'
       done: false
   medium-priority:
   - id: MVP-MCP-011

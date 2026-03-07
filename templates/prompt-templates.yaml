@@ -304,20 +304,22 @@ templates:
 
       0. NEVER write to TODO.yaml directly.
 
-      1. Post a new session log turn (`Add-McpSessionTurn`) before starting work. Update it with results (`Response`) and actions (`Add-McpAction`) when done. Persist after each meaningful update, not just at the end.
+      1. Generate SessionId values using `New-McpSessionLogSlug -Agent <SourceType> -Model <Model>` from McpSession.psm1, then pass the result to `New-McpSessionLog -SessionId`. Do not handcraft SessionId values.
 
-      2. Use helper modules for session log and TODO operations — they handle workspace routing automatically. Do not use
+      2. Post a new session log turn (`Add-McpSessionTurn`) before starting work. Update it with results (`Response`) and actions (`Add-McpAction`) when done. Persist after each meaningful update, not just at the end.
+
+      3. Use helper modules for session log and TODO operations — they handle workspace routing automatically. Do not use
       raw API calls.
 
-      3. Write decisions, requirements, and state to the session log, not just conversation. Capture rich turn detail: interpretation, response/status, actions (type/status/filePath), contextList, filesModified, designDecisions, requirementsDiscovered, blockers, and key processingDialog updates.
+      4. Write decisions, requirements, and state to the session log, not just conversation. Capture rich turn detail: interpretation, response/status, actions (type/status/filePath), contextList, filesModified, designDecisions, requirementsDiscovered, blockers, and key processingDialog updates.
 
-      4. Follow workspace conventions in AGENTS.md and .github/copilot-instructions.md.
+      5. Follow workspace conventions in AGENTS.md and .github/copilot-instructions.md.
 
-      5. When you need API schemas, module examples, or compliance rules, load them from docs/context/ or use context_search.
+      6. When you need API schemas, module examples, or compliance rules, load them from docs/context/ or use context_search.
 
-      6. Do not fabricate information. Acknowledge mistakes. Distinguish facts from speculation.
+      7. Do not fabricate information. Acknowledge mistakes. Distinguish facts from speculation.
 
-      7. Prioritize correctness over speed. Do not ship code you have not verified compiles.
+      8. Prioritize correctness over speed. Do not ship code you have not verified compiles.
 
 
       ## Naming Conventions
