@@ -1,8 +1,10 @@
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -20,17 +22,20 @@ public sealed class ContextController : ControllerBase
     private readonly IContextSearchService _searchService;
     private readonly IGraphRagService _graphRagService;
     private readonly GraphRagOptions _graphRagOptions;
+    private readonly IngestionCoordinator _ingestionCoordinator;
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
     public ContextController(
         McpDbContext db,
         IContextSearchService searchService,
         IGraphRagService graphRagService,
+        IngestionCoordinator ingestionCoordinator,
         IOptions<GraphRagOptions> graphRagOptions)
     {
         _db = db;
         _searchService = searchService;
         _graphRagService = graphRagService;
+        _ingestionCoordinator = ingestionCoordinator;
         _graphRagOptions = graphRagOptions.Value;
     }
 
@@ -158,6 +163,132 @@ public sealed class ContextController : ControllerBase
             .Select(d => new { d.SourceKey, d.SourceType, d.IngestedAt })
             .ToListAsync(cancellationToken).ConfigureAwait(false);
         return Ok(new { sources });
+    }
+
+    /// <summary>
+    /// FR-MCP-065, TR-MCP-INGEST-003: Ingests context directly from a website URL.
+    /// </summary>
+    /// <param name="request">Website ingestion request.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Structured URL ingestion result with optional GraphRAG trigger status.</returns>
+    [HttpPost("ingest-website")]
+    public async Task<ActionResult<WebsiteIngestResult>> IngestWebsiteAsync([FromBody] WebsiteIngestRequest request, CancellationToken cancellationToken)
+    {
+        if (request is null)
+        {
+            return BadRequest(new { error = "Request body is required." });
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Url))
+        {
+            return BadRequest(new { error = "url is required." });
+        }
+
+        var result = await _ingestionCoordinator.IngestWebsiteAsync(request, cancellationToken).ConfigureAwait(false);
+
+        if (request.TriggerGraphRagIndex)
+        {
+            try
+            {
+                await _graphRagService.IndexAsync(new GraphRagIndexRequest { Force = request.ForceRefresh }, cancellationToken).ConfigureAwait(false);
+                result.GraphRagIndexed = true;
+            }
+            catch (Exception ex)
+            {
+                result.GraphRagIndexed = false;
+                result.GraphRagIndexError = ex.Message;
+            }
+        }
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// FR-MCP-065, TR-MCP-INGEST-003: Streams website ingestion progress via SSE.
+    /// </summary>
+    /// <param name="request">Website ingestion request.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    [HttpPost("ingest-website/stream")]
+    public async Task IngestWebsiteStreamAsync([FromBody] WebsiteIngestRequest request, CancellationToken cancellationToken)
+    {
+        if (request is null)
+        {
+            Response.StatusCode = StatusCodes.Status400BadRequest;
+            await Response.WriteAsJsonAsync(new { error = "Request body is required." }, cancellationToken).ConfigureAwait(false);
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Url))
+        {
+            Response.StatusCode = StatusCodes.Status400BadRequest;
+            await Response.WriteAsJsonAsync(new { error = "url is required." }, cancellationToken).ConfigureAwait(false);
+            return;
+        }
+
+        Response.StatusCode = StatusCodes.Status200OK;
+        Response.ContentType = "text/event-stream";
+        Response.Headers.CacheControl = "no-cache";
+        Response.Headers.Append("X-Accel-Buffering", "no");
+
+        static async Task WriteSseEventAsync(HttpResponse response, string eventName, object payload, CancellationToken ct)
+        {
+            var json = JsonSerializer.Serialize(payload);
+            await response.WriteAsync($"event: {eventName}\n", ct).ConfigureAwait(false);
+            await response.WriteAsync($"data: {json}\n\n", ct).ConfigureAwait(false);
+            await response.Body.FlushAsync(ct).ConfigureAwait(false);
+        }
+
+        try
+        {
+            var result = await _ingestionCoordinator.IngestWebsiteStreamingAsync(
+                request,
+                progress => WriteSseEventAsync(Response, progress.EventType, progress, cancellationToken),
+                cancellationToken).ConfigureAwait(false);
+
+            if (request.TriggerGraphRagIndex)
+            {
+                await WriteSseEventAsync(Response, "indexing", new
+                {
+                    runId = result.RunId,
+                    status = "running",
+                    message = "GraphRAG indexing started."
+                }, cancellationToken).ConfigureAwait(false);
+
+                try
+                {
+                    await _graphRagService.IndexAsync(new GraphRagIndexRequest { Force = request.ForceRefresh }, cancellationToken).ConfigureAwait(false);
+                    result.GraphRagIndexed = true;
+
+                    await WriteSseEventAsync(Response, "indexing", new
+                    {
+                        runId = result.RunId,
+                        status = "completed",
+                        message = "GraphRAG indexing completed."
+                    }, cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    result.GraphRagIndexed = false;
+                    result.GraphRagIndexError = ex.Message;
+
+                    await WriteSseEventAsync(Response, "indexing", new
+                    {
+                        runId = result.RunId,
+                        status = "failed",
+                        message = ex.Message
+                    }, cancellationToken).ConfigureAwait(false);
+                }
+            }
+
+            await WriteSseEventAsync(Response, "result", result, cancellationToken).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException)
+        {
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                throw;
+            }
+        }
     }
 }
 

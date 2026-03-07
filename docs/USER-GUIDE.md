@@ -167,6 +167,9 @@ Authentication: include `X-Api-Key` for `/mcpserver/*` endpoints; add `X-Workspa
 - `POST /pack`
 - `GET /sources`
 - `POST /rebuild-index`
+- `POST /ingest-website`
+
+`POST /ingest-website` accepts `url`, `includeSubpages`, `maxPages`, `maxDepth`, `maxBytesPerPage`, `forceRefresh`, and `triggerGraphRagIndex`. Security controls allow only `http/https`, block localhost/private/link-local targets, and enforce bounded redirects/page bytes.
 
 Request example:
 
@@ -328,7 +331,7 @@ Source: `src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs`.
 
 ### Context and GraphRAG
 
-- `context_search`, `context_pack`, `context_sources`
+- `context_search`, `context_pack`, `context_sources`, `context_ingest_website`
 - `graphrag_status`, `graphrag_index`, `graphrag_query`
 
 ### Repo and sync

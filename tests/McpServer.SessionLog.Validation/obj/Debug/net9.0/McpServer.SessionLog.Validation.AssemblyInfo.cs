@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("McpServer.SessionLog.Validation")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+30ff2188706da955521d3f3552b690eaf8bbd7d4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c778b8e452297b33d2d2602abf953bdecdb81f56")]
 [assembly: System.Reflection.AssemblyProductAttribute("McpServer.SessionLog.Validation")]
 [assembly: System.Reflection.AssemblyTitleAttribute("McpServer.SessionLog.Validation")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

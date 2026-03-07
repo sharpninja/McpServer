@@ -128,6 +128,10 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **Markdown Session Log Parser** — `MarkdownSessionLogParser.TryParse` recognizes Markdown files with a `# Session Log – {title}` or `# Copilot Session Log – {title}` header and parses them into `UnifiedSessionLogDto`. Extracts date, status, branch, model, duration, and known sections (Session Overview, Changes Made, Technical Requirements, Testing, etc.) as a summary entry. Individual `### Request` subsections are parsed as separate `UnifiedRequestEntryDto` entries. `NormalizeToStructuredText` produces a structured plain-text representation for FTS5 and vector embedding.
 
+## TR-MCP-INGEST-003
+
+**Direct Website URL Ingestion** — Add `WebsiteIngestor` with a dedicated `HttpClient` and bounded crawl behavior. Only `http`/`https` URLs are allowed. SSRF protections block localhost, loopback, RFC1918, and link-local targets (including DNS-resolved IPs). Redirects are bounded and re-validated at each hop. Per-request controls include max pages, max depth, max bytes per page, force refresh, and optional GraphRAG index trigger. Ingested pages upsert as `SourceType=external-web` with canonical URL source keys and deterministic document IDs.
+
 ## TR-MCP-WS-009
 
 **Primary Workspace Detection and IsEnabled Gating** — `WorkspaceProcessManager.IHostedService.StartAsync` resolves the primary workspace: first by `IsPrimary = true` + lowest port among enabled workspaces; then by lowest-port enabled workspace if none is marked primary. For the primary workspace, only a marker file is written — no child `WebApplication` is created. Workspaces with `IsEnabled = false` are skipped during auto-start but can be started manually.

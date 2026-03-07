@@ -405,3 +405,9 @@ Functional behavior shall include:
 #### FR-MCP-064: Marketing and Adoption Documentation
 The system SHALL provide marketing-oriented documentation that clearly explains what McpServer is, its key feature set, why adopters need it, and the currently supported UI tooling surfaces (including VS extension and Web UI experiences).
 **Technical Implementation:** [TR-MCP-DOC-001](./Technical-Requirements.md#tr-mcp-doc-001) | [Details](./TR-per-FR-Mapping.md#fr-mcp-064)
+
+## FR-MCP-065 Direct Website URL Ingestion
+
+The server shall ingest remote website content directly from one URL (with optional bounded same-host crawling) into the context store and GraphRAG pipeline without pre-downloading files into `docs/external`.
+
+**Covered by:** `ContextController` (`POST /mcpserver/context/ingest-website`), `WebsiteIngestor`, `IngestionCoordinator`, `FwhMcpTools` (`context_ingest_website`), `ContextClient.IngestWebsiteAsync`

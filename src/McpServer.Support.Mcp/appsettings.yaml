@@ -32,11 +32,23 @@ Mcp:
   SessionsPath: docs/sessions
   UnifiedModelSchemaPath: docs/schemas/UnifiedModel.schema.json
   ExternalDocsPath: docs/external
+  MaxWebsitePages: 5000
+  MaxWebsiteDepth: 2
+  MaxWebsiteBytesPerPage: 262144
+  MaxWebsiteRedirects: 3
+  WebsiteRequestTimeoutSeconds: 120
+  WebsiteRequestMaxAttempts: 3
+  WebsiteRequestRetryDelayMilliseconds: 1000
+  WebsiteAllowedSchemes:
+  - http
+  - https
+  WebsiteBlockedHosts:
+  - localhost
   RepoAllowlist:
   - src/McpServer.Cqrs/**/*.cs
   - src/McpServer.Cqrs.Mvvm/**/*.cs
   GraphRag:
-    Enabled: false
+    Enabled: true
     EnhanceContextSearch: true
     RootPath: mcp-data/graphrag
     DefaultQueryMode: local

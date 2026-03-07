@@ -386,6 +386,27 @@ it "sets status to completed" \
         rm -f \"\$MCP_SESSION_FILE\"
     "
 
+it "deletes .mcpServer/session.yaml on completion" \
+    bash -c "
+        source '$SCRIPT_DIR/mcp-session.sh'
+        curl() { :; }
+        workspace=\$(mktemp -d /tmp/mcp-workspace-XXXXXX)
+        mkdir -p \"\$workspace/.mcpServer\"
+        echo '{}' > \"\$workspace/.mcpServer/session.yaml\"
+
+        MCP_BASE_URL='http://test:9999'
+        MCP_API_KEY='key'
+        MCP_WORKSPACE_PATH=\"\$workspace\"
+        MCP_SESSION_FILE=\$(mktemp /tmp/mcp-test-XXXXXX.json)
+
+        mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
+        mcp_session_complete
+
+        [[ ! -f \"\$workspace/.mcpServer/session.yaml\" ]]
+        rm -f \"\$MCP_SESSION_FILE\"
+        rm -rf \"\$workspace\"
+    "
+
 # -- Summary --
 
 teardown_suite

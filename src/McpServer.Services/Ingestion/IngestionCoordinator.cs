@@ -1,5 +1,6 @@
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Notifications;
+using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
@@ -20,6 +21,7 @@ public sealed class IngestionCoordinator
     private readonly ExternalDocsIngestor _externalDocsIngestor;
     private readonly GitHubIngestor _gitHubIngestor;
     private readonly IssueIngestor _issueIngestor;
+    private readonly IWebsiteIngestor _websiteIngestor;
     private readonly ISyncStatusStore _syncStatusStore;
     private readonly IEmbeddingService _embeddingService;
     private readonly IVectorIndexService _vectorIndexService;
@@ -35,6 +37,7 @@ public sealed class IngestionCoordinator
         ExternalDocsIngestor externalDocsIngestor,
         GitHubIngestor gitHubIngestor,
         IssueIngestor issueIngestor,
+        IWebsiteIngestor websiteIngestor,
         ISyncStatusStore syncStatusStore,
         IEmbeddingService embeddingService,
         IVectorIndexService vectorIndexService,
@@ -48,12 +51,144 @@ public sealed class IngestionCoordinator
         _externalDocsIngestor = externalDocsIngestor;
         _gitHubIngestor = gitHubIngestor;
         _issueIngestor = issueIngestor;
+        _websiteIngestor = websiteIngestor;
         _syncStatusStore = syncStatusStore;
         _embeddingService = embeddingService;
         _vectorIndexService = vectorIndexService;
         _eventBus = eventBus;
         _workspaceContext = workspaceContext;
         _logger = logger;
+    }
+
+    /// <summary>
+    /// FR-MCP-065, TR-MCP-INGEST-003: Ingests one website URL (and optional subpages) into the context store.
+    /// </summary>
+    /// <param name="request">Website ingestion request.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Structured ingestion result with per-URL outcomes.</returns>
+    public async Task<WebsiteIngestResult> IngestWebsiteAsync(WebsiteIngestRequest request, CancellationToken cancellationToken = default)
+    {
+        return await IngestWebsiteStreamingAsync(request, null, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// FR-MCP-065, TR-MCP-INGEST-003: Ingests website content and emits streaming progress updates.
+    /// </summary>
+    /// <param name="request">Website ingestion request.</param>
+    /// <param name="onProgress">Optional callback for progress events.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Structured ingestion result with per-URL outcomes.</returns>
+    public async Task<WebsiteIngestResult> IngestWebsiteStreamingAsync(
+        WebsiteIngestRequest request,
+        Func<WebsiteIngestProgressEvent, Task>? onProgress,
+        CancellationToken cancellationToken = default)
+    {
+        var startedAt = DateTime.UtcNow;
+        var result = new WebsiteIngestResult
+        {
+            RunId = Guid.NewGuid().ToString("N"),
+            StartedAtUtc = startedAt,
+            Status = "completed"
+        };
+
+        if (onProgress is not null)
+        {
+            await onProgress(new WebsiteIngestProgressEvent
+            {
+                RunId = result.RunId,
+                EventType = "started",
+                Status = result.Status,
+                PagesProcessed = 0,
+                DocumentsIngested = 0,
+                ChunksWritten = 0,
+                Message = "Website ingestion started."
+            }).ConfigureAwait(false);
+        }
+
+        var pagesProcessed = 0;
+        var pages = await _websiteIngestor.IngestAsync(
+            request,
+            async page =>
+            {
+                pagesProcessed++;
+                if (onProgress is null)
+                {
+                    return;
+                }
+
+                await onProgress(new WebsiteIngestProgressEvent
+                {
+                    RunId = result.RunId,
+                    EventType = "page",
+                    Status = result.Status,
+                    PagesProcessed = pagesProcessed,
+                    DocumentsIngested = 0,
+                    ChunksWritten = 0,
+                    UrlResult = page.Outcome,
+                    Message = $"Fetched {page.Outcome.Url} ({page.Outcome.Status})."
+                }).ConfigureAwait(false);
+            },
+            cancellationToken).ConfigureAwait(false);
+        var outcomes = new List<WebsiteIngestUrlResult>(capacity: pages.Count);
+        var docsIngested = 0;
+        var chunksWritten = 0;
+
+        foreach (var page in pages)
+        {
+            outcomes.Add(page.Outcome);
+            if (page.Document is null || page.Chunks.Count == 0)
+            {
+                continue;
+            }
+
+            await UpsertDocumentAndChunksAsync(page.Document, page.Chunks, cancellationToken).ConfigureAwait(false);
+            docsIngested++;
+            chunksWritten += page.Chunks.Count;
+
+            if (onProgress is not null)
+            {
+                await onProgress(new WebsiteIngestProgressEvent
+                {
+                    RunId = result.RunId,
+                    EventType = "persisted",
+                    Status = result.Status,
+                    PagesProcessed = pagesProcessed,
+                    DocumentsIngested = docsIngested,
+                    ChunksWritten = chunksWritten,
+                    UrlResult = page.Outcome,
+                    Message = $"Persisted {page.Outcome.Url}."
+                }).ConfigureAwait(false);
+            }
+        }
+
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+        if (outcomes.Any(o => string.Equals(o.Status, "error", StringComparison.OrdinalIgnoreCase)))
+        {
+            result.Status = "partial-failure";
+        }
+
+        result.DocumentsIngested = docsIngested;
+        result.ChunksWritten = chunksWritten;
+        result.UrlResults = outcomes;
+        result.CompletedAtUtc = DateTime.UtcNow;
+
+        if (onProgress is not null)
+        {
+            await onProgress(new WebsiteIngestProgressEvent
+            {
+                RunId = result.RunId,
+                EventType = "completed",
+                Status = result.Status,
+                PagesProcessed = pagesProcessed,
+                DocumentsIngested = result.DocumentsIngested,
+                ChunksWritten = result.ChunksWritten,
+                Result = result,
+                Message = "Website ingestion completed."
+            }).ConfigureAwait(false);
+        }
+
+        return result;
     }
 
     /// <summary>FR-SUPPORT-010: Runs full ingestion and returns result.</summary>

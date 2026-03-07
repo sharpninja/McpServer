@@ -1333,7 +1333,7 @@ mvp-mcp:
     title: '[READY] Allow website URL ingestion into GraphRAG without pre-downloading content'
     estimate: 24-32 hours
     note: Detailed implementation plan captured on 2026-03-07 for direct website URL ingestion into GraphRAG.
-    done: false
+    done: true
     description:
     - Allow ingestion from a website URL directly into GraphRAG, so users do not need to download and stage site content first.
     remaining: Implement the planned ingestion API/service/tooling changes, then validate end-to-end GraphRAG indexing from direct website URLs.
@@ -1352,33 +1352,33 @@ mvp-mcp:
     - 'Validation: cover unit/integration/client tests and run existing build/tests for Support.Mcp + Client + ingestion-related suites.'
     implementation-tasks:
     - task: Define request/response models for website ingestion and validation rules (URL scheme, limits, crawl options) in Models and controller contracts.
-      done: false
+      done: true
     - task: Add WebsiteIngestor service under src\\McpServer.Services\\Ingestion with URL normalization, HTTP fetch, HTML-to-text extraction, and content hashing.
-      done: false
+      done: true
     - task: Register WebsiteIngestor and dedicated HttpClient in Program.cs with timeout, user-agent, redirect, and max-response safeguards.
-      done: false
+      done: true
     - task: Extend IngestionOptions with website ingestion limits (max pages, max depth, max bytes/page, allowed schemes/hosts) and bind defaults from appsettings.
-      done: false
+      done: true
     - task: Add IngestionCoordinator path for on-demand website ingestion that reuses UpsertDocumentAndChunksAsync and emits structured SyncRun-like result data.
-      done: false
+      done: true
     - task: Implement REST endpoint (e.g., POST /mcpserver/context/ingest-website) in ContextController with robust validation and explicit error responses.
-      done: false
+      done: true
     - task: Expose MCP tool in McpServerMcpTools (e.g., context_ingest_website) mapped to the same coordinator path for agent workflows.
-      done: false
+      done: true
     - task: Extend McpServer.Client ContextModels + ContextClient with WebsiteIngest request/result types and a strongly typed API method.
-      done: false
+      done: true
     - task: Add SSRF-focused guards and tests for blocked targets (localhost, 127.0.0.0/8, RFC1918, link-local) and redirect handling.
-      done: false
+      done: true
     - task: Add unit tests for WebsiteIngestor content extraction, size/page limit enforcement, canonical source key generation, and dedup/update behavior.
-      done: false
+      done: true
     - task: Add integration tests for new REST endpoint success and failure paths plus source visibility in /mcpserver/context/sources.
-      done: false
+      done: true
     - task: Add MCP transport/tool contract tests validating new tool registration, parameter validation, and serialized result shape.
-      done: false
+      done: true
     - task: Update docs/Project requirements + testing mappings and docs/stdio-tool-contract.json / user docs to document the new capability.
-      done: false
+      done: true
     - task: 'Run validation commands: dotnet build src\\McpServer.Support.Mcp, dotnet build src\\McpServer.Client, and targeted ingestion/client tests.'
-      done: false
+      done: true
   medium-priority:
   - id: MVP-MCP-011
     title: Director manual TUI smoke validation follow-up
@@ -2415,3 +2415,32 @@ Documentation:
     description:
     - Create marketing-oriented documentation for McpServer.
     - "Cover: what McpServer is, key features, why it's needed, supported UI tooling (VS extension, Web UI, etc.), and value proposition for adopters."
+MCP:
+  high-priority:
+  - id: MCP-SESSION-020
+    title: Harden McpSession Powershell Module
+    note: Imported from mcp-session-020.md
+    done: false
+    description:
+    - Initialize-McpSession requires Agent and Model and persists/reuses session slug in .mcpServer/session.yaml.
+    - New-McpSessionLog reuses existing session slug (or initializes one), composes Session Log ID, and serializes session object.
+    - Members accepting Session object persist supplied session or load existing serialized session when omitted.
+    - Update McpSession.psm1 usage details.
+    - Apply equivalent session persistence logic to the bash helper script.
+    technical-details:
+    - 'Source: mcp-session-020.md'
+    - 'State file: .mcpServer/session.yaml'
+    - Reuse existing slug when API key, agent, and model match; when API key differs, reuse only if slug age is less than one hour.
+    implementation-tasks:
+    - task: 'Initialize-McpSession: require Agent/Model and implement slug discovery/reuse rules'
+      done: false
+    - task: Persist session slug to .mcpServer/session.yaml and return slug from initialization
+      done: false
+    - task: 'New-McpSessionLog: use persisted slug and serialize session object to session.yaml'
+      done: false
+    - task: 'Session-accepting members: load/persist serialized session object when session arg is absent/present'
+      done: false
+    - task: Update PowerShell usage docs and apply same logic to tools/bash/mcp-session.sh
+      done: false
+    - task: Update Pester Tests
+      done: false

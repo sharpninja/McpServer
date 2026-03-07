@@ -193,6 +193,10 @@ function Update-McpSessionLog {
     if ($Title)  { $Session.title  = $Title }
 
     Push-SessionLog $Session
+
+    if ($Session.status -eq "completed") {
+        Remove-McpSessionStateFile
+    }
 }
 
 function Get-McpSessionLog {
@@ -494,6 +498,29 @@ function Send-McpDialog {
 function Assert-Initialized {
     if (-not $script:McpBaseUrl) {
         throw "MCP session not initialized. Call Initialize-McpSession first."
+    }
+}
+
+function Get-McpSessionStatePath {
+    $workspacePath = $script:McpWorkspacePath
+    if ([string]::IsNullOrWhiteSpace($workspacePath)) {
+        $workspacePath = (Get-Location).Path
+    }
+
+    $stateDir = Join-Path $workspacePath ".mcpServer"
+    return Join-Path $stateDir "session.yaml"
+}
+
+function Remove-McpSessionStateFile {
+    $statePath = Get-McpSessionStatePath
+    if (-not (Test-Path -LiteralPath $statePath)) {
+        return
+    }
+
+    try {
+        Remove-Item -LiteralPath $statePath -Force -ErrorAction Stop
+    } catch {
+        Write-Warning "Failed to delete session state file '$statePath': $_"
     }
 }
 

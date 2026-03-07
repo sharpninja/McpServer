@@ -13,6 +13,7 @@ Describe 'McpSession Module' {
         InModuleScope McpSession {
             $script:McpBaseUrl = $null
             $script:McpApiKey  = $null
+            $script:McpWorkspacePath = $null
             $script:McpHeaders = @{}
         }
     }
@@ -52,7 +53,7 @@ workspace: demo
         }
 
         It 'discovers marker by walking up from current directory' {
-            $sub = Join-Path $TestDrive 'a' 'b' 'c'
+            $sub = Join-Path (Join-Path (Join-Path $TestDrive 'a') 'b') 'c'
             New-Item $sub -ItemType Directory -Force | Out-Null
             $marker = Join-Path $TestDrive 'AGENTS-README-FIRST.yaml'
             "baseUrl: http://walk:1234`napiKey: walk-key" | Set-Content $marker
@@ -66,7 +67,7 @@ workspace: demo
 
         It 'throws when marker file not found and no explicit params' {
             # Use a temp dir outside TestDrive to avoid walk-up finding markers from other tests
-            $isolatedDir = Join-Path ([System.IO.Path]::GetTempPath()) "pester-no-marker-$(New-Guid)"
+            $isolatedDir = Join-Path ([System.IO.Path]::GetTempPath()) ("pester-no-marker-" + [guid]::NewGuid().ToString())
             New-Item $isolatedDir -ItemType Directory -Force | Out-Null
             Push-Location $isolatedDir
             try {
@@ -355,6 +356,24 @@ workspace: demo
     Describe 'Update-McpSessionLog' {
         BeforeEach {
             Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
+        }
+
+        It 'deletes .mcpServer/session.yaml when status becomes completed' {
+            $workspaceRoot = Join-Path $TestDrive 'workspace'
+            $stateDir = Join-Path $workspaceRoot '.mcpServer'
+            $statePath = Join-Path $stateDir 'session.yaml'
+            New-Item $stateDir -ItemType Directory -Force | Out-Null
+            '{}' | Set-Content $statePath
+
+            InModuleScope McpSession -Parameters @{ WorkspaceRoot = $workspaceRoot } {
+                param($WorkspaceRoot)
+                $script:McpWorkspacePath = $WorkspaceRoot
+            }
+
+            $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
+            Update-McpSessionLog -Session $s -Status completed
+
+            Test-Path $statePath | Should -BeFalse
         }
 
         It 'updates lastUpdated timestamp' {

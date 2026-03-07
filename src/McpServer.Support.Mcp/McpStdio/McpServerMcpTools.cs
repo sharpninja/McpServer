@@ -214,6 +214,48 @@ public sealed class FwhMcpTools
         return JsonSerializer.Serialize(new { sources });
     }
 
+    /// <summary>FR-MCP-065, TR-MCP-INGEST-003: Ingest context directly from a website URL.</summary>
+    [McpServerTool(Name = "context_ingest_website"), Description("Ingest context directly from a website URL with bounded crawl controls.")]
+    public async Task<string> ContextIngestWebsite(
+        [Description("Website URL to ingest")] string url,
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Crawl same-host subpages")] bool includeSubpages = false,
+        [Description("Maximum pages to fetch (default 20)")] int maxPages = 20,
+        [Description("Maximum crawl depth when subpages are enabled (default 1)")] int maxDepth = 1,
+        [Description("Maximum bytes downloaded per page (default 262144)")] int maxBytesPerPage = 262144,
+        [Description("Force refresh semantics for existing documents")] bool forceRefresh = false,
+        [Description("Trigger GraphRAG index after ingest")] bool triggerGraphRagIndex = false,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _coordinator.IngestWebsiteAsync(new WebsiteIngestRequest
+        {
+            Url = url,
+            IncludeSubpages = includeSubpages,
+            MaxPages = maxPages,
+            MaxDepth = maxDepth,
+            MaxBytesPerPage = maxBytesPerPage,
+            ForceRefresh = forceRefresh,
+            TriggerGraphRagIndex = triggerGraphRagIndex,
+        }, cancellationToken).ConfigureAwait(false);
+
+        if (triggerGraphRagIndex)
+        {
+            try
+            {
+                await _graphRagService.IndexAsync(new GraphRagIndexRequest { Force = forceRefresh }, cancellationToken).ConfigureAwait(false);
+                result.GraphRagIndexed = true;
+            }
+            catch (Exception ex)
+            {
+                result.GraphRagIndexed = false;
+                result.GraphRagIndexError = ex.Message;
+            }
+        }
+
+        return JsonSerializer.Serialize(result);
+    }
+
     /// <summary>Get GraphRAG readiness status for the workspace.</summary>
     [McpServerTool(Name = "graphrag_status"), Description("Get GraphRAG status for the workspace (initialized, indexed, backend, last index time).")]
     public async Task<string> GraphRagStatus(
@@ -1421,4 +1463,3 @@ public sealed class FwhMcpTools
         }
     }
 }
-

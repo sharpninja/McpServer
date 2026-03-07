@@ -113,6 +113,81 @@ public sealed class ContextSource
     public string? IngestedAt { get; set; }
 }
 
+/// <summary>Request for website URL ingestion.</summary>
+public sealed class WebsiteIngestRequest
+{
+    [JsonPropertyName("url")]
+    public string Url { get; set; } = string.Empty;
+
+    [JsonPropertyName("includeSubpages")]
+    public bool IncludeSubpages { get; set; }
+
+    [JsonPropertyName("maxPages")]
+    public int MaxPages { get; set; } = 20;
+
+    [JsonPropertyName("maxDepth")]
+    public int MaxDepth { get; set; } = 1;
+
+    [JsonPropertyName("maxBytesPerPage")]
+    public int MaxBytesPerPage { get; set; } = 262_144;
+
+    [JsonPropertyName("forceRefresh")]
+    public bool ForceRefresh { get; set; }
+
+    [JsonPropertyName("triggerGraphRagIndex")]
+    public bool TriggerGraphRagIndex { get; set; }
+}
+
+/// <summary>Per-URL website ingestion outcome.</summary>
+public sealed class WebsiteIngestUrlResult
+{
+    [JsonPropertyName("url")]
+    public string Url { get; set; } = string.Empty;
+
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = string.Empty;
+
+    [JsonPropertyName("sourceKey")]
+    public string? SourceKey { get; set; }
+
+    [JsonPropertyName("message")]
+    public string? Message { get; set; }
+
+    [JsonPropertyName("chunksWritten")]
+    public int ChunksWritten { get; set; }
+}
+
+/// <summary>Website ingestion response payload.</summary>
+public sealed class WebsiteIngestResult
+{
+    [JsonPropertyName("runId")]
+    public string RunId { get; set; } = string.Empty;
+
+    [JsonPropertyName("startedAtUtc")]
+    public string? StartedAtUtc { get; set; }
+
+    [JsonPropertyName("completedAtUtc")]
+    public string? CompletedAtUtc { get; set; }
+
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = string.Empty;
+
+    [JsonPropertyName("documentsIngested")]
+    public int DocumentsIngested { get; set; }
+
+    [JsonPropertyName("chunksWritten")]
+    public int ChunksWritten { get; set; }
+
+    [JsonPropertyName("urlResults")]
+    public IReadOnlyList<WebsiteIngestUrlResult> UrlResults { get; set; } = [];
+
+    [JsonPropertyName("graphRagIndexed")]
+    public bool GraphRagIndexed { get; set; }
+
+    [JsonPropertyName("graphRagIndexError")]
+    public string? GraphRagIndexError { get; set; }
+}
+
 /// <summary>Request for GraphRAG query.</summary>
 public sealed class GraphRagQueryRequest
 {

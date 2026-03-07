@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ModelContextProtocol.Server;
@@ -134,6 +135,22 @@ public static class McpStdioHost
         });
         builder.Services.AddSingleton<ISyncStatusStore, SyncStatusStore>();
         builder.Services.AddSingleton<IWriteAuditLog, WriteAuditLog>();
+        builder.Services.AddHttpClient(WebsiteIngestor.HttpClientName, (sp, client) =>
+        {
+            var options = sp.GetRequiredService<IOptions<IngestionOptions>>().Value;
+            var timeoutSeconds = Math.Clamp(options.WebsiteRequestTimeoutSeconds, 5, 600);
+            client.Timeout = TimeSpan.FromSeconds(timeoutSeconds);
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("McpServer-WebsiteIngestor/1.0");
+        })
+        .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+        {
+            AllowAutoRedirect = false
+        });
+        builder.Services.Configure<HttpStandardResilienceOptions>(WebsiteIngestor.HttpClientName, options =>
+        {
+            options.TotalRequestTimeout.Timeout = TimeSpan.FromSeconds(180);
+            options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(180);
+        });
         builder.Services.AddSingleton<Chunker>();
         builder.Services.AddDataProtection();
         builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
@@ -166,6 +183,8 @@ public static class McpStdioHost
         builder.Services.AddScoped<SessionLogIngestor>();
         builder.Services.AddScoped<ExternalDocsIngestor>();
         builder.Services.AddScoped<GitHubIngestor>();
+        builder.Services.AddScoped<IssueIngestor>();
+        builder.Services.AddScoped<IWebsiteIngestor, WebsiteIngestor>();
         builder.Services.AddScoped<IngestionCoordinator>();
         builder.Services.AddScoped<IRepoFileService, RepoFileService>();
         builder.Services.AddScoped<ISessionLogService, SessionLogService>();

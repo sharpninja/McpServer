@@ -143,3 +143,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-085 | ✅ Complete | WorkspaceControllerTests.ApplyPolicy_ValidDirective_UpdatesWorkspaceBanList, WorkspaceControllerTests.ApplyPolicy_InvalidDirective_ReturnsBadRequest, WorkspacePolicyServiceTests |
 | TEST-MCP-086 | ✅ Complete | AuditedCopilotClientTests, WorkspacePolicyDirectiveParserTests |
 | TEST-MCP-087 | ✅ Complete | IngestionAllowlistContractTests.MarkerPromptTemplate_ContainsAvailableCapabilitiesSection |
+| FR-MCP-065 | ✅ Complete | ContextController (ingest-website), IngestionCoordinator.IngestWebsiteAsync, WebsiteIngestor, FwhMcpTools.context_ingest_website, ContextClient.IngestWebsiteAsync |
+| TR-MCP-INGEST-003 | ✅ Complete | WebsiteIngestor, IngestionOptions website limits, Program/McpStdioHost HttpClient registration, IngestionCoordinator website path |
+| TEST-MCP-088 | ✅ Complete | WebsiteIngestorTests, ContextControllerTests (ingest-website), McpTransportTests (context_ingest_website), ContextClientTests.IngestWebsiteAsync_PostsTypedRequest |

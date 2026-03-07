@@ -75,11 +75,11 @@ For MCP-compatible clients (e.g., Cursor), configure the STDIO transport:
 
 ### Available STDIO Tools
 
-See `docs/stdio-tool-contract.json` for the complete machine-readable manifest of all 21 tools.
+See `docs/stdio-tool-contract.json` for the complete machine-readable manifest of all 22 tools.
 
 Key tool categories:
 
-- **Context**: `context_search`, `context_pack`, `context_sources`
+- **Context**: `context_search`, `context_pack`, `context_sources`, `context_ingest_website`
 - **Repository**: `repo_read`, `repo_list`, `repo_write`
 - **Sync**: `sync_run`, `sync_status`
 - **TODO**: `todo_list`, `todo_get`, `todo_create`, `todo_update`, `todo_delete`

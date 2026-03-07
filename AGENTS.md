@@ -29,6 +29,9 @@ On every subsequent user message:
 - `docs/context/` — on-demand reference docs (schemas, module docs, compliance rules, action types)
 - `docs/Project/` — requirements docs, TODO.yaml, mapping matrices
 - `templates/` — prompt templates (loaded on demand)
+- `tools/powershell/McpContext.psm1` — PowerShell module for context ingestion/query workflows
+- `tools/powershell/McpContext.USER.md` — user-level guide for the McpContext module
+- `tools/powershell/McpContext.AGENT.md` — agent workflow instructions for the McpContext module
 
 ## Context Loading by Task Type
 
@@ -127,4 +130,3 @@ At regular intervals during long sessions (~10 interactions):
 
 - Do not use table-style output in responses.
 - Use concise bullets or short paragraphs instead.
-

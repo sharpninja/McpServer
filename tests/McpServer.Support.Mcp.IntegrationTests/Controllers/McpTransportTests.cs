@@ -137,6 +137,59 @@ public sealed class McpTransportTests : IClassFixture<CustomWebApplicationFactor
         Assert.Contains("answer", queryBody, StringComparison.OrdinalIgnoreCase);
     }
 
+    [Fact]
+    public async Task McpTransport_ContextIngestWebsiteTool_ReturnsStructuredResult()
+    {
+        await InitializeMcpAsync().ConfigureAwait(true);
+
+        var call = new
+        {
+            jsonrpc = "2.0",
+            id = 5,
+            method = "tools/call",
+            @params = new
+            {
+                name = "context_ingest_website",
+                arguments = new
+                {
+                    workspacePath = @"E:\github\McpServer",
+                    url = "http://localhost/test",
+                    maxPages = 1,
+                    maxDepth = 0,
+                    maxBytesPerPage = 4096
+                }
+            }
+        };
+
+        var body = await SendMcpRequestAsync(call).ConfigureAwait(true);
+        Assert.Contains("urlResults", body, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("status", body, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task McpTransport_ContextIngestWebsiteTool_MissingUrl_ReturnsErrorPayload()
+    {
+        await InitializeMcpAsync().ConfigureAwait(true);
+
+        var call = new
+        {
+            jsonrpc = "2.0",
+            id = 6,
+            method = "tools/call",
+            @params = new
+            {
+                name = "context_ingest_website",
+                arguments = new
+                {
+                    workspacePath = @"E:\github\McpServer"
+                }
+            }
+        };
+
+        var body = await SendMcpRequestAsync(call).ConfigureAwait(true);
+        Assert.Contains("error", body, StringComparison.OrdinalIgnoreCase);
+    }
+
     private async Task InitializeMcpAsync()
     {
         var initRequest = new

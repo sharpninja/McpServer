@@ -99,6 +99,10 @@ mcp_session_update() {
        ' "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
 
     _mcp_session_push
+
+    if [[ "$status" == "completed" ]]; then
+        _mcp_session_delete_state
+    fi
 }
 
 mcp_session_complete() {
@@ -321,4 +325,10 @@ _mcp_session_normalize() {
         | .entryCount = (.entries | length)
         | .totalTokens = (([.entries[]?.tokenCount // 0] | add) // 0)
     ' "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
+}
+
+_mcp_session_delete_state() {
+    local workspace_path="${MCP_WORKSPACE_PATH:-$(pwd)}"
+    local state_file="${workspace_path}/.mcpServer/session.yaml"
+    rm -f "$state_file"
 }
