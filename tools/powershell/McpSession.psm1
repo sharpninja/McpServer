@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    MCP Session Log PowerShell module — cmdlets for the /mcpserver/sessionlog API.
+    MCP Session Log PowerShell module - cmdlets for the /mcpserver/sessionlog API.
 
 .DESCRIPTION
     Provides cmdlets to create, update, query, and manage session logs on an MCP Context Server.
@@ -69,7 +69,7 @@ function Initialize-McpSession {
     # Verify connectivity
     try {
         $health = Invoke-RestMethod -Uri "$($script:McpBaseUrl)/health" -TimeoutSec 5
-        Write-Host "Connected to MCP server at $($script:McpBaseUrl) — status: $($health.status)" -ForegroundColor Green
+        Write-Host "Connected to MCP server at $($script:McpBaseUrl) - status: $($health.status)" -ForegroundColor Green
     } catch {
         Write-Warning "MCP server at $($script:McpBaseUrl) is not responding: $_"
     }
