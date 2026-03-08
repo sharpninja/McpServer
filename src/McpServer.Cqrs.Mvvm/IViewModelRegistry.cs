@@ -181,7 +181,7 @@ public sealed class ViewModelRegistry : IViewModelRegistry
                 $"Fallback method '{viewModel.GetType().Name}.{method.Name}' must return Task.");
         }
 
-        await task.ConfigureAwait(false);
+        await task.ConfigureAwait(true);
     }
 
     private static object?[] BuildInvocationArguments(object viewModel, MethodInfo method, CancellationToken ct)

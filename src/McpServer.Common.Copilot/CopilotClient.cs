@@ -22,7 +22,7 @@ public sealed class CopilotClient(
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt);
         var opts = options ?? defaultOptions.CurrentValue;
-        return await RunProcessAsync(prompt, opts, cancellationToken).ConfigureAwait(false);
+        return await RunProcessAsync(prompt, opts, cancellationToken).ConfigureAwait(true);
     }
 
     /// <inheritdoc />
@@ -33,7 +33,7 @@ public sealed class CopilotClient(
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(prompt);
         var opts = options ?? defaultOptions.CurrentValue;
-        var result = await RunProcessAsync(prompt, opts, cancellationToken).ConfigureAwait(false);
+        var result = await RunProcessAsync(prompt, opts, cancellationToken).ConfigureAwait(true);
 
         // Attempt typed deserialization
         var (contentType, parsed) = ContentParser.DetectAndParse<T>(result.Body);
@@ -112,7 +112,7 @@ public sealed class CopilotClient(
                 string? line;
                 try
                 {
-                    line = await reader.ReadLineAsync(timeoutCts.Token).ConfigureAwait(false);
+                    line = await reader.ReadLineAsync(timeoutCts.Token).ConfigureAwait(true);
                 }
                 catch (OperationCanceledException ex)
                 {
@@ -139,7 +139,7 @@ public sealed class CopilotClient(
 
             try
             {
-                await proc.WaitForExitAsync(CancellationToken.None).WaitAsync(TimeSpan.FromSeconds(5)).ConfigureAwait(false);
+                await proc.WaitForExitAsync(CancellationToken.None).WaitAsync(TimeSpan.FromSeconds(5)).ConfigureAwait(true);
             }
             catch (TimeoutException ex)
             {
@@ -147,7 +147,7 @@ public sealed class CopilotClient(
             }
 
             // Log stderr if present (best-effort, don't block on timeout).
-            var stderr = await ReadPartialAsync(stderrTask).ConfigureAwait(false);
+            var stderr = await ReadPartialAsync(stderrTask).ConfigureAwait(true);
             if (!string.IsNullOrWhiteSpace(stderr))
                 logger.LogWarning("Copilot CLI stderr: {Stderr}", stderr.Trim());
 
@@ -208,15 +208,15 @@ public sealed class CopilotClient(
 
                 try
                 {
-                    await proc.WaitForExitAsync(cts.Token).ConfigureAwait(false);
+                    await proc.WaitForExitAsync(cts.Token).ConfigureAwait(true);
                 }
                 catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
                 {
                     // Timeout — kill process
                     logger.LogWarning("Copilot CLI timed out after {Timeout}", timeout);
                     TryKill(proc);
-                    var partialStdout = await ReadPartialAsync(stdoutTask).ConfigureAwait(false);
-                    var partialStderr = await ReadPartialAsync(stderrTask).ConfigureAwait(false);
+                    var partialStdout = await ReadPartialAsync(stdoutTask).ConfigureAwait(true);
+                    var partialStderr = await ReadPartialAsync(stderrTask).ConfigureAwait(true);
                     return new CopilotResult
                     {
                         State = CopilotResultState.Timeout,
@@ -227,11 +227,11 @@ public sealed class CopilotClient(
             }
             else
             {
-                await proc.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
+                await proc.WaitForExitAsync(cancellationToken).ConfigureAwait(true);
             }
 
-            var stdout = await stdoutTask.ConfigureAwait(false);
-            var stderr = await stderrTask.ConfigureAwait(false);
+            var stdout = await stdoutTask.ConfigureAwait(true);
+            var stderr = await stderrTask.ConfigureAwait(true);
             var body = stdout.Trim();
             var (contentType, parsed) = ContentParser.DetectAndParse(body);
 
@@ -309,7 +309,7 @@ public sealed class CopilotClient(
     {
         try
         {
-            return await readTask.WaitAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
+            return await readTask.WaitAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(true);
         }
         catch (TimeoutException ex)
         {

@@ -115,10 +115,10 @@ public sealed class CqrsRelayCommand<TResult> : IAsyncRelayCommand, INotifyPrope
             var command = _commandFactory(parameter);
             _executionTask = Task.Run(async () =>
             {
-                LastResult = await _dispatcher.SendAsync(command, ct).ConfigureAwait(false);
+                LastResult = await _dispatcher.SendAsync(command, ct).ConfigureAwait(true);
             }, ct);
 
-            await _executionTask.ConfigureAwait(false);
+            await _executionTask.ConfigureAwait(true);
             return LastResult!.Value;
         }
         finally
@@ -247,10 +247,10 @@ public sealed class CqrsQueryCommand<TResult> : IAsyncRelayCommand, INotifyPrope
             var query = _queryFactory(parameter);
             _executionTask = Task.Run(async () =>
             {
-                LastResult = await _dispatcher.QueryAsync(query, ct).ConfigureAwait(false);
+                LastResult = await _dispatcher.QueryAsync(query, ct).ConfigureAwait(true);
             }, ct);
 
-            await _executionTask.ConfigureAwait(false);
+            await _executionTask.ConfigureAwait(true);
             return LastResult!.Value;
         }
         finally

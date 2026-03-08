@@ -56,7 +56,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
 
-        await _gate.WaitAsync(ct).ConfigureAwait(false);
+        await _gate.WaitAsync(ct).ConfigureAwait(true);
         try
         {
             while (!ct.IsCancellationRequested)
@@ -64,7 +64,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
                 string? line;
                 try
                 {
-                    line = await _process.StandardOutput.ReadLineAsync(ct).ConfigureAwait(false);
+                    line = await _process.StandardOutput.ReadLineAsync(ct).ConfigureAwait(true);
                 }
                 catch (OperationCanceledException)
                 {
@@ -95,8 +95,8 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
         const string EscChars = "\x1B\x1B\x1B";
         try
         {
-            await _process.StandardInput!.WriteAsync(EscChars.AsMemory(), ct).ConfigureAwait(false);
-            await _process.StandardInput!.FlushAsync(ct).ConfigureAwait(false);
+            await _process.StandardInput!.WriteAsync(EscChars.AsMemory(), ct).ConfigureAwait(true);
+            await _process.StandardInput!.FlushAsync(ct).ConfigureAwait(true);
         }
         catch (Exception ex) when (ex is IOException or ObjectDisposedException or InvalidOperationException)
         {
@@ -112,17 +112,17 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
         if (_process.HasExited)
             return new CopilotResult { State = CopilotResultState.Error, Body = "Copilot process has exited." };
 
-        await _gate.WaitAsync(ct).ConfigureAwait(false);
+        await _gate.WaitAsync(ct).ConfigureAwait(true);
         try
         {
             try
             {
-                await _process.StandardInput!.WriteLineAsync(prompt.AsMemory(), ct).ConfigureAwait(false);
-                await _process.StandardInput!.FlushAsync(ct).ConfigureAwait(false);
+                await _process.StandardInput!.WriteLineAsync(prompt.AsMemory(), ct).ConfigureAwait(true);
+                await _process.StandardInput!.FlushAsync(ct).ConfigureAwait(true);
             }
             catch (Exception ex) when (ex is IOException or ObjectDisposedException or InvalidOperationException)
             {
-                await CaptureRemainingStdoutTailUnsafeAsync(ct).ConfigureAwait(false);
+                await CaptureRemainingStdoutTailUnsafeAsync(ct).ConfigureAwait(true);
                 LogExitDiagnostics("stdin-write-failed", ex);
                 _logger.LogWarning(ex, "Interactive session stdin write failed; Copilot process is no longer writable.");
                 return new CopilotResult
@@ -132,7 +132,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
                 };
             }
 
-            return await ReadUntilSentinelAsync(ct).ConfigureAwait(false);
+            return await ReadUntilSentinelAsync(ct).ConfigureAwait(true);
         }
         finally
         {
@@ -148,17 +148,17 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
         ObjectDisposedException.ThrowIf(_disposed, this);
         if (_process.HasExited) yield break;
 
-        await _gate.WaitAsync(ct).ConfigureAwait(false);
+        await _gate.WaitAsync(ct).ConfigureAwait(true);
         try
         {
             try
             {
-                await _process.StandardInput!.WriteLineAsync(prompt.AsMemory(), ct).ConfigureAwait(false);
-                await _process.StandardInput!.FlushAsync(ct).ConfigureAwait(false);
+                await _process.StandardInput!.WriteLineAsync(prompt.AsMemory(), ct).ConfigureAwait(true);
+                await _process.StandardInput!.FlushAsync(ct).ConfigureAwait(true);
             }
             catch (Exception ex) when (ex is IOException or ObjectDisposedException or InvalidOperationException)
             {
-                await CaptureRemainingStdoutTailUnsafeAsync(ct).ConfigureAwait(false);
+                await CaptureRemainingStdoutTailUnsafeAsync(ct).ConfigureAwait(true);
                 LogExitDiagnostics("stdin-streaming-write-failed", ex);
                 _logger.LogWarning(ex, "Interactive session streaming write failed; Copilot process is no longer writable.");
                 yield break;
@@ -169,7 +169,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
                 string? line;
                 try
                 {
-                    line = await _process.StandardOutput.ReadLineAsync(ct).ConfigureAwait(false);
+                    line = await _process.StandardOutput.ReadLineAsync(ct).ConfigureAwait(true);
                 }
                 catch (OperationCanceledException)
                 {
@@ -203,7 +203,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
             await _process.StandardInput!.FlushAsync();
 
             using var cts = new CancellationTokenSource(timeout);
-            await ReadUntilSentinelAsync(cts.Token).ConfigureAwait(false);
+            await ReadUntilSentinelAsync(cts.Token).ConfigureAwait(true);
         }
         catch (OperationCanceledException)
         {
@@ -230,7 +230,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
         {
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
             if (!_process.HasExited)
-                await _process.WaitForExitAsync(cts.Token).ConfigureAwait(false);
+                await _process.WaitForExitAsync(cts.Token).ConfigureAwait(true);
         }
         catch
         {
@@ -239,7 +239,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
 
         try
         {
-            await _stderrDrainTask.ConfigureAwait(false);
+            await _stderrDrainTask.ConfigureAwait(true);
         }
         catch (ObjectDisposedException)
         {
@@ -248,7 +248,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
 
         try
         {
-            await _exitMonitorTask.ConfigureAwait(false);
+            await _exitMonitorTask.ConfigureAwait(true);
         }
         catch (ObjectDisposedException)
         {
@@ -270,7 +270,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
             string? line;
             try
             {
-                line = await _process.StandardOutput.ReadLineAsync(ct).ConfigureAwait(false);
+                line = await _process.StandardOutput.ReadLineAsync(ct).ConfigureAwait(true);
             }
             catch (OperationCanceledException)
             {
@@ -318,7 +318,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
         {
             while (true)
             {
-                var line = await _process.StandardError.ReadLineAsync().ConfigureAwait(false);
+                var line = await _process.StandardError.ReadLineAsync().ConfigureAwait(true);
                 if (line is null) break;
                 if (!string.IsNullOrWhiteSpace(line))
                 {
@@ -341,8 +341,8 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
     {
         try
         {
-            await _process.WaitForExitAsync(CancellationToken.None).ConfigureAwait(false);
-            await CaptureRemainingStdoutTailAsync(CancellationToken.None).ConfigureAwait(false);
+            await _process.WaitForExitAsync(CancellationToken.None).ConfigureAwait(true);
+            await CaptureRemainingStdoutTailAsync(CancellationToken.None).ConfigureAwait(true);
             LogExitDiagnostics("process-exited", exception: null);
         }
         catch (ObjectDisposedException)
@@ -363,11 +363,11 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
         var acquired = false;
         try
         {
-            acquired = await _gate.WaitAsync(TimeSpan.FromMilliseconds(500), cancellationToken).ConfigureAwait(false);
+            acquired = await _gate.WaitAsync(TimeSpan.FromMilliseconds(500), cancellationToken).ConfigureAwait(true);
             if (!acquired)
                 return;
 
-            await CaptureRemainingStdoutTailUnsafeAsync(cancellationToken).ConfigureAwait(false);
+            await CaptureRemainingStdoutTailUnsafeAsync(cancellationToken).ConfigureAwait(true);
         }
         catch (ObjectDisposedException)
         {
@@ -386,7 +386,7 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
         {
             using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             timeoutCts.CancelAfter(TimeSpan.FromMilliseconds(500));
-            var remaining = await _process.StandardOutput.ReadToEndAsync(timeoutCts.Token).ConfigureAwait(false);
+            var remaining = await _process.StandardOutput.ReadToEndAsync(timeoutCts.Token).ConfigureAwait(true);
             AppendOutputTailBlock(_stdoutTail, remaining);
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)

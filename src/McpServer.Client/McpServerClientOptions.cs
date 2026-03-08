@@ -68,7 +68,7 @@ public sealed class McpServerClientOptions
     /// If you supply your own <see cref="System.Net.Http.HttpClient"/>, this property is
     /// ignored — configure the timeout directly on your <see cref="System.Net.Http.HttpClient"/> instead.
     /// </remarks>
-    public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(30);
+    public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(300);
 
     /// <summary>
     /// Optional logger factory for diagnostic logging. When set, each sub-client creates
