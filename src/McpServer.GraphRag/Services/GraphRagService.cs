@@ -1,9 +1,10 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Linq;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
@@ -18,7 +19,7 @@ internal sealed class GraphRagService : IGraphRagService
 {
     private const string StatusFileName = "graphrag-status.json";
     private const string ReadyArtifactFileName = "output/graphrag-index-ready.json";
-    private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web) { WriteIndented = true };
+    private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web) { WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
     private static readonly ConcurrentDictionary<string, SemaphoreSlim> s_workspaceIndexLocks = new(StringComparer.OrdinalIgnoreCase);
     private static readonly ConcurrentDictionary<string, string> s_workspaceActiveJobs = new(StringComparer.OrdinalIgnoreCase);
 

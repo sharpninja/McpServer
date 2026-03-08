@@ -70,7 +70,7 @@ public sealed class VoiceConversationOptions
     /// <summary>
     /// Minutes of inactivity before a voice session is considered idle and eligible for cleanup.
     /// </summary>
-    public int SessionIdleTimeoutMinutes { get; set; } = 15;
+    public TimeSpan SessionIdleTimeoutMinutes { get; set; } = TimeSpan.FromMinutes(15);
 
     /// <summary>
     /// Command sent to the Copilot subprocess before terminating an idle session.

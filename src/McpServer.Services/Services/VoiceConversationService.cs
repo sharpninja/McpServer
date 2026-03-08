@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using McpServer.Common.Copilot;
 using McpServer.Support.Mcp.Native;
@@ -20,7 +21,8 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
 {
     private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web)
     {
-        WriteIndented = false
+        WriteIndented = false,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
     };
 
     private readonly ConcurrentDictionary<string, VoiceSessionState> _sessions = new(StringComparer.OrdinalIgnoreCase);
@@ -450,7 +452,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         EnsureEnabled();
         ArgumentException.ThrowIfNullOrWhiteSpace(deviceId);
 
-        var idleTimeout = TimeSpan.FromMinutes(_options.CurrentValue.SessionIdleTimeoutMinutes);
+        var idleTimeout = _options.CurrentValue.SessionIdleTimeoutMinutes;
         var now = DateTimeOffset.UtcNow;
 
         foreach (var state in _sessions.Values)
@@ -880,6 +882,7 @@ public sealed partial class VoiceConversationService
         var lineCount = 0;
         await foreach (var line in lineStream!.ConfigureAwait(false))
         {
+            //var timestamped = $"{DateTimeOffset.Now.ToLocalTime():s}: {line}\n";
             lineCount++;
             _logger.LogDebug("Stream line #{LineCount} for {SessionId}: {Line}", lineCount, state.SessionId, line.Length > 100 ? line[..100] + "..." : line);
             yield return new VoiceTurnStreamEvent { Type = "chunk", Text = line + "\n" };
@@ -1712,7 +1715,7 @@ public sealed partial class VoiceConversationService
         try
         {
             var opts = _options.CurrentValue;
-            var timeout = TimeSpan.FromMinutes(opts.SessionIdleTimeoutMinutes);
+            var timeout = opts.SessionIdleTimeoutMinutes;
             var now = DateTimeOffset.UtcNow;
             var staleIds = new List<string>();
 

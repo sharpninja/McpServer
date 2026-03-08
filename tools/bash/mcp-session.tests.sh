@@ -48,7 +48,7 @@ it "reads baseUrl from marker file" \
     bash -c "
         source '$SCRIPT_DIR/mcp-session.sh'
         curl() { echo '{\"status\":\"ok\"}'; }
-        mcp_session_init '$TEST_TMPDIR/AGENTS-README-FIRST.yaml'
+        mcp_session_init 'Copilotcli' 'gpt-5.3-codex' '$TEST_TMPDIR/AGENTS-README-FIRST.yaml'
         [[ \"\$MCP_BASE_URL\" == 'http://localhost:9999' ]]
     "
 
@@ -56,7 +56,7 @@ it "reads apiKey from marker file" \
     bash -c "
         source '$SCRIPT_DIR/mcp-session.sh'
         curl() { echo '{\"status\":\"ok\"}'; }
-        mcp_session_init '$TEST_TMPDIR/AGENTS-README-FIRST.yaml'
+        mcp_session_init 'Copilotcli' 'gpt-5.3-codex' '$TEST_TMPDIR/AGENTS-README-FIRST.yaml'
         [[ \"\$MCP_API_KEY\" == 'test-api-key-abc123' ]]
     "
 
@@ -64,14 +64,20 @@ it "creates session temp file" \
     bash -c "
         source '$SCRIPT_DIR/mcp-session.sh'
         curl() { echo '{\"status\":\"ok\"}'; }
-        mcp_session_init '$TEST_TMPDIR/AGENTS-README-FIRST.yaml'
+        mcp_session_init 'Copilotcli' 'gpt-5.3-codex' '$TEST_TMPDIR/AGENTS-README-FIRST.yaml'
         [[ -n \"\$MCP_SESSION_FILE\" && \"\$MCP_SESSION_FILE\" == /tmp/mcp-session-*.json ]]
+    "
+
+it "fails when agent/model are missing" \
+    bash -c "
+        source '$SCRIPT_DIR/mcp-session.sh'
+        ! mcp_session_init '' '' '$TEST_TMPDIR/AGENTS-README-FIRST.yaml' 2>/dev/null
     "
 
 it "fails when marker file not found" \
     bash -c "
         source '$SCRIPT_DIR/mcp-session.sh'
-        ! mcp_session_init '/nonexistent/path/marker.yaml' 2>/dev/null
+        ! mcp_session_init 'Copilotcli' 'gpt-5.3-codex' '/nonexistent/path/marker.yaml' 2>/dev/null
     "
 
 it "discovers marker by walking up directories" \
@@ -80,7 +86,7 @@ it "discovers marker by walking up directories" \
         cd '$TEST_TMPDIR/a/b/c'
         source '$SCRIPT_DIR/mcp-session.sh'
         curl() { echo '{\"status\":\"ok\"}'; }
-        mcp_session_init
+        mcp_session_init 'Copilotcli' 'gpt-5.3-codex'
         [[ \"\$MCP_BASE_URL\" == 'http://localhost:9999' ]]
     "
 

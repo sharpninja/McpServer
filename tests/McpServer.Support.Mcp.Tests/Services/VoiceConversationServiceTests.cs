@@ -94,7 +94,7 @@ public sealed class VoiceConversationServiceTests
             {
                 Enabled = true,
                 CopilotModel = "gpt-5.3-codex",
-                SessionIdleTimeoutMinutes = 15,
+                SessionIdleTimeoutMinutes = TimeSpan.FromMinutes(15),
             }),
             CreateOptionsMonitor(new TodoPromptOptions { BaseUrl = "http://localhost:7147" }),
             hostEnvironment,

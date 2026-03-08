@@ -8,7 +8,7 @@
 
 .NOTES
     Usage:  Import-Module ./McpSession.psm1
-            Initialize-McpSession                          # reads marker, sets connection
+            Initialize-McpSession -Agent "Copilotcli" -Model "gpt-5.3-codex"  # reads marker, sets connection, persists/reuses session slug
             $s = New-McpSessionLog -Title "My session"     # creates session
             Add-McpSessionTurn -Session $s -QueryTitle "Fix bug" -QueryText "Fix the auth bug" -Status in_progress
             Send-McpDialog -Session $s -RequestId req-001 -Content "Analyzing the issue..." -Category reasoning
@@ -20,18 +20,26 @@ $script:McpBaseUrl       = $null
 $script:McpApiKey        = $null
 $script:McpWorkspacePath = $null
 $script:McpHeaders       = @{}
+$script:McpSessionAgent  = $null
+$script:McpSessionModel  = $null
+$script:McpSessionSlug   = $null
 
 # ─── Connection ──────────────────────────────────────────────────────────────
 
 function Initialize-McpSession {
     <#
     .SYNOPSIS  Read the AGENTS-README-FIRST.yaml marker and configure the module connection.
+    .PARAMETER Agent       Canonical agent prefix used in the session slug.
+    .PARAMETER Model       Model identifier used in the session slug.
     .PARAMETER MarkerPath  Path to the marker file. Defaults to searching upward from the current directory.
     .PARAMETER BaseUrl     Override the base URL instead of reading from the marker.
     .PARAMETER ApiKey      Override the API key instead of reading from the marker.
+    .OUTPUTS               String session slug persisted/reused in .mcpServer/session.yaml.
     #>
     [CmdletBinding()]
     param(
+        [Parameter(Mandatory)][string]$Agent,
+        [Parameter(Mandatory)][string]$Model,
         [string]$MarkerPath,
         [string]$BaseUrl,
         [string]$ApiKey
@@ -73,6 +81,11 @@ function Initialize-McpSession {
     } catch {
         Write-Warning "MCP server at $($script:McpBaseUrl) is not responding: $_"
     }
+
+    $script:McpSessionAgent = $Agent.Trim()
+    $script:McpSessionModel = $Model.Trim()
+    $script:McpSessionSlug = Initialize-McpSessionSlugState -Agent $script:McpSessionAgent -Model $script:McpSessionModel
+    return $script:McpSessionSlug
 }
 
 # ─── Session object ──────────────────────────────────────────────────────────
@@ -144,7 +157,11 @@ function New-McpSessionLog {
     Assert-Initialized
 
     if (-not $SessionId) {
-        $SessionId = New-McpSessionLogSlug -Agent $SourceType -Model $Model
+        if (-not [string]::IsNullOrWhiteSpace($script:McpSessionSlug)) {
+            $SessionId = $script:McpSessionSlug
+        } else {
+            $SessionId = New-McpSessionLogSlug -Agent $SourceType -Model $Model
+        }
     }
 
     $now = (Get-Date).ToUniversalTime().ToString("o")
@@ -164,6 +181,7 @@ function New-McpSessionLog {
     $session | Add-Member -NotePropertyName turns -NotePropertyValue $session.entries -Force
 
     Push-SessionLog $session
+    Save-McpSessionState -Session $session
     return $session
 }
 
@@ -176,11 +194,12 @@ function Update-McpSessionLog {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory)][PSCustomObject]$Session,
+        [PSCustomObject]$Session,
         [ValidateSet("in_progress","completed")][string]$Status,
         [string]$Title
     )
     Assert-Initialized
+    $Session = Resolve-McpSession -Session $Session
 
     $turns = Get-McpSessionTurnList -Session $Session
     $Session.lastUpdated = (Get-Date).ToUniversalTime().ToString("o")
@@ -196,6 +215,8 @@ function Update-McpSessionLog {
 
     if ($Session.status -eq "completed") {
         Remove-McpSessionStateFile
+    } else {
+        Save-McpSessionState -Session $Session
     }
 }
 
@@ -228,6 +249,15 @@ function Get-McpSessionTurnList {
     )
 
     if ($Session.PSObject.Properties.Name -contains "entries") {
+        $entriesValue = $Session.entries
+        if (-not ($entriesValue -is [System.Collections.Generic.List[object]])) {
+            $entriesList = [System.Collections.Generic.List[object]]::new()
+            foreach ($item in @($entriesValue)) {
+                [void]$entriesList.Add($item)
+            }
+            $Session.entries = $entriesList
+        }
+
         if (-not ($Session.PSObject.Properties.Name -contains "turns")) {
             $Session | Add-Member -NotePropertyName turns -NotePropertyValue $Session.entries -Force
         } else {
@@ -265,7 +295,7 @@ function Add-McpSessionTurn {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory)][PSCustomObject]$Session,
+        [PSCustomObject]$Session,
         [string]$RequestId,
         [Parameter(Mandatory)][string]$QueryTitle,
         [Parameter(Mandatory)][string]$QueryText,
@@ -286,6 +316,8 @@ function Add-McpSessionTurn {
         [string[]]$Blockers = @(),
         [switch]$NoPush
     )
+
+    $Session = Resolve-McpSession -Session $Session
 
     $turns = Get-McpSessionTurnList -Session $Session
     if (-not $RequestId) { $RequestId = "req-$('{0:D3}' -f ($turns.Count + 1))" }
@@ -319,6 +351,8 @@ function Add-McpSessionTurn {
 
     if (-not $NoPush) {
         Update-McpSessionLog -Session $Session
+    } else {
+        Save-McpSessionState -Session $Session
     }
     return $turn
 }
@@ -351,6 +385,15 @@ function Set-McpSessionTurn {
         [string[]]$Blockers,
         [switch]$NoPush
     )
+
+    $resolvedSession = Resolve-McpSession -Session $Session -AllowMissing
+    if (-not $Session -and $resolvedSession -and $Turn.PSObject.Properties.Name -contains 'requestId') {
+        $candidateTurns = Get-McpSessionTurnList -Session $resolvedSession
+        $match = @($candidateTurns | Where-Object { $_.requestId -eq $Turn.requestId } | Select-Object -First 1)
+        if ($match.Count -gt 0) {
+            $Turn = $match[0]
+        }
+    }
 
     if ($Response)        { $Turn.response = $Response }
     if ($Interpretation)  { $Turn.interpretation = $Interpretation }
@@ -385,8 +428,10 @@ function Set-McpSessionTurn {
         foreach ($b in $Blockers) { $list.Add($b) }
     }
 
-    if ($Session -and -not $NoPush) {
-        Update-McpSessionLog -Session $Session
+    if ($resolvedSession -and -not $NoPush) {
+        Update-McpSessionLog -Session $resolvedSession
+    } elseif ($resolvedSession) {
+        Save-McpSessionState -Session $resolvedSession
     }
 }
 
@@ -425,8 +470,11 @@ function Add-McpAction {
         filePath    = $FilePath
     }
     $Turn.actions.Add($action)
-    if ($Session -and -not $NoPush) {
-        Update-McpSessionLog -Session $Session
+    $resolvedSession = Resolve-McpSession -Session $Session -AllowMissing
+    if ($resolvedSession -and -not $NoPush) {
+        Update-McpSessionLog -Session $resolvedSession
+    } elseif ($resolvedSession) {
+        Save-McpSessionState -Session $resolvedSession
     }
     return $action
 }
@@ -455,8 +503,11 @@ function Add-McpTurnDetail {
 
     $list = Get-McpSessionTurnStringList -Turn $Turn -Field $Field
     $list.Add($Value)
-    if ($Session -and -not $NoPush) {
-        Update-McpSessionLog -Session $Session
+    $resolvedSession = Resolve-McpSession -Session $Session -AllowMissing
+    if ($resolvedSession -and -not $NoPush) {
+        Update-McpSessionLog -Session $resolvedSession
+    } elseif ($resolvedSession) {
+        Save-McpSessionState -Session $resolvedSession
     }
 }
 
@@ -473,13 +524,14 @@ function Send-McpDialog {
     #>
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory)][PSCustomObject]$Session,
+        [PSCustomObject]$Session,
         [Parameter(Mandatory)][string]$RequestId,
         [Parameter(Mandatory)][string]$Content,
         [ValidateSet("model","tool","system","user")][string]$Role = "model",
         [ValidateSet("reasoning","tool_call","tool_result","observation","decision")][string]$Category = "reasoning"
     )
     Assert-Initialized
+    $Session = Resolve-McpSession -Session $Session
 
     $item = @{
         timestamp = (Get-Date).ToUniversalTime().ToString("o")
@@ -497,7 +549,7 @@ function Send-McpDialog {
 
 function Assert-Initialized {
     if (-not $script:McpBaseUrl) {
-        throw "MCP session not initialized. Call Initialize-McpSession first."
+        throw "MCP session not initialized. Call Initialize-McpSession -Agent <Agent> -Model <Model> first."
     }
 }
 
@@ -509,6 +561,149 @@ function Get-McpSessionStatePath {
 
     $stateDir = Join-Path $workspacePath ".mcpServer"
     return Join-Path $stateDir "session.yaml"
+}
+
+function Get-McpSessionState {
+    $statePath = Get-McpSessionStatePath
+    if (-not (Test-Path -LiteralPath $statePath)) {
+        return $null
+    }
+
+    try {
+        $raw = Get-Content -LiteralPath $statePath -Raw -ErrorAction Stop
+        if ([string]::IsNullOrWhiteSpace($raw)) {
+            return $null
+        }
+
+        return $raw | ConvertFrom-Json -Depth 50
+    } catch {
+        Write-Warning "Failed to parse session state file '$statePath': $_"
+        return $null
+    }
+}
+
+function Save-McpSessionState {
+    param([PSCustomObject]$Session)
+
+    $statePath = Get-McpSessionStatePath
+    $stateDir = Split-Path -Parent $statePath
+    New-Item -ItemType Directory -Path $stateDir -Force | Out-Null
+
+    $existing = Get-McpSessionState
+    $slugGeneratedAt = $existing.slugGeneratedAt
+    if ([string]::IsNullOrWhiteSpace($slugGeneratedAt)) {
+        $slugGeneratedAt = (Get-Date).ToUniversalTime().ToString('o')
+    }
+
+    $state = [PSCustomObject]@{
+        apiKey = $script:McpApiKey
+        agent = $script:McpSessionAgent
+        model = $script:McpSessionModel
+        slug = $script:McpSessionSlug
+        slugGeneratedAt = $slugGeneratedAt
+        session = $Session
+    }
+
+    $state | ConvertTo-Json -Depth 50 | Set-Content -LiteralPath $statePath -Encoding UTF8
+}
+
+function Initialize-McpSessionSlugState {
+    param(
+        [Parameter(Mandatory)][string]$Agent,
+        [Parameter(Mandatory)][string]$Model
+    )
+
+    $state = Get-McpSessionState
+    $now = (Get-Date).ToUniversalTime()
+    $slug = $null
+    $slugGeneratedAt = $null
+
+    if ($state -and $state.slug -and $state.agent -eq $Agent -and $state.model -eq $Model) {
+        $keyMatches = ($state.apiKey -eq $script:McpApiKey)
+        $recentEnough = $false
+        if (-not $keyMatches -and $state.slugGeneratedAt) {
+            $parsedAt = [datetime]::MinValue
+            if ([datetime]::TryParse(
+                [string]$state.slugGeneratedAt,
+                [System.Globalization.CultureInfo]::InvariantCulture,
+                [System.Globalization.DateTimeStyles]::RoundtripKind,
+                [ref]$parsedAt
+            )) {
+                $recentEnough = (($now - $parsedAt.ToUniversalTime()) -lt [timespan]::FromHours(1))
+            }
+        }
+
+        if ($keyMatches -or $recentEnough) {
+            $slug = [string]$state.slug
+            $slugGeneratedAt = [string]$state.slugGeneratedAt
+        }
+    }
+
+    if ([string]::IsNullOrWhiteSpace($slug)) {
+        $slug = New-McpSessionLogSlug -Agent $Agent -Model $Model -TimestampUtc $now
+        $slugGeneratedAt = $now.ToString('o')
+    }
+
+    $script:McpSessionSlug = $slug
+
+    $persistedSession = $null
+    if ($state -and $state.session) {
+        $persistedSession = ConvertTo-McpSessionRuntimeObject -Session $state.session
+    }
+
+    $persisted = [PSCustomObject]@{
+        apiKey = $script:McpApiKey
+        agent = $Agent
+        model = $Model
+        slug = $slug
+        slugGeneratedAt = $slugGeneratedAt
+        session = $persistedSession
+    }
+
+    $statePath = Get-McpSessionStatePath
+    $stateDir = Split-Path -Parent $statePath
+    New-Item -ItemType Directory -Path $stateDir -Force | Out-Null
+    $persisted | ConvertTo-Json -Depth 50 | Set-Content -LiteralPath $statePath -Encoding UTF8
+    return $slug
+}
+
+function Resolve-McpSession {
+    param(
+        [PSCustomObject]$Session,
+        [switch]$AllowMissing
+    )
+
+    if ($Session) {
+        return ConvertTo-McpSessionRuntimeObject -Session $Session
+    }
+
+    $state = Get-McpSessionState
+    if ($state -and $state.session) {
+        return ConvertTo-McpSessionRuntimeObject -Session $state.session
+    }
+
+    if ($AllowMissing) {
+        return $null
+    }
+
+    $statePath = Get-McpSessionStatePath
+    throw "No session provided and no persisted session found at '$statePath'. Create a session with New-McpSessionLog first."
+}
+
+function ConvertTo-McpSessionRuntimeObject {
+    param([Parameter(Mandatory)][PSCustomObject]$Session)
+
+    $sessionObject = $Session
+    if ($sessionObject.PSObject.Properties.Name -contains 'session') {
+        $sessionObject = $sessionObject.session
+    }
+
+    if (-not ($sessionObject.PSObject.Properties.Name -contains 'sourceType')) {
+        throw 'Persisted session object is missing required sourceType property.'
+    }
+
+    [void](Get-McpSessionTurnList -Session $sessionObject)
+    return $sessionObject
 }
 
 function Remove-McpSessionStateFile {

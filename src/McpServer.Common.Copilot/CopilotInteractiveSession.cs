@@ -62,19 +62,21 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
             while (!ct.IsCancellationRequested)
             {
                 string? line;
+                string? timestamped;
                 try
                 {
-                    line = await _process.StandardOutput.ReadLineAsync(ct).ConfigureAwait(true);
+                    line = await _process.StandardOutput.ReadLineAsync(ct).ConfigureAwait(false) + '\n';
+                    timestamped = $"{DateTimeOffset.Now.ToLocalTime():t}: {line}";
                 }
                 catch (OperationCanceledException)
                 {
                     break;
                 }
 
-                if (line is null) break;
-                if (line.Contains(Sentinel, StringComparison.Ordinal)) break;
-                AppendOutputTail(_stdoutTail, line);
-                yield return LineSanitizer.Sanitize(line);
+                if (timestamped is null) break;
+                if (timestamped.Contains(Sentinel, StringComparison.Ordinal)) break;
+                AppendOutputTail(_stdoutTail, timestamped);
+                yield return LineSanitizer.Sanitize(timestamped);
             }
         }
         finally
@@ -167,19 +169,21 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
             while (!ct.IsCancellationRequested)
             {
                 string? line;
+                string? timestamped;
                 try
                 {
-                    line = await _process.StandardOutput.ReadLineAsync(ct).ConfigureAwait(true);
+                    line = await _process.StandardOutput.ReadLineAsync(ct).ConfigureAwait(false) + '\n';
+                    timestamped = $"{DateTimeOffset.Now.ToLocalTime():t}: {line}";
                 }
                 catch (OperationCanceledException)
                 {
                     break;
                 }
 
-                if (line is null) break;
-                if (line.Contains(Sentinel, StringComparison.Ordinal)) break;
-                AppendOutputTail(_stdoutTail, line);
-                yield return LineSanitizer.Sanitize(line);
+                if (timestamped is null) break;
+                if (timestamped.Contains(Sentinel, StringComparison.Ordinal)) break;
+                AppendOutputTail(_stdoutTail, timestamped);
+                yield return LineSanitizer.Sanitize(timestamped);
             }
         }
         finally
@@ -268,16 +272,18 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
         while (!ct.IsCancellationRequested)
         {
             string? line;
+            string? timestamped;
             try
             {
-                line = await _process.StandardOutput.ReadLineAsync(ct).ConfigureAwait(true);
+                line = await _process.StandardOutput.ReadLineAsync(ct).ConfigureAwait(false) + '\n';
+                timestamped = $"{DateTimeOffset.Now.ToLocalTime():t}: {line}";
             }
             catch (OperationCanceledException)
             {
                 break;
             }
 
-            if (line is null)
+            if (timestamped is null)
             {
                 // Process exited
                 if (_process.HasExited && _process.ExitCode != 0)
@@ -293,11 +299,11 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
                 break;
             }
 
-            if (line.Contains(Sentinel, StringComparison.Ordinal))
+            if (timestamped.Contains(Sentinel, StringComparison.Ordinal))
                 break;
 
-            AppendOutputTail(_stdoutTail, line);
-            sb.AppendLine(line);
+            AppendOutputTail(_stdoutTail, timestamped);
+            sb.AppendLine(timestamped);
         }
 
         var body = sb.ToString().Trim();

@@ -22,7 +22,7 @@ Describe 'McpSession Module' {
 
     Describe 'Initialize-McpSession' {
         It 'sets connection from explicit BaseUrl and ApiKey' {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'test-key'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'test-key'
             InModuleScope McpSession {
                 $script:McpBaseUrl | Should -Be 'http://test:9999'
                 $script:McpApiKey  | Should -Be 'test-key'
@@ -32,7 +32,7 @@ Describe 'McpSession Module' {
         }
 
         It 'trims trailing slash from BaseUrl' {
-            Initialize-McpSession -BaseUrl 'http://test:9999/' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999/' -ApiKey 'k'
             InModuleScope McpSession { $script:McpBaseUrl | Should -Be 'http://test:9999' }
         }
 
@@ -45,7 +45,7 @@ apiKey: marker-key-456
 workspace: demo
 "@ | Set-Content $marker
 
-            Initialize-McpSession -MarkerPath $marker
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -MarkerPath $marker
             InModuleScope McpSession {
                 $script:McpBaseUrl | Should -Be 'http://marker-host:7150'
                 $script:McpApiKey  | Should -Be 'marker-key-456'
@@ -60,7 +60,7 @@ workspace: demo
 
             Push-Location $sub
             try {
-                Initialize-McpSession
+                Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex'
                 InModuleScope McpSession { $script:McpBaseUrl | Should -Be 'http://walk:1234' }
             } finally { Pop-Location }
         }
@@ -71,7 +71,7 @@ workspace: demo
             New-Item $isolatedDir -ItemType Directory -Force | Out-Null
             Push-Location $isolatedDir
             try {
-                { Initialize-McpSession } | Should -Throw '*not found*'
+                { Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' } | Should -Throw '*not found*'
             } finally {
                 Pop-Location
                 Remove-Item $isolatedDir -Recurse -Force
@@ -79,7 +79,7 @@ workspace: demo
         }
 
         It 'calls the health endpoint' {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
                 $Uri -eq 'http://test:9999/health'
             }
@@ -119,7 +119,7 @@ workspace: demo
 
     Describe 'New-McpSessionLog' {
         BeforeEach {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
         }
 
         It 'returns session with correct properties' {
@@ -181,7 +181,7 @@ workspace: demo
 
     Describe 'Add-McpSessionTurn' {
         BeforeEach {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
         }
 
         It 'adds turn to session turns list' {
@@ -247,7 +247,7 @@ workspace: demo
 
     Describe 'Set-McpSessionTurn' {
         BeforeEach {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
         }
 
         It 'updates response field' {
@@ -295,7 +295,7 @@ workspace: demo
 
     Describe 'Add-McpAction' {
         BeforeEach {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
         }
 
         It 'adds action with auto-incrementing order' {
@@ -355,7 +355,7 @@ workspace: demo
 
     Describe 'Update-McpSessionLog' {
         BeforeEach {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
         }
 
         It 'deletes .mcpServer/session.yaml when status becomes completed' {
@@ -416,7 +416,7 @@ workspace: demo
 
     Describe 'Get-McpSessionLog' {
         BeforeEach {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
         }
 
         It 'uses default limit=5 and offset=0' {
@@ -438,7 +438,7 @@ workspace: demo
 
     Describe 'Send-McpDialog' {
         BeforeEach {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
         }
 
         It 'posts to the correct dialog endpoint' {
