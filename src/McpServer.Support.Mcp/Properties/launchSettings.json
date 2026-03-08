@@ -2,6 +2,7 @@
   "profiles": {
     "McpServer.Support.Mcp": {
       "commandName": "Project",
+      "workingDirectory": "C:\\ProgramData\\McpServer",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

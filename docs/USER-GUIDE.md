@@ -102,9 +102,11 @@ Import and initialize helper modules (preferred over raw REST for TODO/session l
 Import-Module .\tools\powershell\McpSession.psm1
 Import-Module .\tools\powershell\McpTodo.psm1
 
-Initialize-McpSession
+Initialize-McpSession -Agent "Copilotcli" -Model "gpt-5.3-codex"
 Initialize-McpTodo
 ```
+
+`Initialize-McpSession` persists session state in `.mcpServer/session.yaml` and reuses the session slug when agent/model match.
 
 Sample session log flow:
 

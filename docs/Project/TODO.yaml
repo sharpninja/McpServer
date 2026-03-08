@@ -1382,8 +1382,8 @@ mvp-mcp:
   medium-priority:
   - id: MVP-MCP-011
     title: Director manual TUI smoke validation follow-up
-    estimate: '"0.5-1 day AI-assisted"'
-    note: '"Moved from MVP-MCP-003 Phase 15.3 so endpoint-coverage delivery can be closed while manual interactive verification is tracked independently."'
+    estimate: '"\"0.5-1 day AI-assisted\""'
+    note: '"\"Moved from MVP-MCP-003 Phase 15.3 so endpoint-coverage delivery can be closed while manual interactive verification is tracked independently.\""'
     done: false
     description:
     - Launch Director interactive mode and run an end-to-end manual smoke pass for migrated tabs.
@@ -2420,7 +2420,8 @@ MCP:
   - id: MCP-SESSION-020
     title: Harden McpSession Powershell Module
     note: Imported from mcp-session-020.md
-    done: false
+    done: true
+    completed: 2026-03-08
     description:
     - Initialize-McpSession requires Agent and Model and persists/reuses session slug in .mcpServer/session.yaml.
     - New-McpSessionLog reuses existing session slug (or initializes one), composes Session Log ID, and serializes session object.
@@ -2433,14 +2434,14 @@ MCP:
     - Reuse existing slug when API key, agent, and model match; when API key differs, reuse only if slug age is less than one hour.
     implementation-tasks:
     - task: 'Initialize-McpSession: require Agent/Model and implement slug discovery/reuse rules'
-      done: false
+      done: true
     - task: Persist session slug to .mcpServer/session.yaml and return slug from initialization
-      done: false
+      done: true
     - task: 'New-McpSessionLog: use persisted slug and serialize session object to session.yaml'
-      done: false
+      done: true
     - task: 'Session-accepting members: load/persist serialized session object when session arg is absent/present'
-      done: false
+      done: true
     - task: Update PowerShell usage docs and apply same logic to tools/bash/mcp-session.sh
-      done: false
+      done: true
     - task: Update Pester Tests
-      done: false
+      done: true

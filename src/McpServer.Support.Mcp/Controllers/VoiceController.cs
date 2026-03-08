@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ namespace McpServer.Support.Mcp.Controllers;
 [Route("mcpserver/voice")]
 public sealed class VoiceController : ControllerBase
 {
-    private static readonly JsonSerializerOptions s_sseJsonOptions = new(JsonSerializerDefaults.Web) { WriteIndented = false };
+    private static readonly JsonSerializerOptions s_sseJsonOptions = new(JsonSerializerDefaults.Web) { WriteIndented = false, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
 
     private readonly IVoiceConversationService _voiceService;
     private readonly WorkspaceContext _workspaceContext;
