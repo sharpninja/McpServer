@@ -18,6 +18,7 @@ public static class MarkerFileService
 {
     /// <summary>Well-known marker file name placed at the workspace root.</summary>
     public const string MarkerFileName = "AGENTS-README-FIRST.yaml";
+    private const string WorkspaceStateDirectoryGitIgnoreEntry = ".mcpServer/";
 
     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
@@ -140,15 +141,21 @@ public static class MarkerFileService
         try
         {
             var gitignorePath = Path.Combine(workspacePath, ".gitignore");
-            if (File.Exists(gitignorePath))
-            {
-                var lines = File.ReadAllLines(gitignorePath);
-                if (lines.Any(l => l.Trim().Equals(MarkerFileName, StringComparison.OrdinalIgnoreCase)))
-                    return;
-            }
+            var lines = File.Exists(gitignorePath) ? File.ReadAllLines(gitignorePath) : [];
+            var missingEntries = new[] { MarkerFileName, WorkspaceStateDirectoryGitIgnoreEntry }
+                .Where(entry => !lines.Any(line => line.Trim().Equals(entry, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
 
-            File.AppendAllText(gitignorePath, $"{Environment.NewLine}{MarkerFileName}{Environment.NewLine}");
-            logger?.LogInformation("Added {Marker} to .gitignore at {Path}", MarkerFileName, gitignorePath);
+            if (missingEntries.Count == 0)
+                return;
+
+            var needsLeadingNewLine = lines.Length > 0 && !string.IsNullOrEmpty(lines[^1]);
+            var content = string.Join(Environment.NewLine, missingEntries) + Environment.NewLine;
+            if (needsLeadingNewLine)
+                content = Environment.NewLine + content;
+
+            File.AppendAllText(gitignorePath, content);
+            logger?.LogInformation("Added {Entries} to .gitignore at {Path}", string.Join(", ", missingEntries), gitignorePath);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {

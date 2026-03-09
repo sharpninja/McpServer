@@ -486,6 +486,7 @@ $RECYCLE.BIN/
 # MCP server marker files (runtime artifacts for agent port discovery)
 .mcp-server.yaml
 .mcp-server.json
+.mcpServer/
 
 # SQLite database files (runtime data)
 *.db

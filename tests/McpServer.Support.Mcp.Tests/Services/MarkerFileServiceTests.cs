@@ -297,4 +297,59 @@ public sealed class MarkerFileServiceTests
             }
         }
     }
+
+    /// <summary>
+    /// Verifies marker-file writing ensures the workspace root <c>.gitignore</c>
+    /// contains both the marker file entry and the local <c>.mcpServer/</c>
+    /// state directory entry without duplicating either on repeated writes.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: FR-MCP-018.
+    /// Test data: temp workspace directory with a pre-existing <c>.gitignore</c>
+    /// containing a stable baseline entry.
+    /// This data is used to validate idempotent ignore-file updates performed by
+    /// marker writing during workspace startup.
+    /// </remarks>
+    [Fact]
+    public async Task WriteMarkerAsync_AddsMarkerAndMcpServerEntriesToGitIgnoreWithoutDuplicates()
+    {
+        var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-gitignore-test-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDir);
+
+        try
+        {
+            var gitignorePath = Path.Combine(tempDir, ".gitignore");
+            await File.WriteAllTextAsync(gitignorePath, "bin/" + Environment.NewLine);
+
+            await MarkerFileService.WriteMarkerAsync(
+                workspacePath: tempDir,
+                port: 7147,
+                workspaceName: "test",
+                globalPromptTemplate: "Prompt");
+
+            await MarkerFileService.WriteMarkerAsync(
+                workspacePath: tempDir,
+                port: 7147,
+                workspaceName: "test",
+                globalPromptTemplate: "Prompt");
+
+            var gitignoreLines = await File.ReadAllLinesAsync(gitignorePath);
+
+            Assert.Equal(1, gitignoreLines.Count(line => line == "AGENTS-README-FIRST.yaml"));
+            Assert.Equal(1, gitignoreLines.Count(line => line == ".mcpServer/"));
+            Assert.Contains("bin/", gitignoreLines);
+        }
+        finally
+        {
+            try
+            {
+                if (Directory.Exists(tempDir))
+                    Directory.Delete(tempDir, recursive: true);
+            }
+            catch
+            {
+                // Best-effort cleanup for temp test directory.
+            }
+        }
+    }
 }
