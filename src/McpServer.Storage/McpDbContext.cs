@@ -21,6 +21,9 @@ public sealed class McpDbContext : DbContext
         _workspaceId = workspaceContext?.WorkspacePath ?? string.Empty;
     }
 
+    /// <summary>TR-MCP-MT-003: Gets the current workspace discriminator applied to this context instance.</summary>
+    public string CurrentWorkspaceId => _workspaceId;
+
     /// <summary>TR-MCP-MT-001: Overrides the workspace ID for this context instance (e.g. from an MCP tool parameter).</summary>
     public void OverrideWorkspaceId(string workspaceId) => _workspaceId = workspaceId;
 
@@ -218,8 +221,8 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<SessionLogProcessingDialogEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<SessionLogCommitEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<SessionLogTurnStringListEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<ToolDefinitionEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<ToolDefinitionTagEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<ToolDefinitionEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == string.Empty || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<ToolDefinitionTagEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == string.Empty || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<ToolBucketEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<AgentDefinitionEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<AgentWorkspaceEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
@@ -264,8 +267,6 @@ public sealed class McpDbContext : DbContext
 
     private void StampWorkspaceId()
     {
-        if (_workspaceId.Length == 0) return;
-
         foreach (var entry in ChangeTracker.Entries()
                      .Where(e => e.State == EntityState.Added))
         {
@@ -273,9 +274,30 @@ public sealed class McpDbContext : DbContext
                 .FirstOrDefault(p => p.Metadata.Name == nameof(ContextDocumentEntity.WorkspaceId));
             if (prop is not null && prop.CurrentValue is string val && val.Length == 0)
             {
-                prop.CurrentValue = _workspaceId;
+                var resolvedWorkspaceId = ResolveWorkspaceIdForAddedEntity(entry.Entity);
+                if (resolvedWorkspaceId is not null)
+                    prop.CurrentValue = resolvedWorkspaceId;
             }
         }
+    }
+
+    private string? ResolveWorkspaceIdForAddedEntity(object entity)
+    {
+        return entity switch
+        {
+            ToolDefinitionEntity toolDefinition => toolDefinition.WorkspacePath ?? string.Empty,
+            ToolDefinitionTagEntity toolDefinitionTag => ResolveToolDefinitionTagWorkspaceId(toolDefinitionTag),
+            _ when _workspaceId.Length > 0 => _workspaceId,
+            _ => null,
+        };
+    }
+
+    private string ResolveToolDefinitionTagWorkspaceId(ToolDefinitionTagEntity toolDefinitionTag)
+    {
+        if (toolDefinitionTag.ToolDefinition is not null)
+            return toolDefinitionTag.ToolDefinition.WorkspaceId;
+
+        return _workspaceId;
     }
 
     /// <summary>

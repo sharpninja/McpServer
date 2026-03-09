@@ -1,5 +1,6 @@
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
@@ -22,9 +23,11 @@ public sealed class AgentPoolSeedServiceTests
                 CreateWorkspace(@"E:\ws-c", enabled: true),
             ], 3)));
 
+        var scopeFactory = CreateScopeFactory(workspaceService);
+
         var service = new AgentPoolSeedService(
             pool,
-            workspaceService,
+            scopeFactory,
             CreateOptionsMonitor(new AgentPoolOptions
             {
                 Enabled = true,
@@ -44,10 +47,11 @@ public sealed class AgentPoolSeedServiceTests
     {
         var pool = Substitute.For<IAgentPoolService>();
         var workspaceService = Substitute.For<IWorkspaceService>();
+        var scopeFactory = CreateScopeFactory(workspaceService);
 
         var service = new AgentPoolSeedService(
             pool,
-            workspaceService,
+            scopeFactory,
             CreateOptionsMonitor(new AgentPoolOptions { Enabled = false }),
             NullLogger<AgentPoolSeedService>.Instance);
 
@@ -79,6 +83,19 @@ public sealed class AgentPoolSeedServiceTests
         monitor.Get(Arg.Any<string>()).Returns(value);
         monitor.OnChange(Arg.Any<Action<T, string?>>()).Returns(new NoopDisposable());
         return monitor;
+    }
+
+    private static IServiceScopeFactory CreateScopeFactory(IWorkspaceService workspaceService)
+    {
+        var provider = Substitute.For<IServiceProvider>();
+        provider.GetService(typeof(IWorkspaceService)).Returns(workspaceService);
+
+        var scope = Substitute.For<IServiceScope>();
+        scope.ServiceProvider.Returns(provider);
+
+        var scopeFactory = Substitute.For<IServiceScopeFactory>();
+        scopeFactory.CreateScope().Returns(scope);
+        return scopeFactory;
     }
 
     private sealed class NoopDisposable : IDisposable

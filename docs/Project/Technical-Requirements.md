@@ -581,3 +581,15 @@ Presence signaling SHALL be excluded from one-shot sessions.
 **Status:** ✅ Active directive
 
 **Covered by:** `.github/copilot-instructions.md`, `AGENTS.md`
+
+## TR-MCP-AGENT-006
+
+**Hosted .NET 9 Microsoft Agent Framework Library** — The solution SHALL provide a dedicated .NET 9 class library for hosting an MCP-aware agent inside external .NET applications built on Microsoft Agent Framework. The library SHALL expose DI-friendly registration and configuration APIs for MCP Server connectivity, agent construction, and host lifecycle integration so host applications do not need to assemble low-level MCP session-log or TODO plumbing themselves.
+
+**Status:** 🔴 Planned
+
+## TR-MCP-AGENT-007
+
+**Built-In MCP Session Log and TODO Workflow for Hosted Agents** — The hosted agent library SHALL implement built-in workflow operations for session bootstrap, turn creation/update, TODO retrieval/update, and TODO plan/status/implementation flows using the existing MCP Server session log and TODO contracts. The workflow SHALL preserve canonical ID conventions for session IDs, request IDs, and TODO IDs and SHALL prefer reuse of existing client abstractions instead of duplicating transport logic.
+
+**Status:** 🔴 Planned

@@ -56,17 +56,6 @@
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Storage\**\*.cs" />
-    <Compile Remove="Indexing\**\*.cs" />
-    <Compile Remove="Services\**\*.cs" />
-    <Compile Remove="Models\**\*.cs" />
-    <Compile Remove="Options\**\*.cs" />
-    <Compile Remove="Ingestion\**\*.cs" />
-    <Compile Remove="Notifications\**\*.cs" />
-    <Compile Remove="Requirements\**\*.cs" />
-    <Compile Remove="Native\**\*.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="..\..\templates\**\*.yaml" Link="templates\%(RecursiveDir)%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

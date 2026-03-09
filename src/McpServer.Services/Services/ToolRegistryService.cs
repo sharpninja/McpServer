@@ -75,11 +75,11 @@ public sealed class ToolRegistryService : IToolRegistryService
         if (string.IsNullOrEmpty(name))
             return new ToolMutationResult(false, "Tool name is required.");
 
-        var wsPath = NormalizeWorkspacePath(request.WorkspacePath);
+        var scope = NormalizeScope(request.WorkspacePath);
 
         // Unique name per scope.
         var exists = await _db.ToolDefinitions.AnyAsync(
-            t => t.Name == name && t.WorkspacePath == wsPath, ct).ConfigureAwait(false);
+            t => t.Name == name && t.WorkspacePath == scope.WorkspacePath, ct).ConfigureAwait(false);
         if (exists)
             return new ToolMutationResult(false, $"Tool '{name}' already exists in this scope.");
 
@@ -90,19 +90,20 @@ public sealed class ToolRegistryService : IToolRegistryService
             Description = (request.Description ?? "").Trim(),
             ParameterSchema = request.ParameterSchema,
             CommandTemplate = request.CommandTemplate,
-            WorkspacePath = wsPath,
+            WorkspacePath = scope.WorkspacePath,
+            WorkspaceId = scope.WorkspaceId,
             DateTimeCreated = now,
             DateTimeModified = now,
         };
 
         foreach (var tag in NormalizeTags(request.Tags))
-            entity.Tags.Add(new ToolDefinitionTagEntity { Tag = tag });
+            entity.Tags.Add(new ToolDefinitionTagEntity { Tag = tag, WorkspaceId = scope.WorkspaceId });
 
         _db.ToolDefinitions.Add(entity);
         await _db.SaveChangesAsync(ct).ConfigureAwait(false);
         await PublishChangeSafeAsync(ChangeEventActions.Created, entity.Id.ToString(), ct).ConfigureAwait(false);
 
-        _logger.LogInformation("Tool created: {Name} (scope: {Scope})", name, wsPath ?? "global");
+        _logger.LogInformation("Tool created: {Name} (scope: {Scope})", name, scope.WorkspacePath ?? "global");
         return new ToolMutationResult(true, Tool: ToDto(entity));
     }
 
@@ -132,13 +133,13 @@ public sealed class ToolRegistryService : IToolRegistryService
             entity.CommandTemplate = request.CommandTemplate;
 
         if (request.WorkspacePath is not null)
-            entity.WorkspacePath = NormalizeWorkspacePath(request.WorkspacePath);
+            ApplyScope(entity, NormalizeScope(request.WorkspacePath));
 
         if (request.Tags is not null)
         {
             entity.Tags.Clear();
             foreach (var tag in NormalizeTags(request.Tags))
-                entity.Tags.Add(new ToolDefinitionTagEntity { Tag = tag });
+                entity.Tags.Add(new ToolDefinitionTagEntity { Tag = tag, WorkspaceId = entity.WorkspaceId });
         }
 
         entity.DateTimeModified = DateTimeOffset.UtcNow;
@@ -174,10 +175,24 @@ public sealed class ToolRegistryService : IToolRegistryService
             : query.Where(t => t.WorkspacePath == null || t.WorkspacePath == ws);
     }
 
+    private static ToolScope NormalizeScope(string? workspacePath)
+    {
+        var normalizedPath = NormalizeWorkspacePath(workspacePath);
+        return new ToolScope(normalizedPath, normalizedPath ?? string.Empty);
+    }
+
     private static string? NormalizeWorkspacePath(string? path)
     {
         if (string.IsNullOrWhiteSpace(path)) return null;
         return Path.GetFullPath(path.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+    }
+
+    private static void ApplyScope(ToolDefinitionEntity entity, ToolScope scope)
+    {
+        entity.WorkspacePath = scope.WorkspacePath;
+        entity.WorkspaceId = scope.WorkspaceId;
+        foreach (var tag in entity.Tags)
+            tag.WorkspaceId = scope.WorkspaceId;
     }
 
     private static IReadOnlyList<string> NormalizeTags(IReadOnlyList<string>? tags)
@@ -223,4 +238,6 @@ public sealed class ToolRegistryService : IToolRegistryService
             _logger.LogWarning(ex, "Failed publishing tool registry change event for {EntityId}", entityId);
         }
     }
+
+    private readonly record struct ToolScope(string? WorkspacePath, string WorkspaceId);
 }

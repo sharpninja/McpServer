@@ -2052,6 +2052,33 @@ Architecture:
     - Wrap GraphRAG operations with CQRS handlers (commands/queries) for clear separation of concerns and consistent patterns with the rest of the codebase.
     depends-on:
     - ARCH-SERVICES-001
+  - id: MCP-AGENTFRAMEWORK-001
+    title: Create .NET 9 hosted agent library for Microsoft Agent Framework with MCP workflows
+    note: 'Planned hosted Microsoft Agent Framework library. Validation target: TEST-MCP-089.'
+    done: false
+    description:
+    - Create a .NET 9 class library that provides an MCP-aware agent for host applications built on Microsoft Agent Framework.
+    - The hosted agent should expose built-in workflow for MCP Server session logging and TODO management so host apps can consume plan, status, and implementation flows directly.
+    technical-details:
+    - Expose DI-friendly registration and options for MCP Server connectivity, workspace targeting, and host lifecycle integration.
+    - Reuse existing MCP client, session-log, and TODO abstractions where possible instead of duplicating transport logic.
+    - Support session bootstrap, turn creation and update, TODO query and update, and TODO prompt workflows as built-in agent operations.
+    functional-requirements:
+    - FR-MCP-066
+    technical-requirements:
+    - TR-MCP-AGENT-006
+    - TR-MCP-AGENT-007
+    implementation-tasks:
+    - task: Create the .NET 9 library project and define the public hosting and registration surface.
+      done: false
+    - task: Implement the Microsoft Agent Framework agent wrapper and MCP Server connectivity/options model.
+      done: false
+    - task: Add built-in session-log workflow operations for bootstrap, turn creation, and turn updates.
+      done: false
+    - task: Add built-in TODO workflow operations for query, update, and plan/status/implementation flows.
+      done: false
+    - task: Add integration tests and a sample host application proving the library can be embedded in a .NET application.
+      done: false
   medium-priority:
   - id: PLAN-WEBUI-001
     title: AgentList web parity integration
