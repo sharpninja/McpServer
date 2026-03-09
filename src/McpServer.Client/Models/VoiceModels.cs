@@ -46,6 +46,10 @@ public sealed class VoiceSessionCreateRequest
     [JsonPropertyName("agentParameters")]
     public Dictionary<string, string>? AgentParameters { get; set; }
 
+    /// <summary>Execution strategy used to run the session.</summary>
+    [JsonPropertyName("executionStrategy")]
+    public string? ExecutionStrategy { get; set; }
+
     /// <summary>Whether this is a one-shot session.</summary>
     [JsonPropertyName("oneShotSession")]
     public bool OneShotSession { get; set; }
@@ -73,6 +77,10 @@ public sealed class VoiceSessionCreateResponse
     /// <summary>Resolved model identifier.</summary>
     [JsonPropertyName("modelResolved")]
     public string? ModelResolved { get; set; }
+
+    /// <summary>Execution strategy used by the session.</summary>
+    [JsonPropertyName("executionStrategy")]
+    public string ExecutionStrategy { get; set; } = string.Empty;
 }
 
 /// <summary>Request payload for submitting a voice turn.</summary>
@@ -213,6 +221,10 @@ public sealed class VoiceSessionStatus
     /// <summary>Whether a turn is currently in progress.</summary>
     [JsonPropertyName("isTurnActive")]
     public bool IsTurnActive { get; set; }
+
+    /// <summary>Execution strategy backing the session.</summary>
+    [JsonPropertyName("executionStrategy")]
+    public string ExecutionStrategy { get; set; } = string.Empty;
 
     /// <summary>Most recent error (if any).</summary>
     [JsonPropertyName("lastError")]

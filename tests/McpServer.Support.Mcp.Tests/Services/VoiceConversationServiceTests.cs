@@ -4,6 +4,7 @@ using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -77,23 +78,94 @@ public sealed class VoiceConversationServiceTests
         Assert.False(sent);
     }
 
-    private static VoiceConversationService CreateService()
+    [Fact]
+    public async Task CreateSessionAsync_UsesConfiguredDefaultExecutionStrategy_WhenRequestOmitsOne()
     {
+        using var service = CreateService(defaultExecutionStrategy: AgentExecutionStrategyNames.HostedAgentFramework);
+
+        var created = await service.CreateSessionAsync(new VoiceSessionCreateRequest
+        {
+            AgentName = "planner",
+        }).ConfigureAwait(true);
+
+        Assert.Equal(AgentExecutionStrategyNames.HostedAgentFramework, created.ExecutionStrategy);
+    }
+
+    [Fact]
+    public async Task CreateSessionAsync_ExplicitExecutionStrategy_OverridesConfiguredDefault()
+    {
+        using var service = CreateService(defaultExecutionStrategy: AgentExecutionStrategyNames.HostedAgentFramework);
+
+        var created = await service.CreateSessionAsync(new VoiceSessionCreateRequest
+        {
+            AgentName = "planner",
+            ExecutionStrategy = AgentExecutionStrategyNames.CopilotCli,
+        }).ConfigureAwait(true);
+
+        Assert.Equal(AgentExecutionStrategyNames.CopilotCli, created.ExecutionStrategy);
+    }
+
+    [Fact]
+    public async Task SubmitTurnAsync_IncludesConfiguredModelApiKeyInExecutionOptions()
+    {
+        var hostedStrategy = new CapturingAgentExecutionStrategy(AgentExecutionStrategyNames.HostedAgentFramework);
+        using var service = CreateService(
+            defaultExecutionStrategy: AgentExecutionStrategyNames.HostedAgentFramework,
+            modelApiKey: "voice-model-key",
+            modelApiKeyEnvironmentVariableName: "ANTHROPIC_API_KEY",
+            hostedStrategy: hostedStrategy);
+
+        var created = await service.CreateSessionAsync(new VoiceSessionCreateRequest
+        {
+            AgentName = "planner",
+        }).ConfigureAwait(true);
+        var response = await service.SubmitTurnAsync(created.SessionId, new VoiceTurnRequest
+        {
+            UserTranscriptText = "hello",
+        }).ConfigureAwait(true);
+
+        Assert.NotNull(response);
+        Assert.Equal("completed", response!.Status);
+        Assert.NotNull(hostedStrategy.LastRequest);
+        Assert.Equal(
+            "voice-model-key",
+            hostedStrategy.LastRequest!.Options.EnvironmentVariables["ANTHROPIC_API_KEY"]);
+    }
+
+    private static VoiceConversationService CreateService(
+        string defaultExecutionStrategy = AgentExecutionStrategyNames.CopilotCli,
+        string? modelApiKey = null,
+        string modelApiKeyEnvironmentVariableName = "OPENAI_API_KEY",
+        IAgentExecutionStrategy? hostedStrategy = null)
+    {
+        var copilotClient = Substitute.For<ICopilotClient>();
         var workspaceAccessor = CreateWorkspaceAccessor();
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>()).Build();
         var hostEnvironment = Substitute.For<IHostEnvironment>();
         hostEnvironment.ContentRootPath.Returns(Environment.CurrentDirectory);
         hostEnvironment.EnvironmentName.Returns("Test");
         hostEnvironment.ApplicationName.Returns("McpServer.Support.Mcp.Tests");
+        var strategyResolver = new AgentExecutionStrategyResolver(
+        [
+            new CopilotCliAgentExecutionStrategy(copilotClient),
+            hostedStrategy ?? new FakeAgentExecutionStrategy(AgentExecutionStrategyNames.HostedAgentFramework),
+        ]);
+        var services = new ServiceCollection();
+        services.AddSingleton<IAgentExecutionStrategyResolver>(strategyResolver);
+        var serviceProvider = services.BuildServiceProvider();
 
         return new VoiceConversationService(
-            Substitute.For<ICopilotClient>(),
+            copilotClient,
+            serviceProvider,
             workspaceAccessor,
             configuration,
             CreateOptionsMonitor(new VoiceConversationOptions
             {
                 Enabled = true,
                 CopilotModel = "gpt-5.3-codex",
+                DefaultExecutionStrategy = defaultExecutionStrategy,
+                ModelApiKey = modelApiKey,
+                ModelApiKeyEnvironmentVariableName = modelApiKeyEnvironmentVariableName,
                 SessionIdleTimeoutMinutes = TimeSpan.FromMinutes(15),
             }),
             CreateOptionsMonitor(new TodoPromptOptions { BaseUrl = "http://localhost:7147" }),
@@ -131,6 +203,64 @@ public sealed class VoiceConversationServiceTests
     {
         public void Dispose()
         {
+        }
+    }
+
+    private sealed class FakeAgentExecutionStrategy(string name) : IAgentExecutionStrategy
+    {
+        public string Name { get; } = name;
+
+        public ValueTask<IAgentExecutionSession> CreateSessionAsync(
+            AgentExecutionSessionRequest request,
+            CancellationToken cancellationToken = default) =>
+            ValueTask.FromResult<IAgentExecutionSession>(new FakeAgentExecutionSession());
+    }
+
+    private sealed class CapturingAgentExecutionStrategy(string name) : IAgentExecutionStrategy
+    {
+        public AgentExecutionSessionRequest? LastRequest { get; private set; }
+
+        public string Name { get; } = name;
+
+        public ValueTask<IAgentExecutionSession> CreateSessionAsync(
+            AgentExecutionSessionRequest request,
+            CancellationToken cancellationToken = default)
+        {
+            LastRequest = request;
+            return ValueTask.FromResult<IAgentExecutionSession>(new FakeAgentExecutionSession());
+        }
+    }
+
+    private sealed class FakeAgentExecutionSession : IAgentExecutionSession
+    {
+        private const string FinalResponseBody = """{"type":"final_response","displayText":"done","speakText":"done"}""";
+
+        public bool IsAlive => true;
+
+        public int? ProcessId => null;
+
+        public ValueTask DisposeAsync() => ValueTask.CompletedTask;
+
+        public Task EndAsync(TimeSpan timeout) => Task.CompletedTask;
+
+        public Task<CopilotResult> ReadInitialResponseAsync(CancellationToken cancellationToken = default) =>
+            Task.FromResult(new CopilotResult { Body = FinalResponseBody, State = CopilotResultState.Success });
+
+        public IAsyncEnumerable<string> ReadInitialResponseStreamingAsync(CancellationToken cancellationToken = default) =>
+            EmptyAsyncEnumerable();
+
+        public Task SendEscapeAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
+
+        public Task<CopilotResult> SendAsync(string prompt, CancellationToken cancellationToken = default) =>
+            Task.FromResult(new CopilotResult { Body = FinalResponseBody, State = CopilotResultState.Success });
+
+        public IAsyncEnumerable<string> SendStreamingAsync(string prompt, CancellationToken cancellationToken = default) =>
+            EmptyAsyncEnumerable();
+
+        private static async IAsyncEnumerable<string> EmptyAsyncEnumerable()
+        {
+            await Task.CompletedTask;
+            yield break;
         }
     }
 }

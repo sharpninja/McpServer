@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace McpServer.Support.Mcp.Controllers;
 
@@ -24,9 +22,9 @@ public sealed class WorkspaceController : ControllerBase
     private readonly IWorkspacePolicyService _workspacePolicyService;
     private readonly IWorkspaceProcessManager _processManager;
     private readonly IConfiguration _configuration;
-    private readonly IWebHostEnvironment _env;
     private readonly IOptionsMonitor<MarkerPromptOptions> _promptOptions;
     private readonly IMarkerPromptProvider _markerPromptProvider;
+    private readonly AppSettingsFileService _appSettingsFileService;
 
     /// <summary>Initializes a new instance of the <see cref="WorkspaceController"/> class.</summary>
     public WorkspaceController(
@@ -34,17 +32,17 @@ public sealed class WorkspaceController : ControllerBase
         IWorkspacePolicyService workspacePolicyService,
         IWorkspaceProcessManager processManager,
         IConfiguration configuration,
-        IWebHostEnvironment env,
         IOptionsMonitor<MarkerPromptOptions> promptOptions,
-        IMarkerPromptProvider markerPromptProvider)
+        IMarkerPromptProvider markerPromptProvider,
+        AppSettingsFileService appSettingsFileService)
     {
         _workspaceService = workspaceService;
         _workspacePolicyService = workspacePolicyService;
         _processManager = processManager;
         _configuration = configuration;
-        _env = env;
         _promptOptions = promptOptions;
         _markerPromptProvider = markerPromptProvider;
+        _appSettingsFileService = appSettingsFileService;
     }
 
     /// <summary>
@@ -307,10 +305,23 @@ public sealed class WorkspaceController : ControllerBase
 
         var newTemplate = string.IsNullOrWhiteSpace(request.Template) ? null : request.Template.Trim();
 
-        var appsettingsPath = ResolveAppsettingsPath();
+        var appsettingsPath = _appSettingsFileService.ResolvePreferredAppsettingsPath();
+        var reloadedByYamlService = false;
         if (appsettingsPath.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
         {
-            await PersistMarkerPromptTemplateYamlAsync(appsettingsPath, newTemplate, ct).ConfigureAwait(false);
+            var data = await _appSettingsFileService.LoadYamlAsync(appsettingsPath, ct).ConfigureAwait(false);
+            if (!data.TryGetValue("Mcp", out var mcpObj) || mcpObj is not IDictionary<object, object> mcpDict)
+            {
+                data["Mcp"] = mcpDict = new Dictionary<object, object>();
+            }
+
+            if (newTemplate is null)
+                mcpDict.Remove("MarkerPromptTemplate");
+            else
+                mcpDict["MarkerPromptTemplate"] = newTemplate;
+
+            await _appSettingsFileService.SaveYamlAsync(data, appsettingsPath, ct).ConfigureAwait(false);
+            reloadedByYamlService = true;
         }
         else
         {
@@ -325,7 +336,7 @@ public sealed class WorkspaceController : ControllerBase
             await System.IO.File.WriteAllTextAsync(appsettingsPath, doc.ToJsonString(s_jsonOptions), ct).ConfigureAwait(false);
         }
 
-        if (_configuration is IConfigurationRoot root)
+        if (!reloadedByYamlService && _configuration is IConfigurationRoot root)
             root.Reload();
 
         // Regenerate all marker files so running workspaces pick up the new global prompt.
@@ -370,56 +381,6 @@ public sealed class WorkspaceController : ControllerBase
     {
         // All workspaces share a single port; the primary workspace is always served by this process.
         return true;
-    }
-
-    /// <summary>
-    /// Resolves the path to <c>appsettings.yaml</c> or <c>appsettings.json</c>, preferring YAML when present.
-    /// </summary>
-    private string ResolveAppsettingsPath()
-    {
-        var contentRoot = _env.ContentRootPath;
-        var baseDir = AppContext.BaseDirectory;
-
-        var yamlContentRoot = Path.Combine(contentRoot, "appsettings.yaml");
-        if (System.IO.File.Exists(yamlContentRoot)) return yamlContentRoot;
-
-        var yamlBaseDir = Path.Combine(baseDir, "appsettings.yaml");
-        if (System.IO.File.Exists(yamlBaseDir)) return yamlBaseDir;
-
-        var jsonContentRoot = Path.Combine(contentRoot, "appsettings.json");
-        if (System.IO.File.Exists(jsonContentRoot)) return jsonContentRoot;
-
-        var jsonBaseDir = Path.Combine(baseDir, "appsettings.json");
-        if (System.IO.File.Exists(jsonBaseDir)) return jsonBaseDir;
-
-        return jsonContentRoot;
-    }
-
-    private static async Task PersistMarkerPromptTemplateYamlAsync(string path, string? newTemplate, CancellationToken ct)
-    {
-        var yamlText = await System.IO.File.ReadAllTextAsync(path, ct).ConfigureAwait(false);
-        var deserializer = new DeserializerBuilder()
-            .WithNamingConvention(NullNamingConvention.Instance)
-            .IgnoreUnmatchedProperties()
-            .Build();
-        var serializer = new SerializerBuilder()
-            .WithNamingConvention(NullNamingConvention.Instance)
-            .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
-            .Build();
-
-        var data = deserializer.Deserialize<Dictionary<string, object>>(yamlText);
-        if (!data.TryGetValue("Mcp", out var mcpObj) || mcpObj is not IDictionary<object, object> mcpDict)
-        {
-            data["Mcp"] = mcpDict = new Dictionary<object, object>();
-        }
-
-        if (newTemplate is null)
-            mcpDict.Remove("MarkerPromptTemplate");
-        else
-            mcpDict["MarkerPromptTemplate"] = newTemplate;
-
-        var output = serializer.Serialize(data);
-        await System.IO.File.WriteAllTextAsync(path, output, ct).ConfigureAwait(false);
     }
 
     private static readonly JsonSerializerOptions s_jsonOptions = new()

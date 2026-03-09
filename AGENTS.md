@@ -21,6 +21,7 @@ On every subsequent user message:
 7. When you need API schemas, module examples, or compliance rules, load them from `docs/context/` or use `context_search`.
 8. Do not fabricate information. If you made a mistake, acknowledge it. Distinguish facts from speculation.
 9. Prioritize correctness over speed. Do not ship code you have not verified compiles and is logically sound.
+10. When writing session logs or other audit records, agents must identify themselves accurately using their real agent identity in Pascal-Case. Do not use placeholder, legacy, or misleading sourceType values.
 
 ## Where Things Live
 

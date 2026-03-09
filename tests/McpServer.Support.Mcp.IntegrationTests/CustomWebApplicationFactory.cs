@@ -11,15 +11,20 @@ namespace McpServer.Support.Mcp.IntegrationTests;
 public sealed class CustomWebApplicationFactory : WebApplicationFactory<McpApiEntryPoint>
 {
     private readonly Action<IServiceCollection>? _configureServices;
+    private readonly IReadOnlyDictionary<string, string?> _configurationOverrides;
 
     /// <summary>Initializes a new instance with no service overrides.</summary>
-    public CustomWebApplicationFactory() : this(null) { }
+    public CustomWebApplicationFactory() : this(null, null) { }
 
     /// <summary>Initializes a new instance with optional service overrides.</summary>
     /// <param name="configureServices">Optional callback to register additional or replacement services.</param>
-    internal CustomWebApplicationFactory(Action<IServiceCollection>? configureServices)
+    /// <param name="configurationOverrides">Optional configuration values injected before startup binding.</param>
+    internal CustomWebApplicationFactory(
+        Action<IServiceCollection>? configureServices,
+        IReadOnlyDictionary<string, string?>? configurationOverrides = null)
     {
         _configureServices = configureServices;
+        _configurationOverrides = configurationOverrides ?? new Dictionary<string, string?>();
     }
 
     /// <inheritdoc />
@@ -32,6 +37,9 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<McpApiEn
             {
                 { "Mcp:DataSource", ":memory:" }
             });
+
+            if (_configurationOverrides.Count > 0)
+                config.AddInMemoryCollection(_configurationOverrides);
         });
 
         if (_configureServices is not null)

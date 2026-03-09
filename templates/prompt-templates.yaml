@@ -306,7 +306,11 @@ templates:
 
       1. Generate SessionId values using `New-McpSessionLogSlug -Agent <SourceType> -Model <Model>` from McpSession.psm1, then pass the result to `New-McpSessionLog -SessionId`. Do not handcraft SessionId values.
 
+      1a. Agents must identify themselves accurately in session logs. `sourceType` and the SessionId `<Agent>` prefix must use the agent''s real identity in Pascal-Case. Do not use lowercase forms, placeholders, or legacy aliases.
+
       2. Post a new session log turn (`Add-McpSessionTurn`) before starting work. Update it with results (`Response`) and actions (`Add-McpAction`) when done. Persist after each meaningful update, not just at the end.
+
+      2a. Before any compaction step, persist the current session log state. After compaction, update the session log again to record the compaction outcome and recovered context.
 
       3. Use helper modules for session log and TODO operations — they handle workspace routing automatically. Do not use
       raw API calls.
@@ -333,6 +337,8 @@ templates:
       - Invalid TODO IDs: plan-api-001, MCP-API-42, MCPAPI001.
 
       - Session IDs must use <Agent>-<yyyyMMddTHHmmssZ>-<suffix> and start with the exact agent/source type prefix.
+
+      - `<Agent>` / `sourceType` must be the agent''s real identity in Pascal-Case. Valid example: `Codex`. Invalid examples: `codex`, `copilotcli` (when the agent is Codex), `Assistant`.
 
       - Valid Session ID: Copilot-20260304T113901Z-namingconv.
 
@@ -494,3 +500,4 @@ templates:
       MCP Server version: {{version}}
 
       '
+

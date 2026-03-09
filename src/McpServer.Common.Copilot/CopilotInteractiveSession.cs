@@ -41,6 +41,15 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
     /// <summary>Gets the OS process ID of the Copilot CLI process.</summary>
     public int ProcessId => _process.Id;
 
+    /// <summary>Gets the reader connected to the Copilot CLI standard output stream.</summary>
+    public StreamReader StandardOutput => _process.StandardOutput;
+
+    /// <summary>Gets the reader connected to the Copilot CLI standard error stream.</summary>
+    public StreamReader StandardError => _process.StandardError;
+
+    /// <summary>Gets the writer connected to the Copilot CLI standard input stream.</summary>
+    public StreamWriter? StandardInput => _process.StandardInput;
+
     /// <summary>
     /// Reads the initial response produced by the <c>-i</c> prompt.
     /// Call once immediately after creation.

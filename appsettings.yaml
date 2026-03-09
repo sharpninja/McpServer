@@ -12,6 +12,10 @@ Serilog:
 
 AllowedHosts: "*"
 
+VoiceConversation:
+  DefaultExecutionStrategy: hosted-agentframework
+  ModelApiKeyEnvironmentVariableName: OPENAI_API_KEY
+
 Embedding:
   Enabled: true
   Dimensions: 384

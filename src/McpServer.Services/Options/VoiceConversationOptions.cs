@@ -1,3 +1,5 @@
+using McpServer.Support.Mcp.Services;
+
 namespace McpServer.Support.Mcp.Options;
 
 /// <summary>
@@ -19,6 +21,25 @@ public sealed class VoiceConversationOptions
     /// Copilot model identifier passed to Copilot CLI via <c>--model</c>.
     /// </summary>
     public string CopilotModel { get; set; } = "gpt-5.3-codex";
+
+    /// <summary>
+    /// Default execution strategy used for voice sessions when callers do not explicitly choose one.
+    /// Supported values are <c>copilot-cli</c> and <c>hosted-agentframework</c>.
+    /// </summary>
+    public string DefaultExecutionStrategy { get; set; } = AgentExecutionStrategyNames.CopilotCli;
+
+    /// <summary>
+    /// Optional API key injected into the underlying agent/model process for voice sessions.
+    /// When set, the key is exposed to the process through
+    /// <see cref="ModelApiKeyEnvironmentVariableName"/>.
+    /// </summary>
+    public string? ModelApiKey { get; set; }
+
+    /// <summary>
+    /// Environment variable name used to pass <see cref="ModelApiKey"/> to the underlying
+    /// agent/model process.
+    /// </summary>
+    public string ModelApiKeyEnvironmentVariableName { get; set; } = "OPENAI_API_KEY";
 
     /// <summary>
     /// Maximum number of tool-call loop iterations per turn.

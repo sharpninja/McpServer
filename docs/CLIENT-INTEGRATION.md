@@ -117,6 +117,39 @@ Switch workspace at runtime:
 client.WorkspacePath = @"E:\github\OtherProject";
 ```
 
+## Hosted .NET Agent Framework Library
+
+Use `src\McpServer.AgentFramework` when you want a .NET 9 host application to consume MCP Server session-log and TODO workflows through Microsoft Agent Framework-oriented registration instead of hand-assembling transport glue.
+
+Typical registration:
+
+```csharp
+services.AddMcpServerAgentFramework(options =>
+{
+    options.BaseUrl = new Uri("http://localhost:7147");
+    options.ApiKey = "token-from-marker";
+    options.WorkspacePath = @"E:\github\MyProject";
+    options.SourceType = "Codex";
+});
+
+using var serviceProvider = services.BuildServiceProvider();
+var hostedAgentFactory = serviceProvider.GetRequiredService<IMcpHostedAgentFactory>();
+var hostedAgent = hostedAgentFactory.CreateHostedAgent();
+var registration = hostedAgent.Registration;
+```
+
+Built-in hosted services include:
+
+- `ISessionLogWorkflow` for session bootstrap, turn lifecycle updates, and canonical session/request identifiers.
+- `ITodoWorkflow` for TODO query/get/update plus buffered or streaming plan/status/implementation flows.
+- `IMcpHostedAgent` / `IMcpHostedAgentFactory` for creating `ChatClientAgent`-ready registrations and run options with the built-in MCP tool set attached.
+
+Reference implementations:
+
+- Library source: `src\McpServer.AgentFramework`
+- Preview host: `src\McpServer.AgentFramework.SampleHost`
+- Automated acceptance coverage: `tests\McpServer.AgentFramework.Tests\HostedAgentWorkflowIntegrationTests.cs`
+
 ## Health Check
 
 All clients should verify connectivity before making API calls:

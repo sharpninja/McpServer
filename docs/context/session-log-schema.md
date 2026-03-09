@@ -106,6 +106,13 @@ Send-McpDialog -Session $s -RequestId $t.requestId -Content "Analyzing the issue
 # Complete the turn
 Set-McpSessionTurn -Turn $t -Session $s -Response "Done" -Status completed
 
+# Before compaction, persist the current session state.
+Update-McpSessionLog -Session $s
+
+# After compaction, record the compaction outcome and push again.
+Send-McpDialog -Session $s -RequestId $t.requestId -Content "Compaction completed; recovered context has been restored." -Category observation
+Update-McpSessionLog -Session $s
+
 # Final push at session end
 Update-McpSessionLog -Session $s -Status completed
 ```

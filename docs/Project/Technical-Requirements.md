@@ -586,10 +586,30 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 **Hosted .NET 9 Microsoft Agent Framework Library** — The solution SHALL provide a dedicated .NET 9 class library for hosting an MCP-aware agent inside external .NET applications built on Microsoft Agent Framework. The library SHALL expose DI-friendly registration and configuration APIs for MCP Server connectivity, agent construction, and host lifecycle integration so host applications do not need to assemble low-level MCP session-log or TODO plumbing themselves.
 
-**Status:** 🔴 Planned
+**Status:** ✅ Complete
+
+**Covered by:** `ServiceCollectionExtensions`, `McpAgentFrameworkOptions`, `McpAgentFrameworkOptionsValidator`, `IMcpHostedAgent`, `IMcpHostedAgentFactory`, `McpHostedAgent`, `McpHostedAgentFactory`, `McpHostedAgentRegistration`
 
 ## TR-MCP-AGENT-007
 
 **Built-In MCP Session Log and TODO Workflow for Hosted Agents** — The hosted agent library SHALL implement built-in workflow operations for session bootstrap, turn creation/update, TODO retrieval/update, and TODO plan/status/implementation flows using the existing MCP Server session log and TODO contracts. The workflow SHALL preserve canonical ID conventions for session IDs, request IDs, and TODO IDs and SHALL prefer reuse of existing client abstractions instead of duplicating transport logic.
 
+**Status:** ✅ Complete
+
+**Covered by:** `ISessionLogWorkflow`, `SessionLogWorkflow`, `SessionLogWorkflowContext`, `SessionLogTurnContext`, `ITodoWorkflow`, `TodoWorkflow`, `McpHostedAgentToolAdapter`, `IMcpSessionIdentifierFactory`, `McpSessionIdentifierFactory`
+
+## TR-MCP-HTTP-002
+
+**Detailed and Sanitized HTTP 500 Error Contract** — All HTTP endpoints that return status code 500 SHALL emit a structured response body containing a non-empty human-readable error description that identifies the failing operation and provides actionable diagnostic context for the caller. The contract SHALL be applied centrally so endpoint implementations do not duplicate exception-to-response formatting. Response detail SHALL be sanitized to avoid leaking secrets, tokens, connection strings, or raw stack traces, while server-side logs SHALL retain the full exception detail needed for root-cause analysis.
+
 **Status:** 🔴 Planned
+
+## TR-MCP-CFG-006
+
+**Administrative Configuration Snapshot and YAML Patch API** — `ConfigurationController` SHALL expose `GET /mcpserver/configuration` returning the current flattened `IConfiguration` view as `section:key` pairs, and `PATCH /mcpserver/configuration` accepting a flattened dictionary that patches only the submitted keys into `appsettings.yaml`.
+
+Persistence SHALL be delegated to a dedicated helper service that resolves the correct `appsettings` file path, loads and writes YAML safely, and reloads `IConfigurationRoot` after updates. The endpoints SHALL use standard JWT Bearer admin authorization and remain closed when OIDC is disabled.
+
+**Status:** ✅ Complete
+
+**Covered by:** `ConfigurationController`, `AppSettingsFileService`, `Program.cs` (JWT Bearer auth setup), `WorkspaceController` (shared appsettings helper reuse)

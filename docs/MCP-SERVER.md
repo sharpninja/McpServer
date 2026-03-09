@@ -50,6 +50,10 @@ Common keys:
 - `Mcp:TodoStorage:SqliteDataSource`
 - `Mcp:SessionsPath`
 - `Mcp:ExternalDocsPath`
+- `VoiceConversation:CopilotModel`
+- `VoiceConversation:DefaultExecutionStrategy` (`hosted-agentframework` or `copilot-cli`)
+- `VoiceConversation:ModelApiKey`
+- `VoiceConversation:ModelApiKeyEnvironmentVariableName`
 
 ### Config Reference
 
@@ -70,6 +74,14 @@ Common keys:
   schema file path.
 - `Mcp:ExternalDocsPath` (default `docs/external`):
   external-doc cache folder under `RepoRoot`.
+- `VoiceConversation:CopilotModel` (default `gpt-5.3-codex`):
+  model used for voice sessions when the request does not override it.
+- `VoiceConversation:DefaultExecutionStrategy` (default `copilot-cli`):
+  voice backend used when the request does not specify `executionStrategy`.
+- `VoiceConversation:ModelApiKey` (default unset):
+  optional API key injected into the voice agent/model process.
+- `VoiceConversation:ModelApiKeyEnvironmentVariableName` (default `OPENAI_API_KEY`):
+  environment variable name used to expose `ModelApiKey` to the underlying process.
 - `Mcp:InteractionLogging:*`: request/response interaction logging controls.
 - `Mcp:Parseable:*`: Parseable sink controls.
 - `Mcp:Instances:{name}:*`: per-instance overrides (static, config-file-only instances).
@@ -150,6 +162,13 @@ Available in Debug builds and `Staging` environment; excluded in Production Rele
 | `GET` | `/mcpserver/diagnostic/appsettings-path` | `{ environmentName, contentRootPath, files[] }` |
 
 Use these to verify which binary and which `appsettings.json` a running instance has loaded.
+
+## Administrative Configuration Endpoints
+
+These endpoints require a JWT Bearer token with the `admin` role and stay unavailable when OIDC auth is not configured.
+
+- `GET /mcpserver/configuration` — returns the current effective configuration as flattened `section:key` pairs.
+- `PATCH /mcpserver/configuration` — accepts a JSON dictionary of flattened keys and patches only those values into `appsettings.yaml`, then reloads the active configuration.
 
 Use `Mcp:Instances:{name}` to define isolated instances with unique ports,
 roots, and storage backends.

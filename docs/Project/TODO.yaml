@@ -2472,3 +2472,28 @@ MCP:
       done: true
     - task: Update Pester Tests
       done: true
+  - id: MCP-ERRORS-001
+    title: Ensure every HTTP 500 response includes a detailed error description
+    estimate: 2d
+    note: 'User requirement: Every 500 returned by every endpoint must have a detailed description of the error.'
+    done: false
+    description:
+    - Guarantee that every endpoint returning HTTP 500 includes a detailed, client-visible description of the failure.
+    - Apply the behavior consistently across controllers and shared HTTP/MCP execution paths instead of relying on per-endpoint custom handling.
+    technical-details:
+    - Introduce a centralized 500-response contract so endpoint implementations do not duplicate exception formatting.
+    - Response detail must be sanitized to avoid leaking secrets, tokens, connection strings, or raw stack traces while still identifying the failing operation.
+    - Cover representative controller, middleware, and MCP transport failure paths with regression tests.
+    functional-requirements:
+    - FR-MCP-067
+    technical-requirements:
+    - TR-MCP-HTTP-002
+    implementation-tasks:
+    - task: Define a shared HTTP 500 response payload shape and central exception-to-response mapping strategy
+      done: false
+    - task: Apply the shared 500 handling path across REST endpoints and any shared execution middleware
+      done: false
+    - task: Ensure error descriptions stay detailed but sanitized for sensitive values
+      done: false
+    - task: Add regression tests proving representative endpoints return detailed 500 descriptions consistently
+      done: false

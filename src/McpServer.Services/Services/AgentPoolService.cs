@@ -184,6 +184,7 @@ public sealed class AgentPoolService : IAgentPoolService, IDisposable
                         AgentModel = state.Definition.AgentModel,
                         AgentSeed = state.Definition.AgentSeed,
                         AgentParameters = state.Definition.AgentParameters,
+                        ExecutionStrategy = state.Definition.ExecutionStrategy,
                         OneShotSession = false,
                     },
                     cancellationToken).ConfigureAwait(false);

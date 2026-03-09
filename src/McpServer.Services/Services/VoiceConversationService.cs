@@ -10,6 +10,7 @@ using McpServer.Common.Copilot;
 using McpServer.Support.Mcp.Native;
 using McpServer.Support.Mcp.Options;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Services;
@@ -27,6 +28,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
 
     private readonly ConcurrentDictionary<string, VoiceSessionState> _sessions = new(StringComparer.OrdinalIgnoreCase);
     private readonly ICopilotClient _copilotClient;
+    private readonly IAgentExecutionStrategyResolver _strategyResolver;
     private readonly DesktopProcessLauncher? _desktopLauncher;
     private readonly WorkspaceServiceAccessor _workspaceAccessor;
     private readonly IConfiguration _configuration;
@@ -41,6 +43,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     /// </summary>
     public VoiceConversationService(
         ICopilotClient copilotClient,
+        IServiceProvider serviceProvider,
         WorkspaceServiceAccessor workspaceAccessor,
         IConfiguration configuration,
         IOptionsMonitor<VoiceConversationOptions> options,
@@ -50,6 +53,8 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         ILoggerFactory loggerFactory)
     {
         _copilotClient = copilotClient ?? throw new ArgumentNullException(nameof(copilotClient));
+        ArgumentNullException.ThrowIfNull(serviceProvider);
+        _strategyResolver = serviceProvider.GetRequiredService<IAgentExecutionStrategyResolver>();
         _workspaceAccessor = workspaceAccessor ?? throw new ArgumentNullException(nameof(workspaceAccessor));
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -72,6 +77,10 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         var opts = _options.CurrentValue;
         var now = DateTimeOffset.UtcNow;
         var requestedModel = string.IsNullOrWhiteSpace(request?.AgentModel) ? opts.CopilotModel : request.AgentModel.Trim();
+        var configuredExecutionStrategy = string.IsNullOrWhiteSpace(request?.ExecutionStrategy)
+            ? opts.DefaultExecutionStrategy
+            : request.ExecutionStrategy;
+        var executionStrategy = _strategyResolver.Resolve(configuredExecutionStrategy).Name;
 
         var requestedAgentName = request?.AgentName;
         var requestedWorkspacePath = request?.WorkspacePath;
@@ -82,6 +91,8 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
                 if (!string.Equals(existing.AgentName, requestedAgentName, StringComparison.OrdinalIgnoreCase))
                     continue;
                 if (!string.Equals(existing.WorkspacePath, requestedWorkspacePath, StringComparison.OrdinalIgnoreCase))
+                    continue;
+                if (!string.Equals(existing.ExecutionStrategy, executionStrategy, StringComparison.OrdinalIgnoreCase))
                     continue;
                 if (existing.IsTurnActive)
                     continue;
@@ -96,6 +107,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
                 _logger.LogInformation("Reusing voice session {SessionId} for pooled agent {AgentName}", existing.SessionId, requestedAgentName);
                 return new VoiceSessionCreateResponse
                 {
+                    ExecutionStrategy = existing.ExecutionStrategy,
                     SessionId = existing.SessionId,
                     Status = existing.Status,
                     Language = existing.Language,
@@ -137,6 +149,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
             requestedModel,
             combinedSeed,
             request?.AgentParameters,
+            executionStrategy,
             request?.OneShotSession ?? false,
             now);
         _sessions[sessionId] = state;
@@ -145,6 +158,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
 
         return new VoiceSessionCreateResponse
         {
+            ExecutionStrategy = executionStrategy,
             SessionId = sessionId,
             Status = "idle",
             Language = language,
@@ -369,6 +383,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
                 Status = state.Status,
                 Language = state.Language,
                 CreatedUtc = state.CreatedUtc.ToString("O"),
+                ExecutionStrategy = state.ExecutionStrategy,
                 LastUpdatedUtc = state.LastUpdatedUtc.ToString("O"),
                 IsTurnActive = state.IsTurnActive,
                 LastError = state.LastError,
@@ -473,6 +488,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
                     Status = state.Status,
                     Language = state.Language,
                     CreatedUtc = state.CreatedUtc.ToString("O"),
+                    ExecutionStrategy = state.ExecutionStrategy,
                     LastUpdatedUtc = state.LastUpdatedUtc.ToString("O"),
                     IsTurnActive = state.IsTurnActive,
                     LastError = state.LastError,
@@ -694,7 +710,7 @@ public sealed partial class VoiceConversationService
 
                 try
                 {
-                    state.InteractiveSession = _copilotClient.CreateInteractiveSession(prompt, copilotOpts);
+                    state.InteractiveSession = await CreateExecutionSessionAsync(state, prompt, copilotOpts, cancellationToken).ConfigureAwait(false);
                     copilotResult = await state.InteractiveSession.ReadInitialResponseAsync(cancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception)
@@ -857,7 +873,7 @@ public sealed partial class VoiceConversationService
 
             try
             {
-                state.InteractiveSession = _copilotClient.CreateInteractiveSession(prompt, copilotOpts);
+                state.InteractiveSession = await CreateExecutionSessionAsync(state, prompt, copilotOpts, cancellationToken).ConfigureAwait(false);
                 _logger.LogInformation("Interactive session created (PID={Pid}), reading initial response stream for {SessionId}", state.InteractiveSession.ProcessId, state.SessionId);
                 lineStream = state.InteractiveSession.ReadInitialResponseStreamingAsync(cancellationToken);
             }
@@ -1271,6 +1287,12 @@ public sealed partial class VoiceConversationService
             GitHubToken = promptOpts.GitHubToken,
         };
 
+        if (!string.IsNullOrWhiteSpace(opts.ModelApiKey)
+            && !string.IsNullOrWhiteSpace(opts.ModelApiKeyEnvironmentVariableName))
+        {
+            options.EnvironmentVariables[opts.ModelApiKeyEnvironmentVariableName.Trim()] = opts.ModelApiKey.Trim();
+        }
+
         if (sessionState?.AgentParameters is not null)
         {
             foreach (var pair in sessionState.AgentParameters)
@@ -1278,6 +1300,26 @@ public sealed partial class VoiceConversationService
         }
 
         return options;
+    }
+
+    private ValueTask<IAgentExecutionSession> CreateExecutionSessionAsync(
+        VoiceSessionState state,
+        string initialPrompt,
+        CopilotClientOptions options,
+        CancellationToken cancellationToken)
+    {
+        var workspacePath = !string.IsNullOrWhiteSpace(state.WorkspacePath)
+            ? state.WorkspacePath!
+            : options.WorkingDirectory ?? _workspaceAccessor.GetWorkspacePath();
+        var strategy = _strategyResolver.Resolve(state.ExecutionStrategy);
+        return strategy.CreateSessionAsync(
+            new AgentExecutionSessionRequest(
+                initialPrompt,
+                workspacePath,
+                state.AgentName,
+                state.ExecutionStrategy,
+                options),
+            cancellationToken);
     }
 
     /// <summary>
@@ -1790,6 +1832,7 @@ public sealed partial class VoiceConversationService
             string? agentModel,
             string? agentSeed,
             Dictionary<string, string>? agentParameters,
+            string executionStrategy,
             bool isOneShotSession,
             DateTimeOffset now)
         {
@@ -1805,6 +1848,7 @@ public sealed partial class VoiceConversationService
             AgentParameters = agentParameters is null
                 ? []
                 : new Dictionary<string, string>(agentParameters, StringComparer.OrdinalIgnoreCase);
+            ExecutionStrategy = executionStrategy;
             IsOneShotSession = isOneShotSession;
             CreatedUtc = now;
             LastUpdatedUtc = now;
@@ -1822,6 +1866,7 @@ public sealed partial class VoiceConversationService
         public string? AgentModel { get; }
         public string? AgentSeed { get; }
         public Dictionary<string, string> AgentParameters { get; }
+        public string ExecutionStrategy { get; }
         public bool IsOneShotSession { get; }
         public DateTimeOffset CreatedUtc { get; set; }
         public DateTimeOffset LastUpdatedUtc { get; set; }
@@ -1831,7 +1876,7 @@ public sealed partial class VoiceConversationService
         public string? LastTurnId { get; set; }
         public int TurnCounter { get; set; }
         public CancellationTokenSource? ActiveTurnCts { get; set; }
-        public CopilotInteractiveSession? InteractiveSession { get; set; }
+        public IAgentExecutionSession? InteractiveSession { get; set; }
         public List<VoiceTranscriptEntryDto> Transcript { get; } = [];
         public List<VoiceToolCallRecordDto> LastTurnToolCalls { get; } = [];
     }

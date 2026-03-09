@@ -1,6 +1,6 @@
 # Copilot Instructions — McpServer
 
-**Agent Identity:** When posting to the MCP session log, use `sourceType: copilotcli`.
+**Agent Identity:** When posting to the MCP session log, use the agent's actual identity in Pascal-Case for `sourceType` and the session ID prefix. Do not use inaccurate aliases, lowercase names, or legacy placeholders. Example: `Codex`.
 For specific operational instructions (session bootstrap, turn logging lifecycle, helper command order), follow `AGENTS-README-FIRST.yaml`.
 
 ## Response Formatting

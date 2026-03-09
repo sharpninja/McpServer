@@ -418,4 +418,26 @@ The system SHALL provide a .NET 9 class library that packages an MCP-aware agent
 
 The hosted agent SHALL include a built-in workflow that treats MCP Server session logging and TODO management as first-class primitives, allowing host applications to bootstrap/continue session logs, create and update turns, inspect and mutate TODO items, and run plan/status/implementation task flows without reimplementing those integrations.
 
+**Status:** ✅ Complete
+
 **Technical Implementation:** [TR-MCP-AGENT-006](./Technical-Requirements.md#tr-mcp-agent-006) | [TR-MCP-AGENT-007](./Technical-Requirements.md#tr-mcp-agent-007) | [Details](./TR-per-FR-Mapping.md#fr-mcp-066)
+
+**Covered by:** `McpServer.AgentFramework` (`ServiceCollectionExtensions`, `McpAgentFrameworkOptions`, `AgentFramework/*`, `SessionLog/*`, `Todo/*`), `McpServer.AgentFramework.SampleHost` (`Program.cs`, `SampleHostPreviewFactory.cs`)
+
+## FR-MCP-067 Detailed Internal Server Error Responses
+
+The system SHALL return a detailed client-visible error description for every endpoint response that fails with HTTP 500.
+
+Detailed 500 responses SHALL describe the failed operation clearly enough for callers to diagnose the failure path and distinguish server faults from client mistakes, while remaining sanitized so secrets, tokens, and other sensitive internals are not exposed in the response body.
+
+**Technical Implementation:** [TR-MCP-HTTP-002](./Technical-Requirements.md#tr-mcp-http-002) | [Details](./TR-per-FR-Mapping.md#fr-mcp-067)
+
+## FR-MCP-068 Administrative Configuration Management API
+
+The server SHALL provide an admin-only configuration API that returns the current effective configuration as flattened key-value pairs and supports patching selected values back into `appsettings.yaml` without rewriting unrelated settings or serializing values that originate only from non-file configuration providers.
+
+The configuration-management endpoints SHALL require standard JWT Bearer authentication with the `admin` role. When OIDC is not configured, the endpoints SHALL remain unavailable.
+
+**Technical Implementation:** [TR-MCP-CFG-006](./Technical-Requirements.md#tr-mcp-cfg-006) | [Details](./TR-per-FR-Mapping.md#fr-mcp-068)
+
+**Covered by:** `ConfigurationController`, `AppSettingsFileService`, `Program.cs` (`ConfigurationAdmin` policy), `WorkspaceController` (shared appsettings helper reuse)

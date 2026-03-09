@@ -146,7 +146,13 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-065 | ✅ Complete | ContextController (ingest-website), IngestionCoordinator.IngestWebsiteAsync, WebsiteIngestor, FwhMcpTools.context_ingest_website, ContextClient.IngestWebsiteAsync |
 | TR-MCP-INGEST-003 | ✅ Complete | WebsiteIngestor, IngestionOptions website limits, Program/McpStdioHost HttpClient registration, IngestionCoordinator website path |
 | TEST-MCP-088 | ✅ Complete | WebsiteIngestorTests, ContextControllerTests (ingest-website), McpTransportTests (context_ingest_website), ContextClientTests.IngestWebsiteAsync_PostsTypedRequest |
-| FR-MCP-066 | 🔲 Planned | — |
-| TR-MCP-AGENT-006 | 🔲 Planned | — |
-| TR-MCP-AGENT-007 | 🔲 Planned | — |
-| TEST-MCP-089 | 🔲 Planned | — |
+| FR-MCP-066 | ✅ Complete | `McpServer.AgentFramework` (`ServiceCollectionExtensions`, `McpAgentFrameworkOptions`, `AgentFramework/*`, `SessionLog/*`, `Todo/*`), `McpServer.AgentFramework.SampleHost` (`Program.cs`, `SampleHostPreviewFactory.cs`) |
+| TR-MCP-AGENT-006 | ✅ Complete | `ServiceCollectionExtensions`, `McpAgentFrameworkOptions`, `McpAgentFrameworkOptionsValidator`, `IMcpHostedAgent`, `IMcpHostedAgentFactory`, `McpHostedAgent`, `McpHostedAgentRegistration` |
+| TR-MCP-AGENT-007 | ✅ Complete | `SessionLogWorkflow`, `SessionLogWorkflowContext`, `SessionLogTurnContext`, `TodoWorkflow`, `McpHostedAgentToolAdapter`, `McpSessionIdentifierFactory` |
+| TEST-MCP-089 | ✅ Complete | `HostedAgentWorkflowIntegrationTests`, `McpHostedAgentAdapterTests`, `SessionLogWorkflowTests`, `TodoWorkflowTests`, `ServiceCollectionExtensionsTests` |
+| FR-MCP-067 | 🔲 Planned | — |
+| TR-MCP-HTTP-002 | 🔲 Planned | — |
+| TEST-MCP-090 | 🔲 Planned | — |
+| FR-MCP-068 | ✅ Complete | ConfigurationController, AppSettingsFileService, Program.cs (JWT Bearer auth), WorkspaceController |
+| TR-MCP-CFG-006 | ✅ Complete | ConfigurationController, AppSettingsFileService, Program.cs (JWT Bearer auth), WorkspaceController |
+| TEST-MCP-091 | ✅ Complete | ConfigurationControllerTests, AppSettingsFileServiceTests, ConfigurationAuthorizationPolicyTests |

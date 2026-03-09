@@ -133,6 +133,9 @@ public static class McpStdioHost
                 ?? options.TokenStorePath;
             options.TokenStorePath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.TokenStorePath);
         });
+
+        builder.Services.AddSingleton<IPostConfigureOptions<TemplateStorageOptions>>(_ =>
+            new TemplateStorageOptionsPostConfigure(builder.Configuration, instanceName));
         builder.Services.AddSingleton<ISyncStatusStore, SyncStatusStore>();
         builder.Services.AddSingleton<IWriteAuditLog, WriteAuditLog>();
         builder.Services.AddHttpClient(WebsiteIngestor.HttpClientName, (sp, client) =>
@@ -212,3 +215,4 @@ public static class McpStdioHost
         await host.RunAsync(cancellationToken).ConfigureAwait(false);
     }
 }
+

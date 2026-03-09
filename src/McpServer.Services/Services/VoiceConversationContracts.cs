@@ -56,6 +56,11 @@ public sealed record VoiceSessionCreateRequest
     public Dictionary<string, string>? AgentParameters { get; set; }
 
     /// <summary>
+    /// Optional execution strategy name used to create the agent session.
+    /// </summary>
+    public string? ExecutionStrategy { get; set; }
+
+    /// <summary>
     /// Whether this session is dedicated to one-shot processing.
     /// </summary>
     public bool OneShotSession { get; set; }
@@ -90,6 +95,11 @@ public sealed record VoiceSessionCreateResponse
     /// Model identifier actually used (same as requested in this implementation).
     /// </summary>
     public string? ModelResolved { get; init; }
+
+    /// <summary>
+    /// Execution strategy used by the created session.
+    /// </summary>
+    public required string ExecutionStrategy { get; init; }
 }
 
 /// <summary>
@@ -244,6 +254,11 @@ public sealed record VoiceSessionStatusDto
     /// Number of transcript entries available for retrieval.
     /// </summary>
     public int TranscriptCount { get; init; }
+
+    /// <summary>
+    /// Execution strategy currently backing the session.
+    /// </summary>
+    public required string ExecutionStrategy { get; init; }
 }
 
 /// <summary>

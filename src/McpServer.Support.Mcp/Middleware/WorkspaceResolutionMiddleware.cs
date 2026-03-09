@@ -37,6 +37,7 @@ public sealed class WorkspaceResolutionMiddleware
         "/mcpserver/events",
         "/mcpserver/gh",
         "/mcpserver/context",
+        "/mcpserver/configuration",
         "/mcpserver/voice",
         "/mcp-transport",
     };

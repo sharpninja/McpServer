@@ -195,6 +195,8 @@ builder.Services.Configure<AgentPoolOptions>(builder.Configuration.GetSection(Ag
 builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
 builder.Services.Configure<RequirementsOptions>(builder.Configuration.GetSection(RequirementsOptions.SectionName));
 builder.Services.AddSingleton<IValidateOptions<AgentPoolOptions>, AgentPoolOptionsValidator>();
+builder.Services.AddSingleton<IValidateOptions<VoiceConversationOptions>, VoiceConversationOptionsValidator>();
+builder.Services.AddSingleton<AppSettingsFileService>();
 var requiredRepoAllowlistPatterns = new[]
 {
     "src/McpServer.Cqrs/**/*.cs",
@@ -254,11 +256,8 @@ builder.Services.PostConfigure<GitHubIntegrationOptions>(options =>
         ?? options.TokenStorePath;
     options.TokenStorePath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.TokenStorePath);
 });
-builder.Services.PostConfigure<TemplateStorageOptions>(options =>
-{
-    options.FilePath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TemplateStorage:FilePath") ?? options.FilePath;
-    options.FilePath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.FilePath);
-});
+builder.Services.AddSingleton<IPostConfigureOptions<TemplateStorageOptions>>(_ =>
+    new TemplateStorageOptionsPostConfigure(builder.Configuration, instanceName));
 builder.Services.PostConfigure<RequirementsOptions>(options =>
 {
     var repoRoot = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "RepoRoot")
@@ -332,6 +331,7 @@ builder.Services.AddSingleton<RequirementsDocumentService>();
 builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<RequirementsDocumentService>());
 builder.Services.AddSingleton<IRequirementsDocumentService>(sp => sp.GetRequiredService<RequirementsDocumentService>());
 builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
+builder.Services.AddAgentExecutionStrategies();
 builder.Services.AddSingleton<IVoiceConversationService, VoiceConversationService>();
 builder.Services.AddSingleton<IAgentPoolService, AgentPoolService>();
 builder.Services.AddSingleton<PromptTemplateRenderer>();

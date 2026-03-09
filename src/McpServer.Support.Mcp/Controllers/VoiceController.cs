@@ -54,6 +54,11 @@ public sealed class VoiceController : ControllerBase
             _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new { error = ex.Message });
         }
+        catch (ArgumentException ex)
+        {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            return BadRequest(new { error = ex.Message });
+        }
     }
 
     /// <summary>

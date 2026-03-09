@@ -69,6 +69,25 @@ public sealed class AgentPoolOptionsValidatorTests
     }
 
     [Fact]
+    public void Validate_Fails_WhenExecutionStrategyIsUnknown()
+    {
+        var validator = new AgentPoolOptionsValidator();
+        var options = new AgentPoolOptions
+        {
+            Enabled = true,
+            Agents =
+            [
+                new AgentPoolDefinitionOptions { AgentName = "Planner", AgentPath = "p.exe", ExecutionStrategy = "unknown-strategy" },
+            ],
+        };
+
+        var result = validator.Validate(null, options);
+
+        Assert.True(result.Failed);
+        Assert.Contains("ExecutionStrategy", result.FailureMessage, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void Validate_ReturnsSuccess_WhenConfigurationIsValid()
     {
         var validator = new AgentPoolOptionsValidator();

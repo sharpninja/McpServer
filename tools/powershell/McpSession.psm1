@@ -5,6 +5,7 @@
 .DESCRIPTION
     Provides cmdlets to create, update, query, and manage session logs on an MCP Context Server.
     Automatically reads connection details from the AGENTS-README-FIRST.yaml marker file.
+    For compaction workflows, persist the session log immediately before compaction and again after compaction to record the resulting context state.
 
 .NOTES
     Usage:  Import-Module ./McpSession.psm1

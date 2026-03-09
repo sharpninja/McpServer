@@ -10,6 +10,10 @@ Serilog:
       Microsoft.AspNetCore: Warning
       McpServer.Support.Mcp.Logging: Verbose
 
+VoiceConversation:
+  DefaultExecutionStrategy: hosted-agentframework
+  ModelApiKeyEnvironmentVariableName: OPENAI_API_KEY
+
 Mcp:
   Port: 7147
   DataSource: mcp.db
