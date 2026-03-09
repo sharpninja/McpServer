@@ -263,6 +263,11 @@ function Get-McpSessionTurnList {
         } else {
             $Session.turns = $Session.entries
         }
+
+        foreach ($turn in @($Session.entries)) {
+            Normalize-McpSessionTurnCollections -Turn $turn
+        }
+
         return ,$Session.entries
     }
 
@@ -275,6 +280,11 @@ function Get-McpSessionTurnList {
 
     $Session | Add-Member -NotePropertyName entries -NotePropertyValue $entries -Force
     $Session | Add-Member -NotePropertyName turns -NotePropertyValue $entries -Force
+
+    foreach ($turn in @($Session.entries)) {
+        Normalize-McpSessionTurnCollections -Turn $turn
+    }
+
     return ,$Session.entries
 }
 
@@ -462,14 +472,15 @@ function Add-McpAction {
         [switch]$NoPush
     )
 
+    $actions = Get-McpSessionTurnObjectList -Turn $Turn -Field "actions"
     $action = [PSCustomObject]@{
-        order       = $Turn.actions.Count + 1
+        order       = $actions.Count + 1
         description = $Description
         type        = $Type
         status      = $Status
         filePath    = $FilePath
     }
-    $Turn.actions.Add($action)
+    $actions.Add($action)
     $resolvedSession = Resolve-McpSession -Session $Session -AllowMissing
     if ($resolvedSession -and -not $NoPush) {
         Update-McpSessionLog -Session $resolvedSession
@@ -738,6 +749,42 @@ function Get-McpSessionTurnStringList {
     }
     $Turn.$Field = $list
     return ,$list
+}
+
+function Get-McpSessionTurnObjectList {
+    param(
+        [Parameter(Mandatory)][PSCustomObject]$Turn,
+        [Parameter(Mandatory)][string]$Field
+    )
+
+    $current = $Turn.$Field
+    if ($current -is [System.Collections.Generic.List[object]]) {
+        return ,$current
+    }
+
+    $list = [System.Collections.Generic.List[object]]::new()
+    foreach ($value in @($current)) {
+        if ($null -ne $value) {
+            [void]$list.Add($value)
+        }
+    }
+
+    $Turn.$Field = $list
+    return ,$list
+}
+
+function Normalize-McpSessionTurnCollections {
+    param(
+        [Parameter(Mandatory)][PSCustomObject]$Turn
+    )
+
+    foreach ($field in @("tags", "contextList", "designDecisions", "requirementsDiscovered", "filesModified", "blockers")) {
+        [void](Get-McpSessionTurnStringList -Turn $Turn -Field $field)
+    }
+
+    foreach ($field in @("actions", "processingDialog")) {
+        [void](Get-McpSessionTurnObjectList -Turn $Turn -Field $field)
+    }
 }
 
 function Push-SessionLog {

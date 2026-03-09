@@ -10,10 +10,20 @@ Describe 'McpSession Module' {
 
     # Reset module state between tests
     BeforeEach {
+        $workspaceRoot = Join-Path $TestDrive 'workspace'
+        New-Item $workspaceRoot -ItemType Directory -Force | Out-Null
+
+        InModuleScope McpSession -Parameters @{ WorkspaceRoot = $workspaceRoot } {
+            param($WorkspaceRoot)
+            $script:McpWorkspacePath = $WorkspaceRoot
+            $script:McpSessionAgent = $null
+            $script:McpSessionModel = $null
+            $script:McpSessionSlug = $null
+        }
+
         InModuleScope McpSession {
             $script:McpBaseUrl = $null
             $script:McpApiKey  = $null
-            $script:McpWorkspacePath = $null
             $script:McpHeaders = @{}
         }
     }
@@ -138,6 +148,10 @@ workspace: demo
         }
 
         It 'auto-generates sessionId with source prefix' {
+            InModuleScope McpSession {
+                $script:McpSessionSlug = $null
+            }
+
             $s = New-McpSessionLog -SourceType 'Copilot' -Title 't' -Model 'm'
             $s.sessionId | Should -Match '^Copilot-\d{8}T\d{6}Z-m$'
             $s.sessionId.Length | Should -BeGreaterThan 10
@@ -253,22 +267,22 @@ workspace: demo
         It 'updates response field' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
             $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
-            Set-McpSessionTurn -Turn $e -Response 'All done!' -NoPush
+            Set-McpSessionTurn -Turn $e -Session $s -Response 'All done!' -NoPush
             $e.response | Should -Be 'All done!'
         }
 
         It 'updates status field' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
             $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
-            Set-McpSessionTurn -Turn $e -Status completed -NoPush
+            Set-McpSessionTurn -Turn $e -Session $s -Status completed -NoPush
             $e.status | Should -Be 'completed'
         }
 
         It 'appends to filesModified' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
             $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
-            Set-McpSessionTurn -Turn $e -FilesModified @('a.cs', 'b.cs') -NoPush
-            Set-McpSessionTurn -Turn $e -FilesModified @('c.cs') -NoPush
+            Set-McpSessionTurn -Turn $e -Session $s -FilesModified @('a.cs', 'b.cs') -NoPush
+            Set-McpSessionTurn -Turn $e -Session $s -FilesModified @('c.cs') -NoPush
             $e.filesModified.Count | Should -Be 3
             $e.filesModified[2]    | Should -Be 'c.cs'
         }
@@ -276,7 +290,7 @@ workspace: demo
         It 'appends to designDecisions' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
             $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
-            Set-McpSessionTurn -Turn $e -DesignDecisions @('Use JWT', 'Skip caching') -NoPush
+            Set-McpSessionTurn -Turn $e -Session $s -DesignDecisions @('Use JWT', 'Skip caching') -NoPush
             $e.designDecisions.Count | Should -Be 2
         }
 
@@ -348,6 +362,28 @@ workspace: demo
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
                 $Method -eq 'Post' -and $Uri -like '*/mcpserver/sessionlog'
             }
+        }
+
+        It 'normalizes persisted fixed-size action arrays before appending' {
+            $workspaceRoot = Join-Path $TestDrive 'workspace'
+            New-Item $workspaceRoot -ItemType Directory -Force | Out-Null
+
+            InModuleScope McpSession -Parameters @{ WorkspaceRoot = $workspaceRoot } {
+                param($WorkspaceRoot)
+                $script:McpWorkspacePath = $WorkspaceRoot
+            }
+
+            $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
+
+            $statePath = Join-Path $workspaceRoot '.mcpServer\session.yaml'
+            $persisted = Get-Content -LiteralPath $statePath -Raw | ConvertFrom-Json -Depth 50
+            $persistedSession = $persisted.session
+            $persistedTurn = $persistedSession.entries[0]
+
+            { Add-McpAction -Turn $persistedTurn -Session $persistedSession -Description 'Recovered from persisted state' -Type edit -NoPush } | Should -Not -Throw
+            $persistedTurn.actions.Count | Should -Be 1
+            $persistedTurn.actions[0].description | Should -Be 'Recovered from persisted state'
         }
     }
 
