@@ -92,6 +92,7 @@ public sealed class McpServerClient
         Repo = new RepoClient(http, options, holder);
         Tunnel = new TunnelClient(http, options, holder);
         Workspace = new WorkspaceClient(http, options, holder);
+        Configuration = new ConfigurationClient(http, options, holder);
         Tools = new ToolRegistryClient(http, options, holder);
         AuthConfig = new AuthConfigClient(http, options, holder);
         Diagnostic = new DiagnosticClient(http, options, holder);
@@ -103,7 +104,7 @@ public sealed class McpServerClient
         _allClients = new McpClientBase[]
         {
             Todo, Context, SessionLog, GitHub, Requirements, Voice, Events,
-            Repo, Tunnel, Workspace, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health
+            Repo, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health
         };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
@@ -315,6 +316,13 @@ public sealed class McpServerClient
     /// <para>See <see cref="WorkspaceClient"/> for the full method list.</para>
     /// </summary>
     public WorkspaceClient Workspace { get; }
+
+    /// <summary>
+    /// Admin configuration endpoints — read the effective flattened configuration and patch
+    /// <c>appsettings.yaml</c>.
+    /// <para>See <see cref="ConfigurationClient"/> for the full method list.</para>
+    /// </summary>
+    public ConfigurationClient Configuration { get; }
 
     /// <summary>
     /// Tool registry endpoints — CRUD, search, bucket management, and tool installation.

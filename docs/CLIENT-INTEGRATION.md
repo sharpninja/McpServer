@@ -117,6 +117,19 @@ Switch workspace at runtime:
 client.WorkspacePath = @"E:\github\OtherProject";
 ```
 
+Admin-only configuration endpoints are also available through the typed client when you supply an admin JWT bearer token:
+
+```csharp
+client.BearerToken = adminJwt;
+var values = await client.Configuration.GetValuesAsync();
+
+var updated = await client.Configuration.PatchValuesAsync(new Dictionary<string, string?>
+{
+    ["VoiceConversation:CopilotModel"] = "gpt-5.4",
+    ["VoiceConversation:ModelApiKey"] = null, // remove the persisted key
+});
+```
+
 ## Hosted .NET Agent Framework Library
 
 Use `src\McpServer.AgentFramework` when you want a .NET 9 host application to consume MCP Server session-log and TODO workflows through Microsoft Agent Framework-oriented registration instead of hand-assembling transport glue.

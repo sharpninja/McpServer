@@ -44,6 +44,11 @@ public abstract class McpClientBase
         PropertyNameCaseInsensitive = true,
         DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
     };
+    private static readonly JsonSerializerOptions s_jsonOptionsIncludingNulls = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never
+    };
 
     private readonly HttpClient _http;
     private readonly string _scheme;
@@ -220,6 +225,19 @@ public abstract class McpClientBase
     protected Task<T> PutAsync<T>(string path, object? body, CancellationToken cancellationToken)
         => SendAsync<T>(HttpMethod.Put, path, body, cancellationToken);
 
+    /// <summary>Sends a PATCH request with a JSON body and deserializes the response to <typeparamref name="T"/>.</summary>
+    /// <inheritdoc cref="SendAsync{T}(HttpMethod, string, object?, CancellationToken)" path="/exception"/>
+    protected Task<T> PatchAsync<T>(string path, object? body, CancellationToken cancellationToken)
+        => SendAsync<T>(HttpMethod.Patch, path, body, cancellationToken);
+
+    /// <summary>
+    /// Sends a PATCH request while preserving explicit <see langword="null"/> values in the JSON body.
+    /// Use this for dictionary patch endpoints where <see langword="null"/> removes a value.
+    /// </summary>
+    /// <inheritdoc cref="SendAsync{T}(HttpMethod, string, object?, CancellationToken)" path="/exception"/>
+    protected Task<T> PatchIncludingNullsAsync<T>(string path, object? body, CancellationToken cancellationToken)
+        => SendAsync<T>(HttpMethod.Patch, path, body, s_jsonOptionsIncludingNulls, cancellationToken);
+
     /// <summary>Sends a DELETE request and deserializes the JSON response body to <typeparamref name="T"/>.</summary>
     /// <inheritdoc cref="SendAsync{T}(HttpMethod, string, object?, CancellationToken)" path="/exception"/>
     protected Task<T> DeleteAsync<T>(string path, CancellationToken cancellationToken)
@@ -344,6 +362,23 @@ public abstract class McpClientBase
     /// <exception cref="McpConflictException">HTTP 409 Conflict.</exception>
     /// <exception cref="McpServerException">Any other non-success HTTP status.</exception>
     private async Task<T> SendAsync<T>(HttpMethod method, string path, object? body, CancellationToken cancellationToken)
+        => await SendAsync<T>(method, path, body, s_jsonOptions, cancellationToken).ConfigureAwait(true);
+
+    /// <summary>
+    /// Core HTTP dispatch with a caller-specified request serializer.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown when neither <see cref="ApiKey"/> nor <see cref="BearerToken"/> is set.</exception>
+    /// <exception cref="McpValidationException">HTTP 400 Bad Request.</exception>
+    /// <exception cref="McpUnauthorizedException">HTTP 401 Unauthorized.</exception>
+    /// <exception cref="McpNotFoundException">HTTP 404 Not Found.</exception>
+    /// <exception cref="McpConflictException">HTTP 409 Conflict.</exception>
+    /// <exception cref="McpServerException">Any other non-success HTTP status.</exception>
+    private async Task<T> SendAsync<T>(
+        HttpMethod method,
+        string path,
+        object? body,
+        JsonSerializerOptions requestSerializerOptions,
+        CancellationToken cancellationToken)
     {
         EnsureAuthenticated();
 
@@ -374,7 +409,7 @@ public abstract class McpClientBase
 
         if (body is not null)
             request.Content = new StringContent(
-                JsonSerializer.Serialize(body, s_jsonOptions), Encoding.UTF8, "application/json");
+                JsonSerializer.Serialize(body, requestSerializerOptions), Encoding.UTF8, "application/json");
 
         HttpResponseMessage response;
         try
