@@ -12,7 +12,7 @@
             Initialize-McpSession -Agent "Copilotcli" -Model "gpt-5.3-codex"  # reads marker, sets connection, persists/reuses session slug
             $s = New-McpSessionLog -Title "My session"     # creates session
             Add-McpSessionTurn -Session $s -QueryTitle "Fix bug" -QueryText "Fix the auth bug" -Status in_progress
-            Send-McpDialog -Session $s -RequestId req-001 -Content "Analyzing the issue..." -Category reasoning
+            Send-McpDialog -Session $s -RequestId req-20260304T113901Z-analysis -Content "Analyzing the issue..." -Category reasoning
             Update-McpSessionLog -Session $s               # pushes to server
 #>
 
@@ -138,6 +138,23 @@ function New-McpSessionLogSlug {
     $modelToken = ConvertTo-McpSessionSlugToken -Value $Model
     $stamp = $TimestampUtc.ToUniversalTime().ToString('yyyyMMddTHHmmssZ')
     return "$agentToken-$stamp-$modelToken"
+}
+
+function New-McpRequestId {
+    <#
+    .SYNOPSIS  Build a canonical request ID in the form req-<timestamp>-<slug>.
+    .PARAMETER SuffixSeed    Raw suffix text used to build the request-id slug.
+    .PARAMETER TimestampUtc  Optional UTC timestamp; defaults to now.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][string]$SuffixSeed,
+        [datetime]$TimestampUtc = (Get-Date).ToUniversalTime()
+    )
+
+    $suffixToken = ConvertTo-McpSessionSlugToken -Value $SuffixSeed
+    $stamp = $TimestampUtc.ToUniversalTime().ToString('yyyyMMddTHHmmssZ')
+    return "req-$stamp-$suffixToken"
 }
 
 function New-McpSessionLog {
@@ -331,7 +348,16 @@ function Add-McpSessionTurn {
     $Session = Resolve-McpSession -Session $Session
 
     $turns = Get-McpSessionTurnList -Session $Session
-    if (-not $RequestId) { $RequestId = "req-$('{0:D3}' -f ($turns.Count + 1))" }
+    if (-not $RequestId) {
+        $suffixSeed = $QueryTitle
+        if ([string]::IsNullOrWhiteSpace($suffixSeed)) { $suffixSeed = $QueryText }
+        if ([string]::IsNullOrWhiteSpace($suffixSeed)) { $suffixSeed = "turn" }
+
+        $RequestId = New-McpRequestId -SuffixSeed $suffixSeed
+        if (@($turns | Where-Object { $_.requestId -eq $RequestId }).Count -gt 0) {
+            $RequestId = New-McpRequestId -SuffixSeed ("{0}-{1:D3}" -f $suffixSeed, ($turns.Count + 1))
+        }
+    }
     if (-not $Model) { $Model = $Session.model }
 
     $turn = [PSCustomObject]@{
