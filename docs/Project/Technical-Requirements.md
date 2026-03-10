@@ -588,7 +588,7 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 **Status:** ✅ Complete
 
-**Covered by:** `ServiceCollectionExtensions`, `McpAgentFrameworkOptions`, `McpAgentFrameworkOptionsValidator`, `IMcpHostedAgent`, `IMcpHostedAgentFactory`, `McpHostedAgent`, `McpHostedAgentFactory`, `McpHostedAgentRegistration`
+**Covered by:** `ServiceCollectionExtensions`, `McpAgentOptions`, `McpAgentOptionsValidator`, `IMcpHostedAgent`, `IMcpHostedAgentFactory`, `McpHostedAgent`, `McpHostedAgentFactory`, `McpHostedAgentRegistration`
 
 ## TR-MCP-AGENT-007
 

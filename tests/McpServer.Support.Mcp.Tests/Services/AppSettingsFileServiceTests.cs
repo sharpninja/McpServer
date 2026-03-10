@@ -38,7 +38,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
             """
             VoiceConversation:
               CopilotModel: gpt-5.3-codex
-              DefaultExecutionStrategy: hosted-agentframework
+              DefaultExecutionStrategy: hosted-mcp-agent
             """);
 
         var configuration = BuildConfiguration(yamlPath);
@@ -47,7 +47,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
         var values = service.GetConfigurationValues();
 
         Assert.Equal("gpt-5.3-codex", values["VoiceConversation:CopilotModel"]);
-        Assert.Equal("hosted-agentframework", values["VoiceConversation:DefaultExecutionStrategy"]);
+        Assert.Equal("hosted-mcp-agent", values["VoiceConversation:DefaultExecutionStrategy"]);
     }
 
     /// <summary>
@@ -163,7 +163,7 @@ public sealed class AppSettingsFileServiceTests : IDisposable
         var updated = await service.PatchYamlConfigurationAsync(
             new Dictionary<string, string?>
             {
-                ["VoiceConversation:DefaultExecutionStrategy"] = "hosted-agentframework",
+                ["VoiceConversation:DefaultExecutionStrategy"] = "hosted-mcp-agent",
                 ["VoiceConversation:ModelApiKeyEnvironmentVariableName"] = "OPENAI_API_KEY",
             },
             CancellationToken.None).ConfigureAwait(true);
@@ -171,10 +171,10 @@ public sealed class AppSettingsFileServiceTests : IDisposable
         var loadedYamlText = await File.ReadAllTextAsync(loadedYamlPath).ConfigureAwait(true);
         var contentRootYamlText = await File.ReadAllTextAsync(contentRootYamlPath).ConfigureAwait(true);
 
-        Assert.Equal("hosted-agentframework", configuration["VoiceConversation:DefaultExecutionStrategy"]);
+        Assert.Equal("hosted-mcp-agent", configuration["VoiceConversation:DefaultExecutionStrategy"]);
         Assert.Equal("OPENAI_API_KEY", configuration["VoiceConversation:ModelApiKeyEnvironmentVariableName"]);
-        Assert.Equal("hosted-agentframework", updated["VoiceConversation:DefaultExecutionStrategy"]);
-        Assert.Contains("DefaultExecutionStrategy: hosted-agentframework", loadedYamlText, StringComparison.Ordinal);
+        Assert.Equal("hosted-mcp-agent", updated["VoiceConversation:DefaultExecutionStrategy"]);
+        Assert.Contains("DefaultExecutionStrategy: hosted-mcp-agent", loadedYamlText, StringComparison.Ordinal);
         Assert.Contains("ModelApiKeyEnvironmentVariableName: OPENAI_API_KEY", loadedYamlText, StringComparison.Ordinal);
         Assert.DoesNotContain("DefaultExecutionStrategy", contentRootYamlText, StringComparison.Ordinal);
         Assert.Contains("CopilotModel: should-not-change", contentRootYamlText, StringComparison.Ordinal);

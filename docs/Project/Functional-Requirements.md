@@ -422,7 +422,7 @@ The hosted agent SHALL include a built-in workflow that treats MCP Server sessio
 
 **Technical Implementation:** [TR-MCP-AGENT-006](./Technical-Requirements.md#tr-mcp-agent-006) | [TR-MCP-AGENT-007](./Technical-Requirements.md#tr-mcp-agent-007) | [Details](./TR-per-FR-Mapping.md#fr-mcp-066)
 
-**Covered by:** `McpServer.AgentFramework` (`ServiceCollectionExtensions`, `McpAgentFrameworkOptions`, `AgentFramework/*`, `PowerShellSessions/*`, `SessionLog/*`, `Todo/*`), `McpServer.Client` (`McpServerClient`, `RepoClient`, `DesktopClient`), `McpServer.AgentFramework.SampleHost` (`Program.cs`, `SampleHostPreviewFactory.cs`)
+**Covered by:** `McpServer.McpAgent` (`ServiceCollectionExtensions`, `McpAgentOptions`, `Hosting/*`, `PowerShellSessions/*`, `SessionLog/*`, `Todo/*`), `McpServer.Client` (`McpServerClient`, `RepoClient`, `DesktopClient`), `McpServer.McpAgent.SampleHost` (`Program.cs`, `SampleHostPreviewFactory.cs`)
 
 ## FR-MCP-067 Detailed Internal Server Error Responses
 
@@ -441,3 +441,4 @@ The configuration-management endpoints SHALL require standard JWT Bearer authent
 **Technical Implementation:** [TR-MCP-CFG-006](./Technical-Requirements.md#tr-mcp-cfg-006) | [Details](./TR-per-FR-Mapping.md#fr-mcp-068)
 
 **Covered by:** `ConfigurationController`, `AppSettingsFileService`, `Program.cs` (`ConfigurationAdmin` policy), `WorkspaceController` (shared appsettings helper reuse)
+

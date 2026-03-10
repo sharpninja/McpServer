@@ -33,12 +33,12 @@ public sealed class VoiceConversationOptionsValidatorTests
     }
 
     [Fact]
-    public void Validate_ReturnsSuccess_WhenDefaultExecutionStrategyIsHostedAgentFramework()
+    public void Validate_ReturnsSuccess_WhenDefaultExecutionStrategyIsHostedMcpAgent()
     {
         var validator = new VoiceConversationOptionsValidator();
         var options = new VoiceConversationOptions
         {
-            DefaultExecutionStrategy = AgentExecutionStrategyNames.HostedAgentFramework,
+            DefaultExecutionStrategy = AgentExecutionStrategyNames.HostedMcpAgent,
         };
 
         var result = validator.Validate(null, options);
@@ -62,3 +62,4 @@ public sealed class VoiceConversationOptionsValidatorTests
         Assert.Contains("ModelApiKeyEnvironmentVariableName", result.FailureMessage, StringComparison.Ordinal);
     }
 }
+

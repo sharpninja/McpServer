@@ -13,7 +13,7 @@ Serilog:
 AllowedHosts: "*"
 
 VoiceConversation:
-  DefaultExecutionStrategy: hosted-agentframework
+  DefaultExecutionStrategy: hosted-mcp-agent
   ModelApiKeyEnvironmentVariableName: OPENAI_API_KEY
 
 Embedding:

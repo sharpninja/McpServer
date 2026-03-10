@@ -11,7 +11,7 @@ Serilog:
       McpServer.Support.Mcp.Logging: Verbose
 
 VoiceConversation:
-  DefaultExecutionStrategy: hosted-agentframework
+  DefaultExecutionStrategy: hosted-mcp-agent
   ModelApiKeyEnvironmentVariableName: OPENAI_API_KEY
 
 Mcp:

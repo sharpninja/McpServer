@@ -6,12 +6,12 @@ namespace McpServer.Support.Mcp.Services;
 internal static class AgentExecutionStrategyNames
 {
     public const string CopilotCli = "copilot-cli";
-    public const string HostedAgentFramework = "hosted-agentframework";
+    public const string HostedMcpAgent = "hosted-mcp-agent";
 
     public static IReadOnlyList<string> SupportedNames { get; } =
     [
         CopilotCli,
-        HostedAgentFramework,
+        HostedMcpAgent,
     ];
 
     public static bool IsSupported(string? strategyName)
@@ -92,7 +92,7 @@ public static class AgentExecutionServiceCollectionExtensions
 {
     /// <summary>
     /// FR-MCP-052..058: Adds the default agent execution strategy set, including the legacy
-    /// Copilot CLI backend and the hosted Agent Framework backend.
+    /// Copilot CLI backend and the hosted MCP Agent backend.
     /// </summary>
     /// <param name="services">The service collection receiving the strategy registrations.</param>
     /// <returns>The same <paramref name="services"/> instance for chaining.</returns>
@@ -101,8 +101,9 @@ public static class AgentExecutionServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(services);
 
         services.AddSingleton<IAgentExecutionStrategy, CopilotCliAgentExecutionStrategy>();
-        services.AddSingleton<IAgentExecutionStrategy, HostedAgentFrameworkExecutionStrategy>();
+        services.AddSingleton<IAgentExecutionStrategy, HostedMcpAgentExecutionStrategy>();
         services.AddSingleton<IAgentExecutionStrategyResolver, AgentExecutionStrategyResolver>();
         return services;
     }
 }
+

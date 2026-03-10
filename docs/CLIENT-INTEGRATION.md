@@ -140,12 +140,12 @@ var updated = await client.Configuration.PatchValuesAsync(new Dictionary<string,
 
 ## Hosted .NET Agent Framework Library
 
-Use `src\McpServer.AgentFramework` when you want a .NET 9 host application to consume MCP Server session-log, TODO, repository, and desktop-launch workflows through Microsoft Agent Framework-oriented registration instead of hand-assembling transport glue.
+Use `src\McpServer.McpAgent` when you want a .NET 9 host application to consume MCP Server session-log, TODO, repository, desktop-launch, and in-process PowerShell workflows through Microsoft Agent Framework-oriented registration instead of hand-assembling transport glue.
 
 Typical registration:
 
 ```csharp
-services.AddMcpServerAgentFramework(options =>
+services.AddMcpServerMcpAgent(options =>
 {
     options.BaseUrl = new Uri("http://localhost:7147");
     options.ApiKey = "token-from-marker";
@@ -168,9 +168,9 @@ Built-in hosted services include:
 
 Reference implementations:
 
-- Library source: `src\McpServer.AgentFramework`
-- Interactive CLI host: `src\McpServer.AgentFramework.SampleHost`
-- Automated acceptance coverage: `tests\McpServer.AgentFramework.Tests\HostedAgentWorkflowIntegrationTests.cs`
+- Library source: `src\McpServer.McpAgent`
+- Interactive preview host: `src\McpServer.McpAgent.SampleHost`
+- Automated acceptance coverage: `tests\McpServer.McpAgent.Tests\HostedAgentWorkflowIntegrationTests.cs`
 
 ## Health Check
 

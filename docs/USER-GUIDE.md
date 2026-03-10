@@ -65,7 +65,7 @@ dotnet run --project src\McpServer.Support.Mcp -- --transport stdio --instance d
 - `Mcp:ToolRegistry:*`: default tool bucket configuration
 - `Mcp:Tunnel:*`: ngrok/cloudflare/frp provider settings
 - `VoiceConversation:CopilotModel`: default model for voice sessions
-- `VoiceConversation:DefaultExecutionStrategy`: default voice backend (`hosted-agentframework` or `copilot-cli`)
+- `VoiceConversation:DefaultExecutionStrategy`: default voice backend (`hosted-mcp-agent` or `copilot-cli`)
 - `VoiceConversation:ModelApiKey`: optional model/provider API key for voice sessions
 - `VoiceConversation:ModelApiKeyEnvironmentVariableName`: env var name used to pass the voice model key to the agent process
 - `GET|PATCH /mcpserver/configuration`: admin-only flattened configuration read/patch API; PATCH writes submitted keys back to `appsettings.yaml`
@@ -136,9 +136,9 @@ $tasks = @(
 Update-McpTodo -Id $todo.id -ImplementationTasks $tasks -Note "Initial documentation sections complete."
 ```
 
-### Hosted .NET Agent Framework library and sample host
+### Hosted .NET MCP Agent library and sample host
 
-Use `src\McpServer.AgentFramework` when you need a .NET 9 host application to consume MCP Server session-log, TODO, repository, local desktop-launch, and in-process PowerShell workflows through the hosted Microsoft Agent Framework registration surface.
+Use `src\McpServer.McpAgent` when you need a .NET 9 host application to consume MCP Server session-log, TODO, repository, local desktop-launch, and in-process PowerShell workflows through the hosted Microsoft Agent Framework registration surface.
 
 Common environment variables for the interactive sample host:
 
@@ -160,7 +160,7 @@ Common environment variables for the interactive sample host:
 Run the hosted-agent CLI chat host:
 
 ```powershell
-dotnet run --project src\McpServer.AgentFramework.SampleHost -c Debug
+dotnet run --project src\McpServer.McpAgent.SampleHost -c Debug
 ```
 
 The sample host:
@@ -179,11 +179,11 @@ The sample host:
 You can also execute a single prompt non-interactively:
 
 ```powershell
-dotnet run --project src\McpServer.AgentFramework.SampleHost -c Debug -- "List open TODO items"
+dotnet run --project src\McpServer.McpAgent.SampleHost -c Debug -- "List open TODO items"
 ```
 
 ```powershell
-dotnet run --project src\McpServer.AgentFramework.SampleHost -c Debug -- "! Get-Location"
+dotnet run --project src\McpServer.McpAgent.SampleHost -c Debug -- "! Get-Location"
 ```
 
 ## 3) REST API reference (all controllers)
@@ -556,3 +556,4 @@ Invoke-RestMethod -Method Post -Uri "http://localhost:7147/mcpserver/workspace" 
 - FAQ: `docs/FAQ.md`
 - Context docs: `docs/context/`
 - Tunnel runbooks: `docs/Operations/`
+

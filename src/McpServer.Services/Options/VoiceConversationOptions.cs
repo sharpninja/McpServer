@@ -24,7 +24,7 @@ public sealed class VoiceConversationOptions
 
     /// <summary>
     /// Default execution strategy used for voice sessions when callers do not explicitly choose one.
-    /// Supported values are <c>copilot-cli</c> and <c>hosted-agentframework</c>.
+    /// Supported values are <c>copilot-cli</c> and <c>hosted-mcp-agent</c>.
     /// </summary>
     public string DefaultExecutionStrategy { get; set; } = AgentExecutionStrategyNames.CopilotCli;
 

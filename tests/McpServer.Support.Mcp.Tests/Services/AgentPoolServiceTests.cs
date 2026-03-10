@@ -238,7 +238,7 @@ public sealed class AgentPoolServiceTests
     [Fact]
     public async Task StartAgentAsync_ForwardsExecutionStrategyToVoiceSession()
     {
-        using var service = CreateService(out var voiceService, AgentExecutionStrategyNames.HostedAgentFramework);
+        using var service = CreateService(out var voiceService, AgentExecutionStrategyNames.HostedMcpAgent);
 
         var result = await service.StartAgentAsync("planner", @"C:\workspace-a").ConfigureAwait(true);
 
@@ -247,7 +247,7 @@ public sealed class AgentPoolServiceTests
             .CreateSessionAsync(
                 Arg.Is<VoiceSessionCreateRequest>(request =>
                     request != null &&
-                    request.ExecutionStrategy == AgentExecutionStrategyNames.HostedAgentFramework),
+                    request.ExecutionStrategy == AgentExecutionStrategyNames.HostedMcpAgent),
                 Arg.Any<CancellationToken>())
             .ConfigureAwait(true);
     }
@@ -384,3 +384,4 @@ public sealed class AgentPoolServiceTests
         }
     }
 }
+

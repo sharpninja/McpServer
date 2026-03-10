@@ -51,7 +51,7 @@ Common keys:
 - `Mcp:SessionsPath`
 - `Mcp:ExternalDocsPath`
 - `VoiceConversation:CopilotModel`
-- `VoiceConversation:DefaultExecutionStrategy` (`hosted-agentframework` or `copilot-cli`)
+- `VoiceConversation:DefaultExecutionStrategy` (`hosted-mcp-agent` or `copilot-cli`)
 - `VoiceConversation:ModelApiKey`
 - `VoiceConversation:ModelApiKeyEnvironmentVariableName`
 

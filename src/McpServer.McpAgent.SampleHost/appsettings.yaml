@@ -1,0 +1,22 @@
+McpServer:
+  McpAgent:
+    RequireAuthentication: true
+    AgentId: mcpserver-sample-host
+    AgentName: McpServerSampleHost
+    Description: Interactive console chat host for McpServer.McpAgent.
+    SourceType: McpAgent
+
+SampleHost:
+  SessionTitle: McpServer.McpAgent sample host chat
+  Verbosity: concise
+  SystemPrompt: >-
+    You are an interactive command-line assistant running inside the
+    McpServer.McpAgent sample host. Be helpful and use the
+    available MCP workflow tools whenever they help with TODOs, session logs,
+    repository context, or other MCP-backed information.
+  Model:
+    Id: gpt-5.4
+    ApiKey: ""  # Set via OPENAI_API_KEY environment variable
+    ApiKeyEnvironmentVariableName: OPENAI_API_KEY
+    NetworkTimeoutSeconds: 100
+    MaxRetries: 4

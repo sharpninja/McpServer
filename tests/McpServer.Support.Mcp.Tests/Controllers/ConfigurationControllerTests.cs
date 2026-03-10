@@ -41,7 +41,7 @@ public sealed class ConfigurationControllerTests : IDisposable
             """
             VoiceConversation:
               CopilotModel: gpt-5.3-codex
-              DefaultExecutionStrategy: hosted-agentframework
+              DefaultExecutionStrategy: hosted-mcp-agent
             """);
 
         var result = controller.GetConfigurationValues();
@@ -49,7 +49,7 @@ public sealed class ConfigurationControllerTests : IDisposable
         var ok = Assert.IsType<OkObjectResult>(result.Result);
         var values = Assert.IsAssignableFrom<IReadOnlyDictionary<string, string>>(ok.Value);
         Assert.Equal("gpt-5.3-codex", values["VoiceConversation:CopilotModel"]);
-        Assert.Equal("hosted-agentframework", values["VoiceConversation:DefaultExecutionStrategy"]);
+        Assert.Equal("hosted-mcp-agent", values["VoiceConversation:DefaultExecutionStrategy"]);
     }
 
     /// <summary>

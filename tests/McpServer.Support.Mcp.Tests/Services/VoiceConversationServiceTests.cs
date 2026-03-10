@@ -81,20 +81,20 @@ public sealed class VoiceConversationServiceTests
     [Fact]
     public async Task CreateSessionAsync_UsesConfiguredDefaultExecutionStrategy_WhenRequestOmitsOne()
     {
-        using var service = CreateService(defaultExecutionStrategy: AgentExecutionStrategyNames.HostedAgentFramework);
+        using var service = CreateService(defaultExecutionStrategy: AgentExecutionStrategyNames.HostedMcpAgent);
 
         var created = await service.CreateSessionAsync(new VoiceSessionCreateRequest
         {
             AgentName = "planner",
         }).ConfigureAwait(true);
 
-        Assert.Equal(AgentExecutionStrategyNames.HostedAgentFramework, created.ExecutionStrategy);
+        Assert.Equal(AgentExecutionStrategyNames.HostedMcpAgent, created.ExecutionStrategy);
     }
 
     [Fact]
     public async Task CreateSessionAsync_ExplicitExecutionStrategy_OverridesConfiguredDefault()
     {
-        using var service = CreateService(defaultExecutionStrategy: AgentExecutionStrategyNames.HostedAgentFramework);
+        using var service = CreateService(defaultExecutionStrategy: AgentExecutionStrategyNames.HostedMcpAgent);
 
         var created = await service.CreateSessionAsync(new VoiceSessionCreateRequest
         {
@@ -108,9 +108,9 @@ public sealed class VoiceConversationServiceTests
     [Fact]
     public async Task SubmitTurnAsync_IncludesConfiguredModelApiKeyInExecutionOptions()
     {
-        var hostedStrategy = new CapturingAgentExecutionStrategy(AgentExecutionStrategyNames.HostedAgentFramework);
+        var hostedStrategy = new CapturingAgentExecutionStrategy(AgentExecutionStrategyNames.HostedMcpAgent);
         using var service = CreateService(
-            defaultExecutionStrategy: AgentExecutionStrategyNames.HostedAgentFramework,
+            defaultExecutionStrategy: AgentExecutionStrategyNames.HostedMcpAgent,
             modelApiKey: "voice-model-key",
             modelApiKeyEnvironmentVariableName: "ANTHROPIC_API_KEY",
             hostedStrategy: hostedStrategy);
@@ -148,7 +148,7 @@ public sealed class VoiceConversationServiceTests
         var strategyResolver = new AgentExecutionStrategyResolver(
         [
             new CopilotCliAgentExecutionStrategy(copilotClient),
-            hostedStrategy ?? new FakeAgentExecutionStrategy(AgentExecutionStrategyNames.HostedAgentFramework),
+            hostedStrategy ?? new FakeAgentExecutionStrategy(AgentExecutionStrategyNames.HostedMcpAgent),
         ]);
         var services = new ServiceCollection();
         services.AddSingleton<IAgentExecutionStrategyResolver>(strategyResolver);
@@ -264,3 +264,4 @@ public sealed class VoiceConversationServiceTests
         }
     }
 }
+

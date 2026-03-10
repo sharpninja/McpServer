@@ -51,11 +51,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.ToolRegistry.Vali
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.Workspace.Validation", "tests\McpServer.Workspace.Validation\McpServer.Workspace.Validation.csproj", "{1255D16B-B9CC-4647-A567-C6ABCA1E166E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.AgentFramework", "src\McpServer.AgentFramework\McpServer.AgentFramework.csproj", "{16649839-FA22-438C-B554-5AC585BE749E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.McpAgent", "src\McpServer.McpAgent\McpServer.McpAgent.csproj", "{16649839-FA22-438C-B554-5AC585BE749E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.AgentFramework.SampleHost", "src\McpServer.AgentFramework.SampleHost\McpServer.AgentFramework.SampleHost.csproj", "{2280A17E-2C01-407F-87FC-2AC59C760CC4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.McpAgent.SampleHost", "src\McpServer.McpAgent.SampleHost\McpServer.McpAgent.SampleHost.csproj", "{2280A17E-2C01-407F-87FC-2AC59C760CC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.AgentFramework.Tests", "tests\McpServer.AgentFramework.Tests\McpServer.AgentFramework.Tests.csproj", "{74ED711C-8F0A-4C78-9B96-FC8EAAA1E2BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McpServer.McpAgent.Tests", "tests\McpServer.McpAgent.Tests\McpServer.McpAgent.Tests.csproj", "{74ED711C-8F0A-4C78-9B96-FC8EAAA1E2BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
