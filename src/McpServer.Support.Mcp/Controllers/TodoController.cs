@@ -38,12 +38,6 @@ public sealed class TodoController : ControllerBase
     }
 
     /// <summary>TR-PLANNED-013: Query TODO items by keyword, priority, section, id, or done status.</summary>
-    /// <param name="keyword">Free-text keyword to match across all fields.</param>
-    /// <param name="priority">Filter by priority: high, medium, or low.</param>
-    /// <param name="section">Filter by section key (e.g. mvp-app, mvp-support).</param>
-    /// <param name="id">Filter by item id.</param>
-    /// <param name="done">Filter by done status.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
     [HttpGet]
     public async Task<ActionResult<TodoQueryResult>> QueryAsync(
         [FromQuery] string? keyword,
@@ -66,8 +60,6 @@ public sealed class TodoController : ControllerBase
     }
 
     /// <summary>TR-PLANNED-013: Get a single TODO item by id.</summary>
-    /// <param name="id">The TODO item id (e.g. MVP-APP-001).</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
     [HttpGet("{id}")]
     public async Task<ActionResult<TodoFlatItem>> GetByIdAsync(string id, CancellationToken cancellationToken)
     {
@@ -78,8 +70,6 @@ public sealed class TodoController : ControllerBase
     }
 
     /// <summary>TR-PLANNED-013: Create a new TODO item.</summary>
-    /// <param name="request">Create request body with id, title, section, priority.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
     [HttpPost]
     public async Task<ActionResult<TodoMutationResult>> CreateAsync(
         [FromBody] TodoCreateRequest? request,
@@ -96,9 +86,6 @@ public sealed class TodoController : ControllerBase
     }
 
     /// <summary>TR-PLANNED-013: Update an existing TODO item by id.</summary>
-    /// <param name="id">The TODO item id.</param>
-    /// <param name="request">Update request body with fields to change.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
     [HttpPut("{id}")]
     public async Task<ActionResult<TodoMutationResult>> UpdateAsync(
         string id,
@@ -116,8 +103,6 @@ public sealed class TodoController : ControllerBase
     }
 
     /// <summary>TR-PLANNED-013: Delete a TODO item by id.</summary>
-    /// <param name="id">The TODO item id.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
     [HttpDelete("{id}")]
     public async Task<ActionResult<TodoMutationResult>> DeleteAsync(string id, CancellationToken cancellationToken)
     {
@@ -129,9 +114,6 @@ public sealed class TodoController : ControllerBase
     }
 
     /// <summary>Move a TODO item from the current workspace to a different workspace.</summary>
-    /// <param name="id">The TODO item id to move.</param>
-    /// <param name="request">Request body containing the target workspace path.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
     [HttpPost("{id}/move")]
     public async Task<ActionResult<TodoMutationResult>> MoveAsync(
         string id,
@@ -141,12 +123,10 @@ public sealed class TodoController : ControllerBase
         if (request is null || string.IsNullOrWhiteSpace(request.TargetWorkspacePath))
             return BadRequest(new TodoMutationResult(false, "Request body with targetWorkspacePath is required."));
 
-        // 1. Get the item from the source workspace.
         var item = await _todoService.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
         if (item is null)
             return NotFound(new TodoMutationResult(false, $"Item with id '{id}' not found in source workspace."));
 
-        // 2. Resolve the target workspace.
         var targetWorkspace = await _workspaceService.GetAsync(request.TargetWorkspacePath, cancellationToken).ConfigureAwait(false);
         if (targetWorkspace is null)
             return BadRequest(new TodoMutationResult(false, $"Target workspace '{request.TargetWorkspacePath}' not found."));
@@ -161,7 +141,6 @@ public sealed class TodoController : ControllerBase
 
         var targetService = _todoServiceResolver.Resolve(targetContext);
 
-        // 3. Create in the target workspace.
         var createRequest = new TodoCreateRequest
         {
             Id = item.Id,
@@ -183,20 +162,16 @@ public sealed class TodoController : ControllerBase
         if (!createResult.Success)
             return Conflict(new TodoMutationResult(false, $"Failed to create in target workspace: {createResult.Error}"));
 
-        // 4. Delete from the source workspace.
         var deleteResult = await _todoService.DeleteAsync(id, cancellationToken).ConfigureAwait(false);
         if (!deleteResult.Success)
-            return StatusCode(500, new TodoMutationResult(false, $"Created in target but failed to delete from source: {deleteResult.Error}"));
+            throw new InvalidOperationException($"TODO move failed after target creation succeeded. Target workspace '{request.TargetWorkspacePath}' contains item '{id}', but source deletion failed: {deleteResult.Error}");
 
         return Ok(new TodoMutationResult(true, null, createResult.Item));
     }
 
     /// <summary>
-    /// Invoke Copilot to analyze a TODO item and update project docs with
-    /// new FR/TR entries. Updates the TODO item with all associated FR/TR IDs.
+    /// Invoke Copilot to analyze a TODO item and update project docs with new FR/TR entries.
     /// </summary>
-    /// <param name="id">The TODO item id to analyze.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
     [HttpPost("{id}/requirements")]
     public async Task<ActionResult<RequirementsAnalysisResult>> AnalyzeRequirementsAsync(
         string id,
@@ -209,12 +184,7 @@ public sealed class TodoController : ControllerBase
         return Ok(result);
     }
 
-    /// <summary>
-    /// MVP-MCP-002: Stream a Copilot-generated status report for a TODO item via SSE.
-    /// The Copilot CLI is invoked in the workspace directory and output is streamed line by line.
-    /// </summary>
-    /// <param name="id">The TODO item id.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <summary>MVP-MCP-002: Stream a Copilot-generated status report for a TODO item via SSE.</summary>
     [HttpGet("{id}/prompt/status")]
     [Produces("text/event-stream")]
     public async Task StreamStatusPromptAsync(string id, CancellationToken cancellationToken)
@@ -223,13 +193,7 @@ public sealed class TodoController : ControllerBase
         await StreamCopilotResponseAsync(_todoPromptService.StreamStatusAsync(id, cancellationToken), cancellationToken).ConfigureAwait(false);
     }
 
-    /// <summary>
-    /// MVP-MCP-002: Stream a Copilot-driven implementation session for a TODO item via SSE.
-    /// The Copilot CLI is invoked in the workspace directory with full item context and
-    /// step-by-step implementation instructions. Output is streamed line by line.
-    /// </summary>
-    /// <param name="id">The TODO item id.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <summary>MVP-MCP-002: Stream a Copilot-driven implementation session for a TODO item via SSE.</summary>
     [HttpGet("{id}/prompt/implement")]
     [Produces("text/event-stream")]
     public async Task StreamImplementPromptAsync(string id, CancellationToken cancellationToken)
@@ -238,14 +202,7 @@ public sealed class TodoController : ControllerBase
         await StreamCopilotResponseAsync(_todoPromptService.StreamImplementAsync(id, cancellationToken), cancellationToken).ConfigureAwait(false);
     }
 
-    /// <summary>
-    /// MVP-MCP-002: Stream a Copilot-driven planning session for a TODO item via SSE.
-    /// The Copilot CLI is invoked in the workspace directory with full item context and
-    /// instructions to create a detailed implementation plan. Output is streamed line by line.
-    /// </summary>
-    /// <param name="id">The TODO item id.</param>
-    /// <param name="prompt">Optional prompt or additional instructions from the client (e.g. extension); appended to the plan template when provided.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <summary>MVP-MCP-002: Stream a Copilot-driven planning session for a TODO item via SSE.</summary>
     [HttpGet("{id}/prompt/plan")]
     [Produces("text/event-stream")]
     public async Task StreamPlanPromptAsync(string id, [FromQuery] string? prompt, CancellationToken cancellationToken)
@@ -254,12 +211,7 @@ public sealed class TodoController : ControllerBase
         await StreamCopilotResponseAsync(_todoPromptService.StreamPlanAsync(id, prompt, cancellationToken), cancellationToken).ConfigureAwait(false);
     }
 
-    /// <summary>
-    /// FR-MCP-053: Enqueue a TODO status one-shot request through the Agent Pool queue.
-    /// </summary>
-    /// <param name="id">The TODO item id.</param>
-    /// <param name="request">Optional enqueue overrides such as agent name and template values.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <summary>FR-MCP-053: Enqueue a TODO status one-shot request through the Agent Pool queue.</summary>
     [HttpPost("{id}/prompt/status/queue")]
     public async Task<ActionResult<AgentPoolEnqueueResult>> QueueStatusPromptAsync(
         string id,
@@ -267,12 +219,7 @@ public sealed class TodoController : ControllerBase
         CancellationToken cancellationToken)
         => await QueueTodoPromptAsync(id, AgentPoolOneShotContext.Status, request, cancellationToken).ConfigureAwait(false);
 
-    /// <summary>
-    /// FR-MCP-053: Enqueue a TODO implement one-shot request through the Agent Pool queue.
-    /// </summary>
-    /// <param name="id">The TODO item id.</param>
-    /// <param name="request">Optional enqueue overrides such as agent name and template values.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <summary>FR-MCP-053: Enqueue a TODO implement one-shot request through the Agent Pool queue.</summary>
     [HttpPost("{id}/prompt/implement/queue")]
     public async Task<ActionResult<AgentPoolEnqueueResult>> QueueImplementPromptAsync(
         string id,
@@ -280,12 +227,7 @@ public sealed class TodoController : ControllerBase
         CancellationToken cancellationToken)
         => await QueueTodoPromptAsync(id, AgentPoolOneShotContext.Implement, request, cancellationToken).ConfigureAwait(false);
 
-    /// <summary>
-    /// FR-MCP-053: Enqueue a TODO plan one-shot request through the Agent Pool queue.
-    /// </summary>
-    /// <param name="id">The TODO item id.</param>
-    /// <param name="request">Optional enqueue overrides such as agent name and template values.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <summary>FR-MCP-053: Enqueue a TODO plan one-shot request through the Agent Pool queue.</summary>
     [HttpPost("{id}/prompt/plan/queue")]
     public async Task<ActionResult<AgentPoolEnqueueResult>> QueuePlanPromptAsync(
         string id,
@@ -321,7 +263,6 @@ public sealed class TodoController : ControllerBase
         return result.Success ? Ok(result) : BadRequest(result);
     }
 
-    /// <summary>Returns <c>true</c> if the item exists; writes a 404 JSON response and returns <c>false</c> otherwise.</summary>
     private async Task<bool> EnsureTodoExistsAsync(string id, CancellationToken cancellationToken)
     {
         var item = await _todoService.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
@@ -339,12 +280,9 @@ public sealed class TodoController : ControllerBase
         Response.Headers["Connection"] = "keep-alive";
         Response.ContentType = "text/event-stream";
 
-        // Flush headers immediately so clients see the connection is alive.
         await Response.WriteAsync("event: thinking\ndata: Processing…\n\n", cancellationToken).ConfigureAwait(false);
         await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
 
-        // Send periodic heartbeat events while waiting for data lines.
-        // The enumerator is consumed concurrently with a heartbeat timer.
         var heartbeatInterval = TimeSpan.FromSeconds(5);
         var enumerator = lines.GetAsyncEnumerator(cancellationToken);
         try
@@ -352,7 +290,6 @@ public sealed class TodoController : ControllerBase
             var hasData = false;
             while (true)
             {
-                // Race: next data line vs heartbeat timer.
                 var moveVt = enumerator.MoveNextAsync();
                 Task<bool> moveTask;
                 if (moveVt.IsCompleted)
@@ -387,6 +324,11 @@ public sealed class TodoController : ControllerBase
                 await Response.WriteAsync("data: (no output)\n\n", cancellationToken).ConfigureAwait(false);
                 await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
             }
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            await Response.WriteAsync($"event: error\ndata: Stream failed: {ex.Message}\n\n", cancellationToken).ConfigureAwait(false);
+            await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
         }
         finally
         {

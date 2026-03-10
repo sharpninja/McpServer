@@ -80,14 +80,14 @@ public sealed class SessionLogService : ISessionLogService
             _logger.LogInformation("Created session log {SourceType}/{SessionId}", dto.SourceType, dto.SessionId);
         }
 
+        await ResolveAgentDefinitionLinkAsync(dto, existing, cancellationToken).ConfigureAwait(false);
+
         try
         {
             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
         catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("UNIQUE constraint failed", StringComparison.OrdinalIgnoreCase) == true)
         {
-            // Race condition: another request inserted the same (SourceType, SessionId) between
-            // our query and save. Detach the failed entity, re-query, and update instead.
             _logger.LogWarning("UNIQUE constraint race for {SourceType}/{SessionId}, retrying as update", dto.SourceType, dto.SessionId);
             _db.ChangeTracker.Clear();
 
@@ -98,11 +98,14 @@ public sealed class SessionLogService : ISessionLogService
             existing.SourceFilePath = sourceFilePath;
             existing.ContentHash = contentHash;
             UpsertEntries(existing, dto.Entries);
+            await ResolveAgentDefinitionLinkAsync(dto, existing, cancellationToken).ConfigureAwait(false);
 
             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             _logger.LogInformation("Updated session log {SourceType}/{SessionId} (Id={Id}) after retry", dto.SourceType, dto.SessionId, existing.Id);
             wasCreated = false;
         }
+
+        dto.AgentDefinitionId = existing.AgentDefinitionId;
 
         await PublishChangeSafeAsync(
             wasCreated ? ChangeEventActions.Created : ChangeEventActions.Updated,
@@ -113,10 +116,6 @@ public sealed class SessionLogService : ISessionLogService
         return existing.Id;
     }
 
-    /// <summary>
-    /// Finds an existing session log by (SourceType, SessionId), bypassing global query filters
-    /// so the lookup matches the UNIQUE constraint scope (which is workspace-agnostic).
-    /// </summary>
     private Task<SessionLogEntity?> FindExistingSessionAsync(string sourceType, string sessionId, CancellationToken cancellationToken) =>
         _db.SessionLogs
             .IgnoreQueryFilters()
@@ -218,16 +217,15 @@ public sealed class SessionLogService : ISessionLogService
         if (!string.IsNullOrWhiteSpace(request.Agent))
             query = query.Where(s => s.SourceType == request.Agent);
 
+        if (!string.IsNullOrWhiteSpace(request.AgentDefinitionId))
+            query = query.Where(s => s.AgentDefinitionId == request.AgentDefinitionId);
+
         if (!string.IsNullOrWhiteSpace(request.Model))
         {
             var modelFilter = request.Model;
             query = query.Where(s => s.Model != null && EF.Functions.Like(s.Model, "%" + modelFilter + "%"));
         }
 
-        // SQLite cannot translate DateTimeOffset comparisons or ORDER BY in LINQ.
-        // Load candidate sessions with server-side string filters, then apply
-        // DateTimeOffset filtering, ordering, and paging on the client side.
-        // Session logs are a low-volume entity so this is acceptable.
         var allSessions = await query
             .Include(s => s.Entries.OrderBy(e => e.Id))
                 .ThenInclude(e => e.Actions.OrderBy(a => a.Order))
@@ -246,7 +244,6 @@ public sealed class SessionLogService : ISessionLogService
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
-        // Client-side DateTimeOffset filtering
         IEnumerable<SessionLogEntity> filtered = allSessions;
 
         if (request.From.HasValue)
@@ -255,7 +252,6 @@ public sealed class SessionLogService : ISessionLogService
         if (request.To.HasValue)
             filtered = filtered.Where(s => s.LastUpdated.HasValue && s.LastUpdated.Value <= request.To.Value);
 
-        // Client-side text search
         if (!string.IsNullOrWhiteSpace(request.Text))
         {
             var text = request.Text;
@@ -286,10 +282,36 @@ public sealed class SessionLogService : ISessionLogService
         };
     }
 
+    private async Task ResolveAgentDefinitionLinkAsync(UnifiedSessionLogDto dto, SessionLogEntity entity, CancellationToken cancellationToken)
+    {
+        if (!string.IsNullOrWhiteSpace(dto.AgentDefinitionId))
+        {
+            entity.AgentDefinitionId = dto.AgentDefinitionId;
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(dto.SourceType))
+            return;
+
+        var linkedAgentId = await _db.AgentDefinitions
+            .IgnoreQueryFilters()
+            .Where(a => a.Id.ToLower() == dto.SourceType!.ToLower())
+            .Select(a => a.Id)
+            .FirstOrDefaultAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        if (!string.IsNullOrWhiteSpace(linkedAgentId))
+        {
+            entity.AgentDefinitionId = linkedAgentId;
+            dto.AgentDefinitionId = linkedAgentId;
+        }
+    }
+
     private static void MapDtoToEntity(UnifiedSessionLogDto dto, SessionLogEntity entity)
     {
         entity.Title = dto.Title;
         entity.Model = dto.Model;
+        entity.AgentDefinitionId = dto.AgentDefinitionId;
         entity.Started = ParseDateTimeOffset(dto.Started);
         entity.LastUpdated = ParseDateTimeOffset(dto.LastUpdated);
         entity.Status = dto.Status;
@@ -315,17 +337,9 @@ public sealed class SessionLogService : ISessionLogService
         }
     }
 
-    /// <summary>
-    /// Upserts entries on an existing session: entries are keyed by RequestId.
-    /// Existing entries with a matching RequestId are updated in place.
-    /// New entries (RequestId not yet present) are added.
-    /// Stale entries (present in DB but absent from the DTO) are removed.
-    /// </summary>
     private void UpsertEntries(SessionLogEntity session, List<UnifiedRequestEntryDto>? dtoEntries)
     {
         var incoming = dtoEntries ?? [];
-
-        // Deduplicate incoming entries by RequestId — keep last occurrence
         var deduped = new List<UnifiedRequestEntryDto>();
         var seenRequestIds = new HashSet<string>(StringComparer.Ordinal);
         for (var i = incoming.Count - 1; i >= 0; i--)
@@ -336,31 +350,26 @@ public sealed class SessionLogService : ISessionLogService
         }
         deduped.Reverse();
 
-        // Build a lookup of existing entries by RequestId for O(1) matching
         var existingByRequestId = session.Entries
             .Where(e => e.RequestId != null)
             .ToDictionary(e => e.RequestId!, StringComparer.Ordinal);
 
-        // Track which existing entries are still present in the DTO
         var matchedIds = new HashSet<string>(StringComparer.Ordinal);
 
         foreach (var dto in deduped)
         {
             if (dto.RequestId != null && existingByRequestId.TryGetValue(dto.RequestId, out var existingEntry))
             {
-                // Update existing entry in place
                 UpdateEntryFromDto(existingEntry, dto);
                 matchedIds.Add(dto.RequestId);
             }
             else
             {
-                // New entry — insert
                 var newEntry = MapSingleEntry(dto);
                 session.Entries.Add(newEntry);
             }
         }
 
-        // Remove stale entries no longer in the DTO (cascade deletes actions/tags/context)
         var stale = session.Entries
             .Where(e => e.RequestId != null && !matchedIds.Contains(e.RequestId)
                         && existingByRequestId.ContainsKey(e.RequestId))
@@ -371,9 +380,6 @@ public sealed class SessionLogService : ISessionLogService
         }
     }
 
-    /// <summary>
-    /// Updates an existing entry entity from a DTO, replacing its child collections.
-    /// </summary>
     private void UpdateEntryFromDto(SessionLogTurnEntity entity, UnifiedRequestEntryDto dto)
     {
         entity.Timestamp = ParseDateTimeOffset(dto.Timestamp);
@@ -391,7 +397,6 @@ public sealed class SessionLogService : ISessionLogService
         entity.RawContextJson = SerializeJson(dto.RawContext);
         entity.OriginalEntryJson = SerializeJson(dto.OriginalEntry);
 
-        // Replace child collections (cascade delete handles old rows)
         _db.SessionLogActions.RemoveRange(entity.Actions);
         _db.SessionLogTurnTags.RemoveRange(entity.Tags);
         _db.SessionLogTurnContexts.RemoveRange(entity.ContextItems);
@@ -528,6 +533,7 @@ public sealed class SessionLogService : ISessionLogService
         {
             SourceType = entity.SourceType,
             SessionId = entity.SessionId,
+            AgentDefinitionId = entity.AgentDefinitionId,
             Title = entity.Title,
             Model = entity.Model,
             Started = entity.Started?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
@@ -679,4 +685,3 @@ public sealed class SessionLogService : ISessionLogService
         }
     }
 }
-

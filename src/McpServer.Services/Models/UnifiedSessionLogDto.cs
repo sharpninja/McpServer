@@ -16,6 +16,10 @@ public sealed class UnifiedSessionLogDto
     [JsonPropertyName("sessionId")]
     public string? SessionId { get; set; }
 
+    /// <summary>Optional linked agent definition identifier resolved from the source type.</summary>
+    [JsonPropertyName("agentDefinitionId")]
+    public string? AgentDefinitionId { get; set; }
+
     /// <summary>Human-readable session title.</summary>
     [JsonPropertyName("title")]
     public string? Title { get; set; }

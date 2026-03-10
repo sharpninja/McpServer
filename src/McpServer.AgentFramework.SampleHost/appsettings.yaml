@@ -18,3 +18,5 @@ SampleHost:
     Id: gpt-5.4
     ApiKey: ""  # Set via OPENAI_API_KEY environment variable
     ApiKeyEnvironmentVariableName: OPENAI_API_KEY
+    NetworkTimeoutSeconds: 100
+    MaxRetries: 4

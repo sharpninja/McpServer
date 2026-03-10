@@ -38,7 +38,7 @@ public class AgentWorkspaceEntity
     /// <summary>PR number that must be merged/closed before unbanning.</summary>
     public int? BannedUntilPr { get; set; }
 
-    /// <summary>Isolation strategy: "worktree" or "clone".</summary>
+    /// <summary>Isolation strategy: none, worktree, or clone.</summary>
     [MaxLength(16)]
     public string AgentIsolation { get; set; } = "worktree";
 
@@ -61,6 +61,10 @@ public class AgentWorkspaceEntity
 
     /// <summary>Override instruction files (JSON array, null = use definition default).</summary>
     public string? InstructionFilesOverrideJson { get; set; }
+
+    /// <summary>Restart policy for the runtime process: never, on-failure, or always.</summary>
+    [MaxLength(32)]
+    public string RestartPolicy { get; set; } = "never";
 
     /// <summary>When this agent was added to the workspace.</summary>
     public DateTime AddedAt { get; set; }

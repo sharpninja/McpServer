@@ -30,30 +30,6 @@ public static class MarkerFileService
     /// <summary>
     /// Writes the <c>AGENTS-README-FIRST.yaml</c> marker file to <paramref name="workspacePath"/>.
     /// </summary>
-    /// <param name="workspacePath">Absolute path to the workspace root directory.</param>
-    /// <param name="port">HTTP port the workspace is served on.</param>
-    /// <param name="workspaceName">Human-readable workspace name.</param>
-    /// <param name="logger">Optional logger for diagnostics.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <param name="globalPromptTemplate">
-    /// Global Handlebars prompt template.
-    /// Must be provided; otherwise an exception is thrown.
-    /// </param>
-    /// <param name="workspacePromptTemplate">
-    /// Optional per-workspace Handlebars prompt template.
-    /// When non-null, the resolved text is appended to the global prompt.
-    /// </param>
-    /// <param name="apiKey">
-    /// Per-workspace auth token to include in the marker file.
-    /// Agents read this value and send it as the <c>X-Api-Key</c> header.
-    /// </param>
-    /// <param name="workspace">
-    /// Full workspace definition. All properties are available in Handlebars templates as <c>{{workspace.*}}</c>.
-    /// </param>
-    /// <param name="serverStartedAtUtc">
-    /// Optional server startup UTC timestamp to embed in the marker for stale-marker detection.
-    /// When omitted, the current UTC timestamp is used.
-    /// </param>
     public static async Task WriteMarkerAsync(
         string workspacePath,
         int port,
@@ -64,6 +40,7 @@ public static class MarkerFileService
         string? workspacePromptTemplate = null,
         string? apiKey = null,
         WorkspaceDto? workspace = null,
+        IReadOnlyList<(string AgentId, string Content)>? agentAdditions = null,
         DateTimeOffset? serverStartedAtUtc = null)
     {
         var baseUrl = $"http://{System.Net.Dns.GetHostName()}:{port.ToString(CultureInfo.InvariantCulture)}";
@@ -73,7 +50,7 @@ public static class MarkerFileService
         var markerWrittenAtUtcText = markerWrittenAtUtc.ToString("o", CultureInfo.InvariantCulture);
         var serverStartedAtUtcText = resolvedServerStartedAtUtc.ToString("o", CultureInfo.InvariantCulture);
 
-        var templateContext = BuildTemplateContext(baseUrl, apiKey, workspace, workspacePath, workspaceName);
+        var templateContext = BuildTemplateContext(baseUrl, apiKey, workspace, workspacePath, workspaceName, agentAdditions);
         templateContext["markerWrittenAtUtc"] = markerWrittenAtUtcText;
         templateContext["serverStartedAtUtc"] = serverStartedAtUtcText;
 
@@ -131,12 +108,10 @@ public static class MarkerFileService
     public static void RemoveMarker(string workspacePath, ILogger? logger = null)
     {
         RemoveSingleFile(Path.Combine(workspacePath, MarkerFileName), logger);
-        // Clean up legacy markers if they exist.
         RemoveSingleFile(Path.Combine(workspacePath, ".mcp-server.yaml"), logger);
         RemoveSingleFile(Path.Combine(workspacePath, ".mcp-server.json"), logger);
     }
 
-    /// <summary>Ensures <see cref="MarkerFileName"/> is listed in the workspace root's <c>.gitignore</c>.</summary>
     private static void EnsureGitIgnored(string workspacePath, ILogger? logger)
     {
         try
@@ -180,10 +155,6 @@ public static class MarkerFileService
         }
     }
 
-    /// <summary>
-    /// Resolves the final prompt by compiling global and workspace Handlebars templates
-    /// against the supplied context. Visible for testing.
-    /// </summary>
     internal static string ResolvePrompt(
         Dictionary<string, object?> templateContext,
         string? globalPromptTemplate,
@@ -201,15 +172,13 @@ public static class MarkerFileService
         return global + "\n\n" + workspace;
     }
 
-    /// <summary>
-    /// Builds the Handlebars template context dictionary from the workspace definition and runtime values.
-    /// </summary>
     internal static Dictionary<string, object?> BuildTemplateContext(
         string baseUrl,
         string? apiKey,
         WorkspaceDto? workspace,
         string workspacePath,
-        string workspaceName)
+        string workspaceName,
+        IReadOnlyList<(string AgentId, string Content)>? agentAdditions = null)
     {
         var version = Assembly.GetEntryAssembly()
             ?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
@@ -220,6 +189,13 @@ public static class MarkerFileService
             ["baseUrl"] = baseUrl,
             ["apiKey"] = apiKey ?? string.Empty,
             ["version"] = version,
+            ["agentAdditions"] = agentAdditions is { Count: > 0 }
+                ? agentAdditions.Select(x => new Dictionary<string, object?>
+                {
+                    ["agentId"] = x.AgentId,
+                    ["content"] = x.Content,
+                }).ToList()
+                : null,
             ["workspace"] = workspace is not null ? new Dictionary<string, object?>
             {
                 ["Name"] = workspace.Name,
@@ -260,14 +236,11 @@ public static class MarkerFileService
 
     private static string RenderHandlebars(string template, Dictionary<string, object?> context)
     {
-        // Normalize to LF before and after — CRLF in templates confuses Handlebars
-        // standalone-line detection, and YAML folded scalars treat \r as extra blank lines.
         var compiled = s_handlebars.Compile(template.ReplaceLineEndings("\n"));
         return compiled(context).ReplaceLineEndings("\n");
     }
 }
 
-/// <summary>Serialization model for the <c>AGENTS-README-FIRST.yaml</c> marker file.</summary>
 internal sealed class MarkerFile
 {
     public int Port { get; set; }
@@ -277,7 +250,6 @@ internal sealed class MarkerFile
     public string Workspace { get; set; } = string.Empty;
     public string WorkspacePath { get; set; } = string.Empty;
     public int Pid { get; set; }
-    // Backward-compatible marker write timestamp retained for existing consumers.
     public string StartedAt { get; set; } = string.Empty;
     public string MarkerWrittenAtUtc { get; set; } = string.Empty;
     public string ServerStartedAtUtc { get; set; } = string.Empty;
@@ -285,7 +257,6 @@ internal sealed class MarkerFile
     public string Prompt { get; set; } = string.Empty;
 }
 
-/// <summary>Well-known endpoint paths exposed by the MCP server.</summary>
 internal sealed class MarkerEndpoints
 {
     public string Health { get; set; } = string.Empty;

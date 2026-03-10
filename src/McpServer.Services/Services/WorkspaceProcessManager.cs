@@ -44,7 +44,6 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         _tokenService = tokenService;
         _serverRuntimeInfo = serverRuntimeInfo;
         _eventBus = eventBus;
-        // loggerFactory kept in signature for backward compat (DI registration) but no longer needed
         _ = loggerFactory;
     }
 
@@ -64,8 +63,9 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         _ = _tokenService.GetDefaultToken(key) ?? _tokenService.GenerateDefaultToken(key);
 
         var name = DeriveWorkspaceName(key);
+        var agentAdditions = await GetAgentAdditionsAsync(key, ct).ConfigureAwait(false);
         await MarkerFileService.WriteMarkerAsync(key, port, name, _logger, ct,
-            globalTemplate, workspace.PromptTemplate, token, workspace, _serverRuntimeInfo.StartedAtUtc).ConfigureAwait(false);
+            globalTemplate, workspace.PromptTemplate, token, workspace, agentAdditions, _serverRuntimeInfo.StartedAtUtc).ConfigureAwait(false);
         await PublishMarkerChangeSafeAsync(ChangeEventActions.Updated, key, ct).ConfigureAwait(false);
 
         _activeWorkspaces[key] = port;
@@ -125,15 +125,15 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             var name = DeriveWorkspaceName(key);
             var token = _tokenService.GetToken(key) ?? _tokenService.GenerateToken(key);
             _ = _tokenService.GetDefaultToken(key) ?? _tokenService.GenerateDefaultToken(key);
+            var agentAdditions = await GetAgentAdditionsAsync(key, ct).ConfigureAwait(false);
             await MarkerFileService.WriteMarkerAsync(key, _serverRuntimeInfo.ListenPort, name, _logger, ct,
-                globalTemplate, ws.PromptTemplate, token, ws, _serverRuntimeInfo.StartedAtUtc).ConfigureAwait(false);
+                globalTemplate, ws.PromptTemplate, token, ws, agentAdditions, _serverRuntimeInfo.StartedAtUtc).ConfigureAwait(false);
             await PublishMarkerChangeSafeAsync(ChangeEventActions.Updated, key, ct).ConfigureAwait(false);
         }
 
         _logger.LogInformation("Regenerated marker files for all registered workspaces");
     }
 
-    // IHostedService — register all workspaces on startup, cleanup on stop.
     async Task IHostedService.StartAsync(CancellationToken cancellationToken)
     {
         string? currentWorkspaceName = null;
@@ -207,6 +207,17 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
 
     private static string DeriveWorkspaceName(string normalizedKey)
         => Path.GetFileName(normalizedKey.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+
+    private async Task<IReadOnlyList<(string AgentId, string Content)>> GetAgentAdditionsAsync(string workspacePath, CancellationToken ct)
+    {
+        using var scope = _serviceProvider.CreateScope();
+        var agentService = scope.ServiceProvider.GetRequiredService<IAgentService>();
+        var agentConfigs = await agentService.ListWorkspaceAgentsAsync(workspacePath, ct).ConfigureAwait(false);
+        return agentConfigs.Items
+            .Where(x => !x.Banned && !string.IsNullOrWhiteSpace(x.MarkerAdditions))
+            .Select(x => (x.AgentId, x.MarkerAdditions!))
+            .ToList();
+    }
 
     private async Task PublishMarkerChangeSafeAsync(string action, string entityId, CancellationToken cancellationToken)
     {

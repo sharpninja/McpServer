@@ -152,6 +152,8 @@ Common environment variables for the interactive sample host:
 - `MCP_AGENT_SOURCE_TYPE`
 - `OPENAI_API_KEY`
 - `OPENAI_MODEL`
+- `OPENAI_NETWORK_TIMEOUT_SECONDS`
+- `OPENAI_MAX_RETRIES`
 - `MCP_AGENT_VERBOSITY` (`concise`, `balanced`, or `detailed`)
 - `MCP_AGENT_SYSTEM_PROMPT`
 
@@ -168,6 +170,7 @@ The sample host:
 - starts a real interactive console loop with the built-in MCP tool surface attached
 - shows a PowerShell-style prompt rooted at the hosted local runspace location
 - supports configurable response verbosity through `SampleHost:Verbosity` or `MCP_AGENT_VERBOSITY`
+- supports configurable OpenAI client network timeout and retry count through `SampleHost:Model:NetworkTimeoutSeconds`, `SampleHost:Model:MaxRetries`, `OPENAI_NETWORK_TIMEOUT_SECONDS`, and `OPENAI_MAX_RETRIES`
 - lets you switch verbosity live with `/v 1`, `/v 2`, or `/v 3`
 - routes lines prefixed with `! ` directly into the hosted local PowerShell session while leaving other lines as normal chat prompts
 - logs chat turns through the hosted session-log workflow

@@ -269,6 +269,9 @@ templates:
     - name: workspace
       description: WorkspaceDto object with Name, WorkspacePath, IsPrimary, etc.
       required: true
+    - name: agentAdditions
+      description: Optional list of agent-specific marker instruction sections.
+      required: false
     content: 'You are connected to an MCP Context Server at {{baseUrl}}. Use this server to coordinate your work.
 
 
@@ -363,6 +366,21 @@ templates:
       - Data Directory: {{workspace.DataDirectory}}
 
       - Todo Path: {{workspace.TodoPath}}
+
+
+      {{#if agentAdditions}}
+
+      ## Agent-Specific Instructions
+
+      {{#each agentAdditions}}
+
+      ### {{agentId}}
+
+      {{content}}
+
+      {{/each}}
+
+      {{/if}}
 
 
       ## Authentication
@@ -523,4 +541,3 @@ templates:
       MCP Server version: {{version}}
 
       '
-

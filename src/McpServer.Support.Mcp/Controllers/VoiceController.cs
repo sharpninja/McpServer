@@ -38,10 +38,6 @@ public sealed class VoiceController : ControllerBase
     {
         try
         {
-            // Workspace resolution is enforced by WorkspaceResolutionMiddleware —
-            // if we get here, the workspace is valid.
-
-            // Stamp the resolved workspace path so Copilot launches with the correct CWD
             request ??= new VoiceSessionCreateRequest();
             if (string.IsNullOrWhiteSpace(request.WorkspacePath))
                 request.WorkspacePath = _workspaceContext.WorkspacePath;
@@ -113,11 +109,6 @@ public sealed class VoiceController : ControllerBase
             _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new { error = ex.Message });
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Voice turn request failed for session {SessionId}", sessionId);
-            return StatusCode(StatusCodes.Status500InternalServerError, new { error = "Voice turn processing failed." });
-        }
     }
 
     /// <summary>
@@ -136,6 +127,17 @@ public sealed class VoiceController : ControllerBase
             return;
         }
 
+        try
+        {
+            _ = await _voiceService.SendSessionMessageAsync(sessionId, "User is here.", cancellationToken).ConfigureAwait(false);
+        }
+        catch (ArgumentException ex)
+        {
+            Response.StatusCode = StatusCodes.Status400BadRequest;
+            await Response.WriteAsJsonAsync(new { error = ex.Message }, cancellationToken).ConfigureAwait(false);
+            return;
+        }
+
         Response.ContentType = "text/event-stream";
         Response.Headers.CacheControl = "no-cache";
         Response.Headers.Connection = "keep-alive";
@@ -146,8 +148,6 @@ public sealed class VoiceController : ControllerBase
 
         try
         {
-            _ = await _voiceService.SendSessionMessageAsync(sessionId, "User is here.", cancellationToken).ConfigureAwait(false);
-
             await foreach (var evt in _voiceService.SubmitTurnStreamingAsync(sessionId, request, cancellationToken).ConfigureAwait(false))
             {
                 eventCount++;
@@ -173,7 +173,7 @@ public sealed class VoiceController : ControllerBase
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
             _logger.LogError(ex, "Streaming voice turn failed for session {SessionId} after {EventCount} events", sessionId, eventCount);
-            var json = JsonSerializer.Serialize(new VoiceTurnStreamEvent { Type = "error", Message = "Voice turn processing failed." }, s_sseJsonOptions);
+            var json = JsonSerializer.Serialize(new VoiceTurnStreamEvent { Type = "error", Message = $"Voice turn stream failed after {eventCount} events: {ex.Message}" }, s_sseJsonOptions);
             await Response.WriteAsync($"data: {json}\n\n", cancellationToken).ConfigureAwait(false);
             await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -214,8 +214,7 @@ public sealed class VoiceController : ControllerBase
     }
 
     /// <summary>
-    /// Sends three ESC characters to the active Copilot interactive session stdin,
-    /// cancelling the current generation without ending the session.
+    /// Sends three ESC characters to the active Copilot interactive session stdin, cancelling the current generation.
     /// </summary>
     [HttpPost("session/{sessionId}/escape")]
     public async Task<IActionResult> SendEscapeAsync(string sessionId, CancellationToken cancellationToken)

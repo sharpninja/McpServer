@@ -162,9 +162,9 @@ The server shall provide CRUD operations for agent type definitions with built-i
 
 ## FR-MCP-028 Per-Workspace Agent Configuration
 
-The server shall support per-workspace agent configuration with overrides for launch command, models, branch strategy, seed prompt, and instruction files. Agent pool definitions shall also support intent-default flags (`IsInteractiveDefault`, `IsTodoPlanDefault`, `IsTodoStatusDefault`, `IsTodoImplementDefault`) used for fallback routing when a request does not specify an agent name. Agents can be banned per-workspace or globally with optional PR-gated unbanning. All agent lifecycle events (add, launch, exit, ban, unban, delete, merge, init) are logged for audit.
+The server shall support per-workspace agent configuration with overrides for launch command, models, branch strategy, seed prompt, instruction files, isolation strategy, restart policy, and marker additions. Agents can be banned per-workspace or globally with optional PR-gated unbanning. All agent lifecycle events (add, launch, exit, ban, unban, delete, merge, init) are logged for audit.
 
-**Covered by:** `AgentController`, `AgentService`, `AgentWorkspaceEntity`, `AgentEventLogEntity`
+**Covered by:** `AgentController`, `AgentService`, `AgentWorkspaceEntity`, `AgentEventLogEntity`, `AgentHealthMonitorService`
 
 ## FR-MCP-029 CQRS Framework
 
@@ -288,11 +288,11 @@ The server shall provide a global prompt template registry with REST API endpoin
 
 **Covered by:** `PromptTemplateController`, `PromptTemplateService`, `PromptTemplateRenderer`, `FwhMcpTools` (6 template tools), `TemplateClient`, `TemplatesScreen`
 
-## FR-MCP-050 Template Externalization
+## FR-MCP-050 Per-Agent Workspace Runtime Management
 
-The server shall load system prompt templates (marker prompt, TODO prompts, pairing HTML pages) from external YAML files via provider interfaces. The marker prompt template is required to exist in the external file; the server shall fail critically if it is missing. Configuration overrides (`Mcp:MarkerPromptTemplate`, `Mcp:TodoPrompts`) take precedence over file-loaded templates. This enables runtime template customization without recompilation.
+The server shall provide runtime management for workspace-bound agents, including process launch/stop/status, configurable isolation modes (`none`, `worktree`, `clone`), branch strategy handling (`direct`, `feature-branch`, `worktree`), session-log linkage to known agent definitions, marker-file agent-specific instruction sections, and restart-policy-driven health monitoring.
 
-**Covered by:** `IMarkerPromptProvider`, `FileMarkerPromptProvider`, `ITodoPromptProvider`, `TodoPromptProvider`, `PairingHtmlRenderer`
+**Covered by:** `AgentService`, `AgentController`, `IAgentProcessManager`, `AgentProcessManager`, `IAgentIsolationStrategy`, `AgentIsolationStrategyResolver`, `IAgentBranchStrategy`, `AgentBranchStrategyResolver`, `WorkspaceProcessManager`, `SessionLogService`, `AgentHealthMonitorService`
 
 ## FR-MCP-051 System-Wide Default Copilot Model
 

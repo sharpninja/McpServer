@@ -60,6 +60,9 @@ public sealed record SessionLogQueryRequest
     /// <summary>Filter by agent source type (e.g. Cursor, Copilot).</summary>
     public string? Agent { get; init; }
 
+    /// <summary>Filter by linked agent definition identifier.</summary>
+    public string? AgentDefinitionId { get; init; }
+
     /// <summary>Filter by AI model (exact or contains match).</summary>
     public string? Model { get; init; }
 

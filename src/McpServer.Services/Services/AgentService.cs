@@ -17,13 +17,25 @@ public sealed class AgentService : IAgentService
     private readonly McpDbContext _db;
     private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<AgentService> _logger;
+    private readonly IAgentProcessManager? _agentProcessManager;
+    private readonly AgentIsolationStrategyResolver? _isolationStrategyResolver;
+    private readonly AgentBranchStrategyResolver? _branchStrategyResolver;
 
     /// <summary>Initializes a new instance of <see cref="AgentService"/>.</summary>
-    public AgentService(McpDbContext db, ILogger<AgentService> logger, IChangeEventBus? eventBus = null)
+    public AgentService(
+        McpDbContext db,
+        ILogger<AgentService> logger,
+        IChangeEventBus? eventBus = null,
+        IAgentProcessManager? agentProcessManager = null,
+        AgentIsolationStrategyResolver? isolationStrategyResolver = null,
+        AgentBranchStrategyResolver? branchStrategyResolver = null)
     {
         _db = db;
         _eventBus = eventBus;
         _logger = logger;
+        _agentProcessManager = agentProcessManager;
+        _isolationStrategyResolver = isolationStrategyResolver;
+        _branchStrategyResolver = branchStrategyResolver;
     }
 
     // --- Agent Definitions ---
@@ -176,7 +188,6 @@ public sealed class AgentService : IAgentService
         ArgumentNullException.ThrowIfNull(request);
         var normalized = NormalizePath(workspacePath);
 
-        // Verify agent definition exists
         var defExists = await _db.AgentDefinitions.AnyAsync(x => x.Id == request.AgentId, ct).ConfigureAwait(false);
         if (!defExists)
             return new AgentMutationResult { Success = false, Error = $"Agent definition '{request.AgentId}' not found. Create it first." };
@@ -249,7 +260,6 @@ public sealed class AgentService : IAgentService
 
         if (request.Global || string.IsNullOrWhiteSpace(workspacePath))
         {
-            // Ban globally across all workspaces
             var configs = await _db.AgentWorkspaces
                 .Where(x => x.AgentDefinitionId == agentId)
                 .ToListAsync(ct).ConfigureAwait(false);
@@ -331,6 +341,130 @@ public sealed class AgentService : IAgentService
         return new AgentMutationResult { Success = true };
     }
 
+    // --- Runtime Process Lifecycle ---
+
+    /// <inheritdoc />
+    public async Task<AgentProcessInfo> LaunchAgentAsync(string workspacePath, string agentId, CancellationToken ct = default)
+    {
+        var normalizedWorkspace = NormalizePath(workspacePath);
+        var runtimeDependencies = EnsureRuntimeDependencies();
+        var workspaceConfig = await GetWorkspaceAgentEntityAsync(normalizedWorkspace, agentId, ct).ConfigureAwait(false);
+        var definition = workspaceConfig.AgentDefinition
+            ?? throw new InvalidOperationException($"Agent definition '{agentId}' was not loaded for workspace runtime launch.");
+
+        if (!workspaceConfig.Enabled)
+            throw new InvalidOperationException($"Agent '{agentId}' is disabled in workspace '{normalizedWorkspace}'.");
+        if (workspaceConfig.Banned)
+            throw new InvalidOperationException($"Agent '{agentId}' is banned in workspace '{normalizedWorkspace}'.");
+
+        var isolationStrategy = runtimeDependencies.Isolation.Resolve(workspaceConfig.AgentIsolation);
+        var workDirectory = await isolationStrategy.PrepareWorkDirectoryAsync(normalizedWorkspace, agentId, ct).ConfigureAwait(false);
+
+        var branchMode = string.IsNullOrWhiteSpace(workspaceConfig.BranchStrategyOverride)
+            ? definition.DefaultBranchStrategy
+            : workspaceConfig.BranchStrategyOverride;
+        var branchStrategy = runtimeDependencies.Branch.Resolve(branchMode);
+        var branchName = await branchStrategy.PrepareBranchAsync(workDirectory, agentId, ct).ConfigureAwait(false);
+
+        try
+        {
+            var resolvedCommand = AgentProcessCommandResolver.ResolveEffectiveCommand(
+                workspaceConfig,
+                definition,
+                workDirectory,
+                branchName);
+
+            var info = await runtimeDependencies.ProcessManager
+                .LaunchAsync(normalizedWorkspace, agentId, resolvedCommand, workDirectory, ct)
+                .ConfigureAwait(false);
+
+            await LogEventAsync(
+                normalizedWorkspace,
+                new AgentEventRequest
+                {
+                    AgentId = agentId,
+                    EventType = AgentEventType.Launch,
+                    Details = JsonSerializer.Serialize(new
+                    {
+                        command = resolvedCommand,
+                        branchName,
+                        workDirectory,
+                        isolation = isolationStrategy.StrategyName,
+                        branchStrategy = branchStrategy.StrategyName,
+                    })
+                },
+                userId: null,
+                ct).ConfigureAwait(false);
+
+            workspaceConfig.LastLaunchedAt = DateTime.UtcNow;
+            await _db.SaveChangesAsync(ct).ConfigureAwait(false);
+            return info;
+        }
+        catch
+        {
+            await branchStrategy.FinalizeBranchAsync(workDirectory, agentId, ct).ConfigureAwait(false);
+            await isolationStrategy.CleanupAsync(normalizedWorkspace, agentId, ct).ConfigureAwait(false);
+            throw;
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> StopAgentAsync(string workspacePath, string agentId, CancellationToken ct = default)
+    {
+        var normalizedWorkspace = NormalizePath(workspacePath);
+        var runtimeDependencies = EnsureRuntimeDependencies();
+        var workspaceConfig = await GetWorkspaceAgentEntityAsync(normalizedWorkspace, agentId, ct).ConfigureAwait(false);
+        var stopped = await runtimeDependencies.ProcessManager.StopAsync(normalizedWorkspace, agentId, ct).ConfigureAwait(false);
+        if (!stopped)
+            return false;
+
+        var branchMode = string.IsNullOrWhiteSpace(workspaceConfig.BranchStrategyOverride)
+            ? workspaceConfig.AgentDefinition?.DefaultBranchStrategy
+            : workspaceConfig.BranchStrategyOverride;
+        var branchStrategy = runtimeDependencies.Branch.Resolve(branchMode);
+
+        var isolationStrategy = runtimeDependencies.Isolation.Resolve(workspaceConfig.AgentIsolation);
+        var status = await runtimeDependencies.ProcessManager.GetStatusAsync(normalizedWorkspace, agentId, ct).ConfigureAwait(false);
+        var workDirectory = status?.WorkDirectory ?? normalizedWorkspace;
+
+        await branchStrategy.FinalizeBranchAsync(workDirectory, agentId, ct).ConfigureAwait(false);
+        await isolationStrategy.CleanupAsync(normalizedWorkspace, agentId, ct).ConfigureAwait(false);
+
+        await LogEventAsync(
+            normalizedWorkspace,
+            new AgentEventRequest
+            {
+                AgentId = agentId,
+                EventType = AgentEventType.Exit,
+                Details = JsonSerializer.Serialize(new
+                {
+                    workDirectory,
+                    exitCode = status?.ExitCode,
+                    status = status?.Status,
+                })
+            },
+            userId: null,
+            ct).ConfigureAwait(false);
+
+        return true;
+    }
+
+    /// <inheritdoc />
+    public Task<AgentProcessInfo?> GetAgentProcessStatusAsync(string workspacePath, string agentId, CancellationToken ct = default)
+    {
+        var normalizedWorkspace = NormalizePath(workspacePath);
+        var runtimeDependencies = EnsureRuntimeDependencies();
+        return runtimeDependencies.ProcessManager.GetStatusAsync(normalizedWorkspace, agentId, ct);
+    }
+
+    /// <inheritdoc />
+    public Task<IReadOnlyList<AgentProcessInfo>> ListRunningAgentsAsync(string? workspacePath = null, CancellationToken ct = default)
+    {
+        var runtimeDependencies = EnsureRuntimeDependencies();
+        var normalizedWorkspace = string.IsNullOrWhiteSpace(workspacePath) ? null : NormalizePath(workspacePath);
+        return runtimeDependencies.ProcessManager.ListRunningAsync(normalizedWorkspace, ct);
+    }
+
     // --- Lifecycle Events ---
 
     /// <inheritdoc />
@@ -349,7 +483,6 @@ public sealed class AgentService : IAgentService
             Timestamp = DateTime.UtcNow
         });
 
-        // Update LastLaunchedAt if this is a launch event
         if (request.EventType == AgentEventType.Launch)
         {
             var config = await _db.AgentWorkspaces
@@ -466,5 +599,23 @@ public sealed class AgentService : IAgentService
         {
             _logger.LogWarning(ex, "Failed publishing agent change event for {EntityId}", entityId);
         }
+    }
+
+    private (IAgentProcessManager ProcessManager, AgentIsolationStrategyResolver Isolation, AgentBranchStrategyResolver Branch) EnsureRuntimeDependencies()
+    {
+        if (_agentProcessManager is null || _isolationStrategyResolver is null || _branchStrategyResolver is null)
+            throw new InvalidOperationException("Agent runtime dependencies are not fully configured.");
+
+        return (_agentProcessManager, _isolationStrategyResolver, _branchStrategyResolver);
+    }
+
+    private async Task<AgentWorkspaceEntity> GetWorkspaceAgentEntityAsync(string workspacePath, string agentId, CancellationToken ct)
+    {
+        var entity = await _db.AgentWorkspaces
+            .Include(x => x.AgentDefinition)
+            .FirstOrDefaultAsync(x => x.WorkspacePath == workspacePath && x.AgentDefinitionId == agentId, ct)
+            .ConfigureAwait(false);
+
+        return entity ?? throw new InvalidOperationException($"Agent '{agentId}' is not configured for workspace '{workspacePath}'.");
     }
 }

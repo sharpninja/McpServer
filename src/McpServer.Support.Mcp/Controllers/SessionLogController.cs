@@ -18,7 +18,6 @@ public sealed class SessionLogController : ControllerBase
     private readonly ISessionLogService _service;
     private readonly ILogger<SessionLogController> _logger;
 
-
     /// <summary>TR-PLANNED-013: Constructor.</summary>
     public SessionLogController(ISessionLogService service,
         ILogger<SessionLogController> logger)
@@ -75,6 +74,7 @@ public sealed class SessionLogController : ControllerBase
     /// TR-PLANNED-013: Query session logs with optional filters and pagination.
     /// </summary>
     /// <param name="agent">Filter by agent source type.</param>
+    /// <param name="agentDefinitionId">Filter by linked agent definition identifier.</param>
     /// <param name="model">Filter by AI model.</param>
     /// <param name="text">Full-text search over entry text fields.</param>
     /// <param name="from">Sessions started on or after this date (ISO 8601).</param>
@@ -87,6 +87,7 @@ public sealed class SessionLogController : ControllerBase
     [ProducesResponseType(typeof(SessionLogQueryResult), StatusCodes.Status200OK)]
     public async Task<ActionResult<SessionLogQueryResult>> QueryAsync(
         [FromQuery] string? agent,
+        [FromQuery] string? agentDefinitionId,
         [FromQuery] string? model,
         [FromQuery] string? text,
         [FromQuery] DateTimeOffset? from,
@@ -98,6 +99,7 @@ public sealed class SessionLogController : ControllerBase
         var request = new SessionLogQueryRequest
         {
             Agent = agent,
+            AgentDefinitionId = agentDefinitionId,
             Model = model,
             Text = text,
             From = from,

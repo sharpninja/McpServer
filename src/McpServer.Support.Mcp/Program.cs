@@ -36,7 +36,6 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.File;
 
-// TR-PLANNED-013: When --transport stdio, run MCP over stdin/stdout and exit (no HTTP).
 if (IsStdioTransportRequested(args))
 {
     await McpStdioHost.RunAsync(args, default).ConfigureAwait(false);
@@ -60,7 +59,6 @@ bool IsStdioTransportRequested(string[] a)
 var builder = WebApplication.CreateBuilder(args);
 DisableEnvironmentSpecificJsonConfigForWindowsService(builder);
 
-// Load YAML configuration (overrides JSON when present). Environment-specific YAML takes precedence.
 builder.Configuration.AddYamlFile("appsettings.yaml", optional: true, reloadOnChange: true);
 builder.Configuration.AddYamlFile($"appsettings.{builder.Environment.EnvironmentName}.yaml", optional: true, reloadOnChange: true);
 
@@ -76,9 +74,6 @@ var instanceName = McpInstanceResolver.GetRequestedInstanceName(args);
 McpInstanceResolver.ValidateInstances(builder.Configuration);
 McpInstanceResolver.ValidateTodoStorage(builder.Configuration, instanceName);
 
-// Resolve the primary workspace from Mcp:Workspaces config (FR-MCP-025).
-// Set ContentRootPath to the primary workspace's path so relative paths resolve correctly
-// and WorkspaceProcessManager can identify it.
 WorkspaceConfigEntry? primaryWorkspaceEntry = null;
 {
     var workspaces = builder.Configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
@@ -92,7 +87,6 @@ WorkspaceConfigEntry? primaryWorkspaceEntry = null;
         builder.Environment.ContentRootPath = Path.GetFullPath(primaryWorkspaceEntry.WorkspacePath);
 }
 
-// TR-PLANNED-013: Serilog with optional Parseable (local Docker) sink.
 builder.Host.UseSerilog((context, _, config) =>
 {
     config.ReadFrom.Configuration(context.Configuration)
@@ -116,7 +110,6 @@ builder.Host.UseSerilog((context, _, config) =>
     {
         var ingestUri = $"{parseable.Url!.TrimEnd('/')}/api/v1/ingest";
         var httpClient = new ParseableHttpClient(parseable.StreamName, parseable.Username, parseable.Password);
-        // Exclude Parseable meta-logs (success/failure of push) so they are not republished to Parseable.
         config.WriteTo.Logger(lc => lc
             .Filter.ByExcluding(e => e.Properties.TryGetValue(ParseableHttpClient.ParseableMetaPropertyName, out var v) && v is ScalarValue s && (s.Value is true or "True"))
             .WriteTo.Http(requestUri: ingestUri, queueLimitBytes: null, textFormatter: new ParseableEventFormatter(), batchFormatter: new ParseableBatchFormatter(), httpClient: httpClient, restrictedToMinimumLevel: LogEventLevel.Verbose));
@@ -194,6 +187,7 @@ builder.Services.Configure<GitHubIntegrationOptions>(builder.Configuration.GetSe
 builder.Services.Configure<AgentPoolOptions>(builder.Configuration.GetSection(AgentPoolOptions.SectionName));
 builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
 builder.Services.Configure<RequirementsOptions>(builder.Configuration.GetSection(RequirementsOptions.SectionName));
+builder.Services.Configure<AgentProcessManagerOptions>(builder.Configuration.GetSection(AgentProcessManagerOptions.SectionName));
 builder.Services.AddSingleton<IValidateOptions<AgentPoolOptions>, AgentPoolOptionsValidator>();
 builder.Services.AddSingleton<IValidateOptions<VoiceConversationOptions>, VoiceConversationOptionsValidator>();
 builder.Services.AddSingleton<AppSettingsFileService>();
@@ -301,6 +295,16 @@ builder.Services.AddSingleton<IChangeEventBus, ChannelChangeEventBus>();
 builder.Services.AddSingleton<Chunker>();
 builder.Services.AddDataProtection();
 builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
+builder.Services.AddSingleton<IAgentProcessManager, AgentProcessManager>();
+builder.Services.AddSingleton<IAgentIsolationStrategy, NoneAgentIsolationStrategy>();
+builder.Services.AddSingleton<IAgentIsolationStrategy, WorktreeAgentIsolationStrategy>();
+builder.Services.AddSingleton<IAgentIsolationStrategy, CloneAgentIsolationStrategy>();
+builder.Services.AddSingleton<AgentIsolationStrategyResolver>();
+builder.Services.AddSingleton<IAgentBranchStrategy, DirectAgentBranchStrategy>();
+builder.Services.AddSingleton<IAgentBranchStrategy, FeatureAgentBranchStrategy>();
+builder.Services.AddSingleton<IAgentBranchStrategy, WorktreeAgentBranchStrategy>();
+builder.Services.AddSingleton<AgentBranchStrategyResolver>();
+builder.Services.AddHostedService<AgentHealthMonitorService>();
 builder.Services.AddSingleton<IGitHubWorkspaceTokenStore, FileGitHubWorkspaceTokenStore>();
 builder.Services.Configure<ProcessRunnerOptions>(options =>
 {
@@ -405,7 +409,6 @@ if (oidcAuthBootstrap.Enabled)
 }
 else
 {
-    // Keep authorization available so [Authorize(Policy="AgentManager")] can fall back to API-key-only mode.
     builder.Services.AddAuthentication();
 }
 
@@ -425,7 +428,6 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
-// Tunnel registry — providers registered via DI and started by the hosted service lifecycle.
 builder.Services.Configure<TunnelOptions>(
     builder.Configuration.GetSection(TunnelOptions.SectionName));
 builder.Services.AddSingleton<NgrokTunnelProvider>();
@@ -453,7 +455,6 @@ if (!builder.Environment.IsStaging())
 #endif
 builder.Services.AddEndpointsApiExplorer();
 
-// MCP Streamable HTTP transport — shares FwhMcpTools with STDIO transport.
 builder.Services.AddMcpServer()
     .WithHttpTransport()
     .WithToolsFromAssembly(typeof(FwhMcpTools).Assembly);
@@ -467,7 +468,6 @@ var app = builder.Build();
 var serverProcessId = Environment.ProcessId;
 var serverCommandLine = Environment.CommandLine;
 
-// Log application version at startup for deployment verification.
 app.LogApplicationVersion();
 app.Logger.LogInformation(
     "Server startup event: PID={ProcessId}; Command={CommandLine}",
@@ -492,7 +492,6 @@ if (!app.Environment.IsEnvironment("Test"))
         await db.Database.MigrateAsync().ConfigureAwait(false);
     }
 
-    // Seed built-in agent definitions on startup (idempotent).
     using (var scope = app.Services.CreateScope())
     {
         var agentService = scope.ServiceProvider.GetRequiredService<IAgentService>();
@@ -501,7 +500,6 @@ if (!app.Environment.IsEnvironment("Test"))
             Log.Information("[Agents] Seeded {Count} built-in agent definitions", seededCount);
     }
 
-    // Seed default tool buckets from configuration (idempotent — skips existing).
     using (var scope = app.Services.CreateScope())
     {
         var bucketService = scope.ServiceProvider.GetRequiredService<IToolBucketService>();
@@ -523,8 +521,6 @@ if (!app.Environment.IsEnvironment("Test"))
     }
 }
 
-// Marker files are written by WorkspaceProcessManager during auto-start (including the primary workspace).
-// Register cleanup for the primary workspace marker on shutdown.
 {
     var primaryRepoRoot = McpInstanceResolver.GetEffectiveMcpValue(app.Configuration, instanceName, "RepoRoot") ?? ".";
     var primaryWorkspacePath = Path.IsPathRooted(primaryRepoRoot)
@@ -549,7 +545,6 @@ if (!app.Environment.IsEnvironment("Test"))
     });
 }
 
-// Seed primary-host API tokens eagerly so /api-key is ready even if workspace auto-start lags.
 {
     var apiKeyWorkspacePath = ResolvePrimaryApiKeyWorkspacePath(app.Configuration, app.Environment, instanceName);
     if (!string.IsNullOrWhiteSpace(apiKeyWorkspacePath))
@@ -572,15 +567,12 @@ if (!app.Environment.IsEnvironment("Test"))
     }
 }
 
-// Tunnel lifecycle is managed by TunnelRegistry as an IHostedService.
-// Only the shutdown hook remains for cleanup outside the hosted service scope.
 app.Lifetime.ApplicationStopping.Register(() =>
     app.Services.GetRequiredService<TunnelRegistry>().StopAllAsync().GetAwaiter().GetResult());
 
-// TR-PLANNED-013: Structured interaction logging for all requests; optional async submission to LoggingServiceUrl.
+app.UseGlobalExceptionHandler();
 app.UseMiddleware<InteractionLoggingMiddleware>();
 
-// Per-workspace auth tokens: protect all /mcpserver/* REST routes.
 app.UseAuthentication();
 app.UseMiddleware<WorkspaceResolutionMiddleware>();
 app.UseMiddleware<WorkspaceAuthMiddleware>();
@@ -594,12 +586,10 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MCP Context
 app.MapGet("/", () => Results.Redirect("/swagger"))
     .ExcludeFromDescription();
 
-// Unprotected diagnostics endpoint for stale-marker detection and client troubleshooting.
 app.MapGet("/server-startup-utc", (ServerRuntimeInfo runtimeInfo) =>
     MarkerDiagnosticsEndpointHelper.GetServerStartupResult(runtimeInfo))
     .ExcludeFromDescription();
 
-// Unprotected diagnostics endpoint returning marker file timestamps for configured workspaces.
 app.MapGet("/marker-file-timestamp", (string? repoPath, IConfiguration configuration) =>
     MarkerDiagnosticsEndpointHelper.GetMarkerFileTimestampResult(
         repoPath,
@@ -608,7 +598,6 @@ app.MapGet("/marker-file-timestamp", (string? repoPath, IConfiguration configura
         restrictToCurrentRepoRoot: false))
     .ExcludeFromDescription();
 
-// Unprotected endpoint returning the default (anonymous) API key for consumers without marker file access.
 app.MapGet("/api-key", (WorkspaceTokenService tokenService) =>
 {
     var workspacePath = ResolvePrimaryApiKeyWorkspacePath(app.Configuration, app.Environment, instanceName) ?? string.Empty;
@@ -630,7 +619,6 @@ app.MapGet("/api-key", (WorkspaceTokenService tokenService) =>
 app.MapMcp("/mcp-transport");
 app.MapControllers();
 
-// /pair web login flow — authenticate to view the API key.
 app.MapGet("/pair", async (IOptions<PairingOptions> opts, PairingHtmlRenderer pairingRenderer) =>
 {
     var o = opts.Value;
@@ -825,7 +813,6 @@ static bool ContainsRequiredRole(string? claimValue, ISet<string> requiredRoles)
         catch (JsonException ex)
         {
             System.Diagnostics.Trace.TraceWarning(ex.ToString());
-            // Fall back to delimited parsing below.
         }
     }
 

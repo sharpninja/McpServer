@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "McpServer.AgentFramework.SampleHost": {
-      "commandName": "Project",
-      "workingDirectory": "E:\\github\\McpServer"
-    }
-  }
-}

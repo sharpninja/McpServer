@@ -43,6 +43,8 @@ public sealed class ProcessRunner(
             process.StartInfo.RedirectStandardError = true;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
+            if (!string.IsNullOrWhiteSpace(request.WorkingDirectory))
+                process.StartInfo.WorkingDirectory = request.WorkingDirectory;
 
             var opts = options.Value;
             var token = string.IsNullOrWhiteSpace(request.GitHubTokenOverride)
@@ -51,7 +53,7 @@ public sealed class ProcessRunner(
             processEnvironment.ApplyAll(process.StartInfo, runAsUser: null, token);
             process.StartInfo.FileName = processEnvironment.ResolveExecutable(process.StartInfo, request.FileName);
 
-            logger.LogDebug("Running {FileName} {Arguments}", request.FileName, request.Arguments);
+            logger.LogDebug("Running {FileName} {Arguments} (cwd: {WorkingDirectory})", request.FileName, request.Arguments, process.StartInfo.WorkingDirectory);
             process.Start();
             var stdoutTask = process.StandardOutput.ReadToEndAsync(ct);
             var stderrTask = process.StandardError.ReadToEndAsync(ct);

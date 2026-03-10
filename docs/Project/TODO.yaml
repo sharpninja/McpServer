@@ -1157,8 +1157,8 @@ mvp-mcp:
   - id: MVP-MCP-005
     title: Implement per-agent workspace functionality
     estimate: 5-8 days AI-assisted
-    note: 'Audit completed 2026-02-27. Data model is COMPLETE: AgentDefinitionEntity (global templates, 7 built-in), AgentWorkspaceEntity (per-workspace overrides with isolation, ban, models, branch strategy, seed prompt, launch command, marker additions), AgentEventLogEntity (audit trail). AgentService has full CRUD for both tiers. AgentController has 14 endpoints. What is MISSING: (1) Agent process lifecycle management (launch/stop/monitor), (2) AgentIsolation strategy enforcement (worktree/clone - field stored but never acted on), (3) Session log -> agent FK linkage (sourceType is free-form string, no FK to AgentDefinitionEntity), (4) Per-agent marker file sections (MarkerAdditions field stored but not injected into AGENTS-README-FIRST.yaml), (5) Per-agent git branch management (BranchStrategy stored but not enforced), (6) Agent health monitoring and auto-restart, (7) Multi-agent orchestration (priority, scheduling, conflict resolution).'
-    done: true
+    note: 'Replanned and reopened on 2026-03-10 based on code audit. Existing data model/service CRUD foundations are present (AgentDefinitionEntity, AgentWorkspaceEntity, AgentEventLogEntity, AgentService CRUD, AgentController CRUD/read endpoints, built-in seed defaults), but the runtime per-agent workspace feature set is still missing or incomplete. Missing/partial areas confirmed by audit: (1) agent process lifecycle management (launch/stop/status tracking), (2) enforced isolation strategies (worktree/clone/none), (3) enforced branch strategies, (4) marker file agent additions injection, (5) session-log linkage to agent definition, (6) health monitoring/restart behavior, (7) runtime controller endpoints + tests + docs. This TODO status had drifted and was incorrectly marked done; it is now reopened with a regenerated plan aligned to current code. Retry verification confirmed persisted progress now includes a hand-authored migration file: 20260310213500_AddAgentRuntimeRestartPolicyAndSessionAgentLink.cs.'
+    done: false
     description:
     - Implement the runtime behavior layer for per-agent workspace functionality, building on the existing complete data model (AgentDefinitionEntity, AgentWorkspaceEntity, AgentEventLogEntity) and service layer (AgentService, AgentController).
     - 'Core capability: Launch, monitor, and stop agent processes per-workspace with workspace-specific configuration overrides (launch command, models, branch strategy, seed prompt, isolation mode).'
@@ -1167,7 +1167,8 @@ mvp-mcp:
     - 'Session log linkage: Connect SessionLogEntity.SourceType to AgentDefinitionEntity via optional FK, enabling agent-scoped session log queries and audit trails.'
     - 'Branch management: Enforce BranchStrategy per agent - direct (commit to current branch), feature-branch (create agent-named branch), or worktree (git worktree per agent session).'
     - 'Health monitoring: Periodic health checks on running agent processes with configurable restart policies (never, on-failure, always).'
-    done-summary: All entities (AgentDefinitionEntity, AgentWorkspaceEntity, AgentEventLogEntity), AgentService with full CRUD/ban/unban/event logging, and AgentController with complete REST coverage are implemented. 7 built-in agent types seeded. Multi-tenant workspace isolation via WorkspaceId.
+    done-summary: ''
+    remaining: Requirements traceability docs have been advanced by confirming FR-MCP-050 is present in Functional Requirements and ensuring FR-MCP-050 maps to TR-MCP-AGENT-008 through TR-MCP-AGENT-012 in TR-per-FR-Mapping. Remaining work is final doneSummary/remaining cleanup plus build/test/manual validation before closure.
     technical-details:
     - 'AGENT PROCESS MANAGER: Create IAgentProcessManager interface with methods: LaunchAsync(workspacePath, agentId, ct) -> AgentProcessInfo, StopAsync(workspacePath, agentId, ct) -> bool, GetStatusAsync(workspacePath, agentId, ct) -> AgentProcessInfo, ListRunningAsync(workspacePath?, ct) -> IReadOnlyList<AgentProcessInfo>. Implementation AgentProcessManager uses System.Diagnostics.Process to launch agent CLI tools. Tracks running processes in ConcurrentDictionary<(string workspacePath, string agentId), AgentProcessInfo>. AgentProcessInfo record: ProcessId, AgentId, WorkspacePath, StartedAt, Status (Running/Stopped/Failed), ExitCode?, WorkDirectory (isolated path if applicable).'
     - 'LAUNCH COMMAND RESOLUTION: When launching an agent, resolve the effective launch command: AgentWorkspaceEntity.LaunchCommandOverride ?? AgentDefinitionEntity.LaunchCommand. Support command template variables: {workspacePath}, {agentId}, {branchName}, {modelList}, {seedPrompt}. Parse command string into executable + arguments. Log resolved command to AgentEventLog with EventType=Launch.'
@@ -1183,63 +1184,105 @@ mvp-mcp:
     - 'TESTING: (1) AgentProcessManagerTests - mock Process.Start, verify launch/stop/status lifecycle, verify process tracking dictionary. (2) WorktreeIsolationStrategyTests - mock git commands, verify worktree add/remove calls. (3) FeatureBranchStrategyTests - mock git commands, verify branch creation. (4) AgentHealthMonitorTests - mock process status, verify restart logic and backoff. (5) MarkerFileService integration test - verify agentAdditions appear in generated marker. (6) SessionLogService test - verify AgentDefinitionId auto-populated from SourceType. (7) AgentController integration tests - launch/stop/status endpoints.'
     - 'CONFIGURATION: New appsettings.json sections: Mcp:AgentProcessManager: { AgentsDirectory: ".agents", HealthCheckIntervalSeconds: 30, MaxRestarts: 3, RestartBackoffBaseSeconds: 5 }. Per-workspace agent config already exists in AgentWorkspaceEntity (DB).'
     implementation-tasks:
-    - task: 'Phase 0 - Audit and document current state: Verify all AgentService methods work correctly by running existing AgentController integration tests. Verify AgentDefinitionEntity has all 7 built-in seeds. Verify AgentWorkspaceEntity schema includes AgentIsolation, BranchStrategy, MarkerAdditions fields. Document any gaps in test coverage.'
+    - task: 'Phase 0.1 - Audit baseline and capture evidence: verify current AgentService/AgentController CRUD foundations, seeded built-in definitions, existing AgentWorkspaceEntity fields, and identify exact missing runtime gaps in code/tests/docs.'
+      done: true
+    - task: 'Phase 0.2 - Reconcile TODO metadata with reality: keep TODO reopened, preserve prior audit context in note, and use this regenerated implementation plan as the new source of truth for remaining work.'
+      done: true
+    - task: 'Phase 1.1 - Create runtime process models: add AgentProcessStatus enum and AgentProcessInfo DTO in the shared models area used by Services + Support.Mcp controllers.'
+      done: true
+    - task: Phase 1.2 - Add IAgentProcessManager contract with launch/stop/status/list semantics keyed by (workspacePath, agentId).
+      done: true
+    - task: Phase 1.3 - Implement AgentProcessManager using System.Diagnostics.Process plus in-memory tracking of running processes and exited status metadata.
+      done: true
+    - task: Phase 1.4 - Add command parsing/resolution helper for launch commands so effective command templates can resolve workspacePath, agentId, branchName, modelList, and seedPrompt safely.
+      done: true
+    - task: Phase 1.5 - Register AgentProcessManager as singleton in Program.cs and ensure runtime state is shared across requests/hosted services.
+      done: true
+    - task: Phase 2.1 - Add isolation strategy abstraction (IAgentIsolationStrategy or equivalent factory-driven contract) with PrepareWorkDirectoryAsync/CleanupAsync behavior.
+      done: true
+    - task: Phase 2.2 - Implement None isolation strategy returning the original workspace path unchanged.
+      done: true
+    - task: Phase 2.3 - Implement Worktree isolation strategy creating .agents/{agentId} git worktrees, copying AGENTS-README-FIRST.yaml into the worktree, and cleaning them up.
+      done: true
+    - task: Phase 2.4 - Implement Clone isolation strategy creating shallow clones under .agents/{agentId}-clone and cleaning them up.
+      done: true
+    - task: Phase 2.5 - Add isolation strategy resolution based on AgentWorkspaceEntity.AgentIsolation with validation for unknown/unsupported values.
+      done: true
+    - task: Phase 3.1 - Add branch strategy abstraction (IAgentBranchStrategy or equivalent) with PrepareBranchAsync/FinalizeBranchAsync behavior.
+      done: true
+    - task: Phase 3.2 - Implement Direct branch strategy that keeps the current branch and reports it as the effective branch.
+      done: true
+    - task: Phase 3.3 - Implement FeatureBranch strategy that creates agent/{agentId}/{timestamp} branches and restores the original branch on finalize.
+      done: true
+    - task: Phase 3.4 - Implement Worktree branch strategy that reports the branch already created by worktree isolation.
+      done: true
+    - task: Phase 3.5 - Add branch strategy resolution based on AgentWorkspaceEntity.BranchStrategyOverride or AgentDefinitionEntity.DefaultBranchStrategy with validation/fallback behavior.
+      done: true
+    - task: 'Phase 4.1 - Extend IAgentService with runtime operations: LaunchAgentAsync, StopAgentAsync, GetAgentProcessStatusAsync, and ListRunningAgentsAsync.'
+      done: true
+    - task: 'Phase 4.2 - Implement launch orchestration in AgentService: resolve workspace agent config, enforce enabled/not-banned, resolve effective launch command, prepare isolation work directory, prepare branch, launch via IAgentProcessManager, and log lifecycle event.'
+      done: true
+    - task: Phase 4.3 - Implement stop/status/list orchestration in AgentService including cleanup/finalization hooks where needed.
+      done: true
+    - task: Phase 4.4 - Add defensive logging and explicit mutation/error results for already-running, not-configured, banned, or invalid-strategy conditions.
+      done: true
+    - task: 'Phase 5.1 - Add runtime endpoints to AgentController: POST {agentId}/launch, POST {agentId}/stop, GET {agentId}/process-status, and GET running, using existing workspace resolution rules.'
+      done: true
+    - task: Phase 5.2 - Map runtime endpoint outcomes to proper HTTP results (200/404/409/400 as appropriate) without regressing existing CRUD/event endpoints.
+      done: true
+    - task: Phase 5.3 - Ensure runtime endpoints are protected consistently with existing AgentManager auth expectations for mutating operations.
+      done: true
+    - task: Phase 6.1 - Integrate per-agent marker additions into MarkerFileService.BuildTemplateContext by adding an agentAdditions collection to the Handlebars context.
+      done: true
+    - task: Phase 6.2 - Update marker prompt template/fallback template so agent-specific instructions are rendered when workspace agent configurations include non-empty MarkerAdditions.
+      done: true
+    - task: Phase 6.3 - Update marker-generation call sites (for example WorkspaceProcessManager or equivalent marker orchestration path) to query workspace agent configs and pass them into marker rendering.
+      done: true
+    - task: Phase 7.1 - Add optional AgentDefinitionId linkage to session-log persistence model/entity and DTOs where required.
+      done: true
+    - task: Phase 7.2 - Update McpDbContext mapping/query includes/filters so SessionLog entries can store and query the optional agent definition FK cleanly.
+      done: true
+    - task: Phase 7.3 - Update SessionLogService.SubmitAsync to resolve AgentDefinitionId automatically from SourceType when it matches a known agent definition.
+      done: true
+    - task: Phase 7.4 - Add session-log query filtering by agentDefinitionId in the controller/service path.
+      done: true
+    - task: Phase 7.5 - Create and wire the EF migration for the new session-log agent linkage.
+      done: true
+    - task: Phase 8.1 - Add AgentProcessManagerOptions with AgentsDirectory, HealthCheckIntervalSeconds, MaxRestarts, and RestartBackoffBaseSeconds.
+      done: true
+    - task: Phase 8.2 - Bind AgentProcessManagerOptions from configuration in Program.cs and add appsettings defaults.
+      done: true
+    - task: Phase 8.3 - Add AgentHealthMonitorService as a BackgroundService/hosted service that polls runtime agent state, detects unexpected exits, and applies restart policy behavior.
+      done: true
+    - task: Phase 8.4 - Add restart-policy lookup behavior from workspace agent configuration and cap restarts with exponential backoff plus operational logging.
+      done: true
+    - task: Phase 9.1 - Add unit tests for AgentProcessManager covering launch, stop, status transitions, already-running conflicts, and workspace filtering.
+      done: true
+    - task: Phase 9.2 - Add unit/integration tests for isolation strategies using temp git repositories to validate worktree/clone behavior and marker copying.
+      done: true
+    - task: Phase 9.3 - Add unit tests for branch strategies covering feature-branch creation/finalization and direct/worktree behavior.
+      done: true
+    - task: Phase 9.4 - Add AgentService runtime tests covering config resolution, banned-agent rejection, missing workspace config, isolation invocation, and process-manager delegation.
+      done: true
+    - task: Phase 9.5 - Add AgentController integration tests for runtime endpoints (launch/stop/status/running) with success and conflict/not-found flows.
+      done: true
+    - task: Phase 9.6 - Add MarkerFileService/WorkspaceProcessManager tests proving agentAdditions render into AGENTS-README-FIRST.yaml when configured.
+      done: true
+    - task: Phase 9.7 - Add SessionLogService/controller tests proving AgentDefinitionId auto-linking and filtering behavior.
+      done: true
+    - task: Phase 9.8 - Add AgentHealthMonitorService tests covering unexpected exit detection, restart policy handling, max restart caps, and backoff behavior.
+      done: true
+    - task: Phase 10.1 - Update requirements artifacts for this feature based on actual delivered scope (FR/TR/TEST IDs for runtime lifecycle, isolation, branch strategy, marker injection, session-log linkage, and health monitoring).
+      done: true
+    - task: Phase 10.2 - Update TR-per-FR-Mapping.md and Requirements-Matrix.md to reflect the reopened and then implemented status accurately.
+      done: true
+    - task: Phase 10.3 - Update TODO doneSummary/remaining only after build, tests, and documentation evidence are complete.
       done: false
-    - task: 'Phase 1.1 - Create AgentProcessInfo DTO: Create src/McpServer.Support.Mcp/Models/AgentProcessInfo.cs with record AgentProcessInfo(int? ProcessId, string AgentId, string WorkspacePath, DateTime StartedAt, AgentProcessStatus Status, int? ExitCode, string? WorkDirectory, string? ErrorMessage). Create enum AgentProcessStatus { Running, Stopped, Failed, Starting }. XML doc comments required.'
+    - task: Phase 11.1 - Run build verification for touched projects with warnings-as-errors expectations intact.
       done: false
-    - task: 'Phase 1.2 - Create IAgentProcessManager interface: Create src/McpServer.Support.Mcp/Services/IAgentProcessManager.cs with: Task<AgentProcessInfo> LaunchAsync(string workspacePath, string agentId, string resolvedCommand, string workDirectory, CancellationToken ct), Task<bool> StopAsync(string workspacePath, string agentId, CancellationToken ct), Task<AgentProcessInfo?> GetStatusAsync(string workspacePath, string agentId, CancellationToken ct), Task<IReadOnlyList<AgentProcessInfo>> ListRunningAsync(string? workspacePath, CancellationToken ct). XML doc comments.'
+    - task: Phase 11.2 - Run targeted and then broader tests for Support.Mcp and related projects until all new runtime functionality is validated without regressions.
       done: false
-    - task: 'Phase 1.3 - Implement AgentProcessManager: Create src/McpServer.Support.Mcp/Services/AgentProcessManager.cs implementing IAgentProcessManager. Private _processes (ConcurrentDictionary<(string, string), AgentProcessInfo>). LaunchAsync: parse command into executable + args, create ProcessStartInfo (RedirectStandardOutput/Error, UseShellExecute=false, WorkingDirectory=workDirectory), start Process, store in _processes, log AgentEventLog, return info. StopAsync: find in _processes, kill process (Process.Kill(entireProcessTree: true)), remove from dict, log event. GetStatusAsync: find in dict, check Process.HasExited, update status. ListRunningAsync: filter by workspacePath, return list. Constructor injects ILogger<AgentProcessManager>. All methods use try/catch with LogWarning per TR-MCP-LOG-001.'
-      done: false
-    - task: 'Phase 1.4 - Create IAgentIsolationStrategy interface: Create src/McpServer.Support.Mcp/Services/IAgentIsolationStrategy.cs with: Task<string> PrepareWorkDirectoryAsync(string workspacePath, string agentId, CancellationToken ct), Task CleanupAsync(string workspacePath, string agentId, CancellationToken ct). Create NoneIsolationStrategy (returns workspacePath unchanged), WorktreeIsolationStrategy (git worktree add), CloneIsolationStrategy (git clone --depth 1). Each in separate files under Services/AgentIsolation/.'
-      done: false
-    - task: 'Phase 1.5 - Implement WorktreeIsolationStrategy: Create src/McpServer.Support.Mcp/Services/AgentIsolation/WorktreeIsolationStrategy.cs. PrepareWorkDirectoryAsync: (1) Create .agents/ under workspace root. (2) Generate branch name: agent/{agentId}/{yyyyMMdd-HHmmss}. (3) Run git worktree add .agents/{agentId} -b {branchName} via Process.Start with RedirectStandardError. (4) Copy AGENTS-README-FIRST.yaml from workspace root to worktree root. (5) Return worktree absolute path. CleanupAsync: (1) Run git worktree remove .agents/{agentId} --force. (2) Optionally delete branch with git branch -d. (3) Log to ILogger. Constructor injects ILogger, IOptions<AgentProcessManagerOptions>.'
-      done: false
-    - task: 'Phase 1.6 - Implement CloneIsolationStrategy: Create src/McpServer.Support.Mcp/Services/AgentIsolation/CloneIsolationStrategy.cs. PrepareWorkDirectoryAsync: (1) Create .agents/ under workspace root. (2) Run git clone --depth 1 --single-branch {workspacePath} .agents/{agentId}-clone. (3) Copy AGENTS-README-FIRST.yaml to clone root. (4) Return clone absolute path. CleanupAsync: delete .agents/{agentId}-clone directory recursively. Log all operations.'
-      done: false
-    - task: 'Phase 1.7 - Create AgentIsolationStrategyFactory: Create src/McpServer.Support.Mcp/Services/AgentIsolation/AgentIsolationStrategyFactory.cs with static method Create(string? isolationMode, IServiceProvider sp) -> IAgentIsolationStrategy. Maps null/empty -> NoneIsolationStrategy, worktree -> WorktreeIsolationStrategy, clone -> CloneIsolationStrategy. Throws ArgumentException for unknown modes.'
-      done: false
-    - task: 'Phase 2.1 - Create IAgentBranchStrategy interface: Create src/McpServer.Support.Mcp/Services/IAgentBranchStrategy.cs with: Task<string> PrepareBranchAsync(string workDirectory, string agentId, CancellationToken ct), Task FinalizeBranchAsync(string workDirectory, string agentId, CancellationToken ct). Implementations: DirectBranchStrategy (no-op, returns current branch), FeatureBranchStrategy (git checkout -b agent/{agentId}/{timestamp}), WorktreeBranchStrategy (returns branch already created by worktree isolation). Each in Services/AgentBranch/.'
-      done: false
-    - task: 'Phase 2.2 - Implement FeatureBranchStrategy: Create src/McpServer.Support.Mcp/Services/AgentBranch/FeatureBranchStrategy.cs. PrepareBranchAsync: (1) Get current branch via git rev-parse --abbrev-ref HEAD. (2) Create feature branch: git checkout -b agent/{agentId}/{yyyyMMdd-HHmmss}. (3) Return new branch name. FinalizeBranchAsync: (1) Get current branch. (2) If on agent branch, checkout original branch: git checkout {originalBranch}. (3) Log branch finalization. Store original branch name in instance field for finalization.'
-      done: false
-    - task: 'Phase 3.1 - Add launch/stop methods to IAgentService + AgentService: Add to IAgentService: Task<AgentProcessInfo> LaunchAgentAsync(string workspacePath, string agentId, CancellationToken ct), Task<bool> StopAgentAsync(string workspacePath, string agentId, CancellationToken ct), Task<AgentProcessInfo?> GetAgentProcessStatusAsync(string workspacePath, string agentId, CancellationToken ct), Task<IReadOnlyList<AgentProcessInfo>> ListRunningAgentsAsync(string? workspacePath, CancellationToken ct). Implement in AgentService: (1) Resolve AgentWorkspaceEntity for config. (2) Check not banned. (3) Resolve effective launch command (override ?? default). (4) Resolve isolation strategy via factory. (5) Prepare work directory. (6) Resolve branch strategy. (7) Prepare branch. (8) Delegate to IAgentProcessManager.LaunchAsync. (9) Log AgentEventLog with EventType=Launch. StopAgentAsync: delegate to IAgentProcessManager.StopAsync, log EventType=Exit.'
-      done: false
-    - task: 'Phase 3.2 - Add launch/stop endpoints to AgentController: Add 4 new endpoints: POST /mcpserver/agents/{agentId}/launch?workspace= [Authorize(AgentManager)] -> AgentProcessInfo, POST /mcpserver/agents/{agentId}/stop?workspace= [Authorize(AgentManager)] -> {success}, GET /mcpserver/agents/{agentId}/process-status?workspace= [ApiKey] -> AgentProcessInfo, GET /mcpserver/agents/running?workspace= [ApiKey] -> {agents: AgentProcessInfo[]}. Each delegates to AgentService. Return 404 if agent not configured for workspace. Return 409 if already running (launch) or not running (stop).'
-      done: false
-    - task: 'Phase 4.1 - Marker file integration: Modify MarkerFileService.BuildTemplateContext() to accept optional IReadOnlyList<AgentWorkspaceEntity> agentConfigs parameter. For each non-banned agent with non-empty MarkerAdditions, add to context dictionary: agentAdditions = list of { agentId, content }. Add Handlebars section to DefaultPromptTemplate (or external template file if MVP-MCP-004 is done): {{#if agentAdditions}}\n## Agent-Specific Instructions\n{{#each agentAdditions}}\n### {{this.agentId}}\n{{this.content}}\n{{/each}}\n{{/if}}. Update all callers of BuildTemplateContext to pass agent configs (query from AgentService in WorkspaceProcessManager).'
-      done: false
-    - task: 'Phase 4.2 - Session log agent linkage: (1) Add AgentDefinitionId (string?, nullable) property to SessionLogEntity. (2) Add optional navigation property: AgentDefinitionEntity? AgentDefinition. (3) Create EF Core migration: dotnet ef migrations add AddSessionLogAgentLink. (4) In SessionLogService.SubmitAsync, after upserting: if AgentDefinitionId is null and SourceType is not empty, try resolving via _dbContext.AgentDefinitions.FirstOrDefaultAsync(a => a.Id.ToLower() == dto.SourceType.ToLower()). If found, set AgentDefinitionId and save. (5) Add agentDefinitionId filter to GET /mcpserver/sessionlog query endpoint. (6) Update SessionLogDto to include AgentDefinitionId.'
-      done: false
-    - task: 'Phase 5.1 - Agent health monitor: Create src/McpServer.Support.Mcp/Services/AgentHealthMonitorService.cs extending BackgroundService. Constructor injects IAgentProcessManager, IAgentService (for restart config), ILogger. ExecuteAsync: loop with await Task.Delay(interval, ct). Each iteration: call ListRunningAsync, for each running agent check if process has exited unexpectedly. If exited with non-zero: log Warning, check restart policy from AgentWorkspaceEntity (never/on-failure/always), track restart count per (workspace, agentId) in dictionary, apply exponential backoff (base * 2^retryCount), re-launch if under max restarts. Log all decisions. Register as hosted service in Program.cs.'
-      done: false
-    - task: 'Phase 5.2 - Create AgentProcessManagerOptions: Create src/McpServer.Support.Mcp/Configuration/AgentProcessManagerOptions.cs with: AgentsDirectory (string, default ".agents"), HealthCheckIntervalSeconds (int, default 30), MaxRestarts (int, default 3), RestartBackoffBaseSeconds (int, default 5). Bind to appsettings.json section Mcp:AgentProcessManager. Add section to appsettings.json.'
-      done: false
-    - task: 'Phase 5.3 - DI registration: In Program.cs, register: builder.Services.AddSingleton<IAgentProcessManager, AgentProcessManager>(). builder.Services.AddTransient<NoneIsolationStrategy>(). builder.Services.AddTransient<WorktreeIsolationStrategy>(). builder.Services.AddTransient<CloneIsolationStrategy>(). builder.Services.AddTransient<DirectBranchStrategy>(). builder.Services.AddTransient<FeatureBranchStrategy>(). builder.Services.AddTransient<WorktreeBranchStrategy>(). builder.Services.AddHostedService<AgentHealthMonitorService>(). builder.Services.Configure<AgentProcessManagerOptions>(config.GetSection("Mcp:AgentProcessManager")).'
-      done: false
-    - task: 'Phase 6.1 - Unit tests - AgentProcessManager: Create tests/McpServer.Support.Mcp.Tests/Services/AgentProcessManagerTests.cs. Test cases: (1) LaunchAsync_StartsProcess_ReturnsInfo - verify ProcessStartInfo has correct executable, args, working directory. (2) StopAsync_RunningProcess_KillsAndRemoves. (3) GetStatusAsync_RunningProcess_ReturnsRunning. (4) GetStatusAsync_ExitedProcess_UpdatesStatus. (5) ListRunningAsync_FiltersbyWorkspace. (6) LaunchAsync_AlreadyRunning_ThrowsConflict. (7) StopAsync_NotRunning_ReturnsFalse. Use NSubstitute for ILogger, test with actual process start of trivial command (ping/sleep) or mock Process.'
-      done: false
-    - task: 'Phase 6.2 - Unit tests - Isolation strategies: Create tests for WorktreeIsolationStrategy: (1) PrepareWorkDirectoryAsync_CreatesWorktree_ReturnsPath, (2) CleanupAsync_RemovesWorktree, (3) PrepareWorkDirectoryAsync_CopiesMarkerFile. Create tests for CloneIsolationStrategy: (4) PrepareWorkDirectoryAsync_ClonesRepo, (5) CleanupAsync_DeletesCloneDirectory. Create tests for NoneIsolationStrategy: (6) PrepareWorkDirectoryAsync_ReturnsOriginalPath. Mock git commands via process output redirection or by testing in temp git repos.'
-      done: false
-    - task: 'Phase 6.3 - Unit tests - Branch strategies: Test FeatureBranchStrategy: (1) PrepareBranchAsync_CreatesFeatureBranch, (2) FinalizeBranchAsync_CheckoutsOriginalBranch. Test DirectBranchStrategy: (3) PrepareBranchAsync_NoOp_ReturnsCurrentBranch. Test WorktreeBranchStrategy: (4) PrepareBranchAsync_ReturnsExistingBranch.'
-      done: false
-    - task: 'Phase 6.4 - Unit tests - AgentService launch/stop: Add tests to AgentServiceTests: (1) LaunchAgentAsync_ResolvesConfig_DelegatesToProcessManager - mock IAgentProcessManager, verify called with resolved command and work directory. (2) LaunchAgentAsync_BannedAgent_Throws - verify banned agents cannot launch. (3) LaunchAgentAsync_NoWorkspaceConfig_Throws404. (4) StopAgentAsync_RunningAgent_DelegatesToProcessManager. (5) LaunchAgentAsync_WithIsolation_PreparesWorkDirectory - verify isolation strategy called.'
-      done: false
-    - task: 'Phase 6.5 - Unit tests - Health monitor: Create AgentHealthMonitorServiceTests: (1) DetectsExitedProcess_LogsWarning. (2) RestartPolicyOnFailure_RestartsOnNonZeroExit. (3) RestartPolicyNever_DoesNotRestart. (4) MaxRestarts_ExceededStopsRestarting. (5) ExponentialBackoff_IncreasesDelay. Mock IAgentProcessManager and IAgentService.'
-      done: false
-    - task: 'Phase 6.6 - Integration tests - Controller endpoints: Add tests to existing AgentController test class or create new: (1) POST launch returns 200 with AgentProcessInfo. (2) POST stop returns 200. (3) GET process-status returns running info. (4) GET running lists active agents. (5) POST launch when banned returns 403/409. (6) POST launch when already running returns 409. Use CustomWebApplicationFactory with mock IAgentProcessManager.'
-      done: false
-    - task: 'Phase 6.7 - Integration tests - Marker file with agent additions: Test MarkerFileService generates marker with agentAdditions section when agents have MarkerAdditions configured. Verify Handlebars rendering includes agent-specific instructions.'
-      done: false
-    - task: 'Phase 6.8 - Integration tests - Session log agent linkage: Test SessionLogService.SubmitAsync auto-populates AgentDefinitionId from SourceType. Test query filter by agentDefinitionId returns correct results.'
-      done: false
-    - task: 'Phase 7.1 - Requirements docs: Create FR-MCP-050 (Agent Process Lifecycle Management) in docs/Project/Functional-Requirements.md. Create TR-MCP-AGT-001 (AgentProcessManager singleton with process tracking), TR-MCP-AGT-002 (Agent isolation strategies - none/worktree/clone), TR-MCP-AGT-003 (Agent branch strategies - direct/feature-branch/worktree), TR-MCP-AGT-004 (Agent health monitoring with configurable restart), TR-MCP-AGT-005 (Session log agent linkage via optional FK), TR-MCP-AGT-006 (Marker file agent additions injection). Create TEST-MCP-058..065 in Testing-Requirements.md. Update TR-per-FR-Mapping.md and Requirements-Matrix.md.'
-      done: false
-    - task: 'Phase 8.1 - Build verification: dotnet build src/McpServer.Support.Mcp -c Debug must pass with zero warnings. All new public types must have XML doc comments (CS1591). Verify no missing ConfigureAwait(false) on async calls.'
-      done: false
-    - task: 'Phase 8.2 - Test execution: dotnet test tests/McpServer.Support.Mcp.Tests -c Debug must pass all existing tests plus all new agent lifecycle tests. Zero regressions.'
-      done: false
-    - task: 'Phase 8.3 - Manual smoke test: Start server, use AgentController endpoints to launch a test agent (e.g., a simple script that writes to stdout), verify process status, stop it, verify status changes. Test worktree isolation by launching agent with isolation=worktree, verify .agents/ directory created with git worktree. Test session log auto-linking by submitting a session log with sourceType=copilot, verify AgentDefinitionId populated.'
+    - task: Phase 11.3 - Perform manual smoke validation of launch/stop/status, worktree isolation, marker injection, and session-log agent auto-linking before closing the TODO.
       done: false
   - id: MVP-MCP-006
     title: Prompt Template Registry (CRUD + Test + Director)
@@ -2475,25 +2518,61 @@ MCP:
   - id: MCP-ERRORS-001
     title: Ensure every HTTP 500 response includes a detailed error description
     estimate: 2d
-    note: 'User requirement: Every 500 returned by every endpoint must have a detailed description of the error.'
-    done: false
+    note: Completed and verified. Standardized detailed/sanitized HTTP 500 handling is active in Support.Mcp, bespoke targeted 500 handling was removed, SSE failure semantics were implemented, the Roslyn package restore conflict was resolved, and targeted integration tests now pass.
+    done: true
+    completed: 2026-03-10
     description:
     - Guarantee that every endpoint returning HTTP 500 includes a detailed, client-visible description of the failure.
     - Apply the behavior consistently across controllers and shared HTTP/MCP execution paths instead of relying on per-endpoint custom handling.
+    - Create and document a single exception-handling flow that turns unexpected failures into a standardized 500 response contract across the API surface.
+    - Ensure the implementation distinguishes between expected client errors and unexpected server failures so only genuine server faults become HTTP 500 responses.
+    done-summary: Implemented and verified to completion. Added a standardized HTTP 500 response contract with status, error, message, detail, operation, traceId, and timestampUtc fields. Upgraded GlobalExceptionHandlerMiddleware to sanitize sensitive values, preserve full server-side logging, and return detailed client-visible 500 responses. Wired the handler into Support.Mcp Program.cs. Removed bespoke manual 500 handling from VoiceController SubmitTurnAsync and converted TodoController MoveAsync partial-failure behavior to flow through the centralized handler. Defined SSE behavior so pre-stream failures return normal HTTP errors while post-stream failures emit structured stream error events. Resolved the blocking Microsoft.CodeAnalysis package-version restore conflict and verified the implementation with targeted integration tests passing (4/4).
+    remaining: ''
     technical-details:
     - Introduce a centralized 500-response contract so endpoint implementations do not duplicate exception formatting.
     - Response detail must be sanitized to avoid leaking secrets, tokens, connection strings, or raw stack traces while still identifying the failing operation.
     - Cover representative controller, middleware, and MCP transport failure paths with regression tests.
+    - Add a reusable exception-to-error-response mapper that extracts operation context, exception category, and a safe human-readable failure description.
+    - Prefer framework-level exception middleware/filter wiring over ad hoc try/catch blocks in individual endpoints unless an endpoint requires special translation behavior.
+    - Define a deterministic sanitization strategy for sensitive substrings such as bearer tokens, API keys, secrets, connection strings, filesystem roots if necessary, and raw stack trace content.
+    - Preserve structured logging with full exception details server-side while returning only sanitized detail fields to clients.
+    - Verify behavior for MVC controllers, minimal/shared HTTP handlers, and any MCP-adjacent HTTP execution path that can surface 500 responses.
+    - 'Repository audit finding: McpServer.ServiceDefaults/GlobalExceptionHandlerMiddleware already exists but currently returns a generic payload and is not wired into McpServer.Support.Mcp/Program.cs.'
+    - 'Repository audit finding: explicit manual 500 responses currently exist in VoiceController SubmitTurnAsync and TodoController MoveAsync and should be removed or normalized through the shared contract.'
+    - 'Repository audit finding: streaming endpoints in VoiceController, TodoController, ContextController, EventStreamController, and AgentPoolController require separate pre-stream vs post-stream failure semantics because standard HTTP 500 payloads are only possible before response streaming begins.'
+    - 'Repository audit finding: some controllers intentionally map failures to non-500 responses such as AuthConfigController (502 upstream/OIDC), GraphRagController (409 conflict), and validation/domain-result paths; these should be preserved while unexpected exceptions flow centrally.'
     functional-requirements:
     - FR-MCP-067
     technical-requirements:
     - TR-MCP-HTTP-002
     implementation-tasks:
-    - task: Define a shared HTTP 500 response payload shape and central exception-to-response mapping strategy
-      done: false
-    - task: Apply the shared 500 handling path across REST endpoints and any shared execution middleware
-      done: false
-    - task: Ensure error descriptions stay detailed but sanitized for sensitive values
-      done: false
-    - task: Add regression tests proving representative endpoints return detailed 500 descriptions consistently
-      done: false
+    - task: 'Document the completed audit results inside the TODO/worklog: centralized handler exists but is unused, current payload is generic, explicit manual 500s exist in VoiceController and TodoController, and SSE endpoints require special handling semantics.'
+      done: true
+    - task: Define the standard 500 response payload contract, including fields such as status, error code/category, operation, message/detail, trace or correlation id, and timestamp or equivalent existing metadata; align with any existing API response conventions.
+      done: true
+    - task: Enhance or replace GlobalExceptionHandlerMiddleware in McpServer.ServiceDefaults so it produces the standardized detailed-but-sanitized 500 contract instead of the current generic `{\"error\":\"An unexpected error occurred.\"}` body.
+      done: true
+    - task: Wire the centralized exception handler into src/McpServer.Support.Mcp/Program.cs early enough in the HTTP pipeline to wrap controllers and shared middleware, while preserving intended auth/workspace behavior.
+      done: true
+    - task: Create an exception classification/mapping layer that distinguishes validation/business/client errors from true server errors and assigns stable error categories/messages for known infrastructure failure types.
+      done: true
+    - task: Implement sanitization rules for client-visible 500 detail text so responses remain specific enough to diagnose the failing operation while removing secrets, tokens, credentials, raw stack traces, and other sensitive internals.
+      done: true
+    - task: Refactor normal REST endpoints with ad hoc 500 logic to rely on the centralized path, starting with VoiceController SubmitTurnAsync and TodoController MoveAsync; preserve explicit non-500 mappings such as 400/404/409/422/502 where intentional.
+      done: true
+    - task: Review controllers that currently embed failures into alternate response semantics (for example AgentController validation-style responses and ContextController optional GraphRAG indexing fields) and explicitly decide whether each path should remain non-500 or be converted to centralized unexpected-failure handling.
+      done: true
+    - task: 'Define and document streaming/SSE failure rules for VoiceController, TodoController prompt streams, ContextController ingest stream, EventStreamController, and AgentPoolController: pre-stream failures should return standardized HTTP errors, while post-stream failures should emit structured stream error events rather than attempting normal HTTP 500 payloads.'
+      done: true
+    - task: Ensure every generated 500 response includes a correlation identifier or trace id that matches server-side logs so operators can connect client failures to full diagnostic records.
+      done: true
+    - task: Add or update structured logging so complete exception details remain available in server logs while the HTTP response returns only the sanitized contract.
+      done: true
+    - task: Add regression tests for representative REST failure modes, including unhandled controller exceptions, downstream service exceptions, middleware-thrown exceptions, and refactored manual-500 endpoints; assert status code, payload shape, presence of detailed description, correlation id, and absence of sensitive content.
+      done: true
+    - task: Add regression tests for stream/SSE behavior proving pre-stream exceptions return standardized HTTP errors while post-stream exceptions produce structured stream error events without breaking the documented stream contract.
+      done: true
+    - task: Add negative tests proving known non-500 scenarios are not incorrectly converted into 500 responses and that intentional mappings such as 502 upstream failures and 409 conflicts remain intact.
+      done: true
+    - task: Document the standardized 500 contract and developer guidance for surfacing operation context so future endpoints automatically comply.
+      done: true

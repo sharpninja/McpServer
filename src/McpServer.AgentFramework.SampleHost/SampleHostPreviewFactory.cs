@@ -8,8 +8,11 @@ using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.ClientModel;
+using System.ClientModel.Primitives;
 using System.Text;
 using OpenAIChatClient = OpenAI.Chat.ChatClient;
+using OpenAIClientOptions = OpenAI.OpenAIClientOptions;
 
 namespace McpServer.AgentFramework.SampleHost;
 
@@ -543,7 +546,15 @@ internal sealed class SampleHostConsoleApplication : IDisposable
 
     private static IChatClient CreateChatClient(SampleHostSettings settings)
     {
-        var chatClient = new OpenAIChatClient(settings.ModelId, settings.ModelApiKey);
+        var options = new OpenAIClientOptions
+        {
+            NetworkTimeout = settings.ModelNetworkTimeout,
+            RetryPolicy = new ClientRetryPolicy(settings.ModelMaxRetries),
+        };
+        var chatClient = new OpenAIChatClient(
+            settings.ModelId,
+            new ApiKeyCredential(settings.ModelApiKey),
+            options);
         return chatClient.AsIChatClient();
     }
 
@@ -806,6 +817,8 @@ internal sealed record SampleHostSettings(
     string SourceType,
     string ModelId,
     string ModelApiKey,
+    TimeSpan ModelNetworkTimeout,
+    int ModelMaxRetries,
     string Verbosity,
     string SessionTitle,
     string SystemPrompt)
@@ -820,6 +833,8 @@ internal sealed record SampleHostSettings(
     private const string SourceTypeEnvironmentVariable = "MCP_AGENT_SOURCE_TYPE";
     private const string ModelIdEnvironmentVariable = "OPENAI_MODEL";
     private const string ModelApiKeyEnvironmentVariable = "OPENAI_API_KEY";
+    private const string ModelNetworkTimeoutSecondsEnvironmentVariable = "OPENAI_NETWORK_TIMEOUT_SECONDS";
+    private const string ModelMaxRetriesEnvironmentVariable = "OPENAI_MAX_RETRIES";
     private const string AlternateModelIdEnvironmentVariable = "MCP_AGENT_MODEL";
     private const string VerbosityEnvironmentVariable = "MCP_AGENT_VERBOSITY";
     private const string SystemPromptEnvironmentVariable = "MCP_AGENT_SYSTEM_PROMPT";
@@ -846,6 +861,16 @@ internal sealed record SampleHostSettings(
             configuration["VoiceConversation:CopilotModel"],
             "gpt-5.4")!;
         var modelApiKey = ResolveModelApiKey(configuration);
+        var modelNetworkTimeout = ResolvePositiveTimeSpanSeconds(
+            ReadEnvironmentVariable(ModelNetworkTimeoutSecondsEnvironmentVariable),
+            configuration["SampleHost:Model:NetworkTimeoutSeconds"],
+            100,
+            "OpenAI network timeout");
+        var modelMaxRetries = ResolveNonNegativeInt(
+            ReadEnvironmentVariable(ModelMaxRetriesEnvironmentVariable),
+            configuration["SampleHost:Model:MaxRetries"],
+            4,
+            "OpenAI max retries");
 
         if (string.IsNullOrWhiteSpace(modelApiKey))
         {
@@ -879,6 +904,8 @@ internal sealed record SampleHostSettings(
                 McpHostedAgentDefaults.DefaultSourceType)!,
             modelId,
             modelApiKey,
+            modelNetworkTimeout,
+            modelMaxRetries,
             verbosity,
             FirstNonEmpty(
                 configuration["SampleHost:SessionTitle"],
@@ -957,6 +984,44 @@ internal sealed record SampleHostSettings(
             _ => throw new InvalidOperationException(
                 $"Unsupported sample host verbosity '{configured}'. Use concise, balanced, or detailed."),
         };
+    }
+
+    private static TimeSpan ResolvePositiveTimeSpanSeconds(
+        string? environmentValue,
+        string? configurationValue,
+        int defaultSeconds,
+        string settingName)
+    {
+        var configured = FirstNonEmpty(environmentValue, configurationValue);
+        if (configured is null)
+            return TimeSpan.FromSeconds(defaultSeconds);
+
+        if (!int.TryParse(configured, out var seconds) || seconds <= 0)
+        {
+            throw new InvalidOperationException(
+                $"{settingName} must be a positive integer number of seconds, but was '{configured}'.");
+        }
+
+        return TimeSpan.FromSeconds(seconds);
+    }
+
+    private static int ResolveNonNegativeInt(
+        string? environmentValue,
+        string? configurationValue,
+        int defaultValue,
+        string settingName)
+    {
+        var configured = FirstNonEmpty(environmentValue, configurationValue);
+        if (configured is null)
+            return defaultValue;
+
+        if (!int.TryParse(configured, out var value) || value < 0)
+        {
+            throw new InvalidOperationException(
+                $"{settingName} must be a non-negative integer, but was '{configured}'.");
+        }
+
+        return value;
     }
 
     internal static string BuildSystemPrompt(string basePrompt, string verbosity)

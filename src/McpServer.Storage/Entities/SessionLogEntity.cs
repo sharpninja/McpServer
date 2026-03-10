@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
 namespace McpServer.Support.Mcp.Storage.Entities;
@@ -25,6 +26,14 @@ public sealed class SessionLogEntity
     [Required]
     [MaxLength(256)]
     public required string SessionId { get; set; }
+
+    /// <summary>Optional foreign key link to a known agent definition.</summary>
+    [MaxLength(64)]
+    public string? AgentDefinitionId { get; set; }
+
+    /// <summary>Optional navigation to the linked agent definition.</summary>
+    [ForeignKey(nameof(AgentDefinitionId))]
+    public AgentDefinitionEntity? AgentDefinition { get; set; }
 
     /// <summary>TR-PLANNED-013: Human-readable session title.</summary>
     [MaxLength(1024)]
@@ -54,8 +63,6 @@ public sealed class SessionLogEntity
     [MaxLength(512)]
     public string? CursorSessionLabel { get; set; }
 
-    // Copilot statistics (inlined per plan — no separate table needed for single-valued attributes)
-
     /// <summary>TR-PLANNED-013: Average success score across entries.</summary>
     public double? CopilotAvgSuccessScore { get; set; }
 
@@ -70,8 +77,6 @@ public sealed class SessionLogEntity
 
     /// <summary>TR-PLANNED-013: Number of in-progress entries.</summary>
     public int? CopilotInProgressCount { get; set; }
-
-    // Workspace info (inlined per plan — avoids separate table for single-valued attributes)
 
     /// <summary>TR-PLANNED-013: Project name from workspace.</summary>
     [MaxLength(256)]
@@ -101,4 +106,3 @@ public sealed class SessionLogEntity
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "EF Core navigation collection")]
     public ICollection<SessionLogTurnEntity> Entries { get; set; } = new List<SessionLogTurnEntity>();
 }
-

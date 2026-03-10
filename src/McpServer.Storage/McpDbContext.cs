@@ -94,13 +94,17 @@ public sealed class McpDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        // MVP-SUPPORT-011: Session log 4NF schema
         modelBuilder.Entity<SessionLogEntity>(e =>
         {
             e.HasIndex(x => new { x.SourceType, x.SessionId }).IsUnique();
             e.HasIndex(x => x.SourceType);
             e.HasIndex(x => x.Started);
             e.HasIndex(x => x.LastUpdated);
+            e.HasIndex(x => x.AgentDefinitionId);
+            e.HasOne(x => x.AgentDefinition)
+                .WithMany()
+                .HasForeignKey(x => x.AgentDefinitionId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<SessionLogTurnEntity>(e =>
@@ -182,7 +186,6 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => x.Name).IsUnique();
         });
 
-        // Agent management entities
         modelBuilder.Entity<AgentDefinitionEntity>(e =>
         {
             e.HasKey(x => x.Id);
@@ -207,10 +210,6 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => x.EventType);
         });
 
-        // TR-MCP-MT-003: Global query filters for multi-tenant workspace isolation.
-        // EF Core re-evaluates the _workspaceId field per query, allowing scoped
-        // workspace context to control which rows are visible.
-        // Filters only apply when _workspaceId is non-empty (backward-compatible).
         modelBuilder.Entity<ContextDocumentEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<SessionLogEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
@@ -228,7 +227,6 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<AgentWorkspaceEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<AgentEventLogEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
 
-        // WorkspaceId indexes for all entity types
         modelBuilder.Entity<ContextDocumentEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<SessionLogEntity>().HasIndex(e => e.WorkspaceId);
@@ -245,11 +243,7 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<AgentEventLogEntity>().HasIndex(e => e.WorkspaceId);
     }
 
-    /// <summary>
-    /// TR-MCP-MT-003: Auto-stamps <c>WorkspaceId</c> on all added entities
-    /// whose <c>WorkspaceId</c> is still empty, ensuring multi-tenant isolation
-    /// without requiring every service to set it manually.
-    /// </summary>
+    /// <inheritdoc />
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
         StampWorkspaceId();
@@ -257,7 +251,7 @@ public sealed class McpDbContext : DbContext
         return base.SaveChanges(acceptAllChangesOnSuccess);
     }
 
-    /// <inheritdoc cref="SaveChanges(bool)"/>
+    /// <inheritdoc />
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         StampWorkspaceId();
@@ -300,10 +294,6 @@ public sealed class McpDbContext : DbContext
         return _workspaceId;
     }
 
-    /// <summary>
-    /// Replaces typographic dashes (em/en) with ASCII hyphen in all string
-    /// properties of added or modified entities before persisting.
-    /// </summary>
     private void SanitizeStrings()
     {
         foreach (var entry in ChangeTracker.Entries()
@@ -321,4 +311,3 @@ public sealed class McpDbContext : DbContext
         }
     }
 }
-
