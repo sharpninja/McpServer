@@ -108,4 +108,19 @@ public sealed class RepoIngestorTests : IDisposable
         Assert.DoesNotContain(results, r => r.Doc.SourceKey.Contains("large.txt"));
         Assert.Contains(results, r => r.Doc.SourceKey.Contains("small.txt"));
     }
+
+    [Fact]
+    public async Task IngestAsync_DoesNotSkipPathsThatContainBinOrObjAsSubstring()
+    {
+        var folderWithSubstring = Path.Combine(_tempDir, "binary-assets");
+        Directory.CreateDirectory(folderWithSubstring);
+        File.WriteAllText(Path.Combine(folderWithSubstring, "keep.md"), "# keep");
+
+        var options = Microsoft.Extensions.Options.Options.Create(new IngestionOptions { RepoRoot = _tempDir });
+        var sut = new RepoIngestor(new Chunker(), options, new WorkspaceContext(), NullLogger<RepoIngestor>.Instance);
+
+        var results = await sut.IngestAsync().ConfigureAwait(true);
+
+        Assert.Contains(results, r => r.Doc.SourceKey.Equals("binary-assets/keep.md", StringComparison.Ordinal));
+    }
 }

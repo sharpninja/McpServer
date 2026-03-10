@@ -123,14 +123,25 @@ public sealed class RepoIngestor
         {
             cancellationToken.ThrowIfCancellationRequested();
             var name = Path.GetFileName(path);
+            var relativePath = Path.GetRelativePath(dir, path);
             if (name.StartsWith('.') || name == "mcp.db" ||
-                path.Contains("bin", StringComparison.Ordinal) || path.Contains("obj", StringComparison.Ordinal))
+                IsBuildArtifactPath(relativePath))
             {
                 continue;
             }
             yield return path;
         }
         await Task.CompletedTask.ConfigureAwait(false);
+    }
+
+    private static bool IsBuildArtifactPath(string relativePath)
+    {
+        var segments = relativePath
+            .Split(new[] { '/', '\\' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        return segments.Any(static segment =>
+            segment.Equals("bin", StringComparison.OrdinalIgnoreCase) ||
+            segment.Equals("obj", StringComparison.OrdinalIgnoreCase));
     }
 
     private static bool MatchesAllowlist(string relativePath, IReadOnlyList<string> patterns)
