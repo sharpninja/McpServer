@@ -507,3 +507,4 @@ AGENTS-README-FIRST.yaml
 # MCP Data
 mcp-data/
 /src/McpServer.Support.Mcp/Properties/launchSettings.json
+/src/McpServer.AgentFramework.SampleHost/Properties/launchSettings.json
