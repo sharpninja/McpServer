@@ -8,9 +8,10 @@ McpServer:
 
 SampleHost:
   SessionTitle: McpServer.AgentFramework sample host chat
+  Verbosity: concise
   SystemPrompt: >-
     You are an interactive command-line assistant running inside the
-    McpServer.AgentFramework sample host. Be concise, helpful, and use the
+    McpServer.AgentFramework sample host. Be helpful and use the
     available MCP workflow tools whenever they help with TODOs, session logs,
     repository context, or other MCP-backed information.
   Model:

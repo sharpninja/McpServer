@@ -152,6 +152,7 @@ Common environment variables for the interactive sample host:
 - `MCP_AGENT_SOURCE_TYPE`
 - `OPENAI_API_KEY`
 - `OPENAI_MODEL`
+- `MCP_AGENT_VERBOSITY` (`concise`, `balanced`, or `detailed`)
 - `MCP_AGENT_SYSTEM_PROMPT`
 
 Run the hosted-agent CLI chat host:
@@ -166,6 +167,8 @@ The sample host:
 - creates an OpenAI-backed `ChatClientAgent`
 - starts a real interactive console loop with the built-in MCP tool surface attached
 - shows a PowerShell-style prompt rooted at the hosted local runspace location
+- supports configurable response verbosity through `SampleHost:Verbosity` or `MCP_AGENT_VERBOSITY`
+- lets you switch verbosity live with `/v 1`, `/v 2`, or `/v 3`
 - routes lines prefixed with `! ` directly into the hosted local PowerShell session while leaving other lines as normal chat prompts
 - logs chat turns through the hosted session-log workflow
 - exposes repository tools, `mcp_desktop_launch` for authenticated local program execution through MCP Server, `mcp_powershell_session_*` for model-facing stateful PowerShell execution, and `IMcpHostedAgent.PowerShellSessions` for host-facing direct PowerShell execution

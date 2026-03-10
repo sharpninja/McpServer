@@ -2,6 +2,7 @@ using McpServer.AgentFramework;
 using McpServer.AgentFramework.AgentFramework;
 using McpServer.AgentFramework.PowerShellSessions;
 using McpServer.AgentFramework.SessionLog;
+using McpServer.Client;
 using McpServer.Client.Models;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
@@ -64,6 +65,7 @@ internal sealed class SampleHostConsoleApplication : IDisposable
     private AgentSession? _agentSession;
     private string? _powerShellSessionId;
     private string _powerShellCurrentLocation;
+    private string _verbosity;
     private bool _shouldInjectSystemPrompt = true;
 
     public SampleHostConsoleApplication(IMcpHostedAgent hostedAgent, SampleHostSettings settings)
@@ -74,6 +76,7 @@ internal sealed class SampleHostConsoleApplication : IDisposable
         _chatAgent = hostedAgent.CreateChatClientAgent(_chatClient);
         _runOptions = hostedAgent.CreateRunOptions();
         _powerShellCurrentLocation = settings.WorkspacePath;
+        _verbosity = settings.Verbosity;
     }
 
     public async Task<int> RunAsync(string[] args, CancellationToken cancellationToken = default)
@@ -91,7 +94,7 @@ internal sealed class SampleHostConsoleApplication : IDisposable
             {
                 var commandText = string.Join(' ', args).Trim();
                 if (!string.IsNullOrWhiteSpace(commandText))
-                    await DispatchAsync(commandText, cancellationToken).ConfigureAwait(false);
+                    await TryDispatchAsync(commandText, cancellationToken).ConfigureAwait(false);
 
                 return 0;
             }
@@ -105,7 +108,7 @@ internal sealed class SampleHostConsoleApplication : IDisposable
                 if (string.IsNullOrWhiteSpace(input))
                     continue;
 
-                if (await DispatchAsync(input, cancellationToken).ConfigureAwait(false))
+                if (await TryDispatchAsync(input, cancellationToken).ConfigureAwait(false))
                     break;
             }
 
@@ -115,6 +118,29 @@ internal sealed class SampleHostConsoleApplication : IDisposable
         {
             ClosePowerShellSession();
             await TryCompleteSessionAsync().ConfigureAwait(false);
+        }
+    }
+
+    private async Task<bool> TryDispatchAsync(string input, CancellationToken cancellationToken)
+    {
+        try
+        {
+            return await DispatchAsync(input, cancellationToken).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (McpUnauthorizedException exception)
+        {
+            WriteExpiredAuthenticationMessage("processing the request", exception.Message);
+            return false;
+        }
+        catch (Exception exception)
+        {
+            Console.Error.WriteLine($"error> {exception.Message}");
+            Console.Error.WriteLine();
+            return false;
         }
     }
 
@@ -234,6 +260,27 @@ internal sealed class SampleHostConsoleApplication : IDisposable
                     return Task.CompletedTask;
                 };
                 return true;
+            case "/v":
+                if (!TryParseVerbosityLevel(input, out var verbosity, out var errorMessage))
+                {
+                    commandAction = _ =>
+                    {
+                        Console.Error.WriteLine($"error> {errorMessage}");
+                        Console.Error.WriteLine();
+                        return Task.CompletedTask;
+                    };
+                    return true;
+                }
+
+                commandAction = _ =>
+                {
+                    _verbosity = verbosity;
+                    _shouldInjectSystemPrompt = true;
+                    Console.WriteLine($"Verbosity set to {_verbosity}.");
+                    Console.WriteLine();
+                    return Task.CompletedTask;
+                };
+                return true;
             default:
                 commandAction = _ =>
                 {
@@ -247,19 +294,34 @@ internal sealed class SampleHostConsoleApplication : IDisposable
 
     private async Task ExecutePromptAsync(string input, CancellationToken cancellationToken)
     {
-        var turn = await _hostedAgent.SessionLog.BeginTurnAsync(
-            new SessionLogTurnCreateRequest
-            {
-                QueryText = input,
-                QueryTitle = BuildTurnTitle(input),
-                Interpretation = "User prompt submitted through the interactive AgentFramework sample host.",
-                Model = _settings.ModelId,
-                ModelProvider = "openai",
-                Status = "in_progress",
-                Tags = ["sample-host", "cli-chat"],
-                ContextList = [_settings.WorkspacePath],
-            },
-            cancellationToken).ConfigureAwait(false);
+        SessionLogTurnContext? turn;
+        try
+        {
+            turn = await _hostedAgent.SessionLog.BeginTurnAsync(
+                new SessionLogTurnCreateRequest
+                {
+                    QueryText = input,
+                    QueryTitle = BuildTurnTitle(input),
+                    Interpretation = "User prompt submitted through the interactive AgentFramework sample host.",
+                    Model = _settings.ModelId,
+                    ModelProvider = "openai",
+                    Status = "in_progress",
+                    Tags = ["sample-host", "cli-chat"],
+                    ContextList = [_settings.WorkspacePath],
+                },
+                cancellationToken).ConfigureAwait(false);
+        }
+        catch (McpUnauthorizedException exception)
+        {
+            WriteExpiredAuthenticationMessage("starting the session-log turn", exception.Message);
+            return;
+        }
+        catch (Exception exception)
+        {
+            Console.Error.WriteLine($"warning> Failed to start the session-log turn: {exception.Message}");
+            Console.Error.WriteLine();
+            return;
+        }
 
         try
         {
@@ -389,30 +451,43 @@ internal sealed class SampleHostConsoleApplication : IDisposable
     {
         if (_hostedAgent.SessionLog.Context is not null)
         {
-            await _hostedAgent.SessionLog.UpdateSessionAsync(
-                new SessionLogSessionUpdateRequest
-                {
-                    Status = "completed",
-                },
-                cancellationToken).ConfigureAwait(false);
+            try
+            {
+                await _hostedAgent.SessionLog.UpdateSessionAsync(
+                    new SessionLogSessionUpdateRequest
+                    {
+                        Status = "completed",
+                    },
+                    cancellationToken).ConfigureAwait(false);
+            }
+            catch (McpUnauthorizedException exception)
+            {
+                WriteExpiredAuthenticationMessage("closing the previous session log", exception.Message);
+            }
         }
 
         _agentSession = await _chatAgent.CreateSessionAsync(cancellationToken).ConfigureAwait(false);
         _shouldInjectSystemPrompt = true;
+        try
+        {
+            var context = await _hostedAgent.SessionLog.BootstrapAsync(
+                new SessionLogBootstrapRequest
+                {
+                    Model = _settings.ModelId,
+                    SessionIdSuffix = "cli-chat",
+                    Status = "in_progress",
+                    Title = _settings.SessionTitle,
+                    Workspace = CreateWorkspaceInfo(),
+                },
+                cancellationToken).ConfigureAwait(false);
 
-        var context = await _hostedAgent.SessionLog.BootstrapAsync(
-            new SessionLogBootstrapRequest
-            {
-                Model = _settings.ModelId,
-                SessionIdSuffix = "cli-chat",
-                Status = "in_progress",
-                Title = _settings.SessionTitle,
-                Workspace = CreateWorkspaceInfo(),
-            },
-            cancellationToken).ConfigureAwait(false);
-
-        Console.WriteLine($"Started session {context.SessionId}.");
-        Console.WriteLine();
+            Console.WriteLine($"Started session {context.SessionId}.");
+            Console.WriteLine();
+        }
+        catch (McpUnauthorizedException exception)
+        {
+            WriteExpiredAuthenticationMessage("starting the session log", exception.Message);
+        }
     }
 
     private async Task TryCompleteSessionAsync()
@@ -429,9 +504,14 @@ internal sealed class SampleHostConsoleApplication : IDisposable
                 },
                 CancellationToken.None).ConfigureAwait(false);
         }
+        catch (McpUnauthorizedException exception)
+        {
+            WriteExpiredAuthenticationMessage("closing the session log cleanly", exception.Message);
+        }
         catch (Exception exception)
         {
             Console.Error.WriteLine($"warning> Failed to close the session log cleanly: {exception.Message}");
+            Console.Error.WriteLine();
         }
     }
 
@@ -453,7 +533,7 @@ internal sealed class SampleHostConsoleApplication : IDisposable
         {
             return
             [
-                new ChatMessage(ChatRole.System, _settings.SystemPrompt),
+                new ChatMessage(ChatRole.System, SampleHostSettings.BuildSystemPrompt(_settings.SystemPrompt, _verbosity)),
                 new ChatMessage(ChatRole.User, input),
             ];
         }
@@ -501,7 +581,20 @@ internal sealed class SampleHostConsoleApplication : IDisposable
             : messageText;
     }
 
-    private string BuildConsolePrompt() => $"PS {_powerShellCurrentLocation}> ";
+    private string BuildConsolePrompt() => $"{BuildConsolePromptLabel()} {_powerShellCurrentLocation}> ";
+
+    private string BuildConsolePromptLabel() => $"{BuildConsolePromptAgentName()} [{_verbosity}]";
+
+    private string BuildConsolePromptAgentName()
+    {
+        if (!string.IsNullOrWhiteSpace(_settings.AgentName))
+            return _settings.AgentName.Trim();
+
+        if (!string.IsNullOrWhiteSpace(_settings.ModelId))
+            return _settings.ModelId.Trim();
+
+        return "PS";
+    }
 
     private void ClosePowerShellSession()
     {
@@ -632,11 +725,12 @@ internal sealed class SampleHostConsoleApplication : IDisposable
         Console.WriteLine("  /help    Show this help text.");
         Console.WriteLine("  /tools   List the MCP-backed tools attached to the hosted agent.");
         Console.WriteLine("  /session Show the current MCP session-log identifier.");
+        Console.WriteLine("  /v N     Set verbosity level (1=concise, 2=balanced, 3=detailed).");
         Console.WriteLine("  /new     Start a fresh conversation and session log.");
         Console.WriteLine("  /exit    Exit the sample host.");
         Console.WriteLine();
         Console.WriteLine("Prompt behavior:");
-        Console.WriteLine("  - The default prompt is PowerShell-style: PS <location>>");
+        Console.WriteLine("  - The prompt shows AgentName [verbosity] <location>>");
         Console.WriteLine("  - Prefix a line with ! to run it directly in the local PowerShell session.");
         Console.WriteLine("  - Any line without ! is sent to the hosted agent as a normal chat prompt.");
         Console.WriteLine();
@@ -662,6 +756,42 @@ internal sealed class SampleHostConsoleApplication : IDisposable
         Console.WriteLine($"Source type : {_hostedAgent.SourceType}");
         Console.WriteLine();
     }
+
+    private static bool TryParseVerbosityLevel(string input, out string verbosity, out string errorMessage)
+    {
+        verbosity = string.Empty;
+        errorMessage = string.Empty;
+
+        var parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        if (parts.Length != 2)
+        {
+            errorMessage = "Usage: /v N where N is 1, 2, or 3.";
+            return false;
+        }
+
+        verbosity = parts[1] switch
+        {
+            "1" => "concise",
+            "2" => "balanced",
+            "3" => "detailed",
+            _ => string.Empty,
+        };
+
+        if (!string.IsNullOrWhiteSpace(verbosity))
+            return true;
+
+        errorMessage = $"Unsupported verbosity level '{parts[1]}'. Use 1, 2, or 3.";
+        return false;
+    }
+
+    private static void WriteExpiredAuthenticationMessage(string operation, string? serverMessage = null)
+    {
+        Console.Error.WriteLine(
+            $"warning> MCP authentication expired while {operation}. Re-read AGENTS-README-FIRST.yaml in the workspace root and restart the sample host to refresh the API key.");
+        if (!string.IsNullOrWhiteSpace(serverMessage))
+            Console.Error.WriteLine($"warning> Server detail: {serverMessage}");
+        Console.Error.WriteLine();
+    }
 }
 
 internal sealed record SampleHostSettings(
@@ -676,6 +806,7 @@ internal sealed record SampleHostSettings(
     string SourceType,
     string ModelId,
     string ModelApiKey,
+    string Verbosity,
     string SessionTitle,
     string SystemPrompt)
 {
@@ -690,6 +821,7 @@ internal sealed record SampleHostSettings(
     private const string ModelIdEnvironmentVariable = "OPENAI_MODEL";
     private const string ModelApiKeyEnvironmentVariable = "OPENAI_API_KEY";
     private const string AlternateModelIdEnvironmentVariable = "MCP_AGENT_MODEL";
+    private const string VerbosityEnvironmentVariable = "MCP_AGENT_VERBOSITY";
     private const string SystemPromptEnvironmentVariable = "MCP_AGENT_SYSTEM_PROMPT";
 
     public static SampleHostSettings Resolve(IConfiguration configuration)
@@ -721,6 +853,8 @@ internal sealed record SampleHostSettings(
                 "Configure the model API key through OPENAI_API_KEY, SampleHost:Model:ApiKey, or VoiceConversation:ModelApiKey before running the sample host.");
         }
 
+        var verbosity = ResolveVerbosity(configuration);
+
         return new SampleHostSettings(
             baseUrl,
             apiKey,
@@ -745,13 +879,14 @@ internal sealed record SampleHostSettings(
                 McpHostedAgentDefaults.DefaultSourceType)!,
             modelId,
             modelApiKey,
+            verbosity,
             FirstNonEmpty(
                 configuration["SampleHost:SessionTitle"],
                 "McpServer.AgentFramework sample host chat")!,
             FirstNonEmpty(
                 ReadEnvironmentVariable(SystemPromptEnvironmentVariable),
                 configuration["SampleHost:SystemPrompt"],
-                "You are an interactive command-line assistant running inside the McpServer.AgentFramework sample host. Be concise, helpful, and use the available MCP workflow tools whenever they help you inspect TODOs, session logs, repository context, or other MCP-backed information.")!);
+                "You are an interactive command-line assistant running inside the McpServer.AgentFramework sample host. Be helpful and use the available MCP workflow tools whenever they help you inspect TODOs, session logs, repository context, or other MCP-backed information.")!);
     }
 
     private static Uri ResolveBaseUrl(IConfiguration configuration, MarkerSettings? marker)
@@ -805,6 +940,44 @@ internal sealed record SampleHostSettings(
             configuration["SampleHost:Model:ApiKey"],
             configuration["VoiceConversation:ModelApiKey"],
             namedEnvironmentApiKey);
+    }
+
+    private static string ResolveVerbosity(IConfiguration configuration)
+    {
+        var configured = FirstNonEmpty(
+            ReadEnvironmentVariable(VerbosityEnvironmentVariable),
+            configuration["SampleHost:Verbosity"],
+            "concise")!;
+
+        return configured.Trim().ToLowerInvariant() switch
+        {
+            "concise" => "concise",
+            "balanced" => "balanced",
+            "detailed" => "detailed",
+            _ => throw new InvalidOperationException(
+                $"Unsupported sample host verbosity '{configured}'. Use concise, balanced, or detailed."),
+        };
+    }
+
+    internal static string BuildSystemPrompt(string basePrompt, string verbosity)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(basePrompt);
+
+        var sb = new StringBuilder(basePrompt.Trim());
+        sb.AppendLine();
+        sb.AppendLine();
+        sb.Append("Response verbosity: ");
+        sb.Append(verbosity);
+        sb.AppendLine(".");
+        sb.AppendLine(verbosity switch
+        {
+            "concise" => "Keep answers short by default. Prefer brief paragraphs or bullets and avoid extra detail unless the user asks for it.",
+            "balanced" => "Give enough detail to be useful while staying focused. Include key reasoning and next steps without over-explaining.",
+            "detailed" => "Be thorough and explicit. Include important context, reasoning, and follow-up details when they help the user.",
+            _ => throw new InvalidOperationException($"Unsupported sample host verbosity '{verbosity}'."),
+        });
+
+        return sb.ToString();
     }
 
     private static string? TryFindWorkspaceRoot()
