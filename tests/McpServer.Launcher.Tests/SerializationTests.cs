@@ -34,6 +34,7 @@ public sealed class SerializationTests
         var deserialized = JsonSerializer.Deserialize<ProcessLaunchRequest>(json, s_jsonOptions);
 
         Assert.NotNull(deserialized);
+        Assert.Contains("\"windowStyle\":\"Hidden\"", json);
         Assert.Equal(request.ExecutablePath, deserialized.ExecutablePath);
         Assert.Equal(request.Arguments, deserialized.Arguments);
         Assert.Equal(request.WorkingDirectory, deserialized.WorkingDirectory);

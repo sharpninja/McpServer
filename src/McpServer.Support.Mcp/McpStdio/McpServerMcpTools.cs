@@ -35,7 +35,7 @@ public sealed class FwhMcpTools
     private readonly ISessionLogService _sessionLogService;
     private readonly IGitHubCliService _gitHubCliService;
     private readonly IRequirementsDocumentService _requirementsDocumentService;
-    private readonly IProcessRunner _processRunner;
+    private readonly DesktopLaunchService _desktopLaunchService;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly WorkspaceContext _workspaceContext;
     private readonly IWorkspaceService _workspaceService;
@@ -57,7 +57,7 @@ public sealed class FwhMcpTools
         ISessionLogService sessionLogService,
         IGitHubCliService gitHubCliService,
         IRequirementsDocumentService requirementsDocumentService,
-        IProcessRunner processRunner,
+        DesktopLaunchService desktopLaunchService,
         IHttpContextAccessor httpContextAccessor,
         WorkspaceContext workspaceContext,
         IWorkspaceService workspaceService,
@@ -78,7 +78,7 @@ public sealed class FwhMcpTools
         _sessionLogService = sessionLogService;
         _gitHubCliService = gitHubCliService;
         _requirementsDocumentService = requirementsDocumentService;
-        _processRunner = processRunner;
+        _desktopLaunchService = desktopLaunchService;
         _httpContextAccessor = httpContextAccessor;
         _workspaceContext = workspaceContext;
         _workspaceService = workspaceService;
@@ -1131,77 +1131,54 @@ public sealed class FwhMcpTools
         try
         {
             ApplyWorkspaceOverride(workspacePath);
-
-            var launcherPath = ResolveLauncherPath(workspacePath);
-            if (launcherPath is null)
-                return JsonSerializer.Serialize(new { error = "McpServer.Launcher.exe not found. Check Mcp:LauncherPath configuration." });
-
-            var payload = new Dictionary<string, object?>
-            {
-                ["executablePath"] = executablePath,
-                ["arguments"] = arguments,
-                ["workingDirectory"] = workingDirectory,
-                ["createNoWindow"] = createNoWindow,
-                ["windowStyle"] = windowStyle,
-                ["waitForExit"] = waitForExit,
-                ["timeoutMs"] = timeoutMs
-            };
-
+            Dictionary<string, string>? environmentVariablesMap = null;
             if (!string.IsNullOrWhiteSpace(environmentVariables))
             {
                 try
                 {
-                    var envDict = JsonSerializer.Deserialize<Dictionary<string, string>>(environmentVariables, s_caseInsensitiveOptions);
-                    payload["environmentVariables"] = envDict;
+                    environmentVariablesMap = JsonSerializer.Deserialize<Dictionary<string, string>>(environmentVariables, s_caseInsensitiveOptions);
                 }
                 catch (JsonException ex)
                 {
-                    return JsonSerializer.Serialize(new { error = $"Invalid environmentVariables JSON: {ex.Message}" });
+                    return JsonSerializer.Serialize(
+                        new DesktopLaunchResult
+                        {
+                            Success = false,
+                            ErrorMessage = $"Invalid environmentVariables JSON: {ex.Message}"
+                        },
+                        s_caseInsensitiveOptions);
                 }
             }
 
-            var json = JsonSerializer.Serialize(payload, s_caseInsensitiveOptions);
-            var escapedJson = json.Replace("\"", "\\\"");
-            var result = await _processRunner.RunAsync(launcherPath, $"\"{escapedJson}\"", cancellationToken).ConfigureAwait(false);
+            var result = await _desktopLaunchService.LaunchAsync(
+                    workspacePath,
+                    new DesktopLaunchRequest
+                    {
+                        ExecutablePath = executablePath,
+                        Arguments = arguments,
+                        WorkingDirectory = workingDirectory,
+                        EnvironmentVariables = environmentVariablesMap,
+                        CreateNoWindow = createNoWindow,
+                        WindowStyle = windowStyle,
+                        WaitForExit = waitForExit,
+                        TimeoutMs = timeoutMs
+                    },
+                    cancellationToken)
+                .ConfigureAwait(false);
 
-            if (result.ExitCode != 0)
-            {
-                var errBody = string.IsNullOrWhiteSpace(result.Stderr) ? result.Stdout : result.Stderr;
-                return JsonSerializer.Serialize(new { error = $"Launcher exited with code {result.ExitCode}: {errBody}" });
-            }
-
-            return result.Stdout ?? JsonSerializer.Serialize(new { error = "No output from launcher" });
+            return JsonSerializer.Serialize(result, s_caseInsensitiveOptions);
         }
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return JsonSerializer.Serialize(
+                new DesktopLaunchResult
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
+                },
+                s_caseInsensitiveOptions);
         }
-    }
-
-    /// <summary>
-    /// Resolves the McpServer.Launcher.exe path from config, assembly directory, or workspace.
-    /// </summary>
-    private string? ResolveLauncherPath(string workspacePath)
-    {
-        // 1. Explicit config
-        var config = _httpContextAccessor.HttpContext?.RequestServices.GetService<IConfiguration>();
-        var configPath = config?["Mcp:LauncherPath"];
-        if (!string.IsNullOrWhiteSpace(configPath) && File.Exists(configPath))
-            return configPath;
-
-        // 2. Same directory as MCP server
-        var assemblyDir = AppContext.BaseDirectory;
-        var sideBySide = Path.Combine(assemblyDir, "McpServer.Launcher.exe");
-        if (File.Exists(sideBySide))
-            return sideBySide;
-
-        // 3. _publish directory relative to workspace
-        var publishPath = Path.Combine(workspacePath, "_publish", "McpServer.Launcher", "McpServer.Launcher.exe");
-        if (File.Exists(publishPath))
-            return publishPath;
-
-        return null;
     }
 
     private enum RequirementsEntityType

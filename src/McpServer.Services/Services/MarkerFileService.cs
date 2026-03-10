@@ -95,6 +95,7 @@ public static class MarkerFileService
                 ContextSources = "/mcpserver/context/sources",
                 Todo = "/mcpserver/todo",
                 Repo = "/mcpserver/repo",
+                Desktop = "/mcpserver/desktop",
                 GitHub = "/mcpserver/gh",
                 Tools = "/mcpserver/tools",
                 Workspace = "/mcpserver/workspace",
@@ -298,6 +299,7 @@ internal sealed class MarkerEndpoints
     public string ContextSources { get; set; } = string.Empty;
     public string Todo { get; set; } = string.Empty;
     public string Repo { get; set; } = string.Empty;
+    public string Desktop { get; set; } = string.Empty;
     public string GitHub { get; set; } = string.Empty;
     public string Tools { get; set; } = string.Empty;
     public string Workspace { get; set; } = string.Empty;

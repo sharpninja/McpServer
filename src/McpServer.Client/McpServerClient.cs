@@ -90,6 +90,7 @@ public sealed class McpServerClient
         Voice = new VoiceClient(http, options, holder);
         Events = new EventStreamClient(http, options, holder);
         Repo = new RepoClient(http, options, holder);
+        Desktop = new DesktopClient(http, options, holder);
         Tunnel = new TunnelClient(http, options, holder);
         Workspace = new WorkspaceClient(http, options, holder);
         Configuration = new ConfigurationClient(http, options, holder);
@@ -104,7 +105,7 @@ public sealed class McpServerClient
         _allClients = new McpClientBase[]
         {
             Todo, Context, SessionLog, GitHub, Requirements, Voice, Events,
-            Repo, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health
+            Repo, Desktop, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health
         };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
@@ -304,6 +305,13 @@ public sealed class McpServerClient
     /// <para>See <see cref="RepoClient"/> for the full method list.</para>
     /// </summary>
     public RepoClient Repo { get; }
+
+    /// <summary>
+    /// Desktop process launch endpoint — launch local programs on the interactive desktop through
+    /// the authenticated workspace context.
+    /// <para>See <see cref="DesktopClient"/> for the full method list.</para>
+    /// </summary>
+    public DesktopClient Desktop { get; }
 
     /// <summary>
     /// Tunnel management endpoints — list strategies, enable/disable, start, stop, restart.

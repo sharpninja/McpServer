@@ -13,8 +13,6 @@ public sealed class FileMarkerPromptProvider : IMarkerPromptProvider
 
     private readonly IPromptTemplateService _templateService;
     private readonly ILogger<FileMarkerPromptProvider> _logger;
-    private string? _cached;
-    private bool _loaded;
 
     /// <summary>Initializes a new instance of the <see cref="FileMarkerPromptProvider"/> class.</summary>
     public FileMarkerPromptProvider(IPromptTemplateService templateService, ILogger<FileMarkerPromptProvider> logger)
@@ -26,13 +24,10 @@ public sealed class FileMarkerPromptProvider : IMarkerPromptProvider
     /// <inheritdoc />
     public async Task<string> GetGlobalPromptTemplateAsync(CancellationToken cancellationToken = default)
     {
-        if (_loaded)
-            return _cached!;
-
         try
         {
             var template = await _templateService.GetByIdAsync(TemplateId, cancellationToken).ConfigureAwait(false);
-            
+
             if (template is null)
             {
                 var msg = $"CRITICAL: Marker prompt template '{TemplateId}' not found in prompt-templates.yaml. Server cannot start without it.";
@@ -40,11 +35,8 @@ public sealed class FileMarkerPromptProvider : IMarkerPromptProvider
                 throw new InvalidOperationException(msg);
             }
 
-            _cached = template.Content;
-            _loaded = true;
-
-            _logger.LogInformation("Loaded marker prompt template '{Id}' ({Length} chars)", TemplateId, _cached.Length);
-            return _cached;
+            _logger.LogInformation("Loaded marker prompt template '{Id}' ({Length} chars)", TemplateId, template.Content.Length);
+            return template.Content;
         }
         catch (Exception ex) when (ex is not InvalidOperationException)
         {

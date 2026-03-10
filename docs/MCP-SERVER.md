@@ -152,6 +152,18 @@ gsudo .\scripts\Update-McpService.ps1
 The script performs: stop → backup all `*.json`/`*.db*` → publish Debug build → copy binaries →
 restore backup → start → health-check → archive backup to `%USERPROFILE%\McpServer-Backups\`.
 
+Restore the last archived backup without publishing a new build:
+
+```powershell
+gsudo .\scripts\Update-McpService.ps1 -Restore
+```
+
+You can also restore a specific archive:
+
+```powershell
+gsudo .\scripts\Update-McpService.ps1 -Restore -BackupArchive C:\Users\<you>\McpServer-Backups\McpServer-backup-<timestamp>.zip
+```
+
 ## Diagnostic Endpoints (Debug / Staging only)
 
 Available in Debug builds and `Staging` environment; excluded in Production Release builds.
@@ -256,6 +268,7 @@ Primary controllers:
 - `/mcpserver/sessionlog`
 - `/mcpserver/context`
 - `/mcpserver/repo`
+- `/mcpserver/desktop`
 - `/mcpserver/gh`
 - `/mcpserver/sync`
 

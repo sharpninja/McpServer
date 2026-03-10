@@ -82,12 +82,12 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-MT-003 | ✅ Complete | McpDbContext (global query filter), all entities (WorkspaceId) |
 | FR-MCP-045 | ✅ Complete | TodoController.MoveAsync, FwhMcpTools.TodoMove, TodoMoveRequest |
 | FR-MCP-046 | ✅ Complete | VoiceController, VoiceConversationService, VoiceConversationOptions |
-| FR-MCP-047 | ✅ Complete | DesktopProcessLauncher, NativeMethods |
+| FR-MCP-047 | ✅ Complete | DesktopProcessLauncher, NativeMethods, DesktopLaunchService, DesktopController, FwhMcpTools.DesktopLaunch |
 | FR-MCP-048 | ✅ Complete | Program.cs (AddYamlFile), NetEscapades.Configuration.Yaml |
 | TR-MCP-TODO-002 | ✅ Complete | TodoController, FwhMcpTools, TodoServiceResolver |
 | TR-MCP-VOICE-001–003 | ✅ Complete | VoiceConversationService, VoiceController, VoiceConversationOptions |
 | TR-MCP-CFG-004 | ✅ Complete | Program.cs, NetEscapades.Configuration.Yaml |
-| TR-MCP-DESKTOP-001 | ✅ Complete | DesktopProcessLauncher, NativeMethods |
+| TR-MCP-DESKTOP-001 | ✅ Complete | DesktopProcessLauncher, NativeMethods, DesktopLaunchService, DesktopController, FwhMcpTools.DesktopLaunch |
 | FR-MCP-049 | ✅ Complete | PromptTemplateController, PromptTemplateService, PromptTemplateRenderer, TemplateClient, TemplatesScreen |
 | TR-MCP-TPL-001 | ✅ Complete | PromptTemplateService, TemplateStorageOptions |
 | TR-MCP-TPL-002 | ✅ Complete | PromptTemplateRenderer |
@@ -146,10 +146,10 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-065 | ✅ Complete | ContextController (ingest-website), IngestionCoordinator.IngestWebsiteAsync, WebsiteIngestor, FwhMcpTools.context_ingest_website, ContextClient.IngestWebsiteAsync |
 | TR-MCP-INGEST-003 | ✅ Complete | WebsiteIngestor, IngestionOptions website limits, Program/McpStdioHost HttpClient registration, IngestionCoordinator website path |
 | TEST-MCP-088 | ✅ Complete | WebsiteIngestorTests, ContextControllerTests (ingest-website), McpTransportTests (context_ingest_website), ContextClientTests.IngestWebsiteAsync_PostsTypedRequest |
-| FR-MCP-066 | ✅ Complete | `McpServer.AgentFramework` (`ServiceCollectionExtensions`, `McpAgentFrameworkOptions`, `AgentFramework/*`, `SessionLog/*`, `Todo/*`), `McpServer.AgentFramework.SampleHost` (`Program.cs`, `SampleHostPreviewFactory.cs`) |
+| FR-MCP-066 | ✅ Complete | `McpServer.AgentFramework` (`ServiceCollectionExtensions`, `McpAgentFrameworkOptions`, `AgentFramework/*`, `PowerShellSessions/*`, `SessionLog/*`, `Todo/*`), `McpServer.Client` (`McpServerClient`, `RepoClient`, `DesktopClient`), `McpServer.AgentFramework.SampleHost` (`Program.cs`, `SampleHostPreviewFactory.cs`) |
 | TR-MCP-AGENT-006 | ✅ Complete | `ServiceCollectionExtensions`, `McpAgentFrameworkOptions`, `McpAgentFrameworkOptionsValidator`, `IMcpHostedAgent`, `IMcpHostedAgentFactory`, `McpHostedAgent`, `McpHostedAgentRegistration` |
-| TR-MCP-AGENT-007 | ✅ Complete | `SessionLogWorkflow`, `SessionLogWorkflowContext`, `SessionLogTurnContext`, `TodoWorkflow`, `McpHostedAgentToolAdapter`, `McpSessionIdentifierFactory` |
-| TEST-MCP-089 | ✅ Complete | `HostedAgentWorkflowIntegrationTests`, `McpHostedAgentAdapterTests`, `SessionLogWorkflowTests`, `TodoWorkflowTests`, `ServiceCollectionExtensionsTests` |
+| TR-MCP-AGENT-007 | ✅ Complete | `SessionLogWorkflow`, `SessionLogWorkflowContext`, `SessionLogTurnContext`, `TodoWorkflow`, `IMcpHostedAgent.PowerShellSessions`, `IHostedPowerShellSessionManager`, `McpHostedAgentToolAdapter`, `HostedPowerShellSessionManager`, `HostedPowerShellSessionHost`, `PowerShellSessionCreateResult`, `PowerShellSessionCommandResult`, `PowerShellSessionCloseResult`, `McpServerClient`, `RepoClient`, `DesktopClient`, `McpSessionIdentifierFactory` |
+| TEST-MCP-089 | ✅ Complete | `HostedAgentWorkflowIntegrationTests`, `McpHostedAgentAdapterTests`, `DesktopClientTests`, `DesktopControllerTests`, `SessionLogWorkflowTests`, `TodoWorkflowTests`, `ServiceCollectionExtensionsTests`, `PowerShellSessions_ExecuteInteractiveCommand_PreservesHostLocalSessionState` |
 | FR-MCP-067 | 🔲 Planned | — |
 | TR-MCP-HTTP-002 | 🔲 Planned | — |
 | TEST-MCP-090 | 🔲 Planned | — |

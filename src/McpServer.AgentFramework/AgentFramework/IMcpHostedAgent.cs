@@ -1,5 +1,6 @@
 using McpServer.AgentFramework.SessionLog;
 using McpServer.AgentFramework.Todo;
+using McpServer.AgentFramework.PowerShellSessions;
 using McpServer.Client;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
@@ -8,7 +9,7 @@ namespace McpServer.AgentFramework.AgentFramework;
 
 /// <summary>
 /// FR-MCP-066/TR-MCP-AGENT-007: Host-resolvable MCP-aware agent contract exposing the built-in
-/// session-log and TODO workflow integrations.
+/// session-log, TODO, repository, desktop-launch, and local PowerShell-session integrations.
 /// </summary>
 public interface IMcpHostedAgent
 {
@@ -58,6 +59,13 @@ public interface IMcpHostedAgent
     ITodoWorkflow Todo { get; }
 
     /// <summary>
+    /// Gets the host-facing local PowerShell session manager bound to this hosted agent instance.
+    /// Use this when the host application needs to execute direct local PowerShell commands without
+    /// going through the model-facing tool surface.
+    /// </summary>
+    IHostedPowerShellSessionManager PowerShellSessions { get; }
+
+    /// <summary>
     /// Creates a <see cref="ChatClientAgent"/> that uses this hosted agent's MCP-aware metadata.
     /// Pair the returned agent with <see cref="CreateRunOptions"/> when running prompts that should
     /// be able to invoke the built-in MCP workflow tools.
@@ -67,10 +75,11 @@ public interface IMcpHostedAgent
     ChatClientAgent CreateChatClientAgent(IChatClient chatClient);
 
     /// <summary>
-    /// Creates <see cref="ChatClientAgentRunOptions"/> that attach the built-in MCP workflow tools
-    /// through <see cref="Microsoft.Extensions.AI.ChatOptions.Tools"/> and wrap the supplied chat
-    /// client with function invocation support.
-    /// </summary>
+     /// Creates <see cref="ChatClientAgentRunOptions"/> that attach the built-in MCP workflow tools
+     /// through <see cref="Microsoft.Extensions.AI.ChatOptions.Tools"/> and wrap the supplied chat
+     /// client with function invocation support, including the local in-process PowerShell session
+     /// tools exposed by the hosted-agent adapter.
+     /// </summary>
     /// <param name="baseOptions">
     /// Optional caller-supplied run options to clone and enrich with the hosted MCP capabilities.
     /// </param>

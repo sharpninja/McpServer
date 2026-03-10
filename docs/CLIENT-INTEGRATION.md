@@ -81,6 +81,7 @@ Key tool categories:
 
 - **Context**: `context_search`, `context_pack`, `context_sources`, `context_ingest_website`
 - **Repository**: `repo_read`, `repo_list`, `repo_write`
+- **Desktop**: `desktop_launch`
 - **Sync**: `sync_run`, `sync_status`
 - **TODO**: `todo_list`, `todo_get`, `todo_create`, `todo_update`, `todo_delete`
 - **Session Logs**: `sessionlog_submit`, `sessionlog_query`, `sessionlog_dialog`
@@ -109,6 +110,13 @@ var client = McpServerClientFactory.Create(new McpServerClientOptions
 });
 // All requests include both X-Api-Key and X-Workspace-Path headers
 var todos = await client.Todo.QueryAsync();
+var launch = await client.Desktop.LaunchAsync(new DesktopLaunchRequest
+{
+    ExecutablePath = @"C:\Windows\System32\cmd.exe",
+    Arguments = "/c exit 0",
+    CreateNoWindow = true,
+    WaitForExit = true,
+});
 ```
 
 Switch workspace at runtime:
@@ -132,7 +140,7 @@ var updated = await client.Configuration.PatchValuesAsync(new Dictionary<string,
 
 ## Hosted .NET Agent Framework Library
 
-Use `src\McpServer.AgentFramework` when you want a .NET 9 host application to consume MCP Server session-log and TODO workflows through Microsoft Agent Framework-oriented registration instead of hand-assembling transport glue.
+Use `src\McpServer.AgentFramework` when you want a .NET 9 host application to consume MCP Server session-log, TODO, repository, and desktop-launch workflows through Microsoft Agent Framework-oriented registration instead of hand-assembling transport glue.
 
 Typical registration:
 
@@ -155,12 +163,13 @@ Built-in hosted services include:
 
 - `ISessionLogWorkflow` for session bootstrap, turn lifecycle updates, and canonical session/request identifiers.
 - `ITodoWorkflow` for TODO query/get/update plus buffered or streaming plan/status/implementation flows.
-- `IMcpHostedAgent` / `IMcpHostedAgentFactory` for creating `ChatClientAgent`-ready registrations and run options with the built-in MCP tool set attached.
+- built-in MCP tools for repository access, local desktop launch, and in-process PowerShell sessions (`mcp_repo_*`, `mcp_desktop_launch`, `mcp_powershell_session_*`).
+- `IMcpHostedAgent` / `IMcpHostedAgentFactory` for creating `ChatClientAgent`-ready registrations and run options with the built-in MCP tool set attached, plus `IMcpHostedAgent.PowerShellSessions` for host-driven direct local PowerShell execution.
 
 Reference implementations:
 
 - Library source: `src\McpServer.AgentFramework`
-- Preview host: `src\McpServer.AgentFramework.SampleHost`
+- Interactive CLI host: `src\McpServer.AgentFramework.SampleHost`
 - Automated acceptance coverage: `tests\McpServer.AgentFramework.Tests\HostedAgentWorkflowIntegrationTests.cs`
 
 ## Health Check

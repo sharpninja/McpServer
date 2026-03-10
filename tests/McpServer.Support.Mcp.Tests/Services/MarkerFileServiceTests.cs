@@ -283,6 +283,7 @@ public sealed class MarkerFileServiceTests
             Assert.Contains($"serverStartedAtUtc: {serverStartedAtUtc:o}", yaml);
             Assert.Contains("serverStartupUtc: /server-startup-utc", yaml);
             Assert.Contains("markerFileTimestamp: /marker-file-timestamp?repoPath={workspacePath}", yaml);
+            Assert.Contains("desktop: /mcpserver/desktop", yaml);
         }
         finally
         {

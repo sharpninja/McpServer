@@ -53,6 +53,14 @@ public sealed class AppSettingsFileService
     /// </summary>
     public string ResolvePreferredAppsettingsPath()
     {
+        var loadedYamlPath = ResolveLoadedAppsettingsPath("appsettings.yaml");
+        if (!string.IsNullOrWhiteSpace(loadedYamlPath) && File.Exists(loadedYamlPath))
+            return loadedYamlPath;
+
+        var loadedJsonPath = ResolveLoadedAppsettingsPath("appsettings.json");
+        if (!string.IsNullOrWhiteSpace(loadedJsonPath) && File.Exists(loadedJsonPath))
+            return loadedJsonPath;
+
         var contentRoot = _environment.ContentRootPath;
         var baseDir = AppContext.BaseDirectory;
 
@@ -81,6 +89,10 @@ public sealed class AppSettingsFileService
     /// </summary>
     public string ResolveYamlAppsettingsPath()
     {
+        var loadedYamlPath = ResolveLoadedAppsettingsPath("appsettings.yaml");
+        if (!string.IsNullOrWhiteSpace(loadedYamlPath))
+            return loadedYamlPath;
+
         var contentRoot = _environment.ContentRootPath;
         var baseDir = AppContext.BaseDirectory;
 
@@ -159,6 +171,31 @@ public sealed class AppSettingsFileService
     {
         if (_configuration is IConfigurationRoot root)
             root.Reload();
+    }
+
+    private string? ResolveLoadedAppsettingsPath(string fileName)
+    {
+        if (_configuration is not IConfigurationRoot root)
+            return null;
+
+        foreach (var provider in root.Providers.OfType<FileConfigurationProvider>().Reverse())
+        {
+            var sourcePath = provider.Source.Path;
+            if (!string.Equals(Path.GetFileName(sourcePath ?? string.Empty), fileName, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            if (string.IsNullOrWhiteSpace(sourcePath))
+                continue;
+
+            if (Path.IsPathRooted(sourcePath))
+                return Path.GetFullPath(sourcePath);
+
+            var physicalPath = provider.Source.FileProvider?.GetFileInfo(sourcePath).PhysicalPath;
+            if (!string.IsNullOrWhiteSpace(physicalPath))
+                return Path.GetFullPath(physicalPath);
+        }
+
+        return null;
     }
 
     private static void ApplyPatch(IDictionary<object, object> root, string key, string? value)

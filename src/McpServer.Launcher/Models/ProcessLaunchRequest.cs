@@ -41,6 +41,7 @@ public sealed class ProcessLaunchRequest
     /// Window style for the new process.
     /// </summary>
     [JsonPropertyName("windowStyle")]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public WindowStyleOption WindowStyle { get; set; } = WindowStyleOption.Normal;
 
     /// <summary>

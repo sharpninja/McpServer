@@ -319,6 +319,7 @@ builder.Services.AddScoped<IssueIngestor>();
 builder.Services.AddScoped<IWebsiteIngestor, WebsiteIngestor>();
 builder.Services.AddScoped<IngestionCoordinator>();
 builder.Services.AddScoped<IRepoFileService, RepoFileService>();
+builder.Services.AddScoped<DesktopLaunchService>();
 builder.Services.AddSingleton<IGitHubCliService, GitHubCliService>();
 builder.Services.AddSingleton<ITodoServiceFactory, TodoServiceFactory>();
 builder.Services.AddSingleton<ITodoService>(sp => sp.GetRequiredService<ITodoServiceFactory>().CreatePrimary());

@@ -126,6 +126,60 @@ public sealed class AppSettingsFileServiceTests : IDisposable
         Assert.Contains("CopilotModel: gpt-5.3-codex", yamlText, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// TEST-MCP-091: Verifies that the service patches the YAML file that the active configuration
+    /// root actually loaded instead of blindly preferring the host content root copy.
+    /// This reproduces the Windows service scenario where configuration providers can be rooted in the
+    /// deployed application directory while <see cref="IWebHostEnvironment.ContentRootPath"/> points at
+    /// the primary workspace repository.
+    /// </summary>
+    [Fact]
+    public async Task PatchYamlConfigurationAsync_UsesLoadedYamlProviderPathWhenContentRootDiffers()
+    {
+        var loadedDirectory = Path.Combine(_tempDirectory, "loaded");
+        var contentRootDirectory = Path.Combine(_tempDirectory, "workspace");
+        Directory.CreateDirectory(loadedDirectory);
+        Directory.CreateDirectory(contentRootDirectory);
+
+        var loadedYamlPath = Path.Combine(loadedDirectory, "appsettings.yaml");
+        var contentRootYamlPath = Path.Combine(contentRootDirectory, "appsettings.yaml");
+
+        await File.WriteAllTextAsync(
+            loadedYamlPath,
+            """
+            VoiceConversation:
+              CopilotModel: gpt-5.3-codex
+            """).ConfigureAwait(true);
+        await File.WriteAllTextAsync(
+            contentRootYamlPath,
+            """
+            VoiceConversation:
+              CopilotModel: should-not-change
+            """).ConfigureAwait(true);
+
+        var configuration = BuildConfiguration(loadedYamlPath);
+        var service = CreateService(configuration, contentRootDirectory);
+
+        var updated = await service.PatchYamlConfigurationAsync(
+            new Dictionary<string, string?>
+            {
+                ["VoiceConversation:DefaultExecutionStrategy"] = "hosted-agentframework",
+                ["VoiceConversation:ModelApiKeyEnvironmentVariableName"] = "OPENAI_API_KEY",
+            },
+            CancellationToken.None).ConfigureAwait(true);
+
+        var loadedYamlText = await File.ReadAllTextAsync(loadedYamlPath).ConfigureAwait(true);
+        var contentRootYamlText = await File.ReadAllTextAsync(contentRootYamlPath).ConfigureAwait(true);
+
+        Assert.Equal("hosted-agentframework", configuration["VoiceConversation:DefaultExecutionStrategy"]);
+        Assert.Equal("OPENAI_API_KEY", configuration["VoiceConversation:ModelApiKeyEnvironmentVariableName"]);
+        Assert.Equal("hosted-agentframework", updated["VoiceConversation:DefaultExecutionStrategy"]);
+        Assert.Contains("DefaultExecutionStrategy: hosted-agentframework", loadedYamlText, StringComparison.Ordinal);
+        Assert.Contains("ModelApiKeyEnvironmentVariableName: OPENAI_API_KEY", loadedYamlText, StringComparison.Ordinal);
+        Assert.DoesNotContain("DefaultExecutionStrategy", contentRootYamlText, StringComparison.Ordinal);
+        Assert.Contains("CopilotModel: should-not-change", contentRootYamlText, StringComparison.Ordinal);
+    }
+
     /// <inheritdoc />
     public void Dispose()
     {
@@ -135,8 +189,13 @@ public sealed class AppSettingsFileServiceTests : IDisposable
 
     private AppSettingsFileService CreateService(IConfiguration configuration)
     {
+        return CreateService(configuration, _tempDirectory);
+    }
+
+    private static AppSettingsFileService CreateService(IConfiguration configuration, string contentRootPath)
+    {
         var environment = Substitute.For<IWebHostEnvironment>();
-        environment.ContentRootPath.Returns(_tempDirectory);
+        environment.ContentRootPath.Returns(contentRootPath);
         return new AppSettingsFileService(configuration, environment);
     }
 

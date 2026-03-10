@@ -1,0 +1,41 @@
+using System;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using McpServer.Client.Models;
+
+namespace McpServer.Client;
+
+/// <summary>
+/// FR-MCP-047/TR-MCP-DESKTOP-001: Client for desktop-launch endpoints
+/// (<c>/mcpserver/desktop</c>).
+/// </summary>
+/// <seealso cref="McpServerClient.Desktop"/>
+public sealed class DesktopClient : McpClientBase
+{
+    /// <inheritdoc />
+    public DesktopClient(HttpClient http, McpServerClientOptions options)
+        : base(http, options)
+    {
+    }
+
+    internal DesktopClient(HttpClient http, McpServerClientOptions options, WorkspacePathHolder holder)
+        : base(http, options, holder)
+    {
+    }
+
+    /// <summary>
+    /// Launches a local desktop process through the authenticated MCP Server workspace.
+    /// </summary>
+    /// <param name="request">Structured launch request.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The typed launch result returned by the server.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="request"/> is <see langword="null"/>.</exception>
+    public async Task<DesktopLaunchResult> LaunchAsync(
+        DesktopLaunchRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        return await PostAsync<DesktopLaunchResult>("mcpserver/desktop/launch", request, cancellationToken);
+    }
+}

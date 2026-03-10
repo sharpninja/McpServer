@@ -190,6 +190,7 @@ public static class McpStdioHost
         builder.Services.AddScoped<IWebsiteIngestor, WebsiteIngestor>();
         builder.Services.AddScoped<IngestionCoordinator>();
         builder.Services.AddScoped<IRepoFileService, RepoFileService>();
+        builder.Services.AddScoped<DesktopLaunchService>();
         builder.Services.AddScoped<ISessionLogService, SessionLogService>();
         builder.Services.AddScoped<Fts5SearchService>();
         builder.Services.AddScoped<IContextSearchService, Fts5SearchService>();

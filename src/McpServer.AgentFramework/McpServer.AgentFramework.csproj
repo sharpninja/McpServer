@@ -8,14 +8,14 @@
     <RootNamespace>McpServer.AgentFramework</RootNamespace>
     <PackageId>SharpNinja.McpServer.AgentFramework</PackageId>
     <Authors>SharpNinja</Authors>
-    <Description>Microsoft Agent Framework integration for MCP Server with built-in session-log and TODO workflow support.</Description>
+    <Description>Microsoft Agent Framework integration for MCP Server with built-in session-log, TODO, repository, desktop, and local PowerShell workflow support.</Description>
     <PackageProjectUrl>https://github.com/sharpninja/McpServer</PackageProjectUrl>
     <RepositoryUrl>https://github.com/sharpninja/McpServer</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryBranch>main</RepositoryBranch>
     <PackageTags>mcp;agent-framework;ai-agent;workflow</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageReleaseNotes>MCP-AGENTFRAMEWORK-001: adds hosted-agent registration, session-log and TODO workflows, ChatClientAgent-ready tool adapters, and a sample host preview.</PackageReleaseNotes>
+    <PackageReleaseNotes>MCP-AGENTFRAMEWORK-001: adds hosted-agent registration, session-log and TODO workflows, repository and desktop tools, local PowerShell sessions, ChatClientAgent-ready tool adapters, and an interactive sample host.</PackageReleaseNotes>
     <ReadmeFile>README.md</ReadmeFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IsPackable>true</IsPackable>
@@ -34,5 +34,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="Microsoft.Extensions.Options" />
+    <PackageReference Include="Microsoft.PowerShell.SDK" />
   </ItemGroup>
 </Project>

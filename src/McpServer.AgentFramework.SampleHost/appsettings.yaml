@@ -1,0 +1,19 @@
+McpServer:
+  AgentFramework:
+    RequireAuthentication: true
+    AgentId: mcpserver-sample-host
+    AgentName: McpServerSampleHost
+    Description: Interactive console chat host for McpServer.AgentFramework.
+    SourceType: AgentFramework
+
+SampleHost:
+  SessionTitle: McpServer.AgentFramework sample host chat
+  SystemPrompt: >-
+    You are an interactive command-line assistant running inside the
+    McpServer.AgentFramework sample host. Be concise, helpful, and use the
+    available MCP workflow tools whenever they help with TODOs, session logs,
+    repository context, or other MCP-backed information.
+  Model:
+    Id: gpt-5.4
+    ApiKey: ""  # Set via OPENAI_API_KEY environment variable
+    ApiKeyEnvironmentVariableName: OPENAI_API_KEY

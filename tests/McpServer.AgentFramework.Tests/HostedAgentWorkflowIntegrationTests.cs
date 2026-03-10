@@ -2,6 +2,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using McpServer.AgentFramework.AgentFramework;
+using McpServer.AgentFramework.PowerShellSessions;
 using McpServer.AgentFramework.SessionLog;
 using McpServer.Client.Models;
 using McpClientServiceCollectionExtensions = McpServer.Client.ServiceCollectionExtensions;
@@ -96,6 +97,45 @@ public sealed class HostedAgentWorkflowIntegrationTests
                 ["id"] = "MCP-AGENTFRAMEWORK-001",
             },
             CancellationToken.None);
+        var repoListResult = await tools["mcp_repo_list"].InvokeAsync(
+            new AIFunctionArguments
+            {
+                ["path"] = "src",
+            },
+            CancellationToken.None);
+        var desktopLaunchResult = await tools["mcp_desktop_launch"].InvokeAsync(
+            new AIFunctionArguments
+            {
+                ["executablePath"] = @"C:\Windows\System32\cmd.exe",
+                ["arguments"] = "/c exit 0",
+                ["createNoWindow"] = true,
+                ["waitForExit"] = true,
+            },
+            CancellationToken.None);
+        var powerShellCreateResult = await tools["mcp_powershell_session_create"].InvokeAsync(
+            new AIFunctionArguments(),
+            CancellationToken.None);
+        var powerShellSession = DeserializeJsonResult<PowerShellSessionCreateResult>(powerShellCreateResult);
+        var powerShellFirstCommandResult = await tools["mcp_powershell_session_command"].InvokeAsync(
+            new AIFunctionArguments
+            {
+                ["sessionId"] = powerShellSession.SessionId!,
+                ["command"] = "$global:WorkflowValue = 7; $global:WorkflowValue",
+            },
+            CancellationToken.None);
+        var powerShellSecondCommandResult = await tools["mcp_powershell_session_command"].InvokeAsync(
+            new AIFunctionArguments
+            {
+                ["sessionId"] = powerShellSession.SessionId!,
+                ["command"] = "$global:WorkflowValue",
+            },
+            CancellationToken.None);
+        var powerShellCloseResult = await tools["mcp_powershell_session_close"].InvokeAsync(
+            new AIFunctionArguments
+            {
+                ["sessionId"] = powerShellSession.SessionId!,
+            },
+            CancellationToken.None);
 
         var turnRequestId = GetJsonProperty(Assert.IsType<JsonElement>(beginTurnResult), "requestId", "RequestId").GetString();
         Assert.NotNull(turnRequestId);
@@ -120,6 +160,11 @@ public sealed class HostedAgentWorkflowIntegrationTests
         var todoQuery = DeserializeJsonResult<TodoQueryResult>(queryResult);
         var todoMutation = DeserializeJsonResult<TodoMutationResult>(updateResult);
         var statusText = ReadStringResult(statusResult);
+        var repoListing = DeserializeJsonResult<RepoListResult>(repoListResult);
+        var desktopLaunch = DeserializeJsonResult<DesktopLaunchResult>(desktopLaunchResult);
+        var powerShellFirstCommand = DeserializeJsonResult<PowerShellSessionCommandResult>(powerShellFirstCommandResult);
+        var powerShellSecondCommand = DeserializeJsonResult<PowerShellSessionCommandResult>(powerShellSecondCommandResult);
+        var powerShellClosed = DeserializeJsonResult<PowerShellSessionCloseResult>(powerShellCloseResult);
         var workflowContext = hostedAgent.SessionLog.Context!;
         Assert.NotNull(workflowContext);
         var completedTurn = Assert.Single(workflowContext.Turns);
@@ -153,8 +198,33 @@ public sealed class HostedAgentWorkflowIntegrationTests
             "Acceptance coverage updated through the registered hosted-agent tools.",
             todoMutation.Item.Note);
         Assert.Equal("Coverage protected\nAwaiting review", statusText);
+        Assert.Equal("src", repoListing.Path);
+        Assert.True(desktopLaunch.Success);
+        Assert.Equal(4242, desktopLaunch.ProcessId);
+        Assert.Equal(0, desktopLaunch.ExitCode);
+        Assert.True(powerShellSession.Success);
+        Assert.Equal(@"E:\github\McpServer", powerShellSession.CurrentLocation);
+        Assert.True(powerShellFirstCommand.Success);
+        Assert.Equal("7", powerShellFirstCommand.Output);
+        Assert.Equal(powerShellSession.SessionId, powerShellFirstCommand.SessionId);
+        Assert.True(powerShellSecondCommand.Success);
+        Assert.Equal("7", powerShellSecondCommand.Output);
+        Assert.True(powerShellClosed.Success);
+        Assert.Equal(powerShellSession.SessionId, powerShellClosed.SessionId);
+        Assert.Collection(
+            repoListing.Entries,
+            entry =>
+            {
+                Assert.Equal("McpServer.AgentFramework", entry.Name);
+                Assert.True(entry.IsDirectory);
+            },
+            entry =>
+            {
+                Assert.Equal("McpServer.Client", entry.Name);
+                Assert.True(entry.IsDirectory);
+            });
 
-        Assert.Equal(6, handler.Requests.Count);
+        Assert.Equal(8, handler.Requests.Count);
         Assert.All(
             handler.Requests,
             static request =>
@@ -176,8 +246,12 @@ public sealed class HostedAgentWorkflowIntegrationTests
         Assert.Equal(HttpMethod.Get, handler.Requests[4].Method);
         Assert.Equal("/mcpserver/todo/MCP-AGENTFRAMEWORK-001/prompt/status", handler.Requests[4].RequestUri.AbsolutePath);
         Assert.Contains("text/event-stream", handler.Requests[4].AcceptMediaTypes);
-        Assert.Equal(HttpMethod.Post, handler.Requests[5].Method);
-        Assert.Equal("/mcpserver/sessionlog", handler.Requests[5].RequestUri.AbsolutePath);
+        Assert.Equal(HttpMethod.Get, handler.Requests[5].Method);
+        Assert.Equal("http://localhost:7147/mcpserver/repo/list?path=src", handler.Requests[5].RequestUri.ToString());
+        Assert.Equal(HttpMethod.Post, handler.Requests[6].Method);
+        Assert.Equal("/mcpserver/desktop/launch", handler.Requests[6].RequestUri.AbsolutePath);
+        Assert.Equal(HttpMethod.Post, handler.Requests[7].Method);
+        Assert.Equal("/mcpserver/sessionlog", handler.Requests[7].RequestUri.AbsolutePath);
 
         using var updateBody = JsonDocument.Parse(handler.Requests[3].Body!);
         Assert.Equal("Protect hosted workflow layer", updateBody.RootElement.GetProperty("title").GetString());
@@ -186,7 +260,12 @@ public sealed class HostedAgentWorkflowIntegrationTests
             updateBody.RootElement.GetProperty("note").GetString());
         Assert.False(updateBody.RootElement.GetProperty("done").GetBoolean());
 
-        using var finalSessionBody = JsonDocument.Parse(handler.Requests[5].Body!);
+        using var desktopLaunchBody = JsonDocument.Parse(handler.Requests[6].Body!);
+        Assert.Equal(@"C:\Windows\System32\cmd.exe", desktopLaunchBody.RootElement.GetProperty("executablePath").GetString());
+        Assert.True(desktopLaunchBody.RootElement.GetProperty("createNoWindow").GetBoolean());
+        Assert.True(desktopLaunchBody.RootElement.GetProperty("waitForExit").GetBoolean());
+
+        using var finalSessionBody = JsonDocument.Parse(handler.Requests[7].Body!);
         var finalTurn = finalSessionBody.RootElement.GetProperty("entries")[0];
         Assert.Equal("completed", finalTurn.GetProperty("status").GetString());
         Assert.Equal(
@@ -359,6 +438,12 @@ public sealed class HostedAgentWorkflowIntegrationTests
             if (segments is ["mcpserver", "todo", _, "prompt", "status"] && request.Method == HttpMethod.Get)
                 return CreateTodoStatusResponse();
 
+            if (segments is ["mcpserver", "repo", "list"] && request.Method == HttpMethod.Get)
+                return CreateRepoListResponse(request.RequestUri);
+
+            if (segments is ["mcpserver", "desktop", "launch"] && request.Method == HttpMethod.Post)
+                return CreateDesktopLaunchResponse();
+
             throw new InvalidOperationException(
                 $"Unexpected MCP request '{request.Method} {request.RequestUri.AbsolutePath}'.");
         }
@@ -419,6 +504,51 @@ public sealed class HostedAgentWorkflowIntegrationTests
                 Encoding.UTF8,
                 "text/event-stream"),
         };
+
+        private static HttpResponseMessage CreateRepoListResponse(Uri requestUri)
+        {
+            var path = GetQueryParameter(requestUri, "path") ?? string.Empty;
+            return CreateJsonResponse(
+                HttpStatusCode.OK,
+                JsonSerializer.Serialize(
+                    new RepoListResult
+                    {
+                        Path = path,
+                        Entries =
+                        [
+                            new RepoListEntry { Name = "McpServer.AgentFramework", IsDirectory = true },
+                            new RepoListEntry { Name = "McpServer.Client", IsDirectory = true },
+                        ],
+                    }));
+        }
+
+        private static HttpResponseMessage CreateDesktopLaunchResponse() => CreateJsonResponse(
+            HttpStatusCode.OK,
+            JsonSerializer.Serialize(
+                new DesktopLaunchResult
+                {
+                    Success = true,
+                    ProcessId = 4242,
+                    ExitCode = 0
+                }));
+
+        private static string? GetQueryParameter(Uri requestUri, string name)
+        {
+            foreach (var segment in requestUri.Query.TrimStart('?').Split('&', StringSplitOptions.RemoveEmptyEntries))
+            {
+                var parts = segment.Split('=', 2);
+                if (!string.Equals(Uri.UnescapeDataString(parts[0]), name, StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                return parts.Length == 2
+                    ? Uri.UnescapeDataString(parts[1])
+                    : string.Empty;
+            }
+
+            return null;
+        }
 
         private static HttpResponseMessage CreateJsonResponse(HttpStatusCode statusCode, string body) => new(statusCode)
         {

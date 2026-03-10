@@ -415,6 +415,29 @@ templates:
       - Health: GET {{baseUrl}}/health
 
 
+      ## Repository Access
+
+
+      - Hosted agents expose built-in repository tools: `mcp_repo_list`, `mcp_repo_read`, and `mcp_repo_write`.
+
+      - All repository paths are relative to {{workspace.WorkspacePath}}.
+
+      - REST clients can browse and edit files through {{baseUrl}}/mcpserver/repo/list and {{baseUrl}}/mcpserver/repo/file using the API key above.
+
+      - If you need to browse or edit files, use these repository tools instead of saying that filesystem access is unavailable.
+
+      ## Local Program Execution
+
+
+      - Hosted agents expose a built-in local program execution tool: `mcp_desktop_launch`.
+
+      - Use it when you need to start a local Windows program through MCP Server instead of claiming local program execution is unavailable.
+
+      - Prefer `createNoWindow: true` and `waitForExit: true` for short non-interactive verification commands.
+
+      - REST clients can launch programs through {{baseUrl}}/mcpserver/desktop/launch using the API key above.
+
+
       {{#if workspace.BannedLicenses}}
 
       ## Compliance Restrictions

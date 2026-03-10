@@ -1,5 +1,6 @@
 using McpServer.AgentFramework.SessionLog;
 using McpServer.AgentFramework.Todo;
+using McpServer.AgentFramework.PowerShellSessions;
 using McpServer.Client;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
@@ -11,11 +12,12 @@ namespace McpServer.AgentFramework.AgentFramework;
 
 /// <summary>
 /// FR-MCP-066/TR-MCP-AGENT-007: Hosted-agent wrapper that exposes the configured MCP transport
-/// client and the built-in workflow services.
+/// client plus the built-in workflow services and local PowerShell-session tool surface.
 /// </summary>
 public sealed class McpHostedAgent : IMcpHostedAgent
 {
     private readonly ChatClientAgentOptions _agentOptions;
+    private readonly ILoggerFactory _loggerFactory;
     private readonly McpAgentFrameworkOptions _options;
     private readonly IServiceProvider _serviceProvider;
 
@@ -47,8 +49,10 @@ public sealed class McpHostedAgent : IMcpHostedAgent
         Todo = todo ?? throw new ArgumentNullException(nameof(todo));
         _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         _agentOptions = agentOptions.Clone();
+        _loggerFactory = ResolveLoggerFactory();
+        PowerShellSessions = new HostedPowerShellSessionManager(_loggerFactory.CreateLogger<HostedPowerShellSessionManager>());
 
-        var toolAdapter = new McpHostedAgentToolAdapter(SessionLog, Todo);
+        var toolAdapter = new McpHostedAgentToolAdapter(Client, SessionLog, Todo, PowerShellSessions);
         var functions = toolAdapter.CreateFunctions();
         Registration = new McpHostedAgentRegistration(
             _agentOptions,
@@ -56,7 +60,7 @@ public sealed class McpHostedAgent : IMcpHostedAgent
             chatClient => new ChatClientAgent(
                 chatClient,
                 _agentOptions.Clone(),
-                ResolveLoggerFactory(),
+                _loggerFactory,
                 _serviceProvider),
             CreateRunOptionsCore);
     }
@@ -86,6 +90,9 @@ public sealed class McpHostedAgent : IMcpHostedAgent
     public ITodoWorkflow Todo { get; }
 
     /// <inheritdoc />
+    public IHostedPowerShellSessionManager PowerShellSessions { get; }
+
+    /// <inheritdoc />
     public ChatClientAgent CreateChatClientAgent(IChatClient chatClient) =>
         Registration.CreateChatClientAgent(chatClient);
 
@@ -105,7 +112,7 @@ public sealed class McpHostedAgent : IMcpHostedAgent
         runOptions.ChatClientFactory = chatClient =>
         {
             var innerClient = existingFactory?.Invoke(chatClient) ?? chatClient;
-            return new FunctionInvokingChatClient(innerClient, ResolveLoggerFactory(), _serviceProvider)
+            return new FunctionInvokingChatClient(innerClient, _loggerFactory, _serviceProvider)
             {
                 AllowConcurrentInvocation = false,
             };
