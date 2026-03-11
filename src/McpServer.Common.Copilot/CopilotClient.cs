@@ -61,7 +61,10 @@ public sealed class CopilotClient(
         logger.LogDebug("Launching interactive session: {Agent} in {Cwd}", opts.AgentPath, psi.WorkingDirectory);
 
         var process = processSpawner.Spawn(psi);
-        return new CopilotInteractiveSession(process, logger);
+        var modelPromptLabel = string.Equals(opts.Model, "auto", StringComparison.OrdinalIgnoreCase)
+            ? null
+            : opts.Model;
+        return new CopilotInteractiveSession(process, logger, modelPromptLabel);
     }
 
     /// <inheritdoc />
