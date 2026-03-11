@@ -57,6 +57,7 @@ bool IsStdioTransportRequested(string[] a)
 }
 
 var builder = WebApplication.CreateBuilder(args);
+EnsureApprovedWindowsServiceDeployment();
 DisableEnvironmentSpecificJsonConfigForWindowsService(builder);
 
 builder.Configuration.AddYamlFile("appsettings.yaml", optional: true, reloadOnChange: true);
@@ -705,6 +706,37 @@ static void DisableEnvironmentSpecificJsonConfigForWindowsService(WebApplication
 
     if (builder.Configuration is IConfigurationRoot configurationRoot)
         configurationRoot.Reload();
+}
+
+static void EnsureApprovedWindowsServiceDeployment()
+{
+    if (!OperatingSystem.IsWindows() || !WindowsServiceHelpers.IsWindowsService())
+        return;
+    WindowsServiceDeploymentGuard.EnsureApprovedDeployment(AppContext.BaseDirectory, WriteWindowsServiceDeploymentFailure);
+}
+
+[SupportedOSPlatform("windows")]
+static void WriteWindowsServiceDeploymentFailure(string message)
+{
+    try
+    {
+#pragma warning disable CA1416
+        if (!System.Diagnostics.EventLog.SourceExists("McpServer"))
+        {
+            System.Diagnostics.EventLog.CreateEventSource("McpServer", "Application");
+        }
+
+        System.Diagnostics.EventLog.WriteEntry(
+            "McpServer",
+            message,
+            System.Diagnostics.EventLogEntryType.Error,
+            1001);
+#pragma warning restore CA1416
+    }
+    catch
+    {
+        Console.Error.WriteLine(message);
+    }
 }
 
 [SupportedOSPlatform("windows")]

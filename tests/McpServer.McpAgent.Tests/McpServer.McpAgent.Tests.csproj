@@ -25,4 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\McpServer.McpAgent\McpServer.McpAgent.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
 </Project>

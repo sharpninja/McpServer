@@ -72,11 +72,11 @@ $Timestamp   = Get-Date -Format 'yyyyMMdd-HHmmssfff'
 $BackupDir   = Join-Path $env:TEMP "McpServer-update-backup-$Timestamp"
 $ArchiveDir  = Join-Path $env:USERPROFILE 'McpServer-Backups'
 $ArchivePath = Join-Path $ArchiveDir "McpServer-backup-$Timestamp.zip"
+$DeploymentManifestName = '.mcpservice-deployment.json'
 
 # Files to preserve across updates (glob patterns relative to InstallPath).
-# appsettings files are restored into the service folder after deployment.
+# appsettings.yaml is restored into the service folder after deployment.
 $PreservePatterns = @(
-    'appsettings.json',
     'appsettings.yaml'
 )
 
@@ -199,6 +199,124 @@ function Normalize-FullPath {
     )
 
     return [System.IO.Path]::GetFullPath($PathValue).TrimEnd('\','/')
+}
+
+function Get-ServiceImagePath {
+    param(
+        [Parameter(Mandatory)]
+        [string]$InstallRoot,
+        [Parameter(Mandatory)]
+        [string]$ExecutableName,
+        [Parameter(Mandatory)]
+        [int]$Port
+    )
+
+    $exePath = Join-Path $InstallRoot $ExecutableName
+    return "`"$exePath`" --urls `"http://+:$Port`""
+}
+
+function Ensure-ServiceRegistration {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Name,
+        [Parameter(Mandatory)]
+        [string]$InstallRoot,
+        [Parameter(Mandatory)]
+        [string]$ExecutableName,
+        [Parameter(Mandatory)]
+        [int]$Port
+    )
+
+    $exePath = Join-Path $InstallRoot $ExecutableName
+    if (-not (Test-Path $exePath)) {
+        throw "Deployment is missing $ExecutableName under $InstallRoot."
+    }
+
+    $displayName = 'MCP Server'
+    $description = 'MCP Model Context Protocol Server'
+    $binPath = Get-ServiceImagePath -InstallRoot $InstallRoot -ExecutableName $ExecutableName -Port $Port
+    $svc = Get-Service -Name $Name -ErrorAction SilentlyContinue
+
+    if ($svc) {
+        sc.exe config $Name binPath= $binPath start= auto | Out-Null
+        if ($LASTEXITCODE -ne 0) { throw "sc.exe config failed with exit code $LASTEXITCODE" }
+    }
+    else {
+        sc.exe create $Name binPath= $binPath start= auto DisplayName= $displayName | Out-Null
+        if ($LASTEXITCODE -ne 0) { throw "sc.exe create failed with exit code $LASTEXITCODE" }
+    }
+
+    sc.exe description $Name $description | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw "sc.exe description failed with exit code $LASTEXITCODE" }
+
+    sc.exe failure $Name reset= 86400 actions= restart/60000/restart/60000/restart/60000 | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw "sc.exe failure failed with exit code $LASTEXITCODE" }
+}
+
+function Remove-LegacyAppSettingsJson {
+    param(
+        [Parameter(Mandatory)]
+        [string]$InstallRoot
+    )
+
+    $removed = @()
+    $legacyJsonPath = Join-Path $InstallRoot 'appsettings.json'
+    if (Test-Path $legacyJsonPath) {
+        Remove-Item -Path $legacyJsonPath -Force -ErrorAction SilentlyContinue
+        if (-not (Test-Path $legacyJsonPath)) {
+            $removed += 'appsettings.json'
+        }
+    }
+
+    return ,$removed
+}
+
+function Get-ExecutableHashManifestEntries {
+    param(
+        [Parameter(Mandatory)]
+        [string]$InstallRoot
+    )
+
+    $entries = [System.Collections.Generic.List[object]]::new()
+    foreach ($file in Get-ChildItem -Path $InstallRoot -Filter '*.exe' -File -ErrorAction SilentlyContinue | Sort-Object Name) {
+        $hash = (Get-FileHash -Path $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+        $entries.Add([ordered]@{
+            name   = $file.Name
+            sha256 = $hash
+        })
+    }
+
+    return @($entries)
+}
+
+function Write-DeploymentManifest {
+    param(
+        [Parameter(Mandatory)]
+        [string]$InstallRoot,
+        [Parameter(Mandatory)]
+        [string]$ServiceName,
+        [Parameter(Mandatory)]
+        [string]$ExecutableName,
+        [Parameter(Mandatory)]
+        [int]$Port,
+        [Parameter(Mandatory)]
+        [string]$Operation
+    )
+
+    $manifestPath = Join-Path $InstallRoot $DeploymentManifestName
+    $manifest = [ordered]@{
+        schemaVersion = 1
+        generatedUtc  = (Get-Date).ToUniversalTime().ToString('o')
+        generatedBy   = 'scripts\Update-McpService.ps1'
+        operation     = $Operation
+        serviceName   = $ServiceName
+        executable    = $ExecutableName
+        port          = $Port
+        executableHashes = @(Get-ExecutableHashManifestEntries -InstallRoot $InstallRoot)
+    }
+
+    $manifest | ConvertTo-Json -Depth 6 | Set-Content -Path $manifestPath -Encoding UTF8
+    return $manifestPath
 }
 
 function Get-ConfiguredDataFolder {
@@ -538,7 +656,7 @@ function Restore-PreservedState {
     }
 
     $restored = @()
-    foreach ($name in @('appsettings.json', 'appsettings.yaml')) {
+    foreach ($name in @('appsettings.yaml')) {
         $sourcePath = Join-Path $RestoreSource $name
         if (Test-Path $sourcePath) {
             $target = Join-Path $InstallRoot $name
@@ -550,12 +668,14 @@ function Restore-PreservedState {
     $restoredDataFolder = Get-ConfiguredDataFolder -InstallRoot $InstallRoot
     $dataRestoreSource = Join-Path $RestoreSource 'data'
     $dataRestored = Restore-DataFolderContents -SourceRoot $dataRestoreSource -DestinationRoot $restoredDataFolder -PurgeDestination:$PurgeDataFolder
+    $legacyJsonRemoved = Remove-LegacyAppSettingsJson -InstallRoot $InstallRoot
     $legacyConfigRemoved = Remove-LegacyEnvironmentAppSettings -InstallRoot $InstallRoot
 
     return [pscustomobject]@{
         RestoredConfig      = @($restored)
         RestoredDataFolder  = $restoredDataFolder
         RestoredData        = @($dataRestored)
+        LegacyJsonRemoved   = @($legacyJsonRemoved)
         LegacyConfigRemoved = @($legacyConfigRemoved)
     }
 }
@@ -570,7 +690,8 @@ function Stop-InstalledService {
 
     $svc = Get-Service -Name $Name -ErrorAction SilentlyContinue
     if (-not $svc) {
-        throw "Service '$Name' is not installed. Use Manage-McpService.ps1 -Action Install first."
+        Write-Host "  Service is not installed yet." -ForegroundColor DarkGray
+        return $false
     }
 
     $wasRunning = $svc.Status -eq 'Running'
@@ -614,39 +735,27 @@ function Test-InstalledWorkspaceHealth {
     $workspaceHealthChecked = 0
     $workspaceHealthOk = 0
     $workspaceHealthFailed = 0
-    $appSettingsYamlPath = Join-Path $InstallRoot 'appsettings.yaml'
+    $appSettingsPath = Join-Path $InstallRoot 'appsettings.yaml'
+    $appSettingsFormat = 'yaml'
     $appSettingsJsonPath = Join-Path $InstallRoot 'appsettings.json'
-    if (Test-Path $appSettingsYamlPath) {
-        $appSettingsPath = $appSettingsYamlPath
-        $appSettingsFormat = 'yaml'
-    }
-    elseif (Test-Path $appSettingsJsonPath) {
-        $appSettingsPath = $appSettingsJsonPath
-        $appSettingsFormat = 'json'
-    }
-    else {
-        $appSettingsPath = $null
-        $appSettingsFormat = $null
-    }
 
-    if ($null -eq $appSettingsPath) {
-        Write-Warning "No deployed appsettings.json or appsettings.yaml found at $InstallRoot; skipping workspace health checks."
+    if (-not (Test-Path $appSettingsPath)) {
+        Write-Warning "No deployed appsettings.yaml found at $InstallRoot; skipping workspace health checks."
     }
     else {
+        if (Test-Path $appSettingsJsonPath) {
+            Write-Warning "Legacy appsettings.json is present at $InstallRoot. Remove it and redeploy through Update-McpService.ps1."
+        }
+
         try {
-            if ($appSettingsFormat -eq 'json') {
-                $deployedSettings = Get-Content -Path $appSettingsPath -Raw | ConvertFrom-Json
+            if (-not (Get-Module -ListAvailable -Name powershell-yaml)) {
+                Install-Module -Name powershell-yaml -Force -Scope CurrentUser -ErrorAction Stop
             }
-            else {
-                if (-not (Get-Module -ListAvailable -Name powershell-yaml)) {
-                    Install-Module -Name powershell-yaml -Force -Scope CurrentUser -ErrorAction Stop
-                }
 
-                Import-Module powershell-yaml -ErrorAction Stop
-                $yamlContent = Get-Content -Path $appSettingsPath -Raw
-                $yamlHash = ConvertFrom-Yaml -Yaml $yamlContent
-                $deployedSettings = $yamlHash | ConvertTo-Json -Depth 20 | ConvertFrom-Json
-            }
+            Import-Module powershell-yaml -ErrorAction Stop
+            $yamlContent = Get-Content -Path $appSettingsPath -Raw
+            $yamlHash = ConvertFrom-Yaml -Yaml $yamlContent
+            $deployedSettings = $yamlHash | ConvertTo-Json -Depth 20 | ConvertFrom-Json
 
             $workspaceChecks = @($deployedSettings.Mcp.Workspaces)
         }
@@ -739,15 +848,23 @@ if ($Restore) {
         Write-Host "  Restored data folder: $($restoreSummary.RestoredDataFolder)" -ForegroundColor DarkGray
         Write-Host "  Restored data items: $($restoreSummary.RestoredData -join ', ')" -ForegroundColor DarkGray
     }
+    if ($restoreSummary.LegacyJsonRemoved.Count -gt 0) {
+        Write-Host "  Removed legacy config files: $($restoreSummary.LegacyJsonRemoved -join ', ')" -ForegroundColor DarkGray
+    }
     if ($restoreSummary.LegacyConfigRemoved.Count -gt 0) {
         Write-Host "  Removed legacy environment config overrides: $($restoreSummary.LegacyConfigRemoved -join ', ')" -ForegroundColor DarkGray
     }
 
-    Write-Step "5/8  Starting service '$ServiceName' ..."
+    Write-Step "5/8  Ensuring service registration ..."
+    Ensure-ServiceRegistration -Name $ServiceName -InstallRoot $InstallPath -ExecutableName $ExeName -Port $Port
+    $deploymentManifestPath = Write-DeploymentManifest -InstallRoot $InstallPath -ServiceName $ServiceName -ExecutableName $ExeName -Port $Port -Operation 'restore'
+    Write-Host "  Deployment manifest: $deploymentManifestPath" -ForegroundColor DarkGray
+
+    Write-Step "6/9  Starting service '$ServiceName' ..."
     $svc = Start-InstalledService -Name $ServiceName
     Write-Host "  Service status: $($svc.Status)" -ForegroundColor $(if ($svc.Status -eq 'Running') { 'Green' } else { 'Red' })
 
-    Write-Step "6/8  Verifying health on port $Port ..."
+    Write-Step "7/9  Verifying health on port $Port ..."
     $primaryHealth = Test-HealthEndpoint -Port $Port -Attempts 10 -TimeoutSeconds 3 -DelaySeconds 2
     $healthy = [bool]$primaryHealth.Healthy
     if ($healthy) {
@@ -757,10 +874,10 @@ if ($Restore) {
         Write-Warning "Service did not respond to health check after 20 seconds."
     }
 
-    Write-Step "7/8  Verifying workspace health checks from deployed config ..."
+    Write-Step "8/9  Verifying workspace health checks from deployed config ..."
     $workspaceHealth = Test-InstalledWorkspaceHealth -InstallRoot $InstallPath -Port $Port
 
-    Write-Step "8/8  Cleanup ..."
+    Write-Step "9/9  Cleanup ..."
     Remove-Item $BackupDir -Recurse -Force -ErrorAction SilentlyContinue
     Remove-Item $restoreExtractDir -Recurse -Force -ErrorAction SilentlyContinue
     Write-Host "  Temporary restore directories removed." -ForegroundColor DarkGray
@@ -854,15 +971,23 @@ if ($restoreSummary.RestoredData.Count -gt 0) {
     Write-Host "  Restored data folder: $($restoreSummary.RestoredDataFolder)" -ForegroundColor DarkGray
     Write-Host "  Restored data items: $($restoreSummary.RestoredData -join ', ')" -ForegroundColor DarkGray
 }
+if ($restoreSummary.LegacyJsonRemoved.Count -gt 0) {
+    Write-Host "  Removed legacy config files: $($restoreSummary.LegacyJsonRemoved -join ', ')" -ForegroundColor DarkGray
+}
 if ($restoreSummary.LegacyConfigRemoved.Count -gt 0) {
     Write-Host "  Removed legacy environment config overrides: $($restoreSummary.LegacyConfigRemoved -join ', ')" -ForegroundColor DarkGray
 }
 
-Write-Step "5/8  Starting service '$ServiceName' ..."
+Write-Step "5/8  Ensuring service registration ..."
+Ensure-ServiceRegistration -Name $ServiceName -InstallRoot $InstallPath -ExecutableName $ExeName -Port $Port
+$deploymentManifestPath = Write-DeploymentManifest -InstallRoot $InstallPath -ServiceName $ServiceName -ExecutableName $ExeName -Port $Port -Operation 'update'
+Write-Host "  Deployment manifest: $deploymentManifestPath" -ForegroundColor DarkGray
+
+Write-Step "6/9  Starting service '$ServiceName' ..."
 $svc = Start-InstalledService -Name $ServiceName
 Write-Host "  Service status: $($svc.Status)" -ForegroundColor $(if ($svc.Status -eq 'Running') { 'Green' } else { 'Red' })
 
-Write-Step "6/8  Verifying health on port $Port ..."
+Write-Step "7/9  Verifying health on port $Port ..."
 $primaryHealth = Test-HealthEndpoint -Port $Port -Attempts 10 -TimeoutSeconds 3 -DelaySeconds 2
 $healthy = [bool]$primaryHealth.Healthy
 if ($healthy) {
@@ -872,10 +997,10 @@ if (-not $healthy) {
     Write-Warning "Service did not respond to health check after 20 seconds."
 }
 
-Write-Step "7/8  Verifying workspace health checks from deployed config ..."
+Write-Step "8/9  Verifying workspace health checks from deployed config ..."
 $workspaceHealth = Test-InstalledWorkspaceHealth -InstallRoot $InstallPath -Port $Port
 
-Write-Step "8/8  Cleanup ..."
+Write-Step "9/9  Cleanup ..."
 Remove-Item $BackupDir -Recurse -Force -ErrorAction SilentlyContinue
 Write-Host "  Backup directory removed." -ForegroundColor DarkGray
 

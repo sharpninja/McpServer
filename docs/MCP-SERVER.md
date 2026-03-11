@@ -139,18 +139,21 @@ For the Windows service this is `C:\ProgramData\McpServer\appsettings.json`.
 
 ## Production Deployment (Windows Service)
 
-`C:\ProgramData\McpServer\appsettings.json` is the canonical Windows service configuration.
-Environment-specific appsettings files (such as `appsettings.Production.json`) are not used by
-the Windows service and should not be relied on for runtime configuration.
+`C:\ProgramData\McpServer\appsettings.yaml` is the canonical Windows service configuration.
+`appsettings.json` should not exist in the Windows service install directory. Approved service
+deployments write a `.mcpservice-deployment.json` manifest containing SHA-256 hashes for the
+deployed `.exe` files and must go through `scripts\Update-McpService.ps1`.
 
-Update the service in-place (preserves `appsettings.json` and `*.db*` files):
+Update the service in-place (preserves `appsettings.yaml` and runtime data files):
 
 ```powershell
 gsudo .\scripts\Update-McpService.ps1
 ```
 
-The script performs: stop → backup all `*.json`/`*.db*` → publish Debug build → copy binaries →
-restore backup → start → health-check → archive backup to `%USERPROFILE%\McpServer-Backups\`.
+The script performs: stop → backup preserved config/data → publish Release build → copy binaries →
+restore `appsettings.yaml` and runtime data → remove legacy `appsettings.json` → write the
+deployment manifest with executable hashes → start → health-check → archive backup to
+`%USERPROFILE%\McpServer-Backups\`.
 
 Restore the last archived backup without publishing a new build:
 
@@ -173,7 +176,7 @@ Available in Debug builds and `Staging` environment; excluded in Production Rele
 | `GET` | `/mcpserver/diagnostic/execution-path` | `{ processPath, baseDirectory }` |
 | `GET` | `/mcpserver/diagnostic/appsettings-path` | `{ environmentName, contentRootPath, files[] }` |
 
-Use these to verify which binary and which `appsettings.json` a running instance has loaded.
+Use these to verify which binary and which `appsettings.yaml` a running instance has loaded.
 
 ## Administrative Configuration Endpoints
 

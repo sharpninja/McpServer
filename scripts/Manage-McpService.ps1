@@ -3,8 +3,9 @@
     Manages the MCP Server Windows service (install, uninstall, start, stop, restart, status).
 
 .DESCRIPTION
-    Publishes the MCP Server as a self-contained executable and manages it as a Windows service.
-    Uses gsudo for elevation so the script can be run from a non-admin shell.
+    Manages an already-deployed MCP Server Windows service.
+    Deployment and installation must go through Update-McpService.ps1 so
+    configuration restore and deployment verification always run.
 
 .PARAMETER Action
     The management action to perform: Install, Uninstall, Start, Stop, Restart, Status, Publish.
@@ -28,12 +29,12 @@
     HTTP port for the server. Default: 7147.
 
 .EXAMPLE
-    .\Manage-McpService.ps1 -Action Install
+    .\Manage-McpService.ps1 -Action Install  # intentionally blocked; use Update-McpService.ps1
     .\Manage-McpService.ps1 -Action Start
     .\Manage-McpService.ps1 -Action Status
     .\Manage-McpService.ps1 -Action Restart
     .\Manage-McpService.ps1 -Action Uninstall
-    .\Manage-McpService.ps1 -Action Publish  # publish only, no service changes
+    .\Manage-McpService.ps1 -Action Publish  # intentionally blocked; use Update-McpService.ps1
 #>
 [CmdletBinding()]
 param(
@@ -76,43 +77,7 @@ function Get-ServiceExePath {
 }
 
 function Publish-App {
-    Write-Host "Publishing MCP Server to $InstallPath ..." -ForegroundColor Cyan
-    if (-not (Test-Path $ProjectFile)) {
-        Write-Error "Project file not found: $ProjectFile"
-    }
-
-    dotnet publish $ProjectFile `
-        -c Debug `
-        -r win-x64 `
-        --self-contained true `
-        -p:PublishSingleFile=true `
-        -p:IncludeNativeLibrariesForSelfExtract=true `
-        -o $InstallPath
-
-    if ($LASTEXITCODE -ne 0) {
-        Write-Error "dotnet publish failed with exit code $LASTEXITCODE"
-    }
-
-    # Copy appsettings if not already present (don't overwrite user config)
-    $sourceSettings = Join-Path $ProjectDir 'appsettings.json'
-    $targetSettings = Join-Path $InstallPath 'appsettings.json'
-    if (-not (Test-Path $targetSettings)) {
-        Copy-Item $sourceSettings $targetSettings -Force
-        Write-Host "  Copied default appsettings.json" -ForegroundColor DarkGray
-    }
-    else {
-        Write-Host "  appsettings.json already exists — skipped (check for new config keys)" -ForegroundColor Yellow
-    }
-
-    $legacyProductionSettings = Join-Path $InstallPath 'appsettings.Production.json'
-    if (Test-Path $legacyProductionSettings) {
-        Remove-Item $legacyProductionSettings -Force -ErrorAction SilentlyContinue
-        if (-not (Test-Path $legacyProductionSettings)) {
-            Write-Host "  Removed legacy appsettings.Production.json (appsettings.json is canonical)" -ForegroundColor DarkGray
-        }
-    }
-
-    Write-Host "Publish complete." -ForegroundColor Green
+    Write-Error "Direct service publishing is disabled. Use: gsudo powershell -ExecutionPolicy Bypass -File .\scripts\Update-McpService.ps1"
 }
 
 # ---------------------------------------------------------------------------
@@ -120,35 +85,7 @@ function Publish-App {
 # ---------------------------------------------------------------------------
 
 function Install-McpService {
-    Assert-Gsudo
-
-    $svc = Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
-    if ($svc) {
-        Write-Host "Service '$ServiceName' already exists (Status: $($svc.Status)). Use -Action Uninstall first." -ForegroundColor Yellow
-        return
-    }
-
-    # Publish first
-    Publish-App
-
-    $binPath = Get-ServiceExePath
-    Write-Host "Installing service '$ServiceName' ..." -ForegroundColor Cyan
-    Write-Host "  binPath = $binPath" -ForegroundColor DarkGray
-
-    gsudo {
-        param($svcName, $binPath, $dispName, $desc)
-        sc.exe create $svcName binPath= $binPath start= auto DisplayName= $dispName
-        if ($LASTEXITCODE -ne 0) { throw "sc.exe create failed with exit code $LASTEXITCODE" }
-        sc.exe description $svcName $desc
-        sc.exe failure $svcName reset= 86400 actions= restart/60000/restart/60000/restart/60000
-    } -args $ServiceName, $binPath, $DisplayName, $Description
-
-    if ($LASTEXITCODE -ne 0) {
-        Write-Error "Service installation failed with exit code $LASTEXITCODE"
-    }
-
-    Write-Host "Service '$ServiceName' installed successfully." -ForegroundColor Green
-    Write-Host "Run: .\Manage-McpService.ps1 -Action Start" -ForegroundColor DarkGray
+    Write-Error "Direct service installation is disabled. Use: gsudo powershell -ExecutionPolicy Bypass -File .\scripts\Update-McpService.ps1"
 }
 
 function Uninstall-McpService {
