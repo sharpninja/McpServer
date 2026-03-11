@@ -467,6 +467,11 @@ internal sealed class SampleHostConsoleApplication : IDisposable
             {
                 WriteExpiredAuthenticationMessage("closing the previous session log", exception.Message);
             }
+            catch (Exception exception)
+            {
+                Console.Error.WriteLine($"warning> Failed to close the previous session log cleanly: {exception.Message}");
+                Console.Error.WriteLine();
+            }
         }
 
         _agentSession = await _chatAgent.CreateSessionAsync(cancellationToken).ConfigureAwait(false);
@@ -490,6 +495,11 @@ internal sealed class SampleHostConsoleApplication : IDisposable
         catch (McpUnauthorizedException exception)
         {
             WriteExpiredAuthenticationMessage("starting the session log", exception.Message);
+        }
+        catch (Exception exception)
+        {
+            Console.Error.WriteLine($"warning> Failed to start the session log: {exception.Message}");
+            Console.Error.WriteLine();
         }
     }
 
