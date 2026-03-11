@@ -17,6 +17,7 @@ namespace McpServer.McpAgent.Hosting;
 public sealed class McpHostedAgent : IMcpHostedAgent
 {
     private readonly ChatClientAgentOptions _agentOptions;
+    private readonly ILoggerFactory _loggerFactory;
     private readonly McpAgentOptions _options;
     private readonly IServiceProvider _serviceProvider;
 
