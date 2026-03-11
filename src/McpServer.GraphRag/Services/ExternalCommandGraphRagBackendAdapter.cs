@@ -85,7 +85,9 @@ internal sealed class ExternalCommandGraphRagBackendAdapter(
                 FallbackUsed = false,
                 FallbackReason = null,
                 FailureCode = null,
-                Backend = AdapterName
+                Backend = AdapterName,
+                QueryCorpus = "graphrag-backend",
+                VisibilityNote = null
             };
         }
         catch (Exception ex) when (ex is not OperationCanceledException)

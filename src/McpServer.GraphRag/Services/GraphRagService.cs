@@ -50,6 +50,7 @@ internal sealed class GraphRagService : IGraphRagService
     {
         var workspacePath = ResolveWorkspacePath();
         var graphRoot = ResolveGraphRoot(workspacePath);
+        var inputPath = Path.Combine(graphRoot, "input");
         var persisted = await TryReadStatusAsync(graphRoot, cancellationToken).ConfigureAwait(false);
         var backend = SelectBackend();
         var initialized = HasInitializedStructure(graphRoot);
@@ -57,6 +58,10 @@ internal sealed class GraphRagService : IGraphRagService
         var isIndexedByArtifact = IsReadyArtifactPresent(graphRoot);
         var isIndexed = persisted?.IsIndexed == true && isIndexedByArtifact;
         var backendAvailabilityError = GetBackendAvailabilityError(backend);
+        var inputDocumentCount = Directory.Exists(inputPath)
+            ? Directory.EnumerateFiles(inputPath, "*", SearchOption.AllDirectories).Count()
+            : 0;
+        var isInternalFallback = string.Equals(backend.AdapterName, "internal-fallback", StringComparison.OrdinalIgnoreCase);
 
         return new GraphRagStatusResponse
         {
@@ -75,7 +80,14 @@ internal sealed class GraphRagService : IGraphRagService
             ArtifactVersion = persisted?.ArtifactVersion ?? _options.ArtifactVersion,
             LastIndexDurationMs = persisted?.LastIndexDurationMs,
             LastIndexedDocumentCount = persisted?.LastIndexedDocumentCount,
-            Backend = backend.AdapterName
+            Backend = backend.AdapterName,
+            IndexCorpus = "graphrag-input",
+            QueryCorpus = isInternalFallback ? "context-search" : "graphrag-backend",
+            InputPath = inputPath,
+            InputDocumentCount = inputDocumentCount,
+            VisibilityNote = isInternalFallback
+                ? "internal-fallback indexes files under GraphRAG input but query results come from context-search."
+                : null
         };
     }
 
@@ -268,7 +280,9 @@ internal sealed class GraphRagService : IGraphRagService
             FallbackUsed = fallbackUsed,
             FallbackReason = fallbackReason,
             FailureCode = fallbackUsed ? "query_fallback" : null,
-            Backend = SelectBackend().AdapterName
+            Backend = SelectBackend().AdapterName,
+            QueryCorpus = "context-search",
+            VisibilityNote = "Fallback query uses context-search chunks; GraphRAG input visibility depends on ingestion into context-search."
         };
     }
 

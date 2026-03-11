@@ -62,6 +62,25 @@ public sealed class GraphRagServiceTests : IDisposable
 
         Assert.True(response.FallbackUsed);
         Assert.Equal("graphrag_disabled", response.FallbackReason);
+        Assert.Equal("context-search", response.QueryCorpus);
+    }
+
+    [Fact]
+    public async Task Status_InternalFallback_ReportsCorpusAndInputDiagnostics()
+    {
+        var sut = CreateSut(enabled: true);
+        var initialized = await sut.InitializeAsync().ConfigureAwait(true);
+        var localDocPath = Path.Combine(initialized.GraphRoot, "input", "docs", "prg", "Commodore_64_Programmers_Reference_Guide.txt");
+        Directory.CreateDirectory(Path.GetDirectoryName(localDocPath)!);
+        await File.WriteAllTextAsync(localDocPath, "Video Bank Selection").ConfigureAwait(true);
+
+        var status = await sut.GetStatusAsync().ConfigureAwait(true);
+
+        Assert.Equal("graphrag-input", status.IndexCorpus);
+        Assert.Equal("context-search", status.QueryCorpus);
+        Assert.Equal(Path.Combine(status.GraphRoot, "input"), status.InputPath);
+        Assert.Equal(1, status.InputDocumentCount);
+        Assert.Contains("internal-fallback", status.VisibilityNote, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
