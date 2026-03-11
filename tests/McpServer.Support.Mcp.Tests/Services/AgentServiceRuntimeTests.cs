@@ -77,7 +77,7 @@ public sealed class AgentServiceRuntimeTests : IDisposable
         await _processManager.Received(1).LaunchAsync(
             workspacePath,
             "planner",
-            Arg.Is<string>(command => command.Contains("--id planner", StringComparison.Ordinal)),
+            Arg.Is<string>(command => command != null && command.Contains("--id planner", StringComparison.Ordinal)),
             workspacePath,
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }

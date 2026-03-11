@@ -39,7 +39,7 @@ public sealed class AgentHealthMonitorServiceTests
         agentService.LaunchAgentAsync("C:/ws-a", "planner", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new AgentProcessInfo { AgentId = "planner", WorkspacePath = "C:/ws-a", Status = AgentProcessStatus.Running }));
 
-        var options = Options.Create(new AgentProcessManagerOptions
+        var options = Microsoft.Extensions.Options.Options.Create(new AgentProcessManagerOptions
         {
             HealthCheckIntervalSeconds = 3600,
             RestartBackoffBaseSeconds = 0,
@@ -79,7 +79,7 @@ public sealed class AgentHealthMonitorServiceTests
                 RestartPolicy = "never",
             }));
 
-        var options = Options.Create(new AgentProcessManagerOptions
+        var options = Microsoft.Extensions.Options.Options.Create(new AgentProcessManagerOptions
         {
             HealthCheckIntervalSeconds = 3600,
             RestartBackoffBaseSeconds = 0,

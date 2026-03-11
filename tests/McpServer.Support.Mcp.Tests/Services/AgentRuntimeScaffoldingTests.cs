@@ -37,7 +37,7 @@ public sealed class AgentRuntimeScaffoldingTests
 
         var strategy = new WorktreeAgentIsolationStrategy(
             processRunner,
-            Options.Create(new AgentProcessManagerOptions()),
+            Microsoft.Extensions.Options.Options.Create(new AgentProcessManagerOptions()),
             NullLogger<WorktreeAgentIsolationStrategy>.Instance);
 
         try
@@ -46,7 +46,8 @@ public sealed class AgentRuntimeScaffoldingTests
 
             await processRunner.Received(1).RunAsync(
                 Arg.Is<ProcessRunRequest>(request =>
-                    request.FileName == "git"
+                    request != null
+                    && request.FileName == "git"
                     && request.WorkingDirectory == Path.GetFullPath(workspacePath)
                     && request.Arguments.Contains("worktree add", StringComparison.Ordinal)),
                 Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -71,7 +72,7 @@ public sealed class AgentRuntimeScaffoldingTests
 
         var strategy = new CloneAgentIsolationStrategy(
             processRunner,
-            Options.Create(new AgentProcessManagerOptions()),
+            Microsoft.Extensions.Options.Options.Create(new AgentProcessManagerOptions()),
             NullLogger<CloneAgentIsolationStrategy>.Instance);
 
         try
@@ -80,7 +81,8 @@ public sealed class AgentRuntimeScaffoldingTests
 
             await processRunner.Received(1).RunAsync(
                 Arg.Is<ProcessRunRequest>(request =>
-                    request.FileName == "git"
+                    request != null
+                    && request.FileName == "git"
                     && request.WorkingDirectory == Path.GetFullPath(workspacePath)
                     && request.Arguments.Contains("clone --depth 1", StringComparison.Ordinal)),
                 Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -107,7 +109,8 @@ public sealed class AgentRuntimeScaffoldingTests
         Assert.Equal("main", branch);
         await processRunner.Received(1).RunAsync(
             Arg.Is<ProcessRunRequest>(request =>
-                request.FileName == "git"
+                request != null
+                && request.FileName == "git"
                 && request.WorkingDirectory == workDirectory
                 && request.Arguments == "rev-parse --abbrev-ref HEAD"),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -118,15 +121,15 @@ public sealed class AgentRuntimeScaffoldingTests
     {
         var processRunner = Substitute.For<IProcessRunner>();
         processRunner.RunAsync(
-                Arg.Is<ProcessRunRequest>(request => request.Arguments == "rev-parse --abbrev-ref HEAD"),
+                Arg.Is<ProcessRunRequest>(request => request != null && request.Arguments == "rev-parse --abbrev-ref HEAD"),
                 Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new ProcessRunResult(0, "develop", null)));
         processRunner.RunAsync(
-                Arg.Is<ProcessRunRequest>(request => request.Arguments.StartsWith("checkout -b ", StringComparison.Ordinal)),
+                Arg.Is<ProcessRunRequest>(request => request != null && request.Arguments.StartsWith("checkout -b ", StringComparison.Ordinal)),
                 Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new ProcessRunResult(0, string.Empty, null)));
         processRunner.RunAsync(
-                Arg.Is<ProcessRunRequest>(request => request.Arguments == "checkout \"develop\""),
+                Arg.Is<ProcessRunRequest>(request => request != null && request.Arguments == "checkout \"develop\""),
                 Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new ProcessRunResult(0, string.Empty, null)));
 
@@ -139,12 +142,12 @@ public sealed class AgentRuntimeScaffoldingTests
         await strategy.FinalizeBranchAsync(workDirectory, "planner").ConfigureAwait(true);
 
         await processRunner.Received().RunAsync(
-            Arg.Is<ProcessRunRequest>(request => request.WorkingDirectory == workDirectory),
+            Arg.Is<ProcessRunRequest>(request => request != null && request.WorkingDirectory == workDirectory),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
     [Fact]
-    public async Task MarkerFileService_BuildTemplateContext_IncludesAgentAdditions()
+    public void MarkerFileService_BuildTemplateContext_IncludesAgentAdditions()
     {
         var additions = new List<(string AgentId, string Content)>
         {
