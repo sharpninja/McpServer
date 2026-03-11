@@ -8,14 +8,26 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+$yamlKeyPattern = '[A-Za-z0-9_][A-Za-z0-9_\-]*'
 
 function ConvertFrom-YamlScalar {
+    <#
+    .SYNOPSIS
+        Normalizes a simple YAML scalar value for validation.
+
+    .DESCRIPTION
+        Trims surrounding whitespace and removes matching single- or double-quote delimiters
+        when both ends use the same quote character. Mismatched quote pairs are left unchanged
+        so malformed values are not silently rewritten during validation.
+    #>
     param(
         [string]$Value
     )
 
     $trimmed = $Value.Trim()
-    if (($trimmed.StartsWith("'") -and $trimmed.EndsWith("'")) -or ($trimmed.StartsWith('"') -and $trimmed.EndsWith('"'))) {
+    if ($trimmed.Length -ge 2 -and (
+            ($trimmed[0] -eq "'" -and $trimmed[$trimmed.Length - 1] -eq "'") -or
+            ($trimmed[0] -eq '"' -and $trimmed[$trimmed.Length - 1] -eq '"'))) {
         return $trimmed.Substring(1, $trimmed.Length - 2)
     }
 
@@ -23,6 +35,16 @@ function ConvertFrom-YamlScalar {
 }
 
 function Get-McpInstancesFromYaml {
+    <#
+    .SYNOPSIS
+        Extracts the Mcp:Instances block from the repository YAML settings file.
+
+    .DESCRIPTION
+        Parses the checked-in appsettings YAML using the repository's current indentation pattern
+        so the validation script can run in CI without depending on an external YAML module.
+        The return value includes a HasMcp flag and an ordered dictionary of instance settings
+        containing RepoRoot, Port, and TodoStorage fields needed by this validator.
+    #>
     param(
         [string]$Path
     )
@@ -60,11 +82,12 @@ function Get-McpInstancesFromYaml {
             continue
         }
 
-        if ($line -match '^  [A-Za-z0-9_-]+:\s*$') {
+        if ($line -match "^  ${yamlKeyPattern}:\s*$") {
+            # A sibling key under Mcp means the Instances block has ended.
             break
         }
 
-        if ($line -match '^    ([^:\s][^:]*):\s*$') {
+        if ($line -match "^    (${yamlKeyPattern}):\s*$") {
             $currentInstance = $Matches[1]
             $instances[$currentInstance] = [ordered]@{
                 RepoRoot = $null
@@ -87,7 +110,7 @@ function Get-McpInstancesFromYaml {
             continue
         }
 
-        if ($line -match '^      [A-Za-z0-9_-]+:\s*') {
+        if ($line -match '^      (RepoRoot|Port):\s*') {
             $inTodoStorage = $false
         }
 
@@ -118,6 +141,51 @@ function Get-McpInstancesFromYaml {
     }
 }
 
+function ConvertTo-McpInstanceMap {
+    <#
+    .SYNOPSIS
+        Normalizes parsed instance settings into a consistent ordered dictionary.
+
+    .DESCRIPTION
+        Converts either JSON-derived PSCustomObject instances or the YAML parser output into
+        the same RepoRoot/Port/TodoStorage shape so the validation logic can iterate a single
+        data structure regardless of the source file format.
+    #>
+    param(
+        [object]$Instances
+    )
+
+    $instanceMap = [ordered]@{}
+    if ($null -eq $Instances) {
+        return $instanceMap
+    }
+
+    $entries = if ($Instances -is [System.Collections.IDictionary]) {
+        $Instances.GetEnumerator() | Sort-Object Name
+    }
+    else {
+        $Instances.PSObject.Properties | ForEach-Object {
+            [pscustomobject]@{
+                Name = $_.Name
+                Value = $_.Value
+            }
+        } | Sort-Object Name
+    }
+
+    foreach ($entry in $entries) {
+        $instanceMap[$entry.Name] = [ordered]@{
+            RepoRoot = $entry.Value.RepoRoot
+            Port = $entry.Value.Port
+            TodoStorage = [ordered]@{
+                Provider = $entry.Value.TodoStorage.Provider
+                SqliteDataSource = $entry.Value.TodoStorage.SqliteDataSource
+            }
+        }
+    }
+
+    return $instanceMap
+}
+
 if ([string]::IsNullOrWhiteSpace($ConfigPath)) {
     $candidatePaths = @(
         "src/McpServer.Support.Mcp/appsettings.yaml",
@@ -139,7 +207,7 @@ $config = switch ($extension.ToLowerInvariant()) {
         $json = Get-Content -Raw -Path $ConfigPath | ConvertFrom-Json
         @{
             HasMcp = $null -ne $json.Mcp
-            Instances = $json.Mcp.Instances
+            Instances = ConvertTo-McpInstanceMap -Instances $json.Mcp.Instances
         }
     }
     default { throw "Unsupported config format '$extension' for '$ConfigPath'." }
@@ -155,17 +223,7 @@ if (-not $instances) {
     exit 0
 }
 
-$instanceEntries = if ($instances -is [System.Collections.IDictionary]) {
-    $instances.GetEnumerator() | Sort-Object Name
-}
-else {
-    $instances.PSObject.Properties | ForEach-Object {
-        [pscustomobject]@{
-            Name = $_.Name
-            Value = $_.Value
-        }
-    }
-}
+$instanceEntries = $instances.GetEnumerator() | Sort-Object Name
 
 $ports = @{}
 $instanceEntries | ForEach-Object {
