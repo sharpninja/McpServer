@@ -332,12 +332,15 @@ templates:
       ## Naming Conventions
 
 
-      - TODO IDs for new items must be uppercase kebab-case with exactly 3 segments: <SDLC-PHASE>-<AREA>-### (regex:
-      ^[A-Z]+-[A-Z0-9]+-\d{3}$).
+      - Persisted TODO IDs must be uppercase canonical ids in either <SDLC-PHASE>-<AREA>-### form
+      (regex: ^[A-Z]+-[A-Z0-9]+-\d{3}$) or ISSUE-{number} form (regex: ^ISSUE-\d+$).
 
-      - Valid TODO IDs: PLAN-NAMINGCONVENTIONS-001, MCP-API-042.
+      - Valid TODO IDs: PLAN-NAMINGCONVENTIONS-001, MCP-API-042, ISSUE-17.
 
-      - Invalid TODO IDs: plan-api-001, MCP-API-42, MCPAPI001.
+      - Invalid TODO IDs: plan-api-001, MCP-API-42, ISSUE-ABC, MCPAPI001.
+
+      - Create requests may use ISSUE-NEW only when the intent is to create a new GitHub-backed TODO.
+      The server will create the GitHub issue immediately and persist the TODO using the canonical ISSUE-{number} id.
 
       - Session IDs must use <Agent>-<yyyyMMddTHHmmssZ>-<suffix> and start with the exact agent/source type prefix.
 

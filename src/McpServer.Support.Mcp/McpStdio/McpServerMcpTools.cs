@@ -41,6 +41,8 @@ public sealed class FwhMcpTools
     private readonly IWorkspaceService _workspaceService;
     private readonly IWorkspacePolicyService _workspacePolicyService;
     private readonly TodoServiceResolver _todoServiceResolver;
+    private readonly TodoCreationService _todoCreationService;
+    private readonly TodoUpdateService _todoUpdateService;
     private readonly IPromptTemplateService _promptTemplateService;
     private readonly ILogger<FwhMcpTools> _logger;
 
@@ -63,6 +65,8 @@ public sealed class FwhMcpTools
         IWorkspaceService workspaceService,
         IWorkspacePolicyService workspacePolicyService,
         TodoServiceResolver todoServiceResolver,
+        TodoCreationService todoCreationService,
+        TodoUpdateService todoUpdateService,
         IPromptTemplateService promptTemplateService,
         ILogger<FwhMcpTools> logger)
     {
@@ -84,6 +88,8 @@ public sealed class FwhMcpTools
         _workspaceService = workspaceService;
         _workspacePolicyService = workspacePolicyService;
         _todoServiceResolver = todoServiceResolver;
+        _todoCreationService = todoCreationService;
+        _todoUpdateService = todoUpdateService;
         _promptTemplateService = promptTemplateService;
     }
 
@@ -456,7 +462,7 @@ public sealed class FwhMcpTools
     /// <summary>TR-PLANNED-013: Create a new TODO item.</summary>
     [McpServerTool(Name = "todo_create"), Description("Create a new TODO item. Requires id, title, section, priority.")]
     public async Task<string> TodoCreate(
-        [Description("Item id (e.g. MVP-APP-006)")] string id,
+        [Description("Item id (e.g. MVP-APP-006 or ISSUE-NEW)")] string id,
         [Description("Item title")] string title,
         [Description("Section (e.g. mvp-app)")] string section,
         [Description("Priority (high/medium/low)")] string priority,
@@ -477,7 +483,7 @@ public sealed class FwhMcpTools
                 Estimate = estimate,
                 Description = description != null ? new[] { description } : null
             };
-            var result = await _workspaceAccessor.GetTodoService().CreateAsync(req, cancellationToken).ConfigureAwait(false);
+            var result = await _todoCreationService.CreateAsync(req, cancellationToken).ConfigureAwait(false);
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { success = true, item = result.Item });
         }
@@ -503,7 +509,7 @@ public sealed class FwhMcpTools
         try
         {
             var req = new TodoUpdateRequest { Title = title, Priority = priority, Done = done, Note = note };
-            var result = await _workspaceAccessor.GetTodoService().UpdateAsync(id, req, cancellationToken).ConfigureAwait(false);
+            var result = await _todoUpdateService.UpdateAsync(id, req, cancellationToken).ConfigureAwait(false);
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { success = true, item = result.Item });
         }

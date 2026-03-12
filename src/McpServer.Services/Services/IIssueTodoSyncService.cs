@@ -27,6 +27,13 @@ public interface IIssueTodoSyncService
     /// <returns>Mutation result.</returns>
     Task<GitHubMutationResult> SyncTodoToIssueAsync(string todoId, CancellationToken ct = default);
 
+    /// <summary>TR-MCP-GH-006: Adds a GitHub issue comment describing an ISSUE-* TODO update.</summary>
+    /// <param name="previousTodo">The TODO state before the update.</param>
+    /// <param name="currentTodo">The TODO state after the update.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Comment result.</returns>
+    Task<GitHubCommentResult> CommentOnTodoUpdateAsync(TodoFlatItem previousTodo, TodoFlatItem currentTodo, CancellationToken ct = default);
+
     /// <summary>TR-GH-013-003: Batch sync from TODO.yaml to GitHub.</summary>
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Sync result with counts.</returns>

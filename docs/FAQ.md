@@ -81,7 +81,13 @@ Two backends are available, configured via `Mcp:TodoStorage:Provider`:
 
 ### How are TODO IDs structured?
 
-IDs follow a `SECTION-NNN` pattern (e.g., `APP-001`, `SUPPORT-042`). GitHub-synced items use `ISSUE-{number}` (e.g., `ISSUE-17`).
+Persisted TODO IDs follow one of two canonical forms:
+
+- `<PHASE>-<AREA>-###` for standard workspace TODOs (for example, `MCP-AUTH-001`)
+- `ISSUE-{number}` for GitHub-backed TODOs (for example, `ISSUE-17`)
+
+Create requests may also use `ISSUE-NEW`. The server immediately creates a GitHub issue, determines the
+issue number, and saves the TODO using the canonical `ISSUE-{number}` id.
 
 ### Can I sync TODOs with GitHub Issues?
 
@@ -92,6 +98,9 @@ Yes. Bidirectional sync is available:
 - **Single issue**: `POST /mcpserver/gh/issues/{number}/sync`
 
 Synced items get `ISSUE-{number}` IDs. Status changes (done ↔ closed) propagate in both directions.
+For existing `ISSUE-*` items, MCP TODO priority is authoritative and syncs to canonical GitHub labels such
+as `priority: HIGH`. After the first sync, ISSUE descriptions remain unchanged and later TODO updates add a
+GitHub issue comment summarizing the change set.
 
 ---
 

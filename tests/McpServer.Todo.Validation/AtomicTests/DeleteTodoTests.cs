@@ -63,7 +63,7 @@ public sealed class DeleteTodoTests
     [Fact]
     public async Task Delete_NonExistentItem_Returns404()
     {
-        var fakeId = $"NONEXISTENT-{Guid.NewGuid():N}";
+        var fakeId = TodoEndpointFixture.GenerateMissingId();
         var response = await _fixture.Client.DeleteAsync(
             $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}");
 

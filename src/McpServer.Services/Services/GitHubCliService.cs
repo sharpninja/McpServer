@@ -18,6 +18,7 @@ public sealed class GitHubCliService : IGitHubCliService
     private readonly IGitHubWorkspaceTokenStore? _tokenStore;
     private readonly IHttpContextAccessor? _httpContextAccessor;
     private readonly IOptionsMonitor<GitHubIntegrationOptions>? _githubOptions;
+    private readonly WorkspaceServiceAccessor? _workspaceAccessor;
 
     /// <summary>TR-PLANNED-013: Constructor with IProcessRunner for testability.</summary>
     public GitHubCliService(
@@ -25,13 +26,15 @@ public sealed class GitHubCliService : IGitHubCliService
         ILogger<GitHubCliService> logger,
         IGitHubWorkspaceTokenStore? tokenStore = null,
         IHttpContextAccessor? httpContextAccessor = null,
-        IOptionsMonitor<GitHubIntegrationOptions>? githubOptions = null)
+        IOptionsMonitor<GitHubIntegrationOptions>? githubOptions = null,
+        WorkspaceServiceAccessor? workspaceAccessor = null)
     {
         _logger = logger;
         _processRunner = processRunner;
         _tokenStore = tokenStore;
         _httpContextAccessor = httpContextAccessor;
         _githubOptions = githubOptions;
+        _workspaceAccessor = workspaceAccessor;
     }
 
     /// <inheritdoc />
@@ -293,6 +296,7 @@ public sealed class GitHubCliService : IGitHubCliService
     {
         var preferStoredToken = _githubOptions?.CurrentValue.PreferStoredToken ?? true;
         var allowFallback = _githubOptions?.CurrentValue.AllowCliFallback ?? true;
+        var workingDirectory = ResolveWorkingDirectory();
 
         if (preferStoredToken)
         {
@@ -300,7 +304,7 @@ public sealed class GitHubCliService : IGitHubCliService
             if (!string.IsNullOrWhiteSpace(token))
             {
                 _logger.LogDebug("GitHub CLI auth mode: stored workspace token.");
-                return await _processRunner.RunAsync(new ProcessRunRequest(GhExe, args, token), ct).ConfigureAwait(false);
+                return await _processRunner.RunAsync(new ProcessRunRequest(GhExe, args, token, workingDirectory), ct).ConfigureAwait(false);
             }
         }
 
@@ -311,7 +315,10 @@ public sealed class GitHubCliService : IGitHubCliService
         }
 
         _logger.LogDebug("GitHub CLI auth mode: CLI fallback.");
-        return await _processRunner.RunAsync(GhExe, args, ct).ConfigureAwait(false);
+        if (string.IsNullOrWhiteSpace(workingDirectory))
+            return await _processRunner.RunAsync(GhExe, args, ct).ConfigureAwait(false);
+
+        return await _processRunner.RunAsync(new ProcessRunRequest(GhExe, args, WorkingDirectory: workingDirectory), ct).ConfigureAwait(false);
     }
 
     private async Task<string?> TryResolveWorkspaceTokenAsync(CancellationToken ct)
@@ -338,6 +345,14 @@ public sealed class GitHubCliService : IGitHubCliService
         }
 
         return record.AccessToken;
+    }
+
+    private string? ResolveWorkingDirectory()
+    {
+        var workingDirectory = _workspaceAccessor?.GetWorkspacePath();
+        return string.IsNullOrWhiteSpace(workingDirectory)
+            ? null
+            : Path.GetFullPath(workingDirectory);
     }
 
     private GitHubIssueDetail? ParseIssueDetail(string? json)
