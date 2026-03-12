@@ -87,6 +87,7 @@ public sealed class CloneAgentIsolationStrategy : IAgentIsolationStrategy
         if (!File.Exists(markerSourcePath))
             return;
 
+        Directory.CreateDirectory(clonePath);
         var markerDestinationPath = Path.Combine(clonePath, MarkerFileService.MarkerFileName);
         Directory.CreateDirectory(clonePath);
         await using var source = File.OpenRead(markerSourcePath);

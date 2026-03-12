@@ -62,7 +62,7 @@ public sealed class QuerySessionLogTests
     public async Task Query_FilterByAgent_Returns200Filtered()
     {
         // First submit a session with known agent
-        var sessionId = SessionLogEndpointFixture.GenerateSessionId();
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId("QueryAgentTest");
         var payload = new
         {
             sourceType = "QueryAgentTest",
@@ -96,7 +96,7 @@ public sealed class QuerySessionLogTests
     [Fact]
     public async Task Query_FilterByModel_Returns200Filtered()
     {
-        var sessionId = SessionLogEndpointFixture.GenerateSessionId();
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId("AuditTest");
         var uniqueModel = $"audit-model-{Guid.NewGuid():N}";
         var payload = new
         {
@@ -192,7 +192,7 @@ public sealed class QuerySessionLogTests
     {
         // Submit a session with unique text
         var uniqueText = $"unique-search-text-{Guid.NewGuid():N}";
-        var sessionId = SessionLogEndpointFixture.GenerateSessionId();
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId("AuditTest");
         var payload = new
         {
             sourceType = "AuditTest",

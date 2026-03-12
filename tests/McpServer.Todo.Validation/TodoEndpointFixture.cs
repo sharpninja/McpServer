@@ -13,7 +13,7 @@ public sealed class TodoEndpointFixture : IDisposable
     private static int s_idCounter = Random.Shared.Next(0, 1000);
 
     /// <summary>Base URL of the running MCP Server.</summary>
-    public const string BaseUrl = "http://localhost:7147";
+    public static string BaseUrl { get; } = Environment.GetEnvironmentVariable("MCPSERVER_BASEURL") ?? "http://localhost:7147";
 
     /// <summary>Route prefix for TODO endpoints.</summary>
     public const string TodoRoute = "/mcpserver/todo";

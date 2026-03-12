@@ -678,6 +678,7 @@ public sealed class TodoLifecycleIntegrationTests
             File.WriteAllText(Path.Combine(projectDir, "TODO.yaml"), SeedYaml);
 
             builder.UseEnvironment("Test");
+            builder.UseContentRoot(ResolveContentRoot());
             builder.ConfigureAppConfiguration(config =>
             {
                 config.AddInMemoryCollection(new Dictionary<string, string?>
@@ -688,6 +689,21 @@ public sealed class TodoLifecycleIntegrationTests
                     { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" }
                 });
             });
+        }
+
+        private static string ResolveContentRoot()
+        {
+            var current = new DirectoryInfo(AppContext.BaseDirectory);
+            while (current is not null)
+            {
+                var solutionPath = Path.Combine(current.FullName, "McpServer.sln");
+                if (File.Exists(solutionPath))
+                    return Path.Combine(current.FullName, "src", "McpServer.Support.Mcp");
+
+                current = current.Parent;
+            }
+
+            throw new DirectoryNotFoundException("Could not locate the solution root for lifecycle integration tests.");
         }
 
         private new void Dispose()

@@ -42,8 +42,8 @@ public sealed class AppendDialogTests
     public async Task AppendDialog_ToExistingEntry_Returns200WithCount()
     {
         // First create a session with an entry
-        var sessionId = SessionLogEndpointFixture.GenerateSessionId();
-        var requestId = SessionLogEndpointFixture.GenerateRequestId();
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId("DialogTest");
+        var requestId = SessionLogEndpointFixture.GenerateRequestId("append-dialog-existing-entry");
         var payload = new
         {
             sourceType = "DialogTest",
@@ -101,8 +101,8 @@ public sealed class AppendDialogTests
     [Fact]
     public async Task AppendDialog_MultipleAppends_AccumulatesCount()
     {
-        var sessionId = SessionLogEndpointFixture.GenerateSessionId();
-        var requestId = SessionLogEndpointFixture.GenerateRequestId();
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId("DialogAccumTest");
+        var requestId = SessionLogEndpointFixture.GenerateRequestId("append-dialog-accumulates");
         var payload = new
         {
             sourceType = "DialogAccumTest",
@@ -154,7 +154,9 @@ public sealed class AppendDialogTests
     [Fact]
     public async Task AppendDialog_NonExistentSession_Returns404()
     {
-        var dialogRoute = $"{SessionLogEndpointFixture.SessionLogRoute}/NoSuchAgent/no-session/no-request/dialog";
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId("NoSuchAgent", "missing-session");
+        var requestId = SessionLogEndpointFixture.GenerateRequestId("missing-request");
+        var dialogRoute = $"{SessionLogEndpointFixture.SessionLogRoute}/NoSuchAgent/{sessionId}/{requestId}/dialog";
         var items = new[] { new { timestamp = DateTimeOffset.UtcNow.ToString("o"), role = "model", content = "test", category = "reasoning" } };
         var response = await _fixture.Client.PostAsJsonAsync(dialogRoute, items);
 

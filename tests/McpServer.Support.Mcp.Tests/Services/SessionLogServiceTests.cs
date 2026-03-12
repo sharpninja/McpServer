@@ -227,15 +227,11 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task WhenSubmittingWithNonCanonicalSessionIdThenSessionIsCreated()
+    public async Task WhenSubmittingWithNonCanonicalSessionIdThenArgumentExceptionIsThrown()
     {
         var dto = CreateTestDto("Cursor", "cursor-invalid");
 
-        var id = await _sut.SubmitAsync(dto).ConfigureAwait(true);
-
-        Assert.True(id > 0);
-        var stored = await _db.SessionLogs.FirstAsync(s => s.Id == id).ConfigureAwait(true);
-        Assert.Equal("cursor-invalid", stored.SessionId);
+        await Assert.ThrowsAsync<ArgumentException>(() => _sut.SubmitAsync(dto)).ConfigureAwait(true);
     }
 
     [Fact]

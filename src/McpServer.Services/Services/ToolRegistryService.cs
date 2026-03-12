@@ -32,16 +32,21 @@ public sealed class ToolRegistryService : IToolRegistryService
         if (string.IsNullOrEmpty(kw))
             return new ToolSearchResult([], 0);
 
+        var normalizedWorkspace = NormalizeWorkspacePath(workspacePath);
+
         // Singularize/pluralize-tolerant: match if the tag starts with the keyword or vice-versa.
-        var query = _db.ToolDefinitions
-            .Include(t => t.Tags)
+        IQueryable<ToolDefinitionEntity> query = _db.ToolDefinitions.Include(t => t.Tags);
+        if (normalizedWorkspace is not null)
+            query = query.IgnoreQueryFilters();
+
+        query = query
             .Where(t => t.Tags.Any(tag =>
                 tag.Tag.Contains(kw) || kw.Contains(tag.Tag))
                 || t.Name.Contains(kw)
                 || t.Description.Contains(kw));
 
         // Scope: global + specified workspace.
-        query = FilterScope(query, workspacePath);
+        query = FilterScope(query, normalizedWorkspace);
 
         var entities = await query.OrderBy(t => t.Name).ToListAsync(ct).ConfigureAwait(false);
         var dtos = entities.Select(ToDto).ToList();
@@ -60,8 +65,12 @@ public sealed class ToolRegistryService : IToolRegistryService
     /// <inheritdoc />
     public async Task<ToolSearchResult> ListAsync(string? workspacePath = null, CancellationToken ct = default)
     {
-        var query = _db.ToolDefinitions.Include(t => t.Tags).AsNoTracking();
-        query = FilterScope(query, workspacePath);
+        var normalizedWorkspace = NormalizeWorkspacePath(workspacePath);
+        IQueryable<ToolDefinitionEntity> query = _db.ToolDefinitions.Include(t => t.Tags).AsNoTracking();
+        if (normalizedWorkspace is not null)
+            query = query.IgnoreQueryFilters();
+
+        query = FilterScope(query, normalizedWorkspace);
 
         var entities = await query.OrderBy(t => t.Name).ToListAsync(ct).ConfigureAwait(false);
         var dtos = entities.Select(ToDto).ToList();

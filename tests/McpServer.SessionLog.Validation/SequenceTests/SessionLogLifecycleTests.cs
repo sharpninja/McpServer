@@ -42,9 +42,9 @@ public sealed class SessionLogLifecycleTests
     public async Task FullLifecycle_Submit_Query_AppendDialog_Requery()
     {
         // Step 1: Submit a session log with one entry
-        var sessionId = SessionLogEndpointFixture.GenerateSessionId();
-        var requestId = SessionLogEndpointFixture.GenerateRequestId();
         var sourceType = "LifecycleTest";
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId(sourceType);
+        var requestId = SessionLogEndpointFixture.GenerateRequestId("full-lifecycle");
 
         var submitPayload = new
         {

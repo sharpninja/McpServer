@@ -47,6 +47,20 @@ public sealed class VoiceConversationOptionsValidatorTests
     }
 
     [Fact]
+    public void Validate_ReturnsSuccess_WhenDefaultExecutionStrategyUsesLegacyHostedAgentFrameworkAlias()
+    {
+        var validator = new VoiceConversationOptionsValidator();
+        var options = new VoiceConversationOptions
+        {
+            DefaultExecutionStrategy = AgentExecutionStrategyNames.HostedAgentFrameworkLegacy,
+        };
+
+        var result = validator.Validate(null, options);
+
+        Assert.True(result.Succeeded);
+    }
+
+    [Fact]
     public void Validate_Fails_WhenModelApiKeyConfiguredWithoutEnvironmentVariableName()
     {
         var validator = new VoiceConversationOptionsValidator();

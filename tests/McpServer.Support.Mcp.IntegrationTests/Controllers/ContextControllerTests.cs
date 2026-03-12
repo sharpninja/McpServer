@@ -104,6 +104,37 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
     }
 
     [Fact]
+    public async Task Search_WhenGraphRagEnabledAndQueryEmpty_UsesLegacyPathReason()
+    {
+        using var factory = _factory.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureAppConfiguration((_, config) =>
+            {
+                config.AddInMemoryCollection(new Dictionary<string, string?>
+                {
+                    ["Mcp:GraphRag:Enabled"] = "true",
+                    ["Mcp:GraphRag:EnhanceContextSearch"] = "true"
+                });
+            });
+        });
+        using var client = factory.CreateClient();
+        TestAuthHelper.AddAuthHeader(client, factory.Services);
+
+        var response = await client.PostAsJsonAsync(
+            new Uri("/mcpserver/context/search", UriKind.Relative),
+            new { query = string.Empty, limit = 5 }).ConfigureAwait(true);
+        response.EnsureSuccessStatusCode();
+
+        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        using var doc = JsonDocument.Parse(json);
+        Assert.True(doc.RootElement.TryGetProperty("graphRag", out var graphRag));
+        Assert.True(graphRag.TryGetProperty("backend", out var backend));
+        Assert.Equal("context-search", backend.GetString());
+        Assert.True(graphRag.TryGetProperty("reason", out var reason));
+        Assert.Equal("empty_query_forces_legacy_path", reason.GetString());
+    }
+
+    [Fact]
     public async Task Search_WhenGraphRagEnabledAndSourceTypeProvided_UsesLegacyPathReason()
     {
         using var factory = _factory.WithWebHostBuilder(builder =>

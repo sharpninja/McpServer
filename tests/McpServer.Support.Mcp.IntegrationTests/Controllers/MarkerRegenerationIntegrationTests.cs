@@ -99,24 +99,9 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
     [Fact]
     public async Task GlobalPromptUpdate_RegeneratesMarkerFile()
     {
-        // Verify the workspace was seeded in config.
-        var listResponse = await _client.GetAsync(new Uri("/mcpserver/workspace", UriKind.Relative)).ConfigureAwait(true);
-        Assert.Equal(HttpStatusCode.OK, listResponse.StatusCode);
-        var listBody = await listResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
-        Assert.Contains("marker-test", listBody);
-
-        // 1. Start the workspace and wait for the initial marker file via FSW latch.
         var key = EncodeKey(Path.GetFullPath(_workspacePath));
-        var markerCreated = WatchForMarkerChange();
-        var startResponse = await _client.PostAsync(
-            new Uri($"/mcpserver/workspace/{key}/start", UriKind.Relative), null).ConfigureAwait(true);
-        var startBody = await startResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
-        Assert.True(startResponse.StatusCode == HttpStatusCode.OK,
-            $"Start failed ({startResponse.StatusCode}): {startBody}");
-        var status = JsonSerializer.Deserialize<WorkspaceProcessStatus>(startBody, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-        Assert.True(status!.IsRunning, $"IsRunning=false: {startBody}\nWorkspaces: {listBody}");
-
-        await markerCreated.ConfigureAwait(true);
+        await EnsureWorkspaceSeededAsync().ConfigureAwait(true);
+        await StartWorkspaceAndWaitForMarkerAsync(key).ConfigureAwait(true);
         var initialContent = await File.ReadAllTextAsync(_markerPath).ConfigureAwait(true);
         Assert.Contains("prompt:", initialContent);
 
@@ -147,12 +132,9 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
     [Fact]
     public async Task WorkspacePromptUpdate_RegeneratesMarkerFile()
     {
-        // 1. Start the workspace and wait for the initial marker via FSW.
         var key = EncodeKey(Path.GetFullPath(_workspacePath));
-        var markerCreated = WatchForMarkerChange();
-        await _client.PostAsync(
-            new Uri($"/mcpserver/workspace/{key}/start", UriKind.Relative), null).ConfigureAwait(true);
-        await markerCreated.ConfigureAwait(true);
+        await EnsureWorkspaceSeededAsync().ConfigureAwait(true);
+        await StartWorkspaceAndWaitForMarkerAsync(key).ConfigureAwait(true);
 
         // 2. Update the workspace prompt — latch on marker rewrite.
         var markerChanged = WatchForMarkerChange();
@@ -171,12 +153,9 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
     [Fact]
     public async Task GlobalAndWorkspacePrompts_CombineInMarkerFile()
     {
-        // 1. Start the workspace and wait for the initial marker via FSW.
         var key = EncodeKey(Path.GetFullPath(_workspacePath));
-        var markerCreated = WatchForMarkerChange();
-        await _client.PostAsync(
-            new Uri($"/mcpserver/workspace/{key}/start", UriKind.Relative), null).ConfigureAwait(true);
-        await markerCreated.ConfigureAwait(true);
+        await EnsureWorkspaceSeededAsync().ConfigureAwait(true);
+        await StartWorkspaceAndWaitForMarkerAsync(key).ConfigureAwait(true);
 
         // 2. Set a custom global prompt — latch on settings + marker writes.
         var settingsChanged = WatchForSettingsChange();
@@ -263,6 +242,49 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         return tcs.Task;
     }
 
+    private async Task EnsureWorkspaceSeededAsync()
+    {
+        var listResponse = await _client.GetAsync(new Uri("/mcpserver/workspace", UriKind.Relative)).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, listResponse.StatusCode);
+        var listBody = await listResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.Contains("marker-test", listBody);
+    }
+
+    private async Task StartWorkspaceAndWaitForMarkerAsync(string key)
+    {
+        var startResponse = await _client.PostAsync(
+            new Uri($"/mcpserver/workspace/{key}/start", UriKind.Relative), null).ConfigureAwait(true);
+        var startBody = await startResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.True(startResponse.StatusCode == HttpStatusCode.OK,
+            $"Start failed ({startResponse.StatusCode}): {startBody}");
+
+        var status = JsonSerializer.Deserialize<WorkspaceProcessStatus>(
+            startBody,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        Assert.True(status?.IsRunning == true, $"IsRunning=false: {startBody}");
+
+        await WaitForMarkerFileAsync().ConfigureAwait(true);
+    }
+
+    private async Task WaitForMarkerFileAsync()
+    {
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+        try
+        {
+            while (true)
+            {
+                if (File.Exists(_markerPath))
+                    return;
+
+                await Task.Delay(100, cts.Token).ConfigureAwait(true);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            throw new TimeoutException($"Marker file was not written within 10 s at {_markerPath}");
+        }
+    }
+
     private static string EncodeKey(string path)
     {
         var bytes = System.Text.Encoding.UTF8.GetBytes(path.Trim());
@@ -285,6 +307,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         /// <inheritdoc />
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            var templateStoragePath = Path.Combine(ResolveSolutionRoot(), "templates", "prompt-templates.yaml");
             builder.UseEnvironment("Test");
             // Program.cs sets ContentRootPath to the primary workspace from the repo's
             // appsettings.json.  Override to point at the test workspace folder so
@@ -297,6 +320,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
                     { "Mcp:DataSource", ":memory:" },
+                    { "Mcp:TemplateStorage:FilePath", templateStoragePath },
                 });
             });
             // Program.cs skips WorkspaceProcessManager hosted service in "Test" env.
@@ -306,6 +330,21 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
                 services.AddHostedService(sp =>
                     (WorkspaceProcessManager)sp.GetRequiredService<IWorkspaceProcessManager>());
             });
+        }
+
+        private static string ResolveSolutionRoot()
+        {
+            var current = new DirectoryInfo(AppContext.BaseDirectory);
+            while (current is not null)
+            {
+                var solutionPath = Path.Combine(current.FullName, "McpServer.sln");
+                if (File.Exists(solutionPath))
+                    return current.FullName;
+
+                current = current.Parent;
+            }
+
+            throw new DirectoryNotFoundException("Could not locate the solution root for marker regeneration integration tests.");
         }
     }
 }

@@ -44,7 +44,7 @@ public sealed class SessionLogErrorTests
     {
         var payload = new
         {
-            sessionId = SessionLogEndpointFixture.GenerateSessionId(),
+            sessionId = SessionLogEndpointFixture.GenerateSessionId("AuditTest"),
             title = "Missing source type",
             model = "test",
             status = "completed",
@@ -97,7 +97,7 @@ public sealed class SessionLogErrorTests
         var payload = new
         {
             sourceType = "",
-            sessionId = SessionLogEndpointFixture.GenerateSessionId(),
+            sessionId = SessionLogEndpointFixture.GenerateSessionId("AuditTest"),
             title = "Empty source type",
             entryCount = 0
         };

@@ -41,7 +41,7 @@ public sealed class SubmitSessionLogTests
     [Fact]
     public async Task Submit_MinimalSessionLog_Returns201()
     {
-        var sessionId = SessionLogEndpointFixture.GenerateSessionId();
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId("AuditTest");
         var payload = new
         {
             sourceType = "AuditTest",
@@ -75,8 +75,8 @@ public sealed class SubmitSessionLogTests
     [Fact]
     public async Task Submit_FullSessionLogWithEntries_Returns201()
     {
-        var sessionId = SessionLogEndpointFixture.GenerateSessionId();
-        var requestId = SessionLogEndpointFixture.GenerateRequestId();
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId("AuditTest");
+        var requestId = SessionLogEndpointFixture.GenerateRequestId("submit-full-session-log");
         var payload = new
         {
             sourceType = "AuditTest",
@@ -133,7 +133,7 @@ public sealed class SubmitSessionLogTests
     [Fact]
     public async Task Submit_UpsertSameSession_Returns201WithUpdatedData()
     {
-        var sessionId = SessionLogEndpointFixture.GenerateSessionId();
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId("AuditTest");
         var payload1 = new
         {
             sourceType = "AuditTest",
@@ -182,7 +182,7 @@ public sealed class SubmitSessionLogTests
     [Fact]
     public async Task Submit_WithProcessingDialog_Returns201()
     {
-        var sessionId = SessionLogEndpointFixture.GenerateSessionId();
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId("AuditTest");
         var payload = new
         {
             sourceType = "AuditTest",
@@ -197,7 +197,7 @@ public sealed class SubmitSessionLogTests
             {
                 new
                 {
-                    requestId = SessionLogEndpointFixture.GenerateRequestId(),
+                    requestId = SessionLogEndpointFixture.GenerateRequestId("submit-with-processing-dialog"),
                     timestamp = DateTimeOffset.UtcNow.ToString("o"),
                     queryText = "Test with dialog",
                     queryTitle = "Dialog test entry",

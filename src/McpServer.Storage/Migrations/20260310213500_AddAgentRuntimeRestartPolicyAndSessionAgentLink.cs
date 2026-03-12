@@ -37,8 +37,7 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                 table: "SessionLogs",
                 column: "AgentDefinitionId");
 
-            // SQLite does not support adding foreign keys to existing tables.
-            if (ActiveProvider.Contains("Npgsql", StringComparison.Ordinal))
+            if (!ActiveProvider.Contains("Sqlite", StringComparison.OrdinalIgnoreCase))
             {
                 migrationBuilder.AddForeignKey(
                     name: "FK_SessionLogs_AgentDefinitions_AgentDefinitionId",
@@ -82,8 +81,7 @@ namespace McpServer.Support.Mcp.Storage.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            // SQLite does not support dropping foreign keys on existing tables.
-            if (ActiveProvider.Contains("Npgsql", StringComparison.Ordinal))
+            if (!ActiveProvider.Contains("Sqlite", StringComparison.OrdinalIgnoreCase))
             {
                 migrationBuilder.DropForeignKey(
                     name: "FK_SessionLogs_AgentDefinitions_AgentDefinitionId",
