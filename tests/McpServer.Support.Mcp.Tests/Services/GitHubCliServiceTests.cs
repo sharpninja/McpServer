@@ -1,6 +1,7 @@
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Tests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -373,12 +374,35 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "[]", null));
 
-        var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, tokenStore, accessor, options);
+        var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: "C:\\workspace");
+        var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, tokenStore, accessor, options, workspaceAccessor);
         var result = await sut.ListIssuesAsync("open", 10).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _processRunner.Received(1).RunAsync(
-            Arg.Is<ProcessRunRequest>(r => r != null && r.FileName == "gh" && r.GitHubTokenOverride == "gho_stored"),
+            Arg.Is<ProcessRunRequest>(r => r != null
+                && r.FileName == "gh"
+                && r.GitHubTokenOverride == "gho_stored"
+                && r.WorkingDirectory == Path.GetFullPath("C:\\workspace")),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    [Fact]
+    public async Task ListIssuesAsync_WithWorkspaceAccessor_UsesWorkspaceWorkingDirectory()
+    {
+        _processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new ProcessRunResult(0, "[]", null));
+
+        var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: "C:\\repo\\workspace");
+        var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, workspaceAccessor: workspaceAccessor);
+
+        var result = await sut.ListIssuesAsync("open", 5).ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        await _processRunner.Received(1).RunAsync(
+            Arg.Is<ProcessRunRequest>(request => request != null
+                && request.FileName == "gh"
+                && request.WorkingDirectory == Path.GetFullPath("C:\\repo\\workspace")),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 }

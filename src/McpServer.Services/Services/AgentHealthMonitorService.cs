@@ -92,7 +92,7 @@ public sealed class AgentHealthMonitorService : BackgroundService
                 continue;
             }
 
-            var backoffSeconds = Math.Max(1, _options.RestartBackoffBaseSeconds) * (int)Math.Pow(2, restartCount - 1);
+            var backoffSeconds = Math.Max(0, _options.RestartBackoffBaseSeconds) * (int)Math.Pow(2, restartCount - 1);
             _logger.LogWarning(
                 "Restarting agent {AgentId} in {WorkspacePath} after exit status {Status} and exit code {ExitCode}. Attempt {Attempt}. Backoff {BackoffSeconds}s.",
                 info.AgentId,

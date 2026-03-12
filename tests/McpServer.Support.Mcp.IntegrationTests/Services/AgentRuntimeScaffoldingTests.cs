@@ -6,15 +6,20 @@ using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
 
-namespace McpServer.Support.Mcp.Tests.Services;
+namespace McpServer.Support.Mcp.IntegrationTests.Services;
 
 /// <summary>
-/// Focused regression tests for MVP-MCP-005 runtime scaffolding.
-/// Skipped in unit tests — see McpServer.Support.Mcp.IntegrationTests for active coverage.
+/// Integration tests for MVP-MCP-005 runtime scaffolding strategies (isolation and branch management).
+/// Validates agent isolation (none, worktree, clone) and branch strategies (direct, feature) with real
+/// file system interactions and mocked process execution.
 /// </summary>
 public sealed class AgentRuntimeScaffoldingTests
 {
-    [Fact(Skip = "Moved to integration tests")]
+    /// <summary>
+    /// Verifies that <see cref="NoneAgentIsolationStrategy"/> returns the original workspace path unchanged.
+    /// Tests MVP-MCP-005: no-op isolation passes the workspace through as-is.
+    /// </summary>
+    [Fact]
     public async Task NoneIsolationStrategy_ReturnsOriginalWorkspacePath()
     {
         var strategy = new NoneAgentIsolationStrategy();
@@ -25,7 +30,11 @@ public sealed class AgentRuntimeScaffoldingTests
         Assert.Equal(workspacePath, result);
     }
 
-    [Fact(Skip = "Moved to integration tests")]
+    /// <summary>
+    /// Verifies that <see cref="WorktreeAgentIsolationStrategy"/> calls git worktree add using the workspace
+    /// path as the working directory. Tests MVP-MCP-005: worktree isolation invokes git in the workspace root.
+    /// </summary>
+    [Fact]
     public async Task WorktreeIsolationStrategy_UsesWorkspaceAsWorkingDirectoryForGit()
     {
         var processRunner = Substitute.For<IProcessRunner>();
@@ -60,7 +69,11 @@ public sealed class AgentRuntimeScaffoldingTests
         }
     }
 
-    [Fact(Skip = "Moved to integration tests")]
+    /// <summary>
+    /// Verifies that <see cref="CloneAgentIsolationStrategy"/> calls git clone using the workspace path
+    /// as the working directory. Tests MVP-MCP-005: clone isolation invokes git clone in the workspace root.
+    /// </summary>
+    [Fact]
     public async Task CloneIsolationStrategy_UsesWorkspaceAsWorkingDirectoryForGit()
     {
         var processRunner = Substitute.For<IProcessRunner>();
@@ -95,7 +108,11 @@ public sealed class AgentRuntimeScaffoldingTests
         }
     }
 
-    [Fact(Skip = "Moved to integration tests")]
+    /// <summary>
+    /// Verifies that <see cref="DirectAgentBranchStrategy"/> calls git rev-parse using the supplied working
+    /// directory and returns the branch name from stdout. Tests MVP-MCP-005: direct strategy reads the current branch.
+    /// </summary>
+    [Fact]
     public async Task DirectBranchStrategy_UsesSuppliedWorkingDirectory()
     {
         var processRunner = Substitute.For<IProcessRunner>();
@@ -117,7 +134,11 @@ public sealed class AgentRuntimeScaffoldingTests
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
-    [Fact(Skip = "Moved to integration tests")]
+    /// <summary>
+    /// Verifies that <see cref="FeatureAgentBranchStrategy"/> creates a feature branch, returns its name,
+    /// and restores the original branch on finalize. Tests MVP-MCP-005: feature strategy checkout/restore lifecycle.
+    /// </summary>
+    [Fact]
     public async Task FeatureBranchStrategy_CreatesAndRestoresBranchInSuppliedWorkingDirectory()
     {
         var processRunner = Substitute.For<IProcessRunner>();
@@ -147,7 +168,11 @@ public sealed class AgentRuntimeScaffoldingTests
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
-    [Fact(Skip = "Moved to integration tests")]
+    /// <summary>
+    /// Verifies that <see cref="MarkerFileService.BuildTemplateContext"/> includes agent-specific additions
+    /// when a list of additions is provided. Tests MVP-MCP-005: template context carries per-agent content.
+    /// </summary>
+    [Fact]
     public void MarkerFileService_BuildTemplateContext_IncludesAgentAdditions()
     {
         var additions = new List<(string AgentId, string Content)>

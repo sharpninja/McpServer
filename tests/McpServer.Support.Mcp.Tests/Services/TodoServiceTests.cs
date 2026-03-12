@@ -193,6 +193,25 @@ public sealed class TodoServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task CreateAsync_ValidIssueNumberId_Succeeds()
+    {
+        var request = new TodoCreateRequest
+        {
+            Id = "ISSUE-42",
+            Title = "GitHub-synced id",
+            Section = "issues",
+            Priority = "low"
+        };
+
+        var result = await _sut.CreateAsync(request).ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        var stored = await _sut.GetByIdAsync("ISSUE-42").ConfigureAwait(true);
+        Assert.NotNull(stored);
+        Assert.Equal("GitHub-synced id", stored.Title);
+    }
+
+    [Fact]
     public async Task UpdateAsync_ExistingId_UpdatesFields()
     {
         var request = new TodoUpdateRequest { Title = "Updated title", Done = true };

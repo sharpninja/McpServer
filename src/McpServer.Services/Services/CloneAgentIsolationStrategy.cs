@@ -88,6 +88,7 @@ public sealed class CloneAgentIsolationStrategy : IAgentIsolationStrategy
             return;
 
         var markerDestinationPath = Path.Combine(clonePath, MarkerFileService.MarkerFileName);
+        Directory.CreateDirectory(clonePath);
         await using var source = File.OpenRead(markerSourcePath);
         await using var destination = File.Create(markerDestinationPath);
         await source.CopyToAsync(destination, ct).ConfigureAwait(false);
