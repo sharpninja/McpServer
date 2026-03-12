@@ -310,6 +310,16 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **Covered by:** `TodoController`, `FwhMcpTools`, `TodoMoveRequest`, `TodoServiceResolver`, `IWorkspaceService`
 
+## TR-MCP-TODO-003
+
+**GitHub-Backed TODO Creation Alias** — The server SHALL accept `ISSUE-NEW` only on TODO create requests, SHALL immediately create the corresponding GitHub issue, SHALL rewrite the persisted TODO identifier to the canonical `ISSUE-{number}` value returned by GitHub, and SHALL return that canonical identifier to the caller. Persisted TODO validation SHALL accept both `^[A-Z]+-[A-Z0-9]+-\d{3}$` and `^ISSUE-\d+$`. Dependency validation SHALL use the same persisted-ID rule set.
+
+The `ISSUE-NEW` flow SHALL be implemented through a shared creation path so HTTP, MCP/STDIO, and voice-driven TODO creation all apply the same rewrite and persistence behavior.
+
+**Status:** ✅ Complete
+
+**Covered by:** `TodoCreationService`, `TodoValidator`, `TodoController`, `FwhMcpTools`, `VoiceConversationService`, `TodoService`, `SqliteTodoService`
+
 ## TR-MCP-VOICE-001
 
 **Voice Conversation Service** — `VoiceConversationService` manages the full voice session lifecycle: session creation with `CopilotInteractiveSession` spawned via `DesktopProcessLauncher` (or standard `Process.Start`), turn processing with tool-call loop (max `MaxToolSteps` iterations), in-memory transcript storage, tool-call record tracking, and session cleanup. Configurable via `VoiceConversationOptions` bound from `Mcp:Voice` configuration section (model, timeouts, rate limits for writes/deletes per turn, transcript context limit).
@@ -499,11 +509,11 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 ## TR-MCP-LOG-002
 
-**Identifier Naming Validation** — `TodoValidator` SHALL validate TODO IDs with regex `^[A-Z]+-[A-Z0-9]+-\d{3}$` for create/update dependency paths in both YAML and SQLite providers. `SessionLogIdentifierValidator` SHALL validate session/request IDs using canonical timestamped patterns and enforce exact source-type prefix parity (`SessionId` starts with `{sourceType}-` or `{agent}-`). Invalid values return HTTP 400 at controller boundaries and `ArgumentException` for direct service invocation.
+**Identifier Naming Validation** — `TodoValidator` SHALL validate persisted TODO IDs against the canonical regex set `^[A-Z]+-[A-Z0-9]+-\d{3}$` or `^ISSUE-\d+$` for create/update dependency paths in both YAML and SQLite providers. `ISSUE-NEW` SHALL remain a create-time alias handled before persistence, not a persisted TODO identifier. `SessionLogIdentifierValidator` SHALL validate session/request IDs using canonical timestamped patterns and enforce exact source-type prefix parity (`SessionId` starts with `{sourceType}-` or `{agent}-`). Invalid values return HTTP 400 at controller boundaries and `ArgumentException` for direct service invocation.
 
 **Status:** ✅ Complete
 
-**Covered by:** `TodoValidator`, `TodoService`, `SqliteTodoService`, `SessionLogIdentifierValidator`, `SessionLogController`, `SessionLogService`
+**Covered by:** `TodoValidator`, `TodoService`, `SqliteTodoService`, `TodoCreationService`, `SessionLogIdentifierValidator`, `SessionLogController`, `SessionLogService`
 
 ## TR-MCP-EVT-001
 
@@ -553,7 +563,7 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 ## TR-MCP-GH-003
 
-**Authenticated GitHub CLI Execution Path with Policy-Governed Fallback** — GitHub CLI execution SHALL support per-call token overrides so workspace-stored tokens can be applied as `GH_TOKEN` when present. The execution path SHALL prefer stored tokens when configured, emit telemetry indicating selected auth mode, and reject/allow fallback based on `AllowCliFallback`.
+**Authenticated GitHub CLI Execution Path with Policy-Governed Fallback** — GitHub CLI execution SHALL support per-call token overrides so workspace-stored tokens can be applied as `GH_TOKEN` when present. The execution path SHALL prefer stored tokens when configured, emit telemetry indicating selected auth mode, and reject/allow fallback based on `AllowCliFallback`. When a workspace path is known, gh commands SHALL execute with that workspace root as the working directory.
 
 **Status:** ✅ Complete
 
@@ -566,6 +576,38 @@ Presence signaling SHALL be excluded from one-shot sessions.
 **Status:** ✅ Complete
 
 **Covered by:** `IGitHubCliService`, `GitHubCliService`, `GitHubController` actions endpoints, `McpServer.Client` (`GitHubClient`, `Models/GitHubModels.cs`)
+
+## TR-MCP-GH-005
+
+**Workspace-Scoped gh Repository Execution** — GitHub issue and sync operations that rely on the local gh CLI SHALL execute inside the resolved workspace root so repository-scoped gh commands run against the correct checkout. This SHALL apply to both stored-token and fallback-auth execution modes.
+
+**Status:** ✅ Complete
+
+**Covered by:** `WorkspaceServiceAccessor`, `GitHubCliService`, `ProcessRunRequest`
+
+## TR-MCP-TODO-004
+
+**Shared ISSUE-* TODO Update Orchestration** — All server-side TODO update entry points that can mutate existing TODO items SHALL route `ISSUE-{number}` updates through shared orchestration instead of writing directly to the TODO store. The shared path SHALL suppress description changes after first sync, SHALL reuse the existing TODO store for the local mutation, and SHALL trigger the GitHub sync/comment flow after a successful local update.
+
+**Status:** ✅ Complete
+
+**Covered by:** `TodoUpdateService`, `TodoController`, `FwhMcpTools`, `VoiceConversationService`
+
+## TR-MCP-GH-006
+
+**Canonical GitHub Priority Labels, MCP-Authoritative Priority Sync, and ISSUE Change Comments** — TODO-to-GitHub issue sync SHALL canonicalize priority labels to `priority: HIGH|MEDIUM|LOW`, SHALL remove stale or non-canonical priority labels, and SHALL treat the MCP TODO priority as authoritative even if GitHub labels drift. GitHub-to-TODO refresh for existing `ISSUE-*` items SHALL preserve the current local priority and description, and endpoint-triggered ISSUE updates SHALL add a GitHub issue comment that summarizes the applied local change set after sync completes.
+
+**Status:** ✅ Complete
+
+**Covered by:** `IssueTodoSyncService`, `GitHubCliService`
+
+## TR-MCP-GH-007
+
+**Generated GitHub Comment Note Sections and TODO Comment Round-Trip** — GitHub-to-TODO sync for existing `ISSUE-*` items SHALL rebuild a generated note section that contains GitHub issue comments inside explicit begin/end markers, SHALL preserve user-authored TODO note text outside that generated section, and SHALL continue to avoid mutating the established TODO description. TODO-to-GitHub comment export SHALL detect newly appended user-authored note text and publish that text as a GitHub issue comment rather than collapsing the change to a generic note-update summary. When GitHub marks the issue closed, the next GitHub-to-TODO sync SHALL reconcile the TODO as done.
+
+**Status:** ✅ Complete
+
+**Covered by:** `IssueTodoSyncService`
 
 ### TR-MCP-DOC-001: Marketing Documentation Coverage
 - Define a marketing-focused McpServer narrative that explains platform purpose, problem/need, and adopter value proposition.

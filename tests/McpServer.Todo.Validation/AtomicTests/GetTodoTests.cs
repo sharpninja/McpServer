@@ -90,7 +90,7 @@ public sealed class GetTodoTests : IAsyncLifetime
     [Fact]
     public async Task Get_NonExistentId_Returns404()
     {
-        var fakeId = $"NONEXISTENT-{Guid.NewGuid():N}";
+        var fakeId = TodoEndpointFixture.GenerateMissingId();
         var response = await _fixture.Client.GetAsync(
             $"{TodoEndpointFixture.TodoRoute}/{Uri.EscapeDataString(fakeId)}");
 

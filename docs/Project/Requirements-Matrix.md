@@ -113,7 +113,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-DIR-004 | ✅ Complete | AgentPoolClient, AgentPoolScreen, MainScreen tab integration, DirectorMcpContext typed client usage |
 | FR-MCP-059 | 🔲 Planned | McpServer.Support.Mcp services/registries/managers/providers (DI SSOT state flow) |
 | FR-MCP-060 | ✅ Complete | McpServer.UI.Core (Messages/Handlers/ViewModels), McpServer.Director (MainScreen, DirectorCommands/AuthCommands, ITabRegistry/DirectorTabRegistry), McpServer.Client adapters |
-| FR-MCP-061 | ✅ Complete | TodoValidator, TodoService, SqliteTodoService, SessionLogIdentifierValidator, SessionLogController, SessionLogService |
+| FR-MCP-061 | ✅ Complete | TodoValidator, TodoService, SqliteTodoService, TodoCreationService, SessionLogIdentifierValidator, SessionLogController, SessionLogService |
 | TR-MCP-DIR-005–008 | ✅ Complete | Endpoint-to-handler parity, ViewModel conventions, RBAC visibility/action mapping, declarative tab registry |
 | TR-MCP-ARCH-002 | 🔲 Planned | DI lifetimes for state ownership, pull-notify flow via INotifyPropertyChanged, ActivatorUtilities remediation audit |
 | TR-MCP-LOG-001 | ✅ Complete | Exception logging policy enforced across catch blocks (LogError/LogWarning) |
@@ -156,4 +156,16 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-068 | ✅ Complete | ConfigurationController, AppSettingsFileService, Program.cs (JWT Bearer auth), WorkspaceController |
 | TR-MCP-CFG-006 | ✅ Complete | ConfigurationController, AppSettingsFileService, Program.cs (JWT Bearer auth), WorkspaceController |
 | TEST-MCP-091 | ✅ Complete | ConfigurationControllerTests, AppSettingsFileServiceTests, ConfigurationAuthorizationPolicyTests |
+| FR-MCP-069 | ✅ Complete | TodoCreationService, GitHubCliService, TodoController, FwhMcpTools, VoiceConversationService |
+| TR-MCP-TODO-003 | ✅ Complete | TodoCreationService, TodoValidator, TodoController, FwhMcpTools, VoiceConversationService, TodoService, SqliteTodoService |
+| TR-MCP-GH-005 | ✅ Complete | WorkspaceServiceAccessor, GitHubCliService, ProcessRunRequest |
+| TEST-MCP-092 | ✅ Complete | TodoCreationServiceTests, TodoControllerTests |
+| TEST-MCP-093 | ✅ Complete | GitHubCliServiceTests |
+| FR-MCP-070 | ✅ Complete | TodoUpdateService, IssueTodoSyncService, TodoController, FwhMcpTools, VoiceConversationService |
+| TR-MCP-TODO-004 | ✅ Complete | TodoUpdateService, TodoController, FwhMcpTools, VoiceConversationService |
+| TR-MCP-GH-006 | ✅ Complete | IssueTodoSyncService, GitHubCliService |
+| TEST-MCP-094 | ✅ Complete | TodoUpdateServiceTests, IssueTodoSyncServiceTests |
+| FR-MCP-071 | ✅ Complete | IssueTodoSyncService, TodoUpdateService, GitHubController, TodoController |
+| TR-MCP-GH-007 | ✅ Complete | IssueTodoSyncService |
+| TEST-MCP-095 | ✅ Complete | IssueTodoSyncServiceTests, IssueTodoGitHubRoundTripIntegrationTests |
 

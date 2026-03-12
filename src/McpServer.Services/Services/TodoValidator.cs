@@ -8,8 +8,15 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 internal static class TodoValidator
 {
-    private static readonly Regex s_todoIdRegex = new(
-        "^[A-Z]+-[A-Z0-9]+-\\d{3}$",
+    private const string ThreeSegmentTodoIdPattern = "^[A-Z]+-[A-Z0-9]+-\\d{3}$";
+    private const string IssueTodoIdPattern = "^ISSUE-\\d+$";
+
+    private static readonly Regex s_threeSegmentTodoIdRegex = new(
+        ThreeSegmentTodoIdPattern,
+        RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+    private static readonly Regex s_issueTodoIdRegex = new(
+        IssueTodoIdPattern,
         RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
     private static readonly HashSet<string> s_validPriorities =
@@ -25,15 +32,15 @@ internal static class TodoValidator
 
     /// <summary>
     /// Returns an error message when the TODO identifier is null, empty, or does not match
-    /// the canonical format <c>&lt;PHASE&gt;-&lt;AREA&gt;-###</c>.
+    /// the canonical format <c>&lt;PHASE&gt;-&lt;AREA&gt;-###</c> or <c>ISSUE-{number}</c>.
     /// </summary>
     public static string? ValidateTodoId(string? id)
     {
         if (string.IsNullOrWhiteSpace(id))
             return "Todo id is required.";
 
-        if (!s_todoIdRegex.IsMatch(id))
-            return "Todo id must match <PHASE>-<AREA>-### using uppercase kebab-case (regex: ^[A-Z]+-[A-Z0-9]+-\\d{3}$).";
+        if (!IsCanonicalTodoId(id))
+            return $"Todo id must match <PHASE>-<AREA>-### using uppercase kebab-case (regex: {ThreeSegmentTodoIdPattern}) or ISSUE-{{number}} (regex: {IssueTodoIdPattern}).";
 
         return null;
     }
@@ -75,7 +82,7 @@ internal static class TodoValidator
             if (knownIds.Contains(id))
                 continue;
 
-            return $"{fieldName} contains invalid TODO id '{id}'. Todo id must match <PHASE>-<AREA>-### using uppercase kebab-case (regex: ^[A-Z]+-[A-Z0-9]+-\\d{3}$).";
+            return $"{fieldName} contains invalid TODO id '{id}'. Todo id must match <PHASE>-<AREA>-### using uppercase kebab-case (regex: {ThreeSegmentTodoIdPattern}) or ISSUE-{{number}} (regex: {IssueTodoIdPattern}).";
         }
 
         return null;
@@ -143,4 +150,7 @@ internal static class TodoValidator
         inStack.Remove(node);
         return false;
     }
+
+    private static bool IsCanonicalTodoId(string id)
+        => s_threeSegmentTodoIdRegex.IsMatch(id) || s_issueTodoIdRegex.IsMatch(id);
 }

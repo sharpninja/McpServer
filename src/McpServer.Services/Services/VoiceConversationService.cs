@@ -31,6 +31,8 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     private readonly IAgentExecutionStrategyResolver _strategyResolver;
     private readonly DesktopProcessLauncher? _desktopLauncher;
     private readonly WorkspaceServiceAccessor _workspaceAccessor;
+    private readonly TodoCreationService _todoCreationService;
+    private readonly TodoUpdateService _todoUpdateService;
     private readonly IConfiguration _configuration;
     private readonly IOptionsMonitor<VoiceConversationOptions> _options;
     private readonly IOptionsMonitor<TodoPromptOptions> _todoPromptOptions;
@@ -56,6 +58,8 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         ArgumentNullException.ThrowIfNull(serviceProvider);
         _strategyResolver = serviceProvider.GetRequiredService<IAgentExecutionStrategyResolver>();
         _workspaceAccessor = workspaceAccessor ?? throw new ArgumentNullException(nameof(workspaceAccessor));
+        _todoCreationService = serviceProvider.GetRequiredService<TodoCreationService>();
+        _todoUpdateService = serviceProvider.GetRequiredService<TodoUpdateService>();
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _options = options ?? throw new ArgumentNullException(nameof(options));
         _todoPromptOptions = todoPromptOptions ?? throw new ArgumentNullException(nameof(todoPromptOptions));
@@ -1005,7 +1009,7 @@ public sealed partial class VoiceConversationService
                         TechnicalRequirements = GetOptionalStringList(arguments, "technicalRequirements"),
                     };
 
-                    var result = await _workspaceAccessor.GetTodoService().CreateAsync(request, cancellationToken).ConfigureAwait(false);
+                    var result = await _todoCreationService.CreateAsync(request, cancellationToken).ConfigureAwait(false);
                     resultPayload = new { success = result.Success, error = result.Error, item = result.Item };
                     summary = result.Success && result.Item is not null
                         ? $"Created todo {result.Item.Id}."
@@ -1040,7 +1044,7 @@ public sealed partial class VoiceConversationService
                         TechnicalRequirements = GetOptionalStringList(arguments, "technicalRequirements")
                     };
 
-                    var result = await _workspaceAccessor.GetTodoService().UpdateAsync(id, update, cancellationToken).ConfigureAwait(false);
+                    var result = await _todoUpdateService.UpdateAsync(id, update, cancellationToken).ConfigureAwait(false);
                     resultPayload = new { success = result.Success, error = result.Error, item = result.Item };
                     summary = result.Success
                         ? $"Updated todo {id}."
@@ -1071,7 +1075,7 @@ public sealed partial class VoiceConversationService
                     else
                     {
                         var targetDone = GetOptionalNullableBool(arguments, "done") ?? !current.Done;
-                        var result = await _workspaceAccessor.GetTodoService().UpdateAsync(id, new TodoUpdateRequest { Done = targetDone }, cancellationToken).ConfigureAwait(false);
+                        var result = await _todoUpdateService.UpdateAsync(id, new TodoUpdateRequest { Done = targetDone }, cancellationToken).ConfigureAwait(false);
                         resultPayload = new { success = result.Success, error = result.Error, item = result.Item };
                         summary = result.Success
                             ? (targetDone ? $"Marked {id} done." : $"Reopened {id}.")

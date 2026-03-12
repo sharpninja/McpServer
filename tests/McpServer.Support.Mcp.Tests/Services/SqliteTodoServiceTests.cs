@@ -146,6 +146,23 @@ public sealed class SqliteTodoServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task Create_ValidIssueNumberId_ReturnsSuccess()
+    {
+        var result = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "ISSUE-28",
+            Title = "GitHub todo",
+            Section = "issues",
+            Priority = "medium",
+        }).ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        var stored = await _sut.GetByIdAsync("ISSUE-28").ConfigureAwait(true);
+        Assert.NotNull(stored);
+        Assert.Equal("GitHub todo", stored.Title);
+    }
+
+    [Fact]
     public async Task Update_InvalidDependsOnId_ReturnsError()
     {
         await _sut.CreateAsync(new TodoCreateRequest
