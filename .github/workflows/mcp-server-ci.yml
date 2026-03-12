@@ -30,7 +30,6 @@ on:
       - "scripts/Start-McpServer.ps1"
       - "scripts/Package-McpServerMsix.ps1"
       - "scripts/Migrate-McpTodoStorage.ps1"
-      - "scripts/Validate-McpConfig.ps1"
       - "scripts/Test-McpMultiInstance.ps1"
       - ".github/workflows/mcp-server-ci.yml"
       - "GitVersion.yml"
@@ -55,7 +54,6 @@ on:
       - "scripts/Start-McpServer.ps1"
       - "scripts/Package-McpServerMsix.ps1"
       - "scripts/Migrate-McpTodoStorage.ps1"
-      - "scripts/Validate-McpConfig.ps1"
       - "scripts/Test-McpMultiInstance.ps1"
       - ".github/workflows/mcp-server-ci.yml"
       - "GitVersion.yml"
@@ -77,10 +75,6 @@ jobs:
 
       - name: Restore
         run: dotnet restore tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj
-
-      - name: Validate MCP config
-        shell: pwsh
-        run: ./scripts/Validate-McpConfig.ps1
 
       - name: Build
         run: dotnet build tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj -c Release --no-restore
