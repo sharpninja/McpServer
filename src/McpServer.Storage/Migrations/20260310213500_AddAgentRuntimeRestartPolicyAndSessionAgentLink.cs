@@ -37,13 +37,17 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                 table: "SessionLogs",
                 column: "AgentDefinitionId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_SessionLogs_AgentDefinitions_AgentDefinitionId",
-                table: "SessionLogs",
-                column: "AgentDefinitionId",
-                principalTable: "AgentDefinitions",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.SetNull);
+            // SQLite does not support adding foreign keys to existing tables.
+            if (ActiveProvider.Contains("Npgsql", StringComparison.Ordinal))
+            {
+                migrationBuilder.AddForeignKey(
+                    name: "FK_SessionLogs_AgentDefinitions_AgentDefinitionId",
+                    table: "SessionLogs",
+                    column: "AgentDefinitionId",
+                    principalTable: "AgentDefinitions",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.SetNull);
+            }
 
             if (ActiveProvider.Contains("Npgsql", StringComparison.Ordinal))
             {
@@ -78,9 +82,13 @@ namespace McpServer.Support.Mcp.Storage.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_SessionLogs_AgentDefinitions_AgentDefinitionId",
-                table: "SessionLogs");
+            // SQLite does not support dropping foreign keys on existing tables.
+            if (ActiveProvider.Contains("Npgsql", StringComparison.Ordinal))
+            {
+                migrationBuilder.DropForeignKey(
+                    name: "FK_SessionLogs_AgentDefinitions_AgentDefinitionId",
+                    table: "SessionLogs");
+            }
 
             migrationBuilder.DropIndex(
                 name: "IX_SessionLogs_AgentDefinitionId",
