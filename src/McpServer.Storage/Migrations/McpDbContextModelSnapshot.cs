@@ -179,6 +179,12 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<string>("SeedPromptOverride")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("RestartPolicy")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasDefaultValue("never")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("WorkspaceId")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -368,6 +374,10 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("AgentDefinitionId")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Branch")
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
@@ -450,6 +460,8 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AgentDefinitionId");
 
                     b.HasIndex("LastUpdated");
 
@@ -823,6 +835,16 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .IsRequired();
 
                     b.Navigation("Document");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", "AgentDefinition")
+                        .WithMany()
+                        .HasForeignKey("AgentDefinitionId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("AgentDefinition");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogActionEntity", b =>
