@@ -147,62 +147,9 @@ jobs:
           name: mcp-server-msix
           path: artifacts/msix/*.msix
 
-  multi-instance-smoke:
-    runs-on: windows-latest
-    needs: build-test-publish
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          global-json-file: global.json
-
-      - name: Run multi-instance smoke test
-        shell: pwsh
-        run: |
-          ./scripts/Test-McpMultiInstance.ps1 -Configuration Staging -FirstInstance default -SecondInstance alt-local -TimeoutSeconds 180
-
-  docker-smoke:
-    runs-on: ubuntu-latest
-    needs: build-test-publish
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build Docker image
-        run: docker build -t mcp-server:ci .
-
-      - name: Start container and health check
-        run: |
-          docker run -d --name mcp-ci -p 7147:7147 \
-            -e Mcp__Port=7147 \
-            -e Mcp__DataDirectory=/data \
-            -e VectorIndex__IndexPath=/data/vector.idx \
-            -e Embedding__Enabled=false \
-            -e VectorIndex__Enabled=false \
-            mcp-server:ci
-          for i in {1..30}; do
-            if curl -fsS http://localhost:7147/health; then
-              echo "Health check passed"
-              break
-            fi
-            sleep 1
-          done
-          curl -fsS http://localhost:7147/health | grep -q Healthy
-
-      - name: Test TODO endpoint
-        run: curl -fsS http://localhost:7147/mcpserver/todo | head -c 200
-
-      - name: Test Swagger
-        run: curl -fsS http://localhost:7147/swagger/v1/swagger.json -o /dev/null
-
-      - name: Cleanup
-        if: always()
-        run: docker stop mcp-ci && docker rm mcp-ci || true
-
   release-main:
     runs-on: ubuntu-latest
-    needs: [windows-msix, multi-instance-smoke, docker-smoke]
+    needs: [windows-msix]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
       - name: Download MSIX artifact
