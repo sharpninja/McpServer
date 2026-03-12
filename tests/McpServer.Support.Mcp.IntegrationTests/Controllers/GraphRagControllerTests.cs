@@ -25,6 +25,10 @@ public sealed class GraphRagControllerTests : IClassFixture<CustomWebApplication
         using var doc = JsonDocument.Parse(json);
         Assert.True(doc.RootElement.TryGetProperty("enabled", out _));
         Assert.True(doc.RootElement.TryGetProperty("graphRoot", out _));
+        Assert.True(doc.RootElement.TryGetProperty("indexCorpus", out _));
+        Assert.True(doc.RootElement.TryGetProperty("queryCorpus", out _));
+        Assert.True(doc.RootElement.TryGetProperty("inputPath", out _));
+        Assert.True(doc.RootElement.TryGetProperty("inputDocumentCount", out _));
     }
 
     [Fact]
@@ -56,5 +60,21 @@ public sealed class GraphRagControllerTests : IClassFixture<CustomWebApplication
         }).ConfigureAwait(true);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Query_ReturnsCorpusDiagnostics()
+    {
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/graphrag/query", UriKind.Relative), new
+        {
+            query = "auth",
+            maxChunks = 5
+        }).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        using var doc = JsonDocument.Parse(json);
+        Assert.True(doc.RootElement.TryGetProperty("queryCorpus", out _));
+        Assert.True(doc.RootElement.TryGetProperty("visibilityNote", out _));
     }
 }

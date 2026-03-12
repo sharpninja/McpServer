@@ -40,6 +40,11 @@ public sealed class GraphRagStatusResponse
     public long? LastIndexDurationMs { get; set; }
     public int? LastIndexedDocumentCount { get; set; }
     public string Backend { get; set; } = "internal-fallback";
+    public string IndexCorpus { get; set; } = "graphrag-input";
+    public string QueryCorpus { get; set; } = "context-search";
+    public string InputPath { get; set; } = string.Empty;
+    public int InputDocumentCount { get; set; }
+    public string? VisibilityNote { get; set; }
 }
 
 /// <summary>Citation payload from GraphRAG query responses.</summary>
@@ -66,6 +71,8 @@ public sealed class GraphRagQueryResponse
     public string? FallbackReason { get; set; }
     public string? FailureCode { get; set; }
     public string Backend { get; set; } = "internal-fallback";
+    public string QueryCorpus { get; set; } = "context-search";
+    public string? VisibilityNote { get; set; }
 }
 
 #pragma warning restore CS1591

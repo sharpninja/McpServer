@@ -273,6 +273,21 @@ public sealed class GraphRagStatusResult
 
     [JsonPropertyName("backend")]
     public string Backend { get; set; } = string.Empty;
+
+    [JsonPropertyName("indexCorpus")]
+    public string IndexCorpus { get; set; } = string.Empty;
+
+    [JsonPropertyName("queryCorpus")]
+    public string QueryCorpus { get; set; } = string.Empty;
+
+    [JsonPropertyName("inputPath")]
+    public string InputPath { get; set; } = string.Empty;
+
+    [JsonPropertyName("inputDocumentCount")]
+    public int InputDocumentCount { get; set; }
+
+    [JsonPropertyName("visibilityNote")]
+    public string? VisibilityNote { get; set; }
 }
 
 /// <summary>GraphRAG citation entry.</summary>
@@ -329,6 +344,12 @@ public sealed class GraphRagQueryResult
 
     [JsonPropertyName("backend")]
     public string Backend { get; set; } = string.Empty;
+
+    [JsonPropertyName("queryCorpus")]
+    public string QueryCorpus { get; set; } = string.Empty;
+
+    [JsonPropertyName("visibilityNote")]
+    public string? VisibilityNote { get; set; }
 }
 
 #pragma warning restore CS1591
