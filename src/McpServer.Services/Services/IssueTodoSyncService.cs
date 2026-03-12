@@ -174,8 +174,8 @@ public sealed class IssueTodoSyncService(
         if (updateRequest is not null)
         {
             var updateResult = await github.UpdateIssueAsync(issueNumber, updateRequest, ct).ConfigureAwait(false);
-            if (!updateResult.Success)
-                return updateResult;
+            if (updateResult is null || !updateResult.Success)
+                return updateResult ?? new GitHubMutationResult(false, null, $"UpdateIssueAsync returned null for issue #{issueNumber}");
             logger.LogInformation("Updated metadata for issue #{Number}", issueNumber);
         }
 

@@ -137,6 +137,18 @@ public sealed class VoiceController : ControllerBase
             await Response.WriteAsJsonAsync(new { error = ex.Message }, cancellationToken).ConfigureAwait(false);
             return;
         }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            _logger.LogWarning(ex, "Presence message failed for session {SessionId}; reporting as SSE error event", sessionId);
+            Response.ContentType = "text/event-stream";
+            Response.Headers.CacheControl = "no-cache";
+            Response.Headers.Connection = "keep-alive";
+            Response.Headers["X-Accel-Buffering"] = "no";
+            var errJson = JsonSerializer.Serialize(new VoiceTurnStreamEvent { Type = "error", Message = "Voice turn processing failed." }, s_sseJsonOptions);
+            await Response.WriteAsync($"data: {errJson}\n\n", cancellationToken).ConfigureAwait(false);
+            await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
+            return;
+        }
 
         Response.ContentType = "text/event-stream";
         Response.Headers.CacheControl = "no-cache";

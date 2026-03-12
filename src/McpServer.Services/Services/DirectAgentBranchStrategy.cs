@@ -30,7 +30,7 @@ public sealed class DirectAgentBranchStrategy : IAgentBranchStrategy
         var result = await _processRunner.RunAsync(
             new ProcessRunRequest("git", "rev-parse --abbrev-ref HEAD", WorkingDirectory: workDirectory),
             ct).ConfigureAwait(false);
-        return result.ExitCode == 0 ? result.Stdout?.Trim() : null;
+        return result?.ExitCode == 0 ? result.Stdout?.Trim() : null;
     }
 
     /// <inheritdoc/>
