@@ -144,7 +144,7 @@ workspace: demo
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
             $s.turns.GetType().Name | Should -BeLike 'List*'
             $s.turns.Count | Should -Be 0
-            $s.entries.Count | Should -Be 0
+            $s.turns.Count | Should -Be 0
         }
 
         It 'auto-generates sessionId with source prefix' {
@@ -175,7 +175,7 @@ workspace: demo
             }
         }
 
-        It 'posts canonical entries payload (not turns) to server' {
+        It 'posts canonical turns payload to server' {
             $script:capturedBody = $null
             Mock Invoke-RestMethod {
                 param($Uri, $Method, $Body)
@@ -186,8 +186,10 @@ workspace: demo
             } -ModuleName McpSession
 
             New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm' | Out-Null
-            $script:capturedBody | Should -Match '"entries"'
-            $script:capturedBody | Should -Not -Match '"turns"'
+            $script:capturedBody | Should -Match '"turns"'
+            $script:capturedBody | Should -Not -Match '"entries"'
+            $script:capturedBody | Should -Match '"turnCount"'
+            $script:capturedBody | Should -Not -Match '"entryCount"'
         }
     }
 
@@ -212,14 +214,14 @@ workspace: demo
             $e.status | Should -Be 'in_progress'
         }
 
-        It 'auto-generates sequential requestIds' {
+        It 'auto-generates canonical requestIds' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
             $e1 = Add-McpSessionTurn -Session $s -QueryTitle 'First' -QueryText 'q1' -NoPush
             $e2 = Add-McpSessionTurn -Session $s -QueryTitle 'Second' -QueryText 'q2' -NoPush
             $e3 = Add-McpSessionTurn -Session $s -QueryTitle 'Third' -QueryText 'q3' -NoPush
-            $e1.requestId | Should -Be 'req-001'
-            $e2.requestId | Should -Be 'req-002'
-            $e3.requestId | Should -Be 'req-003'
+            $e1.requestId | Should -Match '^req-\d{8}T\d{6}Z-first$'
+            $e2.requestId | Should -Match '^req-\d{8}T\d{6}Z-second$'
+            $e3.requestId | Should -Match '^req-\d{8}T\d{6}Z-third$'
         }
 
         It 'inherits model from session' {
@@ -379,7 +381,11 @@ workspace: demo
             $statePath = Join-Path $workspaceRoot '.mcpServer\session.yaml'
             $persisted = Get-Content -LiteralPath $statePath -Raw | ConvertFrom-Json -Depth 50
             $persistedSession = $persisted.session
-            $persistedTurn = $persistedSession.entries[0]
+            $persistedSession.PSObject.Properties.Name | Should -Contain 'turns'
+            $persistedSession.PSObject.Properties.Name | Should -Contain 'turnCount'
+            $persistedSession.PSObject.Properties.Name | Should -Not -Contain 'entries'
+            $persistedSession.PSObject.Properties.Name | Should -Not -Contain 'entryCount'
+            $persistedTurn = $persistedSession.turns[0]
 
             { Add-McpAction -Turn $persistedTurn -Session $persistedSession -Description 'Recovered from persisted state' -Type edit -NoPush } | Should -Not -Throw
             $persistedTurn.actions.Count | Should -Be 1

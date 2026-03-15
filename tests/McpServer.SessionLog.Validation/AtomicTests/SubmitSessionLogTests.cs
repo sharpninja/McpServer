@@ -51,7 +51,7 @@ public sealed class SubmitSessionLogTests
             started = DateTimeOffset.UtcNow.ToString("o"),
             lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
             status = "completed",
-            entryCount = 0
+            turnCount = 0
         };
 
         var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
@@ -65,7 +65,7 @@ public sealed class SubmitSessionLogTests
     }
 
     /// <summary>
-    /// Validates the <c>Submit_FullSessionLogWithEntries_Returns201</c> scenario.
+    /// Validates the <c>Submit_FullSessionLogWithTurns_Returns201</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -73,7 +73,7 @@ public sealed class SubmitSessionLogTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task Submit_FullSessionLogWithEntries_Returns201()
+    public async Task Submit_FullSessionLogWithTurns_Returns201()
     {
         var sessionId = SessionLogEndpointFixture.GenerateSessionId("AuditTest");
         var requestId = SessionLogEndpointFixture.GenerateRequestId("submit-full-session-log");
@@ -81,12 +81,12 @@ public sealed class SubmitSessionLogTests
         {
             sourceType = "AuditTest",
             sessionId,
-            title = "Full audit test with entries",
+            title = "Full audit test with turns",
             model = "claude-sonnet-4-20250514",
             started = DateTimeOffset.UtcNow.AddMinutes(-10).ToString("o"),
             lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
             status = "completed",
-            entryCount = 1,
+            turnCount = 1,
             workspace = new
             {
                 project = "McpServer",
@@ -94,21 +94,21 @@ public sealed class SubmitSessionLogTests
                 repository = "https://github.com/sharpninja/McpServer.git",
                 branch = "develop"
             },
-            entries = new[]
+            turns = new[]
             {
                 new
                 {
                     requestId,
                     timestamp = DateTimeOffset.UtcNow.ToString("o"),
                     queryText = "Submit full session log audit test",
-                    queryTitle = "Full audit entry",
+                    queryTitle = "Full audit turn",
                     response = "Session log submitted successfully",
                     status = "completed",
                     score = 1.0,
                     tags = new[] { "audit", "test" },
                     actions = new[]
                     {
-                        new { order = 1, description = "Created test entry", type = "create", status = "completed", filePath = "test.cs" }
+                        new { order = 1, description = "Created test turn", type = "create", status = "completed", filePath = "test.cs" }
                     }
                 }
             }
@@ -143,7 +143,7 @@ public sealed class SubmitSessionLogTests
             started = DateTimeOffset.UtcNow.ToString("o"),
             lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
             status = "in_progress",
-            entryCount = 0
+            turnCount = 0
         };
 
         var response1 = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload1);
@@ -160,7 +160,7 @@ public sealed class SubmitSessionLogTests
             started = DateTimeOffset.UtcNow.ToString("o"),
             lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
             status = "completed",
-            entryCount = 1
+            turnCount = 1
         };
 
         var response2 = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload2);
@@ -192,15 +192,15 @@ public sealed class SubmitSessionLogTests
             started = DateTimeOffset.UtcNow.ToString("o"),
             lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
             status = "completed",
-            entryCount = 1,
-            entries = new[]
+            turnCount = 1,
+            turns = new[]
             {
                 new
                 {
                     requestId = SessionLogEndpointFixture.GenerateRequestId("submit-with-processing-dialog"),
                     timestamp = DateTimeOffset.UtcNow.ToString("o"),
                     queryText = "Test with dialog",
-                    queryTitle = "Dialog test entry",
+                    queryTitle = "Dialog test turn",
                     response = "Done",
                     status = "completed",
                     processingDialog = new[]

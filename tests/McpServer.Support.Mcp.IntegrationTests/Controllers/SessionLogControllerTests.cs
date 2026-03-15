@@ -158,7 +158,7 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
     public async Task WhenPostingWithInvalidRequestIdFormatThenReturns400()
     {
         var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "bad-request-id"));
-        dto.Entries![0].RequestId = "req-bad";
+        dto.Turns![0].RequestId = "req-bad";
         var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -188,8 +188,8 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
             Started = "2026-02-12T10:00:00Z",
             LastUpdated = "2026-02-12T12:00:00Z",
             Status = "completed",
-            EntryCount = 1,
-            Entries =
+            TurnCount = 1,
+            Turns =
             [
                 new UnifiedRequestEntryDto
                 {

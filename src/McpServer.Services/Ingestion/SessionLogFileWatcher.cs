@@ -140,8 +140,8 @@ public sealed class SessionLogFileWatcher : IHostedService, IDisposable
                 var ingestor = scope.ServiceProvider.GetRequiredService<SessionLogIngestor>();
                 var result = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(false);
                 _logger.LogInformation(
-                    "File watcher import complete: {FilesScanned} files scanned, {Imported} imported ({TotalEntries} entries), {Skipped} unchanged, {Failed} failed",
-                    result.FilesScanned, result.Imported, result.TotalEntries, result.Skipped, result.Failed);
+                    "File watcher import complete: {FilesScanned} files scanned, {Imported} imported ({TotalTurns} turns), {Skipped} unchanged, {Failed} failed",
+                    result.FilesScanned, result.Imported, result.TotalTurns, result.Skipped, result.Failed);
             }
             finally
             {

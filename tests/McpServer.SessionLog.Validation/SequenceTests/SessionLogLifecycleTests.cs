@@ -55,7 +55,7 @@ public sealed class SessionLogLifecycleTests
             started = DateTimeOffset.UtcNow.AddMinutes(-5).ToString("o"),
             lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
             status = "in_progress",
-            entryCount = 1,
+            turnCount = 1,
             workspace = new
             {
                 project = "McpServer",
@@ -63,7 +63,7 @@ public sealed class SessionLogLifecycleTests
                 repository = "https://github.com/sharpninja/McpServer.git",
                 branch = "develop"
             },
-            entries = new[]
+            turns = new[]
             {
                 new
                 {
@@ -126,8 +126,8 @@ public sealed class SessionLogLifecycleTests
             started = DateTimeOffset.UtcNow.AddMinutes(-5).ToString("o"),
             lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
             status = "completed",
-            entryCount = 1,
-            entries = new[]
+            turnCount = 1,
+            turns = new[]
             {
                 new
                 {

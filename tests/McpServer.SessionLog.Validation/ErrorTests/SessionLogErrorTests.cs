@@ -48,7 +48,7 @@ public sealed class SessionLogErrorTests
             title = "Missing source type",
             model = "test",
             status = "completed",
-            entryCount = 0
+            turnCount = 0
         };
 
         var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
@@ -74,7 +74,7 @@ public sealed class SessionLogErrorTests
             title = "Missing session ID",
             model = "test",
             status = "completed",
-            entryCount = 0
+            turnCount = 0
         };
 
         var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
@@ -99,7 +99,7 @@ public sealed class SessionLogErrorTests
             sourceType = "",
             sessionId = SessionLogEndpointFixture.GenerateSessionId("AuditTest"),
             title = "Empty source type",
-            entryCount = 0
+            turnCount = 0
         };
 
         var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
@@ -122,7 +122,7 @@ public sealed class SessionLogErrorTests
             sourceType = "AuditTest",
             sessionId = "",
             title = "Empty session ID",
-            entryCount = 0
+            turnCount = 0
         };
 
         var response = await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);

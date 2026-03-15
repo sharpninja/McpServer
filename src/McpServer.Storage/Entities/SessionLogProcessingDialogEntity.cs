@@ -4,7 +4,7 @@ namespace McpServer.Support.Mcp.Storage.Entities;
 
 /// <summary>
 /// TR-PLANNED-013: 4NF processing dialog entity. One row per model reasoning/processing note
-/// appended during request execution. The AI model can independently append entries
+/// appended during request execution. The AI model can independently append dialog items
 /// to capture its internal reasoning, tool-use decisions, and execution trace.
 /// </summary>
 public sealed class SessionLogProcessingDialogEntity
@@ -16,7 +16,7 @@ public sealed class SessionLogProcessingDialogEntity
     /// <summary>TR-MCP-MT-003: Workspace discriminator for multi-tenant data isolation.</summary>
     public string WorkspaceId { get; set; } = string.Empty;
 
-    /// <summary>TR-PLANNED-013: Foreign key to parent entry.</summary>
+    /// <summary>TR-PLANNED-013: Foreign key to parent turn.</summary>
     public long SessionLogTurnId { get; set; }
 
     /// <summary>TR-PLANNED-013: Ordinal position within the dialog sequence.</summary>
@@ -30,7 +30,7 @@ public sealed class SessionLogProcessingDialogEntity
     [MaxLength(64)]
     public required string Role { get; set; }
 
-    /// <summary>TR-PLANNED-013: Content of the processing dialog entry.</summary>
+    /// <summary>TR-PLANNED-013: Content of the processing dialog item.</summary>
     [Required]
     public required string Content { get; set; }
 
@@ -38,7 +38,7 @@ public sealed class SessionLogProcessingDialogEntity
     [MaxLength(128)]
     public string? Category { get; set; }
 
-    /// <summary>TR-PLANNED-013: Navigation to parent entry.</summary>
+    /// <summary>TR-PLANNED-013: Navigation to parent turn.</summary>
     public SessionLogTurnEntity? SessionLogTurn { get; set; }
 }
 

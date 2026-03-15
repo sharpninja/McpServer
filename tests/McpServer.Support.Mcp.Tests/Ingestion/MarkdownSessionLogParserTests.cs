@@ -32,8 +32,8 @@ public sealed class MarkdownSessionLogParserTests
         Assert.Equal("copilot", result!.SourceType);
         Assert.Contains("FTS5 Implementation", result.Title, StringComparison.Ordinal);
         Assert.Equal("Complete", result.Status);
-        Assert.NotNull(result.Entries);
-        Assert.Single(result.Entries!);
+        Assert.NotNull(result.Turns);
+        Assert.Single(result.Turns!);
     }
 
     [Fact]
@@ -79,7 +79,7 @@ public sealed class MarkdownSessionLogParserTests
 
         Assert.NotNull(result);
         Assert.Equal("cursor", result!.SourceType);
-        var entry = result.Entries![0];
+        var entry = result.Turns![0];
         Assert.Equal(3, entry.Actions!.Count);
         Assert.Equal("Created new service", entry.Actions[0].Description);
     }
@@ -139,7 +139,7 @@ public sealed class MarkdownSessionLogParserTests
         Assert.NotNull(result);
         Assert.Equal("claude-sonnet-4", result!.Model);
         // Model should also be on the summary entry
-        Assert.Equal("claude-sonnet-4", result.Entries![0].Model);
+        Assert.Equal("claude-sonnet-4", result.Turns![0].Model);
     }
 
     [Fact]
@@ -159,7 +159,7 @@ public sealed class MarkdownSessionLogParserTests
         var result = MarkdownSessionLogParser.TryParse(md, "copilot-test.md");
 
         Assert.NotNull(result);
-        var summaryEntry = result!.Entries![0];
+        var summaryEntry = result!.Turns![0];
         Assert.Contains("Duration: ~5 hours", summaryEntry.Response, StringComparison.Ordinal);
     }
 
@@ -181,7 +181,7 @@ public sealed class MarkdownSessionLogParserTests
         var result = MarkdownSessionLogParser.TryParse(md, "copilot-test.md");
 
         Assert.NotNull(result);
-        var summaryEntry = result!.Entries![0];
+        var summaryEntry = result!.Turns![0];
         Assert.Contains("Files Summary", summaryEntry.Response, StringComparison.Ordinal);
         Assert.Contains("Source Code: 5 files", summaryEntry.Response, StringComparison.Ordinal);
     }
@@ -212,14 +212,14 @@ public sealed class MarkdownSessionLogParserTests
         var result = MarkdownSessionLogParser.TryParse(md, "copilot-SESSION-LOG-2026-02-16.md");
 
         Assert.NotNull(result);
-        // 1 summary + 3 request entries
-        Assert.Equal(4, result!.Entries!.Count);
-        Assert.Equal("Session Summary", result.Entries[0].QueryTitle);
-        Assert.Contains("1: Fix parser bug", result.Entries[1].QueryTitle, StringComparison.Ordinal);
-        Assert.Contains("2: Add unit tests", result.Entries[2].QueryTitle, StringComparison.Ordinal);
-        Assert.Contains("3: Update documentation", result.Entries[3].QueryTitle, StringComparison.Ordinal);
-        Assert.Contains("Fixed the regex pattern", result.Entries[1].Response, StringComparison.Ordinal);
-        Assert.Equal("gpt-4o", result.Entries[1].Model);
+        // 1 summary + 3 request turns
+        Assert.Equal(4, result!.Turns!.Count);
+        Assert.Equal("Session Summary", result.Turns[0].QueryTitle);
+        Assert.Contains("1: Fix parser bug", result.Turns[1].QueryTitle, StringComparison.Ordinal);
+        Assert.Contains("2: Add unit tests", result.Turns[2].QueryTitle, StringComparison.Ordinal);
+        Assert.Contains("3: Update documentation", result.Turns[3].QueryTitle, StringComparison.Ordinal);
+        Assert.Contains("Fixed the regex pattern", result.Turns[1].Response, StringComparison.Ordinal);
+        Assert.Equal("gpt-4o", result.Turns[1].Model);
     }
 
     [Fact]
@@ -255,7 +255,7 @@ public sealed class MarkdownSessionLogParserTests
         var result = MarkdownSessionLogParser.TryParse(md, "copilot-test.md");
 
         Assert.NotNull(result);
-        var response = result!.Entries![0].Response!;
+        var response = result!.Turns![0].Response!;
         Assert.Contains("Session Overview", response, StringComparison.Ordinal);
         Assert.Contains("Overview content here", response, StringComparison.Ordinal);
         Assert.Contains("Changes Made", response, StringComparison.Ordinal);

@@ -53,17 +53,18 @@ public sealed class SessionLogEntity
     [MaxLength(64)]
     public string? Status { get; set; }
 
-    /// <summary>TR-PLANNED-013: Number of request/response entries.</summary>
-    public int EntryCount { get; set; }
+    /// <summary>TR-PLANNED-013: Number of request/response turns.</summary>
+    [Column("EntryCount")]
+    public int TurnCount { get; set; }
 
-    /// <summary>TR-PLANNED-013: Total token count across all entries.</summary>
+    /// <summary>TR-PLANNED-013: Total token count across all turns.</summary>
     public int? TotalTokens { get; set; }
 
     /// <summary>TR-PLANNED-013: Cursor-specific session label.</summary>
     [MaxLength(512)]
     public string? CursorSessionLabel { get; set; }
 
-    /// <summary>TR-PLANNED-013: Average success score across entries.</summary>
+    /// <summary>TR-PLANNED-013: Average success score across turns.</summary>
     public double? CopilotAvgSuccessScore { get; set; }
 
     /// <summary>TR-PLANNED-013: Total net tokens used.</summary>
@@ -72,10 +73,10 @@ public sealed class SessionLogEntity
     /// <summary>TR-PLANNED-013: Total net premium requests.</summary>
     public int? CopilotTotalNetPremiumRequests { get; set; }
 
-    /// <summary>TR-PLANNED-013: Number of completed entries.</summary>
+    /// <summary>TR-PLANNED-013: Number of completed turns.</summary>
     public int? CopilotCompletedCount { get; set; }
 
-    /// <summary>TR-PLANNED-013: Number of in-progress entries.</summary>
+    /// <summary>TR-PLANNED-013: Number of in-progress turns.</summary>
     public int? CopilotInProgressCount { get; set; }
 
     /// <summary>TR-PLANNED-013: Project name from workspace.</summary>
@@ -102,7 +103,7 @@ public sealed class SessionLogEntity
     [MaxLength(64)]
     public string? ContentHash { get; set; }
 
-    /// <summary>TR-PLANNED-013: Navigation to session log entries.</summary>
+    /// <summary>TR-PLANNED-013: Navigation to session log turns.</summary>
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "EF Core navigation collection")]
-    public ICollection<SessionLogTurnEntity> Entries { get; set; } = new List<SessionLogTurnEntity>();
+    public ICollection<SessionLogTurnEntity> Turns { get; set; } = new List<SessionLogTurnEntity>();
 }

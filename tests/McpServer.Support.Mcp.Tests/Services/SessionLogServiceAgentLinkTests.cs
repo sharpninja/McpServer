@@ -111,8 +111,8 @@ public sealed class SessionLogServiceAgentLinkTests : IDisposable
             Started = "2026-03-10T21:00:00Z",
             LastUpdated = "2026-03-10T21:05:00Z",
             Status = "completed",
-            EntryCount = 1,
-            Entries =
+            TurnCount = 1,
+            Turns =
             [
                 new UnifiedRequestEntryDto
                 {

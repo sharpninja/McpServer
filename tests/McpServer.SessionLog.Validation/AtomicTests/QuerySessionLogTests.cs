@@ -72,7 +72,7 @@ public sealed class QuerySessionLogTests
             started = DateTimeOffset.UtcNow.ToString("o"),
             lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
             status = "completed",
-            entryCount = 0
+            turnCount = 0
         };
         await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
 
@@ -107,7 +107,7 @@ public sealed class QuerySessionLogTests
             started = DateTimeOffset.UtcNow.ToString("o"),
             lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
             status = "completed",
-            entryCount = 0
+            turnCount = 0
         };
         await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
 
@@ -202,7 +202,7 @@ public sealed class QuerySessionLogTests
             started = DateTimeOffset.UtcNow.ToString("o"),
             lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
             status = "completed",
-            entryCount = 0
+            turnCount = 0
         };
         await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
 

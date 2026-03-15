@@ -29,7 +29,7 @@ public sealed class SessionLogWorkflow : ISessionLogWorkflow
     /// to persist workflow state.
     /// </param>
     /// <param name="identifiers">Canonical identifier factory bound to the agent's source type.</param>
-    /// <param name="timeProvider">Time provider used to stamp session and request entries.</param>
+    /// <param name="timeProvider">Time provider used to stamp session and request turns.</param>
     /// <exception cref="ArgumentNullException">
     /// Thrown when any parameter is <see langword="null"/>.
     /// </exception>
@@ -141,7 +141,7 @@ public sealed class SessionLogWorkflow : ISessionLogWorkflow
             if (context.FindTurn(requestId) is not null)
             {
                 throw new InvalidOperationException(
-                    $"Request entry '{requestId}' already exists in the current session-log workflow context.");
+                    $"Request turn '{requestId}' already exists in the current session-log workflow context.");
             }
 
             var turn = new SessionLogTurnContext(requestId, GetUtcTimestamp())
@@ -391,7 +391,7 @@ public sealed class SessionLogWorkflow : ISessionLogWorkflow
     private SessionLogTurnContext FindTurnOrThrow(SessionLogWorkflowContext context, string requestId) =>
         context.FindTurn(requestId)
         ?? throw new InvalidOperationException(
-            $"Request entry '{requestId}' was not found in the current session-log workflow context.");
+            $"Request turn '{requestId}' was not found in the current session-log workflow context.");
 
     private string GetUtcTimestamp() => _timeProvider.GetUtcNow().ToString("o");
 
@@ -436,7 +436,7 @@ public sealed class SessionLogWorkflow : ISessionLogWorkflow
         if (context.FindTurn(requestId) is null)
             return requestId;
 
-        return _identifiers.CreateRequestId($"{suffixSeed}-{context.EntryCount + 1:D3}");
+        return _identifiers.CreateRequestId($"{suffixSeed}-{context.TurnCount + 1:D3}");
     }
 
     private void Touch(SessionLogWorkflowContext context) =>
