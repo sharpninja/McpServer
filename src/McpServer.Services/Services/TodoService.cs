@@ -25,12 +25,14 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
 
     private static readonly IDeserializer s_deserializer = new DeserializerBuilder()
         .WithNamingConvention(HyphenatedNamingConvention.Instance)
+        .WithTypeConverter(new TodoStringListYamlConverter())
         .WithTypeConverter(new TodoFileYamlConverter())
         .IgnoreUnmatchedProperties()
         .Build();
 
     private static readonly ISerializer s_serializer = new SerializerBuilder()
         .WithNamingConvention(HyphenatedNamingConvention.Instance)
+        .WithTypeConverter(new TodoStringListYamlConverter())
         .WithTypeConverter(new TodoFileYamlConverter())
         .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
         .Build();

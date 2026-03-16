@@ -103,6 +103,40 @@ public sealed class TodoServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task GetByIdAsync_UnquotedColonInDescriptionItem_ParsesAsString()
+    {
+        const string yaml = """
+            mvp-support:
+              high-priority:
+                - id: TEST-COLON-001
+                  title: "Colon item"
+                  done: false
+                  description:
+                    - Current implementation status: imported and indexed
+            """;
+
+        var tempFile = Path.Combine(Path.GetTempPath(), $"todo_test_{Guid.NewGuid():N}.yaml");
+        await File.WriteAllTextAsync(tempFile, yaml).ConfigureAwait(true);
+
+        try
+        {
+            using var sut = new TodoService(tempFile, _auditLog, NullLogger<TodoService>.Instance, _eventBus);
+            var item = await sut.GetByIdAsync("TEST-COLON-001").ConfigureAwait(true);
+
+            Assert.NotNull(item);
+            Assert.Equal("Colon item", item.Title);
+            Assert.Equal(["Current implementation status: imported and indexed"], item.Description);
+        }
+        finally
+        {
+            if (File.Exists(tempFile))
+            {
+                File.Delete(tempFile);
+            }
+        }
+    }
+
+    [Fact]
     public async Task GetByIdAsync_ExistingId_ReturnsItem()
     {
         var item = await _sut.GetByIdAsync("TEST-001").ConfigureAwait(true);
