@@ -191,12 +191,10 @@ function New-McpSessionLog {
         started     = $now
         lastUpdated = $now
         status      = "in_progress"
-        entryCount  = 0
+        turnCount   = 0
         totalTokens = 0
-        entries     = [System.Collections.Generic.List[object]]::new()
+        turns       = [System.Collections.Generic.List[object]]::new()
     }
-    # Keep legacy "turns" alias in-memory for older scripts/tests.
-    $session | Add-Member -NotePropertyName turns -NotePropertyValue $session.entries -Force
 
     Push-SessionLog $session
     Save-McpSessionState -Session $session
@@ -221,11 +219,12 @@ function Update-McpSessionLog {
 
     $turns = Get-McpSessionTurnList -Session $Session
     $Session.lastUpdated = (Get-Date).ToUniversalTime().ToString("o")
-    $Session.entryCount = $turns.Count
+    Set-McpSessionScalarProperty -Session $Session -Name 'turnCount' -Value $turns.Count
     $totalTokens = @($turns | ForEach-Object {
         if ($_.PSObject.Properties.Name -contains "tokenCount" -and $null -ne $_.tokenCount) { [int]$_.tokenCount } else { 0 }
     } | Measure-Object -Sum).Sum
-    $Session.totalTokens = if ($null -eq $totalTokens) { 0 } else { [int]$totalTokens }
+    $resolvedTotalTokens = if ($null -eq $totalTokens) { 0 } else { [int]$totalTokens }
+    Set-McpSessionScalarProperty -Session $Session -Name 'totalTokens' -Value $resolvedTotalTokens
     if ($Status) { $Session.status = $Status }
     if ($Title)  { $Session.title  = $Title }
 
@@ -266,44 +265,31 @@ function Get-McpSessionTurnList {
         [Parameter(Mandatory)][PSCustomObject]$Session
     )
 
-    if ($Session.PSObject.Properties.Name -contains "entries") {
-        $entriesValue = $Session.entries
-        if (-not ($entriesValue -is [System.Collections.Generic.List[object]])) {
-            $entriesList = [System.Collections.Generic.List[object]]::new()
-            foreach ($item in @($entriesValue)) {
-                [void]$entriesList.Add($item)
+    if ($Session.PSObject.Properties.Name -contains "turns") {
+        $turnsValue = $Session.turns
+        if (-not ($turnsValue -is [System.Collections.Generic.List[object]])) {
+            $turnsList = [System.Collections.Generic.List[object]]::new()
+            foreach ($item in @($turnsValue)) {
+                [void]$turnsList.Add($item)
             }
-            $Session.entries = $entriesList
+            $Session.turns = $turnsList
         }
 
-        if (-not ($Session.PSObject.Properties.Name -contains "turns")) {
-            $Session | Add-Member -NotePropertyName turns -NotePropertyValue $Session.entries -Force
-        } else {
-            $Session.turns = $Session.entries
-        }
-
-        foreach ($turn in @($Session.entries)) {
+        foreach ($turn in @($Session.turns)) {
             Normalize-McpSessionTurnCollections -Turn $turn
         }
 
-        return ,$Session.entries
+        return ,$Session.turns
     }
 
-    $entries = [System.Collections.Generic.List[object]]::new()
-    if ($Session.PSObject.Properties.Name -contains "turns") {
-        foreach ($item in @($Session.turns)) {
-            [void]$entries.Add($item)
-        }
-    }
+    $turns = [System.Collections.Generic.List[object]]::new()
+    $Session | Add-Member -NotePropertyName turns -NotePropertyValue $turns -Force
 
-    $Session | Add-Member -NotePropertyName entries -NotePropertyValue $entries -Force
-    $Session | Add-Member -NotePropertyName turns -NotePropertyValue $entries -Force
-
-    foreach ($turn in @($Session.entries)) {
+    foreach ($turn in @($Session.turns)) {
         Normalize-McpSessionTurnCollections -Turn $turn
     }
 
-    return ,$Session.entries
+    return ,$Session.turns
 }
 
 function Add-McpSessionTurn {
@@ -639,7 +625,7 @@ function Save-McpSessionState {
         model = $script:McpSessionModel
         slug = $script:McpSessionSlug
         slugGeneratedAt = $slugGeneratedAt
-        session = $Session
+        session = Get-McpSessionSerializableObject -Session $Session
     }
 
     $state | ConvertTo-Json -Depth 50 | Set-Content -LiteralPath $statePath -Encoding UTF8
@@ -814,21 +800,47 @@ function Normalize-McpSessionTurnCollections {
     }
 }
 
-function Push-SessionLog {
-    param([PSCustomObject]$Session)
+function Set-McpSessionScalarProperty {
+    param(
+        [Parameter(Mandatory)][PSCustomObject]$Session,
+        [Parameter(Mandatory)][string]$Name,
+        [Parameter(Mandatory)][object]$Value
+    )
+
+    if ($Session.PSObject.Properties.Name -contains $Name) {
+        $Session.$Name = $Value
+        return
+    }
+
+    $Session | Add-Member -NotePropertyName $Name -NotePropertyValue $Value -Force
+}
+
+function Get-McpSessionSerializableObject {
+    param([Parameter(Mandatory)][PSCustomObject]$Session)
+
     $turns = Get-McpSessionTurnList -Session $Session
     $payload = [ordered]@{}
     foreach ($property in $Session.PSObject.Properties) {
-        if ($property.Name -ne "turns") {
-            $payload[$property.Name] = $property.Value
+        if ($property.Name -in @('entries', 'entryCount', 'turns', 'turnCount')) {
+            continue
         }
+
+        $payload[$property.Name] = $property.Value
     }
-    $payload.entries = $turns
-    $payload.entryCount = $turns.Count
+
+    $payload.turns = $turns
+    $payload.turnCount = $turns.Count
     $totalTokens = @($turns | ForEach-Object {
         if ($_.PSObject.Properties.Name -contains "tokenCount" -and $null -ne $_.tokenCount) { [int]$_.tokenCount } else { 0 }
     } | Measure-Object -Sum).Sum
     $payload.totalTokens = if ($null -eq $totalTokens) { 0 } else { [int]$totalTokens }
+    return [PSCustomObject]$payload
+}
+
+function Push-SessionLog {
+    param([PSCustomObject]$Session)
+
+    $payload = Get-McpSessionSerializableObject -Session $Session
     $body = $payload | ConvertTo-Json -Depth 12
     Invoke-RestMethod -Uri "$($script:McpBaseUrl)/mcpserver/sessionlog" -Method Post -Headers $script:McpHeaders -Body $body | Out-Null
 }

@@ -10,10 +10,11 @@ namespace McpServer.Support.Mcp.Tests.Services;
 
 /// <summary>
 /// Focused regression tests for MVP-MCP-005 runtime scaffolding.
+/// Skipped in unit tests — see McpServer.Support.Mcp.IntegrationTests for active coverage.
 /// </summary>
 public sealed class AgentRuntimeScaffoldingTests
 {
-    [Fact]
+    [Fact(Skip = "Moved to integration tests")]
     public async Task NoneIsolationStrategy_ReturnsOriginalWorkspacePath()
     {
         var strategy = new NoneAgentIsolationStrategy();
@@ -24,7 +25,7 @@ public sealed class AgentRuntimeScaffoldingTests
         Assert.Equal(workspacePath, result);
     }
 
-    [Fact]
+    [Fact(Skip = "Moved to integration tests")]
     public async Task WorktreeIsolationStrategy_UsesWorkspaceAsWorkingDirectoryForGit()
     {
         var processRunner = Substitute.For<IProcessRunner>();
@@ -59,7 +60,7 @@ public sealed class AgentRuntimeScaffoldingTests
         }
     }
 
-    [Fact]
+    [Fact(Skip = "Moved to integration tests")]
     public async Task CloneIsolationStrategy_UsesWorkspaceAsWorkingDirectoryForGit()
     {
         var processRunner = Substitute.For<IProcessRunner>();
@@ -94,7 +95,7 @@ public sealed class AgentRuntimeScaffoldingTests
         }
     }
 
-    [Fact]
+    [Fact(Skip = "Moved to integration tests")]
     public async Task DirectBranchStrategy_UsesSuppliedWorkingDirectory()
     {
         var processRunner = Substitute.For<IProcessRunner>();
@@ -116,7 +117,7 @@ public sealed class AgentRuntimeScaffoldingTests
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
-    [Fact]
+    [Fact(Skip = "Moved to integration tests")]
     public async Task FeatureBranchStrategy_CreatesAndRestoresBranchInSuppliedWorkingDirectory()
     {
         var processRunner = Substitute.For<IProcessRunner>();
@@ -146,7 +147,7 @@ public sealed class AgentRuntimeScaffoldingTests
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
-    [Fact]
+    [Fact(Skip = "Moved to integration tests")]
     public void MarkerFileService_BuildTemplateContext_IncludesAgentAdditions()
     {
         var additions = new List<(string AgentId, string Content)>

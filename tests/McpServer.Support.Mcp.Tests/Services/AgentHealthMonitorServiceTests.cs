@@ -1,6 +1,7 @@
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
@@ -45,7 +46,8 @@ public sealed class AgentHealthMonitorServiceTests
             RestartBackoffBaseSeconds = 0,
             MaxRestarts = 3,
         });
-        var sut = new AgentHealthMonitorService(processManager, agentService, options, NullLogger<AgentHealthMonitorService>.Instance);
+        using var serviceProvider = CreateServiceProvider(agentService);
+        var sut = new AgentHealthMonitorService(processManager, serviceProvider.GetRequiredService<IServiceScopeFactory>(), options, NullLogger<AgentHealthMonitorService>.Instance);
 
         using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(50));
         await Record.ExceptionAsync(() => sut.StartAsync(cts.Token)).ConfigureAwait(true);
@@ -85,7 +87,8 @@ public sealed class AgentHealthMonitorServiceTests
             RestartBackoffBaseSeconds = 0,
             MaxRestarts = 3,
         });
-        var sut = new AgentHealthMonitorService(processManager, agentService, options, NullLogger<AgentHealthMonitorService>.Instance);
+        using var serviceProvider = CreateServiceProvider(agentService);
+        var sut = new AgentHealthMonitorService(processManager, serviceProvider.GetRequiredService<IServiceScopeFactory>(), options, NullLogger<AgentHealthMonitorService>.Instance);
 
         using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(50));
         await Record.ExceptionAsync(() => sut.StartAsync(cts.Token)).ConfigureAwait(true);
@@ -93,5 +96,12 @@ public sealed class AgentHealthMonitorServiceTests
         await sut.StopAsync(CancellationToken.None).ConfigureAwait(true);
 
         await agentService.DidNotReceive().LaunchAgentAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    private static ServiceProvider CreateServiceProvider(IAgentService agentService)
+    {
+        var services = new ServiceCollection();
+        services.AddScoped(_ => agentService);
+        return services.BuildServiceProvider();
     }
 }

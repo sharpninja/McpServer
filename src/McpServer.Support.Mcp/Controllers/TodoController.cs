@@ -18,6 +18,8 @@ public sealed class TodoController : ControllerBase
     private readonly IWorkspaceService _workspaceService;
     private readonly IRequirementsService _requirementsService;
     private readonly ITodoPromptService _todoPromptService;
+    private readonly TodoCreationService _todoCreationService;
+    private readonly TodoUpdateService _todoUpdateService;
     private readonly IAgentPoolService? _agentPoolService;
 
     /// <summary>TR-PLANNED-013, TR-MCP-MT-001: Constructor. Resolves workspace-specific TODO service.</summary>
@@ -27,6 +29,8 @@ public sealed class TodoController : ControllerBase
         IWorkspaceService workspaceService,
         IRequirementsService requirementsService,
         ITodoPromptService todoPromptService,
+        TodoCreationService todoCreationService,
+        TodoUpdateService todoUpdateService,
         IAgentPoolService? agentPoolService = null)
     {
         _todoServiceResolver = todoServiceResolver;
@@ -34,6 +38,8 @@ public sealed class TodoController : ControllerBase
         _todoService = todoServiceResolver.Resolve(workspaceContext);
         _requirementsService = requirementsService;
         _todoPromptService = todoPromptService;
+        _todoCreationService = todoCreationService ?? throw new ArgumentNullException(nameof(todoCreationService));
+        _todoUpdateService = todoUpdateService ?? throw new ArgumentNullException(nameof(todoUpdateService));
         _agentPoolService = agentPoolService;
     }
 
@@ -78,11 +84,12 @@ public sealed class TodoController : ControllerBase
         if (request is null)
             return BadRequest(new TodoMutationResult(false, "Request body is required."));
 
-        var result = await _todoService.CreateAsync(request, cancellationToken).ConfigureAwait(false);
+        var result = await _todoCreationService.CreateAsync(request, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             return Conflict(result);
 
-        return Created(new Uri($"/mcpserver/todo/{Uri.EscapeDataString(request.Id)}", UriKind.Relative), result);
+        var createdId = result.Item?.Id ?? request.Id;
+        return Created(new Uri($"/mcpserver/todo/{Uri.EscapeDataString(createdId)}", UriKind.Relative), result);
     }
 
     /// <summary>TR-PLANNED-013: Update an existing TODO item by id.</summary>
@@ -95,7 +102,7 @@ public sealed class TodoController : ControllerBase
         if (request is null)
             return BadRequest(new TodoMutationResult(false, "Request body is required."));
 
-        var result = await _todoService.UpdateAsync(id, request, cancellationToken).ConfigureAwait(false);
+        var result = await _todoUpdateService.UpdateAsync(id, request, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             return NotFound(result);
 

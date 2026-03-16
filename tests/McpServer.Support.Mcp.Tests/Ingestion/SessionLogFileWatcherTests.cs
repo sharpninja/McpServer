@@ -77,7 +77,7 @@ public sealed class SessionLogFileWatcherTests : IDisposable
             SourceType = "Cursor",
             SessionId = "watcher-1",
             Title = "Watched Session",
-            EntryCount = 0
+            TurnCount = 0
         };
         var json = JsonSerializer.Serialize(dto, new JsonSerializerOptions { WriteIndented = true });
         var filePath = Path.Combine(_tempDir, "docs", "sessions", "watcher-test.json");

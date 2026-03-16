@@ -50,7 +50,10 @@ public sealed class ContextController : ControllerBase
         var limit = Math.Clamp(request?.Limit ?? 20, 1, 100);
         var sourceType = request?.SourceType;
 
-        if (_graphRagOptions.Enabled && _graphRagOptions.EnhanceContextSearch && string.IsNullOrWhiteSpace(sourceType))
+        if (_graphRagOptions.Enabled
+            && _graphRagOptions.EnhanceContextSearch
+            && !string.IsNullOrWhiteSpace(query)
+            && string.IsNullOrWhiteSpace(sourceType))
         {
             var graphResult = await _graphRagService.QueryAsync(new GraphRagQueryRequest
             {
@@ -96,8 +99,12 @@ public sealed class ContextController : ControllerBase
                 mode = _graphRagOptions.DefaultQueryMode,
                 fallbackUsed = true,
                 backend = "context-search",
-                reason = _graphRagOptions.Enabled && _graphRagOptions.EnhanceContextSearch && !string.IsNullOrWhiteSpace(sourceType)
-                    ? "sourceType_filter_forces_legacy_path"
+                reason = _graphRagOptions.Enabled && _graphRagOptions.EnhanceContextSearch
+                    ? string.IsNullOrWhiteSpace(query)
+                        ? "empty_query_forces_legacy_path"
+                        : !string.IsNullOrWhiteSpace(sourceType)
+                            ? "sourceType_filter_forces_legacy_path"
+                            : "graphrag_disabled_or_not_enabled_for_context"
                     : "graphrag_disabled_or_not_enabled_for_context"
             }
         });
@@ -127,10 +134,13 @@ public sealed class ContextController : ControllerBase
         IQueryable<Storage.Entities.ContextChunkEntity> chunksQuery = _db.Chunks.AsNoTracking();
         if (!string.IsNullOrEmpty(query))
         {
-            var isSqlite = _db.Database.ProviderName?.Contains("Sqlite", StringComparison.OrdinalIgnoreCase) == true;
-            chunksQuery = isSqlite
-                ? chunksQuery.Where(c => c.Content != null && c.Content.Contains(query))
-                : chunksQuery.Where(c => c.Content != null && EF.Functions.ILike(c.Content, $"%{query}%"));
+            var providerName = _db.Database.ProviderName ?? string.Empty;
+            var supportsILike = providerName.Contains("Npgsql", StringComparison.OrdinalIgnoreCase)
+                || providerName.Contains("Postgres", StringComparison.OrdinalIgnoreCase);
+
+            chunksQuery = supportsILike
+                ? chunksQuery.Where(c => c.Content != null && EF.Functions.ILike(c.Content, $"%{query}%"))
+                : chunksQuery.Where(c => c.Content != null && c.Content.Contains(query));
         }
         var chunkEntities = await chunksQuery
             .OrderBy(c => c.DocumentId)

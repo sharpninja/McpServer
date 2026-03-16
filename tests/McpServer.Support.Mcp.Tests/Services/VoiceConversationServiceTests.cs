@@ -150,8 +150,14 @@ public sealed class VoiceConversationServiceTests
             new CopilotCliAgentExecutionStrategy(copilotClient),
             hostedStrategy ?? new FakeAgentExecutionStrategy(AgentExecutionStrategyNames.HostedMcpAgent),
         ]);
+        var gitHubCliService = Substitute.For<IGitHubCliService>();
+        var issueSyncService = Substitute.For<IIssueTodoSyncService>();
         var services = new ServiceCollection();
         services.AddSingleton<IAgentExecutionStrategyResolver>(strategyResolver);
+        services.AddSingleton(gitHubCliService);
+        services.AddSingleton(issueSyncService);
+        services.AddSingleton(new TodoCreationService(workspaceAccessor, gitHubCliService, NullLogger<TodoCreationService>.Instance));
+        services.AddSingleton(new TodoUpdateService(workspaceAccessor, issueSyncService, NullLogger<TodoUpdateService>.Instance));
         var serviceProvider = services.BuildServiceProvider();
 
         return new VoiceConversationService(

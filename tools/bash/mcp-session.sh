@@ -93,9 +93,9 @@ mcp_session_create() {
   "started": "${now}",
   "lastUpdated": "${now}",
   "status": "in_progress",
-  "entryCount": 0,
+  "turnCount": 0,
   "totalTokens": 0,
-  "entries": []
+  "turns": []
 }
 EOF
 
@@ -160,7 +160,7 @@ mcp_session_add_turn() {
        --arg st "$status" \
        --arg mdl "$model" \
        '
-        .entries += [{
+        .turns += [{
           requestId: $rid,
           timestamp: $ts,
           queryText: $qt,
@@ -195,7 +195,7 @@ mcp_session_update_turn() {
        --arg field "$field" \
        --arg value "$value" \
        '
-        .entries |= map(
+        .turns |= map(
           if .requestId == $rid then .[$field] = $value else . end
         )
        ' "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
@@ -217,7 +217,7 @@ mcp_session_add_action() {
        --arg fp "$file_path" \
        --arg st "$status" \
        '
-        .entries |= map(
+        .turns |= map(
           if .requestId == $rid then
             .actions += [{
               order: ((.actions | length) + 1),
@@ -241,7 +241,7 @@ mcp_session_add_file() {
 
     local tmp; tmp=$(mktemp)
     jq --arg rid "$req_id" --arg fp "$file_path" \
-       '.entries |= map(if .requestId == $rid then .filesModified += [$fp] else . end)' \
+       '.turns |= map(if .requestId == $rid then .filesModified += [$fp] else . end)' \
        "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
 
     _mcp_session_persist_state
@@ -255,7 +255,7 @@ mcp_session_add_tag() {
 
     local tmp; tmp=$(mktemp)
     jq --arg rid "$req_id" --arg tag "$tag" \
-       '.entries |= map(if .requestId == $rid then .tags += [$tag] else . end)' \
+       '.turns |= map(if .requestId == $rid then .tags += [$tag] else . end)' \
        "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
 
     _mcp_session_persist_state
@@ -269,7 +269,7 @@ mcp_session_add_context() {
 
     local tmp; tmp=$(mktemp)
     jq --arg rid "$req_id" --arg item "$context_item" \
-       '.entries |= map(if .requestId == $rid then .contextList += [$item] else . end)' \
+       '.turns |= map(if .requestId == $rid then .contextList += [$item] else . end)' \
        "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
 
     _mcp_session_persist_state
@@ -283,7 +283,7 @@ mcp_session_add_decision() {
 
     local tmp; tmp=$(mktemp)
     jq --arg rid "$req_id" --arg decision "$decision" \
-       '.entries |= map(if .requestId == $rid then .designDecisions += [$decision] else . end)' \
+       '.turns |= map(if .requestId == $rid then .designDecisions += [$decision] else . end)' \
        "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
 
     _mcp_session_persist_state
@@ -297,7 +297,7 @@ mcp_session_add_requirement() {
 
     local tmp; tmp=$(mktemp)
     jq --arg rid "$req_id" --arg requirement "$requirement" \
-       '.entries |= map(if .requestId == $rid then .requirementsDiscovered += [$requirement] else . end)' \
+       '.turns |= map(if .requestId == $rid then .requirementsDiscovered += [$requirement] else . end)' \
        "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
 
     _mcp_session_persist_state
@@ -311,7 +311,7 @@ mcp_session_add_blocker() {
 
     local tmp; tmp=$(mktemp)
     jq --arg rid "$req_id" --arg blocker "$blocker" \
-       '.entries |= map(if .requestId == $rid then .blockers += [$blocker] else . end)' \
+       '.turns |= map(if .requestId == $rid then .blockers += [$blocker] else . end)' \
        "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
 
     _mcp_session_persist_state
@@ -359,13 +359,14 @@ _mcp_session_push() {
 _mcp_session_normalize() {
     local tmp; tmp=$(mktemp)
     jq '
-        if (.entries | type) == "array" then .
-        elif (.turns | type) == "array" then . + { entries: .turns }
-        else . + { entries: [] }
+        if (.turns | type) == "array" then .
+        elif (.entries | type) == "array" then . + { turns: .entries }
+        else . + { turns: [] }
         end
-        | del(.turns)
-        | .entryCount = (.entries | length)
-        | .totalTokens = (([.entries[]?.tokenCount // 0] | add) // 0)
+        | del(.entries)
+        | del(.entryCount)
+        | .turnCount = (.turns | length)
+        | .totalTokens = (([.turns[]?.tokenCount // 0] | add) // 0)
     ' "$MCP_SESSION_FILE" > "$tmp" && mv "$tmp" "$MCP_SESSION_FILE"
 }
 
@@ -467,6 +468,8 @@ _mcp_session_persist_state() {
     if [[ -z "$MCP_SESSION_STATE_FILE" || ! -f "$MCP_SESSION_FILE" ]]; then
         return 0
     fi
+
+    _mcp_session_normalize
 
     local now_ts
     now_ts=$(date -u +"%Y-%m-%dT%H:%M:%SZ")

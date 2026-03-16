@@ -1,4 +1,5 @@
 using McpServer.Support.Mcp.Options;
+using McpServer.Support.Mcp.Services;
 using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Options;
@@ -100,6 +101,29 @@ public sealed class AgentPoolOptionsValidatorTests
                 new AgentPoolDefinitionOptions { AgentName = "Planner", AgentPath = "p.exe", IsTodoPlanDefault = true },
                 new AgentPoolDefinitionOptions { AgentName = "Status", AgentPath = "s.exe", IsTodoStatusDefault = true },
                 new AgentPoolDefinitionOptions { AgentName = "Implement", AgentPath = "m.exe", IsTodoImplementDefault = true },
+            ],
+        };
+
+        var result = validator.Validate(null, options);
+
+        Assert.True(result.Succeeded);
+    }
+
+    [Fact]
+    public void Validate_ReturnsSuccess_WhenExecutionStrategyUsesLegacyHostedAgentFrameworkAlias()
+    {
+        var validator = new AgentPoolOptionsValidator();
+        var options = new AgentPoolOptions
+        {
+            Enabled = true,
+            Agents =
+            [
+                new AgentPoolDefinitionOptions
+                {
+                    AgentName = "Planner",
+                    AgentPath = "p.exe",
+                    ExecutionStrategy = AgentExecutionStrategyNames.HostedAgentFrameworkLegacy,
+                },
             ],
         };
 

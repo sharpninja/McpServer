@@ -105,9 +105,9 @@ public sealed class SessionSummary
     /// </summary>
     [JsonPropertyName("status")] public string? Status { get; set; }
     /// <summary>
-    /// Gets or sets <c>EntryCount</c> for validation payload/state handling.
+    /// Gets or sets <c>TurnCount</c> for validation payload/state handling.
     /// </summary>
-    [JsonPropertyName("entryCount")] public int EntryCount { get; set; }
+    [JsonPropertyName("turnCount")] public int TurnCount { get; set; }
     /// <summary>
     /// Gets or sets <c>Started</c> for validation payload/state handling.
     /// </summary>
@@ -117,9 +117,9 @@ public sealed class SessionSummary
     /// </summary>
     [JsonPropertyName("lastUpdated")] public string? LastUpdated { get; set; }
     /// <summary>
-    /// Gets or sets <c>Entries</c> for validation payload/state handling.
+    /// Gets or sets <c>Turns</c> for validation payload/state handling.
     /// </summary>
-    [JsonPropertyName("entries")] public List<EntryDto>? Entries { get; set; }
+    [JsonPropertyName("turns")] public List<EntryDto>? Turns { get; set; }
 }
 
 /// <summary>

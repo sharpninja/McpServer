@@ -72,17 +72,17 @@ public sealed class SessionLogWorkflowContext
     /// Gets a DTO projection of the current turn state. This is primarily useful for diagnostics,
     /// assertions, and inspecting the payload shape submitted through <see cref="McpServer.Client.SessionLogClient"/>.
     /// </summary>
-    public IReadOnlyList<UnifiedRequestEntryDto> Entries => _turns.Count == 0
+    public IReadOnlyList<UnifiedRequestEntryDto> TurnDtos => _turns.Count == 0
         ? Array.Empty<UnifiedRequestEntryDto>()
         : _turns.Select(static turn => turn.ToDto()).ToList();
 
     /// <summary>
     /// Gets the number of turns in this session, computed from <see cref="Turns"/>.
     /// </summary>
-    public int EntryCount => _turns.Count;
+    public int TurnCount => _turns.Count;
 
     /// <summary>
-    /// Gets the total token count across all entries that have a token count set, or
+    /// Gets the total token count across all turns that have a token count set, or
     /// <see langword="null"/> when no entry carries token information.
     /// </summary>
     public int? TotalTokens => _turns.Any(e => e.TokenCount.HasValue)
@@ -109,8 +109,8 @@ public sealed class SessionLogWorkflowContext
         Workspace = Workspace,
         Started = Started,
         LastUpdated = LastUpdated,
-        EntryCount = EntryCount,
+        TurnCount = TurnCount,
         TotalTokens = TotalTokens,
-        Entries = _turns.Count > 0 ? _turns.Select(static turn => turn.ToDto()).ToList() : null,
+        Turns = _turns.Count > 0 ? _turns.Select(static turn => turn.ToDto()).ToList() : null,
     };
 }

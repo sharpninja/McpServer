@@ -37,13 +37,16 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                 table: "SessionLogs",
                 column: "AgentDefinitionId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_SessionLogs_AgentDefinitions_AgentDefinitionId",
-                table: "SessionLogs",
-                column: "AgentDefinitionId",
-                principalTable: "AgentDefinitions",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.SetNull);
+            if (!ActiveProvider.Contains("Sqlite", StringComparison.OrdinalIgnoreCase))
+            {
+                migrationBuilder.AddForeignKey(
+                    name: "FK_SessionLogs_AgentDefinitions_AgentDefinitionId",
+                    table: "SessionLogs",
+                    column: "AgentDefinitionId",
+                    principalTable: "AgentDefinitions",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.SetNull);
+            }
 
             if (ActiveProvider.Contains("Npgsql", StringComparison.Ordinal))
             {
@@ -78,9 +81,12 @@ namespace McpServer.Support.Mcp.Storage.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_SessionLogs_AgentDefinitions_AgentDefinitionId",
-                table: "SessionLogs");
+            if (!ActiveProvider.Contains("Sqlite", StringComparison.OrdinalIgnoreCase))
+            {
+                migrationBuilder.DropForeignKey(
+                    name: "FK_SessionLogs_AgentDefinitions_AgentDefinitionId",
+                    table: "SessionLogs");
+            }
 
             migrationBuilder.DropIndex(
                 name: "IX_SessionLogs_AgentDefinitionId",

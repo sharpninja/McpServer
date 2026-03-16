@@ -465,6 +465,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
             File.WriteAllText(Path.Combine(projectDir, "TODO.yaml"), SeedYaml);
 
             builder.UseEnvironment("Test");
+            builder.UseContentRoot(CustomWebApplicationFactory.ResolveContentRoot());
             builder.ConfigureAppConfiguration(config =>
             {
                 config.AddInMemoryCollection(new Dictionary<string, string?>

@@ -109,6 +109,7 @@ public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContra
             File.WriteAllText(Path.Combine(TargetWorkspacePath, "docs", "Project", "TODO.yaml"), "mvp-app:\n  high-priority:\n    - id: TEST-001\n      title: Existing target item\n      done: false\n");
 
             builder.UseEnvironment("Test");
+            builder.UseContentRoot(ResolveContentRoot());
             builder.ConfigureAppConfiguration(config =>
             {
                 config.AddInMemoryCollection(new Dictionary<string, string?>
@@ -135,6 +136,21 @@ public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContra
                 services.AddSingleton<TodoServiceResolver>();
                 services.AddSingleton<IWorkspaceService>(new FailingWorkspaceService(TargetWorkspacePath));
             });
+        }
+
+        private static string ResolveContentRoot()
+        {
+            var current = new DirectoryInfo(AppContext.BaseDirectory);
+            while (current is not null)
+            {
+                var solutionPath = Path.Combine(current.FullName, "McpServer.sln");
+                if (File.Exists(solutionPath))
+                    return Path.Combine(current.FullName, "src", "McpServer.Support.Mcp");
+
+                current = current.Parent;
+            }
+
+            throw new DirectoryNotFoundException("Could not locate the solution root for HTTP 500 contract integration tests.");
         }
 
         public string GetFullWorkspaceApiKey()

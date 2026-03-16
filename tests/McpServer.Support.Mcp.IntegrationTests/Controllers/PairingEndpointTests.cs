@@ -121,6 +121,7 @@ public sealed class PairingWebApplicationFactory : WebApplicationFactory<McpApiE
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Test");
+        builder.UseContentRoot(CustomWebApplicationFactory.ResolveContentRoot());
         builder.ConfigureAppConfiguration(config =>
         {
             // SHA-256 of "testpass"

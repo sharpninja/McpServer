@@ -36,25 +36,25 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-PLANNED-013: Session logs (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogEntity> SessionLogs => Set<SessionLogEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log entries (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-013: Session log turns (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogTurnEntity> SessionLogTurns => Set<SessionLogTurnEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log entry actions (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-013: Session log turn actions (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogActionEntity> SessionLogActions => Set<SessionLogActionEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log entry tags (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-013: Session log turn tags (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogTurnTagEntity> SessionLogTurnTags => Set<SessionLogTurnTagEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log entry context items (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-013: Session log turn context items (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogTurnContextEntity> SessionLogTurnContexts => Set<SessionLogTurnContextEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log entry processing dialog items (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-013: Session log turn processing dialog items (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogProcessingDialogEntity> SessionLogProcessingDialogs => Set<SessionLogProcessingDialogEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log entry commits.</summary>
+    /// <summary>TR-PLANNED-013: Session log turn commits.</summary>
     public DbSet<SessionLogCommitEntity> SessionLogCommits => Set<SessionLogCommitEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log entry string-list items (design decisions, requirements, files modified, blockers).</summary>
+    /// <summary>TR-PLANNED-013: Session log turn string-list items (design decisions, requirements, files modified, blockers).</summary>
     public DbSet<SessionLogTurnStringListEntity> SessionLogTurnStringLists => Set<SessionLogTurnStringListEntity>();
 
     /// <summary>Tool definitions discoverable by keyword search.</summary>
@@ -111,7 +111,7 @@ public sealed class McpDbContext : DbContext
         {
             e.HasIndex(x => new { x.SessionLogId, x.RequestId }).IsUnique();
             e.HasOne(x => x.SessionLog)
-                .WithMany(x => x.Entries)
+                .WithMany(x => x.Turns)
                 .HasForeignKey(x => x.SessionLogId)
                 .OnDelete(DeleteBehavior.Cascade);
         });

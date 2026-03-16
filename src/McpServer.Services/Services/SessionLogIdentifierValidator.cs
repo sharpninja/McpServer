@@ -7,6 +7,10 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 internal static class SessionLogIdentifierValidator
 {
+    private static readonly Regex s_sessionIdRegex = new(
+        "^[A-Z][A-Za-z0-9]*-\\d{8}T\\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$",
+        RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
     private static readonly Regex s_requestIdRegex = new(
         "^req-\\d{8}T\\d{6}Z-[a-z0-9]+(?:-[a-z0-9]+)*$",
         RegexOptions.Compiled | RegexOptions.CultureInvariant);
@@ -22,8 +26,14 @@ internal static class SessionLogIdentifierValidator
         if (string.IsNullOrWhiteSpace(sessionId))
             return "SessionId is required.";
 
-        // Session ID format/prefix validation intentionally disabled.
-        _ = expectedAgent;
+        if (!s_sessionIdRegex.IsMatch(sessionId))
+            return "SessionId must match <Agent>-<yyyyMMddTHHmmssZ>-<suffix> (example: Copilot-20260304T113901Z-feature-audit).";
+
+        if (!string.IsNullOrWhiteSpace(expectedAgent)
+            && !sessionId.StartsWith(expectedAgent + "-", StringComparison.Ordinal))
+        {
+            return $"SessionId must start with '{expectedAgent}-'.";
+        }
 
         return null;
     }

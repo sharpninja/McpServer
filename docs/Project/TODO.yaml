@@ -2576,3 +2576,55 @@ MCP:
       done: true
     - task: Document the standardized 500 contract and developer guidance for surfacing operation context so future endpoints automatically comply.
       done: true
+Diagnostics:
+  high-priority: []
+issues:
+  low-priority:
+  - id: ISSUE-28
+    title: C64CityBuilder GraphRAG local-text visibility diagnosis
+    note: >-
+      status: OPEN
+
+      github-url: https://github.com/sharpninja/McpServer/issues/28
+
+      labels: question
+
+      assignees: sharpninja, Copilot
+
+      created: 2026-03-11T17:29:38Z
+
+      updated: 2026-03-11T19:20:04Z
+    done: false
+    description:
+    - >-
+      Observed on March 11, 2026.
+
+
+      This issue captures diagnosis only. It intentionally excludes fixes, remediation, and implementation steps.
+
+
+      ## Workspace under test
+
+      - E:\github\C64CityBuilder
+
+
+      ## Summary of symptoms
+
+      - Local staged PRG TXT files were present under E:\github\C64CityBuilder\mcp-data\graphrag\input\docs\prg.
+
+      - Commodore_64_Programmers_Reference_Guide.txt contained verified exact phrases, but exact filename and exact snippet queries returned no local hits from MCP context or Gr...
+  - id: ISSUE-1
+    title: Develop
+    note: >-
+      status: MERGED
+
+      github-url: https://github.com/sharpninja/McpServer/pull/1
+
+      created: 2026-02-19T16:17:00Z
+
+      updated: 2026-02-19T16:17:20Z
+    done: false
+mvp-support:
+  high-priority: []
+  medium-priority: []
+  low-priority: []

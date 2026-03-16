@@ -20,7 +20,7 @@
 | Test | Result |
 |------|--------|
 | Submit_MinimalSessionLog_Returns201 | ✅ Passed |
-| Submit_FullSessionLogWithEntries_Returns201 | ✅ Passed |
+| Submit_FullSessionLogWithTurns_Returns201 | ✅ Passed |
 | Submit_UpsertSameSession_Returns201WithUpdatedData | ✅ Passed |
 | Submit_WithProcessingDialog_Returns201 | ✅ Passed |
 
@@ -38,7 +38,7 @@
 ### Append Dialog (POST .../dialog) — 3 tests
 | Test | Result |
 |------|--------|
-| AppendDialog_ToExistingEntry_Returns200WithCount | ✅ Passed |
+| AppendDialog_ToExistingTurn_Returns200WithCount | ✅ Passed |
 | AppendDialog_MultipleAppends_AccumulatesCount | ✅ Passed |
 | AppendDialog_NonExistentSession_Returns404 | ✅ Passed |
 
@@ -62,7 +62,7 @@
 1. **Submit endpoint** correctly returns 201 Created with `{id, sourceType, sessionId}` response body and Location header.
 2. **Upsert behavior** works correctly — submitting the same SourceType+SessionId pair reuses the same database ID.
 3. **Query endpoint** returns paginated results with `{totalCount, limit, offset, items}` structure. All filter parameters (agent, model, text, from, to) work correctly.
-4. **Dialog append** correctly accumulates dialog items on existing entries and returns the running total count.
+4. **Dialog append** correctly accumulates dialog items on existing turns and returns the running total count.
 5. **Validation** properly rejects missing/empty SourceType and SessionId with 400 status and descriptive error messages.
 6. **404 handling** works correctly for dialog append on non-existent sessions.
 7. **Full lifecycle** (submit → query → append dialog → upsert → re-query) works end-to-end.

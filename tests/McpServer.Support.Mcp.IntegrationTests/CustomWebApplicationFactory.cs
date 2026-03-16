@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using McpServer.Support.Mcp;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -31,6 +32,7 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<McpApiEn
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Test");
+        builder.UseContentRoot(ResolveContentRoot());
         builder.ConfigureAppConfiguration(config =>
         {
             config.AddInMemoryCollection(new Dictionary<string, string?>
@@ -44,5 +46,20 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<McpApiEn
 
         if (_configureServices is not null)
             builder.ConfigureServices(_configureServices);
+    }
+
+    internal static string ResolveContentRoot()
+    {
+        var current = new DirectoryInfo(AppContext.BaseDirectory);
+        while (current is not null)
+        {
+            var solutionPath = Path.Combine(current.FullName, "McpServer.sln");
+            if (File.Exists(solutionPath))
+                return Path.Combine(current.FullName, "src", "McpServer.Support.Mcp");
+
+            current = current.Parent;
+        }
+
+        throw new DirectoryNotFoundException("Could not locate the solution root for McpServer.Support.Mcp integration tests.");
     }
 }

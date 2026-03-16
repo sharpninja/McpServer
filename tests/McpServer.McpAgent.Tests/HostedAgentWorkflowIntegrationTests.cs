@@ -266,7 +266,7 @@ public sealed class HostedAgentWorkflowIntegrationTests
         Assert.True(desktopLaunchBody.RootElement.GetProperty("waitForExit").GetBoolean());
 
         using var finalSessionBody = JsonDocument.Parse(handler.Requests[7].Body!);
-        var finalTurn = finalSessionBody.RootElement.GetProperty("entries")[0];
+        var finalTurn = finalSessionBody.RootElement.GetProperty("turns")[0];
         Assert.Equal("completed", finalTurn.GetProperty("status").GetString());
         Assert.Equal(
             "Protected the hosted workflow layer through DI registration and adapter invocation.",

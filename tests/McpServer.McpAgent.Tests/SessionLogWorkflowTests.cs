@@ -162,7 +162,7 @@ public sealed class SessionLogWorkflowTests
         Assert.Equal("Analyzing workflow gaps.", dialogBody.RootElement[0].GetProperty("content").GetString());
 
         using var finalBody = JsonDocument.Parse(handler.Requests[5].Body!);
-        var finalTurn = finalBody.RootElement.GetProperty("entries")[0];
+        var finalTurn = finalBody.RootElement.GetProperty("turns")[0];
         Assert.Equal("completed", finalTurn.GetProperty("status").GetString());
         Assert.Equal("Implemented the workflow lifecycle.", finalTurn.GetProperty("response").GetString());
         Assert.Equal(321, finalTurn.GetProperty("tokenCount").GetInt32());
@@ -211,7 +211,7 @@ public sealed class SessionLogWorkflowTests
 
         Assert.Equal(3, handler.Requests.Count);
         using var body = JsonDocument.Parse(handler.Requests[2].Body!);
-        var finalTurn = body.RootElement.GetProperty("entries")[0];
+        var finalTurn = body.RootElement.GetProperty("turns")[0];
         Assert.Equal("failed", finalTurn.GetProperty("status").GetString());
         Assert.Equal("Compilation error in SessionLogWorkflow.cs.", finalTurn.GetProperty("failureNote").GetString());
         Assert.Equal("dotnet build reports CS1591 in a new public API surface.", finalTurn.GetProperty("blockers")[0].GetString());

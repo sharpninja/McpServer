@@ -34,19 +34,19 @@ public sealed class UnifiedSessionLogDto
     [JsonPropertyName("status")]
     public string? Status { get; set; }
 
-    /// <summary>Number of entries.</summary>
-    [JsonPropertyName("entryCount")]
-    public int EntryCount { get; set; }
+    /// <summary>Number of turns.</summary>
+    [JsonPropertyName("turnCount")]
+    public int TurnCount { get; set; }
 
     /// <summary>Workspace metadata.</summary>
     [JsonPropertyName("workspace")]
     public WorkspaceInfoDto? Workspace { get; set; }
 
-    /// <summary>Request entries.</summary>
-    [JsonPropertyName("entries")]
-    public List<UnifiedRequestEntryDto>? Entries { get; set; }
+    /// <summary>Request turns.</summary>
+    [JsonPropertyName("turns")]
+    public List<UnifiedRequestEntryDto>? Turns { get; set; }
 
-    /// <summary>Total tokens across all entries.</summary>
+    /// <summary>Total tokens across all turns.</summary>
     [JsonPropertyName("totalTokens")]
     public int? TotalTokens { get; set; }
 

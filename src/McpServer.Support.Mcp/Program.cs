@@ -62,6 +62,9 @@ DisableEnvironmentSpecificJsonConfigForWindowsService(builder);
 
 builder.Configuration.AddYamlFile("appsettings.yaml", optional: true, reloadOnChange: true);
 builder.Configuration.AddYamlFile($"appsettings.{builder.Environment.EnvironmentName}.yaml", optional: true, reloadOnChange: true);
+// Re-apply operational overrides after YAML so env vars and CLI args beat repo defaults.
+builder.Configuration.AddEnvironmentVariables();
+builder.Configuration.AddCommandLine(args);
 
 if (OperatingSystem.IsWindows())
 {
@@ -85,7 +88,10 @@ WorkspaceConfigEntry? primaryWorkspaceEntry = null;
         .Where(w => w.IsEnabled)
         .FirstOrDefault();
     if (primaryWorkspaceEntry is not null)
+    {
         builder.Environment.ContentRootPath = Path.GetFullPath(primaryWorkspaceEntry.WorkspacePath);
+        Directory.SetCurrentDirectory(builder.Environment.ContentRootPath);
+    }
 }
 
 builder.Host.UseSerilog((context, _, config) =>
@@ -331,7 +337,9 @@ builder.Services.AddSingleton<ITodoService>(sp => sp.GetRequiredService<ITodoSer
 builder.Services.AddSingleton<TodoServiceResolver>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<WorkspaceServiceAccessor>();
+builder.Services.AddSingleton<TodoCreationService>();
 builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
+builder.Services.AddSingleton<TodoUpdateService>();
 builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
 builder.Services.AddSingleton<RequirementsDocumentService>();
 builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<RequirementsDocumentService>());

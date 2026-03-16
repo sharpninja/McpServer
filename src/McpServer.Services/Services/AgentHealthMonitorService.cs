@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using McpServer.Support.Mcp.Options;
@@ -12,7 +13,7 @@ namespace McpServer.Support.Mcp.Services;
 public sealed class AgentHealthMonitorService : BackgroundService
 {
     private readonly IAgentProcessManager _agentProcessManager;
-    private readonly IAgentService _agentService;
+    private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILogger<AgentHealthMonitorService> _logger;
     private readonly AgentProcessManagerOptions _options;
     private readonly ConcurrentDictionary<string, int> _restartCounts = new(StringComparer.OrdinalIgnoreCase);
@@ -22,12 +23,12 @@ public sealed class AgentHealthMonitorService : BackgroundService
     /// </summary>
     public AgentHealthMonitorService(
         IAgentProcessManager agentProcessManager,
-        IAgentService agentService,
+        IServiceScopeFactory scopeFactory,
         IOptions<AgentProcessManagerOptions> options,
         ILogger<AgentHealthMonitorService> logger)
     {
         _agentProcessManager = agentProcessManager;
-        _agentService = agentService;
+        _scopeFactory = scopeFactory;
         _logger = logger;
         _options = options.Value;
     }
@@ -58,6 +59,9 @@ public sealed class AgentHealthMonitorService : BackgroundService
     private async Task MonitorOnceAsync(CancellationToken cancellationToken)
     {
         var runningAgents = await _agentProcessManager.ListRunningAsync(null, cancellationToken).ConfigureAwait(false);
+        await using var scope = _scopeFactory.CreateAsyncScope();
+        var agentService = scope.ServiceProvider.GetRequiredService<IAgentService>();
+
         foreach (var info in runningAgents)
         {
             if (info.Status == Models.AgentProcessStatus.Running || info.Status == Models.AgentProcessStatus.Starting)
@@ -70,7 +74,7 @@ public sealed class AgentHealthMonitorService : BackgroundService
                 continue;
             }
 
-            var config = await _agentService.GetWorkspaceAgentAsync(info.WorkspacePath, info.AgentId, cancellationToken).ConfigureAwait(false);
+            var config = await agentService.GetWorkspaceAgentAsync(info.WorkspacePath, info.AgentId, cancellationToken).ConfigureAwait(false);
             if (config is null)
                 continue;
 
@@ -92,7 +96,8 @@ public sealed class AgentHealthMonitorService : BackgroundService
                 continue;
             }
 
-            var backoffSeconds = Math.Max(1, _options.RestartBackoffBaseSeconds) * (int)Math.Pow(2, restartCount - 1);
+            var backoffBaseSeconds = Math.Max(0, _options.RestartBackoffBaseSeconds);
+            var backoffSeconds = backoffBaseSeconds * (int)Math.Pow(2, restartCount - 1);
             _logger.LogWarning(
                 "Restarting agent {AgentId} in {WorkspacePath} after exit status {Status} and exit code {ExitCode}. Attempt {Attempt}. Backoff {BackoffSeconds}s.",
                 info.AgentId,
@@ -102,10 +107,14 @@ public sealed class AgentHealthMonitorService : BackgroundService
                 restartCount,
                 backoffSeconds);
 
-            await Task.Delay(TimeSpan.FromSeconds(backoffSeconds), cancellationToken).ConfigureAwait(false);
+            if (backoffSeconds > 0)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(backoffSeconds), cancellationToken).ConfigureAwait(false);
+            }
+
             try
             {
-                await _agentService.LaunchAgentAsync(info.WorkspacePath, info.AgentId, cancellationToken).ConfigureAwait(false);
+                await agentService.LaunchAgentAsync(info.WorkspacePath, info.AgentId, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

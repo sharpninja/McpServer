@@ -42,9 +42,9 @@ public sealed class SessionLogLifecycleTests
     public async Task FullLifecycle_Submit_Query_AppendDialog_Requery()
     {
         // Step 1: Submit a session log with one entry
-        var sessionId = SessionLogEndpointFixture.GenerateSessionId();
-        var requestId = SessionLogEndpointFixture.GenerateRequestId();
         var sourceType = "LifecycleTest";
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId(sourceType);
+        var requestId = SessionLogEndpointFixture.GenerateRequestId("full-lifecycle");
 
         var submitPayload = new
         {
@@ -55,7 +55,7 @@ public sealed class SessionLogLifecycleTests
             started = DateTimeOffset.UtcNow.AddMinutes(-5).ToString("o"),
             lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
             status = "in_progress",
-            entryCount = 1,
+            turnCount = 1,
             workspace = new
             {
                 project = "McpServer",
@@ -63,7 +63,7 @@ public sealed class SessionLogLifecycleTests
                 repository = "https://github.com/sharpninja/McpServer.git",
                 branch = "develop"
             },
-            entries = new[]
+            turns = new[]
             {
                 new
                 {
@@ -126,8 +126,8 @@ public sealed class SessionLogLifecycleTests
             started = DateTimeOffset.UtcNow.AddMinutes(-5).ToString("o"),
             lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
             status = "completed",
-            entryCount = 1,
-            entries = new[]
+            turnCount = 1,
+            turns = new[]
             {
                 new
                 {

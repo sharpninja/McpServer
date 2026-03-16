@@ -46,8 +46,8 @@ public sealed class SessionLogIngestorImportTests : IDisposable
             Title = "Imported Session",
             Model = "gpt-4",
             Started = "2026-02-12T10:00:00Z",
-            EntryCount = 1,
-            Entries =
+            TurnCount = 1,
+            Turns =
             [
                 new UnifiedRequestEntryDto
                 {
@@ -63,11 +63,11 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         var result = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
 
         Assert.Equal(1, result.Imported);
-        var stored = await _db.SessionLogs.Include(s => s.Entries).FirstOrDefaultAsync(s => s.SessionId == "import-1").ConfigureAwait(true);
+        var stored = await _db.SessionLogs.Include(s => s.Turns).FirstOrDefaultAsync(s => s.SessionId == "import-1").ConfigureAwait(true);
         Assert.NotNull(stored);
         Assert.Equal("Copilot", stored!.SourceType);
         Assert.Equal("Imported Session", stored.Title);
-        Assert.Single(stored.Entries);
+        Assert.Single(stored.Turns);
         Assert.NotNull(stored.SourceFilePath);
         Assert.EndsWith("copilot-test.json", stored.SourceFilePath!);
         Assert.NotNull(stored.ContentHash);
@@ -83,7 +83,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
             "sessionId": "ws-string",
             "title": "String Workspace",
             "workspace": "E:\\github\\FunWasHad",
-            "entryCount": 0
+            "turnCount": 0
         }
         """;
         File.WriteAllText(Path.Combine(_tempDir, "docs", "sessions", "cursor-ws.json"), json);
@@ -110,7 +110,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
                 "repository": "sharpninja/FunWasHad",
                 "branch": "develop"
             },
-            "entryCount": 0
+            "turnCount": 0
         }
         """;
         File.WriteAllText(Path.Combine(_tempDir, "docs", "sessions", "copilot-ws.json"), json);
@@ -128,7 +128,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
     [Fact]
     public async Task WhenImportingMissingSourceTypeThenFileIsSkipped()
     {
-        var json = """{ "sessionId": "no-source", "entryCount": 0 }""";
+        var json = """{ "sessionId": "no-source", "turnCount": 0 }""";
         File.WriteAllText(Path.Combine(_tempDir, "docs", "sessions", "bad.json"), json);
 
         var ingestor = CreateIngestor();
@@ -148,7 +148,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
                 SourceType = "Cursor",
                 SessionId = $"multi-{i}",
                 Title = $"Multi {i}",
-                EntryCount = 0
+                TurnCount = 0
             });
         }
 
@@ -168,7 +168,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
             SourceType = "Copilot",
             SessionId = "upsert-1",
             Title = "Original",
-            EntryCount = 0
+            TurnCount = 0
         });
 
         var ingestor = CreateIngestor();
@@ -180,7 +180,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
             SourceType = "Copilot",
             SessionId = "upsert-1",
             Title = "Updated",
-            EntryCount = 0
+            TurnCount = 0
         });
 
         var result = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
@@ -199,7 +199,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
             SourceType = "Cursor",
             SessionId = "unchanged-1",
             Title = "Stable",
-            EntryCount = 0
+            TurnCount = 0
         });
 
         var ingestor = CreateIngestor();
@@ -222,7 +222,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
             SourceType = "Copilot",
             SessionId = "changing-1",
             Title = "V1",
-            EntryCount = 0
+            TurnCount = 0
         });
 
         var ingestor = CreateIngestor();
@@ -234,7 +234,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
             SourceType = "Copilot",
             SessionId = "changing-1",
             Title = "V2",
-            EntryCount = 0
+            TurnCount = 0
         });
 
         var result = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
@@ -252,14 +252,14 @@ public sealed class SessionLogIngestorImportTests : IDisposable
             SourceType = "Cursor",
             SessionId = "stable-1",
             Title = "Stable",
-            EntryCount = 0
+            TurnCount = 0
         });
         WriteSessionFile("evolving.json", new UnifiedSessionLogDto
         {
             SourceType = "Cursor",
             SessionId = "evolving-1",
             Title = "V1",
-            EntryCount = 0
+            TurnCount = 0
         });
 
         var ingestor = CreateIngestor();
@@ -272,7 +272,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
             SourceType = "Cursor",
             SessionId = "evolving-1",
             Title = "V2",
-            EntryCount = 0
+            TurnCount = 0
         });
 
         var second = await ingestor.ImportToSessionLogTablesAsync().ConfigureAwait(true);
@@ -327,12 +327,12 @@ public sealed class SessionLogIngestorImportTests : IDisposable
 
         Assert.True(result.Imported >= 1);
         var stored = await _db.SessionLogs
-            .Include(s => s.Entries)
+            .Include(s => s.Turns)
             .FirstOrDefaultAsync(s => s.SourceType == "copilot")
             .ConfigureAwait(true);
         Assert.NotNull(stored);
         Assert.Contains("MD Import Test", stored!.Title, StringComparison.Ordinal);
-        Assert.NotEmpty(stored.Entries);
+        Assert.NotEmpty(stored.Turns);
     }
 
     [Fact]
@@ -393,7 +393,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
             SourceType = "Cursor",
             SessionId = "json-coexist-1",
             Title = "JSON Session",
-            EntryCount = 0
+            TurnCount = 0
         });
 
         var md = """

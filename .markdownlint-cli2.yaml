@@ -7,6 +7,7 @@ config:
   MD032: false
   MD033: false
   MD034: false
+  MD038: false
   MD040: false
   MD042: false
   MD060: false

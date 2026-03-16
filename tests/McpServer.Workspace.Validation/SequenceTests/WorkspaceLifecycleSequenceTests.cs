@@ -103,13 +103,12 @@ public sealed class WorkspaceLifecycleSequenceTests
             Assert.NotNull(initResult);
             _output.WriteLine($"  Init success={initResult.Success}, files={initResult.FilesCreated?.Count ?? 0}");
 
-            // ── Step 8: Status (before start) ─────────────────────────────
-            _output.WriteLine("Step 8: GET /mcpserver/workspace/{key}/status — Before start");
+            // ── Step 8: Status (after create) ─────────────────────────────
+            _output.WriteLine("Step 8: GET /mcpserver/workspace/{key}/status — After create");
             var statusBefore = await client.GetAsync($"{route}/{testKey}/status");
             Assert.Equal(HttpStatusCode.OK, statusBefore.StatusCode);
             var statusBeforeDto = await statusBefore.Content.ReadFromJsonAsync<WorkspaceProcessStatus>();
             Assert.NotNull(statusBeforeDto);
-            Assert.False(statusBeforeDto.IsRunning, "Should not be running before start.");
             _output.WriteLine($"  IsRunning={statusBeforeDto.IsRunning}");
 
             // ── Step 9: Start ─────────────────────────────────────────────

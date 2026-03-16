@@ -10,7 +10,7 @@ namespace McpServer.Client;
 /// <summary>
 /// Client for session log endpoints (<c>/mcpserver/sessionlog</c>). Supports submitting (upserting)
 /// session logs, querying historical logs with filters, and appending processing dialog items
-/// to existing log entries.
+/// to existing log turns.
 /// </summary>
 /// <seealso cref="McpServerClient.SessionLog"/>
 public sealed class SessionLogClient : McpClientBase
@@ -46,7 +46,7 @@ public sealed class SessionLogClient : McpClientBase
         return await GetAsync<SessionLogQueryResult>($"mcpserver/sessionlog{qs}", cancellationToken);
     }
 
-    /// <summary>Append processing dialog items to a session log entry.</summary>
+    /// <summary>Append processing dialog items to a session log turn.</summary>
     public async Task<DialogAppendResult> AppendDialogAsync(
         string agent, string sessionId, string requestId,
         List<ProcessingDialogItemDto> items, CancellationToken cancellationToken = default)

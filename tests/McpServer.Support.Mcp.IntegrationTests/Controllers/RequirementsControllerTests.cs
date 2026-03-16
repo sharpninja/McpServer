@@ -145,6 +145,7 @@ public sealed class RequirementsControllerTests : IClassFixture<RequirementsCont
             SeedWorkspaceFiles();
 
             builder.UseEnvironment("Test");
+            builder.UseContentRoot(CustomWebApplicationFactory.ResolveContentRoot());
             builder.ConfigureAppConfiguration(config =>
             {
                 config.AddInMemoryCollection(new Dictionary<string, string?>

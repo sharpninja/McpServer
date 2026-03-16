@@ -43,11 +43,11 @@ public sealed class SessionLogService : ISessionLogService
             var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(dto.SessionId, dto.SourceType);
             if (sessionIdError is not null)
                 throw new ArgumentException(sessionIdError, nameof(dto));
-            if (dto.Entries is { Count: > 0 })
+            if (dto.Turns is { Count: > 0 })
             {
-                foreach (var entry in dto.Entries)
+                foreach (var turn in dto.Turns)
                 {
-                    var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(entry.RequestId);
+                    var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(turn.RequestId);
                     if (requestIdError is not null)
                         throw new ArgumentException(requestIdError, nameof(dto));
                 }
@@ -62,7 +62,7 @@ public sealed class SessionLogService : ISessionLogService
             MapDtoToEntity(dto, existing);
             existing.SourceFilePath = sourceFilePath;
             existing.ContentHash = contentHash;
-            UpsertEntries(existing, dto.Entries);
+            UpsertTurns(existing, dto.Turns);
             _logger.LogInformation("Updated session log {SourceType}/{SessionId} (Id={Id})", dto.SourceType, dto.SessionId, existing.Id);
         }
         else
@@ -75,7 +75,7 @@ public sealed class SessionLogService : ISessionLogService
                 ContentHash = contentHash
             };
             MapDtoToEntity(dto, existing);
-            existing.Entries = MapNewEntries(dto.Entries);
+            existing.Turns = MapNewTurns(dto.Turns);
             _db.SessionLogs.Add(existing);
             _logger.LogInformation("Created session log {SourceType}/{SessionId}", dto.SourceType, dto.SessionId);
         }
@@ -97,7 +97,7 @@ public sealed class SessionLogService : ISessionLogService
             MapDtoToEntity(dto, existing);
             existing.SourceFilePath = sourceFilePath;
             existing.ContentHash = contentHash;
-            UpsertEntries(existing, dto.Entries);
+            UpsertTurns(existing, dto.Turns);
             await ResolveAgentDefinitionLinkAsync(dto, existing, cancellationToken).ConfigureAwait(false);
 
             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
@@ -119,17 +119,17 @@ public sealed class SessionLogService : ISessionLogService
     private Task<SessionLogEntity?> FindExistingSessionAsync(string sourceType, string sessionId, CancellationToken cancellationToken) =>
         _db.SessionLogs
             .IgnoreQueryFilters()
-            .Include(s => s.Entries)
+            .Include(s => s.Turns)
                 .ThenInclude(e => e.Actions)
-            .Include(s => s.Entries)
+            .Include(s => s.Turns)
                 .ThenInclude(e => e.Tags)
-            .Include(s => s.Entries)
+            .Include(s => s.Turns)
                 .ThenInclude(e => e.ContextItems)
-            .Include(s => s.Entries)
+            .Include(s => s.Turns)
                 .ThenInclude(e => e.ProcessingDialog)
-            .Include(s => s.Entries)
+            .Include(s => s.Turns)
                 .ThenInclude(e => e.Commits)
-            .Include(s => s.Entries)
+            .Include(s => s.Turns)
                 .ThenInclude(e => e.StringListItems)
             .FirstOrDefaultAsync(s => s.SourceType == sourceType && s.SessionId == sessionId, cancellationToken);
 
@@ -227,17 +227,17 @@ public sealed class SessionLogService : ISessionLogService
         }
 
         var allSessions = await query
-            .Include(s => s.Entries.OrderBy(e => e.Id))
+            .Include(s => s.Turns.OrderBy(e => e.Id))
                 .ThenInclude(e => e.Actions.OrderBy(a => a.Order))
-            .Include(s => s.Entries)
+            .Include(s => s.Turns)
                 .ThenInclude(e => e.Tags)
-            .Include(s => s.Entries)
+            .Include(s => s.Turns)
                 .ThenInclude(e => e.ContextItems.OrderBy(c => c.Ordinal))
-            .Include(s => s.Entries)
+            .Include(s => s.Turns)
                 .ThenInclude(e => e.ProcessingDialog.OrderBy(p => p.Ordinal))
-            .Include(s => s.Entries)
+            .Include(s => s.Turns)
                 .ThenInclude(e => e.Commits.OrderBy(c => c.Ordinal))
-            .Include(s => s.Entries)
+            .Include(s => s.Turns)
                 .ThenInclude(e => e.StringListItems.OrderBy(sl => sl.Ordinal))
             .AsSplitQuery()
             .AsNoTracking()
@@ -255,7 +255,7 @@ public sealed class SessionLogService : ISessionLogService
         if (!string.IsNullOrWhiteSpace(request.Text))
         {
             var text = request.Text;
-            filtered = filtered.Where(s => s.Entries.Any(e =>
+            filtered = filtered.Where(s => s.Turns.Any(e =>
                 (e.QueryText?.Contains(text, StringComparison.OrdinalIgnoreCase) == true) ||
                 (e.QueryTitle?.Contains(text, StringComparison.OrdinalIgnoreCase) == true) ||
                 (e.Response?.Contains(text, StringComparison.OrdinalIgnoreCase) == true) ||
@@ -315,7 +315,7 @@ public sealed class SessionLogService : ISessionLogService
         entity.Started = ParseDateTimeOffset(dto.Started);
         entity.LastUpdated = ParseDateTimeOffset(dto.LastUpdated);
         entity.Status = dto.Status;
-        entity.EntryCount = dto.EntryCount;
+        entity.TurnCount = dto.TurnCount;
         entity.TotalTokens = dto.TotalTokens;
         entity.CursorSessionLabel = dto.CursorSessionLabel;
 
@@ -337,9 +337,9 @@ public sealed class SessionLogService : ISessionLogService
         }
     }
 
-    private void UpsertEntries(SessionLogEntity session, List<UnifiedRequestEntryDto>? dtoEntries)
+    private void UpsertTurns(SessionLogEntity session, List<UnifiedRequestEntryDto>? dtoTurns)
     {
-        var incoming = dtoEntries ?? [];
+        var incoming = dtoTurns ?? [];
         var deduped = new List<UnifiedRequestEntryDto>();
         var seenRequestIds = new HashSet<string>(StringComparer.Ordinal);
         for (var i = incoming.Count - 1; i >= 0; i--)
@@ -350,7 +350,7 @@ public sealed class SessionLogService : ISessionLogService
         }
         deduped.Reverse();
 
-        var existingByRequestId = session.Entries
+        var existingByRequestId = session.Turns
             .Where(e => e.RequestId != null)
             .ToDictionary(e => e.RequestId!, StringComparer.Ordinal);
 
@@ -366,11 +366,11 @@ public sealed class SessionLogService : ISessionLogService
             else
             {
                 var newEntry = MapSingleEntry(dto);
-                session.Entries.Add(newEntry);
+                session.Turns.Add(newEntry);
             }
         }
 
-        var stale = session.Entries
+        var stale = session.Turns
             .Where(e => e.RequestId != null && !matchedIds.Contains(e.RequestId)
                         && existingByRequestId.ContainsKey(e.RequestId))
             .ToList();
@@ -412,12 +412,12 @@ public sealed class SessionLogService : ISessionLogService
         entity.StringListItems = MapStringListItems(dto);
     }
 
-    private static List<SessionLogTurnEntity> MapNewEntries(List<UnifiedRequestEntryDto>? entries)
+    private static List<SessionLogTurnEntity> MapNewTurns(List<UnifiedRequestEntryDto>? turns)
     {
-        if (entries is null or { Count: 0 })
+        if (turns is null or { Count: 0 })
             return [];
 
-        return entries.Select(MapSingleEntry).ToList();
+        return turns.Select(MapSingleEntry).ToList();
     }
 
     private static SessionLogTurnEntity MapSingleEntry(UnifiedRequestEntryDto e)
@@ -539,7 +539,7 @@ public sealed class SessionLogService : ISessionLogService
             Started = entity.Started?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
             LastUpdated = entity.LastUpdated?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),
             Status = entity.Status,
-            EntryCount = entity.EntryCount,
+            TurnCount = entity.TurnCount,
             TotalTokens = entity.TotalTokens,
             CursorSessionLabel = entity.CursorSessionLabel,
             CopilotStatistics = entity.CopilotAvgSuccessScore.HasValue || entity.CopilotTotalNetTokens.HasValue
@@ -562,7 +562,7 @@ public sealed class SessionLogService : ISessionLogService
                     Branch = entity.Branch
                 }
                 : null,
-            Entries = entity.Entries.Select(e => new UnifiedRequestEntryDto
+            Turns = entity.Turns.Select(e => new UnifiedRequestEntryDto
             {
                 RequestId = e.RequestId,
                 Timestamp = e.Timestamp?.ToUniversalTime().ToString("o", CultureInfo.InvariantCulture),

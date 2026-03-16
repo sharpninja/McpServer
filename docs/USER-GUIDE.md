@@ -172,7 +172,7 @@ The sample host:
 - supports configurable response verbosity through `SampleHost:Verbosity` or `MCP_AGENT_VERBOSITY`
 - supports configurable OpenAI client network timeout and retry count through `SampleHost:Model:NetworkTimeoutSeconds`, `SampleHost:Model:MaxRetries`, `OPENAI_NETWORK_TIMEOUT_SECONDS`, and `OPENAI_MAX_RETRIES`
 - lets you switch verbosity live with `/v 1`, `/v 2`, or `/v 3`
-- routes lines prefixed with `! ` directly into the hosted local PowerShell session while leaving other lines as normal chat prompts
+- routes lines prefixed with `!` plus a space directly into the hosted local PowerShell session while leaving other lines as normal chat prompts
 - logs chat turns through the hosted session-log workflow
 - exposes repository tools, `mcp_desktop_launch` for authenticated local program execution through MCP Server, `mcp_powershell_session_*` for model-facing stateful PowerShell execution, and `IMcpHostedAgent.PowerShellSessions` for host-facing direct PowerShell execution
 
@@ -556,4 +556,3 @@ Invoke-RestMethod -Method Post -Uri "http://localhost:7147/mcpserver/workspace" 
 - FAQ: `docs/FAQ.md`
 - Context docs: `docs/context/`
 - Tunnel runbooks: `docs/Operations/`
-

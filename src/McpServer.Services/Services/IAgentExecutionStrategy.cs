@@ -7,6 +7,7 @@ internal static class AgentExecutionStrategyNames
 {
     public const string CopilotCli = "copilot-cli";
     public const string HostedMcpAgent = "hosted-mcp-agent";
+    public const string HostedAgentFrameworkLegacy = "hosted-agentframework";
 
     public static IReadOnlyList<string> SupportedNames { get; } =
     [
@@ -23,7 +24,14 @@ internal static class AgentExecutionStrategyNames
     public static string NormalizeOrDefault(string? strategyName) =>
         string.IsNullOrWhiteSpace(strategyName)
             ? CopilotCli
-            : strategyName.Trim();
+            : NormalizeAlias(strategyName.Trim());
+
+    private static string NormalizeAlias(string strategyName)
+    {
+        return string.Equals(strategyName, HostedAgentFrameworkLegacy, StringComparison.OrdinalIgnoreCase)
+            ? HostedMcpAgent
+            : strategyName;
+    }
 }
 
 internal sealed record AgentExecutionSessionRequest(
