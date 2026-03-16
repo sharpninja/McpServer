@@ -35,12 +35,11 @@ internal sealed class HostedMcpAgentExecutionStrategy(
             : request.WorkspacePath;
         var apiKey = workspaceTokenService.GetToken(workspacePath) ?? workspaceTokenService.GenerateToken(workspacePath);
         var baseUrl = new Uri($"http://127.0.0.1:{serverRuntimeInfo.ListenPort}");
-        var hostedOptions = CreateHostedAgentOptions(request, workspacePath, baseUrl, apiKey);
+        var hostedTimeout = ResolveHostedTimeout(request.Options.Timeout);
+        var hostedOptions = CreateHostedAgentOptions(request, workspacePath, baseUrl, apiKey, hostedTimeout);
         var httpClient = new HttpClient
         {
-            Timeout = request.Options.Timeout > TimeSpan.Zero && request.Options.Timeout != Timeout.InfiniteTimeSpan
-                ? request.Options.Timeout
-                : TimeSpan.FromSeconds(300),
+            Timeout = hostedTimeout,
         };
         var client = new McpServerClient(
             httpClient,
@@ -82,7 +81,8 @@ internal sealed class HostedMcpAgentExecutionStrategy(
         AgentExecutionSessionRequest request,
         string workspacePath,
         Uri baseUrl,
-        string apiKey)
+        string apiKey,
+        TimeSpan timeout)
     {
         var agentName = BuildHostedAgentName(request.AgentName);
         return new McpAgentOptions
@@ -94,12 +94,17 @@ internal sealed class HostedMcpAgentExecutionStrategy(
             Description = $"Hosted MCP Agent execution strategy for {agentName}.",
             RequireAuthentication = true,
             SourceType = McpHostedAgentDefaults.DefaultSourceType,
-            Timeout = request.Options.Timeout > TimeSpan.Zero && request.Options.Timeout != Timeout.InfiniteTimeSpan
-                ? request.Options.Timeout
-                : TimeSpan.FromSeconds(300),
+            Timeout = timeout,
             WorkspacePath = workspacePath,
         };
     }
+
+    internal static TimeSpan ResolveHostedTimeout(TimeSpan requestedTimeout)
+        => requestedTimeout == Timeout.InfiniteTimeSpan
+            ? Timeout.InfiniteTimeSpan
+            : requestedTimeout > TimeSpan.Zero
+                ? requestedTimeout
+                : TimeSpan.FromSeconds(300);
 
     private static string BuildHostedAgentId(string agentName)
     {

@@ -46,6 +46,30 @@ public sealed class WorkspacePolicyDirectiveParserTests
         Assert.NotNull(result.Error);
     }
 
+    [Fact]
+    public async Task ParseAsync_UsesInfiniteCopilotTimeout()
+    {
+        CopilotClientOptions? capturedOptions = null;
+        var copilot = Substitute.For<ICopilotClient>();
+        copilot.InvokeAsync(Arg.Any<string>(), Arg.Any<CopilotClientOptions?>(), Arg.Any<CancellationToken>())
+            .Returns(callInfo =>
+            {
+                capturedOptions = callInfo.ArgAt<CopilotClientOptions?>(1);
+                return new CopilotResult
+                {
+                    State = CopilotResultState.Success,
+                    Body = """{"action":"add","category":"country_of_origin","values":["CN"],"scope":"all"}""",
+                };
+            });
+
+        var parser = CreateParser(copilot);
+        var result = await parser.ParseAsync("Ban chinese sources from all workspaces", workspacePathHint: null).ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        Assert.NotNull(capturedOptions);
+        Assert.Equal(Timeout.InfiniteTimeSpan, capturedOptions!.Timeout);
+    }
+
     private static WorkspacePolicyDirectiveParser CreateParser(ICopilotClient copilotClient)
     {
         var todoService = Substitute.For<ITodoService>();

@@ -49,7 +49,8 @@ public sealed class VoiceConversationOptions
     public int MaxToolSteps { get; set; } = 6;
 
     /// <summary>
-    /// Timeout for a single Copilot CLI invocation in seconds.
+    /// Legacy compatibility setting retained for configuration binding.
+    /// McpServer no longer applies a wallclock timeout to Copilot process lifetime.
     /// </summary>
     public int CopilotTimeoutSeconds { get; set; } = 14400;
 

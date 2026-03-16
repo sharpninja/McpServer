@@ -1285,7 +1285,7 @@ public sealed partial class VoiceConversationService
             AgentPath = agentPath,
             Model = model,
             Silent = true,
-            Timeout = TimeSpan.FromSeconds(Math.Max(5, opts.CopilotTimeoutSeconds)),
+            Timeout = Timeout.InfiniteTimeSpan,
             WorkingDirectory = workingDirectory,
             RunAs = promptOpts.RunAs,
             GitHubToken = promptOpts.GitHubToken,

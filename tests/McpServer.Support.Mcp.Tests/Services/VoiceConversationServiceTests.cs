@@ -132,6 +132,28 @@ public sealed class VoiceConversationServiceTests
             hostedStrategy.LastRequest!.Options.EnvironmentVariables["ANTHROPIC_API_KEY"]);
     }
 
+    [Fact]
+    public async Task SubmitTurnAsync_UsesInfiniteCopilotTimeoutInExecutionOptions()
+    {
+        var hostedStrategy = new CapturingAgentExecutionStrategy(AgentExecutionStrategyNames.HostedMcpAgent);
+        using var service = CreateService(
+            defaultExecutionStrategy: AgentExecutionStrategyNames.HostedMcpAgent,
+            hostedStrategy: hostedStrategy);
+
+        var created = await service.CreateSessionAsync(new VoiceSessionCreateRequest
+        {
+            AgentName = "planner",
+        }).ConfigureAwait(true);
+        var response = await service.SubmitTurnAsync(created.SessionId, new VoiceTurnRequest
+        {
+            UserTranscriptText = "hello",
+        }).ConfigureAwait(true);
+
+        Assert.NotNull(response);
+        Assert.NotNull(hostedStrategy.LastRequest);
+        Assert.Equal(Timeout.InfiniteTimeSpan, hostedStrategy.LastRequest!.Options.Timeout);
+    }
+
     private static VoiceConversationService CreateService(
         string defaultExecutionStrategy = AgentExecutionStrategyNames.CopilotCli,
         string? modelApiKey = null,
