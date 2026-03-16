@@ -234,12 +234,12 @@ Pipeline jobs include:
 
 ## VS Code / VS 2026 Extensions
 
-Extension sources and packaging scripts live in:
+Extension sources live in:
 
 - `extensions/fwh-mcp-todo` (legacy name)
 - `extensions/McpServer-mcp-todo`
-- `scripts/Package-Vsix.ps1`
-- `scripts/Build-AndInstall-Vsix.ps1`
+
+In the RequestTracker host workspace, VSIX packaging is orchestrated by the repo-root `BuildAndInstallVsix` target rather than standalone scripts inside this submodule.
 
 ## Client Library
 
