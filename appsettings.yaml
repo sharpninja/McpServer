@@ -10,7 +10,7 @@ Serilog:
       McpServer.Support.Mcp.Logging: Verbose
 AllowedHosts: '*'
 VoiceConversation:
-  DefaultExecutionStrategy: hosted-mcp-agent
+  DefaultExecutionStrategy: copilot-cli
   ModelApiKeyEnvironmentVariableName: OPENAI_API_KEY
 Embedding:
   Enabled: true
