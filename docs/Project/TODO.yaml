@@ -2098,7 +2098,7 @@ Architecture:
   - id: MCP-AGENTFRAMEWORK-001
     title: Create .NET 9 hosted agent library for Microsoft Agent Framework with MCP workflows
     note: 'Planned hosted Microsoft Agent Framework library. Validation target: TEST-MCP-089.'
-    done: false
+    done: true
     description:
     - Create a .NET 9 class library that provides an MCP-aware agent for host applications built on Microsoft Agent Framework.
     - The hosted agent should expose built-in workflow for MCP Server session logging and TODO management so host apps can consume plan, status, and implementation flows directly.
