@@ -258,7 +258,20 @@ public abstract class McpClientBase
     /// <exception cref="McpNotFoundException">HTTP 404 Not Found.</exception>
     /// <exception cref="McpConflictException">HTTP 409 Conflict.</exception>
     /// <exception cref="McpServerException">Any other non-success HTTP status.</exception>
-    protected async Task<HttpResponseMessage> SendRawAsync(HttpMethod method, string path, object? body, CancellationToken cancellationToken)
+    protected Task<HttpResponseMessage> SendRawAsync(HttpMethod method, string path, object? body, CancellationToken cancellationToken)
+        => SendRawAsync(method, path, body, HttpCompletionOption.ResponseContentRead, null, cancellationToken);
+
+    /// <summary>
+    /// Sends an HTTP request and returns the raw successful response message using the specified
+    /// completion option and optional Accept header.
+    /// </summary>
+    protected async Task<HttpResponseMessage> SendRawAsync(
+        HttpMethod method,
+        string path,
+        object? body,
+        HttpCompletionOption completionOption,
+        string? acceptMediaType,
+        CancellationToken cancellationToken)
     {
         EnsureAuthenticated();
 
@@ -273,6 +286,9 @@ public abstract class McpClientBase
         if (!string.IsNullOrWhiteSpace(WorkspacePath))
             request.Headers.TryAddWithoutValidation("X-Workspace-Path", WorkspacePath);
 
+        if (!string.IsNullOrWhiteSpace(acceptMediaType))
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(acceptMediaType));
+
         if (body is not null)
             request.Content = new StringContent(
                 JsonSerializer.Serialize(body, s_jsonOptions), Encoding.UTF8, "application/json");
@@ -280,7 +296,7 @@ public abstract class McpClientBase
         HttpResponseMessage response;
         try
         {
-            response = await _http.SendAsync(request, cancellationToken);
+            response = await _http.SendAsync(request, completionOption, cancellationToken);
         }
         catch (Exception ex)
         {
