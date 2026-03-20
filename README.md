@@ -1,8 +1,8 @@
 # MCP Server
 
-Standalone repository for `McpServer.Support.Mcp`, the MCP context server used for todo management, session logs, context search, repository operations, and GitHub issue sync.
+MCP Server is a standalone ASP.NET Core service for workspace-scoped context retrieval, TODO orchestration, session logging, repository operations, GraphRAG, and GitHub automation.
 
-## What This Server Provides
+## Documentation
 
 - HTTP API with Swagger UI
 - MCP over STDIO transport (`--transport stdio`)
@@ -270,6 +270,8 @@ Source: `src/McpServer.Client/` — see the [package README](#) for full usage.
 
 ## Additional Documentation
 
-- Full server guide: `docs/MCP-SERVER.md`
 - User documentation: `docs/USER-GUIDE.md`
+- Server and operator guide: `docs/MCP-SERVER.md`
 - Documentation index: `docs/README.md`
+- FAQ: `docs/FAQ.md`
+- Client integration: `docs/CLIENT-INTEGRATION.md`

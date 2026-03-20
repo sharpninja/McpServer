@@ -1158,7 +1158,8 @@ mvp-mcp:
     title: Implement per-agent workspace functionality
     estimate: 5-8 days AI-assisted
     note: 'Replanned and reopened on 2026-03-10 based on code audit. Existing data model/service CRUD foundations are present (AgentDefinitionEntity, AgentWorkspaceEntity, AgentEventLogEntity, AgentService CRUD, AgentController CRUD/read endpoints, built-in seed defaults), but the runtime per-agent workspace feature set is still missing or incomplete. Missing/partial areas confirmed by audit: (1) agent process lifecycle management (launch/stop/status tracking), (2) enforced isolation strategies (worktree/clone/none), (3) enforced branch strategies, (4) marker file agent additions injection, (5) session-log linkage to agent definition, (6) health monitoring/restart behavior, (7) runtime controller endpoints + tests + docs. This TODO status had drifted and was incorrectly marked done; it is now reopened with a regenerated plan aligned to current code. Retry verification confirmed persisted progress now includes a hand-authored migration file: 20260310213500_AddAgentRuntimeRestartPolicyAndSessionAgentLink.cs.'
-    done: false
+    done: true
+    completed: 2026-03-16T23:30:09.6201927Z
     description:
     - Implement the runtime behavior layer for per-agent workspace functionality, building on the existing complete data model (AgentDefinitionEntity, AgentWorkspaceEntity, AgentEventLogEntity) and service layer (AgentService, AgentController).
     - 'Core capability: Launch, monitor, and stop agent processes per-workspace with workspace-specific configuration overrides (launch command, models, branch strategy, seed prompt, isolation mode).'
@@ -1167,8 +1168,8 @@ mvp-mcp:
     - 'Session log linkage: Connect SessionLogEntity.SourceType to AgentDefinitionEntity via optional FK, enabling agent-scoped session log queries and audit trails.'
     - 'Branch management: Enforce BranchStrategy per agent - direct (commit to current branch), feature-branch (create agent-named branch), or worktree (git worktree per agent session).'
     - 'Health monitoring: Periodic health checks on running agent processes with configurable restart policies (never, on-failure, always).'
-    done-summary: ''
-    remaining: Requirements traceability docs have been advanced by confirming FR-MCP-050 is present in Functional Requirements and ensuring FR-MCP-050 maps to TR-MCP-AGENT-008 through TR-MCP-AGENT-012 in TR-per-FR-Mapping. Remaining work is final doneSummary/remaining cleanup plus build/test/manual validation before closure.
+    done-summary: Validated the per-agent workspace runtime end-to-end. Live smoke confirmed marker regeneration plus protected agent launch/process-status/running surfaces, and surfaced a Windows clone-cleanup bug when stopping agents with read-only Git pack files. Fixed clone cleanup to clear read-only attributes before recursive delete, added regression coverage, and re-ran targeted build/runtime/session-link/integration tests successfully.
+    remaining: None.
     technical-details:
     - 'AGENT PROCESS MANAGER: Create IAgentProcessManager interface with methods: LaunchAsync(workspacePath, agentId, ct) -> AgentProcessInfo, StopAsync(workspacePath, agentId, ct) -> bool, GetStatusAsync(workspacePath, agentId, ct) -> AgentProcessInfo, ListRunningAsync(workspacePath?, ct) -> IReadOnlyList<AgentProcessInfo>. Implementation AgentProcessManager uses System.Diagnostics.Process to launch agent CLI tools. Tracks running processes in ConcurrentDictionary<(string workspacePath, string agentId), AgentProcessInfo>. AgentProcessInfo record: ProcessId, AgentId, WorkspacePath, StartedAt, Status (Running/Stopped/Failed), ExitCode?, WorkDirectory (isolated path if applicable).'
     - 'LAUNCH COMMAND RESOLUTION: When launching an agent, resolve the effective launch command: AgentWorkspaceEntity.LaunchCommandOverride ?? AgentDefinitionEntity.LaunchCommand. Support command template variables: {workspacePath}, {agentId}, {branchName}, {modelList}, {seedPrompt}. Parse command string into executable + arguments. Log resolved command to AgentEventLog with EventType=Launch.'
@@ -1427,7 +1428,7 @@ mvp-mcp:
     title: Director manual TUI smoke validation follow-up
     estimate: '"\"0.5-1 day AI-assisted\""'
     note: '"\"Moved from MVP-MCP-003 Phase 15.3 so endpoint-coverage delivery can be closed while manual interactive verification is tracked independently.\""'
-    done: false
+    done: true
     description:
     - Launch Director interactive mode and run an end-to-end manual smoke pass for migrated tabs.
     - Validate role-based tab visibility (admin vs viewer) in live TUI behavior.
@@ -1637,6 +1638,12 @@ infrastructure:
       done: true
     - task: 'Phase 8.3 Completion: run build + targeted unit/integration tests, update TODO doneSummary/remaining, and finalize session log evidence.'
       done: true
+  - id: MCP-TODO-005
+    title: Make TODO database the source of truth with YAML sync and audit history
+    note: 2026-03-20T15:40:45Z blocker resolved. Reviewed the pre-existing pending diff, validated config and the changed integration tests, removed unsafe machine-local temp workspace entries from src/McpServer.Support.Mcp/appsettings.yaml, and am committing the pending changes before starting MCP-TODO-005 implementation.
+    done: false
+    description:
+    - Use the database as the canonical store for TODO items, synchronize every database mutation back to the configured workspace todo.yaml, add audit logging for tracked TODO item state changes, and expose an audit endpoint that returns the full tracked state history for a TODO item.
   medium-priority:
   - id: do-not-speak-tables
     title: '[NEED PLAN] Do Not Speak Tables'
@@ -2451,7 +2458,8 @@ Documentation:
   - id: MCP-USERDOCS-001
     title: '[READY] Create User Documentation'
     estimate: 3d
-    done: false
+    note: User documentation published in docs/USER-GUIDE.md with installation, configuration, full REST controller reference, MCP tool catalogue, GraphRAG guide, multi-tenancy guide, troubleshooting, and index wiring updates. No dependent TODO items reference MCP-USERDOCS-001 in dependsOn.
+    done: true
     description:
     - Author comprehensive user-facing documentation for the MCP Context Server.
     - Covers installation, configuration, API reference, MCP tool catalogue, GraphRAG setup, agent pool usage, and troubleshooting.
@@ -2463,21 +2471,21 @@ Documentation:
     - Add agent pool and workspace multi-tenancy setup guide.
     implementation-tasks:
     - task: Write Installation & Prerequisites guide
-      done: false
+      done: true
     - task: Write Configuration reference (appsettings + marker file)
-      done: false
+      done: true
     - task: Write REST API reference (all controllers)
-      done: false
+      done: true
     - task: Write MCP tool catalogue (all stdio tools)
-      done: false
+      done: true
     - task: Write GraphRAG setup and usage guide
-      done: false
+      done: true
     - task: Write Agent Pool and workspace multi-tenancy guide
-      done: false
+      done: true
     - task: Write Troubleshooting / FAQ section
-      done: false
+      done: true
     - task: Wire all docs into README index and docs/ folder
-      done: false
+      done: true
   - id: DOC-MARKETING-001
     title: "Create Marketing Docs: What McpServer is, features, why it's needed, supported UI tooling"
     note: '"**Implementation Plan**'
@@ -2593,8 +2601,8 @@ issues:
 
       created: 2026-03-11T17:29:38Z
 
-      updated: 2026-03-11T19:20:04Z
-    done: false
+      updated: 2026-03-12T04:49:52Z
+    done: true
     description:
     - >-
       Observed on March 11, 2026.

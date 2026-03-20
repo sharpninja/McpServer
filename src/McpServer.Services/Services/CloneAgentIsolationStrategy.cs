@@ -76,6 +76,7 @@ public sealed class CloneAgentIsolationStrategy : IAgentIsolationStrategy
         if (!Directory.Exists(clonePath))
             return Task.CompletedTask;
 
+        ClearReadOnlyAttributes(clonePath);
         Directory.Delete(clonePath, recursive: true);
         _logger.LogInformation("Removed agent clone directory at {ClonePath}", clonePath);
         return Task.CompletedTask;
@@ -97,6 +98,24 @@ public sealed class CloneAgentIsolationStrategy : IAgentIsolationStrategy
 
     private string GetClonePath(string workspacePath, string agentId)
         => Path.Combine(workspacePath, _agentsDirectoryName, $"{agentId}-clone");
+
+    private static void ClearReadOnlyAttributes(string directoryPath)
+    {
+        var root = new DirectoryInfo(directoryPath);
+        root.Attributes &= ~FileAttributes.ReadOnly;
+
+        foreach (var entry in root.EnumerateFileSystemInfos(
+                     "*",
+                     new EnumerationOptions
+                     {
+                         RecurseSubdirectories = true,
+                         AttributesToSkip = 0
+                     }))
+        {
+            if ((entry.Attributes & FileAttributes.ReadOnly) != 0)
+                entry.Attributes &= ~FileAttributes.ReadOnly;
+        }
+    }
 
     private static string NormalizePath(string path)
         => Path.GetFullPath(path.Trim().TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));

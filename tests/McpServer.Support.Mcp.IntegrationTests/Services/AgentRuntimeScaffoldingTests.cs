@@ -109,6 +109,40 @@ public sealed class AgentRuntimeScaffoldingTests
     }
 
     /// <summary>
+    /// Verifies that <see cref="CloneAgentIsolationStrategy.CleanupAsync(string, string, CancellationToken)"/>
+    /// removes clone directories even when Git pack files are marked read-only on Windows.
+    /// Tests MVP-MCP-005 runtime cleanup using a clone layout that matches the live stop-path failure.
+    /// </summary>
+    [Fact]
+    public async Task CloneIsolationStrategy_CleanupAsync_RemovesReadOnlyGitArtifacts()
+    {
+        var workspacePath = Path.Combine(Path.GetTempPath(), $"mcp-clone-cleanup-{Guid.NewGuid():N}");
+        var clonePath = Path.Combine(workspacePath, ".agents", "planner-clone");
+        var gitPackPath = Path.Combine(clonePath, ".git", "objects", "pack");
+        Directory.CreateDirectory(gitPackPath);
+
+        var packIndexPath = Path.Combine(gitPackPath, "pack-test.idx");
+        await File.WriteAllTextAsync(packIndexPath, "idx").ConfigureAwait(true);
+        File.SetAttributes(packIndexPath, File.GetAttributes(packIndexPath) | FileAttributes.ReadOnly);
+
+        var strategy = new CloneAgentIsolationStrategy(
+            Substitute.For<IProcessRunner>(),
+            Microsoft.Extensions.Options.Options.Create(new AgentProcessManagerOptions()),
+            NullLogger<CloneAgentIsolationStrategy>.Instance);
+
+        try
+        {
+            await strategy.CleanupAsync(workspacePath, "planner").ConfigureAwait(true);
+
+            Assert.False(Directory.Exists(clonePath));
+        }
+        finally
+        {
+            DeleteDirectoryIfPresent(workspacePath);
+        }
+    }
+
+    /// <summary>
     /// Verifies that <see cref="DirectAgentBranchStrategy"/> calls git rev-parse using the supplied working
     /// directory and returns the branch name from stdout. Tests MVP-MCP-005: direct strategy reads the current branch.
     /// </summary>
@@ -192,5 +226,29 @@ public sealed class AgentRuntimeScaffoldingTests
         Assert.True(context.TryGetValue("agentAdditions", out var raw));
         var items = Assert.IsAssignableFrom<IEnumerable<object>>(raw);
         Assert.Equal(2, items.Count());
+    }
+
+    private static void DeleteDirectoryIfPresent(string path)
+    {
+        if (!Directory.Exists(path))
+            return;
+
+        var root = new DirectoryInfo(path);
+        foreach (var entry in root.EnumerateFileSystemInfos(
+                     "*",
+                     new EnumerationOptions
+                     {
+                         RecurseSubdirectories = true,
+                         AttributesToSkip = 0
+                     }))
+        {
+            if ((entry.Attributes & FileAttributes.ReadOnly) != 0)
+                entry.Attributes &= ~FileAttributes.ReadOnly;
+        }
+
+        if ((root.Attributes & FileAttributes.ReadOnly) != 0)
+            root.Attributes &= ~FileAttributes.ReadOnly;
+
+        Directory.Delete(path, recursive: true);
     }
 }
