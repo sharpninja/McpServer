@@ -131,6 +131,26 @@ public sealed class SqliteTodoServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task Query_WithBooleanKeyword_CanMatchAcrossFields()
+    {
+        await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "SQL-TODO-001",
+            Title = "Alpha release",
+            Section = "mvp-app",
+            Priority = "high",
+        }).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new TodoQueryRequest
+        {
+            Keyword = "sql && todo",
+        }).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal("SQL-TODO-001", item.Id);
+    }
+
+    [Fact]
     public async Task Create_InvalidTodoId_ReturnsError()
     {
         var result = await _sut.CreateAsync(new TodoCreateRequest

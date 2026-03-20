@@ -211,6 +211,28 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task WhenQueryingByBooleanTextThenTermsCanMatchAcrossTurnFields()
+    {
+        var match = CreateTestDto("Cursor", BuildSessionId("Cursor", "bool-match"));
+        match.Turns![0].QueryTitle = "Alpha kickoff";
+        match.Turns[0].Response = "Completed beta rollout";
+        await _sut.SubmitAsync(match).ConfigureAwait(true);
+
+        var miss = CreateTestDto("Cursor", BuildSessionId("Cursor", "bool-miss"));
+        miss.Turns![0].QueryTitle = "Alpha kickoff";
+        miss.Turns[0].Response = "Completed gamma rollout";
+        await _sut.SubmitAsync(miss).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest
+        {
+            Text = "alpha && beta",
+        }).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal(BuildSessionId("Cursor", "bool-match"), item.SessionId);
+    }
+
+    [Fact]
     public async Task WhenSubmittingWithMissingSourceTypeThenArgumentExceptionIsThrown()
     {
         var dto = new UnifiedSessionLogDto { SourceType = null, SessionId = "test" };

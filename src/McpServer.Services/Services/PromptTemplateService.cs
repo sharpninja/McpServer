@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using HandlebarsDotNet;
+using McpServer.Cqrs.Search;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
 using Microsoft.Extensions.Logging;
@@ -82,10 +83,8 @@ public sealed class PromptTemplateService : IPromptTemplateService, IDisposable
 
         if (!string.IsNullOrWhiteSpace(keyword))
         {
-            filtered = filtered.Where(t =>
-                (t.Id?.Contains(keyword, StringComparison.OrdinalIgnoreCase) ?? false) ||
-                (t.Title?.Contains(keyword, StringComparison.OrdinalIgnoreCase) ?? false) ||
-                (t.Description?.Contains(keyword, StringComparison.OrdinalIgnoreCase) ?? false));
+            var matcher = BooleanSearchParser.Parse(keyword);
+            filtered = filtered.Where(t => matcher(BuildKeywordSearchText(t)));
         }
 
         var result = filtered.ToList();
@@ -145,6 +144,12 @@ public sealed class PromptTemplateService : IPromptTemplateService, IDisposable
             _fileLock.Release();
         }
     }
+
+    private static string BuildKeywordSearchText(PromptTemplate template)
+        => string.Join(
+            " ",
+            new[] { template.Id, template.Title, template.Description }
+                .Where(static value => !string.IsNullOrWhiteSpace(value)));
 
     /// <inheritdoc />
     public async Task<PromptTemplateMutationResult> UpdateAsync(

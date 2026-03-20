@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text.Json;
+using McpServer.Cqrs.Search;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Storage;
@@ -254,12 +255,8 @@ public sealed class SessionLogService : ISessionLogService
 
         if (!string.IsNullOrWhiteSpace(request.Text))
         {
-            var text = request.Text;
-            filtered = filtered.Where(s => s.Turns.Any(e =>
-                (e.QueryText?.Contains(text, StringComparison.OrdinalIgnoreCase) == true) ||
-                (e.QueryTitle?.Contains(text, StringComparison.OrdinalIgnoreCase) == true) ||
-                (e.Response?.Contains(text, StringComparison.OrdinalIgnoreCase) == true) ||
-                (e.Interpretation?.Contains(text, StringComparison.OrdinalIgnoreCase) == true)));
+            var matcher = BooleanSearchParser.Parse(request.Text);
+            filtered = filtered.Where(s => s.Turns.Any(e => matcher(BuildSearchText(e))));
         }
 
         var filteredList = filtered.ToList();
@@ -281,6 +278,12 @@ public sealed class SessionLogService : ISessionLogService
             Items = items
         };
     }
+
+    private static string BuildSearchText(SessionLogTurnEntity turn)
+        => string.Join(
+            " ",
+            new[] { turn.QueryText, turn.QueryTitle, turn.Response, turn.Interpretation }
+                .Where(static value => !string.IsNullOrWhiteSpace(value)));
 
     private async Task ResolveAgentDefinitionLinkAsync(UnifiedSessionLogDto dto, SessionLogEntity entity, CancellationToken cancellationToken)
     {

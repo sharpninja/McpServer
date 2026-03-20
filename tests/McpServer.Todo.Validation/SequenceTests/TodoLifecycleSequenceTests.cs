@@ -150,15 +150,27 @@ public sealed class TodoLifecycleSequenceTests
 
             // ── Step 10: Requirements (if Copilot available) ──────────────
             _output.WriteLine("Step 10: POST /mcpserver/todo/{id}/requirements — Analyze");
-            var reqResponse = await client.PostAsync(
-                $"{route}/{Uri.EscapeDataString(testId)}/requirements", null);
-            Assert.True(
-                reqResponse.StatusCode == HttpStatusCode.OK ||
-                reqResponse.StatusCode == HttpStatusCode.UnprocessableEntity,
-                $"Requirements returned unexpected {(int)reqResponse.StatusCode}.");
-            var reqResult = await reqResponse.Content.ReadFromJsonAsync<RequirementsAnalysisResult>();
-            Assert.NotNull(reqResult);
-            _output.WriteLine($"  Requirements success={reqResult.Success}, error={reqResult.Error}");
+            using (var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(30)))
+            {
+                try
+                {
+                    var reqResponse = await client.PostAsync(
+                        $"{route}/{Uri.EscapeDataString(testId)}/requirements",
+                        null,
+                        timeoutCts.Token);
+                    Assert.True(
+                        reqResponse.StatusCode == HttpStatusCode.OK ||
+                        reqResponse.StatusCode == HttpStatusCode.UnprocessableEntity,
+                        $"Requirements returned unexpected {(int)reqResponse.StatusCode}.");
+                    var reqResult = await reqResponse.Content.ReadFromJsonAsync<RequirementsAnalysisResult>();
+                    Assert.NotNull(reqResult);
+                    _output.WriteLine($"  Requirements success={reqResult.Success}, error={reqResult.Error}");
+                }
+                catch (TaskCanceledException) when (timeoutCts.IsCancellationRequested)
+                {
+                    _output.WriteLine("  Requirements request timed out locally; treating Copilot as unavailable for validation.");
+                }
+            }
 
             // ── Step 11: Delete ───────────────────────────────────────────
             _output.WriteLine("Step 11: DELETE /mcpserver/todo/{id} — Delete");

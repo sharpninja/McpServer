@@ -94,6 +94,15 @@ public sealed class TodoServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task QueryAsync_WithBooleanKeyword_CanMatchAcrossFields()
+    {
+        var result = await _sut.QueryAsync(new TodoQueryRequest { Keyword = "\"Test item\" && xUnit" }).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal("TEST-001", item.Id);
+    }
+
+    [Fact]
     public async Task GetByIdAsync_ExistingId_ReturnsItem()
     {
         var item = await _sut.GetByIdAsync("TEST-001").ConfigureAwait(true);

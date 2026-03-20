@@ -1,4 +1,5 @@
 using System.Text.Json;
+using McpServer.Cqrs.Search;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Notifications;
@@ -411,25 +412,22 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
 
         if (!string.IsNullOrWhiteSpace(request.Keyword))
         {
-            var kw = request.Keyword;
-            filtered = filtered.Where(i => MatchesKeyword(i, kw));
+            var matcher = BooleanSearchParser.Parse(request.Keyword);
+            filtered = filtered.Where(i => matcher(BuildKeywordSearchText(i)));
         }
 
         return filtered.ToList();
     }
 
-    private static bool MatchesKeyword(TodoFlatItem item, string keyword)
-    {
-        if (item.Id.Contains(keyword, StringComparison.OrdinalIgnoreCase)) return true;
-        if (item.Title.Contains(keyword, StringComparison.OrdinalIgnoreCase)) return true;
-        if (item.Description?.Any(d => d.Contains(keyword, StringComparison.OrdinalIgnoreCase)) == true) return true;
-        if (item.TechnicalDetails?.Any(d => d.Contains(keyword, StringComparison.OrdinalIgnoreCase)) == true) return true;
-        if (item.Note?.Contains(keyword, StringComparison.OrdinalIgnoreCase) == true) return true;
-        if (item.DoneSummary?.Contains(keyword, StringComparison.OrdinalIgnoreCase) == true) return true;
-        if (item.Remaining?.Contains(keyword, StringComparison.OrdinalIgnoreCase) == true) return true;
-        if (item.ImplementationTasks?.Any(t => t.Task.Contains(keyword, StringComparison.OrdinalIgnoreCase)) == true) return true;
-        return false;
-    }
+    private static string BuildKeywordSearchText(TodoFlatItem item)
+        => string.Join(
+            " ",
+            new[] { item.Id, item.Title, item.Note, item.DoneSummary, item.Remaining }
+                .Where(static value => !string.IsNullOrWhiteSpace(value))
+                .Concat(item.Description ?? Array.Empty<string>())
+                .Concat(item.TechnicalDetails ?? Array.Empty<string>())
+                .Concat(item.ImplementationTasks?.Select(static task => task.Task) ?? Array.Empty<string>())
+                .Where(static value => !string.IsNullOrWhiteSpace(value)));
 
     private async Task PublishChangeSafeAsync(string action, string entityId, CancellationToken cancellationToken)
     {
