@@ -329,8 +329,6 @@ staging-and-infrastructure:
     - task: '[Commit 3 - Docs] Add docs/Operations/Tunnel-Cloudflare.md runbook with quick/named tunnel setup, hostname routing, appsettings.json examples, single-port workspace access model, and public /health validation checklist'
       done: true
 saas:
-  high-priority: []
-  medium-priority: []
   low-priority:
   - id: saas-consolidated-roadmap
     title: SaaS planning and delivery roadmap (consolidated)
@@ -1442,9 +1440,6 @@ mvp-mcp:
       done: false
     - task: 'Phase 3 - Record outcomes: Capture pass/fail results, defects, and follow-up TODOs; update TODO notes and session log with findings.'
       done: false
-  low-priority: []
-test:
-  low-priority: []
 infrastructure:
   high-priority:
   - id: android-oidc-proxy-routes
@@ -1640,10 +1635,44 @@ infrastructure:
       done: true
   - id: MCP-TODO-005
     title: Make TODO database the source of truth with YAML sync and audit history
-    note: 2026-03-20T15:40:45Z blocker resolved. Reviewed the pre-existing pending diff, validated config and the changed integration tests, removed unsafe machine-local temp workspace entries from src/McpServer.Support.Mcp/appsettings.yaml, and am committing the pending changes before starting MCP-TODO-005 implementation.
+    note: '2026-03-20T15:40:45Z: Implementation and validation are complete. SQLite is now authoritative for TODO current state, TODO.yaml is a deterministic projection, audit history is exposed through REST/MCP/client surfaces, sqlite is the shipped default provider, and support/unit, client, and integration suites are green. FR-MCP-072, TR-MCP-TODO-005, TR-MCP-TODO-006, TEST-MCP-096, and TEST-MCP-097 were added during implementation. Next: commit, push, and monitor CI.'
     done: false
     description:
-    - Use the database as the canonical store for TODO items, synchronize every database mutation back to the configured workspace todo.yaml, add audit logging for tracked TODO item state changes, and expose an audit endpoint that returns the full tracked state history for a TODO item.
+    - Make SQLite the authoritative current-state store for TODO items while keeping docs/Project/TODO.yaml synchronized as a deterministic projection of database state.
+    - Persist append-only audit history for TODO state changes and expose that history through HTTP, MCP STDIO, and the typed client.
+    - Preserve special TODO document sections such as code-review-remediation, completed, and notes without leaving YAML as the runtime source of truth.
+    remaining: Commit the validated implementation, push develop, and monitor/remediate the CI pipeline if needed.
+    technical-details:
+    - Keep TODO persistence in the existing raw SQLite TODO store rather than moving this feature into McpDbContext for this change.
+    - 'Add additive schema upgrades for todo_items ordering metadata: item_kind, section_order, and item_order.'
+    - Add a todo_item_history table with monotonic per-id versions and stored pre/post snapshots for reconstructable audit history.
+    - Add a todo_document_metadata singleton table for completed, notes, and code-review-remediation reference metadata.
+    - Run schema upgrade, YAML bootstrap import, and projection repair behind a one-time asynchronous initialization gate per workspace service instance.
+    - Treat a non-empty database as authoritative; only import YAML when the DB is empty and the configured TODO file exists.
+    - Surface YAML projection failures explicitly instead of pretending the mutation fully succeeded.
+    - Deliver a GET /mcpserver/todo/{id}/audit endpoint, matching MCP tool support, and typed client support as part of the same feature.
+    functional-requirements:
+    - FR-MCP-072
+    technical-requirements:
+    - TR-MCP-TODO-005
+    - TR-MCP-TODO-006
+    implementation-tasks:
+    - task: 'Phase 0: finalize migration, DTO, initialization, configuration, and requirement contracts before feature code lands'
+      done: true
+    - task: 'Phase 1: extend the SQLite schema with ordering metadata, audit history, and document metadata tables'
+      done: true
+    - task: 'Phase 2: build YAML import and deterministic YAML projection support around the DB-authoritative store'
+      done: true
+    - task: 'Phase 3: refactor the active TODO service so DB reads and writes are authoritative and YAML becomes a synchronized projection'
+      done: true
+    - task: 'Phase 4: add TODO audit query support to the REST API, MCP STDIO tool surface, and typed client'
+      done: true
+    - task: 'Phase 5: flip shipped configuration defaults to sqlite-backed TODO storage and update supporting docs'
+      done: true
+    - task: 'Phase 6: update requirements docs and replace backend-isolation tests with DB-authoritative behavior coverage'
+      done: true
+    - task: 'Phase 7: run build and test validation, then finalize the TODO item, session log, commit, push, and CI remediation'
+      done: false
   medium-priority:
   - id: do-not-speak-tables
     title: '[NEED PLAN] Do Not Speak Tables'
@@ -2584,8 +2613,6 @@ MCP:
       done: true
     - task: Document the standardized 500 contract and developer guidance for surfacing operation context so future endpoints automatically comply.
       done: true
-Diagnostics:
-  high-priority: []
 issues:
   low-priority:
   - id: ISSUE-28
@@ -2632,7 +2659,3 @@ issues:
 
       updated: 2026-02-19T16:17:20Z
     done: false
-mvp-support:
-  high-priority: []
-  medium-priority: []
-  low-priority: []

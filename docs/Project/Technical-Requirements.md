@@ -655,3 +655,23 @@ Persistence SHALL be delegated to a dedicated helper service that resolves the c
 **Status:** ✅ Complete
 
 **Covered by:** `ConfigurationController`, `AppSettingsFileService`, `Program.cs` (JWT Bearer auth setup), `WorkspaceController` (shared appsettings helper reuse)
+
+## TR-MCP-TODO-005
+
+**SQLite-Authoritative TODO Storage with Deterministic YAML Projection** — The TODO subsystem SHALL use SQLite as the authoritative current-state store for workspace TODO items. Service initialization SHALL perform additive schema upgrade, one-time bootstrap import from an existing `TODO.yaml` when the authoritative database is empty, and deterministic projection back to the configured TODO YAML path after successful mutations. The authoritative store SHALL preserve projection metadata needed to rehydrate ordered sections, `code-review-remediation` phases, `notes`, `completed`, and the code-review reference without treating YAML as runtime source of truth.
+
+Projection failures after a committed authoritative mutation SHALL surface an explicit failure result instead of silent success, and shipped configuration defaults SHALL point TODO storage at the SQLite-backed provider.
+
+**Status:** ✅ Complete
+
+**Covered by:** `SqliteTodoService`, `TodoYamlFileSerializer`, `TodoServiceFactory`, `TodoStorageOptions`, `McpInstanceResolver`, `appsettings.yaml`, `appsettings.Staging.yaml`, `src/McpServer.Support.Mcp/appsettings.yaml`, `src/McpServer.Support.Mcp/appsettings.Staging.yaml`
+
+## TR-MCP-TODO-006
+
+**Append-Only TODO Audit History and Retrieval Contract** — TODO create, update, delete, and bootstrap-import operations SHALL append reconstructable audit snapshots with monotonic per-item versions. The server SHALL expose `GET /mcpserver/todo/{id}/audit` together with typed client parity and MCP STDIO tool parity so callers can retrieve ordered tracked states for a TODO item even when the current row has been deleted but audit history still exists.
+
+Mutation results SHALL include a machine-readable failure classification so callers can distinguish validation, not-found, projection-failure, conflict, and external-sync error shapes when TODO operations fail or only partially succeed.
+
+**Status:** ✅ Complete
+
+**Covered by:** `ITodoService`, `ITodoStore`, `SqliteTodoService`, `TodoController`, `McpServerMcpTools`, `TodoClient`, `TodoModels`, `TodoCreationService`, `TodoUpdateService`

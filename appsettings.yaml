@@ -35,7 +35,7 @@ Mcp:
   UnifiedModelSchemaPath: docs/schemas/UnifiedModel.schema.json
   ExternalDocsPath: docs/external
   TodoStorage:
-    Provider: yaml
+    Provider: sqlite
     SqliteDataSource: mcp.db
   Workspaces:
   - WorkspacePath: E:\github\McpServer
@@ -73,7 +73,7 @@ Mcp:
       RepoRoot: .
       TodoFilePath: docs/Project/TODO.yaml
       TodoStorage:
-        Provider: yaml
+        Provider: sqlite
         SqliteDataSource: mcp.db
     alt-local:
       Port: 7157

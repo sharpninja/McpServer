@@ -47,7 +47,7 @@ public sealed class TodoUpdateService
         var todoService = _workspaceAccessor.GetTodoService();
         var existing = await todoService.GetByIdAsync(id, cancellationToken).ConfigureAwait(false);
         if (existing is null)
-            return new TodoMutationResult(false, $"Item with id '{id}' not found.");
+            return new TodoMutationResult(false, $"Item with id '{id}' not found.", FailureKind: TodoMutationFailureKind.NotFound);
 
         var effectiveRequest = NormalizeRequest(id, request);
         if (!HasEffectiveChanges(existing, effectiveRequest))
@@ -65,7 +65,8 @@ public sealed class TodoUpdateService
             return new TodoMutationResult(
                 false,
                 $"Updated TODO {id} locally but GitHub issue sync is not configured.",
-                result.Item);
+                result.Item,
+                TodoMutationFailureKind.ExternalSyncFailed);
         }
 
         var syncResult = await _issueTodoSyncService.SyncTodoToIssueAsync(id, cancellationToken).ConfigureAwait(false);
@@ -74,7 +75,8 @@ public sealed class TodoUpdateService
             return new TodoMutationResult(
                 false,
                 $"Updated TODO {id} locally but failed to sync GitHub issue: {syncResult.ErrorMessage}",
-                result.Item);
+                result.Item,
+                TodoMutationFailureKind.ExternalSyncFailed);
         }
 
         var commentResult = await _issueTodoSyncService
@@ -85,7 +87,8 @@ public sealed class TodoUpdateService
             return new TodoMutationResult(
                 false,
                 $"Updated TODO {id} and synced GitHub issue, but failed to add GitHub comment: {commentResult.Error}",
-                result.Item);
+                result.Item,
+                TodoMutationFailureKind.ExternalSyncFailed);
         }
 
         return result;

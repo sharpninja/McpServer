@@ -157,7 +157,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         Assert.Equal("Remaining from create", item.Remaining);
     }
 
-    /// <summary>POST /mcpserver/todo with duplicate id returns 409 Conflict.</summary>
+    /// <summary>POST /mcpserver/todo with duplicate id returns 400 Bad Request.</summary>
     [Fact]
     public async Task Create_DuplicateId_ReturnsConflict()
     {
@@ -170,7 +170,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         };
 
         var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
-        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     /// <summary>PUT /mcpserver/todo/{id} updates the item fields.</summary>
@@ -217,6 +217,63 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
 
         var getResponse = await _client.GetAsync(new Uri("/mcpserver/todo/DEL-TODO-001", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.NotFound, getResponse.StatusCode);
+    }
+
+    /// <summary>
+    /// TEST-MCP-097: Verifies that the audit endpoint returns append-only ordered history after a full
+    /// create → update → delete lifecycle against the SQLite-authoritative TODO store used by integration tests.
+    /// The fixture uses one isolated TODO id so create, update, and delete actions can be asserted by version.
+    /// </summary>
+    [Fact]
+    public async Task AuditEndpoint_AfterCreateUpdateDelete_ReturnsOrderedHistory()
+    {
+        var createRequest = new
+        {
+            id = "AUDIT-TODO-001",
+            title = "Audit item",
+            section = "mvp-app",
+            priority = "medium"
+        };
+
+        var createResponse = await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.Created, createResponse.StatusCode);
+
+        var updateResponse = await _client.PutAsJsonAsync(
+            new Uri("/mcpserver/todo/AUDIT-TODO-001", UriKind.Relative),
+            new { title = "Audit item updated", done = true }).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, updateResponse.StatusCode);
+
+        var deleteResponse = await _client.DeleteAsync(new Uri("/mcpserver/todo/AUDIT-TODO-001", UriKind.Relative)).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
+
+        var auditResponse = await _client.GetAsync(new Uri("/mcpserver/todo/AUDIT-TODO-001/audit", UriKind.Relative)).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, auditResponse.StatusCode);
+
+        var audit = await auditResponse.Content.ReadFromJsonAsync<AuditQueryResult>().ConfigureAwait(true);
+        Assert.NotNull(audit);
+        Assert.Equal(3, audit.TotalCount);
+        Assert.Collection(
+            audit.Entries,
+            entry =>
+            {
+                Assert.Equal(1, entry.Version);
+                Assert.Equal("created", entry.Action);
+                Assert.Equal("Audit item", entry.Snapshot?.Title);
+            },
+            entry =>
+            {
+                Assert.Equal(2, entry.Version);
+                Assert.Equal("updated", entry.Action);
+                Assert.Equal("Audit item updated", entry.Snapshot?.Title);
+                Assert.Equal("Audit item", entry.PreviousSnapshot?.Title);
+            },
+            entry =>
+            {
+                Assert.Equal(3, entry.Version);
+                Assert.Equal("deleted", entry.Action);
+                Assert.Equal("Audit item updated", entry.Snapshot?.Title);
+                Assert.Equal("Audit item updated", entry.PreviousSnapshot?.Title);
+            });
     }
 
     /// <summary>DELETE /mcpserver/todo/{id} for missing item returns 404.</summary>
@@ -305,7 +362,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         Assert.Equal(2, item.TechnicalRequirements.Length);
     }
 
-    /// <summary>POST /mcpserver/todo with unknown priority returns 409.</summary>
+    /// <summary>POST /mcpserver/todo with unknown priority returns 400.</summary>
     [Fact]
     public async Task Create_UnknownPriority_ReturnsConflict()
     {
@@ -318,7 +375,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         };
 
         var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), request).ConfigureAwait(true);
-        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     /// <summary>GET /mcpserver/todo/{id} returns FR/TR for item with requirements in seed YAML.</summary>
@@ -374,7 +431,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         Assert.Contains("TEST-001", item.DependsOn);
     }
 
-    /// <summary>POST /mcpserver/todo with self-dependency returns 409.</summary>
+    /// <summary>POST /mcpserver/todo with self-dependency returns 400.</summary>
     [Fact]
     public async Task Create_WithSelfDependency_ReturnsConflict()
     {
@@ -388,10 +445,10 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         };
 
         var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), request).ConfigureAwait(true);
-        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
-    /// <summary>POST /mcpserver/todo with nonexistent dependency returns 409.</summary>
+    /// <summary>POST /mcpserver/todo with nonexistent dependency returns 400.</summary>
     [Fact]
     public async Task Create_WithNonexistentDependency_ReturnsConflict()
     {
@@ -405,17 +462,17 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         };
 
         var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), request).ConfigureAwait(true);
-        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
-    /// <summary>PUT /mcpserver/todo/{id} with circular dependency returns 404 (rejected).</summary>
+    /// <summary>PUT /mcpserver/todo/{id} with circular dependency returns 400 (rejected).</summary>
     [Fact]
     public async Task Update_WithCircularDependency_ReturnsNotFound()
     {
         // TEST-002 depends on TEST-001. If we make TEST-001 depend on TEST-002, that's circular.
         var request = new { dependsOn = new[] { "TEST-002" } };
         var response = await _client.PutAsJsonAsync(new Uri("/mcpserver/todo/TEST-001", UriKind.Relative), request).ConfigureAwait(true);
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
         var result = await response.Content.ReadFromJsonAsync<MutationResult>().ConfigureAwait(true);
         Assert.NotNull(result);
@@ -428,6 +485,8 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
     #region Test DTOs (for deserialization)
 
     private sealed record QueryResult(FlatItem[] Items, int TotalCount);
+    private sealed record AuditQueryResult(AuditEntry[] Entries, int TotalCount);
+    private sealed record AuditEntry(long AuditId, string TodoId, int Version, string Action, string RecordedAtUtc, FlatItem? Snapshot, FlatItem? PreviousSnapshot, string? Source);
 
     private sealed record FlatItem(
         string? Id,
@@ -473,7 +532,9 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
                     { "Mcp:DataSource", ":memory:" },
                     { "DataFolder", _tempDir },
                     { "Mcp:RepoRoot", _tempDir },
-                    { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" }
+                    { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" },
+                    { "Mcp:TodoStorage:Provider", "sqlite" },
+                    { "Mcp:TodoStorage:SqliteDataSource", "mcp.db" }
                 });
             });
         }

@@ -473,3 +473,13 @@ When an `ISSUE-*` TODO is updated locally with new note text, the server shall p
 
 **Covered by:** `IssueTodoSyncService`, `TodoUpdateService`, `GitHubController`, `TodoController`
 
+## FR-MCP-072 Database-Authoritative TODO Storage with YAML Projection and Audit History
+
+The server shall treat SQLite as the authoritative current-state store for workspace TODO items. When a configured workspace TODO document already exists and the authoritative database is empty, initialization shall import the current YAML document once into SQLite and thereafter keep `docs/Project/TODO.yaml` synchronized as a deterministic projection of authoritative database state rather than as the live writable source of truth.
+
+The server shall preserve TODO document metadata such as `notes`, `completed`, and `code-review-remediation.reference`, retain append-only audit history for TODO state mutations, and expose that audit history through HTTP, typed client, and MCP tool surfaces so callers can retrieve tracked TODO states even after deletion when history exists.
+
+**Technical Implementation:** [TR-MCP-TODO-005](./Technical-Requirements.md#tr-mcp-todo-005) | [TR-MCP-TODO-006](./Technical-Requirements.md#tr-mcp-todo-006) | [Details](./TR-per-FR-Mapping.md#fr-mcp-072)
+
+**Covered by:** `SqliteTodoService`, `TodoYamlFileSerializer`, `TodoController`, `TodoClient`, `McpServerMcpTools`, `TodoServiceFactory`
+

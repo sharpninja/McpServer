@@ -459,6 +459,35 @@ public sealed class FwhMcpTools
         }
     }
 
+    /// <summary>TR-MCP-TODO-005: Get append-only audit history for a TODO item.</summary>
+    [McpServerTool(Name = "todo_audit"), Description("Get append-only audit history for a TODO item by id.")]
+    public async Task<string> TodoAudit(
+        [Description("TODO item id")] string id,
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Maximum entries to return (default 50)")] int limit = 50,
+        [Description("Entries to skip before returning results (default 0)")] int offset = 0,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _workspaceAccessor.GetTodoService().GetAuditAsync(id, limit, offset, cancellationToken).ConfigureAwait(false);
+            if (result.TotalCount == 0)
+                return JsonSerializer.Serialize(new { error = $"TODO audit '{id}' not found" });
+
+            return JsonSerializer.Serialize(new { entries = result.Entries, totalCount = result.TotalCount });
+        }
+        catch (NotSupportedException ex)
+        {
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+    }
+
     /// <summary>TR-PLANNED-013: Create a new TODO item.</summary>
     [McpServerTool(Name = "todo_create"), Description("Create a new TODO item. Requires id, title, section, priority.")]
     public async Task<string> TodoCreate(

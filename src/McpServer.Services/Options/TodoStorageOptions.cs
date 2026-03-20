@@ -9,9 +9,9 @@ public sealed class TodoStorageOptions
     public const string SectionName = "Mcp:TodoStorage";
 
     /// <summary>
-    /// Backend provider name: yaml or sqlite.
+     /// Backend provider name: yaml or sqlite.
     /// </summary>
-    public string Provider { get; set; } = "yaml";
+    public string Provider { get; set; } = "sqlite";
 
     /// <summary>
      /// SQLite datasource path for TODO storage when provider=sqlite.

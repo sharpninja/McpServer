@@ -117,7 +117,9 @@ public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContra
                     { "Mcp:DataSource", ":memory:" },
                     { "DataFolder", _tempDir },
                     { "Mcp:RepoRoot", _tempDir },
-                    { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" }
+                    { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" },
+                    { "Mcp:TodoStorage:Provider", "sqlite" },
+                    { "Mcp:TodoStorage:SqliteDataSource", "mcp.db" }
                 });
             });
             builder.ConfigureServices(services =>
@@ -236,6 +238,8 @@ public sealed class PassThroughTodoService : ITodoService
 
     public Task<TodoQueryResult> QueryAsync(TodoQueryRequest request, CancellationToken cancellationToken) => _inner.QueryAsync(request, cancellationToken);
     public Task<TodoFlatItem?> GetByIdAsync(string id, CancellationToken cancellationToken) => _inner.GetByIdAsync(id, cancellationToken);
+    public Task<TodoAuditQueryResult> GetAuditAsync(string id, int limit = 50, int offset = 0, CancellationToken cancellationToken = default)
+        => _inner.GetAuditAsync(id, limit, offset, cancellationToken);
     public Task<TodoMutationResult> CreateAsync(TodoCreateRequest request, CancellationToken cancellationToken) => Task.FromResult(new TodoMutationResult(true, null, new TodoFlatItem { Id = request.Id, Title = request.Title, Section = request.Section, Priority = request.Priority, Done = false }));
     public Task<TodoMutationResult> UpdateAsync(string id, TodoUpdateRequest request, CancellationToken cancellationToken) => _inner.UpdateAsync(id, request, cancellationToken);
     public Task<TodoMutationResult> DeleteAsync(string id, CancellationToken cancellationToken) => _inner.DeleteAsync(id, cancellationToken);
@@ -255,6 +259,8 @@ public sealed class FailingDeleteTodoService : ITodoService
     }
 
     public Task<TodoFlatItem?> GetByIdAsync(string id, CancellationToken cancellationToken) => _inner.GetByIdAsync(id, cancellationToken);
+    public Task<TodoAuditQueryResult> GetAuditAsync(string id, int limit = 50, int offset = 0, CancellationToken cancellationToken = default)
+        => _inner.GetAuditAsync(id, limit, offset, cancellationToken);
     public Task<TodoMutationResult> CreateAsync(TodoCreateRequest request, CancellationToken cancellationToken) => _inner.CreateAsync(request, cancellationToken);
     public Task<TodoMutationResult> UpdateAsync(string id, TodoUpdateRequest request, CancellationToken cancellationToken) => _inner.UpdateAsync(id, request, cancellationToken);
     public Task<TodoMutationResult> DeleteAsync(string id, CancellationToken cancellationToken)

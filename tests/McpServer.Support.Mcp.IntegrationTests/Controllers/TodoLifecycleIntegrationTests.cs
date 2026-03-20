@@ -686,7 +686,9 @@ public sealed class TodoLifecycleIntegrationTests
                     { "Mcp:DataSource", ":memory:" },
                     { "DataFolder", _tempDir },
                     { "Mcp:RepoRoot", _tempDir },
-                    { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" }
+                    { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" },
+                    { "Mcp:TodoStorage:Provider", "sqlite" },
+                    { "Mcp:TodoStorage:SqliteDataSource", "mcp.db" }
                 });
             });
         }

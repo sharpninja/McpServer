@@ -47,21 +47,22 @@ internal sealed class TodoServiceFactory : ITodoServiceFactory
         ArgumentException.ThrowIfNullOrWhiteSpace(workspacePath);
         ArgumentNullException.ThrowIfNull(workspaceContext);
 
+        var todoRelPath = workspaceContext.TodoFilePath ?? "docs/Project/TODO.yaml";
+        var todoFullPath = Path.GetFullPath(
+            Path.IsPathRooted(todoRelPath) ? todoRelPath : Path.Combine(workspacePath, todoRelPath));
+
         if (GetProvider() == "SQLITE")
         {
             var dataDir = workspaceContext.DataDirectory ?? workspacePath;
             var dataSource = Path.GetFullPath(Path.Combine(dataDir, "mcp.db"));
-            return new SqliteTodoService(dataSource, _auditLog, _loggerFactory.CreateLogger<SqliteTodoService>(), _eventBus);
+            return new SqliteTodoService(dataSource, todoFullPath, _auditLog, _loggerFactory.CreateLogger<SqliteTodoService>(), _eventBus);
         }
 
-        var todoRelPath = workspaceContext.TodoFilePath ?? "docs/Project/TODO.yaml";
-        var todoFullPath = Path.GetFullPath(
-            Path.IsPathRooted(todoRelPath) ? todoRelPath : Path.Combine(workspacePath, todoRelPath));
         return new TodoService(todoFullPath, _auditLog, _loggerFactory.CreateLogger<TodoService>(), _eventBus);
     }
 
     private string GetProvider()
     {
-        return (_storageOptions.Value.Provider ?? "yaml").Trim().ToUpperInvariant();
+        return (_storageOptions.Value.Provider ?? "sqlite").Trim().ToUpperInvariant();
     }
 }

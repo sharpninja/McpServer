@@ -75,6 +75,28 @@ public sealed class TodoController : ControllerBase
         return Ok(item);
     }
 
+    /// <summary>TR-MCP-TODO-005: Get append-only audit history for a single TODO item.</summary>
+    [HttpGet("{id}/audit")]
+    public async Task<ActionResult<TodoAuditQueryResult>> GetAuditAsync(
+        string id,
+        [FromQuery] int limit = 50,
+        [FromQuery] int offset = 0,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var result = await _todoService.GetAuditAsync(id, limit, offset, cancellationToken).ConfigureAwait(false);
+            if (result.TotalCount == 0)
+                return NotFound(new { error = $"Audit history for TODO '{id}' not found." });
+
+            return Ok(result);
+        }
+        catch (NotSupportedException ex)
+        {
+            return StatusCode(StatusCodes.Status501NotImplemented, new { error = ex.Message });
+        }
+    }
+
     /// <summary>TR-PLANNED-013: Create a new TODO item.</summary>
     [HttpPost]
     public async Task<ActionResult<TodoMutationResult>> CreateAsync(
@@ -86,7 +108,7 @@ public sealed class TodoController : ControllerBase
 
         var result = await _todoCreationService.CreateAsync(request, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
-            return Conflict(result);
+            return ToMutationFailureResult(result);
 
         var createdId = result.Item?.Id ?? request.Id;
         return Created(new Uri($"/mcpserver/todo/{Uri.EscapeDataString(createdId)}", UriKind.Relative), result);
@@ -104,7 +126,7 @@ public sealed class TodoController : ControllerBase
 
         var result = await _todoUpdateService.UpdateAsync(id, request, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
-            return NotFound(result);
+            return ToMutationFailureResult(result);
 
         return Ok(result);
     }
@@ -115,7 +137,7 @@ public sealed class TodoController : ControllerBase
     {
         var result = await _todoService.DeleteAsync(id, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
-            return NotFound(result);
+            return ToMutationFailureResult(result);
 
         return Ok(result);
     }
@@ -280,6 +302,16 @@ public sealed class TodoController : ControllerBase
         await Response.WriteAsync($"{{\"error\":\"TODO '{id}' not found.\"}}", cancellationToken).ConfigureAwait(false);
         return false;
     }
+
+    private ActionResult<TodoMutationResult> ToMutationFailureResult(TodoMutationResult result)
+        => result.FailureKind switch
+        {
+            TodoMutationFailureKind.Validation => BadRequest(result),
+            TodoMutationFailureKind.NotFound => NotFound(result),
+            TodoMutationFailureKind.ProjectionFailed => StatusCode(StatusCodes.Status500InternalServerError, result),
+            TodoMutationFailureKind.ExternalSyncFailed => StatusCode(StatusCodes.Status502BadGateway, result),
+            _ => Conflict(result)
+        };
 
     private async Task StreamCopilotResponseAsync(IAsyncEnumerable<string> lines, CancellationToken cancellationToken)
     {

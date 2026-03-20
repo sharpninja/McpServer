@@ -168,4 +168,9 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-071 | ✅ Complete | IssueTodoSyncService, TodoUpdateService, GitHubController, TodoController |
 | TR-MCP-GH-007 | ✅ Complete | IssueTodoSyncService |
 | TEST-MCP-095 | ✅ Complete | IssueTodoSyncServiceTests, IssueTodoGitHubRoundTripIntegrationTests |
+| FR-MCP-072 | ✅ Complete | SqliteTodoService, TodoYamlFileSerializer, TodoController, TodoClient, McpServerMcpTools, TodoServiceFactory |
+| TR-MCP-TODO-005 | ✅ Complete | SqliteTodoService, TodoYamlFileSerializer, TodoServiceFactory, TodoStorageOptions, McpInstanceResolver, appsettings*.yaml |
+| TR-MCP-TODO-006 | ✅ Complete | ITodoService, ITodoStore, SqliteTodoService, TodoController, McpServerMcpTools, TodoClient, TodoModels, TodoCreationService, TodoUpdateService |
+| TEST-MCP-096 | ✅ Complete | SqliteTodoServiceTests, MixedTodoStorageIsolationTests |
+| TEST-MCP-097 | ✅ Complete | SqliteTodoServiceTests, TodoControllerTests, TodoClientTests, IntegrationTests Controllers.TodoControllerTests |
 

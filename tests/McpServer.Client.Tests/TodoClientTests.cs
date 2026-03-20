@@ -43,6 +43,55 @@ public sealed class TodoClientTests
     }
 
     [Fact]
+    public async System.Threading.Tasks.Task GetAuditAsync_SendsCorrectUrl()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """
+            {
+              "entries": [
+                {
+                  "auditId": 7,
+                  "todoId": "MVP-001",
+                  "version": 2,
+                  "action": "updated",
+                  "recordedAtUtc": "2026-03-20T16:00:00Z",
+                  "snapshot": {
+                    "id": "MVP-001",
+                    "title": "After",
+                    "section": "mvp-app",
+                    "priority": "high",
+                    "done": false
+                  },
+                  "previousSnapshot": {
+                    "id": "MVP-001",
+                    "title": "Before",
+                    "section": "mvp-app",
+                    "priority": "high",
+                    "done": false
+                  },
+                  "source": "api"
+                }
+              ],
+              "totalCount": 1
+            }
+            """);
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.GetAuditAsync("MVP-001", limit: 25, offset: 5);
+
+        Assert.Equal(1, result.TotalCount);
+        Assert.Contains("/mcpserver/todo/MVP-001/audit", handler.LastRequest!.RequestUri!.AbsolutePath);
+        Assert.Contains("limit=25", handler.LastRequest.RequestUri.Query);
+        Assert.Contains("offset=5", handler.LastRequest.RequestUri.Query);
+        Assert.Single(result.Entries);
+        Assert.Equal(7, result.Entries[0].AuditId);
+        Assert.Equal("After", result.Entries[0].Snapshot?.Title);
+        Assert.Equal("Before", result.Entries[0].PreviousSnapshot?.Title);
+    }
+
+    [Fact]
     public async System.Threading.Tasks.Task CreateAsync_PostsJsonBody()
     {
         var handler = new MockHttpHandler(HttpStatusCode.Created, """{"success":true}""");

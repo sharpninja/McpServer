@@ -58,7 +58,7 @@ Mcp:
     MaxConcurrentIndexJobsPerWorkspace: 1
     ArtifactVersion: v1
   TodoStorage:
-    Provider: yaml
+    Provider: sqlite
     SqliteDataSource: mcp.db
   Instances:
     default:
@@ -68,7 +68,7 @@ Mcp:
       RepoRoot: .
       TodoFilePath: docs/Project/TODO.yaml
       TodoStorage:
-        Provider: yaml
+        Provider: sqlite
         SqliteDataSource: mcp.db
     alt-local:
       Port: 7157

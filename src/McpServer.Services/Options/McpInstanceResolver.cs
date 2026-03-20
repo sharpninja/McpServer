@@ -130,7 +130,7 @@ public static class McpInstanceResolver
     {
         ArgumentNullException.ThrowIfNull(configuration);
 
-        var provider = (GetEffectiveMcpValue(configuration, instanceName, "TodoStorage:Provider") ?? "yaml")
+        var provider = (GetEffectiveMcpValue(configuration, instanceName, "TodoStorage:Provider") ?? "sqlite")
             .Trim()
             .ToUpperInvariant();
         if (provider is not ("YAML" or "SQLITE"))

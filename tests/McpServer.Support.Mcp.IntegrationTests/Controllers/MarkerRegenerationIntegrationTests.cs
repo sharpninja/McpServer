@@ -51,6 +51,13 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
             Mcp = new
             {
                 DataSource = ":memory:",
+                RepoRoot = _workspacePath,
+                TodoFilePath = "docs/todo.yaml",
+                TodoStorage = new
+                {
+                    Provider = "sqlite",
+                    SqliteDataSource = "mcp.db",
+                },
                 Workspaces = new[]
                 {
                     new
@@ -320,6 +327,10 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
                     { "Mcp:DataSource", ":memory:" },
+                    { "Mcp:RepoRoot", _workspacePath },
+                    { "Mcp:TodoFilePath", "docs/todo.yaml" },
+                    { "Mcp:TodoStorage:Provider", "sqlite" },
+                    { "Mcp:TodoStorage:SqliteDataSource", "mcp.db" },
                     { "Mcp:TemplateStorage:FilePath", templateStoragePath },
                 });
             });

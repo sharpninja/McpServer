@@ -55,10 +55,10 @@ public sealed class TodoCreationService
         var issueBody = BuildIssueBody(request);
         var issueResult = await _gitHubCliService.CreateIssueAsync(request.Title, issueBody, cancellationToken).ConfigureAwait(false);
         if (!issueResult.Success)
-            return new TodoMutationResult(false, issueResult.Error ?? "GitHub issue creation failed.");
+            return new TodoMutationResult(false, issueResult.Error ?? "GitHub issue creation failed.", FailureKind: TodoMutationFailureKind.ExternalSyncFailed);
 
         if (!issueResult.Number.HasValue)
-            return new TodoMutationResult(false, "GitHub issue creation succeeded but did not return a canonical issue number.");
+            return new TodoMutationResult(false, "GitHub issue creation succeeded but did not return a canonical issue number.", FailureKind: TodoMutationFailureKind.ExternalSyncFailed);
 
         var canonicalId = $"{IssueIdPrefix}{issueResult.Number.Value}";
         var rewrittenRequest = request with
@@ -80,7 +80,7 @@ public sealed class TodoCreationService
                 canonicalId,
                 failure);
 
-            return new TodoMutationResult(false, failure);
+            return new TodoMutationResult(false, failure, FailureKind: TodoMutationFailureKind.ExternalSyncFailed);
         }
 
         _logger.LogInformation(
