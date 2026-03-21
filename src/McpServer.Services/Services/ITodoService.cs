@@ -1,8 +1,10 @@
+using System.Text.Json.Serialization;
+
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013: Service for querying and managing TODO items from the YAML file.
-/// Provides CRUD operations and search by keyword, priority, or id.
+/// TR-PLANNED-013: Service for querying and managing TODO items.
+/// Provides CRUD operations, search, and audit-history access.
 /// </summary>
 public interface ITodoService
 {
@@ -20,6 +22,15 @@ public interface ITodoService
 
     /// <summary>Delete a TODO item by id.</summary>
     Task<TodoMutationResult> DeleteAsync(string id, CancellationToken cancellationToken = default);
+
+    /// <summary>Get append-only audit history for a TODO item.</summary>
+    Task<TodoAuditQueryResult> GetAuditAsync(string id, int limit = 50, int offset = 0, CancellationToken cancellationToken = default);
+
+    /// <summary>TR-MCP-TODO-006: Get projection status for SQLite-authoritative TODO storage.</summary>
+    Task<TodoProjectionStatusResult> GetProjectionStatusAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>TR-MCP-TODO-006: Repair TODO.yaml projection from SQLite-authoritative TODO storage.</summary>
+    Task<TodoProjectionRepairResult> RepairProjectionAsync(CancellationToken cancellationToken = default);
 }
 
 /// <summary>TR-PLANNED-013: Query parameters for searching TODO items.</summary>
@@ -92,6 +103,9 @@ public sealed record TodoFlatItem
     /// <summary>Reference link.</summary>
     public string? Reference { get; init; }
 
+    /// <summary>Code-review phase label for remediation items.</summary>
+    public string? Phase { get; init; }
+
     /// <summary>IDs of TODO items this item depends on.</summary>
     public IReadOnlyList<string>? DependsOn { get; init; }
 
@@ -137,6 +151,9 @@ public sealed record TodoCreateRequest
 
     /// <summary>Remaining work text.</summary>
     public string? Remaining { get; init; }
+
+    /// <summary>Optional code-review phase label.</summary>
+    public string? Phase { get; init; }
 
     /// <summary>IDs of TODO items this item depends on.</summary>
     public IReadOnlyList<string>? DependsOn { get; init; }
@@ -187,6 +204,12 @@ public sealed record TodoUpdateRequest
     /// <summary>Updated remaining text (null = no change).</summary>
     public string? Remaining { get; init; }
 
+    /// <summary>Updated reference text (null = no change).</summary>
+    public string? Reference { get; init; }
+
+    /// <summary>Updated code-review phase label (null = no change).</summary>
+    public string? Phase { get; init; }
+
     /// <summary>Updated dependency list (null = no change).</summary>
     public IReadOnlyList<string>? DependsOn { get; init; }
 
@@ -197,8 +220,87 @@ public sealed record TodoUpdateRequest
     public IReadOnlyList<string>? TechnicalRequirements { get; init; }
 }
 
+/// <summary>Classifies the failure mode of a TODO mutation.</summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum TodoMutationFailureKind
+{
+    /// <summary>No failure classification applies.</summary>
+    None = 0,
+
+    /// <summary>The request content was invalid.</summary>
+    Validation = 1,
+
+    /// <summary>The request conflicted with existing state.</summary>
+    Conflict = 2,
+
+    /// <summary>The target TODO item was not found.</summary>
+    NotFound = 3,
+
+    /// <summary>The authoritative database mutation succeeded but TODO.yaml projection failed.</summary>
+    ProjectionFailed = 4,
+
+    /// <summary>An external dependency failed after the local state changed.</summary>
+    ExternalSyncFailed = 5,
+}
+
 /// <summary>TR-PLANNED-013: Result of a TODO mutation (create/update/delete).</summary>
-public sealed record TodoMutationResult(bool Success, string? Error = null, TodoFlatItem? Item = null);
+public sealed record TodoMutationResult(
+    bool Success,
+    string? Error = null,
+    TodoFlatItem? Item = null,
+    TodoMutationFailureKind FailureKind = TodoMutationFailureKind.None);
+
+/// <summary>TR-MCP-TODO-005: Result of querying TODO audit history.</summary>
+public sealed record TodoAuditQueryResult(IReadOnlyList<TodoAuditEntry> Entries, int TotalCount);
+
+/// <summary>TR-MCP-TODO-006: Status of SQLite-authoritative TODO.yaml projection health and consistency.</summary>
+public sealed record TodoProjectionStatusResult(
+    string AuthoritativeStore,
+    string AuthoritativeDataSource,
+    string ProjectionTargetPath,
+    bool ProjectionTargetExists,
+    bool ProjectionConsistent,
+    bool RepairRequired,
+    string VerifiedAtUtc,
+    string? LastImportedFromYamlUtc = null,
+    string? LastProjectedToYamlUtc = null,
+    string? LastProjectionFailureUtc = null,
+    string? LastProjectionFailure = null,
+    string? Message = null);
+
+/// <summary>TR-MCP-TODO-006: Result of an operator-requested TODO.yaml projection repair attempt.</summary>
+public sealed record TodoProjectionRepairResult(
+    bool Success,
+    string? Error,
+    TodoProjectionStatusResult Status);
+
+/// <summary>TR-MCP-TODO-005: Append-only audit entry for a TODO item.</summary>
+public sealed record TodoAuditEntry
+{
+    /// <summary>Monotonic audit row identifier.</summary>
+    public required long AuditId { get; init; }
+
+    /// <summary>TODO item identifier.</summary>
+    public required string TodoId { get; init; }
+
+    /// <summary>Monotonic version for this TODO id.</summary>
+    public required int Version { get; init; }
+
+    /// <summary>Recorded action (imported, created, updated, deleted).</summary>
+    public required string Action { get; init; }
+
+    /// <summary>UTC timestamp when the history row was recorded.</summary>
+    public required string RecordedAtUtc { get; init; }
+
+    /// <summary>Post-mutation snapshot.</summary>
+    public TodoFlatItem? Snapshot { get; init; }
+
+    /// <summary>Pre-mutation snapshot.</summary>
+    public TodoFlatItem? PreviousSnapshot { get; init; }
+
+    /// <summary>Origin of the mutation or backfill operation.</summary>
+    public string? Source { get; init; }
+}
 
 /// <summary>Request to move a TODO item to a different workspace.</summary>
 public sealed record TodoMoveRequest

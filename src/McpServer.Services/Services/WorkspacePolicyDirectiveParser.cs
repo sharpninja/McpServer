@@ -91,7 +91,6 @@ public sealed class WorkspacePolicyDirectiveParser : IWorkspacePolicyDirectivePa
 
             var options = new CopilotClientOptions
             {
-                Timeout = TimeSpan.FromMinutes(1),
                 WorkingDirectory = workingDirectory,
                 RunAs = currentPromptOptions.RunAs,
                 GitHubToken = currentPromptOptions.GitHubToken,

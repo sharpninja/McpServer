@@ -27,7 +27,7 @@ internal static class SessionLogIdentifierValidator
             return "SessionId is required.";
 
         if (!s_sessionIdRegex.IsMatch(sessionId))
-            return "SessionId must match <Agent>-<yyyyMMddTHHmmssZ>-<suffix> (example: Copilot-20260304T113901Z-namingconv).";
+            return "SessionId must match <Agent>-<yyyyMMddTHHmmssZ>-<suffix> (example: Copilot-20260304T113901Z-feature-audit).";
 
         if (!string.IsNullOrWhiteSpace(expectedAgent)
             && !sessionId.StartsWith(expectedAgent + "-", StringComparison.Ordinal))

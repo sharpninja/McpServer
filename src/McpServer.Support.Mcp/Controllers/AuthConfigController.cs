@@ -1,10 +1,11 @@
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using McpServer.Support.Mcp.Options;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using McpServer.Support.Mcp.Options;
 
 namespace McpServer.Support.Mcp.Controllers;
 
@@ -436,7 +437,7 @@ public sealed class AuthConfigController : ControllerBase
             obj["verification_uri_complete"] = RewriteKeycloakUrlForUiProxy(verificationUriComplete, keycloakHostBaseUri, proxyUiBaseUrl);
         }
 
-        return obj.ToJsonString(new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        return obj.ToJsonString(new JsonSerializerOptions(JsonSerializerDefaults.Web) { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping });
     }
 
     private async Task<string> ReadRequestBodyAsync(CancellationToken cancellationToken)

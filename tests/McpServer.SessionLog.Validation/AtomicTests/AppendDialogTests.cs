@@ -31,7 +31,7 @@ public sealed class AppendDialogTests
     public AppendDialogTests(SessionLogEndpointFixture fixture) => _fixture = fixture;
 
     /// <summary>
-    /// Validates the <c>AppendDialog_ToExistingEntry_Returns200WithCount</c> scenario.
+    /// Validates the <c>AppendDialog_ToExistingTurn_Returns200WithCount</c> scenario.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: TEST-MCP-015, TEST-MCP-074, FR-MCP-003, TR-MCP-LOG-002.
@@ -39,11 +39,11 @@ public sealed class AppendDialogTests
     /// Data rationale: These inputs verify session-log persistence/query behavior and canonical identifier validation paths.
     /// </remarks>
     [Fact]
-    public async Task AppendDialog_ToExistingEntry_Returns200WithCount()
+    public async Task AppendDialog_ToExistingTurn_Returns200WithCount()
     {
-        // First create a session with an entry
-        var sessionId = SessionLogEndpointFixture.GenerateSessionId();
-        var requestId = SessionLogEndpointFixture.GenerateRequestId();
+        // First create a session with a turn
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId("DialogTest");
+        var requestId = SessionLogEndpointFixture.GenerateRequestId("append-dialog-existing-turn");
         var payload = new
         {
             sourceType = "DialogTest",
@@ -53,14 +53,14 @@ public sealed class AppendDialogTests
             started = DateTimeOffset.UtcNow.ToString("o"),
             lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
             status = "in_progress",
-            entryCount = 1,
-            entries = new[]
+            turnCount = 1,
+            turns = new[]
             {
                 new
                 {
                     requestId,
                     timestamp = DateTimeOffset.UtcNow.ToString("o"),
-                    queryText = "Dialog append base entry",
+                    queryText = "Dialog append base turn",
                     queryTitle = "Dialog test",
                     response = "Pending",
                     status = "in_progress"
@@ -101,8 +101,8 @@ public sealed class AppendDialogTests
     [Fact]
     public async Task AppendDialog_MultipleAppends_AccumulatesCount()
     {
-        var sessionId = SessionLogEndpointFixture.GenerateSessionId();
-        var requestId = SessionLogEndpointFixture.GenerateRequestId();
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId("DialogAccumTest");
+        var requestId = SessionLogEndpointFixture.GenerateRequestId("append-dialog-accumulates");
         var payload = new
         {
             sourceType = "DialogAccumTest",
@@ -112,8 +112,8 @@ public sealed class AppendDialogTests
             started = DateTimeOffset.UtcNow.ToString("o"),
             lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
             status = "in_progress",
-            entryCount = 1,
-            entries = new[]
+            turnCount = 1,
+            turns = new[]
             {
                 new
                 {
@@ -154,7 +154,9 @@ public sealed class AppendDialogTests
     [Fact]
     public async Task AppendDialog_NonExistentSession_Returns404()
     {
-        var dialogRoute = $"{SessionLogEndpointFixture.SessionLogRoute}/NoSuchAgent/no-session/no-request/dialog";
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId("NoSuchAgent", "missing-session");
+        var requestId = SessionLogEndpointFixture.GenerateRequestId("missing-request");
+        var dialogRoute = $"{SessionLogEndpointFixture.SessionLogRoute}/NoSuchAgent/{sessionId}/{requestId}/dialog";
         var items = new[] { new { timestamp = DateTimeOffset.UtcNow.ToString("o"), role = "model", content = "test", category = "reasoning" } };
         var response = await _fixture.Client.PostAsJsonAsync(dialogRoute, items);
 

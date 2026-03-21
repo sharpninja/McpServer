@@ -35,6 +35,23 @@ public sealed class VoiceClientTests
     }
 
     [Fact]
+    public async System.Threading.Tasks.Task CreateSessionAsync_SerializesExecutionStrategy()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.Created, """{"sessionId":"voice-1","status":"idle","language":"en-US","executionStrategy":"hosted-mcp-agent"}""");
+        using var http = new HttpClient(handler);
+        var client = new VoiceClient(http, DefaultOptions);
+
+        var result = await client.CreateSessionAsync(new VoiceSessionCreateRequest
+        {
+            DeviceId = "device-1",
+            ExecutionStrategy = "hosted-mcp-agent",
+        });
+
+        Assert.Contains("\"executionStrategy\":\"hosted-mcp-agent\"", handler.LastRequestBody!);
+        Assert.Equal("hosted-mcp-agent", result.ExecutionStrategy);
+    }
+
+    [Fact]
     public async System.Threading.Tasks.Task SubmitTurnAsync_PostsToTurnEndpoint()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"sessionId":"voice-1","turnId":"t1","status":"completed"}""");

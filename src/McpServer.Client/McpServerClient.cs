@@ -16,9 +16,9 @@ namespace McpServer.Client;
 /// <see cref="InvalidOperationException"/> is thrown at request time if the key is empty.</para>
 ///
 /// <para><strong>Default key:</strong> The default key returned by <see cref="InitializeAsync"/>
-/// grants <em>read-only</em> access to all endpoints except TODO routes (<c>/mcpserver/todo*</c>)
-/// which are read-write. Consumers with access to the <c>AGENTS-README-FIRST.yaml</c> marker
-/// file should use the full-access token from that file instead.</para>
+/// grants <em>read-only</em> access only. Consumers with access to the
+/// <c>AGENTS-README-FIRST.yaml</c> marker file should use the full-access token from that file
+/// for write operations or other privileged flows instead.</para>
 ///
 /// <para><strong>Port targeting:</strong> Set <see cref="Port"/> to retarget all sub-clients
 /// to a different workspace host at runtime (e.g. after calling the workspace Start
@@ -90,8 +90,10 @@ public sealed class McpServerClient
         Voice = new VoiceClient(http, options, holder);
         Events = new EventStreamClient(http, options, holder);
         Repo = new RepoClient(http, options, holder);
+        Desktop = new DesktopClient(http, options, holder);
         Tunnel = new TunnelClient(http, options, holder);
         Workspace = new WorkspaceClient(http, options, holder);
+        Configuration = new ConfigurationClient(http, options, holder);
         Tools = new ToolRegistryClient(http, options, holder);
         AuthConfig = new AuthConfigClient(http, options, holder);
         Diagnostic = new DiagnosticClient(http, options, holder);
@@ -103,7 +105,7 @@ public sealed class McpServerClient
         _allClients = new McpClientBase[]
         {
             Todo, Context, SessionLog, GitHub, Requirements, Voice, Events,
-            Repo, Tunnel, Workspace, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health
+            Repo, Desktop, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health
         };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
@@ -202,9 +204,8 @@ public sealed class McpServerClient
     /// recommended startup call for consumers that do <strong>not</strong> have access
     /// to the <c>AGENTS-README-FIRST.yaml</c> marker file.
     ///
-    /// <para>The default key grants <em>read-only</em> access to all endpoints except
-    /// TODO routes (<c>/mcpserver/todo*</c>) which are read-write. For full unrestricted
-    /// access, use the workspace token from the marker file instead.</para>
+    /// <para>The default key grants <em>read-only</em> access only. For full unrestricted
+    /// access, use the workspace token from the marker file or JWT Bearer authentication.</para>
     ///
     /// <para>This method is a no-op if <see cref="ApiKey"/> is already non-empty
     /// (i.e. it was seeded via <see cref="McpServerClientOptions.ApiKey"/> or set
@@ -241,7 +242,7 @@ public sealed class McpServerClient
         var uri = new Uri($"{_options.BaseUrl.Scheme}://{_options.BaseUrl.Host}:{Port}/api-key");
         using var response = await _http.GetAsync(uri, cancellationToken);
 
-        var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+        var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(true);
 
         if (!response.IsSuccessStatusCode)
             throw new McpServerException(
@@ -305,6 +306,13 @@ public sealed class McpServerClient
     public RepoClient Repo { get; }
 
     /// <summary>
+    /// Desktop process launch endpoint — launch local programs on the interactive desktop through
+    /// the authenticated workspace context.
+    /// <para>See <see cref="DesktopClient"/> for the full method list.</para>
+    /// </summary>
+    public DesktopClient Desktop { get; }
+
+    /// <summary>
     /// Tunnel management endpoints — list strategies, enable/disable, start, stop, restart.
     /// <para>See <see cref="TunnelClient"/> for the full method list.</para>
     /// </summary>
@@ -315,6 +323,13 @@ public sealed class McpServerClient
     /// <para>See <see cref="WorkspaceClient"/> for the full method list.</para>
     /// </summary>
     public WorkspaceClient Workspace { get; }
+
+    /// <summary>
+    /// Admin configuration endpoints — read the effective flattened configuration and patch
+    /// <c>appsettings.yaml</c>.
+    /// <para>See <see cref="ConfigurationClient"/> for the full method list.</para>
+    /// </summary>
+    public ConfigurationClient Configuration { get; }
 
     /// <summary>
     /// Tool registry endpoints — CRUD, search, bucket management, and tool installation.

@@ -63,16 +63,16 @@ internal sealed partial class MarkdownSessionLogParser
 
         var startedStr = started?.ToString("o", CultureInfo.InvariantCulture);
 
-        // Extract sections for actions and entries
+        // Extract sections for actions and turns
         var actions = ExtractActions(markdownContent);
-        var entries = new List<UnifiedRequestEntryDto>();
+        var turns = new List<UnifiedRequestEntryDto>();
 
         // Build a summary entry including all known sections
         var summaryResponse = BuildSummaryResponse(markdownContent, duration);
 
         if (actions.Count > 0 || !string.IsNullOrWhiteSpace(title))
         {
-            entries.Add(new UnifiedRequestEntryDto
+            turns.Add(new UnifiedRequestEntryDto
             {
                 RequestId = $"{sourceType}-{sessionId}-summary",
                 Timestamp = startedStr,
@@ -84,9 +84,9 @@ internal sealed partial class MarkdownSessionLogParser
             });
         }
 
-        // Extract individual request entries (### Request sub-sections)
-        var requestEntries = ExtractRequestEntries(markdownContent, sourceType, sessionId, startedStr, model);
-        entries.AddRange(requestEntries);
+        // Extract individual request turns (### Request sub-sections)
+        var requestTurns = ExtractRequestEntries(markdownContent, sourceType, sessionId, startedStr, model);
+        turns.AddRange(requestTurns);
 
         return new UnifiedSessionLogDto
         {
@@ -97,13 +97,13 @@ internal sealed partial class MarkdownSessionLogParser
             Started = startedStr,
             LastUpdated = startedStr,
             Status = status,
-            EntryCount = entries.Count,
+            TurnCount = turns.Count,
             Workspace = new WorkspaceInfoDto
             {
                 Project = "FunWasHad",
                 Branch = branch
             },
-            Entries = entries
+            Turns = turns
         };
     }
 
@@ -146,7 +146,7 @@ internal sealed partial class MarkdownSessionLogParser
             }
         }
 
-        // Append request entries if present
+        // Append request turns if present
         var requestMatches = RequestHeaderRegex().Matches(markdownContent);
         if (requestMatches.Count > 0)
         {
@@ -201,7 +201,7 @@ internal sealed partial class MarkdownSessionLogParser
     private static List<UnifiedRequestEntryDto> ExtractRequestEntries(
         string content, string sourceType, string sessionId, string? timestamp, string? model)
     {
-        var entries = new List<UnifiedRequestEntryDto>();
+        var turns = new List<UnifiedRequestEntryDto>();
         var matches = RequestHeaderRegex().Matches(content);
         var order = 0;
 
@@ -210,7 +210,7 @@ internal sealed partial class MarkdownSessionLogParser
             var requestTitle = match.Groups[1].Value.Trim();
             var body = ExtractSubSectionBody(content, match.Index + match.Length);
 
-            entries.Add(new UnifiedRequestEntryDto
+            turns.Add(new UnifiedRequestEntryDto
             {
                 RequestId = $"{sourceType}-{sessionId}-req-{order:D3}",
                 Timestamp = timestamp,
@@ -222,7 +222,7 @@ internal sealed partial class MarkdownSessionLogParser
             order++;
         }
 
-        return entries;
+        return turns;
     }
 
     private static string? ExtractSubSectionBody(string content, int startIndex)

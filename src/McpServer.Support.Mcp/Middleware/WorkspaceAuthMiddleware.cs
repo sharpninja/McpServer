@@ -16,7 +16,7 @@ namespace McpServer.Support.Mcp.Middleware;
 ///     no fallthrough to API-key auth occurs.</description></item>
 ///   <item><description><strong>API key</strong> — for agents that cannot perform OIDC.
 ///     Full-access keys (from marker files) grant unrestricted access. Default keys
-///     (from <c>GET /api-key</c>) grant read-only access except for TODO routes.</description></item>
+///     (from <c>GET /api-key</c>) grant read-only access only.</description></item>
 /// </list>
 /// Non-<c>/mcpserver/</c> routes (health, swagger, MCP transport, <c>/api-key</c>) pass through unprotected.
 /// </summary>
@@ -124,17 +124,37 @@ public sealed class WorkspaceAuthMiddleware
         // ── API key path (agents only) ────────────────────────────────────────
         var workspacePath = workspaceContext.WorkspacePath ?? configuration["Mcp:RepoRoot"] ?? string.Empty;
 
-        // If no workspace is configured or no token generated yet (startup race), allow through.
+        // Fail closed when workspace resolution or token initialization is unavailable.
         if (string.IsNullOrWhiteSpace(workspacePath))
         {
-            await _next(context).ConfigureAwait(false);
+            _logger.LogWarning("[WS-Auth] {Method} {Path} | Workspace unresolved for API-key auth → 503",
+                method, path);
+            context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+            context.Response.ContentType = "application/json";
+            var unresolvedWorkspaceBody = new
+            {
+                error = "Workspace authentication is unavailable because no workspace could be resolved for this request. Send X-Workspace-Path or retry after startup completes."
+            };
+            await context.Response.WriteAsync(
+                JsonSerializer.Serialize(unresolvedWorkspaceBody, s_json),
+                context.RequestAborted).ConfigureAwait(false);
             return;
         }
 
         var expected = tokenService.GetToken(workspacePath);
         if (expected is null)
         {
-            await _next(context).ConfigureAwait(false);
+            _logger.LogWarning("[WS-Auth] {Method} {Path} | Full workspace token missing for {WorkspacePath} → 503",
+                method, path, workspacePath);
+            context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+            context.Response.ContentType = "application/json";
+            var missingTokenBody = new
+            {
+                error = "Workspace authentication is temporarily unavailable because the workspace API token has not been initialized. Retry after startup completes."
+            };
+            await context.Response.WriteAsync(
+                JsonSerializer.Serialize(missingTokenBody, s_json),
+                context.RequestAborted).ConfigureAwait(false);
             return;
         }
 
@@ -148,28 +168,25 @@ public sealed class WorkspaceAuthMiddleware
             return;
         }
 
-        // Default (anonymous) token — read-only except for TODO routes.
+        // Default (anonymous) token — read-only only.
         if (tokenService.ValidateDefaultToken(workspacePath, provided))
         {
             context.Items[IsDefaultKeyItem] = true;
-
-            var isTodoRoute = path.StartsWithSegments("/mcpserver/todo", StringComparison.OrdinalIgnoreCase);
             var isReadOnly = s_readOnlyMethods.Contains(context.Request.Method);
 
-            if (isTodoRoute || isReadOnly)
+            if (isReadOnly)
             {
                 await _next(context).ConfigureAwait(false);
                 return;
             }
 
-            // Write operation on a non-todo route with only a default key — reject.
+            // Write operation with only a default key — reject.
             context.Response.StatusCode = StatusCodes.Status403Forbidden;
             context.Response.ContentType = "application/json";
             var forbiddenBody = new
             {
-                error = "Default API key grants read-only access to non-todo endpoints. " +
-                        "Use the full workspace API key from the AGENTS-README-FIRST.yaml marker file for write operations, " +
-                        "or authenticate with a valid JWT Bearer token."
+                error = "Default API key grants read-only access only. " +
+                        "Use the full workspace API key from the AGENTS-README-FIRST.yaml marker file or a valid JWT Bearer token for write operations."
             };
             await context.Response.WriteAsync(
                 JsonSerializer.Serialize(forbiddenBody, s_json),

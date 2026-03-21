@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace McpServer.Support.Mcp.Storage.Entities;
 
 /// <summary>
-/// TR-PLANNED-013: 4NF session log entry entity. One row per request/response pair.
+/// TR-PLANNED-013: 4NF session log turn entity. One row per request/response pair.
 /// FR-SUPPORT-010: Child of <see cref="SessionLogEntity"/>.
 /// </summary>
 public sealed class SessionLogTurnEntity
@@ -26,7 +26,7 @@ public sealed class SessionLogTurnEntity
     /// <summary>TR-PLANNED-013: Timestamp of the request (UTC).</summary>
     public DateTimeOffset? Timestamp { get; set; }
 
-    /// <summary>TR-PLANNED-013: AI model used for this entry.</summary>
+    /// <summary>TR-PLANNED-013: AI model used for this turn.</summary>
     [MaxLength(128)]
     public string? Model { get; set; }
 
@@ -47,17 +47,17 @@ public sealed class SessionLogTurnEntity
     /// <summary>TR-PLANNED-013: Agent interpretation of the request.</summary>
     public string? Interpretation { get; set; }
 
-    /// <summary>TR-PLANNED-013: Entry status (e.g. completed, in_progress).</summary>
+    /// <summary>TR-PLANNED-013: Turn status (e.g. completed, in_progress).</summary>
     [MaxLength(64)]
     public string? Status { get; set; }
 
-    /// <summary>TR-PLANNED-013: Token count for this entry.</summary>
+    /// <summary>TR-PLANNED-013: Token count for this turn.</summary>
     public int? TokenCount { get; set; }
 
-    /// <summary>TR-PLANNED-013: Failure note if the entry failed.</summary>
+    /// <summary>TR-PLANNED-013: Failure note if the turn failed.</summary>
     public string? FailureNote { get; set; }
 
-    /// <summary>TR-PLANNED-013: Success score for this entry.</summary>
+    /// <summary>TR-PLANNED-013: Success score for this turn.</summary>
     public double? Score { get; set; }
 
     /// <summary>TR-PLANNED-013: Whether this was a premium request.</summary>
@@ -66,7 +66,7 @@ public sealed class SessionLogTurnEntity
     /// <summary>TR-PLANNED-013: Raw context data serialized as JSON text.</summary>
     public string? RawContextJson { get; set; }
 
-    /// <summary>TR-PLANNED-013: Original entry before normalization serialized as JSON text.</summary>
+    /// <summary>TR-PLANNED-013: Original turn before normalization serialized as JSON text.</summary>
     public string? OriginalEntryJson { get; set; }
 
     /// <summary>TR-PLANNED-013: Navigation to parent session.</summary>
@@ -84,11 +84,11 @@ public sealed class SessionLogTurnEntity
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "EF Core navigation collection")]
     public ICollection<SessionLogTurnContextEntity> ContextItems { get; set; } = new List<SessionLogTurnContextEntity>();
 
-    /// <summary>TR-PLANNED-013: Navigation to processing dialog items. The AI model can independently append entries.</summary>
+    /// <summary>TR-PLANNED-013: Navigation to processing dialog items. The AI model can independently append dialog items.</summary>
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "EF Core navigation collection")]
     public ICollection<SessionLogProcessingDialogEntity> ProcessingDialog { get; set; } = new List<SessionLogProcessingDialogEntity>();
 
-    /// <summary>TR-PLANNED-013: Navigation to commits recorded during this entry.</summary>
+    /// <summary>TR-PLANNED-013: Navigation to commits recorded during this turn.</summary>
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "EF Core navigation collection")]
     public ICollection<SessionLogCommitEntity> Commits { get; set; } = new List<SessionLogCommitEntity>();
 

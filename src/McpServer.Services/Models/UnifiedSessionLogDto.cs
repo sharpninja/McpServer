@@ -16,6 +16,10 @@ public sealed class UnifiedSessionLogDto
     [JsonPropertyName("sessionId")]
     public string? SessionId { get; set; }
 
+    /// <summary>Optional linked agent definition identifier resolved from the source type.</summary>
+    [JsonPropertyName("agentDefinitionId")]
+    public string? AgentDefinitionId { get; set; }
+
     /// <summary>Human-readable session title.</summary>
     [JsonPropertyName("title")]
     public string? Title { get; set; }
@@ -36,21 +40,21 @@ public sealed class UnifiedSessionLogDto
     [JsonPropertyName("status")]
     public string? Status { get; set; }
 
-    /// <summary>Number of request/response entries in the session.</summary>
-    [JsonPropertyName("entryCount")]
-    public int EntryCount { get; set; }
+    /// <summary>Number of request/response turns in the session.</summary>
+    [JsonPropertyName("turnCount")]
+    public int TurnCount { get; set; }
 
     /// <summary>Workspace metadata.</summary>
     [JsonPropertyName("workspace")]
     public WorkspaceInfoDto? Workspace { get; set; }
 
-    /// <summary>Ordered request/response entries.</summary>
-    [JsonPropertyName("entries")]
+    /// <summary>Ordered request/response turns.</summary>
+    [JsonPropertyName("turns")]
     [SuppressMessage("Usage", "CA2227:Collection properties should be read only", Justification = "JSON deserialization requires setter")]
     [SuppressMessage("Design", "CA1002:Do not expose generic lists", Justification = "DTO for JSON schema compatibility")]
-    public List<UnifiedRequestEntryDto>? Entries { get; set; }
+    public List<UnifiedRequestEntryDto>? Turns { get; set; }
 
-    /// <summary>TR-PLANNED-013: Total token count across all entries.</summary>
+    /// <summary>TR-PLANNED-013: Total token count across all turns.</summary>
     [JsonPropertyName("totalTokens")]
     public int? TotalTokens { get; set; }
 
@@ -66,7 +70,7 @@ public sealed class UnifiedSessionLogDto
 /// <summary>TR-PLANNED-013: Copilot aggregate statistics for a session.</summary>
 public sealed class CopilotStatisticsDto
 {
-    /// <summary>Average success score across entries.</summary>
+    /// <summary>Average success score across turns.</summary>
     [JsonPropertyName("averageSuccessScore")]
     public double? AverageSuccessScore { get; set; }
 
@@ -78,11 +82,11 @@ public sealed class CopilotStatisticsDto
     [JsonPropertyName("totalNetPremiumRequests")]
     public int? TotalNetPremiumRequests { get; set; }
 
-    /// <summary>Number of completed entries.</summary>
+    /// <summary>Number of completed turns.</summary>
     [JsonPropertyName("completedCount")]
     public int? CompletedCount { get; set; }
 
-    /// <summary>Number of in-progress entries.</summary>
+    /// <summary>Number of in-progress turns.</summary>
     [JsonPropertyName("inProgressCount")]
     public int? InProgressCount { get; set; }
 }

@@ -269,6 +269,9 @@ templates:
     - name: workspace
       description: WorkspaceDto object with Name, WorkspacePath, IsPrimary, etc.
       required: true
+    - name: agentAdditions
+      description: Optional list of agent-specific marker instruction sections.
+      required: false
     content: 'You are connected to an MCP Context Server at {{baseUrl}}. Use this server to coordinate your work.
 
 
@@ -304,33 +307,44 @@ templates:
 
       0. NEVER write to TODO.yaml directly.
 
-      1. Post a new session log turn (`Add-McpSessionTurn`) before starting work. Update it with results (`Response`) and actions (`Add-McpAction`) when done. Persist after each meaningful update, not just at the end.
+      1. Generate SessionId values using `New-McpSessionLogSlug -Agent <SourceType> -Model <Model>` from McpSession.psm1, then pass the result to `New-McpSessionLog -SessionId`. Do not handcraft SessionId values.
 
-      2. Use helper modules for session log and TODO operations — they handle workspace routing automatically. Do not use
+      1a. Agents must identify themselves accurately in session logs. `sourceType` and the SessionId `<Agent>` prefix must use the agent''s real identity in Pascal-Case. Do not use lowercase forms, placeholders, or legacy aliases.
+
+      2. Post a new session log turn (`Add-McpSessionTurn`) before starting work. Update it with results (`Response`) and actions (`Add-McpAction`) when done. Persist after each meaningful update, not just at the end.
+
+      2a. Before any compaction step, persist the current session log state. After compaction, update the session log again to record the compaction outcome and recovered context.
+
+      3. Use helper modules for session log and TODO operations — they handle workspace routing automatically. Do not use
       raw API calls.
 
-      3. Write decisions, requirements, and state to the session log, not just conversation. Capture rich turn detail: interpretation, response/status, actions (type/status/filePath), contextList, filesModified, designDecisions, requirementsDiscovered, blockers, and key processingDialog updates.
+      4. Write decisions, requirements, and state to the session log, not just conversation. Capture rich turn detail: interpretation, response/status, actions (type/status/filePath), contextList, filesModified, designDecisions, requirementsDiscovered, blockers, and key processingDialog updates.
 
-      4. Follow workspace conventions in AGENTS.md and .github/copilot-instructions.md.
+      5. Follow workspace conventions in AGENTS.md and .github/copilot-instructions.md.
 
-      5. When you need API schemas, module examples, or compliance rules, load them from docs/context/ or use context_search.
+      6. When you need API schemas, module examples, or compliance rules, load them from docs/context/ or use context_search.
 
-      6. Do not fabricate information. Acknowledge mistakes. Distinguish facts from speculation.
+      7. Do not fabricate information. Acknowledge mistakes. Distinguish facts from speculation.
 
-      7. Prioritize correctness over speed. Do not ship code you have not verified compiles.
+      8. Prioritize correctness over speed. Do not ship code you have not verified compiles.
 
 
       ## Naming Conventions
 
 
-      - TODO IDs for new items must be uppercase kebab-case with exactly 3 segments: <SDLC-PHASE>-<AREA>-### (regex:
-      ^[A-Z]+-[A-Z0-9]+-\d{3}$).
+      - Persisted TODO IDs must be uppercase canonical ids in either <SDLC-PHASE>-<AREA>-### form
+      (regex: ^[A-Z]+-[A-Z0-9]+-\d{3}$) or ISSUE-{number} form (regex: ^ISSUE-\d+$).
 
-      - Valid TODO IDs: PLAN-NAMINGCONVENTIONS-001, MCP-API-042.
+      - Valid TODO IDs: PLAN-NAMINGCONVENTIONS-001, MCP-API-042, ISSUE-17.
 
-      - Invalid TODO IDs: plan-api-001, MCP-API-42, MCPAPI001.
+      - Invalid TODO IDs: plan-api-001, MCP-API-42, ISSUE-ABC, MCPAPI001.
+
+      - Create requests may use ISSUE-NEW only when the intent is to create a new GitHub-backed TODO.
+      The server will create the GitHub issue immediately and persist the TODO using the canonical ISSUE-{number} id.
 
       - Session IDs must use <Agent>-<yyyyMMddTHHmmssZ>-<suffix> and start with the exact agent/source type prefix.
+
+      - `<Agent>` / `sourceType` must be the agent''s real identity in Pascal-Case. Valid example: `Codex`. Invalid examples: `codex`, `copilotcli` (when the agent is Codex), `Assistant`.
 
       - Valid Session ID: Copilot-20260304T113901Z-namingconv.
 
@@ -355,6 +369,21 @@ templates:
       - Data Directory: {{workspace.DataDirectory}}
 
       - Todo Path: {{workspace.TodoPath}}
+
+
+      {{#if agentAdditions}}
+
+      ## Agent-Specific Instructions
+
+      {{#each agentAdditions}}
+
+      ### {{agentId}}
+
+      {{content}}
+
+      {{/each}}
+
+      {{/if}}
 
 
       ## Authentication
@@ -405,6 +434,29 @@ templates:
       - MCP Streamable HTTP: POST {{baseUrl}}/mcp-transport (no API key required)
 
       - Health: GET {{baseUrl}}/health
+
+
+      ## Repository Access
+
+
+      - Hosted agents expose built-in repository tools: `mcp_repo_list`, `mcp_repo_read`, and `mcp_repo_write`.
+
+      - All repository paths are relative to {{workspace.WorkspacePath}}.
+
+      - REST clients can browse and edit files through {{baseUrl}}/mcpserver/repo/list and {{baseUrl}}/mcpserver/repo/file using the API key above.
+
+      - If you need to browse or edit files, use these repository tools instead of saying that filesystem access is unavailable.
+
+      ## Local Program Execution
+
+
+      - Hosted agents expose a built-in local program execution tool: `mcp_desktop_launch`.
+
+      - Use it when you need to start a local Windows program through MCP Server instead of claiming local program execution is unavailable.
+
+      - Prefer `createNoWindow: true` and `waitForExit: true` for short non-interactive verification commands.
+
+      - REST clients can launch programs through {{baseUrl}}/mcpserver/desktop/launch using the API key above.
 
 
       {{#if workspace.BannedLicenses}}

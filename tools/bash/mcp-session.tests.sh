@@ -48,7 +48,7 @@ it "reads baseUrl from marker file" \
     bash -c "
         source '$SCRIPT_DIR/mcp-session.sh'
         curl() { echo '{\"status\":\"ok\"}'; }
-        mcp_session_init '$TEST_TMPDIR/AGENTS-README-FIRST.yaml'
+        mcp_session_init 'Copilotcli' 'gpt-5.3-codex' '$TEST_TMPDIR/AGENTS-README-FIRST.yaml'
         [[ \"\$MCP_BASE_URL\" == 'http://localhost:9999' ]]
     "
 
@@ -56,7 +56,7 @@ it "reads apiKey from marker file" \
     bash -c "
         source '$SCRIPT_DIR/mcp-session.sh'
         curl() { echo '{\"status\":\"ok\"}'; }
-        mcp_session_init '$TEST_TMPDIR/AGENTS-README-FIRST.yaml'
+        mcp_session_init 'Copilotcli' 'gpt-5.3-codex' '$TEST_TMPDIR/AGENTS-README-FIRST.yaml'
         [[ \"\$MCP_API_KEY\" == 'test-api-key-abc123' ]]
     "
 
@@ -64,14 +64,20 @@ it "creates session temp file" \
     bash -c "
         source '$SCRIPT_DIR/mcp-session.sh'
         curl() { echo '{\"status\":\"ok\"}'; }
-        mcp_session_init '$TEST_TMPDIR/AGENTS-README-FIRST.yaml'
+        mcp_session_init 'Copilotcli' 'gpt-5.3-codex' '$TEST_TMPDIR/AGENTS-README-FIRST.yaml'
         [[ -n \"\$MCP_SESSION_FILE\" && \"\$MCP_SESSION_FILE\" == /tmp/mcp-session-*.json ]]
+    "
+
+it "fails when agent/model are missing" \
+    bash -c "
+        source '$SCRIPT_DIR/mcp-session.sh'
+        ! mcp_session_init '' '' '$TEST_TMPDIR/AGENTS-README-FIRST.yaml' 2>/dev/null
     "
 
 it "fails when marker file not found" \
     bash -c "
         source '$SCRIPT_DIR/mcp-session.sh'
-        ! mcp_session_init '/nonexistent/path/marker.yaml' 2>/dev/null
+        ! mcp_session_init 'Copilotcli' 'gpt-5.3-codex' '/nonexistent/path/marker.yaml' 2>/dev/null
     "
 
 it "discovers marker by walking up directories" \
@@ -80,7 +86,7 @@ it "discovers marker by walking up directories" \
         cd '$TEST_TMPDIR/a/b/c'
         source '$SCRIPT_DIR/mcp-session.sh'
         curl() { echo '{\"status\":\"ok\"}'; }
-        mcp_session_init
+        mcp_session_init 'Copilotcli' 'gpt-5.3-codex'
         [[ \"\$MCP_BASE_URL\" == 'http://localhost:9999' ]]
     "
 
@@ -124,7 +130,7 @@ it "sets status to in_progress" \
         rm -f \"\$MCP_SESSION_FILE\"
     "
 
-it "initializes empty entries array" \
+it "initializes empty turns array" \
     bash -c "
         source '$SCRIPT_DIR/mcp-session.sh'
         curl() { :; }
@@ -132,7 +138,7 @@ it "initializes empty entries array" \
         MCP_API_KEY='key'
         MCP_SESSION_FILE=\$(mktemp /tmp/mcp-test-XXXXXX.json)
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
-        count=\$(jq '.entries | length' \"\$MCP_SESSION_FILE\")
+        count=\$(jq '.turns | length' \"\$MCP_SESSION_FILE\")
         [[ \"\$count\" == '0' ]]
         rm -f \"\$MCP_SESSION_FILE\"
     "
@@ -162,8 +168,8 @@ it "adds turn with correct requestId and queryTitle" \
         MCP_SESSION_FILE=\$(mktemp /tmp/mcp-test-XXXXXX.json)
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
         mcp_session_add_turn 'req-001' 'Fix bug' 'Fix the auth bug' 'in_progress'
-        rid=\$(jq -r '.entries[0].requestId' \"\$MCP_SESSION_FILE\")
-        qt=\$(jq -r '.entries[0].queryTitle' \"\$MCP_SESSION_FILE\")
+        rid=\$(jq -r '.turns[0].requestId' \"\$MCP_SESSION_FILE\")
+        qt=\$(jq -r '.turns[0].queryTitle' \"\$MCP_SESSION_FILE\")
         [[ \"\$rid\" == 'req-001' && \"\$qt\" == 'Fix bug' ]]
         rm -f \"\$MCP_SESSION_FILE\"
     "
@@ -177,7 +183,7 @@ it "sets turn status correctly" \
         MCP_SESSION_FILE=\$(mktemp /tmp/mcp-test-XXXXXX.json)
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
         mcp_session_add_turn 'r1' 'title' 'text' 'completed'
-        st=\$(jq -r '.entries[0].status' \"\$MCP_SESSION_FILE\")
+        st=\$(jq -r '.turns[0].status' \"\$MCP_SESSION_FILE\")
         [[ \"\$st\" == 'completed' ]]
         rm -f \"\$MCP_SESSION_FILE\"
     "
@@ -191,9 +197,9 @@ it "initializes empty collections on turn" \
         MCP_SESSION_FILE=\$(mktemp /tmp/mcp-test-XXXXXX.json)
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
         mcp_session_add_turn 'r1' 'title' 'text' 'in_progress'
-        jq -e '.entries[0].actions | length == 0' \"\$MCP_SESSION_FILE\" > /dev/null &&
-        jq -e '.entries[0].filesModified | length == 0' \"\$MCP_SESSION_FILE\" > /dev/null &&
-        jq -e '.entries[0].designDecisions | length == 0' \"\$MCP_SESSION_FILE\" > /dev/null
+        jq -e '.turns[0].actions | length == 0' \"\$MCP_SESSION_FILE\" > /dev/null &&
+        jq -e '.turns[0].filesModified | length == 0' \"\$MCP_SESSION_FILE\" > /dev/null &&
+        jq -e '.turns[0].designDecisions | length == 0' \"\$MCP_SESSION_FILE\" > /dev/null
         rm -f \"\$MCP_SESSION_FILE\"
     "
 
@@ -207,7 +213,7 @@ it "appends multiple turns" \
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
         mcp_session_add_turn 'r1' 'First' 'text1' 'in_progress'
         mcp_session_add_turn 'r2' 'Second' 'text2' 'completed'
-        count=\$(jq '.entries | length' \"\$MCP_SESSION_FILE\")
+        count=\$(jq '.turns | length' \"\$MCP_SESSION_FILE\")
         [[ \"\$count\" == '2' ]]
         rm -f \"\$MCP_SESSION_FILE\"
     "
@@ -226,7 +232,7 @@ it "updates turn response field" \
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
         mcp_session_add_turn 'r1' 'title' 'text' 'in_progress'
         mcp_session_update_turn 'r1' 'response' 'All done!'
-        resp=\$(jq -r '.entries[0].response' \"\$MCP_SESSION_FILE\")
+        resp=\$(jq -r '.turns[0].response' \"\$MCP_SESSION_FILE\")
         [[ \"\$resp\" == 'All done!' ]]
         rm -f \"\$MCP_SESSION_FILE\"
     "
@@ -241,7 +247,7 @@ it "updates turn status field" \
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
         mcp_session_add_turn 'r1' 'title' 'text' 'in_progress'
         mcp_session_update_turn 'r1' 'status' 'completed'
-        st=\$(jq -r '.entries[0].status' \"\$MCP_SESSION_FILE\")
+        st=\$(jq -r '.turns[0].status' \"\$MCP_SESSION_FILE\")
         [[ \"\$st\" == 'completed' ]]
         rm -f \"\$MCP_SESSION_FILE\"
     "
@@ -260,9 +266,9 @@ it "adds action with correct fields" \
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
         mcp_session_add_turn 'r1' 'title' 'text' 'in_progress'
         mcp_session_add_action 'r1' 'Created file' 'create' 'new.cs' 'completed'
-        desc=\$(jq -r '.entries[0].actions[0].description' \"\$MCP_SESSION_FILE\")
-        atype=\$(jq -r '.entries[0].actions[0].type' \"\$MCP_SESSION_FILE\")
-        fp=\$(jq -r '.entries[0].actions[0].filePath' \"\$MCP_SESSION_FILE\")
+        desc=\$(jq -r '.turns[0].actions[0].description' \"\$MCP_SESSION_FILE\")
+        atype=\$(jq -r '.turns[0].actions[0].type' \"\$MCP_SESSION_FILE\")
+        fp=\$(jq -r '.turns[0].actions[0].filePath' \"\$MCP_SESSION_FILE\")
         [[ \"\$desc\" == 'Created file' && \"\$atype\" == 'create' && \"\$fp\" == 'new.cs' ]]
         rm -f \"\$MCP_SESSION_FILE\"
     "
@@ -278,8 +284,8 @@ it "auto-increments action order" \
         mcp_session_add_turn 'r1' 'title' 'text' 'in_progress'
         mcp_session_add_action 'r1' 'First' 'edit' 'a.cs'
         mcp_session_add_action 'r1' 'Second' 'edit' 'b.cs'
-        o1=\$(jq '.entries[0].actions[0].order' \"\$MCP_SESSION_FILE\")
-        o2=\$(jq '.entries[0].actions[1].order' \"\$MCP_SESSION_FILE\")
+        o1=\$(jq '.turns[0].actions[0].order' \"\$MCP_SESSION_FILE\")
+        o2=\$(jq '.turns[0].actions[1].order' \"\$MCP_SESSION_FILE\")
         [[ \"\$o1\" == '1' && \"\$o2\" == '2' ]]
         rm -f \"\$MCP_SESSION_FILE\"
     "
@@ -315,8 +321,8 @@ it "appends file to filesModified" \
         mcp_session_add_turn 'r1' 'title' 'text' 'in_progress'
         mcp_session_add_file 'r1' 'src/main.cs'
         mcp_session_add_file 'r1' 'src/test.cs'
-        count=\$(jq '.entries[0].filesModified | length' \"\$MCP_SESSION_FILE\")
-        first=\$(jq -r '.entries[0].filesModified[0]' \"\$MCP_SESSION_FILE\")
+        count=\$(jq '.turns[0].filesModified | length' \"\$MCP_SESSION_FILE\")
+        first=\$(jq -r '.turns[0].filesModified[0]' \"\$MCP_SESSION_FILE\")
         [[ \"\$count\" == '2' && \"\$first\" == 'src/main.cs' ]]
         rm -f \"\$MCP_SESSION_FILE\"
     "
@@ -331,7 +337,7 @@ it "appends tag to tags array" \
         mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
         mcp_session_add_turn 'r1' 'title' 'text' 'in_progress'
         mcp_session_add_tag 'r1' 'bugfix'
-        tag=\$(jq -r '.entries[0].tags[0]' \"\$MCP_SESSION_FILE\")
+        tag=\$(jq -r '.turns[0].tags[0]' \"\$MCP_SESSION_FILE\")
         [[ \"\$tag\" == 'bugfix' ]]
         rm -f \"\$MCP_SESSION_FILE\"
     "
@@ -384,6 +390,27 @@ it "sets status to completed" \
         st=\$(jq -r '.status' \"\$MCP_SESSION_FILE\")
         [[ \"\$st\" == 'completed' ]]
         rm -f \"\$MCP_SESSION_FILE\"
+    "
+
+it "deletes .mcpServer/session.yaml on completion" \
+    bash -c "
+        source '$SCRIPT_DIR/mcp-session.sh'
+        curl() { :; }
+        workspace=\$(mktemp -d /tmp/mcp-workspace-XXXXXX)
+        mkdir -p \"\$workspace/.mcpServer\"
+        echo '{}' > \"\$workspace/.mcpServer/session.yaml\"
+
+        MCP_BASE_URL='http://test:9999'
+        MCP_API_KEY='key'
+        MCP_WORKSPACE_PATH=\"\$workspace\"
+        MCP_SESSION_FILE=\$(mktemp /tmp/mcp-test-XXXXXX.json)
+
+        mcp_session_create 'A' 't' 'm' 'sid' > /dev/null
+        mcp_session_complete
+
+        [[ ! -f \"\$workspace/.mcpServer/session.yaml\" ]]
+        rm -f \"\$MCP_SESSION_FILE\"
+        rm -rf \"\$workspace\"
     "
 
 # -- Summary --

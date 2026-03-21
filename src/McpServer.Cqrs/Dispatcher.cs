@@ -103,7 +103,7 @@ public sealed class Dispatcher : IDispatcher, ILoggerProvider
                     pipeline = () => behavior.HandleAsync(request, context, next);
                 }
 
-                var result = await pipeline().ConfigureAwait(false);
+                var result = await pipeline().ConfigureAwait(true);
 
                 sw.Stop();
                 LogResult(result, context, sw.Elapsed);
@@ -168,7 +168,7 @@ public sealed class Dispatcher : IDispatcher, ILoggerProvider
             ?? throw new InvalidOperationException($"Handler {handlerType.Name} does not have a HandleAsync method.");
 
         var task = (Task<Result<TResult>>)method.Invoke(handler, [request, context])!;
-        return await task.ConfigureAwait(false);
+        return await task.ConfigureAwait(true);
     }
 
     /// <summary>

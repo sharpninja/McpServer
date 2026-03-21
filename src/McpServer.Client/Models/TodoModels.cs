@@ -66,6 +66,10 @@ public sealed class TodoFlatItem
     [JsonPropertyName("reference")]
     public string? Reference { get; set; }
 
+    /// <summary>Code-review phase label for remediation items.</summary>
+    [JsonPropertyName("phase")]
+    public string? Phase { get; set; }
+
     /// <summary>IDs of items this depends on.</summary>
     [JsonPropertyName("dependsOn")]
     public IReadOnlyList<string>? DependsOn { get; set; }
@@ -134,6 +138,10 @@ public sealed class TodoCreateRequest
     [JsonPropertyName("remaining")]
     public string? Remaining { get; set; }
 
+    /// <summary>Code-review phase label.</summary>
+    [JsonPropertyName("phase")]
+    public string? Phase { get; set; }
+
     /// <summary>IDs of items this depends on.</summary>
     [JsonPropertyName("dependsOn")]
     public IReadOnlyList<string>? DependsOn { get; set; }
@@ -198,6 +206,14 @@ public sealed class TodoUpdateRequest
     [JsonPropertyName("remaining")]
     public string? Remaining { get; set; }
 
+    /// <summary>Updated reference text.</summary>
+    [JsonPropertyName("reference")]
+    public string? Reference { get; set; }
+
+    /// <summary>Updated code-review phase label.</summary>
+    [JsonPropertyName("phase")]
+    public string? Phase { get; set; }
+
     /// <summary>Dependency IDs.</summary>
     [JsonPropertyName("dependsOn")]
     public IReadOnlyList<string>? DependsOn { get; set; }
@@ -237,6 +253,149 @@ public sealed class TodoMutationResult
     /// <summary>The affected item (on success).</summary>
     [JsonPropertyName("item")]
     public TodoFlatItem? Item { get; set; }
+
+    /// <summary>Structured failure classification for partial or failed mutations.</summary>
+    [JsonPropertyName("failureKind")]
+    public TodoMutationFailureKind FailureKind { get; set; }
+}
+
+/// <summary>Classifies the failure mode of a TODO mutation.</summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum TodoMutationFailureKind
+{
+    /// <summary>No failure classification applies.</summary>
+    None = 0,
+
+    /// <summary>The request content was invalid.</summary>
+    Validation = 1,
+
+    /// <summary>The request conflicted with existing state.</summary>
+    Conflict = 2,
+
+    /// <summary>The target TODO item was not found.</summary>
+    NotFound = 3,
+
+    /// <summary>The authoritative database mutation succeeded but TODO.yaml projection failed.</summary>
+    ProjectionFailed = 4,
+
+    /// <summary>An external dependency failed after the local state changed.</summary>
+    ExternalSyncFailed = 5,
+}
+
+/// <summary>Result of querying TODO audit history.</summary>
+public sealed class TodoAuditQueryResult
+{
+    /// <summary>Audit entries ordered by TODO version.</summary>
+    [JsonPropertyName("entries")]
+    public IReadOnlyList<TodoAuditEntry> Entries { get; set; } = [];
+
+    /// <summary>Total matching audit entry count before pagination.</summary>
+    [JsonPropertyName("totalCount")]
+    public int TotalCount { get; set; }
+}
+
+/// <summary>Status of SQLite-authoritative TODO.yaml projection health and consistency.</summary>
+public sealed class TodoProjectionStatusResult
+{
+    /// <summary>Authoritative storage provider name.</summary>
+    [JsonPropertyName("authoritativeStore")]
+    public string AuthoritativeStore { get; set; } = string.Empty;
+
+    /// <summary>Absolute path to the authoritative SQLite data source.</summary>
+    [JsonPropertyName("authoritativeDataSource")]
+    public string AuthoritativeDataSource { get; set; } = string.Empty;
+
+    /// <summary>Absolute path to the projected TODO.yaml file.</summary>
+    [JsonPropertyName("projectionTargetPath")]
+    public string ProjectionTargetPath { get; set; } = string.Empty;
+
+    /// <summary>Whether the projection target currently exists as a file.</summary>
+    [JsonPropertyName("projectionTargetExists")]
+    public bool ProjectionTargetExists { get; set; }
+
+    /// <summary>Whether the projected TODO.yaml content matches authoritative SQLite state.</summary>
+    [JsonPropertyName("projectionConsistent")]
+    public bool ProjectionConsistent { get; set; }
+
+    /// <summary>Whether operator repair is currently required.</summary>
+    [JsonPropertyName("repairRequired")]
+    public bool RepairRequired { get; set; }
+
+    /// <summary>UTC timestamp when the consistency check was performed.</summary>
+    [JsonPropertyName("verifiedAtUtc")]
+    public string VerifiedAtUtc { get; set; } = string.Empty;
+
+    /// <summary>UTC timestamp of the last YAML import into SQLite, when known.</summary>
+    [JsonPropertyName("lastImportedFromYamlUtc")]
+    public string? LastImportedFromYamlUtc { get; set; }
+
+    /// <summary>UTC timestamp of the last successful projection from SQLite to YAML, when known.</summary>
+    [JsonPropertyName("lastProjectedToYamlUtc")]
+    public string? LastProjectedToYamlUtc { get; set; }
+
+    /// <summary>UTC timestamp of the last recorded projection failure, when known.</summary>
+    [JsonPropertyName("lastProjectionFailureUtc")]
+    public string? LastProjectionFailureUtc { get; set; }
+
+    /// <summary>Last recorded projection failure message, when known.</summary>
+    [JsonPropertyName("lastProjectionFailure")]
+    public string? LastProjectionFailure { get; set; }
+
+    /// <summary>Human-readable projection status summary.</summary>
+    [JsonPropertyName("message")]
+    public string? Message { get; set; }
+}
+
+/// <summary>Result of an operator-requested TODO.yaml projection repair attempt.</summary>
+public sealed class TodoProjectionRepairResult
+{
+    /// <summary>Whether the repair attempt succeeded.</summary>
+    [JsonPropertyName("success")]
+    public bool Success { get; set; }
+
+    /// <summary>Error message on repair failure.</summary>
+    [JsonPropertyName("error")]
+    public string? Error { get; set; }
+
+    /// <summary>Status after the repair attempt completed.</summary>
+    [JsonPropertyName("status")]
+    public TodoProjectionStatusResult Status { get; set; } = new();
+}
+
+/// <summary>Append-only audit entry for a TODO item.</summary>
+public sealed class TodoAuditEntry
+{
+    /// <summary>Monotonic audit row identifier.</summary>
+    [JsonPropertyName("auditId")]
+    public long AuditId { get; set; }
+
+    /// <summary>TODO item identifier.</summary>
+    [JsonPropertyName("todoId")]
+    public string TodoId { get; set; } = string.Empty;
+
+    /// <summary>Monotonic version for this TODO id.</summary>
+    [JsonPropertyName("version")]
+    public int Version { get; set; }
+
+    /// <summary>Recorded action.</summary>
+    [JsonPropertyName("action")]
+    public string Action { get; set; } = string.Empty;
+
+    /// <summary>UTC timestamp when the history row was recorded.</summary>
+    [JsonPropertyName("recordedAtUtc")]
+    public string RecordedAtUtc { get; set; } = string.Empty;
+
+    /// <summary>Post-mutation snapshot.</summary>
+    [JsonPropertyName("snapshot")]
+    public TodoFlatItem? Snapshot { get; set; }
+
+    /// <summary>Pre-mutation snapshot.</summary>
+    [JsonPropertyName("previousSnapshot")]
+    public TodoFlatItem? PreviousSnapshot { get; set; }
+
+    /// <summary>Origin of the mutation or backfill operation.</summary>
+    [JsonPropertyName("source")]
+    public string? Source { get; set; }
 }
 
 /// <summary>Result of a requirements analysis.</summary>

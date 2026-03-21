@@ -12,7 +12,7 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// <remarks>
 /// Requirement coverage: FR-MCP-050, TR-MCP-TPL-005.
 /// Test data uses substituted template-service responses (missing template, concrete template, repeated reads)
-/// to verify required-template enforcement and caching behavior.
+/// to verify required-template enforcement and fresh reload behavior for marker regeneration.
 /// </remarks>
 public sealed class FileMarkerPromptProviderTests
 {
@@ -69,35 +69,42 @@ public sealed class FileMarkerPromptProviderTests
     }
 
     /// <summary>
-    /// Verifies that marker template lookup is cached after the first successful load.
+    /// Verifies that marker template lookup reloads the current template content on each call.
     /// </summary>
     /// <remarks>
     /// Requirement coverage: FR-MCP-050, TR-MCP-TPL-005.
-    /// Test data: one template payload and two provider reads.
-    /// This data is used to prove the provider avoids redundant template-service calls while returning stable content.
+    /// Test data: two successive template payloads returned by the substituted template service.
+    /// This data is used to prove marker regeneration observes live prompt-template updates instead of reusing stale cached text.
     /// </remarks>
     [Fact]
-    public async Task GetGlobalPromptTemplateAsync_CachesResult()
+    public async Task GetGlobalPromptTemplateAsync_ReloadsUpdatedTemplate()
     {
-        var template = new PromptTemplate
-        {
-            Id = FileMarkerPromptProvider.TemplateId,
-            Title = "Test",
-            Category = "system",
-            Content = "Cached Content",
-            Engine = "handlebars",
-        };
         _templateService.GetByIdAsync(FileMarkerPromptProvider.TemplateId, Arg.Any<CancellationToken>())
-            .Returns(template);
+            .Returns(
+                new PromptTemplate
+                {
+                    Id = FileMarkerPromptProvider.TemplateId,
+                    Title = "Test",
+                    Category = "system",
+                    Content = "First Content",
+                    Engine = "handlebars",
+                },
+                new PromptTemplate
+                {
+                    Id = FileMarkerPromptProvider.TemplateId,
+                    Title = "Test",
+                    Category = "system",
+                    Content = "Updated Content",
+                    Engine = "handlebars",
+                });
 
         var provider = new FileMarkerPromptProvider(_templateService, _logger);
 
         var first = await provider.GetGlobalPromptTemplateAsync();
         var second = await provider.GetGlobalPromptTemplateAsync();
 
-        Assert.Equal("Cached Content", first);
-        Assert.Equal(first, second);
-        // Should only call the service once due to caching
-        await _templateService.Received(1).GetByIdAsync(FileMarkerPromptProvider.TemplateId, Arg.Any<CancellationToken>());
+        Assert.Equal("First Content", first);
+        Assert.Equal("Updated Content", second);
+        await _templateService.Received(2).GetByIdAsync(FileMarkerPromptProvider.TemplateId, Arg.Any<CancellationToken>());
     }
 }

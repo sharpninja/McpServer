@@ -1,3 +1,5 @@
+using McpServer.Support.Mcp.Services;
+
 namespace McpServer.Support.Mcp.Options;
 
 /// <summary>
@@ -29,6 +31,11 @@ public sealed class AgentPoolDefinitionOptions
     /// Optional key-value parameters forwarded as environment variables to the agent process.
     /// </summary>
     public Dictionary<string, string> AgentParameters { get; set; } = [];
+
+    /// <summary>
+    /// Strategy name used to execute this agent. Defaults to the current Copilot CLI path.
+    /// </summary>
+    public string ExecutionStrategy { get; set; } = AgentExecutionStrategyNames.CopilotCli;
 
     /// <summary>
     /// Indicates this agent is the fallback default for interactive requests.

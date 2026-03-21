@@ -53,7 +53,7 @@ public sealed class RepoFileService : IRepoFileService
         var dir = NormalizeRelative(relativePath ?? ".");
         if (!TryResolveFullPath(dir, out var fullPath) || !Directory.Exists(fullPath))
             return Task.FromResult(new RepoListResult(dir, Array.Empty<RepoListEntry>()));
-        if (!IsAllowed(dir)) return Task.FromResult(new RepoListResult(dir, Array.Empty<RepoListEntry>()));
+        if (!CanListPath(dir)) return Task.FromResult(new RepoListResult(dir, Array.Empty<RepoListEntry>()));
 
         var entries = new List<RepoListEntry>();
         foreach (var entry in Directory.EnumerateFileSystemEntries(fullPath))
@@ -62,7 +62,16 @@ public sealed class RepoFileService : IRepoFileService
             if (string.IsNullOrEmpty(name) || name.StartsWith('.')) continue;
             var isDir = Directory.Exists(entry);
             var childRelative = string.IsNullOrEmpty(dir) || dir == "." ? name : dir + "/" + name;
-            if (!IsAllowed(childRelative)) continue;
+            if (isDir)
+            {
+                if (!CanListPath(childRelative))
+                    continue;
+            }
+            else if (!IsAllowed(childRelative))
+            {
+                continue;
+            }
+
             entries.Add(new RepoListEntry(name, isDir));
         }
         return Task.FromResult(new RepoListResult(dir, entries.OrderBy(e => e.Name, StringComparer.OrdinalIgnoreCase).ToList()));
@@ -115,16 +124,28 @@ public sealed class RepoFileService : IRepoFileService
     private bool TryResolveFullPath(string relativePath, out string fullPath)
     {
         fullPath = null!;
-        if (IsPathTraversal(relativePath)) return false;
-        var repoRoot = Path.GetFullPath(_workspaceContext.WorkspacePath ?? _options.RepoRoot);
-        fullPath = Path.GetFullPath(Path.Combine(repoRoot, relativePath));
-        return fullPath.StartsWith(repoRoot, StringComparison.OrdinalIgnoreCase);
+        if (IsPathTraversal(relativePath))
+            return false;
+
+        var repoRoot = GetRepoRoot();
+        var candidate = Path.GetFullPath(Path.Combine(repoRoot, relativePath));
+        if (!IsPathWithinRoot(repoRoot, candidate))
+            return false;
+
+        if (ContainsEscapingReparsePoint(repoRoot, candidate, relativePath))
+            return false;
+
+        fullPath = candidate;
+        return true;
     }
 
     private static bool IsPathTraversal(string relativePath)
     {
-        return relativePath.Contains("..", StringComparison.Ordinal) ||
-               Path.IsPathRooted(relativePath);
+        if (Path.IsPathRooted(relativePath))
+            return true;
+
+        return SplitPathSegments(relativePath)
+            .Any(segment => string.Equals(segment, "..", StringComparison.Ordinal));
     }
 
     private bool IsAllowed(string relativePath)
@@ -134,26 +155,105 @@ public sealed class RepoFileService : IRepoFileService
         return MatchesAllowlist(relativePath, allowlist);
     }
 
-    private static bool MatchesAllowlist(string relativePath, IReadOnlyList<string> patterns)
+    private bool CanListPath(string relativePath)
     {
-        foreach (var p in patterns)
+        var allowlist = _options.RepoAllowlist;
+        if (allowlist == null || allowlist.Count == 0) return true;
+        return CanListPath(relativePath, allowlist);
+    }
+
+    private static bool MatchesAllowlist(string relativePath, IReadOnlyList<string> patterns)
+        => PathGlobMatcher.MatchesAny(relativePath, patterns);
+
+    private static bool CanListPath(string relativePath, IReadOnlyList<string> patterns)
+        => PathGlobMatcher.MayMatchDirectoryPrefix(relativePath, patterns);
+
+    private string GetRepoRoot()
+    {
+        return Path.GetFullPath(_workspaceContext.WorkspacePath ?? _options.RepoRoot)
+            .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+    }
+
+    private bool ContainsEscapingReparsePoint(string repoRoot, string candidatePath, string relativePath)
+    {
+        var current = repoRoot;
+        foreach (var segment in SplitPathSegments(relativePath))
         {
-            if (p.Contains("**", StringComparison.Ordinal))
+            current = Path.Combine(current, segment);
+            if (!File.Exists(current) && !Directory.Exists(current))
+                break;
+
+            try
             {
-                var prefix = p.Replace("**", string.Empty, StringComparison.Ordinal).TrimEnd(s_trimSlashChars);
-                if (relativePath.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) return true;
+                var attributes = File.GetAttributes(current);
+                if (!attributes.HasFlag(FileAttributes.ReparsePoint))
+                    continue;
+
+                var resolved = ResolveReparsePointTarget(current);
+                if (resolved is null || !IsPathWithinRoot(repoRoot, resolved.FullName))
+                {
+                    _logger.LogWarning(
+                        "Rejected repo path {RelativePath} because reparse point {ReparsePath} resolves outside repo root {RepoRoot}.",
+                        relativePath,
+                        current,
+                        repoRoot);
+                    return true;
+                }
             }
-            else if (p.StartsWith("*.", StringComparison.Ordinal))
+            catch (IOException ex)
             {
-                var suffix = p[1..];
-                if (relativePath.EndsWith(suffix, StringComparison.OrdinalIgnoreCase)) return true;
+                _logger.LogWarning(
+                    ex,
+                    "Rejected repo path {RelativePath} because reparse-point validation failed at {ReparsePath}.",
+                    relativePath,
+                    current);
+                return true;
             }
-            else if (relativePath.StartsWith(p.TrimStart('/'), StringComparison.OrdinalIgnoreCase))
+            catch (UnauthorizedAccessException ex)
             {
+                _logger.LogWarning(
+                    ex,
+                    "Rejected repo path {RelativePath} because reparse-point validation could not access {ReparsePath}.",
+                    relativePath,
+                    current);
                 return true;
             }
         }
+
         return false;
+    }
+
+    private static FileSystemInfo? ResolveReparsePointTarget(string path)
+    {
+        if (Directory.Exists(path))
+            return new DirectoryInfo(path).ResolveLinkTarget(returnFinalTarget: true);
+
+        if (File.Exists(path))
+            return new FileInfo(path).ResolveLinkTarget(returnFinalTarget: true);
+
+        return null;
+    }
+
+    private static bool IsPathWithinRoot(string rootPath, string candidatePath)
+    {
+        var relative = Path.GetRelativePath(rootPath, candidatePath);
+        if (string.IsNullOrWhiteSpace(relative) || string.Equals(relative, ".", StringComparison.Ordinal))
+            return true;
+
+        if (Path.IsPathRooted(relative))
+            return false;
+
+        return !string.Equals(relative, "..", StringComparison.Ordinal)
+               && !relative.StartsWith(".." + Path.DirectorySeparatorChar, StringComparison.Ordinal)
+               && !relative.StartsWith(".." + Path.AltDirectorySeparatorChar, StringComparison.Ordinal);
+    }
+
+    private static string[] SplitPathSegments(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path) || string.Equals(path, ".", StringComparison.Ordinal))
+            return [];
+
+        return path.Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     }
 
     private async Task PublishChangeSafeAsync(string action, string entityId, CancellationToken cancellationToken)

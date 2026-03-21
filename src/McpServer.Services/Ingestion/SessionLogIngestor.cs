@@ -24,8 +24,8 @@ public sealed record SessionLogImportResult
     /// <summary>Files that failed to parse or read.</summary>
     public int Failed { get; init; }
 
-    /// <summary>Total entries across all imported session logs.</summary>
-    public int TotalEntries { get; init; }
+    /// <summary>Total turns across all imported session logs.</summary>
+    public int TotalTurns { get; init; }
 }
 
 /// <summary>
@@ -135,10 +135,10 @@ public sealed class SessionLogIngestor
             var sb = new StringBuilder();
             sb.Append("Session: ").Append(dto.Title ?? dto.SessionId ?? "unknown").AppendLine();
             sb.Append("Source: ").AppendLine(dto.SourceType ?? "");
-            sb.Append("Entries: ").AppendLine(dto.EntryCount.ToString(System.Globalization.CultureInfo.InvariantCulture));
-            if (dto.Entries != null)
+            sb.Append("Turns: ").AppendLine(dto.TurnCount.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            if (dto.Turns != null)
             {
-                foreach (var e in dto.Entries)
+                foreach (var e in dto.Turns)
                 {
                     sb.AppendLine("---");
                     sb.Append("Request: ").AppendLine(e.QueryTitle ?? e.RequestId ?? "");
@@ -169,7 +169,7 @@ public sealed class SessionLogIngestor
     /// Skips .md files (no structured data). Uses upsert via <see cref="ISessionLogService.SubmitAsync"/>.
     /// </summary>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>Import statistics including files scanned, imported, skipped, failed, and total entries.</returns>
+        /// <returns>Import statistics including files scanned, imported, skipped, failed, and total turns.</returns>
     public async Task<SessionLogImportResult> ImportToSessionLogTablesAsync(CancellationToken cancellationToken = default)
     {
         var repoRoot = ResolveRepoRoot();
@@ -183,7 +183,7 @@ public sealed class SessionLogIngestor
         var imported = 0;
         var skipped = 0;
         var failed = 0;
-        var totalEntries = 0;
+        var totalTurns = 0;
         var filesScanned = 0;
         foreach (var path in Directory.EnumerateFiles(sessionsDir, "*.json", SearchOption.TopDirectoryOnly))
         {
@@ -219,7 +219,7 @@ public sealed class SessionLogIngestor
 
                 await _sessionLogService.SubmitAsync(dto, path, contentHash, cancellationToken).ConfigureAwait(false);
                 imported++;
-                totalEntries += dto.Entries?.Count ?? 0;
+                totalTurns += dto.Turns?.Count ?? 0;
                 _logger.LogDebug("Imported session log {SourceType}/{SessionId} from {Path}", dto.SourceType, dto.SessionId, path);
             }
             catch (JsonException ex)
@@ -240,8 +240,8 @@ public sealed class SessionLogIngestor
         }
 
         _logger.LogInformation(
-            "Session log import complete: {FilesScanned} scanned, {Imported} imported ({TotalEntries} entries), {Skipped} unchanged, {Failed} failed",
-            filesScanned, imported, totalEntries, skipped, failed);
+            "Session log import complete: {FilesScanned} scanned, {Imported} imported ({TotalTurns} turns), {Skipped} unchanged, {Failed} failed",
+            filesScanned, imported, totalTurns, skipped, failed);
 
         // Also process .md files via MarkdownSessionLogParser for 4NF import
         foreach (var mdPath in Directory.EnumerateFiles(sessionsDir, "*.md", SearchOption.TopDirectoryOnly))
@@ -264,7 +264,7 @@ public sealed class SessionLogIngestor
                 }
                 await _sessionLogService.SubmitAsync(dto, mdPath, contentHash, cancellationToken).ConfigureAwait(false);
                 imported++;
-                totalEntries += dto.Entries?.Count ?? 0;
+                totalTurns += dto.Turns?.Count ?? 0;
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {
@@ -279,7 +279,7 @@ public sealed class SessionLogIngestor
             Imported = imported,
             Skipped = skipped,
             Failed = failed,
-            TotalEntries = totalEntries
+            TotalTurns = totalTurns
         };
     }
 
@@ -300,7 +300,7 @@ public sealed class SessionLogIngestor
             Started = root.TryGetProperty("started", out var s) ? s.GetString() : null,
             LastUpdated = root.TryGetProperty("lastUpdated", out var lu) ? lu.GetString() : null,
             Status = root.TryGetProperty("status", out var stat) ? stat.GetString() : null,
-            EntryCount = root.TryGetProperty("entryCount", out var ec) && ec.ValueKind == JsonValueKind.Number ? ec.GetInt32() : 0,
+            TurnCount = root.TryGetProperty("turnCount", out var ec) && ec.ValueKind == JsonValueKind.Number ? ec.GetInt32() : 0,
             TotalTokens = root.TryGetProperty("totalTokens", out var tt) && tt.ValueKind == JsonValueKind.Number ? tt.GetInt32() : null,
             CursorSessionLabel = root.TryGetProperty("cursorSessionLabel", out var csl) ? csl.GetString() : null,
         };
@@ -330,10 +330,10 @@ public sealed class SessionLogIngestor
             dto.CopilotStatistics = JsonSerializer.Deserialize<CopilotStatisticsDto>(cs.GetRawText(), s_jsonOptions);
         }
 
-        // Entries: use standard deserialization (entries schema is consistent)
-        if (root.TryGetProperty("entries", out var entries) && entries.ValueKind == JsonValueKind.Array)
+        // Turns: use standard deserialization (turns schema is consistent)
+        if (root.TryGetProperty("turns", out var turns) && turns.ValueKind == JsonValueKind.Array)
         {
-            dto.Entries = JsonSerializer.Deserialize<List<UnifiedRequestEntryDto>>(entries.GetRawText(), s_jsonOptions);
+            dto.Turns = JsonSerializer.Deserialize<List<UnifiedRequestEntryDto>>(turns.GetRawText(), s_jsonOptions);
         }
 
         return dto;

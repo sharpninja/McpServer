@@ -6,22 +6,18 @@ This guide is for operators and AI-agent users running `McpServer.Support.Mcp`.
 
 ### Supported host environment
 
-- Windows 10/11 or Windows Server (service scripts are PowerShell-first)
+- Windows 10/11 or Windows Server
 - .NET SDK 9.x for local development
-- `gh` CLI for GitHub issue and PR tooling
-- Network access to configured MCP port (default `7147`)
+- PowerShell 7+
+- `gh` CLI for GitHub issue and PR workflows
+- Network access to the configured MCP port (default `7147`)
 
 ### Prerequisite checks
 
 ```powershell
-# .NET SDK
- dotnet --version
-
-# GitHub CLI
- gh auth status
-
-# MCP health
- Invoke-RestMethod http://localhost:7147/health
+dotnet --version
+gh auth status
+Invoke-RestMethod http://localhost:7147/health
 ```
 
 ### Install/run options
@@ -38,34 +34,37 @@ dotnet run --project src\McpServer.Support.Mcp -- --instance default
 dotnet run --project src\McpServer.Support.Mcp -- --transport stdio --instance default
 ```
 
-#### Windows service
+#### Windows service deployment
 
 ```powershell
-.\scripts\Manage-McpService.ps1 -Action Install
-.\scripts\Manage-McpService.ps1 -Action Start
+gsudo pwsh -NonInteractive -File .\scripts\Update-McpService.ps1 -SkipVersionBump
+Get-Service McpServer
 ```
 
 ### Verify startup
 
-- `GET /health` returns `{"status":"Healthy"}`
-- `GET /swagger` opens API UI
-- Marker file `AGENTS-README-FIRST.yaml` exists at workspace root
+- `GET /health` returns healthy status
+- `GET /swagger` loads the API UI
+- `GET /swagger/v1/swagger.json` returns OpenAPI metadata
+- marker file `AGENTS-README-FIRST.yaml` exists at workspace root
 
 ## 2) Configuration reference (appsettings + marker file)
 
 ### appsettings keys (root)
 
-- `DataFolder`: base folder used for relative MCP data paths
-- `Embedding:*` and `VectorIndex:*`: semantic indexing settings
-- `Mcp:Port`: server port (default `7147`)
-- `Mcp:DataSource`, `Mcp:DataDirectory`: storage path controls
-- `Mcp:RepoRoot`, `Mcp:RepoAllowlist`: repository access and index scope
-- `Mcp:TodoFilePath`, `Mcp:TodoStorage:*`: TODO backend and files
-- `Mcp:GraphRag:*`: GraphRAG behavior
-- `Mcp:ToolRegistry:*`: default tool bucket configuration
-- `Mcp:Tunnel:*`: ngrok/cloudflare/frp provider settings
-- `Mcp:Workspaces`: workspace registrations
-- `Mcp:Instances:{name}:*`: per-instance overrides
+- `DataFolder`
+- `Embedding:*` and `VectorIndex:*`
+- `Mcp:Port`, `Mcp:DataSource`, `Mcp:DataDirectory`
+- `Mcp:RepoRoot`, `Mcp:RepoAllowlist`
+- `Mcp:TodoFilePath`, `Mcp:TodoStorage:*`
+- `Mcp:GraphRag:*`
+- `Mcp:ToolRegistry:*`
+- `Mcp:Tunnel:*`
+- `Mcp:Workspaces`
+- `Mcp:Instances:{name}:*`
+- `VoiceConversation:DefaultExecutionStrategy` (`hosted-agentframework` or `copilot-cli`)
+- `VoiceConversation:ModelApiKeyEnvironmentVariableName`
+- `GET|PATCH /mcpserver/configuration` (PATCH requires admin role)
 
 ### Configuration precedence
 
@@ -74,49 +73,52 @@ dotnet run --project src\McpServer.Support.Mcp -- --transport stdio --instance d
 3. `Mcp:Port`
 4. default `7147`
 
-Instance-level `Mcp:Instances:{name}:*` overrides base `Mcp:*` settings.
-
 ### Marker file (`AGENTS-README-FIRST.yaml`)
 
-Marker file fields used by agents:
+Key fields:
 
 - `baseUrl`, `port`
-- `apiKey` (rotates when server restarts)
+- `apiKey`
 - endpoint map (`health`, `swagger`, `todo`, `sessionLog`, etc.)
-- `workspacePath`, `workspace` name
-- startup timestamps (`serverStartedAtUtc`, `markerWrittenAtUtc`)
+- `workspacePath`, `workspace`
+- `serverStartedAtUtc`, `markerWrittenAtUtc`
 
-Use marker data for authenticated calls:
+Example use:
 
 ```powershell
 $marker = Get-Content .\AGENTS-README-FIRST.yaml -Raw
-$apiKey = ([regex]::Match($marker,'apiKey:\s*(\S+)')).Groups[1].Value
-Invoke-RestMethod -Uri "http://localhost:7147/mcpserver/todo" -Headers @{ 'X-Api-Key' = $apiKey }
+$apiKey = ([regex]::Match($marker, 'apiKey:\s*(\S+)')).Groups[1].Value
+Invoke-RestMethod -Uri "http://localhost:7147/mcpserver/todo" -Headers @{ "X-Api-Key" = $apiKey }
 ```
 
-### PowerShell helper modules
-
-Import and initialize helper modules (preferred over raw REST for TODO/session logging):
+### PowerShell helper modules (McpSession.psm1 + McpTodo.psm1)
 
 ```powershell
+$marker = Get-Content .\AGENTS-README-FIRST.yaml -Raw
+$apiKey = ([regex]::Match($marker, 'apiKey:\s*(\S+)')).Groups[1].Value
+$headers = @{ "X-Api-Key" = $apiKey }
+
+Invoke-RestMethod -Uri "http://localhost:7147/mcpserver/tools/search?keyword=mcp-session-module" -Headers $headers
+Invoke-RestMethod -Uri "http://localhost:7147/mcpserver/tools/search?keyword=mcp-todo-module" -Headers $headers
+
 Import-Module .\tools\powershell\McpSession.psm1
 Import-Module .\tools\powershell\McpTodo.psm1
 
-Initialize-McpSession
+Initialize-McpSession -Agent "Codex" -Model "gpt-5.3-codex"
 Initialize-McpTodo
 ```
 
-Sample session log flow:
+Sample session logging flow:
 
 ```powershell
-$s = New-McpSessionLog -SourceType "Copilot" -Title "MCP docs update" -Model "gpt-5.3-codex"
-$t = Add-McpSessionTurn -Session $s -QueryTitle "Update docs" -QueryText "Create user docs" -Status in_progress
-Add-McpAction -Turn $t -Description "Created docs\\USER-GUIDE.md" -Type edit -FilePath "docs/USER-GUIDE.md"
-Set-McpSessionTurn -Session $s -Turn $t -Response "Docs complete" -Status completed
-Update-McpSessionLog -Session $s -Status completed
+$session = New-McpSessionLog -SourceType "Codex" -Title "MCP docs update" -Model "gpt-5.3-codex"
+$turn = Add-McpSessionTurn -Session $session -QueryTitle "Update docs" -QueryText "Create user docs" -Status in_progress
+Add-McpAction -Turn $turn -Description "Updated docs\\USER-GUIDE.md" -Type edit -FilePath "docs/USER-GUIDE.md"
+Set-McpSessionTurn -Session $session -Turn $turn -Response "Docs complete" -Status completed
+Update-McpSessionLog -Session $session
 ```
 
-Sample TODO flow:
+Sample TODO progress flow:
 
 ```powershell
 $todo = Get-McpTodo -Id "MCP-USERDOCS-001"
@@ -124,14 +126,18 @@ $tasks = @(
   @{ task = "Write Installation & Prerequisites guide"; done = $true },
   @{ task = "Write Configuration reference (appsettings + marker file)"; done = $true }
 )
-Update-McpTodo -Id $todo.id -ImplementationTasks $tasks -Note "Initial documentation sections complete."
+Update-McpTodo -Id $todo.id -ImplementationTasks $tasks
 ```
 
 ## 3) REST API reference (all controllers)
 
 Base URL: `http://<host>:7147`
 
-Authentication: include `X-Api-Key` for `/mcpserver/*` endpoints; add `X-Workspace-Path` to explicitly target a workspace.
+Authentication:
+
+- include `X-Api-Key` for `/mcpserver/*`
+- include `X-Workspace-Path` for explicit workspace targeting
+- OpenAPI: `GET /swagger/v1/swagger.json`
 
 ### AuthConfig controller (`/auth/*`)
 
@@ -143,32 +149,45 @@ Authentication: include `X-Api-Key` for `/mcpserver/*` endpoints; add `X-Workspa
 
 ### AgentPool controller (`/mcpserver/agent-pool/*`)
 
-- `GET /agents`, `POST /connect`
-- `POST /agents/{agentName}/start|stop|connect|recycle`
-- `GET /queue`, `DELETE /queue/{jobId}`
-- `POST /queue/{jobId}/cancel|move-up|move-down`
-- `POST /queue/one-shot`, `POST /queue/resolve`
-- `GET /jobs/{jobId}/stream`, `GET /notifications`
+- `GET /mcpserver/agent-pool/agents`
+- `POST /mcpserver/agent-pool/agents/{agentName}/start|stop|connect|recycle`
+- `POST /mcpserver/agent-pool/connect`
+- `GET /mcpserver/agent-pool/queue`
+- `POST /mcpserver/agent-pool/queue/one-shot`
+- `POST /mcpserver/agent-pool/queue/resolve`
+- `POST /mcpserver/agent-pool/queue/{jobId}/cancel|move-up|move-down`
+- `DELETE /mcpserver/agent-pool/queue/{jobId}`
+- `GET /mcpserver/agent-pool/notifications`
+- `GET /mcpserver/agent-pool/jobs/{jobId}/stream`
 
 ### Agent controller (`/mcpserver/agents*`)
 
 - `GET /mcpserver/agents`
 - `GET|POST|DELETE /mcpserver/agents/{agentId}`
-- `POST /mcpserver/agents/{agentId}/ban|unban`
+- `POST /mcpserver/agents/{agentId}/ban|unban|launch|stop`
 - `GET|POST /mcpserver/agents/{agentId}/events`
+- `GET /mcpserver/agents/{agentId}/process-status`
+- `GET /mcpserver/agents/running`
 - `GET|POST /mcpserver/agents/definitions`
 - `GET|DELETE /mcpserver/agents/definitions/{agentType}`
 - `POST /mcpserver/agents/definitions/seed`
 - `GET /mcpserver/agents/validate`
 
+### Configuration controller (`/mcpserver/configuration`)
+
+- `GET /mcpserver/configuration`
+- `PATCH /mcpserver/configuration`
+
 ### Context controller (`/mcpserver/context/*`)
 
-- `POST /search`
-- `POST /pack`
-- `GET /sources`
-- `POST /rebuild-index`
+- `POST /mcpserver/context/search`
+- `POST /mcpserver/context/pack`
+- `GET /mcpserver/context/sources`
+- `POST /mcpserver/context/rebuild-index`
+- `POST /mcpserver/context/ingest-website`
+- `POST /mcpserver/context/ingest-website/stream`
 
-Request example:
+Search request example:
 
 ```json
 {
@@ -192,27 +211,45 @@ Response example:
 }
 ```
 
+### Desktop controller (`/mcpserver/desktop/*`)
+
+- `POST /mcpserver/desktop/launch` — requires normal workspace authentication plus the
+  privileged `X-Desktop-Launch-Token` header, and the target executable must match
+  `Mcp:DesktopLaunch:AllowedExecutables` while `Mcp:DesktopLaunch:Enabled` is `true`.
+
 ### Diagnostic controller (`/mcpserver/diagnostic/*`)
 
-- `GET /execution-path`
-- `GET /appsettings-path`
+- `GET /mcpserver/diagnostic/execution-path`
+- `GET /mcpserver/diagnostic/appsettings-path`
 
-### EventStream controller
+### EventStream controller (`/mcpserver/events`)
 
 - `GET /mcpserver/events`
 
 ### GitHub controller (`/mcpserver/gh/*`)
 
-- Issues: `GET|POST /issues`, `GET|PUT /issues/{number}`
-- Issue actions: `POST /issues/{number}/close|reopen|sync`, `POST /issues/{id}/comments`
-- Bulk sync: `POST /issues/sync/from-github`, `POST /issues/sync/to-github`
-- Metadata: `GET /labels`, `GET /pulls`, `POST /pulls/{id}/comments`
+- `GET|POST /mcpserver/gh/issues`
+- `GET|PUT /mcpserver/gh/issues/{number}`
+- `POST /mcpserver/gh/issues/{number}/close|reopen|sync`
+- `POST /mcpserver/gh/issues/{id}/comments`
+- `POST /mcpserver/gh/issues/sync/from-github`
+- `POST /mcpserver/gh/issues/sync/to-github`
+- `GET /mcpserver/gh/labels`
+- `GET /mcpserver/gh/pulls`
+- `POST /mcpserver/gh/pulls/{id}/comments`
+- `GET /mcpserver/gh/auth/status`
+- `PUT|DELETE /mcpserver/gh/auth/token`
+- `GET /mcpserver/gh/oauth/config`
+- `GET /mcpserver/gh/oauth/authorize-url`
+- `GET /mcpserver/gh/actions/runs`
+- `GET /mcpserver/gh/actions/runs/{runId}`
+- `POST /mcpserver/gh/actions/runs/{runId}/rerun|cancel`
 
 ### GraphRag controller (`/mcpserver/graphrag/*`)
 
-- `GET /status`
-- `POST /index`
-- `POST /query`
+- `GET /mcpserver/graphrag/status`
+- `POST /mcpserver/graphrag/index`
+- `POST /mcpserver/graphrag/query`
 
 ### PromptTemplate controller (`/mcpserver/templates*`)
 
@@ -224,47 +261,28 @@ Response example:
 
 ### Repo controller (`/mcpserver/repo/*`)
 
-- `GET /repo/file`
-- `POST /repo/file`
-- `GET /repo/list`
-
-Write example:
-
-```json
-{
-  "path": "docs/example.md",
-  "content": "# example"
-}
-```
+- `GET /mcpserver/repo/file`
+- `POST /mcpserver/repo/file`
+- `GET /mcpserver/repo/list`
 
 ### Requirements controller (`/mcpserver/requirements/*`)
 
-- `GET /generate`
-- `GET|POST /fr`, `GET|PUT|DELETE /fr/{id}`
-- `GET|POST /tr`, `GET|PUT|DELETE /tr/{id}`
-- `GET|POST /test`, `GET|PUT|DELETE /test/{id}`
-- `GET /mapping`, `GET|PUT|DELETE /mapping/{frId}`
+- `GET /mcpserver/requirements/generate`
+- `GET|POST /mcpserver/requirements/fr`
+- `GET|PUT|DELETE /mcpserver/requirements/fr/{id}`
+- `GET|POST /mcpserver/requirements/tr`
+- `GET|PUT|DELETE /mcpserver/requirements/tr/{id}`
+- `GET|POST /mcpserver/requirements/test`
+- `GET|PUT|DELETE /mcpserver/requirements/test/{id}`
+- `GET /mcpserver/requirements/mapping`
+- `GET|PUT|DELETE /mcpserver/requirements/mapping/{frId}`
+- `POST /mcpserver/requirements/ingest`
 
 ### SessionLog controller (`/mcpserver/sessionlog*`)
 
 - `GET /mcpserver/sessionlog`
 - `POST /mcpserver/sessionlog`
 - `POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog`
-
-Submit example:
-
-```json
-{
-  "sourceType": "Codex",
-  "sessionId": "Codex-20260305T160000Z-example",
-  "title": "Session",
-  "model": "gpt-5.3-codex",
-  "started": "2026-03-05T16:00:00Z",
-  "lastUpdated": "2026-03-05T16:00:00Z",
-  "status": "in_progress",
-  "turns": []
-}
-```
 
 ### Todo controller (`/mcpserver/todo*`)
 
@@ -273,16 +291,18 @@ Submit example:
 - `POST /mcpserver/todo/{id}/move`
 - `POST /mcpserver/todo/{id}/requirements`
 - `GET /mcpserver/todo/{id}/prompt/implement|plan|status`
-- `POST /mcpserver/todo/{id}/prompt/implement|plan|status/queue`
+- `POST /mcpserver/todo/{id}/prompt/implement/queue`
+- `POST /mcpserver/todo/{id}/prompt/plan/queue`
+- `POST /mcpserver/todo/{id}/prompt/status/queue`
 
-Update example:
+Update request example:
 
 ```json
 {
   "implementationTasks": [
-    { "task": "Write Installation & Prerequisites guide", "done": true }
-  ],
-  "note": "Installation section published."
+    { "task": "Write Installation & Prerequisites guide", "done": true },
+    { "task": "Write Configuration reference (appsettings + marker file)", "done": true }
+  ]
 }
 ```
 
@@ -291,8 +311,11 @@ Update example:
 - `GET|POST /mcpserver/tools`
 - `GET|PUT|DELETE /mcpserver/tools/{id}`
 - `GET /mcpserver/tools/search`
-- Bucket routes: `GET|POST /buckets`, `DELETE /buckets/{name}`
-- Bucket operations: `GET /buckets/{name}/browse`, `POST /buckets/{name}/install`, `POST /buckets/{name}/sync`
+- `GET|POST /mcpserver/tools/buckets`
+- `DELETE /mcpserver/tools/buckets/{name}`
+- `GET /mcpserver/tools/buckets/{name}/browse`
+- `POST /mcpserver/tools/buckets/{name}/install`
+- `POST /mcpserver/tools/buckets/{name}/sync`
 
 ### Tunnel controller (`/mcpserver/tunnel/*`)
 
@@ -302,13 +325,13 @@ Update example:
 
 ### Voice controller (`/mcpserver/voice/*`)
 
-- `GET|POST /session`
-- `GET|DELETE /session/{sessionId}`
-- `POST /session/{sessionId}/turn`
-- `POST /session/{sessionId}/turn/stream`
-- `POST /session/{sessionId}/interrupt`
-- `POST /session/{sessionId}/escape`
-- `GET /session/{sessionId}/transcript`
+- `GET|POST /mcpserver/voice/session`
+- `GET|DELETE /mcpserver/voice/session/{sessionId}`
+- `POST /mcpserver/voice/session/{sessionId}/turn`
+- `POST /mcpserver/voice/session/{sessionId}/turn/stream`
+- `POST /mcpserver/voice/session/{sessionId}/interrupt`
+- `POST /mcpserver/voice/session/{sessionId}/escape`
+- `GET /mcpserver/voice/session/{sessionId}/transcript`
 
 ### Workspace controller (`/mcpserver/workspace*`)
 
@@ -317,10 +340,187 @@ Update example:
 - `POST /mcpserver/workspace/{key}/init|start|stop`
 - `GET /mcpserver/workspace/{key}/status`
 - `GET|PUT /mcpserver/workspace/prompt`
+- `POST /mcpserver/workspace/policy`
+
+### Runtime utility endpoints (non-controller)
+
+- `GET /health`
+- `GET /swagger`
+- `GET /swagger/v1/swagger.json`
+- `POST /mcp-transport`
+
+### Complete endpoint inventory (OpenAPI snapshot)
+
+```text
+GET /auth/config
+POST /auth/device
+POST /auth/token
+GET /auth/ui/{path}
+POST /auth/ui/{path}
+GET /mcpserver/agent-pool/agents
+POST /mcpserver/agent-pool/agents/{agentName}/connect
+POST /mcpserver/agent-pool/agents/{agentName}/recycle
+POST /mcpserver/agent-pool/agents/{agentName}/start
+POST /mcpserver/agent-pool/agents/{agentName}/stop
+POST /mcpserver/agent-pool/connect
+GET /mcpserver/agent-pool/jobs/{jobId}/stream
+GET /mcpserver/agent-pool/notifications
+GET /mcpserver/agent-pool/queue
+DELETE /mcpserver/agent-pool/queue/{jobId}
+POST /mcpserver/agent-pool/queue/{jobId}/cancel
+POST /mcpserver/agent-pool/queue/{jobId}/move-down
+POST /mcpserver/agent-pool/queue/{jobId}/move-up
+POST /mcpserver/agent-pool/queue/one-shot
+POST /mcpserver/agent-pool/queue/resolve
+GET /mcpserver/agents
+DELETE /mcpserver/agents/{agentId}
+GET /mcpserver/agents/{agentId}
+POST /mcpserver/agents/{agentId}
+POST /mcpserver/agents/{agentId}/ban
+GET /mcpserver/agents/{agentId}/events
+POST /mcpserver/agents/{agentId}/events
+POST /mcpserver/agents/{agentId}/launch
+GET /mcpserver/agents/{agentId}/process-status
+POST /mcpserver/agents/{agentId}/stop
+POST /mcpserver/agents/{agentId}/unban
+GET /mcpserver/agents/definitions
+POST /mcpserver/agents/definitions
+DELETE /mcpserver/agents/definitions/{agentType}
+GET /mcpserver/agents/definitions/{agentType}
+POST /mcpserver/agents/definitions/seed
+GET /mcpserver/agents/running
+GET /mcpserver/agents/validate
+GET /mcpserver/configuration
+PATCH /mcpserver/configuration
+POST /mcpserver/context/ingest-website
+POST /mcpserver/context/ingest-website/stream
+POST /mcpserver/context/pack
+POST /mcpserver/context/rebuild-index
+POST /mcpserver/context/search
+GET /mcpserver/context/sources
+POST /mcpserver/desktop/launch  # also requires X-Desktop-Launch-Token when enabled
+GET /mcpserver/events
+GET /mcpserver/gh/actions/runs
+GET /mcpserver/gh/actions/runs/{runId}
+POST /mcpserver/gh/actions/runs/{runId}/cancel
+POST /mcpserver/gh/actions/runs/{runId}/rerun
+GET /mcpserver/gh/auth/status
+DELETE /mcpserver/gh/auth/token
+PUT /mcpserver/gh/auth/token
+GET /mcpserver/gh/issues
+POST /mcpserver/gh/issues
+POST /mcpserver/gh/issues/{id}/comments
+GET /mcpserver/gh/issues/{number}
+PUT /mcpserver/gh/issues/{number}
+POST /mcpserver/gh/issues/{number}/close
+POST /mcpserver/gh/issues/{number}/reopen
+POST /mcpserver/gh/issues/{number}/sync
+POST /mcpserver/gh/issues/sync/from-github
+POST /mcpserver/gh/issues/sync/to-github
+GET /mcpserver/gh/labels
+GET /mcpserver/gh/oauth/authorize-url
+GET /mcpserver/gh/oauth/config
+GET /mcpserver/gh/pulls
+POST /mcpserver/gh/pulls/{id}/comments
+POST /mcpserver/graphrag/index
+POST /mcpserver/graphrag/query
+GET /mcpserver/graphrag/status
+GET /mcpserver/repo/file
+POST /mcpserver/repo/file
+GET /mcpserver/repo/list
+GET /mcpserver/requirements/fr
+POST /mcpserver/requirements/fr
+DELETE /mcpserver/requirements/fr/{id}
+GET /mcpserver/requirements/fr/{id}
+PUT /mcpserver/requirements/fr/{id}
+GET /mcpserver/requirements/generate
+POST /mcpserver/requirements/ingest
+GET /mcpserver/requirements/mapping
+DELETE /mcpserver/requirements/mapping/{frId}
+GET /mcpserver/requirements/mapping/{frId}
+PUT /mcpserver/requirements/mapping/{frId}
+GET /mcpserver/requirements/test
+POST /mcpserver/requirements/test
+DELETE /mcpserver/requirements/test/{id}
+GET /mcpserver/requirements/test/{id}
+PUT /mcpserver/requirements/test/{id}
+GET /mcpserver/requirements/tr
+POST /mcpserver/requirements/tr
+DELETE /mcpserver/requirements/tr/{id}
+GET /mcpserver/requirements/tr/{id}
+PUT /mcpserver/requirements/tr/{id}
+GET /mcpserver/sessionlog
+POST /mcpserver/sessionlog
+POST /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog
+GET /mcpserver/templates
+POST /mcpserver/templates
+DELETE /mcpserver/templates/{id}
+GET /mcpserver/templates/{id}
+PUT /mcpserver/templates/{id}
+POST /mcpserver/templates/{id}/resolve
+POST /mcpserver/templates/{id}/test
+POST /mcpserver/templates/test
+GET /mcpserver/todo
+POST /mcpserver/todo
+DELETE /mcpserver/todo/{id}
+GET /mcpserver/todo/{id}
+PUT /mcpserver/todo/{id}
+POST /mcpserver/todo/{id}/move
+GET /mcpserver/todo/{id}/prompt/implement
+POST /mcpserver/todo/{id}/prompt/implement/queue
+GET /mcpserver/todo/{id}/prompt/plan
+POST /mcpserver/todo/{id}/prompt/plan/queue
+GET /mcpserver/todo/{id}/prompt/status
+POST /mcpserver/todo/{id}/prompt/status/queue
+POST /mcpserver/todo/{id}/requirements
+GET /mcpserver/tools
+POST /mcpserver/tools
+DELETE /mcpserver/tools/{id}
+GET /mcpserver/tools/{id}
+PUT /mcpserver/tools/{id}
+GET /mcpserver/tools/buckets
+POST /mcpserver/tools/buckets
+DELETE /mcpserver/tools/buckets/{name}
+GET /mcpserver/tools/buckets/{name}/browse
+POST /mcpserver/tools/buckets/{name}/install
+POST /mcpserver/tools/buckets/{name}/sync
+GET /mcpserver/tools/search
+POST /mcpserver/tunnel/{name}/disable
+POST /mcpserver/tunnel/{name}/enable
+POST /mcpserver/tunnel/{name}/restart
+POST /mcpserver/tunnel/{name}/start
+GET /mcpserver/tunnel/{name}/status
+POST /mcpserver/tunnel/{name}/stop
+GET /mcpserver/tunnel/list
+GET /mcpserver/voice/session
+POST /mcpserver/voice/session
+DELETE /mcpserver/voice/session/{sessionId}
+GET /mcpserver/voice/session/{sessionId}
+POST /mcpserver/voice/session/{sessionId}/escape
+POST /mcpserver/voice/session/{sessionId}/interrupt
+GET /mcpserver/voice/session/{sessionId}/transcript
+POST /mcpserver/voice/session/{sessionId}/turn
+POST /mcpserver/voice/session/{sessionId}/turn/stream
+GET /mcpserver/workspace
+POST /mcpserver/workspace
+DELETE /mcpserver/workspace/{key}
+GET /mcpserver/workspace/{key}
+PUT /mcpserver/workspace/{key}
+POST /mcpserver/workspace/{key}/init
+POST /mcpserver/workspace/{key}/start
+GET /mcpserver/workspace/{key}/status
+POST /mcpserver/workspace/{key}/stop
+POST /mcpserver/workspace/policy
+GET /mcpserver/workspace/prompt
+PUT /mcpserver/workspace/prompt
+
+```
 
 ## 4) MCP tool catalog (STDIO tools)
 
-Source: `src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs`.
+Source: `src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs`
+
+Current surface area: 42 tools.
 
 ### Workspace policy
 
@@ -328,13 +528,12 @@ Source: `src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs`.
 
 ### Context and GraphRAG
 
-- `context_search`, `context_pack`, `context_sources`
+- `context_search`, `context_pack`, `context_sources`, `context_ingest_website`
 - `graphrag_status`, `graphrag_index`, `graphrag_query`
 
 ### Repo and sync
 
-- `repo_read`, `repo_list`, `repo_write`
-- `sync_run`, `sync_status`
+- `repo_read`, `repo_list`, `repo_write`, `sync_run`, `sync_status`
 
 ### TODO workflow
 
@@ -364,108 +563,118 @@ Source: `src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs`.
 
 Set `Mcp:GraphRag:Enabled` to `true` and configure:
 
-- `RootPath` (artifact storage)
+- `RootPath`
 - `DefaultQueryMode` (`local`, `global`, `drift`)
 - `DefaultMaxChunks`
 - `IndexTimeoutSeconds`, `QueryTimeoutSeconds`
 - `MaxConcurrentIndexJobsPerWorkspace`
 
+Example:
+
+```yaml
+Mcp:
+  GraphRag:
+    Enabled: true
+    RootPath: mcp-data/graphrag
+    DefaultQueryMode: local
+    DefaultMaxChunks: 20
+    IndexTimeoutSeconds: 900
+    QueryTimeoutSeconds: 120
+```
+
 ### Index workflow
 
-1. Start server
-2. `POST /mcpserver/graphrag/index` (or tool `graphrag_index`)
-3. Monitor with `GET /mcpserver/graphrag/status`
-4. Query with `POST /mcpserver/graphrag/query`
-
-Query example:
-
-```json
-{
-  "query": "summarize workspace tenancy model",
-  "mode": "local",
-  "maxChunks": 20,
-  "includeContextChunks": true
-}
-```
+1. Start server.
+2. `POST /mcpserver/graphrag/index` (or MCP tool `graphrag_index`).
+3. Monitor with `GET /mcpserver/graphrag/status`.
+4. Query with `POST /mcpserver/graphrag/query`.
 
 ### Rollout checklist
 
-- [ ] Confirm embeddings and vector index config are valid
-- [ ] Ensure `mcp-data/graphrag` has write permissions
-- [ ] Run initial index in non-production first
-- [ ] Validate latency budgets with representative prompts
-- [ ] Record source coverage via `context_sources`
+- [ ] Confirm embedding/vector dimensions
+- [ ] Ensure write permissions on `mcp-data/graphrag`
+- [ ] Run first index in non-production
+- [ ] Validate latency and answer quality
+- [ ] Track coverage with `context_sources`
 - [ ] Define rebuild cadence (`sync_run` + `graphrag_index`)
-- [ ] Add operational alerts for failed index/query runs
+- [ ] Add alerting for failed index/query jobs
 
 ## 6) Agent Pool and workspace multi-tenancy
 
 ### Agent Pool setup
 
-- Use `/mcpserver/agent-pool/agents` to inspect workers
-- Use `/mcpserver/agent-pool/queue/one-shot` for ad-hoc jobs
-- Use `/mcpserver/agent-pool/queue/resolve` for queued prompt orchestration
-- Stream progress via `/mcpserver/agent-pool/jobs/{jobId}/stream`
+- inspect workers via `/mcpserver/agent-pool/agents`
+- queue ad-hoc jobs via `/mcpserver/agent-pool/queue/one-shot`
+- resolve queued orchestrations via `/mcpserver/agent-pool/queue/resolve`
+- stream progress via `/mcpserver/agent-pool/jobs/{jobId}/stream`
 
-Queue operations:
+Queue one-shot example:
 
-- reorder jobs (`move-up`, `move-down`)
-- cancel (`queue/{jobId}/cancel`)
-- remove (`DELETE queue/{jobId}`)
+```json
+{
+  "prompt": "Summarize recent TODO changes",
+  "model": "gpt-5.3-codex"
+}
+```
 
 ### Multi-tenant workspace model
 
-- One server port for all workspaces
-- Workspace selection order:
+- one server port hosts all configured workspaces
+- resolution order:
   1. `X-Workspace-Path`
-  2. API key workspace reverse-lookup
+  2. API-key reverse lookup
   3. primary workspace fallback
-- Workspaces are managed in `Mcp:Workspaces` (appsettings)
-- Marker file per workspace contains scoped API key and endpoint details
-
-Workspace create/start example:
-
-```powershell
-Invoke-RestMethod -Method Post -Uri "http://localhost:7147/mcpserver/workspace" -Headers @{ 'X-Api-Key' = '<key>' } -Body '{"workspacePath":"E:\\github\\MyProject"}' -ContentType 'application/json'
-```
+- workspaces are configured under `Mcp:Workspaces`
+- each workspace uses scoped marker metadata and keys
 
 ## 7) Troubleshooting and FAQ
 
 ### 401 Unauthorized on `/mcpserver/*`
 
-- Re-read `AGENTS-README-FIRST.yaml` and refresh `apiKey`
-- Confirm `X-Workspace-Path` points to a registered workspace
+- refresh `apiKey` from `AGENTS-README-FIRST.yaml`
+- verify `X-Workspace-Path` targets a registered workspace
+- use full workspace key for non-TODO write operations
 
-### Workspace not found / wrong data set
+### Workspace not found or wrong data set
 
-- Send explicit `X-Workspace-Path` header
-- Validate workspace registration via `GET /mcpserver/workspace`
+- send explicit `X-Workspace-Path`
+- check registrations via `GET /mcpserver/workspace`
 
 ### MCP transport handshake issues
 
-- Ensure client uses `/mcp-transport`
-- Include `Accept: application/json, text/event-stream`
+- ensure client uses `/mcp-transport`
+- include `Accept: application/json, text/event-stream`
 
-### GraphRAG returns empty/poor results
+### GraphRAG returns empty or weak answers
 
-- Confirm GraphRAG is enabled and indexed
-- Verify source ingestion (`sync_run`) and `context_sources`
-- Check embedding/vector index settings (dimensions must match)
+- confirm GraphRAG is enabled and indexed
+- verify ingestion (`sync_run`) and source coverage
+- validate embedding/vector compatibility
 
-### Tool registry or GitHub calls fail
+### Tool registry or GitHub actions fail
 
-- Verify `gh auth status`
-- Confirm bucket name/repo configuration under `Mcp:ToolRegistry`
+- run `gh auth status`
+- validate `Mcp:ToolRegistry` settings
+- verify token status at `GET /mcpserver/gh/auth/status`
 
-### Windows service deployment risks
+### Windows service deployment concerns
 
-- Always use `scripts\Update-McpService.ps1` for updates
-- Do not overwrite `C:\ProgramData\McpServer` directly
+- always use `scripts\Update-McpService.ps1`
+- do not manually overwrite `C:\ProgramData\McpServer`
 
-## 8) Reference links
+## 8) Wire docs into README index and docs folder
 
-- Server guide: `docs/MCP-SERVER.md`
-- Endpoint audit: `docs/ENDPOINT-AUDIT.md`
-- FAQ: `docs/FAQ.md`
-- Context docs: `docs/context/`
-- Tunnel runbooks: `docs/Operations/`
+This user guide is wired into:
+
+- repository README (`README.md`)
+- docs index (`docs/README.md`)
+- docs navigation (`docs/toc.yml`)
+
+## Reference links
+
+- `MCP-SERVER.md`
+- `README.md`
+- `FAQ.md`
+- `context/`
+- `Operations/`
+

@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using McpServer.Support.Mcp.Services;
 
 namespace McpServer.Support.Mcp.Options;
 
@@ -31,6 +32,12 @@ public sealed class AgentPoolOptionsValidator : IValidateOptions<AgentPoolOption
 
             if (string.IsNullOrWhiteSpace(agent.AgentPath))
                 return ValidateOptionsResult.Fail($"AgentPool agent '{agent.AgentName}' requires AgentPath.");
+
+            if (!AgentExecutionStrategyNames.IsSupported(agent.ExecutionStrategy))
+            {
+                return ValidateOptionsResult.Fail(
+                    $"AgentPool agent '{agent.AgentName}' has unsupported ExecutionStrategy '{agent.ExecutionStrategy}'. Supported values: {string.Join(", ", AgentExecutionStrategyNames.SupportedNames)}.");
+            }
 
             if (!seenNames.Add(agent.AgentName))
                 return ValidateOptionsResult.Fail($"Duplicate AgentPool AgentName '{agent.AgentName}'.");

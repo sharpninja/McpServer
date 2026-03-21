@@ -94,6 +94,49 @@ public sealed class TodoServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task QueryAsync_WithBooleanKeyword_CanMatchAcrossFields()
+    {
+        var result = await _sut.QueryAsync(new TodoQueryRequest { Keyword = "\"Test item\" && xUnit" }).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal("TEST-001", item.Id);
+    }
+
+    [Fact]
+    public async Task GetByIdAsync_UnquotedColonInDescriptionItem_ParsesAsString()
+    {
+        const string yaml = """
+            mvp-support:
+              high-priority:
+                - id: TEST-COLON-001
+                  title: "Colon item"
+                  done: false
+                  description:
+                    - Current implementation status: imported and indexed
+            """;
+
+        var tempFile = Path.Combine(Path.GetTempPath(), $"todo_test_{Guid.NewGuid():N}.yaml");
+        await File.WriteAllTextAsync(tempFile, yaml).ConfigureAwait(true);
+
+        try
+        {
+            using var sut = new TodoService(tempFile, _auditLog, NullLogger<TodoService>.Instance, _eventBus);
+            var item = await sut.GetByIdAsync("TEST-COLON-001").ConfigureAwait(true);
+
+            Assert.NotNull(item);
+            Assert.Equal("Colon item", item.Title);
+            Assert.Equal(["Current implementation status: imported and indexed"], item.Description);
+        }
+        finally
+        {
+            if (File.Exists(tempFile))
+            {
+                File.Delete(tempFile);
+            }
+        }
+    }
+
+    [Fact]
     public async Task GetByIdAsync_ExistingId_ReturnsItem()
     {
         var item = await _sut.GetByIdAsync("TEST-001").ConfigureAwait(true);
@@ -190,6 +233,25 @@ public sealed class TodoServiceTests : IDisposable
         Assert.True(result.Success);
         var stored = await _sut.GetByIdAsync("MCP-AUTH-001").ConfigureAwait(true);
         Assert.NotNull(stored);
+    }
+
+    [Fact]
+    public async Task CreateAsync_ValidIssueNumberId_Succeeds()
+    {
+        var request = new TodoCreateRequest
+        {
+            Id = "ISSUE-42",
+            Title = "GitHub-synced id",
+            Section = "issues",
+            Priority = "low"
+        };
+
+        var result = await _sut.CreateAsync(request).ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        var stored = await _sut.GetByIdAsync("ISSUE-42").ConfigureAwait(true);
+        Assert.NotNull(stored);
+        Assert.Equal("GitHub-synced id", stored.Title);
     }
 
     [Fact]

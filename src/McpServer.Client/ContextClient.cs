@@ -49,6 +49,30 @@ public sealed class ContextClient : McpClientBase
         return await GetAsync<ContextSourcesResult>("mcpserver/context/sources", cancellationToken);
     }
 
+    /// <summary>Ingest context directly from a website URL without staging files first.</summary>
+    public async Task<WebsiteIngestResult> IngestWebsiteAsync(
+        string url,
+        bool includeSubpages = false,
+        int maxPages = 20,
+        int maxDepth = 1,
+        int maxBytesPerPage = 262_144,
+        bool forceRefresh = false,
+        bool triggerGraphRagIndex = false,
+        CancellationToken cancellationToken = default)
+    {
+        var request = new WebsiteIngestRequest
+        {
+            Url = url,
+            IncludeSubpages = includeSubpages,
+            MaxPages = maxPages,
+            MaxDepth = maxDepth,
+            MaxBytesPerPage = maxBytesPerPage,
+            ForceRefresh = forceRefresh,
+            TriggerGraphRagIndex = triggerGraphRagIndex
+        };
+        return await PostAsync<WebsiteIngestResult>("mcpserver/context/ingest-website", request, cancellationToken);
+    }
+
     /// <summary>Get GraphRAG status for the active workspace.</summary>
     public async Task<GraphRagStatusResult> GraphRagStatusAsync(CancellationToken cancellationToken = default)
     {

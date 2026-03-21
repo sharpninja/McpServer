@@ -1,9 +1,8 @@
+using McpServer.Cqrs.Search;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Notifications;
 using Microsoft.Extensions.Options;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace McpServer.Support.Mcp.Services;
 
@@ -21,18 +20,6 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
     private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<TodoService> _logger;
     private readonly SemaphoreSlim _fileLock = new(1, 1);
-
-    private static readonly IDeserializer s_deserializer = new DeserializerBuilder()
-        .WithNamingConvention(HyphenatedNamingConvention.Instance)
-        .WithTypeConverter(new TodoFileYamlConverter())
-        .IgnoreUnmatchedProperties()
-        .Build();
-
-    private static readonly ISerializer s_serializer = new SerializerBuilder()
-        .WithNamingConvention(HyphenatedNamingConvention.Instance)
-        .WithTypeConverter(new TodoFileYamlConverter())
-        .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
-        .Build();
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
     public TodoService(IOptions<IngestionOptions> options, IWriteAuditLog auditLog, ILogger<TodoService> logger, IChangeEventBus? eventBus = null)
@@ -82,6 +69,25 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
     }
 
     /// <inheritdoc />
+    public Task<TodoAuditQueryResult> GetAuditAsync(string id, int limit = 50, int offset = 0, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(id);
+        throw new NotSupportedException("TODO audit history requires sqlite TODO storage.");
+    }
+
+    /// <inheritdoc />
+    public Task<TodoProjectionStatusResult> GetProjectionStatusAsync(CancellationToken cancellationToken = default)
+    {
+        throw new NotSupportedException("TODO projection status requires sqlite TODO storage.");
+    }
+
+    /// <inheritdoc />
+    public Task<TodoProjectionRepairResult> RepairProjectionAsync(CancellationToken cancellationToken = default)
+    {
+        throw new NotSupportedException("TODO projection repair requires sqlite TODO storage.");
+    }
+
+    /// <inheritdoc />
     public async Task<TodoMutationResult> CreateAsync(TodoCreateRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -93,16 +99,55 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
 
             var idError = TodoValidator.ValidateTodoId(request.Id);
             if (idError is not null)
-                return new TodoMutationResult(false, idError);
+                return new TodoMutationResult(false, idError, FailureKind: TodoMutationFailureKind.Validation);
 
             // Check for duplicate id
             var existing = FlattenAll(file).Find(i => string.Equals(i.Id, request.Id, StringComparison.OrdinalIgnoreCase));
             if (existing is not null)
-                return new TodoMutationResult(false, $"Item with id '{request.Id}' already exists.");
+                return new TodoMutationResult(false, $"Item with id '{request.Id}' already exists.", FailureKind: TodoMutationFailureKind.Conflict);
 
             var priorityError = TodoValidator.ValidatePriority(request.Priority);
             if (priorityError is not null)
-                return new TodoMutationResult(false, priorityError);
+                return new TodoMutationResult(false, priorityError, FailureKind: TodoMutationFailureKind.Validation);
+
+            if (IsCodeReviewSection(request.Section))
+            {
+                file.CodeReviewRemediation ??= new CodeReviewSection();
+                file.CodeReviewRemediation.Phases ??= [];
+
+                var phase = new CodeReviewPhase
+                {
+                    Id = request.Id,
+                    Phase = request.Phase ?? request.Title,
+                    Title = request.Title,
+                    Done = false,
+                    Estimate = request.Estimate,
+                    ImplementationTasks = request.ImplementationTasks?
+                        .Select(t => new ImplementationTask { Task = t.Task, Done = t.Done })
+                        .ToList()
+                };
+
+                file.CodeReviewRemediation.Phases.Add(phase);
+                await WriteFileAsync(file, cancellationToken).ConfigureAwait(false);
+                _auditLog.RecordWrite(_todoAuditPath, DateTime.UtcNow);
+                _logger.LogInformation("Created code-review remediation phase {Id}", request.Id);
+                await PublishChangeSafeAsync(ChangeEventActions.Created, request.Id, cancellationToken).ConfigureAwait(false);
+
+                return new TodoMutationResult(true, Item: new TodoFlatItem
+                {
+                    Id = phase.Id ?? request.Id,
+                    Title = phase.Title ?? request.Title,
+                    Section = "code-review-remediation",
+                    Priority = "high",
+                    Done = phase.Done,
+                    Estimate = phase.Estimate,
+                    Phase = phase.Phase,
+                    Reference = file.CodeReviewRemediation.Reference,
+                    ImplementationTasks = phase.ImplementationTasks?
+                        .Select(t => new TodoFlatTask(t.Task ?? string.Empty, t.Done))
+                        .ToList()
+                });
+            }
 
             var section = GetOrCreateSection(file, request.Section);
             var list = GetPriorityList(section, request.Priority)!;
@@ -129,10 +174,10 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
                 var allItems = FlattenAll(file);
                 var depIdError = TodoValidator.ValidateDependencyIds(item.DependsOn, allItems, "dependsOn");
                 if (depIdError is not null)
-                    return new TodoMutationResult(false, depIdError);
+                    return new TodoMutationResult(false, depIdError, FailureKind: TodoMutationFailureKind.Validation);
                 var depError = TodoValidator.ValidateDependencies(request.Id, item.DependsOn, allItems);
                 if (depError is not null)
-                    return new TodoMutationResult(false, depError);
+                    return new TodoMutationResult(false, depError, FailureKind: TodoMutationFailureKind.Validation);
             }
 
             list.Add(item);
@@ -161,11 +206,52 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
         {
             var file = await ReadFileAsync(cancellationToken).ConfigureAwait(false);
             if (file is null)
-                return new TodoMutationResult(false, "TODO file not found.");
+                return new TodoMutationResult(false, "TODO file not found.", FailureKind: TodoMutationFailureKind.NotFound);
+
+            var codeReviewPhase = TryGetCodeReviewPhase(file, id);
+            if (codeReviewPhase is not null)
+            {
+                if (request.Title is not null) codeReviewPhase.Title = request.Title;
+                if (request.Done.HasValue) codeReviewPhase.Done = request.Done.Value;
+                if (request.Estimate is not null) codeReviewPhase.Estimate = request.Estimate;
+                if (request.Phase is not null) codeReviewPhase.Phase = request.Phase;
+                if (request.Reference is not null)
+                {
+                    file.CodeReviewRemediation ??= new CodeReviewSection();
+                    file.CodeReviewRemediation.Reference = request.Reference;
+                }
+
+                if (request.ImplementationTasks is not null)
+                {
+                    codeReviewPhase.ImplementationTasks = request.ImplementationTasks
+                        .Select(t => new ImplementationTask { Task = t.Task, Done = t.Done })
+                        .ToList();
+                }
+
+                await WriteFileAsync(file, cancellationToken).ConfigureAwait(false);
+                _auditLog.RecordWrite(_todoAuditPath, DateTime.UtcNow);
+                _logger.LogInformation("Updated code-review remediation phase {Id}", id);
+                await PublishChangeSafeAsync(ChangeEventActions.Updated, id, cancellationToken).ConfigureAwait(false);
+
+                return new TodoMutationResult(true, Item: new TodoFlatItem
+                {
+                    Id = codeReviewPhase.Id ?? id,
+                    Title = codeReviewPhase.Title ?? string.Empty,
+                    Section = "code-review-remediation",
+                    Priority = "high",
+                    Done = codeReviewPhase.Done,
+                    Estimate = codeReviewPhase.Estimate,
+                    Phase = codeReviewPhase.Phase,
+                    Reference = file.CodeReviewRemediation?.Reference,
+                    ImplementationTasks = codeReviewPhase.ImplementationTasks?
+                        .Select(t => new TodoFlatTask(t.Task ?? string.Empty, t.Done))
+                        .ToList()
+                });
+            }
 
             var (item, section, priority) = FindItemInFile(file, id);
             if (item is null)
-                return new TodoMutationResult(false, $"Item with id '{id}' not found.");
+                return new TodoMutationResult(false, $"Item with id '{id}' not found.", FailureKind: TodoMutationFailureKind.NotFound);
 
             if (request.Title is not null) item.Title = request.Title;
             if (request.Done.HasValue) item.Done = request.Done.Value;
@@ -176,6 +262,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
             if (request.CompletedDate is not null) item.CompletedDate = request.CompletedDate;
             if (request.DoneSummary is not null) item.DoneSummary = request.DoneSummary;
             if (request.Remaining is not null) item.Remaining = request.Remaining;
+            if (request.Reference is not null) item.Reference = request.Reference;
             if (request.ImplementationTasks is not null)
             {
                 item.ImplementationTasks = request.ImplementationTasks
@@ -188,10 +275,10 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
                 var proposedDeps = request.DependsOn.ToList();
                 var depIdError = TodoValidator.ValidateDependencyIds(proposedDeps, allItems, "dependsOn");
                 if (depIdError is not null)
-                    return new TodoMutationResult(false, depIdError);
+                    return new TodoMutationResult(false, depIdError, FailureKind: TodoMutationFailureKind.Validation);
                 var depError = TodoValidator.ValidateDependencies(id, proposedDeps, allItems);
                 if (depError is not null)
-                    return new TodoMutationResult(false, depError);
+                    return new TodoMutationResult(false, depError, FailureKind: TodoMutationFailureKind.Validation);
                 item.DependsOn = proposedDeps;
             }
             if (request.FunctionalRequirements is not null)
@@ -243,11 +330,11 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
         {
             var file = await ReadFileAsync(cancellationToken).ConfigureAwait(false);
             if (file is null)
-                return new TodoMutationResult(false, "TODO file not found.");
+                return new TodoMutationResult(false, "TODO file not found.", FailureKind: TodoMutationFailureKind.NotFound);
 
             var removed = RemoveItemFromFile(file, id);
             if (!removed)
-                return new TodoMutationResult(false, $"Item with id '{id}' not found.");
+                return new TodoMutationResult(false, $"Item with id '{id}' not found.", FailureKind: TodoMutationFailureKind.NotFound);
 
             await WriteFileAsync(file, cancellationToken).ConfigureAwait(false);
             _auditLog.RecordWrite(_todoAuditPath, DateTime.UtcNow);
@@ -266,14 +353,11 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
     {
         try
         {
-            if (!File.Exists(_todoFilePath))
-            {
+            var file = await TodoYamlFileSerializer.ReadIfExistsAsync(_todoFilePath, cancellationToken).ConfigureAwait(false);
+            if (file is null)
                 _logger.LogWarning("TODO file not found at {Path}", _todoFilePath);
-                return null;
-            }
 
-            var yaml = await File.ReadAllTextAsync(_todoFilePath, cancellationToken).ConfigureAwait(false);
-            return s_deserializer.Deserialize<TodoFile>(yaml);
+            return file;
         }
         catch (Exception ex)
         {
@@ -284,11 +368,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
 
     private async Task WriteFileAsync(TodoFile file, CancellationToken cancellationToken)
     {
-        var yaml = s_serializer.Serialize(file);
-        var dir = Path.GetDirectoryName(_todoFilePath);
-        if (!string.IsNullOrEmpty(dir))
-            Directory.CreateDirectory(dir);
-        await File.WriteAllTextAsync(_todoFilePath, yaml, cancellationToken).ConfigureAwait(false);
+        await TodoYamlFileSerializer.WriteAtomicallyAsync(_todoFilePath, file, cancellationToken).ConfigureAwait(false);
     }
 
     private static List<TodoFlatItem> FlattenAll(TodoFile file)
@@ -332,6 +412,8 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
                 Priority = "high",
                 Done = phase.Done,
                 Estimate = phase.Estimate,
+                Phase = phase.Phase,
+                Reference = section.Reference,
                 ImplementationTasks = phase.ImplementationTasks?
                     .Where(t => t is not null)
                     .Select(t => new TodoFlatTask(t.Task ?? "", t.Done))
@@ -356,6 +438,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
         Remaining = item.Remaining,
         PriorityNote = item.PriorityNote,
         Reference = item.Reference,
+        Phase = null,
         DependsOn = item.DependsOn,
         FunctionalRequirements = item.FunctionalRequirements,
         TechnicalRequirements = item.TechnicalRequirements,
@@ -383,25 +466,22 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
 
         if (!string.IsNullOrWhiteSpace(request.Keyword))
         {
-            var kw = request.Keyword;
-            filtered = filtered.Where(i => MatchesKeyword(i, kw));
+            var matcher = BooleanSearchParser.Parse(request.Keyword);
+            filtered = filtered.Where(i => matcher(BuildKeywordSearchText(i)));
         }
 
         return filtered.ToList();
     }
 
-    private static bool MatchesKeyword(TodoFlatItem item, string keyword)
-    {
-        if (item.Id.Contains(keyword, StringComparison.OrdinalIgnoreCase)) return true;
-        if (item.Title.Contains(keyword, StringComparison.OrdinalIgnoreCase)) return true;
-        if (item.Description?.Any(d => d.Contains(keyword, StringComparison.OrdinalIgnoreCase)) == true) return true;
-        if (item.TechnicalDetails?.Any(d => d.Contains(keyword, StringComparison.OrdinalIgnoreCase)) == true) return true;
-        if (item.Note?.Contains(keyword, StringComparison.OrdinalIgnoreCase) == true) return true;
-        if (item.DoneSummary?.Contains(keyword, StringComparison.OrdinalIgnoreCase) == true) return true;
-        if (item.Remaining?.Contains(keyword, StringComparison.OrdinalIgnoreCase) == true) return true;
-        if (item.ImplementationTasks?.Any(t => t.Task.Contains(keyword, StringComparison.OrdinalIgnoreCase)) == true) return true;
-        return false;
-    }
+    private static string BuildKeywordSearchText(TodoFlatItem item)
+        => string.Join(
+            " ",
+            new[] { item.Id, item.Title, item.Note, item.DoneSummary, item.Remaining }
+                .Where(static value => !string.IsNullOrWhiteSpace(value))
+                .Concat(item.Description ?? Array.Empty<string>())
+                .Concat(item.TechnicalDetails ?? Array.Empty<string>())
+                .Concat(item.ImplementationTasks?.Select(static task => task.Task) ?? Array.Empty<string>())
+                .Where(static value => !string.IsNullOrWhiteSpace(value)));
 
     private static (TodoItem? Item, string? Section, string? Priority) FindItemInFile(TodoFile file, string id)
     {
@@ -433,6 +513,7 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
                     Title = phase.Title,
                     Done = phase.Done,
                     Estimate = phase.Estimate,
+                    Reference = file.CodeReviewRemediation.Reference,
                     ImplementationTasks = phase.ImplementationTasks
                 };
                 return (synth, "code-review-remediation", "high");
@@ -501,6 +582,12 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
         var list = GetPriorityList(section, priority);
         list?.Add(item);
     }
+
+    private static bool IsCodeReviewSection(string section)
+        => string.Equals(section, "code-review-remediation", StringComparison.OrdinalIgnoreCase);
+
+    private static CodeReviewPhase? TryGetCodeReviewPhase(TodoFile file, string id)
+        => file.CodeReviewRemediation?.Phases?.FirstOrDefault(p => string.Equals(p.Id, id, StringComparison.OrdinalIgnoreCase));
 
     private async Task PublishChangeSafeAsync(string action, string entityId, CancellationToken cancellationToken)
     {

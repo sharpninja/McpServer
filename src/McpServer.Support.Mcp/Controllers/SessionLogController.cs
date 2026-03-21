@@ -13,11 +13,10 @@ namespace McpServer.Support.Mcp.Controllers;
 [Route("mcpserver/sessionlog")]
 public sealed class SessionLogController : ControllerBase
 {
-    private const int MaxEntryCount = 5000;
+    private const int MaxTurnCount = 5000;
 
     private readonly ISessionLogService _service;
     private readonly ILogger<SessionLogController> _logger;
-
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
     public SessionLogController(ISessionLogService service,
@@ -51,18 +50,18 @@ public sealed class SessionLogController : ControllerBase
         if (sessionIdError is not null)
             return BadRequest(new { error = sessionIdError });
 
-        if (dto.Entries is { Count: > 0 })
+        if (dto.Turns is { Count: > 0 })
         {
-            foreach (var entry in dto.Entries)
+            foreach (var turn in dto.Turns)
             {
-                var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(entry.RequestId);
+                var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(turn.RequestId);
                 if (requestIdError is not null)
                     return BadRequest(new { error = requestIdError });
             }
         }
 
-        if (dto.Entries is { Count: > MaxEntryCount })
-            return BadRequest(new { error = $"Entry count exceeds maximum of {MaxEntryCount}." });
+        if (dto.Turns is { Count: > MaxTurnCount })
+            return BadRequest(new { error = $"Turn count exceeds maximum of {MaxTurnCount}." });
 
         var id = await _service.SubmitAsync(dto, sourceFilePath: null, contentHash: null, cancellationToken).ConfigureAwait(false);
 
@@ -75,8 +74,9 @@ public sealed class SessionLogController : ControllerBase
     /// TR-PLANNED-013: Query session logs with optional filters and pagination.
     /// </summary>
     /// <param name="agent">Filter by agent source type.</param>
+    /// <param name="agentDefinitionId">Filter by linked agent definition identifier.</param>
     /// <param name="model">Filter by AI model.</param>
-    /// <param name="text">Full-text search over entry text fields.</param>
+    /// <param name="text">Full-text search over turn text fields.</param>
     /// <param name="from">Sessions started on or after this date (ISO 8601).</param>
     /// <param name="to">Sessions last updated on or before this date (ISO 8601).</param>
     /// <param name="limit">Page size (default 100, max 1000).</param>
@@ -87,6 +87,7 @@ public sealed class SessionLogController : ControllerBase
     [ProducesResponseType(typeof(SessionLogQueryResult), StatusCodes.Status200OK)]
     public async Task<ActionResult<SessionLogQueryResult>> QueryAsync(
         [FromQuery] string? agent,
+        [FromQuery] string? agentDefinitionId,
         [FromQuery] string? model,
         [FromQuery] string? text,
         [FromQuery] DateTimeOffset? from,
@@ -98,6 +99,7 @@ public sealed class SessionLogController : ControllerBase
         var request = new SessionLogQueryRequest
         {
             Agent = agent,
+            AgentDefinitionId = agentDefinitionId,
             Model = model,
             Text = text,
             From = from,
@@ -111,15 +113,15 @@ public sealed class SessionLogController : ControllerBase
     }
 
     /// <summary>
-    /// TR-PLANNED-013: Append processing dialog items to an existing entry.
+    /// TR-PLANNED-013: Append processing dialog items to an existing turn.
     /// The AI model calls this endpoint on the fly to record reasoning, tool calls, and execution trace.
     /// </summary>
     /// <param name="agent">Agent source type (e.g. Cursor, Copilot).</param>
     /// <param name="sessionId">Session identifier.</param>
-    /// <param name="requestId">Request entry identifier within the session.</param>
+    /// <param name="requestId">Request turn identifier within the session.</param>
     /// <param name="items">Dialog items to append.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>200 OK with the new total dialog count, or 404 if entry not found.</returns>
+    /// <returns>200 OK with the new total dialog count, or 404 if turn not found.</returns>
     [HttpPost("{agent}/{sessionId}/{requestId}/dialog")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

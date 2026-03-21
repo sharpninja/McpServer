@@ -13,6 +13,8 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// <summary>TR-PLANNED-013: Unit tests for HybridSearchService RRF blending and degradation.</summary>
 public sealed class HybridSearchServiceTests : IAsyncLifetime
 {
+    private const string WorkspacePath = @"E:\tests\hybrid-search";
+
     private McpDbContext _db = null!;
     private IContextSearchService _fts5 = null!;
     private IVectorIndexService _vectorIndex = null!;
@@ -25,6 +27,7 @@ public sealed class HybridSearchServiceTests : IAsyncLifetime
             .Options;
         _db = new McpDbContext(options);
         await _db.Database.EnsureCreatedAsync().ConfigureAwait(true);
+        _db.OverrideWorkspaceId(WorkspacePath);
 
         // Seed data
         var doc = new ContextDocumentEntity

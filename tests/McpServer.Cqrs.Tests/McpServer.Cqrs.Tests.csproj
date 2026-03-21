@@ -25,4 +25,7 @@
     <ProjectReference Include="..\..\src\McpServer.Cqrs.Mvvm\McpServer.Cqrs.Mvvm.csproj" />
 
   </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
 </Project>

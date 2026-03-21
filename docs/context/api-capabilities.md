@@ -31,6 +31,7 @@ To detect a stale marker without auth:
 - **Context Search**: `POST /mcpserver/context/search` — semantic + full-text hybrid search over indexed project documents
 - **Context Pack**: `POST /mcpserver/context/pack` — retrieve ordered context chunks for a topic
 - **Context Sources**: `GET /mcpserver/context/sources` — list all indexed document sources
+- **Website Ingestion**: `POST /mcpserver/context/ingest-website` — ingest one URL (optionally bounded same-host crawl) directly into context store with SSRF and byte/page limits
 - **Todo Management**: `GET/POST/PUT/DELETE /mcpserver/todo` — query, create, update, delete project tasks
 - **Repo Files**: `GET /mcpserver/repo/file`, `POST /mcpserver/repo/file`, `GET /mcpserver/repo/list` — read, write, and list repository files
 - **GitHub Integration**: `/mcpserver/gh/issues`, `/mcpserver/gh/pulls`, `/mcpserver/gh/labels` — issue, PR, and label management

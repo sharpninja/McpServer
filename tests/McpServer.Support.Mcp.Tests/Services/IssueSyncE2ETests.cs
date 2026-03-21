@@ -61,6 +61,8 @@ public sealed class IssueSyncE2ETests
             .Returns(new GitHubIssueDetailResult(true, issue, null));
         _github.CloseIssueAsync(42, "completed", Arg.Any<CancellationToken>())
             .Returns(new GitHubMutationResult(true, "https://github.com/test/issues/42", null));
+        _github.UpdateIssueAsync(42, Arg.Any<GitHubIssueUpdateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new GitHubMutationResult(true, "https://github.com/test/issues/42", null));
 
         var syncBackResult = await _sut.SyncTodoToIssueAsync("ISSUE-42").ConfigureAwait(true);
         Assert.True(syncBackResult.Success);
@@ -115,6 +117,8 @@ public sealed class IssueSyncE2ETests
         _github.GetIssueAsync(1, Arg.Any<CancellationToken>())
             .Returns(new GitHubIssueDetailResult(true, CreateIssue(1, "Bug 1", "OPEN"), null));
         _github.CloseIssueAsync(1, "completed", Arg.Any<CancellationToken>())
+            .Returns(new GitHubMutationResult(true, "url", null));
+        _github.UpdateIssueAsync(1, Arg.Any<GitHubIssueUpdateRequest>(), Arg.Any<CancellationToken>())
             .Returns(new GitHubMutationResult(true, "url", null));
 
         var result = await _sut.SyncAllTodosToIssuesAsync().ConfigureAwait(true);

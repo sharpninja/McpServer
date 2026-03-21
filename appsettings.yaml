@@ -2,22 +2,21 @@ Logging:
   LogLevel:
     Default: Information
     Microsoft.AspNetCore: Warning
-
 Serilog:
   MinimumLevel:
     Default: Information
     Override:
       Microsoft.AspNetCore: Warning
       McpServer.Support.Mcp.Logging: Verbose
-
-AllowedHosts: "*"
-
+AllowedHosts: '*'
+VoiceConversation:
+  DefaultExecutionStrategy: copilot-cli
+  ModelApiKeyEnvironmentVariableName: OPENAI_API_KEY
 Embedding:
   Enabled: true
   Dimensions: 384
   MaxSequenceLength: 128
   AutoDownload: true
-
 VectorIndex:
   Enabled: true
   Dimensions: 384
@@ -26,57 +25,82 @@ VectorIndex:
   EfConstruction: 200
   EfSearch: 50
   IndexPath: mcp-data/vector.idx
-
 Mcp:
   Port: 7147
   DataSource: mcp.db
-  DataDirectory: "."
-  RepoRoot: "."
+  DataDirectory: .
+  RepoRoot: .
   TodoFilePath: docs/Project/TODO.yaml
   SessionsPath: docs/sessions
   UnifiedModelSchemaPath: docs/schemas/UnifiedModel.schema.json
   ExternalDocsPath: docs/external
   TodoStorage:
-    Provider: yaml
+    Provider: sqlite
     SqliteDataSource: mcp.db
+  DesktopLaunch:
+    Enabled: false
+    AccessToken: ''
+    AllowedExecutables: []
   Workspaces:
-    - WorkspacePath: E:\github\McpServer
-      Name: McpServer
-      TodoPath: docs/Project/TODO.yaml
-      DateTimeCreated: "2026-02-21T00:00:00+00:00"
-      DateTimeModified: "2026-02-23T00:00:00+00:00"
+  - WorkspacePath: E:\github\McpServer
+    Name: McpServer
+    TodoPath: docs/Project/TODO.yaml
+    IsPrimary: false
+    IsEnabled: true
+    DateTimeCreated: &o0
+      DateTime: 0001-01-01T00:00:00.0000000
+      UtcDateTime: 0001-01-01T00:00:00.0000000Z
+      LocalDateTime: 0001-01-01T00:00:00.0000000-06:00
+      Date: 0001-01-01T00:00:00.0000000
+      Day: 1
+      DayOfWeek: Monday
+      DayOfYear: 1
+      Hour: 0
+      Millisecond: 0
+      Microsecond: 0
+      Nanosecond: 0
+      Minute: 0
+      Month: 1
+      Offset: 00:00:00
+      TotalOffsetMinutes: 0
+      Second: 0
+      Ticks: 0
+      UtcTicks: 0
+      TimeOfDay: 00:00:00
+      Year: 1
+    DateTimeModified: *o0
   Instances:
     default:
       Port: 7147
       DataSource: mcp.db
-      DataDirectory: "."
-      RepoRoot: "."
+      DataDirectory: .
+      RepoRoot: .
       TodoFilePath: docs/Project/TODO.yaml
       TodoStorage:
-        Provider: yaml
+        Provider: sqlite
         SqliteDataSource: mcp.db
     alt-local:
       Port: 7157
       DataSource: mcp-alt.db
-      DataDirectory: "."
+      DataDirectory: .
       RepoRoot: docs
       TodoFilePath: docs/Project/TODO.yaml
       TodoStorage:
         Provider: sqlite
         SqliteDataSource: mcp-alt.db
   InteractionLogging:
-    LoggingServiceUrl: ""
+    LoggingServiceUrl: ''
     QueueCapacity: 1000
     IncludeQueryString: false
   Parseable:
     Url: http://localhost:8000
     IngestUrl: http://localhost:8000/api/v1/ingest
     StreamName: mcp
-    Username: admin
-    Password: admin
+    Username: ''
+    Password: ''
     FallbackLogPath: logs/mcp-.log
   Auth:
     Authority: http://localhost:7080/realms/mcpserver
     Audience: mcp-server-api
-    ClientSecret: ""
+    ClientSecret: ''
     RequireHttpsMetadata: false

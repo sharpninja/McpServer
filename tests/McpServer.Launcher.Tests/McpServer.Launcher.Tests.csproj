@@ -22,4 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\McpServer.Launcher\McpServer.Launcher.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
 </Project>

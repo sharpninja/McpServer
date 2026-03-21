@@ -72,15 +72,39 @@ public sealed class InteractionLogSubmissionService : BackgroundService
 
     private async Task PostEntryAsync(HttpClient client, InteractionLogEntry entry, CancellationToken cancellationToken)
     {
+        var loggingServiceUrl = _options.LoggingServiceUrl!;
         try
         {
-            var response = await client.PostAsJsonAsync(_options.LoggingServiceUrl!, entry, s_jsonOptions, cancellationToken).ConfigureAwait(false);
+            var response = await client.PostAsJsonAsync(loggingServiceUrl, entry, s_jsonOptions, cancellationToken).ConfigureAwait(false);
+            var submissionPath = GetSubmissionTargetPath(response.RequestMessage?.RequestUri, loggingServiceUrl);
             if (!response.IsSuccessStatusCode)
-                _logger.LogWarning("Log submission returned {StatusCode} for {Path}", response.StatusCode, entry.Path);
+            {
+                _logger.LogWarning(
+                    "Log submission returned {StatusCode} for submission endpoint {SubmissionPath} while forwarding source path {SourcePath}",
+                    response.StatusCode,
+                    submissionPath,
+                    entry.Path);
+            }
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Failed to submit interaction log for {Path}", entry.Path);
+            var submissionPath = GetSubmissionTargetPath(responseUri: null, loggingServiceUrl);
+            _logger.LogWarning(
+                ex,
+                "Failed to submit interaction log to submission endpoint {SubmissionPath} while forwarding source path {SourcePath}",
+                submissionPath,
+                entry.Path);
         }
+    }
+
+    private static string GetSubmissionTargetPath(Uri? responseUri, string? configuredUrl)
+    {
+        if (responseUri is not null)
+            return responseUri.PathAndQuery;
+
+        if (Uri.TryCreate(configuredUrl, UriKind.Absolute, out var configuredUri))
+            return configuredUri.PathAndQuery;
+
+        return string.IsNullOrWhiteSpace(configuredUrl) ? "(unknown)" : configuredUrl;
     }
 }

@@ -1,8 +1,8 @@
 # MCP Server
 
-Standalone repository for `McpServer.Support.Mcp`, the MCP context server used for todo management, session logs, context search, repository operations, and GitHub issue sync.
+MCP Server is a standalone ASP.NET Core service for workspace-scoped context retrieval, TODO orchestration, session logging, repository operations, GraphRAG, and GitHub automation.
 
-## What This Server Provides
+## Documentation
 
 - HTTP API with Swagger UI
 - MCP over STDIO transport (`--transport stdio`)
@@ -234,12 +234,12 @@ Pipeline jobs include:
 
 ## VS Code / VS 2026 Extensions
 
-Extension sources and packaging scripts live in:
+Extension sources live in:
 
 - `extensions/fwh-mcp-todo` (legacy name)
 - `extensions/McpServer-mcp-todo`
-- `scripts/Package-Vsix.ps1`
-- `scripts/Build-AndInstall-Vsix.ps1`
+
+In the RequestTracker host workspace, VSIX packaging is orchestrated by the repo-root `BuildAndInstallVsix` target rather than standalone scripts inside this submodule.
 
 ## Client Library
 
@@ -270,6 +270,8 @@ Source: `src/McpServer.Client/` — see the [package README](#) for full usage.
 
 ## Additional Documentation
 
-- Full server guide: `docs/MCP-SERVER.md`
 - User documentation: `docs/USER-GUIDE.md`
+- Server and operator guide: `docs/MCP-SERVER.md`
 - Documentation index: `docs/README.md`
+- FAQ: `docs/FAQ.md`
+- Client integration: `docs/CLIENT-INTEGRATION.md`

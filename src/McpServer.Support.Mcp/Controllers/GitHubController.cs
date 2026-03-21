@@ -18,6 +18,17 @@ namespace McpServer.Support.Mcp.Controllers;
 [Route("mcpserver/gh")]
 public sealed class GitHubController : ControllerBase
 {
+    private static readonly HashSet<string> AllowedIssueStates = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "open",
+        "closed",
+        "all"
+    };
+    private static readonly HashSet<string> AllowedCloseReasons = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "completed",
+        "not_planned"
+    };
     private readonly IGitHubCliService _gh;
     private readonly IIssueTodoSyncService? _syncService;
     private readonly IChangeEventBus? _eventBus;
@@ -48,9 +59,13 @@ public sealed class GitHubController : ControllerBase
     /// <param name="cancellationToken">Cancellation token.</param>
     [HttpGet("issues")]
     [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<object>> ListIssuesAsync([FromQuery] string? state, [FromQuery] int limit = 30, CancellationToken cancellationToken = default)
     {
-        var result = await _gh.ListIssuesAsync(state, limit, cancellationToken).ConfigureAwait(false);
+        if (!TryNormalizeIssueState(state, out var normalizedState, out var errorMessage))
+            return BadRequest(new { error = errorMessage });
+
+        var result = await _gh.ListIssuesAsync(normalizedState, limit, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             return Ok(new { issues = Array.Empty<object>(), error = result.Error });
         return Ok(new { issues = result.Issues.Select(i => new { i.Number, i.Title, i.Url, i.State }).ToList() });
@@ -116,7 +131,10 @@ public sealed class GitHubController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<object>> CloseIssueAsync([FromRoute] int number, [FromQuery] string? reason = null, CancellationToken cancellationToken = default)
     {
-        var result = await _gh.CloseIssueAsync(number, reason, cancellationToken).ConfigureAwait(false);
+        if (!TryNormalizeCloseReason(reason, out var normalizedReason, out var errorMessage))
+            return BadRequest(new { error = errorMessage });
+
+        var result = await _gh.CloseIssueAsync(number, normalizedReason, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             return BadRequest(new { error = result.ErrorMessage ?? "failed to close issue" });
         await PublishGitHubChangeSafeAsync(ChangeEventActions.Updated, number.ToString(), cancellationToken).ConfigureAwait(false);
@@ -274,9 +292,13 @@ public sealed class GitHubController : ControllerBase
     /// <param name="cancellationToken">Cancellation token.</param>
     [HttpGet("pulls")]
     [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<object>> ListPullsAsync([FromQuery] string? state, [FromQuery] int limit = 30, CancellationToken cancellationToken = default)
     {
-        var result = await _gh.ListPullsAsync(state, limit, cancellationToken).ConfigureAwait(false);
+        if (!TryNormalizeIssueState(state, out var normalizedState, out var errorMessage))
+            return BadRequest(new { error = errorMessage });
+
+        var result = await _gh.ListPullsAsync(normalizedState, limit, cancellationToken).ConfigureAwait(false);
         if (!result.Success)
             return Ok(new { pulls = Array.Empty<object>(), error = result.Error });
         return Ok(new { pulls = result.Pulls.Select(p => new { p.Number, p.Title, p.Url, p.State }).ToList() });
@@ -381,7 +403,11 @@ public sealed class GitHubController : ControllerBase
     {
         if (_syncService is null)
             return BadRequest(new { error = "Issue sync service not configured" });
-        var result = await _syncService.SyncAllIssuesToTodosAsync(state, limit, cancellationToken).ConfigureAwait(false);
+
+        if (!TryNormalizeIssueState(state, out var normalizedState, out var errorMessage))
+            return BadRequest(new { error = errorMessage });
+
+        var result = await _syncService.SyncAllIssuesToTodosAsync(normalizedState, limit, cancellationToken).ConfigureAwait(false);
         await PublishGitHubChangeSafeAsync(ChangeEventActions.Updated, "sync-from-github", cancellationToken).ConfigureAwait(false);
         return Ok(result);
     }
@@ -467,6 +493,48 @@ public sealed class GitHubController : ControllerBase
         return !string.IsNullOrWhiteSpace(oauth.ClientId)
                && !string.IsNullOrWhiteSpace(oauth.RedirectUri)
                && !string.IsNullOrWhiteSpace(oauth.AuthorizeEndpoint);
+    }
+
+    private static bool TryNormalizeIssueState(string? state, out string? normalizedState, out string? errorMessage)
+    {
+        if (string.IsNullOrWhiteSpace(state))
+        {
+            normalizedState = null;
+            errorMessage = null;
+            return true;
+        }
+
+        normalizedState = state.Trim().ToLowerInvariant();
+        if (AllowedIssueStates.Contains(normalizedState))
+        {
+            errorMessage = null;
+            return true;
+        }
+
+        normalizedState = null;
+        errorMessage = "Invalid state. Allowed values: open, closed, all.";
+        return false;
+    }
+
+    private static bool TryNormalizeCloseReason(string? reason, out string? normalizedReason, out string? errorMessage)
+    {
+        if (string.IsNullOrWhiteSpace(reason))
+        {
+            normalizedReason = null;
+            errorMessage = null;
+            return true;
+        }
+
+        normalizedReason = reason.Trim().ToLowerInvariant();
+        if (AllowedCloseReasons.Contains(normalizedReason))
+        {
+            errorMessage = null;
+            return true;
+        }
+
+        normalizedReason = null;
+        errorMessage = "Invalid close reason. Allowed values: completed, not_planned.";
+        return false;
     }
 }
 

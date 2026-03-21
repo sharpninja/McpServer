@@ -1,6 +1,7 @@
 // TR-PLANNED-013 / FR-SUPPORT-010: MCP Context Unification - local MCP server for Cursor and Copilot.
 
 using System.Globalization;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Runtime.Versioning;
@@ -25,6 +26,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration.Json;
+using Microsoft.Extensions.Http.Resilience;
 using NetEscapades.Configuration.Yaml;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Hosting.WindowsServices;
@@ -35,7 +37,6 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.File;
 
-// TR-PLANNED-013: When --transport stdio, run MCP over stdin/stdout and exit (no HTTP).
 if (IsStdioTransportRequested(args))
 {
     await McpStdioHost.RunAsync(args, default).ConfigureAwait(false);
@@ -57,11 +58,14 @@ bool IsStdioTransportRequested(string[] a)
 }
 
 var builder = WebApplication.CreateBuilder(args);
+EnsureApprovedWindowsServiceDeployment();
 DisableEnvironmentSpecificJsonConfigForWindowsService(builder);
 
-// Load YAML configuration (overrides JSON when present). Environment-specific YAML takes precedence.
 builder.Configuration.AddYamlFile("appsettings.yaml", optional: true, reloadOnChange: true);
 builder.Configuration.AddYamlFile($"appsettings.{builder.Environment.EnvironmentName}.yaml", optional: true, reloadOnChange: true);
+// Re-apply operational overrides after YAML so env vars and CLI args beat repo defaults.
+builder.Configuration.AddEnvironmentVariables();
+builder.Configuration.AddCommandLine(args);
 
 if (OperatingSystem.IsWindows())
 {
@@ -75,9 +79,6 @@ var instanceName = McpInstanceResolver.GetRequestedInstanceName(args);
 McpInstanceResolver.ValidateInstances(builder.Configuration);
 McpInstanceResolver.ValidateTodoStorage(builder.Configuration, instanceName);
 
-// Resolve the primary workspace from Mcp:Workspaces config (FR-MCP-025).
-// Set ContentRootPath to the primary workspace's path so relative paths resolve correctly
-// and WorkspaceProcessManager can identify it.
 WorkspaceConfigEntry? primaryWorkspaceEntry = null;
 {
     var workspaces = builder.Configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
@@ -88,10 +89,12 @@ WorkspaceConfigEntry? primaryWorkspaceEntry = null;
         .Where(w => w.IsEnabled)
         .FirstOrDefault();
     if (primaryWorkspaceEntry is not null)
+    {
         builder.Environment.ContentRootPath = Path.GetFullPath(primaryWorkspaceEntry.WorkspacePath);
+        Directory.SetCurrentDirectory(builder.Environment.ContentRootPath);
+    }
 }
 
-// TR-PLANNED-013: Serilog with optional Parseable (local Docker) sink.
 builder.Host.UseSerilog((context, _, config) =>
 {
     config.ReadFrom.Configuration(context.Configuration)
@@ -115,7 +118,6 @@ builder.Host.UseSerilog((context, _, config) =>
     {
         var ingestUri = $"{parseable.Url!.TrimEnd('/')}/api/v1/ingest";
         var httpClient = new ParseableHttpClient(parseable.StreamName, parseable.Username, parseable.Password);
-        // Exclude Parseable meta-logs (success/failure of push) so they are not republished to Parseable.
         config.WriteTo.Logger(lc => lc
             .Filter.ByExcluding(e => e.Properties.TryGetValue(ParseableHttpClient.ParseableMetaPropertyName, out var v) && v is ScalarValue s && (s.Value is true or "True"))
             .WriteTo.Http(requestUri: ingestUri, queueLimitBytes: null, textFormatter: new ParseableEventFormatter(), batchFormatter: new ParseableBatchFormatter(), httpClient: httpClient, restrictedToMinimumLevel: LogEventLevel.Verbose));
@@ -193,7 +195,10 @@ builder.Services.Configure<GitHubIntegrationOptions>(builder.Configuration.GetSe
 builder.Services.Configure<AgentPoolOptions>(builder.Configuration.GetSection(AgentPoolOptions.SectionName));
 builder.Services.Configure<VoiceConversationOptions>(builder.Configuration.GetSection(VoiceConversationOptions.SectionName));
 builder.Services.Configure<RequirementsOptions>(builder.Configuration.GetSection(RequirementsOptions.SectionName));
+builder.Services.Configure<AgentProcessManagerOptions>(builder.Configuration.GetSection(AgentProcessManagerOptions.SectionName));
 builder.Services.AddSingleton<IValidateOptions<AgentPoolOptions>, AgentPoolOptionsValidator>();
+builder.Services.AddSingleton<IValidateOptions<VoiceConversationOptions>, VoiceConversationOptionsValidator>();
+builder.Services.AddSingleton<AppSettingsFileService>();
 var requiredRepoAllowlistPatterns = new[]
 {
     "src/McpServer.Cqrs/**/*.cs",
@@ -253,11 +258,8 @@ builder.Services.PostConfigure<GitHubIntegrationOptions>(options =>
         ?? options.TokenStorePath;
     options.TokenStorePath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.TokenStorePath);
 });
-builder.Services.PostConfigure<TemplateStorageOptions>(options =>
-{
-    options.FilePath = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "TemplateStorage:FilePath") ?? options.FilePath;
-    options.FilePath = McpInstanceResolver.ResolveDataPath(builder.Configuration, instanceName, options.FilePath);
-});
+builder.Services.AddSingleton<IPostConfigureOptions<TemplateStorageOptions>>(_ =>
+    new TemplateStorageOptionsPostConfigure(builder.Configuration, instanceName));
 builder.Services.PostConfigure<RequirementsOptions>(options =>
 {
     var repoRoot = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "RepoRoot")
@@ -279,12 +281,38 @@ builder.Services.Configure<VectorIndexOptions>(builder.Configuration.GetSection(
 builder.Services.AddSingleton<IInteractionLogSubmissionChannel, InteractionLogSubmissionChannel>();
 builder.Services.AddHostedService<InteractionLogSubmissionService>();
 builder.Services.AddHttpClient("InteractionLogSubmission");
+builder.Services.AddHttpClient(WebsiteIngestor.HttpClientName, (sp, client) =>
+{
+    var options = sp.GetRequiredService<IOptions<IngestionOptions>>().Value;
+    var timeoutSeconds = Math.Clamp(options.WebsiteRequestTimeoutSeconds, 5, 600);
+    client.Timeout = TimeSpan.FromSeconds(timeoutSeconds);
+    client.DefaultRequestHeaders.UserAgent.ParseAdd("McpServer-WebsiteIngestor/1.0");
+})
+.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    AllowAutoRedirect = false
+});
+builder.Services.Configure<HttpStandardResilienceOptions>(WebsiteIngestor.HttpClientName, options =>
+{
+    options.TotalRequestTimeout.Timeout = TimeSpan.FromSeconds(180);
+    options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(180);
+});
 builder.Services.AddSingleton<ISyncStatusStore, SyncStatusStore>();
 builder.Services.AddSingleton<IWriteAuditLog, WriteAuditLog>();
 builder.Services.AddSingleton<IChangeEventBus, ChannelChangeEventBus>();
 builder.Services.AddSingleton<Chunker>();
 builder.Services.AddDataProtection();
 builder.Services.AddSingleton<IProcessRunner, ProcessRunner>();
+builder.Services.AddSingleton<IAgentProcessManager, AgentProcessManager>();
+builder.Services.AddSingleton<IAgentIsolationStrategy, NoneAgentIsolationStrategy>();
+builder.Services.AddSingleton<IAgentIsolationStrategy, WorktreeAgentIsolationStrategy>();
+builder.Services.AddSingleton<IAgentIsolationStrategy, CloneAgentIsolationStrategy>();
+builder.Services.AddSingleton<AgentIsolationStrategyResolver>();
+builder.Services.AddSingleton<IAgentBranchStrategy, DirectAgentBranchStrategy>();
+builder.Services.AddSingleton<IAgentBranchStrategy, FeatureAgentBranchStrategy>();
+builder.Services.AddSingleton<IAgentBranchStrategy, WorktreeAgentBranchStrategy>();
+builder.Services.AddSingleton<AgentBranchStrategyResolver>();
+builder.Services.AddHostedService<AgentHealthMonitorService>();
 builder.Services.AddSingleton<IGitHubWorkspaceTokenStore, FileGitHubWorkspaceTokenStore>();
 builder.Services.Configure<ProcessRunnerOptions>(options =>
 {
@@ -300,20 +328,25 @@ builder.Services.AddScoped<SessionLogIngestor>();
 builder.Services.AddScoped<ExternalDocsIngestor>();
 builder.Services.AddScoped<GitHubIngestor>();
 builder.Services.AddScoped<IssueIngestor>();
+builder.Services.AddScoped<IWebsiteIngestor, WebsiteIngestor>();
 builder.Services.AddScoped<IngestionCoordinator>();
 builder.Services.AddScoped<IRepoFileService, RepoFileService>();
+builder.Services.AddScoped<DesktopLaunchService>();
 builder.Services.AddSingleton<IGitHubCliService, GitHubCliService>();
 builder.Services.AddSingleton<ITodoServiceFactory, TodoServiceFactory>();
 builder.Services.AddSingleton<ITodoService>(sp => sp.GetRequiredService<ITodoServiceFactory>().CreatePrimary());
 builder.Services.AddSingleton<TodoServiceResolver>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<WorkspaceServiceAccessor>();
+builder.Services.AddSingleton<TodoCreationService>();
 builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
+builder.Services.AddSingleton<TodoUpdateService>();
 builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
 builder.Services.AddSingleton<RequirementsDocumentService>();
 builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<RequirementsDocumentService>());
 builder.Services.AddSingleton<IRequirementsDocumentService>(sp => sp.GetRequiredService<RequirementsDocumentService>());
 builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
+builder.Services.AddAgentExecutionStrategies();
 builder.Services.AddSingleton<IVoiceConversationService, VoiceConversationService>();
 builder.Services.AddSingleton<IAgentPoolService, AgentPoolService>();
 builder.Services.AddSingleton<PromptTemplateRenderer>();
@@ -356,12 +389,15 @@ builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
 builder.Services.AddScoped<IToolBucketService, ToolBucketService>();
 builder.Services.AddScoped<IAgentService, AgentService>();
 builder.Services.AddSingleton<WorkspaceTokenService>();
+builder.Services.AddSingleton<ApiKeyIssuanceGuard>();
 builder.Services.AddScoped<WorkspaceContext>();
 builder.Services.AddSingleton(new ServerRuntimeInfo(serverStartupUtc, listenPort));
 builder.Services.AddSingleton<IWorkspaceProcessManager, WorkspaceProcessManager>();
+builder.Services.Configure<DesktopLaunchOptions>(builder.Configuration.GetSection(DesktopLaunchOptions.SectionName));
 builder.Services.Configure<PairingOptions>(builder.Configuration.GetSection(PairingOptions.SectionName));
 builder.Services.Configure<OidcAuthOptions>(builder.Configuration.GetSection(OidcAuthOptions.SectionName));
 builder.Services.Configure<ToolRegistryOptions>(builder.Configuration.GetSection(ToolRegistryOptions.SectionName));
+builder.Services.AddSingleton<PairingLoginAttemptGuard>();
 builder.Services.AddSingleton<PairingSessionService>();
 
 var oidcAuthBootstrap = builder.Configuration.GetSection(OidcAuthOptions.SectionName).Get<OidcAuthOptions>()
@@ -386,7 +422,6 @@ if (oidcAuthBootstrap.Enabled)
 }
 else
 {
-    // Keep authorization available so [Authorize(Policy="AgentManager")] can fall back to API-key-only mode.
     builder.Services.AddAuthentication();
 }
 
@@ -406,7 +441,6 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
-// Tunnel registry — providers registered via DI and started by the hosted service lifecycle.
 builder.Services.Configure<TunnelOptions>(
     builder.Configuration.GetSection(TunnelOptions.SectionName));
 builder.Services.AddSingleton<NgrokTunnelProvider>();
@@ -434,7 +468,6 @@ if (!builder.Environment.IsStaging())
 #endif
 builder.Services.AddEndpointsApiExplorer();
 
-// MCP Streamable HTTP transport — shares FwhMcpTools with STDIO transport.
 builder.Services.AddMcpServer()
     .WithHttpTransport()
     .WithToolsFromAssembly(typeof(FwhMcpTools).Assembly);
@@ -448,7 +481,6 @@ var app = builder.Build();
 var serverProcessId = Environment.ProcessId;
 var serverCommandLine = Environment.CommandLine;
 
-// Log application version at startup for deployment verification.
 app.LogApplicationVersion();
 app.Logger.LogInformation(
     "Server startup event: PID={ProcessId}; Command={CommandLine}",
@@ -473,7 +505,6 @@ if (!app.Environment.IsEnvironment("Test"))
         await db.Database.MigrateAsync().ConfigureAwait(false);
     }
 
-    // Seed built-in agent definitions on startup (idempotent).
     using (var scope = app.Services.CreateScope())
     {
         var agentService = scope.ServiceProvider.GetRequiredService<IAgentService>();
@@ -482,7 +513,6 @@ if (!app.Environment.IsEnvironment("Test"))
             Log.Information("[Agents] Seeded {Count} built-in agent definitions", seededCount);
     }
 
-    // Seed default tool buckets from configuration (idempotent — skips existing).
     using (var scope = app.Services.CreateScope())
     {
         var bucketService = scope.ServiceProvider.GetRequiredService<IToolBucketService>();
@@ -504,8 +534,6 @@ if (!app.Environment.IsEnvironment("Test"))
     }
 }
 
-// Marker files are written by WorkspaceProcessManager during auto-start (including the primary workspace).
-// Register cleanup for the primary workspace marker on shutdown.
 {
     var primaryRepoRoot = McpInstanceResolver.GetEffectiveMcpValue(app.Configuration, instanceName, "RepoRoot") ?? ".";
     var primaryWorkspacePath = Path.IsPathRooted(primaryRepoRoot)
@@ -530,7 +558,6 @@ if (!app.Environment.IsEnvironment("Test"))
     });
 }
 
-// Seed primary-host API tokens eagerly so /api-key is ready even if workspace auto-start lags.
 {
     var apiKeyWorkspacePath = ResolvePrimaryApiKeyWorkspacePath(app.Configuration, app.Environment, instanceName);
     if (!string.IsNullOrWhiteSpace(apiKeyWorkspacePath))
@@ -553,15 +580,9 @@ if (!app.Environment.IsEnvironment("Test"))
     }
 }
 
-// Tunnel lifecycle is managed by TunnelRegistry as an IHostedService.
-// Only the shutdown hook remains for cleanup outside the hosted service scope.
-app.Lifetime.ApplicationStopping.Register(() =>
-    app.Services.GetRequiredService<TunnelRegistry>().StopAllAsync().GetAwaiter().GetResult());
-
-// TR-PLANNED-013: Structured interaction logging for all requests; optional async submission to LoggingServiceUrl.
+app.UseGlobalExceptionHandler();
 app.UseMiddleware<InteractionLoggingMiddleware>();
 
-// Per-workspace auth tokens: protect all /mcpserver/* REST routes.
 app.UseAuthentication();
 app.UseMiddleware<WorkspaceResolutionMiddleware>();
 app.UseMiddleware<WorkspaceAuthMiddleware>();
@@ -575,12 +596,10 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MCP Context
 app.MapGet("/", () => Results.Redirect("/swagger"))
     .ExcludeFromDescription();
 
-// Unprotected diagnostics endpoint for stale-marker detection and client troubleshooting.
 app.MapGet("/server-startup-utc", (ServerRuntimeInfo runtimeInfo) =>
     MarkerDiagnosticsEndpointHelper.GetServerStartupResult(runtimeInfo))
     .ExcludeFromDescription();
 
-// Unprotected diagnostics endpoint returning marker file timestamps for configured workspaces.
 app.MapGet("/marker-file-timestamp", (string? repoPath, IConfiguration configuration) =>
     MarkerDiagnosticsEndpointHelper.GetMarkerFileTimestampResult(
         repoPath,
@@ -589,9 +608,19 @@ app.MapGet("/marker-file-timestamp", (string? repoPath, IConfiguration configura
         restrictToCurrentRepoRoot: false))
     .ExcludeFromDescription();
 
-// Unprotected endpoint returning the default (anonymous) API key for consumers without marker file access.
-app.MapGet("/api-key", (WorkspaceTokenService tokenService) =>
+app.MapGet("/api-key", (HttpContext context, WorkspaceTokenService tokenService, ApiKeyIssuanceGuard apiKeyIssuanceGuard) =>
 {
+    if (!IsLoopbackRequest(context))
+    {
+        app.Logger.LogWarning(
+            "Rejected non-loopback /api-key request: RemoteIp={RemoteIp}",
+            context.Connection.RemoteIpAddress?.ToString() ?? "(none)");
+        return Results.NotFound();
+    }
+
+    context.Response.Headers.CacheControl = "no-store, no-cache";
+    context.Response.Headers.Pragma = "no-cache";
+
     var workspacePath = ResolvePrimaryApiKeyWorkspacePath(app.Configuration, app.Environment, instanceName) ?? string.Empty;
     if (string.IsNullOrWhiteSpace(workspacePath))
         return Results.Problem("No workspace configured.", statusCode: 503);
@@ -599,19 +628,34 @@ app.MapGet("/api-key", (WorkspaceTokenService tokenService) =>
     var defaultToken = tokenService.GetDefaultToken(workspacePath);
     if (defaultToken is null)
     {
-        defaultToken = tokenService.GenerateDefaultToken(workspacePath);
-        app.Logger.LogWarning(
-            "Default API token was missing during /api-key request and was generated on demand: Workspace={WorkspacePath}",
+        app.Logger.LogError(
+            "Default API token unavailable during /api-key request: Workspace={WorkspacePath}",
             workspacePath);
+        return Results.Problem("Default API token unavailable.", statusCode: 503);
     }
 
+    if (!apiKeyIssuanceGuard.TryAcquire(context.Connection.RemoteIpAddress, out var retryAfter))
+    {
+        var retryAfterSeconds = Math.Max(1, (int)Math.Ceiling(retryAfter.TotalSeconds));
+        context.Response.Headers.RetryAfter = retryAfterSeconds.ToString(CultureInfo.InvariantCulture);
+        app.Logger.LogWarning(
+            "Default API token issuance throttled: RemoteIp={RemoteIp}; Workspace={WorkspacePath}; RetryAfterSeconds={RetryAfterSeconds}",
+            context.Connection.RemoteIpAddress?.ToString() ?? "loopback",
+            workspacePath,
+            retryAfterSeconds);
+        return Results.Problem("Default API token issuance is temporarily rate-limited.", statusCode: 429);
+    }
+
+    app.Logger.LogInformation(
+        "Default API token issued: RemoteIp={RemoteIp}; Workspace={WorkspacePath}",
+        context.Connection.RemoteIpAddress?.ToString() ?? "loopback",
+        workspacePath);
     return Results.Ok(new { apiKey = defaultToken });
 }).ExcludeFromDescription();
 
 app.MapMcp("/mcp-transport");
 app.MapControllers();
 
-// /pair web login flow — authenticate to view the API key.
 app.MapGet("/pair", async (IOptions<PairingOptions> opts, PairingHtmlRenderer pairingRenderer) =>
 {
     var o = opts.Value;
@@ -620,22 +664,53 @@ app.MapGet("/pair", async (IOptions<PairingOptions> opts, PairingHtmlRenderer pa
     return Results.Content(await pairingRenderer.RenderLoginPageAsync().ConfigureAwait(false), "text/html");
 }).ExcludeFromDescription();
 
-app.MapPost("/pair", async (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions, PairingHtmlRenderer pairingRenderer) =>
+app.MapPost("/pair", async (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions, PairingLoginAttemptGuard attemptGuard, PairingHtmlRenderer pairingRenderer) =>
 {
     var o = opts.Value;
     if (o.PairingUsers.Count == 0 || string.IsNullOrEmpty(o.ApiKey))
         return Results.Content(await pairingRenderer.RenderNotConfiguredPageAsync().ConfigureAwait(false), "text/html");
 
     var form = await context.Request.ReadFormAsync().ConfigureAwait(false);
-    var username = form["username"].ToString();
+    var username = form["username"].ToString().Trim();
     var password = form["password"].ToString();
+    var remoteIp = context.Connection.RemoteIpAddress;
+
+    if (!attemptGuard.TryAcquire(username, remoteIp, out var retryAfter))
+    {
+        var retryAfterSeconds = Math.Max(1, (int)Math.Ceiling(retryAfter.TotalSeconds));
+        context.Response.Headers.RetryAfter = retryAfterSeconds.ToString(CultureInfo.InvariantCulture);
+        app.Logger.LogWarning(
+            "Pairing sign-in blocked after repeated failures: RemoteIp={RemoteIp}; Username={Username}; RetryAfterSeconds={RetryAfterSeconds}",
+            remoteIp?.ToString() ?? "loopback",
+            username,
+            retryAfterSeconds);
+        return Results.Content(
+            await pairingRenderer.RenderLoginPageAsync("Too many failed sign-in attempts. Please wait and try again.").ConfigureAwait(false),
+            "text/html",
+            Encoding.UTF8,
+            StatusCodes.Status429TooManyRequests);
+    }
 
     var user = o.PairingUsers.Find(u =>
         string.Equals(u.Username, username, StringComparison.OrdinalIgnoreCase));
 
     if (user is null || !VerifyPairingPassword(password, user.PasswordHash))
-        return Results.Content(await pairingRenderer.RenderLoginPageAsync(error: true).ConfigureAwait(false), "text/html");
+    {
+        attemptGuard.RecordFailure(username, remoteIp);
+        app.Logger.LogWarning(
+            "Pairing sign-in failed: RemoteIp={RemoteIp}; Username={Username}",
+            remoteIp?.ToString() ?? "loopback",
+            username);
+        return Results.Content(
+            await pairingRenderer.RenderLoginPageAsync("Invalid username or password.").ConfigureAwait(false),
+            "text/html");
+    }
 
+    attemptGuard.RecordSuccess(username, remoteIp);
+    app.Logger.LogInformation(
+        "Pairing sign-in succeeded: RemoteIp={RemoteIp}; Username={Username}",
+        remoteIp?.ToString() ?? "loopback",
+        username);
     var token = sessions.CreateToken();
     context.Response.Cookies.Append("mcp_pair", token, new CookieOptions
     {
@@ -675,6 +750,12 @@ static bool VerifyPairingPassword(string plaintext, string expectedHash)
     return CryptographicOperations.FixedTimeEquals(computed, expected);
 }
 
+static bool IsLoopbackRequest(HttpContext context)
+{
+    var remoteIp = context.Connection.RemoteIpAddress;
+    return remoteIp is null || IPAddress.IsLoopback(remoteIp);
+}
+
 static void DisableEnvironmentSpecificJsonConfigForWindowsService(WebApplicationBuilder builder)
 {
     if (!OperatingSystem.IsWindows() || !WindowsServiceHelpers.IsWindowsService())
@@ -698,6 +779,41 @@ static void DisableEnvironmentSpecificJsonConfigForWindowsService(WebApplication
 
     if (builder.Configuration is IConfigurationRoot configurationRoot)
         configurationRoot.Reload();
+}
+
+static void EnsureApprovedWindowsServiceDeployment()
+{
+    if (!OperatingSystem.IsWindows())
+        return;
+
+    if (!WindowsServiceHelpers.IsWindowsService() &&
+        !WindowsServiceDeploymentGuard.HasDeploymentManifest(AppContext.BaseDirectory))
+        return;
+    WindowsServiceDeploymentGuard.EnsureApprovedDeployment(AppContext.BaseDirectory, WriteWindowsServiceDeploymentFailure);
+}
+
+[SupportedOSPlatform("windows")]
+static void WriteWindowsServiceDeploymentFailure(string message)
+{
+    try
+    {
+#pragma warning disable CA1416
+        if (!System.Diagnostics.EventLog.SourceExists("McpServer"))
+        {
+            System.Diagnostics.EventLog.CreateEventSource("McpServer", "Application");
+        }
+
+        System.Diagnostics.EventLog.WriteEntry(
+            "McpServer",
+            message,
+            System.Diagnostics.EventLogEntryType.Error,
+            1001);
+#pragma warning restore CA1416
+    }
+    catch
+    {
+        Console.Error.WriteLine(message);
+    }
 }
 
 [SupportedOSPlatform("windows")]
@@ -806,7 +922,6 @@ static bool ContainsRequiredRole(string? claimValue, ISet<string> requiredRoles)
         catch (JsonException ex)
         {
             System.Diagnostics.Trace.TraceWarning(ex.ToString());
-            // Fall back to delimited parsing below.
         }
     }
 

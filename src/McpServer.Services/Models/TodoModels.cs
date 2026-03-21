@@ -194,6 +194,104 @@ public sealed class CompletedItem
 }
 
 /// <summary>
+/// Tolerates list-of-string TODO fields that contain mapping-shaped YAML entries,
+/// such as unquoted sequence items with colons.
+/// </summary>
+internal sealed class TodoStringListYamlConverter : IYamlTypeConverter
+{
+    /// <inheritdoc />
+    public bool Accepts(Type type) => type == typeof(List<string>);
+
+    /// <inheritdoc />
+    public object? ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer)
+    {
+        ArgumentNullException.ThrowIfNull(parser);
+
+        var values = new List<string>();
+        if (parser.TryConsume<SequenceStart>(out _))
+        {
+            while (!parser.TryConsume<SequenceEnd>(out _))
+            {
+                var value = ReadNodeAsText(parser);
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    values.Add(value);
+                }
+            }
+
+            return values;
+        }
+
+        var singleValue = ReadNodeAsText(parser);
+        if (!string.IsNullOrWhiteSpace(singleValue))
+        {
+            values.Add(singleValue);
+        }
+
+        return values;
+    }
+
+    /// <inheritdoc />
+    public void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer serializer)
+    {
+        ArgumentNullException.ThrowIfNull(emitter);
+        ArgumentNullException.ThrowIfNull(serializer);
+
+        var values = (List<string>?)value ?? [];
+        emitter.Emit(new SequenceStart(null, null, false, SequenceStyle.Block));
+        foreach (var item in values)
+        {
+            serializer(item ?? string.Empty, typeof(string));
+        }
+
+        emitter.Emit(new SequenceEnd());
+    }
+
+    private static string ReadNodeAsText(IParser parser)
+    {
+        if (parser.TryConsume<Scalar>(out var scalar))
+        {
+            return scalar.Value ?? string.Empty;
+        }
+
+        if (parser.TryConsume<SequenceStart>(out _))
+        {
+            var values = new List<string>();
+            while (!parser.TryConsume<SequenceEnd>(out _))
+            {
+                var value = ReadNodeAsText(parser);
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    values.Add(value);
+                }
+            }
+
+            return string.Join("; ", values);
+        }
+
+        if (parser.TryConsume<MappingStart>(out _))
+        {
+            var pairs = new List<string>();
+            while (!parser.TryConsume<MappingEnd>(out _))
+            {
+                var key = ReadNodeAsText(parser).Trim();
+                var value = ReadNodeAsText(parser).Trim();
+                if (string.IsNullOrWhiteSpace(key) && string.IsNullOrWhiteSpace(value))
+                {
+                    continue;
+                }
+
+                pairs.Add(string.IsNullOrWhiteSpace(value) ? key : $"{key}: {value}");
+            }
+
+            return string.Join("; ", pairs);
+        }
+
+        throw new YamlException($"Unexpected YAML event '{parser.Current?.GetType().Name ?? "null"}' while parsing a TODO string list.");
+    }
+}
+
+/// <summary>
 /// YamlDotNet type converter for <see cref="TodoFile"/>.
 /// Arbitrary top-level keys become entries in <see cref="TodoFile.Sections"/>.
 /// Reserved keys: <c>code-review-remediation</c>, <c>completed</c>, <c>notes</c>.

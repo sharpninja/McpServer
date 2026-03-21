@@ -75,12 +75,13 @@ For MCP-compatible clients (e.g., Cursor), configure the STDIO transport:
 
 ### Available STDIO Tools
 
-See `docs/stdio-tool-contract.json` for the complete machine-readable manifest of all 21 tools.
+See `docs/stdio-tool-contract.json` for the complete machine-readable manifest of all 22 tools.
 
 Key tool categories:
 
-- **Context**: `context_search`, `context_pack`, `context_sources`
+- **Context**: `context_search`, `context_pack`, `context_sources`, `context_ingest_website`
 - **Repository**: `repo_read`, `repo_list`, `repo_write`
+- **Desktop**: `desktop_launch`
 - **Sync**: `sync_run`, `sync_status`
 - **TODO**: `todo_list`, `todo_get`, `todo_create`, `todo_update`, `todo_delete`
 - **Session Logs**: `sessionlog_submit`, `sessionlog_query`, `sessionlog_dialog`
@@ -105,17 +106,76 @@ var client = McpServerClientFactory.Create(new McpServerClientOptions
 {
     BaseUrl = new Uri("http://localhost:7147"),
     ApiKey = "token-from-marker",
+    DesktopLaunchToken = "desktop-launch-token-from-secure-config",
     WorkspacePath = @"E:\github\MyProject",
 });
 // All requests include both X-Api-Key and X-Workspace-Path headers
 var todos = await client.Todo.QueryAsync();
+var launch = await client.Desktop.LaunchAsync(new DesktopLaunchRequest
+{
+    ExecutablePath = @"C:\Windows\System32\cmd.exe",
+    Arguments = "/c exit 0",
+    CreateNoWindow = true,
+    WaitForExit = true,
+});
 ```
+
+Remote desktop launch also requires the server-side `Mcp:DesktopLaunch:Enabled` feature gate,
+the `Mcp:DesktopLaunch:AllowedExecutables` allowlist, and the privileged
+`X-Desktop-Launch-Token` header supplied by `McpServerClientOptions.DesktopLaunchToken`.
 
 Switch workspace at runtime:
 
 ```csharp
 client.WorkspacePath = @"E:\github\OtherProject";
 ```
+
+Admin-only configuration endpoints are also available through the typed client when you supply an admin JWT bearer token:
+
+```csharp
+client.BearerToken = adminJwt;
+var values = await client.Configuration.GetValuesAsync();
+
+var updated = await client.Configuration.PatchValuesAsync(new Dictionary<string, string?>
+{
+    ["VoiceConversation:CopilotModel"] = "gpt-5.4",
+    ["VoiceConversation:ModelApiKey"] = null, // remove the persisted key
+});
+```
+
+## Hosted .NET Agent Framework Library
+
+Use `src\McpServer.McpAgent` when you want a .NET 9 host application to consume MCP Server session-log, TODO, repository, desktop-launch, and in-process PowerShell workflows through Microsoft Agent Framework-oriented registration instead of hand-assembling transport glue.
+
+Typical registration:
+
+```csharp
+services.AddMcpServerMcpAgent(options =>
+{
+    options.BaseUrl = new Uri("http://localhost:7147");
+    options.ApiKey = "token-from-marker";
+    options.WorkspacePath = @"E:\github\MyProject";
+    options.SourceType = "Codex";
+});
+
+using var serviceProvider = services.BuildServiceProvider();
+var hostedAgentFactory = serviceProvider.GetRequiredService<IMcpHostedAgentFactory>();
+var hostedAgent = hostedAgentFactory.CreateHostedAgent();
+var registration = hostedAgent.Registration;
+```
+
+Built-in hosted services include:
+
+- `ISessionLogWorkflow` for session bootstrap, turn lifecycle updates, and canonical session/request identifiers.
+- `ITodoWorkflow` for TODO query/get/update plus buffered or streaming plan/status/implementation flows.
+- built-in MCP tools for repository access, local desktop launch, and in-process PowerShell sessions (`mcp_repo_*`, `mcp_desktop_launch`, `mcp_powershell_session_*`).
+- `IMcpHostedAgent` / `IMcpHostedAgentFactory` for creating `ChatClientAgent`-ready registrations and run options with the built-in MCP tool set attached, plus `IMcpHostedAgent.PowerShellSessions` for host-driven direct local PowerShell execution.
+
+Reference implementations:
+
+- Library source: `src\McpServer.McpAgent`
+- Interactive preview host: `src\McpServer.McpAgent.SampleHost`
+- Automated acceptance coverage: `tests\McpServer.McpAgent.Tests\HostedAgentWorkflowIntegrationTests.cs`
 
 ## Health Check
 

@@ -20,6 +20,7 @@
     <PackageReference Include="Handlebars.Net" />
     <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <ProjectReference Include="..\McpServer.McpAgent\McpServer.McpAgent.csproj" />
     <ProjectReference Include="..\McpServer.Storage\McpServer.Storage.csproj" />
     <ProjectReference Include="..\McpServer.Cqrs\McpServer.Cqrs.csproj" />
     <ProjectReference Include="..\McpServer.Common.Copilot\McpServer.Common.Copilot.csproj" />

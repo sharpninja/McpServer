@@ -10,6 +10,8 @@ internal interface ITodoStore
 
     Task<TodoFlatItem?> GetByIdAsync(string id, CancellationToken cancellationToken = default);
 
+    Task<TodoAuditQueryResult> GetAuditAsync(string id, int limit = 50, int offset = 0, CancellationToken cancellationToken = default);
+
     Task<TodoMutationResult> CreateAsync(TodoCreateRequest request, CancellationToken cancellationToken = default);
 
     Task<TodoMutationResult> UpdateAsync(string id, TodoUpdateRequest request, CancellationToken cancellationToken = default);

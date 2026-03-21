@@ -45,6 +45,20 @@ public interface IAgentService
     /// <summary>Unban an agent in a specific workspace or globally.</summary>
     Task<AgentMutationResult> UnbanAgentAsync(string agentId, string? workspacePath = null, CancellationToken ct = default);
 
+    // --- Runtime Process Lifecycle ---
+
+    /// <summary>Launches a configured agent runtime for the specified workspace.</summary>
+    Task<AgentProcessInfo> LaunchAgentAsync(string workspacePath, string agentId, CancellationToken ct = default);
+
+    /// <summary>Stops a running configured agent runtime for the specified workspace.</summary>
+    Task<bool> StopAgentAsync(string workspacePath, string agentId, CancellationToken ct = default);
+
+    /// <summary>Gets runtime process status for a configured agent in the specified workspace.</summary>
+    Task<AgentProcessInfo?> GetAgentProcessStatusAsync(string workspacePath, string agentId, CancellationToken ct = default);
+
+    /// <summary>Lists running agent runtimes, optionally filtered to a single workspace.</summary>
+    Task<IReadOnlyList<AgentProcessInfo>> ListRunningAgentsAsync(string? workspacePath = null, CancellationToken ct = default);
+
     // --- Lifecycle Events ---
 
     /// <summary>Log an agent lifecycle event.</summary>

@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    MCP Todo PowerShell module — cmdlets for the /mcpserver/todo API.
+    MCP Todo PowerShell module - cmdlets for the /mcpserver/todo API.
 
 .DESCRIPTION
     Provides cmdlets to list, create, update, complete, and delete todos on an MCP Context Server.
@@ -70,7 +70,7 @@ function Initialize-McpTodo {
     # Verify connectivity
     try {
         $health = Invoke-RestMethod -Uri "$($script:McpBaseUrl)/health" -TimeoutSec 5
-        Write-Host "Connected to MCP server at $($script:McpBaseUrl) — status: $($health.status)" -ForegroundColor Green
+        Write-Host "Connected to MCP server at $($script:McpBaseUrl) - status: $($health.status)" -ForegroundColor Green
     } catch {
         Write-Warning "MCP server at $($script:McpBaseUrl) is not responding: $_"
     }

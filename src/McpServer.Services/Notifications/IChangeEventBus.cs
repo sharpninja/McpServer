@@ -1,6 +1,6 @@
 namespace McpServer.Support.Mcp.Notifications;
 
-/// <summary>In-process pub/sub for domain change events.</summary>
+/// <summary>TR-MCP-EVT-001: In-process pub/sub contract for domain change events.</summary>
 public interface IChangeEventBus
 {
     /// <summary>Publish a change event to all subscribers.</summary>

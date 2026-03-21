@@ -38,6 +38,32 @@ public sealed class TodoClient : McpClientBase
         return await GetAsync<TodoFlatItem>($"mcpserver/todo/{Encode(id)}", cancellationToken);
     }
 
+    /// <summary>Get append-only audit history for a TODO item.</summary>
+    public async Task<TodoAuditQueryResult> GetAuditAsync(
+        string id,
+        int? limit = null,
+        int? offset = null,
+        CancellationToken cancellationToken = default)
+    {
+        var parts = new List<string>();
+        if (limit.HasValue) parts.Add($"limit={limit.Value}");
+        if (offset.HasValue) parts.Add($"offset={offset.Value}");
+        var suffix = parts.Count > 0 ? "?" + string.Join("&", parts) : string.Empty;
+        return await GetAsync<TodoAuditQueryResult>($"mcpserver/todo/{Encode(id)}/audit{suffix}", cancellationToken);
+    }
+
+    /// <summary>Get projection status for SQLite-authoritative TODO storage.</summary>
+    public async Task<TodoProjectionStatusResult> GetProjectionStatusAsync(CancellationToken cancellationToken = default)
+    {
+        return await GetAsync<TodoProjectionStatusResult>("mcpserver/todo/projection/status", cancellationToken);
+    }
+
+    /// <summary>Repair TODO.yaml projection from SQLite-authoritative TODO storage.</summary>
+    public async Task<TodoProjectionRepairResult> RepairProjectionAsync(CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<TodoProjectionRepairResult>("mcpserver/todo/projection/repair", null, cancellationToken);
+    }
+
     /// <summary>Create a new TODO item.</summary>
     public async Task<TodoMutationResult> CreateAsync(TodoCreateRequest request, CancellationToken cancellationToken = default)
     {

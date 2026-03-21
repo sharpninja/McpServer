@@ -18,6 +18,7 @@ public static class MarkerFileService
 {
     /// <summary>Well-known marker file name placed at the workspace root.</summary>
     public const string MarkerFileName = "AGENTS-README-FIRST.yaml";
+    private const string WorkspaceStateDirectoryGitIgnoreEntry = ".mcpServer/";
 
     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
@@ -29,30 +30,6 @@ public static class MarkerFileService
     /// <summary>
     /// Writes the <c>AGENTS-README-FIRST.yaml</c> marker file to <paramref name="workspacePath"/>.
     /// </summary>
-    /// <param name="workspacePath">Absolute path to the workspace root directory.</param>
-    /// <param name="port">HTTP port the workspace is served on.</param>
-    /// <param name="workspaceName">Human-readable workspace name.</param>
-    /// <param name="logger">Optional logger for diagnostics.</param>
-    /// <param name="ct">Cancellation token.</param>
-    /// <param name="globalPromptTemplate">
-    /// Global Handlebars prompt template.
-    /// Must be provided; otherwise an exception is thrown.
-    /// </param>
-    /// <param name="workspacePromptTemplate">
-    /// Optional per-workspace Handlebars prompt template.
-    /// When non-null, the resolved text is appended to the global prompt.
-    /// </param>
-    /// <param name="apiKey">
-    /// Per-workspace auth token to include in the marker file.
-    /// Agents read this value and send it as the <c>X-Api-Key</c> header.
-    /// </param>
-    /// <param name="workspace">
-    /// Full workspace definition. All properties are available in Handlebars templates as <c>{{workspace.*}}</c>.
-    /// </param>
-    /// <param name="serverStartedAtUtc">
-    /// Optional server startup UTC timestamp to embed in the marker for stale-marker detection.
-    /// When omitted, the current UTC timestamp is used.
-    /// </param>
     public static async Task WriteMarkerAsync(
         string workspacePath,
         int port,
@@ -63,6 +40,7 @@ public static class MarkerFileService
         string? workspacePromptTemplate = null,
         string? apiKey = null,
         WorkspaceDto? workspace = null,
+        IReadOnlyList<(string AgentId, string Content)>? agentAdditions = null,
         DateTimeOffset? serverStartedAtUtc = null)
     {
         var baseUrl = $"http://{System.Net.Dns.GetHostName()}:{port.ToString(CultureInfo.InvariantCulture)}";
@@ -72,7 +50,7 @@ public static class MarkerFileService
         var markerWrittenAtUtcText = markerWrittenAtUtc.ToString("o", CultureInfo.InvariantCulture);
         var serverStartedAtUtcText = resolvedServerStartedAtUtc.ToString("o", CultureInfo.InvariantCulture);
 
-        var templateContext = BuildTemplateContext(baseUrl, apiKey, workspace, workspacePath, workspaceName);
+        var templateContext = BuildTemplateContext(baseUrl, apiKey, workspace, workspacePath, workspaceName, agentAdditions);
         templateContext["markerWrittenAtUtc"] = markerWrittenAtUtcText;
         templateContext["serverStartedAtUtc"] = serverStartedAtUtcText;
 
@@ -94,6 +72,7 @@ public static class MarkerFileService
                 ContextSources = "/mcpserver/context/sources",
                 Todo = "/mcpserver/todo",
                 Repo = "/mcpserver/repo",
+                Desktop = "/mcpserver/desktop",
                 GitHub = "/mcpserver/gh",
                 Tools = "/mcpserver/tools",
                 Workspace = "/mcpserver/workspace",
@@ -129,26 +108,30 @@ public static class MarkerFileService
     public static void RemoveMarker(string workspacePath, ILogger? logger = null)
     {
         RemoveSingleFile(Path.Combine(workspacePath, MarkerFileName), logger);
-        // Clean up legacy markers if they exist.
         RemoveSingleFile(Path.Combine(workspacePath, ".mcp-server.yaml"), logger);
         RemoveSingleFile(Path.Combine(workspacePath, ".mcp-server.json"), logger);
     }
 
-    /// <summary>Ensures <see cref="MarkerFileName"/> is listed in the workspace root's <c>.gitignore</c>.</summary>
     private static void EnsureGitIgnored(string workspacePath, ILogger? logger)
     {
         try
         {
             var gitignorePath = Path.Combine(workspacePath, ".gitignore");
-            if (File.Exists(gitignorePath))
-            {
-                var lines = File.ReadAllLines(gitignorePath);
-                if (lines.Any(l => l.Trim().Equals(MarkerFileName, StringComparison.OrdinalIgnoreCase)))
-                    return;
-            }
+            var lines = File.Exists(gitignorePath) ? File.ReadAllLines(gitignorePath) : [];
+            var missingEntries = new[] { MarkerFileName, WorkspaceStateDirectoryGitIgnoreEntry }
+                .Where(entry => !lines.Any(line => line.Trim().Equals(entry, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
 
-            File.AppendAllText(gitignorePath, $"{Environment.NewLine}{MarkerFileName}{Environment.NewLine}");
-            logger?.LogInformation("Added {Marker} to .gitignore at {Path}", MarkerFileName, gitignorePath);
+            if (missingEntries.Count == 0)
+                return;
+
+            var needsLeadingNewLine = lines.Length > 0 && !string.IsNullOrEmpty(lines[^1]);
+            var content = string.Join(Environment.NewLine, missingEntries) + Environment.NewLine;
+            if (needsLeadingNewLine)
+                content = Environment.NewLine + content;
+
+            File.AppendAllText(gitignorePath, content);
+            logger?.LogInformation("Added {Entries} to .gitignore at {Path}", string.Join(", ", missingEntries), gitignorePath);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
@@ -172,10 +155,6 @@ public static class MarkerFileService
         }
     }
 
-    /// <summary>
-    /// Resolves the final prompt by compiling global and workspace Handlebars templates
-    /// against the supplied context. Visible for testing.
-    /// </summary>
     internal static string ResolvePrompt(
         Dictionary<string, object?> templateContext,
         string? globalPromptTemplate,
@@ -193,15 +172,13 @@ public static class MarkerFileService
         return global + "\n\n" + workspace;
     }
 
-    /// <summary>
-    /// Builds the Handlebars template context dictionary from the workspace definition and runtime values.
-    /// </summary>
     internal static Dictionary<string, object?> BuildTemplateContext(
         string baseUrl,
         string? apiKey,
         WorkspaceDto? workspace,
         string workspacePath,
-        string workspaceName)
+        string workspaceName,
+        IReadOnlyList<(string AgentId, string Content)>? agentAdditions = null)
     {
         var version = Assembly.GetEntryAssembly()
             ?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
@@ -212,6 +189,13 @@ public static class MarkerFileService
             ["baseUrl"] = baseUrl,
             ["apiKey"] = apiKey ?? string.Empty,
             ["version"] = version,
+            ["agentAdditions"] = agentAdditions is { Count: > 0 }
+                ? agentAdditions.Select(x => new Dictionary<string, object?>
+                {
+                    ["agentId"] = x.AgentId,
+                    ["content"] = x.Content,
+                }).ToList()
+                : null,
             ["workspace"] = workspace is not null ? new Dictionary<string, object?>
             {
                 ["Name"] = workspace.Name,
@@ -252,14 +236,11 @@ public static class MarkerFileService
 
     private static string RenderHandlebars(string template, Dictionary<string, object?> context)
     {
-        // Normalize to LF before and after — CRLF in templates confuses Handlebars
-        // standalone-line detection, and YAML folded scalars treat \r as extra blank lines.
         var compiled = s_handlebars.Compile(template.ReplaceLineEndings("\n"));
         return compiled(context).ReplaceLineEndings("\n");
     }
 }
 
-/// <summary>Serialization model for the <c>AGENTS-README-FIRST.yaml</c> marker file.</summary>
 internal sealed class MarkerFile
 {
     public int Port { get; set; }
@@ -269,7 +250,6 @@ internal sealed class MarkerFile
     public string Workspace { get; set; } = string.Empty;
     public string WorkspacePath { get; set; } = string.Empty;
     public int Pid { get; set; }
-    // Backward-compatible marker write timestamp retained for existing consumers.
     public string StartedAt { get; set; } = string.Empty;
     public string MarkerWrittenAtUtc { get; set; } = string.Empty;
     public string ServerStartedAtUtc { get; set; } = string.Empty;
@@ -277,7 +257,6 @@ internal sealed class MarkerFile
     public string Prompt { get; set; } = string.Empty;
 }
 
-/// <summary>Well-known endpoint paths exposed by the MCP server.</summary>
 internal sealed class MarkerEndpoints
 {
     public string Health { get; set; } = string.Empty;
@@ -291,6 +270,7 @@ internal sealed class MarkerEndpoints
     public string ContextSources { get; set; } = string.Empty;
     public string Todo { get; set; } = string.Empty;
     public string Repo { get; set; } = string.Empty;
+    public string Desktop { get; set; } = string.Empty;
     public string GitHub { get; set; } = string.Empty;
     public string Tools { get; set; } = string.Empty;
     public string Workspace { get; set; } = string.Empty;

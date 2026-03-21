@@ -23,8 +23,8 @@ public sealed record AgentDefinitionDto
     /// <summary>Default AI models this agent supports.</summary>
     public IReadOnlyList<string> DefaultModels { get; init; } = [];
 
-    /// <summary>Default git branch naming strategy. Supports <c>{agent}</c> and <c>{task}</c> placeholders.</summary>
-    public string DefaultBranchStrategy { get; init; } = "feature/{agent}/{task}";
+    /// <summary>Default git branch strategy. Supported values are direct, feature-branch, and worktree.</summary>
+    public string DefaultBranchStrategy { get; init; } = "direct";
 
     /// <summary>Default seed prompt injected when the agent starts a session.</summary>
     public string DefaultSeedPrompt { get; init; } = "";
@@ -66,7 +66,7 @@ public sealed record AgentWorkspaceConfigDto
     /// <summary>PR number that must be merged/closed before the agent is unbanned.</summary>
     public int? BannedUntilPr { get; init; }
 
-    /// <summary>Isolation strategy: "worktree" or "clone".</summary>
+    /// <summary>Isolation strategy: none, worktree, or clone.</summary>
     public string AgentIsolation { get; init; } = "worktree";
 
     /// <summary>Override launch command (null = use definition default).</summary>
@@ -86,6 +86,9 @@ public sealed record AgentWorkspaceConfigDto
 
     /// <summary>Override instruction files (null = use definition default).</summary>
     public IReadOnlyList<string>? InstructionFilesOverride { get; init; }
+
+    /// <summary>Configured restart policy: never, on-failure, or always.</summary>
+    public string RestartPolicy { get; init; } = "never";
 
     /// <summary>When this agent was added to the workspace.</summary>
     public DateTime AddedAt { get; init; }
@@ -140,8 +143,6 @@ public sealed record AgentEventDto
     public DateTime Timestamp { get; init; }
 }
 
-// --- Request/Response DTOs ---
-
 /// <summary>Request to create or update an agent definition.</summary>
 public sealed record AgentDefinitionRequest
 {
@@ -160,8 +161,8 @@ public sealed record AgentDefinitionRequest
     /// <summary>Default AI models this agent supports.</summary>
     public IReadOnlyList<string> DefaultModels { get; init; } = [];
 
-    /// <summary>Default git branch naming strategy.</summary>
-    public string DefaultBranchStrategy { get; init; } = "feature/{agent}/{task}";
+    /// <summary>Default branch strategy (direct, feature-branch, worktree).</summary>
+    public string DefaultBranchStrategy { get; init; } = "direct";
 
     /// <summary>Default seed prompt injected when the agent starts a session.</summary>
     public string DefaultSeedPrompt { get; init; } = "";
@@ -176,7 +177,7 @@ public sealed record AgentWorkspaceRequest
     /// <summary>Whether this agent is enabled in the workspace.</summary>
     public bool Enabled { get; init; } = true;
 
-    /// <summary>Isolation strategy: "worktree" or "clone".</summary>
+    /// <summary>Isolation strategy: none, worktree, or clone.</summary>
     public string AgentIsolation { get; init; } = "worktree";
 
     /// <summary>Override launch command (null = use definition default).</summary>
@@ -196,6 +197,9 @@ public sealed record AgentWorkspaceRequest
 
     /// <summary>Override instruction files (null = use definition default).</summary>
     public IReadOnlyList<string>? InstructionFilesOverride { get; init; }
+
+    /// <summary>Restart policy for the runtime process.</summary>
+    public string RestartPolicy { get; init; } = "never";
 }
 
 /// <summary>Request to ban an agent.</summary>

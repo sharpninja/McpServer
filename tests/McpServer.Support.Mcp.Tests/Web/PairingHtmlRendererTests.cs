@@ -22,7 +22,7 @@ public sealed class PairingHtmlRendererTests
             .Returns(new PromptTemplate { Id = PairingHtmlRenderer.LoginPageId, Title = "test", Category = "system", Content = template });
 
         var renderer = new PairingHtmlRenderer(_templateService, _logger);
-        var result = await renderer.RenderLoginPageAsync(error: false);
+        var result = await renderer.RenderLoginPageAsync();
 
         Assert.Equal("<html><form></form></html>", result);
     }
@@ -35,7 +35,7 @@ public sealed class PairingHtmlRendererTests
             .Returns(new PromptTemplate { Id = PairingHtmlRenderer.LoginPageId, Title = "test", Category = "system", Content = template });
 
         var renderer = new PairingHtmlRenderer(_templateService, _logger);
-        var result = await renderer.RenderLoginPageAsync(error: true);
+        var result = await renderer.RenderLoginPageAsync("Invalid username or password.");
 
         Assert.Contains("Invalid username or password", result);
     }

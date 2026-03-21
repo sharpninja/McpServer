@@ -1,6 +1,7 @@
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Tests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -99,6 +100,24 @@ public sealed class GitHubCliServiceTests
         Assert.True(result.Success);
     }
 
+    /// <summary>
+    /// TEST-MCP-GH-006: Verifies that issue comment targets are emitted after an explicit end-of-options
+    /// marker so a flag-shaped identifier cannot be reinterpreted as an injected gh CLI option.
+    /// </summary>
+    [Fact]
+    public async Task CommentOnIssueAsync_WithFlagLikeIdentifier_UsesEndOfOptionsMarker()
+    {
+        _processRunner.RunAsync("gh", Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new ProcessRunResult(0, "", null));
+
+        var result = await _sut.CommentOnIssueAsync("--repo", "test comment").ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        await _processRunner.Received(1).RunAsync("gh",
+            Arg.Is<string>(a => a != null && a.Contains("issue comment --body \"test comment\" -- --repo", StringComparison.Ordinal)),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
     [Fact]
     public async Task CommentOnPullAsync_VerifiesGhArgs()
     {
@@ -109,7 +128,7 @@ public sealed class GitHubCliServiceTests
 
         Assert.True(result.Success);
         await _processRunner.Received(1).RunAsync("gh",
-            Arg.Is<string>(a => a != null && a.Contains("pr comment 42", StringComparison.Ordinal)),
+            Arg.Is<string>(a => a != null && a.Contains("pr comment --body \"PR comment\" -- 42", StringComparison.Ordinal)),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
@@ -204,6 +223,20 @@ public sealed class GitHubCliServiceTests
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 
+    /// <summary>
+    /// TEST-MCP-GH-006: Verifies that invalid close reasons are rejected before launching the GitHub CLI so
+    /// attacker-controlled query strings cannot append extra flags through the close-issue reason parameter.
+    /// </summary>
+    [Fact]
+    public async Task CloseIssueAsync_WithInvalidReason_DoesNotInvokeGh()
+    {
+        var result = await _sut.CloseIssueAsync(42, "completed --repo other/repo").ConfigureAwait(true);
+
+        Assert.False(result.Success);
+        Assert.Equal("Invalid close reason. Allowed values: completed, not_planned.", result.ErrorMessage);
+        await _processRunner.DidNotReceiveWithAnyArgs().RunAsync(default!, default!, default).ConfigureAwait(true);
+    }
+
     [Fact]
     public async Task CloseIssueAsync_WithoutReason_NoReasonFlag()
     {
@@ -231,6 +264,20 @@ public sealed class GitHubCliServiceTests
         await _processRunner.Received(1).RunAsync("gh",
             Arg.Is<string>(a => a != null && a.Contains("issue reopen 42", StringComparison.Ordinal)),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// TEST-MCP-GH-006: Verifies that invalid list-state values are rejected before process launch so state
+    /// query parameters cannot smuggle additional GitHub CLI flags into the issue-list command line.
+    /// </summary>
+    [Fact]
+    public async Task ListIssuesAsync_WithInvalidState_DoesNotInvokeGh()
+    {
+        var result = await _sut.ListIssuesAsync("open --repo other/repo", 10).ConfigureAwait(true);
+
+        Assert.False(result.Success);
+        Assert.Equal("Invalid state. Allowed values: open, closed, all.", result.Error);
+        await _processRunner.DidNotReceiveWithAnyArgs().RunAsync(default!, default!, default).ConfigureAwait(true);
     }
 
     [Fact]
@@ -373,12 +420,35 @@ public sealed class GitHubCliServiceTests
         _processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(0, "[]", null));
 
-        var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, tokenStore, accessor, options);
+        var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: "C:\\workspace");
+        var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, tokenStore, accessor, options, workspaceAccessor);
         var result = await sut.ListIssuesAsync("open", 10).ConfigureAwait(true);
 
         Assert.True(result.Success);
         await _processRunner.Received(1).RunAsync(
-            Arg.Is<ProcessRunRequest>(r => r != null && r.FileName == "gh" && r.GitHubTokenOverride == "gho_stored"),
+            Arg.Is<ProcessRunRequest>(r => r != null
+                && r.FileName == "gh"
+                && r.GitHubTokenOverride == "gho_stored"
+                && r.WorkingDirectory == Path.GetFullPath("C:\\workspace")),
+            Arg.Any<CancellationToken>()).ConfigureAwait(true);
+    }
+
+    [Fact]
+    public async Task ListIssuesAsync_WithWorkspaceAccessor_UsesWorkspaceWorkingDirectory()
+    {
+        _processRunner.RunAsync(Arg.Any<ProcessRunRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new ProcessRunResult(0, "[]", null));
+
+        var workspaceAccessor = TestWorkspaceAccessorHelper.Create(Substitute.For<ITodoService>(), repoRoot: "C:\\repo\\workspace");
+        var sut = new GitHubCliService(_processRunner, NullLogger<GitHubCliService>.Instance, workspaceAccessor: workspaceAccessor);
+
+        var result = await sut.ListIssuesAsync("open", 5).ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        await _processRunner.Received(1).RunAsync(
+            Arg.Is<ProcessRunRequest>(request => request != null
+                && request.FileName == "gh"
+                && request.WorkingDirectory == Path.GetFullPath("C:\\repo\\workspace")),
             Arg.Any<CancellationToken>()).ConfigureAwait(true);
     }
 }

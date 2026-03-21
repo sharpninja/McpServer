@@ -358,6 +358,9 @@ ASALocalRun/
 # MSBuild Binary and Structured Log
 *.binlog
 
+# Build output
+**/bin/
+
 # NVidia Nsight GPU debugger configuration file
 *.nvuser
 
@@ -486,6 +489,7 @@ $RECYCLE.BIN/
 # MCP server marker files (runtime artifacts for agent port discovery)
 .mcp-server.yaml
 .mcp-server.json
+.mcpServer/
 
 # SQLite database files (runtime data)
 *.db
@@ -505,3 +509,5 @@ AGENTS-README-FIRST.yaml
 
 # MCP Data
 mcp-data/
+/src/McpServer.Support.Mcp/Properties/launchSettings.json
+/src/McpServer.AgentFramework.SampleHost/Properties/launchSettings.json

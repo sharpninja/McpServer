@@ -1,160 +1,88 @@
-# MCP Server Guide
+# MCP Server
 
-## Overview
+Standalone repository for `McpServer.Support.Mcp`, the MCP context server used for todo management, session logs, context search, repository operations, and GitHub issue sync.
 
-## Documentation
+## What This Server Provides
 
-- [User Documentation](USER-GUIDE.md)
-- [Documentation Index](README.md)
-`McpServer.Support.Mcp` is the local MCP context server for todo data,
-session logs, context search, repo file operations, and GitHub issue sync.
+- HTTP API with Swagger UI
+- MCP over STDIO transport (`--transport stdio`)
+- Single-port multi-tenant workspace hosting via `X-Workspace-Path` header
+- Per-workspace todo storage backend (`yaml` file-backed or `sqlite` table-backed)
+- Three-tier workspace resolution: header → API key reverse lookup → default
+- Optional interaction logging and Parseable sink support
 
-Supported transports:
+## Repository Layout
 
-- HTTP REST + Swagger
-- STDIO MCP (`--transport stdio`)
+- `src/McpServer.Support.Mcp` - server application
+- `tests/McpServer.Support.Mcp.Tests` - unit/integration tests
+- `MCP-SERVER.md` - detailed operational and configuration guide
+- `scripts` - run, validate, test, migration, extension, and packaging scripts
+- `.github/workflows/mcp-server-ci.yml` - CI pipeline (build/test/artifacts/MSIX/docs quality)
+
+## Prerequisites
+
+- .NET SDK from `global.json`
+- PowerShell 7+
+- Windows SDK tools (`makeappx.exe`) for MSIX packaging
+- Optional: GitHub CLI (`gh`) for GitHub issue endpoints
 
 ## Quick Start
 
-Build and run:
+1. Restore and build:
 
 ```powershell
-.\scripts\Start-McpServer.ps1 -Configuration Staging
+dotnet restore McpServer.sln
+dotnet build McpServer.sln -c Staging
 ```
 
-Run a named instance from `appsettings`:
+1. Run the default instance:
 
 ```powershell
 .\scripts\Start-McpServer.ps1 -Configuration Staging -Instance default
 ```
 
-Run in STDIO mode:
+1. Open Swagger:
+
+```text
+http://localhost:7147/swagger
+```
+
+## Run Modes
+
+### HTTP mode
 
 ```powershell
-dotnet run --project src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj `
-  -c Staging -- --transport stdio --instance default
+dotnet run --project src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj -c Staging -- --instance default
+```
+
+### STDIO MCP mode
+
+```powershell
+dotnet run --project src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj -c Staging -- --transport stdio --instance default
 ```
 
 ## Configuration
 
-Primary section: `Mcp`.
+Primary config section: `Mcp`.
 
-Common keys:
+Important keys:
 
 - `Mcp:Port`
-- `Mcp:DataSource`
-- `Mcp:DataDirectory`
 - `Mcp:RepoRoot`
+- `Mcp:DataSource`
 - `Mcp:TodoFilePath`
 - `Mcp:TodoStorage:Provider` (`yaml` or `sqlite`)
 - `Mcp:TodoStorage:SqliteDataSource`
-- `Mcp:SessionsPath`
-- `Mcp:ExternalDocsPath`
-
-### Config Reference
-
-- `Mcp:Port` (default `7147`): HTTP port when `PORT` is not set.
-- `Mcp:DataSource` (default `mcp.db`): main SQLite DB filename or path.
-- `Mcp:DataDirectory` (default `.`): base directory for relative DB paths.
-- `Mcp:RepoRoot` (default `.`): root folder for repo-aware operations.
-- `Mcp:TodoFilePath` (default `docs/Project/TODO.yaml`):
-  YAML path relative to `RepoRoot` unless absolute.
-- `Mcp:TodoStorage:Provider` (default `yaml`):
-  todo backend (`yaml` or `sqlite`).
-- `Mcp:TodoStorage:SqliteDataSource` (default `mcp.db`):
-  SQLite path for `sqlite` todo backend.
-- `Mcp:SessionsPath` (default `docs/sessions`):
-  session log folder under `RepoRoot`.
-- `Mcp:UnifiedModelSchemaPath`
-  (default `docs/schemas/UnifiedModel.schema.json`):
-  schema file path.
-- `Mcp:ExternalDocsPath` (default `docs/external`):
-  external-doc cache folder under `RepoRoot`.
-- `Mcp:InteractionLogging:*`: request/response interaction logging controls.
-- `Mcp:Parseable:*`: Parseable sink controls.
-- `Mcp:Instances:{name}:*`: per-instance overrides (static, config-file-only instances).
-- `Mcp:Workspaces`: dynamic workspace list managed via API (see [Workspaces](#workspaces)).
+- `Mcp:GraphRag:*` (GraphRAG enablement, query defaults, backend command, concurrency)
+- `Mcp:Instances:{name}:*` (per-instance overrides)
 
 Environment overrides:
 
-- `PORT` (highest-priority runtime port override)
-- `MCP_INSTANCE` (instance selector when `--instance` is not passed)
+- `PORT` - highest-priority runtime port override
+- `MCP_INSTANCE` - instance selection when `--instance` is not passed
+- Do not keep Parseable, OAuth, or other runtime secrets in shared repo config. Inject them through environment variables, secure host configuration, or machine-local overrides.
 
-## Workspaces
-
-Workspaces are dynamic MCP instances tied to local project folders. They are stored in
-`Mcp:Workspaces` inside the active `appsettings.json` (never in the database) and managed
-entirely through the REST API — no manual config editing needed.
-
-Each workspace entry has:
-
-| Field | Required | Description |
-|-------|----------|-------------|
-| `WorkspacePath` | ✅ | Absolute path to the project folder |
-| `Name` | auto | Defaults to the last path segment |
-| `WorkspacePort` | auto | Shared with host port |
-| `TodoPath` | auto | Defaults to `docs/todo.yaml` within `WorkspacePath` |
-| `TunnelProvider` | optional | `ngrok`, `cloudflare`, or `frp` |
-
-Create a workspace:
-
-```bash
-curl -X POST http://localhost:7147/mcpserver/workspace \
-  -H "Content-Type: application/json" \
-  -d '{"workspacePath": "E:\\github\\MyProject"}'
-```
-
-The workspace is immediately accessible on the shared host port. Target it with the `X-Workspace-Path` header:
-
-```bash
-curl http://localhost:7147/mcpserver/todo \
-  -H "X-Api-Key: <token>" \
-  -H "X-Workspace-Path: E:\\github\\MyProject"
-```
-
-### Workspace Resolution
-
-All workspaces share a single port. Per-request workspace identity is resolved via a three-tier chain:
-
-1. **`X-Workspace-Path` header** — highest priority. Send the absolute workspace path.
-2. **API key reverse lookup** — the `X-Api-Key` token maps back to its workspace.
-3. **Default workspace** — falls back to the primary workspace from configuration.
-
-This eliminates per-workspace ports and simplifies agent connectivity.
-
-Workspace state is written to `{ContentRootPath}/appsettings.json` by the running process.
-For the Windows service this is `C:\ProgramData\McpServer\appsettings.json`.
-
-## Production Deployment (Windows Service)
-
-`C:\ProgramData\McpServer\appsettings.json` is the canonical Windows service configuration.
-Environment-specific appsettings files (such as `appsettings.Production.json`) are not used by
-the Windows service and should not be relied on for runtime configuration.
-
-Update the service in-place (preserves `appsettings.json` and `*.db*` files):
-
-```powershell
-gsudo .\scripts\Update-McpService.ps1
-```
-
-The script performs: stop → backup all `*.json`/`*.db*` → publish Debug build → copy binaries →
-restore backup → start → health-check → archive backup to `%USERPROFILE%\McpServer-Backups\`.
-
-## Diagnostic Endpoints (Debug / Staging only)
-
-Available in Debug builds and `Staging` environment; excluded in Production Release builds.
-
-| Method | Route | Returns |
-|--------|-------|---------|
-| `GET` | `/mcpserver/diagnostic/execution-path` | `{ processPath, baseDirectory }` |
-| `GET` | `/mcpserver/diagnostic/appsettings-path` | `{ environmentName, contentRootPath, files[] }` |
-
-Use these to verify which binary and which `appsettings.json` a running instance has loaded.
-
-Use `Mcp:Instances:{name}` to define isolated instances with unique ports,
-roots, and storage backends.
-
-Example:
+### Example `Mcp:Instances`
 
 ```json
 {
@@ -164,6 +92,7 @@ Example:
         "Port": 7147,
         "RepoRoot": ".",
         "DataSource": "mcp.db",
+        "TodoFilePath": "docs/Project/TODO.yaml",
         "TodoStorage": {
           "Provider": "yaml",
           "SqliteDataSource": "mcp.db"
@@ -173,6 +102,7 @@ Example:
         "Port": 7157,
         "RepoRoot": "temp_test",
         "DataSource": "mcp-alt.db",
+        "TodoFilePath": "docs/Project/TODO.yaml",
         "TodoStorage": {
           "Provider": "sqlite",
           "SqliteDataSource": "mcp-alt.db"
@@ -183,55 +113,103 @@ Example:
 }
 ```
 
-Selection:
+## Multi-Instance and Storage Validation
 
-- CLI: `--instance <name>`
-- ENV: `MCP_INSTANCE=<name>`
-
-Validation:
-
-- Duplicate instance ports are rejected at startup.
-- Missing `RepoRoot` or non-numeric `Port` is rejected at startup.
-
-Run two servers concurrently:
+Run two configured instances:
 
 ```powershell
 .\scripts\Start-McpServer.ps1 -Configuration Staging -Instance default
 .\scripts\Start-McpServer.ps1 -Configuration Staging -Instance alt-local
 ```
 
-Automated two-instance smoke test:
+Smoke test both instances:
 
 ```powershell
-.\scripts\Test-McpMultiInstance.ps1 -Configuration Staging `
-  -FirstInstance default -SecondInstance alt-local
+.\scripts\Test-McpMultiInstance.ps1 -Configuration Staging -FirstInstance default -SecondInstance alt-local
 ```
 
-Expected endpoints:
-
-- `default` -> `http://localhost:7147/swagger`
-- `alt-local` -> `http://localhost:7157/swagger`
-
-## Todo Storage Backends
-
-Backends:
-
-- `yaml`: reads and writes configured `TodoFilePath`
-- `sqlite`: stores todo items in SQLite (`todo_items` table)
-
-Backend is selected per instance via `Mcp:Instances:{name}:TodoStorage`.
-
-Migrate between backends:
+Migrate todo data between backends:
 
 ```powershell
-.\scripts\Migrate-McpTodoStorage.ps1 `
-  -SourceBaseUrl http://localhost:7147 `
-  -TargetBaseUrl http://localhost:7157
+.\scripts\Migrate-McpTodoStorage.ps1 -SourceBaseUrl http://localhost:7147 -TargetBaseUrl http://localhost:7157
+```
+
+## Common Scripts
+
+- `scripts/Start-McpServer.ps1` - build/run server with optional `-Instance`
+- `scripts/Run-McpServer.ps1` - direct local run helper
+- `scripts/Update-McpService.ps1` - stop, publish Debug build, restore config/data, restart, health-check Windows service
+- `scripts/Validate-McpConfig.ps1` - config validation
+- `scripts/Test-McpMultiInstance.ps1` - two-instance smoke test
+- `scripts/Test-GraphRagSmoke.ps1` - GraphRAG status/index/query smoke validation
+- `scripts/Migrate-McpTodoStorage.ps1` - todo backend migration
+- `scripts/Package-McpServerMsix.ps1` - publish and package MSIX
+
+## GraphRAG
+
+GraphRAG is workspace-scoped and disabled by default. When enabled, it can enhance `/mcpserver/context/search` and is also exposed directly through:
+
+- `GET /mcpserver/graphrag/status`
+- `POST /mcpserver/graphrag/index`
+- `POST /mcpserver/graphrag/query`
+
+Key behavior:
+
+- Per-workspace GraphRAG state under `Mcp:GraphRag:RootPath`
+- Index locking per workspace (single active index job by default)
+- Explicit status lifecycle fields (`state`, `activeJobId`, failure metadata, artifact version)
+- Fallback to context search when GraphRAG is disabled, uninitialized, not indexed, or backend execution fails
+- Do not store backend secrets in repo config; inject runtime secrets via environment or secure host configuration
+
+Example config:
+
+```json
+{
+  "Mcp": {
+    "GraphRag": {
+      "Enabled": true,
+      "EnhanceContextSearch": true,
+      "RootPath": "mcp-data/graphrag",
+      "DefaultQueryMode": "local",
+      "DefaultMaxChunks": 20,
+      "IndexTimeoutSeconds": 600,
+      "QueryTimeoutSeconds": 120,
+      "BackendCommand": "",
+      "BackendArgs": "{operation} --graphRoot {graphRoot} --workspace {workspacePath}",
+      "MaxConcurrentIndexJobsPerWorkspace": 1,
+      "ArtifactVersion": "v1"
+    }
+  }
+}
+```
+
+### GraphRAG Observability
+
+Track these operational indicators during rollout:
+
+- Index duration (`lastIndexDurationMs`) and active job contention (`index_conflict`)
+- Fallback rate (`fallbackUsed` and `fallbackReason`) per query mode
+- Failure categories (`failureCode`) and backend stderr patterns
+- Indexed corpus drift (`lastIndexedDocumentCount` vs expected input volume)
+
+### GraphRAG Rollout Checklist
+
+1. Keep `Mcp:GraphRag:Enabled=false` in shared defaults.
+2. Enable GraphRAG in one pilot workspace and run `scripts/Test-GraphRagSmoke.ps1`.
+3. Verify fallback rate and failure codes remain acceptable under real workload.
+4. Expand enablement workspace-by-workspace.
+5. Keep external backend optional; if unavailable, ensure fallback path remains healthy.
+
+## Build and Test
+
+```powershell
+dotnet build McpServer.sln -c Staging
+dotnet test tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj -c Debug
 ```
 
 ## API Surface
 
-Primary controllers:
+Main endpoints:
 
 - `/mcpserver/todo`
 - `/mcpserver/sessionlog`
@@ -239,59 +217,62 @@ Primary controllers:
 - `/mcpserver/repo`
 - `/mcpserver/gh`
 - `/mcpserver/sync`
-
-Swagger:
-
+- `/health`
 - `/swagger`
 
-## Operations Runbook
+## CI/CD
 
-Update service in-place:
+Workflow: `.github/workflows/mcp-server-ci.yml`
+
+Pipeline jobs include:
+
+- restore/build/test
+- config validation
+- OpenAPI artifact generation
+- publish artifact upload
+- Windows MSIX packaging
+- markdown lint and link checking for docs
+
+## VS Code / VS 2026 Extensions
+
+Extension sources and packaging scripts live in:
+
+- `extensions/fwh-mcp-todo` (legacy name)
+- `extensions/McpServer-mcp-todo`
+- `scripts/Package-Vsix.ps1`
+- `scripts/Build-AndInstall-Vsix.ps1`
+
+## Client Library
+
+A typed REST client is available as a NuGet package for consuming the MCP Server API:
 
 ```powershell
-gsudo .\scripts\Update-McpService.ps1
+dotnet add package SharpNinja.McpServer.Client
 ```
 
-Health checks:
+```csharp
+// With DI
+builder.Services.AddMcpServerClient(options =>
+{
+    options.BaseUrl = new Uri("http://localhost:7147");
+    options.ApiKey = "your-api-key"; // optional
+});
 
-1. Open `/swagger` and `/health`.
-2. Test todo read/write with `/mcpserver/todo`.
-3. Test context search with `/mcpserver/context/search`.
-4. For GitHub integration, run `gh auth status` on the host.
+// Without DI
+var client = McpServerClientFactory.Create(new McpServerClientOptions
+{
+    BaseUrl = new Uri("http://localhost:7147"),
+});
+```
 
-Log signals:
+Covers all API endpoints: Todo, Context, SessionLog, GitHub, Repo, Sync, Workspace, and Tools.
 
-- Startup shows selected mode and configured sinks.
-- Interaction logging middleware captures request/response metadata.
+Source: `src/McpServer.Client/` — see the [package README](#) for full usage.
 
-## Troubleshooting
+## Additional Documentation
 
-- Port already in use:
-  change `Mcp:Port` (or instance `Port`) or stop conflicting process.
-- Wrong root folder:
-  verify `RepoRoot` on the selected instance.
-- Todo not found:
-  - YAML: verify `TodoFilePath` exists relative to `RepoRoot`.
-  - SQLite: verify `SqliteDataSource` path and file permissions.
-- STDIO tools unavailable:
-  ensure server started with `--transport stdio`.
+- User documentation: `USER-GUIDE.md`
+- Documentation index: `README.md`
+- FAQ: `FAQ.md`
 
-## Build and CI
-
-Workflow: `.github/workflows/mcp-server-ci.yml`.
-
-Pipeline responsibilities:
-
-- Restore, build, and test server + tests
-- Publish build artifact
-- Run markdown and link checks
-
-## Packaging (MSIX)
-
-Script:
-
-- `scripts/Package-McpServerMsix.ps1`
-
-The script publishes output, writes a minimal Appx manifest, and creates an
-`.msix` package with `makeappx.exe`.
 

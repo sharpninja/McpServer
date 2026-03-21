@@ -10,6 +10,17 @@ Describe 'McpSession Module' {
 
     # Reset module state between tests
     BeforeEach {
+        $workspaceRoot = Join-Path $TestDrive 'workspace'
+        New-Item $workspaceRoot -ItemType Directory -Force | Out-Null
+
+        InModuleScope McpSession -Parameters @{ WorkspaceRoot = $workspaceRoot } {
+            param($WorkspaceRoot)
+            $script:McpWorkspacePath = $WorkspaceRoot
+            $script:McpSessionAgent = $null
+            $script:McpSessionModel = $null
+            $script:McpSessionSlug = $null
+        }
+
         InModuleScope McpSession {
             $script:McpBaseUrl = $null
             $script:McpApiKey  = $null
@@ -21,7 +32,7 @@ Describe 'McpSession Module' {
 
     Describe 'Initialize-McpSession' {
         It 'sets connection from explicit BaseUrl and ApiKey' {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'test-key'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'test-key'
             InModuleScope McpSession {
                 $script:McpBaseUrl | Should -Be 'http://test:9999'
                 $script:McpApiKey  | Should -Be 'test-key'
@@ -31,7 +42,7 @@ Describe 'McpSession Module' {
         }
 
         It 'trims trailing slash from BaseUrl' {
-            Initialize-McpSession -BaseUrl 'http://test:9999/' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999/' -ApiKey 'k'
             InModuleScope McpSession { $script:McpBaseUrl | Should -Be 'http://test:9999' }
         }
 
@@ -44,7 +55,7 @@ apiKey: marker-key-456
 workspace: demo
 "@ | Set-Content $marker
 
-            Initialize-McpSession -MarkerPath $marker
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -MarkerPath $marker
             InModuleScope McpSession {
                 $script:McpBaseUrl | Should -Be 'http://marker-host:7150'
                 $script:McpApiKey  | Should -Be 'marker-key-456'
@@ -52,25 +63,25 @@ workspace: demo
         }
 
         It 'discovers marker by walking up from current directory' {
-            $sub = Join-Path $TestDrive 'a' 'b' 'c'
+            $sub = Join-Path (Join-Path (Join-Path $TestDrive 'a') 'b') 'c'
             New-Item $sub -ItemType Directory -Force | Out-Null
             $marker = Join-Path $TestDrive 'AGENTS-README-FIRST.yaml'
             "baseUrl: http://walk:1234`napiKey: walk-key" | Set-Content $marker
 
             Push-Location $sub
             try {
-                Initialize-McpSession
+                Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex'
                 InModuleScope McpSession { $script:McpBaseUrl | Should -Be 'http://walk:1234' }
             } finally { Pop-Location }
         }
 
         It 'throws when marker file not found and no explicit params' {
             # Use a temp dir outside TestDrive to avoid walk-up finding markers from other tests
-            $isolatedDir = Join-Path ([System.IO.Path]::GetTempPath()) "pester-no-marker-$(New-Guid)"
+            $isolatedDir = Join-Path ([System.IO.Path]::GetTempPath()) ("pester-no-marker-" + [guid]::NewGuid().ToString())
             New-Item $isolatedDir -ItemType Directory -Force | Out-Null
             Push-Location $isolatedDir
             try {
-                { Initialize-McpSession } | Should -Throw '*not found*'
+                { Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' } | Should -Throw '*not found*'
             } finally {
                 Pop-Location
                 Remove-Item $isolatedDir -Recurse -Force
@@ -78,7 +89,7 @@ workspace: demo
         }
 
         It 'calls the health endpoint' {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
                 $Uri -eq 'http://test:9999/health'
             }
@@ -104,9 +115,21 @@ workspace: demo
 
     # ── New-McpSessionLog ─────────────────────────────────────────────────────
 
+    Describe 'New-McpSessionLogSlug' {
+        It 'builds canonical slug from agent, timestamp, and model' {
+            $timestamp = [datetime]::Parse('2026-03-07T13:58:44Z')
+            $slug = New-McpSessionLogSlug -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -TimestampUtc $timestamp
+            $slug | Should -Be 'Copilotcli-20260307T135844Z-gpt-5-3-codex'
+        }
+
+        It 'throws when agent is not in canonical form' {
+            { New-McpSessionLogSlug -Agent 'copilot' -Model 'gpt-5.3-codex' } | Should -Throw '*must match*'
+        }
+    }
+
     Describe 'New-McpSessionLog' {
         BeforeEach {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
         }
 
         It 'returns session with correct properties' {
@@ -121,12 +144,16 @@ workspace: demo
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
             $s.turns.GetType().Name | Should -BeLike 'List*'
             $s.turns.Count | Should -Be 0
-            $s.entries.Count | Should -Be 0
+            $s.turns.Count | Should -Be 0
         }
 
         It 'auto-generates sessionId with source prefix' {
+            InModuleScope McpSession {
+                $script:McpSessionSlug = $null
+            }
+
             $s = New-McpSessionLog -SourceType 'Copilot' -Title 't' -Model 'm'
-            $s.sessionId | Should -BeLike 'Copilot-*'
+            $s.sessionId | Should -Match '^Copilot-\d{8}T\d{6}Z-m$'
             $s.sessionId.Length | Should -BeGreaterThan 10
         }
 
@@ -148,7 +175,7 @@ workspace: demo
             }
         }
 
-        It 'posts canonical entries payload (not turns) to server' {
+        It 'posts canonical turns payload to server' {
             $script:capturedBody = $null
             Mock Invoke-RestMethod {
                 param($Uri, $Method, $Body)
@@ -159,8 +186,10 @@ workspace: demo
             } -ModuleName McpSession
 
             New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm' | Out-Null
-            $script:capturedBody | Should -Match '"entries"'
-            $script:capturedBody | Should -Not -Match '"turns"'
+            $script:capturedBody | Should -Match '"turns"'
+            $script:capturedBody | Should -Not -Match '"entries"'
+            $script:capturedBody | Should -Match '"turnCount"'
+            $script:capturedBody | Should -Not -Match '"entryCount"'
         }
     }
 
@@ -168,7 +197,7 @@ workspace: demo
 
     Describe 'Add-McpSessionTurn' {
         BeforeEach {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
         }
 
         It 'adds turn to session turns list' {
@@ -185,14 +214,14 @@ workspace: demo
             $e.status | Should -Be 'in_progress'
         }
 
-        It 'auto-generates sequential requestIds' {
+        It 'auto-generates canonical requestIds' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
             $e1 = Add-McpSessionTurn -Session $s -QueryTitle 'First' -QueryText 'q1' -NoPush
             $e2 = Add-McpSessionTurn -Session $s -QueryTitle 'Second' -QueryText 'q2' -NoPush
             $e3 = Add-McpSessionTurn -Session $s -QueryTitle 'Third' -QueryText 'q3' -NoPush
-            $e1.requestId | Should -Be 'req-001'
-            $e2.requestId | Should -Be 'req-002'
-            $e3.requestId | Should -Be 'req-003'
+            $e1.requestId | Should -Match '^req-\d{8}T\d{6}Z-first$'
+            $e2.requestId | Should -Match '^req-\d{8}T\d{6}Z-second$'
+            $e3.requestId | Should -Match '^req-\d{8}T\d{6}Z-third$'
         }
 
         It 'inherits model from session' {
@@ -234,28 +263,28 @@ workspace: demo
 
     Describe 'Set-McpSessionTurn' {
         BeforeEach {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
         }
 
         It 'updates response field' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
             $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
-            Set-McpSessionTurn -Turn $e -Response 'All done!' -NoPush
+            Set-McpSessionTurn -Turn $e -Session $s -Response 'All done!' -NoPush
             $e.response | Should -Be 'All done!'
         }
 
         It 'updates status field' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
             $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
-            Set-McpSessionTurn -Turn $e -Status completed -NoPush
+            Set-McpSessionTurn -Turn $e -Session $s -Status completed -NoPush
             $e.status | Should -Be 'completed'
         }
 
         It 'appends to filesModified' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
             $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
-            Set-McpSessionTurn -Turn $e -FilesModified @('a.cs', 'b.cs') -NoPush
-            Set-McpSessionTurn -Turn $e -FilesModified @('c.cs') -NoPush
+            Set-McpSessionTurn -Turn $e -Session $s -FilesModified @('a.cs', 'b.cs') -NoPush
+            Set-McpSessionTurn -Turn $e -Session $s -FilesModified @('c.cs') -NoPush
             $e.filesModified.Count | Should -Be 3
             $e.filesModified[2]    | Should -Be 'c.cs'
         }
@@ -263,7 +292,7 @@ workspace: demo
         It 'appends to designDecisions' {
             $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
             $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
-            Set-McpSessionTurn -Turn $e -DesignDecisions @('Use JWT', 'Skip caching') -NoPush
+            Set-McpSessionTurn -Turn $e -Session $s -DesignDecisions @('Use JWT', 'Skip caching') -NoPush
             $e.designDecisions.Count | Should -Be 2
         }
 
@@ -282,7 +311,7 @@ workspace: demo
 
     Describe 'Add-McpAction' {
         BeforeEach {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
         }
 
         It 'adds action with auto-incrementing order' {
@@ -336,13 +365,57 @@ workspace: demo
                 $Method -eq 'Post' -and $Uri -like '*/mcpserver/sessionlog'
             }
         }
+
+        It 'normalizes persisted fixed-size action arrays before appending' {
+            $workspaceRoot = Join-Path $TestDrive 'workspace'
+            New-Item $workspaceRoot -ItemType Directory -Force | Out-Null
+
+            InModuleScope McpSession -Parameters @{ WorkspaceRoot = $workspaceRoot } {
+                param($WorkspaceRoot)
+                $script:McpWorkspacePath = $WorkspaceRoot
+            }
+
+            $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
+            $e = Add-McpSessionTurn -Session $s -QueryTitle 'q' -QueryText 'q' -NoPush
+
+            $statePath = Join-Path $workspaceRoot '.mcpServer\session.yaml'
+            $persisted = Get-Content -LiteralPath $statePath -Raw | ConvertFrom-Json -Depth 50
+            $persistedSession = $persisted.session
+            $persistedSession.PSObject.Properties.Name | Should -Contain 'turns'
+            $persistedSession.PSObject.Properties.Name | Should -Contain 'turnCount'
+            $persistedSession.PSObject.Properties.Name | Should -Not -Contain 'entries'
+            $persistedSession.PSObject.Properties.Name | Should -Not -Contain 'entryCount'
+            $persistedTurn = $persistedSession.turns[0]
+
+            { Add-McpAction -Turn $persistedTurn -Session $persistedSession -Description 'Recovered from persisted state' -Type edit -NoPush } | Should -Not -Throw
+            $persistedTurn.actions.Count | Should -Be 1
+            $persistedTurn.actions[0].description | Should -Be 'Recovered from persisted state'
+        }
     }
 
     # ── Update-McpSessionLog ──────────────────────────────────────────────────
 
     Describe 'Update-McpSessionLog' {
         BeforeEach {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
+        }
+
+        It 'deletes .mcpServer/session.yaml when status becomes completed' {
+            $workspaceRoot = Join-Path $TestDrive 'workspace'
+            $stateDir = Join-Path $workspaceRoot '.mcpServer'
+            $statePath = Join-Path $stateDir 'session.yaml'
+            New-Item $stateDir -ItemType Directory -Force | Out-Null
+            '{}' | Set-Content $statePath
+
+            InModuleScope McpSession -Parameters @{ WorkspaceRoot = $workspaceRoot } {
+                param($WorkspaceRoot)
+                $script:McpWorkspacePath = $WorkspaceRoot
+            }
+
+            $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
+            Update-McpSessionLog -Session $s -Status completed
+
+            Test-Path $statePath | Should -BeFalse
         }
 
         It 'updates lastUpdated timestamp' {
@@ -385,7 +458,7 @@ workspace: demo
 
     Describe 'Get-McpSessionLog' {
         BeforeEach {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
         }
 
         It 'uses default limit=5 and offset=0' {
@@ -407,7 +480,7 @@ workspace: demo
 
     Describe 'Send-McpDialog' {
         BeforeEach {
-            Initialize-McpSession -BaseUrl 'http://test:9999' -ApiKey 'k'
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
         }
 
         It 'posts to the correct dialog endpoint' {

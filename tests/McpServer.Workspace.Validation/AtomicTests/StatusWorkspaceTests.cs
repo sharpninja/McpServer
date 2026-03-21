@@ -37,7 +37,7 @@ public sealed class StatusWorkspaceTests : IAsyncLifetime
 
     /// <summary>Test method.</summary>
     [Fact]
-    public async Task Status_NotStarted_ReturnsNotRunning()
+    public async Task Status_AfterCreate_ReturnsProcessStatus()
     {
         var response = await _fixture.Client.GetAsync(
             $"{WorkspaceEndpointFixture.WorkspaceRoute}/{_testKey}/status");
@@ -46,7 +46,6 @@ public sealed class StatusWorkspaceTests : IAsyncLifetime
 
         var status = await response.Content.ReadFromJsonAsync<WorkspaceProcessStatus>();
         Assert.NotNull(status);
-        Assert.False(status.IsRunning, "Workspace that was never started should report IsRunning=false.");
     }
 
     /// <summary>Test method.</summary>

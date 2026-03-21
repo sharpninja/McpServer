@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ namespace McpServer.Support.Mcp.Controllers;
 [Route("mcpserver/voice")]
 public sealed class VoiceController : ControllerBase
 {
-    private static readonly JsonSerializerOptions s_sseJsonOptions = new(JsonSerializerDefaults.Web) { WriteIndented = false };
+    private static readonly JsonSerializerOptions s_sseJsonOptions = new(JsonSerializerDefaults.Web) { WriteIndented = false, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
 
     private readonly IVoiceConversationService _voiceService;
     private readonly WorkspaceContext _workspaceContext;
@@ -37,10 +38,6 @@ public sealed class VoiceController : ControllerBase
     {
         try
         {
-            // Workspace resolution is enforced by WorkspaceResolutionMiddleware —
-            // if we get here, the workspace is valid.
-
-            // Stamp the resolved workspace path so Copilot launches with the correct CWD
             request ??= new VoiceSessionCreateRequest();
             if (string.IsNullOrWhiteSpace(request.WorkspacePath))
                 request.WorkspacePath = _workspaceContext.WorkspacePath;
@@ -52,6 +49,11 @@ public sealed class VoiceController : ControllerBase
         {
             _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new { error = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            return BadRequest(new { error = ex.Message });
         }
     }
 
@@ -107,11 +109,6 @@ public sealed class VoiceController : ControllerBase
             _logger.LogWarning("{ExceptionDetail}", ex.ToString());
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new { error = ex.Message });
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Voice turn request failed for session {SessionId}", sessionId);
-            return StatusCode(StatusCodes.Status500InternalServerError, new { error = "Voice turn processing failed." });
-        }
     }
 
     /// <summary>
@@ -130,6 +127,29 @@ public sealed class VoiceController : ControllerBase
             return;
         }
 
+        try
+        {
+            _ = await _voiceService.SendSessionMessageAsync(sessionId, "User is here.", cancellationToken).ConfigureAwait(false);
+        }
+        catch (ArgumentException ex)
+        {
+            Response.StatusCode = StatusCodes.Status400BadRequest;
+            await Response.WriteAsJsonAsync(new { error = ex.Message }, cancellationToken).ConfigureAwait(false);
+            return;
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException)
+        {
+            _logger.LogError(ex, "Streaming voice turn failed before SSE setup for session {SessionId}", sessionId);
+            Response.ContentType = "text/event-stream";
+            Response.Headers.CacheControl = "no-cache";
+            Response.Headers.Connection = "keep-alive";
+            Response.Headers["X-Accel-Buffering"] = "no";
+            var json = JsonSerializer.Serialize(new VoiceTurnStreamEvent { Type = "error", Message = $"Voice turn processing failed. {ex.Message}" }, s_sseJsonOptions);
+            await Response.WriteAsync($"data: {json}\n\n", cancellationToken).ConfigureAwait(false);
+            await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
+            return;
+        }
+
         Response.ContentType = "text/event-stream";
         Response.Headers.CacheControl = "no-cache";
         Response.Headers.Connection = "keep-alive";
@@ -137,7 +157,6 @@ public sealed class VoiceController : ControllerBase
 
         _logger.LogInformation("SSE stream starting for session {SessionId}", sessionId);
         var eventCount = 0;
-        _ = await _voiceService.SendSessionMessageAsync(sessionId, "User is here.", cancellationToken).ConfigureAwait(false);
 
         try
         {
@@ -166,14 +185,23 @@ public sealed class VoiceController : ControllerBase
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
             _logger.LogError(ex, "Streaming voice turn failed for session {SessionId} after {EventCount} events", sessionId, eventCount);
-            var json = JsonSerializer.Serialize(new VoiceTurnStreamEvent { Type = "error", Message = "Voice turn processing failed." }, s_sseJsonOptions);
+            var json = JsonSerializer.Serialize(new VoiceTurnStreamEvent { Type = "error", Message = $"Voice turn stream failed after {eventCount} events: {ex.Message}" }, s_sseJsonOptions);
             await Response.WriteAsync($"data: {json}\n\n", cancellationToken).ConfigureAwait(false);
             await Response.Body.FlushAsync(cancellationToken).ConfigureAwait(false);
         }
         finally
         {
             if (HttpContext.RequestAborted.IsCancellationRequested)
-                _ = await _voiceService.SendSessionMessageAsync(sessionId, "User is AFK.", CancellationToken.None).ConfigureAwait(false);
+            {
+                try
+                {
+                    _ = await _voiceService.SendSessionMessageAsync(sessionId, "User is AFK.", CancellationToken.None).ConfigureAwait(false);
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException)
+                {
+                    _logger.LogWarning(ex, "Failed to send AFK presence message for session {SessionId}", sessionId);
+                }
+            }
         }
     }
 
@@ -198,8 +226,7 @@ public sealed class VoiceController : ControllerBase
     }
 
     /// <summary>
-    /// Sends three ESC characters to the active Copilot interactive session stdin,
-    /// cancelling the current generation without ending the session.
+    /// Sends three ESC characters to the active Copilot interactive session stdin, cancelling the current generation.
     /// </summary>
     [HttpPost("session/{sessionId}/escape")]
     public async Task<IActionResult> SendEscapeAsync(string sessionId, CancellationToken cancellationToken)

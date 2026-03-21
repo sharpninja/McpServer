@@ -18,7 +18,7 @@ Invoke-RestMethod -Uri "http://localhost:7147/mcpserver/tools/search?keyword=tod
 # 2. Import and initialize
 Import-Module ./McpSession.psm1
 Import-Module ./McpTodo.psm1
-Initialize-McpSession          # reads marker file, verifies server health
+Initialize-McpSession -Agent "Copilotcli" -Model "gpt-5.3-codex"  # reads marker file, verifies server health, persists/reuses session state
 Initialize-McpTodo             # reads marker file, verifies server health
 ```
 

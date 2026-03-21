@@ -296,13 +296,13 @@ public sealed class AuditedCopilotClient : ICopilotClient
                 Started = now.ToString("o", CultureInfo.InvariantCulture),
                 LastUpdated = now.ToString("o", CultureInfo.InvariantCulture),
                 Status = status,
-                EntryCount = 1,
+                TurnCount = 1,
                 Workspace = new WorkspaceInfoDto
                 {
                     Project = workspaceName,
                     Repository = target.WorkspacePath,
                 },
-                Entries =
+                Turns =
                 [
                     new UnifiedRequestEntryDto
                     {

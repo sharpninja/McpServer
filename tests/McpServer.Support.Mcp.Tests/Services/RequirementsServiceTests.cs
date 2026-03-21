@@ -1,6 +1,8 @@
 using McpServer.Common.Copilot;
+using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
 
@@ -186,5 +188,52 @@ public sealed class RequirementsServiceTests
         Assert.Equal(2, trs.Count);
 
         await Task.CompletedTask.ConfigureAwait(true);
+    }
+
+    [Fact]
+    public async Task AnalyzeAsync_UsesInfiniteCopilotTimeout()
+    {
+        var todo = new TodoFlatItem
+        {
+            Id = "TODO-1",
+            Title = "Analyze me",
+            Section = "mvp-app",
+            Priority = "high",
+            Done = false,
+            Description = ["Needs long-running Copilot analysis."],
+        };
+        var todoService = Substitute.For<ITodoService>();
+        todoService.GetByIdAsync("TODO-1", Arg.Any<CancellationToken>()).Returns(todo);
+        todoService.UpdateAsync("TODO-1", Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new TodoMutationResult(true));
+
+        var accessor = TestWorkspaceAccessorHelper.Create(todoService);
+        var promptOptions = Substitute.For<IOptionsMonitor<TodoPromptOptions>>();
+        promptOptions.CurrentValue.Returns(new TodoPromptOptions());
+
+        CopilotClientOptions? capturedOptions = null;
+        var copilotClient = Substitute.For<ICopilotClient>();
+        copilotClient.InvokeAsync(Arg.Any<string>(), Arg.Any<CopilotClientOptions?>(), Arg.Any<CancellationToken>())
+            .Returns(callInfo =>
+            {
+                capturedOptions = callInfo.ArgAt<CopilotClientOptions?>(1);
+                return new CopilotResult
+                {
+                    State = CopilotResultState.Success,
+                    Body = """{"functionalRequirements":["FR-TODO-001"],"technicalRequirements":["TR-TODO-001"]}""",
+                };
+            });
+
+        var sut = new RequirementsService(
+            copilotClient,
+            accessor,
+            promptOptions,
+            NullLogger<RequirementsService>.Instance);
+
+        var result = await sut.AnalyzeAsync("TODO-1").ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        Assert.NotNull(capturedOptions);
+        Assert.Equal(Timeout.InfiniteTimeSpan, capturedOptions!.Timeout);
     }
 }

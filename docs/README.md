@@ -1,9 +1,16 @@
 # Documentation Index
 
-- [MCP Server Guide](MCP-SERVER.md)
 - [MCP Server User Documentation](USER-GUIDE.md)
+- [Installation & prerequisites](USER-GUIDE.md#1-installation-and-prerequisites)
+- [Configuration reference](USER-GUIDE.md#2-configuration-reference-appsettings--marker-file)
+- [REST API reference](USER-GUIDE.md#3-rest-api-reference-all-controllers)
+- [MCP tool catalog](USER-GUIDE.md#4-mcp-tool-catalog-stdio-tools)
+- [GraphRAG setup and usage](USER-GUIDE.md#5-graphrag-setup-and-usage)
+- [Agent pool and workspace multi-tenancy guide](USER-GUIDE.md#6-agent-pool-and-workspace-multi-tenancy)
+- [Troubleshooting / FAQ](USER-GUIDE.md#7-troubleshooting-and-faq)
+- [Documentation index and wiring](USER-GUIDE.md#8-wire-docs-into-readme-index-and-docs-folder)
+- [MCP Server Guide](MCP-SERVER.md)
 - [FAQ](FAQ.md)
-
 - [Client Integration](CLIENT-INTEGRATION.md)
 - [Context Reference](context/api-capabilities.md)
 - [Project Requirements](Project/Requirements-Matrix.md)

@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Configurations>Debug;Release;Staging</Configurations>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+    <RootNamespace>McpServer.McpAgent</RootNamespace>
+    <PackageId>SharpNinja.McpServer.McpAgent</PackageId>
+    <Authors>SharpNinja</Authors>
+    <Description>MCP Agent integration for MCP Server, built on Microsoft Agent Framework, with built-in session-log, TODO, repository, desktop, and local PowerShell workflow support.</Description>
+    <PackageProjectUrl>https://github.com/sharpninja/McpServer</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sharpninja/McpServer</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryBranch>main</RepositoryBranch>
+    <PackageTags>mcp;agent-framework;ai-agent;workflow</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReleaseNotes>MCP-AGENT-001: adds hosted-agent registration, session-log and TODO workflows, repository and desktop tools, local PowerShell sessions, ChatClientAgent-ready tool adapters, and an interactive sample host.</PackageReleaseNotes>
+    <ReadmeFile>README.md</ReadmeFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\McpServer.Client\McpServer.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Agents.AI" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+    <PackageReference Include="Microsoft.PowerShell.SDK" />
+  </ItemGroup>
+</Project>

@@ -35,12 +35,14 @@ public sealed class FwhMcpTools
     private readonly ISessionLogService _sessionLogService;
     private readonly IGitHubCliService _gitHubCliService;
     private readonly IRequirementsDocumentService _requirementsDocumentService;
-    private readonly IProcessRunner _processRunner;
+    private readonly DesktopLaunchService _desktopLaunchService;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly WorkspaceContext _workspaceContext;
     private readonly IWorkspaceService _workspaceService;
     private readonly IWorkspacePolicyService _workspacePolicyService;
     private readonly TodoServiceResolver _todoServiceResolver;
+    private readonly TodoCreationService _todoCreationService;
+    private readonly TodoUpdateService _todoUpdateService;
     private readonly IPromptTemplateService _promptTemplateService;
     private readonly ILogger<FwhMcpTools> _logger;
 
@@ -57,12 +59,14 @@ public sealed class FwhMcpTools
         ISessionLogService sessionLogService,
         IGitHubCliService gitHubCliService,
         IRequirementsDocumentService requirementsDocumentService,
-        IProcessRunner processRunner,
+        DesktopLaunchService desktopLaunchService,
         IHttpContextAccessor httpContextAccessor,
         WorkspaceContext workspaceContext,
         IWorkspaceService workspaceService,
         IWorkspacePolicyService workspacePolicyService,
         TodoServiceResolver todoServiceResolver,
+        TodoCreationService todoCreationService,
+        TodoUpdateService todoUpdateService,
         IPromptTemplateService promptTemplateService,
         ILogger<FwhMcpTools> logger)
     {
@@ -78,12 +82,14 @@ public sealed class FwhMcpTools
         _sessionLogService = sessionLogService;
         _gitHubCliService = gitHubCliService;
         _requirementsDocumentService = requirementsDocumentService;
-        _processRunner = processRunner;
+        _desktopLaunchService = desktopLaunchService;
         _httpContextAccessor = httpContextAccessor;
         _workspaceContext = workspaceContext;
         _workspaceService = workspaceService;
         _workspacePolicyService = workspacePolicyService;
         _todoServiceResolver = todoServiceResolver;
+        _todoCreationService = todoCreationService;
+        _todoUpdateService = todoUpdateService;
         _promptTemplateService = promptTemplateService;
     }
 
@@ -212,6 +218,48 @@ public sealed class FwhMcpTools
             .Select(d => new { d.SourceKey, d.SourceType, d.IngestedAt })
             .ToListAsync(cancellationToken).ConfigureAwait(false);
         return JsonSerializer.Serialize(new { sources });
+    }
+
+    /// <summary>FR-MCP-065, TR-MCP-INGEST-003: Ingest context directly from a website URL.</summary>
+    [McpServerTool(Name = "context_ingest_website"), Description("Ingest context directly from a website URL with bounded crawl controls.")]
+    public async Task<string> ContextIngestWebsite(
+        [Description("Website URL to ingest")] string url,
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Crawl same-host subpages")] bool includeSubpages = false,
+        [Description("Maximum pages to fetch (default 20)")] int maxPages = 20,
+        [Description("Maximum crawl depth when subpages are enabled (default 1)")] int maxDepth = 1,
+        [Description("Maximum bytes downloaded per page (default 262144)")] int maxBytesPerPage = 262144,
+        [Description("Force refresh semantics for existing documents")] bool forceRefresh = false,
+        [Description("Trigger GraphRAG index after ingest")] bool triggerGraphRagIndex = false,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _coordinator.IngestWebsiteAsync(new WebsiteIngestRequest
+        {
+            Url = url,
+            IncludeSubpages = includeSubpages,
+            MaxPages = maxPages,
+            MaxDepth = maxDepth,
+            MaxBytesPerPage = maxBytesPerPage,
+            ForceRefresh = forceRefresh,
+            TriggerGraphRagIndex = triggerGraphRagIndex,
+        }, cancellationToken).ConfigureAwait(false);
+
+        if (triggerGraphRagIndex)
+        {
+            try
+            {
+                await _graphRagService.IndexAsync(new GraphRagIndexRequest { Force = forceRefresh }, cancellationToken).ConfigureAwait(false);
+                result.GraphRagIndexed = true;
+            }
+            catch (Exception ex)
+            {
+                result.GraphRagIndexed = false;
+                result.GraphRagIndexError = ex.Message;
+            }
+        }
+
+        return JsonSerializer.Serialize(result);
     }
 
     /// <summary>Get GraphRAG readiness status for the workspace.</summary>
@@ -411,10 +459,85 @@ public sealed class FwhMcpTools
         }
     }
 
+    /// <summary>TR-MCP-TODO-005: Get append-only audit history for a TODO item.</summary>
+    [McpServerTool(Name = "todo_audit"), Description("Get append-only audit history for a TODO item by id.")]
+    public async Task<string> TodoAudit(
+        [Description("TODO item id")] string id,
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Maximum entries to return (default 50)")] int limit = 50,
+        [Description("Entries to skip before returning results (default 0)")] int offset = 0,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _workspaceAccessor.GetTodoService().GetAuditAsync(id, limit, offset, cancellationToken).ConfigureAwait(false);
+            if (result.TotalCount == 0)
+                return JsonSerializer.Serialize(new { error = $"TODO audit '{id}' not found" });
+
+            return JsonSerializer.Serialize(new { entries = result.Entries, totalCount = result.TotalCount });
+        }
+        catch (NotSupportedException ex)
+        {
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>TR-MCP-TODO-006: Get SQLite-authoritative TODO projection status.</summary>
+    [McpServerTool(Name = "todo_projection_status"), Description("Get projection status for SQLite-backed TODO storage.")]
+    public async Task<string> TodoProjectionStatus(
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _workspaceAccessor.GetTodoService().GetProjectionStatusAsync(cancellationToken).ConfigureAwait(false);
+            return JsonSerializer.Serialize(result);
+        }
+        catch (NotSupportedException ex)
+        {
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>TR-MCP-TODO-006: Repair TODO.yaml projection from SQLite-authoritative TODO storage.</summary>
+    [McpServerTool(Name = "todo_projection_repair"), Description("Repair TODO.yaml projection from authoritative SQLite-backed TODO storage.")]
+    public async Task<string> TodoProjectionRepair(
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _workspaceAccessor.GetTodoService().RepairProjectionAsync(cancellationToken).ConfigureAwait(false);
+            return JsonSerializer.Serialize(result);
+        }
+        catch (NotSupportedException ex)
+        {
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+    }
+
     /// <summary>TR-PLANNED-013: Create a new TODO item.</summary>
     [McpServerTool(Name = "todo_create"), Description("Create a new TODO item. Requires id, title, section, priority.")]
     public async Task<string> TodoCreate(
-        [Description("Item id (e.g. MVP-APP-006)")] string id,
+        [Description("Item id (e.g. MVP-APP-006 or ISSUE-NEW)")] string id,
         [Description("Item title")] string title,
         [Description("Section (e.g. mvp-app)")] string section,
         [Description("Priority (high/medium/low)")] string priority,
@@ -435,7 +558,7 @@ public sealed class FwhMcpTools
                 Estimate = estimate,
                 Description = description != null ? new[] { description } : null
             };
-            var result = await _workspaceAccessor.GetTodoService().CreateAsync(req, cancellationToken).ConfigureAwait(false);
+            var result = await _todoCreationService.CreateAsync(req, cancellationToken).ConfigureAwait(false);
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { success = true, item = result.Item });
         }
@@ -461,7 +584,7 @@ public sealed class FwhMcpTools
         try
         {
             var req = new TodoUpdateRequest { Title = title, Priority = priority, Done = done, Note = note };
-            var result = await _workspaceAccessor.GetTodoService().UpdateAsync(id, req, cancellationToken).ConfigureAwait(false);
+            var result = await _todoUpdateService.UpdateAsync(id, req, cancellationToken).ConfigureAwait(false);
             if (!result.Success) return JsonSerializer.Serialize(new { error = result.Error });
             return JsonSerializer.Serialize(new { success = true, item = result.Item });
         }
@@ -1089,77 +1212,54 @@ public sealed class FwhMcpTools
         try
         {
             ApplyWorkspaceOverride(workspacePath);
-
-            var launcherPath = ResolveLauncherPath(workspacePath);
-            if (launcherPath is null)
-                return JsonSerializer.Serialize(new { error = "McpServer.Launcher.exe not found. Check Mcp:LauncherPath configuration." });
-
-            var payload = new Dictionary<string, object?>
-            {
-                ["executablePath"] = executablePath,
-                ["arguments"] = arguments,
-                ["workingDirectory"] = workingDirectory,
-                ["createNoWindow"] = createNoWindow,
-                ["windowStyle"] = windowStyle,
-                ["waitForExit"] = waitForExit,
-                ["timeoutMs"] = timeoutMs
-            };
-
+            Dictionary<string, string>? environmentVariablesMap = null;
             if (!string.IsNullOrWhiteSpace(environmentVariables))
             {
                 try
                 {
-                    var envDict = JsonSerializer.Deserialize<Dictionary<string, string>>(environmentVariables, s_caseInsensitiveOptions);
-                    payload["environmentVariables"] = envDict;
+                    environmentVariablesMap = JsonSerializer.Deserialize<Dictionary<string, string>>(environmentVariables, s_caseInsensitiveOptions);
                 }
                 catch (JsonException ex)
                 {
-                    return JsonSerializer.Serialize(new { error = $"Invalid environmentVariables JSON: {ex.Message}" });
+                    return JsonSerializer.Serialize(
+                        new DesktopLaunchResult
+                        {
+                            Success = false,
+                            ErrorMessage = $"Invalid environmentVariables JSON: {ex.Message}"
+                        },
+                        s_caseInsensitiveOptions);
                 }
             }
 
-            var json = JsonSerializer.Serialize(payload, s_caseInsensitiveOptions);
-            var escapedJson = json.Replace("\"", "\\\"");
-            var result = await _processRunner.RunAsync(launcherPath, $"\"{escapedJson}\"", cancellationToken).ConfigureAwait(false);
+            var result = await _desktopLaunchService.LaunchAsync(
+                    workspacePath,
+                    new DesktopLaunchRequest
+                    {
+                        ExecutablePath = executablePath,
+                        Arguments = arguments,
+                        WorkingDirectory = workingDirectory,
+                        EnvironmentVariables = environmentVariablesMap,
+                        CreateNoWindow = createNoWindow,
+                        WindowStyle = windowStyle,
+                        WaitForExit = waitForExit,
+                        TimeoutMs = timeoutMs
+                    },
+                    cancellationToken)
+                .ConfigureAwait(false);
 
-            if (result.ExitCode != 0)
-            {
-                var errBody = string.IsNullOrWhiteSpace(result.Stderr) ? result.Stdout : result.Stderr;
-                return JsonSerializer.Serialize(new { error = $"Launcher exited with code {result.ExitCode}: {errBody}" });
-            }
-
-            return result.Stdout ?? JsonSerializer.Serialize(new { error = "No output from launcher" });
+            return JsonSerializer.Serialize(result, s_caseInsensitiveOptions);
         }
         catch (Exception ex)
         {
             _logger.LogError("{ExceptionDetail}", ex.ToString());
-            return JsonSerializer.Serialize(new { error = ex.Message });
+            return JsonSerializer.Serialize(
+                new DesktopLaunchResult
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message
+                },
+                s_caseInsensitiveOptions);
         }
-    }
-
-    /// <summary>
-    /// Resolves the McpServer.Launcher.exe path from config, assembly directory, or workspace.
-    /// </summary>
-    private string? ResolveLauncherPath(string workspacePath)
-    {
-        // 1. Explicit config
-        var config = _httpContextAccessor.HttpContext?.RequestServices.GetService<IConfiguration>();
-        var configPath = config?["Mcp:LauncherPath"];
-        if (!string.IsNullOrWhiteSpace(configPath) && File.Exists(configPath))
-            return configPath;
-
-        // 2. Same directory as MCP server
-        var assemblyDir = AppContext.BaseDirectory;
-        var sideBySide = Path.Combine(assemblyDir, "McpServer.Launcher.exe");
-        if (File.Exists(sideBySide))
-            return sideBySide;
-
-        // 3. _publish directory relative to workspace
-        var publishPath = Path.Combine(workspacePath, "_publish", "McpServer.Launcher", "McpServer.Launcher.exe");
-        if (File.Exists(publishPath))
-            return publishPath;
-
-        return null;
     }
 
     private enum RequirementsEntityType
@@ -1421,4 +1521,3 @@ public sealed class FwhMcpTools
         }
     }
 }
-

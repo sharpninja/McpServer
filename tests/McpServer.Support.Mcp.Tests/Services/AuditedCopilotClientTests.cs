@@ -111,10 +111,10 @@ public sealed class AuditedCopilotClientTests
 
     private static bool HasCompletedCopilotInvocationAudit(UnifiedSessionLogDto? dto)
     {
-        if (dto?.Entries is not { Count: 1 })
+        if (dto?.Turns is not { Count: 1 })
             return false;
 
-        var entry = dto.Entries[0];
+        var entry = dto.Turns[0];
         if (entry.Actions is not { Count: > 0 })
             return false;
 
@@ -124,10 +124,10 @@ public sealed class AuditedCopilotClientTests
 
     private static bool HasCompletedStreamingAudit(UnifiedSessionLogDto? dto)
     {
-        if (dto?.Entries is not { Count: 1 })
+        if (dto?.Turns is not { Count: 1 })
             return false;
 
-        var entry = dto.Entries[0];
+        var entry = dto.Turns[0];
         return string.Equals(entry.Status, "completed", StringComparison.Ordinal)
                && string.Equals(entry.QueryTitle, "Copilot invoke_streaming", StringComparison.Ordinal);
     }

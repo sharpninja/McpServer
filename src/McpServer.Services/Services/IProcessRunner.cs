@@ -28,9 +28,10 @@ public interface IProcessRunner
 public sealed record ProcessRunResult(int ExitCode, string? Stdout, string? Stderr);
 
 /// <summary>
-/// TR-MCP-GH-003: Structured process run request with optional GitHub token override.
+/// TR-MCP-GH-003: Structured process run request with optional execution metadata.
 /// </summary>
 /// <param name="FileName">Executable file name.</param>
 /// <param name="Arguments">Command-line arguments.</param>
 /// <param name="GitHubTokenOverride">Optional token override passed as <c>GH_TOKEN</c>.</param>
-public sealed record ProcessRunRequest(string FileName, string Arguments, string? GitHubTokenOverride = null);
+/// <param name="WorkingDirectory">Optional working directory for the process.</param>
+public sealed record ProcessRunRequest(string FileName, string Arguments, string? GitHubTokenOverride = null, string? WorkingDirectory = null);

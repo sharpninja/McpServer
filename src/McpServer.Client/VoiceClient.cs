@@ -57,14 +57,16 @@ public sealed class VoiceClient : McpClientBase
             HttpMethod.Post,
             $"mcpserver/voice/session/{Uri.EscapeDataString(sessionId)}/turn/stream",
             request,
+            HttpCompletionOption.ResponseHeadersRead,
+            "text/event-stream",
             cancellationToken);
 
-        using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+        using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(true);
         using var reader = new System.IO.StreamReader(stream);
 
         while (!cancellationToken.IsCancellationRequested)
         {
-            var line = await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false);
+            var line = await reader.ReadLineAsync(cancellationToken).ConfigureAwait(true);
             if (line is null)
                 yield break;
 

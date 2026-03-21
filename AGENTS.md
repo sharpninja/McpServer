@@ -21,6 +21,7 @@ On every subsequent user message:
 7. When you need API schemas, module examples, or compliance rules, load them from `docs/context/` or use `context_search`.
 8. Do not fabricate information. If you made a mistake, acknowledge it. Distinguish facts from speculation.
 9. Prioritize correctness over speed. Do not ship code you have not verified compiles and is logically sound.
+10. When writing session logs or other audit records, agents must identify themselves accurately using their real agent identity in Pascal-Case. Do not use placeholder, legacy, or misleading sourceType values.
 
 ## Where Things Live
 
@@ -29,6 +30,9 @@ On every subsequent user message:
 - `docs/context/` — on-demand reference docs (schemas, module docs, compliance rules, action types)
 - `docs/Project/` — requirements docs, TODO.yaml, mapping matrices
 - `templates/` — prompt templates (loaded on demand)
+- `tools/powershell/McpContext.psm1` — PowerShell module for context ingestion/query workflows
+- `tools/powershell/McpContext.USER.md` — user-level guide for the McpContext module
+- `tools/powershell/McpContext.AGENT.md` — agent workflow instructions for the McpContext module
 
 ## Context Loading by Task Type
 
@@ -127,4 +131,3 @@ At regular intervals during long sessions (~10 interactions):
 
 - Do not use table-style output in responses.
 - Use concise bullets or short paragraphs instead.
-

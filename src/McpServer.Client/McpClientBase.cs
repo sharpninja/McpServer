@@ -44,6 +44,11 @@ public abstract class McpClientBase
         PropertyNameCaseInsensitive = true,
         DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
     };
+    private static readonly JsonSerializerOptions s_jsonOptionsIncludingNulls = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never
+    };
 
     private readonly HttpClient _http;
     private readonly string _scheme;
@@ -220,6 +225,19 @@ public abstract class McpClientBase
     protected Task<T> PutAsync<T>(string path, object? body, CancellationToken cancellationToken)
         => SendAsync<T>(HttpMethod.Put, path, body, cancellationToken);
 
+    /// <summary>Sends a PATCH request with a JSON body and deserializes the response to <typeparamref name="T"/>.</summary>
+    /// <inheritdoc cref="SendAsync{T}(HttpMethod, string, object?, CancellationToken)" path="/exception"/>
+    protected Task<T> PatchAsync<T>(string path, object? body, CancellationToken cancellationToken)
+        => SendAsync<T>(HttpMethod.Patch, path, body, cancellationToken);
+
+    /// <summary>
+    /// Sends a PATCH request while preserving explicit <see langword="null"/> values in the JSON body.
+    /// Use this for dictionary patch endpoints where <see langword="null"/> removes a value.
+    /// </summary>
+    /// <inheritdoc cref="SendAsync{T}(HttpMethod, string, object?, CancellationToken)" path="/exception"/>
+    protected Task<T> PatchIncludingNullsAsync<T>(string path, object? body, CancellationToken cancellationToken)
+        => SendAsync<T>(HttpMethod.Patch, path, body, s_jsonOptionsIncludingNulls, cancellationToken);
+
     /// <summary>Sends a DELETE request and deserializes the JSON response body to <typeparamref name="T"/>.</summary>
     /// <inheritdoc cref="SendAsync{T}(HttpMethod, string, object?, CancellationToken)" path="/exception"/>
     protected Task<T> DeleteAsync<T>(string path, CancellationToken cancellationToken)
@@ -240,7 +258,20 @@ public abstract class McpClientBase
     /// <exception cref="McpNotFoundException">HTTP 404 Not Found.</exception>
     /// <exception cref="McpConflictException">HTTP 409 Conflict.</exception>
     /// <exception cref="McpServerException">Any other non-success HTTP status.</exception>
-    protected async Task<HttpResponseMessage> SendRawAsync(HttpMethod method, string path, object? body, CancellationToken cancellationToken)
+    protected Task<HttpResponseMessage> SendRawAsync(HttpMethod method, string path, object? body, CancellationToken cancellationToken)
+        => SendRawAsync(method, path, body, HttpCompletionOption.ResponseContentRead, null, cancellationToken);
+
+    /// <summary>
+    /// Sends an HTTP request and returns the raw successful response message using the specified
+    /// completion option and optional Accept header.
+    /// </summary>
+    protected async Task<HttpResponseMessage> SendRawAsync(
+        HttpMethod method,
+        string path,
+        object? body,
+        HttpCompletionOption completionOption,
+        string? acceptMediaType,
+        CancellationToken cancellationToken)
     {
         EnsureAuthenticated();
 
@@ -255,6 +286,11 @@ public abstract class McpClientBase
         if (!string.IsNullOrWhiteSpace(WorkspacePath))
             request.Headers.TryAddWithoutValidation("X-Workspace-Path", WorkspacePath);
 
+        AppendCustomHeaders(request);
+
+        if (!string.IsNullOrWhiteSpace(acceptMediaType))
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(acceptMediaType));
+
         if (body is not null)
             request.Content = new StringContent(
                 JsonSerializer.Serialize(body, s_jsonOptions), Encoding.UTF8, "application/json");
@@ -262,7 +298,7 @@ public abstract class McpClientBase
         HttpResponseMessage response;
         try
         {
-            response = await _http.SendAsync(request, cancellationToken);
+            response = await _http.SendAsync(request, completionOption, cancellationToken);
         }
         catch (Exception ex)
         {
@@ -275,7 +311,7 @@ public abstract class McpClientBase
 
         using (response)
         {
-            var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(true);
             ThrowForStatus(response.StatusCode, content);
         }
 
@@ -304,10 +340,20 @@ public abstract class McpClientBase
     /// <returns>Response bytes and media type.</returns>
     protected async Task<(byte[] Content, string? ContentType)> GetBytesAsync(string path, CancellationToken cancellationToken)
     {
-        using var response = await SendRawAsync(HttpMethod.Get, path, null, cancellationToken).ConfigureAwait(false);
-        var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
+        using var response = await SendRawAsync(HttpMethod.Get, path, null, cancellationToken).ConfigureAwait(true);
+        var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(true);
         var mediaType = response.Content.Headers.ContentType?.MediaType;
         return (bytes, mediaType);
+    }
+
+    /// <summary>
+    /// Allows derived clients to append endpoint-specific headers after the shared
+    /// authentication and workspace headers have been applied.
+    /// </summary>
+    /// <param name="request">The outbound request receiving any derived-client headers.</param>
+    protected virtual void AppendCustomHeaders(HttpRequestMessage request)
+    {
+        ArgumentNullException.ThrowIfNull(request);
     }
 
     /// <summary>
@@ -344,6 +390,23 @@ public abstract class McpClientBase
     /// <exception cref="McpConflictException">HTTP 409 Conflict.</exception>
     /// <exception cref="McpServerException">Any other non-success HTTP status.</exception>
     private async Task<T> SendAsync<T>(HttpMethod method, string path, object? body, CancellationToken cancellationToken)
+        => await SendAsync<T>(method, path, body, s_jsonOptions, cancellationToken).ConfigureAwait(true);
+
+    /// <summary>
+    /// Core HTTP dispatch with a caller-specified request serializer.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown when neither <see cref="ApiKey"/> nor <see cref="BearerToken"/> is set.</exception>
+    /// <exception cref="McpValidationException">HTTP 400 Bad Request.</exception>
+    /// <exception cref="McpUnauthorizedException">HTTP 401 Unauthorized.</exception>
+    /// <exception cref="McpNotFoundException">HTTP 404 Not Found.</exception>
+    /// <exception cref="McpConflictException">HTTP 409 Conflict.</exception>
+    /// <exception cref="McpServerException">Any other non-success HTTP status.</exception>
+    private async Task<T> SendAsync<T>(
+        HttpMethod method,
+        string path,
+        object? body,
+        JsonSerializerOptions requestSerializerOptions,
+        CancellationToken cancellationToken)
     {
         EnsureAuthenticated();
 
@@ -367,6 +430,7 @@ public abstract class McpClientBase
 
         if (!string.IsNullOrWhiteSpace(WorkspacePath))
             request.Headers.TryAddWithoutValidation("X-Workspace-Path", WorkspacePath);
+        AppendCustomHeaders(request);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         _logger?.LogInformation("[McpClient] {Method} {Uri} | Auth={AuthMode} | WorkspacePath={WorkspacePath}",
@@ -374,7 +438,7 @@ public abstract class McpClientBase
 
         if (body is not null)
             request.Content = new StringContent(
-                JsonSerializer.Serialize(body, s_jsonOptions), Encoding.UTF8, "application/json");
+                JsonSerializer.Serialize(body, requestSerializerOptions), Encoding.UTF8, "application/json");
 
         HttpResponseMessage response;
         try
@@ -418,6 +482,7 @@ public abstract class McpClientBase
             request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
         if (!string.IsNullOrWhiteSpace(WorkspacePath))
             request.Headers.TryAddWithoutValidation("X-Workspace-Path", WorkspacePath);
+        AppendCustomHeaders(request);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));
 
         using var response = await _http.SendAsync(
@@ -425,16 +490,16 @@ public abstract class McpClientBase
 
         if (!response.IsSuccessStatusCode)
         {
-            var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(true);
             ThrowForStatus(response.StatusCode, body);
         }
 
-        using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+        using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(true);
         using var reader = new StreamReader(stream, Encoding.UTF8);
 
         while (!cancellationToken.IsCancellationRequested)
         {
-            var line = await reader.ReadLineAsync(cancellationToken).ConfigureAwait(false);
+            var line = await reader.ReadLineAsync(cancellationToken).ConfigureAwait(true);
             if (line is null) break; // stream closed
 
             if (line.StartsWith("event: done", StringComparison.Ordinal))
@@ -447,7 +512,7 @@ public abstract class McpClientBase
 
     private static async Task<T> ReadResponseAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken)
     {
-        var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+        var content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(true);
 
         if (!response.IsSuccessStatusCode)
             ThrowForStatus(response.StatusCode, content);

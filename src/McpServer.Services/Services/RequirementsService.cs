@@ -35,7 +35,6 @@ internal sealed class RequirementsService(
         var currentPromptOptions = promptOptions.CurrentValue;
         var options = new CopilotClientOptions
         {
-            Timeout = TimeSpan.FromMinutes(5),
             WorkingDirectory = workspaceAccessor.GetWorkspacePath(),
             RunAs = currentPromptOptions.RunAs,
             GitHubToken = currentPromptOptions.GitHubToken,

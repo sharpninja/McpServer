@@ -32,6 +32,20 @@
       "httpEquivalent": "GET /mcpserver/context/sources"
     },
     {
+      "name": "context_ingest_website",
+      "description": "Ingest context directly from a website URL with bounded crawl controls.",
+      "parameters": {
+        "url": { "type": "string", "required": true, "description": "Website URL to ingest" },
+        "includeSubpages": { "type": "boolean", "default": false, "description": "Crawl same-host subpages" },
+        "maxPages": { "type": "integer", "default": 20, "description": "Maximum pages to fetch" },
+        "maxDepth": { "type": "integer", "default": 1, "description": "Maximum crawl depth" },
+        "maxBytesPerPage": { "type": "integer", "default": 262144, "description": "Maximum bytes downloaded per page" },
+        "forceRefresh": { "type": "boolean", "default": false, "description": "Force refresh semantics for existing documents" },
+        "triggerGraphRagIndex": { "type": "boolean", "default": false, "description": "Trigger GraphRAG index after ingest" }
+      },
+      "httpEquivalent": "POST /mcpserver/context/ingest-website"
+    },
+    {
       "name": "repo_read",
       "description": "Read file content by relative path from repo root. Path must be allowed.",
       "parameters": {
@@ -88,9 +102,9 @@
     },
     {
       "name": "todo_create",
-      "description": "Create a new TODO item. Requires id, title, section, priority.",
+      "description": "Create a new TODO item. Requires id, title, section, priority. Use ISSUE-NEW to create a GitHub-backed TODO that is persisted as ISSUE-{number}.",
       "parameters": {
-        "id": { "type": "string", "required": true, "description": "Item id (e.g. MVP-APP-006)" },
+        "id": { "type": "string", "required": true, "description": "Item id (e.g. MVP-APP-006 or ISSUE-NEW)" },
         "title": { "type": "string", "required": true, "description": "Item title" },
         "section": { "type": "string", "required": true, "description": "Section (e.g. mvp-app)" },
         "priority": { "type": "string", "required": true, "description": "Priority (high/medium/low)" },

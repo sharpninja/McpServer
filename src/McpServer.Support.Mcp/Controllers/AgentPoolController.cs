@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
@@ -12,7 +13,7 @@ namespace McpServer.Support.Mcp.Controllers;
 [Route("mcpserver/agent-pool")]
 public sealed class AgentPoolController : ControllerBase
 {
-    private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web);
+    private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web) { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
     private readonly IAgentPoolService _agentPoolService;
     private readonly WorkspaceContext _workspaceContext;
 

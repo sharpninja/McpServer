@@ -1,3 +1,5 @@
+using McpServer.Support.Mcp.Services;
+
 namespace McpServer.Support.Mcp.Options;
 
 /// <summary>
@@ -21,12 +23,34 @@ public sealed class VoiceConversationOptions
     public string CopilotModel { get; set; } = "gpt-5.3-codex";
 
     /// <summary>
+    /// Default execution strategy used for voice sessions when callers do not explicitly choose one.
+    /// Supported values are <c>copilot-cli</c> and <c>hosted-mcp-agent</c>.
+    /// The legacy alias <c>hosted-agentframework</c> is also accepted and normalized
+    /// to <c>hosted-mcp-agent</c> for backward compatibility.
+    /// </summary>
+    public string DefaultExecutionStrategy { get; set; } = AgentExecutionStrategyNames.CopilotCli;
+
+    /// <summary>
+    /// Optional API key injected into the underlying agent/model process for voice sessions.
+    /// When set, the key is exposed to the process through
+    /// <see cref="ModelApiKeyEnvironmentVariableName"/>.
+    /// </summary>
+    public string? ModelApiKey { get; set; }
+
+    /// <summary>
+    /// Environment variable name used to pass <see cref="ModelApiKey"/> to the underlying
+    /// agent/model process.
+    /// </summary>
+    public string ModelApiKeyEnvironmentVariableName { get; set; } = "OPENAI_API_KEY";
+
+    /// <summary>
     /// Maximum number of tool-call loop iterations per turn.
     /// </summary>
     public int MaxToolSteps { get; set; } = 6;
 
     /// <summary>
-    /// Timeout for a single Copilot CLI invocation in seconds.
+    /// Legacy compatibility setting retained for configuration binding.
+    /// McpServer no longer applies a wallclock timeout to Copilot process lifetime.
     /// </summary>
     public int CopilotTimeoutSeconds { get; set; } = 14400;
 
@@ -70,7 +94,7 @@ public sealed class VoiceConversationOptions
     /// <summary>
     /// Minutes of inactivity before a voice session is considered idle and eligible for cleanup.
     /// </summary>
-    public int SessionIdleTimeoutMinutes { get; set; } = 15;
+    public TimeSpan SessionIdleTimeoutMinutes { get; set; } = TimeSpan.FromMinutes(15);
 
     /// <summary>
     /// Command sent to the Copilot subprocess before terminating an idle session.

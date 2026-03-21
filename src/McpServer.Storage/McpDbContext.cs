@@ -21,6 +21,9 @@ public sealed class McpDbContext : DbContext
         _workspaceId = workspaceContext?.WorkspacePath ?? string.Empty;
     }
 
+    /// <summary>TR-MCP-MT-003: Gets the current workspace discriminator applied to this context instance.</summary>
+    public string CurrentWorkspaceId => _workspaceId;
+
     /// <summary>TR-MCP-MT-001: Overrides the workspace ID for this context instance (e.g. from an MCP tool parameter).</summary>
     public void OverrideWorkspaceId(string workspaceId) => _workspaceId = workspaceId;
 
@@ -33,25 +36,25 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-PLANNED-013: Session logs (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogEntity> SessionLogs => Set<SessionLogEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log entries (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-013: Session log turns (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogTurnEntity> SessionLogTurns => Set<SessionLogTurnEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log entry actions (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-013: Session log turn actions (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogActionEntity> SessionLogActions => Set<SessionLogActionEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log entry tags (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-013: Session log turn tags (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogTurnTagEntity> SessionLogTurnTags => Set<SessionLogTurnTagEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log entry context items (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-013: Session log turn context items (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogTurnContextEntity> SessionLogTurnContexts => Set<SessionLogTurnContextEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log entry processing dialog items (MVP-SUPPORT-011).</summary>
+    /// <summary>TR-PLANNED-013: Session log turn processing dialog items (MVP-SUPPORT-011).</summary>
     public DbSet<SessionLogProcessingDialogEntity> SessionLogProcessingDialogs => Set<SessionLogProcessingDialogEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log entry commits.</summary>
+    /// <summary>TR-PLANNED-013: Session log turn commits.</summary>
     public DbSet<SessionLogCommitEntity> SessionLogCommits => Set<SessionLogCommitEntity>();
 
-    /// <summary>TR-PLANNED-013: Session log entry string-list items (design decisions, requirements, files modified, blockers).</summary>
+    /// <summary>TR-PLANNED-013: Session log turn string-list items (design decisions, requirements, files modified, blockers).</summary>
     public DbSet<SessionLogTurnStringListEntity> SessionLogTurnStringLists => Set<SessionLogTurnStringListEntity>();
 
     /// <summary>Tool definitions discoverable by keyword search.</summary>
@@ -91,20 +94,24 @@ public sealed class McpDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        // MVP-SUPPORT-011: Session log 4NF schema
         modelBuilder.Entity<SessionLogEntity>(e =>
         {
             e.HasIndex(x => new { x.SourceType, x.SessionId }).IsUnique();
             e.HasIndex(x => x.SourceType);
             e.HasIndex(x => x.Started);
             e.HasIndex(x => x.LastUpdated);
+            e.HasIndex(x => x.AgentDefinitionId);
+            e.HasOne(x => x.AgentDefinition)
+                .WithMany()
+                .HasForeignKey(x => x.AgentDefinitionId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<SessionLogTurnEntity>(e =>
         {
             e.HasIndex(x => new { x.SessionLogId, x.RequestId }).IsUnique();
             e.HasOne(x => x.SessionLog)
-                .WithMany(x => x.Entries)
+                .WithMany(x => x.Turns)
                 .HasForeignKey(x => x.SessionLogId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
@@ -179,7 +186,6 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => x.Name).IsUnique();
         });
 
-        // Agent management entities
         modelBuilder.Entity<AgentDefinitionEntity>(e =>
         {
             e.HasKey(x => x.Id);
@@ -204,28 +210,23 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => x.EventType);
         });
 
-        // TR-MCP-MT-003: Global query filters for multi-tenant workspace isolation.
-        // EF Core re-evaluates the _workspaceId field per query, allowing scoped
-        // workspace context to control which rows are visible.
-        // Filters only apply when _workspaceId is non-empty (backward-compatible).
-        modelBuilder.Entity<ContextDocumentEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<ContextChunkEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogActionEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnTagEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnContextEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogProcessingDialogEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogCommitEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnStringListEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<ToolDefinitionEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<ToolDefinitionTagEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<ToolBucketEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<AgentDefinitionEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<AgentWorkspaceEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<AgentEventLogEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<ContextDocumentEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<ContextChunkEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogTurnEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogActionEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogTurnTagEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogTurnContextEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogProcessingDialogEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogCommitEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogTurnStringListEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<ToolDefinitionEntity>().HasQueryFilter(e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
+        modelBuilder.Entity<ToolDefinitionTagEntity>().HasQueryFilter(e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
+        modelBuilder.Entity<ToolBucketEntity>().HasQueryFilter(e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
+        modelBuilder.Entity<AgentDefinitionEntity>().HasQueryFilter(e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
+        modelBuilder.Entity<AgentWorkspaceEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<AgentEventLogEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
 
-        // WorkspaceId indexes for all entity types
         modelBuilder.Entity<ContextDocumentEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<SessionLogEntity>().HasIndex(e => e.WorkspaceId);
@@ -242,11 +243,7 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<AgentEventLogEntity>().HasIndex(e => e.WorkspaceId);
     }
 
-    /// <summary>
-    /// TR-MCP-MT-003: Auto-stamps <c>WorkspaceId</c> on all added entities
-    /// whose <c>WorkspaceId</c> is still empty, ensuring multi-tenant isolation
-    /// without requiring every service to set it manually.
-    /// </summary>
+    /// <inheritdoc />
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
         StampWorkspaceId();
@@ -254,7 +251,7 @@ public sealed class McpDbContext : DbContext
         return base.SaveChanges(acceptAllChangesOnSuccess);
     }
 
-    /// <inheritdoc cref="SaveChanges(bool)"/>
+    /// <inheritdoc />
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         StampWorkspaceId();
@@ -264,8 +261,6 @@ public sealed class McpDbContext : DbContext
 
     private void StampWorkspaceId()
     {
-        if (_workspaceId.Length == 0) return;
-
         foreach (var entry in ChangeTracker.Entries()
                      .Where(e => e.State == EntityState.Added))
         {
@@ -273,15 +268,32 @@ public sealed class McpDbContext : DbContext
                 .FirstOrDefault(p => p.Metadata.Name == nameof(ContextDocumentEntity.WorkspaceId));
             if (prop is not null && prop.CurrentValue is string val && val.Length == 0)
             {
-                prop.CurrentValue = _workspaceId;
+                var resolvedWorkspaceId = ResolveWorkspaceIdForAddedEntity(entry.Entity);
+                if (resolvedWorkspaceId is not null)
+                    prop.CurrentValue = resolvedWorkspaceId;
             }
         }
     }
 
-    /// <summary>
-    /// Replaces typographic dashes (em/en) with ASCII hyphen in all string
-    /// properties of added or modified entities before persisting.
-    /// </summary>
+    private string? ResolveWorkspaceIdForAddedEntity(object entity)
+    {
+        return entity switch
+        {
+            ToolDefinitionEntity toolDefinition => toolDefinition.WorkspacePath ?? string.Empty,
+            ToolDefinitionTagEntity toolDefinitionTag => ResolveToolDefinitionTagWorkspaceId(toolDefinitionTag),
+            _ when _workspaceId.Length > 0 => _workspaceId,
+            _ => null,
+        };
+    }
+
+    private string ResolveToolDefinitionTagWorkspaceId(ToolDefinitionTagEntity toolDefinitionTag)
+    {
+        if (toolDefinitionTag.ToolDefinition is not null)
+            return toolDefinitionTag.ToolDefinition.WorkspaceId;
+
+        return _workspaceId;
+    }
+
     private void SanitizeStrings()
     {
         foreach (var entry in ChangeTracker.Entries()
@@ -299,4 +311,3 @@ public sealed class McpDbContext : DbContext
         }
     }
 }
-

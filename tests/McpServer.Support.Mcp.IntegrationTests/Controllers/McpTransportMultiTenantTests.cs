@@ -81,4 +81,34 @@ public sealed class McpTransportMultiTenantTests : IClassFixture<CustomWebApplic
         var body = await response.Content.ReadAsStringAsync();
         Assert.Contains("serverInfo", body, StringComparison.Ordinal);
     }
+
+    [Fact]
+    public async Task McpTransport_BearerWithoutWorkspaceHeader_Returns404()
+    {
+        var initRequest = new
+        {
+            jsonrpc = "2.0",
+            id = 1,
+            method = "initialize",
+            @params = new
+            {
+                protocolVersion = "2025-03-26",
+                capabilities = new { },
+                clientInfo = new { name = "test-client-bearer", version = "1.0.0" }
+            }
+        };
+
+        using var request = new HttpRequestMessage(HttpMethod.Post, "/mcp-transport");
+        request.Content = new StringContent(
+            JsonSerializer.Serialize(initRequest),
+            Encoding.UTF8,
+            "application/json");
+        request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+        request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("text/event-stream"));
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", "synthetic-jwt");
+
+        var response = await _client.SendAsync(request);
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
 }

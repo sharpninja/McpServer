@@ -1,3 +1,7 @@
+- name: User Documentation
+  href: USER-GUIDE.md
+- name: MCP Server Guide
+  href: MCP-SERVER.md
 - name: FAQ
   href: FAQ.md
 - name: Requirements Matrix

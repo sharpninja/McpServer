@@ -26,6 +26,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Build.Framework" PrivateAssets="all" />
     <PackageReference Include="ModelContextProtocol" />
     <PackageReference Include="ModelContextProtocol.AspNetCore" />
     <PackageReference Include="Serilog.AspNetCore" />
@@ -54,17 +60,6 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>McpServer.SpecFlow.Tests</_Parameter1>
     </AssemblyAttribute>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Storage\**\*.cs" />
-    <Compile Remove="Indexing\**\*.cs" />
-    <Compile Remove="Services\**\*.cs" />
-    <Compile Remove="Models\**\*.cs" />
-    <Compile Remove="Options\**\*.cs" />
-    <Compile Remove="Ingestion\**\*.cs" />
-    <Compile Remove="Notifications\**\*.cs" />
-    <Compile Remove="Requirements\**\*.cs" />
-    <Compile Remove="Native\**\*.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\templates\**\*.yaml" Link="templates\%(RecursiveDir)%(Filename)%(Extension)">

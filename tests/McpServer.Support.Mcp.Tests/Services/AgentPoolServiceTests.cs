@@ -235,6 +235,23 @@ public sealed class AgentPoolServiceTests
         Assert.Equal(@"C:\ws-test", completed.WorkspacePath);
     }
 
+    [Fact]
+    public async Task StartAgentAsync_ForwardsExecutionStrategyToVoiceSession()
+    {
+        using var service = CreateService(out var voiceService, AgentExecutionStrategyNames.HostedMcpAgent);
+
+        var result = await service.StartAgentAsync("planner", @"C:\workspace-a").ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        await voiceService.Received(1)
+            .CreateSessionAsync(
+                Arg.Is<VoiceSessionCreateRequest>(request =>
+                    request != null &&
+                    request.ExecutionStrategy == AgentExecutionStrategyNames.HostedMcpAgent),
+                Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
     private static VoiceTurnResponse CreateCompletedTurn(string sessionId)
     {
         return new VoiceTurnResponse
@@ -269,7 +286,7 @@ public sealed class AgentPoolServiceTests
         throw new TimeoutException($"Timed out waiting for job '{jobId}' status [{string.Join(", ", statuses)}].");
     }
 
-    private static AgentPoolService CreateService(out IVoiceConversationService voiceService)
+    private static AgentPoolService CreateService(out IVoiceConversationService voiceService, string executionStrategy = AgentExecutionStrategyNames.CopilotCli)
     {
         voiceService = Substitute.For<IVoiceConversationService>();
         voiceService.GetStatusAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
@@ -281,6 +298,7 @@ public sealed class AgentPoolServiceTests
                 var agentName = (req.AgentName ?? "agent").ToLowerInvariant();
                 return Task.FromResult(new VoiceSessionCreateResponse
                 {
+                    ExecutionStrategy = req.ExecutionStrategy ?? AgentExecutionStrategyNames.CopilotCli,
                     SessionId = $"sess-{agentName}",
                     Status = "idle",
                     Language = "en-US",
@@ -314,6 +332,7 @@ public sealed class AgentPoolServiceTests
                     AgentName = "planner",
                     AgentPath = "agent.exe",
                     AgentModel = "gpt-5.3-codex",
+                    ExecutionStrategy = executionStrategy,
                     IsInteractiveDefault = true,
                     IsTodoPlanDefault = true,
                     IsTodoStatusDefault = true,
@@ -365,3 +384,4 @@ public sealed class AgentPoolServiceTests
         }
     }
 }
+

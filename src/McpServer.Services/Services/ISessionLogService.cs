@@ -29,15 +29,15 @@ public interface ISessionLogService
     Task<bool> IsUnchangedAsync(string sourceType, string sessionId, string contentHash, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// TR-PLANNED-013: Append one or more processing dialog items to an existing entry.
+    /// TR-PLANNED-013: Append one or more processing dialog items to an existing turn.
     /// The AI model calls this on the fly to record reasoning, tool calls, and execution trace.
     /// </summary>
     /// <param name="sourceType">Agent source type.</param>
     /// <param name="sessionId">Session identifier.</param>
-    /// <param name="requestId">Request entry identifier within the session.</param>
+    /// <param name="requestId">Request turn identifier within the session.</param>
     /// <param name="items">Dialog items to append (added after existing items).</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>Total dialog item count on the entry after appending.</returns>
+    /// <returns>Total dialog item count on the turn after appending.</returns>
     Task<int> AppendProcessingDialogAsync(
         string sourceType,
         string sessionId,
@@ -50,7 +50,7 @@ public interface ISessionLogService
     /// </summary>
     /// <param name="request">Query parameters.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>Paginated list of session logs with entries.</returns>
+    /// <returns>Paginated list of session logs with turns.</returns>
     Task<SessionLogQueryResult> QueryAsync(SessionLogQueryRequest request, CancellationToken cancellationToken = default);
 }
 
@@ -59,6 +59,9 @@ public sealed record SessionLogQueryRequest
 {
     /// <summary>Filter by agent source type (e.g. Cursor, Copilot).</summary>
     public string? Agent { get; init; }
+
+    /// <summary>Filter by linked agent definition identifier.</summary>
+    public string? AgentDefinitionId { get; init; }
 
     /// <summary>Filter by AI model (exact or contains match).</summary>
     public string? Model { get; init; }

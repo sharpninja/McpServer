@@ -121,4 +121,21 @@ public sealed class ContextClientTests
         Assert.Equal("graphrag_not_indexed", result.FallbackReason);
         Assert.Single(result.Entities);
     }
+
+    [Fact]
+    public async System.Threading.Tasks.Task IngestWebsiteAsync_PostsTypedRequest()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"runId":"r1","status":"completed","documentsIngested":1,"chunksWritten":2,"urlResults":[{"url":"https://example.com","status":"ingested","chunksWritten":2}],"graphRagIndexed":false}""");
+        using var http = new HttpClient(handler);
+        var client = new ContextClient(http, DefaultOptions);
+
+        var result = await client.IngestWebsiteAsync("https://example.com", includeSubpages: true, maxPages: 5);
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/context/ingest-website", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("\"url\":\"https://example.com\"", handler.LastRequestBody!);
+        Assert.Contains("\"includeSubpages\":true", handler.LastRequestBody!);
+        Assert.Equal("completed", result.Status);
+        Assert.Single(result.UrlResults);
+    }
 }

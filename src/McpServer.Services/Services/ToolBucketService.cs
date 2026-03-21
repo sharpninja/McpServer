@@ -45,7 +45,11 @@ public sealed class ToolBucketService : IToolBucketService
     /// <inheritdoc />
     public async Task<BucketListResult> ListBucketsAsync(CancellationToken ct = default)
     {
-        var entities = await _db.ToolBuckets.AsNoTracking().OrderBy(b => b.Name).ToListAsync(ct).ConfigureAwait(false);
+        var entities = await GetVisibleBucketsQuery()
+            .AsNoTracking()
+            .OrderBy(b => b.Name)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
         var dtos = entities.Select(ToDto).ToList();
         return new BucketListResult(dtos, dtos.Count);
     }
@@ -57,7 +61,10 @@ public sealed class ToolBucketService : IToolBucketService
         if (string.IsNullOrEmpty(name))
             return new BucketMutationResult(false, "Bucket name is required.");
 
-        var exists = await _db.ToolBuckets.AnyAsync(b => b.Name == name, ct).ConfigureAwait(false);
+        var exists = await _db.ToolBuckets
+            .IgnoreQueryFilters()
+            .AnyAsync(b => b.Name == name, ct)
+            .ConfigureAwait(false);
         if (exists)
             return new BucketMutationResult(false, $"Bucket '{name}' already exists.");
 
@@ -86,7 +93,7 @@ public sealed class ToolBucketService : IToolBucketService
     public async Task<BucketMutationResult> RemoveBucketAsync(string bucketName, bool uninstallTools = false, CancellationToken ct = default)
     {
         var name = (bucketName ?? "").Trim().ToLowerInvariant();
-        var entity = await _db.ToolBuckets.FirstOrDefaultAsync(b => b.Name == name, ct).ConfigureAwait(false);
+        var entity = await GetVisibleBucketsQuery().FirstOrDefaultAsync(b => b.Name == name, ct).ConfigureAwait(false);
         if (entity is null)
             return new BucketMutationResult(false, $"Bucket '{name}' not found.");
 
@@ -114,7 +121,7 @@ public sealed class ToolBucketService : IToolBucketService
     public async Task<BucketBrowseResult> BrowseAsync(string bucketName, CancellationToken ct = default)
     {
         var name = (bucketName ?? "").Trim().ToLowerInvariant();
-        var bucket = await _db.ToolBuckets.AsNoTracking().FirstOrDefaultAsync(b => b.Name == name, ct).ConfigureAwait(false);
+        var bucket = await GetVisibleBucketsQuery().AsNoTracking().FirstOrDefaultAsync(b => b.Name == name, ct).ConfigureAwait(false);
         if (bucket is null)
             return new BucketBrowseResult(false, $"Bucket '{name}' not found.");
 
@@ -129,7 +136,7 @@ public sealed class ToolBucketService : IToolBucketService
     public async Task<ToolMutationResult> InstallAsync(string bucketName, string toolName, string? workspacePath = null, CancellationToken ct = default)
     {
         var name = (bucketName ?? "").Trim().ToLowerInvariant();
-        var bucket = await _db.ToolBuckets.AsNoTracking().FirstOrDefaultAsync(b => b.Name == name, ct).ConfigureAwait(false);
+        var bucket = await GetVisibleBucketsQuery().AsNoTracking().FirstOrDefaultAsync(b => b.Name == name, ct).ConfigureAwait(false);
         if (bucket is null)
             return new ToolMutationResult(false, $"Bucket '{name}' not found.");
 
@@ -169,7 +176,7 @@ public sealed class ToolBucketService : IToolBucketService
     public async Task<BucketSyncResult> SyncAsync(string bucketName, CancellationToken ct = default)
     {
         var name = (bucketName ?? "").Trim().ToLowerInvariant();
-        var bucket = await _db.ToolBuckets.FirstOrDefaultAsync(b => b.Name == name, ct).ConfigureAwait(false);
+        var bucket = await GetVisibleBucketsQuery().FirstOrDefaultAsync(b => b.Name == name, ct).ConfigureAwait(false);
         if (bucket is null)
             return new BucketSyncResult(false, $"Bucket '{name}' not found.");
 
@@ -287,6 +294,17 @@ public sealed class ToolBucketService : IToolBucketService
         }
 
         return manifests;
+    }
+
+    private IQueryable<ToolBucketEntity> GetVisibleBucketsQuery()
+    {
+        var workspaceId = _db.CurrentWorkspaceId;
+        var query = _db.ToolBuckets.IgnoreQueryFilters();
+        if (string.IsNullOrWhiteSpace(workspaceId))
+            return query.Where(b => b.WorkspaceId == string.Empty);
+
+        // Default buckets are seeded without a workspace and must remain visible to every workspace.
+        return query.Where(b => b.WorkspaceId == string.Empty || b.WorkspaceId == workspaceId);
     }
 
     private static string NormApiPath(string path)

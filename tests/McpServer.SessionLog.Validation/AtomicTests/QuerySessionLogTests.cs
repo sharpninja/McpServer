@@ -62,7 +62,7 @@ public sealed class QuerySessionLogTests
     public async Task Query_FilterByAgent_Returns200Filtered()
     {
         // First submit a session with known agent
-        var sessionId = SessionLogEndpointFixture.GenerateSessionId();
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId("QueryAgentTest");
         var payload = new
         {
             sourceType = "QueryAgentTest",
@@ -72,7 +72,7 @@ public sealed class QuerySessionLogTests
             started = DateTimeOffset.UtcNow.ToString("o"),
             lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
             status = "completed",
-            entryCount = 0
+            turnCount = 0
         };
         await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
 
@@ -96,7 +96,7 @@ public sealed class QuerySessionLogTests
     [Fact]
     public async Task Query_FilterByModel_Returns200Filtered()
     {
-        var sessionId = SessionLogEndpointFixture.GenerateSessionId();
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId("AuditTest");
         var uniqueModel = $"audit-model-{Guid.NewGuid():N}";
         var payload = new
         {
@@ -107,7 +107,7 @@ public sealed class QuerySessionLogTests
             started = DateTimeOffset.UtcNow.ToString("o"),
             lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
             status = "completed",
-            entryCount = 0
+            turnCount = 0
         };
         await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
 
@@ -192,7 +192,7 @@ public sealed class QuerySessionLogTests
     {
         // Submit a session with unique text
         var uniqueText = $"unique-search-text-{Guid.NewGuid():N}";
-        var sessionId = SessionLogEndpointFixture.GenerateSessionId();
+        var sessionId = SessionLogEndpointFixture.GenerateSessionId("AuditTest");
         var payload = new
         {
             sourceType = "AuditTest",
@@ -202,7 +202,7 @@ public sealed class QuerySessionLogTests
             started = DateTimeOffset.UtcNow.ToString("o"),
             lastUpdated = DateTimeOffset.UtcNow.ToString("o"),
             status = "completed",
-            entryCount = 0
+            turnCount = 0
         };
         await _fixture.Client.PostAsJsonAsync(SessionLogEndpointFixture.SessionLogRoute, payload);
 

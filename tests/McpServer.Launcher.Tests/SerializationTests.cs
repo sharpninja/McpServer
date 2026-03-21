@@ -1,3 +1,4 @@
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using McpServer.Launcher.Models;
 
@@ -10,7 +11,8 @@ public sealed class SerializationTests
 {
     private static readonly JsonSerializerOptions s_jsonOptions = new(JsonSerializerDefaults.Web)
     {
-        WriteIndented = false
+        WriteIndented = false,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
     };
 
     [Fact]
@@ -32,6 +34,7 @@ public sealed class SerializationTests
         var deserialized = JsonSerializer.Deserialize<ProcessLaunchRequest>(json, s_jsonOptions);
 
         Assert.NotNull(deserialized);
+        Assert.Contains("\"windowStyle\":\"Hidden\"", json);
         Assert.Equal(request.ExecutablePath, deserialized.ExecutablePath);
         Assert.Equal(request.Arguments, deserialized.Arguments);
         Assert.Equal(request.WorkingDirectory, deserialized.WorkingDirectory);

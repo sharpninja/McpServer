@@ -244,7 +244,7 @@ public sealed class WorkspacePolicyService : IWorkspacePolicyService
         var sessionId = $"Copilot-{idTimestamp}-policy-{suffix}";
         var requestId = $"req-{idTimestamp}-policy-{Guid.NewGuid().ToString("N")[..8]}";
 
-        var entry = new UnifiedRequestEntryDto
+        var turn = new UnifiedRequestEntryDto
         {
             RequestId = requestId,
             Timestamp = now.ToString("o", CultureInfo.InvariantCulture),
@@ -277,13 +277,13 @@ public sealed class WorkspacePolicyService : IWorkspacePolicyService
             Started = now.ToString("o", CultureInfo.InvariantCulture),
             LastUpdated = now.ToString("o", CultureInfo.InvariantCulture),
             Status = "completed",
-            EntryCount = 1,
+            TurnCount = 1,
             Workspace = new WorkspaceInfoDto
             {
                 Project = workspaceName,
                 Repository = workspacePath,
             },
-            Entries = [entry],
+            Turns = [turn],
         };
 
         await _sessionLogService.SubmitAsync(dto, cancellationToken: ct).ConfigureAwait(false);

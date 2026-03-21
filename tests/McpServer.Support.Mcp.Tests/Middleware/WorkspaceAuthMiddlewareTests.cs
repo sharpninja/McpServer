@@ -7,7 +7,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Middleware;
 
-/// <summary>Unit tests for <see cref="WorkspaceAuthMiddleware"/> default key behavior.</summary>
+/// <summary>Unit tests for <see cref="WorkspaceAuthMiddleware"/> default-key behavior.</summary>
 public sealed class WorkspaceAuthMiddlewareTests
 {
     private const string WorkspacePath = @"C:\projects\test";
@@ -78,7 +78,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     }
 
     [Fact]
-    public async Task DefaultToken_AllowsWriteOnTodoRoute()
+    public async Task DefaultToken_DeniesWriteOnTodoRoute()
     {
         var tokenService = CreateTokenService();
         var defaultToken = tokenService.GetDefaultToken(WorkspacePath)!;
@@ -88,7 +88,8 @@ public sealed class WorkspaceAuthMiddlewareTests
 
         await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
 
-        Assert.True(nextCalled);
+        Assert.False(nextCalled);
+        Assert.Equal(403, ctx.Response.StatusCode);
     }
 
     [Fact]
@@ -122,7 +123,7 @@ public sealed class WorkspaceAuthMiddlewareTests
     }
 
     [Fact]
-    public async Task DefaultToken_AllowsDeleteOnTodoRoute()
+    public async Task DefaultToken_DeniesDeleteOnTodoRoute()
     {
         var tokenService = CreateTokenService();
         var defaultToken = tokenService.GetDefaultToken(WorkspacePath)!;
@@ -132,7 +133,8 @@ public sealed class WorkspaceAuthMiddlewareTests
 
         await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
 
-        Assert.True(nextCalled);
+        Assert.False(nextCalled);
+        Assert.Equal(403, ctx.Response.StatusCode);
     }
 
     [Fact]
@@ -184,9 +186,8 @@ public sealed class WorkspaceAuthMiddlewareTests
     }
 
     [Fact]
-    public async Task EmptyApiKey_Config_PassesAll()
+    public async Task MissingWorkspaceToken_Returns503()
     {
-        // When Mcp:ApiKey is empty, auth is open mode — all requests pass.
         var tokenService = new WorkspaceTokenService();
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
@@ -202,6 +203,25 @@ public sealed class WorkspaceAuthMiddlewareTests
 
         await middleware.InvokeAsync(ctx, tokenService, config, wsContext);
 
-        Assert.True(nextCalled);
+        Assert.False(nextCalled);
+        Assert.Equal(503, ctx.Response.StatusCode);
+    }
+
+    [Fact]
+    public async Task EmptyWorkspaceContext_Returns503()
+    {
+        var tokenService = new WorkspaceTokenService();
+        var config = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>())
+            .Build();
+        var wsContext = new WorkspaceContext();
+        var nextCalled = false;
+        var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
+        var ctx = CreateContext("GET", "/mcpserver/context/search", null);
+
+        await middleware.InvokeAsync(ctx, tokenService, config, wsContext);
+
+        Assert.False(nextCalled);
+        Assert.Equal(503, ctx.Response.StatusCode);
     }
 }
