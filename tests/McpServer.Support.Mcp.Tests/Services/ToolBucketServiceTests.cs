@@ -102,6 +102,30 @@ public sealed class ToolBucketServiceTests : IDisposable
     }
 
     /// <summary>
+    /// Verifies that an unscoped bucket query only returns global buckets instead of every tenant bucket,
+    /// which keeps global discovery working while preventing empty-workspace data visibility across tenants.
+    /// Validates FR-MCP-022 and TR-MCP-MT-003.
+    /// </summary>
+    [Fact]
+    public async Task ListBucketsAsync_WithoutWorkspaceScope_ReturnsOnlyGlobalBuckets()
+    {
+        using (var seed = CreateContext(null))
+        {
+            seed.ToolBuckets.Add(CreateBucketEntity("official", string.Empty));
+            seed.ToolBuckets.Add(CreateBucketEntity("workspace-only", @"E:\github\McpServer"));
+            seed.SaveChanges();
+        }
+
+        using var unscopedDb = CreateContext(null);
+        var sut = CreateSut(unscopedDb);
+
+        var result = await sut.ListBucketsAsync().ConfigureAwait(true);
+
+        Assert.Single(result.Buckets);
+        Assert.Equal("official", result.Buckets[0].Name);
+    }
+
+    /// <summary>
     /// Disposes the shared relational test database connection after each test class instance so temporary
     /// resources are released deterministically.
     /// </summary>

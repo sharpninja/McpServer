@@ -286,6 +286,8 @@ public abstract class McpClientBase
         if (!string.IsNullOrWhiteSpace(WorkspacePath))
             request.Headers.TryAddWithoutValidation("X-Workspace-Path", WorkspacePath);
 
+        AppendCustomHeaders(request);
+
         if (!string.IsNullOrWhiteSpace(acceptMediaType))
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(acceptMediaType));
 
@@ -342,6 +344,16 @@ public abstract class McpClientBase
         var bytes = await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(true);
         var mediaType = response.Content.Headers.ContentType?.MediaType;
         return (bytes, mediaType);
+    }
+
+    /// <summary>
+    /// Allows derived clients to append endpoint-specific headers after the shared
+    /// authentication and workspace headers have been applied.
+    /// </summary>
+    /// <param name="request">The outbound request receiving any derived-client headers.</param>
+    protected virtual void AppendCustomHeaders(HttpRequestMessage request)
+    {
+        ArgumentNullException.ThrowIfNull(request);
     }
 
     /// <summary>
@@ -418,6 +430,7 @@ public abstract class McpClientBase
 
         if (!string.IsNullOrWhiteSpace(WorkspacePath))
             request.Headers.TryAddWithoutValidation("X-Workspace-Path", WorkspacePath);
+        AppendCustomHeaders(request);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         _logger?.LogInformation("[McpClient] {Method} {Uri} | Auth={AuthMode} | WorkspacePath={WorkspacePath}",
@@ -469,6 +482,7 @@ public abstract class McpClientBase
             request.Headers.TryAddWithoutValidation("X-Api-Key", ApiKey);
         if (!string.IsNullOrWhiteSpace(WorkspacePath))
             request.Headers.TryAddWithoutValidation("X-Workspace-Path", WorkspacePath);
+        AppendCustomHeaders(request);
         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));
 
         using var response = await _http.SendAsync(

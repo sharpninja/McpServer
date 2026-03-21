@@ -7,7 +7,8 @@ using Microsoft.Extensions.Logging;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// TR-PLANNED-013: Channel-based buffer for interaction log entries. Non-blocking enqueue; async dequeue for background submission.
+/// TR-PLANNED-013: Channel-based buffer for interaction log entries. Non-blocking enqueue explicitly rejects
+/// new entries when the buffer is full, and async dequeue supports background submission.
 /// </summary>
 public sealed class InteractionLogSubmissionChannel : IInteractionLogSubmissionChannel
 {
@@ -25,7 +26,8 @@ public sealed class InteractionLogSubmissionChannel : IInteractionLogSubmissionC
         var capacity = options?.Value?.QueueCapacity ?? 1000;
         _channel = Channel.CreateBounded<InteractionLogEntry>(new BoundedChannelOptions(capacity)
         {
-            FullMode = BoundedChannelFullMode.DropOldest
+            FullMode = BoundedChannelFullMode.Wait,
+            SingleReader = true,
         });
     }
 

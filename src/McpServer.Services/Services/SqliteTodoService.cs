@@ -161,6 +161,49 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
         return new TodoAuditQueryResult(entries, totalCount);
     }
 
+    /// <inheritdoc />
+    public async Task<TodoProjectionStatusResult> GetProjectionStatusAsync(CancellationToken cancellationToken = default)
+    {
+        await EnsureInitializedAsync(cancellationToken).ConfigureAwait(false);
+        await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            return await GetProjectionStatusCoreAsync(cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<TodoProjectionRepairResult> RepairProjectionAsync(CancellationToken cancellationToken = default)
+    {
+        await EnsureInitializedAsync(cancellationToken).ConfigureAwait(false);
+        await _writeLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            try
+            {
+                await ProjectDatabaseToYamlAsync(cancellationToken).ConfigureAwait(false);
+                _logger.LogInformation("Repaired TODO.yaml projection from authoritative SQLite storage at {TodoFilePath}.", _todoFilePath);
+                var status = await GetProjectionStatusCoreAsync(cancellationToken).ConfigureAwait(false);
+                return new TodoProjectionRepairResult(true, null, status);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException or YamlException or InvalidOperationException or SqliteException)
+            {
+                _logger.LogError(ex, "Operator-requested TODO projection repair failed for {TodoFilePath}.", _todoFilePath);
+                await TryRecordProjectionFailureAsync(ex).ConfigureAwait(false);
+                var status = await GetProjectionStatusCoreAsync(cancellationToken).ConfigureAwait(false);
+                return new TodoProjectionRepairResult(false, $"Failed to repair TODO projection at '{_todoFilePath}': {ex.Message}", status);
+            }
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
+
     public async Task<TodoMutationResult> CreateAsync(TodoCreateRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -439,12 +482,14 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
                 completed_json TEXT NULL,
                 code_review_reference TEXT NULL,
                 last_imported_from_yaml_utc TEXT NULL,
-                last_projected_to_yaml_utc TEXT NULL
+                last_projected_to_yaml_utc TEXT NULL,
+                last_projection_failure_utc TEXT NULL,
+                last_projection_failure_message TEXT NULL
             );
             """;
         await command.ExecuteNonQueryAsync().ConfigureAwait(false);
 
-        var columns = await GetTodoItemColumnsAsync(connection).ConfigureAwait(false);
+        var columns = await GetTableColumnsAsync(connection, "todo_items").ConfigureAwait(false);
         if (!columns.Contains("item_kind"))
             await ExecuteNonQueryAsync(connection, "ALTER TABLE todo_items ADD COLUMN item_kind TEXT NOT NULL DEFAULT 'standard';").ConfigureAwait(false);
         if (!columns.Contains("section_order"))
@@ -453,6 +498,12 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
             await ExecuteNonQueryAsync(connection, "ALTER TABLE todo_items ADD COLUMN item_order INTEGER NOT NULL DEFAULT 0;").ConfigureAwait(false);
         if (!columns.Contains("phase_label"))
             await ExecuteNonQueryAsync(connection, "ALTER TABLE todo_items ADD COLUMN phase_label TEXT NULL;").ConfigureAwait(false);
+
+        var metadataColumns = await GetTableColumnsAsync(connection, "todo_document_metadata").ConfigureAwait(false);
+        if (!metadataColumns.Contains("last_projection_failure_utc"))
+            await ExecuteNonQueryAsync(connection, "ALTER TABLE todo_document_metadata ADD COLUMN last_projection_failure_utc TEXT NULL;").ConfigureAwait(false);
+        if (!metadataColumns.Contains("last_projection_failure_message"))
+            await ExecuteNonQueryAsync(connection, "ALTER TABLE todo_document_metadata ADD COLUMN last_projection_failure_message TEXT NULL;").ConfigureAwait(false);
     }
 
     private async Task EnsureMetadataRowAsync(SqliteConnection connection)
@@ -469,6 +520,8 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
             file.Completed is null ? null : JsonSerializer.Serialize(file.Completed, _json),
             file.CodeReviewRemediation?.Reference,
             importedAtUtc.ToString("O"),
+            null,
+            null,
             null);
 
         await UpdateDocumentMetadataAsync(connection, documentMetadata, cancellationToken).ConfigureAwait(false);
@@ -649,6 +702,7 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException or YamlException or InvalidOperationException or SqliteException)
         {
+            await TryRecordProjectionFailureAsync(ex).ConfigureAwait(false);
             _logger.LogError(ex, "TODO mutation for {Id} committed in SQLite but projection to {TodoFilePath} failed.", id, _todoFilePath);
             var message = $"TODO '{id}' was committed to authoritative SQLite storage, but projection to '{_todoFilePath}' failed: {ex.Message}";
             return new TodoMutationResult(false, message, item, TodoMutationFailureKind.ProjectionFailed);
@@ -659,12 +713,40 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
 
     private async Task ProjectDatabaseToYamlAsync(CancellationToken cancellationToken)
     {
+        var file = await BuildProjectedTodoFileAsync(cancellationToken).ConfigureAwait(false);
+        await TodoYamlFileSerializer.WriteAtomicallyAsync(_todoFilePath, file, cancellationToken).ConfigureAwait(false);
+
+        try
+        {
+            using var connection = CreateConnection();
+            await connection.OpenAsync(CancellationToken.None).ConfigureAwait(false);
+            var metadata = await GetDocumentMetadataAsync(connection, CancellationToken.None).ConfigureAwait(false);
+            var updatedMetadata = metadata with
+            {
+                LastProjectedToYamlUtc = DateTime.UtcNow.ToString("O"),
+                LastProjectionFailureUtc = null,
+                LastProjectionFailureMessage = null,
+            };
+            await UpdateDocumentMetadataAsync(connection, updatedMetadata, CancellationToken.None).ConfigureAwait(false);
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or SqliteException)
+        {
+            _logger.LogWarning(ex, "TODO.yaml projection succeeded for {TodoFilePath}, but projection metadata could not be updated.", _todoFilePath);
+        }
+    }
+
+    private async Task<TodoFile> BuildProjectedTodoFileAsync(CancellationToken cancellationToken)
+    {
         var items = await GetAllStoredAsync(cancellationToken).ConfigureAwait(false);
 
         using var connection = CreateConnection();
         await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
         var metadata = await GetDocumentMetadataAsync(connection, cancellationToken).ConfigureAwait(false);
+        return BuildProjectedTodoFile(items, metadata);
+    }
 
+    private TodoFile BuildProjectedTodoFile(IReadOnlyList<StoredTodoItem> items, TodoDocumentMetadata metadata)
+    {
         var file = new TodoFile();
         foreach (var sectionGroup in items
             .Where(static item => item.ItemKind == StandardItemKind)
@@ -710,11 +792,97 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
 
         file.Completed = DeserializeJson<List<CompletedGroup>>(metadata.CompletedJson);
         file.Notes = DeserializeJson<List<string>>(metadata.NotesJson);
+        return file;
+    }
 
-        await TodoYamlFileSerializer.WriteAtomicallyAsync(_todoFilePath, file, cancellationToken).ConfigureAwait(false);
+    private async Task<TodoProjectionStatusResult> GetProjectionStatusCoreAsync(CancellationToken cancellationToken)
+    {
+        using var connection = CreateConnection();
+        await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+        var metadata = await GetDocumentMetadataAsync(connection, cancellationToken).ConfigureAwait(false);
+        var projectedFile = await BuildProjectedTodoFileAsync(cancellationToken).ConfigureAwait(false);
 
-        var updatedMetadata = metadata with { LastProjectedToYamlUtc = DateTime.UtcNow.ToString("O") };
-        await UpdateDocumentMetadataAsync(connection, updatedMetadata, cancellationToken).ConfigureAwait(false);
+        var projectionTargetExists = File.Exists(_todoFilePath);
+        var projectionConsistent = false;
+        string? consistencyMessage = null;
+
+        if (!projectionTargetExists)
+        {
+            consistencyMessage = Directory.Exists(_todoFilePath)
+                ? $"Projected TODO target '{_todoFilePath}' is a directory instead of a file."
+                : $"Projected TODO file '{_todoFilePath}' does not exist.";
+        }
+        else
+        {
+            try
+            {
+                var actualFile = await TodoYamlFileSerializer.ReadIfExistsAsync(_todoFilePath, cancellationToken).ConfigureAwait(false);
+                if (actualFile is null)
+                {
+                    consistencyMessage = $"Projected TODO file '{_todoFilePath}' could not be loaded for consistency verification.";
+                }
+                else
+                {
+                    projectionConsistent = string.Equals(
+                        NormalizeYaml(TodoYamlFileSerializer.Serialize(actualFile)),
+                        NormalizeYaml(TodoYamlFileSerializer.Serialize(projectedFile)),
+                        StringComparison.Ordinal);
+
+                    if (!projectionConsistent)
+                        consistencyMessage = $"Projected TODO file '{_todoFilePath}' does not match authoritative SQLite state.";
+                }
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or YamlException)
+            {
+                consistencyMessage = $"Projected TODO file '{_todoFilePath}' could not be read for consistency verification: {ex.Message}";
+            }
+        }
+
+        var repairRequired = !projectionTargetExists || !projectionConsistent;
+        var historicalFailureMessage = string.IsNullOrWhiteSpace(metadata.LastProjectionFailureMessage)
+            ? null
+            : $"Last recorded projection failure at {metadata.LastProjectionFailureUtc ?? "an unknown time"}: {metadata.LastProjectionFailureMessage}";
+
+        var message = consistencyMessage
+            ?? (repairRequired
+                ? historicalFailureMessage ?? "TODO.yaml requires repair to match authoritative SQLite state."
+                : historicalFailureMessage is null
+                    ? "TODO.yaml matches authoritative SQLite state."
+                    : $"TODO.yaml matches authoritative SQLite state. {historicalFailureMessage}");
+
+        return new TodoProjectionStatusResult(
+            AuthoritativeStore: "sqlite",
+            AuthoritativeDataSource: _dataSource,
+            ProjectionTargetPath: _todoFilePath,
+            ProjectionTargetExists: projectionTargetExists,
+            ProjectionConsistent: projectionConsistent,
+            RepairRequired: repairRequired,
+            VerifiedAtUtc: DateTime.UtcNow.ToString("O"),
+            LastImportedFromYamlUtc: metadata.LastImportedFromYamlUtc,
+            LastProjectedToYamlUtc: metadata.LastProjectedToYamlUtc,
+            LastProjectionFailureUtc: metadata.LastProjectionFailureUtc,
+            LastProjectionFailure: metadata.LastProjectionFailureMessage,
+            Message: message);
+    }
+
+    private async Task TryRecordProjectionFailureAsync(Exception ex)
+    {
+        try
+        {
+            using var connection = CreateConnection();
+            await connection.OpenAsync(CancellationToken.None).ConfigureAwait(false);
+            var metadata = await GetDocumentMetadataAsync(connection, CancellationToken.None).ConfigureAwait(false);
+            var updatedMetadata = metadata with
+            {
+                LastProjectionFailureUtc = DateTime.UtcNow.ToString("O"),
+                LastProjectionFailureMessage = ex.Message,
+            };
+            await UpdateDocumentMetadataAsync(connection, updatedMetadata, CancellationToken.None).ConfigureAwait(false);
+        }
+        catch (Exception recordEx) when (recordEx is InvalidOperationException or SqliteException)
+        {
+            _logger.LogWarning(recordEx, "Failed to persist TODO projection failure metadata for {TodoFilePath}.", _todoFilePath);
+        }
     }
 
     private static List<TodoItem>? BuildPriorityItems(IGrouping<string, StoredTodoItem> group, string priority)
@@ -936,17 +1104,19 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
     private async Task<TodoDocumentMetadata> GetDocumentMetadataAsync(SqliteConnection connection, CancellationToken cancellationToken)
     {
         using var command = connection.CreateCommand();
-        command.CommandText = "SELECT notes_json, completed_json, code_review_reference, last_imported_from_yaml_utc, last_projected_to_yaml_utc FROM todo_document_metadata WHERE singleton_id = 1 LIMIT 1;";
+        command.CommandText = "SELECT notes_json, completed_json, code_review_reference, last_imported_from_yaml_utc, last_projected_to_yaml_utc, last_projection_failure_utc, last_projection_failure_message FROM todo_document_metadata WHERE singleton_id = 1 LIMIT 1;";
         using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
         if (!await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
-            return new TodoDocumentMetadata(null, null, null, null, null);
+            return new TodoDocumentMetadata(null, null, null, null, null, null, null);
 
         return new TodoDocumentMetadata(
             GetNullableString(reader, "notes_json"),
             GetNullableString(reader, "completed_json"),
             GetNullableString(reader, "code_review_reference"),
             GetNullableString(reader, "last_imported_from_yaml_utc"),
-            GetNullableString(reader, "last_projected_to_yaml_utc"));
+            GetNullableString(reader, "last_projected_to_yaml_utc"),
+            GetNullableString(reader, "last_projection_failure_utc"),
+            GetNullableString(reader, "last_projection_failure_message"));
     }
 
     private async Task UpdateDocumentMetadataAsync(SqliteConnection connection, TodoDocumentMetadata metadata, CancellationToken cancellationToken)
@@ -958,7 +1128,9 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
                 completed_json = $completedJson,
                 code_review_reference = $codeReviewReference,
                 last_imported_from_yaml_utc = $lastImported,
-                last_projected_to_yaml_utc = $lastProjected
+                last_projected_to_yaml_utc = $lastProjected,
+                last_projection_failure_utc = $lastProjectionFailureUtc,
+                last_projection_failure_message = $lastProjectionFailureMessage
             WHERE singleton_id = 1;
             """;
         command.Parameters.AddWithValue("$notesJson", (object?)metadata.NotesJson ?? DBNull.Value);
@@ -966,6 +1138,8 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
         command.Parameters.AddWithValue("$codeReviewReference", (object?)metadata.CodeReviewReference ?? DBNull.Value);
         command.Parameters.AddWithValue("$lastImported", (object?)metadata.LastImportedFromYamlUtc ?? DBNull.Value);
         command.Parameters.AddWithValue("$lastProjected", (object?)metadata.LastProjectedToYamlUtc ?? DBNull.Value);
+        command.Parameters.AddWithValue("$lastProjectionFailureUtc", (object?)metadata.LastProjectionFailureUtc ?? DBNull.Value);
+        command.Parameters.AddWithValue("$lastProjectionFailureMessage", (object?)metadata.LastProjectionFailureMessage ?? DBNull.Value);
         await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
     }
 
@@ -1006,10 +1180,10 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
         return Convert.ToInt32((long)(await command.ExecuteScalarAsync().ConfigureAwait(false) ?? 0L));
     }
 
-    private async Task<HashSet<string>> GetTodoItemColumnsAsync(SqliteConnection connection)
+    private async Task<HashSet<string>> GetTableColumnsAsync(SqliteConnection connection, string tableName)
     {
         using var command = connection.CreateCommand();
-        command.CommandText = "PRAGMA table_info(todo_items);";
+        command.CommandText = $"PRAGMA table_info({tableName});";
         using var reader = await command.ExecuteReaderAsync().ConfigureAwait(false);
         var columns = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         while (await reader.ReadAsync().ConfigureAwait(false))
@@ -1034,6 +1208,9 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
         => string.IsNullOrWhiteSpace(value)
             ? default
             : JsonSerializer.Deserialize<T>(value, _json);
+
+    private static string NormalizeYaml(string yaml)
+        => yaml.Replace("\r\n", "\n", StringComparison.Ordinal).Trim();
 
     private TodoFlatItem? DeserializeFlatItem(string? value) => DeserializeJson<TodoFlatItem>(value);
 
@@ -1179,5 +1356,7 @@ internal sealed class SqliteTodoService : ITodoService, ITodoStore, IDisposable
         string? CompletedJson,
         string? CodeReviewReference,
         string? LastImportedFromYamlUtc,
-        string? LastProjectedToYamlUtc);
+        string? LastProjectedToYamlUtc,
+        string? LastProjectionFailureUtc,
+        string? LastProjectionFailureMessage);
 }

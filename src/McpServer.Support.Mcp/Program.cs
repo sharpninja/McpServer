@@ -1,6 +1,7 @@
 // TR-PLANNED-013 / FR-SUPPORT-010: MCP Context Unification - local MCP server for Cursor and Copilot.
 
 using System.Globalization;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Runtime.Versioning;
@@ -388,12 +389,15 @@ builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
 builder.Services.AddScoped<IToolBucketService, ToolBucketService>();
 builder.Services.AddScoped<IAgentService, AgentService>();
 builder.Services.AddSingleton<WorkspaceTokenService>();
+builder.Services.AddSingleton<ApiKeyIssuanceGuard>();
 builder.Services.AddScoped<WorkspaceContext>();
 builder.Services.AddSingleton(new ServerRuntimeInfo(serverStartupUtc, listenPort));
 builder.Services.AddSingleton<IWorkspaceProcessManager, WorkspaceProcessManager>();
+builder.Services.Configure<DesktopLaunchOptions>(builder.Configuration.GetSection(DesktopLaunchOptions.SectionName));
 builder.Services.Configure<PairingOptions>(builder.Configuration.GetSection(PairingOptions.SectionName));
 builder.Services.Configure<OidcAuthOptions>(builder.Configuration.GetSection(OidcAuthOptions.SectionName));
 builder.Services.Configure<ToolRegistryOptions>(builder.Configuration.GetSection(ToolRegistryOptions.SectionName));
+builder.Services.AddSingleton<PairingLoginAttemptGuard>();
 builder.Services.AddSingleton<PairingSessionService>();
 
 var oidcAuthBootstrap = builder.Configuration.GetSection(OidcAuthOptions.SectionName).Get<OidcAuthOptions>()
@@ -576,9 +580,6 @@ if (!app.Environment.IsEnvironment("Test"))
     }
 }
 
-app.Lifetime.ApplicationStopping.Register(() =>
-    app.Services.GetRequiredService<TunnelRegistry>().StopAllAsync().GetAwaiter().GetResult());
-
 app.UseGlobalExceptionHandler();
 app.UseMiddleware<InteractionLoggingMiddleware>();
 
@@ -607,8 +608,19 @@ app.MapGet("/marker-file-timestamp", (string? repoPath, IConfiguration configura
         restrictToCurrentRepoRoot: false))
     .ExcludeFromDescription();
 
-app.MapGet("/api-key", (WorkspaceTokenService tokenService) =>
+app.MapGet("/api-key", (HttpContext context, WorkspaceTokenService tokenService, ApiKeyIssuanceGuard apiKeyIssuanceGuard) =>
 {
+    if (!IsLoopbackRequest(context))
+    {
+        app.Logger.LogWarning(
+            "Rejected non-loopback /api-key request: RemoteIp={RemoteIp}",
+            context.Connection.RemoteIpAddress?.ToString() ?? "(none)");
+        return Results.NotFound();
+    }
+
+    context.Response.Headers.CacheControl = "no-store, no-cache";
+    context.Response.Headers.Pragma = "no-cache";
+
     var workspacePath = ResolvePrimaryApiKeyWorkspacePath(app.Configuration, app.Environment, instanceName) ?? string.Empty;
     if (string.IsNullOrWhiteSpace(workspacePath))
         return Results.Problem("No workspace configured.", statusCode: 503);
@@ -616,12 +628,28 @@ app.MapGet("/api-key", (WorkspaceTokenService tokenService) =>
     var defaultToken = tokenService.GetDefaultToken(workspacePath);
     if (defaultToken is null)
     {
-        defaultToken = tokenService.GenerateDefaultToken(workspacePath);
-        app.Logger.LogWarning(
-            "Default API token was missing during /api-key request and was generated on demand: Workspace={WorkspacePath}",
+        app.Logger.LogError(
+            "Default API token unavailable during /api-key request: Workspace={WorkspacePath}",
             workspacePath);
+        return Results.Problem("Default API token unavailable.", statusCode: 503);
     }
 
+    if (!apiKeyIssuanceGuard.TryAcquire(context.Connection.RemoteIpAddress, out var retryAfter))
+    {
+        var retryAfterSeconds = Math.Max(1, (int)Math.Ceiling(retryAfter.TotalSeconds));
+        context.Response.Headers.RetryAfter = retryAfterSeconds.ToString(CultureInfo.InvariantCulture);
+        app.Logger.LogWarning(
+            "Default API token issuance throttled: RemoteIp={RemoteIp}; Workspace={WorkspacePath}; RetryAfterSeconds={RetryAfterSeconds}",
+            context.Connection.RemoteIpAddress?.ToString() ?? "loopback",
+            workspacePath,
+            retryAfterSeconds);
+        return Results.Problem("Default API token issuance is temporarily rate-limited.", statusCode: 429);
+    }
+
+    app.Logger.LogInformation(
+        "Default API token issued: RemoteIp={RemoteIp}; Workspace={WorkspacePath}",
+        context.Connection.RemoteIpAddress?.ToString() ?? "loopback",
+        workspacePath);
     return Results.Ok(new { apiKey = defaultToken });
 }).ExcludeFromDescription();
 
@@ -636,22 +664,53 @@ app.MapGet("/pair", async (IOptions<PairingOptions> opts, PairingHtmlRenderer pa
     return Results.Content(await pairingRenderer.RenderLoginPageAsync().ConfigureAwait(false), "text/html");
 }).ExcludeFromDescription();
 
-app.MapPost("/pair", async (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions, PairingHtmlRenderer pairingRenderer) =>
+app.MapPost("/pair", async (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions, PairingLoginAttemptGuard attemptGuard, PairingHtmlRenderer pairingRenderer) =>
 {
     var o = opts.Value;
     if (o.PairingUsers.Count == 0 || string.IsNullOrEmpty(o.ApiKey))
         return Results.Content(await pairingRenderer.RenderNotConfiguredPageAsync().ConfigureAwait(false), "text/html");
 
     var form = await context.Request.ReadFormAsync().ConfigureAwait(false);
-    var username = form["username"].ToString();
+    var username = form["username"].ToString().Trim();
     var password = form["password"].ToString();
+    var remoteIp = context.Connection.RemoteIpAddress;
+
+    if (!attemptGuard.TryAcquire(username, remoteIp, out var retryAfter))
+    {
+        var retryAfterSeconds = Math.Max(1, (int)Math.Ceiling(retryAfter.TotalSeconds));
+        context.Response.Headers.RetryAfter = retryAfterSeconds.ToString(CultureInfo.InvariantCulture);
+        app.Logger.LogWarning(
+            "Pairing sign-in blocked after repeated failures: RemoteIp={RemoteIp}; Username={Username}; RetryAfterSeconds={RetryAfterSeconds}",
+            remoteIp?.ToString() ?? "loopback",
+            username,
+            retryAfterSeconds);
+        return Results.Content(
+            await pairingRenderer.RenderLoginPageAsync("Too many failed sign-in attempts. Please wait and try again.").ConfigureAwait(false),
+            "text/html",
+            Encoding.UTF8,
+            StatusCodes.Status429TooManyRequests);
+    }
 
     var user = o.PairingUsers.Find(u =>
         string.Equals(u.Username, username, StringComparison.OrdinalIgnoreCase));
 
     if (user is null || !VerifyPairingPassword(password, user.PasswordHash))
-        return Results.Content(await pairingRenderer.RenderLoginPageAsync(error: true).ConfigureAwait(false), "text/html");
+    {
+        attemptGuard.RecordFailure(username, remoteIp);
+        app.Logger.LogWarning(
+            "Pairing sign-in failed: RemoteIp={RemoteIp}; Username={Username}",
+            remoteIp?.ToString() ?? "loopback",
+            username);
+        return Results.Content(
+            await pairingRenderer.RenderLoginPageAsync("Invalid username or password.").ConfigureAwait(false),
+            "text/html");
+    }
 
+    attemptGuard.RecordSuccess(username, remoteIp);
+    app.Logger.LogInformation(
+        "Pairing sign-in succeeded: RemoteIp={RemoteIp}; Username={Username}",
+        remoteIp?.ToString() ?? "loopback",
+        username);
     var token = sessions.CreateToken();
     context.Response.Cookies.Append("mcp_pair", token, new CookieOptions
     {
@@ -691,6 +750,12 @@ static bool VerifyPairingPassword(string plaintext, string expectedHash)
     return CryptographicOperations.FixedTimeEquals(computed, expected);
 }
 
+static bool IsLoopbackRequest(HttpContext context)
+{
+    var remoteIp = context.Connection.RemoteIpAddress;
+    return remoteIp is null || IPAddress.IsLoopback(remoteIp);
+}
+
 static void DisableEnvironmentSpecificJsonConfigForWindowsService(WebApplicationBuilder builder)
 {
     if (!OperatingSystem.IsWindows() || !WindowsServiceHelpers.IsWindowsService())
@@ -718,7 +783,11 @@ static void DisableEnvironmentSpecificJsonConfigForWindowsService(WebApplication
 
 static void EnsureApprovedWindowsServiceDeployment()
 {
-    if (!OperatingSystem.IsWindows() || !WindowsServiceHelpers.IsWindowsService())
+    if (!OperatingSystem.IsWindows())
+        return;
+
+    if (!WindowsServiceHelpers.IsWindowsService() &&
+        !WindowsServiceDeploymentGuard.HasDeploymentManifest(AppContext.BaseDirectory))
         return;
     WindowsServiceDeploymentGuard.EnsureApprovedDeployment(AppContext.BaseDirectory, WriteWindowsServiceDeploymentFailure);
 }

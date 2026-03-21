@@ -97,6 +97,38 @@ public sealed class TodoController : ControllerBase
         }
     }
 
+    /// <summary>TR-MCP-TODO-006: Get SQLite-authoritative TODO projection status and repair guidance.</summary>
+    [HttpGet("projection/status")]
+    public async Task<ActionResult<TodoProjectionStatusResult>> GetProjectionStatusAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            var result = await _todoService.GetProjectionStatusAsync(cancellationToken).ConfigureAwait(false);
+            return Ok(result);
+        }
+        catch (NotSupportedException ex)
+        {
+            return StatusCode(StatusCodes.Status501NotImplemented, new { error = ex.Message });
+        }
+    }
+
+    /// <summary>TR-MCP-TODO-006: Repair TODO.yaml projection from SQLite-authoritative TODO storage.</summary>
+    [HttpPost("projection/repair")]
+    public async Task<ActionResult<TodoProjectionRepairResult>> RepairProjectionAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            var result = await _todoService.RepairProjectionAsync(cancellationToken).ConfigureAwait(false);
+            return result.Success
+                ? Ok(result)
+                : StatusCode(StatusCodes.Status500InternalServerError, result);
+        }
+        catch (NotSupportedException ex)
+        {
+            return StatusCode(StatusCodes.Status501NotImplemented, new { error = ex.Message });
+        }
+    }
+
     /// <summary>TR-PLANNED-013: Create a new TODO item.</summary>
     [HttpPost]
     public async Task<ActionResult<TodoMutationResult>> CreateAsync(

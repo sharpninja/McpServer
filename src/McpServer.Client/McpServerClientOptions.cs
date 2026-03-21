@@ -60,6 +60,13 @@ public sealed class McpServerClientOptions
     public string? WorkspacePath { get; set; }
 
     /// <summary>
+    /// Optional privileged token sent only to the desktop-launch endpoint as
+    /// <c>X-Desktop-Launch-Token</c>. Use this for callers that are explicitly trusted to invoke
+    /// remote desktop launch in addition to normal workspace authentication.
+    /// </summary>
+    public string? DesktopLaunchToken { get; set; }
+
+    /// <summary>
     /// HTTP request timeout applied to the internally-created <see cref="System.Net.Http.HttpClient"/>
     /// when using <see cref="McpServerClientFactory.Create(McpServerClientOptions)"/>.
     /// Defaults to 30 seconds.

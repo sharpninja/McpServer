@@ -59,4 +59,31 @@ public sealed class DesktopClientTests
         Assert.Contains("\"windowStyle\":\"Hidden\"", handler.LastRequestBody!);
         Assert.Contains("\"waitForExit\":true", handler.LastRequestBody!);
     }
+
+    /// <summary>
+    /// FR-MCP-047/TR-MCP-DESKTOP-001: Verifies that <see cref="DesktopClient"/> forwards the
+    /// optional privileged desktop-launch token as the dedicated HTTP header for the desktop
+    /// endpoint only.
+    /// The test uses the existing <see cref="MockHttpHandler"/> so the outbound headers can be
+    /// inspected without contacting a live MCP server.
+    /// </summary>
+    [Fact]
+    public async Task LaunchAsync_WhenDesktopLaunchTokenConfigured_AddsDesktopLaunchHeader()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true,"processId":4242,"exitCode":0}""");
+        using var http = new HttpClient(handler);
+        var client = new DesktopClient(
+            http,
+            new McpServerClientOptions
+            {
+                ApiKey = "test-key",
+                BaseUrl = new Uri("http://localhost:7147"),
+                DesktopLaunchToken = "desktop-secret"
+            });
+
+        await client.LaunchAsync(new DesktopLaunchRequest { ExecutablePath = @"C:\Windows\System32\cmd.exe" });
+
+        Assert.True(handler.LastRequest!.Headers.TryGetValues("X-Desktop-Launch-Token", out var values));
+        Assert.Equal("desktop-secret", Assert.Single(values));
+    }
 }

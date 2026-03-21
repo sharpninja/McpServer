@@ -180,6 +180,127 @@ public sealed class AppSettingsFileServiceTests : IDisposable
         Assert.Contains("CopilotModel: should-not-change", contentRootYamlText, StringComparison.Ordinal);
     }
 
+    /// <summary>
+    /// TEST-MCP-091: Verifies that concurrent YAML patch requests are serialized across the full
+    /// read-modify-write cycle so both updates persist instead of one request overwriting the other.
+    /// The test blocks the first temp-file write after load to force a true overlap opportunity.
+    /// </summary>
+    [Fact]
+    public async Task PatchYamlConfigurationAsync_ConcurrentPatchesSerializeWholeMutation()
+    {
+        var yamlPath = Path.Combine(_tempDirectory, "appsettings.yaml");
+        await File.WriteAllTextAsync(
+            yamlPath,
+            """
+            VoiceConversation:
+              CopilotModel: gpt-5.3-codex
+            """).ConfigureAwait(true);
+
+        var configuration = BuildConfiguration(yamlPath);
+        var firstWriteEntered = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var releaseFirstWrite = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var writeCount = 0;
+        var service = CreateService(
+            configuration,
+            _tempDirectory,
+            async (path, content, ct) =>
+            {
+                var invocation = Interlocked.Increment(ref writeCount);
+                if (invocation == 1)
+                {
+                    firstWriteEntered.SetResult();
+                    await releaseFirstWrite.Task.WaitAsync(ct).ConfigureAwait(false);
+                }
+
+                await File.WriteAllTextAsync(path, content, ct).ConfigureAwait(false);
+            });
+
+        var firstPatch = service.PatchYamlConfigurationAsync(
+            new Dictionary<string, string?> { ["VoiceConversation:DefaultExecutionStrategy"] = "hosted-mcp-agent" },
+            CancellationToken.None);
+
+        await firstWriteEntered.Task.WaitAsync(TimeSpan.FromSeconds(5)).ConfigureAwait(true);
+
+        var secondPatch = service.PatchYamlConfigurationAsync(
+            new Dictionary<string, string?> { ["VoiceConversation:ModelApiKeyEnvironmentVariableName"] = "OPENAI_API_KEY" },
+            CancellationToken.None);
+
+        releaseFirstWrite.SetResult();
+        await Task.WhenAll(firstPatch, secondPatch).ConfigureAwait(true);
+
+        var yamlText = await File.ReadAllTextAsync(yamlPath).ConfigureAwait(true);
+        Assert.Contains("DefaultExecutionStrategy: hosted-mcp-agent", yamlText, StringComparison.Ordinal);
+        Assert.Contains("ModelApiKeyEnvironmentVariableName: OPENAI_API_KEY", yamlText, StringComparison.Ordinal);
+        Assert.Equal("hosted-mcp-agent", configuration["VoiceConversation:DefaultExecutionStrategy"]);
+        Assert.Equal("OPENAI_API_KEY", configuration["VoiceConversation:ModelApiKeyEnvironmentVariableName"]);
+    }
+
+    /// <summary>
+    /// TEST-MCP-091: Verifies that a failed temp-file write leaves the original YAML document untouched
+    /// and cleans up the temporary artifact so interrupted writes cannot strand partial config files.
+    /// </summary>
+    [Fact]
+    public async Task PatchYamlConfigurationAsync_WhenAtomicWriteFails_LeavesOriginalFileAndCleansTempFile()
+    {
+        var yamlPath = Path.Combine(_tempDirectory, "appsettings.yaml");
+        await File.WriteAllTextAsync(
+            yamlPath,
+            """
+            VoiceConversation:
+              CopilotModel: gpt-5.3-codex
+            """).ConfigureAwait(true);
+
+        var configuration = BuildConfiguration(yamlPath);
+        string? tempPath = null;
+        var service = CreateService(
+            configuration,
+            _tempDirectory,
+            async (path, content, ct) =>
+            {
+                tempPath = path;
+                await File.WriteAllTextAsync(path, "partial", ct).ConfigureAwait(false);
+                throw new IOException("Simulated temp-write failure.");
+            });
+
+        await Assert.ThrowsAsync<IOException>(() => service.PatchYamlConfigurationAsync(
+            new Dictionary<string, string?> { ["VoiceConversation:CopilotModel"] = "gpt-5.4" },
+            CancellationToken.None)).ConfigureAwait(true);
+
+        var yamlText = await File.ReadAllTextAsync(yamlPath).ConfigureAwait(true);
+        Assert.Contains("CopilotModel: gpt-5.3-codex", yamlText, StringComparison.Ordinal);
+        Assert.Equal("gpt-5.3-codex", configuration["VoiceConversation:CopilotModel"]);
+        Assert.NotNull(tempPath);
+        Assert.False(File.Exists(tempPath));
+    }
+
+    /// <summary>
+    /// TEST-MCP-091: Verifies that global prompt updates use the same atomic write service when the active
+    /// configuration file is JSON-backed, preserving reload behavior and consistent formatting.
+    /// </summary>
+    [Fact]
+    public async Task UpdateGlobalPromptTemplateAsync_WhenJsonBacked_UpdatesJsonAndReloadsConfiguration()
+    {
+        var jsonPath = Path.Combine(_tempDirectory, "appsettings.json");
+        await File.WriteAllTextAsync(
+            jsonPath,
+            """
+            {
+              "Mcp": {
+                "MarkerPromptTemplate": "old-template"
+              }
+            }
+            """).ConfigureAwait(true);
+
+        var configuration = BuildJsonConfiguration(jsonPath);
+        var service = CreateService(configuration);
+
+        await service.UpdateGlobalPromptTemplateAsync("new-template", CancellationToken.None).ConfigureAwait(true);
+
+        var jsonText = await File.ReadAllTextAsync(jsonPath).ConfigureAwait(true);
+        Assert.Equal("new-template", configuration["Mcp:MarkerPromptTemplate"]);
+        Assert.Contains("\"MarkerPromptTemplate\": \"new-template\"", jsonText, StringComparison.Ordinal);
+    }
+
     /// <inheritdoc />
     public void Dispose()
     {
@@ -192,17 +313,29 @@ public sealed class AppSettingsFileServiceTests : IDisposable
         return CreateService(configuration, _tempDirectory);
     }
 
-    private static AppSettingsFileService CreateService(IConfiguration configuration, string contentRootPath)
+    private static AppSettingsFileService CreateService(
+        IConfiguration configuration,
+        string contentRootPath,
+        Func<string, string, CancellationToken, Task>? writeTextAsync = null)
     {
         var environment = Substitute.For<IWebHostEnvironment>();
         environment.ContentRootPath.Returns(contentRootPath);
-        return new AppSettingsFileService(configuration, environment);
+        return writeTextAsync is null
+            ? new AppSettingsFileService(configuration, environment)
+            : new AppSettingsFileService(configuration, environment, writeTextAsync);
     }
 
     private static IConfigurationRoot BuildConfiguration(string yamlPath)
     {
         return new ConfigurationBuilder()
             .AddYamlFile(yamlPath, optional: false, reloadOnChange: false)
+            .Build();
+    }
+
+    private static IConfigurationRoot BuildJsonConfiguration(string jsonPath)
+    {
+        return new ConfigurationBuilder()
+            .AddJsonFile(jsonPath, optional: false, reloadOnChange: false)
             .Build();
     }
 }

@@ -51,4 +51,40 @@ public sealed class InteractionLogSubmissionChannelTests
         Assert.False(success);
         Assert.Null(entry);
     }
+
+    /// <summary>TryEnqueue rejects a new entry when the bounded queue is full and preserves the already queued entry.</summary>
+    [Fact]
+    public async Task TryEnqueue_WhenQueueFull_ReturnsFalseAndPreservesQueuedEntry()
+    {
+        var options = Microsoft.Extensions.Options.Options.Create(new McpInteractionLoggingOptions { QueueCapacity = 1 });
+        var channel = new InteractionLogSubmissionChannel(options, NullLogger<InteractionLogSubmissionChannel>.Instance);
+
+        var first = new InteractionLogEntry
+        {
+            TimestampUtc = DateTime.UtcNow,
+            Method = "GET",
+            Path = "/mcpserver/context/sources",
+            StatusCode = 200,
+            DurationMs = 1.5,
+            RequestId = "req-1"
+        };
+        var second = new InteractionLogEntry
+        {
+            TimestampUtc = DateTime.UtcNow,
+            Method = "POST",
+            Path = "/mcpserver/context/search",
+            StatusCode = 202,
+            DurationMs = 3.0,
+            RequestId = "req-2"
+        };
+
+        Assert.True(channel.TryEnqueue(first));
+        Assert.False(channel.TryEnqueue(second));
+
+        var (success, dequeued) = await channel.TryDequeueAsync().ConfigureAwait(true);
+        Assert.True(success);
+        Assert.NotNull(dequeued);
+        Assert.Equal("req-1", dequeued.RequestId);
+        Assert.Equal("/mcpserver/context/sources", dequeued.Path);
+    }
 }

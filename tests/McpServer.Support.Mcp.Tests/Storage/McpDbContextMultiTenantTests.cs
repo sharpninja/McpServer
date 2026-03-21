@@ -26,8 +26,52 @@ public sealed class McpDbContextMultiTenantTests : IDisposable
             new SessionLogEntity { Id = 1, SessionId = "s1", SourceType = "cursor", WorkspaceId = @"C:\ws\alpha" },
             new SessionLogEntity { Id = 2, SessionId = "s2", SourceType = "copilot", WorkspaceId = @"C:\ws\beta" });
         ctx.ToolBuckets.AddRange(
+            new ToolBucketEntity { Id = 3, Name = "bucket-global", Owner = "org", Repo = "repo-global", WorkspaceId = string.Empty },
             new ToolBucketEntity { Id = 1, Name = "bucket-a", Owner = "org", Repo = "repo-a", WorkspaceId = @"C:\ws\alpha" },
             new ToolBucketEntity { Id = 2, Name = "bucket-b", Owner = "org", Repo = "repo-b", WorkspaceId = @"C:\ws\beta" });
+        ctx.AgentDefinitions.AddRange(
+            new AgentDefinitionEntity
+            {
+                Id = "agent-global",
+                WorkspaceId = string.Empty,
+                DisplayName = "Global Agent",
+                DefaultLaunchCommand = "pwsh",
+                DefaultInstructionFile = "AGENTS-README-FIRST.yaml",
+                DefaultModelsJson = "[]",
+                DefaultBranchStrategy = "feature/global",
+                DefaultSeedPrompt = "",
+                IsBuiltIn = true,
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow,
+            },
+            new AgentDefinitionEntity
+            {
+                Id = "agent-alpha",
+                WorkspaceId = @"C:\ws\alpha",
+                DisplayName = "Alpha Agent",
+                DefaultLaunchCommand = "pwsh",
+                DefaultInstructionFile = "AGENTS-README-FIRST.yaml",
+                DefaultModelsJson = "[]",
+                DefaultBranchStrategy = "feature/alpha",
+                DefaultSeedPrompt = "",
+                IsBuiltIn = false,
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow,
+            },
+            new AgentDefinitionEntity
+            {
+                Id = "agent-beta",
+                WorkspaceId = @"C:\ws\beta",
+                DisplayName = "Beta Agent",
+                DefaultLaunchCommand = "pwsh",
+                DefaultInstructionFile = "AGENTS-README-FIRST.yaml",
+                DefaultModelsJson = "[]",
+                DefaultBranchStrategy = "feature/beta",
+                DefaultSeedPrompt = "",
+                IsBuiltIn = false,
+                CreatedAt = DateTime.UtcNow,
+                ModifiedAt = DateTime.UtcNow,
+            });
         ctx.SaveChanges();
     }
 
@@ -71,8 +115,9 @@ public sealed class McpDbContextMultiTenantTests : IDisposable
 
         var buckets = ctx.ToolBuckets.ToList();
 
-        Assert.Single(buckets);
-        Assert.Equal("bucket-a", buckets[0].Name);
+        Assert.Equal(2, buckets.Count);
+        Assert.Contains(buckets, bucket => bucket.Name == "bucket-a");
+        Assert.Contains(buckets, bucket => bucket.Name == "bucket-global");
     }
 
     [Fact]
@@ -86,14 +131,46 @@ public sealed class McpDbContextMultiTenantTests : IDisposable
     }
 
     [Fact]
-    public void EmptyWorkspaceId_ReturnsAll()
+    public void EmptyWorkspaceId_HidesTenantScopedDocuments()
     {
-        // When workspace context is empty, all rows are visible (backward compat)
         using var ctx = CreateContext(string.Empty);
 
-        var allDocs = ctx.Documents.ToList();
+        var docs = ctx.Documents.ToList();
 
-        Assert.Equal(2, allDocs.Count);
+        Assert.Empty(docs);
+    }
+
+    [Fact]
+    public void EmptyWorkspaceId_ReturnsOnlyGlobalToolBuckets()
+    {
+        using var ctx = CreateContext(string.Empty);
+
+        var buckets = ctx.ToolBuckets.ToList();
+
+        Assert.Single(buckets);
+        Assert.Equal("bucket-global", buckets[0].Name);
+    }
+
+    [Fact]
+    public void EmptyWorkspaceId_ReturnsOnlyGlobalAgentDefinitions()
+    {
+        using var ctx = CreateContext(string.Empty);
+
+        var agents = ctx.AgentDefinitions.OrderBy(a => a.Id).ToList();
+
+        Assert.Single(agents);
+        Assert.Equal("agent-global", agents[0].Id);
+    }
+
+    [Fact]
+    public void WorkspaceFilter_IncludesGlobalAgentDefinitions()
+    {
+        using var ctx = CreateContext(@"C:\ws\alpha");
+
+        var agents = ctx.AgentDefinitions.OrderBy(a => a.Id).ToList();
+
+        Assert.Equal(2, agents.Count);
+        Assert.Equal(["agent-alpha", "agent-global"], agents.Select(a => a.Id).ToArray());
     }
 
     [Fact]

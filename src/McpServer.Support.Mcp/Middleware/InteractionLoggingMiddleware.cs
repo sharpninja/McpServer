@@ -124,8 +124,14 @@ public sealed class InteractionLoggingMiddleware
                 entry.RequestBody ?? "(none)",
                 entry.ResponseBody ?? "(none)");
 
-            if (!string.IsNullOrWhiteSpace(_options.LoggingServiceUrl) && _channel != null)
-                _channel.TryEnqueue(entry);
+            if (!string.IsNullOrWhiteSpace(_options.LoggingServiceUrl) && _channel != null && !_channel.TryEnqueue(entry))
+            {
+                _logger.LogWarning(
+                    "Interaction log forwarding rejected request {RequestId} for {Method} {Path} because the submission queue is full.",
+                    entry.RequestId,
+                    entry.Method,
+                    entry.Path);
+            }
         }
     }
 

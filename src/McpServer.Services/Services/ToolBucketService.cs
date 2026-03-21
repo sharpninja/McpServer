@@ -301,7 +301,7 @@ public sealed class ToolBucketService : IToolBucketService
         var workspaceId = _db.CurrentWorkspaceId;
         var query = _db.ToolBuckets.IgnoreQueryFilters();
         if (string.IsNullOrWhiteSpace(workspaceId))
-            return query;
+            return query.Where(b => b.WorkspaceId == string.Empty);
 
         // Default buckets are seeded without a workspace and must remain visible to every workspace.
         return query.Where(b => b.WorkspaceId == string.Empty || b.WorkspaceId == workspaceId);

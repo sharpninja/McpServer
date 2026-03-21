@@ -517,7 +517,7 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 ## TR-MCP-EVT-001
 
-**In-Process Change Event Bus** — `ChannelChangeEventBus` SHALL be registered as a singleton `IChangeEventBus` and provide fan-out publish/subscribe semantics to independent subscribers using bounded channels (capacity 1000, `DropOldest` overflow mode).
+**In-Process Change Event Bus** — `ChannelChangeEventBus` SHALL be registered as a singleton `IChangeEventBus` and provide fan-out publish/subscribe semantics to independent subscribers using bounded channels (capacity 1000) with non-blocking publish behavior. When a subscriber buffer is full, delivery to that subscriber SHALL be rejected and logged at warning level instead of silently discarding already queued events.
 
 **Covered by:** `ChannelChangeEventBus`, `IChangeEventBus`, `Program.cs`
 
@@ -634,7 +634,7 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 ## TR-MCP-AGENT-007
 
-**Built-In MCP Session Log, TODO, Repository, Desktop-Launch, and PowerShell Workflow for Hosted Agents** — The hosted agent library SHALL implement built-in workflow operations for session bootstrap, turn creation/update, TODO retrieval/update, TODO plan/status/implementation flows, repository read/list/write operations, local desktop process launch using the existing MCP Server contracts, and persistent in-process PowerShell sessions hosted directly inside the current .NET agent process. The workflow SHALL preserve canonical ID conventions for session IDs, request IDs, and TODO IDs, SHALL keep repository access scoped to repo-relative paths, SHALL expose desktop launch through the authenticated workspace context, SHALL keep PowerShell session state local to the hosted agent instance, SHALL expose the same local PowerShell session manager to host applications through `IMcpHostedAgent.PowerShellSessions`, and SHALL prefer reuse of existing client abstractions where server contracts already exist instead of duplicating transport logic.
+**Built-In MCP Session Log, TODO, Repository, Desktop-Launch, and PowerShell Workflow for Hosted Agents** — The hosted agent library SHALL implement built-in workflow operations for session bootstrap, turn creation/update, TODO retrieval/update, TODO plan/status/implementation flows, repository read/list/write operations, local desktop process launch using the existing MCP Server contracts, and persistent in-process PowerShell sessions hosted directly inside the current .NET agent process. The workflow SHALL preserve canonical ID conventions for session IDs, request IDs, and TODO IDs, SHALL keep repository access scoped to repo-relative paths, SHALL expose desktop launch through the authenticated workspace context only when the server-side desktop-launch feature gate, executable allowlist, and privileged desktop-launch token requirements are satisfied, SHALL keep PowerShell session state local to the hosted agent instance, SHALL expose the same local PowerShell session manager to host applications through `IMcpHostedAgent.PowerShellSessions`, and SHALL prefer reuse of existing client abstractions where server contracts already exist instead of duplicating transport logic.
 
 **Status:** ✅ Complete
 
@@ -650,7 +650,7 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 **Administrative Configuration Snapshot and YAML Patch API** — `ConfigurationController` SHALL expose `GET /mcpserver/configuration` returning the current flattened `IConfiguration` view as `section:key` pairs, and `PATCH /mcpserver/configuration` accepting a flattened dictionary that patches only the submitted keys into `appsettings.yaml`.
 
-Persistence SHALL be delegated to a dedicated helper service that resolves the correct `appsettings` file path, loads and writes YAML safely, and reloads `IConfigurationRoot` after updates. The endpoints SHALL use standard JWT Bearer admin authorization and remain closed when OIDC is disabled.
+Persistence SHALL be delegated to a dedicated helper service that resolves the correct loaded `appsettings` file path, serializes concurrent mutations across the full read-modify-write cycle, writes YAML or JSON via temp-file-plus-atomic-replace semantics, and reloads `IConfigurationRoot` after successful updates. `WorkspaceController` global-prompt updates SHALL reuse the same helper so shared configuration writes obey the same durability and reload guarantees. The endpoints SHALL use standard JWT Bearer admin authorization and remain closed when OIDC is disabled.
 
 **Status:** ✅ Complete
 
@@ -668,10 +668,10 @@ Projection failures after a committed authoritative mutation SHALL surface an ex
 
 ## TR-MCP-TODO-006
 
-**Append-Only TODO Audit History and Retrieval Contract** — TODO create, update, delete, and bootstrap-import operations SHALL append reconstructable audit snapshots with monotonic per-item versions. The server SHALL expose `GET /mcpserver/todo/{id}/audit` together with typed client parity and MCP STDIO tool parity so callers can retrieve ordered tracked states for a TODO item even when the current row has been deleted but audit history still exists.
+**Append-Only TODO Audit History, Projection Failure Classification, and Repair Contract** — TODO create, update, delete, and bootstrap-import operations SHALL append reconstructable audit snapshots with monotonic per-item versions. The server SHALL expose `GET /mcpserver/todo/{id}/audit` together with typed client parity and MCP STDIO tool parity so callers can retrieve ordered tracked states for a TODO item even when the current row has been deleted but audit history still exists.
 
-Mutation results SHALL include a machine-readable failure classification so callers can distinguish validation, not-found, projection-failure, conflict, and external-sync error shapes when TODO operations fail or only partially succeed.
+Mutation results SHALL include a machine-readable failure classification so callers can distinguish validation, not-found, projection-failure, conflict, and external-sync error shapes when TODO operations fail or only partially succeed. For SQLite-backed TODO storage, a projection failure SHALL preserve committed authoritative SQLite state, record operator-visible projection failure metadata, and leave `TODO.yaml` repairable without replaying the mutation. The server SHALL expose `GET /mcpserver/todo/projection/status` and `POST /mcpserver/todo/projection/repair` together with typed client parity and MCP STDIO tool parity so operators can verify whether `TODO.yaml` matches authoritative SQLite state and rebuild it on demand.
 
 **Status:** ✅ Complete
 
-**Covered by:** `ITodoService`, `ITodoStore`, `SqliteTodoService`, `TodoController`, `McpServerMcpTools`, `TodoClient`, `TodoModels`, `TodoCreationService`, `TodoUpdateService`
+**Covered by:** `ITodoService`, `ITodoStore`, `SqliteTodoService`, `TodoYamlFileSerializer`, `TodoController`, `McpServerMcpTools`, `TodoClient`, `TodoModels`, `TodoCreationService`, `TodoUpdateService`

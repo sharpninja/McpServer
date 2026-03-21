@@ -157,6 +157,29 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         Assert.Equal("Remaining from create", item.Remaining);
     }
 
+    /// <summary>POST /mcpserver/todo with the default /api-key token returns 403 Forbidden.</summary>
+    [Fact]
+    public async Task Create_WithDefaultApiKey_ReturnsForbidden()
+    {
+        using var client = _factory.CreateClient();
+        var tokenService = _factory.Services.GetRequiredService<WorkspaceTokenService>();
+        var config = _factory.Services.GetRequiredService<IConfiguration>();
+        var defaultToken = tokenService.GetDefaultToken(config["Mcp:RepoRoot"]!)
+                           ?? throw new InvalidOperationException("Workspace default API key was not generated for test host.");
+        client.DefaultRequestHeaders.TryAddWithoutValidation("X-Api-Key", defaultToken);
+
+        var createRequest = new
+        {
+            id = "DEFAULT-TODO-001",
+            title = "Default key write should fail",
+            section = "mvp-app",
+            priority = "low"
+        };
+
+        var response = await client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+    }
+
     /// <summary>POST /mcpserver/todo with duplicate id returns 400 Bad Request.</summary>
     [Fact]
     public async Task Create_DuplicateId_ReturnsConflict()
@@ -268,12 +291,90 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
                 Assert.Equal("Audit item", entry.PreviousSnapshot?.Title);
             },
             entry =>
+             {
+                 Assert.Equal(3, entry.Version);
+                 Assert.Equal("deleted", entry.Action);
+                 Assert.Equal("Audit item updated", entry.Snapshot?.Title);
+                 Assert.Equal("Audit item updated", entry.PreviousSnapshot?.Title);
+             });
+    }
+
+    /// <summary>
+    /// TR-MCP-TODO-006: Verifies that a real mutation-time projection failure remains visible through the
+    /// REST API while the SQLite-authoritative item is still committed and the repair endpoint can rebuild
+    /// TODO.yaml afterward. The fixture temporarily replaces the projected TODO.yaml file with a directory
+    /// so create fails deterministically without compromising the authoritative SQLite store.
+    /// </summary>
+    [Fact]
+    public async Task ProjectionEndpoints_AfterMutationProjectionFailure_ReportAndRepairAuthoritativeState()
+    {
+        var yamlPath = _factory.TodoYamlPath;
+        Assert.True(File.Exists(yamlPath));
+
+        File.Delete(yamlPath);
+        Directory.CreateDirectory(yamlPath);
+
+        try
+        {
+            var createRequest = new
             {
-                Assert.Equal(3, entry.Version);
-                Assert.Equal("deleted", entry.Action);
-                Assert.Equal("Audit item updated", entry.Snapshot?.Title);
-                Assert.Equal("Audit item updated", entry.PreviousSnapshot?.Title);
-            });
+                id = "INT-PROJ-001",
+                title = "Projection failure integration",
+                section = "mvp-app",
+                priority = "high"
+            };
+
+            var createResponse = await _client.PostAsJsonAsync(new Uri("/mcpserver/todo", UriKind.Relative), createRequest).ConfigureAwait(true);
+            Assert.Equal(HttpStatusCode.InternalServerError, createResponse.StatusCode);
+
+            var createResult = await createResponse.Content.ReadFromJsonAsync<MutationResult>().ConfigureAwait(true);
+            Assert.NotNull(createResult);
+            Assert.False(createResult.Success);
+            Assert.Equal("ProjectionFailed", createResult.FailureKind);
+
+            var getResponse = await _client.GetAsync(new Uri("/mcpserver/todo/INT-PROJ-001", UriKind.Relative)).ConfigureAwait(true);
+            Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
+
+            var statusResponse = await _client.GetAsync(new Uri("/mcpserver/todo/projection/status", UriKind.Relative)).ConfigureAwait(true);
+            Assert.Equal(HttpStatusCode.OK, statusResponse.StatusCode);
+
+            var status = await statusResponse.Content.ReadFromJsonAsync<ProjectionStatusResult>().ConfigureAwait(true);
+            Assert.NotNull(status);
+            Assert.True(status.RepairRequired);
+            Assert.False(status.ProjectionTargetExists);
+            Assert.False(status.ProjectionConsistent);
+            Assert.Contains("directory", status.Message ?? string.Empty, StringComparison.OrdinalIgnoreCase);
+
+            Directory.Delete(yamlPath, recursive: true);
+
+            var repairResponse = await _client.PostAsync(new Uri("/mcpserver/todo/projection/repair", UriKind.Relative), content: null).ConfigureAwait(true);
+            Assert.Equal(HttpStatusCode.OK, repairResponse.StatusCode);
+
+            var repair = await repairResponse.Content.ReadFromJsonAsync<ProjectionRepairResult>().ConfigureAwait(true);
+            Assert.NotNull(repair);
+            Assert.True(repair.Success);
+            Assert.NotNull(repair.Status);
+            Assert.False(repair.Status.RepairRequired);
+            Assert.True(repair.Status.ProjectionTargetExists);
+            Assert.True(repair.Status.ProjectionConsistent);
+            Assert.True(File.Exists(yamlPath));
+
+            var repairedStatusResponse = await _client.GetAsync(new Uri("/mcpserver/todo/projection/status", UriKind.Relative)).ConfigureAwait(true);
+            Assert.Equal(HttpStatusCode.OK, repairedStatusResponse.StatusCode);
+
+            var repairedStatus = await repairedStatusResponse.Content.ReadFromJsonAsync<ProjectionStatusResult>().ConfigureAwait(true);
+            Assert.NotNull(repairedStatus);
+            Assert.False(repairedStatus.RepairRequired);
+            Assert.True(repairedStatus.ProjectionConsistent);
+        }
+        finally
+        {
+            if (Directory.Exists(yamlPath))
+                Directory.Delete(yamlPath, recursive: true);
+
+            if (!File.Exists(yamlPath))
+                await _client.PostAsync(new Uri("/mcpserver/todo/projection/repair", UriKind.Relative), content: null).ConfigureAwait(true);
+        }
     }
 
     /// <summary>DELETE /mcpserver/todo/{id} for missing item returns 404.</summary>
@@ -480,7 +581,21 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         Assert.Contains("Circular", result.Error ?? "", StringComparison.OrdinalIgnoreCase);
     }
 
-    private sealed record MutationResult(bool Success, string? Error);
+    private sealed record MutationResult(bool Success, string? Error, string? FailureKind = null);
+    private sealed record ProjectionStatusResult(
+        string AuthoritativeStore,
+        string AuthoritativeDataSource,
+        string ProjectionTargetPath,
+        bool ProjectionTargetExists,
+        bool ProjectionConsistent,
+        bool RepairRequired,
+        string VerifiedAtUtc,
+        string? LastImportedFromYamlUtc,
+        string? LastProjectedToYamlUtc,
+        string? LastProjectionFailureUtc,
+        string? LastProjectionFailure,
+        string? Message);
+    private sealed record ProjectionRepairResult(bool Success, string? Error, ProjectionStatusResult Status);
 
     #region Test DTOs (for deserialization)
 
@@ -516,12 +631,14 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
     {
         private readonly string _tempDir = Path.Combine(Path.GetTempPath(), "mcp-todo-tests-" + Guid.NewGuid().ToString("N")[..8]);
 
+        public string TodoYamlPath => Path.Combine(_tempDir, "docs", "Project", "TODO.yaml");
+
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             // Create seed TODO.yaml
             var projectDir = Path.Combine(_tempDir, "docs", "Project");
             Directory.CreateDirectory(projectDir);
-            File.WriteAllText(Path.Combine(projectDir, "TODO.yaml"), SeedYaml);
+            File.WriteAllText(TodoYamlPath, SeedYaml);
 
             builder.UseEnvironment("Test");
             builder.UseContentRoot(CustomWebApplicationFactory.ResolveContentRoot());

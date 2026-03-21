@@ -9,8 +9,9 @@ namespace McpServer.Support.Mcp.Middleware;
 ///   <item><description><c>X-Workspace-Path</c> header — explicit workspace path (highest priority).</description></item>
 ///   <item><description><c>X-Api-Key</c> reverse lookup via <see cref="WorkspaceTokenService"/>.</description></item>
 /// </list>
-/// If neither tier resolves a workspace, workspace-independent routes pass through with an
-/// empty <see cref="WorkspaceContext"/>; workspace-required routes receive a <c>404</c>.
+/// If neither tier resolves a workspace, API-key and unauthenticated callers may continue on
+/// explicitly workspace-independent routes, but Bearer-authenticated callers must still supply
+/// <c>X-Workspace-Path</c> for tenant-scoped routes. Workspace-required routes receive a <c>404</c>.
 /// Populates the scoped <see cref="WorkspaceContext"/> for downstream services.
 /// Non-<c>/mcpserver/</c> and non-<c>/mcp-transport</c> routes skip resolution.
 /// </summary>
@@ -40,6 +41,12 @@ public sealed class WorkspaceResolutionMiddleware
         "/mcpserver/configuration",
         "/mcpserver/voice",
         "/mcp-transport",
+    };
+
+    private static readonly HashSet<string> BearerWorkspaceIndependentPrefixes = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "/mcpserver/workspace",
+        "/mcpserver/tools",
     };
 
     private readonly RequestDelegate _next;
@@ -135,7 +142,7 @@ public sealed class WorkspaceResolutionMiddleware
         }
 
         // No workspace resolved — check whether this route requires one.
-        if (IsWorkspaceIndependent(path))
+        if (IsWorkspaceIndependent(path, hasBearerToken))
         {
             _logger.LogDebug("[WS-Resolve] {Method} {Path} | SKIP: workspace-independent route, proceeding without workspace",
                 method, path);
@@ -149,13 +156,16 @@ public sealed class WorkspaceResolutionMiddleware
         context.Response.StatusCode = StatusCodes.Status404NotFound;
         context.Response.ContentType = "application/json";
         await context.Response.WriteAsync(
-            """{"error":"Workspace required. Send X-Workspace-Path header."}""",
+            hasBearerToken
+                ? """{"error":"Workspace required. Bearer-authenticated requests must send X-Workspace-Path for tenant-scoped routes."}"""
+                : """{"error":"Workspace required. Send X-Workspace-Path header."}""",
             context.RequestAborted).ConfigureAwait(false);
     }
 
-    private static bool IsWorkspaceIndependent(PathString path)
+    private static bool IsWorkspaceIndependent(PathString path, bool hasBearerToken)
     {
-        foreach (var prefix in WorkspaceIndependentPrefixes)
+        var prefixes = hasBearerToken ? BearerWorkspaceIndependentPrefixes : WorkspaceIndependentPrefixes;
+        foreach (var prefix in prefixes)
         {
             if (path.StartsWithSegments(prefix, StringComparison.OrdinalIgnoreCase))
                 return true;

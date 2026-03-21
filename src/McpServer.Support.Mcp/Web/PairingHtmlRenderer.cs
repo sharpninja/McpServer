@@ -1,3 +1,5 @@
+using System.Net;
+
 namespace McpServer.Support.Mcp.Web;
 
 /// <summary>
@@ -26,12 +28,12 @@ public sealed class PairingHtmlRenderer
         _logger = logger;
     }
 
-    /// <summary>Renders the login form page. Shows an error banner when <paramref name="error"/> is <c>true</c>.</summary>
-    public async Task<string> RenderLoginPageAsync(bool error = false, CancellationToken cancellationToken = default)
+    /// <summary>Renders the login form page. Shows an error banner when <paramref name="errorMessage"/> is not empty.</summary>
+    public async Task<string> RenderLoginPageAsync(string? errorMessage = null, CancellationToken cancellationToken = default)
     {
-        var errorBanner = error
-            ? "<div style='background:#fee;color:#c00;padding:10px 16px;border-radius:6px;margin-bottom:16px;border:1px solid #fcc'>Invalid username or password.</div>"
-            : "";
+        var errorBanner = string.IsNullOrWhiteSpace(errorMessage)
+            ? string.Empty
+            : $"<div style='background:#fee;color:#c00;padding:10px 16px;border-radius:6px;margin-bottom:16px;border:1px solid #fcc'>{WebUtility.HtmlEncode(errorMessage)}</div>";
 
         var template = await GetTemplateContentAsync(LoginPageId, cancellationToken).ConfigureAwait(false);
         if (template is not null)
@@ -39,7 +41,7 @@ public sealed class PairingHtmlRenderer
             return template.Replace("{errorBanner}", errorBanner, StringComparison.Ordinal);
         }
 
-        return PairingHtml.LoginPage(error);
+        return PairingHtml.LoginPage(errorMessage);
     }
 
     /// <summary>Renders the API key display page.</summary>

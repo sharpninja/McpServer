@@ -488,6 +488,52 @@ public sealed class FwhMcpTools
         }
     }
 
+    /// <summary>TR-MCP-TODO-006: Get SQLite-authoritative TODO projection status.</summary>
+    [McpServerTool(Name = "todo_projection_status"), Description("Get projection status for SQLite-backed TODO storage.")]
+    public async Task<string> TodoProjectionStatus(
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _workspaceAccessor.GetTodoService().GetProjectionStatusAsync(cancellationToken).ConfigureAwait(false);
+            return JsonSerializer.Serialize(result);
+        }
+        catch (NotSupportedException ex)
+        {
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>TR-MCP-TODO-006: Repair TODO.yaml projection from SQLite-authoritative TODO storage.</summary>
+    [McpServerTool(Name = "todo_projection_repair"), Description("Repair TODO.yaml projection from authoritative SQLite-backed TODO storage.")]
+    public async Task<string> TodoProjectionRepair(
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _workspaceAccessor.GetTodoService().RepairProjectionAsync(cancellationToken).ConfigureAwait(false);
+            return JsonSerializer.Serialize(result);
+        }
+        catch (NotSupportedException ex)
+        {
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return JsonSerializer.Serialize(new { error = ex.Message });
+        }
+    }
+
     /// <summary>TR-PLANNED-013: Create a new TODO item.</summary>
     [McpServerTool(Name = "todo_create"), Description("Create a new TODO item. Requires id, title, section, priority.")]
     public async Task<string> TodoCreate(

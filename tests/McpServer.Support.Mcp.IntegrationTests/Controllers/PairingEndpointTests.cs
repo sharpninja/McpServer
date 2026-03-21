@@ -45,6 +45,43 @@ public sealed class PairingEndpointTests : IClassFixture<PairingWebApplicationFa
     }
 
     [Fact]
+    public async Task PairPost_AfterRepeatedFailures_ReturnsTooManyRequests()
+    {
+        await using var factory = new PairingWebApplicationFactory();
+        using var client = factory.CreateClient(new Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false,
+        });
+
+        for (var i = 0; i < 5; i++)
+        {
+            using var failedAttempt = new FormUrlEncodedContent(
+            [
+                new KeyValuePair<string, string>("username", "admin"),
+                new KeyValuePair<string, string>("password", "wrong"),
+            ]);
+
+            var failedResponse = await client.PostAsync("/pair", failedAttempt).ConfigureAwait(true);
+            Assert.Equal(HttpStatusCode.OK, failedResponse.StatusCode);
+        }
+
+        using var lockedAttempt = new FormUrlEncodedContent(
+        [
+            new KeyValuePair<string, string>("username", "admin"),
+            new KeyValuePair<string, string>("password", "testpass"),
+        ]);
+
+        var response = await client.PostAsync("/pair", lockedAttempt).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.TooManyRequests, response.StatusCode);
+        Assert.True(response.Headers.TryGetValues("Retry-After", out var retryAfterValues));
+        Assert.NotEmpty(retryAfterValues);
+
+        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.Contains("Too many failed sign-in attempts", body, StringComparison.Ordinal);
+        Assert.False(response.Headers.TryGetValues("Set-Cookie", out _));
+    }
+
+    [Fact]
     public async Task PairPost_WithGoodCredentials_RedirectsToKey()
     {
         var form = new FormUrlEncodedContent(

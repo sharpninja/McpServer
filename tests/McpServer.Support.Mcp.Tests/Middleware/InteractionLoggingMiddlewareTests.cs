@@ -2,6 +2,7 @@ using System.Text;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Tests.TestSupport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -290,5 +291,33 @@ public sealed class InteractionLoggingMiddlewareTests
         using var reader = new StreamReader(originalBody);
         var writtenContent = await reader.ReadToEndAsync().ConfigureAwait(true);
         Assert.Equal(responseJson, writtenContent);
+    }
+
+    /// <summary>InvokeAsync logs a warning when the submission queue rejects an interaction log entry because the buffer is full.</summary>
+    [Fact]
+    public async Task InvokeAsync_WhenQueueRejectsEntry_LogsWarning()
+    {
+        RequestDelegate next = _ => Task.CompletedTask;
+        var logger = new TestLogger<McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware>();
+        var options = Microsoft.Extensions.Options.Options.Create(new McpInteractionLoggingOptions
+        {
+            LoggingServiceUrl = "https://log.example.com/ingest",
+            IncludeRequestBody = false,
+            IncludeResponseBody = false
+        });
+        var channel = Substitute.For<IInteractionLogSubmissionChannel>();
+        channel.TryEnqueue(Arg.Any<InteractionLogEntry>()).Returns(false);
+
+        var middleware = new McpServer.Support.Mcp.Middleware.InteractionLoggingMiddleware(next, logger, options, channel);
+        var context = CreateContext("POST", "/mcpserver/context/search");
+        context.Response.StatusCode = 202;
+
+        await middleware.InvokeAsync(context).ConfigureAwait(true);
+
+        Assert.Contains(
+            logger.Entries,
+            entry => entry.Level == LogLevel.Warning &&
+                entry.Message.Contains("Interaction log forwarding rejected request", StringComparison.Ordinal) &&
+                entry.Message.Contains("/mcpserver/context/search", StringComparison.Ordinal));
     }
 }

@@ -7,6 +7,7 @@ using McpServer.McpAgent.SessionLog;
 using McpServer.McpAgent.Todo;
 using McpServer.Client;
 using McpServer.Common.Copilot;
+using McpServer.Support.Mcp.Options;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Options;
@@ -16,6 +17,7 @@ namespace McpServer.Support.Mcp.Services;
 internal sealed class HostedMcpAgentExecutionStrategy(
     ICopilotClient copilotClient,
     WorkspaceTokenService workspaceTokenService,
+    IOptions<DesktopLaunchOptions> desktopLaunchOptions,
     ServerRuntimeInfo serverRuntimeInfo,
     IServiceProvider serviceProvider,
     ILogger<HostedMcpAgentExecutionStrategy> logger)
@@ -34,9 +36,10 @@ internal sealed class HostedMcpAgentExecutionStrategy(
             ? request.Options.WorkingDirectory ?? Environment.CurrentDirectory
             : request.WorkspacePath;
         var apiKey = workspaceTokenService.GetToken(workspacePath) ?? workspaceTokenService.GenerateToken(workspacePath);
+        var desktopLaunchToken = desktopLaunchOptions.Value.AccessToken;
         var baseUrl = new Uri($"http://127.0.0.1:{serverRuntimeInfo.ListenPort}");
         var hostedTimeout = ResolveHostedTimeout(request.Options.Timeout);
-        var hostedOptions = CreateHostedAgentOptions(request, workspacePath, baseUrl, apiKey, hostedTimeout);
+        var hostedOptions = CreateHostedAgentOptions(request, workspacePath, baseUrl, apiKey, desktopLaunchToken, hostedTimeout);
         var httpClient = new HttpClient
         {
             Timeout = hostedTimeout,
@@ -47,6 +50,7 @@ internal sealed class HostedMcpAgentExecutionStrategy(
             {
                 ApiKey = apiKey,
                 BaseUrl = baseUrl,
+                DesktopLaunchToken = desktopLaunchToken,
                 Timeout = httpClient.Timeout,
                 WorkspacePath = workspacePath,
             });
@@ -82,6 +86,7 @@ internal sealed class HostedMcpAgentExecutionStrategy(
         string workspacePath,
         Uri baseUrl,
         string apiKey,
+        string? desktopLaunchToken,
         TimeSpan timeout)
     {
         var agentName = BuildHostedAgentName(request.AgentName);
@@ -91,6 +96,7 @@ internal sealed class HostedMcpAgentExecutionStrategy(
             AgentName = agentName,
             ApiKey = apiKey,
             BaseUrl = baseUrl,
+            DesktopLaunchToken = desktopLaunchToken,
             Description = $"Hosted MCP Agent execution strategy for {agentName}.",
             RequireAuthentication = true,
             SourceType = McpHostedAgentDefaults.DefaultSourceType,
@@ -352,13 +358,23 @@ internal sealed class HostedMcpAgentExecutionStrategy(
                 return;
 
             _disposed = true;
-            if (_session is not null)
-                await _session.DisposeAsync().ConfigureAwait(false);
+            var session = Interlocked.Exchange(ref _session, null);
+            if (session is not null)
+                await session.DisposeAsync().ConfigureAwait(false);
 
             _gate.Dispose();
         }
 
-        public void Dispose() => DisposeAsync().AsTask().GetAwaiter().GetResult();
+        public void Dispose()
+        {
+            if (_disposed)
+                return;
+
+            _disposed = true;
+            var session = Interlocked.Exchange(ref _session, null);
+            session?.Dispose();
+            _gate.Dispose();
+        }
 
         private async Task<string> SendPromptAsync(string prompt, CancellationToken cancellationToken)
         {

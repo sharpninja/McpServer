@@ -1,5 +1,3 @@
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
@@ -305,39 +303,7 @@ public sealed class WorkspaceController : ControllerBase
 
         var newTemplate = string.IsNullOrWhiteSpace(request.Template) ? null : request.Template.Trim();
 
-        var appsettingsPath = _appSettingsFileService.ResolvePreferredAppsettingsPath();
-        var reloadedByYamlService = false;
-        if (appsettingsPath.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
-        {
-            var data = await _appSettingsFileService.LoadYamlAsync(appsettingsPath, ct).ConfigureAwait(false);
-            if (!data.TryGetValue("Mcp", out var mcpObj) || mcpObj is not IDictionary<object, object> mcpDict)
-            {
-                data["Mcp"] = mcpDict = new Dictionary<object, object>();
-            }
-
-            if (newTemplate is null)
-                mcpDict.Remove("MarkerPromptTemplate");
-            else
-                mcpDict["MarkerPromptTemplate"] = newTemplate;
-
-            await _appSettingsFileService.SaveYamlAsync(data, appsettingsPath, ct).ConfigureAwait(false);
-            reloadedByYamlService = true;
-        }
-        else
-        {
-            var jsonText = await System.IO.File.ReadAllTextAsync(appsettingsPath, ct).ConfigureAwait(false);
-            var doc = JsonNode.Parse(jsonText, new JsonNodeOptions { PropertyNameCaseInsensitive = true })!;
-            var mcp = doc["Mcp"] as JsonObject ?? new JsonObject();
-            if (newTemplate is null)
-                mcp.Remove("MarkerPromptTemplate");
-            else
-                mcp["MarkerPromptTemplate"] = newTemplate;
-            doc["Mcp"] = mcp;
-            await System.IO.File.WriteAllTextAsync(appsettingsPath, doc.ToJsonString(s_jsonOptions), ct).ConfigureAwait(false);
-        }
-
-        if (!reloadedByYamlService && _configuration is IConfigurationRoot root)
-            root.Reload();
+        await _appSettingsFileService.UpdateGlobalPromptTemplateAsync(newTemplate, ct).ConfigureAwait(false);
 
         // Regenerate all marker files so running workspaces pick up the new global prompt.
         // Pass the new template explicitly to avoid IOptionsMonitor staleness after reload.
@@ -382,13 +348,6 @@ public sealed class WorkspaceController : ControllerBase
         // All workspaces share a single port; the primary workspace is always served by this process.
         return true;
     }
-
-    private static readonly JsonSerializerOptions s_jsonOptions = new()
-    {
-        WriteIndented = true,
-        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
-    };
-
     // Base64URL encode a workspace path for use as a URL key.
     private static string EncodeKey(string path)
     {

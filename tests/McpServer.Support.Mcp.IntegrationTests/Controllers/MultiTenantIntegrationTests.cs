@@ -120,6 +120,17 @@ public sealed class MultiTenantIntegrationTests : IClassFixture<CustomWebApplica
     }
 
     [Fact]
+    public async Task BearerWithoutWorkspaceHeader_OnTenantRoute_Returns404()
+    {
+        var client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", "synthetic-jwt");
+
+        var response = await client.GetAsync(new Uri("/mcpserver/sessionlog/query", UriKind.Relative));
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
     public async Task WorkspaceResolutionMiddleware_OnlyRunsForMcpRoutes()
     {
         var client = _factory.CreateClient();

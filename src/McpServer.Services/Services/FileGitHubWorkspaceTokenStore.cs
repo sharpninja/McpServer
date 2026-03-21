@@ -1,4 +1,7 @@
 using System.Security.Cryptography;
+using System.Runtime.Versioning;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text.Json;
 using McpServer.Support.Mcp.Options;
 using Microsoft.AspNetCore.DataProtection;
@@ -12,6 +15,7 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 public sealed class FileGitHubWorkspaceTokenStore : IGitHubWorkspaceTokenStore, IDisposable
 {
+    private const int StoreLockRetryDelayMilliseconds = 50;
     private static readonly JsonSerializerOptions s_jsonOptions = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -43,6 +47,7 @@ public sealed class FileGitHubWorkspaceTokenStore : IGitHubWorkspaceTokenStore, 
         await _gate.WaitAsync(ct).ConfigureAwait(false);
         try
         {
+            using var storeLock = await AcquireStoreLockAsync(ct).ConfigureAwait(false);
             var doc = await ReadUnlockedAsync(ct).ConfigureAwait(false);
             var match = doc.Entries.FirstOrDefault(e => string.Equals(e.WorkspacePath, normalized, StringComparison.OrdinalIgnoreCase));
             if (match is null)
@@ -78,6 +83,7 @@ public sealed class FileGitHubWorkspaceTokenStore : IGitHubWorkspaceTokenStore, 
         await _gate.WaitAsync(ct).ConfigureAwait(false);
         try
         {
+            using var storeLock = await AcquireStoreLockAsync(ct).ConfigureAwait(false);
             var doc = await ReadUnlockedAsync(ct).ConfigureAwait(false);
             var existing = doc.Entries.FirstOrDefault(e => string.Equals(e.WorkspacePath, normalized, StringComparison.OrdinalIgnoreCase));
             if (existing is null)
@@ -113,6 +119,7 @@ public sealed class FileGitHubWorkspaceTokenStore : IGitHubWorkspaceTokenStore, 
         await _gate.WaitAsync(ct).ConfigureAwait(false);
         try
         {
+            using var storeLock = await AcquireStoreLockAsync(ct).ConfigureAwait(false);
             var doc = await ReadUnlockedAsync(ct).ConfigureAwait(false);
             var removed = doc.Entries.RemoveAll(e => string.Equals(e.WorkspacePath, normalized, StringComparison.OrdinalIgnoreCase)) > 0;
             if (removed)
@@ -139,6 +146,7 @@ public sealed class FileGitHubWorkspaceTokenStore : IGitHubWorkspaceTokenStore, 
 
         try
         {
+            EnsureRestrictedFilePermissions(path);
             var json = await File.ReadAllTextAsync(path, ct).ConfigureAwait(false);
             var doc = JsonSerializer.Deserialize<GitHubTokenStoreDocument>(json, s_jsonOptions);
             return doc ?? new GitHubTokenStoreDocument();
@@ -159,8 +167,21 @@ public sealed class FileGitHubWorkspaceTokenStore : IGitHubWorkspaceTokenStore, 
 
         var json = JsonSerializer.Serialize(doc, s_jsonOptions);
         var tmp = path + "." + Guid.NewGuid().ToString("N") + ".tmp";
-        await File.WriteAllTextAsync(tmp, json, ct).ConfigureAwait(false);
-        File.Move(tmp, path, true);
+        try
+        {
+            await File.WriteAllTextAsync(tmp, json, ct).ConfigureAwait(false);
+            EnsureRestrictedFilePermissions(tmp);
+            if (File.Exists(path))
+                File.Replace(tmp, path, null, ignoreMetadataErrors: true);
+            else
+                File.Move(tmp, path);
+            EnsureRestrictedFilePermissions(path);
+        }
+        finally
+        {
+            if (File.Exists(tmp))
+                File.Delete(tmp);
+        }
     }
 
     private string ResolveStorePath()
@@ -172,6 +193,89 @@ public sealed class FileGitHubWorkspaceTokenStore : IGitHubWorkspaceTokenStore, 
         return Path.IsPathRooted(configured)
             ? Path.GetFullPath(configured)
             : Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, configured));
+    }
+
+    private async Task<FileStream> AcquireStoreLockAsync(CancellationToken ct)
+    {
+        var lockPath = ResolveStorePath() + ".lock";
+        var dir = Path.GetDirectoryName(lockPath);
+        if (!string.IsNullOrWhiteSpace(dir))
+            Directory.CreateDirectory(dir);
+
+        while (true)
+        {
+            ct.ThrowIfCancellationRequested();
+
+            try
+            {
+                var stream = new FileStream(lockPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                try
+                {
+                    EnsureRestrictedFilePermissions(lockPath);
+                    return stream;
+                }
+                catch
+                {
+                    stream.Dispose();
+                    throw;
+                }
+            }
+            catch (IOException)
+            {
+                await Task.Delay(StoreLockRetryDelayMilliseconds, ct).ConfigureAwait(false);
+            }
+        }
+    }
+
+    private static void EnsureRestrictedFilePermissions(string path)
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            EnsureRestrictedWindowsFilePermissions(path);
+            return;
+        }
+
+        if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
+        {
+            File.SetUnixFileMode(path, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+            return;
+        }
+
+        throw new PlatformNotSupportedException("GitHub token-store permission hardening requires Windows ACL or Unix file-mode support.");
+    }
+
+    [SupportedOSPlatform("windows")]
+    private static void EnsureRestrictedWindowsFilePermissions(string path)
+    {
+        using var identity = WindowsIdentity.GetCurrent();
+        var currentUser = identity.User
+            ?? throw new InvalidOperationException("The current Windows identity did not expose a user SID for token-store ACL hardening.");
+
+        var fileInfo = new FileInfo(path);
+        var security = fileInfo.GetAccessControl();
+        security.SetAccessRuleProtection(isProtected: true, preserveInheritance: false);
+
+        foreach (var existingRule in security
+                     .GetAccessRules(includeExplicit: true, includeInherited: true, targetType: typeof(SecurityIdentifier))
+                     .OfType<FileSystemAccessRule>()
+                     .ToArray())
+        {
+            security.RemoveAccessRuleAll(existingRule);
+        }
+
+        AddAllowRule(security, currentUser);
+        AddAllowRule(security, new SecurityIdentifier(WellKnownSidType.BuiltinAdministratorsSid, null));
+        AddAllowRule(security, new SecurityIdentifier(WellKnownSidType.LocalSystemSid, null));
+        fileInfo.SetAccessControl(security);
+    }
+
+    [SupportedOSPlatform("windows")]
+    private static void AddAllowRule(FileSecurity security, SecurityIdentifier identity)
+    {
+        security.AddAccessRule(new FileSystemAccessRule(
+            identity,
+            FileSystemRights.FullControl,
+            AccessControlType.Allow));
     }
 
     private static string NormalizeWorkspacePath(string workspacePath)
