@@ -13,6 +13,8 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// </summary>
 public sealed class SessionLogServiceAgentLinkTests : IDisposable
 {
+    private const string WorkspacePath = @"E:\tests\sessionlog-agent-link";
+
     private readonly McpDbContext _db;
     private readonly SessionLogService _sut;
 
@@ -23,6 +25,7 @@ public sealed class SessionLogServiceAgentLinkTests : IDisposable
             .Options;
         _db = new McpDbContext(options);
         _db.Database.EnsureCreated();
+        _db.OverrideWorkspaceId(WorkspacePath);
         _sut = new SessionLogService(_db, NullLogger<SessionLogService>.Instance);
     }
 

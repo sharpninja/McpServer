@@ -28,6 +28,7 @@ public sealed class SessionLogIngestorImportTests : IDisposable
         _service = new SessionLogService(_db, NullLogger<SessionLogService>.Instance);
         _tempDir = Path.Combine(Path.GetTempPath(), $"fwh-ingestor-{Guid.NewGuid():N}");
         Directory.CreateDirectory(Path.Combine(_tempDir, "docs", "sessions"));
+        _db.OverrideWorkspaceId(_tempDir);
     }
 
     public void Dispose()

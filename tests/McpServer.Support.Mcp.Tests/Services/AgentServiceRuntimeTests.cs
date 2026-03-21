@@ -61,6 +61,7 @@ public sealed class AgentServiceRuntimeTests : IDisposable
     public async Task LaunchAgentAsync_EnabledConfig_DelegatesToProcessManager()
     {
         var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "agent-service-launch"));
+        _db.OverrideWorkspaceId(workspacePath);
         SeedDefinitionAndWorkspace(workspacePath, enabled: true, banned: false, launchCommand: "agent --workspace {workspacePath} --id {agentId}");
         _processManager.LaunchAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(new AgentProcessInfo
@@ -86,6 +87,7 @@ public sealed class AgentServiceRuntimeTests : IDisposable
     public async Task LaunchAgentAsync_BannedAgent_ThrowsInvalidOperationException()
     {
         var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "agent-service-banned"));
+        _db.OverrideWorkspaceId(workspacePath);
         SeedDefinitionAndWorkspace(workspacePath, enabled: true, banned: true, launchCommand: "agent");
 
         await Assert.ThrowsAsync<InvalidOperationException>(() => _sut.LaunchAgentAsync(workspacePath, "planner")).ConfigureAwait(true);
@@ -95,6 +97,7 @@ public sealed class AgentServiceRuntimeTests : IDisposable
     [Fact]
     public async Task LaunchAgentAsync_MissingWorkspaceConfig_ThrowsInvalidOperationException()
     {
+        _db.OverrideWorkspaceId(Path.GetFullPath("C:/missing-ws"));
         _db.AgentDefinitions.Add(new AgentDefinitionEntity
         {
             Id = "planner",
@@ -117,6 +120,7 @@ public sealed class AgentServiceRuntimeTests : IDisposable
     public async Task StopAgentAsync_RunningAgent_DelegatesToProcessManager()
     {
         var workspacePath = Path.GetFullPath(Path.Combine(Path.GetTempPath(), "agent-service-stop"));
+        _db.OverrideWorkspaceId(workspacePath);
         SeedDefinitionAndWorkspace(workspacePath, enabled: true, banned: false, launchCommand: "agent");
         _processManager.StopAsync(workspacePath, "planner", Arg.Any<CancellationToken>())
             .Returns(Task.FromResult(true));
