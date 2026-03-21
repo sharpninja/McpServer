@@ -383,6 +383,114 @@ public sealed class SqliteTodoServiceTests : IDisposable
         TryDelete(root);
     }
 
+    /// <summary>
+    /// TR-MCP-TODO-006: Verifies that projection status reports a healthy, consistent YAML projection after
+    /// a successful SQLite-backed mutation. The fixture uses the isolated temp DB/YAML pair created for this
+    /// test class so the status check can assert live consistency instead of repository-global state.
+    /// </summary>
+    [Fact]
+    public async Task GetProjectionStatusAsync_AfterSuccessfulProjection_ReturnsConsistentStatus()
+    {
+        var result = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "SQL-STATUS-001",
+            Title = "Projection status",
+            Section = "mvp-app",
+            Priority = "high",
+        }).ConfigureAwait(true);
+
+        Assert.True(result.Success);
+
+        var status = await _sut.GetProjectionStatusAsync().ConfigureAwait(true);
+
+        Assert.Equal("sqlite", status.AuthoritativeStore);
+        Assert.Equal(_tempDbPath, status.AuthoritativeDataSource);
+        Assert.Equal(_tempYamlPath, status.ProjectionTargetPath);
+        Assert.True(status.ProjectionTargetExists);
+        Assert.True(status.ProjectionConsistent);
+        Assert.False(status.RepairRequired);
+        Assert.Null(status.LastProjectionFailure);
+        Assert.Contains("matches authoritative SQLite state", status.Message ?? string.Empty, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// TR-MCP-TODO-006: Verifies that projection status requires repair when the projected TODO.yaml file is
+    /// missing even though SQLite state remains authoritative and healthy. The fixture creates a successful
+    /// projection first, then removes the YAML file to exercise the live consistency check without failure metadata.
+    /// </summary>
+    [Fact]
+    public async Task GetProjectionStatusAsync_WhenProjectedYamlIsMissing_RequiresRepair()
+    {
+        var result = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "SQL-STATUS-002",
+            Title = "Missing projection",
+            Section = "mvp-app",
+            Priority = "medium",
+        }).ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        File.Delete(_tempYamlPath);
+
+        var status = await _sut.GetProjectionStatusAsync().ConfigureAwait(true);
+
+        Assert.False(status.ProjectionTargetExists);
+        Assert.False(status.ProjectionConsistent);
+        Assert.True(status.RepairRequired);
+        Assert.Null(status.LastProjectionFailure);
+        Assert.Contains("does not exist", status.Message ?? string.Empty, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// TR-MCP-TODO-006: Verifies that an operator-requested repair rewrites TODO.yaml from authoritative
+    /// SQLite state after a real projection failure and clears the repair-required status. The fixture first
+    /// forces projection failure by making the target path a directory, then restores the path and requests repair.
+    /// </summary>
+    [Fact]
+    public async Task RepairProjectionAsync_AfterProjectionFailure_RebuildsYamlAndClearsFailureStatus()
+    {
+        var root = Path.Combine(Path.GetTempPath(), $"todo_projection_repair_{Guid.NewGuid():N}");
+        var dbPath = Path.Combine(root, "mcp.db");
+        var yamlDirectoryPath = Path.Combine(root, "docs", "Project", "TODO.yaml");
+        Directory.CreateDirectory(yamlDirectoryPath);
+
+        var auditLog = Substitute.For<IWriteAuditLog>();
+        using var failingStore = new SqliteTodoService(dbPath, yamlDirectoryPath, auditLog, NullLogger<SqliteTodoService>.Instance);
+
+        var createResult = await failingStore.CreateAsync(new TodoCreateRequest
+        {
+            Id = "SQL-REPAIR-001",
+            Title = "Repair target",
+            Section = "mvp-app",
+            Priority = "high",
+        }).ConfigureAwait(true);
+
+        Assert.False(createResult.Success);
+        Assert.Equal(TodoMutationFailureKind.ProjectionFailed, createResult.FailureKind);
+
+        var failedStatus = await failingStore.GetProjectionStatusAsync().ConfigureAwait(true);
+        Assert.True(failedStatus.RepairRequired);
+        Assert.NotNull(failedStatus.LastProjectionFailure);
+
+        Directory.Delete(yamlDirectoryPath, recursive: true);
+
+        var repairResult = await failingStore.RepairProjectionAsync().ConfigureAwait(true);
+
+        Assert.True(repairResult.Success);
+        Assert.Null(repairResult.Error);
+        Assert.False(repairResult.Status.RepairRequired);
+        Assert.True(repairResult.Status.ProjectionTargetExists);
+        Assert.True(repairResult.Status.ProjectionConsistent);
+        Assert.Null(repairResult.Status.LastProjectionFailure);
+        Assert.True(File.Exists(yamlDirectoryPath));
+
+        var yaml = await File.ReadAllTextAsync(yamlDirectoryPath).ConfigureAwait(true);
+        Assert.Contains("SQL-REPAIR-001", yaml, StringComparison.Ordinal);
+        Assert.Contains("Repair target", yaml, StringComparison.Ordinal);
+
+        TryDelete(root);
+    }
+
     private static void TryDelete(string path)
     {
         try

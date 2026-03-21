@@ -11,9 +11,8 @@ namespace McpServer.Support.Mcp.Services;
 ///     <c>AGENTS-README-FIRST.yaml</c> marker file. Grant unrestricted access to all
 ///     <c>/mcpserver/*</c> endpoints.</description></item>
 ///   <item><description><strong>Default (anonymous) tokens</strong> — returned by the
-///     unprotected <c>GET /api-key</c> endpoint. Grant <em>read-only</em> access to all
-///     endpoints <strong>except</strong> TODO routes (<c>/mcpserver/todo*</c>), which are
-///     read-write.</description></item>
+///     unprotected <c>GET /api-key</c> endpoint. Grant <em>read-only</em> access only.
+///     All write operations require a full workspace token or JWT Bearer auth.</description></item>
 /// </list>
 /// Tokens are held in memory only (never persisted) and rotate on every service restart.
 /// </summary>
@@ -68,7 +67,7 @@ public sealed class WorkspaceTokenService
     /// <summary>
     /// Generates a new default (anonymous) token for the given workspace and stores it.
     /// If a default token already exists for the workspace it is replaced.
-    /// Default tokens grant read-only access to all endpoints except TODO routes which are read-write.
+    /// Default tokens grant read-only access only.
     /// </summary>
     /// <returns>The generated base64url token.</returns>
     public string GenerateDefaultToken(string workspacePath)

@@ -38,6 +38,7 @@ public static class ServiceCollectionExtensions
                 clientOptions.ApiKey = options.ApiKey;
                 clientOptions.BearerToken = options.BearerToken;
                 clientOptions.BaseUrl = options.BaseUrl;
+                clientOptions.DesktopLaunchToken = options.DesktopLaunchToken;
                 clientOptions.Timeout = options.Timeout;
                 clientOptions.WorkspacePath = options.WorkspacePath;
             });

@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using YamlDotNet.Serialization;
@@ -21,16 +23,39 @@ public sealed class AppSettingsFileService
         .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
         .Build();
 
+    private static readonly JsonNodeOptions s_jsonNodeOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+    };
+
+    private static readonly JsonSerializerOptions s_jsonOptions = new()
+    {
+        WriteIndented = true,
+        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+    };
+
     private readonly IConfiguration _configuration;
     private readonly IWebHostEnvironment _environment;
+    private readonly SemaphoreSlim _writeLock = new(1, 1);
+    private readonly Func<string, string, CancellationToken, Task> _writeTextAsync;
 
     /// <summary>Initializes a new instance of the <see cref="AppSettingsFileService"/> class.</summary>
     /// <param name="configuration">The active configuration root.</param>
     /// <param name="environment">The current host environment.</param>
     public AppSettingsFileService(IConfiguration configuration, IWebHostEnvironment environment)
+        : this(configuration, environment, static (path, content, ct) => File.WriteAllTextAsync(path, content, ct))
+    {
+    }
+
+    internal AppSettingsFileService(
+        IConfiguration configuration,
+        IWebHostEnvironment environment,
+        Func<string, string, CancellationToken, Task> writeTextAsync)
     {
         _configuration = configuration;
         _environment = environment;
+        ArgumentNullException.ThrowIfNull(writeTextAsync);
+        _writeTextAsync = writeTextAsync;
     }
 
     /// <summary>
@@ -115,6 +140,56 @@ public sealed class AppSettingsFileService
     public async Task<Dictionary<object, object>> LoadYamlAsync(string? path = null, CancellationToken ct = default)
     {
         var resolvedPath = path ?? ResolveYamlAppsettingsPath();
+        return await LoadYamlCoreAsync(resolvedPath, ct).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Updates the global marker prompt template in the active appsettings file using atomic write semantics.
+    /// </summary>
+    /// <param name="template">The new marker prompt template identifier, or <c>null</c> to remove it.</param>
+    /// <param name="ct">The cancellation token.</param>
+    public async Task UpdateGlobalPromptTemplateAsync(string? template, CancellationToken ct = default)
+    {
+        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            var resolvedPath = ResolvePreferredAppsettingsPath();
+            if (resolvedPath.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
+            {
+                var data = await LoadYamlCoreAsync(resolvedPath, ct).ConfigureAwait(false);
+                if (!data.TryGetValue("Mcp", out var mcpObj) || mcpObj is not IDictionary<object, object> mcpDict)
+                    data["Mcp"] = mcpDict = new Dictionary<object, object>();
+
+                if (template is null)
+                    mcpDict.Remove("MarkerPromptTemplate");
+                else
+                    mcpDict["MarkerPromptTemplate"] = template;
+
+                await SaveYamlCoreAsync(data, resolvedPath, ct).ConfigureAwait(false);
+            }
+            else
+            {
+                var document = await LoadJsonCoreAsync(resolvedPath, ct).ConfigureAwait(false);
+                var mcp = document["Mcp"] as JsonObject ?? new JsonObject();
+                if (template is null)
+                    mcp.Remove("MarkerPromptTemplate");
+                else
+                    mcp["MarkerPromptTemplate"] = template;
+
+                document["Mcp"] = mcp;
+                await SaveJsonCoreAsync(document, resolvedPath, ct).ConfigureAwait(false);
+            }
+
+            ReloadConfiguration();
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
+
+    private async Task<Dictionary<object, object>> LoadYamlCoreAsync(string resolvedPath, CancellationToken ct)
+    {
         if (!File.Exists(resolvedPath))
             return [];
 
@@ -136,13 +211,16 @@ public sealed class AppSettingsFileService
         ArgumentNullException.ThrowIfNull(data);
 
         var resolvedPath = path ?? ResolveYamlAppsettingsPath();
-        var directory = Path.GetDirectoryName(resolvedPath);
-        if (!string.IsNullOrWhiteSpace(directory))
-            Directory.CreateDirectory(directory);
-
-        var yamlText = s_serializer.Serialize(data);
-        await File.WriteAllTextAsync(resolvedPath, yamlText, ct).ConfigureAwait(false);
-        ReloadConfiguration();
+        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            await SaveYamlCoreAsync(data, resolvedPath, ct).ConfigureAwait(false);
+            ReloadConfiguration();
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
     }
 
     /// <summary>
@@ -157,20 +235,75 @@ public sealed class AppSettingsFileService
     {
         ArgumentNullException.ThrowIfNull(updates);
 
-        var resolvedPath = ResolveYamlAppsettingsPath();
-        var data = await LoadYamlAsync(resolvedPath, ct).ConfigureAwait(false);
+        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            var resolvedPath = ResolveYamlAppsettingsPath();
+            var data = await LoadYamlCoreAsync(resolvedPath, ct).ConfigureAwait(false);
 
-        foreach (var update in updates)
-            ApplyPatch(data, update.Key, update.Value);
+            foreach (var update in updates)
+                ApplyPatch(data, update.Key, update.Value);
 
-        await SaveYamlAsync(data, resolvedPath, ct).ConfigureAwait(false);
-        return GetConfigurationValues();
+            await SaveYamlCoreAsync(data, resolvedPath, ct).ConfigureAwait(false);
+            ReloadConfiguration();
+            return GetConfigurationValues();
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
     }
 
     private void ReloadConfiguration()
     {
         if (_configuration is IConfigurationRoot root)
             root.Reload();
+    }
+
+    private async Task<JsonObject> LoadJsonCoreAsync(string resolvedPath, CancellationToken ct)
+    {
+        if (!File.Exists(resolvedPath))
+            return new JsonObject();
+
+        var jsonText = await File.ReadAllTextAsync(resolvedPath, ct).ConfigureAwait(false);
+        if (string.IsNullOrWhiteSpace(jsonText))
+            return new JsonObject();
+
+        return JsonNode.Parse(jsonText, s_jsonNodeOptions) as JsonObject ?? new JsonObject();
+    }
+
+    private async Task SaveYamlCoreAsync(Dictionary<object, object> data, string resolvedPath, CancellationToken ct)
+    {
+        var yamlText = s_serializer.Serialize(data);
+        await WriteTextAtomicallyAsync(resolvedPath, yamlText, ct).ConfigureAwait(false);
+    }
+
+    private async Task SaveJsonCoreAsync(JsonObject data, string resolvedPath, CancellationToken ct)
+    {
+        var jsonText = data.ToJsonString(s_jsonOptions);
+        await WriteTextAtomicallyAsync(resolvedPath, jsonText, ct).ConfigureAwait(false);
+    }
+
+    private async Task WriteTextAtomicallyAsync(string resolvedPath, string content, CancellationToken ct)
+    {
+        var directory = Path.GetDirectoryName(resolvedPath);
+        if (!string.IsNullOrWhiteSpace(directory))
+            Directory.CreateDirectory(directory);
+
+        var tempPath = Path.Combine(
+            directory ?? AppContext.BaseDirectory,
+            $".{Path.GetFileName(resolvedPath)}.{Guid.NewGuid():N}.tmp");
+
+        try
+        {
+            await _writeTextAsync(tempPath, content, ct).ConfigureAwait(false);
+            File.Move(tempPath, resolvedPath, overwrite: true);
+        }
+        finally
+        {
+            if (File.Exists(tempPath))
+                File.Delete(tempPath);
+        }
     }
 
     private string? ResolveLoadedAppsettingsPath(string fileName)

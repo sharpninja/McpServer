@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Text;
 using System.Text.Json;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
@@ -13,6 +15,17 @@ namespace McpServer.Support.Mcp.Services;
 public sealed class GitHubCliService : IGitHubCliService
 {
     private const string GhExe = "gh";
+    private static readonly HashSet<string> AllowedIssueStates = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "open",
+        "closed",
+        "all"
+    };
+    private static readonly HashSet<string> AllowedCloseReasons = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "completed",
+        "not_planned"
+    };
     private readonly IProcessRunner _processRunner;
     private readonly ILogger<GitHubCliService> _logger;
     private readonly IGitHubWorkspaceTokenStore? _tokenStore;
@@ -40,12 +53,26 @@ public sealed class GitHubCliService : IGitHubCliService
     /// <inheritdoc />
     public async Task<GitHubIssueListResult> ListIssuesAsync(string? state, int limit, CancellationToken cancellationToken = default)
     {
-        var args = $"issue list --limit {Math.Clamp(limit, 1, 100)} --json number,title,url,state";
-        if (!string.IsNullOrWhiteSpace(state))
+        if (!TryNormalizeIssueState(state, out var normalizedState, out var errorMessage))
+            return new GitHubIssueListResult(false, errorMessage, Array.Empty<GitHubIssueItem>());
+
+        var args = new List<string>
         {
-            args += " --state " + state.Trim();
+            "issue",
+            "list",
+            "--limit",
+            Math.Clamp(limit, 1, 100).ToString(CultureInfo.InvariantCulture),
+            "--json",
+            "number,title,url,state"
+        };
+
+        if (normalizedState is not null)
+        {
+            args.Add("--state");
+            args.Add(normalizedState);
         }
-        var result = await RunGhAsync(args, cancellationToken).ConfigureAwait(false);
+
+        var result = await RunGhAsync(BuildArguments(args), cancellationToken).ConfigureAwait(false);
         if (result.ExitCode != 0)
         {
             return new GitHubIssueListResult(false, result.Stderr ?? "gh failed", Array.Empty<GitHubIssueItem>());
@@ -57,12 +84,26 @@ public sealed class GitHubCliService : IGitHubCliService
     /// <inheritdoc />
     public async Task<GitHubPullListResult> ListPullsAsync(string? state, int limit, CancellationToken cancellationToken = default)
     {
-        var args = $"pr list --limit {Math.Clamp(limit, 1, 100)} --json number,title,url,state";
-        if (!string.IsNullOrWhiteSpace(state))
+        if (!TryNormalizeIssueState(state, out var normalizedState, out var errorMessage))
+            return new GitHubPullListResult(false, errorMessage, Array.Empty<GitHubPullItem>());
+
+        var args = new List<string>
         {
-            args += " --state " + state.Trim();
+            "pr",
+            "list",
+            "--limit",
+            Math.Clamp(limit, 1, 100).ToString(CultureInfo.InvariantCulture),
+            "--json",
+            "number,title,url,state"
+        };
+
+        if (normalizedState is not null)
+        {
+            args.Add("--state");
+            args.Add(normalizedState);
         }
-        var result = await RunGhAsync(args, cancellationToken).ConfigureAwait(false);
+
+        var result = await RunGhAsync(BuildArguments(args), cancellationToken).ConfigureAwait(false);
         if (result.ExitCode != 0)
         {
             return new GitHubPullListResult(false, result.Stderr ?? "gh failed", Array.Empty<GitHubPullItem>());
@@ -75,12 +116,14 @@ public sealed class GitHubCliService : IGitHubCliService
     public async Task<GitHubCreateIssueResult> CreateIssueAsync(string title, string? body, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(title);
-        var args = $"issue create --title \"{EscapeArg(title)}\"";
+        var args = new List<string> { "issue", "create", "--title", title };
         if (!string.IsNullOrWhiteSpace(body))
         {
-            args += " --body \"" + EscapeArg(body) + "\"";
+            args.Add("--body");
+            args.Add(body);
         }
-        var result = await RunGhAsync(args, cancellationToken).ConfigureAwait(false);
+
+        var result = await RunGhAsync(BuildArguments(args), cancellationToken).ConfigureAwait(false);
         if (result.ExitCode != 0)
         {
             return new GitHubCreateIssueResult(false, null, null, result.Stderr ?? "gh failed");
@@ -95,7 +138,8 @@ public sealed class GitHubCliService : IGitHubCliService
     {
         ArgumentNullException.ThrowIfNull(issueId);
         ArgumentNullException.ThrowIfNull(body);
-        var args = $"issue comment {issueId.Trim()} --body \"{EscapeArg(body)}\"";
+        var normalizedIssueId = NormalizeTargetIdentifier(issueId, nameof(issueId));
+        var args = BuildArguments("issue", "comment", "--body", body, "--", normalizedIssueId);
         var result = await RunGhAsync(args, cancellationToken).ConfigureAwait(false);
         return new GitHubCommentResult(result.ExitCode == 0, result.ExitCode != 0 ? result.Stderr : null);
     }
@@ -105,7 +149,8 @@ public sealed class GitHubCliService : IGitHubCliService
     {
         ArgumentNullException.ThrowIfNull(prId);
         ArgumentNullException.ThrowIfNull(body);
-        var args = $"pr comment {prId.Trim()} --body \"{EscapeArg(body)}\"";
+        var normalizedPullId = NormalizeTargetIdentifier(prId, nameof(prId));
+        var args = BuildArguments("pr", "comment", "--body", body, "--", normalizedPullId);
         var result = await RunGhAsync(args, cancellationToken).ConfigureAwait(false);
         return new GitHubCommentResult(result.ExitCode == 0, result.ExitCode != 0 ? result.Stderr : null);
     }
@@ -113,7 +158,12 @@ public sealed class GitHubCliService : IGitHubCliService
     /// <inheritdoc />
     public async Task<GitHubIssueDetailResult> GetIssueAsync(int issueNumber, CancellationToken ct = default)
     {
-        var args = $"issue view {issueNumber} --json number,title,body,state,url,labels,assignees,milestone,createdAt,updatedAt,closedAt,author,comments";
+        var args = BuildArguments(
+            "issue",
+            "view",
+            issueNumber.ToString(CultureInfo.InvariantCulture),
+            "--json",
+            "number,title,body,state,url,labels,assignees,milestone,createdAt,updatedAt,closedAt,author,comments");
         var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubIssueDetailResult(false, null, result.Stderr ?? "gh failed");
@@ -127,19 +177,62 @@ public sealed class GitHubCliService : IGitHubCliService
     public async Task<GitHubMutationResult> UpdateIssueAsync(int issueNumber, GitHubIssueUpdateRequest request, CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(request);
-        var args = $"issue edit {issueNumber}";
-        if (request.Title is not null) args += $" --title \"{EscapeArg(request.Title)}\"";
-        if (request.Body is not null) args += $" --body \"{EscapeArg(request.Body)}\"";
+        var args = new List<string> { "issue", "edit", issueNumber.ToString(CultureInfo.InvariantCulture) };
+        if (request.Title is not null)
+        {
+            args.Add("--title");
+            args.Add(request.Title);
+        }
+
+        if (request.Body is not null)
+        {
+            args.Add("--body");
+            args.Add(request.Body);
+        }
+
         if (request.AddLabels is { Count: > 0 })
-            foreach (var label in request.AddLabels) args += $" --add-label \"{EscapeArg(label)}\"";
+        {
+            foreach (var label in request.AddLabels)
+            {
+                args.Add("--add-label");
+                args.Add(label);
+            }
+        }
+
         if (request.RemoveLabels is { Count: > 0 })
-            foreach (var label in request.RemoveLabels) args += $" --remove-label \"{EscapeArg(label)}\"";
+        {
+            foreach (var label in request.RemoveLabels)
+            {
+                args.Add("--remove-label");
+                args.Add(label);
+            }
+        }
+
         if (request.AddAssignees is { Count: > 0 })
-            foreach (var assignee in request.AddAssignees) args += $" --add-assignee \"{EscapeArg(assignee)}\"";
+        {
+            foreach (var assignee in request.AddAssignees)
+            {
+                args.Add("--add-assignee");
+                args.Add(assignee);
+            }
+        }
+
         if (request.RemoveAssignees is { Count: > 0 })
-            foreach (var assignee in request.RemoveAssignees) args += $" --remove-assignee \"{EscapeArg(assignee)}\"";
-        if (request.Milestone is not null) args += $" --milestone \"{EscapeArg(request.Milestone)}\"";
-        var result = await RunGhAsync(args, ct).ConfigureAwait(false);
+        {
+            foreach (var assignee in request.RemoveAssignees)
+            {
+                args.Add("--remove-assignee");
+                args.Add(assignee);
+            }
+        }
+
+        if (request.Milestone is not null)
+        {
+            args.Add("--milestone");
+            args.Add(request.Milestone);
+        }
+
+        var result = await RunGhAsync(BuildArguments(args), ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubMutationResult(false, null, result.Stderr ?? "gh failed");
         return new GitHubMutationResult(true, result.Stdout?.Trim(), null);
@@ -148,10 +241,17 @@ public sealed class GitHubCliService : IGitHubCliService
     /// <inheritdoc />
     public async Task<GitHubMutationResult> CloseIssueAsync(int issueNumber, string? reason = null, CancellationToken ct = default)
     {
-        var args = $"issue close {issueNumber}";
-        if (!string.IsNullOrWhiteSpace(reason))
-            args += $" --reason {reason.Trim()}";
-        var result = await RunGhAsync(args, ct).ConfigureAwait(false);
+        if (!TryNormalizeCloseReason(reason, out var normalizedReason, out var errorMessage))
+            return new GitHubMutationResult(false, null, errorMessage);
+
+        var args = new List<string> { "issue", "close", issueNumber.ToString(CultureInfo.InvariantCulture) };
+        if (normalizedReason is not null)
+        {
+            args.Add("--reason");
+            args.Add(normalizedReason);
+        }
+
+        var result = await RunGhAsync(BuildArguments(args), ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubMutationResult(false, null, result.Stderr ?? "gh failed");
         return new GitHubMutationResult(true, result.Stdout?.Trim(), null);
@@ -160,7 +260,7 @@ public sealed class GitHubCliService : IGitHubCliService
     /// <inheritdoc />
     public async Task<GitHubMutationResult> ReopenIssueAsync(int issueNumber, CancellationToken ct = default)
     {
-        var args = $"issue reopen {issueNumber}";
+        var args = BuildArguments("issue", "reopen", issueNumber.ToString(CultureInfo.InvariantCulture));
         var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubMutationResult(false, null, result.Stderr ?? "gh failed");
@@ -170,7 +270,7 @@ public sealed class GitHubCliService : IGitHubCliService
     /// <inheritdoc />
     public async Task<GitHubLabelsResult> ListIssueLabelsAsync(CancellationToken ct = default)
     {
-        var args = "label list --json name,color,description --limit 100";
+        var args = BuildArguments("label", "list", "--json", "name,color,description", "--limit", "100");
         var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubLabelsResult(false, null, result.Stderr ?? "gh failed");
@@ -182,13 +282,21 @@ public sealed class GitHubCliService : IGitHubCliService
     public async Task<GitHubWorkflowRunListResult> ListWorkflowRunsAsync(GitHubWorkflowRunQuery query, CancellationToken ct = default)
     {
         query ??= new GitHubWorkflowRunQuery();
-        var args = $"run list --limit {Math.Clamp(query.Limit, 1, 100)} --json databaseId,workflowName,displayTitle,headBranch,status,conclusion,event,url,createdAt,updatedAt";
-        if (!string.IsNullOrWhiteSpace(query.Branch)) args += $" --branch \"{EscapeArg(query.Branch)}\"";
-        if (!string.IsNullOrWhiteSpace(query.Status)) args += $" --status \"{EscapeArg(query.Status)}\"";
-        if (!string.IsNullOrWhiteSpace(query.Event)) args += $" --event \"{EscapeArg(query.Event)}\"";
-        if (!string.IsNullOrWhiteSpace(query.Workflow)) args += $" --workflow \"{EscapeArg(query.Workflow)}\"";
+        var args = new List<string>
+        {
+            "run",
+            "list",
+            "--limit",
+            Math.Clamp(query.Limit, 1, 100).ToString(CultureInfo.InvariantCulture),
+            "--json",
+            "databaseId,workflowName,displayTitle,headBranch,status,conclusion,event,url,createdAt,updatedAt"
+        };
+        AddOption(args, "--branch", query.Branch);
+        AddOption(args, "--status", query.Status);
+        AddOption(args, "--event", query.Event);
+        AddOption(args, "--workflow", query.Workflow);
 
-        var result = await RunGhAsync(args, ct).ConfigureAwait(false);
+        var result = await RunGhAsync(BuildArguments(args), ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubWorkflowRunListResult(false, Array.Empty<GitHubWorkflowRunItem>(), result.Stderr ?? "gh failed");
 
@@ -198,7 +306,12 @@ public sealed class GitHubCliService : IGitHubCliService
     /// <inheritdoc />
     public async Task<GitHubWorkflowRunDetailResult> GetWorkflowRunAsync(long runId, CancellationToken ct = default)
     {
-        var args = $"run view {runId} --json databaseId,workflowName,displayTitle,headBranch,headSha,status,conclusion,event,url,attempt,createdAt,updatedAt,jobs";
+        var args = BuildArguments(
+            "run",
+            "view",
+            runId.ToString(CultureInfo.InvariantCulture),
+            "--json",
+            "databaseId,workflowName,displayTitle,headBranch,headSha,status,conclusion,event,url,attempt,createdAt,updatedAt,jobs");
         var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubWorkflowRunDetailResult(false, null, result.Stderr ?? "gh failed");
@@ -212,7 +325,7 @@ public sealed class GitHubCliService : IGitHubCliService
     /// <inheritdoc />
     public async Task<GitHubMutationResult> RerunWorkflowRunAsync(long runId, CancellationToken ct = default)
     {
-        var args = $"run rerun {runId}";
+        var args = BuildArguments("run", "rerun", runId.ToString(CultureInfo.InvariantCulture));
         var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubMutationResult(false, null, result.Stderr ?? "gh failed");
@@ -222,7 +335,7 @@ public sealed class GitHubCliService : IGitHubCliService
     /// <inheritdoc />
     public async Task<GitHubMutationResult> CancelWorkflowRunAsync(long runId, CancellationToken ct = default)
     {
-        var args = $"run cancel {runId}";
+        var args = BuildArguments("run", "cancel", runId.ToString(CultureInfo.InvariantCulture));
         var result = await RunGhAsync(args, ct).ConfigureAwait(false);
         if (result.ExitCode != 0)
             return new GitHubMutationResult(false, null, result.Stderr ?? "gh failed");
@@ -287,9 +400,126 @@ public sealed class GitHubCliService : IGitHubCliService
         return null;
     }
 
-    private static string EscapeArg(string s)
+    private static bool TryNormalizeIssueState(string? state, out string? normalizedState, out string? errorMessage)
     {
-        return s.Replace("\\", "\\\\", StringComparison.Ordinal).Replace("\"", "\\\"", StringComparison.Ordinal);
+        if (string.IsNullOrWhiteSpace(state))
+        {
+            normalizedState = null;
+            errorMessage = null;
+            return true;
+        }
+
+        normalizedState = state.Trim().ToLowerInvariant();
+        if (AllowedIssueStates.Contains(normalizedState))
+        {
+            errorMessage = null;
+            return true;
+        }
+
+        normalizedState = null;
+        errorMessage = "Invalid state. Allowed values: open, closed, all.";
+        return false;
+    }
+
+    private static bool TryNormalizeCloseReason(string? reason, out string? normalizedReason, out string? errorMessage)
+    {
+        if (string.IsNullOrWhiteSpace(reason))
+        {
+            normalizedReason = null;
+            errorMessage = null;
+            return true;
+        }
+
+        normalizedReason = reason.Trim().ToLowerInvariant();
+        if (AllowedCloseReasons.Contains(normalizedReason))
+        {
+            errorMessage = null;
+            return true;
+        }
+
+        normalizedReason = null;
+        errorMessage = "Invalid close reason. Allowed values: completed, not_planned.";
+        return false;
+    }
+
+    private static string NormalizeTargetIdentifier(string value, string paramName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(value, paramName);
+        return value.Trim();
+    }
+
+    private static void AddOption(List<string> args, string option, string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return;
+
+        args.Add(option);
+        args.Add(value);
+    }
+
+    private static string BuildArguments(IEnumerable<string> arguments)
+    {
+        return string.Join(" ", arguments.Select(QuoteArgument));
+    }
+
+    private static string BuildArguments(params string[] arguments)
+    {
+        return BuildArguments((IEnumerable<string>)arguments);
+    }
+
+    private static string QuoteArgument(string argument)
+    {
+        ArgumentNullException.ThrowIfNull(argument);
+
+        if (argument.Length == 0)
+            return "\"\"";
+
+        var requiresQuoting = false;
+        for (var i = 0; i < argument.Length; i++)
+        {
+            if (char.IsWhiteSpace(argument[i]) || argument[i] == '"')
+            {
+                requiresQuoting = true;
+                break;
+            }
+        }
+
+        if (!requiresQuoting)
+            return argument;
+
+        var builder = new StringBuilder(argument.Length + 2);
+        builder.Append('"');
+        var backslashCount = 0;
+        foreach (var character in argument)
+        {
+            if (character == '\\')
+            {
+                backslashCount++;
+                continue;
+            }
+
+            if (character == '"')
+            {
+                builder.Append('\\', backslashCount * 2 + 1);
+                builder.Append('"');
+                backslashCount = 0;
+                continue;
+            }
+
+            if (backslashCount > 0)
+            {
+                builder.Append('\\', backslashCount);
+                backslashCount = 0;
+            }
+
+            builder.Append(character);
+        }
+
+        if (backslashCount > 0)
+            builder.Append('\\', backslashCount * 2);
+
+        builder.Append('"');
+        return builder.ToString();
     }
 
     private async Task<ProcessRunResult> RunGhAsync(string args, CancellationToken ct)

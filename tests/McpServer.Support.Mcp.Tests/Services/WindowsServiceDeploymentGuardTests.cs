@@ -16,6 +16,20 @@ public sealed class WindowsServiceDeploymentGuardTests : IDisposable
     }
 
     [Fact]
+    public void HasDeploymentManifest_WhenManifestExists_ReturnsTrue()
+    {
+        WriteManifest(Array.Empty<ExecutableHashEntry>());
+
+        Assert.True(WindowsServiceDeploymentGuard.HasDeploymentManifest(_tempDirectory));
+    }
+
+    [Fact]
+    public void HasDeploymentManifest_WhenManifestMissing_ReturnsFalse()
+    {
+        Assert.False(WindowsServiceDeploymentGuard.HasDeploymentManifest(_tempDirectory));
+    }
+
+    [Fact]
     public void EnsureApprovedDeployment_MissingManifest_ThrowsAndLogsClearMessage()
     {
         File.WriteAllText(Path.Combine(_tempDirectory, "appsettings.yaml"), "Logging:\n  LogLevel:\n    Default: Information\n");

@@ -76,6 +76,18 @@ internal sealed class TodoService : ITodoService, ITodoStore, IDisposable
     }
 
     /// <inheritdoc />
+    public Task<TodoProjectionStatusResult> GetProjectionStatusAsync(CancellationToken cancellationToken = default)
+    {
+        throw new NotSupportedException("TODO projection status requires sqlite TODO storage.");
+    }
+
+    /// <inheritdoc />
+    public Task<TodoProjectionRepairResult> RepairProjectionAsync(CancellationToken cancellationToken = default)
+    {
+        throw new NotSupportedException("TODO projection repair requires sqlite TODO storage.");
+    }
+
+    /// <inheritdoc />
     public async Task<TodoMutationResult> CreateAsync(TodoCreateRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);

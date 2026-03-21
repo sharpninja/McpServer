@@ -40,6 +40,11 @@ public sealed class McpAgentOptions
     public string? WorkspacePath { get; set; }
 
     /// <summary>
+    /// Optional privileged token used only for remote desktop-launch requests.
+    /// </summary>
+    public string? DesktopLaunchToken { get; set; }
+
+    /// <summary>
     /// Stable identifier projected into <see cref="ChatClientAgentOptions.Id"/> for host-side agent construction.
     /// </summary>
     public string AgentId { get; set; } = McpHostedAgentDefaults.DefaultAgentId;
@@ -70,6 +75,7 @@ public sealed class McpAgentOptions
             ApiKey = ApiKey,
             BearerToken = BearerToken,
             BaseUrl = BaseUrl,
+            DesktopLaunchToken = DesktopLaunchToken,
             LoggerFactory = loggerFactory,
             Timeout = Timeout,
             WorkspacePath = WorkspacePath,

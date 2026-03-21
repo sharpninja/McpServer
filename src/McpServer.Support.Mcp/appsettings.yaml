@@ -47,6 +47,10 @@ Mcp:
   RepoAllowlist:
   - src/McpServer.Cqrs/**/*.cs
   - src/McpServer.Cqrs.Mvvm/**/*.cs
+  DesktopLaunch:
+    Enabled: false
+    AccessToken: ''
+    AllowedExecutables: []
   GraphRag:
     Enabled: true
     EnhanceContextSearch: true
@@ -109,8 +113,8 @@ Mcp:
     Url: http://localhost:8000
     IngestUrl: http://localhost:8000/api/v1/ingest
     StreamName: mcp
-    Username: admin
-    Password: admin
+    Username: ''
+    Password: ''
     FallbackLogPath: logs/mcp-.log
   PairingUsers: []
   Workspaces:

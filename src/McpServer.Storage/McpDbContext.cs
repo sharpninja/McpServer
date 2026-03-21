@@ -210,22 +210,22 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => x.EventType);
         });
 
-        modelBuilder.Entity<ContextDocumentEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<ContextChunkEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogActionEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnTagEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnContextEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogProcessingDialogEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogCommitEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnStringListEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<ToolDefinitionEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == string.Empty || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<ToolDefinitionTagEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == string.Empty || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<ToolBucketEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<AgentDefinitionEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<AgentWorkspaceEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<AgentEventLogEntity>().HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<ContextDocumentEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<ContextChunkEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogTurnEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogActionEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogTurnTagEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogTurnContextEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogProcessingDialogEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogCommitEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogTurnStringListEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<ToolDefinitionEntity>().HasQueryFilter(e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
+        modelBuilder.Entity<ToolDefinitionTagEntity>().HasQueryFilter(e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
+        modelBuilder.Entity<ToolBucketEntity>().HasQueryFilter(e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
+        modelBuilder.Entity<AgentDefinitionEntity>().HasQueryFilter(e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
+        modelBuilder.Entity<AgentWorkspaceEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<AgentEventLogEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
 
         modelBuilder.Entity<ContextDocumentEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasIndex(e => e.WorkspaceId);

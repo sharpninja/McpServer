@@ -32,12 +32,74 @@ public sealed class TodoEndpointFixture : IDisposable
     public TodoEndpointFixture()
     {
         Client = new HttpClient { BaseAddress = new Uri(BaseUrl) };
-        var apiKey = GetDefaultApiKeyAsync(Client).GetAwaiter().GetResult();
+        var apiKey = ResolvePreferredApiKeyAsync(Client).GetAwaiter().GetResult();
         if (!string.IsNullOrWhiteSpace(apiKey))
         {
             Client.DefaultRequestHeaders.Remove("X-Api-Key");
             Client.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
         }
+    }
+
+    private static async Task<string?> ResolvePreferredApiKeyAsync(HttpClient client)
+    {
+        var explicitKey = Environment.GetEnvironmentVariable("MCPSERVER_APIKEY");
+        if (!string.IsNullOrWhiteSpace(explicitKey))
+            return explicitKey;
+
+        var fullKey = TryReadApiKeyFromSessionState() ?? TryReadApiKeyFromMarkerFile();
+        if (!string.IsNullOrWhiteSpace(fullKey))
+            return fullKey;
+
+        return await GetDefaultApiKeyAsync(client).ConfigureAwait(false);
+    }
+
+    private static string? TryReadApiKeyFromSessionState()
+    {
+        var sessionPath = FindFileUpwards(".mcpServer", "session.yaml");
+        if (sessionPath is null)
+            return null;
+
+        try
+        {
+            using var document = JsonDocument.Parse(File.ReadAllText(sessionPath));
+            return document.RootElement.TryGetProperty("apiKey", out var apiKeyElement)
+                ? apiKeyElement.GetString()
+                : null;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static string? TryReadApiKeyFromMarkerFile()
+    {
+        var markerPath = FindFileUpwards("AGENTS-README-FIRST.yaml");
+        if (markerPath is null)
+            return null;
+
+        foreach (var line in File.ReadLines(markerPath))
+        {
+            if (line.StartsWith("apiKey:", StringComparison.OrdinalIgnoreCase))
+                return line["apiKey:".Length..].Trim();
+        }
+
+        return null;
+    }
+
+    private static string? FindFileUpwards(params string[] pathSegments)
+    {
+        var current = new DirectoryInfo(AppContext.BaseDirectory);
+        while (current is not null)
+        {
+            var candidate = Path.Combine([current.FullName, .. pathSegments]);
+            if (File.Exists(candidate))
+                return candidate;
+
+            current = current.Parent;
+        }
+
+        return null;
     }
 
     private static async Task<string?> GetDefaultApiKeyAsync(HttpClient client)

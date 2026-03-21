@@ -277,7 +277,7 @@ public sealed class McpHostedAgentAdapterTests
     [Fact]
     public async Task Registration_Functions_DesktopLaunch_ReusesExistingDesktopClient()
     {
-        var (hostedAgent, handler) = CreateHostedAgent();
+        var (hostedAgent, handler) = CreateHostedAgent("desktop-secret");
         var launchFunction = hostedAgent.Registration.Functions.Single(static function =>
             function.Name == "mcp_desktop_launch");
 
@@ -303,6 +303,7 @@ public sealed class McpHostedAgentAdapterTests
         Assert.Single(handler.Requests);
         Assert.Equal(HttpMethod.Post, handler.Requests[0].Method);
         Assert.Equal("/mcpserver/desktop/launch", handler.Requests[0].RequestUri.AbsolutePath);
+        Assert.Equal("desktop-secret", handler.Requests[0].DesktopLaunchToken);
 
         using var requestBody = JsonDocument.Parse(handler.Requests[0].Body!);
         Assert.Equal(@"C:\Windows\System32\cmd.exe", requestBody.RootElement.GetProperty("executablePath").GetString());
@@ -416,7 +417,7 @@ public sealed class McpHostedAgentAdapterTests
         Assert.Empty(handler.Requests);
     }
 
-    private static (McpHostedAgent HostedAgent, RecordingMcpHttpMessageHandler Handler) CreateHostedAgent()
+    private static (McpHostedAgent HostedAgent, RecordingMcpHttpMessageHandler Handler) CreateHostedAgent(string? desktopLaunchToken = null)
     {
         var handler = new RecordingMcpHttpMessageHandler();
         var httpClient = new HttpClient(handler);
@@ -426,6 +427,7 @@ public sealed class McpHostedAgentAdapterTests
             {
                 ApiKey = "test-key",
                 BaseUrl = new Uri("http://localhost:7147"),
+                DesktopLaunchToken = desktopLaunchToken,
                 WorkspacePath = @"E:\github\McpServer",
             });
         var timeProvider = new FixedTimeProvider(new DateTimeOffset(2026, 03, 09, 15, 01, 05, TimeSpan.Zero));
@@ -434,6 +436,7 @@ public sealed class McpHostedAgentAdapterTests
             {
                 ApiKey = "test-key",
                 BaseUrl = new Uri("http://localhost:7147"),
+                DesktopLaunchToken = desktopLaunchToken,
                 SourceType = "Codex",
                 WorkspacePath = @"E:\github\McpServer",
             });
@@ -498,7 +501,11 @@ public sealed class McpHostedAgentAdapterTests
                 ? null
                 : await request.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
-            Requests.Add(new RecordedRequest(request.Method, request.RequestUri!, body));
+            var desktopLaunchToken = request.Headers.TryGetValues("X-Desktop-Launch-Token", out var tokenValues)
+                ? tokenValues.SingleOrDefault()
+                : null;
+
+            Requests.Add(new RecordedRequest(request.Method, request.RequestUri!, body, desktopLaunchToken));
 
             return request.RequestUri!.AbsolutePath switch
             {
@@ -632,10 +639,12 @@ public sealed class McpHostedAgentAdapterTests
     /// <param name="Method">The emitted HTTP method.</param>
     /// <param name="RequestUri">The emitted request URI.</param>
     /// <param name="Body">The serialized request body, when present.</param>
+    /// <param name="DesktopLaunchToken">The privileged desktop-launch header, when present.</param>
     private sealed record RecordedRequest(
         HttpMethod Method,
         Uri RequestUri,
-        string? Body);
+        string? Body,
+        string? DesktopLaunchToken);
 
     /// <summary>
     /// TEST-MCP-089: Provides a deterministic clock for the hosted-agent adapter tests.

@@ -46,7 +46,7 @@ public sealed class WorkspaceResolutionMiddlewareTests
         return svc;
     }
 
-    private static DefaultHttpContext CreateContext(string path, string method = "GET", string? workspaceHeader = null, string? apiKey = null)
+    private static DefaultHttpContext CreateContext(string path, string method = "GET", string? workspaceHeader = null, string? apiKey = null, string? bearerToken = null)
     {
         var ctx = new DefaultHttpContext
         {
@@ -57,6 +57,8 @@ public sealed class WorkspaceResolutionMiddlewareTests
             ctx.Request.Headers[WorkspaceResolutionMiddleware.WorkspacePathHeader] = workspaceHeader;
         if (apiKey is not null)
             ctx.Request.Headers["X-Api-Key"] = apiKey;
+        if (bearerToken is not null)
+            ctx.Request.Headers.Authorization = $"Bearer {bearerToken}";
         return ctx;
     }
 
@@ -235,5 +237,40 @@ public sealed class WorkspaceResolutionMiddlewareTests
 
         Assert.True(wsContext.IsResolved);
         Assert.True(wsContext.IsDefaultKey);
+    }
+
+    [Fact]
+    public async Task BearerToken_WithoutWorkspaceHeader_RejectsTenantRoute()
+    {
+        var wsDto = MakeDto(WorkspaceA, isPrimary: true);
+        var workspaceService = CreateWorkspaceService(wsDto);
+        var tokenService = new WorkspaceTokenService();
+        var wsContext = new WorkspaceContext();
+        var nextCalled = false;
+        var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
+
+        var ctx = CreateContext("/mcpserver/sessionlog/query", bearerToken: "jwt-token");
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
+
+        Assert.False(nextCalled);
+        Assert.Equal(404, ctx.Response.StatusCode);
+        Assert.False(wsContext.IsResolved);
+    }
+
+    [Fact]
+    public async Task BearerToken_WithoutWorkspaceHeader_AllowsWorkspaceRegistryRoute()
+    {
+        var wsDto = MakeDto(WorkspaceA, isPrimary: true);
+        var workspaceService = CreateWorkspaceService(wsDto);
+        var tokenService = new WorkspaceTokenService();
+        var wsContext = new WorkspaceContext();
+        var nextCalled = false;
+        var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; });
+
+        var ctx = CreateContext("/mcpserver/workspace", bearerToken: "jwt-token");
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService);
+
+        Assert.True(nextCalled);
+        Assert.False(wsContext.IsResolved);
     }
 }

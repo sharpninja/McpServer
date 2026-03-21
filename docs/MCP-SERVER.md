@@ -80,6 +80,7 @@ Environment overrides:
 
 - `PORT` - highest-priority runtime port override
 - `MCP_INSTANCE` - instance selection when `--instance` is not passed
+- Do not keep Parseable, OAuth, or other runtime secrets in shared repo config. Inject them through environment variables, secure host configuration, or machine-local overrides.
 
 ### Example `Mcp:Instances`
 

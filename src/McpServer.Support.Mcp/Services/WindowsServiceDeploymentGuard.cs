@@ -5,6 +5,12 @@ namespace McpServer.Support.Mcp.Services;
 
 internal static class WindowsServiceDeploymentGuard
 {
+    internal static bool HasDeploymentManifest(string baseDirectory)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(baseDirectory);
+        return File.Exists(Path.Combine(baseDirectory, ".mcpservice-deployment.json"));
+    }
+
     internal static void EnsureApprovedDeployment(string baseDirectory, Action<string>? logFailure = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(baseDirectory);

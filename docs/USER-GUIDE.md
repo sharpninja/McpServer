@@ -213,7 +213,9 @@ Response example:
 
 ### Desktop controller (`/mcpserver/desktop/*`)
 
-- `POST /mcpserver/desktop/launch`
+- `POST /mcpserver/desktop/launch` — requires normal workspace authentication plus the
+  privileged `X-Desktop-Launch-Token` header, and the target executable must match
+  `Mcp:DesktopLaunch:AllowedExecutables` while `Mcp:DesktopLaunch:Enabled` is `true`.
 
 ### Diagnostic controller (`/mcpserver/diagnostic/*`)
 
@@ -396,7 +398,7 @@ POST /mcpserver/context/pack
 POST /mcpserver/context/rebuild-index
 POST /mcpserver/context/search
 GET /mcpserver/context/sources
-POST /mcpserver/desktop/launch
+POST /mcpserver/desktop/launch  # also requires X-Desktop-Launch-Token when enabled
 GET /mcpserver/events
 GET /mcpserver/gh/actions/runs
 GET /mcpserver/gh/actions/runs/{runId}

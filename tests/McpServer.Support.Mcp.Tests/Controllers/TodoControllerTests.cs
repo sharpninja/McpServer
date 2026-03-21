@@ -167,6 +167,90 @@ public sealed class TodoControllerTests
         Assert.Equal(TodoMutationFailureKind.ProjectionFailed, mutation.FailureKind);
     }
 
+    /// <summary>
+    /// TR-MCP-TODO-006: Verifies that GET /mcpserver/todo/projection/status returns the service-provided
+    /// projection status payload when the active TODO provider supports SQLite projection diagnostics.
+    /// The fixture supplies a fully-populated status result so the controller's success shaping can be asserted.
+    /// </summary>
+    [Fact]
+    public async Task GetProjectionStatusAsync_WhenSupported_ReturnsOk()
+    {
+        var todoService = Substitute.For<ITodoService>();
+        todoService.GetProjectionStatusAsync(Arg.Any<CancellationToken>())
+            .Returns(new TodoProjectionStatusResult(
+                "sqlite",
+                "E:\\todo.db",
+                "E:\\docs\\Project\\TODO.yaml",
+                true,
+                true,
+                false,
+                "2026-03-21T00:00:00.0000000Z",
+                LastProjectedToYamlUtc: "2026-03-21T00:00:00.0000000Z",
+                Message: "TODO.yaml matches authoritative SQLite state."));
+
+        var controller = CreateController(todoService);
+        var actionResult = await controller.GetProjectionStatusAsync(CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(actionResult.Result);
+        var status = Assert.IsType<TodoProjectionStatusResult>(ok.Value);
+        Assert.False(status.RepairRequired);
+        Assert.True(status.ProjectionConsistent);
+    }
+
+    /// <summary>
+    /// TR-MCP-TODO-006: Verifies that GET /mcpserver/todo/projection/status returns 501 when the active TODO
+    /// provider does not support SQLite projection diagnostics. The fixture uses a thrown
+    /// <see cref="NotSupportedException"/> to exercise the controller's compatibility path.
+    /// </summary>
+    [Fact]
+    public async Task GetProjectionStatusAsync_WhenNotSupported_ReturnsNotImplemented()
+    {
+        var todoService = Substitute.For<ITodoService>();
+        todoService.GetProjectionStatusAsync(Arg.Any<CancellationToken>())
+            .Returns(_ => Task.FromException<TodoProjectionStatusResult>(
+                new NotSupportedException("Projection status requires sqlite-backed TODO storage.")));
+
+        var controller = CreateController(todoService);
+        var actionResult = await controller.GetProjectionStatusAsync(CancellationToken.None).ConfigureAwait(true);
+
+        var objectResult = Assert.IsType<ObjectResult>(actionResult.Result);
+        Assert.Equal(StatusCodes.Status501NotImplemented, objectResult.StatusCode);
+    }
+
+    /// <summary>
+    /// TR-MCP-TODO-006: Verifies that POST /mcpserver/todo/projection/repair returns HTTP 500 when the
+    /// service reports an unsuccessful repair attempt. The fixture returns a failed repair result so the
+    /// controller can preserve the service's operator-visible error details.
+    /// </summary>
+    [Fact]
+    public async Task RepairProjectionAsync_WhenRepairFails_ReturnsInternalServerError()
+    {
+        var todoService = Substitute.For<ITodoService>();
+        todoService.RepairProjectionAsync(Arg.Any<CancellationToken>())
+            .Returns(new TodoProjectionRepairResult(
+                false,
+                "repair failed",
+                new TodoProjectionStatusResult(
+                    "sqlite",
+                    "E:\\todo.db",
+                    "E:\\docs\\Project\\TODO.yaml",
+                    false,
+                    false,
+                    true,
+                    "2026-03-21T00:00:00.0000000Z",
+                    LastProjectionFailure: "Directory exists at projection target.",
+                    Message: "Projected TODO target 'E:\\docs\\Project\\TODO.yaml' is a directory instead of a file.")));
+
+        var controller = CreateController(todoService);
+        var actionResult = await controller.RepairProjectionAsync(CancellationToken.None).ConfigureAwait(true);
+
+        var objectResult = Assert.IsType<ObjectResult>(actionResult.Result);
+        Assert.Equal(StatusCodes.Status500InternalServerError, objectResult.StatusCode);
+        var repair = Assert.IsType<TodoProjectionRepairResult>(objectResult.Value);
+        Assert.True(repair.Status.RepairRequired);
+        Assert.Equal("repair failed", repair.Error);
+    }
+
     private static TodoController CreateController(
         ITodoService todoService,
         IGitHubCliService? gitHubCliService = null,

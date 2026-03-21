@@ -16,9 +16,9 @@ namespace McpServer.Client;
 /// <see cref="InvalidOperationException"/> is thrown at request time if the key is empty.</para>
 ///
 /// <para><strong>Default key:</strong> The default key returned by <see cref="InitializeAsync"/>
-/// grants <em>read-only</em> access to all endpoints except TODO routes (<c>/mcpserver/todo*</c>)
-/// which are read-write. Consumers with access to the <c>AGENTS-README-FIRST.yaml</c> marker
-/// file should use the full-access token from that file instead.</para>
+/// grants <em>read-only</em> access only. Consumers with access to the
+/// <c>AGENTS-README-FIRST.yaml</c> marker file should use the full-access token from that file
+/// for write operations or other privileged flows instead.</para>
 ///
 /// <para><strong>Port targeting:</strong> Set <see cref="Port"/> to retarget all sub-clients
 /// to a different workspace host at runtime (e.g. after calling the workspace Start
@@ -204,9 +204,8 @@ public sealed class McpServerClient
     /// recommended startup call for consumers that do <strong>not</strong> have access
     /// to the <c>AGENTS-README-FIRST.yaml</c> marker file.
     ///
-    /// <para>The default key grants <em>read-only</em> access to all endpoints except
-    /// TODO routes (<c>/mcpserver/todo*</c>) which are read-write. For full unrestricted
-    /// access, use the workspace token from the marker file instead.</para>
+    /// <para>The default key grants <em>read-only</em> access only. For full unrestricted
+    /// access, use the workspace token from the marker file or JWT Bearer authentication.</para>
     ///
     /// <para>This method is a no-op if <see cref="ApiKey"/> is already non-empty
     /// (i.e. it was seeded via <see cref="McpServerClientOptions.ApiKey"/> or set

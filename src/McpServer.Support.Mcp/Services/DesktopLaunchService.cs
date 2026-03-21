@@ -1,8 +1,10 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Services;
 
@@ -18,6 +20,7 @@ public sealed class DesktopLaunchService
     };
 
     private readonly IConfiguration _configuration;
+    private readonly DesktopLaunchOptions _desktopLaunchOptions;
     private readonly ILogger<DesktopLaunchService> _logger;
     private readonly IProcessRunner _processRunner;
 
@@ -26,14 +29,17 @@ public sealed class DesktopLaunchService
     /// configured launcher location, structured process runner, and logger.
     /// </summary>
     /// <param name="configuration">Application configuration used to resolve launcher paths.</param>
+    /// <param name="desktopLaunchOptions">Privileged desktop-launch feature-gate and allowlist configuration.</param>
     /// <param name="processRunner">Process runner used to invoke <c>McpServer.Launcher.exe</c>.</param>
     /// <param name="logger">Logger for diagnostic output.</param>
     public DesktopLaunchService(
         IConfiguration configuration,
+        IOptions<DesktopLaunchOptions> desktopLaunchOptions,
         IProcessRunner processRunner,
         ILogger<DesktopLaunchService> logger)
     {
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _desktopLaunchOptions = desktopLaunchOptions?.Value ?? throw new ArgumentNullException(nameof(desktopLaunchOptions));
         _processRunner = processRunner ?? throw new ArgumentNullException(nameof(processRunner));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
@@ -57,6 +63,35 @@ public sealed class DesktopLaunchService
         if (string.IsNullOrWhiteSpace(workspacePath))
             return CreateFailureResult("workspacePath is required.");
 
+        if (!_desktopLaunchOptions.Enabled)
+        {
+            _logger.LogWarning(
+                "Rejected desktop launch for workspace {WorkspacePath} because desktop launch is disabled.",
+                workspacePath);
+            return CreateFailureResult("Desktop launch is disabled. Enable Mcp:DesktopLaunch:Enabled to allow local process launch.");
+        }
+
+        if (_desktopLaunchOptions.AllowedExecutables.Count == 0)
+        {
+            _logger.LogWarning(
+                "Rejected desktop launch for workspace {WorkspacePath} because no desktop executables are allowlisted.",
+                workspacePath);
+            return CreateFailureResult("No desktop executables are allowlisted. Configure Mcp:DesktopLaunch:AllowedExecutables.");
+        }
+
+        var normalizedExecutablePath = NormalizeExecutablePath(request.ExecutablePath);
+        if (normalizedExecutablePath is null)
+            return CreateFailureResult("executablePath must be a non-empty absolute path.");
+
+        if (!PathGlobMatcher.MatchesAny(normalizedExecutablePath, _desktopLaunchOptions.AllowedExecutables))
+        {
+            _logger.LogWarning(
+                "Rejected desktop launch for workspace {WorkspacePath} because executable {ExecutablePath} does not match the configured allowlist.",
+                workspacePath,
+                normalizedExecutablePath);
+            return CreateFailureResult("Executable path is not in the configured desktop allowlist.");
+        }
+
         var launcherPath = ResolveLauncherPath(workspacePath);
         if (launcherPath is null)
             return CreateFailureResult("McpServer.Launcher.exe not found. Check Mcp:LauncherPath configuration.");
@@ -65,7 +100,7 @@ public sealed class DesktopLaunchService
         {
             var payload = new DesktopLaunchRequest
             {
-                ExecutablePath = request.ExecutablePath,
+                ExecutablePath = normalizedExecutablePath,
                 Arguments = request.Arguments,
                 WorkingDirectory = request.WorkingDirectory,
                 EnvironmentVariables = request.EnvironmentVariables,
@@ -99,6 +134,29 @@ public sealed class DesktopLaunchService
         {
             _logger.LogError(ex, "Desktop launch failed for workspace {WorkspacePath}", workspacePath);
             return CreateFailureResult(ex.Message);
+        }
+    }
+
+    private static string? NormalizeExecutablePath(string? executablePath)
+    {
+        if (string.IsNullOrWhiteSpace(executablePath) || !Path.IsPathRooted(executablePath))
+            return null;
+
+        try
+        {
+            return Path.GetFullPath(executablePath);
+        }
+        catch (ArgumentException)
+        {
+            return null;
+        }
+        catch (NotSupportedException)
+        {
+            return null;
+        }
+        catch (PathTooLongException)
+        {
+            return null;
         }
     }
 

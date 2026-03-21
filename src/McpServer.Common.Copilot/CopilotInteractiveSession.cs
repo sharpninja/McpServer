@@ -9,7 +9,7 @@ namespace McpServer.Common.Copilot;
 /// Subsequent prompts are written to stdin; responses are read from stdout
 /// until the "Esc to cancel" sentinel indicates Copilot is ready for input.
 /// </summary>
-public sealed class CopilotInteractiveSession : IAsyncDisposable
+public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
 {
     private const string Sentinel = "Esc to cancel";
     private const int OutputTailLineLimit = 40;
@@ -268,6 +268,19 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable
             // Process already disposed.
         }
 
+        _process.Dispose();
+        _gate.Dispose();
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        if (_disposed)
+            return;
+
+        _disposed = true;
+        MarkShutdownRequested();
+        TryKillProcess();
         _process.Dispose();
         _gate.Dispose();
     }

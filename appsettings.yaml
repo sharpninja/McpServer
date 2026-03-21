@@ -37,6 +37,10 @@ Mcp:
   TodoStorage:
     Provider: sqlite
     SqliteDataSource: mcp.db
+  DesktopLaunch:
+    Enabled: false
+    AccessToken: ''
+    AllowedExecutables: []
   Workspaces:
   - WorkspacePath: E:\github\McpServer
     Name: McpServer
@@ -92,8 +96,8 @@ Mcp:
     Url: http://localhost:8000
     IngestUrl: http://localhost:8000/api/v1/ingest
     StreamName: mcp
-    Username: admin
-    Password: admin
+    Username: ''
+    Password: ''
     FallbackLogPath: logs/mcp-.log
   Auth:
     Authority: http://localhost:7080/realms/mcpserver

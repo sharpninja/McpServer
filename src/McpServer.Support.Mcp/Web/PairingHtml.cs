@@ -1,3 +1,5 @@
+using System.Net;
+
 namespace McpServer.Support.Mcp.Web;
 
 /// <summary>
@@ -6,12 +8,12 @@ namespace McpServer.Support.Mcp.Web;
 /// </summary>
 internal static class PairingHtml
 {
-    /// <summary>Renders the login form. Shows an error banner when <paramref name="error"/> is <c>true</c>.</summary>
-    public static string LoginPage(bool error = false)
+    /// <summary>Renders the login form. Shows an error banner when <paramref name="errorMessage"/> is not empty.</summary>
+    public static string LoginPage(string? errorMessage = null)
     {
-        var errorBanner = error
-            ? "<div style='background:#fee;color:#c00;padding:10px 16px;border-radius:6px;margin-bottom:16px;border:1px solid #fcc'>Invalid username or password.</div>"
-            : "";
+        var errorBanner = string.IsNullOrWhiteSpace(errorMessage)
+            ? string.Empty
+            : $"<div style='background:#fee;color:#c00;padding:10px 16px;border-radius:6px;margin-bottom:16px;border:1px solid #fcc'>{WebUtility.HtmlEncode(errorMessage)}</div>";
 
         return $$"""
         <!DOCTYPE html>

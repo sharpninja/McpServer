@@ -31,6 +31,7 @@ internal static class SampleHostAppFactory
             options.BaseUrl = settings.BaseUrl;
             options.ApiKey = settings.ApiKey;
             options.BearerToken = settings.BearerToken;
+            options.DesktopLaunchToken = settings.DesktopLaunchToken;
             options.RequireAuthentication = settings.RequireAuthentication;
             options.WorkspacePath = settings.WorkspacePath;
             options.AgentId = settings.AgentId;
@@ -819,6 +820,7 @@ internal sealed record SampleHostSettings(
     Uri BaseUrl,
     string? ApiKey,
     string? BearerToken,
+    string? DesktopLaunchToken,
     bool RequireAuthentication,
     string WorkspacePath,
     string AgentId,
@@ -835,6 +837,7 @@ internal sealed record SampleHostSettings(
 {
     private const string ApiKeyEnvironmentVariable = "MCP_SERVER_API_KEY";
     private const string BearerTokenEnvironmentVariable = "MCP_SERVER_BEARER_TOKEN";
+    private const string DesktopLaunchTokenEnvironmentVariable = "MCP_SERVER_DESKTOP_LAUNCH_TOKEN";
     private const string BaseUrlEnvironmentVariable = "MCP_SERVER_BASE_URL";
     private const string WorkspacePathEnvironmentVariable = "MCP_SERVER_WORKSPACE_PATH";
     private const string AgentIdEnvironmentVariable = "MCP_AGENT_ID";
@@ -862,6 +865,9 @@ internal sealed record SampleHostSettings(
         var bearerToken = FirstNonEmpty(
             ReadEnvironmentVariable(BearerTokenEnvironmentVariable),
             configuration["McpServer:AgentFramework:BearerToken"]);
+        var desktopLaunchToken = FirstNonEmpty(
+            ReadEnvironmentVariable(DesktopLaunchTokenEnvironmentVariable),
+            configuration["McpServer:AgentFramework:DesktopLaunchToken"]);
         var requireAuthentication = ResolveRequireAuthentication(configuration, apiKey, bearerToken);
         var workspacePath = ResolveWorkspacePath(configuration, marker);
         var modelId = FirstNonEmpty(
@@ -894,6 +900,7 @@ internal sealed record SampleHostSettings(
             baseUrl,
             apiKey,
             bearerToken,
+            desktopLaunchToken,
             requireAuthentication,
             workspacePath,
             FirstNonEmpty(

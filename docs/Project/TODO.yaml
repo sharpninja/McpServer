@@ -1642,7 +1642,7 @@ infrastructure:
     - Make SQLite the authoritative current-state store for TODO items while keeping docs/Project/TODO.yaml synchronized as a deterministic projection of database state.
     - Persist append-only audit history for TODO state changes and expose that history through HTTP, MCP STDIO, and the typed client.
     - Preserve special TODO document sections such as code-review-remediation, completed, and notes without leaving YAML as the runtime source of truth.
-    done-summary: 'Implemented authoritative SQLite TODO storage with deterministic TODO.yaml projection, append-only audit history, REST/MCP/client audit access, sqlite-default configuration, updated FR/TR/TEST traceability, full local validation, and a green GitHub Actions run 250 on develop.'
+    done-summary: Implemented authoritative SQLite TODO storage with deterministic TODO.yaml projection, append-only audit history, REST/MCP/client audit access, sqlite-default configuration, updated FR/TR/TEST traceability, full local validation, and a green GitHub Actions run 250 on develop.
     remaining: ''
     technical-details:
     - Keep TODO persistence in the existing raw SQLite TODO store rather than moving this feature into McpDbContext for this change.
@@ -1675,6 +1675,58 @@ infrastructure:
       done: true
     - task: 'Phase 7: run build and test validation, then finalize the TODO item, session log, commit, push, and CI remediation'
       done: true
+  - id: MCP-TODO-006
+    title: Remediate high-signal workspace code review findings
+    estimate: L
+    note: 'Status 2026-03-21: phases 0 through 9 are complete locally and the remediation branch is ready for merge/release follow-through. The core remediation set was committed as `046c80d24115f832d57e0c718d9936984a28b16e`, the follow-up workspace-scope test-fixture fix was committed as `89f3e4bc15845361c2dbb8e58a96e31193bdca55`, and draft PR `#31` (`codex/mcp-todo-006-remediation` -> `develop`) is green on workflow run `#253`, including `build-test-publish` and `windows-msix`. Local validation is also green, including `dotnet test tests\McpServer.Support.Mcp.Tests -c Release` with 501 total, 495 passed, 6 skipped, and 0 failed. Remaining step, if desired, is merge/deploy follow-through outside this remediation implementation slice.'
+    done: false
+    description:
+    - Execute a coordinated remediation program that hardens the workspace against security flaws, data-loss conditions, startup auth bypasses, and runtime/operational hazards uncovered by repository-wide review.
+    - Sequence the fixes so security and fail-closed behavior land before convenience or cleanup work, reducing the time the deployed service spends in a partially hardened state.
+    - Deliver each remediation with targeted regression coverage, explicit failure semantics, and configuration/documentation updates so the fixes survive redeploys and future refactors.
+    - Treat auth boundaries, workspace isolation, repo file access, and privileged local execution as one trust-boundary workstream so fixes do not close one bypass while leaving an equivalent neighboring path open.
+    remaining: 'Phase 0 through Phase 4 are complete. Immediate next step: begin Phase 5 by replacing silent drop behavior in interaction-log submission and change-event delivery with an explicit durability or backpressure model, then validate the chosen overflow semantics with focused regression coverage.'
+    technical-details:
+    - 'Finding A — GitHub CLI argument injection: GitHubCliService.CloseIssueAsync appends the close reason without the same escaping and quoting discipline used for other gh arguments. Fix the specific bug first, then audit the rest of the GitHub CLI command builder paths for the same bug class so the remediation is class-wide instead of one-line-only.'
+    - 'Finding B — Secret and token storage hardening: remove insecure default credentials from shipped configuration, require secure injection for runtime secrets, restrict GitHub token-store file permissions, and add cross-process-safe write semantics so concurrent service instances cannot silently overwrite or expose credential material.'
+    - 'Finding C — Startup auth fail-closed behavior: ensure workspace/token initialization completes before protected routes serve traffic, and return explicit failure responses when workspace or token state is unavailable instead of allowing requests through a bootstrap gap.'
+    - 'Finding D — Silent audit/change loss: InteractionLogSubmissionQueue and ChannelChangeEventBus currently rely on lossy bounded-channel behavior. Decide the supported overflow model (backpressure, explicit rejection, dead-letter persistence, or durable local buffering), then implement that model with telemetry and regression tests instead of silent drops.'
+    - 'Finding E — TODO persistence semantics: clarify the contract for DB-authoritative success plus YAML-projection failure, add operator-visible repair/consistency verification, and ensure callers/tests can distinguish committed current-state changes from full mutation failure.'
+    - 'Finding F — Runtime hardening: remove async-over-sync disposal patterns that can deadlock under load or shutdown pressure, strengthen pairing password protection and brute-force resistance, and review whether deployment-integrity validation should cover non-Windows-service launch modes when tamper detection is expected.'
+    - 'Finding G — Token issuance and default-token scope: /api-key currently issues a usable primary-workspace token through too-broad a trust boundary. Tighten issuance scope, reduce the default token to truly minimal privileges, and add rate-limiting/audit expectations so token issuance is observable and intentionally bounded.'
+    - 'Finding H — Workspace isolation and tenant scoping: bearer-auth routes that continue with an empty workspace context must fail closed instead of inheriting broad visibility. Remove any empty-workspace means all rows behavior for externally reachable data paths and require explicit workspace resolution where tenant boundaries matter.'
+    - 'Finding I — Repo file boundary enforcement: replace naive prefix-style allowlist matching with real glob evaluation and canonical-path validation, then add symlink or junction-aware checks so repo read and list surfaces cannot escape the intended boundary via path tricks or overbroad matches.'
+    - 'Finding J — Privileged local execution: desktop launch and related agent-launch capabilities need a stronger authorization tier, explicit feature gating, and executable allowlists so possession of a broad workspace key does not automatically imply local process-launch authority.'
+    - 'Finding K — Config patch durability: appsettings patch flows must use serialized temp-file plus atomic replace semantics so concurrent or interrupted writes do not leave invalid YAML or partial config state on disk.'
+    - 'Scope guard: keep this TODO focused on the reviewed findings above. Do not expand it into unrelated refactors, style cleanup, or speculative architecture work unless one of the remediations proves that such a change is directly required.'
+    - 'Acceptance criteria: shipped config must no longer embed insecure defaults; /api-key issuance and default-token scope must be intentionally restricted; protected routes and tenant-sensitive data paths must fail closed when workspace/auth context is unresolved; repo access must use real boundary enforcement; privileged local execution must require explicit admin authorization; event/audit delivery semantics must be observable rather than silently lossy; TODO projection failure states must be explicit and recoverable; config patch writes must be atomic; and each remediated finding must have reproducible regression coverage or an explicit operational verification path.'
+    implementation-tasks:
+    - task: 'Phase 0: convert the code-review findings into an implementation contract by confirming exact affected code paths, deciding any intentionally deferred sub-findings, defining acceptance criteria per finding, and reserving FR/TR/TEST documentation updates if the fixes introduce new externally visible guarantees'
+      done: true
+    - task: 'Phase 1: fix the GitHub CLI command-injection class of issues by escaping and quoting close-reason handling, auditing the remaining gh command builders for equivalent unescaped inputs, and adding adversarial regression tests around GitHubCliService and GitHubController'
+      done: true
+    - task: 'Phase 2: harden token issuance, token scope, and secret persistence by restricting /api-key trust boundaries, reducing default-token privileges, removing insecure shipped defaults, requiring secure runtime secret injection, restricting GitHub token-store file permissions, and making token-store writes safe across concurrent processes or service instances'
+      done: true
+    - task: 'Phase 3: restore strict workspace isolation and fail-closed auth behavior by ensuring tokens are generated before protected routes serve traffic, rejecting unconfigured workspace or auth states explicitly, requiring resolved workspace context where tenant boundaries apply, and removing externally reachable empty-workspace all-rows behavior'
+      done: true
+    - task: 'Phase 4: harden repo and local-execution trust boundaries by replacing naive repo allowlist matching with real glob plus canonical-path enforcement, adding junction or symlink-safe validation, and gating desktop or agent-launch capabilities behind explicit admin controls and executable allowlists'
+      done: true
+    - task: 'Phase 5: replace silent drop behavior in interaction-log submission and change-event delivery with supported durability/backpressure semantics, add explicit overflow telemetry, and add tests that prove overflow behavior is visible and non-silent'
+      done: false
+    - task: 'Phase 6: harden SQLite-authoritative TODO projection semantics by making DB-commit plus YAML-projection failure states unambiguous to callers, adding operator-visible repair or consistency verification, and covering failure/recovery paths in service and integration tests'
+      done: false
+    - task: 'Phase 7: remove runtime hardening gaps by eliminating async-over-sync disposal deadlock risks, upgrading pairing password protection and brute-force resistance, and deciding whether deployment-integrity validation must also apply outside the Windows-service hosting path'
+      done: false
+    - task: 'Phase 8: make configuration patch writes atomic and serialized with temp-file plus replace semantics, then add concurrency and interruption coverage so config updates cannot leave partially written YAML on disk'
+      done: false
+    - task: 'Phase 9: run the remediation validation matrix, update MCP-TODO-006 and session logs with phase-by-phase status, and only then commit, push, redeploy if needed, and monitor CI until the full remediation set is green'
+      done: false
+  - id: MCP-TODO-007
+    title: Make workspace configuration database-first and endpoint-managed
+    estimate: 3-5d
+    done: false
+    description:
+    - Make workspace configuration authoritative in the database and manage workspace CRUD through the endpoints. Updating workspaces should persist the source-of-truth state in the database and only write the corresponding projection to appsettings.yaml. On startup, import workspace definitions from appsettings.yaml only when the workspace database is empty, and do not let file contents overwrite existing database state once records exist.
   medium-priority:
   - id: do-not-speak-tables
     title: '[NEED PLAN] Do Not Speak Tables'

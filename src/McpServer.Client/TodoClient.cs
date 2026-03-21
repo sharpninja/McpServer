@@ -52,6 +52,18 @@ public sealed class TodoClient : McpClientBase
         return await GetAsync<TodoAuditQueryResult>($"mcpserver/todo/{Encode(id)}/audit{suffix}", cancellationToken);
     }
 
+    /// <summary>Get projection status for SQLite-authoritative TODO storage.</summary>
+    public async Task<TodoProjectionStatusResult> GetProjectionStatusAsync(CancellationToken cancellationToken = default)
+    {
+        return await GetAsync<TodoProjectionStatusResult>("mcpserver/todo/projection/status", cancellationToken);
+    }
+
+    /// <summary>Repair TODO.yaml projection from SQLite-authoritative TODO storage.</summary>
+    public async Task<TodoProjectionRepairResult> RepairProjectionAsync(CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<TodoProjectionRepairResult>("mcpserver/todo/projection/repair", null, cancellationToken);
+    }
+
     /// <summary>Create a new TODO item.</summary>
     public async Task<TodoMutationResult> CreateAsync(TodoCreateRequest request, CancellationToken cancellationToken = default)
     {

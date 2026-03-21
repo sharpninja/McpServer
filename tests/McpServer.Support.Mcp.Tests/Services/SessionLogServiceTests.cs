@@ -13,6 +13,8 @@ namespace McpServer.Support.Mcp.Tests.Services;
 /// <summary>TR-PLANNED-013: Unit tests for SessionLogService submit and query (MVP-SUPPORT-011).</summary>
 public sealed class SessionLogServiceTests : IDisposable
 {
+    private const string WorkspacePath = @"E:\tests\sessionlog-service";
+
     private readonly McpDbContext _db;
     private readonly IChangeEventBus _eventBus;
     private readonly SessionLogService _sut;
@@ -24,6 +26,7 @@ public sealed class SessionLogServiceTests : IDisposable
             .Options;
         _db = new McpDbContext(options);
         _db.Database.EnsureCreated();
+        _db.OverrideWorkspaceId(WorkspacePath);
         _eventBus = Substitute.For<IChangeEventBus>();
         _sut = new SessionLogService(_db, NullLogger<SessionLogService>.Instance, _eventBus);
     }

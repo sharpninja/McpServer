@@ -106,6 +106,7 @@ var client = McpServerClientFactory.Create(new McpServerClientOptions
 {
     BaseUrl = new Uri("http://localhost:7147"),
     ApiKey = "token-from-marker",
+    DesktopLaunchToken = "desktop-launch-token-from-secure-config",
     WorkspacePath = @"E:\github\MyProject",
 });
 // All requests include both X-Api-Key and X-Workspace-Path headers
@@ -118,6 +119,10 @@ var launch = await client.Desktop.LaunchAsync(new DesktopLaunchRequest
     WaitForExit = true,
 });
 ```
+
+Remote desktop launch also requires the server-side `Mcp:DesktopLaunch:Enabled` feature gate,
+the `Mcp:DesktopLaunch:AllowedExecutables` allowlist, and the privileged
+`X-Desktop-Launch-Token` header supplied by `McpServerClientOptions.DesktopLaunchToken`.
 
 Switch workspace at runtime:
 

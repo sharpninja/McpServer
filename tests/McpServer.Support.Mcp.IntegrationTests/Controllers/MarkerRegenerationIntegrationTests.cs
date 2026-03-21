@@ -76,7 +76,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         // FileSystemWatcher on appsettings.json — fires when config writes complete.
         _settingsWatcher = new FileSystemWatcher(_workspacePath, "appsettings.json")
         {
-            NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size,
+            NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size | NotifyFilters.CreationTime | NotifyFilters.FileName,
             EnableRaisingEvents = true,
         };
 
@@ -202,18 +202,28 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
 
     /// <summary>
     /// Returns a <see cref="Task"/> that completes when <c>appsettings.json</c> is written.
-    /// The <see cref="FileSystemWatcher"/> releases the latch on the first <see cref="FileSystemWatcher.Changed"/> event.
+    /// The <see cref="FileSystemWatcher"/> releases the latch on the first change/create/rename event so
+    /// atomic temp-file replace writes are observed deterministically.
     /// </summary>
     private Task WatchForSettingsChange()
     {
         var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         FileSystemEventHandler? handler = null;
-        handler = (_, _) =>
+        RenamedEventHandler? renamedHandler = null;
+
+        void Complete()
         {
             _settingsWatcher.Changed -= handler;
+            _settingsWatcher.Created -= handler;
+            _settingsWatcher.Renamed -= renamedHandler;
             tcs.TrySetResult();
-        };
+        }
+
+        handler = (_, _) => Complete();
+        renamedHandler = (_, _) => Complete();
         _settingsWatcher.Changed += handler;
+        _settingsWatcher.Created += handler;
+        _settingsWatcher.Renamed += renamedHandler;
 
         // Guard against the write completing before the handler was attached.
         var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));

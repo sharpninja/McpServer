@@ -294,6 +294,74 @@ public sealed class TodoAuditQueryResult
     public int TotalCount { get; set; }
 }
 
+/// <summary>Status of SQLite-authoritative TODO.yaml projection health and consistency.</summary>
+public sealed class TodoProjectionStatusResult
+{
+    /// <summary>Authoritative storage provider name.</summary>
+    [JsonPropertyName("authoritativeStore")]
+    public string AuthoritativeStore { get; set; } = string.Empty;
+
+    /// <summary>Absolute path to the authoritative SQLite data source.</summary>
+    [JsonPropertyName("authoritativeDataSource")]
+    public string AuthoritativeDataSource { get; set; } = string.Empty;
+
+    /// <summary>Absolute path to the projected TODO.yaml file.</summary>
+    [JsonPropertyName("projectionTargetPath")]
+    public string ProjectionTargetPath { get; set; } = string.Empty;
+
+    /// <summary>Whether the projection target currently exists as a file.</summary>
+    [JsonPropertyName("projectionTargetExists")]
+    public bool ProjectionTargetExists { get; set; }
+
+    /// <summary>Whether the projected TODO.yaml content matches authoritative SQLite state.</summary>
+    [JsonPropertyName("projectionConsistent")]
+    public bool ProjectionConsistent { get; set; }
+
+    /// <summary>Whether operator repair is currently required.</summary>
+    [JsonPropertyName("repairRequired")]
+    public bool RepairRequired { get; set; }
+
+    /// <summary>UTC timestamp when the consistency check was performed.</summary>
+    [JsonPropertyName("verifiedAtUtc")]
+    public string VerifiedAtUtc { get; set; } = string.Empty;
+
+    /// <summary>UTC timestamp of the last YAML import into SQLite, when known.</summary>
+    [JsonPropertyName("lastImportedFromYamlUtc")]
+    public string? LastImportedFromYamlUtc { get; set; }
+
+    /// <summary>UTC timestamp of the last successful projection from SQLite to YAML, when known.</summary>
+    [JsonPropertyName("lastProjectedToYamlUtc")]
+    public string? LastProjectedToYamlUtc { get; set; }
+
+    /// <summary>UTC timestamp of the last recorded projection failure, when known.</summary>
+    [JsonPropertyName("lastProjectionFailureUtc")]
+    public string? LastProjectionFailureUtc { get; set; }
+
+    /// <summary>Last recorded projection failure message, when known.</summary>
+    [JsonPropertyName("lastProjectionFailure")]
+    public string? LastProjectionFailure { get; set; }
+
+    /// <summary>Human-readable projection status summary.</summary>
+    [JsonPropertyName("message")]
+    public string? Message { get; set; }
+}
+
+/// <summary>Result of an operator-requested TODO.yaml projection repair attempt.</summary>
+public sealed class TodoProjectionRepairResult
+{
+    /// <summary>Whether the repair attempt succeeded.</summary>
+    [JsonPropertyName("success")]
+    public bool Success { get; set; }
+
+    /// <summary>Error message on repair failure.</summary>
+    [JsonPropertyName("error")]
+    public string? Error { get; set; }
+
+    /// <summary>Status after the repair attempt completed.</summary>
+    [JsonPropertyName("status")]
+    public TodoProjectionStatusResult Status { get; set; } = new();
+}
+
 /// <summary>Append-only audit entry for a TODO item.</summary>
 public sealed class TodoAuditEntry
 {

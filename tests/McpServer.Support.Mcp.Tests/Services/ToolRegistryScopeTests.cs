@@ -113,6 +113,46 @@ public sealed class ToolRegistryScopeTests : IDisposable
     }
 
     /// <summary>
+    /// Verifies that an unscoped registry query only returns global tools, preventing empty-workspace
+    /// visibility from surfacing workspace-specific tool definitions across tenants while keeping
+    /// intentionally global tools discoverable.
+    /// </summary>
+    [Fact]
+    public async Task ListAsync_WithoutWorkspaceParameter_ReturnsOnlyGlobalTools()
+    {
+        using (var seed = CreateContext(null))
+        {
+            seed.ToolDefinitions.Add(new ToolDefinitionEntity
+            {
+                Name = "global-tool",
+                Description = "Global tool",
+                WorkspaceId = string.Empty,
+                WorkspacePath = null,
+                DateTimeCreated = DateTimeOffset.UtcNow,
+                DateTimeModified = DateTimeOffset.UtcNow,
+            });
+            seed.ToolDefinitions.Add(new ToolDefinitionEntity
+            {
+                Name = "workspace-tool",
+                Description = "Workspace tool",
+                WorkspaceId = @"E:\github\McpServer",
+                WorkspacePath = @"E:\github\McpServer",
+                DateTimeCreated = DateTimeOffset.UtcNow,
+                DateTimeModified = DateTimeOffset.UtcNow,
+            });
+            seed.SaveChanges();
+        }
+
+        using var unscopedDb = CreateContext(null);
+        var registry = CreateRegistry(unscopedDb);
+
+        var result = await registry.ListAsync().ConfigureAwait(true);
+
+        Assert.Single(result.Tools);
+        Assert.Equal("global-tool", result.Tools[0].Name);
+    }
+
+    /// <summary>
     /// Releases the shared relational test database connection after the test
     /// class completes so temporary resources do not leak across runs.
     /// </summary>

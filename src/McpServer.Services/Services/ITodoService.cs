@@ -25,6 +25,12 @@ public interface ITodoService
 
     /// <summary>Get append-only audit history for a TODO item.</summary>
     Task<TodoAuditQueryResult> GetAuditAsync(string id, int limit = 50, int offset = 0, CancellationToken cancellationToken = default);
+
+    /// <summary>TR-MCP-TODO-006: Get projection status for SQLite-authoritative TODO storage.</summary>
+    Task<TodoProjectionStatusResult> GetProjectionStatusAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>TR-MCP-TODO-006: Repair TODO.yaml projection from SQLite-authoritative TODO storage.</summary>
+    Task<TodoProjectionRepairResult> RepairProjectionAsync(CancellationToken cancellationToken = default);
 }
 
 /// <summary>TR-PLANNED-013: Query parameters for searching TODO items.</summary>
@@ -246,6 +252,27 @@ public sealed record TodoMutationResult(
 
 /// <summary>TR-MCP-TODO-005: Result of querying TODO audit history.</summary>
 public sealed record TodoAuditQueryResult(IReadOnlyList<TodoAuditEntry> Entries, int TotalCount);
+
+/// <summary>TR-MCP-TODO-006: Status of SQLite-authoritative TODO.yaml projection health and consistency.</summary>
+public sealed record TodoProjectionStatusResult(
+    string AuthoritativeStore,
+    string AuthoritativeDataSource,
+    string ProjectionTargetPath,
+    bool ProjectionTargetExists,
+    bool ProjectionConsistent,
+    bool RepairRequired,
+    string VerifiedAtUtc,
+    string? LastImportedFromYamlUtc = null,
+    string? LastProjectedToYamlUtc = null,
+    string? LastProjectionFailureUtc = null,
+    string? LastProjectionFailure = null,
+    string? Message = null);
+
+/// <summary>TR-MCP-TODO-006: Result of an operator-requested TODO.yaml projection repair attempt.</summary>
+public sealed record TodoProjectionRepairResult(
+    bool Success,
+    string? Error,
+    TodoProjectionStatusResult Status);
 
 /// <summary>TR-MCP-TODO-005: Append-only audit entry for a TODO item.</summary>
 public sealed record TodoAuditEntry
