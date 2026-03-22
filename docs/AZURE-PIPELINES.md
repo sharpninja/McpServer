@@ -6,7 +6,7 @@ This repository now uses `azure-pipelines.yml` as the CI/CD source of truth for 
 
 The Azure pipeline covers the core repository workflow only:
 
-- Linux build, config validation, test, version calculation, and publish artifact generation
+- Windows self-hosted build, config validation, test, version calculation, and publish artifact generation
 - Markdown lint and non-blocking markdown link checks
 - DocFX documentation build and docs artifact publication
 - Windows MSIX packaging as a non-blocking job
@@ -18,6 +18,8 @@ It intentionally does **not** attempt to migrate or manage any separate Copilot 
 
 Optional Azure DevOps variables control the release-oriented steps:
 
+- `AgentPoolName`
+  Defaults to `Default` and identifies the Windows self-hosted agent pool used by all jobs in this pipeline.
 - `NuGetApiKey`
   Used on `main` to push `McpServer.Client` packages to `nuget.org`.
 - `AzureArtifactsFeedUrl`
@@ -28,6 +30,10 @@ Optional Azure DevOps variables control the release-oriented steps:
   Azure Storage account name whose `$web` container receives the docs artifact on `main`.
 
 If any optional variable is absent, the corresponding publish or deploy step is skipped rather than failing the pipeline.
+
+## Agent Hosting
+
+This pipeline is configured for a Windows self-hosted agent so the same machine can handle the .NET build, docs generation, package publication, Azure CLI deployment, and MSIX packaging path without relying on Microsoft-hosted parallelism. The `Default` pool must contain at least one online Windows agent with current Azure Pipelines agent software.
 
 ## Retention
 
