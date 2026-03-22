@@ -16,8 +16,9 @@ Standalone repository for `McpServer.Support.Mcp`, the MCP context server used f
 - `src/McpServer.Support.Mcp` - server application
 - `tests/McpServer.Support.Mcp.Tests` - unit/integration tests
 - `MCP-SERVER.md` - detailed operational and configuration guide
+- `AZURE-PIPELINES.md` - Azure DevOps CI/CD variables and retention notes
 - `scripts` - run, validate, test, migration, extension, and packaging scripts
-- `.github/workflows/mcp-server-ci.yml` - CI pipeline (build/test/artifacts/MSIX/docs quality)
+- `azure-pipelines.yml` - Azure DevOps pipeline (build/test/artifacts/MSIX/docs quality/package publish)
 
 ## Prerequisites
 
@@ -222,16 +223,17 @@ Main endpoints:
 
 ## CI/CD
 
-Workflow: `.github/workflows/mcp-server-ci.yml`
+Pipeline: `azure-pipelines.yml`
 
 Pipeline jobs include:
 
-- restore/build/test
 - config validation
-- OpenAPI artifact generation
+- restore/build/test
 - publish artifact upload
 - Windows MSIX packaging
 - markdown lint and link checking for docs
+- DocFX docs artifact build
+- client NuGet pack and branch-conditional feed publish
 
 ## VS Code / VS 2026 Extensions
 

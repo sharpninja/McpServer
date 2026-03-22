@@ -493,3 +493,13 @@ When application log events contain more structured properties than the Parseabl
 
 **Covered by:** `ParseableEventFormatter`, `ParseableBatchFormatter`
 
+## FR-MCP-074 Azure DevOps Repository Pipeline Migration
+
+The repository SHALL define Azure DevOps YAML pipelines as the source of truth for repository CI/CD instead of the retired GitHub Actions workflow files.
+
+The Azure DevOps pipeline SHALL preserve the current repository automation intent for branch/path-filtered validation, published server artifacts, documentation artifacts, Windows MSIX packaging, and branch-conditional client package publication, while ignoring any separate Copilot coding agent pipeline.
+
+**Technical Implementation:** [TR-MCP-CI-001](./Technical-Requirements.md#tr-mcp-ci-001) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `azure-pipelines.yml`, `docs/AZURE-PIPELINES.md`
+

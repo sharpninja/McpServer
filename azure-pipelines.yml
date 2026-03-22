@@ -1,0 +1,328 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+  paths:
+    include:
+      - src/McpServer.Support.Mcp/**
+      - src/McpServer.Client/**
+      - src/McpServer.Director/**
+      - src/McpServer.UI.Core/**
+      - src/McpServer.Cqrs/**
+      - src/McpServer.Cqrs.Mvvm/**
+      - src/McpServer.Web/**
+      - tests/McpServer.Support.Mcp.Tests/**
+      - tests/McpServer.Client.Tests/**
+      - tests/McpServer.Cqrs.Tests/**
+      - docs/**
+      - docfx.json
+      - templates/**
+      - index.md
+      - toc.yml
+      - README.md
+      - scripts/Start-McpServer.ps1
+      - scripts/Package-McpServerMsix.ps1
+      - scripts/Migrate-McpTodoStorage.ps1
+      - scripts/Test-McpMultiInstance.ps1
+      - scripts/Validate-McpConfig.ps1
+      - azure-pipelines.yml
+      - GitVersion.yml
+
+pr:
+  branches:
+    include:
+      - main
+      - develop
+  paths:
+    include:
+      - src/McpServer.Support.Mcp/**
+      - src/McpServer.Client/**
+      - src/McpServer.Director/**
+      - src/McpServer.UI.Core/**
+      - src/McpServer.Cqrs/**
+      - src/McpServer.Cqrs.Mvvm/**
+      - src/McpServer.Web/**
+      - tests/McpServer.Support.Mcp.Tests/**
+      - tests/McpServer.Client.Tests/**
+      - tests/McpServer.Cqrs.Tests/**
+      - docs/**
+      - docfx.json
+      - templates/**
+      - index.md
+      - toc.yml
+      - README.md
+      - scripts/Start-McpServer.ps1
+      - scripts/Package-McpServerMsix.ps1
+      - scripts/Migrate-McpTodoStorage.ps1
+      - scripts/Test-McpMultiInstance.ps1
+      - scripts/Validate-McpConfig.ps1
+      - azure-pipelines.yml
+      - GitVersion.yml
+
+variables:
+  BuildConfiguration: Release
+  TestProject: tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj
+  ServerProject: src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj
+  ClientProject: src/McpServer.Client/McpServer.Client.csproj
+  PublishArtifactName: mcp-server-publish
+  DocsArtifactName: mcp-server-docs
+  MsixArtifactName: mcp-server-msix
+  PackageArtifactName: mcp-packages-nupkg
+  DocsAzureServiceConnection: ''
+  DocsStorageAccount: ''
+  AzureArtifactsFeedUrl: ''
+
+jobs:
+  - job: build_test_publish
+    displayName: build-test-publish
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - checkout: self
+        fetchDepth: 0
+
+      - task: UseDotNet@2
+        displayName: Setup .NET
+        inputs:
+          packageType: sdk
+          useGlobalJson: true
+
+      - task: PowerShell@2
+        displayName: Validate config
+        inputs:
+          pwsh: true
+          targetType: filePath
+          filePath: scripts/Validate-McpConfig.ps1
+
+      - script: dotnet restore $(TestProject)
+        displayName: Restore
+
+      - script: dotnet build $(TestProject) -c $(BuildConfiguration) --no-restore
+        displayName: Build
+
+      - script: dotnet test $(TestProject) -c $(BuildConfiguration) --no-build --logger trx --results-directory TestResults
+        displayName: Test
+
+      - task: PublishTestResults@2
+        displayName: Publish test results
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFormat: VSTest
+          testResultsFiles: TestResults/**/*.trx
+          failTaskOnFailedTests: true
+          testRunTitle: McpServer.Support.Mcp.Tests ($(BuildConfiguration))
+
+      - task: PowerShell@2
+        displayName: Compute package version
+        name: setPackageVersion
+        inputs:
+          pwsh: true
+          targetType: inline
+          script: |
+            $toolPath = Join-Path $HOME '.dotnet/tools'
+            $env:PATH = "$toolPath$([IO.Path]::PathSeparator)$env:PATH"
+
+            dotnet tool update --global GitVersion.Tool | Out-Host
+            if ($LASTEXITCODE -ne 0) {
+              dotnet tool install --global GitVersion.Tool | Out-Host
+            }
+
+            $gvJson = dotnet-gitversion /output json | Out-String
+            $gv = $gvJson | ConvertFrom-Json
+            $isMain = '$(Build.SourceBranch)' -eq 'refs/heads/main'
+            $version = if ($isMain) { $gv.MajorMinorPatch } else { $gv.SemVer }
+
+            Write-Host "GitVersion FullSemVer: $($gv.FullSemVer)"
+            Write-Host "GitVersion SemVer: $($gv.SemVer)"
+            Write-Host "PackageVersion: $version"
+            Write-Host "##vso[task.setvariable variable=PackageVersion;isOutput=true]$version"
+
+      - script: dotnet publish $(ServerProject) -c $(BuildConfiguration) -o $(Build.ArtifactStagingDirectory)/mcp-server
+        displayName: Publish MCP Server
+
+      - task: PublishPipelineArtifact@1
+        displayName: Upload MCP publish artifact
+        inputs:
+          targetPath: $(Build.ArtifactStagingDirectory)/mcp-server
+          artifact: $(PublishArtifactName)
+
+  - job: docs_quality
+    displayName: docs-quality
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - checkout: self
+
+      - task: NodeTool@0
+        displayName: Setup Node.js
+        inputs:
+          versionSpec: 20.x
+
+      - script: npx --yes markdownlint-cli2 "docs/**/*.md" "README.md"
+        displayName: Markdown lint
+
+      - task: Bash@3
+        displayName: Link check
+        continueOnError: true
+        inputs:
+          targetType: inline
+          script: |
+            set -euo pipefail
+            npx --yes markdown-link-check --quiet README.md
+            while IFS= read -r -d '' file; do
+              npx --yes markdown-link-check --quiet "$file"
+            done < <(find docs -type f -name '*.md' -print0)
+
+  - job: docs_build
+    displayName: docs-build
+    dependsOn: docs_quality
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - checkout: self
+
+      - task: UseDotNet@2
+        displayName: Setup .NET
+        inputs:
+          packageType: sdk
+          useGlobalJson: true
+
+      - script: dotnet tool restore
+        displayName: Restore tools
+
+      - script: dotnet docfx docfx.json
+        displayName: Build documentation
+
+      - task: PublishPipelineArtifact@1
+        displayName: Upload docs artifact
+        inputs:
+          targetPath: $(Build.SourcesDirectory)/_site
+          artifact: $(DocsArtifactName)
+
+  - job: windows_msix
+    displayName: windows-msix
+    dependsOn: build_test_publish
+    continueOnError: true
+    pool:
+      vmImage: windows-latest
+    steps:
+      - checkout: self
+
+      - task: UseDotNet@2
+        displayName: Setup .NET
+        inputs:
+          packageType: sdk
+          useGlobalJson: true
+
+      - task: PowerShell@2
+        displayName: Package MSIX
+        inputs:
+          pwsh: true
+          targetType: filePath
+          filePath: scripts/Package-McpServerMsix.ps1
+          arguments: -Configuration $(BuildConfiguration) -Version 1.0.$(Build.BuildId).0
+
+      - task: PublishPipelineArtifact@1
+        displayName: Upload MSIX artifact
+        condition: succeeded()
+        inputs:
+          targetPath: $(Build.SourcesDirectory)/artifacts/msix
+          artifact: $(MsixArtifactName)
+
+  - job: publish_packages
+    displayName: publish-packages
+    dependsOn: build_test_publish
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    pool:
+      vmImage: ubuntu-latest
+    variables:
+      PackageVersion: $[ dependencies.build_test_publish.outputs['setPackageVersion.PackageVersion'] ]
+    steps:
+      - checkout: self
+        fetchDepth: 0
+
+      - task: UseDotNet@2
+        displayName: Setup .NET
+        inputs:
+          packageType: sdk
+          useGlobalJson: true
+
+      - script: dotnet pack $(ClientProject) -c $(BuildConfiguration) -p:PackageVersion=$(PackageVersion) -o $(Build.ArtifactStagingDirectory)/nupkg
+        displayName: Pack
+
+      - task: NuGetAuthenticate@1
+        displayName: Authenticate Azure Artifacts
+        condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/main'), ne(variables['AzureArtifactsFeedUrl'], ''))
+
+      - task: PowerShell@2
+        displayName: Push to NuGet (main only)
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+        env:
+          NUGET_API_KEY: $(NuGetApiKey)
+        inputs:
+          pwsh: true
+          targetType: inline
+          script: |
+            if ([string]::IsNullOrWhiteSpace($env:NUGET_API_KEY)) {
+              Write-Host "NuGetApiKey not set; skipping nuget.org publish."
+              exit 0
+            }
+
+            $packages = Get-ChildItem -Path "$(Build.ArtifactStagingDirectory)/nupkg" -Filter *.nupkg | Select-Object -ExpandProperty FullName
+            foreach ($package in $packages) {
+              dotnet nuget push $package --source https://api.nuget.org/v3/index.json --api-key $env:NUGET_API_KEY --skip-duplicate
+              if ($LASTEXITCODE -ne 0) {
+                throw "dotnet nuget push failed for $package"
+              }
+            }
+
+      - task: PowerShell@2
+        displayName: Push to Azure Artifacts (non-main)
+        condition: and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/main'))
+        env:
+          AZURE_ARTIFACTS_FEED_URL: $(AzureArtifactsFeedUrl)
+        inputs:
+          pwsh: true
+          targetType: inline
+          script: |
+            if ([string]::IsNullOrWhiteSpace($env:AZURE_ARTIFACTS_FEED_URL)) {
+              Write-Host "AzureArtifactsFeedUrl not set; skipping Azure Artifacts publish."
+              exit 0
+            }
+
+            $packages = Get-ChildItem -Path "$(Build.ArtifactStagingDirectory)/nupkg" -Filter *.nupkg | Select-Object -ExpandProperty FullName
+            foreach ($package in $packages) {
+              dotnet nuget push $package --source $env:AZURE_ARTIFACTS_FEED_URL --api-key azdo --skip-duplicate
+              if ($LASTEXITCODE -ne 0) {
+                throw "dotnet nuget push failed for $package"
+              }
+            }
+
+      - task: PublishPipelineArtifact@1
+        displayName: Upload NuGet artifact
+        inputs:
+          targetPath: $(Build.ArtifactStagingDirectory)/nupkg
+          artifact: $(PackageArtifactName)
+
+  - job: docs_deploy
+    displayName: docs-deploy
+    dependsOn: docs_build
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main'), ne(variables['DocsAzureServiceConnection'], ''), ne(variables['DocsStorageAccount'], ''))
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - download: current
+        artifact: $(DocsArtifactName)
+
+      - task: AzureCLI@2
+        displayName: Deploy docs to Azure static website
+        inputs:
+          azureSubscription: $(DocsAzureServiceConnection)
+          scriptType: pscore
+          scriptLocation: inlineScript
+          inlineScript: |
+            $source = "$(Pipeline.Workspace)/$(DocsArtifactName)"
+            az storage blob upload-batch --account-name "$(DocsStorageAccount)" --destination '$web' --source $source --overwrite true

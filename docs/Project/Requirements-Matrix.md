@@ -176,4 +176,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-073 | ✅ Complete | ParseableEventFormatter, ParseableBatchFormatter |
 | TR-MCP-LOG-003 | ✅ Complete | ParseableEventFormatter, ParseableBatchFormatter |
 | TEST-MCP-098 | ✅ Complete | ParseableEventFormatterTests |
+| FR-MCP-074 | ✅ Complete | azure-pipelines.yml, docs/AZURE-PIPELINES.md |
+| TR-MCP-CI-001 | ✅ Complete | azure-pipelines.yml, docs/AZURE-PIPELINES.md, README.md, docs/MCP-SERVER.md, docs/RELEASE-CHECKLIST.md |
+| TEST-MCP-099 | ✅ Complete | azure-pipelines.yml, docs/AZURE-PIPELINES.md |
 
