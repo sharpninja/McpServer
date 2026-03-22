@@ -19,6 +19,7 @@ public sealed class AgentHealthMonitorServiceTests
     {
         var processManager = Substitute.For<IAgentProcessManager>();
         var agentService = Substitute.For<IAgentService>();
+        var launchCalled = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         processManager.ListRunningAsync(null, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<IReadOnlyList<AgentProcessInfo>>(
             [
@@ -38,7 +39,11 @@ public sealed class AgentHealthMonitorServiceTests
                 RestartPolicy = "on-failure",
             }));
         agentService.LaunchAgentAsync("C:/ws-a", "planner", Arg.Any<CancellationToken>())
-            .Returns(Task.FromResult(new AgentProcessInfo { AgentId = "planner", WorkspacePath = "C:/ws-a", Status = AgentProcessStatus.Running }));
+            .Returns(_ =>
+            {
+                launchCalled.TrySetResult();
+                return Task.FromResult(new AgentProcessInfo { AgentId = "planner", WorkspacePath = "C:/ws-a", Status = AgentProcessStatus.Running });
+            });
 
         var options = Microsoft.Extensions.Options.Options.Create(new AgentProcessManagerOptions
         {
@@ -49,9 +54,9 @@ public sealed class AgentHealthMonitorServiceTests
         using var serviceProvider = CreateServiceProvider(agentService);
         var sut = new AgentHealthMonitorService(processManager, serviceProvider.GetRequiredService<IServiceScopeFactory>(), options, NullLogger<AgentHealthMonitorService>.Instance);
 
-        using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(50));
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
         await Record.ExceptionAsync(() => sut.StartAsync(cts.Token)).ConfigureAwait(true);
-        await Task.Delay(25).ConfigureAwait(true);
+        await launchCalled.Task.WaitAsync(TimeSpan.FromSeconds(1)).ConfigureAwait(true);
         await sut.StopAsync(CancellationToken.None).ConfigureAwait(true);
 
         await agentService.Received().LaunchAgentAsync("C:/ws-a", "planner", Arg.Any<CancellationToken>()).ConfigureAwait(true);
@@ -62,6 +67,7 @@ public sealed class AgentHealthMonitorServiceTests
     {
         var processManager = Substitute.For<IAgentProcessManager>();
         var agentService = Substitute.For<IAgentService>();
+        var lookupCalled = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         processManager.ListRunningAsync(null, Arg.Any<CancellationToken>())
             .Returns(Task.FromResult<IReadOnlyList<AgentProcessInfo>>(
             [
@@ -74,12 +80,16 @@ public sealed class AgentHealthMonitorServiceTests
                 }
             ]));
         agentService.GetWorkspaceAgentAsync("C:/ws-a", "planner", Arg.Any<CancellationToken>())
-            .Returns(Task.FromResult<AgentWorkspaceConfigDto?>(new AgentWorkspaceConfigDto
+            .Returns(_ =>
             {
-                AgentId = "planner",
-                WorkspacePath = "C:/ws-a",
-                RestartPolicy = "never",
-            }));
+                lookupCalled.TrySetResult();
+                return Task.FromResult<AgentWorkspaceConfigDto?>(new AgentWorkspaceConfigDto
+                {
+                    AgentId = "planner",
+                    WorkspacePath = "C:/ws-a",
+                    RestartPolicy = "never",
+                });
+            });
 
         var options = Microsoft.Extensions.Options.Options.Create(new AgentProcessManagerOptions
         {
@@ -90,9 +100,9 @@ public sealed class AgentHealthMonitorServiceTests
         using var serviceProvider = CreateServiceProvider(agentService);
         var sut = new AgentHealthMonitorService(processManager, serviceProvider.GetRequiredService<IServiceScopeFactory>(), options, NullLogger<AgentHealthMonitorService>.Instance);
 
-        using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(50));
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
         await Record.ExceptionAsync(() => sut.StartAsync(cts.Token)).ConfigureAwait(true);
-        await Task.Delay(25).ConfigureAwait(true);
+        await lookupCalled.Task.WaitAsync(TimeSpan.FromSeconds(1)).ConfigureAwait(true);
         await sut.StopAsync(CancellationToken.None).ConfigureAwait(true);
 
         await agentService.DidNotReceive().LaunchAgentAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>()).ConfigureAwait(true);
