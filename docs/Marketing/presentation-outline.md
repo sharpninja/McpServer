@@ -9,7 +9,7 @@
 **Title:** McpServer
 **Subtitle:** Context Intelligence for AI Coding Agents
 **Tagline:** Persistent memory. Shared workspace state. Open standard.
-**Links:** GitHub: https://github.com/sharpninja/McpServer | NuGet: https://www.nuget.org/packages/SharpNinja.McpServer.Client
+**Links:** GitHub: https://github.com/sharpninja/McpServer | Client docs: https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md
 **Speaker Notes:** McpServer is a self-hosted MCP context server. Today I will cover what it does, why it exists, and how agents connect to it. This is technical infrastructure — the database layer for AI-assisted development.
 
 ---
@@ -101,11 +101,11 @@
 **Title:** The Right Interface for Every Workflow
 **Diagram:** ![UI Tooling](diagrams/ui-tooling.png)
 **Card 1 — Web UI:** Blazor dashboard. Todos, sessions, agents, templates, context search. GitHub Primer CSS.
-**Card 2 — Director CLI:** dotnet tool install --global SharpNinja.McpServer.Director · https://www.nuget.org/packages/SharpNinja.McpServer.Director
+**Card 2 — Director CLI:** dotnet tool install --global SharpNinja.McpServer.Director · https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md
 **Card 3 — Director TUI:** director ui — full terminal UI, role-filtered tabs, auto-refresh.
 **Card 4 — VS/VS Code Extension:** VSIX. Browse and update todos inside your editor. No context switching.
-**Card 5 — Client NuGet:** SharpNinja.McpServer.Client · https://www.nuget.org/packages/SharpNinja.McpServer.Client
-**Card 6 — MCP STDIO/HTTP:** Connect Copilot, Cursor, Codex, Claude. Endpoint: POST http://localhost:7147/mcp-transport
+**Card 5 — Client docs:** SharpNinja.McpServer.Client · https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md
+**Card 6 — MCP STDIO/HTTP:** Connect Copilot, Cursor, Codex, Claude. Endpoint: POST <your-mcpserver-base-url>/mcp-transport
 **Speaker Notes:** We built six access surfaces because different people work differently. The CLI is for automation. The TUI is for SSH sessions. The Web UI is for exploration and team review. The VSIX is for developers who don't want to leave VS Code. The NuGet client is for building on top of McpServer. The MCP transport is for agents.
 
 ---
@@ -129,7 +129,7 @@
 **Step 1 — Build:** dotnet restore McpServer.sln && dotnet build McpServer.sln -c Staging
 **Step 2 — Run:** .\scripts\Start-McpServer.ps1 -Configuration Staging
 **Step 3 — Connect:** http://localhost:7147/swagger
-**Step 4 — Add to agent:** { "mcpServers": { "mcpserver": { "url": "http://localhost:7147/mcp-transport" } } }
+**Step 4 — Add to agent:** { "mcpServers": { "mcpserver": { "url": "<your-mcpserver-base-url>/mcp-transport" } } }
 **Agent Workflow:** ![Agent Workflow Sequence](diagrams/agent-workflow.png)
 **CTA:** View Full Docs → https://github.com/sharpninja/McpServer
 **Speaker Notes:** Four steps from zero to a running context server that any MCP agent can connect to. AGENTS-README-FIRST.yaml is written to your workspace root automatically — agents read it to get the API key, base URL, and connection prompt.
@@ -141,7 +141,7 @@
 **Title:** Give Your Agents Memory.
 **Body:** McpServer is open source, self-hosted, and ready to run.
 **CTA 1:** Star on GitHub → https://github.com/sharpninja/McpServer
-**CTA 2:** Install Director → dotnet tool install --global SharpNinja.McpServer.Director · https://www.nuget.org/packages/SharpNinja.McpServer.Director
-**CTA 3:** Add the Client → dotnet add package SharpNinja.McpServer.Client · https://www.nuget.org/packages/SharpNinja.McpServer.Client
+**CTA 2:** Install Director → dotnet tool install --global SharpNinja.McpServer.Director · https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md
+**CTA 3:** Add the Client → dotnet add package SharpNinja.McpServer.Client · https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md
 **Footer:** MIT · © SharpNinja · https://github.com/sharpninja/McpServer
 **Speaker Notes:** The repository is public. The NuGet packages are published. The documentation covers configuration, deployment, and API reference. If you're building with AI coding agents, give them a context server. Start here.

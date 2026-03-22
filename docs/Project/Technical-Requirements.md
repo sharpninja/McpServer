@@ -609,7 +609,9 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 **Covered by:** `IssueTodoSyncService`
 
-### TR-MCP-DOC-001: Marketing Documentation Coverage
+## TR-MCP-DOC-001
+
+### Marketing Documentation Coverage
 - Define a marketing-focused McpServer narrative that explains platform purpose, problem/need, and adopter value proposition.
 - Document key capabilities and differentiators in concise adoption-oriented language aligned with existing FR feature areas.
 - Maintain a supported UI tooling section covering available user surfaces (including VS extension, Web UI, and Director/TUI where applicable) with current support status.

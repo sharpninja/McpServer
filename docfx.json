@@ -7,7 +7,7 @@
     ],
     "resource": [
       {
-        "files": ["docs/images/**"]
+        "files": ["docs/images/**", "docs/Marketing/diagrams/*.png"]
       }
     ],
     "output": "_site",

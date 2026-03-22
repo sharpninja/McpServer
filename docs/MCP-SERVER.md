@@ -269,7 +269,7 @@ var client = McpServerClientFactory.Create(new McpServerClientOptions
 
 Covers all API endpoints: Todo, Context, SessionLog, GitHub, Repo, Sync, Workspace, and Tools.
 
-Source: `src/McpServer.Client/` — see the [package README](../src/McpServer.Client/README.md) for full usage.
+Source: `src/McpServer.Client/` — see the [package README](https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md) for full usage.
 
 ## Additional Documentation
 

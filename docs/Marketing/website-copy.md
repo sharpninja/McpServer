@@ -65,10 +65,10 @@ Each section maps to a Canva website block.
 **UI Tooling Diagram:** ![UI Tooling](diagrams/ui-tooling.png)
 
 **Tool 1 — Blazor Web UI:** Full browser-based dashboard. Todos, sessions, agents, templates, context search. GitHub Primer CSS.
-**Tool 2 — Director CLI:** `dotnet tool install --global SharpNinja.McpServer.Director` — https://www.nuget.org/packages/SharpNinja.McpServer.Director
+**Tool 2 — Director CLI:** `dotnet tool install --global SharpNinja.McpServer.Director` — https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md
 **Tool 3 — Director TUI:** `director ui` — full terminal UI. Role-filtered tabs, keyboard navigation, auto-refresh. Works over SSH.
 **Tool 4 — VS / VS Code Extension:** VSIX extension. Browse and update todos without leaving your editor.
-**Tool 5 — Client NuGet:** `dotnet add package SharpNinja.McpServer.Client` — https://www.nuget.org/packages/SharpNinja.McpServer.Client
+**Tool 5 — Client docs:** `dotnet add package SharpNinja.McpServer.Client` — https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md
 **Tool 6 — MCP STDIO / HTTP:** Native MCP transport. Connect GitHub Copilot, Cursor, Codex, or Claude with zero custom code.
 
 ---
@@ -103,8 +103,8 @@ Or install Director: `dotnet tool install --global SharpNinja.McpServer.Director
 **Tagline:** McpServer — Context intelligence for AI-assisted development.
 
 - GitHub Repository → https://github.com/sharpninja/McpServer
-- NuGet: Client → https://www.nuget.org/packages/SharpNinja.McpServer.Client
-- NuGet: Director → https://www.nuget.org/packages/SharpNinja.McpServer.Director
+- Client docs → https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md
+- Director docs → https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md
 - Swagger UI → http://localhost:7147/swagger
 - MCP Spec → https://modelcontextprotocol.io
 

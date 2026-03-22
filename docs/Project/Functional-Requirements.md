@@ -298,7 +298,7 @@ The server shall provide runtime management for workspace-bound agents, includin
 
 The server SHALL allow configuration of a system-wide default Copilot model (e.g., `gpt-5.3-codex`) that is applied consistently across all Copilot session types — server-initiated CLI invocations (`CopilotClientOptions.Model`), voice conversation sessions (`VoiceConversationOptions.CopilotModel`), and built-in agent type defaults (`AgentDefaults`). The configured model SHALL be overridable per-workspace via agent configuration and per-invocation via explicit parameters.
 
-**Technical Implementation:** [TR-MCP-CFG-005](./Technical-Requirements.md#tr-mcp-cfg-005) | [Details](./TR-per-FR-Mapping.md#fr-mcp-051)
+**Technical Implementation:** [TR-MCP-CFG-005](./Technical-Requirements.md#tr-mcp-cfg-005) | [Mapping](./TR-per-FR-Mapping.md)
 
 ## FR-MCP-052 Agent Pool Runtime Orchestration
 
@@ -362,7 +362,7 @@ These presence messages do not apply to one-shot sessions.
 
 The system SHALL enforce a DI-centered Single Source of Truth architecture across `McpServer.Support.Mcp`: authoritative mutable data sources must be owned by DI-registered singleton or scoped services, services shall notify state availability/changes via `INotifyPropertyChanged`, and consumers shall pull current state from the owning service rather than receiving pushed data payloads.
 
-**Technical Implementation:** [TR-MCP-ARCH-002](./Technical-Requirements.md#tr-mcp-arch-002) | [Details](./TR-per-FR-Mapping.md#fr-mcp-059)
+**Technical Implementation:** [TR-MCP-ARCH-002](./Technical-Requirements.md#tr-mcp-arch-002) | [Mapping](./TR-per-FR-Mapping.md)
 
 ## FR-MCP-060 Director MVVM/CQRS Full Endpoint Coverage
 
@@ -405,7 +405,7 @@ Functional behavior shall include:
 
 #### FR-MCP-064: Marketing and Adoption Documentation
 The system SHALL provide marketing-oriented documentation that clearly explains what McpServer is, its key feature set, why adopters need it, and the currently supported UI tooling surfaces (including VS extension and Web UI experiences).
-**Technical Implementation:** [TR-MCP-DOC-001](./Technical-Requirements.md#tr-mcp-doc-001) | [Details](./TR-per-FR-Mapping.md#fr-mcp-064)
+**Technical Implementation:** [TR-MCP-DOC-001](./Technical-Requirements.md#tr-mcp-doc-001) | [Mapping](./TR-per-FR-Mapping.md)
 
 ## FR-MCP-065 Direct Website URL Ingestion
 
@@ -421,7 +421,7 @@ The hosted agent SHALL include a built-in workflow that treats MCP Server sessio
 
 **Status:** ✅ Complete
 
-**Technical Implementation:** [TR-MCP-AGENT-006](./Technical-Requirements.md#tr-mcp-agent-006) | [TR-MCP-AGENT-007](./Technical-Requirements.md#tr-mcp-agent-007) | [Details](./TR-per-FR-Mapping.md#fr-mcp-066)
+**Technical Implementation:** [TR-MCP-AGENT-006](./Technical-Requirements.md#tr-mcp-agent-006) | [TR-MCP-AGENT-007](./Technical-Requirements.md#tr-mcp-agent-007) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `McpServer.McpAgent` (`ServiceCollectionExtensions`, `McpAgentOptions`, `Hosting/*`, `PowerShellSessions/*`, `SessionLog/*`, `Todo/*`), `McpServer.Client` (`McpServerClient`, `RepoClient`, `DesktopClient`), `McpServer.McpAgent.SampleHost` (`Program.cs`, `SampleHostPreviewFactory.cs`)
 
@@ -431,7 +431,7 @@ The system SHALL return a detailed client-visible error description for every en
 
 Detailed 500 responses SHALL describe the failed operation clearly enough for callers to diagnose the failure path and distinguish server faults from client mistakes, while remaining sanitized so secrets, tokens, and other sensitive internals are not exposed in the response body.
 
-**Technical Implementation:** [TR-MCP-HTTP-002](./Technical-Requirements.md#tr-mcp-http-002) | [Details](./TR-per-FR-Mapping.md#fr-mcp-067)
+**Technical Implementation:** [TR-MCP-HTTP-002](./Technical-Requirements.md#tr-mcp-http-002) | [Mapping](./TR-per-FR-Mapping.md)
 
 ## FR-MCP-068 Administrative Configuration Management API
 
@@ -439,7 +439,7 @@ The server SHALL provide an admin-only configuration API that returns the curren
 
 The configuration-management endpoints SHALL require standard JWT Bearer authentication with the `admin` role. When OIDC is not configured, the endpoints SHALL remain unavailable.
 
-**Technical Implementation:** [TR-MCP-CFG-006](./Technical-Requirements.md#tr-mcp-cfg-006) | [Details](./TR-per-FR-Mapping.md#fr-mcp-068)
+**Technical Implementation:** [TR-MCP-CFG-006](./Technical-Requirements.md#tr-mcp-cfg-006) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `ConfigurationController`, `AppSettingsFileService`, `Program.cs` (`ConfigurationAdmin` policy), `WorkspaceController` (shared appsettings helper reuse)
 
@@ -449,7 +449,7 @@ The server shall support a create-time TODO identifier of `ISSUE-NEW` that immed
 
 This behavior shall be available through all server-side TODO creation entry points that already support normal TODO creation. Callers shall receive the canonical persisted identifier rather than the temporary `ISSUE-NEW` alias.
 
-**Technical Implementation:** [TR-MCP-TODO-003](./Technical-Requirements.md#tr-mcp-todo-003) | [TR-MCP-GH-005](./Technical-Requirements.md#tr-mcp-gh-005) | [Details](./TR-per-FR-Mapping.md#fr-mcp-069)
+**Technical Implementation:** [TR-MCP-TODO-003](./Technical-Requirements.md#tr-mcp-todo-003) | [TR-MCP-GH-005](./Technical-Requirements.md#tr-mcp-gh-005) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `TodoCreationService`, `GitHubCliService`, `TodoController`, `FwhMcpTools`, `VoiceConversationService`
 
@@ -459,7 +459,7 @@ The server shall treat MCP TODO updates as authoritative for existing `ISSUE-{nu
 
 Priority synchronization shall use canonical GitHub labels in the form `priority: HIGH`, `priority: MEDIUM`, or `priority: LOW`. GitHub-to-TODO refreshes for existing `ISSUE-*` items shall preserve the local priority and description that were already established by the first sync.
 
-**Technical Implementation:** [TR-MCP-TODO-004](./Technical-Requirements.md#tr-mcp-todo-004) | [TR-MCP-GH-006](./Technical-Requirements.md#tr-mcp-gh-006) | [Details](./TR-per-FR-Mapping.md#fr-mcp-070)
+**Technical Implementation:** [TR-MCP-TODO-004](./Technical-Requirements.md#tr-mcp-todo-004) | [TR-MCP-GH-006](./Technical-Requirements.md#tr-mcp-gh-006) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `TodoUpdateService`, `IssueTodoSyncService`, `TodoController`, `FwhMcpTools`, `VoiceConversationService`
 
@@ -469,7 +469,7 @@ The server shall round-trip `ISSUE-{number}` discussion between GitHub and MCP T
 
 When an `ISSUE-*` TODO is updated locally with new note text, the server shall propagate the appended TODO-authored comment back to GitHub as an issue comment. When the GitHub issue is later closed outside MCP, a GitHub-to-TODO sync shall mark the corresponding TODO as done.
 
-**Technical Implementation:** [TR-MCP-GH-007](./Technical-Requirements.md#tr-mcp-gh-007) | [Details](./TR-per-FR-Mapping.md#fr-mcp-071)
+**Technical Implementation:** [TR-MCP-GH-007](./Technical-Requirements.md#tr-mcp-gh-007) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `IssueTodoSyncService`, `TodoUpdateService`, `GitHubController`, `TodoController`
 
@@ -479,7 +479,7 @@ The server shall treat SQLite as the authoritative current-state store for works
 
 The server shall preserve TODO document metadata such as `notes`, `completed`, and `code-review-remediation.reference`, retain append-only audit history for TODO state mutations, and expose that audit history through HTTP, typed client, and MCP tool surfaces so callers can retrieve tracked TODO states even after deletion when history exists.
 
-**Technical Implementation:** [TR-MCP-TODO-005](./Technical-Requirements.md#tr-mcp-todo-005) | [TR-MCP-TODO-006](./Technical-Requirements.md#tr-mcp-todo-006) | [Details](./TR-per-FR-Mapping.md#fr-mcp-072)
+**Technical Implementation:** [TR-MCP-TODO-005](./Technical-Requirements.md#tr-mcp-todo-005) | [TR-MCP-TODO-006](./Technical-Requirements.md#tr-mcp-todo-006) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `SqliteTodoService`, `TodoYamlFileSerializer`, `TodoController`, `TodoClient`, `McpServerMcpTools`, `TodoServiceFactory`
 
@@ -489,7 +489,7 @@ The server shall cap each Parseable log event payload to a maximum of 250 top-le
 
 When application log events contain more structured properties than the Parseable limit allows, the server shall preserve the canonical Parseable metadata fields (`timestamp`, `level`, `message`, and `exception` when present) and omit excess user properties rather than emitting an oversized payload.
 
-**Technical Implementation:** [TR-MCP-LOG-003](./Technical-Requirements.md#tr-mcp-log-003) | [Details](./TR-per-FR-Mapping.md#fr-mcp-073)
+**Technical Implementation:** [TR-MCP-LOG-003](./Technical-Requirements.md#tr-mcp-log-003) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `ParseableEventFormatter`, `ParseableBatchFormatter`
 

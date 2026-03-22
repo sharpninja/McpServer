@@ -45,7 +45,7 @@ Workspace instances are hosted as in-process Kestrel listeners starting at port 
 {
   "mcpServers": {
     "mcp-server": {
-      "url": "http://localhost:7147/mcp-transport"
+      "url": "<your-mcpserver-base-url>/mcp-transport"
     }
   }
 }
@@ -58,7 +58,7 @@ Workspace instances are hosted as in-process Kestrel listeners starting at port 
   "servers": {
     "mcp-server": {
       "type": "sse",
-      "url": "http://localhost:7147/mcp-transport"
+      "url": "<your-mcpserver-base-url>/mcp-transport"
     }
   }
 }
