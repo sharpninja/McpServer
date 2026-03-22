@@ -675,3 +675,11 @@ Mutation results SHALL include a machine-readable failure classification so call
 **Status:** ✅ Complete
 
 **Covered by:** `ITodoService`, `ITodoStore`, `SqliteTodoService`, `TodoYamlFileSerializer`, `TodoController`, `McpServerMcpTools`, `TodoClient`, `TodoModels`, `TodoCreationService`, `TodoUpdateService`
+
+## TR-MCP-LOG-003
+
+**Parseable Event Field-Cap Enforcement** — `ParseableEventFormatter` SHALL emit no more than 250 top-level fields for any individual Parseable event payload. The formatter SHALL always preserve the canonical Parseable metadata keys (`timestamp`, `level`, `message`, and `exception` when present), SHALL prevent user-supplied structured properties from overwriting those reserved keys, and SHALL drop excess non-reserved properties once the remaining field budget is exhausted. Property selection for retained non-reserved fields SHALL be deterministic so tests and operational analysis can reason about which fields survive truncation.
+
+**Status:** ✅ Complete
+
+**Covered by:** `ParseableEventFormatter`, `ParseableBatchFormatter`

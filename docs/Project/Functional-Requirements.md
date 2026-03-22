@@ -483,3 +483,13 @@ The server shall preserve TODO document metadata such as `notes`, `completed`, a
 
 **Covered by:** `SqliteTodoService`, `TodoYamlFileSerializer`, `TodoController`, `TodoClient`, `McpServerMcpTools`, `TodoServiceFactory`
 
+## FR-MCP-073 Parseable Log Event Field Cap
+
+The server shall cap each Parseable log event payload to a maximum of 250 top-level fields so Parseable ingest remains within the supported field-count envelope for a single event.
+
+When application log events contain more structured properties than the Parseable limit allows, the server shall preserve the canonical Parseable metadata fields (`timestamp`, `level`, `message`, and `exception` when present) and omit excess user properties rather than emitting an oversized payload.
+
+**Technical Implementation:** [TR-MCP-LOG-003](./Technical-Requirements.md#tr-mcp-log-003) | [Details](./TR-per-FR-Mapping.md#fr-mcp-073)
+
+**Covered by:** `ParseableEventFormatter`, `ParseableBatchFormatter`
+
