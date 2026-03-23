@@ -42,12 +42,12 @@
 2. **Final test run**: `dotnet run --project tests/McpServer.Support.Mcp.Tests`
 3. **Docker build**: `docker build -t mcp-server:$(cat .version) -t mcp-server:latest .`
 4. **Tag release**: `git tag v$(cat .version) && git push origin v$(cat .version)`
-5. **CI release**: GitHub Actions `release-main` job creates release automatically on tag push
-6. **MSIX package**: CI `windows-msix` job publishes installer artifact
+5. **CI publish**: Azure DevOps `publish-packages` job publishes `McpServer.Client` on `main` when `NuGetApiKey` is configured
+6. **MSIX package**: Azure DevOps `windows-msix` job publishes the installer artifact
 
 ## Post-Release Verification
 
-- [ ] GitHub Release created with correct artifacts
+- [ ] Azure DevOps pipeline run completed with the expected published artifacts
 - [ ] Docker image runs and passes health check
 - [ ] MSIX installer works on clean Windows machine
 - [ ] FunWasHad workspace can connect to released MCP server

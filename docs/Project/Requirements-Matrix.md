@@ -173,4 +173,10 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-TODO-006 | ✅ Complete | ITodoService, ITodoStore, SqliteTodoService, TodoController, McpServerMcpTools, TodoClient, TodoModels, TodoCreationService, TodoUpdateService |
 | TEST-MCP-096 | ✅ Complete | SqliteTodoServiceTests, MixedTodoStorageIsolationTests |
 | TEST-MCP-097 | ✅ Complete | SqliteTodoServiceTests, TodoControllerTests, TodoClientTests, IntegrationTests Controllers.TodoControllerTests |
+| FR-MCP-073 | ✅ Complete | ParseableEventFormatter, ParseableBatchFormatter |
+| TR-MCP-LOG-003 | ✅ Complete | ParseableEventFormatter, ParseableBatchFormatter |
+| TEST-MCP-098 | ✅ Complete | ParseableEventFormatterTests |
+| FR-MCP-074 | ✅ Complete | azure-pipelines.yml, docs/AZURE-PIPELINES.md |
+| TR-MCP-CI-001 | ✅ Complete | azure-pipelines.yml, docs/AZURE-PIPELINES.md, README.md, docs/MCP-SERVER.md, docs/RELEASE-CHECKLIST.md |
+| TEST-MCP-099 | ✅ Complete | azure-pipelines.yml, docs/AZURE-PIPELINES.md |
 

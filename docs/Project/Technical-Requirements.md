@@ -609,7 +609,9 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 **Covered by:** `IssueTodoSyncService`
 
-### TR-MCP-DOC-001: Marketing Documentation Coverage
+## TR-MCP-DOC-001
+
+### Marketing Documentation Coverage
 - Define a marketing-focused McpServer narrative that explains platform purpose, problem/need, and adopter value proposition.
 - Document key capabilities and differentiators in concise adoption-oriented language aligned with existing FR feature areas.
 - Maintain a supported UI tooling section covering available user surfaces (including VS extension, Web UI, and Director/TUI where applicable) with current support status.
@@ -675,3 +677,21 @@ Mutation results SHALL include a machine-readable failure classification so call
 **Status:** ✅ Complete
 
 **Covered by:** `ITodoService`, `ITodoStore`, `SqliteTodoService`, `TodoYamlFileSerializer`, `TodoController`, `McpServerMcpTools`, `TodoClient`, `TodoModels`, `TodoCreationService`, `TodoUpdateService`
+
+## TR-MCP-LOG-003
+
+**Parseable Event Field-Cap Enforcement** — `ParseableEventFormatter` SHALL emit no more than 250 top-level fields for any individual Parseable event payload. The formatter SHALL always preserve the canonical Parseable metadata keys (`timestamp`, `level`, `message`, and `exception` when present), SHALL prevent user-supplied structured properties from overwriting those reserved keys, and SHALL drop excess non-reserved properties once the remaining field budget is exhausted. Property selection for retained non-reserved fields SHALL be deterministic so tests and operational analysis can reason about which fields survive truncation.
+
+**Status:** ✅ Complete
+
+**Covered by:** `ParseableEventFormatter`, `ParseableBatchFormatter`
+
+## TR-MCP-CI-001
+
+**Azure DevOps Repository Pipeline Definition** — The repository SHALL use `azure-pipelines.yml` as the CI/CD definition for the core repo workflow. The pipeline SHALL trigger on `main` and `develop` pushes and pull requests with path filters matching the tracked source, test, docs, script, template, and pipeline-definition files. The pipeline SHALL run repository config validation, restore/build/test the support MCP test project, compute package versioning from GitVersion, publish the server build artifact, lint and link-check documentation, build the DocFX site artifact, run Windows MSIX packaging as a non-blocking job, and pack the client NuGet package.
+
+Package publication SHALL be branch-conditional: `main` publishes to `nuget.org` only when `NuGetApiKey` is configured, while non-`main` branches publish to Azure Artifacts only when `AzureArtifactsFeedUrl` is configured. Optional docs deployment to Azure static website storage SHALL be gated behind explicit pipeline variables so the repo pipeline remains portable when deployment infrastructure is absent. The retired GitHub Actions workflow YAML files SHALL be removed from the repository as part of the migration, and retention of stale runs/artifacts SHALL move to Azure DevOps retention policy configuration rather than a repository-hosted cleanup workflow.
+
+**Status:** ✅ Complete
+
+**Covered by:** `azure-pipelines.yml`, `docs/AZURE-PIPELINES.md`, `README.md`, `docs/MCP-SERVER.md`, `docs/RELEASE-CHECKLIST.md`

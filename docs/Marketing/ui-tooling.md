@@ -5,7 +5,7 @@ Full-featured Blazor Server dashboard — Dashboard, Workspaces, Todos, Sessions
 
 ## Director CLI (`director`)
 .NET global tool. Install: `dotnet tool install --global SharpNinja.McpServer.Director`
-NuGet: https://www.nuget.org/packages/SharpNinja.McpServer.Director
+Docs: https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md
 Commands: `director health`, `director list`, `director agents defs`, `director sync status`, `director login`, `director ui`
 Auto-discovers workspace via `AGENTS-README-FIRST.yaml` marker file.
 
@@ -18,7 +18,7 @@ Source: `extensions/McpServer-mcp-todo/`
 
 ## Client NuGet (`SharpNinja.McpServer.Client`)
 Typed C# REST client. Install: `dotnet add package SharpNinja.McpServer.Client`
-NuGet: https://www.nuget.org/packages/SharpNinja.McpServer.Client
+Docs: https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md
 
 ```csharp
 builder.Services.AddMcpServerClient(options => {
@@ -29,13 +29,13 @@ builder.Services.AddMcpServerClient(options => {
 Covers all endpoints: Todo, Context, SessionLog, GitHub, Repo, Sync, Workspace, Tools, Requirements, Templates.
 
 ## MCP STDIO / Streamable HTTP
-- MCP Streamable HTTP: `POST http://localhost:7147/mcp-transport`
+- MCP Streamable HTTP: `POST <your-mcpserver-base-url>/mcp-transport`
 - MCP STDIO: `McpServer.Support.Mcp --transport stdio`
 - Compatible: GitHub Copilot, Cursor, Codex, Claude Desktop, any MCP-spec agent
 
 Agent config:
 ```json
-{ "mcpServers": { "mcpserver": { "url": "http://localhost:7147/mcp-transport" } } }
+{ "mcpServers": { "mcpserver": { "url": "<your-mcpserver-base-url>/mcp-transport" } } }
 ```
 
 ## Swagger / OpenAPI

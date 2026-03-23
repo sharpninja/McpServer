@@ -20,7 +20,7 @@ Title: McpServer
 Subtitle: Context Intelligence for AI Coding Agents
 Tagline (smaller text below): Persistent memory. Shared workspace state. Open standard.
 Bottom-left: GitHub: https://github.com/sharpninja/McpServer
-Bottom-right: NuGet: https://www.nuget.org/packages/SharpNinja.McpServer.Client
+Bottom-right: Client docs: https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md
 
 Visual: abstract network/graph illustration — nodes connected by glowing lines on dark background, suggesting distributed agents connecting to a central hub.
 
@@ -193,7 +193,7 @@ Note: GitHub's Primer CSS design system
 Card 2 — icon: terminal / >_
 Name: Director CLI
 Text: dotnet tool install --global SharpNinja.McpServer.Director
-Link: https://www.nuget.org/packages/SharpNinja.McpServer.Director
+Link: https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md
 
 Card 3 — icon: keyboard / TUI
 Name: Director TUI
@@ -206,12 +206,12 @@ Text: VSIX extension. Browse and update todos inside your editor.
 Card 5 — icon: NuGet / package box
 Name: Client NuGet
 Text: SharpNinja.McpServer.Client — typed C# client for all API endpoints
-Link: https://www.nuget.org/packages/SharpNinja.McpServer.Client
+Link: https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md
 
 Card 6 — icon: plug / connect
 Name: MCP STDIO / HTTP
 Text: Connect Copilot, Cursor, Codex, or Claude with zero custom code
-Endpoint: POST http://localhost:7147/mcp-transport
+Endpoint: POST <your-mcpserver-base-url>/mcp-transport
 
 Speaker notes: We built six access surfaces because different people work differently. The CLI is for automation and scripting. The TUI is for SSH sessions. The Web UI is for exploration and team review. The VSIX is for developers who don't want to leave VS Code. The NuGet client is for building on top of McpServer. And the MCP transport is for agents.
 
@@ -260,7 +260,7 @@ Step 3 — Open Swagger:
 http://localhost:7147/swagger
 
 Step 4 — Connect your agent (dark code block):
-{ "mcpServers": { "mcpserver": { "url": "http://localhost:7147/mcp-transport" } } }
+{ "mcpServers": { "mcpserver": { "url": "<your-mcpserver-base-url>/mcp-transport" } } }
 
 CTA button below steps (blue filled): "View Full Documentation on GitHub →"
 Link: https://github.com/sharpninja/McpServer
@@ -287,12 +287,12 @@ https://github.com/sharpninja/McpServer
 CTA 2 — outlined button:
 Install Director CLI
 dotnet tool install --global SharpNinja.McpServer.Director
-https://www.nuget.org/packages/SharpNinja.McpServer.Director
+https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md
 
 CTA 3 — outlined button:
 Add the C# Client
 dotnet add package SharpNinja.McpServer.Client
-https://www.nuget.org/packages/SharpNinja.McpServer.Client
+https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md
 
 Footer links (small text at bottom):
 GitHub: https://github.com/sharpninja/McpServer
@@ -333,8 +333,8 @@ OVERALL DECK STYLE RULES:
 | Resource | URL |
 |---|---|
 | GitHub Repository | https://github.com/sharpninja/McpServer |
-| Client NuGet | https://www.nuget.org/packages/SharpNinja.McpServer.Client |
-| Director NuGet | https://www.nuget.org/packages/SharpNinja.McpServer.Director |
+| Client docs | https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md |
+| Director docs | https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md |
 | Local Swagger UI | http://localhost:7147/swagger |
-| MCP Transport | http://localhost:7147/mcp-transport |
+| MCP Transport | POST /mcp-transport on your local McpServer base URL |
 | MCP Spec | https://modelcontextprotocol.io |

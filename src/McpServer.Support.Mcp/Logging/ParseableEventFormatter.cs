@@ -2,6 +2,7 @@
 
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using Serilog.Events;
 using Serilog.Formatting;
@@ -16,6 +17,8 @@ namespace McpServer.Support.Mcp.Logging;
 public sealed class ParseableEventFormatter : ITextFormatter
 {
     private const string TimestampFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
+    private static readonly string[] s_reservedFieldNames = ["timestamp", "level", "message", "exception"];
+    internal const int MaxFieldCount = 250;
     internal static readonly JsonSerializerOptions s_jsonOptions = new() { WriteIndented = false };
 
     /// <inheritdoc />
@@ -42,11 +45,23 @@ public sealed class ParseableEventFormatter : ITextFormatter
         };
         if (logEvent.Exception != null)
             obj["exception"] = logEvent.Exception.ToString();
-        foreach (var prop in logEvent.Properties)
+
+        var propertyBudget = MaxFieldCount - obj.Count;
+        if (propertyBudget <= 0)
+            return obj;
+
+        foreach (var prop in logEvent.Properties
+                     .Where(static prop => !s_reservedFieldNames.Contains(prop.Key, StringComparer.OrdinalIgnoreCase))
+                     .OrderBy(static prop => prop.Key, StringComparer.Ordinal))
         {
+            if (propertyBudget == 0)
+                break;
+
             var s = ToStringValue(prop.Value) ?? string.Empty;
             obj[prop.Key] = s.Trim('"');
+            propertyBudget--;
         }
+
         return obj;
     }
 
