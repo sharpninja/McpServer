@@ -60,6 +60,7 @@ Get-Service McpServer
 - `Mcp:GraphRag:*`
 - `Mcp:ToolRegistry:*`
 - `Mcp:Tunnel:*`
+- `Mcp:Parseable:Enabled`, `Mcp:Parseable:Url` — optional Serilog HTTP sink to Parseable; default off (`Enabled: false`). Set `Enabled: true` and `Url` (e.g. `http://localhost:8000`) to enable.
 - `Mcp:Workspaces`
 - `Mcp:Instances:{name}:*`
 - `VoiceConversation:DefaultExecutionStrategy` (`hosted-agentframework` or `copilot-cli`)
@@ -677,4 +678,3 @@ This user guide is wired into:
 - `FAQ.md`
 - `context/`
 - `Operations/`
-

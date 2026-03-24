@@ -93,8 +93,8 @@ Mcp:
     QueueCapacity: 1000
     IncludeQueryString: false
   Parseable:
-    Url: http://localhost:8000
-    IngestUrl: http://localhost:8000/api/v1/ingest
+    Enabled: false
+    Url: ''
     StreamName: mcp
     Username: ''
     Password: ''

@@ -572,7 +572,7 @@ public sealed class AgentService : IAgentService
     private IReadOnlyList<string> DeserializeStringList(string json)
     {
         try { return JsonSerializer.Deserialize<List<string>>(json) ?? []; }
-        catch (JsonException ex) { _logger.LogWarning("{ExceptionDetail}", ex.ToString()); return []; }
+        catch (JsonException ex) { _logger.LogError("{ExceptionDetail}", ex.ToString()); return []; }
     }
 
     private static string NormalizePath(string path)

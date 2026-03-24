@@ -113,12 +113,12 @@ public sealed class SessionLogIngestor
             }
             catch (IOException ex)
             {
-                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+                _logger.LogError("{ExceptionDetail}", ex.ToString());
                 // Skip unreadable files
             }
             catch (JsonException ex)
             {
-                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+                _logger.LogError("{ExceptionDetail}", ex.ToString());
                 // Skip invalid JSON
             }
         }
@@ -150,7 +150,7 @@ public sealed class SessionLogIngestor
         }
         catch (JsonException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return json;
         }
     }

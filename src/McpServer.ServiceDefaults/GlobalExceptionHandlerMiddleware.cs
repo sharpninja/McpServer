@@ -41,7 +41,7 @@ internal sealed partial class GlobalExceptionHandlerMiddleware
         }
         catch (OperationCanceledException ex) when (context.RequestAborted.IsCancellationRequested)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             Log.RequestCancelled(_logger, context.Request.Method, context.Request.Path);
         }
 

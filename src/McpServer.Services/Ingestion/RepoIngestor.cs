@@ -82,12 +82,12 @@ public sealed class RepoIngestor
             }
             catch (IOException ex)
             {
-                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+                _logger.LogError("{ExceptionDetail}", ex.ToString());
                 // Skip unreadable files
             }
             catch (UnauthorizedAccessException ex)
             {
-                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+                _logger.LogError("{ExceptionDetail}", ex.ToString());
                 // Skip inaccessible files
             }
         }

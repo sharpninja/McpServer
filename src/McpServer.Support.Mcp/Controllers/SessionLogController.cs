@@ -152,7 +152,7 @@ public sealed class SessionLogController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return NotFound(new { error = ex.Message });
         }
     }

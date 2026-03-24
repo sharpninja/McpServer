@@ -10,6 +10,12 @@ public sealed class McpParseableOptions
     public const string SectionName = "Mcp:Parseable";
 
     /// <summary>
+    /// When <see langword="false"/> (default), Serilog does not register the Parseable HTTP sink regardless of <see cref="Url"/>.
+    /// Set to <see langword="true"/> and configure <see cref="Url"/> to enable log shipping (e.g. with <c>scripts/Setup-Parseable.ps1</c>).
+    /// </summary>
+    public bool Enabled { get; set; }
+
+    /// <summary>
     /// Parseable ingestion base URL (e.g. http://localhost:8000). When null or empty, Serilog does not send to Parseable.
     /// Ingestion endpoint used: {Url}/api/v1/ingest
     /// </summary>

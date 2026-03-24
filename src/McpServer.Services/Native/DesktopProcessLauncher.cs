@@ -458,32 +458,46 @@ internal sealed class DesktopProcessLauncher
         return duplicatedToken;
     }
 
+    /// <summary>Locates <c>pwsh.exe</c> under Program Files (PowerShell 7 stable or preview).</summary>
+    private static string? TryGetPwshExecutablePath()
+    {
+        var root = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+        if (string.IsNullOrEmpty(root))
+            return null;
+
+        foreach (var relative in new[] { Path.Combine("PowerShell", "7", "pwsh.exe"), Path.Combine("PowerShell", "7-preview", "pwsh.exe") })
+        {
+            var full = Path.Combine(root, relative);
+            if (File.Exists(full))
+                return full;
+        }
+
+        return null;
+    }
+
     /// <summary>
     /// Resolves a command name to its full executable path by running
-    /// <c>Get-Command</c> in a PowerShell session on the interactive desktop.
-    /// Returns null if the command cannot be resolved.
+    /// <c>Get-Command</c> in a <c>pwsh.exe</c> session on the interactive desktop.
+    /// Returns null if <c>pwsh.exe</c> is not installed or the command cannot be resolved.
     /// </summary>
     /// <param name="commandName">The command name to resolve (e.g. <c>copilot</c>).</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The full path to the executable, or null if not found.</returns>
     internal async Task<string?> ResolveCommandPathAsync(string commandName, CancellationToken cancellationToken = default)
     {
-        var psPath = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.System),
-            "WindowsPowerShell", "v1.0", "powershell.exe");
-
-        if (!File.Exists(psPath))
+        var pwshPath = TryGetPwshExecutablePath();
+        if (string.IsNullOrEmpty(pwshPath))
         {
-            _logger.LogWarning("PowerShell not found at {Path}, cannot resolve command", psPath);
+            _logger.LogWarning("pwsh.exe not found under Program Files; cannot resolve command");
             return null;
         }
 
         var escapedName = commandName.Replace("'", "''");
         var arguments = $"-NoProfile -NonInteractive -Command \"(Get-Command '{escapedName}' -ErrorAction SilentlyContinue).Source\"";
 
-        _logger.LogDebug("Resolving command path for '{Command}' via desktop PowerShell", commandName);
+        _logger.LogDebug("Resolving command path for '{Command}' via desktop pwsh.exe", commandName);
 
-        using var handle = LaunchWithStdio(psPath, arguments);
+        using var handle = LaunchWithStdio(pwshPath, arguments);
         var stdout = await handle.StandardOutput.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
         var exitCode = await handle.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
 

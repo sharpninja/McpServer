@@ -50,9 +50,9 @@ public sealed class InteractionLogSubmissionChannel : IInteractionLogSubmissionC
                     return (true, entry);
             }
         }
-        catch (OperationCanceledException ex)
+        catch (OperationCanceledException)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            //_logger.LogError("{ExceptionDetail}", ex.ToString());
             // Expected on shutdown
         }
 

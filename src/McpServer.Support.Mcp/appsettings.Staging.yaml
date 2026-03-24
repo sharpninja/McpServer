@@ -47,5 +47,6 @@ Mcp:
     QueueCapacity: 1000
     IncludeQueryString: false
   Parseable:
-    Url: http://localhost:8000
+    Enabled: false
+    Url: ''
     StreamName: mcp

@@ -23,7 +23,7 @@ MCP Server is a standalone ASP.NET Core service for workspace-scoped context ret
 ## Prerequisites
 
 - .NET SDK from `global.json`
-- PowerShell 7+
+- PowerShell 7+ — use **`pwsh.exe`** for all repo scripts and documented shell commands (not `powershell.exe`)
 - Windows SDK tools (`makeappx.exe`) for MSIX packaging
 - Optional: GitHub CLI (`gh`) for GitHub issue endpoints
 

@@ -114,14 +114,14 @@ builder.Host.UseSerilog((context, _, config) =>
             shared: true);
     }
 
-    if (!string.IsNullOrWhiteSpace(parseable.Url) && !context.HostingEnvironment.IsEnvironment("Test"))
-    {
-        var ingestUri = $"{parseable.Url!.TrimEnd('/')}/api/v1/ingest";
-        var httpClient = new ParseableHttpClient(parseable.StreamName, parseable.Username, parseable.Password);
-        config.WriteTo.Logger(lc => lc
-            .Filter.ByExcluding(e => e.Properties.TryGetValue(ParseableHttpClient.ParseableMetaPropertyName, out var v) && v is ScalarValue s && (s.Value is true or "True"))
-            .WriteTo.Http(requestUri: ingestUri, queueLimitBytes: null, textFormatter: new ParseableEventFormatter(), batchFormatter: new ParseableBatchFormatter(), httpClient: httpClient, restrictedToMinimumLevel: LogEventLevel.Verbose));
-    }
+    // if (parseable.Enabled && !string.IsNullOrWhiteSpace(parseable.Url) && !context.HostingEnvironment.IsEnvironment("Test"))
+    // {
+    //     var ingestUri = $"{parseable.Url!.TrimEnd('/')}/api/v1/ingest";
+    //     var httpClient = new ParseableHttpClient(parseable.StreamName, parseable.Username, parseable.Password);
+    //     config.WriteTo.Logger(lc => lc
+    //         .Filter.ByExcluding(e => e.Properties.TryGetValue(ParseableHttpClient.ParseableMetaPropertyName, out var v) && v is ScalarValue s && (s.Value is true or "True"))
+    //         .WriteTo.Http(requestUri: ingestUri, queueLimitBytes: null, textFormatter: new ParseableEventFormatter(), batchFormatter: new ParseableBatchFormatter(), httpClient: httpClient, restrictedToMinimumLevel: LogEventLevel.Verbose));
+    // }
 }, writeToProviders: true);
 
 if (OperatingSystem.IsWindows())
@@ -279,7 +279,7 @@ builder.Services.PostConfigure<RequirementsOptions>(options =>
 builder.Services.Configure<EmbeddingOptions>(builder.Configuration.GetSection("Embedding"));
 builder.Services.Configure<VectorIndexOptions>(builder.Configuration.GetSection("VectorIndex"));
 builder.Services.AddSingleton<IInteractionLogSubmissionChannel, InteractionLogSubmissionChannel>();
-builder.Services.AddHostedService<InteractionLogSubmissionService>();
+// builder.Services.AddHostedService<InteractionLogSubmissionService>();
 builder.Services.AddHttpClient("InteractionLogSubmission");
 builder.Services.AddHttpClient(WebsiteIngestor.HttpClientName, (sp, client) =>
 {
@@ -491,10 +491,10 @@ if (!app.Environment.IsEnvironment("Test"))
 {
     var parseableOpts = app.Configuration.GetSection(McpParseableOptions.SectionName).Get<McpParseableOptions>() ?? new McpParseableOptions();
     Log.Information("[Serilog] File sink enabled, path: {Path}", ResolveSerilogFilePath(parseableOpts.FallbackLogPath));
-    if (!string.IsNullOrWhiteSpace(parseableOpts.Url))
+    if (parseableOpts.Enabled && !string.IsNullOrWhiteSpace(parseableOpts.Url))
         Log.Information("[Parseable] Sink enabled, ingestion URL: {Url}/api/v1/ingest (X-P-Stream: {Stream})", parseableOpts.Url.TrimEnd('/'), parseableOpts.StreamName);
     else
-        Log.Information("[Parseable] Sink disabled (no Url configured).");
+        Log.Information("[Parseable] Sink disabled (Enabled={Enabled}, Url configured: {HasUrl}).", parseableOpts.Enabled, !string.IsNullOrWhiteSpace(parseableOpts.Url));
 }
 
 if (!app.Environment.IsEnvironment("Test"))

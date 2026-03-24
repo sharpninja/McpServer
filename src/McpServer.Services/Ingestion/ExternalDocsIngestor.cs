@@ -76,12 +76,12 @@ public sealed class ExternalDocsIngestor
             }
             catch (IOException ex)
             {
-                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+                _logger.LogError("{ExceptionDetail}", ex.ToString());
                 // Skip unreadable
             }
             catch (UnauthorizedAccessException ex)
             {
-                _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+                _logger.LogError("{ExceptionDetail}", ex.ToString());
                 // Skip inaccessible
             }
         }

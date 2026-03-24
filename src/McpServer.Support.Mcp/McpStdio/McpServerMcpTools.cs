@@ -859,12 +859,12 @@ public sealed class FwhMcpTools
         }
         catch (RequirementsRepositoryException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
         catch (Exception ex)
@@ -943,12 +943,12 @@ public sealed class FwhMcpTools
         }
         catch (RequirementsRepositoryException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
         catch (Exception ex)
@@ -994,12 +994,12 @@ public sealed class FwhMcpTools
         }
         catch (RequirementsRepositoryException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return JsonSerializer.Serialize(new { error = ex.Message });
         }
         catch (Exception ex)
