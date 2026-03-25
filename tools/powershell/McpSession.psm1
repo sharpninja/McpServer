@@ -35,7 +35,7 @@ function Initialize-McpSession {
     .PARAMETER MarkerPath  Path to the marker file. Defaults to searching upward from the current directory.
     .PARAMETER BaseUrl     Override the base URL instead of reading from the marker.
     .PARAMETER ApiKey      Override the API key instead of reading from the marker.
-    .OUTPUTS               String session slug persisted/reused in .mcpServer/session.yaml.
+    .OUTPUTS               String session slug persisted/reused in .mcpServer/session.yaml and mirrored to .mcpSession/current-session.json.
     #>
     [CmdletBinding()]
     param(
@@ -577,14 +577,37 @@ function Assert-Initialized {
     }
 }
 
-function Get-McpSessionStatePath {
-    $workspacePath = $script:McpWorkspacePath
-    if ([string]::IsNullOrWhiteSpace($workspacePath)) {
-        $workspacePath = (Get-Location).Path
+function Get-McpSessionWorkspacePath {
+    if (-not [string]::IsNullOrWhiteSpace($script:McpWorkspacePath)) {
+        return $script:McpWorkspacePath
     }
 
+    return (Get-Location).Path
+}
+
+function Get-McpSessionStatePath {
+    $workspacePath = Get-McpSessionWorkspacePath
     $stateDir = Join-Path $workspacePath ".mcpServer"
     return Join-Path $stateDir "session.yaml"
+}
+
+function Get-McpCurrentSessionCacheDirectoryPath {
+    $workspacePath = Get-McpSessionWorkspacePath
+    return Join-Path $workspacePath ".mcpSession"
+}
+
+function Get-McpCurrentSessionCachePath {
+    $cacheDir = Get-McpCurrentSessionCacheDirectoryPath
+    return Join-Path $cacheDir "current-session.json"
+}
+
+function Get-McpCurrentSessionCacheCandidatePaths {
+    $cacheDir = Get-McpCurrentSessionCacheDirectoryPath
+    return @(
+        (Join-Path $cacheDir "current-session.json"),
+        (Join-Path $cacheDir "session.json"),
+        (Join-Path $cacheDir "current.json")
+    )
 }
 
 function Get-McpSessionState {
@@ -604,6 +627,76 @@ function Get-McpSessionState {
         Write-Warning "Failed to parse session state file '$statePath': $_"
         return $null
     }
+}
+
+function ConvertTo-McpCachedSessionObject {
+    param(
+        [Parameter(Mandatory)][object]$Candidate,
+        [Parameter(Mandatory)][string]$Path
+    )
+
+    $sessionCandidate = $Candidate
+    $propertyNames = @($sessionCandidate.PSObject.Properties.Name)
+    if (-not ($propertyNames -contains 'sourceType' -and $propertyNames -contains 'sessionId')) {
+        foreach ($propertyName in @('currentSession', 'current', 'session')) {
+            if ($propertyNames -contains $propertyName -and $null -ne $sessionCandidate.$propertyName) {
+                $sessionCandidate = $sessionCandidate.$propertyName
+                break
+            }
+        }
+    }
+
+    if ($null -eq $sessionCandidate) {
+        return $null
+    }
+
+    $sessionPropertyNames = @($sessionCandidate.PSObject.Properties.Name)
+    if (-not ($sessionPropertyNames -contains 'sourceType' -and $sessionPropertyNames -contains 'sessionId')) {
+        return $null
+    }
+
+    try {
+        return ConvertTo-McpSessionRuntimeObject -Session $sessionCandidate
+    } catch {
+        Write-Warning "Failed to normalize current session cache file '$Path': $_"
+        return $null
+    }
+}
+
+function Get-McpCurrentSessionCache {
+    foreach ($cachePath in @(Get-McpCurrentSessionCacheCandidatePaths)) {
+        if (-not (Test-Path -LiteralPath $cachePath)) {
+            continue
+        }
+
+        try {
+            $raw = Get-Content -LiteralPath $cachePath -Raw -ErrorAction Stop
+            if ([string]::IsNullOrWhiteSpace($raw)) {
+                continue
+            }
+
+            $candidate = $raw | ConvertFrom-Json -Depth 50
+            $session = ConvertTo-McpCachedSessionObject -Candidate $candidate -Path $cachePath
+            if ($null -ne $session) {
+                return $session
+            }
+        } catch {
+            Write-Warning "Failed to parse current session cache file '$cachePath': $_"
+        }
+    }
+
+    return $null
+}
+
+function Save-McpCurrentSessionCache {
+    param([PSCustomObject]$Session)
+
+    $cachePath = Get-McpCurrentSessionCachePath
+    $cacheDir = Split-Path -Parent $cachePath
+    New-Item -ItemType Directory -Path $cacheDir -Force | Out-Null
+
+    $payload = Get-McpSessionSerializableObject -Session $Session
+    $payload | ConvertTo-Json -Depth 50 | Set-Content -LiteralPath $cachePath -Encoding UTF8
 }
 
 function Save-McpSessionState {
@@ -629,6 +722,7 @@ function Save-McpSessionState {
     }
 
     $state | ConvertTo-Json -Depth 50 | Set-Content -LiteralPath $statePath -Encoding UTF8
+    Save-McpCurrentSessionCache -Session $Session
 }
 
 function Initialize-McpSessionSlugState {
@@ -638,6 +732,7 @@ function Initialize-McpSessionSlugState {
     )
 
     $state = Get-McpSessionState
+    $currentSession = Get-McpCurrentSessionCache
     $now = (Get-Date).ToUniversalTime()
     $slug = $null
     $slugGeneratedAt = $null
@@ -663,6 +758,29 @@ function Initialize-McpSessionSlugState {
         }
     }
 
+    if ([string]::IsNullOrWhiteSpace($slug) -and $currentSession) {
+        $sessionId = [string]$currentSession.sessionId
+        $sessionModel = [string]$currentSession.model
+        $sessionStatus = [string]$currentSession.status
+        $sessionSourceType = [string]$currentSession.sourceType
+        $statusIsReusable = [string]::IsNullOrWhiteSpace($sessionStatus) -or $sessionStatus -notin @('completed', 'closed')
+        $agentMatches = $sessionSourceType -eq $Agent -or (
+            -not [string]::IsNullOrWhiteSpace($sessionId) -and
+            $sessionId.StartsWith("$Agent-", [System.StringComparison]::Ordinal)
+        )
+
+        if ($statusIsReusable -and $agentMatches -and $sessionModel -eq $Model) {
+            $slug = $sessionId
+            $slugGeneratedAt = if (-not [string]::IsNullOrWhiteSpace([string]$currentSession.lastUpdated)) {
+                [string]$currentSession.lastUpdated
+            } elseif (-not [string]::IsNullOrWhiteSpace([string]$currentSession.started)) {
+                [string]$currentSession.started
+            } else {
+                $now.ToString('o')
+            }
+        }
+    }
+
     if ([string]::IsNullOrWhiteSpace($slug)) {
         $slug = New-McpSessionLogSlug -Agent $Agent -Model $Model -TimestampUtc $now
         $slugGeneratedAt = $now.ToString('o')
@@ -671,7 +789,9 @@ function Initialize-McpSessionSlugState {
     $script:McpSessionSlug = $slug
 
     $persistedSession = $null
-    if ($state -and $state.session) {
+    if ($currentSession) {
+        $persistedSession = $currentSession
+    } elseif ($state -and $state.session) {
         $persistedSession = ConvertTo-McpSessionRuntimeObject -Session $state.session
     }
 
@@ -699,6 +819,11 @@ function Resolve-McpSession {
 
     if ($Session) {
         return ConvertTo-McpSessionRuntimeObject -Session $Session
+    }
+
+    $currentSession = Get-McpCurrentSessionCache
+    if ($currentSession) {
+        return $currentSession
     }
 
     $state = Get-McpSessionState
@@ -731,15 +856,25 @@ function ConvertTo-McpSessionRuntimeObject {
 }
 
 function Remove-McpSessionStateFile {
-    $statePath = Get-McpSessionStatePath
-    if (-not (Test-Path -LiteralPath $statePath)) {
-        return
+    foreach ($path in @((Get-McpSessionStatePath)) + @(Get-McpCurrentSessionCacheCandidatePaths)) {
+        if (-not (Test-Path -LiteralPath $path)) {
+            continue
+        }
+
+        try {
+            Remove-Item -LiteralPath $path -Force -ErrorAction Stop
+        } catch {
+            Write-Warning "Failed to delete session state file '$path': $_"
+        }
     }
 
     try {
-        Remove-Item -LiteralPath $statePath -Force -ErrorAction Stop
+        $cacheDir = Get-McpCurrentSessionCacheDirectoryPath
+        if ((Test-Path -LiteralPath $cacheDir) -and $null -eq (Get-ChildItem -LiteralPath $cacheDir -Force -ErrorAction Stop | Select-Object -First 1)) {
+            Remove-Item -LiteralPath $cacheDir -Force -ErrorAction Stop
+        }
     } catch {
-        Write-Warning "Failed to delete session state file '$statePath': $_"
+        Write-Warning "Failed to delete current session cache directory '$cacheDir': $_"
     }
 }
 

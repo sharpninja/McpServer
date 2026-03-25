@@ -179,4 +179,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-074 | ✅ Complete | azure-pipelines.yml, docs/AZURE-PIPELINES.md |
 | TR-MCP-CI-001 | ✅ Complete | azure-pipelines.yml, docs/AZURE-PIPELINES.md, README.md, docs/MCP-SERVER.md, docs/RELEASE-CHECKLIST.md |
 | TEST-MCP-099 | ✅ Complete | azure-pipelines.yml, docs/AZURE-PIPELINES.md |
+| FR-MCP-075 | ✅ Complete | tools/powershell/McpSession.psm1 |
+| TR-MCP-AGENT-013 | ✅ Complete | tools/powershell/McpSession.psm1 |
+| TEST-MCP-100 | ✅ Complete | tools/powershell/McpSession.Tests.ps1 |
 

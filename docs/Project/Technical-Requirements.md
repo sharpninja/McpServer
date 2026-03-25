@@ -695,3 +695,13 @@ Package publication SHALL be branch-conditional: `main` publishes to `nuget.org`
 **Status:** ✅ Complete
 
 **Covered by:** `azure-pipelines.yml`, `docs/AZURE-PIPELINES.md`, `README.md`, `docs/MCP-SERVER.md`, `docs/RELEASE-CHECKLIST.md`
+
+## TR-MCP-AGENT-013
+
+**PowerShell McpSession Dual-Path Session Cache Resolution** — `tools/powershell/McpSession.psm1` SHALL persist the canonical current session object to `.mcpSession/current-session.json` whenever session state is saved, SHALL consult that current-session cache before falling back to the legacy `.mcpServer/session.yaml` wrapper when resolving the active session, and SHALL reuse the cached current-session `sessionId` during initialization when the cache matches the requested agent/model and the session is still active.
+
+When a session is completed, the module SHALL remove both the legacy wrapper cache and the `.mcpSession` current-session cache so a later bootstrap does not accidentally reuse a completed session. The implementation SHALL continue supporting the legacy wrapper file for backward compatibility.
+
+**Status:** ✅ Complete
+
+**Covered by:** `tools/powershell/McpSession.psm1`

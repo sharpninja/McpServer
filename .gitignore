@@ -490,6 +490,7 @@ $RECYCLE.BIN/
 .mcp-server.yaml
 .mcp-server.json
 .mcpServer/
+.mcpSession/
 
 # SQLite database files (runtime data)
 *.db

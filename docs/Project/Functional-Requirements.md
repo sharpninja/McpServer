@@ -503,3 +503,13 @@ The Azure DevOps pipeline SHALL preserve the current repository automation inten
 
 **Covered by:** `azure-pipelines.yml`, `docs/AZURE-PIPELINES.md`
 
+## FR-MCP-075 PowerShell Session Cache Discovery from `.mcpSession`
+
+The PowerShell `McpSession` module SHALL discover and reuse the current session object cached in the workspace `.mcpSession` folder so follow-on commands can resolve the active session even when the caller does not pass an explicit session object.
+
+This cache-discovery behavior SHALL remain backward compatible with the existing `.mcpServer/session.yaml` slug/state wrapper and SHALL prefer the current-session cache when both representations are available.
+
+**Technical Implementation:** [TR-MCP-AGENT-013](./Technical-Requirements.md#tr-mcp-agent-013) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `tools/powershell/McpSession.psm1`
+

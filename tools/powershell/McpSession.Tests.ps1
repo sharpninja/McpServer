@@ -191,6 +191,19 @@ workspace: demo
             $script:capturedBody | Should -Match '"turnCount"'
             $script:capturedBody | Should -Not -Match '"entryCount"'
         }
+
+        It 'mirrors the current session object into .mcpSession/current-session.json' {
+            $workspaceRoot = Join-Path $TestDrive 'workspace'
+            $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
+
+            $currentSessionPath = Join-Path $workspaceRoot '.mcpSession\current-session.json'
+            Test-Path $currentSessionPath | Should -BeTrue
+
+            $persistedSession = Get-Content -LiteralPath $currentSessionPath -Raw | ConvertFrom-Json -Depth 50
+            $persistedSession.sourceType | Should -Be 'T'
+            $persistedSession.sessionId | Should -Be $s.sessionId
+            $persistedSession.turnCount | Should -Be 0
+        }
     }
 
     # ── Add-McpSessionTurn ───────────────────────────────────────────────────
@@ -400,12 +413,16 @@ workspace: demo
             Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
         }
 
-        It 'deletes .mcpServer/session.yaml when status becomes completed' {
+        It 'deletes both persisted session cache files when status becomes completed' {
             $workspaceRoot = Join-Path $TestDrive 'workspace'
             $stateDir = Join-Path $workspaceRoot '.mcpServer'
             $statePath = Join-Path $stateDir 'session.yaml'
+            $currentSessionDir = Join-Path $workspaceRoot '.mcpSession'
+            $currentSessionPath = Join-Path $currentSessionDir 'current-session.json'
             New-Item $stateDir -ItemType Directory -Force | Out-Null
+            New-Item $currentSessionDir -ItemType Directory -Force | Out-Null
             '{}' | Set-Content $statePath
+            '{}' | Set-Content $currentSessionPath
 
             InModuleScope McpSession -Parameters @{ WorkspaceRoot = $workspaceRoot } {
                 param($WorkspaceRoot)
@@ -416,6 +433,7 @@ workspace: demo
             Update-McpSessionLog -Session $s -Status completed
 
             Test-Path $statePath | Should -BeFalse
+            Test-Path $currentSessionPath | Should -BeFalse
         }
 
         It 'updates lastUpdated timestamp' {
@@ -451,6 +469,40 @@ workspace: demo
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
                 $Method -eq 'Post' -and $Uri -like '*/mcpserver/sessionlog'
             }
+        }
+
+        It 'resolves the persisted current session object from .mcpSession when no explicit session is provided' {
+            $workspaceRoot = Join-Path $TestDrive 'workspace'
+            $s = New-McpSessionLog -SourceType 'Copilotcli' -Title 't' -Model 'gpt-5.3-codex'
+            $legacyStatePath = Join-Path $workspaceRoot '.mcpServer\session.yaml'
+            Remove-Item -LiteralPath $legacyStatePath -Force
+
+            Update-McpSessionLog -Title 'updated from current cache'
+
+            $currentSessionPath = Join-Path $workspaceRoot '.mcpSession\current-session.json'
+            $persistedSession = Get-Content -LiteralPath $currentSessionPath -Raw | ConvertFrom-Json -Depth 50
+            $persistedSession.sessionId | Should -Be $s.sessionId
+            $persistedSession.title | Should -Be 'updated from current cache'
+        }
+    }
+
+    Describe 'Current session cache reuse' {
+        It 'reuses the current session id from .mcpSession when the legacy wrapper state file is missing' {
+            $workspaceRoot = Join-Path $TestDrive 'workspace'
+
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k' | Out-Null
+            $s = New-McpSessionLog -SourceType 'Copilotcli' -Title 't' -Model 'gpt-5.3-codex'
+            $legacyStatePath = Join-Path $workspaceRoot '.mcpServer\session.yaml'
+            Remove-Item -LiteralPath $legacyStatePath -Force
+
+            InModuleScope McpSession {
+                $script:McpSessionAgent = $null
+                $script:McpSessionModel = $null
+                $script:McpSessionSlug = $null
+            }
+
+            $slug = Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
+            $slug | Should -Be $s.sessionId
         }
     }
 
