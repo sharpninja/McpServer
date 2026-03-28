@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using HandlebarsDotNet;
 using Microsoft.Extensions.Logging;
 using YamlDotNet.Core;
@@ -18,6 +20,8 @@ public static class MarkerFileService
 {
     /// <summary>Well-known marker file name placed at the workspace root.</summary>
     public const string MarkerFileName = "AGENTS-README-FIRST.yaml";
+    internal const string MarkerSignatureCanonicalization = "marker-v1";
+    internal const string MarkerSignatureVerifier = "workspace_api_key";
     private const string WorkspaceStateDirectoryGitIgnoreEntry = ".mcpServer/";
 
     private static readonly ISerializer s_yamlSerializer = new SerializerBuilder()
@@ -85,8 +89,29 @@ public static class MarkerFileService
             StartedAt = markerWrittenAtUtcText,
             MarkerWrittenAtUtc = markerWrittenAtUtcText,
             ServerStartedAtUtc = serverStartedAtUtcText,
+            Signature = new MarkerSignature
+            {
+                Algorithm = "HMAC-SHA256",
+                Canonicalization = MarkerSignatureCanonicalization,
+                Verifier = MarkerSignatureVerifier,
+            },
+            TrustBootstrap = new MarkerTrustBootstrap
+            {
+                Description = "This marker is self-verifiable when the workspace API key and rendered bootstrap payload still match the active MCP workspace contract.",
+                Guarantees =
+                [
+                    "The marker signature can be recomputed from the workspace API key in this file.",
+                    "The /health endpoint echoes a caller nonce exactly when one is supplied.",
+                    "Agents must stop MCP usage after any signature or nonce mismatch."
+                ],
+                HealthNonceEndpoint = "/health",
+                HealthNonceParameter = "nonce",
+                Fallback = "If health check, nonce verification, or signature verification fails, log MCP_UNTRUSTED and continue without the MCP server. Do not probe additional endpoints.",
+                RecommendedUsage = "Use /sessionlog, /todo, /context, and other MCP endpoints only after both signature and nonce verification succeed.",
+            },
             Prompt = ResolvePrompt(templateContext, globalPromptTemplate, workspacePromptTemplate),
         };
+        marker.Signature.Value = ComputeMarkerSignature(marker);
 
         try
         {
@@ -234,6 +259,59 @@ public static class MarkerFileService
         };
     }
 
+    internal static string ComputeMarkerSignature(MarkerFile marker)
+    {
+        ArgumentNullException.ThrowIfNull(marker);
+
+        var keyBytes = Encoding.UTF8.GetBytes(marker.ApiKey ?? string.Empty);
+        var payloadBytes = Encoding.UTF8.GetBytes(BuildSignaturePayload(marker));
+        using var hmac = new HMACSHA256(keyBytes);
+        return Convert.ToHexString(hmac.ComputeHash(payloadBytes));
+    }
+
+    internal static string BuildSignaturePayload(MarkerFile marker)
+    {
+        ArgumentNullException.ThrowIfNull(marker);
+
+        var builder = new StringBuilder();
+        AppendPayloadLine(builder, "canonicalization", marker.Signature.Canonicalization);
+        AppendPayloadLine(builder, "port", marker.Port.ToString(CultureInfo.InvariantCulture));
+        AppendPayloadLine(builder, "baseUrl", marker.BaseUrl);
+        AppendPayloadLine(builder, "apiKey", marker.ApiKey);
+        AppendPayloadLine(builder, "workspace", marker.Workspace);
+        AppendPayloadLine(builder, "workspacePath", marker.WorkspacePath);
+        AppendPayloadLine(builder, "pid", marker.Pid.ToString(CultureInfo.InvariantCulture));
+        AppendPayloadLine(builder, "startedAt", marker.StartedAt);
+        AppendPayloadLine(builder, "markerWrittenAtUtc", marker.MarkerWrittenAtUtc);
+        AppendPayloadLine(builder, "serverStartedAtUtc", marker.ServerStartedAtUtc);
+        AppendPayloadLine(builder, "endpoints.health", marker.Endpoints.Health);
+        AppendPayloadLine(builder, "endpoints.swagger", marker.Endpoints.Swagger);
+        AppendPayloadLine(builder, "endpoints.swaggerUi", marker.Endpoints.SwaggerUi);
+        AppendPayloadLine(builder, "endpoints.mcpTransport", marker.Endpoints.McpTransport);
+        AppendPayloadLine(builder, "endpoints.sessionLog", marker.Endpoints.SessionLog);
+        AppendPayloadLine(builder, "endpoints.sessionLogDialog", marker.Endpoints.SessionLogDialog);
+        AppendPayloadLine(builder, "endpoints.contextSearch", marker.Endpoints.ContextSearch);
+        AppendPayloadLine(builder, "endpoints.contextPack", marker.Endpoints.ContextPack);
+        AppendPayloadLine(builder, "endpoints.contextSources", marker.Endpoints.ContextSources);
+        AppendPayloadLine(builder, "endpoints.todo", marker.Endpoints.Todo);
+        AppendPayloadLine(builder, "endpoints.repo", marker.Endpoints.Repo);
+        AppendPayloadLine(builder, "endpoints.desktop", marker.Endpoints.Desktop);
+        AppendPayloadLine(builder, "endpoints.gitHub", marker.Endpoints.GitHub);
+        AppendPayloadLine(builder, "endpoints.tools", marker.Endpoints.Tools);
+        AppendPayloadLine(builder, "endpoints.workspace", marker.Endpoints.Workspace);
+        AppendPayloadLine(builder, "endpoints.serverStartupUtc", marker.Endpoints.ServerStartupUtc);
+        AppendPayloadLine(builder, "endpoints.markerFileTimestamp", marker.Endpoints.MarkerFileTimestamp);
+        return builder.ToString();
+    }
+
+    private static void AppendPayloadLine(StringBuilder builder, string key, string? value)
+    {
+        builder.Append(key)
+            .Append('=')
+            .Append((value ?? string.Empty).ReplaceLineEndings("\n"))
+            .Append('\n');
+    }
+
     private static string RenderHandlebars(string template, Dictionary<string, object?> context)
     {
         var compiled = s_handlebars.Compile(template.ReplaceLineEndings("\n"));
@@ -253,8 +331,33 @@ internal sealed class MarkerFile
     public string StartedAt { get; set; } = string.Empty;
     public string MarkerWrittenAtUtc { get; set; } = string.Empty;
     public string ServerStartedAtUtc { get; set; } = string.Empty;
+    [YamlMember(Alias = "signature", ApplyNamingConventions = false)]
+    public MarkerSignature Signature { get; set; } = new();
+    [YamlMember(Alias = "trust_bootstrap", ApplyNamingConventions = false)]
+    public MarkerTrustBootstrap TrustBootstrap { get; set; } = new();
     [YamlMember(ScalarStyle = ScalarStyle.Literal)]
     public string Prompt { get; set; } = string.Empty;
+}
+
+internal sealed class MarkerSignature
+{
+    public string Algorithm { get; set; } = string.Empty;
+    public string Canonicalization { get; set; } = string.Empty;
+    public string Verifier { get; set; } = string.Empty;
+    public string Value { get; set; } = string.Empty;
+}
+
+internal sealed class MarkerTrustBootstrap
+{
+    public string Description { get; set; } = string.Empty;
+    public string[] Guarantees { get; set; } = [];
+    [YamlMember(Alias = "health_nonce_endpoint", ApplyNamingConventions = false)]
+    public string HealthNonceEndpoint { get; set; } = string.Empty;
+    [YamlMember(Alias = "health_nonce_parameter", ApplyNamingConventions = false)]
+    public string HealthNonceParameter { get; set; } = string.Empty;
+    public string Fallback { get; set; } = string.Empty;
+    [YamlMember(Alias = "recommended_usage", ApplyNamingConventions = false)]
+    public string RecommendedUsage { get; set; } = string.Empty;
 }
 
 internal sealed class MarkerEndpoints

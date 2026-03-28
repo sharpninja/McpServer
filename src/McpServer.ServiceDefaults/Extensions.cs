@@ -213,12 +213,12 @@ public static class ServiceDefaultsExtensions
             }
 
             context.Response.ContentType = "application/json";
-            object payload = includeException
-                ? new
-                {
-                    status = report.Status.ToString(),
-                    version,
-                    checks = report.Entries.Select(e => new
+            var payload = new Dictionary<string, object?>
+            {
+                ["status"] = report.Status.ToString(),
+                ["version"] = version,
+                ["checks"] = includeException
+                    ? report.Entries.Select(e => new
                     {
                         name = e.Key,
                         status = e.Value.Status.ToString(),
@@ -226,19 +226,20 @@ public static class ServiceDefaultsExtensions
                         exception = e.Value.Exception?.Message,
                         duration = e.Value.Duration.TotalMilliseconds
                     })
-                }
-                : new
-                {
-                    status = report.Status.ToString(),
-                    version,
-                    checks = report.Entries.Select(e => new
+                    : report.Entries.Select(e => new
                     {
                         name = e.Key,
                         status = e.Value.Status.ToString(),
                         description = e.Value.Description,
                         duration = e.Value.Duration.TotalMilliseconds
                     })
-                };
+            };
+
+            if (context.Request.Query.TryGetValue("nonce", out var nonceValues))
+            {
+                payload["nonce"] = nonceValues.ToString();
+            }
+
             var result = System.Text.Json.JsonSerializer.Serialize(payload);
             await context.Response.WriteAsync(result).ConfigureAwait(false);
         };

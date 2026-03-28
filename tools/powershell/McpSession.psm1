@@ -33,8 +33,236 @@ $script:McpHeaders       = @{}
 $script:McpSessionAgent  = $null
 $script:McpSessionModel  = $null
 $script:McpSessionSlug   = $null
+$script:McpTrustBootstrapPendingNote = $null
+$script:McpTrustBootstrapPendingRecordedAt = $null
 
 # ─── Connection ──────────────────────────────────────────────────────────────
+
+function Find-McpMarkerFile {
+    $dir = (Get-Location).Path
+    while ($dir) {
+        $candidate = Join-Path $dir "AGENTS-README-FIRST.yaml"
+        if (Test-Path -LiteralPath $candidate) {
+            return $candidate
+        }
+
+        $parent = Split-Path $dir -Parent
+        if (-not $parent -or $parent -eq $dir) {
+            break
+        }
+
+        $dir = $parent
+    }
+
+    return $null
+}
+
+function Read-McpMarkerNestedMap {
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string[]]$Lines,
+        [Parameter(Mandatory)][int]$StartIndex
+    )
+
+    $values = [ordered]@{}
+    $index = $StartIndex
+
+    while ($index -lt $Lines.Count) {
+        $line = $Lines[$index]
+        if ($line -match '^\S') {
+            break
+        }
+
+        if ($line -match '^\s{2}(?<key>[A-Za-z_][A-Za-z0-9_]*)\s*:\s*(?<value>.*)$') {
+            $values[$Matches.key] = $Matches.value
+        }
+
+        $index++
+    }
+
+    return @{
+        Values = $values
+        NextIndex = $index
+    }
+}
+
+function ConvertFrom-McpMarkerContent {
+    param(
+        [Parameter(Mandatory)][string]$Content
+    )
+
+    $normalized = $Content.ReplaceLineEndings("`n")
+    $lines = $normalized -split "`n"
+    $marker = [ordered]@{
+        endpoints = [ordered]@{}
+        signature = [ordered]@{}
+        trust_bootstrap = [ordered]@{}
+        prompt = ''
+    }
+
+    for ($index = 0; $index -lt $lines.Count; $index++) {
+        $line = $lines[$index]
+        if ([string]::IsNullOrWhiteSpace($line)) {
+            continue
+        }
+
+        if ($line -match '^(?<key>[A-Za-z_][A-Za-z0-9_]*)\s*:\s*(?<value>.*)$') {
+            $key = $Matches.key
+            $value = $Matches.value
+
+            if ($value -eq '|-') {
+                $index++
+                $promptLines = [System.Collections.Generic.List[string]]::new()
+                while ($index -lt $lines.Count) {
+                    $promptLine = $lines[$index]
+                    if ($promptLine -match '^\S') {
+                        $index--
+                        break
+                    }
+
+                    if ($promptLine.StartsWith('  ')) {
+                        [void]$promptLines.Add($promptLine.Substring(2))
+                    } else {
+                        [void]$promptLines.Add($promptLine)
+                    }
+
+                    $index++
+                }
+
+                $marker[$key] = ($promptLines -join "`n").TrimEnd("`n")
+                continue
+            }
+
+            if ([string]::IsNullOrWhiteSpace($value)) {
+                $section = Read-McpMarkerNestedMap -Lines $lines -StartIndex ($index + 1)
+                $marker[$key] = $section.Values
+                $index = $section.NextIndex - 1
+                continue
+            }
+
+            $marker[$key] = $value
+        }
+    }
+
+    return [pscustomobject]$marker
+}
+
+function Get-McpMarkerSignaturePayload {
+    param(
+        [Parameter(Mandatory)][pscustomobject]$Marker
+    )
+
+    $lines = [System.Collections.Generic.List[string]]::new()
+    $lines.Add("canonicalization=$([string]$Marker.signature.canonicalization)")
+    $lines.Add("port=$([string]$Marker.port)")
+    $lines.Add("baseUrl=$([string]$Marker.baseUrl)")
+    $lines.Add("apiKey=$([string]$Marker.apiKey)")
+    $lines.Add("workspace=$([string]$Marker.workspace)")
+    $lines.Add("workspacePath=$([string]$Marker.workspacePath)")
+    $lines.Add("pid=$([string]$Marker.pid)")
+    $lines.Add("startedAt=$([string]$Marker.startedAt)")
+    $lines.Add("markerWrittenAtUtc=$([string]$Marker.markerWrittenAtUtc)")
+    $lines.Add("serverStartedAtUtc=$([string]$Marker.serverStartedAtUtc)")
+    $lines.Add("endpoints.health=$([string]$Marker.endpoints.health)")
+    $lines.Add("endpoints.swagger=$([string]$Marker.endpoints.swagger)")
+    $lines.Add("endpoints.swaggerUi=$([string]$Marker.endpoints.swaggerUi)")
+    $lines.Add("endpoints.mcpTransport=$([string]$Marker.endpoints.mcpTransport)")
+    $lines.Add("endpoints.sessionLog=$([string]$Marker.endpoints.sessionLog)")
+    $lines.Add("endpoints.sessionLogDialog=$([string]$Marker.endpoints.sessionLogDialog)")
+    $lines.Add("endpoints.contextSearch=$([string]$Marker.endpoints.contextSearch)")
+    $lines.Add("endpoints.contextPack=$([string]$Marker.endpoints.contextPack)")
+    $lines.Add("endpoints.contextSources=$([string]$Marker.endpoints.contextSources)")
+    $lines.Add("endpoints.todo=$([string]$Marker.endpoints.todo)")
+    $lines.Add("endpoints.repo=$([string]$Marker.endpoints.repo)")
+    $lines.Add("endpoints.desktop=$([string]$Marker.endpoints.desktop)")
+    $lines.Add("endpoints.gitHub=$([string]$Marker.endpoints.gitHub)")
+    $lines.Add("endpoints.tools=$([string]$Marker.endpoints.tools)")
+    $lines.Add("endpoints.workspace=$([string]$Marker.endpoints.workspace)")
+    $lines.Add("endpoints.serverStartupUtc=$([string]$Marker.endpoints.serverStartupUtc)")
+    $lines.Add("endpoints.markerFileTimestamp=$([string]$Marker.endpoints.markerFileTimestamp)")
+    return (($lines -join "`n") + "`n")
+}
+
+function Get-McpMarkerSignatureValue {
+    param(
+        [Parameter(Mandatory)][pscustomobject]$Marker
+    )
+
+    $hmac = [System.Security.Cryptography.HMACSHA256]::new([System.Text.Encoding]::UTF8.GetBytes([string]$Marker.apiKey))
+    try {
+        $payloadBytes = [System.Text.Encoding]::UTF8.GetBytes((Get-McpMarkerSignaturePayload -Marker $Marker))
+        return [Convert]::ToHexString($hmac.ComputeHash($payloadBytes))
+    } finally {
+        $hmac.Dispose()
+    }
+}
+
+function Test-McpMarkerSignature {
+    param(
+        [Parameter(Mandatory)][pscustomobject]$Marker
+    )
+
+    if (-not $Marker.signature -or [string]::IsNullOrWhiteSpace([string]$Marker.signature.value)) {
+        return $false
+    }
+
+    $expected = (Get-McpMarkerSignatureValue -Marker $Marker)
+    return [string]::Equals(
+        $expected,
+        [string]$Marker.signature.value,
+        [System.StringComparison]::OrdinalIgnoreCase)
+}
+
+function New-McpTrustNonce {
+    $bytes = [System.Security.Cryptography.RandomNumberGenerator]::GetBytes(18)
+    return [Convert]::ToBase64String($bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_')
+}
+
+function Reset-McpSessionConnectionState {
+    $script:McpBaseUrl = $null
+    $script:McpApiKey = $null
+    $script:McpWorkspacePath = $null
+    $script:McpHeaders = @{}
+}
+
+function Throw-McpUntrusted {
+    param(
+        [Parameter(Mandatory)][string]$Reason
+    )
+
+    Reset-McpSessionConnectionState
+    $message = "MCP_UNTRUSTED: $Reason"
+    Write-Warning $message
+    throw $message
+}
+
+function Invoke-McpTrustedHealthCheck {
+    param(
+        [Parameter(Mandatory)][string]$BaseUrl
+    )
+
+    $nonce = New-McpTrustNonce
+    $separator = if ($BaseUrl.Contains('?')) { '&' } else { '?' }
+    $health = Invoke-RestMethod -Uri "$BaseUrl/health${separator}nonce=$nonce" -TimeoutSec 5
+    if ([string]$health.nonce -ne $nonce) {
+        Throw-McpUntrusted -Reason "The /health response nonce did not match the caller nonce."
+    }
+
+    return [pscustomobject]@{
+        Nonce = $nonce
+        Status = [string]$health.status
+        VerifiedAtUtc = (Get-Date).ToUniversalTime().ToString("o")
+    }
+}
+
+function Set-McpPendingTrustBootstrapNote {
+    param(
+        [Parameter(Mandatory)][string]$Message,
+        [Parameter(Mandatory)][string]$RecordedAtUtc
+    )
+
+    $script:McpTrustBootstrapPendingNote = $Message
+    $script:McpTrustBootstrapPendingRecordedAt = $RecordedAtUtc
+}
 
 function Initialize-McpSession {
     <#
@@ -45,8 +273,11 @@ function Initialize-McpSession {
         Reads MCP connection settings from AGENTS-README-FIRST.yaml, or from -BaseUrl and
         -ApiKey when both overrides are supplied, then stores the resolved base URL, API key,
         workspace header, agent identity, model identifier, and reusable session slug in
-        module-scoped state. The function performs a best-effort /health request and emits a
-        warning if that request fails, but it still initializes local module state.
+        module-scoped state. When the marker file is used, the function verifies the marker
+        signature before contacting the server. The function then calls /health with a random
+        nonce and requires the response to echo that exact nonce. If signature or nonce
+        verification fails, the function emits MCP_UNTRUSTED, clears module connection state,
+        and throws before any follow-on MCP usage can occur.
 
         This function does not create a session-log record, does not POST to
         /mcpserver/sessionlog, and does not return a session object. Its only return value is
@@ -85,27 +316,31 @@ function Initialize-McpSession {
         [string]$ApiKey
     )
 
+    $signatureVerified = $false
+    $verifiedAtUtc = $null
+
     if ($BaseUrl -and $ApiKey) {
         $script:McpBaseUrl = $BaseUrl.TrimEnd('/')
         $script:McpApiKey  = $ApiKey
+        if ([string]::IsNullOrWhiteSpace($script:McpWorkspacePath)) {
+            $script:McpWorkspacePath = (Get-Location).Path
+        }
     } else {
         if (-not $MarkerPath) {
-            $dir = (Get-Location).Path
-            while ($dir) {
-                $candidate = Join-Path $dir "AGENTS-README-FIRST.yaml"
-                if (Test-Path $candidate) { $MarkerPath = $candidate; break }
-                $parent = Split-Path $dir -Parent
-                if (-not $parent -or $parent -eq $dir) { break }
-                $dir = $parent
-            }
+            $MarkerPath = Find-McpMarkerFile
         }
         if (-not $MarkerPath -or -not (Test-Path $MarkerPath)) {
             throw "AGENTS-README-FIRST.yaml not found. Provide -MarkerPath, or run from within a workspace."
         }
-        $content = Get-Content $MarkerPath -Raw
-        $script:McpBaseUrl       = ([regex]::Match($content, 'baseUrl:\s*(\S+)')).Groups[1].Value
-        $script:McpApiKey        = ([regex]::Match($content, 'apiKey:\s*(\S+)')).Groups[1].Value
-        $script:McpWorkspacePath = ([regex]::Match($content, 'workspacePath:\s*(.+)')).Groups[1].Value.Trim()
+        $marker = ConvertFrom-McpMarkerContent -Content (Get-Content -LiteralPath $MarkerPath -Raw)
+        if (-not (Test-McpMarkerSignature -Marker $marker)) {
+            Throw-McpUntrusted -Reason "Marker signature verification failed."
+        }
+
+        $signatureVerified = $true
+        $script:McpBaseUrl = ([string]$marker.baseUrl).TrimEnd('/')
+        $script:McpApiKey = [string]$marker.apiKey
+        $script:McpWorkspacePath = [string]$marker.workspacePath
     }
 
     $script:McpHeaders = @{
@@ -114,16 +349,29 @@ function Initialize-McpSession {
         "X-Workspace-Path" = $script:McpWorkspacePath
     }
 
-    # Verify connectivity
     try {
-        $health = Invoke-RestMethod -Uri "$($script:McpBaseUrl)/health" -TimeoutSec 5
-        Write-Host "Connected to MCP server at $($script:McpBaseUrl) - status: $($health.status)" -ForegroundColor Green
+        $handshake = Invoke-McpTrustedHealthCheck -BaseUrl $script:McpBaseUrl
+        $verifiedAtUtc = $handshake.VerifiedAtUtc
+        Write-Host "Connected to MCP server at $($script:McpBaseUrl) - status: $($handshake.Status)" -ForegroundColor Green
     } catch {
-        Write-Warning "MCP server at $($script:McpBaseUrl) is not responding: $_"
+        if ($_.Exception.Message -like 'MCP_UNTRUSTED:*') {
+            throw
+        }
+
+        Throw-McpUntrusted -Reason "The /health trust handshake failed: $($_.Exception.Message)"
     }
 
     $script:McpSessionAgent = $Agent.Trim()
     $script:McpSessionModel = $Model.Trim()
+    if ($signatureVerified) {
+        Set-McpPendingTrustBootstrapNote `
+            -Message "Agent successfully trusted MCP Server at $verifiedAtUtc via nonce and signature verification." `
+            -RecordedAtUtc $verifiedAtUtc
+    } else {
+        Set-McpPendingTrustBootstrapNote `
+            -Message "Agent established MCP connectivity at $verifiedAtUtc via nonce verification using explicit connection overrides." `
+            -RecordedAtUtc $verifiedAtUtc
+    }
     $script:McpSessionSlug = Initialize-McpSessionSlugState -Agent $script:McpSessionAgent -Model $script:McpSessionModel
     return $script:McpSessionSlug
 }
@@ -553,6 +801,22 @@ function Add-McpSessionTurn {
         blockers               = [System.Collections.Generic.List[string]]::new($Blockers)
         actions                = [System.Collections.Generic.List[object]]::new()
         processingDialog       = [System.Collections.Generic.List[object]]::new()
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace($script:McpTrustBootstrapPendingNote)) {
+        $turn.processingDialog.Add([PSCustomObject]@{
+            timestamp = if ([string]::IsNullOrWhiteSpace($script:McpTrustBootstrapPendingRecordedAt)) {
+                (Get-Date).ToUniversalTime().ToString("o")
+            } else {
+                $script:McpTrustBootstrapPendingRecordedAt
+            }
+            role = "system"
+            content = $script:McpTrustBootstrapPendingNote
+            category = "observation"
+        })
+
+        $script:McpTrustBootstrapPendingNote = $null
+        $script:McpTrustBootstrapPendingRecordedAt = $null
     }
 
     [void]$turns.Add($turn)
@@ -1049,6 +1313,8 @@ function Save-McpSessionState {
         model = $script:McpSessionModel
         slug = $script:McpSessionSlug
         slugGeneratedAt = $slugGeneratedAt
+        pendingTrustNote = $script:McpTrustBootstrapPendingNote
+        pendingTrustRecordedAt = $script:McpTrustBootstrapPendingRecordedAt
         session = Get-McpSessionSerializableObject -Session $Session
     }
 
@@ -1118,6 +1384,13 @@ function Initialize-McpSessionSlugState {
     }
 
     $script:McpSessionSlug = $slug
+    if ($state -and -not [string]::IsNullOrWhiteSpace([string]$state.pendingTrustNote)) {
+        $script:McpTrustBootstrapPendingNote = [string]$state.pendingTrustNote
+    }
+
+    if ($state -and -not [string]::IsNullOrWhiteSpace([string]$state.pendingTrustRecordedAt)) {
+        $script:McpTrustBootstrapPendingRecordedAt = [string]$state.pendingTrustRecordedAt
+    }
 
     $persistedSession = $null
     if ($currentSession) {
@@ -1132,6 +1405,8 @@ function Initialize-McpSessionSlugState {
         model = $Model
         slug = $slug
         slugGeneratedAt = $slugGeneratedAt
+        pendingTrustNote = $script:McpTrustBootstrapPendingNote
+        pendingTrustRecordedAt = $script:McpTrustBootstrapPendingRecordedAt
         session = $persistedSession
     }
 

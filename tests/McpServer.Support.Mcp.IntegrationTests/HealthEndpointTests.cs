@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
@@ -32,5 +33,19 @@ public sealed class HealthEndpointTests : IClassFixture<CustomWebApplicationFact
         var response = await client.GetAsync(new Uri("/", UriKind.Relative)).ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
         Assert.Contains("swagger", response.Headers.Location?.ToString() ?? string.Empty, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>GET /health echoes a caller nonce when one is supplied.</summary>
+    [Fact]
+    public async Task Health_WithNonce_EchoesNonce()
+    {
+        var client = _factory.CreateClient();
+        const string nonce = "test-nonce-123";
+
+        var response = await client.GetAsync(new Uri($"/health?nonce={nonce}", UriKind.Relative)).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var payload = await JsonDocument.ParseAsync(await response.Content.ReadAsStreamAsync().ConfigureAwait(true)).ConfigureAwait(true);
+        Assert.Equal(nonce, payload.RootElement.GetProperty("nonce").GetString());
     }
 }

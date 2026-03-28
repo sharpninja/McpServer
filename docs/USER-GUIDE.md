@@ -109,6 +109,13 @@ Initialize-McpSession -Agent "Codex" -Model "gpt-5.3-codex"
 Initialize-McpTodo
 ```
 
+Bootstrap trust behavior:
+
+- Marker-based initialization now verifies the marker signature before any MCP endpoint is trusted.
+- The signature is self-verifiable: the helper modules recompute the marker HMAC-SHA256 by using the workspace API key in `AGENTS-README-FIRST.yaml` as the verifier.
+- After signature verification succeeds, the helper modules call `/health` with a random nonce and require the response to echo that exact nonce.
+- If signature verification, the `/health` request, or nonce verification fails, the modules emit `MCP_UNTRUSTED`, clear their MCP connection state, and stop before probing any additional MCP endpoints.
+
 Sample session logging flow:
 
 ```powershell
@@ -121,7 +128,7 @@ Update-McpSessionLog -Session $session
 
 Public function contract reference for `McpSession.psm1`:
 
-- `Initialize-McpSession` configures module-scoped connection state and returns only a `System.String` session slug. It does not create a session-log record and it does not return a session object.
+- `Initialize-McpSession` configures module-scoped connection state, verifies the marker signature when a marker file is used, performs the `/health` nonce handshake, and returns only a `System.String` session slug. It does not create a session-log record and it does not return a session object.
 - `New-McpSessionLogSlug` returns only a formatted session ID string. It does not write local files and it does not call the server.
 - `New-McpSessionLog` creates the actual session object, posts it immediately to `/mcpserver/sessionlog`, persists it locally, and returns that session object.
 - `Update-McpSessionLog` pushes the full current session payload to the server. If `-Session` is omitted, it resolves the current persisted session from local state. It does not return a value.

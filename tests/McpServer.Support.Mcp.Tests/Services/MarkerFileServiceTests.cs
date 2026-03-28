@@ -284,6 +284,10 @@ public sealed class MarkerFileServiceTests
             Assert.Contains("serverStartupUtc: /server-startup-utc", yaml);
             Assert.Contains("markerFileTimestamp: /marker-file-timestamp?repoPath={workspacePath}", yaml);
             Assert.Contains("desktop: /mcpserver/desktop", yaml);
+            Assert.Contains("signature:", yaml);
+            Assert.Contains("trust_bootstrap:", yaml);
+            Assert.Contains("verifier: workspace_api_key", yaml);
+            Assert.Contains("health_nonce_parameter: nonce", yaml);
         }
         finally
         {
@@ -352,5 +356,66 @@ public sealed class MarkerFileServiceTests
                 // Best-effort cleanup for temp test directory.
             }
         }
+    }
+
+    /// <summary>
+    /// Verifies that marker-signature payload generation is deterministic for the same marker content.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: FR-MCP-076, TR-MCP-SEC-003.
+    /// Test data: two in-memory marker objects with identical values.
+    /// This data is used to prove that signature verification can be reproduced by bootstrap clients.
+    /// </remarks>
+    [Fact]
+    public void BuildSignaturePayload_WithSameMarkerValues_IsDeterministic()
+    {
+        var marker = new MarkerFile
+        {
+            Port = 7147,
+            BaseUrl = BaseUrl,
+            ApiKey = "marker-key",
+            Endpoints = new MarkerEndpoints
+            {
+                Health = "/health",
+                Swagger = "/swagger/v1/swagger.json",
+                SwaggerUi = "/swagger",
+                McpTransport = "/mcp-transport",
+                SessionLog = "/mcpserver/sessionlog",
+                SessionLogDialog = "/mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog",
+                ContextSearch = "/mcpserver/context/search",
+                ContextPack = "/mcpserver/context/pack",
+                ContextSources = "/mcpserver/context/sources",
+                Todo = "/mcpserver/todo",
+                Repo = "/mcpserver/repo",
+                Desktop = "/mcpserver/desktop",
+                GitHub = "/mcpserver/gh",
+                Tools = "/mcpserver/tools",
+                Workspace = "/mcpserver/workspace",
+                ServerStartupUtc = "/server-startup-utc",
+                MarkerFileTimestamp = "/marker-file-timestamp?repoPath={workspacePath}",
+            },
+            Workspace = "test",
+            WorkspacePath = @"C:\test",
+            Pid = 123,
+            StartedAt = "2026-03-28T16:00:00.0000000Z",
+            MarkerWrittenAtUtc = "2026-03-28T16:00:00.0000000Z",
+            ServerStartedAtUtc = "2026-03-28T15:59:00.0000000Z",
+            Signature = new MarkerSignature
+            {
+                Algorithm = "HMAC-SHA256",
+                Canonicalization = MarkerFileService.MarkerSignatureCanonicalization,
+                Verifier = MarkerFileService.MarkerSignatureVerifier,
+            },
+            TrustBootstrap = new MarkerTrustBootstrap(),
+            Prompt = "Prompt",
+        };
+
+        var payloadA = MarkerFileService.BuildSignaturePayload(marker);
+        var payloadB = MarkerFileService.BuildSignaturePayload(marker);
+        var signatureA = MarkerFileService.ComputeMarkerSignature(marker);
+        var signatureB = MarkerFileService.ComputeMarkerSignature(marker);
+
+        Assert.Equal(payloadA, payloadB);
+        Assert.Equal(signatureA, signatureB);
     }
 }

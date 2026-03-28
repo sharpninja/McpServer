@@ -15,6 +15,8 @@ DataFolder: "."
 Mcp:
   DatabaseProvider: sqlite
   PostgresConnectionString: ""
+  SqlServerConnectionString: ""
+  DatabaseMigrationsAssembly: ""
   Port: 7147
   DataSource: mcp.db
   DataDirectory: "."

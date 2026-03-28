@@ -24,7 +24,6 @@ using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Web;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Http.Resilience;
 using NetEscapades.Configuration.Yaml;
@@ -146,44 +145,7 @@ else
 }
 
 builder.AddServiceDefaults();
-
-if (builder.Environment.IsEnvironment("Test"))
-{
-    builder.Services.AddDbContext<McpDbContext>(options =>
-    {
-        options.UseInMemoryDatabase("mcp-tests");
-        options.EnableSensitiveDataLogging();
-    }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
-}
-else
-{
-    var databaseProvider = (McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "DatabaseProvider") ?? "sqlite")
-        .Trim()
-        .ToUpperInvariant();
-
-    if (databaseProvider is "POSTGRES" or "POSTGRESQL" or "NPGSQL")
-    {
-        var postgresConnectionString = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "PostgresConnectionString")
-            ?? builder.Configuration.GetConnectionString("Mcp");
-
-        if (string.IsNullOrWhiteSpace(postgresConnectionString))
-            throw new InvalidOperationException("Mcp:PostgresConnectionString (or ConnectionStrings:Mcp) is required when Mcp:DatabaseProvider is postgres.");
-
-        builder.Services.AddDbContext<McpDbContext>(options =>
-        {
-            options.UseNpgsql(postgresConnectionString);
-            options.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
-        }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
-    }
-    else
-    {
-        var dataSource = McpInstanceResolver.ResolveSqliteDataSource(builder.Configuration, instanceName);
-        builder.Services.AddDbContext<McpDbContext>(options =>
-        {
-            options.UseSqlite($"Data Source={dataSource}");
-        }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
-    }
-}
+builder.Services.AddConfiguredMcpDbContext(builder.Configuration, instanceName, builder.Environment.IsEnvironment("Test"));
 
 builder.Services.Configure<IngestionOptions>(builder.Configuration.GetSection("Mcp"));
 builder.Services.Configure<GraphRagOptions>(builder.Configuration.GetSection(GraphRagOptions.SectionName));
