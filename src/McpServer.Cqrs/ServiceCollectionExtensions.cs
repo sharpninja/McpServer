@@ -34,7 +34,7 @@ public static class ServiceCollectionExtensions
     /// <returns>The service collection for chaining.</returns>
     public static IServiceCollection AddCqrsLoggerProvider(this IServiceCollection services)
     {
-        services.AddSingleton<ILoggerProvider>(sp => sp.GetRequiredService<Dispatcher>());
+        services.AddSingleton<ILoggerProvider>(sp => new DeferredDispatcherLoggerProvider(() => sp.GetRequiredService<Dispatcher>()));
         return services;
     }
 
@@ -93,5 +93,52 @@ public static class ServiceCollectionExtensions
         services.AddCqrsDispatcher();
         services.AddCqrsHandlers(handlerAssemblies);
         return services;
+    }
+}
+
+internal sealed class DeferredDispatcherLoggerProvider : ILoggerProvider
+{
+    private readonly Func<Dispatcher> _dispatcherFactory;
+
+    public DeferredDispatcherLoggerProvider(Func<Dispatcher> dispatcherFactory)
+    {
+        _dispatcherFactory = dispatcherFactory;
+    }
+
+    public ILogger CreateLogger(string categoryName) => new DeferredDispatcherLogger(_dispatcherFactory, categoryName);
+
+    public void Dispose()
+    {
+    }
+}
+
+internal sealed class DeferredDispatcherLogger : ILogger
+{
+    private readonly Func<Dispatcher> _dispatcherFactory;
+    private readonly string _categoryName;
+    private ILogger? _inner;
+
+    public DeferredDispatcherLogger(Func<Dispatcher> dispatcherFactory, string categoryName)
+    {
+        _dispatcherFactory = dispatcherFactory;
+        _categoryName = categoryName;
+    }
+
+    public IDisposable? BeginScope<TState>(TState state) where TState : notnull => GetInnerLogger().BeginScope(state);
+
+    public bool IsEnabled(LogLevel logLevel) => GetInnerLogger().IsEnabled(logLevel);
+
+    public void Log<TState>(
+        LogLevel logLevel,
+        EventId eventId,
+        TState state,
+        Exception? exception,
+        Func<TState, Exception?, string> formatter)
+        => GetInnerLogger().Log(logLevel, eventId, state, exception, formatter);
+
+    private ILogger GetInnerLogger()
+    {
+        _inner ??= _dispatcherFactory().CreateLogger(_categoryName);
+        return _inner;
     }
 }
