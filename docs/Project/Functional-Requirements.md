@@ -513,3 +513,23 @@ This cache-discovery behavior SHALL remain backward compatible with the existing
 
 **Covered by:** `tools/powershell/McpSession.psm1`
 
+## FR-MCP-076 Marker File Trust Bootstrap and Session Authenticity Validation
+
+The server shall render a trust-bootstrap contract into `AGENTS-README-FIRST.yaml` that instructs agents to verify the marker signature, perform a nonce-based `/health` challenge, and treat any signature or nonce mismatch as `MCP_UNTRUSTED`.
+
+When trust validation fails, the bootstrap flow shall stop using MCP services and shall not probe additional MCP endpoints. The marker contract shall remain explicit enough for `McpSession`, `McpTodo`, and `McpContext` to follow the same verified bootstrap sequence without diverging on trust semantics.
+
+**Technical Implementation:** [TR-MCP-SEC-003](./Technical-Requirements.md#tr-mcp-sec-003) | [TR-MCP-AGENT-014](./Technical-Requirements.md#tr-mcp-agent-014) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `src/McpServer.Services/Services/MarkerFileService.cs`, `templates/prompt-templates.yaml`, `src/McpServer.ServiceDefaults/Extensions.cs`, `tools/powershell/McpSession.psm1`, `tools/powershell/McpTodo.psm1`, `tools/powershell/McpContext.psm1`, `docs/context/module-bootstrap.md`, `docs/USER-GUIDE.md`
+
+## FR-MCP-077 Optional Native At-Rest Encryption for Workspace Databases
+
+The server shall support optional configuration-driven at-rest encryption for workspace databases using only provider-native or provider-extension facilities.
+
+When encryption settings change, the server shall preserve existing data by using provider-specific no-data-loss transition procedures for enable, disable, and provider-supported protector or key-state changes. The encryption contract shall remain explicit enough that startup can detect configuration-versus-live-state mismatches and require a deliberate transition workflow instead of silently changing data protection state.
+
+**Technical Implementation:** [TR-MCP-SEC-004](./Technical-Requirements.md#tr-mcp-sec-004) | [TR-MCP-CFG-007](./Technical-Requirements.md#tr-mcp-cfg-007) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs`, `src/McpServer.Storage/McpDbContextFactory.cs`, `src/McpServer.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs`, `src/McpServer.Support.Mcp/Program.cs`, `src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs`, `scripts/Invoke-McpDatabaseEncryptionTransition.ps1`, `src/McpServer.Storage.SqliteMigrations`, `src/McpServer.Storage.PostgreSqlMigrations`, `src/McpServer.Storage.SqlServerMigrations`, `docs/USER-GUIDE.md`
+

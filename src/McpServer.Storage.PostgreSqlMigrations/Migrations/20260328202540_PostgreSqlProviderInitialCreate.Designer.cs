@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 {
     [DbContext(typeof(McpDbContext))]
-    [Migration("20260328165500_PostgreSqlProviderBaseline")]
-    partial class PostgreSqlProviderBaseline
+    [Migration("20260328202540_PostgreSqlProviderInitialCreate")]
+    partial class PostgreSqlProviderInitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

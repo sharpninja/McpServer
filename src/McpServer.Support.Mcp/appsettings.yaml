@@ -22,6 +22,26 @@ VectorIndex:
   EfSearch: 50
   IndexPath: mcp-data/vector.idx
 Mcp:
+  Database:
+    Provider: sqlite
+    MigrationsAssembly: ''
+    Sqlite:
+      DataSource: mcp.db
+    PostgreSql:
+      ConnectionString: ''
+    SqlServer:
+      ConnectionString: ''
+    Encryption:
+      Enabled: false
+      Sqlite:
+        Key: ''
+        SeeToolPath: ''
+      PostgreSql:
+        KeyProvider: ''
+        PrincipalKey: ''
+      SqlServer:
+        CertificateName: ''
+        DatabaseEncryptionKeyName: ''
   DatabaseProvider: sqlite
   PostgresConnectionString: ''
   SqlServerConnectionString: ''

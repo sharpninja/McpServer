@@ -39,7 +39,10 @@ internal static class McpDatabaseConfigurationResolver
             return;
         }
 
-        var providerOptions = ResolveProviderOptions(configuration, instanceName);
+        var runtimeOptions = ResolveRuntimeOptions(configuration, instanceName);
+        var providerOptions = runtimeOptions.ProviderOptions;
+        services.AddSingleton(runtimeOptions);
+        services.AddSingleton(providerOptions);
         services.AddDbContext<McpDbContext>(options =>
         {
             McpDatabaseProviderFactory.Configure(options, providerOptions);
@@ -53,12 +56,23 @@ internal static class McpDatabaseConfigurationResolver
     /// <param name="instanceName">Optional MCP instance name.</param>
     /// <returns>The resolved provider options.</returns>
     public static McpDatabaseProviderOptions ResolveProviderOptions(IConfiguration configuration, string? instanceName)
+        => ResolveRuntimeOptions(configuration, instanceName).ProviderOptions;
+
+    /// <summary>
+    /// Resolves the configured provider, connection string, and native encryption settings into one runtime contract.
+    /// </summary>
+    /// <param name="configuration">Application configuration.</param>
+    /// <param name="instanceName">Optional MCP instance name.</param>
+    /// <returns>The resolved runtime options.</returns>
+    public static McpDatabaseRuntimeOptions ResolveRuntimeOptions(IConfiguration configuration, string? instanceName)
     {
         ArgumentNullException.ThrowIfNull(configuration);
 
-        var requestedProvider = McpInstanceResolver.GetEffectiveMcpValue(configuration, instanceName, "DatabaseProvider") ?? "sqlite";
+        var requestedProvider = ResolveRequestedProvider(configuration, instanceName);
         var strategy = McpDatabaseProviderFactory.ResolveStrategy(requestedProvider);
-        var migrationsAssembly = McpInstanceResolver.GetEffectiveMcpValue(configuration, instanceName, "DatabaseMigrationsAssembly");
+        var migrationsAssembly = GetEffectiveDatabaseValue(configuration, instanceName, "MigrationsAssembly")
+            ?? McpInstanceResolver.GetEffectiveMcpValue(configuration, instanceName, "DatabaseMigrationsAssembly")
+            ?? Environment.GetEnvironmentVariable("MCP_DATABASE_MIGRATIONS_ASSEMBLY");
 
         var connectionString = strategy.Kind switch
         {
@@ -68,7 +82,9 @@ internal static class McpDatabaseConfigurationResolver
             _ => throw new InvalidOperationException($"Unsupported MCP database provider '{requestedProvider}'."),
         };
 
-        return McpDatabaseProviderFactory.CreateOptions(requestedProvider, connectionString, migrationsAssembly);
+        return new McpDatabaseRuntimeOptions(
+            McpDatabaseProviderFactory.CreateOptions(requestedProvider, connectionString, migrationsAssembly),
+            ResolveEncryptionOptions(configuration, instanceName));
     }
 
     private static bool ShouldUseInMemoryDatabase(IConfiguration configuration, string? instanceName)
@@ -79,13 +95,29 @@ internal static class McpDatabaseConfigurationResolver
 
     private static string ResolveSqliteConnectionString(IConfiguration configuration, string? instanceName)
     {
+        var configuredConnectionString = GetEffectiveDatabaseValue(configuration, instanceName, "Sqlite:ConnectionString");
+        if (!string.IsNullOrWhiteSpace(configuredConnectionString))
+        {
+            return configuredConnectionString;
+        }
+
+        var configuredDataSource = GetEffectiveDatabaseValue(configuration, instanceName, "Sqlite:DataSource")
+            ?? Environment.GetEnvironmentVariable("MCP_SQLITE_DATA_SOURCE");
+        if (!string.IsNullOrWhiteSpace(configuredDataSource))
+        {
+            return configuredDataSource.Contains('=', StringComparison.Ordinal)
+                ? configuredDataSource
+                : $"Data Source={McpInstanceResolver.ResolveDataPath(configuration, instanceName, configuredDataSource)}";
+        }
+
         var dataSource = McpInstanceResolver.ResolveSqliteDataSource(configuration, instanceName);
         return $"Data Source={dataSource}";
     }
 
     private static string ResolvePostgreSqlConnectionString(IConfiguration configuration, string? instanceName)
     {
-        var configured = McpInstanceResolver.GetEffectiveMcpValue(configuration, instanceName, "PostgresConnectionString")
+        var configured = GetEffectiveDatabaseValue(configuration, instanceName, "PostgreSql:ConnectionString")
+            ?? McpInstanceResolver.GetEffectiveMcpValue(configuration, instanceName, "PostgresConnectionString")
             ?? configuration.GetConnectionString("Mcp");
 #pragma warning disable CS0618
         var resolved = PostgresConnectionStringResolver.ResolveConnectionString(
@@ -106,7 +138,8 @@ internal static class McpDatabaseConfigurationResolver
 
     private static string ResolveSqlServerConnectionString(IConfiguration configuration, string? instanceName)
     {
-        var resolved = McpInstanceResolver.GetEffectiveMcpValue(configuration, instanceName, "SqlServerConnectionString")
+        var resolved = GetEffectiveDatabaseValue(configuration, instanceName, "SqlServer:ConnectionString")
+            ?? McpInstanceResolver.GetEffectiveMcpValue(configuration, instanceName, "SqlServerConnectionString")
             ?? configuration.GetConnectionString("McpSqlServer")
             ?? Environment.GetEnvironmentVariable("MCP_SQLSERVER_CONNECTION_STRING");
 
@@ -117,5 +150,47 @@ internal static class McpDatabaseConfigurationResolver
         }
 
         return resolved;
+    }
+
+    private static string ResolveRequestedProvider(IConfiguration configuration, string? instanceName)
+        => GetEffectiveDatabaseValue(configuration, instanceName, "Provider")
+            ?? McpInstanceResolver.GetEffectiveMcpValue(configuration, instanceName, "DatabaseProvider")
+            ?? Environment.GetEnvironmentVariable("MCP_DATABASE_PROVIDER")
+            ?? "sqlite";
+
+    private static McpDatabaseEncryptionOptions ResolveEncryptionOptions(IConfiguration configuration, string? instanceName)
+    {
+        var enabledRaw = GetEffectiveDatabaseValue(configuration, instanceName, "Encryption:Enabled")
+            ?? Environment.GetEnvironmentVariable("MCP_DATABASE_ENCRYPTION_ENABLED");
+        var enabled = bool.TryParse(enabledRaw, out var parsedEnabled) && parsedEnabled;
+
+        return new McpDatabaseEncryptionOptions(
+            enabled,
+            GetEffectiveDatabaseValue(configuration, instanceName, "Encryption:Sqlite:Key")
+                ?? Environment.GetEnvironmentVariable("MCP_SQLITE_ENCRYPTION_KEY"),
+            GetEffectiveDatabaseValue(configuration, instanceName, "Encryption:Sqlite:SeeToolPath")
+                ?? Environment.GetEnvironmentVariable("MCP_SQLITE_SEE_TOOL_PATH"),
+            GetEffectiveDatabaseValue(configuration, instanceName, "Encryption:PostgreSql:KeyProvider")
+                ?? Environment.GetEnvironmentVariable("MCP_POSTGRES_TDE_KEY_PROVIDER"),
+            GetEffectiveDatabaseValue(configuration, instanceName, "Encryption:PostgreSql:PrincipalKey")
+                ?? Environment.GetEnvironmentVariable("MCP_POSTGRES_TDE_PRINCIPAL_KEY"),
+            GetEffectiveDatabaseValue(configuration, instanceName, "Encryption:SqlServer:CertificateName")
+                ?? Environment.GetEnvironmentVariable("MCP_SQLSERVER_TDE_CERTIFICATE"),
+            GetEffectiveDatabaseValue(configuration, instanceName, "Encryption:SqlServer:DatabaseEncryptionKeyName")
+                ?? Environment.GetEnvironmentVariable("MCP_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY"));
+    }
+
+    private static string? GetEffectiveDatabaseValue(IConfiguration configuration, string? instanceName, string nestedKey)
+    {
+        if (!string.IsNullOrWhiteSpace(instanceName))
+        {
+            var instanceValue = configuration[$"Mcp:Instances:{instanceName}:Database:{nestedKey}"];
+            if (!string.IsNullOrWhiteSpace(instanceValue))
+            {
+                return instanceValue;
+            }
+        }
+
+        return configuration[$"Mcp:Database:{nestedKey}"];
     }
 }

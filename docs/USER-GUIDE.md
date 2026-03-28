@@ -55,6 +55,7 @@ Get-Service McpServer
 - `DataFolder`
 - `Embedding:*` and `VectorIndex:*`
 - `Mcp:Port`, `Mcp:DataSource`, `Mcp:DataDirectory`
+- `Mcp:Database:*` — canonical database provider, provider connection settings, migration assembly override, and native at-rest encryption settings
 - `Mcp:RepoRoot`, `Mcp:RepoAllowlist`
 - `Mcp:TodoFilePath`, `Mcp:TodoStorage:*`
 - `Mcp:GraphRag:*`
@@ -66,6 +67,10 @@ Get-Service McpServer
 - `VoiceConversation:DefaultExecutionStrategy` (`hosted-agentframework` or `copilot-cli`)
 - `VoiceConversation:ModelApiKeyEnvironmentVariableName`
 - `GET|PATCH /mcpserver/configuration` (PATCH requires admin role)
+
+Legacy flat keys such as `Mcp:DatabaseProvider`, `Mcp:PostgresConnectionString`,
+`Mcp:SqlServerConnectionString`, and `Mcp:DatabaseMigrationsAssembly` remain supported as
+fallbacks, but new configuration should prefer the nested `Mcp:Database:*` surface.
 
 ### Configuration precedence
 
@@ -83,6 +88,8 @@ Key fields:
 - endpoint map (`health`, `swagger`, `todo`, `sessionLog`, etc.)
 - `workspacePath`, `workspace`
 - `serverStartedAtUtc`, `markerWrittenAtUtc`
+- `signature`
+- `trust_bootstrap`
 
 Example use:
 
@@ -91,6 +98,176 @@ $marker = Get-Content .\AGENTS-README-FIRST.yaml -Raw
 $apiKey = ([regex]::Match($marker, 'apiKey:\s*(\S+)')).Groups[1].Value
 Invoke-RestMethod -Uri "http://localhost:7147/mcpserver/todo" -Headers @{ "X-Api-Key" = $apiKey }
 ```
+
+### Database provider configuration
+
+Canonical provider configuration now lives under `Mcp:Database:*`.
+
+Example SQLite configuration:
+
+```yaml
+Mcp:
+  Database:
+    Provider: sqlite
+    Sqlite:
+      DataSource: mcp.db
+```
+
+Example SQL Server configuration:
+
+```yaml
+Mcp:
+  Database:
+    Provider: sqlserver
+    SqlServer:
+      ConnectionString: "Server=(localdb)\\MSSQLLocalDB;Database=mcp.db;Trusted_Connection=True;TrustServerCertificate=True"
+```
+
+Example PostgreSQL configuration:
+
+```yaml
+Mcp:
+  Database:
+    Provider: postgresql
+    PostgreSql:
+      ConnectionString: "Host=localhost;Port=5432;Database=mcp;Username=postgres;Password=postgres"
+```
+
+Supported environment-variable overrides:
+
+- `MCP_DATABASE_PROVIDER`
+- `MCP_DATABASE_MIGRATIONS_ASSEMBLY`
+- `MCP_SQLITE_DATA_SOURCE`
+- `MCP_POSTGRES_CONNECTION_STRING`
+- `MCP_SQLSERVER_CONNECTION_STRING`
+
+Provider integration-test notes:
+
+- SQLite clean-database tests create isolated temp database files automatically.
+- SQL Server provider and migration tests use per-run LocalDB instances created and deleted by the test harness.
+- PostgreSQL provider tests are opt-in and require `MCP_TEST_POSTGRES_CONNECTION_STRING` plus `MCP_TEST_POSTGRES_ADMIN_CONNECTION_STRING`.
+- SQL Server LocalDB is not sufficient for TDE validation.
+
+### Native at-rest encryption configuration
+
+Database encryption is configuration-driven and uses only provider-native or provider-extension
+facilities:
+
+- SQLite: SQLite SEE
+- PostgreSQL: `pg_tde` on Percona Server for PostgreSQL
+- SQL Server: native TDE
+
+Canonical appsettings surface:
+
+```yaml
+Mcp:
+  Database:
+    Provider: sqlserver
+    SqlServer:
+      ConnectionString: "Server=sql01;Database=mcp;Integrated Security=True;TrustServerCertificate=True"
+    Encryption:
+      Enabled: true
+      Sqlite:
+        Key: ""
+        SeeToolPath: ""
+      PostgreSql:
+        KeyProvider: ""
+        PrincipalKey: ""
+      SqlServer:
+        CertificateName: "McpServerTdeCert"
+        DatabaseEncryptionKeyName: "McpServerTdeKey"
+```
+
+Supported environment-variable overrides:
+
+- `MCP_DATABASE_ENCRYPTION_ENABLED`
+- `MCP_SQLITE_ENCRYPTION_KEY`
+- `MCP_SQLITE_SEE_TOOL_PATH`
+- `MCP_POSTGRES_TDE_KEY_PROVIDER`
+- `MCP_POSTGRES_TDE_PRINCIPAL_KEY`
+- `MCP_SQLSERVER_TDE_CERTIFICATE`
+- `MCP_SQLSERVER_TDE_DATABASE_ENCRYPTION_KEY`
+
+Startup behavior:
+
+- The server now resolves desired provider and encryption state from appsettings and environment variables.
+- Provider-owned migrations are applied through the provider migration assemblies.
+- After migration, startup validates the live encryption state against configuration.
+- If configured encryption and live database state do not match, startup fails with an actionable error instead of silently enabling, disabling, or bypassing encryption.
+
+### Encryption transition procedures
+
+Use these procedures when `Mcp:Database:Encryption:Enabled` changes, or when the provider's
+native protection state must be rotated or removed. The server intentionally does not perform
+these transitions automatically during normal startup.
+
+Built-in maintenance command:
+
+```powershell
+pwsh.exe ./scripts/Invoke-McpDatabaseEncryptionTransition.ps1 -Operation Verify
+pwsh.exe ./scripts/Invoke-McpDatabaseEncryptionTransition.ps1 -Operation Enable
+pwsh.exe ./scripts/Invoke-McpDatabaseEncryptionTransition.ps1 -Operation Disable
+```
+
+Execution notes:
+
+- The PowerShell wrapper calls the built-in `--database-encryption-transition` command in `McpServer.Support.Mcp`.
+- The default mode is dry-run planning only. Add `-Execute` to mutate the database.
+- PostgreSQL and SQL Server execute mode require `-BackupPath` so rollback material exists before encryption state changes.
+- SQL Server `-BackupPath` is evaluated by SQL Server on the database host, not by the local client process.
+- SQLite disable operations often require `-CurrentKey` because the new disabled configuration no longer carries the old key.
+- Use `-Instance` or `MCP_INSTANCE` when the target database settings live under an MCP instance override.
+- Invalid maintenance-command usage returns a non-zero process exit code.
+- Console output and optional JSON reports redact SQLite key material instead of echoing passphrases.
+
+Example executions:
+
+```powershell
+pwsh.exe ./scripts/Invoke-McpDatabaseEncryptionTransition.ps1 `
+  -Operation Enable `
+  -BackupPath E:\backups\mcp-before-tde.bak `
+  -Execute
+
+pwsh.exe ./scripts/Invoke-McpDatabaseEncryptionTransition.ps1 `
+  -Operation Disable `
+  -CurrentKey "old-sqlite-passphrase" `
+  -Execute
+```
+
+#### SQLite SEE
+
+1. Stop the MCP server.
+2. Run the dry-run transition command first and confirm the backup path, SEE CLI path, and target operation are correct.
+3. Execute the transition command. The tool creates a backup copy, creates a working copy, applies SEE `.text-rekey`, forces nonce reservation with `.filectrl reserve_bytes 12` plus `VACUUM` on enable, verifies `PRAGMA integrity_check`, inspects `.dbinfo`, and swaps the verified copy into place only after validation passes.
+4. Retain the original backup until post-cutover validation succeeds.
+5. Update `Mcp:Database:Encryption:Enabled` and any SQLite encryption key settings, then restart the server.
+
+Current runtime note:
+
+- The server validates the configured SQLite encrypted mode, but an encrypted SQLite deployment still requires a SEE-enabled native SQLite runtime in the host environment. If that runtime is not provisioned, startup fails explicitly.
+
+#### PostgreSQL `pg_tde`
+
+1. Stop the MCP server or otherwise quiesce application writes.
+2. Run the dry-run transition command first and confirm the backup path, `pg_dump` path, and target operation are correct.
+3. Ensure the target runtime is Percona Server for PostgreSQL with `pg_tde` installed and that the configured key provider and principal key are available.
+4. Execute the transition command. The tool runs `pg_dump -Fc`, rewrites each application table to `tde_heap` on enable or back to `heap` on disable, runs `SELECT count(*)` after each rewrite, and then verifies relation state with `pg_tde_is_encrypted(...)`.
+5. Retain the backup archive until post-cutover validation succeeds.
+6. Update `Mcp:Database:Encryption:Enabled`, `KeyProvider`, and `PrincipalKey` configuration as needed, then restart the server.
+
+#### SQL Server TDE
+
+1. Stop the MCP server or otherwise quiesce writes.
+2. Run the dry-run transition command first and confirm the SQL Server backup path and certificate name are correct.
+3. Take or retain a backup of the TDE certificate/private key material. The transition command does not remove or export certificates for you.
+4. Execute the transition command. The tool runs a copy-only `BACKUP DATABASE`, verifies the configured certificate exists, creates the database encryption key when needed, runs `ALTER DATABASE ... SET ENCRYPTION ON` or `OFF`, and polls `sys.dm_database_encryption_keys` until the target state is reached.
+5. Keep certificates and keys long enough to preserve restore and log-backup compatibility.
+6. Update `Mcp:Database:Encryption:Enabled`, `CertificateName`, and `DatabaseEncryptionKeyName`, then restart the server.
+
+SQL Server LocalDB note:
+
+- LocalDB is supported for SQL Server provider and migration integration tests only.
+- LocalDB cannot validate TDE. Use a separate Developer or Standard SQL Server target for SQL Server encryption validation and transition work.
 
 ### PowerShell helper modules (McpSession.psm1 + McpTodo.psm1)
 

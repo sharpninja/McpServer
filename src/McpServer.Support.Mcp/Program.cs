@@ -10,6 +10,7 @@ using System.Text.Json;
 using McpServer.Common.Copilot;
 using McpServer.Common.Copilot.Extensions;
 using McpServer.GraphRag;
+using McpServer.Support.Mcp.DatabaseMaintenance;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Logging;
@@ -21,6 +22,7 @@ using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Controllers;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
+using McpServer.Support.Mcp.Storage.Database;
 using McpServer.Support.Mcp.Web;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +41,22 @@ using Serilog.Sinks.File;
 if (IsStdioTransportRequested(args))
 {
     await McpStdioHost.RunAsync(args, default).ConfigureAwait(false);
+    return;
+}
+
+if (McpDatabaseEncryptionTransitionCommand.TryParse(args, out var transitionCommand, out var transitionParseError))
+{
+    if (transitionCommand is null)
+    {
+        Console.Error.WriteLine(transitionParseError ?? McpDatabaseEncryptionTransitionCommand.GetUsageText());
+        Environment.ExitCode = 1;
+        return;
+    }
+
+    var exitCode = await McpDatabaseEncryptionTransitionCommand
+        .RunAsync(transitionCommand, default)
+        .ConfigureAwait(false);
+    Environment.ExitCode = exitCode;
     return;
 }
 
@@ -464,7 +482,9 @@ if (!app.Environment.IsEnvironment("Test"))
     using (var scope = app.Services.CreateScope())
     {
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        await db.Database.MigrateAsync().ConfigureAwait(false);
+        var runtimeOptions = scope.ServiceProvider.GetRequiredService<McpDatabaseRuntimeOptions>();
+        await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, runtimeOptions.ProviderOptions).ConfigureAwait(false);
+        await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions).ConfigureAwait(false);
     }
 
     using (var scope = app.Services.CreateScope())

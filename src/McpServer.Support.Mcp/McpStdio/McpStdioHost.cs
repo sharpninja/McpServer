@@ -9,6 +9,7 @@ using McpServer.GraphRag;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
+using McpServer.Support.Mcp.Storage.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -187,7 +188,9 @@ public static class McpStdioHost
         using (var scope = host.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-            await db.Database.MigrateAsync(cancellationToken).ConfigureAwait(false);
+            var runtimeOptions = scope.ServiceProvider.GetRequiredService<McpDatabaseRuntimeOptions>();
+            await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, runtimeOptions.ProviderOptions, cancellationToken).ConfigureAwait(false);
+            await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions, cancellationToken).ConfigureAwait(false);
         }
 
         await host.RunAsync(cancellationToken).ConfigureAwait(false);
