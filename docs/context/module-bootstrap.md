@@ -18,9 +18,15 @@ Invoke-RestMethod -Uri "http://localhost:7147/mcpserver/tools/search?keyword=tod
 # 2. Import and initialize
 Import-Module ./McpSession.psm1
 Import-Module ./McpTodo.psm1
-Initialize-McpSession -Agent "Copilotcli" -Model "gpt-5.3-codex"  # reads marker file, verifies server health, persists/reuses session state
+$sessionSlug = Initialize-McpSession -Agent "Copilotcli" -Model "gpt-5.3-codex"  # returns only the reusable session-slug string; does not create a session object
 Initialize-McpTodo             # reads marker file, verifies server health
 ```
+
+`Initialize-McpSession` configures module-scoped connection state, performs a best-effort
+health check, and persists or reuses the session-slug metadata in local state files. It does
+not create a session-log record and it does not return a session object. Call
+`New-McpSessionLog` when you need the actual session object that `Add-McpSessionTurn`,
+`Set-McpSessionTurn`, and `Update-McpSessionLog` operate on explicitly.
 
 ## Bash Bootstrap
 

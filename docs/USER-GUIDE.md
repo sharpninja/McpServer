@@ -119,6 +119,19 @@ Set-McpSessionTurn -Session $session -Turn $turn -Response "Docs complete" -Stat
 Update-McpSessionLog -Session $session
 ```
 
+Public function contract reference for `McpSession.psm1`:
+
+- `Initialize-McpSession` configures module-scoped connection state and returns only a `System.String` session slug. It does not create a session-log record and it does not return a session object.
+- `New-McpSessionLogSlug` returns only a formatted session ID string. It does not write local files and it does not call the server.
+- `New-McpSessionLog` creates the actual session object, posts it immediately to `/mcpserver/sessionlog`, persists it locally, and returns that session object.
+- `Update-McpSessionLog` pushes the full current session payload to the server. If `-Session` is omitted, it resolves the current persisted session from local state. It does not return a value.
+- `Get-McpSessionLog` performs a read-only query for recent session-log records and returns the deserialized API response, including paging metadata and the `items` collection.
+- `Add-McpSessionTurn` appends one new turn object to a session and returns that new turn object. If `-NoPush` is not supplied, it also persists the updated session immediately.
+- `Set-McpSessionTurn` updates scalar fields on an existing turn and appends new values to list-valued fields such as `tags`, `contextList`, `designDecisions`, `requirementsDiscovered`, `filesModified`, and `blockers`. It does not replace those collections wholesale, and it does not return a value.
+- `Add-McpAction` appends one structured action object to `Turn.actions`, assigns the next sequential `order`, and returns the new action object.
+- `Add-McpTurnDetail` appends one non-empty string to a supported list-valued turn field and ignores null or whitespace-only values. It does not return a value.
+- `Send-McpDialog` posts one dialog item to the turn dialog endpoint. It does not update the local turn object and it does not return a value.
+
 Sample TODO progress flow:
 
 ```powershell
