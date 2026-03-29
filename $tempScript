@@ -1,0 +1,99 @@
+param()
+$ErrorActionPreference = 'Stop'
+$repoRoot = 'E:\github\McpServer'
+Set-Location $repoRoot
+$results = [System.Collections.Generic.List[object]]::new()
+function Add-Result {
+    param(
+        [string]$Name,
+        [string]$Kind,
+        [bool]$Success,
+        [double]$Seconds,
+        [string]$Details
+    )
+    $results.Add([pscustomobject]@{
+        Name = $Name
+        Kind = $Kind
+        Success = $Success
+        Seconds = [math]::Round($Seconds, 2)
+        Details = $Details
+    }) | Out-Null
+}
+function Invoke-ProcessStep {
+    param(
+        [string]$Name,
+        [string]$FilePath,
+        [string[]]$ArgumentList,
+        [string]$Kind
+    )
+    $sw = [System.Diagnostics.Stopwatch]::StartNew()
+    & $FilePath @ArgumentList
+    $exitCode = $LASTEXITCODE
+    $sw.Stop()
+    if ($exitCode -ne 0) {
+        Add-Result -Name $Name -Kind $Kind -Success $false -Seconds $sw.Elapsed.TotalSeconds -Details "Exit code $exitCode"
+        throw "Step failed: $Name (exit code $exitCode)"
+    }
+    Add-Result -Name $Name -Kind $Kind -Success $true -Seconds $sw.Elapsed.TotalSeconds -Details 'OK'
+}
+function Invoke-PesterStep {
+    param(
+        [string]$Path
+    )
+    $sw = [System.Diagnostics.Stopwatch]::StartNew()
+    $result = Invoke-Pester -Path $Path -Output Detailed -PassThru
+    $sw.Stop()
+    $success = ($result.FailedCount -eq 0)
+    $details = "Passed=$($result.PassedCount); Failed=$($result.FailedCount); Skipped=$($result.SkippedCount)"
+    Add-Result -Name $Path -Kind 'pester' -Success $success -Seconds $sw.Elapsed.TotalSeconds -Details $details
+    if (-not $success) {
+        throw "Pester failed: $Path"
+    }
+}
+$buildProjects = @(
+    'src\\McpServer.Support.Mcp\\McpServer.Support.Mcp.csproj',
+    'src\\McpServer.Client\\McpServer.Client.csproj'
+)
+$testProjects = @(
+    'tests\\McpServer.Client.Tests\\McpServer.Client.Tests.csproj',
+    'tests\\McpServer.Context.Validation\\McpServer.Context.Validation.csproj',
+    'tests\\McpServer.Cqrs.Tests\\McpServer.Cqrs.Tests.csproj',
+    'tests\\McpServer.GitHub.Validation\\McpServer.GitHub.Validation.csproj',
+    'tests\\McpServer.Launcher.Tests\\McpServer.Launcher.Tests.csproj',
+    'tests\\McpServer.McpAgent.Tests\\McpServer.McpAgent.Tests.csproj',
+    'tests\\McpServer.Repo.Validation\\McpServer.Repo.Validation.csproj',
+    'tests\\McpServer.SessionLog.Validation\\McpServer.SessionLog.Validation.csproj',
+    'tests\\McpServer.Support.Mcp.IntegrationTests\\McpServer.Support.Mcp.IntegrationTests.csproj',
+    'tests\\McpServer.Support.Mcp.Tests\\McpServer.Support.Mcp.Tests.csproj',
+    'tests\\McpServer.Todo.Validation\\McpServer.Todo.Validation.csproj',
+    'tests\\McpServer.ToolRegistry.Validation\\McpServer.ToolRegistry.Validation.csproj',
+    'tests\\McpServer.Workspace.Validation\\McpServer.Workspace.Validation.csproj'
+)
+$pesterTests = @(
+    'tools\\powershell\\McpSession.Tests.ps1',
+    'tools\\powershell\\McpTodo.Tests.ps1'
+)
+try {
+    foreach ($project in $buildProjects) {
+        Invoke-ProcessStep -Name $project -FilePath 'dotnet' -ArgumentList @('build', $project, '-c', 'Debug', '--nologo') -Kind 'build'
+    }
+    foreach ($project in $testProjects) {
+        Invoke-ProcessStep -Name $project -FilePath 'dotnet' -ArgumentList @('test', $project, '-c', 'Debug', '--nologo', '--logger', 'console;verbosity=minimal') -Kind 'dotnet-test'
+    }
+    Invoke-ProcessStep -Name 'scripts\\Validate-McpConfig.ps1' -FilePath 'pwsh.exe' -ArgumentList @('-NoLogo', '-NoProfile', '-File', 'scripts\\Validate-McpConfig.ps1') -Kind 'config'
+    foreach ($testPath in $pesterTests) {
+        Invoke-PesterStep -Path $testPath
+    }
+    [pscustomobject]@{
+        Success = $true
+        Results = $results
+    } | ConvertTo-Json -Depth 6
+}
+catch {
+    [pscustomobject]@{
+        Success = $false
+        Error = $_.Exception.Message
+        Results = $results
+    } | ConvertTo-Json -Depth 6
+    exit 1
+}

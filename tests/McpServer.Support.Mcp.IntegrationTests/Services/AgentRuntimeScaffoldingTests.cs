@@ -209,6 +209,7 @@ public sealed class AgentRuntimeScaffoldingTests
     [Fact]
     public void MarkerFileService_BuildTemplateContext_IncludesAgentAdditions()
     {
+        var temporaryPort = IntegrationTestPortAllocator.AllocateTemporaryPort();
         var additions = new List<(string AgentId, string Content)>
         {
             ("planner", "Plan-only guidance"),
@@ -216,7 +217,7 @@ public sealed class AgentRuntimeScaffoldingTests
         };
 
         var context = MarkerFileService.BuildTemplateContext(
-            "http://localhost:7147",
+            IntegrationTestPortAllocator.BuildLoopbackBaseUrl(temporaryPort),
             "abc123",
             workspace: null,
             workspacePath: "C:/repo",

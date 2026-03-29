@@ -1,11 +1,13 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
+using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
@@ -26,6 +28,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
     private HttpClient _client = null!;
     private FileSystemWatcher _settingsWatcher = null!;
     private FileSystemWatcher _markerWatcher = null!;
+    private int _temporaryPort;
 
     public MarkerRegenerationIntegrationTests()
     {
@@ -44,8 +47,8 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         Directory.CreateDirectory(_tempRoot);
         Directory.CreateDirectory(_workspacePath);
 
-        // Seed appsettings.json with a primary workspace whose port is 0
-        // (matches HttpContext.Connection.LocalPort in the in-memory test server).
+        // Seed appsettings.json with a primary workspace. The factory injects a temporary non-standard
+        // MCP port so generated marker content never falls back to the default service port.
         var settings = new
         {
             Mcp = new
@@ -88,6 +91,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
         };
 
         _factory = new MarkerRegenerationFactory(_workspacePath);
+        _temporaryPort = _factory.TemporaryPort;
         _client = _factory.CreateClient();
         TestAuthHelper.AddAuthHeader(_client, _factory.Services);
         return ValueTask.CompletedTask;
@@ -133,7 +137,7 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
 
         var updatedContent = await File.ReadAllTextAsync(_markerPath).ConfigureAwait(true);
         Assert.Contains("CUSTOM GLOBAL PROMPT for testing marker regeneration", updatedContent);
-        Assert.Contains($"http://{System.Net.Dns.GetHostName()}:7147", updatedContent);
+        Assert.Contains(IntegrationTestPortAllocator.BuildHostBaseUrl(_temporaryPort), updatedContent);
     }
 
     [Fact]
@@ -196,8 +200,8 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
 
         // 4. Read the final marker — both prompts should be present.
         var finalContent = await File.ReadAllTextAsync(_markerPath).ConfigureAwait(true);
-        Assert.Contains($"GLOBAL SECTION http://{System.Net.Dns.GetHostName()}:7147", finalContent);
-        Assert.Contains($"WORKSPACE SECTION http://{System.Net.Dns.GetHostName()}:7147", finalContent);
+        Assert.Contains($"GLOBAL SECTION {IntegrationTestPortAllocator.BuildHostBaseUrl(_temporaryPort)}", finalContent);
+        Assert.Contains($"WORKSPACE SECTION {IntegrationTestPortAllocator.BuildHostBaseUrl(_temporaryPort)}", finalContent);
     }
 
     /// <summary>
@@ -315,11 +319,15 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
     private sealed class MarkerRegenerationFactory : WebApplicationFactory<McpApiEntryPoint>
     {
         private readonly string _workspacePath;
+        private readonly int _temporaryPort = IntegrationTestPortAllocator.AllocateTemporaryPort();
 
         public MarkerRegenerationFactory(string workspacePath)
         {
             _workspacePath = workspacePath;
         }
+
+        /// <summary>Gets the temporary MCP port assigned to this marker-regeneration host.</summary>
+        public int TemporaryPort => _temporaryPort;
 
         /// <inheritdoc />
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -337,6 +345,8 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
                     { "Mcp:DataSource", ":memory:" },
+                    { "Mcp:Port", _temporaryPort.ToString(System.Globalization.CultureInfo.InvariantCulture) },
+                    { "Mcp:Tunnel:Port", _temporaryPort.ToString(System.Globalization.CultureInfo.InvariantCulture) },
                     { "Mcp:RepoRoot", _workspacePath },
                     { "Mcp:TodoFilePath", "docs/todo.yaml" },
                     { "Mcp:TodoStorage:Provider", "sqlite" },
@@ -348,6 +358,10 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
             // Re-register it so auto-start writes the initial marker file.
             builder.ConfigureServices(services =>
             {
+                services.RemoveAll<ServerRuntimeInfo>();
+                services.AddSingleton(new ServerRuntimeInfo(DateTimeOffset.UtcNow, _temporaryPort));
+                services.PostConfigure<TodoPromptOptions>(options => options.BaseUrl = IntegrationTestPortAllocator.BuildHostBaseUrl(_temporaryPort));
+                services.PostConfigure<TunnelOptions>(options => options.Port = _temporaryPort);
                 services.AddHostedService(sp =>
                     (WorkspaceProcessManager)sp.GetRequiredService<IWorkspaceProcessManager>());
             });
