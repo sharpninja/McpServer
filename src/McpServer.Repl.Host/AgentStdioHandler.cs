@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging;
-using McpServer.Repl.Core;
 using System.Text;
 
 namespace McpServer.Repl.Host;
@@ -11,23 +10,14 @@ namespace McpServer.Repl.Host;
 public class AgentStdioHandler
 {
     private readonly ILogger<AgentStdioHandler> _logger;
-    private readonly IReplProtocol _protocol;
-    private readonly IWorkspaceSelector _workspaceSelector;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AgentStdioHandler"/> class.
     /// </summary>
     /// <param name="logger">Logger instance for diagnostic output.</param>
-    /// <param name="protocol">REPL protocol implementation.</param>
-    /// <param name="workspaceSelector">Workspace selection service.</param>
-    public AgentStdioHandler(
-        ILogger<AgentStdioHandler> logger,
-        IReplProtocol protocol,
-        IWorkspaceSelector workspaceSelector)
+    public AgentStdioHandler(ILogger<AgentStdioHandler> logger)
     {
         _logger = logger;
-        _protocol = protocol;
-        _workspaceSelector = workspaceSelector;
     }
 
     /// <summary>
