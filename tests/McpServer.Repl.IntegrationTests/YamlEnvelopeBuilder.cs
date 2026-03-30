@@ -502,4 +502,334 @@ public static class YamlEnvelopeBuilder
             done
         };
     }
+
+    public static object CreateRequirementsListFrRequest(
+        string requestId,
+        string? area = null,
+        string? status = null)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.listFr",
+            new
+            {
+                area,
+                status
+            });
+    }
+
+    public static object CreateRequirementsGetFrRequest(string requestId, string id)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.getFr",
+            new { id });
+    }
+
+    public static object CreateRequirementsCreateFrRequest(
+        string requestId,
+        string id,
+        string title,
+        string description,
+        string priority,
+        string area,
+        string? notes = null)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.createFr",
+            new
+            {
+                id,
+                title,
+                description,
+                priority,
+                area,
+                notes
+            });
+    }
+
+    public static object CreateRequirementsUpdateFrRequest(
+        string requestId,
+        string? id = null,
+        string? title = null,
+        string? description = null,
+        string? status = null,
+        string? priority = null,
+        string? notes = null)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.updateFr",
+            new
+            {
+                id,
+                title,
+                description,
+                status,
+                priority,
+                notes
+            });
+    }
+
+    public static object CreateRequirementsDeleteFrRequest(string requestId, string id)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.deleteFr",
+            new { id });
+    }
+
+    public static object CreateRequirementsListTrRequest(
+        string requestId,
+        string? area = null,
+        string? subarea = null,
+        string? status = null)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.listTr",
+            new
+            {
+                area,
+                subarea,
+                status
+            });
+    }
+
+    public static object CreateRequirementsGetTrRequest(string requestId, string id)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.getTr",
+            new { id });
+    }
+
+    public static object CreateRequirementsCreateTrRequest(
+        string requestId,
+        string id,
+        string title,
+        string description,
+        string priority,
+        string area,
+        string subarea,
+        string? notes = null)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.createTr",
+            new
+            {
+                id,
+                title,
+                description,
+                priority,
+                area,
+                subarea,
+                notes
+            });
+    }
+
+    public static object CreateRequirementsUpdateTrRequest(
+        string requestId,
+        string? id = null,
+        string? title = null,
+        string? description = null,
+        string? status = null,
+        string? priority = null,
+        string? notes = null)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.updateTr",
+            new
+            {
+                id,
+                title,
+                description,
+                status,
+                priority,
+                notes
+            });
+    }
+
+    public static object CreateRequirementsDeleteTrRequest(string requestId, string id)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.deleteTr",
+            new { id });
+    }
+
+    public static object CreateRequirementsListTestRequest(
+        string requestId,
+        string? area = null,
+        string? status = null)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.listTest",
+            new
+            {
+                area,
+                status
+            });
+    }
+
+    public static object CreateRequirementsGetTestRequest(string requestId, string id)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.getTest",
+            new { id });
+    }
+
+    public static object CreateRequirementsCreateTestRequest(
+        string requestId,
+        string id,
+        string title,
+        string description,
+        string priority,
+        string area,
+        string testType,
+        string? notes = null)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.createTest",
+            new
+            {
+                id,
+                title,
+                description,
+                priority,
+                area,
+                testType,
+                notes
+            });
+    }
+
+    public static object CreateRequirementsUpdateTestRequest(
+        string requestId,
+        string? id = null,
+        string? title = null,
+        string? description = null,
+        string? status = null,
+        string? priority = null,
+        string? notes = null)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.updateTest",
+            new
+            {
+                id,
+                title,
+                description,
+                status,
+                priority,
+                notes
+            });
+    }
+
+    public static object CreateRequirementsDeleteTestRequest(string requestId, string id)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.deleteTest",
+            new { id });
+    }
+
+    public static object CreateRequirementsListMappingsRequest(
+        string requestId,
+        string? frId = null,
+        string? trId = null,
+        string? testId = null)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.listMappings",
+            new
+            {
+                frId,
+                trId,
+                testId
+            });
+    }
+
+    public static object CreateRequirementsCreateMappingRequest(
+        string requestId,
+        string? frId = null,
+        string? trId = null,
+        string? testId = null,
+        string? notes = null)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.createMapping",
+            new
+            {
+                frId,
+                trId,
+                testId,
+                notes
+            });
+    }
+
+    public static object CreateRequirementsDeleteMappingRequest(
+        string requestId,
+        string? frId = null,
+        string? trId = null,
+        string? testId = null)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.deleteMapping",
+            new
+            {
+                frId,
+                trId,
+                testId
+            });
+    }
+
+    public static object CreateRequirementsGenerateDocumentRequest(
+        string requestId,
+        string format,
+        string docType)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.generateDocument",
+            new
+            {
+                format,
+                docType
+            });
+    }
+
+    public static object CreateRequirementsIngestDocumentRequest(
+        string requestId,
+        string content,
+        string format,
+        string mergeStrategy)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.ingestDocument",
+            new
+            {
+                content,
+                format,
+                mergeStrategy
+            });
+    }
+
+    public static object CreateRequirementsCurrentSelectionRequest(string requestId)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.requirements.currentSelection",
+            new { });
+    }
 }
