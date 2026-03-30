@@ -293,4 +293,213 @@ public static class YamlEnvelopeBuilder
             filePath
         };
     }
+
+    public static object CreateTodoQueryRequest(
+        string requestId,
+        string? keyword = null,
+        string? priority = null,
+        string? section = null,
+        string? id = null,
+        bool? done = null)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.todo.query",
+            new
+            {
+                keyword,
+                priority,
+                section,
+                id,
+                done
+            });
+    }
+
+    public static object CreateTodoGetRequest(string requestId, string id)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.todo.get",
+            new { id });
+    }
+
+    public static object CreateTodoSelectRequest(string requestId, string id)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.todo.select",
+            new { id });
+    }
+
+    public static object CreateTodoCreateRequest(
+        string requestId,
+        string id,
+        string title,
+        string section,
+        string priority,
+        string? estimate = null,
+        string[]? description = null,
+        string[]? technicalDetails = null,
+        object[]? implementationTasks = null,
+        string? note = null,
+        string? remaining = null,
+        string[]? dependsOn = null,
+        string[]? functionalRequirements = null,
+        string[]? technicalRequirements = null)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.todo.create",
+            new
+            {
+                id,
+                title,
+                section,
+                priority,
+                estimate,
+                description,
+                technicalDetails,
+                implementationTasks,
+                note,
+                remaining,
+                dependsOn,
+                functionalRequirements,
+                technicalRequirements
+            });
+    }
+
+    public static object CreateTodoUpdateRequest(
+        string requestId,
+        string id,
+        string? title = null,
+        string? priority = null,
+        string? section = null,
+        bool? done = null,
+        string? estimate = null,
+        string[]? description = null,
+        string? remaining = null)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.todo.update",
+            new
+            {
+                id,
+                title,
+                priority,
+                section,
+                done,
+                estimate,
+                description,
+                remaining
+            });
+    }
+
+    public static object CreateTodoUpdateSelectedRequest(
+        string requestId,
+        string? title = null,
+        string? priority = null,
+        bool? done = null,
+        string? remaining = null)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.todo.updateSelected",
+            new
+            {
+                title,
+                priority,
+                done,
+                remaining
+            });
+    }
+
+    public static object CreateTodoDeleteRequest(string requestId, string id)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.todo.delete",
+            new { id });
+    }
+
+    public static object CreateTodoDeleteSelectedRequest(string requestId)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.todo.deleteSelected",
+            new { });
+    }
+
+    public static object CreateTodoAnalyzeRequirementsRequest(string requestId, string id)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.todo.analyzeRequirements",
+            new { id });
+    }
+
+    public static object CreateTodoStreamStatusRequest(string requestId, string id)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.todo.streamStatus",
+            new { id });
+    }
+
+    public static object CreateTodoStreamPlanRequest(string requestId, string id)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.todo.streamPlan",
+            new { id });
+    }
+
+    public static object CreateTodoStreamImplementRequest(string requestId, string id)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.todo.streamImplement",
+            new { id });
+    }
+
+    public static object CreateTodoGetProjectionStatusRequest(string requestId, string id)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.todo.getProjectionStatus",
+            new { id });
+    }
+
+    public static object CreateTodoRepairProjectionRequest(string requestId, string id)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.todo.repairProjection",
+            new { id });
+    }
+
+    public static object CreateTodoCurrentSelectionRequest(string requestId)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "workflow.todo.currentSelection",
+            new { });
+    }
+
+    public static object CreateCancelCommandRequest(string requestId)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            "cancel",
+            new { });
+    }
+
+    public static object CreateTodoSubtask(string task, bool done)
+    {
+        return new
+        {
+            task,
+            done
+        };
+    }
 }

@@ -182,6 +182,35 @@ public sealed class ReplChildProcessHelper : IDisposable
     }
 
     /// <summary>
+    /// Waits for a specific pattern to appear in any stdout line.
+    /// </summary>
+    /// <param name="pattern">The pattern to search for (case-insensitive).</param>
+    /// <param name="timeout">Maximum time to wait.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>True if the pattern was found; otherwise, false.</returns>
+    public async Task<bool> WaitForStdoutPatternAsync(
+        string pattern,
+        TimeSpan timeout,
+        CancellationToken cancellationToken = default)
+    {
+        var deadline = DateTime.UtcNow + timeout;
+        while (DateTime.UtcNow < deadline && !cancellationToken.IsCancellationRequested)
+        {
+            lock (_lock)
+            {
+                if (_stdoutLines.Any(line => line.Contains(pattern, StringComparison.OrdinalIgnoreCase)))
+                {
+                    return true;
+                }
+            }
+
+            await Task.Delay(50, cancellationToken);
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Clears all captured stderr lines.
     /// Useful for test isolation when testing multiple commands in sequence.
     /// </summary>
