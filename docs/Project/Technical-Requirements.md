@@ -737,3 +737,57 @@ When a session is completed, the module SHALL remove both the legacy wrapper cac
 **Status:** ✅ In Progress
 
 **Covered by:** `src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs`, `src/McpServer.Storage/McpDbContextFactory.cs`, `src/McpServer.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs`, `src/McpServer.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs`, `src/McpServer.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs`, `scripts/Invoke-McpDatabaseEncryptionTransition.ps1`, `src/McpServer.Storage.SqliteMigrations`, `src/McpServer.Storage.PostgreSqlMigrations`, `src/McpServer.Storage.SqlServerMigrations`
+
+## TR-MCP-REPL-001
+
+**YAML Envelope Protocol** — The REPL host SHALL parse incoming STDIO lines as YAML-formatted command envelopes containing `command`, `args` (dictionary), and optional `correlationId`. Response envelopes SHALL contain `status` (`success`/`error`), optional `result` payload, optional `error` message and code, and echoed `correlationId`. Malformed YAML SHALL emit structured error responses rather than crashing the process.
+
+**Status:** 🔴 Planned
+
+## TR-MCP-REPL-002
+
+**DI-Integrated REPL Host** — `McpReplHost` SHALL be registered as an `IHostedService` using the same DI composition root as `McpStdioHost` and HTTP hosting. The REPL loop SHALL inject scoped service instances per command invocation and SHALL NOT instantiate services via `new` or `ActivatorUtilities.CreateInstance` outside DI registration paths.
+
+**Status:** 🔴 Planned
+
+**Covered by:** `McpReplHost`, `Program.cs` (AddHostedService<McpReplHost>), `McpReplHostOptions`
+
+## TR-MCP-REPL-003
+
+**Command Loop Lifecycle** — The REPL host SHALL emit `repl_started` lifecycle event on startup with workspace path, process ID, and host mode. The command loop SHALL read lines from `Console.In`, parse YAML envelopes, execute commands via scoped DI containers, serialize responses as YAML to `Console.Out`, and handle EOF/explicit exit with `repl_stopped` event. Unhandled exceptions SHALL emit structured error responses and continue the loop rather than terminating the host process.
+
+**Status:** 🔴 Planned
+
+**Covered by:** `McpReplHost`, `ReplCommandLoop`, `ReplLifecycleEventPublisher`
+
+## TR-MCP-REPL-004
+
+**Command Registry and Dispatcher** — `ReplCommandRegistry` SHALL maintain command-name-to-handler mappings using a DI-friendly registration pattern. Handlers SHALL implement `IReplCommandHandler<TArgs, TResult>` and execute through async `HandleAsync(TArgs, CancellationToken)`. Command dispatch SHALL resolve handlers from DI per invocation and SHALL pass deserialized `args` dictionaries as strongly typed handler arguments via YamlDotNet model binding.
+
+**Status:** 🔴 Planned
+
+**Covered by:** `IReplCommandHandler<TArgs, TResult>`, `ReplCommandRegistry`, `ReplCommandDispatcher`, `ReplCommandRegistrationExtensions`
+
+## TR-MCP-REPL-005
+
+**Namespace Organization and Handler Parity** — Command names SHALL use dot-delimited namespaces matching REST controller routes: `todo.list`, `todo.create`, `session.append`, `context.search`, `requirements.list`, `workspace.status`, `agent_pool.status`. Handler implementations SHALL delegate to existing service contracts (`ITodoService`, `ISessionLogService`, `IContextService`, `IRequirementsDocumentService`, `IWorkspaceService`, `IAgentPoolService`) without duplicating business logic.
+
+**Status:** 🔴 Planned
+
+**Covered by:** `TodoCommandHandlers`, `SessionLogCommandHandlers`, `ContextCommandHandlers`, `RequirementsCommandHandlers`, `WorkspaceCommandHandlers`, `AgentPoolCommandHandlers`
+
+## TR-MCP-REPL-006
+
+**Trust Bootstrap and Token Validation** — The REPL host SHALL require `bootstrap` command invocation with marker file path as the first operational command. The `bootstrap` handler SHALL verify marker signature, perform `/health` nonce challenge via HTTP client, and cache the validated API key for subsequent commands. Operational commands invoked before successful bootstrap SHALL return `auth_required` error. The host SHALL detect API key staleness by comparing cached token against re-read marker file and SHALL emit `token_rotated` warnings when mismatches occur.
+
+**Status:** 🔴 Planned
+
+**Covered by:** `BootstrapCommandHandler`, `ReplAuthenticationState`, `MarkerFileVerifier`, `HealthChallengeClient`
+
+## TR-MCP-REPL-007
+
+**State Query Commands** — The REPL host SHALL expose read-only state query commands: `agent_pool.list` (pooled agent availability), `agent_pool.queue` (queued one-shot requests), `voice.sessions` (active voice sessions), `workspace.events.status` (notification subscription count). Handlers SHALL query current service state snapshots without blocking on long-running operations or establishing persistent subscriptions.
+
+**Status:** 🔴 Planned
+
+**Covered by:** `AgentPoolStatusCommandHandler`, `VoiceSessionListCommandHandler`, `WorkspaceEventsStatusCommandHandler`

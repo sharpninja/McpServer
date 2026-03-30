@@ -533,3 +533,33 @@ When encryption settings change, the server shall preserve existing data by usin
 
 **Covered by:** `src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs`, `src/McpServer.Storage/McpDbContextFactory.cs`, `src/McpServer.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs`, `src/McpServer.Support.Mcp/Program.cs`, `src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs`, `scripts/Invoke-McpDatabaseEncryptionTransition.ps1`, `src/McpServer.Storage.SqliteMigrations`, `src/McpServer.Storage.PostgreSqlMigrations`, `src/McpServer.Storage.SqlServerMigrations`, `docs/USER-GUIDE.md`
 
+## FR-MCP-REPL-001 YAML Protocol STDIO REPL Host
+
+The server shall provide a YAML-envelope STDIO REPL host that accepts structured commands over standard input, executes operations against workspace services, and returns structured YAML responses over standard output. The REPL host shall support the same trust bootstrap, authentication, and workspace resolution semantics as the HTTP and MCP STDIO transports.
+
+**Technical Implementation:** [TR-MCP-REPL-001](./Technical-Requirements.md#tr-mcp-repl-001) | [TR-MCP-REPL-002](./Technical-Requirements.md#tr-mcp-repl-002) | [Mapping](./TR-per-FR-Mapping.md)
+
+## FR-MCP-REPL-002 REPL Lifecycle Management
+
+The REPL host shall support graceful startup, interactive command loop, structured error handling with typed error codes, and clean shutdown on EOF or explicit exit commands. The host shall maintain session context across commands within a single process invocation and emit lifecycle events for observability.
+
+**Technical Implementation:** [TR-MCP-REPL-003](./Technical-Requirements.md#tr-mcp-repl-003) | [Mapping](./TR-per-FR-Mapping.md)
+
+## FR-MCP-REPL-003 Command Namespace Parity
+
+The REPL command surface shall provide namespace-organized commands with functional parity to HTTP REST endpoints and MCP STDIO tools for TODO operations, session log operations, context operations, requirements management, workspace management, and agent pool operations. Command routing shall reuse existing service contracts without duplicating business logic.
+
+**Technical Implementation:** [TR-MCP-REPL-004](./Technical-Requirements.md#tr-mcp-repl-004) | [TR-MCP-REPL-005](./Technical-Requirements.md#tr-mcp-repl-005) | [Mapping](./TR-per-FR-Mapping.md)
+
+## FR-MCP-REPL-004 Trust Bootstrap and Auth Rotation
+
+The REPL host shall implement marker-file trust bootstrap with signature verification and health nonce challenge before accepting operational commands. API key authentication shall use the same per-workspace token semantics as HTTP endpoints. The host shall detect API key rotation between commands and emit warnings when tokens become stale.
+
+**Technical Implementation:** [TR-MCP-REPL-006](./Technical-Requirements.md#tr-mcp-repl-006) | [Mapping](./TR-per-FR-Mapping.md)
+
+## FR-MCP-REPL-005 Orchestration State Visibility
+
+The REPL host shall expose commands for querying agent pool state, active voice sessions, queued one-shot requests, and workspace notification subscriptions. State queries shall return current snapshots without blocking on long-running operations.
+
+**Technical Implementation:** [TR-MCP-REPL-007](./Technical-Requirements.md#tr-mcp-repl-007) | [Mapping](./TR-per-FR-Mapping.md)
+

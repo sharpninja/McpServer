@@ -190,4 +190,36 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-SEC-004 | ✅ In Progress | src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs, src/McpServer.Storage/McpDbContextFactory.cs, src/McpServer.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs, scripts/Invoke-McpDatabaseEncryptionTransition.ps1, src/McpServer.Storage.SqliteMigrations, src/McpServer.Storage.PostgreSqlMigrations, src/McpServer.Storage.SqlServerMigrations |
 | TR-MCP-CFG-007 | ✅ Complete | src/McpServer.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs, src/McpServer.Storage/McpDbContextFactory.cs, src/McpServer.Support.Mcp/Program.cs, src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs, src/McpServer.Support.Mcp/appsettings.yaml, src/McpServer.Support.Mcp/appsettings.Staging.yaml |
 | TEST-MCP-102 | ✅ In Progress | tests/McpServer.Support.Mcp.IntegrationTests/Controllers/ProviderDatabaseIntegrationTests.cs, tests/McpServer.Support.Mcp.IntegrationTests/ProviderIntegrationTestSupport.cs, tests/McpServer.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs, scripts/Invoke-McpDatabaseEncryptionTransition.ps1, src/McpServer.Storage.SqliteMigrations, src/McpServer.Storage.PostgreSqlMigrations, src/McpServer.Storage.SqlServerMigrations |
+| FR-MCP-REPL-001 | 🔴 Planned | — |
+| FR-MCP-REPL-002 | 🔴 Planned | — |
+| FR-MCP-REPL-003 | 🔴 Planned | — |
+| FR-MCP-REPL-004 | 🔴 Planned | — |
+| FR-MCP-REPL-005 | 🔴 Planned | — |
+| TR-MCP-REPL-001 | 🔴 Planned | — |
+| TR-MCP-REPL-002 | 🔴 Planned | McpReplHost, Program.cs, McpReplHostOptions |
+| TR-MCP-REPL-003 | 🔴 Planned | McpReplHost, ReplCommandLoop, ReplLifecycleEventPublisher |
+| TR-MCP-REPL-004 | 🔴 Planned | IReplCommandHandler<TArgs, TResult>, ReplCommandRegistry, ReplCommandDispatcher, ReplCommandRegistrationExtensions |
+| TR-MCP-REPL-005 | 🔴 Planned | TodoCommandHandlers, SessionLogCommandHandlers, ContextCommandHandlers, RequirementsCommandHandlers, WorkspaceCommandHandlers, AgentPoolCommandHandlers |
+| TR-MCP-REPL-006 | 🔴 Planned | BootstrapCommandHandler, ReplAuthenticationState, MarkerFileVerifier, HealthChallengeClient |
+| TR-MCP-REPL-007 | 🔴 Planned | AgentPoolStatusCommandHandler, VoiceSessionListCommandHandler, WorkspaceEventsStatusCommandHandler |
+| TEST-MCP-REPL-001 | 🔴 Planned | — |
+| TEST-MCP-REPL-002 | 🔴 Planned | — |
+| TEST-MCP-REPL-003 | 🔴 Planned | — |
+| TEST-MCP-REPL-004 | 🔴 Planned | — |
+| TEST-MCP-REPL-005 | 🔴 Planned | — |
+| TEST-MCP-REPL-006 | 🔴 Planned | — |
+| TEST-MCP-REPL-007 | 🔴 Planned | — |
+| TEST-MCP-REPL-008 | 🔴 Planned | — |
+| TEST-MCP-REPL-009 | 🔴 Planned | — |
+| TEST-MCP-REPL-010 | 🔴 Planned | — |
+| TEST-MCP-REPL-011 | 🔴 Planned | — |
+| TEST-MCP-REPL-012 | 🔴 Planned | — |
+| TEST-MCP-REPL-013 | 🔴 Planned | — |
+| TEST-MCP-REPL-014 | 🔴 Planned | — |
+| TEST-MCP-REPL-015 | 🔴 Planned | — |
+| TEST-MCP-REPL-016 | 🔴 Planned | — |
+| TEST-MCP-REPL-017 | 🔴 Planned | — |
+| TEST-MCP-REPL-018 | 🔴 Planned | — |
+| TEST-MCP-REPL-019 | 🔴 Planned | — |
+| TEST-MCP-REPL-020 | 🔴 Planned | — |
 
