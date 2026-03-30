@@ -940,6 +940,26 @@ public class TodoWorkflowTests
     }
 
     [Fact]
+    public async Task StreamPlanAsync_TodoNotFound_ThrowsInvalidOperationException()
+    {
+        _workflow.StreamPlanAsync("MCP-NONEXISTENT-999", Arg.Any<Func<IStreamingEvent, Task>>(), default)
+            .Throws(new InvalidOperationException("TODO item not found: MCP-NONEXISTENT-999"));
+
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            async () => await _workflow.StreamPlanAsync("MCP-NONEXISTENT-999", evt => Task.CompletedTask));
+    }
+
+    [Fact]
+    public async Task StreamImplementAsync_TodoNotFound_ThrowsInvalidOperationException()
+    {
+        _workflow.StreamImplementAsync("MCP-NONEXISTENT-999", Arg.Any<Func<IStreamingEvent, Task>>(), default)
+            .Throws(new InvalidOperationException("TODO item not found: MCP-NONEXISTENT-999"));
+
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            async () => await _workflow.StreamImplementAsync("MCP-NONEXISTENT-999", evt => Task.CompletedTask));
+    }
+
+    [Fact]
     public async Task StreamPlanAsync_ErrorDuringStreaming_EmitsErrorEvent()
     {
         var events = new List<IStreamingEvent>();
