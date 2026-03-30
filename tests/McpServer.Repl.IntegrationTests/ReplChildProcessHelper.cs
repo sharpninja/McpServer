@@ -170,6 +170,30 @@ public sealed class ReplChildProcessHelper : IDisposable
     }
 
     /// <summary>
+    /// Clears all captured stdout lines.
+    /// Useful for test isolation when testing multiple commands in sequence.
+    /// </summary>
+    public void ClearStdout()
+    {
+        lock (_lock)
+        {
+            _stdoutLines.Clear();
+        }
+    }
+
+    /// <summary>
+    /// Clears all captured stderr lines.
+    /// Useful for test isolation when testing multiple commands in sequence.
+    /// </summary>
+    public void ClearStderr()
+    {
+        lock (_lock)
+        {
+            _stderrLines.Clear();
+        }
+    }
+
+    /// <summary>
     /// Stops the child process gracefully.
     /// </summary>
     /// <param name="cancellationToken">Cancellation token.</param>
