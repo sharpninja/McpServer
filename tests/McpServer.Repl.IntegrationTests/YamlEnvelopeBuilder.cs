@@ -832,4 +832,42 @@ public static class YamlEnvelopeBuilder
             "workflow.requirements.currentSelection",
             new { });
     }
+
+    public static object CreateGenericClientRequest(
+        string requestId,
+        string clientName,
+        string methodName,
+        Dictionary<string, object?>? arguments = null)
+    {
+        return CreateRequestEnvelope(
+            requestId,
+            $"client.{clientName}.{methodName}",
+            arguments ?? new Dictionary<string, object?>());
+    }
+
+    public static object CreateContextQueryRequest(
+        string requestId,
+        string query,
+        int? limit = null,
+        string? sourceType = null)
+    {
+        var args = new Dictionary<string, object?> { ["query"] = query };
+        if (limit.HasValue) args["limit"] = limit.Value;
+        if (sourceType != null) args["sourceType"] = sourceType;
+        return CreateGenericClientRequest(requestId, "context", "SearchAsync", args);
+    }
+
+    public static object CreateRepoGetBranchesRequest(
+        string requestId)
+    {
+        return CreateGenericClientRequest(requestId, "repo", "GetBranchesAsync", new Dictionary<string, object?>());
+    }
+
+    public static object CreateDesktopOpenFolderRequest(
+        string requestId,
+        string folderPath)
+    {
+        var args = new Dictionary<string, object?> { ["folderPath"] = folderPath };
+        return CreateGenericClientRequest(requestId, "desktop", "OpenFolderAsync", args);
+    }
 }
