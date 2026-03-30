@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\McpServer.Repl.Core\McpServer.Repl.Core.csproj" />
     <ProjectReference Include="..\..\src\McpServer.Client\McpServer.Client.csproj" />
+    <ProjectReference Include="..\..\tests\McpServer.Todo.Validation\McpServer.Todo.Validation.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Xunit" />
