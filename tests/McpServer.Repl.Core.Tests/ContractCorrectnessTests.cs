@@ -11,7 +11,7 @@ public class ContractCorrectnessTests
         var serializer = Substitute.For<IYamlSerializer>();
 
         var methods = typeof(IYamlSerializer).GetMethods();
-        
+
         Assert.Contains(methods, m => m.Name == nameof(IYamlSerializer.Serialize));
         Assert.Contains(methods, m => m.Name == nameof(IYamlSerializer.Deserialize));
         Assert.Contains(methods, m => m.Name == nameof(IYamlSerializer.TryDeserialize));
@@ -27,7 +27,7 @@ public class ContractCorrectnessTests
         var reader = Substitute.For<IMarkerFileReader>();
 
         var methods = typeof(IMarkerFileReader).GetMethods();
-        
+
         Assert.Contains(methods, m => m.Name == nameof(IMarkerFileReader.ReadAsync));
         Assert.Contains(methods, m => m.Name == nameof(IMarkerFileReader.TryReadAsync));
         Assert.Contains(methods, m => m.Name == nameof(IMarkerFileReader.VerifyTrustAsync));
@@ -42,7 +42,7 @@ public class ContractCorrectnessTests
         var trustService = Substitute.For<ITrustBootstrapService>();
 
         var methods = typeof(ITrustBootstrapService).GetMethods();
-        
+
         Assert.Contains(methods, m => m.Name == nameof(ITrustBootstrapService.PromptUserTrustAsync));
         Assert.Contains(methods, m => m.Name == nameof(ITrustBootstrapService.RecordTrustDecisionAsync));
         Assert.Contains(methods, m => m.Name == nameof(ITrustBootstrapService.GetTrustDecisionAsync));
@@ -60,7 +60,7 @@ public class ContractCorrectnessTests
 
         var methods = typeof(IAuthRotationHandler).GetMethods();
         var properties = typeof(IAuthRotationHandler).GetProperties();
-        
+
         Assert.Contains(properties, p => p.Name == nameof(IAuthRotationHandler.CurrentAuthState));
         Assert.Contains(methods, m => m.Name == nameof(IAuthRotationHandler.UpdateAuthStateAsync));
         Assert.Contains(methods, m => m.Name == nameof(IAuthRotationHandler.RegisterAuthChangeCallback));
@@ -76,7 +76,7 @@ public class ContractCorrectnessTests
         var markerData = Substitute.For<IMarkerFileData>();
 
         var properties = typeof(IMarkerFileData).GetProperties();
-        
+
         Assert.Contains(properties, p => p.Name == nameof(IMarkerFileData.WorkspacePath));
         Assert.Contains(properties, p => p.Name == nameof(IMarkerFileData.ServerUrl));
         Assert.Contains(properties, p => p.Name == nameof(IMarkerFileData.ApiKey));
@@ -94,7 +94,7 @@ public class ContractCorrectnessTests
         var trustResult = Substitute.For<ITrustVerificationResult>();
 
         var properties = typeof(ITrustVerificationResult).GetProperties();
-        
+
         Assert.Contains(properties, p => p.Name == nameof(ITrustVerificationResult.IsTrusted));
         Assert.Contains(properties, p => p.Name == nameof(ITrustVerificationResult.TrustMethod));
         Assert.Contains(properties, p => p.Name == nameof(ITrustVerificationResult.Details));
@@ -109,7 +109,7 @@ public class ContractCorrectnessTests
         var authState = Substitute.For<IAuthState>();
 
         var properties = typeof(IAuthState).GetProperties();
-        
+
         Assert.Contains(properties, p => p.Name == nameof(IAuthState.WorkspacePath));
         Assert.Contains(properties, p => p.Name == nameof(IAuthState.ServerUrl));
         Assert.Contains(properties, p => p.Name == nameof(IAuthState.ApiKey));
@@ -128,7 +128,7 @@ public class ContractCorrectnessTests
         var workspace = Substitute.For<ITrustedWorkspace>();
 
         var properties = typeof(ITrustedWorkspace).GetProperties();
-        
+
         Assert.Contains(properties, p => p.Name == nameof(ITrustedWorkspace.WorkspacePath));
         Assert.Contains(properties, p => p.Name == nameof(ITrustedWorkspace.TrustedAt));
         Assert.Contains(properties, p => p.Name == nameof(ITrustedWorkspace.TrustMethod));
@@ -143,7 +143,7 @@ public class ContractCorrectnessTests
         var envelope = Substitute.For<IYamlEnvelope>();
 
         var properties = typeof(IYamlEnvelope).GetProperties();
-        
+
         Assert.Contains(properties, p => p.Name == nameof(IYamlEnvelope.Type));
         Assert.Contains(properties, p => p.Name == nameof(IYamlEnvelope.Payload));
 
@@ -156,7 +156,7 @@ public class ContractCorrectnessTests
         var payload = Substitute.For<IHelloPayload>();
 
         var properties = typeof(IHelloPayload).GetProperties();
-        
+
         Assert.Contains(properties, p => p.Name == nameof(IHelloPayload.ProtocolVersion));
         Assert.Contains(properties, p => p.Name == nameof(IHelloPayload.Capabilities));
         Assert.Contains(properties, p => p.Name == nameof(IHelloPayload.Metadata));
@@ -170,7 +170,7 @@ public class ContractCorrectnessTests
         var payload = Substitute.For<IRequestPayload>();
 
         var properties = typeof(IRequestPayload).GetProperties();
-        
+
         Assert.Contains(properties, p => p.Name == nameof(IRequestPayload.RequestId));
         Assert.Contains(properties, p => p.Name == nameof(IRequestPayload.Method));
         Assert.Contains(properties, p => p.Name == nameof(IRequestPayload.Params));
@@ -184,7 +184,7 @@ public class ContractCorrectnessTests
         var payload = Substitute.For<IErrorPayload>();
 
         var properties = typeof(IErrorPayload).GetProperties();
-        
+
         Assert.Contains(properties, p => p.Name == nameof(IErrorPayload.RequestId));
         Assert.Contains(properties, p => p.Name == nameof(IErrorPayload.Code));
         Assert.Contains(properties, p => p.Name == nameof(IErrorPayload.Message));
@@ -272,10 +272,10 @@ public class ContractCorrectnessTests
 
         var readMethod = typeof(IMarkerFileReader).GetMethod(nameof(IMarkerFileReader.ReadAsync));
         Assert.NotNull(readMethod);
-        
+
         var parameters = readMethod.GetParameters();
         var cancellationTokenParam = parameters.FirstOrDefault(p => p.ParameterType == typeof(CancellationToken));
-        
+
         Assert.NotNull(cancellationTokenParam);
         Assert.True(cancellationTokenParam.IsOptional || cancellationTokenParam.HasDefaultValue);
 
@@ -287,15 +287,15 @@ public class ContractCorrectnessTests
     {
         var markerDataProps = typeof(IMarkerFileData).GetProperties();
         var metadataProperty = markerDataProps.First(p => p.Name == nameof(IMarkerFileData.Metadata));
-        
+
         var nullabilityContext = new System.Reflection.NullabilityInfoContext();
         var nullabilityInfo = nullabilityContext.Create(metadataProperty);
-        
+
         Assert.Equal(System.Reflection.NullabilityState.Nullable, nullabilityInfo.ReadState);
 
         var trustResultProps = typeof(ITrustVerificationResult).GetProperties();
         var denialReasonProperty = trustResultProps.First(p => p.Name == nameof(ITrustVerificationResult.DenialReason));
-        
+
         var denialReasonNullability = nullabilityContext.Create(denialReasonProperty);
         Assert.Equal(System.Reflection.NullabilityState.Nullable, denialReasonNullability.ReadState);
     }

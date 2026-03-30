@@ -912,7 +912,7 @@ public class SessionLogWorkflowTests
     public void FakeSessionLogState_NoDuplicateTurns_EnforcesDuplicatePrevention()
     {
         var state = new FakeSessionLogState();
-        
+
         state.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         state.BeginTurn("req-20260304T113901Z-task-001");
         state.CompleteTurn(); // Complete first turn
@@ -927,10 +927,10 @@ public class SessionLogWorkflowTests
     public void FakeSessionLogState_ProperStatusTransitions_EnforcesStateMachine()
     {
         var state = new FakeSessionLogState();
-        
+
         state.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         state.BeginTurn("req-20260304T113901Z-task-001");
-        
+
         Assert.Equal("in_progress", state.CurrentTurnStatus);
 
         state.CompleteTurn();
@@ -939,7 +939,7 @@ public class SessionLogWorkflowTests
 
         state.BeginTurn("req-20260304T113901Z-task-002");
         Assert.Equal("in_progress", state.CurrentTurnStatus);
-        
+
         state.FailTurn();
         Assert.Null(state.CurrentTurnStatus);
         Assert.Equal(2, state.TurnCount);
@@ -949,7 +949,7 @@ public class SessionLogWorkflowTests
     public void FakeSessionLogState_CompletedTurnImmutable_ThrowsOnModify()
     {
         var state = new FakeSessionLogState();
-        
+
         state.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         state.BeginTurn("req-20260304T113901Z-task-001");
         state.CompleteTurn();
@@ -961,7 +961,7 @@ public class SessionLogWorkflowTests
     public void FakeSessionLogState_FailedTurnImmutable_ThrowsOnModify()
     {
         var state = new FakeSessionLogState();
-        
+
         state.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         state.BeginTurn("req-20260304T113901Z-task-001");
         state.FailTurn();

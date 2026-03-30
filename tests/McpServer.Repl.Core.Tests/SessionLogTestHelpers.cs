@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using McpServer.Repl.Core;
 using McpServer.Client;
 using McpServer.Client.Models;
+using McpServer.Repl.Core;
 
 namespace McpServer.Repl.Core.Tests;
 
@@ -121,7 +121,7 @@ internal sealed class StubSessionLogClient : ISessionLogClientAdapter
     private readonly List<UnifiedSessionLogDto> _sessions = new();
 
     public Task<SessionLogSubmitResult> SubmitAsync(
-        UnifiedSessionLogDto sessionLog, 
+        UnifiedSessionLogDto sessionLog,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(sessionLog);

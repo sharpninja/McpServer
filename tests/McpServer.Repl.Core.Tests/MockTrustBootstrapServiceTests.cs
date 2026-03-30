@@ -10,7 +10,7 @@ public class MockTrustBootstrapServiceTests
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
-        
+
         var markerData = CreateMarkerDataWithNonce(workspacePath, "valid-nonce-123");
 
         trustService.PromptUserTrustAsync(workspacePath, markerData, default)
@@ -27,7 +27,7 @@ public class MockTrustBootstrapServiceTests
             });
 
         var result = await trustService.PromptUserTrustAsync(workspacePath, markerData);
-        
+
         Assert.True(result);
     }
 
@@ -36,7 +36,7 @@ public class MockTrustBootstrapServiceTests
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
-        
+
         var markerData = CreateMarkerDataWithNonce(workspacePath, "invalid-nonce");
 
         trustService.PromptUserTrustAsync(workspacePath, markerData, default)
@@ -53,7 +53,7 @@ public class MockTrustBootstrapServiceTests
             });
 
         var result = await trustService.PromptUserTrustAsync(workspacePath, markerData);
-        
+
         Assert.False(result);
     }
 
@@ -62,14 +62,14 @@ public class MockTrustBootstrapServiceTests
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var workspacePath = "/home/user/project";
-        
+
         var markerData = CreateMarkerData(workspacePath, null);
 
         trustService.PromptUserTrustAsync(workspacePath, markerData, default)
             .Returns(false);
 
         var result = await trustService.PromptUserTrustAsync(workspacePath, markerData);
-        
+
         Assert.False(result);
     }
 
@@ -229,19 +229,19 @@ public class MockTrustBootstrapServiceTests
                 return Task.FromResult(false);
             });
 
-        var attempt1 = await trustService.PromptUserTrustAsync(workspacePath, 
+        var attempt1 = await trustService.PromptUserTrustAsync(workspacePath,
             CreateMarkerDataWithNonce(workspacePath, "invalid-nonce-1"));
         Assert.False(attempt1);
 
-        var attempt2 = await trustService.PromptUserTrustAsync(workspacePath, 
+        var attempt2 = await trustService.PromptUserTrustAsync(workspacePath,
             CreateMarkerDataWithNonce(workspacePath, "valid-nonce-123"));
         Assert.True(attempt2);
 
-        var attempt3 = await trustService.PromptUserTrustAsync(workspacePath, 
+        var attempt3 = await trustService.PromptUserTrustAsync(workspacePath,
             CreateMarkerDataWithNonce(workspacePath, "invalid-nonce-2"));
         Assert.False(attempt3);
 
-        var attempt4 = await trustService.PromptUserTrustAsync(workspacePath, 
+        var attempt4 = await trustService.PromptUserTrustAsync(workspacePath,
             CreateMarkerDataWithNonce(workspacePath, "valid-nonce-456"));
         Assert.True(attempt4);
     }
@@ -280,7 +280,7 @@ public class MockTrustBootstrapServiceTests
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
 
-        var workspace = CreateTrustedWorkspace("/home/user/project", "user_confirmed", 
+        var workspace = CreateTrustedWorkspace("/home/user/project", "user_confirmed",
             new Dictionary<string, object?>
             {
                 ["user"] = "john.doe",

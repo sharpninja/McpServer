@@ -19,7 +19,7 @@ public class Iteration1_IntegrationTests
 
         trustService.GetTrustDecisionAsync(workspacePath, default)
             .Returns((false, false));
-        
+
         trustService.PromptUserTrustAsync(workspacePath, markerData, default)
             .Returns(true);
 
@@ -42,10 +42,10 @@ public class Iteration1_IntegrationTests
         await trustService.RecordTrustDecisionAsync(workspacePath, true);
 
         var result = await markerReader.VerifyTrustAsync(workspacePath, requireUserConfirmation: true);
-        
+
         Assert.True(result.IsTrusted);
         Assert.Equal("user_confirmed", result.TrustMethod);
-        
+
         await trustService.Received(1).RecordTrustDecisionAsync(workspacePath, true, default);
     }
 
@@ -54,7 +54,7 @@ public class Iteration1_IntegrationTests
     {
         var trustService = Substitute.For<ITrustBootstrapService>();
         var markerReader = Substitute.For<IMarkerFileReader>();
-        
+
         var workspacePath = "/home/user/project";
 
         trustService.GetTrustDecisionAsync(workspacePath, default)
@@ -68,15 +68,15 @@ public class Iteration1_IntegrationTests
             .Returns(trustResult);
 
         var (hasDecision, isTrusted) = await trustService.GetTrustDecisionAsync(workspacePath);
-        
+
         Assert.True(hasDecision);
         Assert.True(isTrusted);
 
         var result = await markerReader.VerifyTrustAsync(workspacePath, requireUserConfirmation: false);
-        
+
         Assert.True(result.IsTrusted);
         Assert.Equal("registry_cached", result.TrustMethod);
-        
+
         await trustService.DidNotReceive().PromptUserTrustAsync(Arg.Any<string>(), Arg.Any<IMarkerFileData>(), Arg.Any<CancellationToken>());
     }
 
@@ -85,7 +85,7 @@ public class Iteration1_IntegrationTests
     {
         var markerReader = Substitute.For<IMarkerFileReader>();
         var authHandler = Substitute.For<IAuthRotationHandler>();
-        
+
         var workspacePath = "/home/user/project";
         var oldMarkerData = CreateFakeMarkerData(workspacePath, "old-key-123");
         var newMarkerData = CreateFakeMarkerData(workspacePath, "new-key-456");
@@ -108,7 +108,7 @@ public class Iteration1_IntegrationTests
 
         currentKey = authHandler.CurrentAuthState.ApiKey;
         Assert.Equal("new-key-456", currentKey);
-        
+
         await authHandler.Received(1).UpdateAuthStateAsync(newMarkerData, default);
     }
 
@@ -117,7 +117,7 @@ public class Iteration1_IntegrationTests
     {
         var authHandler = Substitute.For<IAuthRotationHandler>();
         var markerReader = Substitute.For<IMarkerFileReader>();
-        
+
         var workspacePath = "/home/user/project";
 
         authHandler.ValidateAuthStateAsync(default)
@@ -139,7 +139,7 @@ public class Iteration1_IntegrationTests
         Assert.False(isValid);
 
         var newState = await authHandler.RefreshAuthStateAsync(workspacePath);
-        
+
         Assert.NotNull(newState);
         Assert.Equal("refreshed-key", newState.ApiKey);
         Assert.True(newState.IsValid);
@@ -151,7 +151,7 @@ public class Iteration1_IntegrationTests
     {
         var markerReader = Substitute.For<IMarkerFileReader>();
         var authHandler = Substitute.For<IAuthRotationHandler>();
-        
+
         var workspacePath = "/home/user/project";
         var callbackInvoked = false;
         IMarkerFileData? capturedData = null;
@@ -177,7 +177,7 @@ public class Iteration1_IntegrationTests
         Assert.True(callbackInvoked);
         Assert.NotNull(capturedData);
         Assert.Equal("rotated-key", capturedData.ApiKey);
-        
+
         await authHandler.Received(1).UpdateAuthStateAsync(newMarkerData, default);
     }
 
@@ -185,7 +185,7 @@ public class Iteration1_IntegrationTests
     public void YamlSerializationOrchestration_TrustBootstrapPayload_RoundTrips()
     {
         var yamlSerializer = CreateFakeYamlSerializer();
-        
+
         var trustPayload = new
         {
             workspacePath = "/home/user/project",
@@ -214,8 +214,8 @@ public class Iteration1_IntegrationTests
             .Returns(callInfo =>
             {
                 var data = callInfo.Arg<IMarkerFileData>();
-                
-                if (data?.Metadata != null && 
+
+                if (data?.Metadata != null &&
                     data.Metadata.TryGetValue("nonce", out var nonce) &&
                     nonce?.ToString() == "valid-nonce")
                 {
@@ -224,7 +224,7 @@ public class Iteration1_IntegrationTests
                 return Task.FromResult(false);
             });
 
-        var markerWithValidNonce = CreateFakeMarkerData(workspacePath, "test-key", 
+        var markerWithValidNonce = CreateFakeMarkerData(workspacePath, "test-key",
             new Dictionary<string, object?> { ["nonce"] = "valid-nonce" });
 
         var result = await trustService.PromptUserTrustAsync(workspacePath, markerWithValidNonce);
@@ -256,7 +256,7 @@ public class Iteration1_IntegrationTests
 
         authHandler.RefreshAuthStateAsync(workspacePath, default).Returns(refreshedState);
         var newState = await authHandler.RefreshAuthStateAsync(workspacePath);
-        
+
         authHandler.CurrentAuthState.Returns(refreshedState);
         Assert.True(authHandler.CurrentAuthState.IsValid);
         Assert.Equal("refreshed-key", authHandler.CurrentAuthState.ApiKey);
@@ -269,13 +269,13 @@ public class Iteration1_IntegrationTests
     {
         var yamlSerializer = Substitute.For<IYamlSerializer>();
         Assert.NotNull(yamlSerializer);
-        
+
         var markerReader = Substitute.For<IMarkerFileReader>();
         Assert.NotNull(markerReader);
-        
+
         var trustService = Substitute.For<ITrustBootstrapService>();
         Assert.NotNull(trustService);
-        
+
         var authHandler = Substitute.For<IAuthRotationHandler>();
         Assert.NotNull(authHandler);
 
@@ -298,7 +298,7 @@ public class Iteration1_IntegrationTests
         trustService.GetTrustDecisionAsync(workspacePath, default)
             .Returns((false, false));
 
-        var markerData = CreateFakeMarkerData(workspacePath, "bootstrap-key", 
+        var markerData = CreateFakeMarkerData(workspacePath, "bootstrap-key",
             new Dictionary<string, object?> { ["nonce"] = "challenge-12345" });
 
         markerReader.ReadAsync(workspacePath, default)
@@ -348,10 +348,10 @@ public class Iteration1_IntegrationTests
     private static IYamlSerializer CreateFakeYamlSerializer()
     {
         var serializer = Substitute.For<IYamlSerializer>();
-        
+
         var yamlDotNetSerializer = new SerializerBuilder()
             .Build();
-        
+
         var yamlDotNetDeserializer = new DeserializerBuilder()
             .Build();
 
@@ -376,11 +376,11 @@ public class Iteration1_IntegrationTests
                     throw new ArgumentNullException(nameof(yaml));
                 }
                 var dict = yamlDotNetDeserializer.Deserialize<Dictionary<string, object>>(yaml);
-                
+
                 var envelope = Substitute.For<IYamlEnvelope>();
                 envelope.Type.Returns(dict["type"]?.ToString() ?? "unknown");
                 envelope.Payload.Returns(dict.ContainsKey("payload") ? dict["payload"] : null);
-                
+
                 return envelope;
             });
 
@@ -396,7 +396,7 @@ public class Iteration1_IntegrationTests
     }
 
     private static IMarkerFileData CreateFakeMarkerData(
-        string workspacePath, 
+        string workspacePath,
         string apiKey,
         IReadOnlyDictionary<string, object?>? metadata = null)
     {

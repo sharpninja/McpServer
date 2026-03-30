@@ -9,9 +9,9 @@ public class StubMarkerFileReaderTests
     public async Task ReadAsync_PreCannedTrustBootstrapPayload_ReturnsExpectedData()
     {
         var stub = new StubMarkerFileReader();
-        
+
         var result = await stub.ReadAsync("/home/user/trusted-workspace");
-        
+
         Assert.NotNull(result);
         Assert.Equal("/home/user/trusted-workspace", result.WorkspacePath);
         Assert.Equal("http://localhost:5177", result.ServerUrl);
@@ -26,9 +26,9 @@ public class StubMarkerFileReaderTests
     public async Task ReadAsync_UntrustedWorkspace_ReturnsDataWithoutTrustMetadata()
     {
         var stub = new StubMarkerFileReader();
-        
+
         var result = await stub.ReadAsync("/home/user/untrusted-workspace");
-        
+
         Assert.NotNull(result);
         Assert.Equal("/home/user/untrusted-workspace", result.WorkspacePath);
         Assert.Equal("untrusted-key-456", result.ApiKey);
@@ -39,7 +39,7 @@ public class StubMarkerFileReaderTests
     public async Task ReadAsync_NonexistentPath_ThrowsFileNotFoundException()
     {
         var stub = new StubMarkerFileReader();
-        
+
         await Assert.ThrowsAsync<FileNotFoundException>(
             async () => await stub.ReadAsync("/nonexistent/path")
         );
@@ -49,9 +49,9 @@ public class StubMarkerFileReaderTests
     public async Task TryReadAsync_ValidWorkspace_ReturnsSuccessWithData()
     {
         var stub = new StubMarkerFileReader();
-        
+
         var (success, data) = await stub.TryReadAsync("/home/user/trusted-workspace");
-        
+
         Assert.True(success);
         Assert.NotNull(data);
         Assert.Equal("trust-bootstrap-key-123", data.ApiKey);
@@ -61,9 +61,9 @@ public class StubMarkerFileReaderTests
     public async Task TryReadAsync_NonexistentPath_ReturnsFailureWithNull()
     {
         var stub = new StubMarkerFileReader();
-        
+
         var (success, data) = await stub.TryReadAsync("/nonexistent/path");
-        
+
         Assert.False(success);
         Assert.Null(data);
     }
@@ -72,9 +72,9 @@ public class StubMarkerFileReaderTests
     public async Task VerifyTrustAsync_TrustedWorkspaceWithoutPrompt_ReturnsCachedTrust()
     {
         var stub = new StubMarkerFileReader();
-        
+
         var result = await stub.VerifyTrustAsync("/home/user/trusted-workspace", requireUserConfirmation: false);
-        
+
         Assert.NotNull(result);
         Assert.True(result.IsTrusted);
         Assert.Equal("registry_cached", result.TrustMethod);
@@ -84,9 +84,9 @@ public class StubMarkerFileReaderTests
     public async Task VerifyTrustAsync_TrustedWorkspaceWithPrompt_ReturnsUserConfirmed()
     {
         var stub = new StubMarkerFileReader();
-        
+
         var result = await stub.VerifyTrustAsync("/home/user/trusted-workspace", requireUserConfirmation: true);
-        
+
         Assert.NotNull(result);
         Assert.True(result.IsTrusted);
         Assert.Equal("user_confirmed", result.TrustMethod);
@@ -96,9 +96,9 @@ public class StubMarkerFileReaderTests
     public async Task VerifyTrustAsync_UntrustedWorkspaceWithoutPrompt_ReturnsNotTrusted()
     {
         var stub = new StubMarkerFileReader();
-        
+
         var result = await stub.VerifyTrustAsync("/home/user/untrusted-workspace", requireUserConfirmation: false);
-        
+
         Assert.NotNull(result);
         Assert.False(result.IsTrusted);
         Assert.Equal("not_trusted", result.TrustMethod);
@@ -109,9 +109,9 @@ public class StubMarkerFileReaderTests
     public async Task VerifyTrustAsync_SignatureVerifiedWorkspace_ReturnsSignatureVerified()
     {
         var stub = new StubMarkerFileReader();
-        
+
         var result = await stub.VerifyTrustAsync("/home/user/signature-verified", requireUserConfirmation: false);
-        
+
         Assert.NotNull(result);
         Assert.True(result.IsTrusted);
         Assert.Equal("signature_verified", result.TrustMethod);
@@ -134,15 +134,15 @@ public class StubMarkerFileReaderTests
         };
 
         using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(100));
-        
+
         var watchTask = stub.WatchAsync("/home/user/trusted-workspace", callback, cts.Token);
-        
+
         await Task.Delay(50);
-        
+
         await cts.CancelAsync();
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () => await watchTask);
-        
+
         Assert.True(callbackInvoked);
         Assert.NotNull(capturedData);
         Assert.Contains("rotated", capturedData.ApiKey);
@@ -152,14 +152,14 @@ public class StubMarkerFileReaderTests
     public async Task PreCannedPayloads_CoverMultipleScenarios()
     {
         var stub = new StubMarkerFileReader();
-        
+
         var trustedData = await stub.ReadAsync("/home/user/trusted-workspace");
         Assert.NotNull(trustedData.Metadata);
         Assert.True(trustedData.Metadata.ContainsKey("nonce"));
-        
+
         var untrustedData = await stub.ReadAsync("/home/user/untrusted-workspace");
         Assert.True(untrustedData.Metadata == null || !untrustedData.Metadata.ContainsKey("nonce"));
-        
+
         var signatureData = await stub.ReadAsync("/home/user/signature-verified");
         Assert.NotNull(signatureData.Metadata);
         Assert.True(signatureData.Metadata.ContainsKey("signature"));
@@ -183,12 +183,12 @@ internal sealed class StubMarkerFileReader : IMarkerFileReader
                     ["signature"] = "sha256-signature-xyz",
                     ["trust_level"] = "user_confirmed"
                 }),
-            
+
             ["/home/user/untrusted-workspace"] = CreateMarkerData(
                 "/home/user/untrusted-workspace",
                 "untrusted-key-456",
                 null),
-            
+
             ["/home/user/signature-verified"] = CreateMarkerData(
                 "/home/user/signature-verified",
                 "verified-key-789",

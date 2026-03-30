@@ -1476,9 +1476,9 @@ public class TodoWorkflowTests
         }
 
         public string TodoId => _todoId;
-        public IReadOnlyList<IRequirementReference> FunctionalRequirements => 
+        public IReadOnlyList<IRequirementReference> FunctionalRequirements =>
             _result.FunctionalRequirements?.Select(id => (IRequirementReference)new RequirementReferenceAdapter(id)).ToList() ?? new List<IRequirementReference>();
-        public IReadOnlyList<IRequirementReference> TechnicalRequirements => 
+        public IReadOnlyList<IRequirementReference> TechnicalRequirements =>
             _result.TechnicalRequirements?.Select(id => (IRequirementReference)new RequirementReferenceAdapter(id)).ToList() ?? new List<IRequirementReference>();
         public bool AllRequirementsExist => _allExist;
     }

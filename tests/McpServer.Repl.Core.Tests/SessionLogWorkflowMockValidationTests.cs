@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using McpServer.Repl.Core;
 using McpServer.Client;
 using McpServer.Client.Models;
+using McpServer.Repl.Core;
 using NSubstitute;
 using Xunit;
 
@@ -102,9 +102,9 @@ public class SessionLogWorkflowMockValidationTests
     public void WorkflowRouting_BeginTurn_CreatesNewTurn()
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
-        
+
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
-        
+
         Assert.Equal("req-20260304T113901Z-task-001", _fakeState.CurrentTurnRequestId);
         Assert.Equal("in_progress", _fakeState.CurrentTurnStatus);
         Assert.Equal(0, _fakeState.TurnCount);
@@ -115,9 +115,9 @@ public class SessionLogWorkflowMockValidationTests
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
-        
+
         _fakeState.UpdateTurn();
-        
+
         Assert.Equal("in_progress", _fakeState.CurrentTurnStatus);
     }
 
@@ -126,9 +126,9 @@ public class SessionLogWorkflowMockValidationTests
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
-        
+
         _fakeState.CompleteTurn();
-        
+
         Assert.Null(_fakeState.CurrentTurnRequestId);
         Assert.Null(_fakeState.CurrentTurnStatus);
         Assert.Equal(1, _fakeState.TurnCount);
@@ -139,9 +139,9 @@ public class SessionLogWorkflowMockValidationTests
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
-        
+
         _fakeState.FailTurn();
-        
+
         Assert.Null(_fakeState.CurrentTurnRequestId);
         Assert.Null(_fakeState.CurrentTurnStatus);
         Assert.Equal(1, _fakeState.TurnCount);
@@ -220,11 +220,11 @@ public class SessionLogWorkflowMockValidationTests
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
-        
+
         Assert.Equal("in_progress", _fakeState.CurrentTurnStatus);
 
         _fakeState.CompleteTurn();
-        
+
         Assert.Null(_fakeState.CurrentTurnStatus);
         Assert.Equal(1, _fakeState.TurnCount);
     }
@@ -234,11 +234,11 @@ public class SessionLogWorkflowMockValidationTests
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
-        
+
         Assert.Equal("in_progress", _fakeState.CurrentTurnStatus);
 
         _fakeState.FailTurn();
-        
+
         Assert.Null(_fakeState.CurrentTurnStatus);
         Assert.Equal(1, _fakeState.TurnCount);
     }
@@ -247,22 +247,22 @@ public class SessionLogWorkflowMockValidationTests
     public void TurnLifecycleGuard_MultipleTurns_TracksSeparately()
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
-        
+
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
         _fakeState.CompleteTurn();
-        
+
         Assert.Equal(1, _fakeState.TurnCount);
         Assert.Null(_fakeState.CurrentTurnRequestId);
 
         _fakeState.BeginTurn("req-20260304T113901Z-task-002");
         _fakeState.UpdateTurn();
         _fakeState.CompleteTurn();
-        
+
         Assert.Equal(2, _fakeState.TurnCount);
 
         _fakeState.BeginTurn("req-20260304T113901Z-task-003");
         _fakeState.FailTurn();
-        
+
         Assert.Equal(3, _fakeState.TurnCount);
     }
 
@@ -354,7 +354,7 @@ public class SessionLogWorkflowMockValidationTests
     public void SessionState_AfterBeginTurn_TracksActiveTurn()
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
-        
+
         var requestId = "req-20260304T113901Z-task-001";
         _fakeState.BeginTurn(requestId);
 
@@ -368,7 +368,7 @@ public class SessionLogWorkflowMockValidationTests
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
-        
+
         _fakeState.CompleteTurn();
 
         Assert.Null(_fakeState.CurrentTurnRequestId);
@@ -440,7 +440,7 @@ public class SessionLogWorkflowMockValidationTests
         };
 
         var result1 = await _stubClient.AppendDialogAsync("Copilot", "session-1", "req-1", items1);
-        
+
         var items2 = new List<ProcessingDialogItemDto>
         {
             new() { Role = "model", Content = "Second", Category = "reasoning" }

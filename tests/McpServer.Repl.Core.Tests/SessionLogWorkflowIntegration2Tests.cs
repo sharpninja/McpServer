@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using McpServer.Repl.Core;
 using McpServer.Client;
 using McpServer.Client.Models;
+using McpServer.Repl.Core;
 using Xunit;
 
 namespace McpServer.Repl.Core.Tests;
@@ -83,7 +83,7 @@ public class SessionLogWorkflowIntegration2Tests
         await _stubClient.SubmitAsync(sessionLog);
 
         _fakeState.OpenSession(agent, sessionId, title, model);
-        
+
         var requestId = "req-20260304T113901Z-task-001";
         _fakeState.BeginTurn(requestId);
 
@@ -181,7 +181,7 @@ public class SessionLogWorkflowIntegration2Tests
 
         await _stubClient.SubmitAsync(sessionLog);
         _fakeState.OpenSession(agent, sessionId, "History Test", "claude-sonnet-4");
-        
+
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
         _fakeState.CompleteTurn();
 
@@ -274,11 +274,11 @@ public class SessionLogWorkflowIntegration2Tests
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
-        
+
         Assert.Equal("in_progress", _fakeState.CurrentTurnStatus);
 
         _fakeState.CompleteTurn();
-        
+
         Assert.Null(_fakeState.CurrentTurnStatus);
         Assert.Equal(1, _fakeState.TurnCount);
     }
@@ -288,11 +288,11 @@ public class SessionLogWorkflowIntegration2Tests
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
-        
+
         Assert.Equal("in_progress", _fakeState.CurrentTurnStatus);
 
         _fakeState.FailTurn();
-        
+
         Assert.Null(_fakeState.CurrentTurnStatus);
         Assert.Equal(1, _fakeState.TurnCount);
     }
@@ -302,11 +302,11 @@ public class SessionLogWorkflowIntegration2Tests
     {
         _fakeState.OpenSession("Copilot", "Copilot-20260304T113901Z-test", "Test", "model");
         _fakeState.BeginTurn("req-20260304T113901Z-task-001");
-        
+
         Assert.Equal("in_progress", _fakeState.CurrentTurnStatus);
 
         _fakeState.UpdateTurn();
-        
+
         Assert.Equal("in_progress", _fakeState.CurrentTurnStatus);
     }
 

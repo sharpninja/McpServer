@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using McpServer.Repl.Core;
 using McpServer.Client.Models;
+using McpServer.Repl.Core;
 using NSubstitute;
 using Xunit;
 
@@ -64,7 +64,7 @@ public class Iteration2_AllTestsValidation
     public async Task Validation_StubSessionLogClient_QueryReturnsValidResult()
     {
         var stubClient = new StubSessionLogClient();
-        
+
         var result = await stubClient.QueryAsync(agent: "Copilot");
 
         Assert.NotNull(result);
@@ -129,7 +129,7 @@ public class Iteration2_AllTestsValidation
     public void Validation_ISessionLogWorkflow_InterfaceExists()
     {
         var interfaceType = typeof(ISessionLogWorkflow);
-        
+
         Assert.True(interfaceType.IsInterface);
         Assert.NotNull(interfaceType.GetMethod("BootstrapAsync"));
         Assert.NotNull(interfaceType.GetMethod("OpenSessionAsync"));
@@ -147,7 +147,7 @@ public class Iteration2_AllTestsValidation
     public void Validation_ISessionLogState_InterfaceExists()
     {
         var interfaceType = typeof(ISessionLogState);
-        
+
         Assert.True(interfaceType.IsInterface);
         Assert.NotNull(interfaceType.GetProperty("Agent"));
         Assert.NotNull(interfaceType.GetProperty("SessionId"));
@@ -165,7 +165,7 @@ public class Iteration2_AllTestsValidation
     public void Validation_IDialogItem_InterfaceExists()
     {
         var interfaceType = typeof(IDialogItem);
-        
+
         Assert.True(interfaceType.IsInterface);
         Assert.NotNull(interfaceType.GetProperty("Timestamp"));
         Assert.NotNull(interfaceType.GetProperty("Role"));
@@ -177,7 +177,7 @@ public class Iteration2_AllTestsValidation
     public void Validation_ISessionAction_InterfaceExists()
     {
         var interfaceType = typeof(ISessionAction);
-        
+
         Assert.True(interfaceType.IsInterface);
         Assert.NotNull(interfaceType.GetProperty("Order"));
         Assert.NotNull(interfaceType.GetProperty("Description"));
@@ -190,7 +190,7 @@ public class Iteration2_AllTestsValidation
     public void Validation_ISessionLogSummary_InterfaceExists()
     {
         var interfaceType = typeof(ISessionLogSummary);
-        
+
         Assert.True(interfaceType.IsInterface);
         Assert.NotNull(interfaceType.GetProperty("Agent"));
         Assert.NotNull(interfaceType.GetProperty("SessionId"));
@@ -247,7 +247,7 @@ public class Iteration2_AllTestsValidation
     public void Validation_FakeYamlSerializer_CanSerializeAndDeserialize()
     {
         var serializer = new FakeYamlSerializer();
-        
+
         var envelope = NSubstitute.Substitute.For<IYamlEnvelope>();
         envelope.Type.Returns("test");
         envelope.Payload.Returns(new { test = "value" });

@@ -9,12 +9,12 @@ public class StubAuthRotationHandlerTests
     public async Task UpdateAuthState_NewMarkerData_TransitionsToNewState()
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
-        
+
         Assert.Equal("initial-key", stub.CurrentAuthState.ApiKey);
         Assert.True(stub.CurrentAuthState.IsValid);
 
         var newMarkerData = CreateMarkerData("/home/user/project", "updated-key");
-        
+
         await stub.UpdateAuthStateAsync(newMarkerData);
 
         Assert.Equal("updated-key", stub.CurrentAuthState.ApiKey);
@@ -36,7 +36,7 @@ public class StubAuthRotationHandlerTests
     public async Task RegisterAuthChangeCallback_InvokesOnUpdate()
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
-        
+
         var callbackInvoked = false;
         IAuthState? capturedState = null;
 
@@ -61,7 +61,7 @@ public class StubAuthRotationHandlerTests
     public async Task RegisterAuthChangeCallback_MultipleCallbacks_AllInvoked()
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
-        
+
         var callback1Invoked = false;
         var callback2Invoked = false;
         var callback3Invoked = false;
@@ -82,7 +82,7 @@ public class StubAuthRotationHandlerTests
     public async Task UnregisterAuthChangeCallback_RemovesCallback()
     {
         var stub = new StubAuthRotationHandler("/home/user/project", "initial-key");
-        
+
         var callback1Invoked = false;
         var callback2Invoked = false;
 
@@ -168,13 +168,13 @@ public class StubAuthRotationHandlerTests
 
         var markerV2 = CreateMarkerData("/home/user/project", "key-v2");
         await stub.UpdateAuthStateAsync(markerV2);
-        
+
         Assert.True(stub.CurrentAuthState.IsValid);
         Assert.Equal("key-v2", stub.CurrentAuthState.ApiKey);
 
         var markerV3 = CreateMarkerData("/home/user/project", "key-v3");
         await stub.UpdateAuthStateAsync(markerV3);
-        
+
         Assert.True(stub.CurrentAuthState.IsValid);
         Assert.Equal("key-v3", stub.CurrentAuthState.ApiKey);
 
@@ -274,7 +274,7 @@ internal sealed class StubAuthRotationHandler : IAuthRotationHandler
 
     public Task<bool> ValidateAuthStateAsync(CancellationToken cancellationToken = default)
     {
-        var isValid = _currentAuthState.IsValid && 
+        var isValid = _currentAuthState.IsValid &&
                       !string.IsNullOrEmpty(_currentAuthState.ApiKey) &&
                       !_currentAuthState.ApiKey.Contains("expired");
 

@@ -28,7 +28,7 @@ public class OrchestrationRulesTests
             .Returns(trustResult);
 
         var verifyResult = await markerReader.VerifyTrustAsync(workspacePath, requireUserConfirmation: false);
-        
+
         if (!verifyResult.IsTrusted)
         {
             await authHandler.DidNotReceive().UpdateAuthStateAsync(Arg.Any<IMarkerFileData>(), Arg.Any<CancellationToken>());
@@ -44,7 +44,7 @@ public class OrchestrationRulesTests
         var workspacePath = "/home/user/project";
 
         var validNonce = "valid-nonce-abc123";
-        var markerWithValidNonce = CreateMarkerData(workspacePath, "key", 
+        var markerWithValidNonce = CreateMarkerData(workspacePath, "key",
             new Dictionary<string, object?> { ["nonce"] = validNonce });
 
         trustService.PromptUserTrustAsync(workspacePath, Arg.Any<IMarkerFileData>(), default)
@@ -93,8 +93,8 @@ public class OrchestrationRulesTests
         Assert.Equal("registry_cached", result.TrustMethod);
 
         await trustService.DidNotReceive().PromptUserTrustAsync(
-            Arg.Any<string>(), 
-            Arg.Any<IMarkerFileData>(), 
+            Arg.Any<string>(),
+            Arg.Any<IMarkerFileData>(),
             Arg.Any<CancellationToken>());
     }
 
@@ -150,7 +150,7 @@ public class OrchestrationRulesTests
         Assert.True(rotationDetected);
         Assert.NotNull(rotatedData);
         Assert.Equal("rotated-key-xyz", rotatedData!.ApiKey);
-        
+
         await authHandler.Received(1).UpdateAuthStateAsync(newMarkerData, default);
     }
 
@@ -235,7 +235,7 @@ public class OrchestrationRulesTests
 
         Assert.True(result.IsTrusted);
         Assert.Equal("signature_verified", result.TrustMethod);
-        
+
         await trustService.DidNotReceive().PromptUserTrustAsync(
             Arg.Any<string>(),
             Arg.Any<IMarkerFileData>(),

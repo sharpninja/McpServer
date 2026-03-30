@@ -346,7 +346,7 @@ public class SessionLogWorkflowProductionTests
     public async Task QueryHistoryAsync_Pagination_ReturnsCorrectSlice()
     {
         await _workflow.BootstrapAsync();
-        
+
         var history = await _workflow.QueryHistoryAsync(limit: 5, offset: 0);
 
         Assert.NotNull(history);

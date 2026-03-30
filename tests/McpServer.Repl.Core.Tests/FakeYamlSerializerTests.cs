@@ -36,9 +36,9 @@ public class FakeYamlSerializerTests
         var requestPayload = Substitute.For<IRequestPayload>();
         requestPayload.RequestId.Returns("req-001");
         requestPayload.Method.Returns("workspace.select");
-        requestPayload.Params.Returns(new Dictionary<string, object?> 
-        { 
-            ["path"] = "/home/user/project" 
+        requestPayload.Params.Returns(new Dictionary<string, object?>
+        {
+            ["path"] = "/home/user/project"
         });
 
         var envelope = Substitute.For<IYamlEnvelope>();
