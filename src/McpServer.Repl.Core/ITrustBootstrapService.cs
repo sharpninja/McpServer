@@ -1,3 +1,7 @@
+// FR-MCP-REPL-004: Trust Bootstrap and Auth Rotation - Marker file trust verification
+// TR-MCP-REPL-006: Trust Bootstrap and Token Validation - Bootstrap and auth interfaces
+// TEST-MCP-REPL-004: Bootstrap invocation validates marker signature and health nonce
+
 namespace McpServer.Repl.Core;
 
 /// <summary>

@@ -1,3 +1,8 @@
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - TODO workflow interface
+// FR-MCP-REPL-003: Command Namespace Parity - TODO operation contracts
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - TODO workflow contract
+// TEST-MCP-REPL-006: TODO REPL commands match REST endpoint semantics
+
 namespace McpServer.Repl.Core;
 
 /// <summary>

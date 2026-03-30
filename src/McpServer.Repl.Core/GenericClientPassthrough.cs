@@ -1,6 +1,20 @@
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Generic client passthrough operations
+// FR-MCP-REPL-003: Command Namespace Parity - Workspace and context operation forwarding
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - Client passthrough implementation
+// TEST-MCP-REPL-010: Workspace management REPL commands match REST endpoints
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Generic client passthrough implementation
+// FR-MCP-REPL-003: Command Namespace Parity - Client operation forwarding implementation
+// FR-MCP-REPL-005: Orchestration State Visibility - State query implementation
+// TR-MCP-REPL-004: Command Registry and Dispatcher - Generic passthrough handler
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - Client passthrough delegation
+// TR-MCP-REPL-007: State Query Commands - Client passthrough dynamic binding
+// TEST-MCP-REPL-008: Context REPL operations match REST endpoints
+// TEST-MCP-REPL-011: Generic client passthrough delegates to correct client methods
+
 using System.Reflection;
 using System.Text.Json;
 using System.Threading;

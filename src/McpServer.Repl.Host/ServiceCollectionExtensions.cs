@@ -1,3 +1,12 @@
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Service registration extensions
+// TR-MCP-REPL-002: DI-Integrated REPL Host - Service collection configuration
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - Workflow DI registration
+
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - DI service registration
+// TR-MCP-REPL-002: DI-Integrated REPL Host - Service composition root
+// TR-MCP-REPL-004: Command Registry and Dispatcher - Workflow handler registration
+// TEST-MCP-REPL-016: All dependencies resolved from DI container
+
 using Microsoft.Extensions.DependencyInjection;
 using McpServer.Repl.Core;
 

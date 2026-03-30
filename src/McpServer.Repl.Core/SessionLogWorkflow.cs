@@ -1,8 +1,25 @@
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Session log workflow operations
+// FR-MCP-REPL-002: REPL Lifecycle Management - Session state management and turn lifecycle
+// FR-MCP-REPL-003: Command Namespace Parity - Session log operations via REPL commands
+// TR-MCP-REPL-001: YAML Envelope Protocol - Session log command/response framing
+// TR-MCP-REPL-002: DI-Integrated REPL Host - Workflow service DI registration
+// TR-MCP-REPL-003: Command Loop Lifecycle - Session log turn lifecycle state management
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - Session log command handlers
+// TEST-MCP-REPL-006: Session log workflow operation parity with REST endpoints
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Session log workflow implementation
+// FR-MCP-REPL-002: REPL Lifecycle Management - Turn lifecycle and state management
+// FR-MCP-REPL-003: Command Namespace Parity - Session log operation implementation
+// TR-MCP-REPL-004: Command Registry and Dispatcher - Session log workflow handler
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - Session log workflow delegation
+// TEST-MCP-REPL-007: Session log REPL commands match REST endpoint semantics
+// TEST-MCP-REPL-020: Session state and turn context properly isolated
+
 using McpServer.Client;
 using McpServer.Client.Models;
 

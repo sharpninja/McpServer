@@ -1,3 +1,8 @@
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Protocol infrastructure
+// TR-MCP-REPL-001: YAML Envelope Protocol - YAML serialization and framing
+// TR-MCP-REPL-002: DI-Integrated REPL Host - Workspace resolution
+// TEST-MCP-REPL-017: Workspace context resolution matches HTTP header behavior
+
 namespace McpServer.Repl.Core;
 
 /// <summary>

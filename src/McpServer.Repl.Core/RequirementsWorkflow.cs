@@ -1,9 +1,21 @@
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Requirements workflow operations
+// FR-MCP-REPL-003: Command Namespace Parity - Requirements management operations via REPL
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - Requirements command handlers
+// TEST-MCP-REPL-009: Requirements REPL commands match REST endpoint semantics
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Requirements workflow implementation
+// FR-MCP-REPL-003: Command Namespace Parity - Requirements operation implementation
+// TR-MCP-REPL-004: Command Registry and Dispatcher - Requirements workflow handler
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - Requirements workflow delegation
+// TEST-MCP-REPL-009: Requirements management operations validate requirement identifier rules
+// TEST-MCP-REPL-019: Workflows delegate to typed client contracts without duplicating logic
+
 using McpServer.Client;
 using McpServer.Client.Models;
 

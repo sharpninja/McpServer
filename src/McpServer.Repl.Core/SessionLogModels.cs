@@ -1,6 +1,15 @@
 using System;
 using System.Collections.Generic;
 
+// FR-MCP-REPL-003: Command Namespace Parity - Session log command structures
+// TR-MCP-REPL-001: YAML Envelope Protocol - Session log data models
+// TEST-MCP-REPL-006: Session log REPL commands match REST endpoint semantics
+
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Session log workflow data models
+// FR-MCP-REPL-002: REPL Lifecycle Management - Turn state and lifecycle models
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - Session log models
+// TEST-MCP-REPL-007: Session log REPL commands match REST endpoint semantics
+
 namespace McpServer.Repl.Core;
 
 /// <summary>

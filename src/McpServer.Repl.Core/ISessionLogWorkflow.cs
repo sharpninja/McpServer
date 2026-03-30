@@ -1,3 +1,9 @@
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Session log workflow interface
+// FR-MCP-REPL-002: REPL Lifecycle Management - Turn lifecycle and state transitions
+// FR-MCP-REPL-003: Command Namespace Parity - Session log operation contracts
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - Session log workflow contract
+// TEST-MCP-REPL-006: Session log REPL commands match REST endpoint semantics
+
 namespace McpServer.Repl.Core;
 
 /// <summary>

@@ -1,9 +1,24 @@
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - TODO workflow operations
+// FR-MCP-REPL-003: Command Namespace Parity - TODO operations via REPL commands  
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - TODO command handlers
+// TEST-MCP-REPL-006: TODO workflow operations match REST endpoint behavior
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - TODO workflow implementation
+// FR-MCP-REPL-003: Command Namespace Parity - TODO operation implementation
+// TR-MCP-REPL-002: DI-Integrated REPL Host - TODO workflow DI registration
+// TR-MCP-REPL-004: Command Registry and Dispatcher - TODO workflow handler
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - TODO workflow delegation
+// TEST-MCP-REPL-006: TODO REPL commands match REST endpoint semantics
+// TEST-MCP-REPL-012: Streaming TODO operations emit events correctly
+// TEST-MCP-REPL-019: Workflows delegate to typed client contracts without duplicating logic
+// TEST-MCP-REPL-020: TODO selection state properly isolated
+
 using McpServer.Client;
 using McpServer.Client.Models;
 using McpServer.Repl.Core;

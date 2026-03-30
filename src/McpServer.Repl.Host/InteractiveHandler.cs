@@ -1,3 +1,7 @@
+// FR-MCP-REPL-002: REPL Lifecycle Management - Interactive command loop handler
+// TR-MCP-REPL-003: Command Loop Lifecycle - Interactive STDIO processing
+// TEST-MCP-REPL-013: REPL host terminates gracefully on EOF or exit command
+
 using Microsoft.Extensions.Logging;
 using McpServer.Client;
 using McpServer.Client.Models;

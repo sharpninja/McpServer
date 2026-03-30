@@ -1,3 +1,9 @@
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - REPL protocol contracts and models
+// FR-MCP-REPL-004: Trust Bootstrap and Auth Rotation - Protocol-level authentication
+// TR-MCP-REPL-001: YAML Envelope Protocol - Command/response framing structures
+// TR-MCP-REPL-006: Trust Bootstrap and Token Validation - Protocol authentication interface
+// TEST-MCP-REPL-004: Bootstrap invocation validates marker signature and health nonce
+
 namespace McpServer.Repl.Core;
 
 /// <summary>

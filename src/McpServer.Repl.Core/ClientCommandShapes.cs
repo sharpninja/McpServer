@@ -1,4 +1,18 @@
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Command/response model shapes
+// FR-MCP-REPL-003: Command Namespace Parity - Command argument and response structures
+// TR-MCP-REPL-001: YAML Envelope Protocol - Command envelope data models
+// TR-MCP-REPL-004: Command Registry and Dispatcher - Command shape definitions
+// TEST-MCP-REPL-001: YAML command envelopes serialize/deserialize correctly
+
 using System.Collections.Generic;
+
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Client passthrough command shapes
+// FR-MCP-REPL-003: Command Namespace Parity - Generic client operation contract models
+// FR-MCP-REPL-005: Orchestration State Visibility - State query command shapes
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - Client command namespace shapes
+// TR-MCP-REPL-007: State Query Commands - Client passthrough models
+// TEST-MCP-REPL-008: Context REPL operations match REST endpoints
+// TEST-MCP-REPL-011: Generic client passthrough delegates to correct client methods
 
 namespace McpServer.Repl.Core;
 

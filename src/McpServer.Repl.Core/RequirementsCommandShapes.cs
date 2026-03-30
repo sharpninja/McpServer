@@ -1,3 +1,13 @@
+// FR-MCP-REPL-003: Command Namespace Parity - Requirements command structures
+// TR-MCP-REPL-001: YAML Envelope Protocol - Requirements command envelope data models
+// TR-MCP-REPL-004: Command Registry and Dispatcher - Requirements command shapes
+// TEST-MCP-REPL-009: Requirements REPL commands match REST endpoint semantics
+
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Requirements workflow command shapes
+// FR-MCP-REPL-003: Command Namespace Parity - Requirements operation contract models
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - Requirements command namespace shapes
+// TEST-MCP-REPL-009: Requirements management operations validate requirement identifier rules
+
 namespace McpServer.Repl.Core;
 
 /// <summary>

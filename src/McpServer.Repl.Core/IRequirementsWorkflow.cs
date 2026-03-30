@@ -1,3 +1,8 @@
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Requirements workflow interface
+// FR-MCP-REPL-003: Command Namespace Parity - Requirements operation contracts
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - Requirements workflow contract
+// TEST-MCP-REPL-009: Requirements management operations validate requirement identifier rules
+
 namespace McpServer.Repl.Core;
 
 /// <summary>

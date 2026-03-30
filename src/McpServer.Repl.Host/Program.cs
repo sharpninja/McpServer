@@ -1,3 +1,10 @@
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Host application entry point
+// FR-MCP-REPL-002: REPL Lifecycle Management - Host startup and command routing
+// TR-MCP-REPL-002: DI-Integrated REPL Host - Service registration and composition root
+// TR-MCP-REPL-003: Command Loop Lifecycle - Interactive and agent STDIO mode selection
+// TEST-MCP-REPL-001: REPL host processes well-formed YAML command envelopes
+// TEST-MCP-REPL-013: REPL host terminates gracefully on EOF or exit command
+
 using System.CommandLine;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;

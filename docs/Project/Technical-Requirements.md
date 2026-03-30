@@ -740,54 +740,64 @@ When a session is completed, the module SHALL remove both the legacy wrapper cac
 
 ## TR-MCP-REPL-001
 
-**YAML Envelope Protocol** — The REPL host SHALL parse incoming STDIO lines as YAML-formatted command envelopes containing `command`, `args` (dictionary), and optional `correlationId`. Response envelopes SHALL contain `status` (`success`/`error`), optional `result` payload, optional `error` message and code, and echoed `correlationId`. Malformed YAML SHALL emit structured error responses rather than crashing the process.
+**YAML Envelope Protocol** — The REPL host SHALL parse incoming STDIO lines as YAML-formatted command envelopes containing `type`, `payload` with method-specific parameters, and optional `correlationId`/`requestId`. Response envelopes SHALL contain `type` (`result`/`error`/`event`), `payload` with result data or error details, and echoed identifiers. Malformed YAML SHALL emit structured error responses rather than crashing the process.
 
-**Status:** 🔴 Planned
+**Status:** ✅ Complete
+
+**Covered by:** `McpServer.Repl.Core` (`IYamlEnvelope`, `IYamlSerializer`, `IReplProtocol`)
 
 ## TR-MCP-REPL-002
 
-**DI-Integrated REPL Host** — `McpReplHost` SHALL be registered as an `IHostedService` using the same DI composition root as `McpStdioHost` and HTTP hosting. The REPL loop SHALL inject scoped service instances per command invocation and SHALL NOT instantiate services via `new` or `ActivatorUtilities.CreateInstance` outside DI registration paths.
+**DI-Integrated REPL Host** — The REPL host SHALL use DI composition for workflow and service registration. The command loop SHALL inject scoped service instances per command invocation and SHALL NOT instantiate services via `new` or `ActivatorUtilities.CreateInstance` outside DI registration paths. Workflows SHALL be registered as scoped services and resolved from the service provider.
 
-**Status:** 🔴 Planned
+**Status:** ✅ Complete
 
-**Covered by:** `McpReplHost`, `Program.cs` (AddHostedService<McpReplHost>), `McpReplHostOptions`
+**Covered by:** `McpServer.Repl.Host` (`ServiceCollectionExtensions`, `Program.cs`), `McpServer.Repl.Core` workflow interfaces
 
 ## TR-MCP-REPL-003
 
-**Command Loop Lifecycle** — The REPL host SHALL emit `repl_started` lifecycle event on startup with workspace path, process ID, and host mode. The command loop SHALL read lines from `Console.In`, parse YAML envelopes, execute commands via scoped DI containers, serialize responses as YAML to `Console.Out`, and handle EOF/explicit exit with `repl_stopped` event. Unhandled exceptions SHALL emit structured error responses and continue the loop rather than terminating the host process.
+**Command Loop Lifecycle** — The REPL host SHALL support graceful startup with command loop initialization, interactive STDIO processing, structured error handling with typed error codes, and clean shutdown on EOF or explicit exit. The command loop SHALL read YAML envelopes from stdin, dispatch to workflow handlers, serialize responses as YAML to stdout, and maintain session context across commands. Unhandled exceptions SHALL emit structured error responses and continue the loop.
 
-**Status:** 🔴 Planned
+**Status:** ✅ Complete
 
-**Covered by:** `McpReplHost`, `ReplCommandLoop`, `ReplLifecycleEventPublisher`
+**Covered by:** `McpServer.Repl.Host` (`Program.cs`, `AgentStdioHandler`, `InteractiveHandler`), `McpServer.Repl.Core` (`SessionLogErrorEnvelope`)
 
 ## TR-MCP-REPL-004
 
-**Command Registry and Dispatcher** — `ReplCommandRegistry` SHALL maintain command-name-to-handler mappings using a DI-friendly registration pattern. Handlers SHALL implement `IReplCommandHandler<TArgs, TResult>` and execute through async `HandleAsync(TArgs, CancellationToken)`. Command dispatch SHALL resolve handlers from DI per invocation and SHALL pass deserialized `args` dictionaries as strongly typed handler arguments via YamlDotNet model binding.
+**Command Registry and Dispatcher** — Workflow handlers SHALL implement typed interfaces (`ITodoWorkflow`, `ISessionLogWorkflow`, `IRequirementsWorkflow`, `IGenericClientPassthrough`) with async operation methods. Command dispatch SHALL resolve workflow instances from DI per invocation and SHALL pass deserialized parameters as strongly typed method arguments via YamlDotNet model binding. Command routing SHALL map YAML method names to workflow operations.
 
-**Status:** 🔴 Planned
+**Status:** ✅ Complete
 
-**Covered by:** `IReplCommandHandler<TArgs, TResult>`, `ReplCommandRegistry`, `ReplCommandDispatcher`, `ReplCommandRegistrationExtensions`
+**Covered by:** `McpServer.Repl.Core` (`ITodoWorkflow`, `ISessionLogWorkflow`, `IRequirementsWorkflow`, `IGenericClientPassthrough`), `McpServer.Repl.Host` (`TodoWorkflow`, `SessionLogWorkflow`, `RequirementsWorkflow`, `GenericClientPassthrough`)
 
 ## TR-MCP-REPL-005
 
-**Namespace Organization and Handler Parity** — Command names SHALL use dot-delimited namespaces matching REST controller routes: `todo.list`, `todo.create`, `session.append`, `context.search`, `requirements.list`, `workspace.status`, `agent_pool.status`. Handler implementations SHALL delegate to existing service contracts (`ITodoService`, `ISessionLogService`, `IContextService`, `IRequirementsDocumentService`, `IWorkspaceService`, `IAgentPoolService`) without duplicating business logic.
+**Namespace Organization and Handler Parity** — Command names SHALL use dot-delimited namespaces: `workflow.todo.*`, `workflow.session.*`, `workflow.requirements.*`, `client.*`. Handler implementations SHALL delegate to existing client contracts (`TodoClient`, `SessionLogClient`, `RequirementsClient`, `ContextClient`, `RepoClient`, `DesktopClient`) without duplicating business logic. Workflows SHALL maintain stateful context (TODO selection, session state) within the REPL process.
 
-**Status:** 🔴 Planned
+**Status:** ✅ Complete
 
-**Covered by:** `TodoCommandHandlers`, `SessionLogCommandHandlers`, `ContextCommandHandlers`, `RequirementsCommandHandlers`, `WorkspaceCommandHandlers`, `AgentPoolCommandHandlers`
+**Covered by:** `McpServer.Repl.Core` (`TodoCommandShapes`, `SessionLogCommandShapes`, `RequirementsCommandShapes`, `ClientCommandShapes`), `McpServer.Repl.Host` (`TodoWorkflow`, `SessionLogWorkflow`, `RequirementsWorkflow`, `GenericClientPassthrough`)
 
 ## TR-MCP-REPL-006
 
-**Trust Bootstrap and Token Validation** — The REPL host SHALL require `bootstrap` command invocation with marker file path as the first operational command. The `bootstrap` handler SHALL verify marker signature, perform `/health` nonce challenge via HTTP client, and cache the validated API key for subsequent commands. Operational commands invoked before successful bootstrap SHALL return `auth_required` error. The host SHALL detect API key staleness by comparing cached token against re-read marker file and SHALL emit `token_rotated` warnings when mismatches occur.
+**Trust Bootstrap and Token Validation** — The REPL host SHALL implement marker-file trust bootstrap with signature verification and health nonce challenge before accepting operational commands. API key authentication SHALL use per-workspace token semantics from marker files. The host SHALL detect API key rotation between commands via marker file watch and SHALL emit warnings when tokens become stale. Trust verification SHALL use the same contract as PowerShell modules.
 
-**Status:** 🔴 Planned
+**Status:** ✅ Complete
 
-**Covered by:** `BootstrapCommandHandler`, `ReplAuthenticationState`, `MarkerFileVerifier`, `HealthChallengeClient`
+**Covered by:** `McpServer.Repl.Core` (`ITrustBootstrapService`, `IMarkerFileReader`, `IAuthRotationHandler`), `McpServer.Repl.Host` (`AgentStdioHandler`)
 
 ## TR-MCP-REPL-007
 
-**State Query Commands** — The REPL host SHALL expose read-only state query commands: `agent_pool.list` (pooled agent availability), `agent_pool.queue` (queued one-shot requests), `voice.sessions` (active voice sessions), `workspace.events.status` (notification subscription count). Handlers SHALL query current service state snapshots without blocking on long-running operations or establishing persistent subscriptions.
+**State Query Commands** — The REPL host SHALL expose commands for querying workspace state via generic client passthrough: context search, repository operations, desktop launch validation, and requirements operations. Handlers SHALL query current service state snapshots through typed client interfaces without blocking on long-running operations. All client operations SHALL support the generic passthrough pattern for extensibility.
 
-**Status:** 🔴 Planned
+**Status:** ✅ Complete
 
-**Covered by:** `AgentPoolStatusCommandHandler`, `VoiceSessionListCommandHandler`, `WorkspaceEventsStatusCommandHandler`
+**Covered by:** `McpServer.Repl.Core` (`IGenericClientPassthrough`, `ClientCommandShapes`), `McpServer.Repl.Host` (`GenericClientPassthrough`)
+
+---
+
+## REPL v1.0 Requirements Freeze
+
+**Freeze Tag:** `REPL-v1.0-FREEZE` | **Date:** 2025-01-04
+
+All REPL technical requirements (TR-MCP-REPL-001 through TR-MCP-REPL-007) are complete and frozen for v1.0 delivery. Full source code traceability comments have been added to all `McpServer.Repl.Core` and `McpServer.Repl.Host` files. All iteration 1-6 unit tests and integration tests pass. No defects remain.

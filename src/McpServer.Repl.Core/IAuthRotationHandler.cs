@@ -1,3 +1,7 @@
+// FR-MCP-REPL-004: Trust Bootstrap and Auth Rotation - Auth rotation handler
+// TR-MCP-REPL-006: Trust Bootstrap and Token Validation - Auth token staleness detection
+// TEST-MCP-REPL-005: REPL detects API key rotation and emits warnings
+
 namespace McpServer.Repl.Core;
 
 /// <summary>

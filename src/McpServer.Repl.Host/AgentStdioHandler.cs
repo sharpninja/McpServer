@@ -1,3 +1,16 @@
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Agent STDIO mode handler
+// FR-MCP-REPL-002: REPL Lifecycle Management - Agent command loop and lifecycle
+// FR-MCP-REPL-004: Trust Bootstrap and Auth Rotation - Trust enforcement before operations
+// TR-MCP-REPL-002: DI-Integrated REPL Host - Agent handler DI integration
+// TR-MCP-REPL-003: Command Loop Lifecycle - Agent STDIO processing
+// TR-MCP-REPL-006: Trust Bootstrap and Token Validation - Trust verification implementation
+// TEST-MCP-REPL-001: REPL host processes well-formed YAML command envelopes
+// TEST-MCP-REPL-003: Operational commands require bootstrap
+// TEST-MCP-REPL-004: Bootstrap validates marker signature and health nonce
+// TEST-MCP-REPL-005: Auth rotation detection and warnings
+// TEST-MCP-REPL-013: REPL host terminates gracefully on EOF or exit command
+// TEST-MCP-REPL-018: Trust-before-auth and nonce-validation rules enforced
+
 using Microsoft.Extensions.Logging;
 using System.Text;
 

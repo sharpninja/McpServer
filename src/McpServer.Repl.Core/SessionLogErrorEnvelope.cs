@@ -1,3 +1,13 @@
+// TR-MCP-REPL-001: YAML Envelope Protocol - Error response framing
+// TR-MCP-REPL-003: Command Loop Lifecycle - Structured error handling
+// TEST-MCP-REPL-002: Malformed YAML emits structured error response
+// TEST-MCP-REPL-014: Unhandled exceptions emit structured error response
+
+// FR-MCP-REPL-002: REPL Lifecycle Management - Structured error handling
+// TR-MCP-REPL-003: Command Loop Lifecycle - Error response envelopes
+// TEST-MCP-REPL-002: Malformed YAML emits structured error responses
+// TEST-MCP-REPL-014: Workflow exceptions emit structured errors without crashing
+
 namespace McpServer.Repl.Core;
 
 /// <summary>

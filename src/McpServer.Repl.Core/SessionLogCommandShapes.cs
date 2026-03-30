@@ -1,3 +1,14 @@
+// FR-MCP-REPL-003: Command Namespace Parity - Session log command structures
+// TR-MCP-REPL-001: YAML Envelope Protocol - Command envelope data models
+// TR-MCP-REPL-004: Command Registry and Dispatcher - Session log command shapes
+// TEST-MCP-REPL-006: Session log REPL commands match REST endpoint semantics
+
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Session log workflow command shapes
+// FR-MCP-REPL-002: REPL Lifecycle Management - Session log turn command models
+// FR-MCP-REPL-003: Command Namespace Parity - Session log operation contract models
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - Session log command namespace shapes
+// TEST-MCP-REPL-007: Session log REPL commands match REST endpoint semantics
+
 namespace McpServer.Repl.Core;
 
 /// <summary>

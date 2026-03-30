@@ -1,3 +1,13 @@
+// FR-MCP-REPL-003: Command Namespace Parity - TODO command structures
+// TR-MCP-REPL-001: YAML Envelope Protocol - TODO command envelope data models
+// TR-MCP-REPL-004: Command Registry and Dispatcher - TODO command shapes
+// TEST-MCP-REPL-006: TODO REPL commands match REST endpoint semantics
+
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - TODO workflow command shapes
+// FR-MCP-REPL-003: Command Namespace Parity - TODO operation contract models
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - TODO command namespace shapes
+// TEST-MCP-REPL-006: TODO REPL commands match REST endpoint semantics
+
 namespace McpServer.Repl.Core;
 
 /// <summary>

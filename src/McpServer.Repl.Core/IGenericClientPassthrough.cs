@@ -2,6 +2,11 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
+// FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Generic client passthrough interface
+// FR-MCP-REPL-003: Command Namespace Parity - Workspace and context operation forwarding
+// TR-MCP-REPL-005: Namespace Organization and Handler Parity - Client passthrough contract
+// TEST-MCP-REPL-010: Workspace management REPL commands match REST endpoints
+
 namespace McpServer.Repl.Core;
 
 /// <summary>
