@@ -17,6 +17,7 @@ using McpServer.Support.Mcp.Logging;
 using McpServer.Support.Mcp.McpStdio;
 using McpServer.Support.Mcp.Middleware;
 using McpServer.Support.Mcp.Notifications;
+using McpServer.Support.Mcp.Identity;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Controllers;
@@ -376,27 +377,50 @@ builder.Services.AddSingleton<IWorkspaceProcessManager, WorkspaceProcessManager>
 builder.Services.Configure<DesktopLaunchOptions>(builder.Configuration.GetSection(DesktopLaunchOptions.SectionName));
 builder.Services.Configure<PairingOptions>(builder.Configuration.GetSection(PairingOptions.SectionName));
 builder.Services.Configure<OidcAuthOptions>(builder.Configuration.GetSection(OidcAuthOptions.SectionName));
+builder.Services.Configure<IdentityServerOptions>(builder.Configuration.GetSection(IdentityServerOptions.SectionName));
 builder.Services.Configure<ToolRegistryOptions>(builder.Configuration.GetSection(ToolRegistryOptions.SectionName));
 builder.Services.AddSingleton<PairingLoginAttemptGuard>();
 builder.Services.AddSingleton<PairingSessionService>();
 
+// Embedded IdentityServer (when enabled, acts as the local OIDC authority)
+var identityServerOptions = builder.Configuration.GetSection(IdentityServerOptions.SectionName).Get<IdentityServerOptions>()
+    ?? new IdentityServerOptions();
+var identityDataFolder = builder.Configuration["DataFolder"] ?? ".";
+if (!Path.IsPathRooted(identityDataFolder))
+    identityDataFolder = Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, identityDataFolder));
+builder.Services.AddMcpIdentityServer(builder.Configuration, identityDataFolder);
+
 var oidcAuthBootstrap = builder.Configuration.GetSection(OidcAuthOptions.SectionName).Get<OidcAuthOptions>()
     ?? new OidcAuthOptions();
 
-if (oidcAuthBootstrap.Enabled)
+// When embedded IdentityServer is enabled and no external authority is configured,
+// point JWT validation at the local IdentityServer instance.
+var effectiveAuthority = oidcAuthBootstrap.Authority;
+var effectiveAudience = oidcAuthBootstrap.Audience;
+var authEnabled = oidcAuthBootstrap.Enabled || identityServerOptions.Enabled;
+
+if (identityServerOptions.Enabled && !oidcAuthBootstrap.Enabled)
+{
+    effectiveAuthority = !string.IsNullOrWhiteSpace(identityServerOptions.IssuerUri)
+        ? identityServerOptions.IssuerUri
+        : $"http://localhost:{listenPort}";
+    effectiveAudience = identityServerOptions.ApiResourceName;
+}
+
+if (authEnabled)
 {
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
             options.MapInboundClaims = false;
-            options.Authority = oidcAuthBootstrap.Authority;
-            options.Audience = oidcAuthBootstrap.Audience;
+            options.Authority = effectiveAuthority;
+            options.Audience = effectiveAudience;
             options.RequireHttpsMetadata = oidcAuthBootstrap.RequireHttpsMetadata;
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 NameClaimType = "preferred_username",
                 RoleClaimType = "realm_roles",
-                ValidateAudience = !string.IsNullOrWhiteSpace(oidcAuthBootstrap.Audience),
+                ValidateAudience = !string.IsNullOrWhiteSpace(effectiveAudience),
             };
         });
 }
@@ -409,7 +433,7 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AgentManager", policy =>
     {
-        if (!oidcAuthBootstrap.Enabled)
+        if (!authEnabled)
         {
             policy.RequireAssertion(_ => true);
             return;
@@ -565,6 +589,7 @@ if (!app.Environment.IsEnvironment("Test"))
 app.UseGlobalExceptionHandler();
 app.UseMiddleware<InteractionLoggingMiddleware>();
 
+app.UseMcpIdentityServer();
 app.UseAuthentication();
 app.UseMiddleware<WorkspaceResolutionMiddleware>();
 app.UseMiddleware<WorkspaceAuthMiddleware>();
@@ -715,6 +740,12 @@ app.MapGet("/pair/key", async (HttpContext context, IOptions<PairingOptions> opt
     var serverUrl = $"{request.Scheme}://{request.Host}";
     return Results.Content(await pairingRenderer.RenderKeyPageAsync(o.ApiKey, serverUrl).ConfigureAwait(false), "text/html");
 }).ExcludeFromDescription();
+
+// Seed IdentityServer defaults (admin user, roles) on first run
+if (identityServerOptions is { Enabled: true, SeedDefaults: true })
+{
+    await IdentityServerSeeder.SeedAsync(app.Services, identityServerOptions);
+}
 
 try
 {

@@ -12,10 +12,7 @@ using Microsoft.Extensions.Hosting;
 using McpServer.Repl.Host;
 using McpServer.Client;
 
-var versionOption = new Option<bool>("--version", "Display version information");
-
 var rootCommand = new RootCommand("MCP Server REPL Host");
-rootCommand.AddOption(versionOption);
 
 var agentStdioCommand = new Command("--agent-stdio", "Run in agent STDIO mode for MCP protocol communication");
 agentStdioCommand.SetHandler(async (context) =>
@@ -36,17 +33,8 @@ interactiveCommand.SetHandler(async (context) =>
 rootCommand.AddCommand(agentStdioCommand);
 rootCommand.AddCommand(interactiveCommand);
 
-rootCommand.SetHandler((bool showVersion) =>
+rootCommand.SetHandler(() =>
 {
-    if (showVersion)
-    {
-        var version = Assembly.GetExecutingAssembly()
-            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-            ?.InformationalVersion ?? "6.0.0";
-        Console.WriteLine($"mcpserver-repl version {version}");
-        return;
-    }
-    
     Console.WriteLine("MCP Server REPL Host");
     Console.WriteLine();
     Console.WriteLine("Usage:");
@@ -60,7 +48,7 @@ rootCommand.SetHandler((bool showVersion) =>
     Console.WriteLine("  --interactive          Run in interactive REPL mode");
     Console.WriteLine("  --agent-stdio          Run in agent STDIO mode for MCP protocol communication");
     Console.WriteLine();
-}, versionOption);
+});
 
 return await rootCommand.InvokeAsync(args);
 
