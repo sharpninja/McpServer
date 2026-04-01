@@ -1,11 +1,120 @@
 BeforeAll {
     Import-Module (Join-Path $PSScriptRoot 'McpSession.psm1') -Force
+
+    function New-TrustedSessionMarker {
+        param(
+            [string]$BaseUrl = 'http://marker-host:7150',
+            [string]$ApiKey = 'marker-key-456',
+            [string]$WorkspacePath = 'C:\workspace'
+        )
+
+        $marker = [pscustomobject]@{
+            port = 7147
+            baseUrl = $BaseUrl
+            apiKey = $ApiKey
+            workspace = 'demo'
+            workspacePath = $WorkspacePath
+            pid = 12345
+            startedAt = '2026-03-28T16:00:00.0000000Z'
+            markerWrittenAtUtc = '2026-03-28T16:00:00.0000000Z'
+            serverStartedAtUtc = '2026-03-28T15:59:00.0000000Z'
+            endpoints = [pscustomobject]@{
+                health = '/health'
+                swagger = '/swagger/v1/swagger.json'
+                swaggerUi = '/swagger'
+                mcpTransport = '/mcp-transport'
+                sessionLog = '/mcpserver/sessionlog'
+                sessionLogDialog = '/mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog'
+                contextSearch = '/mcpserver/context/search'
+                contextPack = '/mcpserver/context/pack'
+                contextSources = '/mcpserver/context/sources'
+                todo = '/mcpserver/todo'
+                repo = '/mcpserver/repo'
+                desktop = '/mcpserver/desktop'
+                gitHub = '/mcpserver/gh'
+                tools = '/mcpserver/tools'
+                workspace = '/mcpserver/workspace'
+                serverStartupUtc = '/server-startup-utc'
+                markerFileTimestamp = '/marker-file-timestamp?repoPath={workspacePath}'
+            }
+            signature = [pscustomobject]@{
+                algorithm = 'HMAC-SHA256'
+                canonicalization = 'marker-v1'
+                verifier = 'workspace_api_key'
+                value = ''
+            }
+            trust_bootstrap = [pscustomobject]@{
+                description = 'Trust bootstrap'
+                health_nonce_endpoint = '/health'
+                health_nonce_parameter = 'nonce'
+                fallback = 'If health check, nonce verification, or signature verification fails, log MCP_UNTRUSTED.'
+                recommended_usage = 'Use endpoints only after verification.'
+            }
+            prompt = "Prompt"
+        }
+
+        $signature = InModuleScope McpSession -Parameters @{ Marker = $marker } {
+            param($Marker)
+            Get-McpMarkerSignatureValue -Marker $Marker
+        }
+
+        @"
+port: 7147
+baseUrl: $BaseUrl
+apiKey: $ApiKey
+endpoints:
+  health: /health
+  swagger: /swagger/v1/swagger.json
+  swaggerUi: /swagger
+  mcpTransport: /mcp-transport
+  sessionLog: /mcpserver/sessionlog
+  sessionLogDialog: /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog
+  contextSearch: /mcpserver/context/search
+  contextPack: /mcpserver/context/pack
+  contextSources: /mcpserver/context/sources
+  todo: /mcpserver/todo
+  repo: /mcpserver/repo
+  desktop: /mcpserver/desktop
+  gitHub: /mcpserver/gh
+  tools: /mcpserver/tools
+  workspace: /mcpserver/workspace
+  serverStartupUtc: /server-startup-utc
+  markerFileTimestamp: /marker-file-timestamp?repoPath={workspacePath}
+workspace: demo
+workspacePath: $WorkspacePath
+pid: 12345
+startedAt: 2026-03-28T16:00:00.0000000Z
+markerWrittenAtUtc: 2026-03-28T16:00:00.0000000Z
+serverStartedAtUtc: 2026-03-28T15:59:00.0000000Z
+signature:
+  algorithm: HMAC-SHA256
+  canonicalization: marker-v1
+  verifier: workspace_api_key
+  value: $signature
+trust_bootstrap:
+  description: Trust bootstrap
+  health_nonce_endpoint: /health
+  health_nonce_parameter: nonce
+  fallback: If health check, nonce verification, or signature verification fails, log MCP_UNTRUSTED.
+  recommended_usage: Use endpoints only after verification.
+prompt: |-
+  Prompt
+"@
+    }
 }
 
 Describe 'McpSession Module' {
     # Default mock — absorbs all HTTP calls
     BeforeAll {
-        Mock Invoke-RestMethod { $null } -ModuleName McpSession
+        Mock Invoke-RestMethod {
+            param($Uri)
+            if ($Uri -like '*/health?nonce=*') {
+                $nonce = [regex]::Match($Uri, 'nonce=([^&]+)').Groups[1].Value
+                return [pscustomobject]@{ status = 'Healthy'; nonce = $nonce }
+            }
+
+            return $null
+        } -ModuleName McpSession
     }
 
     # Reset module state between tests
@@ -48,12 +157,7 @@ Describe 'McpSession Module' {
 
         It 'parses marker file for baseUrl and apiKey' {
             $marker = Join-Path $TestDrive 'AGENTS-README-FIRST.yaml'
-            @"
-owner: test
-baseUrl: http://marker-host:7150
-apiKey: marker-key-456
-workspace: demo
-"@ | Set-Content $marker
+            New-TrustedSessionMarker | Set-Content $marker
 
             Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -MarkerPath $marker
             InModuleScope McpSession {
@@ -66,7 +170,7 @@ workspace: demo
             $sub = Join-Path (Join-Path (Join-Path $TestDrive 'a') 'b') 'c'
             New-Item $sub -ItemType Directory -Force | Out-Null
             $marker = Join-Path $TestDrive 'AGENTS-README-FIRST.yaml'
-            "baseUrl: http://walk:1234`napiKey: walk-key" | Set-Content $marker
+            (New-TrustedSessionMarker -BaseUrl 'http://walk:1234' -ApiKey 'walk-key') | Set-Content $marker
 
             Push-Location $sub
             try {
@@ -91,8 +195,34 @@ workspace: demo
         It 'calls the health endpoint' {
             Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
-                $Uri -eq 'http://test:9999/health'
+                $Uri -like 'http://test:9999/health?nonce=*'
             }
+        }
+
+        It 'throws MCP_UNTRUSTED when marker signature verification fails' {
+            $marker = Join-Path $TestDrive 'AGENTS-README-FIRST.yaml'
+            @"
+port: 7147
+baseUrl: http://marker-host:7150
+apiKey: marker-key-456
+workspace: demo
+workspacePath: C:\workspace
+pid: 12345
+startedAt: 2026-03-28T16:00:00.0000000Z
+markerWrittenAtUtc: 2026-03-28T16:00:00.0000000Z
+serverStartedAtUtc: 2026-03-28T15:59:00.0000000Z
+signature:
+  algorithm: HMAC-SHA256
+  canonicalization: marker-v1
+  verifier: workspace_api_key
+  value: BAD
+trust_bootstrap:
+  description: Trust bootstrap
+prompt: |-
+  Prompt
+"@ | Set-Content $marker
+
+            { Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -MarkerPath $marker } | Should -Throw '*MCP_UNTRUSTED*'
         }
     }
 
@@ -191,6 +321,19 @@ workspace: demo
             $script:capturedBody | Should -Match '"turnCount"'
             $script:capturedBody | Should -Not -Match '"entryCount"'
         }
+
+        It 'mirrors the current session object into .mcpSession/current-session.json' {
+            $workspaceRoot = Join-Path $TestDrive 'workspace'
+            $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
+
+            $currentSessionPath = Join-Path $workspaceRoot '.mcpSession\current-session.json'
+            Test-Path $currentSessionPath | Should -BeTrue
+
+            $persistedSession = Get-Content -LiteralPath $currentSessionPath -Raw | ConvertFrom-Json -Depth 50
+            $persistedSession.sourceType | Should -Be 'T'
+            $persistedSession.sessionId | Should -Be $s.sessionId
+            $persistedSession.turnCount | Should -Be 0
+        }
     }
 
     # ── Add-McpSessionTurn ───────────────────────────────────────────────────
@@ -244,7 +387,7 @@ workspace: demo
             $e.filesModified.Count          | Should -Be 0
             $e.blockers.Count               | Should -Be 0
             $e.actions.Count                | Should -Be 0
-            $e.processingDialog.Count       | Should -Be 0
+            $e.processingDialog.Count       | Should -Be 1
         }
 
         It 'adds turn locally without extra push when -NoPush is set' {
@@ -256,6 +399,13 @@ workspace: demo
             $s.turns[0].queryTitle | Should -Be 'NoPush test'
             # lastUpdated should NOT have been bumped (Update-McpSessionLog was not called)
             $s.lastUpdated | Should -Be $originalUpdated
+        }
+
+        It 'carries the successful trust note into the first appended turn' {
+            $s = New-McpSessionLog -SourceType 'T' -Title 't' -Model 'm'
+            $turn = Add-McpSessionTurn -Session $s -QueryTitle 'Trust' -QueryText 'Trust' -NoPush
+            $turn.processingDialog.Count | Should -BeGreaterThan 0
+            $turn.processingDialog[0].content | Should -Match '(trusted MCP Server|established MCP connectivity)'
         }
     }
 
@@ -400,12 +550,16 @@ workspace: demo
             Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
         }
 
-        It 'deletes .mcpServer/session.yaml when status becomes completed' {
+        It 'deletes both persisted session cache files when status becomes completed' {
             $workspaceRoot = Join-Path $TestDrive 'workspace'
             $stateDir = Join-Path $workspaceRoot '.mcpServer'
             $statePath = Join-Path $stateDir 'session.yaml'
+            $currentSessionDir = Join-Path $workspaceRoot '.mcpSession'
+            $currentSessionPath = Join-Path $currentSessionDir 'current-session.json'
             New-Item $stateDir -ItemType Directory -Force | Out-Null
+            New-Item $currentSessionDir -ItemType Directory -Force | Out-Null
             '{}' | Set-Content $statePath
+            '{}' | Set-Content $currentSessionPath
 
             InModuleScope McpSession -Parameters @{ WorkspaceRoot = $workspaceRoot } {
                 param($WorkspaceRoot)
@@ -416,6 +570,7 @@ workspace: demo
             Update-McpSessionLog -Session $s -Status completed
 
             Test-Path $statePath | Should -BeFalse
+            Test-Path $currentSessionPath | Should -BeFalse
         }
 
         It 'updates lastUpdated timestamp' {
@@ -451,6 +606,40 @@ workspace: demo
             Should -Invoke Invoke-RestMethod -ModuleName McpSession -ParameterFilter {
                 $Method -eq 'Post' -and $Uri -like '*/mcpserver/sessionlog'
             }
+        }
+
+        It 'resolves the persisted current session object from .mcpSession when no explicit session is provided' {
+            $workspaceRoot = Join-Path $TestDrive 'workspace'
+            $s = New-McpSessionLog -SourceType 'Copilotcli' -Title 't' -Model 'gpt-5.3-codex'
+            $legacyStatePath = Join-Path $workspaceRoot '.mcpServer\session.yaml'
+            Remove-Item -LiteralPath $legacyStatePath -Force
+
+            Update-McpSessionLog -Title 'updated from current cache'
+
+            $currentSessionPath = Join-Path $workspaceRoot '.mcpSession\current-session.json'
+            $persistedSession = Get-Content -LiteralPath $currentSessionPath -Raw | ConvertFrom-Json -Depth 50
+            $persistedSession.sessionId | Should -Be $s.sessionId
+            $persistedSession.title | Should -Be 'updated from current cache'
+        }
+    }
+
+    Describe 'Current session cache reuse' {
+        It 'reuses the current session id from .mcpSession when the legacy wrapper state file is missing' {
+            $workspaceRoot = Join-Path $TestDrive 'workspace'
+
+            Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k' | Out-Null
+            $s = New-McpSessionLog -SourceType 'Copilotcli' -Title 't' -Model 'gpt-5.3-codex'
+            $legacyStatePath = Join-Path $workspaceRoot '.mcpServer\session.yaml'
+            Remove-Item -LiteralPath $legacyStatePath -Force
+
+            InModuleScope McpSession {
+                $script:McpSessionAgent = $null
+                $script:McpSessionModel = $null
+                $script:McpSessionSlug = $null
+            }
+
+            $slug = Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -BaseUrl 'http://test:9999' -ApiKey 'k'
+            $slug | Should -Be $s.sessionId
         }
     }
 

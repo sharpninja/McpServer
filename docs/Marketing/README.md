@@ -12,15 +12,15 @@ Content for the McpServer Canva website and presentation.
 - [presentation-outline.md](presentation-outline.md) — 12-slide outline with speaker notes
 - [canva-website-prompt.md](canva-website-prompt.md) — Ready-to-paste Canva AI prompt for the website
 - [canva-presentation-prompt.md](canva-presentation-prompt.md) — Ready-to-paste Canva AI prompt for the presentation
-- [diagrams/](diagrams/) — Mermaid source + rendered PNG diagrams
+- [diagrams/README.md](diagrams/README.md) — Mermaid source + rendered PNG diagrams
 
 ## Known Links
 
 | Resource | URL |
 |---|---|
 | GitHub Repository | https://github.com/sharpninja/McpServer |
-| Client NuGet | https://www.nuget.org/packages/SharpNinja.McpServer.Client |
-| Director NuGet | https://www.nuget.org/packages/SharpNinja.McpServer.Director |
+| Client docs | https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md |
+| Director docs | https://github.com/sharpninja/McpServer/blob/develop/docs/Marketing/ui-tooling.md |
 | Local Swagger UI | http://localhost:7147/swagger |
-| MCP Transport | http://localhost:7147/mcp-transport |
+| MCP Transport | POST /mcp-transport on your local McpServer base URL |
 | MCP Spec | https://modelcontextprotocol.io |

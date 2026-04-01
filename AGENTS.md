@@ -18,10 +18,11 @@ On every subsequent user message:
 4. Persist session log updates immediately after each meaningful change (turn creation, action append, decision, requirement, blocker, file/context update). Do not defer saves.
 5. Capture rich turn detail: interpretation, response, status, actions (type/status/filePath), contextList, filesModified, designDecisions, requirementsDiscovered, blockers, and relevant processing dialog.
 6. Follow workspace conventions in `.github/copilot-instructions.md` for build, test, and architecture guidance.
-7. When you need API schemas, module examples, or compliance rules, load them from `docs/context/` or use `context_search`.
-8. Do not fabricate information. If you made a mistake, acknowledge it. Distinguish facts from speculation.
-9. Prioritize correctness over speed. Do not ship code you have not verified compiles and is logically sound.
-10. When writing session logs or other audit records, agents must identify themselves accurately using their real agent identity in Pascal-Case. Do not use placeholder, legacy, or misleading sourceType values.
+7. Use **only `pwsh.exe`** for shell commands and script execution; do not use `powershell.exe`.
+8. When you need API schemas, module examples, or compliance rules, load them from `docs/context/` or use `context_search`.
+9. Do not fabricate information. If you made a mistake, acknowledge it. Distinguish facts from speculation.
+10. Prioritize correctness over speed. Do not ship code you have not verified compiles and is logically sound.
+11. When writing session logs or other audit records, agents must identify themselves accurately using their real agent identity in Pascal-Case. Do not use placeholder, legacy, or misleading sourceType values.
 
 ## Where Things Live
 

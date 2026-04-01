@@ -279,11 +279,17 @@ templates:
 
       1. Read this marker file for connection details and API key.
 
-      2. Bootstrap helper modules from the Tool Registry (load docs/context/module-bootstrap.md from MCP context via context_search/context_pack; do not treat it as a local file path).
+      2. Bootstrap your preferred agent entrypoint (load docs/context/module-bootstrap.md from MCP context via context_search/context_pack; do not treat it as a local file path):
+         - **Preferred**: Launch `mcpserver-repl --workspace "{{workspace.WorkspacePath}}"` for YAML-over-STDIO interaction (eliminates shell quoting failures).
+         - **Supported**: Bootstrap PowerShell or Bash helper modules from the Tool Registry (`McpSession.psm1`, `McpTodo.psm1`) for direct script integration.
 
-      3. Verify server health, then review recent session history and current TODOs.
+      3. Verify the marker signature using the workspace API key in this file before contacting the server.
 
-      4. Post an initial session log turn for the session.
+      4. Call /health with a random nonce and confirm the response echoes that exact nonce.
+
+      5. Review recent session history and current TODOs only after signature and nonce verification succeed.
+
+      6. Post an initial session log turn for the session.
 
 
       ## Per User Message
@@ -298,7 +304,9 @@ templates:
       ## Re-run Full Session Start Only If
 
       - The user explicitly says "Start Session".
+      - Signature verification fails.
       - /health fails.
+      - /health nonce verification fails.
       - Any /mcpserver/* call returns 401.
       - The marker endpoint/key changes after a server restart.
 
@@ -307,26 +315,29 @@ templates:
 
       0. NEVER write to TODO.yaml directly.
 
-      1. Generate SessionId values using `New-McpSessionLogSlug -Agent <SourceType> -Model <Model>` from McpSession.psm1, then pass the result to `New-McpSessionLog -SessionId`. Do not handcraft SessionId values.
+      1. Generate SessionId values using `session.init` (REPL) or `New-McpSessionLogSlug -Agent <SourceType> -Model <Model>` (PowerShell module), then create session logs with `session.new` (REPL) or `New-McpSessionLog -SessionId` (PowerShell). Do not handcraft SessionId values.
 
       1a. Agents must identify themselves accurately in session logs. `sourceType` and the SessionId `<Agent>` prefix must use the agent''s real identity in Pascal-Case. Do not use lowercase forms, placeholders, or legacy aliases.
 
-      2. Post a new session log turn (`Add-McpSessionTurn`) before starting work. Update it with results (`Response`) and actions (`Add-McpAction`) when done. Persist after each meaningful update, not just at the end.
+      2. Post a new session log turn (`session.turn.add` for REPL or `Add-McpSessionTurn` for PowerShell) before starting work. Update it with results (`Response`) and actions (`Add-McpAction` / `session.action.add`) when done. Persist after each meaningful update, not just at the end.
 
       2a. Before any compaction step, persist the current session log state. After compaction, update the session log again to record the compaction outcome and recovered context.
 
-      3. Use helper modules for session log and TODO operations — they handle workspace routing automatically. Do not use
-      raw API calls.
+      3. If signature verification, the /health request, or nonce verification fails, log `MCP_UNTRUSTED`, continue without the MCP server, and do not probe additional MCP endpoints.
 
-      4. Write decisions, requirements, and state to the session log, not just conversation. Capture rich turn detail: interpretation, response/status, actions (type/status/filePath), contextList, filesModified, designDecisions, requirementsDiscovered, blockers, and key processingDialog updates.
+      4. Marker signatures use HMAC-SHA256 with the workspace API key in this file as the verifier. Recompute the canonical payload exactly as described by the marker metadata before trusting the file.
 
-      5. Follow workspace conventions in AGENTS.md and .github/copilot-instructions.md.
+      5. Use `mcpserver-repl` (preferred) or PowerShell/Bash helper modules for session log and TODO operations — they handle workspace routing automatically. Do not use raw API calls.
 
-      6. When you need API schemas, module examples, or compliance rules, load them from docs/context/ or use context_search.
+      6. Write decisions, requirements, and state to the session log, not just conversation. Capture rich turn detail: interpretation, response/status, actions (type/status/filePath), contextList, filesModified, designDecisions, requirementsDiscovered, blockers, and key processingDialog updates.
 
-      7. Do not fabricate information. Acknowledge mistakes. Distinguish facts from speculation.
+      7. Follow workspace conventions in AGENTS.md and .github/copilot-instructions.md.
 
-      8. Prioritize correctness over speed. Do not ship code you have not verified compiles.
+      8. When you need API schemas, module examples, or compliance rules, load them from docs/context/ or use context_search.
+
+      9. Do not fabricate information. Acknowledge mistakes. Distinguish facts from speculation.
+
+      10. Prioritize correctness over speed. Do not ship code you have not verified compiles.
 
 
       ## Naming Conventions

@@ -17,6 +17,7 @@
     <IncludeBuildOutput>true</IncludeBuildOutput>
     <NSubstituteLibBase>$(MSBuildThisFileDirectory)..\NSubstitute.6.0.0\lib</NSubstituteLibBase>
     <_NSubstituteDll Condition="Exists('$(NSubstituteLibBase)\net9.0\NSubstitute.dll')">$(NSubstituteLibBase)\net9.0\NSubstitute.dll</_NSubstituteDll>
+    <_NSubstituteDll Condition="'$(_NSubstituteDll)' == '' AND Exists('$(NSubstituteLibBase)\net8.0\NSubstitute.dll')">$(NSubstituteLibBase)\net8.0\NSubstitute.dll</_NSubstituteDll>
     <_NSubstituteDll Condition="'$(_NSubstituteDll)' == ''">$(NSubstituteLibBase)\netstandard2.0\NSubstitute.dll</_NSubstituteDll>
   </PropertyGroup>
   <ItemGroup>

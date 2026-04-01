@@ -16,13 +16,14 @@ MCP Server is a standalone ASP.NET Core service for workspace-scoped context ret
 - `src/McpServer.Support.Mcp` - server application
 - `tests/McpServer.Support.Mcp.Tests` - unit/integration tests
 - `docs/MCP-SERVER.md` - detailed operational and configuration guide
+- `docs/AZURE-PIPELINES.md` - Azure DevOps CI/CD variables and retention notes
 - `scripts` - run, validate, test, migration, extension, and packaging scripts
-- `.github/workflows/mcp-server-ci.yml` - CI pipeline (build/test/artifacts/MSIX/docs quality)
+- `azure-pipelines.yml` - Azure DevOps pipeline (build/test/artifacts/MSIX/docs quality/package publish)
 
 ## Prerequisites
 
 - .NET SDK from `global.json`
-- PowerShell 7+
+- PowerShell 7+ — use **`pwsh.exe`** for all repo scripts and documented shell commands (not `powershell.exe`)
 - Windows SDK tools (`makeappx.exe`) for MSIX packaging
 - Optional: GitHub CLI (`gh`) for GitHub issue endpoints
 
@@ -221,16 +222,17 @@ Main endpoints:
 
 ## CI/CD
 
-Workflow: `.github/workflows/mcp-server-ci.yml`
+Pipeline: `azure-pipelines.yml`
 
 Pipeline jobs include:
 
-- restore/build/test
 - config validation
-- OpenAPI artifact generation
+- restore/build/test
 - publish artifact upload
 - Windows MSIX packaging
 - markdown lint and link checking for docs
+- DocFX docs artifact build
+- client NuGet pack and branch-conditional feed publish
 
 ## VS Code / VS 2026 Extensions
 
@@ -266,7 +268,7 @@ var client = McpServerClientFactory.Create(new McpServerClientOptions
 
 Covers all API endpoints: Todo, Context, SessionLog, GitHub, Repo, Sync, Workspace, and Tools.
 
-Source: `src/McpServer.Client/` — see the [package README](#) for full usage.
+Source: `src/McpServer.Client/` — see the [package README](https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md) for full usage.
 
 ## Additional Documentation
 

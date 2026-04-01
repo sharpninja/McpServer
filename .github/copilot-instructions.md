@@ -12,7 +12,7 @@ For specific operational instructions (session bootstrap, turn logging lifecycle
 
 - Do NOT set focus to the terminal window.
 - Do NOT write multiline commands to the terminal; use temporary scripts instead.
-- Always use non-login pwsh and PowerShell commands.
+- Use **only `pwsh.exe`** (PowerShell 7+). Do not invoke `powershell.exe` (Windows PowerShell 5.1) for scripts, examples, or tooling.
 
 ## Session Logging Requirements
 
@@ -41,7 +41,7 @@ dotnet test tests\McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedN
 dotnet test tests\McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~TodoServiceTests"
 
 # Validate appsettings config
-pwsh ./scripts/Validate-McpConfig.ps1
+pwsh.exe ./scripts/Validate-McpConfig.ps1
 
 # Markdown lint (docs only)
 # CI uses markdownlint-cli2 with .markdownlint-cli2.yaml

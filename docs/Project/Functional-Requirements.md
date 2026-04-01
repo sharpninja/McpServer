@@ -298,7 +298,7 @@ The server shall provide runtime management for workspace-bound agents, includin
 
 The server SHALL allow configuration of a system-wide default Copilot model (e.g., `gpt-5.3-codex`) that is applied consistently across all Copilot session types — server-initiated CLI invocations (`CopilotClientOptions.Model`), voice conversation sessions (`VoiceConversationOptions.CopilotModel`), and built-in agent type defaults (`AgentDefaults`). The configured model SHALL be overridable per-workspace via agent configuration and per-invocation via explicit parameters.
 
-**Technical Implementation:** [TR-MCP-CFG-005](./Technical-Requirements.md#tr-mcp-cfg-005) | [Details](./TR-per-FR-Mapping.md#fr-mcp-051)
+**Technical Implementation:** [TR-MCP-CFG-005](./Technical-Requirements.md#tr-mcp-cfg-005) | [Mapping](./TR-per-FR-Mapping.md)
 
 ## FR-MCP-052 Agent Pool Runtime Orchestration
 
@@ -362,7 +362,7 @@ These presence messages do not apply to one-shot sessions.
 
 The system SHALL enforce a DI-centered Single Source of Truth architecture across `McpServer.Support.Mcp`: authoritative mutable data sources must be owned by DI-registered singleton or scoped services, services shall notify state availability/changes via `INotifyPropertyChanged`, and consumers shall pull current state from the owning service rather than receiving pushed data payloads.
 
-**Technical Implementation:** [TR-MCP-ARCH-002](./Technical-Requirements.md#tr-mcp-arch-002) | [Details](./TR-per-FR-Mapping.md#fr-mcp-059)
+**Technical Implementation:** [TR-MCP-ARCH-002](./Technical-Requirements.md#tr-mcp-arch-002) | [Mapping](./TR-per-FR-Mapping.md)
 
 ## FR-MCP-060 Director MVVM/CQRS Full Endpoint Coverage
 
@@ -405,7 +405,7 @@ Functional behavior shall include:
 
 #### FR-MCP-064: Marketing and Adoption Documentation
 The system SHALL provide marketing-oriented documentation that clearly explains what McpServer is, its key feature set, why adopters need it, and the currently supported UI tooling surfaces (including VS extension and Web UI experiences).
-**Technical Implementation:** [TR-MCP-DOC-001](./Technical-Requirements.md#tr-mcp-doc-001) | [Details](./TR-per-FR-Mapping.md#fr-mcp-064)
+**Technical Implementation:** [TR-MCP-DOC-001](./Technical-Requirements.md#tr-mcp-doc-001) | [Mapping](./TR-per-FR-Mapping.md)
 
 ## FR-MCP-065 Direct Website URL Ingestion
 
@@ -421,7 +421,7 @@ The hosted agent SHALL include a built-in workflow that treats MCP Server sessio
 
 **Status:** ✅ Complete
 
-**Technical Implementation:** [TR-MCP-AGENT-006](./Technical-Requirements.md#tr-mcp-agent-006) | [TR-MCP-AGENT-007](./Technical-Requirements.md#tr-mcp-agent-007) | [Details](./TR-per-FR-Mapping.md#fr-mcp-066)
+**Technical Implementation:** [TR-MCP-AGENT-006](./Technical-Requirements.md#tr-mcp-agent-006) | [TR-MCP-AGENT-007](./Technical-Requirements.md#tr-mcp-agent-007) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `McpServer.McpAgent` (`ServiceCollectionExtensions`, `McpAgentOptions`, `Hosting/*`, `PowerShellSessions/*`, `SessionLog/*`, `Todo/*`), `McpServer.Client` (`McpServerClient`, `RepoClient`, `DesktopClient`), `McpServer.McpAgent.SampleHost` (`Program.cs`, `SampleHostPreviewFactory.cs`)
 
@@ -431,7 +431,7 @@ The system SHALL return a detailed client-visible error description for every en
 
 Detailed 500 responses SHALL describe the failed operation clearly enough for callers to diagnose the failure path and distinguish server faults from client mistakes, while remaining sanitized so secrets, tokens, and other sensitive internals are not exposed in the response body.
 
-**Technical Implementation:** [TR-MCP-HTTP-002](./Technical-Requirements.md#tr-mcp-http-002) | [Details](./TR-per-FR-Mapping.md#fr-mcp-067)
+**Technical Implementation:** [TR-MCP-HTTP-002](./Technical-Requirements.md#tr-mcp-http-002) | [Mapping](./TR-per-FR-Mapping.md)
 
 ## FR-MCP-068 Administrative Configuration Management API
 
@@ -439,7 +439,7 @@ The server SHALL provide an admin-only configuration API that returns the curren
 
 The configuration-management endpoints SHALL require standard JWT Bearer authentication with the `admin` role. When OIDC is not configured, the endpoints SHALL remain unavailable.
 
-**Technical Implementation:** [TR-MCP-CFG-006](./Technical-Requirements.md#tr-mcp-cfg-006) | [Details](./TR-per-FR-Mapping.md#fr-mcp-068)
+**Technical Implementation:** [TR-MCP-CFG-006](./Technical-Requirements.md#tr-mcp-cfg-006) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `ConfigurationController`, `AppSettingsFileService`, `Program.cs` (`ConfigurationAdmin` policy), `WorkspaceController` (shared appsettings helper reuse)
 
@@ -449,7 +449,7 @@ The server shall support a create-time TODO identifier of `ISSUE-NEW` that immed
 
 This behavior shall be available through all server-side TODO creation entry points that already support normal TODO creation. Callers shall receive the canonical persisted identifier rather than the temporary `ISSUE-NEW` alias.
 
-**Technical Implementation:** [TR-MCP-TODO-003](./Technical-Requirements.md#tr-mcp-todo-003) | [TR-MCP-GH-005](./Technical-Requirements.md#tr-mcp-gh-005) | [Details](./TR-per-FR-Mapping.md#fr-mcp-069)
+**Technical Implementation:** [TR-MCP-TODO-003](./Technical-Requirements.md#tr-mcp-todo-003) | [TR-MCP-GH-005](./Technical-Requirements.md#tr-mcp-gh-005) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `TodoCreationService`, `GitHubCliService`, `TodoController`, `FwhMcpTools`, `VoiceConversationService`
 
@@ -459,7 +459,7 @@ The server shall treat MCP TODO updates as authoritative for existing `ISSUE-{nu
 
 Priority synchronization shall use canonical GitHub labels in the form `priority: HIGH`, `priority: MEDIUM`, or `priority: LOW`. GitHub-to-TODO refreshes for existing `ISSUE-*` items shall preserve the local priority and description that were already established by the first sync.
 
-**Technical Implementation:** [TR-MCP-TODO-004](./Technical-Requirements.md#tr-mcp-todo-004) | [TR-MCP-GH-006](./Technical-Requirements.md#tr-mcp-gh-006) | [Details](./TR-per-FR-Mapping.md#fr-mcp-070)
+**Technical Implementation:** [TR-MCP-TODO-004](./Technical-Requirements.md#tr-mcp-todo-004) | [TR-MCP-GH-006](./Technical-Requirements.md#tr-mcp-gh-006) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `TodoUpdateService`, `IssueTodoSyncService`, `TodoController`, `FwhMcpTools`, `VoiceConversationService`
 
@@ -469,7 +469,7 @@ The server shall round-trip `ISSUE-{number}` discussion between GitHub and MCP T
 
 When an `ISSUE-*` TODO is updated locally with new note text, the server shall propagate the appended TODO-authored comment back to GitHub as an issue comment. When the GitHub issue is later closed outside MCP, a GitHub-to-TODO sync shall mark the corresponding TODO as done.
 
-**Technical Implementation:** [TR-MCP-GH-007](./Technical-Requirements.md#tr-mcp-gh-007) | [Details](./TR-per-FR-Mapping.md#fr-mcp-071)
+**Technical Implementation:** [TR-MCP-GH-007](./Technical-Requirements.md#tr-mcp-gh-007) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `IssueTodoSyncService`, `TodoUpdateService`, `GitHubController`, `TodoController`
 
@@ -479,7 +479,114 @@ The server shall treat SQLite as the authoritative current-state store for works
 
 The server shall preserve TODO document metadata such as `notes`, `completed`, and `code-review-remediation.reference`, retain append-only audit history for TODO state mutations, and expose that audit history through HTTP, typed client, and MCP tool surfaces so callers can retrieve tracked TODO states even after deletion when history exists.
 
-**Technical Implementation:** [TR-MCP-TODO-005](./Technical-Requirements.md#tr-mcp-todo-005) | [TR-MCP-TODO-006](./Technical-Requirements.md#tr-mcp-todo-006) | [Details](./TR-per-FR-Mapping.md#fr-mcp-072)
+**Technical Implementation:** [TR-MCP-TODO-005](./Technical-Requirements.md#tr-mcp-todo-005) | [TR-MCP-TODO-006](./Technical-Requirements.md#tr-mcp-todo-006) | [Mapping](./TR-per-FR-Mapping.md)
 
 **Covered by:** `SqliteTodoService`, `TodoYamlFileSerializer`, `TodoController`, `TodoClient`, `McpServerMcpTools`, `TodoServiceFactory`
 
+## FR-MCP-073 Parseable Log Event Field Cap
+
+The server shall cap each Parseable log event payload to a maximum of 250 top-level fields so Parseable ingest remains within the supported field-count envelope for a single event.
+
+When application log events contain more structured properties than the Parseable limit allows, the server shall preserve the canonical Parseable metadata fields (`timestamp`, `level`, `message`, and `exception` when present) and omit excess user properties rather than emitting an oversized payload.
+
+**Technical Implementation:** [TR-MCP-LOG-003](./Technical-Requirements.md#tr-mcp-log-003) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `ParseableEventFormatter`, `ParseableBatchFormatter`
+
+## FR-MCP-074 Azure DevOps Repository Pipeline Migration
+
+The repository SHALL define Azure DevOps YAML pipelines as the source of truth for repository CI/CD instead of the retired GitHub Actions workflow files.
+
+The Azure DevOps pipeline SHALL preserve the current repository automation intent for branch/path-filtered validation, published server artifacts, documentation artifacts, Windows MSIX packaging, and branch-conditional client package publication, while ignoring any separate Copilot coding agent pipeline.
+
+**Technical Implementation:** [TR-MCP-CI-001](./Technical-Requirements.md#tr-mcp-ci-001) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `azure-pipelines.yml`, `docs/AZURE-PIPELINES.md`
+
+## FR-MCP-075 PowerShell Session Cache Discovery from `.mcpSession`
+
+The PowerShell `McpSession` module SHALL discover and reuse the current session object cached in the workspace `.mcpSession` folder so follow-on commands can resolve the active session even when the caller does not pass an explicit session object.
+
+This cache-discovery behavior SHALL remain backward compatible with the existing `.mcpServer/session.yaml` slug/state wrapper and SHALL prefer the current-session cache when both representations are available.
+
+**Technical Implementation:** [TR-MCP-AGENT-013](./Technical-Requirements.md#tr-mcp-agent-013) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `tools/powershell/McpSession.psm1`
+
+## FR-MCP-076 Marker File Trust Bootstrap and Session Authenticity Validation
+
+The server shall render a trust-bootstrap contract into `AGENTS-README-FIRST.yaml` that instructs agents to verify the marker signature, perform a nonce-based `/health` challenge, and treat any signature or nonce mismatch as `MCP_UNTRUSTED`.
+
+When trust validation fails, the bootstrap flow shall stop using MCP services and shall not probe additional MCP endpoints. The marker contract shall remain explicit enough for `McpSession`, `McpTodo`, and `McpContext` to follow the same verified bootstrap sequence without diverging on trust semantics.
+
+**Technical Implementation:** [TR-MCP-SEC-003](./Technical-Requirements.md#tr-mcp-sec-003) | [TR-MCP-AGENT-014](./Technical-Requirements.md#tr-mcp-agent-014) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `src/McpServer.Services/Services/MarkerFileService.cs`, `templates/prompt-templates.yaml`, `src/McpServer.ServiceDefaults/Extensions.cs`, `tools/powershell/McpSession.psm1`, `tools/powershell/McpTodo.psm1`, `tools/powershell/McpContext.psm1`, `docs/context/module-bootstrap.md`, `docs/USER-GUIDE.md`
+
+## FR-MCP-077 Optional Native At-Rest Encryption for Workspace Databases
+
+The server shall support optional configuration-driven at-rest encryption for workspace databases using only provider-native or provider-extension facilities.
+
+When encryption settings change, the server shall preserve existing data by using provider-specific no-data-loss transition procedures for enable, disable, and provider-supported protector or key-state changes. The encryption contract shall remain explicit enough that startup can detect configuration-versus-live-state mismatches and require a deliberate transition workflow instead of silently changing data protection state.
+
+**Technical Implementation:** [TR-MCP-SEC-004](./Technical-Requirements.md#tr-mcp-sec-004) | [TR-MCP-CFG-007](./Technical-Requirements.md#tr-mcp-cfg-007) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs`, `src/McpServer.Storage/McpDbContextFactory.cs`, `src/McpServer.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs`, `src/McpServer.Support.Mcp/Program.cs`, `src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs`, `scripts/Invoke-McpDatabaseEncryptionTransition.ps1`, `src/McpServer.Storage.SqliteMigrations`, `src/McpServer.Storage.PostgreSqlMigrations`, `src/McpServer.Storage.SqlServerMigrations`, `docs/USER-GUIDE.md`
+
+## FR-MCP-REPL-001 YAML Protocol STDIO REPL Host
+
+The server shall provide a YAML-envelope STDIO REPL host that accepts structured commands over standard input, executes operations against workspace services, and returns structured YAML responses over standard output. The REPL host shall support the same trust bootstrap, authentication, and workspace resolution semantics as the HTTP and MCP STDIO transports.
+
+**Status:** ✅ Complete
+
+**Technical Implementation:** [TR-MCP-REPL-001](./Technical-Requirements.md#tr-mcp-repl-001) | [TR-MCP-REPL-002](./Technical-Requirements.md#tr-mcp-repl-002) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `McpServer.Repl.Core` (`IReplProtocol`, `IYamlEnvelope`, `IYamlSerializer`, `IMarkerFileReader`, `ITrustBootstrapService`, `IAuthRotationHandler`, `IWorkspaceSelector`), `McpServer.Repl.Host` (`Program.cs`, `AgentStdioHandler`, `InteractiveHandler`, `ServiceCollectionExtensions`)
+
+## FR-MCP-REPL-002 REPL Lifecycle Management
+
+The REPL host shall support graceful startup, interactive command loop, structured error handling with typed error codes, and clean shutdown on EOF or explicit exit commands. The host shall maintain session context across commands within a single process invocation and emit lifecycle events for observability.
+
+**Status:** ✅ Complete
+
+**Technical Implementation:** [TR-MCP-REPL-003](./Technical-Requirements.md#tr-mcp-repl-003) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `McpServer.Repl.Host` (`Program.cs`, `AgentStdioHandler`, `InteractiveHandler`), `McpServer.Repl.Core` (`SessionLogErrorEnvelope`)
+
+## FR-MCP-REPL-003 Command Namespace Parity
+
+The REPL command surface shall provide namespace-organized commands with functional parity to HTTP REST endpoints and MCP STDIO tools for TODO operations, session log operations, context operations, requirements management, workspace management, and agent pool operations. Command routing shall reuse existing service contracts without duplicating business logic.
+
+**Status:** ✅ Complete
+
+**Technical Implementation:** [TR-MCP-REPL-004](./Technical-Requirements.md#tr-mcp-repl-004) | [TR-MCP-REPL-005](./Technical-Requirements.md#tr-mcp-repl-005) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `McpServer.Repl.Core` (`ITodoWorkflow`, `TodoCommandShapes`, `ISessionLogWorkflow`, `SessionLogCommandShapes`, `SessionLogModels`, `IRequirementsWorkflow`, `RequirementsCommandShapes`, `RequirementsCommandModels`, `IGenericClientPassthrough`, `ClientCommandShapes`), `McpServer.Repl.Host` (`TodoWorkflow`, `RequirementsWorkflow`, `SessionLogWorkflow`, `GenericClientPassthrough`)
+
+## FR-MCP-REPL-004 Trust Bootstrap and Auth Rotation
+
+The REPL host shall implement marker-file trust bootstrap with signature verification and health nonce challenge before accepting operational commands. API key authentication shall use the same per-workspace token semantics as HTTP endpoints. The host shall detect API key rotation between commands and emit warnings when tokens become stale.
+
+**Status:** ✅ Complete
+
+**Technical Implementation:** [TR-MCP-REPL-006](./Technical-Requirements.md#tr-mcp-repl-006) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `McpServer.Repl.Core` (`ITrustBootstrapService`, `IMarkerFileReader`, `IAuthRotationHandler`), `McpServer.Repl.Host` (`AgentStdioHandler`)
+
+## FR-MCP-REPL-005 Orchestration State Visibility
+
+The REPL host shall expose commands for querying agent pool state, active voice sessions, queued one-shot requests, and workspace notification subscriptions. State queries shall return current snapshots without blocking on long-running operations.
+
+**Status:** ✅ Complete
+
+**Technical Implementation:** [TR-MCP-REPL-007](./Technical-Requirements.md#tr-mcp-repl-007) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `McpServer.Repl.Core` (`IGenericClientPassthrough`, `ClientCommandShapes`), `McpServer.Repl.Host` (`GenericClientPassthrough`)
+
+---
+
+## REPL v1.0 Requirements Freeze
+
+**Freeze Tag:** `REPL-v1.0-FREEZE` | **Date:** 2025-01-04
+
+All REPL functional requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005) are complete and frozen for v1.0 delivery. Full source code traceability comments have been added to all `McpServer.Repl.Core` and `McpServer.Repl.Host` files. All iteration 1-6 unit tests and integration tests pass. No defects remain.

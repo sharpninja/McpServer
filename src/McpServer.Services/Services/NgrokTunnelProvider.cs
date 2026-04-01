@@ -117,7 +117,7 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
         }
         catch (InvalidOperationException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             /* process exited between check and kill */
         }
         finally
@@ -153,9 +153,9 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
             if (_process is not null && !_process.HasExited)
                 _process.Kill(entireProcessTree: true);
         }
-        catch (InvalidOperationException ex)
+        catch (InvalidOperationException)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            //_logger.LogError("{ExceptionDetail}", ex.ToString());
             /* process already exited */
         }
         if (_process is not null)
@@ -198,7 +198,7 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
         }
         catch (ObjectDisposedException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             // ignored
         }
 
@@ -229,17 +229,17 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
         }
         catch (OperationCanceledException ex) when (ct.IsCancellationRequested)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             // expected during shutdown
         }
         catch (ObjectDisposedException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             // process stream disposed during shutdown
         }
         catch (InvalidOperationException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             // process exited and stream became unavailable
         }
         catch (Exception ex)
@@ -299,7 +299,7 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
         }
         catch (InvalidOperationException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             hasExited = true;
         }
 
@@ -325,7 +325,7 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
         }
         catch (InvalidOperationException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return null;
         }
     }

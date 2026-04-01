@@ -3,14 +3,23 @@
     MCP Session Log PowerShell module - cmdlets for the /mcpserver/sessionlog API.
 
 .DESCRIPTION
-    Provides cmdlets to create, update, query, and manage session logs on an MCP Context Server.
-    Automatically reads connection details from the AGENTS-README-FIRST.yaml marker file.
-    For compaction workflows, persist the session log immediately before compaction and again after compaction to record the resulting context state.
+    Provides exported cmdlets to initialize MCP session-log connectivity, create session-log
+    records, append or update turn data, append structured actions and dialog items, and query
+    recent session-log records from an MCP Context Server. The module reads connection details
+    from AGENTS-README-FIRST.yaml unless explicit connection overrides are supplied.
+
+    Initialize-McpSession configures module-scoped connection state and returns only a reusable
+    session-slug string. It does not create a session-log record and it does not return a
+    session object. New-McpSessionLog creates the session object, posts it to the server, and
+    persists it locally for later resolution by the other exported cmdlets.
+
+    For compaction workflows, persist the session log immediately before compaction and again
+    after compaction to record the resulting context state.
 
 .NOTES
     Usage:  Import-Module ./McpSession.psm1
-            Initialize-McpSession -Agent "Copilotcli" -Model "gpt-5.3-codex"  # reads marker, sets connection, persists/reuses session slug
-            $s = New-McpSessionLog -Title "My session"     # creates session
+            $slug = Initialize-McpSession -Agent "Copilotcli" -Model "gpt-5.3-codex"  # returns a string session slug only
+            $s = New-McpSessionLog -SourceType "Copilotcli" -Title "My session" -Model "gpt-5.3-codex"  # creates the session object
             Add-McpSessionTurn -Session $s -QueryTitle "Fix bug" -QueryText "Fix the auth bug" -Status in_progress
             Send-McpDialog -Session $s -RequestId req-20260304T113901Z-analysis -Content "Analyzing the issue..." -Category reasoning
             Update-McpSessionLog -Session $s               # pushes to server
@@ -24,18 +33,279 @@ $script:McpHeaders       = @{}
 $script:McpSessionAgent  = $null
 $script:McpSessionModel  = $null
 $script:McpSessionSlug   = $null
+$script:McpTrustBootstrapPendingNote = $null
+$script:McpTrustBootstrapPendingRecordedAt = $null
 
 # ─── Connection ──────────────────────────────────────────────────────────────
 
+function Find-McpMarkerFile {
+    $dir = (Get-Location).Path
+    while ($dir) {
+        $candidate = Join-Path $dir "AGENTS-README-FIRST.yaml"
+        if (Test-Path -LiteralPath $candidate) {
+            return $candidate
+        }
+
+        $parent = Split-Path $dir -Parent
+        if (-not $parent -or $parent -eq $dir) {
+            break
+        }
+
+        $dir = $parent
+    }
+
+    return $null
+}
+
+function Read-McpMarkerNestedMap {
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string[]]$Lines,
+        [Parameter(Mandatory)][int]$StartIndex
+    )
+
+    $values = [ordered]@{}
+    $index = $StartIndex
+
+    while ($index -lt $Lines.Count) {
+        $line = $Lines[$index]
+        if ($line -match '^\S') {
+            break
+        }
+
+        if ($line -match '^\s{2}(?<key>[A-Za-z_][A-Za-z0-9_]*)\s*:\s*(?<value>.*)$') {
+            $values[$Matches.key] = $Matches.value
+        }
+
+        $index++
+    }
+
+    return @{
+        Values = $values
+        NextIndex = $index
+    }
+}
+
+function ConvertFrom-McpMarkerContent {
+    param(
+        [Parameter(Mandatory)][string]$Content
+    )
+
+    $normalized = $Content.ReplaceLineEndings("`n")
+    $lines = $normalized -split "`n"
+    $marker = [ordered]@{
+        endpoints = [ordered]@{}
+        signature = [ordered]@{}
+        trust_bootstrap = [ordered]@{}
+        prompt = ''
+    }
+
+    for ($index = 0; $index -lt $lines.Count; $index++) {
+        $line = $lines[$index]
+        if ([string]::IsNullOrWhiteSpace($line)) {
+            continue
+        }
+
+        if ($line -match '^(?<key>[A-Za-z_][A-Za-z0-9_]*)\s*:\s*(?<value>.*)$') {
+            $key = $Matches.key
+            $value = $Matches.value
+
+            if ($value -eq '|-') {
+                $index++
+                $promptLines = [System.Collections.Generic.List[string]]::new()
+                while ($index -lt $lines.Count) {
+                    $promptLine = $lines[$index]
+                    if ($promptLine -match '^\S') {
+                        $index--
+                        break
+                    }
+
+                    if ($promptLine.StartsWith('  ')) {
+                        [void]$promptLines.Add($promptLine.Substring(2))
+                    } else {
+                        [void]$promptLines.Add($promptLine)
+                    }
+
+                    $index++
+                }
+
+                $marker[$key] = ($promptLines -join "`n").TrimEnd("`n")
+                continue
+            }
+
+            if ([string]::IsNullOrWhiteSpace($value)) {
+                $section = Read-McpMarkerNestedMap -Lines $lines -StartIndex ($index + 1)
+                $marker[$key] = $section.Values
+                $index = $section.NextIndex - 1
+                continue
+            }
+
+            $marker[$key] = $value
+        }
+    }
+
+    return [pscustomobject]$marker
+}
+
+function Get-McpMarkerSignaturePayload {
+    param(
+        [Parameter(Mandatory)][pscustomobject]$Marker
+    )
+
+    $lines = [System.Collections.Generic.List[string]]::new()
+    $lines.Add("canonicalization=$([string]$Marker.signature.canonicalization)")
+    $lines.Add("port=$([string]$Marker.port)")
+    $lines.Add("baseUrl=$([string]$Marker.baseUrl)")
+    $lines.Add("apiKey=$([string]$Marker.apiKey)")
+    $lines.Add("workspace=$([string]$Marker.workspace)")
+    $lines.Add("workspacePath=$([string]$Marker.workspacePath)")
+    $lines.Add("pid=$([string]$Marker.pid)")
+    $lines.Add("startedAt=$([string]$Marker.startedAt)")
+    $lines.Add("markerWrittenAtUtc=$([string]$Marker.markerWrittenAtUtc)")
+    $lines.Add("serverStartedAtUtc=$([string]$Marker.serverStartedAtUtc)")
+    $lines.Add("endpoints.health=$([string]$Marker.endpoints.health)")
+    $lines.Add("endpoints.swagger=$([string]$Marker.endpoints.swagger)")
+    $lines.Add("endpoints.swaggerUi=$([string]$Marker.endpoints.swaggerUi)")
+    $lines.Add("endpoints.mcpTransport=$([string]$Marker.endpoints.mcpTransport)")
+    $lines.Add("endpoints.sessionLog=$([string]$Marker.endpoints.sessionLog)")
+    $lines.Add("endpoints.sessionLogDialog=$([string]$Marker.endpoints.sessionLogDialog)")
+    $lines.Add("endpoints.contextSearch=$([string]$Marker.endpoints.contextSearch)")
+    $lines.Add("endpoints.contextPack=$([string]$Marker.endpoints.contextPack)")
+    $lines.Add("endpoints.contextSources=$([string]$Marker.endpoints.contextSources)")
+    $lines.Add("endpoints.todo=$([string]$Marker.endpoints.todo)")
+    $lines.Add("endpoints.repo=$([string]$Marker.endpoints.repo)")
+    $lines.Add("endpoints.desktop=$([string]$Marker.endpoints.desktop)")
+    $lines.Add("endpoints.gitHub=$([string]$Marker.endpoints.gitHub)")
+    $lines.Add("endpoints.tools=$([string]$Marker.endpoints.tools)")
+    $lines.Add("endpoints.workspace=$([string]$Marker.endpoints.workspace)")
+    $lines.Add("endpoints.serverStartupUtc=$([string]$Marker.endpoints.serverStartupUtc)")
+    $lines.Add("endpoints.markerFileTimestamp=$([string]$Marker.endpoints.markerFileTimestamp)")
+    return (($lines -join "`n") + "`n")
+}
+
+function Get-McpMarkerSignatureValue {
+    param(
+        [Parameter(Mandatory)][pscustomobject]$Marker
+    )
+
+    $hmac = [System.Security.Cryptography.HMACSHA256]::new([System.Text.Encoding]::UTF8.GetBytes([string]$Marker.apiKey))
+    try {
+        $payloadBytes = [System.Text.Encoding]::UTF8.GetBytes((Get-McpMarkerSignaturePayload -Marker $Marker))
+        return [Convert]::ToHexString($hmac.ComputeHash($payloadBytes))
+    } finally {
+        $hmac.Dispose()
+    }
+}
+
+function Test-McpMarkerSignature {
+    param(
+        [Parameter(Mandatory)][pscustomobject]$Marker
+    )
+
+    if (-not $Marker.signature -or [string]::IsNullOrWhiteSpace([string]$Marker.signature.value)) {
+        return $false
+    }
+
+    $expected = (Get-McpMarkerSignatureValue -Marker $Marker)
+    return [string]::Equals(
+        $expected,
+        [string]$Marker.signature.value,
+        [System.StringComparison]::OrdinalIgnoreCase)
+}
+
+function New-McpTrustNonce {
+    $bytes = [System.Security.Cryptography.RandomNumberGenerator]::GetBytes(18)
+    return [Convert]::ToBase64String($bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_')
+}
+
+function Reset-McpSessionConnectionState {
+    $script:McpBaseUrl = $null
+    $script:McpApiKey = $null
+    $script:McpWorkspacePath = $null
+    $script:McpHeaders = @{}
+}
+
+function Throw-McpUntrusted {
+    param(
+        [Parameter(Mandatory)][string]$Reason
+    )
+
+    Reset-McpSessionConnectionState
+    $message = "MCP_UNTRUSTED: $Reason"
+    Write-Warning $message
+    throw $message
+}
+
+function Invoke-McpTrustedHealthCheck {
+    param(
+        [Parameter(Mandatory)][string]$BaseUrl
+    )
+
+    $nonce = New-McpTrustNonce
+    $separator = if ($BaseUrl.Contains('?')) { '&' } else { '?' }
+    $health = Invoke-RestMethod -Uri "$BaseUrl/health${separator}nonce=$nonce" -TimeoutSec 5
+    if ([string]$health.nonce -ne $nonce) {
+        Throw-McpUntrusted -Reason "The /health response nonce did not match the caller nonce."
+    }
+
+    return [pscustomobject]@{
+        Nonce = $nonce
+        Status = [string]$health.status
+        VerifiedAtUtc = (Get-Date).ToUniversalTime().ToString("o")
+    }
+}
+
+function Set-McpPendingTrustBootstrapNote {
+    param(
+        [Parameter(Mandatory)][string]$Message,
+        [Parameter(Mandatory)][string]$RecordedAtUtc
+    )
+
+    $script:McpTrustBootstrapPendingNote = $Message
+    $script:McpTrustBootstrapPendingRecordedAt = $RecordedAtUtc
+}
+
 function Initialize-McpSession {
     <#
-    .SYNOPSIS  Read the AGENTS-README-FIRST.yaml marker and configure the module connection.
-    .PARAMETER Agent       Canonical agent prefix used in the session slug.
-    .PARAMETER Model       Model identifier used in the session slug.
-    .PARAMETER MarkerPath  Path to the marker file. Defaults to searching upward from the current directory.
-    .PARAMETER BaseUrl     Override the base URL instead of reading from the marker.
-    .PARAMETER ApiKey      Override the API key instead of reading from the marker.
-    .OUTPUTS               String session slug persisted/reused in .mcpServer/session.yaml.
+    .SYNOPSIS
+        Configure module-scoped MCP connection state and return the reusable session slug.
+
+    .DESCRIPTION
+        Reads MCP connection settings from AGENTS-README-FIRST.yaml, or from -BaseUrl and
+        -ApiKey when both overrides are supplied, then stores the resolved base URL, API key,
+        workspace header, agent identity, model identifier, and reusable session slug in
+        module-scoped state. When the marker file is used, the function verifies the marker
+        signature before contacting the server. The function then calls /health with a random
+        nonce and requires the response to echo that exact nonce. If signature or nonce
+        verification fails, the function emits MCP_UNTRUSTED, clears module connection state,
+        and throws before any follow-on MCP usage can occur.
+
+        This function does not create a session-log record, does not POST to
+        /mcpserver/sessionlog, and does not return a session object. Its only return value is
+        the session-slug string that later commands may reuse when New-McpSessionLog is called.
+
+    .PARAMETER Agent
+        Pascal-Case agent identity used as the leading token in generated session IDs.
+
+    .PARAMETER Model
+        Model identifier used in generated session IDs and in persisted session-slug state.
+
+    .PARAMETER MarkerPath
+        Explicit path to AGENTS-README-FIRST.yaml. When omitted, the function searches upward
+        from the current directory until it finds AGENTS-README-FIRST.yaml.
+
+    .PARAMETER BaseUrl
+        MCP server base URL override. This parameter is used only when -ApiKey is also
+        supplied. If either override parameter is missing, the function falls back to the
+        marker file.
+
+    .PARAMETER ApiKey
+        MCP API key override. This parameter is used only when -BaseUrl is also supplied. If
+        either override parameter is missing, the function falls back to the marker file.
+
+    .OUTPUTS
+        System.String. Returns only the reusable session-slug string. The slug is persisted in
+        .mcpServer/session.yaml. If a serialized current session already exists, it remains
+        stored for later resolution, but it is not returned by this function.
     #>
     [CmdletBinding()]
     param(
@@ -46,27 +316,31 @@ function Initialize-McpSession {
         [string]$ApiKey
     )
 
+    $signatureVerified = $false
+    $verifiedAtUtc = $null
+
     if ($BaseUrl -and $ApiKey) {
         $script:McpBaseUrl = $BaseUrl.TrimEnd('/')
         $script:McpApiKey  = $ApiKey
+        if ([string]::IsNullOrWhiteSpace($script:McpWorkspacePath)) {
+            $script:McpWorkspacePath = (Get-Location).Path
+        }
     } else {
         if (-not $MarkerPath) {
-            $dir = (Get-Location).Path
-            while ($dir) {
-                $candidate = Join-Path $dir "AGENTS-README-FIRST.yaml"
-                if (Test-Path $candidate) { $MarkerPath = $candidate; break }
-                $parent = Split-Path $dir -Parent
-                if (-not $parent -or $parent -eq $dir) { break }
-                $dir = $parent
-            }
+            $MarkerPath = Find-McpMarkerFile
         }
         if (-not $MarkerPath -or -not (Test-Path $MarkerPath)) {
             throw "AGENTS-README-FIRST.yaml not found. Provide -MarkerPath, or run from within a workspace."
         }
-        $content = Get-Content $MarkerPath -Raw
-        $script:McpBaseUrl       = ([regex]::Match($content, 'baseUrl:\s*(\S+)')).Groups[1].Value
-        $script:McpApiKey        = ([regex]::Match($content, 'apiKey:\s*(\S+)')).Groups[1].Value
-        $script:McpWorkspacePath = ([regex]::Match($content, 'workspacePath:\s*(.+)')).Groups[1].Value.Trim()
+        $marker = ConvertFrom-McpMarkerContent -Content (Get-Content -LiteralPath $MarkerPath -Raw)
+        if (-not (Test-McpMarkerSignature -Marker $marker)) {
+            Throw-McpUntrusted -Reason "Marker signature verification failed."
+        }
+
+        $signatureVerified = $true
+        $script:McpBaseUrl = ([string]$marker.baseUrl).TrimEnd('/')
+        $script:McpApiKey = [string]$marker.apiKey
+        $script:McpWorkspacePath = [string]$marker.workspacePath
     }
 
     $script:McpHeaders = @{
@@ -75,16 +349,29 @@ function Initialize-McpSession {
         "X-Workspace-Path" = $script:McpWorkspacePath
     }
 
-    # Verify connectivity
     try {
-        $health = Invoke-RestMethod -Uri "$($script:McpBaseUrl)/health" -TimeoutSec 5
-        Write-Host "Connected to MCP server at $($script:McpBaseUrl) - status: $($health.status)" -ForegroundColor Green
+        $handshake = Invoke-McpTrustedHealthCheck -BaseUrl $script:McpBaseUrl
+        $verifiedAtUtc = $handshake.VerifiedAtUtc
+        Write-Host "Connected to MCP server at $($script:McpBaseUrl) - status: $($handshake.Status)" -ForegroundColor Green
     } catch {
-        Write-Warning "MCP server at $($script:McpBaseUrl) is not responding: $_"
+        if ($_.Exception.Message -like 'MCP_UNTRUSTED:*') {
+            throw
+        }
+
+        Throw-McpUntrusted -Reason "The /health trust handshake failed: $($_.Exception.Message)"
     }
 
     $script:McpSessionAgent = $Agent.Trim()
     $script:McpSessionModel = $Model.Trim()
+    if ($signatureVerified) {
+        Set-McpPendingTrustBootstrapNote `
+            -Message "Agent successfully trusted MCP Server at $verifiedAtUtc via nonce and signature verification." `
+            -RecordedAtUtc $verifiedAtUtc
+    } else {
+        Set-McpPendingTrustBootstrapNote `
+            -Message "Agent established MCP connectivity at $verifiedAtUtc via nonce verification using explicit connection overrides." `
+            -RecordedAtUtc $verifiedAtUtc
+    }
     $script:McpSessionSlug = Initialize-McpSessionSlugState -Agent $script:McpSessionAgent -Model $script:McpSessionModel
     return $script:McpSessionSlug
 }
@@ -114,10 +401,26 @@ function ConvertTo-McpSessionSlugToken {
 
 function New-McpSessionLogSlug {
     <#
-    .SYNOPSIS  Build a canonical session ID slug in the form <agent>-<timestamp>-<model>.
-    .PARAMETER Agent         Agent/source prefix (must match ^[A-Z][A-Za-z0-9]*$).
-    .PARAMETER Model         Model identifier used to build the suffix slug.
-    .PARAMETER TimestampUtc  Optional UTC timestamp; defaults to now.
+    .SYNOPSIS
+        Build a canonical session ID string without creating a session record.
+
+    .DESCRIPTION
+        Returns a session ID in the form <Agent>-<yyyyMMddTHHmmssZ>-<model-slug>. This
+        function performs no network I/O, writes no local state files, and does not create or
+        update a session-log record.
+
+    .PARAMETER Agent
+        Pascal-Case agent/source prefix. The value must match ^[A-Z][A-Za-z0-9]*$.
+
+    .PARAMETER Model
+        Raw model identifier used to build the normalized trailing slug segment.
+
+    .PARAMETER TimestampUtc
+        Optional UTC timestamp used for the middle timestamp token. Defaults to the current
+        UTC time.
+
+    .OUTPUTS
+        System.String. Returns only the formatted session ID.
     #>
     [CmdletBinding()]
     param(
@@ -159,11 +462,36 @@ function New-McpRequestId {
 
 function New-McpSessionLog {
     <#
-    .SYNOPSIS  Create a new session log object and POST it to the server.
-    .PARAMETER SourceType  Agent identifier (e.g. "Copilot", "Cline", "Cursor").
-    .PARAMETER SessionId   Stable session ID prefixed with agent name. Auto-generated if omitted.
-    .PARAMETER Title       Brief session summary.
-    .PARAMETER Model       AI model name (e.g. "claude-sonnet-4-20250514").
+    .SYNOPSIS
+        Create a new session object, POST it to the server, and persist it locally.
+
+    .DESCRIPTION
+        Constructs a new session-log object, immediately POSTs it to /mcpserver/sessionlog,
+        then persists the created session to the local session-state files used by the module.
+        The returned object is the session object that subsequent exported cmdlets expect when
+        you want to work against a specific session explicitly.
+
+        If -SessionId is omitted, the function first reuses the initialized session slug from
+        Initialize-McpSession when one is available. If no initialized slug exists, the
+        function generates a new canonical session ID from -SourceType and -Model.
+
+    .PARAMETER SourceType
+        Actual agent identity recorded in the session log. This value becomes the session
+        record sourceType and should match the agent prefix used for the session ID.
+
+    .PARAMETER SessionId
+        Explicit session ID to assign to the new session record. If omitted, the initialized
+        reusable slug is used when available; otherwise a new canonical session ID is generated.
+
+    .PARAMETER Title
+        Human-readable title for the session record.
+
+    .PARAMETER Model
+        Model identifier recorded in the session record.
+
+    .OUTPUTS
+        PSCustomObject. Returns the newly created in-memory session object after it has been
+        posted to the server and persisted locally.
     #>
     [CmdletBinding()]
     param(
@@ -203,10 +531,32 @@ function New-McpSessionLog {
 
 function Update-McpSessionLog {
     <#
-    .SYNOPSIS  Push the current session log state to the server.
-    .PARAMETER Session  The session object returned by New-McpSessionLog.
-    .PARAMETER Status   Optionally change status to "completed".
-    .PARAMETER Title    Optionally update the title.
+    .SYNOPSIS
+        Persist the current session object to the server and refresh local session state.
+
+    .DESCRIPTION
+        Resolves the session object, recalculates lastUpdated, turnCount, and totalTokens,
+        applies optional scalar updates such as -Status and -Title, and POSTs the full session
+        payload to /mcpserver/sessionlog. If -Session is omitted, the function loads the
+        current session from the local session-state cache.
+
+        When the resulting session status is completed, the function removes the local session
+        state files after a successful push. Otherwise it rewrites the local session state with
+        the updated payload.
+
+    .PARAMETER Session
+        Optional session object to push. If omitted, the current persisted session is resolved
+        from local session-state files.
+
+    .PARAMETER Status
+        Optional replacement value for the session status before the session is pushed.
+
+    .PARAMETER Title
+        Optional replacement value for the session title before the session is pushed.
+
+    .OUTPUTS
+        None. The function updates server-side and local session state but does not return a
+        value.
     #>
     [CmdletBinding()]
     param(
@@ -239,9 +589,23 @@ function Update-McpSessionLog {
 
 function Get-McpSessionLog {
     <#
-    .SYNOPSIS  Query recent session logs from the server.
-    .PARAMETER Limit   Number of sessions to return (default 5).
-    .PARAMETER Offset  Pagination offset.
+    .SYNOPSIS
+        Query recent session-log records from the server.
+
+    .DESCRIPTION
+        Sends a read-only request to /mcpserver/sessionlog using the current module
+        connection headers. This function does not create, update, or delete local session
+        state files.
+
+    .PARAMETER Limit
+        Maximum number of session records to request. Defaults to 5.
+
+    .PARAMETER Offset
+        Pagination offset applied to the server-side query.
+
+    .OUTPUTS
+        System.Object. Returns the deserialized API response, which includes paging metadata
+        such as totalCount, limit, offset, and the items collection.
     #>
     [CmdletBinding()]
     param(
@@ -294,18 +658,87 @@ function Get-McpSessionTurnList {
 
 function Add-McpSessionTurn {
     <#
-    .SYNOPSIS  Add a request turn to the session and push to server.
-    .PARAMETER Session        The session object.
-    .PARAMETER RequestId      Unique ID for this request. Auto-generated if omitted.
-    .PARAMETER QueryTitle     Short summary of the query.
-    .PARAMETER QueryText      Full user query or task description.
-    .PARAMETER Interpretation Your understanding of what was asked.
-    .PARAMETER Response       Your response text.
-    .PARAMETER Status         "in_progress" or "completed".
-    .PARAMETER Model          Model used for this turn. Defaults to session model.
-    .PARAMETER Tags           Array of tags (e.g. "refactor", "bugfix").
-    .PARAMETER ContextList    Array of files or resources referenced.
-    .PARAMETER Push           If set, immediately push to server. Default: true.
+    .SYNOPSIS
+        Create a new turn, append it to the session, and persist the change by default.
+
+    .DESCRIPTION
+        Resolves the target session, creates a new turn object, appends it to the session's
+        turns collection, and then persists the updated session unless -NoPush is supplied.
+        If -Session is omitted, the function resolves the current persisted session from local
+        state.
+
+        When -RequestId is omitted, the function generates a canonical request ID from
+        -QueryTitle, then from -QueryText, and finally from the literal seed "turn" if both
+        text inputs are blank. If the generated ID already exists in the session, the function
+        generates a second canonical ID using a numeric suffix.
+
+    .PARAMETER Session
+        Optional session object to update. If omitted, the current persisted session is
+        resolved from local session-state files.
+
+    .PARAMETER RequestId
+        Explicit request ID for the new turn. When omitted, the function generates a unique
+        canonical request ID.
+
+    .PARAMETER QueryTitle
+        Short human-readable summary of the user request represented by the turn.
+
+    .PARAMETER QueryText
+        Full request text or task description represented by the turn.
+
+    .PARAMETER Interpretation
+        Agent interpretation of the request at the time the turn is created.
+
+    .PARAMETER Response
+        Initial response text to store on the turn. This value may be empty when the turn is
+        first created.
+
+    .PARAMETER Status
+        Initial turn status. Must be in_progress or completed.
+
+    .PARAMETER Model
+        Model identifier recorded on the turn. If omitted, the session model is used.
+
+    .PARAMETER Tags
+        Initial tags collection to store on the turn.
+
+    .PARAMETER ContextList
+        Initial context-reference collection to store on the turn.
+
+    .PARAMETER TokenCount
+        Optional token-count value to store on the turn.
+
+    .PARAMETER ModelProvider
+        Optional model-provider identifier to store on the turn.
+
+    .PARAMETER FailureNote
+        Optional failure note to store on the turn.
+
+    .PARAMETER Score
+        Optional numeric score to store on the turn.
+
+    .PARAMETER IsPremium
+        Optional premium-model flag to store on the turn.
+
+    .PARAMETER DesignDecisions
+        Initial design-decision entries to store on the turn.
+
+    .PARAMETER RequirementsDiscovered
+        Initial requirement IDs or requirement notes to store on the turn.
+
+    .PARAMETER FilesModified
+        Initial file-path entries to store on the turn.
+
+    .PARAMETER Blockers
+        Initial blocker entries to store on the turn.
+
+    .PARAMETER NoPush
+        When supplied, the function writes the updated session only to local session-state
+        files and does not POST the session to the server.
+
+    .OUTPUTS
+        PSCustomObject. Returns the newly created turn object after it has been appended to the
+        in-memory session.
     #>
     [CmdletBinding()]
     param(
@@ -370,6 +803,22 @@ function Add-McpSessionTurn {
         processingDialog       = [System.Collections.Generic.List[object]]::new()
     }
 
+    if (-not [string]::IsNullOrWhiteSpace($script:McpTrustBootstrapPendingNote)) {
+        $turn.processingDialog.Add([PSCustomObject]@{
+            timestamp = if ([string]::IsNullOrWhiteSpace($script:McpTrustBootstrapPendingRecordedAt)) {
+                (Get-Date).ToUniversalTime().ToString("o")
+            } else {
+                $script:McpTrustBootstrapPendingRecordedAt
+            }
+            role = "system"
+            content = $script:McpTrustBootstrapPendingNote
+            category = "observation"
+        })
+
+        $script:McpTrustBootstrapPendingNote = $null
+        $script:McpTrustBootstrapPendingRecordedAt = $null
+    }
+
     [void]$turns.Add($turn)
 
     if (-not $NoPush) {
@@ -382,11 +831,77 @@ function Add-McpSessionTurn {
 
 function Set-McpSessionTurn {
     <#
-    .SYNOPSIS  Update fields on an existing turn and optionally push.
-    .PARAMETER Turn      The turn object returned by Add-McpSessionTurn.
-    .PARAMETER Session   The parent session object.
-    .PARAMETER Response  Updated response text.
-    .PARAMETER Status    Updated status.
+    .SYNOPSIS
+        Update an existing turn and persist the containing session by default.
+
+    .DESCRIPTION
+        Updates scalar fields on an existing turn and appends supplied list values to the turn's
+        existing list fields. This function does not replace list-valued properties such as
+        tags, contextList, designDecisions, requirementsDiscovered, filesModified, or blockers;
+        each supplied value is appended in order.
+
+        If -Session is omitted, the function resolves the current persisted session from local
+        state. When the supplied -Turn includes a requestId and the resolved session contains a
+        turn with the same requestId, the function updates the turn instance from the resolved
+        session before applying changes. Unless -NoPush is supplied, the updated session is
+        POSTed to the server immediately.
+
+    .PARAMETER Turn
+        Turn object to update. The object is typically the value returned by Add-McpSessionTurn.
+
+    .PARAMETER Session
+        Optional parent session object. If omitted, the current persisted session is resolved
+        from local session-state files.
+
+    .PARAMETER Response
+        Replacement response text for the turn.
+
+    .PARAMETER Interpretation
+        Replacement interpretation text for the turn.
+
+    .PARAMETER Status
+        Replacement turn status.
+
+    .PARAMETER TokenCount
+        Replacement token-count value.
+
+    .PARAMETER ModelProvider
+        Replacement model-provider identifier.
+
+    .PARAMETER FailureNote
+        Replacement failure note.
+
+    .PARAMETER Score
+        Replacement score value.
+
+    .PARAMETER IsPremium
+        Replacement premium-model flag.
+
+    .PARAMETER Tags
+        Values to append to the turn's tags collection.
+
+    .PARAMETER ContextList
+        Values to append to the turn's contextList collection.
+
+    .PARAMETER FilesModified
+        Values to append to the turn's filesModified collection.
+
+    .PARAMETER DesignDecisions
+        Values to append to the turn's designDecisions collection.
+
+    .PARAMETER RequirementsDiscovered
+        Values to append to the turn's requirementsDiscovered collection.
+
+    .PARAMETER Blockers
+        Values to append to the turn's blockers collection.
+
+    .PARAMETER NoPush
+        When supplied, the function writes the updated session only to local session-state
+        files and does not POST the session to the server.
+
+    .OUTPUTS
+        None. The function mutates the turn and persists the containing session, but it does
+        not return a value.
     #>
     [CmdletBinding()]
     param(
@@ -462,12 +977,42 @@ function Set-McpSessionTurn {
 
 function Add-McpAction {
     <#
-    .SYNOPSIS  Add an action to a session turn.
-    .PARAMETER Turn         The turn object.
-    .PARAMETER Description  What was done.
-    .PARAMETER Type         Action type: edit, create, delete, commit, design_decision, etc.
-    .PARAMETER FilePath     Affected file path (empty string if N/A).
-    .PARAMETER Status       "completed", "in_progress", or "failed".
+    .SYNOPSIS
+        Append a structured action record to a turn.
+
+    .DESCRIPTION
+        Adds a new action object to Turn.actions and assigns the next sequential order value
+        based on the current action count. If -Session is supplied, or if the module can
+        resolve the current persisted session from local state, the containing session is
+        persisted immediately unless -NoPush is supplied. If no session can be resolved, the
+        function updates only the in-memory turn object.
+
+    .PARAMETER Turn
+        Turn object whose actions collection will receive the new action.
+
+    .PARAMETER Description
+        Human-readable description of the action that was taken.
+
+    .PARAMETER Type
+        Action type recorded on the action object. The value must be one of the exported
+        validate-set literals.
+
+    .PARAMETER Session
+        Optional parent session object used for immediate persistence.
+
+    .PARAMETER FilePath
+        Related file path or external identifier for the action. Use the empty string when the
+        action is not tied to a specific path.
+
+    .PARAMETER Status
+        Action execution status. Must be completed, in_progress, or failed.
+
+    .PARAMETER NoPush
+        When supplied, the function updates only in-memory and local session-state data; it
+        does not POST the containing session to the server.
+
+    .OUTPUTS
+        PSCustomObject. Returns the newly created action object.
     #>
     [CmdletBinding()]
     param(
@@ -505,12 +1050,39 @@ function Add-McpAction {
 
 function Add-McpTurnDetail {
     <#
-    .SYNOPSIS  Append detail text to a turn list field and optionally push.
-    .PARAMETER Turn      The turn object.
-    .PARAMETER Field     One of tags/contextList/designDecisions/requirementsDiscovered/filesModified/blockers.
-    .PARAMETER Value     Detail string to append.
-    .PARAMETER Session   Optional parent session for immediate persistence.
-    .PARAMETER NoPush    When set, do not push even when Session is provided.
+    .SYNOPSIS
+        Append one string value to a list-valued turn field.
+
+    .DESCRIPTION
+        Appends a single non-empty string value to one of the supported list-valued turn
+        fields: tags, contextList, designDecisions, requirementsDiscovered, filesModified, or
+        blockers. The function never replaces the existing collection and silently ignores
+        null, empty, or whitespace-only values.
+
+        If -Session is supplied, or if the module can resolve the current persisted session
+        from local state, the containing session is persisted immediately unless -NoPush is
+        supplied. If no session can be resolved, the function updates only the in-memory turn
+        object.
+
+    .PARAMETER Turn
+        Turn object whose list-valued field will receive the appended value.
+
+    .PARAMETER Field
+        Name of the list-valued field that will receive the new string.
+
+    .PARAMETER Value
+        String value to append. Whitespace-only values are ignored.
+
+    .PARAMETER Session
+        Optional parent session object used for immediate persistence.
+
+    .PARAMETER NoPush
+        When supplied, the function updates only in-memory and local session-state data; it
+        does not POST the containing session to the server.
+
+    .OUTPUTS
+        None. The function mutates the turn and optionally persists the containing session, but
+        it does not return a value.
     #>
     [CmdletBinding()]
     param(
@@ -539,12 +1111,35 @@ function Add-McpTurnDetail {
 
 function Send-McpDialog {
     <#
-    .SYNOPSIS  Post reasoning dialog items to the session log dialog endpoint.
-    .PARAMETER Session    The session object.
-    .PARAMETER RequestId  The request turn ID.
-    .PARAMETER Content    The reasoning text or observation.
-    .PARAMETER Role       "model", "tool", "system", or "user".
-    .PARAMETER Category   "reasoning", "tool_call", "tool_result", "observation", or "decision".
+    .SYNOPSIS
+        POST one dialog item to the dialog endpoint for a specific session turn.
+
+    .DESCRIPTION
+        Resolves the target session, constructs a single dialog item payload, and POSTs that
+        item to /mcpserver/sessionlog/{sourceType}/{sessionId}/{requestId}/dialog. If -Session
+        is omitted, the function resolves the current persisted session from local state. This
+        function does not modify the local turn object and does not rewrite local session-state
+        files.
+
+    .PARAMETER Session
+        Optional session object that identifies the session owning the target turn. If omitted,
+        the current persisted session is resolved from local session-state files.
+
+    .PARAMETER RequestId
+        Request ID of the existing turn that will receive the dialog item.
+
+    .PARAMETER Content
+        Dialog content to post.
+
+    .PARAMETER Role
+        Role value recorded for the dialog item. Must be model, tool, system, or user.
+
+    .PARAMETER Category
+        Category value recorded for the dialog item. Must be reasoning, tool_call,
+        tool_result, observation, or decision.
+
+    .OUTPUTS
+        None. The function sends the dialog item to the server but does not return a value.
     #>
     [CmdletBinding()]
     param(
@@ -577,14 +1172,37 @@ function Assert-Initialized {
     }
 }
 
-function Get-McpSessionStatePath {
-    $workspacePath = $script:McpWorkspacePath
-    if ([string]::IsNullOrWhiteSpace($workspacePath)) {
-        $workspacePath = (Get-Location).Path
+function Get-McpSessionWorkspacePath {
+    if (-not [string]::IsNullOrWhiteSpace($script:McpWorkspacePath)) {
+        return $script:McpWorkspacePath
     }
 
+    return (Get-Location).Path
+}
+
+function Get-McpSessionStatePath {
+    $workspacePath = Get-McpSessionWorkspacePath
     $stateDir = Join-Path $workspacePath ".mcpServer"
     return Join-Path $stateDir "session.yaml"
+}
+
+function Get-McpCurrentSessionCacheDirectoryPath {
+    $workspacePath = Get-McpSessionWorkspacePath
+    return Join-Path $workspacePath ".mcpSession"
+}
+
+function Get-McpCurrentSessionCachePath {
+    $cacheDir = Get-McpCurrentSessionCacheDirectoryPath
+    return Join-Path $cacheDir "current-session.json"
+}
+
+function Get-McpCurrentSessionCacheCandidatePaths {
+    $cacheDir = Get-McpCurrentSessionCacheDirectoryPath
+    return @(
+        (Join-Path $cacheDir "current-session.json"),
+        (Join-Path $cacheDir "session.json"),
+        (Join-Path $cacheDir "current.json")
+    )
 }
 
 function Get-McpSessionState {
@@ -606,6 +1224,76 @@ function Get-McpSessionState {
     }
 }
 
+function ConvertTo-McpCachedSessionObject {
+    param(
+        [Parameter(Mandatory)][object]$Candidate,
+        [Parameter(Mandatory)][string]$Path
+    )
+
+    $sessionCandidate = $Candidate
+    $propertyNames = @($sessionCandidate.PSObject.Properties.Name)
+    if (-not ($propertyNames -contains 'sourceType' -and $propertyNames -contains 'sessionId')) {
+        foreach ($propertyName in @('currentSession', 'current', 'session')) {
+            if ($propertyNames -contains $propertyName -and $null -ne $sessionCandidate.$propertyName) {
+                $sessionCandidate = $sessionCandidate.$propertyName
+                break
+            }
+        }
+    }
+
+    if ($null -eq $sessionCandidate) {
+        return $null
+    }
+
+    $sessionPropertyNames = @($sessionCandidate.PSObject.Properties.Name)
+    if (-not ($sessionPropertyNames -contains 'sourceType' -and $sessionPropertyNames -contains 'sessionId')) {
+        return $null
+    }
+
+    try {
+        return ConvertTo-McpSessionRuntimeObject -Session $sessionCandidate
+    } catch {
+        Write-Warning "Failed to normalize current session cache file '$Path': $_"
+        return $null
+    }
+}
+
+function Get-McpCurrentSessionCache {
+    foreach ($cachePath in @(Get-McpCurrentSessionCacheCandidatePaths)) {
+        if (-not (Test-Path -LiteralPath $cachePath)) {
+            continue
+        }
+
+        try {
+            $raw = Get-Content -LiteralPath $cachePath -Raw -ErrorAction Stop
+            if ([string]::IsNullOrWhiteSpace($raw)) {
+                continue
+            }
+
+            $candidate = $raw | ConvertFrom-Json -Depth 50
+            $session = ConvertTo-McpCachedSessionObject -Candidate $candidate -Path $cachePath
+            if ($null -ne $session) {
+                return $session
+            }
+        } catch {
+            Write-Warning "Failed to parse current session cache file '$cachePath': $_"
+        }
+    }
+
+    return $null
+}
+
+function Save-McpCurrentSessionCache {
+    param([PSCustomObject]$Session)
+
+    $cachePath = Get-McpCurrentSessionCachePath
+    $cacheDir = Split-Path -Parent $cachePath
+    New-Item -ItemType Directory -Path $cacheDir -Force | Out-Null
+
+    $payload = Get-McpSessionSerializableObject -Session $Session
+    $payload | ConvertTo-Json -Depth 50 | Set-Content -LiteralPath $cachePath -Encoding UTF8
+}
+
 function Save-McpSessionState {
     param([PSCustomObject]$Session)
 
@@ -625,10 +1313,13 @@ function Save-McpSessionState {
         model = $script:McpSessionModel
         slug = $script:McpSessionSlug
         slugGeneratedAt = $slugGeneratedAt
+        pendingTrustNote = $script:McpTrustBootstrapPendingNote
+        pendingTrustRecordedAt = $script:McpTrustBootstrapPendingRecordedAt
         session = Get-McpSessionSerializableObject -Session $Session
     }
 
     $state | ConvertTo-Json -Depth 50 | Set-Content -LiteralPath $statePath -Encoding UTF8
+    Save-McpCurrentSessionCache -Session $Session
 }
 
 function Initialize-McpSessionSlugState {
@@ -638,6 +1329,7 @@ function Initialize-McpSessionSlugState {
     )
 
     $state = Get-McpSessionState
+    $currentSession = Get-McpCurrentSessionCache
     $now = (Get-Date).ToUniversalTime()
     $slug = $null
     $slugGeneratedAt = $null
@@ -663,15 +1355,47 @@ function Initialize-McpSessionSlugState {
         }
     }
 
+    if ([string]::IsNullOrWhiteSpace($slug) -and $currentSession) {
+        $sessionId = [string]$currentSession.sessionId
+        $sessionModel = [string]$currentSession.model
+        $sessionStatus = [string]$currentSession.status
+        $sessionSourceType = [string]$currentSession.sourceType
+        $statusIsReusable = [string]::IsNullOrWhiteSpace($sessionStatus) -or $sessionStatus -notin @('completed', 'closed')
+        $agentMatches = $sessionSourceType -eq $Agent -or (
+            -not [string]::IsNullOrWhiteSpace($sessionId) -and
+            $sessionId.StartsWith("$Agent-", [System.StringComparison]::Ordinal)
+        )
+
+        if ($statusIsReusable -and $agentMatches -and $sessionModel -eq $Model) {
+            $slug = $sessionId
+            $slugGeneratedAt = if (-not [string]::IsNullOrWhiteSpace([string]$currentSession.lastUpdated)) {
+                [string]$currentSession.lastUpdated
+            } elseif (-not [string]::IsNullOrWhiteSpace([string]$currentSession.started)) {
+                [string]$currentSession.started
+            } else {
+                $now.ToString('o')
+            }
+        }
+    }
+
     if ([string]::IsNullOrWhiteSpace($slug)) {
         $slug = New-McpSessionLogSlug -Agent $Agent -Model $Model -TimestampUtc $now
         $slugGeneratedAt = $now.ToString('o')
     }
 
     $script:McpSessionSlug = $slug
+    if ($state -and -not [string]::IsNullOrWhiteSpace([string]$state.pendingTrustNote)) {
+        $script:McpTrustBootstrapPendingNote = [string]$state.pendingTrustNote
+    }
+
+    if ($state -and -not [string]::IsNullOrWhiteSpace([string]$state.pendingTrustRecordedAt)) {
+        $script:McpTrustBootstrapPendingRecordedAt = [string]$state.pendingTrustRecordedAt
+    }
 
     $persistedSession = $null
-    if ($state -and $state.session) {
+    if ($currentSession) {
+        $persistedSession = $currentSession
+    } elseif ($state -and $state.session) {
         $persistedSession = ConvertTo-McpSessionRuntimeObject -Session $state.session
     }
 
@@ -681,6 +1405,8 @@ function Initialize-McpSessionSlugState {
         model = $Model
         slug = $slug
         slugGeneratedAt = $slugGeneratedAt
+        pendingTrustNote = $script:McpTrustBootstrapPendingNote
+        pendingTrustRecordedAt = $script:McpTrustBootstrapPendingRecordedAt
         session = $persistedSession
     }
 
@@ -699,6 +1425,11 @@ function Resolve-McpSession {
 
     if ($Session) {
         return ConvertTo-McpSessionRuntimeObject -Session $Session
+    }
+
+    $currentSession = Get-McpCurrentSessionCache
+    if ($currentSession) {
+        return $currentSession
     }
 
     $state = Get-McpSessionState
@@ -731,15 +1462,25 @@ function ConvertTo-McpSessionRuntimeObject {
 }
 
 function Remove-McpSessionStateFile {
-    $statePath = Get-McpSessionStatePath
-    if (-not (Test-Path -LiteralPath $statePath)) {
-        return
+    foreach ($path in @((Get-McpSessionStatePath)) + @(Get-McpCurrentSessionCacheCandidatePaths)) {
+        if (-not (Test-Path -LiteralPath $path)) {
+            continue
+        }
+
+        try {
+            Remove-Item -LiteralPath $path -Force -ErrorAction Stop
+        } catch {
+            Write-Warning "Failed to delete session state file '$path': $_"
+        }
     }
 
     try {
-        Remove-Item -LiteralPath $statePath -Force -ErrorAction Stop
+        $cacheDir = Get-McpCurrentSessionCacheDirectoryPath
+        if ((Test-Path -LiteralPath $cacheDir) -and $null -eq (Get-ChildItem -LiteralPath $cacheDir -Force -ErrorAction Stop | Select-Object -First 1)) {
+            Remove-Item -LiteralPath $cacheDir -Force -ErrorAction Stop
+        }
     } catch {
-        Write-Warning "Failed to delete session state file '$statePath': $_"
+        Write-Warning "Failed to delete current session cache directory '$cacheDir': $_"
     }
 }
 

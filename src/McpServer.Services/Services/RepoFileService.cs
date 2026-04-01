@@ -104,12 +104,12 @@ public sealed class RepoFileService : IRepoFileService
         }
         catch (IOException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return new RepoWriteResult(false, ex.Message);
         }
         catch (UnauthorizedAccessException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return new RepoWriteResult(false, ex.Message);
         }
     }

@@ -361,7 +361,7 @@ public sealed class GitHubCliService : IGitHubCliService
         }
         catch (JsonException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Array.Empty<GitHubIssueItem>();
         }
     }
@@ -385,7 +385,7 @@ public sealed class GitHubCliService : IGitHubCliService
         }
         catch (JsonException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Array.Empty<GitHubPullItem>();
         }
     }
@@ -649,7 +649,7 @@ public sealed class GitHubCliService : IGitHubCliService
         }
         catch (JsonException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return null;
         }
     }
@@ -672,7 +672,7 @@ public sealed class GitHubCliService : IGitHubCliService
         }
         catch (JsonException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Array.Empty<GitHubLabel>();
         }
     }
@@ -703,7 +703,7 @@ public sealed class GitHubCliService : IGitHubCliService
         }
         catch (JsonException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Array.Empty<GitHubWorkflowRunItem>();
         }
     }
@@ -761,7 +761,7 @@ public sealed class GitHubCliService : IGitHubCliService
         }
         catch (JsonException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return null;
         }
     }
