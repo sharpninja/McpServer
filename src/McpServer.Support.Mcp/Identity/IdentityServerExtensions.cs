@@ -11,8 +11,7 @@ internal static class IdentityServerExtensions
 {
     public static IServiceCollection AddMcpIdentityServer(
         this IServiceCollection services,
-        IConfiguration configuration,
-        string dataFolder)
+        IConfiguration configuration)
     {
         var options = configuration.GetSection(IdentityServerOptions.SectionName).Get<IdentityServerOptions>()
             ?? new IdentityServerOptions();
@@ -20,15 +19,16 @@ internal static class IdentityServerExtensions
         if (!options.Enabled)
             return services;
 
-        var identityDbPath = Path.IsPathRooted(options.DatabaseFile)
-            ? options.DatabaseFile
-            : Path.Combine(dataFolder, options.DatabaseFile);
+        var identityConnectionString = options.ConnectionString;
+        if (string.IsNullOrWhiteSpace(identityConnectionString))
+        {
+            // Default to SQL Server LocalDB
+            identityConnectionString = $"Server=(localdb)\\MSSQLLocalDB;Database={options.DatabaseName};Trusted_Connection=True;MultipleActiveResultSets=true";
+        }
 
-        var identityConnectionString = $"Data Source={identityDbPath}";
-
-        // ASP.NET Core Identity
+        // ASP.NET Core Identity backed by SQL Server
         services.AddDbContext<McpIdentityDbContext>(opts =>
-            opts.UseSqlite(identityConnectionString));
+            opts.UseSqlServer(identityConnectionString));
 
         services.AddIdentity<McpUser, IdentityRole>(opts =>
         {
@@ -49,6 +49,8 @@ internal static class IdentityServerExtensions
                 idsvr.IssuerUri = options.IssuerUri;
 
             idsvr.EmitStaticAudienceClaim = true;
+            idsvr.UserInteraction.DeviceVerificationUrl = "/device";
+            idsvr.UserInteraction.DeviceVerificationUserCodeParameter = "userCode";
         })
         .AddAspNetIdentity<McpUser>()
         .AddInMemoryIdentityResources(IdentityServerConfig.GetIdentityResources())

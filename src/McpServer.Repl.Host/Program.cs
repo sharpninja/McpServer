@@ -61,7 +61,7 @@ static IHost CreateHost()
             
             services.AddSingleton(sp =>
             {
-                var serverUrl = Environment.GetEnvironmentVariable("MCP_SERVER_URL") ?? "http://localhost:5000";
+                var serverUrl = Environment.GetEnvironmentVariable("MCP_SERVER_URL") ?? "http://localhost:7147";
                 var options = new McpServerClientOptions
                 {
                     BaseUrl = new Uri(serverUrl)
@@ -71,6 +71,7 @@ static IHost CreateHost()
             });
             
             services.AddTransient<AgentStdioHandler>();
+            services.AddTransient<LoginHandler>();
             services.AddTransient<InteractiveHandler>();
         })
         .Build();

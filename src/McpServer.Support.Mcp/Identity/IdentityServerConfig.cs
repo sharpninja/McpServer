@@ -45,12 +45,16 @@ internal static class IdentityServerConfig
             AllowedScopes = { options.ApiScopeName },
         },
 
-        // Interactive client for CLI tools (Device Authorization Flow)
+        // Interactive client for CLI tools (Device Authorization + Password flows)
         new DuendeClient
         {
             ClientId = "mcp-director",
             ClientName = "MCP Director CLI",
-            AllowedGrantTypes = GrantTypes.DeviceFlow,
+            AllowedGrantTypes =
+            {
+                "urn:ietf:params:oauth:grant-type:device_code",
+                GrantType.ResourceOwnerPassword,
+            },
             RequireClientSecret = false,
             AllowedScopes = { "openid", "profile", "email", "roles", options.ApiScopeName },
             AllowOfflineAccess = true,

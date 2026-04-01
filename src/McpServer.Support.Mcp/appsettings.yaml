@@ -141,7 +141,8 @@ Mcp:
   IdentityServer:
     Enabled: false
     IssuerUri: ''
-    DatabaseFile: identity.db
+    ConnectionString: ''
+    DatabaseName: McpIdentity
     SeedDefaults: true
     DefaultAdminUser: admin
     DefaultAdminPassword: McpAdmin1!

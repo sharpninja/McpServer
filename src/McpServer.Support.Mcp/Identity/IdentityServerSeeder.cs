@@ -13,9 +13,9 @@ internal static class IdentityServerSeeder
         using var scope = services.CreateScope();
         var sp = scope.ServiceProvider;
 
-        // Apply Identity migrations
+        // Create Identity database schema (no migrations assembly — use EnsureCreated)
         var identityDb = sp.GetRequiredService<McpIdentityDbContext>();
-        await identityDb.Database.MigrateAsync();
+        await identityDb.Database.EnsureCreatedAsync();
 
         // Seed default admin user
         var userManager = sp.GetRequiredService<UserManager<McpUser>>();

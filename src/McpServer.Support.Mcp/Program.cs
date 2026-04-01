@@ -385,10 +385,7 @@ builder.Services.AddSingleton<PairingSessionService>();
 // Embedded IdentityServer (when enabled, acts as the local OIDC authority)
 var identityServerOptions = builder.Configuration.GetSection(IdentityServerOptions.SectionName).Get<IdentityServerOptions>()
     ?? new IdentityServerOptions();
-var identityDataFolder = builder.Configuration["DataFolder"] ?? ".";
-if (!Path.IsPathRooted(identityDataFolder))
-    identityDataFolder = Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, identityDataFolder));
-builder.Services.AddMcpIdentityServer(builder.Configuration, identityDataFolder);
+builder.Services.AddMcpIdentityServer(builder.Configuration);
 
 var oidcAuthBootstrap = builder.Configuration.GetSection(OidcAuthOptions.SectionName).Get<OidcAuthOptions>()
     ?? new OidcAuthOptions();

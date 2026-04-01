@@ -15,8 +15,11 @@ public sealed class IdentityServerOptions
     /// <summary>The issuer URI for tokens. Defaults to the server's base URL.</summary>
     public string IssuerUri { get; set; } = "";
 
-    /// <summary>SQLite database file for identity data. Relative to DataFolder.</summary>
-    public string DatabaseFile { get; set; } = "identity.db";
+    /// <summary>SQL Server connection string for identity data. When empty, defaults to LocalDB.</summary>
+    public string ConnectionString { get; set; } = "";
+
+    /// <summary>Database name for the identity store (used in default LocalDB connection string).</summary>
+    public string DatabaseName { get; set; } = "McpIdentity";
 
     /// <summary>Whether to seed default clients and resources on startup.</summary>
     public bool SeedDefaults { get; set; } = true;
