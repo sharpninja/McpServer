@@ -682,20 +682,26 @@ public interface ISessionLogClientAdapter
 /// <summary>
 /// Production adapter for SessionLogClient.
 /// </summary>
-internal sealed class SessionLogClientAdapter : ISessionLogClientAdapter
+public sealed class SessionLogClientAdapter : ISessionLogClientAdapter
 {
     private readonly SessionLogClient _client;
 
+    /// <summary>
+    /// Initializes a new <see cref="SessionLogClientAdapter"/> wrapping the specified client.
+    /// </summary>
+    /// <param name="client">The session log client to wrap.</param>
     public SessionLogClientAdapter(SessionLogClient client)
     {
         _client = client ?? throw new ArgumentNullException(nameof(client));
     }
 
+    /// <inheritdoc />
     public Task<SessionLogSubmitResult> SubmitAsync(UnifiedSessionLogDto sessionLog, CancellationToken cancellationToken = default)
     {
         return _client.SubmitAsync(sessionLog, cancellationToken);
     }
 
+    /// <inheritdoc />
     public Task<SessionLogQueryResult> QueryAsync(
         string? agent = null,
         string? model = null,
@@ -709,6 +715,7 @@ internal sealed class SessionLogClientAdapter : ISessionLogClientAdapter
         return _client.QueryAsync(agent, model, text, from, to, limit, offset, cancellationToken);
     }
 
+    /// <inheritdoc />
     public Task<DialogAppendResult> AppendDialogAsync(
         string agent,
         string sessionId,
