@@ -23,13 +23,16 @@ For specific operational instructions (session bootstrap, turn logging lifecycle
 ## Build, Test, Lint
 
 ```powershell
-# Build
-dotnet build src\McpServer.Support.Mcp -c Debug
-dotnet build src\McpServer.Client -c Debug
+# Build (via Nuke)
+./build.ps1 Compile
+# or: dotnet build src\McpServer.Support.Mcp -c Debug
 
-# Run unit tests
-dotnet test tests\McpServer.Support.Mcp.Tests -c Debug
-dotnet test tests\McpServer.Client.Tests -c Debug
+# Run all unit tests (via Nuke)
+./build.ps1 Test
+# or individual projects:
+# dotnet test tests\McpServer.Support.Mcp.Tests -c Debug
+# dotnet test tests\McpServer.Client.Tests -c Debug
+# dotnet test tests\Build.Tests -c Debug
 
 # Run integration tests (uses CustomWebApplicationFactory, in-memory EF)
 dotnet test tests\McpServer.Support.Mcp.IntegrationTests -c Debug
@@ -40,8 +43,12 @@ dotnet test tests\McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedN
 # Run tests in a single class
 dotnet test tests\McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedName~TodoServiceTests"
 
-# Validate appsettings config
-pwsh.exe ./scripts/Validate-McpConfig.ps1
+# Validate appsettings config (via Nuke)
+./build.ps1 ValidateConfig
+# or: pwsh.exe ./scripts/Validate-McpConfig.ps1
+
+# Validate requirements traceability
+./build.ps1 ValidateTraceability
 
 # Markdown lint (docs only)
 # CI uses markdownlint-cli2 with .markdownlint-cli2.yaml

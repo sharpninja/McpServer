@@ -8,10 +8,10 @@ A command-line REPL (Read-Eval-Print Loop) host for interacting with the Model C
 
 ```powershell
 # Pack the tool (from solution root)
-.\scripts\Pack-ReplTool.ps1
+./build.ps1 PackReplTool
 
 # Install globally
-.\scripts\Install-ReplTool.ps1
+./build.ps1 InstallReplTool
 
 # Or install manually
 dotnet tool install --global SharpNinja.McpServer.Repl --add-source ./local-packages
@@ -20,7 +20,7 @@ dotnet tool install --global SharpNinja.McpServer.Repl --add-source ./local-pack
 ### Update Existing Installation
 
 ```powershell
-.\scripts\Install-ReplTool.ps1 -Update
+./build.ps1 InstallReplTool --update-tool
 
 # Or manually
 dotnet tool update --global SharpNinja.McpServer.Repl --add-source ./local-packages
@@ -29,7 +29,7 @@ dotnet tool update --global SharpNinja.McpServer.Repl --add-source ./local-packa
 ### Uninstall
 
 ```powershell
-.\scripts\Install-ReplTool.ps1 -Uninstall
+./build.ps1 InstallReplTool --uninstall-tool
 
 # Or manually
 dotnet tool uninstall --global SharpNinja.McpServer.Repl
@@ -128,13 +128,15 @@ mcpserver-repl --interactive
 ### Build
 
 ```powershell
-dotnet build src/McpServer.Repl.Host/McpServer.Repl.Host.csproj --configuration Release
+./build.ps1 Compile --configuration Release
+# or: dotnet build src/McpServer.Repl.Host/McpServer.Repl.Host.csproj --configuration Release
 ```
 
 ### Pack
 
 ```powershell
-dotnet pack src/McpServer.Repl.Host/McpServer.Repl.Host.csproj --configuration Release --output ./local-packages
+./build.ps1 PackReplTool
+# or: dotnet pack src/McpServer.Repl.Host/McpServer.Repl.Host.csproj --configuration Release --output ./local-packages
 ```
 
 ### Run Locally (Without Installing)

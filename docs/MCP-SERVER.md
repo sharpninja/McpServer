@@ -32,14 +32,15 @@ Standalone repository for `McpServer.Support.Mcp`, the MCP context server used f
 1. Restore and build:
 
 ```powershell
-dotnet restore McpServer.sln
-dotnet build McpServer.sln -c Staging
+./build.ps1 Compile --configuration Staging
+# or: dotnet restore McpServer.sln && dotnet build McpServer.sln -c Staging
 ```
 
 1. Run the default instance:
 
 ```powershell
-.\scripts\Start-McpServer.ps1 -Configuration Staging -Instance default
+./build.ps1 StartServer --instance default
+# or: dotnet run --project src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj -c Staging -- --instance default
 ```
 
 1. Open Swagger:
@@ -119,14 +120,14 @@ Environment overrides:
 Run two configured instances:
 
 ```powershell
-.\scripts\Start-McpServer.ps1 -Configuration Staging -Instance default
-.\scripts\Start-McpServer.ps1 -Configuration Staging -Instance alt-local
+./build.ps1 StartServer --instance default
+./build.ps1 StartServer --instance alt-local
 ```
 
 Smoke test both instances:
 
 ```powershell
-.\scripts\Test-McpMultiInstance.ps1 -Configuration Staging -FirstInstance default -SecondInstance alt-local
+./build.ps1 TestMultiInstance --first-instance default --second-instance alt-local
 ```
 
 Migrate todo data between backends:
@@ -135,16 +136,18 @@ Migrate todo data between backends:
 .\scripts\Migrate-McpTodoStorage.ps1 -SourceBaseUrl http://localhost:7147 -TargetBaseUrl http://localhost:7157
 ```
 
+## Build System
+
+Build-related tasks are available as Nuke targets via `./build.ps1`. See the [Build System section in README.md](../README.md#build-system) for the full target list.
+
 ## Common Scripts
 
-- `scripts/Start-McpServer.ps1` - build/run server with optional `-Instance`
+The following operational/admin scripts are not part of the Nuke build pipeline:
+
 - `scripts/Run-McpServer.ps1` - direct local run helper
 - `scripts/Update-McpService.ps1` - stop, publish Debug build, restore config/data, restart, health-check Windows service
-- `scripts/Validate-McpConfig.ps1` - config validation
-- `scripts/Test-McpMultiInstance.ps1` - two-instance smoke test
-- `scripts/Test-GraphRagSmoke.ps1` - GraphRAG status/index/query smoke validation
+- `scripts/Manage-McpService.ps1` - install/start/stop/remove Windows service
 - `scripts/Migrate-McpTodoStorage.ps1` - todo backend migration
-- `scripts/Package-McpServerMsix.ps1` - publish and package MSIX
 
 ## GraphRAG
 
@@ -204,8 +207,8 @@ Track these operational indicators during rollout:
 ## Build and Test
 
 ```powershell
-dotnet build McpServer.sln -c Staging
-dotnet test tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj -c Debug
+./build.ps1 Compile --configuration Staging
+./build.ps1 Test
 ```
 
 ## API Surface

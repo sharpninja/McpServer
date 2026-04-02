@@ -4,8 +4,10 @@
 
 ### Build & Test
 
-- [ ] `dotnet build McpServer.sln -c Release` succeeds with 0 errors, 0 warnings
-- [ ] `dotnet run --project tests/McpServer.Support.Mcp.Tests` — all tests pass (target: 236+)
+- [ ] `./build.ps1 Compile --configuration Release` succeeds with 0 errors, 0 warnings
+- [ ] `./build.ps1 Test` — all tests pass (target: 236+)
+- [ ] `./build.ps1 ValidateConfig` — config validation passes
+- [ ] `./build.ps1 ValidateTraceability` — requirements coverage passes
 - [ ] Docker build succeeds: `docker build -t mcp-server:latest .`
 - [ ] Container health check passes: `curl http://localhost:7147/health`
 
@@ -38,8 +40,8 @@
 
 ## Release Steps
 
-1. **Version bump**: Update `.version` file
-2. **Final test run**: `dotnet run --project tests/McpServer.Support.Mcp.Tests`
+1. **Version bump**: `./build.ps1 BumpVersion` or update `.version` file
+2. **Final test run**: `./build.ps1 Test`
 3. **Docker build**: `docker build -t mcp-server:$(cat .version) -t mcp-server:latest .`
 4. **Tag release**: `git tag v$(cat .version) && git push origin v$(cat .version)`
 5. **CI publish**: Azure DevOps `publish-packages` job publishes `McpServer.Client` on `main` when `NuGetApiKey` is configured
