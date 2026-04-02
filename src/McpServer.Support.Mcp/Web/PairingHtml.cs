@@ -72,6 +72,9 @@ internal static class PairingHtml
             .key-box{background:#f6f8fa;border:1px solid #d0d7de;border-radius:6px;padding:14px 16px;font-family:'Cascadia Code','Fira Code',monospace;font-size:.95rem;word-break:break-all;margin-bottom:16px;position:relative}
             .copy-btn{position:absolute;top:8px;right:8px;background:#0969da;color:#fff;border:none;border-radius:4px;padding:4px 10px;font-size:.8rem;cursor:pointer}
             .copy-btn:hover{background:#0860c4}
+            .qr-section{text-align:center;margin-bottom:20px}
+            .qr-section h2{font-size:1rem;margin-bottom:12px;color:#333}
+            .qr-section img{display:inline-block;padding:12px;background:#fff;border:1px solid #d0d7de;border-radius:8px;width:256px;height:256px}
             .section{margin-bottom:20px}
             .section h2{font-size:1rem;margin-bottom:8px;color:#333}
             pre{background:#f6f8fa;border:1px solid #d0d7de;border-radius:6px;padding:14px 16px;font-size:.82rem;overflow-x:auto;line-height:1.5}
@@ -81,7 +84,11 @@ internal static class PairingHtml
         <body>
           <div class="card">
             <h1>🔑 Your API Key</h1>
-            <p class="sub">Use this key to authenticate mutating API calls.</p>
+            <p class="sub">Scan the QR code with the MCP Server mobile app, or copy the key below.</p>
+            <div class="qr-section">
+              <h2>📱 Scan to Pair</h2>
+              <img src="/pair/qr" alt="QR code for pairing"/>
+            </div>
             <div class="key-box">
               <span id="key">{{apiKey}}</span>
               <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('key').textContent)">Copy</button>
