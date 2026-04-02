@@ -18,6 +18,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+    <PackageReference Include="Duende.IdentityServer" />
+    <PackageReference Include="Duende.IdentityServer.AspNetIdentity" />
+    <PackageReference Include="Duende.IdentityServer.EntityFramework" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
@@ -45,6 +49,7 @@
     <PackageReference Include="Microsoft.ML.OnnxRuntime" />
     <PackageReference Include="HNSWIndex" />
     <PackageReference Include="Handlebars.Net" />
+    <PackageReference Include="QRCoder" />
     <ProjectReference Include="..\McpServer.ServiceDefaults\McpServer.ServiceDefaults.csproj" />
     <ProjectReference Include="..\McpServer.Common.Copilot\McpServer.Common.Copilot.csproj" />
     <ProjectReference Include="..\McpServer.Storage\McpServer.Storage.csproj" />

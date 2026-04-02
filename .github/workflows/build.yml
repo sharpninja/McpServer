@@ -1,0 +1,163 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - src/**
+      - tests/**
+      - build/**
+      - build.ps1
+      - build.sh
+      - '*.sln'
+      - Directory.Build.props
+      - Directory.Packages.props
+      - GitVersion.yml
+      - .github/workflows/build.yml
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - src/**
+      - tests/**
+      - build/**
+      - build.ps1
+      - build.sh
+      - '*.sln'
+      - Directory.Build.props
+      - Directory.Packages.props
+      - GitVersion.yml
+      - .github/workflows/build.yml
+
+jobs:
+  build-test:
+    name: Build & Test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Compile
+        run: ./build.ps1 Compile --configuration Release
+        shell: pwsh
+
+      - name: Test
+        run: ./build.ps1 Test --configuration Release
+        shell: pwsh
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults/**/*.trx
+          if-no-files-found: ignore
+
+  validate:
+    name: Validate
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Validate Config
+        run: ./build.ps1 ValidateConfig
+        shell: pwsh
+
+      - name: Validate Traceability
+        run: ./build.ps1 ValidateTraceability
+        shell: pwsh
+
+  package:
+    name: Package
+    needs: build-test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Pack NuGet
+        run: ./build.ps1 PackNuGet --configuration Release
+        shell: pwsh
+
+      - name: Pack REPL Tool
+        run: ./build.ps1 PackReplTool --configuration Release
+        shell: pwsh
+
+      - name: Upload NuGet packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages
+          path: artifacts/nupkg/*.nupkg
+
+      - name: Upload REPL tool package
+        uses: actions/upload-artifact@v4
+        with:
+          name: repl-tool-package
+          path: local-packages/*.nupkg
+
+  msix:
+    name: MSIX Package
+    needs: build-test
+    runs-on: windows-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Package MSIX
+        run: ./build.ps1 PackageMsix --configuration Release
+        shell: pwsh
+
+      - name: Upload MSIX artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: msix-package
+          path: artifacts/msix/*.msix
+
+  publish:
+    name: Publish
+    needs: build-test
+    if: github.event_name == 'push'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Publish Server
+        run: ./build.ps1 Publish --configuration Release
+        shell: pwsh
+
+      - name: Upload publish artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcp-server-publish
+          path: artifacts/mcp-server/
