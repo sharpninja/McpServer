@@ -10,51 +10,25 @@ and other MCP clients to the standalone MCP server.
 | HTTP REST | `http://localhost:7147` | `Mcp:Port` in appsettings.json |
 | STDIO | `dotnet run --project src/McpServer.Support.Mcp -- --transport stdio` | Command-line |
 
-## VS Code Extension
+## VS Code / Cursor (MCP Streamable HTTP)
 
-The `McpServer-mcp-todo` VS Code extension communicates with the MCP server via HTTP REST.
-
-### VS Code Settings
-
-In VS Code `settings.json`:
+For VS Code Copilot, Cursor, and other MCP-compatible editors, configure the Streamable HTTP transport via `.vscode/mcp.json`:
 
 ```json
 {
-  "mcpServer.url": "http://localhost:7147",
-  "mcpServer.todoEndpoint": "/mcpserver/todo"
+  "servers": {
+    "mcp-server": {
+      "type": "http",
+      "url": "http://localhost:7147/mcp-transport"
+    }
+  }
 }
-```
-
-### Installation
-
-```bash
-code --install-extension extensions/McpServer-mcp-todo/McpServer-mcp-todo-0.7.0.vsix
-```
-
-Or use the deployment script:
-
-```powershell
-./scripts/Deploy-McpTodoExtension.ps1
 ```
 
 ### Docker Mode
 
 When running the MCP server in Docker, the extension connects to the same URL
 (`http://localhost:7147`) since the Docker port is mapped to the host.
-
-## Visual Studio VSIX
-
-The `McpServer.VsExtension.McpTodo.Vsix` project provides a Visual Studio 2022+ extension.
-
-### Building
-
-```bash
-dotnet build src/McpServer.VsExtension.McpTodo.Vsix/McpServer.VsExtension.McpTodo.Vsix.csproj -c Release
-```
-
-### VSIX Settings
-
-The VSIX reads the MCP server URL from VS settings or defaults to `http://localhost:7147`.
 
 ## STDIO Transport (Cursor / MCP Clients)
 
