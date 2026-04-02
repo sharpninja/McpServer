@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\McpServer.Client\McpServer.Client.csproj" />
+    <ProjectReference Include="..\McpServer.Repl.Core\McpServer.Repl.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

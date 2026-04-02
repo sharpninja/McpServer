@@ -17,6 +17,9 @@ trigger:
       - tests/McpServer.Support.Mcp.Tests/**
       - tests/McpServer.Client.Tests/**
       - tests/McpServer.Cqrs.Tests/**
+      - tests/Build.Tests/**
+      - build/**
+      - build.ps1
       - docs/**
       - docfx.json
       - templates/**
@@ -48,6 +51,9 @@ pr:
       - tests/McpServer.Support.Mcp.Tests/**
       - tests/McpServer.Client.Tests/**
       - tests/McpServer.Cqrs.Tests/**
+      - tests/Build.Tests/**
+      - build/**
+      - build.ps1
       - docs/**
       - docfx.json
       - templates/**
@@ -96,16 +102,24 @@ jobs:
         inputs:
           pwsh: true
           targetType: filePath
-          filePath: scripts/Validate-McpConfig.ps1
+          filePath: build.ps1
+          arguments: ValidateConfig
 
-      - script: dotnet restore $(TestProject)
-        displayName: Restore
+      - task: PowerShell@2
+        displayName: Compile
+        inputs:
+          pwsh: true
+          targetType: filePath
+          filePath: build.ps1
+          arguments: Compile --configuration $(BuildConfiguration)
 
-      - script: dotnet build $(TestProject) -c $(BuildConfiguration) --no-restore
-        displayName: Build
-
-      - script: dotnet test $(TestProject) -c $(BuildConfiguration) --no-build --logger trx --results-directory TestResults
+      - task: PowerShell@2
         displayName: Test
+        inputs:
+          pwsh: true
+          targetType: filePath
+          filePath: build.ps1
+          arguments: Test --configuration $(BuildConfiguration)
 
       - task: PublishTestResults@2
         displayName: Publish test results
@@ -141,13 +155,18 @@ jobs:
             Write-Host "PackageVersion: $version"
             Write-Host "##vso[task.setvariable variable=PackageVersion;isOutput=true]$version"
 
-      - script: dotnet publish $(ServerProject) -c $(BuildConfiguration) -o $(Build.ArtifactStagingDirectory)/mcp-server
+      - task: PowerShell@2
         displayName: Publish MCP Server
+        inputs:
+          pwsh: true
+          targetType: filePath
+          filePath: build.ps1
+          arguments: Publish --configuration $(BuildConfiguration)
 
       - task: PublishPipelineArtifact@1
         displayName: Upload MCP publish artifact
         inputs:
-          targetPath: $(Build.ArtifactStagingDirectory)/mcp-server
+          targetPath: $(Build.SourcesDirectory)/artifacts/mcp-server
           artifact: $(PublishArtifactName)
 
   - job: docs_quality
@@ -227,8 +246,8 @@ jobs:
         inputs:
           pwsh: true
           targetType: filePath
-          filePath: scripts/Package-McpServerMsix.ps1
-          arguments: -Configuration $(BuildConfiguration) -Version 1.0.$(Build.BuildId).0
+          filePath: build.ps1
+          arguments: PackageMsix --configuration $(BuildConfiguration) --msix-version 1.0.$(Build.BuildId).0
 
       - task: PublishPipelineArtifact@1
         displayName: Upload MSIX artifact
@@ -255,8 +274,13 @@ jobs:
           packageType: sdk
           useGlobalJson: true
 
-      - script: dotnet pack $(ClientProject) -c $(BuildConfiguration) -p:PackageVersion=$(PackageVersion) -o $(Build.ArtifactStagingDirectory)/nupkg
-        displayName: Pack
+      - task: PowerShell@2
+        displayName: Pack NuGet
+        inputs:
+          pwsh: true
+          targetType: filePath
+          filePath: build.ps1
+          arguments: PackNuGet --configuration $(BuildConfiguration) --package-version $(PackageVersion)
 
       - task: NuGetAuthenticate@1
         displayName: Authenticate Azure Artifacts
@@ -276,7 +300,7 @@ jobs:
               exit 0
             }
 
-            $packages = Get-ChildItem -Path "$(Build.ArtifactStagingDirectory)/nupkg" -Filter *.nupkg | Select-Object -ExpandProperty FullName
+            $packages = Get-ChildItem -Path "$(Build.SourcesDirectory)/artifacts/nupkg" -Filter *.nupkg | Select-Object -ExpandProperty FullName
             foreach ($package in $packages) {
               dotnet nuget push $package --source https://api.nuget.org/v3/index.json --api-key $env:NUGET_API_KEY --skip-duplicate
               if ($LASTEXITCODE -ne 0) {
@@ -298,7 +322,7 @@ jobs:
               exit 0
             }
 
-            $packages = Get-ChildItem -Path "$(Build.ArtifactStagingDirectory)/nupkg" -Filter *.nupkg | Select-Object -ExpandProperty FullName
+            $packages = Get-ChildItem -Path "$(Build.SourcesDirectory)/artifacts/nupkg" -Filter *.nupkg | Select-Object -ExpandProperty FullName
             foreach ($package in $packages) {
               dotnet nuget push $package --source $env:AZURE_ARTIFACTS_FEED_URL --api-key azdo --skip-duplicate
               if ($LASTEXITCODE -ne 0) {
@@ -309,7 +333,7 @@ jobs:
       - task: PublishPipelineArtifact@1
         displayName: Upload NuGet artifact
         inputs:
-          targetPath: $(Build.ArtifactStagingDirectory)/nupkg
+          targetPath: $(Build.SourcesDirectory)/artifacts/nupkg
           artifact: $(PackageArtifactName)
 
   - job: docs_deploy
