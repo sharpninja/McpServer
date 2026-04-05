@@ -13,8 +13,30 @@ Serilog:
 DataFolder: "."
 
 Mcp:
+  Database:
+    Provider: sqlite
+    MigrationsAssembly: ""
+    Sqlite:
+      DataSource: mcp.db
+    PostgreSql:
+      ConnectionString: ""
+    SqlServer:
+      ConnectionString: ""
+    Encryption:
+      Enabled: false
+      Sqlite:
+        Key: ""
+        SeeToolPath: ""
+      PostgreSql:
+        KeyProvider: ""
+        PrincipalKey: ""
+      SqlServer:
+        CertificateName: ""
+        DatabaseEncryptionKeyName: ""
   DatabaseProvider: sqlite
   PostgresConnectionString: ""
+  SqlServerConnectionString: ""
+  DatabaseMigrationsAssembly: ""
   Port: 7147
   DataSource: mcp.db
   DataDirectory: "."
@@ -47,5 +69,6 @@ Mcp:
     QueueCapacity: 1000
     IncludeQueryString: false
   Parseable:
-    Url: http://localhost:8000
+    Enabled: false
+    Url: ''
     StreamName: mcp

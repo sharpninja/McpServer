@@ -211,6 +211,8 @@ PublishScripts/
 # NuGet v3's project.json files produces more ignorable files
 *.nuget.props
 *.nuget.targets
+# Local NuGet package feed
+local-packages/
 
 # Microsoft Azure Build Output
 csx/
@@ -490,6 +492,7 @@ $RECYCLE.BIN/
 .mcp-server.yaml
 .mcp-server.json
 .mcpServer/
+.mcpSession/
 
 # SQLite database files (runtime data)
 *.db

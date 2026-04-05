@@ -57,12 +57,12 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsConflictException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Conflict(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return BadRequest(new { error = ex.Message });
         }
 
@@ -83,12 +83,12 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsNotFoundException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return NotFound(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return BadRequest(new { error = ex.Message });
         }
 
@@ -105,7 +105,7 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsNotFoundException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return NotFound(new { error = ex.Message });
         }
 
@@ -139,12 +139,12 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsConflictException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Conflict(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return BadRequest(new { error = ex.Message });
         }
 
@@ -165,12 +165,12 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsNotFoundException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return NotFound(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return BadRequest(new { error = ex.Message });
         }
 
@@ -187,7 +187,7 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsNotFoundException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return NotFound(new { error = ex.Message });
         }
 
@@ -221,12 +221,12 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsConflictException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return Conflict(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return BadRequest(new { error = ex.Message });
         }
 
@@ -247,12 +247,12 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsNotFoundException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return NotFound(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return BadRequest(new { error = ex.Message });
         }
 
@@ -269,7 +269,7 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsNotFoundException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return NotFound(new { error = ex.Message });
         }
 
@@ -303,7 +303,7 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (ArgumentException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return BadRequest(new { error = ex.Message });
         }
 
@@ -320,7 +320,7 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (RequirementsNotFoundException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return NotFound(new { error = ex.Message });
         }
 
@@ -385,17 +385,17 @@ public sealed class RequirementsController : ControllerBase
         }
         catch (FileNotFoundException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return NotFound(new { error = ex.Message });
         }
         catch (IOException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return BadRequest(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
-            _logger.LogWarning("{ExceptionDetail}", ex.ToString());
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
             return BadRequest(new { error = ex.Message });
         }
     }

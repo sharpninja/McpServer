@@ -31,7 +31,7 @@ public sealed class ToolDefinitionEntity
     [MaxLength(8192)]
     public string? ParameterSchema { get; set; }
 
-    /// <summary>Command or executable template for invocation (e.g. <c>powershell -File Take-Screenshot.ps1 -Path {path}</c>).</summary>
+    /// <summary>Command or executable template for invocation (e.g. <c>pwsh.exe -File Take-Screenshot.ps1 -Path {path}</c>).</summary>
     [MaxLength(2048)]
     public string? CommandTemplate { get; set; }
 

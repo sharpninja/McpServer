@@ -1,10 +1,14 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using McpServer.Support.Mcp;
+using McpServer.Support.Mcp.Options;
+using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace McpServer.Support.Mcp.IntegrationTests;
 
@@ -13,6 +17,7 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<McpApiEn
 {
     private readonly Action<IServiceCollection>? _configureServices;
     private readonly IReadOnlyDictionary<string, string?> _configurationOverrides;
+    private readonly int _temporaryPort = IntegrationTestPortAllocator.AllocateTemporaryPort();
 
     /// <summary>Initializes a new instance with no service overrides.</summary>
     public CustomWebApplicationFactory() : this(null, null) { }
@@ -28,6 +33,12 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<McpApiEn
         _configurationOverrides = configurationOverrides ?? new Dictionary<string, string?>();
     }
 
+    /// <summary>Gets the temporary MCP port assigned to this integration-test host.</summary>
+    internal int TemporaryPort => _temporaryPort;
+
+    /// <summary>Gets the runtime base URL expected in hostname-based generated artifacts.</summary>
+    internal string ExpectedRuntimeBaseUrl => IntegrationTestPortAllocator.BuildHostBaseUrl(_temporaryPort);
+
     /// <inheritdoc />
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -37,7 +48,9 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<McpApiEn
         {
             config.AddInMemoryCollection(new Dictionary<string, string?>
             {
-                { "Mcp:DataSource", ":memory:" }
+                { "Mcp:DataSource", ":memory:" },
+                { "Mcp:Port", _temporaryPort.ToString(CultureInfo.InvariantCulture) },
+                { "Mcp:Tunnel:Port", _temporaryPort.ToString(CultureInfo.InvariantCulture) },
             });
 
             if (_configurationOverrides.Count > 0)
@@ -46,6 +59,14 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<McpApiEn
 
         if (_configureServices is not null)
             builder.ConfigureServices(_configureServices);
+
+        builder.ConfigureServices(services =>
+        {
+            services.RemoveAll<ServerRuntimeInfo>();
+            services.AddSingleton(new ServerRuntimeInfo(DateTimeOffset.UtcNow, _temporaryPort));
+            services.PostConfigure<TodoPromptOptions>(options => options.BaseUrl = ExpectedRuntimeBaseUrl);
+            services.PostConfigure<TunnelOptions>(options => options.Port = _temporaryPort);
+        });
     }
 
     internal static string ResolveContentRoot()

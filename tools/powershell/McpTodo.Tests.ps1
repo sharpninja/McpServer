@@ -1,11 +1,114 @@
 BeforeAll {
     Import-Module (Join-Path $PSScriptRoot 'McpTodo.psm1') -Force
+
+    function New-TrustedTodoMarker {
+        param(
+            [string]$BaseUrl = 'http://marker:7150',
+            [string]$ApiKey = 'mk-123',
+            [string]$WorkspacePath = 'C:\workspace'
+        )
+
+        $marker = [pscustomobject]@{
+            port = 7147
+            baseUrl = $BaseUrl
+            apiKey = $ApiKey
+            workspace = 'demo'
+            workspacePath = $WorkspacePath
+            pid = 12345
+            startedAt = '2026-03-28T16:00:00.0000000Z'
+            markerWrittenAtUtc = '2026-03-28T16:00:00.0000000Z'
+            serverStartedAtUtc = '2026-03-28T15:59:00.0000000Z'
+            endpoints = [pscustomobject]@{
+                health = '/health'
+                swagger = '/swagger/v1/swagger.json'
+                swaggerUi = '/swagger'
+                mcpTransport = '/mcp-transport'
+                sessionLog = '/mcpserver/sessionlog'
+                sessionLogDialog = '/mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog'
+                contextSearch = '/mcpserver/context/search'
+                contextPack = '/mcpserver/context/pack'
+                contextSources = '/mcpserver/context/sources'
+                todo = '/mcpserver/todo'
+                repo = '/mcpserver/repo'
+                desktop = '/mcpserver/desktop'
+                gitHub = '/mcpserver/gh'
+                tools = '/mcpserver/tools'
+                workspace = '/mcpserver/workspace'
+                serverStartupUtc = '/server-startup-utc'
+                markerFileTimestamp = '/marker-file-timestamp?repoPath={workspacePath}'
+            }
+            signature = [pscustomobject]@{
+                algorithm = 'HMAC-SHA256'
+                canonicalization = 'marker-v1'
+                verifier = 'workspace_api_key'
+                value = ''
+            }
+        }
+
+        $signature = InModuleScope McpTodo -Parameters @{ Marker = $marker } {
+            param($Marker)
+            $hmac = [System.Security.Cryptography.HMACSHA256]::new([System.Text.Encoding]::UTF8.GetBytes([string]$Marker.apiKey))
+            try {
+                $payloadBytes = [System.Text.Encoding]::UTF8.GetBytes((Get-McpMarkerSignaturePayload -Marker $Marker))
+                [Convert]::ToHexString($hmac.ComputeHash($payloadBytes))
+            } finally {
+                $hmac.Dispose()
+            }
+        }
+
+        @"
+port: 7147
+baseUrl: $BaseUrl
+apiKey: $ApiKey
+endpoints:
+  health: /health
+  swagger: /swagger/v1/swagger.json
+  swaggerUi: /swagger
+  mcpTransport: /mcp-transport
+  sessionLog: /mcpserver/sessionlog
+  sessionLogDialog: /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog
+  contextSearch: /mcpserver/context/search
+  contextPack: /mcpserver/context/pack
+  contextSources: /mcpserver/context/sources
+  todo: /mcpserver/todo
+  repo: /mcpserver/repo
+  desktop: /mcpserver/desktop
+  gitHub: /mcpserver/gh
+  tools: /mcpserver/tools
+  workspace: /mcpserver/workspace
+  serverStartupUtc: /server-startup-utc
+  markerFileTimestamp: /marker-file-timestamp?repoPath={workspacePath}
+workspace: demo
+workspacePath: $WorkspacePath
+pid: 12345
+startedAt: 2026-03-28T16:00:00.0000000Z
+markerWrittenAtUtc: 2026-03-28T16:00:00.0000000Z
+serverStartedAtUtc: 2026-03-28T15:59:00.0000000Z
+signature:
+  algorithm: HMAC-SHA256
+  canonicalization: marker-v1
+  verifier: workspace_api_key
+  value: $signature
+trust_bootstrap:
+  description: Trust bootstrap
+prompt: |-
+  Prompt
+"@
+    }
 }
 
 Describe 'McpTodo Module' {
     # Default mock — absorbs all HTTP calls
     BeforeAll {
-        Mock Invoke-RestMethod { $null } -ModuleName McpTodo
+        Mock Invoke-RestMethod {
+            param($Uri)
+            if ($Uri -like '*/health?nonce=*') {
+                $nonce = [regex]::Match($Uri, 'nonce=([^&]+)').Groups[1].Value
+                return [pscustomobject]@{ status = 'Healthy'; nonce = $nonce }
+            }
+
+            return $null
+        } -ModuleName McpTodo
     }
 
     # Reset module state between tests
@@ -37,12 +140,7 @@ Describe 'McpTodo Module' {
 
         It 'parses marker file for connection details' {
             $marker = Join-Path $TestDrive 'AGENTS-README-FIRST.yaml'
-            @"
-owner: test
-baseUrl: http://marker:7150
-apiKey: mk-123
-workspace: demo
-"@ | Set-Content $marker
+            New-TrustedTodoMarker | Set-Content $marker
 
             Initialize-McpTodo -MarkerPath $marker
             InModuleScope McpTodo {
@@ -55,7 +153,7 @@ workspace: demo
             $sub = Join-Path $TestDrive 'x' 'y' 'z'
             New-Item $sub -ItemType Directory -Force | Out-Null
             $marker = Join-Path $TestDrive 'AGENTS-README-FIRST.yaml'
-            "baseUrl: http://walk:5000`napiKey: wk" | Set-Content $marker
+            (New-TrustedTodoMarker -BaseUrl 'http://walk:5000' -ApiKey 'wk') | Set-Content $marker
 
             Push-Location $sub
             try {
@@ -79,8 +177,34 @@ workspace: demo
         It 'calls the health endpoint' {
             Initialize-McpTodo -BaseUrl 'http://test:9999' -ApiKey 'k'
             Should -Invoke Invoke-RestMethod -ModuleName McpTodo -ParameterFilter {
-                $Uri -eq 'http://test:9999/health'
+                $Uri -like 'http://test:9999/health?nonce=*'
             }
+        }
+
+        It 'throws MCP_UNTRUSTED when marker signature verification fails' {
+            $marker = Join-Path $TestDrive 'AGENTS-README-FIRST.yaml'
+            @"
+port: 7147
+baseUrl: http://marker:7150
+apiKey: mk-123
+workspace: demo
+workspacePath: C:\workspace
+pid: 12345
+startedAt: 2026-03-28T16:00:00.0000000Z
+markerWrittenAtUtc: 2026-03-28T16:00:00.0000000Z
+serverStartedAtUtc: 2026-03-28T15:59:00.0000000Z
+signature:
+  algorithm: HMAC-SHA256
+  canonicalization: marker-v1
+  verifier: workspace_api_key
+  value: BAD
+trust_bootstrap:
+  description: Trust bootstrap
+prompt: |-
+  Prompt
+"@ | Set-Content $marker
+
+            { Initialize-McpTodo -MarkerPath $marker } | Should -Throw '*MCP_UNTRUSTED*'
         }
     }
 

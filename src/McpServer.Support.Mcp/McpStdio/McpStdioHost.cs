@@ -9,8 +9,8 @@ using McpServer.GraphRag;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
+using McpServer.Support.Mcp.Storage.Database;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -41,32 +41,7 @@ public static class McpStdioHost
             consoleOptions.LogToStandardErrorThreshold = LogLevel.Information;
         });
 
-        var databaseProvider = (McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "DatabaseProvider") ?? "sqlite")
-            .Trim()
-            .ToUpperInvariant();
-
-        if (databaseProvider is "POSTGRES" or "POSTGRESQL" or "NPGSQL")
-        {
-            var postgresConnectionString = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "PostgresConnectionString")
-                ?? builder.Configuration.GetConnectionString("Mcp");
-
-            if (string.IsNullOrWhiteSpace(postgresConnectionString))
-                throw new InvalidOperationException("Mcp:PostgresConnectionString (or ConnectionStrings:Mcp) is required when Mcp:DatabaseProvider is postgres.");
-
-            builder.Services.AddDbContext<McpDbContext>(options =>
-            {
-                options.UseNpgsql(postgresConnectionString);
-                options.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
-            }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
-        }
-        else
-        {
-            var dataSource = McpInstanceResolver.ResolveSqliteDataSource(builder.Configuration, instanceName);
-            builder.Services.AddDbContext<McpDbContext>(options =>
-            {
-                options.UseSqlite($"Data Source={dataSource}");
-            }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
-        }
+        builder.Services.AddConfiguredMcpDbContext(builder.Configuration, instanceName, builder.Environment.IsEnvironment("Test"));
 
         builder.Services.Configure<IngestionOptions>(builder.Configuration.GetSection("Mcp"));
         builder.Services.Configure<GraphRagOptions>(builder.Configuration.GetSection(GraphRagOptions.SectionName));
@@ -213,7 +188,9 @@ public static class McpStdioHost
         using (var scope = host.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-            await db.Database.MigrateAsync(cancellationToken).ConfigureAwait(false);
+            var runtimeOptions = scope.ServiceProvider.GetRequiredService<McpDatabaseRuntimeOptions>();
+            await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, runtimeOptions.ProviderOptions, cancellationToken).ConfigureAwait(false);
+            await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions, cancellationToken).ConfigureAwait(false);
         }
 
         await host.RunAsync(cancellationToken).ConfigureAwait(false);

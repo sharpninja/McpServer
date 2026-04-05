@@ -1,17 +1,23 @@
 using McpServer.McpAgent.Hosting;
-using McpServer.McpAgent.SessionLog;
-using McpServer.McpAgent.Todo;
 using McpServer.Client;
+using McpServer.Repl.Core;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using AgentSessionLogWorkflow = McpServer.McpAgent.SessionLog.SessionLogWorkflow;
+using AgentTodoWorkflow = McpServer.McpAgent.Todo.TodoWorkflow;
+using IAgentSessionLogWorkflow = McpServer.McpAgent.SessionLog.ISessionLogWorkflow;
+using IAgentTodoWorkflow = McpServer.McpAgent.Todo.ITodoWorkflow;
+using IReplSessionLogWorkflow = McpServer.Repl.Core.ISessionLogWorkflow;
+using ReplSessionLogWorkflow = McpServer.Repl.Core.SessionLogWorkflow;
 
 namespace McpServer.McpAgent;
 
 /// <summary>
 /// FR-MCP-066/TR-MCP-AGENT-006: Dependency injection extensions for the hosted MCP Agent
-/// registration surface, including the built-in session-log and TODO workflow services.
+/// registration surface, including the built-in session-log, TODO, requirements, and
+/// generic client passthrough workflow services.
 /// </summary>
 public static class ServiceCollectionExtensions
 {
@@ -56,8 +62,25 @@ public static class ServiceCollectionExtensions
         services.TryAddTransient<McpServerClientOptions>(static serviceProvider =>
             serviceProvider.GetRequiredService<IOptions<McpServerClientOptions>>().Value);
 
-        services.TryAddTransient<ISessionLogWorkflow, SessionLogWorkflow>();
-        services.TryAddTransient<ITodoWorkflow, TodoWorkflow>();
+        // McpAgent-internal workflows (operate on McpAgent.SessionLog/Todo types)
+        services.TryAddTransient<IAgentSessionLogWorkflow, AgentSessionLogWorkflow>();
+        services.TryAddTransient<IAgentTodoWorkflow, AgentTodoWorkflow>();
+
+        // REPL Core workflows (requirements, session history, generic passthrough)
+        services.TryAddTransient<IRequirementsWorkflow>(static sp =>
+            new RequirementsWorkflow(sp.GetRequiredService<McpServerClient>().Requirements));
+
+        services.TryAddTransient<IGenericClientPassthrough>(static sp =>
+            new GenericClientPassthrough(sp.GetRequiredService<McpServerClient>()));
+
+        services.TryAddTransient<ISessionLogClientAdapter>(static sp =>
+            new SessionLogClientAdapter(sp.GetRequiredService<McpServerClient>().SessionLog));
+
+        services.TryAddTransient<IReplSessionLogWorkflow>(static sp =>
+            new ReplSessionLogWorkflow(
+                sp.GetRequiredService<ISessionLogClientAdapter>(),
+                sp.GetRequiredService<TimeProvider>()));
+
         services.TryAddTransient<IMcpHostedAgent, McpHostedAgent>();
         services.TryAddSingleton<IMcpHostedAgentFactory, McpHostedAgentFactory>();
         return services;

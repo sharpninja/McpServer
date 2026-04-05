@@ -179,4 +179,67 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-074 | ✅ Complete | azure-pipelines.yml, docs/AZURE-PIPELINES.md |
 | TR-MCP-CI-001 | ✅ Complete | azure-pipelines.yml, docs/AZURE-PIPELINES.md, README.md, docs/MCP-SERVER.md, docs/RELEASE-CHECKLIST.md |
 | TEST-MCP-099 | ✅ Complete | azure-pipelines.yml, docs/AZURE-PIPELINES.md |
+| FR-MCP-075 | ✅ Complete | tools/powershell/McpSession.psm1 |
+| TR-MCP-AGENT-013 | ✅ Complete | tools/powershell/McpSession.psm1 |
+| TEST-MCP-100 | ✅ Complete | tools/powershell/McpSession.Tests.ps1 |
+| FR-MCP-076 | ✅ Complete | src/McpServer.Services/Services/MarkerFileService.cs, templates/prompt-templates.yaml, src/McpServer.ServiceDefaults/Extensions.cs, tools/powershell/McpSession.psm1, tools/powershell/McpTodo.psm1, tools/powershell/McpContext.psm1, docs/context/module-bootstrap.md, docs/USER-GUIDE.md |
+| TR-MCP-SEC-003 | ✅ Complete | src/McpServer.Services/Services/MarkerFileService.cs, templates/prompt-templates.yaml, src/McpServer.ServiceDefaults/Extensions.cs, tools/powershell/McpSession.psm1, tools/powershell/McpTodo.psm1, tools/powershell/McpContext.psm1 |
+| TR-MCP-AGENT-014 | ✅ Complete | tools/powershell/McpSession.psm1, tools/powershell/McpTodo.psm1, tools/powershell/McpContext.psm1, docs/context/module-bootstrap.md, docs/USER-GUIDE.md |
+| TEST-MCP-101 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs, tests/McpServer.Support.Mcp.IntegrationTests/HealthEndpointTests.cs, tools/powershell/McpSession.Tests.ps1, tools/powershell/McpTodo.Tests.ps1 |
+| FR-MCP-077 | ✅ In Progress | src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs, src/McpServer.Storage/McpDbContextFactory.cs, src/McpServer.Storage/Database/McpDatabaseProviderKind.cs, src/McpServer.Storage/Database/McpDatabaseProviderOptions.cs, src/McpServer.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs, src/McpServer.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs, src/McpServer.Support.Mcp/Program.cs, src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs, scripts/Invoke-McpDatabaseEncryptionTransition.ps1, src/McpServer.Storage.SqliteMigrations, src/McpServer.Storage.PostgreSqlMigrations, src/McpServer.Storage.SqlServerMigrations, docs/USER-GUIDE.md |
+| TR-MCP-SEC-004 | ✅ In Progress | src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs, src/McpServer.Storage/McpDbContextFactory.cs, src/McpServer.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs, scripts/Invoke-McpDatabaseEncryptionTransition.ps1, src/McpServer.Storage.SqliteMigrations, src/McpServer.Storage.PostgreSqlMigrations, src/McpServer.Storage.SqlServerMigrations |
+| TR-MCP-CFG-007 | ✅ Complete | src/McpServer.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs, src/McpServer.Storage/McpDbContextFactory.cs, src/McpServer.Support.Mcp/Program.cs, src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs, src/McpServer.Support.Mcp/appsettings.yaml, src/McpServer.Support.Mcp/appsettings.Staging.yaml |
+| TEST-MCP-102 | ✅ In Progress | tests/McpServer.Support.Mcp.IntegrationTests/Controllers/ProviderDatabaseIntegrationTests.cs, tests/McpServer.Support.Mcp.IntegrationTests/ProviderIntegrationTestSupport.cs, tests/McpServer.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs, scripts/Invoke-McpDatabaseEncryptionTransition.ps1, src/McpServer.Storage.SqliteMigrations, src/McpServer.Storage.PostgreSqlMigrations, src/McpServer.Storage.SqlServerMigrations |
+| FR-MCP-REPL-001 | ✅ Complete | McpServer.Repl.Core (IReplProtocol, IYamlEnvelope, IYamlSerializer, IMarkerFileReader, ITrustBootstrapService, IAuthRotationHandler, IWorkspaceSelector), McpServer.Repl.Host (Program.cs, AgentStdioHandler, InteractiveHandler, ServiceCollectionExtensions) |
+| FR-MCP-REPL-002 | ✅ Complete | McpServer.Repl.Host (Program.cs, AgentStdioHandler, InteractiveHandler), McpServer.Repl.Core (SessionLogErrorEnvelope) |
+| FR-MCP-REPL-003 | ✅ Complete | McpServer.Repl.Core (ITodoWorkflow, TodoCommandShapes, ISessionLogWorkflow, SessionLogCommandShapes, SessionLogModels, IRequirementsWorkflow, RequirementsCommandShapes, RequirementsCommandModels, IGenericClientPassthrough, ClientCommandShapes), McpServer.Repl.Host (TodoWorkflow, RequirementsWorkflow, SessionLogWorkflow, GenericClientPassthrough) |
+| FR-MCP-REPL-004 | ✅ Complete | McpServer.Repl.Core (ITrustBootstrapService, IMarkerFileReader, IAuthRotationHandler), McpServer.Repl.Host (AgentStdioHandler) |
+| FR-MCP-REPL-005 | ✅ Complete | McpServer.Repl.Core (IGenericClientPassthrough, ClientCommandShapes), McpServer.Repl.Host (GenericClientPassthrough) |
+| TR-MCP-REPL-001 | ✅ Complete | McpServer.Repl.Core (IYamlEnvelope, IYamlSerializer, IReplProtocol) |
+| TR-MCP-REPL-002 | ✅ Complete | McpServer.Repl.Host (ServiceCollectionExtensions, Program.cs), McpServer.Repl.Core workflow interfaces |
+| TR-MCP-REPL-003 | ✅ Complete | McpServer.Repl.Host (Program.cs, AgentStdioHandler, InteractiveHandler), McpServer.Repl.Core (SessionLogErrorEnvelope) |
+| TR-MCP-REPL-004 | ✅ Complete | McpServer.Repl.Core (ITodoWorkflow, ISessionLogWorkflow, IRequirementsWorkflow, IGenericClientPassthrough), McpServer.Repl.Host (TodoWorkflow, SessionLogWorkflow, RequirementsWorkflow, GenericClientPassthrough) |
+| TR-MCP-REPL-005 | ✅ Complete | McpServer.Repl.Core (TodoCommandShapes, SessionLogCommandShapes, RequirementsCommandShapes, ClientCommandShapes), McpServer.Repl.Host (TodoWorkflow, SessionLogWorkflow, RequirementsWorkflow, GenericClientPassthrough) |
+| TR-MCP-REPL-006 | ✅ Complete | McpServer.Repl.Core (ITrustBootstrapService, IMarkerFileReader, IAuthRotationHandler), McpServer.Repl.Host (AgentStdioHandler) |
+| TR-MCP-REPL-007 | ✅ Complete | McpServer.Repl.Core (IGenericClientPassthrough, ClientCommandShapes), McpServer.Repl.Host (GenericClientPassthrough) |
+| TEST-MCP-REPL-001 | ✅ Complete | tests/McpServer.Repl.Core.Tests (Iteration1_IntegrationTests, YamlFramingTests), tests/McpServer.Repl.IntegrationTests (YamlEnvelopeShapeTests) |
+| TEST-MCP-REPL-002 | ✅ Complete | tests/McpServer.Repl.Core.Tests (FakeYamlSerializerTests, YamlFramingTests) |
+| TEST-MCP-REPL-003 | ✅ Complete | tests/McpServer.Repl.Core.Tests (ProtocolHandshakeTests), tests/McpServer.Repl.IntegrationTests (TrustBootstrapFlowTests) |
+| TEST-MCP-REPL-004 | ✅ Complete | tests/McpServer.Repl.IntegrationTests (TrustBootstrapFlowTests), tests/McpServer.Repl.Core.Tests (MarkerFileTrustTests, MockTrustBootstrapServiceTests) |
+| TEST-MCP-REPL-005 | ✅ Complete | tests/McpServer.Repl.Core.Tests (AuthRotationTests, StubAuthRotationHandlerTests), tests/McpServer.Repl.IntegrationTests (AuthKeyAndWorkspaceTests) |
+| TEST-MCP-REPL-006 | ✅ Complete | tests/McpServer.Repl.Core.Tests (TodoWorkflowTests, TodoWorkflowTestExtensions), tests/McpServer.Repl.IntegrationTests (Iteration3IntegrationTests) |
+| TEST-MCP-REPL-007 | ✅ Complete | tests/McpServer.Repl.Core.Tests (SessionLogWorkflowTests, SessionLogWorkflowIntegration2Tests, SessionLogWorkflowProductionTests), tests/McpServer.Repl.IntegrationTests (Iteration2IntegrationTests) |
+| TEST-MCP-REPL-008 | ✅ Complete | tests/McpServer.Repl.Core.Tests (GenericClientPassthroughTests), tests/McpServer.Repl.IntegrationTests (Iteration5IntegrationTests) |
+| TEST-MCP-REPL-009 | ✅ Complete | tests/McpServer.Repl.Core.Tests (RequirementsWorkflowTests), tests/McpServer.Repl.IntegrationTests (Iteration4IntegrationTests) |
+| TEST-MCP-REPL-010 | ✅ Complete | tests/McpServer.Repl.Core.Tests (WorkspaceSelectionTests), tests/McpServer.Repl.IntegrationTests (AuthKeyAndWorkspaceTests) |
+| TEST-MCP-REPL-011 | ✅ Complete | tests/McpServer.Repl.Core.Tests (GenericClientPassthroughTests), tests/McpServer.Repl.IntegrationTests (Iteration5IntegrationTests) |
+| TEST-MCP-REPL-012 | ✅ Complete | tests/McpServer.Repl.Core.Tests (TodoWorkflowTests streaming event tests) |
+| TEST-MCP-REPL-013 | ✅ Complete | tests/McpServer.Repl.IntegrationTests (EndToEndFlowTests) |
+| TEST-MCP-REPL-014 | ✅ Complete | tests/McpServer.Repl.Core.Tests (SessionLogWorkflowTests, TodoWorkflowTests error handling) |
+| TEST-MCP-REPL-015 | ✅ Complete | tests/McpServer.Repl.Core.Tests (RequestResponseCorrelationTests), tests/McpServer.Repl.IntegrationTests (YamlEnvelopeShapeTests) |
+| TEST-MCP-REPL-016 | ✅ Complete | tests/McpServer.Repl.Core.Tests (McpServerClientIntegrationTests, DI registration tests) |
+| TEST-MCP-REPL-017 | ✅ Complete | tests/McpServer.Repl.Core.Tests (WorkspaceSelectionTests), tests/McpServer.Repl.IntegrationTests (AuthKeyAndWorkspaceTests) |
+| TEST-MCP-REPL-018 | ✅ Complete | tests/McpServer.Repl.Core.Tests (OrchestrationRulesTests), tests/McpServer.Repl.IntegrationTests (TrustBootstrapFlowTests) |
+| TEST-MCP-REPL-019 | ✅ Complete | tests/McpServer.Repl.Core.Tests (TodoWorkflowTests, SessionLogWorkflowTests, RequirementsWorkflowTests, GenericClientPassthroughTests) |
+| TEST-MCP-REPL-020 | ✅ Complete | tests/McpServer.Repl.Core.Tests (SessionLogWorkflowTests state management, TodoWorkflowTests selection state) |
+
+---
+
+## Requirements Freeze Tag: REPL v1.0 Delivery
+
+**Date:** 2025-01-04  
+**Freeze Tag:** `REPL-v1.0-FREEZE`  
+**Status:** ✅ **Requirements Frozen for REPL v1.0 Delivery**
+
+All REPL iteration 1-6 requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005, TR-MCP-REPL-001 through TR-MCP-REPL-007, TEST-MCP-REPL-001 through TEST-MCP-REPL-020) are complete with:
+- Full source code traceability comments in all `McpServer.Repl.Core` and `McpServer.Repl.Host` files
+- All unit tests passing (iterations 1-6)
+- All integration tests passing
+- Complete YAML protocol implementation
+- Trust bootstrap and auth rotation support
+- Workflow command parity with REST endpoints
+- DI-integrated architecture
+- Comprehensive test coverage
+
+**Reconciliation:** All requirement defects discovered during TDD have been reconciled back into the canonical requirements documents. No outstanding defects or gaps remain for REPL v1.0.
 

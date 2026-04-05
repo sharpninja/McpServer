@@ -22,8 +22,30 @@ VectorIndex:
   EfSearch: 50
   IndexPath: mcp-data/vector.idx
 Mcp:
+  Database:
+    Provider: sqlite
+    MigrationsAssembly: ''
+    Sqlite:
+      DataSource: mcp.db
+    PostgreSql:
+      ConnectionString: ''
+    SqlServer:
+      ConnectionString: ''
+    Encryption:
+      Enabled: false
+      Sqlite:
+        Key: ''
+        SeeToolPath: ''
+      PostgreSql:
+        KeyProvider: ''
+        PrincipalKey: ''
+      SqlServer:
+        CertificateName: ''
+        DatabaseEncryptionKeyName: ''
   DatabaseProvider: sqlite
   PostgresConnectionString: ''
+  SqlServerConnectionString: ''
+  DatabaseMigrationsAssembly: ''
   Port: 7147
   DataSource: mcp.db
   DataDirectory: .
@@ -110,12 +132,22 @@ Mcp:
     QueueCapacity: 1000
     IncludeQueryString: false
   Parseable:
-    Url: http://localhost:8000
-    IngestUrl: http://localhost:8000/api/v1/ingest
+    Enabled: false
+    Url: ''
     StreamName: mcp
     Username: ''
     Password: ''
     FallbackLogPath: logs/mcp-.log
+  IdentityServer:
+    Enabled: false
+    IssuerUri: ''
+    ConnectionString: ''
+    DatabaseName: McpIdentity
+    SeedDefaults: true
+    DefaultAdminUser: admin
+    DefaultAdminPassword: McpAdmin1!
+    ApiScopeName: mcp-api
+    ApiResourceName: mcp-server-api
   PairingUsers: []
   Workspaces:
   - WorkspacePath: E:\github\McpServer

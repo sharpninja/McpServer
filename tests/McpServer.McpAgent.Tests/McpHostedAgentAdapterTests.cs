@@ -8,6 +8,7 @@ using McpServer.McpAgent.SessionLog;
 using McpServer.McpAgent.Todo;
 using McpServer.Client;
 using McpServer.Client.Models;
+using McpServer.Repl.Core;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +23,8 @@ namespace McpServer.McpAgent.Tests;
 /// </summary>
 public sealed class McpHostedAgentAdapterTests
 {
+    private static readonly string TestWorkspacePath =
+        Path.TrimEndingDirectorySeparator(AppContext.BaseDirectory);
     /// <summary>
     /// TEST-MCP-089: Verifies that the adapter registration exposes a stable MCP capability surface,
     /// preserves caller-supplied run options, and wraps chat clients with function invocation support.
@@ -40,9 +43,12 @@ public sealed class McpHostedAgentAdapterTests
             "mcp_session_turn_begin",
             "mcp_session_turn_update",
             "mcp_session_turn_complete",
+            "mcp_session_query_history",
             "mcp_todo_query",
             "mcp_todo_get",
             "mcp_todo_update",
+            "mcp_todo_create",
+            "mcp_todo_delete",
             "mcp_todo_plan",
             "mcp_todo_status",
             "mcp_todo_implementation",
@@ -53,6 +59,13 @@ public sealed class McpHostedAgentAdapterTests
             "mcp_powershell_session_create",
             "mcp_powershell_session_command",
             "mcp_powershell_session_close",
+            "mcp_requirements_list_fr",
+            "mcp_requirements_list_tr",
+            "mcp_requirements_list_test",
+            "mcp_requirements_get_fr",
+            "mcp_requirements_get_tr",
+            "mcp_requirements_get_test",
+            "mcp_client_invoke",
         };
 
         var existingTool = AIFunctionFactory.Create(
@@ -338,7 +351,7 @@ public sealed class McpHostedAgentAdapterTests
         var createdSession = DeserializeJsonResult<PowerShellSessionCreateResult>(createResult);
         Assert.True(createdSession.Success);
         Assert.NotNull(createdSession.SessionId);
-        Assert.Equal(@"E:\github\McpServer", createdSession.CurrentLocation);
+        Assert.Equal(TestWorkspacePath, createdSession.CurrentLocation);
 
         var firstCommandResult = await commandFunction.InvokeAsync(
             new AIFunctionArguments
@@ -368,7 +381,7 @@ public sealed class McpHostedAgentAdapterTests
         Assert.True(firstCommand.Success);
         Assert.Equal("42", firstCommand.Output);
         Assert.Equal(createdSession.SessionId, firstCommand.SessionId);
-        Assert.Equal(@"E:\github\McpServer", firstCommand.CurrentLocation);
+        Assert.Equal(TestWorkspacePath, firstCommand.CurrentLocation);
         Assert.True(secondCommand.Success);
         Assert.Equal("42", secondCommand.Output);
         Assert.Equal(createdSession.SessionId, secondCommand.SessionId);
@@ -388,7 +401,7 @@ public sealed class McpHostedAgentAdapterTests
     public async Task PowerShellSessions_ExecuteInteractiveCommand_PreservesHostLocalSessionState()
     {
         var (hostedAgent, handler) = CreateHostedAgent();
-        var createdSession = hostedAgent.PowerShellSessions.CreateSession(@"E:\github\McpServer");
+        var createdSession = hostedAgent.PowerShellSessions.CreateSession(TestWorkspacePath);
         Assert.True(createdSession.Success);
         Assert.NotNull(createdSession.SessionId);
 
@@ -428,7 +441,7 @@ public sealed class McpHostedAgentAdapterTests
                 ApiKey = "test-key",
                 BaseUrl = new Uri("http://localhost:7147"),
                 DesktopLaunchToken = desktopLaunchToken,
-                WorkspacePath = @"E:\github\McpServer",
+                WorkspacePath = TestWorkspacePath,
             });
         var timeProvider = new FixedTimeProvider(new DateTimeOffset(2026, 03, 09, 15, 01, 05, TimeSpan.Zero));
         var options = Options.Create(
@@ -438,11 +451,15 @@ public sealed class McpHostedAgentAdapterTests
                 BaseUrl = new Uri("http://localhost:7147"),
                 DesktopLaunchToken = desktopLaunchToken,
                 SourceType = "Codex",
-                WorkspacePath = @"E:\github\McpServer",
+                WorkspacePath = TestWorkspacePath,
             });
         var identifiers = new McpSessionIdentifierFactory(options, timeProvider);
-        var sessionLog = new SessionLogWorkflow(client, identifiers, timeProvider);
+        var sessionLog = new McpServer.McpAgent.SessionLog.SessionLogWorkflow(client, identifiers, timeProvider);
         var todo = new TodoWorkflow(client);
+        var requirements = new RequirementsWorkflow(client.Requirements);
+        var clientPassthrough = new GenericClientPassthrough(client);
+        var replSessionLogAdapter = new SessionLogClientAdapter(client.SessionLog);
+        var replSessionLog = new McpServer.Repl.Core.SessionLogWorkflow(replSessionLogAdapter, timeProvider);
         var serviceProvider = new ServiceCollection().BuildServiceProvider();
 
         return (
@@ -458,6 +475,9 @@ public sealed class McpHostedAgentAdapterTests
                 options,
                 sessionLog,
                 todo,
+                requirements,
+                clientPassthrough,
+                replSessionLog,
                 serviceProvider),
             handler);
     }

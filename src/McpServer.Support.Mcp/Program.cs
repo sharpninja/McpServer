@@ -10,21 +10,23 @@ using System.Text.Json;
 using McpServer.Common.Copilot;
 using McpServer.Common.Copilot.Extensions;
 using McpServer.GraphRag;
+using McpServer.Support.Mcp.DatabaseMaintenance;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Logging;
 using McpServer.Support.Mcp.McpStdio;
 using McpServer.Support.Mcp.Middleware;
 using McpServer.Support.Mcp.Notifications;
+using McpServer.Support.Mcp.Identity;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Controllers;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
+using McpServer.Support.Mcp.Storage.Database;
 using McpServer.Support.Mcp.Web;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Http.Resilience;
 using NetEscapades.Configuration.Yaml;
@@ -40,6 +42,22 @@ using Serilog.Sinks.File;
 if (IsStdioTransportRequested(args))
 {
     await McpStdioHost.RunAsync(args, default).ConfigureAwait(false);
+    return;
+}
+
+if (McpDatabaseEncryptionTransitionCommand.TryParse(args, out var transitionCommand, out var transitionParseError))
+{
+    if (transitionCommand is null)
+    {
+        Console.Error.WriteLine(transitionParseError ?? McpDatabaseEncryptionTransitionCommand.GetUsageText());
+        Environment.ExitCode = 1;
+        return;
+    }
+
+    var exitCode = await McpDatabaseEncryptionTransitionCommand
+        .RunAsync(transitionCommand, default)
+        .ConfigureAwait(false);
+    Environment.ExitCode = exitCode;
     return;
 }
 
@@ -114,14 +132,14 @@ builder.Host.UseSerilog((context, _, config) =>
             shared: true);
     }
 
-    if (!string.IsNullOrWhiteSpace(parseable.Url) && !context.HostingEnvironment.IsEnvironment("Test"))
-    {
-        var ingestUri = $"{parseable.Url!.TrimEnd('/')}/api/v1/ingest";
-        var httpClient = new ParseableHttpClient(parseable.StreamName, parseable.Username, parseable.Password);
-        config.WriteTo.Logger(lc => lc
-            .Filter.ByExcluding(e => e.Properties.TryGetValue(ParseableHttpClient.ParseableMetaPropertyName, out var v) && v is ScalarValue s && (s.Value is true or "True"))
-            .WriteTo.Http(requestUri: ingestUri, queueLimitBytes: null, textFormatter: new ParseableEventFormatter(), batchFormatter: new ParseableBatchFormatter(), httpClient: httpClient, restrictedToMinimumLevel: LogEventLevel.Verbose));
-    }
+    // if (parseable.Enabled && !string.IsNullOrWhiteSpace(parseable.Url) && !context.HostingEnvironment.IsEnvironment("Test"))
+    // {
+    //     var ingestUri = $"{parseable.Url!.TrimEnd('/')}/api/v1/ingest";
+    //     var httpClient = new ParseableHttpClient(parseable.StreamName, parseable.Username, parseable.Password);
+    //     config.WriteTo.Logger(lc => lc
+    //         .Filter.ByExcluding(e => e.Properties.TryGetValue(ParseableHttpClient.ParseableMetaPropertyName, out var v) && v is ScalarValue s && (s.Value is true or "True"))
+    //         .WriteTo.Http(requestUri: ingestUri, queueLimitBytes: null, textFormatter: new ParseableEventFormatter(), batchFormatter: new ParseableBatchFormatter(), httpClient: httpClient, restrictedToMinimumLevel: LogEventLevel.Verbose));
+    // }
 }, writeToProviders: true);
 
 if (OperatingSystem.IsWindows())
@@ -146,44 +164,7 @@ else
 }
 
 builder.AddServiceDefaults();
-
-if (builder.Environment.IsEnvironment("Test"))
-{
-    builder.Services.AddDbContext<McpDbContext>(options =>
-    {
-        options.UseInMemoryDatabase("mcp-tests");
-        options.EnableSensitiveDataLogging();
-    }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
-}
-else
-{
-    var databaseProvider = (McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "DatabaseProvider") ?? "sqlite")
-        .Trim()
-        .ToUpperInvariant();
-
-    if (databaseProvider is "POSTGRES" or "POSTGRESQL" or "NPGSQL")
-    {
-        var postgresConnectionString = McpInstanceResolver.GetEffectiveMcpValue(builder.Configuration, instanceName, "PostgresConnectionString")
-            ?? builder.Configuration.GetConnectionString("Mcp");
-
-        if (string.IsNullOrWhiteSpace(postgresConnectionString))
-            throw new InvalidOperationException("Mcp:PostgresConnectionString (or ConnectionStrings:Mcp) is required when Mcp:DatabaseProvider is postgres.");
-
-        builder.Services.AddDbContext<McpDbContext>(options =>
-        {
-            options.UseNpgsql(postgresConnectionString);
-            options.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
-        }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
-    }
-    else
-    {
-        var dataSource = McpInstanceResolver.ResolveSqliteDataSource(builder.Configuration, instanceName);
-        builder.Services.AddDbContext<McpDbContext>(options =>
-        {
-            options.UseSqlite($"Data Source={dataSource}");
-        }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
-    }
-}
+builder.Services.AddConfiguredMcpDbContext(builder.Configuration, instanceName, builder.Environment.IsEnvironment("Test"));
 
 builder.Services.Configure<IngestionOptions>(builder.Configuration.GetSection("Mcp"));
 builder.Services.Configure<GraphRagOptions>(builder.Configuration.GetSection(GraphRagOptions.SectionName));
@@ -279,7 +260,7 @@ builder.Services.PostConfigure<RequirementsOptions>(options =>
 builder.Services.Configure<EmbeddingOptions>(builder.Configuration.GetSection("Embedding"));
 builder.Services.Configure<VectorIndexOptions>(builder.Configuration.GetSection("VectorIndex"));
 builder.Services.AddSingleton<IInteractionLogSubmissionChannel, InteractionLogSubmissionChannel>();
-builder.Services.AddHostedService<InteractionLogSubmissionService>();
+// builder.Services.AddHostedService<InteractionLogSubmissionService>();
 builder.Services.AddHttpClient("InteractionLogSubmission");
 builder.Services.AddHttpClient(WebsiteIngestor.HttpClientName, (sp, client) =>
 {
@@ -396,27 +377,47 @@ builder.Services.AddSingleton<IWorkspaceProcessManager, WorkspaceProcessManager>
 builder.Services.Configure<DesktopLaunchOptions>(builder.Configuration.GetSection(DesktopLaunchOptions.SectionName));
 builder.Services.Configure<PairingOptions>(builder.Configuration.GetSection(PairingOptions.SectionName));
 builder.Services.Configure<OidcAuthOptions>(builder.Configuration.GetSection(OidcAuthOptions.SectionName));
+builder.Services.Configure<IdentityServerOptions>(builder.Configuration.GetSection(IdentityServerOptions.SectionName));
 builder.Services.Configure<ToolRegistryOptions>(builder.Configuration.GetSection(ToolRegistryOptions.SectionName));
 builder.Services.AddSingleton<PairingLoginAttemptGuard>();
 builder.Services.AddSingleton<PairingSessionService>();
 
+// Embedded IdentityServer (when enabled, acts as the local OIDC authority)
+var identityServerOptions = builder.Configuration.GetSection(IdentityServerOptions.SectionName).Get<IdentityServerOptions>()
+    ?? new IdentityServerOptions();
+builder.Services.AddMcpIdentityServer(builder.Configuration);
+
 var oidcAuthBootstrap = builder.Configuration.GetSection(OidcAuthOptions.SectionName).Get<OidcAuthOptions>()
     ?? new OidcAuthOptions();
 
-if (oidcAuthBootstrap.Enabled)
+// When embedded IdentityServer is enabled and no external authority is configured,
+// point JWT validation at the local IdentityServer instance.
+var effectiveAuthority = oidcAuthBootstrap.Authority;
+var effectiveAudience = oidcAuthBootstrap.Audience;
+var authEnabled = oidcAuthBootstrap.Enabled || identityServerOptions.Enabled;
+
+if (identityServerOptions.Enabled && !oidcAuthBootstrap.Enabled)
+{
+    effectiveAuthority = !string.IsNullOrWhiteSpace(identityServerOptions.IssuerUri)
+        ? identityServerOptions.IssuerUri
+        : $"http://localhost:{listenPort}";
+    effectiveAudience = identityServerOptions.ApiResourceName;
+}
+
+if (authEnabled)
 {
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
             options.MapInboundClaims = false;
-            options.Authority = oidcAuthBootstrap.Authority;
-            options.Audience = oidcAuthBootstrap.Audience;
+            options.Authority = effectiveAuthority;
+            options.Audience = effectiveAudience;
             options.RequireHttpsMetadata = oidcAuthBootstrap.RequireHttpsMetadata;
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 NameClaimType = "preferred_username",
                 RoleClaimType = "realm_roles",
-                ValidateAudience = !string.IsNullOrWhiteSpace(oidcAuthBootstrap.Audience),
+                ValidateAudience = !string.IsNullOrWhiteSpace(effectiveAudience),
             };
         });
 }
@@ -429,7 +430,7 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AgentManager", policy =>
     {
-        if (!oidcAuthBootstrap.Enabled)
+        if (!authEnabled)
         {
             policy.RequireAssertion(_ => true);
             return;
@@ -491,10 +492,10 @@ if (!app.Environment.IsEnvironment("Test"))
 {
     var parseableOpts = app.Configuration.GetSection(McpParseableOptions.SectionName).Get<McpParseableOptions>() ?? new McpParseableOptions();
     Log.Information("[Serilog] File sink enabled, path: {Path}", ResolveSerilogFilePath(parseableOpts.FallbackLogPath));
-    if (!string.IsNullOrWhiteSpace(parseableOpts.Url))
+    if (parseableOpts.Enabled && !string.IsNullOrWhiteSpace(parseableOpts.Url))
         Log.Information("[Parseable] Sink enabled, ingestion URL: {Url}/api/v1/ingest (X-P-Stream: {Stream})", parseableOpts.Url.TrimEnd('/'), parseableOpts.StreamName);
     else
-        Log.Information("[Parseable] Sink disabled (no Url configured).");
+        Log.Information("[Parseable] Sink disabled (Enabled={Enabled}, Url configured: {HasUrl}).", parseableOpts.Enabled, !string.IsNullOrWhiteSpace(parseableOpts.Url));
 }
 
 if (!app.Environment.IsEnvironment("Test"))
@@ -502,7 +503,9 @@ if (!app.Environment.IsEnvironment("Test"))
     using (var scope = app.Services.CreateScope())
     {
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        await db.Database.MigrateAsync().ConfigureAwait(false);
+        var runtimeOptions = scope.ServiceProvider.GetRequiredService<McpDatabaseRuntimeOptions>();
+        await McpDatabaseMigrationCoordinator.ApplyMigrationsAsync(db, runtimeOptions.ProviderOptions).ConfigureAwait(false);
+        await McpDatabaseEncryptionCoordinator.ValidateAsync(db, runtimeOptions).ConfigureAwait(false);
     }
 
     using (var scope = app.Services.CreateScope())
@@ -583,6 +586,7 @@ if (!app.Environment.IsEnvironment("Test"))
 app.UseGlobalExceptionHandler();
 app.UseMiddleware<InteractionLoggingMiddleware>();
 
+app.UseMcpIdentityServer();
 app.UseAuthentication();
 app.UseMiddleware<WorkspaceResolutionMiddleware>();
 app.UseMiddleware<WorkspaceAuthMiddleware>();
@@ -733,6 +737,61 @@ app.MapGet("/pair/key", async (HttpContext context, IOptions<PairingOptions> opt
     var serverUrl = $"{request.Scheme}://{request.Host}";
     return Results.Content(await pairingRenderer.RenderKeyPageAsync(o.ApiKey, serverUrl).ConfigureAwait(false), "text/html");
 }).ExcludeFromDescription();
+
+app.MapGet("/pair/qr", async (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions,
+    TunnelRegistry tunnelRegistry, IOptions<IdentityServerOptions> idsOpts, IOptions<OidcAuthOptions> oidcOpts) =>
+{
+    var token = context.Request.Cookies["mcp_pair"];
+    if (!sessions.Validate(token))
+        return Results.Redirect("/pair");
+
+    // Prefer the tunnel public URL so mobile devices can reach the server externally
+    string? baseUrl = null;
+    var tunnels = await tunnelRegistry.ListAsync(context.RequestAborted).ConfigureAwait(false);
+    var activeTunnel = tunnels.FirstOrDefault(t => t.IsRunning && !string.IsNullOrEmpty(t.PublicUrl));
+    if (activeTunnel is not null)
+    {
+        baseUrl = activeTunnel.PublicUrl!.TrimEnd('/');
+    }
+
+    baseUrl ??= $"{context.Request.Scheme}://{context.Request.Host}";
+
+    // When a tunnel is active, point to the identity server proxy login page
+    string loginUrl;
+    var ids = idsOpts.Value;
+    var oidc = oidcOpts.Value;
+    if (activeTunnel is not null && oidc.Enabled)
+    {
+        // External Keycloak: proxy login page through the tunnel
+        var authority = oidc.Authority.TrimEnd('/');
+        if (Uri.TryCreate(authority, UriKind.Absolute, out var authorityUri))
+        {
+            loginUrl = $"{baseUrl}/auth/ui{authorityUri.AbsolutePath.TrimEnd('/')}/device";
+        }
+        else
+        {
+            loginUrl = $"{baseUrl}/pair";
+        }
+    }
+    else if (activeTunnel is not null && ids.Enabled)
+    {
+        // Embedded IdentityServer: login page is served by the MCP server itself via tunnel
+        loginUrl = $"{baseUrl}/pair";
+    }
+    else
+    {
+        loginUrl = $"{baseUrl}/pair";
+    }
+
+    var svg = PairingQrCode.GenerateSvg(loginUrl);
+    return Results.Content(svg, "image/svg+xml");
+}).ExcludeFromDescription();
+
+// Seed IdentityServer defaults (admin user, roles) on first run
+if (identityServerOptions is { Enabled: true, SeedDefaults: true })
+{
+    await IdentityServerSeeder.SeedAsync(app.Services, identityServerOptions);
+}
 
 try
 {

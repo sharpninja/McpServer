@@ -18,7 +18,8 @@ MCP Server is a local AI-agent integration server that exposes project context â
 **From the command line (development):**
 
 ```bash
-dotnet run --project src/McpServer.Support.Mcp -- --instance default
+./build.ps1 StartServer --instance default
+# or: dotnet run --project src/McpServer.Support.Mcp -- --instance default
 ```
 
 **Over STDIO (for MCP clients that prefer stdin/stdout):**

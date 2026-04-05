@@ -216,16 +216,20 @@ templates:
       \    h1{font-size:1.3rem;margin-bottom:4px;color:#111}\n    .sub{font-size:.85rem;color:#666;margin-bottom:20px}\n \
       \   .key-box{background:#f6f8fa;border:1px solid #d0d7de;border-radius:6px;padding:14px 16px;font-family:'Cascadia Code','Fira\
       \ Code',monospace;font-size:.95rem;word-break:break-all;margin-bottom:16px;position:relative}\n    .copy-btn{position:absolute;top:8px;right:8px;background:#0969da;color:#fff;border:none;border-radius:4px;padding:4px\
-      \ 10px;font-size:.8rem;cursor:pointer}\n    .copy-btn:hover{background:#0860c4}\n    .section{margin-bottom:20px}\n\
+      \ 10px;font-size:.8rem;cursor:pointer}\n    .copy-btn:hover{background:#0860c4}\n    .qr-section{text-align:center;margin-bottom:20px}\n\
+      \    .qr-section h2{font-size:1rem;margin-bottom:12px;color:#333}\n    .qr-section img{display:inline-block;padding:12px;background:#fff;border:1px\
+      \ solid #d0d7de;border-radius:8px;width:256px;height:256px}\n    .section{margin-bottom:20px}\n\
       \    .section h2{font-size:1rem;margin-bottom:8px;color:#333}\n    pre{background:#f6f8fa;border:1px solid #d0d7de;border-radius:6px;padding:14px\
       \ 16px;font-size:.82rem;overflow-x:auto;line-height:1.5}\n    .warn{font-size:.8rem;color:#888;margin-top:12px}\n  </style>\n\
-      </head>\n<body>\n  <div class=\"card\">\n    <h1>\U0001F511 Your API Key</h1>\n    <p class=\"sub\">Use this key to\
-      \ authenticate mutating API calls.</p>\n    <div class=\"key-box\">\n      <span id=\"key\">{apiKey}</span>\n      <button\
-      \ class=\"copy-btn\" onclick=\"navigator.clipboard.writeText(document.getElementById('key').textContent)\">Copy</button>\n\
-      \    </div>\n    <div class=\"section\">\n      <h2>MCP Client Config</h2>\n      <pre>{\n  \"mcpServers\": {\n    \"\
-      mcp-server\": {\n      \"url\": \"{serverUrl}/mcp-transport\"\n    }\n  }\n}</pre>\n    </div>\n    <div class=\"section\"\
-      >\n      <h2>cURL Example</h2>\n      <pre>curl {serverUrl}/mcpserver/workspace \\\n  -H \"X-Api-Key: {apiKey}\"</pre>\n\
-      \    </div>\n    <p class=\"warn\">Keep this key secret. It grants write access to workspace and tool endpoints.</p>\n\
+      </head>\n<body>\n  <div class=\"card\">\n    <h1>\U0001F511 Your API Key</h1>\n    <p class=\"sub\">Scan the QR code\
+      \ with the MCP Server mobile app, or copy the key below.</p>\n    <div class=\"qr-section\">\n      <h2>\U0001F4F1 Scan\
+      \ to Pair</h2>\n      <img src=\"/pair/qr\" alt=\"QR code for pairing\"/>\n    </div>\n    <div class=\"key-box\">\n\
+      \      <span id=\"key\">{apiKey}</span>\n\
+      \      <button class=\"copy-btn\" onclick=\"navigator.clipboard.writeText(document.getElementById('key').textContent)\"\
+      >Copy</button>\n    </div>\n    <div class=\"section\">\n      <h2>MCP Client Config</h2>\n      <pre>{\n  \"mcpServers\"\
+      : {\n    \"mcp-server\": {\n      \"url\": \"{serverUrl}/mcp-transport\"\n    }\n  }\n}</pre>\n    </div>\n    <div class=\"\
+      section\">\n      <h2>cURL Example</h2>\n      <pre>curl {serverUrl}/mcpserver/workspace \\\n  -H \"X-Api-Key: {apiKey}\"\
+      </pre>\n    </div>\n    <p class=\"warn\">Keep this key secret. It grants write access to workspace and tool endpoints.</p>\n\
       \  </div>\n</body>\n</html>\n"
   pairing-not-configured-page:
     title: Pairing Not Configured Page
@@ -279,11 +283,17 @@ templates:
 
       1. Read this marker file for connection details and API key.
 
-      2. Bootstrap helper modules from the Tool Registry (load docs/context/module-bootstrap.md from MCP context via context_search/context_pack; do not treat it as a local file path).
+      2. Bootstrap your preferred agent entrypoint (load docs/context/module-bootstrap.md from MCP context via context_search/context_pack; do not treat it as a local file path):
+         - **Preferred**: Launch `mcpserver-repl --workspace "{{workspace.WorkspacePath}}"` for YAML-over-STDIO interaction (eliminates shell quoting failures).
+         - **Supported**: Bootstrap PowerShell or Bash helper modules from the Tool Registry (`McpSession.psm1`, `McpTodo.psm1`) for direct script integration.
 
-      3. Verify server health, then review recent session history and current TODOs.
+      3. Verify the marker signature using the workspace API key in this file before contacting the server.
 
-      4. Post an initial session log turn for the session.
+      4. Call /health with a random nonce and confirm the response echoes that exact nonce.
+
+      5. Review recent session history and current TODOs only after signature and nonce verification succeed.
+
+      6. Post an initial session log turn for the session.
 
 
       ## Per User Message
@@ -298,7 +308,9 @@ templates:
       ## Re-run Full Session Start Only If
 
       - The user explicitly says "Start Session".
+      - Signature verification fails.
       - /health fails.
+      - /health nonce verification fails.
       - Any /mcpserver/* call returns 401.
       - The marker endpoint/key changes after a server restart.
 
@@ -307,26 +319,29 @@ templates:
 
       0. NEVER write to TODO.yaml directly.
 
-      1. Generate SessionId values using `New-McpSessionLogSlug -Agent <SourceType> -Model <Model>` from McpSession.psm1, then pass the result to `New-McpSessionLog -SessionId`. Do not handcraft SessionId values.
+      1. Generate SessionId values using `session.init` (REPL) or `New-McpSessionLogSlug -Agent <SourceType> -Model <Model>` (PowerShell module), then create session logs with `session.new` (REPL) or `New-McpSessionLog -SessionId` (PowerShell). Do not handcraft SessionId values.
 
       1a. Agents must identify themselves accurately in session logs. `sourceType` and the SessionId `<Agent>` prefix must use the agent''s real identity in Pascal-Case. Do not use lowercase forms, placeholders, or legacy aliases.
 
-      2. Post a new session log turn (`Add-McpSessionTurn`) before starting work. Update it with results (`Response`) and actions (`Add-McpAction`) when done. Persist after each meaningful update, not just at the end.
+      2. Post a new session log turn (`session.turn.add` for REPL or `Add-McpSessionTurn` for PowerShell) before starting work. Update it with results (`Response`) and actions (`Add-McpAction` / `session.action.add`) when done. Persist after each meaningful update, not just at the end.
 
       2a. Before any compaction step, persist the current session log state. After compaction, update the session log again to record the compaction outcome and recovered context.
 
-      3. Use helper modules for session log and TODO operations — they handle workspace routing automatically. Do not use
-      raw API calls.
+      3. If signature verification, the /health request, or nonce verification fails, log `MCP_UNTRUSTED`, continue without the MCP server, and do not probe additional MCP endpoints.
 
-      4. Write decisions, requirements, and state to the session log, not just conversation. Capture rich turn detail: interpretation, response/status, actions (type/status/filePath), contextList, filesModified, designDecisions, requirementsDiscovered, blockers, and key processingDialog updates.
+      4. Marker signatures use HMAC-SHA256 with the workspace API key in this file as the verifier. Recompute the canonical payload exactly as described by the marker metadata before trusting the file.
 
-      5. Follow workspace conventions in AGENTS.md and .github/copilot-instructions.md.
+      5. Use `mcpserver-repl` (preferred) or PowerShell/Bash helper modules for session log and TODO operations — they handle workspace routing automatically. Do not use raw API calls.
 
-      6. When you need API schemas, module examples, or compliance rules, load them from docs/context/ or use context_search.
+      6. Write decisions, requirements, and state to the session log, not just conversation. Capture rich turn detail: interpretation, response/status, actions (type/status/filePath), contextList, filesModified, designDecisions, requirementsDiscovered, blockers, and key processingDialog updates.
 
-      7. Do not fabricate information. Acknowledge mistakes. Distinguish facts from speculation.
+      7. Follow workspace conventions in AGENTS.md and .github/copilot-instructions.md.
 
-      8. Prioritize correctness over speed. Do not ship code you have not verified compiles.
+      8. When you need API schemas, module examples, or compliance rules, load them from docs/context/ or use context_search.
+
+      9. Do not fabricate information. Acknowledge mistakes. Distinguish facts from speculation.
+
+      10. Prioritize correctness over speed. Do not ship code you have not verified compiles.
 
 
       ## Naming Conventions

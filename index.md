@@ -22,8 +22,8 @@ Welcome to the MCP Server documentation. MCP Server is a .NET 9/ASP.NET Core app
 
 ## Getting Started
 
-1. **Build**: `dotnet build src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj`
-2. **Run**: `dotnet run --project src\McpServer.Support.Mcp`
+1. **Build**: `./build.ps1 Compile` (or `dotnet build McpServer.sln`)
+2. **Run**: `./build.ps1 StartServer` (or `dotnet run --project src\McpServer.Support.Mcp`)
 3. **Install as service**: `.\scripts\Manage-McpService.ps1 -Action Install`
 
 See the [FAQ](docs/FAQ.md) for detailed setup instructions.
