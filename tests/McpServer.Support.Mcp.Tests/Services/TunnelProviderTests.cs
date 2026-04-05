@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Reflection;
+using McpServer.Common.Copilot;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -12,6 +13,16 @@ namespace McpServer.Support.Mcp.Tests.Services;
 public sealed class TunnelProviderTests
 {
     private readonly IProcessRunner _processRunner = Substitute.For<IProcessRunner>();
+    private readonly IProcessEnvironmentService _processEnvironment = Substitute.For<IProcessEnvironmentService>();
+
+    public TunnelProviderTests()
+    {
+        // ResolveExecutable returns the filename unchanged by default so test stubs on
+        // specific executable names continue to work without explicit configuration.
+        _processEnvironment
+            .ResolveExecutable(Arg.Any<System.Diagnostics.ProcessStartInfo>(), Arg.Any<string>())
+            .Returns(ci => ci.ArgAt<string>(1));
+    }
 
     private static Microsoft.Extensions.Options.IOptions<TunnelOptions> CreateOptions(Action<TunnelOptions>? configure = null)
     {
@@ -25,7 +36,7 @@ public sealed class TunnelProviderTests
     [Fact]
     public void NgrokProvider_ProviderName_IsNgrok()
     {
-        var sut = new NgrokTunnelProvider(CreateOptions(), _processRunner, NullLogger<NgrokTunnelProvider>.Instance);
+        var sut = new NgrokTunnelProvider(CreateOptions(), _processRunner, _processEnvironment, NullLogger<NgrokTunnelProvider>.Instance);
         Assert.Equal("ngrok", sut.ProviderName);
     }
 
@@ -35,7 +46,7 @@ public sealed class TunnelProviderTests
         _processRunner.RunAsync("ngrok", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(1, null, "not found"));
 
-        var sut = new NgrokTunnelProvider(CreateOptions(), _processRunner, NullLogger<NgrokTunnelProvider>.Instance);
+        var sut = new NgrokTunnelProvider(CreateOptions(), _processRunner, _processEnvironment, NullLogger<NgrokTunnelProvider>.Instance);
         await sut.StartAsync(CancellationToken.None).ConfigureAwait(true);
 
         var status = await sut.GetStatusAsync().ConfigureAwait(true);
@@ -46,7 +57,7 @@ public sealed class TunnelProviderTests
     [Fact]
     public async Task NgrokProvider_GetStatusAsync_BeforeStart_ReturnsNotRunning()
     {
-        var sut = new NgrokTunnelProvider(CreateOptions(), _processRunner, NullLogger<NgrokTunnelProvider>.Instance);
+        var sut = new NgrokTunnelProvider(CreateOptions(), _processRunner, _processEnvironment, NullLogger<NgrokTunnelProvider>.Instance);
         var status = await sut.GetStatusAsync().ConfigureAwait(true);
         Assert.False(status.IsRunning);
     }
@@ -54,7 +65,7 @@ public sealed class TunnelProviderTests
     [Fact]
     public async Task NgrokProvider_GetStatusAsync_WhenTrackedProcessExited_ReturnsDetailedExitError()
     {
-        var sut = new NgrokTunnelProvider(CreateOptions(), _processRunner, NullLogger<NgrokTunnelProvider>.Instance);
+        var sut = new NgrokTunnelProvider(CreateOptions(), _processRunner, _processEnvironment, NullLogger<NgrokTunnelProvider>.Instance);
         using var exitedProcess = StartExitedDotnetProcess();
 
         SetPrivateField(sut, "_process", exitedProcess);
@@ -76,7 +87,7 @@ public sealed class TunnelProviderTests
         _processRunner.RunAsync("curl", Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new ProcessRunResult(-1, null, "curl not found"));
 
-        var sut = new NgrokTunnelProvider(CreateOptions(), _processRunner, NullLogger<NgrokTunnelProvider>.Instance);
+        var sut = new NgrokTunnelProvider(CreateOptions(), _processRunner, _processEnvironment, NullLogger<NgrokTunnelProvider>.Instance);
         SetPrivateField(sut, "_process", Process.GetCurrentProcess());
         SetPrivateField(sut, "_error", "ngrok startup timed out after 8s waiting for a public URL.");
 
