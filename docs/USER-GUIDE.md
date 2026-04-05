@@ -25,7 +25,8 @@ Invoke-RestMethod http://localhost:7147/health
 #### Development run (HTTP + MCP transport)
 
 ```powershell
-dotnet run --project src\McpServer.Support.Mcp -- --instance default
+./build.ps1 StartServer --instance default
+# or: dotnet run --project src\McpServer.Support.Mcp -- --instance default
 ```
 
 #### STDIO transport

@@ -8,6 +8,7 @@ using McpServer.McpAgent.SessionLog;
 using McpServer.McpAgent.Todo;
 using McpServer.Client;
 using McpServer.Client.Models;
+using McpServer.Repl.Core;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
@@ -441,8 +442,12 @@ public sealed class McpHostedAgentAdapterTests
                 WorkspacePath = @"E:\github\McpServer",
             });
         var identifiers = new McpSessionIdentifierFactory(options, timeProvider);
-        var sessionLog = new SessionLogWorkflow(client, identifiers, timeProvider);
+        var sessionLog = new McpServer.McpAgent.SessionLog.SessionLogWorkflow(client, identifiers, timeProvider);
         var todo = new TodoWorkflow(client);
+        var requirements = new RequirementsWorkflow(client.Requirements);
+        var clientPassthrough = new GenericClientPassthrough(client);
+        var replSessionLogAdapter = new SessionLogClientAdapter(client.SessionLog);
+        var replSessionLog = new McpServer.Repl.Core.SessionLogWorkflow(replSessionLogAdapter, timeProvider);
         var serviceProvider = new ServiceCollection().BuildServiceProvider();
 
         return (
@@ -458,6 +463,9 @@ public sealed class McpHostedAgentAdapterTests
                 options,
                 sessionLog,
                 todo,
+                requirements,
+                clientPassthrough,
+                replSessionLog,
                 serviceProvider),
             handler);
     }

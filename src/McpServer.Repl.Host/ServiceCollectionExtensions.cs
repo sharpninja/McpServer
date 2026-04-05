@@ -25,11 +25,11 @@ public static class ServiceCollectionExtensions
     /// <returns>The configured service collection for fluent chaining.</returns>
     public static IServiceCollection AddReplCoreServices(this IServiceCollection services)
     {
-        // Register TODO workflow
+        // Register TODO workflow (implementation lives in McpServer.Repl.Core)
         services.AddSingleton<ITodoWorkflow>(sp =>
         {
             var clientFactory = sp.GetRequiredService<McpServer.Client.McpServerClient>();
-            return new TodoWorkflow(clientFactory.Todo);
+            return new McpServer.Repl.Core.TodoWorkflow(clientFactory.Todo);
         });
 
         return services;

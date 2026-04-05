@@ -3,14 +3,16 @@ using System.Text;
 using System.Text.Json;
 using McpServer.McpAgent;
 using McpServer.McpAgent.Hosting;
-using McpServer.McpAgent.SessionLog;
-using McpServer.McpAgent.Todo;
 using McpServer.Client;
 using McpServer.Common.Copilot;
+using McpServer.Repl.Core;
 using McpServer.Support.Mcp.Options;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Options;
+using AgentSessionLogWorkflow = McpServer.McpAgent.SessionLog.SessionLogWorkflow;
+using AgentTodoWorkflow = McpServer.McpAgent.Todo.TodoWorkflow;
+using ReplSessionLogImpl = McpServer.Repl.Core.SessionLogWorkflow;
 
 namespace McpServer.Support.Mcp.Services;
 
@@ -56,8 +58,12 @@ internal sealed class HostedMcpAgentExecutionStrategy(
             });
         var optionsMonitor = Microsoft.Extensions.Options.Options.Create(hostedOptions);
         var identifiers = new McpSessionIdentifierFactory(optionsMonitor, TimeProvider.System);
-        var sessionLog = new SessionLogWorkflow(client, identifiers, TimeProvider.System);
-        var todo = new TodoWorkflow(client);
+        var sessionLog = new AgentSessionLogWorkflow(client, identifiers, TimeProvider.System);
+        var todo = new AgentTodoWorkflow(client);
+        var requirements = new RequirementsWorkflow(client.Requirements);
+        var clientPassthrough = new GenericClientPassthrough(client);
+        var replSessionLogAdapter = new SessionLogClientAdapter(client.SessionLog);
+        var replSessionLog = new ReplSessionLogImpl(replSessionLogAdapter, TimeProvider.System);
         var hostedAgent = new McpHostedAgent(
             client,
             identifiers,
@@ -70,6 +76,9 @@ internal sealed class HostedMcpAgentExecutionStrategy(
             optionsMonitor,
             sessionLog,
             todo,
+            requirements,
+            clientPassthrough,
+            replSessionLog,
             serviceProvider);
 
         return ValueTask.FromResult<IAgentExecutionSession>(

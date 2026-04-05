@@ -35,6 +35,17 @@ On every subsequent user message:
 - `tools/powershell/McpContext.USER.md` — user-level guide for the McpContext module
 - `tools/powershell/McpContext.AGENT.md` — agent workflow instructions for the McpContext module
 
+## MCP Interaction via REPL Tools
+
+Agents running inside `McpAgent` must use the 27 built-in tools instead of raw HTTP calls. See `docs/REPL-MIGRATION-GUIDE.md` for the full tool inventory and migration patterns.
+
+Key rules:
+- Use `mcp_session_*` tools for session log lifecycle (bootstrap, turns, history).
+- Use `mcp_todo_*` tools for TODO CRUD (query, get, create, update, delete, plan, status, implementation).
+- Use `mcp_requirements_*` tools for FR/TR/TEST queries.
+- Use `mcp_client_invoke` for any sub-client method not covered by a dedicated tool (context search, GitHub, workspace, etc.).
+- Do not make raw HTTP calls to `/mcpserver/*` endpoints when a tool is available.
+
 ## Context Loading by Task Type
 
 - Session logging → `docs/context/session-log-schema.md` + `docs/context/module-bootstrap.md`
@@ -43,6 +54,7 @@ On every subsequent user message:
 - Adding dependencies → `docs/context/compliance-rules.md`
 - Logging actions → `docs/context/action-types.md`
 - New to workspace → this file + `docs/context/api-capabilities.md`
+- Migrating from raw API → `docs/REPL-MIGRATION-GUIDE.md`
 
 ## Agent Conduct
 

@@ -1,12 +1,14 @@
-using McpServer.McpAgent.SessionLog;
-using McpServer.McpAgent.Todo;
 using McpServer.McpAgent.PowerShellSessions;
 using McpServer.Client;
+using McpServer.Repl.Core;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using IAgentSessionLogWorkflow = McpServer.McpAgent.SessionLog.ISessionLogWorkflow;
+using IAgentTodoWorkflow = McpServer.McpAgent.Todo.ITodoWorkflow;
+using IReplSessionLogWorkflow = McpServer.Repl.Core.ISessionLogWorkflow;
 
 namespace McpServer.McpAgent.Hosting;
 
@@ -30,14 +32,20 @@ public sealed class McpHostedAgent : IMcpHostedAgent
     /// <param name="options">The configured scaffold options for the hosted agent.</param>
     /// <param name="sessionLog">The session-log workflow service bound to this agent instance.</param>
     /// <param name="todo">The TODO workflow service bound to this agent instance.</param>
+    /// <param name="requirements">The REPL-backed requirements workflow for FR/TR/TEST operations.</param>
+    /// <param name="clientPassthrough">The generic client passthrough for dynamic sub-client method invocation.</param>
+    /// <param name="replSessionLog">The REPL-backed session-log workflow for history queries.</param>
     /// <param name="serviceProvider">The service provider used to create Agent Framework wrappers around the workflows.</param>
     public McpHostedAgent(
         McpServerClient client,
         IMcpSessionIdentifierFactory identifiers,
         ChatClientAgentOptions agentOptions,
         IOptions<McpAgentOptions> options,
-        ISessionLogWorkflow sessionLog,
-        ITodoWorkflow todo,
+        IAgentSessionLogWorkflow sessionLog,
+        IAgentTodoWorkflow todo,
+        IRequirementsWorkflow requirements,
+        IGenericClientPassthrough clientPassthrough,
+        IReplSessionLogWorkflow replSessionLog,
         IServiceProvider serviceProvider)
     {
         Client = client ?? throw new ArgumentNullException(nameof(client));
@@ -52,7 +60,11 @@ public sealed class McpHostedAgent : IMcpHostedAgent
         _loggerFactory = ResolveLoggerFactory();
         PowerShellSessions = new HostedPowerShellSessionManager(_loggerFactory.CreateLogger<HostedPowerShellSessionManager>());
 
-        var toolAdapter = new McpHostedAgentToolAdapter(Client, SessionLog, Todo, PowerShellSessions);
+        var toolAdapter = new McpHostedAgentToolAdapter(
+            Client, SessionLog, Todo, PowerShellSessions,
+            requirements ?? throw new ArgumentNullException(nameof(requirements)),
+            clientPassthrough ?? throw new ArgumentNullException(nameof(clientPassthrough)),
+            replSessionLog ?? throw new ArgumentNullException(nameof(replSessionLog)));
         var functions = toolAdapter.CreateFunctions();
         Registration = new McpHostedAgentRegistration(
             _agentOptions,
@@ -84,10 +96,10 @@ public sealed class McpHostedAgent : IMcpHostedAgent
     public McpServerClient Client { get; }
 
     /// <inheritdoc />
-    public ISessionLogWorkflow SessionLog { get; }
+    public IAgentSessionLogWorkflow SessionLog { get; }
 
     /// <inheritdoc />
-    public ITodoWorkflow Todo { get; }
+    public IAgentTodoWorkflow Todo { get; }
 
     /// <inheritdoc />
     public IHostedPowerShellSessionManager PowerShellSessions { get; }

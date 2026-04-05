@@ -738,6 +738,55 @@ app.MapGet("/pair/key", async (HttpContext context, IOptions<PairingOptions> opt
     return Results.Content(await pairingRenderer.RenderKeyPageAsync(o.ApiKey, serverUrl).ConfigureAwait(false), "text/html");
 }).ExcludeFromDescription();
 
+app.MapGet("/pair/qr", async (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions,
+    TunnelRegistry tunnelRegistry, IOptions<IdentityServerOptions> idsOpts, IOptions<OidcAuthOptions> oidcOpts) =>
+{
+    var token = context.Request.Cookies["mcp_pair"];
+    if (!sessions.Validate(token))
+        return Results.Redirect("/pair");
+
+    // Prefer the tunnel public URL so mobile devices can reach the server externally
+    string? baseUrl = null;
+    var tunnels = await tunnelRegistry.ListAsync(context.RequestAborted).ConfigureAwait(false);
+    var activeTunnel = tunnels.FirstOrDefault(t => t.IsRunning && !string.IsNullOrEmpty(t.PublicUrl));
+    if (activeTunnel is not null)
+    {
+        baseUrl = activeTunnel.PublicUrl!.TrimEnd('/');
+    }
+
+    baseUrl ??= $"{context.Request.Scheme}://{context.Request.Host}";
+
+    // When a tunnel is active, point to the identity server proxy login page
+    string loginUrl;
+    var ids = idsOpts.Value;
+    var oidc = oidcOpts.Value;
+    if (activeTunnel is not null && oidc.Enabled)
+    {
+        // External Keycloak: proxy login page through the tunnel
+        var authority = oidc.Authority.TrimEnd('/');
+        if (Uri.TryCreate(authority, UriKind.Absolute, out var authorityUri))
+        {
+            loginUrl = $"{baseUrl}/auth/ui{authorityUri.AbsolutePath.TrimEnd('/')}/device";
+        }
+        else
+        {
+            loginUrl = $"{baseUrl}/pair";
+        }
+    }
+    else if (activeTunnel is not null && ids.Enabled)
+    {
+        // Embedded IdentityServer: login page is served by the MCP server itself via tunnel
+        loginUrl = $"{baseUrl}/pair";
+    }
+    else
+    {
+        loginUrl = $"{baseUrl}/pair";
+    }
+
+    var svg = PairingQrCode.GenerateSvg(loginUrl);
+    return Results.Content(svg, "image/svg+xml");
+}).ExcludeFromDescription();
+
 // Seed IdentityServer defaults (admin user, roles) on first run
 if (identityServerOptions is { Enabled: true, SeedDefaults: true })
 {
