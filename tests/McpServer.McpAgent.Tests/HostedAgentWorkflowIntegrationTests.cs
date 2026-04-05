@@ -1,3 +1,4 @@
+using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -21,6 +22,8 @@ namespace McpServer.McpAgent.Tests;
 /// </summary>
 public sealed class HostedAgentWorkflowIntegrationTests
 {
+    private static readonly string TestWorkspacePath =
+        Path.TrimEndingDirectorySeparator(AppContext.BaseDirectory);
     /// <summary>
     /// TEST-MCP-089: Verifies that a DI-registered hosted agent can expose its ChatClientAgent
     /// metadata, attach the built-in MCP tools to run options, and execute a representative
@@ -203,7 +206,7 @@ public sealed class HostedAgentWorkflowIntegrationTests
         Assert.Equal(4242, desktopLaunch.ProcessId);
         Assert.Equal(0, desktopLaunch.ExitCode);
         Assert.True(powerShellSession.Success);
-        Assert.Equal(@"E:\github\McpServer", powerShellSession.CurrentLocation);
+        Assert.Equal(TestWorkspacePath, powerShellSession.CurrentLocation);
         Assert.True(powerShellFirstCommand.Success);
         Assert.Equal("7", powerShellFirstCommand.Output);
         Assert.Equal(powerShellSession.SessionId, powerShellFirstCommand.SessionId);
@@ -227,10 +230,10 @@ public sealed class HostedAgentWorkflowIntegrationTests
         Assert.Equal(8, handler.Requests.Count);
         Assert.All(
             handler.Requests,
-            static request =>
+            request =>
             {
                 Assert.Equal("test-key", request.ApiKey);
-                Assert.Equal(@"E:\github\McpServer", request.WorkspacePath);
+                Assert.Equal(TestWorkspacePath, request.WorkspacePath);
             });
 
         Assert.Equal(HttpMethod.Post, handler.Requests[0].Method);
@@ -344,7 +347,7 @@ public sealed class HostedAgentWorkflowIntegrationTests
             options.ApiKey = "test-key";
             options.BaseUrl = new Uri("http://localhost:7147");
             options.SourceType = "Codex";
-            options.WorkspacePath = @"E:\github\McpServer";
+            options.WorkspacePath = TestWorkspacePath;
         });
         services.AddHttpClient(McpClientServiceCollectionExtensions.HttpClientName)
             .ConfigurePrimaryHttpMessageHandler(static serviceProvider =>
