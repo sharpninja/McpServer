@@ -766,7 +766,7 @@ app.MapGet("/pair/qr", async (HttpContext context, IOptions<PairingOptions> opts
         var authority = oidc.Authority.TrimEnd('/');
         if (Uri.TryCreate(authority, UriKind.Absolute, out var authorityUri))
         {
-            loginUrl = $"{baseUrl}/auth/ui{authorityUri.AbsolutePath}";
+            loginUrl = $"{baseUrl}/auth/ui{authorityUri.AbsolutePath.TrimEnd('/')}/device";
         }
         else
         {
