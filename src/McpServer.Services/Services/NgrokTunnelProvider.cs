@@ -52,8 +52,12 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
         var check = await _processRunner.RunAsync(ngrokExe, "version", cancellationToken).ConfigureAwait(false);
         if (check.ExitCode != 0)
         {
-            _error = "ngrok CLI not found. Install from https://ngrok.com/download";
-            _logger.LogError("{Error}", _error);
+            _error = string.IsNullOrWhiteSpace(ngrokExe) || ngrokExe == "ngrok"
+                ? "ngrok CLI not found on PATH. When running as a Windows service, ngrok must be a portable executable " +
+                  "(not the Microsoft Store version). Download from https://ngrok.com/download and configure " +
+                  "Mcp:Tunnel:Ngrok:ExecutablePath to its full path, or set Mcp:Tunnel:Provider to '' to disable tunneling."
+                : $"ngrok CLI not found at configured path '{ngrokExe}'. Verify the path is correct and the file exists.";
+            _logger.LogWarning("{Error}", _error);
             return;
         }
 
