@@ -27,6 +27,7 @@
         "BumpVersion",
         "Clean",
         "Compile",
+        "DeployService",
         "InstallReplTool",
         "PackageMsix",
         "PackNuGet",
@@ -140,6 +141,10 @@
           "type": "string",
           "description": "GraphRAG query for smoke test"
         },
+        "InstallPath": {
+          "type": "string",
+          "description": "Service installation path"
+        },
         "Instance": {
           "type": "string",
           "description": "MCP instance name from appsettings"
@@ -163,6 +168,15 @@
         "SecondInstance": {
           "type": "string",
           "description": "Second MCP instance name"
+        },
+        "ServiceName": {
+          "type": "string",
+          "description": "Windows service name"
+        },
+        "ServicePort": {
+          "type": "integer",
+          "description": "Service port",
+          "format": "int32"
         },
         "Solution": {
           "type": "string",

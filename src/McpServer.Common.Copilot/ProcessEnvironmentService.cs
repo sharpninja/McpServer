@@ -91,6 +91,11 @@ public sealed class ProcessEnvironmentService(
 
         foreach (var dir in path.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries))
         {
+            // Skip Windows App Execution Aliases — stub files in WindowsApps cannot be
+            // launched by a service process (UseShellExecute=false) and raise Win32Exception 1920.
+            if (dir.Trim().Contains(@"Microsoft\WindowsApps", StringComparison.OrdinalIgnoreCase))
+                continue;
+
             foreach (var ext in extensions)
             {
                 var candidate = Path.Combine(dir.Trim(), fileName + ext);
