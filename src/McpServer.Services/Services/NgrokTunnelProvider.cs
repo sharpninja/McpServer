@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
+using McpServer.Common.Copilot;
 using McpServer.Support.Mcp.Options;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -20,6 +21,7 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
 
     private readonly TunnelOptions _options;
     private readonly IProcessRunner _processRunner;
+    private readonly IProcessEnvironmentService _processEnvironment;
     private readonly ILogger<NgrokTunnelProvider> _logger;
     private Process? _process;
     private CancellationTokenSource? _outputPumpCts;
@@ -34,10 +36,15 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
     private bool _stopRequested;
 
     /// <summary>Initializes a new instance of the <see cref="NgrokTunnelProvider"/> class.</summary>
-    public NgrokTunnelProvider(IOptions<TunnelOptions> options, IProcessRunner processRunner, ILogger<NgrokTunnelProvider> logger)
+    public NgrokTunnelProvider(
+        IOptions<TunnelOptions> options,
+        IProcessRunner processRunner,
+        IProcessEnvironmentService processEnvironment,
+        ILogger<NgrokTunnelProvider> logger)
     {
         _options = options.Value;
         _processRunner = processRunner;
+        _processEnvironment = processEnvironment;
         _logger = logger;
     }
 
@@ -78,7 +85,12 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
             RedirectStandardError = true,
         };
 
+        // Apply interactive user's environment (USERPROFILE, HOME, PATH) so that ngrok
+        // can find its config file (ngrok.yml) when running as a Windows service under LocalSystem.
+        _processEnvironment.ApplyAll(startInfo, runAsUser: null, gitHubToken: null);
+
         // Pass auth token via environment variable to avoid exposure in process listing.
+        // NGROK_AUTHTOKEN overrides whatever is in the config file.
         if (!string.IsNullOrWhiteSpace(ngrok.AuthToken))
             startInfo.Environment["NGROK_AUTHTOKEN"] = ngrok.AuthToken;
 
@@ -433,8 +445,10 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
     }
 
     /// <summary>
-    /// Returns the ngrok executable path from <see cref="NgrokTunnelOptions.ExecutablePath"/>
-    /// or falls back to the bare <c>ngrok</c> command name (resolved via PATH).
+    /// Returns the ngrok executable path. Uses <see cref="NgrokTunnelOptions.ExecutablePath"/>
+    /// when configured; otherwise resolves <c>ngrok</c> against the interactive user's PATH
+    /// (via <see cref="IProcessEnvironmentService"/>) so that the correct binary is found
+    /// even when running as a Windows service under LocalSystem.
     /// </summary>
     private string ResolveExecutablePath()
     {
@@ -445,6 +459,12 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
             return configured;
         }
 
-        return "ngrok";
+        // Build a temporary PSI with the user environment applied, then ask
+        // ProcessEnvironmentService to resolve 'ngrok' against the enriched PATH.
+        var probe = new ProcessStartInfo();
+        _processEnvironment.ApplyRunAsEnvironment(probe, runAsUser: null);
+        var resolved = _processEnvironment.ResolveExecutable(probe, "ngrok");
+        _logger.LogDebug("Resolved ngrok executable: {Path}", resolved);
+        return resolved;
     }
 }
