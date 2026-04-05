@@ -1,5 +1,5 @@
 // FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - TODO workflow operations
-// FR-MCP-REPL-003: Command Namespace Parity - TODO operations via REPL commands  
+// FR-MCP-REPL-003: Command Namespace Parity - TODO operations via REPL commands
 // TR-MCP-REPL-005: Namespace Organization and Handler Parity - TODO command handlers
 // TEST-MCP-REPL-006: TODO workflow operations match REST endpoint behavior
 
@@ -21,9 +21,8 @@ using System.Threading.Tasks;
 
 using McpServer.Client;
 using McpServer.Client.Models;
-using McpServer.Repl.Core;
 
-namespace McpServer.Repl.Host;
+namespace McpServer.Repl.Core;
 
 /// <summary>
 /// Production TODO workflow implementation for iteration 3.
@@ -164,7 +163,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
 
         var clientRequest = MapUpdateRequest(request);
         var result = await _client.UpdateAsync(_currentSelection.Id, clientRequest, cancellationToken);
-        
+
         // Update selection state with new values
         if (result.Success && result.Item != null)
         {
@@ -457,7 +456,7 @@ public sealed class TodoWorkflow : ITodoWorkflow
         try
         {
             var status = await _client.GetProjectionStatusAsync(cancellationToken);
-            
+
             // Map the workspace-level projection status to a TODO-specific status
             return new TodoProjectionStatusAdapter(id, status);
         }
@@ -594,7 +593,7 @@ internal sealed class TodoItemAdapter : ITodoItem
     public string? Note => _item.Note;
     public IReadOnlyList<string> Description => _item.Description ?? Array.Empty<string>();
     public IReadOnlyList<string> TechnicalDetails => _item.TechnicalDetails ?? Array.Empty<string>();
-    public IReadOnlyList<ITodoSubtask> ImplementationTasks => 
+    public IReadOnlyList<ITodoSubtask> ImplementationTasks =>
         _item.ImplementationTasks?.Select(t => (ITodoSubtask)new TodoSubtaskAdapter(t)).ToArray() ?? Array.Empty<ITodoSubtask>();
     public string? CompletedDate => _item.CompletedDate;
     public string? DoneSummary => _item.DoneSummary;
@@ -654,7 +653,7 @@ internal sealed class TodoRequirementsAnalysisAdapter : ITodoRequirementsAnalysi
 
     public string TodoId => _todoId;
     public IReadOnlyList<IRequirementReference> FunctionalRequirements =>
-        _result.FunctionalRequirements?.Select(id => (IRequirementReference)new RequirementReferenceAdapter(id)).ToArray() 
+        _result.FunctionalRequirements?.Select(id => (IRequirementReference)new RequirementReferenceAdapter(id)).ToArray()
         ?? Array.Empty<IRequirementReference>();
     public IReadOnlyList<IRequirementReference> TechnicalRequirements =>
         _result.TechnicalRequirements?.Select(id => (IRequirementReference)new RequirementReferenceAdapter(id)).ToArray()
