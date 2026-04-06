@@ -390,36 +390,15 @@ builder.Services.AddMcpIdentityServer(builder.Configuration);
 var oidcAuthBootstrap = builder.Configuration.GetSection(OidcAuthOptions.SectionName).Get<OidcAuthOptions>()
     ?? new OidcAuthOptions();
 
-// When embedded IdentityServer is enabled and no external authority is configured,
-// point JWT validation at the local IdentityServer instance.
-var effectiveAuthority = oidcAuthBootstrap.Authority;
-var effectiveAudience = oidcAuthBootstrap.Audience;
-var authEnabled = oidcAuthBootstrap.Enabled || identityServerOptions.Enabled;
+// Select the OIDC provider strategy from configuration.
+// Priority: embedded IdentityServer > external authority > disabled.
+var oidcStrategy = OidcProviderStrategyFactory.Create(identityServerOptions, oidcAuthBootstrap, listenPort);
+builder.Services.AddSingleton<IOidcProviderStrategy>(oidcStrategy);
 
-if (identityServerOptions.Enabled && !oidcAuthBootstrap.Enabled)
+if (oidcStrategy.IsEnabled)
 {
-    effectiveAuthority = !string.IsNullOrWhiteSpace(identityServerOptions.IssuerUri)
-        ? identityServerOptions.IssuerUri
-        : $"http://localhost:{listenPort}";
-    effectiveAudience = identityServerOptions.ApiResourceName;
-}
-
-if (authEnabled)
-{
-    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(options =>
-        {
-            options.MapInboundClaims = false;
-            options.Authority = effectiveAuthority;
-            options.Audience = effectiveAudience;
-            options.RequireHttpsMetadata = oidcAuthBootstrap.RequireHttpsMetadata;
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                NameClaimType = "preferred_username",
-                RoleClaimType = "realm_roles",
-                ValidateAudience = !string.IsNullOrWhiteSpace(effectiveAudience),
-            };
-        });
+    var authBuilder = builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
+    oidcStrategy.ConfigureAuthentication(authBuilder);
 }
 else
 {
@@ -430,7 +409,7 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AgentManager", policy =>
     {
-        if (!authEnabled)
+        if (!oidcStrategy.IsEnabled)
         {
             policy.RequireAssertion(_ => true);
             return;
@@ -753,7 +732,7 @@ app.MapGet("/pair/key", async (HttpContext context, IOptions<PairingOptions> opt
 }).ExcludeFromDescription();
 
 app.MapGet("/pair/qr", async (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions,
-    TunnelRegistry tunnelRegistry, IOptions<IdentityServerOptions> idsOpts, IOptions<OidcAuthOptions> oidcOpts) =>
+    TunnelRegistry tunnelRegistry, IOidcProviderStrategy oidcProvider) =>
 {
     var token = context.Request.Cookies["mcp_pair"];
     if (!sessions.Validate(token))
@@ -770,32 +749,9 @@ app.MapGet("/pair/qr", async (HttpContext context, IOptions<PairingOptions> opts
 
     baseUrl ??= $"{context.Request.Scheme}://{context.Request.Host}";
 
-    // When a tunnel is active, point to the identity server proxy login page
-    string loginUrl;
-    var ids = idsOpts.Value;
-    var oidc = oidcOpts.Value;
-    if (activeTunnel is not null && oidc.Enabled)
-    {
-        // External Keycloak: proxy login page through the tunnel
-        var authority = oidc.Authority.TrimEnd('/');
-        if (Uri.TryCreate(authority, UriKind.Absolute, out var authorityUri))
-        {
-            loginUrl = $"{baseUrl}/auth/ui{authorityUri.AbsolutePath.TrimEnd('/')}/device";
-        }
-        else
-        {
-            loginUrl = $"{baseUrl}/pair";
-        }
-    }
-    else if (activeTunnel is not null && ids.Enabled)
-    {
-        // Embedded IdentityServer: login page is served by the MCP server itself via tunnel
-        loginUrl = $"{baseUrl}/pair";
-    }
-    else
-    {
-        loginUrl = $"{baseUrl}/pair";
-    }
+    var loginUrl = activeTunnel is not null && oidcProvider.IsEnabled
+        ? oidcProvider.GetPairingLoginUrl(baseUrl)
+        : $"{baseUrl}/pair";
 
     var svg = PairingQrCode.GenerateSvg(loginUrl);
     return Results.Content(svg, "image/svg+xml");

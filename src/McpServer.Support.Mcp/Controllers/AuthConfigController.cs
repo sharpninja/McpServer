@@ -7,8 +7,6 @@ using McpServer.Support.Mcp.Identity;
 using McpServer.Support.Mcp.Options;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using IdentityServerOptions = McpServer.Support.Mcp.Identity.IdentityServerOptions;
-
 namespace McpServer.Support.Mcp.Controllers;
 
 /// <summary>
@@ -25,35 +23,14 @@ public sealed class AuthConfigController : ControllerBase
     /// <summary>
     /// Returns the public OIDC configuration for CLI clients.
     /// No secrets are exposed — only the authority URL, public client ID, and endpoint URLs.
+    /// The active <see cref="IOidcProviderStrategy"/> determines all values.
     /// </summary>
-    /// <param name="options">Bound from <c>Mcp:Auth</c> configuration section.</param>
-    /// <param name="identityServerOptions">Bound from <c>Mcp:IdentityServer</c> configuration section.</param>
-    /// <returns>Public auth configuration or a disabled indicator.</returns>
     [HttpGet("config")]
     [ProducesResponseType(typeof(AuthConfigResponse), 200)]
     public IActionResult GetConfig(
-        [FromServices] IOptions<OidcAuthOptions> options,
-        [FromServices] IOptions<IdentityServerOptions> identityServerOptions)
+        [FromServices] IOidcProviderStrategy oidcProvider)
     {
-        var auth = options.Value;
-        var ids = identityServerOptions.Value;
-        var proxyBaseUrl = $"{Request.Scheme}://{Request.Host}";
-
-        // Embedded IdentityServer takes precedence when enabled and no external authority is set
-        if (ids.Enabled && !auth.Enabled)
-        {
-            return Ok(new AuthConfigResponse
-            {
-                Enabled = true,
-                Authority = proxyBaseUrl,
-                ClientId = "mcp-director",
-                Scopes = $"openid profile email roles {ids.ApiScopeName}",
-                DeviceAuthorizationEndpoint = $"{proxyBaseUrl}/connect/deviceauthorization",
-                TokenEndpoint = $"{proxyBaseUrl}/connect/token"
-            });
-        }
-
-        if (!auth.Enabled)
+        if (!oidcProvider.IsEnabled)
         {
             return Ok(new AuthConfigResponse
             {
@@ -66,111 +43,88 @@ public sealed class AuthConfigController : ControllerBase
             });
         }
 
-        var authority = auth.Authority.TrimEnd('/');
+        var requestBaseUrl = $"{Request.Scheme}://{Request.Host}";
 
         return Ok(new AuthConfigResponse
         {
             Enabled = true,
-            Authority = authority,
-            ClientId = auth.DirectorClientId,
-            Scopes = "openid profile email",
-            DeviceAuthorizationEndpoint = $"{proxyBaseUrl}/auth/device",
-            TokenEndpoint = $"{proxyBaseUrl}/auth/token"
+            Authority = oidcProvider.GetPublicAuthority(requestBaseUrl),
+            ClientId = oidcProvider.ClientId,
+            Scopes = oidcProvider.Scopes,
+            DeviceAuthorizationEndpoint = oidcProvider.GetDeviceAuthorizationEndpoint(requestBaseUrl),
+            TokenEndpoint = oidcProvider.GetTokenEndpoint(requestBaseUrl)
         });
     }
 
     /// <summary>
-    /// Proxies the OAuth 2.0 Device Authorization request to the configured authority.
-    /// When embedded IdentityServer is active, forwards to the local /connect/deviceauthorization endpoint.
-    /// Otherwise proxies to the external Keycloak instance.
+    /// Proxies the OAuth 2.0 Device Authorization request to the provider's endpoint.
+    /// The active <see cref="IOidcProviderStrategy"/> determines the target.
     /// </summary>
     [HttpPost("device")]
     [Consumes("application/x-www-form-urlencoded")]
     public Task<IActionResult> ProxyDeviceAuthorization(
+        [FromServices] IOidcProviderStrategy oidcProvider,
         [FromServices] IOptions<OidcAuthOptions> options,
-        [FromServices] IOptions<IdentityServerOptions> identityServerOptions,
         [FromServices] IHttpClientFactory httpClientFactory,
         [FromServices] ILogger<AuthConfigController> logger,
         CancellationToken cancellationToken)
     {
-        var ids = identityServerOptions.Value;
-        if (ids.Enabled && !options.Value.Enabled)
-        {
-            var localEndpoint = $"{Request.Scheme}://{Request.Host}/connect/deviceauthorization";
-            return ProxyOidcFormPostAsync(
-                options.Value,
-                localEndpoint,
-                httpClientFactory,
-                logger,
-                cancellationToken,
-                rewriteDeviceVerificationUris: false,
-                bypassEnabledCheck: true);
-        }
+        var requestBaseUrl = $"{Request.Scheme}://{Request.Host}";
+        var endpoint = oidcProvider.GetDeviceAuthorizationEndpoint(requestBaseUrl);
+        var isEmbedded = oidcProvider is EmbeddedIdentityServerStrategy;
 
         return ProxyOidcFormPostAsync(
             options.Value,
-            GetDeviceAuthorizationEndpoint(options.Value),
+            endpoint,
             httpClientFactory,
             logger,
             cancellationToken,
-            rewriteDeviceVerificationUris: true);
+            rewriteDeviceVerificationUris: !isEmbedded,
+            bypassEnabledCheck: isEmbedded);
     }
 
     /// <summary>
-    /// Proxies the OAuth 2.0 Token request to the configured authority.
-    /// When embedded IdentityServer is active, forwards to the local /connect/token endpoint.
-    /// Otherwise proxies to the external Keycloak instance.
+    /// Proxies the OAuth 2.0 Token request to the provider's endpoint.
+    /// The active <see cref="IOidcProviderStrategy"/> determines the target.
     /// </summary>
     [HttpPost("token")]
     [Consumes("application/x-www-form-urlencoded")]
     public Task<IActionResult> ProxyToken(
+        [FromServices] IOidcProviderStrategy oidcProvider,
         [FromServices] IOptions<OidcAuthOptions> options,
-        [FromServices] IOptions<IdentityServerOptions> identityServerOptions,
         [FromServices] IHttpClientFactory httpClientFactory,
         [FromServices] ILogger<AuthConfigController> logger,
         CancellationToken cancellationToken)
     {
-        var ids = identityServerOptions.Value;
-        if (ids.Enabled && !options.Value.Enabled)
-        {
-            var localEndpoint = $"{Request.Scheme}://{Request.Host}/connect/token";
-            return ProxyOidcFormPostAsync(
-                options.Value,
-                localEndpoint,
-                httpClientFactory,
-                logger,
-                cancellationToken,
-                enforceMinimumTokenLifetime: true,
-                bypassEnabledCheck: true);
-        }
+        var requestBaseUrl = $"{Request.Scheme}://{Request.Host}";
+        var endpoint = oidcProvider.GetTokenEndpoint(requestBaseUrl);
+        var isEmbedded = oidcProvider is EmbeddedIdentityServerStrategy;
 
         return ProxyOidcFormPostAsync(
             options.Value,
-            GetTokenEndpoint(options.Value),
+            endpoint,
             httpClientFactory,
             logger,
             cancellationToken,
-            enforceMinimumTokenLifetime: true);
+            enforceMinimumTokenLifetime: true,
+            bypassEnabledCheck: isEmbedded);
     }
 
     /// <summary>
     /// Browser-facing UI proxy for device-flow verification pages and supporting assets.
-    /// When embedded IdentityServer is active, redirects to the local IdentityServer UI.
-    /// Otherwise proxies to the external Keycloak instance.
+    /// Embedded providers serve their own UI directly; external providers are proxied.
     /// </summary>
     [HttpGet("ui/{**path}")]
     [HttpPost("ui/{**path}")]
     public Task<IActionResult> ProxyBrowserUi(
         string? path,
+        [FromServices] IOidcProviderStrategy oidcProvider,
         [FromServices] IOptions<OidcAuthOptions> options,
-        [FromServices] IOptions<IdentityServerOptions> identityServerOptions,
         [FromServices] ILogger<AuthConfigController> logger,
         CancellationToken cancellationToken)
     {
-        var ids = identityServerOptions.Value;
-        if (ids.Enabled && !options.Value.Enabled)
+        if (oidcProvider is EmbeddedIdentityServerStrategy)
         {
-            // IdentityServer serves its own UI; redirect to it
             var localPath = NormalizeUiProxyPath(path);
             var redirectUrl = $"/{localPath}{Request.QueryString}";
             return Task.FromResult<IActionResult>(Redirect(redirectUrl));
