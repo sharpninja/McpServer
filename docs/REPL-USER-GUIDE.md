@@ -171,7 +171,7 @@ Session logging and turn management. Captures agent activity, reasoning dialog, 
 - `workflow.sessionlog.appendActions` — Log actions performed
 - `workflow.sessionlog.queryHistory` — Query past sessions
 
-**Example: Open Session**
+### Example: Open Session
 
 ```yaml
 type: request
@@ -217,7 +217,7 @@ TODO item management with structured metadata, dependencies, and requirement tra
 - `workflow.todo.streamPlan` — Stream plan generation events
 - `workflow.todo.streamImplement` — Stream implementation execution
 
-**Example: Create TODO**
+### Example: Create TODO
 
 ```yaml
 type: request
@@ -276,7 +276,7 @@ Requirements management for functional (FR), technical (TR), and test (TEST) req
 - `workflow.requirements.generateDocument` — Generate formatted document
 - `workflow.requirements.ingestDocument` — Ingest external document
 
-**Example: List Functional Requirements**
+### Example: List Functional Requirements
 
 ```yaml
 type: request
@@ -334,7 +334,7 @@ Generic passthrough to all `McpServerClient` sub-clients. Enables dynamic invoca
 - `client.configuration.*` — Admin configuration
 - `client.tools.*` — Tool registry operations
 
-**Example: Context Search**
+### Example: Context Search
 
 ```yaml
 type: request

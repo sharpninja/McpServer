@@ -455,7 +455,7 @@ public sealed class McpHostedAgentAdapterTests
             });
         var identifiers = new McpSessionIdentifierFactory(options, timeProvider);
         var sessionLog = new McpServer.McpAgent.SessionLog.SessionLogWorkflow(client, identifiers, timeProvider);
-        var todo = new TodoWorkflow(client);
+        var todo = new McpServer.McpAgent.Todo.TodoWorkflow(client);
         var requirements = new RequirementsWorkflow(client.Requirements);
         var clientPassthrough = new GenericClientPassthrough(client);
         var replSessionLogAdapter = new SessionLogClientAdapter(client.SessionLog);
