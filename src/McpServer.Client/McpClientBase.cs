@@ -109,9 +109,9 @@ public abstract class McpClientBase
 
     /// <summary>
     /// API key for workspace authentication, sent as the <c>X-Api-Key</c> header on every
-    /// request. <b>Mutually exclusive with <see cref="BearerToken"/>.</b> Setting the API key
-    /// is silently ignored when a JWT bearer token is already active. Setting
-    /// <see cref="BearerToken"/> to a non-empty value clears the API key.
+    /// request. <b>Mutually exclusive with <see cref="BearerToken"/>.</b> Setting a non-empty
+    /// API key clears any bearer token and disables bearer-only enforcement so callers can
+    /// intentionally rotate from interactive user auth back to agent-style marker auth.
     ///
     /// <para>Obtain the key from the <c>AGENTS-README-FIRST.yaml</c> marker file that the
     /// MCP Server writes to each workspace root on startup.</para>
@@ -121,17 +121,12 @@ public abstract class McpClientBase
         get => _apiKey;
         set
         {
-            // JWT and API key are mutually exclusive. Once a Bearer token is set,
-            // API key writes are ignored — agents use API keys, users use JWT.
-            if (!string.IsNullOrWhiteSpace(_bearerToken))
-                return;
-
-            // API key is set-once. After initial assignment, further writes are ignored.
-            // Call Logout() to clear credentials and start over.
-            if (!string.IsNullOrWhiteSpace(_apiKey))
-                return;
-
             _apiKey = value ?? string.Empty;
+            if (!string.IsNullOrWhiteSpace(_apiKey))
+            {
+                _bearerToken = string.Empty;
+                RequireBearerToken = false;
+            }
         }
     }
     private string _apiKey = string.Empty;
@@ -139,26 +134,24 @@ public abstract class McpClientBase
     /// <summary>
     /// JWT bearer token sent as the <c>Authorization: Bearer</c> header on every request.
     /// <b>Mutually exclusive with <see cref="ApiKey"/>.</b> Setting this to a non-empty value
-    /// clears the API key and enables <see cref="RequireBearerToken"/>, permanently preventing
-    /// silent fallback to API key authentication for the lifetime of this client instance.
-    /// <para>The bearer token is set-once: after initial assignment, further writes are
-    /// silently ignored. Call <see cref="Logout"/> to clear all credentials.</para>
+    /// clears the API key and enables <see cref="RequireBearerToken"/> for the active auth mode.
+    /// Clearing the bearer token also clears bearer-only enforcement so callers can later switch
+    /// to marker-file API-key authentication without rebuilding the client.
     /// </summary>
     public string BearerToken
     {
         get => _bearerToken;
         set
         {
-            // Bearer token is set-once. After initial assignment, further writes are
-            // ignored. Call Logout() to clear credentials and start over.
-            if (!string.IsNullOrWhiteSpace(_bearerToken))
-                return;
-
             _bearerToken = value ?? string.Empty;
             if (!string.IsNullOrWhiteSpace(_bearerToken))
             {
                 _apiKey = string.Empty;
                 RequireBearerToken = true;
+            }
+            else
+            {
+                RequireBearerToken = false;
             }
         }
     }
@@ -367,9 +360,8 @@ public abstract class McpClientBase
 
         if (RequireBearerToken && !hasBearer)
             throw new InvalidOperationException(
-                "Authentication failed: a JWT bearer token was previously set on this client but is " +
-                "now empty. The client cannot fall back to API key authentication once a bearer token " +
-                "has been configured. Re-authenticate via OIDC to obtain a new token.");
+                "Authentication failed: bearer-token authentication is currently required for this client, " +
+                "but no bearer token is configured. Re-authenticate via OIDC or switch the client to API-key authentication.");
 
         if (!hasBearer && !hasApiKey)
             throw new InvalidOperationException(
