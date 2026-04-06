@@ -72,9 +72,21 @@ internal static class IdentityServerConfig
             AllowedGrantTypes = GrantTypes.Code,
             RequirePkce = true,
             RequireClientSecret = false,
-            RedirectUris = { "http://localhost:7147/auth/callback", "https://localhost:7147/auth/callback" },
-            PostLogoutRedirectUris = { "http://localhost:7147/", "https://localhost:7147/" },
-            AllowedCorsOrigins = { "http://localhost:7147", "https://localhost:7147" },
+            RedirectUris =
+            {
+                "http://localhost:7147/auth/callback", "https://localhost:7147/auth/callback",
+                "https://localhost:39983/signin-oidc", "http://localhost:39984/signin-oidc",
+            },
+            PostLogoutRedirectUris =
+            {
+                "http://localhost:7147/", "https://localhost:7147/",
+                "https://localhost:39983/", "http://localhost:39984/",
+            },
+            AllowedCorsOrigins =
+            {
+                "http://localhost:7147", "https://localhost:7147",
+                "https://localhost:39983", "http://localhost:39984",
+            },
             AllowedScopes = { "openid", "profile", "email", "roles", options.ApiScopeName },
             AllowOfflineAccess = true,
         },
