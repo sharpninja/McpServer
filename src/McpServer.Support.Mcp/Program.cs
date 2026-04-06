@@ -107,12 +107,6 @@ WorkspaceConfigEntry? primaryWorkspaceEntry = null;
         .Where(w => w.IsEnabled)
         .FirstOrDefault();
 
-    // Content root must point to a stable, backed-up path — NOT a workspace directory.
-    // Workspace appsettings.yaml files are developer configs and must not override the service config.
-    var dataRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "McpServer-Data");
-    Directory.CreateDirectory(dataRoot);
-    builder.Environment.ContentRootPath = dataRoot;
-    Directory.SetCurrentDirectory(dataRoot);
 }
 
 builder.Host.UseSerilog((context, _, config) =>
@@ -394,7 +388,8 @@ var oidcAuthBootstrap = builder.Configuration.GetSection(OidcAuthOptions.Section
 
 // Select the OIDC provider strategy from configuration.
 // Priority: embedded IdentityServer > external authority > disabled.
-var oidcStrategy = OidcProviderStrategyFactory.Create(identityServerOptions, oidcAuthBootstrap, listenPort);
+var oidcStrategyLogger = LoggerFactory.Create(lb => lb.AddConsole()).CreateLogger("OidcProviderStrategyFactory");
+var oidcStrategy = OidcProviderStrategyFactory.Create(identityServerOptions, oidcAuthBootstrap, listenPort, oidcStrategyLogger);
 builder.Services.AddSingleton<IOidcProviderStrategy>(oidcStrategy);
 
 if (oidcStrategy.IsEnabled)

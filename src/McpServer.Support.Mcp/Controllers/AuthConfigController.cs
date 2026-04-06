@@ -28,8 +28,10 @@ public sealed class AuthConfigController : ControllerBase
     [HttpGet("config")]
     [ProducesResponseType(typeof(AuthConfigResponse), 200)]
     public IActionResult GetConfig(
-        [FromServices] IOidcProviderStrategy oidcProvider)
+        [FromServices] IOidcProviderStrategy oidcProvider,
+        [FromServices] ILogger<AuthConfigController> logger)
     {
+        logger.LogWarning("AuthConfig requested. Strategy type: {StrategyType}, IsEnabled: {IsEnabled}", oidcProvider.GetType().Name, oidcProvider.IsEnabled);
         if (!oidcProvider.IsEnabled)
         {
             return Ok(new AuthConfigResponse

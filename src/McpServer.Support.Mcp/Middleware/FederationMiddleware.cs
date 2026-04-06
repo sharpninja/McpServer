@@ -17,6 +17,7 @@ namespace McpServer.Support.Mcp.Middleware;
 public sealed class FederationMiddleware
 {
     private const string FederationManagementPrefix = "/mcpserver/federation";
+    private const string AuthPrefix = "/auth";
 
     private readonly RequestDelegate _next;
     private readonly FederationRegistry _registry;
@@ -47,8 +48,9 @@ public sealed class FederationMiddleware
     /// <param name="workspaceContext">Resolved workspace identity from the preceding middleware.</param>
     public async Task InvokeAsync(HttpContext context, WorkspaceContext workspaceContext)
     {
-        // Management API is always served locally
-        if (context.Request.Path.StartsWithSegments(FederationManagementPrefix, StringComparison.OrdinalIgnoreCase))
+        // Management API and auth endpoints are always served locally
+        if (context.Request.Path.StartsWithSegments(FederationManagementPrefix, StringComparison.OrdinalIgnoreCase) ||
+            context.Request.Path.StartsWithSegments(AuthPrefix, StringComparison.OrdinalIgnoreCase))
         {
             await _next(context).ConfigureAwait(false);
             return;
