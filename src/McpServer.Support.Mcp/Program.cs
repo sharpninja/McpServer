@@ -442,6 +442,19 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
+builder.Services.Configure<FederationOptions>(
+    builder.Configuration.GetSection(FederationOptions.SectionName));
+builder.Services.AddSingleton<FederationRegistry>();
+builder.Services.AddSingleton<FederationProxyService>();
+builder.Services.AddHttpClient(FederationProxyService.HttpClientName)
+    .ConfigurePrimaryHttpMessageHandler(() => new System.Net.Http.HttpClientHandler
+    {
+        AllowAutoRedirect = false,
+        AutomaticDecompression = System.Net.DecompressionMethods.None,
+    });
+builder.Services.AddHealthChecks()
+    .AddCheck<FederationUpstreamHealthCheck>("upstream", tags: ["live"]);
+
 builder.Services.Configure<TunnelOptions>(
     builder.Configuration.GetSection(TunnelOptions.SectionName));
 builder.Services.AddSingleton<NgrokTunnelProvider>();
@@ -589,6 +602,7 @@ app.UseMiddleware<InteractionLoggingMiddleware>();
 app.UseMcpIdentityServer();
 app.UseAuthentication();
 app.UseMiddleware<WorkspaceResolutionMiddleware>();
+app.UseMiddleware<FederationMiddleware>();
 app.UseMiddleware<WorkspaceAuthMiddleware>();
 app.UseAuthorization();
 

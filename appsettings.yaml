@@ -69,6 +69,33 @@ Mcp:
       TimeOfDay: 00:00:00
       Year: 1
     DateTimeModified: *o0
+  - WorkspacePath: F:\GitHub\Requirements
+    Name: Requirements
+    TodoPath: docs/TODO.yaml
+    IsPrimary: false
+    IsEnabled: true
+    DateTimeCreated: &o1
+      DateTime: 2026-04-06T00:00:00.0000000
+      UtcDateTime: 2026-04-06T00:00:00.0000000Z
+      LocalDateTime: 2026-04-05T18:00:00.0000000-06:00
+      Date: 2026-04-06T00:00:00.0000000
+      Day: 6
+      DayOfWeek: Monday
+      DayOfYear: 96
+      Hour: 0
+      Millisecond: 0
+      Microsecond: 0
+      Nanosecond: 0
+      Minute: 0
+      Month: 4
+      Offset: 00:00:00
+      TotalOffsetMinutes: 0
+      Second: 0
+      Ticks: 0
+      UtcTicks: 0
+      TimeOfDay: 00:00:00
+      Year: 2026
+    DateTimeModified: *o1
   Instances:
     default:
       Port: 7147
@@ -104,3 +131,10 @@ Mcp:
     Audience: mcp-server-api
     ClientSecret: ''
     RequireHttpsMetadata: false
+  Federation:
+    Enabled: true
+    MaxHops: 3
+    DefaultTarget: ngrok
+    Targets:
+      - Name: ngrok
+        BaseUrl: https://zeugmatically-unindicative-calista.ngrok-free.dev

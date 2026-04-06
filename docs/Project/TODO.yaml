@@ -2653,3 +2653,10 @@ issues:
 
       updated: 2026-02-19T16:17:20Z
     done: false
+Build Infrastructure:
+  high-priority:
+  - id: PLAN-NUKE-001
+    title: Add Nuke Build System and Migrate Build-Related PS Scripts to Targets
+    estimate: 8h
+    note: 'Scaffold Nuke build project, migrate 9 PS scripts to C# targets with TDD, integrate with Azure Pipelines and GitHub Actions, update documentation. See plan file: expressive-popping-deer.md'
+    done: false
