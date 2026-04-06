@@ -106,11 +106,13 @@ WorkspaceConfigEntry? primaryWorkspaceEntry = null;
     primaryWorkspaceEntry ??= workspaces
         .Where(w => w.IsEnabled)
         .FirstOrDefault();
-    if (primaryWorkspaceEntry is not null)
-    {
-        builder.Environment.ContentRootPath = Path.GetFullPath(primaryWorkspaceEntry.WorkspacePath);
-        Directory.SetCurrentDirectory(builder.Environment.ContentRootPath);
-    }
+
+    // Content root must point to a stable, backed-up path — NOT a workspace directory.
+    // Workspace appsettings.yaml files are developer configs and must not override the service config.
+    var dataRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "McpServer-Data");
+    Directory.CreateDirectory(dataRoot);
+    builder.Environment.ContentRootPath = dataRoot;
+    Directory.SetCurrentDirectory(dataRoot);
 }
 
 builder.Host.UseSerilog((context, _, config) =>
