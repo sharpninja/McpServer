@@ -2660,3 +2660,220 @@ Build Infrastructure:
     estimate: 8h
     note: 'Scaffold Nuke build project, migrate 9 PS scripts to C# targets with TDD, integrate with Azure Pipelines and GitHub Actions, update documentation. See plan file: expressive-popping-deer.md'
     done: false
+GraphRAG:
+  high-priority:
+  - id: PLAN-GRAPHRAGADHOC-001
+    title: 'GraphRAG Ad-Hoc: Requirements — FR, TR, TEST entries and mapping'
+    estimate: 1-2h
+    done: false
+    description:
+    - 'Phase 0: Define requirements before implementation begins.'
+    - Add FR-MCP-078 (GraphRAG Ad-Hoc Document Ingestion), FR-MCP-079 (GraphRAG Entity/Relationship CRUD), FR-MCP-080 (GraphRAG Document Management) to Functional-Requirements.md.
+    - Add corresponding TR entries to Technical-Requirements.md.
+    - Add TEST entries to Testing-Requirements.md.
+    - Update TR-per-FR-Mapping.md and Requirements-Matrix.md.
+    technical-details:
+    - 'Modified: docs/Project/Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, TR-per-FR-Mapping.md, Requirements-Matrix.md'
+    depends-on: []
+    implementation-tasks:
+    - task: Add FR-MCP-078/079/080 to Functional-Requirements.md
+      done: false
+    - task: Add TR entries to Technical-Requirements.md
+      done: false
+    - task: Add TEST entries to Testing-Requirements.md
+      done: false
+    - task: Update TR-per-FR-Mapping.md
+      done: false
+    - task: Update Requirements-Matrix.md
+      done: false
+    - task: Post session log turn with results
+      done: false
+  - id: IMPL-GRAPHRAGADHOC-001
+    title: 'GraphRAG Ad-Hoc: Storage layer — entities, relationships, RemoveVector'
+    estimate: 3-4h
+    done: false
+    description:
+    - 'Phase 1 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
+    - Create GraphEntityEntity and GraphRelationshipEntity EF Core entities.
+    - Update McpDbContext with DbSets, model config, query filters, indexes.
+    - Add RemoveVector to IVectorIndexService and implement in VectorIndexService.
+    - Generate EF migration for new tables.
+    technical-details:
+    - 'New files: src/McpServer.Storage/Entities/GraphEntityEntity.cs, GraphRelationshipEntity.cs'
+    - 'Modified: McpDbContext.cs, IVectorIndexService.cs, VectorIndexService.cs'
+    - 'Tests: GraphRagEntityStorageTests.cs, GraphRagRelationshipStorageTests.cs, VectorIndexRemoveTests.cs'
+    depends-on:
+    - PLAN-GRAPHRAGADHOC-001
+    implementation-tasks:
+    - task: Write storage layer unit tests
+      done: false
+    - task: Create GraphEntityEntity and GraphRelationshipEntity
+      done: false
+    - task: Update McpDbContext
+      done: false
+    - task: Add RemoveVector to vector index service
+      done: false
+    - task: Generate EF migration
+      done: false
+    - task: All tests green
+      done: false
+    - task: Post session log turn with results
+      done: false
+  - id: IMPL-GRAPHRAGADHOC-002
+    title: 'GraphRAG Ad-Hoc: DTOs, service interface, and service implementation'
+    estimate: 4-6h
+    done: false
+    description:
+    - 'Phase 2 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
+    - Add ~14 new DTOs to GraphRagModels.cs.
+    - Extend IGraphRagService with 15 new methods.
+    - 'Implement all methods in GraphRagService: text ingest, document mgmt, entity/relationship CRUD.'
+    technical-details:
+    - 'Modified: GraphRagModels.cs, IGraphRagService.cs, GraphRagService.cs'
+    - 'New deps in GraphRagService: McpDbContext, IEmbeddingService, IVectorIndexService'
+    - 'Tests: GraphRagIngestTextTests.cs, GraphRagDocumentManagementTests.cs, GraphRagEntityCrudTests.cs, GraphRagRelationshipCrudTests.cs'
+    depends-on:
+    - IMPL-GRAPHRAGADHOC-001
+    implementation-tasks:
+    - task: Write all service-layer unit tests
+      done: false
+    - task: Add DTOs to GraphRagModels.cs
+      done: false
+    - task: Extend IGraphRagService interface
+      done: false
+    - task: Implement IngestTextAsync
+      done: false
+    - task: Implement document management methods
+      done: false
+    - task: Implement entity CRUD
+      done: false
+    - task: Implement relationship CRUD
+      done: false
+    - task: All tests green
+      done: false
+    - task: Post session log turn with results
+      done: false
+  - id: IMPL-GRAPHRAGADHOC-003
+    title: 'GraphRAG Ad-Hoc: CQRS commands and queries'
+    estimate: 2-3h
+    done: false
+    description:
+    - 'Phase 3 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
+    - 8 command records + handlers, 6 query records + handlers.
+    - Auto-discovered by existing AddCqrsHandlers(Assembly).
+    technical-details:
+    - New files in src/McpServer.GraphRag/Commands/ and Queries/
+    - 'Commands: IngestText, DeleteDocument, CreateEntity, UpdateEntity, DeleteEntity, CreateRelationship, UpdateRelationship, DeleteRelationship'
+    - 'Queries: ListDocuments, GetDocumentChunks, GetEntity, ListEntities, GetRelationship, ListRelationships'
+    - 'Tests: GraphRagCqrsTests.cs'
+    depends-on:
+    - IMPL-GRAPHRAGADHOC-002
+    implementation-tasks:
+    - task: Write CQRS handler tests
+      done: false
+    - task: Create command records and handlers
+      done: false
+    - task: Create query records and handlers
+      done: false
+    - task: All tests green
+      done: false
+    - task: Post session log turn with results
+      done: false
+  - id: IMPL-GRAPHRAGADHOC-004
+    title: 'GraphRAG Ad-Hoc: HTTP controller endpoints'
+    estimate: 2-3h
+    done: false
+    description:
+    - 'Phase 4 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
+    - '14 new action methods on GraphRagController: documents/ingest, documents CRUD, entities CRUD, relationships CRUD.'
+    technical-details:
+    - 'Modified: src/McpServer.Support.Mcp/Controllers/GraphRagController.cs'
+    - Routes under existing mcpserver/graphrag base
+    - 'Tests: GraphRagControllerAdHocTests.cs'
+    depends-on:
+    - IMPL-GRAPHRAGADHOC-003
+    implementation-tasks:
+    - task: Write controller endpoint tests
+      done: false
+    - task: Add document ingest and management endpoints
+      done: false
+    - task: Add entity CRUD endpoints
+      done: false
+    - task: Add relationship CRUD endpoints
+      done: false
+    - task: All tests green
+      done: false
+    - task: Post session log turn with results
+      done: false
+  - id: IMPL-GRAPHRAGADHOC-005
+    title: 'GraphRAG Ad-Hoc: MCP tools'
+    estimate: 1-2h
+    done: false
+    description:
+    - 'Phase 5 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
+    - 14 new [McpServerTool] methods in FwhMcpTools matching the HTTP endpoints.
+    technical-details:
+    - 'Modified: src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs'
+    - 'Tools: graphrag_ingest_text, graphrag_list_documents, graphrag_get_document_chunks, graphrag_delete_document, graphrag_create_entity, etc.'
+    - 'Tests: GraphRagMcpToolTests.cs'
+    depends-on:
+    - IMPL-GRAPHRAGADHOC-004
+    implementation-tasks:
+    - task: Write MCP tool tests
+      done: false
+    - task: Add 14 tool methods
+      done: false
+    - task: All tests green
+      done: false
+    - task: Post session log turn with results
+      done: false
+  - id: IMPL-GRAPHRAGADHOC-006
+    title: 'GraphRAG Ad-Hoc: REPL commands and workflow'
+    estimate: 2-3h
+    done: false
+    description:
+    - 'Phase 6 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
+    - New GraphRagCommandShapes, IGraphRagWorkflow, GraphRagWorkflow.
+    - Add client methods to ContextClient. Register workflow in REPL host DI.
+    technical-details:
+    - 'New: GraphRagCommandShapes.cs, IGraphRagWorkflow.cs, GraphRagWorkflow.cs in Repl.Core'
+    - 'Modified: ContextClient.cs, ServiceCollectionExtensions.cs in Repl.Host'
+    - 'Tests: GraphRagWorkflowTests.cs in Repl.Core.Tests'
+    depends-on:
+    - IMPL-GRAPHRAGADHOC-004
+    implementation-tasks:
+    - task: Write REPL workflow tests
+      done: false
+    - task: Create GraphRagCommandShapes
+      done: false
+    - task: Create IGraphRagWorkflow and GraphRagWorkflow
+      done: false
+    - task: Add client methods to ContextClient
+      done: false
+    - task: Register in REPL host DI
+      done: false
+    - task: All tests green
+      done: false
+    - task: Post session log turn with results
+      done: false
+  - id: IMPL-GRAPHRAGADHOC-007
+    title: 'GraphRAG Ad-Hoc: McpAgent hosted tools'
+    estimate: 1-2h
+    done: false
+    description:
+    - 'Phase 7 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
+    - Add 14 GraphRAG tools to McpHostedAgentToolAdapter via AIFunctionFactory.
+    technical-details:
+    - 'Modified: src/McpServer.McpAgent/Hosting/McpHostedAgentToolAdapter.cs'
+    - 'Tests: GraphRagToolAdapterTests.cs in McpServer.McpAgent.Tests'
+    depends-on:
+    - IMPL-GRAPHRAGADHOC-004
+    implementation-tasks:
+    - task: Write tool adapter tests
+      done: false
+    - task: Add tool methods to McpHostedAgentToolAdapter
+      done: false
+    - task: All tests green
+      done: false
+    - task: Post session log turn with results
+      done: false
