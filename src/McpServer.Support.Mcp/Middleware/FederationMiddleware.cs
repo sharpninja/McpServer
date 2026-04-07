@@ -25,12 +25,17 @@ public sealed class FederationMiddleware
     /// </summary>
     private static readonly string[] LocalOnlyPrefixes =
     [
-        "/auth",          // OIDC proxy (/auth/config, /auth/device, /auth/token, /auth/ui/*)
-        "/connect",       // Embedded IdentityServer endpoints
-        "/.well-known",   // OIDC discovery documents
-        "/health",        // Health checks
-        "/ready",         // Readiness probe
-        "/swagger",       // Swagger UI
+        "/auth",                 // OIDC proxy (/auth/config, /auth/device, /auth/token, /auth/ui/*)
+        "/connect",              // Embedded IdentityServer endpoints
+        "/.well-known",          // OIDC discovery documents
+        "/health",               // Health checks
+        "/ready",                // Readiness probe
+        "/swagger",              // Swagger UI
+        "/api-key",              // Local workspace token issuance
+        "/server-startup-utc",   // Local server metadata
+        "/marker-file-timestamp", // Local marker file state
+        "/mcp-transport",        // MCP JSON-RPC — clients target servers directly
+        "/mcpserver/workspace",  // Workspace list/info is always local
     ];
 
     private readonly RequestDelegate _next;
