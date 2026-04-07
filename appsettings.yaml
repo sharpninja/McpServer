@@ -10,7 +10,10 @@ Serilog:
       McpServer.Support.Mcp.Logging: Verbose
 AllowedHosts: '*'
 VoiceConversation:
+  Enabled: true
   DefaultExecutionStrategy: copilot-cli
+  CopilotModel: gpt-5.3-codex
+  UseDesktopLaunch: true
   ModelApiKeyEnvironmentVariableName: OPENAI_API_KEY
 Embedding:
   Enabled: true
