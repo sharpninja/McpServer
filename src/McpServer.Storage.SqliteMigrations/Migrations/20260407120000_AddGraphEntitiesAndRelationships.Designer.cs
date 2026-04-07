@@ -3,16 +3,19 @@ using System;
 using McpServer.Support.Mcp.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace McpServer.Support.Mcp.Storage.Migrations
+namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 {
     [DbContext(typeof(McpDbContext))]
-    partial class McpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260407120000_AddGraphEntitiesAndRelationships")]
+    partial class AddGraphEntitiesAndRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.12");
@@ -504,9 +507,6 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("EntryCount")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTimeOffset?>("LastUpdated")
                         .HasColumnType("TEXT");
 
@@ -553,6 +553,10 @@ namespace McpServer.Support.Mcp.Storage.Migrations
 
                     b.Property<int?>("TotalTokens")
                         .HasColumnType("INTEGER");
+
+                    b.Property<int>("TurnCount")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("EntryCount");
 
                     b.Property<string>("WorkspaceId")
                         .IsRequired()
@@ -1012,7 +1016,7 @@ namespace McpServer.Support.Mcp.Storage.Migrations
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.SessionLogEntity", "SessionLog")
-                        .WithMany("Entries")
+                        .WithMany("Turns")
                         .HasForeignKey("SessionLogId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1072,7 +1076,7 @@ namespace McpServer.Support.Mcp.Storage.Migrations
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntity", b =>
                 {
-                    b.Navigation("Entries");
+                    b.Navigation("Turns");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnEntity", b =>
