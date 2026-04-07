@@ -92,9 +92,6 @@
 - TEST-MCP-100: Given a PowerShell `McpSession` workspace with an active session cached in `.mcpSession/current-session.json`, when the legacy `.mcpServer/session.yaml` wrapper is missing and the module is reinitialized or resolves a session without an explicit `Session` argument, then it reuses the cached current session object and session ID. When the session is completed, both cache files are removed.
 - TEST-MCP-101: Given trust-bootstrap marker rendering and the public PowerShell bootstrap modules, when the marker signature is valid and `/health` echoes the submitted nonce exactly, then `McpSession`, `McpTodo`, and `McpContext` initialize successfully and proceed with MCP usage. When the signature is invalid or the nonce does not match, then each bootstrap module emits `MCP_UNTRUSTED`, does not probe additional endpoints, and aborts MCP usage before session-log or TODO traffic continues.
 - TEST-MCP-102: Given the provider-factory, native encryption, and maintenance-command workstreams, when SQLite, PostgreSQL, and SQL Server are configured for clean-database integration runs, then provider-specific migrations apply successfully and the live encryption state matches the configured state. When encryption is enabled or disabled on an existing database, then the provider-specific transition workflow shall expose a no-data-loss maintenance procedure and dry-run plan before mutation, with automated dry-run tests covering SQLite SEE, PostgreSQL `pg_tde`, and SQL Server TDE command generation. SQL Server provider and migration integration coverage shall use self-managed SQL Server LocalDB instances that are created and torn down by the test harness, while SQL Server TDE validation shall run against a separate non-LocalDB SQL Server target because LocalDB cannot validate TDE.
-
-## REPL Host Testing Requirements
-
 - TEST-MCP-REPL-001: ✅ **Complete** - Given a REPL host process, when a well-formed YAML command envelope is sent to stdin, then a YAML response envelope is emitted to stdout with `type: result` and the expected result payload. **Covered by:** `Iteration1_IntegrationTests`, `YamlFramingTests`, `YamlEnvelopeShapeTests`
 - TEST-MCP-REPL-002: ✅ **Complete** - Given a REPL host process, when malformed YAML is sent to stdin, then a structured error response is emitted with `type: error` and descriptive error details, without crashing the host process. **Covered by:** `FakeYamlSerializerTests`, `YamlFramingTests`
 - TEST-MCP-REPL-003: ✅ **Complete** - Given a REPL host with no bootstrap invocation, when an operational command is sent, then the response contains `type: error` and appropriate error code. **Covered by:** `ProtocolHandshakeTests`, `TrustBootstrapFlowTests`
@@ -115,11 +112,10 @@
 - TEST-MCP-REPL-018: ✅ **Complete** - Given orchestration rules for trust and auth, when workflows execute, then trust-before-auth and nonce-validation rules are enforced. **Covered by:** `OrchestrationRulesTests`, `TrustBootstrapFlowTests`
 - TEST-MCP-REPL-019: ✅ **Complete** - Given namespace-organized command shapes, when workflows execute, then operations delegate to typed client contracts without duplicating business logic. **Covered by:** `TodoWorkflowTests`, `SessionLogWorkflowTests`, `RequirementsWorkflowTests`, `GenericClientPassthroughTests`
 - TEST-MCP-REPL-020: ✅ **Complete** - Given concurrent REPL operations, when workflows maintain stateful context, then session state and TODO selection are properly isolated per workflow instance. **Covered by:** `SessionLogWorkflowTests` (state management), `TodoWorkflowTests` (selection state)
-
----
-
-## REPL v1.0 Requirements Freeze
-
-**Freeze Tag:** `REPL-v1.0-FREEZE` | **Date:** 2025-01-04
-
-All REPL testing requirements (TEST-MCP-REPL-001 through TEST-MCP-REPL-020) are complete and frozen for v1.0 delivery. Full source code traceability comments have been added to all `McpServer.Repl.Core` and `McpServer.Repl.Host` files. All iteration 1-6 unit tests and integration tests pass with 100% coverage of requirement validation. No defects remain.
+- TEST-GRAPHRAG-ADHOC-001: GraphEntityEntity/GraphRelationshipEntity persist with all fields, workspace isolation, cascade delete, FK validation, and RemoveVector correctness.
+- TEST-GRAPHRAG-ADHOC-002: IngestTextAsync creates document + chunks, generates embeddings, registers vectors, handles empty content, defaults SourceType/SourceKey, and optionally triggers reindex.
+- TEST-GRAPHRAG-ADHOC-003: ListDocumentsAsync pagination and filtering, GetDocumentChunksAsync ordering, DeleteDocumentAsync cascade and vector cleanup.
+- TEST-GRAPHRAG-ADHOC-004: Create/Get/Update/List/Delete for entities and relationships with ID generation, timestamp management, FK validation, cascade behavior.
+- TEST-GRAPHRAG-ADHOC-005: All CQRS command and query handlers delegate to IGraphRagService and wrap results in Result<T>.
+- TEST-GRAPHRAG-ADHOC-006: All 14 controller actions return correct HTTP status codes, content types, and error responses.
+- TEST-GRAPHRAG-ADHOC-007: MCP tools serialize correctly, REPL workflow delegates to ContextClient, McpAgent tool adapter exposes all 14 tools.
