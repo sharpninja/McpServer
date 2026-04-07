@@ -1,3 +1,4 @@
+using System.Globalization;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -126,6 +127,48 @@ public sealed class FederationController : ControllerBase
     }
 
     /// <summary>
+    /// Returns connection credentials for this server so a federated peer can generate a
+    /// marker file that points to this server's public URL.
+    /// The caller must supply a full-access workspace token as <c>X-Api-Key</c>.
+    /// The workspace is looked up by <paramref name="workspaceName"/>; if found, a token is
+    /// issued for that workspace's local path. Returns <c>404</c> when no enabled workspace
+    /// with the given name is registered, so the caller can fall back to local credentials.
+    /// </summary>
+    /// <param name="workspaceName">Display name of the workspace to look up.</param>
+    /// <param name="tokenService">Workspace token service (injected).</param>
+    /// <param name="workspaceService">Workspace service for name lookup (injected).</param>
+    /// <param name="serverRuntimeInfo">Server runtime info (injected).</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Connection info including this server's local base URL and the workspace token, or 404.</returns>
+    [HttpGet("connection")]
+    public async Task<ActionResult<FederationConnectionInfo>> GetConnection(
+        [FromQuery] string workspaceName,
+        [FromServices] WorkspaceTokenService tokenService,
+        [FromServices] IWorkspaceService workspaceService,
+        [FromServices] ServerRuntimeInfo serverRuntimeInfo,
+        CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(workspaceName))
+            return BadRequest(new { error = "workspaceName query parameter is required." });
+
+        // Resolve the workspace by name — paths differ across machines.
+        var workspaces = await workspaceService.ListAsync(ct).ConfigureAwait(false);
+        var match = workspaces.Items.FirstOrDefault(w =>
+            w.IsEnabled &&
+            string.Equals(w.Name, workspaceName.Trim(), StringComparison.OrdinalIgnoreCase));
+
+        if (match is null)
+            return NotFound(new { error = $"No enabled workspace named '{workspaceName}' is registered on this server." });
+
+        var token = tokenService.GetToken(match.WorkspacePath) ?? tokenService.GenerateToken(match.WorkspacePath);
+        _ = tokenService.GetDefaultToken(match.WorkspacePath) ?? tokenService.GenerateDefaultToken(match.WorkspacePath);
+
+        var port = serverRuntimeInfo.ListenPort;
+        var baseUrl = $"http://{System.Net.Dns.GetHostName()}:{port.ToString(CultureInfo.InvariantCulture)}";
+        return Ok(new FederationConnectionInfo(baseUrl, port, token));
+    }
+
+    /// <summary>
     /// Auto-discover federation targets from running tunnel providers.
     /// For each tunnel provider that is currently running and has a public URL, a corresponding
     /// federation target is registered (name = provider name, baseUrl = public URL).
@@ -170,3 +213,12 @@ public sealed record FederationStatusResponse(
 /// <param name="Discovered">Number of new targets registered in this call.</param>
 /// <param name="Targets">The newly registered target info objects.</param>
 public sealed record TunnelDiscoveryResult(int Discovered, IReadOnlyList<FederationTargetInfo> Targets);
+
+/// <summary>
+/// FR-MCP-077: Connection credentials returned by the federation connection endpoint so a
+/// federated peer can generate a marker file pointing to this server.
+/// </summary>
+/// <param name="BaseUrl">This server's local base URL (e.g. <c>http://hostname:7147</c>).</param>
+/// <param name="Port">The TCP port the server is listening on.</param>
+/// <param name="ApiKey">Full-access workspace token for the requested workspace path.</param>
+public sealed record FederationConnectionInfo(string BaseUrl, int Port, string ApiKey);

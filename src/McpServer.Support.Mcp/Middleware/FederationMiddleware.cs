@@ -17,7 +17,21 @@ namespace McpServer.Support.Mcp.Middleware;
 public sealed class FederationMiddleware
 {
     private const string FederationManagementPrefix = "/mcpserver/federation";
-    private const string AuthPrefix = "/auth";
+
+    /// <summary>
+    /// Path prefixes that are always handled locally — never proxied via federation.
+    /// These are server-infrastructure endpoints (auth proxy, OIDC discovery, health, Swagger)
+    /// that must not be forwarded to a remote server.
+    /// </summary>
+    private static readonly string[] LocalOnlyPrefixes =
+    [
+        "/auth",          // OIDC proxy (/auth/config, /auth/device, /auth/token, /auth/ui/*)
+        "/connect",       // Embedded IdentityServer endpoints
+        "/.well-known",   // OIDC discovery documents
+        "/health",        // Health checks
+        "/ready",         // Readiness probe
+        "/swagger",       // Swagger UI
+    ];
 
     private readonly RequestDelegate _next;
     private readonly FederationRegistry _registry;
@@ -48,9 +62,9 @@ public sealed class FederationMiddleware
     /// <param name="workspaceContext">Resolved workspace identity from the preceding middleware.</param>
     public async Task InvokeAsync(HttpContext context, WorkspaceContext workspaceContext)
     {
-        // Management API and auth endpoints are always served locally
+        // Management API and infrastructure endpoints are always served locally
         if (context.Request.Path.StartsWithSegments(FederationManagementPrefix, StringComparison.OrdinalIgnoreCase) ||
-            context.Request.Path.StartsWithSegments(AuthPrefix, StringComparison.OrdinalIgnoreCase))
+            IsLocalOnlyPath(context.Request.Path))
         {
             await _next(context).ConfigureAwait(false);
             return;
@@ -86,6 +100,16 @@ public sealed class FederationMiddleware
         // Proxy to target
         await _proxyService.ProxyAsync(context, target, hopCount + 1, context.RequestAborted)
             .ConfigureAwait(false);
+    }
+
+    private static bool IsLocalOnlyPath(PathString path)
+    {
+        foreach (var prefix in LocalOnlyPrefixes)
+        {
+            if (path.StartsWithSegments(prefix, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+        return false;
     }
 
     private bool TryDetectLoop(HttpContext context, out int hopCount)

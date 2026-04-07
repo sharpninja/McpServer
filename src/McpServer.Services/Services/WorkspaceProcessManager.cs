@@ -1,4 +1,6 @@
 using System.Collections.Concurrent;
+using System.Net.Http.Json;
+using System.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -22,6 +24,8 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
     private readonly IMarkerPromptProvider _markerPromptProvider;
     private readonly WorkspaceTokenService _tokenService;
     private readonly ServerRuntimeInfo _serverRuntimeInfo;
+    private readonly FederationRegistry? _federationRegistry;
+    private readonly IHttpClientFactory? _httpClientFactory;
     private readonly IChangeEventBus? _eventBus;
 
     private string? _primaryWorkspaceKey;
@@ -35,6 +39,8 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         IMarkerPromptProvider markerPromptProvider,
         WorkspaceTokenService tokenService,
         ServerRuntimeInfo serverRuntimeInfo,
+        FederationRegistry? federationRegistry = null,
+        IHttpClientFactory? httpClientFactory = null,
         IChangeEventBus? eventBus = null)
     {
         _logger = logger;
@@ -43,6 +49,8 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         _markerPromptProvider = markerPromptProvider;
         _tokenService = tokenService;
         _serverRuntimeInfo = serverRuntimeInfo;
+        _federationRegistry = federationRegistry;
+        _httpClientFactory = httpClientFactory;
         _eventBus = eventBus;
         _ = loggerFactory;
     }
@@ -64,8 +72,10 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
 
         var name = DeriveWorkspaceName(key);
         var agentAdditions = await GetAgentAdditionsAsync(key, ct).ConfigureAwait(false);
+        var (overrideBaseUrl, upstreamApiKey) = await ResolveUpstreamConnectionAsync(key, workspace.Name ?? name, token, ct).ConfigureAwait(false);
         await MarkerFileService.WriteMarkerAsync(key, port, name, _logger, ct,
-            globalTemplate, workspace.PromptTemplate, token, workspace, agentAdditions, _serverRuntimeInfo.StartedAtUtc).ConfigureAwait(false);
+            globalTemplate, workspace.PromptTemplate, upstreamApiKey ?? token, workspace, agentAdditions,
+            _serverRuntimeInfo.StartedAtUtc, overrideBaseUrl).ConfigureAwait(false);
         await PublishMarkerChangeSafeAsync(ChangeEventActions.Updated, key, ct).ConfigureAwait(false);
 
         _activeWorkspaces[key] = port;
@@ -126,8 +136,10 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             var token = _tokenService.GetToken(key) ?? _tokenService.GenerateToken(key);
             _ = _tokenService.GetDefaultToken(key) ?? _tokenService.GenerateDefaultToken(key);
             var agentAdditions = await GetAgentAdditionsAsync(key, ct).ConfigureAwait(false);
+            var (overrideBaseUrl, upstreamApiKey) = await ResolveUpstreamConnectionAsync(key, ws.Name ?? name, token, ct).ConfigureAwait(false);
             await MarkerFileService.WriteMarkerAsync(key, _serverRuntimeInfo.ListenPort, name, _logger, ct,
-                globalTemplate, ws.PromptTemplate, token, ws, agentAdditions, _serverRuntimeInfo.StartedAtUtc).ConfigureAwait(false);
+                globalTemplate, ws.PromptTemplate, upstreamApiKey ?? token, ws, agentAdditions,
+                _serverRuntimeInfo.StartedAtUtc, overrideBaseUrl).ConfigureAwait(false);
             await PublishMarkerChangeSafeAsync(ChangeEventActions.Updated, key, ct).ConfigureAwait(false);
         }
 
@@ -219,6 +231,78 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
             .ToList();
     }
 
+    /// <summary>
+    /// When federation is enabled and a default target is configured, attempts to fetch
+    /// connection credentials from the upstream server's
+    /// <c>GET /mcpserver/federation/connection</c> endpoint by workspace name.
+    /// Workspace names are used instead of paths because paths may differ across machines.
+    /// Returns the upstream's public base URL and workspace-specific API key so the marker
+    /// file can point agents directly at the federated server.
+    /// Falls back gracefully to <c>(null, null)</c> — indicating local credentials — when
+    /// federation is disabled, no target is configured, the workspace is not found on the
+    /// remote server (404), or any other error occurs.
+    /// </summary>
+    private async Task<(string? OverrideBaseUrl, string? UpstreamApiKey)> ResolveUpstreamConnectionAsync(
+        string workspacePath, string workspaceName, string localApiKey, CancellationToken ct)
+    {
+        if (_federationRegistry is null || !_federationRegistry.IsEnabled)
+            return (null, null);
+
+        var target = _federationRegistry.ResolveTarget(workspacePath);
+        if (target is null)
+            return (null, null);
+
+        if (_httpClientFactory is null)
+        {
+            _logger.LogWarning(
+                "Federation is enabled for {WorkspacePath} but IHttpClientFactory is not available — using local credentials.",
+                workspacePath);
+            return (target.BaseUrl, null);
+        }
+
+        // Use the target's ApiKey if configured; otherwise use the local workspace token (for self-federation).
+        var authKey = target.ApiKey ?? localApiKey;
+        var encodedName = HttpUtility.UrlEncode(workspaceName);
+        var url = $"{target.BaseUrl}/mcpserver/federation/connection?workspaceName={encodedName}";
+
+        try
+        {
+            using var client = _httpClientFactory.CreateClient(FederationProxyService.HttpClientName);
+            using var request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.TryAddWithoutValidation("X-Api-Key", authKey);
+
+            using var response = await client.SendAsync(request, ct).ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogWarning(
+                    "Upstream federation/connection returned {StatusCode} for workspace {WorkspacePath} — using local credentials.",
+                    (int)response.StatusCode, workspacePath);
+                return (null, null);
+            }
+
+            var info = await response.Content.ReadFromJsonAsync<FederationConnectionResult>(ct).ConfigureAwait(false);
+            if (info is null || string.IsNullOrWhiteSpace(info.ApiKey))
+            {
+                _logger.LogWarning(
+                    "Upstream federation/connection returned an empty API key for workspace {WorkspacePath} — using local credentials.",
+                    workspacePath);
+                return (null, null);
+            }
+
+            _logger.LogInformation(
+                "Marker for {WorkspacePath} will use upstream {BaseUrl}.", workspacePath, target.BaseUrl);
+            return (target.BaseUrl, info.ApiKey);
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or OperationCanceledException)
+        {
+            _logger.LogWarning(ex,
+                "Could not reach upstream at {Url} for workspace {WorkspacePath} — using local credentials.",
+                url, workspacePath);
+            return (null, null);
+        }
+    }
+
     private async Task PublishMarkerChangeSafeAsync(string action, string entityId, CancellationToken cancellationToken)
     {
         if (_eventBus is null)
@@ -242,3 +326,9 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         }
     }
 }
+
+/// <summary>
+/// Internal DTO used to deserialize the JSON body returned by the upstream server's
+/// <c>GET /mcpserver/federation/connection</c> endpoint.
+/// </summary>
+internal sealed record FederationConnectionResult(string BaseUrl, int Port, string ApiKey);

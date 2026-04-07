@@ -33,6 +33,8 @@ public static class MarkerFileService
 
     /// <summary>
     /// Writes the <c>AGENTS-README-FIRST.yaml</c> marker file to <paramref name="workspacePath"/>.
+    /// When <paramref name="overrideBaseUrl"/> is supplied the marker uses that URL (e.g. a
+    /// federation upstream or ngrok tunnel) instead of the default <c>http://hostname:port</c>.
     /// </summary>
     public static async Task WriteMarkerAsync(
         string workspacePath,
@@ -45,9 +47,23 @@ public static class MarkerFileService
         string? apiKey = null,
         WorkspaceDto? workspace = null,
         IReadOnlyList<(string AgentId, string Content)>? agentAdditions = null,
-        DateTimeOffset? serverStartedAtUtc = null)
+        DateTimeOffset? serverStartedAtUtc = null,
+        string? overrideBaseUrl = null)
     {
-        var baseUrl = $"http://{System.Net.Dns.GetHostName()}:{port.ToString(CultureInfo.InvariantCulture)}";
+        string baseUrl;
+        if (!string.IsNullOrWhiteSpace(overrideBaseUrl))
+        {
+            baseUrl = overrideBaseUrl.TrimEnd('/');
+            // Derive port from the override URL so the marker Port field is consistent.
+            if (Uri.TryCreate(baseUrl, UriKind.Absolute, out var overrideUri))
+                port = overrideUri.IsDefaultPort
+                    ? (string.Equals(overrideUri.Scheme, "https", StringComparison.OrdinalIgnoreCase) ? 443 : 80)
+                    : overrideUri.Port;
+        }
+        else
+        {
+            baseUrl = $"http://{System.Net.Dns.GetHostName()}:{port.ToString(CultureInfo.InvariantCulture)}";
+        }
         var markerPath = Path.Combine(workspacePath, MarkerFileName);
         var markerWrittenAtUtc = DateTimeOffset.UtcNow;
         var resolvedServerStartedAtUtc = (serverStartedAtUtc ?? markerWrittenAtUtc).ToUniversalTime();
