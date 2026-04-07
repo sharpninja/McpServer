@@ -45,31 +45,17 @@ internal static class IdentityServerConfig
             AllowedScopes = { options.ApiScopeName },
         },
 
-        // Interactive client for CLI tools (Device Authorization + Password flows)
+        // Unified public client for CLI tools, web UI, and browser-based flows
         new DuendeClient
         {
             ClientId = "mcp-director",
-            ClientName = "MCP Director CLI",
+            ClientName = "MCP Director",
             AllowedGrantTypes =
             {
+                GrantType.AuthorizationCode,
                 "urn:ietf:params:oauth:grant-type:device_code",
                 GrantType.ResourceOwnerPassword,
             },
-            RequireClientSecret = false,
-            AllowedScopes = { "openid", "profile", "email", "roles", options.ApiScopeName },
-            AllowOfflineAccess = true,
-            AccessTokenLifetime = 3600,
-            RefreshTokenUsage = TokenUsage.ReUse,
-            RefreshTokenExpiration = TokenExpiration.Sliding,
-            SlidingRefreshTokenLifetime = 86400,
-        },
-
-        // Web/SPA client for pairing UI and browser-based access
-        new DuendeClient
-        {
-            ClientId = "mcp-web",
-            ClientName = "MCP Web Client",
-            AllowedGrantTypes = GrantTypes.Code,
             RequirePkce = true,
             RequireClientSecret = false,
             RedirectUris =
@@ -89,6 +75,10 @@ internal static class IdentityServerConfig
             },
             AllowedScopes = { "openid", "profile", "email", "roles", options.ApiScopeName },
             AllowOfflineAccess = true,
+            AccessTokenLifetime = 3600,
+            RefreshTokenUsage = TokenUsage.ReUse,
+            RefreshTokenExpiration = TokenExpiration.Sliding,
+            SlidingRefreshTokenLifetime = 86400,
         },
     ];
 }
