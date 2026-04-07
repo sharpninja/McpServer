@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
@@ -109,6 +110,132 @@ public sealed class ContextClient : McpClientBase
             ResponseTokenBudget = responseTokenBudget
         };
         return await PostAsync<GraphRagQueryResult>("mcpserver/graphrag/query", request, cancellationToken);
+    }
+
+    // ── Ad-Hoc Text Ingestion (FR-MCP-078, TR-GRAPHRAG-ADHOC-001) ──
+
+    /// <summary>Ingest raw text into the GraphRAG corpus.</summary>
+    public async Task<GraphRagIngestTextResult> GraphRagIngestTextAsync(
+        GraphRagIngestTextRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<GraphRagIngestTextResult>("mcpserver/graphrag/documents/ingest", request, cancellationToken);
+    }
+
+    // ── Document Management (FR-MCP-080, TR-GRAPHRAG-ADHOC-003) ──
+
+    /// <summary>List documents in the GraphRAG corpus with pagination.</summary>
+    public async Task<GraphRagDocumentListResult> GraphRagListDocumentsAsync(
+        int skip = 0, int take = 50, string? sourceType = null, CancellationToken cancellationToken = default)
+    {
+        var path = $"mcpserver/graphrag/documents?skip={skip}&take={take}";
+        if (!string.IsNullOrWhiteSpace(sourceType))
+            path += $"&sourceType={Uri.EscapeDataString(sourceType)}";
+        return await GetAsync<GraphRagDocumentListResult>(path, cancellationToken);
+    }
+
+    /// <summary>Retrieve all chunks for a specific document.</summary>
+    public async Task<GraphRagDocumentChunksResult> GraphRagGetDocumentChunksAsync(
+        string documentId, CancellationToken cancellationToken = default)
+    {
+        return await GetAsync<GraphRagDocumentChunksResult>(
+            $"mcpserver/graphrag/documents/{Uri.EscapeDataString(documentId)}/chunks", cancellationToken);
+    }
+
+    /// <summary>Delete a document and its chunks from the corpus.</summary>
+    public async Task<GraphRagDocumentDeleteResult> GraphRagDeleteDocumentAsync(
+        string documentId, CancellationToken cancellationToken = default)
+    {
+        return await DeleteAsync<GraphRagDocumentDeleteResult>(
+            $"mcpserver/graphrag/documents/{Uri.EscapeDataString(documentId)}", cancellationToken);
+    }
+
+    // ── Entity CRUD (FR-MCP-079, TR-GRAPHRAG-ADHOC-002) ──
+
+    /// <summary>Create a new graph entity.</summary>
+    public async Task<GraphEntityResult> GraphRagCreateEntityAsync(
+        GraphEntityRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<GraphEntityResult>("mcpserver/graphrag/entities", request, cancellationToken);
+    }
+
+    /// <summary>List graph entities with pagination and optional type filter.</summary>
+    public async Task<GraphEntityListResult> GraphRagListEntitiesAsync(
+        int skip = 0, int take = 50, string? entityType = null, CancellationToken cancellationToken = default)
+    {
+        var path = $"mcpserver/graphrag/entities?skip={skip}&take={take}";
+        if (!string.IsNullOrWhiteSpace(entityType))
+            path += $"&entityType={Uri.EscapeDataString(entityType)}";
+        return await GetAsync<GraphEntityListResult>(path, cancellationToken);
+    }
+
+    /// <summary>Retrieve a graph entity by ID.</summary>
+    public async Task<GraphEntityResult> GraphRagGetEntityAsync(
+        string entityId, CancellationToken cancellationToken = default)
+    {
+        return await GetAsync<GraphEntityResult>(
+            $"mcpserver/graphrag/entities/{Uri.EscapeDataString(entityId)}", cancellationToken);
+    }
+
+    /// <summary>Update an existing graph entity.</summary>
+    public async Task<GraphEntityResult> GraphRagUpdateEntityAsync(
+        string entityId, GraphEntityRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PutAsync<GraphEntityResult>(
+            $"mcpserver/graphrag/entities/{Uri.EscapeDataString(entityId)}", request, cancellationToken);
+    }
+
+    /// <summary>Delete a graph entity by ID.</summary>
+    public async Task GraphRagDeleteEntityAsync(
+        string entityId, CancellationToken cancellationToken = default)
+    {
+        await SendForStatusAsync(HttpMethod.Delete,
+            $"mcpserver/graphrag/entities/{Uri.EscapeDataString(entityId)}", null, cancellationToken);
+    }
+
+    // ── Relationship CRUD (FR-MCP-079, TR-GRAPHRAG-ADHOC-002) ──
+
+    /// <summary>Create a new graph relationship.</summary>
+    public async Task<GraphRelationshipResult> GraphRagCreateRelationshipAsync(
+        GraphRelationshipRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<GraphRelationshipResult>("mcpserver/graphrag/relationships", request, cancellationToken);
+    }
+
+    /// <summary>List graph relationships with pagination and optional filters.</summary>
+    public async Task<GraphRelationshipListResult> GraphRagListRelationshipsAsync(
+        int skip = 0, int take = 50, string? entityId = null, string? type = null,
+        CancellationToken cancellationToken = default)
+    {
+        var path = $"mcpserver/graphrag/relationships?skip={skip}&take={take}";
+        if (!string.IsNullOrWhiteSpace(entityId))
+            path += $"&entityId={Uri.EscapeDataString(entityId)}";
+        if (!string.IsNullOrWhiteSpace(type))
+            path += $"&type={Uri.EscapeDataString(type)}";
+        return await GetAsync<GraphRelationshipListResult>(path, cancellationToken);
+    }
+
+    /// <summary>Retrieve a graph relationship by ID.</summary>
+    public async Task<GraphRelationshipResult> GraphRagGetRelationshipAsync(
+        string relationshipId, CancellationToken cancellationToken = default)
+    {
+        return await GetAsync<GraphRelationshipResult>(
+            $"mcpserver/graphrag/relationships/{Uri.EscapeDataString(relationshipId)}", cancellationToken);
+    }
+
+    /// <summary>Update an existing graph relationship.</summary>
+    public async Task<GraphRelationshipResult> GraphRagUpdateRelationshipAsync(
+        string relationshipId, GraphRelationshipRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PutAsync<GraphRelationshipResult>(
+            $"mcpserver/graphrag/relationships/{Uri.EscapeDataString(relationshipId)}", request, cancellationToken);
+    }
+
+    /// <summary>Delete a graph relationship by ID.</summary>
+    public async Task GraphRagDeleteRelationshipAsync(
+        string relationshipId, CancellationToken cancellationToken = default)
+    {
+        await SendForStatusAsync(HttpMethod.Delete,
+            $"mcpserver/graphrag/relationships/{Uri.EscapeDataString(relationshipId)}", null, cancellationToken);
     }
 }
 

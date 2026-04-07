@@ -1,7 +1,10 @@
+using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Storage;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
@@ -9,6 +12,7 @@ using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Services;
 
+/// <summary>Tests for core GraphRagService lifecycle operations (status, init, index, query).</summary>
 public sealed class GraphRagServiceTests : IDisposable
 {
     private readonly string _workspacePath;
@@ -199,12 +203,29 @@ public sealed class GraphRagServiceTests : IDisposable
             new ExternalCommandGraphRagBackendAdapter(runner, NullLogger<ExternalCommandGraphRagBackendAdapter>.Instance)
         };
 
+        var dbOptions = new DbContextOptionsBuilder<McpDbContext>()
+            .UseInMemoryDatabase($"GraphRagServiceTests_{Guid.NewGuid():N}")
+            .Options;
+        var db = new McpDbContext(dbOptions);
+        db.Database.EnsureCreated();
+        db.OverrideWorkspaceId(effectiveWorkspacePath);
+
+        var embeddingService = Substitute.For<IEmbeddingService>();
+        embeddingService.Dimensions.Returns(384);
+        embeddingService.IsAvailable.Returns(true);
+        embeddingService.GenerateEmbedding(Arg.Any<string>()).Returns(new float[384]);
+
+        var vectorIndexService = Substitute.For<IVectorIndexService>();
+
         return new GraphRagService(
             options,
             ingestion,
             workspaceContext,
             contextSearch,
             adapters,
-            NullLogger<GraphRagService>.Instance);
+            NullLogger<GraphRagService>.Instance,
+            db,
+            embeddingService,
+            vectorIndexService);
     }
 }

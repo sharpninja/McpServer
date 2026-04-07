@@ -75,6 +75,12 @@ public sealed class McpDbContext : DbContext
     /// <summary>Agent lifecycle event audit log.</summary>
     public DbSet<AgentEventLogEntity> AgentEventLogs => Set<AgentEventLogEntity>();
 
+    /// <summary>FR-MCP-079: Explicit graph entity nodes.</summary>
+    public DbSet<GraphEntityEntity> GraphEntities => Set<GraphEntityEntity>();
+
+    /// <summary>FR-MCP-079: Explicit graph relationship edges.</summary>
+    public DbSet<GraphRelationshipEntity> GraphRelationships => Set<GraphRelationshipEntity>();
+
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -210,6 +216,27 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => x.EventType);
         });
 
+        modelBuilder.Entity<GraphEntityEntity>(e =>
+        {
+            e.HasIndex(x => x.Name);
+            e.HasIndex(x => x.EntityType);
+        });
+
+        modelBuilder.Entity<GraphRelationshipEntity>(e =>
+        {
+            e.HasIndex(x => x.SourceEntityId);
+            e.HasIndex(x => x.TargetEntityId);
+            e.HasIndex(x => x.RelationshipType);
+            e.HasOne(x => x.SourceEntity)
+                .WithMany(x => x.SourceRelationships)
+                .HasForeignKey(x => x.SourceEntityId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasOne(x => x.TargetEntity)
+                .WithMany(x => x.TargetRelationships)
+                .HasForeignKey(x => x.TargetEntityId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
         modelBuilder.Entity<ContextDocumentEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<SessionLogEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
@@ -226,6 +253,8 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<AgentDefinitionEntity>().HasQueryFilter(e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
         modelBuilder.Entity<AgentWorkspaceEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<AgentEventLogEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<GraphEntityEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<GraphRelationshipEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
 
         modelBuilder.Entity<ContextDocumentEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasIndex(e => e.WorkspaceId);
@@ -241,6 +270,8 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<AgentDefinitionEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<AgentWorkspaceEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<AgentEventLogEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<GraphEntityEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<GraphRelationshipEntity>().HasIndex(e => e.WorkspaceId);
     }
 
     /// <inheritdoc />

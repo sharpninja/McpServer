@@ -5,15 +5,21 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using McpServer.Support.Mcp.Indexing;
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Options;
+using McpServer.Support.Mcp.Storage;
+using McpServer.Support.Mcp.Storage.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
 /// Orchestrates workspace-scoped GraphRAG lifecycle and routes backend execution to adapter implementations.
+/// FR-MCP-078/079/080, TR-GRAPHRAG-ADHOC-001/002/003: Extended with ad-hoc text ingestion,
+/// document management, entity CRUD, and relationship CRUD.
 /// </summary>
 internal sealed class GraphRagService : IGraphRagService
 {
@@ -29,14 +35,21 @@ internal sealed class GraphRagService : IGraphRagService
     private readonly IContextSearchService _contextSearchService;
     private readonly IReadOnlyList<IGraphRagBackendAdapter> _backendAdapters;
     private readonly ILogger<GraphRagService> _logger;
+    private readonly McpDbContext _dbContext;
+    private readonly IEmbeddingService _embeddingService;
+    private readonly IVectorIndexService _vectorIndexService;
 
+    /// <summary>FR-MCP-078/079/080: Initializes the service with all required dependencies.</summary>
     public GraphRagService(
         IOptions<GraphRagOptions> options,
         IOptions<IngestionOptions> ingestionOptions,
         WorkspaceContext workspaceContext,
         IContextSearchService contextSearchService,
         IEnumerable<IGraphRagBackendAdapter> backendAdapters,
-        ILogger<GraphRagService> logger)
+        ILogger<GraphRagService> logger,
+        McpDbContext dbContext,
+        IEmbeddingService embeddingService,
+        IVectorIndexService vectorIndexService)
     {
         _options = options.Value;
         _ingestionOptions = ingestionOptions.Value;
@@ -44,6 +57,9 @@ internal sealed class GraphRagService : IGraphRagService
         _contextSearchService = contextSearchService;
         _backendAdapters = backendAdapters.ToList();
         _logger = logger;
+        _dbContext = dbContext;
+        _embeddingService = embeddingService;
+        _vectorIndexService = vectorIndexService;
     }
 
     public async Task<GraphRagStatusResponse> GetStatusAsync(CancellationToken cancellationToken = default)
@@ -284,6 +300,394 @@ internal sealed class GraphRagService : IGraphRagService
             QueryCorpus = "context-search",
             VisibilityNote = "Fallback query uses context-search chunks; GraphRAG input visibility depends on ingestion into context-search."
         };
+    }
+
+    // ── Ad-Hoc Text Ingestion (FR-MCP-078, TR-GRAPHRAG-ADHOC-001) ──
+
+    /// <inheritdoc />
+    public async Task<GraphRagIngestTextResponse> IngestTextAsync(GraphRagIngestTextRequest request, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        if (string.IsNullOrWhiteSpace(request.Content))
+            throw new ArgumentException("Content must not be empty.", nameof(request));
+
+        var documentId = $"adhoc-{Guid.NewGuid():N}";
+        var contentHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(request.Content)));
+        var sourceType = request.SourceType ?? "adhoc-text";
+        var sourceKey = request.SourceKey ?? request.Title ?? documentId;
+
+        var chunker = new Chunker();
+        var chunks = chunker.Chunk(documentId, request.Content);
+        var totalTokens = chunks.Sum(c => c.TokenCount);
+
+        var docEntity = new ContextDocumentEntity
+        {
+            Id = documentId,
+            SourceType = sourceType,
+            SourceKey = sourceKey,
+            IngestedAt = DateTime.UtcNow,
+            ContentHash = contentHash,
+        };
+        _dbContext.Documents.Add(docEntity);
+
+        foreach (var chunk in chunks)
+        {
+            var embedding = _embeddingService.GenerateEmbedding(chunk.Content);
+            var chunkEntity = new ContextChunkEntity
+            {
+                Id = chunk.Id,
+                DocumentId = documentId,
+                Content = chunk.Content,
+                TokenCount = chunk.TokenCount,
+                ChunkIndex = chunk.ChunkIndex,
+                Embedding = EmbeddingToBytes(embedding),
+            };
+            _dbContext.Chunks.Add(chunkEntity);
+            _vectorIndexService.AddVector(chunk.Id, embedding);
+        }
+
+        await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);
+
+        var reindexTriggered = false;
+        if (request.TriggerReindex)
+        {
+            await IndexAsync(null, ct).ConfigureAwait(false);
+            reindexTriggered = true;
+        }
+
+        _logger.LogInformation("GraphRAG ad-hoc text ingested: DocumentId={DocumentId}, Chunks={ChunkCount}, Tokens={TokenCount}",
+            documentId, chunks.Count, totalTokens);
+
+        return new GraphRagIngestTextResponse
+        {
+            DocumentId = documentId,
+            ChunkCount = chunks.Count,
+            TokenCount = totalTokens,
+            SourceType = sourceType,
+            SourceKey = sourceKey,
+            ReindexTriggered = reindexTriggered,
+        };
+    }
+
+    // ── Document Management (FR-MCP-080, TR-GRAPHRAG-ADHOC-003) ──
+
+    /// <inheritdoc />
+    public async Task<GraphRagDocumentListResponse> ListDocumentsAsync(int skip = 0, int take = 50, string? sourceType = null, CancellationToken ct = default)
+    {
+        var query = _dbContext.Documents.AsQueryable();
+        if (!string.IsNullOrWhiteSpace(sourceType))
+            query = query.Where(d => d.SourceType == sourceType);
+
+        var totalCount = await query.CountAsync(ct).ConfigureAwait(false);
+        var docs = await query
+            .OrderByDescending(d => d.IngestedAt)
+            .Skip(skip)
+            .Take(take)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+
+        var docIds = docs.Select(d => d.Id).ToList();
+        var chunkStats = await _dbContext.Chunks
+            .Where(c => docIds.Contains(c.DocumentId))
+            .GroupBy(c => c.DocumentId)
+            .Select(g => new { DocumentId = g.Key, ChunkCount = g.Count(), TotalTokens = g.Sum(c => c.TokenCount) })
+            .ToDictionaryAsync(x => x.DocumentId, ct)
+            .ConfigureAwait(false);
+
+        var summaries = docs.Select(d =>
+        {
+            chunkStats.TryGetValue(d.Id, out var stats);
+            return new GraphRagDocumentSummary
+            {
+                Id = d.Id,
+                SourceType = d.SourceType,
+                SourceKey = d.SourceKey,
+                IngestedAt = d.IngestedAt,
+                ContentHash = d.ContentHash,
+                ChunkCount = stats?.ChunkCount ?? 0,
+                TotalTokens = stats?.TotalTokens ?? 0,
+            };
+        }).ToList();
+
+        return new GraphRagDocumentListResponse
+        {
+            Documents = summaries,
+            TotalCount = totalCount,
+        };
+    }
+
+    /// <inheritdoc />
+    public async Task<GraphRagDocumentChunksResponse?> GetDocumentChunksAsync(string documentId, CancellationToken ct = default)
+    {
+        var doc = await _dbContext.Documents.FirstOrDefaultAsync(d => d.Id == documentId, ct).ConfigureAwait(false);
+        if (doc is null)
+            return null;
+
+        var chunks = await _dbContext.Chunks
+            .Where(c => c.DocumentId == documentId)
+            .OrderBy(c => c.ChunkIndex)
+            .Select(c => new GraphRagDocumentChunkItem
+            {
+                Id = c.Id,
+                Content = c.Content,
+                TokenCount = c.TokenCount,
+                ChunkIndex = c.ChunkIndex,
+            })
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+
+        return new GraphRagDocumentChunksResponse
+        {
+            DocumentId = documentId,
+            Chunks = chunks,
+            TotalChunks = chunks.Count,
+        };
+    }
+
+    /// <inheritdoc />
+    public async Task<GraphRagDocumentDeleteResponse> DeleteDocumentAsync(string documentId, CancellationToken ct = default)
+    {
+        var doc = await _dbContext.Documents.FirstOrDefaultAsync(d => d.Id == documentId, ct).ConfigureAwait(false);
+        if (doc is null)
+            return new GraphRagDocumentDeleteResponse { DocumentId = documentId, ChunksRemoved = 0, Success = false };
+
+        var chunks = await _dbContext.Chunks
+            .Where(c => c.DocumentId == documentId)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+
+        foreach (var chunk in chunks)
+        {
+            _vectorIndexService.RemoveVector(chunk.Id);
+        }
+
+        _dbContext.Chunks.RemoveRange(chunks);
+        _dbContext.Documents.Remove(doc);
+        await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);
+
+        _logger.LogInformation("GraphRAG document deleted: DocumentId={DocumentId}, ChunksRemoved={ChunkCount}",
+            documentId, chunks.Count);
+
+        return new GraphRagDocumentDeleteResponse
+        {
+            DocumentId = documentId,
+            ChunksRemoved = chunks.Count,
+            Success = true,
+        };
+    }
+
+    // ── Entity CRUD (FR-MCP-079, TR-GRAPHRAG-ADHOC-002) ──
+
+    /// <inheritdoc />
+    public async Task<GraphEntityResponse> CreateEntityAsync(GraphEntityRequest request, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        var now = DateTime.UtcNow;
+        var entity = new GraphEntityEntity
+        {
+            Id = $"ge-{Guid.NewGuid():N}",
+            Name = request.Name,
+            EntityType = request.EntityType,
+            Description = request.Description,
+            Metadata = request.Metadata,
+            CreatedAtUtc = now,
+            UpdatedAtUtc = now,
+        };
+
+        _dbContext.GraphEntities.Add(entity);
+        await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);
+
+        return MapEntityToResponse(entity);
+    }
+
+    /// <inheritdoc />
+    public async Task<GraphEntityResponse?> GetEntityAsync(string entityId, CancellationToken ct = default)
+    {
+        var entity = await _dbContext.GraphEntities.FirstOrDefaultAsync(e => e.Id == entityId, ct).ConfigureAwait(false);
+        return entity is null ? null : MapEntityToResponse(entity);
+    }
+
+    /// <inheritdoc />
+    public async Task<GraphEntityResponse?> UpdateEntityAsync(string entityId, GraphEntityRequest request, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        var entity = await _dbContext.GraphEntities.FirstOrDefaultAsync(e => e.Id == entityId, ct).ConfigureAwait(false);
+        if (entity is null)
+            return null;
+
+        entity.Name = request.Name;
+        entity.EntityType = request.EntityType;
+        entity.Description = request.Description;
+        entity.Metadata = request.Metadata;
+        entity.UpdatedAtUtc = DateTime.UtcNow;
+
+        await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);
+        return MapEntityToResponse(entity);
+    }
+
+    /// <inheritdoc />
+    public async Task<GraphEntityListResponse> ListEntitiesAsync(int skip = 0, int take = 50, string? entityType = null, CancellationToken ct = default)
+    {
+        var query = _dbContext.GraphEntities.AsQueryable();
+        if (!string.IsNullOrWhiteSpace(entityType))
+            query = query.Where(e => e.EntityType == entityType);
+
+        var totalCount = await query.CountAsync(ct).ConfigureAwait(false);
+        var entities = await query
+            .OrderBy(e => e.CreatedAtUtc)
+            .Skip(skip)
+            .Take(take)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+
+        return new GraphEntityListResponse
+        {
+            Entities = entities.Select(MapEntityToResponse).ToList(),
+            TotalCount = totalCount,
+        };
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> DeleteEntityAsync(string entityId, CancellationToken ct = default)
+    {
+        var entity = await _dbContext.GraphEntities.FirstOrDefaultAsync(e => e.Id == entityId, ct).ConfigureAwait(false);
+        if (entity is null)
+            return false;
+
+        _dbContext.GraphEntities.Remove(entity);
+        await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);
+        return true;
+    }
+
+    // ── Relationship CRUD (FR-MCP-079, TR-GRAPHRAG-ADHOC-002) ──
+
+    /// <inheritdoc />
+    public async Task<GraphRelationshipResponse> CreateRelationshipAsync(GraphRelationshipRequest request, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
+        var sourceExists = await _dbContext.GraphEntities.AnyAsync(e => e.Id == request.SourceEntityId, ct).ConfigureAwait(false);
+        if (!sourceExists)
+            throw new InvalidOperationException($"Source entity '{request.SourceEntityId}' does not exist.");
+
+        var targetExists = await _dbContext.GraphEntities.AnyAsync(e => e.Id == request.TargetEntityId, ct).ConfigureAwait(false);
+        if (!targetExists)
+            throw new InvalidOperationException($"Target entity '{request.TargetEntityId}' does not exist.");
+
+        var now = DateTime.UtcNow;
+        var relationship = new GraphRelationshipEntity
+        {
+            Id = $"gr-{Guid.NewGuid():N}",
+            SourceEntityId = request.SourceEntityId,
+            TargetEntityId = request.TargetEntityId,
+            RelationshipType = request.RelationshipType,
+            Description = request.Description,
+            Weight = request.Weight,
+            Metadata = request.Metadata,
+            CreatedAtUtc = now,
+            UpdatedAtUtc = now,
+        };
+
+        _dbContext.GraphRelationships.Add(relationship);
+        await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);
+
+        return MapRelationshipToResponse(relationship);
+    }
+
+    /// <inheritdoc />
+    public async Task<GraphRelationshipResponse?> GetRelationshipAsync(string relationshipId, CancellationToken ct = default)
+    {
+        var rel = await _dbContext.GraphRelationships.FirstOrDefaultAsync(r => r.Id == relationshipId, ct).ConfigureAwait(false);
+        return rel is null ? null : MapRelationshipToResponse(rel);
+    }
+
+    /// <inheritdoc />
+    public async Task<GraphRelationshipResponse?> UpdateRelationshipAsync(string relationshipId, GraphRelationshipRequest request, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        var rel = await _dbContext.GraphRelationships.FirstOrDefaultAsync(r => r.Id == relationshipId, ct).ConfigureAwait(false);
+        if (rel is null)
+            return null;
+
+        rel.SourceEntityId = request.SourceEntityId;
+        rel.TargetEntityId = request.TargetEntityId;
+        rel.RelationshipType = request.RelationshipType;
+        rel.Description = request.Description;
+        rel.Weight = request.Weight;
+        rel.Metadata = request.Metadata;
+        rel.UpdatedAtUtc = DateTime.UtcNow;
+
+        await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);
+        return MapRelationshipToResponse(rel);
+    }
+
+    /// <inheritdoc />
+    public async Task<GraphRelationshipListResponse> ListRelationshipsAsync(int skip = 0, int take = 50, string? entityId = null, string? relationshipType = null, CancellationToken ct = default)
+    {
+        var query = _dbContext.GraphRelationships.AsQueryable();
+        if (!string.IsNullOrWhiteSpace(entityId))
+            query = query.Where(r => r.SourceEntityId == entityId || r.TargetEntityId == entityId);
+        if (!string.IsNullOrWhiteSpace(relationshipType))
+            query = query.Where(r => r.RelationshipType == relationshipType);
+
+        var totalCount = await query.CountAsync(ct).ConfigureAwait(false);
+        var relationships = await query
+            .OrderBy(r => r.CreatedAtUtc)
+            .Skip(skip)
+            .Take(take)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+
+        return new GraphRelationshipListResponse
+        {
+            Relationships = relationships.Select(MapRelationshipToResponse).ToList(),
+            TotalCount = totalCount,
+        };
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> DeleteRelationshipAsync(string relationshipId, CancellationToken ct = default)
+    {
+        var rel = await _dbContext.GraphRelationships.FirstOrDefaultAsync(r => r.Id == relationshipId, ct).ConfigureAwait(false);
+        if (rel is null)
+            return false;
+
+        _dbContext.GraphRelationships.Remove(rel);
+        await _dbContext.SaveChangesAsync(ct).ConfigureAwait(false);
+        return true;
+    }
+
+    // ── Private mapping helpers ──
+
+    private static GraphEntityResponse MapEntityToResponse(GraphEntityEntity entity) => new()
+    {
+        Id = entity.Id,
+        Name = entity.Name,
+        EntityType = entity.EntityType,
+        Description = entity.Description,
+        Metadata = entity.Metadata,
+        CreatedAtUtc = entity.CreatedAtUtc,
+        UpdatedAtUtc = entity.UpdatedAtUtc,
+    };
+
+    private static GraphRelationshipResponse MapRelationshipToResponse(GraphRelationshipEntity rel) => new()
+    {
+        Id = rel.Id,
+        SourceEntityId = rel.SourceEntityId,
+        TargetEntityId = rel.TargetEntityId,
+        RelationshipType = rel.RelationshipType,
+        Description = rel.Description,
+        Weight = rel.Weight,
+        Metadata = rel.Metadata,
+        CreatedAtUtc = rel.CreatedAtUtc,
+        UpdatedAtUtc = rel.UpdatedAtUtc,
+    };
+
+    private static byte[] EmbeddingToBytes(float[] embedding)
+    {
+        var bytes = new byte[embedding.Length * sizeof(float)];
+        Buffer.BlockCopy(embedding, 0, bytes, 0, bytes.Length);
+        return bytes;
     }
 
     private string ResolveWorkspacePath()

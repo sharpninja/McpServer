@@ -32,6 +32,14 @@ public static class ServiceCollectionExtensions
             return new McpServer.Repl.Core.TodoWorkflow(clientFactory.Todo);
         });
 
+        // Register GraphRAG workflow (implementation lives in McpServer.Repl.Core)
+        // FR-MCP-078/079/080, TR-GRAPHRAG-ADHOC-001/002/003
+        services.AddSingleton<IGraphRagWorkflow>(sp =>
+        {
+            var clientFactory = sp.GetRequiredService<McpServer.Client.McpServerClient>();
+            return new McpServer.Repl.Core.GraphRagWorkflow(clientFactory.Context);
+        });
+
         return services;
     }
 }
