@@ -63,6 +63,8 @@ public sealed class NgrokTunnelProvider : ITunnelProvider, IDisposable
             args += $" --subdomain {ngrok.Subdomain}";
         if (!string.IsNullOrWhiteSpace(ngrok.Region))
             args += $" --region {ngrok.Region}";
+        if (ngrok.PoolingEnabled)
+            args += " --pooling-enabled";
 
         var startInfo = new ProcessStartInfo
         {

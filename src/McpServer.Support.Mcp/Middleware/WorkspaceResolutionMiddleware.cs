@@ -34,6 +34,7 @@ public sealed class WorkspaceResolutionMiddleware
         "/mcpserver/repo",
         "/mcpserver/tools",
         "/mcpserver/tunnel",
+        "/mcpserver/federation",
         "/mcpserver/diagnostic",
         "/mcpserver/events",
         "/mcpserver/gh",

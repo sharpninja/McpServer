@@ -45,38 +45,40 @@ internal static class IdentityServerConfig
             AllowedScopes = { options.ApiScopeName },
         },
 
-        // Interactive client for CLI tools (Device Authorization + Password flows)
+        // Unified public client for CLI tools, web UI, and browser-based flows
         new DuendeClient
         {
             ClientId = "mcp-director",
-            ClientName = "MCP Director CLI",
+            ClientName = "MCP Director",
             AllowedGrantTypes =
             {
+                GrantType.AuthorizationCode,
                 "urn:ietf:params:oauth:grant-type:device_code",
                 GrantType.ResourceOwnerPassword,
             },
+            RequirePkce = true,
             RequireClientSecret = false,
+            RedirectUris =
+            {
+                "http://localhost:7147/auth/callback", "https://localhost:7147/auth/callback",
+                "https://localhost:39983/signin-oidc", "http://localhost:39984/signin-oidc",
+            },
+            PostLogoutRedirectUris =
+            {
+                "http://localhost:7147/", "https://localhost:7147/",
+                "https://localhost:39983/", "http://localhost:39984/",
+            },
+            AllowedCorsOrigins =
+            {
+                "http://localhost:7147", "https://localhost:7147",
+                "https://localhost:39983", "http://localhost:39984",
+            },
             AllowedScopes = { "openid", "profile", "email", "roles", options.ApiScopeName },
             AllowOfflineAccess = true,
             AccessTokenLifetime = 3600,
             RefreshTokenUsage = TokenUsage.ReUse,
             RefreshTokenExpiration = TokenExpiration.Sliding,
             SlidingRefreshTokenLifetime = 86400,
-        },
-
-        // Web/SPA client for pairing UI and browser-based access
-        new DuendeClient
-        {
-            ClientId = "mcp-web",
-            ClientName = "MCP Web Client",
-            AllowedGrantTypes = GrantTypes.Code,
-            RequirePkce = true,
-            RequireClientSecret = false,
-            RedirectUris = { "http://localhost:7147/auth/callback", "https://localhost:7147/auth/callback" },
-            PostLogoutRedirectUris = { "http://localhost:7147/", "https://localhost:7147/" },
-            AllowedCorsOrigins = { "http://localhost:7147", "https://localhost:7147" },
-            AllowedScopes = { "openid", "profile", "email", "roles", options.ApiScopeName },
-            AllowOfflineAccess = true,
         },
     ];
 }

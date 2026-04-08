@@ -12,7 +12,8 @@ partial class Build
         {
             var testProjects = Solution.GetAllProjects("*")
                 .Where(p => p.Name.EndsWith(".Tests") || p.Name.EndsWith(".Validation"))
-                .Where(p => !p.Name.Contains("IntegrationTests"));
+                .Where(p => !p.Name.Contains("IntegrationTests"))
+                .Where(p => !p.Name.EndsWith(".Validation"));
 
             foreach (var project in testProjects)
             {

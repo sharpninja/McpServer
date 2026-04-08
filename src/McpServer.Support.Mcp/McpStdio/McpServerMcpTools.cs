@@ -324,6 +324,270 @@ public sealed class FwhMcpTools
         return JsonSerializer.Serialize(result);
     }
 
+    // ── Ad-Hoc Text Ingestion (FR-MCP-078, TR-GRAPHRAG-ADHOC-001) ──
+
+    /// <summary>FR-MCP-078: Ingest raw text into the GraphRAG corpus.</summary>
+    /// <returns>JSON string with document ID, chunk count, and source metadata.</returns>
+    [McpServerTool(Name = "graphrag_ingest_text"), Description("Ingest raw text into the GraphRAG corpus, creating a document and chunks.")]
+    public async Task<string> GraphRagIngestText(
+        [Description("Text content to ingest")] string content,
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Optional document title")] string? title = null,
+        [Description("Source type classification (default 'adhoc-text')")] string? sourceType = null,
+        [Description("Source key / path for the document")] string? sourceKey = null,
+        [Description("Trigger full reindex after ingestion")] bool triggerReindex = false,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        if (string.IsNullOrWhiteSpace(content))
+            return JsonSerializer.Serialize(new { error = "content is required" });
+        var result = await _graphRagService.IngestTextAsync(new GraphRagIngestTextRequest
+        {
+            Content = content,
+            Title = title,
+            SourceType = sourceType,
+            SourceKey = sourceKey,
+            TriggerReindex = triggerReindex,
+        }, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-080: List documents in the GraphRAG corpus.</summary>
+    /// <returns>JSON string with paginated document list.</returns>
+    [McpServerTool(Name = "graphrag_list_documents"), Description("List documents in the GraphRAG corpus with pagination and optional source type filter.")]
+    public async Task<string> GraphRagListDocuments(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Number of documents to skip (default 0)")] int skip = 0,
+        [Description("Maximum documents to return (default 50)")] int take = 50,
+        [Description("Optional source type filter")] string? sourceType = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.ListDocumentsAsync(skip, take, sourceType, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-080: Get all chunks for a specific document.</summary>
+    /// <returns>JSON string with document chunks or error.</returns>
+    [McpServerTool(Name = "graphrag_get_document_chunks"), Description("Retrieve all chunks for a specific GraphRAG document by document ID.")]
+    public async Task<string> GraphRagGetDocumentChunks(
+        [Description("Document ID")] string documentId,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.GetDocumentChunksAsync(documentId, cancellationToken).ConfigureAwait(false);
+        if (result is null)
+            return JsonSerializer.Serialize(new { error = $"Document '{documentId}' not found" });
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-080: Delete a document and its chunks from the corpus.</summary>
+    /// <returns>JSON string with deletion result.</returns>
+    [McpServerTool(Name = "graphrag_delete_document"), Description("Delete a document and its chunks from the GraphRAG corpus.")]
+    public async Task<string> GraphRagDeleteDocument(
+        [Description("Document ID to delete")] string documentId,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.DeleteDocumentAsync(documentId, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(result);
+    }
+
+    // ── Entity CRUD (FR-MCP-079, TR-GRAPHRAG-ADHOC-002) ──
+
+    /// <summary>FR-MCP-079: Create a new graph entity.</summary>
+    /// <returns>JSON string with the created entity.</returns>
+    [McpServerTool(Name = "graphrag_create_entity"), Description("Create a new graph entity in the GraphRAG knowledge graph.")]
+    public async Task<string> GraphRagCreateEntity(
+        [Description("Entity display name")] string name,
+        [Description("Entity type (e.g. person, organization, concept)")] string entityType,
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Optional description")] string? description = null,
+        [Description("Optional JSON metadata")] string? metadata = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.CreateEntityAsync(new GraphEntityRequest
+        {
+            Name = name,
+            EntityType = entityType,
+            Description = description,
+            Metadata = metadata,
+        }, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-079: List graph entities with pagination.</summary>
+    /// <returns>JSON string with paginated entity list.</returns>
+    [McpServerTool(Name = "graphrag_list_entities"), Description("List graph entities with pagination and optional type filter.")]
+    public async Task<string> GraphRagListEntities(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Number of entities to skip (default 0)")] int skip = 0,
+        [Description("Maximum entities to return (default 50)")] int take = 50,
+        [Description("Optional entity type filter")] string? entityType = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.ListEntitiesAsync(skip, take, entityType, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-079: Get a graph entity by ID.</summary>
+    /// <returns>JSON string with entity or error.</returns>
+    [McpServerTool(Name = "graphrag_get_entity"), Description("Retrieve a graph entity by its ID.")]
+    public async Task<string> GraphRagGetEntity(
+        [Description("Entity ID")] string entityId,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.GetEntityAsync(entityId, cancellationToken).ConfigureAwait(false);
+        if (result is null)
+            return JsonSerializer.Serialize(new { error = $"Entity '{entityId}' not found" });
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-079: Update an existing graph entity.</summary>
+    /// <returns>JSON string with updated entity or error.</returns>
+    [McpServerTool(Name = "graphrag_update_entity"), Description("Update an existing graph entity by ID.")]
+    public async Task<string> GraphRagUpdateEntity(
+        [Description("Entity ID to update")] string entityId,
+        [Description("Updated entity name")] string name,
+        [Description("Updated entity type")] string entityType,
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Updated description")] string? description = null,
+        [Description("Updated JSON metadata")] string? metadata = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.UpdateEntityAsync(entityId, new GraphEntityRequest
+        {
+            Name = name,
+            EntityType = entityType,
+            Description = description,
+            Metadata = metadata,
+        }, cancellationToken).ConfigureAwait(false);
+        if (result is null)
+            return JsonSerializer.Serialize(new { error = $"Entity '{entityId}' not found" });
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-079: Delete a graph entity by ID.</summary>
+    /// <returns>JSON string indicating deletion success.</returns>
+    [McpServerTool(Name = "graphrag_delete_entity"), Description("Delete a graph entity by its ID.")]
+    public async Task<string> GraphRagDeleteEntity(
+        [Description("Entity ID to delete")] string entityId,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var deleted = await _graphRagService.DeleteEntityAsync(entityId, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(new { deleted, entityId });
+    }
+
+    // ── Relationship CRUD (FR-MCP-079, TR-GRAPHRAG-ADHOC-002) ──
+
+    /// <summary>FR-MCP-079: Create a new graph relationship.</summary>
+    /// <returns>JSON string with the created relationship.</returns>
+    [McpServerTool(Name = "graphrag_create_relationship"), Description("Create a new graph relationship between two entities.")]
+    public async Task<string> GraphRagCreateRelationship(
+        [Description("Source entity ID")] string sourceEntityId,
+        [Description("Target entity ID")] string targetEntityId,
+        [Description("Relationship type")] string relationshipType,
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Optional description")] string? description = null,
+        [Description("Weight/strength (default 1.0)")] double weight = 1.0,
+        [Description("Optional JSON metadata")] string? metadata = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.CreateRelationshipAsync(new GraphRelationshipRequest
+        {
+            SourceEntityId = sourceEntityId,
+            TargetEntityId = targetEntityId,
+            RelationshipType = relationshipType,
+            Description = description,
+            Weight = weight,
+            Metadata = metadata,
+        }, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-079: List graph relationships with pagination.</summary>
+    /// <returns>JSON string with paginated relationship list.</returns>
+    [McpServerTool(Name = "graphrag_list_relationships"), Description("List graph relationships with pagination and optional entity/type filters.")]
+    public async Task<string> GraphRagListRelationships(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Number of relationships to skip (default 0)")] int skip = 0,
+        [Description("Maximum relationships to return (default 50)")] int take = 50,
+        [Description("Optional entity ID filter")] string? entityId = null,
+        [Description("Optional relationship type filter")] string? relationshipType = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.ListRelationshipsAsync(skip, take, entityId, relationshipType, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-079: Get a graph relationship by ID.</summary>
+    /// <returns>JSON string with relationship or error.</returns>
+    [McpServerTool(Name = "graphrag_get_relationship"), Description("Retrieve a graph relationship by its ID.")]
+    public async Task<string> GraphRagGetRelationship(
+        [Description("Relationship ID")] string relationshipId,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.GetRelationshipAsync(relationshipId, cancellationToken).ConfigureAwait(false);
+        if (result is null)
+            return JsonSerializer.Serialize(new { error = $"Relationship '{relationshipId}' not found" });
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-079: Update an existing graph relationship.</summary>
+    /// <returns>JSON string with updated relationship or error.</returns>
+    [McpServerTool(Name = "graphrag_update_relationship"), Description("Update an existing graph relationship by ID.")]
+    public async Task<string> GraphRagUpdateRelationship(
+        [Description("Relationship ID to update")] string relationshipId,
+        [Description("Source entity ID")] string sourceEntityId,
+        [Description("Target entity ID")] string targetEntityId,
+        [Description("Relationship type")] string relationshipType,
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Updated description")] string? description = null,
+        [Description("Updated weight (default 1.0)")] double weight = 1.0,
+        [Description("Updated JSON metadata")] string? metadata = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.UpdateRelationshipAsync(relationshipId, new GraphRelationshipRequest
+        {
+            SourceEntityId = sourceEntityId,
+            TargetEntityId = targetEntityId,
+            RelationshipType = relationshipType,
+            Description = description,
+            Weight = weight,
+            Metadata = metadata,
+        }, cancellationToken).ConfigureAwait(false);
+        if (result is null)
+            return JsonSerializer.Serialize(new { error = $"Relationship '{relationshipId}' not found" });
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-079: Delete a graph relationship by ID.</summary>
+    /// <returns>JSON string indicating deletion success.</returns>
+    [McpServerTool(Name = "graphrag_delete_relationship"), Description("Delete a graph relationship by its ID.")]
+    public async Task<string> GraphRagDeleteRelationship(
+        [Description("Relationship ID to delete")] string relationshipId,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var deleted = await _graphRagService.DeleteRelationshipAsync(relationshipId, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(new { deleted, relationshipId });
+    }
+
     /// <summary>Read file content by relative path from repo root.</summary>
     /// <returns>JSON string with file path, content, and existence flag.</returns>
     [McpServerTool(Name = "repo_read"), Description("Read file content by relative path from repo root. Path must be allowed.")]

@@ -26,6 +26,11 @@ public interface IVectorIndexService
     /// <summary>TR-PLANNED-013: Rebuild the index from scratch.</summary>
     Task RebuildAsync(CancellationToken ct = default);
 
+    /// <summary>FR-MCP-080, TR-GRAPHRAG-ADHOC-003: Remove a vector from the index by chunk ID.</summary>
+    /// <param name="chunkId">Chunk identifier to remove.</param>
+    /// <returns><see langword="true"/> if the vector was found and removed; otherwise <see langword="false"/>.</returns>
+    bool RemoveVector(string chunkId);
+
     /// <summary>TR-PLANNED-013: Number of vectors in the index.</summary>
     int Count { get; }
 }

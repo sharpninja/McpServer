@@ -523,15 +523,15 @@ When trust validation fails, the bootstrap flow shall stop using MCP services an
 
 **Covered by:** `src/McpServer.Services/Services/MarkerFileService.cs`, `templates/prompt-templates.yaml`, `src/McpServer.ServiceDefaults/Extensions.cs`, `tools/powershell/McpSession.psm1`, `tools/powershell/McpTodo.psm1`, `tools/powershell/McpContext.psm1`, `docs/context/module-bootstrap.md`, `docs/USER-GUIDE.md`
 
-## FR-MCP-077 Optional Native At-Rest Encryption for Workspace Databases
+## FR-MCP-077 Server Federation and Request Proxying
 
-The server shall support optional configuration-driven at-rest encryption for workspace databases using only provider-native or provider-extension facilities.
+The server shall support an opt-in federation mode that proxies incoming requests to a configured remote MCP server instance. Routing shall support a global default target and per-workspace overrides. The feature shall include anti-loop protection (via `X-Mcp-Federation-Hop` header with a configurable maximum hop count), transparent SSE/streaming forwarding for `/mcp-transport`, a runtime management REST API at `/mcpserver/federation`, and auto-discovery of federation targets from running tunnel providers.
 
-When encryption settings change, the server shall preserve existing data by using provider-specific no-data-loss transition procedures for enable, disable, and provider-supported protector or key-state changes. The encryption contract shall remain explicit enough that startup can detect configuration-versus-live-state mismatches and require a deliberate transition workflow instead of silently changing data protection state.
+**Status:** ✅ Complete
 
-**Technical Implementation:** [TR-MCP-SEC-004](./Technical-Requirements.md#tr-mcp-sec-004) | [TR-MCP-CFG-007](./Technical-Requirements.md#tr-mcp-cfg-007) | [Mapping](./TR-per-FR-Mapping.md)
+**Technical Implementation:** `FederationOptions`, `FederationRegistry`, `FederationProxyService`, `FederationMiddleware`, `FederationController`
 
-**Covered by:** `src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs`, `src/McpServer.Storage/McpDbContextFactory.cs`, `src/McpServer.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs`, `src/McpServer.Support.Mcp/Program.cs`, `src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs`, `scripts/Invoke-McpDatabaseEncryptionTransition.ps1`, `src/McpServer.Storage.SqliteMigrations`, `src/McpServer.Storage.PostgreSqlMigrations`, `src/McpServer.Storage.SqlServerMigrations`, `docs/USER-GUIDE.md`
+**Configuration:** `Mcp:Federation:Enabled`, `Mcp:Federation:Targets`, `Mcp:Federation:DefaultTarget`, `Mcp:Federation:WorkspaceRoutes`, `Mcp:Federation:MaxHops`
 
 ## FR-MCP-REPL-001 YAML Protocol STDIO REPL Host
 
@@ -590,3 +590,19 @@ The REPL host shall expose commands for querying agent pool state, active voice 
 **Freeze Tag:** `REPL-v1.0-FREEZE` | **Date:** 2025-01-04
 
 All REPL functional requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005) are complete and frozen for v1.0 delivery. Full source code traceability comments have been added to all `McpServer.Repl.Core` and `McpServer.Repl.Host` files. All iteration 1-6 unit tests and integration tests pass. No defects remain.
+
+
+---
+
+## FR-MCP-078 GraphRAG Ad-Hoc Document Ingestion
+
+The server shall accept raw text or markdown content via a REST endpoint and MCP tool, chunk it, generate embeddings, store it in the context database and vector index, and optionally trigger a GraphRAG re-index. Documents ingested this way shall use source type "adhoc-text" by default and support caller-specified title, source type, and source key metadata.
+
+## FR-MCP-079 GraphRAG Entity and Relationship CRUD
+
+The server shall provide full CRUD operations for explicit graph entity nodes and relationship edges, persisted in workspace-scoped EF Core tables. Entities shall have name, type, description, and extensible JSON metadata. Relationships shall link two entities with a typed, weighted, described edge. Deleting an entity shall cascade to all its relationships. All operations shall be available via REST endpoints, MCP tools, and REPL commands.
+
+## FR-MCP-080 GraphRAG Document Management
+
+The server shall provide endpoints to list indexed documents with chunk counts and token totals, retrieve chunks for a specific document ordered by chunk index, and delete a document with cascade removal of its chunks and corresponding vector index entries. All operations shall be workspace-scoped and available via REST endpoints, MCP tools, and REPL commands.
+

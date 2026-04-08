@@ -130,8 +130,12 @@ public sealed class McpServerClient
         get => _apiKey;
         set
         {
-            _apiKey = value;
-            foreach (var c in _allClients) c.ApiKey = value;
+            _apiKey = value ?? string.Empty;
+            if (!string.IsNullOrWhiteSpace(_apiKey))
+            {
+                _bearerToken = string.Empty;
+            }
+            foreach (var c in _allClients) c.ApiKey = _apiKey;
         }
     }
 
@@ -145,8 +149,12 @@ public sealed class McpServerClient
         get => _bearerToken;
         set
         {
-            _bearerToken = value;
-            foreach (var c in _allClients) c.BearerToken = value;
+            _bearerToken = value ?? string.Empty;
+            if (!string.IsNullOrWhiteSpace(_bearerToken))
+            {
+                _apiKey = string.Empty;
+            }
+            foreach (var c in _allClients) c.BearerToken = _bearerToken;
         }
     }
 

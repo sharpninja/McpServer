@@ -31,11 +31,17 @@ internal static class WindowsServiceDeploymentGuard
         try
         {
             using var document = JsonDocument.Parse(File.ReadAllText(manifestPath));
+            var allowedGenerators = new[]
+            {
+                @"scripts\Update-McpService.ps1",
+                "build/Build.UpdateService.cs",
+            };
+
             if (!document.RootElement.TryGetProperty("generatedBy", out var generatedByElement) ||
                 generatedByElement.ValueKind != JsonValueKind.String ||
-                !string.Equals(generatedByElement.GetString(), "scripts\\Update-McpService.ps1", StringComparison.Ordinal))
+                !allowedGenerators.Any(g => string.Equals(generatedByElement.GetString(), g, StringComparison.Ordinal)))
             {
-                Fail("Windows service deployment was not prepared by scripts\\Update-McpService.ps1. Redeploy with that script.");
+                Fail("Windows service deployment was not prepared by an approved deployer. Redeploy with scripts\\Update-McpService.ps1 or ./build.ps1 UpdateService.");
             }
 
             if (!document.RootElement.TryGetProperty("executableHashes", out var hashesElement) ||

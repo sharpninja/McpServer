@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(update-config)",
+      "Bash(python -m json.tool)",
+      "Bash(python:*)",
+      "Bash(node:*)",
+      "Bash(openssl rand:*)",
+      "Bash(curl -s 'http://PAYTON-LEGION2:7147/health?nonce=__TRACKED_VAR__')",
+      "Bash(curl:*)",
+      "Bash(start:*)",
+      "Bash(gsudo:*)",
+      "Bash(grep -E \"\\\\.ps1$\")",
+      "Bash(dotnet build:*)",
+      "Bash(break)",
+      "Bash(printf '{\"schemaVersion\":1,\"generatedUtc\":\"2026-04-06T20:00:00Z\",\"generatedBy\":\"manual-fix\",\"operation\":\"update\",\"serviceName\":\"McpServer\",\"executable\":\"McpServer.Support.Mcp.exe\",\"port\":7147}')",
+      "Bash(tasklist)",
+      "Bash(\"C:/ProgramData/McpServer/tools/ngrok.exe\" http:*)",
+      "Bash(\"C:/ProgramData/McpServer/tools/ngrok.exe\" api:*)",
+      "Bash(C:/ProgramData/McpServer/tools/ngrok.exe version:*)",
+      "Bash(NGROK_AUTHTOKEN=39PlC1rVQvxL7JLCUnvZ7BwWP1h_5EKMeqsnVoTTrLfuR79h3 \"C:/ProgramData/McpServer/tools/ngrok.exe\" http 7147 --log stdout --log-format json)",
+      "Bash(grep -h \"Route\\\\|HttpGet\\\\|HttpPost\\\\|HttpPut\\\\|HttpDelete\" /f/GitHub/McpServer/src/McpServer.Support.Mcp/Controllers/*.cs)",
+      "Bash(sed 's/.*Name = \"//')",
+      "Bash(sed 's/\".*//')",
+      "Bash(az pipelines:*)",
+      "Bash(az devops:*)",
+      "Bash(pwsh -ExecutionPolicy Bypass -File F:/GitHub/McpServer/check-markers.ps1)",
+      "Bash(grep -v \"^Loaded\\\\|^$\\\\|Snippet\\\\|-------\\\\|aliases\\\\|common\\\\|repos\\\\|bing\\\\|chocolatey\\\\|clean\\\\|devmode\\\\|gh_comp\\\\|github\\\\|module-loader\\\\|oh-my-posh\\\\|set-version\\\\|update-snippets\\\\|CommandType\\\\|----------\\\\|Alias\\\\|Name \\\\|----\\\\|Snippets\\\\|profileup\\\\|snipup\\\\|snipps\\\\|hub\\\\|modrl\\\\|posh\\\\|repos\\\\|ch \\\\|dn \\\\|dt \\\\|np \\\\|ng \\\\|pp \\\\|pps\\\\|psg\\\\|scp\\\\|wg \\\\|als\\\\|clean\\\\|devmode\\\\|audio\\\\|pwg\")",
+      "Bash(pwsh -NoProfile -NonInteractive -ExecutionPolicy Bypass -File F:/GitHub/McpServer/check-markers.ps1)",
+      "Bash(pwsh -NoProfile -NonInteractive -ExecutionPolicy Bypass -File F:/GitHub/McpServer/create-graphrag-todos.ps1)"
+    ]
+  }
+}

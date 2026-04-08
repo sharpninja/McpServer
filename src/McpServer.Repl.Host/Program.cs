@@ -61,11 +61,7 @@ static IHost CreateHost()
             
             services.AddSingleton(sp =>
             {
-                var serverUrl = Environment.GetEnvironmentVariable("MCP_SERVER_URL") ?? "http://localhost:7147";
-                var options = new McpServerClientOptions
-                {
-                    BaseUrl = new Uri(serverUrl)
-                };
+                var options = MarkerFileClientOptionsResolver.Resolve();
                 var httpClient = new HttpClient();
                 return new McpServerClient(httpClient, options);
             });

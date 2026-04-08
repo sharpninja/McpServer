@@ -66,6 +66,20 @@ public sealed class McpHostedAgentAdapterTests
             "mcp_requirements_get_tr",
             "mcp_requirements_get_test",
             "mcp_client_invoke",
+            "mcp_graphrag_ingest_text",
+            "mcp_graphrag_list_documents",
+            "mcp_graphrag_get_document_chunks",
+            "mcp_graphrag_delete_document",
+            "mcp_graphrag_create_entity",
+            "mcp_graphrag_list_entities",
+            "mcp_graphrag_get_entity",
+            "mcp_graphrag_update_entity",
+            "mcp_graphrag_delete_entity",
+            "mcp_graphrag_create_relationship",
+            "mcp_graphrag_list_relationships",
+            "mcp_graphrag_get_relationship",
+            "mcp_graphrag_update_relationship",
+            "mcp_graphrag_delete_relationship",
         };
 
         var existingTool = AIFunctionFactory.Create(
@@ -455,7 +469,7 @@ public sealed class McpHostedAgentAdapterTests
             });
         var identifiers = new McpSessionIdentifierFactory(options, timeProvider);
         var sessionLog = new McpServer.McpAgent.SessionLog.SessionLogWorkflow(client, identifiers, timeProvider);
-        var todo = new TodoWorkflow(client);
+        var todo = new McpServer.McpAgent.Todo.TodoWorkflow(client);
         var requirements = new RequirementsWorkflow(client.Requirements);
         var clientPassthrough = new GenericClientPassthrough(client);
         var replSessionLogAdapter = new SessionLogClientAdapter(client.SessionLog);
