@@ -58,7 +58,7 @@ function Read-McpMarkerNestedMap {
         }
 
         if ($line -match '^\s{2}(?<key>[A-Za-z_][A-Za-z0-9_]*)\s*:\s*(?<value>.*)$') {
-            $values[$Matches.key] = $Matches.value
+            $values[$Matches.key] = Normalize-McpMarkerScalar -Value $Matches.value
         }
 
         $index++
@@ -68,6 +68,23 @@ function Read-McpMarkerNestedMap {
         Values = $values
         NextIndex = $index
     }
+}
+
+function Normalize-McpMarkerScalar {
+    param(
+        [Parameter(Mandatory)][AllowEmptyString()][string]$Value
+    )
+
+    $normalized = $Value.Trim()
+    if ($normalized.Length -ge 2) {
+        $first = $normalized[0]
+        $last = $normalized[$normalized.Length - 1]
+        if (($first -eq '"' -and $last -eq '"') -or ($first -eq "'" -and $last -eq "'")) {
+            return $normalized.Substring(1, $normalized.Length - 2)
+        }
+    }
+
+    return $normalized
 }
 
 function ConvertFrom-McpMarkerContent {
@@ -93,7 +110,7 @@ function ConvertFrom-McpMarkerContent {
         if ($line -match '^(?<key>[A-Za-z_][A-Za-z0-9_]*)\s*:\s*(?<value>.*)$') {
             $key = $Matches.key
             $value = $Matches.value
-            if ($value -eq '|-') {
+            if ($value -in @('|', '|-')) {
                 $index++
                 $promptLines = [System.Collections.Generic.List[string]]::new()
                 while ($index -lt $lines.Count) {
@@ -123,7 +140,7 @@ function ConvertFrom-McpMarkerContent {
                 continue
             }
 
-            $marker[$key] = $value
+            $marker[$key] = Normalize-McpMarkerScalar -Value $value
         }
     }
 

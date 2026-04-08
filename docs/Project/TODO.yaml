@@ -2665,13 +2665,14 @@ GraphRAG:
   - id: PLAN-GRAPHRAGADHOC-001
     title: 'GraphRAG Ad-Hoc: Requirements — FR, TR, TEST entries and mapping'
     estimate: 1-2h
-    done: false
+    done: true
     description:
     - 'Phase 0: Define requirements before implementation begins.'
     - Add FR-MCP-078 (GraphRAG Ad-Hoc Document Ingestion), FR-MCP-079 (GraphRAG Entity/Relationship CRUD), FR-MCP-080 (GraphRAG Document Management) to Functional-Requirements.md.
     - Add corresponding TR entries to Technical-Requirements.md.
     - Add TEST entries to Testing-Requirements.md.
     - Update TR-per-FR-Mapping.md and Requirements-Matrix.md.
+    done-summary: 'Implemented in session ClaudeCode-20260407T000000Z with full TDD. PR #5 on Azure DevOps.'
     technical-details:
     - 'Modified: docs/Project/Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, TR-per-FR-Mapping.md, Requirements-Matrix.md'
     depends-on: []
@@ -2691,13 +2692,14 @@ GraphRAG:
   - id: IMPL-GRAPHRAGADHOC-001
     title: 'GraphRAG Ad-Hoc: Storage layer — entities, relationships, RemoveVector'
     estimate: 3-4h
-    done: false
+    done: true
     description:
     - 'Phase 1 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
     - Create GraphEntityEntity and GraphRelationshipEntity EF Core entities.
     - Update McpDbContext with DbSets, model config, query filters, indexes.
     - Add RemoveVector to IVectorIndexService and implement in VectorIndexService.
     - Generate EF migration for new tables.
+    done-summary: 'Implemented in session ClaudeCode-20260407T000000Z with full TDD. PR #5 on Azure DevOps.'
     technical-details:
     - 'New files: src/McpServer.Storage/Entities/GraphEntityEntity.cs, GraphRelationshipEntity.cs'
     - 'Modified: McpDbContext.cs, IVectorIndexService.cs, VectorIndexService.cs'
@@ -2722,12 +2724,13 @@ GraphRAG:
   - id: IMPL-GRAPHRAGADHOC-002
     title: 'GraphRAG Ad-Hoc: DTOs, service interface, and service implementation'
     estimate: 4-6h
-    done: false
+    done: true
     description:
     - 'Phase 2 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
     - Add ~14 new DTOs to GraphRagModels.cs.
     - Extend IGraphRagService with 15 new methods.
     - 'Implement all methods in GraphRagService: text ingest, document mgmt, entity/relationship CRUD.'
+    done-summary: 'Implemented in session ClaudeCode-20260407T000000Z with full TDD. PR #5 on Azure DevOps.'
     technical-details:
     - 'Modified: GraphRagModels.cs, IGraphRagService.cs, GraphRagService.cs'
     - 'New deps in GraphRagService: McpDbContext, IEmbeddingService, IVectorIndexService'
@@ -2756,11 +2759,12 @@ GraphRAG:
   - id: IMPL-GRAPHRAGADHOC-003
     title: 'GraphRAG Ad-Hoc: CQRS commands and queries'
     estimate: 2-3h
-    done: false
+    done: true
     description:
     - 'Phase 3 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
     - 8 command records + handlers, 6 query records + handlers.
     - Auto-discovered by existing AddCqrsHandlers(Assembly).
+    done-summary: 'Implemented in session ClaudeCode-20260407T000000Z with full TDD. PR #5 on Azure DevOps.'
     technical-details:
     - New files in src/McpServer.GraphRag/Commands/ and Queries/
     - 'Commands: IngestText, DeleteDocument, CreateEntity, UpdateEntity, DeleteEntity, CreateRelationship, UpdateRelationship, DeleteRelationship'
@@ -2782,10 +2786,11 @@ GraphRAG:
   - id: IMPL-GRAPHRAGADHOC-004
     title: 'GraphRAG Ad-Hoc: HTTP controller endpoints'
     estimate: 2-3h
-    done: false
+    done: true
     description:
     - 'Phase 4 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
     - '14 new action methods on GraphRagController: documents/ingest, documents CRUD, entities CRUD, relationships CRUD.'
+    done-summary: 'Implemented in session ClaudeCode-20260407T000000Z with full TDD. PR #5 on Azure DevOps.'
     technical-details:
     - 'Modified: src/McpServer.Support.Mcp/Controllers/GraphRagController.cs'
     - Routes under existing mcpserver/graphrag base
@@ -2808,10 +2813,11 @@ GraphRAG:
   - id: IMPL-GRAPHRAGADHOC-005
     title: 'GraphRAG Ad-Hoc: MCP tools'
     estimate: 1-2h
-    done: false
+    done: true
     description:
     - 'Phase 5 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
     - 14 new [McpServerTool] methods in FwhMcpTools matching the HTTP endpoints.
+    done-summary: 'Implemented in session ClaudeCode-20260407T000000Z with full TDD. PR #5 on Azure DevOps.'
     technical-details:
     - 'Modified: src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs'
     - 'Tools: graphrag_ingest_text, graphrag_list_documents, graphrag_get_document_chunks, graphrag_delete_document, graphrag_create_entity, etc.'
@@ -2830,11 +2836,12 @@ GraphRAG:
   - id: IMPL-GRAPHRAGADHOC-006
     title: 'GraphRAG Ad-Hoc: REPL commands and workflow'
     estimate: 2-3h
-    done: false
+    done: true
     description:
     - 'Phase 6 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
     - New GraphRagCommandShapes, IGraphRagWorkflow, GraphRagWorkflow.
     - Add client methods to ContextClient. Register workflow in REPL host DI.
+    done-summary: 'Implemented in session ClaudeCode-20260407T000000Z with full TDD. PR #5 on Azure DevOps.'
     technical-details:
     - 'New: GraphRagCommandShapes.cs, IGraphRagWorkflow.cs, GraphRagWorkflow.cs in Repl.Core'
     - 'Modified: ContextClient.cs, ServiceCollectionExtensions.cs in Repl.Host'
@@ -2859,10 +2866,11 @@ GraphRAG:
   - id: IMPL-GRAPHRAGADHOC-007
     title: 'GraphRAG Ad-Hoc: McpAgent hosted tools'
     estimate: 1-2h
-    done: false
+    done: true
     description:
     - 'Phase 7 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
     - Add 14 GraphRAG tools to McpHostedAgentToolAdapter via AIFunctionFactory.
+    done-summary: 'Implemented in session ClaudeCode-20260407T000000Z with full TDD. PR #5 on Azure DevOps.'
     technical-details:
     - 'Modified: src/McpServer.McpAgent/Hosting/McpHostedAgentToolAdapter.cs'
     - 'Tests: GraphRagToolAdapterTests.cs in McpServer.McpAgent.Tests'
@@ -2874,6 +2882,141 @@ GraphRAG:
     - task: Add tool methods to McpHostedAgentToolAdapter
       done: false
     - task: All tests green
+      done: false
+    - task: Post session log turn with results
+      done: false
+Plugin:
+  high-priority:
+  - id: IMPL-CCPLUGIN-001
+    title: 'Claude Code Plugin: Scaffold + manifest + REPL tool setup'
+    estimate: 2-3h
+    done: false
+    description:
+    - 'Phase 1: Create repo structure, plugin.json, ensure-repl.sh, marker-resolver.sh, detect-shell.sh. TDD with bats-core. Post session log turn before/after. Update TODO tasks as completed.'
+    depends-on: []
+    implementation-tasks:
+    - task: Write ensure-repl.bats tests
+      done: false
+    - task: Write marker-resolver.bats tests
+      done: false
+    - task: Create plugin.json manifest
+      done: false
+    - task: Implement ensure-repl.sh and .ps1
+      done: false
+    - task: Implement marker-resolver.sh and .ps1
+      done: false
+    - task: Implement detect-shell.sh
+      done: false
+    - task: All tests green
+      done: false
+    - task: Post session log turn with results
+      done: false
+  - id: IMPL-CCPLUGIN-002
+    title: 'Claude Code Plugin: REPL invocation wrapper + cache manager'
+    estimate: 2-3h
+    done: false
+    description:
+    - 'Phase 2: Implement repl-invoke.sh and cache-manager.sh with YAML-based local cache. TDD with bats-core.'
+    depends-on:
+    - IMPL-CCPLUGIN-001
+    implementation-tasks:
+    - task: Write repl-invoke.bats tests
+      done: false
+    - task: Write cache-manager.bats tests
+      done: false
+    - task: Implement repl-invoke.sh and .ps1
+      done: false
+    - task: Implement cache-manager.sh and .ps1
+      done: false
+    - task: All tests green
+      done: false
+    - task: Post session log turn with results
+      done: false
+  - id: IMPL-CCPLUGIN-003
+    title: 'Claude Code Plugin: Hooks (session lifecycle + plan tracking)'
+    estimate: 3-4h
+    done: false
+    description:
+    - 'Phase 3: Implement hooks.json and all hook scripts (session-start, session-end, pre/post-compact, plan-approved, plan-modified, cache-flush, health-check). TDD with bats-core.'
+    depends-on:
+    - IMPL-CCPLUGIN-002
+    implementation-tasks:
+    - task: Write hooks.bats tests
+      done: false
+    - task: Create hooks.json configuration
+      done: false
+    - task: Implement session-start.sh
+      done: false
+    - task: Implement session-end.sh
+      done: false
+    - task: Implement pre-compact.sh and post-compact.sh
+      done: false
+    - task: Implement plan-approved.sh and plan-modified.sh
+      done: false
+    - task: Implement cache-flush.sh and health-check.sh
+      done: false
+    - task: All tests green
+      done: false
+    - task: Post session log turn with results
+      done: false
+  - id: IMPL-CCPLUGIN-004
+    title: 'Claude Code Plugin: Skills (TODO, Session, Requirements, GraphRAG)'
+    estimate: 2-3h
+    done: false
+    description:
+    - 'Phase 4: Write SKILL.md files with proper frontmatter, trigger phrases, imperative body, and reference docs. TDD with bats-core for structure validation.'
+    depends-on:
+    - IMPL-CCPLUGIN-003
+    implementation-tasks:
+    - task: Write skills.bats validation tests
+      done: false
+    - task: Write skills/todo/SKILL.md
+      done: false
+    - task: Write skills/session/SKILL.md
+      done: false
+    - task: Write skills/requirements/SKILL.md
+      done: false
+    - task: Write skills/graphrag/SKILL.md
+      done: false
+    - task: All tests green
+      done: false
+    - task: Post session log turn with results
+      done: false
+  - id: IMPL-CCPLUGIN-005
+    title: 'Claude Code Plugin: MCP auto-connect + integration testing'
+    estimate: 2-3h
+    done: false
+    description:
+    - 'Phase 5: Configure .mcp.json with mcpserver-repl stdio transport. End-to-end integration tests including offline cache/flush cycle.'
+    depends-on:
+    - IMPL-CCPLUGIN-004
+    implementation-tasks:
+    - task: Write integration.bats tests
+      done: false
+    - task: Create .mcp.json configuration
+      done: false
+    - task: Verify end-to-end TODO create/query/delete
+      done: false
+    - task: Verify offline cache and flush cycle
+      done: false
+    - task: All tests green
+      done: false
+    - task: Post session log turn with results
+      done: false
+  - id: IMPL-CCPLUGIN-006
+    title: 'Claude Code Plugin: Marketplace submission'
+    estimate: 1h
+    done: false
+    description:
+    - 'Phase 6: Push plugin to sharpninja/mcpserver-claude-code-plugin repo. Submit marketplace entry to Anthropic claude-plugins-official.'
+    depends-on:
+    - IMPL-CCPLUGIN-005
+    implementation-tasks:
+    - task: Push all files to GitHub repo
+      done: false
+    - task: Create README.md with install instructions
+      done: false
+    - task: Submit marketplace entry
       done: false
     - task: Post session log turn with results
       done: false
