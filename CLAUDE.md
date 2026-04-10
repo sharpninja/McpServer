@@ -116,7 +116,7 @@ Use `pwsh.exe` (PowerShell 7+) for all scripts. Do not use `powershell.exe`.
 ### Session Start (Run Once Per Session)
 
 1. **Read `AGENTS-README-FIRST.yaml`** in the repo root for the current API key, endpoints, and base URL
-2. **Verify marker signature** using HMAC-SHA256 with the workspace API key before contacting the server
+2. **Verify marker signature** using `Initialize-McpSession` from `McpSession.psm1` (preferred), or by manually recomputing HMAC-SHA256 over the exact fields listed in `signature.fields` of the marker file in that order, each as `key=value\n`, trailing LF on the final line, UTF-8 encoded. Do not infer the payload shape from the YAML structure — use only the `signature.fields` list.
 3. **GET `/health`** with a random nonce — confirm the response echoes that exact nonce
 4. **Review recent session history** and current TODOs only after verification succeeds
 5. **POST an initial session log turn** for the session

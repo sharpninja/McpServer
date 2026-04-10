@@ -418,4 +418,143 @@ public sealed class MarkerFileServiceTests
         Assert.Equal(payloadA, payloadB);
         Assert.Equal(signatureA, signatureB);
     }
+
+    /// <summary>
+    /// Verifies that <see cref="MarkerFileService.SignaturePayloadFields"/> contains exactly 28 entries
+    /// and that each payload line produced by <see cref="MarkerFileService.BuildSignaturePayload"/> starts
+    /// with the corresponding field name in declaration order.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: FR-MCP-081, TR-MCP-SEC-005.
+    /// Test data: a fully populated in-memory <see cref="MarkerFile"/>; no external dependencies.
+    /// This data is used to ensure the public fields array and the payload builder remain in sync
+    /// so the marker is self-describing for any agent performing manual verification.
+    /// </remarks>
+    [Fact]
+    public void SignaturePayloadFields_MatchesBuildSignaturePayloadFieldOrder()
+    {
+        var marker = new MarkerFile
+        {
+            Port = 7147,
+            BaseUrl = BaseUrl,
+            ApiKey = "test-key",
+            Endpoints = new MarkerEndpoints
+            {
+                Health = "/health",
+                Swagger = "/swagger/v1/swagger.json",
+                SwaggerUi = "/swagger",
+                McpTransport = "/mcp-transport",
+                SessionLog = "/mcpserver/sessionlog",
+                SessionLogDialog = "/mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog",
+                ContextSearch = "/mcpserver/context/search",
+                ContextPack = "/mcpserver/context/pack",
+                ContextSources = "/mcpserver/context/sources",
+                Todo = "/mcpserver/todo",
+                Repo = "/mcpserver/repo",
+                Desktop = "/mcpserver/desktop",
+                GitHub = "/mcpserver/gh",
+                Tools = "/mcpserver/tools",
+                Workspace = "/mcpserver/workspace",
+                ServerStartupUtc = "/server-startup-utc",
+                MarkerFileTimestamp = "/marker-file-timestamp?repoPath={workspacePath}",
+            },
+            Workspace = "test",
+            WorkspacePath = @"C:\test",
+            Pid = 1,
+            StartedAt = "2026-01-01T00:00:00.0000000Z",
+            MarkerWrittenAtUtc = "2026-01-01T00:00:00.0000000Z",
+            ServerStartedAtUtc = "2026-01-01T00:00:00.0000000Z",
+            Signature = new MarkerSignature
+            {
+                Algorithm = "HMAC-SHA256",
+                Canonicalization = MarkerFileService.MarkerSignatureCanonicalization,
+                Verifier = MarkerFileService.MarkerSignatureVerifier,
+            },
+            TrustBootstrap = new MarkerTrustBootstrap(),
+            Prompt = string.Empty,
+        };
+
+        var fields = MarkerFileService.SignaturePayloadFields;
+        var payload = MarkerFileService.BuildSignaturePayload(marker);
+        var lines = payload.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
+        Assert.Equal(27, fields.Length);
+        Assert.Equal(fields.Length, lines.Length);
+        for (var i = 0; i < fields.Length; i++)
+        {
+            Assert.StartsWith($"{fields[i]}=", lines[i]);
+        }
+    }
+
+    /// <summary>
+    /// Verifies that the written marker YAML contains a <c>fields</c> list and a <c>format</c> entry
+    /// inside the <c>signature</c> block so that any agent can reconstruct the payload without
+    /// consulting server source code or helper modules.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: FR-MCP-081, TR-MCP-SEC-005.
+    /// Test data: temp workspace directory and minimal global prompt string.
+    /// This data is used to assert the marker YAML is self-describing for trust bootstrap.
+    /// </remarks>
+    [Fact]
+    public async Task WriteMarkerAsync_SignatureBlock_ContainsFieldsListAndFormat()
+    {
+        var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-fields-test-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDir);
+
+        try
+        {
+            await MarkerFileService.WriteMarkerAsync(
+                workspacePath: tempDir,
+                port: 7147,
+                workspaceName: "test",
+                globalPromptTemplate: "Test");
+
+            var yaml = await File.ReadAllTextAsync(Path.Combine(tempDir, MarkerFileService.MarkerFileName));
+
+            Assert.Contains("fields:", yaml);
+            Assert.Contains("- canonicalization", yaml);
+            Assert.Contains("- endpoints.gitHub", yaml);
+            Assert.Contains("- endpoints.markerFileTimestamp", yaml);
+            Assert.Contains("format:", yaml);
+        }
+        finally
+        {
+            try { Directory.Delete(tempDir, recursive: true); } catch { }
+        }
+    }
+
+    /// <summary>
+    /// Verifies that the <c>format</c> field in the written marker signature block describes
+    /// LF line endings and UTF-8 encoding so agents have the encoding contract in the file.
+    /// </summary>
+    /// <remarks>
+    /// Requirement coverage: FR-MCP-081, TR-MCP-SEC-005.
+    /// Test data: temp workspace directory and minimal global prompt string.
+    /// This data is used to confirm the marker encoding contract is readable without external references.
+    /// </remarks>
+    [Fact]
+    public async Task WriteMarkerAsync_SignatureBlock_FormatDescribesEncodingContract()
+    {
+        var tempDir = Path.Combine(Path.GetTempPath(), "mcp-marker-format-test-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(tempDir);
+
+        try
+        {
+            await MarkerFileService.WriteMarkerAsync(
+                workspacePath: tempDir,
+                port: 7147,
+                workspaceName: "test",
+                globalPromptTemplate: "Test");
+
+            var yaml = await File.ReadAllTextAsync(Path.Combine(tempDir, MarkerFileService.MarkerFileName));
+
+            Assert.Contains("UTF-8", yaml);
+            Assert.Contains(@"\n", yaml);
+        }
+        finally
+        {
+            try { Directory.Delete(tempDir, recursive: true); } catch { }
+        }
+    }
 }

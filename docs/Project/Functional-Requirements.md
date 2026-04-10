@@ -606,3 +606,9 @@ The server shall provide full CRUD operations for explicit graph entity nodes an
 
 The server shall provide endpoints to list indexed documents with chunk counts and token totals, retrieve chunks for a specific document ordered by chunk index, and delete a document with cascade removal of its chunks and corresponding vector index entries. All operations shall be workspace-scoped and available via REST endpoints, MCP tools, and REPL commands.
 
+## FR-MCP-081 Self-Describing Marker Signature Canonicalization
+
+The generated `AGENTS-README-FIRST.yaml` marker file shall embed the complete `marker-v1` canonical field list and encoding contract inside the `signature` block so that any agent can reconstruct and verify the HMAC-SHA256 signature without consulting server source code or helper modules.
+
+**Covered by:** `MarkerFileService`, `MarkerSignature`
+

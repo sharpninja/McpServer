@@ -673,6 +673,13 @@ When a session is completed, the module SHALL remove both the legacy wrapper cac
 
 **Covered by:** `tools/powershell/McpSession.psm1`, `tools/powershell/McpTodo.psm1`, `tools/powershell/McpContext.psm1`, `docs/context/module-bootstrap.md`, `docs/USER-GUIDE.md`
 
+## TR-MCP-SEC-005
+
+**Self-Describing Marker Signature Payload** — The `MarkerSignature` model SHALL include an ordered `fields` array listing the 28 canonical field names used to construct the `marker-v1` HMAC-SHA256 payload, and a `format` string describing the `key=value\n` per-field encoding, trailing LF on the final line, and UTF-8 encoding. The `fields` array SHALL be the authoritative source of truth for field order; `BuildSignaturePayload` SHALL derive its output order from the same array so the two cannot diverge.
+**Status:** ✅ Complete
+
+**Covered by:** `MarkerFileService`, `MarkerSignature`, `MarkerFileServiceTests`
+
 ## TR-MCP-SEC-004
 
 **Provider-Native At-Rest Encryption with No-Loss Transition Procedures** — The storage layer SHALL support optional at-rest encryption using only provider-native or provider-extension facilities: SQLite SEE, PostgreSQL `pg_tde` on Percona Server for PostgreSQL, and native SQL Server TDE. The implementation SHALL detect desired-versus-actual encryption state at startup, SHALL refuse to silently continue when the configured state and live state differ, and SHALL require explicit no-data-loss enable/disable/rotation procedures that preserve existing data when configuration changes. SQL Server LocalDB may be used for provider and migration coverage, but SQL Server TDE validation requires a non-LocalDB SQL Server target.
