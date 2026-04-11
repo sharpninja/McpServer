@@ -40,6 +40,19 @@ public static class ServiceCollectionExtensions
             return new McpServer.Repl.Core.GraphRagWorkflow(clientFactory.Context);
         });
 
+        // Register YAML protocol primitives used by agent-stdio mode.
+        // FR-MCP-REPL-001, TR-MCP-REPL-001/003/004: YAML envelope serialization,
+        // generic client passthrough, command dispatcher, and stream-level protocol loop.
+        services.AddSingleton<IYamlSerializer, YamlSerializer>();
+        services.AddSingleton<IGenericClientPassthrough>(sp =>
+            new GenericClientPassthrough(sp.GetRequiredService<McpServer.Client.McpServerClient>()));
+        services.AddSingleton<IReplCommandDispatcher>(sp =>
+            new ReplCommandDispatcher(sp.GetRequiredService<IGenericClientPassthrough>()));
+        services.AddSingleton<IAgentStdioProtocol>(sp =>
+            new AgentStdioProtocol(
+                sp.GetRequiredService<IYamlSerializer>(),
+                sp.GetRequiredService<IReplCommandDispatcher>()));
+
         return services;
     }
 }
