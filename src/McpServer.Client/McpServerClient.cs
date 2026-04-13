@@ -101,11 +101,12 @@ public sealed class McpServerClient
         AgentPool = new AgentPoolClient(http, options, holder);
         Agent = new AgentClient(http, options, holder);
         Health = new HealthClient(http, options, holder);
+        Federation = new FederationClient(http, options, holder);
 
         _allClients = new McpClientBase[]
         {
             Todo, Context, SessionLog, GitHub, Requirements, Voice, Events,
-            Repo, Desktop, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health
+            Repo, Desktop, Tunnel, Workspace, Configuration, Tools, AuthConfig, Diagnostic, Template, AgentPool, Agent, Health, Federation
         };
         _apiKey = options.ApiKey ?? string.Empty;
         _bearerToken = options.BearerToken ?? string.Empty;
@@ -380,4 +381,10 @@ public sealed class McpServerClient
     /// <para>See <see cref="HealthClient"/> for the full method list.</para>
     /// </summary>
     public HealthClient Health { get; }
+
+    /// <summary>
+    /// Federation management endpoints — status, targets, routes, discovery, connection, and push.
+    /// <para>See <see cref="FederationClient"/> for the full method list.</para>
+    /// </summary>
+    public FederationClient Federation { get; }
 }

@@ -431,6 +431,64 @@ builder.Services.AddHttpClient(FederationProxyService.HttpClientName)
 builder.Services.AddHealthChecks()
     .AddCheck<FederationUpstreamHealthCheck>("upstream", tags: ["live"]);
 
+// FR-MCP-082/083/084/085: Federation Phase 2 — federated read-merge and push.
+// Register the HTTP client and data client used by federation decorators.
+builder.Services.AddHttpClient(McpServer.Support.Mcp.FederationDataClient.HttpClientName);
+builder.Services.AddSingleton<McpServer.Support.Mcp.FederationDataClient>();
+builder.Services.AddSingleton<IFederationDataClient>(sp => sp.GetRequiredService<McpServer.Support.Mcp.FederationDataClient>());
+builder.Services.AddSingleton<McpServer.Support.Mcp.GraphRag.IGraphRagFederationClient>(sp => sp.GetRequiredService<McpServer.Support.Mcp.FederationDataClient>());
+
+// Decorate ITodoService with federated merge.
+{
+    var innerTodo = builder.Services.Single(d => d.ServiceType == typeof(ITodoService));
+    builder.Services.Remove(innerTodo);
+    builder.Services.AddSingleton<ITodoService>(sp =>
+    {
+        var factory = sp.GetRequiredService<ITodoServiceFactory>();
+        var inner = factory.CreatePrimary();
+        return new FederatedTodoService(
+            inner,
+            sp.GetRequiredService<FederationRegistry>(),
+            sp.GetRequiredService<IFederationDataClient>(),
+            sp.GetRequiredService<ILogger<FederatedTodoService>>());
+    });
+}
+
+// Decorate ISessionLogService with federated merge.
+{
+    var innerSession = builder.Services.Single(d => d.ServiceType == typeof(ISessionLogService));
+    builder.Services.Remove(innerSession);
+    builder.Services.AddScoped<ISessionLogService>(sp =>
+    {
+        var inner = ActivatorUtilities.CreateInstance<SessionLogService>(sp);
+        return new FederatedSessionLogService(
+            inner,
+            sp.GetRequiredService<FederationRegistry>(),
+            sp.GetRequiredService<IFederationDataClient>(),
+            sp.GetRequiredService<ILogger<FederatedSessionLogService>>());
+    });
+}
+
+// Decorate IGraphRagService with federated merge.
+// GraphRagService is internal to McpServer.GraphRag, so we capture the type from the descriptor.
+{
+    var innerGraphRag = builder.Services.Single(d => d.ServiceType == typeof(IGraphRagService));
+    var innerType = innerGraphRag.ImplementationType!;
+    builder.Services.Remove(innerGraphRag);
+    builder.Services.AddScoped<IGraphRagService>(sp =>
+    {
+        var inner = (IGraphRagService)ActivatorUtilities.CreateInstance(sp, innerType);
+        return new McpServer.Support.Mcp.GraphRag.FederatedGraphRagService(
+            inner,
+            sp.GetRequiredService<FederationRegistry>(),
+            sp.GetRequiredService<McpServer.Support.Mcp.GraphRag.IGraphRagFederationClient>(),
+            sp.GetRequiredService<ILogger<McpServer.Support.Mcp.GraphRag.FederatedGraphRagService>>());
+    });
+}
+
+// Push service for explicit federation data push.
+builder.Services.AddScoped<IFederationPushService, FederationPushService>();
+
 builder.Services.Configure<TunnelOptions>(
     builder.Configuration.GetSection(TunnelOptions.SectionName));
 builder.Services.AddSingleton<NgrokTunnelProvider>();
