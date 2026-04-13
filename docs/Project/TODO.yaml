@@ -1454,6 +1454,23 @@ infrastructure:
     - MCP proxy routes are server endpoints, not Android-side rewrites. The server must forward device authorization and token polling requests to Keycloak using configured OIDC authority/realm endpoints.
     - Preserve OIDC response payloads/status codes so Android device-flow polling logic continues to work unchanged except for base URL (:7147 instead of :7080).
     - 'Route examples: GET /auth/config (local metadata), POST /auth/device (proxy to Keycloak device authorization endpoint), POST /auth/token (proxy to Keycloak token endpoint).'
+  - id: INFRA-REPO-001
+    title: Repository Infrastructure
+    done: false
+    depends-on: []
+  - id: INFRA-MCP-001
+    title: MCP Server Setup and Session Init
+    done: true
+    done-summary: Workspace registered, 32 TODOs created with dependency graph, 15 FRs and 12 TRs registered. Session log creation blocked by server bug (500 on SubmitAsync).
+    depends-on:
+    - INFRA-REPO-001
+    implementation-tasks:
+    - task: Register VICE-Sharp workspace
+      done: true
+    - task: Create session log
+      done: false
+    - task: Create all iteration TODOs
+      done: true
   - id: web-ui
     title: '[READY] McpServer Management Web UI'
     note: "\"Blazor Server app using Primer CSS (GitHub's design system) + Octicons. Separate process (McpServer.Web), talks to McpServer API via McpServer.Client. Reuses McpServer.UI.Core ViewModels + CQRS handlers (same pattern as Director). Open-source .NET OIDC server integration from day one, aligned with platform-wide Keycloak replacement. NO MudBlazor - custom Blazor components wrapping Primer CSS classes directly."
@@ -1633,6 +1650,12 @@ infrastructure:
       done: true
     - task: 'Phase 8.3 Completion: run build + targeted unit/integration tests, update TODO doneSummary/remaining, and finalize session log evidence.'
       done: true
+  - id: INFRA-CI-001
+    title: CI CD Pipelines
+    done: false
+    depends-on:
+    - VALID-DET-001
+    - IMPL-APPS-001
   - id: MCP-TODO-005
     title: Make TODO database the source of truth with YAML sync and audit history
     note: '2026-03-20T15:40:45Z: Core implementation now compiles. SQLite authoritative storage, YAML serializer sharing, audit-history contracts, HTTP/MCP/client surfaces, and sqlite default config wiring are in place. Next: targeted tests, requirements docs, and remediations.'
@@ -2516,6 +2539,55 @@ Documentation:
     description:
     - Create marketing-oriented documentation for McpServer.
     - "Cover: what McpServer is, key features, why it's needed, supported UI tooling (VS extension, Web UI, etc.), and value proposition for adopters."
+  - id: DOCS-INREPO-001
+    title: In-Repo Documentation
+    done: true
+    description:
+    - README.md, THIRD_PARTY_NOTICES.md, docs/ with Architecture, Public-API, StateWindow, Decoupling, PubSub, ROMs, ROL 122+ entries, Iteration specs
+    done-summary: 'All 12 documentation files created: README.md, THIRD_PARTY_NOTICES.md, docs/README.md, Iteration-00-Foundations.md, Iteration-Roadmap.md, Architecture.md, Public-API.md, StateWindow.md, Decoupling.md, PubSub.md, ROMs.md, ROL.md (125 entries)'
+    depends-on:
+    - INFRA-MCP-001
+    implementation-tasks:
+    - task: Create README.md
+      done: true
+    - task: Create THIRD_PARTY_NOTICES.md
+      done: true
+    - task: Create docs/README.md TOC
+      done: true
+    - task: Create docs/Iteration-00-Foundations.md
+      done: true
+    - task: Create docs/Iteration-Roadmap.md
+      done: true
+    - task: Create docs/Architecture.md
+      done: true
+    - task: Create docs/Public-API.md
+      done: true
+    - task: Create docs/StateWindow.md
+      done: true
+    - task: Create docs/Decoupling.md
+      done: true
+    - task: Create docs/PubSub.md
+      done: true
+    - task: Create docs/ROMs.md
+      done: true
+    - task: Create docs/ROL.md with 122+ entries
+      done: true
+  - id: DOCS-FRTR-001
+    title: FR/TR Requirements Documentation
+    note: 15 FRs and 12 TRs registered in MCP Server via REST API. Doc files being written.
+    done: true
+    description:
+    - Functional and Technical Requirements covering CPU, memory, video, audio, IO, storage, input, media capture, monitor, snapshots, machine profiles
+    done-summary: 15 FR docs + 12 TR docs + 3 traceability docs created (31 files). 15 FRs and 12 TRs registered in MCP Server.
+    depends-on:
+    - INFRA-MCP-001
+    implementation-tasks:
+    - task: Create FR documents
+      done: true
+    - task: Create TR documents
+      done: true
+    - task: Register FR/TR in MCP Server
+      done: true
 MCP:
   high-priority:
   - id: MCP-SESSION-020
@@ -3020,3 +3092,203 @@ Plugin:
       done: false
     - task: Post session log turn with results
       done: false
+Federation:
+  high-priority:
+  - id: IMPL-FEDERATION-001
+    title: Federation read-merge and federated push
+    estimate: 4-6d
+    done: false
+    description:
+    - 'Implement transparent federated read merging for TODO/SessionLog/GraphRAG (local wins on ID collision), FederationPushService for all 4 domains, POST /mcpserver/federation/push endpoint, FederationClient in McpServer.Client, IFederationWorkflow in McpServer.Repl.Core. Byrd TDD process. Plan file: vivid-wiggling-wombat.md'
+    technical-details:
+    - 'Decorator pattern via .NET 10 keyed services: ITodoService/ISessionLogService/IGraphRagService each get local key + federated decorator as public registration.'
+    - IFederationClientFactory creates McpServerClient per FederationTarget using IHttpClientFactory named FederationClient.
+    - FederatedGraphRagService in McpServer.GraphRag; FederatedTodoService and FederatedSessionLogService in McpServer.Services.
+    - McpServer.Services.csproj and McpServer.GraphRag.csproj both need ProjectReference to McpServer.Client.
+    - FederationPushService is scoped; FederationClientFactory is singleton.
+    - 'GraphRAG push order: entities then relationships then documents.'
+    - FederationWorkflow takes IFederationClient interface for testability.
+    - 'Remote call failures in federated read decorators: catch (except OperationCanceledException), log Warning, return local-only.'
+    functional-requirements:
+    - FR-MCP-082
+    - FR-MCP-083
+    - FR-MCP-084
+    - FR-MCP-085
+    technical-requirements:
+    - TR-MCP-FED-001
+    - TR-MCP-FED-002
+    - TR-MCP-FED-003
+    - TR-MCP-FED-004
+    implementation-tasks:
+    - task: 'Phase 1: csproj - McpServer.Client ref to McpServer.Services + McpServer.GraphRag'
+      done: false
+    - task: 'Phase 2: FederationPushResult + IFederationClientFactory + FederationClientFactory'
+      done: false
+    - task: 'Phase 3: FederatedTodoServiceTests (10 scenarios) + FederatedTodoService'
+      done: false
+    - task: 'Phase 4: FederatedSessionLogServiceTests (8 scenarios) + FederatedSessionLogService'
+      done: false
+    - task: 'Phase 5: FederatedGraphRagServiceTests (13 scenarios) + FederatedGraphRagService'
+      done: false
+    - task: 'Phase 6: FederationPushServiceTests (11 scenarios) + IFederationPushService + FederationPushService'
+      done: false
+    - task: 'Phase 7: Push endpoint in FederationController'
+      done: false
+    - task: 'Phase 8: IFederationClient + FederationClient + FederationModels in McpServer.Client'
+      done: false
+    - task: 'Phase 9: FederationWorkflowTests (7 scenarios) + IFederationWorkflow + FederationWorkflow'
+      done: false
+    - task: 'Phase 10: DI wiring - Program.cs + GraphRag ServiceCollectionExtensions'
+      done: false
+    - task: 'Phase 11: Test project csproj updates + all tests green'
+      done: false
+Knowledge:
+  medium-priority:
+  - id: KNOW-GRAPH-001
+    title: GraphRAG Knowledge Ingestion
+    done: true
+    description:
+    - Ingest VICE manual, C64 Programmer Reference, MOS CPU/VIC-II/SID/CIA/VIA datasheets, file format specs, Klaus Dormann test suite, resid-fp docs
+    done-summary: '41 documents ingested into GraphRAG: 10 core in-repo docs (Architecture, Public-API, ROL, etc.) + 31 FR/TR requirement docs. Total: ~71K tokens across 170 chunks. Index rebuilt.'
+    depends-on:
+    - DOCS-FRTR-001
+Implementation:
+  high-priority:
+  - id: IMPL-ABSTR-001
+    title: Abstractions - Tests
+    done: false
+    description:
+    - Write tests for 33+ public interfaces in ViceSharp.Abstractions
+    depends-on:
+    - KNOW-GRAPH-001
+  - id: IMPL-ABSTR-002
+    title: Abstractions - Mermaid Diagrams
+    done: false
+    depends-on:
+    - IMPL-ABSTR-001
+  - id: IMPL-ABSTR-003
+    title: Abstractions - Implementation
+    done: false
+    depends-on:
+    - IMPL-ABSTR-002
+  - id: IMPL-SRCGEN-001
+    title: Source Generator - Tests
+    done: false
+    depends-on:
+    - IMPL-ABSTR-003
+  - id: IMPL-SRCGEN-002
+    title: Source Generator - Mermaid Diagrams
+    done: false
+    depends-on:
+    - IMPL-SRCGEN-001
+  - id: IMPL-SRCGEN-003
+    title: Source Generator - Implementation
+    done: false
+    depends-on:
+    - IMPL-SRCGEN-002
+  - id: IMPL-CORE-001
+    title: Core - Tests
+    done: false
+    depends-on:
+    - IMPL-ABSTR-003
+  - id: IMPL-CORE-002
+    title: Core - Mermaid Diagrams
+    done: false
+    depends-on:
+    - IMPL-CORE-001
+  - id: IMPL-CORE-003
+    title: Core - Implementation
+    done: false
+    depends-on:
+    - IMPL-CORE-002
+  - id: IMPL-ARCH-001
+    title: Architectures - Tests
+    done: false
+    depends-on:
+    - IMPL-CORE-003
+  - id: IMPL-ARCH-002
+    title: Architectures - Mermaid Diagrams
+    done: false
+    depends-on:
+    - IMPL-ARCH-001
+  - id: IMPL-ARCH-003
+    title: Architectures - Implementation
+    done: false
+    depends-on:
+    - IMPL-ARCH-002
+  - id: IMPL-CHIPS-001
+    title: Chips and Peripherals - Tests
+    done: false
+    depends-on:
+    - IMPL-CORE-003
+  - id: IMPL-CHIPS-002
+    title: Chips and Peripherals - Mermaid
+    done: false
+    depends-on:
+    - IMPL-CHIPS-001
+  - id: IMPL-CHIPS-003
+    title: Chips and Peripherals - Implementation
+    done: false
+    depends-on:
+    - IMPL-CHIPS-002
+  - id: IMPL-MEDIA-001
+    title: Media Capture - Tests
+    done: false
+    depends-on:
+    - IMPL-CORE-003
+  - id: IMPL-MEDIA-002
+    title: Media Capture - Mermaid
+    done: false
+    depends-on:
+    - IMPL-MEDIA-001
+  - id: IMPL-MEDIA-003
+    title: Media Capture - Implementation
+    done: false
+    depends-on:
+    - IMPL-MEDIA-002
+  - id: IMPL-MON-001
+    title: Monitor Hosting Controls - Tests
+    done: false
+    depends-on:
+    - IMPL-CORE-003
+  - id: IMPL-MON-002
+    title: Monitor Hosting Controls - Mermaid
+    done: false
+    depends-on:
+    - IMPL-MON-001
+  - id: IMPL-MON-003
+    title: Monitor Hosting Controls - Implementation
+    done: false
+    depends-on:
+    - IMPL-MON-002
+  - id: IMPL-APPS-001
+    title: Apps Stubs
+    done: false
+    depends-on:
+    - IMPL-ARCH-003
+    - IMPL-MON-003
+  medium-priority:
+  - id: IMPL-ROM-001
+    title: RomFetch Tool - Tests
+    done: false
+    depends-on:
+    - INFRA-REPO-001
+  - id: IMPL-ROM-002
+    title: RomFetch Tool - Implementation
+    done: false
+    depends-on:
+    - IMPL-ROM-001
+Validation:
+  high-priority:
+  - id: VALID-DET-001
+    title: Determinism Test and Benchmarks
+    done: false
+    depends-on:
+    - IMPL-ARCH-003
+    - IMPL-CHIPS-003
+  - id: VALID-FINAL-001
+    title: Final Validation
+    done: false
+    depends-on:
+    - INFRA-CI-001
+    - IMPL-ROM-002
