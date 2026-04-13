@@ -8,6 +8,7 @@
     <UserSecretsId>funwashad-support-mcp</UserSecretsId>
     <NoWarn>$(NoWarn);CA1515;CA1849;CA1031;CA3003;CA1056;CA1054;CS0436</NoWarn>
     <RootNamespace>McpServer.Support.Mcp</RootNamespace>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Staging'">
     <Optimize>false</Optimize>
