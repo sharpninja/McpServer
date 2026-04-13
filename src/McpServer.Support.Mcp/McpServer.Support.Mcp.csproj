@@ -8,7 +8,6 @@
     <UserSecretsId>funwashad-support-mcp</UserSecretsId>
     <NoWarn>$(NoWarn);CA1515;CA1849;CA1031;CA3003;CA1056;CA1054;CS0436</NoWarn>
     <RootNamespace>McpServer.Support.Mcp</RootNamespace>
-    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Staging'">
     <Optimize>false</Optimize>
@@ -29,7 +28,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" PrivateAssets="all">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <IncludeAssets>runtime; build; native; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" PrivateAssets="all" />
