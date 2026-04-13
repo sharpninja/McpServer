@@ -844,4 +844,163 @@ public class GenericClientPassthroughTests
     }
 
     #endregion
+
+    #region Federation Client Passthrough Tests
+
+    [Fact]
+    public async Task ResolveClient_FederationCaseInsensitive_ResolvesFederationClient()
+    {
+        var args = new Dictionary<string, object?>();
+
+        var expectedResult = new FederationStatusResponse
+        {
+            Enabled = true,
+            Targets = new List<FederationTargetInfo>(),
+            WorkspaceRoutes = new List<WorkspaceRouteInfo>()
+        };
+
+        _passthrough.InvokeAsync("federation", "GetStatusAsync", args, Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<object?>(expectedResult));
+
+        var result = await _passthrough.InvokeAsync("federation", "GetStatusAsync", args);
+
+        Assert.NotNull(result);
+        var status = Assert.IsType<FederationStatusResponse>(result);
+        Assert.True(status.Enabled);
+        await _passthrough.Received(1).InvokeAsync("federation", "GetStatusAsync", args, Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task FederationClient_AddTarget_CoercesComplexRequest()
+    {
+        var args = new Dictionary<string, object?>
+        {
+            ["request"] = new Dictionary<string, object?>
+            {
+                ["name"] = "remote-server",
+                ["baseUrl"] = "http://remote:7147",
+                ["apiKey"] = "secret"
+            }
+        };
+
+        var expectedResult = new FederationTargetInfo
+        {
+            Name = "remote-server",
+            BaseUrl = "http://remote:7147",
+            HasApiKey = true,
+            IsDefault = false
+        };
+
+        _passthrough.InvokeAsync("federation", "AddTargetAsync", args, Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<object?>(expectedResult));
+
+        var result = await _passthrough.InvokeAsync("federation", "AddTargetAsync", args);
+
+        Assert.NotNull(result);
+        var target = Assert.IsType<FederationTargetInfo>(result);
+        Assert.Equal("remote-server", target.Name);
+        Assert.True(target.HasApiKey);
+    }
+
+    [Fact]
+    public async Task FederationClient_Push_CoercesTypeFilter()
+    {
+        var args = new Dictionary<string, object?>
+        {
+            ["types"] = new List<object?> { "todos", "sessionlogs" }
+        };
+
+        var expectedResult = new FederationPushResult
+        {
+            Succeeded = 10,
+            Failed = 0,
+            Errors = new List<string>()
+        };
+
+        _passthrough.InvokeAsync("federation", "PushAsync", args, Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<object?>(expectedResult));
+
+        var result = await _passthrough.InvokeAsync("federation", "PushAsync", args);
+
+        Assert.NotNull(result);
+        var push = Assert.IsType<FederationPushResult>(result);
+        Assert.Equal(10, push.Succeeded);
+        Assert.Equal(0, push.Failed);
+    }
+
+    [Fact]
+    public async Task FederationClient_ListTargets_ReturnsCollection()
+    {
+        var args = new Dictionary<string, object?>();
+
+        var expectedResult = new List<FederationTargetInfo>
+        {
+            new() { Name = "server-a", BaseUrl = "http://a:7147", HasApiKey = false, IsDefault = true },
+            new() { Name = "server-b", BaseUrl = "http://b:7148", HasApiKey = true, IsDefault = false }
+        };
+
+        _passthrough.InvokeAsync("federation", "ListTargetsAsync", args, Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<object?>(expectedResult));
+
+        var result = await _passthrough.InvokeAsync("federation", "ListTargetsAsync", args);
+
+        Assert.NotNull(result);
+        var targets = Assert.IsType<List<FederationTargetInfo>>(result);
+        Assert.Equal(2, targets.Count);
+        Assert.Equal("server-a", targets[0].Name);
+        Assert.True(targets[0].IsDefault);
+    }
+
+    [Fact]
+    public async Task FederationClient_DiscoverFromTunnels_ReturnsTunnelDiscoveryResult()
+    {
+        var args = new Dictionary<string, object?>();
+
+        var expectedResult = new TunnelDiscoveryResult
+        {
+            Discovered = 1,
+            Targets = new List<FederationTargetInfo>
+            {
+                new() { Name = "ngrok", BaseUrl = "https://abc.ngrok.io", HasApiKey = false, IsDefault = false }
+            }
+        };
+
+        _passthrough.InvokeAsync("federation", "DiscoverFromTunnelsAsync", args, Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<object?>(expectedResult));
+
+        var result = await _passthrough.InvokeAsync("federation", "DiscoverFromTunnelsAsync", args);
+
+        Assert.NotNull(result);
+        var discovery = Assert.IsType<TunnelDiscoveryResult>(result);
+        Assert.Equal(1, discovery.Discovered);
+        Assert.Single(discovery.Targets);
+    }
+
+    [Fact]
+    public async Task FederationClient_GetConnection_ReturnsCredentials()
+    {
+        var args = new Dictionary<string, object?>
+        {
+            ["workspaceName"] = "MyProject"
+        };
+
+        var expectedResult = new FederationConnectionInfo
+        {
+            BaseUrl = "http://hostname:7147",
+            Port = 7147,
+            ApiKey = "ws-token"
+        };
+
+        _passthrough.InvokeAsync("federation", "GetConnectionAsync", args, Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<object?>(expectedResult));
+
+        var result = await _passthrough.InvokeAsync("federation", "GetConnectionAsync", args);
+
+        Assert.NotNull(result);
+        var conn = Assert.IsType<FederationConnectionInfo>(result);
+        Assert.Equal(7147, conn.Port);
+        Assert.Equal("ws-token", conn.ApiKey);
+    }
+
+    #endregion
 }
