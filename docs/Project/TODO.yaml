@@ -1454,23 +1454,121 @@ infrastructure:
     - MCP proxy routes are server endpoints, not Android-side rewrites. The server must forward device authorization and token polling requests to Keycloak using configured OIDC authority/realm endpoints.
     - Preserve OIDC response payloads/status codes so Android device-flow polling logic continues to work unchanged except for base URL (:7147 instead of :7080).
     - 'Route examples: GET /auth/config (local metadata), POST /auth/device (proxy to Keycloak device authorization endpoint), POST /auth/token (proxy to Keycloak token endpoint).'
-  - id: INFRA-REPO-001
-    title: Repository Infrastructure
+  - id: PLAN-CLAUDEPLUGIN-001
+    title: Create mcpserver Claude Code Plugin
+    note: Audited 2026-04-06. 3 critical corrections (SessionStart invalid, shell field invalid, mcp.json format), 4 moderate (user_invoked field, homepage, allowed-tools, agent fields), 3 minor (gitignore, CLAUDE_PLUGIN_ROOT, hooks.json description).
     done: false
-    depends-on: []
-  - id: INFRA-MCP-001
-    title: MCP Server Setup and Session Init
-    done: true
-    done-summary: Workspace registered, 32 TODOs created with dependency graph, 15 FRs and 12 TRs registered. Session log creation blocked by server bug (500 on SubmitAsync).
-    depends-on:
-    - INFRA-REPO-001
+    description:
+    - Create a Claude Code plugin at .claude/plugins/mcpserver/ that automates MCP server session bootstrapping and provides skills for common workflows.
+    - Connects Claude Code to 45 MCP tools via Streamable HTTP at /mcp-transport (no API key needed).
+    - Provides bootstrap hook for automatic health verification and context injection.
+    - 'User-invoked skills: /mcpserver:status, /mcpserver:todo, /mcpserver:deploy, /mcpserver:tunnel.'
+    - 'Model-invoked skills: session logging workflow, TODO workflow, requirements tracking.'
+    - 'Custom agent: mcp-context-researcher for context search and GraphRAG research.'
+    - ''
+    - '## Implementation Phases'
+    - ''
+    - '### Phase 1: Core Infrastructure (3 files)'
+    - '- .claude-plugin/plugin.json - Plugin manifest (fields: name, description, version, author with name/email). No homepage field.'
+    - '- .mcp.json - MCP transport connection. FLAT format: { server-name: { type: http, url: ... } }. No mcpServers wrapper.'
+    - '- README.md - Plugin documentation'
+    - ''
+    - '### Phase 2: Session Bootstrap (2 files) - REVISED'
+    - '- hooks/hooks.json - Hook registration. Top-level has description + hooks object. Valid events: PreToolUse, PostToolUse, Stop, UserPromptSubmit. SessionStart does NOT exist.'
+    - '- hooks/hooks-handlers/session-start.ps1 - Bootstrap script. Reads AGENTS-README-FIRST.yaml, verifies /health with nonce, injects context or MCP_UNTRUSTED warning.'
+    - '- DESIGN DECISION NEEDED: Use UserPromptSubmit hook (fires on first prompt, auto-bootstrap) OR create a /mcpserver:start user-invoked skill for explicit bootstrap. UserPromptSubmit fires on EVERY prompt so script must be idempotent and fast (check cached state).'
+    - '- Hook entry fields: type, command, timeout ONLY. No shell field. Use $CLAUDE_PLUGIN_ROOT for paths.'
+    - ''
+    - '### Phase 3: User-Invoked Skills (4 files)'
+    - '- skills/status/SKILL.md - /mcpserver:status. Frontmatter: name, description, argument-hint, allowed-tools: [Bash, Read]'
+    - '- skills/todo/SKILL.md - /mcpserver:todo. Frontmatter: name, description, argument-hint, allowed-tools: [Bash, Read]'
+    - '- skills/deploy/SKILL.md - /mcpserver:deploy. Frontmatter: name, description, argument-hint, allowed-tools: [Bash, Read]'
+    - '- skills/tunnel/SKILL.md - /mcpserver:tunnel. Frontmatter: name, description, argument-hint, allowed-tools: [Bash, Read]'
+    - '- NOTE: User-invoked is determined by presence of argument-hint field. No user_invoked: true field exists.'
+    - ''
+    - '### Phase 4: Model-Invoked Skills (3 files)'
+    - '- skills/mcp-session-logging/SKILL.md - Only name + description in frontmatter. No argument-hint = model-invoked.'
+    - '- skills/mcp-todo-workflow/SKILL.md - TODO CRUD, ID format rules, GitHub sync behavior'
+    - '- skills/mcp-requirements/SKILL.md - FR/TR/TEST format, docs/Project/ locations'
+    - ''
+    - '### Phase 5: Custom Agent (1 file)'
+    - '- agents/mcp-context-researcher.md - Frontmatter must include: name, description, tools (comma-separated), model (sonnet), color (cyan)'
+    - ''
+    - '### Phase 6: Housekeeping (1 task)'
+    - '- Update .gitignore with .claude/*.local.md and .claude/*.local.json patterns'
+    - ''
+    - '## Key Design Decisions'
+    - '- .mcp.json uses FLAT format with localhost:7147/mcp-transport (no API key, portable)'
+    - '- Bootstrap hook uses UserPromptSubmit (not SessionStart which does not exist). Script must be idempotent.'
+    - '- Hook commands reference plugin root via ${CLAUDE_PLUGIN_ROOT} variable, not hardcoded paths'
+    - '- Model-invoked skills provide naming conventions and workflow guides'
+    - '- API key included in hook context output for REST API fallback calls'
+    - ''
+    - '## Audit Corrections Applied (2026-04-06)'
+    - '- CRITICAL: SessionStart is not a valid hook event. Changed to UserPromptSubmit or explicit /mcpserver:start skill.'
+    - '- CRITICAL: shell field does not exist in hook entries. Removed.'
+    - '- CRITICAL: .mcp.json must use flat format, not mcpServers wrapper.'
+    - '- MODERATE: user_invoked: true is not a valid field. Use argument-hint presence instead.'
+    - '- MODERATE: homepage is not a valid plugin.json field. Removed.'
+    - '- MODERATE: Added allowed-tools to all user-invoked skills.'
+    - '- MODERATE: Added model, color, tools fields to agent definition.'
+    - '- MINOR: Added .gitignore task for plugin local config files.'
+    - '- MINOR: Use ${CLAUDE_PLUGIN_ROOT} in hook commands instead of hardcoded paths.'
+    - '- MINOR: Added top-level description field to hooks.json spec.'
+    - ''
+    - '## Verification'
+    - 1. Bootstrap hook fires on first prompt and injects MCP server context
+    - 2. /mcpserver:status shows health, workspace, tunnel status
+    - 3. /mcpserver:todo lists TODOs via MCP tools
+    - 4. mcp-session-logging skill activates when logging turns
+    - 5. mcp-todo-workflow skill activates with correct naming conventions
+    - 6. All 45 MCP tools visible in Claude tool list
+    technical-details:
+    - 13 files + 1 gitignore update across 6 phases.
+    - 'Plugin follows Claude Code plugin format: .claude-plugin/plugin.json manifest, .mcp.json (FLAT format) for MCP server connections, hooks/hooks.json for lifecycle hooks, skills/name/SKILL.md for slash commands and model-invoked skills, agents/name.md for custom agents.'
+    - 'Valid hook events: PreToolUse, PostToolUse, Stop, UserPromptSubmit. SessionStart does NOT exist.'
+    - 'Hook entry fields: type (command), command (string, supports ${CLAUDE_PLUGIN_ROOT}), timeout (int seconds). No shell field.'
+    - User-invoked skills identified by argument-hint presence, not a user_invoked field.
+    - 'Agent frontmatter supports: name, description, tools (comma-separated), model (sonnet/haiku/opus/inherit), color.'
+    - 'plugin.json valid fields: name, description, version, author (name/email). No homepage.'
+    - '.mcp.json flat format: { server-name: { type: http, url: ... } }. No mcpServers wrapper.'
+    - Uses pwsh.exe -NoProfile -NonInteractive for all PowerShell.
+    - Full plan at .claude/plans/flickering-cooking-finch.md
     implementation-tasks:
-    - task: Register VICE-Sharp workspace
-      done: true
-    - task: Create session log
+    - task: 'DESIGN DECISION: Choose bootstrap strategy - UserPromptSubmit hook vs /mcpserver:start skill'
       done: false
-    - task: Create all iteration TODOs
-      done: true
+    - task: 'Create .claude-plugin/plugin.json manifest (fields: name, description, version, author)'
+      done: false
+    - task: Create .mcp.json with FLAT format Streamable HTTP transport config
+      done: false
+    - task: 'Create hooks/hooks.json with UserPromptSubmit registration (fields: type, command, timeout only)'
+      done: false
+    - task: Create hooks/hooks-handlers/session-start.ps1 idempotent bootstrap script using ${CLAUDE_PLUGIN_ROOT}
+      done: false
+    - task: Create skills/status/SKILL.md with argument-hint and allowed-tools
+      done: false
+    - task: Create skills/todo/SKILL.md with argument-hint and allowed-tools
+      done: false
+    - task: Create skills/deploy/SKILL.md with argument-hint and allowed-tools
+      done: false
+    - task: Create skills/tunnel/SKILL.md with argument-hint and allowed-tools
+      done: false
+    - task: Create skills/mcp-session-logging/SKILL.md model-invoked skill (name + description only)
+      done: false
+    - task: Create skills/mcp-todo-workflow/SKILL.md model-invoked skill
+      done: false
+    - task: Create skills/mcp-requirements/SKILL.md model-invoked skill
+      done: false
+    - task: Create agents/mcp-context-researcher.md with tools, model, color fields
+      done: false
+    - task: Create README.md plugin documentation
+      done: false
+    - task: Update .gitignore with .claude/*.local.md and .claude/*.local.json patterns
+      done: false
+    - task: Test hook ${CLAUDE_PLUGIN_ROOT} variable expansion on Windows
+      done: false
+    - task: Verify plugin loads and all 45 MCP tools appear in Claude Code session
+      done: false
   - id: web-ui
     title: '[READY] McpServer Management Web UI'
     note: "\"Blazor Server app using Primer CSS (GitHub's design system) + Octicons. Separate process (McpServer.Web), talks to McpServer API via McpServer.Client. Reuses McpServer.UI.Core ViewModels + CQRS handlers (same pattern as Director). Open-source .NET OIDC server integration from day one, aligned with platform-wide Keycloak replacement. NO MudBlazor - custom Blazor components wrapping Primer CSS classes directly."
@@ -1650,22 +1748,21 @@ infrastructure:
       done: true
     - task: 'Phase 8.3 Completion: run build + targeted unit/integration tests, update TODO doneSummary/remaining, and finalize session log evidence.'
       done: true
-  - id: INFRA-CI-001
-    title: CI CD Pipelines
-    done: false
-    depends-on:
-    - VALID-DET-001
-    - IMPL-APPS-001
   - id: MCP-TODO-005
     title: Make TODO database the source of truth with YAML sync and audit history
-    note: '2026-03-20T15:40:45Z: Core implementation now compiles. SQLite authoritative storage, YAML serializer sharing, audit-history contracts, HTTP/MCP/client surfaces, and sqlite default config wiring are in place. Next: targeted tests, requirements docs, and remediations.'
+    note: >-
+      2026-03-20T15:40:45Z: Core implementation now compiles. SQLite authoritative storage, YAML serializer sharing, audit-history contracts, HTTP/MCP/client surfaces, and sqlite default config wiring are in place. Next: targeted tests, requirements docs, and remediations.
+
+      2026-04-07: Verified TodoStorage.Provider set to 'sqlite' in appsettings.yaml
+
+      2026-04-07: Updated Functional-Requirements.md to mark FR-MCP-072 as complete
     done: false
     description:
-    - Make SQLite the authoritative current-state store for TODO items while keeping docs/Project/TODO.yaml synchronized as a deterministic projection of database state.
+    - Make Database the authoritative current-state store for TODO items while keeping docs/Project/TODO.yaml synchronized as a deterministic projection of database state.
     - Persist append-only audit history for TODO state changes and expose that history through HTTP, MCP STDIO, and the typed client.
     - Preserve special TODO document sections such as code-review-remediation, completed, and notes without leaving YAML as the runtime source of truth.
     technical-details:
-    - Keep TODO persistence in the existing raw SQLite TODO store rather than moving this feature into McpDbContext for this change.
+    - Keep TODO persistence in the existing raw Database TODO store rather than moving this feature into McpDbContext for this change.
     - 'Add additive schema upgrades for todo_items ordering metadata: item_kind, section_order, and item_order.'
     - Add a todo_item_history table with monotonic per-id versions and stored pre/post snapshots for reconstructable audit history.
     - Add a todo_document_metadata singleton table for completed, notes, and code-review-remediation reference metadata.
@@ -1673,22 +1770,23 @@ infrastructure:
     - Treat a non-empty database as authoritative; only import YAML when the DB is empty and the configured TODO file exists.
     - Surface YAML projection failures explicitly instead of pretending the mutation fully succeeded.
     - Deliver a GET /mcpserver/todo/{id}/audit endpoint, matching MCP tool support, and typed client support as part of the same feature.
+    - Any schema changes must propagate across all implemented DB providers (SQLite, SQL Server, PostgreSQL) via the strategy pattern.
     implementation-tasks:
-    - task: 'Phase 0: finalize migration, DTO, initialization, configuration, and requirement contracts before feature code lands'
-      done: false
-    - task: 'Phase 1: extend the SQLite schema with ordering metadata, audit history, and document metadata tables'
-      done: false
-    - task: 'Phase 2: build YAML import and deterministic YAML projection support around the DB-authoritative store'
-      done: false
-    - task: 'Phase 3: refactor the active TODO service so DB reads and writes are authoritative and YAML becomes a synchronized projection'
-      done: false
-    - task: 'Phase 4: add TODO audit query support to the REST API, MCP STDIO tool surface, and typed client'
-      done: false
-    - task: 'Phase 5: flip shipped configuration defaults to sqlite-backed TODO storage and update supporting docs'
-      done: false
-    - task: 'Phase 6: update requirements docs and replace backend-isolation tests with DB-authoritative behavior coverage'
-      done: false
-    - task: 'Phase 7: run build and test validation, then finalize the TODO item, session log, commit, push, and CI remediation'
+    - task: 'Phase 0: Finalize contracts - Completed'
+      done: true
+    - task: 'Phase 1: Extend schema - Partially complete (migrations exist, verify tables)'
+      done: true
+    - task: 'Phase 2: YAML import/projection - Implemented in TodoController'
+      done: true
+    - task: 'Phase 3: Refactor TODO service - Completed (ITodoService used)'
+      done: true
+    - task: 'Phase 4: Add audit query - Implemented (GetAuditAsync endpoint)'
+      done: true
+    - task: 'Phase 5: Flip config defaults - Verify in appsettings.yaml'
+      done: true
+    - task: 'Phase 6: Update docs and tests - Pending'
+      done: true
+    - task: 'Phase 7: Build/test/commit - Pending'
       done: false
   medium-priority:
   - id: do-not-speak-tables
@@ -2539,55 +2637,6 @@ Documentation:
     description:
     - Create marketing-oriented documentation for McpServer.
     - "Cover: what McpServer is, key features, why it's needed, supported UI tooling (VS extension, Web UI, etc.), and value proposition for adopters."
-  - id: DOCS-INREPO-001
-    title: In-Repo Documentation
-    done: true
-    description:
-    - README.md, THIRD_PARTY_NOTICES.md, docs/ with Architecture, Public-API, StateWindow, Decoupling, PubSub, ROMs, ROL 122+ entries, Iteration specs
-    done-summary: 'All 12 documentation files created: README.md, THIRD_PARTY_NOTICES.md, docs/README.md, Iteration-00-Foundations.md, Iteration-Roadmap.md, Architecture.md, Public-API.md, StateWindow.md, Decoupling.md, PubSub.md, ROMs.md, ROL.md (125 entries)'
-    depends-on:
-    - INFRA-MCP-001
-    implementation-tasks:
-    - task: Create README.md
-      done: true
-    - task: Create THIRD_PARTY_NOTICES.md
-      done: true
-    - task: Create docs/README.md TOC
-      done: true
-    - task: Create docs/Iteration-00-Foundations.md
-      done: true
-    - task: Create docs/Iteration-Roadmap.md
-      done: true
-    - task: Create docs/Architecture.md
-      done: true
-    - task: Create docs/Public-API.md
-      done: true
-    - task: Create docs/StateWindow.md
-      done: true
-    - task: Create docs/Decoupling.md
-      done: true
-    - task: Create docs/PubSub.md
-      done: true
-    - task: Create docs/ROMs.md
-      done: true
-    - task: Create docs/ROL.md with 122+ entries
-      done: true
-  - id: DOCS-FRTR-001
-    title: FR/TR Requirements Documentation
-    note: 15 FRs and 12 TRs registered in MCP Server via REST API. Doc files being written.
-    done: true
-    description:
-    - Functional and Technical Requirements covering CPU, memory, video, audio, IO, storage, input, media capture, monitor, snapshots, machine profiles
-    done-summary: 15 FR docs + 12 TR docs + 3 traceability docs created (31 files). 15 FRs and 12 TRs registered in MCP Server.
-    depends-on:
-    - INFRA-MCP-001
-    implementation-tasks:
-    - task: Create FR documents
-      done: true
-    - task: Create TR documents
-      done: true
-    - task: Register FR/TR in MCP Server
-      done: true
 MCP:
   high-priority:
   - id: MCP-SESSION-020
@@ -2725,570 +2774,3 @@ issues:
 
       updated: 2026-02-19T16:17:20Z
     done: false
-Build Infrastructure:
-  high-priority:
-  - id: PLAN-NUKE-001
-    title: Add Nuke Build System and Migrate Build-Related PS Scripts to Targets
-    estimate: 8h
-    note: 'Scaffold Nuke build project, migrate 9 PS scripts to C# targets with TDD, integrate with Azure Pipelines and GitHub Actions, update documentation. See plan file: expressive-popping-deer.md'
-    done: false
-GraphRAG:
-  high-priority:
-  - id: PLAN-GRAPHRAGADHOC-001
-    title: 'GraphRAG Ad-Hoc: Requirements — FR, TR, TEST entries and mapping'
-    estimate: 1-2h
-    done: true
-    description:
-    - 'Phase 0: Define requirements before implementation begins.'
-    - Add FR-MCP-078 (GraphRAG Ad-Hoc Document Ingestion), FR-MCP-079 (GraphRAG Entity/Relationship CRUD), FR-MCP-080 (GraphRAG Document Management) to Functional-Requirements.md.
-    - Add corresponding TR entries to Technical-Requirements.md.
-    - Add TEST entries to Testing-Requirements.md.
-    - Update TR-per-FR-Mapping.md and Requirements-Matrix.md.
-    done-summary: 'Implemented in session ClaudeCode-20260407T000000Z with full TDD. PR #5 on Azure DevOps.'
-    technical-details:
-    - 'Modified: docs/Project/Functional-Requirements.md, Technical-Requirements.md, Testing-Requirements.md, TR-per-FR-Mapping.md, Requirements-Matrix.md'
-    depends-on: []
-    implementation-tasks:
-    - task: Add FR-MCP-078/079/080 to Functional-Requirements.md
-      done: false
-    - task: Add TR entries to Technical-Requirements.md
-      done: false
-    - task: Add TEST entries to Testing-Requirements.md
-      done: false
-    - task: Update TR-per-FR-Mapping.md
-      done: false
-    - task: Update Requirements-Matrix.md
-      done: false
-    - task: Post session log turn with results
-      done: false
-  - id: IMPL-GRAPHRAGADHOC-001
-    title: 'GraphRAG Ad-Hoc: Storage layer — entities, relationships, RemoveVector'
-    estimate: 3-4h
-    done: true
-    description:
-    - 'Phase 1 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
-    - Create GraphEntityEntity and GraphRelationshipEntity EF Core entities.
-    - Update McpDbContext with DbSets, model config, query filters, indexes.
-    - Add RemoveVector to IVectorIndexService and implement in VectorIndexService.
-    - Generate EF migration for new tables.
-    done-summary: 'Implemented in session ClaudeCode-20260407T000000Z with full TDD. PR #5 on Azure DevOps.'
-    technical-details:
-    - 'New files: src/McpServer.Storage/Entities/GraphEntityEntity.cs, GraphRelationshipEntity.cs'
-    - 'Modified: McpDbContext.cs, IVectorIndexService.cs, VectorIndexService.cs'
-    - 'Tests: GraphRagEntityStorageTests.cs, GraphRagRelationshipStorageTests.cs, VectorIndexRemoveTests.cs'
-    depends-on:
-    - PLAN-GRAPHRAGADHOC-001
-    implementation-tasks:
-    - task: Write storage layer unit tests
-      done: false
-    - task: Create GraphEntityEntity and GraphRelationshipEntity
-      done: false
-    - task: Update McpDbContext
-      done: false
-    - task: Add RemoveVector to vector index service
-      done: false
-    - task: Generate EF migration
-      done: false
-    - task: All tests green
-      done: false
-    - task: Post session log turn with results
-      done: false
-  - id: IMPL-GRAPHRAGADHOC-002
-    title: 'GraphRAG Ad-Hoc: DTOs, service interface, and service implementation'
-    estimate: 4-6h
-    done: true
-    description:
-    - 'Phase 2 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
-    - Add ~14 new DTOs to GraphRagModels.cs.
-    - Extend IGraphRagService with 15 new methods.
-    - 'Implement all methods in GraphRagService: text ingest, document mgmt, entity/relationship CRUD.'
-    done-summary: 'Implemented in session ClaudeCode-20260407T000000Z with full TDD. PR #5 on Azure DevOps.'
-    technical-details:
-    - 'Modified: GraphRagModels.cs, IGraphRagService.cs, GraphRagService.cs'
-    - 'New deps in GraphRagService: McpDbContext, IEmbeddingService, IVectorIndexService'
-    - 'Tests: GraphRagIngestTextTests.cs, GraphRagDocumentManagementTests.cs, GraphRagEntityCrudTests.cs, GraphRagRelationshipCrudTests.cs'
-    depends-on:
-    - IMPL-GRAPHRAGADHOC-001
-    implementation-tasks:
-    - task: Write all service-layer unit tests
-      done: false
-    - task: Add DTOs to GraphRagModels.cs
-      done: false
-    - task: Extend IGraphRagService interface
-      done: false
-    - task: Implement IngestTextAsync
-      done: false
-    - task: Implement document management methods
-      done: false
-    - task: Implement entity CRUD
-      done: false
-    - task: Implement relationship CRUD
-      done: false
-    - task: All tests green
-      done: false
-    - task: Post session log turn with results
-      done: false
-  - id: IMPL-GRAPHRAGADHOC-003
-    title: 'GraphRAG Ad-Hoc: CQRS commands and queries'
-    estimate: 2-3h
-    done: true
-    description:
-    - 'Phase 3 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
-    - 8 command records + handlers, 6 query records + handlers.
-    - Auto-discovered by existing AddCqrsHandlers(Assembly).
-    done-summary: 'Implemented in session ClaudeCode-20260407T000000Z with full TDD. PR #5 on Azure DevOps.'
-    technical-details:
-    - New files in src/McpServer.GraphRag/Commands/ and Queries/
-    - 'Commands: IngestText, DeleteDocument, CreateEntity, UpdateEntity, DeleteEntity, CreateRelationship, UpdateRelationship, DeleteRelationship'
-    - 'Queries: ListDocuments, GetDocumentChunks, GetEntity, ListEntities, GetRelationship, ListRelationships'
-    - 'Tests: GraphRagCqrsTests.cs'
-    depends-on:
-    - IMPL-GRAPHRAGADHOC-002
-    implementation-tasks:
-    - task: Write CQRS handler tests
-      done: false
-    - task: Create command records and handlers
-      done: false
-    - task: Create query records and handlers
-      done: false
-    - task: All tests green
-      done: false
-    - task: Post session log turn with results
-      done: false
-  - id: IMPL-GRAPHRAGADHOC-004
-    title: 'GraphRAG Ad-Hoc: HTTP controller endpoints'
-    estimate: 2-3h
-    done: true
-    description:
-    - 'Phase 4 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
-    - '14 new action methods on GraphRagController: documents/ingest, documents CRUD, entities CRUD, relationships CRUD.'
-    done-summary: 'Implemented in session ClaudeCode-20260407T000000Z with full TDD. PR #5 on Azure DevOps.'
-    technical-details:
-    - 'Modified: src/McpServer.Support.Mcp/Controllers/GraphRagController.cs'
-    - Routes under existing mcpserver/graphrag base
-    - 'Tests: GraphRagControllerAdHocTests.cs'
-    depends-on:
-    - IMPL-GRAPHRAGADHOC-003
-    implementation-tasks:
-    - task: Write controller endpoint tests
-      done: false
-    - task: Add document ingest and management endpoints
-      done: false
-    - task: Add entity CRUD endpoints
-      done: false
-    - task: Add relationship CRUD endpoints
-      done: false
-    - task: All tests green
-      done: false
-    - task: Post session log turn with results
-      done: false
-  - id: IMPL-GRAPHRAGADHOC-005
-    title: 'GraphRAG Ad-Hoc: MCP tools'
-    estimate: 1-2h
-    done: true
-    description:
-    - 'Phase 5 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
-    - 14 new [McpServerTool] methods in FwhMcpTools matching the HTTP endpoints.
-    done-summary: 'Implemented in session ClaudeCode-20260407T000000Z with full TDD. PR #5 on Azure DevOps.'
-    technical-details:
-    - 'Modified: src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs'
-    - 'Tools: graphrag_ingest_text, graphrag_list_documents, graphrag_get_document_chunks, graphrag_delete_document, graphrag_create_entity, etc.'
-    - 'Tests: GraphRagMcpToolTests.cs'
-    depends-on:
-    - IMPL-GRAPHRAGADHOC-004
-    implementation-tasks:
-    - task: Write MCP tool tests
-      done: false
-    - task: Add 14 tool methods
-      done: false
-    - task: All tests green
-      done: false
-    - task: Post session log turn with results
-      done: false
-  - id: IMPL-GRAPHRAGADHOC-006
-    title: 'GraphRAG Ad-Hoc: REPL commands and workflow'
-    estimate: 2-3h
-    done: true
-    description:
-    - 'Phase 6 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
-    - New GraphRagCommandShapes, IGraphRagWorkflow, GraphRagWorkflow.
-    - Add client methods to ContextClient. Register workflow in REPL host DI.
-    done-summary: 'Implemented in session ClaudeCode-20260407T000000Z with full TDD. PR #5 on Azure DevOps.'
-    technical-details:
-    - 'New: GraphRagCommandShapes.cs, IGraphRagWorkflow.cs, GraphRagWorkflow.cs in Repl.Core'
-    - 'Modified: ContextClient.cs, ServiceCollectionExtensions.cs in Repl.Host'
-    - 'Tests: GraphRagWorkflowTests.cs in Repl.Core.Tests'
-    depends-on:
-    - IMPL-GRAPHRAGADHOC-004
-    implementation-tasks:
-    - task: Write REPL workflow tests
-      done: false
-    - task: Create GraphRagCommandShapes
-      done: false
-    - task: Create IGraphRagWorkflow and GraphRagWorkflow
-      done: false
-    - task: Add client methods to ContextClient
-      done: false
-    - task: Register in REPL host DI
-      done: false
-    - task: All tests green
-      done: false
-    - task: Post session log turn with results
-      done: false
-  - id: IMPL-GRAPHRAGADHOC-007
-    title: 'GraphRAG Ad-Hoc: McpAgent hosted tools'
-    estimate: 1-2h
-    done: true
-    description:
-    - 'Phase 7 of GraphRAG ad-hoc endpoints. TDD: tests first, then implementation. Post MCP session log turn before and after work. All public types and members must have XML doc comments per TR (CS1591 is error). Update FR/TR/TEST requirements docs.'
-    - Add 14 GraphRAG tools to McpHostedAgentToolAdapter via AIFunctionFactory.
-    done-summary: 'Implemented in session ClaudeCode-20260407T000000Z with full TDD. PR #5 on Azure DevOps.'
-    technical-details:
-    - 'Modified: src/McpServer.McpAgent/Hosting/McpHostedAgentToolAdapter.cs'
-    - 'Tests: GraphRagToolAdapterTests.cs in McpServer.McpAgent.Tests'
-    depends-on:
-    - IMPL-GRAPHRAGADHOC-004
-    implementation-tasks:
-    - task: Write tool adapter tests
-      done: false
-    - task: Add tool methods to McpHostedAgentToolAdapter
-      done: false
-    - task: All tests green
-      done: false
-    - task: Post session log turn with results
-      done: false
-Plugin:
-  high-priority:
-  - id: IMPL-CCPLUGIN-001
-    title: 'Claude Code Plugin: Scaffold + manifest + REPL tool setup'
-    estimate: 2-3h
-    done: false
-    description:
-    - 'Phase 1: Create repo structure, plugin.json, ensure-repl.sh, marker-resolver.sh, detect-shell.sh. TDD with bats-core. Post session log turn before/after. Update TODO tasks as completed.'
-    depends-on: []
-    implementation-tasks:
-    - task: Write ensure-repl.bats tests
-      done: false
-    - task: Write marker-resolver.bats tests
-      done: false
-    - task: Create plugin.json manifest
-      done: false
-    - task: Implement ensure-repl.sh and .ps1
-      done: false
-    - task: Implement marker-resolver.sh and .ps1
-      done: false
-    - task: Implement detect-shell.sh
-      done: false
-    - task: All tests green
-      done: false
-    - task: Post session log turn with results
-      done: false
-  - id: IMPL-CCPLUGIN-002
-    title: 'Claude Code Plugin: REPL invocation wrapper + cache manager'
-    estimate: 2-3h
-    done: false
-    description:
-    - 'Phase 2: Implement repl-invoke.sh and cache-manager.sh with YAML-based local cache. TDD with bats-core.'
-    depends-on:
-    - IMPL-CCPLUGIN-001
-    implementation-tasks:
-    - task: Write repl-invoke.bats tests
-      done: false
-    - task: Write cache-manager.bats tests
-      done: false
-    - task: Implement repl-invoke.sh and .ps1
-      done: false
-    - task: Implement cache-manager.sh and .ps1
-      done: false
-    - task: All tests green
-      done: false
-    - task: Post session log turn with results
-      done: false
-  - id: IMPL-CCPLUGIN-003
-    title: 'Claude Code Plugin: Hooks (session lifecycle + plan tracking)'
-    estimate: 3-4h
-    done: false
-    description:
-    - 'Phase 3: Implement hooks.json and all hook scripts (session-start, session-end, pre/post-compact, plan-approved, plan-modified, cache-flush, health-check). TDD with bats-core.'
-    depends-on:
-    - IMPL-CCPLUGIN-002
-    implementation-tasks:
-    - task: Write hooks.bats tests
-      done: false
-    - task: Create hooks.json configuration
-      done: false
-    - task: Implement session-start.sh
-      done: false
-    - task: Implement session-end.sh
-      done: false
-    - task: Implement pre-compact.sh and post-compact.sh
-      done: false
-    - task: Implement plan-approved.sh and plan-modified.sh
-      done: false
-    - task: Implement cache-flush.sh and health-check.sh
-      done: false
-    - task: All tests green
-      done: false
-    - task: Post session log turn with results
-      done: false
-  - id: IMPL-CCPLUGIN-004
-    title: 'Claude Code Plugin: Skills (TODO, Session, Requirements, GraphRAG)'
-    estimate: 2-3h
-    done: false
-    description:
-    - 'Phase 4: Write SKILL.md files with proper frontmatter, trigger phrases, imperative body, and reference docs. TDD with bats-core for structure validation.'
-    depends-on:
-    - IMPL-CCPLUGIN-003
-    implementation-tasks:
-    - task: Write skills.bats validation tests
-      done: false
-    - task: Write skills/todo/SKILL.md
-      done: false
-    - task: Write skills/session/SKILL.md
-      done: false
-    - task: Write skills/requirements/SKILL.md
-      done: false
-    - task: Write skills/graphrag/SKILL.md
-      done: false
-    - task: All tests green
-      done: false
-    - task: Post session log turn with results
-      done: false
-  - id: IMPL-CCPLUGIN-005
-    title: 'Claude Code Plugin: MCP auto-connect + integration testing'
-    estimate: 2-3h
-    done: false
-    description:
-    - 'Phase 5: Configure .mcp.json with mcpserver-repl stdio transport. End-to-end integration tests including offline cache/flush cycle.'
-    depends-on:
-    - IMPL-CCPLUGIN-004
-    implementation-tasks:
-    - task: Write integration.bats tests
-      done: false
-    - task: Create .mcp.json configuration
-      done: false
-    - task: Verify end-to-end TODO create/query/delete
-      done: false
-    - task: Verify offline cache and flush cycle
-      done: false
-    - task: All tests green
-      done: false
-    - task: Post session log turn with results
-      done: false
-  - id: IMPL-CCPLUGIN-006
-    title: 'Claude Code Plugin: Marketplace submission'
-    estimate: 1h
-    done: false
-    description:
-    - 'Phase 6: Push plugin to sharpninja/mcpserver-claude-code-plugin repo. Submit marketplace entry to Anthropic claude-plugins-official.'
-    depends-on:
-    - IMPL-CCPLUGIN-005
-    implementation-tasks:
-    - task: Push all files to GitHub repo
-      done: false
-    - task: Create README.md with install instructions
-      done: false
-    - task: Submit marketplace entry
-      done: false
-    - task: Post session log turn with results
-      done: false
-Federation:
-  high-priority:
-  - id: IMPL-FEDERATION-001
-    title: Federation read-merge and federated push
-    estimate: 4-6d
-    done: false
-    description:
-    - 'Implement transparent federated read merging for TODO/SessionLog/GraphRAG (local wins on ID collision), FederationPushService for all 4 domains, POST /mcpserver/federation/push endpoint, FederationClient in McpServer.Client, IFederationWorkflow in McpServer.Repl.Core. Byrd TDD process. Plan file: vivid-wiggling-wombat.md'
-    technical-details:
-    - 'Decorator pattern via .NET 10 keyed services: ITodoService/ISessionLogService/IGraphRagService each get local key + federated decorator as public registration.'
-    - IFederationClientFactory creates McpServerClient per FederationTarget using IHttpClientFactory named FederationClient.
-    - FederatedGraphRagService in McpServer.GraphRag; FederatedTodoService and FederatedSessionLogService in McpServer.Services.
-    - McpServer.Services.csproj and McpServer.GraphRag.csproj both need ProjectReference to McpServer.Client.
-    - FederationPushService is scoped; FederationClientFactory is singleton.
-    - 'GraphRAG push order: entities then relationships then documents.'
-    - FederationWorkflow takes IFederationClient interface for testability.
-    - 'Remote call failures in federated read decorators: catch (except OperationCanceledException), log Warning, return local-only.'
-    functional-requirements:
-    - FR-MCP-082
-    - FR-MCP-083
-    - FR-MCP-084
-    - FR-MCP-085
-    technical-requirements:
-    - TR-MCP-FED-001
-    - TR-MCP-FED-002
-    - TR-MCP-FED-003
-    - TR-MCP-FED-004
-    implementation-tasks:
-    - task: 'Phase 1: csproj - McpServer.Client ref to McpServer.Services + McpServer.GraphRag'
-      done: false
-    - task: 'Phase 2: FederationPushResult + IFederationClientFactory + FederationClientFactory'
-      done: false
-    - task: 'Phase 3: FederatedTodoServiceTests (10 scenarios) + FederatedTodoService'
-      done: false
-    - task: 'Phase 4: FederatedSessionLogServiceTests (8 scenarios) + FederatedSessionLogService'
-      done: false
-    - task: 'Phase 5: FederatedGraphRagServiceTests (13 scenarios) + FederatedGraphRagService'
-      done: false
-    - task: 'Phase 6: FederationPushServiceTests (11 scenarios) + IFederationPushService + FederationPushService'
-      done: false
-    - task: 'Phase 7: Push endpoint in FederationController'
-      done: false
-    - task: 'Phase 8: IFederationClient + FederationClient + FederationModels in McpServer.Client'
-      done: false
-    - task: 'Phase 9: FederationWorkflowTests (7 scenarios) + IFederationWorkflow + FederationWorkflow'
-      done: false
-    - task: 'Phase 10: DI wiring - Program.cs + GraphRag ServiceCollectionExtensions'
-      done: false
-    - task: 'Phase 11: Test project csproj updates + all tests green'
-      done: false
-Knowledge:
-  medium-priority:
-  - id: KNOW-GRAPH-001
-    title: GraphRAG Knowledge Ingestion
-    done: true
-    description:
-    - Ingest VICE manual, C64 Programmer Reference, MOS CPU/VIC-II/SID/CIA/VIA datasheets, file format specs, Klaus Dormann test suite, resid-fp docs
-    done-summary: '41 documents ingested into GraphRAG: 10 core in-repo docs (Architecture, Public-API, ROL, etc.) + 31 FR/TR requirement docs. Total: ~71K tokens across 170 chunks. Index rebuilt.'
-    depends-on:
-    - DOCS-FRTR-001
-Implementation:
-  high-priority:
-  - id: IMPL-ABSTR-001
-    title: Abstractions - Tests
-    done: false
-    description:
-    - Write tests for 33+ public interfaces in ViceSharp.Abstractions
-    depends-on:
-    - KNOW-GRAPH-001
-  - id: IMPL-ABSTR-002
-    title: Abstractions - Mermaid Diagrams
-    done: false
-    depends-on:
-    - IMPL-ABSTR-001
-  - id: IMPL-ABSTR-003
-    title: Abstractions - Implementation
-    done: false
-    depends-on:
-    - IMPL-ABSTR-002
-  - id: IMPL-SRCGEN-001
-    title: Source Generator - Tests
-    done: false
-    depends-on:
-    - IMPL-ABSTR-003
-  - id: IMPL-SRCGEN-002
-    title: Source Generator - Mermaid Diagrams
-    done: false
-    depends-on:
-    - IMPL-SRCGEN-001
-  - id: IMPL-SRCGEN-003
-    title: Source Generator - Implementation
-    done: false
-    depends-on:
-    - IMPL-SRCGEN-002
-  - id: IMPL-CORE-001
-    title: Core - Tests
-    done: false
-    depends-on:
-    - IMPL-ABSTR-003
-  - id: IMPL-CORE-002
-    title: Core - Mermaid Diagrams
-    done: false
-    depends-on:
-    - IMPL-CORE-001
-  - id: IMPL-CORE-003
-    title: Core - Implementation
-    done: false
-    depends-on:
-    - IMPL-CORE-002
-  - id: IMPL-ARCH-001
-    title: Architectures - Tests
-    done: false
-    depends-on:
-    - IMPL-CORE-003
-  - id: IMPL-ARCH-002
-    title: Architectures - Mermaid Diagrams
-    done: false
-    depends-on:
-    - IMPL-ARCH-001
-  - id: IMPL-ARCH-003
-    title: Architectures - Implementation
-    done: false
-    depends-on:
-    - IMPL-ARCH-002
-  - id: IMPL-CHIPS-001
-    title: Chips and Peripherals - Tests
-    done: false
-    depends-on:
-    - IMPL-CORE-003
-  - id: IMPL-CHIPS-002
-    title: Chips and Peripherals - Mermaid
-    done: false
-    depends-on:
-    - IMPL-CHIPS-001
-  - id: IMPL-CHIPS-003
-    title: Chips and Peripherals - Implementation
-    done: false
-    depends-on:
-    - IMPL-CHIPS-002
-  - id: IMPL-MEDIA-001
-    title: Media Capture - Tests
-    done: false
-    depends-on:
-    - IMPL-CORE-003
-  - id: IMPL-MEDIA-002
-    title: Media Capture - Mermaid
-    done: false
-    depends-on:
-    - IMPL-MEDIA-001
-  - id: IMPL-MEDIA-003
-    title: Media Capture - Implementation
-    done: false
-    depends-on:
-    - IMPL-MEDIA-002
-  - id: IMPL-MON-001
-    title: Monitor Hosting Controls - Tests
-    done: false
-    depends-on:
-    - IMPL-CORE-003
-  - id: IMPL-MON-002
-    title: Monitor Hosting Controls - Mermaid
-    done: false
-    depends-on:
-    - IMPL-MON-001
-  - id: IMPL-MON-003
-    title: Monitor Hosting Controls - Implementation
-    done: false
-    depends-on:
-    - IMPL-MON-002
-  - id: IMPL-APPS-001
-    title: Apps Stubs
-    done: false
-    depends-on:
-    - IMPL-ARCH-003
-    - IMPL-MON-003
-  medium-priority:
-  - id: IMPL-ROM-001
-    title: RomFetch Tool - Tests
-    done: false
-    depends-on:
-    - INFRA-REPO-001
-  - id: IMPL-ROM-002
-    title: RomFetch Tool - Implementation
-    done: false
-    depends-on:
-    - IMPL-ROM-001
-Validation:
-  high-priority:
-  - id: VALID-DET-001
-    title: Determinism Test and Benchmarks
-    done: false
-    depends-on:
-    - IMPL-ARCH-003
-    - IMPL-CHIPS-003
-  - id: VALID-FINAL-001
-    title: Final Validation
-    done: false
-    depends-on:
-    - INFRA-CI-001
-    - IMPL-ROM-002
