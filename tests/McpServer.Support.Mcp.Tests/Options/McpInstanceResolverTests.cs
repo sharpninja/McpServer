@@ -65,7 +65,7 @@ public sealed class McpInstanceResolverTests
     }
 
     [Fact]
-    public void ValidateTodoStorage_ThrowsOnUnsupportedProvider()
+    public void ValidateTodoStorage_RejectsUnknownProvider()
     {
         var data = new Dictionary<string, string?>
         {
@@ -73,16 +73,67 @@ public sealed class McpInstanceResolverTests
         };
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(data).Build();
 
-        Assert.Throws<InvalidOperationException>(() => McpInstanceResolver.ValidateTodoStorage(configuration, null));
+        var ex = Assert.Throws<InvalidOperationException>(() => McpInstanceResolver.ValidateTodoStorage(configuration, null));
+        Assert.Contains("memory", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
-    public void ValidateTodoStorage_ThrowsWhenSqliteDataSourceMissing()
+    public void ValidateTodoStorage_AcceptsDatabaseProvider_WhenDatabaseConfigured()
+    {
+        var data = new Dictionary<string, string?>
+        {
+            ["Mcp:TodoStorage:Provider"] = "database",
+            ["Mcp:Database:Provider"] = "sqlserver",
+        };
+        var configuration = new ConfigurationBuilder().AddInMemoryCollection(data).Build();
+
+        McpInstanceResolver.ValidateTodoStorage(configuration, null);
+    }
+
+    [Fact]
+    public void ValidateTodoStorage_AcceptsYamlProvider_WithoutDatabaseConfigured()
+    {
+        var data = new Dictionary<string, string?>
+        {
+            ["Mcp:TodoStorage:Provider"] = "yaml",
+        };
+        var configuration = new ConfigurationBuilder().AddInMemoryCollection(data).Build();
+
+        McpInstanceResolver.ValidateTodoStorage(configuration, null);
+    }
+
+    [Fact]
+    public void ValidateTodoStorage_AliasesLegacySqliteToDatabase_WhenDatabaseConfigured()
     {
         var data = new Dictionary<string, string?>
         {
             ["Mcp:TodoStorage:Provider"] = "sqlite",
-            ["Mcp:TodoStorage:SqliteDataSource"] = "",
+            ["Mcp:Database:Provider"] = "sqlite",
+        };
+        var configuration = new ConfigurationBuilder().AddInMemoryCollection(data).Build();
+
+        McpInstanceResolver.ValidateTodoStorage(configuration, null);
+    }
+
+    [Fact]
+    public void ValidateTodoStorage_RequiresMcpDatabaseProvider_WhenProviderIsDatabase()
+    {
+        var data = new Dictionary<string, string?>
+        {
+            ["Mcp:TodoStorage:Provider"] = "database",
+        };
+        var configuration = new ConfigurationBuilder().AddInMemoryCollection(data).Build();
+
+        var ex = Assert.Throws<InvalidOperationException>(() => McpInstanceResolver.ValidateTodoStorage(configuration, null));
+        Assert.Contains("Mcp:Database:Provider", ex.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void ValidateTodoStorage_LegacySqliteAlias_FailsWhenDatabaseProviderMissing()
+    {
+        var data = new Dictionary<string, string?>
+        {
+            ["Mcp:TodoStorage:Provider"] = "sqlite",
         };
         var configuration = new ConfigurationBuilder().AddInMemoryCollection(data).Build();
 

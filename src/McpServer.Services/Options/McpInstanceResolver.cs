@@ -126,21 +126,38 @@ public static class McpInstanceResolver
     /// <summary>
     /// Validates TODO storage provider and provider-specific settings for the selected effective instance.
     /// </summary>
+    /// <remarks>
+    /// TR-MCP-TODO-005 (provider-agnostic): accepts <c>yaml</c> or <c>database</c>. The legacy
+    /// <c>sqlite</c> value is accepted and mapped to <c>database</c> with a one-time warning
+    /// logged via <see cref="System.Diagnostics.Trace"/>. When provider is <c>database</c> the
+    /// <c>Mcp:Database:Provider</c> setting (TR-MCP-CFG-007) must be non-empty.
+    /// </remarks>
     public static void ValidateTodoStorage(IConfiguration configuration, string? instanceName)
     {
         ArgumentNullException.ThrowIfNull(configuration);
 
-        var provider = (GetEffectiveMcpValue(configuration, instanceName, "TodoStorage:Provider") ?? "sqlite")
-            .Trim()
-            .ToUpperInvariant();
-        if (provider is not ("YAML" or "SQLITE"))
-            throw new InvalidOperationException($"Unsupported TODO storage provider '{provider}'. Allowed values: yaml, sqlite.");
+        var rawProvider = (GetEffectiveMcpValue(configuration, instanceName, "TodoStorage:Provider") ?? "database")
+            .Trim();
+        var provider = rawProvider.ToUpperInvariant();
 
         if (provider == "SQLITE")
         {
-            var sqliteDataSource = GetEffectiveMcpValue(configuration, instanceName, "TodoStorage:SqliteDataSource");
-            if (string.IsNullOrWhiteSpace(sqliteDataSource))
-                throw new InvalidOperationException("Mcp:TodoStorage:SqliteDataSource is required when TodoStorage:Provider is sqlite.");
+            System.Diagnostics.Trace.TraceWarning(
+                "Mcp:TodoStorage:Provider='sqlite' is deprecated; treating as 'database' (TODO storage now follows Mcp:Database:Provider).");
+            provider = "DATABASE";
+        }
+
+        if (provider is not ("YAML" or "DATABASE"))
+            throw new InvalidOperationException(
+                $"Unsupported TODO storage provider '{rawProvider}'. Allowed values: yaml, database (legacy alias: sqlite).");
+
+        if (provider == "DATABASE")
+        {
+            var dbProvider = configuration["Mcp:Database:Provider"];
+            if (string.IsNullOrWhiteSpace(dbProvider))
+                throw new InvalidOperationException(
+                    "Mcp:Database:Provider is required when Mcp:TodoStorage:Provider is 'database'. " +
+                    "Set it to one of: sqlite, sqlserver, postgresql (TR-MCP-CFG-007).");
         }
     }
 
