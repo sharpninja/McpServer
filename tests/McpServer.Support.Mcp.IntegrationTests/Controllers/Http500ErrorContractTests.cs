@@ -216,13 +216,14 @@ public sealed class FailingTodoServiceFactory : ITodoServiceFactory
     private readonly TodoServiceFactory _innerFactory;
 
     public FailingTodoServiceFactory(
+        IServiceScopeFactory scopeFactory,
         IOptions<IngestionOptions> ingestionOptions,
         IOptions<TodoStorageOptions> options,
         IWriteAuditLog auditLog,
         ILoggerFactory loggerFactory,
         IChangeEventBus? eventBus = null)
     {
-        _innerFactory = new TodoServiceFactory(ingestionOptions, options, auditLog, loggerFactory, eventBus);
+        _innerFactory = new TodoServiceFactory(scopeFactory, ingestionOptions, options, auditLog, loggerFactory, eventBus);
     }
 
     public ITodoService CreatePrimary() => new FailingDeleteTodoService(_innerFactory.CreatePrimary());
