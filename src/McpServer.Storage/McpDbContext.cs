@@ -81,6 +81,15 @@ public sealed class McpDbContext : DbContext
     /// <summary>FR-MCP-079: Explicit graph relationship edges.</summary>
     public DbSet<GraphRelationshipEntity> GraphRelationships => Set<GraphRelationshipEntity>();
 
+    /// <summary>TR-MCP-TODO-005 (provider-agnostic): Authoritative TODO items.</summary>
+    public DbSet<TodoItemEntity> TodoItems => Set<TodoItemEntity>();
+
+    /// <summary>TR-MCP-TODO-005 (provider-agnostic): Append-only TODO audit rows.</summary>
+    public DbSet<TodoAuditHistoryEntity> TodoAuditHistory => Set<TodoAuditHistoryEntity>();
+
+    /// <summary>TR-MCP-TODO-005 / TR-MCP-TODO-006 (provider-agnostic): Singleton TODO document metadata.</summary>
+    public DbSet<TodoDocumentMetadataEntity> TodoDocumentMetadata => Set<TodoDocumentMetadataEntity>();
+
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -235,6 +244,27 @@ public sealed class McpDbContext : DbContext
                 .WithMany(x => x.TargetRelationships)
                 .HasForeignKey(x => x.TargetEntityId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<TodoItemEntity>(e =>
+        {
+            e.HasIndex(x => x.Section);
+            e.HasIndex(x => x.Priority);
+            e.HasIndex(x => x.Done);
+        });
+
+        modelBuilder.Entity<TodoAuditHistoryEntity>(e =>
+        {
+            e.HasIndex(x => new { x.TodoId, x.Version }).IsUnique();
+            e.HasIndex(x => new { x.TodoId, x.RecordedAtUtc });
+            e.HasIndex(x => x.Action);
+        });
+
+        modelBuilder.Entity<TodoDocumentMetadataEntity>(e =>
+        {
+            e.ToTable(t => t.HasCheckConstraint(
+                "CK_TodoDocumentMetadata_Singleton",
+                "\"SingletonId\" = 1"));
         });
 
         modelBuilder.Entity<ContextDocumentEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);

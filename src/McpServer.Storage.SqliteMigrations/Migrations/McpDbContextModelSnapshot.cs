@@ -15,7 +15,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.12");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.0");
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentDefinitionEntity", b =>
                 {
@@ -778,6 +778,185 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.HasIndex("WorkspaceId");
 
                     b.ToTable("SessionLogTurnTags");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoAuditHistoryEntity", b =>
+                {
+                    b.Property<long>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PreviousSnapshotJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RecordedAtUtc")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SnapshotJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Source")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TodoId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("AuditId");
+
+                    b.HasIndex("Action");
+
+                    b.HasIndex("TodoId", "RecordedAtUtc");
+
+                    b.HasIndex("TodoId", "Version")
+                        .IsUnique();
+
+                    b.ToTable("TodoAuditHistory");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", b =>
+                {
+                    b.Property<int>("SingletonId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CodeReviewReference")
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CompletedJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastImportedFromYamlUtc")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastProjectedToYamlUtc")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastProjectionFailureMessage")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastProjectionFailureUtc")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NotesJson")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("SingletonId");
+
+                    b.ToTable("TodoDocumentMetadata", t =>
+                        {
+                            t.HasCheckConstraint("CK_TodoDocumentMetadata_Singleton", "\"SingletonId\" = 1");
+                        });
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CompletedDate")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DependsOnJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DescriptionJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Done")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DoneSummary")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Estimate")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FunctionalRequirementsJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ImplementationTasksJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ItemKind")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ItemOrder")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(4096)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhaseLabel")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PriorityNote")
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Reference")
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Remaining")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Section")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SectionOrder")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("TechnicalDetailsJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TechnicalRequirementsJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Done");
+
+                    b.HasIndex("Priority");
+
+                    b.HasIndex("Section");
+
+                    b.ToTable("TodoItems");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity", b =>
