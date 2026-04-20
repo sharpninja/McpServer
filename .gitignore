@@ -501,6 +501,7 @@ $RECYCLE.BIN/
 
 # Build / publish output
 _publish/
+_publish-launcher/
 _site/
 
 # Local scratch files
