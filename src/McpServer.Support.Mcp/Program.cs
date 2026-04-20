@@ -506,6 +506,8 @@ if (!builder.Environment.IsEnvironment("Test"))
     builder.Services.AddHostedService(sp => (WorkspaceProcessManager)sp.GetRequiredService<IWorkspaceProcessManager>());
     builder.Services.AddHostedService(sp => sp.GetRequiredService<TunnelRegistry>());
     builder.Services.AddHostedService<AgentPoolSeedService>();
+    // TR-MCP-TODO-007: one-shot import from legacy mcp.db into the configured authoritative DB.
+    builder.Services.AddHostedService<LegacyTodoSqliteMigrator>();
 }
 
 var mvcBuilder = builder.Services.AddControllers();
