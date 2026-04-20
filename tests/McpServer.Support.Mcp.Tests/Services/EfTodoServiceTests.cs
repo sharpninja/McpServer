@@ -3,6 +3,7 @@ using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -27,6 +28,7 @@ namespace McpServer.Support.Mcp.Tests.Services;
 public sealed class EfTodoServiceTests : IDisposable
 {
     private readonly ServiceProvider _serviceProvider;
+    private readonly SqliteConnection _connection;
     private readonly string _tempRoot;
     private readonly string _tempYamlPath;
     private readonly IWriteAuditLog _auditLog = Substitute.For<IWriteAuditLog>();
@@ -40,8 +42,13 @@ public sealed class EfTodoServiceTests : IDisposable
         Directory.CreateDirectory(Path.Combine(_tempRoot, "docs", "Project"));
         _tempYamlPath = Path.Combine(_tempRoot, "docs", "Project", "TODO.yaml");
 
+        // Keep a single open connection for the fixture lifetime so the in-memory database
+        // survives across EF scopes (SQLite drops ":memory:" when the last connection closes).
+        _connection = new SqliteConnection("Data Source=:memory:");
+        _connection.Open();
+
         var services = new ServiceCollection();
-        services.AddDbContext<McpDbContext>(opts => opts.UseSqlite($"DataSource=file:{Guid.NewGuid():N}?mode=memory&cache=shared"));
+        services.AddDbContext<McpDbContext>(opts => opts.UseSqlite(_connection));
 
         _serviceProvider = services.BuildServiceProvider();
         using (var scope = _serviceProvider.CreateScope())
@@ -74,6 +81,7 @@ public sealed class EfTodoServiceTests : IDisposable
     {
         _sut.Dispose();
         _serviceProvider.Dispose();
+        _connection.Dispose();
         try { if (Directory.Exists(_tempRoot)) Directory.Delete(_tempRoot, true); } catch { /* best-effort */ }
     }
 
@@ -83,7 +91,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// <see cref="EfTodoService.GetByIdAsync"/>, and publishes a <c>todo.created</c>
     /// change event.
     /// </summary>
-    [Fact(Skip = "Phase 3 pending: EfTodoService bodies currently NotImplementedException. Unskip once CreateAsync is ported.")]
+    [Fact]
     public async Task CreateAsync_PersistsAndRoundTrips()
     {
         var result = await _sut.CreateAsync(new TodoCreateRequest
@@ -105,7 +113,7 @@ public sealed class EfTodoServiceTests : IDisposable
     /// in the audit table - one history row per version, monotonic
     /// <c>(TodoId, Version)</c>.
     /// </summary>
-    [Fact(Skip = "Phase 3 pending: EfTodoService bodies currently NotImplementedException. Unskip once UpdateAsync + audit are ported.")]
+    [Fact]
     public async Task UpdateAsync_AppendsAuditRow_MonotonicVersion()
     {
         await _sut.CreateAsync(new TodoCreateRequest
@@ -126,52 +134,38 @@ public sealed class EfTodoServiceTests : IDisposable
     /// Phase-3 acceptance: <see cref="EfTodoService.QueryAsync"/> honors priority
     /// and keyword filters applied through the relational layer.
     /// </summary>
-    [Fact(Skip = "Phase 3 pending: EfTodoService bodies currently NotImplementedException. Unskip once QueryAsync is ported.")]
+    [Fact]
     public async Task QueryAsync_FiltersByPriorityAndKeyword()
     {
-        await _sut.CreateAsync(new TodoCreateRequest { Id = "EF-A", Title = "alpha widget", Section = "s", Priority = "high" }).ConfigureAwait(true);
-        await _sut.CreateAsync(new TodoCreateRequest { Id = "EF-B", Title = "beta widget", Section = "s", Priority = "low" }).ConfigureAwait(true);
+        var createA = await _sut.CreateAsync(new TodoCreateRequest { Id = "EF-ALPHA-001", Title = "alpha widget", Section = "s", Priority = "high" }).ConfigureAwait(true);
+        Assert.True(createA.Success, createA.Error);
+        var createB = await _sut.CreateAsync(new TodoCreateRequest { Id = "EF-BETA-002", Title = "beta widget", Section = "s", Priority = "low" }).ConfigureAwait(true);
+        Assert.True(createB.Success, createB.Error);
 
         var highs = await _sut.QueryAsync(new TodoQueryRequest { Priority = "high" }).ConfigureAwait(true);
         Assert.Single(highs.Items);
-        Assert.Equal("EF-A", highs.Items[0].Id);
+        Assert.Equal("EF-ALPHA-001", highs.Items[0].Id);
 
         var betas = await _sut.QueryAsync(new TodoQueryRequest { Keyword = "beta" }).ConfigureAwait(true);
         Assert.Single(betas.Items);
-        Assert.Equal("EF-B", betas.Items[0].Id);
+        Assert.Equal("EF-BETA-002", betas.Items[0].Id);
     }
 
     /// <summary>
     /// Phase-3 acceptance: <see cref="EfTodoService.DeleteAsync"/> removes the row
     /// and appends a <c>deleted</c> audit entry, making the TODO unfindable.
     /// </summary>
-    [Fact(Skip = "Phase 3 pending: EfTodoService bodies currently NotImplementedException. Unskip once DeleteAsync is ported.")]
+    [Fact]
     public async Task DeleteAsync_RemovesAndAppendsAudit()
     {
-        await _sut.CreateAsync(new TodoCreateRequest { Id = "EF-DEL", Title = "doomed", Section = "s", Priority = "low" }).ConfigureAwait(true);
-        var result = await _sut.DeleteAsync("EF-DEL").ConfigureAwait(true);
-        Assert.True(result.Success);
-        Assert.Null(await _sut.GetByIdAsync("EF-DEL").ConfigureAwait(true));
+        var created = await _sut.CreateAsync(new TodoCreateRequest { Id = "EF-DEL-001", Title = "doomed", Section = "s", Priority = "low" }).ConfigureAwait(true);
+        Assert.True(created.Success, created.Error);
+        var result = await _sut.DeleteAsync("EF-DEL-001").ConfigureAwait(true);
+        Assert.True(result.Success, result.Error);
+        Assert.Null(await _sut.GetByIdAsync("EF-DEL-001").ConfigureAwait(true));
 
-        var audit = await _sut.GetAuditAsync("EF-DEL").ConfigureAwait(true);
+        var audit = await _sut.GetAuditAsync("EF-DEL-001").ConfigureAwait(true);
         Assert.Contains(audit.Entries, e => e.Action == "deleted");
     }
 
-    /// <summary>
-    /// Phase-3 acceptance: while method bodies are still stubbed, public surface
-    /// throws <see cref="NotImplementedException"/> so accidental "half-ported"
-    /// regressions are caught before phase 3 code ships.
-    /// </summary>
-    [Fact]
-    public async Task StubGuard_AllPublicMethodsThrow_NotImplementedException_UntilPhase3Ports()
-    {
-        await Assert.ThrowsAsync<NotImplementedException>(() => _sut.QueryAsync(new TodoQueryRequest())).ConfigureAwait(true);
-        await Assert.ThrowsAsync<NotImplementedException>(() => _sut.GetByIdAsync("x")).ConfigureAwait(true);
-        await Assert.ThrowsAsync<NotImplementedException>(() => _sut.CreateAsync(new TodoCreateRequest { Id = "x", Title = "t", Section = "s", Priority = "low" })).ConfigureAwait(true);
-        await Assert.ThrowsAsync<NotImplementedException>(() => _sut.UpdateAsync("x", new TodoUpdateRequest())).ConfigureAwait(true);
-        await Assert.ThrowsAsync<NotImplementedException>(() => _sut.DeleteAsync("x")).ConfigureAwait(true);
-        await Assert.ThrowsAsync<NotImplementedException>(() => _sut.GetAuditAsync("x")).ConfigureAwait(true);
-        await Assert.ThrowsAsync<NotImplementedException>(() => _sut.GetProjectionStatusAsync()).ConfigureAwait(true);
-        await Assert.ThrowsAsync<NotImplementedException>(() => _sut.RepairProjectionAsync()).ConfigureAwait(true);
-    }
 }
