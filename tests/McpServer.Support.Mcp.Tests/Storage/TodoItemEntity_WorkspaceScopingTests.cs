@@ -20,7 +20,7 @@ public sealed class TodoItemEntity_WorkspaceScopingTests
     /// The EF model MUST declare the primary key as the composite
     /// <c>(WorkspaceId, Id)</c> rather than <c>Id</c> alone.
     /// </summary>
-    [Fact(Skip = "TR-MCP-TODO-008 Phase 1 pending: composite PK not yet configured")]
+    [Fact]
     public void TodoItem_PrimaryKey_IsCompositeWorkspaceIdAndId()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
@@ -42,7 +42,7 @@ public sealed class TodoItemEntity_WorkspaceScopingTests
     /// A <c>WorkspaceId</c> column MUST exist on <see cref="TodoItemEntity"/>
     /// so the TR-MCP-MT-003 global query filter has something to clamp on.
     /// </summary>
-    [Fact(Skip = "TR-MCP-TODO-008 Phase 1 pending: WorkspaceId property not yet added")]
+    [Fact]
     public void TodoItem_HasWorkspaceIdProperty()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
@@ -60,7 +60,7 @@ public sealed class TodoItemEntity_WorkspaceScopingTests
     /// Audit rows MUST also carry <c>WorkspaceId</c> so history queries
     /// under the global query filter never leak across workspaces.
     /// </summary>
-    [Fact(Skip = "TR-MCP-TODO-008 Phase 1 pending: audit WorkspaceId not yet added")]
+    [Fact]
     public void TodoAuditHistory_HasWorkspaceIdPropertyAndIndex()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()
@@ -82,7 +82,7 @@ public sealed class TodoItemEntity_WorkspaceScopingTests
     /// MUST reference the ambient workspace id, matching the TR-MCP-MT-003
     /// pattern installed on the other 12+ multi-tenant entities.
     /// </summary>
-    [Fact(Skip = "TR-MCP-TODO-008 Phase 1 pending: query filter not yet installed")]
+    [Fact]
     public void TodoItem_HasGlobalQueryFilter()
     {
         var options = new DbContextOptionsBuilder<McpDbContext>()

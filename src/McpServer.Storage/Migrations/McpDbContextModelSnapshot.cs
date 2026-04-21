@@ -814,13 +814,20 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<int>("Version")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
                     b.HasKey("AuditId");
 
                     b.HasIndex("Action");
 
-                    b.HasIndex("TodoId", "RecordedAtUtc");
+                    b.HasIndex("WorkspaceId");
 
-                    b.HasIndex("TodoId", "Version")
+                    b.HasIndex("WorkspaceId", "TodoId", "RecordedAtUtc");
+
+                    b.HasIndex("WorkspaceId", "TodoId", "Version")
                         .IsUnique();
 
                     b.ToTable("TodoAuditHistory");
@@ -828,6 +835,10 @@ namespace McpServer.Support.Mcp.Storage.Migrations
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", b =>
                 {
+                    b.Property<string>("WorkspaceId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("SingletonId")
                         .HasColumnType("INTEGER");
 
@@ -856,7 +867,7 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                     b.Property<string>("NotesJson")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("SingletonId");
+                    b.HasKey("WorkspaceId", "SingletonId");
 
                     b.ToTable("TodoDocumentMetadata", t =>
                         {
@@ -866,6 +877,10 @@ namespace McpServer.Support.Mcp.Storage.Migrations
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", b =>
                 {
+                    b.Property<string>("WorkspaceId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Id")
                         .HasMaxLength(128)
                         .HasColumnType("TEXT");
@@ -947,7 +962,7 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("WorkspaceId", "Id");
 
                     b.HasIndex("Done");
 

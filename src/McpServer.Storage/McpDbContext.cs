@@ -248,6 +248,9 @@ public sealed class McpDbContext : DbContext
 
         modelBuilder.Entity<TodoItemEntity>(e =>
         {
+            // TR-MCP-TODO-008: composite PK (WorkspaceId, Id) so the same canonical
+            // TODO id may coexist across workspaces. Matches TR-MCP-MT-003 pattern.
+            e.HasKey(x => new { x.WorkspaceId, x.Id });
             e.HasIndex(x => x.Section);
             e.HasIndex(x => x.Priority);
             e.HasIndex(x => x.Done);
@@ -255,18 +258,23 @@ public sealed class McpDbContext : DbContext
 
         modelBuilder.Entity<TodoAuditHistoryEntity>(e =>
         {
-            e.HasIndex(x => new { x.TodoId, x.Version }).IsUnique();
-            e.HasIndex(x => new { x.TodoId, x.RecordedAtUtc });
+            // TR-MCP-TODO-008: unique monotonic (TodoId, Version) scoped per workspace.
+            e.HasIndex(x => new { x.WorkspaceId, x.TodoId, x.Version }).IsUnique();
+            e.HasIndex(x => new { x.WorkspaceId, x.TodoId, x.RecordedAtUtc });
             e.HasIndex(x => x.Action);
         });
 
         modelBuilder.Entity<TodoDocumentMetadataEntity>(e =>
         {
+            // TR-MCP-TODO-008: composite PK (WorkspaceId, SingletonId). Check constraint
+            // becomes per-workspace (SingletonId = 1 for every workspace's singleton).
+            //
             // Singleton pattern: SingletonId is a fixed sentinel (= 1), never auto-assigned.
             // Without ValueGeneratedNever(), SQL Server treats int PKs as IDENTITY and rejects
             // explicit-value inserts (error 544); SQLite silently accepts them so unit tests
             // against SQLite miss this. LegacyTodoSqliteMigrator (TR-MCP-TODO-007) inserts with
             // SingletonId = 1 explicitly, so this is required for cross-provider correctness.
+            e.HasKey(x => new { x.WorkspaceId, x.SingletonId });
             e.Property(x => x.SingletonId).ValueGeneratedNever();
             e.ToTable(t => t.HasCheckConstraint(
                 "CK_TodoDocumentMetadata_Singleton",
@@ -292,6 +300,12 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<GraphEntityEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<GraphRelationshipEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
 
+        // TR-MCP-TODO-008: workspace-scoped TODO storage. Same pattern as the
+        // other multi-tenant entities: never cross workspaces on reads, updates, deletes.
+        modelBuilder.Entity<TodoItemEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<TodoAuditHistoryEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<TodoDocumentMetadataEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+
         modelBuilder.Entity<ContextDocumentEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<SessionLogEntity>().HasIndex(e => e.WorkspaceId);
@@ -308,6 +322,13 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<AgentEventLogEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<GraphEntityEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<GraphRelationshipEntity>().HasIndex(e => e.WorkspaceId);
+
+        // TR-MCP-TODO-008: WorkspaceId indexes on Todo entities. The composite PK
+        // on TodoItemEntity / TodoDocumentMetadataEntity already indexes WorkspaceId
+        // as leading key; we add a standalone index only on TodoAuditHistoryEntity
+        // because its PK is AuditId (identity) and the unique (WorkspaceId, TodoId,
+        // Version) index already covers the common filter paths.
+        modelBuilder.Entity<TodoAuditHistoryEntity>().HasIndex(e => e.WorkspaceId);
     }
 
     /// <inheritdoc />

@@ -3,20 +3,31 @@ using System.ComponentModel.DataAnnotations;
 namespace McpServer.Support.Mcp.Storage.Entities;
 
 /// <summary>
-/// TR-MCP-TODO-005 (provider-agnostic): Authoritative TODO item row. Stored via
-/// <c>McpDbContext</c> and therefore routed to whichever provider
-/// <c>Mcp:Database:Provider</c> selects (TR-MCP-CFG-007).
+/// TR-MCP-TODO-005 (provider-agnostic) + TR-MCP-TODO-008 (workspace-scoped):
+/// Authoritative TODO item row. Stored via <c>McpDbContext</c> and routed to
+/// whichever provider <c>Mcp:Database:Provider</c> selects (TR-MCP-CFG-007).
 /// </summary>
 /// <remarks>
-/// TODO items are global (not workspace-scoped); this entity does NOT carry a
-/// <c>WorkspaceId</c> and is NOT attached to the workspace global query filter.
-/// Schema mirrors the legacy SQLite <c>todo_items</c> table so
-/// <c>LegacyTodoSqliteMigrator</c> (TR-MCP-TODO-007) can copy rows verbatim.
+/// TODO items are workspace-scoped per TR-MCP-TODO-008: every row carries a
+/// <c>WorkspaceId</c> stamped by <c>StampWorkspaceId</c> and is clamped by the
+/// global query filter installed in <c>McpDbContext.OnModelCreating</c>. The
+/// primary key is the composite <c>(WorkspaceId, Id)</c> so the same canonical
+/// TODO id may coexist across workspaces without collision (matches the
+/// TR-MCP-MT-003 multi-tenant pattern used by context, session-log, agent,
+/// tool, and graph entities).
 /// </remarks>
 public sealed class TodoItemEntity
 {
+    /// <summary>
+    /// Workspace discriminator (TR-MCP-MT-003 pattern); the absolute workspace
+    /// path resolved from <c>WorkspaceContext</c>. Part of the composite
+    /// primary key with <see cref="Id"/>.
+    /// </summary>
+    [Required]
+    [MaxLength(1024)]
+    public string WorkspaceId { get; set; } = string.Empty;
+
     /// <summary>Canonical TODO identifier (e.g. <c>MVP-APP-001</c>, <c>ISSUE-17</c>).</summary>
-    [Key]
     [MaxLength(128)]
     public required string Id { get; set; }
 

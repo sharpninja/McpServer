@@ -16,6 +16,17 @@ public sealed class TodoAuditHistoryEntity
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long AuditId { get; set; }
 
+    /// <summary>
+    /// TR-MCP-TODO-008 workspace discriminator. Filter column (non-PK; the PK
+    /// stays on <see cref="AuditId"/> so audits remain append-only under a
+    /// single monotonic identity). Combined with <see cref="TodoId"/> and
+    /// <see cref="Version"/> in the unique index so the same
+    /// <c>(TodoId, Version)</c> may exist under different workspaces.
+    /// </summary>
+    [Required]
+    [MaxLength(1024)]
+    public string WorkspaceId { get; set; } = string.Empty;
+
     /// <summary>TODO item identifier this audit row belongs to.</summary>
     [Required]
     [MaxLength(128)]

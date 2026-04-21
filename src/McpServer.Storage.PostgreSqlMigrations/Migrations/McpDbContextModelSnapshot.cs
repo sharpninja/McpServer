@@ -841,13 +841,20 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<int>("Version")
                         .HasColumnType("integer");
 
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
                     b.HasKey("AuditId");
 
                     b.HasIndex("Action");
 
-                    b.HasIndex("TodoId", "RecordedAtUtc");
+                    b.HasIndex("WorkspaceId");
 
-                    b.HasIndex("TodoId", "Version")
+                    b.HasIndex("WorkspaceId", "TodoId", "RecordedAtUtc");
+
+                    b.HasIndex("WorkspaceId", "TodoId", "Version")
                         .IsUnique();
 
                     b.ToTable("TodoAuditHistory");
@@ -855,6 +862,10 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", b =>
                 {
+                    b.Property<string>("WorkspaceId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
                     b.Property<int>("SingletonId")
                         .HasColumnType("integer");
 
@@ -883,7 +894,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                     b.Property<string>("NotesJson")
                         .HasColumnType("text");
 
-                    b.HasKey("SingletonId");
+                    b.HasKey("WorkspaceId", "SingletonId");
 
                     b.ToTable("TodoDocumentMetadata", t =>
                         {
@@ -893,6 +904,10 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", b =>
                 {
+                    b.Property<string>("WorkspaceId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
                     b.Property<string>("Id")
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
@@ -974,7 +989,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("character varying(1024)");
 
-                    b.HasKey("Id");
+                    b.HasKey("WorkspaceId", "Id");
 
                     b.HasIndex("Done");
 

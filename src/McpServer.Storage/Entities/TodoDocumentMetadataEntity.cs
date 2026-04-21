@@ -15,8 +15,17 @@ namespace McpServer.Support.Mcp.Storage.Entities;
 /// </remarks>
 public sealed class TodoDocumentMetadataEntity
 {
-    /// <summary>Fixed singleton key (always <c>1</c>).</summary>
-    [Key]
+    /// <summary>
+    /// TR-MCP-TODO-008 workspace discriminator (the absolute workspace path
+    /// resolved from <c>WorkspaceContext</c>). Part of the composite primary
+    /// key with <see cref="SingletonId"/> so each workspace owns exactly one
+    /// document-metadata singleton without collision.
+    /// </summary>
+    [Required]
+    [MaxLength(1024)]
+    public string WorkspaceId { get; set; } = string.Empty;
+
+    /// <summary>Fixed singleton key (always <c>1</c>). Composite-PK component.</summary>
     public int SingletonId { get; set; } = 1;
 
     /// <summary>JSON-serialized top-level notes block.</summary>

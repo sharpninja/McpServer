@@ -48,6 +48,14 @@ public sealed class EfTodoServiceTests : IDisposable
         _connection.Open();
 
         var services = new ServiceCollection();
+        // TR-MCP-TODO-008: WorkspaceContext pinned to the test repo root so the
+        // global query filter installed in McpDbContext lets the fixture see its
+        // own inserts. Without this, `!IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId`
+        // is `false && ...` = false, suppressing every row.
+        services.AddScoped(_ => new McpServer.Support.Mcp.Services.WorkspaceContext
+        {
+            WorkspacePath = _tempRoot,
+        });
         services.AddDbContext<McpDbContext>(opts => opts.UseSqlite(_connection));
 
         _serviceProvider = services.BuildServiceProvider();

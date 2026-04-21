@@ -38,6 +38,12 @@ public sealed class LegacyTodoSqliteMigratorTests : IDisposable
         _targetConnection.Open();
 
         var services = new ServiceCollection();
+        // TR-MCP-TODO-008: WorkspaceContext fixture so legacy-migrated rows pass
+        // the McpDbContext global query filter when the test re-reads them.
+        services.AddScoped(_ => new McpServer.Support.Mcp.Services.WorkspaceContext
+        {
+            WorkspacePath = _tempRoot,
+        });
         services.AddDbContext<McpDbContext>(opts => opts.UseSqlite(_targetConnection));
         _serviceProvider = services.BuildServiceProvider();
 
