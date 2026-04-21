@@ -75,6 +75,16 @@ bool IsStdioTransportRequested(string[] a)
     return false;
 }
 
+// When launched by Windows Service Control Manager, the process starts with
+// CurrentDirectory=System32. Host.UseWindowsService() fixes ContentRootPath
+// later, but AddYamlFile below resolves against the ConfigurationBuilder's
+// initial FileProvider (CurrentDirectory), so without this bump the service
+// silently skips appsettings.yaml and TR-MCP-CFG-007 validation fires.
+if (OperatingSystem.IsWindows() && WindowsServiceHelpers.IsWindowsService())
+{
+    Directory.SetCurrentDirectory(AppContext.BaseDirectory);
+}
+
 var builder = WebApplication.CreateBuilder(args);
 EnsureApprovedWindowsServiceDeployment();
 DisableEnvironmentSpecificJsonConfigForWindowsService(builder);
