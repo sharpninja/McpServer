@@ -5,6 +5,7 @@ using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -36,6 +37,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
     private readonly IWriteAuditLog _auditLog;
     private readonly ILogger<EfTodoService> _logger;
     private readonly IChangeEventBus? _eventBus;
+    private readonly IHttpContextAccessor? _httpContextAccessor;
     private readonly SemaphoreSlim _writeLock = new(1, 1);
     private readonly JsonSerializerOptions _json = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
@@ -48,7 +50,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
         IOptions<TodoStorageOptions> storageOptions,
         IWriteAuditLog auditLog,
         ILogger<EfTodoService> logger,
-        IChangeEventBus? eventBus = null)
+        IChangeEventBus? eventBus = null,
+        IHttpContextAccessor? httpContextAccessor = null)
     {
         _scopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
         _ingestionOptions = ingestionOptions ?? throw new ArgumentNullException(nameof(ingestionOptions));
@@ -56,6 +59,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
         _auditLog = auditLog ?? throw new ArgumentNullException(nameof(auditLog));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _eventBus = eventBus;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     /// <inheritdoc />
@@ -114,7 +118,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
             if (await ctx.TodoItems.AnyAsync(i => i.Id == request.Id, cancellationToken).ConfigureAwait(false))
                 return new TodoMutationResult(false, $"Item with id '{request.Id}' already exists.", FailureKind: TodoMutationFailureKind.Conflict);
 
-            var all = await ctx.TodoItems.AsNoTracking().Select(ToFlatItemExpression).ToListAsync(cancellationToken).ConfigureAwait(false);
+            var allEntities = await ctx.TodoItems.AsNoTracking().ToListAsync(cancellationToken).ConfigureAwait(false);
+            var all = allEntities.Select(ToFlatItem).ToList();
             var depIdError = TodoValidator.ValidateDependencyIds(request.DependsOn, all, "dependsOn");
             if (depIdError is not null)
                 return new TodoMutationResult(false, depIdError, FailureKind: TodoMutationFailureKind.Validation);
@@ -211,7 +216,8 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
                 ? request.Phase ?? existing.PhaseLabel ?? existing.Title
                 : null;
 
-            var all = await ctx.TodoItems.AsNoTracking().Select(ToFlatItemExpression).ToListAsync(cancellationToken).ConfigureAwait(false);
+            var allEntities = await ctx.TodoItems.AsNoTracking().ToListAsync(cancellationToken).ConfigureAwait(false);
+            var all = allEntities.Select(ToFlatItem).ToList();
             var depIdError = TodoValidator.ValidateDependencyIds(DeserializeList(existing.DependsOnJson), all, "dependsOn");
             if (depIdError is not null)
                 return new TodoMutationResult(false, depIdError, FailureKind: TodoMutationFailureKind.Validation);
@@ -445,6 +451,20 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
     private DbScope CreateScope()
     {
         var scope = _scopeFactory.CreateAsyncScope();
+        // TR-MCP-TODO-008: EfTodoService is a singleton but McpDbContext applies a
+        // per-workspace global query filter fed by the scoped WorkspaceContext.
+        // The new scope we just created is detached from the HTTP request scope,
+        // so we must copy the request-scope's workspace identity onto the new
+        // scope's DbContext before any query runs. When called outside an HTTP
+        // request (STDIO/hosted services/tests) we leave the fresh scope's
+        // WorkspaceContext as-is.
+        var requestCtx = _httpContextAccessor?.HttpContext?.RequestServices.GetService<WorkspaceContext>();
+        if (requestCtx is not null && !string.IsNullOrEmpty(requestCtx.WorkspacePath))
+        {
+            var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+            ctx.OverrideWorkspaceId(requestCtx.WorkspacePath);
+            return new DbScope(scope, ctx);
+        }
         return new DbScope(scope);
     }
 
@@ -456,6 +476,12 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
         {
             _scope = scope;
             Context = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+        }
+
+        public DbScope(AsyncServiceScope scope, McpDbContext context)
+        {
+            _scope = scope;
+            Context = context;
         }
 
         public McpDbContext Context { get; }

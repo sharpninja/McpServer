@@ -1,6 +1,7 @@
 using McpServer.Support.Mcp.Ingestion;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Notifications;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -24,6 +25,7 @@ internal sealed class TodoServiceFactory : ITodoServiceFactory
     private readonly IWriteAuditLog _auditLog;
     private readonly ILoggerFactory _loggerFactory;
     private readonly IChangeEventBus? _eventBus;
+    private readonly IHttpContextAccessor? _httpContextAccessor;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TodoServiceFactory"/> class.
@@ -34,7 +36,8 @@ internal sealed class TodoServiceFactory : ITodoServiceFactory
         IOptions<TodoStorageOptions> storageOptions,
         IWriteAuditLog auditLog,
         ILoggerFactory loggerFactory,
-        IChangeEventBus? eventBus = null)
+        IChangeEventBus? eventBus = null,
+        IHttpContextAccessor? httpContextAccessor = null)
     {
         _scopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
         _ingestionOptions = ingestionOptions ?? throw new ArgumentNullException(nameof(ingestionOptions));
@@ -42,6 +45,7 @@ internal sealed class TodoServiceFactory : ITodoServiceFactory
         _auditLog = auditLog ?? throw new ArgumentNullException(nameof(auditLog));
         _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
         _eventBus = eventBus;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     /// <inheritdoc />
@@ -53,7 +57,8 @@ internal sealed class TodoServiceFactory : ITodoServiceFactory
             _storageOptions,
             _auditLog,
             _loggerFactory.CreateLogger<EfTodoService>(),
-            _eventBus),
+            _eventBus,
+            _httpContextAccessor),
         _ => new TodoService(_ingestionOptions, _auditLog, _loggerFactory.CreateLogger<TodoService>(), _eventBus),
     };
 
@@ -77,7 +82,8 @@ internal sealed class TodoServiceFactory : ITodoServiceFactory
                 _storageOptions,
                 _auditLog,
                 _loggerFactory.CreateLogger<EfTodoService>(),
-                _eventBus);
+                _eventBus,
+                _httpContextAccessor);
         }
 
         return new TodoService(todoFullPath, _auditLog, _loggerFactory.CreateLogger<TodoService>(), _eventBus);

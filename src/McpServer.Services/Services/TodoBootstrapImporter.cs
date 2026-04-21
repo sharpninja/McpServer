@@ -59,7 +59,11 @@ internal sealed class TodoBootstrapImporter : IHostedService
     {
         try
         {
-            await RunAsync(cancellationToken).ConfigureAwait(false);
+            var summary = await RunAsync(cancellationToken).ConfigureAwait(false);
+            _logger.LogInformation(
+                "TodoBootstrapImporter summary: {Count} outcomes: {Detail}",
+                summary.Outcomes.Count,
+                string.Join("; ", summary.Outcomes.Select(o => $"{o.WorkspacePath}={o.Result}:{o.ImportedCount}")));
         }
         catch (Exception ex)
         {
@@ -74,6 +78,18 @@ internal sealed class TodoBootstrapImporter : IHostedService
     internal async Task<BootstrapSummary> RunAsync(CancellationToken cancellationToken)
     {
         var workspaces = _configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
+
+        // Always consider Mcp:RepoRoot as an implicit single-workspace: legacy deployments
+        // and integration-test fixtures set RepoRoot + TodoFilePath without a Workspaces
+        // entry, and this path must still be bootstrapped into the DB. Prepend so the
+        // primary workspace is visited first; de-dup by Path.GetFullPath below.
+        var legacy = BuildLegacySingleWorkspace();
+        if (legacy is not null
+            && !workspaces.Any(w => PathsEqual(w.WorkspacePath, legacy.WorkspacePath)))
+        {
+            workspaces.Insert(0, legacy);
+        }
+
         var outcomes = new List<BootstrapOutcome>(workspaces.Count);
         foreach (var entry in workspaces)
         {
@@ -84,6 +100,33 @@ internal sealed class TodoBootstrapImporter : IHostedService
             outcomes.Add(await BootstrapWorkspaceAsync(entry, cancellationToken).ConfigureAwait(false));
         }
         return new BootstrapSummary(new ReadOnlyCollection<BootstrapOutcome>(outcomes));
+    }
+
+    private static bool PathsEqual(string? a, string? b)
+    {
+        if (string.IsNullOrWhiteSpace(a) || string.IsNullOrWhiteSpace(b))
+            return false;
+        try
+        {
+            var na = Path.GetFullPath(a).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            var nb = Path.GetFullPath(b).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            return string.Equals(na, nb, StringComparison.OrdinalIgnoreCase);
+        }
+        catch { return false; }
+    }
+
+    private WorkspaceConfigEntry? BuildLegacySingleWorkspace()
+    {
+        var repoRoot = _configuration["Mcp:RepoRoot"];
+        if (string.IsNullOrWhiteSpace(repoRoot))
+            return null;
+        var todoRel = _configuration["Mcp:TodoFilePath"];
+        return new WorkspaceConfigEntry
+        {
+            WorkspacePath = repoRoot,
+            Name = "default",
+            TodoPath = string.IsNullOrWhiteSpace(todoRel) ? "docs/todo.yaml" : todoRel,
+        };
     }
 
     /// <summary>Bootstraps a single workspace; surface for unit tests.</summary>

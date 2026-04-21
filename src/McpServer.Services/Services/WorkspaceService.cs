@@ -232,7 +232,38 @@ public sealed class WorkspaceService : IWorkspaceService
     }
 
     private List<WorkspaceConfigEntry> ReadAll()
-        => _configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
+    {
+        var configured = _configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
+
+        // TR-MCP-TODO-008: always consider Mcp:RepoRoot as an implicit workspace so
+        // legacy deployments and integration-test fixtures (which set RepoRoot but not
+        // Mcp:Workspaces) still have a tenant identity. De-dup against configured entries.
+        var repoRoot = _configuration["Mcp:RepoRoot"];
+        if (!string.IsNullOrWhiteSpace(repoRoot))
+        {
+            // Resolve relative paths against ContentRoot (not CWD) so the synthesized
+            // workspace path matches what token seeding (NormalizeWorkspacePathForToken)
+            // stores. In test hosts CWD can diverge from ContentRoot.
+            var absolute = (Path.IsPathRooted(repoRoot)
+                    ? Path.GetFullPath(repoRoot)
+                    : Path.GetFullPath(Path.Combine(_env.ContentRootPath, repoRoot)))
+                .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            if (!configured.Any(w => string.Equals(NormalizePath(w.WorkspacePath), absolute, StringComparison.OrdinalIgnoreCase)))
+            {
+                var todoRel = _configuration["Mcp:TodoFilePath"];
+                configured.Insert(0, new WorkspaceConfigEntry
+                {
+                    WorkspacePath = absolute,
+                    Name = DeriveNameFromPath(absolute),
+                    TodoPath = string.IsNullOrWhiteSpace(todoRel) ? DefaultTodoPath : todoRel,
+                    IsPrimary = true,
+                    IsEnabled = true,
+                });
+            }
+        }
+
+        return configured;
+    }
 
     private async Task WriteAllAsync(List<WorkspaceConfigEntry> workspaces, CancellationToken ct)
     {

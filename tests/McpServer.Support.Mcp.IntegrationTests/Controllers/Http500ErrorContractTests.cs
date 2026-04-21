@@ -118,8 +118,7 @@ public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContra
                     { "DataFolder", _tempDir },
                     { "Mcp:RepoRoot", _tempDir },
                     { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" },
-                    { "Mcp:TodoStorage:Provider", "sqlite" },
-                    { "Mcp:TodoStorage:SqliteDataSource", "mcp.db" }
+                    { "Mcp:TodoStorage:Provider", "yaml" }
                 });
             });
             builder.ConfigureServices(services =>

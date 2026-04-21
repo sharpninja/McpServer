@@ -160,31 +160,31 @@ public sealed class LegacyTodoFlatItem
     public string? Remaining { get; set; }
 
     /// <summary>Legacy technical details field.</summary>
-    [YamlMember(Alias = "technicalDetails")]
+    [YamlMember(Alias = "technicalDetails", ApplyNamingConventions = false)]
     public List<string>? TechnicalDetails { get; set; }
 
     /// <summary>Legacy functional requirements field.</summary>
-    [YamlMember(Alias = "functionalRequirements")]
+    [YamlMember(Alias = "functionalRequirements", ApplyNamingConventions = false)]
     public List<string>? FunctionalRequirements { get; set; }
 
     /// <summary>Legacy technical requirements field.</summary>
-    [YamlMember(Alias = "technicalRequirements")]
+    [YamlMember(Alias = "technicalRequirements", ApplyNamingConventions = false)]
     public List<string>? TechnicalRequirements { get; set; }
 
     /// <summary>Legacy dependency field.</summary>
-    [YamlMember(Alias = "dependsOn")]
+    [YamlMember(Alias = "dependsOn", ApplyNamingConventions = false)]
     public List<string>? DependsOn { get; set; }
 
     /// <summary>Legacy implementation tasks field.</summary>
-    [YamlMember(Alias = "implementationTasks")]
+    [YamlMember(Alias = "implementationTasks", ApplyNamingConventions = false)]
     public List<ImplementationTask>? ImplementationTasks { get; set; }
 
     /// <summary>Legacy completion date field.</summary>
-    [YamlMember(Alias = "completedDate")]
+    [YamlMember(Alias = "completedDate", ApplyNamingConventions = false)]
     public string? CompletedDate { get; set; }
 
     /// <summary>Legacy done summary field.</summary>
-    [YamlMember(Alias = "doneSummary")]
+    [YamlMember(Alias = "doneSummary", ApplyNamingConventions = false)]
     public string? DoneSummary { get; set; }
 
     /// <summary>Legacy reference field.</summary>
