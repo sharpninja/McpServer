@@ -33,8 +33,7 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                 name: "TodoDocumentMetadata",
                 columns: table => new
                 {
-                    SingletonId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SingletonId = table.Column<int>(type: "int", nullable: false),
                     NotesJson = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CompletedJson = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CodeReviewReference = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: true),

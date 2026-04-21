@@ -829,7 +829,6 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", b =>
                 {
                     b.Property<int>("SingletonId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CodeReviewReference")

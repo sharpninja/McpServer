@@ -33,8 +33,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                 name: "TodoDocumentMetadata",
                 columns: table => new
                 {
-                    SingletonId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    SingletonId = table.Column<int>(type: "INTEGER", nullable: false),
                     NotesJson = table.Column<string>(type: "TEXT", nullable: true),
                     CompletedJson = table.Column<string>(type: "TEXT", nullable: true),
                     CodeReviewReference = table.Column<string>(type: "TEXT", maxLength: 1024, nullable: true),

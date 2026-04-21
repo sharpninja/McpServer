@@ -856,10 +856,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", b =>
                 {
                     b.Property<int>("SingletonId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SingletonId"));
 
                     b.Property<string>("CodeReviewReference")
                         .HasMaxLength(1024)

@@ -34,8 +34,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                 name: "TodoDocumentMetadata",
                 columns: table => new
                 {
-                    SingletonId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SingletonId = table.Column<int>(type: "integer", nullable: false),
                     NotesJson = table.Column<string>(type: "text", nullable: true),
                     CompletedJson = table.Column<string>(type: "text", nullable: true),
                     CodeReviewReference = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: true),

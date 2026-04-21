@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace McpServer.Support.Mcp.Storage.Migrations
+namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 {
     [DbContext(typeof(McpDbContext))]
-    [Migration("20260420202645_AddTodoStorage")]
+    [Migration("20260420214635_AddTodoStorage")]
     partial class AddTodoStorage
     {
         /// <inheritdoc />
@@ -832,7 +832,6 @@ namespace McpServer.Support.Mcp.Storage.Migrations
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", b =>
                 {
                     b.Property<int>("SingletonId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CodeReviewReference")

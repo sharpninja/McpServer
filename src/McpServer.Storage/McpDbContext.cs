@@ -262,6 +262,12 @@ public sealed class McpDbContext : DbContext
 
         modelBuilder.Entity<TodoDocumentMetadataEntity>(e =>
         {
+            // Singleton pattern: SingletonId is a fixed sentinel (= 1), never auto-assigned.
+            // Without ValueGeneratedNever(), SQL Server treats int PKs as IDENTITY and rejects
+            // explicit-value inserts (error 544); SQLite silently accepts them so unit tests
+            // against SQLite miss this. LegacyTodoSqliteMigrator (TR-MCP-TODO-007) inserts with
+            // SingletonId = 1 explicitly, so this is required for cross-provider correctness.
+            e.Property(x => x.SingletonId).ValueGeneratedNever();
             e.ToTable(t => t.HasCheckConstraint(
                 "CK_TodoDocumentMetadata_Singleton",
                 "\"SingletonId\" = 1"));

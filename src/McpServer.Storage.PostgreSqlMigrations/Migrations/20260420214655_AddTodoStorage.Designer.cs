@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
 {
     [DbContext(typeof(McpDbContext))]
-    [Migration("20260420195635_AddTodoStorage")]
+    [Migration("20260420214655_AddTodoStorage")]
     partial class AddTodoStorage
     {
         /// <inheritdoc />
@@ -859,10 +859,7 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", b =>
                 {
                     b.Property<int>("SingletonId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("SingletonId"));
 
                     b.Property<string>("CodeReviewReference")
                         .HasMaxLength(1024)
