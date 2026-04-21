@@ -508,6 +508,8 @@ if (!builder.Environment.IsEnvironment("Test"))
     builder.Services.AddHostedService<AgentPoolSeedService>();
     // TR-MCP-TODO-007: one-shot import from legacy mcp.db into the configured authoritative DB.
     builder.Services.AddHostedService<LegacyTodoSqliteMigrator>();
+    // TR-MCP-TODO-008 Phase 4: per-workspace YAML bootstrap into the authoritative DB.
+    builder.Services.AddHostedService<TodoBootstrapImporter>();
 }
 
 var mvcBuilder = builder.Services.AddControllers();
