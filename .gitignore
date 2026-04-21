@@ -515,3 +515,9 @@ AGENTS-README-FIRST.yaml
 mcp-data/
 /src/McpServer.Support.Mcp/Properties/launchSettings.json
 /src/McpServer.AgentFramework.SampleHost/Properties/launchSettings.json
+
+# Local workspace bootstrap marker (per-checkout, not source)
+todo-bootstrap.marker
+
+# Local scratch / test cache
+/cache/

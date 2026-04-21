@@ -310,11 +310,9 @@ Operational scripts for startup, health checks, packaging, config validation, an
 **GitHub-Backed TODO Creation Alias** — The server SHALL accept `ISSUE-NEW` only on TODO create requests, SHALL immediately create the corresponding GitHub issue, SHALL rewrite the persisted TODO identifier to the canonical `ISSUE-{number}` value returned by GitHub, and SHALL return that canonical identifier to the caller. Persisted TODO validation SHALL accept both `^[A-Z]+-[A-Z0-9]+-\d{3}$` and `^ISSUE-\d+$`. Dependency validation SHALL use the same persisted-ID rule set.
 The `ISSUE-NEW` flow SHALL be implemented through a shared creation path so HTTP, MCP/STDIO, and voice-driven TODO creation all apply the same rewrite and persistence behavior.
 
-**Status:** 🟡 In Progress
+**Status:** ✅ Complete
 
-**Note:** Blocked behind TR-MCP-TODO-005 provider-agnostic rewrite. Reverts to ✅ Complete when `SqliteTodoService` in Covered-by is replaced with `EfTodoService` (phase 3).
-
-**Covered by:** `TodoCreationService`, `TodoValidator`, `TodoController`, `FwhMcpTools`, `VoiceConversationService`, `TodoService`, `SqliteTodoService`
+**Covered by:** `TodoCreationService`, `TodoValidator`, `TodoController`, `FwhMcpTools`, `VoiceConversationService`, `TodoService`, `EfTodoService`
 
 ## TR-MCP-VOICE-001
 
@@ -488,11 +486,9 @@ Presence signaling SHALL be excluded from one-shot sessions.
 ## TR-MCP-LOG-002
 
 **Identifier Naming Validation** — `TodoValidator` SHALL validate persisted TODO IDs against the canonical regex set `^[A-Z]+-[A-Z0-9]+-\d{3}$` or `^ISSUE-\d+$` for create/update dependency paths across all configured TODO storage providers (`yaml` and `database` per TR-MCP-TODO-005). `ISSUE-NEW` SHALL remain a create-time alias handled before persistence, not a persisted TODO identifier. `SessionLogIdentifierValidator` SHALL validate session/request IDs using canonical timestamped patterns and enforce exact source-type prefix parity (`SessionId` starts with `{sourceType}-` or `{agent}-`). Invalid values return HTTP 400 at controller boundaries and `ArgumentException` for direct service invocation.
-**Status:** 🟡 In Progress
+**Status:** ✅ Complete
 
-**Note:** Blocked behind TR-MCP-TODO-005 provider-agnostic rewrite. Reverts to ✅ Complete when `SqliteTodoService` in Covered-by is replaced with `EfTodoService` (phase 3).
-
-**Covered by:** `TodoValidator`, `TodoService`, `SqliteTodoService`, `TodoCreationService`, `SessionLogIdentifierValidator`, `SessionLogController`, `SessionLogService`
+**Covered by:** `TodoValidator`, `TodoService`, `EfTodoService`, `TodoCreationService`, `SessionLogIdentifierValidator`, `SessionLogController`, `SessionLogService`
 
 ## TR-MCP-EVT-001
 
@@ -632,7 +628,7 @@ Persistence SHALL be delegated to a dedicated helper service that resolves the c
 **Provider-Agnostic Database-Authoritative TODO Storage with Deterministic YAML Projection** — The TODO subsystem SHALL use the configured `Mcp:Database:Provider` (SQLite, SQL Server, or PostgreSQL) via `McpDatabaseProviderFactory` (TR-MCP-CFG-007) as the authoritative current-state store for workspace TODO items. Service initialization SHALL perform EF Core schema migration, one-time bootstrap import from an existing `TODO.yaml` when the authoritative database is empty, and deterministic projection back to the configured TODO YAML path after successful mutations. The authoritative store SHALL preserve projection metadata needed to rehydrate ordered sections, `code-review-remediation` phases, `notes`, `completed`, and the code-review reference without treating YAML as runtime source of truth.
 Projection failures after a committed authoritative mutation SHALL surface an explicit failure result instead of silent success. The TODO storage provider setting SHALL accept `yaml` or `database`; the legacy `sqlite` value SHALL be accepted and aliased to `database` with a one-time warning log. No sqlite-specific settings SHALL be consulted when provider is `database`.
 
-**Status:** 🟡 In Progress
+**Status:** ✅ Complete
 
 **Covered by:** `EfTodoService`, `TodoItemEntity`, `TodoAuditHistoryEntity`, `TodoDocumentMetadataEntity`, `McpDbContext` (Todo DbSets), `McpDatabaseProviderFactory`, `TodoYamlFileSerializer`, `TodoServiceFactory`, `TodoStorageOptions`, `McpInstanceResolver`, `appsettings.yaml`, `appsettings.Staging.yaml`, `src/McpServer.Support.Mcp/appsettings.yaml`, `src/McpServer.Support.Mcp/appsettings.Staging.yaml`
 
@@ -641,7 +637,7 @@ Projection failures after a committed authoritative mutation SHALL surface an ex
 **Append-Only TODO Audit History, Projection Failure Classification, and Repair Contract** — TODO create, update, delete, and bootstrap-import operations SHALL append reconstructable audit snapshots with monotonic per-item versions. The server SHALL expose `GET /mcpserver/todo/{id}/audit` together with typed client parity and MCP STDIO tool parity so callers can retrieve ordered tracked states for a TODO item even when the current row has been deleted but audit history still exists.
 Mutation results SHALL include a machine-readable failure classification so callers can distinguish validation, not-found, projection-failure, conflict, and external-sync error shapes when TODO operations fail or only partially succeed. For database-backed TODO storage (the authoritative mode per TR-MCP-TODO-005), a projection failure SHALL preserve committed authoritative database state, record operator-visible projection failure metadata, and leave `TODO.yaml` repairable without replaying the mutation. The server SHALL expose `GET /mcpserver/todo/projection/status` and `POST /mcpserver/todo/projection/repair` together with typed client parity and MCP STDIO tool parity so operators can verify whether `TODO.yaml` matches authoritative database state and rebuild it on demand.
 
-**Status:** 🟡 In Progress
+**Status:** ✅ Complete
 
 **Covered by:** `ITodoService`, `ITodoStore`, `EfTodoService`, `TodoAuditHistoryEntity`, `TodoYamlFileSerializer`, `TodoController`, `McpServerMcpTools`, `TodoClient`, `TodoModels`, `TodoCreationService`, `TodoUpdateService`
 
@@ -649,9 +645,11 @@ Mutation results SHALL include a machine-readable failure classification so call
 
 **Legacy SQLite TODO Storage One-Shot Migration** — When TR-MCP-TODO-005 provider-agnostic storage is enabled and a pre-existing legacy `mcp.db` SQLite TODO store is present at the deprecated `Mcp:TodoStorage:SqliteDataSource` path, the server SHALL copy rows from `todo_items`, `todo_item_history`, and `todo_document_metadata` into the configured authoritative database on first boot, preserving primary keys, audit identifiers, and monotonic per-item versions. The migrator SHALL be idempotent: subsequent starts SHALL be no-ops when the target TODO tables are non-empty or the completion marker file exists in the effective data folder. The migrator SHALL honor the `Mcp:TodoStorage:MigrateFromLegacySqlite` feature flag and SHALL run as a background hosted service so it never blocks the SCM 30-second service-start window. Failures SHALL log per-row context and continue with the next row rather than aborting the whole migration.
 
-**Status:** 🔴 Planned
+**Status:** ✅ Superseded by TR-MCP-TODO-008
 
-**Covered by:** `LegacyTodoSqliteMigrator` (planned)
+**Note:** In practice the provider-agnostic rewrite (TR-MCP-TODO-005) was shipped alongside the workspace-scoped schema (TR-MCP-TODO-008), whose per-workspace YAML bootstrap (`TodoBootstrapImporter`) replaces the need for a legacy `mcp.db` row copy. Live Phase 5 deploys on LEGION2 and PAYTON-DESKTOP (2026-04-21) reconstructed authoritative state from workspace YAML directly; legacy SQLite TODO rows are out-of-band archived to CSV when present (see `C:\Users\Public\mcpserver-postgres-archive-20260421` on PAYTON for the postgres/SQLite snapshot archived during deploy).
+
+**Covered by:** `TodoBootstrapImporter` (replaces legacy migrator), per-workspace YAML bootstrap path
 
 ## TR-MCP-TODO-008
 
@@ -661,9 +659,11 @@ Bootstrap SHALL import from the per-workspace `TodoFilePath` YAML into the autho
 
 The `LegacyTodoSqliteMigrator` (TR-MCP-TODO-007) SHALL stamp imported rows with the active workspace's `WorkspacePath`. REST routes `/mcpserver/todo/*` and MCP STDIO `todo_*` tools SHALL honor the workspace resolved by the existing `WorkspaceAuthMiddleware` / `X-Workspace` header path without additional caller changes beyond what TR-MCP-MT-003 already mandates.
 
-**Status:** 🔴 Planned
+**Status:** ✅ Complete
 
-**Covered by:** `TodoItemEntity`, `TodoAuditHistoryEntity`, `TodoDocumentMetadataEntity`, `McpDbContext` (query filters + composite keys), `EfTodoService`, `LegacyTodoSqliteMigrator`, `TodoBootstrapImporter` (new), `TodoServiceFactory.CreateForWorkspace`, per-provider migration assemblies
+**Note:** Phase 5 live deploy verified on 2026-04-21: LEGION2 bootstrapped 130 items across 7 workspaces; PAYTON-DESKTOP bootstrapped 96 items across 5 workspaces (workspace scoping confirmed via `TodoBootstrapImporter summary` log lines with per-workspace `Imported:N` outcomes).
+
+**Covered by:** `TodoItemEntity`, `TodoAuditHistoryEntity`, `TodoDocumentMetadataEntity`, `McpDbContext` (query filters + composite keys), `EfTodoService`, `TodoBootstrapImporter`, `TodoServiceFactory.CreateForWorkspace`, per-provider migration assemblies
 
 ## TR-MCP-LOG-003
 
