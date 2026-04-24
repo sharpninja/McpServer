@@ -249,7 +249,7 @@ public sealed class ContextControllerTests : IClassFixture<CustomWebApplicationF
         using (var scope = factory.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-            var docs = await db.Documents.Where(d => d.SourceType == "external-web" && d.SourceKey == "https://example.com/docs").ToListAsync().ConfigureAwait(true);
+            var docs = await db.Documents.IgnoreQueryFilters().Where(d => d.SourceType == "external-web" && d.SourceKey == "https://example.com/docs").ToListAsync().ConfigureAwait(true);
             Assert.Single(docs);
             Assert.Equal("HASH-2", docs[0].ContentHash);
         }

@@ -4,6 +4,7 @@ using McpServer.Support.Mcp.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 {
     [DbContext(typeof(McpDbContext))]
-    partial class McpDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260420214644_AddTodoStorage")]
+    partial class AddTodoStorage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -842,20 +845,13 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<int>("Version")
                         .HasColumnType("int");
 
-                    b.Property<string>("WorkspaceId")
-                        .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
-
                     b.HasKey("AuditId");
 
                     b.HasIndex("Action");
 
-                    b.HasIndex("WorkspaceId");
+                    b.HasIndex("TodoId", "RecordedAtUtc");
 
-                    b.HasIndex("WorkspaceId", "TodoId", "RecordedAtUtc");
-
-                    b.HasIndex("WorkspaceId", "TodoId", "Version")
+                    b.HasIndex("TodoId", "Version")
                         .IsUnique();
 
                     b.ToTable("TodoAuditHistory");
@@ -863,10 +859,6 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", b =>
                 {
-                    b.Property<string>("WorkspaceId")
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
-
                     b.Property<int>("SingletonId")
                         .HasColumnType("int");
 
@@ -895,7 +887,7 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Property<string>("NotesJson")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("WorkspaceId", "SingletonId");
+                    b.HasKey("SingletonId");
 
                     b.ToTable("TodoDocumentMetadata", t =>
                         {
@@ -905,10 +897,6 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", b =>
                 {
-                    b.Property<string>("WorkspaceId")
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
-
                     b.Property<string>("Id")
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
@@ -990,7 +978,7 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                         .HasMaxLength(1024)
                         .HasColumnType("nvarchar(1024)");
 
-                    b.HasKey("WorkspaceId", "Id");
+                    b.HasKey("Id");
 
                     b.HasIndex("Done");
 

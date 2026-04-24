@@ -118,8 +118,7 @@ public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContra
                     { "DataFolder", _tempDir },
                     { "Mcp:RepoRoot", _tempDir },
                     { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" },
-                    { "Mcp:TodoStorage:Provider", "sqlite" },
-                    { "Mcp:TodoStorage:SqliteDataSource", "mcp.db" }
+                    { "Mcp:TodoStorage:Provider", "yaml" }
                 });
             });
             builder.ConfigureServices(services =>
@@ -216,13 +215,14 @@ public sealed class FailingTodoServiceFactory : ITodoServiceFactory
     private readonly TodoServiceFactory _innerFactory;
 
     public FailingTodoServiceFactory(
+        IServiceScopeFactory scopeFactory,
         IOptions<IngestionOptions> ingestionOptions,
         IOptions<TodoStorageOptions> options,
         IWriteAuditLog auditLog,
         ILoggerFactory loggerFactory,
         IChangeEventBus? eventBus = null)
     {
-        _innerFactory = new TodoServiceFactory(ingestionOptions, options, auditLog, loggerFactory, eventBus);
+        _innerFactory = new TodoServiceFactory(scopeFactory, ingestionOptions, options, auditLog, loggerFactory, eventBus);
     }
 
     public ITodoService CreatePrimary() => new FailingDeleteTodoService(_innerFactory.CreatePrimary());

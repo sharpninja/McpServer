@@ -48,6 +48,7 @@ public sealed class WorkspaceResolutionMiddleware
     {
         "/mcpserver/workspace",
         "/mcpserver/tools",
+        "/mcpserver/configuration",
     };
 
     private readonly RequestDelegate _next;
