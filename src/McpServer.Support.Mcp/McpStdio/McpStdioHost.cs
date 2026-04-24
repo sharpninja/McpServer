@@ -143,6 +143,7 @@ public static class McpStdioHost
         builder.Services.AddSingleton<TodoCreationService>();
         builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
         builder.Services.AddSingleton<TodoUpdateService>();
+        builder.Services.AddScoped<ITodoExecutionService, TodoExecutionService>();
         builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
         builder.Services.AddSingleton<RequirementsDocumentService>();
         builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<RequirementsDocumentService>());
@@ -196,4 +197,3 @@ public static class McpStdioHost
         await host.RunAsync(cancellationToken).ConfigureAwait(false);
     }
 }
-

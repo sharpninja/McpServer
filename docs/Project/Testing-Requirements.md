@@ -119,3 +119,6 @@
 - TEST-GRAPHRAG-ADHOC-005: All CQRS command and query handlers delegate to IGraphRagService and wrap results in Result<T>.
 - TEST-GRAPHRAG-ADHOC-006: All 14 controller actions return correct HTTP status codes, content types, and error responses.
 - TEST-GRAPHRAG-ADHOC-007: MCP tools serialize correctly, REPL workflow delegates to ContextClient, McpAgent tool adapter exposes all 14 tools.
+- TEST-MCP-103: Given a Byrd execution TODO, when unit tests are not defined, then the service rejects transition to `Implementing`; when unit tests are defined through the test-plan API, then the TODO advances to `TestReady`.
+- TEST-MCP-104: Given a Byrd execution TODO linked to requirements, session turns, and modified files, when bounded execution context or checkpoint delta context is requested, then the server returns only concise snippets, recent turn summaries, relevant files, artifacts, commits, and updated next action for that TODO.
+- TEST-MCP-105: Given the Byrd execution REST controller, STDIO MCP tools, typed client, and `adb_step` surface, when representative phase creation, active TODO lookup, status progression, and screenshot validation calls are executed, then structured contracts remain stable and Android validation results are returned without arbitrary shell passthrough.

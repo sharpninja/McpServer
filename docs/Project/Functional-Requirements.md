@@ -606,3 +606,15 @@ The server shall provide full CRUD operations for explicit graph entity nodes an
 
 The server shall provide endpoints to list indexed documents with chunk counts and token totals, retrieve chunks for a specific document ordered by chunk index, and delete a document with cascade removal of its chunks and corresponding vector index entries. All operations shall be workspace-scoped and available via REST endpoints, MCP tools, and REPL commands.
 
+## FR-MCP-081 Byrd Iteration Phase and TODO Execution Persistence
+
+The server shall persist Byrd iteration phases, decomposed execution TODOs, and TODO checkpoints so agents can resume multi-step work from MCP state instead of chat history. Persisted execution TODOs shall carry goal, summary, acceptance criteria, constraints, requirement links, relevant files, next action, test plan state, validation state, and linked session turn identifiers.
+
+## FR-MCP-082 Bounded Byrd Execution Context Hydration
+
+The server shall return a bounded active TODO execution context and a checkpoint-based delta context for the current execution TODO. Hydration shall prefer concise requirement snippets, concise recent session-turn summaries, relevant files, artifacts, test state, validation state, and execution pointers, and shall not return full plan markdown or broad session-log history when compact state is sufficient.
+
+## FR-MCP-083 Structured Android Validation for Byrd TODOs
+
+The server shall expose a structured `adb_step` surface for safe Android validation actions used during Byrd execution. Supported actions shall be limited to fixed safe operations such as screenshot, tap, swipe, text input, keyevent, wait, app launch, and focus inspection, and their results shall be storable as validation evidence and TODO checkpoint artifacts.
+

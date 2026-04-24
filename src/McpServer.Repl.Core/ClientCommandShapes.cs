@@ -184,11 +184,11 @@ namespace McpServer.Repl.Core;
 ///   requestId: req-20260304T120000Z-todo-001
 ///   result:
 ///     items:
-///       - id: TODO-001
+///       - id: EXEC-TODO-001
 ///         title: Implement JWT validation
 ///         status: pending
 ///         priority: high
-///       - id: TODO-002
+///       - id: EXEC-TODO-002
 ///         title: Add rate limiting
 ///         status: pending
 ///         priority: medium
@@ -423,11 +423,11 @@ public static class ClientCommandShapes
     ///   requestId: req-20260304T120000Z-todo-001
     ///   result:
     ///     items:
-    ///       - id: TODO-001
+    ///       - id: EXEC-TODO-001
     ///         title: Implement JWT validation
     ///         status: pending
     ///         priority: high
-    ///       - id: TODO-002
+    ///       - id: EXEC-TODO-002
     ///         title: Add rate limiting
     ///         status: pending
     ///         priority: medium

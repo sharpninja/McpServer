@@ -222,6 +222,16 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-REPL-018 | ✅ Complete | tests/McpServer.Repl.Core.Tests (OrchestrationRulesTests), tests/McpServer.Repl.IntegrationTests (TrustBootstrapFlowTests) |
 | TEST-MCP-REPL-019 | ✅ Complete | tests/McpServer.Repl.Core.Tests (TodoWorkflowTests, SessionLogWorkflowTests, RequirementsWorkflowTests, GenericClientPassthroughTests) |
 | TEST-MCP-REPL-020 | ✅ Complete | tests/McpServer.Repl.Core.Tests (SessionLogWorkflowTests state management, TodoWorkflowTests selection state) |
+| FR-MCP-081 | ✅ Complete | TodoExecutionService, TodoExecutionModels, TodoExecutionController |
+| FR-MCP-082 | ✅ Complete | TodoExecutionService, TodoExecutionController, McpServerMcpTools, TodoClient |
+| FR-MCP-083 | ✅ Complete | TodoExecutionService, TodoExecutionController, McpServerMcpTools, TodoClient |
+| TR-MCP-BYRD-001 | ✅ Complete | TodoExecutionModels, ITodoExecutionService, TodoExecutionService |
+| TR-MCP-BYRD-002 | ✅ Complete | TodoExecutionService, TodoExecutionController, McpServerMcpTools, TodoClient |
+| TR-MCP-BYRD-003 | ✅ Complete | TodoExecutionService, TodoExecutionController |
+| TR-MCP-BYRD-004 | ✅ Complete | TodoExecutionController, McpServerMcpTools, TodoClient |
+| TEST-MCP-103 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs |
+| TEST-MCP-104 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs |
+| TEST-MCP-105 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Controllers/TodoExecutionControllerTests.cs, tests/McpServer.Support.Mcp.Tests/McpStdio/TodoExecutionMcpToolTests.cs, tests/McpServer.Client.Tests/TodoClientTests.cs |
 
 ---
 
@@ -242,4 +252,3 @@ All REPL iteration 1-6 requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005, TR
 - Comprehensive test coverage
 
 **Reconciliation:** All requirement defects discovered during TDD have been reconciled back into the canonical requirements documents. No outstanding defects or gaps remain for REPL v1.0.
-

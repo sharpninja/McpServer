@@ -753,6 +753,34 @@ When a session is completed, the module SHALL remove both the legacy wrapper cac
 
 **Covered by:** `McpServer.Repl.Core` (`IGenericClientPassthrough`, `ClientCommandShapes`), `McpServer.Repl.Host` (`GenericClientPassthrough`)
 
+## TR-MCP-BYRD-001
+
+**Workspace-Scoped Byrd Execution Store** — The server SHALL persist Byrd iteration phases, execution TODOs, and TODO checkpoints in a workspace-scoped durable store under `.mcpServer`, with stable IDs for phases, TODOs, and checkpoints. The execution store SHALL coexist with the existing TODO providers without breaking legacy TODO CRUD behavior.
+**Status:** ✅ Complete
+
+**Covered by:** `src/McpServer.Services/Models/TodoExecutionModels.cs`, `src/McpServer.Services/Services/ITodoExecutionService.cs`, `src/McpServer.Services/Services/TodoExecutionService.cs`
+
+## TR-MCP-BYRD-002
+
+**Bounded Hydration and Delta Queries** — The server SHALL hydrate a bounded execution context for the active Byrd TODO using requirement snippets, recent session-turn summaries, relevant files, artifacts, validation state, and execution pointers. It SHALL also return checkpoint-based delta context that reports only the new turns, artifacts, commits, and next action since a specified checkpoint.
+**Status:** ✅ Complete
+
+**Covered by:** `src/McpServer.Services/Services/TodoExecutionService.cs`, `src/McpServer.Support.Mcp/Controllers/TodoExecutionController.cs`, `src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs`, `src/McpServer.Client/TodoClient.cs`
+
+## TR-MCP-BYRD-003
+
+**Byrd Progression Enforcement** — The execution service SHALL enforce Byrd progression rules so implementation cannot begin before unit tests are defined, validation cannot begin without implementation evidence, blocked TODOs require an explicit resume reason, and completion requires passing validation plus satisfied acceptance criteria. Test-plan updates, checkpoints, validation results, and session-turn linking SHALL update the persisted execution pointers used for resumption.
+**Status:** ✅ Complete
+
+**Covered by:** `src/McpServer.Services/Services/TodoExecutionService.cs`, `src/McpServer.Support.Mcp/Controllers/TodoExecutionController.cs`
+
+## TR-MCP-BYRD-004
+
+**Structured TODO Execution Surfaces** — The server SHALL expose the Byrd execution workflow through REST endpoints, STDIO MCP tools, and typed client methods, including the safe `adb_step` action surface for Android validation. The exposed contracts SHALL remain structured and bounded for iteration phase creation, plan decomposition, active TODO selection, execution context hydration, checkpoint append, validation result recording, status progression, session-turn linking, and device actions.
+**Status:** ✅ Complete
+
+**Covered by:** `src/McpServer.Support.Mcp/Controllers/TodoExecutionController.cs`, `src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs`, `src/McpServer.Client/Models/TodoModels.cs`, `src/McpServer.Client/TodoClient.cs`
+
 ---
 
 ## REPL v1.0 Requirements Freeze
@@ -760,4 +788,3 @@ When a session is completed, the module SHALL remove both the legacy wrapper cac
 **Freeze Tag:** `REPL-v1.0-FREEZE` | **Date:** 2025-01-04
 
 All REPL technical requirements (TR-MCP-REPL-001 through TR-MCP-REPL-007) are complete and frozen for v1.0 delivery. Full source code traceability comments have been added to all `McpServer.Repl.Core` and `McpServer.Repl.Host` files. All iteration 1-6 unit tests and integration tests pass. No defects remain.
-
