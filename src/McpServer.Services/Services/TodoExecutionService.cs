@@ -1111,12 +1111,14 @@ public sealed class TodoExecutionService : ITodoExecutionService
         var turns = await _db.SessionLogTurns
             .AsNoTracking()
             .Where(turn => turn.RequestId != null && requestIdSet.Contains(turn.RequestId))
-            .OrderByDescending(turn => turn.Timestamp)
-            .Take(limit)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
-        return turns.Select(BuildTurnSummary).ToList();
+        return turns
+            .OrderByDescending(turn => turn.Timestamp)
+            .Take(limit)
+            .Select(BuildTurnSummary)
+            .ToList();
     }
 
     private async Task<IReadOnlyList<string>> GetFilesModifiedAsync(string workspacePath, IReadOnlyList<string> requestIds, int limit, CancellationToken cancellationToken)
@@ -1130,19 +1132,20 @@ public sealed class TodoExecutionService : ITodoExecutionService
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
 
-        var files = await _db.SessionLogTurnStringLists
+        var items = await _db.SessionLogTurnStringLists
             .AsNoTracking()
             .Where(item => item.ListType == "filesModified"
                 && item.SessionLogTurn != null
                 && item.SessionLogTurn.RequestId != null
                 && requestIdSet.Contains(item.SessionLogTurn.RequestId))
-            .OrderByDescending(item => item.SessionLogTurn!.Timestamp)
-            .Take(limit * 4)
-            .Select(item => item.Value)
+            .Select(item => new { item.SessionLogTurn!.Timestamp, item.Value })
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
-        return files
+        return items
+            .OrderByDescending(item => item.Timestamp)
+            .Take(limit * 4)
+            .Select(item => item.Value)
             .Where(static file => !string.IsNullOrWhiteSpace(file))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .Take(limit)
