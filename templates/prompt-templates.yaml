@@ -283,17 +283,27 @@ templates:
 
       1. Read this marker file for connection details and API key.
 
-      2. Bootstrap your preferred agent entrypoint (load docs/context/module-bootstrap.md from MCP context via context_search/context_pack; do not treat it as a local file path):
-         - **Preferred**: Launch `mcpserver-repl --workspace "{{workspace.WorkspacePath}}"` for YAML-over-STDIO interaction (eliminates shell quoting failures).
-         - **Supported**: Bootstrap PowerShell or Bash helper modules from the Tool Registry (`McpSession.psm1`, `McpTodo.psm1`) for direct script integration.
+      2. Bootstrap the required plugin named for your agent in the top-level `agent_plugins` contract. Codex must use `mcpserver-codex-plugin`; Claude must use `mcpserver-claude-code-plugin`; Copilot must use `mcpserver-copilot-plugin`; Cline must use `mcpserver-cline-plugin`.
 
       3. Verify the marker signature using the workspace API key in this file before contacting the server.
 
       4. Call /health with a random nonce and confirm the response echoes that exact nonce.
 
-      5. Review recent session history and current TODOs only after signature and nonce verification succeed.
+      5. Verify and log plugin identity before other MCP work: sourceType, plugin name/version, plugin root or MCP server name, marker signature result, health nonce result, and workspace path.
 
-      6. Post an initial session log turn for the session.
+      6. Review recent session history and current TODOs only after signature, nonce, and plugin verification succeed.
+
+      7. Post an initial session log turn for the session.
+
+
+      ## Required Agent Plugins
+
+      - `agent_plugins.policy` is `required`. The plugin contract or deterministic digest is covered by marker signature verification.
+      - If your matching plugin is unavailable, stop MCP usage, record `MCP_PLUGIN_UNAVAILABLE:<Agent>`, and continue only with non-MCP local diagnosis.
+      - Do not substitute raw REST, generic `mcpserver-repl`, helper modules, or another agent''s plugin for normal session, TODO, requirements, import/export, or traceability operations.
+      - Another agent''s plugin may be inspected only for read-only diagnosis of plugin installation or contract drift.
+      - Normal workspace shell commands use `pwsh.exe`. Plugin-owned hooks may use the runner declared by that plugin contract.
+      - Codex plugin tools/hooks must satisfy `agent_plugins.agents.Codex`; Claude plugin tools/hooks must satisfy `agent_plugins.agents.Claude`; Copilot plugin tools/hooks must satisfy `agent_plugins.agents.Copilot`; Cline MCP tools must satisfy `agent_plugins.agents.Cline`.
 
 
       ## Per User Message
@@ -331,7 +341,7 @@ templates:
 
       4. Marker signatures use HMAC-SHA256 with the workspace API key in this file as the verifier. Recompute the canonical payload exactly as described by the marker metadata before trusting the file.
 
-      5. Use `mcpserver-repl` (preferred) or PowerShell/Bash helper modules for session log and TODO operations — they handle workspace routing automatically. Do not use raw API calls.
+      5. Use your required agent plugin for session log, TODO, requirements, import/export, and traceability operations. Do not use raw API calls or generic helper paths except for read-only diagnosis after plugin failure.
 
       6. Write decisions, requirements, and state to the session log, not just conversation. Capture rich turn detail: interpretation, response/status, actions (type/status/filePath), contextList, filesModified, designDecisions, requirementsDiscovered, blockers, and key processingDialog updates.
 

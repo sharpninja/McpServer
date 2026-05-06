@@ -31,9 +31,10 @@ public sealed record CreateTestRequest(string Id, string Condition);
 /// <param name="Condition">Test condition text.</param>
 public sealed record UpdateTestRequest(string Condition);
 
-/// <summary>Request payload for creating or updating an FR-to-TR mapping row.</summary>
+/// <summary>Request payload for creating or updating an FR-to-TR/TEST mapping row.</summary>
 /// <param name="TrIds">List of TR identifiers mapped to the FR row.</param>
-public sealed record UpsertFrTrMappingRequest(IReadOnlyList<string> TrIds);
+/// <param name="TestIds">List of TEST identifiers mapped to the FR row.</param>
+public sealed record UpsertFrTrMappingRequest(IReadOnlyList<string> TrIds, IReadOnlyList<string>? TestIds = null);
 
 /// <summary>
 /// Request payload for bulk requirements ingest from Markdown content.

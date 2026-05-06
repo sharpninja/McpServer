@@ -507,6 +507,11 @@ public interface IFrCreateRequest
 public interface IFrUpdateRequest
 {
     /// <summary>
+    /// Gets the FR identifier to update. Null uses the current selection.
+    /// </summary>
+    string? Id { get; }
+
+    /// <summary>
     /// Gets the updated title. Null preserves existing value.
     /// </summary>
     string? Title { get; }
@@ -672,6 +677,11 @@ public interface ITrCreateRequest
 /// </summary>
 public interface ITrUpdateRequest
 {
+    /// <summary>
+    /// Gets the TR identifier to update. Null uses the current selection.
+    /// </summary>
+    string? Id { get; }
+
     /// <summary>
     /// Gets the updated title. Null preserves existing value.
     /// </summary>
@@ -840,6 +850,11 @@ public interface ITestCreateRequest
 public interface ITestUpdateRequest
 {
     /// <summary>
+    /// Gets the TEST identifier to update. Null uses the current selection.
+    /// </summary>
+    string? Id { get; }
+
+    /// <summary>
     /// Gets the updated title. Null preserves existing value.
     /// </summary>
     string? Title { get; }
@@ -947,9 +962,19 @@ public interface IMappingCreateRequest
     string? TrId { get; }
 
     /// <summary>
+    /// Gets technical requirement IDs to link. Empty means no TR links.
+    /// </summary>
+    IReadOnlyList<string>? TrIds { get; }
+
+    /// <summary>
     /// Gets the test requirement ID to link, or null.
     /// </summary>
     string? TestId { get; }
+
+    /// <summary>
+    /// Gets test requirement IDs to link. Empty means no TEST links.
+    /// </summary>
+    IReadOnlyList<string>? TestIds { get; }
 
     /// <summary>
     /// Gets optional notes about this mapping.

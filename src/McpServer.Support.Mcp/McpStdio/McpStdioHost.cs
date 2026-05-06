@@ -49,6 +49,7 @@ public static class McpStdioHost
         builder.Services.Configure<GitHubIntegrationOptions>(builder.Configuration.GetSection(GitHubIntegrationOptions.SectionName));
         builder.Services.Configure<TodoPromptOptions>(builder.Configuration.GetSection(TodoPromptOptions.SectionName));
         builder.Services.Configure<TemplateStorageOptions>(builder.Configuration.GetSection(TemplateStorageOptions.SectionName));
+        builder.Services.Configure<RequirementsOptions>(builder.Configuration.GetSection(RequirementsOptions.SectionName));
         var requiredRepoAllowlistPatterns = new[]
         {
             "src/McpServer.Cqrs/**/*.cs",
@@ -145,9 +146,9 @@ public static class McpStdioHost
         builder.Services.AddSingleton<TodoUpdateService>();
         builder.Services.AddScoped<ITodoExecutionService, TodoExecutionService>();
         builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
-        builder.Services.AddSingleton<RequirementsDocumentService>();
-        builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<RequirementsDocumentService>());
-        builder.Services.AddSingleton<IRequirementsDocumentService>(sp => sp.GetRequiredService<RequirementsDocumentService>());
+        builder.Services.AddSingleton<RequirementsDatabaseDocumentService>();
+        builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<RequirementsDatabaseDocumentService>());
+        builder.Services.AddSingleton<IRequirementsDocumentService>(sp => sp.GetRequiredService<RequirementsDatabaseDocumentService>());
         builder.Services.AddSingleton<PromptTemplateRenderer>();
         builder.Services.AddSingleton<IPromptTemplateService, PromptTemplateService>();
         builder.Services.AddSingleton<ITodoPromptProvider, TodoPromptProvider>();
@@ -174,6 +175,7 @@ public static class McpStdioHost
         builder.Services.AddScoped<Fts5SearchService>();
         builder.Services.AddScoped<IContextSearchService, Fts5SearchService>();
         builder.Services.AddMcpGraphRag();
+        builder.Services.AddScoped<WorkspaceContext>();
         builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
         builder.Services.AddScoped<IWorkspacePolicyDirectiveParser, WorkspacePolicyDirectiveParser>();
         builder.Services.AddScoped<IWorkspacePolicyService, WorkspacePolicyService>();

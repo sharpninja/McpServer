@@ -1422,8 +1422,10 @@ public interface IListMappingsResult
 ///   method: workflow.requirements.createMapping
 ///   params:
 ///     frId: FR-MCP-002
-///     trId: TR-MCP-ARCH-002
-///     testId: TEST-MCP-003
+///     trIds:
+///       - TR-MCP-ARCH-002
+///     testIds:
+///       - TEST-MCP-003
 ///     notes: Workspace isolation complete traceability
 /// </code>
 /// </remarks>
@@ -1440,9 +1442,19 @@ public interface ICreateMappingParams
     string? TrId { get; }
 
     /// <summary>
+    /// Gets technical requirement IDs to link. Empty means no TR links.
+    /// </summary>
+    IReadOnlyList<string>? TrIds { get; }
+
+    /// <summary>
     /// Gets the test requirement ID to link, or null.
     /// </summary>
     string? TestId { get; }
+
+    /// <summary>
+    /// Gets test requirement IDs to link. Empty means no TEST links.
+    /// </summary>
+    IReadOnlyList<string>? TestIds { get; }
 
     /// <summary>
     /// Gets optional notes about this mapping.

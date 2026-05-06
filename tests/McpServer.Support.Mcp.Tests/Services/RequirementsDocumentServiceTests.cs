@@ -46,6 +46,8 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.Single(mapping);
         Assert.Equal("FR-MCP-001", mapping[0].FrId);
         Assert.Equal(2, mapping[0].TrIds.Count);
+        Assert.Single(mapping[0].TestIds);
+        Assert.Equal("TEST-MCP-001", mapping[0].TestIds[0]);
 
         var functionalDoc = await service.GenerateDocumentAsync(RequirementsDocType.Functional).ConfigureAwait(true);
         Assert.Equal("text/markdown", functionalDoc.MimeType);
@@ -112,6 +114,23 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.Equal("TR-MCP-CFG-001", mapping.TrIds[0]);
     }
 
+    [Fact]
+    public void ParseMapping_AcceptsLegacyTwoColumnRows()
+    {
+        var parsed = RequirementsDocumentParser.ParseMapping("""
+            # TR per FR Mapping (MCP Server)
+
+            | FR | Primary TRs |
+            | --- | --- |
+            | FR-MCP-001 | TR-MCP-CFG-001, TR-MCP-CFG-002 |
+            """);
+
+        var mapping = Assert.Single(parsed);
+        Assert.Equal("FR-MCP-001", mapping.FrId);
+        Assert.Equal(2, mapping.TrIds.Count);
+        Assert.Empty(mapping.TestIds);
+    }
+
     private RequirementsDocumentService CreateService()
     {
         var options = Microsoft.Extensions.Options.Options.Create(new RequirementsOptions
@@ -131,7 +150,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         File.WriteAllText(Path.Combine(projectDir, "Functional-Requirements.md"), "# Functional Requirements (MCP Server)\n\n");
         File.WriteAllText(Path.Combine(projectDir, "Technical-Requirements.md"), "# Technical Requirements (MCP Server)\n\n");
         File.WriteAllText(Path.Combine(projectDir, "Testing-Requirements.md"), "# Testing Requirements (MCP Server)\n\n");
-        File.WriteAllText(Path.Combine(projectDir, "TR-per-FR-Mapping.md"), "# TR per FR Mapping (MCP Server)\n\n| FR | Primary TRs |\n| --- | --- |\n");
+        File.WriteAllText(Path.Combine(projectDir, "TR-per-FR-Mapping.md"), "# TR per FR Mapping (MCP Server)\n\n| FR | Primary TRs | Tests |\n| --- | --- | --- |\n");
     }
 
     private void SeedCanonicalDocs()
@@ -179,9 +198,9 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         File.WriteAllText(Path.Combine(projectDir, "TR-per-FR-Mapping.md"), """
             # TR per FR Mapping (MCP Server)
 
-            | FR | Primary TRs |
-            | --- | --- |
-            | FR-MCP-001 | TR-MCP-CFG-001, TR-MCP-CFG-002 |
+            | FR | Primary TRs | Tests |
+            | --- | --- | --- |
+            | FR-MCP-001 | TR-MCP-CFG-001, TR-MCP-CFG-002 | TEST-MCP-001 |
             """);
     }
 }

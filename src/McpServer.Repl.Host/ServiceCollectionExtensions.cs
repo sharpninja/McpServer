@@ -40,6 +40,14 @@ public static class ServiceCollectionExtensions
             return new McpServer.Repl.Core.GraphRagWorkflow(clientFactory.Context);
         });
 
+        // Register requirements workflow so agent plugins can invoke the
+        // workflow.requirements namespace without falling back to raw REST.
+        services.AddSingleton<IRequirementsWorkflow>(sp =>
+        {
+            var clientFactory = sp.GetRequiredService<McpServer.Client.McpServerClient>();
+            return new McpServer.Repl.Core.RequirementsWorkflow(clientFactory.Requirements);
+        });
+
         // Register YAML protocol primitives used by agent-stdio mode.
         // FR-MCP-REPL-001, TR-MCP-REPL-001/003/004: YAML envelope serialization,
         // generic client passthrough, command dispatcher, and stream-level protocol loop.
@@ -47,7 +55,9 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IGenericClientPassthrough>(sp =>
             new GenericClientPassthrough(sp.GetRequiredService<McpServer.Client.McpServerClient>()));
         services.AddSingleton<IReplCommandDispatcher>(sp =>
-            new ReplCommandDispatcher(sp.GetRequiredService<IGenericClientPassthrough>()));
+            new ReplCommandDispatcher(
+                sp.GetRequiredService<IGenericClientPassthrough>(),
+                sp.GetRequiredService<IRequirementsWorkflow>()));
         services.AddSingleton<IAgentStdioProtocol>(sp =>
             new AgentStdioProtocol(
                 sp.GetRequiredService<IYamlSerializer>(),

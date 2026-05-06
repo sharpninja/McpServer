@@ -119,13 +119,16 @@ internal static class RequirementsDocumentParser
             if (!cells[0].StartsWith("FR-", StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            list.Add(new FrTrMapping(cells[0], ParseMappingTrIds(cells[1])));
+            list.Add(new FrTrMapping(
+                cells[0],
+                ParseMappingIds(cells[1]),
+                cells.Length >= 3 ? ParseMappingIds(cells[2]) : []));
         }
 
         return list;
     }
 
-    private static IReadOnlyList<string> ParseMappingTrIds(string cell)
+    private static IReadOnlyList<string> ParseMappingIds(string cell)
     {
         if (string.IsNullOrWhiteSpace(cell) || cell.Contains("planned", StringComparison.OrdinalIgnoreCase))
             return [];

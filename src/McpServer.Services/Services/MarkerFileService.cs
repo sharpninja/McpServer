@@ -74,6 +74,7 @@ public static class MarkerFileService
         templateContext["markerWrittenAtUtc"] = markerWrittenAtUtcText;
         templateContext["serverStartedAtUtc"] = serverStartedAtUtcText;
 
+        var agentPlugins = BuildDefaultAgentPlugins(workspacePath);
         var marker = new MarkerFile
         {
             Port = port,
@@ -125,8 +126,10 @@ public static class MarkerFileService
                 Fallback = "If health check, nonce verification, or signature verification fails, log MCP_UNTRUSTED and continue without the MCP server. Do not probe additional endpoints.",
                 RecommendedUsage = "Use /sessionlog, /todo, /context, and other MCP endpoints only after both signature and nonce verification succeed.",
             },
+            AgentPlugins = agentPlugins,
             Prompt = ResolvePrompt(templateContext, globalPromptTemplate, workspacePromptTemplate),
         };
+        agentPlugins.ContractDigest = ComputeAgentPluginsDigest(agentPlugins);
         marker.Signature.Value = ComputeMarkerSignature(marker);
 
         try
@@ -225,6 +228,9 @@ public static class MarkerFileService
             ?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
             ?.InformationalVersion ?? "unknown";
 
+        var agentPlugins = BuildDefaultAgentPlugins(workspacePath);
+        agentPlugins.ContractDigest = ComputeAgentPluginsDigest(agentPlugins);
+
         return new Dictionary<string, object?>
         {
             ["baseUrl"] = baseUrl,
@@ -237,6 +243,7 @@ public static class MarkerFileService
                     ["content"] = x.Content,
                 }).ToList()
                 : null,
+            ["agentPlugins"] = agentPlugins,
             ["workspace"] = workspace is not null ? new Dictionary<string, object?>
             {
                 ["Name"] = workspace.Name,
@@ -317,7 +324,100 @@ public static class MarkerFileService
         AppendPayloadLine(builder, "endpoints.workspace", marker.Endpoints.Workspace);
         AppendPayloadLine(builder, "endpoints.serverStartupUtc", marker.Endpoints.ServerStartupUtc);
         AppendPayloadLine(builder, "endpoints.markerFileTimestamp", marker.Endpoints.MarkerFileTimestamp);
+        if (marker.AgentPlugins is not null)
+        {
+            AppendPayloadLine(builder, "agentPlugins.policy", marker.AgentPlugins.Policy);
+            AppendPayloadLine(builder, "agentPlugins.contractDigest", marker.AgentPlugins.ContractDigest);
+        }
         return builder.ToString();
+    }
+
+    internal static MarkerAgentPlugins BuildDefaultAgentPlugins(string workspacePath)
+    {
+        var siblingRoot = Path.GetDirectoryName(Path.GetFullPath(workspacePath)) ?? string.Empty;
+        string Sibling(string name) => string.IsNullOrWhiteSpace(siblingRoot) ? name : Path.Combine(siblingRoot, name);
+
+        return new MarkerAgentPlugins
+        {
+            Policy = "required",
+            Agents = new Dictionary<string, MarkerAgentPluginContract>(StringComparer.Ordinal)
+            {
+                ["Codex"] = new()
+                {
+                    SourceType = "Codex",
+                    PluginName = "mcpserver-codex-plugin",
+                    PluginVersion = "1.1.0",
+                    Activation = "Codex hook lifecycle through .codex-plugin/plugin.json.",
+                    StartupCommand = "lib/session-start.sh \"{workspacePath}\"",
+                    UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:Codex",
+                    RequiredEnvVars = ["CODEX_PLUGIN_ROOT", "PLUGIN_AGENT_NAME=Codex"],
+                    HookExpectations = ["SessionStart", "UserPromptSubmit", "PostToolUse", "Stop"],
+                    ToolExpectations = ["workflow.sessionlog.*", "workflow.todo.*", "workflow.requirements.*"],
+                    RootHints = [Sibling("mcpserver-codex-plugin"), "$CODEX_PLUGIN_ROOT"],
+                },
+                ["Claude"] = new()
+                {
+                    SourceType = "Claude",
+                    PluginName = "mcpserver-claude-code-plugin",
+                    PluginVersion = "1.1.0",
+                    Activation = "Claude Code plugin hooks and .mcp.json mcpserver entry.",
+                    StartupCommand = "hooks/session-start.sh \"{workspacePath}\"",
+                    UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:Claude",
+                    RequiredEnvVars = ["CLAUDE_PLUGIN_ROOT", "PLUGIN_AGENT_NAME=Claude"],
+                    HookExpectations = ["SessionStart", "UserPromptSubmit", "PostToolUse", "Stop"],
+                    ToolExpectations = ["mcpserver session tools", "mcpserver todo tools", "mcpserver requirements tools"],
+                    RootHints = [Sibling("mcpserver-claude-code-plugin"), "$CLAUDE_PLUGIN_ROOT"],
+                },
+                ["Copilot"] = new()
+                {
+                    SourceType = "Copilot",
+                    PluginName = "mcpserver-copilot-plugin",
+                    PluginVersion = "1.1.0",
+                    Activation = "Copilot plugin hooks and .mcp.json mcpserver entry.",
+                    StartupCommand = "hooks/session-start.sh \"{workspacePath}\"",
+                    UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:Copilot",
+                    RequiredEnvVars = ["COPILOT_PLUGIN_ROOT", "PLUGIN_AGENT_NAME=Copilot"],
+                    HookExpectations = ["SessionStart", "UserPromptSubmit", "PostToolUse", "Stop"],
+                    ToolExpectations = ["mcpserver session tools", "mcpserver todo tools", "mcpserver requirements tools"],
+                    RootHints = [Sibling("mcpserver-copilot-plugin"), "$COPILOT_PLUGIN_ROOT"],
+                },
+                ["Cline"] = new()
+                {
+                    SourceType = "Cline",
+                    PluginName = "mcpserver-cline-plugin",
+                    PluginVersion = "1.1.0",
+                    Activation = "Cline MCP server configured from server.json.",
+                    StartupCommand = "npm run build && node dist/index.js",
+                    UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:Cline",
+                    RequiredEnvVars = ["CLINE_PLUGIN_ROOT", "PLUGIN_AGENT_NAME=Cline"],
+                    HookExpectations = ["MCP server startup", "tool call audit"],
+                    ToolExpectations = ["session_*", "req_*"],
+                    RootHints = [Sibling("mcpserver-cline-plugin"), "$CLINE_PLUGIN_ROOT"],
+                },
+            },
+        };
+    }
+
+    internal static string ComputeAgentPluginsDigest(MarkerAgentPlugins agentPlugins)
+    {
+        ArgumentNullException.ThrowIfNull(agentPlugins);
+        var builder = new StringBuilder();
+        AppendPayloadLine(builder, "policy", agentPlugins.Policy);
+        foreach (var (agentName, contract) in agentPlugins.Agents.OrderBy(x => x.Key, StringComparer.Ordinal))
+        {
+            AppendPayloadLine(builder, $"{agentName}.sourceType", contract.SourceType);
+            AppendPayloadLine(builder, $"{agentName}.pluginName", contract.PluginName);
+            AppendPayloadLine(builder, $"{agentName}.pluginVersion", contract.PluginVersion);
+            AppendPayloadLine(builder, $"{agentName}.activation", contract.Activation);
+            AppendPayloadLine(builder, $"{agentName}.startupCommand", contract.StartupCommand);
+            AppendPayloadLine(builder, $"{agentName}.unavailableFailure", contract.UnavailableFailure);
+            AppendPayloadLine(builder, $"{agentName}.requiredEnvVars", string.Join(",", contract.RequiredEnvVars));
+            AppendPayloadLine(builder, $"{agentName}.hookExpectations", string.Join(",", contract.HookExpectations));
+            AppendPayloadLine(builder, $"{agentName}.toolExpectations", string.Join(",", contract.ToolExpectations));
+            AppendPayloadLine(builder, $"{agentName}.rootHints", string.Join(",", contract.RootHints));
+        }
+
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(builder.ToString())));
     }
 
     private static void AppendPayloadLine(StringBuilder builder, string key, string? value)
@@ -351,8 +451,41 @@ internal sealed class MarkerFile
     public MarkerSignature Signature { get; set; } = new();
     [YamlMember(Alias = "trust_bootstrap", ApplyNamingConventions = false)]
     public MarkerTrustBootstrap TrustBootstrap { get; set; } = new();
+    [YamlMember(Alias = "agent_plugins", ApplyNamingConventions = false)]
+    public MarkerAgentPlugins? AgentPlugins { get; set; }
     [YamlMember(ScalarStyle = ScalarStyle.Literal)]
     public string Prompt { get; set; } = string.Empty;
+}
+
+internal sealed class MarkerAgentPlugins
+{
+    public string Policy { get; set; } = "required";
+    [YamlMember(Alias = "contract_digest", ApplyNamingConventions = false)]
+    public string ContractDigest { get; set; } = string.Empty;
+    public Dictionary<string, MarkerAgentPluginContract> Agents { get; set; } = new(StringComparer.Ordinal);
+}
+
+internal sealed class MarkerAgentPluginContract
+{
+    [YamlMember(Alias = "source_type", ApplyNamingConventions = false)]
+    public string SourceType { get; set; } = string.Empty;
+    [YamlMember(Alias = "plugin_name", ApplyNamingConventions = false)]
+    public string PluginName { get; set; } = string.Empty;
+    [YamlMember(Alias = "plugin_version", ApplyNamingConventions = false)]
+    public string PluginVersion { get; set; } = string.Empty;
+    public string Activation { get; set; } = string.Empty;
+    [YamlMember(Alias = "startup_command", ApplyNamingConventions = false)]
+    public string StartupCommand { get; set; } = string.Empty;
+    [YamlMember(Alias = "unavailable_failure", ApplyNamingConventions = false)]
+    public string UnavailableFailure { get; set; } = string.Empty;
+    [YamlMember(Alias = "required_env_vars", ApplyNamingConventions = false)]
+    public string[] RequiredEnvVars { get; set; } = [];
+    [YamlMember(Alias = "hook_expectations", ApplyNamingConventions = false)]
+    public string[] HookExpectations { get; set; } = [];
+    [YamlMember(Alias = "tool_expectations", ApplyNamingConventions = false)]
+    public string[] ToolExpectations { get; set; } = [];
+    [YamlMember(Alias = "root_hints", ApplyNamingConventions = false)]
+    public string[] RootHints { get; set; } = [];
 }
 
 internal sealed class MarkerSignature

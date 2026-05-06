@@ -1448,13 +1448,14 @@ public sealed class FwhMcpTools
     }
 
     /// <summary>REQ-MGMT-001: Create a requirement or mapping row.</summary>
-    [McpServerTool(Name = "requirements_create"), Description("Create a requirement entry. type = fr|tr|test|mapping. For mapping, body is a comma-separated TR id list.")]
+    [McpServerTool(Name = "requirements_create"), Description("Create a requirement entry. type = fr|tr|test|mapping. For mapping, body is comma-separated TR ids and testIds is comma-separated TEST ids.")]
     public async Task<string> RequirementsCreate(
         [Description("Entry type: fr, tr, test, or mapping")] string type,
         [Description("Entry id (FR/TR/TEST id or FR id for mapping rows)")] string id,
         [Description("Workspace path (required)")] string workspacePath,
         [Description("Title (required for fr; optional for tr; ignored for test/mapping)")] string? title = null,
         [Description("Body text (required for fr/tr/test; for mapping use comma-separated TR ids)")] string? body = null,
+        [Description("Comma-separated TEST ids for mapping rows")] string? testIds = null,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -1486,7 +1487,7 @@ public sealed class FwhMcpTools
                 }
                 case RequirementsEntityType.Mapping:
                 {
-                    var mapping = new FrTrMapping(id, ParseMappingTrIds(body));
+                    var mapping = new FrTrMapping(id, ParseMappingIds(body), ParseMappingIds(testIds));
                     await _requirementsDocumentService.UpsertMappingAsync(mapping, cancellationToken).ConfigureAwait(false);
                     return JsonSerializer.Serialize(new { success = true, item = mapping });
                 }
@@ -1519,6 +1520,7 @@ public sealed class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         [Description("Updated title (fr/tr only)")] string? title = null,
         [Description("Updated body text or mapping TR id list")] string? body = null,
+        [Description("Updated comma-separated TEST ids for mapping rows")] string? testIds = null,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -1569,8 +1571,11 @@ public sealed class FwhMcpTools
                     var existing = await _requirementsDocumentService.GetMappingAsync(id, cancellationToken).ConfigureAwait(false);
                     var trIds = body is null && existing is not null
                         ? existing.TrIds
-                        : ParseMappingTrIds(body);
-                    var updated = new FrTrMapping(id, trIds);
+                        : ParseMappingIds(body);
+                    var targetTestIds = testIds is null && existing is not null
+                        ? existing.TestIds
+                        : ParseMappingIds(testIds);
+                    var updated = new FrTrMapping(id, trIds, targetTestIds);
                     await _requirementsDocumentService.UpsertMappingAsync(updated, cancellationToken).ConfigureAwait(false);
                     return JsonSerializer.Serialize(new { success = true, item = updated });
                 }
@@ -1964,7 +1969,7 @@ public sealed class FwhMcpTools
         }
     }
 
-    private static IReadOnlyList<string> ParseMappingTrIds(string? body)
+    private static IReadOnlyList<string> ParseMappingIds(string? body)
     {
         if (string.IsNullOrWhiteSpace(body))
             return Array.Empty<string>();

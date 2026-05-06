@@ -33,6 +33,8 @@ public sealed class FrCreateRequestModel : IFrCreateRequest
 public sealed class FrUpdateRequestModel : IFrUpdateRequest
 {
     /// <inheritdoc />
+    public string? Id { get; set; }
+    /// <inheritdoc />
     public string? Title { get; set; }
     /// <inheritdoc />
     public string? Description { get; set; }
@@ -66,6 +68,8 @@ public sealed class TrCreateRequestModel : ITrCreateRequest
 /// <inheritdoc />
 public sealed class TrUpdateRequestModel : ITrUpdateRequest
 {
+    /// <inheritdoc />
+    public string? Id { get; set; }
     /// <inheritdoc />
     public string? Title { get; set; }
     /// <inheritdoc />
@@ -101,6 +105,8 @@ public sealed class TestCreateRequestModel : ITestCreateRequest
 public sealed class TestUpdateRequestModel : ITestUpdateRequest
 {
     /// <inheritdoc />
+    public string? Id { get; set; }
+    /// <inheritdoc />
     public string? Title { get; set; }
     /// <inheritdoc />
     public string? Description { get; set; }
@@ -120,7 +126,11 @@ public sealed class MappingCreateRequestModel : IMappingCreateRequest
     /// <inheritdoc />
     public string? TrId { get; set; }
     /// <inheritdoc />
+    public IReadOnlyList<string>? TrIds { get; set; }
+    /// <inheritdoc />
     public string? TestId { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<string>? TestIds { get; set; }
     /// <inheritdoc />
     public string? Notes { get; set; }
 }
@@ -348,7 +358,11 @@ public sealed class CreateMappingParamsModel : ICreateMappingParams
     /// <inheritdoc />
     public string? TrId { get; set; }
     /// <inheritdoc />
+    public IReadOnlyList<string>? TrIds { get; set; }
+    /// <inheritdoc />
     public string? TestId { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<string>? TestIds { get; set; }
     /// <inheritdoc />
     public string? Notes { get; set; }
 }

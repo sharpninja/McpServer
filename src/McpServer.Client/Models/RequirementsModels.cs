@@ -17,6 +17,10 @@ public sealed class FrEntry
     /// <summary>Requirement body.</summary>
     [JsonPropertyName("body")]
     public string Body { get; set; } = string.Empty;
+
+    /// <summary>Owning workspace discriminator.</summary>
+    [JsonPropertyName("workspaceId")]
+    public string WorkspaceId { get; set; } = string.Empty;
 }
 
 /// <summary>A technical requirement entry.</summary>
@@ -33,6 +37,10 @@ public sealed class TrEntry
     /// <summary>Requirement body.</summary>
     [JsonPropertyName("body")]
     public string Body { get; set; } = string.Empty;
+
+    /// <summary>Owning workspace discriminator.</summary>
+    [JsonPropertyName("workspaceId")]
+    public string WorkspaceId { get; set; } = string.Empty;
 }
 
 /// <summary>A testing requirement entry.</summary>
@@ -45,6 +53,10 @@ public sealed class TestEntry
     /// <summary>Testing condition text.</summary>
     [JsonPropertyName("condition")]
     public string Condition { get; set; } = string.Empty;
+
+    /// <summary>Owning workspace discriminator.</summary>
+    [JsonPropertyName("workspaceId")]
+    public string WorkspaceId { get; set; } = string.Empty;
 }
 
 /// <summary>A functional-to-technical requirement mapping row.</summary>
@@ -57,6 +69,14 @@ public sealed class FrTrMapping
     /// <summary>Mapped technical requirement identifiers.</summary>
     [JsonPropertyName("trIds")]
     public IReadOnlyList<string> TrIds { get; set; } = [];
+
+    /// <summary>Mapped testing requirement identifiers.</summary>
+    [JsonPropertyName("testIds")]
+    public IReadOnlyList<string> TestIds { get; set; } = [];
+
+    /// <summary>Owning workspace discriminator.</summary>
+    [JsonPropertyName("workspaceId")]
+    public string WorkspaceId { get; set; } = string.Empty;
 }
 
 /// <summary>Request payload for creating a functional requirement entry.</summary>
@@ -141,6 +161,10 @@ public sealed class UpsertFrTrMappingRequest
     /// <summary>Mapped technical requirement identifiers.</summary>
     [JsonPropertyName("trIds")]
     public IReadOnlyList<string> TrIds { get; set; } = [];
+
+    /// <summary>Mapped testing requirement identifiers.</summary>
+    [JsonPropertyName("testIds")]
+    public IReadOnlyList<string> TestIds { get; set; } = [];
 }
 
 /// <summary>Result of a mutation operation.</summary>

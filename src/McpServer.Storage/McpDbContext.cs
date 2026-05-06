@@ -90,6 +90,12 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-MCP-TODO-005 / TR-MCP-TODO-006 (provider-agnostic): Singleton TODO document metadata.</summary>
     public DbSet<TodoDocumentMetadataEntity> TodoDocumentMetadata => Set<TodoDocumentMetadataEntity>();
 
+    /// <summary>Authoritative workspace-scoped FR/TR/TEST requirements.</summary>
+    public DbSet<RequirementEntity> Requirements => Set<RequirementEntity>();
+
+    /// <summary>Authoritative workspace-scoped FR-to-TR/TEST traceability links.</summary>
+    public DbSet<RequirementTraceabilityLinkEntity> RequirementTraceabilityLinks => Set<RequirementTraceabilityLinkEntity>();
+
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -281,6 +287,19 @@ public sealed class McpDbContext : DbContext
                 "\"SingletonId\" = 1"));
         });
 
+        modelBuilder.Entity<RequirementEntity>(e =>
+        {
+            e.HasKey(x => new { x.WorkspaceId, x.Kind, x.Id });
+            e.HasIndex(x => new { x.WorkspaceId, x.Id });
+            e.HasIndex(x => x.Kind);
+        });
+
+        modelBuilder.Entity<RequirementTraceabilityLinkEntity>(e =>
+        {
+            e.HasKey(x => new { x.WorkspaceId, x.FrId, x.TargetKind, x.TargetId });
+            e.HasIndex(x => new { x.WorkspaceId, x.TargetKind, x.TargetId });
+        });
+
         modelBuilder.Entity<ContextDocumentEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<SessionLogEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
@@ -305,6 +324,8 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<TodoItemEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<TodoAuditHistoryEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
         modelBuilder.Entity<TodoDocumentMetadataEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<RequirementEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<RequirementTraceabilityLinkEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
 
         modelBuilder.Entity<ContextDocumentEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasIndex(e => e.WorkspaceId);
@@ -329,6 +350,8 @@ public sealed class McpDbContext : DbContext
         // because its PK is AuditId (identity) and the unique (WorkspaceId, TodoId,
         // Version) index already covers the common filter paths.
         modelBuilder.Entity<TodoAuditHistoryEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<RequirementEntity>().HasIndex(e => e.WorkspaceId);
+        modelBuilder.Entity<RequirementTraceabilityLinkEntity>().HasIndex(e => e.WorkspaceId);
     }
 
     /// <inheritdoc />

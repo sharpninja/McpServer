@@ -99,12 +99,13 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        var frId = _selection?.FrId;
+        var frId = request.Id ?? _selection?.FrId;
         if (string.IsNullOrEmpty(frId))
         {
             throw new InvalidOperationException("No FR is currently selected");
         }
 
+        ValidateFrId(frId);
         var clientRequest = new UpdateFrRequest
         {
             Title = request.Title ?? string.Empty,
@@ -184,12 +185,13 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        var trId = _selection?.TrId;
+        var trId = request.Id ?? _selection?.TrId;
         if (string.IsNullOrEmpty(trId))
         {
             throw new InvalidOperationException("No TR is currently selected");
         }
 
+        ValidateTrId(trId);
         var clientRequest = new UpdateTrRequest
         {
             Title = request.Title,
@@ -263,12 +265,13 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        var testId = _selection?.TestId;
+        var testId = request.Id ?? _selection?.TestId;
         if (string.IsNullOrEmpty(testId))
         {
             throw new InvalidOperationException("No TEST is currently selected");
         }
 
+        ValidateTestId(testId);
         var clientRequest = new UpdateTestRequest
         {
             Condition = request.Description ?? string.Empty
@@ -301,7 +304,31 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             filtered = filtered.Where(m => m.TrIds.Contains(trId));
         }
 
-        var items = filtered.SelectMany(m => m.TrIds.Select(tr => new MappingItemAdapter(m.FrId, tr, testId, null))).ToList();
+        if (!string.IsNullOrEmpty(testId))
+        {
+            filtered = filtered.Where(m => m.TestIds.Contains(testId));
+        }
+
+        var items = new List<IMappingItem>();
+        foreach (var mapping in filtered)
+        {
+            var matchingTrIds = string.IsNullOrEmpty(trId)
+                ? mapping.TrIds
+                : mapping.TrIds.Where(id => id == trId).ToArray();
+            var matchingTestIds = string.IsNullOrEmpty(testId)
+                ? mapping.TestIds
+                : mapping.TestIds.Where(id => id == testId).ToArray();
+
+            if (!string.IsNullOrEmpty(trId) && !string.IsNullOrEmpty(testId))
+            {
+                items.AddRange(matchingTrIds.SelectMany(tr => matchingTestIds.Select(test => new MappingItemAdapter(mapping.FrId, tr, test, null))));
+                continue;
+            }
+
+            items.AddRange(matchingTrIds.Select(tr => new MappingItemAdapter(mapping.FrId, tr, null, null)));
+            items.AddRange(matchingTestIds.Select(test => new MappingItemAdapter(mapping.FrId, null, test, null)));
+        }
+
         return new MappingQueryResultAdapter(items);
     }
 
@@ -310,64 +337,79 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        if (string.IsNullOrEmpty(request.FrId) && string.IsNullOrEmpty(request.TrId) && string.IsNullOrEmpty(request.TestId))
+        var trIds = NormalizeIds(request.TrIds, request.TrId);
+        var testIds = NormalizeIds(request.TestIds, request.TestId);
+
+        if (string.IsNullOrEmpty(request.FrId))
         {
-            throw new ArgumentException("At least one requirement ID must be provided");
+            throw new ArgumentException("FR ID is required for requirement mappings");
         }
 
-        if (!string.IsNullOrEmpty(request.FrId))
+        if (trIds.Count == 0 && testIds.Count == 0)
         {
-            ValidateFrId(request.FrId);
+            throw new ArgumentException("At least one TR or TEST ID must be provided");
+        }
+
+        ValidateFrId(request.FrId);
+        try
+        {
+            await _client.GetFrAsync(request.FrId, cancellationToken);
+        }
+        catch
+        {
+            throw new InvalidOperationException($"Referenced FR does not exist: {request.FrId}");
+        }
+
+        foreach (var id in trIds)
+        {
+            ValidateTrId(id);
             try
             {
-                await _client.GetFrAsync(request.FrId, cancellationToken);
+                await _client.GetTrAsync(id, cancellationToken);
             }
             catch
             {
-                throw new InvalidOperationException($"Referenced FR does not exist: {request.FrId}");
+                throw new InvalidOperationException($"Referenced TR does not exist: {id}");
             }
         }
 
-        if (!string.IsNullOrEmpty(request.TrId))
+        foreach (var id in testIds)
         {
-            ValidateTrId(request.TrId);
+            ValidateTestId(id);
             try
             {
-                await _client.GetTrAsync(request.TrId, cancellationToken);
+                await _client.GetTestAsync(id, cancellationToken);
             }
             catch
             {
-                throw new InvalidOperationException($"Referenced TR does not exist: {request.TrId}");
+                throw new InvalidOperationException($"Referenced TEST does not exist: {id}");
             }
         }
 
-        if (!string.IsNullOrEmpty(request.TestId))
+        try
         {
-            ValidateTestId(request.TestId);
-            try
-            {
-                await _client.GetTestAsync(request.TestId, cancellationToken);
-            }
-            catch
-            {
-                throw new InvalidOperationException($"Referenced TEST does not exist: {request.TestId}");
-            }
+            var existing = await _client.GetMappingAsync(request.FrId, cancellationToken);
+            trIds = NormalizeIds(existing.TrIds.Concat(trIds), null);
+            testIds = NormalizeIds(existing.TestIds.Concat(testIds), null);
         }
-
-        if (!string.IsNullOrEmpty(request.FrId) && !string.IsNullOrEmpty(request.TrId))
+        catch
         {
-            var upsertRequest = new UpsertFrTrMappingRequest
-            {
-                TrIds = new[] { request.TrId }
-            };
-
-            var mapping = await _client.UpsertMappingAsync(request.FrId, upsertRequest, cancellationToken);
-            var item = new MappingItemAdapter(mapping.FrId, request.TrId, request.TestId, request.Notes);
-            return new MappingMutationResultAdapter(true, item);
+            // No existing mapping for this FR; create one below.
         }
 
-        var mappingItem = new MappingItemAdapter(request.FrId, request.TrId, request.TestId, request.Notes);
-        return new MappingMutationResultAdapter(true, mappingItem);
+        var upsertRequest = new UpsertFrTrMappingRequest
+        {
+            TrIds = trIds,
+            TestIds = testIds
+        };
+
+        var mapping = await _client.UpsertMappingAsync(request.FrId, upsertRequest, cancellationToken);
+        var item = new MappingItemAdapter(
+            mapping.FrId,
+            trIds.FirstOrDefault(),
+            testIds.FirstOrDefault(),
+            request.Notes);
+        return new MappingMutationResultAdapter(true, item);
     }
 
     /// <inheritdoc />
@@ -378,20 +420,53 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             throw new ArgumentException("At least one requirement ID must be provided");
         }
 
+        var mappings = await _client.ListMappingsAsync(cancellationToken);
+        var matching = mappings.AsEnumerable();
+
         if (!string.IsNullOrEmpty(frId))
         {
-            try
-            {
-                await _client.DeleteMappingAsync(frId, cancellationToken);
-            }
-            catch
-            {
-                throw new InvalidOperationException("Mapping not found");
-            }
+            ValidateFrId(frId);
+            matching = matching.Where(m => m.FrId == frId);
         }
-        else
+
+        if (!string.IsNullOrEmpty(trId))
+        {
+            ValidateTrId(trId);
+            matching = matching.Where(m => m.TrIds.Contains(trId));
+        }
+
+        if (!string.IsNullOrEmpty(testId))
+        {
+            ValidateTestId(testId);
+            matching = matching.Where(m => m.TestIds.Contains(testId));
+        }
+
+        var targets = matching.ToList();
+        if (targets.Count == 0)
         {
             throw new InvalidOperationException("Mapping not found");
+        }
+
+        foreach (var mapping in targets)
+        {
+            if (string.IsNullOrEmpty(trId) && string.IsNullOrEmpty(testId))
+            {
+                await _client.DeleteMappingAsync(mapping.FrId, cancellationToken);
+                continue;
+            }
+
+            var remainingTrIds = string.IsNullOrEmpty(trId)
+                ? mapping.TrIds
+                : mapping.TrIds.Where(id => id != trId).ToArray();
+            var remainingTestIds = string.IsNullOrEmpty(testId)
+                ? mapping.TestIds
+                : mapping.TestIds.Where(id => id != testId).ToArray();
+
+            await _client.UpsertMappingAsync(mapping.FrId, new UpsertFrTrMappingRequest
+            {
+                TrIds = remainingTrIds,
+                TestIds = remainingTestIds
+            }, cancellationToken);
         }
     }
 
@@ -545,6 +620,25 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     {
         var parts = id.Split('-');
         return parts.Length > 1 ? parts[1] : string.Empty;
+    }
+
+    private static IReadOnlyList<string> NormalizeIds(IEnumerable<string>? ids, string? singleId)
+    {
+        var values = new List<string>();
+        if (ids is not null)
+        {
+            values.AddRange(ids.Where(id => !string.IsNullOrWhiteSpace(id)));
+        }
+
+        if (!string.IsNullOrWhiteSpace(singleId))
+        {
+            values.Add(singleId);
+        }
+
+        return values
+            .Distinct(StringComparer.Ordinal)
+            .OrderBy(id => id, StringComparer.Ordinal)
+            .ToArray();
     }
 }
 

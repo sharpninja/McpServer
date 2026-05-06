@@ -120,6 +120,7 @@ public static class MarkerFileClientOptionsResolver
         var values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         var endpoints = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         var signature = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var agentPlugins = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         string? currentSection = null;
 
         foreach (var rawLine in lines)
@@ -147,6 +148,12 @@ public static class MarkerFileClientOptionsResolver
                 continue;
             }
 
+            if (rawLine.StartsWith("agent_plugins:", StringComparison.Ordinal))
+            {
+                currentSection = "agent_plugins";
+                continue;
+            }
+
             if (currentSection is not null && rawLine.StartsWith("  ", StringComparison.Ordinal))
             {
                 var sectionParts = line.Trim().Split(':', 2);
@@ -164,6 +171,12 @@ public static class MarkerFileClientOptionsResolver
                 else if (currentSection == "signature")
                 {
                     signature[key] = value;
+                }
+                else if (currentSection == "agent_plugins"
+                         && (string.Equals(key, "policy", StringComparison.OrdinalIgnoreCase)
+                             || string.Equals(key, "contract_digest", StringComparison.OrdinalIgnoreCase)))
+                {
+                    agentPlugins[key] = value;
                 }
 
                 continue;
@@ -205,7 +218,8 @@ public static class MarkerFileClientOptionsResolver
             ServerStartedAtUtc: serverStartedAtUtc,
             SignatureCanonicalization: canonicalization,
             SignatureValue: signatureValue,
-            Endpoints: endpoints);
+            Endpoints: endpoints,
+            AgentPlugins: agentPlugins);
     }
 
     internal static bool VerifyMarkerSignature(MarkerSettings marker)
@@ -260,6 +274,14 @@ public static class MarkerFileClientOptionsResolver
             builder.AppendLine($"endpoints.{endpointName}={endpointValue ?? string.Empty}");
         }
 
+        marker.AgentPlugins.TryGetValue("policy", out var policy);
+        marker.AgentPlugins.TryGetValue("contract_digest", out var contractDigest);
+        if (policy is not null || contractDigest is not null)
+        {
+            builder.AppendLine($"agentPlugins.policy={policy ?? string.Empty}");
+            builder.AppendLine($"agentPlugins.contractDigest={contractDigest ?? string.Empty}");
+        }
+
         return builder.ToString();
     }
 
@@ -278,6 +300,7 @@ public static class MarkerFileClientOptionsResolver
     /// <param name="SignatureCanonicalization">The signature canonicalization format.</param>
     /// <param name="SignatureValue">The marker signature value.</param>
     /// <param name="Endpoints">The endpoint map recorded in the marker file.</param>
+    /// <param name="AgentPlugins">The signed agent plugin policy/digest values recorded in the marker file.</param>
     public readonly record struct MarkerSettings(
         string Port,
         string BaseUrl,
@@ -290,5 +313,6 @@ public static class MarkerFileClientOptionsResolver
         string ServerStartedAtUtc,
         string SignatureCanonicalization,
         string SignatureValue,
-        IReadOnlyDictionary<string, string> Endpoints);
+        IReadOnlyDictionary<string, string> Endpoints,
+        IReadOnlyDictionary<string, string> AgentPlugins);
 }

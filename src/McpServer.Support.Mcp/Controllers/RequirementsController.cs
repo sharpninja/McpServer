@@ -2,6 +2,7 @@ using System.Text;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Requirements.Models;
+using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -17,17 +18,20 @@ public sealed class RequirementsController : ControllerBase
 {
     private readonly IRequirementsDocumentService _requirements;
     private readonly RequirementsOptions _requirementsOptions;
+    private readonly WorkspaceContext _workspaceContext;
     private readonly ILogger<RequirementsController> _logger;
 
 
     /// <summary>Initializes a new instance of the <see cref="RequirementsController"/> class.</summary>
     public RequirementsController(IRequirementsDocumentService requirements,
         IOptions<RequirementsOptions> requirementsOptions,
+        WorkspaceContext workspaceContext,
         ILogger<RequirementsController> logger)
     {
         _logger = logger;
         _requirements = requirements;
         _requirementsOptions = requirementsOptions?.Value ?? throw new ArgumentNullException(nameof(requirementsOptions));
+        _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
     }
 
     /// <summary>Gets all Functional Requirement entries.</summary>
@@ -296,10 +300,15 @@ public sealed class RequirementsController : ControllerBase
         if (request is null)
             return BadRequest(new { error = "Request body is required." });
 
-        var mapping = new FrTrMapping(frId, request.TrIds ?? Array.Empty<string>());
+        var mapping = new FrTrMapping(frId, request.TrIds ?? Array.Empty<string>(), request.TestIds ?? Array.Empty<string>());
         try
         {
             await _requirements.UpsertMappingAsync(mapping, cancellationToken).ConfigureAwait(false);
+        }
+        catch (RequirementsNotFoundException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return NotFound(new { error = ex.Message });
         }
         catch (ArgumentException ex)
         {
@@ -349,10 +358,10 @@ public sealed class RequirementsController : ControllerBase
                 && string.IsNullOrWhiteSpace(testingMarkdown)
                 && string.IsNullOrWhiteSpace(mappingMarkdown))
             {
-                functionalMarkdown = ReadMarkdownFile(_requirementsOptions.FunctionalRequirementsPath);
-                technicalMarkdown = ReadMarkdownFile(_requirementsOptions.TechnicalRequirementsPath);
-                testingMarkdown = ReadMarkdownFile(_requirementsOptions.TestingRequirementsPath);
-                mappingMarkdown = ReadMarkdownFile(_requirementsOptions.MappingPath);
+                functionalMarkdown = ReadMarkdownFile(ResolveRequirementsFilePath(RequirementsDocumentRenderer.FunctionalFileName, _requirementsOptions.FunctionalRequirementsPath));
+                technicalMarkdown = ReadMarkdownFile(ResolveRequirementsFilePath(RequirementsDocumentRenderer.TechnicalFileName, _requirementsOptions.TechnicalRequirementsPath));
+                testingMarkdown = ReadMarkdownFile(ResolveRequirementsFilePath(RequirementsDocumentRenderer.TestingFileName, _requirementsOptions.TestingRequirementsPath));
+                mappingMarkdown = ReadMarkdownFile(ResolveRequirementsFilePath(RequirementsDocumentRenderer.MappingFileName, _requirementsOptions.MappingPath));
             }
 
             var frEntries = RequirementsDocumentParser.ParseFunctional(functionalMarkdown);
@@ -463,6 +472,14 @@ public sealed class RequirementsController : ControllerBase
         if (!System.IO.File.Exists(path))
             throw new FileNotFoundException($"Requirements markdown file was not found: {path}", path);
         return System.IO.File.ReadAllText(path);
+    }
+
+    private string ResolveRequirementsFilePath(string fileName, string configuredPath)
+    {
+        if (!string.IsNullOrWhiteSpace(_workspaceContext.WorkspacePath))
+            return Path.Combine(_workspaceContext.WorkspacePath, "docs", "Project", fileName);
+
+        return configuredPath;
     }
 
     private async Task<(int Added, int Updated)> UpsertFunctionalAsync(
