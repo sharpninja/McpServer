@@ -17,9 +17,20 @@ public interface IRequirementsDocumentService : IRequirementsRepository
     Task<(string Content, string MimeType)> GenerateDocumentAsync(RequirementsDocType docType, CancellationToken ct = default);
 
     /// <summary>
-    /// Generate all four requirements documents as a ZIP archive.
+    /// Generate all four requirements documents into a workspace folder.
     /// </summary>
+    /// <param name="outputRootPath">Directory where the generated documents should be written.</param>
+    /// <param name="generatedAtUtc">Optional export timestamp. Uses current UTC time when omitted.</param>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>A <see cref="MemoryStream"/> containing the ZIP archive.</returns>
-    Task<MemoryStream> GenerateAllAsync(CancellationToken ct = default);
+    /// <returns>Metadata for the workspace files written by the export.</returns>
+    Task<RequirementsDocumentExportResult> GenerateAllAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default);
+
+    /// <summary>
+    /// Generate Azure and GitHub wiki copies of all requirements documents into a workspace folder.
+    /// </summary>
+    /// <param name="outputRootPath">Directory where the generated wiki folders should be written.</param>
+    /// <param name="generatedAtUtc">Optional manifest and file timestamp. Uses current UTC time when omitted.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Metadata for the workspace files written by the export.</returns>
+    Task<RequirementsDocumentExportResult> GenerateWikiAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default);
 }

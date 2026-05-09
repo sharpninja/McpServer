@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -187,11 +188,74 @@ public sealed class RequirementsGeneratedDocument
 
     /// <summary>Document media type.</summary>
     public string? ContentType { get; set; }
+
+    /// <summary>Workspace export metadata when a multi-document export writes files directly to disk.</summary>
+    public RequirementsDocumentExportResult? ExportResult { get; set; }
+}
+
+/// <summary>Result payload returned after requirements documents are exported to the workspace.</summary>
+public sealed class RequirementsDocumentExportResult
+{
+    /// <summary>Whether the export succeeded.</summary>
+    [JsonPropertyName("success")]
+    public bool Success { get; set; }
+
+    /// <summary>Generated document format.</summary>
+    [JsonPropertyName("format")]
+    public string Format { get; set; } = string.Empty;
+
+    /// <summary>Generated document selector.</summary>
+    [JsonPropertyName("docType")]
+    public string DocType { get; set; } = string.Empty;
+
+    /// <summary>UTC timestamp used for manifests and exported file modified times.</summary>
+    [JsonPropertyName("generatedAtUtc")]
+    public DateTimeOffset GeneratedAtUtc { get; set; }
+
+    /// <summary>Absolute workspace output root where the files were written.</summary>
+    [JsonPropertyName("outputRoot")]
+    public string OutputRoot { get; set; } = string.Empty;
+
+    /// <summary>Files written by the export operation.</summary>
+    [JsonPropertyName("files")]
+    public IReadOnlyList<RequirementsDocumentExportFile> Files { get; set; } = [];
+}
+
+/// <summary>Metadata for one requirements document written during workspace export.</summary>
+public sealed class RequirementsDocumentExportFile
+{
+    /// <summary>Path relative to the export output root.</summary>
+    [JsonPropertyName("relativePath")]
+    public string RelativePath { get; set; } = string.Empty;
+
+    /// <summary>Absolute path written on disk.</summary>
+    [JsonPropertyName("fullPath")]
+    public string FullPath { get; set; } = string.Empty;
+
+    /// <summary>Content type for the written file.</summary>
+    [JsonPropertyName("contentType")]
+    public string ContentType { get; set; } = string.Empty;
+
+    /// <summary>UTC modified time assigned to the written file.</summary>
+    [JsonPropertyName("lastModifiedUtc")]
+    public DateTimeOffset LastModifiedUtc { get; set; }
 }
 
 /// <summary>Request payload for bulk requirements ingest from markdown text.</summary>
 public sealed class RequirementsIngestRequest
 {
+    /// <summary>Requested source format: auto, canonical, or wiki.</summary>
+    [JsonPropertyName("sourceFormat")]
+    public string? SourceFormat { get; set; }
+
+    /// <summary>Preferred wiki platform when Azure and GitHub timestamp checks disagree.</summary>
+    [JsonPropertyName("preferredWikiFormat")]
+    public string? PreferredWikiFormat { get; set; }
+
+    /// <summary>Path-keyed document map used for wiki import.</summary>
+    [JsonPropertyName("documents")]
+    public IReadOnlyDictionary<string, RequirementsIngestDocument>? Documents { get; set; }
+
     /// <summary>Functional requirements markdown content.</summary>
     [JsonPropertyName("functionalMarkdown")]
     public string? FunctionalMarkdown { get; set; }
@@ -209,6 +273,22 @@ public sealed class RequirementsIngestRequest
     public string? MappingMarkdown { get; set; }
 }
 
+/// <summary>Path-keyed document payload used for requirements wiki imports.</summary>
+public sealed class RequirementsIngestDocument
+{
+    /// <summary>UTF-8 text content for a wiki or canonical document.</summary>
+    [JsonPropertyName("content")]
+    public string? Content { get; set; }
+
+    /// <summary>Base64-encoded UTF-8 content for binary-safe REPL and plugin transport.</summary>
+    [JsonPropertyName("contentBase64")]
+    public string? ContentBase64 { get; set; }
+
+    /// <summary>Optional file or ZIP entry modified timestamp used for wiki source selection.</summary>
+    [JsonPropertyName("lastModifiedUtc")]
+    public DateTimeOffset? LastModifiedUtc { get; set; }
+}
+
 /// <summary>Result of bulk requirements ingest.</summary>
 public sealed class RequirementsIngestResult
 {
@@ -224,6 +304,14 @@ public sealed class RequirementsIngestResult
     [JsonPropertyName("functionalUpdated")]
     public int FunctionalUpdated { get; set; }
 
+    /// <summary>Total FR entries deleted.</summary>
+    [JsonPropertyName("functionalDeleted")]
+    public int FunctionalDeleted { get; set; }
+
+    /// <summary>Total FR entries ignored because they already matched.</summary>
+    [JsonPropertyName("functionalIgnored")]
+    public int FunctionalIgnored { get; set; }
+
     /// <summary>Total TR entries parsed from input markdown.</summary>
     [JsonPropertyName("technicalParsed")]
     public int TechnicalParsed { get; set; }
@@ -235,6 +323,14 @@ public sealed class RequirementsIngestResult
     /// <summary>Total TR entries updated.</summary>
     [JsonPropertyName("technicalUpdated")]
     public int TechnicalUpdated { get; set; }
+
+    /// <summary>Total TR entries deleted.</summary>
+    [JsonPropertyName("technicalDeleted")]
+    public int TechnicalDeleted { get; set; }
+
+    /// <summary>Total TR entries ignored because they already matched.</summary>
+    [JsonPropertyName("technicalIgnored")]
+    public int TechnicalIgnored { get; set; }
 
     /// <summary>Total TEST entries parsed from input markdown.</summary>
     [JsonPropertyName("testingParsed")]
@@ -248,6 +344,14 @@ public sealed class RequirementsIngestResult
     [JsonPropertyName("testingUpdated")]
     public int TestingUpdated { get; set; }
 
+    /// <summary>Total TEST entries deleted.</summary>
+    [JsonPropertyName("testingDeleted")]
+    public int TestingDeleted { get; set; }
+
+    /// <summary>Total TEST entries ignored because they already matched.</summary>
+    [JsonPropertyName("testingIgnored")]
+    public int TestingIgnored { get; set; }
+
     /// <summary>Total mapping rows parsed from input markdown.</summary>
     [JsonPropertyName("mappingParsed")]
     public int MappingParsed { get; set; }
@@ -259,4 +363,32 @@ public sealed class RequirementsIngestResult
     /// <summary>Total mapping rows updated.</summary>
     [JsonPropertyName("mappingUpdated")]
     public int MappingUpdated { get; set; }
+
+    /// <summary>Total mapping rows deleted.</summary>
+    [JsonPropertyName("mappingDeleted")]
+    public int MappingDeleted { get; set; }
+
+    /// <summary>Total mapping rows ignored because they already matched.</summary>
+    [JsonPropertyName("mappingIgnored")]
+    public int MappingIgnored { get; set; }
+
+    /// <summary>Selected wiki platform for a wiki import.</summary>
+    [JsonPropertyName("selectedWikiFormat")]
+    public string? SelectedWikiFormat { get; set; }
+
+    /// <summary>Reason the selected wiki platform was chosen.</summary>
+    [JsonPropertyName("selectedWikiReason")]
+    public string? SelectedWikiReason { get; set; }
+
+    /// <summary>Manifest timestamp for the selected wiki platform.</summary>
+    [JsonPropertyName("selectedManifestGeneratedAtUtc")]
+    public DateTimeOffset? SelectedManifestGeneratedAtUtc { get; set; }
+
+    /// <summary>Latest file modified timestamp for the selected wiki platform.</summary>
+    [JsonPropertyName("selectedLatestFileModifiedUtc")]
+    public DateTimeOffset? SelectedLatestFileModifiedUtc { get; set; }
+
+    /// <summary>Non-fatal ingest warnings.</summary>
+    [JsonPropertyName("warnings")]
+    public IReadOnlyList<string> Warnings { get; set; } = [];
 }

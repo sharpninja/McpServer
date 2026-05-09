@@ -10,7 +10,7 @@ using Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Controllers;
 
 /// <summary>
-/// REST endpoints for managing requirements documents (FR/TR/TEST/mapping) and generating canonical Markdown/ZIP output.
+/// REST endpoints for managing requirements documents (FR/TR/TEST/mapping) and generating canonical Markdown/workspace output.
 /// </summary>
 [ApiController]
 [Route("mcpserver/requirements")]
@@ -348,12 +348,26 @@ public sealed class RequirementsController : ControllerBase
     {
         try
         {
+            var sourceFormat = NormalizeSourceFormat(request?.SourceFormat, request?.Documents);
+            var wikiSelection = sourceFormat == "wiki"
+                ? RequirementsWikiDocumentSelector.Select(request?.Documents ?? new Dictionary<string, RequirementsIngestDocument>(), request?.PreferredWikiFormat)
+                : null;
+
             var functionalMarkdown = request?.FunctionalMarkdown;
             var technicalMarkdown = request?.TechnicalMarkdown;
             var testingMarkdown = request?.TestingMarkdown;
             var mappingMarkdown = request?.MappingMarkdown;
 
-            if (string.IsNullOrWhiteSpace(functionalMarkdown)
+            if (wikiSelection is not null)
+            {
+                functionalMarkdown = wikiSelection.FunctionalMarkdown;
+                technicalMarkdown = wikiSelection.TechnicalMarkdown;
+                testingMarkdown = wikiSelection.TestingMarkdown;
+                mappingMarkdown = wikiSelection.MappingMarkdown;
+            }
+
+            if (wikiSelection is null
+                && string.IsNullOrWhiteSpace(functionalMarkdown)
                 && string.IsNullOrWhiteSpace(technicalMarkdown)
                 && string.IsNullOrWhiteSpace(testingMarkdown)
                 && string.IsNullOrWhiteSpace(mappingMarkdown))
@@ -364,30 +378,57 @@ public sealed class RequirementsController : ControllerBase
                 mappingMarkdown = ReadMarkdownFile(ResolveRequirementsFilePath(RequirementsDocumentRenderer.MappingFileName, _requirementsOptions.MappingPath));
             }
 
+            var hasFunctionalDocument = functionalMarkdown is not null;
+            var hasTechnicalDocument = technicalMarkdown is not null;
+            var hasTestingDocument = testingMarkdown is not null;
+            var hasMappingDocument = mappingMarkdown is not null;
+
             var frEntries = RequirementsDocumentParser.ParseFunctional(functionalMarkdown);
             var trEntries = RequirementsDocumentParser.ParseTechnical(technicalMarkdown);
             var testEntries = RequirementsDocumentParser.ParseTesting(testingMarkdown);
             var mappingEntries = RequirementsDocumentParser.ParseMapping(mappingMarkdown);
 
-            var (frAdded, frUpdated) = await UpsertFunctionalAsync(frEntries, cancellationToken).ConfigureAwait(false);
-            var (trAdded, trUpdated) = await UpsertTechnicalAsync(trEntries, cancellationToken).ConfigureAwait(false);
-            var (testAdded, testUpdated) = await UpsertTestingAsync(testEntries, cancellationToken).ConfigureAwait(false);
-            var (mappingAdded, mappingUpdated) = await UpsertMappingAsync(mappingEntries, cancellationToken).ConfigureAwait(false);
+            var authoritative = wikiSelection is not null;
+            var (frAdded, frUpdated, frDeleted, frIgnored) = authoritative && hasFunctionalDocument
+                ? await SyncFunctionalAsync(frEntries, cancellationToken).ConfigureAwait(false)
+                : await UpsertFunctionalAsync(frEntries, cancellationToken).ConfigureAwait(false);
+            var (trAdded, trUpdated, trDeleted, trIgnored) = authoritative && hasTechnicalDocument
+                ? await SyncTechnicalAsync(trEntries, cancellationToken).ConfigureAwait(false)
+                : await UpsertTechnicalAsync(trEntries, cancellationToken).ConfigureAwait(false);
+            var (testAdded, testUpdated, testDeleted, testIgnored) = authoritative && hasTestingDocument
+                ? await SyncTestingAsync(testEntries, cancellationToken).ConfigureAwait(false)
+                : await UpsertTestingAsync(testEntries, cancellationToken).ConfigureAwait(false);
+            var (mappingAdded, mappingUpdated, mappingDeleted, mappingIgnored) = authoritative && hasMappingDocument
+                ? await SyncMappingAsync(mappingEntries, cancellationToken).ConfigureAwait(false)
+                : await UpsertMappingAsync(mappingEntries, cancellationToken).ConfigureAwait(false);
 
             var result = new RequirementsIngestResult
             {
                 FunctionalParsed = frEntries.Count,
                 FunctionalAdded = frAdded,
                 FunctionalUpdated = frUpdated,
+                FunctionalDeleted = frDeleted,
+                FunctionalIgnored = frIgnored,
                 TechnicalParsed = trEntries.Count,
                 TechnicalAdded = trAdded,
                 TechnicalUpdated = trUpdated,
+                TechnicalDeleted = trDeleted,
+                TechnicalIgnored = trIgnored,
                 TestingParsed = testEntries.Count,
                 TestingAdded = testAdded,
                 TestingUpdated = testUpdated,
+                TestingDeleted = testDeleted,
+                TestingIgnored = testIgnored,
                 MappingParsed = mappingEntries.Count,
                 MappingAdded = mappingAdded,
-                MappingUpdated = mappingUpdated
+                MappingUpdated = mappingUpdated,
+                MappingDeleted = mappingDeleted,
+                MappingIgnored = mappingIgnored,
+                SelectedWikiFormat = wikiSelection?.Platform,
+                SelectedWikiReason = wikiSelection?.Reason,
+                SelectedManifestGeneratedAtUtc = wikiSelection?.ManifestGeneratedAtUtc,
+                SelectedLatestFileModifiedUtc = wikiSelection?.LatestFileModifiedUtc,
+                Warnings = wikiSelection?.Warnings ?? []
             };
 
             return Ok(result);
@@ -409,19 +450,36 @@ public sealed class RequirementsController : ControllerBase
         }
     }
 
-    /// <summary>Generates a requirements document as Markdown or ZIP.</summary>
+    /// <summary>Generates a requirements document or exports all requirements documents to the workspace.</summary>
     /// <param name="doc">Document selector: functional, technical, testing, mapping, or all.</param>
+    /// <param name="format">Output format: markdown or wiki.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     [HttpGet("generate")]
-    public async Task<IActionResult> GenerateAsync([FromQuery] string doc = "all", CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GenerateAsync(
+        [FromQuery] string doc = "all",
+        [FromQuery] string format = "markdown",
+        CancellationToken cancellationToken = default)
     {
         if (!TryParseDocType(doc, out var docType))
             return BadRequest(new { error = $"Unsupported doc value '{doc}'. Expected functional|technical|testing|mapping|all." });
 
+        var normalizedFormat = (format ?? "markdown").Trim().ToLowerInvariant();
+        if (normalizedFormat == "wiki")
+        {
+            if (docType != RequirementsDocType.All)
+                return BadRequest(new { error = "Wiki generation requires doc=all." });
+
+            var wikiExport = await _requirements.GenerateWikiAsync(ResolveWikiOutputRoot(), ct: cancellationToken).ConfigureAwait(false);
+            return Ok(wikiExport);
+        }
+
+        if (normalizedFormat is not "markdown" and not "yaml")
+            return BadRequest(new { error = $"Unsupported format value '{format}'. Expected markdown|yaml|wiki." });
+
         if (docType == RequirementsDocType.All)
         {
-            var zip = await _requirements.GenerateAllAsync(cancellationToken).ConfigureAwait(false);
-            return File(zip.ToArray(), "application/zip", "requirements-documents.zip");
+            var export = await _requirements.GenerateAllAsync(ResolveProjectOutputRoot(), ct: cancellationToken).ConfigureAwait(false);
+            return Ok(export);
         }
 
         var (content, mimeType) = await _requirements.GenerateDocumentAsync(docType, cancellationToken).ConfigureAwait(false);
@@ -482,7 +540,59 @@ public sealed class RequirementsController : ControllerBase
         return configuredPath;
     }
 
-    private async Task<(int Added, int Updated)> UpsertFunctionalAsync(
+    private string ResolveProjectOutputRoot()
+    {
+        if (!string.IsNullOrWhiteSpace(_workspaceContext.WorkspacePath))
+            return Path.Combine(_workspaceContext.WorkspacePath, "docs", "Project");
+
+        var configuredPaths = new[]
+        {
+            _requirementsOptions.FunctionalRequirementsPath,
+            _requirementsOptions.TechnicalRequirementsPath,
+            _requirementsOptions.TestingRequirementsPath,
+            _requirementsOptions.MappingPath
+        };
+
+        var configuredDirectory = configuredPaths
+            .Where(static path => !string.IsNullOrWhiteSpace(path))
+            .Select(Path.GetFullPath)
+            .Select(Path.GetDirectoryName)
+            .FirstOrDefault(static path => !string.IsNullOrWhiteSpace(path));
+
+        if (!string.IsNullOrWhiteSpace(configuredDirectory))
+            return configuredDirectory!;
+
+        throw new IOException("A workspace path or configured requirements file path is required for requirements export.");
+    }
+
+    private string ResolveWikiOutputRoot() => Path.Combine(ResolveProjectOutputRoot(), "wiki");
+
+    private static string NormalizeSourceFormat(string? sourceFormat, IReadOnlyDictionary<string, RequirementsIngestDocument>? documents)
+    {
+        var normalized = string.IsNullOrWhiteSpace(sourceFormat)
+            ? "auto"
+            : sourceFormat.Trim().ToLowerInvariant();
+
+        return normalized switch
+        {
+            "auto" => documents is { Count: > 0 } && ContainsWikiFolder(documents.Keys) ? "wiki" : "canonical",
+            "canonical" => "canonical",
+            "wiki" => "wiki",
+            _ => throw new ArgumentException($"Unsupported sourceFormat '{sourceFormat}'. Expected auto|canonical|wiki.", nameof(sourceFormat))
+        };
+    }
+
+    private static bool ContainsWikiFolder(IEnumerable<string> paths)
+        => paths.Any(static path =>
+        {
+            var normalized = path.Replace('\\', '/').Trim('/');
+            return normalized.StartsWith("azure/", StringComparison.OrdinalIgnoreCase)
+                   || normalized.StartsWith("github/", StringComparison.OrdinalIgnoreCase)
+                   || normalized.Contains("/azure/", StringComparison.OrdinalIgnoreCase)
+                   || normalized.Contains("/github/", StringComparison.OrdinalIgnoreCase);
+        });
+
+    private async Task<(int Added, int Updated, int Deleted, int Ignored)> UpsertFunctionalAsync(
         IReadOnlyList<FrEntry> entries,
         CancellationToken cancellationToken)
     {
@@ -505,10 +615,10 @@ public sealed class RequirementsController : ControllerBase
             }
         }
 
-        return (added, updated);
+        return (added, updated, 0, 0);
     }
 
-    private async Task<(int Added, int Updated)> UpsertTechnicalAsync(
+    private async Task<(int Added, int Updated, int Deleted, int Ignored)> UpsertTechnicalAsync(
         IReadOnlyList<TrEntry> entries,
         CancellationToken cancellationToken)
     {
@@ -531,10 +641,10 @@ public sealed class RequirementsController : ControllerBase
             }
         }
 
-        return (added, updated);
+        return (added, updated, 0, 0);
     }
 
-    private async Task<(int Added, int Updated)> UpsertTestingAsync(
+    private async Task<(int Added, int Updated, int Deleted, int Ignored)> UpsertTestingAsync(
         IReadOnlyList<TestEntry> entries,
         CancellationToken cancellationToken)
     {
@@ -557,10 +667,10 @@ public sealed class RequirementsController : ControllerBase
             }
         }
 
-        return (added, updated);
+        return (added, updated, 0, 0);
     }
 
-    private async Task<(int Added, int Updated)> UpsertMappingAsync(
+    private async Task<(int Added, int Updated, int Deleted, int Ignored)> UpsertMappingAsync(
         IReadOnlyList<FrTrMapping> entries,
         CancellationToken cancellationToken)
     {
@@ -579,6 +689,169 @@ public sealed class RequirementsController : ControllerBase
             await _requirements.UpsertMappingAsync(entry, cancellationToken).ConfigureAwait(false);
         }
 
-        return (added, updated);
+        return (added, updated, 0, 0);
     }
+
+    private async Task<(int Added, int Updated, int Deleted, int Ignored)> SyncFunctionalAsync(
+        IReadOnlyList<FrEntry> entries,
+        CancellationToken cancellationToken)
+    {
+        var existing = (await _requirements.GetAllFrAsync(cancellationToken).ConfigureAwait(false))
+            .ToDictionary(entry => entry.Id, StringComparer.OrdinalIgnoreCase);
+        var incoming = entries.ToDictionary(entry => entry.Id, StringComparer.OrdinalIgnoreCase);
+
+        var added = 0;
+        var updated = 0;
+        var ignored = 0;
+        foreach (var entry in entries)
+        {
+            if (!existing.TryGetValue(entry.Id, out var existingEntry))
+            {
+                await _requirements.AddFrAsync(entry, cancellationToken).ConfigureAwait(false);
+                added++;
+            }
+            else if (existingEntry.Title == entry.Title && existingEntry.Body == entry.Body)
+            {
+                ignored++;
+            }
+            else
+            {
+                await _requirements.UpdateFrAsync(entry, cancellationToken).ConfigureAwait(false);
+                updated++;
+            }
+        }
+
+        var deleted = 0;
+        foreach (var existingEntry in existing.Values.Where(entry => !incoming.ContainsKey(entry.Id)))
+        {
+            await _requirements.DeleteFrAsync(existingEntry.Id, cancellationToken).ConfigureAwait(false);
+            deleted++;
+        }
+
+        return (added, updated, deleted, ignored);
+    }
+
+    private async Task<(int Added, int Updated, int Deleted, int Ignored)> SyncTechnicalAsync(
+        IReadOnlyList<TrEntry> entries,
+        CancellationToken cancellationToken)
+    {
+        var existing = (await _requirements.GetAllTrAsync(cancellationToken).ConfigureAwait(false))
+            .ToDictionary(entry => entry.Id, StringComparer.OrdinalIgnoreCase);
+        var incoming = entries.ToDictionary(entry => entry.Id, StringComparer.OrdinalIgnoreCase);
+
+        var added = 0;
+        var updated = 0;
+        var ignored = 0;
+        foreach (var entry in entries)
+        {
+            if (!existing.TryGetValue(entry.Id, out var existingEntry))
+            {
+                await _requirements.AddTrAsync(entry, cancellationToken).ConfigureAwait(false);
+                added++;
+            }
+            else if (existingEntry.Title == entry.Title && existingEntry.Body == entry.Body)
+            {
+                ignored++;
+            }
+            else
+            {
+                await _requirements.UpdateTrAsync(entry, cancellationToken).ConfigureAwait(false);
+                updated++;
+            }
+        }
+
+        var deleted = 0;
+        foreach (var existingEntry in existing.Values.Where(entry => !incoming.ContainsKey(entry.Id)))
+        {
+            await _requirements.DeleteTrAsync(existingEntry.Id, cancellationToken).ConfigureAwait(false);
+            deleted++;
+        }
+
+        return (added, updated, deleted, ignored);
+    }
+
+    private async Task<(int Added, int Updated, int Deleted, int Ignored)> SyncTestingAsync(
+        IReadOnlyList<TestEntry> entries,
+        CancellationToken cancellationToken)
+    {
+        var existing = (await _requirements.GetAllTestAsync(cancellationToken).ConfigureAwait(false))
+            .ToDictionary(entry => entry.Id, StringComparer.OrdinalIgnoreCase);
+        var incoming = entries.ToDictionary(entry => entry.Id, StringComparer.OrdinalIgnoreCase);
+
+        var added = 0;
+        var updated = 0;
+        var ignored = 0;
+        foreach (var entry in entries)
+        {
+            if (!existing.TryGetValue(entry.Id, out var existingEntry))
+            {
+                await _requirements.AddTestAsync(entry, cancellationToken).ConfigureAwait(false);
+                added++;
+            }
+            else if (existingEntry.Condition == entry.Condition)
+            {
+                ignored++;
+            }
+            else
+            {
+                await _requirements.UpdateTestAsync(entry, cancellationToken).ConfigureAwait(false);
+                updated++;
+            }
+        }
+
+        var deleted = 0;
+        foreach (var existingEntry in existing.Values.Where(entry => !incoming.ContainsKey(entry.Id)))
+        {
+            await _requirements.DeleteTestAsync(existingEntry.Id, cancellationToken).ConfigureAwait(false);
+            deleted++;
+        }
+
+        return (added, updated, deleted, ignored);
+    }
+
+    private async Task<(int Added, int Updated, int Deleted, int Ignored)> SyncMappingAsync(
+        IReadOnlyList<FrTrMapping> entries,
+        CancellationToken cancellationToken)
+    {
+        var existing = (await _requirements.GetAllMappingsAsync(cancellationToken).ConfigureAwait(false))
+            .ToDictionary(entry => entry.FrId, StringComparer.OrdinalIgnoreCase);
+        var incoming = entries.ToDictionary(entry => entry.FrId, StringComparer.OrdinalIgnoreCase);
+
+        var added = 0;
+        var updated = 0;
+        var ignored = 0;
+        foreach (var entry in entries)
+        {
+            if (!existing.TryGetValue(entry.FrId, out var existingEntry))
+            {
+                await _requirements.UpsertMappingAsync(entry, cancellationToken).ConfigureAwait(false);
+                added++;
+            }
+            else if (MappingsEqual(existingEntry, entry))
+            {
+                ignored++;
+            }
+            else
+            {
+                await _requirements.UpsertMappingAsync(entry, cancellationToken).ConfigureAwait(false);
+                updated++;
+            }
+        }
+
+        var deleted = 0;
+        foreach (var existingEntry in existing.Values.Where(entry => !incoming.ContainsKey(entry.FrId)))
+        {
+            await _requirements.DeleteMappingAsync(existingEntry.FrId, cancellationToken).ConfigureAwait(false);
+            deleted++;
+        }
+
+        return (added, updated, deleted, ignored);
+    }
+
+    private static bool MappingsEqual(FrTrMapping left, FrTrMapping right)
+        => StringSetEqual(left.TrIds, right.TrIds) && StringSetEqual(left.TestIds, right.TestIds);
+
+    private static bool StringSetEqual(IReadOnlyList<string> left, IReadOnlyList<string> right)
+        => left.OrderBy(static value => value, StringComparer.OrdinalIgnoreCase)
+            .SequenceEqual(right.OrderBy(static value => value, StringComparer.OrdinalIgnoreCase), StringComparer.OrdinalIgnoreCase);
 }

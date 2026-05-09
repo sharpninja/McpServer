@@ -3,6 +3,8 @@
 // TR-MCP-REPL-004: Command Registry and Dispatcher - Envelope-to-handler routing
 // TEST-MCP-REPL-001: REPL host processes well-formed YAML command envelopes
 
+using McpServer.Client.Models;
+
 namespace McpServer.Repl.Core;
 
 /// <summary>
@@ -220,9 +222,12 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
                         cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.IngestDocumentMethod =>
                     await _requirementsWorkflow.IngestDocumentAsync(
-                        RequireString(args, "content"),
+                        GetString(args, "content") ?? string.Empty,
                         GetString(args, "format") ?? "markdown",
                         GetString(args, "mergeStrategy") ?? "merge",
+                        GetRequirementsDocumentMap(args),
+                        GetString(args, "sourceFormat"),
+                        GetString(args, "preferredWikiFormat"),
                         cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.CurrentSelectionMethod => _requirementsWorkflow.CurrentSelection(),
                 _ => null,
@@ -331,6 +336,83 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
         }
 
         return value;
+    }
+
+    private static IReadOnlyDictionary<string, RequirementsIngestDocument>? GetRequirementsDocumentMap(IReadOnlyDictionary<string, object?> args)
+    {
+        if (!args.TryGetValue("documents", out var value) || value is null)
+        {
+            return null;
+        }
+
+        if (value is IReadOnlyDictionary<string, RequirementsIngestDocument> typed)
+        {
+            return typed;
+        }
+
+        if (value is not System.Collections.IDictionary rawMap)
+        {
+            return null;
+        }
+
+        var documents = new Dictionary<string, RequirementsIngestDocument>(StringComparer.OrdinalIgnoreCase);
+        foreach (System.Collections.DictionaryEntry entry in rawMap)
+        {
+            var path = Convert.ToString(entry.Key, System.Globalization.CultureInfo.InvariantCulture);
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                continue;
+            }
+
+            documents[path] = ConvertRequirementDocument(entry.Value);
+        }
+
+        return documents.Count == 0 ? null : documents;
+    }
+
+    private static RequirementsIngestDocument ConvertRequirementDocument(object? value)
+    {
+        if (value is RequirementsIngestDocument typed)
+        {
+            return typed;
+        }
+
+        if (value is string textContent)
+        {
+            return new RequirementsIngestDocument { Content = textContent };
+        }
+
+        if (value is not System.Collections.IDictionary fields)
+        {
+            return new RequirementsIngestDocument { Content = Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture) };
+        }
+
+        var content = GetField(fields, "content");
+        var contentBase64 = GetField(fields, "contentBase64");
+        var lastModifiedRaw = GetField(fields, "lastModifiedUtc");
+        var lastModifiedUtc = DateTimeOffset.TryParse(lastModifiedRaw, out var parsed)
+            ? parsed.ToUniversalTime()
+            : (DateTimeOffset?)null;
+
+        return new RequirementsIngestDocument
+        {
+            Content = content,
+            ContentBase64 = contentBase64,
+            LastModifiedUtc = lastModifiedUtc
+        };
+    }
+
+    private static string? GetField(System.Collections.IDictionary fields, string name)
+    {
+        foreach (System.Collections.DictionaryEntry entry in fields)
+        {
+            if (entry.Key?.ToString()?.Equals(name, StringComparison.OrdinalIgnoreCase) == true)
+            {
+                return Convert.ToString(entry.Value, System.Globalization.CultureInfo.InvariantCulture);
+            }
+        }
+
+        return null;
     }
 
     private static IReadOnlyList<string> GetStringList(IReadOnlyDictionary<string, object?> args, string name)

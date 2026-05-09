@@ -1,4 +1,3 @@
-using System.IO.Compression;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Requirements.Models;
@@ -48,11 +47,12 @@ public sealed class RequirementsDatabaseDocumentServiceTests
         Assert.Contains("TEST-MCP-900", mappingMarkdown);
         Assert.DoesNotContain("Workspace B", mappingMarkdown);
 
-        await using var zipStream = await service.GenerateAllAsync();
-        using var zip = new ZipArchive(zipStream, ZipArchiveMode.Read);
-        var functional = await ReadZipEntryAsync(zip, "Functional-Requirements.md");
+        var outputRoot = Path.Combine(workspaceA, "docs", "Project", "export");
+        var export = await service.GenerateAllAsync(outputRoot);
+        var functional = await File.ReadAllTextAsync(Path.Combine(outputRoot, "Functional-Requirements.md"));
         Assert.Contains("Workspace A", functional);
         Assert.DoesNotContain("Workspace B", functional);
+        Assert.Contains(export.Files, file => file.RelativePath == "Functional-Requirements.md");
     }
 
     /// <summary>Mapping validation rejects missing FR/TR/TEST ids before storing links.</summary>
@@ -74,14 +74,6 @@ public sealed class RequirementsDatabaseDocumentServiceTests
             service.UpsertMappingAsync(new FrTrMapping("FR-MCP-901", ["TR-MCP-MISSING"], [])));
         await Assert.ThrowsAsync<ArgumentException>(() =>
             service.UpsertMappingAsync(new FrTrMapping("FR-MCP-901", [], ["TEST-MCP-MISSING"])));
-    }
-
-    private static async Task<string> ReadZipEntryAsync(ZipArchive zip, string name)
-    {
-        var entry = zip.GetEntry(name) ?? throw new InvalidOperationException($"Missing zip entry {name}.");
-        await using var stream = entry.Open();
-        using var reader = new StreamReader(stream);
-        return await reader.ReadToEndAsync();
     }
 
     private sealed class RequirementsDbFixture : IDisposable

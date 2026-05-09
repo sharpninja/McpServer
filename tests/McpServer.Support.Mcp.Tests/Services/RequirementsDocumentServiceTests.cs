@@ -1,4 +1,3 @@
-using System.IO.Compression;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Requirements.Models;
@@ -60,14 +59,15 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task GenerateAllAsync_ReturnsZipWithCanonicalFiles()
+    public async Task GenerateAllAsync_WritesCanonicalFilesToWorkspace()
     {
         SeedCanonicalDocs();
         var service = CreateService();
+        var outputRoot = Path.Combine(_tempRoot, "export", "canonical");
+        var generatedAt = new DateTimeOffset(2026, 5, 8, 12, 0, 0, TimeSpan.Zero);
 
-        await using var zipStream = await service.GenerateAllAsync().ConfigureAwait(true);
-        using var zip = new ZipArchive(zipStream, ZipArchiveMode.Read, leaveOpen: false);
-        var names = zip.Entries.Select(e => e.FullName).OrderBy(static n => n, StringComparer.Ordinal).ToArray();
+        var result = await service.GenerateAllAsync(outputRoot, generatedAt).ConfigureAwait(true);
+        var names = result.Files.Select(e => e.RelativePath).OrderBy(static n => n, StringComparer.Ordinal).ToArray();
 
         Assert.Equal(
             new[]
@@ -78,6 +78,52 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
                 "Testing-Requirements.md"
             },
             names);
+        Assert.True(result.Success);
+        Assert.Equal("markdown", result.Format);
+        Assert.Equal(Path.GetFullPath(outputRoot), result.OutputRoot);
+        Assert.Contains("FR-MCP-001", File.ReadAllText(Path.Combine(outputRoot, RequirementsDocumentRenderer.FunctionalFileName)));
+        Assert.Equal(generatedAt.UtcDateTime, File.GetLastWriteTimeUtc(Path.Combine(outputRoot, RequirementsDocumentRenderer.FunctionalFileName)));
+    }
+
+    [Fact]
+    public async Task GenerateWikiAsync_WritesAzureAndGitHubFoldersWithMetadata()
+    {
+        SeedCanonicalDocs();
+        var service = CreateService();
+        var outputRoot = Path.Combine(_tempRoot, "docs", "Project", "wiki");
+        Directory.CreateDirectory(Path.Combine(outputRoot, "azure"));
+        File.WriteAllText(Path.Combine(outputRoot, "azure", "Old.md"), "stale");
+
+        var generatedAt = new DateTimeOffset(2026, 5, 8, 12, 0, 0, TimeSpan.Zero);
+        var result = await service.GenerateWikiAsync(outputRoot, generatedAt).ConfigureAwait(true);
+        var names = result.Files.Select(e => e.RelativePath).OrderBy(static n => n, StringComparer.Ordinal).ToArray();
+
+        Assert.Equal(
+            new[]
+            {
+                "azure/.mcp-requirements-manifest.json",
+                "azure/.order",
+                "azure/Functional-Requirements.md",
+                "azure/Home.md",
+                "azure/TR-per-FR-Mapping.md",
+                "azure/Technical-Requirements.md",
+                "azure/Testing-Requirements.md",
+                "github/.mcp-requirements-manifest.json",
+                "github/Functional-Requirements.md",
+                "github/Home.md",
+                "github/TR-per-FR-Mapping.md",
+                "github/Technical-Requirements.md",
+                "github/Testing-Requirements.md",
+                "github/_Footer.md",
+                "github/_Sidebar.md"
+            },
+            names);
+
+        var manifest = File.ReadAllText(Path.Combine(outputRoot, "azure", ".mcp-requirements-manifest.json"));
+        Assert.Contains("\"platform\": \"azure\"", manifest, StringComparison.Ordinal);
+        Assert.Contains("\"generatedAtUtc\": \"2026-05-08T12:00:00+00:00\"", manifest, StringComparison.Ordinal);
+        Assert.False(File.Exists(Path.Combine(outputRoot, "azure", "Old.md")));
+        Assert.Equal(generatedAt.UtcDateTime, File.GetLastWriteTimeUtc(Path.Combine(outputRoot, "github", "_Sidebar.md")));
     }
 
     [Fact]

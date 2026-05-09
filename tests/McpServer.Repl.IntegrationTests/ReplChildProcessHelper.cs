@@ -64,10 +64,14 @@ public sealed class ReplChildProcessHelper : IDisposable
             throw new InvalidOperationException("Process already started");
         }
 
+        var repoRoot = FindRepoRoot(AppContext.BaseDirectory);
+        var projectPath = Path.Combine(repoRoot, "src", "McpServer.Repl.Host", "McpServer.Repl.Host.csproj");
+
         var startInfo = new ProcessStartInfo
         {
             FileName = "dotnet",
-            Arguments = "run --project ../../../../src/McpServer.Repl.Host/McpServer.Repl.Host.csproj -- --agent-stdio",
+            Arguments = $"run --project \"{projectPath}\" -- --agent-stdio",
+            WorkingDirectory = repoRoot,
             UseShellExecute = false,
             RedirectStandardInput = true,
             RedirectStandardOutput = true,
@@ -87,6 +91,23 @@ public sealed class ReplChildProcessHelper : IDisposable
         _process.BeginErrorReadLine();
 
         return Task.CompletedTask;
+    }
+
+    private static string FindRepoRoot(string startPath)
+    {
+        var directory = new DirectoryInfo(startPath);
+        while (directory is not null)
+        {
+            if (File.Exists(Path.Combine(directory.FullName, "McpServer.slnx"))
+                || Directory.Exists(Path.Combine(directory.FullName, ".git")))
+            {
+                return directory.FullName;
+            }
+
+            directory = directory.Parent;
+        }
+
+        throw new InvalidOperationException($"Could not resolve repository root from '{startPath}'.");
     }
 
     /// <summary>

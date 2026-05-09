@@ -8,6 +8,8 @@
 // TR-MCP-REPL-005: Namespace Organization and Handler Parity - Requirements command namespace shapes
 // TEST-MCP-REPL-009: Requirements management operations validate requirement identifier rules
 
+using McpServer.Client.Models;
+
 namespace McpServer.Repl.Core;
 
 /// <summary>
@@ -1594,12 +1596,22 @@ public interface IDeleteMappingResult
 ///     format: yaml
 ///     docType: fr
 /// </code>
+/// Example YAML for wiki workspace export:
+/// <code>
+/// type: request
+/// payload:
+///   requestId: req-20260304T113901Z-gendoc-003
+///   method: workflow.requirements.generateDocument
+///   params:
+///     format: wiki
+///     docType: all
+/// </code>
 /// </remarks>
 public interface IGenerateDocumentParams
 {
     /// <summary>
     /// Gets the output format.
-    /// Valid values: "markdown", "yaml".
+    /// Valid values: "markdown", "yaml", "wiki".
     /// </summary>
     string Format { get; }
 
@@ -1662,13 +1674,38 @@ public interface IGenerateDocumentResult
 
     /// <summary>
     /// Gets the generated document content.
-    /// Format depends on the requested format (Markdown or YAML).
+    /// Format depends on the requested format (Markdown or YAML). Multi-document exports are returned in OutputRoot and Files.
     /// </summary>
     string Content { get; }
 
     /// <summary>
+    /// Gets generated binary content as Base64 for legacy binary output.
+    /// </summary>
+    string? ContentBase64 { get; }
+
+    /// <summary>
+    /// Gets the generated output media type.
+    /// </summary>
+    string? ContentType { get; }
+
+    /// <summary>
+    /// Gets the generated output file name.
+    /// </summary>
+    string? FileName { get; }
+
+    /// <summary>
+    /// Gets the workspace output root for multi-document exports.
+    /// </summary>
+    string? OutputRoot { get; }
+
+    /// <summary>
+    /// Gets metadata for files written by a multi-document export.
+    /// </summary>
+    IReadOnlyList<RequirementsDocumentExportFile> Files { get; }
+
+    /// <summary>
     /// Gets the document format that was generated.
-    /// Valid values: "markdown", "yaml".
+    /// Valid values: "markdown", "yaml", "wiki".
     /// </summary>
     string Format { get; }
 
@@ -1713,10 +1750,25 @@ public interface IIngestDocumentParams
     string Content { get; }
 
     /// <summary>
+    /// Gets optional path-keyed document content for wiki imports.
+    /// </summary>
+    IReadOnlyDictionary<string, object?>? Documents { get; }
+
+    /// <summary>
     /// Gets the document format.
-    /// Valid values: "markdown", "yaml".
+    /// Valid values: "markdown", "yaml", "wiki".
     /// </summary>
     string Format { get; }
+
+    /// <summary>
+    /// Gets the source format selector: auto, canonical, or wiki.
+    /// </summary>
+    string? SourceFormat { get; }
+
+    /// <summary>
+    /// Gets the preferred wiki platform for timestamp conflicts.
+    /// </summary>
+    string? PreferredWikiFormat { get; }
 
     /// <summary>
     /// Gets the conflict resolution strategy.

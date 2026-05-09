@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using McpServer.Client.Models;
 
 // FR-MCP-REPL-003: Command Namespace Parity - Requirements command structures
 // TR-MCP-REPL-001: YAML Envelope Protocol - Requirements command data models
@@ -408,6 +409,16 @@ public sealed class GenerateDocumentResultModel : IGenerateDocumentResult
     /// <inheritdoc />
     public string Content { get; set; } = string.Empty;
     /// <inheritdoc />
+    public string? ContentBase64 { get; set; }
+    /// <inheritdoc />
+    public string? ContentType { get; set; }
+    /// <inheritdoc />
+    public string? FileName { get; set; }
+    /// <inheritdoc />
+    public string? OutputRoot { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<RequirementsDocumentExportFile> Files { get; set; } = [];
+    /// <inheritdoc />
     public string Format { get; set; } = string.Empty;
     /// <inheritdoc />
     public string DocType { get; set; } = string.Empty;
@@ -421,7 +432,13 @@ public sealed class IngestDocumentParamsModel : IIngestDocumentParams
     /// <inheritdoc />
     public string Content { get; set; } = string.Empty;
     /// <inheritdoc />
+    public IReadOnlyDictionary<string, object?>? Documents { get; set; }
+    /// <inheritdoc />
     public string Format { get; set; } = string.Empty;
+    /// <inheritdoc />
+    public string? SourceFormat { get; set; }
+    /// <inheritdoc />
+    public string? PreferredWikiFormat { get; set; }
     /// <inheritdoc />
     public string MergeStrategy { get; set; } = string.Empty;
 }

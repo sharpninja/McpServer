@@ -476,6 +476,11 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         ValidateFormat(format);
         ValidateDocType(docType);
 
+        if (format == "wiki" && docType != "all")
+        {
+            throw new ArgumentException("Wiki generation requires docType=all");
+        }
+
         var docParam = docType switch
         {
             "fr" => "functional",
@@ -486,33 +491,70 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             _ => throw new ArgumentException($"Invalid docType: {docType}. Valid values: fr, tr, test, matrix, all")
         };
 
-        var generatedDoc = await _client.GenerateAsync(docParam, cancellationToken);
+        var generatedDoc = await _client.GenerateAsync(docParam, format, cancellationToken);
 
-        var content = format == "markdown"
-            ? System.Text.Encoding.UTF8.GetString(generatedDoc.Content)
-            : System.Text.Encoding.UTF8.GetString(generatedDoc.Content);
+        if (generatedDoc.ExportResult is not null)
+        {
+            var export = generatedDoc.ExportResult;
+            return new DocumentGenerationResultAdapter(
+                true,
+                content: string.Empty,
+                export.Format,
+                export.DocType,
+                contentType: generatedDoc.ContentType ?? "application/json",
+                outputRoot: export.OutputRoot,
+                files: export.Files,
+                generatedAt: export.GeneratedAtUtc);
+        }
 
-        return new DocumentGenerationResultAdapter(true, content, format, docType);
+        var content = System.Text.Encoding.UTF8.GetString(generatedDoc.Content);
+
+        return new DocumentGenerationResultAdapter(
+            true,
+            content,
+            format,
+            docType,
+            contentType: generatedDoc.ContentType ?? "text/markdown",
+            fileName: null);
     }
 
     /// <inheritdoc />
     public async Task<IDocumentIngestionResult> IngestDocumentAsync(string content, string format, string mergeStrategy, CancellationToken cancellationToken = default)
+        => await IngestDocumentAsync(content, format, mergeStrategy, documents: null, sourceFormat: null, preferredWikiFormat: null, cancellationToken).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public async Task<IDocumentIngestionResult> IngestDocumentAsync(
+        string content,
+        string format,
+        string mergeStrategy,
+        IReadOnlyDictionary<string, RequirementsIngestDocument>? documents,
+        string? sourceFormat,
+        string? preferredWikiFormat,
+        CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrEmpty(content))
+        if (string.IsNullOrEmpty(content) && documents is not { Count: > 0 })
         {
-            throw new ArgumentException("Content cannot be null or empty");
+            throw new ArgumentException("Content or documents cannot be null or empty");
         }
 
         ValidateFormat(format);
         ValidateMergeStrategy(mergeStrategy);
 
-        var request = new RequirementsIngestRequest
-        {
-            FunctionalMarkdown = content,
-            TechnicalMarkdown = content,
-            TestingMarkdown = content,
-            MappingMarkdown = content
-        };
+        var request = documents is { Count: > 0 }
+            ? new RequirementsIngestRequest
+            {
+                SourceFormat = sourceFormat ?? (format == "wiki" ? "wiki" : "auto"),
+                PreferredWikiFormat = preferredWikiFormat,
+                Documents = documents
+            }
+            : new RequirementsIngestRequest
+            {
+                SourceFormat = sourceFormat,
+                FunctionalMarkdown = content,
+                TechnicalMarkdown = content,
+                TestingMarkdown = content,
+                MappingMarkdown = content
+            };
 
         var result = await _client.IngestAsync(request, cancellationToken);
 
@@ -576,9 +618,9 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
     private static void ValidateFormat(string format)
     {
-        if (format != "markdown" && format != "yaml")
+        if (format != "markdown" && format != "yaml" && format != "wiki")
         {
-            throw new ArgumentException($"Invalid format: {format}. Valid values: markdown, yaml");
+            throw new ArgumentException($"Invalid format: {format}. Valid values: markdown, yaml, wiki");
         }
     }
 
@@ -855,17 +897,37 @@ internal sealed class MappingMutationResultAdapter : IMappingMutationResult
 
 internal sealed class DocumentGenerationResultAdapter : IDocumentGenerationResult
 {
-    public DocumentGenerationResultAdapter(bool success, string content, string format, string docType)
+    public DocumentGenerationResultAdapter(
+        bool success,
+        string content,
+        string format,
+        string docType,
+        string? contentBase64 = null,
+        string? contentType = null,
+        string? fileName = null,
+        string? outputRoot = null,
+        IReadOnlyList<RequirementsDocumentExportFile>? files = null,
+        DateTimeOffset? generatedAt = null)
     {
         Success = success;
         Content = content;
         Format = format;
         DocType = docType;
-        GeneratedAt = DateTimeOffset.UtcNow.ToString("o");
+        ContentBase64 = contentBase64;
+        ContentType = contentType;
+        FileName = fileName;
+        OutputRoot = outputRoot;
+        Files = files ?? [];
+        GeneratedAt = (generatedAt ?? DateTimeOffset.UtcNow).ToString("o");
     }
 
     public bool Success { get; }
     public string Content { get; }
+    public string? ContentBase64 { get; }
+    public string? ContentType { get; }
+    public string? FileName { get; }
+    public string? OutputRoot { get; }
+    public IReadOnlyList<RequirementsDocumentExportFile> Files { get; }
     public string Format { get; }
     public string DocType { get; }
     public string GeneratedAt { get; }

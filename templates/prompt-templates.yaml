@@ -354,6 +354,9 @@ templates:
       10. Prioritize correctness over speed. Do not ship code you have not verified compiles.
 
 
+      11. Use the Byrd Development Process for all plans: organize work into small gated implementation slices, define validation before broadening scope, and keep session-log/TODO updates current between meaningful steps.
+
+
       ## Naming Conventions
 
 

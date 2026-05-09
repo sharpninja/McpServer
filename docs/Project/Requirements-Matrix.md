@@ -232,6 +232,13 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-103 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs |
 | TEST-MCP-104 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs |
 | TEST-MCP-105 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Controllers/TodoExecutionControllerTests.cs, tests/McpServer.Support.Mcp.Tests/McpStdio/TodoExecutionMcpToolTests.cs, tests/McpServer.Client.Tests/TodoClientTests.cs |
+| FR-MCP-084 | ✅ Complete | RequirementsWikiDocumentRenderer, RequirementsWikiDocumentSelector, RequirementsController, RequirementsClient, RequirementsWorkflow, ReplCommandDispatcher, McpServerMcpTools, Codex/Claude/Copilot/Cline plugins |
+| TR-MCP-REQ-004 | ✅ Complete | RequirementsWikiDocumentRenderer, RequirementsDocumentService, RequirementsDatabaseDocumentService, RequirementsController, RequirementsClient, RequirementsWorkflow, McpServerMcpTools |
+| TR-MCP-REQ-005 | ✅ Complete | RequirementsWikiDocumentSelector, RequirementsController, RequirementsIngestRequest, RequirementsIngestResult, RequirementsClient, ReplCommandDispatcher, RequirementsWorkflow |
+| TEST-MCP-106 | ✅ Complete | RequirementsDocumentServiceTests, RequirementsControllerTests |
+| TEST-MCP-107 | ✅ Complete | RequirementsControllerTests |
+| TEST-MCP-108 | ✅ Complete | RequirementsWorkflow, ReplCommandDispatcher, mcpserver-codex-plugin tests/repl-invoke-shim.bats |
+| TEST-MCP-109 | ✅ Complete | mcpserver-codex-plugin tests/repl-invoke-shim.bats, Claude Code skills.bats, Copilot requirements skill, Cline requirements.test.ts |
 
 ---
 

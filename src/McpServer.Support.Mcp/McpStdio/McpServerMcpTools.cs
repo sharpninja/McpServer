@@ -1410,11 +1410,12 @@ public sealed class FwhMcpTools
         }
     }
 
-    /// <summary>REQ-MGMT-001: Generate requirements documents as Markdown (doc=all concatenates all docs).</summary>
-    [McpServerTool(Name = "requirements_generate"), Description("Generate requirements documents as Markdown. doc = functional|technical|testing|mapping|all (default all).")]
+    /// <summary>REQ-MGMT-001: Generate requirements documents as Markdown or workspace files.</summary>
+    [McpServerTool(Name = "requirements_generate"), Description("Generate requirements documents. doc = functional|technical|testing|mapping|all (default all). format = markdown|wiki. doc=all writes files to the workspace and returns export metadata.")]
     public async Task<string> RequirementsGenerate(
         [Description("Workspace path (required)")] string workspacePath,
         [Description("Document selector: functional, technical, testing, mapping, or all")] string? doc = "all",
+        [Description("Output format: markdown or wiki")] string? format = "markdown",
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -1423,18 +1424,27 @@ public sealed class FwhMcpTools
             if (!TryParseRequirementsDocType(doc, out var docType))
                 return JsonSerializer.Serialize(new { error = "Unsupported doc. Expected functional|technical|testing|mapping|all." });
 
+            var normalizedFormat = (format ?? "markdown").Trim().ToLowerInvariant();
+            if (normalizedFormat == "wiki")
+            {
+                if (docType != RequirementsDocType.All)
+                    return JsonSerializer.Serialize(new { error = "Wiki generation requires doc=all." });
+
+                var export = await _requirementsDocumentService.GenerateWikiAsync(
+                    Path.Combine(workspacePath, "docs", "Project", "wiki"),
+                    ct: cancellationToken).ConfigureAwait(false);
+                return JsonSerializer.Serialize(export, s_camelCaseOptions);
+            }
+
+            if (normalizedFormat is not "markdown" and not "yaml")
+                return JsonSerializer.Serialize(new { error = "Unsupported format. Expected markdown|yaml|wiki." });
+
             if (docType == RequirementsDocType.All)
             {
-                var functional = await _requirementsDocumentService.GenerateDocumentAsync(RequirementsDocType.Functional, cancellationToken).ConfigureAwait(false);
-                var technical = await _requirementsDocumentService.GenerateDocumentAsync(RequirementsDocType.Technical, cancellationToken).ConfigureAwait(false);
-                var testing = await _requirementsDocumentService.GenerateDocumentAsync(RequirementsDocType.Testing, cancellationToken).ConfigureAwait(false);
-                var mapping = await _requirementsDocumentService.GenerateDocumentAsync(RequirementsDocType.Mapping, cancellationToken).ConfigureAwait(false);
-                return string.Join(
-                    "\n\n---\n\n",
-                    functional.Content.TrimEnd(),
-                    technical.Content.TrimEnd(),
-                    testing.Content.TrimEnd(),
-                    mapping.Content.TrimEnd());
+                var export = await _requirementsDocumentService.GenerateAllAsync(
+                    Path.Combine(workspacePath, "docs", "Project"),
+                    ct: cancellationToken).ConfigureAwait(false);
+                return JsonSerializer.Serialize(export, s_camelCaseOptions);
             }
 
             var result = await _requirementsDocumentService.GenerateDocumentAsync(docType, cancellationToken).ConfigureAwait(false);

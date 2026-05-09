@@ -70,6 +70,6 @@ public enum RequirementsDocType
     /// <summary>TR-per-FR Mapping document.</summary>
     Mapping,
 
-    /// <summary>All four documents as a ZIP archive.</summary>
+    /// <summary>All requirements documents as a workspace export.</summary>
     All
 }
