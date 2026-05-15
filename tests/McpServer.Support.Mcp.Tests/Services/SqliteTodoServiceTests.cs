@@ -256,6 +256,29 @@ public sealed class SqliteTodoServiceTests : IDisposable
     }
 
     /// <summary>
+    /// TEST-MCP-096: Verifies that the persisted TODO ID contract accepts uppercase/digit kebab
+    /// identifiers with more than two semantic segments before the numeric suffix.
+    /// </summary>
+    [Theory]
+    [InlineData("PHASE0-REMOTE-001")]
+    [InlineData("MCP-TODO-CREATE-001")]
+    public async Task Create_ValidUppercaseKebabIdWithDigitsAndExtraSegments_ReturnsSuccess(string id)
+    {
+        var result = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = id,
+            Title = "Import-compatible TODO",
+            Section = "mvp-app",
+            Priority = "medium",
+        }).ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        var stored = await _sut.GetByIdAsync(id).ConfigureAwait(true);
+        Assert.NotNull(stored);
+        Assert.Equal(id, stored.Id);
+    }
+
+    /// <summary>
     /// TEST-MCP-096: Verifies that dependency validation still runs in the SQLite-authoritative path before
     /// any authoritative mutation is committed. The fixture uses an invalid dependency id to ensure the
     /// update fails with a validation classification instead of writing inconsistent state.

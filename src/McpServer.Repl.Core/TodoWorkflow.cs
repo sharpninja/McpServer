@@ -494,9 +494,8 @@ public sealed class TodoWorkflow : ITodoWorkflow
 
     private static void ValidateTodoId(string id)
     {
-        // Canonical format: <PHASE>-<AREA>-### or ISSUE-{number}
-        // Pattern: ^[A-Z]+-[A-Z0-9]+-\d{3}$ or ^ISSUE-\d+$
-        var validPattern1 = System.Text.RegularExpressions.Regex.IsMatch(id, @"^[A-Z]+-[A-Z0-9]+-\d{3}$");
+        // Canonical format: uppercase kebab-case ending in -### or ISSUE-{number}.
+        var validPattern1 = System.Text.RegularExpressions.Regex.IsMatch(id, @"^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\d{3}$");
         var validPattern2 = System.Text.RegularExpressions.Regex.IsMatch(id, @"^ISSUE-\d+$");
         var validPattern3 = id == "ISSUE-NEW";
 

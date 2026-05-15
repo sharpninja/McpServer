@@ -292,6 +292,27 @@ public sealed class TodoServiceTests : IDisposable
         Assert.NotNull(stored);
     }
 
+    [Theory]
+    [InlineData("PHASE0-REMOTE-001")]
+    [InlineData("MCP-TODO-CREATE-001")]
+    public async Task CreateAsync_ValidUppercaseKebabIdWithDigitsAndExtraSegments_Succeeds(string id)
+    {
+        var request = new TodoCreateRequest
+        {
+            Id = id,
+            Title = "Valid import id",
+            Section = "mvp-support",
+            Priority = "medium"
+        };
+
+        var result = await _sut.CreateAsync(request).ConfigureAwait(true);
+
+        Assert.True(result.Success);
+        var stored = await _sut.GetByIdAsync(id).ConfigureAwait(true);
+        Assert.NotNull(stored);
+        Assert.Equal(id, stored.Id);
+    }
+
     [Fact]
     public async Task CreateAsync_ValidIssueNumberId_Succeeds()
     {

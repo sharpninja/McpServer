@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.IO.Compression;
 using System.Text.Json;
 using McpServer.Support.Mcp;
 using McpServer.Support.Mcp.Requirements.Models;
@@ -83,19 +84,17 @@ public sealed class RequirementsControllerTests : IClassFixture<RequirementsCont
     {
         var response = await _client.GetAsync("/mcpserver/requirements/generate?doc=all&format=wiki").ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
+        Assert.Equal("application/zip", response.Content.Headers.ContentType?.MediaType);
 
-        var export = await response.Content.ReadFromJsonAsync<RequirementsDocumentExportResult>().ConfigureAwait(true);
-        Assert.NotNull(export);
-        Assert.EndsWith(Path.Combine("docs", "Project", "wiki"), export!.OutputRoot, StringComparison.OrdinalIgnoreCase);
-        var names = export.Files.Select(e => e.RelativePath).OrderBy(static n => n, StringComparer.Ordinal).ToArray();
+        await using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(true);
+        using var archive = new ZipArchive(responseStream, ZipArchiveMode.Read, leaveOpen: false);
+        var names = archive.Entries.Select(e => e.FullName).OrderBy(static n => n, StringComparer.Ordinal).ToArray();
 
         Assert.Contains("azure/.mcp-requirements-manifest.json", names);
         Assert.Contains("azure/.order", names);
         Assert.Contains("github/.mcp-requirements-manifest.json", names);
         Assert.Contains("github/_Sidebar.md", names);
         Assert.Contains("github/_Footer.md", names);
-        Assert.All(export.Files, file => Assert.True(File.Exists(file.FullPath), file.FullPath));
     }
 
     [Fact]

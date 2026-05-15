@@ -76,6 +76,105 @@ public sealed class RequirementsDatabaseDocumentServiceTests
             service.UpsertMappingAsync(new FrTrMapping("FR-MCP-901", [], ["TEST-MCP-MISSING"])));
     }
 
+    /// <summary>Bootstrap accepts bold legacy headings and does not treat notes columns as TEST links.</summary>
+    [Fact]
+    public async Task Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors()
+    {
+        using var fixture = new RequirementsDbFixture();
+        var workspace = fixture.CreateWorkspace("legacy-bold");
+        var project = Path.Combine(workspace, "docs", "Project");
+        await File.WriteAllTextAsync(
+            Path.Combine(project, "Functional-Requirements.md"),
+            """
+            # Functional Requirements
+
+            ## **FR-1 — Compile-time product identity.**
+
+            **FR-1 — Compile-time product identity.** The build system shall stamp each binary.
+            """);
+        await File.WriteAllTextAsync(
+            Path.Combine(project, "Technical-Requirements.md"),
+            """
+            # Technical Requirements
+
+            ## **TR-1 — Target frameworks.**
+
+            **TR-1 — Target frameworks.** SDK targets net10.0.
+            """);
+        await File.WriteAllTextAsync(
+            Path.Combine(project, "TR-per-FR-Mapping.md"),
+            """
+            # TR per FR Mapping
+
+            | Functional Requirement | Technical Requirements | Notes |
+            | --- | --- | --- |
+            | FR-1 | TR-1 | Notes are prose, not TEST ids. |
+            """);
+
+        fixture.SetWorkspace(workspace);
+        var service = fixture.CreateService();
+        var export = await service.GenerateWikiAsync(Path.Combine(project, "wiki")).ConfigureAwait(true);
+        var rows = await fixture.GetRequirementRowsAsync().ConfigureAwait(true);
+
+        Assert.True(export.Success);
+        Assert.Contains(rows, row => row.Kind == "fr" && row.Id == "FR-1");
+        Assert.Contains(rows, row => row.Kind == "tr" && row.Id == "TR-1");
+        Assert.DoesNotContain(rows, row => row.Kind == "test" && row.Id.Contains("Notes", StringComparison.OrdinalIgnoreCase));
+
+        var (mappingMarkdown, _) = await service.GenerateDocumentAsync(RequirementsDocType.Mapping).ConfigureAwait(true);
+        Assert.Contains("TR-1", mappingMarkdown);
+        Assert.DoesNotContain("Notes are prose", mappingMarkdown);
+    }
+
+    /// <summary>Bootstrap rebuilds traceability when orphan links were left by a failed import.</summary>
+    [Fact]
+    public async Task Bootstrap_StaleTraceabilityLinks_RebuildsWithoutUniqueConstraintFailure()
+    {
+        using var fixture = new RequirementsDbFixture();
+        var workspace = fixture.CreateWorkspace("stale-link");
+        var project = Path.Combine(workspace, "docs", "Project");
+        await File.WriteAllTextAsync(
+            Path.Combine(project, "Functional-Requirements.md"),
+            """
+            # Functional Requirements
+
+            ## FR-1 Stale link repair
+
+            The system shall rebuild requirements storage from checked-in documents.
+            """);
+        await File.WriteAllTextAsync(
+            Path.Combine(project, "Technical-Requirements.md"),
+            """
+            # Technical Requirements
+
+            ## TR-1
+
+            The importer shall tolerate existing orphan links.
+            """);
+        await File.WriteAllTextAsync(
+            Path.Combine(project, "TR-per-FR-Mapping.md"),
+            """
+            # TR per FR Mapping
+
+            | Functional Requirement | Technical Requirements |
+            | --- | --- |
+            | FR-1 | TR-1 |
+            """);
+
+        fixture.SetWorkspace(workspace);
+        await fixture.SeedTraceabilityLinkAsync(workspace, "FR-1", "tr", "TR-1").ConfigureAwait(true);
+
+        var service = fixture.CreateService();
+        var export = await service.GenerateWikiAsync(Path.Combine(project, "wiki")).ConfigureAwait(true);
+        var links = await fixture.GetTraceabilityRowsAsync().ConfigureAwait(true);
+
+        Assert.True(export.Success);
+        var link = Assert.Single(links);
+        Assert.Equal("FR-1", link.FrId);
+        Assert.Equal("tr", link.TargetKind);
+        Assert.Equal("TR-1", link.TargetId);
+    }
+
     private sealed class RequirementsDbFixture : IDisposable
     {
         private readonly ServiceProvider _provider;
@@ -127,6 +226,34 @@ public sealed class RequirementsDatabaseDocumentServiceTests
                 .ThenBy(x => x.Kind)
                 .ThenBy(x => x.Id)
                 .ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<RequirementTraceabilityLinkEntity>> GetTraceabilityRowsAsync()
+        {
+            await using var scope = _provider.CreateAsyncScope();
+            return await scope.ServiceProvider.GetRequiredService<McpDbContext>()
+                .RequirementTraceabilityLinks
+                .IgnoreQueryFilters()
+                .OrderBy(x => x.WorkspaceId)
+                .ThenBy(x => x.FrId)
+                .ThenBy(x => x.TargetKind)
+                .ThenBy(x => x.TargetId)
+                .ToListAsync();
+        }
+
+        public async Task SeedTraceabilityLinkAsync(string workspacePath, string frId, string targetKind, string targetId)
+        {
+            await using var scope = _provider.CreateAsyncScope();
+            var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+            ctx.RequirementTraceabilityLinks.Add(new RequirementTraceabilityLinkEntity
+            {
+                WorkspaceId = workspacePath,
+                FrId = frId,
+                TargetKind = targetKind,
+                TargetId = targetId,
+                CreatedAtUtc = DateTimeOffset.UtcNow.ToString("O"),
+            });
+            await ctx.SaveChangesAsync();
         }
 
         public void SetWorkspace(string workspacePath)

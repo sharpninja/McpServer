@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using McpServer.Client.Models;
 using McpServer.Repl.Core;
+using NSubstitute;
 using Xunit;
 
 namespace McpServer.Repl.Core.Tests;
@@ -96,6 +99,112 @@ public class SessionLogWorkflowProductionTests
 
         await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             await _workflow.OpenSessionAsync("Copilot", sessionId, "Test", "model"));
+    }
+
+    #endregion
+
+    #region Recovery Import Tests
+
+    [Fact]
+    public async Task ImportRecoveryAsync_MergesWithExistingFullSessionBeforeSubmit()
+    {
+        var client = Substitute.For<ISessionLogClientAdapter>();
+        var existing = new UnifiedSessionLogDto
+        {
+            SourceType = "Codex",
+            SessionId = "Codex-20260514T000000Z-recovery",
+            Title = "Existing Session",
+            Model = "gpt-5",
+            Started = "2026-05-14T00:00:00Z",
+            LastUpdated = "2026-05-14T00:02:00Z",
+            Status = "in_progress",
+            Turns = new List<UnifiedRequestEntryDto>
+            {
+                new()
+                {
+                    RequestId = "req-20260514T000100Z-existing",
+                    Timestamp = "2026-05-14T00:01:00Z",
+                    QueryTitle = "Existing",
+                    QueryText = "Existing text",
+                    Status = "completed",
+                    Actions = new List<UnifiedActionDto>
+                    {
+                        new() { Order = 1, Type = "test", Status = "completed", Description = "Existing action" }
+                    }
+                }
+            },
+            TurnCount = 1
+        };
+
+        client.QueryAsync("Codex", null, null, null, null, 1000, 0, Arg.Any<CancellationToken>())
+            .Returns(new SessionLogQueryResult
+            {
+                Items = new[] { existing },
+                TotalCount = 1,
+                Limit = 1000
+            });
+
+        UnifiedSessionLogDto? submitted = null;
+        client.SubmitAsync(Arg.Do<UnifiedSessionLogDto>(dto => submitted = dto), Arg.Any<CancellationToken>())
+            .Returns(new SessionLogSubmitResult
+            {
+                Id = 42,
+                SourceType = "Codex",
+                SessionId = "Codex-20260514T000000Z-recovery"
+            });
+
+        var workflow = new SessionLogWorkflow(client, TimeProvider.System);
+        var incoming = new UnifiedSessionLogDto
+        {
+            SourceType = "Codex",
+            SessionId = "Codex-20260514T000000Z-recovery",
+            Title = "Recovered Session",
+            Model = "gpt-5",
+            Started = "2026-05-14T00:00:00Z",
+            LastUpdated = "2026-05-14T00:05:00Z",
+            Status = "completed",
+            Turns = new List<UnifiedRequestEntryDto>
+            {
+                new()
+                {
+                    RequestId = "req-20260514T000100Z-existing",
+                    Timestamp = "2026-05-14T00:01:00Z",
+                    QueryTitle = "Existing",
+                    QueryText = "Existing text",
+                    Status = "completed",
+                    Actions = new List<UnifiedActionDto>
+                    {
+                        new() { Order = 2, Type = "edit", Status = "completed", Description = "Recovered action" }
+                    }
+                },
+                new()
+                {
+                    RequestId = "req-20260514T000500Z-imported",
+                    Timestamp = "2026-05-14T00:05:00Z",
+                    QueryTitle = "Imported",
+                    QueryText = "Imported text",
+                    Status = "completed-local",
+                    Response = "Recovered response"
+                }
+            }
+        };
+
+        var result = await workflow.ImportRecoveryAsync(incoming);
+
+        Assert.True(result.ExistingSessionFound);
+        Assert.Equal(1, result.ImportedTurns);
+        Assert.Equal(1, result.MergedTurns);
+        Assert.Equal(2, result.TotalTurns);
+        Assert.NotNull(submitted);
+        Assert.Equal(2, submitted!.Turns!.Count);
+        Assert.Equal(2, submitted.TurnCount);
+        Assert.Equal("completed", submitted.Status);
+        Assert.Contains(submitted.Turns, turn =>
+            turn.RequestId == "req-20260514T000100Z-existing" &&
+            turn.Actions is { Count: 2 });
+        Assert.Contains(submitted.Turns, turn =>
+            turn.RequestId == "req-20260514T000500Z-imported" &&
+            turn.Status == "completed");
     }
 
     #endregion

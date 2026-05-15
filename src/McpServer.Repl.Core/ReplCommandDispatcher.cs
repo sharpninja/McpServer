@@ -3,6 +3,8 @@
 // TR-MCP-REPL-004: Command Registry and Dispatcher - Envelope-to-handler routing
 // TEST-MCP-REPL-001: REPL host processes well-formed YAML command envelopes
 
+using System.Collections;
+using System.Text.Json;
 using McpServer.Client.Models;
 
 namespace McpServer.Repl.Core;
@@ -36,18 +38,33 @@ public interface IReplCommandDispatcher
 public sealed class ReplCommandDispatcher : IReplCommandDispatcher
 {
     private const string ServerProtocolVersion = "1.0";
+    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
+    {
+        PropertyNameCaseInsensitive = true,
+    };
+
     private readonly IGenericClientPassthrough _passthrough;
+    private readonly ISessionLogWorkflow? _sessionLogWorkflow;
     private readonly IRequirementsWorkflow? _requirementsWorkflow;
+    private readonly ITodoWorkflow? _todoWorkflow;
 
     /// <summary>
     /// Initializes a new <see cref="ReplCommandDispatcher"/>.
     /// </summary>
     /// <param name="passthrough">The generic client passthrough used to invoke <c>client.*.*</c> methods.</param>
+    /// <param name="sessionLogWorkflow">The optional session-log workflow used to invoke <c>workflow.sessionlog.*</c> methods.</param>
     /// <param name="requirementsWorkflow">The optional requirements workflow used to invoke <c>workflow.requirements.*</c> methods.</param>
-    public ReplCommandDispatcher(IGenericClientPassthrough passthrough, IRequirementsWorkflow? requirementsWorkflow = null)
+    /// <param name="todoWorkflow">The optional TODO workflow used to invoke <c>workflow.todo.*</c> methods.</param>
+    public ReplCommandDispatcher(
+        IGenericClientPassthrough passthrough,
+        ISessionLogWorkflow? sessionLogWorkflow = null,
+        IRequirementsWorkflow? requirementsWorkflow = null,
+        ITodoWorkflow? todoWorkflow = null)
     {
         _passthrough = passthrough ?? throw new ArgumentNullException(nameof(passthrough));
+        _sessionLogWorkflow = sessionLogWorkflow;
         _requirementsWorkflow = requirementsWorkflow;
+        _todoWorkflow = todoWorkflow;
     }
 
     /// <inheritdoc />
@@ -92,11 +109,306 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
             return await DispatchRequirementsRequestAsync(request, cancellationToken).ConfigureAwait(false);
         }
 
+        if (method.StartsWith(SessionLogCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
+        {
+            return await DispatchSessionLogRequestAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+
+        if (method.StartsWith(TodoCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
+        {
+            return await DispatchTodoRequestAsync(request, cancellationToken).ConfigureAwait(false);
+        }
+
         return BuildError(
             requestId: request.RequestId,
             code: "method_not_found",
             message: $"Method '{method}' is not routed by this dispatcher. " +
-                     $"Supported namespaces: client.<clientName>.<methodName>, {RequirementsCommandShapes.MethodNamespace}.*.");
+                     $"Supported namespaces: client.<clientName>.<methodName>, {SessionLogCommandShapes.MethodNamespace}.*, {RequirementsCommandShapes.MethodNamespace}.*, {TodoCommandShapes.MethodNamespace}.*.");
+    }
+
+    private async Task<IYamlEnvelope> DispatchSessionLogRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
+    {
+        if (_sessionLogWorkflow is null)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_not_found",
+                message: "Session-log workflow is not registered.");
+        }
+
+        var workflow = _sessionLogWorkflow;
+        var args = request.Params is null
+            ? new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+            : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
+
+        try
+        {
+            object? result;
+            switch (request.Method)
+            {
+                case SessionLogCommandShapes.BootstrapMethod:
+                    await workflow.BootstrapAsync(cancellationToken).ConfigureAwait(false);
+                    result = new Dictionary<string, object?> { ["initialized"] = true };
+                    break;
+
+                case SessionLogCommandShapes.OpenSessionMethod:
+                    await workflow.OpenSessionAsync(
+                        GetString(args, "agent") ?? GetString(args, "sourceType") ?? "Codex",
+                        RequireString(args, "sessionId"),
+                        RequireString(args, "title"),
+                        GetString(args, "model") ?? "unknown",
+                        cancellationToken).ConfigureAwait(false);
+                    result = new Dictionary<string, object?>
+                    {
+                        ["sessionId"] = RequireString(args, "sessionId"),
+                        ["opened"] = true,
+                    };
+                    break;
+
+                case SessionLogCommandShapes.CurrentSessionMethod:
+                    result = workflow.CurrentSession();
+                    break;
+
+                case SessionLogCommandShapes.BeginTurnMethod:
+                    await workflow.BeginTurnAsync(
+                        RequireString(args, "requestId"),
+                        RequireString(args, "queryTitle"),
+                        RequireString(args, "queryText"),
+                        cancellationToken).ConfigureAwait(false);
+                    result = new Dictionary<string, object?>
+                    {
+                        ["requestId"] = RequireString(args, "requestId"),
+                        ["status"] = "in_progress",
+                    };
+                    break;
+
+                case SessionLogCommandShapes.UpdateTurnMethod:
+                    await workflow.UpdateTurnAsync(
+                        GetString(args, "response"),
+                        GetString(args, "interpretation"),
+                        GetInt(args, "tokenCount"),
+                        GetStringList(args, "tags"),
+                        GetStringList(args, "contextList"),
+                        cancellationToken).ConfigureAwait(false);
+                    result = new Dictionary<string, object?> { ["updated"] = true };
+                    break;
+
+                case SessionLogCommandShapes.CompleteTurnMethod:
+                    await workflow.CompleteTurnAsync(
+                        RequireString(args, "response"),
+                        cancellationToken).ConfigureAwait(false);
+                    result = new Dictionary<string, object?> { ["status"] = "completed" };
+                    break;
+
+                case SessionLogCommandShapes.FailTurnMethod:
+                    await workflow.FailTurnAsync(
+                        RequireString(args, "errorMessage"),
+                        GetString(args, "errorCode"),
+                        cancellationToken).ConfigureAwait(false);
+                    result = new Dictionary<string, object?> { ["status"] = "failed" };
+                    break;
+
+                case SessionLogCommandShapes.AppendDialogMethod:
+                    await workflow.AppendDialogAsync(
+                        GetDialogItems(args, "dialogItems"),
+                        cancellationToken).ConfigureAwait(false);
+                    result = new Dictionary<string, object?> { ["appended"] = true };
+                    break;
+
+                case SessionLogCommandShapes.AppendActionsMethod:
+                    await workflow.AppendActionsAsync(
+                        GetSessionActions(args, "actions"),
+                        cancellationToken).ConfigureAwait(false);
+                    result = new Dictionary<string, object?> { ["appended"] = true };
+                    break;
+
+                case SessionLogCommandShapes.QueryHistoryMethod:
+                    result = await workflow.QueryHistoryAsync(
+                        GetString(args, "agent") ?? GetString(args, "sourceType"),
+                        GetInt(args, "limit") ?? 10,
+                        GetInt(args, "offset") ?? 0,
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case SessionLogCommandShapes.ImportRecoveryMethod:
+                    result = await workflow.ImportRecoveryAsync(
+                        BuildSessionLogRecovery(args),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                default:
+                    return BuildError(
+                        requestId: request.RequestId,
+                        code: "method_not_found",
+                        message: $"Method '{request.Method}' is not routed by the session-log workflow.");
+            }
+
+            return new YamlEnvelope
+            {
+                Type = "result",
+                Payload = new ResultPayload
+                {
+                    RequestId = request.RequestId,
+                    Result = result,
+                },
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_invocation_error",
+                message: ex.Message,
+                details: new Dictionary<string, object?>
+                {
+                    ["methodName"] = request.Method,
+                    ["exceptionType"] = ex.GetType().FullName,
+                });
+        }
+    }
+
+    private async Task<IYamlEnvelope> DispatchTodoRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
+    {
+        if (_todoWorkflow is null)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_not_found",
+                message: "TODO workflow is not registered.");
+        }
+
+        var workflow = _todoWorkflow;
+        var args = request.Params is null
+            ? new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase)
+            : new Dictionary<string, object?>(request.Params, StringComparer.OrdinalIgnoreCase);
+
+        try
+        {
+            object? result;
+            switch (request.Method)
+            {
+                case TodoCommandShapes.QueryMethod:
+                    result = await workflow.QueryAsync(
+                        GetString(args, "keyword"),
+                        GetString(args, "priority"),
+                        GetString(args, "section"),
+                        GetString(args, "id"),
+                        GetBool(args, "done"),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case TodoCommandShapes.GetMethod:
+                    result = await workflow.GetAsync(RequireString(args, "id"), cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case TodoCommandShapes.SelectMethod:
+                    await workflow.SelectAsync(RequireString(args, "id"), cancellationToken).ConfigureAwait(false);
+                    result = new Dictionary<string, object?>
+                    {
+                        ["selected"] = true,
+                        ["id"] = RequireString(args, "id"),
+                    };
+                    break;
+
+                case TodoCommandShapes.CreateMethod:
+                    result = await workflow.CreateAsync(BuildTodoCreateRequest(GetRequestArgs(args)), cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case TodoCommandShapes.UpdateMethod:
+                    result = await workflow.UpdateAsync(
+                        RequireString(args, "id"),
+                        BuildTodoUpdateRequest(GetRequestArgs(args)),
+                        cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case TodoCommandShapes.UpdateSelectedMethod:
+                    result = await workflow.UpdateAsync(BuildTodoUpdateRequest(GetRequestArgs(args)), cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case TodoCommandShapes.DeleteMethod:
+                    result = await DeleteAndReturnAsync(
+                        () => workflow.DeleteAsync(RequireString(args, "id"), cancellationToken),
+                        RequireString(args, "id")).ConfigureAwait(false);
+                    break;
+
+                case TodoCommandShapes.DeleteSelectedMethod:
+                    await workflow.DeleteAsync(cancellationToken).ConfigureAwait(false);
+                    result = new Dictionary<string, object?> { ["deleted"] = true };
+                    break;
+
+                case TodoCommandShapes.AnalyzeRequirementsMethod:
+                    result = await workflow.AnalyzeRequirementsAsync(RequireString(args, "id"), cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case TodoCommandShapes.StreamStatusMethod:
+                    result = await CollectTodoEventsAsync(
+                        callback => workflow.StreamStatusAsync(RequireString(args, "id"), callback, cancellationToken)).ConfigureAwait(false);
+                    break;
+
+                case TodoCommandShapes.StreamPlanMethod:
+                    result = await CollectTodoEventsAsync(
+                        callback => workflow.StreamPlanAsync(RequireString(args, "id"), callback, cancellationToken)).ConfigureAwait(false);
+                    break;
+
+                case TodoCommandShapes.StreamImplementMethod:
+                    result = await CollectTodoEventsAsync(
+                        callback => workflow.StreamImplementAsync(RequireString(args, "id"), callback, cancellationToken)).ConfigureAwait(false);
+                    break;
+
+                case TodoCommandShapes.GetProjectionStatusMethod:
+                    result = await workflow.GetProjectionStatusAsync(RequireString(args, "id"), cancellationToken).ConfigureAwait(false);
+                    break;
+
+                case TodoCommandShapes.RepairProjectionMethod:
+                    await workflow.RepairProjectionAsync(RequireString(args, "id"), cancellationToken).ConfigureAwait(false);
+                    result = new Dictionary<string, object?>
+                    {
+                        ["repaired"] = true,
+                        ["id"] = RequireString(args, "id"),
+                    };
+                    break;
+
+                case TodoCommandShapes.CurrentSelectionMethod:
+                    result = workflow.CurrentSelection();
+                    break;
+
+                default:
+                    return BuildError(
+                        requestId: request.RequestId,
+                        code: "method_not_found",
+                        message: $"Method '{request.Method}' is not routed by the TODO workflow.");
+            }
+
+            return new YamlEnvelope
+            {
+                Type = "result",
+                Payload = new ResultPayload
+                {
+                    RequestId = request.RequestId,
+                    Result = result,
+                },
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            return BuildError(
+                requestId: request.RequestId,
+                code: "method_invocation_error",
+                message: ex.Message,
+                details: new Dictionary<string, object?>
+                {
+                    ["methodName"] = request.Method,
+                    ["exceptionType"] = ex.GetType().FullName,
+                });
+        }
     }
 
     private async Task<IYamlEnvelope> DispatchRequirementsRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
@@ -320,11 +632,291 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
         }
     }
 
+    private static UnifiedSessionLogDto BuildSessionLogRecovery(IReadOnlyDictionary<string, object?> args)
+    {
+        var sessionLog = args.TryGetValue("sessionLog", out var sessionLogValue)
+            ? ConvertValue<UnifiedSessionLogDto>(sessionLogValue)
+            : null;
+        sessionLog ??= new UnifiedSessionLogDto();
+
+        sessionLog.SourceType = FirstNonEmpty(
+            sessionLog.SourceType,
+            GetString(args, "sourceType"),
+            GetString(args, "agent"));
+        sessionLog.SessionId = FirstNonEmpty(sessionLog.SessionId, GetString(args, "sessionId"));
+        sessionLog.Title = FirstNonEmpty(sessionLog.Title, GetString(args, "title"));
+        sessionLog.Model = FirstNonEmpty(sessionLog.Model, GetString(args, "model"));
+        sessionLog.Started = FirstNonEmpty(sessionLog.Started, GetString(args, "started"));
+        sessionLog.LastUpdated = FirstNonEmpty(sessionLog.LastUpdated, GetString(args, "lastUpdated"));
+        sessionLog.Status = FirstNonEmpty(sessionLog.Status, GetString(args, "status"));
+        sessionLog.Turns ??= args.TryGetValue("turns", out var turnsValue)
+            ? ConvertValue<List<UnifiedRequestEntryDto>>(turnsValue)
+            : null;
+
+        return sessionLog;
+    }
+
+    private static IReadOnlyList<IDialogItem> GetDialogItems(IReadOnlyDictionary<string, object?> args, string name)
+    {
+        if (!args.TryGetValue(name, out var value) || value is null)
+        {
+            return Array.Empty<IDialogItem>();
+        }
+
+        return ConvertValue<List<DialogItemAdapter>>(value)?.Cast<IDialogItem>().ToArray()
+            ?? Array.Empty<IDialogItem>();
+    }
+
+    private static IReadOnlyList<ISessionAction> GetSessionActions(IReadOnlyDictionary<string, object?> args, string name)
+    {
+        if (!args.TryGetValue(name, out var value) || value is null)
+        {
+            return Array.Empty<ISessionAction>();
+        }
+
+        return ConvertValue<List<SessionActionAdapter>>(value)?.Cast<ISessionAction>().ToArray()
+            ?? Array.Empty<ISessionAction>();
+    }
+
+    private static T? ConvertValue<T>(object? value)
+    {
+        if (value is null)
+        {
+            return default;
+        }
+
+        if (value is T typed)
+        {
+            return typed;
+        }
+
+        var normalized = NormalizeJsonElement(value);
+        var json = JsonSerializer.Serialize(normalized, JsonOptions);
+        return JsonSerializer.Deserialize<T>(json, JsonOptions);
+    }
+
+    private static string? FirstNonEmpty(params string?[] values)
+    {
+        foreach (var value in values)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                return value;
+            }
+        }
+
+        return null;
+    }
+
+    private static TodoCreateRequestAdapter BuildTodoCreateRequest(IReadOnlyDictionary<string, object?> args)
+    {
+        return new TodoCreateRequestAdapter
+        {
+            Id = RequireString(args, "id"),
+            Title = RequireString(args, "title"),
+            Section = RequireString(args, "section"),
+            Priority = RequireString(args, "priority"),
+            Estimate = GetString(args, "estimate"),
+            Description = GetStringList(args, "description"),
+            TechnicalDetails = GetStringList(args, "technicalDetails"),
+            ImplementationTasks = GetTodoSubtasks(args, "implementationTasks"),
+            Note = GetString(args, "note"),
+            Remaining = GetString(args, "remaining"),
+            DependsOn = GetStringList(args, "dependsOn"),
+            FunctionalRequirements = GetStringList(args, "functionalRequirements"),
+            TechnicalRequirements = GetStringList(args, "technicalRequirements"),
+        };
+    }
+
+    private static TodoUpdateRequestAdapter BuildTodoUpdateRequest(IReadOnlyDictionary<string, object?> args)
+    {
+        return new TodoUpdateRequestAdapter
+        {
+            Title = GetString(args, "title"),
+            Priority = GetString(args, "priority"),
+            Section = GetString(args, "section"),
+            Done = GetBool(args, "done"),
+            Estimate = GetString(args, "estimate"),
+            Description = GetStringList(args, "description"),
+            TechnicalDetails = GetStringList(args, "technicalDetails"),
+            ImplementationTasks = GetTodoSubtasks(args, "implementationTasks"),
+            Note = GetString(args, "note"),
+            CompletedDate = GetString(args, "completedDate"),
+            DoneSummary = GetString(args, "doneSummary"),
+            Remaining = GetString(args, "remaining"),
+            DependsOn = GetStringList(args, "dependsOn"),
+            FunctionalRequirements = GetStringList(args, "functionalRequirements"),
+            TechnicalRequirements = GetStringList(args, "technicalRequirements"),
+        };
+    }
+
+    private static Dictionary<string, object?> GetRequestArgs(Dictionary<string, object?> args)
+    {
+        if (!args.TryGetValue("request", out var requestValue) || requestValue is null)
+        {
+            return args;
+        }
+
+        return ToStringObjectDictionary(requestValue) ?? args;
+    }
+
+    private static Dictionary<string, object?>? ToStringObjectDictionary(object? value)
+    {
+        if (value is null)
+        {
+            return null;
+        }
+
+        if (value is Dictionary<string, object?> typed)
+        {
+            return new Dictionary<string, object?>(typed, StringComparer.OrdinalIgnoreCase);
+        }
+
+        if (value is IReadOnlyDictionary<string, object?> readOnly)
+        {
+            return new Dictionary<string, object?>(readOnly, StringComparer.OrdinalIgnoreCase);
+        }
+
+        if (value is IDictionary rawMap)
+        {
+            var normalized = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
+            foreach (DictionaryEntry entry in rawMap)
+            {
+                var key = Convert.ToString(entry.Key, System.Globalization.CultureInfo.InvariantCulture);
+                if (!string.IsNullOrWhiteSpace(key))
+                {
+                    normalized[key] = NormalizeJsonElement(entry.Value);
+                }
+            }
+
+            return normalized;
+        }
+
+        if (value is JsonElement element && element.ValueKind == JsonValueKind.Object)
+        {
+            var normalized = new Dictionary<string, object?>(StringComparer.OrdinalIgnoreCase);
+            foreach (var property in element.EnumerateObject())
+            {
+                normalized[property.Name] = NormalizeJsonElement(property.Value);
+            }
+
+            return normalized;
+        }
+
+        return null;
+    }
+
+    private static object? NormalizeJsonElement(object? value)
+    {
+        if (value is not JsonElement element)
+        {
+            return value;
+        }
+
+        return element.ValueKind switch
+        {
+            JsonValueKind.Object => ToStringObjectDictionary(element),
+            JsonValueKind.Array => element.EnumerateArray().Select(v => NormalizeJsonElement(v)).ToArray(),
+            JsonValueKind.String => element.GetString(),
+            JsonValueKind.Number when element.TryGetInt64(out var integer) => integer,
+            JsonValueKind.Number when element.TryGetDouble(out var number) => number,
+            JsonValueKind.True => true,
+            JsonValueKind.False => false,
+            JsonValueKind.Null => null,
+            _ => element.ToString(),
+        };
+    }
+
+    private static bool? GetBool(IReadOnlyDictionary<string, object?> args, string name)
+    {
+        if (!args.TryGetValue(name, out var value) || value is null)
+        {
+            return null;
+        }
+
+        if (value is bool typed)
+        {
+            return typed;
+        }
+
+        if (value is JsonElement element)
+        {
+            return element.ValueKind switch
+            {
+                JsonValueKind.True => true,
+                JsonValueKind.False => false,
+                JsonValueKind.String when bool.TryParse(element.GetString(), out var parsed) => parsed,
+                JsonValueKind.Number when element.TryGetInt32(out var numeric) => numeric != 0,
+                _ => null,
+            };
+        }
+
+        if (value is IConvertible convertible)
+        {
+            var text = Convert.ToString(convertible, System.Globalization.CultureInfo.InvariantCulture);
+            if (bool.TryParse(text, out var parsed))
+            {
+                return parsed;
+            }
+
+            if (long.TryParse(text, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var numeric))
+            {
+                return numeric != 0;
+            }
+        }
+
+        return null;
+    }
+
+    private static int? GetInt(IReadOnlyDictionary<string, object?> args, string name)
+    {
+        if (!args.TryGetValue(name, out var value) || value is null)
+        {
+            return null;
+        }
+
+        if (value is int typed)
+        {
+            return typed;
+        }
+
+        if (value is JsonElement element)
+        {
+            return element.ValueKind switch
+            {
+                JsonValueKind.Number when element.TryGetInt32(out var parsed) => parsed,
+                JsonValueKind.String when int.TryParse(element.GetString(), System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var parsed) => parsed,
+                _ => null,
+            };
+        }
+
+        if (value is IConvertible convertible)
+        {
+            var text = Convert.ToString(convertible, System.Globalization.CultureInfo.InvariantCulture);
+            if (int.TryParse(text, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var parsed))
+            {
+                return parsed;
+            }
+        }
+
+        return null;
+    }
+
     private static string? GetString(IReadOnlyDictionary<string, object?> args, string name)
     {
-        return args.TryGetValue(name, out var value) && value is not null
-            ? Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture)
-            : null;
+        if (!args.TryGetValue(name, out var value) || value is null)
+        {
+            return null;
+        }
+
+        if (value is JsonElement element)
+        {
+            return element.ValueKind == JsonValueKind.String
+                ? element.GetString()
+                : element.ToString();
+        }
+
+        return Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture);
     }
 
     private static string RequireString(IReadOnlyDictionary<string, object?> args, string name)
@@ -438,9 +1030,105 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
                 .ToArray();
         }
 
+        if (value is IEnumerable rawValues)
+        {
+            return rawValues
+                .Cast<object?>()
+                .Select(v => Convert.ToString(NormalizeJsonElement(v), System.Globalization.CultureInfo.InvariantCulture))
+                .Where(v => !string.IsNullOrWhiteSpace(v))
+                .Select(v => v!)
+                .ToArray();
+        }
+
         return new[] { Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture) ?? string.Empty }
             .Where(v => !string.IsNullOrWhiteSpace(v))
             .ToArray();
+    }
+
+    private static IReadOnlyList<ITodoSubtask> GetTodoSubtasks(IReadOnlyDictionary<string, object?> args, string name)
+    {
+        if (!args.TryGetValue(name, out var value) || value is null)
+        {
+            return Array.Empty<ITodoSubtask>();
+        }
+
+        if (value is string single)
+        {
+            return string.IsNullOrWhiteSpace(single)
+                ? Array.Empty<ITodoSubtask>()
+                : new ITodoSubtask[] { new TodoSubtaskAdapter { Task = single, Done = false } };
+        }
+
+        if (value is JsonElement element && element.ValueKind == JsonValueKind.Array)
+        {
+            return element
+                .EnumerateArray()
+                .Select(v => ConvertTodoSubtask(v))
+                .Where(v => v is not null)
+                .Select(v => v!)
+                .ToArray();
+        }
+
+        if (value is IEnumerable values)
+        {
+            return values
+                .Cast<object?>()
+                .Select(ConvertTodoSubtask)
+                .Where(v => v is not null)
+                .Select(v => v!)
+                .ToArray();
+        }
+
+        var task = ConvertTodoSubtask(value);
+        return task is null ? Array.Empty<ITodoSubtask>() : new[] { task };
+    }
+
+    private static ITodoSubtask? ConvertTodoSubtask(object? value)
+    {
+        value = NormalizeJsonElement(value);
+        if (value is null)
+        {
+            return null;
+        }
+
+        if (value is ITodoSubtask typed)
+        {
+            return typed;
+        }
+
+        if (value is string text)
+        {
+            return string.IsNullOrWhiteSpace(text)
+                ? null
+                : new TodoSubtaskAdapter { Task = text, Done = false };
+        }
+
+        var fields = ToStringObjectDictionary(value);
+        if (fields is null)
+        {
+            var fallbackText = Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture);
+            return string.IsNullOrWhiteSpace(fallbackText)
+                ? null
+                : new TodoSubtaskAdapter { Task = fallbackText, Done = false };
+        }
+
+        return new TodoSubtaskAdapter
+        {
+            Task = RequireString(fields, "task"),
+            Done = GetBool(fields, "done") ?? false,
+        };
+    }
+
+    private static async Task<IReadOnlyList<IStreamingEvent>> CollectTodoEventsAsync(Func<Func<IStreamingEvent, Task>, Task> stream)
+    {
+        var events = new List<IStreamingEvent>();
+        await stream(evt =>
+        {
+            events.Add(evt);
+            return Task.CompletedTask;
+        }).ConfigureAwait(false);
+
+        return events;
     }
 
     private static async Task<object> DeleteAndReturnAsync(Func<Task> delete, string id)
@@ -468,6 +1156,99 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
             ["trId"] = trId,
             ["testId"] = testId,
         };
+    }
+
+    private sealed class DialogItemAdapter : IDialogItem
+    {
+        public DateTimeOffset Timestamp { get; init; }
+
+        public string Role { get; init; } = string.Empty;
+
+        public string Content { get; init; } = string.Empty;
+
+        public string Category { get; init; } = string.Empty;
+    }
+
+    private sealed class SessionActionAdapter : ISessionAction
+    {
+        public int Order { get; init; }
+
+        public string Description { get; init; } = string.Empty;
+
+        public string Type { get; init; } = string.Empty;
+
+        public string Status { get; init; } = string.Empty;
+
+        public string FilePath { get; init; } = string.Empty;
+    }
+
+    private sealed class TodoCreateRequestAdapter : ITodoCreateRequest
+    {
+        public string Id { get; init; } = string.Empty;
+
+        public string Title { get; init; } = string.Empty;
+
+        public string Section { get; init; } = string.Empty;
+
+        public string Priority { get; init; } = string.Empty;
+
+        public string? Estimate { get; init; }
+
+        public IReadOnlyList<string>? Description { get; init; }
+
+        public IReadOnlyList<string>? TechnicalDetails { get; init; }
+
+        public IReadOnlyList<ITodoSubtask>? ImplementationTasks { get; init; }
+
+        public string? Note { get; init; }
+
+        public string? Remaining { get; init; }
+
+        public IReadOnlyList<string>? DependsOn { get; init; }
+
+        public IReadOnlyList<string>? FunctionalRequirements { get; init; }
+
+        public IReadOnlyList<string>? TechnicalRequirements { get; init; }
+    }
+
+    private sealed class TodoUpdateRequestAdapter : ITodoUpdateRequest
+    {
+        public string? Title { get; init; }
+
+        public string? Priority { get; init; }
+
+        public string? Section { get; init; }
+
+        public bool? Done { get; init; }
+
+        public string? Estimate { get; init; }
+
+        public IReadOnlyList<string>? Description { get; init; }
+
+        public IReadOnlyList<string>? TechnicalDetails { get; init; }
+
+        public IReadOnlyList<ITodoSubtask>? ImplementationTasks { get; init; }
+
+        public string? Note { get; init; }
+
+        public string? CompletedDate { get; init; }
+
+        public string? DoneSummary { get; init; }
+
+        public string? Remaining { get; init; }
+
+        public IReadOnlyList<string>? DependsOn { get; init; }
+
+        public IReadOnlyList<string>? FunctionalRequirements { get; init; }
+
+        public IReadOnlyList<string>? TechnicalRequirements { get; init; }
+    }
+
+    private sealed class TodoSubtaskAdapter : ITodoSubtask
+    {
+        public string Task { get; init; } = string.Empty;
+
+        public bool Done { get; init; }
     }
 
     private static IYamlEnvelope BuildHelloResponse(IHelloPayload? request)

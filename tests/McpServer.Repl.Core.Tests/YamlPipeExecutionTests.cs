@@ -6,6 +6,7 @@
 // TEST-MCP-REPL-001: REPL host processes well-formed YAML command envelopes end-to-end
 
 using System.Text;
+using McpServer.Client.Models;
 using McpServer.Repl.Core;
 using NSubstitute;
 
@@ -165,9 +166,287 @@ public class YamlPipeExecutionTests
             Arg.Any<CancellationToken>());
     }
 
+    /// <summary>
+    /// A workflow.sessionlog.importRecovery request is routed to the session-log workflow
+    /// with the recovered turns parsed from YAML params. This route performs the safe
+    /// query-merge-submit behavior in the workflow layer.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_SessionLogImportRecovery_DelegatesToSessionLogWorkflow()
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var sessionLog = Substitute.For<ISessionLogWorkflow>();
+        sessionLog.ImportRecoveryAsync(Arg.Any<UnifiedSessionLogDto>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new SessionLogRecoveryImportResult
+            {
+                SourceType = "Codex",
+                SessionId = "Codex-20260514T000000Z-recovery",
+                ImportedTurns = 1,
+                TotalTurns = 1
+            }));
+
+        var sut = new ReplCommandDispatcher(passthrough, sessionLogWorkflow: sessionLog);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-sessionlog-import",
+                Method = SessionLogCommandShapes.ImportRecoveryMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["sourceType"] = "Codex",
+                    ["sessionId"] = "Codex-20260514T000000Z-recovery",
+                    ["title"] = "Recovered session",
+                    ["model"] = "gpt-5",
+                    ["turns"] = new object[]
+                    {
+                        new Dictionary<string, object?>
+                        {
+                            ["requestId"] = "req-20260514T000100Z-imported",
+                            ["timestamp"] = "2026-05-14T00:01:00Z",
+                            ["queryTitle"] = "Imported",
+                            ["queryText"] = "Imported text",
+                            ["status"] = "completed",
+                        }
+                    },
+                }
+            }
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await sessionLog.Received(1).ImportRecoveryAsync(
+            Arg.Is<UnifiedSessionLogDto>(dto =>
+                dto != null &&
+                dto.SourceType == "Codex" &&
+                dto.SessionId == "Codex-20260514T000000Z-recovery" &&
+                dto.Turns != null &&
+                dto.Turns.Count == 1 &&
+                dto.Turns[0].RequestId == "req-20260514T000100Z-imported"),
+            Arg.Any<CancellationToken>());
+        await passthrough.DidNotReceiveWithAnyArgs().InvokeAsync(default!, default!, default!, default);
+    }
+
+    /// <summary>
+    /// A workflow.todo.query request is routed through the typed TODO workflow instead of
+    /// falling through to the generic client passthrough. This keeps YAML REPL callers on the
+    /// same command-shape contract as in-process MCP tools.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_TodoQueryRequest_DelegatesToTodoWorkflow()
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var todo = Substitute.For<ITodoWorkflow>();
+        var queryResult = Substitute.For<ITodoQueryResult>();
+        queryResult.TotalCount.Returns(0);
+        queryResult.Items.Returns(Array.Empty<ITodoItem>());
+        todo.QueryAsync("auth", "high", "Backlog", "MCP-TODO-001", false, Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(queryResult));
+
+        var sut = new ReplCommandDispatcher(passthrough, todoWorkflow: todo);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-todo-query",
+                Method = TodoCommandShapes.QueryMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["keyword"] = "auth",
+                    ["priority"] = "high",
+                    ["section"] = "Backlog",
+                    ["id"] = "MCP-TODO-001",
+                    ["done"] = "false",
+                }
+            }
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await todo.Received(1).QueryAsync("auth", "high", "Backlog", "MCP-TODO-001", false, Arg.Any<CancellationToken>());
+        await passthrough.DidNotReceiveWithAnyArgs().InvokeAsync(default!, default!, default!, default);
+    }
+
+    /// <summary>
+    /// A flat workflow.todo.create request is normalized into the typed create-request
+    /// interface before dispatch. YAML callers do not have to know the client method's
+    /// internal <c>request</c> parameter name.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_TodoCreateRequest_AcceptsFlatYamlShape()
+    {
+        var todo = Substitute.For<ITodoWorkflow>();
+        var mutation = CreateMutationResult();
+        todo.CreateAsync(Arg.Any<ITodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(mutation));
+
+        var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>(), todoWorkflow: todo);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-todo-create",
+                Method = TodoCommandShapes.CreateMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["id"] = "MCP-TODO-001",
+                    ["title"] = "Fix TODO contract",
+                    ["section"] = "Backlog",
+                    ["priority"] = "high",
+                    ["description"] = new[] { "route workflow.todo.* through TODO workflow" },
+                    ["implementationTasks"] = new object[]
+                    {
+                        new Dictionary<string, object?> { ["task"] = "Add dispatcher route", ["done"] = true },
+                        "Add plugin regression",
+                    },
+                }
+            }
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await todo.Received(1).CreateAsync(
+            Arg.Is<ITodoCreateRequest>(request =>
+                request != null &&
+                request.Id == "MCP-TODO-001" &&
+                request.Title == "Fix TODO contract" &&
+                request.Section == "Backlog" &&
+                request.Priority == "high" &&
+                request.Description != null &&
+                request.Description!.SequenceEqual(new[] { "route workflow.todo.* through TODO workflow" }) &&
+                request.ImplementationTasks != null &&
+                request.ImplementationTasks!.Count == 2 &&
+                request.ImplementationTasks![0].Task == "Add dispatcher route" &&
+                request.ImplementationTasks![0].Done &&
+                request.ImplementationTasks![1].Task == "Add plugin regression" &&
+                !request.ImplementationTasks![1].Done),
+            Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// A nested <c>request:</c> workflow.todo.update request is normalized into the typed update
+    /// request while retaining the top-level TODO id. Folded YAML scalars arrive as ordinary
+    /// strings and must stay that way.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_TodoUpdateRequest_AcceptsNestedRequestShape()
+    {
+        var todo = Substitute.For<ITodoWorkflow>();
+        var mutation = CreateMutationResult();
+        todo.UpdateAsync("MCP-TODO-001", Arg.Any<ITodoUpdateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(mutation));
+
+        var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>(), todoWorkflow: todo);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-todo-update",
+                Method = TodoCommandShapes.UpdateMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["id"] = "MCP-TODO-001",
+                    ["request"] = new Dictionary<string, object?>
+                    {
+                        ["done"] = true,
+                        ["doneSummary"] = "Dispatcher accepts nested request shape.",
+                        ["implementationTasks"] = new[]
+                        {
+                            new Dictionary<string, object?> { ["task"] = "Verify YAML contract", ["done"] = "true" },
+                        },
+                    },
+                }
+            }
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await todo.Received(1).UpdateAsync(
+            "MCP-TODO-001",
+            Arg.Is<ITodoUpdateRequest>(request =>
+                request != null &&
+                request.Done == true &&
+                request.DoneSummary == "Dispatcher accepts nested request shape." &&
+                request.ImplementationTasks != null &&
+                request.ImplementationTasks!.Count == 1 &&
+                request.ImplementationTasks![0].Task == "Verify YAML contract" &&
+                request.ImplementationTasks![0].Done),
+            Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
+    /// JSON flow style is valid YAML. The production YAML parser must feed workflow.todo.create
+    /// with the same data as block-style YAML so callers can use either representation.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_TodoCreateRequest_AcceptsJsonFlowStyleYaml()
+    {
+        var todo = Substitute.For<ITodoWorkflow>();
+        var mutation = CreateMutationResult();
+        todo.CreateAsync(Arg.Any<ITodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(mutation));
+
+        var serializer = new YamlSerializer();
+        var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>(), todoWorkflow: todo);
+        var envelope = serializer.Deserialize("""
+            type: request
+            payload:
+              requestId: req-todo-create-flow
+              method: workflow.todo.create
+              params: { id: MCP-TODO-002, title: Flow style create, section: Backlog, priority: medium, implementationTasks: [{ task: Normalize flow style, done: false }] }
+            """);
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await todo.Received(1).CreateAsync(
+            Arg.Is<ITodoCreateRequest>(request =>
+                request != null &&
+                request.Id == "MCP-TODO-002" &&
+                request.Title == "Flow style create" &&
+                request.ImplementationTasks != null &&
+                request.ImplementationTasks!.Count == 1 &&
+                request.ImplementationTasks![0].Task == "Normalize flow style" &&
+                !request.ImplementationTasks![0].Done),
+            Arg.Any<CancellationToken>());
+    }
+
     private static bool DictionaryContainsValue(Dictionary<string, object?>? dict, string key, object expected)
     {
         return dict is not null && dict.TryGetValue(key, out var value) && Equals(value, expected);
+    }
+
+    private static ITodoMutationResult CreateMutationResult()
+    {
+        var item = Substitute.For<ITodoItem>();
+        item.Id.Returns("MCP-TODO-001");
+        item.Title.Returns("Fix TODO contract");
+        item.Section.Returns("Backlog");
+        item.Priority.Returns("high");
+        item.Done.Returns(false);
+        item.Description.Returns(Array.Empty<string>());
+        item.TechnicalDetails.Returns(Array.Empty<string>());
+        item.ImplementationTasks.Returns(Array.Empty<ITodoSubtask>());
+        item.DependsOn.Returns(Array.Empty<string>());
+        item.FunctionalRequirements.Returns(Array.Empty<string>());
+        item.TechnicalRequirements.Returns(Array.Empty<string>());
+
+        var result = Substitute.For<ITodoMutationResult>();
+        result.Success.Returns(true);
+        result.Item.Returns(item);
+        return result;
     }
 
     /// <summary>

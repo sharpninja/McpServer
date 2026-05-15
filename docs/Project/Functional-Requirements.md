@@ -364,7 +364,7 @@ The system SHALL enforce a DI-centered Single Source of Truth architecture acros
 
 The server shall enforce canonical identifier conventions for newly created TODO and session log payloads:
 
-- Persisted TODO IDs must match either `<SDLC-PHASE>-<AREA>-###` using uppercase kebab-case or `ISSUE-{number}` for canonical GitHub-backed TODOs.
+- Persisted TODO IDs must match either uppercase kebab-case ending in a three-digit sequence suffix (for example `PHASE0-REMOTE-001` or `MCP-TODO-CREATE-001`) or `ISSUE-{number}` for canonical GitHub-backed TODOs.
 - Create requests may use `ISSUE-NEW` only as a temporary server-side alias for immediate GitHub-backed TODO creation; persisted TODO IDs must still be canonical.
 - Session IDs must match `<Agent>-<yyyyMMddTHHmmssZ>-<suffix>` and be prefixed by the exact `sourceType`/`agent`.
 - Request IDs must match `req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal>`.

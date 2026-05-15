@@ -84,7 +84,7 @@ Two backends are available, configured via `Mcp:TodoStorage:Provider`:
 
 Persisted TODO IDs follow one of two canonical forms:
 
-- `<PHASE>-<AREA>-###` for standard workspace TODOs (for example, `MCP-AUTH-001`)
+- Uppercase kebab-case ending in `-###` for standard workspace TODOs (for example, `PHASE0-REMOTE-001` or `MCP-TODO-CREATE-001`)
 - `ISSUE-{number}` for GitHub-backed TODOs (for example, `ISSUE-17`)
 
 Create requests may also use `ISSUE-NEW`. The server immediately creates a GitHub issue, determines the

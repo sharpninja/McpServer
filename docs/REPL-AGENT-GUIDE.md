@@ -1331,15 +1331,18 @@ payload:
 
 ### TODO IDs
 
-**Format:** `<PHASE>-<AREA>-###` or `ISSUE-{number}`
+**Format:** uppercase kebab-case ending in `-###` or `ISSUE-{number}`
 
 **Rules:**
-- Phase/Area must be uppercase
-- Number must be 3 digits
+- Segments must use uppercase letters and digits
+- IDs need at least one descriptive segment before the final three-digit suffix
+- The final sequence suffix must be 3 digits
 - Special case: `ISSUE-NEW` creates GitHub-backed TODO
 
 **Valid Examples:**
 - `MCP-AUTH-001`
+- `PHASE0-REMOTE-001`
+- `MCP-TODO-CREATE-001`
 - `PLAN-NAMINGCONVENTIONS-001`
 - `ISSUE-17`
 - `ISSUE-NEW` (special case)
@@ -1347,6 +1350,7 @@ payload:
 **Invalid Examples:**
 - `mcp-auth-001` (lowercase)
 - `MCP-AUTH-42` (not 3 digits)
+- `MCP-001` (missing descriptive segment)
 - `MCPAUTH001` (missing hyphens)
 
 ### Requirement IDs

@@ -450,18 +450,52 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
 
         var now = Now();
         var workspaceId = RequireWorkspaceId(ctx);
+        var staleLinks = await ctx.RequirementTraceabilityLinks.ToListAsync(ct).ConfigureAwait(false);
+        if (staleLinks.Count > 0)
+        {
+            ctx.RequirementTraceabilityLinks.RemoveRange(staleLinks);
+            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
+        }
+
+        var importedRequirements = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (var entry in RequirementsDocumentParser.ParseFunctional(ReadFileIfExists(paths.Functional)))
+        {
+            if (!importedRequirements.Add($"{FrKind}\0{entry.Id}"))
+                continue;
             ctx.Requirements.Add(new RequirementEntity { WorkspaceId = workspaceId, Kind = FrKind, Id = entry.Id, Title = entry.Title, Body = entry.Body, CreatedAtUtc = now, UpdatedAtUtc = now });
+        }
         foreach (var entry in RequirementsDocumentParser.ParseTechnical(ReadFileIfExists(paths.Technical)))
+        {
+            if (!importedRequirements.Add($"{TrKind}\0{entry.Id}"))
+                continue;
             ctx.Requirements.Add(new RequirementEntity { WorkspaceId = workspaceId, Kind = TrKind, Id = entry.Id, Title = entry.Title, Body = entry.Body, CreatedAtUtc = now, UpdatedAtUtc = now });
+        }
         foreach (var entry in RequirementsDocumentParser.ParseTesting(ReadFileIfExists(paths.Testing)))
+        {
+            if (!importedRequirements.Add($"{TestKind}\0{entry.Id}"))
+                continue;
             ctx.Requirements.Add(new RequirementEntity { WorkspaceId = workspaceId, Kind = TestKind, Id = entry.Id, Title = string.Empty, Body = entry.Condition, CreatedAtUtc = now, UpdatedAtUtc = now });
+        }
+
+        var importedLinks = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (var mapping in RequirementsDocumentParser.ParseMapping(ReadFileIfExists(paths.Mapping)))
         {
+            if (!importedRequirements.Contains($"{FrKind}\0{mapping.FrId}"))
+                continue;
+
             foreach (var trId in NormalizeIds(mapping.TrIds))
+            {
+                if (!importedRequirements.Contains($"{TrKind}\0{trId}") || !importedLinks.Add($"{mapping.FrId}\0{TrKind}\0{trId}"))
+                    continue;
                 ctx.RequirementTraceabilityLinks.Add(new RequirementTraceabilityLinkEntity { WorkspaceId = workspaceId, FrId = mapping.FrId, TargetKind = TrKind, TargetId = trId, CreatedAtUtc = now });
+            }
+
             foreach (var testId in NormalizeIds(mapping.TestIds))
+            {
+                if (!importedRequirements.Contains($"{TestKind}\0{testId}") || !importedLinks.Add($"{mapping.FrId}\0{TestKind}\0{testId}"))
+                    continue;
                 ctx.RequirementTraceabilityLinks.Add(new RequirementTraceabilityLinkEntity { WorkspaceId = workspaceId, FrId = mapping.FrId, TargetKind = TestKind, TargetId = testId, CreatedAtUtc = now });
+            }
         }
 
         await ctx.SaveChangesAsync(ct).ConfigureAwait(false);

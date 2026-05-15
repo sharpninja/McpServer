@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using System.Text;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
@@ -470,7 +471,8 @@ public sealed class RequirementsController : ControllerBase
                 return BadRequest(new { error = "Wiki generation requires doc=all." });
 
             var wikiExport = await _requirements.GenerateWikiAsync(ResolveWikiOutputRoot(), ct: cancellationToken).ConfigureAwait(false);
-            return Ok(wikiExport);
+            var zipBytes = CreateWikiExportZip(wikiExport);
+            return File(zipBytes, "application/zip", "requirements-wiki-documents.zip");
         }
 
         if (normalizedFormat is not "markdown" and not "yaml")
@@ -493,6 +495,38 @@ public sealed class RequirementsController : ControllerBase
         };
 
         return File(Encoding.UTF8.GetBytes(content), mimeType, fileName);
+    }
+
+    private static byte[] CreateWikiExportZip(RequirementsDocumentExportResult wikiExport)
+    {
+        ArgumentNullException.ThrowIfNull(wikiExport);
+
+        var outputRoot = Path.GetFullPath(wikiExport.OutputRoot);
+        using var stream = new MemoryStream();
+        using (var archive = new ZipArchive(stream, ZipArchiveMode.Create, leaveOpen: true))
+        {
+            foreach (var file in wikiExport.Files)
+            {
+                var fullPath = Path.GetFullPath(file.FullPath);
+                if (!fullPath.StartsWith(outputRoot, StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new InvalidOperationException($"Generated wiki file is outside the output root: {file.FullPath}");
+                }
+
+                if (!System.IO.File.Exists(fullPath))
+                {
+                    throw new FileNotFoundException("Generated wiki file was not found.", fullPath);
+                }
+
+                var relativePath = string.IsNullOrWhiteSpace(file.RelativePath)
+                    ? Path.GetRelativePath(outputRoot, fullPath)
+                    : file.RelativePath;
+                relativePath = relativePath.Replace('\\', '/');
+                archive.CreateEntryFromFile(fullPath, relativePath, CompressionLevel.Fastest);
+            }
+        }
+
+        return stream.ToArray();
     }
 
     internal static bool TryParseDocType(string? raw, out RequirementsDocType docType)

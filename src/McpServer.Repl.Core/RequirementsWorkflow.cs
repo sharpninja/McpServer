@@ -507,6 +507,19 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
                 generatedAt: export.GeneratedAtUtc);
         }
 
+        var contentType = generatedDoc.ContentType ?? "text/markdown";
+        if (format == "wiki" || contentType.Contains("zip", StringComparison.OrdinalIgnoreCase))
+        {
+            return new DocumentGenerationResultAdapter(
+                true,
+                content: string.Empty,
+                format,
+                docType,
+                contentBase64: Convert.ToBase64String(generatedDoc.Content),
+                contentType: contentType,
+                fileName: "requirements-wiki-documents.zip");
+        }
+
         var content = System.Text.Encoding.UTF8.GetString(generatedDoc.Content);
 
         return new DocumentGenerationResultAdapter(
@@ -514,7 +527,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             content,
             format,
             docType,
-            contentType: generatedDoc.ContentType ?? "text/markdown",
+            contentType: contentType,
             fileName: null);
     }
 

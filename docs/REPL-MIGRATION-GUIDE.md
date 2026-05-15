@@ -200,7 +200,7 @@ These canonical formats are enforced by both the old API and the new tools:
 
 - **Session ID**: `<Agent>-<yyyyMMddTHHmmssZ>-<suffix>` (e.g. `Copilot-20260402T120000Z-authflow`)
 - **Request ID**: `req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal>` (e.g. `req-20260402T120000Z-add-login-001`)
-- **TODO ID**: `<PHASE>-<AREA>-###` or `ISSUE-{number}` (e.g. `PLAN-AUTH-001`, `ISSUE-42`)
+- **TODO ID**: uppercase kebab-case ending in `-###` or `ISSUE-{number}` (e.g. `PLAN-AUTH-001`, `MCP-TODO-CREATE-001`, `ISSUE-42`)
 - **FR ID**: `FR-<AREA>-###` (e.g. `FR-MCP-001`)
 - **TR ID**: `TR-<AREA>-<SUBAREA>-###` (e.g. `TR-MCP-ARCH-001`)
 - **TEST ID**: `TEST-<AREA>-###` (e.g. `TEST-MCP-001`)
