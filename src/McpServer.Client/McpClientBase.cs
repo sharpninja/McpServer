@@ -105,7 +105,10 @@ public abstract class McpClientBase
         // when a JWT is provided, enforcing mutual exclusivity from construction.
         ApiKey = options.ApiKey ?? string.Empty;
         BearerToken = options.BearerToken ?? string.Empty;
+        _credentialDiagnostic = options.CredentialDiagnostic;
     }
+
+    private readonly string? _credentialDiagnostic;
 
     /// <summary>
     /// API key for workspace authentication, sent as the <c>X-Api-Key</c> header on every
@@ -364,10 +367,14 @@ public abstract class McpClientBase
                 "but no bearer token is configured. Re-authenticate via OIDC or switch the client to API-key authentication.");
 
         if (!hasBearer && !hasApiKey)
-            throw new InvalidOperationException(
-                "Authentication required: no credential is configured on this client. " +
+        {
+            var baseMessage = "Authentication required: no credential is configured on this client. " +
                 "Set BearerToken (for interactive users via OIDC) or ApiKey (for agents via " +
-                "the AGENTS-README-FIRST.yaml marker file) before calling any endpoint.");
+                "the AGENTS-README-FIRST.yaml marker file) before calling any endpoint.";
+            if (!string.IsNullOrWhiteSpace(_credentialDiagnostic))
+                baseMessage = baseMessage + " Credential resolution diagnostic: " + _credentialDiagnostic;
+            throw new InvalidOperationException(baseMessage);
+        }
     }
 
     /// <summary>

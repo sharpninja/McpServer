@@ -70,7 +70,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("AgentDefinitions");
+                    b.ToTable("AgentDefinitions", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentEventLogEntity", b =>
@@ -120,7 +120,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspacePath");
 
-                    b.ToTable("AgentEventLogs");
+                    b.ToTable("AgentEventLogs", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentWorkspaceEntity", b =>
@@ -202,7 +202,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.HasIndex("AgentDefinitionId", "WorkspacePath")
                         .IsUnique();
 
-                    b.ToTable("AgentWorkspaces");
+                    b.ToTable("AgentWorkspaces", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity", b =>
@@ -239,7 +239,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("Chunks");
+                    b.ToTable("Chunks", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity", b =>
@@ -280,7 +280,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("Documents");
+                    b.ToTable("Documents", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.GraphEntityEntity", b =>
@@ -325,7 +325,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("GraphEntities");
+                    b.ToTable("GraphEntities", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.GraphRelationshipEntity", b =>
@@ -380,7 +380,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("GraphRelationships");
+                    b.ToTable("GraphRelationships", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementEntity", b =>
@@ -424,7 +424,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId", "Id");
 
-                    b.ToTable("Requirements");
+                    b.ToTable("Requirements", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementTraceabilityLinkEntity", b =>
@@ -456,7 +456,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId", "TargetKind", "TargetId");
 
-                    b.ToTable("RequirementTraceabilityLinks");
+                    b.ToTable("RequirementTraceabilityLinks", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogActionEntity", b =>
@@ -496,7 +496,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("SessionLogActions");
+                    b.ToTable("SessionLogActions", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogCommitEntity", b =>
@@ -540,7 +540,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("SessionLogTurnId");
 
-                    b.ToTable("SessionLogCommits");
+                    b.ToTable("SessionLogCommits", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntity", b =>
@@ -650,7 +650,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.HasIndex("SourceType", "SessionId")
                         .IsUnique();
 
-                    b.ToTable("SessionLogs");
+                    b.ToTable("SessionLogs", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity", b =>
@@ -691,7 +691,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("SessionLogProcessingDialogs");
+                    b.ToTable("SessionLogProcessingDialogs", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnContextEntity", b =>
@@ -721,7 +721,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("SessionLogTurnContexts");
+                    b.ToTable("SessionLogTurnContexts", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnEntity", b =>
@@ -794,7 +794,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.HasIndex("SessionLogId", "RequestId")
                         .IsUnique();
 
-                    b.ToTable("SessionLogTurns");
+                    b.ToTable("SessionLogTurns", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnStringListEntity", b =>
@@ -826,7 +826,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("SessionLogTurnId", "ListType");
 
-                    b.ToTable("SessionLogTurnStringLists");
+                    b.ToTable("SessionLogTurnStringLists", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnTagEntity", b =>
@@ -853,7 +853,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("SessionLogTurnTags");
+                    b.ToTable("SessionLogTurnTags", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoAuditHistoryEntity", b =>
@@ -906,7 +906,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.HasIndex("WorkspaceId", "TodoId", "Version")
                         .IsUnique();
 
-                    b.ToTable("TodoAuditHistory");
+                    b.ToTable("TodoAuditHistory", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", b =>
@@ -945,7 +945,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasKey("WorkspaceId", "SingletonId");
 
-                    b.ToTable("TodoDocumentMetadata", t =>
+                    b.ToTable("TodoDocumentMetadata", null, t =>
                         {
                             t.HasCheckConstraint("CK_TodoDocumentMetadata_Singleton", "\"SingletonId\" = 1");
                         });
@@ -1046,7 +1046,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("Section");
 
-                    b.ToTable("TodoItems");
+                    b.ToTable("TodoItems", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity", b =>
@@ -1097,7 +1097,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("ToolBuckets");
+                    b.ToTable("ToolBuckets", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity", b =>
@@ -1151,7 +1151,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.HasIndex("Name", "WorkspacePath")
                         .IsUnique();
 
-                    b.ToTable("ToolDefinitions");
+                    b.ToTable("ToolDefinitions", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity", b =>
@@ -1181,7 +1181,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.HasIndex("ToolDefinitionId", "Tag")
                         .IsUnique();
 
-                    b.ToTable("ToolDefinitionTags");
+                    b.ToTable("ToolDefinitionTags", (string)null);
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentWorkspaceEntity", b =>

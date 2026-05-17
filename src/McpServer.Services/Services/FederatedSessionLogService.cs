@@ -73,6 +73,14 @@ public sealed class FederatedSessionLogService : ISessionLogService
     public Task<int> AppendProcessingDialogAsync(string sourceType, string sessionId, string requestId, IReadOnlyList<ProcessingDialogItemDto> items, CancellationToken cancellationToken = default)
         => _inner.AppendProcessingDialogAsync(sourceType, sessionId, requestId, items, cancellationToken);
 
+    /// <inheritdoc />
+    public Task<UnifiedSessionLogDto?> GetAsync(string sourceType, string sessionId, CancellationToken cancellationToken = default)
+        => _inner.GetAsync(sourceType, sessionId, cancellationToken);
+
+    /// <inheritdoc />
+    public Task<long> UpsertTurnAsync(string sourceType, string sessionId, UnifiedRequestEntryDto turn, CancellationToken cancellationToken = default)
+        => _inner.UpsertTurnAsync(sourceType, sessionId, turn, cancellationToken);
+
     private static SessionLogQueryResult MergeResults(SessionLogQueryResult local, SessionLogQueryResult remote)
     {
         var localKeys = new HashSet<string>(

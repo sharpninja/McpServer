@@ -48,6 +48,99 @@ public sealed class MarkerFileClientOptionsResolverTests
         }
     }
 
+    /// <summary>
+    /// FR-MCP-REPL-007: When the marker file is missing, the diagnostic surface must
+    /// list every directory that was searched so the user can correct the workspace
+    /// path or marker location.
+    /// </summary>
+    [Fact]
+    public void TryResolveWithDiagnostics_WhenMarkerMissing_EnumeratesSearchedPaths()
+    {
+        var root = CreateTemporaryWorkspace();
+        try
+        {
+            var nested = Path.Combine(root, "src", "nested");
+            Directory.CreateDirectory(nested);
+
+            var ok = MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(
+                workspacePathOverride: nested,
+                markerPathOverride: null,
+                out _,
+                out var error);
+
+            Assert.False(ok);
+            Assert.False(string.IsNullOrWhiteSpace(error));
+            Assert.Contains(nested, error, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains(root, error, StringComparison.OrdinalIgnoreCase);
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// FR-MCP-REPL-007: An explicit <c>--workspace-path</c> override is honored
+    /// instead of walking from <see cref="Environment.CurrentDirectory"/>.
+    /// </summary>
+    [Fact]
+    public void TryResolveWithDiagnostics_AcceptsExplicitWorkspaceArgument()
+    {
+        var root = CreateTemporaryWorkspace();
+        try
+        {
+            File.WriteAllText(Path.Combine(root, "AGENTS-README-FIRST.yaml"), BuildMarker(root));
+
+            var ok = MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(
+                workspacePathOverride: root,
+                markerPathOverride: null,
+                out var options,
+                out _);
+
+            Assert.True(ok);
+            Assert.NotNull(options);
+            Assert.Equal("test-api-key", options!.ApiKey);
+            Assert.Equal(root, options.WorkspacePath);
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// FR-MCP-REPL-007: When a marker exists but signature verification fails, the
+    /// diagnostic reports both the marker path AND identifies signature mismatch
+    /// (rather than the generic "not found" message).
+    /// </summary>
+    [Fact]
+    public void TryResolveWithDiagnostics_WhenSignatureFails_ReportsReason()
+    {
+        var root = CreateTemporaryWorkspace();
+        try
+        {
+            var markerPath = Path.Combine(root, "AGENTS-README-FIRST.yaml");
+            File.WriteAllText(markerPath, BuildMarker(root).Replace(
+                "canonicalization: marker-v1",
+                "canonicalization: marker-v0",
+                StringComparison.Ordinal));
+
+            var ok = MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(
+                workspacePathOverride: root,
+                markerPathOverride: null,
+                out _,
+                out var error);
+
+            Assert.False(ok);
+            Assert.Contains(markerPath, error, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("signature", error, StringComparison.OrdinalIgnoreCase);
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
     private static string CreateTemporaryWorkspace()
     {
         var path = Path.Combine(Path.GetTempPath(), $"repl-marker-{Guid.NewGuid():N}");

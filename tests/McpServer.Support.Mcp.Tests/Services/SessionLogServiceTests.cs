@@ -28,7 +28,14 @@ public sealed class SessionLogServiceTests : IDisposable
         _db.Database.EnsureCreated();
         _db.OverrideWorkspaceId(WorkspacePath);
         _eventBus = Substitute.For<IChangeEventBus>();
-        _sut = new SessionLogService(_db, NullLogger<SessionLogService>.Instance, _eventBus);
+        // TR-MCP-MT-003A: default fixture mirrors the production wiring with a
+        // WorkspaceContext so SubmitAsync stamps WorkspaceId on every row; the
+        // global query filter on read then matches and existing tests keep working.
+        _sut = new SessionLogService(
+            _db,
+            NullLogger<SessionLogService>.Instance,
+            _eventBus,
+            new WorkspaceContext { WorkspacePath = WorkspacePath });
     }
 
     public void Dispose() => _db.Dispose();
@@ -456,6 +463,229 @@ public sealed class SessionLogServiceTests : IDisposable
         Assert.Single(entry.ProcessingDialog!);
         Assert.Equal("model", entry.ProcessingDialog![0].Role);
         Assert.Equal("Thinking...", entry.ProcessingDialog[0].Content);
+    }
+
+    /// <summary>
+    /// TR-MCP-MT-003A: SubmitAsync must stamp the resolved workspace context onto the
+    /// persisted SessionLogEntity so subsequent reads under the same workspace context
+    /// are not hidden by the global query filter.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_StampsWorkspaceIdOnSessionEntity()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "ws-stamp"));
+        var id = await sut.SubmitAsync(dto).ConfigureAwait(true);
+
+        var stored = await _db.SessionLogs
+            .IgnoreQueryFilters()
+            .FirstAsync(s => s.Id == id)
+            .ConfigureAwait(true);
+        Assert.Equal(WorkspacePath, stored.WorkspaceId);
+    }
+
+    /// <summary>
+    /// TR-MCP-MT-003A: Child entities (turns, actions, tags, context items, dialog,
+    /// commits, string-list items) must also carry the parent's WorkspaceId so they
+    /// pass the per-entity query filters at <see cref="McpDbContext.OnModelCreating"/>.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_StampsWorkspaceIdOnEveryChildEntity()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "ws-children"));
+        dto.Turns![0].Actions =
+        [
+            new UnifiedActionDto { Order = 0, Description = "Edit Program.cs", Type = "edit", Status = "completed", FilePath = "Program.cs" }
+        ];
+        dto.Turns[0].Tags = ["csharp", "ef-core"];
+        dto.Turns[0].ContextList = ["docs/README.md"];
+        dto.Turns[0].ProcessingDialog =
+        [
+            new ProcessingDialogItemDto { Role = "model", Content = "thinking", Category = "reasoning" }
+        ];
+        dto.Turns[0].Commits =
+        [
+            new SessionLogCommitDto { Sha = "abc123", Branch = "main", Message = "commit msg", Author = "x", FilesChanged = ["a.cs"] }
+        ];
+        dto.Turns[0].FilesModified = ["a.cs"];
+
+        var id = await sut.SubmitAsync(dto).ConfigureAwait(true);
+
+        var turn = await _db.SessionLogTurns.IgnoreQueryFilters().FirstAsync(t => t.SessionLogId == id).ConfigureAwait(true);
+        Assert.Equal(WorkspacePath, turn.WorkspaceId);
+
+        var action = await _db.SessionLogActions.IgnoreQueryFilters().FirstAsync(a => a.SessionLogTurnId == turn.Id).ConfigureAwait(true);
+        Assert.Equal(WorkspacePath, action.WorkspaceId);
+
+        var tag = await _db.SessionLogTurnTags.IgnoreQueryFilters().FirstAsync(t => t.SessionLogTurnId == turn.Id).ConfigureAwait(true);
+        Assert.Equal(WorkspacePath, tag.WorkspaceId);
+
+        var context = await _db.SessionLogTurnContexts.IgnoreQueryFilters().FirstAsync(c => c.SessionLogTurnId == turn.Id).ConfigureAwait(true);
+        Assert.Equal(WorkspacePath, context.WorkspaceId);
+
+        var dialog = await _db.SessionLogProcessingDialogs.IgnoreQueryFilters().FirstAsync(d => d.SessionLogTurnId == turn.Id).ConfigureAwait(true);
+        Assert.Equal(WorkspacePath, dialog.WorkspaceId);
+
+        var commit = await _db.SessionLogCommits.IgnoreQueryFilters().FirstAsync(c => c.SessionLogTurnId == turn.Id).ConfigureAwait(true);
+        Assert.Equal(WorkspacePath, commit.WorkspaceId);
+
+        var stringList = await _db.SessionLogTurnStringLists.IgnoreQueryFilters().FirstAsync(s => s.SessionLogTurnId == turn.Id).ConfigureAwait(true);
+        Assert.Equal(WorkspacePath, stringList.WorkspaceId);
+    }
+
+    /// <summary>
+    /// TR-MCP-MT-003A: When no workspace context is injected (ingestion / batch import
+    /// path) and the DbContext has no workspace override either, WorkspaceId must
+    /// default to empty string and not crash. Uses a dedicated DbContext so the
+    /// fixture-level <see cref="McpDbContext.OverrideWorkspaceId"/> does not auto-fill
+    /// the field via <see cref="McpDbContext.SaveChangesAsync"/>'s built-in stamping.
+    /// </summary>
+    [Fact]
+    public async Task SubmitAsync_WithNullWorkspaceContext_KeepsWorkspaceIdEmpty()
+    {
+        var options = new DbContextOptionsBuilder<McpDbContext>()
+            .UseInMemoryDatabase($"SessionLogTests_NullCtx_{Guid.NewGuid()}")
+            .Options;
+        using var db = new McpDbContext(options);
+        db.Database.EnsureCreated();
+
+        var sut = new SessionLogService(db, NullLogger<SessionLogService>.Instance, _eventBus, workspaceContext: null);
+
+        var dto = CreateTestDto("Cursor", BuildSessionId("Cursor", "no-ws"));
+        var id = await sut.SubmitAsync(dto).ConfigureAwait(true);
+
+        var stored = await db.SessionLogs
+            .IgnoreQueryFilters()
+            .FirstAsync(s => s.Id == id)
+            .ConfigureAwait(true);
+        Assert.Equal(string.Empty, stored.WorkspaceId);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010C: <c>UpsertTurnAsync</c> creates a new turn on an existing
+    /// session without deleting any sibling turns. Guards the per-turn helper
+    /// against the delete-stale behavior of the full-session upsert.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_NewTurn_AppendsWithoutDeletingSiblings()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+        var sessionId = BuildSessionId("Cursor", "turn-append");
+        var initial = CreateTestDto("Cursor", sessionId);
+        await sut.SubmitAsync(initial).ConfigureAwait(true);
+
+        var newTurn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260516T120000Z-second",
+            Timestamp = "2026-05-16T12:00:00Z",
+            QueryText = "second turn",
+            Status = "completed"
+        };
+
+        var turnId = await sut.UpsertTurnAsync("Cursor", sessionId, newTurn).ConfigureAwait(true);
+
+        Assert.True(turnId > 0);
+        var turns = await _db.SessionLogTurns
+            .IgnoreQueryFilters()
+            .Where(t => t.SessionLog!.SessionId == sessionId)
+            .ToListAsync()
+            .ConfigureAwait(true);
+        Assert.Equal(2, turns.Count);
+        Assert.Contains(turns, t => t.RequestId == "req-20260211T100100Z-entry-001");
+        Assert.Contains(turns, t => t.RequestId == "req-20260516T120000Z-second");
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010C: <c>UpsertTurnAsync</c> on an existing requestId updates the
+    /// row in place rather than inserting a duplicate.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_ExistingTurn_UpdatesInPlace()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+        var sessionId = BuildSessionId("Cursor", "turn-update");
+        var initial = CreateTestDto("Cursor", sessionId);
+        await sut.SubmitAsync(initial).ConfigureAwait(true);
+
+        var updatedTurn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260211T100100Z-entry-001",
+            Timestamp = "2026-02-11T10:01:00Z",
+            QueryText = "updated query",
+            Response = "updated response",
+            Status = "completed"
+        };
+
+        await sut.UpsertTurnAsync("Cursor", sessionId, updatedTurn).ConfigureAwait(true);
+
+        var turn = await _db.SessionLogTurns
+            .IgnoreQueryFilters()
+            .SingleAsync(t => t.RequestId == "req-20260211T100100Z-entry-001")
+            .ConfigureAwait(true);
+        Assert.Equal("updated query", turn.QueryText);
+        Assert.Equal("updated response", turn.Response);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010C: <c>UpsertTurnAsync</c> throws when the parent session does
+    /// not exist so the controller can map to 404.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_SessionMissing_ThrowsInvalidOperationException()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+        var turn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260516T120000Z-x",
+            QueryText = "x",
+            Status = "completed"
+        };
+
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            () => sut.UpsertTurnAsync("Cursor", BuildSessionId("Cursor", "missing"), turn))
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010A: After submit, <c>GetAsync</c> by (sourceType, sessionId)
+    /// returns the same record under the same workspace context.
+    /// </summary>
+    [Fact]
+    public async Task GetAsync_AfterSubmit_ReturnsRecord()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+        var sessionId = BuildSessionId("Cursor", "get-by-id");
+        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId)).ConfigureAwait(true);
+
+        var fetched = await sut.GetAsync("Cursor", sessionId).ConfigureAwait(true);
+
+        Assert.NotNull(fetched);
+        Assert.Equal(sessionId, fetched!.SessionId);
+        Assert.Equal("Cursor", fetched.SourceType);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010A: <c>GetAsync</c> returns null for a session that does not
+    /// exist (controller maps to 404).
+    /// </summary>
+    [Fact]
+    public async Task GetAsync_Missing_ReturnsNull()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+
+        var fetched = await sut.GetAsync("Cursor", BuildSessionId("Cursor", "absent")).ConfigureAwait(true);
+
+        Assert.Null(fetched);
+    }
+
+    private SessionLogService BuildSutWithWorkspaceContext(string workspacePath)
+    {
+        _db.OverrideWorkspaceId(workspacePath);
+        var ctx = new WorkspaceContext { WorkspacePath = workspacePath };
+        return new SessionLogService(_db, NullLogger<SessionLogService>.Instance, _eventBus, ctx);
     }
 
     private static UnifiedSessionLogDto CreateTestDto(string sourceType, string sessionId, string title = "Test Session")

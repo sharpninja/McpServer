@@ -100,19 +100,107 @@ public static class MarkerFileClientOptionsResolver
     /// <returns>The marker file path when found; otherwise, <see langword="null"/>.</returns>
     public static string? FindMarkerFile(string startPath)
     {
+        return FindMarkerFile(startPath, out _);
+    }
+
+    /// <summary>
+    /// FR-MCP-REPL-007: Walks upward from a starting path to locate the workspace
+    /// marker file and reports every directory that was searched.
+    /// </summary>
+    /// <param name="startPath">The path to begin searching from.</param>
+    /// <param name="searchedPaths">Every directory walked in search order.</param>
+    /// <returns>The marker file path when found; otherwise, <see langword="null"/>.</returns>
+    public static string? FindMarkerFile(string startPath, out IReadOnlyList<string> searchedPaths)
+    {
+        var searched = new List<string>();
         var current = new DirectoryInfo(startPath);
         while (current is not null)
         {
+            searched.Add(current.FullName);
             var candidate = Path.Combine(current.FullName, MarkerFileName);
             if (File.Exists(candidate))
             {
+                searchedPaths = searched;
                 return candidate;
             }
 
             current = current.Parent;
         }
 
+        searchedPaths = searched;
         return null;
+    }
+
+    /// <summary>
+    /// FR-MCP-REPL-007: Resolves REPL client options with diagnostic surface. Honors
+    /// explicit workspace-path or marker-file overrides. On failure, the
+    /// <paramref name="error"/> string enumerates every directory searched and
+    /// reports whether the marker file was missing or its signature failed to verify.
+    /// </summary>
+    /// <param name="workspacePathOverride">Optional explicit workspace path (CLI <c>--workspace-path</c>).</param>
+    /// <param name="markerPathOverride">Optional explicit marker file path (CLI <c>--marker-file</c>).</param>
+    /// <param name="options">The resolved options on success.</param>
+    /// <param name="error">Diagnostic message on failure.</param>
+    /// <returns><see langword="true"/> when resolution succeeds; otherwise <see langword="false"/>.</returns>
+    public static bool TryResolveWithDiagnostics(
+        string? workspacePathOverride,
+        string? markerPathOverride,
+        out McpServerClientOptions? options,
+        out string error)
+    {
+        options = null;
+        error = string.Empty;
+
+        string? markerPath;
+        IReadOnlyList<string> searchedPaths;
+
+        if (!string.IsNullOrWhiteSpace(markerPathOverride))
+        {
+            markerPath = markerPathOverride;
+            searchedPaths = new[] { markerPathOverride };
+            if (!File.Exists(markerPath))
+            {
+                error = $"Marker file not found at explicit path '{markerPath}'. Pass --workspace-path <dir> or place AGENTS-README-FIRST.yaml at that path.";
+                return false;
+            }
+        }
+        else
+        {
+            var searchRoot = !string.IsNullOrWhiteSpace(workspacePathOverride)
+                ? workspacePathOverride
+                : Environment.GetEnvironmentVariable("MCP_WORKSPACE_PATH")
+                    ?? Environment.GetEnvironmentVariable("MCP_WORKSPACE")
+                    ?? Environment.CurrentDirectory;
+
+            markerPath = FindMarkerFile(searchRoot, out searchedPaths);
+            if (markerPath is null)
+            {
+                var pathList = string.Join("; ", searchedPaths);
+                error = $"Marker file '{MarkerFileName}' not found. Searched: {pathList}. To override, pass --workspace-path <dir> or --marker-file <path>.";
+                return false;
+            }
+        }
+
+        var parsed = ParseMarker(File.ReadAllLines(markerPath));
+        if (parsed is null)
+        {
+            error = $"Marker file at '{markerPath}' is malformed: missing required fields (baseUrl/apiKey/workspacePath/signature).";
+            return false;
+        }
+
+        if (!VerifyMarkerSignature(parsed.Value))
+        {
+            error = $"Marker file at '{markerPath}' failed HMAC-SHA256 signature verification. Either the marker is stale (server restarted) or has been tampered with. Re-read the file or restart the server.";
+            return false;
+        }
+
+        options = new McpServerClientOptions
+        {
+            BaseUrl = new Uri(parsed.Value.BaseUrl),
+            ApiKey = parsed.Value.ApiKey,
+            WorkspacePath = parsed.Value.WorkspacePath,
+        };
+        return true;
     }
 
     internal static MarkerSettings? ParseMarker(IEnumerable<string> lines)

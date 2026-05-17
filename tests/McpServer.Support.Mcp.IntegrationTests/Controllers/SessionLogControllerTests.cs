@@ -177,6 +177,136 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    /// <summary>
+    /// FR-SUPPORT-010B: Body-binding failure returns RFC 7807 ProblemDetails with
+    /// the offending JSON path; the response must not echo the action parameter
+    /// name (<c>dto</c>) which misleads callers into thinking a wrapper is required.
+    /// </summary>
+    [Fact]
+    public async Task WhenPostingMalformedWorkspaceFieldThenReturnsProblemDetailsWithoutDtoKey()
+    {
+        var raw = "{\"sourceType\":\"Cursor\",\"sessionId\":\"Cursor-20260516T120000Z-bad-ws\",\"workspace\":\"not-an-object\"}";
+        using var content = new StringContent(raw, System.Text.Encoding.UTF8, "application/json");
+
+        var response = await _client.PostAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), content).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
+        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.DoesNotContain("\"dto\"", body, StringComparison.Ordinal);
+        Assert.Contains("workspace", body, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010B: Domain validation (missing SourceType) returns ProblemDetails
+    /// not the legacy <c>{"error":"..."}</c> plain object.
+    /// </summary>
+    [Fact]
+    public async Task WhenPostingMissingSourceTypeThenReturnsProblemDetails()
+    {
+        var dto = new UnifiedSessionLogDto { SourceType = null, SessionId = BuildSessionId("Cursor", "no-source") };
+
+        var response = await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
+        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.Contains("sourceType", body, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010C: <c>GET /mcpserver/sessionlog/{agent}/{sessionId}</c> returns
+    /// the just-created record so a POST/GET round-trip via REST works without
+    /// scanning the list endpoint.
+    /// </summary>
+    [Fact]
+    public async Task WhenPostingThenGetBySessionIdReturnsRecord()
+    {
+        var sessionId = BuildSessionId("Cursor", $"get-by-id-{Guid.NewGuid():N}");
+        var dto = CreateTestDto("Cursor", sessionId);
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto).ConfigureAwait(true);
+
+        var response = await _client.GetAsync(
+            new Uri($"/mcpserver/sessionlog/Cursor/{sessionId}", UriKind.Relative)).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var fetched = await response.Content.ReadFromJsonAsync<UnifiedSessionLogDto>().ConfigureAwait(true);
+        Assert.NotNull(fetched);
+        Assert.Equal(sessionId, fetched!.SessionId);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010C: <c>GET</c> by sessionId returns 404 when the session is
+    /// not found.
+    /// </summary>
+    [Fact]
+    public async Task WhenGettingMissingSessionIdThenReturns404()
+    {
+        var response = await _client.GetAsync(
+            new Uri("/mcpserver/sessionlog/Cursor/Cursor-20260101T000000Z-absent", UriKind.Relative))
+            .ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010C: <c>POST /mcpserver/sessionlog/{agent}/{sessionId}/turn</c>
+    /// appends a turn to an existing session and the turn is retrievable.
+    /// </summary>
+    [Fact]
+    public async Task WhenPostingTurnViaRestThenTurnIsRetrievable()
+    {
+        var sessionId = BuildSessionId("Cursor", $"turn-rest-{Guid.NewGuid():N}");
+        var dto = CreateTestDto("Cursor", sessionId);
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto).ConfigureAwait(true);
+
+        var newTurn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260516T120000Z-via-rest",
+            Timestamp = "2026-05-16T12:00:00Z",
+            QueryText = "appended turn",
+            Status = "completed"
+        };
+
+        var response = await _client.PostAsJsonAsync(
+            new Uri($"/mcpserver/sessionlog/Cursor/{sessionId}/turn", UriKind.Relative), newTurn)
+            .ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+
+        var fetched = await _client.GetFromJsonAsync<UnifiedSessionLogDto>(
+            new Uri($"/mcpserver/sessionlog/Cursor/{sessionId}", UriKind.Relative)).ConfigureAwait(true);
+        Assert.NotNull(fetched);
+        Assert.NotNull(fetched!.Turns);
+        Assert.Contains(fetched.Turns!, t => t.RequestId == "req-20260516T120000Z-via-rest");
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010C: Unsupported verb on the turn-append route returns 405 with
+    /// <c>Allow</c> naming the supported verbs.
+    /// </summary>
+    [Fact]
+    public async Task WhenPuttingTurnRouteThenReturns405WithAllowHeader()
+    {
+        var sessionId = BuildSessionId("Cursor", $"turn-verb-{Guid.NewGuid():N}");
+        var dto = CreateTestDto("Cursor", sessionId);
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto).ConfigureAwait(true);
+
+        var content = JsonContent.Create(new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260516T120000Z-put",
+            Status = "completed"
+        });
+        using var request = new HttpRequestMessage(HttpMethod.Put,
+            new Uri($"/mcpserver/sessionlog/Cursor/{sessionId}/turn", UriKind.Relative))
+        { Content = content };
+
+        var response = await _client.SendAsync(request).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.MethodNotAllowed, response.StatusCode);
+        Assert.Contains("POST", response.Content.Headers.Allow ?? response.Headers.GetValues("Allow"));
+    }
+
     private static UnifiedSessionLogDto CreateTestDto(string sourceType, string sessionId)
     {
         return new UnifiedSessionLogDto

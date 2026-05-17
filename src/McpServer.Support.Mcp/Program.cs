@@ -532,6 +532,39 @@ if (!builder.Environment.IsStaging())
     mvcBuilder.ConfigureApplicationPartManager(mgr =>
         mgr.FeatureProviders.Add(new ExcludeControllerFeatureProvider(typeof(DiagnosticController))));
 #endif
+
+// FR-SUPPORT-010B / TR-PLANNED-013A: Replace ASP.NET's default invalid-model-state
+// response shape ({"errors":{"dto":["..."]}}) with RFC 7807 ProblemDetails that
+// cites the actual offending JSON path. The "dto" key is the action parameter
+// name; surfacing it confuses callers into thinking a wrapper field is required.
+mvcBuilder.ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = ctx =>
+    {
+        var errors = ctx.ModelState
+            .Where(kvp => kvp.Value is { Errors.Count: > 0 })
+            .ToDictionary(
+                kvp => string.IsNullOrEmpty(kvp.Key) || kvp.Key == "dto" || kvp.Key == "body" || kvp.Key == "turn"
+                    ? "$"
+                    : kvp.Key,
+                kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).ToArray());
+
+        var problem = new Microsoft.AspNetCore.Mvc.ValidationProblemDetails(errors)
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Title = "Invalid request body.",
+            Detail = "Body must conform to the documented schema. Accepted top-level shape for session log POST: { \"sourceType\": string, \"sessionId\": string, optional \"workspace\": { project, targetFramework, repository, branch } }. No outer wrapper is required.",
+            Type = "https://docs.mcpserver/errors/invalid-body",
+        };
+        problem.Extensions["traceId"] = ctx.HttpContext.TraceIdentifier;
+
+        return new Microsoft.AspNetCore.Mvc.ObjectResult(problem)
+        {
+            StatusCode = StatusCodes.Status400BadRequest,
+            ContentTypes = { "application/problem+json" },
+        };
+    };
+});
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddMcpServer()
