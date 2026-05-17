@@ -37,30 +37,93 @@ promptTemplateId: default-marker-prompt
 
 ### Step 2: Verify Marker Signature
 
-Recompute the HMAC-SHA256 marker signature using the API key as the verifier:
+Recompute the HMAC-SHA256 marker signature using the workspace API key as the
+HMAC key. **The signed payload is canonicalised as `key=value` lines separated
+by a single LF (`\n`) — never CRLF, regardless of the host operating system.**
+The hex-encoded digest must match `signature.value` in the marker (case-insensitive).
+
+The canonical key order is:
+
+```text
+canonicalization=marker-v1\n
+port={Port}\n
+baseUrl={BaseUrl}\n
+apiKey={ApiKey}\n
+workspace={Workspace}\n
+workspacePath={WorkspacePath}\n
+pid={Pid}\n
+startedAt={StartedAt}\n
+markerWrittenAtUtc={MarkerWrittenAtUtc}\n
+serverStartedAtUtc={ServerStartedAtUtc}\n
+endpoints.health={EndpointHealth}\n
+endpoints.swagger={EndpointSwagger}\n
+endpoints.swaggerUi={EndpointSwaggerUi}\n
+endpoints.mcpTransport={EndpointMcpTransport}\n
+endpoints.sessionLog={EndpointSessionLog}\n
+endpoints.sessionLogDialog={EndpointSessionLogDialog}\n
+endpoints.contextSearch={EndpointContextSearch}\n
+endpoints.contextPack={EndpointContextPack}\n
+endpoints.contextSources={EndpointContextSources}\n
+endpoints.todo={EndpointTodo}\n
+endpoints.repo={EndpointRepo}\n
+endpoints.desktop={EndpointDesktop}\n
+endpoints.gitHub={EndpointGitHub}\n
+endpoints.tools={EndpointTools}\n
+endpoints.workspace={EndpointWorkspace}\n
+endpoints.serverStartupUtc={EndpointServerStartupUtc}\n
+endpoints.markerFileTimestamp={EndpointMarkerFileTimestamp}\n
+# Only emitted when agent_plugins is present in the marker:
+agentPlugins.policy={AgentPluginsPolicy}\n
+agentPlugins.contractDigest={AgentPluginsContractDigest}\n
+```
 
 ```csharp
 using System.Security.Cryptography;
 using System.Text;
 
-string ComputeMarkerSignature(string workspacePath, string apiKey, string baseUrl)
+string ComputeMarkerSignature(MarkerData marker)
 {
-    var payload = $"{workspacePath}|{apiKey}|{baseUrl}";
-    var keyBytes = Encoding.UTF8.GetBytes(apiKey);
-    var payloadBytes = Encoding.UTF8.GetBytes(payload);
-    
-    using var hmac = new HMACSHA256(keyBytes);
-    var hashBytes = hmac.ComputeHash(payloadBytes);
-    return Convert.ToBase64String(hashBytes);
+    var payload = new StringBuilder();
+    void Line(string key, string value) =>
+        payload.Append(key).Append('=').Append(value ?? string.Empty).Append('\n');
+
+    Line("canonicalization", marker.SignatureCanonicalization); // "marker-v1"
+    Line("port", marker.Port.ToString(CultureInfo.InvariantCulture));
+    Line("baseUrl", marker.BaseUrl);
+    Line("apiKey", marker.ApiKey);
+    Line("workspace", marker.Workspace);
+    Line("workspacePath", marker.WorkspacePath);
+    Line("pid", marker.Pid.ToString(CultureInfo.InvariantCulture));
+    Line("startedAt", marker.StartedAt);
+    Line("markerWrittenAtUtc", marker.MarkerWrittenAtUtc);
+    Line("serverStartedAtUtc", marker.ServerStartedAtUtc);
+    foreach (var (key, value) in marker.Endpoints) // emit in canonical order above
+        Line($"endpoints.{key}", value);
+    if (marker.AgentPlugins is not null)
+    {
+        Line("agentPlugins.policy", marker.AgentPlugins.Policy);
+        Line("agentPlugins.contractDigest", marker.AgentPlugins.ContractDigest);
+    }
+
+    using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(marker.ApiKey));
+    var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(payload.ToString()));
+    return Convert.ToHexString(hash); // uppercase hex; comparison is case-insensitive
 }
 
 // Verify
-var computedSignature = ComputeMarkerSignature(markerData.WorkspacePath, markerData.ApiKey, markerData.BaseUrl);
-if (computedSignature != markerData.MarkerSignature)
+var computed = ComputeMarkerSignature(markerData);
+if (!string.Equals(computed, markerData.SignatureValue, StringComparison.OrdinalIgnoreCase))
 {
     throw new InvalidOperationException("MCP_UNTRUSTED: Marker signature verification failed");
 }
 ```
+
+> **Common pitfall:** `StringBuilder.AppendLine` honours
+> `Environment.NewLine` and emits CRLF on Windows, which breaks signature
+> verification against a server-produced marker. Always append a literal `\n`
+> (or use the helper shown above). This was the root cause of the v6.0.0 REPL
+> tool's "Authentication required" failure for agent-stdio mode on Windows -
+> fixed in v6.1.0 (FR-MCP-REPL-007 / TR-MCP-REPL-008 regression).
 
 ### Step 3: Nonce Handshake
 

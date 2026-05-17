@@ -109,6 +109,44 @@ public sealed class MarkerFileClientOptionsResolverTests
     }
 
     /// <summary>
+    /// FR-MCP-REPL-007 / TR-MCP-REPL-008 regression: the production MCP server
+    /// signs marker files with raw LF (<c>\n</c>) line separators via
+    /// <c>MarkerFileService.AppendPayloadLine</c>. The resolver must hash the
+    /// payload with the same line ending or signatures generated on Linux/macOS
+    /// (and on Windows by the .NET server which uses literal <c>'\n'</c>) will
+    /// fail to verify when the REPL runs on Windows. This test asserts the
+    /// resolver successfully verifies a marker whose signature was computed over
+    /// an LF-only payload, independent of the running platform's
+    /// <see cref="Environment.NewLine"/>.
+    /// </summary>
+    [Fact]
+    public void TryResolveWithDiagnostics_VerifiesSignatureBuiltWithLfLineEndings()
+    {
+        var root = CreateTemporaryWorkspace();
+        try
+        {
+            File.WriteAllText(
+                Path.Combine(root, "AGENTS-README-FIRST.yaml"),
+                BuildServerCompatibleMarker(root));
+
+            var ok = MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(
+                workspacePathOverride: root,
+                markerPathOverride: null,
+                out var options,
+                out var error);
+
+            Assert.True(ok, $"Resolver rejected an LF-signed marker: {error}");
+            Assert.NotNull(options);
+            Assert.Equal("test-api-key", options!.ApiKey);
+            Assert.Equal(root, options.WorkspacePath);
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
+    /// <summary>
     /// FR-MCP-REPL-007: When a marker exists but signature verification fails, the
     /// diagnostic reports both the marker path AND identifies signature mismatch
     /// (rather than the generic "not found" message).
@@ -212,22 +250,127 @@ signature:
 """;
     }
 
-    private static string BuildSignaturePayload(
+    /// <summary>
+    /// Builds a marker file whose HMAC payload is rendered with literal LF
+    /// (<c>\n</c>) separators, matching the production server's
+    /// <c>MarkerFileService.AppendPayloadLine</c>. Used by the LF regression
+    /// test above so a failing resolver on Windows is easy to spot independent
+    /// of how the other helper builds its own marker.
+    /// </summary>
+    private static string BuildServerCompatibleMarker(string workspacePath)
+    {
+        const string apiKey = "test-api-key";
+        var endpoints = new Dictionary<string, string>
+        {
+            ["health"] = "/health",
+            ["swagger"] = "/swagger/v1/swagger.json",
+            ["swaggerUi"] = "/swagger",
+            ["mcpTransport"] = "/mcp-transport",
+            ["sessionLog"] = "/mcpserver/sessionlog",
+            ["sessionLogDialog"] = "/mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog",
+            ["contextSearch"] = "/mcpserver/context/search",
+            ["contextPack"] = "/mcpserver/context/pack",
+            ["contextSources"] = "/mcpserver/context/sources",
+            ["todo"] = "/mcpserver/todo",
+            ["repo"] = "/mcpserver/repo",
+            ["desktop"] = "/mcpserver/desktop",
+            ["gitHub"] = "/mcpserver/gh",
+            ["tools"] = "/mcpserver/tools",
+            ["workspace"] = "/mcpserver/workspace",
+            ["serverStartupUtc"] = "/server-startup-utc",
+            ["markerFileTimestamp"] = "/marker-file-timestamp?repoPath={workspacePath}",
+        };
+
+        var payload = BuildSignaturePayloadLf(apiKey, workspacePath, endpoints);
+        using var hmac = new System.Security.Cryptography.HMACSHA256(System.Text.Encoding.UTF8.GetBytes(apiKey));
+        var signature = Convert.ToHexString(hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(payload)));
+
+        return $$"""
+port: 7147
+baseUrl: http://localhost:7147
+apiKey: {{apiKey}}
+endpoints:
+  health: /health
+  swagger: /swagger/v1/swagger.json
+  swaggerUi: /swagger
+  mcpTransport: /mcp-transport
+  sessionLog: /mcpserver/sessionlog
+  sessionLogDialog: /mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog
+  contextSearch: /mcpserver/context/search
+  contextPack: /mcpserver/context/pack
+  contextSources: /mcpserver/context/sources
+  todo: /mcpserver/todo
+  repo: /mcpserver/repo
+  desktop: /mcpserver/desktop
+  gitHub: /mcpserver/gh
+  tools: /mcpserver/tools
+  workspace: /mcpserver/workspace
+  serverStartupUtc: /server-startup-utc
+  markerFileTimestamp: /marker-file-timestamp?repoPath={workspacePath}
+workspace: TestWorkspace
+workspacePath: {{workspacePath}}
+pid: 1234
+startedAt: 2026-04-06T20:29:10.3301205+00:00
+markerWrittenAtUtc: 2026-04-06T20:29:10.3301205+00:00
+serverStartedAtUtc: 2026-04-06T20:29:05.1397259+00:00
+signature:
+  algorithm: HMAC-SHA256
+  canonicalization: marker-v1
+  verifier: workspace_api_key
+  value: {{signature}}
+""";
+    }
+
+    private static string BuildSignaturePayloadLf(
         string apiKey,
         string workspacePath,
         IReadOnlyDictionary<string, string> endpoints)
     {
         var builder = new System.Text.StringBuilder();
-        builder.AppendLine("canonicalization=marker-v1");
-        builder.AppendLine("port=7147");
-        builder.AppendLine("baseUrl=http://localhost:7147");
-        builder.AppendLine($"apiKey={apiKey}");
-        builder.AppendLine("workspace=TestWorkspace");
-        builder.AppendLine($"workspacePath={workspacePath}");
-        builder.AppendLine("pid=1234");
-        builder.AppendLine("startedAt=2026-04-06T20:29:10.3301205+00:00");
-        builder.AppendLine("markerWrittenAtUtc=2026-04-06T20:29:10.3301205+00:00");
-        builder.AppendLine("serverStartedAtUtc=2026-04-06T20:29:05.1397259+00:00");
+        void Line(string key, string value) => builder.Append(key).Append('=').Append(value).Append('\n');
+
+        Line("canonicalization", "marker-v1");
+        Line("port", "7147");
+        Line("baseUrl", "http://localhost:7147");
+        Line("apiKey", apiKey);
+        Line("workspace", "TestWorkspace");
+        Line("workspacePath", workspacePath);
+        Line("pid", "1234");
+        Line("startedAt", "2026-04-06T20:29:10.3301205+00:00");
+        Line("markerWrittenAtUtc", "2026-04-06T20:29:10.3301205+00:00");
+        Line("serverStartedAtUtc", "2026-04-06T20:29:05.1397259+00:00");
+
+        foreach (var endpointName in new[]
+        {
+            "health", "swagger", "swaggerUi", "mcpTransport", "sessionLog", "sessionLogDialog",
+            "contextSearch", "contextPack", "contextSources", "todo", "repo", "desktop",
+            "gitHub", "tools", "workspace", "serverStartupUtc", "markerFileTimestamp",
+        })
+        {
+            Line($"endpoints.{endpointName}", endpoints[endpointName]);
+        }
+
+        return builder.ToString();
+    }
+
+    private static string BuildSignaturePayload(
+        string apiKey,
+        string workspacePath,
+        IReadOnlyDictionary<string, string> endpoints)
+    {
+        // FR-MCP-REPL-007 fix: match the server's LF-only payload format so
+        // unit-test markers and real server markers verify identically.
+        var builder = new System.Text.StringBuilder();
+        builder.Append("canonicalization=marker-v1\n");
+        builder.Append("port=7147\n");
+        builder.Append("baseUrl=http://localhost:7147\n");
+        builder.Append($"apiKey={apiKey}\n");
+        builder.Append("workspace=TestWorkspace\n");
+        builder.Append($"workspacePath={workspacePath}\n");
+        builder.Append("pid=1234\n");
+        builder.Append("startedAt=2026-04-06T20:29:10.3301205+00:00\n");
+        builder.Append("markerWrittenAtUtc=2026-04-06T20:29:10.3301205+00:00\n");
+        builder.Append("serverStartedAtUtc=2026-04-06T20:29:05.1397259+00:00\n");
 
         foreach (var endpointName in new[]
         {
@@ -250,7 +393,7 @@ signature:
             "markerFileTimestamp",
         })
         {
-            builder.AppendLine($"endpoints.{endpointName}={endpoints[endpointName]}");
+            builder.Append($"endpoints.{endpointName}={endpoints[endpointName]}\n");
         }
 
         return builder.ToString();

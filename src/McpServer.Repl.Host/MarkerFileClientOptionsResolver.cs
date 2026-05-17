@@ -325,17 +325,22 @@ public static class MarkerFileClientOptionsResolver
 
     private static string BuildSignaturePayload(MarkerSettings marker)
     {
+        // FR-MCP-REPL-007 fix: the server's MarkerFileService.AppendPayloadLine
+        // always terminates with a literal LF ('\n'). StringBuilder.AppendLine
+        // honours Environment.NewLine which is CRLF on Windows, so we cannot use
+        // it here - the HMAC payload must be byte-identical to what the server
+        // hashed regardless of which OS the REPL is running on.
         var builder = new StringBuilder();
-        builder.AppendLine($"canonicalization={marker.SignatureCanonicalization}");
-        builder.AppendLine($"port={marker.Port}");
-        builder.AppendLine($"baseUrl={marker.BaseUrl}");
-        builder.AppendLine($"apiKey={marker.ApiKey}");
-        builder.AppendLine($"workspace={marker.Workspace}");
-        builder.AppendLine($"workspacePath={marker.WorkspacePath}");
-        builder.AppendLine($"pid={marker.Pid}");
-        builder.AppendLine($"startedAt={marker.StartedAt}");
-        builder.AppendLine($"markerWrittenAtUtc={marker.MarkerWrittenAtUtc}");
-        builder.AppendLine($"serverStartedAtUtc={marker.ServerStartedAtUtc}");
+        AppendLfLine(builder, "canonicalization", marker.SignatureCanonicalization);
+        AppendLfLine(builder, "port", marker.Port);
+        AppendLfLine(builder, "baseUrl", marker.BaseUrl);
+        AppendLfLine(builder, "apiKey", marker.ApiKey);
+        AppendLfLine(builder, "workspace", marker.Workspace);
+        AppendLfLine(builder, "workspacePath", marker.WorkspacePath);
+        AppendLfLine(builder, "pid", marker.Pid);
+        AppendLfLine(builder, "startedAt", marker.StartedAt);
+        AppendLfLine(builder, "markerWrittenAtUtc", marker.MarkerWrittenAtUtc);
+        AppendLfLine(builder, "serverStartedAtUtc", marker.ServerStartedAtUtc);
 
         foreach (var endpointName in new[]
         {
@@ -359,18 +364,32 @@ public static class MarkerFileClientOptionsResolver
         })
         {
             marker.Endpoints.TryGetValue(endpointName, out var endpointValue);
-            builder.AppendLine($"endpoints.{endpointName}={endpointValue ?? string.Empty}");
+            AppendLfLine(builder, $"endpoints.{endpointName}", endpointValue ?? string.Empty);
         }
 
         marker.AgentPlugins.TryGetValue("policy", out var policy);
         marker.AgentPlugins.TryGetValue("contract_digest", out var contractDigest);
         if (policy is not null || contractDigest is not null)
         {
-            builder.AppendLine($"agentPlugins.policy={policy ?? string.Empty}");
-            builder.AppendLine($"agentPlugins.contractDigest={contractDigest ?? string.Empty}");
+            AppendLfLine(builder, "agentPlugins.policy", policy ?? string.Empty);
+            AppendLfLine(builder, "agentPlugins.contractDigest", contractDigest ?? string.Empty);
         }
 
         return builder.ToString();
+    }
+
+    /// <summary>
+    /// Mirrors the server's <c>MarkerFileService.AppendPayloadLine</c>: writes
+    /// <c>{key}={value}\n</c> with a literal LF, normalising any embedded CRLF
+    /// in <paramref name="value"/> to LF so the HMAC payload matches across
+    /// Linux / macOS / Windows.
+    /// </summary>
+    private static void AppendLfLine(StringBuilder builder, string key, object? value)
+    {
+        builder.Append(key)
+            .Append('=')
+            .Append((value?.ToString() ?? string.Empty).ReplaceLineEndings("\n"))
+            .Append('\n');
     }
 
     /// <summary>
