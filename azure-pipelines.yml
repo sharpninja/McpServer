@@ -191,10 +191,11 @@ jobs:
           pwsh: true
           targetType: inline
           script: |
-            npx --yes markdown-link-check --quiet README.md
+            $config = Join-Path $env:BUILD_SOURCESDIRECTORY '.markdown-link-check.json'
+            npx --yes markdown-link-check --config $config --quiet README.md
             Get-ChildItem docs -Recurse -Filter *.md | ForEach-Object {
               $file = $_.FullName
-              npx --yes markdown-link-check --quiet $file
+              npx --yes markdown-link-check --config $config --quiet $file
               if ($LASTEXITCODE -ne 0) {
                 throw "markdown-link-check failed for $file"
               }
