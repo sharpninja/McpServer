@@ -142,6 +142,10 @@ The ingestion pipeline shall parse legacy Markdown session log files (matching a
 
 One workspace is designated as the **primary** workspace - served by the host process directly with no child `WebApplication` spun up. Only a marker file is written. Resolution order: (1) first enabled workspace with `IsPrimary = true` and lowest port; (2) enabled workspace with lowest port if none marked primary; (3) no primary if no workspaces enabled.
 
+**Status:** ✅ Complete
+
+**Covered by:** `WorkspaceProcessManager`, `WorkspaceConfigEntry`, `Program.cs` primary-workspace resolution block
+
 ## FR-MCP-026 OIDC Authentication
 
 The server shall support standards-based OIDC JWT Bearer authentication for management endpoints using a configurable open-source .NET OIDC provider. Optional external identity federation (for example, GitHub) may be configured through that provider. Management endpoints (agent mutations) require JWT; read endpoints use existing API key auth.
@@ -166,7 +170,7 @@ A standalone CQRS framework (`McpServer.Cqrs`) shall provide async command/query
 
 **Status:** ✅ Complete
 
-**Covered by:** `McpServer.Cqrs` project (`Dispatcher`, `CallContext`, `CorrelationId`, `Result<T>`, `IPipelineBehavior`), `McpServer.Cqrs.Mvvm` (IViewModelRegistry, ViewModelRegistryExtensions), `McpServer.UI.Core` (WorkspaceListViewModel, WorkspacePolicyViewModel, AddUiCore DI extension)
+**Covered by:** `McpServer.Cqrs` project (`Dispatcher`, `CallContext`, `CorrelationId`, `Result<T>`, `IPipelineBehavior`), `McpServer.Cqrs.Mvvm` (IViewModelRegistry, ViewModelRegistryExtensions). Workspace and policy view-models moved to the separate `McpServerManager` repository (former `McpServer.UI.Core` / `WorkspaceListViewModel` / `WorkspacePolicyViewModel` / `AddUiCore` DI extension).
 
 **Implementation:** 37 unit tests passing. Provides `ICommand<T>`/`IQuery<T>` message types, `ICommandHandler<,>`/`IQueryHandler<,>` handlers, `Dispatcher` with pipeline behavior chain, `CallContext` with `CorrelationId` for structured logging, and `Result<T>` monad with success/error paths. MVVM layer adds `IViewModelRegistry` for CLI exec command support.
 
@@ -232,6 +236,10 @@ The server shall support CRUD operations for Functional Requirements (FR), Techn
 
 The server shall expose a requirements document generation endpoint that renders any canonical requirements document as Markdown and exports all documents directly to the workspace with canonical filenames.
 
+**Status:** ✅ Complete
+
+**Covered by:** `RequirementsController` (`POST /mcpserver/requirements/generate`), `RequirementsDocumentService`, `RequirementsDocumentRenderer`
+
 ## FR-MCP-042 Requirements Management MCP Tools
 
 The STDIO MCP tool surface shall expose requirements management tools for listing, generating, creating, updating, and deleting requirements entries so AI agents can manage requirements directly from a conversation.
@@ -278,7 +286,7 @@ The server shall support `appsettings.yaml` as an optional configuration source 
 
 The server shall provide a global prompt template registry with REST API endpoints (`/mcpserver/templates`) and MCP tools for CRUD operations (list, get, create, update, delete) and test/render operations. Templates are stored as YAML files, support Handlebars rendering with declared variables, and are filterable by category, tag, and keyword. A Director TUI tab shall enable template browsing and preview.
 
-**Covered by:** `PromptTemplateController`, `PromptTemplateService`, `PromptTemplateRenderer`, `FwhMcpTools` (6 template tools), `TemplateClient`, `TemplatesScreen`
+**Covered by:** `PromptTemplateController`, `PromptTemplateService`, `PromptTemplateRenderer`, `FwhMcpTools` (6 template tools), `TemplateClient`. The Director template-browsing TUI surface (`TemplatesScreen`) moved to the separate `McpServerManager` repository.
 
 ## FR-MCP-050 Per-Agent Workspace Runtime Management
 
@@ -364,7 +372,7 @@ The system SHALL enforce a DI-centered Single Source of Truth architecture acros
 
 The server shall enforce canonical identifier conventions for newly created TODO and session log payloads:
 
-- Persisted TODO IDs must match either `<SDLC-PHASE>-<AREA>-###` using uppercase kebab-case or `ISSUE-{number}` for canonical GitHub-backed TODOs.
+- Persisted TODO IDs must match either uppercase kebab-case ending in a three-digit sequence suffix (for example `PHASE0-REMOTE-001` or `MCP-TODO-CREATE-001`) or `ISSUE-{number}` for canonical GitHub-backed TODOs.
 - Create requests may use `ISSUE-NEW` only as a temporary server-side alias for immediate GitHub-backed TODO creation; persisted TODO IDs must still be canonical.
 - Session IDs must match `<Agent>-<yyyyMMddTHHmmssZ>-<suffix>` and be prefixed by the exact `sourceType`/`agent`.
 - Request IDs must match `req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal>`.
@@ -395,8 +403,10 @@ Functional behavior shall include:
 
 **Covered by:** `GitHubIntegrationOptions`, `FileGitHubWorkspaceTokenStore`, `GitHubController`, `GitHubCliService`, `ProcessRunner`, `GitHubClient`
 
-#### FR-MCP-064: Marketing and Adoption Documentation
+## FR-MCP-064 Marketing and Adoption Documentation
+
 The system SHALL provide marketing-oriented documentation that clearly explains what McpServer is, its key feature set, why adopters need it, and the currently supported UI tooling surfaces (including VS extension and Web UI experiences).
+
 **Technical Implementation:** [TR-MCP-DOC-001](./Technical-Requirements.md#tr-mcp-doc-001) | [Mapping](./TR-per-FR-Mapping.md)
 
 ## FR-MCP-065 Direct Website URL Ingestion
@@ -529,29 +539,57 @@ The server shall support an opt-in federation mode that proxies incoming request
 
 The server shall accept raw text or markdown content via a REST endpoint and MCP tool, chunk it, generate embeddings, store it in the context database and vector index, and optionally trigger a GraphRAG re-index. Documents ingested this way shall use source type "adhoc-text" by default and support caller-specified title, source type, and source key metadata.
 
+**Status:** ✅ Complete
+
+**Covered by:** `GraphRagController` (`POST /mcpserver/graphrag/documents/ingest`), `McpServer.GraphRag` (`GraphRagService` ad-hoc ingestion path), `FwhMcpTools` (graphrag ingest tool)
+
 ## FR-MCP-079 GraphRAG Entity and Relationship CRUD
 
 The server shall provide full CRUD operations for explicit graph entity nodes and relationship edges, persisted in workspace-scoped EF Core tables. Entities shall have name, type, description, and extensible JSON metadata. Relationships shall link two entities with a typed, weighted, described edge. Deleting an entity shall cascade to all its relationships. All operations shall be available via REST endpoints, MCP tools, and REPL commands.
+
+**Status:** ✅ Complete
+
+**Covered by:** `GraphRagController` (entity + relationship endpoints), `McpServer.GraphRag` (`GraphRagService` entity / relationship CRUD), `GraphEntityEntity`, `GraphRelationshipEntity`, `FwhMcpTools` (graphrag entity/relationship tools), `McpServer.Repl.Core` (graphrag command shapes)
 
 ## FR-MCP-080 GraphRAG Document Management
 
 The server shall provide endpoints to list indexed documents with chunk counts and token totals, retrieve chunks for a specific document ordered by chunk index, and delete a document with cascade removal of its chunks and corresponding vector index entries. All operations shall be workspace-scoped and available via REST endpoints, MCP tools, and REPL commands.
 
+**Status:** ✅ Complete
+
+**Covered by:** `GraphRagController` (document list/get/delete endpoints), `McpServer.GraphRag` (`GraphRagService` document management), `ContextDocumentEntity`, `ContextChunkEntity`, `FwhMcpTools` (graphrag document tools)
+
 ## FR-MCP-081 Byrd Iteration Phase and TODO Execution Persistence
 
 The server shall persist Byrd iteration phases, decomposed execution TODOs, and TODO checkpoints so agents can resume multi-step work from MCP state instead of chat history. Persisted execution TODOs shall carry goal, summary, acceptance criteria, constraints, requirement links, relevant files, next action, test plan state, validation state, and linked session turn identifiers.
+
+**Status:** ✅ Complete
+
+**Covered by:** `TodoExecutionController` (`/mcpserver/todo-execution/*`), `TodoExecutionService`, Byrd phase + checkpoint entities, `McpDbContext`
 
 ## FR-MCP-082 Bounded Byrd Execution Context Hydration
 
 The server shall return a bounded active TODO execution context and a checkpoint-based delta context for the current execution TODO. Hydration shall prefer concise requirement snippets, concise recent session-turn summaries, relevant files, artifacts, test state, validation state, and execution pointers, and shall not return full plan markdown or broad session-log history when compact state is sufficient.
 
+**Status:** ✅ Complete
+
+**Covered by:** `TodoExecutionController` (`active`, `next-ready`, `{todoId}`, `{todoId}/delta` endpoints), `TodoExecutionService`
+
 ## FR-MCP-083 Structured Android Validation for Byrd TODOs
 
 The server shall expose a structured `adb_step` surface for safe Android validation actions used during Byrd execution. Supported actions shall be limited to fixed safe operations such as screenshot, tap, swipe, text input, keyevent, wait, app launch, and focus inspection, and their results shall be storable as validation evidence and TODO checkpoint artifacts.
 
+**Status:** ✅ Complete
+
+**Covered by:** `TodoExecutionController` (`POST /mcpserver/todo-execution/adb/step`), `TodoExecutionService.AdbStepAsync`, `AdbStepAction` / `AdbStepRequest` models, `FwhMcpTools` (`adb_step` tool)
+
 ## FR-MCP-084 Requirements Wiki Workspace Export/Import
 
 The server, REPL, and agent plugins shall support requirements export and import in wiki format. Wiki export shall write both Azure DevOps Wiki and GitHub Wiki document folders directly under docs/Project/wiki. Wiki import shall detect wiki document folders, select the authoritative platform source using manifest and file modified timestamps, and create, update, delete, or ignore requirements and mappings to match the selected source.
+
+**Status:** ✅ Complete
+
+**Covered by:** `RequirementsController` (wiki export + ingest endpoints), `RequirementsDocumentService` (wiki renderer + parser), `McpServer.Repl.Core` (requirements wiki workflow commands)
 
 ## FR-MCP-REPL-001 YAML Protocol STDIO REPL Host
 
@@ -614,9 +652,33 @@ All REPL functional requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005) are c
 
 ---
 
+## FR-MCP-REPL-007 REPL Credential Discovery Diagnostics
+
+`mcpserver-repl --agent-stdio` shall expose `--workspace-path` and `--marker-file` CLI overrides for credential resolution. When marker discovery fails, the diagnostic message shall enumerate every directory searched and distinguish "marker not found" from "marker signature mismatch". The diagnostic is forwarded into the `McpServerClient` and appended to the "Authentication required" exception so callers see the root cause rather than the generic message.
+
+**Covered by:** `MarkerFileClientOptionsResolver.TryResolveWithDiagnostics`, `Program.cs` (`--workspace-path` / `--marker-file`), `McpClientBase.EnsureAuthenticated`
+
 ## FR-SUPPORT-010 MCP Context Unification
 
 Local MCP server providing context retrieval, TODO management, repository access, session logging, and ingestion capabilities for AI agent integration.
 
 **Covered by:** `ContextController`, `TodoController`, `RepoController`, `SessionLogController`, `McpServerMcpTools`, `McpDbContext`, `HybridSearchService`, `EmbeddingService`, `VectorIndexService`, `Fts5SearchService`, `RepoFileService`, `IngestionCoordinator`
+
+## FR-SUPPORT-010A SessionLog Workspace Stamping
+
+Session log POST shall stamp the resolved workspace ID on every persisted row (parent SessionLog plus all child entities: turns, actions, tags, context items, processing dialog, commits, string-list items) so a POST followed by a GET under the same workspace context returns the same record. When no workspace context is resolved (ingestion / batch import paths), WorkspaceId defaults to empty string and the DbContext-level auto-stamp populates it from `_workspaceId` if available.
+
+**Covered by:** `SessionLogService.StampWorkspaceId`, `McpDbContext.StampWorkspaceId`, `SessionLogControllerTests.WhenPostingThenGetBySessionIdReturnsRecord`
+
+## FR-SUPPORT-010B SessionLog ProblemDetails Errors
+
+Session log POST shall return RFC 7807 ProblemDetails on body-binding or validation failure. Error responses cite the offending JSON path under `errors`, never the action-parameter name. Content-Type is `application/problem+json`. The accepted top-level shape is documented in the response `detail`.
+
+**Covered by:** `Program.cs` (`InvalidModelStateResponseFactory`), `SessionLogController.SubmitAsync` (`ValidationProblem` calls), `SessionLogControllerTests.WhenPostingMalformedWorkspaceFieldThenReturnsProblemDetailsWithoutDtoKey`
+
+## FR-SUPPORT-010C SessionLog REST Surface Completion
+
+Session log REST shall expose `GET /mcpserver/sessionlog/{agent}/{sessionId}` (single-record fetch under tenancy) and `POST /mcpserver/sessionlog/{agent}/{sessionId}/turn` (turn-append by RequestId). Unsupported verbs on either route return 405 Method Not Allowed with an `Allow` header.
+
+**Covered by:** `SessionLogController.GetByIdAsync`, `SessionLogController.UpsertTurnAsync`, `SessionLogService.GetAsync`, `SessionLogService.UpsertTurnAsync`
 

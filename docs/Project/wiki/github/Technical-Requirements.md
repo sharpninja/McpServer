@@ -65,6 +65,26 @@ No alternate direct-launch path is permitted for pooled workloads; pooled agents
 
 **Covered by:** `ISessionLogWorkflow`, `SessionLogWorkflow`, `SessionLogWorkflowContext`, `SessionLogTurnContext`, `ITodoWorkflow`, `TodoWorkflow`, `IMcpHostedAgent.PowerShellSessions`, `IHostedPowerShellSessionManager`, `McpHostedAgentToolAdapter`, `HostedPowerShellSessionManager`, `HostedPowerShellSessionHost`, `PowerShellSessionCreateResult`, `PowerShellSessionCommandResult`, `PowerShellSessionCloseResult`, `McpServerClient`, `RepoClient`, `DesktopClient`, `IMcpSessionIdentifierFactory`, `McpSessionIdentifierFactory`
 
+## TR-MCP-AGENT-008
+
+**Agent Pool Orchestration** — Reserved/planned: orchestrates a pool of agents for parallel task processing. Not yet implemented; placeholder for FR-MCP-028 / FR-MCP-050 traceability.
+
+## TR-MCP-AGENT-009
+
+**Agent Plugin Discovery** — Reserved/planned: discovers installed agent plugins and validates their contracts. Not yet implemented; placeholder for FR-MCP-050 traceability.
+
+## TR-MCP-AGENT-010
+
+**Agent Process Lifecycle** — Reserved/planned: manages start/stop/health of agent host processes. Not yet implemented; placeholder for FR-MCP-050 traceability.
+
+## TR-MCP-AGENT-011
+
+**Agent State Synchronization** — Reserved/planned: synchronizes agent state across pool members. Not yet implemented; placeholder for FR-MCP-050 traceability.
+
+## TR-MCP-AGENT-012
+
+**Agent Notification Bus** — Reserved/planned: routes notifications between agents and the workspace event bus. Not yet implemented; placeholder for FR-MCP-050 traceability.
+
 ## TR-MCP-AGENT-013
 
 **PowerShell McpSession Dual-Path Session Cache Resolution** — `tools/powershell/McpSession.psm1` SHALL persist the canonical current session object to `.mcpSession/current-session.json` whenever session state is saved, SHALL consult that current-session cache before falling back to the legacy `.mcpServer/session.yaml` wrapper when resolving the active session, and SHALL reuse the cached current-session `sessionId` during initialization when the cache matches the requested agent/model and the session is still active.
@@ -448,7 +468,9 @@ SQLite FTS5 full-text search support and hybrid ranking.
 ## TR-MCP-HTTP-002
 
 **Detailed and Sanitized HTTP 500 Error Contract** — All HTTP endpoints that return status code 500 SHALL emit a structured response body containing a non-empty human-readable error description that identifies the failing operation and provides actionable diagnostic context for the caller. The contract SHALL be applied centrally so endpoint implementations do not duplicate exception-to-response formatting. Response detail SHALL be sanitized to avoid leaking secrets, tokens, connection strings, or raw stack traces, while server-side logs SHALL retain the full exception detail needed for root-cause analysis.
-**Status:** 🔴 Planned
+**Status:** ✅ Complete
+
+**Covered by:** `src/McpServer.Support.Mcp/Program.cs` `InvalidModelStateResponseFactory` (centralized RFC 7807 ProblemDetails emission for binder/validation failures, paired with `ValidationProblem` / `Problem` controller helpers for domain errors); `SessionLogController.SubmitAsync` and `GetByIdAsync` route through the centralized path. Sanitization defers to ASP.NET Core's default ProblemDetails serialization, which omits stack traces outside the Development environment.
 
 ## TR-MCP-INGEST-001
 
@@ -468,7 +490,7 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 ## TR-MCP-LOG-002
 
-**Identifier Naming Validation** — `TodoValidator` SHALL validate persisted TODO IDs against the canonical regex set `^[A-Z]+-[A-Z0-9]+-\d{3}$` or `^ISSUE-\d+$` for create/update dependency paths across all configured TODO storage providers (`yaml` and `database` per TR-MCP-TODO-005). `ISSUE-NEW` SHALL remain a create-time alias handled before persistence, not a persisted TODO identifier. `SessionLogIdentifierValidator` SHALL validate session/request IDs using canonical timestamped patterns and enforce exact source-type prefix parity (`SessionId` starts with `{sourceType}-` or `{agent}-`). Invalid values return HTTP 400 at controller boundaries and `ArgumentException` for direct service invocation.
+**Identifier Naming Validation** — `TodoValidator` SHALL validate persisted TODO IDs against the canonical regex set `^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\d{3}$` or `^ISSUE-\d+$` for create/update dependency paths across all configured TODO storage providers (`yaml` and `database` per TR-MCP-TODO-005). `ISSUE-NEW` SHALL remain a create-time alias handled before persistence, not a persisted TODO identifier. `SessionLogIdentifierValidator` SHALL validate session/request IDs using canonical timestamped patterns and enforce exact source-type prefix parity (`SessionId` starts with `{sourceType}-` or `{agent}-`). Invalid values return HTTP 400 at controller boundaries and `ArgumentException` for direct service invocation.
 **Status:** ✅ Complete
 
 **Covered by:** `TodoValidator`, `TodoService`, `EfTodoService`, `TodoCreationService`, `SessionLogIdentifierValidator`, `SessionLogController`, `SessionLogService`
@@ -494,6 +516,10 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 **EF Core Global Query Filter for WorkspaceId** — `McpDbContext` accepts optional `WorkspaceContext` to capture `_workspaceId` per-instance. `OnModelCreating` applies `.HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId)` on all 14 entity types. Empty `_workspaceId` disables filtering (backward compatible). `IgnoreQueryFilters()` escapes for cross-workspace admin queries. `WorkspaceId TEXT NOT NULL DEFAULT ''` column with indexes on all entity tables.
 **Covered by:** `McpDbContext`, all entity types (`WorkspaceId` property)
+
+## TR-MCP-MT-003A
+
+`SessionLogService` injects an optional `WorkspaceContext` and stamps `WorkspaceId` on every entity it persists. When the context is null (ingestion / batch import path), the service skips stamping and relies on `McpDbContext.SaveChangesAsync` to auto-fill `WorkspaceId` for Added entities from the DbContext's resolved `_workspaceId`. This ensures POST/GET round-trips work under the same workspace context AND existing rows with empty WorkspaceId remain visible when no workspace header is set.
 
 ## TR-MCP-OPS-001
 
@@ -555,6 +581,10 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **Covered by:** `McpServer.Repl.Core` (`IGenericClientPassthrough`, `ClientCommandShapes`), `McpServer.Repl.Host` (`GenericClientPassthrough`)
 
+## TR-MCP-REPL-008
+
+`MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(workspacePathOverride, markerPathOverride, out options, out error)` returns success/failure plus a human-readable diagnostic. The diagnostic enumerates every directory walked, names the marker file when found, and distinguishes "not found" from "malformed" and "signature mismatch". `FindMarkerFile(startPath, out searchedPaths)` exposes the same path list for callers that want raw enumeration. The legacy parameterless `Resolve()` remains for back-compat.
+
 ## TR-MCP-REQ-001
 
 **AI Requirements Analysis Service** — `RequirementsService` invokes `ICopilotClient` with a structured prompt containing the TODO item's title, description, technical details, implementation tasks, and pre-existing FR/TR assignments. The prompt instructs Copilot to identify existing FRs/TRs from `docs/Project/` and create new entries for unaddressed functionality, then emit a JSON block with assigned IDs. Response parsing first attempts structured JSON extraction; falls back to regex (`FR-[A-Z]+-\d{3}` / `TR-[A-Z]+-\d{3}`) for robustness. Discovered IDs are merged (deduplicated, order-preserved) back into the TODO via `ITodoService.UpdateAsync`.
@@ -609,7 +639,7 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-TODO-003
 
-**GitHub-Backed TODO Creation Alias** — The server SHALL accept `ISSUE-NEW` only on TODO create requests, SHALL immediately create the corresponding GitHub issue, SHALL rewrite the persisted TODO identifier to the canonical `ISSUE-{number}` value returned by GitHub, and SHALL return that canonical identifier to the caller. Persisted TODO validation SHALL accept both `^[A-Z]+-[A-Z0-9]+-\d{3}$` and `^ISSUE-\d+$`. Dependency validation SHALL use the same persisted-ID rule set.
+**GitHub-Backed TODO Creation Alias** — The server SHALL accept `ISSUE-NEW` only on TODO create requests, SHALL immediately create the corresponding GitHub issue, SHALL rewrite the persisted TODO identifier to the canonical `ISSUE-{number}` value returned by GitHub, and SHALL return that canonical identifier to the caller. Persisted TODO validation SHALL accept both `^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\d{3}$` and `^ISSUE-\d+$`. Dependency validation SHALL use the same persisted-ID rule set.
 The `ISSUE-NEW` flow SHALL be implemented through a shared creation path so HTTP, MCP/STDIO, and voice-driven TODO creation all apply the same rewrite and persistence behavior.
 
 **Status:** ✅ Complete
@@ -740,8 +770,8 @@ The server SHALL provide a prompt resolution endpoint returning the populated pr
 
 ## TR-MCP-VOICE-003
 
-**Voice Session Lifecycle Management** — One active session per device enforced via `DeviceId` lookup; creating a new session for a device with an active session returns the existing session. Idle timeout (`SessionIdleTimeoutMinutes`, default 15) triggers `IdleShutdownCommand` sent to Copilot, waits for `IdleShutdownSentinel` response, then terminates the session. `UseDesktopLaunch` option (default true) selects `CreateProcessAsUser` for Windows service context.
-**Covered by:** `VoiceConversationService`, `VoiceConversationOptions`
+**Voice Session Lifecycle Management** — One active session per device enforced via `DeviceId` lookup; creating a new session for a device with an active session returns the existing session. Idle timeout (`SessionIdleTimeoutMinutes`, default 15) triggers the configured idle-shutdown prompt sent to Copilot, waits for the configured sentinel response, then terminates the session. `UseDesktopLaunch` option (default true) selects `CreateProcessAsUser` for Windows service context.
+**Covered by:** `VoiceConversationService.OnIdleCleanupTick` / `CleanupIdleSessionsAsync` (60s timer-driven idle-shutdown orchestrator), `VoiceConversationOptions.SessionIdleTimeoutMinutes`, `VoiceConversationOptions.IdleShutdownCommand` (config string sent to Copilot), `VoiceConversationOptions.IdleShutdownSentinel` (config string awaited as the shutdown confirmation). Note: `IdleShutdownCommand` and `IdleShutdownSentinel` are configured strings on `VoiceConversationOptions`, not CLR message types.
 
 ## TR-MCP-VOICE-004
 
@@ -785,4 +815,12 @@ Presence signaling SHALL be excluded from one-shot sessions.
 ## TR-MCP-WS-009
 
 **Primary Workspace Detection and IsEnabled Gating** — `WorkspaceProcessManager.IHostedService.StartAsync` resolves the primary workspace: first by `IsPrimary = true` + lowest port among enabled workspaces; then by lowest-port enabled workspace if none is marked primary. For the primary workspace, only a marker file is written - no child `WebApplication` is created. Workspaces with `IsEnabled = false` are skipped during auto-start but can be started manually.
+
+## TR-MCP-WS-UI-001
+
+**McpServer Management Web UI** — Reserved/planned: web-based management UI for workspace and server administration. Tracks FR-MCP-031.
+
+## TR-PLANNED-013A
+
+`AddControllers().ConfigureApiBehaviorOptions` installs an `InvalidModelStateResponseFactory` that produces `application/problem+json` responses for body-binding failures on `/mcpserver/*` endpoints. The factory strips the action parameter name (`dto`, `body`, `turn`) from the `errors` keys, replacing them with `$` so callers see the canonical JSON root marker instead of a misleading wrapper field name. `SessionLogController.SubmitAsync` and `GetByIdAsync` use `ValidationProblem` for domain validation to keep the response shape uniform.
 
