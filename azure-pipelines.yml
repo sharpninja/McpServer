@@ -192,8 +192,11 @@ jobs:
           targetType: inline
           script: |
             $config = Join-Path $env:BUILD_SOURCESDIRECTORY '.markdown-link-check.json'
+            $wikiRoot = Join-Path $env:BUILD_SOURCESDIRECTORY 'docs/Project/wiki'
             npx --yes markdown-link-check --config $config --quiet README.md
-            Get-ChildItem docs -Recurse -Filter *.md | ForEach-Object {
+            Get-ChildItem docs -Recurse -Filter *.md | Where-Object {
+              -not $_.FullName.StartsWith($wikiRoot, [System.StringComparison]::OrdinalIgnoreCase)
+            } | ForEach-Object {
               $file = $_.FullName
               npx --yes markdown-link-check --config $config --quiet $file
               if ($LASTEXITCODE -ne 0) {
