@@ -14,15 +14,15 @@ namespace McpServer.Repl.Core;
 /// <list type="bullet">
 /// <item>
 /// <term>TODO ID</term>
-/// <description>Format: <c>&lt;PHASE&gt;-&lt;AREA&gt;-###</c> or <c>ISSUE-{number}</c>. Regex: <c>^[A-Z]+-[A-Z0-9]+-\d{3}$</c> or <c>^ISSUE-\d+$</c></description>
+/// <description>Format: uppercase kebab-case ending in <c>-###</c> or <c>ISSUE-{number}</c>. Regex: <c>^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\d{3}$</c> or <c>^ISSUE-\d+$</c></description>
 /// </item>
 /// <item>
 /// <term>Valid examples</term>
-/// <description><c>PLAN-NAMINGCONVENTIONS-001</c>, <c>MCP-API-042</c>, <c>ISSUE-17</c></description>
+/// <description><c>PLAN-NAMINGCONVENTIONS-001</c>, <c>PHASE0-REMOTE-001</c>, <c>MCP-TODO-CREATE-001</c>, <c>ISSUE-17</c></description>
 /// </item>
 /// <item>
 /// <term>Invalid examples</term>
-/// <description><c>plan-api-001</c>, <c>MCP-API-42</c>, <c>ISSUE-ABC</c>, <c>MCPAPI001</c></description>
+/// <description><c>plan-api-001</c>, <c>MCP-API-42</c>, <c>MCP-001</c>, <c>ISSUE-ABC</c>, <c>MCPAPI001</c></description>
 /// </item>
 /// <item>
 /// <term>Special ID</term>
@@ -310,7 +310,7 @@ public interface ITodoItem
 {
     /// <summary>
     /// Gets the unique TODO identifier.
-    /// Format: <c>&lt;PHASE&gt;-&lt;AREA&gt;-###</c> or <c>ISSUE-{number}</c>
+    /// Format: uppercase kebab-case ending in <c>-###</c> or <c>ISSUE-{number}</c>.
     /// </summary>
     string Id { get; }
 
@@ -424,7 +424,7 @@ public interface ITodoCreateRequest
 {
     /// <summary>
     /// Gets the TODO identifier.
-    /// Must match <c>^[A-Z]+-[A-Z0-9]+-\d{3}$</c> or <c>^ISSUE-\d+$</c>, or <c>ISSUE-NEW</c> to create a GitHub issue.
+    /// Must match <c>^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\d{3}$</c> or <c>^ISSUE-\d+$</c>, or <c>ISSUE-NEW</c> to create a GitHub issue.
     /// </summary>
     string Id { get; }
 

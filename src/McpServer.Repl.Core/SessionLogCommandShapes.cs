@@ -29,6 +29,7 @@ namespace McpServer.Repl.Core;
 /// <item><c>workflow.sessionlog.appendDialog</c> — Add dialog items to turn</item>
 /// <item><c>workflow.sessionlog.appendActions</c> — Add actions to turn</item>
 /// <item><c>workflow.sessionlog.queryHistory</c> — Query session log history</item>
+/// <item><c>workflow.sessionlog.importRecovery</c> — Import recovered turns without deleting existing ones</item>
 /// </list>
 /// </para>
 /// <para>
@@ -122,6 +123,12 @@ public static class SessionLogCommandShapes
     /// Method: <c>workflow.sessionlog.queryHistory</c>
     /// </summary>
     public const string QueryHistoryMethod = "workflow.sessionlog.queryHistory";
+
+    /// <summary>
+    /// Command method for importing recovered turns by merging with the full current session.
+    /// Method: <c>workflow.sessionlog.importRecovery</c>
+    /// </summary>
+    public const string ImportRecoveryMethod = "workflow.sessionlog.importRecovery";
 }
 
 /// <summary>

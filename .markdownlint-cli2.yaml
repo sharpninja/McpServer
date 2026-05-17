@@ -11,3 +11,11 @@ config:
   MD040: false
   MD042: false
   MD060: false
+  MD024:
+    siblings_only: true
+ignores:
+  # Server-generated wiki export: shape is controlled by RequirementsDocumentService
+  # and regenerated on every requirements ingest, so hand-edits never survive.
+  # Lint coverage for the same content already runs on the source docs under
+  # docs/Project/{Functional,Technical,Testing}-Requirements.md.
+  - "docs/Project/wiki/**"

@@ -4,6 +4,8 @@
 // TR-MCP-REPL-005: Namespace Organization and Handler Parity - Session log workflow contract
 // TEST-MCP-REPL-006: Session log REPL commands match REST endpoint semantics
 
+using McpServer.Client.Models;
+
 namespace McpServer.Repl.Core;
 
 /// <summary>
@@ -190,6 +192,65 @@ public interface ISessionLogWorkflow
         int limit = 10,
         int offset = 0,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Imports recovered session-log turns by querying the existing full session, merging
+    /// missing data by request identifier, and submitting the complete merged DTO.
+    /// </summary>
+    /// <param name="sessionLog">The recovered session-log payload to merge.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>Counts describing the idempotent import result.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="sessionLog"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when source type, session identifier, or turn identifiers are invalid.</exception>
+    Task<SessionLogRecoveryImportResult> ImportRecoveryAsync(
+        UnifiedSessionLogDto sessionLog,
+        CancellationToken cancellationToken = default);
+}
+
+/// <summary>
+/// Result returned from a session-log recovery import.
+/// </summary>
+public sealed class SessionLogRecoveryImportResult
+{
+    /// <summary>
+    /// Gets or sets the agent/source type imported.
+    /// </summary>
+    public string? SourceType { get; set; }
+
+    /// <summary>
+    /// Gets or sets the session identifier imported.
+    /// </summary>
+    public string? SessionId { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether an existing remote session was found and merged.
+    /// </summary>
+    public bool ExistingSessionFound { get; set; }
+
+    /// <summary>
+    /// Gets or sets the number of new turns added to the merged DTO.
+    /// </summary>
+    public int ImportedTurns { get; set; }
+
+    /// <summary>
+    /// Gets or sets the number of existing turns that received merged details.
+    /// </summary>
+    public int MergedTurns { get; set; }
+
+    /// <summary>
+    /// Gets or sets the number of incoming turns skipped as duplicates with no new data.
+    /// </summary>
+    public int SkippedTurns { get; set; }
+
+    /// <summary>
+    /// Gets or sets the final turn count submitted to the server.
+    /// </summary>
+    public int TotalTurns { get; set; }
+
+    /// <summary>
+    /// Gets or sets the row identifier returned by the session-log submit endpoint.
+    /// </summary>
+    public long SubmitId { get; set; }
 }
 
 /// <summary>

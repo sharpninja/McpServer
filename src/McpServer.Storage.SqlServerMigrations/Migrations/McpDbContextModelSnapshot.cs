@@ -17,7 +17,7 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.12")
+                .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -290,6 +290,182 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.HasIndex("WorkspaceId");
 
                     b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.GraphEntityEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(4096)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Metadata")
+                        .HasMaxLength(8192)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<DateTime>("UpdatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EntityType");
+
+                    b.HasIndex("Name");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.ToTable("GraphEntities");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.GraphRelationshipEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(4096)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Metadata")
+                        .HasMaxLength(8192)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RelationshipType")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("SourceEntityId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("TargetEntityId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("UpdatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Weight")
+                        .HasColumnType("float");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RelationshipType");
+
+                    b.HasIndex("SourceEntityId");
+
+                    b.HasIndex("TargetEntityId");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.ToTable("GraphRelationships");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementEntity", b =>
+                {
+                    b.Property<string>("WorkspaceId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("Kind")
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<string>("Id")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedAtUtc")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("UpdatedAtUtc")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.HasKey("WorkspaceId", "Kind", "Id");
+
+                    b.HasIndex("Kind");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("WorkspaceId", "Id");
+
+                    b.ToTable("Requirements");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementTraceabilityLinkEntity", b =>
+                {
+                    b.Property<string>("WorkspaceId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("FrId")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("TargetKind")
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<string>("TargetId")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("CreatedAtUtc")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.HasKey("WorkspaceId", "FrId", "TargetKind", "TargetId");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("WorkspaceId", "TargetKind", "TargetId");
+
+                    b.ToTable("RequirementTraceabilityLinks");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogActionEntity", b =>
@@ -706,6 +882,201 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.ToTable("SessionLogTurnTags");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoAuditHistoryEntity", b =>
+                {
+                    b.Property<long>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("AuditId"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<string>("PreviousSnapshotJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RecordedAtUtc")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("SnapshotJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Source")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("TodoId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("AuditId");
+
+                    b.HasIndex("Action");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("WorkspaceId", "TodoId", "RecordedAtUtc");
+
+                    b.HasIndex("WorkspaceId", "TodoId", "Version")
+                        .IsUnique();
+
+                    b.ToTable("TodoAuditHistory");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", b =>
+                {
+                    b.Property<string>("WorkspaceId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<int>("SingletonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CodeReviewReference")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("CompletedJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastImportedFromYamlUtc")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("LastProjectedToYamlUtc")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("LastProjectionFailureMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastProjectionFailureUtc")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("NotesJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("WorkspaceId", "SingletonId");
+
+                    b.ToTable("TodoDocumentMetadata", t =>
+                        {
+                            t.HasCheckConstraint("CK_TodoDocumentMetadata_Singleton", "\"SingletonId\" = 1");
+                        });
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoItemEntity", b =>
+                {
+                    b.Property<string>("WorkspaceId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("Id")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("CompletedDate")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("DependsOnJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Done")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DoneSummary")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Estimate")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("FunctionalRequirementsJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImplementationTasksJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ItemKind")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<int>("ItemOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(4096)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhaseLabel")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<string>("PriorityNote")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("Reference")
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<string>("Remaining")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Section")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<int>("SectionOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TechnicalDetailsJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TechnicalRequirementsJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.HasKey("WorkspaceId", "Id");
+
+                    b.HasIndex("Done");
+
+                    b.HasIndex("Priority");
+
+                    b.HasIndex("Section");
+
+                    b.ToTable("TodoItems");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -870,6 +1241,25 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                     b.Navigation("Document");
                 });
 
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.GraphRelationshipEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.GraphEntityEntity", "SourceEntity")
+                        .WithMany("SourceRelationships")
+                        .HasForeignKey("SourceEntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.GraphEntityEntity", "TargetEntity")
+                        .WithMany("TargetRelationships")
+                        .HasForeignKey("TargetEntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SourceEntity");
+
+                    b.Navigation("TargetEntity");
+                });
+
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogActionEntity", b =>
                 {
                     b.HasOne("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnEntity", "SessionLogTurn")
@@ -976,6 +1366,13 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity", b =>
                 {
                     b.Navigation("Chunks");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.GraphEntityEntity", b =>
+                {
+                    b.Navigation("SourceRelationships");
+
+                    b.Navigation("TargetRelationships");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntity", b =>

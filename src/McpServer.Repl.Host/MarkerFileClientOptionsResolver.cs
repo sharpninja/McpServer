@@ -100,19 +100,107 @@ public static class MarkerFileClientOptionsResolver
     /// <returns>The marker file path when found; otherwise, <see langword="null"/>.</returns>
     public static string? FindMarkerFile(string startPath)
     {
+        return FindMarkerFile(startPath, out _);
+    }
+
+    /// <summary>
+    /// FR-MCP-REPL-007: Walks upward from a starting path to locate the workspace
+    /// marker file and reports every directory that was searched.
+    /// </summary>
+    /// <param name="startPath">The path to begin searching from.</param>
+    /// <param name="searchedPaths">Every directory walked in search order.</param>
+    /// <returns>The marker file path when found; otherwise, <see langword="null"/>.</returns>
+    public static string? FindMarkerFile(string startPath, out IReadOnlyList<string> searchedPaths)
+    {
+        var searched = new List<string>();
         var current = new DirectoryInfo(startPath);
         while (current is not null)
         {
+            searched.Add(current.FullName);
             var candidate = Path.Combine(current.FullName, MarkerFileName);
             if (File.Exists(candidate))
             {
+                searchedPaths = searched;
                 return candidate;
             }
 
             current = current.Parent;
         }
 
+        searchedPaths = searched;
         return null;
+    }
+
+    /// <summary>
+    /// FR-MCP-REPL-007: Resolves REPL client options with diagnostic surface. Honors
+    /// explicit workspace-path or marker-file overrides. On failure, the
+    /// <paramref name="error"/> string enumerates every directory searched and
+    /// reports whether the marker file was missing or its signature failed to verify.
+    /// </summary>
+    /// <param name="workspacePathOverride">Optional explicit workspace path (CLI <c>--workspace-path</c>).</param>
+    /// <param name="markerPathOverride">Optional explicit marker file path (CLI <c>--marker-file</c>).</param>
+    /// <param name="options">The resolved options on success.</param>
+    /// <param name="error">Diagnostic message on failure.</param>
+    /// <returns><see langword="true"/> when resolution succeeds; otherwise <see langword="false"/>.</returns>
+    public static bool TryResolveWithDiagnostics(
+        string? workspacePathOverride,
+        string? markerPathOverride,
+        out McpServerClientOptions? options,
+        out string error)
+    {
+        options = null;
+        error = string.Empty;
+
+        string? markerPath;
+        IReadOnlyList<string> searchedPaths;
+
+        if (!string.IsNullOrWhiteSpace(markerPathOverride))
+        {
+            markerPath = markerPathOverride;
+            searchedPaths = new[] { markerPathOverride };
+            if (!File.Exists(markerPath))
+            {
+                error = $"Marker file not found at explicit path '{markerPath}'. Pass --workspace-path <dir> or place AGENTS-README-FIRST.yaml at that path.";
+                return false;
+            }
+        }
+        else
+        {
+            var searchRoot = !string.IsNullOrWhiteSpace(workspacePathOverride)
+                ? workspacePathOverride
+                : Environment.GetEnvironmentVariable("MCP_WORKSPACE_PATH")
+                    ?? Environment.GetEnvironmentVariable("MCP_WORKSPACE")
+                    ?? Environment.CurrentDirectory;
+
+            markerPath = FindMarkerFile(searchRoot, out searchedPaths);
+            if (markerPath is null)
+            {
+                var pathList = string.Join("; ", searchedPaths);
+                error = $"Marker file '{MarkerFileName}' not found. Searched: {pathList}. To override, pass --workspace-path <dir> or --marker-file <path>.";
+                return false;
+            }
+        }
+
+        var parsed = ParseMarker(File.ReadAllLines(markerPath));
+        if (parsed is null)
+        {
+            error = $"Marker file at '{markerPath}' is malformed: missing required fields (baseUrl/apiKey/workspacePath/signature).";
+            return false;
+        }
+
+        if (!VerifyMarkerSignature(parsed.Value))
+        {
+            error = $"Marker file at '{markerPath}' failed HMAC-SHA256 signature verification. Either the marker is stale (server restarted) or has been tampered with. Re-read the file or restart the server.";
+            return false;
+        }
+
+        options = new McpServerClientOptions
+        {
+            BaseUrl = new Uri(parsed.Value.BaseUrl),
+            ApiKey = parsed.Value.ApiKey,
+            WorkspacePath = parsed.Value.WorkspacePath,
+        };
+        return true;
     }
 
     internal static MarkerSettings? ParseMarker(IEnumerable<string> lines)
@@ -120,6 +208,7 @@ public static class MarkerFileClientOptionsResolver
         var values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         var endpoints = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         var signature = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var agentPlugins = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         string? currentSection = null;
 
         foreach (var rawLine in lines)
@@ -147,6 +236,12 @@ public static class MarkerFileClientOptionsResolver
                 continue;
             }
 
+            if (rawLine.StartsWith("agent_plugins:", StringComparison.Ordinal))
+            {
+                currentSection = "agent_plugins";
+                continue;
+            }
+
             if (currentSection is not null && rawLine.StartsWith("  ", StringComparison.Ordinal))
             {
                 var sectionParts = line.Trim().Split(':', 2);
@@ -164,6 +259,12 @@ public static class MarkerFileClientOptionsResolver
                 else if (currentSection == "signature")
                 {
                     signature[key] = value;
+                }
+                else if (currentSection == "agent_plugins"
+                         && (string.Equals(key, "policy", StringComparison.OrdinalIgnoreCase)
+                             || string.Equals(key, "contract_digest", StringComparison.OrdinalIgnoreCase)))
+                {
+                    agentPlugins[key] = value;
                 }
 
                 continue;
@@ -205,7 +306,8 @@ public static class MarkerFileClientOptionsResolver
             ServerStartedAtUtc: serverStartedAtUtc,
             SignatureCanonicalization: canonicalization,
             SignatureValue: signatureValue,
-            Endpoints: endpoints);
+            Endpoints: endpoints,
+            AgentPlugins: agentPlugins);
     }
 
     internal static bool VerifyMarkerSignature(MarkerSettings marker)
@@ -223,17 +325,22 @@ public static class MarkerFileClientOptionsResolver
 
     private static string BuildSignaturePayload(MarkerSettings marker)
     {
+        // FR-MCP-REPL-007 fix: the server's MarkerFileService.AppendPayloadLine
+        // always terminates with a literal LF ('\n'). StringBuilder.AppendLine
+        // honours Environment.NewLine which is CRLF on Windows, so we cannot use
+        // it here - the HMAC payload must be byte-identical to what the server
+        // hashed regardless of which OS the REPL is running on.
         var builder = new StringBuilder();
-        builder.AppendLine($"canonicalization={marker.SignatureCanonicalization}");
-        builder.AppendLine($"port={marker.Port}");
-        builder.AppendLine($"baseUrl={marker.BaseUrl}");
-        builder.AppendLine($"apiKey={marker.ApiKey}");
-        builder.AppendLine($"workspace={marker.Workspace}");
-        builder.AppendLine($"workspacePath={marker.WorkspacePath}");
-        builder.AppendLine($"pid={marker.Pid}");
-        builder.AppendLine($"startedAt={marker.StartedAt}");
-        builder.AppendLine($"markerWrittenAtUtc={marker.MarkerWrittenAtUtc}");
-        builder.AppendLine($"serverStartedAtUtc={marker.ServerStartedAtUtc}");
+        AppendLfLine(builder, "canonicalization", marker.SignatureCanonicalization);
+        AppendLfLine(builder, "port", marker.Port);
+        AppendLfLine(builder, "baseUrl", marker.BaseUrl);
+        AppendLfLine(builder, "apiKey", marker.ApiKey);
+        AppendLfLine(builder, "workspace", marker.Workspace);
+        AppendLfLine(builder, "workspacePath", marker.WorkspacePath);
+        AppendLfLine(builder, "pid", marker.Pid);
+        AppendLfLine(builder, "startedAt", marker.StartedAt);
+        AppendLfLine(builder, "markerWrittenAtUtc", marker.MarkerWrittenAtUtc);
+        AppendLfLine(builder, "serverStartedAtUtc", marker.ServerStartedAtUtc);
 
         foreach (var endpointName in new[]
         {
@@ -257,10 +364,32 @@ public static class MarkerFileClientOptionsResolver
         })
         {
             marker.Endpoints.TryGetValue(endpointName, out var endpointValue);
-            builder.AppendLine($"endpoints.{endpointName}={endpointValue ?? string.Empty}");
+            AppendLfLine(builder, $"endpoints.{endpointName}", endpointValue ?? string.Empty);
+        }
+
+        marker.AgentPlugins.TryGetValue("policy", out var policy);
+        marker.AgentPlugins.TryGetValue("contract_digest", out var contractDigest);
+        if (policy is not null || contractDigest is not null)
+        {
+            AppendLfLine(builder, "agentPlugins.policy", policy ?? string.Empty);
+            AppendLfLine(builder, "agentPlugins.contractDigest", contractDigest ?? string.Empty);
         }
 
         return builder.ToString();
+    }
+
+    /// <summary>
+    /// Mirrors the server's <c>MarkerFileService.AppendPayloadLine</c>: writes
+    /// <c>{key}={value}\n</c> with a literal LF, normalising any embedded CRLF
+    /// in <paramref name="value"/> to LF so the HMAC payload matches across
+    /// Linux / macOS / Windows.
+    /// </summary>
+    private static void AppendLfLine(StringBuilder builder, string key, object? value)
+    {
+        builder.Append(key)
+            .Append('=')
+            .Append((value?.ToString() ?? string.Empty).ReplaceLineEndings("\n"))
+            .Append('\n');
     }
 
     /// <summary>
@@ -278,6 +407,7 @@ public static class MarkerFileClientOptionsResolver
     /// <param name="SignatureCanonicalization">The signature canonicalization format.</param>
     /// <param name="SignatureValue">The marker signature value.</param>
     /// <param name="Endpoints">The endpoint map recorded in the marker file.</param>
+    /// <param name="AgentPlugins">The signed agent plugin policy/digest values recorded in the marker file.</param>
     public readonly record struct MarkerSettings(
         string Port,
         string BaseUrl,
@@ -290,5 +420,6 @@ public static class MarkerFileClientOptionsResolver
         string ServerStartedAtUtc,
         string SignatureCanonicalization,
         string SignatureValue,
-        IReadOnlyDictionary<string, string> Endpoints);
+        IReadOnlyDictionary<string, string> Endpoints,
+        IReadOnlyDictionary<string, string> AgentPlugins);
 }

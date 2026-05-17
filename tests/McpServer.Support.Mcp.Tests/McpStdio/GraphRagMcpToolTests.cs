@@ -93,6 +93,7 @@ public sealed class GraphRagMcpToolTests : IDisposable
             todoServiceResolver,
             todoCreationService,
             todoUpdateService,
+            Substitute.For<ITodoExecutionService>(),
             Substitute.For<IPromptTemplateService>(),
             NullLogger<FwhMcpTools>.Instance);
     }

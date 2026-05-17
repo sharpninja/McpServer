@@ -1,4 +1,3 @@
-using System.IO.Compression;
 using System.Text;
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Options;
@@ -345,29 +344,42 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     }
 
     /// <inheritdoc />
-    public Task<MemoryStream> GenerateAllAsync(CancellationToken ct = default)
+    public async Task<RequirementsDocumentExportResult> GenerateAllAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default)
     {
         ct.ThrowIfCancellationRequested();
 
-        var stream = new MemoryStream();
-        using (var zip = new ZipArchive(stream, ZipArchiveMode.Create, leaveOpen: true))
-        {
-            WriteZipEntry(zip, RequirementsDocumentRenderer.FunctionalFileName, RequirementsDocumentRenderer.RenderFunctional(_frEntries));
-            WriteZipEntry(zip, RequirementsDocumentRenderer.TechnicalFileName, RequirementsDocumentRenderer.RenderTechnical(_trEntries));
-            WriteZipEntry(zip, RequirementsDocumentRenderer.TestingFileName, RequirementsDocumentRenderer.RenderTesting(_testEntries));
-            WriteZipEntry(zip, RequirementsDocumentRenderer.MappingFileName, RequirementsDocumentRenderer.RenderMapping(_mappings));
-        }
-
-        stream.Position = 0;
-        return Task.FromResult(stream);
+        var generated = (generatedAtUtc ?? DateTimeOffset.UtcNow).ToUniversalTime();
+        var documents = RequirementsWikiDocumentRenderer.RenderCanonicalFiles(_frEntries, _trEntries, _testEntries, _mappings);
+        return await RequirementsDocumentExportWriter.WriteAsync(
+            outputRootPath,
+            "markdown",
+            "all",
+            generated,
+            documents,
+            ct: ct).ConfigureAwait(false);
     }
 
-    private static void WriteZipEntry(ZipArchive zip, string entryName, string content)
+    /// <inheritdoc />
+    public async Task<RequirementsDocumentExportResult> GenerateWikiAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default)
     {
-        var entry = zip.CreateEntry(entryName);
-        using var stream = entry.Open();
-        using var writer = new StreamWriter(stream, s_utf8NoBom, leaveOpen: false);
-        writer.Write(content);
+        ct.ThrowIfCancellationRequested();
+
+        var generated = (generatedAtUtc ?? DateTimeOffset.UtcNow).ToUniversalTime();
+        var documents = RequirementsWikiDocumentRenderer.RenderWikiFiles(
+            _frEntries,
+            _trEntries,
+            _testEntries,
+            _mappings,
+            generated);
+
+        return await RequirementsDocumentExportWriter.WriteAsync(
+            outputRootPath,
+            "wiki",
+            "all",
+            generated,
+            documents,
+            [RequirementsWikiDocumentRenderer.AzureFolder, RequirementsWikiDocumentRenderer.GitHubFolder],
+            ct).ConfigureAwait(false);
     }
 
     private async Task PersistFunctionalAsync(CancellationToken ct) =>

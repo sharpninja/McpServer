@@ -233,6 +233,292 @@ public sealed class TodoClientTests
     }
 
     [Fact]
+    public async System.Threading.Tasks.Task CreateIterationPhaseAsync_PostsCorrectUrl()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"phaseId":"PHASE-001","status":"Planning"}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.CreateIterationPhaseAsync(new Models.CreateIterationPhaseRequest
+        {
+            Name = "Execution phase",
+            Summary = "Bounded Byrd execution"
+        });
+
+        Assert.Equal("PHASE-001", result.PhaseId);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/todo-execution/phases", handler.LastRequest.RequestUri!.AbsolutePath);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task CreateTodosFromPlanAsync_PostsCorrectUrl()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"phaseId":"PHASE-001","planId":"PLAN-001","todoIds":["TODO-201","TODO-202"]}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.CreateTodosFromPlanAsync(
+            "PHASE-001",
+            new Models.CreateTodosFromPlanRequest
+            {
+                PhaseId = "PHASE-001",
+                PlanId = "PLAN-001",
+                Todos =
+                [
+                    new Models.PlanTodoInput
+                    {
+                        Title = "Execution todo",
+                        Goal = "Bound context",
+                        Summary = "Use active TODO only."
+                    }
+                ]
+            });
+
+        Assert.Equal("PHASE-001", result.PhaseId);
+        Assert.Equal(2, result.TodoIds.Count);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/todo-execution/phases/PHASE-001/todos", handler.LastRequest.RequestUri!.AbsolutePath);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task GetActiveTodoAsync_SendsCorrectUrl()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"todoId":"TODO-201","title":"Execution todo","status":"TestDesign","nextAction":"Define unit tests"}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.GetActiveTodoAsync();
+
+        Assert.Equal("TODO-201", result.TodoId);
+        Assert.Equal(Models.TodoExecutionStatus.TestDesign, result.Status);
+        Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/todo-execution/active", handler.LastRequest.RequestUri!.AbsolutePath);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task GetNextReadyTodoAsync_SendsCorrectUrl()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"todoId":"TODO-202","title":"Validation todo","status":"Validating","nextAction":"Run validation"}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.GetNextReadyTodoAsync();
+
+        Assert.Equal("TODO-202", result.TodoId);
+        Assert.Equal(Models.TodoExecutionStatus.Validating, result.Status);
+        Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/todo-execution/next-ready", handler.LastRequest.RequestUri!.AbsolutePath);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task GetExecutionContextAsync_SendsCorrectQuery()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """
+            {
+              "todoId":"TODO-201",
+              "workspacePath":"F:\\GitHub\\McpServer",
+              "title":"Execution todo",
+              "goal":"Implement bounded execution",
+              "summary":"Hydrate the active TODO context.",
+              "status":"TestDesign",
+              "iterationPhaseId":"PHASE-001",
+              "nextAction":"Define unit tests",
+              "requirementIds":["FR-BYRD-001"],
+              "recentRequirementSnippets":["FR-BYRD-001: Planning remains bounded."],
+              "recentTurnSummaries":["Defined the TODO execution boundaries."],
+              "relevantFiles":["src/McpServer.Services/Services/TodoExecutionService.cs"],
+              "artifactIds":[],
+              "acceptanceCriteria":["Hydrates requirement snippets"],
+              "constraints":["Do not return the full plan"],
+              "testPlan":{"unitTestsDefined":false,"unitTestsPassing":false,"integrationTestsDefined":false,"integrationTestsPassing":false,"testFilePaths":[],"testCommands":[]},
+              "validation":{"lastResult":"not_run","lastValidatedAtUtc":null,"validationArtifactIds":[],"summary":null},
+              "pointers":{"lastRelevantTurnId":"req-001","lastSuccessfulTurnId":null,"lastFailedTurnId":null,"lastCheckpointId":"CHK-001","lastCommitSha":null,"lastScreenshotArtifactId":null}
+            }
+            """);
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.GetExecutionContextAsync("TODO-201", 3, 2);
+
+        Assert.Equal("TODO-201", result.TodoId);
+        Assert.Contains("/mcpserver/todo-execution/todos/TODO-201", handler.LastRequest!.RequestUri!.AbsolutePath);
+        Assert.Contains("requirementSnippetLimit=3", handler.LastRequest.RequestUri.Query);
+        Assert.Contains("sessionTurnSummaryLimit=2", handler.LastRequest.RequestUri.Query);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task GetDeltaContextAsync_SendsCorrectQuery()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """
+            {
+              "todoId":"TODO-201",
+              "sinceCheckpointId":"CHK-001",
+              "newRequirementIds":["FR-BYRD-001"],
+              "newTurnIds":["req-002"],
+              "newArtifactIds":["artifacts/diff.patch"],
+              "newCommitShas":["abc1234"],
+              "updatedNextAction":"Run validation"
+            }
+            """);
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.GetDeltaContextAsync("TODO-201", "CHK-001");
+
+        Assert.Equal("TODO-201", result.TodoId);
+        Assert.Equal("CHK-001", result.SinceCheckpointId);
+        Assert.Equal(HttpMethod.Get, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/todo-execution/todos/TODO-201/delta", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("sinceCheckpointId=CHK-001", handler.LastRequest.RequestUri.Query);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task SetTestPlanAsync_PutsCorrectUrl()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"todoId":"TODO-201","status":"TestReady"}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.SetTestPlanAsync(
+            "TODO-201",
+            new Models.SetTodoTestPlanRequest
+            {
+                UnitTestsDefined = true,
+                TestFilePaths = ["tests/TodoExecutionServiceTests.cs"],
+                TestCommands = ["dotnet test tests/McpServer.Support.Mcp.Tests"]
+            });
+
+        Assert.Equal("TODO-201", result.TodoId);
+        Assert.Equal(Models.TodoExecutionStatus.TestReady, result.Status);
+        Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/todo-execution/todos/TODO-201/test-plan", handler.LastRequest.RequestUri!.AbsolutePath);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task UpdateExecutionStatusAsync_PostsCorrectUrl()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"todoId":"TODO-201","previousStatus":"TestReady","currentStatus":"Implementing"}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.UpdateExecutionStatusAsync(
+            "TODO-201",
+            new Models.UpdateTodoStatusRequest
+            {
+                TargetStatus = Models.TodoExecutionStatus.Implementing,
+                Reason = "Unit tests are defined"
+            });
+
+        Assert.Equal(Models.TodoExecutionStatus.Implementing, result.CurrentStatus);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/todo-execution/todos/TODO-201/status", handler.LastRequest.RequestUri!.AbsolutePath);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task AppendCheckpointAsync_PostsCorrectUrl()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"todoId":"TODO-201","checkpointId":"CHK-001"}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.AppendCheckpointAsync(
+            "TODO-201",
+            new Models.AppendTodoCheckpointRequest
+            {
+                Kind = Models.TodoCheckpointKind.ImplementationProgress,
+                Summary = "Implemented execution gating.",
+                NextAction = "Run validation"
+            });
+
+        Assert.Equal("CHK-001", result.CheckpointId);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/todo-execution/todos/TODO-201/checkpoints", handler.LastRequest.RequestUri!.AbsolutePath);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task RecordValidationResultAsync_PostsCorrectUrl()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"todoId":"TODO-201","validationState":{"lastResult":"pass","summary":"Validation succeeded."}}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.RecordValidationResultAsync(
+            "TODO-201",
+            new Models.RecordTodoValidationResultRequest
+            {
+                Result = "pass",
+                Summary = "Validation succeeded.",
+                UnitTestsPassing = true
+            });
+
+        Assert.Equal("TODO-201", result.TodoId);
+        Assert.Equal("Validation succeeded.", result.ValidationState.Summary);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/todo-execution/todos/TODO-201/validation", handler.LastRequest.RequestUri!.AbsolutePath);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task LinkSessionTurnsAsync_PostsCorrectUrl()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"todoId":"TODO-201","sessionTurnIds":["req-001","req-002"]}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.LinkSessionTurnsAsync(
+            "TODO-201",
+            new Models.LinkTodoToSessionTurnsRequest
+            {
+                SessionTurnIds = ["req-001", "req-002"]
+            });
+
+        Assert.Equal("TODO-201", result.TodoId);
+        Assert.Equal(2, result.SessionTurnIds.Count);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/todo-execution/todos/TODO-201/session-turns", handler.LastRequest.RequestUri!.AbsolutePath);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task AdbStepAsync_PostsCorrectUrl()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"success":true,"action":"Screenshot","deviceSerial":"emulator-5554","commandSummary":"adb -s emulator-5554 exec-out screencap -p","screenshotPath":"artifacts/device/test.png","screenshotBase64":null,"currentFocus":"com.example/.MainActivity","observationHints":[],"error":null,"timestampUtc":"2026-04-23T22:01:01Z"}""");
+        using var http = new HttpClient(handler);
+        var client = new TodoClient(http, DefaultOptions);
+
+        var result = await client.AdbStepAsync(new Models.AdbStepRequest
+        {
+            Action = Models.AdbStepAction.Screenshot,
+            CaptureScreenshot = true,
+            Instruction = "Capture the current UI state."
+        });
+
+        Assert.True(result.Success);
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/todo-execution/adb/step", handler.LastRequest.RequestUri!.AbsolutePath);
+    }
+
+    [Fact]
     public async System.Threading.Tasks.Task StreamStatusAsync_YieldsDataLines()
     {
         var sse = "data: Line one\n\ndata: Line two\n\nevent: done\ndata: \n\n";

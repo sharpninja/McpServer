@@ -61,6 +61,11 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
                     Provider = "sqlite",
                     SqliteDataSource = "mcp.db",
                 },
+                Database = new
+                {
+                    Provider = "sqlite",
+                    Sqlite = new { DataSource = "mcp.db" },
+                },
                 Workspaces = new[]
                 {
                     new
@@ -351,6 +356,8 @@ public sealed class MarkerRegenerationIntegrationTests : IAsyncLifetime
                     { "Mcp:TodoFilePath", "docs/todo.yaml" },
                     { "Mcp:TodoStorage:Provider", "sqlite" },
                     { "Mcp:TodoStorage:SqliteDataSource", "mcp.db" },
+                    { "Mcp:Database:Provider", "sqlite" },
+                    { "Mcp:Database:Sqlite:DataSource", "mcp.db" },
                     { "Mcp:TemplateStorage:FilePath", templateStoragePath },
                 });
             });

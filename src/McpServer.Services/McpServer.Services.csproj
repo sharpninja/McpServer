@@ -18,7 +18,6 @@
     <PackageReference Include="Serilog.Sinks.Http" />
     <PackageReference Include="YamlDotNet" />
     <PackageReference Include="Handlebars.Net" />
-    <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <ProjectReference Include="..\McpServer.McpAgent\McpServer.McpAgent.csproj" />
     <ProjectReference Include="..\McpServer.Storage\McpServer.Storage.csproj" />

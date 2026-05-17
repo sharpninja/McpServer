@@ -47,6 +47,7 @@ namespace McpServer.Repl.Core;
 /// <item><c>client.agentpool.*</c> — Agent-pool runtime</item>
 /// <item><c>client.agent.*</c> — Agent management</item>
 /// <item><c>client.health.*</c> — Server health checks</item>
+/// <item><c>client.federation.*</c> — Federation management (status, targets, routes, push/pull)</item>
 /// </list>
 /// <para><strong>Request Envelope Structure:</strong></para>
 /// <para>
@@ -183,11 +184,11 @@ namespace McpServer.Repl.Core;
 ///   requestId: req-20260304T120000Z-todo-001
 ///   result:
 ///     items:
-///       - id: TODO-001
+///       - id: EXEC-TODO-001
 ///         title: Implement JWT validation
 ///         status: pending
 ///         priority: high
-///       - id: TODO-002
+///       - id: EXEC-TODO-002
 ///         title: Add rate limiting
 ///         status: pending
 ///         priority: medium
@@ -208,7 +209,7 @@ namespace McpServer.Repl.Core;
 /// payload:
 ///   requestId: req-20260304T120000Z-invalid-001
 ///   code: unknown_client
-///   message: Client 'invalidclient' not found. Valid clients: context, github, todo, sessionlog, requirements, voice, events, repo, desktop, tunnel, workspace, configuration, tools, authconfig, diagnostic, template, agentpool, agent, health.
+///   message: Client 'invalidclient' not found. Valid clients: context, github, todo, sessionlog, requirements, voice, events, repo, desktop, tunnel, workspace, configuration, tools, authconfig, diagnostic, template, agentpool, agent, health, federation.
 ///   details:
 ///     requestedClient: invalidclient
 ///     validClients:
@@ -231,6 +232,7 @@ namespace McpServer.Repl.Core;
 ///       - agentpool
 ///       - agent
 ///       - health
+///       - federation
 /// </code>
 /// <para><strong>Example: Error - Unknown Method</strong></para>
 /// <code>
@@ -355,7 +357,7 @@ public static class ClientCommandShapes
         /// Valid client names match the property names on <c>McpServerClient</c>: <c>Context</c>, <c>GitHub</c>, <c>Todo</c>,
         /// <c>SessionLog</c>, <c>Requirements</c>, <c>Voice</c>, <c>Events</c>, <c>Repo</c>, <c>Desktop</c>, <c>Tunnel</c>,
         /// <c>Workspace</c>, <c>Configuration</c>, <c>Tools</c>, <c>AuthConfig</c>, <c>Diagnostic</c>, <c>Template</c>,
-        /// <c>AgentPool</c>, <c>Agent</c>, <c>Health</c>.
+        /// <c>AgentPool</c>, <c>Agent</c>, <c>Health</c>, <c>Federation</c>.
         /// </summary>
         string ClientName { get; }
 
@@ -421,11 +423,11 @@ public static class ClientCommandShapes
     ///   requestId: req-20260304T120000Z-todo-001
     ///   result:
     ///     items:
-    ///       - id: TODO-001
+    ///       - id: EXEC-TODO-001
     ///         title: Implement JWT validation
     ///         status: pending
     ///         priority: high
-    ///       - id: TODO-002
+    ///       - id: EXEC-TODO-002
     ///         title: Add rate limiting
     ///         status: pending
     ///         priority: medium

@@ -8,6 +8,11 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <!-- Suppress trim analysis warnings; projects use reflection-based DI, CQRS, and JSON -->
     <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
+    <!-- EF Design 10.0.0 transitively pulls CodeAnalysis.Workspaces.MSBuild 4.14.0 alongside direct 5.3.0; both emit duplicate BuildHost content files -->
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+    <!-- NU1901/NU1903: transitive CVEs (System.Security.Cryptography.Xml, Microsoft.Build.*, NuGet.Packaging).
+         No XML crypto / build-tasks surface exposed to external input in this repo. Pins/bumps tracked separately. -->
+    <NoWarn>$(NoWarn);NU1901;NU1903</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests')) OR $(MSBuildProjectName.EndsWith('.IntegrationTests')) OR '$(MSBuildProjectName)' == '_build'">

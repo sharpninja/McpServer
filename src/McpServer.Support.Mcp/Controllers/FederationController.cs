@@ -16,14 +16,17 @@ public sealed class FederationController : ControllerBase
 {
     private readonly FederationRegistry _registry;
     private readonly TunnelRegistry _tunnelRegistry;
+    private readonly IFederationPushService? _pushService;
 
     /// <summary>Initializes a new instance of the <see cref="FederationController"/> class.</summary>
     /// <param name="registry">Federation target registry.</param>
     /// <param name="tunnelRegistry">Tunnel registry for auto-discovery.</param>
-    public FederationController(FederationRegistry registry, TunnelRegistry tunnelRegistry)
+    /// <param name="pushService">Optional push service for federated data push operations.</param>
+    public FederationController(FederationRegistry registry, TunnelRegistry tunnelRegistry, IFederationPushService? pushService = null)
     {
         _registry = registry;
         _tunnelRegistry = tunnelRegistry;
+        _pushService = pushService;
     }
 
     /// <summary>Get the current federation status including all targets and workspace routes.</summary>
@@ -196,6 +199,57 @@ public sealed class FederationController : ControllerBase
         return Ok(new TunnelDiscoveryResult(discovered.Count, discovered));
     }
 
+    /// <summary>
+    /// FR-MCP-085: Push local data (TODOs, session logs) to the resolved federation target.
+    /// Optionally filter by type using the <paramref name="request"/> body.
+    /// </summary>
+    /// <param name="request">Push request with optional type filter.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Push result with success/failure counts, 409 if federation is disabled, 404 if no target.</returns>
+    [HttpPost("push")]
+    public async Task<ActionResult<FederationPushResult>> Push([FromBody] FederationPushRequest request, CancellationToken ct)
+    {
+        if (!_registry.IsEnabled)
+            return Conflict(new { error = "Federation is disabled." });
+
+        if (_registry.ResolveTarget(null) is null)
+            return NotFound(new { error = "No federation target resolved." });
+
+        if (_pushService is null)
+            return StatusCode(501, new { error = "Push service is not configured." });
+
+        var types = request.Types ?? [];
+        var pushAll = types.Count == 0;
+
+        if (pushAll)
+        {
+            var result = await _pushService.PushAllAsync(ct).ConfigureAwait(false);
+            return Ok(result);
+        }
+
+        var succeeded = 0;
+        var failed = 0;
+        var errors = new List<string>();
+
+        if (types.Contains("todos", StringComparer.OrdinalIgnoreCase))
+        {
+            var r = await _pushService.PushTodosAsync(ct).ConfigureAwait(false);
+            succeeded += r.Succeeded;
+            failed += r.Failed;
+            errors.AddRange(r.Errors);
+        }
+
+        if (types.Contains("sessionlogs", StringComparer.OrdinalIgnoreCase))
+        {
+            var r = await _pushService.PushSessionLogsAsync(ct).ConfigureAwait(false);
+            succeeded += r.Succeeded;
+            failed += r.Failed;
+            errors.AddRange(r.Errors);
+        }
+
+        return Ok(new FederationPushResult(succeeded, failed, errors));
+    }
+
     private FederationStatusResponse BuildStatus()
         => new(_registry.IsEnabled, _registry.List(), _registry.ListRoutes());
 }
@@ -222,3 +276,14 @@ public sealed record TunnelDiscoveryResult(int Discovered, IReadOnlyList<Federat
 /// <param name="Port">The TCP port the server is listening on.</param>
 /// <param name="ApiKey">Full-access workspace token for the requested workspace path.</param>
 public sealed record FederationConnectionInfo(string BaseUrl, int Port, string ApiKey);
+
+/// <summary>
+/// FR-MCP-085: Request body for the federation push endpoint.
+/// When <see cref="Types"/> is empty or null, all data types are pushed.
+/// Valid type values: <c>"todos"</c>, <c>"sessionlogs"</c>.
+/// </summary>
+public sealed class FederationPushRequest
+{
+    /// <summary>Optional filter for which data types to push. Empty means push all.</summary>
+    public IReadOnlyList<string>? Types { get; set; }
+}

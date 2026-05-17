@@ -596,12 +596,14 @@ payload:
 
 ### TODO IDs
 
-**Format:** `<PHASE>-<AREA>-###` or `ISSUE-{number}`
+**Format:** uppercase kebab-case ending in `-###` or `ISSUE-{number}`
 
-**Regex:** `^[A-Z]+-[A-Z0-9]+-\d{3}$` or `^ISSUE-\d+$`
+**Regex:** `^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\d{3}$` or `^ISSUE-\d+$`
 
 **Examples:**
 - `MCP-AUTH-001`
+- `PHASE0-REMOTE-001`
+- `MCP-TODO-CREATE-001`
 - `PLAN-NAMINGCONVENTIONS-001`
 - `ISSUE-17`
 

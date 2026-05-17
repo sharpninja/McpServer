@@ -77,15 +77,18 @@ internal static class RequirementsDocumentRenderer
         var sb = new StringBuilder();
         sb.AppendLine("# TR per FR Mapping (MCP Server)");
         sb.AppendLine();
-        sb.AppendLine("| FR | Primary TRs |");
-        sb.AppendLine("| --- | --- |");
+        sb.AppendLine("| FR | Primary TRs | Tests |");
+        sb.AppendLine("| --- | --- | --- |");
 
         foreach (var mapping in mappings)
         {
             var trCell = mapping.TrIds is { Count: > 0 }
                 ? string.Join(", ", mapping.TrIds)
                 : "*(Planned)*";
-            sb.Append("| ").Append(mapping.FrId).Append(" | ").Append(trCell).AppendLine(" |");
+            var testCell = mapping.TestIds is { Count: > 0 }
+                ? string.Join(", ", mapping.TestIds)
+                : "*(Planned)*";
+            sb.Append("| ").Append(mapping.FrId).Append(" | ").Append(trCell).Append(" | ").Append(testCell).AppendLine(" |");
         }
 
         return sb.ToString();

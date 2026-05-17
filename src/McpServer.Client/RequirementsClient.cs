@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using McpServer.Client.Models;
@@ -14,6 +15,8 @@ namespace McpServer.Client;
 /// <seealso cref="McpServerClient.Requirements"/>
 public sealed class RequirementsClient : McpClientBase
 {
+    private static readonly JsonSerializerOptions s_jsonOptions = new() { PropertyNameCaseInsensitive = true };
+
     /// <inheritdoc />
     public RequirementsClient(HttpClient http, McpServerClientOptions options)
         : base(http, options) { }
@@ -136,15 +139,27 @@ public sealed class RequirementsClient : McpClientBase
     }
 
     /// <summary>
-    /// Generates requirements output as markdown or zip binary.
+    /// Generates requirements output as inline content or workspace export metadata.
     /// </summary>
     /// <param name="doc">Document selector: <c>functional</c>, <c>technical</c>, <c>testing</c>, <c>mapping</c>, or <c>all</c>.</param>
+    /// <param name="format">Document format: <c>markdown</c>, <c>yaml</c>, or <c>wiki</c>.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>Generated binary content and media type.</returns>
-    public async Task<RequirementsGeneratedDocument> GenerateAsync(string doc = "all", CancellationToken cancellationToken = default)
+    /// <returns>Generated content, media type, and optional workspace export metadata.</returns>
+    public async Task<RequirementsGeneratedDocument> GenerateAsync(string doc = "all", string format = "markdown", CancellationToken cancellationToken = default)
     {
-        var path = $"mcpserver/requirements/generate?doc={Uri.EscapeDataString(doc)}";
+        var path = $"mcpserver/requirements/generate?doc={Uri.EscapeDataString(doc)}&format={Uri.EscapeDataString(format)}";
         var (content, contentType) = await GetBytesAsync(path, cancellationToken);
+        if (string.Equals(contentType, "application/json", StringComparison.OrdinalIgnoreCase))
+        {
+            var export = JsonSerializer.Deserialize<RequirementsDocumentExportResult>(content, s_jsonOptions);
+            return new RequirementsGeneratedDocument
+            {
+                Content = content,
+                ContentType = contentType,
+                ExportResult = export
+            };
+        }
+
         return new RequirementsGeneratedDocument
         {
             Content = content,

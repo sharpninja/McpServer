@@ -75,6 +75,16 @@ bool IsStdioTransportRequested(string[] a)
     return false;
 }
 
+// When launched by Windows Service Control Manager, the process starts with
+// CurrentDirectory=System32. Host.UseWindowsService() fixes ContentRootPath
+// later, but AddYamlFile below resolves against the ConfigurationBuilder's
+// initial FileProvider (CurrentDirectory), so without this bump the service
+// silently skips appsettings.yaml and TR-MCP-CFG-007 validation fires.
+if (OperatingSystem.IsWindows() && WindowsServiceHelpers.IsWindowsService())
+{
+    Directory.SetCurrentDirectory(AppContext.BaseDirectory);
+}
+
 var builder = WebApplication.CreateBuilder(args);
 EnsureApprovedWindowsServiceDeployment();
 DisableEnvironmentSpecificJsonConfigForWindowsService(builder);
@@ -318,10 +328,11 @@ builder.Services.AddSingleton<WorkspaceServiceAccessor>();
 builder.Services.AddSingleton<TodoCreationService>();
 builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
 builder.Services.AddSingleton<TodoUpdateService>();
+builder.Services.AddScoped<ITodoExecutionService, TodoExecutionService>();
 builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
-builder.Services.AddSingleton<RequirementsDocumentService>();
-builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<RequirementsDocumentService>());
-builder.Services.AddSingleton<IRequirementsDocumentService>(sp => sp.GetRequiredService<RequirementsDocumentService>());
+builder.Services.AddSingleton<RequirementsDatabaseDocumentService>();
+builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<RequirementsDatabaseDocumentService>());
+builder.Services.AddSingleton<IRequirementsDocumentService>(sp => sp.GetRequiredService<RequirementsDatabaseDocumentService>());
 builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
 builder.Services.AddAgentExecutionStrategies();
 builder.Services.AddSingleton<IVoiceConversationService, VoiceConversationService>();
@@ -431,6 +442,64 @@ builder.Services.AddHttpClient(FederationProxyService.HttpClientName)
 builder.Services.AddHealthChecks()
     .AddCheck<FederationUpstreamHealthCheck>("upstream", tags: ["live"]);
 
+// FR-MCP-082/083/084/085: Federation Phase 2 — federated read-merge and push.
+// Register the HTTP client and data client used by federation decorators.
+builder.Services.AddHttpClient(McpServer.Support.Mcp.FederationDataClient.HttpClientName);
+builder.Services.AddSingleton<McpServer.Support.Mcp.FederationDataClient>();
+builder.Services.AddSingleton<IFederationDataClient>(sp => sp.GetRequiredService<McpServer.Support.Mcp.FederationDataClient>());
+builder.Services.AddSingleton<McpServer.Support.Mcp.GraphRag.IGraphRagFederationClient>(sp => sp.GetRequiredService<McpServer.Support.Mcp.FederationDataClient>());
+
+// Decorate ITodoService with federated merge.
+{
+    var innerTodo = builder.Services.Single(d => d.ServiceType == typeof(ITodoService));
+    builder.Services.Remove(innerTodo);
+    builder.Services.AddSingleton<ITodoService>(sp =>
+    {
+        var factory = sp.GetRequiredService<ITodoServiceFactory>();
+        var inner = factory.CreatePrimary();
+        return new FederatedTodoService(
+            inner,
+            sp.GetRequiredService<FederationRegistry>(),
+            sp.GetRequiredService<IFederationDataClient>(),
+            sp.GetRequiredService<ILogger<FederatedTodoService>>());
+    });
+}
+
+// Decorate ISessionLogService with federated merge.
+{
+    var innerSession = builder.Services.Single(d => d.ServiceType == typeof(ISessionLogService));
+    builder.Services.Remove(innerSession);
+    builder.Services.AddScoped<ISessionLogService>(sp =>
+    {
+        var inner = ActivatorUtilities.CreateInstance<SessionLogService>(sp);
+        return new FederatedSessionLogService(
+            inner,
+            sp.GetRequiredService<FederationRegistry>(),
+            sp.GetRequiredService<IFederationDataClient>(),
+            sp.GetRequiredService<ILogger<FederatedSessionLogService>>());
+    });
+}
+
+// Decorate IGraphRagService with federated merge.
+// GraphRagService is internal to McpServer.GraphRag, so we capture the type from the descriptor.
+{
+    var innerGraphRag = builder.Services.Single(d => d.ServiceType == typeof(IGraphRagService));
+    var innerType = innerGraphRag.ImplementationType!;
+    builder.Services.Remove(innerGraphRag);
+    builder.Services.AddScoped<IGraphRagService>(sp =>
+    {
+        var inner = (IGraphRagService)ActivatorUtilities.CreateInstance(sp, innerType);
+        return new McpServer.Support.Mcp.GraphRag.FederatedGraphRagService(
+            inner,
+            sp.GetRequiredService<FederationRegistry>(),
+            sp.GetRequiredService<McpServer.Support.Mcp.GraphRag.IGraphRagFederationClient>(),
+            sp.GetRequiredService<ILogger<McpServer.Support.Mcp.GraphRag.FederatedGraphRagService>>());
+    });
+}
+
+// Push service for explicit federation data push.
+builder.Services.AddScoped<IFederationPushService, FederationPushService>();
+
 builder.Services.Configure<TunnelOptions>(
     builder.Configuration.GetSection(TunnelOptions.SectionName));
 builder.Services.AddSingleton<NgrokTunnelProvider>();
@@ -448,7 +517,14 @@ if (!builder.Environment.IsEnvironment("Test"))
     builder.Services.AddHostedService(sp => (WorkspaceProcessManager)sp.GetRequiredService<IWorkspaceProcessManager>());
     builder.Services.AddHostedService(sp => sp.GetRequiredService<TunnelRegistry>());
     builder.Services.AddHostedService<AgentPoolSeedService>();
+    // TR-MCP-TODO-007: one-shot import from legacy mcp.db into the configured authoritative DB.
+    builder.Services.AddHostedService<LegacyTodoSqliteMigrator>();
 }
+
+// TR-MCP-TODO-008 Phase 4: per-workspace YAML bootstrap into the authoritative DB.
+// Runs in every environment (incl. Test) so integration fixtures that seed a YAML
+// file get materialized into the DB before the first request.
+builder.Services.AddHostedService<TodoBootstrapImporter>();
 
 var mvcBuilder = builder.Services.AddControllers();
 #if !DEBUG
@@ -456,6 +532,39 @@ if (!builder.Environment.IsStaging())
     mvcBuilder.ConfigureApplicationPartManager(mgr =>
         mgr.FeatureProviders.Add(new ExcludeControllerFeatureProvider(typeof(DiagnosticController))));
 #endif
+
+// FR-SUPPORT-010B / TR-PLANNED-013A: Replace ASP.NET's default invalid-model-state
+// response shape ({"errors":{"dto":["..."]}}) with RFC 7807 ProblemDetails that
+// cites the actual offending JSON path. The "dto" key is the action parameter
+// name; surfacing it confuses callers into thinking a wrapper field is required.
+mvcBuilder.ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = ctx =>
+    {
+        var errors = ctx.ModelState
+            .Where(kvp => kvp.Value is { Errors.Count: > 0 })
+            .ToDictionary(
+                kvp => string.IsNullOrEmpty(kvp.Key) || kvp.Key == "dto" || kvp.Key == "body" || kvp.Key == "turn"
+                    ? "$"
+                    : kvp.Key,
+                kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).ToArray());
+
+        var problem = new Microsoft.AspNetCore.Mvc.ValidationProblemDetails(errors)
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Title = "Invalid request body.",
+            Detail = "Body must conform to the documented schema. Accepted top-level shape for session log POST: { \"sourceType\": string, \"sessionId\": string, optional \"workspace\": { project, targetFramework, repository, branch } }. No outer wrapper is required.",
+            Type = "https://docs.mcpserver/errors/invalid-body",
+        };
+        problem.Extensions["traceId"] = ctx.HttpContext.TraceIdentifier;
+
+        return new Microsoft.AspNetCore.Mvc.ObjectResult(problem)
+        {
+            StatusCode = StatusCodes.Status400BadRequest,
+            ContentTypes = { "application/problem+json" },
+        };
+    };
+});
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddMcpServer()

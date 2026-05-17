@@ -150,8 +150,8 @@ Mcp:
     ApiResourceName: mcp-server-api
   PairingUsers: []
   Workspaces:
-  - WorkspacePath: E:\github\McpServer
-    Name: McpServer
+  - WorkspacePath: F:\GitHub\McpServer\src\McpServer.Support.Mcp
+    Name: McpServer.Support.Mcp
     TodoPath: docs/Project/TODO.yaml
     IsPrimary: true
     IsEnabled: true
@@ -176,6 +176,13 @@ Mcp:
       UtcTicks: 0
       TimeOfDay: 00:00:00
       Year: 1
+    DateTimeModified: *o0
+  - WorkspacePath: E:\github\McpServer
+    Name: McpServer
+    TodoPath: docs/Project/TODO.yaml
+    IsPrimary: true
+    IsEnabled: true
+    DateTimeCreated: *o0
     DateTimeModified: *o0
   - WorkspacePath: C:\Users\kingd\AppData\Local\Temp\ws_policy_080c19bf5114467f8875a03f829d1db6
     Name: ws_policy_080c19bf5114467f8875a03f829d1db6

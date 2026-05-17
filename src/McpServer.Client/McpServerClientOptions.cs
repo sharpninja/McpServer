@@ -83,4 +83,13 @@ public sealed class McpServerClientOptions
     /// When <see langword="null"/>, diagnostic messages are silently discarded.
     /// </summary>
     public ILoggerFactory? LoggerFactory { get; set; }
+
+    /// <summary>
+    /// FR-MCP-REPL-007 / TR-MCP-REPL-008: Optional diagnostic message produced when
+    /// credential resolution failed (e.g. marker file missing or signature
+    /// invalid). When <see cref="ApiKey"/> and <see cref="BearerToken"/> are both
+    /// null this message is appended to the "Authentication required" exception so
+    /// callers see the searched paths and failure reason.
+    /// </summary>
+    public string? CredentialDiagnostic { get; set; }
 }

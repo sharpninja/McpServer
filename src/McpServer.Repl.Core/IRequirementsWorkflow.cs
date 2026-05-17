@@ -3,6 +3,8 @@
 // TR-MCP-REPL-005: Namespace Organization and Handler Parity - Requirements workflow contract
 // TEST-MCP-REPL-009: Requirements management operations validate requirement identifier rules
 
+using McpServer.Client.Models;
+
 namespace McpServer.Repl.Core;
 
 /// <summary>
@@ -52,10 +54,10 @@ namespace McpServer.Repl.Core;
 /// </para>
 /// <para><strong>Generated Document Response Formats:</strong></para>
 /// <para>
-/// The <see cref="GenerateDocumentAsync"/> operation produces formatted requirement documents in Markdown or YAML.
+/// The <see cref="GenerateDocumentAsync"/> operation produces formatted requirement documents in Markdown/YAML or workspace export metadata for multi-document exports.
 /// For Markdown output, the response includes full document content with headings, tables, and status indicators.
 /// For YAML output, the response includes structured requirement data suitable for machine processing.
-/// The <see cref="IngestDocumentAsync"/> operation parses external requirement documents and synchronizes them
+/// The <c>IngestDocumentAsync</c> operation parses external requirement documents and synchronizes them
 /// with the workspace, validating identifier rules and updating existing requirements or creating new ones as needed.
 /// Ingestion supports incremental updates and conflict detection.
 /// </para>
@@ -360,6 +362,26 @@ public interface IRequirementsWorkflow
         CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Ingests one or more path-keyed requirements documents, including Azure/GitHub wiki document sets.
+    /// </summary>
+    /// <param name="content">Optional canonical document content used when no document map is supplied.</param>
+    /// <param name="format">The import format. Valid values: markdown, yaml, or wiki.</param>
+    /// <param name="mergeStrategy">The merge strategy retained for backward-compatible callers.</param>
+    /// <param name="documents">Optional path-keyed content map for wiki imports.</param>
+    /// <param name="sourceFormat">Source format selector: auto, canonical, or wiki.</param>
+    /// <param name="preferredWikiFormat">Preferred wiki platform when timestamp checks disagree.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task representing the asynchronous ingestion operation.</returns>
+    Task<IDocumentIngestionResult> IngestDocumentAsync(
+        string content,
+        string format,
+        string mergeStrategy,
+        IReadOnlyDictionary<string, RequirementsIngestDocument>? documents,
+        string? sourceFormat,
+        string? preferredWikiFormat,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Gets the current requirements selection state.
     /// Returns null if no requirements are currently selected.
     /// </summary>
@@ -506,6 +528,11 @@ public interface IFrCreateRequest
 /// </summary>
 public interface IFrUpdateRequest
 {
+    /// <summary>
+    /// Gets the FR identifier to update. Null uses the current selection.
+    /// </summary>
+    string? Id { get; }
+
     /// <summary>
     /// Gets the updated title. Null preserves existing value.
     /// </summary>
@@ -672,6 +699,11 @@ public interface ITrCreateRequest
 /// </summary>
 public interface ITrUpdateRequest
 {
+    /// <summary>
+    /// Gets the TR identifier to update. Null uses the current selection.
+    /// </summary>
+    string? Id { get; }
+
     /// <summary>
     /// Gets the updated title. Null preserves existing value.
     /// </summary>
@@ -840,6 +872,11 @@ public interface ITestCreateRequest
 public interface ITestUpdateRequest
 {
     /// <summary>
+    /// Gets the TEST identifier to update. Null uses the current selection.
+    /// </summary>
+    string? Id { get; }
+
+    /// <summary>
     /// Gets the updated title. Null preserves existing value.
     /// </summary>
     string? Title { get; }
@@ -947,9 +984,19 @@ public interface IMappingCreateRequest
     string? TrId { get; }
 
     /// <summary>
+    /// Gets technical requirement IDs to link. Empty means no TR links.
+    /// </summary>
+    IReadOnlyList<string>? TrIds { get; }
+
+    /// <summary>
     /// Gets the test requirement ID to link, or null.
     /// </summary>
     string? TestId { get; }
+
+    /// <summary>
+    /// Gets test requirement IDs to link. Empty means no TEST links.
+    /// </summary>
+    IReadOnlyList<string>? TestIds { get; }
 
     /// <summary>
     /// Gets optional notes about this mapping.
@@ -985,13 +1032,38 @@ public interface IDocumentGenerationResult
 
     /// <summary>
     /// Gets the generated document content.
-    /// Format depends on the requested format (Markdown or YAML).
+    /// Format depends on the requested format (Markdown or YAML). Multi-document exports are returned in OutputRoot and Files.
     /// </summary>
     string Content { get; }
 
     /// <summary>
+    /// Gets generated binary content as Base64 for legacy binary output.
+    /// </summary>
+    string? ContentBase64 { get; }
+
+    /// <summary>
+    /// Gets the generated document media type.
+    /// </summary>
+    string? ContentType { get; }
+
+    /// <summary>
+    /// Gets the generated output file name.
+    /// </summary>
+    string? FileName { get; }
+
+    /// <summary>
+    /// Gets the workspace output root for multi-document exports.
+    /// </summary>
+    string? OutputRoot { get; }
+
+    /// <summary>
+    /// Gets metadata for files written by a multi-document export.
+    /// </summary>
+    IReadOnlyList<RequirementsDocumentExportFile> Files { get; }
+
+    /// <summary>
     /// Gets the document format that was generated.
-    /// Valid values: "markdown", "yaml".
+    /// Valid values: "markdown", "yaml", "wiki".
     /// </summary>
     string Format { get; }
 
