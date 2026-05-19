@@ -47,12 +47,18 @@ public sealed class RequirementsDatabaseDocumentServiceTests
         Assert.Contains("TEST-MCP-900", mappingMarkdown);
         Assert.DoesNotContain("Workspace B", mappingMarkdown);
 
+        var (matrixMarkdown, _) = await service.GenerateDocumentAsync(RequirementsDocType.Matrix);
+        Assert.Contains("| FR-MCP-900 | Tracked | Functional-Requirements.md |", matrixMarkdown);
+        Assert.Contains("| TR-MCP-900 | Tracked | Technical-Requirements.md |", matrixMarkdown);
+        Assert.Contains("| TEST-MCP-900 | Tracked | Testing-Requirements.md |", matrixMarkdown);
+
         var outputRoot = Path.Combine(workspaceA, "docs", "Project", "export");
         var export = await service.GenerateAllAsync(outputRoot);
         var functional = await File.ReadAllTextAsync(Path.Combine(outputRoot, "Functional-Requirements.md"));
         Assert.Contains("Workspace A", functional);
         Assert.DoesNotContain("Workspace B", functional);
         Assert.Contains(export.Files, file => file.RelativePath == "Functional-Requirements.md");
+        Assert.Contains(export.Files, file => file.RelativePath == "Requirements-Matrix.md");
     }
 
     /// <summary>Mapping validation rejects missing FR/TR/TEST ids before storing links.</summary>

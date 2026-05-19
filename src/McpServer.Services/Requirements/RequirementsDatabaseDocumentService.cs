@@ -298,6 +298,11 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             RequirementsDocType.Technical => (RequirementsDocumentRenderer.RenderTechnical(await GetAllTrAsync(ct).ConfigureAwait(false)), "text/markdown"),
             RequirementsDocType.Testing => (RequirementsDocumentRenderer.RenderTesting(await GetAllTestAsync(ct).ConfigureAwait(false)), "text/markdown"),
             RequirementsDocType.Mapping => (RequirementsDocumentRenderer.RenderMapping(await GetAllMappingsAsync(ct).ConfigureAwait(false)), "text/markdown"),
+            RequirementsDocType.Matrix => (RequirementsDocumentRenderer.RenderMatrix(
+                await GetAllFrAsync(ct).ConfigureAwait(false),
+                await GetAllTrAsync(ct).ConfigureAwait(false),
+                await GetAllTestAsync(ct).ConfigureAwait(false),
+                ReadExistingMatrixForExport(null)), "text/markdown"),
             RequirementsDocType.All => throw new ArgumentOutOfRangeException(nameof(docType), "Use GenerateAllAsync for docType=All."),
             _ => throw new ArgumentOutOfRangeException(nameof(docType), docType, "Unknown requirements document type.")
         };
@@ -312,7 +317,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         var mapping = await GetAllMappingsAsync(ct).ConfigureAwait(false);
 
         var generated = (generatedAtUtc ?? DateTimeOffset.UtcNow).ToUniversalTime();
-        var documents = RequirementsWikiDocumentRenderer.RenderCanonicalFiles(fr, tr, test, mapping);
+        var documents = RequirementsWikiDocumentRenderer.RenderCanonicalFiles(fr, tr, test, mapping, ReadExistingMatrixForExport(outputRootPath));
         return await RequirementsDocumentExportWriter.WriteAsync(
             outputRootPath,
             "markdown",
@@ -331,7 +336,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         var mapping = await GetAllMappingsAsync(ct).ConfigureAwait(false);
 
         var generated = (generatedAtUtc ?? DateTimeOffset.UtcNow).ToUniversalTime();
-        var documents = RequirementsWikiDocumentRenderer.RenderWikiFiles(fr, tr, test, mapping, generated);
+        var documents = RequirementsWikiDocumentRenderer.RenderWikiFiles(fr, tr, test, mapping, generated, ReadExistingMatrixForWikiExport(outputRootPath));
         return await RequirementsDocumentExportWriter.WriteAsync(
             outputRootPath,
             "wiki",
@@ -535,14 +540,52 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                 Path.Combine(projectDir, RequirementsDocumentRenderer.FunctionalFileName),
                 Path.Combine(projectDir, RequirementsDocumentRenderer.TechnicalFileName),
                 Path.Combine(projectDir, RequirementsDocumentRenderer.TestingFileName),
-                Path.Combine(projectDir, RequirementsDocumentRenderer.MappingFileName));
+                Path.Combine(projectDir, RequirementsDocumentRenderer.MappingFileName),
+                Path.Combine(projectDir, RequirementsDocumentRenderer.MatrixFileName));
         }
 
         return new RequirementDocumentPaths(
             _options.FunctionalRequirementsPath,
             _options.TechnicalRequirementsPath,
             _options.TestingRequirementsPath,
-            _options.MappingPath);
+            _options.MappingPath,
+            _options.MatrixPath);
+    }
+
+    private string? ReadExistingMatrixForExport(string? outputRootPath)
+    {
+        if (!string.IsNullOrWhiteSpace(outputRootPath))
+        {
+            var outputMatrix = Path.Combine(outputRootPath, RequirementsDocumentRenderer.MatrixFileName);
+            var outputMatrixMarkdown = ReadFileIfExists(outputMatrix);
+            if (outputMatrixMarkdown is not null)
+                return outputMatrixMarkdown;
+        }
+
+        var workspacePath = TryGetRequestWorkspacePath();
+        if (!string.IsNullOrWhiteSpace(workspacePath))
+        {
+            var workspaceMatrix = Path.Combine(workspacePath, "docs", "Project", RequirementsDocumentRenderer.MatrixFileName);
+            var workspaceMatrixMarkdown = ReadFileIfExists(workspaceMatrix);
+            if (workspaceMatrixMarkdown is not null)
+                return workspaceMatrixMarkdown;
+        }
+
+        return ReadFileIfExists(_options.MatrixPath);
+    }
+
+    private string? ReadExistingMatrixForWikiExport(string outputRootPath)
+    {
+        var projectRoot = Directory.GetParent(Path.GetFullPath(outputRootPath))?.FullName;
+        if (!string.IsNullOrWhiteSpace(projectRoot))
+        {
+            var projectMatrix = Path.Combine(projectRoot, RequirementsDocumentRenderer.MatrixFileName);
+            var projectMatrixMarkdown = ReadFileIfExists(projectMatrix);
+            if (projectMatrixMarkdown is not null)
+                return projectMatrixMarkdown;
+        }
+
+        return ReadExistingMatrixForExport(null);
     }
 
     private string? TryInferWorkspacePathFromOptions()
@@ -555,6 +598,15 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         return docsDir is null ? null : Directory.GetParent(docsDir)?.FullName;
     }
 
+    private string? TryGetRequestWorkspacePath()
+    {
+        var requestCtx = _httpContextAccessor?.HttpContext?.RequestServices.GetService<WorkspaceContext>();
+        var workspacePath = requestCtx?.WorkspacePath;
+        if (string.IsNullOrWhiteSpace(workspacePath))
+            workspacePath = TryInferWorkspacePathFromOptions();
+        return string.IsNullOrWhiteSpace(workspacePath) ? null : Path.GetFullPath(workspacePath);
+    }
+
     private static IReadOnlyList<string> NormalizeIds(IEnumerable<string>? ids) =>
         ids is null
             ? []
@@ -563,7 +615,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToArray();
 
-    private static string? ReadFileIfExists(string path) =>
+    private static string? ReadFileIfExists(string? path) =>
         string.IsNullOrWhiteSpace(path) || !File.Exists(path) ? null : File.ReadAllText(path);
 
     private static void ValidateFr(FrEntry entry)
@@ -637,7 +689,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         }
     }
 
-    private readonly record struct RequirementDocumentPaths(string Functional, string Technical, string Testing, string Mapping);
+    private readonly record struct RequirementDocumentPaths(string Functional, string Technical, string Testing, string Mapping, string Matrix);
 
     private readonly struct DbScope : IAsyncDisposable
     {

@@ -50,6 +50,12 @@ public sealed class RequirementsControllerTests : IClassFixture<RequirementsCont
         var generatedMarkdown = await generated.Content.ReadAsStringAsync().ConfigureAwait(true);
         Assert.Contains("FR-MCP-999 Requirements test entry", generatedMarkdown);
 
+        var generatedMatrix = await _client.GetAsync("/mcpserver/requirements/generate?doc=matrix").ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, generatedMatrix.StatusCode);
+        Assert.Equal("text/markdown", generatedMatrix.Content.Headers.ContentType?.MediaType);
+        var matrixMarkdown = await generatedMatrix.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.Contains("| FR-MCP-999 | Tracked | Functional-Requirements.md |", matrixMarkdown);
+
         var deleteResponse = await _client.DeleteAsync("/mcpserver/requirements/fr/FR-MCP-999").ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
 
@@ -58,7 +64,7 @@ public sealed class RequirementsControllerTests : IClassFixture<RequirementsCont
     }
 
     [Fact]
-    public async Task GenerateAll_WritesFourDocumentsToWorkspace()
+    public async Task GenerateAll_WritesCanonicalDocumentsToWorkspace()
     {
         var response = await _client.GetAsync("/mcpserver/requirements/generate?doc=all").ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -71,6 +77,7 @@ public sealed class RequirementsControllerTests : IClassFixture<RequirementsCont
             new[]
             {
                 "Functional-Requirements.md",
+                "Requirements-Matrix.md",
                 "TR-per-FR-Mapping.md",
                 "Technical-Requirements.md",
                 "Testing-Requirements.md"
@@ -92,7 +99,9 @@ public sealed class RequirementsControllerTests : IClassFixture<RequirementsCont
 
         Assert.Contains("azure/.mcp-requirements-manifest.json", names);
         Assert.Contains("azure/.order", names);
+        Assert.Contains("azure/Requirements-Matrix.md", names);
         Assert.Contains("github/.mcp-requirements-manifest.json", names);
+        Assert.Contains("github/Requirements-Matrix.md", names);
         Assert.Contains("github/_Sidebar.md", names);
         Assert.Contains("github/_Footer.md", names);
     }

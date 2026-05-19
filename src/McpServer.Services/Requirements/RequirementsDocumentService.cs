@@ -338,6 +338,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
             RequirementsDocType.Technical => Task.FromResult((RequirementsDocumentRenderer.RenderTechnical(_trEntries), "text/markdown")),
             RequirementsDocType.Testing => Task.FromResult((RequirementsDocumentRenderer.RenderTesting(_testEntries), "text/markdown")),
             RequirementsDocType.Mapping => Task.FromResult((RequirementsDocumentRenderer.RenderMapping(_mappings), "text/markdown")),
+            RequirementsDocType.Matrix => Task.FromResult((RequirementsDocumentRenderer.RenderMatrix(_frEntries, _trEntries, _testEntries, ReadFileIfExists(_options.MatrixPath)), "text/markdown")),
             RequirementsDocType.All => throw new ArgumentOutOfRangeException(nameof(docType), "Use GenerateAllAsync for docType=All."),
             _ => throw new ArgumentOutOfRangeException(nameof(docType), docType, "Unknown requirements document type.")
         };
@@ -349,7 +350,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
         ct.ThrowIfCancellationRequested();
 
         var generated = (generatedAtUtc ?? DateTimeOffset.UtcNow).ToUniversalTime();
-        var documents = RequirementsWikiDocumentRenderer.RenderCanonicalFiles(_frEntries, _trEntries, _testEntries, _mappings);
+        var documents = RequirementsWikiDocumentRenderer.RenderCanonicalFiles(_frEntries, _trEntries, _testEntries, _mappings, ReadExistingMatrixForExport(outputRootPath));
         return await RequirementsDocumentExportWriter.WriteAsync(
             outputRootPath,
             "markdown",
@@ -370,7 +371,8 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
             _trEntries,
             _testEntries,
             _mappings,
-            generated);
+            generated,
+            ReadExistingMatrixForWikiExport(outputRootPath));
 
         return await RequirementsDocumentExportWriter.WriteAsync(
             outputRootPath,
@@ -393,6 +395,21 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
 
     private async Task PersistMappingAsync(CancellationToken ct) =>
         await AtomicWriteAsync(_options.MappingPath, RequirementsDocumentRenderer.RenderMapping(_mappings), ct).ConfigureAwait(false);
+
+    private string? ReadExistingMatrixForExport(string outputRootPath)
+    {
+        var outputMatrix = Path.Combine(outputRootPath, RequirementsDocumentRenderer.MatrixFileName);
+        return ReadFileIfExists(outputMatrix) ?? ReadFileIfExists(_options.MatrixPath);
+    }
+
+    private string? ReadExistingMatrixForWikiExport(string outputRootPath)
+    {
+        var projectRoot = Directory.GetParent(Path.GetFullPath(outputRootPath))?.FullName;
+        var projectMatrix = string.IsNullOrWhiteSpace(projectRoot)
+            ? null
+            : Path.Combine(projectRoot, RequirementsDocumentRenderer.MatrixFileName);
+        return ReadFileIfExists(projectMatrix) ?? ReadFileIfExists(_options.MatrixPath);
+    }
 
     private async Task AtomicWriteAsync(string path, string content, CancellationToken ct)
     {
@@ -445,7 +462,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
         }
     }
 
-    private static string? ReadFileIfExists(string path)
+    private static string? ReadFileIfExists(string? path)
     {
         if (string.IsNullOrWhiteSpace(path))
             return null;

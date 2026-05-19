@@ -141,7 +141,7 @@ public sealed class RequirementsClient : McpClientBase
     /// <summary>
     /// Generates requirements output as inline content or workspace export metadata.
     /// </summary>
-    /// <param name="doc">Document selector: <c>functional</c>, <c>technical</c>, <c>testing</c>, <c>mapping</c>, or <c>all</c>.</param>
+    /// <param name="doc">Document selector: <c>functional</c>, <c>technical</c>, <c>testing</c>, <c>mapping</c>, <c>matrix</c>, or <c>all</c>.</param>
     /// <param name="format">Document format: <c>markdown</c>, <c>yaml</c>, or <c>wiki</c>.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Generated content, media type, and optional workspace export metadata.</returns>

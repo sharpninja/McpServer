@@ -70,6 +70,9 @@ public enum RequirementsDocType
     /// <summary>TR-per-FR Mapping document.</summary>
     Mapping,
 
+    /// <summary>Requirements Matrix document.</summary>
+    Matrix,
+
     /// <summary>All requirements documents as a workspace export.</summary>
     All
 }

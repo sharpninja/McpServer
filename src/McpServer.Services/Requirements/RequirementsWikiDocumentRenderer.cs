@@ -17,7 +17,8 @@ internal static class RequirementsWikiDocumentRenderer
         RequirementsDocumentRenderer.FunctionalFileName,
         RequirementsDocumentRenderer.TechnicalFileName,
         RequirementsDocumentRenderer.TestingFileName,
-        RequirementsDocumentRenderer.MappingFileName
+        RequirementsDocumentRenderer.MappingFileName,
+        RequirementsDocumentRenderer.MatrixFileName
     ];
 
     private static readonly JsonSerializerOptions s_manifestOptions = new()
@@ -29,12 +30,14 @@ internal static class RequirementsWikiDocumentRenderer
         IEnumerable<FrEntry> functional,
         IEnumerable<TrEntry> technical,
         IEnumerable<TestEntry> testing,
-        IEnumerable<FrTrMapping> mappings) =>
+        IEnumerable<FrTrMapping> mappings,
+        string? existingMatrixMarkdown = null) =>
         [
             new(RequirementsDocumentRenderer.FunctionalFileName, RequirementsDocumentRenderer.RenderFunctional(functional), "text/markdown"),
             new(RequirementsDocumentRenderer.TechnicalFileName, RequirementsDocumentRenderer.RenderTechnical(technical), "text/markdown"),
             new(RequirementsDocumentRenderer.TestingFileName, RequirementsDocumentRenderer.RenderTesting(testing), "text/markdown"),
-            new(RequirementsDocumentRenderer.MappingFileName, RequirementsDocumentRenderer.RenderMapping(mappings), "text/markdown")
+            new(RequirementsDocumentRenderer.MappingFileName, RequirementsDocumentRenderer.RenderMapping(mappings), "text/markdown"),
+            new(RequirementsDocumentRenderer.MatrixFileName, RequirementsDocumentRenderer.RenderMatrix(functional, technical, testing, existingMatrixMarkdown), "text/markdown")
         ];
 
     internal static IReadOnlyList<RequirementsRenderedDocument> RenderWikiFiles(
@@ -42,7 +45,8 @@ internal static class RequirementsWikiDocumentRenderer
         IEnumerable<TrEntry> technical,
         IEnumerable<TestEntry> testing,
         IEnumerable<FrTrMapping> mappings,
-        DateTimeOffset generatedAtUtc)
+        DateTimeOffset generatedAtUtc,
+        string? existingMatrixMarkdown = null)
     {
         var documents = new Dictionary<string, string>(StringComparer.Ordinal)
         {
@@ -50,7 +54,8 @@ internal static class RequirementsWikiDocumentRenderer
             [RequirementsDocumentRenderer.FunctionalFileName] = RequirementsDocumentRenderer.RenderFunctional(functional),
             [RequirementsDocumentRenderer.TechnicalFileName] = RequirementsDocumentRenderer.RenderTechnical(technical),
             [RequirementsDocumentRenderer.TestingFileName] = RequirementsDocumentRenderer.RenderTesting(testing),
-            [RequirementsDocumentRenderer.MappingFileName] = RequirementsDocumentRenderer.RenderMapping(mappings)
+            [RequirementsDocumentRenderer.MappingFileName] = RequirementsDocumentRenderer.RenderMapping(mappings),
+            [RequirementsDocumentRenderer.MatrixFileName] = RequirementsDocumentRenderer.RenderMatrix(functional, technical, testing, existingMatrixMarkdown)
         };
 
         var files = new List<RequirementsRenderedDocument>();
@@ -102,6 +107,7 @@ internal static class RequirementsWikiDocumentRenderer
         - [Technical Requirements](Technical-Requirements)
         - [Testing Requirements](Testing-Requirements)
         - [Traceability Mapping](TR-per-FR-Mapping)
+        - [Requirements Matrix](Requirements-Matrix)
         """;
 
     private static string RenderAzureOrder() =>
@@ -111,6 +117,7 @@ internal static class RequirementsWikiDocumentRenderer
         Technical-Requirements
         Testing-Requirements
         TR-per-FR-Mapping
+        Requirements-Matrix
         """;
 
     private static string RenderGitHubSidebar() =>
@@ -120,6 +127,7 @@ internal static class RequirementsWikiDocumentRenderer
         - [Technical Requirements](Technical-Requirements)
         - [Testing Requirements](Testing-Requirements)
         - [Traceability Mapping](TR-per-FR-Mapping)
+        - [Requirements Matrix](Requirements-Matrix)
         """;
 
     internal static UTF8Encoding Utf8NoBom => s_utf8NoBom;

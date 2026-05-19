@@ -56,6 +56,12 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         var technicalDoc = await service.GenerateDocumentAsync(RequirementsDocType.Technical).ConfigureAwait(true);
         Assert.Contains("## TR-MCP-WS-004", technicalDoc.Content);
         Assert.Contains("**Workspace Controller** — REST API", technicalDoc.Content);
+
+        var matrixDoc = await service.GenerateDocumentAsync(RequirementsDocType.Matrix).ConfigureAwait(true);
+        Assert.Contains("# Requirements Matrix (MCP Server)", matrixDoc.Content);
+        Assert.Contains("| FR-MCP-001 | Tracked | Functional-Requirements.md |", matrixDoc.Content);
+        Assert.Contains("| TR-MCP-CFG-001 | Tracked | Technical-Requirements.md |", matrixDoc.Content);
+        Assert.Contains("| TEST-MCP-001 | Tracked | Testing-Requirements.md |", matrixDoc.Content);
     }
 
     [Fact]
@@ -73,6 +79,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
             new[]
             {
                 "Functional-Requirements.md",
+                "Requirements-Matrix.md",
                 "TR-per-FR-Mapping.md",
                 "Technical-Requirements.md",
                 "Testing-Requirements.md"
@@ -82,7 +89,33 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.Equal("markdown", result.Format);
         Assert.Equal(Path.GetFullPath(outputRoot), result.OutputRoot);
         Assert.Contains("FR-MCP-001", File.ReadAllText(Path.Combine(outputRoot, RequirementsDocumentRenderer.FunctionalFileName)));
+        Assert.Contains("TEST-MCP-001", File.ReadAllText(Path.Combine(outputRoot, RequirementsDocumentRenderer.MatrixFileName)));
         Assert.Equal(generatedAt.UtcDateTime, File.GetLastWriteTimeUtc(Path.Combine(outputRoot, RequirementsDocumentRenderer.FunctionalFileName)));
+    }
+
+    [Fact]
+    public async Task GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds()
+    {
+        SeedCanonicalDocs();
+        var projectMatrixPath = Path.Combine(_tempRoot, "docs", "Project", RequirementsDocumentRenderer.MatrixFileName);
+        await File.WriteAllTextAsync(projectMatrixPath, """
+            # Requirements Matrix (MCP Server)
+
+            | Requirement | Status | Source Files |
+            | --- | --- | --- |
+            | FR-MCP-001 | Complete | ExistingSource |
+            """).ConfigureAwait(true);
+
+        var service = CreateService();
+        var outputRoot = Path.Combine(_tempRoot, "export", "canonical-with-matrix");
+
+        await service.GenerateAllAsync(outputRoot).ConfigureAwait(true);
+
+        var matrix = await File.ReadAllTextAsync(Path.Combine(outputRoot, RequirementsDocumentRenderer.MatrixFileName)).ConfigureAwait(true);
+        Assert.Contains("| FR-MCP-001 | Complete | ExistingSource |", matrix);
+        Assert.Contains("| FR-MCP-002 | Tracked | Functional-Requirements.md |", matrix);
+        Assert.Contains("| TR-MCP-CFG-001 | Tracked | Technical-Requirements.md |", matrix);
+        Assert.Contains("| TEST-MCP-001 | Tracked | Testing-Requirements.md |", matrix);
     }
 
     [Fact]
@@ -105,12 +138,14 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
                 "azure/.order",
                 "azure/Functional-Requirements.md",
                 "azure/Home.md",
+                "azure/Requirements-Matrix.md",
                 "azure/TR-per-FR-Mapping.md",
                 "azure/Technical-Requirements.md",
                 "azure/Testing-Requirements.md",
                 "github/.mcp-requirements-manifest.json",
                 "github/Functional-Requirements.md",
                 "github/Home.md",
+                "github/Requirements-Matrix.md",
                 "github/TR-per-FR-Mapping.md",
                 "github/Technical-Requirements.md",
                 "github/Testing-Requirements.md",
@@ -122,6 +157,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         var manifest = File.ReadAllText(Path.Combine(outputRoot, "azure", ".mcp-requirements-manifest.json"));
         Assert.Contains("\"platform\": \"azure\"", manifest, StringComparison.Ordinal);
         Assert.Contains("\"generatedAtUtc\": \"2026-05-08T12:00:00+00:00\"", manifest, StringComparison.Ordinal);
+        Assert.Contains("\"Requirements-Matrix.md\"", manifest, StringComparison.Ordinal);
         Assert.False(File.Exists(Path.Combine(outputRoot, "azure", "Old.md")));
         Assert.Equal(generatedAt.UtcDateTime, File.GetLastWriteTimeUtc(Path.Combine(outputRoot, "github", "_Sidebar.md")));
     }
@@ -184,7 +220,8 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
             FunctionalRequirementsPath = Path.Combine(_tempRoot, "docs", "Project", "Functional-Requirements.md"),
             TechnicalRequirementsPath = Path.Combine(_tempRoot, "docs", "Project", "Technical-Requirements.md"),
             TestingRequirementsPath = Path.Combine(_tempRoot, "docs", "Project", "Testing-Requirements.md"),
-            MappingPath = Path.Combine(_tempRoot, "docs", "Project", "TR-per-FR-Mapping.md")
+            MappingPath = Path.Combine(_tempRoot, "docs", "Project", "TR-per-FR-Mapping.md"),
+            MatrixPath = Path.Combine(_tempRoot, "docs", "Project", "Requirements-Matrix.md")
         });
 
         return new RequirementsDocumentService(options, NullLogger<RequirementsDocumentService>.Instance);

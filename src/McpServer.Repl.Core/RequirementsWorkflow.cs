@@ -486,7 +486,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             "fr" => "functional",
             "tr" => "technical",
             "test" => "testing",
-            "matrix" => "mapping",
+            "matrix" => "matrix",
             "all" => "all",
             _ => throw new ArgumentException($"Invalid docType: {docType}. Valid values: fr, tr, test, matrix, all")
         };

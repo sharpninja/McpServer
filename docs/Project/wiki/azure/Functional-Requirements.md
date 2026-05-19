@@ -234,7 +234,7 @@ The server shall support CRUD operations for Functional Requirements (FR), Techn
 
 ## FR-MCP-041 Requirements Document Generation
 
-The server shall expose a requirements document generation endpoint that renders any canonical requirements document as Markdown and exports all documents directly to the workspace with canonical filenames.
+The server shall expose a requirements document generation endpoint that renders any canonical requirements document as Markdown, including the `Requirements-Matrix.md` traceability matrix, and exports all canonical documents directly to the workspace with canonical filenames.
 
 **Status:** ✅ Complete
 
@@ -590,6 +590,78 @@ The server, REPL, and agent plugins shall support requirements export and import
 **Status:** ✅ Complete
 
 **Covered by:** `RequirementsController` (wiki export + ingest endpoints), `RequirementsDocumentService` (wiki renderer + parser), `McpServer.Repl.Core` (requirements wiki workflow commands)
+
+## FR-MCP-085 QA Workspace Question CRUD
+
+Create / read / update / delete a Question (title, body, tags[], author).
+
+## FR-MCP-086 QA Workspace Answer CRUD
+
+Create / read / update / delete an Answer attached to a Question.
+
+## FR-MCP-087 QA Accepted Answer Invariant
+
+Accept exactly one Answer per Question (idempotent; re-accept clears prior accepted answer).
+
+## FR-MCP-088 QA Question Tag Filtering
+
+Tag filter on Question list with AND semantics (`?tag=foo&tag=bar`).
+
+## FR-MCP-089 QA Per User Voting
+
+Vote (+1 / -1) on Question and Answer with one-vote-per-user enforcement. A given actor may hold at most one active vote per entity (Question or Answer). Submitting the same vote a second time is idempotent (returns the current state, no counter change, no new audit row). Submitting the opposite vote replaces the prior vote (counter adjusts by +/- 2; an audit row is written for the change). An actor may explicitly revoke their vote (counter adjusts by -1 or +1; audit row recorded). Voter identity is the value resolved by `IQaAuthorResolver`. The Question/Answer rows still store a denormalized counter for fast reads; the authoritative per-voter state lives in a `QaVoteEntity` table with a unique constraint (TR-MCP-QA-032). Voter identity and every vote transition (apply, change, revoke) appear in the audit history (TR-MCP-QA-019), and a voter-history endpoint exposes them (TR-MCP-QA-031).
+
+## FR-MCP-090 QA Threaded Comments
+
+Threaded comments on Questions and Answers with depth cap (<= 3).
+
+## FR-MCP-091 QA FAQ Projection
+
+`GET /mcpserver/qa/faq` returns questions that have an accepted answer, projected as `{ questionId, title, tags[], voteCount, acceptedAnswer: { body, author, voteCount }, deeplink }` where `deeplink = "/mcpserver/qa/questions/{id}"`. Default sort: accepted-answer voteCount desc, then question voteCount desc.
+
+## FR-MCP-092 QA Author Resolution
+
+Author identity resolves via request-body `author` if provided, falling back to API-key -> workspace-identity (via `WorkspaceTokenService`), then JWT `sub` claim.
+
+## FR-MCP-093 QA Workspace Isolation
+
+All Q&A data is workspace-scoped via composite PK `(WorkspaceId, Id)` and EF global query filter (TR-MCP-MT-003 pattern).
+
+## FR-MCP-094 QA REST MCP STDIO and Client Parity
+
+Q&A is reachable from REST, MCP STDIO tools, and the typed C# client library with feature parity.
+
+## FR-MCP-095 QA REPL and PowerShell Parity
+
+Q&A is reachable from the REPL via a `workflow.qa.*` command namespace (interactive REPL + `--agent-stdio` YAML envelope protocol) and from a PowerShell module (`McpQa.psm1`) following the `Verb-Noun` pattern of `McpTodo.psm1`.
+
+## FR-MCP-096 QA User and Agent Documentation
+
+Documentation surfaces the Q&A subsystem for end users, integrators, and agents (USER-GUIDE, CLIENT-INTEGRATION, api-capabilities, AGENTS, FAQ, README, plus a new `qa-schema.md` context doc).
+
+## FR-MCP-097 QA Plugin Skill
+
+Each Claude Code plugin (sibling repos `mcpserver-claude-code-plugin`, `mcpserver-claude-cowork-plugin`, `mcpserver-codex-plugin`, `mcpserver-cline-plugin`, `mcpserver-cline-v2-plugin`, `mcpserver-copilot-plugin`) gets a `skills/qa/SKILL.md` skill that lets agents use Q&A as a knowledge source - ask, answer, accept, and read FAQ via the REPL workflow.
+
+## FR-MCP-098 QA Append Only Audit
+
+Full audit tracking: every Q&A mutation (question create/update/delete, answer create/update/delete, accept/un-accept, vote +1/-1, comment add/delete) writes an append-only audit row capturing actor, action, version, full pre-mutation snapshot, and timestamp. Audit history is queryable per entity (`GET /mcpserver/qa/questions/{id}/audit`, `/answers/{id}/audit`, `/comments/{id}/audit`) and at workspace scope (`GET /mcpserver/qa/audit`) with paging, matching the TODO audit endpoint contract.
+
+## FR-MCP-099 QA Web Research Capture
+
+Mandatory web-research-to-Q&A capture: whenever a plugin/agent performs an internet search (web fetch, web search, MCP web tool, browser MCP, or any external HTTP retrieval) in order to answer a workspace-scoped question, the agent MUST post a new Question to `/mcpserver/qa/questions` containing the original prompt, then post an Answer containing the synthesized response with every source URL cited inline (markdown links) and as a `sources[]` array in the answer body's JSON sidecar. If the agent verified the synthesized answer, it MUST also call accept-answer. This is enforced by the `qa/SKILL.md` in every sibling plugin repo (mandatory rule at top of body) and surfaced in `AGENTS.md` / `CLAUDE.md` so agents cannot opt out. Captured `web_reference` actions in the session log point at the resulting Q&A entry's deeplink.
+
+## FR-MCP-100 QA Close and Duplicate Flags
+
+Close / duplicate flags: a Question can be closed with a reason and reopened; a Question can be marked as a duplicate of another Question (canonical) with both directions navigable. Closed questions are excluded from FAQ by default and from the default Question list (opt-in via `?includeClosed=true`); duplicates redirect FAQ consumers to the canonical Question via the deeplink. Close and duplicate transitions are full audit events (TR-MCP-QA-018 family).
+
+## FR-MCP-101 QA Markdown Rendering and Sanitization
+
+HTML / Markdown sanitization and rendering: every Question.Body, Answer.Body, and Comment.Body is authored as Markdown, stored verbatim, and additionally rendered to sanitized HTML at write time. Both representations are returned in the DTOs (`body` raw Markdown, `bodyHtml` sanitized HTML). The sanitizer strips script, iframe, on-* attributes, javascript: URLs, and other XSS vectors per a whitelist (allow paragraph, headings <=3, lists, code/pre, bold/italic, links with `rel="nofollow noopener"`, inline code, blockquote, tables). Sanitization runs on every write and on every audit-snapshot read so historical bodies are also safe to render.
+
+## FR-MCP-102 QA Generated FAQ Wiki Page
+
+FAQ wiki page: the documentation wiki output (Azure DevOps wiki under `docs/Project/wiki/azure/` and GitHub wiki under `docs/Project/wiki/github/`) includes a generated `FAQ.md` page rendered from the live `/mcpserver/qa/faq` endpoint of a configured workspace at build time. The page lists every accepted Q&A with the question title (linked to its detail endpoint), tags, vote counts, the rendered HTML body of the accepted answer, and the `sources[]` array as a sources section. The wiki Home / Sidebar / .order files reference the new FAQ page. The page is regenerated by the Nuke build during the wiki publication target.
 
 ## FR-MCP-REPL-001 YAML Protocol STDIO REPL Host
 

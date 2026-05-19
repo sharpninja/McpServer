@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 namespace McpServer.Support.Mcp.Controllers;
 
 /// <summary>
-/// REST endpoints for managing requirements documents (FR/TR/TEST/mapping) and generating canonical Markdown/workspace output.
+/// REST endpoints for managing requirements documents (FR/TR/TEST/mapping/matrix) and generating canonical Markdown/workspace output.
 /// </summary>
 [ApiController]
 [Route("mcpserver/requirements")]
@@ -452,7 +452,7 @@ public sealed class RequirementsController : ControllerBase
     }
 
     /// <summary>Generates a requirements document or exports all requirements documents to the workspace.</summary>
-    /// <param name="doc">Document selector: functional, technical, testing, mapping, or all.</param>
+    /// <param name="doc">Document selector: functional, technical, testing, mapping, matrix, or all.</param>
     /// <param name="format">Output format: markdown or wiki.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     [HttpGet("generate")]
@@ -462,7 +462,7 @@ public sealed class RequirementsController : ControllerBase
         CancellationToken cancellationToken = default)
     {
         if (!TryParseDocType(doc, out var docType))
-            return BadRequest(new { error = $"Unsupported doc value '{doc}'. Expected functional|technical|testing|mapping|all." });
+            return BadRequest(new { error = $"Unsupported doc value '{doc}'. Expected functional|technical|testing|mapping|matrix|all." });
 
         var normalizedFormat = (format ?? "markdown").Trim().ToLowerInvariant();
         if (normalizedFormat == "wiki")
@@ -491,6 +491,7 @@ public sealed class RequirementsController : ControllerBase
             RequirementsDocType.Technical => RequirementsDocumentRenderer.TechnicalFileName,
             RequirementsDocType.Testing => RequirementsDocumentRenderer.TestingFileName,
             RequirementsDocType.Mapping => RequirementsDocumentRenderer.MappingFileName,
+            RequirementsDocType.Matrix => RequirementsDocumentRenderer.MatrixFileName,
             _ => "requirements.md"
         };
 
@@ -548,6 +549,9 @@ public sealed class RequirementsController : ControllerBase
             case "mapping":
                 docType = RequirementsDocType.Mapping;
                 return true;
+            case "matrix":
+                docType = RequirementsDocType.Matrix;
+                return true;
             case "all":
                 docType = RequirementsDocType.All;
                 return true;
@@ -584,7 +588,8 @@ public sealed class RequirementsController : ControllerBase
             _requirementsOptions.FunctionalRequirementsPath,
             _requirementsOptions.TechnicalRequirementsPath,
             _requirementsOptions.TestingRequirementsPath,
-            _requirementsOptions.MappingPath
+            _requirementsOptions.MappingPath,
+            _requirementsOptions.MatrixPath
         };
 
         var configuredDirectory = configuredPaths
