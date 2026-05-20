@@ -246,26 +246,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-107 | ✅ Complete | RequirementsControllerTests |
 | TEST-MCP-108 | ✅ Complete | RequirementsWorkflow, ReplCommandDispatcher, mcpserver-codex-plugin tests/repl-invoke-shim.bats |
 | TEST-MCP-109 | ✅ Complete | mcpserver-codex-plugin tests/repl-invoke-shim.bats, Claude Code skills.bats, Copilot requirements skill, Cline requirements.test.ts |
-
----
-
-## Requirements Freeze Tag: REPL v1.0 Delivery
-
-**Date:** 2025-01-04
-**Freeze Tag:** `REPL-v1.0-FREEZE`
-**Status:** ✅ **Requirements Frozen for REPL v1.0 Delivery**
-
-All REPL iteration 1-6 requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005, TR-MCP-REPL-001 through TR-MCP-REPL-007, TEST-MCP-REPL-001 through TEST-MCP-REPL-020) are complete with:
-- Full source code traceability comments in all `McpServer.Repl.Core` and `McpServer.Repl.Host` files
-- All unit tests passing (iterations 1-6)
-- All integration tests passing
-- Complete YAML protocol implementation
-- Trust bootstrap and auth rotation support
-- Workflow command parity with REST endpoints
-- DI-integrated architecture
-- Comprehensive test coverage
-
-**Reconciliation:** All requirement defects discovered during TDD have been reconciled back into the canonical requirements documents. No outstanding defects or gaps remain for REPL v1.0.
 | FR-MCP-078 | ✅ Complete | GraphRagController, GraphRagAdHocService, McpServer.GraphRag |
 | FR-MCP-079 | ✅ Complete | GraphRagController, GraphRagAdHocService |
 | FR-MCP-080 | ✅ Complete | GraphRagController, GraphRagAdHocService |
@@ -423,3 +403,21 @@ All REPL iteration 1-6 requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005, TR
 | TEST-MCP-133 | 🔲 Planned | Voter-history endpoint tests |
 | TEST-MCP-134 | 🔲 Planned | One-vote-per-user tests |
 | TEST-MCP-135 | 🔲 Planned | Current vote state endpoint tests |
+| TEST-GRAPHRAG-ADHOC-001 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-002 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-003 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-004 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-005 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-006 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-007 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-007-1 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-007-2 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-007-3 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-007-4 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010A-1 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010A-2 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010B-1 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010B-2 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010C-1 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010C-2 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010C-3 | Tracked | Testing-Requirements.md |

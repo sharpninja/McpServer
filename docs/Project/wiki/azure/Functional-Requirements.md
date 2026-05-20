@@ -234,11 +234,7 @@ The server shall support CRUD operations for Functional Requirements (FR), Techn
 
 ## FR-MCP-041 Requirements Document Generation
 
-The server shall expose a requirements document generation endpoint that renders any canonical requirements document as Markdown, including the `Requirements-Matrix.md` traceability matrix, and exports all canonical documents directly to the workspace with canonical filenames.
-
-**Status:** ✅ Complete
-
-**Covered by:** `RequirementsController` (`POST /mcpserver/requirements/generate`), `RequirementsDocumentService`, `RequirementsDocumentRenderer`
+The server shall expose a requirements document generation endpoint that renders any canonical requirements document as Markdown, including the Requirements-Matrix.md traceability matrix, and exports all canonical documents directly to the workspace with canonical filenames.
 
 ## FR-MCP-042 Requirements Management MCP Tools
 
