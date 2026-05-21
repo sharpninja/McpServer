@@ -306,6 +306,19 @@ templates:
       - Codex plugin tools/hooks must satisfy `agent_plugins.agents.Codex`; Claude plugin tools/hooks must satisfy `agent_plugins.agents.Claude`; Copilot plugin tools/hooks must satisfy `agent_plugins.agents.Copilot`; Cline MCP tools must satisfy `agent_plugins.agents.Cline`.
 
 
+      ## Codex MCP Quickstart
+
+      If you are Codex, use the Codex plugin wrappers before direct REPL calls:
+
+      1. Run `Invoke-CodexMcpPlugin.ps1 -Command Status` from the `mcpserver-codex-plugin` root to verify plugin root, marker trust, health nonce, workspace path, session id, current turn, and supported namespaces.
+
+      2. Invoke MCP workflow methods with `Invoke-CodexMcpPlugin.ps1 -Command Invoke -Method <method> -Params <yaml>` so YAML parameters are passed through stdin instead of fragile nested shell quoting.
+
+      3. Complete the session-log turn intentionally with `Invoke-CodexMcpPlugin.ps1 -Command CompleteTurn -Response <final response>` before the final answer when the stop gate cannot infer completion.
+
+      4. For `mcpserver-repl --agent-stdio`, send one YAML envelope per document separated by `---`. Do not send a single `type: batch` envelope; batch envelopes are rejected with `unsupported_batch_envelope`.
+
+
       ## Per User Message
 
       1. Post a new session log turn before starting work.

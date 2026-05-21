@@ -480,6 +480,38 @@ public class YamlPipeExecutionTests
     }
 
     /// <summary>
+    /// A batch envelope returns an actionable protocol error instead of a generic unsupported
+    /// envelope response. The diagnostic preserves the first nested request id when present and
+    /// points callers at the supported YAML stream shape.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_BatchEnvelope_ReturnsActionableUnsupportedBatchError()
+    {
+        var serializer = new YamlSerializer();
+        var envelope = serializer.Deserialize("""
+            type: batch
+            payload:
+              requests:
+                - requestId: req-batch-001
+                  method: client.todo.QueryAsync
+                  params:
+                    keyword: auth
+            """);
+        var sut = new ReplCommandDispatcher(Substitute.For<IGenericClientPassthrough>());
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("error", response.Type);
+        var err = Assert.IsAssignableFrom<IErrorPayload>(response.Payload);
+        Assert.Equal("req-batch-001", err.RequestId);
+        Assert.Equal("unsupported_batch_envelope", err.Code);
+        Assert.Contains("agent-stdio", err.Message);
+        Assert.Contains("---", err.Message);
+        Assert.NotNull(err.Details);
+        Assert.True(err.Details!.ContainsKey("supportedMultiRequestShape"));
+    }
+
+    /// <summary>
     /// When the passthrough throws, the dispatcher wraps the failure in an error envelope
     /// carrying the original request id and code <c>method_invocation_error</c> — it must not
     /// let the exception escape past the dispatch boundary, so the agent loop stays alive.
