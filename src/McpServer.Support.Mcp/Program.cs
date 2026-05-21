@@ -22,6 +22,7 @@ using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Controllers;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Services.FederationAdapters;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Database;
 using McpServer.Support.Mcp.Web;
@@ -433,6 +434,7 @@ builder.Services.Configure<FederationOptions>(
     builder.Configuration.GetSection(FederationOptions.SectionName));
 builder.Services.AddSingleton<FederationRegistry>();
 builder.Services.AddSingleton<FederationProxyService>();
+builder.Services.AddFederationStateAdapters();
 builder.Services.AddSingleton<IFederationTopologyService, FederationTopologyService>();
 builder.Services.AddSingleton<FederationStateAdapterRegistry>();
 builder.Services.AddHttpClient(FederationProxyService.HttpClientName)
