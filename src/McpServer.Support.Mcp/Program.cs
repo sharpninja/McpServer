@@ -433,6 +433,8 @@ builder.Services.Configure<FederationOptions>(
     builder.Configuration.GetSection(FederationOptions.SectionName));
 builder.Services.AddSingleton<FederationRegistry>();
 builder.Services.AddSingleton<FederationProxyService>();
+builder.Services.AddSingleton<IFederationTopologyService, FederationTopologyService>();
+builder.Services.AddSingleton<FederationStateAdapterRegistry>();
 builder.Services.AddHttpClient(FederationProxyService.HttpClientName)
     .ConfigurePrimaryHttpMessageHandler(() => new System.Net.Http.HttpClientHandler
     {
@@ -517,6 +519,7 @@ if (!builder.Environment.IsEnvironment("Test"))
     builder.Services.AddHostedService(sp => (WorkspaceProcessManager)sp.GetRequiredService<IWorkspaceProcessManager>());
     builder.Services.AddHostedService(sp => sp.GetRequiredService<TunnelRegistry>());
     builder.Services.AddHostedService<AgentPoolSeedService>();
+    builder.Services.AddHostedService<FederationQueuedOperationReplayService>();
     // TR-MCP-TODO-007: one-shot import from legacy mcp.db into the configured authoritative DB.
     builder.Services.AddHostedService<LegacyTodoSqliteMigrator>();
 }

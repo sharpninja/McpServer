@@ -959,3 +959,9 @@ Presence signaling SHALL be excluded from one-shot sessions.
 ## TR-PLANNED-013A
 
 `AddControllers().ConfigureApiBehaviorOptions` installs an `InvalidModelStateResponseFactory` that produces `application/problem+json` responses for body-binding failures on `/mcpserver/*` endpoints. The factory strips the action parameter name (`dto`, `body`, `turn`) from the `errors` keys, replacing them with `$` so callers see the canonical JSON root marker instead of a misleading wrapper field name. `SessionLogController.SubmitAsync` and `GetByIdAsync` use `ValidationProblem` for domain validation to keep the response shape uniform.
+
+## TR-MCP-FED-001
+
+**Hub Proxy Federation Contract** - Federation configuration SHALL include `Role`, `HubBaseUrl`, `ProxyId`, `EnrollmentToken`, queue settings, and sync settings while preserving existing target/route configuration. Durable storage SHALL track proxies, proxy-hosted workspaces, operations, outbox fanout rows, and conflicts across SQLite, PostgreSQL, and SQL Server providers. Hub endpoints SHALL support proxy enrollment, heartbeat, proxy/workspace inventory, operation intake, acknowledgement, queue status, conflicts, sync, and adapter coverage. LocalProxy routing SHALL forward MCP traffic to the hub with loop-protection and operation headers, while local infrastructure and federation diagnostic endpoints remain local. Mutating LocalProxy requests SHALL queue durably when the hub is unreachable and replay through the hub intake endpoint.
+
+**Covered by:** `FederationOptions`, `FederationRegistry`, `FederationHeaders`, `FederationTopologyService`, `FederationQueuedOperationReplayService`, `FederationController`, `McpDbContext`, `Federation*Entity`, provider migrations, `FederationMiddleware`, `FederationProxyService`

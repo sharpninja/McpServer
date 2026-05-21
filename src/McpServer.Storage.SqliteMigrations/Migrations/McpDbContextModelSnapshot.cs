@@ -70,7 +70,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("AgentDefinitions", (string)null);
+                    b.ToTable("AgentDefinitions");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentEventLogEntity", b =>
@@ -120,7 +120,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspacePath");
 
-                    b.ToTable("AgentEventLogs", (string)null);
+                    b.ToTable("AgentEventLogs");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentWorkspaceEntity", b =>
@@ -202,7 +202,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.HasIndex("AgentDefinitionId", "WorkspacePath")
                         .IsUnique();
 
-                    b.ToTable("AgentWorkspaces", (string)null);
+                    b.ToTable("AgentWorkspaces");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ContextChunkEntity", b =>
@@ -239,7 +239,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("Chunks", (string)null);
+                    b.ToTable("Chunks");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ContextDocumentEntity", b =>
@@ -280,7 +280,282 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("Documents", (string)null);
+                    b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.FederationConflictEntity", b =>
+                {
+                    b.Property<string>("ConflictId")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DetailsJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Domain")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HubVersion")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OperationId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProxyId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProxyVersion")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResolutionStatus")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("ResolvedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResourceId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ConflictId");
+
+                    b.HasIndex("OperationId");
+
+                    b.HasIndex("Domain", "ResourceId");
+
+                    b.HasIndex("ProxyId", "ResolutionStatus");
+
+                    b.ToTable("FederationConflicts");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.FederationOperationEntity", b =>
+                {
+                    b.Property<string>("OperationId")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("AcknowledgedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("AttemptCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("BaseVersion")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("BodyBase64")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Domain")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("GlobalWorkspaceId")
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HeadersJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HttpMethod")
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HubVersion")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastError")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Method")
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Path")
+                        .HasMaxLength(2048)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProxyId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResourceId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SourceOperationId")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("UpdatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("OperationId");
+
+                    b.HasIndex("CreatedAtUtc");
+
+                    b.HasIndex("SourceOperationId");
+
+                    b.HasIndex("Domain", "ResourceId");
+
+                    b.HasIndex("ProxyId", "Status");
+
+                    b.ToTable("FederationOperations");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.FederationOutboxEntity", b =>
+                {
+                    b.Property<long>("Sequence")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset?>("AcknowledgedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OperationId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProxyId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Sequence");
+
+                    b.HasIndex("OperationId");
+
+                    b.HasIndex("ProxyId", "Sequence");
+
+                    b.ToTable("FederationOutbox");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.FederationProxyEntity", b =>
+                {
+                    b.Property<string>("ProxyId")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("BaseUrl")
+                        .HasMaxLength(2048)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DisplayName")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("LastHeartbeatUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MetadataJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("UpdatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ProxyId");
+
+                    b.HasIndex("LastHeartbeatUtc");
+
+                    b.HasIndex("Status");
+
+                    b.ToTable("FederationProxies");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.FederationWorkspaceEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("GlobalWorkspaceId")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTimeOffset>("LastSeenUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MetadataJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProxyId")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Version")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WorkspaceName")
+                        .HasMaxLength(512)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("WorkspacePath")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GlobalWorkspaceId")
+                        .IsUnique();
+
+                    b.HasIndex("ProxyId");
+
+                    b.HasIndex("ProxyId", "WorkspacePath")
+                        .IsUnique();
+
+                    b.ToTable("FederationWorkspaces");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.GraphEntityEntity", b =>
@@ -325,7 +600,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("GraphEntities", (string)null);
+                    b.ToTable("GraphEntities");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.GraphRelationshipEntity", b =>
@@ -380,7 +655,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("GraphRelationships", (string)null);
+                    b.ToTable("GraphRelationships");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementEntity", b =>
@@ -424,7 +699,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId", "Id");
 
-                    b.ToTable("Requirements", (string)null);
+                    b.ToTable("Requirements");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.RequirementTraceabilityLinkEntity", b =>
@@ -456,7 +731,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId", "TargetKind", "TargetId");
 
-                    b.ToTable("RequirementTraceabilityLinks", (string)null);
+                    b.ToTable("RequirementTraceabilityLinks");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogActionEntity", b =>
@@ -496,7 +771,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("SessionLogActions", (string)null);
+                    b.ToTable("SessionLogActions");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogCommitEntity", b =>
@@ -540,7 +815,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("SessionLogTurnId");
 
-                    b.ToTable("SessionLogCommits", (string)null);
+                    b.ToTable("SessionLogCommits");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogEntity", b =>
@@ -650,7 +925,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.HasIndex("SourceType", "SessionId")
                         .IsUnique();
 
-                    b.ToTable("SessionLogs", (string)null);
+                    b.ToTable("SessionLogs");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogProcessingDialogEntity", b =>
@@ -691,7 +966,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("SessionLogProcessingDialogs", (string)null);
+                    b.ToTable("SessionLogProcessingDialogs");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnContextEntity", b =>
@@ -721,7 +996,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("SessionLogTurnContexts", (string)null);
+                    b.ToTable("SessionLogTurnContexts");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnEntity", b =>
@@ -794,7 +1069,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.HasIndex("SessionLogId", "RequestId")
                         .IsUnique();
 
-                    b.ToTable("SessionLogTurns", (string)null);
+                    b.ToTable("SessionLogTurns");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnStringListEntity", b =>
@@ -826,7 +1101,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("SessionLogTurnId", "ListType");
 
-                    b.ToTable("SessionLogTurnStringLists", (string)null);
+                    b.ToTable("SessionLogTurnStringLists");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.SessionLogTurnTagEntity", b =>
@@ -853,7 +1128,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("SessionLogTurnTags", (string)null);
+                    b.ToTable("SessionLogTurnTags");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoAuditHistoryEntity", b =>
@@ -906,7 +1181,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.HasIndex("WorkspaceId", "TodoId", "Version")
                         .IsUnique();
 
-                    b.ToTable("TodoAuditHistory", (string)null);
+                    b.ToTable("TodoAuditHistory");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.TodoDocumentMetadataEntity", b =>
@@ -945,7 +1220,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasKey("WorkspaceId", "SingletonId");
 
-                    b.ToTable("TodoDocumentMetadata", null, t =>
+                    b.ToTable("TodoDocumentMetadata", t =>
                         {
                             t.HasCheckConstraint("CK_TodoDocumentMetadata_Singleton", "\"SingletonId\" = 1");
                         });
@@ -1046,7 +1321,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("Section");
 
-                    b.ToTable("TodoItems", (string)null);
+                    b.ToTable("TodoItems");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolBucketEntity", b =>
@@ -1097,7 +1372,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("ToolBuckets", (string)null);
+                    b.ToTable("ToolBuckets");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolDefinitionEntity", b =>
@@ -1151,7 +1426,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.HasIndex("Name", "WorkspacePath")
                         .IsUnique();
 
-                    b.ToTable("ToolDefinitions", (string)null);
+                    b.ToTable("ToolDefinitions");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.ToolDefinitionTagEntity", b =>
@@ -1181,7 +1456,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                     b.HasIndex("ToolDefinitionId", "Tag")
                         .IsUnique();
 
-                    b.ToTable("ToolDefinitionTags", (string)null);
+                    b.ToTable("ToolDefinitionTags");
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.AgentWorkspaceEntity", b =>
@@ -1204,6 +1479,54 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                         .IsRequired();
 
                     b.Navigation("Document");
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.FederationConflictEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.FederationOperationEntity", null)
+                        .WithMany()
+                        .HasForeignKey("OperationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.FederationProxyEntity", null)
+                        .WithMany()
+                        .HasForeignKey("ProxyId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.FederationOperationEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.FederationProxyEntity", null)
+                        .WithMany()
+                        .HasForeignKey("ProxyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.FederationOutboxEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.FederationOperationEntity", null)
+                        .WithMany()
+                        .HasForeignKey("OperationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.FederationProxyEntity", null)
+                        .WithMany()
+                        .HasForeignKey("ProxyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.FederationWorkspaceEntity", b =>
+                {
+                    b.HasOne("McpServer.Support.Mcp.Storage.Entities.FederationProxyEntity", null)
+                        .WithMany()
+                        .HasForeignKey("ProxyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("McpServer.Support.Mcp.Storage.Entities.GraphRelationshipEntity", b =>

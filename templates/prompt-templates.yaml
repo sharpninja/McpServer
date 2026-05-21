@@ -319,6 +319,15 @@ templates:
       4. For `mcpserver-repl --agent-stdio`, send one YAML envelope per document separated by `---`. Do not send a single `type: batch` envelope; batch envelopes are rejected with `unsupported_batch_envelope`.
 
 
+      ## Federation Topology
+
+      - To identify hub/proxy topology, call the supported federation status surface, preferably through your required plugin or client wrapper: `/mcpserver/federation/status`.
+      - Status fields to report when relevant: `role`, `configuredRole`, `hubBaseUrl`, `proxyId`, `proxyCount`, `hostedWorkspaceCount`, `queueDepth`, and `conflictCount`.
+      - `Standalone` serves local workspaces only. `DirectProxy` is the existing point-to-point proxy mode. `Hub` is authoritative for enrolled proxies and global workspace inventory. `LocalProxy` forwards MCP requests to `hubBaseUrl` and queues mutating requests during hub outages.
+      - LocalProxy queued writes return `202 Accepted` with `X-Mcp-Queued: true` and `X-Mcp-Operation-Id`. Treat the write as optimistic until the hub acknowledges it.
+      - If `queueDepth` or `conflictCount` is non-zero, include that in session log status and avoid claiming federation synchronization is complete.
+
+
       ## Per User Message
 
       1. Post a new session log turn before starting work.

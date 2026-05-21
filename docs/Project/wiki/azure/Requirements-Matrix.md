@@ -403,6 +403,9 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-133 | 🔲 Planned | Voter-history endpoint tests |
 | TEST-MCP-134 | 🔲 Planned | One-vote-per-user tests |
 | TEST-MCP-135 | 🔲 Planned | Current vote state endpoint tests |
+| FR-MCP-103 | 🟡 Partial | Hub-and-spoke federation |
+| TR-MCP-FED-001 | 🟡 Partial | Hub proxy federation contract |
+| TEST-MCP-136 | 🟡 Partial | Hub-and-spoke federation tests |
 | TEST-GRAPHRAG-ADHOC-001 | Tracked | Testing-Requirements.md |
 | TEST-GRAPHRAG-ADHOC-002 | Tracked | Testing-Requirements.md |
 | TEST-GRAPHRAG-ADHOC-003 | Tracked | Testing-Requirements.md |

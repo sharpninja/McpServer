@@ -423,3 +423,6 @@ All REPL iteration 1-6 requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005, TR
 | TEST-MCP-133 | 🔲 Planned | Voter-history endpoint tests |
 | TEST-MCP-134 | 🔲 Planned | One-vote-per-user tests |
 | TEST-MCP-135 | 🔲 Planned | Current vote state endpoint tests |
+| FR-MCP-103 | 🟡 Partial | Hub-and-spoke federation |
+| TR-MCP-FED-001 | 🟡 Partial | Hub proxy federation contract |
+| TEST-MCP-136 | 🟡 Partial | Hub-and-spoke federation tests |

@@ -412,6 +412,10 @@ SQLite FTS5 full-text search support and hybrid ranking.
 **Workspace Notification Category Coverage** — The notification system SHALL support at minimum the categories: `todo`, `session_log`, `repo`, `context`, `tool_registry`, `tool_bucket`, `workspace`, `github`, `marker`, `agent`, and `requirements`.
 **Covered by:** `ChangeEventCategories` and all publishing call sites in mutation services/controllers
 
+## TR-MCP-FED-001
+
+**Hub proxy federation contract** — Federation shall persist proxy, workspace, operation, outbox, and conflict records; expose enrollment, heartbeat, inventory, operation replay, queue status, conflict, sync, and acknowledgement APIs; route LocalProxy /mcpserver/* and /mcp-transport requests through the hub with hop protection and federation headers; and register mutable-state adapters for every replicated MCP domain or an explicit local-only exemption.
+
 ## TR-MCP-GH-001
 
 **GitHub OAuth Bootstrap Configuration Contract** — The server SHALL bind GitHub integration settings from `Mcp:GitHub`, including OAuth client metadata (`ClientId`, `RedirectUri`, `AuthorizeEndpoint`, `Scopes`) and token store path/fallback policy flags. REST endpoints under `/mcpserver/gh/oauth/*` SHALL expose the effective bootstrap configuration and authorize URL composition.

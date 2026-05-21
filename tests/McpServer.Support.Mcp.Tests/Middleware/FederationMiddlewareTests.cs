@@ -23,6 +23,18 @@ public sealed class FederationMiddlewareTests
         return new FederationRegistry(Microsoft.Extensions.Options.Options.Create(opts));
     }
 
+    private static FederationRegistry CreateLocalProxyRegistry()
+    {
+        var opts = new FederationOptions
+        {
+            Enabled = true,
+            Role = FederationRole.LocalProxy,
+            HubBaseUrl = "http://hub.example:7147",
+            ProxyId = "PAYTON-LEGION2",
+        };
+        return new FederationRegistry(Microsoft.Extensions.Options.Options.Create(opts));
+    }
+
     private static FederationProxyService CreateProxyService()
     {
         var factory = Substitute.For<IHttpClientFactory>();
@@ -54,6 +66,14 @@ public sealed class FederationMiddlewareTests
         if (hopHeader is not null)
             ctx.Request.Headers[FederationProxyService.HopCountHeader] = hopHeader;
         return ctx;
+    }
+
+    private static FederationProxyService CreateProxyService(HttpMessageHandler handler)
+    {
+        var factory = Substitute.For<IHttpClientFactory>();
+        factory.CreateClient(FederationProxyService.HttpClientName)
+               .Returns(new HttpClient(handler));
+        return new FederationProxyService(factory, NullLogger<FederationProxyService>.Instance);
     }
 
     // --- Pass-through cases ---
@@ -172,5 +192,57 @@ public sealed class FederationMiddlewareTests
         await mw.InvokeAsync(ctx, new WorkspaceContext());
 
         Assert.NotEqual(508, ctx.Response.StatusCode);
+    }
+
+    /// <summary>LocalProxy mode forwards MCP transport requests to the configured hub.</summary>
+    [Fact]
+    public async Task InvokeAsync_LocalProxy_ProxiesMcpTransportToHub()
+    {
+        var registry = CreateLocalProxyRegistry();
+        var nextCalled = false;
+        var handler = new CapturingHandler();
+        var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, registry, CreateProxyService(handler));
+
+        var ctx = CreateContext("/mcp-transport");
+        ctx.Request.Method = "POST";
+        ctx.Response.Body = new MemoryStream();
+        await mw.InvokeAsync(ctx, new WorkspaceContext { WorkspacePath = @"F:\GitHub\McpServer" }).ConfigureAwait(true);
+
+        Assert.False(nextCalled);
+        Assert.NotNull(handler.Request);
+        Assert.Equal("http://hub.example:7147/mcp-transport", handler.Request!.RequestUri!.ToString());
+        Assert.True(handler.Request.Headers.Contains(FederationHeaders.ProxyId));
+        Assert.Equal("PAYTON-LEGION2", handler.Request.Headers.GetValues(FederationHeaders.ProxyId).Single());
+        Assert.True(handler.Request.Headers.Contains(FederationHeaders.OperationId));
+        Assert.Equal(@"F:\GitHub\McpServer", handler.Request.Headers.GetValues(FederationHeaders.GlobalWorkspaceId).Single());
+    }
+
+    /// <summary>Standalone and DirectProxy modes keep MCP transport local for compatibility.</summary>
+    [Fact]
+    public async Task InvokeAsync_DirectProxy_KeepsMcpTransportLocal()
+    {
+        var registry = CreateRegistry(enabled: true, defaultTarget: "t1");
+        var nextCalled = false;
+        var handler = new CapturingHandler();
+        var mw = CreateMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, registry, CreateProxyService(handler));
+
+        await mw.InvokeAsync(CreateContext("/mcp-transport"), new WorkspaceContext()).ConfigureAwait(true);
+
+        Assert.True(nextCalled);
+        Assert.Null(handler.Request);
+    }
+
+    private sealed class CapturingHandler : HttpMessageHandler
+    {
+        public HttpRequestMessage? Request { get; private set; }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            Request = request;
+            return Task.FromResult(new HttpResponseMessage(System.Net.HttpStatusCode.OK)
+            {
+                Content = new StringContent("{}"),
+            });
+        }
     }
 }

@@ -31,6 +31,58 @@ public sealed class FederationClient : McpClientBase
     public async Task<FederationStatusResponse> GetStatusAsync(CancellationToken cancellationToken = default)
         => await GetAsync<FederationStatusResponse>("mcpserver/federation/status", cancellationToken);
 
+    /// <summary>List local proxies enrolled with the hub.</summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Proxy inventory.</returns>
+    public async Task<List<FederationProxyInfo>> ListProxiesAsync(CancellationToken cancellationToken = default)
+        => await GetAsync<List<FederationProxyInfo>>("mcpserver/federation/proxies", cancellationToken);
+
+    /// <summary>List proxy-hosted workspaces known by the hub.</summary>
+    /// <param name="proxyId">Optional proxy filter.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Workspace inventory.</returns>
+    public async Task<List<FederationWorkspaceInfo>> ListWorkspacesAsync(string? proxyId = null, CancellationToken cancellationToken = default)
+    {
+        var path = string.IsNullOrWhiteSpace(proxyId)
+            ? "mcpserver/federation/workspaces"
+            : $"mcpserver/federation/workspaces?proxyId={Encode(proxyId)}";
+        return await GetAsync<List<FederationWorkspaceInfo>>(path, cancellationToken);
+    }
+
+    /// <summary>Return queued operation and conflict counts.</summary>
+    /// <param name="proxyId">Optional proxy filter.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Queue status.</returns>
+    public async Task<FederationQueueStatusResponse> GetQueueStatusAsync(string? proxyId = null, CancellationToken cancellationToken = default)
+    {
+        var path = string.IsNullOrWhiteSpace(proxyId)
+            ? "mcpserver/federation/queue"
+            : $"mcpserver/federation/queue?proxyId={Encode(proxyId)}";
+        return await GetAsync<FederationQueueStatusResponse>(path, cancellationToken);
+    }
+
+    /// <summary>List federation conflicts.</summary>
+    /// <param name="proxyId">Optional proxy filter.</param>
+    /// <param name="openOnly">Whether to return only open conflicts.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Conflict inventory.</returns>
+    public async Task<List<FederationConflictInfo>> ListConflictsAsync(
+        string? proxyId = null,
+        bool openOnly = true,
+        CancellationToken cancellationToken = default)
+    {
+        var query = string.IsNullOrWhiteSpace(proxyId)
+            ? $"?openOnly={openOnly}"
+            : $"?proxyId={Encode(proxyId)}&openOnly={openOnly}";
+        return await GetAsync<List<FederationConflictInfo>>($"mcpserver/federation/conflicts{query}", cancellationToken);
+    }
+
+    /// <summary>Return mutable state adapter coverage diagnostics.</summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Adapter coverage rows.</returns>
+    public async Task<List<FederationStateAdapterCoverage>> GetAdapterCoverageAsync(CancellationToken cancellationToken = default)
+        => await GetAsync<List<FederationStateAdapterCoverage>>("mcpserver/federation/adapters", cancellationToken);
+
     /// <summary>Enable federation proxying globally.</summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Updated federation status.</returns>

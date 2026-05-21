@@ -96,6 +96,21 @@ public sealed class McpDbContext : DbContext
     /// <summary>Authoritative workspace-scoped FR-to-TR/TEST traceability links.</summary>
     public DbSet<RequirementTraceabilityLinkEntity> RequirementTraceabilityLinks => Set<RequirementTraceabilityLinkEntity>();
 
+    /// <summary>FR-MCP-103: Enrolled local federation proxies known by the hub.</summary>
+    public DbSet<FederationProxyEntity> FederationProxies => Set<FederationProxyEntity>();
+
+    /// <summary>FR-MCP-103: Workspaces hosted by local federation proxies.</summary>
+    public DbSet<FederationWorkspaceEntity> FederationWorkspaces => Set<FederationWorkspaceEntity>();
+
+    /// <summary>FR-MCP-103: Queued, replayed, and acknowledged federation operations.</summary>
+    public DbSet<FederationOperationEntity> FederationOperations => Set<FederationOperationEntity>();
+
+    /// <summary>FR-MCP-103: Hub fanout rows waiting for proxy acknowledgement.</summary>
+    public DbSet<FederationOutboxEntity> FederationOutbox => Set<FederationOutboxEntity>();
+
+    /// <summary>FR-MCP-103: Conflicts created by stale proxy writes.</summary>
+    public DbSet<FederationConflictEntity> FederationConflicts => Set<FederationConflictEntity>();
+
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -298,6 +313,64 @@ public sealed class McpDbContext : DbContext
         {
             e.HasKey(x => new { x.WorkspaceId, x.FrId, x.TargetKind, x.TargetId });
             e.HasIndex(x => new { x.WorkspaceId, x.TargetKind, x.TargetId });
+        });
+
+        modelBuilder.Entity<FederationProxyEntity>(e =>
+        {
+            e.HasIndex(x => x.Status);
+            e.HasIndex(x => x.LastHeartbeatUtc);
+        });
+
+        modelBuilder.Entity<FederationWorkspaceEntity>(e =>
+        {
+            e.HasIndex(x => x.GlobalWorkspaceId).IsUnique();
+            e.HasIndex(x => new { x.ProxyId, x.WorkspacePath }).IsUnique();
+            e.HasIndex(x => x.ProxyId);
+            e.HasOne<FederationProxyEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.ProxyId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<FederationOperationEntity>(e =>
+        {
+            e.HasIndex(x => new { x.ProxyId, x.Status });
+            e.HasIndex(x => x.SourceOperationId);
+            e.HasIndex(x => new { x.Domain, x.ResourceId });
+            e.HasIndex(x => x.CreatedAtUtc);
+            e.HasOne<FederationProxyEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.ProxyId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<FederationOutboxEntity>(e =>
+        {
+            e.HasIndex(x => new { x.ProxyId, x.Sequence });
+            e.HasIndex(x => x.OperationId);
+            e.HasOne<FederationProxyEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.ProxyId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasOne<FederationOperationEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.OperationId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<FederationConflictEntity>(e =>
+        {
+            e.HasIndex(x => new { x.ProxyId, x.ResolutionStatus });
+            e.HasIndex(x => x.OperationId);
+            e.HasIndex(x => new { x.Domain, x.ResourceId });
+            e.HasOne<FederationOperationEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.OperationId)
+                .OnDelete(DeleteBehavior.Cascade);
+            e.HasOne<FederationProxyEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.ProxyId)
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         modelBuilder.Entity<ContextDocumentEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);

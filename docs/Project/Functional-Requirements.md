@@ -753,3 +753,9 @@ Session log POST shall return RFC 7807 ProblemDetails on body-binding or validat
 Session log REST shall expose `GET /mcpserver/sessionlog/{agent}/{sessionId}` (single-record fetch under tenancy) and `POST /mcpserver/sessionlog/{agent}/{sessionId}/turn` (turn-append by RequestId). Unsupported verbs on either route return 405 Method Not Allowed with an `Allow` header.
 
 **Covered by:** `SessionLogController.GetByIdAsync`, `SessionLogController.UpsertTurnAsync`, `SessionLogService.GetAsync`, `SessionLogService.UpsertTurnAsync`
+
+## FR-MCP-103 Hub-and-Spoke Federation
+
+The server shall support hub-and-spoke federation where a `Hub` instance is authoritative for enrolled `LocalProxy` servers, global workspace inventory, operation intake, sync fanout, queue status, and conflicts. Existing point-to-point federation remains supported as `DirectProxy`; `Standalone` continues to serve only local workspaces. A LocalProxy shall forward MCP requests to the configured hub, queue mutating requests durably during hub outages, replay queued operations when connectivity returns, and expose role, hub URL, proxy id, queue depth, stale/queued status, and conflict status to agents and operators.
+
+**Covered by:** `FederationOptions`, `FederationRegistry`, `FederationMiddleware`, `FederationProxyService`, `FederationTopologyService`, `FederationQueuedOperationReplayService`, `FederationController`, provider migrations, `templates/prompt-templates.yaml`
