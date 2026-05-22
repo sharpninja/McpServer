@@ -39,6 +39,7 @@ public sealed class FederationProxyService
     private readonly ILogger<FederationProxyService> _logger;
     private readonly IFederationTopologyService? _topologyService;
     private readonly IOptions<FederationOptions>? _options;
+    private readonly FederationStateAdapterRegistry? _adapterRegistry;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FederationProxyService"/> class.
@@ -47,16 +48,19 @@ public sealed class FederationProxyService
     /// <param name="logger">Logger.</param>
     /// <param name="topologyService">Optional topology service used to queue local proxy writes after hub outages.</param>
     /// <param name="options">Optional federation options.</param>
+    /// <param name="adapterRegistry">Optional adapter registry used to reject un-replayable queued writes.</param>
     public FederationProxyService(
         IHttpClientFactory httpClientFactory,
         ILogger<FederationProxyService> logger,
         IFederationTopologyService? topologyService = null,
-        IOptions<FederationOptions>? options = null)
+        IOptions<FederationOptions>? options = null,
+        FederationStateAdapterRegistry? adapterRegistry = null)
     {
         _httpClientFactory = httpClientFactory;
         _logger = logger;
         _topologyService = topologyService;
         _options = options;
+        _adapterRegistry = adapterRegistry;
     }
 
     /// <summary>
@@ -139,6 +143,20 @@ public sealed class FederationProxyService
 
         using (response)
         {
+            if ((int)response.StatusCode >= StatusCodes.Status500InternalServerError &&
+                await TryQueueFailedWriteAsync(
+                        context,
+                        operationId,
+                        sourceOperationId,
+                        proxyId,
+                        globalWorkspaceId,
+                        bodyCapture,
+                        ct)
+                    .ConfigureAwait(false))
+            {
+                return;
+            }
+
             context.Response.StatusCode = (int)response.StatusCode;
             CopyResponseHeaders(response, context.Response);
 
@@ -276,13 +294,17 @@ public sealed class FederationProxyService
             return false;
         }
 
+        var domain = InferDomain(context.Request.Path);
+        if (!CanQueueDomain(domain) || !CanReplayQueuedDomain(domain) || !CanReplayQueuedRequest(context.Request, domain))
+            return false;
+
         var response = await _topologyService.QueueLocalOperationAsync(new FederationOperationRequest
         {
             OperationId = operationId,
             ProxyId = proxyId,
             SourceOperationId = sourceOperationId,
             GlobalWorkspaceId = globalWorkspaceId,
-            Domain = InferDomain(context.Request.Path),
+            Domain = domain,
             ResourceId = InferResourceId(context.Request),
             HttpMethod = context.Request.Method,
             Path = BuildReplayPath(context.Request),
@@ -305,6 +327,60 @@ public sealed class FederationProxyService
             cancellationToken)
             .ConfigureAwait(false);
         return true;
+    }
+
+    private static bool CanQueueDomain(string domain)
+        => domain is not "context_metadata" and
+           not "github_metadata" and
+           not "repo_file_changes" and
+           not "marker_state" and
+           not "mcp_transport" and
+           not "unknown";
+
+    private bool CanReplayQueuedDomain(string domain)
+        => _adapterRegistry is null || _adapterRegistry.CanApply(domain);
+
+    private static bool CanReplayQueuedRequest(HttpRequest request, string domain)
+    {
+        var path = (request.Path.Value ?? string.Empty).TrimEnd('/');
+        return domain switch
+        {
+            "todo" => IsTodoReplayPath(request.Method, path),
+            "session_log" => HttpMethods.IsPost(request.Method) &&
+                             string.Equals(path, "/mcpserver/sessionlog", StringComparison.OrdinalIgnoreCase),
+            "workspace" => IsWorkspaceReplayPath(request.Method, path),
+            _ => false,
+        };
+    }
+
+    private static bool IsTodoReplayPath(string method, string path)
+    {
+        if (HttpMethods.IsPost(method))
+            return string.Equals(path, "/mcpserver/todo", StringComparison.OrdinalIgnoreCase);
+
+        if (!HttpMethods.IsPut(method) && !HttpMethods.IsPatch(method) && !HttpMethods.IsDelete(method))
+            return false;
+
+        var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        return segments.Length == 3 &&
+               string.Equals(segments[0], "mcpserver", StringComparison.OrdinalIgnoreCase) &&
+               string.Equals(segments[1], "todo", StringComparison.OrdinalIgnoreCase) &&
+               !string.IsNullOrWhiteSpace(segments[2]);
+    }
+
+    private static bool IsWorkspaceReplayPath(string method, string path)
+    {
+        if (HttpMethods.IsPost(method))
+            return string.Equals(path, "/mcpserver/workspace", StringComparison.OrdinalIgnoreCase);
+
+        if (!HttpMethods.IsPut(method) && !HttpMethods.IsDelete(method))
+            return false;
+
+        var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        return segments.Length == 3 &&
+               string.Equals(segments[0], "mcpserver", StringComparison.OrdinalIgnoreCase) &&
+               string.Equals(segments[1], "workspace", StringComparison.OrdinalIgnoreCase) &&
+               !string.IsNullOrWhiteSpace(segments[2]);
     }
 
     private async Task<RequestBodyCapture> CaptureBodyForQueueAsync(

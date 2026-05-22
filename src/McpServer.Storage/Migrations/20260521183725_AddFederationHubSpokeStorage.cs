@@ -149,7 +149,7 @@ namespace McpServer.Support.Mcp.Migrations
                         column: x => x.ProxyId,
                         principalTable: "FederationProxies",
                         principalColumn: "ProxyId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(

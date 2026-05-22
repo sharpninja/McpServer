@@ -155,6 +155,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
 
             ctx.TodoItems.Add(entity);
             var flat = ToFlatItem(entity);
+            await SyncTodoRequirementLinksAsync(ctx, entity, flat, cancellationToken).ConfigureAwait(false);
             await AppendAuditAsync(ctx, entity.Id, ChangeEventActions.Created, flat, null, ApiSource, cancellationToken).ConfigureAwait(false);
             await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
@@ -234,6 +235,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
             }
 
             var updatedFlat = ToFlatItem(existing);
+            await SyncTodoRequirementLinksAsync(ctx, existing, updatedFlat, cancellationToken).ConfigureAwait(false);
             await AppendAuditAsync(ctx, existing.Id, ChangeEventActions.Updated, updatedFlat, previousFlat, ApiSource, cancellationToken).ConfigureAwait(false);
             await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
@@ -262,6 +264,7 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
                 return new TodoMutationResult(false, $"Item with id '{id}' not found.", FailureKind: TodoMutationFailureKind.NotFound);
 
             var snapshot = ToFlatItem(existing);
+            await SoftDeleteTodoRequirementLinksAsync(ctx, existing, cancellationToken).ConfigureAwait(false);
             ctx.TodoItems.Remove(existing);
             await AppendAuditAsync(ctx, id, ChangeEventActions.Deleted, snapshot, snapshot, ApiSource, cancellationToken).ConfigureAwait(false);
             await ctx.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
@@ -387,6 +390,166 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
             PreviousSnapshotJson = SerializeFlatItem(previousSnapshot),
             Source = source,
         });
+    }
+
+    private async Task SyncTodoRequirementLinksAsync(
+        McpDbContext ctx,
+        TodoItemEntity entity,
+        TodoFlatItem flat,
+        CancellationToken cancellationToken)
+    {
+        var workspaceId = string.IsNullOrWhiteSpace(entity.WorkspaceId)
+            ? ctx.CurrentWorkspaceId
+            : entity.WorkspaceId;
+        var now = DateTimeOffset.UtcNow;
+        var todoRecord = await ctx.TodoRecords
+            .IgnoreQueryFilters()
+            .SingleOrDefaultAsync(row => row.WorkspaceId == workspaceId && row.TodoId == entity.Id, cancellationToken)
+            .ConfigureAwait(false);
+        if (todoRecord is null)
+        {
+            todoRecord = new TodoRecordEntity
+            {
+                WorkspaceId = workspaceId,
+                TodoId = entity.Id,
+                CreatedAtUtc = now,
+                UpdatedAtUtc = now,
+            };
+            ctx.TodoRecords.Add(todoRecord);
+        }
+        else
+        {
+            todoRecord.UpdatedAtUtc = now;
+            SetSoftDeleteState(ctx.Entry(todoRecord), false, null);
+        }
+
+        var desired = NormalizeRequirementLinks(flat)
+            .Select(link => (WorkspaceId: workspaceId, TodoId: entity.Id, link.Kind, link.Id))
+            .ToArray();
+
+        foreach (var link in desired)
+        {
+            await EnsureRequirementAsync(ctx, link.WorkspaceId, link.Kind, link.Id, now, cancellationToken).ConfigureAwait(false);
+        }
+
+        var existingLinks = await ctx.TodoRequirementLinks
+            .IgnoreQueryFilters()
+            .Where(row => row.WorkspaceId == workspaceId && row.TodoId == entity.Id)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var desiredKeys = desired
+            .Select(link => BuildTodoRequirementKey(link.Kind, link.Id))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var existing in existingLinks)
+        {
+            var key = BuildTodoRequirementKey(existing.RequirementKind, existing.RequirementId);
+            SetSoftDeleteState(ctx.Entry(existing), !desiredKeys.Contains(key), !desiredKeys.Contains(key) ? "todo_requirement_sync" : null);
+        }
+
+        foreach (var link in desired)
+        {
+            var existing = existingLinks.SingleOrDefault(row =>
+                string.Equals(row.RequirementKind, link.Kind, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(row.RequirementId, link.Id, StringComparison.OrdinalIgnoreCase));
+            if (existing is not null)
+            {
+                SetSoftDeleteState(ctx.Entry(existing), false, null);
+                continue;
+            }
+
+            ctx.TodoRequirementLinks.Add(new TodoRequirementLinkEntity
+            {
+                WorkspaceId = link.WorkspaceId,
+                TodoId = link.TodoId,
+                RequirementKind = link.Kind,
+                RequirementId = link.Id,
+                CreatedAtUtc = now,
+            });
+        }
+    }
+
+    private static async Task EnsureRequirementAsync(
+        McpDbContext ctx,
+        string workspaceId,
+        string kind,
+        string id,
+        DateTimeOffset now,
+        CancellationToken cancellationToken)
+    {
+        var existing = await ctx.Requirements
+            .IgnoreQueryFilters()
+            .SingleOrDefaultAsync(row => row.WorkspaceId == workspaceId && row.Kind == kind && row.Id == id, cancellationToken)
+            .ConfigureAwait(false);
+        if (existing is not null)
+        {
+            SetSoftDeleteState(ctx.Entry(existing), false, null);
+            return;
+        }
+
+        ctx.Requirements.Add(new RequirementEntity
+        {
+            WorkspaceId = workspaceId,
+            Kind = kind,
+            Id = id,
+            Title = id,
+            Body = $"Placeholder requirement backfilled for TODO link {id}.",
+            Priority = "medium",
+            Status = "pending",
+            CreatedAtUtc = now.ToString("O"),
+            UpdatedAtUtc = now.ToString("O"),
+        });
+    }
+
+    private static async Task SoftDeleteTodoRequirementLinksAsync(
+        McpDbContext ctx,
+        TodoItemEntity entity,
+        CancellationToken cancellationToken)
+    {
+        var workspaceId = string.IsNullOrWhiteSpace(entity.WorkspaceId)
+            ? ctx.CurrentWorkspaceId
+            : entity.WorkspaceId;
+        var links = await ctx.TodoRequirementLinks
+            .Where(row => row.WorkspaceId == workspaceId && row.TodoId == entity.Id)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        foreach (var link in links)
+        {
+            ctx.TodoRequirementLinks.Remove(link);
+        }
+
+        var record = await ctx.TodoRecords
+            .SingleOrDefaultAsync(row => row.WorkspaceId == workspaceId && row.TodoId == entity.Id, cancellationToken)
+            .ConfigureAwait(false);
+        if (record is not null)
+            ctx.TodoRecords.Remove(record);
+    }
+
+    private static IEnumerable<(string Kind, string Id)> NormalizeRequirementLinks(TodoFlatItem flat)
+    {
+        foreach (var id in NormalizeRequirementIds(flat.FunctionalRequirements))
+            yield return ("fr", id);
+        foreach (var id in NormalizeRequirementIds(flat.TechnicalRequirements))
+            yield return ("tr", id);
+    }
+
+    private static IEnumerable<string> NormalizeRequirementIds(IReadOnlyList<string>? ids)
+    {
+        return ids?
+            .Where(static id => !string.IsNullOrWhiteSpace(id))
+            .Select(static id => id.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            ?? [];
+    }
+
+    private static string BuildTodoRequirementKey(string kind, string id) => kind.ToLowerInvariant() + ":" + id;
+
+    private static void SetSoftDeleteState(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry, bool isDeleted, string? reason)
+    {
+        entry.Property("IsDeleted").CurrentValue = isDeleted;
+        entry.Property("DeletedAtUtc").CurrentValue = isDeleted ? DateTimeOffset.UtcNow : null;
+        entry.Property("DeletedBy").CurrentValue = isDeleted ? nameof(EfTodoService) : null;
+        entry.Property("DeleteReason").CurrentValue = reason;
     }
 
     private async Task<int> ResolveSectionOrderAsync(McpDbContext ctx, string section, CancellationToken cancellationToken)

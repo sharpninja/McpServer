@@ -36,16 +36,14 @@ public sealed class FederationTopologyService : IFederationTopologyService
     /// <inheritdoc />
     public FederationTopologySnapshot GetSnapshot()
     {
+        using var scope = _scopeFactory.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+        var snapshot = BuildSnapshot(db);
+
         lock (_snapshotLock)
-        {
-            return new FederationTopologySnapshot
-            {
-                ProxyCount = _snapshot.ProxyCount,
-                WorkspaceCount = _snapshot.WorkspaceCount,
-                QueueDepth = _snapshot.QueueDepth,
-                ConflictCount = _snapshot.ConflictCount,
-            };
-        }
+            _snapshot = snapshot;
+
+        return CopySnapshot(snapshot);
     }
 
     /// <inheritdoc />
@@ -227,11 +225,15 @@ public sealed class FederationTopologyService : IFederationTopologyService
 
         await using var scope = _scopeFactory.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
-        return await db.FederationOperations
+        var candidates = await db.FederationOperations
             .Where(o =>
                 o.ProxyId == proxyId &&
                 (o.Status == "queued" || o.Status == "replay_failed") &&
                 o.AttemptCount < maxAttempts)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        return candidates
             .OrderBy(o => o.CreatedAtUtc)
             .Take(limit)
             .Select(o => new FederationOperationReplayItem
@@ -251,8 +253,7 @@ public sealed class FederationTopologyService : IFederationTopologyService
                 Status = o.Status,
                 AttemptCount = o.AttemptCount,
             })
-            .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
+            .ToList();
     }
 
     /// <inheritdoc />
@@ -313,6 +314,16 @@ public sealed class FederationTopologyService : IFederationTopologyService
 
         var entity = await db.FederationOperations.FindAsync([operationId], cancellationToken).ConfigureAwait(false);
         var created = entity is null;
+        if (!created)
+        {
+            return new FederationOperationResponse
+            {
+                OperationId = operationId,
+                Status = entity!.Status,
+                Created = false,
+            };
+        }
+
         if (entity is null)
         {
             entity = new FederationOperationEntity
@@ -360,14 +371,7 @@ public sealed class FederationTopologyService : IFederationTopologyService
         }
 
         if (created && createOutbox && !conflict)
-        {
-            db.FederationOutbox.Add(new FederationOutboxEntity
-            {
-                ProxyId = request.ProxyId,
-                OperationId = operationId,
-                CreatedAtUtc = now,
-            });
-        }
+            await AddFanoutRowsAsync(db, request.ProxyId, operationId, now, cancellationToken).ConfigureAwait(false);
 
         await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         await RefreshSnapshotAsync(db, cancellationToken).ConfigureAwait(false);
@@ -406,12 +410,15 @@ public sealed class FederationTopologyService : IFederationTopologyService
         entity.AcknowledgedAtUtc = now;
         entity.UpdatedAtUtc = now;
 
-        var outboxRows = await db.FederationOutbox
-            .Where(o => o.OperationId == operationId && o.AcknowledgedAtUtc == null)
-            .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
-        foreach (var row in outboxRows)
-            row.AcknowledgedAtUtc = now;
+        if (IsTerminalApplyFailure(entity.Status))
+        {
+            var outboxRows = await db.FederationOutbox
+                .Where(o => o.OperationId == operationId && o.AcknowledgedAtUtc == null)
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+            foreach (var row in outboxRows)
+                row.AcknowledgedAtUtc = now;
+        }
 
         await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         await RefreshSnapshotAsync(db, cancellationToken).ConfigureAwait(false);
@@ -420,6 +427,65 @@ public sealed class FederationTopologyService : IFederationTopologyService
         {
             OperationId = operationId,
             Status = entity.Status,
+            Created = false,
+        };
+    }
+
+    /// <inheritdoc />
+    public async Task<FederationOperationResponse> AcknowledgeSyncItemAsync(
+        string proxyId,
+        long sequence,
+        FederationSyncAckRequest request,
+        CancellationToken cancellationToken)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(proxyId);
+        ArgumentNullException.ThrowIfNull(request);
+        var now = DateTimeOffset.UtcNow;
+
+        await using var scope = _scopeFactory.CreateAsyncScope();
+        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+        var outbox = await db.FederationOutbox
+            .FirstOrDefaultAsync(o => o.ProxyId == proxyId && o.Sequence == sequence, cancellationToken)
+            .ConfigureAwait(false);
+        if (outbox is null)
+        {
+            return new FederationOperationResponse
+            {
+                OperationId = string.Empty,
+                Status = "not_found",
+                Created = false,
+            };
+        }
+
+        outbox.AcknowledgedAtUtc = now;
+        var entity = await db.FederationOperations.FindAsync([outbox.OperationId], cancellationToken).ConfigureAwait(false);
+        if (entity is not null)
+        {
+            entity.HubVersion = request.HubVersion ?? entity.HubVersion;
+            entity.LastError = request.Error;
+            entity.UpdatedAtUtc = now;
+
+            var anyPending = await db.FederationOutbox
+                .AnyAsync(o =>
+                    o.OperationId == outbox.OperationId &&
+                    o.Sequence != sequence &&
+                    o.AcknowledgedAtUtc == null,
+                    cancellationToken)
+                .ConfigureAwait(false);
+            if (!anyPending)
+            {
+                entity.Status = string.IsNullOrWhiteSpace(request.Status) ? "acknowledged" : request.Status.Trim();
+                entity.AcknowledgedAtUtc = now;
+            }
+        }
+
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await RefreshSnapshotAsync(db, cancellationToken).ConfigureAwait(false);
+
+        return new FederationOperationResponse
+        {
+            OperationId = outbox.OperationId,
+            Status = entity?.Status ?? "acknowledged",
             Created = false,
         };
     }
@@ -529,12 +595,46 @@ public sealed class FederationTopologyService : IFederationTopologyService
                 {
                     Sequence = outbox.Sequence,
                     OperationId = operation.OperationId,
+                    ProxyId = operation.ProxyId,
+                    SourceOperationId = operation.SourceOperationId,
+                    GlobalWorkspaceId = operation.GlobalWorkspaceId,
                     Domain = operation.Domain,
                     ResourceId = operation.ResourceId,
+                    HttpMethod = operation.HttpMethod,
+                    Path = operation.Path,
+                    Method = operation.Method,
+                    HeadersJson = operation.HeadersJson,
+                    BodyBase64 = operation.BodyBase64,
+                    BaseVersion = operation.BaseVersion,
                     HubVersion = operation.HubVersion,
                 })
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
+    }
+
+    private static async Task AddFanoutRowsAsync(
+        McpDbContext db,
+        string sourceProxyId,
+        string operationId,
+        DateTimeOffset now,
+        CancellationToken cancellationToken)
+    {
+        var recipients = await db.FederationProxies
+            .AsNoTracking()
+            .Where(p => p.ProxyId != sourceProxyId)
+            .Select(p => p.ProxyId)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        foreach (var recipient in recipients)
+        {
+            db.FederationOutbox.Add(new FederationOutboxEntity
+            {
+                ProxyId = recipient,
+                OperationId = operationId,
+                CreatedAtUtc = now,
+            });
+        }
     }
 
     private static FederationWorkspaceEntity UpsertWorkspace(
@@ -560,18 +660,52 @@ public sealed class FederationTopologyService : IFederationTopologyService
                 ProxyId = proxyId,
                 WorkspacePath = request.WorkspacePath,
                 GlobalWorkspaceId = globalWorkspaceId,
+                CanonicalWorkspaceId = globalWorkspaceId,
                 CreatedAtUtc = now,
             };
             db.FederationWorkspaces.Add(entity);
         }
 
         entity.GlobalWorkspaceId = globalWorkspaceId;
+        entity.CanonicalWorkspaceId = globalWorkspaceId;
         entity.WorkspaceName = request.WorkspaceName;
         entity.IsEnabled = request.IsEnabled;
         entity.Version = request.Version;
         entity.MetadataJson = request.MetadataJson;
         entity.LastSeenUtc = now;
+        EnsureFederatedWorkspaceRow(db, entity, now);
         return entity;
+    }
+
+    private static void EnsureFederatedWorkspaceRow(McpDbContext db, FederationWorkspaceEntity entity, DateTimeOffset now)
+    {
+        var workspace = db.Workspaces.Local.FirstOrDefault(w =>
+                string.Equals(w.WorkspaceId, entity.CanonicalWorkspaceId, StringComparison.OrdinalIgnoreCase))
+            ?? db.Workspaces.IgnoreQueryFilters().FirstOrDefault(w => w.WorkspaceId == entity.CanonicalWorkspaceId);
+
+        if (workspace is null)
+        {
+            workspace = new WorkspaceEntity
+            {
+                WorkspaceId = entity.CanonicalWorkspaceId,
+                WorkspacePath = entity.CanonicalWorkspaceId,
+                Name = string.IsNullOrWhiteSpace(entity.WorkspaceName) ? entity.CanonicalWorkspaceId : entity.WorkspaceName!,
+                TodoPath = "docs/todo.yaml",
+                IsEnabled = entity.IsEnabled,
+                DateTimeCreated = now,
+            };
+            db.Workspaces.Add(workspace);
+        }
+
+        workspace.WorkspacePath = entity.CanonicalWorkspaceId;
+        workspace.Name = string.IsNullOrWhiteSpace(entity.WorkspaceName) ? workspace.Name : entity.WorkspaceName!;
+        workspace.IsEnabled = entity.IsEnabled;
+        workspace.DateTimeModified = now;
+
+        db.Entry(workspace).Property("IsDeleted").CurrentValue = false;
+        db.Entry(workspace).Property("DeletedAtUtc").CurrentValue = null;
+        db.Entry(workspace).Property("DeletedBy").CurrentValue = null;
+        db.Entry(workspace).Property("DeleteReason").CurrentValue = null;
     }
 
     private async Task EnsureProxyAsync(McpDbContext db, string proxyId, DateTimeOffset now, CancellationToken cancellationToken)
@@ -593,7 +727,25 @@ public sealed class FederationTopologyService : IFederationTopologyService
 
     private async Task RefreshSnapshotAsync(McpDbContext db, CancellationToken cancellationToken)
     {
-        var snapshot = new FederationTopologySnapshot
+        var snapshot = await BuildSnapshotAsync(db, cancellationToken).ConfigureAwait(false);
+
+        lock (_snapshotLock)
+            _snapshot = snapshot;
+    }
+
+    private static FederationTopologySnapshot BuildSnapshot(McpDbContext db)
+        => new()
+        {
+            ProxyCount = db.FederationProxies.Count(),
+            WorkspaceCount = db.FederationWorkspaces.Count(),
+            QueueDepth = db.FederationOperations
+                .Count(o => o.Status == "queued" || o.Status == "accepted" || o.Status == "replay_failed"),
+            ConflictCount = db.FederationConflicts.Count(c => c.ResolutionStatus == "open"),
+            FanoutDepth = db.FederationOutbox.Count(o => o.AcknowledgedAtUtc == null),
+        };
+
+    private static async Task<FederationTopologySnapshot> BuildSnapshotAsync(McpDbContext db, CancellationToken cancellationToken)
+        => new()
         {
             ProxyCount = await db.FederationProxies.CountAsync(cancellationToken).ConfigureAwait(false),
             WorkspaceCount = await db.FederationWorkspaces.CountAsync(cancellationToken).ConfigureAwait(false),
@@ -601,11 +753,18 @@ public sealed class FederationTopologyService : IFederationTopologyService
                 .CountAsync(o => o.Status == "queued" || o.Status == "accepted" || o.Status == "replay_failed", cancellationToken)
                 .ConfigureAwait(false),
             ConflictCount = await db.FederationConflicts.CountAsync(c => c.ResolutionStatus == "open", cancellationToken).ConfigureAwait(false),
+            FanoutDepth = await db.FederationOutbox.CountAsync(o => o.AcknowledgedAtUtc == null, cancellationToken).ConfigureAwait(false),
         };
 
-        lock (_snapshotLock)
-            _snapshot = snapshot;
-    }
+    private static FederationTopologySnapshot CopySnapshot(FederationTopologySnapshot snapshot)
+        => new()
+        {
+            ProxyCount = snapshot.ProxyCount,
+            WorkspaceCount = snapshot.WorkspaceCount,
+            QueueDepth = snapshot.QueueDepth,
+            ConflictCount = snapshot.ConflictCount,
+            FanoutDepth = snapshot.FanoutDepth,
+        };
 
     private static FederationWorkspaceInfo ToWorkspaceInfo(FederationWorkspaceEntity entity)
         => new()
@@ -648,6 +807,12 @@ public sealed class FederationTopologyService : IFederationTopologyService
         => !string.IsNullOrWhiteSpace(proxyVersion) &&
            hubVersion is not null &&
            !string.Equals(proxyVersion, hubVersion, StringComparison.Ordinal);
+
+    private static bool IsTerminalApplyFailure(string status)
+        => string.Equals(status, "conflict", StringComparison.OrdinalIgnoreCase) ||
+           string.Equals(status, "rejected", StringComparison.OrdinalIgnoreCase) ||
+           string.Equals(status, "failed", StringComparison.OrdinalIgnoreCase) ||
+           string.Equals(status, "apply_failed", StringComparison.OrdinalIgnoreCase);
 
     private static string CreateGlobalWorkspaceId(string proxyId, string workspacePath)
     {

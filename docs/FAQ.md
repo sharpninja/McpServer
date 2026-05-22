@@ -11,8 +11,7 @@ MCP Server is a local AI-agent integration server that exposes project context â
 **As a Windows service:**
 
 ```powershell
-.\scripts\Manage-McpService.ps1 -Action Install
-.\scripts\Manage-McpService.ps1 -Action Start
+gsudo pwsh.exe -NoLogo -NoProfile -File .\build.ps1 UpdateService
 ```
 
 **From the command line (development):**
@@ -286,11 +285,10 @@ Both share the same backend services and run on the same port.
 ### How do I install as a Windows service?
 
 ```powershell
-.\scripts\Manage-McpService.ps1 -Action Install
-.\scripts\Manage-McpService.ps1 -Action Start
+gsudo pwsh.exe -NoLogo -NoProfile -File .\build.ps1 UpdateService
 ```
 
-The script uses `gsudo` for UAC elevation and `sc.exe` for service management. The service is configured with auto-start and automatic recovery on failure.
+The Nuke target handles elevation, backup/restore, publish, service registration/update, restart, and health verification. The service is configured with auto-start and automatic recovery on failure.
 
 ### Where is the service installed?
 
@@ -299,12 +297,10 @@ Published to `C:\ProgramData\McpServer\` as a self-contained single-file executa
 ### How do I update the service?
 
 ```powershell
-gsudo .\scripts\Update-McpService.ps1
+gsudo pwsh.exe -NoLogo -NoProfile -File .\build.ps1 UpdateService
 ```
 
-This stops the service, publishes a fresh Debug build, restores all `*.json` and `*.db*` files
-(preserving config and data), restarts the service, and verifies health. A timestamped archive
-is saved to `%USERPROFILE%\McpServer-Backups\` for rollback.
+The Nuke target stops the service, creates backups, publishes, restores configuration and data, restarts the service, and verifies health. A timestamped archive is saved to `%USERPROFILE%\McpServer-Backups\` for rollback. Do not update the Windows service by manually copying files or by running lower-level deployment scripts directly.
 
 ### What actions are available in the management script?
 

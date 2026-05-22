@@ -983,8 +983,11 @@ Then `get_todo_delta_context` can cheaply return only what changed.
 The progression service should enforce:
 
 - no implementation before tests are defined
-- no completion before validation passes
-- integration testing can be deferred, but the state model must support it
+- no completion before validation passes with 100% test success for the executed gate
+- no transition to the next iteration when the executed gate has failed tests, skipped tests, or required tests that were not run
+- tests directly track progress; do not use skipped tests as placeholders for deferred work
+- deferred work is tracked in MCP TODO/requirements state until its slice begins, then tests are added and made to pass before progression
+- integration testing can be scheduled as a later gate, but any integration tests included in the executed gate must pass without skips
 - reopened TODOs are expected when requirements are refined
 
 That mirrors the Byrd Development Process emphasis on strong requirements, TDD, iterative refinement, and proof-driven completion.

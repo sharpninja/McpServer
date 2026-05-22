@@ -21,6 +21,11 @@ public sealed class FederationWorkspaceEntity
     [MaxLength(256)]
     public required string ProxyId { get; set; }
 
+    /// <summary>Canonical workspace row that represents this federated workspace on the hub.</summary>
+    [Required]
+    [MaxLength(1024)]
+    public string CanonicalWorkspaceId { get; set; } = string.Empty;
+
     /// <summary>Workspace display name reported by the proxy.</summary>
     [MaxLength(512)]
     public string? WorkspaceName { get; set; }
@@ -45,4 +50,7 @@ public sealed class FederationWorkspaceEntity
 
     /// <summary>UTC timestamp when the workspace was last seen or updated.</summary>
     public DateTimeOffset LastSeenUtc { get; set; }
+
+    /// <summary>Canonical workspace navigation.</summary>
+    public WorkspaceEntity? CanonicalWorkspace { get; set; }
 }

@@ -2,7 +2,9 @@ using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Storage;
+using McpServer.Support.Mcp.Storage.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -72,16 +74,17 @@ public abstract class FederationStateAdapterBase : IFederationStateAdapter
 /// </summary>
 public abstract class DatabaseFederationStateAdapterBase : FederationStateAdapterBase
 {
-    private readonly IServiceScopeFactory _scopeFactory;
-
     /// <summary>Initializes a new instance of the <see cref="DatabaseFederationStateAdapterBase"/> class.</summary>
     /// <param name="domain">Mutable state domain handled by the adapter.</param>
     /// <param name="scopeFactory">Scope factory used to resolve <see cref="McpDbContext"/>.</param>
     protected DatabaseFederationStateAdapterBase(string domain, IServiceScopeFactory scopeFactory)
         : base(domain)
     {
-        _scopeFactory = scopeFactory;
+        ScopeFactory = scopeFactory;
     }
+
+    /// <summary>Scope factory used to resolve scoped services and database contexts.</summary>
+    protected IServiceScopeFactory ScopeFactory { get; }
 
     /// <inheritdoc />
     public override async ValueTask<FederationStateSnapshot> SnapshotAsync(string resourceId, CancellationToken cancellationToken)
@@ -125,14 +128,14 @@ public abstract class DatabaseFederationStateAdapterBase : FederationStateAdapte
 
     private async Task<object?> ReadPayloadAsync(string resourceId, CancellationToken cancellationToken)
     {
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        await using var scope = ScopeFactory.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         return await ReadPayloadAsync(db, resourceId, cancellationToken).ConfigureAwait(false);
     }
 
     private async Task<string?> GetExplicitVersionAsync(string resourceId, CancellationToken cancellationToken)
     {
-        await using var scope = _scopeFactory.CreateAsyncScope();
+        await using var scope = ScopeFactory.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
         return await ReadExplicitVersionAsync(db, resourceId, cancellationToken).ConfigureAwait(false);
     }
@@ -174,22 +177,169 @@ public sealed class WorkspaceFederationStateAdapter : FederationStateAdapterBase
             : workspace.DateTimeModified.ToUnixTimeMilliseconds().ToString(CultureInfo.InvariantCulture);
     }
 
+    /// <inheritdoc />
+    public override async ValueTask<FederationApplyResult> ApplyAsync(FederationStateOperation operation, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(operation);
+        await using var scope = _scopeFactory.CreateAsyncScope();
+        var workspaceService = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
+        var resourceId = ResolveResourceId(operation);
+
+        if (IsDelete(operation))
+        {
+            if (string.IsNullOrWhiteSpace(resourceId))
+                return Conflict("Workspace delete operation does not identify a workspace path.");
+
+            var deleted = await workspaceService.DeleteAsync(resourceId, cancellationToken).ConfigureAwait(false);
+            return deleted.Success
+                ? new FederationApplyResult { Applied = true, Version = null }
+                : Conflict(deleted.Error ?? "Workspace delete failed.");
+        }
+
+        WorkspaceDto? payload;
+        try
+        {
+            payload = JsonSerializer.Deserialize<WorkspaceDto>(operation.PayloadJson, JsonOptions);
+        }
+        catch (JsonException ex)
+        {
+            return Conflict($"Workspace federation payload is invalid JSON: {ex.Message}");
+        }
+
+        if (payload is null || string.IsNullOrWhiteSpace(payload.WorkspacePath))
+            return Conflict("Workspace federation payload does not include a workspace path.");
+
+        var existing = await workspaceService.GetAsync(payload.WorkspacePath, cancellationToken).ConfigureAwait(false);
+        var result = existing is null
+            ? await workspaceService.CreateAsync(new WorkspaceCreateRequest
+            {
+                WorkspacePath = payload.WorkspacePath,
+                Name = payload.Name,
+                TodoPath = payload.TodoPath,
+                DataDirectory = payload.DataDirectory,
+                TunnelProvider = payload.TunnelProvider,
+                RunAs = payload.RunAs,
+                IsPrimary = payload.IsPrimary,
+                IsEnabled = payload.IsEnabled,
+                PromptTemplate = payload.PromptTemplate,
+                StatusPrompt = payload.StatusPrompt,
+                ImplementPrompt = payload.ImplementPrompt,
+                PlanPrompt = payload.PlanPrompt,
+                BannedLicenses = payload.BannedLicenses,
+                BannedCountriesOfOrigin = payload.BannedCountriesOfOrigin,
+                BannedOrganizations = payload.BannedOrganizations,
+                BannedIndividuals = payload.BannedIndividuals,
+            }, cancellationToken).ConfigureAwait(false)
+            : await workspaceService.UpdateAsync(payload.WorkspacePath, new WorkspaceUpdateRequest
+            {
+                Name = payload.Name,
+                TodoPath = payload.TodoPath,
+                DataDirectory = payload.DataDirectory ?? string.Empty,
+                TunnelProvider = payload.TunnelProvider ?? string.Empty,
+                RunAs = payload.RunAs ?? string.Empty,
+                IsPrimary = payload.IsPrimary,
+                IsEnabled = payload.IsEnabled,
+                PromptTemplate = payload.PromptTemplate ?? string.Empty,
+                StatusPrompt = payload.StatusPrompt ?? string.Empty,
+                ImplementPrompt = payload.ImplementPrompt ?? string.Empty,
+                PlanPrompt = payload.PlanPrompt ?? string.Empty,
+                BannedLicenses = payload.BannedLicenses,
+                BannedCountriesOfOrigin = payload.BannedCountriesOfOrigin,
+                BannedOrganizations = payload.BannedOrganizations,
+                BannedIndividuals = payload.BannedIndividuals,
+            }, cancellationToken).ConfigureAwait(false);
+
+        return result.Success
+            ? new FederationApplyResult
+            {
+                Applied = true,
+                Version = await GetVersionAsync(payload.WorkspacePath, cancellationToken).ConfigureAwait(false),
+            }
+            : Conflict(result.Error ?? "Workspace apply failed.");
+    }
+
     private async Task<WorkspaceDto?> GetWorkspaceAsync(string resourceId, CancellationToken cancellationToken)
     {
         await using var scope = _scopeFactory.CreateAsyncScope();
         var workspaceService = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
         return await workspaceService.GetAsync(resourceId, cancellationToken).ConfigureAwait(false);
     }
+
+    private static string? ResolveResourceId(FederationStateOperation operation)
+        => !string.IsNullOrWhiteSpace(operation.ResourceId)
+            ? operation.ResourceId.Trim()
+            : TryReadString(operation.PayloadJson, "workspacePath");
+
+    private static string? TryReadString(string payloadJson, string propertyName)
+    {
+        try
+        {
+            using var document = JsonDocument.Parse(payloadJson);
+            return document.RootElement.TryGetProperty(propertyName, out var property) ? property.GetString() : null;
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
+    }
+
+    private static bool IsDelete(FederationStateOperation operation)
+        => string.Equals(operation.HttpMethod, "DELETE", StringComparison.OrdinalIgnoreCase);
+
+    private static FederationApplyResult Conflict(string message)
+        => new()
+        {
+            Applied = false,
+            Conflict = true,
+            Message = message,
+        };
 }
 
 /// <summary>Federation adapter for authoritative TODO state.</summary>
 public sealed class TodoFederationStateAdapter : DatabaseFederationStateAdapterBase
 {
+    private readonly IServiceScopeFactory _scopeFactory;
+
     /// <summary>Initializes a new instance of the <see cref="TodoFederationStateAdapter"/> class.</summary>
     /// <param name="scopeFactory">Scope factory used to resolve <see cref="McpDbContext"/>.</param>
     public TodoFederationStateAdapter(IServiceScopeFactory scopeFactory)
         : base("todo", scopeFactory)
     {
+        _scopeFactory = scopeFactory;
+    }
+
+    /// <inheritdoc />
+    public override async ValueTask<FederationApplyResult> ApplyAsync(FederationStateOperation operation, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(operation);
+
+        try
+        {
+            var method = (operation.HttpMethod ?? string.Empty).Trim().ToUpperInvariant();
+            await using var scope = _scopeFactory.CreateAsyncScope();
+            var todoService = scope.ServiceProvider.GetRequiredService<ITodoService>();
+            return method switch
+            {
+                "POST" => await ApplyCreateAsync(todoService, operation, cancellationToken).ConfigureAwait(false),
+                "PUT" or "PATCH" => await ApplyUpdateAsync(todoService, operation, cancellationToken).ConfigureAwait(false),
+                "DELETE" => await ApplyDeleteAsync(todoService, operation, cancellationToken).ConfigureAwait(false),
+                _ => new FederationApplyResult
+                {
+                    Applied = false,
+                    Conflict = true,
+                    Message = $"TODO federation apply does not support HTTP method '{operation.HttpMethod ?? "<none>"}'.",
+                },
+            };
+        }
+        catch (JsonException ex)
+        {
+            return new FederationApplyResult
+            {
+                Applied = false,
+                Conflict = true,
+                Message = $"TODO federation payload is invalid JSON: {ex.Message}",
+            };
+        }
     }
 
     /// <inheritdoc />
@@ -259,6 +409,103 @@ public sealed class TodoFederationStateAdapter : DatabaseFederationStateAdapterB
             .ConfigureAwait(false) is { } version
             ? version.ToString(CultureInfo.InvariantCulture)
             : null;
+
+    private async Task<FederationApplyResult> ApplyCreateAsync(
+        ITodoService todoService,
+        FederationStateOperation operation,
+        CancellationToken cancellationToken)
+    {
+        var request = JsonSerializer.Deserialize<TodoCreateRequest>(operation.PayloadJson, JsonOptions);
+        if (request is null)
+            return Conflict("TODO create payload is empty.");
+
+        var result = await todoService.CreateAsync(request, cancellationToken).ConfigureAwait(false);
+        return await FromTodoMutationAsync(result, request.Id, cancellationToken).ConfigureAwait(false);
+    }
+
+    private async Task<FederationApplyResult> ApplyUpdateAsync(
+        ITodoService todoService,
+        FederationStateOperation operation,
+        CancellationToken cancellationToken)
+    {
+        var todoId = ResolveTodoId(operation);
+        if (string.IsNullOrWhiteSpace(todoId))
+            return Conflict("TODO update operation does not identify a TODO id.");
+
+        var request = JsonSerializer.Deserialize<TodoUpdateRequest>(operation.PayloadJson, JsonOptions);
+        if (request is null)
+            return Conflict("TODO update payload is empty.");
+
+        var result = await todoService.UpdateAsync(todoId, request, cancellationToken).ConfigureAwait(false);
+        return await FromTodoMutationAsync(result, todoId, cancellationToken).ConfigureAwait(false);
+    }
+
+    private async Task<FederationApplyResult> ApplyDeleteAsync(
+        ITodoService todoService,
+        FederationStateOperation operation,
+        CancellationToken cancellationToken)
+    {
+        var todoId = ResolveTodoId(operation);
+        if (string.IsNullOrWhiteSpace(todoId))
+            return Conflict("TODO delete operation does not identify a TODO id.");
+
+        var result = await todoService.DeleteAsync(todoId, cancellationToken).ConfigureAwait(false);
+        return await FromTodoMutationAsync(result, todoId, cancellationToken).ConfigureAwait(false);
+    }
+
+    private async Task<FederationApplyResult> FromTodoMutationAsync(
+        TodoMutationResult result,
+        string resourceId,
+        CancellationToken cancellationToken)
+    {
+        if (!result.Success)
+        {
+            return new FederationApplyResult
+            {
+                Applied = false,
+                Conflict = true,
+                Message = result.Error,
+                Version = await GetVersionAsync(resourceId, cancellationToken).ConfigureAwait(false),
+            };
+        }
+
+        var versionResourceId = result.Item?.Id ?? resourceId;
+        return new FederationApplyResult
+        {
+            Applied = true,
+            Version = await GetVersionAsync(versionResourceId, cancellationToken).ConfigureAwait(false),
+        };
+    }
+
+    private static FederationApplyResult Conflict(string message)
+        => new()
+        {
+            Applied = false,
+            Conflict = true,
+            Message = message,
+        };
+
+    private static string? ResolveTodoId(FederationStateOperation operation)
+    {
+        if (!string.IsNullOrWhiteSpace(operation.ResourceId) &&
+            !operation.ResourceId.StartsWith("/mcpserver/todo", StringComparison.OrdinalIgnoreCase))
+        {
+            return operation.ResourceId.Trim();
+        }
+
+        var path = operation.Path;
+        if (string.IsNullOrWhiteSpace(path))
+            path = operation.ResourceId;
+        if (string.IsNullOrWhiteSpace(path))
+            return null;
+
+        var pathOnly = path.Split('?', 2)[0].TrimEnd('/');
+        var marker = "/mcpserver/todo/";
+        var markerIndex = pathOnly.IndexOf(marker, StringComparison.OrdinalIgnoreCase);
+        return markerIndex < 0
+            ? null
+            : Uri.UnescapeDataString(pathOnly[(markerIndex + marker.Length)..]);
+    }
 }
 
 /// <summary>Federation adapter for session log state.</summary>
@@ -269,6 +516,56 @@ public sealed class SessionLogFederationStateAdapter : DatabaseFederationStateAd
     public SessionLogFederationStateAdapter(IServiceScopeFactory scopeFactory)
         : base("session_log", scopeFactory)
     {
+    }
+
+    /// <inheritdoc />
+    public override async ValueTask<FederationApplyResult> ApplyAsync(FederationStateOperation operation, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(operation);
+        var key = SessionLogKey.Parse(operation.ResourceId ?? string.Empty);
+
+        await using var scope = ScopeFactory.CreateAsyncScope();
+        if (string.Equals(operation.HttpMethod, "DELETE", StringComparison.OrdinalIgnoreCase))
+        {
+            if (string.IsNullOrWhiteSpace(key.SessionId))
+                return Conflict("Session log delete operation does not identify a session id.");
+
+            var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+            var query = db.SessionLogs.Where(s => s.SessionId == key.SessionId);
+            if (!string.IsNullOrWhiteSpace(key.SourceType))
+                query = query.Where(s => s.SourceType == key.SourceType);
+            var session = await query.FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
+            if (session is null)
+                return new FederationApplyResult { Applied = true, Version = null };
+
+            db.SessionLogs.Remove(session);
+            await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            return new FederationApplyResult { Applied = true, Version = null };
+        }
+
+        UnifiedSessionLogDto? payload;
+        try
+        {
+            payload = JsonSerializer.Deserialize<UnifiedSessionLogDto>(operation.PayloadJson, JsonOptions);
+        }
+        catch (JsonException ex)
+        {
+            return Conflict($"Session log federation payload is invalid JSON: {ex.Message}");
+        }
+
+        if (payload is null)
+            return Conflict("Session log federation payload is empty.");
+        payload.SourceType ??= key.SourceType;
+        payload.SessionId ??= key.SessionId;
+        if (string.IsNullOrWhiteSpace(payload.SourceType) || string.IsNullOrWhiteSpace(payload.SessionId))
+            return Conflict("Session log federation payload must include sourceType and sessionId.");
+
+        var sessionLogService = scope.ServiceProvider.GetRequiredService<ISessionLogService>();
+        await sessionLogService.SubmitAsync(payload, contentHash: operation.OperationId, cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+
+        var version = await GetVersionAsync($"{payload.SourceType}/{payload.SessionId}", cancellationToken).ConfigureAwait(false);
+        return new FederationApplyResult { Applied = true, Version = version };
     }
 
     /// <inheritdoc />
@@ -354,6 +651,14 @@ public sealed class SessionLogFederationStateAdapter : DatabaseFederationStateAd
             .FirstOrDefaultAsync(cancellationToken)
             .ConfigureAwait(false);
     }
+
+    private static FederationApplyResult Conflict(string message)
+        => new()
+        {
+            Applied = false,
+            Conflict = true,
+            Message = message,
+        };
 }
 
 /// <summary>Federation adapter for requirements and traceability links.</summary>
@@ -364,6 +669,61 @@ public sealed class RequirementsFederationStateAdapter : DatabaseFederationState
     public RequirementsFederationStateAdapter(IServiceScopeFactory scopeFactory)
         : base("requirements", scopeFactory)
     {
+    }
+
+    /// <inheritdoc />
+    public override async ValueTask<FederationApplyResult> ApplyAsync(FederationStateOperation operation, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(operation);
+        var requirementKey = RequirementKey.Parse(operation.ResourceId ?? string.Empty);
+        await using var scope = ScopeFactory.CreateAsyncScope();
+        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+
+        if (string.Equals(operation.HttpMethod, "DELETE", StringComparison.OrdinalIgnoreCase))
+        {
+            if (string.IsNullOrWhiteSpace(requirementKey.Id))
+                return Conflict("Requirements delete operation does not identify a requirement id.");
+
+            var query = db.Requirements.Where(r => r.Id == requirementKey.Id);
+            if (!string.IsNullOrWhiteSpace(requirementKey.Kind))
+                query = query.Where(r => r.Kind == requirementKey.Kind);
+            var rows = await query.ToListAsync(cancellationToken).ConfigureAwait(false);
+            if (rows.Count == 0)
+                return new FederationApplyResult { Applied = true, Version = null };
+
+            var ids = rows.Select(r => r.Id).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var links = await db.RequirementTraceabilityLinks
+                .Where(l => ids.Contains(l.FrId) || ids.Contains(l.TargetId))
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+            db.RequirementTraceabilityLinks.RemoveRange(links);
+            db.Requirements.RemoveRange(rows);
+            await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            return new FederationApplyResult { Applied = true, Version = null };
+        }
+
+        RequirementsPayload? payload;
+        try
+        {
+            payload = JsonSerializer.Deserialize<RequirementsPayload>(operation.PayloadJson, JsonOptions);
+        }
+        catch (JsonException ex)
+        {
+            return Conflict($"Requirements federation payload is invalid JSON: {ex.Message}");
+        }
+
+        if (payload is null || payload.Requirements.Count == 0)
+            return Conflict("Requirements federation payload does not contain requirement rows.");
+
+        foreach (var item in payload.Requirements)
+            await UpsertRequirementAsync(db, item, cancellationToken).ConfigureAwait(false);
+
+        foreach (var link in payload.Links)
+            await UpsertRequirementLinkAsync(db, link, cancellationToken).ConfigureAwait(false);
+
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        var version = await GetVersionAsync(operation.ResourceId ?? payload.Requirements[0].Id, cancellationToken).ConfigureAwait(false);
+        return new FederationApplyResult { Applied = true, Version = version };
     }
 
     /// <inheritdoc />
@@ -412,6 +772,103 @@ public sealed class RequirementsFederationStateAdapter : DatabaseFederationState
 
         return new { requirements, links };
     }
+
+    private static async Task UpsertRequirementAsync(
+        McpDbContext db,
+        RequirementPayload item,
+        CancellationToken cancellationToken)
+    {
+        var kind = string.IsNullOrWhiteSpace(item.Kind) ? "fr" : item.Kind.Trim().ToLowerInvariant();
+        var id = item.Id.Trim();
+        var entity = await db.Requirements
+            .FirstOrDefaultAsync(r => r.Kind == kind && r.Id == id, cancellationToken)
+            .ConfigureAwait(false);
+        var now = DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture);
+        if (entity is null)
+        {
+            entity = new RequirementEntity
+            {
+                Kind = kind,
+                Id = id,
+                CreatedAtUtc = string.IsNullOrWhiteSpace(item.CreatedAtUtc) ? now : item.CreatedAtUtc,
+            };
+            db.Requirements.Add(entity);
+        }
+
+        entity.Title = item.Title ?? string.Empty;
+        entity.Body = item.Body ?? string.Empty;
+        entity.UpdatedAtUtc = string.IsNullOrWhiteSpace(item.UpdatedAtUtc) ? now : item.UpdatedAtUtc;
+    }
+
+    private static async Task UpsertRequirementLinkAsync(
+        McpDbContext db,
+        RequirementLinkPayload link,
+        CancellationToken cancellationToken)
+    {
+        var frId = link.FrId.Trim();
+        var targetKind = link.TargetKind.Trim().ToLowerInvariant();
+        var targetId = link.TargetId.Trim();
+        var entity = await db.RequirementTraceabilityLinks
+            .FirstOrDefaultAsync(l =>
+                l.FrId == frId &&
+                l.TargetKind == targetKind &&
+                l.TargetId == targetId,
+                cancellationToken)
+            .ConfigureAwait(false);
+        if (entity is not null)
+            return;
+
+        db.RequirementTraceabilityLinks.Add(new RequirementTraceabilityLinkEntity
+        {
+            FrId = frId,
+            TargetKind = targetKind,
+            TargetId = targetId,
+            CreatedAtUtc = string.IsNullOrWhiteSpace(link.CreatedAtUtc)
+                ? DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture)
+                : link.CreatedAtUtc,
+        });
+    }
+
+    private static FederationApplyResult Conflict(string message)
+        => new()
+        {
+            Applied = false,
+            Conflict = true,
+            Message = message,
+        };
+
+    private sealed class RequirementsPayload
+    {
+        public List<RequirementPayload> Requirements { get; set; } = [];
+
+        public List<RequirementLinkPayload> Links { get; set; } = [];
+    }
+
+    private sealed class RequirementPayload
+    {
+        public string Kind { get; set; } = string.Empty;
+
+        public string Id { get; set; } = string.Empty;
+
+        public string? Title { get; set; }
+
+        public string? Body { get; set; }
+
+        public string? CreatedAtUtc { get; set; }
+
+        public string? UpdatedAtUtc { get; set; }
+    }
+
+    private sealed class RequirementLinkPayload
+    {
+        public string FrId { get; set; } = string.Empty;
+
+        public string TargetKind { get; set; } = string.Empty;
+
+        public string TargetId { get; set; } = string.Empty;
+
+        public string? CreatedAtUtc { get; set; }
+    }
 }
 
 /// <summary>Federation adapter for tool bucket and tool definition metadata.</summary>
@@ -422,6 +879,60 @@ public sealed class ToolsBucketsFederationStateAdapter : DatabaseFederationState
     public ToolsBucketsFederationStateAdapter(IServiceScopeFactory scopeFactory)
         : base("tools_buckets", scopeFactory)
     {
+    }
+
+    /// <inheritdoc />
+    public override async ValueTask<FederationApplyResult> ApplyAsync(FederationStateOperation operation, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(operation);
+        await using var scope = ScopeFactory.CreateAsyncScope();
+        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+
+        if (string.Equals(operation.HttpMethod, "DELETE", StringComparison.OrdinalIgnoreCase))
+        {
+            var resourceId = operation.ResourceId;
+            if (string.IsNullOrWhiteSpace(resourceId))
+                return Conflict("Tools/buckets delete operation does not identify a resource id.");
+
+            var tools = await db.ToolDefinitions
+                .Include(t => t.Tags)
+                .Where(t => t.Name == resourceId || t.BucketName == resourceId)
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+            var buckets = await db.ToolBuckets
+                .Where(b => b.Name == resourceId)
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+            db.ToolDefinitions.RemoveRange(tools);
+            db.ToolBuckets.RemoveRange(buckets);
+            await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            return new FederationApplyResult { Applied = true, Version = null };
+        }
+
+        ToolsBucketsPayload? payload;
+        try
+        {
+            payload = JsonSerializer.Deserialize<ToolsBucketsPayload>(operation.PayloadJson, JsonOptions);
+        }
+        catch (JsonException ex)
+        {
+            return Conflict($"Tools/buckets federation payload is invalid JSON: {ex.Message}");
+        }
+
+        if (payload is null || (payload.Buckets.Count == 0 && payload.Tools.Count == 0))
+            return Conflict("Tools/buckets federation payload does not contain bucket or tool rows.");
+
+        foreach (var bucket in payload.Buckets)
+            await UpsertBucketAsync(db, bucket, cancellationToken).ConfigureAwait(false);
+        foreach (var tool in payload.Tools)
+            await UpsertToolAsync(db, tool, cancellationToken).ConfigureAwait(false);
+
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        return new FederationApplyResult
+        {
+            Applied = true,
+            Version = await GetVersionAsync(operation.ResourceId ?? "*", cancellationToken).ConfigureAwait(false),
+        };
     }
 
     /// <inheritdoc />
@@ -465,6 +976,114 @@ public sealed class ToolsBucketsFederationStateAdapter : DatabaseFederationState
 
         return buckets.Count == 0 && tools.Count == 0 ? null : new { buckets, tools };
     }
+
+    private static async Task UpsertBucketAsync(McpDbContext db, ToolBucketPayload bucket, CancellationToken cancellationToken)
+    {
+        var name = bucket.Name.Trim();
+        var entity = await db.ToolBuckets
+            .FirstOrDefaultAsync(b => b.Name == name, cancellationToken)
+            .ConfigureAwait(false);
+        if (entity is null)
+        {
+            entity = new ToolBucketEntity
+            {
+                Name = name,
+                Owner = bucket.Owner ?? string.Empty,
+                Repo = bucket.Repo ?? string.Empty,
+                DateTimeCreated = bucket.DateTimeCreated ?? DateTimeOffset.UtcNow,
+            };
+            db.ToolBuckets.Add(entity);
+        }
+
+        entity.Owner = bucket.Owner ?? entity.Owner;
+        entity.Repo = bucket.Repo ?? entity.Repo;
+        entity.Branch = string.IsNullOrWhiteSpace(bucket.Branch) ? entity.Branch : bucket.Branch;
+        entity.ManifestPath = string.IsNullOrWhiteSpace(bucket.ManifestPath) ? entity.ManifestPath : bucket.ManifestPath;
+        entity.DateTimeLastSynced = bucket.DateTimeLastSynced;
+    }
+
+    private static async Task UpsertToolAsync(McpDbContext db, ToolDefinitionPayload tool, CancellationToken cancellationToken)
+    {
+        var name = tool.Name.Trim();
+        var workspacePath = tool.WorkspacePath;
+        var entity = await db.ToolDefinitions
+            .Include(t => t.Tags)
+            .FirstOrDefaultAsync(t => t.Name == name && t.WorkspacePath == workspacePath, cancellationToken)
+            .ConfigureAwait(false);
+        if (entity is null)
+        {
+            entity = new ToolDefinitionEntity
+            {
+                Name = name,
+                Description = tool.Description ?? string.Empty,
+                DateTimeCreated = tool.DateTimeCreated ?? DateTimeOffset.UtcNow,
+            };
+            db.ToolDefinitions.Add(entity);
+        }
+
+        entity.Description = tool.Description ?? entity.Description;
+        entity.ParameterSchema = tool.ParameterSchema;
+        entity.CommandTemplate = tool.CommandTemplate;
+        entity.WorkspacePath = workspacePath;
+        entity.BucketName = tool.BucketName;
+        entity.DateTimeModified = tool.DateTimeModified ?? DateTimeOffset.UtcNow;
+        entity.Tags.Clear();
+        foreach (var tag in tool.Tags.Distinct(StringComparer.OrdinalIgnoreCase))
+            entity.Tags.Add(new ToolDefinitionTagEntity { Tag = tag });
+    }
+
+    private static FederationApplyResult Conflict(string message)
+        => new()
+        {
+            Applied = false,
+            Conflict = true,
+            Message = message,
+        };
+
+    private sealed class ToolsBucketsPayload
+    {
+        public List<ToolBucketPayload> Buckets { get; set; } = [];
+
+        public List<ToolDefinitionPayload> Tools { get; set; } = [];
+    }
+
+    private sealed class ToolBucketPayload
+    {
+        public string Name { get; set; } = string.Empty;
+
+        public string? Owner { get; set; }
+
+        public string? Repo { get; set; }
+
+        public string? Branch { get; set; }
+
+        public string? ManifestPath { get; set; }
+
+        public DateTimeOffset? DateTimeCreated { get; set; }
+
+        public DateTimeOffset? DateTimeLastSynced { get; set; }
+    }
+
+    private sealed class ToolDefinitionPayload
+    {
+        public string Name { get; set; } = string.Empty;
+
+        public string? Description { get; set; }
+
+        public string? ParameterSchema { get; set; }
+
+        public string? CommandTemplate { get; set; }
+
+        public string? WorkspacePath { get; set; }
+
+        public string? BucketName { get; set; }
+
+        public DateTimeOffset? DateTimeCreated { get; set; }
+
+        public DateTimeOffset? DateTimeModified { get; set; }
+
+        public List<string> Tags { get; set; } = [];
+    }
 }
 
 /// <summary>Federation adapter for persisted agent definitions and workspace configuration.</summary>
@@ -475,6 +1094,59 @@ public sealed class AgentsFederationStateAdapter : DatabaseFederationStateAdapte
     public AgentsFederationStateAdapter(IServiceScopeFactory scopeFactory)
         : base("agents", scopeFactory)
     {
+    }
+
+    /// <inheritdoc />
+    public override async ValueTask<FederationApplyResult> ApplyAsync(FederationStateOperation operation, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(operation);
+        await using var scope = ScopeFactory.CreateAsyncScope();
+        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+
+        if (string.Equals(operation.HttpMethod, "DELETE", StringComparison.OrdinalIgnoreCase))
+        {
+            var resourceId = operation.ResourceId;
+            if (string.IsNullOrWhiteSpace(resourceId))
+                return Conflict("Agents delete operation does not identify an agent definition id.");
+
+            var workspaceConfigs = await db.AgentWorkspaces
+                .Where(a => a.AgentDefinitionId == resourceId)
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+            var definitions = await db.AgentDefinitions
+                .Where(a => a.Id == resourceId)
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
+            db.AgentWorkspaces.RemoveRange(workspaceConfigs);
+            db.AgentDefinitions.RemoveRange(definitions);
+            await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            return new FederationApplyResult { Applied = true, Version = null };
+        }
+
+        AgentsPayload? payload;
+        try
+        {
+            payload = JsonSerializer.Deserialize<AgentsPayload>(operation.PayloadJson, JsonOptions);
+        }
+        catch (JsonException ex)
+        {
+            return Conflict($"Agents federation payload is invalid JSON: {ex.Message}");
+        }
+
+        if (payload is null || (payload.Definitions.Count == 0 && payload.WorkspaceConfigs.Count == 0))
+            return Conflict("Agents federation payload does not contain agent definition or workspace rows.");
+
+        foreach (var definition in payload.Definitions)
+            await UpsertAgentDefinitionAsync(db, definition, cancellationToken).ConfigureAwait(false);
+        foreach (var workspace in payload.WorkspaceConfigs)
+            await UpsertAgentWorkspaceAsync(db, workspace, cancellationToken).ConfigureAwait(false);
+
+        await db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        return new FederationApplyResult
+        {
+            Applied = true,
+            Version = await GetVersionAsync(operation.ResourceId ?? "*", cancellationToken).ConfigureAwait(false),
+        };
     }
 
     /// <inheritdoc />
@@ -527,6 +1199,141 @@ public sealed class AgentsFederationStateAdapter : DatabaseFederationStateAdapte
             .ConfigureAwait(false);
 
         return definitions.Count == 0 && workspaceConfigs.Count == 0 ? null : new { definitions, workspaceConfigs };
+    }
+
+    private static async Task UpsertAgentDefinitionAsync(
+        McpDbContext db,
+        AgentDefinitionPayload definition,
+        CancellationToken cancellationToken)
+    {
+        var id = definition.Id.Trim();
+        var entity = await db.AgentDefinitions
+            .FirstOrDefaultAsync(a => a.Id == id, cancellationToken)
+            .ConfigureAwait(false);
+        if (entity is null)
+        {
+            entity = new AgentDefinitionEntity
+            {
+                Id = id,
+                CreatedAt = definition.CreatedAt ?? DateTime.UtcNow,
+            };
+            db.AgentDefinitions.Add(entity);
+        }
+
+        entity.DisplayName = definition.DisplayName ?? entity.DisplayName;
+        entity.DefaultLaunchCommand = definition.DefaultLaunchCommand ?? entity.DefaultLaunchCommand;
+        entity.DefaultInstructionFile = definition.DefaultInstructionFile ?? entity.DefaultInstructionFile;
+        entity.DefaultModelsJson = definition.DefaultModelsJson ?? entity.DefaultModelsJson;
+        entity.DefaultBranchStrategy = definition.DefaultBranchStrategy ?? entity.DefaultBranchStrategy;
+        entity.DefaultSeedPrompt = definition.DefaultSeedPrompt ?? entity.DefaultSeedPrompt;
+        entity.IsBuiltIn = definition.IsBuiltIn;
+        entity.ModifiedAt = definition.ModifiedAt ?? DateTime.UtcNow;
+    }
+
+    private static async Task UpsertAgentWorkspaceAsync(
+        McpDbContext db,
+        AgentWorkspacePayload workspace,
+        CancellationToken cancellationToken)
+    {
+        var agentDefinitionId = workspace.AgentDefinitionId.Trim();
+        var workspacePath = workspace.WorkspacePath.Trim();
+        var entity = await db.AgentWorkspaces
+            .FirstOrDefaultAsync(a => a.AgentDefinitionId == agentDefinitionId && a.WorkspacePath == workspacePath, cancellationToken)
+            .ConfigureAwait(false);
+        if (entity is null)
+        {
+            entity = new AgentWorkspaceEntity
+            {
+                AgentDefinitionId = agentDefinitionId,
+                WorkspacePath = workspacePath,
+                AddedAt = workspace.AddedAt ?? DateTime.UtcNow,
+            };
+            db.AgentWorkspaces.Add(entity);
+        }
+
+        entity.Enabled = workspace.Enabled;
+        entity.Banned = workspace.Banned;
+        entity.BannedReason = workspace.BannedReason;
+        entity.BannedUntilPr = workspace.BannedUntilPr;
+        entity.AgentIsolation = string.IsNullOrWhiteSpace(workspace.AgentIsolation) ? entity.AgentIsolation : workspace.AgentIsolation;
+        entity.LaunchCommandOverride = workspace.LaunchCommandOverride;
+        entity.ModelsOverrideJson = workspace.ModelsOverrideJson;
+        entity.BranchStrategyOverride = workspace.BranchStrategyOverride;
+        entity.SeedPromptOverride = workspace.SeedPromptOverride;
+        entity.MarkerAdditions = workspace.MarkerAdditions ?? string.Empty;
+        entity.InstructionFilesOverrideJson = workspace.InstructionFilesOverrideJson;
+        entity.RestartPolicy = string.IsNullOrWhiteSpace(workspace.RestartPolicy) ? entity.RestartPolicy : workspace.RestartPolicy;
+    }
+
+    private static FederationApplyResult Conflict(string message)
+        => new()
+        {
+            Applied = false,
+            Conflict = true,
+            Message = message,
+        };
+
+    private sealed class AgentsPayload
+    {
+        public List<AgentDefinitionPayload> Definitions { get; set; } = [];
+
+        public List<AgentWorkspacePayload> WorkspaceConfigs { get; set; } = [];
+    }
+
+    private sealed class AgentDefinitionPayload
+    {
+        public string Id { get; set; } = string.Empty;
+
+        public string? DisplayName { get; set; }
+
+        public string? DefaultLaunchCommand { get; set; }
+
+        public string? DefaultInstructionFile { get; set; }
+
+        public string? DefaultModelsJson { get; set; }
+
+        public string? DefaultBranchStrategy { get; set; }
+
+        public string? DefaultSeedPrompt { get; set; }
+
+        public bool IsBuiltIn { get; set; }
+
+        public DateTime? CreatedAt { get; set; }
+
+        public DateTime? ModifiedAt { get; set; }
+    }
+
+    private sealed class AgentWorkspacePayload
+    {
+        public string AgentDefinitionId { get; set; } = string.Empty;
+
+        public string WorkspacePath { get; set; } = string.Empty;
+
+        public bool Enabled { get; set; } = true;
+
+        public bool Banned { get; set; }
+
+        public string? BannedReason { get; set; }
+
+        public int? BannedUntilPr { get; set; }
+
+        public string? AgentIsolation { get; set; }
+
+        public string? LaunchCommandOverride { get; set; }
+
+        public string? ModelsOverrideJson { get; set; }
+
+        public string? BranchStrategyOverride { get; set; }
+
+        public string? SeedPromptOverride { get; set; }
+
+        public string? MarkerAdditions { get; set; }
+
+        public string? InstructionFilesOverrideJson { get; set; }
+
+        public string? RestartPolicy { get; set; }
+
+        public DateTime? AddedAt { get; set; }
     }
 }
 

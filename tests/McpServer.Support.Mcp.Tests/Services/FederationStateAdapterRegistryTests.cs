@@ -2,9 +2,12 @@ using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Services.FederationAdapters;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Entities;
+using McpServer.Support.Mcp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
+using System.Text.Json;
 
 namespace McpServer.Support.Mcp.Tests.Services;
 
@@ -31,8 +34,28 @@ public sealed class FederationStateAdapterRegistryTests
             .ToArray();
 
         Assert.Equal(
-            ["context_metadata", "github_metadata", "marker_state", "repo_file_changes"],
+            ["context_metadata", "github_metadata", "marker_state", "mcp_transport", "repo_file_changes"],
             localOnlyDomains);
+
+        Assert.Contains(coverage, row => row.Domain == "todo" && row.ApplySupported);
+        Assert.Contains(coverage, row => row.Domain == "session_log" && row.Covered && row.ApplySupported);
+        Assert.Contains(coverage, row => row.Domain == "mcp_transport" && row.LocalOnly && !row.ApplySupported);
+        Assert.Collection(
+            coverage.OrderBy(row => row.Domain, StringComparer.Ordinal).Select(row => (row.Domain, row.LocalOnly, row.ApplySupported)),
+            row => Assert.Equal(("agents", false, true), row),
+            row => Assert.Equal(("context_metadata", true, false), row),
+            row => Assert.Equal(("github_metadata", true, false), row),
+            row => Assert.Equal(("marker_state", true, false), row),
+            row => Assert.Equal(("mcp_transport", true, false), row),
+            row => Assert.Equal(("repo_file_changes", true, false), row),
+            row => Assert.Equal(("requirements", false, true), row),
+            row => Assert.Equal(("session_log", false, true), row),
+            row => Assert.Equal(("todo", false, true), row),
+            row => Assert.Equal(("tools_buckets", false, true), row),
+            row => Assert.Equal(("workspace", false, true), row));
+        Assert.True(registry.CanApply("todo"));
+        Assert.True(registry.CanApply("session_log"));
+        Assert.False(registry.CanApply("mcp_transport"));
     }
 
     /// <summary>Workspace adapter snapshots registration metadata and versions from modification time.</summary>
@@ -47,6 +70,55 @@ public sealed class FederationStateAdapterRegistryTests
         Assert.Equal("workspace", snapshot.Domain);
         Assert.Equal("1700000000000", snapshot.Version);
         Assert.Contains("McpServer", snapshot.PayloadJson, StringComparison.Ordinal);
+    }
+
+    /// <summary>Workspace adapter applies signed state payloads through the canonical workspace service.</summary>
+    [Fact]
+    public async Task WorkspaceAdapter_AppliesWorkspacePayloadThroughWorkspaceService()
+    {
+        var workspaceService = Substitute.For<IWorkspaceService>();
+        workspaceService.GetAsync(WorkspacePath, Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<WorkspaceDto?>(null));
+        workspaceService.CreateAsync(Arg.Any<WorkspaceCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new WorkspaceMutationResult(true, Workspace: new WorkspaceDto
+            {
+                WorkspacePath = WorkspacePath,
+                Name = "McpServer",
+                TodoPath = "docs/Project/TODO.yaml",
+                StatusPrompt = "status",
+                ImplementPrompt = "implement",
+                PlanPrompt = "plan",
+                DateTimeModified = DateTimeOffset.FromUnixTimeMilliseconds(1700000000000),
+            })));
+        using var provider = CreateProvider(services => services.AddSingleton(workspaceService));
+        var adapter = ResolveAdapter(provider, "workspace");
+
+        var result = await adapter.ApplyAsync(new FederationStateOperation
+        {
+            OperationId = "op-workspace",
+            Domain = "workspace",
+            ResourceId = WorkspacePath,
+            HttpMethod = "PUT",
+            PayloadJson = JsonSerializer.Serialize(new WorkspaceDto
+            {
+                WorkspacePath = WorkspacePath,
+                Name = "McpServer",
+                TodoPath = "docs/Project/TODO.yaml",
+                IsPrimary = true,
+                IsEnabled = true,
+                StatusPrompt = "status",
+                ImplementPrompt = "implement",
+                PlanPrompt = "plan",
+                DateTimeModified = DateTimeOffset.FromUnixTimeMilliseconds(1700000000000),
+            }, new JsonSerializerOptions(JsonSerializerDefaults.Web)),
+        }, CancellationToken.None).ConfigureAwait(true);
+
+        Assert.True(result.Applied);
+        await workspaceService.Received(1)
+            .CreateAsync(
+                Arg.Is<WorkspaceCreateRequest>(request => request != null && request.WorkspacePath == WorkspacePath),
+                Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
     }
 
     /// <summary>TODO adapter uses the latest audit version and includes item state.</summary>
@@ -80,6 +152,122 @@ public sealed class FederationStateAdapterRegistryTests
         Assert.Contains("Federation plan", snapshot.PayloadJson, StringComparison.Ordinal);
     }
 
+    /// <summary>TODO adapter applies signed HTTP create operations through the TODO service.</summary>
+    [Fact]
+    public async Task TodoAdapter_AppliesHttpCreateThroughTodoService()
+    {
+        var todoService = Substitute.For<ITodoService>();
+        todoService.CreateAsync(Arg.Any<TodoCreateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new TodoMutationResult(
+                true,
+                Item: new TodoFlatItem
+                {
+                    Id = "PLAN-FEDERATION-002",
+                    Title = "Create through federation",
+                    Section = "federation",
+                    Priority = "high",
+                    Done = false,
+                })));
+        using var provider = CreateProvider(services => services.AddSingleton(todoService));
+        var adapter = ResolveAdapter(provider, "todo");
+
+        var result = await adapter.ApplyAsync(new FederationStateOperation
+        {
+            OperationId = "op-create",
+            Domain = "todo",
+            HttpMethod = "POST",
+            PayloadJson = JsonSerializer.Serialize(new TodoCreateRequest
+            {
+                Id = "PLAN-FEDERATION-002",
+                Title = "Create through federation",
+                Section = "federation",
+                Priority = "high",
+            }, new JsonSerializerOptions(JsonSerializerDefaults.Web)),
+        }, CancellationToken.None).ConfigureAwait(true);
+
+        Assert.True(result.Applied);
+        await todoService.Received(1)
+            .CreateAsync(
+                Arg.Is<TodoCreateRequest>(request => request != null && request.Id == "PLAN-FEDERATION-002"),
+                Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>TODO adapter resolves path ids for signed HTTP update operations.</summary>
+    [Fact]
+    public async Task TodoAdapter_AppliesHttpUpdateUsingPathId()
+    {
+        var todoService = Substitute.For<ITodoService>();
+        todoService.UpdateAsync("PLAN-FEDERATION-003", Arg.Any<TodoUpdateRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new TodoMutationResult(
+                true,
+                Item: new TodoFlatItem
+                {
+                    Id = "PLAN-FEDERATION-003",
+                    Title = "Updated through federation",
+                    Section = "federation",
+                    Priority = "high",
+                    Done = true,
+                })));
+        using var provider = CreateProvider(services => services.AddSingleton(todoService));
+        var adapter = ResolveAdapter(provider, "todo");
+
+        var result = await adapter.ApplyAsync(new FederationStateOperation
+        {
+            OperationId = "op-update",
+            Domain = "todo",
+            ResourceId = "/mcpserver/todo/PLAN-FEDERATION-003",
+            HttpMethod = "PUT",
+            Path = "/mcpserver/todo/PLAN-FEDERATION-003",
+            PayloadJson = JsonSerializer.Serialize(new TodoUpdateRequest
+            {
+                Done = true,
+            }, new JsonSerializerOptions(JsonSerializerDefaults.Web)),
+        }, CancellationToken.None).ConfigureAwait(true);
+
+        Assert.True(result.Applied);
+        await todoService.Received(1)
+            .UpdateAsync(
+                "PLAN-FEDERATION-003",
+                Arg.Is<TodoUpdateRequest>(request => request != null && request.Done == true),
+                Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>TODO adapter resolves path ids for signed HTTP delete operations.</summary>
+    [Fact]
+    public async Task TodoAdapter_AppliesHttpDeleteUsingPathId()
+    {
+        var todoService = Substitute.For<ITodoService>();
+        todoService.DeleteAsync("PLAN-FEDERATION-004", Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new TodoMutationResult(
+                true,
+                Item: new TodoFlatItem
+                {
+                    Id = "PLAN-FEDERATION-004",
+                    Title = "Deleted through federation",
+                    Section = "federation",
+                    Priority = "high",
+                    Done = true,
+                })));
+        using var provider = CreateProvider(services => services.AddSingleton(todoService));
+        var adapter = ResolveAdapter(provider, "todo");
+
+        var result = await adapter.ApplyAsync(new FederationStateOperation
+        {
+            OperationId = "op-delete",
+            Domain = "todo",
+            ResourceId = "/mcpserver/todo/PLAN-FEDERATION-004",
+            HttpMethod = "DELETE",
+            Path = "/mcpserver/todo/PLAN-FEDERATION-004",
+        }, CancellationToken.None).ConfigureAwait(true);
+
+        Assert.True(result.Applied);
+        await todoService.Received(1)
+            .DeleteAsync("PLAN-FEDERATION-004", Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
     /// <summary>Requirements adapter snapshots requirement rows and their cross-links.</summary>
     [Fact]
     public async Task RequirementsAdapter_SnapshotsRequirementAndTraceabilityLinks()
@@ -110,6 +298,62 @@ public sealed class FederationStateAdapterRegistryTests
 
         Assert.NotNull(snapshot.Version);
         Assert.Contains("TR-MCP-FED-001", snapshot.PayloadJson, StringComparison.Ordinal);
+    }
+
+    /// <summary>Requirements adapter applies requirement rows and cross-links from signed state payloads.</summary>
+    [Fact]
+    public async Task RequirementsAdapter_AppliesRequirementAndTraceabilityPayload()
+    {
+        using var provider = CreateProvider();
+        var adapter = ResolveAdapter(provider, "requirements");
+        var payload = new
+        {
+            requirements = new[]
+            {
+                new
+                {
+                    kind = "fr",
+                    id = "FR-MCP-999",
+                    title = "Federated requirement",
+                    body = "Replicated through federation",
+                    createdAtUtc = "2026-05-22T00:00:00Z",
+                    updatedAtUtc = "2026-05-22T00:00:00Z",
+                },
+                new
+                {
+                    kind = "tr",
+                    id = "TR-MCP-FED-999",
+                    title = "Federated technical requirement",
+                    body = "Replicated through federation",
+                    createdAtUtc = "2026-05-22T00:00:00Z",
+                    updatedAtUtc = "2026-05-22T00:00:00Z",
+                },
+            },
+            links = new[]
+            {
+                new
+                {
+                    frId = "FR-MCP-999",
+                    targetKind = "tr",
+                    targetId = "TR-MCP-FED-999",
+                    createdAtUtc = "2026-05-22T00:00:00Z",
+                },
+            },
+        };
+
+        var result = await adapter.ApplyAsync(new FederationStateOperation
+        {
+            OperationId = "op-req",
+            Domain = "requirements",
+            ResourceId = "fr/FR-MCP-999",
+            PayloadJson = JsonSerializer.Serialize(payload, new JsonSerializerOptions(JsonSerializerDefaults.Web)),
+        }, CancellationToken.None).ConfigureAwait(true);
+
+        Assert.True(result.Applied);
+        await using var scope = provider.CreateAsyncScope();
+        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+        Assert.NotNull(await db.Requirements.FirstOrDefaultAsync(r => r.Id == "FR-MCP-999").ConfigureAwait(true));
+        Assert.NotNull(await db.RequirementTraceabilityLinks.FirstOrDefaultAsync(l => l.FrId == "FR-MCP-999").ConfigureAwait(true));
     }
 
     /// <summary>Tool and agent adapters snapshot persisted configuration without runtime process state.</summary>
@@ -160,6 +404,145 @@ public sealed class FederationStateAdapterRegistryTests
         Assert.Contains("Codex", agentsSnapshot.PayloadJson, StringComparison.Ordinal);
     }
 
+    /// <summary>Tools/buckets adapter applies bucket, tool definition, and tag rows from signed state payloads.</summary>
+    [Fact]
+    public async Task ToolsBucketsAdapter_AppliesBucketToolAndTagPayload()
+    {
+        using var provider = CreateProvider();
+        var adapter = ResolveAdapter(provider, "tools_buckets");
+        var payload = new
+        {
+            buckets = new[]
+            {
+                new
+                {
+                    name = "official",
+                    owner = "sharpninja",
+                    repo = "mcp-tools",
+                    branch = "main",
+                    manifestPath = "/",
+                    dateTimeCreated = DateTimeOffset.Parse("2026-05-22T00:00:00Z"),
+                },
+            },
+            tools = new[]
+            {
+                new
+                {
+                    name = "federation-status",
+                    description = "Show federation status",
+                    bucketName = "official",
+                    dateTimeCreated = DateTimeOffset.Parse("2026-05-22T00:00:00Z"),
+                    dateTimeModified = DateTimeOffset.Parse("2026-05-22T00:01:00Z"),
+                    tags = new[] { "federation", "status" },
+                },
+            },
+        };
+
+        var result = await adapter.ApplyAsync(new FederationStateOperation
+        {
+            OperationId = "op-tools",
+            Domain = "tools_buckets",
+            ResourceId = "official",
+            PayloadJson = JsonSerializer.Serialize(payload, new JsonSerializerOptions(JsonSerializerDefaults.Web)),
+        }, CancellationToken.None).ConfigureAwait(true);
+
+        Assert.True(result.Applied);
+        await using var scope = provider.CreateAsyncScope();
+        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+        var tool = await db.ToolDefinitions.Include(t => t.Tags).FirstOrDefaultAsync(t => t.Name == "federation-status").ConfigureAwait(true);
+        Assert.NotNull(tool);
+        Assert.Contains(tool.Tags, tag => tag.Tag == "federation");
+    }
+
+    /// <summary>Agents adapter applies agent definitions and workspace configuration from signed state payloads.</summary>
+    [Fact]
+    public async Task AgentsAdapter_AppliesDefinitionAndWorkspacePayload()
+    {
+        using var provider = CreateProvider();
+        var adapter = ResolveAdapter(provider, "agents");
+        var payload = new
+        {
+            definitions = new[]
+            {
+                new
+                {
+                    id = "codex",
+                    displayName = "Codex",
+                    defaultLaunchCommand = "codex",
+                    defaultInstructionFile = "AGENTS.md",
+                    defaultModelsJson = "[]",
+                    defaultBranchStrategy = "feature/{agent}/{task}",
+                    defaultSeedPrompt = "",
+                    isBuiltIn = true,
+                    createdAt = DateTime.Parse("2026-05-22T00:00:00Z"),
+                    modifiedAt = DateTime.Parse("2026-05-22T00:01:00Z"),
+                },
+            },
+            workspaceConfigs = new[]
+            {
+                new
+                {
+                    agentDefinitionId = "codex",
+                    workspacePath = WorkspacePath,
+                    enabled = true,
+                    banned = false,
+                    agentIsolation = "worktree",
+                    markerAdditions = "",
+                    restartPolicy = "never",
+                    addedAt = DateTime.Parse("2026-05-22T00:00:00Z"),
+                },
+            },
+        };
+
+        var result = await adapter.ApplyAsync(new FederationStateOperation
+        {
+            OperationId = "op-agents",
+            Domain = "agents",
+            ResourceId = "codex",
+            PayloadJson = JsonSerializer.Serialize(payload, new JsonSerializerOptions(JsonSerializerDefaults.Web)),
+        }, CancellationToken.None).ConfigureAwait(true);
+
+        Assert.True(result.Applied);
+        await using var scope = provider.CreateAsyncScope();
+        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+        Assert.NotNull(await db.AgentDefinitions.FirstOrDefaultAsync(a => a.Id == "codex").ConfigureAwait(true));
+        Assert.NotNull(await db.AgentWorkspaces.FirstOrDefaultAsync(a => a.AgentDefinitionId == "codex").ConfigureAwait(true));
+    }
+
+    /// <summary>Session log adapter applies unified session log payloads through the canonical session log service.</summary>
+    [Fact]
+    public async Task SessionLogAdapter_AppliesPayloadThroughSessionLogService()
+    {
+        var sessionLogService = Substitute.For<ISessionLogService>();
+        sessionLogService.SubmitAsync(Arg.Any<UnifiedSessionLogDto>(), null, Arg.Any<string?>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(42L));
+        using var provider = CreateProvider(services => services.AddSingleton(sessionLogService));
+        var adapter = ResolveAdapter(provider, "session_log");
+
+        var result = await adapter.ApplyAsync(new FederationStateOperation
+        {
+            OperationId = "op-session",
+            Domain = "session_log",
+            ResourceId = "Codex/Codex-20260522T000000Z-fed",
+            PayloadJson = JsonSerializer.Serialize(new UnifiedSessionLogDto
+            {
+                SourceType = "Codex",
+                SessionId = "Codex-20260522T000000Z-fed",
+                Status = "completed",
+                Turns = [],
+            }, new JsonSerializerOptions(JsonSerializerDefaults.Web)),
+        }, CancellationToken.None).ConfigureAwait(true);
+
+        Assert.True(result.Applied);
+        await sessionLogService.Received(1)
+            .SubmitAsync(
+                Arg.Is<UnifiedSessionLogDto>(payload => payload != null && payload.SessionId == "Codex-20260522T000000Z-fed"),
+                null,
+                "op-session",
+                Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
     /// <summary>Local-only adapters reject apply attempts and explain the exemption.</summary>
     [Fact]
     public async Task LocalOnlyAdapter_RejectsApply()
@@ -190,7 +573,7 @@ public sealed class FederationStateAdapterRegistryTests
         await db.SaveChangesAsync().ConfigureAwait(false);
     }
 
-    private static ServiceProvider CreateProvider()
+    private static ServiceProvider CreateProvider(Action<IServiceCollection>? configureServices = null)
     {
         var services = new ServiceCollection();
         services.AddOptions();
@@ -199,6 +582,7 @@ public sealed class FederationStateAdapterRegistryTests
         var databaseRoot = new InMemoryDatabaseRoot();
         var databaseName = $"fed-adapters-{Guid.NewGuid():N}";
         services.AddDbContext<McpDbContext>(options => options.UseInMemoryDatabase(databaseName, databaseRoot));
+        configureServices?.Invoke(services);
         services.AddFederationStateAdapters();
         services.AddSingleton<FederationStateAdapterRegistry>();
         return services.BuildServiceProvider();

@@ -215,6 +215,10 @@ public sealed class ProcessEnvironmentService(
             logger.LogWarning("Cannot read registry for user {User} PATH: {Error}", username, ex.Message);
         }
 
+        // NVM-launched npm shims need the selected Node runtime ahead of older system installs.
+        AddIfExists(parts, Path.Combine(userProfile, "scoop", "apps", "nvm", "current", "nodejs", "nodejs"));
+        AddIfExists(parts, Path.Combine(userProfile, "scoop", "apps", "nvm", "current", "nodejs"));
+
         // Common tool directories that host CLIs.
         AddIfExists(parts, Path.Combine(localAppData, "Microsoft", "WinGet", "Links"));
         AddIfExists(parts, Path.Combine(userProfile, "scoop", "shims"));

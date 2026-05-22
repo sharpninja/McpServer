@@ -30,6 +30,19 @@ public sealed class RequirementEntity
     /// <summary>Requirement body or testing condition text.</summary>
     public string Body { get; set; } = string.Empty;
 
+    /// <summary>Requirement priority, such as <c>high</c>, <c>medium</c>, or <c>low</c>.</summary>
+    [Required]
+    [MaxLength(32)]
+    public string Priority { get; set; } = "medium";
+
+    /// <summary>Requirement lifecycle status, such as <c>pending</c> or <c>completed</c>.</summary>
+    [Required]
+    [MaxLength(64)]
+    public string Status { get; set; } = "pending";
+
+    /// <summary>Optional operator notes that are not part of the canonical body text.</summary>
+    public string? Notes { get; set; }
+
     /// <summary>UTC timestamp when the row was first created.</summary>
     [Required]
     [MaxLength(64)]

@@ -57,7 +57,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             .AsNoTracking()
             .Where(x => x.Kind == FrKind)
             .OrderBy(x => x.Id)
-            .Select(x => new FrEntry(x.Id, x.Title, x.Body, x.WorkspaceId))
+            .Select(x => new FrEntry(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes))
             .ToListAsync(ct)
             .ConfigureAwait(false);
     }
@@ -69,21 +69,21 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await using var scope = CreateScope();
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var row = await FindRequirementAsync(scope.Context, FrKind, id, asTracking: false, ct).ConfigureAwait(false);
-        return row is null ? null : new FrEntry(row.Id, row.Title, row.Body, row.WorkspaceId);
+        return row is null ? null : new FrEntry(row.Id, row.Title, row.Body, row.WorkspaceId, row.Priority, row.Status, row.Notes);
     }
 
     /// <inheritdoc />
     public async Task AddFrAsync(FrEntry entry, CancellationToken ct = default)
     {
         ValidateFr(entry);
-        await AddRequirementAsync(FrKind, entry.Id, entry.Title, entry.Body, ct).ConfigureAwait(false);
+        await AddRequirementAsync(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task UpdateFrAsync(FrEntry entry, CancellationToken ct = default)
     {
         ValidateFr(entry);
-        await UpdateRequirementAsync(FrKind, entry.Id, entry.Title, entry.Body, ct).ConfigureAwait(false);
+        await UpdateRequirementAsync(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -118,7 +118,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             .AsNoTracking()
             .Where(x => x.Kind == TrKind)
             .OrderBy(x => x.Id)
-            .Select(x => new TrEntry(x.Id, x.Title, x.Body, x.WorkspaceId))
+            .Select(x => new TrEntry(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes))
             .ToListAsync(ct)
             .ConfigureAwait(false);
     }
@@ -130,21 +130,21 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await using var scope = CreateScope();
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var row = await FindRequirementAsync(scope.Context, TrKind, id, asTracking: false, ct).ConfigureAwait(false);
-        return row is null ? null : new TrEntry(row.Id, row.Title, row.Body, row.WorkspaceId);
+        return row is null ? null : new TrEntry(row.Id, row.Title, row.Body, row.WorkspaceId, row.Priority, row.Status, row.Notes);
     }
 
     /// <inheritdoc />
     public async Task AddTrAsync(TrEntry entry, CancellationToken ct = default)
     {
         ValidateTr(entry);
-        await AddRequirementAsync(TrKind, entry.Id, entry.Title, entry.Body, ct).ConfigureAwait(false);
+        await AddRequirementAsync(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task UpdateTrAsync(TrEntry entry, CancellationToken ct = default)
     {
         ValidateTr(entry);
-        await UpdateRequirementAsync(TrKind, entry.Id, entry.Title, entry.Body, ct).ConfigureAwait(false);
+        await UpdateRequirementAsync(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -163,7 +163,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             .AsNoTracking()
             .Where(x => x.Kind == TestKind)
             .OrderBy(x => x.Id)
-            .Select(x => new TestEntry(x.Id, x.Body, x.WorkspaceId))
+            .Select(x => new TestEntry(x.Id, x.Body, x.WorkspaceId, x.Title, x.Priority, x.Status, x.Notes))
             .ToListAsync(ct)
             .ConfigureAwait(false);
     }
@@ -175,21 +175,21 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await using var scope = CreateScope();
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var row = await FindRequirementAsync(scope.Context, TestKind, id, asTracking: false, ct).ConfigureAwait(false);
-        return row is null ? null : new TestEntry(row.Id, row.Body, row.WorkspaceId);
+        return row is null ? null : new TestEntry(row.Id, row.Body, row.WorkspaceId, row.Title, row.Priority, row.Status, row.Notes);
     }
 
     /// <inheritdoc />
     public async Task AddTestAsync(TestEntry entry, CancellationToken ct = default)
     {
         ValidateTest(entry);
-        await AddRequirementAsync(TestKind, entry.Id, string.Empty, entry.Condition, ct).ConfigureAwait(false);
+        await AddRequirementAsync(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task UpdateTestAsync(TestEntry entry, CancellationToken ct = default)
     {
         ValidateTest(entry);
-        await UpdateRequirementAsync(TestKind, entry.Id, string.Empty, entry.Condition, ct).ConfigureAwait(false);
+        await UpdateRequirementAsync(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -347,7 +347,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             ct).ConfigureAwait(false);
     }
 
-    private async Task AddRequirementAsync(string kind, string id, string title, string body, CancellationToken ct)
+    private async Task AddRequirementAsync(string kind, string id, string title, string body, string priority, string status, string? notes, CancellationToken ct)
     {
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
@@ -359,7 +359,19 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                 throw new RequirementsConflictException($"{kind.ToUpperInvariant()} '{id}' already exists.");
 
             var now = Now();
-            ctx.Requirements.Add(new RequirementEntity { WorkspaceId = RequireWorkspaceId(ctx), Kind = kind, Id = id, Title = title, Body = body, CreatedAtUtc = now, UpdatedAtUtc = now });
+            ctx.Requirements.Add(new RequirementEntity
+            {
+                WorkspaceId = RequireWorkspaceId(ctx),
+                Kind = kind,
+                Id = id,
+                Title = title,
+                Body = body,
+                Priority = NormalizePriority(priority),
+                Status = NormalizeStatus(status),
+                Notes = notes,
+                CreatedAtUtc = now,
+                UpdatedAtUtc = now
+            });
             await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
             await PublishRequirementsChangeSafeAsync(ChangeEventActions.Created, id, ct).ConfigureAwait(false);
         }
@@ -369,7 +381,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         }
     }
 
-    private async Task UpdateRequirementAsync(string kind, string id, string title, string body, CancellationToken ct)
+    private async Task UpdateRequirementAsync(string kind, string id, string title, string body, string priority, string status, string? notes, CancellationToken ct)
     {
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
@@ -381,6 +393,9 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                 ?? throw new RequirementsNotFoundException($"{kind.ToUpperInvariant()} '{id}' was not found.");
             row.Title = title;
             row.Body = body;
+            row.Priority = NormalizePriority(priority);
+            row.Status = NormalizeStatus(status);
+            row.Notes = notes;
             row.UpdatedAtUtc = Now();
             await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
             await PublishRequirementsChangeSafeAsync(ChangeEventActions.Updated, id, ct).ConfigureAwait(false);
@@ -643,6 +658,12 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         if (string.IsNullOrWhiteSpace(entry.Condition))
             throw new ArgumentException("TEST condition is required.", nameof(entry));
     }
+
+    private static string NormalizePriority(string? priority) =>
+        string.IsNullOrWhiteSpace(priority) ? "medium" : priority.Trim().ToLowerInvariant();
+
+    private static string NormalizeStatus(string? status) =>
+        string.IsNullOrWhiteSpace(status) ? "pending" : status.Trim().ToLowerInvariant();
 
     private static void ValidateMapping(FrTrMapping mapping)
     {

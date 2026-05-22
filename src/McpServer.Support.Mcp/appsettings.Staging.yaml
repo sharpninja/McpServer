@@ -68,6 +68,33 @@ Mcp:
     LoggingServiceUrl: ""
     QueueCapacity: 1000
     IncludeQueryString: false
+  Federation:
+    Enabled: false
+    Role: Standalone
+    HubBaseUrl: ''
+    HubAccessToken: ''
+    ProxyId: ''
+    EnrollmentToken: ''
+    MaxHops: 3
+    DefaultTarget: ''
+    Targets: []
+    WorkspaceRoutes: []
+    Queue:
+      Enabled: true
+      MaxReplayAttempts: 10
+      MaxBodyBytes: 1048576
+    Sync:
+      HeartbeatSeconds: 30
+      ReplayIntervalSeconds: 15
+      FanoutIntervalSeconds: 15
+    Signing:
+      Enabled: true
+      SharedSecret: ''
+      EnvelopeTtlSeconds: 300
+    LocalExecution:
+      Enabled: false
+      AllowedMethods:
+      - desktop_launch
   Parseable:
     Enabled: false
     Url: ''

@@ -63,17 +63,7 @@ public sealed class CanonicalToolBucketMigrationTests : IDisposable
         using (var db = CreateContext())
         {
             db.GetService<IMigrator>().Migrate(PreviousMigration);
-            db.ToolBuckets.Add(new ToolBucketEntity
-            {
-                Name = "official",
-                Owner = "sharpninja",
-                Repo = "McpServerTools",
-                Branch = "main",
-                ManifestPath = "/",
-                WorkspaceId = string.Empty,
-                DateTimeCreated = DateTimeOffset.UtcNow,
-            });
-            db.SaveChanges();
+            SeedToolBucket(db, "official");
         }
 
         using (var db = CreateContext())
@@ -99,26 +89,8 @@ public sealed class CanonicalToolBucketMigrationTests : IDisposable
         using (var db = CreateContext())
         {
             db.GetService<IMigrator>().Migrate(PreviousMigration);
-            db.ToolBuckets.Add(new ToolBucketEntity
-            {
-                Name = "mcpservertools",
-                Owner = "sharpninja",
-                Repo = "McpServerTools",
-                Branch = "main",
-                ManifestPath = "/",
-                WorkspaceId = string.Empty,
-                DateTimeCreated = DateTimeOffset.UtcNow,
-            });
-            db.ToolDefinitions.Add(new ToolDefinitionEntity
-            {
-                Name = "mcp-session-module",
-                Description = "Download McpSession",
-                BucketName = "mcpservertools",
-                WorkspaceId = string.Empty,
-                DateTimeCreated = DateTimeOffset.UtcNow,
-                DateTimeModified = DateTimeOffset.UtcNow,
-            });
-            db.SaveChanges();
+            SeedToolBucket(db, "mcpservertools");
+            SeedToolDefinition(db, "mcp-session-module", "mcpservertools", string.Empty, null);
         }
 
         using (var db = CreateContext())
@@ -149,23 +121,8 @@ public sealed class CanonicalToolBucketMigrationTests : IDisposable
         using (var db = CreateContext())
         {
             db.GetService<IMigrator>().Migrate(PreviousMigration);
-            var tool = new ToolDefinitionEntity
-            {
-                Name = "mcp-session-module",
-                Description = "Download McpSession",
-                WorkspacePath = null,
-                WorkspaceId = @"E:\github\McpServer",
-                DateTimeCreated = DateTimeOffset.UtcNow,
-                DateTimeModified = DateTimeOffset.UtcNow,
-            };
-            tool.Tags.Add(new ToolDefinitionTagEntity
-            {
-                Tag = "session",
-                WorkspaceId = @"E:\github\McpServer",
-            });
-
-            db.ToolDefinitions.Add(tool);
-            db.SaveChanges();
+            var toolId = SeedToolDefinition(db, "mcp-session-module", null, @"E:\github\McpServer", null);
+            SeedToolDefinitionTag(db, toolId, "session", @"E:\github\McpServer");
         }
 
         using (var db = CreateContext())
@@ -196,5 +153,39 @@ public sealed class CanonicalToolBucketMigrationTests : IDisposable
     private McpDbContext CreateContext()
     {
         return new McpDbContext(_options);
+    }
+
+    private static void SeedToolBucket(McpDbContext db, string name)
+    {
+        db.Database.ExecuteSqlInterpolated(
+            $"""
+            INSERT INTO ToolBuckets (Name, Owner, Repo, Branch, ManifestPath, DateTimeCreated, DateTimeLastSynced, WorkspaceId)
+            VALUES ({name}, 'sharpninja', 'McpServerTools', 'main', '/', {DateTimeOffset.UtcNow}, NULL, '')
+            """);
+    }
+
+    private static long SeedToolDefinition(
+        McpDbContext db,
+        string name,
+        string? bucketName,
+        string workspaceId,
+        string? workspacePath)
+    {
+        db.Database.ExecuteSqlInterpolated(
+            $"""
+            INSERT INTO ToolDefinitions (Name, Description, BucketName, WorkspaceId, WorkspacePath, DateTimeCreated, DateTimeModified)
+            VALUES ({name}, 'Download McpSession', {bucketName}, {workspaceId}, {workspacePath}, {DateTimeOffset.UtcNow}, {DateTimeOffset.UtcNow})
+            """);
+
+        return db.Database.SqlQueryRaw<long>("SELECT last_insert_rowid() AS Value").Single();
+    }
+
+    private static void SeedToolDefinitionTag(McpDbContext db, long toolId, string tag, string workspaceId)
+    {
+        db.Database.ExecuteSqlInterpolated(
+            $"""
+            INSERT INTO ToolDefinitionTags (ToolDefinitionId, Tag, WorkspaceId)
+            VALUES ({toolId}, {tag}, {workspaceId})
+            """);
     }
 }

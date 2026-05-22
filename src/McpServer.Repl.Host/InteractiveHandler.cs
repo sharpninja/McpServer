@@ -931,7 +931,9 @@ public class InteractiveHandler
                     AnsiConsole.MarkupLine($"  Enrolled proxies: {status.ProxyCount}");
                     AnsiConsole.MarkupLine($"  Hosted workspaces: {status.HostedWorkspaceCount}");
                     AnsiConsole.MarkupLine($"  Queue depth: {(status.QueueDepth == 0 ? "[green]0[/]" : $"[yellow]{status.QueueDepth}[/]")}");
+                    AnsiConsole.MarkupLine($"  Fanout depth: {(status.FanoutDepth == 0 ? "[green]0[/]" : $"[yellow]{status.FanoutDepth}[/]")}");
                     AnsiConsole.MarkupLine($"  Conflicts: {(status.ConflictCount == 0 ? "[green]0[/]" : $"[red]{status.ConflictCount}[/]")}");
+                    AnsiConsole.MarkupLine($"  Stale reads: {Markup.Escape(status.StaleReadStatus)}");
                     AnsiConsole.WriteLine();
 
                     if (status.Targets.Count == 0)

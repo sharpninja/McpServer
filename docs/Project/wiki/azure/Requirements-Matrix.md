@@ -406,6 +406,19 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-103 | 🟡 Partial | Hub-and-spoke federation |
 | TR-MCP-FED-001 | 🟡 Partial | Hub proxy federation contract |
 | TEST-MCP-136 | 🟡 Partial | Hub-and-spoke federation tests |
+| FR-MCP-104 | Tracked | Functional-Requirements.md |
+| FR-MCP-105 | Tracked | Functional-Requirements.md |
+| FR-MCP-106 | Tracked | Functional-Requirements.md |
+| FR-MCP-107 | Tracked | Functional-Requirements.md |
+| TR-MCP-BYRD-005 | Tracked | Technical-Requirements.md |
+| TR-MCP-DB-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-DB-002 | Tracked | Technical-Requirements.md |
+| TR-MCP-DB-003 | Tracked | Technical-Requirements.md |
+| TR-MCP-DB-004 | Tracked | Technical-Requirements.md |
+| TR-MCP-DB-005 | Tracked | Technical-Requirements.md |
+| TR-MCP-PLAN-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-PLUGIN-008 | Tracked | Technical-Requirements.md |
+| TR-MCP-TPL-007 | Tracked | Technical-Requirements.md |
 | TEST-GRAPHRAG-ADHOC-001 | Tracked | Testing-Requirements.md |
 | TEST-GRAPHRAG-ADHOC-002 | Tracked | Testing-Requirements.md |
 | TEST-GRAPHRAG-ADHOC-003 | Tracked | Testing-Requirements.md |
@@ -413,6 +426,13 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-GRAPHRAG-ADHOC-005 | Tracked | Testing-Requirements.md |
 | TEST-GRAPHRAG-ADHOC-006 | Tracked | Testing-Requirements.md |
 | TEST-GRAPHRAG-ADHOC-007 | Tracked | Testing-Requirements.md |
+| TEST-MCP-137 | Tracked | Testing-Requirements.md |
+| TEST-MCP-138 | Tracked | Testing-Requirements.md |
+| TEST-MCP-139 | Tracked | Testing-Requirements.md |
+| TEST-MCP-140 | Tracked | Testing-Requirements.md |
+| TEST-MCP-141 | Tracked | Testing-Requirements.md |
+| TEST-MCP-142 | Tracked | Testing-Requirements.md |
+| TEST-MCP-143 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-1 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-2 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-3 | Tracked | Testing-Requirements.md |

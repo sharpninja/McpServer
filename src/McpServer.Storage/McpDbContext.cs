@@ -1,3 +1,6 @@
+using System.Linq.Expressions;
+using System.Data.Common;
+using System.Text.Json;
 using McpServer.Common.Copilot;
 using McpServer.Support.Mcp.Services;
 using McpServer.Support.Mcp.Storage.Entities;
@@ -26,6 +29,12 @@ public sealed class McpDbContext : DbContext
 
     /// <summary>TR-MCP-MT-001: Overrides the workspace ID for this context instance (e.g. from an MCP tool parameter).</summary>
     public void OverrideWorkspaceId(string workspaceId) => _workspaceId = workspaceId;
+
+    /// <summary>TR-MCP-DB-001: Canonical database-authoritative workspace registry.</summary>
+    public DbSet<WorkspaceEntity> Workspaces => Set<WorkspaceEntity>();
+
+    /// <summary>TR-MCP-DB-004: Generic append-only mutable-entity audit ledger.</summary>
+    public DbSet<DataAuditLogEntity> DataAuditLogs => Set<DataAuditLogEntity>();
 
     /// <summary>TR-PLANNED-013: Indexed documents.</summary>
     public DbSet<ContextDocumentEntity> Documents => Set<ContextDocumentEntity>();
@@ -84,6 +93,12 @@ public sealed class McpDbContext : DbContext
     /// <summary>TR-MCP-TODO-005 (provider-agnostic): Authoritative TODO items.</summary>
     public DbSet<TodoItemEntity> TodoItems => Set<TodoItemEntity>();
 
+    /// <summary>TR-MCP-DB-005: Durable TODO lifecycle anchors used by relational links.</summary>
+    public DbSet<TodoRecordEntity> TodoRecords => Set<TodoRecordEntity>();
+
+    /// <summary>TR-MCP-DB-005: Normalized TODO-to-requirement link rows.</summary>
+    public DbSet<TodoRequirementLinkEntity> TodoRequirementLinks => Set<TodoRequirementLinkEntity>();
+
     /// <summary>TR-MCP-TODO-005 (provider-agnostic): Append-only TODO audit rows.</summary>
     public DbSet<TodoAuditHistoryEntity> TodoAuditHistory => Set<TodoAuditHistoryEntity>();
 
@@ -115,6 +130,36 @@ public sealed class McpDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         ArgumentNullException.ThrowIfNull(modelBuilder);
+
+        modelBuilder.Entity<WorkspaceEntity>(e =>
+        {
+            e.HasKey(x => x.WorkspaceId);
+            e.HasIndex(x => x.WorkspacePath).IsUnique();
+            e.HasIndex(x => x.IsPrimary);
+            e.HasIndex(x => x.IsEnabled);
+            e.HasIndex(x => x.IsDeleted);
+            e.HasData(new WorkspaceEntity
+            {
+                WorkspaceId = string.Empty,
+                WorkspacePath = string.Empty,
+                Name = "global",
+                TodoPath = "docs/todo.yaml",
+                IsEnabled = true,
+                DateTimeCreated = DateTimeOffset.UnixEpoch,
+                DateTimeModified = DateTimeOffset.UnixEpoch,
+            });
+        });
+
+        modelBuilder.Entity<DataAuditLogEntity>(e =>
+        {
+            e.HasKey(x => x.AuditId);
+            e.HasIndex(x => new { x.WorkspaceId, x.EntityKind, x.EntityKey });
+            e.HasIndex(x => x.Action);
+            e.HasIndex(x => x.OccurredAtUtc);
+            e.HasIndex(x => x.CorrelationId);
+            e.HasIndex(x => x.FederationOperationId);
+        });
+
         modelBuilder.Entity<ContextDocumentEntity>(e =>
         {
             e.HasIndex(x => x.SourceType);
@@ -127,7 +172,7 @@ public sealed class McpDbContext : DbContext
             e.HasOne(x => x.Document)
                 .WithMany(x => x.Chunks)
                 .HasForeignKey(x => x.DocumentId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<SessionLogEntity>(e =>
@@ -149,7 +194,7 @@ public sealed class McpDbContext : DbContext
             e.HasOne(x => x.SessionLog)
                 .WithMany(x => x.Turns)
                 .HasForeignKey(x => x.SessionLogId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<SessionLogActionEntity>(e =>
@@ -157,7 +202,7 @@ public sealed class McpDbContext : DbContext
             e.HasOne(x => x.SessionLogTurn)
                 .WithMany(x => x.Actions)
                 .HasForeignKey(x => x.SessionLogTurnId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<SessionLogTurnTagEntity>(e =>
@@ -165,7 +210,7 @@ public sealed class McpDbContext : DbContext
             e.HasOne(x => x.SessionLogTurn)
                 .WithMany(x => x.Tags)
                 .HasForeignKey(x => x.SessionLogTurnId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<SessionLogTurnContextEntity>(e =>
@@ -173,7 +218,7 @@ public sealed class McpDbContext : DbContext
             e.HasOne(x => x.SessionLogTurn)
                 .WithMany(x => x.ContextItems)
                 .HasForeignKey(x => x.SessionLogTurnId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<SessionLogProcessingDialogEntity>(e =>
@@ -181,7 +226,7 @@ public sealed class McpDbContext : DbContext
             e.HasOne(x => x.SessionLogTurn)
                 .WithMany(x => x.ProcessingDialog)
                 .HasForeignKey(x => x.SessionLogTurnId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<SessionLogCommitEntity>(e =>
@@ -189,7 +234,7 @@ public sealed class McpDbContext : DbContext
             e.HasOne(x => x.SessionLogTurn)
                 .WithMany(x => x.Commits)
                 .HasForeignKey(x => x.SessionLogTurnId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<SessionLogTurnStringListEntity>(e =>
@@ -197,7 +242,7 @@ public sealed class McpDbContext : DbContext
             e.HasOne(x => x.SessionLogTurn)
                 .WithMany(x => x.StringListItems)
                 .HasForeignKey(x => x.SessionLogTurnId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
             e.HasIndex(x => new { x.SessionLogTurnId, x.ListType });
         });
 
@@ -214,7 +259,7 @@ public sealed class McpDbContext : DbContext
             e.HasOne(x => x.ToolDefinition)
                 .WithMany(x => x.Tags)
                 .HasForeignKey(x => x.ToolDefinitionId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<ToolBucketEntity>(e =>
@@ -235,7 +280,7 @@ public sealed class McpDbContext : DbContext
             e.HasOne(x => x.AgentDefinition)
                 .WithMany(x => x.WorkspaceConfigs)
                 .HasForeignKey(x => x.AgentDefinitionId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<AgentEventLogEntity>(e =>
@@ -260,11 +305,11 @@ public sealed class McpDbContext : DbContext
             e.HasOne(x => x.SourceEntity)
                 .WithMany(x => x.SourceRelationships)
                 .HasForeignKey(x => x.SourceEntityId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
             e.HasOne(x => x.TargetEntity)
                 .WithMany(x => x.TargetRelationships)
                 .HasForeignKey(x => x.TargetEntityId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<TodoItemEntity>(e =>
@@ -275,6 +320,26 @@ public sealed class McpDbContext : DbContext
             e.HasIndex(x => x.Section);
             e.HasIndex(x => x.Priority);
             e.HasIndex(x => x.Done);
+        });
+
+        modelBuilder.Entity<TodoRecordEntity>(e =>
+        {
+            e.HasKey(x => new { x.WorkspaceId, x.TodoId });
+            e.HasIndex(x => x.UpdatedAtUtc);
+        });
+
+        modelBuilder.Entity<TodoRequirementLinkEntity>(e =>
+        {
+            e.HasKey(x => new { x.WorkspaceId, x.TodoId, x.RequirementKind, x.RequirementId });
+            e.HasIndex(x => new { x.WorkspaceId, x.RequirementKind, x.RequirementId });
+            e.HasOne(x => x.TodoRecord)
+                .WithMany()
+                .HasForeignKey(x => new { x.WorkspaceId, x.TodoId })
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(x => x.Requirement)
+                .WithMany()
+                .HasForeignKey(x => new { x.WorkspaceId, x.RequirementKind, x.RequirementId })
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<TodoAuditHistoryEntity>(e =>
@@ -307,12 +372,23 @@ public sealed class McpDbContext : DbContext
             e.HasKey(x => new { x.WorkspaceId, x.Kind, x.Id });
             e.HasIndex(x => new { x.WorkspaceId, x.Id });
             e.HasIndex(x => x.Kind);
+            e.Property(x => x.Priority).HasDefaultValue("medium");
+            e.Property(x => x.Status).HasDefaultValue("pending");
         });
 
         modelBuilder.Entity<RequirementTraceabilityLinkEntity>(e =>
         {
             e.HasKey(x => new { x.WorkspaceId, x.FrId, x.TargetKind, x.TargetId });
             e.HasIndex(x => new { x.WorkspaceId, x.TargetKind, x.TargetId });
+            e.Property(x => x.SourceKind).HasDefaultValue("fr");
+            e.HasOne(x => x.SourceRequirement)
+                .WithMany()
+                .HasForeignKey(x => new { x.WorkspaceId, x.SourceKind, x.FrId })
+                .OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(x => x.TargetRequirement)
+                .WithMany()
+                .HasForeignKey(x => new { x.WorkspaceId, x.TargetKind, x.TargetId })
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<FederationProxyEntity>(e =>
@@ -325,11 +401,16 @@ public sealed class McpDbContext : DbContext
         {
             e.HasIndex(x => x.GlobalWorkspaceId).IsUnique();
             e.HasIndex(x => new { x.ProxyId, x.WorkspacePath }).IsUnique();
+            e.HasIndex(x => x.CanonicalWorkspaceId);
             e.HasIndex(x => x.ProxyId);
+            e.HasOne(x => x.CanonicalWorkspace)
+                .WithMany()
+                .HasForeignKey(x => x.CanonicalWorkspaceId)
+                .OnDelete(DeleteBehavior.Restrict);
             e.HasOne<FederationProxyEntity>()
                 .WithMany()
                 .HasForeignKey(x => x.ProxyId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<FederationOperationEntity>(e =>
@@ -341,7 +422,7 @@ public sealed class McpDbContext : DbContext
             e.HasOne<FederationProxyEntity>()
                 .WithMany()
                 .HasForeignKey(x => x.ProxyId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<FederationOutboxEntity>(e =>
@@ -351,11 +432,11 @@ public sealed class McpDbContext : DbContext
             e.HasOne<FederationProxyEntity>()
                 .WithMany()
                 .HasForeignKey(x => x.ProxyId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
             e.HasOne<FederationOperationEntity>()
                 .WithMany()
                 .HasForeignKey(x => x.OperationId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<FederationConflictEntity>(e =>
@@ -366,39 +447,39 @@ public sealed class McpDbContext : DbContext
             e.HasOne<FederationOperationEntity>()
                 .WithMany()
                 .HasForeignKey(x => x.OperationId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
             e.HasOne<FederationProxyEntity>()
                 .WithMany()
                 .HasForeignKey(x => x.ProxyId)
                 .OnDelete(DeleteBehavior.NoAction);
         });
 
-        modelBuilder.Entity<ContextDocumentEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<ContextChunkEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogActionEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnTagEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnContextEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogProcessingDialogEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogCommitEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<SessionLogTurnStringListEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<ToolDefinitionEntity>().HasQueryFilter(e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
-        modelBuilder.Entity<ToolDefinitionTagEntity>().HasQueryFilter(e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
-        modelBuilder.Entity<ToolBucketEntity>().HasQueryFilter(e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
-        modelBuilder.Entity<AgentDefinitionEntity>().HasQueryFilter(e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
-        modelBuilder.Entity<AgentWorkspaceEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<AgentEventLogEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<GraphEntityEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<GraphRelationshipEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<ContextDocumentEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<ContextChunkEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogTurnEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogActionEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogTurnTagEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogTurnContextEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogProcessingDialogEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogCommitEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<SessionLogTurnStringListEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<ToolDefinitionEntity>().HasQueryFilter("Workspace", e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
+        modelBuilder.Entity<ToolDefinitionTagEntity>().HasQueryFilter("Workspace", e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
+        modelBuilder.Entity<ToolBucketEntity>().HasQueryFilter("Workspace", e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
+        modelBuilder.Entity<AgentDefinitionEntity>().HasQueryFilter("Workspace", e => e.WorkspaceId == string.Empty || (!string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId));
+        modelBuilder.Entity<AgentWorkspaceEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<AgentEventLogEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<GraphEntityEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<GraphRelationshipEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
 
         // TR-MCP-TODO-008: workspace-scoped TODO storage. Same pattern as the
         // other multi-tenant entities: never cross workspaces on reads, updates, deletes.
-        modelBuilder.Entity<TodoItemEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<TodoAuditHistoryEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<TodoDocumentMetadataEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<RequirementEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
-        modelBuilder.Entity<RequirementTraceabilityLinkEntity>().HasQueryFilter(e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<TodoItemEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<TodoAuditHistoryEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<TodoDocumentMetadataEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<RequirementEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
+        modelBuilder.Entity<RequirementTraceabilityLinkEntity>().HasQueryFilter("Workspace", e => !string.IsNullOrEmpty(_workspaceId) && e.WorkspaceId == _workspaceId);
 
         modelBuilder.Entity<ContextDocumentEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<ContextChunkEntity>().HasIndex(e => e.WorkspaceId);
@@ -425,22 +506,362 @@ public sealed class McpDbContext : DbContext
         modelBuilder.Entity<TodoAuditHistoryEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<RequirementEntity>().HasIndex(e => e.WorkspaceId);
         modelBuilder.Entity<RequirementTraceabilityLinkEntity>().HasIndex(e => e.WorkspaceId);
+
+        ApplyDbFkConventions(modelBuilder);
     }
 
     /// <inheritdoc />
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
-        StampWorkspaceId();
-        SanitizeStrings();
+        PrepareDbFkChanges();
         return base.SaveChanges(acceptAllChangesOnSuccess);
     }
 
     /// <inheritdoc />
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        StampWorkspaceId();
-        SanitizeStrings();
+        PrepareDbFkChanges();
         return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private static void ApplyDbFkConventions(ModelBuilder modelBuilder)
+    {
+        ApplyWorkspaceForeignKeys(modelBuilder);
+        ApplySoftDeleteMetadata(modelBuilder);
+        ApplySoftDeleteQueryFilters(modelBuilder);
+    }
+
+    private static void ApplyWorkspaceForeignKeys(ModelBuilder modelBuilder)
+    {
+        var workspaceClrType = typeof(WorkspaceEntity);
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes().ToArray())
+        {
+            if (entityType.ClrType == workspaceClrType)
+                continue;
+
+            if (entityType.FindProperty(nameof(WorkspaceEntity.WorkspaceId)) is null)
+                continue;
+
+            modelBuilder.Entity(entityType.ClrType)
+                .HasOne(workspaceClrType)
+                .WithMany()
+                .HasForeignKey(nameof(WorkspaceEntity.WorkspaceId))
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+    }
+
+    private static void ApplySoftDeleteMetadata(ModelBuilder modelBuilder)
+    {
+        foreach (var entityType in DurableEntityTypes(modelBuilder).ToArray())
+        {
+            var builder = modelBuilder.Entity(entityType.ClrType);
+            builder.Property<bool>("IsDeleted").HasDefaultValue(false);
+            builder.Property<DateTimeOffset?>("DeletedAtUtc");
+            builder.Property<string?>("DeletedBy").HasMaxLength(256);
+            builder.Property<string?>("DeleteReason").HasMaxLength(1024);
+        }
+    }
+
+    private static void ApplySoftDeleteQueryFilters(ModelBuilder modelBuilder)
+    {
+        foreach (var entityType in DurableEntityTypes(modelBuilder).ToArray())
+        {
+            var parameter = Expression.Parameter(entityType.ClrType, "e");
+            var softDeleteFilter = Expression.Equal(
+                Expression.Call(
+                    typeof(EF),
+                    nameof(EF.Property),
+                    [typeof(bool)],
+                    parameter,
+                    Expression.Constant("IsDeleted")),
+                Expression.Constant(false));
+
+            modelBuilder.Entity(entityType.ClrType)
+                .HasQueryFilter("SoftDelete", Expression.Lambda(softDeleteFilter, parameter));
+        }
+    }
+
+    private static IEnumerable<Microsoft.EntityFrameworkCore.Metadata.IMutableEntityType> DurableEntityTypes(ModelBuilder modelBuilder)
+    {
+        return modelBuilder.Model.GetEntityTypes()
+            .Where(e => e.ClrType != typeof(DataAuditLogEntity))
+            .Where(e => e.GetTableName() is not null)
+            .Where(e => e.ClrType.Name.EndsWith("Entity", StringComparison.Ordinal));
+    }
+
+    private void PrepareDbFkChanges()
+    {
+        StampWorkspaceId();
+        ApplySoftDeletes();
+        BlockPhysicalDeletes();
+        EnsureWorkspaceRows();
+        AppendAuditRows();
+        EnsureWorkspaceRows();
+        SanitizeStrings();
+    }
+
+    private void ApplySoftDeletes()
+    {
+        var now = DateTimeOffset.UtcNow;
+        var softDeletedEntries = ChangeTracker.Entries()
+                     .Where(e => e.State == EntityState.Deleted && IsDurableAuditableEntry(e))
+                     .ToArray();
+
+        foreach (var entry in softDeletedEntries)
+        {
+            entry.State = EntityState.Modified;
+            SetShadowValue(entry, "IsDeleted", true);
+            SetShadowValue(entry, "DeletedAtUtc", now);
+            SetShadowValue(entry, "DeletedBy", "McpDbContext");
+            SetShadowValue(entry, "DeleteReason", "soft_delete");
+        }
+
+        SoftDeleteGraphRelationshipsForDeletedEntities(softDeletedEntries, now);
+    }
+
+    private void BlockPhysicalDeletes()
+    {
+        var physicalDeletes = ChangeTracker.Entries()
+            .Where(e => e.State == EntityState.Deleted && IsPersistentEntityEntry(e))
+            .Select(e => e.Metadata.ClrType.Name)
+            .Distinct(StringComparer.Ordinal)
+            .OrderBy(name => name, StringComparer.Ordinal)
+            .ToArray();
+
+        if (physicalDeletes.Length == 0)
+            return;
+
+        throw new InvalidOperationException(
+            "Physical deletes are blocked for persistent MCP data. Use soft-delete metadata instead. Entities: "
+            + string.Join(", ", physicalDeletes));
+    }
+
+    private void SoftDeleteGraphRelationshipsForDeletedEntities(
+        IReadOnlyCollection<Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry> softDeletedEntries,
+        DateTimeOffset now)
+    {
+        var graphEntityIds = softDeletedEntries
+            .Select(e => e.Entity)
+            .OfType<GraphEntityEntity>()
+            .Select(e => e.Id)
+            .Where(id => !string.IsNullOrWhiteSpace(id))
+            .Distinct(StringComparer.Ordinal)
+            .ToArray();
+
+        if (graphEntityIds.Length == 0)
+            return;
+
+        var relationships = GraphRelationships
+            .IgnoreQueryFilters()
+            .Where(r => graphEntityIds.Contains(r.SourceEntityId) || graphEntityIds.Contains(r.TargetEntityId))
+            .ToArray();
+
+        foreach (var relationship in relationships)
+        {
+            var entry = Entry(relationship);
+            if (TryGetSoftDeleteValue(entry))
+                continue;
+
+            entry.State = EntityState.Modified;
+            SetShadowValue(entry, "IsDeleted", true);
+            SetShadowValue(entry, "DeletedAtUtc", now);
+            SetShadowValue(entry, "DeletedBy", "McpDbContext");
+            SetShadowValue(entry, "DeleteReason", "parent_graph_entity_soft_delete");
+        }
+    }
+
+    private void EnsureWorkspaceRows()
+    {
+        var workspaceIds = ChangeTracker.Entries()
+            .Where(e => e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted)
+            .Where(e => e.Entity is not WorkspaceEntity)
+            .Select(e => TryGetWorkspaceId(e))
+            .Where(id => id is not null)
+            .Select(id => id!)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+
+        foreach (var workspaceId in workspaceIds)
+        {
+            if (Workspaces.Local.Any(w => string.Equals(w.WorkspaceId, workspaceId, StringComparison.OrdinalIgnoreCase)))
+                continue;
+
+            try
+            {
+                if (Workspaces.IgnoreQueryFilters().Any(w => w.WorkspaceId == workspaceId))
+                    continue;
+            }
+            catch (DbException ex) when (IsWorkspaceBootstrapSchemaUnavailable(ex))
+            {
+                continue;
+            }
+
+            Workspaces.Add(CreateImplicitWorkspace(workspaceId));
+        }
+    }
+
+    private static bool IsWorkspaceBootstrapSchemaUnavailable(DbException exception)
+    {
+        return exception.Message.Contains("Workspaces", StringComparison.OrdinalIgnoreCase)
+            || exception.Message.Contains("WorkspaceId", StringComparison.OrdinalIgnoreCase)
+            || exception.Message.Contains("no such table", StringComparison.OrdinalIgnoreCase)
+            || exception.Message.Contains("no such column", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static WorkspaceEntity CreateImplicitWorkspace(string workspaceId)
+    {
+        var now = DateTimeOffset.UtcNow;
+        var path = workspaceId;
+        var name = string.IsNullOrWhiteSpace(path)
+            ? "global"
+            : Path.GetFileName(path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+
+        return new WorkspaceEntity
+        {
+            WorkspaceId = workspaceId,
+            WorkspacePath = path,
+            Name = string.IsNullOrWhiteSpace(name) ? "workspace" : name,
+            TodoPath = "docs/todo.yaml",
+            IsEnabled = true,
+            DateTimeCreated = now,
+            DateTimeModified = now,
+        };
+    }
+
+    private void AppendAuditRows()
+    {
+        if (!IsAuditTableAvailable())
+            return;
+
+        var now = DateTimeOffset.UtcNow;
+        var auditRows = ChangeTracker.Entries()
+            .Where(e => e.State is EntityState.Added or EntityState.Modified or EntityState.Deleted)
+            .Where(IsDurableAuditableEntry)
+            .Select(e => CreateAuditRow(e, now))
+            .Where(e => e is not null)
+            .Select(e => e!)
+            .ToArray();
+
+        if (auditRows.Length == 0)
+            return;
+
+        DataAuditLogs.AddRange(auditRows);
+    }
+
+    private bool IsAuditTableAvailable()
+    {
+        try
+        {
+            _ = DataAuditLogs.IgnoreQueryFilters().Any();
+            return true;
+        }
+        catch (DbException ex) when (IsWorkspaceBootstrapSchemaUnavailable(ex))
+        {
+            return false;
+        }
+    }
+
+    private static DataAuditLogEntity? CreateAuditRow(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry, DateTimeOffset now)
+    {
+        var action = entry.State switch
+        {
+            EntityState.Added => "create",
+            EntityState.Deleted => "delete",
+            EntityState.Modified when TryGetSoftDeleteValue(entry) => "delete",
+            EntityState.Modified => "update",
+            _ => null,
+        };
+
+        if (action is null)
+            return null;
+
+        return new DataAuditLogEntity
+        {
+            AuditId = Guid.NewGuid().ToString("N"),
+            WorkspaceId = TryGetWorkspaceId(entry) ?? string.Empty,
+            EntityKind = entry.Metadata.ClrType.Name,
+            EntityKey = BuildEntityKey(entry),
+            Action = action,
+            Actor = "McpDbContext",
+            SourceType = "McpDbContext",
+            OccurredAtUtc = now,
+            PreviousSnapshotJson = entry.State == EntityState.Added ? null : SnapshotJson(entry, originalValues: true),
+            CurrentSnapshotJson = entry.State == EntityState.Deleted ? null : SnapshotJson(entry, originalValues: false),
+        };
+    }
+
+    private static string BuildEntityKey(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry)
+    {
+        var key = entry.Metadata.FindPrimaryKey();
+        var properties = key?.Properties.Count > 0 ? key.Properties : entry.Properties.Select(p => p.Metadata).ToList();
+        return string.Join("|", properties.Select(p =>
+        {
+            var value = entry.Property(p.Name).CurrentValue ?? entry.Property(p.Name).OriginalValue;
+            return $"{p.Name}={value}";
+        }));
+    }
+
+    private static string SnapshotJson(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry, bool originalValues)
+    {
+        var snapshot = entry.Properties
+            .OrderBy(p => p.Metadata.Name, StringComparer.Ordinal)
+            .ToDictionary(
+                p => p.Metadata.Name,
+                p => SanitizeAuditValue(p.Metadata.Name, originalValues ? p.OriginalValue : p.CurrentValue));
+
+        return JsonSerializer.Serialize(snapshot);
+    }
+
+    private static object? SanitizeAuditValue(string name, object? value)
+    {
+        if (value is null)
+            return null;
+
+        if (name.Contains("Token", StringComparison.OrdinalIgnoreCase)
+            || name.Contains("Secret", StringComparison.OrdinalIgnoreCase)
+            || name.Contains("Password", StringComparison.OrdinalIgnoreCase)
+            || name.Contains("ApiKey", StringComparison.OrdinalIgnoreCase)
+            || name.Contains("Key", StringComparison.OrdinalIgnoreCase))
+        {
+            return "[redacted]";
+        }
+
+        return value;
+    }
+
+    private static string? TryGetWorkspaceId(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry)
+    {
+        var property = entry.Properties.FirstOrDefault(p => p.Metadata.Name == nameof(WorkspaceEntity.WorkspaceId));
+        return property?.CurrentValue as string ?? property?.OriginalValue as string;
+    }
+
+    private static bool TryGetSoftDeleteValue(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry)
+    {
+        var property = entry.Properties.FirstOrDefault(p => p.Metadata.Name == "IsDeleted");
+        return property?.CurrentValue is true;
+    }
+
+    private static bool IsDurableAuditableEntry(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry)
+    {
+        return entry.Entity is not DataAuditLogEntity
+            && entry.Entity is not WorkspaceEntity { WorkspaceId: "" }
+            && entry.Metadata.GetTableName() is not null
+            && entry.Metadata.ClrType.Name.EndsWith("Entity", StringComparison.Ordinal)
+            && entry.Properties.Any(p => p.Metadata.Name == "IsDeleted");
+    }
+
+    private static bool IsPersistentEntityEntry(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry)
+    {
+        return entry.Metadata.GetTableName() is not null
+            && entry.Metadata.ClrType.Name.EndsWith("Entity", StringComparison.Ordinal);
+    }
+
+    private static void SetShadowValue(Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry entry, string propertyName, object? value)
+    {
+        var property = entry.Properties.FirstOrDefault(p => p.Metadata.Name == propertyName);
+        if (property is not null)
+            property.CurrentValue = value;
     }
 
     private void StampWorkspaceId()

@@ -13,6 +13,12 @@ The hosted McpAgent now exposes **27 tools** through the AI function surface. Th
 
 Using these tools instead of raw API calls ensures consistent identifier validation, canonical formatting, and proper audit trails.
 
+## Agent Plugin Boundary
+
+In workspaces whose marker declares `agent_plugins.policy: required`, hosted tools and direct `mcpserver-repl --agent-stdio` are not substitutes for the required per-agent plugin. Codex, Claude Code, GitHub Copilot, and Cline must use their matching plugin wrapper for normal session log, TODO, requirements, import/export, and traceability operations. Direct REPL use remains appropriate for plugin implementation and fallback diagnostics.
+
+When direct `--agent-stdio` is used, send one YAML envelope per document and separate multiple documents with `---`. Do not send `type: batch`; unsupported batch envelopes are rejected with `unsupported_batch_envelope`.
+
 ## Tool Inventory
 
 ### Session Log (6 tools)

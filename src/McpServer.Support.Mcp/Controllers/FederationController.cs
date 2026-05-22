@@ -19,6 +19,8 @@ public sealed class FederationController : ControllerBase
     private readonly IFederationPushService? _pushService;
     private readonly IFederationTopologyService? _topologyService;
     private readonly FederationStateAdapterRegistry? _adapterRegistry;
+    private readonly IFederationEnvelopeSigner? _envelopeSigner;
+    private readonly IFederationOperationApplyService? _operationApplyService;
 
     /// <summary>Initializes a new instance of the <see cref="FederationController"/> class.</summary>
     /// <param name="registry">Federation target registry.</param>
@@ -26,18 +28,24 @@ public sealed class FederationController : ControllerBase
     /// <param name="pushService">Optional push service for federated data push operations.</param>
     /// <param name="topologyService">Optional hub/proxy topology service.</param>
     /// <param name="adapterRegistry">Optional state adapter registry.</param>
+    /// <param name="envelopeSigner">Optional signed envelope verifier.</param>
+    /// <param name="operationApplyService">Optional operation apply service used by signed hub intake.</param>
     public FederationController(
         FederationRegistry registry,
         TunnelRegistry tunnelRegistry,
         IFederationPushService? pushService = null,
         IFederationTopologyService? topologyService = null,
-        FederationStateAdapterRegistry? adapterRegistry = null)
+        FederationStateAdapterRegistry? adapterRegistry = null,
+        IFederationEnvelopeSigner? envelopeSigner = null,
+        IFederationOperationApplyService? operationApplyService = null)
     {
         _registry = registry;
         _tunnelRegistry = tunnelRegistry;
         _pushService = pushService;
         _topologyService = topologyService;
         _adapterRegistry = adapterRegistry;
+        _envelopeSigner = envelopeSigner;
+        _operationApplyService = operationApplyService;
     }
 
     /// <summary>Get the current federation status including all targets and workspace routes.</summary>
@@ -141,6 +149,61 @@ public sealed class FederationController : ControllerBase
         return Ok(response);
     }
 
+    /// <summary>Accept or idempotently replay one signed federation operation envelope.</summary>
+    /// <param name="envelope">Signed operation envelope.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Operation status.</returns>
+    [HttpPost("envelopes")]
+    public async Task<ActionResult<FederationOperationResponse>> RecordEnvelope(
+        [FromBody] FederationExecutionEnvelope envelope,
+        CancellationToken ct)
+    {
+        if (_topologyService is null)
+            return StatusCode(501, new { error = "Federation topology service is not configured." });
+        if (_operationApplyService is null)
+            return StatusCode(501, new { error = "Federation operation apply service is not configured." });
+        if (_envelopeSigner is null || !_envelopeSigner.IsConfigured)
+            return StatusCode(501, new { error = "Federation envelope signer is not configured." });
+
+        var verification = _envelopeSigner.Verify(envelope);
+        if (!verification.IsValid)
+            return BadRequest(new { error = verification.Error });
+
+        var response = await _topologyService.RecordOperationAsync(envelope.Operation, ct).ConfigureAwait(false);
+        if (!ShouldApplySignedEnvelope(response.Status))
+            return Ok(response);
+
+        var apply = await _operationApplyService.ApplyAsync(envelope.Operation, ct).ConfigureAwait(false);
+        if (apply.Conflict || (!apply.Applied && !apply.AlreadyApplied))
+        {
+            response = await _topologyService.AcknowledgeOperationAsync(
+                    response.OperationId,
+                    new FederationOperationAckRequest
+                    {
+                        Status = "conflict",
+                        HubVersion = apply.Version,
+                        Error = apply.Message ?? "Federation operation apply did not complete.",
+                    },
+                    ct)
+                .ConfigureAwait(false);
+        }
+        else
+        {
+            response = await _topologyService.AcknowledgeOperationAsync(
+                    response.OperationId,
+                    new FederationOperationAckRequest
+                    {
+                        Status = apply.AlreadyApplied ? "already_applied" : "applied",
+                        HubVersion = apply.Version,
+                        Error = apply.Message,
+                    },
+                    ct)
+                .ConfigureAwait(false);
+        }
+
+        return Ok(response);
+    }
+
     /// <summary>Acknowledge one replayed or fanned-out operation.</summary>
     /// <param name="operationId">Operation identifier.</param>
     /// <param name="request">Acknowledgement payload.</param>
@@ -223,7 +286,38 @@ public sealed class FederationController : ControllerBase
         if (_topologyService is null)
             return StatusCode(501, new { error = "Federation topology service is not configured." });
 
-        return Ok(await _topologyService.GetSyncItemsAsync(proxyId, afterSequence, ct).ConfigureAwait(false));
+        var items = await _topologyService.GetSyncItemsAsync(proxyId, afterSequence, ct).ConfigureAwait(false);
+        if (_envelopeSigner is { IsConfigured: true })
+        {
+            foreach (var item in items)
+                item.Envelope = _envelopeSigner.Sign(item.ToRequest(), "hub", proxyId, ResolveSyncApplyMode(item));
+        }
+
+        return Ok(items);
+    }
+
+    /// <summary>Acknowledge one recipient-specific sync row.</summary>
+    /// <param name="sequence">Sync sequence number.</param>
+    /// <param name="request">Acknowledgement payload.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Updated operation status.</returns>
+    [HttpPost("sync/{sequence:long}/ack")]
+    public async Task<ActionResult<FederationOperationResponse>> AcknowledgeSync(
+        long sequence,
+        [FromBody] FederationSyncAckRequest request,
+        CancellationToken ct)
+    {
+        if (_topologyService is null)
+            return StatusCode(501, new { error = "Federation topology service is not configured." });
+
+        var proxyId = !string.IsNullOrWhiteSpace(request.ProxyId)
+            ? request.ProxyId
+            : Request.Headers[FederationHeaders.ProxyId].FirstOrDefault();
+        if (string.IsNullOrWhiteSpace(proxyId))
+            return BadRequest(new { error = $"ProxyId is required in body or {FederationHeaders.ProxyId} header." });
+
+        var response = await _topologyService.AcknowledgeSyncItemAsync(proxyId, sequence, request, ct).ConfigureAwait(false);
+        return response.Status == "not_found" ? NotFound(response) : Ok(response);
     }
 
     /// <summary>Return mutable state adapter coverage diagnostics.</summary>
@@ -466,8 +560,21 @@ public sealed class FederationController : ControllerBase
             HostedWorkspaceCount = snapshot.WorkspaceCount,
             QueueDepth = snapshot.QueueDepth,
             ConflictCount = snapshot.ConflictCount,
+            FanoutDepth = snapshot.FanoutDepth,
+            StaleReadStatus = snapshot.QueueDepth > 0 || snapshot.FanoutDepth > 0 ? "stale" : "none",
         };
     }
+
+    private static bool ShouldApplySignedEnvelope(string? status)
+        => string.IsNullOrWhiteSpace(status) ||
+           status.Equals("accepted", StringComparison.OrdinalIgnoreCase) ||
+           status.Equals("queued", StringComparison.OrdinalIgnoreCase) ||
+           status.Equals("replay_failed", StringComparison.OrdinalIgnoreCase);
+
+    private static string ResolveSyncApplyMode(FederationSyncItem item)
+        => string.Equals(item.Domain, "local_execution", StringComparison.OrdinalIgnoreCase)
+            ? "local_execution"
+            : "state";
 }
 
 /// <summary>FR-MCP-077: Full federation status snapshot returned by the management API.</summary>
@@ -508,6 +615,12 @@ public sealed class FederationStatusResponse
 
     /// <summary>Number of open conflicts.</summary>
     public int ConflictCount { get; set; }
+
+    /// <summary>Number of unacknowledged fanout rows.</summary>
+    public int FanoutDepth { get; set; }
+
+    /// <summary>Current stale-read status. <c>none</c> means no stale read is currently reported.</summary>
+    public string StaleReadStatus { get; set; } = "none";
 }
 
 /// <summary>FR-MCP-077: Result of a tunnel-based target auto-discovery operation.</summary>

@@ -55,7 +55,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
         if (!string.IsNullOrEmpty(status))
         {
-            filtered = filtered.Where(e => e.Id.Contains(status));
+            filtered = filtered.Where(e => string.Equals(e.Status, status, StringComparison.OrdinalIgnoreCase));
         }
 
         var items = filtered.Select(e => new FrItemAdapter(e)).ToList();
@@ -80,7 +80,9 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         {
             Id = request.Id,
             Title = request.Title,
-            Body = request.Description
+            Body = request.Description,
+            Priority = request.Priority,
+            Notes = request.Notes
         };
 
         try
@@ -108,8 +110,11 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         ValidateFrId(frId);
         var clientRequest = new UpdateFrRequest
         {
-            Title = request.Title ?? string.Empty,
-            Body = request.Description ?? string.Empty
+            Title = request.Title,
+            Body = request.Description,
+            Priority = request.Priority,
+            Status = request.Status,
+            Notes = request.Notes
         };
 
         var entry = await _client.UpdateFrAsync(frId, clientRequest, cancellationToken);
@@ -141,7 +146,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
         if (!string.IsNullOrEmpty(status))
         {
-            filtered = filtered.Where(e => e.Id.Contains(status));
+            filtered = filtered.Where(e => string.Equals(e.Status, status, StringComparison.OrdinalIgnoreCase));
         }
 
         var items = filtered.Select(e => new TrItemAdapter(e)).ToList();
@@ -166,7 +171,9 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         {
             Id = request.Id,
             Title = request.Title,
-            Body = request.Description
+            Body = request.Description,
+            Priority = request.Priority,
+            Notes = request.Notes
         };
 
         try
@@ -195,7 +202,10 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         var clientRequest = new UpdateTrRequest
         {
             Title = request.Title,
-            Body = request.Description ?? string.Empty
+            Body = request.Description,
+            Priority = request.Priority,
+            Status = request.Status,
+            Notes = request.Notes
         };
 
         var entry = await _client.UpdateTrAsync(trId, clientRequest, cancellationToken);
@@ -222,7 +232,7 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
 
         if (!string.IsNullOrEmpty(status))
         {
-            filtered = filtered.Where(e => e.Id.Contains(status));
+            filtered = filtered.Where(e => string.Equals(e.Status, status, StringComparison.OrdinalIgnoreCase));
         }
 
         var items = filtered.Select(e => new TestItemAdapter(e)).ToList();
@@ -246,7 +256,10 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         var clientRequest = new CreateTestRequest
         {
             Id = request.Id,
-            Condition = request.Description
+            Title = request.Title,
+            Condition = request.Description,
+            Priority = request.Priority,
+            Notes = request.Notes
         };
 
         try
@@ -274,7 +287,11 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
         ValidateTestId(testId);
         var clientRequest = new UpdateTestRequest
         {
-            Condition = request.Description ?? string.Empty
+            Title = request.Title,
+            Condition = request.Description,
+            Priority = request.Priority,
+            Status = request.Status,
+            Notes = request.Notes
         };
 
         var entry = await _client.UpdateTestAsync(testId, clientRequest, cancellationToken);
@@ -717,10 +734,10 @@ internal sealed class FrItemAdapter : IFrItem
     public string Id => _entry.Id;
     public string Title => _entry.Title;
     public string Description => _entry.Body;
-    public string Status => "pending";
-    public string Priority => "medium";
+    public string Status => _entry.Status;
+    public string Priority => _entry.Priority;
     public string Area => ExtractArea(_entry.Id);
-    public string? Notes => null;
+    public string? Notes => _entry.Notes;
     public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
     public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
 
@@ -768,11 +785,11 @@ internal sealed class TrItemAdapter : ITrItem
     public string Id => _entry.Id;
     public string Title => _entry.Title;
     public string Description => _entry.Body;
-    public string Status => "pending";
-    public string Priority => "medium";
+    public string Status => _entry.Status;
+    public string Priority => _entry.Priority;
     public string Area => ExtractArea(_entry.Id);
     public string Subarea => ExtractSubarea(_entry.Id);
-    public string? Notes => null;
+    public string? Notes => _entry.Notes;
     public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
     public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
 
@@ -824,13 +841,13 @@ internal sealed class TestItemAdapter : ITestItem
     }
 
     public string Id => _entry.Id;
-    public string Title => $"Test {_entry.Id}";
+    public string Title => string.IsNullOrWhiteSpace(_entry.Title) ? $"Test {_entry.Id}" : _entry.Title;
     public string Description => _entry.Condition;
-    public string Status => "pending";
-    public string Priority => "medium";
+    public string Status => _entry.Status;
+    public string Priority => _entry.Priority;
     public string Area => ExtractArea(_entry.Id);
     public string TestType => "unit";
-    public string? Notes => null;
+    public string? Notes => _entry.Notes;
     public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
     public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
 

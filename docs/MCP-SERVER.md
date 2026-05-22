@@ -140,12 +140,17 @@ Migrate todo data between backends:
 
 Build-related tasks are available as Nuke targets via `./build.ps1`. See the [Build System section in README.md](../README.md#build-system) for the full target list.
 
-## Common Scripts
+## Common Scripts And Service Updates
 
-The following operational/admin scripts are not part of the Nuke build pipeline:
+Windows service deployment and update must go through the Nuke build target:
+
+```powershell
+pwsh.exe -NoLogo -NoProfile -File .\build.ps1 UpdateService
+```
+
+The following operational/admin scripts are lower-level helpers for local development, diagnostics, or migration tasks. Do not use them as the normal Windows service redeploy path:
 
 - `scripts/Run-McpServer.ps1` - direct local run helper
-- `scripts/Update-McpService.ps1` - stop, publish Debug build, restore config/data, restart, health-check Windows service
 - `scripts/Manage-McpService.ps1` - install/start/stop/remove Windows service
 - `scripts/Migrate-McpTodoStorage.ps1` - todo backend migration
 

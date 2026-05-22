@@ -38,7 +38,7 @@ dotnet run --project src\McpServer.Support.Mcp -- --transport stdio --instance d
 #### Windows service deployment
 
 ```powershell
-gsudo pwsh -NonInteractive -File .\scripts\Update-McpService.ps1 -SkipVersionBump
+gsudo pwsh.exe -NoLogo -NoProfile -File .\build.ps1 UpdateService --skip-version-bump
 Get-Service McpServer
 ```
 
@@ -63,7 +63,7 @@ Get-Service McpServer
 - `Mcp:ToolRegistry:*`
 - `Mcp:Tunnel:*`
 - `Mcp:Parseable:Enabled`, `Mcp:Parseable:Url` — optional Serilog HTTP sink to Parseable; default off (`Enabled: false`). Set `Enabled: true` and `Url` (e.g. `http://localhost:8000`) to enable.
-- `Mcp:Workspaces`
+- `Mcp:Workspaces` — informational projection and bootstrap fallback. The database workspace registry is authoritative after startup/bootstrap.
 - `Mcp:Instances:{name}:*`
 - `VoiceConversation:DefaultExecutionStrategy` (`hosted-agentframework` or `copilot-cli`)
 - `VoiceConversation:ModelApiKeyEnvironmentVariableName`
@@ -858,7 +858,8 @@ Queue one-shot example:
 
 ### Windows service deployment concerns
 
-- always use `scripts\Update-McpService.ps1`
+- always use the Nuke target: `pwsh.exe -NoLogo -NoProfile -File .\build.ps1 UpdateService`
+- do not run `scripts\Update-McpService.ps1` directly for service redeployments
 - do not manually overwrite `C:\ProgramData\McpServer`
 
 ## 8) Wire docs into README index and docs folder
@@ -872,6 +873,10 @@ This user guide is wired into:
 ## Reference links
 
 - `MCP-SERVER.md`
+- `AGENT-PLUGIN-AVAILABILITY.md`
+- `REPL-USER-GUIDE.md`
+- `REPL-AGENT-GUIDE.md`
+- `context/federation.md`
 - `README.md`
 - `FAQ.md`
 - `context/`

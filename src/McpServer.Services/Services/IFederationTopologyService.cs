@@ -47,6 +47,13 @@ public interface IFederationTopologyService
     /// <summary>Acknowledges an operation after replay or fanout delivery.</summary>
     Task<FederationOperationResponse> AcknowledgeOperationAsync(string operationId, FederationOperationAckRequest request, CancellationToken cancellationToken);
 
+    /// <summary>Acknowledges a single recipient sync row after proxy-side apply.</summary>
+    Task<FederationOperationResponse> AcknowledgeSyncItemAsync(
+        string proxyId,
+        long sequence,
+        FederationSyncAckRequest request,
+        CancellationToken cancellationToken);
+
     /// <summary>Returns queue and conflict counts.</summary>
     Task<FederationQueueStatusResponse> GetQueueStatusAsync(string? proxyId, CancellationToken cancellationToken);
 
@@ -74,4 +81,7 @@ public sealed class FederationTopologySnapshot
 
     /// <summary>Total open conflict count in the cached snapshot.</summary>
     public int ConflictCount { get; set; }
+
+    /// <summary>Total unacknowledged fanout row count in the cached snapshot.</summary>
+    public int FanoutDepth { get; set; }
 }

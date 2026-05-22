@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -5,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace McpServer.Support.Mcp.Storage.Migrations
 {
     /// <inheritdoc />
+    [DbContext(typeof(McpDbContext))]
+    [Migration("20260223000000_RemoveWorkspaceTable")]
     public partial class RemoveWorkspaceTable : Migration
     {
         /// <inheritdoc />
@@ -12,9 +15,70 @@ namespace McpServer.Support.Mcp.Storage.Migrations
         {
             ArgumentNullException.ThrowIfNull(migrationBuilder);
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_ToolDefinitions_Workspaces_WorkspacePath",
-                table: "ToolDefinitions");
+            if (ActiveProvider.Contains("Sqlite", StringComparison.OrdinalIgnoreCase))
+            {
+                migrationBuilder.Sql("PRAGMA foreign_keys=OFF;", suppressTransaction: true);
+                migrationBuilder.Sql(
+                    """
+                    DROP INDEX IF EXISTS "IX_ToolDefinitions_WorkspacePath";
+                    DROP INDEX IF EXISTS "IX_ToolDefinitions_Name_WorkspacePath";
+
+                    CREATE TABLE "__ef_temp_ToolDefinitions" (
+                        "Id" INTEGER NOT NULL CONSTRAINT "PK_ToolDefinitions" PRIMARY KEY AUTOINCREMENT,
+                        "Name" TEXT NOT NULL,
+                        "Description" TEXT NOT NULL,
+                        "ParameterSchema" TEXT NULL,
+                        "CommandTemplate" TEXT NULL,
+                        "WorkspacePath" TEXT NULL,
+                        "BucketName" TEXT NULL,
+                        "DateTimeCreated" TEXT NOT NULL,
+                        "DateTimeModified" TEXT NOT NULL
+                    );
+
+                    INSERT INTO "__ef_temp_ToolDefinitions" (
+                        "Id",
+                        "Name",
+                        "Description",
+                        "ParameterSchema",
+                        "CommandTemplate",
+                        "WorkspacePath",
+                        "BucketName",
+                        "DateTimeCreated",
+                        "DateTimeModified")
+                    SELECT
+                        "Id",
+                        "Name",
+                        "Description",
+                        "ParameterSchema",
+                        "CommandTemplate",
+                        "WorkspacePath",
+                        "BucketName",
+                        "DateTimeCreated",
+                        "DateTimeModified"
+                    FROM "ToolDefinitions";
+
+                    DROP TABLE "ToolDefinitions";
+                    ALTER TABLE "__ef_temp_ToolDefinitions" RENAME TO "ToolDefinitions";
+
+                    CREATE UNIQUE INDEX "IX_ToolDefinitions_Name_WorkspacePath"
+                    ON "ToolDefinitions" ("Name", "WorkspacePath");
+
+                    CREATE INDEX "IX_ToolDefinitions_WorkspacePath"
+                    ON "ToolDefinitions" ("WorkspacePath");
+
+                    DROP INDEX IF EXISTS "IX_Workspaces_WorkspacePort";
+                    DROP TABLE IF EXISTS "Workspaces";
+                    """);
+                migrationBuilder.Sql("PRAGMA foreign_keys=ON;", suppressTransaction: true);
+                return;
+            }
+
+            if (!ActiveProvider.Contains("Sqlite", StringComparison.OrdinalIgnoreCase))
+            {
+                migrationBuilder.DropForeignKey(
+                    name: "FK_ToolDefinitions_Workspaces_WorkspacePath",
+                    table: "ToolDefinitions");
+            }
 
             migrationBuilder.DropIndex(
                 name: "IX_Workspaces_WorkspacePort",
@@ -53,13 +117,16 @@ namespace McpServer.Support.Mcp.Storage.Migrations
                 column: "WorkspacePort",
                 unique: true);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_ToolDefinitions_Workspaces_WorkspacePath",
-                table: "ToolDefinitions",
-                column: "WorkspacePath",
-                principalTable: "Workspaces",
-                principalColumn: "WorkspacePath",
-                onDelete: ReferentialAction.Cascade);
+            if (!ActiveProvider.Contains("Sqlite", StringComparison.OrdinalIgnoreCase))
+            {
+                migrationBuilder.AddForeignKey(
+                    name: "FK_ToolDefinitions_Workspaces_WorkspacePath",
+                    table: "ToolDefinitions",
+                    column: "WorkspacePath",
+                    principalTable: "Workspaces",
+                    principalColumn: "WorkspacePath",
+                    onDelete: ReferentialAction.Cascade);
+            }
         }
     }
 }

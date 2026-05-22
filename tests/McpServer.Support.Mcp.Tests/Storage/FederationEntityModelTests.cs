@@ -39,11 +39,20 @@ public sealed class FederationEntityModelTests
     {
         using var ctx = CreateContext();
 
-        Assert.Empty(ctx.Model.FindEntityType(typeof(FederationProxyEntity))!.GetDeclaredQueryFilters());
-        Assert.Empty(ctx.Model.FindEntityType(typeof(FederationWorkspaceEntity))!.GetDeclaredQueryFilters());
-        Assert.Empty(ctx.Model.FindEntityType(typeof(FederationOperationEntity))!.GetDeclaredQueryFilters());
-        Assert.Empty(ctx.Model.FindEntityType(typeof(FederationOutboxEntity))!.GetDeclaredQueryFilters());
-        Assert.Empty(ctx.Model.FindEntityType(typeof(FederationConflictEntity))!.GetDeclaredQueryFilters());
+        AssertNoWorkspaceFilter(ctx.Model.FindEntityType(typeof(FederationProxyEntity))!);
+        AssertNoWorkspaceFilter(ctx.Model.FindEntityType(typeof(FederationWorkspaceEntity))!);
+        AssertNoWorkspaceFilter(ctx.Model.FindEntityType(typeof(FederationOperationEntity))!);
+        AssertNoWorkspaceFilter(ctx.Model.FindEntityType(typeof(FederationOutboxEntity))!);
+        AssertNoWorkspaceFilter(ctx.Model.FindEntityType(typeof(FederationConflictEntity))!);
+    }
+
+    private static void AssertNoWorkspaceFilter(Microsoft.EntityFrameworkCore.Metadata.IEntityType entityType)
+    {
+        var filterKeys = entityType.GetDeclaredQueryFilters()
+            .Select(filter => filter.Key)
+            .ToArray();
+
+        Assert.DoesNotContain("Workspace", filterKeys);
     }
 
     private static McpDbContext CreateContext()

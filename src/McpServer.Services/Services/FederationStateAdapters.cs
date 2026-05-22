@@ -1,3 +1,5 @@
+using McpServer.Support.Mcp.Services.FederationAdapters;
+
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
@@ -64,6 +66,18 @@ public sealed class FederationStateOperation
 
     /// <summary>Serialized operation payload.</summary>
     public string PayloadJson { get; set; } = "{}";
+
+    /// <summary>Original HTTP method for replayed REST operations.</summary>
+    public string? HttpMethod { get; set; }
+
+    /// <summary>Original request path for replayed REST operations.</summary>
+    public string? Path { get; set; }
+
+    /// <summary>Original MCP method or tool name for transport operations.</summary>
+    public string? Method { get; set; }
+
+    /// <summary>Serialized non-secret request headers for replayed operations.</summary>
+    public string? HeadersJson { get; set; }
 }
 
 /// <summary>FR-MCP-103: Result returned after applying a federation state operation.</summary>
@@ -96,6 +110,9 @@ public sealed class FederationStateAdapterCoverage
 
     /// <summary>Whether the domain is intentionally exempt from replication.</summary>
     public bool LocalOnly { get; set; }
+
+    /// <summary>Whether the adapter implements local apply semantics for signed federation operations.</summary>
+    public bool ApplySupported { get; set; }
 }
 
 /// <summary>FR-MCP-103: Registry for mutable state adapters and local-only exemptions.</summary>
@@ -114,6 +131,7 @@ public sealed class FederationStateAdapterRegistry
         "github_metadata",
         "repo_file_changes",
         "marker_state",
+        "mcp_transport",
     ];
 
     private readonly IReadOnlyDictionary<string, IFederationStateAdapter> _adapters;
@@ -134,14 +152,34 @@ public sealed class FederationStateAdapterRegistry
     public bool TryGet(string domain, out IFederationStateAdapter adapter)
         => _adapters.TryGetValue(domain, out adapter!);
 
+    /// <summary>Returns whether the domain has a registered non-local adapter with apply semantics.</summary>
+    public bool CanApply(string domain)
+        => _adapters.TryGetValue(domain, out var adapter) &&
+           !adapter.IsLocalOnly &&
+           AdapterOverridesApply(adapter);
+
     /// <summary>Returns adapter coverage for all required domains.</summary>
     public IReadOnlyList<FederationStateAdapterCoverage> GetCoverage()
         => RequiredDomains
-            .Select(domain => new FederationStateAdapterCoverage
+            .Select(domain =>
             {
-                Domain = domain,
-                Covered = _adapters.ContainsKey(domain),
-                LocalOnly = _localOnlyDomains.Contains(domain),
+                var covered = _adapters.TryGetValue(domain, out var adapter);
+                var localOnly = _localOnlyDomains.Contains(domain);
+                return new FederationStateAdapterCoverage
+                {
+                    Domain = domain,
+                    Covered = covered,
+                    LocalOnly = localOnly,
+                    ApplySupported = covered && !localOnly && AdapterOverridesApply(adapter!),
+                };
             })
             .ToList();
+
+    private static bool AdapterOverridesApply(IFederationStateAdapter adapter)
+    {
+        var method = adapter.GetType().GetMethod(nameof(IFederationStateAdapter.ApplyAsync), [typeof(FederationStateOperation), typeof(CancellationToken)]);
+        return method?.DeclaringType is { } declaringType &&
+               declaringType != typeof(FederationStateAdapterBase) &&
+               declaringType != typeof(DatabaseFederationStateAdapterBase);
+    }
 }

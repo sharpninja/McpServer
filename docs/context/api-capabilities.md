@@ -37,7 +37,7 @@ To detect a stale marker without auth:
 - **GitHub Integration**: `/mcpserver/gh/issues`, `/mcpserver/gh/pulls`, `/mcpserver/gh/labels` — issue, PR, and label management
 - **Tool Registry**: `GET /mcpserver/tools/search` — discover available tools; `GET/POST /mcpserver/tools` — manage tool definitions
 - **Session Log**: `POST /mcpserver/sessionlog`, `GET /mcpserver/sessionlog` — session logging
-- **Federation**: `GET /mcpserver/federation/status` — role, hub URL, proxy id, queue depth, conflicts; `/mcpserver/federation/proxies`, `/workspaces`, `/queue`, `/conflicts`, `/adapters`, `/operations`, and `/sync` support hub-spoke enrollment, operation replay, diagnostics, and fanout
+- **Federation**: `GET /mcpserver/federation/status` — role, hub URL, proxy id, queue depth, fanout depth, stale-read status, conflicts; `/mcpserver/federation/proxies`, `/workspaces`, `/queue`, `/conflicts`, `/adapters`, `/operations`, `/envelopes`, and `/sync` support hub-spoke enrollment, signed operation replay, diagnostics, and fanout
 - **MCP Protocol**: `/mcp-transport` — Model Context Protocol streamable HTTP transport endpoint
 
 ## Server Health

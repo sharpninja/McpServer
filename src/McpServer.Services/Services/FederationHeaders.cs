@@ -23,4 +23,7 @@ public static class FederationHeaders
 
     /// <summary>Header identifying whether the response is based on a stale local read.</summary>
     public const string StaleRead = "X-Mcp-Stale-Read";
+
+    /// <summary>Header carrying stale-read status detail.</summary>
+    public const string StaleReadStatus = "X-Mcp-Stale-Read-Status";
 }

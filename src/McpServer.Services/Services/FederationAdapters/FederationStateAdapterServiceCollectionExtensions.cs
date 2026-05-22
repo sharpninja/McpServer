@@ -31,6 +31,9 @@ public static class FederationStateAdapterServiceCollectionExtensions
         services.AddSingleton<IFederationStateAdapter>(_ => new LocalOnlyFederationStateAdapter(
             "marker_state",
             "Marker files contain host-specific ports, process ids, API keys, signatures, and trust material."));
+        services.AddSingleton<IFederationStateAdapter>(_ => new LocalOnlyFederationStateAdapter(
+            "mcp_transport",
+            "MCP transport streams can carry arbitrary tool calls and are forwarded live rather than replayed from the offline queue."));
 
         return services;
     }

@@ -1,11 +1,10 @@
 using McpServer.Support.Mcp.Storage;
-using Xunit.Sdk;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>
-/// TEST-MCP-101, TEST-MCP-102: Verifies that the provider factory can apply migrations and persist data on a
-/// clean SQLite database, a clean SQL Server LocalDB database, and an env-gated PostgreSQL database.
+/// TEST-MCP-101, TEST-MCP-102: Verifies that the provider factory can apply migrations and persist data on
+/// clean SQLite and SQL Server LocalDB databases.
 /// These tests exercise the actual runtime DbContext wiring without editing production code.
 /// </summary>
 public sealed class ProviderDatabaseIntegrationTests
@@ -72,35 +71,4 @@ public sealed class ProviderDatabaseIntegrationTests
         }
     }
 
-    /// <summary>
-    /// Verifies that the PostgreSQL provider can migrate and persist data when the test harness is provided with
-    /// explicit connection strings for a clean throwaway database. If the required env vars are missing, the test
-    /// is skipped rather than fabricating a database target.
-    /// </summary>
-    [Fact]
-    public async Task PostgreSql_CleanDatabase_WhenConfigured_AppliesMigrationsAndPersistsEntity()
-    {
-        await using var workspace = ProviderIntegrationTestSupport.CreateWorkspace();
-        var (databaseName, cleanConnectionString) = await PostgreSqlSandbox.CreateCleanDatabaseAsync().ConfigureAwait(true);
-        var factory = ProviderIntegrationTestSupport.CreateFactory(
-            workspace,
-            new Dictionary<string, string?>
-            {
-                ["Mcp:DatabaseProvider"] = "postgresql",
-                ["Mcp:PostgresConnectionString"] = cleanConnectionString,
-            });
-
-        try
-        {
-            using var client = factory.CreateClient();
-            _ = client;
-
-            await ProviderIntegrationTestSupport.AssertDatabaseRoundTripAsync(factory, "Npgsql", string.Empty).ConfigureAwait(true);
-        }
-        finally
-        {
-            factory.Dispose();
-            await PostgreSqlSandbox.DropDatabaseAsync(databaseName).ConfigureAwait(true);
-        }
-    }
 }

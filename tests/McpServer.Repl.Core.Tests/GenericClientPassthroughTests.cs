@@ -903,6 +903,45 @@ public class GenericClientPassthroughTests
     }
 
     [Fact]
+    public async Task FederationClient_EnrollProxy_CoercesHubSpokeRequest()
+    {
+        var args = new Dictionary<string, object?>
+        {
+            ["request"] = new Dictionary<string, object?>
+            {
+                ["proxyId"] = "PAYTON-LEGION2",
+                ["displayName"] = "PAYTON-LEGION2",
+                ["baseUrl"] = "http://PAYTON-LEGION2:7147",
+                ["workspaces"] = new List<object?>
+                {
+                    new Dictionary<string, object?>
+                    {
+                        ["workspaceName"] = "McpServer",
+                        ["workspacePath"] = @"F:\GitHub\McpServer",
+                    },
+                },
+            },
+        };
+
+        var expectedResult = new FederationEnrollmentResponse
+        {
+            ProxyId = "PAYTON-LEGION2",
+            Accepted = true,
+            HeartbeatSeconds = 30,
+        };
+
+        _passthrough.InvokeAsync("federation", "EnrollProxyAsync", args, Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult<object?>(expectedResult));
+
+        var result = await _passthrough.InvokeAsync("federation", "EnrollProxyAsync", args);
+
+        Assert.NotNull(result);
+        var enrollment = Assert.IsType<FederationEnrollmentResponse>(result);
+        Assert.True(enrollment.Accepted);
+        Assert.Equal("PAYTON-LEGION2", enrollment.ProxyId);
+    }
+
+    [Fact]
     public async Task FederationClient_Push_CoercesTypeFilter()
     {
         var args = new Dictionary<string, object?>

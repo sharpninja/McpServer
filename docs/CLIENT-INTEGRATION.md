@@ -25,6 +25,12 @@ For VS Code Copilot, Cursor, and other MCP-compatible editors, configure the Str
 }
 ```
 
+## Agent Plugin Availability
+
+MCP-compatible editor clients can connect directly through Streamable HTTP or STDIO. Audited agent workflows are stricter: when `AGENTS-README-FIRST.yaml` declares `agent_plugins.policy: required`, each agent must use its matching plugin for session log, TODO, requirements, import/export, and traceability operations.
+
+See `docs/AGENT-PLUGIN-AVAILABILITY.md` for current plugin repositories, expected local roots, status wrappers, and failure behavior.
+
 ### Docker Mode
 
 When running the MCP server in Docker, the extension connects to the same URL

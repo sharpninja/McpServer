@@ -55,7 +55,13 @@ public sealed class RequirementsController : ControllerBase
         if (request is null)
             return BadRequest(new { error = "Request body is required." });
 
-        var entry = new FrEntry(request.Id, request.Title, request.Body);
+        var entry = new FrEntry(
+            request.Id,
+            request.Title,
+            request.Body,
+            Priority: request.Priority ?? "medium",
+            Status: request.Status ?? "pending",
+            Notes: request.Notes);
         try
         {
             await _requirements.AddFrAsync(entry, cancellationToken).ConfigureAwait(false);
@@ -81,7 +87,18 @@ public sealed class RequirementsController : ControllerBase
         if (request is null)
             return BadRequest(new { error = "Request body is required." });
 
-        var entry = new FrEntry(id, request.Title, request.Body);
+        var existing = await _requirements.GetFrAsync(id, cancellationToken).ConfigureAwait(false);
+        if (existing is null)
+            return NotFound(new { error = $"FR '{id}' not found." });
+
+        var entry = existing with
+        {
+            Title = request.Title ?? existing.Title,
+            Body = request.Body ?? existing.Body,
+            Priority = request.Priority ?? existing.Priority,
+            Status = request.Status ?? existing.Status,
+            Notes = request.Notes ?? existing.Notes
+        };
         try
         {
             await _requirements.UpdateFrAsync(entry, cancellationToken).ConfigureAwait(false);
@@ -137,7 +154,13 @@ public sealed class RequirementsController : ControllerBase
         if (request is null)
             return BadRequest(new { error = "Request body is required." });
 
-        var entry = new TrEntry(request.Id, request.Title ?? string.Empty, request.Body);
+        var entry = new TrEntry(
+            request.Id,
+            request.Title ?? string.Empty,
+            request.Body,
+            Priority: request.Priority ?? "medium",
+            Status: request.Status ?? "pending",
+            Notes: request.Notes);
         try
         {
             await _requirements.AddTrAsync(entry, cancellationToken).ConfigureAwait(false);
@@ -163,7 +186,18 @@ public sealed class RequirementsController : ControllerBase
         if (request is null)
             return BadRequest(new { error = "Request body is required." });
 
-        var entry = new TrEntry(id, request.Title ?? string.Empty, request.Body);
+        var existing = await _requirements.GetTrAsync(id, cancellationToken).ConfigureAwait(false);
+        if (existing is null)
+            return NotFound(new { error = $"TR '{id}' not found." });
+
+        var entry = existing with
+        {
+            Title = request.Title ?? existing.Title,
+            Body = request.Body ?? existing.Body,
+            Priority = request.Priority ?? existing.Priority,
+            Status = request.Status ?? existing.Status,
+            Notes = request.Notes ?? existing.Notes
+        };
         try
         {
             await _requirements.UpdateTrAsync(entry, cancellationToken).ConfigureAwait(false);
@@ -219,7 +253,13 @@ public sealed class RequirementsController : ControllerBase
         if (request is null)
             return BadRequest(new { error = "Request body is required." });
 
-        var entry = new TestEntry(request.Id, request.Condition);
+        var entry = new TestEntry(
+            request.Id,
+            request.Condition,
+            Title: request.Title ?? string.Empty,
+            Priority: request.Priority ?? "medium",
+            Status: request.Status ?? "pending",
+            Notes: request.Notes);
         try
         {
             await _requirements.AddTestAsync(entry, cancellationToken).ConfigureAwait(false);
@@ -245,7 +285,18 @@ public sealed class RequirementsController : ControllerBase
         if (request is null)
             return BadRequest(new { error = "Request body is required." });
 
-        var entry = new TestEntry(id, request.Condition);
+        var existing = await _requirements.GetTestAsync(id, cancellationToken).ConfigureAwait(false);
+        if (existing is null)
+            return NotFound(new { error = $"TEST '{id}' not found." });
+
+        var entry = existing with
+        {
+            Title = request.Title ?? existing.Title,
+            Condition = request.Condition ?? existing.Condition,
+            Priority = request.Priority ?? existing.Priority,
+            Status = request.Status ?? existing.Status,
+            Notes = request.Notes ?? existing.Notes
+        };
         try
         {
             await _requirements.UpdateTestAsync(entry, cancellationToken).ConfigureAwait(false);

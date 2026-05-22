@@ -145,7 +145,7 @@ Vector indexing uses ONNX Runtime with Sentence Transformer embeddings and HNSW 
 | Method | Details |
 |---|---|
 | **Standalone** | `./build.ps1 StartServer` or `dotnet run` |
-| **Windows Service** | `scripts/Manage-McpService.ps1 -Action Install` with auto-restart and health checks |
+| **Windows Service** | `./build.ps1 UpdateService` through the Nuke build; do not manually redeploy service files |
 | **Docker** | Multi-stage build, volumes for `/data` and `/workspace` |
 | **MSIX** | `./build.ps1 PackageMsix` for Windows app package |
 | **Windows Launcher** | GUI application for starting/managing the server |
@@ -159,6 +159,7 @@ Vector indexing uses ONNX Runtime with Sentence Transformer embeddings and HNSW 
 | `Compile` | Restore + build the solution (default) |
 | `Test` | Run all unit tests |
 | `Publish` | Publish server for deployment |
+| `UpdateService` | Build/publish, backup config/data, update the Windows service, restore config/data, and health-check |
 | `PackNuGet` | Pack McpServer.Client NuGet package |
 | `PackReplTool` | Pack mcpserver-repl to local-packages/ |
 | `PackageMsix` | Create MSIX package for Windows |

@@ -112,8 +112,8 @@ public sealed class GraphRagRelationshipStorageTests : IDisposable
     }
 
     /// <summary>
-    /// FR-MCP-079: Verifies cascade delete — deleting a source entity removes
-    /// all relationships where that entity is the source.
+    /// FR-MCP-079 / DB-FK-001: Verifies that deleting a source entity hides
+    /// relationships by soft delete rather than physically cascading rows.
     /// </summary>
     [Fact]
     public async Task CascadeFromEntityDelete_RemovesRelationship()
@@ -139,6 +139,12 @@ public sealed class GraphRagRelationshipStorageTests : IDisposable
 
         var remaining = await _db.GraphRelationships.ToListAsync().ConfigureAwait(true);
         Assert.Empty(remaining);
+
+        var retained = await _db.GraphRelationships
+            .IgnoreQueryFilters()
+            .SingleAsync(r => r.Id == rel.Id)
+            .ConfigureAwait(true);
+        Assert.True((bool)_db.Entry(retained).Property("IsDeleted").CurrentValue!);
     }
 
     /// <summary>

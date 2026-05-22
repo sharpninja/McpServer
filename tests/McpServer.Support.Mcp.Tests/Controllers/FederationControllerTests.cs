@@ -30,6 +30,21 @@ public sealed class FederationControllerTests
             NullLogger<TunnelRegistry>.Instance);
     }
 
+    private static FederationEnvelopeSigner CreateSigner()
+    {
+        var monitor = Substitute.For<IOptionsMonitor<FederationOptions>>();
+        monitor.CurrentValue.Returns(new FederationOptions
+        {
+            EnrollmentToken = "test-secret",
+            Signing = new FederationSigningOptions
+            {
+                Enabled = true,
+                EnvelopeTtlSeconds = 300,
+            },
+        });
+        return new FederationEnvelopeSigner(monitor);
+    }
+
     private static FederationController CreateController(
         FederationRegistry? registry = null,
         TunnelRegistry? tunnels = null)
@@ -52,6 +67,162 @@ public sealed class FederationControllerTests
         var status = Assert.IsType<FederationStatusResponse>(ok.Value);
         Assert.False(status.Enabled);
         Assert.Empty(status.Targets);
+    }
+
+    /// <summary>Adapter diagnostics expose the registered coverage rows through the controller.</summary>
+    [Fact]
+    public void GetAdapterCoverage_ReturnsRegistryCoverage()
+    {
+        var registry = new FederationStateAdapterRegistry(
+        [
+            new TestStateAdapter("todo", applySupported: true),
+            new TestStateAdapter("marker_state", localOnly: true),
+        ]);
+        var controller = new FederationController(
+            CreateRegistry(),
+            CreateEmptyTunnelRegistry(),
+            adapterRegistry: registry);
+
+        var result = controller.GetAdapterCoverage();
+
+        var ok = Assert.IsType<OkObjectResult>(result.Result);
+        var coverage = Assert.IsAssignableFrom<IReadOnlyList<FederationStateAdapterCoverage>>(ok.Value);
+        Assert.Contains(coverage, row => row.Domain == "todo" && row.Covered && row.ApplySupported && !row.LocalOnly);
+        Assert.Contains(coverage, row => row.Domain == "marker_state" && row.Covered && row.LocalOnly && !row.ApplySupported);
+        Assert.Contains(coverage, row => row.Domain == "workspace" && !row.Covered && !row.LocalOnly && !row.ApplySupported);
+    }
+
+    /// <summary>Adapter diagnostics return an explicit not-configured response when no registry is available.</summary>
+    [Fact]
+    public void GetAdapterCoverage_WithoutRegistry_Returns501()
+    {
+        var controller = CreateController();
+
+        var result = controller.GetAdapterCoverage();
+
+        var status = Assert.IsType<ObjectResult>(result.Result);
+        Assert.Equal(501, status.StatusCode);
+    }
+
+    /// <summary>Signed envelope intake applies newly accepted operations on the hub.</summary>
+    [Fact]
+    public async Task RecordEnvelope_AppliesAcceptedOperation()
+    {
+        var topology = Substitute.For<IFederationTopologyService>();
+        var apply = Substitute.For<IFederationOperationApplyService>();
+        var signer = CreateSigner();
+        var operation = new FederationOperationRequest
+        {
+            OperationId = "op-1",
+            ProxyId = "PAYTON-LEGION2",
+            Domain = "todo",
+            ResourceId = "PLAN-FEDERATION-001",
+            HttpMethod = "PUT",
+            Path = "/mcpserver/todo/PLAN-FEDERATION-001",
+            BodyBase64 = Convert.ToBase64String("{\"done\":true}"u8.ToArray()),
+        };
+        var envelope = signer.Sign(operation, "PAYTON-LEGION2");
+        topology.RecordOperationAsync(operation, Arg.Any<CancellationToken>())
+            .Returns(new FederationOperationResponse { OperationId = "op-1", Status = "accepted", Created = true });
+        topology.AcknowledgeOperationAsync("op-1", Arg.Any<FederationOperationAckRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new FederationOperationResponse { OperationId = "op-1", Status = "applied", Created = false });
+        apply.ApplyAsync(operation, Arg.Any<CancellationToken>())
+            .Returns(new FederationApplyResult { Applied = true, Version = "v2" });
+        var controller = new FederationController(
+            CreateRegistry(),
+            CreateEmptyTunnelRegistry(),
+            topologyService: topology,
+            envelopeSigner: signer,
+            operationApplyService: apply);
+
+        var result = await controller.RecordEnvelope(envelope, CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(result.Result);
+        var response = Assert.IsType<FederationOperationResponse>(ok.Value);
+        Assert.Equal("applied", response.Status);
+        await apply.Received(1)
+            .ApplyAsync(operation, Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+        await topology.Received(1)
+            .AcknowledgeOperationAsync(
+                "op-1",
+                Arg.Is<FederationOperationAckRequest>(request =>
+                    request != null &&
+                    request.Status == "applied" &&
+                    request.HubVersion == "v2"),
+                Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>Signed envelope intake applies existing non-terminal operation rows instead of returning accepted.</summary>
+    [Fact]
+    public async Task RecordEnvelope_AppliesExistingAcceptedOperation()
+    {
+        var topology = Substitute.For<IFederationTopologyService>();
+        var apply = Substitute.For<IFederationOperationApplyService>();
+        var signer = CreateSigner();
+        var operation = new FederationOperationRequest
+        {
+            OperationId = "op-replay-1",
+            ProxyId = "PAYTON-LEGION2",
+            Domain = "todo",
+            ResourceId = "PLAN-FEDERATION-001",
+            BodyBase64 = Convert.ToBase64String("{\"done\":true}"u8.ToArray()),
+        };
+        var envelope = signer.Sign(operation, "PAYTON-LEGION2");
+        topology.RecordOperationAsync(operation, Arg.Any<CancellationToken>())
+            .Returns(new FederationOperationResponse { OperationId = "op-replay-1", Status = "accepted", Created = false });
+        topology.AcknowledgeOperationAsync("op-replay-1", Arg.Any<FederationOperationAckRequest>(), Arg.Any<CancellationToken>())
+            .Returns(new FederationOperationResponse { OperationId = "op-replay-1", Status = "applied", Created = false });
+        apply.ApplyAsync(operation, Arg.Any<CancellationToken>())
+            .Returns(new FederationApplyResult { Applied = true, Version = "v2" });
+        var controller = new FederationController(
+            CreateRegistry(),
+            CreateEmptyTunnelRegistry(),
+            topologyService: topology,
+            envelopeSigner: signer,
+            operationApplyService: apply);
+
+        var result = await controller.RecordEnvelope(envelope, CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(result.Result);
+        var response = Assert.IsType<FederationOperationResponse>(ok.Value);
+        Assert.Equal("applied", response.Status);
+        await apply.Received(1)
+            .ApplyAsync(operation, Arg.Any<CancellationToken>())
+            .ConfigureAwait(true);
+    }
+
+    /// <summary>Hub sync signs local-execution outbox rows with local-execution apply mode.</summary>
+    [Fact]
+    public async Task Sync_LocalExecutionItemSignsEnvelopeWithLocalExecutionApplyMode()
+    {
+        var topology = Substitute.For<IFederationTopologyService>();
+        var signer = CreateSigner();
+        topology.GetSyncItemsAsync("PAYTON-LEGION2", 0, Arg.Any<CancellationToken>())
+            .Returns([new FederationSyncItem
+            {
+                Sequence = 7,
+                OperationId = "op-local-1",
+                ProxyId = "PAYTON-DESKTOP",
+                Domain = "local_execution",
+                Method = "desktop_launch",
+                BodyBase64 = Convert.ToBase64String("{}"u8.ToArray()),
+            }]);
+        var controller = new FederationController(
+            CreateRegistry(),
+            CreateEmptyTunnelRegistry(),
+            topologyService: topology,
+            envelopeSigner: signer);
+
+        var result = await controller.Sync("PAYTON-LEGION2", 0, CancellationToken.None).ConfigureAwait(true);
+
+        var ok = Assert.IsType<OkObjectResult>(result.Result);
+        var items = Assert.IsAssignableFrom<IReadOnlyList<FederationSyncItem>>(ok.Value);
+        var item = Assert.Single(items);
+        Assert.NotNull(item.Envelope);
+        Assert.Equal("local_execution", item.Envelope.ApplyMode);
+        Assert.Equal("PAYTON-LEGION2", item.Envelope.TargetProxyId);
     }
 
     // --- Enable / Disable ---
@@ -265,5 +436,49 @@ public sealed class FederationControllerTests
         var ok = Assert.IsType<OkObjectResult>(result.Result);
         var discovery = Assert.IsType<TunnelDiscoveryResult>(ok.Value);
         Assert.Equal(0, discovery.Discovered);
+    }
+
+    private sealed class TestStateAdapter : IFederationStateAdapter
+    {
+        private readonly bool _applySupported;
+
+        public TestStateAdapter(string domain, bool localOnly = false, bool applySupported = false)
+        {
+            Domain = domain;
+            IsLocalOnly = localOnly;
+            _applySupported = applySupported;
+        }
+
+        public string Domain { get; }
+
+        public bool IsLocalOnly { get; }
+
+        public ValueTask<FederationStateSnapshot> SnapshotAsync(
+            string? resourceId,
+            CancellationToken cancellationToken)
+            => ValueTask.FromResult(new FederationStateSnapshot
+            {
+                Domain = Domain,
+                ResourceId = resourceId ?? string.Empty,
+                Version = "v1",
+                PayloadJson = "{}",
+            });
+
+        public ValueTask<FederationApplyResult> ApplyAsync(
+            FederationStateOperation operation,
+            CancellationToken cancellationToken)
+            => _applySupported
+                ? ValueTask.FromResult(new FederationApplyResult { Applied = true, Version = "v2" })
+                : ValueTask.FromResult(new FederationApplyResult { Conflict = true, Message = "Apply is not supported." });
+
+        public ValueTask<string?> GetVersionAsync(string resourceId, CancellationToken cancellationToken)
+            => ValueTask.FromResult<string?>("v1");
+
+        public string GetIdempotencyKey(FederationStateOperation operation)
+            => operation.SourceOperationId ?? operation.OperationId;
+
+        public bool IsEcho(FederationStateOperation operation)
+            => !string.IsNullOrWhiteSpace(operation.SourceOperationId) &&
+               string.Equals(operation.SourceOperationId, operation.OperationId, StringComparison.Ordinal);
     }
 }

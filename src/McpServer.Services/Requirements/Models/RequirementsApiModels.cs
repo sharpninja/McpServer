@@ -4,32 +4,52 @@ namespace McpServer.Support.Mcp.Requirements.Models;
 /// <param name="Id">Requirement identifier (e.g. FR-MCP-040).</param>
 /// <param name="Title">Requirement title.</param>
 /// <param name="Body">Requirement body text.</param>
-public sealed record CreateFrRequest(string Id, string Title, string Body);
+/// <param name="Priority">Optional requirement priority.</param>
+/// <param name="Status">Optional requirement status.</param>
+/// <param name="Notes">Optional requirement notes.</param>
+public sealed record CreateFrRequest(string Id, string Title, string Body, string? Priority = null, string? Status = null, string? Notes = null);
 
 /// <summary>Request payload for updating a Functional Requirement entry.</summary>
 /// <param name="Title">Requirement title.</param>
 /// <param name="Body">Requirement body text.</param>
-public sealed record UpdateFrRequest(string Title, string Body);
+/// <param name="Priority">Optional requirement priority.</param>
+/// <param name="Status">Optional requirement status.</param>
+/// <param name="Notes">Optional requirement notes.</param>
+public sealed record UpdateFrRequest(string? Title = null, string? Body = null, string? Priority = null, string? Status = null, string? Notes = null);
 
 /// <summary>Request payload for creating a Technical Requirement entry.</summary>
 /// <param name="Id">Requirement identifier (e.g. TR-MCP-REQ-002).</param>
 /// <param name="Title">Optional title rendered as bold text before the em dash.</param>
 /// <param name="Body">Requirement body text.</param>
-public sealed record CreateTrRequest(string Id, string? Title, string Body);
+/// <param name="Priority">Optional requirement priority.</param>
+/// <param name="Status">Optional requirement status.</param>
+/// <param name="Notes">Optional requirement notes.</param>
+public sealed record CreateTrRequest(string Id, string? Title, string Body, string? Priority = null, string? Status = null, string? Notes = null);
 
 /// <summary>Request payload for updating a Technical Requirement entry.</summary>
 /// <param name="Title">Optional title rendered as bold text before the em dash.</param>
 /// <param name="Body">Requirement body text.</param>
-public sealed record UpdateTrRequest(string? Title, string Body);
+/// <param name="Priority">Optional requirement priority.</param>
+/// <param name="Status">Optional requirement status.</param>
+/// <param name="Notes">Optional requirement notes.</param>
+public sealed record UpdateTrRequest(string? Title = null, string? Body = null, string? Priority = null, string? Status = null, string? Notes = null);
 
 /// <summary>Request payload for creating a Testing Requirement entry.</summary>
 /// <param name="Id">Requirement identifier (e.g. TEST-MCP-039).</param>
 /// <param name="Condition">Test condition text.</param>
-public sealed record CreateTestRequest(string Id, string Condition);
+/// <param name="Title">Optional test title.</param>
+/// <param name="Priority">Optional requirement priority.</param>
+/// <param name="Status">Optional requirement status.</param>
+/// <param name="Notes">Optional requirement notes.</param>
+public sealed record CreateTestRequest(string Id, string Condition, string? Title = null, string? Priority = null, string? Status = null, string? Notes = null);
 
 /// <summary>Request payload for updating a Testing Requirement entry.</summary>
 /// <param name="Condition">Test condition text.</param>
-public sealed record UpdateTestRequest(string Condition);
+/// <param name="Title">Optional test title.</param>
+/// <param name="Priority">Optional requirement priority.</param>
+/// <param name="Status">Optional requirement status.</param>
+/// <param name="Notes">Optional requirement notes.</param>
+public sealed record UpdateTestRequest(string? Condition = null, string? Title = null, string? Priority = null, string? Status = null, string? Notes = null);
 
 /// <summary>Request payload for creating or updating an FR-to-TR/TEST mapping row.</summary>
 /// <param name="TrIds">List of TR identifiers mapped to the FR row.</param>

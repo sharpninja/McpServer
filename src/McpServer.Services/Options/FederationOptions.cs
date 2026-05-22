@@ -27,6 +27,13 @@ public sealed class FederationOptions
     public string? HubBaseUrl { get; set; }
 
     /// <summary>
+    /// Stable hub access token used for authenticated hub-bound traffic.
+    /// Hub deployments validate this value as an inter-server credential, and
+    /// LocalProxy deployments send it as the upstream <c>X-Api-Key</c>.
+    /// </summary>
+    public string? HubAccessToken { get; set; }
+
+    /// <summary>
     /// Stable local proxy identifier sent to the hub. If omitted, the local machine name
     /// is used at runtime.
     /// </summary>
@@ -61,6 +68,12 @@ public sealed class FederationOptions
 
     /// <summary>Hub/proxy synchronization settings.</summary>
     public FederationSyncOptions Sync { get; set; } = new();
+
+    /// <summary>Signed operation envelope settings.</summary>
+    public FederationSigningOptions Signing { get; set; } = new();
+
+    /// <summary>Machine-local execution settings for signed hub envelopes.</summary>
+    public FederationLocalExecutionOptions LocalExecution { get; set; } = new();
 }
 
 /// <summary>FR-MCP-103: Supported federation topology roles.</summary>
@@ -136,4 +149,30 @@ public sealed class FederationSyncOptions
 
     /// <summary>Hub-side fanout polling interval in seconds.</summary>
     public int FanoutIntervalSeconds { get; set; } = 15;
+}
+
+/// <summary>FR-MCP-103: HMAC signing settings for federation operation envelopes.</summary>
+public sealed class FederationSigningOptions
+{
+    /// <summary>Whether signed operation envelopes are required on envelope endpoints.</summary>
+    public bool Enabled { get; set; } = true;
+
+    /// <summary>
+    /// Shared HMAC secret for operation envelopes. When omitted, the enrollment
+    /// token is used as the signing key.
+    /// </summary>
+    public string? SharedSecret { get; set; }
+
+    /// <summary>Envelope lifetime in seconds before verification rejects it.</summary>
+    public int EnvelopeTtlSeconds { get; set; } = 300;
+}
+
+/// <summary>FR-MCP-103: Policy for signed hub-requested machine-local operations.</summary>
+public sealed class FederationLocalExecutionOptions
+{
+    /// <summary>Whether signed local execution envelopes are allowed on LocalProxy instances.</summary>
+    public bool Enabled { get; set; }
+
+    /// <summary>Allowed local execution methods. Desktop launch is further constrained by desktop launch policy.</summary>
+    public List<string> AllowedMethods { get; set; } = ["desktop_launch"];
 }

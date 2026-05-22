@@ -21,6 +21,7 @@ public sealed class FederationRegistry
 
     private readonly FederationRole _configuredRole;
     private readonly string? _hubBaseUrl;
+    private readonly string? _hubAccessToken;
     private readonly string? _proxyId;
     private readonly string? _enrollmentToken;
     private volatile bool _enabled;
@@ -37,6 +38,7 @@ public sealed class FederationRegistry
         _enabled = cfg.Enabled;
         _configuredRole = cfg.Role;
         _hubBaseUrl = string.IsNullOrWhiteSpace(cfg.HubBaseUrl) ? null : cfg.HubBaseUrl.TrimEnd('/');
+        _hubAccessToken = string.IsNullOrWhiteSpace(cfg.HubAccessToken) ? null : cfg.HubAccessToken.Trim();
         _proxyId = string.IsNullOrWhiteSpace(cfg.ProxyId) ? Environment.MachineName : cfg.ProxyId.Trim();
         _enrollmentToken = string.IsNullOrWhiteSpace(cfg.EnrollmentToken) ? null : cfg.EnrollmentToken.Trim();
         _defaultTarget = string.IsNullOrWhiteSpace(cfg.DefaultTarget) ? null : cfg.DefaultTarget.Trim();
@@ -78,6 +80,12 @@ public sealed class FederationRegistry
     /// <summary>Hub base URL configured for LocalProxy mode, if any.</summary>
     public string? HubBaseUrl => _hubBaseUrl;
 
+    /// <summary>Stable hub access token configured for inter-server hub traffic, if any.</summary>
+    public string? HubAccessToken => _hubAccessToken;
+
+    /// <summary>Whether a stable hub access token is configured.</summary>
+    public bool HasHubAccessToken => _hubAccessToken is not null;
+
     /// <summary>Stable proxy identifier sent to the hub.</summary>
     public string? ProxyId => _proxyId;
 
@@ -99,7 +107,7 @@ public sealed class FederationRegistry
         {
             return _hubBaseUrl is null
                 ? null
-                : new FederationTarget("hub", _hubBaseUrl, null);
+                : new FederationTarget("hub", _hubBaseUrl, _hubAccessToken);
         }
 
         if (EffectiveRole != FederationRole.DirectProxy)

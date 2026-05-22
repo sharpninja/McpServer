@@ -154,6 +154,75 @@ public sealed class VoiceConversationServiceTests
         Assert.Equal(Timeout.InfiniteTimeSpan, hostedStrategy.LastRequest!.Options.Timeout);
     }
 
+    [Fact]
+    public async Task SubmitTurnStreamingAsync_EmptyRuntimeStream_EmitsErrorAndRecordsAssistantError()
+    {
+        using var service = CreateService(defaultExecutionStrategy: AgentExecutionStrategyNames.HostedMcpAgent);
+        var created = await service.CreateSessionAsync(new VoiceSessionCreateRequest
+        {
+            AgentName = "planner",
+            WorkspacePath = @"E:\ws-a",
+        }).ConfigureAwait(true);
+
+        var events = await CollectAsync(service.SubmitTurnStreamingAsync(created.SessionId, new VoiceTurnRequest
+        {
+            UserTranscriptText = "Read the file .github/copilot-instructions.md and follow those instructions.",
+        })).ConfigureAwait(true);
+
+        var terminal = Assert.Single(events, static evt => evt.Type is "done" or "error");
+        Assert.Equal("error", terminal.Type);
+        Assert.Contains("No response returned from voice runtime", terminal.Message, StringComparison.Ordinal);
+        Assert.DoesNotContain(events, static evt => evt.Type == "done" && evt.Status == "completed");
+
+        var status = await service.GetStatusAsync(created.SessionId).ConfigureAwait(true);
+        Assert.NotNull(status);
+        Assert.Equal("error", status!.Status);
+        Assert.Contains("No response returned from voice runtime", status.LastError, StringComparison.Ordinal);
+        Assert.Equal(2, status.TranscriptCount);
+
+        var transcript = await service.GetTranscriptAsync(created.SessionId).ConfigureAwait(true);
+        Assert.NotNull(transcript);
+        Assert.Equal(2, transcript!.Items.Count);
+        Assert.Contains(transcript.Items, static item => item.Role == "user");
+        var assistant = Assert.Single(transcript.Items, static item => item.Role == "assistant");
+        Assert.Equal("error", assistant.Category);
+        Assert.Contains("No response returned from voice runtime", assistant.Text, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task CopilotInteractiveSession_ReadInitialResponseStreamingAsync_StdoutClosesAfterNonzeroExit_ThrowsDiagnostic()
+    {
+        const string stderr = "GitHub Copilot CLI requires Node.js v24 or higher.";
+        var process = new FakeSpawnedProcess(stdout: string.Empty, stderr: stderr, exitCode: 1);
+        var spawner = new FakeProcessSpawner(process);
+        var processEnvironment = Substitute.For<IProcessEnvironmentService>();
+        processEnvironment
+            .ResolveExecutable(Arg.Any<System.Diagnostics.ProcessStartInfo>(), Arg.Any<string>())
+            .Returns(call => call.ArgAt<string>(1));
+        var client = new CopilotClient(
+            CreateOptionsMonitor(new CopilotClientOptions
+            {
+                AgentPath = "copilot",
+                Model = "auto",
+                WorkingDirectory = Environment.CurrentDirectory,
+                Timeout = Timeout.InfiniteTimeSpan,
+            }),
+            processEnvironment,
+            spawner,
+            NullLogger<CopilotClient>.Instance);
+
+        await using var session = client.CreateInteractiveSession("hello");
+        var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+        {
+            await foreach (var _ in session.ReadInitialResponseStreamingAsync().ConfigureAwait(true))
+            {
+            }
+        }).ConfigureAwait(true);
+
+        Assert.Contains("Copilot CLI exited with code 1", exception.Message, StringComparison.Ordinal);
+        Assert.Contains("Node.js v24", exception.Message, StringComparison.Ordinal);
+    }
+
     private static VoiceConversationService CreateService(
         string defaultExecutionStrategy = AgentExecutionStrategyNames.CopilotCli,
         string? modelApiKey = null,
@@ -289,6 +358,62 @@ public sealed class VoiceConversationServiceTests
         {
             await Task.CompletedTask;
             yield break;
+        }
+    }
+
+    private static async Task<List<T>> CollectAsync<T>(IAsyncEnumerable<T> stream)
+    {
+        var items = new List<T>();
+        await foreach (var item in stream.ConfigureAwait(true))
+            items.Add(item);
+        return items;
+    }
+
+    private sealed class FakeProcessSpawner(ISpawnedProcess process) : IProcessSpawner
+    {
+        public ISpawnedProcess Spawn(System.Diagnostics.ProcessStartInfo startInfo) => process;
+    }
+
+    private sealed class FakeSpawnedProcess : ISpawnedProcess
+    {
+        private readonly MemoryStream _stdout;
+        private readonly MemoryStream _stderr;
+        private readonly MemoryStream _stdin = new();
+
+        public FakeSpawnedProcess(string stdout, string stderr, int exitCode)
+        {
+            _stdout = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(stdout));
+            _stderr = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(stderr));
+            StandardOutput = new StreamReader(_stdout);
+            StandardError = new StreamReader(_stderr);
+            StandardInput = new StreamWriter(_stdin);
+            ExitCode = exitCode;
+        }
+
+        public StreamReader StandardOutput { get; }
+
+        public StreamReader StandardError { get; }
+
+        public StreamWriter? StandardInput { get; }
+
+        public int Id => 1234;
+
+        public bool HasExited => true;
+
+        public int ExitCode { get; }
+
+        public void Dispose()
+        {
+            StandardInput?.Dispose();
+            StandardOutput.Dispose();
+            StandardError.Dispose();
+            _stdin.Dispose();
+        }
+
+        public Task WaitForExitAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
+
+        public void Kill()
+        {
         }
     }
 }

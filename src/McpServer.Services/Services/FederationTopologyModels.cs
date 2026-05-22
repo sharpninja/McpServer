@@ -192,6 +192,22 @@ public sealed class FederationOperationAckRequest
     public string? Error { get; set; }
 }
 
+/// <summary>FR-MCP-103: Recipient-specific sync acknowledgement request.</summary>
+public sealed class FederationSyncAckRequest
+{
+    /// <summary>Status to assign to the acknowledged sync row.</summary>
+    public string Status { get; set; } = "acknowledged";
+
+    /// <summary>Hub-assigned version after apply, when available.</summary>
+    public string? HubVersion { get; set; }
+
+    /// <summary>Error text when acknowledgement represents a failed apply.</summary>
+    public string? Error { get; set; }
+
+    /// <summary>Proxy that received and applied the sync row.</summary>
+    public string? ProxyId { get; set; }
+}
+
 /// <summary>FR-MCP-103: Operation status returned by intake and acknowledgement endpoints.</summary>
 public sealed class FederationOperationResponse
 {
@@ -340,4 +356,162 @@ public sealed class FederationSyncItem
 
     /// <summary>Hub version associated with the operation.</summary>
     public string? HubVersion { get; set; }
+
+    /// <summary>Proxy that originated the operation.</summary>
+    public string ProxyId { get; set; } = string.Empty;
+
+    /// <summary>Optional source operation ID used for echo suppression.</summary>
+    public string? SourceOperationId { get; set; }
+
+    /// <summary>Hub-wide workspace identifier affected by the operation.</summary>
+    public string? GlobalWorkspaceId { get; set; }
+
+    /// <summary>HTTP method for proxied REST operations.</summary>
+    public string? HttpMethod { get; set; }
+
+    /// <summary>Request path for proxied REST operations.</summary>
+    public string? Path { get; set; }
+
+    /// <summary>MCP method or tool name for transport operations.</summary>
+    public string? Method { get; set; }
+
+    /// <summary>Serialized operation headers.</summary>
+    public string? HeadersJson { get; set; }
+
+    /// <summary>Base64-encoded operation payload.</summary>
+    public string? BodyBase64 { get; set; }
+
+    /// <summary>Proxy-observed base version for optimistic conflict detection.</summary>
+    public string? BaseVersion { get; set; }
+
+    /// <summary>Signed envelope supplied by the hub for proxy-side apply, when signing is configured.</summary>
+    public FederationExecutionEnvelope? Envelope { get; set; }
+
+    /// <summary>Creates the operation request represented by this sync item.</summary>
+    public FederationOperationRequest ToRequest()
+        => new()
+        {
+            OperationId = OperationId,
+            ProxyId = ProxyId,
+            SourceOperationId = SourceOperationId,
+            GlobalWorkspaceId = GlobalWorkspaceId,
+            Domain = Domain,
+            ResourceId = ResourceId,
+            HttpMethod = HttpMethod,
+            Path = Path,
+            Method = Method,
+            HeadersJson = HeadersJson,
+            BodyBase64 = BodyBase64,
+            BaseVersion = BaseVersion,
+        };
+}
+
+/// <summary>FR-MCP-103: Signed operation envelope exchanged between hub and local proxies.</summary>
+public sealed class FederationExecutionEnvelope
+{
+    /// <summary>Envelope schema version.</summary>
+    public int SchemaVersion { get; set; } = 1;
+
+    /// <summary>Unique envelope identifier.</summary>
+    public string EnvelopeId { get; set; } = $"fedenvelope-{Guid.NewGuid():N}";
+
+    /// <summary>Proxy that issued the envelope.</summary>
+    public string SourceProxyId { get; set; } = string.Empty;
+
+    /// <summary>Destination proxy, or <c>null</c> for hub intake.</summary>
+    public string? TargetProxyId { get; set; }
+
+    /// <summary>Operation carried by the envelope.</summary>
+    public FederationOperationRequest Operation { get; set; } = new();
+
+    /// <summary>UTC timestamp when the envelope was issued.</summary>
+    public DateTimeOffset IssuedAtUtc { get; set; } = DateTimeOffset.UtcNow;
+
+    /// <summary>UTC timestamp when the envelope expires.</summary>
+    public DateTimeOffset ExpiresAtUtc { get; set; } = DateTimeOffset.UtcNow.AddMinutes(5);
+
+    /// <summary>Replay-protection nonce.</summary>
+    public string Nonce { get; set; } = Guid.NewGuid().ToString("N");
+
+    /// <summary>SHA-256 hash of the decoded operation body bytes.</summary>
+    public string BodySha256 { get; set; } = string.Empty;
+
+    /// <summary>Apply mode, for example <c>state</c> or <c>local_execution</c>.</summary>
+    public string ApplyMode { get; set; } = "state";
+
+    /// <summary>HMAC signature over the canonical envelope payload.</summary>
+    public FederationEnvelopeSignature? Signature { get; set; }
+}
+
+/// <summary>FR-MCP-103: Signed hub request for a machine-local proxy operation.</summary>
+public sealed class FederationLocalExecutionRequest
+{
+    /// <summary>Local execution method, for example <c>desktop_launch</c>.</summary>
+    public string Method { get; set; } = string.Empty;
+
+    /// <summary>Proxy-local workspace path used to resolve local resources.</summary>
+    public string? WorkspacePath { get; set; }
+
+    /// <summary>Full path to an executable for desktop launch operations.</summary>
+    public string? ExecutablePath { get; set; }
+
+    /// <summary>Optional command-line arguments.</summary>
+    public string? Arguments { get; set; }
+
+    /// <summary>Optional process working directory.</summary>
+    public string? WorkingDirectory { get; set; }
+
+    /// <summary>Optional process environment variables.</summary>
+    public Dictionary<string, string>? EnvironmentVariables { get; set; }
+
+    /// <summary>Whether the launched process should not create a visible window.</summary>
+    public bool CreateNoWindow { get; set; } = true;
+
+    /// <summary>Window style for desktop launch operations.</summary>
+    public string WindowStyle { get; set; } = "Hidden";
+
+    /// <summary>Whether to wait for process exit.</summary>
+    public bool WaitForExit { get; set; } = true;
+
+    /// <summary>Optional timeout in milliseconds when waiting for exit.</summary>
+    public int? TimeoutMs { get; set; }
+}
+
+/// <summary>FR-MCP-103: Result of a signed machine-local proxy operation.</summary>
+public sealed class FederationLocalExecutionResult
+{
+    /// <summary>Whether local execution succeeded.</summary>
+    public bool Success { get; set; }
+
+    /// <summary>Human-readable result or error text.</summary>
+    public string? Message { get; set; }
+
+    /// <summary>Process identifier when a process was launched.</summary>
+    public int? ProcessId { get; set; }
+
+    /// <summary>Exit code when a process was launched and waited on.</summary>
+    public int? ExitCode { get; set; }
+}
+
+/// <summary>FR-MCP-103: Signature metadata for a federation execution envelope.</summary>
+public sealed class FederationEnvelopeSignature
+{
+    /// <summary>Signature algorithm.</summary>
+    public string Algorithm { get; set; } = "HMAC-SHA256";
+
+    /// <summary>Canonicalization format.</summary>
+    public string Canonicalization { get; set; } = "federation-envelope-v1";
+
+    /// <summary>Lowercase hexadecimal signature value.</summary>
+    public string Value { get; set; } = string.Empty;
+}
+
+/// <summary>FR-MCP-103: Result of verifying a signed federation envelope.</summary>
+public sealed class FederationEnvelopeVerificationResult
+{
+    /// <summary>Whether the envelope signature and freshness checks passed.</summary>
+    public bool IsValid { get; set; }
+
+    /// <summary>Failure reason when <see cref="IsValid"/> is false.</summary>
+    public string? Error { get; set; }
 }

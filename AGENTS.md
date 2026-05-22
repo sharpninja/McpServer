@@ -24,6 +24,10 @@ On every subsequent user message:
 10. Prioritize correctness over speed. Do not ship code you have not verified compiles and is logically sound.
 11. When writing session logs or other audit records, agents must identify themselves accurately using their real agent identity in Pascal-Case. Do not use placeholder, legacy, or misleading sourceType values.
 
+## Byrd Test Gate
+
+The canonical process is `docs/Development-Process-draft-v3.md`. To leave a Byrd implementation slice, the entire unit test suite for the current iteration and previous iterations must be completely passing. In this workspace, skipped tests are not passing tests: a validation gate requires zero failures and zero skips in the executed scope. Tests should directly track progress; deferred work belongs in MCP TODO/requirements state until that slice starts, not in skipped test placeholders.
+
 ## Where Things Live
 
 - `AGENTS-README-FIRST.yaml` — connection details, API key, workspace config (regenerated on server start)
