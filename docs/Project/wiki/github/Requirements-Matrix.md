@@ -406,10 +406,34 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-103 | 🟡 Partial | Hub-and-spoke federation |
 | TR-MCP-FED-001 | 🟡 Partial | Hub proxy federation contract |
 | TEST-MCP-136 | 🟡 Partial | Hub-and-spoke federation tests |
+| FR-01 | Tracked | Functional-Requirements.md |
+| FR-02 | Tracked | Functional-Requirements.md |
+| FR-03 | Tracked | Functional-Requirements.md |
+| FR-04 | Tracked | Functional-Requirements.md |
+| FR-05 | Tracked | Functional-Requirements.md |
+| FR-06 | Tracked | Functional-Requirements.md |
+| FR-07 | Tracked | Functional-Requirements.md |
+| FR-08 | Tracked | Functional-Requirements.md |
+| FR-09 | Tracked | Functional-Requirements.md |
+| FR-10 | Tracked | Functional-Requirements.md |
 | FR-MCP-104 | Tracked | Functional-Requirements.md |
 | FR-MCP-105 | Tracked | Functional-Requirements.md |
 | FR-MCP-106 | Tracked | Functional-Requirements.md |
 | FR-MCP-107 | Tracked | Functional-Requirements.md |
+| TR-01 | Tracked | Technical-Requirements.md |
+| TR-02 | Tracked | Technical-Requirements.md |
+| TR-03 | Tracked | Technical-Requirements.md |
+| TR-04 | Tracked | Technical-Requirements.md |
+| TR-05 | Tracked | Technical-Requirements.md |
+| TR-06 | Tracked | Technical-Requirements.md |
+| TR-07 | Tracked | Technical-Requirements.md |
+| TR-08 | Tracked | Technical-Requirements.md |
+| TR-09 | Tracked | Technical-Requirements.md |
+| TR-10 | Tracked | Technical-Requirements.md |
+| TR-11 | Tracked | Technical-Requirements.md |
+| TR-12 | Tracked | Technical-Requirements.md |
+| TR-13 | Tracked | Technical-Requirements.md |
+| TR-14 | Tracked | Technical-Requirements.md |
 | TR-MCP-BYRD-005 | Tracked | Technical-Requirements.md |
 | TR-MCP-DB-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-DB-002 | Tracked | Technical-Requirements.md |
@@ -419,6 +443,10 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-PLAN-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLUGIN-008 | Tracked | Technical-Requirements.md |
 | TR-MCP-TPL-007 | Tracked | Technical-Requirements.md |
+| TR-MCP-WEB-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-WEB-002 | Tracked | Technical-Requirements.md |
+| TR-MCP-WEB-003 | Tracked | Technical-Requirements.md |
+| TR-MCP-WEB-004 | Tracked | Technical-Requirements.md |
 | TEST-GRAPHRAG-ADHOC-001 | Tracked | Testing-Requirements.md |
 | TEST-GRAPHRAG-ADHOC-002 | Tracked | Testing-Requirements.md |
 | TEST-GRAPHRAG-ADHOC-003 | Tracked | Testing-Requirements.md |
