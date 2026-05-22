@@ -26,6 +26,7 @@ namespace McpServer.Support.Mcp.Services;
 /// </remarks>
 internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
 {
+    private const int RequirementIdMaxLength = 128;
     private const string StandardItemKind = "standard";
     private const string CodeReviewPhaseItemKind = "code_review_phase";
     private const string CodeReviewSectionKey = "code-review-remediation";
@@ -537,9 +538,22 @@ internal sealed class EfTodoService : ITodoService, ITodoStore, IDisposable
     {
         return ids?
             .Where(static id => !string.IsNullOrWhiteSpace(id))
-            .Select(static id => id.Trim())
+            .Select(static id => ExtractRequirementId(id))
+            .Where(static id => !string.IsNullOrWhiteSpace(id))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             ?? [];
+    }
+
+    private static string ExtractRequirementId(string value)
+    {
+        var trimmed = value.Trim();
+        var delimiter = trimmed.IndexOfAny([' ', '\t', '\r', '\n', ':']);
+        if (delimiter > 0)
+            trimmed = trimmed[..delimiter];
+
+        return trimmed.Length <= RequirementIdMaxLength
+            ? trimmed
+            : trimmed[..RequirementIdMaxLength];
     }
 
     private static string BuildTodoRequirementKey(string kind, string id) => kind.ToLowerInvariant() + ":" + id;

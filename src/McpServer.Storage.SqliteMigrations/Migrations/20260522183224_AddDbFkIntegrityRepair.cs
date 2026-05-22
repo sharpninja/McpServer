@@ -998,15 +998,43 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                 SELECT "WorkspaceId", "Id", '1970-01-01T00:00:00+00:00', '1970-01-01T00:00:00+00:00', 0
                 FROM "TodoItems";
 
-                INSERT OR IGNORE INTO "Requirements" ("WorkspaceId", "Kind", "Id", "Title", "Body", "Priority", "Status", "CreatedAtUtc", "UpdatedAtUtc", "IsDeleted")
-                SELECT DISTINCT ti."WorkspaceId", 'fr', fr.value, fr.value, 'Placeholder requirement backfilled by DB-FK-001.', 'medium', 'pending', '1970-01-01T00:00:00Z', '1970-01-01T00:00:00Z', 0
-                FROM "TodoItems" ti, json_each(CASE WHEN json_valid(COALESCE(ti."FunctionalRequirementsJson", '')) THEN ti."FunctionalRequirementsJson" ELSE '[]' END) fr
-                WHERE fr.value IS NOT NULL AND fr.value <> '';
+                CREATE TEMP TABLE IF NOT EXISTS "__todo_requirement_ids" (
+                    "WorkspaceId" TEXT NOT NULL,
+                    "TodoId" TEXT NOT NULL,
+                    "RequirementKind" TEXT NOT NULL,
+                    "RequirementId" TEXT NOT NULL
+                );
+                DELETE FROM "__todo_requirement_ids";
+
+                WITH "todo_requirement_source" AS (
+                    SELECT ti."WorkspaceId", ti."Id" AS "TodoId", 'fr' AS "RequirementKind", fr.value AS "RawRequirementId"
+                    FROM "TodoItems" ti, json_each(CASE WHEN json_valid(COALESCE(ti."FunctionalRequirementsJson", '')) THEN ti."FunctionalRequirementsJson" ELSE '[]' END) fr
+                    UNION ALL
+                    SELECT ti."WorkspaceId", ti."Id" AS "TodoId", 'tr' AS "RequirementKind", tr.value AS "RawRequirementId"
+                    FROM "TodoItems" ti, json_each(CASE WHEN json_valid(COALESCE(ti."TechnicalRequirementsJson", '')) THEN ti."TechnicalRequirementsJson" ELSE '[]' END) tr
+                ),
+                "todo_requirement_trimmed" AS (
+                    SELECT "WorkspaceId", "TodoId", "RequirementKind", trim("RawRequirementId") AS "RawRequirementId"
+                    FROM "todo_requirement_source"
+                    WHERE trim(COALESCE("RawRequirementId", '')) <> ''
+                ),
+                "todo_requirement_ids" AS (
+                    SELECT "WorkspaceId", "TodoId", "RequirementKind",
+                        CASE
+                            WHEN instr("RawRequirementId", ':') > 0 AND (instr("RawRequirementId", ' ') = 0 OR instr("RawRequirementId", ':') < instr("RawRequirementId", ' ')) THEN substr("RawRequirementId", 1, instr("RawRequirementId", ':') - 1)
+                            WHEN instr("RawRequirementId", ' ') > 0 THEN substr("RawRequirementId", 1, instr("RawRequirementId", ' ') - 1)
+                            ELSE "RawRequirementId"
+                        END AS "RequirementId"
+                    FROM "todo_requirement_trimmed"
+                )
+                INSERT OR IGNORE INTO "__todo_requirement_ids" ("WorkspaceId", "TodoId", "RequirementKind", "RequirementId")
+                SELECT DISTINCT "WorkspaceId", "TodoId", "RequirementKind", substr(trim("RequirementId"), 1, 128)
+                FROM "todo_requirement_ids"
+                WHERE trim("RequirementId") <> '';
 
                 INSERT OR IGNORE INTO "Requirements" ("WorkspaceId", "Kind", "Id", "Title", "Body", "Priority", "Status", "CreatedAtUtc", "UpdatedAtUtc", "IsDeleted")
-                SELECT DISTINCT ti."WorkspaceId", 'tr', tr.value, tr.value, 'Placeholder requirement backfilled by DB-FK-001.', 'medium', 'pending', '1970-01-01T00:00:00Z', '1970-01-01T00:00:00Z', 0
-                FROM "TodoItems" ti, json_each(CASE WHEN json_valid(COALESCE(ti."TechnicalRequirementsJson", '')) THEN ti."TechnicalRequirementsJson" ELSE '[]' END) tr
-                WHERE tr.value IS NOT NULL AND tr.value <> '';
+                SELECT DISTINCT ids."WorkspaceId", ids."RequirementKind", ids."RequirementId", ids."RequirementId", 'Placeholder requirement backfilled by DB-FK-001.', 'medium', 'pending', '1970-01-01T00:00:00Z', '1970-01-01T00:00:00Z', 0
+                FROM "__todo_requirement_ids" ids;
 
                 INSERT OR IGNORE INTO "Requirements" ("WorkspaceId", "Kind", "Id", "Title", "Body", "Priority", "Status", "CreatedAtUtc", "UpdatedAtUtc", "IsDeleted")
                 SELECT DISTINCT "WorkspaceId", 'fr', "FrId", "FrId", 'Placeholder requirement backfilled by DB-FK-001.', 'medium', 'pending', '1970-01-01T00:00:00Z', '1970-01-01T00:00:00Z', 0
@@ -1019,14 +1047,8 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
                 WHERE "TargetKind" IS NOT NULL AND "TargetKind" <> '' AND "TargetId" IS NOT NULL AND "TargetId" <> '';
 
                 INSERT OR IGNORE INTO "TodoRequirementLinks" ("WorkspaceId", "TodoId", "RequirementKind", "RequirementId", "CreatedAtUtc", "IsDeleted")
-                SELECT ti."WorkspaceId", ti."Id", 'fr', fr.value, '1970-01-01T00:00:00+00:00', 0
-                FROM "TodoItems" ti, json_each(CASE WHEN json_valid(COALESCE(ti."FunctionalRequirementsJson", '')) THEN ti."FunctionalRequirementsJson" ELSE '[]' END) fr
-                WHERE fr.value IS NOT NULL AND fr.value <> '';
-
-                INSERT OR IGNORE INTO "TodoRequirementLinks" ("WorkspaceId", "TodoId", "RequirementKind", "RequirementId", "CreatedAtUtc", "IsDeleted")
-                SELECT ti."WorkspaceId", ti."Id", 'tr', tr.value, '1970-01-01T00:00:00+00:00', 0
-                FROM "TodoItems" ti, json_each(CASE WHEN json_valid(COALESCE(ti."TechnicalRequirementsJson", '')) THEN ti."TechnicalRequirementsJson" ELSE '[]' END) tr
-                WHERE tr.value IS NOT NULL AND tr.value <> '';
+                SELECT ids."WorkspaceId", ids."TodoId", ids."RequirementKind", ids."RequirementId", '1970-01-01T00:00:00+00:00', 0
+                FROM "__todo_requirement_ids" ids;
                 """);
 
             migrationBuilder.CreateIndex(

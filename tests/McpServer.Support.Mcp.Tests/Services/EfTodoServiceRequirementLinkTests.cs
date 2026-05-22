@@ -89,6 +89,37 @@ public sealed class EfTodoServiceRequirementLinkTests : IDisposable
     }
 
     /// <summary>
+    /// TEST-MCP-140: Requirement projections may contain legacy display text; durable
+    /// link rows use only the canonical bounded requirement identifier.
+    /// </summary>
+    [Fact]
+    public async Task CreateAsync_WithRequirementProjectionDisplayText_CreatesCanonicalRequirementLinks()
+    {
+        var created = await _sut.CreateAsync(new TodoCreateRequest
+        {
+            Id = "TODO-LINK-003",
+            Title = "Link legacy requirement labels",
+            Section = "Backlog",
+            Priority = "high",
+            FunctionalRequirements = ["FR-06: Client must throw typed exceptions for HTTP error responses"],
+            TechnicalRequirements = ["TR-MCP-REQ-002 RequirementsDocumentService parses all four files"],
+        }).ConfigureAwait(true);
+
+        Assert.True(created.Success, created.Error);
+
+        using var scope = _serviceProvider.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+        var links = await db.TodoRequirementLinks
+            .OrderBy(row => row.RequirementKind)
+            .Select(row => row.RequirementKind + ":" + row.RequirementId)
+            .ToListAsync()
+            .ConfigureAwait(true);
+
+        Assert.Equal(["fr:FR-06", "tr:TR-MCP-REQ-002"], links);
+        Assert.DoesNotContain(links, link => link.Contains(' ', StringComparison.Ordinal));
+    }
+
+    /// <summary>
     /// TEST-MCP-140: Updating requirement projections keeps JSON fields and
     /// normalized link rows synchronized, including stale-link soft deletion.
     /// </summary>

@@ -1145,18 +1145,30 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                 FROM "TodoItems"
                 ON CONFLICT ("WorkspaceId", "TodoId") DO NOTHING;
 
-                INSERT INTO "Requirements" ("WorkspaceId", "Kind", "Id", "Title", "Body", "Priority", "Status", "CreatedAtUtc", "UpdatedAtUtc", "IsDeleted")
-                SELECT DISTINCT ti."WorkspaceId", 'fr', fr.value, fr.value, 'Placeholder requirement backfilled by DB-FK-001.', 'medium', 'pending', '1970-01-01T00:00:00Z', '1970-01-01T00:00:00Z', false
-                FROM "TodoItems" ti
-                CROSS JOIN LATERAL jsonb_array_elements_text(CASE WHEN ti."FunctionalRequirementsJson" IS NOT NULL AND ti."FunctionalRequirementsJson" ~ '^\s*\[' THEN ti."FunctionalRequirementsJson"::jsonb ELSE '[]'::jsonb END) AS fr(value)
-                WHERE fr.value IS NOT NULL AND fr.value <> ''
-                ON CONFLICT ("WorkspaceId", "Kind", "Id") DO NOTHING;
+                CREATE TEMP TABLE "__todo_requirement_ids" (
+                    "WorkspaceId" character varying(1024) NOT NULL,
+                    "TodoId" character varying(128) NOT NULL,
+                    "RequirementKind" character varying(16) NOT NULL,
+                    "RequirementId" character varying(128) NOT NULL
+                ) ON COMMIT DROP;
+
+                INSERT INTO "__todo_requirement_ids" ("WorkspaceId", "TodoId", "RequirementKind", "RequirementId")
+                SELECT DISTINCT src."WorkspaceId", src."TodoId", src."RequirementKind", left(regexp_replace(btrim(src."RawRequirementId"), '[[:space:]:].*$', ''), 128)
+                FROM (
+                    SELECT ti."WorkspaceId", ti."Id" AS "TodoId", 'fr' AS "RequirementKind", fr.value AS "RawRequirementId"
+                    FROM "TodoItems" ti
+                    CROSS JOIN LATERAL jsonb_array_elements_text(CASE WHEN ti."FunctionalRequirementsJson" IS NOT NULL AND ti."FunctionalRequirementsJson" ~ '^\s*\[' THEN ti."FunctionalRequirementsJson"::jsonb ELSE '[]'::jsonb END) AS fr(value)
+                    UNION ALL
+                    SELECT ti."WorkspaceId", ti."Id" AS "TodoId", 'tr' AS "RequirementKind", tr.value AS "RawRequirementId"
+                    FROM "TodoItems" ti
+                    CROSS JOIN LATERAL jsonb_array_elements_text(CASE WHEN ti."TechnicalRequirementsJson" IS NOT NULL AND ti."TechnicalRequirementsJson" ~ '^\s*\[' THEN ti."TechnicalRequirementsJson"::jsonb ELSE '[]'::jsonb END) AS tr(value)
+                ) src
+                WHERE btrim(coalesce(src."RawRequirementId", '')) <> ''
+                  AND left(regexp_replace(btrim(src."RawRequirementId"), '[[:space:]:].*$', ''), 128) <> '';
 
                 INSERT INTO "Requirements" ("WorkspaceId", "Kind", "Id", "Title", "Body", "Priority", "Status", "CreatedAtUtc", "UpdatedAtUtc", "IsDeleted")
-                SELECT DISTINCT ti."WorkspaceId", 'tr', tr.value, tr.value, 'Placeholder requirement backfilled by DB-FK-001.', 'medium', 'pending', '1970-01-01T00:00:00Z', '1970-01-01T00:00:00Z', false
-                FROM "TodoItems" ti
-                CROSS JOIN LATERAL jsonb_array_elements_text(CASE WHEN ti."TechnicalRequirementsJson" IS NOT NULL AND ti."TechnicalRequirementsJson" ~ '^\s*\[' THEN ti."TechnicalRequirementsJson"::jsonb ELSE '[]'::jsonb END) AS tr(value)
-                WHERE tr.value IS NOT NULL AND tr.value <> ''
+                SELECT DISTINCT ids."WorkspaceId", ids."RequirementKind", ids."RequirementId", ids."RequirementId", 'Placeholder requirement backfilled by DB-FK-001.', 'medium', 'pending', '1970-01-01T00:00:00Z', '1970-01-01T00:00:00Z', false
+                FROM "__todo_requirement_ids" ids
                 ON CONFLICT ("WorkspaceId", "Kind", "Id") DO NOTHING;
 
                 INSERT INTO "Requirements" ("WorkspaceId", "Kind", "Id", "Title", "Body", "Priority", "Status", "CreatedAtUtc", "UpdatedAtUtc", "IsDeleted")
@@ -1172,17 +1184,8 @@ namespace McpServer.Support.Mcp.Storage.PostgreSqlMigrations.Migrations
                 ON CONFLICT ("WorkspaceId", "Kind", "Id") DO NOTHING;
 
                 INSERT INTO "TodoRequirementLinks" ("WorkspaceId", "TodoId", "RequirementKind", "RequirementId", "CreatedAtUtc", "IsDeleted")
-                SELECT ti."WorkspaceId", ti."Id", 'fr', fr.value, TIMESTAMPTZ '1970-01-01T00:00:00+00:00', false
-                FROM "TodoItems" ti
-                CROSS JOIN LATERAL jsonb_array_elements_text(CASE WHEN ti."FunctionalRequirementsJson" IS NOT NULL AND ti."FunctionalRequirementsJson" ~ '^\s*\[' THEN ti."FunctionalRequirementsJson"::jsonb ELSE '[]'::jsonb END) AS fr(value)
-                WHERE fr.value IS NOT NULL AND fr.value <> ''
-                ON CONFLICT ("WorkspaceId", "TodoId", "RequirementKind", "RequirementId") DO NOTHING;
-
-                INSERT INTO "TodoRequirementLinks" ("WorkspaceId", "TodoId", "RequirementKind", "RequirementId", "CreatedAtUtc", "IsDeleted")
-                SELECT ti."WorkspaceId", ti."Id", 'tr', tr.value, TIMESTAMPTZ '1970-01-01T00:00:00+00:00', false
-                FROM "TodoItems" ti
-                CROSS JOIN LATERAL jsonb_array_elements_text(CASE WHEN ti."TechnicalRequirementsJson" IS NOT NULL AND ti."TechnicalRequirementsJson" ~ '^\s*\[' THEN ti."TechnicalRequirementsJson"::jsonb ELSE '[]'::jsonb END) AS tr(value)
-                WHERE tr.value IS NOT NULL AND tr.value <> ''
+                SELECT ids."WorkspaceId", ids."TodoId", ids."RequirementKind", ids."RequirementId", TIMESTAMPTZ '1970-01-01T00:00:00+00:00', false
+                FROM "__todo_requirement_ids" ids
                 ON CONFLICT ("WorkspaceId", "TodoId", "RequirementKind", "RequirementId") DO NOTHING;
                 """);
 

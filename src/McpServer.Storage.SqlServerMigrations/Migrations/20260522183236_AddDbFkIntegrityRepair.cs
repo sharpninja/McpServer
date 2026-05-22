@@ -1146,19 +1146,35 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                 FROM [TodoItems] ti
                 WHERE NOT EXISTS (SELECT 1 FROM [TodoRecords] tr WHERE tr.[WorkspaceId] = ti.[WorkspaceId] AND tr.[TodoId] = ti.[Id]);
 
-                INSERT INTO [Requirements] ([WorkspaceId], [Kind], [Id], [Title], [Body], [Priority], [Status], [CreatedAtUtc], [UpdatedAtUtc], [IsDeleted])
-                SELECT DISTINCT ti.[WorkspaceId], N'fr', fr.[value], fr.[value], N'Placeholder requirement backfilled by DB-FK-001.', N'medium', N'pending', N'1970-01-01T00:00:00Z', N'1970-01-01T00:00:00Z', CAST(0 AS bit)
-                FROM [TodoItems] ti
-                CROSS APPLY OPENJSON(CASE WHEN ISJSON(ti.[FunctionalRequirementsJson]) = 1 THEN ti.[FunctionalRequirementsJson] ELSE N'[]' END) fr
-                WHERE fr.[value] IS NOT NULL AND fr.[value] <> N''
-                  AND NOT EXISTS (SELECT 1 FROM [Requirements] r WHERE r.[WorkspaceId] = ti.[WorkspaceId] AND r.[Kind] = N'fr' AND r.[Id] = fr.[value]);
+                DECLARE @TodoRequirementIds TABLE (
+                    [WorkspaceId] nvarchar(1024) NOT NULL,
+                    [TodoId] nvarchar(128) NOT NULL,
+                    [RequirementKind] nvarchar(16) NOT NULL,
+                    [RequirementId] nvarchar(128) NOT NULL
+                );
+
+                INSERT INTO @TodoRequirementIds ([WorkspaceId], [TodoId], [RequirementKind], [RequirementId])
+                SELECT DISTINCT src.[WorkspaceId], src.[TodoId], src.[RequirementKind], LEFT(LTRIM(RTRIM(canonical.[RequirementId])), 128)
+                FROM (
+                    SELECT ti.[WorkspaceId], ti.[Id] AS [TodoId], N'fr' AS [RequirementKind], CONVERT(nvarchar(4000), fr.[value]) AS [RawRequirementId]
+                    FROM [TodoItems] ti
+                    CROSS APPLY OPENJSON(CASE WHEN ISJSON(ti.[FunctionalRequirementsJson]) = 1 THEN ti.[FunctionalRequirementsJson] ELSE N'[]' END) fr
+                    UNION ALL
+                    SELECT ti.[WorkspaceId], ti.[Id] AS [TodoId], N'tr' AS [RequirementKind], CONVERT(nvarchar(4000), tr.[value]) AS [RawRequirementId]
+                    FROM [TodoItems] ti
+                    CROSS APPLY OPENJSON(CASE WHEN ISJSON(ti.[TechnicalRequirementsJson]) = 1 THEN ti.[TechnicalRequirementsJson] ELSE N'[]' END) tr
+                ) src
+                CROSS APPLY (SELECT LTRIM(RTRIM(src.[RawRequirementId])) AS [RawRequirementId]) trimmed
+                CROSS APPLY (SELECT PATINDEX(N'%[ :' + NCHAR(9) + NCHAR(10) + NCHAR(13) + N']%', trimmed.[RawRequirementId] + N' ') AS [DelimiterIndex]) delimiter
+                CROSS APPLY (SELECT LEFT(trimmed.[RawRequirementId], delimiter.[DelimiterIndex] - 1) AS [RequirementId]) canonical
+                WHERE trimmed.[RawRequirementId] IS NOT NULL
+                  AND trimmed.[RawRequirementId] <> N''
+                  AND LTRIM(RTRIM(canonical.[RequirementId])) <> N'';
 
                 INSERT INTO [Requirements] ([WorkspaceId], [Kind], [Id], [Title], [Body], [Priority], [Status], [CreatedAtUtc], [UpdatedAtUtc], [IsDeleted])
-                SELECT DISTINCT ti.[WorkspaceId], N'tr', tr.[value], tr.[value], N'Placeholder requirement backfilled by DB-FK-001.', N'medium', N'pending', N'1970-01-01T00:00:00Z', N'1970-01-01T00:00:00Z', CAST(0 AS bit)
-                FROM [TodoItems] ti
-                CROSS APPLY OPENJSON(CASE WHEN ISJSON(ti.[TechnicalRequirementsJson]) = 1 THEN ti.[TechnicalRequirementsJson] ELSE N'[]' END) tr
-                WHERE tr.[value] IS NOT NULL AND tr.[value] <> N''
-                  AND NOT EXISTS (SELECT 1 FROM [Requirements] r WHERE r.[WorkspaceId] = ti.[WorkspaceId] AND r.[Kind] = N'tr' AND r.[Id] = tr.[value]);
+                SELECT DISTINCT ids.[WorkspaceId], ids.[RequirementKind], ids.[RequirementId], ids.[RequirementId], N'Placeholder requirement backfilled by DB-FK-001.', N'medium', N'pending', N'1970-01-01T00:00:00Z', N'1970-01-01T00:00:00Z', CAST(0 AS bit)
+                FROM @TodoRequirementIds ids
+                WHERE NOT EXISTS (SELECT 1 FROM [Requirements] r WHERE r.[WorkspaceId] = ids.[WorkspaceId] AND r.[Kind] = ids.[RequirementKind] AND r.[Id] = ids.[RequirementId]);
 
                 INSERT INTO [Requirements] ([WorkspaceId], [Kind], [Id], [Title], [Body], [Priority], [Status], [CreatedAtUtc], [UpdatedAtUtc], [IsDeleted])
                 SELECT DISTINCT rtl.[WorkspaceId], N'fr', rtl.[FrId], rtl.[FrId], N'Placeholder requirement backfilled by DB-FK-001.', N'medium', N'pending', N'1970-01-01T00:00:00Z', N'1970-01-01T00:00:00Z', CAST(0 AS bit)
@@ -1173,18 +1189,9 @@ namespace McpServer.Support.Mcp.Storage.SqlServerMigrations.Migrations
                   AND NOT EXISTS (SELECT 1 FROM [Requirements] r WHERE r.[WorkspaceId] = rtl.[WorkspaceId] AND r.[Kind] = rtl.[TargetKind] AND r.[Id] = rtl.[TargetId]);
 
                 INSERT INTO [TodoRequirementLinks] ([WorkspaceId], [TodoId], [RequirementKind], [RequirementId], [CreatedAtUtc], [IsDeleted])
-                SELECT ti.[WorkspaceId], ti.[Id], N'fr', fr.[value], CONVERT(datetimeoffset, '1970-01-01T00:00:00+00:00'), CAST(0 AS bit)
-                FROM [TodoItems] ti
-                CROSS APPLY OPENJSON(CASE WHEN ISJSON(ti.[FunctionalRequirementsJson]) = 1 THEN ti.[FunctionalRequirementsJson] ELSE N'[]' END) fr
-                WHERE fr.[value] IS NOT NULL AND fr.[value] <> N''
-                  AND NOT EXISTS (SELECT 1 FROM [TodoRequirementLinks] l WHERE l.[WorkspaceId] = ti.[WorkspaceId] AND l.[TodoId] = ti.[Id] AND l.[RequirementKind] = N'fr' AND l.[RequirementId] = fr.[value]);
-
-                INSERT INTO [TodoRequirementLinks] ([WorkspaceId], [TodoId], [RequirementKind], [RequirementId], [CreatedAtUtc], [IsDeleted])
-                SELECT ti.[WorkspaceId], ti.[Id], N'tr', tr.[value], CONVERT(datetimeoffset, '1970-01-01T00:00:00+00:00'), CAST(0 AS bit)
-                FROM [TodoItems] ti
-                CROSS APPLY OPENJSON(CASE WHEN ISJSON(ti.[TechnicalRequirementsJson]) = 1 THEN ti.[TechnicalRequirementsJson] ELSE N'[]' END) tr
-                WHERE tr.[value] IS NOT NULL AND tr.[value] <> N''
-                  AND NOT EXISTS (SELECT 1 FROM [TodoRequirementLinks] l WHERE l.[WorkspaceId] = ti.[WorkspaceId] AND l.[TodoId] = ti.[Id] AND l.[RequirementKind] = N'tr' AND l.[RequirementId] = tr.[value]);
+                SELECT ids.[WorkspaceId], ids.[TodoId], ids.[RequirementKind], ids.[RequirementId], CONVERT(datetimeoffset, '1970-01-01T00:00:00+00:00'), CAST(0 AS bit)
+                FROM @TodoRequirementIds ids
+                WHERE NOT EXISTS (SELECT 1 FROM [TodoRequirementLinks] l WHERE l.[WorkspaceId] = ids.[WorkspaceId] AND l.[TodoId] = ids.[TodoId] AND l.[RequirementKind] = ids.[RequirementKind] AND l.[RequirementId] = ids.[RequirementId]);
                 """);
 
             migrationBuilder.CreateIndex(
