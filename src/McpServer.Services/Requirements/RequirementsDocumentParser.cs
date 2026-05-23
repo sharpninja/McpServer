@@ -73,17 +73,22 @@ internal static class RequirementsDocumentParser
             return [];
 
         var list = new List<TestEntry>();
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (Match match in s_testEntryRegex.Matches(content))
         {
             if (!match.Success)
                 continue;
 
-            var id = match.Groups["id"].Value.Trim();
-            var condition = match.Groups["condition"].Value.Trim();
-            if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(condition))
+            AddTestEntry(list, seen, match.Groups["id"].Value, match.Groups["condition"].Value);
+        }
+
+        foreach (var line in content.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries))
+        {
+            var cells = SplitMarkdownTableRow(line);
+            if (cells.Count < 2)
                 continue;
 
-            list.Add(new TestEntry(id, condition));
+            AddTestEntry(list, seen, cells[0], DecodeWikiTableCell(cells[1]));
         }
 
         return list;
@@ -182,4 +187,48 @@ internal static class RequirementsDocumentParser
             .Replace("\r\n", "\n", StringComparison.Ordinal)
             .Trim();
     }
+
+    private static void AddTestEntry(
+        ICollection<TestEntry> entries,
+        ISet<string> seen,
+        string rawId,
+        string rawCondition)
+    {
+        var id = rawId.Trim();
+        var condition = rawCondition.Trim();
+        if (string.IsNullOrWhiteSpace(id)
+            || string.IsNullOrWhiteSpace(condition)
+            || !id.StartsWith("TEST-", StringComparison.OrdinalIgnoreCase)
+            || !seen.Add(id))
+        {
+            return;
+        }
+
+        entries.Add(new TestEntry(id, condition));
+    }
+
+    private static IReadOnlyList<string> SplitMarkdownTableRow(string line)
+    {
+        var trimmed = line.Trim();
+        if (!trimmed.StartsWith('|') || !trimmed.EndsWith('|'))
+            return [];
+
+        var inner = trimmed.Trim('|');
+        if (inner.Contains("---", StringComparison.Ordinal) && inner.Replace("|", string.Empty, StringComparison.Ordinal).Trim('-').Length == 0)
+            return [];
+
+        const string escapedPipePlaceholder = "\uE000";
+        return inner
+            .Replace("\\|", escapedPipePlaceholder, StringComparison.Ordinal)
+            .Split('|', StringSplitOptions.TrimEntries)
+            .Select(static cell => cell.Replace(escapedPipePlaceholder, "|", StringComparison.Ordinal).Trim())
+            .Where(static cell => !cell.Equals("ID", StringComparison.OrdinalIgnoreCase)
+                                  && !cell.Equals("Requirement", StringComparison.OrdinalIgnoreCase))
+            .ToArray();
+    }
+
+    private static string DecodeWikiTableCell(string value) =>
+        value
+            .Replace("<br>", "\n", StringComparison.OrdinalIgnoreCase)
+            .Trim();
 }

@@ -78,6 +78,7 @@ variables:
   DocsArtifactName: mcp-server-docs
   MsixArtifactName: mcp-server-msix
   PackageArtifactName: mcp-packages-nupkg
+  RequirementsWikiZip: docs/requirements/requirements-wiki-documents.zip
   DocsAzureServiceConnection: ''
   DocsStorageAccount: ''
   AzureArtifactsFeedUrl: ''
@@ -359,3 +360,37 @@ jobs:
           inlineScript: |
             $source = "$(Pipeline.Workspace)/$(DocsArtifactName)"
             az storage blob upload-batch --account-name "$(DocsStorageAccount)" --destination '$web' --source $source --overwrite true
+
+  - job: publish_azure_wiki
+    displayName: publish-azure-wiki
+    dependsOn: docs_build
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    pool:
+      name: $(AgentPoolName)
+    steps:
+      - checkout: self
+
+      - task: PowerShell@2
+        displayName: Publish Azure requirements wiki
+        env:
+          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+        inputs:
+          pwsh: true
+          targetType: inline
+          script: |
+            if ([string]::IsNullOrWhiteSpace($env:SYSTEM_ACCESSTOKEN)) {
+              throw "System.AccessToken is not available. Enable 'Allow scripts to access the OAuth token' for this pipeline."
+            }
+
+            $repo = "$(System.CollectionUri)$(System.TeamProject)/_git/McpServer.wiki"
+            $zip = "$(Build.SourcesDirectory)/$(RequirementsWikiZip)"
+            $output = "$(Build.ArtifactStagingDirectory)/requirements-wiki/azure"
+            ./scripts/Publish-RequirementsWiki.ps1 `
+              -Target Azure `
+              -ExportZip $zip `
+              -OutputPath $output `
+              -RepositoryUrl $repo `
+              -AuthToken $env:SYSTEM_ACCESSTOKEN `
+              -UserDocsBranch "$(Build.SourceBranchName)" `
+              -CommitMessage "Sync Azure requirements wiki from $(Build.SourceVersion)" `
+              -Push

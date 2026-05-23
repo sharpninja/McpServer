@@ -420,6 +420,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-105 | Tracked | Functional-Requirements.md |
 | FR-MCP-106 | Tracked | Functional-Requirements.md |
 | FR-MCP-107 | Tracked | Functional-Requirements.md |
+| FR-MCP-108 | Tracked | Functional-Requirements.md |
 | TR-01 | Tracked | Technical-Requirements.md |
 | TR-02 | Tracked | Technical-Requirements.md |
 | TR-03 | Tracked | Technical-Requirements.md |
@@ -442,6 +443,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-DB-005 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLAN-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLUGIN-008 | Tracked | Technical-Requirements.md |
+| TR-MCP-TODO-009 | Tracked | Technical-Requirements.md |
 | TR-MCP-TPL-007 | Tracked | Technical-Requirements.md |
 | TR-MCP-WEB-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-WEB-002 | Tracked | Technical-Requirements.md |
@@ -461,6 +463,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-141 | Tracked | Testing-Requirements.md |
 | TEST-MCP-142 | Tracked | Testing-Requirements.md |
 | TEST-MCP-143 | Tracked | Testing-Requirements.md |
+| TEST-MCP-144 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-1 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-2 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-3 | Tracked | Testing-Requirements.md |

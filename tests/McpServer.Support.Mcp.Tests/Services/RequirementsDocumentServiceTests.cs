@@ -163,6 +163,32 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task GenerateWikiAsync_RendersTestingRequirementsAsGroupedTables()
+    {
+        SeedGroupedTestingDocs();
+        var service = CreateService();
+        var outputRoot = Path.Combine(_tempRoot, "docs", "Project", "wiki");
+        var generatedAt = new DateTimeOffset(2026, 5, 22, 16, 30, 0, TimeSpan.Zero);
+
+        await service.GenerateWikiAsync(outputRoot, generatedAt).ConfigureAwait(true);
+
+        var githubTesting = await File.ReadAllTextAsync(
+            Path.Combine(outputRoot, "github", RequirementsDocumentRenderer.TestingFileName)).ConfigureAwait(true);
+        var azureTesting = await File.ReadAllTextAsync(
+            Path.Combine(outputRoot, "azure", RequirementsDocumentRenderer.TestingFileName)).ConfigureAwait(true);
+
+        Assert.Equal(githubTesting, azureTesting);
+        Assert.Contains("## TEST-MCP", githubTesting);
+        Assert.Contains("| ID | Requirement |", githubTesting);
+        Assert.Contains("| TEST-MCP-001 | Given configurable RepoRoot/Todo paths, when service starts, then path resolution is correct. |", githubTesting);
+        Assert.Contains("## TEST-MCP-REPL", githubTesting);
+        Assert.Contains("| TEST-MCP-REPL-007-1 | Given `TryResolveWithDiagnostics` with a workspace path containing no marker file, when called, then the error message enumerates every directory walked. |", githubTesting);
+        Assert.Contains("## TEST-SUPPORT", githubTesting);
+        Assert.Contains("| TEST-SUPPORT-010A-1 | Given a `SessionLogService`, when `SubmitAsync` persists a session, then child entities keep the workspace id. |", githubTesting);
+        Assert.DoesNotContain("- TEST-MCP-001:", githubTesting);
+    }
+
+    [Fact]
     public async Task ConcurrentMutations_ProduceValidTestingDocument()
     {
         SeedEmptyDocs();
@@ -211,6 +237,31 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.Equal("FR-MCP-001", mapping.FrId);
         Assert.Equal(2, mapping.TrIds.Count);
         Assert.Empty(mapping.TestIds);
+    }
+
+    [Fact]
+    public void ParseTesting_AcceptsWikiGroupedTableRows()
+    {
+        var parsed = RequirementsDocumentParser.ParseTesting("""
+            # Testing Requirements (MCP Server)
+
+            ## TEST-MCP
+
+            | ID | Requirement |
+            | --- | --- |
+            | TEST-MCP-001 | Given A \| B, when C, then D. |
+
+            ## TEST-MCP-REPL
+
+            | ID | Requirement |
+            | --- | --- |
+            | TEST-MCP-REPL-007-1 | Given marker diagnostics, when no marker exists, then searched paths are listed. |
+            """);
+
+        Assert.Equal(2, parsed.Count);
+        Assert.Equal("TEST-MCP-001", parsed[0].Id);
+        Assert.Equal("Given A | B, when C, then D.", parsed[0].Condition);
+        Assert.Equal("TEST-MCP-REPL-007-1", parsed[1].Id);
     }
 
     private RequirementsDocumentService CreateService()
@@ -284,6 +335,42 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
             | FR | Primary TRs | Tests |
             | --- | --- | --- |
             | FR-MCP-001 | TR-MCP-CFG-001, TR-MCP-CFG-002 | TEST-MCP-001 |
+            """);
+    }
+
+    private void SeedGroupedTestingDocs()
+    {
+        var projectDir = Path.Combine(_tempRoot, "docs", "Project");
+        File.WriteAllText(Path.Combine(projectDir, "Functional-Requirements.md"), """
+            # Functional Requirements (MCP Server)
+
+            ## FR-MCP-001 Configurable workspace root and paths
+
+            The server shall support configurable paths.
+            """);
+
+        File.WriteAllText(Path.Combine(projectDir, "Technical-Requirements.md"), """
+            # Technical Requirements (MCP Server)
+
+            ## TR-MCP-CFG-001
+
+            Configuration paths are resolved through options.
+            """);
+
+        File.WriteAllText(Path.Combine(projectDir, "Testing-Requirements.md"), """
+            # Testing Requirements (MCP Server)
+
+            - TEST-MCP-001: Given configurable RepoRoot/Todo paths, when service starts, then path resolution is correct.
+            - TEST-MCP-REPL-007-1: Given `TryResolveWithDiagnostics` with a workspace path containing no marker file, when called, then the error message enumerates every directory walked.
+            - TEST-SUPPORT-010A-1: Given a `SessionLogService`, when `SubmitAsync` persists a session, then child entities keep the workspace id.
+            """);
+
+        File.WriteAllText(Path.Combine(projectDir, "TR-per-FR-Mapping.md"), """
+            # TR per FR Mapping (MCP Server)
+
+            | FR | Primary TRs | Tests |
+            | --- | --- | --- |
+            | FR-MCP-001 | TR-MCP-CFG-001 | TEST-MCP-001 |
             """);
     }
 }

@@ -104,6 +104,14 @@ public sealed class RequirementsControllerTests : IClassFixture<RequirementsCont
         Assert.Contains("github/Requirements-Matrix.md", names);
         Assert.Contains("github/_Sidebar.md", names);
         Assert.Contains("github/_Footer.md", names);
+
+        var testingEntry = archive.GetEntry("github/Testing-Requirements.md");
+        Assert.NotNull(testingEntry);
+        using var testingReader = new StreamReader(testingEntry!.Open());
+        var testingMarkdown = await testingReader.ReadToEndAsync().ConfigureAwait(true);
+        Assert.Contains("## TEST-MCP", testingMarkdown, StringComparison.Ordinal);
+        Assert.Contains("| ID | Requirement |", testingMarkdown, StringComparison.Ordinal);
+        Assert.DoesNotContain("- TEST-MCP-", testingMarkdown, StringComparison.Ordinal);
     }
 
     [Fact]
