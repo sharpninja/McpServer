@@ -113,6 +113,85 @@ public sealed class TodoItem
     public List<ImplementationTask>? ImplementationTasks { get; set; }
 }
 
+/// <summary>
+/// Legacy flat TODO item shape used by older workspace-local <c>docs/todo.yaml</c> files.
+/// This model exists only to support backward-compatible deserialization into <see cref="TodoFile"/>.
+/// </summary>
+public sealed class LegacyTodoFlatItem
+{
+    /// <summary>Unique identifier for the TODO item.</summary>
+    [YamlMember(Alias = "id")]
+    public string? Id { get; set; }
+
+    /// <summary>Short title of the TODO item.</summary>
+    [YamlMember(Alias = "title")]
+    public string? Title { get; set; }
+
+    /// <summary>Legacy section key.</summary>
+    [YamlMember(Alias = "section")]
+    public string? Section { get; set; }
+
+    /// <summary>Legacy priority value.</summary>
+    [YamlMember(Alias = "priority")]
+    public string? Priority { get; set; }
+
+    /// <summary>Legacy effort estimate.</summary>
+    [YamlMember(Alias = "estimate")]
+    public string? Estimate { get; set; }
+
+    /// <summary>Legacy workflow status text.</summary>
+    [YamlMember(Alias = "status")]
+    public string? Status { get; set; }
+
+    /// <summary>Legacy phase label.</summary>
+    [YamlMember(Alias = "phase")]
+    public string? Phase { get; set; }
+
+    /// <summary>Legacy multiline description.</summary>
+    [YamlMember(Alias = "description")]
+    public List<string>? Description { get; set; }
+
+    /// <summary>Legacy note field.</summary>
+    [YamlMember(Alias = "note")]
+    public string? Note { get; set; }
+
+    /// <summary>Legacy remaining-work field.</summary>
+    [YamlMember(Alias = "remaining")]
+    public string? Remaining { get; set; }
+
+    /// <summary>Legacy technical details field.</summary>
+    [YamlMember(Alias = "technicalDetails", ApplyNamingConventions = false)]
+    public List<string>? TechnicalDetails { get; set; }
+
+    /// <summary>Legacy functional requirements field.</summary>
+    [YamlMember(Alias = "functionalRequirements", ApplyNamingConventions = false)]
+    public List<string>? FunctionalRequirements { get; set; }
+
+    /// <summary>Legacy technical requirements field.</summary>
+    [YamlMember(Alias = "technicalRequirements", ApplyNamingConventions = false)]
+    public List<string>? TechnicalRequirements { get; set; }
+
+    /// <summary>Legacy dependency field.</summary>
+    [YamlMember(Alias = "dependsOn", ApplyNamingConventions = false)]
+    public List<string>? DependsOn { get; set; }
+
+    /// <summary>Legacy implementation tasks field.</summary>
+    [YamlMember(Alias = "implementationTasks", ApplyNamingConventions = false)]
+    public List<ImplementationTask>? ImplementationTasks { get; set; }
+
+    /// <summary>Legacy completion date field.</summary>
+    [YamlMember(Alias = "completedDate", ApplyNamingConventions = false)]
+    public string? CompletedDate { get; set; }
+
+    /// <summary>Legacy done summary field.</summary>
+    [YamlMember(Alias = "doneSummary", ApplyNamingConventions = false)]
+    public string? DoneSummary { get; set; }
+
+    /// <summary>Legacy reference field.</summary>
+    [YamlMember(Alias = "reference")]
+    public string? Reference { get; set; }
+}
+
 /// <summary>TR-PLANNED-013: A sub-task within a TODO item.</summary>
 public sealed class ImplementationTask
 {
@@ -315,6 +394,8 @@ internal sealed class TodoFileYamlConverter : IYamlTypeConverter
                 file.Completed = (List<CompletedGroup>?)rootDeserializer(typeof(List<CompletedGroup>));
             else if (string.Equals(key, "notes", StringComparison.OrdinalIgnoreCase))
                 file.Notes = (List<string>?)rootDeserializer(typeof(List<string>));
+            else if (string.Equals(key, "todos", StringComparison.OrdinalIgnoreCase))
+                ImportLegacyFlatTodos(file, (List<LegacyTodoFlatItem>?)rootDeserializer(typeof(List<LegacyTodoFlatItem>)));
             else
                 file.Sections[key] = (TodoSection?)rootDeserializer(typeof(TodoSection)) ?? new TodoSection();
         }
@@ -347,5 +428,73 @@ internal sealed class TodoFileYamlConverter : IYamlTypeConverter
             serializer(file.Notes, typeof(List<string>));
         }
         emitter.Emit(new MappingEnd());
+    }
+
+    private static void ImportLegacyFlatTodos(TodoFile file, List<LegacyTodoFlatItem>? legacyItems)
+    {
+        if (legacyItems is null)
+            return;
+
+        foreach (var legacyItem in legacyItems)
+        {
+            if (legacyItem is null || string.IsNullOrWhiteSpace(legacyItem.Id))
+                continue;
+
+            var sectionKey = string.IsNullOrWhiteSpace(legacyItem.Section) ? "general" : legacyItem.Section.Trim();
+            var priorityKey = NormalizeLegacyPriority(legacyItem.Priority);
+            if (!file.Sections.TryGetValue(sectionKey, out var section))
+            {
+                section = new TodoSection();
+                file.Sections[sectionKey] = section;
+            }
+
+            var targetList = priorityKey switch
+            {
+                "high" => section.HighPriority ??= [],
+                "low" => section.LowPriority ??= [],
+                _ => section.MediumPriority ??= [],
+            };
+
+            targetList.Add(new TodoItem
+            {
+                Id = legacyItem.Id,
+                Title = legacyItem.Title,
+                Estimate = legacyItem.Estimate,
+                Note = legacyItem.Note,
+                Done = IsLegacyItemDone(legacyItem),
+                CompletedDate = legacyItem.CompletedDate,
+                Description = legacyItem.Description,
+                DoneSummary = legacyItem.DoneSummary,
+                Remaining = legacyItem.Remaining,
+                TechnicalDetails = legacyItem.TechnicalDetails,
+                Reference = legacyItem.Reference,
+                DependsOn = legacyItem.DependsOn,
+                FunctionalRequirements = legacyItem.FunctionalRequirements,
+                TechnicalRequirements = legacyItem.TechnicalRequirements,
+                ImplementationTasks = legacyItem.ImplementationTasks,
+            });
+        }
+    }
+
+    private static string NormalizeLegacyPriority(string? priority)
+    {
+        var normalized = priority?.Trim();
+        if (string.Equals(normalized, "high", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(normalized, "critical", StringComparison.OrdinalIgnoreCase))
+            return "high";
+        if (string.Equals(normalized, "low", StringComparison.OrdinalIgnoreCase))
+            return "low";
+        return "medium";
+    }
+
+    private static bool IsLegacyItemDone(LegacyTodoFlatItem item)
+    {
+        if (!string.IsNullOrWhiteSpace(item.CompletedDate))
+            return true;
+
+        var status = item.Status?.Trim();
+        return string.Equals(status, "done", StringComparison.OrdinalIgnoreCase)
+               || string.Equals(status, "completed", StringComparison.OrdinalIgnoreCase)
+               || string.Equals(status, "closed", StringComparison.OrdinalIgnoreCase);
     }
 }

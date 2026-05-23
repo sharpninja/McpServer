@@ -12,5 +12,15 @@
   href: Project/Technical-Requirements.md
 - name: Client Integration
   href: CLIENT-INTEGRATION.md
+- name: Agent Plugin Availability
+  href: AGENT-PLUGIN-AVAILABILITY.md
+- name: REPL User Guide
+  href: REPL-USER-GUIDE.md
+- name: REPL Agent Guide
+  href: REPL-AGENT-GUIDE.md
+- name: REPL Migration Guide
+  href: REPL-MIGRATION-GUIDE.md
+- name: Federation Reference
+  href: context/federation.md
 - name: Release Checklist
   href: RELEASE-CHECKLIST.md

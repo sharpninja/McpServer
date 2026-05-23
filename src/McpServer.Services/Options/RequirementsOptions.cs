@@ -27,4 +27,9 @@ public sealed class RequirementsOptions
     /// Path to <c>TR-per-FR-Mapping.md</c>. Relative paths are resolved under <c>Mcp:RepoRoot</c>.
     /// </summary>
     public string MappingPath { get; set; } = Path.Combine("docs", "Project", "TR-per-FR-Mapping.md");
+
+    /// <summary>
+    /// Path to <c>Requirements-Matrix.md</c>. Relative paths are resolved under <c>Mcp:RepoRoot</c>.
+    /// </summary>
+    public string MatrixPath { get; set; } = Path.Combine("docs", "Project", "Requirements-Matrix.md");
 }

@@ -21,13 +21,50 @@ public sealed class SessionLogService : ISessionLogService
     private readonly McpDbContext _db;
     private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<SessionLogService> _logger;
+    private readonly WorkspaceContext? _workspaceContext;
 
     /// <summary>TR-PLANNED-013: Constructor.</summary>
-    public SessionLogService(McpDbContext db, ILogger<SessionLogService> logger, IChangeEventBus? eventBus = null)
+    /// <remarks>
+    /// TR-MCP-MT-003A: <paramref name="workspaceContext"/> is optional so the
+    /// ingestion / batch import paths (which run without an HTTP scope) keep
+    /// working; in those cases <c>WorkspaceId</c> defaults to empty string.
+    /// </remarks>
+    public SessionLogService(
+        McpDbContext db,
+        ILogger<SessionLogService> logger,
+        IChangeEventBus? eventBus = null,
+        WorkspaceContext? workspaceContext = null)
     {
         _db = db ?? throw new ArgumentNullException(nameof(db));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _eventBus = eventBus;
+        _workspaceContext = workspaceContext;
+    }
+
+    private string ResolveWorkspaceId() => _workspaceContext?.WorkspacePath ?? string.Empty;
+
+    private void StampWorkspaceId(SessionLogEntity session)
+    {
+        var workspaceId = ResolveWorkspaceId();
+        if (string.IsNullOrEmpty(workspaceId))
+        {
+            // No explicit workspace context: defer to McpDbContext.SaveChangesAsync
+            // which auto-stamps Added entities from the DbContext's _workspaceId.
+            // This preserves ingestion / batch-import paths that run without an HTTP scope.
+            return;
+        }
+
+        session.WorkspaceId = workspaceId;
+        foreach (var turn in session.Turns)
+        {
+            turn.WorkspaceId = workspaceId;
+            foreach (var action in turn.Actions) action.WorkspaceId = workspaceId;
+            foreach (var tag in turn.Tags) tag.WorkspaceId = workspaceId;
+            foreach (var context in turn.ContextItems) context.WorkspaceId = workspaceId;
+            foreach (var dialog in turn.ProcessingDialog) dialog.WorkspaceId = workspaceId;
+            foreach (var commit in turn.Commits) commit.WorkspaceId = workspaceId;
+            foreach (var stringItem in turn.StringListItems) stringItem.WorkspaceId = workspaceId;
+        }
     }
 
     /// <inheritdoc />
@@ -82,6 +119,7 @@ public sealed class SessionLogService : ISessionLogService
         }
 
         await ResolveAgentDefinitionLinkAsync(dto, existing, cancellationToken).ConfigureAwait(false);
+        StampWorkspaceId(existing);
 
         try
         {
@@ -100,6 +138,7 @@ public sealed class SessionLogService : ISessionLogService
             existing.ContentHash = contentHash;
             UpsertTurns(existing, dto.Turns);
             await ResolveAgentDefinitionLinkAsync(dto, existing, cancellationToken).ConfigureAwait(false);
+            StampWorkspaceId(existing);
 
             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             _logger.LogInformation("Updated session log {SourceType}/{SessionId} (Id={Id}) after retry", dto.SourceType, dto.SessionId, existing.Id);
@@ -181,6 +220,7 @@ public sealed class SessionLogService : ISessionLogService
             ? entry.ProcessingDialog.Max(p => p.Ordinal) + 1
             : 0;
 
+        var workspaceId = ResolveWorkspaceId();
         foreach (var item in items)
         {
             entry.ProcessingDialog.Add(new SessionLogProcessingDialogEntity
@@ -189,7 +229,8 @@ public sealed class SessionLogService : ISessionLogService
                 Timestamp = ParseDateTimeOffset(item.Timestamp) ?? DateTimeOffset.UtcNow,
                 Role = item.Role ?? "model",
                 Content = item.Content ?? string.Empty,
-                Category = item.Category
+                Category = item.Category,
+                WorkspaceId = workspaceId
             });
         }
 
@@ -277,6 +318,89 @@ public sealed class SessionLogService : ISessionLogService
             Offset = offset,
             Items = items
         };
+    }
+
+    /// <inheritdoc />
+    public async Task<UnifiedSessionLogDto?> GetAsync(string sourceType, string sessionId, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(sourceType);
+        ArgumentNullException.ThrowIfNull(sessionId);
+
+        var entity = await _db.SessionLogs
+            .Include(s => s.Turns.OrderBy(e => e.Id))
+                .ThenInclude(e => e.Actions.OrderBy(a => a.Order))
+            .Include(s => s.Turns)
+                .ThenInclude(e => e.Tags)
+            .Include(s => s.Turns)
+                .ThenInclude(e => e.ContextItems.OrderBy(c => c.Ordinal))
+            .Include(s => s.Turns)
+                .ThenInclude(e => e.ProcessingDialog.OrderBy(p => p.Ordinal))
+            .Include(s => s.Turns)
+                .ThenInclude(e => e.Commits.OrderBy(c => c.Ordinal))
+            .Include(s => s.Turns)
+                .ThenInclude(e => e.StringListItems.OrderBy(sl => sl.Ordinal))
+            .AsSplitQuery()
+            .AsNoTracking()
+            .FirstOrDefaultAsync(s => s.SourceType == sourceType && s.SessionId == sessionId, cancellationToken)
+            .ConfigureAwait(false);
+
+        return entity is null ? null : MapEntityToDto(entity);
+    }
+
+    /// <inheritdoc />
+    public async Task<long> UpsertTurnAsync(string sourceType, string sessionId, UnifiedRequestEntryDto turn, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(sourceType);
+        ArgumentNullException.ThrowIfNull(sessionId);
+        ArgumentNullException.ThrowIfNull(turn);
+
+        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);
+        if (sessionIdError is not null)
+            throw new ArgumentException(sessionIdError, nameof(sessionId));
+
+        var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(turn.RequestId);
+        if (requestIdError is not null)
+            throw new ArgumentException(requestIdError, nameof(turn));
+
+        var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)
+            ?? throw new InvalidOperationException($"Session not found: {sourceType}/{sessionId}");
+
+        var existingTurn = session.Turns.FirstOrDefault(t => t.RequestId == turn.RequestId);
+        SessionLogTurnEntity persistedTurn;
+
+        if (existingTurn is null)
+        {
+            persistedTurn = MapSingleEntry(turn);
+            session.Turns.Add(persistedTurn);
+        }
+        else
+        {
+            UpdateEntryFromDto(existingTurn, turn);
+            persistedTurn = existingTurn;
+        }
+
+        var workspaceId = ResolveWorkspaceId();
+        if (!string.IsNullOrEmpty(workspaceId))
+        {
+            session.WorkspaceId = workspaceId;
+            persistedTurn.WorkspaceId = workspaceId;
+            foreach (var action in persistedTurn.Actions) action.WorkspaceId = workspaceId;
+            foreach (var tag in persistedTurn.Tags) tag.WorkspaceId = workspaceId;
+            foreach (var context in persistedTurn.ContextItems) context.WorkspaceId = workspaceId;
+            foreach (var dialog in persistedTurn.ProcessingDialog) dialog.WorkspaceId = workspaceId;
+            foreach (var commit in persistedTurn.Commits) commit.WorkspaceId = workspaceId;
+            foreach (var stringItem in persistedTurn.StringListItems) stringItem.WorkspaceId = workspaceId;
+        }
+
+        await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+        await PublishChangeSafeAsync(
+            ChangeEventActions.Updated,
+            $"{sourceType}/{sessionId}",
+            $"mcp://workspace/sessionlog/{sourceType}/{sessionId}",
+            cancellationToken).ConfigureAwait(false);
+
+        return persistedTurn.Id;
     }
 
     private static string BuildSearchText(SessionLogTurnEntity turn)

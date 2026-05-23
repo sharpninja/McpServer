@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using McpServer.Client.Models;
 
 // FR-MCP-REPL-003: Command Namespace Parity - Requirements command structures
 // TR-MCP-REPL-001: YAML Envelope Protocol - Requirements command data models
@@ -32,6 +33,8 @@ public sealed class FrCreateRequestModel : IFrCreateRequest
 /// <inheritdoc />
 public sealed class FrUpdateRequestModel : IFrUpdateRequest
 {
+    /// <inheritdoc />
+    public string? Id { get; set; }
     /// <inheritdoc />
     public string? Title { get; set; }
     /// <inheritdoc />
@@ -67,6 +70,8 @@ public sealed class TrCreateRequestModel : ITrCreateRequest
 public sealed class TrUpdateRequestModel : ITrUpdateRequest
 {
     /// <inheritdoc />
+    public string? Id { get; set; }
+    /// <inheritdoc />
     public string? Title { get; set; }
     /// <inheritdoc />
     public string? Description { get; set; }
@@ -101,6 +106,8 @@ public sealed class TestCreateRequestModel : ITestCreateRequest
 public sealed class TestUpdateRequestModel : ITestUpdateRequest
 {
     /// <inheritdoc />
+    public string? Id { get; set; }
+    /// <inheritdoc />
     public string? Title { get; set; }
     /// <inheritdoc />
     public string? Description { get; set; }
@@ -120,7 +127,11 @@ public sealed class MappingCreateRequestModel : IMappingCreateRequest
     /// <inheritdoc />
     public string? TrId { get; set; }
     /// <inheritdoc />
+    public IReadOnlyList<string>? TrIds { get; set; }
+    /// <inheritdoc />
     public string? TestId { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<string>? TestIds { get; set; }
     /// <inheritdoc />
     public string? Notes { get; set; }
 }
@@ -348,7 +359,11 @@ public sealed class CreateMappingParamsModel : ICreateMappingParams
     /// <inheritdoc />
     public string? TrId { get; set; }
     /// <inheritdoc />
+    public IReadOnlyList<string>? TrIds { get; set; }
+    /// <inheritdoc />
     public string? TestId { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<string>? TestIds { get; set; }
     /// <inheritdoc />
     public string? Notes { get; set; }
 }
@@ -394,6 +409,16 @@ public sealed class GenerateDocumentResultModel : IGenerateDocumentResult
     /// <inheritdoc />
     public string Content { get; set; } = string.Empty;
     /// <inheritdoc />
+    public string? ContentBase64 { get; set; }
+    /// <inheritdoc />
+    public string? ContentType { get; set; }
+    /// <inheritdoc />
+    public string? FileName { get; set; }
+    /// <inheritdoc />
+    public string? OutputRoot { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<RequirementsDocumentExportFile> Files { get; set; } = [];
+    /// <inheritdoc />
     public string Format { get; set; } = string.Empty;
     /// <inheritdoc />
     public string DocType { get; set; } = string.Empty;
@@ -407,7 +432,13 @@ public sealed class IngestDocumentParamsModel : IIngestDocumentParams
     /// <inheritdoc />
     public string Content { get; set; } = string.Empty;
     /// <inheritdoc />
+    public IReadOnlyDictionary<string, object?>? Documents { get; set; }
+    /// <inheritdoc />
     public string Format { get; set; } = string.Empty;
+    /// <inheritdoc />
+    public string? SourceFormat { get; set; }
+    /// <inheritdoc />
+    public string? PreferredWikiFormat { get; set; }
     /// <inheritdoc />
     public string MergeStrategy { get; set; } = string.Empty;
 }

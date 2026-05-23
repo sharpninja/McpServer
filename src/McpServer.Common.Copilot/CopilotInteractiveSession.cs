@@ -82,7 +82,18 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
                     break;
                 }
 
-                if (line is null) break;
+                if (line is null)
+                {
+                    var exitException = await TryCreateProcessExitExceptionAsync(
+                        "stdout-closed-before-initial-response",
+                        exception: null,
+                        ct).ConfigureAwait(false);
+                    if (exitException is not null)
+                        throw exitException;
+
+                    break;
+                }
+
                 if (line.Contains(Sentinel, StringComparison.Ordinal)) break;
                 var timestamped = FormatOutputLine(line);
                 AppendOutputTail(_stdoutTail, timestamped);
@@ -158,7 +169,17 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
         [EnumeratorCancellation] CancellationToken ct = default)
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
-        if (_process.HasExited) yield break;
+        if (_process.HasExited)
+        {
+            var exitException = await TryCreateProcessExitExceptionAsync(
+                "send-streaming-process-exited",
+                exception: null,
+                ct).ConfigureAwait(false);
+            if (exitException is not null)
+                throw exitException;
+
+            yield break;
+        }
 
         await _gate.WaitAsync(ct).ConfigureAwait(true);
         try
@@ -173,7 +194,11 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
                 await CaptureRemainingStdoutTailUnsafeAsync(ct).ConfigureAwait(true);
                 LogExitDiagnostics("stdin-streaming-write-failed", ex);
                 _logger.LogWarning(ex, "Interactive session streaming write failed; Copilot process is no longer writable.");
-                yield break;
+                var exitException = await TryCreateProcessExitExceptionAsync(
+                    "stdin-streaming-write-failed",
+                    ex,
+                    ct).ConfigureAwait(false);
+                throw exitException ?? new InvalidOperationException("Copilot interactive session is no longer writable.", ex);
             }
 
             while (!ct.IsCancellationRequested)
@@ -188,7 +213,18 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
                     break;
                 }
 
-                if (line is null) break;
+                if (line is null)
+                {
+                    var exitException = await TryCreateProcessExitExceptionAsync(
+                        "stdout-closed-during-streaming-send",
+                        exception: null,
+                        ct).ConfigureAwait(false);
+                    if (exitException is not null)
+                        throw exitException;
+
+                    break;
+                }
+
                 if (line.Contains(Sentinel, StringComparison.Ordinal)) break;
                 var timestamped = FormatOutputLine(line);
                 AppendOutputTail(_stdoutTail, timestamped);
@@ -343,6 +379,112 @@ public sealed class CopilotInteractiveSession : IAsyncDisposable, IDisposable
     {
         var sanitized = LineSanitizer.Sanitize(line, _modelPromptLabel);
         return $"{DateTimeOffset.Now.ToLocalTime():t}: {sanitized}\n";
+    }
+
+    private async Task<InvalidOperationException?> TryCreateProcessExitExceptionAsync(
+        string reason,
+        Exception? exception,
+        CancellationToken cancellationToken)
+    {
+        await WaitForProcessExitSnapshotAsync(cancellationToken).ConfigureAwait(false);
+        if (!TryGetExitCode(out var exitCode) || exitCode == 0)
+            return null;
+
+        await WaitForStderrDrainSnapshotAsync(cancellationToken).ConfigureAwait(false);
+        LogExitDiagnostics(reason, exception);
+
+        var stderrTail = SnapshotOutputTail(_stderrTail);
+        var stdoutTail = SnapshotOutputTail(_stdoutTail);
+        var message = BuildProcessExitMessage(exitCode, stderrTail, stdoutTail);
+        return new InvalidOperationException(message, exception);
+    }
+
+    private async Task WaitForProcessExitSnapshotAsync(CancellationToken cancellationToken)
+    {
+        if (_process.HasExited)
+            return;
+
+        try
+        {
+            await _process.WaitForExitAsync(cancellationToken)
+                .WaitAsync(TimeSpan.FromMilliseconds(250), cancellationToken)
+                .ConfigureAwait(false);
+        }
+        catch (TimeoutException)
+        {
+            // Process did not exit quickly enough for a streaming-close diagnostic.
+        }
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            // Diagnostic wait timed out; preserve the normal cancellation semantics.
+        }
+        catch (ObjectDisposedException)
+        {
+            // Process was disposed while collecting diagnostics.
+        }
+    }
+
+    private async Task WaitForStderrDrainSnapshotAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _stderrDrainTask
+                .WaitAsync(TimeSpan.FromMilliseconds(500), cancellationToken)
+                .ConfigureAwait(false);
+        }
+        catch (TimeoutException)
+        {
+            // Stderr may still be draining; use the tail captured so far.
+        }
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            // Diagnostic wait timed out; use the tail captured so far.
+        }
+        catch (ObjectDisposedException)
+        {
+            // Stream was disposed while collecting diagnostics.
+        }
+    }
+
+    private bool TryGetExitCode(out int exitCode)
+    {
+        exitCode = 0;
+        try
+        {
+            if (!_process.HasExited)
+                return false;
+
+            exitCode = _process.ExitCode;
+            return true;
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or ObjectDisposedException)
+        {
+            _logger.LogDebug(ex, "Unable to read interactive process exit code for streaming diagnostics.");
+            return false;
+        }
+    }
+
+    private static string BuildProcessExitMessage(int exitCode, string stderrTail, string stdoutTail)
+    {
+        var stderr = NormalizeTailForUser(stderrTail);
+        if (!string.IsNullOrWhiteSpace(stderr))
+            return $"Copilot CLI exited with code {exitCode}: {stderr}";
+
+        var stdout = NormalizeTailForUser(stdoutTail);
+        if (!string.IsNullOrWhiteSpace(stdout))
+            return $"Copilot CLI exited with code {exitCode}. Stdout tail: {stdout}";
+
+        return $"Copilot CLI exited with code {exitCode} before returning a response.";
+    }
+
+    private static string NormalizeTailForUser(string tail)
+    {
+        if (string.IsNullOrWhiteSpace(tail) || string.Equals(tail, "(none)", StringComparison.Ordinal))
+            return string.Empty;
+
+        var normalized = tail.Trim().Replace("\r", " ").Replace("\n", " ");
+        const int MaxLength = 500;
+        return normalized.Length <= MaxLength ? normalized : normalized[..MaxLength] + "...";
     }
 
     private async Task DrainStderrAsync()

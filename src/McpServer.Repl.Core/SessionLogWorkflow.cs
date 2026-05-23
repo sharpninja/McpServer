@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 // FR-MCP-REPL-001: YAML Protocol STDIO REPL Host - Session log workflow implementation
@@ -41,6 +42,11 @@ namespace McpServer.Repl.Core;
 /// </remarks>
 public sealed class SessionLogWorkflow : ISessionLogWorkflow
 {
+    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
+    {
+        PropertyNameCaseInsensitive = true
+    };
+
     private readonly ISessionLogClientAdapter _client;
     private readonly TimeProvider _timeProvider;
     private readonly SemaphoreSlim _lock = new(1, 1);
@@ -302,6 +308,48 @@ public sealed class SessionLogWorkflow : ISessionLogWorkflow
         return result.Items.Select(item => new SessionLogSummary(item)).ToList();
     }
 
+    /// <inheritdoc />
+    public async Task<SessionLogRecoveryImportResult> ImportRecoveryAsync(
+        UnifiedSessionLogDto sessionLog,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(sessionLog);
+        ArgumentException.ThrowIfNullOrWhiteSpace(sessionLog.SourceType);
+        ArgumentException.ThrowIfNullOrWhiteSpace(sessionLog.SessionId);
+
+        ValidateSessionId(sessionLog.SessionId, sessionLog.SourceType);
+        foreach (var turn in sessionLog.Turns ?? [])
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(turn.RequestId);
+            ValidateRequestId(turn.RequestId);
+        }
+
+        var query = await _client.QueryAsync(
+            agent: sessionLog.SourceType,
+            limit: 1000,
+            cancellationToken: cancellationToken).ConfigureAwait(false);
+        var existing = query.Items.FirstOrDefault(item =>
+            string.Equals(item.SessionId, sessionLog.SessionId, StringComparison.Ordinal));
+
+        var target = existing is null
+            ? new UnifiedSessionLogDto()
+            : CloneSession(existing);
+        var result = new SessionLogRecoveryImportResult
+        {
+            SourceType = sessionLog.SourceType,
+            SessionId = sessionLog.SessionId,
+            ExistingSessionFound = existing is not null,
+        };
+
+        MergeSession(target, sessionLog, result);
+        NormalizeSession(target);
+
+        var submit = await _client.SubmitAsync(target, cancellationToken).ConfigureAwait(false);
+        result.SubmitId = submit.Id;
+        result.TotalTurns = target.Turns?.Count ?? 0;
+        return result;
+    }
+
     private SessionLogState EnsureSessionActive()
     {
         if (_state == null)
@@ -349,6 +397,378 @@ public sealed class SessionLogWorkflow : ISessionLogWorkflow
         {
             throw new ArgumentException($"Invalid request ID format: {requestId}", nameof(requestId));
         }
+    }
+
+    private static UnifiedSessionLogDto CloneSession(UnifiedSessionLogDto sessionLog)
+    {
+        var json = JsonSerializer.Serialize(sessionLog, JsonOptions);
+        return JsonSerializer.Deserialize<UnifiedSessionLogDto>(json, JsonOptions)
+            ?? throw new InvalidOperationException("Unable to clone session log.");
+    }
+
+    private static void MergeSession(
+        UnifiedSessionLogDto target,
+        UnifiedSessionLogDto incoming,
+        SessionLogRecoveryImportResult result)
+    {
+        target.SourceType = FirstNonEmpty(target.SourceType, incoming.SourceType);
+        target.SessionId = FirstNonEmpty(target.SessionId, incoming.SessionId);
+        target.Title = FirstNonEmpty(target.Title, incoming.Title) ?? "Recovered session";
+        target.Model = FirstNonEmpty(target.Model, incoming.Model) ?? "unknown";
+        target.Started = EarliestTimestamp(target.Started, incoming.Started)
+            ?? incoming.Started
+            ?? target.Started
+            ?? DateTimeOffset.UtcNow.ToString("o");
+        target.LastUpdated = LatestTimestamp(target.LastUpdated, incoming.LastUpdated);
+        target.Status = PreferSessionStatus(target.Status, incoming.Status);
+        target.Workspace ??= incoming.Workspace;
+        target.CursorSessionLabel ??= incoming.CursorSessionLabel;
+        target.CopilotStatistics ??= incoming.CopilotStatistics;
+        target.TotalTokens ??= incoming.TotalTokens;
+
+        target.Turns ??= [];
+        foreach (var incomingTurn in incoming.Turns ?? [])
+        {
+            if (string.IsNullOrWhiteSpace(incomingTurn.RequestId))
+            {
+                continue;
+            }
+
+            var existingTurn = target.Turns.FirstOrDefault(turn =>
+                string.Equals(turn.RequestId, incomingTurn.RequestId, StringComparison.Ordinal));
+            if (existingTurn is null)
+            {
+                target.Turns.Add(CloneTurn(incomingTurn));
+                result.ImportedTurns++;
+                continue;
+            }
+
+            if (MergeTurn(existingTurn, incomingTurn))
+            {
+                result.MergedTurns++;
+            }
+            else
+            {
+                result.SkippedTurns++;
+            }
+        }
+    }
+
+    private static void NormalizeSession(UnifiedSessionLogDto sessionLog)
+    {
+        sessionLog.Turns ??= [];
+        foreach (var turn in sessionLog.Turns)
+        {
+            NormalizeTurn(turn, sessionLog.Model);
+        }
+
+        sessionLog.TurnCount = sessionLog.Turns.Count;
+        sessionLog.TotalTokens = sessionLog.Turns
+            .Where(turn => turn.TokenCount.HasValue)
+            .Select(turn => turn.TokenCount!.Value)
+            .DefaultIfEmpty()
+            .Sum();
+
+        var latestTurnTimestamp = sessionLog.Turns
+            .Select(turn => ParseTimestamp(turn.Timestamp))
+            .Where(timestamp => timestamp.HasValue)
+            .Select(timestamp => timestamp!.Value)
+            .DefaultIfEmpty(ParseTimestamp(sessionLog.LastUpdated) ?? DateTimeOffset.UtcNow)
+            .Max();
+        sessionLog.LastUpdated = latestTurnTimestamp.ToString("o");
+        sessionLog.Status = PreferSessionStatus(sessionLog.Status, null);
+    }
+
+    private static UnifiedRequestEntryDto CloneTurn(UnifiedRequestEntryDto turn)
+    {
+        var json = JsonSerializer.Serialize(turn, JsonOptions);
+        return JsonSerializer.Deserialize<UnifiedRequestEntryDto>(json, JsonOptions)
+            ?? throw new InvalidOperationException("Unable to clone session turn.");
+    }
+
+    private static void NormalizeTurn(UnifiedRequestEntryDto turn, string? sessionModel)
+    {
+        turn.Status = NormalizeTurnStatus(turn.Status);
+        turn.QueryTitle = FirstNonEmpty(turn.QueryTitle, turn.RequestId) ?? "Recovered turn";
+        turn.QueryText = FirstNonEmpty(turn.QueryText, turn.QueryTitle) ?? "Recovered session-log turn";
+        turn.Timestamp = ParseTimestamp(turn.Timestamp)?.ToString("o") ?? DateTimeOffset.UtcNow.ToString("o");
+        turn.Model ??= sessionModel;
+    }
+
+    private static bool MergeTurn(UnifiedRequestEntryDto target, UnifiedRequestEntryDto incoming)
+    {
+        var changed = false;
+
+        changed |= FillString(target.Timestamp, incoming.Timestamp, value => target.Timestamp = value);
+        changed |= FillString(target.QueryText, incoming.QueryText, value => target.QueryText = value);
+        changed |= FillString(target.QueryTitle, incoming.QueryTitle, value => target.QueryTitle = value);
+        changed |= FillString(target.Response, incoming.Response, value => target.Response = value);
+        changed |= FillString(target.Interpretation, incoming.Interpretation, value => target.Interpretation = value);
+        changed |= FillString(target.Model, incoming.Model, value => target.Model = value);
+        changed |= FillString(target.ModelProvider, incoming.ModelProvider, value => target.ModelProvider = value);
+        changed |= FillString(target.FailureNote, incoming.FailureNote, value => target.FailureNote = value);
+        changed |= FillValue(target.TokenCount, incoming.TokenCount, value => target.TokenCount = value);
+        changed |= FillValue(target.Score, incoming.Score, value => target.Score = value);
+        changed |= FillValue(target.IsPremium, incoming.IsPremium, value => target.IsPremium = value);
+
+        var preferredStatus = PreferTurnStatus(target.Status, incoming.Status);
+        if (!string.Equals(target.Status, preferredStatus, StringComparison.OrdinalIgnoreCase))
+        {
+            target.Status = preferredStatus;
+            changed = true;
+        }
+
+        changed |= UnionStrings(target.Tags, incoming.Tags, value => target.Tags = value);
+        changed |= UnionStrings(target.ContextList, incoming.ContextList, value => target.ContextList = value);
+        changed |= UnionStrings(target.DesignDecisions, incoming.DesignDecisions, value => target.DesignDecisions = value);
+        changed |= UnionStrings(target.RequirementsDiscovered, incoming.RequirementsDiscovered, value => target.RequirementsDiscovered = value);
+        changed |= UnionStrings(target.FilesModified, incoming.FilesModified, value => target.FilesModified = value);
+        changed |= UnionStrings(target.Blockers, incoming.Blockers, value => target.Blockers = value);
+        changed |= MergeActions(target.Actions, incoming.Actions, value => target.Actions = value);
+        changed |= MergeDialog(target.ProcessingDialog, incoming.ProcessingDialog, value => target.ProcessingDialog = value);
+        changed |= MergeCommits(target.Commits, incoming.Commits, value => target.Commits = value);
+
+        target.RawContext ??= incoming.RawContext;
+        target.OriginalEntry ??= incoming.OriginalEntry;
+
+        return changed;
+    }
+
+    private static bool FillString(string? target, string? incoming, Action<string> assign)
+    {
+        if (!string.IsNullOrWhiteSpace(target) || string.IsNullOrWhiteSpace(incoming))
+        {
+            return false;
+        }
+
+        assign(incoming);
+        return true;
+    }
+
+    private static bool FillValue<T>(T? target, T? incoming, Action<T> assign)
+        where T : struct
+    {
+        if (target.HasValue || !incoming.HasValue)
+        {
+            return false;
+        }
+
+        assign(incoming.Value);
+        return true;
+    }
+
+    private static bool UnionStrings(List<string>? target, List<string>? incoming, Action<List<string>> assign)
+    {
+        if (incoming is not { Count: > 0 })
+        {
+            return false;
+        }
+
+        target ??= [];
+        assign(target);
+        var before = target.Count;
+        var existing = new HashSet<string>(target, StringComparer.Ordinal);
+        foreach (var value in incoming.Where(value => !string.IsNullOrWhiteSpace(value)))
+        {
+            if (existing.Add(value))
+            {
+                target.Add(value);
+            }
+        }
+
+        return target.Count != before;
+    }
+
+    private static bool MergeActions(List<UnifiedActionDto>? target, List<UnifiedActionDto>? incoming, Action<List<UnifiedActionDto>> assign)
+    {
+        if (incoming is not { Count: > 0 })
+        {
+            return false;
+        }
+
+        target ??= [];
+        assign(target);
+        var before = target.Count;
+        var existing = new HashSet<string>(target.Select(ActionKey), StringComparer.Ordinal);
+        foreach (var action in incoming)
+        {
+            if (existing.Add(ActionKey(action)))
+            {
+                target.Add(action);
+            }
+        }
+
+        return target.Count != before;
+    }
+
+    private static bool MergeDialog(List<ProcessingDialogItemDto>? target, List<ProcessingDialogItemDto>? incoming, Action<List<ProcessingDialogItemDto>> assign)
+    {
+        if (incoming is not { Count: > 0 })
+        {
+            return false;
+        }
+
+        target ??= [];
+        assign(target);
+        var before = target.Count;
+        var existing = new HashSet<string>(target.Select(DialogKey), StringComparer.Ordinal);
+        foreach (var item in incoming)
+        {
+            if (existing.Add(DialogKey(item)))
+            {
+                target.Add(item);
+            }
+        }
+
+        return target.Count != before;
+    }
+
+    private static bool MergeCommits(List<SessionLogCommitDto>? target, List<SessionLogCommitDto>? incoming, Action<List<SessionLogCommitDto>> assign)
+    {
+        if (incoming is not { Count: > 0 })
+        {
+            return false;
+        }
+
+        target ??= [];
+        assign(target);
+        var before = target.Count;
+        var existing = new HashSet<string>(target.Select(CommitKey), StringComparer.Ordinal);
+        foreach (var commit in incoming)
+        {
+            if (existing.Add(CommitKey(commit)))
+            {
+                target.Add(commit);
+            }
+        }
+
+        return target.Count != before;
+    }
+
+    private static string? FirstNonEmpty(string? current, string? incoming)
+    {
+        return !string.IsNullOrWhiteSpace(current) ? current :
+            !string.IsNullOrWhiteSpace(incoming) ? incoming :
+            null;
+    }
+
+    private static string PreferSessionStatus(string? current, string? incoming)
+    {
+        var statuses = new[] { current, incoming }
+            .Select(NormalizeSessionStatus)
+            .Where(status => !string.IsNullOrWhiteSpace(status))
+            .ToArray();
+
+        if (statuses.Contains("completed", StringComparer.OrdinalIgnoreCase))
+        {
+            return "completed";
+        }
+
+        return statuses.FirstOrDefault() ?? "in_progress";
+    }
+
+    private static string PreferTurnStatus(string? current, string? incoming)
+    {
+        var statuses = new[] { current, incoming }
+            .Select(NormalizeTurnStatus)
+            .Where(status => !string.IsNullOrWhiteSpace(status))
+            .ToArray();
+
+        if (statuses.Contains("failed", StringComparer.OrdinalIgnoreCase))
+        {
+            return "failed";
+        }
+
+        if (statuses.Contains("completed", StringComparer.OrdinalIgnoreCase))
+        {
+            return "completed";
+        }
+
+        return statuses.FirstOrDefault() ?? "in_progress";
+    }
+
+    private static string NormalizeSessionStatus(string? status)
+    {
+        if (string.IsNullOrWhiteSpace(status))
+        {
+            return "in_progress";
+        }
+
+        return status.StartsWith("completed", StringComparison.OrdinalIgnoreCase)
+            ? "completed"
+            : "in_progress";
+    }
+
+    private static string NormalizeTurnStatus(string? status)
+    {
+        if (string.IsNullOrWhiteSpace(status))
+        {
+            return "in_progress";
+        }
+
+        if (status.StartsWith("failed", StringComparison.OrdinalIgnoreCase) ||
+            status.StartsWith("interrupted", StringComparison.OrdinalIgnoreCase))
+        {
+            return "failed";
+        }
+
+        if (status.StartsWith("completed", StringComparison.OrdinalIgnoreCase) ||
+            status.StartsWith("partial", StringComparison.OrdinalIgnoreCase))
+        {
+            return "completed";
+        }
+
+        return "in_progress";
+    }
+
+    private static DateTimeOffset? ParseTimestamp(string? timestamp)
+    {
+        return DateTimeOffset.TryParse(timestamp, out var parsed)
+            ? parsed.ToUniversalTime()
+            : null;
+    }
+
+    private static string? EarliestTimestamp(string? current, string? incoming)
+    {
+        var parsedCurrent = ParseTimestamp(current);
+        var parsedIncoming = ParseTimestamp(incoming);
+
+        return (parsedCurrent, parsedIncoming) switch
+        {
+            ({ } left, { } right) => (left <= right ? left : right).ToString("o"),
+            ({ } left, null) => left.ToString("o"),
+            (null, { } right) => right.ToString("o"),
+            _ => null,
+        };
+    }
+
+    private static string LatestTimestamp(string? current, string? incoming)
+    {
+        var parsedCurrent = ParseTimestamp(current);
+        var parsedIncoming = ParseTimestamp(incoming);
+
+        return (parsedCurrent, parsedIncoming) switch
+        {
+            ({ } left, { } right) => (left >= right ? left : right).ToString("o"),
+            ({ } left, null) => left.ToString("o"),
+            (null, { } right) => right.ToString("o"),
+            _ => DateTimeOffset.UtcNow.ToString("o"),
+        };
+    }
+
+    private static string ActionKey(UnifiedActionDto action)
+    {
+        return string.Join('\u001f', action.Type, action.Status, action.Description, action.FilePath);
+    }
+
+    private static string DialogKey(ProcessingDialogItemDto item)
+    {
+        return string.Join('\u001f', item.Timestamp, item.Role, item.Category, item.Content);
+    }
+
+    private static string CommitKey(SessionLogCommitDto commit)
+    {
+        return string.Join('\u001f', commit.Sha, commit.Branch, commit.Message, commit.Timestamp);
     }
 }
 

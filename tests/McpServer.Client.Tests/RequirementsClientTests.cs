@@ -78,6 +78,76 @@ public sealed class RequirementsClientTests
     }
 
     [Fact]
+    public async System.Threading.Tasks.Task UpdateFrAsync_PutsMetadataBody()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"id":"FR-MCP-001","title":"Title","body":"Body","priority":"high","status":"in_progress","notes":"Reviewed"}""");
+        using var http = new HttpClient(handler);
+        var client = new RequirementsClient(http, DefaultOptions);
+
+        var result = await client.UpdateFrAsync("FR-MCP-001", new UpdateFrRequest
+        {
+            Title = "Title",
+            Body = "Body",
+            Priority = "high",
+            Status = "in_progress",
+            Notes = "Reviewed"
+        });
+
+        Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
+        Assert.Contains("\"priority\":\"high\"", handler.LastRequestBody!);
+        Assert.Contains("\"status\":\"in_progress\"", handler.LastRequestBody!);
+        Assert.Contains("\"notes\":\"Reviewed\"", handler.LastRequestBody!);
+        Assert.Equal("high", result.Priority);
+        Assert.Equal("in_progress", result.Status);
+        Assert.Equal("Reviewed", result.Notes);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task UpdateTrAndTestAsync_PutMetadataBody()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"id":"TR-MCP-REQ-001","title":"TR","body":"Body","priority":"high","status":"completed","notes":"TR notes"}""");
+        using var http = new HttpClient(handler);
+        var client = new RequirementsClient(http, DefaultOptions);
+
+        var tr = await client.UpdateTrAsync("TR-MCP-REQ-001", new UpdateTrRequest
+        {
+            Title = "TR",
+            Body = "Body",
+            Priority = "high",
+            Status = "completed",
+            Notes = "TR notes"
+        });
+
+        Assert.Contains("\"priority\":\"high\"", handler.LastRequestBody!);
+        Assert.Contains("\"status\":\"completed\"", handler.LastRequestBody!);
+        Assert.Contains("\"notes\":\"TR notes\"", handler.LastRequestBody!);
+        Assert.Equal("high", tr.Priority);
+        Assert.Equal("completed", tr.Status);
+        Assert.Equal("TR notes", tr.Notes);
+
+        var testHandler = new MockHttpHandler(HttpStatusCode.OK, """{"id":"TEST-MCP-001","condition":"Condition","priority":"high","status":"completed","notes":"TEST notes"}""");
+        using var testHttp = new HttpClient(testHandler);
+        var testClient = new RequirementsClient(testHttp, DefaultOptions);
+
+        var test = await testClient.UpdateTestAsync("TEST-MCP-001", new UpdateTestRequest
+        {
+            Condition = "Condition",
+            Priority = "high",
+            Status = "completed",
+            Notes = "TEST notes"
+        });
+
+        Assert.Contains("\"priority\":\"high\"", testHandler.LastRequestBody!);
+        Assert.Contains("\"status\":\"completed\"", testHandler.LastRequestBody!);
+        Assert.Contains("\"notes\":\"TEST notes\"", testHandler.LastRequestBody!);
+        Assert.Equal("high", test.Priority);
+        Assert.Equal("completed", test.Status);
+        Assert.Equal("TEST notes", test.Notes);
+    }
+
+    [Fact]
     public async System.Threading.Tasks.Task DeleteTestAsync_UsesDeleteEndpoint()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");
@@ -110,17 +180,25 @@ public sealed class RequirementsClientTests
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task GenerateAsync_ReturnsBinaryAndContentType()
+    public async System.Threading.Tasks.Task GenerateAsync_ReturnsWorkspaceExportMetadata()
     {
-        var handler = new MockHttpHandler(HttpStatusCode.OK, "ZIPDATA", "application/zip");
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """
+            {"success":true,"format":"wiki","docType":"all","generatedAtUtc":"2026-05-08T12:00:00Z","outputRoot":"F:\\GitHub\\McpServer\\docs\\Project\\wiki","files":[{"relativePath":"azure/Home.md","fullPath":"F:\\GitHub\\McpServer\\docs\\Project\\wiki\\azure\\Home.md","contentType":"text/markdown","lastModifiedUtc":"2026-05-08T12:00:00Z"}]}
+            """);
         using var http = new HttpClient(handler);
         var client = new RequirementsClient(http, DefaultOptions);
 
-        var result = await client.GenerateAsync("all");
+        var result = await client.GenerateAsync("all", "wiki");
 
-        Assert.Equal("application/zip", result.ContentType);
-        Assert.NotEmpty(result.Content);
+        Assert.Equal("application/json", result.ContentType);
+        Assert.NotNull(result.ExportResult);
+        Assert.True(result.ExportResult!.Success);
+        Assert.Equal("wiki", result.ExportResult.Format);
+        Assert.Equal("azure/Home.md", Assert.Single(result.ExportResult.Files).RelativePath);
         Assert.Contains("doc=all", handler.LastRequest!.RequestUri!.Query);
+        Assert.Contains("format=wiki", handler.LastRequest.RequestUri.Query);
         Assert.Equal(HttpMethod.Get, handler.LastRequest.Method);
     }
 
@@ -143,5 +221,35 @@ public sealed class RequirementsClientTests
         Assert.Contains("functionalMarkdown", handler.LastRequestBody!, StringComparison.Ordinal);
         Assert.Equal(1, result.FunctionalParsed);
         Assert.Equal(1, result.FunctionalUpdated);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task IngestAsync_PostsWikiDocumentMap()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"functionalParsed":1,"functionalAdded":1,"functionalUpdated":0,"technicalParsed":0,"technicalAdded":0,"technicalUpdated":0,"testingParsed":0,"testingAdded":0,"testingUpdated":0,"mappingParsed":0,"mappingAdded":0,"mappingUpdated":0,"selectedWikiFormat":"github"}""");
+        using var http = new HttpClient(handler);
+        var client = new RequirementsClient(http, DefaultOptions);
+
+        var result = await client.IngestAsync(new RequirementsIngestRequest
+        {
+            SourceFormat = "wiki",
+            PreferredWikiFormat = "github",
+            Documents = new Dictionary<string, RequirementsIngestDocument>
+            {
+                ["github/Functional-Requirements.md"] = new()
+                {
+                    Content = "# Functional Requirements (MCP Server)",
+                    LastModifiedUtc = new DateTimeOffset(2026, 5, 8, 12, 0, 0, TimeSpan.Zero)
+                }
+            }
+        });
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("\"sourceFormat\":\"wiki\"", handler.LastRequestBody!, StringComparison.Ordinal);
+        Assert.Contains("\"preferredWikiFormat\":\"github\"", handler.LastRequestBody!, StringComparison.Ordinal);
+        Assert.Contains("\"documents\"", handler.LastRequestBody!, StringComparison.Ordinal);
+        Assert.Equal("github", result.SelectedWikiFormat);
     }
 }

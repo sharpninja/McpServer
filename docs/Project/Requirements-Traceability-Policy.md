@@ -27,3 +27,13 @@ This policy defines how requirement IDs are represented and validated across pro
   - TR coverage in matrix via explicit IDs or range rows
   - TEST coverage in matrix via explicit IDs
 - Default mode fails on FR coverage gaps and reports TR/TEST gaps as warnings; use `-StrictTrAndTestCoverage` to fail on TR/TEST gaps.
+
+## Intentional Numbering Gaps
+
+Some TR series begin at `-002` or skip a sequence number. These gaps are intentional and SHALL be left in place rather than backfilled with stub entries:
+
+- **TR-MCP-WS-001** is intentionally absent; the workspace series begins at `TR-MCP-WS-002` (Workspace Service). The numbering was chosen at series introduction (commit 4866e5e, 2026-02-21) and there is no historical TR-MCP-WS-001.
+- **TR-MCP-TODO-001** is intentionally absent; the TODO series begins at `TR-MCP-TODO-002`. Original TODO scaffolding TRs were folded into higher-numbered entries before the doc shipped.
+- **TR-PLANNED-013** is intentionally represented only by `TR-PLANNED-013A` (SessionLog ProblemDetails Factory). The non-suffixed `TR-PLANNED-013` was absorbed by the `TR-MCP-DIR-*` series when Director requirements moved to `Requirements-Director.md` (commit 3029287, 2026-03-06).
+
+The traceability validator must NOT treat these IDs as missing. Authors SHOULD continue numbering future entries from the next unused integer in the relevant series rather than backfilling.

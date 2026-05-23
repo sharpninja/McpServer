@@ -74,6 +74,22 @@ public sealed class VectorIndexService : IVectorIndexService, IDisposable
     }
 
     /// <inheritdoc />
+    public bool RemoveVector(string chunkId)
+    {
+        ArgumentNullException.ThrowIfNull(chunkId);
+        lock (_lock)
+        {
+            if (!_chunkIdToInternalId.TryGetValue(chunkId, out var internalId))
+                return false;
+
+            _chunkIdToInternalId.Remove(chunkId);
+            _internalIdToChunkId.Remove(internalId);
+            _internalIdToVector.Remove(internalId);
+            return true;
+        }
+    }
+
+    /// <inheritdoc />
     public IReadOnlyList<(string ChunkId, float Distance)> Search(float[] queryEmbedding, int k = 20)
     {
         ArgumentNullException.ThrowIfNull(queryEmbedding);

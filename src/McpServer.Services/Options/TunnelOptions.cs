@@ -45,6 +45,12 @@ public sealed class NgrokTunnelOptions
 
     /// <summary>ngrok region (e.g. <c>us</c>, <c>eu</c>, <c>ap</c>).</summary>
     public string? Region { get; set; }
+
+    /// <summary>
+    /// When <c>true</c>, passes <c>--pooling-enabled</c> to allow multiple ngrok agents
+    /// to share the same endpoint for load balancing.
+    /// </summary>
+    public bool PoolingEnabled { get; set; }
 }
 
 /// <summary>Options for the Cloudflare Tunnel provider.</summary>

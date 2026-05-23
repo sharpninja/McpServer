@@ -1,4 +1,3 @@
-using System.IO.Compression;
 using System.Text;
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Options;
@@ -339,35 +338,50 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
             RequirementsDocType.Technical => Task.FromResult((RequirementsDocumentRenderer.RenderTechnical(_trEntries), "text/markdown")),
             RequirementsDocType.Testing => Task.FromResult((RequirementsDocumentRenderer.RenderTesting(_testEntries), "text/markdown")),
             RequirementsDocType.Mapping => Task.FromResult((RequirementsDocumentRenderer.RenderMapping(_mappings), "text/markdown")),
+            RequirementsDocType.Matrix => Task.FromResult((RequirementsDocumentRenderer.RenderMatrix(_frEntries, _trEntries, _testEntries, ReadFileIfExists(_options.MatrixPath)), "text/markdown")),
             RequirementsDocType.All => throw new ArgumentOutOfRangeException(nameof(docType), "Use GenerateAllAsync for docType=All."),
             _ => throw new ArgumentOutOfRangeException(nameof(docType), docType, "Unknown requirements document type.")
         };
     }
 
     /// <inheritdoc />
-    public Task<MemoryStream> GenerateAllAsync(CancellationToken ct = default)
+    public async Task<RequirementsDocumentExportResult> GenerateAllAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default)
     {
         ct.ThrowIfCancellationRequested();
 
-        var stream = new MemoryStream();
-        using (var zip = new ZipArchive(stream, ZipArchiveMode.Create, leaveOpen: true))
-        {
-            WriteZipEntry(zip, RequirementsDocumentRenderer.FunctionalFileName, RequirementsDocumentRenderer.RenderFunctional(_frEntries));
-            WriteZipEntry(zip, RequirementsDocumentRenderer.TechnicalFileName, RequirementsDocumentRenderer.RenderTechnical(_trEntries));
-            WriteZipEntry(zip, RequirementsDocumentRenderer.TestingFileName, RequirementsDocumentRenderer.RenderTesting(_testEntries));
-            WriteZipEntry(zip, RequirementsDocumentRenderer.MappingFileName, RequirementsDocumentRenderer.RenderMapping(_mappings));
-        }
-
-        stream.Position = 0;
-        return Task.FromResult(stream);
+        var generated = (generatedAtUtc ?? DateTimeOffset.UtcNow).ToUniversalTime();
+        var documents = RequirementsWikiDocumentRenderer.RenderCanonicalFiles(_frEntries, _trEntries, _testEntries, _mappings, ReadExistingMatrixForExport(outputRootPath));
+        return await RequirementsDocumentExportWriter.WriteAsync(
+            outputRootPath,
+            "markdown",
+            "all",
+            generated,
+            documents,
+            ct: ct).ConfigureAwait(false);
     }
 
-    private static void WriteZipEntry(ZipArchive zip, string entryName, string content)
+    /// <inheritdoc />
+    public async Task<RequirementsDocumentExportResult> GenerateWikiAsync(string outputRootPath, DateTimeOffset? generatedAtUtc = null, CancellationToken ct = default)
     {
-        var entry = zip.CreateEntry(entryName);
-        using var stream = entry.Open();
-        using var writer = new StreamWriter(stream, s_utf8NoBom, leaveOpen: false);
-        writer.Write(content);
+        ct.ThrowIfCancellationRequested();
+
+        var generated = (generatedAtUtc ?? DateTimeOffset.UtcNow).ToUniversalTime();
+        var documents = RequirementsWikiDocumentRenderer.RenderWikiFiles(
+            _frEntries,
+            _trEntries,
+            _testEntries,
+            _mappings,
+            generated,
+            ReadExistingMatrixForWikiExport(outputRootPath));
+
+        return await RequirementsDocumentExportWriter.WriteAsync(
+            outputRootPath,
+            "wiki",
+            "all",
+            generated,
+            documents,
+            [RequirementsWikiDocumentRenderer.AzureFolder, RequirementsWikiDocumentRenderer.GitHubFolder],
+            ct).ConfigureAwait(false);
     }
 
     private async Task PersistFunctionalAsync(CancellationToken ct) =>
@@ -381,6 +395,21 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
 
     private async Task PersistMappingAsync(CancellationToken ct) =>
         await AtomicWriteAsync(_options.MappingPath, RequirementsDocumentRenderer.RenderMapping(_mappings), ct).ConfigureAwait(false);
+
+    private string? ReadExistingMatrixForExport(string outputRootPath)
+    {
+        var outputMatrix = Path.Combine(outputRootPath, RequirementsDocumentRenderer.MatrixFileName);
+        return ReadFileIfExists(outputMatrix) ?? ReadFileIfExists(_options.MatrixPath);
+    }
+
+    private string? ReadExistingMatrixForWikiExport(string outputRootPath)
+    {
+        var projectRoot = Directory.GetParent(Path.GetFullPath(outputRootPath))?.FullName;
+        var projectMatrix = string.IsNullOrWhiteSpace(projectRoot)
+            ? null
+            : Path.Combine(projectRoot, RequirementsDocumentRenderer.MatrixFileName);
+        return ReadFileIfExists(projectMatrix) ?? ReadFileIfExists(_options.MatrixPath);
+    }
 
     private async Task AtomicWriteAsync(string path, string content, CancellationToken ct)
     {
@@ -433,7 +462,7 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
         }
     }
 
-    private static string? ReadFileIfExists(string path)
+    private static string? ReadFileIfExists(string? path)
     {
         if (string.IsNullOrWhiteSpace(path))
             return null;

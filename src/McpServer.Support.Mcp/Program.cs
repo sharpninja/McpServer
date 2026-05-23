@@ -22,6 +22,7 @@ using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Controllers;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Services.FederationAdapters;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Database;
 using McpServer.Support.Mcp.Web;
@@ -75,6 +76,16 @@ bool IsStdioTransportRequested(string[] a)
     return false;
 }
 
+// When launched by Windows Service Control Manager, the process starts with
+// CurrentDirectory=System32. Host.UseWindowsService() fixes ContentRootPath
+// later, but AddYamlFile below resolves against the ConfigurationBuilder's
+// initial FileProvider (CurrentDirectory), so without this bump the service
+// silently skips appsettings.yaml and TR-MCP-CFG-007 validation fires.
+if (OperatingSystem.IsWindows() && WindowsServiceHelpers.IsWindowsService())
+{
+    Directory.SetCurrentDirectory(AppContext.BaseDirectory);
+}
+
 var builder = WebApplication.CreateBuilder(args);
 EnsureApprovedWindowsServiceDeployment();
 DisableEnvironmentSpecificJsonConfigForWindowsService(builder);
@@ -106,11 +117,7 @@ WorkspaceConfigEntry? primaryWorkspaceEntry = null;
     primaryWorkspaceEntry ??= workspaces
         .Where(w => w.IsEnabled)
         .FirstOrDefault();
-    if (primaryWorkspaceEntry is not null)
-    {
-        builder.Environment.ContentRootPath = Path.GetFullPath(primaryWorkspaceEntry.WorkspacePath);
-        Directory.SetCurrentDirectory(builder.Environment.ContentRootPath);
-    }
+
 }
 
 builder.Host.UseSerilog((context, _, config) =>
@@ -322,10 +329,11 @@ builder.Services.AddSingleton<WorkspaceServiceAccessor>();
 builder.Services.AddSingleton<TodoCreationService>();
 builder.Services.AddSingleton<IIssueTodoSyncService, IssueTodoSyncService>();
 builder.Services.AddSingleton<TodoUpdateService>();
+builder.Services.AddScoped<ITodoExecutionService, TodoExecutionService>();
 builder.Services.AddSingleton<IRequirementsService, RequirementsService>();
-builder.Services.AddSingleton<RequirementsDocumentService>();
-builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<RequirementsDocumentService>());
-builder.Services.AddSingleton<IRequirementsDocumentService>(sp => sp.GetRequiredService<RequirementsDocumentService>());
+builder.Services.AddSingleton<RequirementsDatabaseDocumentService>();
+builder.Services.AddSingleton<IRequirementsRepository>(sp => sp.GetRequiredService<RequirementsDatabaseDocumentService>());
+builder.Services.AddSingleton<IRequirementsDocumentService>(sp => sp.GetRequiredService<RequirementsDatabaseDocumentService>());
 builder.Services.AddSingleton<ITodoPromptService, TodoPromptService>();
 builder.Services.AddAgentExecutionStrategies();
 builder.Services.AddSingleton<IVoiceConversationService, VoiceConversationService>();
@@ -363,6 +371,7 @@ builder.Services.AddScoped<ISessionLogService, SessionLogService>();
 builder.Services.AddScoped<Fts5SearchService>();
 builder.Services.AddScoped<IContextSearchService, HybridSearchService>();
 builder.Services.AddMcpGraphRag();
+builder.Services.AddScoped<IWorkspaceProjectionWriter, WorkspaceProjectionWriter>();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 builder.Services.AddScoped<IWorkspacePolicyDirectiveParser, WorkspacePolicyDirectiveParser>();
 builder.Services.AddScoped<IWorkspacePolicyService, WorkspacePolicyService>();
@@ -390,36 +399,16 @@ builder.Services.AddMcpIdentityServer(builder.Configuration);
 var oidcAuthBootstrap = builder.Configuration.GetSection(OidcAuthOptions.SectionName).Get<OidcAuthOptions>()
     ?? new OidcAuthOptions();
 
-// When embedded IdentityServer is enabled and no external authority is configured,
-// point JWT validation at the local IdentityServer instance.
-var effectiveAuthority = oidcAuthBootstrap.Authority;
-var effectiveAudience = oidcAuthBootstrap.Audience;
-var authEnabled = oidcAuthBootstrap.Enabled || identityServerOptions.Enabled;
+// Select the OIDC provider strategy from configuration.
+// Priority: embedded IdentityServer > external authority > disabled.
+var oidcStrategyLogger = LoggerFactory.Create(lb => lb.AddConsole()).CreateLogger("OidcProviderStrategyFactory");
+var oidcStrategy = OidcProviderStrategyFactory.Create(identityServerOptions, oidcAuthBootstrap, listenPort, oidcStrategyLogger);
+builder.Services.AddSingleton<IOidcProviderStrategy>(oidcStrategy);
 
-if (identityServerOptions.Enabled && !oidcAuthBootstrap.Enabled)
+if (oidcStrategy.IsEnabled)
 {
-    effectiveAuthority = !string.IsNullOrWhiteSpace(identityServerOptions.IssuerUri)
-        ? identityServerOptions.IssuerUri
-        : $"http://localhost:{listenPort}";
-    effectiveAudience = identityServerOptions.ApiResourceName;
-}
-
-if (authEnabled)
-{
-    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(options =>
-        {
-            options.MapInboundClaims = false;
-            options.Authority = effectiveAuthority;
-            options.Audience = effectiveAudience;
-            options.RequireHttpsMetadata = oidcAuthBootstrap.RequireHttpsMetadata;
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                NameClaimType = "preferred_username",
-                RoleClaimType = "realm_roles",
-                ValidateAudience = !string.IsNullOrWhiteSpace(effectiveAudience),
-            };
-        });
+    var authBuilder = builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme);
+    oidcStrategy.ConfigureAuthentication(authBuilder);
 }
 else
 {
@@ -430,7 +419,7 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AgentManager", policy =>
     {
-        if (!authEnabled)
+        if (!oidcStrategy.IsEnabled)
         {
             policy.RequireAssertion(_ => true);
             return;
@@ -441,6 +430,83 @@ builder.Services.AddAuthorization(options =>
         policy.RequireAssertion(ctx => HasAnyRole(ctx.User, "agent-manager", "admin"));
     });
 });
+
+builder.Services.Configure<FederationOptions>(
+    builder.Configuration.GetSection(FederationOptions.SectionName));
+builder.Services.AddSingleton<FederationRegistry>();
+builder.Services.AddSingleton<FederationProxyService>();
+builder.Services.AddFederationStateAdapters();
+builder.Services.AddSingleton<IFederationTopologyService, FederationTopologyService>();
+builder.Services.AddSingleton<FederationStateAdapterRegistry>();
+builder.Services.AddSingleton<IFederationEnvelopeSigner, FederationEnvelopeSigner>();
+builder.Services.AddSingleton<IFederationOperationApplyService, FederationOperationApplyService>();
+builder.Services.AddSingleton<IFederationLocalExecutionService, FederationLocalExecutionService>();
+builder.Services.AddHttpClient(FederationProxyService.HttpClientName)
+    .ConfigurePrimaryHttpMessageHandler(() => new System.Net.Http.HttpClientHandler
+    {
+        AllowAutoRedirect = false,
+        AutomaticDecompression = System.Net.DecompressionMethods.None,
+    });
+builder.Services.AddHealthChecks()
+    .AddCheck<FederationUpstreamHealthCheck>("upstream", tags: ["live"]);
+
+// FR-MCP-082/083/084/085: Federation Phase 2 — federated read-merge and push.
+// Register the HTTP client and data client used by federation decorators.
+builder.Services.AddHttpClient(McpServer.Support.Mcp.FederationDataClient.HttpClientName);
+builder.Services.AddSingleton<McpServer.Support.Mcp.FederationDataClient>();
+builder.Services.AddSingleton<IFederationDataClient>(sp => sp.GetRequiredService<McpServer.Support.Mcp.FederationDataClient>());
+builder.Services.AddSingleton<McpServer.Support.Mcp.GraphRag.IGraphRagFederationClient>(sp => sp.GetRequiredService<McpServer.Support.Mcp.FederationDataClient>());
+
+// Decorate ITodoService with federated merge.
+{
+    var innerTodo = builder.Services.Single(d => d.ServiceType == typeof(ITodoService));
+    builder.Services.Remove(innerTodo);
+    builder.Services.AddSingleton<ITodoService>(sp =>
+    {
+        var factory = sp.GetRequiredService<ITodoServiceFactory>();
+        var inner = factory.CreatePrimary();
+        return new FederatedTodoService(
+            inner,
+            sp.GetRequiredService<FederationRegistry>(),
+            sp.GetRequiredService<IFederationDataClient>(),
+            sp.GetRequiredService<ILogger<FederatedTodoService>>());
+    });
+}
+
+// Decorate ISessionLogService with federated merge.
+{
+    var innerSession = builder.Services.Single(d => d.ServiceType == typeof(ISessionLogService));
+    builder.Services.Remove(innerSession);
+    builder.Services.AddScoped<ISessionLogService>(sp =>
+    {
+        var inner = ActivatorUtilities.CreateInstance<SessionLogService>(sp);
+        return new FederatedSessionLogService(
+            inner,
+            sp.GetRequiredService<FederationRegistry>(),
+            sp.GetRequiredService<IFederationDataClient>(),
+            sp.GetRequiredService<ILogger<FederatedSessionLogService>>());
+    });
+}
+
+// Decorate IGraphRagService with federated merge.
+// GraphRagService is internal to McpServer.GraphRag, so we capture the type from the descriptor.
+{
+    var innerGraphRag = builder.Services.Single(d => d.ServiceType == typeof(IGraphRagService));
+    var innerType = innerGraphRag.ImplementationType!;
+    builder.Services.Remove(innerGraphRag);
+    builder.Services.AddScoped<IGraphRagService>(sp =>
+    {
+        var inner = (IGraphRagService)ActivatorUtilities.CreateInstance(sp, innerType);
+        return new McpServer.Support.Mcp.GraphRag.FederatedGraphRagService(
+            inner,
+            sp.GetRequiredService<FederationRegistry>(),
+            sp.GetRequiredService<McpServer.Support.Mcp.GraphRag.IGraphRagFederationClient>(),
+            sp.GetRequiredService<ILogger<McpServer.Support.Mcp.GraphRag.FederatedGraphRagService>>());
+    });
+}
+
+// Push service for explicit federation data push.
+builder.Services.AddScoped<IFederationPushService, FederationPushService>();
 
 builder.Services.Configure<TunnelOptions>(
     builder.Configuration.GetSection(TunnelOptions.SectionName));
@@ -459,7 +525,17 @@ if (!builder.Environment.IsEnvironment("Test"))
     builder.Services.AddHostedService(sp => (WorkspaceProcessManager)sp.GetRequiredService<IWorkspaceProcessManager>());
     builder.Services.AddHostedService(sp => sp.GetRequiredService<TunnelRegistry>());
     builder.Services.AddHostedService<AgentPoolSeedService>();
+    builder.Services.AddHostedService<FederationLocalProxyEnrollmentService>();
+    builder.Services.AddHostedService<FederationQueuedOperationReplayService>();
+    builder.Services.AddHostedService<FederationFanoutSyncService>();
+    // TR-MCP-TODO-007: one-shot import from legacy mcp.db into the configured authoritative DB.
+    builder.Services.AddHostedService<LegacyTodoSqliteMigrator>();
 }
+
+// TR-MCP-TODO-008 Phase 4: per-workspace YAML bootstrap into the authoritative DB.
+// Runs in every environment (incl. Test) so integration fixtures that seed a YAML
+// file get materialized into the DB before the first request.
+builder.Services.AddHostedService<TodoBootstrapImporter>();
 
 var mvcBuilder = builder.Services.AddControllers();
 #if !DEBUG
@@ -467,6 +543,39 @@ if (!builder.Environment.IsStaging())
     mvcBuilder.ConfigureApplicationPartManager(mgr =>
         mgr.FeatureProviders.Add(new ExcludeControllerFeatureProvider(typeof(DiagnosticController))));
 #endif
+
+// FR-SUPPORT-010B / TR-PLANNED-013A: Replace ASP.NET's default invalid-model-state
+// response shape ({"errors":{"dto":["..."]}}) with RFC 7807 ProblemDetails that
+// cites the actual offending JSON path. The "dto" key is the action parameter
+// name; surfacing it confuses callers into thinking a wrapper field is required.
+mvcBuilder.ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = ctx =>
+    {
+        var errors = ctx.ModelState
+            .Where(kvp => kvp.Value is { Errors.Count: > 0 })
+            .ToDictionary(
+                kvp => string.IsNullOrEmpty(kvp.Key) || kvp.Key == "dto" || kvp.Key == "body" || kvp.Key == "turn"
+                    ? "$"
+                    : kvp.Key,
+                kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).ToArray());
+
+        var problem = new Microsoft.AspNetCore.Mvc.ValidationProblemDetails(errors)
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Title = "Invalid request body.",
+            Detail = "Body must conform to the documented schema. Accepted top-level shape for session log POST: { \"sourceType\": string, \"sessionId\": string, optional \"workspace\": { project, targetFramework, repository, branch } }. No outer wrapper is required.",
+            Type = "https://docs.mcpserver/errors/invalid-body",
+        };
+        problem.Extensions["traceId"] = ctx.HttpContext.TraceIdentifier;
+
+        return new Microsoft.AspNetCore.Mvc.ObjectResult(problem)
+        {
+            StatusCode = StatusCodes.Status400BadRequest,
+            ContentTypes = { "application/problem+json" },
+        };
+    };
+});
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddMcpServer()
@@ -589,6 +698,7 @@ app.UseMiddleware<InteractionLoggingMiddleware>();
 app.UseMcpIdentityServer();
 app.UseAuthentication();
 app.UseMiddleware<WorkspaceResolutionMiddleware>();
+app.UseMiddleware<FederationMiddleware>();
 app.UseMiddleware<WorkspaceAuthMiddleware>();
 app.UseAuthorization();
 
@@ -739,7 +849,7 @@ app.MapGet("/pair/key", async (HttpContext context, IOptions<PairingOptions> opt
 }).ExcludeFromDescription();
 
 app.MapGet("/pair/qr", async (HttpContext context, IOptions<PairingOptions> opts, PairingSessionService sessions,
-    TunnelRegistry tunnelRegistry, IOptions<IdentityServerOptions> idsOpts, IOptions<OidcAuthOptions> oidcOpts) =>
+    TunnelRegistry tunnelRegistry, IOidcProviderStrategy oidcProvider) =>
 {
     var token = context.Request.Cookies["mcp_pair"];
     if (!sessions.Validate(token))
@@ -756,32 +866,9 @@ app.MapGet("/pair/qr", async (HttpContext context, IOptions<PairingOptions> opts
 
     baseUrl ??= $"{context.Request.Scheme}://{context.Request.Host}";
 
-    // When a tunnel is active, point to the identity server proxy login page
-    string loginUrl;
-    var ids = idsOpts.Value;
-    var oidc = oidcOpts.Value;
-    if (activeTunnel is not null && oidc.Enabled)
-    {
-        // External Keycloak: proxy login page through the tunnel
-        var authority = oidc.Authority.TrimEnd('/');
-        if (Uri.TryCreate(authority, UriKind.Absolute, out var authorityUri))
-        {
-            loginUrl = $"{baseUrl}/auth/ui{authorityUri.AbsolutePath.TrimEnd('/')}/device";
-        }
-        else
-        {
-            loginUrl = $"{baseUrl}/pair";
-        }
-    }
-    else if (activeTunnel is not null && ids.Enabled)
-    {
-        // Embedded IdentityServer: login page is served by the MCP server itself via tunnel
-        loginUrl = $"{baseUrl}/pair";
-    }
-    else
-    {
-        loginUrl = $"{baseUrl}/pair";
-    }
+    var loginUrl = activeTunnel is not null && oidcProvider.IsEnabled
+        ? oidcProvider.GetPairingLoginUrl(baseUrl)
+        : $"{baseUrl}/pair";
 
     var svg = PairingQrCode.GenerateSvg(loginUrl);
     return Results.Content(svg, "image/svg+xml");

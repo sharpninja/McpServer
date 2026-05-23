@@ -6,11 +6,11 @@ namespace McpServer.Support.Mcp.Requirements;
 internal static class RequirementsDocumentParser
 {
     private static readonly Regex s_frEntryRegex = new(
-        @"^##\s+(?<id>FR-[^\s]+)\s+(?<title>.+?)\s*\r?\n\r?\n(?<body>[\s\S]*?)(?=^##\s+FR-[^\s]+\s+|\z)",
+        @"^##\s+(?:\*\*)?(?<id>FR-[^\s*]+)\s+(?<title>.+?)\s*\r?\n\r?\n(?<body>[\s\S]*?)(?=^##\s+(?:\*\*)?FR-[^\s*]+\s+|\z)",
         RegexOptions.Compiled | RegexOptions.Multiline);
 
     private static readonly Regex s_trEntryRegex = new(
-        @"^##\s+(?<id>TR-[^\s]+)\s*\r?\n\r?\n(?<body>[\s\S]*?)(?=^##\s+TR-[^\s]+\s*$|\z)",
+        @"^##\s+(?:\*\*)?(?<id>TR-[^\s*]+).*?\r?\n\r?\n(?<body>[\s\S]*?)(?=^##\s+(?:\*\*)?TR-[^\s*]+.*$|\z)",
         RegexOptions.Compiled | RegexOptions.Multiline);
 
     private static readonly Regex s_testEntryRegex = new(
@@ -33,7 +33,7 @@ internal static class RequirementsDocumentParser
                 continue;
 
             var id = match.Groups["id"].Value.Trim();
-            var title = match.Groups["title"].Value.Trim();
+            var title = CleanHeadingTitle(match.Groups["title"].Value);
             var body = NormalizeBody(match.Groups["body"].Value);
             if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(title))
                 continue;
@@ -119,13 +119,24 @@ internal static class RequirementsDocumentParser
             if (!cells[0].StartsWith("FR-", StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            list.Add(new FrTrMapping(cells[0], ParseMappingTrIds(cells[1])));
+            list.Add(new FrTrMapping(
+                cells[0],
+                ParseMappingIds(cells[1]),
+                cells.Length >= 3 && cells[2].Contains("TEST-", StringComparison.OrdinalIgnoreCase) ? ParseMappingIds(cells[2]) : []));
         }
 
         return list;
     }
 
-    private static IReadOnlyList<string> ParseMappingTrIds(string cell)
+    private static string CleanHeadingTitle(string raw)
+    {
+        var title = (raw ?? string.Empty).Trim().Trim('*').Trim();
+        if (title.StartsWith("—", StringComparison.Ordinal) || title.StartsWith("-", StringComparison.Ordinal))
+            title = title[1..].Trim();
+        return title.TrimEnd('*').Trim();
+    }
+
+    private static IReadOnlyList<string> ParseMappingIds(string cell)
     {
         if (string.IsNullOrWhiteSpace(cell) || cell.Contains("planned", StringComparison.OrdinalIgnoreCase))
             return [];

@@ -1,7 +1,9 @@
-using System.IO.Compression;
 using System.Net;
 using System.Net.Http.Json;
+using System.IO.Compression;
+using System.Text.Json;
 using McpServer.Support.Mcp;
+using McpServer.Support.Mcp.Requirements.Models;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -48,6 +50,12 @@ public sealed class RequirementsControllerTests : IClassFixture<RequirementsCont
         var generatedMarkdown = await generated.Content.ReadAsStringAsync().ConfigureAwait(true);
         Assert.Contains("FR-MCP-999 Requirements test entry", generatedMarkdown);
 
+        var generatedMatrix = await _client.GetAsync("/mcpserver/requirements/generate?doc=matrix").ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, generatedMatrix.StatusCode);
+        Assert.Equal("text/markdown", generatedMatrix.Content.Headers.ContentType?.MediaType);
+        var matrixMarkdown = await generatedMatrix.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.Contains("| FR-MCP-999 | Tracked | Functional-Requirements.md |", matrixMarkdown);
+
         var deleteResponse = await _client.DeleteAsync("/mcpserver/requirements/fr/FR-MCP-999").ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, deleteResponse.StatusCode);
 
@@ -56,24 +64,46 @@ public sealed class RequirementsControllerTests : IClassFixture<RequirementsCont
     }
 
     [Fact]
-    public async Task GenerateAll_ReturnsZipWithFourDocuments()
+    public async Task GenerateAll_WritesCanonicalDocumentsToWorkspace()
     {
         var response = await _client.GetAsync("/mcpserver/requirements/generate?doc=all").ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal("application/zip", response.Content.Headers.ContentType?.MediaType);
+        Assert.Equal("application/json", response.Content.Headers.ContentType?.MediaType);
 
-        await using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(true);
-        using var zip = new ZipArchive(stream, ZipArchiveMode.Read, leaveOpen: false);
-        var names = zip.Entries.Select(e => e.FullName).OrderBy(static n => n, StringComparer.Ordinal).ToArray();
+        var export = await response.Content.ReadFromJsonAsync<RequirementsDocumentExportResult>().ConfigureAwait(true);
+        Assert.NotNull(export);
+        var names = export!.Files.Select(e => e.RelativePath).OrderBy(static n => n, StringComparer.Ordinal).ToArray();
         Assert.Equal(
             new[]
             {
                 "Functional-Requirements.md",
+                "Requirements-Matrix.md",
                 "TR-per-FR-Mapping.md",
                 "Technical-Requirements.md",
                 "Testing-Requirements.md"
             },
             names);
+        Assert.All(export.Files, file => Assert.True(File.Exists(file.FullPath), file.FullPath));
+    }
+
+    [Fact]
+    public async Task GenerateWiki_WritesAzureAndGitHubWikiFiles()
+    {
+        var response = await _client.GetAsync("/mcpserver/requirements/generate?doc=all&format=wiki").ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal("application/zip", response.Content.Headers.ContentType?.MediaType);
+
+        await using var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(true);
+        using var archive = new ZipArchive(responseStream, ZipArchiveMode.Read, leaveOpen: false);
+        var names = archive.Entries.Select(e => e.FullName).OrderBy(static n => n, StringComparer.Ordinal).ToArray();
+
+        Assert.Contains("azure/.mcp-requirements-manifest.json", names);
+        Assert.Contains("azure/.order", names);
+        Assert.Contains("azure/Requirements-Matrix.md", names);
+        Assert.Contains("github/.mcp-requirements-manifest.json", names);
+        Assert.Contains("github/Requirements-Matrix.md", names);
+        Assert.Contains("github/_Sidebar.md", names);
+        Assert.Contains("github/_Footer.md", names);
     }
 
     [Fact]
@@ -134,6 +164,94 @@ public sealed class RequirementsControllerTests : IClassFixture<RequirementsCont
         var mapping = await _client.GetAsync("/mcpserver/requirements/mapping/FR-MCP-777").ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, mapping.StatusCode);
     }
+
+    [Fact]
+    public async Task IngestEndpoint_SelectsNewerWikiSourceAndAuthoritativelySyncs()
+    {
+        var older = new DateTimeOffset(2026, 5, 7, 12, 0, 0, TimeSpan.Zero);
+        var newer = new DateTimeOffset(2026, 5, 8, 12, 0, 0, TimeSpan.Zero);
+        var payload = new
+        {
+            sourceFormat = "wiki",
+            documents = new Dictionary<string, object?>
+            {
+                ["azure/.mcp-requirements-manifest.json"] = WikiDoc("""{"generatedAtUtc":"2026-05-07T12:00:00Z"}""", older),
+                ["azure/Functional-Requirements.md"] = WikiDoc("""
+                    # Functional Requirements (MCP Server)
+
+                    ## FR-MCP-101 Azure Entry
+
+                    Azure body.
+                    """, older),
+                ["azure/Technical-Requirements.md"] = WikiDoc("""
+                    # Technical Requirements (MCP Server)
+
+                    ## TR-MCP-101
+
+                    Azure TR body.
+                    """, older),
+                ["azure/Testing-Requirements.md"] = WikiDoc("""
+                    # Testing Requirements (MCP Server)
+
+                    - TEST-MCP-101: Azure test.
+                    """, older),
+                ["azure/TR-per-FR-Mapping.md"] = WikiDoc("""
+                    # TR per FR Mapping (MCP Server)
+
+                    | FR | Primary TRs | Tests |
+                    | --- | --- | --- |
+                    | FR-MCP-101 | TR-MCP-101 | TEST-MCP-101 |
+                    """, older),
+                ["github/.mcp-requirements-manifest.json"] = WikiDoc("""{"generatedAtUtc":"2026-05-08T12:00:00Z"}""", newer),
+                ["github/Functional-Requirements.md"] = WikiDoc("""
+                    # Functional Requirements (MCP Server)
+
+                    ## FR-MCP-888 GitHub Entry
+
+                    GitHub body.
+                    """, newer),
+                ["github/Technical-Requirements.md"] = WikiDoc("""
+                    # Technical Requirements (MCP Server)
+
+                    ## TR-MCP-888
+
+                    GitHub TR body.
+                    """, newer),
+                ["github/Testing-Requirements.md"] = WikiDoc("""
+                    # Testing Requirements (MCP Server)
+
+                    - TEST-MCP-888: GitHub test.
+                    """, newer),
+                ["github/TR-per-FR-Mapping.md"] = WikiDoc("""
+                    # TR per FR Mapping (MCP Server)
+
+                    | FR | Primary TRs | Tests |
+                    | --- | --- | --- |
+                    | FR-MCP-888 | TR-MCP-888 | TEST-MCP-888 |
+                    """, newer),
+            }
+        };
+
+        var ingestResponse = await _client.PostAsJsonAsync("/mcpserver/requirements/ingest", payload).ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, ingestResponse.StatusCode);
+
+        using var body = JsonDocument.Parse(await ingestResponse.Content.ReadAsStringAsync().ConfigureAwait(true));
+        Assert.Equal("github", body.RootElement.GetProperty("selectedWikiFormat").GetString());
+        Assert.True(body.RootElement.GetProperty("functionalDeleted").GetInt32() >= 1);
+
+        var selectedFr = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-888").ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.OK, selectedFr.StatusCode);
+
+        var deletedSeedFr = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-001").ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.NotFound, deletedSeedFr.StatusCode);
+    }
+
+    private static object WikiDoc(string content, DateTimeOffset lastModifiedUtc)
+        => new
+        {
+            content,
+            lastModifiedUtc
+        };
 
     /// <summary>WebApplicationFactory that seeds a temporary requirements docs workspace.</summary>
     public sealed class RequirementsWebFactory : WebApplicationFactory<McpApiEntryPoint>, IDisposable

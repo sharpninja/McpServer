@@ -13,6 +13,12 @@ The hosted McpAgent now exposes **27 tools** through the AI function surface. Th
 
 Using these tools instead of raw API calls ensures consistent identifier validation, canonical formatting, and proper audit trails.
 
+## Agent Plugin Boundary
+
+In workspaces whose marker declares `agent_plugins.policy: required`, hosted tools and direct `mcpserver-repl --agent-stdio` are not substitutes for the required per-agent plugin. Codex, Claude Code, GitHub Copilot, and Cline must use their matching plugin wrapper for normal session log, TODO, requirements, import/export, and traceability operations. Direct REPL use remains appropriate for plugin implementation and fallback diagnostics.
+
+When direct `--agent-stdio` is used, send one YAML envelope per document and separate multiple documents with `---`. Do not send `type: batch`; unsupported batch envelopes are rejected with `unsupported_batch_envelope`.
+
 ## Tool Inventory
 
 ### Session Log (6 tools)
@@ -200,7 +206,7 @@ These canonical formats are enforced by both the old API and the new tools:
 
 - **Session ID**: `<Agent>-<yyyyMMddTHHmmssZ>-<suffix>` (e.g. `Copilot-20260402T120000Z-authflow`)
 - **Request ID**: `req-<yyyyMMddTHHmmssZ>-<slugOrOrdinal>` (e.g. `req-20260402T120000Z-add-login-001`)
-- **TODO ID**: `<PHASE>-<AREA>-###` or `ISSUE-{number}` (e.g. `PLAN-AUTH-001`, `ISSUE-42`)
+- **TODO ID**: uppercase kebab-case ending in `-###` or `ISSUE-{number}` (e.g. `PLAN-AUTH-001`, `MCP-TODO-CREATE-001`, `ISSUE-42`)
 - **FR ID**: `FR-<AREA>-###` (e.g. `FR-MCP-001`)
 - **TR ID**: `TR-<AREA>-<SUBAREA>-###` (e.g. `TR-MCP-ARCH-001`)
 - **TEST ID**: `TEST-<AREA>-###` (e.g. `TEST-MCP-001`)

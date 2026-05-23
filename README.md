@@ -1,156 +1,170 @@
 # MCP Server
 
-MCP Server is a standalone ASP.NET Core service for workspace-scoped context retrieval, TODO orchestration, session logging, repository operations, GraphRAG, and GitHub automation.
+Workspace-scoped AI agent infrastructure for .NET — context retrieval, TODO orchestration, session logging, repository operations, GitHub automation, GraphRAG, and agent orchestration over HTTP and MCP STDIO transports.
 
-## Documentation
+## Key Features
 
-- HTTP API with Swagger UI
-- MCP over STDIO transport (`--transport stdio`)
-- Single-port multi-tenant workspace hosting via `X-Workspace-Path` header
-- Per-workspace todo storage backend (`yaml` file-backed or `sqlite` table-backed)
-- Three-tier workspace resolution: header → API key reverse lookup → default
-- Optional interaction logging and Parseable sink support
-
-## Repository Layout
-
-- `src/McpServer.Support.Mcp` - server application
-- `tests/McpServer.Support.Mcp.Tests` - unit/integration tests
-- `docs/MCP-SERVER.md` - detailed operational and configuration guide
-- `docs/AZURE-PIPELINES.md` - Azure DevOps CI/CD variables and retention notes
-- `scripts` - run, validate, test, migration, extension, and packaging scripts
-- `azure-pipelines.yml` - Azure DevOps pipeline (build/test/artifacts/MSIX/docs quality/package publish)
-
-## Prerequisites
-
-- .NET SDK from `global.json`
-- PowerShell 7+ — use **`pwsh.exe`** for all repo scripts and documented shell commands (not `powershell.exe`)
-- Windows SDK tools (`makeappx.exe`) for MSIX packaging
-- Optional: GitHub CLI (`gh`) for GitHub issue endpoints
+- **Dual transport** — HTTP REST with Swagger UI and MCP-over-STDIO for direct agent integration
+- **Multi-tenant workspaces** — single port, workspace isolation via header, API key, or default resolution
+- **Agent orchestration** — process-isolated agent pool with branch strategies, PowerShell sessions, and desktop automation
+- **Semantic search** — ONNX-based vector embeddings with HNSW indexing, optional GraphRAG enhancement
+- **Requirements traceability** — FR/TR/TEST document management with validation and Markdown/ZIP export
+- **Multi-provider storage** — SQLite, SQL Server, and PostgreSQL with automatic migrations
+- **REPL CLI tool** — `mcpserver-repl` for interactive and agent-STDIO access via YAML envelope protocol
+- **Typed .NET client** — `SharpNinja.McpServer.Client` NuGet package covering all API endpoints
 
 ## Quick Start
 
-1. Restore and build:
-
 ```powershell
-./build.ps1 Compile --configuration Staging
-# or: dotnet restore McpServer.sln && dotnet build McpServer.sln -c Staging
+# Build
+./build.ps1 Compile
+
+# Run
+./build.ps1 StartServer --instance default
+
+# Test
+./build.ps1 Test
 ```
 
-1. Run the default instance:
+Open Swagger at `http://localhost:7147/swagger`.
+
+## Architecture
+
+```
+src/
+  McpServer.Support.Mcp     ASP.NET Core server (controllers, STDIO host, auth)
+  McpServer.Client           Typed REST client library (NuGet)
+  McpServer.McpAgent         Microsoft Agent Framework integration
+  McpServer.Repl.Core        REPL protocol, YAML envelope, trust bootstrap
+  McpServer.Repl.Host        mcpserver-repl CLI tool
+  McpServer.Services         Business logic (ingestion, indexing, TODO, GitHub, agents)
+  McpServer.Storage          EF Core abstraction + vector indexing
+  McpServer.GraphRag         Hybrid semantic search with GraphRAG
+  McpServer.Cqrs             Lightweight async CQRS framework (NuGet)
+  McpServer.Cqrs.Mvvm        MVVM extensions for CQRS
+  McpServer.Launcher          Windows GUI launcher
+  McpServer.ServiceDefaults  Aspire service defaults, OpenTelemetry, health checks
+```
+
+## Transports
+
+### HTTP
 
 ```powershell
 ./build.ps1 StartServer --instance default
-# or: dotnet run --project src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj -c Staging -- --instance default
+# Listens on http://localhost:7147
 ```
 
-1. Open Swagger:
-
-```text
-http://localhost:7147/swagger
-```
-
-## Run Modes
-
-### HTTP mode
+### MCP STDIO
 
 ```powershell
-dotnet run --project src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj -c Staging -- --instance default
+dotnet run --project src/McpServer.Support.Mcp -- --transport stdio --instance default
 ```
 
-### STDIO MCP mode
+### REPL
 
 ```powershell
-dotnet run --project src\McpServer.Support.Mcp\McpServer.Support.Mcp.csproj -c Staging -- --transport stdio --instance default
+./build.ps1 InstallReplTool
+mcpserver-repl --interactive              # interactive mode
+mcpserver-repl --agent-stdio              # STDIO mode for agent integration
 ```
+
+## API Surface
+
+| Route | Capability |
+|---|---|
+| `/mcpserver/todo` | TODO CRUD, audit history, priority/section filtering, prompt generation |
+| `/mcpserver/sessionlog` | Session log upsert, query, full-text search, pagination |
+| `/mcpserver/context` | Hybrid semantic search with GraphRAG, deterministic context packs |
+| `/mcpserver/agents` | Agent definitions, workspace config, deployment status |
+| `/mcpserver/agent-pool` | Pool lifecycle, health monitoring, process isolation |
+| `/mcpserver/repo` | Repository read/list/write with allowlist enforcement |
+| `/mcpserver/requirements` | FR/TR/TEST documents, validation, Markdown/ZIP export |
+| `/mcpserver/workspace` | Multi-tenant workspace resolution and management |
+| `/mcpserver/gh` | GitHub issues, PRs, workflows, repository metadata |
+| `/mcpserver/tools` | Tool capability registration, discovery, schema validation |
+| `/mcpserver/graphrag` | GraphRAG query with mode selection |
+| `/mcpserver/events` | Server-sent events for real-time change notifications |
+| `/mcpserver/templates` | Prompt template storage and rendering |
+| `/mcpserver/voice` | Voice conversation management |
+| `/mcpserver/desktop` | Desktop application launch (Windows) |
+| `/mcpserver/diagnostic` | Health, version, database connectivity, index status |
+| `/mcpserver/configuration` | Application configuration retrieval |
+| `/mcpserver/tunnel` | Reverse proxy for agent communication |
+| `/auth` | OIDC discovery, device authorization flow, token endpoint |
+| `/health` | Health check |
+| `/swagger` | OpenAPI documentation |
 
 ## Configuration
 
-Primary config section: `Mcp`.
-
-Important keys:
-
-- `Mcp:Port`
-- `Mcp:RepoRoot`
-- `Mcp:DataSource`
-- `Mcp:TodoFilePath`
-- `Mcp:TodoStorage:Provider` (`yaml` or `sqlite`)
-- `Mcp:TodoStorage:SqliteDataSource`
-- `Mcp:GraphRag:*` (GraphRAG enablement, query defaults, backend command, concurrency)
-- `Mcp:Instances:{name}:*` (per-instance overrides)
-
-Environment overrides:
-
-- `PORT` - highest-priority runtime port override
-- `MCP_INSTANCE` - instance selection when `--instance` is not passed
-
-### Example `Mcp:Instances`
+Primary config section: `Mcp`. Instance overrides under `Mcp:Instances:{name}`.
 
 ```json
 {
   "Mcp": {
+    "Port": 7147,
+    "RepoRoot": ".",
+    "DataSource": "mcp.db",
+    "ApiKey": "your-api-key",
+    "TodoStorage": { "Provider": "yaml" },
     "Instances": {
-      "default": {
-        "Port": 7147,
-        "RepoRoot": ".",
-        "DataSource": "mcp.db",
-        "TodoFilePath": "docs/Project/TODO.yaml",
-        "TodoStorage": {
-          "Provider": "yaml",
-          "SqliteDataSource": "mcp.db"
-        }
-      },
-      "alt-local": {
-        "Port": 7157,
-        "RepoRoot": "temp_test",
-        "DataSource": "mcp-alt.db",
-        "TodoFilePath": "docs/Project/TODO.yaml",
-        "TodoStorage": {
-          "Provider": "sqlite",
-          "SqliteDataSource": "mcp-alt.db"
-        }
-      }
+      "default": { "Port": 7147, "RepoRoot": "." },
+      "alt-local": { "Port": 7157, "TodoStorage": { "Provider": "sqlite" } }
     }
   }
 }
 ```
 
-## Multi-Instance and Storage Validation
+Environment overrides: `PORT` (runtime port), `MCP_INSTANCE` (instance selection).
 
-Run two configured instances:
+## Authentication
 
-```powershell
-./build.ps1 StartServer --instance default
-./build.ps1 StartServer --instance alt-local
-# or: .\scripts\Start-McpServer.ps1 -Configuration Staging -Instance default
-```
+| Method | Use Case |
+|---|---|
+| **API key** | Server-to-server, per-workspace isolation via `X-Workspace-Path` header |
+| **OIDC / Keycloak** | External identity provider with JWT Bearer validation and device authorization flow |
+| **Embedded IdentityServer** | Local OIDC authority when `Mcp:IdentityServer:Enabled = true` |
+| **Marker file trust** | Cryptographic signature validation for REPL protocol bootstrap |
 
-Smoke test both instances:
+## Storage
 
-```powershell
-./build.ps1 TestMultiInstance --first-instance default --second-instance alt-local
-# or: .\scripts\Test-McpMultiInstance.ps1 -Configuration Staging -FirstInstance default -SecondInstance alt-local
-```
+**Database providers** (EF Core with automatic migrations):
 
-Migrate todo data between backends:
+| Provider | Project |
+|---|---|
+| SQLite (default) | `McpServer.Storage.SqliteMigrations` |
+| SQL Server | `McpServer.Storage.SqlServerMigrations` |
+| PostgreSQL | `McpServer.Storage.PostgreSqlMigrations` |
 
-```powershell
-.\scripts\Migrate-McpTodoStorage.ps1 -SourceBaseUrl http://localhost:7147 -TargetBaseUrl http://localhost:7157
-```
+TODO items can be stored as YAML files on disk (`yaml`) or in a SQLite table (`sqlite`), configured per instance.
+
+Vector indexing uses ONNX Runtime with Sentence Transformer embeddings and HNSW index for semantic search.
+
+## Deployment
+
+| Method | Details |
+|---|---|
+| **Standalone** | `./build.ps1 StartServer` or `dotnet run` |
+| **Windows Service** | `./build.ps1 UpdateService` through the Nuke build; do not manually redeploy service files |
+| **Docker** | Multi-stage build, volumes for `/data` and `/workspace` |
+| **MSIX** | `./build.ps1 PackageMsix` for Windows app package |
+| **Windows Launcher** | GUI application for starting/managing the server |
 
 ## Build System
 
-The project uses [Nuke](https://nuke.build/) as the build orchestrator. All build-related tasks are available as Nuke targets via `./build.ps1` (or `./build.sh` on Linux/macOS).
+[Nuke](https://nuke.build/) build orchestrator via `./build.ps1` (or `./build.sh` on Linux/macOS).
 
 | Target | Description |
 |---|---|
 | `Compile` | Restore + build the solution (default) |
 | `Test` | Run all unit tests |
-| `Publish` | Publish McpServer.Support.Mcp for deployment |
-| `PackNuGet` | Pack McpServer.Client as a NuGet package |
-| `PackReplTool` | Pack McpServer.Repl.Host to local-packages/ |
+| `Publish` | Publish server for deployment |
+| `UpdateService` | Build/publish, backup config/data, update the Windows service, restore config/data, and health-check |
+| `PackNuGet` | Pack McpServer.Client NuGet package |
+| `PackReplTool` | Pack mcpserver-repl to local-packages/ |
 | `PackageMsix` | Create MSIX package for Windows |
 | `InstallReplTool` | Install mcpserver-repl as a global dotnet tool |
-| `StartServer` | Build and run MCP server (`--instance` to select) |
+| `StartServer` | Build and run MCP server |
 | `BumpVersion` | Increment patch version in GitVersion.yml |
 | `ValidateConfig` | Validate appsettings instance configuration |
 | `ValidateTraceability` | Check FR/TR/TEST requirements coverage |
@@ -158,149 +172,74 @@ The project uses [Nuke](https://nuke.build/) as the build orchestrator. All buil
 | `TestGraphRagSmoke` | GraphRAG endpoint smoke test |
 | `Clean` | Clean artifacts and solution output |
 
-## Common Scripts
-
-The following scripts handle operational/admin tasks that are not part of the build pipeline:
-
-- `scripts/Run-McpServer.ps1` - direct local run helper
-- `scripts/Update-McpService.ps1` - stop, publish Debug build, restore config/data, restart, health-check Windows service
-- `scripts/Manage-McpService.ps1` - install/start/stop/remove Windows service
-- `scripts/Migrate-McpTodoStorage.ps1` - todo backend migration
-- `scripts/Setup-McpKeycloak.ps1` - Keycloak OIDC provider setup
-- `scripts/Invoke-McpDatabaseEncryptionTransition.ps1` - database encryption operations
-
-## GraphRAG
-
-GraphRAG is workspace-scoped and disabled by default. When enabled, it can enhance `/mcpserver/context/search` and is also exposed directly through:
-
-- `GET /mcpserver/graphrag/status`
-- `POST /mcpserver/graphrag/index`
-- `POST /mcpserver/graphrag/query`
-
-Key behavior:
-
-- Per-workspace GraphRAG state under `Mcp:GraphRag:RootPath`
-- Index locking per workspace (single active index job by default)
-- Explicit status lifecycle fields (`state`, `activeJobId`, failure metadata, artifact version)
-- Fallback to context search when GraphRAG is disabled, uninitialized, not indexed, or backend execution fails
-- Do not store backend secrets in repo config; inject runtime secrets via environment or secure host configuration
-
-Example config:
-
-```json
-{
-  "Mcp": {
-    "GraphRag": {
-      "Enabled": true,
-      "EnhanceContextSearch": true,
-      "RootPath": "mcp-data/graphrag",
-      "DefaultQueryMode": "local",
-      "DefaultMaxChunks": 20,
-      "IndexTimeoutSeconds": 600,
-      "QueryTimeoutSeconds": 120,
-      "BackendCommand": "",
-      "BackendArgs": "{operation} --graphRoot {graphRoot} --workspace {workspacePath}",
-      "MaxConcurrentIndexJobsPerWorkspace": 1,
-      "ArtifactVersion": "v1"
-    }
-  }
-}
-```
-
-### GraphRAG Observability
-
-Track these operational indicators during rollout:
-
-- Index duration (`lastIndexDurationMs`) and active job contention (`index_conflict`)
-- Fallback rate (`fallbackUsed` and `fallbackReason`) per query mode
-- Failure categories (`failureCode`) and backend stderr patterns
-- Indexed corpus drift (`lastIndexedDocumentCount` vs expected input volume)
-
-### GraphRAG Rollout Checklist
-
-1. Keep `Mcp:GraphRag:Enabled=false` in shared defaults.
-2. Enable GraphRAG in one pilot workspace and run `scripts/Test-GraphRagSmoke.ps1`.
-3. Verify fallback rate and failure codes remain acceptable under real workload.
-4. Expand enablement workspace-by-workspace.
-5. Keep external backend optional; if unavailable, ensure fallback path remains healthy.
-
-## Build and Test
-
-```powershell
-./build.ps1 Compile --configuration Staging
-./build.ps1 Test
-# or directly:
-# dotnet build McpServer.sln -c Staging
-# dotnet test tests\McpServer.Support.Mcp.Tests\McpServer.Support.Mcp.Tests.csproj -c Debug
-```
-
-## API Surface
-
-Main endpoints:
-
-- `/mcpserver/todo`
-- `/mcpserver/sessionlog`
-- `/mcpserver/context`
-- `/mcpserver/repo`
-- `/mcpserver/gh`
-- `/mcpserver/sync`
-- `/health`
-- `/swagger`
-
 ## CI/CD
 
-Pipeline: `azure-pipelines.yml`
-
-Pipeline jobs include:
-
-- config validation
-- restore/build/test
-- publish artifact upload
-- Windows MSIX packaging
-- markdown lint and link checking for docs
-- DocFX docs artifact build
-- client NuGet pack and branch-conditional feed publish
-
-## VS Code / VS 2026 Extensions
-
-Extension sources live in:
-
-- `extensions/fwh-mcp-todo` (legacy name)
-- `extensions/McpServer-mcp-todo`
-
-In the RequestTracker host workspace, VSIX packaging is orchestrated by the repo-root `BuildAndInstallVsix` target rather than standalone scripts inside this submodule.
+| Platform | File | Jobs |
+|---|---|---|
+| **Azure Pipelines** | `azure-pipelines.yml` | Build, test, publish, MSIX, docs lint, docs build, NuGet publish |
+| **GitHub Actions** | `.github/workflows/build.yml` | Build & test, validate, package, MSIX, publish |
 
 ## Client Library
-
-A typed REST client is available as a NuGet package for consuming the MCP Server API:
 
 ```powershell
 dotnet add package SharpNinja.McpServer.Client
 ```
 
 ```csharp
-// With DI
 builder.Services.AddMcpServerClient(options =>
 {
     options.BaseUrl = new Uri("http://localhost:7147");
-    options.ApiKey = "your-api-key"; // optional
-});
-
-// Without DI
-var client = McpServerClientFactory.Create(new McpServerClientOptions
-{
-    BaseUrl = new Uri("http://localhost:7147"),
+    options.ApiKey = "your-api-key";
 });
 ```
 
-Covers all API endpoints: Todo, Context, SessionLog, GitHub, Repo, Sync, Workspace, and Tools.
+Covers: Todo, Context, SessionLog, GitHub, Repo, Workspace, ToolRegistry, Sync, and more.
 
-Source: `src/McpServer.Client/` — see the [package README](https://github.com/sharpninja/McpServer/blob/develop/src/McpServer.Client/README.md) for full usage.
+Source: `src/McpServer.Client/` | [Package README](src/McpServer.Client/README.md)
 
-## Additional Documentation
+## Agent Framework
 
-- User documentation: `docs/USER-GUIDE.md`
-- Server and operator guide: `docs/MCP-SERVER.md`
-- Documentation index: `docs/README.md`
-- FAQ: `docs/FAQ.md`
-- Client integration: `docs/CLIENT-INTEGRATION.md`
+`McpServer.McpAgent` integrates with the Microsoft Agent Framework:
+
+```csharp
+builder.Services.AddMcpServerMcpAgent();
+```
+
+Built-in MCP tools: `mcp_repo_read`, `mcp_repo_list`, `mcp_repo_write`, `mcp_desktop_launch`, `mcp_powershell_session_*`.
+Workflows: session log lifecycle, TODO management, requirements ingestion.
+
+Sample host: `src/McpServer.McpAgent.SampleHost/`
+
+## Tests
+
+16 test projects covering unit, integration, and SpecFlow validation:
+
+- `Build.Tests` — build system and configuration (43 tests)
+- `McpServer.Support.Mcp.Tests` / `.IntegrationTests` — server API and database
+- `McpServer.Client.Tests` — REST client serialization
+- `McpServer.McpAgent.Tests` — agent workflows and tool adapters
+- `McpServer.Repl.Core.Tests` / `.IntegrationTests` — REPL protocol
+- `McpServer.Cqrs.Tests` — CQRS dispatcher and pipeline
+- 7 SpecFlow validation projects (Context, GitHub, Repo, SessionLog, Todo, ToolRegistry, Workspace)
+
+## Prerequisites
+
+- .NET SDK (version in `global.json`)
+- PowerShell 7+ (`pwsh.exe`)
+- Optional: Windows SDK (`makeappx.exe`) for MSIX, GitHub CLI (`gh`) for GitHub endpoints
+
+## Documentation
+
+| Document | Purpose |
+|---|---|
+| [User Guide](docs/USER-GUIDE.md) | End-user setup and usage |
+| [Server Guide](docs/MCP-SERVER.md) | Operations and configuration |
+| [Client Integration](docs/CLIENT-INTEGRATION.md) | NuGet client library usage |
+| [REPL Migration Guide](docs/REPL-MIGRATION-GUIDE.md) | Migrating to mcpserver-repl |
+| [FAQ](docs/FAQ.md) | Common questions |
+| [Release Checklist](docs/RELEASE-CHECKLIST.md) | Pre-release verification |
+| [Azure Pipelines](docs/AZURE-PIPELINES.md) | CI/CD variables and retention |
+
+## License
+
+See [LICENSE](LICENSE) for details.

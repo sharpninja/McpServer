@@ -648,6 +648,13 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
                 state.LastTurnToolCalls.Add(item);
 
             var displayText = fullText.ToString().Trim();
+            if (string.IsNullOrWhiteSpace(displayText) &&
+                finalEvent?.Type == "error" &&
+                !string.IsNullOrWhiteSpace(finalEvent.Message))
+            {
+                displayText = finalEvent.Message.Trim();
+            }
+
             if (!string.IsNullOrWhiteSpace(displayText))
             {
                 AddTranscriptEntryIfEnabled(state, new VoiceTranscriptEntryDto
@@ -900,15 +907,57 @@ public sealed partial class VoiceConversationService
         }
 
         var lineCount = 0;
-        await foreach (var line in lineStream!.ConfigureAwait(false))
+        VoiceTurnStreamEvent? streamError = null;
+        var lineEnumerator = lineStream!.GetAsyncEnumerator(cancellationToken);
+        try
         {
-            //var timestamped = $"{DateTimeOffset.Now.ToLocalTime():s}: {line}\n";
-            lineCount++;
-            _logger.LogDebug("Stream line #{LineCount} for {SessionId}: {Line}", lineCount, state.SessionId, line.Length > 100 ? line[..100] + "..." : line);
-            yield return new VoiceTurnStreamEvent { Type = "chunk", Text = line + "\n" };
+            while (true)
+            {
+                bool movedNext;
+                try
+                {
+                    movedNext = await lineEnumerator.MoveNextAsync().ConfigureAwait(false);
+                }
+                catch (Exception ex) when (ex is IOException or InvalidOperationException or ObjectDisposedException)
+                {
+                    _logger.LogWarning(
+                        ex,
+                        "Voice runtime stream failed: Session={SessionId}; Turn={TurnId}; Lines={LineCount}",
+                        state.SessionId,
+                        turnId,
+                        lineCount);
+                    streamError = new VoiceTurnStreamEvent { Type = "error", TurnId = turnId, Message = ex.Message };
+                    break;
+                }
+
+                if (!movedNext)
+                    break;
+
+                var line = lineEnumerator.Current;
+                //var timestamped = $"{DateTimeOffset.Now.ToLocalTime():s}: {line}\n";
+                lineCount++;
+                _logger.LogDebug("Stream line #{LineCount} for {SessionId}: {Line}", lineCount, state.SessionId, line.Length > 100 ? line[..100] + "..." : line);
+                yield return new VoiceTurnStreamEvent { Type = "chunk", Text = line + "\n" };
+            }
+        }
+        finally
+        {
+            await lineEnumerator.DisposeAsync().ConfigureAwait(false);
+        }
+
+        if (streamError is not null)
+        {
+            yield return streamError;
+            yield break;
         }
 
         _logger.LogInformation("Stream complete for {SessionId}: {LineCount} lines", state.SessionId, lineCount);
+        if (lineCount == 0)
+        {
+            yield return new VoiceTurnStreamEvent { Type = "error", TurnId = turnId, Message = "No response returned from voice runtime." };
+            yield break;
+        }
+
         yield return new VoiceTurnStreamEvent { Type = "done", TurnId = turnId, Status = "completed", ToolCalls = toolRecords };
     }
 

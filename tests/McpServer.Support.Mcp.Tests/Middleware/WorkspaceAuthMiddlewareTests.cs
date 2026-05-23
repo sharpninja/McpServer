@@ -1,8 +1,10 @@
+using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Middleware;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace McpServer.Support.Mcp.Tests.Middleware;
@@ -35,6 +37,13 @@ public sealed class WorkspaceAuthMiddlewareTests
         return new WorkspaceContext { WorkspacePath = WorkspacePath };
     }
 
+    private static IOptions<FederationOptions> CreateFederationOptions(Action<FederationOptions>? configure = null)
+    {
+        var options = new FederationOptions();
+        configure?.Invoke(options);
+        return Microsoft.Extensions.Options.Options.Create(options);
+    }
+
     private static DefaultHttpContext CreateContext(string method, string path, string? apiKey)
     {
         var ctx = new DefaultHttpContext
@@ -56,7 +65,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
         var ctx = CreateContext("POST", "/mcpserver/repo/file", fullToken);
 
-        await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
+        await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext(), CreateFederationOptions());
 
         Assert.True(nextCalled);
         Assert.Equal(200, ctx.Response.StatusCode);
@@ -71,7 +80,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
         var ctx = CreateContext("GET", "/mcpserver/context/search", defaultToken);
 
-        await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
+        await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext(), CreateFederationOptions());
 
         Assert.True(nextCalled);
         Assert.True((bool)ctx.Items[WorkspaceAuthMiddleware.IsDefaultKeyItem]!);
@@ -86,8 +95,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
         var ctx = CreateContext("POST", "/mcpserver/todo", defaultToken);
 
-        await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
-
+        await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext(), CreateFederationOptions());
         Assert.False(nextCalled);
         Assert.Equal(403, ctx.Response.StatusCode);
     }
@@ -101,7 +109,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
         var ctx = CreateContext("POST", "/mcpserver/repo/file", defaultToken);
 
-        await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
+        await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext(), CreateFederationOptions());
 
         Assert.False(nextCalled);
         Assert.Equal(403, ctx.Response.StatusCode);
@@ -116,7 +124,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
         var ctx = CreateContext("DELETE", "/mcpserver/repo/test.txt", defaultToken);
 
-        await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
+        await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext(), CreateFederationOptions());
 
         Assert.False(nextCalled);
         Assert.Equal(403, ctx.Response.StatusCode);
@@ -131,7 +139,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
         var ctx = CreateContext("DELETE", "/mcpserver/todo/MVP-APP-001", defaultToken);
 
-        await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
+        await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext(), CreateFederationOptions());
 
         Assert.False(nextCalled);
         Assert.Equal(403, ctx.Response.StatusCode);
@@ -145,10 +153,34 @@ public sealed class WorkspaceAuthMiddlewareTests
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
         var ctx = CreateContext("GET", "/mcpserver/todo", "totally-wrong-token");
 
-        await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
+        await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext(), CreateFederationOptions());
 
         Assert.False(nextCalled);
         Assert.Equal(401, ctx.Response.StatusCode);
+    }
+
+    [Fact]
+    public async Task HubAccessToken_AllowsFederationHubRequest()
+    {
+        var tokenService = new WorkspaceTokenService();
+        var nextCalled = false;
+        var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
+        var ctx = CreateContext("POST", "/mcpserver/todo", "hub-secret");
+
+        await middleware.InvokeAsync(
+            ctx,
+            tokenService,
+            CreateConfig(),
+            CreateWorkspaceContext(),
+            CreateFederationOptions(options =>
+            {
+                options.Enabled = true;
+                options.Role = FederationRole.Hub;
+                options.HubAccessToken = "hub-secret";
+            }));
+
+        Assert.True(nextCalled);
+        Assert.Equal(200, ctx.Response.StatusCode);
     }
 
     [Fact]
@@ -159,7 +191,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
         var ctx = CreateContext("GET", "/health", null);
 
-        await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext());
+        await middleware.InvokeAsync(ctx, tokenService, CreateConfig(), CreateWorkspaceContext(), CreateFederationOptions());
 
         Assert.True(nextCalled);
     }
@@ -180,7 +212,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
         var ctx = CreateContext("POST", "/mcpserver/repo/file", fullToken);
 
-        await middleware.InvokeAsync(ctx, tokenService, configOther, wsContext);
+        await middleware.InvokeAsync(ctx, tokenService, configOther, wsContext, CreateFederationOptions());
 
         Assert.True(nextCalled, "Should accept token validated against WorkspaceContext path, not config path");
     }
@@ -201,7 +233,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
         var ctx = CreateContext("POST", "/mcpserver/repo/file", null);
 
-        await middleware.InvokeAsync(ctx, tokenService, config, wsContext);
+        await middleware.InvokeAsync(ctx, tokenService, config, wsContext, CreateFederationOptions());
 
         Assert.False(nextCalled);
         Assert.Equal(503, ctx.Response.StatusCode);
@@ -219,7 +251,7 @@ public sealed class WorkspaceAuthMiddlewareTests
         var middleware = new WorkspaceAuthMiddleware(_ => { nextCalled = true; return Task.CompletedTask; }, NullLogger<WorkspaceAuthMiddleware>.Instance);
         var ctx = CreateContext("GET", "/mcpserver/context/search", null);
 
-        await middleware.InvokeAsync(ctx, tokenService, config, wsContext);
+        await middleware.InvokeAsync(ctx, tokenService, config, wsContext, CreateFederationOptions());
 
         Assert.False(nextCalled);
         Assert.Equal(503, ctx.Response.StatusCode);

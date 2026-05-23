@@ -1,8 +1,10 @@
 using System.Text.Json;
+using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace McpServer.Support.Mcp.Middleware;
 
@@ -54,7 +56,12 @@ public sealed class WorkspaceAuthMiddleware
     }
 
     /// <summary>Validates the auth token for <c>/mcpserver/*</c> requests.</summary>
-    public async Task InvokeAsync(HttpContext context, WorkspaceTokenService tokenService, IConfiguration configuration, WorkspaceContext workspaceContext)
+    public async Task InvokeAsync(
+        HttpContext context,
+        WorkspaceTokenService tokenService,
+        IConfiguration configuration,
+        WorkspaceContext workspaceContext,
+        IOptions<FederationOptions> federationOptions)
     {
         var path = context.Request.Path;
 
@@ -121,6 +128,15 @@ public sealed class WorkspaceAuthMiddleware
             return;
         }
 
+        var provided = context.Request.Headers[HeaderName].FirstOrDefault()
+                       ?? context.Request.Query[QueryParam].FirstOrDefault();
+
+        if (IsValidHubAccessToken(provided, federationOptions.Value))
+        {
+            await _next(context).ConfigureAwait(false);
+            return;
+        }
+
         // ── API key path (agents only) ────────────────────────────────────────
         var workspacePath = workspaceContext.WorkspacePath ?? configuration["Mcp:RepoRoot"] ?? string.Empty;
 
@@ -157,9 +173,6 @@ public sealed class WorkspaceAuthMiddleware
                 context.RequestAborted).ConfigureAwait(false);
             return;
         }
-
-        var provided = context.Request.Headers[HeaderName].FirstOrDefault()
-                       ?? context.Request.Query[QueryParam].FirstOrDefault();
 
         // Full-access token — unrestricted.
         if (tokenService.ValidateToken(workspacePath, provided))
@@ -203,6 +216,19 @@ public sealed class WorkspaceAuthMiddleware
         await context.Response.WriteAsync(
             JsonSerializer.Serialize(body, s_json),
             context.RequestAborted).ConfigureAwait(false);
+    }
+
+    private static bool IsValidHubAccessToken(string? provided, FederationOptions options)
+    {
+        if (!options.Enabled ||
+            options.Role != FederationRole.Hub ||
+            string.IsNullOrWhiteSpace(options.HubAccessToken) ||
+            string.IsNullOrWhiteSpace(provided))
+        {
+            return false;
+        }
+
+        return string.Equals(options.HubAccessToken.Trim(), provided, StringComparison.Ordinal);
     }
 
     private static bool IsAgentMutationRoute(PathString path, string method)

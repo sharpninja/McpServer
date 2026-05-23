@@ -163,4 +163,45 @@ public sealed class McpServerClientTests
 
         await Assert.ThrowsAsync<InvalidOperationException>(() => client.InitializeAsync());
     }
+
+    [Fact]
+    public async System.Threading.Tasks.Task ApiKey_SetAfterBearerToken_UsesApiKeyHeader()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"items":[]}""");
+        using var http = new HttpClient(handler);
+        var options = new McpServerClientOptions
+        {
+            BaseUrl = new Uri("http://localhost:7147"),
+            BearerToken = "cached-bearer"
+        };
+        var client = new McpServerClient(http, options);
+
+        client.ApiKey = "marker-key";
+        await client.Todo.QueryAsync();
+
+        Assert.True(handler.LastRequest!.Headers.TryGetValues("X-Api-Key", out var apiKeyValues));
+        Assert.Contains("marker-key", apiKeyValues!);
+        Assert.Null(handler.LastRequest.Headers.Authorization);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task ClearingBearerToken_AllowsLaterApiKeyFallback()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"items":[]}""");
+        using var http = new HttpClient(handler);
+        var options = new McpServerClientOptions
+        {
+            BaseUrl = new Uri("http://localhost:7147"),
+            BearerToken = "cached-bearer"
+        };
+        var client = new McpServerClient(http, options);
+
+        client.BearerToken = string.Empty;
+        client.ApiKey = "marker-key";
+        await client.Todo.QueryAsync();
+
+        Assert.True(handler.LastRequest!.Headers.TryGetValues("X-Api-Key", out var apiKeyValues));
+        Assert.Contains("marker-key", apiKeyValues!);
+        Assert.Null(handler.LastRequest.Headers.Authorization);
+    }
 }

@@ -69,6 +69,8 @@ Agent STDIO mode implements the MCP protocol over standard input/output for prog
 mcpserver-repl --agent-stdio
 ```
 
+When a workspace marker declares `agent_plugins.policy: required`, agents should normally use their required plugin wrapper instead of invoking `mcpserver-repl --agent-stdio` directly. Direct REPL use is for plugin implementation, plugin diagnostics, and fallback investigation after plugin verification fails.
+
 #### STDIO Features
 
 - **Protocol Compliance**: Full MCP wire protocol support
@@ -102,6 +104,8 @@ The REPL protocol uses four envelope types:
 2. **result**: Successful response from server
 3. **error**: Error response with code and details
 4. **event**: Server-initiated notifications (streaming, state changes)
+
+Agent STDIO accepts one envelope per YAML document. Multiple request documents may be sent in sequence by separating them with `---`. Do not send a single `type: batch` envelope; unsupported batch envelopes are rejected with `unsupported_batch_envelope`.
 
 ### Request Envelope Structure
 
@@ -171,7 +175,7 @@ Session logging and turn management. Captures agent activity, reasoning dialog, 
 - `workflow.sessionlog.appendActions` — Log actions performed
 - `workflow.sessionlog.queryHistory` — Query past sessions
 
-**Example: Open Session**
+### Example: Open Session
 
 ```yaml
 type: request
@@ -217,7 +221,7 @@ TODO item management with structured metadata, dependencies, and requirement tra
 - `workflow.todo.streamPlan` — Stream plan generation events
 - `workflow.todo.streamImplement` — Stream implementation execution
 
-**Example: Create TODO**
+### Example: Create TODO
 
 ```yaml
 type: request
@@ -276,7 +280,7 @@ Requirements management for functional (FR), technical (TR), and test (TEST) req
 - `workflow.requirements.generateDocument` — Generate formatted document
 - `workflow.requirements.ingestDocument` — Ingest external document
 
-**Example: List Functional Requirements**
+### Example: List Functional Requirements
 
 ```yaml
 type: request
@@ -334,7 +338,7 @@ Generic passthrough to all `McpServerClient` sub-clients. Enables dynamic invoca
 - `client.configuration.*` — Admin configuration
 - `client.tools.*` — Tool registry operations
 
-**Example: Context Search**
+### Example: Context Search
 
 ```yaml
 type: request
@@ -596,12 +600,14 @@ payload:
 
 ### TODO IDs
 
-**Format:** `<PHASE>-<AREA>-###` or `ISSUE-{number}`
+**Format:** uppercase kebab-case ending in `-###` or `ISSUE-{number}`
 
-**Regex:** `^[A-Z]+-[A-Z0-9]+-\d{3}$` or `^ISSUE-\d+$`
+**Regex:** `^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\d{3}$` or `^ISSUE-\d+$`
 
 **Examples:**
 - `MCP-AUTH-001`
+- `PHASE0-REMOTE-001`
+- `MCP-TODO-CREATE-001`
 - `PLAN-NAMINGCONVENTIONS-001`
 - `ISSUE-17`
 
@@ -796,6 +802,8 @@ payload:
 - **TODO Schema**: `docs/context/todo-schema.md`
 - **Module Bootstrap**: `docs/context/module-bootstrap.md`
 - **Agent Guide**: `docs/REPL-AGENT-GUIDE.md`
+- **Agent Plugin Availability**: `docs/AGENT-PLUGIN-AVAILABILITY.md`
+- **Federation Reference**: `docs/context/federation.md`
 
 ## License
 

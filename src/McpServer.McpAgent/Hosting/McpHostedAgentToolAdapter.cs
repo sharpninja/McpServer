@@ -171,6 +171,64 @@ internal sealed class McpHostedAgentToolAdapter
             (Func<string, string, Dictionary<string, object?>, CancellationToken, Task<object?>>)InvokeClientAsync,
             "mcp_client_invoke",
             "Dynamically invoke any MCP Server sub-client method by specifying clientName (e.g. 'context', 'github', 'workspace'), methodName (e.g. 'SearchAsync'), and a dictionary of arguments."),
+
+        // ── GraphRAG ad-hoc management tools (FR-MCP-078/079/080) ──────
+        CreateTool(
+            (Func<GraphRagIngestTextRequest, CancellationToken, Task<GraphRagIngestTextResult>>)GraphRagIngestTextAsync,
+            "mcp_graphrag_ingest_text",
+            "Ingest raw text into the GraphRAG corpus for the active workspace."),
+        CreateTool(
+            (Func<int, int, string?, CancellationToken, Task<GraphRagDocumentListResult>>)GraphRagListDocumentsAsync,
+            "mcp_graphrag_list_documents",
+            "List documents in the GraphRAG corpus with pagination and optional sourceType filter."),
+        CreateTool(
+            (Func<string, CancellationToken, Task<GraphRagDocumentChunksResult>>)GraphRagGetDocumentChunksAsync,
+            "mcp_graphrag_get_document_chunks",
+            "Retrieve all chunks for a specific document in the GraphRAG corpus."),
+        CreateTool(
+            (Func<string, CancellationToken, Task<GraphRagDocumentDeleteResult>>)GraphRagDeleteDocumentAsync,
+            "mcp_graphrag_delete_document",
+            "Delete a document and its chunks from the GraphRAG corpus."),
+        CreateTool(
+            (Func<GraphEntityRequest, CancellationToken, Task<GraphEntityResult>>)GraphRagCreateEntityAsync,
+            "mcp_graphrag_create_entity",
+            "Create a new graph entity in the GraphRAG knowledge graph."),
+        CreateTool(
+            (Func<int, int, string?, CancellationToken, Task<GraphEntityListResult>>)GraphRagListEntitiesAsync,
+            "mcp_graphrag_list_entities",
+            "List graph entities with pagination and optional entityType filter."),
+        CreateTool(
+            (Func<string, CancellationToken, Task<GraphEntityResult>>)GraphRagGetEntityAsync,
+            "mcp_graphrag_get_entity",
+            "Retrieve a graph entity by its identifier."),
+        CreateTool(
+            (Func<string, GraphEntityRequest, CancellationToken, Task<GraphEntityResult>>)GraphRagUpdateEntityAsync,
+            "mcp_graphrag_update_entity",
+            "Update an existing graph entity by identifier."),
+        CreateTool(
+            (Func<string, CancellationToken, Task<string>>)GraphRagDeleteEntityAsync,
+            "mcp_graphrag_delete_entity",
+            "Delete a graph entity by its identifier."),
+        CreateTool(
+            (Func<GraphRelationshipRequest, CancellationToken, Task<GraphRelationshipResult>>)GraphRagCreateRelationshipAsync,
+            "mcp_graphrag_create_relationship",
+            "Create a new graph relationship between two entities."),
+        CreateTool(
+            (Func<int, int, string?, string?, CancellationToken, Task<GraphRelationshipListResult>>)GraphRagListRelationshipsAsync,
+            "mcp_graphrag_list_relationships",
+            "List graph relationships with pagination and optional entityId and type filters."),
+        CreateTool(
+            (Func<string, CancellationToken, Task<GraphRelationshipResult>>)GraphRagGetRelationshipAsync,
+            "mcp_graphrag_get_relationship",
+            "Retrieve a graph relationship by its identifier."),
+        CreateTool(
+            (Func<string, GraphRelationshipRequest, CancellationToken, Task<GraphRelationshipResult>>)GraphRagUpdateRelationshipAsync,
+            "mcp_graphrag_update_relationship",
+            "Update an existing graph relationship by identifier."),
+        CreateTool(
+            (Func<string, CancellationToken, Task<string>>)GraphRagDeleteRelationshipAsync,
+            "mcp_graphrag_delete_relationship",
+            "Delete a graph relationship by its identifier."),
     ];
 
     private static AIFunction CreateTool(Delegate implementation, string name, string description) =>
@@ -368,4 +426,96 @@ internal sealed class McpHostedAgentToolAdapter
         Dictionary<string, object?> arguments,
         CancellationToken cancellationToken) =>
         _clientPassthrough.InvokeAsync(clientName, methodName, arguments, cancellationToken);
+
+    // ── GraphRAG ad-hoc management implementations (FR-MCP-078/079/080) ──
+
+    private Task<GraphRagIngestTextResult> GraphRagIngestTextAsync(
+        GraphRagIngestTextRequest request,
+        CancellationToken cancellationToken) =>
+        _client.Context.GraphRagIngestTextAsync(
+            request ?? throw new ArgumentNullException(nameof(request)), cancellationToken);
+
+    private Task<GraphRagDocumentListResult> GraphRagListDocumentsAsync(
+        int skip = 0,
+        int take = 50,
+        string? sourceType = null,
+        CancellationToken cancellationToken = default) =>
+        _client.Context.GraphRagListDocumentsAsync(skip, take, sourceType, cancellationToken);
+
+    private Task<GraphRagDocumentChunksResult> GraphRagGetDocumentChunksAsync(
+        string documentId,
+        CancellationToken cancellationToken) =>
+        _client.Context.GraphRagGetDocumentChunksAsync(documentId, cancellationToken);
+
+    private Task<GraphRagDocumentDeleteResult> GraphRagDeleteDocumentAsync(
+        string documentId,
+        CancellationToken cancellationToken) =>
+        _client.Context.GraphRagDeleteDocumentAsync(documentId, cancellationToken);
+
+    private Task<GraphEntityResult> GraphRagCreateEntityAsync(
+        GraphEntityRequest request,
+        CancellationToken cancellationToken) =>
+        _client.Context.GraphRagCreateEntityAsync(
+            request ?? throw new ArgumentNullException(nameof(request)), cancellationToken);
+
+    private Task<GraphEntityListResult> GraphRagListEntitiesAsync(
+        int skip = 0,
+        int take = 50,
+        string? entityType = null,
+        CancellationToken cancellationToken = default) =>
+        _client.Context.GraphRagListEntitiesAsync(skip, take, entityType, cancellationToken);
+
+    private Task<GraphEntityResult> GraphRagGetEntityAsync(
+        string entityId,
+        CancellationToken cancellationToken) =>
+        _client.Context.GraphRagGetEntityAsync(entityId, cancellationToken);
+
+    private Task<GraphEntityResult> GraphRagUpdateEntityAsync(
+        string entityId,
+        GraphEntityRequest request,
+        CancellationToken cancellationToken) =>
+        _client.Context.GraphRagUpdateEntityAsync(
+            entityId, request ?? throw new ArgumentNullException(nameof(request)), cancellationToken);
+
+    private async Task<string> GraphRagDeleteEntityAsync(
+        string entityId,
+        CancellationToken cancellationToken)
+    {
+        await _client.Context.GraphRagDeleteEntityAsync(entityId, cancellationToken).ConfigureAwait(false);
+        return $"Entity '{entityId}' deleted successfully.";
+    }
+
+    private Task<GraphRelationshipResult> GraphRagCreateRelationshipAsync(
+        GraphRelationshipRequest request,
+        CancellationToken cancellationToken) =>
+        _client.Context.GraphRagCreateRelationshipAsync(
+            request ?? throw new ArgumentNullException(nameof(request)), cancellationToken);
+
+    private Task<GraphRelationshipListResult> GraphRagListRelationshipsAsync(
+        int skip = 0,
+        int take = 50,
+        string? entityId = null,
+        string? type = null,
+        CancellationToken cancellationToken = default) =>
+        _client.Context.GraphRagListRelationshipsAsync(skip, take, entityId, type, cancellationToken);
+
+    private Task<GraphRelationshipResult> GraphRagGetRelationshipAsync(
+        string relationshipId,
+        CancellationToken cancellationToken) =>
+        _client.Context.GraphRagGetRelationshipAsync(relationshipId, cancellationToken);
+
+    private Task<GraphRelationshipResult> GraphRagUpdateRelationshipAsync(
+        string relationshipId,
+        GraphRelationshipRequest request,
+        CancellationToken cancellationToken) =>
+        _client.Context.GraphRagUpdateRelationshipAsync(
+            relationshipId, request ?? throw new ArgumentNullException(nameof(request)), cancellationToken);
+
+    private async Task<string> GraphRagDeleteRelationshipAsync(
+        string relationshipId,
+        CancellationToken cancellationToken)
+    {
+        await _client.Context.GraphRagDeleteRelationshipAsync(relationshipId, cancellationToken).ConfigureAwait(false);
+        return $"Relationship '{relationshipId}' deleted successfully.";
+    }
 }

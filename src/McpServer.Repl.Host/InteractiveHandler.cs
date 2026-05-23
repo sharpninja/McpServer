@@ -90,6 +90,9 @@ public class InteractiveHandler
                     "Update TODO",
                     "Ingest Requirements",
                     "List Requirements",
+                    "Federation Status",
+                    "Federation Push",
+                    "Federation Pull",
                     "Switch Workspace",
                 };
 
@@ -124,6 +127,15 @@ public class InteractiveHandler
                         break;
                     case "List Requirements":
                         await ListRequirementsAsync(cancellationToken);
+                        break;
+                    case "Federation Status":
+                        await FederationStatusAsync(cancellationToken);
+                        break;
+                    case "Federation Push":
+                        await FederationPushAsync(cancellationToken);
+                        break;
+                    case "Federation Pull":
+                        await FederationPullAsync(cancellationToken);
                         break;
                     case "Switch Workspace":
                         await SelectWorkspaceAsync(cancellationToken);
@@ -898,6 +910,237 @@ public class InteractiveHandler
         }
 
         return parts.Count > 0 ? string.Join("\n\n---\n\n", parts) : null;
+    }
+
+    private async Task FederationStatusAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            await AnsiConsole.Status()
+                .StartAsync("Fetching federation status...", async ctx =>
+                {
+                    var status = await _client.Federation.GetStatusAsync(cancellationToken);
+
+                    AnsiConsole.MarkupLine($"[bold blue]Federation Status[/]");
+                    AnsiConsole.MarkupLine($"  Enabled: {(status.Enabled ? "[green]Yes[/]" : "[dim]No[/]")}");
+                    AnsiConsole.MarkupLine($"  Role: [cyan]{Markup.Escape(status.Role)}[/] (configured: {Markup.Escape(status.ConfiguredRole)})");
+                    if (!string.IsNullOrWhiteSpace(status.HubBaseUrl))
+                        AnsiConsole.MarkupLine($"  Hub: {Markup.Escape(status.HubBaseUrl)}");
+                    if (!string.IsNullOrWhiteSpace(status.ProxyId))
+                        AnsiConsole.MarkupLine($"  Proxy: {Markup.Escape(status.ProxyId)}");
+                    AnsiConsole.MarkupLine($"  Enrolled proxies: {status.ProxyCount}");
+                    AnsiConsole.MarkupLine($"  Hosted workspaces: {status.HostedWorkspaceCount}");
+                    AnsiConsole.MarkupLine($"  Queue depth: {(status.QueueDepth == 0 ? "[green]0[/]" : $"[yellow]{status.QueueDepth}[/]")}");
+                    AnsiConsole.MarkupLine($"  Fanout depth: {(status.FanoutDepth == 0 ? "[green]0[/]" : $"[yellow]{status.FanoutDepth}[/]")}");
+                    AnsiConsole.MarkupLine($"  Conflicts: {(status.ConflictCount == 0 ? "[green]0[/]" : $"[red]{status.ConflictCount}[/]")}");
+                    AnsiConsole.MarkupLine($"  Stale reads: {Markup.Escape(status.StaleReadStatus)}");
+                    AnsiConsole.WriteLine();
+
+                    if (status.Targets.Count == 0)
+                    {
+                        AnsiConsole.MarkupLine("[dim]No federation targets registered.[/]");
+                    }
+                    else
+                    {
+                        var table = new Table();
+                        table.Border(TableBorder.Rounded);
+                        table.AddColumn("[green]Name[/]");
+                        table.AddColumn("[green]Base URL[/]");
+                        table.AddColumn("[green]API Key[/]");
+                        table.AddColumn("[green]Default[/]");
+
+                        foreach (var t in status.Targets)
+                        {
+                            table.AddRow(
+                                Markup.Escape(t.Name),
+                                Markup.Escape(t.BaseUrl),
+                                t.HasApiKey ? "[green]Yes[/]" : "[dim]No[/]",
+                                t.IsDefault ? "[green]Yes[/]" : "[dim]No[/]");
+                        }
+
+                        AnsiConsole.Write(table);
+                    }
+
+                    if (status.WorkspaceRoutes.Count > 0)
+                    {
+                        AnsiConsole.WriteLine();
+                        AnsiConsole.MarkupLine("[bold]Workspace Routes:[/]");
+                        var routeTable = new Table();
+                        routeTable.Border(TableBorder.Rounded);
+                        routeTable.AddColumn("[cyan]Workspace Path[/]");
+                        routeTable.AddColumn("[cyan]Target[/]");
+
+                        foreach (var r in status.WorkspaceRoutes)
+                            routeTable.AddRow(Markup.Escape(r.WorkspacePath), Markup.Escape(r.TargetName));
+
+                        AnsiConsole.Write(routeTable);
+                    }
+                });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to get federation status");
+            AnsiConsole.MarkupLine($"[red]Error:[/] {ex.Message}");
+        }
+    }
+
+    private async Task FederationPushAsync(CancellationToken cancellationToken)
+    {
+        AnsiConsole.MarkupLine("[bold blue]Federation Push[/]");
+        AnsiConsole.WriteLine();
+
+        var typeChoice = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("[green]What to push:[/]")
+                .AddChoices("All", "TODOs Only", "Session Logs Only", "Cancel"));
+
+        if (typeChoice == "Cancel")
+            return;
+
+        List<string>? types = typeChoice switch
+        {
+            "TODOs Only" => ["todos"],
+            "Session Logs Only" => ["sessionlogs"],
+            _ => null
+        };
+
+        try
+        {
+            await AnsiConsole.Status()
+                .StartAsync("Pushing data to federation target...", async ctx =>
+                {
+                    var result = await _client.Federation.PushAsync(types, cancellationToken);
+
+                    if (result.Failed == 0 && result.Errors.Count == 0)
+                    {
+                        AnsiConsole.MarkupLine($"[green]Push complete:[/] {result.Succeeded} item(s) succeeded, {result.Failed} failed");
+                    }
+                    else
+                    {
+                        AnsiConsole.MarkupLine($"[yellow]Push complete:[/] {result.Succeeded} succeeded, {result.Failed} failed");
+                        foreach (var err in result.Errors)
+                            AnsiConsole.MarkupLine($"  [red]Error:[/] {Markup.Escape(err)}");
+                    }
+                });
+        }
+        catch (McpConflictException)
+        {
+            AnsiConsole.MarkupLine("[red]Federation is disabled. Enable it first.[/]");
+        }
+        catch (McpNotFoundException)
+        {
+            AnsiConsole.MarkupLine("[red]No federation target resolved. Add a target and set it as default first.[/]");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to push federation data");
+            AnsiConsole.MarkupLine($"[red]Error:[/] {ex.Message}");
+        }
+    }
+
+    private async Task FederationPullAsync(CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrEmpty(_currentWorkspace))
+        {
+            AnsiConsole.MarkupLine("[red]No workspace selected[/]");
+            return;
+        }
+
+        AnsiConsole.MarkupLine("[bold blue]Federation Pull[/]");
+        AnsiConsole.MarkupLine("[dim]Queries local data with federation merge enabled — remote items are included automatically.[/]");
+        AnsiConsole.WriteLine();
+
+        var pullChoice = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("[green]What to pull:[/]")
+                .AddChoices("TODOs", "Session Logs", "Cancel"));
+
+        if (pullChoice == "Cancel")
+            return;
+
+        try
+        {
+            if (pullChoice == "TODOs")
+            {
+                await AnsiConsole.Status()
+                    .StartAsync("Querying TODOs (local + federated)...", async ctx =>
+                    {
+                        var result = await _client.Todo.QueryAsync(cancellationToken: cancellationToken);
+
+                        if (result?.Items == null || result.Items.Count == 0)
+                        {
+                            AnsiConsole.MarkupLine("[yellow]No TODOs found.[/]");
+                            return;
+                        }
+
+                        var table = new Table();
+                        table.Border(TableBorder.Rounded);
+                        table.AddColumn("[green]ID[/]");
+                        table.AddColumn("[green]Title[/]");
+                        table.AddColumn("[green]Priority[/]");
+                        table.AddColumn("[green]Done[/]");
+
+                        foreach (var item in result.Items)
+                        {
+                            var priorityColor = item.Priority switch
+                            {
+                                "P0-Critical" => "red",
+                                "P1-High" => "yellow",
+                                "P2-Medium" => "blue",
+                                _ => "dim"
+                            };
+                            table.AddRow(
+                                Markup.Escape(item.Id),
+                                Markup.Escape(item.Title),
+                                $"[{priorityColor}]{Markup.Escape(item.Priority)}[/]",
+                                item.Done ? "[green]Yes[/]" : "[dim]No[/]");
+                        }
+
+                        AnsiConsole.Write(table);
+                        AnsiConsole.MarkupLine($"\n[dim]Total: {result.TotalCount} TODO(s) (local + federated)[/]");
+                    });
+            }
+            else
+            {
+                await AnsiConsole.Status()
+                    .StartAsync("Querying session logs (local + federated)...", async ctx =>
+                    {
+                        var result = await _client.SessionLog.QueryAsync(cancellationToken: cancellationToken);
+
+                        if (result?.Items == null || result.Items.Count == 0)
+                        {
+                            AnsiConsole.MarkupLine("[yellow]No session logs found.[/]");
+                            return;
+                        }
+
+                        var table = new Table();
+                        table.Border(TableBorder.Rounded);
+                        table.AddColumn("[green]Session ID[/]");
+                        table.AddColumn("[green]Agent[/]");
+                        table.AddColumn("[green]Model[/]");
+                        table.AddColumn("[green]Status[/]");
+                        table.AddColumn("[green]Turns[/]");
+
+                        foreach (var item in result.Items)
+                        {
+                            table.AddRow(
+                                Markup.Escape(item.SessionId ?? ""),
+                                Markup.Escape(item.SourceType ?? ""),
+                                Markup.Escape(item.Model ?? ""),
+                                Markup.Escape(item.Status ?? ""),
+                                (item.Turns?.Count ?? 0).ToString());
+                        }
+
+                        AnsiConsole.Write(table);
+                        AnsiConsole.MarkupLine($"\n[dim]Total: {result.TotalCount} session log(s) (local + federated)[/]");
+                    });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to pull federation data");
+            AnsiConsole.MarkupLine($"[red]Error:[/] {ex.Message}");
+        }
     }
 
     private async Task ListRequirementsAsync(CancellationToken cancellationToken)

@@ -24,6 +24,11 @@ namespace McpServer.Support.Mcp.McpStdio;
 public sealed class FwhMcpTools
 {
     private static readonly JsonSerializerOptions s_caseInsensitiveOptions = new() { PropertyNameCaseInsensitive = true };
+    private static readonly JsonSerializerOptions s_camelCaseOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+    };
     private readonly McpDbContext _db;
     private readonly IRepoFileService _repoFileService;
     private readonly IngestionCoordinator _coordinator;
@@ -43,6 +48,7 @@ public sealed class FwhMcpTools
     private readonly TodoServiceResolver _todoServiceResolver;
     private readonly TodoCreationService _todoCreationService;
     private readonly TodoUpdateService _todoUpdateService;
+    private readonly ITodoExecutionService _todoExecutionService;
     private readonly IPromptTemplateService _promptTemplateService;
     private readonly ILogger<FwhMcpTools> _logger;
 
@@ -67,6 +73,7 @@ public sealed class FwhMcpTools
         TodoServiceResolver todoServiceResolver,
         TodoCreationService todoCreationService,
         TodoUpdateService todoUpdateService,
+        ITodoExecutionService todoExecutionService,
         IPromptTemplateService promptTemplateService,
         ILogger<FwhMcpTools> logger)
     {
@@ -90,6 +97,7 @@ public sealed class FwhMcpTools
         _todoServiceResolver = todoServiceResolver;
         _todoCreationService = todoCreationService;
         _todoUpdateService = todoUpdateService;
+        _todoExecutionService = todoExecutionService;
         _promptTemplateService = promptTemplateService;
     }
 
@@ -114,6 +122,8 @@ public sealed class FwhMcpTools
 
         _db.OverrideWorkspaceId(workspacePath);
     }
+
+    private static string SerializeJson(object value) => JsonSerializer.Serialize(value, s_camelCaseOptions);
 
     /// <summary>Applies a natural-language workspace policy directive.</summary>
     [McpServerTool(Name = "workspace_policy_apply"), Description("Apply a natural-language workspace policy directive (ban/unban/clear for licenses, countries, organizations, or individuals).")]
@@ -322,6 +332,270 @@ public sealed class FwhMcpTools
             ResponseTokenBudget = responseTokenBudget,
         }, cancellationToken).ConfigureAwait(false);
         return JsonSerializer.Serialize(result);
+    }
+
+    // ── Ad-Hoc Text Ingestion (FR-MCP-078, TR-GRAPHRAG-ADHOC-001) ──
+
+    /// <summary>FR-MCP-078: Ingest raw text into the GraphRAG corpus.</summary>
+    /// <returns>JSON string with document ID, chunk count, and source metadata.</returns>
+    [McpServerTool(Name = "graphrag_ingest_text"), Description("Ingest raw text into the GraphRAG corpus, creating a document and chunks.")]
+    public async Task<string> GraphRagIngestText(
+        [Description("Text content to ingest")] string content,
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Optional document title")] string? title = null,
+        [Description("Source type classification (default 'adhoc-text')")] string? sourceType = null,
+        [Description("Source key / path for the document")] string? sourceKey = null,
+        [Description("Trigger full reindex after ingestion")] bool triggerReindex = false,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        if (string.IsNullOrWhiteSpace(content))
+            return JsonSerializer.Serialize(new { error = "content is required" });
+        var result = await _graphRagService.IngestTextAsync(new GraphRagIngestTextRequest
+        {
+            Content = content,
+            Title = title,
+            SourceType = sourceType,
+            SourceKey = sourceKey,
+            TriggerReindex = triggerReindex,
+        }, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-080: List documents in the GraphRAG corpus.</summary>
+    /// <returns>JSON string with paginated document list.</returns>
+    [McpServerTool(Name = "graphrag_list_documents"), Description("List documents in the GraphRAG corpus with pagination and optional source type filter.")]
+    public async Task<string> GraphRagListDocuments(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Number of documents to skip (default 0)")] int skip = 0,
+        [Description("Maximum documents to return (default 50)")] int take = 50,
+        [Description("Optional source type filter")] string? sourceType = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.ListDocumentsAsync(skip, take, sourceType, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-080: Get all chunks for a specific document.</summary>
+    /// <returns>JSON string with document chunks or error.</returns>
+    [McpServerTool(Name = "graphrag_get_document_chunks"), Description("Retrieve all chunks for a specific GraphRAG document by document ID.")]
+    public async Task<string> GraphRagGetDocumentChunks(
+        [Description("Document ID")] string documentId,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.GetDocumentChunksAsync(documentId, cancellationToken).ConfigureAwait(false);
+        if (result is null)
+            return JsonSerializer.Serialize(new { error = $"Document '{documentId}' not found" });
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-080: Delete a document and its chunks from the corpus.</summary>
+    /// <returns>JSON string with deletion result.</returns>
+    [McpServerTool(Name = "graphrag_delete_document"), Description("Delete a document and its chunks from the GraphRAG corpus.")]
+    public async Task<string> GraphRagDeleteDocument(
+        [Description("Document ID to delete")] string documentId,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.DeleteDocumentAsync(documentId, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(result);
+    }
+
+    // ── Entity CRUD (FR-MCP-079, TR-GRAPHRAG-ADHOC-002) ──
+
+    /// <summary>FR-MCP-079: Create a new graph entity.</summary>
+    /// <returns>JSON string with the created entity.</returns>
+    [McpServerTool(Name = "graphrag_create_entity"), Description("Create a new graph entity in the GraphRAG knowledge graph.")]
+    public async Task<string> GraphRagCreateEntity(
+        [Description("Entity display name")] string name,
+        [Description("Entity type (e.g. person, organization, concept)")] string entityType,
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Optional description")] string? description = null,
+        [Description("Optional JSON metadata")] string? metadata = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.CreateEntityAsync(new GraphEntityRequest
+        {
+            Name = name,
+            EntityType = entityType,
+            Description = description,
+            Metadata = metadata,
+        }, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-079: List graph entities with pagination.</summary>
+    /// <returns>JSON string with paginated entity list.</returns>
+    [McpServerTool(Name = "graphrag_list_entities"), Description("List graph entities with pagination and optional type filter.")]
+    public async Task<string> GraphRagListEntities(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Number of entities to skip (default 0)")] int skip = 0,
+        [Description("Maximum entities to return (default 50)")] int take = 50,
+        [Description("Optional entity type filter")] string? entityType = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.ListEntitiesAsync(skip, take, entityType, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-079: Get a graph entity by ID.</summary>
+    /// <returns>JSON string with entity or error.</returns>
+    [McpServerTool(Name = "graphrag_get_entity"), Description("Retrieve a graph entity by its ID.")]
+    public async Task<string> GraphRagGetEntity(
+        [Description("Entity ID")] string entityId,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.GetEntityAsync(entityId, cancellationToken).ConfigureAwait(false);
+        if (result is null)
+            return JsonSerializer.Serialize(new { error = $"Entity '{entityId}' not found" });
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-079: Update an existing graph entity.</summary>
+    /// <returns>JSON string with updated entity or error.</returns>
+    [McpServerTool(Name = "graphrag_update_entity"), Description("Update an existing graph entity by ID.")]
+    public async Task<string> GraphRagUpdateEntity(
+        [Description("Entity ID to update")] string entityId,
+        [Description("Updated entity name")] string name,
+        [Description("Updated entity type")] string entityType,
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Updated description")] string? description = null,
+        [Description("Updated JSON metadata")] string? metadata = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.UpdateEntityAsync(entityId, new GraphEntityRequest
+        {
+            Name = name,
+            EntityType = entityType,
+            Description = description,
+            Metadata = metadata,
+        }, cancellationToken).ConfigureAwait(false);
+        if (result is null)
+            return JsonSerializer.Serialize(new { error = $"Entity '{entityId}' not found" });
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-079: Delete a graph entity by ID.</summary>
+    /// <returns>JSON string indicating deletion success.</returns>
+    [McpServerTool(Name = "graphrag_delete_entity"), Description("Delete a graph entity by its ID.")]
+    public async Task<string> GraphRagDeleteEntity(
+        [Description("Entity ID to delete")] string entityId,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var deleted = await _graphRagService.DeleteEntityAsync(entityId, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(new { deleted, entityId });
+    }
+
+    // ── Relationship CRUD (FR-MCP-079, TR-GRAPHRAG-ADHOC-002) ──
+
+    /// <summary>FR-MCP-079: Create a new graph relationship.</summary>
+    /// <returns>JSON string with the created relationship.</returns>
+    [McpServerTool(Name = "graphrag_create_relationship"), Description("Create a new graph relationship between two entities.")]
+    public async Task<string> GraphRagCreateRelationship(
+        [Description("Source entity ID")] string sourceEntityId,
+        [Description("Target entity ID")] string targetEntityId,
+        [Description("Relationship type")] string relationshipType,
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Optional description")] string? description = null,
+        [Description("Weight/strength (default 1.0)")] double weight = 1.0,
+        [Description("Optional JSON metadata")] string? metadata = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.CreateRelationshipAsync(new GraphRelationshipRequest
+        {
+            SourceEntityId = sourceEntityId,
+            TargetEntityId = targetEntityId,
+            RelationshipType = relationshipType,
+            Description = description,
+            Weight = weight,
+            Metadata = metadata,
+        }, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-079: List graph relationships with pagination.</summary>
+    /// <returns>JSON string with paginated relationship list.</returns>
+    [McpServerTool(Name = "graphrag_list_relationships"), Description("List graph relationships with pagination and optional entity/type filters.")]
+    public async Task<string> GraphRagListRelationships(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Number of relationships to skip (default 0)")] int skip = 0,
+        [Description("Maximum relationships to return (default 50)")] int take = 50,
+        [Description("Optional entity ID filter")] string? entityId = null,
+        [Description("Optional relationship type filter")] string? relationshipType = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.ListRelationshipsAsync(skip, take, entityId, relationshipType, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-079: Get a graph relationship by ID.</summary>
+    /// <returns>JSON string with relationship or error.</returns>
+    [McpServerTool(Name = "graphrag_get_relationship"), Description("Retrieve a graph relationship by its ID.")]
+    public async Task<string> GraphRagGetRelationship(
+        [Description("Relationship ID")] string relationshipId,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.GetRelationshipAsync(relationshipId, cancellationToken).ConfigureAwait(false);
+        if (result is null)
+            return JsonSerializer.Serialize(new { error = $"Relationship '{relationshipId}' not found" });
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-079: Update an existing graph relationship.</summary>
+    /// <returns>JSON string with updated relationship or error.</returns>
+    [McpServerTool(Name = "graphrag_update_relationship"), Description("Update an existing graph relationship by ID.")]
+    public async Task<string> GraphRagUpdateRelationship(
+        [Description("Relationship ID to update")] string relationshipId,
+        [Description("Source entity ID")] string sourceEntityId,
+        [Description("Target entity ID")] string targetEntityId,
+        [Description("Relationship type")] string relationshipType,
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Updated description")] string? description = null,
+        [Description("Updated weight (default 1.0)")] double weight = 1.0,
+        [Description("Updated JSON metadata")] string? metadata = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var result = await _graphRagService.UpdateRelationshipAsync(relationshipId, new GraphRelationshipRequest
+        {
+            SourceEntityId = sourceEntityId,
+            TargetEntityId = targetEntityId,
+            RelationshipType = relationshipType,
+            Description = description,
+            Weight = weight,
+            Metadata = metadata,
+        }, cancellationToken).ConfigureAwait(false);
+        if (result is null)
+            return JsonSerializer.Serialize(new { error = $"Relationship '{relationshipId}' not found" });
+        return JsonSerializer.Serialize(result);
+    }
+
+    /// <summary>FR-MCP-079: Delete a graph relationship by ID.</summary>
+    /// <returns>JSON string indicating deletion success.</returns>
+    [McpServerTool(Name = "graphrag_delete_relationship"), Description("Delete a graph relationship by its ID.")]
+    public async Task<string> GraphRagDeleteRelationship(
+        [Description("Relationship ID to delete")] string relationshipId,
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        var deleted = await _graphRagService.DeleteRelationshipAsync(relationshipId, cancellationToken).ConfigureAwait(false);
+        return JsonSerializer.Serialize(new { deleted, relationshipId });
     }
 
     /// <summary>Read file content by relative path from repo root.</summary>
@@ -724,6 +998,369 @@ public sealed class FwhMcpTools
         }
     }
 
+    /// <summary>Create a bounded Byrd iteration phase.</summary>
+    [McpServerTool(Name = "create_iteration_phase"), Description("Create a bounded Byrd iteration phase aligned to requirements and scope.")]
+    public async Task<string> CreateIterationPhase(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Phase name")] string name,
+        [Description("Phase summary")] string summary,
+        [Description("Linked requirement IDs")] string[]? requirementIds = null,
+        [Description("Entry criteria")] string[]? entryCriteria = null,
+        [Description("Exit criteria")] string[]? exitCriteria = null,
+        [Description("Originating plan ID")] string? createdFromPlanId = null,
+        [Description("Branch associated with the phase")] string? branch = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _todoExecutionService.CreateIterationPhaseAsync(workspacePath, new CreateIterationPhaseRequest
+            {
+                Name = name,
+                Summary = summary,
+                RequirementIds = requirementIds,
+                EntryCriteria = entryCriteria,
+                ExitCriteria = exitCriteria,
+                CreatedFromPlanId = createdFromPlanId,
+                Branch = branch,
+            }, cancellationToken).ConfigureAwait(false);
+            return SerializeJson(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return SerializeJson(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>Create Byrd execution TODOs from a plan.</summary>
+    [McpServerTool(Name = "create_todos_from_plan"), Description("Decompose an approved plan into executable TODO items inside an iteration phase.")]
+    public async Task<string> CreateTodosFromPlan(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Iteration phase ID")] string phaseId,
+        [Description("Plan ID")] string planId,
+        [Description("Planned TODO definitions")] PlanTodoInput[]? todos = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _todoExecutionService.CreateTodosFromPlanAsync(workspacePath, new CreateTodosFromPlanRequest
+            {
+                PhaseId = phaseId,
+                PlanId = planId,
+                Todos = todos,
+            }, cancellationToken).ConfigureAwait(false);
+            return SerializeJson(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return SerializeJson(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>Return the active Byrd execution TODO.</summary>
+    [McpServerTool(Name = "get_active_todo"), Description("Return the single TODO Codex should work on next.")]
+    public async Task<string> GetActiveTodo(
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _todoExecutionService.GetActiveTodoAsync(workspacePath, cancellationToken).ConfigureAwait(false);
+            return result is null
+                ? SerializeJson(new { error = "No active TODO was found." })
+                : SerializeJson(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return SerializeJson(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>Return the bounded execution context for a Byrd TODO.</summary>
+    [McpServerTool(Name = "get_todo_execution_context"), Description("Hydrate a single bounded working set for a Byrd execution TODO.")]
+    public async Task<string> GetTodoExecutionContext(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Execution TODO ID")] string todoId,
+        [Description("Maximum requirement snippets to return (default 5)")] int requirementSnippetLimit = 5,
+        [Description("Maximum recent turn summaries to return (default 5)")] int sessionTurnSummaryLimit = 5,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _todoExecutionService.GetExecutionContextAsync(
+                workspacePath,
+                todoId,
+                requirementSnippetLimit,
+                sessionTurnSummaryLimit,
+                cancellationToken).ConfigureAwait(false);
+            return result is null
+                ? SerializeJson(new { error = $"Execution TODO '{todoId}' was not found." })
+                : SerializeJson(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return SerializeJson(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>Return the execution delta for a Byrd TODO since a checkpoint.</summary>
+    [McpServerTool(Name = "get_todo_delta_context"), Description("Fetch only what changed since the last checkpoint for a Byrd TODO.")]
+    public async Task<string> GetTodoDeltaContext(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Execution TODO ID")] string todoId,
+        [Description("Checkpoint ID to diff from")] string? sinceCheckpointId = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _todoExecutionService.GetDeltaContextAsync(workspacePath, todoId, sinceCheckpointId, cancellationToken).ConfigureAwait(false);
+            return result is null
+                ? SerializeJson(new { error = $"Execution TODO '{todoId}' was not found." })
+                : SerializeJson(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return SerializeJson(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>Store the test plan for a Byrd TODO.</summary>
+    [McpServerTool(Name = "set_todo_test_plan"), Description("Store test files and commands before implementation begins.")]
+    public async Task<string> SetTodoTestPlan(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Execution TODO ID")] string todoId,
+        [Description("Whether unit tests are defined")] bool unitTestsDefined,
+        [Description("Whether integration tests are defined")] bool integrationTestsDefined = false,
+        [Description("Test file paths")] string[]? testFilePaths = null,
+        [Description("Test commands")] string[]? testCommands = null,
+        [Description("Whether unit tests are already passing")] bool? unitTestsPassing = null,
+        [Description("Whether integration tests are already passing")] bool? integrationTestsPassing = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _todoExecutionService.SetTestPlanAsync(workspacePath, todoId, new SetTodoTestPlanRequest
+            {
+                UnitTestsDefined = unitTestsDefined,
+                IntegrationTestsDefined = integrationTestsDefined,
+                TestFilePaths = testFilePaths,
+                TestCommands = testCommands,
+                UnitTestsPassing = unitTestsPassing,
+                IntegrationTestsPassing = integrationTestsPassing,
+            }, cancellationToken).ConfigureAwait(false);
+            return SerializeJson(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return SerializeJson(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>Move a Byrd TODO through its execution states.</summary>
+    [McpServerTool(Name = "update_todo_status"), Description("Move a Byrd TODO through its execution states with process enforcement.")]
+    public async Task<string> UpdateTodoStatus(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Execution TODO ID")] string todoId,
+        [Description("Target execution status")] TodoExecutionStatus targetStatus,
+        [Description("Optional transition reason")] string? reason = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _todoExecutionService.UpdateStatusAsync(workspacePath, todoId, new UpdateTodoStatusRequest
+            {
+                TargetStatus = targetStatus,
+                Reason = reason,
+            }, cancellationToken).ConfigureAwait(false);
+            return SerializeJson(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return SerializeJson(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>Append a checkpoint to a Byrd TODO.</summary>
+    [McpServerTool(Name = "append_todo_checkpoint"), Description("Record progress, decisions, failures, or validation results for a Byrd TODO.")]
+    public async Task<string> AppendTodoCheckpoint(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Execution TODO ID")] string todoId,
+        [Description("Checkpoint kind")] TodoCheckpointKind kind,
+        [Description("Checkpoint summary")] string summary,
+        [Description("Suggested next action")] string? nextAction = null,
+        [Description("Requirement IDs")] string[]? requirementIds = null,
+        [Description("Session turn IDs")] string[]? sessionTurnIds = null,
+        [Description("Artifact IDs")] string[]? artifactIds = null,
+        [Description("Commit SHAs")] string[]? commitShas = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _todoExecutionService.AppendCheckpointAsync(workspacePath, todoId, new AppendTodoCheckpointRequest
+            {
+                Kind = kind,
+                Summary = summary,
+                NextAction = nextAction,
+                RequirementIds = requirementIds,
+                SessionTurnIds = sessionTurnIds,
+                ArtifactIds = artifactIds,
+                CommitShas = commitShas,
+            }, cancellationToken).ConfigureAwait(false);
+            return SerializeJson(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return SerializeJson(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>Record the validation result for a Byrd TODO.</summary>
+    [McpServerTool(Name = "record_todo_validation_result"), Description("Persist validation state, including device validation artifacts, for a Byrd TODO.")]
+    public async Task<string> RecordTodoValidationResult(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Execution TODO ID")] string todoId,
+        [Description("Validation result string")] string result,
+        [Description("Validation summary")] string? summary = null,
+        [Description("Artifact IDs")] string[]? artifactIds = null,
+        [Description("Session turn IDs")] string[]? sessionTurnIds = null,
+        [Description("Whether unit tests are passing")] bool? unitTestsPassing = null,
+        [Description("Whether integration tests are passing")] bool? integrationTestsPassing = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var payload = await _todoExecutionService.RecordValidationResultAsync(workspacePath, todoId, new RecordTodoValidationResultRequest
+            {
+                Result = result,
+                Summary = summary,
+                ArtifactIds = artifactIds,
+                SessionTurnIds = sessionTurnIds,
+                UnitTestsPassing = unitTestsPassing,
+                IntegrationTestsPassing = integrationTestsPassing,
+            }, cancellationToken).ConfigureAwait(false);
+            return SerializeJson(payload);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return SerializeJson(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>Return the next ready Byrd TODO.</summary>
+    [McpServerTool(Name = "get_next_ready_todo"), Description("Advance work without rereading the whole plan.")]
+    public async Task<string> GetNextReadyTodo(
+        [Description("Workspace path (required)")] string workspacePath,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _todoExecutionService.GetNextReadyTodoAsync(workspacePath, cancellationToken).ConfigureAwait(false);
+            return result is null
+                ? SerializeJson(new { error = "No ready TODO was found." })
+                : SerializeJson(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return SerializeJson(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>Link historical session turns to a Byrd TODO.</summary>
+    [McpServerTool(Name = "link_todo_to_session_turns"), Description("Attach historical evidence to a Byrd TODO without duplicating log content.")]
+    public async Task<string> LinkTodoToSessionTurns(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("Execution TODO ID")] string todoId,
+        [Description("Session turn IDs")] string[]? sessionTurnIds = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _todoExecutionService.LinkTodoToSessionTurnsAsync(workspacePath, todoId, new LinkTodoToSessionTurnsRequest
+            {
+                SessionTurnIds = sessionTurnIds,
+            }, cancellationToken).ConfigureAwait(false);
+            return SerializeJson(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return SerializeJson(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>Perform a safe Android ADB step.</summary>
+    [McpServerTool(Name = "adb_step"), Description("Perform a fixed safe ADB action such as screenshot, tap, swipe, text, keyevent, wait, launch_app, or get_focus.")]
+    public async Task<string> AdbStep(
+        [Description("Workspace path (required)")] string workspacePath,
+        [Description("ADB action")] AdbStepAction action,
+        [Description("Optional device serial")] string? deviceSerial = null,
+        [Description("Capture a screenshot after the action")] bool captureScreenshot = false,
+        [Description("Optional user-facing instruction")] string? instruction = null,
+        [Description("Tap X coordinate")] int? x = null,
+        [Description("Tap Y coordinate")] int? y = null,
+        [Description("Swipe start X coordinate")] int? startX = null,
+        [Description("Swipe start Y coordinate")] int? startY = null,
+        [Description("Swipe end X coordinate")] int? endX = null,
+        [Description("Swipe end Y coordinate")] int? endY = null,
+        [Description("Optional duration in milliseconds")] int? durationMs = null,
+        [Description("Text payload")] string? text = null,
+        [Description("Key event value")] string? keyEvent = null,
+        [Description("Package name to launch")] string? packageName = null,
+        [Description("Activity name for explicit launches")] string? activityName = null,
+        [Description("Wait duration in milliseconds")] int? waitMilliseconds = null,
+        CancellationToken cancellationToken = default)
+    {
+        ApplyWorkspaceOverride(workspacePath);
+        try
+        {
+            var result = await _todoExecutionService.AdbStepAsync(workspacePath, new AdbStepRequest
+            {
+                DeviceSerial = deviceSerial,
+                Action = action,
+                CaptureScreenshot = captureScreenshot,
+                Instruction = instruction,
+                X = x,
+                Y = y,
+                StartX = startX,
+                StartY = startY,
+                EndX = endX,
+                EndY = endY,
+                DurationMs = durationMs,
+                Text = text,
+                KeyEvent = keyEvent,
+                PackageName = packageName,
+                ActivityName = activityName,
+                WaitMilliseconds = waitMilliseconds,
+            }, cancellationToken).ConfigureAwait(false);
+            return SerializeJson(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return SerializeJson(new { error = ex.Message });
+        }
+    }
+
     private static async Task<string> CollectStreamAsync(IAsyncEnumerable<string> lines)
     {
         var sb = new System.Text.StringBuilder();
@@ -773,31 +1410,41 @@ public sealed class FwhMcpTools
         }
     }
 
-    /// <summary>REQ-MGMT-001: Generate requirements documents as Markdown (doc=all concatenates all docs).</summary>
-    [McpServerTool(Name = "requirements_generate"), Description("Generate requirements documents as Markdown. doc = functional|technical|testing|mapping|all (default all).")]
+    /// <summary>REQ-MGMT-001: Generate requirements documents as Markdown or workspace files.</summary>
+    [McpServerTool(Name = "requirements_generate"), Description("Generate requirements documents. doc = functional|technical|testing|mapping|matrix|all (default all). format = markdown|wiki. doc=all writes files to the workspace and returns export metadata.")]
     public async Task<string> RequirementsGenerate(
         [Description("Workspace path (required)")] string workspacePath,
-        [Description("Document selector: functional, technical, testing, mapping, or all")] string? doc = "all",
+        [Description("Document selector: functional, technical, testing, mapping, matrix, or all")] string? doc = "all",
+        [Description("Output format: markdown or wiki")] string? format = "markdown",
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
         try
         {
             if (!TryParseRequirementsDocType(doc, out var docType))
-                return JsonSerializer.Serialize(new { error = "Unsupported doc. Expected functional|technical|testing|mapping|all." });
+                return JsonSerializer.Serialize(new { error = "Unsupported doc. Expected functional|technical|testing|mapping|matrix|all." });
+
+            var normalizedFormat = (format ?? "markdown").Trim().ToLowerInvariant();
+            if (normalizedFormat == "wiki")
+            {
+                if (docType != RequirementsDocType.All)
+                    return JsonSerializer.Serialize(new { error = "Wiki generation requires doc=all." });
+
+                var export = await _requirementsDocumentService.GenerateWikiAsync(
+                    Path.Combine(workspacePath, "docs", "Project", "wiki"),
+                    ct: cancellationToken).ConfigureAwait(false);
+                return JsonSerializer.Serialize(export, s_camelCaseOptions);
+            }
+
+            if (normalizedFormat is not "markdown" and not "yaml")
+                return JsonSerializer.Serialize(new { error = "Unsupported format. Expected markdown|yaml|wiki." });
 
             if (docType == RequirementsDocType.All)
             {
-                var functional = await _requirementsDocumentService.GenerateDocumentAsync(RequirementsDocType.Functional, cancellationToken).ConfigureAwait(false);
-                var technical = await _requirementsDocumentService.GenerateDocumentAsync(RequirementsDocType.Technical, cancellationToken).ConfigureAwait(false);
-                var testing = await _requirementsDocumentService.GenerateDocumentAsync(RequirementsDocType.Testing, cancellationToken).ConfigureAwait(false);
-                var mapping = await _requirementsDocumentService.GenerateDocumentAsync(RequirementsDocType.Mapping, cancellationToken).ConfigureAwait(false);
-                return string.Join(
-                    "\n\n---\n\n",
-                    functional.Content.TrimEnd(),
-                    technical.Content.TrimEnd(),
-                    testing.Content.TrimEnd(),
-                    mapping.Content.TrimEnd());
+                var export = await _requirementsDocumentService.GenerateAllAsync(
+                    Path.Combine(workspacePath, "docs", "Project"),
+                    ct: cancellationToken).ConfigureAwait(false);
+                return JsonSerializer.Serialize(export, s_camelCaseOptions);
             }
 
             var result = await _requirementsDocumentService.GenerateDocumentAsync(docType, cancellationToken).ConfigureAwait(false);
@@ -811,13 +1458,14 @@ public sealed class FwhMcpTools
     }
 
     /// <summary>REQ-MGMT-001: Create a requirement or mapping row.</summary>
-    [McpServerTool(Name = "requirements_create"), Description("Create a requirement entry. type = fr|tr|test|mapping. For mapping, body is a comma-separated TR id list.")]
+    [McpServerTool(Name = "requirements_create"), Description("Create a requirement entry. type = fr|tr|test|mapping. For mapping, body is comma-separated TR ids and testIds is comma-separated TEST ids.")]
     public async Task<string> RequirementsCreate(
         [Description("Entry type: fr, tr, test, or mapping")] string type,
         [Description("Entry id (FR/TR/TEST id or FR id for mapping rows)")] string id,
         [Description("Workspace path (required)")] string workspacePath,
         [Description("Title (required for fr; optional for tr; ignored for test/mapping)")] string? title = null,
         [Description("Body text (required for fr/tr/test; for mapping use comma-separated TR ids)")] string? body = null,
+        [Description("Comma-separated TEST ids for mapping rows")] string? testIds = null,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -849,7 +1497,7 @@ public sealed class FwhMcpTools
                 }
                 case RequirementsEntityType.Mapping:
                 {
-                    var mapping = new FrTrMapping(id, ParseMappingTrIds(body));
+                    var mapping = new FrTrMapping(id, ParseMappingIds(body), ParseMappingIds(testIds));
                     await _requirementsDocumentService.UpsertMappingAsync(mapping, cancellationToken).ConfigureAwait(false);
                     return JsonSerializer.Serialize(new { success = true, item = mapping });
                 }
@@ -882,6 +1530,7 @@ public sealed class FwhMcpTools
         [Description("Workspace path (required)")] string workspacePath,
         [Description("Updated title (fr/tr only)")] string? title = null,
         [Description("Updated body text or mapping TR id list")] string? body = null,
+        [Description("Updated comma-separated TEST ids for mapping rows")] string? testIds = null,
         CancellationToken cancellationToken = default)
     {
         ApplyWorkspaceOverride(workspacePath);
@@ -932,8 +1581,11 @@ public sealed class FwhMcpTools
                     var existing = await _requirementsDocumentService.GetMappingAsync(id, cancellationToken).ConfigureAwait(false);
                     var trIds = body is null && existing is not null
                         ? existing.TrIds
-                        : ParseMappingTrIds(body);
-                    var updated = new FrTrMapping(id, trIds);
+                        : ParseMappingIds(body);
+                    var targetTestIds = testIds is null && existing is not null
+                        ? existing.TestIds
+                        : ParseMappingIds(testIds);
+                    var updated = new FrTrMapping(id, trIds, targetTestIds);
                     await _requirementsDocumentService.UpsertMappingAsync(updated, cancellationToken).ConfigureAwait(false);
                     return JsonSerializer.Serialize(new { success = true, item = updated });
                 }
@@ -1290,6 +1942,9 @@ public sealed class FwhMcpTools
             case "mapping":
                 docType = RequirementsDocType.Mapping;
                 return true;
+            case "matrix":
+                docType = RequirementsDocType.Matrix;
+                return true;
             case "all":
                 docType = RequirementsDocType.All;
                 return true;
@@ -1327,7 +1982,7 @@ public sealed class FwhMcpTools
         }
     }
 
-    private static IReadOnlyList<string> ParseMappingTrIds(string? body)
+    private static IReadOnlyList<string> ParseMappingIds(string? body)
     {
         if (string.IsNullOrWhiteSpace(body))
             return Array.Empty<string>();

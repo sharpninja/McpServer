@@ -8,11 +8,11 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 internal static class TodoValidator
 {
-    private const string ThreeSegmentTodoIdPattern = "^[A-Z]+-[A-Z0-9]+-\\d{3}$";
+    private const string KebabTodoIdPattern = "^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\\d{3}$";
     private const string IssueTodoIdPattern = "^ISSUE-\\d+$";
 
-    private static readonly Regex s_threeSegmentTodoIdRegex = new(
-        ThreeSegmentTodoIdPattern,
+    private static readonly Regex s_kebabTodoIdRegex = new(
+        KebabTodoIdPattern,
         RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
     private static readonly Regex s_issueTodoIdRegex = new(
@@ -32,7 +32,7 @@ internal static class TodoValidator
 
     /// <summary>
     /// Returns an error message when the TODO identifier is null, empty, or does not match
-    /// the canonical format <c>&lt;PHASE&gt;-&lt;AREA&gt;-###</c> or <c>ISSUE-{number}</c>.
+    /// the canonical format <c>&lt;PREFIX&gt;-&lt;AREA&gt;[-&lt;DETAIL&gt;...]-###</c> or <c>ISSUE-{number}</c>.
     /// </summary>
     public static string? ValidateTodoId(string? id)
     {
@@ -40,7 +40,7 @@ internal static class TodoValidator
             return "Todo id is required.";
 
         if (!IsCanonicalTodoId(id))
-            return $"Todo id must match <PHASE>-<AREA>-### using uppercase kebab-case (regex: {ThreeSegmentTodoIdPattern}) or ISSUE-{{number}} (regex: {IssueTodoIdPattern}).";
+            return $"Todo id must match uppercase kebab-case ending in -### (regex: {KebabTodoIdPattern}) or ISSUE-{{number}} (regex: {IssueTodoIdPattern}).";
 
         return null;
     }
@@ -82,7 +82,7 @@ internal static class TodoValidator
             if (knownIds.Contains(id))
                 continue;
 
-            return $"{fieldName} contains invalid TODO id '{id}'. Todo id must match <PHASE>-<AREA>-### using uppercase kebab-case (regex: {ThreeSegmentTodoIdPattern}) or ISSUE-{{number}} (regex: {IssueTodoIdPattern}).";
+            return $"{fieldName} contains invalid TODO id '{id}'. Todo id must match uppercase kebab-case ending in -### (regex: {KebabTodoIdPattern}) or ISSUE-{{number}} (regex: {IssueTodoIdPattern}).";
         }
 
         return null;
@@ -152,5 +152,5 @@ internal static class TodoValidator
     }
 
     private static bool IsCanonicalTodoId(string id)
-        => s_threeSegmentTodoIdRegex.IsMatch(id) || s_issueTodoIdRegex.IsMatch(id);
+        => s_kebabTodoIdRegex.IsMatch(id) || s_issueTodoIdRegex.IsMatch(id);
 }

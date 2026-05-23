@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Configurations>Debug;Release;Staging</Configurations>
@@ -11,7 +11,7 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>mcpserver-repl</ToolCommandName>
     <PackageId>SharpNinja.McpServer.Repl</PackageId>
-    <Version>6.0.0</Version>
+    <Version>6.1.1</Version>
     <Authors>SharpNinja</Authors>
     <Description>MCP Server REPL Host - Interactive and STDIO modes for Model Context Protocol integration with workspace session logs, TODO management, and requirements tracking.</Description>
     <PackageTags>mcp;repl;model-context-protocol;session-log;todo;requirements;cli</PackageTags>

@@ -38,17 +38,17 @@ public sealed class SessionLogController : ControllerBase
     public async Task<IActionResult> SubmitAsync([FromBody] UnifiedSessionLogDto dto, CancellationToken cancellationToken)
     {
         if (dto is null)
-            return BadRequest(new { error = "Request body is required." });
+            return ValidationProblem(detail: "Request body is required.", title: "Invalid session log body.");
 
         if (string.IsNullOrWhiteSpace(dto.SourceType))
-            return BadRequest(new { error = "SourceType is required." });
+            return ValidationProblem(detail: "sourceType is required.", title: "Invalid session log body.");
 
         if (string.IsNullOrWhiteSpace(dto.SessionId))
-            return BadRequest(new { error = "SessionId is required." });
+            return ValidationProblem(detail: "sessionId is required.", title: "Invalid session log body.");
 
         var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(dto.SessionId, dto.SourceType);
         if (sessionIdError is not null)
-            return BadRequest(new { error = sessionIdError });
+            return ValidationProblem(detail: sessionIdError, title: "Invalid sessionId.");
 
         if (dto.Turns is { Count: > 0 })
         {
@@ -56,12 +56,12 @@ public sealed class SessionLogController : ControllerBase
             {
                 var requestIdError = SessionLogIdentifierValidator.ValidateRequestId(turn.RequestId);
                 if (requestIdError is not null)
-                    return BadRequest(new { error = requestIdError });
+                    return ValidationProblem(detail: requestIdError, title: "Invalid requestId.");
             }
         }
 
         if (dto.Turns is { Count: > MaxTurnCount })
-            return BadRequest(new { error = $"Turn count exceeds maximum of {MaxTurnCount}." });
+            return ValidationProblem(detail: $"Turn count exceeds maximum of {MaxTurnCount}.", title: "Too many turns.");
 
         var id = await _service.SubmitAsync(dto, sourceFilePath: null, contentHash: null, cancellationToken).ConfigureAwait(false);
 
@@ -110,6 +110,74 @@ public sealed class SessionLogController : ControllerBase
 
         var result = await _service.QueryAsync(request, cancellationToken).ConfigureAwait(false);
         return Ok(result);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010C: Fetch a single session log by (agent, sessionId). Returns
+    /// 404 when the session does not exist or is excluded by the current workspace
+    /// tenancy filter.
+    /// </summary>
+    /// <param name="agent">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>200 OK with the session, or 404 Not Found.</returns>
+    [HttpGet("{agent}/{sessionId}")]
+    [ProducesResponseType(typeof(UnifiedSessionLogDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<UnifiedSessionLogDto>> GetByIdAsync(
+        string agent,
+        string sessionId,
+        CancellationToken cancellationToken)
+    {
+        var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, agent);
+        if (sessionIdError is not null)
+            return Problem(detail: sessionIdError, statusCode: StatusCodes.Status400BadRequest, title: "Invalid session identifier.");
+
+        var dto = await _service.GetAsync(agent, sessionId, cancellationToken).ConfigureAwait(false);
+        if (dto is null)
+            return NotFound();
+        return Ok(dto);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010C: Upsert a single turn on an existing session by RequestId.
+    /// Use this for incremental turn updates without re-POSTing the whole session
+    /// payload.
+    /// </summary>
+    /// <param name="agent">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="turn">Turn payload.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>201 Created with the turn id, 400 on validation failure, or 404 if the parent session does not exist.</returns>
+    [HttpPost("{agent}/{sessionId}/turn")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpsertTurnAsync(
+        string agent,
+        string sessionId,
+        [FromBody] UnifiedRequestEntryDto turn,
+        CancellationToken cancellationToken)
+    {
+        if (turn is null)
+            return Problem(detail: "Request body must be a UnifiedRequestEntryDto.", statusCode: StatusCodes.Status400BadRequest, title: "Invalid turn body.");
+
+        try
+        {
+            var turnId = await _service.UpsertTurnAsync(agent, sessionId, turn, cancellationToken).ConfigureAwait(false);
+            return Created(
+                new Uri($"/mcpserver/sessionlog/{Uri.EscapeDataString(agent)}/{Uri.EscapeDataString(sessionId)}", UriKind.Relative),
+                new { turnId, agent, sessionId, requestId = turn.RequestId });
+        }
+        catch (ArgumentException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status400BadRequest, title: "Invalid turn payload.");
+        }
+        catch (InvalidOperationException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return NotFound(new { error = ex.Message });
+        }
     }
 
     /// <summary>

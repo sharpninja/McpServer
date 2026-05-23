@@ -52,6 +52,29 @@ public interface ISessionLogService
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Paginated list of session logs with turns.</returns>
     Task<SessionLogQueryResult> QueryAsync(SessionLogQueryRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// FR-SUPPORT-010C: Fetch a single session log by (sourceType, sessionId) within
+    /// the current workspace context. Returns null when the session does not exist
+    /// or is filtered out by tenancy.
+    /// </summary>
+    /// <param name="sourceType">Agent source type.</param>
+    /// <param name="sessionId">Session identifier.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The mapped session log DTO, or null if not found.</returns>
+    Task<UnifiedSessionLogDto?> GetAsync(string sourceType, string sessionId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// FR-SUPPORT-010C: Upsert a single turn on an existing session by RequestId.
+    /// Does not delete sibling turns.
+    /// </summary>
+    /// <param name="sourceType">Agent source type of the parent session.</param>
+    /// <param name="sessionId">Session identifier of the parent session.</param>
+    /// <param name="turn">Turn payload to upsert.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The persisted turn entity identifier.</returns>
+    /// <exception cref="InvalidOperationException">When the parent session does not exist.</exception>
+    Task<long> UpsertTurnAsync(string sourceType, string sessionId, UnifiedRequestEntryDto turn, CancellationToken cancellationToken = default);
 }
 
 /// <summary>TR-PLANNED-013: Query parameters for session log search.</summary>

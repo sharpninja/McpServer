@@ -224,6 +224,55 @@ prompt: |-
 
             { Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -MarkerPath $marker } | Should -Throw '*MCP_UNTRUSTED*'
         }
+
+        It 'accepts quoted marker scalars when recomputing the signature' {
+            $quotedMarker = @'
+port: "7147"
+baseUrl: "http://PAYTON-LEGION2:7147"
+apiKey: "QYDndy2mJrmiDNK2noenYxJQOmNcq77cawFktjvo2ck"
+endpoints:
+  health: "/health"
+  swagger: "/swagger/v1/swagger.json"
+  swaggerUi: "/swagger"
+  mcpTransport: "/mcp-transport"
+  sessionLog: "/mcpserver/sessionlog"
+  sessionLogDialog: "/mcpserver/sessionlog/{agent}/{sessionId}/{requestId}/dialog"
+  contextSearch: "/mcpserver/context/search"
+  contextPack: "/mcpserver/context/pack"
+  contextSources: "/mcpserver/context/sources"
+  todo: "/mcpserver/todo"
+  repo: "/mcpserver/repo"
+  desktop: "/mcpserver/desktop"
+  gitHub: "/mcpserver/gh"
+  tools: "/mcpserver/tools"
+  workspace: "/mcpserver/workspace"
+  serverStartupUtc: "/server-startup-utc"
+  markerFileTimestamp: "/marker-file-timestamp?repoPath={workspacePath}"
+workspace: "TruckMate"
+workspacePath: "C:\GitHub\sharpninja\TruckMate"
+pid: "6444"
+startedAt: "2026-04-08T20:07:33.4596237+00:00"
+markerWrittenAtUtc: "2026-04-08T20:07:33.4596237+00:00"
+serverStartedAtUtc: "2026-04-08T20:07:28.5450988+00:00"
+signature:
+  algorithm: "HMAC-SHA256"
+  canonicalization: "marker-v1"
+  verifier: "workspace_api_key"
+  value: "ED769FDFAF0376790EB7EE498B23797393FAFFB74E033D4DD9705B62480421F8"
+trust_bootstrap:
+  description: "Trust bootstrap"
+prompt: |
+  Prompt
+'@
+            $marker = Join-Path $TestDrive 'AGENTS-README-FIRST.yaml'
+            $quotedMarker | Set-Content $marker
+
+            { Initialize-McpSession -Agent 'Copilotcli' -Model 'gpt-5.3-codex' -MarkerPath $marker } | Should -Not -Throw
+            InModuleScope McpSession {
+                $script:McpBaseUrl | Should -Be 'http://PAYTON-LEGION2:7147'
+                $script:McpApiKey | Should -Be 'QYDndy2mJrmiDNK2noenYxJQOmNcq77cawFktjvo2ck'
+            }
+        }
     }
 
     # ── Assert-Initialized guard ──────────────────────────────────────────────

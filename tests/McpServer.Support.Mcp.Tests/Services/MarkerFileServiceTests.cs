@@ -286,6 +286,12 @@ public sealed class MarkerFileServiceTests
             Assert.Contains("desktop: /mcpserver/desktop", yaml);
             Assert.Contains("signature:", yaml);
             Assert.Contains("trust_bootstrap:", yaml);
+            Assert.Contains("agent_plugins:", yaml);
+            Assert.Contains("policy: required", yaml);
+            Assert.Contains("MCP_PLUGIN_UNAVAILABLE:Codex", yaml);
+            Assert.Contains("MCP_PLUGIN_UNAVAILABLE:Claude", yaml);
+            Assert.Contains("MCP_PLUGIN_UNAVAILABLE:Copilot", yaml);
+            Assert.Contains("MCP_PLUGIN_UNAVAILABLE:Cline", yaml);
             Assert.Contains("verifier: workspace_api_key", yaml);
             Assert.Contains("health_nonce_parameter: nonce", yaml);
         }
@@ -417,5 +423,29 @@ public sealed class MarkerFileServiceTests
 
         Assert.Equal(payloadA, payloadB);
         Assert.Equal(signatureA, signatureB);
+    }
+
+    /// <summary>Verifies plugin contract data is part of the marker signature payload.</summary>
+    [Fact]
+    public void BuildSignaturePayload_IncludesAgentPluginDigestWhenContractIsPresent()
+    {
+        var plugins = MarkerFileService.BuildDefaultAgentPlugins(@"C:\test");
+        plugins.ContractDigest = MarkerFileService.ComputeAgentPluginsDigest(plugins);
+        var marker = new MarkerFile
+        {
+            Port = 7147,
+            BaseUrl = BaseUrl,
+            ApiKey = "marker-key",
+            Endpoints = new MarkerEndpoints { Health = "/health" },
+            Workspace = "test",
+            WorkspacePath = @"C:\test",
+            Signature = new MarkerSignature { Canonicalization = MarkerFileService.MarkerSignatureCanonicalization },
+            AgentPlugins = plugins,
+        };
+
+        var payload = MarkerFileService.BuildSignaturePayload(marker);
+
+        Assert.Contains("agentPlugins.policy=required", payload);
+        Assert.Contains("agentPlugins.contractDigest=", payload);
     }
 }

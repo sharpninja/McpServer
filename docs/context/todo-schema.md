@@ -16,11 +16,11 @@ Load this file when you need to create, update, query, or manage project TODOs.
 
 ## Naming Conventions (Normative)
 
-- Persisted TODO IDs must match either uppercase three-segment kebab-case
-  `<SDLC-PHASE>-<AREA>-###` or canonical GitHub issue IDs `ISSUE-{number}`.
-- Required persisted-ID regex set: `^[A-Z]+-[A-Z0-9]+-\d{3}$` or `^ISSUE-\d+$`
-- Valid persisted-ID examples: `PLAN-NAMINGCONVENTIONS-001`, `MCP-API-042`, `ISSUE-17`
-- Invalid persisted-ID examples: `plan-api-001`, `MCP-API-42`, `ISSUE-ABC`, `MCPAPI001`
+- Persisted TODO IDs must match either uppercase kebab-case ending in a three-digit sequence suffix
+  or canonical GitHub issue IDs `ISSUE-{number}`.
+- Required persisted-ID regex set: `^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\d{3}$` or `^ISSUE-\d+$`
+- Valid persisted-ID examples: `PLAN-NAMINGCONVENTIONS-001`, `PHASE0-REMOTE-001`, `MCP-TODO-CREATE-001`, `ISSUE-17`
+- Invalid persisted-ID examples: `plan-api-001`, `MCP-API-42`, `MCP-001`, `ISSUE-ABC`, `MCPAPI001`
 - Create requests may also use the special id `ISSUE-NEW`. The server immediately creates a GitHub
   issue, rewrites the saved TODO id to the canonical `ISSUE-{number}` value, and returns that canonical id.
 - After the first sync, `ISSUE-{number}` descriptions are immutable. Server-side TODO update surfaces sync
@@ -32,7 +32,7 @@ Load this file when you need to create, update, query, or manage project TODOs.
 
 ```json
 {
-  "id": "string — unique TODO ID in format <PHASE>-<AREA>-### or ISSUE-{number} (e.g. 'MCP-AUTH-001', 'ISSUE-17')",
+  "id": "string — unique TODO ID in uppercase kebab-case ending in -### or ISSUE-{number} (e.g. 'MCP-AUTH-001', 'MCP-TODO-CREATE-001', 'ISSUE-17')",
   "title": "string — brief title",
   "section": "string — grouping category (e.g. 'Backend', 'Frontend', 'Infrastructure')",
   "priority": "string — 'critical', 'high', 'medium', or 'low'",
@@ -59,7 +59,7 @@ Load this file when you need to create, update, query, or manage project TODOs.
 
 ```json
 {
-  "id": "string — REQUIRED TODO ID matching ^[A-Z]+-[A-Z0-9]+-\\d{3}$ or ^ISSUE-\\d+$; create requests may also use ISSUE-NEW to create and persist a canonical GitHub-backed todo",
+  "id": "string — REQUIRED TODO ID matching ^[A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+-\\d{3}$ or ^ISSUE-\\d+$; create requests may also use ISSUE-NEW to create and persist a canonical GitHub-backed todo",
   "title": "string — REQUIRED brief title",
   "section": "string — REQUIRED grouping category",
   "priority": "string — REQUIRED: 'critical', 'high', 'medium', or 'low'",

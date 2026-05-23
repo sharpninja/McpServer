@@ -88,6 +88,112 @@ public sealed class TodoClient : McpClientBase
         return await PostAsync<RequirementsAnalysisResult>($"mcpserver/todo/{Encode(id)}/requirements", null, cancellationToken);
     }
 
+    /// <summary>Create a bounded Byrd iteration phase.</summary>
+    public async Task<CreateIterationPhaseResult> CreateIterationPhaseAsync(
+        CreateIterationPhaseRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<CreateIterationPhaseResult>("mcpserver/todo-execution/phases", request, cancellationToken);
+    }
+
+    /// <summary>Create execution TODOs from an approved plan.</summary>
+    public async Task<CreateTodosFromPlanResult> CreateTodosFromPlanAsync(
+        string phaseId,
+        CreateTodosFromPlanRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<CreateTodosFromPlanResult>($"mcpserver/todo-execution/phases/{Encode(phaseId)}/todos", request, cancellationToken);
+    }
+
+    /// <summary>Return the active Byrd execution TODO.</summary>
+    public async Task<ActiveTodoResult> GetActiveTodoAsync(CancellationToken cancellationToken = default)
+    {
+        return await GetAsync<ActiveTodoResult>("mcpserver/todo-execution/active", cancellationToken);
+    }
+
+    /// <summary>Return the next ready Byrd execution TODO.</summary>
+    public async Task<ActiveTodoResult> GetNextReadyTodoAsync(CancellationToken cancellationToken = default)
+    {
+        return await GetAsync<ActiveTodoResult>("mcpserver/todo-execution/next-ready", cancellationToken);
+    }
+
+    /// <summary>Hydrate the bounded execution context for a Byrd TODO.</summary>
+    public async Task<ActiveTodoContext> GetExecutionContextAsync(
+        string todoId,
+        int requirementSnippetLimit = 5,
+        int sessionTurnSummaryLimit = 5,
+        CancellationToken cancellationToken = default)
+    {
+        return await GetAsync<ActiveTodoContext>(
+            $"mcpserver/todo-execution/todos/{Encode(todoId)}?requirementSnippetLimit={requirementSnippetLimit}&sessionTurnSummaryLimit={sessionTurnSummaryLimit}",
+            cancellationToken);
+    }
+
+    /// <summary>Return the execution delta for a Byrd TODO since a checkpoint.</summary>
+    public async Task<TodoDeltaContext> GetDeltaContextAsync(
+        string todoId,
+        string? sinceCheckpointId = null,
+        CancellationToken cancellationToken = default)
+    {
+        var suffix = string.IsNullOrWhiteSpace(sinceCheckpointId)
+            ? string.Empty
+            : $"?sinceCheckpointId={Encode(sinceCheckpointId)}";
+        return await GetAsync<TodoDeltaContext>($"mcpserver/todo-execution/todos/{Encode(todoId)}/delta{suffix}", cancellationToken);
+    }
+
+    /// <summary>Store the test plan for a Byrd TODO.</summary>
+    public async Task<SetTodoTestPlanResult> SetTestPlanAsync(
+        string todoId,
+        SetTodoTestPlanRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await PutAsync<SetTodoTestPlanResult>($"mcpserver/todo-execution/todos/{Encode(todoId)}/test-plan", request, cancellationToken);
+    }
+
+    /// <summary>Move a Byrd TODO through its execution states.</summary>
+    public async Task<UpdateTodoStatusResult> UpdateExecutionStatusAsync(
+        string todoId,
+        UpdateTodoStatusRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<UpdateTodoStatusResult>($"mcpserver/todo-execution/todos/{Encode(todoId)}/status", request, cancellationToken);
+    }
+
+    /// <summary>Append a checkpoint to a Byrd TODO.</summary>
+    public async Task<AppendTodoCheckpointResult> AppendCheckpointAsync(
+        string todoId,
+        AppendTodoCheckpointRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<AppendTodoCheckpointResult>($"mcpserver/todo-execution/todos/{Encode(todoId)}/checkpoints", request, cancellationToken);
+    }
+
+    /// <summary>Record a validation result for a Byrd TODO.</summary>
+    public async Task<RecordTodoValidationResultResult> RecordValidationResultAsync(
+        string todoId,
+        RecordTodoValidationResultRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<RecordTodoValidationResultResult>($"mcpserver/todo-execution/todos/{Encode(todoId)}/validation", request, cancellationToken);
+    }
+
+    /// <summary>Link historical session turns to a Byrd TODO.</summary>
+    public async Task<LinkTodoToSessionTurnsResult> LinkSessionTurnsAsync(
+        string todoId,
+        LinkTodoToSessionTurnsRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<LinkTodoToSessionTurnsResult>($"mcpserver/todo-execution/todos/{Encode(todoId)}/session-turns", request, cancellationToken);
+    }
+
+    /// <summary>Perform a safe Android ADB step.</summary>
+    public async Task<AdbStepResult> AdbStepAsync(
+        AdbStepRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<AdbStepResult>("mcpserver/todo-execution/adb/step", request, cancellationToken);
+    }
+
     /// <summary>
     /// Streams a Copilot-generated status report for the specified TODO item via SSE.
     /// Each yielded string is one line of the report, delivered in real-time as the

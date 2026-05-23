@@ -202,6 +202,13 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-REPL-005 | ✅ Complete | McpServer.Repl.Core (TodoCommandShapes, SessionLogCommandShapes, RequirementsCommandShapes, ClientCommandShapes), McpServer.Repl.Host (TodoWorkflow, SessionLogWorkflow, RequirementsWorkflow, GenericClientPassthrough) |
 | TR-MCP-REPL-006 | ✅ Complete | McpServer.Repl.Core (ITrustBootstrapService, IMarkerFileReader, IAuthRotationHandler), McpServer.Repl.Host (AgentStdioHandler) |
 | TR-MCP-REPL-007 | ✅ Complete | McpServer.Repl.Core (IGenericClientPassthrough, ClientCommandShapes), McpServer.Repl.Host (GenericClientPassthrough) |
+| FR-SUPPORT-010A | ✅ Complete | src/McpServer.Services/Services/SessionLogService.cs (StampWorkspaceId), src/McpServer.Storage/McpDbContext.cs (auto-stamp fallback) |
+| FR-SUPPORT-010B | ✅ Complete | src/McpServer.Support.Mcp/Program.cs (InvalidModelStateResponseFactory), src/McpServer.Support.Mcp/Controllers/SessionLogController.cs (ValidationProblem) |
+| FR-SUPPORT-010C | ✅ Complete | src/McpServer.Support.Mcp/Controllers/SessionLogController.cs (GetByIdAsync, UpsertTurnAsync), src/McpServer.Services/Services/SessionLogService.cs (GetAsync, UpsertTurnAsync) |
+| FR-MCP-REPL-007 | ✅ Complete | src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs (TryResolveWithDiagnostics, FindMarkerFile out-param), src/McpServer.Repl.Host/Program.cs (--workspace-path, --marker-file), src/McpServer.Client/McpClientBase.cs (CredentialDiagnostic surfacing) |
+| TR-MCP-MT-003A | ✅ Complete | src/McpServer.Services/Services/SessionLogService.cs |
+| TR-PLANNED-013A | ✅ Complete | src/McpServer.Support.Mcp/Program.cs |
+| TR-MCP-REPL-008 | ✅ Complete | src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs |
 | TEST-MCP-REPL-001 | ✅ Complete | tests/McpServer.Repl.Core.Tests (Iteration1_IntegrationTests, YamlFramingTests), tests/McpServer.Repl.IntegrationTests (YamlEnvelopeShapeTests) |
 | TEST-MCP-REPL-002 | ✅ Complete | tests/McpServer.Repl.Core.Tests (FakeYamlSerializerTests, YamlFramingTests) |
 | TEST-MCP-REPL-003 | ✅ Complete | tests/McpServer.Repl.Core.Tests (ProtocolHandshakeTests), tests/McpServer.Repl.IntegrationTests (TrustBootstrapFlowTests) |
@@ -222,13 +229,30 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-REPL-018 | ✅ Complete | tests/McpServer.Repl.Core.Tests (OrchestrationRulesTests), tests/McpServer.Repl.IntegrationTests (TrustBootstrapFlowTests) |
 | TEST-MCP-REPL-019 | ✅ Complete | tests/McpServer.Repl.Core.Tests (TodoWorkflowTests, SessionLogWorkflowTests, RequirementsWorkflowTests, GenericClientPassthroughTests) |
 | TEST-MCP-REPL-020 | ✅ Complete | tests/McpServer.Repl.Core.Tests (SessionLogWorkflowTests state management, TodoWorkflowTests selection state) |
+| FR-MCP-081 | ✅ Complete | TodoExecutionService, TodoExecutionModels, TodoExecutionController |
+| FR-MCP-082 | ✅ Complete | TodoExecutionService, TodoExecutionController, McpServerMcpTools, TodoClient |
+| FR-MCP-083 | ✅ Complete | TodoExecutionService, TodoExecutionController, McpServerMcpTools, TodoClient |
+| TR-MCP-BYRD-001 | ✅ Complete | TodoExecutionModels, ITodoExecutionService, TodoExecutionService |
+| TR-MCP-BYRD-002 | ✅ Complete | TodoExecutionService, TodoExecutionController, McpServerMcpTools, TodoClient |
+| TR-MCP-BYRD-003 | ✅ Complete | TodoExecutionService, TodoExecutionController |
+| TR-MCP-BYRD-004 | ✅ Complete | TodoExecutionController, McpServerMcpTools, TodoClient |
+| TEST-MCP-103 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs |
+| TEST-MCP-104 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs |
+| TEST-MCP-105 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Controllers/TodoExecutionControllerTests.cs, tests/McpServer.Support.Mcp.Tests/McpStdio/TodoExecutionMcpToolTests.cs, tests/McpServer.Client.Tests/TodoClientTests.cs |
+| FR-MCP-084 | ✅ Complete | RequirementsWikiDocumentRenderer, RequirementsWikiDocumentSelector, RequirementsController, RequirementsClient, RequirementsWorkflow, ReplCommandDispatcher, McpServerMcpTools, Codex/Claude/Copilot/Cline plugins |
+| TR-MCP-REQ-004 | ✅ Complete | RequirementsWikiDocumentRenderer, RequirementsDocumentService, RequirementsDatabaseDocumentService, RequirementsController, RequirementsClient, RequirementsWorkflow, McpServerMcpTools |
+| TR-MCP-REQ-005 | ✅ Complete | RequirementsWikiDocumentSelector, RequirementsController, RequirementsIngestRequest, RequirementsIngestResult, RequirementsClient, ReplCommandDispatcher, RequirementsWorkflow |
+| TEST-MCP-106 | ✅ Complete | RequirementsDocumentServiceTests, RequirementsControllerTests |
+| TEST-MCP-107 | ✅ Complete | RequirementsControllerTests |
+| TEST-MCP-108 | ✅ Complete | RequirementsWorkflow, ReplCommandDispatcher, mcpserver-codex-plugin tests/repl-invoke-shim.bats |
+| TEST-MCP-109 | ✅ Complete | mcpserver-codex-plugin tests/repl-invoke-shim.bats, Claude Code skills.bats, Copilot requirements skill, Cline requirements.test.ts |
 
 ---
 
 ## Requirements Freeze Tag: REPL v1.0 Delivery
 
-**Date:** 2025-01-04  
-**Freeze Tag:** `REPL-v1.0-FREEZE`  
+**Date:** 2025-01-04
+**Freeze Tag:** `REPL-v1.0-FREEZE`
 **Status:** ✅ **Requirements Frozen for REPL v1.0 Delivery**
 
 All REPL iteration 1-6 requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005, TR-MCP-REPL-001 through TR-MCP-REPL-007, TEST-MCP-REPL-001 through TEST-MCP-REPL-020) are complete with:
@@ -242,4 +266,163 @@ All REPL iteration 1-6 requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005, TR
 - Comprehensive test coverage
 
 **Reconciliation:** All requirement defects discovered during TDD have been reconciled back into the canonical requirements documents. No outstanding defects or gaps remain for REPL v1.0.
-
+| FR-MCP-078 | ✅ Complete | GraphRagController, GraphRagAdHocService, McpServer.GraphRag |
+| FR-MCP-079 | ✅ Complete | GraphRagController, GraphRagAdHocService |
+| FR-MCP-080 | ✅ Complete | GraphRagController, GraphRagAdHocService |
+| TR-GRAPHRAG-ADHOC-001 | ✅ Complete | src/McpServer.GraphRag, src/McpServer.Support.Mcp/Controllers/GraphRagController.cs |
+| TR-GRAPHRAG-ADHOC-002 | ✅ Complete | src/McpServer.GraphRag |
+| TR-GRAPHRAG-ADHOC-003 | ✅ Complete | src/McpServer.GraphRag |
+| TR-MCP-DOC-001 | ✅ Complete | docs/ folder structure, docs/MCP-SERVER.md, docs/USER-GUIDE.md |
+| TR-MCP-TODO-007 | ✅ Complete | src/McpServer.Support.Mcp/Services/TodoCreationService.cs |
+| TR-MCP-TODO-008 | ✅ Complete | src/McpServer.Support.Mcp/Services/SqliteTodoService.cs |
+| TEST-MCP-001 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Configuration |
+| TEST-MCP-002 | ✅ Complete | tests/McpServer.Support.Mcp.IntegrationTests/Controllers/TodoControllerTests.cs |
+| TEST-MCP-003 | ✅ Complete | tests/McpServer.Support.Mcp.IntegrationTests (workspace isolation), src/McpServer.Storage/McpDbContext.cs (HasQueryFilter) |
+| TEST-MCP-004 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/HybridSearchServiceTests.cs |
+| TEST-MCP-005 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/IssueTodoSyncServiceTests.cs |
+| TEST-MCP-006 | ✅ Complete | tests/McpServer.Support.Mcp.IntegrationTests/McpTransportTests.cs |
+| TEST-MCP-007 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/WorkspaceServiceTests.cs |
+| TEST-MCP-008 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/ToolRegistryServiceTests.cs |
+| TEST-MCP-009 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Middleware/WorkspaceAuthMiddlewareTests.cs |
+| TEST-MCP-010 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/PairingServiceTests.cs |
+| TEST-MCP-011 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/TunnelProviderTests.cs |
+| TEST-MCP-012 | ✅ Complete | tests/McpServer.Support.Mcp.IntegrationTests/McpTransportTests.cs |
+| TEST-MCP-013 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs |
+| TEST-MCP-014 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/RequirementsServiceTests.cs |
+| TEST-MCP-015 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/MarkdownSessionLogParserTests.cs |
+| TEST-MCP-026 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-027 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-028 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-029 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-030 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-031 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-032 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-033 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-034 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-035 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-036 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-037 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-038 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-039 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-040 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-041 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-042 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-043 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-044 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-045 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-046 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-047 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-048 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-049 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-050 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-051 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-052 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-053 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-054 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-055 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-056 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-057 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-058 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-059 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-060 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-061 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-062 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-063 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-064 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-065 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-066 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-067 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-068 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-069 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-070 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-071 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-072 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-073 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| FR-MCP-064 | 🔲 Planned | docs/ marketing pages (planned) |
+| TR-MCP-AGENT-008 | 🔲 Planned | Reserved for FR-MCP-028 / FR-MCP-050 |
+| TR-MCP-AGENT-009 | 🔲 Planned | Reserved for FR-MCP-050 |
+| TR-MCP-AGENT-010 | 🔲 Planned | Reserved for FR-MCP-050 |
+| TR-MCP-AGENT-011 | 🔲 Planned | Reserved for FR-MCP-050 |
+| TR-MCP-AGENT-012 | 🔲 Planned | Reserved for FR-MCP-050 |
+| TR-MCP-WS-UI-001 | 🔲 Planned | Reserved for FR-MCP-031 (Management Web UI) |
+| FR-MCP-085 | 🔲 Planned | Question, service, controller, client, MCP, REPL, PowerShell Q&A implementation |
+| FR-MCP-086 | 🔲 Planned | Answer, service, controller, client, MCP, REPL, PowerShell Q&A implementation |
+| FR-MCP-087 | 🔲 Planned | Accepted-answer service and FAQ projection |
+| FR-MCP-088 | 🔲 Planned | Question query and tag filtering |
+| FR-MCP-089 | 🔲 Planned | QaVoteEntity, vote service, audit, voter endpoints |
+| FR-MCP-090 | 🔲 Planned | Comment entity and service operations |
+| FR-MCP-091 | 🔲 Planned | FAQ endpoint, client, wiki generator |
+| FR-MCP-092 | 🔲 Planned | QaAuthorResolver |
+| FR-MCP-093 | 🔲 Planned | Q&A EF workspace scoping |
+| FR-MCP-094 | 🔲 Planned | QaController, MCP tools, QaClient |
+| FR-MCP-095 | 🔲 Planned | QaWorkflow and McpQa PowerShell module |
+| FR-MCP-096 | 🔲 Planned | Q&A docs and context reference |
+| FR-MCP-097 | 🔲 Planned | Sibling plugin qa skills |
+| FR-MCP-098 | 🔲 Planned | QaAuditHistoryEntity and audit endpoints |
+| FR-MCP-099 | 🔲 Planned | Q&A skill web-research capture mandate |
+| FR-MCP-100 | 🔲 Planned | Question close and duplicate flows |
+| FR-MCP-101 | 🔲 Planned | QaBodyRenderer and body HTML fields |
+| FR-MCP-102 | 🔲 Planned | FAQ wiki build target |
+| TR-MCP-QA-001 | 🔲 Planned | Q&A entity tenancy |
+| TR-MCP-QA-002 | 🔲 Planned | Question tags JSON |
+| TR-MCP-QA-003 | 🔲 Planned | Provider migrations |
+| TR-MCP-QA-004 | 🔲 Planned | Denormalized vote counters |
+| TR-MCP-QA-005 | 🔲 Planned | Accepted answer storage |
+| TR-MCP-QA-006 | 🔲 Planned | Q&A service shape |
+| TR-MCP-QA-007 | 🔲 Planned | Q&A REST surface |
+| TR-MCP-QA-008 | 🔲 Planned | Q&A search indexing |
+| TR-MCP-QA-009 | 🔲 Planned | Q&A author resolver |
+| TR-MCP-QA-010 | 🔲 Planned | Q&A MCP STDIO tools |
+| TR-MCP-QA-011 | 🔲 Planned | FAQ query projection |
+| TR-MCP-QA-012 | 🔲 Planned | Typed Q&A client |
+| TR-MCP-QA-013 | 🔲 Planned | Q&A XML documentation |
+| TR-MCP-QA-014 | 🔲 Planned | Q&A REPL workflow |
+| TR-MCP-QA-015 | 🔲 Planned | Q&A PowerShell module |
+| TR-MCP-QA-016 | 🔲 Planned | Plugin Q&A skill |
+| TR-MCP-QA-017 | 🔲 Planned | Q&A documentation surface |
+| TR-MCP-QA-018 | 🔲 Planned | Q&A audit storage |
+| TR-MCP-QA-019 | 🔲 Planned | Q&A audit emission |
+| TR-MCP-QA-020 | 🔲 Planned | Q&A audit query |
+| TR-MCP-QA-021 | 🔲 Planned | Q&A audit surfaces |
+| TR-MCP-QA-022 | 🔲 Planned | Answer sources JSON |
+| TR-MCP-QA-023 | 🔲 Planned | Mandatory web capture skill rule |
+| TR-MCP-QA-024 | 🔲 Planned | Companion web skill cross-references |
+| TR-MCP-QA-025 | 🔲 Planned | Close and duplicate storage |
+| TR-MCP-QA-026 | 🔲 Planned | Close and duplicate surfaces |
+| TR-MCP-QA-027 | 🔲 Planned | Q&A body rendering |
+| TR-MCP-QA-028 | 🔲 Planned | Q&A sanitization tests |
+| TR-MCP-QA-029 | 🔲 Planned | FAQ wiki generation target |
+| TR-MCP-QA-030 | 🔲 Planned | FAQ wiki snapshot tests |
+| TR-MCP-QA-031 | 🔲 Planned | Q&A voter history |
+| TR-MCP-QA-032 | 🔲 Planned | Q&A vote state storage |
+| TR-MCP-QA-033 | 🔲 Planned | Q&A vote state machine |
+| TR-MCP-QA-034 | 🔲 Planned | Q&A vote audit actions |
+| TEST-MCP-110 | 🔲 Planned | Q&A question CRUD tests |
+| TEST-MCP-111 | 🔲 Planned | Q&A answer CRUD tests |
+| TEST-MCP-112 | 🔲 Planned | Accepted-answer invariant tests |
+| TEST-MCP-113 | 🔲 Planned | Q&A tag filter tests |
+| TEST-MCP-114 | 🔲 Planned | Q&A vote counter tests |
+| TEST-MCP-115 | 🔲 Planned | Q&A comment tests |
+| TEST-MCP-116 | 🔲 Planned | FAQ projection tests |
+| TEST-MCP-117 | 🔲 Planned | Q&A search indexing tests |
+| TEST-MCP-118 | 🔲 Planned | Q&A author resolver tests |
+| TEST-MCP-119 | 🔲 Planned | Q&A workspace isolation tests |
+| TEST-MCP-120 | 🔲 Planned | Q&A MCP STDIO parity tests |
+| TEST-MCP-121 | 🔲 Planned | QaClient tests |
+| TEST-MCP-122 | 🔲 Planned | QaWorkflow tests |
+| TEST-MCP-123 | 🔲 Planned | McpQa PowerShell tests |
+| TEST-MCP-124 | 🔲 Planned | Plugin skill smoke tests |
+| TEST-MCP-125 | 🔲 Planned | Q&A audit emission tests |
+| TEST-MCP-126 | 🔲 Planned | Q&A audit query tests |
+| TEST-MCP-127 | 🔲 Planned | Q&A vote audit transaction tests |
+| TEST-MCP-128 | 🔲 Planned | Answer sources tests |
+| TEST-MCP-129 | 🔲 Planned | Q&A skill mandate text tests |
+| TEST-MCP-130 | 🔲 Planned | Close and duplicate flow tests |
+| TEST-MCP-131 | 🔲 Planned | Q&A sanitization tests |
+| TEST-MCP-132 | 🔲 Planned | FAQ wiki generation tests |
+| TEST-MCP-133 | 🔲 Planned | Voter-history endpoint tests |
+| TEST-MCP-134 | 🔲 Planned | One-vote-per-user tests |
+| TEST-MCP-135 | 🔲 Planned | Current vote state endpoint tests |
+| FR-MCP-103 | 🟡 Partial | Hub-and-spoke federation |
+| TR-MCP-FED-001 | 🟡 Partial | Hub proxy federation contract |
+| TEST-MCP-136 | 🟡 Partial | Hub-and-spoke federation tests |

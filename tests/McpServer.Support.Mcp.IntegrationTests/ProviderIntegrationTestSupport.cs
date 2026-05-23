@@ -1,4 +1,3 @@
-using System.Data.Common;
 using System.Diagnostics;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Database;
@@ -8,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Xunit.Sdk;
 
 namespace McpServer.Support.Mcp.IntegrationTests;
 
@@ -306,103 +304,5 @@ internal sealed class SqlLocalDbSandbox : IAsyncDisposable
             throw new InvalidOperationException(
                 $"SqlLocalDB.exe {string.Join(" ", arguments)} failed with exit code {process.ExitCode}.\nSTDOUT: {stdout}\nSTDERR: {stderr}");
         }
-    }
-}
-
-/// <summary>
-/// Executes psql-based admin commands for PostgreSQL clean-database tests.
-/// </summary>
-internal static class PostgreSqlSandbox
-{
-    private const string AdminConnectionStringEnvironment = "MCP_TEST_POSTGRES_ADMIN_CONNECTION_STRING";
-    private const string ConnectionStringEnvironment = "MCP_TEST_POSTGRES_CONNECTION_STRING";
-
-    /// <summary>
-    /// Creates a clean PostgreSQL database and returns a connection string targeted at that database.
-    /// </summary>
-    /// <returns>A tuple containing the targeted database name and the database connection string.</returns>
-    public static async Task<(string DatabaseName, string ConnectionString)> CreateCleanDatabaseAsync()
-    {
-        var adminConnectionString = GetRequiredEnvironmentVariable(AdminConnectionStringEnvironment);
-        var targetConnectionString = GetRequiredEnvironmentVariable(ConnectionStringEnvironment);
-        var databaseName = $"mcp_provider_{Guid.NewGuid():N}";
-
-        await ExecutePsqlAsync(adminConnectionString, $@"DROP DATABASE IF EXISTS ""{databaseName}"" WITH (FORCE);").ConfigureAwait(false);
-        await ExecutePsqlAsync(adminConnectionString, $@"CREATE DATABASE ""{databaseName}"";").ConfigureAwait(false);
-
-        return (databaseName, ReplaceDatabaseName(targetConnectionString, databaseName));
-    }
-
-    /// <summary>
-    /// Drops a PostgreSQL database using the configured admin connection string.
-    /// </summary>
-    /// <param name="databaseName">Database name to remove.</param>
-    /// <returns>A task that completes when cleanup finishes.</returns>
-    public static async Task DropDatabaseAsync(string databaseName)
-    {
-        var adminConnectionString = GetRequiredEnvironmentVariable(AdminConnectionStringEnvironment);
-        await ExecutePsqlAsync(adminConnectionString, $@"DROP DATABASE IF EXISTS ""{databaseName}"" WITH (FORCE);").ConfigureAwait(false);
-    }
-
-    /// <summary>
-    /// Returns the PostgreSQL connection string environment variable if it exists, otherwise skips the test.
-    /// </summary>
-    /// <returns>The configured connection string.</returns>
-    public static string GetPostgresConnectionStringOrSkip()
-    {
-        var value = Environment.GetEnvironmentVariable(ConnectionStringEnvironment);
-        if (string.IsNullOrWhiteSpace(value))
-        {
-        throw SkipException.ForSkip(
-            $"Skipped because {ConnectionStringEnvironment} is not set. Provide a PostgreSQL connection string to run the clean-database integration test.");
-        }
-
-        return value;
-    }
-
-    private static string GetRequiredEnvironmentVariable(string name)
-    {
-        var value = Environment.GetEnvironmentVariable(name);
-        if (!string.IsNullOrWhiteSpace(value))
-            return value;
-
-        throw SkipException.ForSkip(
-            $"Skipped because {name} is not set. Provide PostgreSQL admin and target connection strings to run the clean-database integration test.");
-    }
-
-    private static async Task ExecutePsqlAsync(string connectionString, string sql)
-    {
-        var psi = new ProcessStartInfo("psql.exe")
-        {
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-        };
-        psi.ArgumentList.Add("-X");
-        psi.ArgumentList.Add("-v");
-        psi.ArgumentList.Add("ON_ERROR_STOP=1");
-        psi.ArgumentList.Add("-d");
-        psi.ArgumentList.Add(connectionString);
-        psi.ArgumentList.Add("-c");
-        psi.ArgumentList.Add(sql);
-
-        using var process = Process.Start(psi) ?? throw new InvalidOperationException("psql.exe could not be started.");
-        var stdout = await process.StandardOutput.ReadToEndAsync().ConfigureAwait(false);
-        var stderr = await process.StandardError.ReadToEndAsync().ConfigureAwait(false);
-        await process.WaitForExitAsync().ConfigureAwait(false);
-
-        if (process.ExitCode != 0)
-        {
-            throw new InvalidOperationException(
-                $"psql.exe failed with exit code {process.ExitCode}.\nSTDOUT: {stdout}\nSTDERR: {stderr}");
-        }
-    }
-
-    private static string ReplaceDatabaseName(string connectionString, string databaseName)
-    {
-        var builder = new DbConnectionStringBuilder { ConnectionString = connectionString };
-        builder["Database"] = databaseName;
-        return builder.ConnectionString;
     }
 }

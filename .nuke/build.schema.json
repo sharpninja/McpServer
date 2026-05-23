@@ -37,6 +37,7 @@
         "Test",
         "TestGraphRagSmoke",
         "TestMultiInstance",
+        "UpdateService",
         "ValidateConfig",
         "ValidateTraceability"
       ]
@@ -140,6 +141,10 @@
           "type": "string",
           "description": "GraphRAG query for smoke test"
         },
+        "InstallPath": {
+          "type": "string",
+          "description": "Service installation directory (default: C:\\ProgramData\\McpServer)"
+        },
         "Instance": {
           "type": "string",
           "description": "MCP instance name from appsettings"
@@ -156,13 +161,34 @@
           "type": "string",
           "description": "Package version for NuGet pack (defaults to GitVersion output)"
         },
+        "Port": {
+          "type": "integer",
+          "description": "HTTP port for the service (default: 7147)",
+          "format": "int32"
+        },
         "Publisher": {
           "type": "string",
           "description": "MSIX publisher identity"
         },
+        "PublishSource": {
+          "type": "string",
+          "description": "Path to pre-built publish output (used with --skip-build)"
+        },
         "SecondInstance": {
           "type": "string",
           "description": "Second MCP instance name"
+        },
+        "ServiceName": {
+          "type": "string",
+          "description": "Windows service name (default: McpServer)"
+        },
+        "SkipBuild": {
+          "type": "boolean",
+          "description": "Skip build — use existing publish output from --publish-source"
+        },
+        "SkipVersionBump": {
+          "type": "boolean",
+          "description": "Skip GitVersion.yml patch version bump"
         },
         "Solution": {
           "type": "string",

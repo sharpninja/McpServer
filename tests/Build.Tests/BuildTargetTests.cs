@@ -61,4 +61,11 @@ public sealed class BuildTargetTests
         Assert.NotNull(BuildType.GetProperty("ArtifactsDirectory"));
         Assert.NotNull(BuildType.GetProperty("LocalPackagesDirectory"));
     }
+
+    [Fact]
+    public void Build_HasTestTarget()
+    {
+        var prop = BuildType.GetProperty("Test");
+        Assert.NotNull(prop);
+    }
 }
