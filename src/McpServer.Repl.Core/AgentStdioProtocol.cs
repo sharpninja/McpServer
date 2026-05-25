@@ -33,6 +33,9 @@ public interface IAgentStdioProtocol
 /// </summary>
 public sealed class AgentStdioProtocol : IAgentStdioProtocol
 {
+    private const string CommandTimeoutEnvVar = "MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS";
+    private static readonly TimeSpan DefaultCommandTimeout = TimeSpan.FromMinutes(2);
+
     private readonly IYamlSerializer _serializer;
     private readonly IReplCommandDispatcher _dispatcher;
 
@@ -126,13 +129,39 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
         }
 
         IYamlEnvelope response;
+        using var commandCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        commandCts.CancelAfter(ResolveCommandTimeout());
+
         try
         {
-            response = await _dispatcher.DispatchAsync(envelope, cancellationToken).ConfigureAwait(false);
+            if (_dispatcher is IStreamingReplCommandDispatcher streamingDispatcher)
+            {
+                response = await streamingDispatcher.DispatchAsync(
+                    envelope,
+                    async evt => await WriteEnvelopeAsync(evt, writer, cancellationToken).ConfigureAwait(false),
+                    commandCts.Token).ConfigureAwait(false);
+            }
+            else
+            {
+                response = await _dispatcher.DispatchAsync(envelope, commandCts.Token).ConfigureAwait(false);
+            }
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
         }
         catch (OperationCanceledException)
         {
-            throw;
+            response = new YamlEnvelope
+            {
+                Type = "error",
+                Payload = new ErrorPayload
+                {
+                    RequestId = (envelope.Payload as IRequestPayload)?.RequestId ?? "unknown",
+                    Code = "command_timeout",
+                    Message = $"Command timed out after {ResolveCommandTimeout().TotalSeconds:0} seconds.",
+                },
+            };
         }
         catch (Exception ex)
         {
@@ -149,6 +178,17 @@ public sealed class AgentStdioProtocol : IAgentStdioProtocol
         }
 
         await WriteEnvelopeAsync(response, writer, cancellationToken).ConfigureAwait(false);
+    }
+
+    private static TimeSpan ResolveCommandTimeout()
+    {
+        var configured = Environment.GetEnvironmentVariable(CommandTimeoutEnvVar);
+        if (int.TryParse(configured, out var seconds) && seconds > 0)
+        {
+            return TimeSpan.FromSeconds(seconds);
+        }
+
+        return DefaultCommandTimeout;
     }
 
     private async Task WriteEnvelopeAsync(IYamlEnvelope envelope, TextWriter writer, CancellationToken cancellationToken)

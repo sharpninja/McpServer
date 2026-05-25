@@ -9,6 +9,7 @@ using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -121,7 +122,7 @@ public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContra
                     { "Mcp:TodoStorage:Provider", "yaml" }
                 });
             });
-            builder.ConfigureServices(services =>
+            builder.ConfigureTestServices(services =>
             {
                 services.RemoveAll<IVoiceConversationService>();
                 services.RemoveAll<ITodoPromptService>();
@@ -129,6 +130,7 @@ public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContra
                 services.RemoveAll<ITodoService>();
                 services.RemoveAll<TodoServiceResolver>();
                 services.RemoveAll<IWorkspaceService>();
+                services.RemoveAll<IWorkspaceProjectionWriter>();
 
                 services.AddSingleton<IVoiceConversationService, FailingVoiceConversationService>();
                 services.AddSingleton<ITodoPromptService, FailingTodoPromptService>();
@@ -136,6 +138,7 @@ public sealed class Http500ErrorContractTests : IClassFixture<Http500ErrorContra
                 services.AddSingleton<ITodoService>(sp => sp.GetRequiredService<ITodoServiceFactory>().CreatePrimary());
                 services.AddSingleton<TodoServiceResolver>();
                 services.AddSingleton<IWorkspaceService>(new FailingWorkspaceService(TargetWorkspacePath));
+                services.AddSingleton<IWorkspaceProjectionWriter, NoOpWorkspaceProjectionWriter>();
             });
         }
 

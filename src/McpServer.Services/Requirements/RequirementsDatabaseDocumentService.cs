@@ -22,6 +22,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     private const string FrKind = "fr";
     private const string TrKind = "tr";
     private const string TestKind = "test";
+    private static readonly string[] SoftDeleteQueryFilter = ["SoftDelete"];
 
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly RequirementsOptions _options;
@@ -245,17 +246,27 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
             await ValidateMappingTargetsAsync(ctx, mapping.FrId, normalizedTrIds, normalizedTestIds, ct).ConfigureAwait(false);
 
+            var workspaceId = RequireWorkspaceId(ctx);
             var existingLinks = await ctx.RequirementTraceabilityLinks
-                .Where(x => x.FrId == mapping.FrId)
+                .IgnoreQueryFilters(SoftDeleteQueryFilter)
+                .Where(x => x.WorkspaceId == workspaceId && x.FrId == mapping.FrId)
                 .ToListAsync(ct)
                 .ConfigureAwait(false);
-            ctx.RequirementTraceabilityLinks.RemoveRange(existingLinks);
-            var now = Now();
-            var workspaceId = RequireWorkspaceId(ctx);
+
+            var timestamp = DateTimeOffset.UtcNow;
+            var now = timestamp.ToString("O");
+            var desiredKeys = normalizedTrIds
+                .Select(trId => BuildTraceabilityLinkKey(TrKind, trId))
+                .Concat(normalizedTestIds.Select(testId => BuildTraceabilityLinkKey(TestKind, testId)))
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var existingLink in existingLinks.Where(link => !desiredKeys.Contains(BuildTraceabilityLinkKey(link.TargetKind, link.TargetId))))
+                MarkSoftDeleted(ctx, existingLink, timestamp, "requirements_mapping_replaced");
+
             foreach (var trId in normalizedTrIds)
-                ctx.RequirementTraceabilityLinks.Add(new RequirementTraceabilityLinkEntity { WorkspaceId = workspaceId, FrId = mapping.FrId, TargetKind = TrKind, TargetId = trId, CreatedAtUtc = now });
+                UpsertTraceabilityLink(ctx, existingLinks, workspaceId, mapping.FrId, TrKind, trId, now);
             foreach (var testId in normalizedTestIds)
-                ctx.RequirementTraceabilityLinks.Add(new RequirementTraceabilityLinkEntity { WorkspaceId = workspaceId, FrId = mapping.FrId, TargetKind = TestKind, TargetId = testId, CreatedAtUtc = now });
+                UpsertTraceabilityLink(ctx, existingLinks, workspaceId, mapping.FrId, TestKind, testId, now);
 
             await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
             await PublishRequirementsChangeSafeAsync(ChangeEventActions.Updated, mapping.FrId, ct).ConfigureAwait(false);
@@ -265,6 +276,43 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             _writeLock.Release();
         }
     }
+
+    private static void UpsertTraceabilityLink(
+        McpDbContext ctx,
+        IReadOnlyList<RequirementTraceabilityLinkEntity> existingLinks,
+        string workspaceId,
+        string frId,
+        string targetKind,
+        string targetId,
+        string createdAtUtc)
+    {
+        var existing = existingLinks.FirstOrDefault(link =>
+            string.Equals(link.TargetKind, targetKind, StringComparison.OrdinalIgnoreCase)
+            && string.Equals(link.TargetId, targetId, StringComparison.OrdinalIgnoreCase));
+
+        if (existing is null)
+        {
+            ctx.RequirementTraceabilityLinks.Add(new RequirementTraceabilityLinkEntity
+            {
+                WorkspaceId = workspaceId,
+                FrId = frId,
+                TargetKind = targetKind,
+                TargetId = targetId,
+                CreatedAtUtc = createdAtUtc
+            });
+            return;
+        }
+
+        existing.SourceKind = FrKind;
+        if (IsSoftDeleted(ctx, existing))
+        {
+            existing.CreatedAtUtc = createdAtUtc;
+            ClearSoftDelete(ctx, existing);
+        }
+    }
+
+    private static string BuildTraceabilityLinkKey(string targetKind, string targetId)
+        => $"{targetKind}\0{targetId}";
 
     /// <inheritdoc />
     public async Task DeleteMappingAsync(string frId, CancellationToken ct = default)
@@ -686,6 +734,39 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             : ctx.CurrentWorkspaceId;
 
     private static string Now() => DateTime.UtcNow.ToString("O");
+
+    private static bool IsSoftDeleted(McpDbContext ctx, object entity)
+    {
+        var entry = ctx.Entry(entity);
+        return entry.Metadata.FindProperty("IsDeleted") is not null
+               && entry.Property("IsDeleted").CurrentValue is true;
+    }
+
+    private static void MarkSoftDeleted(McpDbContext ctx, object entity, DateTimeOffset deletedAtUtc, string reason)
+    {
+        var entry = ctx.Entry(entity);
+        if (entry.Metadata.FindProperty("IsDeleted") is null)
+            return;
+
+        entry.State = EntityState.Modified;
+        entry.Property("IsDeleted").CurrentValue = true;
+        entry.Property("DeletedAtUtc").CurrentValue = deletedAtUtc;
+        entry.Property("DeletedBy").CurrentValue = nameof(RequirementsDatabaseDocumentService);
+        entry.Property("DeleteReason").CurrentValue = reason;
+    }
+
+    private static void ClearSoftDelete(McpDbContext ctx, object entity)
+    {
+        var entry = ctx.Entry(entity);
+        if (entry.Metadata.FindProperty("IsDeleted") is null)
+            return;
+
+        entry.State = EntityState.Modified;
+        entry.Property("IsDeleted").CurrentValue = false;
+        entry.Property("DeletedAtUtc").CurrentValue = null;
+        entry.Property("DeletedBy").CurrentValue = null;
+        entry.Property("DeleteReason").CurrentValue = null;
+    }
 
     private async Task PublishRequirementsChangeSafeAsync(string action, string entityId, CancellationToken ct)
     {

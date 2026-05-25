@@ -18,6 +18,7 @@ namespace McpServer.Repl.Host;
 /// </summary>
 public class AgentStdioHandler
 {
+    private static readonly UTF8Encoding ProtocolEncoding = new(encoderShouldEmitUTF8Identifier: false);
     private readonly ILogger<AgentStdioHandler> _logger;
     private readonly IAgentStdioProtocol _protocol;
 
@@ -44,8 +45,8 @@ public class AgentStdioHandler
 
         try
         {
-            using var reader = new StreamReader(Console.OpenStandardInput(), Encoding.UTF8);
-            using var writer = new StreamWriter(Console.OpenStandardOutput(), Encoding.UTF8) { AutoFlush = true };
+            using var reader = new StreamReader(Console.OpenStandardInput(), ProtocolEncoding);
+            using var writer = new StreamWriter(Console.OpenStandardOutput(), ProtocolEncoding) { AutoFlush = true };
 
             await _protocol.RunAsync(reader, writer, cancellationToken).ConfigureAwait(false);
 

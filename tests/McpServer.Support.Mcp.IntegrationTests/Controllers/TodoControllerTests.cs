@@ -1,28 +1,34 @@
 using System.Net;
 using System.Net.Http.Json;
+using McpServer.Support.Mcp.IntegrationTests;
 using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>TR-PLANNED-013: Integration tests for TODO CRUD endpoints.</summary>
-public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.TodoWebFactory>, IDisposable
+public sealed class TodoControllerTests : IDisposable
 {
     private readonly HttpClient _client;
     private readonly TodoWebFactory _factory;
 
-    public TodoControllerTests(TodoWebFactory factory)
+    public TodoControllerTests()
     {
-        _factory = factory;
-        _client = factory.CreateClient();
-        _client.DefaultRequestHeaders.TryAddWithoutValidation("X-Api-Key", factory.GetFullWorkspaceApiKey());
+        _factory = new TodoWebFactory();
+        _client = _factory.CreateClient();
+        _client.DefaultRequestHeaders.TryAddWithoutValidation("X-Api-Key", _factory.GetFullWorkspaceApiKey());
     }
 
-    public void Dispose() => _client.Dispose();
+    public void Dispose()
+    {
+        _client.Dispose();
+        _factory.Dispose();
+    }
 
     /// <summary>GET /mcpserver/todo returns 200 with items from seed YAML.</summary>
     [Fact]
@@ -559,6 +565,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
         {
             // Create seed TODO.yaml
             var projectDir = Path.Combine(_tempDir, "docs", "Project");
+            var databasePath = Path.Combine(_tempDir, "mcp.db");
             Directory.CreateDirectory(projectDir);
             File.WriteAllText(TodoYamlPath, SeedYaml);
 
@@ -568,13 +575,28 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
             {
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    { "Mcp:DataSource", ":memory:" },
+                    { "Mcp:DataSource", databasePath },
+                    { "Mcp:Database:Provider", "sqlite" },
+                    { "Mcp:Database:Sqlite:DataSource", databasePath },
+                    { "Mcp:UseInMemoryDatabaseForTests", "false" },
                     { "DataFolder", _tempDir },
                     { "Mcp:RepoRoot", _tempDir },
                     { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" },
                     { "Mcp:TodoStorage:Provider", "sqlite" },
-                    { "Mcp:TodoStorage:SqliteDataSource", "mcp.db" }
+                    { "Mcp:TodoStorage:SqliteDataSource", "mcp.db" },
+                    { "Mcp:Workspaces:0:WorkspacePath", _tempDir },
+                    { "Mcp:Workspaces:0:Name", Path.GetFileName(_tempDir) },
+                    { "Mcp:Workspaces:0:TodoPath", "docs/Project/TODO.yaml" },
+                    { "Mcp:Workspaces:0:IsPrimary", "true" },
+                    { "Mcp:Workspaces:0:IsEnabled", "true" }
                 });
+            });
+            builder.ConfigureServices(services =>
+            {
+                IntegrationTestDatabase.ConfigureSqlite(services, databasePath);
+                services.RemoveAll<IWorkspaceProjectionWriter>();
+                services.AddSingleton<IWorkspaceProjectionWriter, NoOpWorkspaceProjectionWriter>();
+                services.AddHostedService<IntegrationTestDatabase.Initializer>();
             });
         }
 
@@ -585,7 +607,7 @@ public sealed class TodoControllerTests : IClassFixture<TodoControllerTests.Todo
                    ?? throw new InvalidOperationException("Workspace full API key was not generated for test host.");
         }
 
-        private new void Dispose()
+        public new void Dispose()
         {
             base.Dispose();
             try { Directory.Delete(_tempDir, recursive: true); } catch { /* best effort */ }

@@ -4,6 +4,7 @@ using McpServer.Support.Mcp.Storage.Database;
 using McpServer.Support.Mcp.Storage.Entities;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -56,14 +57,30 @@ internal static class ProviderIntegrationTestSupport
             services =>
             {
                 services.RemoveAll<McpDbContext>();
+                services.RemoveAll<DbContextOptions>();
                 services.RemoveAll<DbContextOptions<McpDbContext>>();
+                services.RemoveAll<IDbContextOptionsConfiguration<McpDbContext>>();
+                services.RemoveAll<McpDatabaseProviderOptions>();
+                services.RemoveAll<McpDatabaseRuntimeOptions>();
+                services.AddSingleton(providerOptions);
+                services.AddSingleton(new McpDatabaseRuntimeOptions(
+                    providerOptions,
+                    new McpDatabaseEncryptionOptions(
+                        enabled: false,
+                        sqliteKey: null,
+                        sqliteSeeToolPath: null,
+                        postgreSqlKeyProvider: null,
+                        postgreSqlPrincipalKey: null,
+                        sqlServerCertificateName: null,
+                        sqlServerDatabaseEncryptionKeyName: null)));
                 services.AddDbContext<McpDbContext>(options =>
                 {
                     options.UseInternalServiceProvider(internalServiceProvider);
                     McpDatabaseProviderFactory.Configure(options, providerOptions);
                 }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
             },
-            configuration).WithWebHostBuilder(builder =>
+            configuration,
+            configureDefaultTestDatabase: false).WithWebHostBuilder(builder =>
         {
             builder.ConfigureAppConfiguration((_, config) =>
             {

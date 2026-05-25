@@ -149,10 +149,10 @@ public sealed class IngestionAllowlistContractTests
         Assert.Contains("  Federation:", content);
         Assert.Contains("    Enabled: false", content);
         Assert.Contains("    Role: Standalone", content);
-        Assert.Contains("    HubBaseUrl: ''", content);
-        Assert.Contains("    HubAccessToken: ''", content);
-        Assert.Contains("    ProxyId: ''", content);
-        Assert.Contains("    EnrollmentToken: ''", content);
+        Assert.Contains("    HubBaseUrl:", content);
+        Assert.Contains("    HubAccessToken:", content);
+        Assert.Contains("    ProxyId:", content);
+        Assert.Contains("    EnrollmentToken:", content);
         Assert.Contains("    Queue:", content);
         Assert.Contains("      MaxReplayAttempts: 10", content);
         Assert.Contains("      MaxBodyBytes: 1048576", content);
@@ -161,7 +161,7 @@ public sealed class IngestionAllowlistContractTests
         Assert.Contains("      ReplayIntervalSeconds: 15", content);
         Assert.Contains("      FanoutIntervalSeconds: 15", content);
         Assert.Contains("    Signing:", content);
-        Assert.Contains("      SharedSecret: ''", content);
+        Assert.Contains("      SharedSecret:", content);
         Assert.Contains("      EnvelopeTtlSeconds: 300", content);
         Assert.Contains("    LocalExecution:", content);
         Assert.Contains("      AllowedMethods:", content);

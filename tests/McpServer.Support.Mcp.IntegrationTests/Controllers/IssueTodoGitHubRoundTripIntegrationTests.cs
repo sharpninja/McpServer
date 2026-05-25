@@ -2,12 +2,18 @@ using System.Globalization;
 using System.Net;
 using System.Net.Http.Json;
 using McpServer.Support.Mcp.Models;
+using McpServer.Support.Mcp.IntegrationTests;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Storage;
+using McpServer.Support.Mcp.Storage.Database;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
@@ -187,6 +193,7 @@ public sealed class IssueTodoGitHubRoundTripIntegrationTests
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             var projectDir = Path.Combine(_tempDir, "docs", "Project");
+            var databasePath = Path.Combine(_tempDir, "mcp.db");
             Directory.CreateDirectory(projectDir);
             File.WriteAllText(Path.Combine(projectDir, "TODO.yaml"), SeedYaml);
 
@@ -196,20 +203,61 @@ public sealed class IssueTodoGitHubRoundTripIntegrationTests
             {
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    ["Mcp:DataSource"] = ":memory:",
                     ["DataFolder"] = _tempDir,
+                    ["Mcp:DataSource"] = databasePath,
+                    ["Mcp:Database:Provider"] = "sqlite",
+                    ["Mcp:Database:Sqlite:DataSource"] = databasePath,
+                    ["Mcp:UseInMemoryDatabaseForTests"] = "false",
                     ["Mcp:RepoRoot"] = _tempDir,
                     ["Mcp:TodoFilePath"] = "docs/Project/TODO.yaml",
                     ["Mcp:TodoStorage:Provider"] = "sqlite",
-                    ["Mcp:TodoStorage:SqliteDataSource"] = "mcp.db"
+                    ["Mcp:TodoStorage:SqliteDataSource"] = "mcp.db",
+                    ["Mcp:Workspaces:0:WorkspacePath"] = _tempDir,
+                    ["Mcp:Workspaces:0:Name"] = Path.GetFileName(_tempDir),
+                    ["Mcp:Workspaces:0:TodoPath"] = "docs/Project/TODO.yaml",
+                    ["Mcp:Workspaces:0:IsPrimary"] = "true",
+                    ["Mcp:Workspaces:0:IsEnabled"] = "true"
                 });
             });
             builder.ConfigureServices(services =>
             {
+                ConfigureTestDatabase(services, databasePath);
+                services.RemoveAll<IWorkspaceProjectionWriter>();
+                services.AddSingleton<IWorkspaceProjectionWriter, NoOpWorkspaceProjectionWriter>();
                 services.RemoveAll<IGitHubCliService>();
                 services.AddSingleton<FakeGitHubCliService>();
                 services.AddSingleton<IGitHubCliService>(provider => provider.GetRequiredService<FakeGitHubCliService>());
+                services.AddHostedService<TestDatabaseInitializer>();
             });
+        }
+
+        private static void ConfigureTestDatabase(IServiceCollection services, string databasePath)
+        {
+            var connectionString = $"Data Source={databasePath}";
+            var providerOptions = McpDatabaseProviderFactory.CreateOptions("sqlite", connectionString);
+
+            services.RemoveAll<McpDbContext>();
+            services.RemoveAll<DbContextOptions>();
+            services.RemoveAll<DbContextOptions<McpDbContext>>();
+            services.RemoveAll<IDbContextOptionsConfiguration<McpDbContext>>();
+            services.RemoveAll<McpDatabaseProviderOptions>();
+            services.RemoveAll<McpDatabaseRuntimeOptions>();
+            services.AddSingleton(providerOptions);
+            services.AddSingleton(new McpDatabaseRuntimeOptions(
+                providerOptions,
+                new McpDatabaseEncryptionOptions(
+                    enabled: false,
+                    sqliteKey: null,
+                    sqliteSeeToolPath: null,
+                    postgreSqlKeyProvider: null,
+                    postgreSqlPrincipalKey: null,
+                    sqlServerCertificateName: null,
+                    sqlServerDatabaseEncryptionKeyName: null)));
+            services.AddDbContext<McpDbContext>(options =>
+            {
+                McpDatabaseProviderFactory.Configure(options, providerOptions);
+                options.EnableSensitiveDataLogging();
+            }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
         }
 
         /// <summary>
@@ -234,6 +282,25 @@ public sealed class IssueTodoGitHubRoundTripIntegrationTests
               medium-priority: []
               low-priority: []
             """;
+
+        private sealed class TestDatabaseInitializer : IHostedService
+        {
+            private readonly IServiceProvider _services;
+
+            public TestDatabaseInitializer(IServiceProvider services)
+            {
+                _services = services;
+            }
+
+            public async Task StartAsync(CancellationToken cancellationToken)
+            {
+                using var scope = _services.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+                await db.Database.EnsureCreatedAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+        }
     }
 
     internal sealed class FakeGitHubCliService : IGitHubCliService

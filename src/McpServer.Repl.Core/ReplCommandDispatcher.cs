@@ -30,14 +30,35 @@ public interface IReplCommandDispatcher
 }
 
 /// <summary>
+/// Dispatches parsed YAML envelopes and can emit additional envelopes while a command is still running.
+/// This is used for commands that naturally stream progress events before returning a final result.
+/// </summary>
+public interface IStreamingReplCommandDispatcher : IReplCommandDispatcher
+{
+    /// <summary>
+    /// Dispatches a parsed YAML envelope and emits any intermediate envelopes through the supplied callback.
+    /// </summary>
+    /// <param name="envelope">The inbound envelope to dispatch. Must have a non-null payload.</param>
+    /// <param name="emitEnvelopeAsync">Callback used to write intermediate envelopes to the caller, or null to buffer only.</param>
+    /// <param name="cancellationToken">Cancellation token propagated to handlers.</param>
+    /// <returns>The final response envelope to emit back to the caller.</returns>
+    Task<IYamlEnvelope> DispatchAsync(
+        IYamlEnvelope envelope,
+        Func<IYamlEnvelope, Task>? emitEnvelopeAsync,
+        CancellationToken cancellationToken);
+}
+
+/// <summary>
 /// Default <see cref="IReplCommandDispatcher"/> implementation. Routes <c>hello</c> envelopes
 /// to a handshake response and <c>request</c> envelopes with the <c>client.&lt;clientName&gt;.&lt;methodName&gt;</c>
 /// method shape to <see cref="IGenericClientPassthrough.InvokeAsync"/>. All other method
 /// namespaces produce a <c>method_not_found</c> error envelope.
 /// </summary>
-public sealed class ReplCommandDispatcher : IReplCommandDispatcher
+public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
 {
+    private const string StreamCommandTimeoutEnvVar = "MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS";
     private const string ServerProtocolVersion = "1.0";
+    private static readonly TimeSpan DefaultStreamCommandTimeout = TimeSpan.FromMinutes(2);
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
     {
         PropertyNameCaseInsensitive = true,
@@ -68,7 +89,15 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
     }
 
     /// <inheritdoc />
-    public async Task<IYamlEnvelope> DispatchAsync(IYamlEnvelope envelope, CancellationToken cancellationToken)
+    public Task<IYamlEnvelope> DispatchAsync(IYamlEnvelope envelope, CancellationToken cancellationToken)
+        => DispatchAsync(envelope, emitEnvelopeAsync: null, cancellationToken);
+
+    /// <inheritdoc />
+    /// <inheritdoc />
+    public async Task<IYamlEnvelope> DispatchAsync(
+        IYamlEnvelope envelope,
+        Func<IYamlEnvelope, Task>? emitEnvelopeAsync,
+        CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(envelope);
 
@@ -85,7 +114,7 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
                         code: "invalid_envelope",
                         message: "Request envelope is missing a request payload.");
                 }
-                return await DispatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
+                return await DispatchRequestAsync(request, emitEnvelopeAsync, cancellationToken).ConfigureAwait(false);
 
             case "batch":
                 return BuildUnsupportedBatchEnvelopeError(envelope.Payload);
@@ -98,7 +127,10 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
         }
     }
 
-    private async Task<IYamlEnvelope> DispatchRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
+    private async Task<IYamlEnvelope> DispatchRequestAsync(
+        IRequestPayload request,
+        Func<IYamlEnvelope, Task>? emitEnvelopeAsync,
+        CancellationToken cancellationToken)
     {
         var method = request.Method ?? "";
 
@@ -119,7 +151,7 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
 
         if (method.StartsWith(TodoCommandShapes.MethodNamespace + ".", StringComparison.Ordinal))
         {
-            return await DispatchTodoRequestAsync(request, cancellationToken).ConfigureAwait(false);
+            return await DispatchTodoRequestAsync(request, emitEnvelopeAsync, cancellationToken).ConfigureAwait(false);
         }
 
         return BuildError(
@@ -274,7 +306,10 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
         }
     }
 
-    private async Task<IYamlEnvelope> DispatchTodoRequestAsync(IRequestPayload request, CancellationToken cancellationToken)
+    private async Task<IYamlEnvelope> DispatchTodoRequestAsync(
+        IRequestPayload request,
+        Func<IYamlEnvelope, Task>? emitEnvelopeAsync,
+        CancellationToken cancellationToken)
     {
         if (_todoWorkflow is null)
         {
@@ -349,17 +384,38 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
 
                 case TodoCommandShapes.StreamStatusMethod:
                     result = await CollectTodoEventsAsync(
-                        callback => workflow.StreamStatusAsync(RequireString(args, "id"), callback, cancellationToken)).ConfigureAwait(false);
+                        request.RequestId,
+                        request.Method,
+                        (callback, streamCancellationToken) => workflow.StreamStatusAsync(
+                            RequireString(args, "id"),
+                            callback,
+                            streamCancellationToken),
+                        emitEnvelopeAsync,
+                        cancellationToken).ConfigureAwait(false);
                     break;
 
                 case TodoCommandShapes.StreamPlanMethod:
                     result = await CollectTodoEventsAsync(
-                        callback => workflow.StreamPlanAsync(RequireString(args, "id"), callback, cancellationToken)).ConfigureAwait(false);
+                        request.RequestId,
+                        request.Method,
+                        (callback, streamCancellationToken) => workflow.StreamPlanAsync(
+                            RequireString(args, "id"),
+                            callback,
+                            streamCancellationToken),
+                        emitEnvelopeAsync,
+                        cancellationToken).ConfigureAwait(false);
                     break;
 
                 case TodoCommandShapes.StreamImplementMethod:
                     result = await CollectTodoEventsAsync(
-                        callback => workflow.StreamImplementAsync(RequireString(args, "id"), callback, cancellationToken)).ConfigureAwait(false);
+                        request.RequestId,
+                        request.Method,
+                        (callback, streamCancellationToken) => workflow.StreamImplementAsync(
+                            RequireString(args, "id"),
+                            callback,
+                            streamCancellationToken),
+                        emitEnvelopeAsync,
+                        cancellationToken).ConfigureAwait(false);
                     break;
 
                 case TodoCommandShapes.GetProjectionStatusMethod:
@@ -1122,16 +1178,95 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
         };
     }
 
-    private static async Task<IReadOnlyList<IStreamingEvent>> CollectTodoEventsAsync(Func<Func<IStreamingEvent, Task>, Task> stream)
+    private static async Task<IReadOnlyList<IStreamingEvent>> CollectTodoEventsAsync(
+        string requestId,
+        string method,
+        Func<Func<IStreamingEvent, Task>, CancellationToken, Task> stream,
+        Func<IYamlEnvelope, Task>? emitEnvelopeAsync,
+        CancellationToken cancellationToken)
     {
         var events = new List<IStreamingEvent>();
-        await stream(evt =>
+        using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        timeoutCts.CancelAfter(ResolveStreamCommandTimeout());
+
+        try
         {
-            events.Add(evt);
-            return Task.CompletedTask;
-        }).ConfigureAwait(false);
+            await stream(async evt =>
+            {
+                events.Add(evt);
+                if (emitEnvelopeAsync is not null)
+                {
+                    await emitEnvelopeAsync(BuildTodoStreamEventEnvelope(requestId, method, evt)).ConfigureAwait(false);
+                }
+            }, timeoutCts.Token).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            if (events.Count == 0 || !events[^1].EventType.EndsWith(".cancelled", StringComparison.OrdinalIgnoreCase))
+            {
+                var timeoutEvent = new DispatcherStreamingEvent(
+                    "stream.timeout",
+                    new Dictionary<string, object?>
+                    {
+                        ["requestId"] = requestId,
+                        ["message"] = $"Stream command timed out after {ResolveStreamCommandTimeout().TotalSeconds:0} seconds.",
+                    },
+                    DateTimeOffset.UtcNow,
+                    events.Count + 1);
+                events.Add(timeoutEvent);
+                if (emitEnvelopeAsync is not null)
+                {
+                    await emitEnvelopeAsync(BuildTodoStreamEventEnvelope(requestId, method, timeoutEvent)).ConfigureAwait(false);
+                }
+            }
+        }
 
         return events;
+    }
+
+    private static TimeSpan ResolveStreamCommandTimeout()
+    {
+        var configured = Environment.GetEnvironmentVariable(StreamCommandTimeoutEnvVar);
+        if (int.TryParse(configured, out var seconds) && seconds > 0)
+        {
+            return TimeSpan.FromSeconds(seconds);
+        }
+
+        return DefaultStreamCommandTimeout;
+    }
+
+    private static IYamlEnvelope BuildTodoStreamEventEnvelope(string requestId, string method, IStreamingEvent evt)
+        => new YamlEnvelope
+        {
+            Type = "event",
+            Payload = new EventPayload
+            {
+                Event = method,
+                Data = new Dictionary<string, object?>
+                {
+                    ["requestId"] = requestId,
+                    ["eventType"] = evt.EventType,
+                    ["sequence"] = evt.Sequence,
+                    ["data"] = evt.Data,
+                },
+                Timestamp = evt.Timestamp,
+            },
+        };
+
+    private sealed class DispatcherStreamingEvent : IStreamingEvent
+    {
+        public DispatcherStreamingEvent(string eventType, object? data, DateTimeOffset timestamp, int sequence)
+        {
+            EventType = eventType;
+            Data = data;
+            Timestamp = timestamp;
+            Sequence = sequence;
+        }
+
+        public string EventType { get; }
+        public object? Data { get; }
+        public DateTimeOffset Timestamp { get; }
+        public int Sequence { get; }
     }
 
     private static async Task<object> DeleteAndReturnAsync(Func<Task> delete, string id)

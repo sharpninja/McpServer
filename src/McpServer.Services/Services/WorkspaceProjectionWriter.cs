@@ -94,11 +94,11 @@ public sealed class WorkspaceProjectionWriter : IWorkspaceProjectionWriter
         var yamlContentRoot = Path.Combine(contentRoot, "appsettings.yaml");
         if (File.Exists(yamlContentRoot)) return yamlContentRoot;
 
-        var yamlBaseDir = Path.Combine(baseDir, "appsettings.yaml");
-        if (File.Exists(yamlBaseDir)) return yamlBaseDir;
-
         var jsonContentRoot = Path.Combine(contentRoot, "appsettings.json");
         if (File.Exists(jsonContentRoot)) return jsonContentRoot;
+
+        var yamlBaseDir = Path.Combine(baseDir, "appsettings.yaml");
+        if (File.Exists(yamlBaseDir)) return yamlBaseDir;
 
         var jsonBaseDir = Path.Combine(baseDir, "appsettings.json");
         if (File.Exists(jsonBaseDir)) return jsonBaseDir;

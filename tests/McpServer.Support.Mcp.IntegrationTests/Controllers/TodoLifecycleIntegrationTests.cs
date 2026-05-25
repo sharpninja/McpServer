@@ -1,8 +1,12 @@
 using System.Net;
 using System.Net.Http.Json;
+using McpServer.Support.Mcp.IntegrationTests;
+using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
@@ -674,6 +678,7 @@ public sealed class TodoLifecycleIntegrationTests
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             var projectDir = Path.Combine(_tempDir, "docs", "Project");
+            var databasePath = Path.Combine(_tempDir, "mcp.db");
             Directory.CreateDirectory(projectDir);
             File.WriteAllText(Path.Combine(projectDir, "TODO.yaml"), SeedYaml);
 
@@ -683,13 +688,28 @@ public sealed class TodoLifecycleIntegrationTests
             {
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    { "Mcp:DataSource", ":memory:" },
+                    { "Mcp:DataSource", databasePath },
+                    { "Mcp:Database:Provider", "sqlite" },
+                    { "Mcp:Database:Sqlite:DataSource", databasePath },
+                    { "Mcp:UseInMemoryDatabaseForTests", "false" },
                     { "DataFolder", _tempDir },
                     { "Mcp:RepoRoot", _tempDir },
                     { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" },
                     { "Mcp:TodoStorage:Provider", "sqlite" },
-                    { "Mcp:TodoStorage:SqliteDataSource", "mcp.db" }
+                    { "Mcp:TodoStorage:SqliteDataSource", "mcp.db" },
+                    { "Mcp:Workspaces:0:WorkspacePath", _tempDir },
+                    { "Mcp:Workspaces:0:Name", Path.GetFileName(_tempDir) },
+                    { "Mcp:Workspaces:0:TodoPath", "docs/Project/TODO.yaml" },
+                    { "Mcp:Workspaces:0:IsPrimary", "true" },
+                    { "Mcp:Workspaces:0:IsEnabled", "true" }
                 });
+            });
+            builder.ConfigureServices(services =>
+            {
+                IntegrationTestDatabase.ConfigureSqlite(services, databasePath);
+                services.RemoveAll<IWorkspaceProjectionWriter>();
+                services.AddSingleton<IWorkspaceProjectionWriter, NoOpWorkspaceProjectionWriter>();
+                services.AddHostedService<IntegrationTestDatabase.Initializer>();
             });
         }
 

@@ -1006,13 +1006,21 @@ static string? ResolvePrimaryApiKeyWorkspacePath(IConfiguration configuration, I
     // Prefer the DB-registered primary workspace (workspaces live in the DB now, not appsettings).
     if (services is not null)
     {
-        using var scope = services.CreateScope();
-        var svc = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
-        var items = svc.ListAsync().GetAwaiter().GetResult().Items;
-        var primary = items.FirstOrDefault(w => w.IsPrimary && w.IsEnabled)
-                   ?? items.FirstOrDefault(w => w.IsEnabled);
-        if (!string.IsNullOrWhiteSpace(primary?.WorkspacePath))
-            return NormalizeWorkspacePathForToken(primary.WorkspacePath, environment.ContentRootPath);
+        try
+        {
+            using var scope = services.CreateScope();
+            var svc = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
+            var items = svc.ListAsync().GetAwaiter().GetResult().Items;
+            var primary = items.FirstOrDefault(w => w.IsPrimary && w.IsEnabled)
+                       ?? items.FirstOrDefault(w => w.IsEnabled);
+            if (!string.IsNullOrWhiteSpace(primary?.WorkspacePath))
+                return NormalizeWorkspacePathForToken(primary.WorkspacePath, environment.ContentRootPath);
+        }
+        catch when (environment.IsEnvironment("Test"))
+        {
+            // Test hosts create their isolated schema after Program startup.
+            // Fall through to RepoRoot so auth-token seeding stays hermetic.
+        }
     }
 
     // Legacy fallback: Mcp:RepoRoot config value (used by integration tests and bare deployments).

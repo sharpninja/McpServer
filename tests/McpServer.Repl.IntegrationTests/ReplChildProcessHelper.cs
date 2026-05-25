@@ -9,6 +9,10 @@ namespace McpServer.Repl.IntegrationTests;
 /// </summary>
 public sealed class ReplChildProcessHelper : IDisposable
 {
+    private const string LiveWorkspaceDiscoveryEnvVar = "MCPSERVER_REPL_TEST_USE_LIVE_WORKSPACE_DISCOVERY";
+    private static readonly TimeSpan StartupProbeTimeout = TimeSpan.FromMilliseconds(250);
+    private static readonly TimeSpan ShutdownTimeout = TimeSpan.FromSeconds(2);
+
     private Process? _process;
     private readonly List<string> _stdoutLines = new();
     private readonly List<string> _stderrLines = new();
@@ -46,6 +50,11 @@ public sealed class ReplChildProcessHelper : IDisposable
     }
 
     /// <summary>
+    /// Gets captured process diagnostics for assertion failure messages.
+    /// </summary>
+    public string Diagnostics => BuildDiagnostics();
+
+    /// <summary>
     /// Gets a value indicating whether the child process is running.
     /// </summary>
     public bool IsRunning => _process != null && !_process.HasExited;
@@ -55,7 +64,7 @@ public sealed class ReplChildProcessHelper : IDisposable
     /// </summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task that completes when the process is started.</returns>
-    public Task StartAsync(CancellationToken cancellationToken = default)
+    public async Task StartAsync(CancellationToken cancellationToken = default)
     {
         if (_disposed)
         {
@@ -68,19 +77,13 @@ public sealed class ReplChildProcessHelper : IDisposable
         }
 
         var repoRoot = FindRepoRoot(AppContext.BaseDirectory);
-        var workspaceRoot = ResolveWorkspaceRootAsync(repoRoot).GetAwaiter().GetResult();
+        var workspaceRoot = await ResolveWorkspaceRootAsync(repoRoot).ConfigureAwait(false);
         var markerPath = Path.Combine(workspaceRoot, "AGENTS-README-FIRST.yaml");
-        var projectPath = Path.Combine(repoRoot, "src", "McpServer.Repl.Host", "McpServer.Repl.Host.csproj");
-        var arguments = $"run --project \"{projectPath}\" -- --agent-stdio --workspace-path \"{workspaceRoot}\"";
-        if (File.Exists(markerPath))
-        {
-            arguments += $" --marker-file \"{markerPath}\"";
-        }
+        var hostAssemblyPath = ResolveHostAssemblyPath(repoRoot);
 
         var startInfo = new ProcessStartInfo
         {
             FileName = "dotnet",
-            Arguments = arguments,
             WorkingDirectory = workspaceRoot,
             UseShellExecute = false,
             RedirectStandardInput = true,
@@ -91,18 +94,42 @@ public sealed class ReplChildProcessHelper : IDisposable
             StandardInputEncoding = Encoding.UTF8,
             StandardErrorEncoding = Encoding.UTF8
         };
+        startInfo.ArgumentList.Add(hostAssemblyPath);
+        startInfo.ArgumentList.Add("--agent-stdio");
+        startInfo.ArgumentList.Add("--workspace-path");
+        startInfo.ArgumentList.Add(workspaceRoot);
+        if (File.Exists(markerPath))
+        {
+            startInfo.ArgumentList.Add("--marker-file");
+            startInfo.ArgumentList.Add(markerPath);
+        }
+
         startInfo.Environment["MCP_WORKSPACE_PATH"] = workspaceRoot;
         startInfo.Environment["MCPSERVER_WORKSPACE_PATH"] = workspaceRoot;
+        startInfo.Environment["MCPSERVER_REPL_COMMAND_TIMEOUT_SECONDS"] = "10";
+        startInfo.Environment["MCPSERVER_REPL_STREAM_COMMAND_TIMEOUT_SECONDS"] = "8";
+        startInfo.Environment["DOTNET_CLI_TELEMETRY_OPTOUT"] = "1";
+        startInfo.Environment["DOTNET_NOLOGO"] = "1";
 
         _process = new Process { StartInfo = startInfo };
         _process.OutputDataReceived += OnStdoutDataReceived;
         _process.ErrorDataReceived += OnStderrDataReceived;
 
-        _process.Start();
+        if (!_process.Start())
+        {
+            _process = null;
+            throw new InvalidOperationException("Failed to start mcpserver-repl host process.");
+        }
+
         _process.BeginOutputReadLine();
         _process.BeginErrorReadLine();
 
-        return Task.CompletedTask;
+        await Task.Delay(StartupProbeTimeout, cancellationToken).ConfigureAwait(false);
+        if (_process.HasExited)
+        {
+            throw new InvalidOperationException(
+                $"mcpserver-repl host exited during startup with code {_process.ExitCode}.{Environment.NewLine}{BuildDiagnostics()}");
+        }
     }
 
     private static string FindRepoRoot(string startPath)
@@ -126,15 +153,55 @@ public sealed class ReplChildProcessHelper : IDisposable
 
     private static async Task<string> ResolveWorkspaceRootAsync(string repoRoot)
     {
-        var registeredWorkspaceRoot = await TryResolveRegisteredWorkspaceRootAsync(repoRoot).ConfigureAwait(false);
-        if (!string.IsNullOrWhiteSpace(registeredWorkspaceRoot))
+        if (IsLiveWorkspaceDiscoveryEnabled())
         {
-            return registeredWorkspaceRoot;
+            var registeredWorkspaceRoot = await TryResolveRegisteredWorkspaceRootAsync(repoRoot).ConfigureAwait(false);
+            if (!string.IsNullOrWhiteSpace(registeredWorkspaceRoot))
+            {
+                return registeredWorkspaceRoot;
+            }
         }
 
         return TryResolveSubmoduleWorkspaceRoot(repoRoot)
             ?? TryFindMarkerRoot(repoRoot)
             ?? repoRoot;
+    }
+
+    private static bool IsLiveWorkspaceDiscoveryEnabled()
+        => string.Equals(
+            Environment.GetEnvironmentVariable(LiveWorkspaceDiscoveryEnvVar),
+            "true",
+            StringComparison.OrdinalIgnoreCase);
+
+    private static string ResolveHostAssemblyPath(string repoRoot)
+    {
+        var outputDirectory = new DirectoryInfo(AppContext.BaseDirectory.TrimEnd(
+            Path.DirectorySeparatorChar,
+            Path.AltDirectorySeparatorChar));
+        var targetFramework = outputDirectory.Name;
+        var configuration = outputDirectory.Parent?.Name ?? "Debug";
+        var candidate = Path.Combine(
+            repoRoot,
+            "src",
+            "McpServer.Repl.Host",
+            "bin",
+            configuration,
+            targetFramework,
+            "McpServer.Repl.Host.dll");
+        if (File.Exists(candidate))
+        {
+            return candidate;
+        }
+
+        var copiedCandidate = Path.Combine(AppContext.BaseDirectory, "McpServer.Repl.Host.dll");
+        if (File.Exists(copiedCandidate))
+        {
+            return copiedCandidate;
+        }
+
+        throw new FileNotFoundException(
+            $"Could not find built McpServer.Repl.Host assembly. Build the test project before running REPL integration tests. Checked '{candidate}' and '{copiedCandidate}'.",
+            candidate);
     }
 
     private static async Task<string?> TryResolveRegisteredWorkspaceRootAsync(string repoRoot)
@@ -420,10 +487,11 @@ public sealed class ReplChildProcessHelper : IDisposable
 
         if (_process == null || _process.HasExited)
         {
-            throw new InvalidOperationException("Process is not running");
+            throw new InvalidOperationException($"Process is not running.{Environment.NewLine}{BuildDiagnostics()}");
         }
 
         await _process.StandardInput.WriteLineAsync(yamlContent.AsMemory(), cancellationToken);
+        await _process.StandardInput.WriteLineAsync(string.Empty.AsMemory(), cancellationToken);
         await _process.StandardInput.FlushAsync(cancellationToken);
     }
 
@@ -448,6 +516,49 @@ public sealed class ReplChildProcessHelper : IDisposable
                 {
                     return true;
                 }
+            }
+
+            if (_process is { HasExited: true })
+            {
+                throw new InvalidOperationException(
+                    $"Process exited before stdout reached {count} document(s).{Environment.NewLine}{BuildDiagnostics()}");
+            }
+
+            await Task.Delay(50, cancellationToken);
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Waits until stdout contains a final result or error envelope for the specified request ID.
+    /// </summary>
+    /// <param name="requestId">Request ID to wait for.</param>
+    /// <param name="timeout">Maximum time to wait.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>True if a final response envelope was received; otherwise, false.</returns>
+    public async Task<bool> WaitForStdoutResponseAsync(
+        string requestId,
+        TimeSpan timeout,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(requestId);
+
+        var deadline = DateTime.UtcNow + timeout;
+        while (DateTime.UtcNow < deadline && !cancellationToken.IsCancellationRequested)
+        {
+            lock (_lock)
+            {
+                if (_stdoutLines.Any(document => IsFinalResponseForRequest(document, requestId)))
+                {
+                    return true;
+                }
+            }
+
+            if (_process is { HasExited: true })
+            {
+                throw new InvalidOperationException(
+                    $"Process exited before stdout contained a final response for request '{requestId}'.{Environment.NewLine}{BuildDiagnostics()}");
             }
 
             await Task.Delay(50, cancellationToken);
@@ -477,6 +588,12 @@ public sealed class ReplChildProcessHelper : IDisposable
                 {
                     return true;
                 }
+            }
+
+            if (_process is { HasExited: true })
+            {
+                throw new InvalidOperationException(
+                    $"Process exited before stdout contained '{expectedText}'.{Environment.NewLine}{BuildDiagnostics()}");
             }
 
             await Task.Delay(50, cancellationToken);
@@ -522,6 +639,12 @@ public sealed class ReplChildProcessHelper : IDisposable
                 }
             }
 
+            if (_process is { HasExited: true })
+            {
+                throw new InvalidOperationException(
+                    $"Process exited before stdout matched '{pattern}'.{Environment.NewLine}{BuildDiagnostics()}");
+            }
+
             await Task.Delay(50, cancellationToken);
         }
 
@@ -555,17 +678,40 @@ public sealed class ReplChildProcessHelper : IDisposable
         try
         {
             _process.StandardInput.Close();
-            
-            if (!_process.WaitForExit(2000))
+
+            if (!_process.WaitForExit((int)ShutdownTimeout.TotalMilliseconds))
             {
-                _process.Kill();
+                _process.Kill(entireProcessTree: true);
             }
 
+            await _process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
             await Task.CompletedTask;
         }
         catch
         {
             // Best effort cleanup
+        }
+    }
+
+    private string BuildDiagnostics()
+    {
+        lock (_lock)
+        {
+            var pendingStdout = _stdoutDocumentLines.Count == 0
+                ? string.Empty
+                : string.Join(Environment.NewLine, _stdoutDocumentLines);
+            var stdout = _stdoutLines.Count == 0
+                ? "<none>"
+                : string.Join($"{Environment.NewLine}--- stdout document ---{Environment.NewLine}", _stdoutLines);
+            if (!string.IsNullOrWhiteSpace(pendingStdout))
+            {
+                stdout += $"{Environment.NewLine}--- pending stdout document ---{Environment.NewLine}{pendingStdout}";
+            }
+
+            var stderr = _stderrLines.Count == 0
+                ? "<none>"
+                : string.Join(Environment.NewLine, _stderrLines);
+            return $"STDOUT:{Environment.NewLine}{stdout}{Environment.NewLine}STDERR:{Environment.NewLine}{stderr}";
         }
     }
 
@@ -637,6 +783,15 @@ public sealed class ReplChildProcessHelper : IDisposable
     private static bool IsTopLevelDocumentStart(string line) =>
         line.StartsWith("type:", StringComparison.Ordinal);
 
+    private static bool IsFinalResponseForRequest(string document, string requestId)
+    {
+        return (document.Contains("type: result", StringComparison.Ordinal)
+                || document.Contains("type: error", StringComparison.Ordinal))
+               && (document.Contains($"requestId: {requestId}", StringComparison.Ordinal)
+                   || document.Contains($"requestId: \"{requestId}\"", StringComparison.Ordinal)
+                   || document.Contains($"requestId: '{requestId}'", StringComparison.Ordinal));
+    }
+
     private static int CountLeadingSpaces(string line)
     {
         var count = 0;
@@ -677,7 +832,7 @@ public sealed class ReplChildProcessHelper : IDisposable
             {
                 if (!_process.HasExited)
                 {
-                    _process.Kill();
+                    _process.Kill(entireProcessTree: true);
                 }
 
                 _process.Dispose();

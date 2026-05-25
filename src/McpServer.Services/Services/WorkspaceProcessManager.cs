@@ -129,6 +129,7 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
         foreach (var ws in workspaces.Items)
         {
             if (!ws.IsEnabled) continue;
+            if (string.IsNullOrWhiteSpace(ws.WorkspacePath)) continue;
             var key = NormalizeKey(ws.WorkspacePath);
             if (!_activeWorkspaces.ContainsKey(key)) continue;
 

@@ -13,6 +13,9 @@ namespace McpServer.Support.Mcp.Services;
 /// </summary>
 public sealed class ToolRegistryService : IToolRegistryService
 {
+    private static readonly string[] WorkspaceQueryFilter = ["Workspace"];
+    private static readonly string[] SoftDeleteQueryFilter = ["SoftDelete"];
+
     private readonly McpDbContext _db;
     private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<ToolRegistryService> _logger;
@@ -37,7 +40,7 @@ public sealed class ToolRegistryService : IToolRegistryService
         // Singularize/pluralize-tolerant: match if the tag starts with the keyword or vice-versa.
         IQueryable<ToolDefinitionEntity> query = _db.ToolDefinitions.Include(t => t.Tags);
         if (normalizedWorkspace is not null)
-            query = query.IgnoreQueryFilters();
+            query = query.IgnoreQueryFilters(WorkspaceQueryFilter);
 
         query = query
             .Where(t => t.Tags.Any(tag =>
@@ -49,7 +52,7 @@ public sealed class ToolRegistryService : IToolRegistryService
         query = FilterScope(query, normalizedWorkspace);
 
         var entities = await query.OrderBy(t => t.Name).ToListAsync(ct).ConfigureAwait(false);
-        var dtos = entities.Select(ToDto).ToList();
+        var dtos = entities.Select(entity => ToDto(entity)).ToList();
         return new ToolSearchResult(dtos, dtos.Count);
     }
 
@@ -68,12 +71,12 @@ public sealed class ToolRegistryService : IToolRegistryService
         var normalizedWorkspace = NormalizeWorkspacePath(workspacePath);
         IQueryable<ToolDefinitionEntity> query = _db.ToolDefinitions.Include(t => t.Tags).AsNoTracking();
         if (normalizedWorkspace is not null)
-            query = query.IgnoreQueryFilters();
+            query = query.IgnoreQueryFilters(WorkspaceQueryFilter);
 
         query = FilterScope(query, normalizedWorkspace);
 
         var entities = await query.OrderBy(t => t.Name).ToListAsync(ct).ConfigureAwait(false);
-        var dtos = entities.Select(ToDto).ToList();
+        var dtos = entities.Select(entity => ToDto(entity)).ToList();
         return new ToolSearchResult(dtos, dtos.Count);
     }
 
@@ -144,19 +147,20 @@ public sealed class ToolRegistryService : IToolRegistryService
         if (request.WorkspacePath is not null)
             ApplyScope(entity, NormalizeScope(request.WorkspacePath));
 
+        var now = DateTimeOffset.UtcNow;
+        IReadOnlyList<string>? tagsOverride = null;
         if (request.Tags is not null)
         {
-            entity.Tags.Clear();
-            foreach (var tag in NormalizeTags(request.Tags))
-                entity.Tags.Add(new ToolDefinitionTagEntity { Tag = tag, WorkspaceId = entity.WorkspaceId });
+            tagsOverride = NormalizeTags(request.Tags);
+            await ReplaceTagsAsync(entity, tagsOverride, now, ct).ConfigureAwait(false);
         }
 
-        entity.DateTimeModified = DateTimeOffset.UtcNow;
+        entity.DateTimeModified = now;
         await _db.SaveChangesAsync(ct).ConfigureAwait(false);
         await PublishChangeSafeAsync(ChangeEventActions.Updated, entity.Id.ToString(), ct).ConfigureAwait(false);
 
         _logger.LogInformation("Tool updated: {Name} (id: {Id})", entity.Name, entity.Id);
-        return new ToolMutationResult(true, Tool: ToDto(entity));
+        return new ToolMutationResult(true, Tool: ToDto(entity, tagsOverride));
     }
 
     /// <inheritdoc />
@@ -168,12 +172,47 @@ public sealed class ToolRegistryService : IToolRegistryService
             return new ToolMutationResult(false, $"Tool {id} not found.");
 
         var dto = ToDto(entity);
-        _db.ToolDefinitions.Remove(entity);
+        var now = DateTimeOffset.UtcNow;
+        foreach (var tag in entity.Tags)
+            MarkSoftDeleted(tag, now, "tool_deleted");
+        entity.DateTimeModified = now;
+        MarkSoftDeleted(entity, now, "tool_deleted");
         await _db.SaveChangesAsync(ct).ConfigureAwait(false);
         await PublishChangeSafeAsync(ChangeEventActions.Deleted, dto.Id.ToString(), ct).ConfigureAwait(false);
 
         _logger.LogInformation("Tool deleted: {Name} (id: {Id})", dto.Name, dto.Id);
         return new ToolMutationResult(true, Tool: dto);
+    }
+
+    private async Task ReplaceTagsAsync(
+        ToolDefinitionEntity entity,
+        IReadOnlyList<string> desiredTags,
+        DateTimeOffset timestamp,
+        CancellationToken ct)
+    {
+        var desiredTagSet = desiredTags.ToHashSet(StringComparer.Ordinal);
+        var allTags = await _db.ToolDefinitionTags
+            .IgnoreQueryFilters(SoftDeleteQueryFilter)
+            .Where(t => t.ToolDefinitionId == entity.Id)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+
+        foreach (var tag in allTags.Where(tag => !desiredTagSet.Contains(tag.Tag)))
+            MarkSoftDeleted(tag, timestamp, "tool_tag_replaced");
+
+        foreach (var desiredTag in desiredTags)
+        {
+            var existing = allTags.FirstOrDefault(tag => string.Equals(tag.Tag, desiredTag, StringComparison.Ordinal));
+            if (existing is null)
+            {
+                entity.Tags.Add(new ToolDefinitionTagEntity { Tag = desiredTag, WorkspaceId = entity.WorkspaceId });
+                continue;
+            }
+
+            existing.WorkspaceId = entity.WorkspaceId;
+            if (IsSoftDeleted(existing))
+                ClearSoftDelete(existing);
+        }
     }
 
     private static IQueryable<ToolDefinitionEntity> FilterScope(IQueryable<ToolDefinitionEntity> query, string? workspacePath)
@@ -214,16 +253,49 @@ public sealed class ToolRegistryService : IToolRegistryService
             .ToList();
     }
 
-    private static ToolDto ToDto(ToolDefinitionEntity e) => new(
+    private static ToolDto ToDto(ToolDefinitionEntity e, IReadOnlyList<string>? tagsOverride = null) => new(
         e.Id,
         e.Name,
         e.Description,
-        e.Tags.Select(t => t.Tag).OrderBy(t => t).ToList(),
+        (tagsOverride ?? e.Tags.Select(t => t.Tag).ToList()).OrderBy(t => t).ToList(),
         e.ParameterSchema,
         e.CommandTemplate,
         e.WorkspacePath,
         e.DateTimeCreated,
         e.DateTimeModified);
+
+    private bool IsSoftDeleted(object entity)
+    {
+        var entry = _db.Entry(entity);
+        return entry.Metadata.FindProperty("IsDeleted") is not null
+               && entry.Property("IsDeleted").CurrentValue is true;
+    }
+
+    private void MarkSoftDeleted(object entity, DateTimeOffset deletedAtUtc, string reason)
+    {
+        var entry = _db.Entry(entity);
+        if (entry.Metadata.FindProperty("IsDeleted") is null)
+            return;
+
+        entry.State = EntityState.Modified;
+        entry.Property("IsDeleted").CurrentValue = true;
+        entry.Property("DeletedAtUtc").CurrentValue = deletedAtUtc;
+        entry.Property("DeletedBy").CurrentValue = nameof(ToolRegistryService);
+        entry.Property("DeleteReason").CurrentValue = reason;
+    }
+
+    private void ClearSoftDelete(object entity)
+    {
+        var entry = _db.Entry(entity);
+        if (entry.Metadata.FindProperty("IsDeleted") is null)
+            return;
+
+        entry.State = EntityState.Modified;
+        entry.Property("IsDeleted").CurrentValue = false;
+        entry.Property("DeletedAtUtc").CurrentValue = null;
+        entry.Property("DeletedBy").CurrentValue = null;
+        entry.Property("DeleteReason").CurrentValue = null;
+    }
 
     private async Task PublishChangeSafeAsync(string action, string entityId, CancellationToken ct)
     {

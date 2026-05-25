@@ -3,30 +3,41 @@ using System.Net.Http.Json;
 using System.IO.Compression;
 using System.Text.Json;
 using McpServer.Support.Mcp;
+using McpServer.Support.Mcp.IntegrationTests;
 using McpServer.Support.Mcp.Requirements.Models;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Storage;
+using McpServer.Support.Mcp.Storage.Database;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
 
 /// <summary>Integration tests for requirements management endpoints.</summary>
-public sealed class RequirementsControllerTests : IClassFixture<RequirementsControllerTests.RequirementsWebFactory>, IDisposable
+public sealed class RequirementsControllerTests : IDisposable
 {
     private readonly HttpClient _client;
     private readonly RequirementsWebFactory _factory;
 
-    public RequirementsControllerTests(RequirementsWebFactory factory)
+    public RequirementsControllerTests()
     {
-        _factory = factory;
-        _client = factory.CreateClient();
-        _client.DefaultRequestHeaders.TryAddWithoutValidation("X-Api-Key", factory.GetFullWorkspaceApiKey());
+        _factory = new RequirementsWebFactory();
+        _client = _factory.CreateClient();
+        _client.DefaultRequestHeaders.TryAddWithoutValidation("X-Api-Key", _factory.GetFullWorkspaceApiKey());
     }
 
-    public void Dispose() => _client.Dispose();
+    public void Dispose()
+    {
+        _client.Dispose();
+        _factory.Dispose();
+    }
 
     [Fact]
     public async Task FunctionalCrud_AndGenerateEndpoint_WorkEndToEnd()
@@ -158,7 +169,9 @@ public sealed class RequirementsControllerTests : IClassFixture<RequirementsCont
         };
 
         var ingestResponse = await _client.PostAsJsonAsync("/mcpserver/requirements/ingest", payload).ConfigureAwait(true);
-        Assert.Equal(HttpStatusCode.OK, ingestResponse.StatusCode);
+        var ingestBody = await ingestResponse.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.True(ingestResponse.StatusCode == HttpStatusCode.OK,
+            $"Requirements ingest failed ({ingestResponse.StatusCode}): {ingestBody}");
 
         var fr = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-777").ConfigureAwait(true);
         Assert.Equal(HttpStatusCode.OK, fr.StatusCode);
@@ -269,6 +282,7 @@ public sealed class RequirementsControllerTests : IClassFixture<RequirementsCont
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             SeedWorkspaceFiles();
+            var databasePath = Path.Combine(_tempDir, "mcp.db");
 
             builder.UseEnvironment("Test");
             builder.UseContentRoot(CustomWebApplicationFactory.ResolveContentRoot());
@@ -276,10 +290,55 @@ public sealed class RequirementsControllerTests : IClassFixture<RequirementsCont
             {
                 config.AddInMemoryCollection(new Dictionary<string, string?>
                 {
-                    { "Mcp:DataSource", ":memory:" },
-                    { "Mcp:RepoRoot", _tempDir }
+                    { "DataFolder", _tempDir },
+                    { "Mcp:DataSource", databasePath },
+                    { "Mcp:Database:Provider", "sqlite" },
+                    { "Mcp:Database:Sqlite:DataSource", databasePath },
+                    { "Mcp:UseInMemoryDatabaseForTests", "false" },
+                    { "Mcp:RepoRoot", _tempDir },
+                    { "Mcp:Workspaces:0:WorkspacePath", _tempDir },
+                    { "Mcp:Workspaces:0:Name", Path.GetFileName(_tempDir) },
+                    { "Mcp:Workspaces:0:TodoPath", "docs/Project/TODO.yaml" },
+                    { "Mcp:Workspaces:0:IsPrimary", "true" },
+                    { "Mcp:Workspaces:0:IsEnabled", "true" }
                 });
             });
+            builder.ConfigureServices(services =>
+            {
+                ConfigureTestDatabase(services, databasePath);
+                services.RemoveAll<IWorkspaceProjectionWriter>();
+                services.AddSingleton<IWorkspaceProjectionWriter, NoOpWorkspaceProjectionWriter>();
+                services.AddHostedService<TestDatabaseInitializer>();
+            });
+        }
+
+        private static void ConfigureTestDatabase(IServiceCollection services, string databasePath)
+        {
+            var connectionString = $"Data Source={databasePath}";
+            var providerOptions = McpDatabaseProviderFactory.CreateOptions("sqlite", connectionString);
+
+            services.RemoveAll<McpDbContext>();
+            services.RemoveAll<DbContextOptions>();
+            services.RemoveAll<DbContextOptions<McpDbContext>>();
+            services.RemoveAll<IDbContextOptionsConfiguration<McpDbContext>>();
+            services.RemoveAll<McpDatabaseProviderOptions>();
+            services.RemoveAll<McpDatabaseRuntimeOptions>();
+            services.AddSingleton(providerOptions);
+            services.AddSingleton(new McpDatabaseRuntimeOptions(
+                providerOptions,
+                new McpDatabaseEncryptionOptions(
+                    enabled: false,
+                    sqliteKey: null,
+                    sqliteSeeToolPath: null,
+                    postgreSqlKeyProvider: null,
+                    postgreSqlPrincipalKey: null,
+                    sqlServerCertificateName: null,
+                    sqlServerDatabaseEncryptionKeyName: null)));
+            services.AddDbContext<McpDbContext>(options =>
+            {
+                McpDatabaseProviderFactory.Configure(options, providerOptions);
+                options.EnableSensitiveDataLogging();
+            }, ServiceLifetime.Scoped, ServiceLifetime.Scoped);
         }
 
         private void SeedWorkspaceFiles()
@@ -333,10 +392,29 @@ public sealed class RequirementsControllerTests : IClassFixture<RequirementsCont
                    ?? throw new InvalidOperationException("Workspace full API key was not generated for test host.");
         }
 
-        private new void Dispose()
+        public new void Dispose()
         {
             base.Dispose();
             try { Directory.Delete(_tempDir, recursive: true); } catch { /* best effort */ }
+        }
+
+        private sealed class TestDatabaseInitializer : IHostedService
+        {
+            private readonly IServiceProvider _services;
+
+            public TestDatabaseInitializer(IServiceProvider services)
+            {
+                _services = services;
+            }
+
+            public async Task StartAsync(CancellationToken cancellationToken)
+            {
+                using var scope = _services.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+                await db.Database.EnsureCreatedAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
         }
     }
 }

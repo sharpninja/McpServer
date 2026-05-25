@@ -28,5 +28,10 @@ internal static class TestAuthHelper
         var token = tokenService.GetToken(workspacePath);
         if (token is not null)
             client.DefaultRequestHeaders.Add("X-Api-Key", token);
+
+        var workspaceService = scope.ServiceProvider.GetService<IWorkspaceService>();
+        var workspace = workspaceService?.GetAsync(workspacePath).GetAwaiter().GetResult();
+        if (workspace is not null)
+            client.DefaultRequestHeaders.Add("X-Workspace-Path", workspacePath);
     }
 }

@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Text.Json;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Services;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using NSubstitute;
@@ -151,24 +151,44 @@ public sealed class FederationLocalProxyEnrollmentServiceTests
         var registry = new FederationRegistry(Microsoft.Extensions.Options.Options.Create(options));
         var factory = Substitute.For<IHttpClientFactory>();
         factory.CreateClient(FederationProxyService.HttpClientName).Returns(new HttpClient(handler));
-        var configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string?>
-            {
-                ["Mcp:Workspaces:0:Name"] = "McpServer",
-                ["Mcp:Workspaces:0:WorkspacePath"] = @"F:\GitHub\McpServer",
-                ["Mcp:Workspaces:0:IsEnabled"] = "true",
-                ["Mcp:Workspaces:0:IsPrimary"] = "true",
-                ["Mcp:Workspaces:1:Name"] = "Disabled",
-                ["Mcp:Workspaces:1:WorkspacePath"] = @"F:\GitHub\Disabled",
-                ["Mcp:Workspaces:1:IsEnabled"] = "false",
-            })
-            .Build();
+        var workspaceService = Substitute.For<IWorkspaceService>();
+        workspaceService.ListAsync(Arg.Any<CancellationToken>())
+            .Returns(new WorkspaceListResult(
+            [
+                new WorkspaceDto
+                {
+                    Name = "McpServer",
+                    WorkspacePath = @"F:\GitHub\McpServer",
+                    TodoPath = "docs/todo.yaml",
+                    DataDirectory = @"F:\GitHub\McpServer",
+                    IsEnabled = true,
+                    IsPrimary = true,
+                    StatusPrompt = "status",
+                    ImplementPrompt = "implement",
+                    PlanPrompt = "plan",
+                },
+                new WorkspaceDto
+                {
+                    Name = "Disabled",
+                    WorkspacePath = @"F:\GitHub\Disabled",
+                    TodoPath = "docs/todo.yaml",
+                    IsEnabled = false,
+                    StatusPrompt = "status",
+                    ImplementPrompt = "implement",
+                    PlanPrompt = "plan",
+                },
+            ],
+            2));
+        var serviceProvider = new ServiceCollection()
+            .AddSingleton(workspaceService)
+            .BuildServiceProvider();
+        var scopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
 
         return new FederationLocalProxyEnrollmentService(
             registry,
             factory,
             monitor,
-            configuration,
+            scopeFactory,
             new ServerRuntimeInfo(DateTimeOffset.Parse("2026-05-22T00:00:00Z", CultureInfo.InvariantCulture), 7147),
             NullLogger<FederationLocalProxyEnrollmentService>.Instance);
     }
