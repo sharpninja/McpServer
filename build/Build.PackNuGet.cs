@@ -17,6 +17,8 @@ partial class Build
                 SourceDirectory / "McpServer.Client" / "McpServer.Client.csproj",
                 SourceDirectory / "McpServer.Cqrs" / "McpServer.Cqrs.csproj",
                 SourceDirectory / "McpServer.Cqrs.Mvvm" / "McpServer.Cqrs.Mvvm.csproj",
+                SourceDirectory / "McpServer.Repl.Core" / "McpServer.Repl.Core.csproj",
+                SourceDirectory / "McpServer.McpAgent" / "McpServer.McpAgent.csproj",
             };
 
             foreach (var project in projects)

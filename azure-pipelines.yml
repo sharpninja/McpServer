@@ -10,6 +10,8 @@ trigger:
       - src/McpServer.Support.Mcp/**
       - src/McpServer.Client/**
       - src/McpServer.Director/**
+      - src/McpServer.McpAgent/**
+      - src/McpServer.Repl.Core/**
       - src/McpServer.UI.Core/**
       - src/McpServer.Cqrs/**
       - src/McpServer.Cqrs.Mvvm/**
@@ -44,6 +46,8 @@ pr:
       - src/McpServer.Support.Mcp/**
       - src/McpServer.Client/**
       - src/McpServer.Director/**
+      - src/McpServer.McpAgent/**
+      - src/McpServer.Repl.Core/**
       - src/McpServer.UI.Core/**
       - src/McpServer.Cqrs/**
       - src/McpServer.Cqrs.Mvvm/**
