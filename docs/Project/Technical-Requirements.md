@@ -1,5 +1,65 @@
 # Technical Requirements (MCP Server)
 
+## TR-01
+
+**TR-01** — Placeholder requirement backfilled by DB-FK-001.
+
+## TR-02
+
+**TR-02** — Placeholder requirement backfilled by DB-FK-001.
+
+## TR-03
+
+**TR-03** — Placeholder requirement backfilled by DB-FK-001.
+
+## TR-04
+
+**TR-04** — Placeholder requirement backfilled by DB-FK-001.
+
+## TR-05
+
+**TR-05** — Placeholder requirement backfilled by DB-FK-001.
+
+## TR-06
+
+**TR-06** — Placeholder requirement backfilled by DB-FK-001.
+
+## TR-07
+
+**TR-07** — Placeholder requirement backfilled by DB-FK-001.
+
+## TR-08
+
+**TR-08** — Placeholder requirement backfilled by DB-FK-001.
+
+## TR-09
+
+**TR-09** — Placeholder requirement backfilled by DB-FK-001.
+
+## TR-10
+
+**TR-10** — Placeholder requirement backfilled by DB-FK-001.
+
+## TR-11
+
+**TR-11** — Placeholder requirement backfilled by DB-FK-001.
+
+## TR-12
+
+**TR-12** — Placeholder requirement backfilled by DB-FK-001.
+
+## TR-13
+
+**TR-13** — Placeholder requirement backfilled by DB-FK-001.
+
+## TR-14
+
+**TR-14** — Placeholder requirement backfilled by DB-FK-001.
+
+## TR-GEN-YAML-001
+
+**YAML Generation Test** — TR for YAML document generation test
+
 ## TR-GRAPHRAG-ADHOC-001
 
 **Ad-hoc text ingestion pipeline** — GraphRagService.IngestTextAsync shall accept raw text, chunk via Chunker (512 tokens), generate embeddings via IEmbeddingService (all-MiniLM-L6-v2, 384-dim), persist ContextDocumentEntity and ContextChunkEntity rows with workspace scoping, register vectors in IVectorIndexService, and optionally trigger IndexAsync. Document ID format: "adhoc-{Guid:N}". Content hash: SHA256.
@@ -198,6 +258,10 @@ ASP.NET Core 9 server with HTTP and STDIO MCP transport.
 
 **Covered by:** `src/McpServer.Support.Mcp/Controllers/TodoExecutionController.cs`, `src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs`, `src/McpServer.Client/Models/TodoModels.cs`, `src/McpServer.Client/TodoClient.cs`
 
+## TR-MCP-BYRD-005
+
+**Byrd process plan creation requirements** — The Byrd Development Process V3 document must define plan creation requirements for decision-complete frontier-model handoff plans, including required FR/TR/TEST capture, TDD tests, expected red state, green criteria, validation scope, and acceptance criteria before implementation begins.
+
 ## TR-MCP-CFG-001
 
 IOptions-based configuration for all filesystem and runtime settings.
@@ -322,6 +386,26 @@ HNSW vector index with ONNX embeddings.
 
 SQLite FTS5 full-text search support and hybrid ranking.
 
+## TR-MCP-DB-001
+
+**Database-authoritative workspace registry** — Workspaces must be stored in a canonical Workspaces table as the source of truth, with appsettings workspace entries generated only as informational projections after successful database commits.
+
+## TR-MCP-DB-002
+
+**Workspace foreign-key integrity** — Every persistent table with WorkspaceId must have a required FK to Workspaces, including global rows through a reserved empty WorkspaceId row and federation workspace mappings.
+
+## TR-MCP-DB-003
+
+**Soft deletes for persistent MCP data** — Persistent MCP domain deletes must be logical deletes with deletion metadata and Restrict or NoAction relationships, never physical row removal or cascade delete for durable domain state.
+
+## TR-MCP-DB-004
+
+**Generic audit ledger for mutable data** — Every mutable persistent database entity must emit append-only audit rows with workspace, entity key, action, actor/source, timestamps, and previous/current snapshots, while TODO-specific audit history remains compatible.
+
+## TR-MCP-DB-005
+
+**TODO and requirement relational links** — TODO requirement references and requirement traceability links must be stored as relational rows with FKs to TODO lifecycle anchors and Requirements, with missing referenced requirements backfilled before FK enforcement.
+
 ## TR-MCP-DESKTOP-001
 
 **Desktop Process Launcher** — `DesktopProcessLauncher` in `Native/` uses P/Invoke (`WTSQueryUserToken`, `DuplicateTokenEx`, `CreateProcessAsUser`) to launch processes on the interactive desktop from a LocalSystem service context. Two launch modes: `LaunchWithStdio` (redirected stdin/stdout/stderr pipes for Copilot CLI integration) and `LaunchVisible` (visible console window, no pipes). `ResolveCommandPathAsync` resolves WinGet shim paths via desktop PowerShell to find actual executable locations. Uses `CreateProcessAsUser` (not `CreateProcessWithTokenW`, which causes `STATUS_DLL_INIT_FAILED` under LocalSystem).
@@ -411,6 +495,11 @@ SQLite FTS5 full-text search support and hybrid ranking.
 
 **Workspace Notification Category Coverage** — The notification system SHALL support at minimum the categories: `todo`, `session_log`, `repo`, `context`, `tool_registry`, `tool_bucket`, `workspace`, `github`, `marker`, `agent`, and `requirements`.
 **Covered by:** `ChangeEventCategories` and all publishing call sites in mutation services/controllers
+
+## TR-MCP-FED-001
+
+**Hub Proxy Federation Contract** — Federation configuration SHALL include `Role`, `HubBaseUrl`, `ProxyId`, `EnrollmentToken`, queue settings, and sync settings while preserving existing target/route configuration. Durable storage SHALL track proxies, proxy-hosted workspaces, operations, outbox fanout rows, and conflicts across SQLite, PostgreSQL, and SQL Server providers. Hub endpoints SHALL support proxy enrollment, heartbeat, proxy/workspace inventory, operation intake, acknowledgement, queue status, conflicts, sync, and adapter coverage. LocalProxy routing SHALL forward MCP traffic to the hub with loop-protection and operation headers, while local infrastructure and federation diagnostic endpoints remain local. Mutating LocalProxy requests SHALL queue durably when the hub is unreachable and replay through the hub intake endpoint.
+**Covered by:** `FederationOptions`, `FederationRegistry`, `FederationHeaders`, `FederationTopologyService`, `FederationQueuedOperationReplayService`, `FederationController`, `McpDbContext`, `Federation*Entity`, provider migrations, `FederationMiddleware`, `FederationProxyService`
 
 ## TR-MCP-GH-001
 
@@ -524,6 +613,14 @@ Pluggable ingestors for repo/session/external/github/issues.
 ## TR-MCP-OPS-001
 
 Operational scripts for startup, health checks, packaging, config validation, and migration.
+
+## TR-MCP-PLAN-001
+
+**Safe session wrap-up and deploy sequencing** — Wrap-up plans must inventory dirty state across affected workspaces, preserve unrelated work, require Nuke or repo-supported deployment paths, and block publish or service updates until the intended slice is cleanly isolated and validated with zero failures and zero skips.
+
+## TR-MCP-PLUGIN-008
+
+**Codex requirements update command fallback parity** — The Codex plugin requirements fallback must pass updateFr, updateTr, and updateTest payloads to the REPL/client without dropping fields or invoking unsupported command aliases.
 
 ## TR-MCP-POL-001
 
@@ -736,7 +833,7 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 ## TR-MCP-REQ-004
 
-**Dual Wiki Workspace Renderer** — Requirements document generation SHALL support format=wiki with doc=all, writing both azure/ and github/ folders under docs/Project/wiki and returning workspace export metadata. Each platform folder SHALL include canonical requirements markdown documents, `Requirements-Matrix.md`, and `.mcp-requirements-manifest.json` with generatedAtUtc. Wiki Testing-Requirements.md output SHALL render grouped Markdown tables by TEST ID prefix. Azure Wiki output SHALL include `.order`; GitHub Wiki output SHALL include `_Sidebar.md` and `_Footer.md`. Status: Complete. Covered by `RequirementsWikiDocumentRenderer`, `RequirementsDocumentService`, `RequirementsDatabaseDocumentService`, `RequirementsController`, `RequirementsClient`, `RequirementsWorkflow`, `McpServerMcpTools`.
+**Dual Wiki Workspace Renderer** — Requirements document generation SHALL support format=wiki with doc=all, writing both azure/ and github/ folders under docs/Project/wiki and returning workspace export metadata. Each platform folder SHALL include canonical requirements markdown documents, `Requirements-Matrix.md`, and `.mcp-requirements-manifest.json` with generatedAtUtc. Azure Wiki output SHALL include `.order`; GitHub Wiki output SHALL include `_Sidebar.md` and `_Footer.md`. Status: Complete. Covered by `RequirementsWikiDocumentRenderer`, `RequirementsDocumentService`, `RequirementsDatabaseDocumentService`, `RequirementsController`, `RequirementsClient`, `RequirementsWorkflow`, `McpServerMcpTools`.
 
 ## TR-MCP-REQ-005
 
@@ -829,6 +926,10 @@ The `LegacyTodoSqliteMigrator` (TR-MCP-TODO-007) SHALL stamp imported rows with 
 
 **Covered by:** `TodoItemEntity`, `TodoAuditHistoryEntity`, `TodoDocumentMetadataEntity`, `McpDbContext` (query filters + composite keys), `EfTodoService`, `TodoBootstrapImporter`, `TodoServiceFactory.CreateForWorkspace`, per-provider migration assemblies
 
+## TR-MCP-TODO-009
+
+**Preserve TODO description Markdown** — TODO persistence, plugin/client update paths, database storage, audit rows, and informational projections must treat description as Markdown, preserving blank lines, indentation, code fences, list spacing, and trailing content without trimming meaningful formatting.
+
 ## TR-MCP-TPL-001
 
 **Prompt Template YAML Storage** — `PromptTemplateService` persists templates in a single YAML file (default `templates/prompt-templates.yaml`) using YamlDotNet with `HyphenatedNamingConvention`. Root structure: `templates:` → map of template-id → entry object (title, category, tags, description, engine, variables, content). Read/write serialization uses `SemaphoreSlim(1,1)` for write safety. Templates are loaded on-demand and not cached (file is source of truth).
@@ -869,6 +970,10 @@ The server SHALL provide a prompt resolution endpoint returning the populated pr
 **Status:** 🔴 Planned
 
 **Covered by:** `PromptTemplateController` *(planned extension)*, `PromptTemplateRenderer`, `AgentPoolController` *(planned)*
+
+## TR-MCP-TPL-007
+
+**Marker template requires actionable requirements-backed plans** — The default marker prompt must instruct every agent in every workspace to make plans decision-complete, capture FR/TR/TEST requirements, include explicit TDD unit-test expectations, and preserve Byrd gates so implementation agents can execute the plan directly.
 
 ## TR-MCP-TR-001
 
@@ -920,6 +1025,22 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 **Covered by:** `VoiceConversationService` *(planned extension)*, `AgentPoolStreamService` *(planned)*
 
+## TR-MCP-WEB-001
+
+**TR-MCP-WEB-001** — Placeholder requirement backfilled by DB-FK-001.
+
+## TR-MCP-WEB-002
+
+**TR-MCP-WEB-002** — Placeholder requirement backfilled by DB-FK-001.
+
+## TR-MCP-WEB-003
+
+**TR-MCP-WEB-003** — Placeholder requirement backfilled by DB-FK-001.
+
+## TR-MCP-WEB-004
+
+**TR-MCP-WEB-004** — Placeholder requirement backfilled by DB-FK-001.
+
 ## TR-MCP-WS-002
 
 **Workspace Service** — CRUD operations for workspace entities persisted in EF Core SQLite. Auto-port assignment starts at base 7147 and increments from the current maximum registered port. Init scaffolding creates the workspace directory, `docs/Project/TODO.yaml`, `docs/sessions/`, `docs/external/`, and `mcp.db`.
@@ -958,10 +1079,8 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 ## TR-PLANNED-013A
 
-`AddControllers().ConfigureApiBehaviorOptions` installs an `InvalidModelStateResponseFactory` that produces `application/problem+json` responses for body-binding failures on `/mcpserver/*` endpoints. The factory strips the action parameter name (`dto`, `body`, `turn`) from the `errors` keys, replacing them with `$` so callers see the canonical JSON root marker instead of a misleading wrapper field name. `SessionLogController.SubmitAsync` and `GetByIdAsync` use `ValidationProblem` for domain validation to keep the response shape uniform.
+`AddControllers().ConfigureApiBehaviorOptions` installs an `InvalidModelStateResponseFactory` that produces `application/problem+json` responses for body-binding failures on `/mcpserver/*` endpoints. The factory strips the action parameter name (`dto`, `body`, `turn`) from the `errors` keys, replacing them with `$` so callers see the canonical JSON root marker instead of a misleading wrapper field name. `SessionLogController.SubmitAsync` and `GetByIdAsync` use `ValidationProblem` for domain validation to keep the response shape uniform. `SessionLogService.UpsertTurnAsync` rejects terminal turn statuses when the turn lacks decision, action, and commit evidence so `SessionLogController.UpsertTurnAsync` returns a detailed ProblemDetails response for audit-empty closes.
 
-## TR-MCP-FED-001
+## TR-TEST-001
 
-**Hub Proxy Federation Contract** - Federation configuration SHALL include `Role`, `HubBaseUrl`, `ProxyId`, `EnrollmentToken`, queue settings, and sync settings while preserving existing target/route configuration. Durable storage SHALL track proxies, proxy-hosted workspaces, operations, outbox fanout rows, and conflicts across SQLite, PostgreSQL, and SQL Server providers. Hub endpoints SHALL support proxy enrollment, heartbeat, proxy/workspace inventory, operation intake, acknowledgement, queue status, conflicts, sync, and adapter coverage. LocalProxy routing SHALL forward MCP traffic to the hub with loop-protection and operation headers, while local infrastructure and federation diagnostic endpoints remain local. Mutating LocalProxy requests SHALL queue durably when the hub is unreachable and replay through the hub intake endpoint.
-
-**Covered by:** `FederationOptions`, `FederationRegistry`, `FederationHeaders`, `FederationTopologyService`, `FederationQueuedOperationReplayService`, `FederationController`, `McpDbContext`, `Federation*Entity`, provider migrations, `FederationMiddleware`, `FederationProxyService`
+**TR-TEST-001** — Placeholder requirement backfilled for TODO link TR-TEST-001.

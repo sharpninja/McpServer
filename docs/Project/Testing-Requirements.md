@@ -102,7 +102,7 @@
 - TEST-MCP-103: Given a Byrd execution TODO, when unit tests are not defined, then the service rejects transition to `Implementing`; when unit tests are defined through the test-plan API, then the TODO advances to `TestReady`.
 - TEST-MCP-104: Given a Byrd execution TODO linked to requirements, session turns, and modified files, when bounded execution context or checkpoint delta context is requested, then the server returns only concise snippets, recent turn summaries, relevant files, artifacts, commits, and updated next action for that TODO.
 - TEST-MCP-105: Given the Byrd execution REST controller, STDIO MCP tools, typed client, and `adb_step` surface, when representative phase creation, active TODO lookup, status progression, and screenshot validation calls are executed, then structured contracts remain stable and Android validation results are returned without arbitrary shell passthrough.
-- TEST-MCP-106: Given requirements export with doc=all and format=wiki, when generation runs, then docs/Project/wiki contains both azure/ and github/ folders, each manifest includes generatedAtUtc, Azure includes `.order`, GitHub includes `_Sidebar.md` and `_Footer.md`, and Testing-Requirements.md renders as grouped tables by TEST ID prefix.
+- TEST-MCP-106: Given requirements export with doc=all and format=wiki, when generation runs, then docs/Project/wiki contains both azure/ and github/ folders, each manifest includes generatedAtUtc, Azure includes `.order`, and GitHub includes `_Sidebar.md` and `_Footer.md`.
 - TEST-MCP-107: Given wiki ingest with Azure and GitHub document folders, when manifest and file modified timestamps identify a newer source, then import selects that source; when the two checks disagree, import fails unless preferredWikiFormat is supplied.
 - TEST-MCP-108: Given the REPL requirements workflow, when wiki export or import is invoked, then export returns format, docType, generatedAtUtc, outputRoot, and written file metadata, and import accepts path-keyed documents with per-document timestamps.
 - TEST-MCP-109: Given Codex, Claude Code, Copilot, and Cline agent plugins, when requirements wiki workflows are used, then each plugin exposes the wiki requirements contract and routes generate/ingest envelopes without expecting archive bytes.
@@ -114,43 +114,33 @@
 - TEST-MCP-115: Comment thread create / list / delete with depth-cap enforcement.
 - TEST-MCP-116: FAQ endpoint projection shape, ordering, deeplink format.
 - TEST-MCP-117: Search: created question/answer text is found via `IContextSearchService`; removed on delete.
-Source plan requirement: TEST-MCP-QA-008
 - TEST-MCP-118: Author resolution precedence (body > API key > JWT > anonymous-rejected).
-Source plan requirement: TEST-MCP-QA-009
 - TEST-MCP-119: Workspace isolation (mirror `EfTodoService_WorkspaceIsolationTests`).
-Source plan requirement: TEST-MCP-QA-010
 - TEST-MCP-120: MCP STDIO tool parity for each REST endpoint.
-Source plan requirement: TEST-MCP-QA-011
 - TEST-MCP-121: `QaClient` end-to-end against `CustomWebApplicationFactory`.
-Source plan requirement: TEST-MCP-QA-012
 - TEST-MCP-122: `QaWorkflow` unit tests in `tests/McpServer.Repl.Core.Tests` (NSubstitute over `QaClient`); REPL agent-stdio integration test in `tests/McpServer.Repl.IntegrationTests` that spawns the host with `ReplChildProcessHelper`, sends a `workflow.qa.*` YAML envelope, asserts the response shape.
-Source plan requirement: TEST-MCP-QA-013
 - TEST-MCP-123: PowerShell module Pester tests (if a `tools/powershell/tests/` pattern exists, otherwise smoke-script invoked from `./build.ps1 Test` or a new `ValidatePowerShell` target).
-Source plan requirement: TEST-MCP-QA-014
 - TEST-MCP-124: Skill smoke test: each new `qa/SKILL.md` is loaded by the plugin packager and its frontmatter passes the standard skill validation script in each plugin repo.
-Source plan requirement: TEST-MCP-QA-015
 - TEST-MCP-125: Audit emission tests: one audit row per mutation, correct `Action`, `Version` monotonic per `(EntityKind, EntityId)`, `Actor` populated via `IQaAuthorResolver`, `SnapshotJson` round-trips.
-Source plan requirement: TEST-MCP-QA-016
 - TEST-MCP-126: Audit query tests: paging contract, filter combinations, empty-result case, workspace isolation (audits from workspace A invisible to workspace B).
-Source plan requirement: TEST-MCP-QA-017
 - TEST-MCP-127: Vote audit: an `UPDATE ... SET VoteCount = VoteCount + @delta` plus an audit row are emitted in a single transaction (both succeed or both rollback). Audit row's `Actor` is populated from `IQaAuthorResolver`, so voter identity is captured per event.
-Source plan requirement: TEST-MCP-QA-018
 - TEST-MCP-128: Answer-with-sources: round-trip `CreateAnswerRequest.Sources` -> `AnswerEntity.SourcesJson` -> `AnswerDto.Sources`; FAQ projection includes the sources array; deletion of an answer hard-deletes the sources via the existing cascade.
-Source plan requirement: TEST-MCP-QA-019
 - TEST-MCP-129: Skill mandate text test: each sibling-plugin `skills/qa/SKILL.md` contains the exact mandatory rule block (regex match on the callout) and the `sources[]` schema example. Validation is a small PowerShell or `dotnet test` content-check (`tests/McpServer.Qa.Validation/SkillMandateTests.cs` or a `tools/plugin-skill-check.ps1` invoked from `./build.ps1 Test`).
-Source plan requirement: TEST-MCP-QA-020
 - TEST-MCP-130: Close / duplicate flow tests: close-with-reason, reopen, mark-as-duplicate (canonical link both ways), FAQ excludes closed by default, FAQ surfaces duplicate redirect when requested with `?includeClosed=true`, audit rows captured per transition.
-Source plan requirement: TEST-MCP-QA-021
 - TEST-MCP-131: Sanitization test corpus: XSS-payload corpus validates that every common attack vector is stripped on Question/Answer/Comment write; `bodyHtml` contains only allow-listed tags/attributes; raw `body` is preserved verbatim; round-trip Markdown -> HTML matches snapshot.
-Source plan requirement: TEST-MCP-QA-022
 - TEST-MCP-132: FAQ wiki page generation test: build target produces deterministic Markdown matching the snapshot fixture, wiki index files updated, generated page renders cleanly in both Azure DevOps and GitHub wiki conventions (e.g., `_Sidebar.md` / `.order` references present).
-Source plan requirement: TEST-MCP-QA-023
 - TEST-MCP-133: Voter-history endpoint: posting N votes from M distinct actors produces N audit rows; `GET /questions/{id}/voters` returns exactly those rows projected to `{ actor, action, createdAt }`; same for answers; workspace isolation enforced.
-Source plan requirement: TEST-MCP-QA-024
 - TEST-MCP-134: One-vote-per-user enforcement: same actor posts vote_up twice -> second call is no-op (no counter change, no second audit row); actor posts vote_up then vote_down -> counter delta is -2, audit row recorded with action `vote_change`; actor revokes vote -> counter delta is -1, audit row `vote_revoke`; unique index prevents duplicate `QaVoteEntity` rows under concurrent calls (test with parallel writes against in-memory SQLite using `Task.WhenAll`).
-Source plan requirement: TEST-MCP-QA-025
 - TEST-MCP-135: Current vote state endpoint: `GET /questions/{id}/votes` returns one row per active voter from `QaVoteEntity` after a sequence of apply / change / revoke calls; revoked voters do not appear; workspace isolation enforced.
-Source plan requirement: TEST-MCP-QA-026
+- TEST-MCP-136: Hub-and-spoke federation tests: config role defaults, durable proxy/workspace/operation storage, hub enrollment and status, LocalProxy `/mcp-transport` routing, operation headers, queued write fallback, replay candidate persistence, stale-version conflict creation, and provider migration compilation. **Covered by:** `FederationMiddlewareTests`, `FederationTopologyServiceTests`, `FederationProxyServiceTests`, `FederationEntityModelTests`
+- TEST-MCP-137: Given templates/prompt-templates.yaml, when the marker-template contract tests run, then default-marker-prompt contains the frontier-to-implementation planning guidance, explicit requirements capture guidance, and TDD unit-test planning guidance.
+- TEST-MCP-138: Unit tests must fail red until WorkspaceService is database-authoritative and DbForeignKeyContractTests prove every WorkspaceId entity has a Workspaces FK with non-cascade delete behavior.
+- TEST-MCP-139: Unit tests must fail red until persistent delete paths preserve rows through soft-delete metadata and every mutable entity writes DataAuditLog rows for create, update, and soft-delete operations.
+- TEST-MCP-140: Unit and provider tests must fail red until TODO requirement links and requirement traceability links enforce FKs, missing requirements are backfilled, and SQLite, SQL Server, and PostgreSQL migrations preserve data.
+- TEST-MCP-141: Add or update a documentation contract test proving docs/Development-Process-draft-v3.md captures the plan creation requirements for decision-complete frontier-model handoff plans, FR/TR/TEST traceability, TDD-first red/green behavior, and zero-failure zero-skip Byrd gates.
+- TEST-MCP-142: Bats coverage must prove workflow.requirements.updateFr, updateTr, and updateTest accept priority changes and do not fail inside the Codex plugin wrapper.
+- TEST-MCP-143: Validate that outstanding-session consolidation creates MCP-backed requirements and TODO traceability, inventories dirty workspaces, preserves unrelated changes, blocks unsafe deploys, and records zero-failure zero-skip validation gates before completion.
+- TEST-MCP-144: Given a TODO description containing Markdown headings, lists, code fences, blank lines, leading indentation, and trailing content, create, update, read, audit, and projection paths preserve the exact meaningful formatting with zero failures and zero skips.
 - TEST-MCP-REPL-001: ✅ **Complete** - Given a REPL host process, when a well-formed YAML command envelope is sent to stdin, then a YAML response envelope is emitted to stdout with `type: result` and the expected result payload. **Covered by:** `Iteration1_IntegrationTests`, `YamlFramingTests`, `YamlEnvelopeShapeTests`
 - TEST-MCP-REPL-002: ✅ **Complete** - Given a REPL host process, when malformed YAML is sent to stdin, then a structured error response is emitted with `type: error` and descriptive error details, without crashing the host process. **Covered by:** `FakeYamlSerializerTests`, `YamlFramingTests`
 - TEST-MCP-REPL-003: ✅ **Complete** - Given a REPL host with no bootstrap invocation, when an operational command is sent, then the response contains `type: error` and appropriate error code. **Covered by:** `ProtocolHandshakeTests`, `TrustBootstrapFlowTests`
@@ -182,4 +172,4 @@ Source plan requirement: TEST-MCP-QA-026
 - TEST-SUPPORT-010C-1: Given a successful POST to `/mcpserver/sessionlog`, when `GET /mcpserver/sessionlog/{agent}/{sessionId}` is called under the same workspace context, then the response is 200 OK with the round-tripped session. **Covered by:** `SessionLogControllerTests.WhenPostingThenGetBySessionIdReturnsRecord`
 - TEST-SUPPORT-010C-2: Given a session exists, when `POST /mcpserver/sessionlog/{agent}/{sessionId}/turn` carries a `UnifiedRequestEntryDto`, then 201 is returned and the subsequent GET shows the appended turn. **Covered by:** `SessionLogControllerTests.WhenPostingTurnViaRestThenTurnIsRetrievable`, `SessionLogServiceTests.UpsertTurnAsync_NewTurn_AppendsWithoutDeletingSiblings`
 - TEST-SUPPORT-010C-3: Given the turn-append route, when PUT is used instead of POST, then 405 is returned with `Allow: POST`. **Covered by:** `SessionLogControllerTests.WhenPuttingTurnRouteThenReturns405WithAllowHeader`
-- TEST-MCP-136: Hub-and-spoke federation tests: config role defaults, durable proxy/workspace/operation storage, hub enrollment and status, LocalProxy `/mcp-transport` routing, operation headers, queued write fallback, replay candidate persistence, stale-version conflict creation, and provider migration compilation. **Covered by:** `FederationMiddlewareTests`, `FederationTopologyServiceTests`, `FederationProxyServiceTests`, `FederationEntityModelTests`
+- TEST-SUPPORT-010C-4: Given a session exists, when `POST /mcpserver/sessionlog/{agent}/{sessionId}/turn` attempts to close a turn with no decision, action, or commit items, then the response is 400 ProblemDetails and states that compliance with session logging requirements is not optional. **Covered by:** `SessionLogControllerTests.WhenClosingTurnWithoutComplianceItemsThenReturns400`, `SessionLogServiceTests.UpsertTurnAsync_ClosingTurnWithoutDecisionActionOrCommit_ThrowsArgumentException`

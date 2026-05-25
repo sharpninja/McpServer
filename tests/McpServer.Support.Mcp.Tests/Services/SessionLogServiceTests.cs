@@ -665,7 +665,17 @@ public sealed class SessionLogServiceTests : IDisposable
             RequestId = "req-20260516T120000Z-second",
             Timestamp = "2026-05-16T12:00:00Z",
             QueryText = "second turn",
-            Status = "completed"
+            Status = "completed",
+            Actions =
+            [
+                new UnifiedActionDto
+                {
+                    Description = "Recorded service turn append",
+                    Type = "session_turn",
+                    Status = "completed",
+                    FilePath = "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs"
+                }
+            ]
         };
 
         var turnId = await sut.UpsertTurnAsync("Cursor", sessionId, newTurn).ConfigureAwait(true);
@@ -699,7 +709,11 @@ public sealed class SessionLogServiceTests : IDisposable
             Timestamp = "2026-02-11T10:01:00Z",
             QueryText = "updated query",
             Response = "updated response",
-            Status = "completed"
+            Status = "completed",
+            DesignDecisions =
+            [
+                "Keep UpsertTurnAsync focused on updating the addressed turn in place."
+            ]
         };
 
         await sut.UpsertTurnAsync("Cursor", sessionId, updatedTurn).ConfigureAwait(true);
@@ -710,6 +724,33 @@ public sealed class SessionLogServiceTests : IDisposable
             .ConfigureAwait(true);
         Assert.Equal("updated query", turn.QueryText);
         Assert.Equal("updated response", turn.Response);
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010C: <c>UpsertTurnAsync</c> rejects terminal turn states when the
+    /// submitted turn has no decision, action, or commit evidence.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAsync_ClosingTurnWithoutDecisionActionOrCommit_ThrowsArgumentException()
+    {
+        var sut = BuildSutWithWorkspaceContext(WorkspacePath);
+        var sessionId = BuildSessionId("Cursor", "turn-close-validation");
+        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId)).ConfigureAwait(true);
+
+        var turn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260516T120100Z-no-evidence",
+            Timestamp = "2026-05-16T12:01:00Z",
+            QueryText = "terminal turn without audit evidence",
+            Status = "completed"
+        };
+
+        var ex = await Assert.ThrowsAsync<ArgumentException>(
+            () => sut.UpsertTurnAsync("Cursor", sessionId, turn))
+            .ConfigureAwait(true);
+
+        Assert.Contains("no decision, action, or commit items", ex.Message, StringComparison.Ordinal);
+        Assert.Contains("Compliance with Session Logging Requirements is not optional.", ex.Message, StringComparison.Ordinal);
     }
 
     /// <summary>

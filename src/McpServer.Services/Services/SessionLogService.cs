@@ -17,6 +17,8 @@ namespace McpServer.Support.Mcp.Services;
 public sealed class SessionLogService : ISessionLogService
 {
     private const int MaxLimit = 1000;
+    private const string SessionTurnComplianceError =
+        "Compliance with Session Logging Requirements is not optional.";
 
     private readonly McpDbContext _db;
     private readonly IChangeEventBus? _eventBus;
@@ -364,6 +366,8 @@ public sealed class SessionLogService : ISessionLogService
         var session = await FindExistingSessionAsync(sourceType, sessionId, cancellationToken).ConfigureAwait(false)
             ?? throw new InvalidOperationException($"Session not found: {sourceType}/{sessionId}");
 
+        ValidateTerminalTurnCompliance(turn);
+
         var existingTurn = session.Turns.FirstOrDefault(t => t.RequestId == turn.RequestId);
         SessionLogTurnEntity persistedTurn;
 
@@ -401,6 +405,33 @@ public sealed class SessionLogService : ISessionLogService
 
         return persistedTurn.Id;
     }
+
+    private static void ValidateTerminalTurnCompliance(UnifiedRequestEntryDto turn)
+    {
+        if (!IsTerminalTurnStatus(turn.Status))
+            return;
+
+        var decisionCount = (turn.DesignDecisions?.Count(static value => !string.IsNullOrWhiteSpace(value)) ?? 0)
+            + (turn.ProcessingDialog?.Count(static item =>
+                string.Equals(item.Category, "decision", StringComparison.OrdinalIgnoreCase)) ?? 0);
+        var actionCount = turn.Actions?.Count ?? 0;
+        var commitCount = turn.Commits?.Count ?? 0;
+
+        if (decisionCount > 0 || actionCount > 0 || commitCount > 0)
+            return;
+
+        throw new ArgumentException(
+            $"Cannot close session turn '{turn.RequestId}' with status '{turn.Status}' because the payload contains no decision, action, or commit items. {SessionTurnComplianceError} Add at least one design decision, session action, or commit entry before retrying.",
+            nameof(turn));
+    }
+
+    private static bool IsTerminalTurnStatus(string? status) =>
+        status is not null
+        && (string.Equals(status, "completed", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(status, "failed", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(status, "closed", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(status, "cancelled", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(status, "canceled", StringComparison.OrdinalIgnoreCase));
 
     private static string BuildSearchText(SessionLogTurnEntity turn)
         => string.Join(

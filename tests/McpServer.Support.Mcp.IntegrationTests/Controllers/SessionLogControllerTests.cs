@@ -265,7 +265,17 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
             RequestId = "req-20260516T120000Z-via-rest",
             Timestamp = "2026-05-16T12:00:00Z",
             QueryText = "appended turn",
-            Status = "completed"
+            Status = "completed",
+            Actions =
+            [
+                new UnifiedActionDto
+                {
+                    Description = "Recorded REST turn append",
+                    Type = "session_turn",
+                    Status = "completed",
+                    FilePath = "tests/McpServer.Support.Mcp.IntegrationTests/Controllers/SessionLogControllerTests.cs"
+                }
+            ]
         };
 
         var response = await _client.PostAsJsonAsync(
@@ -279,6 +289,36 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         Assert.NotNull(fetched);
         Assert.NotNull(fetched!.Turns);
         Assert.Contains(fetched.Turns!, t => t.RequestId == "req-20260516T120000Z-via-rest");
+    }
+
+    /// <summary>
+    /// FR-SUPPORT-010C: Closing a turn through the REST turn endpoint requires at
+    /// least one decision, action, or commit item so audit-empty completions are rejected.
+    /// </summary>
+    [Fact]
+    public async Task WhenClosingTurnWithoutComplianceItemsThenReturns400()
+    {
+        var sessionId = BuildSessionId("Cursor", $"turn-close-validation-{Guid.NewGuid():N}");
+        var dto = CreateTestDto("Cursor", sessionId);
+        await _client.PostAsJsonAsync(new Uri("/mcpserver/sessionlog", UriKind.Relative), dto).ConfigureAwait(true);
+
+        var emptyClose = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260516T120100Z-empty-close",
+            Timestamp = "2026-05-16T12:01:00Z",
+            QueryText = "close without compliance items",
+            Status = "completed"
+        };
+
+        var response = await _client.PostAsJsonAsync(
+            new Uri($"/mcpserver/sessionlog/Cursor/{sessionId}/turn", UriKind.Relative), emptyClose)
+            .ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
+        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+        Assert.Contains("no decision, action, or commit items", body, StringComparison.Ordinal);
+        Assert.Contains("Compliance with Session Logging Requirements is not optional.", body, StringComparison.Ordinal);
     }
 
     /// <summary>

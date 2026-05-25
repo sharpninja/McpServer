@@ -246,26 +246,6 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-107 | ✅ Complete | RequirementsControllerTests |
 | TEST-MCP-108 | ✅ Complete | RequirementsWorkflow, ReplCommandDispatcher, mcpserver-codex-plugin tests/repl-invoke-shim.bats |
 | TEST-MCP-109 | ✅ Complete | mcpserver-codex-plugin tests/repl-invoke-shim.bats, Claude Code skills.bats, Copilot requirements skill, Cline requirements.test.ts |
-
----
-
-## Requirements Freeze Tag: REPL v1.0 Delivery
-
-**Date:** 2025-01-04
-**Freeze Tag:** `REPL-v1.0-FREEZE`
-**Status:** ✅ **Requirements Frozen for REPL v1.0 Delivery**
-
-All REPL iteration 1-6 requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005, TR-MCP-REPL-001 through TR-MCP-REPL-007, TEST-MCP-REPL-001 through TEST-MCP-REPL-020) are complete with:
-- Full source code traceability comments in all `McpServer.Repl.Core` and `McpServer.Repl.Host` files
-- All unit tests passing (iterations 1-6)
-- All integration tests passing
-- Complete YAML protocol implementation
-- Trust bootstrap and auth rotation support
-- Workflow command parity with REST endpoints
-- DI-integrated architecture
-- Comprehensive test coverage
-
-**Reconciliation:** All requirement defects discovered during TDD have been reconciled back into the canonical requirements documents. No outstanding defects or gaps remain for REPL v1.0.
 | FR-MCP-078 | ✅ Complete | GraphRagController, GraphRagAdHocService, McpServer.GraphRag |
 | FR-MCP-079 | ✅ Complete | GraphRagController, GraphRagAdHocService |
 | FR-MCP-080 | ✅ Complete | GraphRagController, GraphRagAdHocService |
@@ -426,3 +406,81 @@ All REPL iteration 1-6 requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005, TR
 | FR-MCP-103 | 🟡 Partial | Hub-and-spoke federation |
 | TR-MCP-FED-001 | 🟡 Partial | Hub proxy federation contract |
 | TEST-MCP-136 | 🟡 Partial | Hub-and-spoke federation tests |
+| FR-01 | Tracked | Functional-Requirements.md |
+| FR-02 | Tracked | Functional-Requirements.md |
+| FR-03 | Tracked | Functional-Requirements.md |
+| FR-04 | Tracked | Functional-Requirements.md |
+| FR-05 | Tracked | Functional-Requirements.md |
+| FR-06 | Tracked | Functional-Requirements.md |
+| FR-07 | Tracked | Functional-Requirements.md |
+| FR-08 | Tracked | Functional-Requirements.md |
+| FR-09 | Tracked | Functional-Requirements.md |
+| FR-10 | Tracked | Functional-Requirements.md |
+| FR-MCP-104 | Tracked | Functional-Requirements.md |
+| FR-MCP-105 | Tracked | Functional-Requirements.md |
+| FR-MCP-106 | Tracked | Functional-Requirements.md |
+| FR-MCP-107 | Tracked | Functional-Requirements.md |
+| FR-MCP-108 | Tracked | Functional-Requirements.md |
+| FR-WFL-001 | Tracked | Functional-Requirements.md |
+| TR-01 | Tracked | Technical-Requirements.md |
+| TR-02 | Tracked | Technical-Requirements.md |
+| TR-03 | Tracked | Technical-Requirements.md |
+| TR-04 | Tracked | Technical-Requirements.md |
+| TR-05 | Tracked | Technical-Requirements.md |
+| TR-06 | Tracked | Technical-Requirements.md |
+| TR-07 | Tracked | Technical-Requirements.md |
+| TR-08 | Tracked | Technical-Requirements.md |
+| TR-09 | Tracked | Technical-Requirements.md |
+| TR-10 | Tracked | Technical-Requirements.md |
+| TR-11 | Tracked | Technical-Requirements.md |
+| TR-12 | Tracked | Technical-Requirements.md |
+| TR-13 | Tracked | Technical-Requirements.md |
+| TR-14 | Tracked | Technical-Requirements.md |
+| TR-MCP-BYRD-005 | Tracked | Technical-Requirements.md |
+| TR-MCP-DB-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-DB-002 | Tracked | Technical-Requirements.md |
+| TR-MCP-DB-003 | Tracked | Technical-Requirements.md |
+| TR-MCP-DB-004 | Tracked | Technical-Requirements.md |
+| TR-MCP-DB-005 | Tracked | Technical-Requirements.md |
+| TR-MCP-PLAN-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-PLUGIN-008 | Tracked | Technical-Requirements.md |
+| TR-MCP-TODO-009 | Tracked | Technical-Requirements.md |
+| TR-MCP-TPL-007 | Tracked | Technical-Requirements.md |
+| TR-MCP-WEB-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-WEB-002 | Tracked | Technical-Requirements.md |
+| TR-MCP-WEB-003 | Tracked | Technical-Requirements.md |
+| TR-MCP-WEB-004 | Tracked | Technical-Requirements.md |
+| TR-TEST-INTEG-001 | Tracked | Technical-Requirements.md |
+| TR-WFL-FULL-001 | Tracked | Technical-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-001 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-002 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-003 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-004 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-005 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-006 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-007 | Tracked | Testing-Requirements.md |
+| TEST-MCP-137 | Tracked | Testing-Requirements.md |
+| TEST-MCP-138 | Tracked | Testing-Requirements.md |
+| TEST-MCP-139 | Tracked | Testing-Requirements.md |
+| TEST-MCP-140 | Tracked | Testing-Requirements.md |
+| TEST-MCP-141 | Tracked | Testing-Requirements.md |
+| TEST-MCP-142 | Tracked | Testing-Requirements.md |
+| TEST-MCP-143 | Tracked | Testing-Requirements.md |
+| TEST-MCP-144 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-007-1 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-007-2 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-007-3 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-007-4 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010A-1 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010A-2 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010B-1 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010B-2 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010C-1 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010C-2 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010C-3 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010C-4 | ✅ Complete | SessionLogControllerTests, SessionLogServiceTests |
+| TEST-WFL-001 | Tracked | Testing-Requirements.md |
+| FR-GEN-001 | Tracked | Functional-Requirements.md |
+| FR-TEST-002 | Tracked | Functional-Requirements.md |
+| TR-GEN-YAML-001 | Tracked | Technical-Requirements.md |
+| TR-TEST-001 | Tracked | Technical-Requirements.md |
