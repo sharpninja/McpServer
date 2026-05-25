@@ -170,6 +170,89 @@ public sealed class SessionLogServiceTests : IDisposable
         Assert.All(result.Items, item => Assert.Equal("Cursor", item.SourceType));
     }
 
+    /// <summary>
+    /// Regression: a missing agent filter must not restrict history to marker-defined
+    /// source types; mixed Codex, Cursor, Cline, and McpAgent sessions are all in scope.
+    /// </summary>
+    [Fact]
+    public async Task QueryAsync_WithoutAgent_ReturnsMixedSourceSessionsForWorkspace()
+    {
+        await _sut.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "mixed-codex"))).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "mixed-cursor"))).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Cline", BuildSessionId("Cline", "mixed-cline"))).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("McpAgent", BuildSessionId("McpAgent", "mixed-mcpagent"))).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Limit = 10 }).ConfigureAwait(true);
+
+        Assert.Equal(4, result.TotalCount);
+        Assert.Contains(result.Items, item => item.SourceType == "Codex");
+        Assert.Contains(result.Items, item => item.SourceType == "Cursor");
+        Assert.Contains(result.Items, item => item.SourceType == "Cline");
+        Assert.Contains(result.Items, item => item.SourceType == "McpAgent");
+    }
+
+    /// <summary>
+    /// Regression: an explicit agent filter remains active after enabling unfiltered
+    /// mixed-source history queries.
+    /// </summary>
+    [Fact]
+    public async Task QueryAsync_WithAgent_ReturnsOnlyMatchingSourceType()
+    {
+        await _sut.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "agent-codex"))).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "agent-cursor"))).ConfigureAwait(true);
+        await _sut.SubmitAsync(CreateTestDto("McpAgent", BuildSessionId("McpAgent", "agent-mcpagent"))).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Agent = "McpAgent" }).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal("McpAgent", item.SourceType);
+    }
+
+    /// <summary>
+    /// Regression: workspace query filters must prevent session history from
+    /// leaking rows that belong to another registered workspace.
+    /// </summary>
+    [Fact]
+    public async Task QueryAsync_DoesNotReturnSessionsFromOtherWorkspaces()
+    {
+        var primary = BuildSutWithWorkspaceContext(WorkspacePath);
+        await primary.SubmitAsync(CreateTestDto("Codex", BuildSessionId("Codex", "primary-workspace"))).ConfigureAwait(true);
+
+        var otherWorkspacePath = @"E:\tests\sessionlog-service-other";
+        var other = BuildSutWithWorkspaceContext(otherWorkspacePath);
+        await other.SubmitAsync(CreateTestDto("Cursor", BuildSessionId("Cursor", "other-workspace"))).ConfigureAwait(true);
+
+        var querySut = BuildSutWithWorkspaceContext(WorkspacePath);
+        var result = await querySut.QueryAsync(new SessionLogQueryRequest { Limit = 10 }).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal("Codex", item.SourceType);
+        Assert.DoesNotContain(result.Items, session => session.SessionId == BuildSessionId("Cursor", "other-workspace"));
+    }
+
+    /// <summary>
+    /// Regression: recent history should be ordered by last update time, not only
+    /// by when the session was originally started.
+    /// </summary>
+    [Fact]
+    public async Task QueryAsync_OrdersByLastUpdatedForRecentActivity()
+    {
+        var olderStartedRecent = CreateTestDto("Cursor", BuildSessionId("Cursor", "older-start-recent-update"));
+        olderStartedRecent.Started = "2026-03-01T00:00:00Z";
+        olderStartedRecent.LastUpdated = "2026-05-24T23:16:08Z";
+        await _sut.SubmitAsync(olderStartedRecent).ConfigureAwait(true);
+
+        var newerStartedStale = CreateTestDto("Codex", BuildSessionId("Codex", "newer-start-stale-update"));
+        newerStartedStale.Started = "2026-05-01T00:00:00Z";
+        newerStartedStale.LastUpdated = "2026-05-01T00:10:00Z";
+        await _sut.SubmitAsync(newerStartedStale).ConfigureAwait(true);
+
+        var result = await _sut.QueryAsync(new SessionLogQueryRequest { Limit = 1 }).ConfigureAwait(true);
+
+        var item = Assert.Single(result.Items);
+        Assert.Equal(BuildSessionId("Cursor", "older-start-recent-update"), item.SessionId);
+    }
+
     [Fact]
     public async Task WhenQueryingByDateRangeThenOnlyMatchingSessionsAreReturned()
     {
