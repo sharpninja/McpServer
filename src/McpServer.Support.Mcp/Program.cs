@@ -108,17 +108,6 @@ var instanceName = McpInstanceResolver.GetRequestedInstanceName(args);
 McpInstanceResolver.ValidateInstances(builder.Configuration);
 McpInstanceResolver.ValidateTodoStorage(builder.Configuration, instanceName);
 
-WorkspaceConfigEntry? primaryWorkspaceEntry = null;
-{
-    var workspaces = builder.Configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
-    primaryWorkspaceEntry = workspaces
-        .Where(w => w.IsPrimary && w.IsEnabled)
-        .FirstOrDefault();
-    primaryWorkspaceEntry ??= workspaces
-        .Where(w => w.IsEnabled)
-        .FirstOrDefault();
-
-}
 
 builder.Host.UseSerilog((context, _, config) =>
 {
@@ -302,13 +291,6 @@ builder.Services.AddSingleton<IAgentBranchStrategy, WorktreeAgentBranchStrategy>
 builder.Services.AddSingleton<AgentBranchStrategyResolver>();
 builder.Services.AddHostedService<AgentHealthMonitorService>();
 builder.Services.AddSingleton<IGitHubWorkspaceTokenStore, FileGitHubWorkspaceTokenStore>();
-builder.Services.Configure<ProcessRunnerOptions>(options =>
-{
-    if (primaryWorkspaceEntry is not null)
-    {
-        options.GitHubToken = primaryWorkspaceEntry.GitHubToken;
-    }
-});
 builder.Services.AddSingleton<IEmbeddingService, EmbeddingService>();
 builder.Services.AddSingleton<IVectorIndexService, VectorIndexService>();
 builder.Services.AddScoped<RepoIngestor>();
@@ -344,19 +326,22 @@ builder.Services.AddSingleton<IPromptTemplateService, PromptTemplateService>();
 builder.Services.AddSingleton<IMarkerPromptProvider, FileMarkerPromptProvider>();
 builder.Services.AddSingleton<ITodoPromptProvider, TodoPromptProvider>();
 builder.Services.AddSingleton<PairingHtmlRenderer>();
-builder.Services.Configure<TodoPromptOptions>(options =>
-{
-    if (primaryWorkspaceEntry is not null)
+builder.Services.AddOptions<TodoPromptOptions>()
+    .Configure<IWorkspaceService>((options, svc) =>
     {
-        options.StatusPrompt = string.IsNullOrWhiteSpace(primaryWorkspaceEntry.StatusPrompt) ? null : primaryWorkspaceEntry.StatusPrompt;
-        options.ImplementPrompt = string.IsNullOrWhiteSpace(primaryWorkspaceEntry.ImplementPrompt) ? null : primaryWorkspaceEntry.ImplementPrompt;
-        options.PlanPrompt = string.IsNullOrWhiteSpace(primaryWorkspaceEntry.PlanPrompt) ? null : primaryWorkspaceEntry.PlanPrompt;
-        options.BaseUrl = $"http://{System.Net.Dns.GetHostName()}:{listenPort}";
-        options.RunAs = primaryWorkspaceEntry.RunAs;
-        options.GitHubToken = primaryWorkspaceEntry.GitHubToken;
-        options.AgentPath = primaryWorkspaceEntry.AgentPath;
-    }
-});
+        var items = svc.ListAsync().GetAwaiter().GetResult().Items;
+        var primary = items.FirstOrDefault(w => w.IsPrimary && w.IsEnabled)
+                   ?? items.FirstOrDefault(w => w.IsEnabled);
+        if (primary is not null)
+        {
+            options.StatusPrompt = string.IsNullOrWhiteSpace(primary.StatusPrompt) ? null : primary.StatusPrompt;
+            options.ImplementPrompt = string.IsNullOrWhiteSpace(primary.ImplementPrompt) ? null : primary.ImplementPrompt;
+            options.PlanPrompt = string.IsNullOrWhiteSpace(primary.PlanPrompt) ? null : primary.PlanPrompt;
+            options.BaseUrl = $"http://{System.Net.Dns.GetHostName()}:{listenPort}";
+            options.RunAs = primary.RunAs;
+            options.AgentPath = primary.AgentPath;
+        }
+    });
 builder.Services.AddSingleton<IProcessSpawner, DesktopProcessSpawner>();
 builder.Services.AddCopilotClient();
 builder.Services.RemoveAll<ICopilotClient>();
@@ -671,7 +656,7 @@ if (!app.Environment.IsEnvironment("Test"))
 }
 
 {
-    var apiKeyWorkspacePath = ResolvePrimaryApiKeyWorkspacePath(app.Configuration, app.Environment, instanceName);
+    var apiKeyWorkspacePath = ResolvePrimaryApiKeyWorkspacePath(app.Configuration, app.Environment, instanceName, app.Services);
     if (!string.IsNullOrWhiteSpace(apiKeyWorkspacePath))
     {
         var tokenService = app.Services.GetRequiredService<WorkspaceTokenService>();
@@ -714,12 +699,16 @@ app.MapGet("/server-startup-utc", (ServerRuntimeInfo runtimeInfo) =>
     MarkerDiagnosticsEndpointHelper.GetServerStartupResult(runtimeInfo))
     .ExcludeFromDescription();
 
-app.MapGet("/marker-file-timestamp", (string? repoPath, IConfiguration configuration) =>
-    MarkerDiagnosticsEndpointHelper.GetMarkerFileTimestampResult(
+app.MapGet("/marker-file-timestamp", async (string? repoPath, IConfiguration configuration, IWorkspaceService workspaceSvc) =>
+{
+    var workspacePaths = (await workspaceSvc.ListAsync()).Items.Select(w => w.WorkspacePath);
+    return MarkerDiagnosticsEndpointHelper.GetMarkerFileTimestampResult(
         repoPath,
         configuration,
         app.Environment.ContentRootPath,
-        restrictToCurrentRepoRoot: false))
+        workspacePaths,
+        restrictToCurrentRepoRoot: false);
+})
     .ExcludeFromDescription();
 
 app.MapGet("/api-key", (HttpContext context, WorkspaceTokenService tokenService, ApiKeyIssuanceGuard apiKeyIssuanceGuard) =>
@@ -735,7 +724,7 @@ app.MapGet("/api-key", (HttpContext context, WorkspaceTokenService tokenService,
     context.Response.Headers.CacheControl = "no-store, no-cache";
     context.Response.Headers.Pragma = "no-cache";
 
-    var workspacePath = ResolvePrimaryApiKeyWorkspacePath(app.Configuration, app.Environment, instanceName) ?? string.Empty;
+    var workspacePath = ResolvePrimaryApiKeyWorkspacePath(app.Configuration, app.Environment, instanceName, app.Services) ?? string.Empty;
     if (string.IsNullOrWhiteSpace(workspacePath))
         return Results.Problem("No workspace configured.", statusCode: 503);
 
@@ -1012,23 +1001,25 @@ static bool HasAnyRole(ClaimsPrincipal user, params string[] requiredRoles)
     return false;
 }
 
-static string? ResolvePrimaryApiKeyWorkspacePath(IConfiguration configuration, IHostEnvironment environment, string? instanceName)
+static string? ResolvePrimaryApiKeyWorkspacePath(IConfiguration configuration, IHostEnvironment environment, string? instanceName, IServiceProvider? services = null)
 {
     var effectiveRepoRoot = McpInstanceResolver.GetEffectiveMcpValue(configuration, instanceName, "RepoRoot");
     if (!string.IsNullOrWhiteSpace(effectiveRepoRoot))
         return NormalizeWorkspacePathForToken(effectiveRepoRoot, environment.ContentRootPath);
 
-    var workspaces = configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
-    var primary = workspaces
-        .Where(w => w.IsPrimary && w.IsEnabled)
-        .FirstOrDefault();
-    primary ??= workspaces
-        .Where(w => w.IsEnabled)
-        .FirstOrDefault();
+    if (services is not null)
+    {
+        using var scope = services.CreateScope();
+        var svc = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
+        var items = svc.ListAsync().GetAwaiter().GetResult().Items;
+        var primary = items.FirstOrDefault(w => w.IsPrimary && w.IsEnabled)
+                   ?? items.FirstOrDefault(w => w.IsEnabled);
+        return string.IsNullOrWhiteSpace(primary?.WorkspacePath)
+            ? null
+            : NormalizeWorkspacePathForToken(primary.WorkspacePath, environment.ContentRootPath);
+    }
 
-    return string.IsNullOrWhiteSpace(primary?.WorkspacePath)
-        ? null
-        : NormalizeWorkspacePathForToken(primary.WorkspacePath, environment.ContentRootPath);
+    return null;
 }
 
 static string NormalizeWorkspacePathForToken(string workspacePath, string contentRootPath)

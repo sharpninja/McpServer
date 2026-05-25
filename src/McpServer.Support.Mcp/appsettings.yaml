@@ -24,28 +24,28 @@ VectorIndex:
 Mcp:
   Database:
     Provider: sqlite
-    MigrationsAssembly: ''
+    MigrationsAssembly: ""
     Sqlite:
       DataSource: mcp.db
     PostgreSql:
-      ConnectionString: ''
+      ConnectionString: ""
     SqlServer:
-      ConnectionString: ''
+      ConnectionString: ""
     Encryption:
       Enabled: false
       Sqlite:
-        Key: ''
-        SeeToolPath: ''
+        Key: ""
+        SeeToolPath: ""
       PostgreSql:
-        KeyProvider: ''
-        PrincipalKey: ''
+        KeyProvider: ""
+        PrincipalKey: ""
       SqlServer:
-        CertificateName: ''
-        DatabaseEncryptionKeyName: ''
+        CertificateName: ""
+        DatabaseEncryptionKeyName: ""
   DatabaseProvider: sqlite
-  PostgresConnectionString: ''
-  SqlServerConnectionString: ''
-  DatabaseMigrationsAssembly: ''
+  PostgresConnectionString: ""
+  SqlServerConnectionString: ""
+  DatabaseMigrationsAssembly: ""
   Port: 7147
   DataSource: mcp.db
   DataDirectory: .
@@ -71,7 +71,7 @@ Mcp:
   - src/McpServer.Cqrs.Mvvm/**/*.cs
   DesktopLaunch:
     Enabled: false
-    AccessToken: ''
+    AccessToken: ""
     AllowedExecutables: []
   GraphRag:
     Enabled: true
@@ -113,29 +113,29 @@ Mcp:
       Branch: main
       ManifestPath: /
   Tunnel:
-    Provider: ''
+    Provider: ""
     Port: 7147
     Ngrok:
       Enabled: false
-      Subdomain: ''
-      AuthToken: ''
+      Subdomain: ""
+      AuthToken: ""
       Region: us
     Cloudflare:
       Enabled: false
-      TunnelName: ''
-      Hostname: ''
+      TunnelName: ""
+      Hostname: ""
     Frp:
       ServerAddress: 127.0.0.1
       ServerPort: 7000
   Federation:
     Enabled: false
     Role: Standalone
-    HubBaseUrl: ''
-    HubAccessToken: ''
-    ProxyId: ''
-    EnrollmentToken: ''
+    HubBaseUrl: ""
+    HubAccessToken: ""
+    ProxyId: ""
+    EnrollmentToken: ""
     MaxHops: 3
-    DefaultTarget: ''
+    DefaultTarget: ""
     Targets: []
     WorkspaceRoutes: []
     Queue:
@@ -148,27 +148,27 @@ Mcp:
       FanoutIntervalSeconds: 15
     Signing:
       Enabled: true
-      SharedSecret: ''
+      SharedSecret: ""
       EnvelopeTtlSeconds: 300
     LocalExecution:
       Enabled: false
       AllowedMethods:
       - desktop_launch
   InteractionLogging:
-    LoggingServiceUrl: ''
+    LoggingServiceUrl: ""
     QueueCapacity: 1000
     IncludeQueryString: false
   Parseable:
     Enabled: false
-    Url: ''
+    Url: ""
     StreamName: mcp
-    Username: ''
-    Password: ''
+    Username: ""
+    Password: ""
     FallbackLogPath: logs/mcp-.log
   IdentityServer:
     Enabled: false
-    IssuerUri: ''
-    ConnectionString: ''
+    IssuerUri: ""
+    ConnectionString: ""
     DatabaseName: McpIdentity
     SeedDefaults: true
     DefaultAdminUser: admin
@@ -176,206 +176,4 @@ Mcp:
     ApiScopeName: mcp-api
     ApiResourceName: mcp-server-api
   PairingUsers: []
-  Workspaces:
-  - WorkspacePath: F:\GitHub\McpServer\src\McpServer.Support.Mcp
-    Name: McpServer.Support.Mcp
-    TodoPath: docs/Project/TODO.yaml
-    IsPrimary: true
-    IsEnabled: true
-    DateTimeCreated: &o0
-      DateTime: 0001-01-01T00:00:00.0000000
-      UtcDateTime: 0001-01-01T00:00:00.0000000Z
-      LocalDateTime: 0001-01-01T00:00:00.0000000-06:00
-      Date: 0001-01-01T00:00:00.0000000
-      Day: 1
-      DayOfWeek: Monday
-      DayOfYear: 1
-      Hour: 0
-      Millisecond: 0
-      Microsecond: 0
-      Nanosecond: 0
-      Minute: 0
-      Month: 1
-      Offset: 00:00:00
-      TotalOffsetMinutes: 0
-      Second: 0
-      Ticks: 0
-      UtcTicks: 0
-      TimeOfDay: 00:00:00
-      Year: 1
-    DateTimeModified: *o0
-  - WorkspacePath: E:\github\McpServer
-    Name: McpServer
-    TodoPath: docs/Project/TODO.yaml
-    IsPrimary: true
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Users\kingd\AppData\Local\Temp\ws_policy_080c19bf5114467f8875a03f829d1db6
-    Name: ws_policy_080c19bf5114467f8875a03f829d1db6
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Users\kingd\AppData\Local\Temp\ws_policy_c43d29c948994fe3a042c0cae69bf917
-    Name: ws_policy_c43d29c948994fe3a042c0cae69bf917
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Temp\McpAuditTest_bd910e5e1a1e484b9d20c23e03d9ae8d
-    Name: AuditStartTest
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Temp\McpAuditTest_60fc3556a8d1457c83d63e007182c2c0
-    Name: AuditStartTest
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Temp\McpAuditTest_26cd2044c01d44dab2093d92ae35157e
-    Name: AuditStartTest
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Temp\McpAuditTest_49bdd68c5a3d4d14b0b5b073b8c2ddc9
-    Name: AuditUpdateOriginal
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Temp\McpAuditTest_d0f99ab162f54265ab23a7fc3800301c
-    Name: AuditUpdateOriginal
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Temp\McpAuditTest_faf46d634d834b8ab39b40bd3b9be544
-    Name: AuditUpdateOriginal
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Temp\McpAuditTest_df8169c5f74d48a38c10322ab7269eba
-    Name: AuditInitTest
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Temp\McpAuditTest_774dbecb0c1b4fb5b37fc0d39aaf7b42
-    Name: AuditInitTest
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Temp\McpAuditTest_e902949772434ff6bc68895dce700c2e
-    Name: AuditDeleteTest
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Temp\McpAuditTest_101d56a6b8fd418e8757d40d10a3ab3c
-    Name: AuditStatusTest
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Temp\McpAuditTest_e3a48cb5a9444370a671a3d7337098ae
-    Name: AuditStatusTest
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Temp\McpAuditTest_a44cdbdf34a7418cb8af1fdc2cfb945a
-    Name: AuditStopTest
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Temp\McpAuditTest_5c385c98965b4471866ec6f013c4d1f0
-    Name: AuditStopTest
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Temp\McpAuditTest_f99bdd79dad546c5a2fc3040561ebd92
-    Name: AuditGetTest
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Temp\McpAuditTest_45f5877d81974a45a6b5aabcd3daa135
-    Name: AuditGetTest
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Temp\McpAuditTest_4efebe286c60416f9a6d65e5a5670593
-    Name: AuditGetTest
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: E:\github\McpServer\.tmp\ws-994503d713bc43b0b160245a67a66883
-    Name: AuditCreateTest
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: E:\github\McpServer\.tmp\ws-aadfd4d1d9124fe58eb7892698268078
-    Name: AuditCreateTest
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Users\kingd\AppData\Local\Temp\ws_test_171492a398d04b1e8fb774c352c9bdeb
-    Name: test-ws
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Users\kingd\AppData\Local\Temp\ws_todo_7f6bab430fe2447685f86aaeb1503af1
-    Name: ws_todo_7f6bab430fe2447685f86aaeb1503af1
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Users\kingd\AppData\Local\Temp\ws_auto_bc0acb1b78154482b3a433dc827f74e2
-    Name: ws_auto_bc0acb1b78154482b3a433dc827f74e2
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
-  - WorkspacePath: C:\Users\kingd\AppData\Local\Temp\MyProject_578ecabf27db4642935ba32a0b7466f2
-    Name: MyProject_578ecabf27db4642935ba32a0b7466f2
-    TodoPath: docs/todo.yaml
-    IsPrimary: false
-    IsEnabled: true
-    DateTimeCreated: *o0
-    DateTimeModified: *o0
+

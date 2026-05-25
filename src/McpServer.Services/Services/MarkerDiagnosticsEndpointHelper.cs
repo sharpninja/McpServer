@@ -26,6 +26,7 @@ internal static class MarkerDiagnosticsEndpointHelper
         string? repoPath,
         IConfiguration configuration,
         string contentRootPath,
+        IEnumerable<string>? workspacePaths = null,
         bool restrictToCurrentRepoRoot = false)
     {
         if (string.IsNullOrWhiteSpace(repoPath))
@@ -44,7 +45,7 @@ internal static class MarkerDiagnosticsEndpointHelper
             });
         }
 
-        var allowedPaths = GetAllowedRepoPaths(configuration, contentRootPath, restrictToCurrentRepoRoot);
+        var allowedPaths = GetAllowedRepoPaths(configuration, contentRootPath, restrictToCurrentRepoRoot, workspacePaths);
         if (allowedPaths.Count > 0 && !allowedPaths.Contains(normalizedRepoPath))
         {
             return Results.NotFound(new
@@ -104,19 +105,18 @@ internal static class MarkerDiagnosticsEndpointHelper
         }
     }
 
-    private static HashSet<string> GetAllowedRepoPaths(IConfiguration configuration, string contentRootPath, bool restrictToCurrentRepoRoot)
+    private static HashSet<string> GetAllowedRepoPaths(IConfiguration configuration, string contentRootPath, bool restrictToCurrentRepoRoot, IEnumerable<string>? workspacePaths = null)
     {
         var allowed = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        if (!restrictToCurrentRepoRoot)
+        if (!restrictToCurrentRepoRoot && workspacePaths is not null)
         {
-            var workspaces = configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
-            foreach (var workspace in workspaces)
+            foreach (var wsPath in workspacePaths)
             {
-                if (string.IsNullOrWhiteSpace(workspace.WorkspacePath))
+                if (string.IsNullOrWhiteSpace(wsPath))
                     continue;
 
-                if (TryNormalizeRepoPath(workspace.WorkspacePath, contentRootPath, out var normalizedWorkspacePath, out _))
+                if (TryNormalizeRepoPath(wsPath, contentRootPath, out var normalizedWorkspacePath, out _))
                     allowed.Add(normalizedWorkspacePath);
             }
         }

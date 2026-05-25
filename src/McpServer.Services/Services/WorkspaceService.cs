@@ -803,6 +803,7 @@ public sealed class WorkspaceService : IWorkspaceService
             BannedOrganizations = NormalizePolicyList(e.BannedOrganizations) ?? [],
             BannedIndividuals = NormalizePolicyList(e.BannedIndividuals) ?? [],
             GitRemoteUrl = await GetGitRemoteUrlAsync(e.WorkspacePath, ct).ConfigureAwait(false),
+            AgentPath = string.IsNullOrWhiteSpace(e.AgentPath) ? null : e.AgentPath,
         };
         return dto;
     }
