@@ -753,7 +753,7 @@ app.MapGet("/api-key", (HttpContext context, WorkspaceTokenService tokenService,
         "Default API token issued: RemoteIp={RemoteIp}; Workspace={WorkspacePath}",
         context.Connection.RemoteIpAddress?.ToString() ?? "loopback",
         workspacePath);
-    return Results.Ok(new { apiKey = defaultToken });
+    return Results.Ok(new { apiKey = defaultToken, workspacePath });
 }).ExcludeFromDescription();
 
 app.MapMcp("/mcp-transport");
@@ -1003,10 +1003,7 @@ static bool HasAnyRole(ClaimsPrincipal user, params string[] requiredRoles)
 
 static string? ResolvePrimaryApiKeyWorkspacePath(IConfiguration configuration, IHostEnvironment environment, string? instanceName, IServiceProvider? services = null)
 {
-    var effectiveRepoRoot = McpInstanceResolver.GetEffectiveMcpValue(configuration, instanceName, "RepoRoot");
-    if (!string.IsNullOrWhiteSpace(effectiveRepoRoot))
-        return NormalizeWorkspacePathForToken(effectiveRepoRoot, environment.ContentRootPath);
-
+    // Prefer the DB-registered primary workspace (workspaces live in the DB now, not appsettings).
     if (services is not null)
     {
         using var scope = services.CreateScope();
@@ -1014,10 +1011,14 @@ static string? ResolvePrimaryApiKeyWorkspacePath(IConfiguration configuration, I
         var items = svc.ListAsync().GetAwaiter().GetResult().Items;
         var primary = items.FirstOrDefault(w => w.IsPrimary && w.IsEnabled)
                    ?? items.FirstOrDefault(w => w.IsEnabled);
-        return string.IsNullOrWhiteSpace(primary?.WorkspacePath)
-            ? null
-            : NormalizeWorkspacePathForToken(primary.WorkspacePath, environment.ContentRootPath);
+        if (!string.IsNullOrWhiteSpace(primary?.WorkspacePath))
+            return NormalizeWorkspacePathForToken(primary.WorkspacePath, environment.ContentRootPath);
     }
+
+    // Legacy fallback: Mcp:RepoRoot config value (used by integration tests and bare deployments).
+    var effectiveRepoRoot = McpInstanceResolver.GetEffectiveMcpValue(configuration, instanceName, "RepoRoot");
+    if (!string.IsNullOrWhiteSpace(effectiveRepoRoot))
+        return NormalizeWorkspacePathForToken(effectiveRepoRoot, environment.ContentRootPath);
 
     return null;
 }
