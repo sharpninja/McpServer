@@ -123,27 +123,25 @@ public class StubMarkerFileReaderTests
     public async Task WatchAsync_SimulatesMarkerFileChange_InvokesCallback()
     {
         var stub = new StubMarkerFileReader();
-        var callbackInvoked = false;
-        IMarkerFileData? capturedData = null;
+        var callback = new TaskCompletionSource<IMarkerFileData>(
+            TaskCreationOptions.RunContinuationsAsynchronously);
 
-        Func<IMarkerFileData, Task> callback = async data =>
+        Func<IMarkerFileData, Task> onChange = data =>
         {
-            callbackInvoked = true;
-            capturedData = data;
-            await Task.CompletedTask;
+            callback.TrySetResult(data);
+            return Task.CompletedTask;
         };
 
         using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(100));
 
-        var watchTask = stub.WatchAsync("/home/user/trusted-workspace", callback, cts.Token);
+        var watchTask = stub.WatchAsync("/home/user/trusted-workspace", onChange, cts.Token);
 
-        await Task.Delay(50);
+        var capturedData = await callback.Task.WaitAsync(TimeSpan.FromSeconds(1));
 
         await cts.CancelAsync();
 
         await Assert.ThrowsAsync<TaskCanceledException>(async () => await watchTask);
 
-        Assert.True(callbackInvoked);
         Assert.NotNull(capturedData);
         Assert.Contains("rotated", capturedData.ApiKey);
     }

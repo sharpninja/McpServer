@@ -1,4 +1,5 @@
 using System.Text.Json;
+using McpServer.Validation;
 using Xunit;
 
 namespace McpServer.ToolRegistry.Validation;
@@ -35,9 +36,7 @@ public sealed class ToolRegistryFixture : IDisposable
     public ToolRegistryFixture()
     {
         Client = new HttpClient { BaseAddress = new Uri(BaseUrl) };
-        var apiKey = ResolvePreferredApiKeyAsync(Client).GetAwaiter().GetResult();
-        if (!string.IsNullOrWhiteSpace(apiKey))
-            Client.DefaultRequestHeaders.Add("X-Api-Key", apiKey);
+        ValidationAuth.AddPreferredApiKey(Client);
     }
 
     private static async Task<string?> ResolvePreferredApiKeyAsync(HttpClient client)

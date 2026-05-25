@@ -158,7 +158,6 @@ public sealed class SessionLogService : ISessionLogService
 
     private Task<SessionLogEntity?> FindExistingSessionAsync(string sourceType, string sessionId, CancellationToken cancellationToken) =>
         _db.SessionLogs
-            .IgnoreQueryFilters()
             .Include(s => s.Turns)
                 .ThenInclude(e => e.Actions)
             .Include(s => s.Turns)

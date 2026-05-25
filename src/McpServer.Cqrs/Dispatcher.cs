@@ -155,7 +155,15 @@ public sealed class Dispatcher : IDispatcher, ILoggerProvider
             if (sw.IsRunning)
                 sw.Stop();
             _activeContexts.TryRemove(context.Correlation.BaseId, out _);
-            CaptureDispatchLog(context, sw.Elapsed, outcome, error);
+            try
+            {
+                CaptureDispatchLog(context, sw.Elapsed, outcome, error);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to capture dispatch log for {Operation} [{CorrelationId}]",
+                    context.OperationName, context.Correlation.Current);
+            }
             context.Dispose();
         }
     }
@@ -208,7 +216,8 @@ public sealed class Dispatcher : IDispatcher, ILoggerProvider
     private void CaptureDispatchLog(CallContext context, TimeSpan elapsed, string outcome, string? error)
     {
         var finishedAt = DateTimeOffset.UtcNow;
-        var entries = context.Entries
+        var entriesSnapshot = context.Entries.ToList();
+        var entries = entriesSnapshot
             .OrderBy(e => e.Timestamp)
             .Select(static e => new DispatchLogRecordEntry(
                 e.Timestamp,

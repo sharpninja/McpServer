@@ -1307,7 +1307,7 @@ namespace McpServer.Support.Mcp.Storage.SqliteMigrations.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.HasIndex("SourceType", "SessionId")
+                    b.HasIndex("WorkspaceId", "SourceType", "SessionId")
                         .IsUnique();
 
                     b.ToTable("SessionLogs");

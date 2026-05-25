@@ -295,13 +295,13 @@ jobs:
         displayName: Push to NuGet (main only)
         condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
         env:
-          NUGET_API_KEY: $(NUGET_API_KEY)
+          NUGET_API_KEY: $(NuGetApiKey)
         inputs:
           pwsh: true
           targetType: inline
           script: |
             if ([string]::IsNullOrWhiteSpace($env:NUGET_API_KEY)) {
-              Write-Host "NUGET_API_KEY pipeline secret not set; skipping nuget.org publish."
+              Write-Host "NuGetApiKey pipeline secret not set; skipping nuget.org publish."
               exit 0
             }
 

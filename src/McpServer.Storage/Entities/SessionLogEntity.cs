@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace McpServer.Support.Mcp.Storage.Entities;
 
 /// <summary>
-/// TR-PLANNED-013: 4NF session log entity. One row per session, keyed by (SourceType, SessionId).
+/// TR-PLANNED-013: 4NF session log entity. One row per workspace session, keyed by (WorkspaceId, SourceType, SessionId).
 /// FR-SUPPORT-010: Persisted in MCP SQLite database for session log normalization.
 /// </summary>
 public sealed class SessionLogEntity
@@ -17,12 +17,12 @@ public sealed class SessionLogEntity
     /// <summary>TR-MCP-MT-003: Workspace discriminator for multi-tenant data isolation.</summary>
     public string WorkspaceId { get; set; } = string.Empty;
 
-    /// <summary>TR-PLANNED-013: Agent source type (e.g. Cursor, Copilot). Unique with SessionId.</summary>
+    /// <summary>TR-PLANNED-013: Agent source type (e.g. Cursor, Copilot). Unique with WorkspaceId and SessionId.</summary>
     [Required]
     [MaxLength(64)]
     public required string SourceType { get; set; }
 
-    /// <summary>TR-PLANNED-013: Unique session identifier within the source type.</summary>
+    /// <summary>TR-PLANNED-013: Unique session identifier within the workspace and source type.</summary>
     [Required]
     [MaxLength(256)]
     public required string SessionId { get; set; }

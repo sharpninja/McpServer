@@ -82,6 +82,12 @@ public sealed class TodoClient : McpClientBase
         return await DeleteAsync<TodoMutationResult>($"mcpserver/todo/{Encode(id)}", cancellationToken);
     }
 
+    /// <summary>Move a TODO item to another registered workspace.</summary>
+    public async Task<TodoMutationResult> MoveAsync(string id, TodoMoveRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<TodoMutationResult>($"mcpserver/todo/{Encode(id)}/move", request, cancellationToken);
+    }
+
     /// <summary>Analyze requirements for a TODO item via Copilot.</summary>
     public async Task<RequirementsAnalysisResult> AnalyzeRequirementsAsync(string id, CancellationToken cancellationToken = default)
     {

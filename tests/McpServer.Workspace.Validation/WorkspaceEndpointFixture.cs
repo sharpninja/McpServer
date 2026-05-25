@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using McpServer.Validation;
 using Xunit;
 
 namespace McpServer.Workspace.Validation;
@@ -26,11 +27,8 @@ public sealed class WorkspaceEndpointFixture : IDisposable
     public WorkspaceEndpointFixture()
     {
         Client = new HttpClient { BaseAddress = new Uri(BaseUrl) };
-        ApiKey = ResolvePreferredApiKeyAsync(Client).GetAwaiter().GetResult();
-        if (!string.IsNullOrWhiteSpace(ApiKey))
-        {
-            Client.DefaultRequestHeaders.Add("X-Api-Key", ApiKey);
-        }
+        ApiKey = ValidationAuth.ResolvePreferredApiKey(Client);
+        ValidationAuth.AddPreferredApiKey(Client);
     }
 
     private static async Task<string?> ResolvePreferredApiKeyAsync(HttpClient client)

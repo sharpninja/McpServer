@@ -227,6 +227,14 @@ public sealed class TodoUpdateRequest
     public IReadOnlyList<string>? TechnicalRequirements { get; set; }
 }
 
+/// <summary>Request to move a TODO item to another registered workspace.</summary>
+public sealed class TodoMoveRequest
+{
+    /// <summary>Absolute path of the target workspace.</summary>
+    [JsonPropertyName("targetWorkspacePath")]
+    public string TargetWorkspacePath { get; set; } = string.Empty;
+}
+
 /// <summary>Result of a TODO query.</summary>
 public sealed class TodoQueryResult
 {

@@ -177,7 +177,7 @@ public sealed class McpDbContext : DbContext
 
         modelBuilder.Entity<SessionLogEntity>(e =>
         {
-            e.HasIndex(x => new { x.SourceType, x.SessionId }).IsUnique();
+            e.HasIndex(x => new { x.WorkspaceId, x.SourceType, x.SessionId }).IsUnique();
             e.HasIndex(x => x.SourceType);
             e.HasIndex(x => x.Started);
             e.HasIndex(x => x.LastUpdated);

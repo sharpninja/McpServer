@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text;
+using System.Text.Json;
 
 namespace McpServer.Repl.IntegrationTests;
 
@@ -11,7 +12,9 @@ public sealed class ReplChildProcessHelper : IDisposable
     private Process? _process;
     private readonly List<string> _stdoutLines = new();
     private readonly List<string> _stderrLines = new();
+    private readonly List<string> _stdoutDocumentLines = new();
     private readonly object _lock = new();
+    private int? _stdoutBlockScalarIndent;
     private bool _disposed;
 
     /// <summary>
@@ -65,13 +68,20 @@ public sealed class ReplChildProcessHelper : IDisposable
         }
 
         var repoRoot = FindRepoRoot(AppContext.BaseDirectory);
+        var workspaceRoot = ResolveWorkspaceRootAsync(repoRoot).GetAwaiter().GetResult();
+        var markerPath = Path.Combine(workspaceRoot, "AGENTS-README-FIRST.yaml");
         var projectPath = Path.Combine(repoRoot, "src", "McpServer.Repl.Host", "McpServer.Repl.Host.csproj");
+        var arguments = $"run --project \"{projectPath}\" -- --agent-stdio --workspace-path \"{workspaceRoot}\"";
+        if (File.Exists(markerPath))
+        {
+            arguments += $" --marker-file \"{markerPath}\"";
+        }
 
         var startInfo = new ProcessStartInfo
         {
             FileName = "dotnet",
-            Arguments = $"run --project \"{projectPath}\" -- --agent-stdio",
-            WorkingDirectory = repoRoot,
+            Arguments = arguments,
+            WorkingDirectory = workspaceRoot,
             UseShellExecute = false,
             RedirectStandardInput = true,
             RedirectStandardOutput = true,
@@ -81,6 +91,8 @@ public sealed class ReplChildProcessHelper : IDisposable
             StandardInputEncoding = Encoding.UTF8,
             StandardErrorEncoding = Encoding.UTF8
         };
+        startInfo.Environment["MCP_WORKSPACE_PATH"] = workspaceRoot;
+        startInfo.Environment["MCPSERVER_WORKSPACE_PATH"] = workspaceRoot;
 
         _process = new Process { StartInfo = startInfo };
         _process.OutputDataReceived += OnStdoutDataReceived;
@@ -98,7 +110,9 @@ public sealed class ReplChildProcessHelper : IDisposable
         var directory = new DirectoryInfo(startPath);
         while (directory is not null)
         {
-            if (File.Exists(Path.Combine(directory.FullName, "McpServer.slnx"))
+            if (File.Exists(Path.Combine(directory.FullName, "McpServer.sln"))
+                || File.Exists(Path.Combine(directory.FullName, "McpServer.slnx"))
+                || File.Exists(Path.Combine(directory.FullName, ".git"))
                 || Directory.Exists(Path.Combine(directory.FullName, ".git")))
             {
                 return directory.FullName;
@@ -108,6 +122,287 @@ public sealed class ReplChildProcessHelper : IDisposable
         }
 
         throw new InvalidOperationException($"Could not resolve repository root from '{startPath}'.");
+    }
+
+    private static async Task<string> ResolveWorkspaceRootAsync(string repoRoot)
+    {
+        var registeredWorkspaceRoot = await TryResolveRegisteredWorkspaceRootAsync(repoRoot).ConfigureAwait(false);
+        if (!string.IsNullOrWhiteSpace(registeredWorkspaceRoot))
+        {
+            return registeredWorkspaceRoot;
+        }
+
+        return TryResolveSubmoduleWorkspaceRoot(repoRoot)
+            ?? TryFindMarkerRoot(repoRoot)
+            ?? repoRoot;
+    }
+
+    private static async Task<string?> TryResolveRegisteredWorkspaceRootAsync(string repoRoot)
+    {
+        try
+        {
+            using var client = new HttpClient { BaseAddress = new Uri("http://localhost:7147") };
+            using var keyResponse = await client.GetAsync("/api-key").ConfigureAwait(false);
+            if (!keyResponse.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            await using var keyStream = await keyResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            using var keyDocument = await JsonDocument.ParseAsync(keyStream).ConfigureAwait(false);
+            if (!keyDocument.RootElement.TryGetProperty("apiKey", out var keyElement))
+            {
+                return null;
+            }
+
+            var apiKey = keyElement.GetString();
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
+                return null;
+            }
+
+            using var workspaceRequest = new HttpRequestMessage(HttpMethod.Get, "/mcpserver/workspace");
+            workspaceRequest.Headers.Add("X-Api-Key", apiKey);
+            using var workspaceResponse = await client.SendAsync(workspaceRequest).ConfigureAwait(false);
+            if (!workspaceResponse.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            await using var workspaceStream = await workspaceResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            using var workspaceDocument = await JsonDocument.ParseAsync(workspaceStream).ConfigureAwait(false);
+            if (!workspaceDocument.RootElement.TryGetProperty("items", out var items)
+                || items.ValueKind != JsonValueKind.Array)
+            {
+                return null;
+            }
+
+            var workspaces = items.EnumerateArray()
+                .Select(TryGetWorkspaceCandidate)
+                .Where(candidate => candidate is not null)
+                .Select(candidate => candidate!)
+                .ToList();
+
+            var remoteMatched = TryFindRemoteMatchedWorkspace(repoRoot, workspaces);
+            if (!string.IsNullOrWhiteSpace(remoteMatched))
+            {
+                return remoteMatched;
+            }
+
+            return workspaces
+                .Select(candidate => Path.GetFullPath(candidate.WorkspacePath))
+                .Where(path => IsSameOrAncestor(path, repoRoot))
+                .OrderByDescending(path => path.Length)
+                .FirstOrDefault();
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static WorkspaceCandidate? TryGetWorkspaceCandidate(JsonElement element)
+    {
+        if (!element.TryGetProperty("workspacePath", out var workspacePathElement))
+        {
+            return null;
+        }
+
+        var workspacePath = workspacePathElement.GetString();
+        if (string.IsNullOrWhiteSpace(workspacePath))
+        {
+            return null;
+        }
+
+        var gitRemoteUrl = element.TryGetProperty("gitRemoteUrl", out var gitRemoteUrlElement)
+            ? gitRemoteUrlElement.GetString()
+            : null;
+        return new WorkspaceCandidate(workspacePath, gitRemoteUrl);
+    }
+
+    private static string? TryFindRemoteMatchedWorkspace(string repoRoot, IReadOnlyList<WorkspaceCandidate> workspaces)
+    {
+        var sourceOriginUrls = GetRemoteUrls(repoRoot, "origin").ToList();
+        var sourceUrls = sourceOriginUrls.Count > 0
+            ? sourceOriginUrls
+            : GetRemoteUrls(repoRoot).ToList();
+        var normalizedSourceUrls = sourceUrls
+            .Select(NormalizeRemoteUrl)
+            .Where(url => !string.IsNullOrWhiteSpace(url))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        if (normalizedSourceUrls.Count == 0)
+        {
+            return null;
+        }
+
+        foreach (var workspace in workspaces)
+        {
+            var workspacePath = Path.GetFullPath(workspace.WorkspacePath);
+            var workspaceUrls = new List<string>();
+            if (!string.IsNullOrWhiteSpace(workspace.GitRemoteUrl))
+            {
+                workspaceUrls.Add(workspace.GitRemoteUrl);
+            }
+
+            workspaceUrls.AddRange(GetRemoteUrls(workspacePath, "origin"));
+            workspaceUrls.AddRange(GetRemoteUrls(workspacePath));
+
+            if (workspaceUrls
+                .Select(NormalizeRemoteUrl)
+                .Where(url => !string.IsNullOrWhiteSpace(url))
+                .Any(url => normalizedSourceUrls.Contains(url!)))
+            {
+                return workspacePath;
+            }
+        }
+
+        return null;
+    }
+
+    private static IEnumerable<string> GetRemoteUrls(string repoPath, string? remoteName = null)
+    {
+        if (!Directory.Exists(repoPath))
+        {
+            yield break;
+        }
+
+        var output = RunGit(repoPath, remoteName is null ? "remote -v" : $"remote get-url --all {remoteName}");
+        if (string.IsNullOrWhiteSpace(output))
+        {
+            yield break;
+        }
+
+        foreach (var line in output.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries))
+        {
+            var remoteUrl = line.Trim();
+            if (remoteName is null && remoteUrl.Contains('\t', StringComparison.Ordinal))
+            {
+                remoteUrl = remoteUrl.Split('\t', 2)[1].Split(' ', 2)[0];
+            }
+
+            if (!string.IsNullOrWhiteSpace(remoteUrl))
+            {
+                yield return remoteUrl;
+            }
+        }
+    }
+
+    private static string? RunGit(string workingDirectory, string arguments)
+    {
+        try
+        {
+            using var process = new Process();
+            process.StartInfo = new ProcessStartInfo
+            {
+                FileName = "git",
+                Arguments = arguments,
+                WorkingDirectory = workingDirectory,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true,
+            };
+
+            process.Start();
+            var output = process.StandardOutput.ReadToEnd();
+            if (!process.WaitForExit(5000))
+            {
+                process.Kill(entireProcessTree: true);
+                return null;
+            }
+
+            return process.ExitCode == 0 ? output : null;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static string? NormalizeRemoteUrl(string? remoteUrl)
+    {
+        if (string.IsNullOrWhiteSpace(remoteUrl))
+        {
+            return null;
+        }
+
+        var value = remoteUrl.Trim().Replace('\\', '/');
+        if (value.StartsWith("git@", StringComparison.OrdinalIgnoreCase))
+        {
+            var separator = value.IndexOf(':', StringComparison.Ordinal);
+            if (separator > 0)
+            {
+                value = "https://" + value[4..separator] + "/" + value[(separator + 1)..];
+            }
+        }
+
+        if (value.EndsWith(".git", StringComparison.OrdinalIgnoreCase))
+        {
+            value = value[..^4];
+        }
+
+        return value.TrimEnd('/');
+    }
+
+    private static string? TryResolveSubmoduleWorkspaceRoot(string repoRoot)
+    {
+        var gitFile = Path.Combine(repoRoot, ".git");
+        if (!File.Exists(gitFile))
+        {
+            return null;
+        }
+
+        var line = File.ReadLines(gitFile)
+            .FirstOrDefault(value => value.StartsWith("gitdir:", StringComparison.OrdinalIgnoreCase));
+        if (line is null)
+        {
+            return null;
+        }
+
+        var gitDir = line["gitdir:".Length..].Trim();
+        var absoluteGitDir = Path.IsPathFullyQualified(gitDir)
+            ? Path.GetFullPath(gitDir)
+            : Path.GetFullPath(Path.Combine(repoRoot, gitDir));
+
+        var current = new DirectoryInfo(absoluteGitDir);
+        while (current is not null)
+        {
+            if (string.Equals(current.Name, ".git", StringComparison.OrdinalIgnoreCase)
+                && current.Parent is not null
+                && File.Exists(Path.Combine(current.Parent.FullName, "AGENTS-README-FIRST.yaml")))
+            {
+                return current.Parent.FullName;
+            }
+
+            current = current.Parent;
+        }
+
+        return null;
+    }
+
+    private static string? TryFindMarkerRoot(string startPath)
+    {
+        var current = new DirectoryInfo(startPath);
+        while (current is not null)
+        {
+            if (File.Exists(Path.Combine(current.FullName, "AGENTS-README-FIRST.yaml")))
+            {
+                return current.FullName;
+            }
+
+            current = current.Parent;
+        }
+
+        return null;
+    }
+
+    private static bool IsSameOrAncestor(string candidateAncestor, string path)
+    {
+        var ancestor = Path.TrimEndingDirectorySeparator(Path.GetFullPath(candidateAncestor));
+        var descendant = Path.TrimEndingDirectorySeparator(Path.GetFullPath(path));
+        return string.Equals(ancestor, descendant, StringComparison.OrdinalIgnoreCase)
+            || descendant.StartsWith(ancestor + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase)
+            || descendant.StartsWith(ancestor + Path.AltDirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>
@@ -199,6 +494,8 @@ public sealed class ReplChildProcessHelper : IDisposable
         lock (_lock)
         {
             _stdoutLines.Clear();
+            _stdoutDocumentLines.Clear();
+            _stdoutBlockScalarIndent = null;
         }
     }
 
@@ -274,11 +571,42 @@ public sealed class ReplChildProcessHelper : IDisposable
 
     private void OnStdoutDataReceived(object sender, DataReceivedEventArgs e)
     {
-        if (e.Data != null)
+        if (e.Data == null)
         {
-            lock (_lock)
+            return;
+        }
+
+        lock (_lock)
+        {
+            var line = e.Data.TrimStart('\uFEFF');
+            if (IsTopLevelDocumentStart(line) && _stdoutDocumentLines.Count > 0)
             {
-                _stdoutLines.Add(e.Data);
+                FlushStdoutDocument();
+            }
+
+            if (string.IsNullOrWhiteSpace(e.Data))
+            {
+                if (_stdoutBlockScalarIndent is null)
+                {
+                    FlushStdoutDocument();
+                }
+                else
+                {
+                    _stdoutDocumentLines.Add(line);
+                }
+                return;
+            }
+
+            if (_stdoutBlockScalarIndent is int blockIndent
+                && CountLeadingSpaces(line) <= blockIndent)
+            {
+                _stdoutBlockScalarIndent = null;
+            }
+
+            _stdoutDocumentLines.Add(line);
+            if (StartsBlockScalar(line))
+            {
+                _stdoutBlockScalarIndent = CountLeadingSpaces(line);
             }
         }
     }
@@ -293,6 +621,47 @@ public sealed class ReplChildProcessHelper : IDisposable
             }
         }
     }
+
+    private void FlushStdoutDocument()
+    {
+        if (_stdoutDocumentLines.Count == 0)
+        {
+            return;
+        }
+
+        _stdoutLines.Add(string.Join(Environment.NewLine, _stdoutDocumentLines));
+        _stdoutDocumentLines.Clear();
+        _stdoutBlockScalarIndent = null;
+    }
+
+    private static bool IsTopLevelDocumentStart(string line) =>
+        line.StartsWith("type:", StringComparison.Ordinal);
+
+    private static int CountLeadingSpaces(string line)
+    {
+        var count = 0;
+        while (count < line.Length && line[count] == ' ')
+        {
+            count++;
+        }
+
+        return count;
+    }
+
+    private static bool StartsBlockScalar(string line)
+    {
+        var trimmed = line.TrimEnd();
+        var colonIndex = trimmed.LastIndexOf(':');
+        if (colonIndex < 0 || colonIndex == trimmed.Length - 1)
+        {
+            return false;
+        }
+
+        var value = trimmed[(colonIndex + 1)..].TrimStart();
+        return value.StartsWith('|') || value.StartsWith('>');
+    }
+
+    private sealed record WorkspaceCandidate(string WorkspacePath, string? GitRemoteUrl);
 
     /// <inheritdoc/>
     public void Dispose()
