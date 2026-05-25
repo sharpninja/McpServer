@@ -22,6 +22,7 @@ using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements;
 using McpServer.Support.Mcp.Controllers;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Services.FederationAdapters;
 using McpServer.Support.Mcp.Storage;
 using McpServer.Support.Mcp.Storage.Database;
 using McpServer.Support.Mcp.Web;
@@ -370,6 +371,7 @@ builder.Services.AddScoped<ISessionLogService, SessionLogService>();
 builder.Services.AddScoped<Fts5SearchService>();
 builder.Services.AddScoped<IContextSearchService, HybridSearchService>();
 builder.Services.AddMcpGraphRag();
+builder.Services.AddScoped<IWorkspaceProjectionWriter, WorkspaceProjectionWriter>();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 builder.Services.AddScoped<IWorkspacePolicyDirectiveParser, WorkspacePolicyDirectiveParser>();
 builder.Services.AddScoped<IWorkspacePolicyService, WorkspacePolicyService>();
@@ -433,6 +435,12 @@ builder.Services.Configure<FederationOptions>(
     builder.Configuration.GetSection(FederationOptions.SectionName));
 builder.Services.AddSingleton<FederationRegistry>();
 builder.Services.AddSingleton<FederationProxyService>();
+builder.Services.AddFederationStateAdapters();
+builder.Services.AddSingleton<IFederationTopologyService, FederationTopologyService>();
+builder.Services.AddSingleton<FederationStateAdapterRegistry>();
+builder.Services.AddSingleton<IFederationEnvelopeSigner, FederationEnvelopeSigner>();
+builder.Services.AddSingleton<IFederationOperationApplyService, FederationOperationApplyService>();
+builder.Services.AddSingleton<IFederationLocalExecutionService, FederationLocalExecutionService>();
 builder.Services.AddHttpClient(FederationProxyService.HttpClientName)
     .ConfigurePrimaryHttpMessageHandler(() => new System.Net.Http.HttpClientHandler
     {
@@ -517,6 +525,9 @@ if (!builder.Environment.IsEnvironment("Test"))
     builder.Services.AddHostedService(sp => (WorkspaceProcessManager)sp.GetRequiredService<IWorkspaceProcessManager>());
     builder.Services.AddHostedService(sp => sp.GetRequiredService<TunnelRegistry>());
     builder.Services.AddHostedService<AgentPoolSeedService>();
+    builder.Services.AddHostedService<FederationLocalProxyEnrollmentService>();
+    builder.Services.AddHostedService<FederationQueuedOperationReplayService>();
+    builder.Services.AddHostedService<FederationFanoutSyncService>();
     // TR-MCP-TODO-007: one-shot import from legacy mcp.db into the configured authoritative DB.
     builder.Services.AddHostedService<LegacyTodoSqliteMigrator>();
 }

@@ -69,6 +69,8 @@ Agent STDIO mode implements the MCP protocol over standard input/output for prog
 mcpserver-repl --agent-stdio
 ```
 
+When a workspace marker declares `agent_plugins.policy: required`, agents should normally use their required plugin wrapper instead of invoking `mcpserver-repl --agent-stdio` directly. Direct REPL use is for plugin implementation, plugin diagnostics, and fallback investigation after plugin verification fails.
+
 #### STDIO Features
 
 - **Protocol Compliance**: Full MCP wire protocol support
@@ -102,6 +104,8 @@ The REPL protocol uses four envelope types:
 2. **result**: Successful response from server
 3. **error**: Error response with code and details
 4. **event**: Server-initiated notifications (streaming, state changes)
+
+Agent STDIO accepts one envelope per YAML document. Multiple request documents may be sent in sequence by separating them with `---`. Do not send a single `type: batch` envelope; unsupported batch envelopes are rejected with `unsupported_batch_envelope`.
 
 ### Request Envelope Structure
 
@@ -798,6 +802,8 @@ payload:
 - **TODO Schema**: `docs/context/todo-schema.md`
 - **Module Bootstrap**: `docs/context/module-bootstrap.md`
 - **Agent Guide**: `docs/REPL-AGENT-GUIDE.md`
+- **Agent Plugin Availability**: `docs/AGENT-PLUGIN-AVAILABILITY.md`
+- **Federation Reference**: `docs/context/federation.md`
 
 ## License
 

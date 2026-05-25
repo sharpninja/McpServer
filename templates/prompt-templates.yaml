@@ -306,6 +306,28 @@ templates:
       - Codex plugin tools/hooks must satisfy `agent_plugins.agents.Codex`; Claude plugin tools/hooks must satisfy `agent_plugins.agents.Claude`; Copilot plugin tools/hooks must satisfy `agent_plugins.agents.Copilot`; Cline MCP tools must satisfy `agent_plugins.agents.Cline`.
 
 
+      ## Codex MCP Quickstart
+
+      If you are Codex, use the Codex plugin wrappers before direct REPL calls:
+
+      1. Run `Invoke-CodexMcpPlugin.ps1 -Command Status` from the `mcpserver-codex-plugin` root to verify plugin root, marker trust, health nonce, workspace path, session id, current turn, and supported namespaces.
+
+      2. Invoke MCP workflow methods with `Invoke-CodexMcpPlugin.ps1 -Command Invoke -Method <method> -Params <yaml>` so YAML parameters are passed through stdin instead of fragile nested shell quoting.
+
+      3. Complete the session-log turn intentionally with `Invoke-CodexMcpPlugin.ps1 -Command CompleteTurn -Response <final response>` before the final answer when the stop gate cannot infer completion.
+
+      4. For `mcpserver-repl --agent-stdio`, send one YAML envelope per document separated by `---`. Do not send a single `type: batch` envelope; batch envelopes are rejected with `unsupported_batch_envelope`.
+
+
+      ## Federation Topology
+
+      - To identify hub/proxy topology, call the supported federation status surface, preferably through your required plugin or client wrapper: `/mcpserver/federation/status`.
+      - Status fields to report when relevant: `role`, `configuredRole`, `hubBaseUrl`, `proxyId`, `proxyCount`, `hostedWorkspaceCount`, `queueDepth`, `fanoutDepth`, `conflictCount`, and `staleReadStatus`.
+      - `Standalone` serves local workspaces only. `DirectProxy` is the existing point-to-point proxy mode. `Hub` is authoritative for enrolled proxies and global workspace inventory. `LocalProxy` forwards MCP requests to `hubBaseUrl` and queues mutating requests during hub outages.
+      - LocalProxy queued writes return `202 Accepted` with `X-Mcp-Queued: true` and `X-Mcp-Operation-Id`. Treat the write as optimistic until the hub acknowledges it.
+      - If `queueDepth`, `fanoutDepth`, `conflictCount`, or stale-read status is non-zero/non-clear, include that in session log status and avoid claiming federation synchronization is complete.
+
+
       ## Per User Message
 
       1. Post a new session log turn before starting work.
@@ -354,7 +376,18 @@ templates:
       10. Prioritize correctness over speed. Do not ship code you have not verified compiles.
 
 
-      11. Use the Byrd Development Process for all plans: organize work into small gated implementation slices, define validation before broadening scope, and keep session-log/TODO updates current between meaningful steps.
+      11. Use the Byrd Development Process V3 for all plans: organize work into small gated implementation slices, define validation before broadening scope, and keep session-log/TODO updates current between meaningful steps. A Byrd gate requires 100% test success before moving to the next iteration: zero failed tests and zero skipped tests in the executed validation scope. Tests are the progress ledger; do not hide unfinished work with skipped tests. Track deferred scope in MCP TODO/requirements and add its tests when that slice begins.
+
+
+      ## Planning Standard
+
+      Plans are frontier-model handoff artifacts. Write them so a less expensive implementation model can execute successfully without resolving unstated product, architecture, interface, data, testing, rollout, or validation decisions.
+
+      Every plan must be decision-complete. Lock the intended behavior, public interfaces, data shapes, migration/backfill strategy, failure modes, rollout or deployment path, validation commands, and acceptance criteria before implementation starts.
+
+      Every plan must capture requirements before implementation: create or update FR/TR/TEST records through the required MCP requirements workflow, include the requirement IDs in the TODO and session log, and map FR to TR and TEST coverage.
+
+      Every implementation plan must name the TDD unit tests to add or update first, the expected red state, the green criteria, and the exact validation scope for each Byrd gate.
 
 
       ## Naming Conventions

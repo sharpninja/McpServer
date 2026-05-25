@@ -7,6 +7,8 @@ on:
       - src/**
       - tests/**
       - build/**
+      - docs/**
+      - scripts/Publish-RequirementsWiki.ps1
       - build.ps1
       - build.sh
       - '*.sln'
@@ -20,6 +22,8 @@ on:
       - src/**
       - tests/**
       - build/**
+      - docs/**
+      - scripts/Publish-RequirementsWiki.ps1
       - build.ps1
       - build.sh
       - '*.sln'
@@ -27,6 +31,9 @@ on:
       - Directory.Packages.props
       - GitVersion.yml
       - .github/workflows/build.yml
+
+permissions:
+  contents: read
 
 jobs:
   build-test:
@@ -161,3 +168,30 @@ jobs:
         with:
           name: mcp-server-publish
           path: artifacts/mcp-server/
+
+  publish-wiki:
+    name: Publish GitHub Wiki
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Publish GitHub requirements wiki
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./scripts/Publish-RequirementsWiki.ps1 `
+            -Target GitHub `
+            -ExportZip "${{ github.workspace }}/docs/requirements/requirements-wiki-documents.zip" `
+            -OutputPath "${{ runner.temp }}/requirements-wiki/github" `
+            -RepositoryUrl "https://github.com/${{ github.repository }}.wiki.git" `
+            -AuthToken $env:GITHUB_TOKEN `
+            -UserDocsBranch "${{ github.ref_name }}" `
+            -CommitMessage "Sync GitHub requirements wiki from ${{ github.sha }}" `
+            -Push
+        shell: pwsh

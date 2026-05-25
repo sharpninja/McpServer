@@ -304,7 +304,7 @@ public sealed class SessionLogService : ISessionLogService
         var totalCount = filteredList.Count;
 
         var sessions = filteredList
-            .OrderByDescending(s => s.Started ?? DateTimeOffset.MinValue)
+            .OrderByDescending(s => s.LastUpdated ?? s.Started ?? DateTimeOffset.MinValue)
             .Skip(offset)
             .Take(limit)
             .ToList();

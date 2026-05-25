@@ -47,12 +47,18 @@ public sealed class RequirementsDatabaseDocumentServiceTests
         Assert.Contains("TEST-MCP-900", mappingMarkdown);
         Assert.DoesNotContain("Workspace B", mappingMarkdown);
 
+        var (matrixMarkdown, _) = await service.GenerateDocumentAsync(RequirementsDocType.Matrix);
+        Assert.Contains("| FR-MCP-900 | Tracked | Functional-Requirements.md |", matrixMarkdown);
+        Assert.Contains("| TR-MCP-900 | Tracked | Technical-Requirements.md |", matrixMarkdown);
+        Assert.Contains("| TEST-MCP-900 | Tracked | Testing-Requirements.md |", matrixMarkdown);
+
         var outputRoot = Path.Combine(workspaceA, "docs", "Project", "export");
         var export = await service.GenerateAllAsync(outputRoot);
         var functional = await File.ReadAllTextAsync(Path.Combine(outputRoot, "Functional-Requirements.md"));
         Assert.Contains("Workspace A", functional);
         Assert.DoesNotContain("Workspace B", functional);
         Assert.Contains(export.Files, file => file.RelativePath == "Functional-Requirements.md");
+        Assert.Contains(export.Files, file => file.RelativePath == "Requirements-Matrix.md");
     }
 
     /// <summary>Mapping validation rejects missing FR/TR/TEST ids before storing links.</summary>
@@ -74,6 +80,40 @@ public sealed class RequirementsDatabaseDocumentServiceTests
             service.UpsertMappingAsync(new FrTrMapping("FR-MCP-901", ["TR-MCP-MISSING"], [])));
         await Assert.ThrowsAsync<ArgumentException>(() =>
             service.UpsertMappingAsync(new FrTrMapping("FR-MCP-901", [], ["TEST-MCP-MISSING"])));
+    }
+
+    /// <summary>Requirement metadata survives create, update, list, and get through DB storage.</summary>
+    [Fact]
+    public async Task RequirementMetadata_RoundTripsThroughDatabaseStorage()
+    {
+        using var fixture = new RequirementsDbFixture();
+        fixture.SetWorkspace(fixture.CreateWorkspace("metadata"));
+        var service = fixture.CreateService();
+
+        await service.AddFrAsync(new FrEntry("FR-MCP-902", "FR", "FR body", Priority: "medium", Status: "pending", Notes: "draft"));
+        await service.AddTrAsync(new TrEntry("TR-MCP-REQ-902", "TR", "TR body", Priority: "medium", Status: "pending", Notes: "draft"));
+        await service.AddTestAsync(new TestEntry("TEST-MCP-902", "Test body", Title: "Metadata test", Priority: "medium", Status: "pending", Notes: "draft"));
+
+        await service.UpdateFrAsync(new FrEntry("FR-MCP-902", "FR", "FR body", Priority: "high", Status: "in_progress", Notes: "reviewed"));
+        await service.UpdateTrAsync(new TrEntry("TR-MCP-REQ-902", "TR", "TR body", Priority: "high", Status: "completed", Notes: "reviewed"));
+        await service.UpdateTestAsync(new TestEntry("TEST-MCP-902", "Test body", Title: "Metadata test", Priority: "high", Status: "completed", Notes: "reviewed"));
+
+        var fr = Assert.Single(await service.GetAllFrAsync());
+        Assert.Equal("high", fr.Priority);
+        Assert.Equal("in_progress", fr.Status);
+        Assert.Equal("reviewed", fr.Notes);
+
+        var tr = Assert.Single(await service.GetAllTrAsync());
+        Assert.Equal("high", tr.Priority);
+        Assert.Equal("completed", tr.Status);
+        Assert.Equal("reviewed", tr.Notes);
+
+        var test = await service.GetTestAsync("TEST-MCP-902");
+        Assert.NotNull(test);
+        Assert.Equal("Metadata test", test.Title);
+        Assert.Equal("high", test.Priority);
+        Assert.Equal("completed", test.Status);
+        Assert.Equal("reviewed", test.Notes);
     }
 
     /// <summary>Bootstrap accepts bold legacy headings and does not treat notes columns as TEST links.</summary>
@@ -245,6 +285,8 @@ public sealed class RequirementsDatabaseDocumentServiceTests
         {
             await using var scope = _provider.CreateAsyncScope();
             var ctx = scope.ServiceProvider.GetRequiredService<McpDbContext>();
+            await EnsureRequirementAsync(ctx, workspacePath, "fr", frId);
+            await EnsureRequirementAsync(ctx, workspacePath, targetKind, targetId);
             ctx.RequirementTraceabilityLinks.Add(new RequirementTraceabilityLinkEntity
             {
                 WorkspaceId = workspacePath,
@@ -254,6 +296,27 @@ public sealed class RequirementsDatabaseDocumentServiceTests
                 CreatedAtUtc = DateTimeOffset.UtcNow.ToString("O"),
             });
             await ctx.SaveChangesAsync();
+        }
+
+        private static async Task EnsureRequirementAsync(McpDbContext ctx, string workspacePath, string kind, string id)
+        {
+            if (await ctx.Requirements.IgnoreQueryFilters()
+                    .AnyAsync(x => x.WorkspaceId == workspacePath && x.Kind == kind && x.Id == id))
+            {
+                return;
+            }
+
+            var now = DateTimeOffset.UtcNow.ToString("O");
+            ctx.Requirements.Add(new RequirementEntity
+            {
+                WorkspaceId = workspacePath,
+                Kind = kind,
+                Id = id,
+                Title = id,
+                Body = "Seeded requirement for traceability FK coverage.",
+                CreatedAtUtc = now,
+                UpdatedAtUtc = now,
+            });
         }
 
         public void SetWorkspace(string workspacePath)

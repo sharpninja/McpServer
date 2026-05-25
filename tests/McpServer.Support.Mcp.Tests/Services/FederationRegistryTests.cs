@@ -143,6 +143,27 @@ public sealed class FederationRegistryTests
         Assert.NotNull(sut.ResolveTarget(null));
     }
 
+    /// <summary>LocalProxy resolves the configured hub target with the stable hub access token.</summary>
+    [Fact]
+    public void ResolveTarget_LocalProxy_UsesHubAccessToken()
+    {
+        var sut = CreateRegistry(o =>
+        {
+            o.Enabled = true;
+            o.Role = FederationRole.LocalProxy;
+            o.HubBaseUrl = "http://hub.example:7147/";
+            o.HubAccessToken = "hub-secret";
+        });
+
+        var target = sut.ResolveTarget(@"C:\ws\alpha");
+
+        Assert.NotNull(target);
+        Assert.Equal("hub", target.Name);
+        Assert.Equal("http://hub.example:7147", target.BaseUrl);
+        Assert.Equal("hub-secret", target.ApiKey);
+        Assert.True(sut.HasHubAccessToken);
+    }
+
     // --- TryAddTarget ---
 
     /// <summary>Adding a valid target succeeds and it appears in List().</summary>

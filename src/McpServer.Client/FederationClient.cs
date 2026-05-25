@@ -31,6 +31,165 @@ public sealed class FederationClient : McpClientBase
     public async Task<FederationStatusResponse> GetStatusAsync(CancellationToken cancellationToken = default)
         => await GetAsync<FederationStatusResponse>("mcpserver/federation/status", cancellationToken);
 
+    /// <summary>List local proxies enrolled with the hub.</summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Proxy inventory.</returns>
+    public async Task<List<FederationProxyInfo>> ListProxiesAsync(CancellationToken cancellationToken = default)
+        => await GetAsync<List<FederationProxyInfo>>("mcpserver/federation/proxies", cancellationToken);
+
+    /// <summary>Enroll a local proxy with the hub.</summary>
+    /// <param name="request">Enrollment payload.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Accepted enrollment response.</returns>
+    public async Task<FederationEnrollmentResponse> EnrollProxyAsync(
+        FederationEnrollmentRequest request,
+        CancellationToken cancellationToken = default)
+        => await PostAsync<FederationEnrollmentResponse>("mcpserver/federation/proxies/enroll", request, cancellationToken);
+
+    /// <summary>Record a heartbeat from an enrolled local proxy.</summary>
+    /// <param name="proxyId">Proxy identifier.</param>
+    /// <param name="request">Heartbeat payload.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Heartbeat response.</returns>
+    public async Task<FederationHeartbeatResponse> HeartbeatAsync(
+        string proxyId,
+        FederationHeartbeatRequest request,
+        CancellationToken cancellationToken = default)
+        => await PostAsync<FederationHeartbeatResponse>(
+            $"mcpserver/federation/proxies/{Encode(proxyId)}/heartbeat",
+            request,
+            cancellationToken);
+
+    /// <summary>Register or update one workspace hosted by a proxy.</summary>
+    /// <param name="proxyId">Proxy identifier.</param>
+    /// <param name="request">Workspace registration payload.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Registered workspace info.</returns>
+    public async Task<FederationWorkspaceInfo> RegisterWorkspaceAsync(
+        string proxyId,
+        FederationWorkspaceRegistrationRequest request,
+        CancellationToken cancellationToken = default)
+        => await PostAsync<FederationWorkspaceInfo>(
+            $"mcpserver/federation/proxies/{Encode(proxyId)}/workspaces",
+            request,
+            cancellationToken);
+
+    /// <summary>List proxy-hosted workspaces known by the hub.</summary>
+    /// <param name="proxyId">Optional proxy filter.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Workspace inventory.</returns>
+    public async Task<List<FederationWorkspaceInfo>> ListWorkspacesAsync(string? proxyId = null, CancellationToken cancellationToken = default)
+    {
+        var path = string.IsNullOrWhiteSpace(proxyId)
+            ? "mcpserver/federation/workspaces"
+            : $"mcpserver/federation/workspaces?proxyId={Encode(proxyId)}";
+        return await GetAsync<List<FederationWorkspaceInfo>>(path, cancellationToken);
+    }
+
+    /// <summary>Return queued operation and conflict counts.</summary>
+    /// <param name="proxyId">Optional proxy filter.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Queue status.</returns>
+    public async Task<FederationQueueStatusResponse> GetQueueStatusAsync(string? proxyId = null, CancellationToken cancellationToken = default)
+    {
+        var path = string.IsNullOrWhiteSpace(proxyId)
+            ? "mcpserver/federation/queue"
+            : $"mcpserver/federation/queue?proxyId={Encode(proxyId)}";
+        return await GetAsync<FederationQueueStatusResponse>(path, cancellationToken);
+    }
+
+    /// <summary>List federation conflicts.</summary>
+    /// <param name="proxyId">Optional proxy filter.</param>
+    /// <param name="openOnly">Whether to return only open conflicts.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Conflict inventory.</returns>
+    public async Task<List<FederationConflictInfo>> ListConflictsAsync(
+        string? proxyId = null,
+        bool openOnly = true,
+        CancellationToken cancellationToken = default)
+    {
+        var query = string.IsNullOrWhiteSpace(proxyId)
+            ? $"?openOnly={openOnly}"
+            : $"?proxyId={Encode(proxyId)}&openOnly={openOnly}";
+        return await GetAsync<List<FederationConflictInfo>>($"mcpserver/federation/conflicts{query}", cancellationToken);
+    }
+
+    /// <summary>Return mutable state adapter coverage diagnostics.</summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Adapter coverage rows.</returns>
+    public async Task<List<FederationStateAdapterCoverage>> GetAdapterCoverageAsync(CancellationToken cancellationToken = default)
+        => await GetAsync<List<FederationStateAdapterCoverage>>("mcpserver/federation/adapters", cancellationToken);
+
+    /// <summary>Return hub fanout rows for a proxy after a sequence.</summary>
+    /// <param name="proxyId">Proxy identifier.</param>
+    /// <param name="afterSequence">Exclusive sequence cursor.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Sync rows waiting for proxy acknowledgement.</returns>
+    public async Task<List<FederationSyncItem>> GetSyncItemsAsync(
+        string proxyId,
+        long afterSequence = 0,
+        CancellationToken cancellationToken = default)
+        => await GetAsync<List<FederationSyncItem>>(
+            $"mcpserver/federation/sync?proxyId={Encode(proxyId)}&afterSequence={afterSequence}",
+            cancellationToken);
+
+    /// <summary>Acknowledge one recipient-specific sync row.</summary>
+    /// <param name="sequence">Sync sequence number.</param>
+    /// <param name="request">Acknowledgement payload.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Updated operation status.</returns>
+    public async Task<FederationOperationResponse> AcknowledgeSyncAsync(
+        long sequence,
+        FederationSyncAckRequest request,
+        CancellationToken cancellationToken = default)
+        => await PostAsync<FederationOperationResponse>($"mcpserver/federation/sync/{sequence}/ack", request, cancellationToken);
+
+    /// <summary>Accept or idempotently replay one federation operation.</summary>
+    /// <param name="request">Operation payload.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Operation status.</returns>
+    public async Task<FederationOperationResponse> RecordOperationAsync(
+        FederationOperationRequest request,
+        CancellationToken cancellationToken = default)
+        => await PostAsync<FederationOperationResponse>("mcpserver/federation/operations", request, cancellationToken);
+
+    /// <summary>Acknowledge one replayed or fanned-out operation.</summary>
+    /// <param name="operationId">Operation identifier.</param>
+    /// <param name="request">Acknowledgement payload.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Updated operation status.</returns>
+    public async Task<FederationOperationResponse> AcknowledgeOperationAsync(
+        string operationId,
+        FederationOperationAckRequest request,
+        CancellationToken cancellationToken = default)
+        => await PostAsync<FederationOperationResponse>(
+            $"mcpserver/federation/operations/{Encode(operationId)}/ack",
+            request,
+            cancellationToken);
+
+    /// <summary>Accept or idempotently replay one signed federation operation envelope.</summary>
+    /// <param name="envelope">Signed operation envelope.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Operation status.</returns>
+    public async Task<FederationOperationResponse> RecordEnvelopeAsync(
+        FederationExecutionEnvelope envelope,
+        CancellationToken cancellationToken = default)
+        => await PostAsync<FederationOperationResponse>("mcpserver/federation/envelopes", envelope, cancellationToken);
+
+    /// <summary>Resolve a federation conflict.</summary>
+    /// <param name="conflictId">Conflict identifier.</param>
+    /// <param name="request">Resolution request.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Resolved conflict info.</returns>
+    public async Task<FederationConflictInfo> ResolveConflictAsync(
+        string conflictId,
+        FederationConflictResolutionRequest request,
+        CancellationToken cancellationToken = default)
+        => await PostAsync<FederationConflictInfo>(
+            $"mcpserver/federation/conflicts/{Encode(conflictId)}/resolve",
+            request,
+            cancellationToken);
+
     /// <summary>Enable federation proxying globally.</summary>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Updated federation status.</returns>

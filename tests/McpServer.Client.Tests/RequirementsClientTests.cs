@@ -78,6 +78,76 @@ public sealed class RequirementsClientTests
     }
 
     [Fact]
+    public async System.Threading.Tasks.Task UpdateFrAsync_PutsMetadataBody()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"id":"FR-MCP-001","title":"Title","body":"Body","priority":"high","status":"in_progress","notes":"Reviewed"}""");
+        using var http = new HttpClient(handler);
+        var client = new RequirementsClient(http, DefaultOptions);
+
+        var result = await client.UpdateFrAsync("FR-MCP-001", new UpdateFrRequest
+        {
+            Title = "Title",
+            Body = "Body",
+            Priority = "high",
+            Status = "in_progress",
+            Notes = "Reviewed"
+        });
+
+        Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
+        Assert.Contains("\"priority\":\"high\"", handler.LastRequestBody!);
+        Assert.Contains("\"status\":\"in_progress\"", handler.LastRequestBody!);
+        Assert.Contains("\"notes\":\"Reviewed\"", handler.LastRequestBody!);
+        Assert.Equal("high", result.Priority);
+        Assert.Equal("in_progress", result.Status);
+        Assert.Equal("Reviewed", result.Notes);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task UpdateTrAndTestAsync_PutMetadataBody()
+    {
+        var handler = new MockHttpHandler(HttpStatusCode.OK, """{"id":"TR-MCP-REQ-001","title":"TR","body":"Body","priority":"high","status":"completed","notes":"TR notes"}""");
+        using var http = new HttpClient(handler);
+        var client = new RequirementsClient(http, DefaultOptions);
+
+        var tr = await client.UpdateTrAsync("TR-MCP-REQ-001", new UpdateTrRequest
+        {
+            Title = "TR",
+            Body = "Body",
+            Priority = "high",
+            Status = "completed",
+            Notes = "TR notes"
+        });
+
+        Assert.Contains("\"priority\":\"high\"", handler.LastRequestBody!);
+        Assert.Contains("\"status\":\"completed\"", handler.LastRequestBody!);
+        Assert.Contains("\"notes\":\"TR notes\"", handler.LastRequestBody!);
+        Assert.Equal("high", tr.Priority);
+        Assert.Equal("completed", tr.Status);
+        Assert.Equal("TR notes", tr.Notes);
+
+        var testHandler = new MockHttpHandler(HttpStatusCode.OK, """{"id":"TEST-MCP-001","condition":"Condition","priority":"high","status":"completed","notes":"TEST notes"}""");
+        using var testHttp = new HttpClient(testHandler);
+        var testClient = new RequirementsClient(testHttp, DefaultOptions);
+
+        var test = await testClient.UpdateTestAsync("TEST-MCP-001", new UpdateTestRequest
+        {
+            Condition = "Condition",
+            Priority = "high",
+            Status = "completed",
+            Notes = "TEST notes"
+        });
+
+        Assert.Contains("\"priority\":\"high\"", testHandler.LastRequestBody!);
+        Assert.Contains("\"status\":\"completed\"", testHandler.LastRequestBody!);
+        Assert.Contains("\"notes\":\"TEST notes\"", testHandler.LastRequestBody!);
+        Assert.Equal("high", test.Priority);
+        Assert.Equal("completed", test.Status);
+        Assert.Equal("TEST notes", test.Notes);
+    }
+
+    [Fact]
     public async System.Threading.Tasks.Task DeleteTestAsync_UsesDeleteEndpoint()
     {
         var handler = new MockHttpHandler(HttpStatusCode.OK, """{"success":true}""");

@@ -144,6 +144,17 @@ curl -H "X-Api-Key: $API_KEY" \
 
 If signature verification or nonce verification fails, emit `MCP_UNTRUSTED`, clear all MCP connection state, and stop before probing additional endpoints.
 
+## Required Agent Plugins
+
+When `AGENTS-README-FIRST.yaml` contains `agent_plugins.policy: required`, each agent must use its matching plugin for normal MCP mutations:
+
+- Codex uses `mcpserver-codex-plugin`.
+- Claude Code uses `mcpserver-claude-code-plugin`.
+- GitHub Copilot uses `mcpserver-copilot-plugin`.
+- Cline uses `mcpserver-cline-plugin`.
+
+The plugin wrapper is required for session log, TODO, requirements, import/export, and traceability workflows. Direct `mcpserver-repl --agent-stdio` use is reserved for plugin implementation, plugin troubleshooting, and fallback diagnosis after plugin verification fails. If the matching plugin is unavailable, record `MCP_PLUGIN_UNAVAILABLE:<Agent>` when a trusted logging path exists and continue only with non-MCP local diagnosis.
+
 ### Step 4: Store Connection State
 
 After successful bootstrap, store the connection metadata for subsequent requests:
@@ -207,6 +218,8 @@ payload:
 ### Command Dispatch
 
 After handshake, send request envelopes over stdin, receive result/error/event envelopes on stdout.
+
+Send one request envelope per YAML document. Multiple requests may be streamed by separating YAML documents with `---`. Do not send a single `type: batch` envelope; unsupported batch envelopes are rejected with `unsupported_batch_envelope`.
 
 **Request Format:**
 
@@ -1486,6 +1499,8 @@ Every ~10 interactions:
 ## Additional Resources
 
 - **User Guide**: `docs/REPL-USER-GUIDE.md`
+- **Agent Plugin Availability**: `docs/AGENT-PLUGIN-AVAILABILITY.md`
+- **Federation Reference**: `docs/context/federation.md`
 - **API Documentation**: `docs/context/api-capabilities.md`
 - **Session Log Schema**: `docs/context/session-log-schema.md`
 - **TODO Schema**: `docs/context/todo-schema.md`

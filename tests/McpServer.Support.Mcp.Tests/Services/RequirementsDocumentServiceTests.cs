@@ -56,6 +56,12 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         var technicalDoc = await service.GenerateDocumentAsync(RequirementsDocType.Technical).ConfigureAwait(true);
         Assert.Contains("## TR-MCP-WS-004", technicalDoc.Content);
         Assert.Contains("**Workspace Controller** — REST API", technicalDoc.Content);
+
+        var matrixDoc = await service.GenerateDocumentAsync(RequirementsDocType.Matrix).ConfigureAwait(true);
+        Assert.Contains("# Requirements Matrix (MCP Server)", matrixDoc.Content);
+        Assert.Contains("| FR-MCP-001 | Tracked | Functional-Requirements.md |", matrixDoc.Content);
+        Assert.Contains("| TR-MCP-CFG-001 | Tracked | Technical-Requirements.md |", matrixDoc.Content);
+        Assert.Contains("| TEST-MCP-001 | Tracked | Testing-Requirements.md |", matrixDoc.Content);
     }
 
     [Fact]
@@ -73,6 +79,7 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
             new[]
             {
                 "Functional-Requirements.md",
+                "Requirements-Matrix.md",
                 "TR-per-FR-Mapping.md",
                 "Technical-Requirements.md",
                 "Testing-Requirements.md"
@@ -82,7 +89,33 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.Equal("markdown", result.Format);
         Assert.Equal(Path.GetFullPath(outputRoot), result.OutputRoot);
         Assert.Contains("FR-MCP-001", File.ReadAllText(Path.Combine(outputRoot, RequirementsDocumentRenderer.FunctionalFileName)));
+        Assert.Contains("TEST-MCP-001", File.ReadAllText(Path.Combine(outputRoot, RequirementsDocumentRenderer.MatrixFileName)));
         Assert.Equal(generatedAt.UtcDateTime, File.GetLastWriteTimeUtc(Path.Combine(outputRoot, RequirementsDocumentRenderer.FunctionalFileName)));
+    }
+
+    [Fact]
+    public async Task GenerateAllAsync_PreservesExistingMatrixRowsAndAppendsMissingIds()
+    {
+        SeedCanonicalDocs();
+        var projectMatrixPath = Path.Combine(_tempRoot, "docs", "Project", RequirementsDocumentRenderer.MatrixFileName);
+        await File.WriteAllTextAsync(projectMatrixPath, """
+            # Requirements Matrix (MCP Server)
+
+            | Requirement | Status | Source Files |
+            | --- | --- | --- |
+            | FR-MCP-001 | Complete | ExistingSource |
+            """).ConfigureAwait(true);
+
+        var service = CreateService();
+        var outputRoot = Path.Combine(_tempRoot, "export", "canonical-with-matrix");
+
+        await service.GenerateAllAsync(outputRoot).ConfigureAwait(true);
+
+        var matrix = await File.ReadAllTextAsync(Path.Combine(outputRoot, RequirementsDocumentRenderer.MatrixFileName)).ConfigureAwait(true);
+        Assert.Contains("| FR-MCP-001 | Complete | ExistingSource |", matrix);
+        Assert.Contains("| FR-MCP-002 | Tracked | Functional-Requirements.md |", matrix);
+        Assert.Contains("| TR-MCP-CFG-001 | Tracked | Technical-Requirements.md |", matrix);
+        Assert.Contains("| TEST-MCP-001 | Tracked | Testing-Requirements.md |", matrix);
     }
 
     [Fact]
@@ -105,12 +138,14 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
                 "azure/.order",
                 "azure/Functional-Requirements.md",
                 "azure/Home.md",
+                "azure/Requirements-Matrix.md",
                 "azure/TR-per-FR-Mapping.md",
                 "azure/Technical-Requirements.md",
                 "azure/Testing-Requirements.md",
                 "github/.mcp-requirements-manifest.json",
                 "github/Functional-Requirements.md",
                 "github/Home.md",
+                "github/Requirements-Matrix.md",
                 "github/TR-per-FR-Mapping.md",
                 "github/Technical-Requirements.md",
                 "github/Testing-Requirements.md",
@@ -122,8 +157,35 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         var manifest = File.ReadAllText(Path.Combine(outputRoot, "azure", ".mcp-requirements-manifest.json"));
         Assert.Contains("\"platform\": \"azure\"", manifest, StringComparison.Ordinal);
         Assert.Contains("\"generatedAtUtc\": \"2026-05-08T12:00:00+00:00\"", manifest, StringComparison.Ordinal);
+        Assert.Contains("\"Requirements-Matrix.md\"", manifest, StringComparison.Ordinal);
         Assert.False(File.Exists(Path.Combine(outputRoot, "azure", "Old.md")));
         Assert.Equal(generatedAt.UtcDateTime, File.GetLastWriteTimeUtc(Path.Combine(outputRoot, "github", "_Sidebar.md")));
+    }
+
+    [Fact]
+    public async Task GenerateWikiAsync_RendersTestingRequirementsAsGroupedTables()
+    {
+        SeedGroupedTestingDocs();
+        var service = CreateService();
+        var outputRoot = Path.Combine(_tempRoot, "docs", "Project", "wiki");
+        var generatedAt = new DateTimeOffset(2026, 5, 22, 16, 30, 0, TimeSpan.Zero);
+
+        await service.GenerateWikiAsync(outputRoot, generatedAt).ConfigureAwait(true);
+
+        var githubTesting = await File.ReadAllTextAsync(
+            Path.Combine(outputRoot, "github", RequirementsDocumentRenderer.TestingFileName)).ConfigureAwait(true);
+        var azureTesting = await File.ReadAllTextAsync(
+            Path.Combine(outputRoot, "azure", RequirementsDocumentRenderer.TestingFileName)).ConfigureAwait(true);
+
+        Assert.Equal(githubTesting, azureTesting);
+        Assert.Contains("## TEST-MCP", githubTesting);
+        Assert.Contains("| ID | Requirement |", githubTesting);
+        Assert.Contains("| TEST-MCP-001 | Given configurable RepoRoot/Todo paths, when service starts, then path resolution is correct. |", githubTesting);
+        Assert.Contains("## TEST-MCP-REPL", githubTesting);
+        Assert.Contains("| TEST-MCP-REPL-007-1 | Given `TryResolveWithDiagnostics` with a workspace path containing no marker file, when called, then the error message enumerates every directory walked. |", githubTesting);
+        Assert.Contains("## TEST-SUPPORT", githubTesting);
+        Assert.Contains("| TEST-SUPPORT-010A-1 | Given a `SessionLogService`, when `SubmitAsync` persists a session, then child entities keep the workspace id. |", githubTesting);
+        Assert.DoesNotContain("- TEST-MCP-001:", githubTesting);
     }
 
     [Fact]
@@ -177,6 +239,31 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
         Assert.Empty(mapping.TestIds);
     }
 
+    [Fact]
+    public void ParseTesting_AcceptsWikiGroupedTableRows()
+    {
+        var parsed = RequirementsDocumentParser.ParseTesting("""
+            # Testing Requirements (MCP Server)
+
+            ## TEST-MCP
+
+            | ID | Requirement |
+            | --- | --- |
+            | TEST-MCP-001 | Given A \| B, when C, then D. |
+
+            ## TEST-MCP-REPL
+
+            | ID | Requirement |
+            | --- | --- |
+            | TEST-MCP-REPL-007-1 | Given marker diagnostics, when no marker exists, then searched paths are listed. |
+            """);
+
+        Assert.Equal(2, parsed.Count);
+        Assert.Equal("TEST-MCP-001", parsed[0].Id);
+        Assert.Equal("Given A | B, when C, then D.", parsed[0].Condition);
+        Assert.Equal("TEST-MCP-REPL-007-1", parsed[1].Id);
+    }
+
     private RequirementsDocumentService CreateService()
     {
         var options = Microsoft.Extensions.Options.Options.Create(new RequirementsOptions
@@ -184,7 +271,8 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
             FunctionalRequirementsPath = Path.Combine(_tempRoot, "docs", "Project", "Functional-Requirements.md"),
             TechnicalRequirementsPath = Path.Combine(_tempRoot, "docs", "Project", "Technical-Requirements.md"),
             TestingRequirementsPath = Path.Combine(_tempRoot, "docs", "Project", "Testing-Requirements.md"),
-            MappingPath = Path.Combine(_tempRoot, "docs", "Project", "TR-per-FR-Mapping.md")
+            MappingPath = Path.Combine(_tempRoot, "docs", "Project", "TR-per-FR-Mapping.md"),
+            MatrixPath = Path.Combine(_tempRoot, "docs", "Project", "Requirements-Matrix.md")
         });
 
         return new RequirementsDocumentService(options, NullLogger<RequirementsDocumentService>.Instance);
@@ -247,6 +335,42 @@ public sealed class RequirementsDocumentServiceTests : IDisposable
             | FR | Primary TRs | Tests |
             | --- | --- | --- |
             | FR-MCP-001 | TR-MCP-CFG-001, TR-MCP-CFG-002 | TEST-MCP-001 |
+            """);
+    }
+
+    private void SeedGroupedTestingDocs()
+    {
+        var projectDir = Path.Combine(_tempRoot, "docs", "Project");
+        File.WriteAllText(Path.Combine(projectDir, "Functional-Requirements.md"), """
+            # Functional Requirements (MCP Server)
+
+            ## FR-MCP-001 Configurable workspace root and paths
+
+            The server shall support configurable paths.
+            """);
+
+        File.WriteAllText(Path.Combine(projectDir, "Technical-Requirements.md"), """
+            # Technical Requirements (MCP Server)
+
+            ## TR-MCP-CFG-001
+
+            Configuration paths are resolved through options.
+            """);
+
+        File.WriteAllText(Path.Combine(projectDir, "Testing-Requirements.md"), """
+            # Testing Requirements (MCP Server)
+
+            - TEST-MCP-001: Given configurable RepoRoot/Todo paths, when service starts, then path resolution is correct.
+            - TEST-MCP-REPL-007-1: Given `TryResolveWithDiagnostics` with a workspace path containing no marker file, when called, then the error message enumerates every directory walked.
+            - TEST-SUPPORT-010A-1: Given a `SessionLogService`, when `SubmitAsync` persists a session, then child entities keep the workspace id.
+            """);
+
+        File.WriteAllText(Path.Combine(projectDir, "TR-per-FR-Mapping.md"), """
+            # TR per FR Mapping (MCP Server)
+
+            | FR | Primary TRs | Tests |
+            | --- | --- | --- |
+            | FR-MCP-001 | TR-MCP-CFG-001 | TEST-MCP-001 |
             """);
     }
 }

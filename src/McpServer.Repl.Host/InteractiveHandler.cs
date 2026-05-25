@@ -923,6 +923,17 @@ public class InteractiveHandler
 
                     AnsiConsole.MarkupLine($"[bold blue]Federation Status[/]");
                     AnsiConsole.MarkupLine($"  Enabled: {(status.Enabled ? "[green]Yes[/]" : "[dim]No[/]")}");
+                    AnsiConsole.MarkupLine($"  Role: [cyan]{Markup.Escape(status.Role)}[/] (configured: {Markup.Escape(status.ConfiguredRole)})");
+                    if (!string.IsNullOrWhiteSpace(status.HubBaseUrl))
+                        AnsiConsole.MarkupLine($"  Hub: {Markup.Escape(status.HubBaseUrl)}");
+                    if (!string.IsNullOrWhiteSpace(status.ProxyId))
+                        AnsiConsole.MarkupLine($"  Proxy: {Markup.Escape(status.ProxyId)}");
+                    AnsiConsole.MarkupLine($"  Enrolled proxies: {status.ProxyCount}");
+                    AnsiConsole.MarkupLine($"  Hosted workspaces: {status.HostedWorkspaceCount}");
+                    AnsiConsole.MarkupLine($"  Queue depth: {(status.QueueDepth == 0 ? "[green]0[/]" : $"[yellow]{status.QueueDepth}[/]")}");
+                    AnsiConsole.MarkupLine($"  Fanout depth: {(status.FanoutDepth == 0 ? "[green]0[/]" : $"[yellow]{status.FanoutDepth}[/]")}");
+                    AnsiConsole.MarkupLine($"  Conflicts: {(status.ConflictCount == 0 ? "[green]0[/]" : $"[red]{status.ConflictCount}[/]")}");
+                    AnsiConsole.MarkupLine($"  Stale reads: {Markup.Escape(status.StaleReadStatus)}");
                     AnsiConsole.WriteLine();
 
                     if (status.Targets.Count == 0)

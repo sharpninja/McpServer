@@ -251,8 +251,8 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 
 ## Requirements Freeze Tag: REPL v1.0 Delivery
 
-**Date:** 2025-01-04  
-**Freeze Tag:** `REPL-v1.0-FREEZE`  
+**Date:** 2025-01-04
+**Freeze Tag:** `REPL-v1.0-FREEZE`
 **Status:** ✅ **Requirements Frozen for REPL v1.0 Delivery**
 
 All REPL iteration 1-6 requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005, TR-MCP-REPL-001 through TR-MCP-REPL-007, TEST-MCP-REPL-001 through TEST-MCP-REPL-020) are complete with:
@@ -345,3 +345,84 @@ All REPL iteration 1-6 requirements (FR-MCP-REPL-001 through FR-MCP-REPL-005, TR
 | TR-MCP-AGENT-011 | 🔲 Planned | Reserved for FR-MCP-050 |
 | TR-MCP-AGENT-012 | 🔲 Planned | Reserved for FR-MCP-050 |
 | TR-MCP-WS-UI-001 | 🔲 Planned | Reserved for FR-MCP-031 (Management Web UI) |
+| FR-MCP-085 | 🔲 Planned | Question, service, controller, client, MCP, REPL, PowerShell Q&A implementation |
+| FR-MCP-086 | 🔲 Planned | Answer, service, controller, client, MCP, REPL, PowerShell Q&A implementation |
+| FR-MCP-087 | 🔲 Planned | Accepted-answer service and FAQ projection |
+| FR-MCP-088 | 🔲 Planned | Question query and tag filtering |
+| FR-MCP-089 | 🔲 Planned | QaVoteEntity, vote service, audit, voter endpoints |
+| FR-MCP-090 | 🔲 Planned | Comment entity and service operations |
+| FR-MCP-091 | 🔲 Planned | FAQ endpoint, client, wiki generator |
+| FR-MCP-092 | 🔲 Planned | QaAuthorResolver |
+| FR-MCP-093 | 🔲 Planned | Q&A EF workspace scoping |
+| FR-MCP-094 | 🔲 Planned | QaController, MCP tools, QaClient |
+| FR-MCP-095 | 🔲 Planned | QaWorkflow and McpQa PowerShell module |
+| FR-MCP-096 | 🔲 Planned | Q&A docs and context reference |
+| FR-MCP-097 | 🔲 Planned | Sibling plugin qa skills |
+| FR-MCP-098 | 🔲 Planned | QaAuditHistoryEntity and audit endpoints |
+| FR-MCP-099 | 🔲 Planned | Q&A skill web-research capture mandate |
+| FR-MCP-100 | 🔲 Planned | Question close and duplicate flows |
+| FR-MCP-101 | 🔲 Planned | QaBodyRenderer and body HTML fields |
+| FR-MCP-102 | 🔲 Planned | FAQ wiki build target |
+| TR-MCP-QA-001 | 🔲 Planned | Q&A entity tenancy |
+| TR-MCP-QA-002 | 🔲 Planned | Question tags JSON |
+| TR-MCP-QA-003 | 🔲 Planned | Provider migrations |
+| TR-MCP-QA-004 | 🔲 Planned | Denormalized vote counters |
+| TR-MCP-QA-005 | 🔲 Planned | Accepted answer storage |
+| TR-MCP-QA-006 | 🔲 Planned | Q&A service shape |
+| TR-MCP-QA-007 | 🔲 Planned | Q&A REST surface |
+| TR-MCP-QA-008 | 🔲 Planned | Q&A search indexing |
+| TR-MCP-QA-009 | 🔲 Planned | Q&A author resolver |
+| TR-MCP-QA-010 | 🔲 Planned | Q&A MCP STDIO tools |
+| TR-MCP-QA-011 | 🔲 Planned | FAQ query projection |
+| TR-MCP-QA-012 | 🔲 Planned | Typed Q&A client |
+| TR-MCP-QA-013 | 🔲 Planned | Q&A XML documentation |
+| TR-MCP-QA-014 | 🔲 Planned | Q&A REPL workflow |
+| TR-MCP-QA-015 | 🔲 Planned | Q&A PowerShell module |
+| TR-MCP-QA-016 | 🔲 Planned | Plugin Q&A skill |
+| TR-MCP-QA-017 | 🔲 Planned | Q&A documentation surface |
+| TR-MCP-QA-018 | 🔲 Planned | Q&A audit storage |
+| TR-MCP-QA-019 | 🔲 Planned | Q&A audit emission |
+| TR-MCP-QA-020 | 🔲 Planned | Q&A audit query |
+| TR-MCP-QA-021 | 🔲 Planned | Q&A audit surfaces |
+| TR-MCP-QA-022 | 🔲 Planned | Answer sources JSON |
+| TR-MCP-QA-023 | 🔲 Planned | Mandatory web capture skill rule |
+| TR-MCP-QA-024 | 🔲 Planned | Companion web skill cross-references |
+| TR-MCP-QA-025 | 🔲 Planned | Close and duplicate storage |
+| TR-MCP-QA-026 | 🔲 Planned | Close and duplicate surfaces |
+| TR-MCP-QA-027 | 🔲 Planned | Q&A body rendering |
+| TR-MCP-QA-028 | 🔲 Planned | Q&A sanitization tests |
+| TR-MCP-QA-029 | 🔲 Planned | FAQ wiki generation target |
+| TR-MCP-QA-030 | 🔲 Planned | FAQ wiki snapshot tests |
+| TR-MCP-QA-031 | 🔲 Planned | Q&A voter history |
+| TR-MCP-QA-032 | 🔲 Planned | Q&A vote state storage |
+| TR-MCP-QA-033 | 🔲 Planned | Q&A vote state machine |
+| TR-MCP-QA-034 | 🔲 Planned | Q&A vote audit actions |
+| TEST-MCP-110 | 🔲 Planned | Q&A question CRUD tests |
+| TEST-MCP-111 | 🔲 Planned | Q&A answer CRUD tests |
+| TEST-MCP-112 | 🔲 Planned | Accepted-answer invariant tests |
+| TEST-MCP-113 | 🔲 Planned | Q&A tag filter tests |
+| TEST-MCP-114 | 🔲 Planned | Q&A vote counter tests |
+| TEST-MCP-115 | 🔲 Planned | Q&A comment tests |
+| TEST-MCP-116 | 🔲 Planned | FAQ projection tests |
+| TEST-MCP-117 | 🔲 Planned | Q&A search indexing tests |
+| TEST-MCP-118 | 🔲 Planned | Q&A author resolver tests |
+| TEST-MCP-119 | 🔲 Planned | Q&A workspace isolation tests |
+| TEST-MCP-120 | 🔲 Planned | Q&A MCP STDIO parity tests |
+| TEST-MCP-121 | 🔲 Planned | QaClient tests |
+| TEST-MCP-122 | 🔲 Planned | QaWorkflow tests |
+| TEST-MCP-123 | 🔲 Planned | McpQa PowerShell tests |
+| TEST-MCP-124 | 🔲 Planned | Plugin skill smoke tests |
+| TEST-MCP-125 | 🔲 Planned | Q&A audit emission tests |
+| TEST-MCP-126 | 🔲 Planned | Q&A audit query tests |
+| TEST-MCP-127 | 🔲 Planned | Q&A vote audit transaction tests |
+| TEST-MCP-128 | 🔲 Planned | Answer sources tests |
+| TEST-MCP-129 | 🔲 Planned | Q&A skill mandate text tests |
+| TEST-MCP-130 | 🔲 Planned | Close and duplicate flow tests |
+| TEST-MCP-131 | 🔲 Planned | Q&A sanitization tests |
+| TEST-MCP-132 | 🔲 Planned | FAQ wiki generation tests |
+| TEST-MCP-133 | 🔲 Planned | Voter-history endpoint tests |
+| TEST-MCP-134 | 🔲 Planned | One-vote-per-user tests |
+| TEST-MCP-135 | 🔲 Planned | Current vote state endpoint tests |
+| FR-MCP-103 | 🟡 Partial | Hub-and-spoke federation |
+| TR-MCP-FED-001 | 🟡 Partial | Hub proxy federation contract |
+| TEST-MCP-136 | 🟡 Partial | Hub-and-spoke federation tests |

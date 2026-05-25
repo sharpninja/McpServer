@@ -155,12 +155,19 @@ public sealed class GraphRagEntityStorageTests : IDisposable
         // Verify the relationship exists.
         Assert.Single(await _db.GraphRelationships.ToListAsync().ConfigureAwait(true));
 
-        // Delete the source entity — cascade should remove the relationship.
+        // Delete the source entity - DB-FK-001 soft-deletes related relationships
+        // instead of physically cascading durable graph state.
         _db.GraphEntities.Remove(entityA);
         await _db.SaveChangesAsync().ConfigureAwait(true);
 
         var remaining = await _db.GraphRelationships.ToListAsync().ConfigureAwait(true);
         Assert.Empty(remaining);
+
+        var retained = await _db.GraphRelationships
+            .IgnoreQueryFilters()
+            .SingleAsync(r => r.Id == relationship.Id)
+            .ConfigureAwait(true);
+        Assert.True((bool)_db.Entry(retained).Property("IsDeleted").CurrentValue!);
     }
 
     /// <summary>

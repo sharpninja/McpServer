@@ -34,7 +34,6 @@ public sealed class FederationMiddleware
         "/api-key",              // Local workspace token issuance
         "/server-startup-utc",   // Local server metadata
         "/marker-file-timestamp", // Local marker file state
-        "/mcp-transport",        // MCP JSON-RPC — clients target servers directly
         "/mcpserver/workspace",  // Workspace list/info is always local
     ];
 
@@ -69,7 +68,7 @@ public sealed class FederationMiddleware
     {
         // Management API and infrastructure endpoints are always served locally
         if (context.Request.Path.StartsWithSegments(FederationManagementPrefix, StringComparison.OrdinalIgnoreCase) ||
-            IsLocalOnlyPath(context.Request.Path))
+            IsLocalOnlyPath(context.Request.Path, _registry.EffectiveRole))
         {
             await _next(context).ConfigureAwait(false);
             return;
@@ -103,12 +102,22 @@ public sealed class FederationMiddleware
         }
 
         // Proxy to target
-        await _proxyService.ProxyAsync(context, target, hopCount + 1, context.RequestAborted)
+        await _proxyService.ProxyAsync(
+                context,
+                target,
+                hopCount + 1,
+                context.RequestAborted,
+                _registry.EffectiveRole == FederationRole.LocalProxy ? _registry.ProxyId : null,
+                workspaceContext.WorkspacePath,
+                queueOnFailure: _registry.EffectiveRole == FederationRole.LocalProxy)
             .ConfigureAwait(false);
     }
 
-    private static bool IsLocalOnlyPath(PathString path)
+    private static bool IsLocalOnlyPath(PathString path, FederationRole role)
     {
+        if (path.StartsWithSegments("/mcp-transport", StringComparison.OrdinalIgnoreCase))
+            return role != FederationRole.LocalProxy;
+
         foreach (var prefix in LocalOnlyPrefixes)
         {
             if (path.StartsWithSegments(prefix, StringComparison.OrdinalIgnoreCase))

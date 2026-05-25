@@ -1,6 +1,8 @@
 using McpServer.Support.Mcp.Middleware;
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Storage;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using Xunit;
@@ -78,6 +80,30 @@ public sealed class WorkspaceResolutionMiddlewareTests
         Assert.True(nextCalled);
         Assert.True(wsContext.IsResolved);
         Assert.Contains("alpha", wsContext.WorkspacePath!, StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// Regression: when middleware resolves a workspace after <see cref="McpDbContext"/>
+    /// has already been constructed in the request scope, it must synchronize the
+    /// DbContext workspace discriminator used by global query filters.
+    /// </summary>
+    [Fact]
+    public async Task XWorkspacePath_Header_OverridesDbContextWorkspaceId()
+    {
+        var wsDto = MakeDto(WorkspaceA);
+        var workspaceService = CreateWorkspaceService(wsDto);
+        var tokenService = new WorkspaceTokenService();
+        var wsContext = new WorkspaceContext();
+        var options = new DbContextOptionsBuilder<McpDbContext>()
+            .UseInMemoryDatabase($"WorkspaceResolution_{Guid.NewGuid():N}")
+            .Options;
+        using var dbContext = new McpDbContext(options);
+        var mw = CreateMiddleware(_ => Task.CompletedTask);
+
+        var ctx = CreateContext("/mcpserver/sessionlog", workspaceHeader: WorkspaceA);
+        await mw.InvokeAsync(ctx, wsContext, tokenService, workspaceService, dbContext);
+
+        Assert.Equal(WorkspaceA, dbContext.CurrentWorkspaceId);
     }
 
     [Fact]

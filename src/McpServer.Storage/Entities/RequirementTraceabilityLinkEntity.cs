@@ -13,6 +13,11 @@ public sealed class RequirementTraceabilityLinkEntity
     [MaxLength(1024)]
     public string WorkspaceId { get; set; } = string.Empty;
 
+    /// <summary>Source requirement kind. DB-FK-001 fixes this to <c>fr</c>.</summary>
+    [Required]
+    [MaxLength(16)]
+    public string SourceKind { get; set; } = "fr";
+
     /// <summary>Source functional requirement identifier.</summary>
     [Required]
     [MaxLength(128)]
@@ -32,4 +37,10 @@ public sealed class RequirementTraceabilityLinkEntity
     [Required]
     [MaxLength(64)]
     public string CreatedAtUtc { get; set; } = string.Empty;
+
+    /// <summary>Source functional requirement navigation.</summary>
+    public RequirementEntity? SourceRequirement { get; set; }
+
+    /// <summary>Target technical or testing requirement navigation.</summary>
+    public RequirementEntity? TargetRequirement { get; set; }
 }

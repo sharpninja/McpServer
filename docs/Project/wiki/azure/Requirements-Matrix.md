@@ -1,0 +1,477 @@
+# Requirements Matrix (MCP Server)
+
+Traceability policy: see `Requirements-Traceability-Policy.md`.
+
+| Requirement | Status | Source Files |
+| --- | --- | --- |
+| FR-SUPPORT-010 | ✅ Complete | ContextController, TodoController, RepoController, SessionLogController, McpServerMcpTools, HybridSearchService, Fts5SearchService, VectorIndexService |
+| FR-MCP-001 | ✅ Complete | IngestionOptions, IOptions |
+| FR-MCP-002 | ✅ Complete | TodoController, TodoService, SqliteTodoService |
+| FR-MCP-003 | ✅ Complete | SessionLogController, SessionLogService |
+| FR-MCP-004 | ✅ Complete | HybridSearchService, Fts5SearchService, VectorIndexService |
+| FR-MCP-005 | ✅ Complete | GitHubController, GitHubCliService, IssueTodoSyncService |
+| FR-MCP-006 | ✅ Complete | IngestionCoordinator, RepoIngestor, SessionLogIngestor |
+| FR-MCP-007 | ✅ Complete | Program.cs, McpServerMcpTools, McpStdioHost |
+| FR-MCP-008 | ✅ Complete | Dockerfile, docker-compose.mcp.yml |
+| FR-MCP-009 | ✅ Complete | WorkspaceController, WorkspaceService |
+| FR-MCP-011 | ✅ Complete | WorkspaceProcessManager |
+| FR-MCP-012 | ✅ Complete | ToolRegistryController, ToolRegistryService, ToolBucketService |
+| FR-MCP-013 | ✅ Complete | WorkspaceAuthMiddleware, WorkspaceTokenService, MarkerFileService |
+| FR-MCP-014 | ✅ Complete | PairingHtml, PairingOptions, Program.cs (/pair) |
+| FR-MCP-015 | ✅ Complete | NgrokTunnelProvider, CloudflareTunnelProvider, FrpTunnelProvider |
+| FR-MCP-016 | ✅ Complete | Program.cs (MapMcp), ModelContextProtocol.AspNetCore |
+| FR-MCP-017 | ✅ Complete | Program.cs (UseWindowsService), Manage-McpService.ps1 |
+| FR-MCP-018 | ✅ Complete | MarkerFileService, WorkspaceProcessManager |
+| FR-MCP-019 | 🔀 Replaced | Replaced by FR-MCP-043 (single-app multi-tenant) |
+| FR-MCP-020 | ✅ Complete | WorkspaceProcessManager (marker file writes) |
+| FR-MCP-021 | ✅ Complete | WorkspaceController POST, WorkspaceService.InitAsync |
+| FR-MCP-022 | ✅ Complete | ToolRegistryOptions, Program.cs (EnsureDefaultBucketsAsync) |
+| FR-MCP-023 | ✅ Complete | RequirementsService, IRequirementsService, ICopilotClient |
+| FR-MCP-024 | ✅ Complete | MarkdownSessionLogParser, SessionLogIngestor |
+| FR-MCP-025 | ✅ Complete | WorkspaceProcessManager, WorkspaceConfigEntry, Program.cs |
+| FR-LOC-001 | 🔲 Planned | — |
+| TR-MCP-ARCH-001 | ✅ Complete | Core infrastructure |
+| TR-MCP-DATA-001–003 | ✅ Complete | Storage and indexing |
+| TR-MCP-CFG-001–002 | ✅ Complete | Configuration |
+| TR-MCP-CFG-003 | ✅ Complete | WorkspaceConfigEntry schema + appsettings.json patch workflow |
+| TR-MCP-INGEST-001–002 | ✅ Complete | Ingestion pipeline |
+| TR-MCP-API-001 | ✅ Complete | REST API |
+| TR-MCP-OPS-001 | ✅ Complete | Operational scripts |
+| TR-MCP-WS-002–009 | ✅ Complete | Workspace management (TR-MCP-WS-006 obsolete) |
+| TR-MCP-TR-001–003 | ✅ Complete | Tool registry |
+| TR-MCP-SEC-001–002 | ✅ Complete | Security |
+| TR-MCP-TUN-001–003 | ✅ Complete | Tunneling |
+| TR-MCP-HTTP-001 | ✅ Complete | MCP transport |
+| TR-MCP-SVC-001 | ✅ Complete | Windows service |
+| TR-MCP-REQ-001 | ✅ Complete | AI requirements analysis |
+| TR-MCP-REQ-002 | ✅ Complete | RequirementsDocumentService, RequirementsDocumentParser, RequirementsDocumentRenderer, RequirementsOptions |
+| TR-MCP-REQ-003 | ✅ Complete | RequirementsController, FwhMcpTools, Program.cs (requirements DI/config) |
+| TR-MCP-DRY-001 | ✅ Active directive | All code and scripts |
+| TR-MCP-DOC-002 | ✅ Active directive | .github/copilot-instructions.md, AGENTS.md |
+| TR-LOC-001 | 🔲 Planned | — |
+| FR-MCP-026 | ✅ Complete | OidcAuthOptions, Program.cs (JWT Bearer + AgentManager policy), WorkspaceAuthMiddleware, AgentController, AuthConfigController, Setup-McpKeycloak.ps1, setup-mcp-keycloak.sh, McpServer.Director (AuthCommands, OidcAuthService, LoginDialog) |
+| FR-MCP-027 | ✅ Complete | Program.cs (startup built-in seeding), AgentController, AgentService, AgentDefaults, AgentDefinitionEntity |
+| FR-MCP-028 | 🔲 Planned | AgentController, AgentService, AgentWorkspaceEntity, AgentEventLogEntity, McpDbContext |
+| FR-MCP-029 | ✅ Complete | McpServer.Cqrs (Dispatcher, CallContext, CorrelationId, Result, IPipelineBehavior) |
+| FR-MCP-030 | ✅ Complete | McpServer.Director (Program, DirectorCommands, AuthCommands, InteractiveCommand, McpHttpClient, OidcAuthService, TokenCache, MainScreen, HealthScreen, AgentScreen, TodoScreen, SessionLogScreen, WorkspaceListScreen, WorkspacePolicyScreen, LoginDialog, ViewModelBinder) |
+| FR-MCP-031 | 🔲 Planned | — |
+| FR-MCP-032 | 🔲 Planned | — |
+| FR-MCP-033 | ✅ Complete | WorkspaceController (POST /mcpserver/workspace/policy), WorkspacePolicyService, WorkspacePolicyDirectiveParser, McpServerMcpTools.workspace_policy_apply |
+| FR-MCP-034 | ✅ Complete | IWorkspaceService, MarkerFileService, WorkspaceModels |
+| FR-MCP-035 | ✅ Complete | templates/prompt-templates.yaml |
+| FR-MCP-036 | ✅ Complete | AuditedCopilotClient, Program.cs (ICopilotClient decorator), McpStdioHost (ICopilotClient decorator), CopilotServiceCollectionExtensions |
+| FR-MCP-037 | ✅ Complete | McpServer.Director (Program exec/list-viewmodels), McpServer.Cqrs.Mvvm (IViewModelRegistry) |
+| FR-MCP-038 | ✅ Complete | templates/prompt-templates.yaml |
+| FR-MCP-039 | ✅ Complete | Program.cs + McpStdioHost PostConfigure<IngestionOptions>, appsettings.yaml RepoAllowlist, templates/prompt-templates.yaml |
+| FR-MCP-040 | ✅ Complete | RequirementsController, RequirementsDocumentService, IRequirementsRepository |
+| FR-MCP-041 | ✅ Complete | RequirementsController (/mcpserver/requirements/generate), RequirementsDocumentService, RequirementsDocumentRenderer |
+| FR-MCP-042 | ✅ Complete | FwhMcpTools (requirements_* tools), RequirementsDocumentService |
+| FR-MCP-043 | ✅ In Progress | WorkspaceResolutionMiddleware, WorkspaceContext, WorkspaceTokenService |
+| FR-MCP-044 | ✅ In Progress | McpDbContext (global query filter), all entities (WorkspaceId) |
+| TR-MCP-AUTH-001–003 | ✅ Complete | OidcAuthOptions, Program.cs (JwtBearer + AgentManager policy), WorkspaceAuthMiddleware, AgentController, Setup-McpKeycloak.ps1, setup-mcp-keycloak.sh, McpServer.Director (AuthCommands, OidcAuthService) |
+| TR-MCP-AGENT-001–003 | ✅ Complete | AgentDefinitionEntity, AgentWorkspaceEntity, AgentEventLogEntity, McpDbContext, AgentDefaults, AgentService, AgentController, Program.cs (startup seeding), WorkspaceAppFactory (primary-only controller exposure) |
+| TR-MCP-CQRS-001–005 | ✅ Complete | McpServer.Cqrs (Dispatcher, CallContext, CorrelationId, Result, IPipelineBehavior, ILoggerProvider) |
+| TR-MCP-DIR-001–003 | ✅ Complete | McpServer.Director (System.CommandLine CLI, CQRS dispatch, OIDC auth, exec command, Terminal.Gui interactive mode) |
+| TR-MCP-COMP-001–003 | ✅ Complete | IWorkspaceService, MarkerFileService |
+| TR-MCP-AUDIT-001 | ✅ Complete | AuditedCopilotClient, Program.cs decorator wiring, McpStdioHost decorator wiring |
+| TR-MCP-POL-001 | ✅ Complete | WorkspacePolicyService, WorkspacePolicyDirectiveParser, WorkspaceController policy endpoint, McpServerMcpTools.workspace_policy_apply |
+| TR-MCP-DTO-001 | ✅ Complete | UnifiedSessionLogDto |
+| TR-MCP-CTX-001 | ✅ Complete | Program.cs + McpStdioHost PostConfigure<IngestionOptions>, appsettings.yaml RepoAllowlist, templates/prompt-templates.yaml |
+| TR-MCP-MT-001 | ✅ Complete | WorkspaceContext, WorkspaceResolutionMiddleware |
+| TR-MCP-MT-002 | ✅ Complete | WorkspaceResolutionMiddleware, WorkspaceTokenService |
+| TR-MCP-MT-003 | ✅ Complete | McpDbContext (global query filter), all entities (WorkspaceId) |
+| FR-MCP-045 | ✅ Complete | TodoController.MoveAsync, FwhMcpTools.TodoMove, TodoMoveRequest |
+| FR-MCP-046 | ✅ Complete | VoiceController, VoiceConversationService, VoiceConversationOptions |
+| FR-MCP-047 | ✅ Complete | DesktopProcessLauncher, NativeMethods, DesktopLaunchService, DesktopController, FwhMcpTools.DesktopLaunch |
+| FR-MCP-048 | ✅ Complete | Program.cs (AddYamlFile), NetEscapades.Configuration.Yaml |
+| TR-MCP-TODO-002 | ✅ Complete | TodoController, FwhMcpTools, TodoServiceResolver |
+| TR-MCP-VOICE-001–003 | ✅ Complete | VoiceConversationService, VoiceController, VoiceConversationOptions |
+| TR-MCP-CFG-004 | ✅ Complete | Program.cs, NetEscapades.Configuration.Yaml |
+| TR-MCP-DESKTOP-001 | ✅ Complete | DesktopProcessLauncher, NativeMethods, DesktopLaunchService, DesktopController, FwhMcpTools.DesktopLaunch |
+| FR-MCP-049 | ✅ Complete | PromptTemplateController, PromptTemplateService, PromptTemplateRenderer, TemplateClient, TemplatesScreen |
+| TR-MCP-TPL-001 | ✅ Complete | PromptTemplateService, TemplateStorageOptions |
+| TR-MCP-TPL-002 | ✅ Complete | PromptTemplateRenderer |
+| TR-MCP-TPL-003 | ✅ Complete | PromptTemplateController, FwhMcpTools |
+| TR-MCP-TPL-004 | ✅ Complete | TemplateMessages, \*TemplateQueryHandler, \*TemplateCommandHandler, TemplateApiClientAdapter, TemplateListViewModel, TemplateDetailViewModel, TemplatesScreen |
+| FR-MCP-050 | ✅ Complete | IMarkerPromptProvider, FileMarkerPromptProvider, ITodoPromptProvider, TodoPromptProvider, PairingHtmlRenderer |
+| TR-MCP-TPL-005 | ✅ Complete | IMarkerPromptProvider, FileMarkerPromptProvider, ITodoPromptProvider, TodoPromptProvider, PairingHtmlRenderer, templates/prompt-templates.yaml |
+| FR-MCP-051 | 🔲 Planned | CopilotClientOptions, VoiceConversationOptions, AgentDefaults |
+| TR-MCP-CFG-005 | 🔲 Planned | CopilotClientOptions, VoiceConversationOptions, AgentDefaults |
+| FR-MCP-052 | ✅ Complete | AgentPoolOptions, AgentPoolDefinitionOptions, AgentPoolOptionsValidator, Program.cs (AgentPool registration), IAgentPoolService, AgentPoolService |
+| FR-MCP-053 | ✅ Complete | AgentPoolService (queue lifecycle/dispatch), AgentPoolController (queue endpoints), TodoController queue enqueue endpoints |
+| FR-MCP-054 | ✅ Complete | AgentPoolController, AgentPoolService (notification and per-job stream fan-out) |
+| FR-MCP-055 | ✅ Complete | AgentPoolService (intent/context routing and default agent resolution), AgentPoolModels |
+| FR-MCP-056 | ✅ Complete | PromptTemplateController, PromptTemplateService, PromptTemplateRenderer, AgentPoolService.ResolvePromptAsync, AgentPoolController queue/resolve |
+| FR-MCP-057 | ✅ Complete | AgentPoolClient, Client.Models.AgentPoolModels, McpServerClient.AgentPool, AgentPoolScreen, MainScreen tab wiring |
+| FR-MCP-058 | ✅ Complete | AgentPoolController SSE endpoints, AgentPoolService stream subscriptions, VoiceConversationService agent-session reuse/one-shot guard, VoiceController |
+| TR-MCP-AGENT-004 | ✅ Complete | AgentPoolOptions, AgentPoolDefinitionOptions, AgentPoolOptionsValidator, Program.cs options validation/DI |
+| TR-MCP-AGENT-005 | ✅ Complete | IAgentPoolService, AgentPoolService, AgentPoolController |
+| TR-MCP-API-002 | ✅ Complete | AgentPoolController lifecycle/queue/resolve endpoints, AgentPoolService prompt/context routing |
+| TR-MCP-API-003 | ✅ Complete | AgentPoolController notifications/jobs SSE, AgentPoolService notification + job stream channels |
+| TR-MCP-TPL-006 | ✅ Complete | PromptTemplateController, PromptTemplateRenderer, AgentPoolService template/context prompt resolution |
+| TR-MCP-VOICE-004 | ✅ Complete | VoiceConversationService pooled agent reuse + one-shot guard, AgentPoolService voice-runtime dispatch integration |
+| TR-MCP-DIR-004 | ✅ Complete | AgentPoolClient, AgentPoolScreen, MainScreen tab integration, DirectorMcpContext typed client usage |
+| FR-MCP-059 | 🔲 Planned | McpServer.Support.Mcp services/registries/managers/providers (DI SSOT state flow) |
+| FR-MCP-060 | ✅ Complete | McpServer.UI.Core (Messages/Handlers/ViewModels), McpServer.Director (MainScreen, DirectorCommands/AuthCommands, ITabRegistry/DirectorTabRegistry), McpServer.Client adapters |
+| FR-MCP-061 | ✅ Complete | TodoValidator, TodoService, SqliteTodoService, TodoCreationService, SessionLogIdentifierValidator, SessionLogController, SessionLogService |
+| TR-MCP-DIR-005–008 | ✅ Complete | Endpoint-to-handler parity, ViewModel conventions, RBAC visibility/action mapping, declarative tab registry |
+| TR-MCP-ARCH-002 | 🔲 Planned | DI lifetimes for state ownership, pull-notify flow via INotifyPropertyChanged, ActivatorUtilities remediation audit |
+| TR-MCP-LOG-001 | ✅ Complete | Exception logging policy enforced across catch blocks (LogError/LogWarning) |
+| TR-MCP-LOG-002 | ✅ Complete | TodoValidator, TodoService, SqliteTodoService, SessionLogIdentifierValidator, SessionLogController, SessionLogService |
+| TEST-MCP-074 | ✅ Complete | TodoServiceTests, SqliteTodoServiceTests, SessionLogControllerTests, SessionLogServiceTests, MarkerFileServiceTests |
+| FR-MCP-062 | ✅ Complete | IChangeEventBus, ChannelChangeEventBus, EventStreamController, mutation services/controllers/workspace process manager |
+| TR-MCP-EVT-001 | ✅ Complete | ChannelChangeEventBus, IChangeEventBus, Program.cs (singleton registration) |
+| TR-MCP-EVT-002 | ✅ Complete | TodoService, SqliteTodoService, SessionLogService, RepoFileService, ToolRegistryService, ToolBucketService, WorkspaceService, AgentService, RequirementsDocumentService, IngestionCoordinator, WorkspaceProcessManager |
+| TR-MCP-EVT-003 | ✅ Complete | EventStreamController |
+| TR-MCP-EVT-004 | ✅ Complete | ChangeEvent, ChangeEventActions, ChangeEventCategories |
+| TR-MCP-EVT-005 | ✅ Complete | ChangeEventCategories, mutation publishers across workspace domains |
+| TEST-MCP-075 | ✅ Complete | ChannelChangeEventBusTests |
+| TEST-MCP-076 | ✅ Complete | TodoServiceTests, SqliteTodoServiceTests, SessionLogServiceTests, RepoFileServiceTests |
+| TEST-MCP-077 | ✅ Complete | EventPublishingServiceTests |
+| TEST-MCP-078 | ✅ Complete | EventStreamIntegrationTests |
+| TEST-MCP-079 | ✅ Complete | EventStreamIntegrationTests |
+| TEST-MCP-080 | ✅ Complete | EventStreamIntegrationTests (positive + non-matching category filter paths verified) |
+| FR-MCP-063 | ✅ Complete | GitHubIntegrationOptions, FileGitHubWorkspaceTokenStore, GitHubController, GitHubCliService, ProcessRunner, GitHubClient |
+| TR-MCP-GH-001 | ✅ Complete | GitHubIntegrationOptions, Program.cs, McpStdioHost, GitHubController |
+| TR-MCP-GH-002 | ✅ Complete | IGitHubWorkspaceTokenStore, FileGitHubWorkspaceTokenStore, GitHubController |
+| TR-MCP-GH-003 | ✅ Complete | IProcessRunner, ProcessRunner, GitHubCliService |
+| TR-MCP-GH-004 | ✅ Complete | IGitHubCliService, GitHubCliService, GitHubController, McpServer.Client GitHub models/client |
+| TEST-MCP-081 | ✅ Complete | GitHubControllerTests.AuthTokenEndpoints_RoundTrip |
+| TEST-MCP-082 | ✅ Complete | GitHubControllerTests.OAuthConfig_AndAuthorizeUrlBehavior |
+| TEST-MCP-083 | ✅ Complete | GitHubCliServiceTests.ListIssuesAsync_WithStoredWorkspaceToken_UsesProcessRunRequestOverride, FileGitHubWorkspaceTokenStoreTests |
+| TEST-MCP-084 | ✅ Complete | GitHubCliServiceTests workflow run tests, GitHubControllerTests.ListWorkflowRuns_ReturnsOk, GitHubClientTests workflow/auth tests |
+| TEST-MCP-085 | ✅ Complete | WorkspaceControllerTests.ApplyPolicy_ValidDirective_UpdatesWorkspaceBanList, WorkspaceControllerTests.ApplyPolicy_InvalidDirective_ReturnsBadRequest, WorkspacePolicyServiceTests |
+| TEST-MCP-086 | ✅ Complete | AuditedCopilotClientTests, WorkspacePolicyDirectiveParserTests |
+| TEST-MCP-087 | ✅ Complete | IngestionAllowlistContractTests.MarkerPromptTemplate_ContainsAvailableCapabilitiesSection |
+| FR-MCP-065 | ✅ Complete | ContextController (ingest-website), IngestionCoordinator.IngestWebsiteAsync, WebsiteIngestor, FwhMcpTools.context_ingest_website, ContextClient.IngestWebsiteAsync |
+| TR-MCP-INGEST-003 | ✅ Complete | WebsiteIngestor, IngestionOptions website limits, Program/McpStdioHost HttpClient registration, IngestionCoordinator website path |
+| TEST-MCP-088 | ✅ Complete | WebsiteIngestorTests, ContextControllerTests (ingest-website), McpTransportTests (context_ingest_website), ContextClientTests.IngestWebsiteAsync_PostsTypedRequest |
+| FR-MCP-066 | ✅ Complete | `McpServer.McpAgent` (`ServiceCollectionExtensions`, `McpAgentOptions`, `Hosting/*`, `PowerShellSessions/*`, `SessionLog/*`, `Todo/*`), `McpServer.Client` (`McpServerClient`, `RepoClient`, `DesktopClient`), `McpServer.McpAgent.SampleHost` (`Program.cs`, `SampleHostPreviewFactory.cs`) |
+| TR-MCP-AGENT-006 | ✅ Complete | `ServiceCollectionExtensions`, `McpAgentOptions`, `McpAgentOptionsValidator`, `IMcpHostedAgent`, `IMcpHostedAgentFactory`, `McpHostedAgent`, `McpHostedAgentRegistration` |
+| TR-MCP-AGENT-007 | ✅ Complete | `SessionLogWorkflow`, `SessionLogWorkflowContext`, `SessionLogTurnContext`, `TodoWorkflow`, `IMcpHostedAgent.PowerShellSessions`, `IHostedPowerShellSessionManager`, `McpHostedAgentToolAdapter`, `HostedPowerShellSessionManager`, `HostedPowerShellSessionHost`, `PowerShellSessionCreateResult`, `PowerShellSessionCommandResult`, `PowerShellSessionCloseResult`, `McpServerClient`, `RepoClient`, `DesktopClient`, `McpSessionIdentifierFactory` |
+| TEST-MCP-089 | ✅ Complete | `HostedAgentWorkflowIntegrationTests`, `McpHostedAgentAdapterTests`, `DesktopClientTests`, `DesktopControllerTests`, `SessionLogWorkflowTests`, `TodoWorkflowTests`, `ServiceCollectionExtensionsTests`, `PowerShellSessions_ExecuteInteractiveCommand_PreservesHostLocalSessionState` |
+| FR-MCP-067 | 🔲 Planned | — |
+| TR-MCP-HTTP-002 | 🔲 Planned | — |
+| TEST-MCP-090 | 🔲 Planned | — |
+| FR-MCP-068 | ✅ Complete | ConfigurationController, AppSettingsFileService, Program.cs (JWT Bearer auth), WorkspaceController |
+| TR-MCP-CFG-006 | ✅ Complete | ConfigurationController, AppSettingsFileService, Program.cs (JWT Bearer auth), WorkspaceController |
+| TEST-MCP-091 | ✅ Complete | ConfigurationControllerTests, AppSettingsFileServiceTests, ConfigurationAuthorizationPolicyTests |
+| FR-MCP-069 | ✅ Complete | TodoCreationService, GitHubCliService, TodoController, FwhMcpTools, VoiceConversationService |
+| TR-MCP-TODO-003 | ✅ Complete | TodoCreationService, TodoValidator, TodoController, FwhMcpTools, VoiceConversationService, TodoService, SqliteTodoService |
+| TR-MCP-GH-005 | ✅ Complete | WorkspaceServiceAccessor, GitHubCliService, ProcessRunRequest |
+| TEST-MCP-092 | ✅ Complete | TodoCreationServiceTests, TodoControllerTests |
+| TEST-MCP-093 | ✅ Complete | GitHubCliServiceTests |
+| FR-MCP-070 | ✅ Complete | TodoUpdateService, IssueTodoSyncService, TodoController, FwhMcpTools, VoiceConversationService |
+| TR-MCP-TODO-004 | ✅ Complete | TodoUpdateService, TodoController, FwhMcpTools, VoiceConversationService |
+| TR-MCP-GH-006 | ✅ Complete | IssueTodoSyncService, GitHubCliService |
+| TEST-MCP-094 | ✅ Complete | TodoUpdateServiceTests, IssueTodoSyncServiceTests |
+| FR-MCP-071 | ✅ Complete | IssueTodoSyncService, TodoUpdateService, GitHubController, TodoController |
+| TR-MCP-GH-007 | ✅ Complete | IssueTodoSyncService |
+| TEST-MCP-095 | ✅ Complete | IssueTodoSyncServiceTests, IssueTodoGitHubRoundTripIntegrationTests |
+| FR-MCP-072 | ✅ Complete | SqliteTodoService, TodoYamlFileSerializer, TodoController, TodoClient, McpServerMcpTools, TodoServiceFactory |
+| TR-MCP-TODO-005 | ✅ Complete | SqliteTodoService, TodoYamlFileSerializer, TodoServiceFactory, TodoStorageOptions, McpInstanceResolver, appsettings*.yaml |
+| TR-MCP-TODO-006 | ✅ Complete | ITodoService, ITodoStore, SqliteTodoService, TodoController, McpServerMcpTools, TodoClient, TodoModels, TodoCreationService, TodoUpdateService |
+| TEST-MCP-096 | ✅ Complete | SqliteTodoServiceTests, MixedTodoStorageIsolationTests |
+| TEST-MCP-097 | ✅ Complete | SqliteTodoServiceTests, TodoControllerTests, TodoClientTests, IntegrationTests Controllers.TodoControllerTests |
+| FR-MCP-073 | ✅ Complete | ParseableEventFormatter, ParseableBatchFormatter |
+| TR-MCP-LOG-003 | ✅ Complete | ParseableEventFormatter, ParseableBatchFormatter |
+| TEST-MCP-098 | ✅ Complete | ParseableEventFormatterTests |
+| FR-MCP-074 | ✅ Complete | azure-pipelines.yml, docs/AZURE-PIPELINES.md |
+| TR-MCP-CI-001 | ✅ Complete | azure-pipelines.yml, docs/AZURE-PIPELINES.md, README.md, docs/MCP-SERVER.md, docs/RELEASE-CHECKLIST.md |
+| TEST-MCP-099 | ✅ Complete | azure-pipelines.yml, docs/AZURE-PIPELINES.md |
+| FR-MCP-075 | ✅ Complete | tools/powershell/McpSession.psm1 |
+| TR-MCP-AGENT-013 | ✅ Complete | tools/powershell/McpSession.psm1 |
+| TEST-MCP-100 | ✅ Complete | tools/powershell/McpSession.Tests.ps1 |
+| FR-MCP-076 | ✅ Complete | src/McpServer.Services/Services/MarkerFileService.cs, templates/prompt-templates.yaml, src/McpServer.ServiceDefaults/Extensions.cs, tools/powershell/McpSession.psm1, tools/powershell/McpTodo.psm1, tools/powershell/McpContext.psm1, docs/context/module-bootstrap.md, docs/USER-GUIDE.md |
+| TR-MCP-SEC-003 | ✅ Complete | src/McpServer.Services/Services/MarkerFileService.cs, templates/prompt-templates.yaml, src/McpServer.ServiceDefaults/Extensions.cs, tools/powershell/McpSession.psm1, tools/powershell/McpTodo.psm1, tools/powershell/McpContext.psm1 |
+| TR-MCP-AGENT-014 | ✅ Complete | tools/powershell/McpSession.psm1, tools/powershell/McpTodo.psm1, tools/powershell/McpContext.psm1, docs/context/module-bootstrap.md, docs/USER-GUIDE.md |
+| TEST-MCP-101 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs, tests/McpServer.Support.Mcp.IntegrationTests/HealthEndpointTests.cs, tools/powershell/McpSession.Tests.ps1, tools/powershell/McpTodo.Tests.ps1 |
+| FR-MCP-077 | ✅ In Progress | src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs, src/McpServer.Storage/McpDbContextFactory.cs, src/McpServer.Storage/Database/McpDatabaseProviderKind.cs, src/McpServer.Storage/Database/McpDatabaseProviderOptions.cs, src/McpServer.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs, src/McpServer.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs, src/McpServer.Support.Mcp/Program.cs, src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs, scripts/Invoke-McpDatabaseEncryptionTransition.ps1, src/McpServer.Storage.SqliteMigrations, src/McpServer.Storage.PostgreSqlMigrations, src/McpServer.Storage.SqlServerMigrations, docs/USER-GUIDE.md |
+| TR-MCP-SEC-004 | ✅ In Progress | src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs, src/McpServer.Storage/McpDbContextFactory.cs, src/McpServer.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs, src/McpServer.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs, scripts/Invoke-McpDatabaseEncryptionTransition.ps1, src/McpServer.Storage.SqliteMigrations, src/McpServer.Storage.PostgreSqlMigrations, src/McpServer.Storage.SqlServerMigrations |
+| TR-MCP-CFG-007 | ✅ Complete | src/McpServer.Support.Mcp/Options/McpDatabaseConfigurationResolver.cs, src/McpServer.Storage/McpDbContextFactory.cs, src/McpServer.Support.Mcp/Program.cs, src/McpServer.Support.Mcp/McpStdio/McpStdioHost.cs, src/McpServer.Support.Mcp/appsettings.yaml, src/McpServer.Support.Mcp/appsettings.Staging.yaml |
+| TEST-MCP-102 | ✅ In Progress | tests/McpServer.Support.Mcp.IntegrationTests/Controllers/ProviderDatabaseIntegrationTests.cs, tests/McpServer.Support.Mcp.IntegrationTests/ProviderIntegrationTestSupport.cs, tests/McpServer.Support.Mcp.Tests/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommandTests.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs, src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs, scripts/Invoke-McpDatabaseEncryptionTransition.ps1, src/McpServer.Storage.SqliteMigrations, src/McpServer.Storage.PostgreSqlMigrations, src/McpServer.Storage.SqlServerMigrations |
+| FR-MCP-REPL-001 | ✅ Complete | McpServer.Repl.Core (IReplProtocol, IYamlEnvelope, IYamlSerializer, IMarkerFileReader, ITrustBootstrapService, IAuthRotationHandler, IWorkspaceSelector), McpServer.Repl.Host (Program.cs, AgentStdioHandler, InteractiveHandler, ServiceCollectionExtensions) |
+| FR-MCP-REPL-002 | ✅ Complete | McpServer.Repl.Host (Program.cs, AgentStdioHandler, InteractiveHandler), McpServer.Repl.Core (SessionLogErrorEnvelope) |
+| FR-MCP-REPL-003 | ✅ Complete | McpServer.Repl.Core (ITodoWorkflow, TodoCommandShapes, ISessionLogWorkflow, SessionLogCommandShapes, SessionLogModels, IRequirementsWorkflow, RequirementsCommandShapes, RequirementsCommandModels, IGenericClientPassthrough, ClientCommandShapes), McpServer.Repl.Host (TodoWorkflow, RequirementsWorkflow, SessionLogWorkflow, GenericClientPassthrough) |
+| FR-MCP-REPL-004 | ✅ Complete | McpServer.Repl.Core (ITrustBootstrapService, IMarkerFileReader, IAuthRotationHandler), McpServer.Repl.Host (AgentStdioHandler) |
+| FR-MCP-REPL-005 | ✅ Complete | McpServer.Repl.Core (IGenericClientPassthrough, ClientCommandShapes), McpServer.Repl.Host (GenericClientPassthrough) |
+| TR-MCP-REPL-001 | ✅ Complete | McpServer.Repl.Core (IYamlEnvelope, IYamlSerializer, IReplProtocol) |
+| TR-MCP-REPL-002 | ✅ Complete | McpServer.Repl.Host (ServiceCollectionExtensions, Program.cs), McpServer.Repl.Core workflow interfaces |
+| TR-MCP-REPL-003 | ✅ Complete | McpServer.Repl.Host (Program.cs, AgentStdioHandler, InteractiveHandler), McpServer.Repl.Core (SessionLogErrorEnvelope) |
+| TR-MCP-REPL-004 | ✅ Complete | McpServer.Repl.Core (ITodoWorkflow, ISessionLogWorkflow, IRequirementsWorkflow, IGenericClientPassthrough), McpServer.Repl.Host (TodoWorkflow, SessionLogWorkflow, RequirementsWorkflow, GenericClientPassthrough) |
+| TR-MCP-REPL-005 | ✅ Complete | McpServer.Repl.Core (TodoCommandShapes, SessionLogCommandShapes, RequirementsCommandShapes, ClientCommandShapes), McpServer.Repl.Host (TodoWorkflow, SessionLogWorkflow, RequirementsWorkflow, GenericClientPassthrough) |
+| TR-MCP-REPL-006 | ✅ Complete | McpServer.Repl.Core (ITrustBootstrapService, IMarkerFileReader, IAuthRotationHandler), McpServer.Repl.Host (AgentStdioHandler) |
+| TR-MCP-REPL-007 | ✅ Complete | McpServer.Repl.Core (IGenericClientPassthrough, ClientCommandShapes), McpServer.Repl.Host (GenericClientPassthrough) |
+| FR-SUPPORT-010A | ✅ Complete | src/McpServer.Services/Services/SessionLogService.cs (StampWorkspaceId), src/McpServer.Storage/McpDbContext.cs (auto-stamp fallback) |
+| FR-SUPPORT-010B | ✅ Complete | src/McpServer.Support.Mcp/Program.cs (InvalidModelStateResponseFactory), src/McpServer.Support.Mcp/Controllers/SessionLogController.cs (ValidationProblem) |
+| FR-SUPPORT-010C | ✅ Complete | src/McpServer.Support.Mcp/Controllers/SessionLogController.cs (GetByIdAsync, UpsertTurnAsync), src/McpServer.Services/Services/SessionLogService.cs (GetAsync, UpsertTurnAsync) |
+| FR-MCP-REPL-007 | ✅ Complete | src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs (TryResolveWithDiagnostics, FindMarkerFile out-param), src/McpServer.Repl.Host/Program.cs (--workspace-path, --marker-file), src/McpServer.Client/McpClientBase.cs (CredentialDiagnostic surfacing) |
+| TR-MCP-MT-003A | ✅ Complete | src/McpServer.Services/Services/SessionLogService.cs |
+| TR-PLANNED-013A | ✅ Complete | src/McpServer.Support.Mcp/Program.cs |
+| TR-MCP-REPL-008 | ✅ Complete | src/McpServer.Repl.Host/MarkerFileClientOptionsResolver.cs |
+| TEST-MCP-REPL-001 | ✅ Complete | tests/McpServer.Repl.Core.Tests (Iteration1_IntegrationTests, YamlFramingTests), tests/McpServer.Repl.IntegrationTests (YamlEnvelopeShapeTests) |
+| TEST-MCP-REPL-002 | ✅ Complete | tests/McpServer.Repl.Core.Tests (FakeYamlSerializerTests, YamlFramingTests) |
+| TEST-MCP-REPL-003 | ✅ Complete | tests/McpServer.Repl.Core.Tests (ProtocolHandshakeTests), tests/McpServer.Repl.IntegrationTests (TrustBootstrapFlowTests) |
+| TEST-MCP-REPL-004 | ✅ Complete | tests/McpServer.Repl.IntegrationTests (TrustBootstrapFlowTests), tests/McpServer.Repl.Core.Tests (MarkerFileTrustTests, MockTrustBootstrapServiceTests) |
+| TEST-MCP-REPL-005 | ✅ Complete | tests/McpServer.Repl.Core.Tests (AuthRotationTests, StubAuthRotationHandlerTests), tests/McpServer.Repl.IntegrationTests (AuthKeyAndWorkspaceTests) |
+| TEST-MCP-REPL-006 | ✅ Complete | tests/McpServer.Repl.Core.Tests (TodoWorkflowTests, TodoWorkflowTestExtensions), tests/McpServer.Repl.IntegrationTests (Iteration3IntegrationTests) |
+| TEST-MCP-REPL-007 | ✅ Complete | tests/McpServer.Repl.Core.Tests (SessionLogWorkflowTests, SessionLogWorkflowIntegration2Tests, SessionLogWorkflowProductionTests), tests/McpServer.Repl.IntegrationTests (Iteration2IntegrationTests) |
+| TEST-MCP-REPL-008 | ✅ Complete | tests/McpServer.Repl.Core.Tests (GenericClientPassthroughTests), tests/McpServer.Repl.IntegrationTests (Iteration5IntegrationTests) |
+| TEST-MCP-REPL-009 | ✅ Complete | tests/McpServer.Repl.Core.Tests (RequirementsWorkflowTests), tests/McpServer.Repl.IntegrationTests (Iteration4IntegrationTests) |
+| TEST-MCP-REPL-010 | ✅ Complete | tests/McpServer.Repl.Core.Tests (WorkspaceSelectionTests), tests/McpServer.Repl.IntegrationTests (AuthKeyAndWorkspaceTests) |
+| TEST-MCP-REPL-011 | ✅ Complete | tests/McpServer.Repl.Core.Tests (GenericClientPassthroughTests), tests/McpServer.Repl.IntegrationTests (Iteration5IntegrationTests) |
+| TEST-MCP-REPL-012 | ✅ Complete | tests/McpServer.Repl.Core.Tests (TodoWorkflowTests streaming event tests) |
+| TEST-MCP-REPL-013 | ✅ Complete | tests/McpServer.Repl.IntegrationTests (EndToEndFlowTests) |
+| TEST-MCP-REPL-014 | ✅ Complete | tests/McpServer.Repl.Core.Tests (SessionLogWorkflowTests, TodoWorkflowTests error handling) |
+| TEST-MCP-REPL-015 | ✅ Complete | tests/McpServer.Repl.Core.Tests (RequestResponseCorrelationTests), tests/McpServer.Repl.IntegrationTests (YamlEnvelopeShapeTests) |
+| TEST-MCP-REPL-016 | ✅ Complete | tests/McpServer.Repl.Core.Tests (McpServerClientIntegrationTests, DI registration tests) |
+| TEST-MCP-REPL-017 | ✅ Complete | tests/McpServer.Repl.Core.Tests (WorkspaceSelectionTests), tests/McpServer.Repl.IntegrationTests (AuthKeyAndWorkspaceTests) |
+| TEST-MCP-REPL-018 | ✅ Complete | tests/McpServer.Repl.Core.Tests (OrchestrationRulesTests), tests/McpServer.Repl.IntegrationTests (TrustBootstrapFlowTests) |
+| TEST-MCP-REPL-019 | ✅ Complete | tests/McpServer.Repl.Core.Tests (TodoWorkflowTests, SessionLogWorkflowTests, RequirementsWorkflowTests, GenericClientPassthroughTests) |
+| TEST-MCP-REPL-020 | ✅ Complete | tests/McpServer.Repl.Core.Tests (SessionLogWorkflowTests state management, TodoWorkflowTests selection state) |
+| FR-MCP-081 | ✅ Complete | TodoExecutionService, TodoExecutionModels, TodoExecutionController |
+| FR-MCP-082 | ✅ Complete | TodoExecutionService, TodoExecutionController, McpServerMcpTools, TodoClient |
+| FR-MCP-083 | ✅ Complete | TodoExecutionService, TodoExecutionController, McpServerMcpTools, TodoClient |
+| TR-MCP-BYRD-001 | ✅ Complete | TodoExecutionModels, ITodoExecutionService, TodoExecutionService |
+| TR-MCP-BYRD-002 | ✅ Complete | TodoExecutionService, TodoExecutionController, McpServerMcpTools, TodoClient |
+| TR-MCP-BYRD-003 | ✅ Complete | TodoExecutionService, TodoExecutionController |
+| TR-MCP-BYRD-004 | ✅ Complete | TodoExecutionController, McpServerMcpTools, TodoClient |
+| TEST-MCP-103 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs |
+| TEST-MCP-104 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/TodoExecutionServiceTests.cs |
+| TEST-MCP-105 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Controllers/TodoExecutionControllerTests.cs, tests/McpServer.Support.Mcp.Tests/McpStdio/TodoExecutionMcpToolTests.cs, tests/McpServer.Client.Tests/TodoClientTests.cs |
+| FR-MCP-084 | ✅ Complete | RequirementsWikiDocumentRenderer, RequirementsWikiDocumentSelector, RequirementsController, RequirementsClient, RequirementsWorkflow, ReplCommandDispatcher, McpServerMcpTools, Codex/Claude/Copilot/Cline plugins |
+| TR-MCP-REQ-004 | ✅ Complete | RequirementsWikiDocumentRenderer, RequirementsDocumentService, RequirementsDatabaseDocumentService, RequirementsController, RequirementsClient, RequirementsWorkflow, McpServerMcpTools |
+| TR-MCP-REQ-005 | ✅ Complete | RequirementsWikiDocumentSelector, RequirementsController, RequirementsIngestRequest, RequirementsIngestResult, RequirementsClient, ReplCommandDispatcher, RequirementsWorkflow |
+| TEST-MCP-106 | ✅ Complete | RequirementsDocumentServiceTests, RequirementsControllerTests |
+| TEST-MCP-107 | ✅ Complete | RequirementsControllerTests |
+| TEST-MCP-108 | ✅ Complete | RequirementsWorkflow, ReplCommandDispatcher, mcpserver-codex-plugin tests/repl-invoke-shim.bats |
+| TEST-MCP-109 | ✅ Complete | mcpserver-codex-plugin tests/repl-invoke-shim.bats, Claude Code skills.bats, Copilot requirements skill, Cline requirements.test.ts |
+| FR-MCP-078 | ✅ Complete | GraphRagController, GraphRagAdHocService, McpServer.GraphRag |
+| FR-MCP-079 | ✅ Complete | GraphRagController, GraphRagAdHocService |
+| FR-MCP-080 | ✅ Complete | GraphRagController, GraphRagAdHocService |
+| TR-GRAPHRAG-ADHOC-001 | ✅ Complete | src/McpServer.GraphRag, src/McpServer.Support.Mcp/Controllers/GraphRagController.cs |
+| TR-GRAPHRAG-ADHOC-002 | ✅ Complete | src/McpServer.GraphRag |
+| TR-GRAPHRAG-ADHOC-003 | ✅ Complete | src/McpServer.GraphRag |
+| TR-MCP-DOC-001 | ✅ Complete | docs/ folder structure, docs/MCP-SERVER.md, docs/USER-GUIDE.md |
+| TR-MCP-TODO-007 | ✅ Complete | src/McpServer.Support.Mcp/Services/TodoCreationService.cs |
+| TR-MCP-TODO-008 | ✅ Complete | src/McpServer.Support.Mcp/Services/SqliteTodoService.cs |
+| TEST-MCP-001 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Configuration |
+| TEST-MCP-002 | ✅ Complete | tests/McpServer.Support.Mcp.IntegrationTests/Controllers/TodoControllerTests.cs |
+| TEST-MCP-003 | ✅ Complete | tests/McpServer.Support.Mcp.IntegrationTests (workspace isolation), src/McpServer.Storage/McpDbContext.cs (HasQueryFilter) |
+| TEST-MCP-004 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/HybridSearchServiceTests.cs |
+| TEST-MCP-005 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/IssueTodoSyncServiceTests.cs |
+| TEST-MCP-006 | ✅ Complete | tests/McpServer.Support.Mcp.IntegrationTests/McpTransportTests.cs |
+| TEST-MCP-007 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/WorkspaceServiceTests.cs |
+| TEST-MCP-008 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/ToolRegistryServiceTests.cs |
+| TEST-MCP-009 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Middleware/WorkspaceAuthMiddlewareTests.cs |
+| TEST-MCP-010 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/PairingServiceTests.cs |
+| TEST-MCP-011 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/TunnelProviderTests.cs |
+| TEST-MCP-012 | ✅ Complete | tests/McpServer.Support.Mcp.IntegrationTests/McpTransportTests.cs |
+| TEST-MCP-013 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/MarkerFileServiceTests.cs |
+| TEST-MCP-014 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/RequirementsServiceTests.cs |
+| TEST-MCP-015 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Services/MarkdownSessionLogParserTests.cs |
+| TEST-MCP-026 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-027 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-028 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-029 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-030 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-031 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-032 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-033 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-034 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-035 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-036 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-037 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-038 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-039 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-040 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-041 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-042 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-043 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-044 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-045 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-046 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-047 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-048 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-049 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-050 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-051 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-052 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-053 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-054 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-055 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-056 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-057 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-058 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-059 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-060 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-061 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-062 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-063 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-064 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-065 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-066 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-067 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-068 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-069 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-070 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-071 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-072 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| TEST-MCP-073 | ✅ Complete | tests/McpServer.Support.Mcp.Tests |
+| FR-MCP-064 | 🔲 Planned | docs/ marketing pages (planned) |
+| TR-MCP-AGENT-008 | 🔲 Planned | Reserved for FR-MCP-028 / FR-MCP-050 |
+| TR-MCP-AGENT-009 | 🔲 Planned | Reserved for FR-MCP-050 |
+| TR-MCP-AGENT-010 | 🔲 Planned | Reserved for FR-MCP-050 |
+| TR-MCP-AGENT-011 | 🔲 Planned | Reserved for FR-MCP-050 |
+| TR-MCP-AGENT-012 | 🔲 Planned | Reserved for FR-MCP-050 |
+| TR-MCP-WS-UI-001 | 🔲 Planned | Reserved for FR-MCP-031 (Management Web UI) |
+| FR-MCP-085 | 🔲 Planned | Question, service, controller, client, MCP, REPL, PowerShell Q&A implementation |
+| FR-MCP-086 | 🔲 Planned | Answer, service, controller, client, MCP, REPL, PowerShell Q&A implementation |
+| FR-MCP-087 | 🔲 Planned | Accepted-answer service and FAQ projection |
+| FR-MCP-088 | 🔲 Planned | Question query and tag filtering |
+| FR-MCP-089 | 🔲 Planned | QaVoteEntity, vote service, audit, voter endpoints |
+| FR-MCP-090 | 🔲 Planned | Comment entity and service operations |
+| FR-MCP-091 | 🔲 Planned | FAQ endpoint, client, wiki generator |
+| FR-MCP-092 | 🔲 Planned | QaAuthorResolver |
+| FR-MCP-093 | 🔲 Planned | Q&A EF workspace scoping |
+| FR-MCP-094 | 🔲 Planned | QaController, MCP tools, QaClient |
+| FR-MCP-095 | 🔲 Planned | QaWorkflow and McpQa PowerShell module |
+| FR-MCP-096 | 🔲 Planned | Q&A docs and context reference |
+| FR-MCP-097 | 🔲 Planned | Sibling plugin qa skills |
+| FR-MCP-098 | 🔲 Planned | QaAuditHistoryEntity and audit endpoints |
+| FR-MCP-099 | 🔲 Planned | Q&A skill web-research capture mandate |
+| FR-MCP-100 | 🔲 Planned | Question close and duplicate flows |
+| FR-MCP-101 | 🔲 Planned | QaBodyRenderer and body HTML fields |
+| FR-MCP-102 | 🔲 Planned | FAQ wiki build target |
+| TR-MCP-QA-001 | 🔲 Planned | Q&A entity tenancy |
+| TR-MCP-QA-002 | 🔲 Planned | Question tags JSON |
+| TR-MCP-QA-003 | 🔲 Planned | Provider migrations |
+| TR-MCP-QA-004 | 🔲 Planned | Denormalized vote counters |
+| TR-MCP-QA-005 | 🔲 Planned | Accepted answer storage |
+| TR-MCP-QA-006 | 🔲 Planned | Q&A service shape |
+| TR-MCP-QA-007 | 🔲 Planned | Q&A REST surface |
+| TR-MCP-QA-008 | 🔲 Planned | Q&A search indexing |
+| TR-MCP-QA-009 | 🔲 Planned | Q&A author resolver |
+| TR-MCP-QA-010 | 🔲 Planned | Q&A MCP STDIO tools |
+| TR-MCP-QA-011 | 🔲 Planned | FAQ query projection |
+| TR-MCP-QA-012 | 🔲 Planned | Typed Q&A client |
+| TR-MCP-QA-013 | 🔲 Planned | Q&A XML documentation |
+| TR-MCP-QA-014 | 🔲 Planned | Q&A REPL workflow |
+| TR-MCP-QA-015 | 🔲 Planned | Q&A PowerShell module |
+| TR-MCP-QA-016 | 🔲 Planned | Plugin Q&A skill |
+| TR-MCP-QA-017 | 🔲 Planned | Q&A documentation surface |
+| TR-MCP-QA-018 | 🔲 Planned | Q&A audit storage |
+| TR-MCP-QA-019 | 🔲 Planned | Q&A audit emission |
+| TR-MCP-QA-020 | 🔲 Planned | Q&A audit query |
+| TR-MCP-QA-021 | 🔲 Planned | Q&A audit surfaces |
+| TR-MCP-QA-022 | 🔲 Planned | Answer sources JSON |
+| TR-MCP-QA-023 | 🔲 Planned | Mandatory web capture skill rule |
+| TR-MCP-QA-024 | 🔲 Planned | Companion web skill cross-references |
+| TR-MCP-QA-025 | 🔲 Planned | Close and duplicate storage |
+| TR-MCP-QA-026 | 🔲 Planned | Close and duplicate surfaces |
+| TR-MCP-QA-027 | 🔲 Planned | Q&A body rendering |
+| TR-MCP-QA-028 | 🔲 Planned | Q&A sanitization tests |
+| TR-MCP-QA-029 | 🔲 Planned | FAQ wiki generation target |
+| TR-MCP-QA-030 | 🔲 Planned | FAQ wiki snapshot tests |
+| TR-MCP-QA-031 | 🔲 Planned | Q&A voter history |
+| TR-MCP-QA-032 | 🔲 Planned | Q&A vote state storage |
+| TR-MCP-QA-033 | 🔲 Planned | Q&A vote state machine |
+| TR-MCP-QA-034 | 🔲 Planned | Q&A vote audit actions |
+| TEST-MCP-110 | 🔲 Planned | Q&A question CRUD tests |
+| TEST-MCP-111 | 🔲 Planned | Q&A answer CRUD tests |
+| TEST-MCP-112 | 🔲 Planned | Accepted-answer invariant tests |
+| TEST-MCP-113 | 🔲 Planned | Q&A tag filter tests |
+| TEST-MCP-114 | 🔲 Planned | Q&A vote counter tests |
+| TEST-MCP-115 | 🔲 Planned | Q&A comment tests |
+| TEST-MCP-116 | 🔲 Planned | FAQ projection tests |
+| TEST-MCP-117 | 🔲 Planned | Q&A search indexing tests |
+| TEST-MCP-118 | 🔲 Planned | Q&A author resolver tests |
+| TEST-MCP-119 | 🔲 Planned | Q&A workspace isolation tests |
+| TEST-MCP-120 | 🔲 Planned | Q&A MCP STDIO parity tests |
+| TEST-MCP-121 | 🔲 Planned | QaClient tests |
+| TEST-MCP-122 | 🔲 Planned | QaWorkflow tests |
+| TEST-MCP-123 | 🔲 Planned | McpQa PowerShell tests |
+| TEST-MCP-124 | 🔲 Planned | Plugin skill smoke tests |
+| TEST-MCP-125 | 🔲 Planned | Q&A audit emission tests |
+| TEST-MCP-126 | 🔲 Planned | Q&A audit query tests |
+| TEST-MCP-127 | 🔲 Planned | Q&A vote audit transaction tests |
+| TEST-MCP-128 | 🔲 Planned | Answer sources tests |
+| TEST-MCP-129 | 🔲 Planned | Q&A skill mandate text tests |
+| TEST-MCP-130 | 🔲 Planned | Close and duplicate flow tests |
+| TEST-MCP-131 | 🔲 Planned | Q&A sanitization tests |
+| TEST-MCP-132 | 🔲 Planned | FAQ wiki generation tests |
+| TEST-MCP-133 | 🔲 Planned | Voter-history endpoint tests |
+| TEST-MCP-134 | 🔲 Planned | One-vote-per-user tests |
+| TEST-MCP-135 | 🔲 Planned | Current vote state endpoint tests |
+| FR-MCP-103 | 🟡 Partial | Hub-and-spoke federation |
+| TR-MCP-FED-001 | 🟡 Partial | Hub proxy federation contract |
+| TEST-MCP-136 | 🟡 Partial | Hub-and-spoke federation tests |
+| FR-01 | Tracked | Functional-Requirements.md |
+| FR-02 | Tracked | Functional-Requirements.md |
+| FR-03 | Tracked | Functional-Requirements.md |
+| FR-04 | Tracked | Functional-Requirements.md |
+| FR-05 | Tracked | Functional-Requirements.md |
+| FR-06 | Tracked | Functional-Requirements.md |
+| FR-07 | Tracked | Functional-Requirements.md |
+| FR-08 | Tracked | Functional-Requirements.md |
+| FR-09 | Tracked | Functional-Requirements.md |
+| FR-10 | Tracked | Functional-Requirements.md |
+| FR-MCP-104 | Tracked | Functional-Requirements.md |
+| FR-MCP-105 | Tracked | Functional-Requirements.md |
+| FR-MCP-106 | Tracked | Functional-Requirements.md |
+| FR-MCP-107 | Tracked | Functional-Requirements.md |
+| FR-MCP-108 | Tracked | Functional-Requirements.md |
+| TR-01 | Tracked | Technical-Requirements.md |
+| TR-02 | Tracked | Technical-Requirements.md |
+| TR-03 | Tracked | Technical-Requirements.md |
+| TR-04 | Tracked | Technical-Requirements.md |
+| TR-05 | Tracked | Technical-Requirements.md |
+| TR-06 | Tracked | Technical-Requirements.md |
+| TR-07 | Tracked | Technical-Requirements.md |
+| TR-08 | Tracked | Technical-Requirements.md |
+| TR-09 | Tracked | Technical-Requirements.md |
+| TR-10 | Tracked | Technical-Requirements.md |
+| TR-11 | Tracked | Technical-Requirements.md |
+| TR-12 | Tracked | Technical-Requirements.md |
+| TR-13 | Tracked | Technical-Requirements.md |
+| TR-14 | Tracked | Technical-Requirements.md |
+| TR-MCP-BYRD-005 | Tracked | Technical-Requirements.md |
+| TR-MCP-DB-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-DB-002 | Tracked | Technical-Requirements.md |
+| TR-MCP-DB-003 | Tracked | Technical-Requirements.md |
+| TR-MCP-DB-004 | Tracked | Technical-Requirements.md |
+| TR-MCP-DB-005 | Tracked | Technical-Requirements.md |
+| TR-MCP-PLAN-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-PLUGIN-008 | Tracked | Technical-Requirements.md |
+| TR-MCP-TODO-009 | Tracked | Technical-Requirements.md |
+| TR-MCP-TPL-007 | Tracked | Technical-Requirements.md |
+| TR-MCP-WEB-001 | Tracked | Technical-Requirements.md |
+| TR-MCP-WEB-002 | Tracked | Technical-Requirements.md |
+| TR-MCP-WEB-003 | Tracked | Technical-Requirements.md |
+| TR-MCP-WEB-004 | Tracked | Technical-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-001 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-002 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-003 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-004 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-005 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-006 | Tracked | Testing-Requirements.md |
+| TEST-GRAPHRAG-ADHOC-007 | Tracked | Testing-Requirements.md |
+| TEST-MCP-137 | Tracked | Testing-Requirements.md |
+| TEST-MCP-138 | Tracked | Testing-Requirements.md |
+| TEST-MCP-139 | Tracked | Testing-Requirements.md |
+| TEST-MCP-140 | Tracked | Testing-Requirements.md |
+| TEST-MCP-141 | Tracked | Testing-Requirements.md |
+| TEST-MCP-142 | Tracked | Testing-Requirements.md |
+| TEST-MCP-143 | Tracked | Testing-Requirements.md |
+| TEST-MCP-144 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-007-1 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-007-2 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-007-3 | Tracked | Testing-Requirements.md |
+| TEST-MCP-REPL-007-4 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010A-1 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010A-2 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010B-1 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010B-2 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010C-1 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010C-2 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010C-3 | Tracked | Testing-Requirements.md |

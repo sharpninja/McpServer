@@ -22,6 +22,18 @@ public sealed class FrEntry
     /// <summary>Owning workspace discriminator.</summary>
     [JsonPropertyName("workspaceId")]
     public string WorkspaceId { get; set; } = string.Empty;
+
+    /// <summary>Requirement priority.</summary>
+    [JsonPropertyName("priority")]
+    public string Priority { get; set; } = "medium";
+
+    /// <summary>Requirement status.</summary>
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = "pending";
+
+    /// <summary>Optional operator notes.</summary>
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
 }
 
 /// <summary>A technical requirement entry.</summary>
@@ -42,6 +54,18 @@ public sealed class TrEntry
     /// <summary>Owning workspace discriminator.</summary>
     [JsonPropertyName("workspaceId")]
     public string WorkspaceId { get; set; } = string.Empty;
+
+    /// <summary>Requirement priority.</summary>
+    [JsonPropertyName("priority")]
+    public string Priority { get; set; } = "medium";
+
+    /// <summary>Requirement status.</summary>
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = "pending";
+
+    /// <summary>Optional operator notes.</summary>
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
 }
 
 /// <summary>A testing requirement entry.</summary>
@@ -55,9 +79,25 @@ public sealed class TestEntry
     [JsonPropertyName("condition")]
     public string Condition { get; set; } = string.Empty;
 
+    /// <summary>Requirement title.</summary>
+    [JsonPropertyName("title")]
+    public string Title { get; set; } = string.Empty;
+
     /// <summary>Owning workspace discriminator.</summary>
     [JsonPropertyName("workspaceId")]
     public string WorkspaceId { get; set; } = string.Empty;
+
+    /// <summary>Requirement priority.</summary>
+    [JsonPropertyName("priority")]
+    public string Priority { get; set; } = "medium";
+
+    /// <summary>Requirement status.</summary>
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = "pending";
+
+    /// <summary>Optional operator notes.</summary>
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
 }
 
 /// <summary>A functional-to-technical requirement mapping row.</summary>
@@ -94,6 +134,18 @@ public sealed class CreateFrRequest
     /// <summary>Requirement body.</summary>
     [JsonPropertyName("body")]
     public string Body { get; set; } = string.Empty;
+
+    /// <summary>Requirement priority.</summary>
+    [JsonPropertyName("priority")]
+    public string? Priority { get; set; }
+
+    /// <summary>Requirement status.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Optional operator notes.</summary>
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
 }
 
 /// <summary>Request payload for updating a functional requirement entry.</summary>
@@ -101,11 +153,23 @@ public sealed class UpdateFrRequest
 {
     /// <summary>Requirement title.</summary>
     [JsonPropertyName("title")]
-    public string Title { get; set; } = string.Empty;
+    public string? Title { get; set; }
 
     /// <summary>Requirement body.</summary>
     [JsonPropertyName("body")]
-    public string Body { get; set; } = string.Empty;
+    public string? Body { get; set; }
+
+    /// <summary>Requirement priority.</summary>
+    [JsonPropertyName("priority")]
+    public string? Priority { get; set; }
+
+    /// <summary>Requirement status.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Optional operator notes.</summary>
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
 }
 
 /// <summary>Request payload for creating a technical requirement entry.</summary>
@@ -122,6 +186,18 @@ public sealed class CreateTrRequest
     /// <summary>Requirement body.</summary>
     [JsonPropertyName("body")]
     public string Body { get; set; } = string.Empty;
+
+    /// <summary>Requirement priority.</summary>
+    [JsonPropertyName("priority")]
+    public string? Priority { get; set; }
+
+    /// <summary>Requirement status.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Optional operator notes.</summary>
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
 }
 
 /// <summary>Request payload for updating a technical requirement entry.</summary>
@@ -133,7 +209,19 @@ public sealed class UpdateTrRequest
 
     /// <summary>Requirement body.</summary>
     [JsonPropertyName("body")]
-    public string Body { get; set; } = string.Empty;
+    public string? Body { get; set; }
+
+    /// <summary>Requirement priority.</summary>
+    [JsonPropertyName("priority")]
+    public string? Priority { get; set; }
+
+    /// <summary>Requirement status.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Optional operator notes.</summary>
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
 }
 
 /// <summary>Request payload for creating a testing requirement entry.</summary>
@@ -146,6 +234,22 @@ public sealed class CreateTestRequest
     /// <summary>Testing condition text.</summary>
     [JsonPropertyName("condition")]
     public string Condition { get; set; } = string.Empty;
+
+    /// <summary>Requirement title.</summary>
+    [JsonPropertyName("title")]
+    public string? Title { get; set; }
+
+    /// <summary>Requirement priority.</summary>
+    [JsonPropertyName("priority")]
+    public string? Priority { get; set; }
+
+    /// <summary>Requirement status.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Optional operator notes.</summary>
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
 }
 
 /// <summary>Request payload for updating a testing requirement entry.</summary>
@@ -153,7 +257,23 @@ public sealed class UpdateTestRequest
 {
     /// <summary>Testing condition text.</summary>
     [JsonPropertyName("condition")]
-    public string Condition { get; set; } = string.Empty;
+    public string? Condition { get; set; }
+
+    /// <summary>Requirement title.</summary>
+    [JsonPropertyName("title")]
+    public string? Title { get; set; }
+
+    /// <summary>Requirement priority.</summary>
+    [JsonPropertyName("priority")]
+    public string? Priority { get; set; }
+
+    /// <summary>Requirement status.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Optional operator notes.</summary>
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
 }
 
 /// <summary>Request payload for creating or updating a mapping row.</summary>

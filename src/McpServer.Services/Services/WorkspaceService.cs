@@ -1,6 +1,9 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using McpServer.Support.Mcp.Storage;
+using McpServer.Support.Mcp.Storage.Entities;
 using McpServer.Support.Mcp.Notifications;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using YamlDotNet.Serialization;
@@ -9,9 +12,9 @@ using YamlDotNet.Serialization.NamingConventions;
 namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
-/// FR-MCP-009 / TR-MCP-WS-002: Workspace CRUD backed by <c>appsettings.json</c> or <c>appsettings.yaml</c>.
-/// Workspaces are stored at <c>Mcp:Workspaces</c> and persisted to the appsettings file in the content root.
-/// Prefers <c>appsettings.yaml</c> when present.
+/// FR-MCP-009 / TR-MCP-DB-001: Workspace CRUD backed first by the canonical
+/// database workspace registry. <c>Mcp:Workspaces</c> is a bootstrap fallback
+/// and informational projection.
 /// </summary>
 public sealed class WorkspaceService : IWorkspaceService
 {
@@ -21,6 +24,8 @@ public sealed class WorkspaceService : IWorkspaceService
     private readonly IConfiguration _configuration;
     private readonly IHostEnvironment _env;
     private readonly IProcessRunner _processRunner;
+    private readonly McpDbContext? _db;
+    private readonly IWorkspaceProjectionWriter? _projectionWriter;
     private readonly IChangeEventBus? _eventBus;
     private readonly ILogger<WorkspaceService> _logger;
 
@@ -34,9 +39,41 @@ public sealed class WorkspaceService : IWorkspaceService
         _logger = logger;
     }
 
+    /// <summary>Initializes a new database-authoritative instance of the <see cref="WorkspaceService"/> class.</summary>
+    public WorkspaceService(
+        IConfiguration configuration,
+        IHostEnvironment env,
+        IProcessRunner processRunner,
+        McpDbContext db,
+        IWorkspaceProjectionWriter projectionWriter,
+        ILogger<WorkspaceService> logger,
+        IChangeEventBus? eventBus = null)
+        : this(configuration, env, processRunner, logger, eventBus)
+    {
+        _db = db;
+        _projectionWriter = projectionWriter;
+    }
+
     /// <inheritdoc />
     public async Task<WorkspaceListResult> ListAsync(CancellationToken ct = default)
     {
+        if (_db is not null)
+        {
+            await EnsureBootstrappedAsync(ct).ConfigureAwait(false);
+            var rows = await _db.Workspaces
+                .AsNoTracking()
+                .OrderBy(w => w.Name)
+                .ToListAsync(ct)
+                .ConfigureAwait(false);
+            var dbDtos = new List<WorkspaceDto>(rows.Count);
+            foreach (var row in rows)
+            {
+                dbDtos.Add(await ToDtoAsync(row, ct).ConfigureAwait(false));
+            }
+
+            return new WorkspaceListResult(dbDtos, dbDtos.Count);
+        }
+
         var all = ReadAll();
         var dtos = new List<WorkspaceDto>(all.Count);
         foreach (var entry in all.OrderBy(w => w.Name))
@@ -50,6 +87,13 @@ public sealed class WorkspaceService : IWorkspaceService
     public async Task<WorkspaceDto?> GetAsync(string workspacePath, CancellationToken ct = default)
     {
         var normalized = NormalizePath(workspacePath);
+        if (_db is not null)
+        {
+            await EnsureBootstrappedAsync(ct).ConfigureAwait(false);
+            var row = await FindActiveWorkspaceAsync(normalized, ct).ConfigureAwait(false);
+            return row is null ? null : await ToDtoAsync(row, ct).ConfigureAwait(false);
+        }
+
         var entry = ReadAll().FirstOrDefault(w => NormalizePath(w.WorkspacePath) == normalized);
         return entry is null ? null : await ToDtoAsync(entry, ct).ConfigureAwait(false);
     }
@@ -57,6 +101,9 @@ public sealed class WorkspaceService : IWorkspaceService
     /// <inheritdoc />
     public async Task<WorkspaceMutationResult> CreateAsync(WorkspaceCreateRequest request, CancellationToken ct = default)
     {
+        if (_db is not null)
+            return await CreateDatabaseAsync(request, ct).ConfigureAwait(false);
+
         var normalized = NormalizePath(request.WorkspacePath);
         if (string.IsNullOrWhiteSpace(normalized))
             return new WorkspaceMutationResult(false, "WorkspacePath is required.");
@@ -107,6 +154,9 @@ public sealed class WorkspaceService : IWorkspaceService
     /// <inheritdoc />
     public async Task<WorkspaceMutationResult> UpdateAsync(string workspacePath, WorkspaceUpdateRequest request, CancellationToken ct = default)
     {
+        if (_db is not null)
+            return await UpdateDatabaseAsync(workspacePath, request, ct).ConfigureAwait(false);
+
         var normalized = NormalizePath(workspacePath);
         await s_writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
@@ -162,6 +212,9 @@ public sealed class WorkspaceService : IWorkspaceService
     /// <inheritdoc />
     public async Task<WorkspaceMutationResult> DeleteAsync(string workspacePath, CancellationToken ct = default)
     {
+        if (_db is not null)
+            return await DeleteDatabaseAsync(workspacePath, ct).ConfigureAwait(false);
+
         var normalized = NormalizePath(workspacePath);
         await s_writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
@@ -187,7 +240,18 @@ public sealed class WorkspaceService : IWorkspaceService
     public async Task<WorkspaceInitResult> InitAsync(string workspacePath, CancellationToken ct = default)
     {
         var normalized = NormalizePath(workspacePath);
-        var entry = ReadAll().FirstOrDefault(w => NormalizePath(w.WorkspacePath) == normalized);
+        WorkspaceConfigEntry? entry;
+        if (_db is not null)
+        {
+            await EnsureBootstrappedAsync(ct).ConfigureAwait(false);
+            var row = await FindActiveWorkspaceAsync(normalized, ct).ConfigureAwait(false);
+            entry = row is null ? null : ToConfigEntry(row);
+        }
+        else
+        {
+            entry = ReadAll().FirstOrDefault(w => NormalizePath(w.WorkspacePath) == normalized);
+        }
+
         if (entry is null)
             return new WorkspaceInitResult(false, $"Workspace not found: {normalized}");
 
@@ -229,6 +293,177 @@ public sealed class WorkspaceService : IWorkspaceService
             _logger.LogError(ex, "Failed to initialize workspace: {Path}", normalized);
             return new WorkspaceInitResult(false, ex.Message, filesCreated);
         }
+    }
+
+    private async Task<WorkspaceMutationResult> CreateDatabaseAsync(WorkspaceCreateRequest request, CancellationToken ct)
+    {
+        var normalized = NormalizePath(request.WorkspacePath);
+        if (string.IsNullOrWhiteSpace(normalized))
+            return new WorkspaceMutationResult(false, "WorkspacePath is required.");
+        if (!Path.IsPathRooted(normalized))
+            return new WorkspaceMutationResult(false, "WorkspacePath must be an absolute path.");
+
+        await s_writeLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            await EnsureBootstrappedAsync(ct).ConfigureAwait(false);
+            var existing = await _db!.Workspaces
+                .IgnoreQueryFilters()
+                .SingleOrDefaultAsync(w => w.WorkspaceId == normalized || w.WorkspacePath == normalized, ct)
+                .ConfigureAwait(false);
+
+            if (existing is { IsDeleted: false })
+                return new WorkspaceMutationResult(false, $"Workspace already registered: {normalized}");
+
+            var entry = CreateConfigEntry(request, normalized);
+            WorkspaceEntity entity;
+            if (existing is null)
+            {
+                entity = ToEntity(entry);
+                _db.Workspaces.Add(entity);
+            }
+            else
+            {
+                ApplyConfigEntry(existing, entry);
+                existing.IsDeleted = false;
+                existing.DeletedAtUtc = null;
+                existing.DeletedBy = null;
+                existing.DeleteReason = null;
+                entity = existing;
+            }
+
+            await _db.SaveChangesAsync(ct).ConfigureAwait(false);
+            await WriteProjectionFromDatabaseAsync(ct).ConfigureAwait(false);
+            _logger.LogInformation("Workspace created: {Name} at {Path}", entity.Name, entity.WorkspacePath);
+            await PublishChangeSafeAsync(ChangeEventActions.Created, normalized, ct).ConfigureAwait(false);
+            return new WorkspaceMutationResult(true, Workspace: await ToDtoAsync(entity, ct).ConfigureAwait(false));
+        }
+        finally
+        {
+            s_writeLock.Release();
+        }
+    }
+
+    private async Task<WorkspaceMutationResult> UpdateDatabaseAsync(string workspacePath, WorkspaceUpdateRequest request, CancellationToken ct)
+    {
+        var normalized = NormalizePath(workspacePath);
+        await s_writeLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            await EnsureBootstrappedAsync(ct).ConfigureAwait(false);
+            var entity = await FindActiveWorkspaceAsync(normalized, ct).ConfigureAwait(false);
+            if (entity is null)
+                return new WorkspaceMutationResult(false, $"Workspace not found: {normalized}");
+
+            ApplyUpdate(entity, request, normalized);
+            await _db!.SaveChangesAsync(ct).ConfigureAwait(false);
+            await WriteProjectionFromDatabaseAsync(ct).ConfigureAwait(false);
+            _logger.LogInformation("Workspace updated: {Name} at {Path}", entity.Name, entity.WorkspacePath);
+            await PublishChangeSafeAsync(ChangeEventActions.Updated, normalized, ct).ConfigureAwait(false);
+            return new WorkspaceMutationResult(true, Workspace: await ToDtoAsync(entity, ct).ConfigureAwait(false));
+        }
+        finally
+        {
+            s_writeLock.Release();
+        }
+    }
+
+    private async Task<WorkspaceMutationResult> DeleteDatabaseAsync(string workspacePath, CancellationToken ct)
+    {
+        var normalized = NormalizePath(workspacePath);
+        await s_writeLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            await EnsureBootstrappedAsync(ct).ConfigureAwait(false);
+            var entity = await FindActiveWorkspaceAsync(normalized, ct).ConfigureAwait(false);
+            if (entity is null)
+                return new WorkspaceMutationResult(false, $"Workspace not found: {normalized}");
+
+            var dto = await ToDtoAsync(entity, ct).ConfigureAwait(false);
+            entity.IsDeleted = true;
+            entity.DeletedAtUtc = DateTimeOffset.UtcNow;
+            entity.DeletedBy = nameof(WorkspaceService);
+            entity.DeleteReason = "workspace_delete";
+            entity.DateTimeModified = entity.DeletedAtUtc.Value;
+            await _db!.SaveChangesAsync(ct).ConfigureAwait(false);
+            await WriteProjectionFromDatabaseAsync(ct).ConfigureAwait(false);
+            _logger.LogInformation("Workspace soft-deleted: {Name} at {Path}", dto.Name, dto.WorkspacePath);
+            await PublishChangeSafeAsync(ChangeEventActions.Deleted, normalized, ct).ConfigureAwait(false);
+            return new WorkspaceMutationResult(true, Workspace: dto);
+        }
+        finally
+        {
+            s_writeLock.Release();
+        }
+    }
+
+    private async Task EnsureBootstrappedAsync(CancellationToken ct)
+    {
+        if (_db is null)
+            return;
+
+        if (!await _db.Workspaces.IgnoreQueryFilters().AnyAsync(w => w.WorkspaceId == string.Empty, ct).ConfigureAwait(false))
+        {
+            _db.Workspaces.Add(new WorkspaceEntity
+            {
+                WorkspaceId = string.Empty,
+                WorkspacePath = string.Empty,
+                Name = "global",
+                TodoPath = DefaultTodoPath,
+                IsEnabled = true,
+                DateTimeCreated = DateTimeOffset.UtcNow,
+                DateTimeModified = DateTimeOffset.UtcNow,
+            });
+        }
+
+        if (await _db.Workspaces.AnyAsync(w => w.WorkspaceId != string.Empty, ct).ConfigureAwait(false))
+        {
+            if (_db.ChangeTracker.HasChanges())
+                await _db.SaveChangesAsync(ct).ConfigureAwait(false);
+            return;
+        }
+
+        foreach (var entry in ReadAll())
+        {
+            var normalized = NormalizePath(entry.WorkspacePath);
+            if (string.IsNullOrWhiteSpace(normalized))
+                continue;
+
+            if (_db.Workspaces.Local.Any(w => string.Equals(w.WorkspaceId, normalized, StringComparison.OrdinalIgnoreCase)))
+                continue;
+
+            entry.WorkspacePath = normalized;
+            _db.Workspaces.Add(ToEntity(entry));
+        }
+
+        if (_db.ChangeTracker.HasChanges())
+        {
+            await _db.SaveChangesAsync(ct).ConfigureAwait(false);
+            await WriteProjectionFromDatabaseAsync(ct).ConfigureAwait(false);
+        }
+    }
+
+    private async Task<WorkspaceEntity?> FindActiveWorkspaceAsync(string normalizedPath, CancellationToken ct)
+    {
+        return await _db!.Workspaces
+            .SingleOrDefaultAsync(w => w.WorkspaceId == normalizedPath || w.WorkspacePath == normalizedPath, ct)
+            .ConfigureAwait(false);
+    }
+
+    private async Task WriteProjectionFromDatabaseAsync(CancellationToken ct)
+    {
+        if (_projectionWriter is null || _db is null)
+            return;
+
+        var rows = await _db.Workspaces
+            .AsNoTracking()
+            .Where(w => w.WorkspaceId != string.Empty)
+            .OrderBy(w => w.Name)
+            .ToListAsync(ct)
+            .ConfigureAwait(false);
+        var projection = rows.Select(ToConfigEntry).ToList();
+
+        await _projectionWriter.WriteProjectionAsync(projection, ct).ConfigureAwait(false);
     }
 
     private List<WorkspaceConfigEntry> ReadAll()
@@ -384,6 +619,165 @@ public sealed class WorkspaceService : IWorkspaceService
         }
 
         return normalized;
+    }
+
+    private static WorkspaceConfigEntry CreateConfigEntry(WorkspaceCreateRequest request, string normalized)
+    {
+        var now = DateTimeOffset.UtcNow;
+        return new WorkspaceConfigEntry
+        {
+            WorkspacePath = normalized,
+            Name = !string.IsNullOrWhiteSpace(request.Name) ? request.Name.Trim() : DeriveNameFromPath(normalized),
+            TodoPath = !string.IsNullOrWhiteSpace(request.TodoPath) ? request.TodoPath.Trim() : DefaultTodoPath,
+            DataDirectory = string.IsNullOrWhiteSpace(request.DataDirectory) ? null : Path.GetFullPath(request.DataDirectory.Trim()),
+            TunnelProvider = string.IsNullOrWhiteSpace(request.TunnelProvider) ? null : request.TunnelProvider.Trim(),
+            RunAs = string.IsNullOrWhiteSpace(request.RunAs) ? null : request.RunAs.Trim(),
+            PromptTemplate = string.IsNullOrWhiteSpace(request.PromptTemplate) ? null : request.PromptTemplate.Trim(),
+            StatusPrompt = StripIfDefault(nameof(TodoPromptDefaults.StatusPrompt), request.StatusPrompt),
+            ImplementPrompt = StripIfDefault(nameof(TodoPromptDefaults.ImplementPrompt), request.ImplementPrompt),
+            PlanPrompt = StripIfDefault(nameof(TodoPromptDefaults.PlanPrompt), request.PlanPrompt),
+            BannedLicenses = NormalizePolicyList(request.BannedLicenses),
+            BannedCountriesOfOrigin = NormalizePolicyList(request.BannedCountriesOfOrigin, toUpperInvariant: true),
+            BannedOrganizations = NormalizePolicyList(request.BannedOrganizations),
+            BannedIndividuals = NormalizePolicyList(request.BannedIndividuals),
+            IsPrimary = request.IsPrimary,
+            IsEnabled = request.IsEnabled,
+            DateTimeCreated = now,
+            DateTimeModified = now,
+        };
+    }
+
+    private static WorkspaceEntity ToEntity(WorkspaceConfigEntry entry)
+    {
+        var normalized = NormalizePath(entry.WorkspacePath);
+        var created = entry.DateTimeCreated == default ? DateTimeOffset.UtcNow : entry.DateTimeCreated;
+        var modified = entry.DateTimeModified == default ? created : entry.DateTimeModified;
+        return new WorkspaceEntity
+        {
+            WorkspaceId = normalized,
+            WorkspacePath = normalized,
+            Name = string.IsNullOrWhiteSpace(entry.Name) ? DeriveNameFromPath(normalized) : entry.Name,
+            TodoPath = string.IsNullOrWhiteSpace(entry.TodoPath) ? DefaultTodoPath : entry.TodoPath,
+            DataDirectory = string.IsNullOrWhiteSpace(entry.DataDirectory) ? null : entry.DataDirectory,
+            TunnelProvider = string.IsNullOrWhiteSpace(entry.TunnelProvider) ? null : entry.TunnelProvider,
+            RunAs = string.IsNullOrWhiteSpace(entry.RunAs) ? null : entry.RunAs,
+            IsPrimary = entry.IsPrimary,
+            IsEnabled = entry.IsEnabled,
+            PromptTemplate = string.IsNullOrWhiteSpace(entry.PromptTemplate) ? null : entry.PromptTemplate,
+            StatusPrompt = string.IsNullOrWhiteSpace(entry.StatusPrompt) ? null : entry.StatusPrompt,
+            ImplementPrompt = string.IsNullOrWhiteSpace(entry.ImplementPrompt) ? null : entry.ImplementPrompt,
+            PlanPrompt = string.IsNullOrWhiteSpace(entry.PlanPrompt) ? null : entry.PlanPrompt,
+            BannedLicensesJson = SerializePolicyList(entry.BannedLicenses),
+            BannedCountriesOfOriginJson = SerializePolicyList(entry.BannedCountriesOfOrigin),
+            BannedOrganizationsJson = SerializePolicyList(entry.BannedOrganizations),
+            BannedIndividualsJson = SerializePolicyList(entry.BannedIndividuals),
+            AgentPath = string.IsNullOrWhiteSpace(entry.AgentPath) ? null : entry.AgentPath,
+            DateTimeCreated = created,
+            DateTimeModified = modified,
+        };
+    }
+
+    private static WorkspaceConfigEntry ToConfigEntry(WorkspaceEntity entity)
+    {
+        return new WorkspaceConfigEntry
+        {
+            WorkspacePath = entity.WorkspacePath,
+            Name = entity.Name,
+            TodoPath = entity.TodoPath,
+            DataDirectory = entity.DataDirectory,
+            TunnelProvider = entity.TunnelProvider,
+            RunAs = entity.RunAs,
+            IsPrimary = entity.IsPrimary,
+            IsEnabled = entity.IsEnabled,
+            PromptTemplate = entity.PromptTemplate,
+            StatusPrompt = entity.StatusPrompt,
+            ImplementPrompt = entity.ImplementPrompt,
+            PlanPrompt = entity.PlanPrompt,
+            BannedLicenses = DeserializePolicyList(entity.BannedLicensesJson),
+            BannedCountriesOfOrigin = DeserializePolicyList(entity.BannedCountriesOfOriginJson),
+            BannedOrganizations = DeserializePolicyList(entity.BannedOrganizationsJson),
+            BannedIndividuals = DeserializePolicyList(entity.BannedIndividualsJson),
+            AgentPath = entity.AgentPath,
+            DateTimeCreated = entity.DateTimeCreated,
+            DateTimeModified = entity.DateTimeModified,
+        };
+    }
+
+    private static void ApplyConfigEntry(WorkspaceEntity entity, WorkspaceConfigEntry entry)
+    {
+        entity.WorkspaceId = NormalizePath(entry.WorkspacePath);
+        entity.WorkspacePath = NormalizePath(entry.WorkspacePath);
+        entity.Name = entry.Name;
+        entity.TodoPath = entry.TodoPath;
+        entity.DataDirectory = entry.DataDirectory;
+        entity.TunnelProvider = entry.TunnelProvider;
+        entity.RunAs = entry.RunAs;
+        entity.IsPrimary = entry.IsPrimary;
+        entity.IsEnabled = entry.IsEnabled;
+        entity.PromptTemplate = entry.PromptTemplate;
+        entity.StatusPrompt = entry.StatusPrompt;
+        entity.ImplementPrompt = entry.ImplementPrompt;
+        entity.PlanPrompt = entry.PlanPrompt;
+        entity.BannedLicensesJson = SerializePolicyList(entry.BannedLicenses);
+        entity.BannedCountriesOfOriginJson = SerializePolicyList(entry.BannedCountriesOfOrigin);
+        entity.BannedOrganizationsJson = SerializePolicyList(entry.BannedOrganizations);
+        entity.BannedIndividualsJson = SerializePolicyList(entry.BannedIndividuals);
+        entity.AgentPath = entry.AgentPath;
+        entity.DateTimeCreated = entry.DateTimeCreated == default ? entity.DateTimeCreated : entry.DateTimeCreated;
+        entity.DateTimeModified = DateTimeOffset.UtcNow;
+    }
+
+    private static void ApplyUpdate(WorkspaceEntity entity, WorkspaceUpdateRequest request, string normalized)
+    {
+        if (request.Name is not null)
+            entity.Name = string.IsNullOrWhiteSpace(request.Name) ? DeriveNameFromPath(normalized) : request.Name.Trim();
+        if (request.TodoPath is not null)
+            entity.TodoPath = string.IsNullOrWhiteSpace(request.TodoPath) ? DefaultTodoPath : request.TodoPath.Trim();
+        if (request.TunnelProvider is not null)
+            entity.TunnelProvider = string.IsNullOrWhiteSpace(request.TunnelProvider) ? null : request.TunnelProvider.Trim();
+        if (request.RunAs is not null)
+            entity.RunAs = string.IsNullOrWhiteSpace(request.RunAs) ? null : request.RunAs.Trim();
+        if (request.DataDirectory is not null)
+            entity.DataDirectory = string.IsNullOrWhiteSpace(request.DataDirectory) ? null : Path.GetFullPath(request.DataDirectory.Trim());
+        if (request.IsPrimary is not null)
+            entity.IsPrimary = request.IsPrimary.Value;
+        if (request.IsEnabled is not null)
+            entity.IsEnabled = request.IsEnabled.Value;
+        if (request.PromptTemplate is not null)
+            entity.PromptTemplate = string.IsNullOrWhiteSpace(request.PromptTemplate) ? null : request.PromptTemplate.Trim();
+        if (request.StatusPrompt is not null)
+            entity.StatusPrompt = StripIfDefault(nameof(TodoPromptDefaults.StatusPrompt), request.StatusPrompt);
+        if (request.ImplementPrompt is not null)
+            entity.ImplementPrompt = StripIfDefault(nameof(TodoPromptDefaults.ImplementPrompt), request.ImplementPrompt);
+        if (request.PlanPrompt is not null)
+            entity.PlanPrompt = StripIfDefault(nameof(TodoPromptDefaults.PlanPrompt), request.PlanPrompt);
+        if (request.BannedLicenses is not null)
+            entity.BannedLicensesJson = SerializePolicyList(NormalizePolicyList(request.BannedLicenses));
+        if (request.BannedCountriesOfOrigin is not null)
+            entity.BannedCountriesOfOriginJson = SerializePolicyList(NormalizePolicyList(request.BannedCountriesOfOrigin, toUpperInvariant: true));
+        if (request.BannedOrganizations is not null)
+            entity.BannedOrganizationsJson = SerializePolicyList(NormalizePolicyList(request.BannedOrganizations));
+        if (request.BannedIndividuals is not null)
+            entity.BannedIndividualsJson = SerializePolicyList(NormalizePolicyList(request.BannedIndividuals));
+
+        entity.DateTimeModified = DateTimeOffset.UtcNow;
+    }
+
+    private static string? SerializePolicyList(List<string>? values)
+    {
+        return values is null || values.Count == 0 ? null : JsonSerializer.Serialize(values, s_jsonOptions);
+    }
+
+    private static List<string>? DeserializePolicyList(string? json)
+    {
+        return string.IsNullOrWhiteSpace(json)
+            ? null
+            : JsonSerializer.Deserialize<List<string>>(json);
+    }
+
+    private async Task<WorkspaceDto> ToDtoAsync(WorkspaceEntity entity, CancellationToken ct)
+    {
+        return await ToDtoAsync(ToConfigEntry(entity), ct).ConfigureAwait(false);
     }
 
     private async Task<WorkspaceDto> ToDtoAsync(WorkspaceConfigEntry e, CancellationToken ct)

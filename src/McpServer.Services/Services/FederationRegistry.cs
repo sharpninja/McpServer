@@ -19,6 +19,11 @@ public sealed class FederationRegistry
     private readonly ConcurrentDictionary<string, string> _workspaceRoutes =
         new(StringComparer.OrdinalIgnoreCase);
 
+    private readonly FederationRole _configuredRole;
+    private readonly string? _hubBaseUrl;
+    private readonly string? _hubAccessToken;
+    private readonly string? _proxyId;
+    private readonly string? _enrollmentToken;
     private volatile bool _enabled;
     private volatile string? _defaultTarget;
 
@@ -31,6 +36,11 @@ public sealed class FederationRegistry
     {
         var cfg = options.Value;
         _enabled = cfg.Enabled;
+        _configuredRole = cfg.Role;
+        _hubBaseUrl = string.IsNullOrWhiteSpace(cfg.HubBaseUrl) ? null : cfg.HubBaseUrl.TrimEnd('/');
+        _hubAccessToken = string.IsNullOrWhiteSpace(cfg.HubAccessToken) ? null : cfg.HubAccessToken.Trim();
+        _proxyId = string.IsNullOrWhiteSpace(cfg.ProxyId) ? Environment.MachineName : cfg.ProxyId.Trim();
+        _enrollmentToken = string.IsNullOrWhiteSpace(cfg.EnrollmentToken) ? null : cfg.EnrollmentToken.Trim();
         _defaultTarget = string.IsNullOrWhiteSpace(cfg.DefaultTarget) ? null : cfg.DefaultTarget.Trim();
 
         foreach (var t in cfg.Targets)
@@ -49,6 +59,39 @@ public sealed class FederationRegistry
     /// <summary>Whether federation is globally enabled.</summary>
     public bool IsEnabled => _enabled;
 
+    /// <summary>Configured federation role before backward-compatibility inference.</summary>
+    public FederationRole ConfiguredRole => _configuredRole;
+
+    /// <summary>
+    /// Effective federation role. Existing configuration that only sets
+    /// <see cref="FederationOptions.Enabled"/> is interpreted as DirectProxy.
+    /// </summary>
+    public FederationRole EffectiveRole
+    {
+        get
+        {
+            if (_configuredRole == FederationRole.Standalone && _enabled)
+                return FederationRole.DirectProxy;
+
+            return _configuredRole;
+        }
+    }
+
+    /// <summary>Hub base URL configured for LocalProxy mode, if any.</summary>
+    public string? HubBaseUrl => _hubBaseUrl;
+
+    /// <summary>Stable hub access token configured for inter-server hub traffic, if any.</summary>
+    public string? HubAccessToken => _hubAccessToken;
+
+    /// <summary>Whether a stable hub access token is configured.</summary>
+    public bool HasHubAccessToken => _hubAccessToken is not null;
+
+    /// <summary>Stable proxy identifier sent to the hub.</summary>
+    public string? ProxyId => _proxyId;
+
+    /// <summary>Whether an enrollment token is configured.</summary>
+    public bool HasEnrollmentToken => _enrollmentToken is not null;
+
     /// <summary>
     /// Resolves the federation target for a request given the resolved workspace path.
     /// Returns <c>null</c> when federation is disabled or no matching target exists.
@@ -58,6 +101,16 @@ public sealed class FederationRegistry
     public FederationTarget? ResolveTarget(string? workspacePath)
     {
         if (!_enabled)
+            return null;
+
+        if (EffectiveRole == FederationRole.LocalProxy)
+        {
+            return _hubBaseUrl is null
+                ? null
+                : new FederationTarget("hub", _hubBaseUrl, _hubAccessToken);
+        }
+
+        if (EffectiveRole != FederationRole.DirectProxy)
             return null;
 
         // 1. Workspace-specific route

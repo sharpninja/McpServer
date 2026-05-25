@@ -17,7 +17,8 @@ internal static class RequirementsWikiDocumentRenderer
         RequirementsDocumentRenderer.FunctionalFileName,
         RequirementsDocumentRenderer.TechnicalFileName,
         RequirementsDocumentRenderer.TestingFileName,
-        RequirementsDocumentRenderer.MappingFileName
+        RequirementsDocumentRenderer.MappingFileName,
+        RequirementsDocumentRenderer.MatrixFileName
     ];
 
     private static readonly JsonSerializerOptions s_manifestOptions = new()
@@ -29,12 +30,14 @@ internal static class RequirementsWikiDocumentRenderer
         IEnumerable<FrEntry> functional,
         IEnumerable<TrEntry> technical,
         IEnumerable<TestEntry> testing,
-        IEnumerable<FrTrMapping> mappings) =>
+        IEnumerable<FrTrMapping> mappings,
+        string? existingMatrixMarkdown = null) =>
         [
             new(RequirementsDocumentRenderer.FunctionalFileName, RequirementsDocumentRenderer.RenderFunctional(functional), "text/markdown"),
             new(RequirementsDocumentRenderer.TechnicalFileName, RequirementsDocumentRenderer.RenderTechnical(technical), "text/markdown"),
             new(RequirementsDocumentRenderer.TestingFileName, RequirementsDocumentRenderer.RenderTesting(testing), "text/markdown"),
-            new(RequirementsDocumentRenderer.MappingFileName, RequirementsDocumentRenderer.RenderMapping(mappings), "text/markdown")
+            new(RequirementsDocumentRenderer.MappingFileName, RequirementsDocumentRenderer.RenderMapping(mappings), "text/markdown"),
+            new(RequirementsDocumentRenderer.MatrixFileName, RequirementsDocumentRenderer.RenderMatrix(functional, technical, testing, existingMatrixMarkdown), "text/markdown")
         ];
 
     internal static IReadOnlyList<RequirementsRenderedDocument> RenderWikiFiles(
@@ -42,15 +45,17 @@ internal static class RequirementsWikiDocumentRenderer
         IEnumerable<TrEntry> technical,
         IEnumerable<TestEntry> testing,
         IEnumerable<FrTrMapping> mappings,
-        DateTimeOffset generatedAtUtc)
+        DateTimeOffset generatedAtUtc,
+        string? existingMatrixMarkdown = null)
     {
         var documents = new Dictionary<string, string>(StringComparer.Ordinal)
         {
             ["Home.md"] = RenderHome(),
             [RequirementsDocumentRenderer.FunctionalFileName] = RequirementsDocumentRenderer.RenderFunctional(functional),
             [RequirementsDocumentRenderer.TechnicalFileName] = RequirementsDocumentRenderer.RenderTechnical(technical),
-            [RequirementsDocumentRenderer.TestingFileName] = RequirementsDocumentRenderer.RenderTesting(testing),
-            [RequirementsDocumentRenderer.MappingFileName] = RequirementsDocumentRenderer.RenderMapping(mappings)
+            [RequirementsDocumentRenderer.TestingFileName] = RenderTesting(testing),
+            [RequirementsDocumentRenderer.MappingFileName] = RequirementsDocumentRenderer.RenderMapping(mappings),
+            [RequirementsDocumentRenderer.MatrixFileName] = RequirementsDocumentRenderer.RenderMatrix(functional, technical, testing, existingMatrixMarkdown)
         };
 
         var files = new List<RequirementsRenderedDocument>();
@@ -102,7 +107,74 @@ internal static class RequirementsWikiDocumentRenderer
         - [Technical Requirements](Technical-Requirements)
         - [Testing Requirements](Testing-Requirements)
         - [Traceability Mapping](TR-per-FR-Mapping)
+        - [Requirements Matrix](Requirements-Matrix)
         """;
+
+    private static string RenderTesting(IEnumerable<TestEntry> entries)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("# Testing Requirements (MCP Server)");
+        sb.AppendLine();
+
+        foreach (var group in entries
+                     .GroupBy(static entry => GetTestingGroupKey(entry.Id), StringComparer.Ordinal)
+                     .OrderBy(static group => group.Key, StringComparer.Ordinal))
+        {
+            sb.Append("## ").AppendLine(group.Key);
+            sb.AppendLine();
+            sb.AppendLine("| ID | Requirement |");
+            sb.AppendLine("| --- | --- |");
+
+            foreach (var entry in group.OrderBy(static item => item.Id, StringComparer.Ordinal))
+            {
+                sb.Append("| ")
+                    .Append(EscapeTableCell(entry.Id))
+                    .Append(" | ")
+                    .Append(EscapeTableCell(entry.Condition))
+                    .AppendLine(" |");
+            }
+
+            sb.AppendLine();
+        }
+
+        return sb.ToString().TrimEnd() + Environment.NewLine;
+    }
+
+    private static string GetTestingGroupKey(string id)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            return "TEST";
+
+        var segments = id.Split('-', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        if (segments.Length == 0)
+            return id.Trim();
+
+        var groupSegments = new List<string>(segments.Length);
+        foreach (var segment in segments)
+        {
+            if (groupSegments.Count > 0 && char.IsDigit(segment[0]))
+                break;
+
+            groupSegments.Add(segment);
+        }
+
+        return groupSegments.Count == 0
+            ? id.Trim()
+            : string.Join('-', groupSegments);
+    }
+
+    private static string EscapeTableCell(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return string.Empty;
+
+        return value
+            .Replace("\r\n", "\n", StringComparison.Ordinal)
+            .Replace('\r', '\n')
+            .Trim()
+            .Replace("\n", "<br>", StringComparison.Ordinal)
+            .Replace("|", "\\|", StringComparison.Ordinal);
+    }
 
     private static string RenderAzureOrder() =>
         """
@@ -111,6 +183,7 @@ internal static class RequirementsWikiDocumentRenderer
         Technical-Requirements
         Testing-Requirements
         TR-per-FR-Mapping
+        Requirements-Matrix
         """;
 
     private static string RenderGitHubSidebar() =>
@@ -120,6 +193,7 @@ internal static class RequirementsWikiDocumentRenderer
         - [Technical Requirements](Technical-Requirements)
         - [Testing Requirements](Testing-Requirements)
         - [Traceability Mapping](TR-per-FR-Mapping)
+        - [Requirements Matrix](Requirements-Matrix)
         """;
 
     internal static UTF8Encoding Utf8NoBom => s_utf8NoBom;

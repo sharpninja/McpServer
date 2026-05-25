@@ -87,6 +87,9 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
                 }
                 return await DispatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
 
+            case "batch":
+                return BuildUnsupportedBatchEnvelopeError(envelope.Payload);
+
             default:
                 return BuildError(
                     requestId: "unknown",
@@ -1268,6 +1271,71 @@ public sealed class ReplCommandDispatcher : IReplCommandDispatcher
                 Capabilities = capabilities,
             },
         };
+    }
+
+    private static IYamlEnvelope BuildUnsupportedBatchEnvelopeError(object? payload)
+    {
+        return BuildError(
+            requestId: TryGetBatchRequestId(payload) ?? "unknown",
+            code: "unsupported_batch_envelope",
+            message: "Batch envelopes are not supported by agent-stdio. Send one request envelope per YAML document, separated by '---'.",
+            details: new Dictionary<string, object?>
+            {
+                ["unsupportedType"] = "batch",
+                ["supportedEnvelopeTypes"] = new[] { "hello", "request" },
+                ["supportedMultiRequestShape"] = "YAML stream with one envelope per document separated by '---'.",
+            });
+    }
+
+    private static string? TryGetBatchRequestId(object? payload)
+    {
+        var payloadDictionary = ToStringObjectDictionary(payload);
+        if (payloadDictionary is null)
+        {
+            return null;
+        }
+
+        if (TryGetDictionaryString(payloadDictionary, "requestId", out var directRequestId))
+        {
+            return directRequestId;
+        }
+
+        if (!payloadDictionary.TryGetValue("requests", out var requests) &&
+            !payloadDictionary.TryGetValue("envelopes", out requests))
+        {
+            return null;
+        }
+
+        if (requests is IEnumerable requestItems and not string)
+        {
+            foreach (var item in requestItems)
+            {
+                var requestDictionary = ToStringObjectDictionary(item);
+                if (TryGetDictionaryString(requestDictionary, "requestId", out var requestId))
+                {
+                    return requestId;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static bool TryGetDictionaryString(
+        IReadOnlyDictionary<string, object?>? dictionary,
+        string key,
+        out string? value)
+    {
+        value = null;
+        if (dictionary is null ||
+            !dictionary.TryGetValue(key, out var raw) ||
+            raw is null)
+        {
+            return false;
+        }
+
+        value = raw.ToString();
+        return !string.IsNullOrWhiteSpace(value);
     }
 
     private static IYamlEnvelope BuildError(

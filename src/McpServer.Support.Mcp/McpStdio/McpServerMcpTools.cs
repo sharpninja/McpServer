@@ -1411,10 +1411,10 @@ public sealed class FwhMcpTools
     }
 
     /// <summary>REQ-MGMT-001: Generate requirements documents as Markdown or workspace files.</summary>
-    [McpServerTool(Name = "requirements_generate"), Description("Generate requirements documents. doc = functional|technical|testing|mapping|all (default all). format = markdown|wiki. doc=all writes files to the workspace and returns export metadata.")]
+    [McpServerTool(Name = "requirements_generate"), Description("Generate requirements documents. doc = functional|technical|testing|mapping|matrix|all (default all). format = markdown|wiki. doc=all writes files to the workspace and returns export metadata.")]
     public async Task<string> RequirementsGenerate(
         [Description("Workspace path (required)")] string workspacePath,
-        [Description("Document selector: functional, technical, testing, mapping, or all")] string? doc = "all",
+        [Description("Document selector: functional, technical, testing, mapping, matrix, or all")] string? doc = "all",
         [Description("Output format: markdown or wiki")] string? format = "markdown",
         CancellationToken cancellationToken = default)
     {
@@ -1422,7 +1422,7 @@ public sealed class FwhMcpTools
         try
         {
             if (!TryParseRequirementsDocType(doc, out var docType))
-                return JsonSerializer.Serialize(new { error = "Unsupported doc. Expected functional|technical|testing|mapping|all." });
+                return JsonSerializer.Serialize(new { error = "Unsupported doc. Expected functional|technical|testing|mapping|matrix|all." });
 
             var normalizedFormat = (format ?? "markdown").Trim().ToLowerInvariant();
             if (normalizedFormat == "wiki")
@@ -1941,6 +1941,9 @@ public sealed class FwhMcpTools
                 return true;
             case "mapping":
                 docType = RequirementsDocType.Mapping;
+                return true;
+            case "matrix":
+                docType = RequirementsDocType.Matrix;
                 return true;
             case "all":
                 docType = RequirementsDocType.All;

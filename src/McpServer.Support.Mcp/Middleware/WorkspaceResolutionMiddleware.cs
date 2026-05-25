@@ -1,4 +1,5 @@
 using McpServer.Support.Mcp.Services;
+using McpServer.Support.Mcp.Storage;
 using Microsoft.Extensions.Logging;
 
 namespace McpServer.Support.Mcp.Middleware;
@@ -66,7 +67,8 @@ public sealed class WorkspaceResolutionMiddleware
         HttpContext context,
         WorkspaceContext workspaceContext,
         WorkspaceTokenService tokenService,
-        IWorkspaceService workspaceService)
+        IWorkspaceService workspaceService,
+        McpDbContext? dbContext = null)
     {
         var path = context.Request.Path;
 
@@ -101,7 +103,7 @@ public sealed class WorkspaceResolutionMiddleware
 
             _logger.LogInformation("[WS-Resolve] {Method} {Path} | Tier1 OK: X-Workspace-Path='{HeaderValue}' → {WorkspaceName}",
                 method, path, headerValue, ws.Name);
-            PopulateContext(workspaceContext, ws, isDefault: false, context);
+            PopulateContext(workspaceContext, ws, isDefault: false, context, dbContext);
             await _next(context).ConfigureAwait(false);
             return;
         }
@@ -122,7 +124,7 @@ public sealed class WorkspaceResolutionMiddleware
                     {
                         _logger.LogInformation("[WS-Resolve] {Method} {Path} | Tier2 OK: ApiKey reverse lookup → {WorkspaceName} (isDefault={IsDefault})",
                             method, path, ws.Name, isDefault);
-                        PopulateContext(workspaceContext, ws, isDefault, context);
+                        PopulateContext(workspaceContext, ws, isDefault, context, dbContext);
                         await _next(context).ConfigureAwait(false);
                         return;
                     }
@@ -175,12 +177,13 @@ public sealed class WorkspaceResolutionMiddleware
         return false;
     }
 
-    private static void PopulateContext(WorkspaceContext ctx, WorkspaceDto ws, bool isDefault, HttpContext httpContext)
+    private static void PopulateContext(WorkspaceContext ctx, WorkspaceDto ws, bool isDefault, HttpContext httpContext, McpDbContext? dbContext)
     {
         ctx.WorkspacePath = ws.WorkspacePath;
         ctx.WorkspaceName = ws.Name;
         ctx.DataDirectory = ws.DataDirectory;
         ctx.TodoFilePath = ws.TodoPath;
+        dbContext?.OverrideWorkspaceId(ws.WorkspacePath);
 
         // A JWT-authenticated user is never treated as a "default key" user, even when the
         // workspace was resolved via the anonymous API key.

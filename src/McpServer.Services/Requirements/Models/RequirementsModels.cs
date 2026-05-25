@@ -5,20 +5,51 @@ namespace McpServer.Support.Mcp.Requirements.Models;
 /// <param name="Title">The requirement title text.</param>
 /// <param name="Body">The full body text (may include **Covered by:** lines).</param>
 /// <param name="WorkspaceId">The workspace discriminator that owns the row.</param>
-public sealed record FrEntry(string Id, string Title, string Body, string WorkspaceId = "");
+/// <param name="Priority">The requirement priority.</param>
+/// <param name="Status">The requirement status.</param>
+/// <param name="Notes">Optional operator notes.</param>
+public sealed record FrEntry(
+    string Id,
+    string Title,
+    string Body,
+    string WorkspaceId = "",
+    string Priority = "medium",
+    string Status = "pending",
+    string? Notes = null);
 
 /// <summary>FR-MCP-026: Technical Requirement entry parsed from Technical-Requirements.md.</summary>
 /// <param name="Id">The TR identifier (e.g. TR-MCP-ARCH-001).</param>
 /// <param name="Title">Optional bold title before em-dash separator (may be empty).</param>
 /// <param name="Body">The full body text of the requirement.</param>
 /// <param name="WorkspaceId">The workspace discriminator that owns the row.</param>
-public sealed record TrEntry(string Id, string Title, string Body, string WorkspaceId = "");
+/// <param name="Priority">The requirement priority.</param>
+/// <param name="Status">The requirement status.</param>
+/// <param name="Notes">Optional operator notes.</param>
+public sealed record TrEntry(
+    string Id,
+    string Title,
+    string Body,
+    string WorkspaceId = "",
+    string Priority = "medium",
+    string Status = "pending",
+    string? Notes = null);
 
 /// <summary>FR-MCP-026: Testing Requirement entry parsed from Testing-Requirements.md.</summary>
 /// <param name="Id">The TEST identifier (e.g. TEST-MCP-001).</param>
 /// <param name="Condition">The test condition text.</param>
 /// <param name="WorkspaceId">The workspace discriminator that owns the row.</param>
-public sealed record TestEntry(string Id, string Condition, string WorkspaceId = "");
+/// <param name="Title">Optional test title.</param>
+/// <param name="Priority">The requirement priority.</param>
+/// <param name="Status">The requirement status.</param>
+/// <param name="Notes">Optional operator notes.</param>
+public sealed record TestEntry(
+    string Id,
+    string Condition,
+    string WorkspaceId = "",
+    string Title = "",
+    string Priority = "medium",
+    string Status = "pending",
+    string? Notes = null);
 
 /// <summary>FR-MCP-026: FR-to-TR mapping row from TR-per-FR-Mapping.md.</summary>
 public sealed record FrTrMapping
@@ -69,6 +100,9 @@ public enum RequirementsDocType
 
     /// <summary>TR-per-FR Mapping document.</summary>
     Mapping,
+
+    /// <summary>Requirements Matrix document.</summary>
+    Matrix,
 
     /// <summary>All requirements documents as a workspace export.</summary>
     All

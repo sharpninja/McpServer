@@ -17,16 +17,35 @@ public sealed class FederationController : ControllerBase
     private readonly FederationRegistry _registry;
     private readonly TunnelRegistry _tunnelRegistry;
     private readonly IFederationPushService? _pushService;
+    private readonly IFederationTopologyService? _topologyService;
+    private readonly FederationStateAdapterRegistry? _adapterRegistry;
+    private readonly IFederationEnvelopeSigner? _envelopeSigner;
+    private readonly IFederationOperationApplyService? _operationApplyService;
 
     /// <summary>Initializes a new instance of the <see cref="FederationController"/> class.</summary>
     /// <param name="registry">Federation target registry.</param>
     /// <param name="tunnelRegistry">Tunnel registry for auto-discovery.</param>
     /// <param name="pushService">Optional push service for federated data push operations.</param>
-    public FederationController(FederationRegistry registry, TunnelRegistry tunnelRegistry, IFederationPushService? pushService = null)
+    /// <param name="topologyService">Optional hub/proxy topology service.</param>
+    /// <param name="adapterRegistry">Optional state adapter registry.</param>
+    /// <param name="envelopeSigner">Optional signed envelope verifier.</param>
+    /// <param name="operationApplyService">Optional operation apply service used by signed hub intake.</param>
+    public FederationController(
+        FederationRegistry registry,
+        TunnelRegistry tunnelRegistry,
+        IFederationPushService? pushService = null,
+        IFederationTopologyService? topologyService = null,
+        FederationStateAdapterRegistry? adapterRegistry = null,
+        IFederationEnvelopeSigner? envelopeSigner = null,
+        IFederationOperationApplyService? operationApplyService = null)
     {
         _registry = registry;
         _tunnelRegistry = tunnelRegistry;
         _pushService = pushService;
+        _topologyService = topologyService;
+        _adapterRegistry = adapterRegistry;
+        _envelopeSigner = envelopeSigner;
+        _operationApplyService = operationApplyService;
     }
 
     /// <summary>Get the current federation status including all targets and workspace routes.</summary>
@@ -34,6 +53,280 @@ public sealed class FederationController : ControllerBase
     [HttpGet("status")]
     public ActionResult<FederationStatusResponse> GetStatus()
         => Ok(BuildStatus());
+
+    /// <summary>Enroll a LocalProxy with this hub.</summary>
+    /// <param name="request">Enrollment payload.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Accepted enrollment response.</returns>
+    [HttpPost("proxies/enroll")]
+    public async Task<ActionResult<FederationEnrollmentResponse>> EnrollProxy(
+        [FromBody] FederationEnrollmentRequest request,
+        CancellationToken ct)
+    {
+        if (_topologyService is null)
+            return StatusCode(501, new { error = "Federation topology service is not configured." });
+
+        var response = await _topologyService.EnrollAsync(request, ct).ConfigureAwait(false);
+        return Ok(response);
+    }
+
+    /// <summary>Record a heartbeat from an enrolled LocalProxy.</summary>
+    /// <param name="proxyId">Proxy identifier.</param>
+    /// <param name="request">Heartbeat payload.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Heartbeat result with queue and conflict counts.</returns>
+    [HttpPost("proxies/{proxyId}/heartbeat")]
+    public async Task<ActionResult<FederationHeartbeatResponse>> Heartbeat(
+        string proxyId,
+        [FromBody] FederationHeartbeatRequest request,
+        CancellationToken ct)
+    {
+        if (_topologyService is null)
+            return StatusCode(501, new { error = "Federation topology service is not configured." });
+
+        var response = await _topologyService.HeartbeatAsync(proxyId, request, ct).ConfigureAwait(false);
+        return Ok(response);
+    }
+
+    /// <summary>List enrolled proxies known by this hub.</summary>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Proxy inventory.</returns>
+    [HttpGet("proxies")]
+    public async Task<ActionResult<IReadOnlyList<FederationProxyInfo>>> ListProxies(CancellationToken ct)
+    {
+        if (_topologyService is null)
+            return StatusCode(501, new { error = "Federation topology service is not configured." });
+
+        return Ok(await _topologyService.ListProxiesAsync(ct).ConfigureAwait(false));
+    }
+
+    /// <summary>Register or update one workspace hosted by a proxy.</summary>
+    /// <param name="proxyId">Proxy identifier.</param>
+    /// <param name="request">Workspace registration payload.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Registered workspace info.</returns>
+    [HttpPost("proxies/{proxyId}/workspaces")]
+    public async Task<ActionResult<FederationWorkspaceInfo>> RegisterWorkspace(
+        string proxyId,
+        [FromBody] FederationWorkspaceRegistrationRequest request,
+        CancellationToken ct)
+    {
+        if (_topologyService is null)
+            return StatusCode(501, new { error = "Federation topology service is not configured." });
+
+        var response = await _topologyService.RegisterWorkspaceAsync(proxyId, request, ct).ConfigureAwait(false);
+        return Ok(response);
+    }
+
+    /// <summary>List global proxy-hosted workspaces, optionally scoped to one proxy.</summary>
+    /// <param name="proxyId">Optional proxy filter.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Workspace inventory.</returns>
+    [HttpGet("workspaces")]
+    public async Task<ActionResult<IReadOnlyList<FederationWorkspaceInfo>>> ListWorkspaces(
+        [FromQuery] string? proxyId,
+        CancellationToken ct)
+    {
+        if (_topologyService is null)
+            return StatusCode(501, new { error = "Federation topology service is not configured." });
+
+        return Ok(await _topologyService.ListWorkspacesAsync(proxyId, ct).ConfigureAwait(false));
+    }
+
+    /// <summary>Accept or idempotently replay one federation operation.</summary>
+    /// <param name="request">Operation payload.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Operation status.</returns>
+    [HttpPost("operations")]
+    public async Task<ActionResult<FederationOperationResponse>> RecordOperation(
+        [FromBody] FederationOperationRequest request,
+        CancellationToken ct)
+    {
+        if (_topologyService is null)
+            return StatusCode(501, new { error = "Federation topology service is not configured." });
+
+        var response = await _topologyService.RecordOperationAsync(request, ct).ConfigureAwait(false);
+        return Ok(response);
+    }
+
+    /// <summary>Accept or idempotently replay one signed federation operation envelope.</summary>
+    /// <param name="envelope">Signed operation envelope.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Operation status.</returns>
+    [HttpPost("envelopes")]
+    public async Task<ActionResult<FederationOperationResponse>> RecordEnvelope(
+        [FromBody] FederationExecutionEnvelope envelope,
+        CancellationToken ct)
+    {
+        if (_topologyService is null)
+            return StatusCode(501, new { error = "Federation topology service is not configured." });
+        if (_operationApplyService is null)
+            return StatusCode(501, new { error = "Federation operation apply service is not configured." });
+        if (_envelopeSigner is null || !_envelopeSigner.IsConfigured)
+            return StatusCode(501, new { error = "Federation envelope signer is not configured." });
+
+        var verification = _envelopeSigner.Verify(envelope);
+        if (!verification.IsValid)
+            return BadRequest(new { error = verification.Error });
+
+        var response = await _topologyService.RecordOperationAsync(envelope.Operation, ct).ConfigureAwait(false);
+        if (!ShouldApplySignedEnvelope(response.Status))
+            return Ok(response);
+
+        var apply = await _operationApplyService.ApplyAsync(envelope.Operation, ct).ConfigureAwait(false);
+        if (apply.Conflict || (!apply.Applied && !apply.AlreadyApplied))
+        {
+            response = await _topologyService.AcknowledgeOperationAsync(
+                    response.OperationId,
+                    new FederationOperationAckRequest
+                    {
+                        Status = "conflict",
+                        HubVersion = apply.Version,
+                        Error = apply.Message ?? "Federation operation apply did not complete.",
+                    },
+                    ct)
+                .ConfigureAwait(false);
+        }
+        else
+        {
+            response = await _topologyService.AcknowledgeOperationAsync(
+                    response.OperationId,
+                    new FederationOperationAckRequest
+                    {
+                        Status = apply.AlreadyApplied ? "already_applied" : "applied",
+                        HubVersion = apply.Version,
+                        Error = apply.Message,
+                    },
+                    ct)
+                .ConfigureAwait(false);
+        }
+
+        return Ok(response);
+    }
+
+    /// <summary>Acknowledge one replayed or fanned-out operation.</summary>
+    /// <param name="operationId">Operation identifier.</param>
+    /// <param name="request">Acknowledgement payload.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Updated operation status.</returns>
+    [HttpPost("operations/{operationId}/ack")]
+    public async Task<ActionResult<FederationOperationResponse>> AcknowledgeOperation(
+        string operationId,
+        [FromBody] FederationOperationAckRequest request,
+        CancellationToken ct)
+    {
+        if (_topologyService is null)
+            return StatusCode(501, new { error = "Federation topology service is not configured." });
+
+        var response = await _topologyService.AcknowledgeOperationAsync(operationId, request, ct).ConfigureAwait(false);
+        return response.Status == "not_found" ? NotFound(response) : Ok(response);
+    }
+
+    /// <summary>Inspect queued operations, fanout depth, and conflicts.</summary>
+    /// <param name="proxyId">Optional proxy filter.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Queue status.</returns>
+    [HttpGet("queue")]
+    public async Task<ActionResult<FederationQueueStatusResponse>> GetQueueStatus(
+        [FromQuery] string? proxyId,
+        CancellationToken ct)
+    {
+        if (_topologyService is null)
+            return StatusCode(501, new { error = "Federation topology service is not configured." });
+
+        return Ok(await _topologyService.GetQueueStatusAsync(proxyId, ct).ConfigureAwait(false));
+    }
+
+    /// <summary>List federation conflicts.</summary>
+    /// <param name="proxyId">Optional proxy filter.</param>
+    /// <param name="openOnly">Whether to return only open conflicts.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Conflict inventory.</returns>
+    [HttpGet("conflicts")]
+    public async Task<ActionResult<IReadOnlyList<FederationConflictInfo>>> ListConflicts(
+        [FromQuery] string? proxyId,
+        [FromQuery] bool openOnly = true,
+        CancellationToken ct = default)
+    {
+        if (_topologyService is null)
+            return StatusCode(501, new { error = "Federation topology service is not configured." });
+
+        return Ok(await _topologyService.ListConflictsAsync(proxyId, openOnly, ct).ConfigureAwait(false));
+    }
+
+    /// <summary>Resolve a federation conflict.</summary>
+    /// <param name="conflictId">Conflict identifier.</param>
+    /// <param name="request">Resolution payload.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Resolved conflict info.</returns>
+    [HttpPost("conflicts/{conflictId}/resolve")]
+    public async Task<ActionResult<FederationConflictInfo>> ResolveConflict(
+        string conflictId,
+        [FromBody] FederationConflictResolutionRequest request,
+        CancellationToken ct)
+    {
+        if (_topologyService is null)
+            return StatusCode(501, new { error = "Federation topology service is not configured." });
+
+        var response = await _topologyService.ResolveConflictAsync(conflictId, request, ct).ConfigureAwait(false);
+        return response is null ? NotFound(new { error = $"Conflict '{conflictId}' not found." }) : Ok(response);
+    }
+
+    /// <summary>Return hub fanout rows for a proxy after a sequence.</summary>
+    /// <param name="proxyId">Proxy identifier.</param>
+    /// <param name="afterSequence">Exclusive sequence cursor.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Sync rows waiting for proxy acknowledgement.</returns>
+    [HttpGet("sync")]
+    public async Task<ActionResult<IReadOnlyList<FederationSyncItem>>> Sync(
+        [FromQuery] string proxyId,
+        [FromQuery] long afterSequence,
+        CancellationToken ct)
+    {
+        if (_topologyService is null)
+            return StatusCode(501, new { error = "Federation topology service is not configured." });
+
+        var items = await _topologyService.GetSyncItemsAsync(proxyId, afterSequence, ct).ConfigureAwait(false);
+        if (_envelopeSigner is { IsConfigured: true })
+        {
+            foreach (var item in items)
+                item.Envelope = _envelopeSigner.Sign(item.ToRequest(), "hub", proxyId, ResolveSyncApplyMode(item));
+        }
+
+        return Ok(items);
+    }
+
+    /// <summary>Acknowledge one recipient-specific sync row.</summary>
+    /// <param name="sequence">Sync sequence number.</param>
+    /// <param name="request">Acknowledgement payload.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>Updated operation status.</returns>
+    [HttpPost("sync/{sequence:long}/ack")]
+    public async Task<ActionResult<FederationOperationResponse>> AcknowledgeSync(
+        long sequence,
+        [FromBody] FederationSyncAckRequest request,
+        CancellationToken ct)
+    {
+        if (_topologyService is null)
+            return StatusCode(501, new { error = "Federation topology service is not configured." });
+
+        var proxyId = !string.IsNullOrWhiteSpace(request.ProxyId)
+            ? request.ProxyId
+            : Request.Headers[FederationHeaders.ProxyId].FirstOrDefault();
+        if (string.IsNullOrWhiteSpace(proxyId))
+            return BadRequest(new { error = $"ProxyId is required in body or {FederationHeaders.ProxyId} header." });
+
+        var response = await _topologyService.AcknowledgeSyncItemAsync(proxyId, sequence, request, ct).ConfigureAwait(false);
+        return response.Status == "not_found" ? NotFound(response) : Ok(response);
+    }
+
+    /// <summary>Return mutable state adapter coverage diagnostics.</summary>
+    /// <returns>Adapter coverage rows.</returns>
+    [HttpGet("adapters")]
+    public ActionResult<IReadOnlyList<FederationStateAdapterCoverage>> GetAdapterCoverage()
+        => _adapterRegistry is null
+            ? StatusCode(501, new { error = "Federation adapter registry is not configured." })
+            : Ok(_adapterRegistry.GetCoverage());
 
     /// <summary>Enable federation proxying globally.</summary>
     /// <returns>Updated federation status.</returns>
@@ -251,17 +544,84 @@ public sealed class FederationController : ControllerBase
     }
 
     private FederationStatusResponse BuildStatus()
-        => new(_registry.IsEnabled, _registry.List(), _registry.ListRoutes());
+    {
+        var snapshot = _topologyService?.GetSnapshot() ?? new FederationTopologySnapshot();
+        return new FederationStatusResponse
+        {
+            Enabled = _registry.IsEnabled,
+            Role = _registry.EffectiveRole.ToString(),
+            ConfiguredRole = _registry.ConfiguredRole.ToString(),
+            HubBaseUrl = _registry.HubBaseUrl,
+            ProxyId = _registry.ProxyId,
+            HasEnrollmentToken = _registry.HasEnrollmentToken,
+            Targets = _registry.List(),
+            WorkspaceRoutes = _registry.ListRoutes(),
+            ProxyCount = snapshot.ProxyCount,
+            HostedWorkspaceCount = snapshot.WorkspaceCount,
+            QueueDepth = snapshot.QueueDepth,
+            ConflictCount = snapshot.ConflictCount,
+            FanoutDepth = snapshot.FanoutDepth,
+            StaleReadStatus = snapshot.QueueDepth > 0 || snapshot.FanoutDepth > 0 ? "stale" : "none",
+        };
+    }
+
+    private static bool ShouldApplySignedEnvelope(string? status)
+        => string.IsNullOrWhiteSpace(status) ||
+           status.Equals("accepted", StringComparison.OrdinalIgnoreCase) ||
+           status.Equals("queued", StringComparison.OrdinalIgnoreCase) ||
+           status.Equals("replay_failed", StringComparison.OrdinalIgnoreCase);
+
+    private static string ResolveSyncApplyMode(FederationSyncItem item)
+        => string.Equals(item.Domain, "local_execution", StringComparison.OrdinalIgnoreCase)
+            ? "local_execution"
+            : "state";
 }
 
 /// <summary>FR-MCP-077: Full federation status snapshot returned by the management API.</summary>
-/// <param name="Enabled">Whether federation is globally enabled.</param>
-/// <param name="Targets">Registered federation targets.</param>
-/// <param name="WorkspaceRoutes">Per-workspace routing rules.</param>
-public sealed record FederationStatusResponse(
-    bool Enabled,
-    IReadOnlyList<FederationTargetInfo> Targets,
-    IReadOnlyList<WorkspaceRouteInfo> WorkspaceRoutes);
+public sealed class FederationStatusResponse
+{
+    /// <summary>Whether federation is globally enabled.</summary>
+    public bool Enabled { get; set; }
+
+    /// <summary>Effective federation role after compatibility inference.</summary>
+    public string Role { get; set; } = FederationRole.Standalone.ToString();
+
+    /// <summary>Configured federation role before compatibility inference.</summary>
+    public string ConfiguredRole { get; set; } = FederationRole.Standalone.ToString();
+
+    /// <summary>Hub base URL configured for LocalProxy mode.</summary>
+    public string? HubBaseUrl { get; set; }
+
+    /// <summary>Stable local proxy identifier.</summary>
+    public string? ProxyId { get; set; }
+
+    /// <summary>Whether an enrollment token is configured. The token value is never returned.</summary>
+    public bool HasEnrollmentToken { get; set; }
+
+    /// <summary>Registered federation targets.</summary>
+    public IReadOnlyList<FederationTargetInfo> Targets { get; set; } = [];
+
+    /// <summary>Per-workspace routing rules.</summary>
+    public IReadOnlyList<WorkspaceRouteInfo> WorkspaceRoutes { get; set; } = [];
+
+    /// <summary>Number of enrolled proxies known by the hub.</summary>
+    public int ProxyCount { get; set; }
+
+    /// <summary>Number of proxy-hosted workspaces known by the hub.</summary>
+    public int HostedWorkspaceCount { get; set; }
+
+    /// <summary>Number of queued operations waiting for replay or acknowledgement.</summary>
+    public int QueueDepth { get; set; }
+
+    /// <summary>Number of open conflicts.</summary>
+    public int ConflictCount { get; set; }
+
+    /// <summary>Number of unacknowledged fanout rows.</summary>
+    public int FanoutDepth { get; set; }
+
+    /// <summary>Current stale-read status. <c>none</c> means no stale read is currently reported.</summary>
+    public string StaleReadStatus { get; set; } = "none";
+}
 
 /// <summary>FR-MCP-077: Result of a tunnel-based target auto-discovery operation.</summary>
 /// <param name="Discovered">Number of new targets registered in this call.</param>

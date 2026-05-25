@@ -65,6 +65,26 @@ No alternate direct-launch path is permitted for pooled workloads; pooled agents
 
 **Covered by:** `ISessionLogWorkflow`, `SessionLogWorkflow`, `SessionLogWorkflowContext`, `SessionLogTurnContext`, `ITodoWorkflow`, `TodoWorkflow`, `IMcpHostedAgent.PowerShellSessions`, `IHostedPowerShellSessionManager`, `McpHostedAgentToolAdapter`, `HostedPowerShellSessionManager`, `HostedPowerShellSessionHost`, `PowerShellSessionCreateResult`, `PowerShellSessionCommandResult`, `PowerShellSessionCloseResult`, `McpServerClient`, `RepoClient`, `DesktopClient`, `IMcpSessionIdentifierFactory`, `McpSessionIdentifierFactory`
 
+## TR-MCP-AGENT-008
+
+**Agent Pool Orchestration** — Reserved/planned: orchestrates a pool of agents for parallel task processing. Not yet implemented; placeholder for FR-MCP-028 / FR-MCP-050 traceability.
+
+## TR-MCP-AGENT-009
+
+**Agent Plugin Discovery** — Reserved/planned: discovers installed agent plugins and validates their contracts. Not yet implemented; placeholder for FR-MCP-050 traceability.
+
+## TR-MCP-AGENT-010
+
+**Agent Process Lifecycle** — Reserved/planned: manages start/stop/health of agent host processes. Not yet implemented; placeholder for FR-MCP-050 traceability.
+
+## TR-MCP-AGENT-011
+
+**Agent State Synchronization** — Reserved/planned: synchronizes agent state across pool members. Not yet implemented; placeholder for FR-MCP-050 traceability.
+
+## TR-MCP-AGENT-012
+
+**Agent Notification Bus** — Reserved/planned: routes notifications between agents and the workspace event bus. Not yet implemented; placeholder for FR-MCP-050 traceability.
+
 ## TR-MCP-AGENT-013
 
 **PowerShell McpSession Dual-Path Session Cache Resolution** — `tools/powershell/McpSession.psm1` SHALL persist the canonical current session object to `.mcpSession/current-session.json` whenever session state is saved, SHALL consult that current-session cache before falling back to the legacy `.mcpServer/session.yaml` wrapper when resolving the active session, and SHALL reuse the cached current-session `sessionId` during initialization when the cache matches the requested agent/model and the session is still active.
@@ -448,7 +468,6 @@ SQLite FTS5 full-text search support and hybrid ranking.
 ## TR-MCP-HTTP-002
 
 **Detailed and Sanitized HTTP 500 Error Contract** — All HTTP endpoints that return status code 500 SHALL emit a structured response body containing a non-empty human-readable error description that identifies the failing operation and provides actionable diagnostic context for the caller. The contract SHALL be applied centrally so endpoint implementations do not duplicate exception-to-response formatting. Response detail SHALL be sanitized to avoid leaking secrets, tokens, connection strings, or raw stack traces, while server-side logs SHALL retain the full exception detail needed for root-cause analysis.
-
 **Status:** ✅ Complete
 
 **Covered by:** `src/McpServer.Support.Mcp/Program.cs` `InvalidModelStateResponseFactory` (centralized RFC 7807 ProblemDetails emission for binder/validation failures, paired with `ValidationProblem` / `Problem` controller helpers for domain errors); `SessionLogController.SubmitAsync` and `GetByIdAsync` route through the centralized path. Sanitization defers to ASP.NET Core's default ProblemDetails serialization, which omits stack traces outside the Development environment.
@@ -498,6 +517,10 @@ Pluggable ingestors for repo/session/external/github/issues.
 **EF Core Global Query Filter for WorkspaceId** — `McpDbContext` accepts optional `WorkspaceContext` to capture `_workspaceId` per-instance. `OnModelCreating` applies `.HasQueryFilter(e => _workspaceId == "" || e.WorkspaceId == _workspaceId)` on all 14 entity types. Empty `_workspaceId` disables filtering (backward compatible). `IgnoreQueryFilters()` escapes for cross-workspace admin queries. `WorkspaceId TEXT NOT NULL DEFAULT ''` column with indexes on all entity tables.
 **Covered by:** `McpDbContext`, all entity types (`WorkspaceId` property)
 
+## TR-MCP-MT-003A
+
+`SessionLogService` injects an optional `WorkspaceContext` and stamps `WorkspaceId` on every entity it persists. When the context is null (ingestion / batch import path), the service skips stamping and relies on `McpDbContext.SaveChangesAsync` to auto-fill `WorkspaceId` for Added entities from the DbContext's resolved `_workspaceId`. This ensures POST/GET round-trips work under the same workspace context AND existing rows with empty WorkspaceId remain visible when no workspace header is set.
+
 ## TR-MCP-OPS-001
 
 Operational scripts for startup, health checks, packaging, config validation, and migration.
@@ -508,6 +531,142 @@ Operational scripts for startup, health checks, packaging, config validation, an
 **Status:** ✅ Complete
 
 **Covered by:** `WorkspaceController` (`POST /mcpserver/workspace/policy`), `WorkspacePolicyService`, `WorkspacePolicyDirectiveParser`, `McpServerMcpTools.workspace_policy_apply`
+
+## TR-MCP-QA-001
+
+**QA Entity Tenancy** — `QuestionEntity`, `AnswerEntity`, `CommentEntity` use composite PK `(WorkspaceId, Id)` plus global query filter (mirrors TR-MCP-MT-003).
+
+## TR-MCP-QA-002
+
+**QA Question Tags JSON** — Tags stored as `TagsJson` string column on `QuestionEntity` (no separate Tag table), serialized via the same pattern as `TodoItemEntity.DescriptionJson`.
+
+## TR-MCP-QA-003
+
+**QA Provider Migrations** — Q&A storage works on all three providers: SQLite, PostgreSQL, SQL Server. One migration per provider project.
+
+## TR-MCP-QA-004
+
+**QA Denormalized Vote Counters** — `VoteCount` is an `int` column on Question and Answer; vote endpoints use atomic `UPDATE ... SET VoteCount = VoteCount + @delta` via raw SQL or EF interceptor pattern. Voter identity is NOT stored on the Question/Answer row itself - it is captured per vote in the audit history (TR-MCP-QA-019 records `Actor` on every `vote_up` / `vote_down` audit row), preserving full provenance without bloating the hot read path.
+
+## TR-MCP-QA-005
+
+**QA Accepted Answer Storage** — `AcceptedAnswerId` is a nullable string FK on `QuestionEntity`; accepting writes `AcceptedAnswerId` + `AcceptedAt`; un-accepting clears both.
+
+## TR-MCP-QA-006
+
+**QA Service Shape** — `EfQaService` follows the `EfTodoService` shape: `IServiceScopeFactory` for scoped DbContext access, `IWriteAuditLog` for audit, optional `IChangeEventBus` for events, internal `SemaphoreSlim` for write serialization.
+
+## TR-MCP-QA-007
+
+**QA REST Surface** — `QaController` routes at `/mcpserver/qa`; `WorkspaceResolutionMiddleware.WorkspaceIndependentPrefixes` adds `"/mcpserver/qa"` (joining `/mcpserver/todo` and `/mcpserver/sessionlog`). Auth is enforced by existing `WorkspaceAuthMiddleware`.
+
+## TR-MCP-QA-008
+
+**QA Search Indexing** — Q&A search integration: `IQaSearchIndexer` writes a `ContextDocumentEntity` (`SourceType = "qa-question"` or `"qa-answer"`, `SourceKey = $"qa/{kind}/{id}"`) and a `ContextChunkEntity` (`Content = Title + "\n\n" + Body + "\n\nTags: " + tags`) on create/update, and removes both on delete. Existing FTS5 triggers and `EmbeddingService` handle the rest; no new FTS virtual table.
+
+## TR-MCP-QA-009
+
+**QA Author Resolver** — `IQaAuthorResolver` reads `HttpContext.User.FindFirst("sub")`, the `X-Api-Key` header via `WorkspaceTokenService`, and a request-body `author` field, applying the precedence in FR-MCP-QA-008.
+
+## TR-MCP-QA-010
+
+**QA MCP STDIO Tools** — MCP STDIO tools live on the existing `FwhMcpTools` class (file `src/McpServer.Support.Mcp/McpStdio/McpServerMcpTools.cs`); each Q&A tool accepts optional `workspacePath` and calls the existing `ApplyWorkspaceOverride` helper.
+
+## TR-MCP-QA-011
+
+**QA FAQ Query Projection** — FAQ projection executes as a single EF query: `Questions.Where(q => q.AcceptedAnswerId != null).Include(q => q.AcceptedAnswer).OrderByDescending(q => q.AcceptedAnswer!.VoteCount).ThenByDescending(q => q.VoteCount).Take(limit)`.
+
+## TR-MCP-QA-012
+
+**QA Typed Client** — `QaClient` ships in `McpServer.Client` (NuGet `SharpNinja.McpServer.Client`); wired into `McpServerClient.Qa` via `McpServerClientFactory`.
+
+## TR-MCP-QA-013
+
+**QA XML Documentation** — XML docs on every new public type and member (CS1591 enforced). Test classes cite TR-PLANNED-013 plus the FR/TR/TEST IDs they validate.
+
+## TR-MCP-QA-014
+
+**QA REPL Workflow** — REPL exposure: `IQaWorkflow` in `McpServer.Repl.Core` wraps `McpServerClient.Qa`; `QaWorkflow` registered as singleton in `McpServer.Repl.Core/ServiceCollectionExtensions.cs`; `QaCommandShapes` defines `MethodNamespace = "workflow.qa"` and per-method constants; `ReplCommandDispatcher` constructor takes `IQaWorkflow` and switches on `workflow.qa.*` methods.
+
+## TR-MCP-QA-015
+
+**QA PowerShell Module** — PowerShell module `tools/powershell/McpQa.psm1` reads `AGENTS-README-FIRST.yaml` via existing `Find-McpMarkerFile`/`ConvertFrom-McpMarkerContent` helpers, exports `Get-McpQuestion`, `Search-McpQuestion`, `New-McpQuestion`, `Set-McpQuestion`, `Remove-McpQuestion`, `Add-McpAnswer`, `Approve-McpAnswer`, `Add-McpQaVote`, `Add-McpQaComment`, `Get-McpFaq`.
+
+## TR-MCP-QA-016
+
+**QA Plugin Skill** — Plugin skills: each sibling plugin repo adds `skills/qa/SKILL.md` with the standard YAML frontmatter (`name`, `description` with trigger phrases, `version`). Body documents the `workflow.qa.*` command namespace, request envelope shape, response shape, and explicitly positions Q&A as a workspace knowledge source (read FAQ first; if no accepted answer matches, ask; if a peer answers and accepts, future agents inherit the answer via FAQ + hybrid search).
+
+## TR-MCP-QA-017
+
+**QA Documentation Surface** — Documentation: a new `docs/context/qa-schema.md` defines the on-demand schema reference (entities, IDs, FAQ projection); `docs/USER-GUIDE.md`, `docs/CLIENT-INTEGRATION.md`, `docs/context/api-capabilities.md`, `docs/REPL-USER-GUIDE.md`, `docs/REPL-AGENT-GUIDE.md`, `docs/FAQ.md`, `AGENTS.md`, and the root `README.md` are updated to surface the subsystem; `CLAUDE.md` `Context Loading by Task Type` adds a Q&A row.
+
+## TR-MCP-QA-018
+
+**QA Audit Storage** — Audit storage: `QaAuditHistoryEntity` (composite PK `(WorkspaceId, Id)`, columns `EntityKind` enum `question`/`answer`/`comment`, `EntityId`, `Action` enum `create`/`update`/`delete`/`accept`/`unaccept`/`vote_up`/`vote_down`/`comment_add`/`comment_delete`, `Version` int, `Actor`, `SnapshotJson`, `CreatedAt`) lives in `src/McpServer.Storage/Entities/` with the same global query filter as Q&A entities. Composite index on `(EntityKind, EntityId, Version)`.
+
+## TR-MCP-QA-019
+
+**QA Audit Emission** — Audit emission: `EfQaService` injects `IWriteAuditLog` and calls it before persisting each mutation, capturing the pre-mutation snapshot (post-mutation for create) and computing `Version = MAX(Version) + 1` for that `(EntityKind, EntityId)` pair (mirrors `EfTodoService` audit pattern at line ~374).
+
+## TR-MCP-QA-020
+
+**QA Audit Query** — Audit query: `IQaService.GetAuditAsync` returns `QaAuditQueryResult` with `TotalCount` + paged `QaAuditEntryDto` rows; filterable by `entityKind`, `entityId`, `action`, `from`, `to`, `actor`. `EfQaService.GetAuditAsync` uses an EF query mirroring `EfTodoService.GetAuditAsync`.
+
+## TR-MCP-QA-021
+
+**QA Audit Surfaces** — Audit surfaces: `QaController` adds `[HttpGet("questions/{id}/audit")]`, `[HttpGet("answers/{id}/audit")]`, `[HttpGet("comments/{id}/audit")]`, and `[HttpGet("audit")]`; MCP tool `qa_get_audit`; client `QaClient.GetAuditAsync`; REPL `workflow.qa.audit`; PowerShell `Get-McpQaAudit`; plugin skill documents audit access as a knowledge-provenance tool.
+
+## TR-MCP-QA-022
+
+**QA Answer Sources JSON** — Answer payload supports a structured `sources[]` array (each entry: `{ url, title?, fetchedAt, contentHash? }`) so web-search-derived answers carry their citations. Stored on `AnswerEntity` as `SourcesJson` (nullable string column). DTO `AnswerDto.Sources`, request `CreateAnswerRequest.Sources`. FAQ projection surfaces sources alongside the accepted answer.
+
+## TR-MCP-QA-023
+
+**QA Mandatory Web Capture Skill Rule** — Plugin skill mandate: every `skills/qa/SKILL.md` opens with a mandatory rule block, formatted as a callout (`> [!IMPORTANT]`), stating: "Any time you invoke an internet search, web fetch, browser MCP, or any external HTTP retrieval to help answer a workspace question, you MUST create a Q&A entry capturing the question, the synthesized answer, and the source URLs in the `sources[]` array. If you verified the answer, accept it. This is required, not optional." Skill also documents the exact `workflow.qa.create` + `workflow.qa.createAnswer` + `workflow.qa.accept` sequence and the `sources[]` schema.
+
+## TR-MCP-QA-024
+
+**QA Companion Web Skill Cross References** — Companion skills in each plugin that perform web research (`web-research`, `browser`, `search`, or equivalents already shipped in each plugin) get an inline "Required follow-up" section pointing back at the Q&A skill, so the mandate is visible from both directions. Implementation step: enumerate each sibling plugin's existing skills and add the cross-reference where applicable.
+
+## TR-MCP-QA-025
+
+**QA Close and Duplicate Storage** — Close / duplicate storage: extend `QuestionEntity` with `IsClosed` (bool), `ClosedAt` (DateTimeOffset?), `ClosedByActor` (string?), `CloseReason` (enum string `closed`/`duplicate`/`off-topic`/`resolved`/`other`), `DuplicateOfQuestionId` (nullable, with a self-referencing FK + index). FAQ projection filters out closed questions unless `?includeClosed=true`. Search indexer emits a `closed` flag in the `ContextChunkEntity.Metadata` JSON so hybrid-search consumers can filter.
+
+## TR-MCP-QA-026
+
+**QA Close and Duplicate Surfaces** — Close / duplicate endpoints: `POST /mcpserver/qa/questions/{id}/close` (body `{ reason, duplicateOfQuestionId? }`), `POST /mcpserver/qa/questions/{id}/reopen`, both writing audit rows with action `close` / `reopen` / `mark_duplicate`. Surface in MCP tool (`qa_close_question`, `qa_reopen_question`), client (`CloseQuestionAsync`, `ReopenQuestionAsync`), REPL (`workflow.qa.close`, `workflow.qa.reopen`), PowerShell (`Close-McpQuestion`, `Open-McpQuestion`), and skill body.
+
+## TR-MCP-QA-027
+
+**QA Body Rendering** — Sanitization pipeline: add NuGet packages `Markdig` (markdown -> HTML) and `Ganss.Xss` to `Directory.Packages.props` (central package management). New service `IQaBodyRenderer` (impl `QaBodyRenderer`) renders + sanitizes using a strict allow-list: tags `p, h1, h2, h3, ul, ol, li, code, pre, strong, em, a, blockquote, table, thead, tbody, tr, th, td, hr, br, img`; attributes `href, src, alt, title, class` (with `class` restricted to a set of code-highlight classes); URLs limited to `http`, `https`, `mailto`; force `rel="nofollow noopener"` on all `<a>`; drop `script`, `iframe`, `object`, `embed`, `form`, all `on*` attributes, and `javascript:` URLs. Renderer is called by `EfQaService` on every Create / Update for Question, Answer, and Comment, populating sibling columns `TitleHtml?` (Question only), `BodyHtml`, plus answer/comment equivalents. Audit snapshots also store the rendered HTML so historical views are safe.
+
+## TR-MCP-QA-028
+
+**QA Sanitization Tests** — Sanitization tests: `tests/McpServer.Support.Mcp.Tests/Services/QaBodyRendererTests.cs` covers a canonical XSS-payload corpus (script tags, `<img onerror>`, `javascript:` href, data URLs, nested HTML in markdown, comment-out attacks, html entities). Same corpus runs against the live controller via `tests/McpServer.Qa.Validation/ErrorTests/SanitizationTests.cs`.
+
+## TR-MCP-QA-029
+
+**QA FAQ Wiki Generation Target** — FAQ wiki page generation: add a Nuke build target (e.g. `BuildFaqWikiPage`) in `build/Build.cs` (or whatever the existing target file is) that POSTs `GET /mcpserver/qa/faq?limit=500&includeSources=true` to a configured workspace (env-var-driven endpoint + API key, mirroring existing wiki publication patterns), formats the response into Markdown, writes `docs/Project/wiki/azure/FAQ.md` and `docs/Project/wiki/github/FAQ.md`, and updates `Home.md`, `_Sidebar.md`, and `.order` entries to list the FAQ page. Target is wired into the existing publication target so `./build.ps1` rebuilds the FAQ page alongside the requirements wiki.
+
+## TR-MCP-QA-030
+
+**QA FAQ Wiki Snapshot Tests** — FAQ wiki content tests: a `tests/Build.Tests/FaqWikiPageTests.cs` test invokes `BuildFaqWikiPage` against a fixture FAQ JSON payload, snapshot-compares the generated Markdown to a checked-in expected output to catch unintended formatting changes, and asserts the wiki index files reference the new page.
+
+## TR-MCP-QA-031
+
+**QA Voter History** — Voter-history endpoints (derived from audit): `GET /mcpserver/qa/questions/{id}/voters` and `GET /mcpserver/qa/answers/{id}/voters` return the audit rows for that entity filtered to `Action IN ('vote_up','vote_down','vote_change','vote_revoke')`, projected as `{ actor, action, createdAt }` with paging. Same surface exposed through MCP (`qa_get_voters`), client (`QaClient.GetVotersAsync`), REPL (`workflow.qa.voters`), and PowerShell (`Get-McpQaVoters`). The plugin skill documents this endpoint as the canonical way to answer "who voted on X". A companion `GET .../votes` endpoint returns the current per-voter state (one row per active voter) from `QaVoteEntity` for "what is each voter's current position" queries.
+
+## TR-MCP-QA-032
+
+**QA Vote State Storage** — Per-voter state storage: new `QaVoteEntity` (composite PK `(WorkspaceId, Id)`; columns `EntityKind` (`question`/`answer`), `EntityId`, `VoterActor`, `VoteValue` (`1` or `-1`), `CreatedAt`, `UpdatedAt`). Unique index `(WorkspaceId, EntityKind, EntityId, VoterActor)` enforces one-vote-per-user-per-entity at the database layer (prevents race conditions even under concurrent vote calls). Global query filter on `WorkspaceId` matches other Q&A entities.
+
+## TR-MCP-QA-033
+
+**QA Vote State Machine** — Vote state machine: `EfQaService.VoteAsync(entityKind, entityId, delta, actor)` runs in a single transaction that (a) looks up the existing `QaVoteEntity` row, (b) applies one of `no-op` (same vote already exists), `apply` (no existing vote -> insert + counter +/- 1), `change` (opposite vote exists -> update row + counter +/- 2), or `revoke` (delta is 0 and a vote exists -> delete row + counter -/+ 1), (c) writes the corresponding audit row with action `vote_up` / `vote_down` / `vote_change` / `vote_revoke` (no audit row on `no-op`), (d) updates the Question/Answer counter via atomic `UPDATE`. Returns the resulting state so callers know which branch ran.
+
+## TR-MCP-QA-034
+
+**QA Vote Audit Actions** — Vote audit-action enum extends to: `vote_up`, `vote_down`, `vote_change`, `vote_revoke`. Migration adds the new values to the audit action enum check constraint (where one exists - SQLite stores as string, SqlServer / Postgres via check constraint).
 
 ## TR-MCP-REPL-001
 
@@ -558,22 +717,26 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **Covered by:** `McpServer.Repl.Core` (`IGenericClientPassthrough`, `ClientCommandShapes`), `McpServer.Repl.Host` (`GenericClientPassthrough`)
 
+## TR-MCP-REPL-008
+
+`MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(workspacePathOverride, markerPathOverride, out options, out error)` returns success/failure plus a human-readable diagnostic. The diagnostic enumerates every directory walked, names the marker file when found, and distinguishes "not found" from "malformed" and "signature mismatch". `FindMarkerFile(startPath, out searchedPaths)` exposes the same path list for callers that want raw enumeration. The legacy parameterless `Resolve()` remains for back-compat.
+
 ## TR-MCP-REQ-001
 
 **AI Requirements Analysis Service** — `RequirementsService` invokes `ICopilotClient` with a structured prompt containing the TODO item's title, description, technical details, implementation tasks, and pre-existing FR/TR assignments. The prompt instructs Copilot to identify existing FRs/TRs from `docs/Project/` and create new entries for unaddressed functionality, then emit a JSON block with assigned IDs. Response parsing first attempts structured JSON extraction; falls back to regex (`FR-[A-Z]+-\d{3}` / `TR-[A-Z]+-\d{3}`) for robustness. Discovered IDs are merged (deduplicated, order-preserved) back into the TODO via `ITodoService.UpdateAsync`.
 
 ## TR-MCP-REQ-002
 
-**Requirements Document Management Service** — `RequirementsDocumentService` parses the four canonical requirements documents (`Functional-Requirements.md`, `Technical-Requirements.md`, `Testing-Requirements.md`, `TR-per-FR-Mapping.md`) into a strongly typed in-memory model on startup and provides CRUD operations for FR/TR/TEST entries and mapping rows. Mutations are serialized with `SemaphoreSlim` and persisted with atomic file swaps (temp file + `File.Replace`/fallback overwrite) to prevent document corruption under concurrent writes.
+**Requirements Document Management Service** — `RequirementsDocumentService` parses the canonical requirements documents (`Functional-Requirements.md`, `Technical-Requirements.md`, `Testing-Requirements.md`, `TR-per-FR-Mapping.md`) into a strongly typed in-memory model on startup and provides CRUD operations for FR/TR/TEST entries and mapping rows. It renders `Functional-Requirements.md`, `Technical-Requirements.md`, `Testing-Requirements.md`, `TR-per-FR-Mapping.md`, and `Requirements-Matrix.md` for exports. Matrix rendering preserves existing matrix rows and appends missing FR/TR/TEST identifiers so generated exports satisfy traceability validation without discarding hand-maintained status/source metadata.
 **Covered by:** `RequirementsDocumentService`, `RequirementsDocumentParser`, `RequirementsDocumentRenderer`, `RequirementsOptions`
 
 ## TR-MCP-REQ-003
 
-**Requirements REST + STDIO Tool Integration** — The requirements management feature is exposed over REST via RequirementsController at /mcpserver/requirements/* and over STDIO via MCP tools (requirements_list, requirements_generate, requirements_create, requirements_update, requirements_delete). Document generation supports individual Markdown documents and doc=all workspace exports with canonical filenames.
+**Requirements REST + STDIO Tool Integration** — The requirements management feature is exposed over REST via RequirementsController at /mcpserver/requirements/* and over STDIO via MCP tools (requirements_list, requirements_generate, requirements_create, requirements_update, requirements_delete). Document generation supports individual Markdown documents, including `doc=matrix` / `docType=matrix` for `Requirements-Matrix.md`, and `doc=all` workspace exports with canonical filenames including `Requirements-Matrix.md`.
 
 ## TR-MCP-REQ-004
 
-**Dual Wiki Workspace Renderer** — Requirements document generation SHALL support format=wiki with doc=all, writing both azure/ and github/ folders under docs/Project/wiki and returning workspace export metadata. Each platform folder SHALL include canonical requirements markdown documents plus `.mcp-requirements-manifest.json` with generatedAtUtc. Azure Wiki output SHALL include `.order`; GitHub Wiki output SHALL include `_Sidebar.md` and `_Footer.md`. Status: Complete. Covered by `RequirementsWikiDocumentRenderer`, `RequirementsDocumentService`, `RequirementsDatabaseDocumentService`, `RequirementsController`, `RequirementsClient`, `RequirementsWorkflow`, `McpServerMcpTools`.
+**Dual Wiki Workspace Renderer** — Requirements document generation SHALL support format=wiki with doc=all, writing both azure/ and github/ folders under docs/Project/wiki and returning workspace export metadata. Each platform folder SHALL include canonical requirements markdown documents, `Requirements-Matrix.md`, and `.mcp-requirements-manifest.json` with generatedAtUtc. Wiki Testing-Requirements.md output SHALL render grouped Markdown tables by TEST ID prefix. Azure Wiki output SHALL include `.order`; GitHub Wiki output SHALL include `_Sidebar.md` and `_Footer.md`. Status: Complete. Covered by `RequirementsWikiDocumentRenderer`, `RequirementsDocumentService`, `RequirementsDatabaseDocumentService`, `RequirementsController`, `RequirementsClient`, `RequirementsWorkflow`, `McpServerMcpTools`.
 
 ## TR-MCP-REQ-005
 
@@ -744,7 +907,6 @@ The server SHALL provide a prompt resolution endpoint returning the populated pr
 ## TR-MCP-VOICE-003
 
 **Voice Session Lifecycle Management** — One active session per device enforced via `DeviceId` lookup; creating a new session for a device with an active session returns the existing session. Idle timeout (`SessionIdleTimeoutMinutes`, default 15) triggers the configured idle-shutdown prompt sent to Copilot, waits for the configured sentinel response, then terminates the session. `UseDesktopLaunch` option (default true) selects `CreateProcessAsUser` for Windows service context.
-
 **Covered by:** `VoiceConversationService.OnIdleCleanupTick` / `CleanupIdleSessionsAsync` (60s timer-driven idle-shutdown orchestrator), `VoiceConversationOptions.SessionIdleTimeoutMinutes`, `VoiceConversationOptions.IdleShutdownCommand` (config string sent to Copilot), `VoiceConversationOptions.IdleShutdownSentinel` (config string awaited as the shutdown confirmation). Note: `IdleShutdownCommand` and `IdleShutdownSentinel` are configured strings on `VoiceConversationOptions`, not CLR message types.
 
 ## TR-MCP-VOICE-004
@@ -790,39 +952,16 @@ Presence signaling SHALL be excluded from one-shot sessions.
 
 **Primary Workspace Detection and IsEnabled Gating** — `WorkspaceProcessManager.IHostedService.StartAsync` resolves the primary workspace: first by `IsPrimary = true` + lowest port among enabled workspaces; then by lowest-port enabled workspace if none is marked primary. For the primary workspace, only a marker file is written - no child `WebApplication` is created. Workspaces with `IsEnabled = false` are skipped during auto-start but can be started manually.
 
-
-## TR-MCP-MT-003A SessionLog WorkspaceContext Injection
-
-`SessionLogService` injects an optional `WorkspaceContext` and stamps `WorkspaceId` on every entity it persists. When the context is null (ingestion / batch import path), the service skips stamping and relies on `McpDbContext.SaveChangesAsync` to auto-fill `WorkspaceId` for Added entities from the DbContext's resolved `_workspaceId`. This ensures POST/GET round-trips work under the same workspace context AND existing rows with empty WorkspaceId remain visible when no workspace header is set.
-
-## TR-PLANNED-013A SessionLog ProblemDetails Factory
-
-`AddControllers().ConfigureApiBehaviorOptions` installs an `InvalidModelStateResponseFactory` that produces `application/problem+json` responses for body-binding failures on `/mcpserver/*` endpoints. The factory strips the action parameter name (`dto`, `body`, `turn`) from the `errors` keys, replacing them with `$` so callers see the canonical JSON root marker instead of a misleading wrapper field name. `SessionLogController.SubmitAsync` and `GetByIdAsync` use `ValidationProblem` for domain validation to keep the response shape uniform.
-
-## TR-MCP-REPL-008 MarkerFile Resolution Diagnostics
-
-`MarkerFileClientOptionsResolver.TryResolveWithDiagnostics(workspacePathOverride, markerPathOverride, out options, out error)` returns success/failure plus a human-readable diagnostic. The diagnostic enumerates every directory walked, names the marker file when found, and distinguishes "not found" from "malformed" and "signature mismatch". `FindMarkerFile(startPath, out searchedPaths)` exposes the same path list for callers that want raw enumeration. The legacy parameterless `Resolve()` remains for back-compat.
-
-## TR-MCP-AGENT-008
-
-**Agent Pool Orchestration** — Reserved/planned: orchestrates a pool of agents for parallel task processing. Not yet implemented; placeholder for FR-MCP-028 / FR-MCP-050 traceability.
-
-## TR-MCP-AGENT-009
-
-**Agent Plugin Discovery** — Reserved/planned: discovers installed agent plugins and validates their contracts. Not yet implemented; placeholder for FR-MCP-050 traceability.
-
-## TR-MCP-AGENT-010
-
-**Agent Process Lifecycle** — Reserved/planned: manages start/stop/health of agent host processes. Not yet implemented; placeholder for FR-MCP-050 traceability.
-
-## TR-MCP-AGENT-011
-
-**Agent State Synchronization** — Reserved/planned: synchronizes agent state across pool members. Not yet implemented; placeholder for FR-MCP-050 traceability.
-
-## TR-MCP-AGENT-012
-
-**Agent Notification Bus** — Reserved/planned: routes notifications between agents and the workspace event bus. Not yet implemented; placeholder for FR-MCP-050 traceability.
-
 ## TR-MCP-WS-UI-001
 
 **McpServer Management Web UI** — Reserved/planned: web-based management UI for workspace and server administration. Tracks FR-MCP-031.
+
+## TR-PLANNED-013A
+
+`AddControllers().ConfigureApiBehaviorOptions` installs an `InvalidModelStateResponseFactory` that produces `application/problem+json` responses for body-binding failures on `/mcpserver/*` endpoints. The factory strips the action parameter name (`dto`, `body`, `turn`) from the `errors` keys, replacing them with `$` so callers see the canonical JSON root marker instead of a misleading wrapper field name. `SessionLogController.SubmitAsync` and `GetByIdAsync` use `ValidationProblem` for domain validation to keep the response shape uniform.
+
+## TR-MCP-FED-001
+
+**Hub Proxy Federation Contract** - Federation configuration SHALL include `Role`, `HubBaseUrl`, `ProxyId`, `EnrollmentToken`, queue settings, and sync settings while preserving existing target/route configuration. Durable storage SHALL track proxies, proxy-hosted workspaces, operations, outbox fanout rows, and conflicts across SQLite, PostgreSQL, and SQL Server providers. Hub endpoints SHALL support proxy enrollment, heartbeat, proxy/workspace inventory, operation intake, acknowledgement, queue status, conflicts, sync, and adapter coverage. LocalProxy routing SHALL forward MCP traffic to the hub with loop-protection and operation headers, while local infrastructure and federation diagnostic endpoints remain local. Mutating LocalProxy requests SHALL queue durably when the hub is unreachable and replay through the hub intake endpoint.
+
+**Covered by:** `FederationOptions`, `FederationRegistry`, `FederationHeaders`, `FederationTopologyService`, `FederationQueuedOperationReplayService`, `FederationController`, `McpDbContext`, `Federation*Entity`, provider migrations, `FederationMiddleware`, `FederationProxyService`
