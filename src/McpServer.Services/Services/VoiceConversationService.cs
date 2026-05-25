@@ -33,6 +33,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
     private readonly WorkspaceServiceAccessor _workspaceAccessor;
     private readonly TodoCreationService _todoCreationService;
     private readonly TodoUpdateService _todoUpdateService;
+    private readonly IServiceScopeFactory _scopeFactory;
     private readonly IConfiguration _configuration;
     private readonly IOptionsMonitor<VoiceConversationOptions> _options;
     private readonly IOptionsMonitor<TodoPromptOptions> _todoPromptOptions;
@@ -60,6 +61,7 @@ public sealed partial class VoiceConversationService : IVoiceConversationService
         _workspaceAccessor = workspaceAccessor ?? throw new ArgumentNullException(nameof(workspaceAccessor));
         _todoCreationService = serviceProvider.GetRequiredService<TodoCreationService>();
         _todoUpdateService = serviceProvider.GetRequiredService<TodoUpdateService>();
+        _scopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _options = options ?? throw new ArgumentNullException(nameof(options));
         _todoPromptOptions = todoPromptOptions ?? throw new ArgumentNullException(nameof(todoPromptOptions));
@@ -1239,13 +1241,16 @@ public sealed partial class VoiceConversationService
     /// </summary>
     private async Task<string> ResolveAgentPathAsync(CancellationToken cancellationToken)
     {
-        // 1. Try workspace config entries from IConfiguration
+        // 1. Try DB-backed workspace registration for the current workspace
         var workspacePath = _workspaceAccessor.GetWorkspacePath();
-        var workspaces = _configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>();
-        var entry = workspaces?.FirstOrDefault(w =>
-            string.Equals(w.WorkspacePath, workspacePath, StringComparison.OrdinalIgnoreCase));
-        if (!string.IsNullOrWhiteSpace(entry?.AgentPath))
-            return entry.AgentPath;
+        if (!string.IsNullOrWhiteSpace(workspacePath))
+        {
+            await using var scope = _scopeFactory.CreateAsyncScope();
+            var workspaceSvc = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
+            var dto = await workspaceSvc.GetAsync(workspacePath, cancellationToken).ConfigureAwait(false);
+            if (!string.IsNullOrWhiteSpace(dto?.AgentPath))
+                return dto.AgentPath;
+        }
 
         // 2. Try TodoPromptOptions (set for primary workspace)
         var promptOpts = _todoPromptOptions.CurrentValue;

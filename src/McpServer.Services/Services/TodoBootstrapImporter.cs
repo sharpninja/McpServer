@@ -12,10 +12,11 @@ namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
 /// TR-MCP-TODO-008 Phase 4: per-workspace YAML bootstrap importer. On host
-/// start, iterates every <c>Mcp:Workspaces</c> entry and, for each workspace
-/// that has no TODO rows stamped with its workspace id and no marker file,
-/// imports the workspace's <c>TodoPath</c> YAML into the authoritative
-/// database with every row stamped via <see cref="McpDbContext.OverrideWorkspaceId"/>.
+/// start, iterates every registered workspace (DB-backed) and, for each
+/// workspace that has no TODO rows stamped with its workspace id and no
+/// marker file, imports the workspace's <c>TodoPath</c> YAML into the
+/// authoritative database with every row stamped via
+/// <see cref="McpDbContext.OverrideWorkspaceId"/>.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -74,13 +75,31 @@ internal sealed class TodoBootstrapImporter : IHostedService
     /// <inheritdoc />
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-    /// <summary>Imports every configured workspace; surface for unit tests.</summary>
+    /// <summary>Imports every registered workspace; surface for unit tests.</summary>
     internal async Task<BootstrapSummary> RunAsync(CancellationToken cancellationToken)
     {
-        var workspaces = _configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
+        // Workspace registrations live in the DB (IWorkspaceService) - not appsettings.
+        List<WorkspaceConfigEntry> workspaces;
+        await using (var scope = _scopeFactory.CreateAsyncScope())
+        {
+            var workspaceSvc = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
+            var list = await workspaceSvc.ListAsync(cancellationToken).ConfigureAwait(false);
+            workspaces = list.Items
+                .Where(w => !string.IsNullOrWhiteSpace(w.WorkspacePath))
+                .Select(w => new WorkspaceConfigEntry
+                {
+                    WorkspacePath = w.WorkspacePath,
+                    Name = w.Name,
+                    TodoPath = w.TodoPath,
+                    DataDirectory = w.DataDirectory,
+                    IsEnabled = w.IsEnabled,
+                    IsPrimary = w.IsPrimary,
+                })
+                .ToList();
+        }
 
         // Always consider Mcp:RepoRoot as an implicit single-workspace: legacy deployments
-        // and integration-test fixtures set RepoRoot + TodoFilePath without a Workspaces
+        // and integration-test fixtures set RepoRoot + TodoFilePath without a DB workspace
         // entry, and this path must still be bootstrapped into the DB. Prepend so the
         // primary workspace is visited first; de-dup by Path.GetFullPath below.
         var legacy = BuildLegacySingleWorkspace();

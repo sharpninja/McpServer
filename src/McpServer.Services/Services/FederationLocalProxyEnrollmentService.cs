@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using McpServer.Support.Mcp.Options;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -17,7 +17,7 @@ public sealed class FederationLocalProxyEnrollmentService : BackgroundService
     private readonly FederationRegistry _registry;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IOptionsMonitor<FederationOptions> _options;
-    private readonly IConfiguration _configuration;
+    private readonly IServiceScopeFactory _scopeFactory;
     private readonly ServerRuntimeInfo _runtimeInfo;
     private readonly ILogger<FederationLocalProxyEnrollmentService> _logger;
     private bool _enrolled;
@@ -26,21 +26,21 @@ public sealed class FederationLocalProxyEnrollmentService : BackgroundService
     /// <param name="registry">Federation registry seeded from configuration.</param>
     /// <param name="httpClientFactory">HTTP client factory.</param>
     /// <param name="options">Federation options monitor.</param>
-    /// <param name="configuration">Application configuration used to read local workspaces.</param>
+    /// <param name="scopeFactory">Service scope factory used to resolve <see cref="IWorkspaceService"/> for live workspace inventory.</param>
     /// <param name="runtimeInfo">Current server runtime information.</param>
     /// <param name="logger">Logger.</param>
     public FederationLocalProxyEnrollmentService(
         FederationRegistry registry,
         IHttpClientFactory httpClientFactory,
         IOptionsMonitor<FederationOptions> options,
-        IConfiguration configuration,
+        IServiceScopeFactory scopeFactory,
         ServerRuntimeInfo runtimeInfo,
         ILogger<FederationLocalProxyEnrollmentService> logger)
     {
         _registry = registry;
         _httpClientFactory = httpClientFactory;
         _options = options;
-        _configuration = configuration;
+        _scopeFactory = scopeFactory;
         _runtimeInfo = runtimeInfo;
         _logger = logger;
     }
@@ -113,7 +113,7 @@ public sealed class FederationLocalProxyEnrollmentService : BackgroundService
             BaseUrl = BuildCallbackBaseUrl(),
             EnrollmentToken = _options.CurrentValue.EnrollmentToken,
             MetadataJson = BuildMetadataJson("enroll"),
-            Workspaces = BuildWorkspaceInventory(),
+            Workspaces = await BuildWorkspaceInventoryAsync(cancellationToken).ConfigureAwait(false),
         };
 
         var client = CreateHubClient();
@@ -136,7 +136,7 @@ public sealed class FederationLocalProxyEnrollmentService : BackgroundService
         {
             Status = "online",
             MetadataJson = BuildMetadataJson("heartbeat"),
-            Workspaces = BuildWorkspaceInventory(),
+            Workspaces = await BuildWorkspaceInventoryAsync(cancellationToken).ConfigureAwait(false),
         };
 
         var client = CreateHubClient();
@@ -175,10 +175,12 @@ public sealed class FederationLocalProxyEnrollmentService : BackgroundService
             serverStartedAtUtc = _runtimeInfo.StartedAtUtc,
         }, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-    private IReadOnlyList<FederationWorkspaceRegistrationRequest> BuildWorkspaceInventory()
+    private async Task<IReadOnlyList<FederationWorkspaceRegistrationRequest>> BuildWorkspaceInventoryAsync(CancellationToken cancellationToken)
     {
-        var workspaces = _configuration.GetSection("Mcp:Workspaces").Get<List<WorkspaceConfigEntry>>() ?? [];
-        return workspaces
+        await using var scope = _scopeFactory.CreateAsyncScope();
+        var workspaceSvc = scope.ServiceProvider.GetRequiredService<IWorkspaceService>();
+        var list = await workspaceSvc.ListAsync(cancellationToken).ConfigureAwait(false);
+        return list.Items
             .Where(w => w.IsEnabled && !string.IsNullOrWhiteSpace(w.WorkspacePath))
             .Select(w => new FederationWorkspaceRegistrationRequest
             {
