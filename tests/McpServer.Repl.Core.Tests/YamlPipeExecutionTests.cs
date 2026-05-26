@@ -167,6 +167,97 @@ public class YamlPipeExecutionTests
     }
 
     /// <summary>
+    /// Requirements batch commands are schema-validated by the dispatcher before invoking
+    /// the requirements workflow, preventing empty or malformed records arrays from reaching
+    /// endpoint-backed workflow methods.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_InvalidRequirementsBatch_ReturnsSchemaValidationFailed()
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var requirements = Substitute.For<IRequirementsWorkflow>();
+        var sut = new ReplCommandDispatcher(passthrough, requirementsWorkflow: requirements);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-batch-invalid",
+                Method = RequirementsCommandShapes.CreateFrBatchMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["records"] = Array.Empty<object>(),
+                },
+            },
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("error", response.Type);
+        var err = Assert.IsAssignableFrom<IErrorPayload>(response.Payload);
+        Assert.Equal("schema_validation_failed", err.Code);
+        Assert.NotNull(err.Details);
+        var errors = Assert.IsAssignableFrom<IEnumerable<string>>(err.Details!["errors"]);
+        Assert.Contains(errors, error => error.Contains("records", StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>
+    /// A valid requirements batch request survives schema validation and is converted to the
+    /// typed batch request DTO before the workflow is invoked.
+    /// </summary>
+    [Fact]
+    public async Task Dispatcher_ValidRequirementsBatch_DelegatesToRequirementsWorkflow()
+    {
+        var passthrough = Substitute.For<IGenericClientPassthrough>();
+        var requirements = Substitute.For<IRequirementsWorkflow>();
+        requirements
+            .CreateFrBatchAsync(Arg.Any<CreateFrBatchRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new RequirementsBatchResult
+            {
+                Success = true,
+                Operation = "create",
+                Kind = "fr",
+                Total = 1,
+            }));
+        var sut = new ReplCommandDispatcher(passthrough, requirementsWorkflow: requirements);
+
+        var envelope = new YamlEnvelope
+        {
+            Type = "request",
+            Payload = new RequestPayload
+            {
+                RequestId = "req-batch-valid",
+                Method = RequirementsCommandShapes.CreateFrBatchMethod,
+                Params = new Dictionary<string, object?>
+                {
+                    ["records"] = new[]
+                    {
+                        new Dictionary<string, object?>
+                        {
+                            ["id"] = "FR-MCP-001",
+                            ["title"] = "Batch FR",
+                            ["body"] = "Create requirements in batches.",
+                        },
+                    },
+                },
+            },
+        };
+
+        var response = await sut.DispatchAsync(envelope, CancellationToken.None);
+
+        Assert.Equal("result", response.Type);
+        await requirements.Received(1).CreateFrBatchAsync(
+            Arg.Is<CreateFrBatchRequest>(request =>
+                request != null &&
+                request.Records.Count == 1 &&
+                request.Records[0].Id == "FR-MCP-001" &&
+                request.Records[0].Title == "Batch FR" &&
+                request.Records[0].Body == "Create requirements in batches."),
+            Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>
     /// A workflow.sessionlog.importRecovery request is routed to the session-log workflow
     /// with the recovered turns parsed from YAML params. This route performs the safe
     /// query-merge-submit behavior in the workflow layer.

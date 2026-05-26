@@ -62,6 +62,73 @@ public sealed class RequirementsClientTests
         Assert.Equal("TR-MCP-001", result.Id);
     }
 
+    /// <summary>
+    /// Verifies FR batch creation posts the records array to the atomic FR batch endpoint and deserializes the batch result.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task CreateFrBatchAsync_PostsRecordsArray()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"success":true,"operation":"create","kind":"fr","total":1,"items":[{"kind":"fr","id":"FR-MCP-910","fr":{"id":"FR-MCP-910","title":"Batch","body":"Body"}}],"errors":[]}""");
+        using var http = new HttpClient(handler);
+        var client = new RequirementsClient(http, DefaultOptions);
+
+        var result = await client.CreateFrBatchAsync(new CreateFrBatchRequest
+        {
+            Records =
+            [
+                new CreateFrBatchRecord
+                {
+                    Id = "FR-MCP-910",
+                    Title = "Batch",
+                    Description = "Body",
+                    Priority = "high"
+                }
+            ]
+        });
+
+        Assert.Equal(HttpMethod.Post, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/requirements/fr/batch", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("\"records\"", handler.LastRequestBody!, StringComparison.Ordinal);
+        Assert.Contains("\"description\":\"Body\"", handler.LastRequestBody!, StringComparison.Ordinal);
+        Assert.True(result.Success);
+        Assert.Equal("FR-MCP-910", Assert.Single(result.Items).Id);
+    }
+
+    /// <summary>
+    /// Verifies mixed batch updates post to the atomic mixed batch endpoint with kind-tagged records.
+    /// </summary>
+    [Fact]
+    public async System.Threading.Tasks.Task UpdateBatchAsync_PostsMixedRecordsArray()
+    {
+        var handler = new MockHttpHandler(
+            HttpStatusCode.OK,
+            """{"success":true,"operation":"update","total":1,"items":[{"kind":"test","id":"TEST-MCP-910","test":{"id":"TEST-MCP-910","condition":"Updated"}}],"errors":[]}""");
+        using var http = new HttpClient(handler);
+        var client = new RequirementsClient(http, DefaultOptions);
+
+        var result = await client.UpdateBatchAsync(new UpdateRequirementsBatchRequest
+        {
+            Records =
+            [
+                new UpdateRequirementBatchRecord
+                {
+                    Kind = "test",
+                    Id = "TEST-MCP-910",
+                    Description = "Updated"
+                }
+            ]
+        });
+
+        Assert.Equal(HttpMethod.Put, handler.LastRequest!.Method);
+        Assert.Contains("/mcpserver/requirements/batch", handler.LastRequest.RequestUri!.AbsolutePath);
+        Assert.Contains("\"kind\":\"test\"", handler.LastRequestBody!, StringComparison.Ordinal);
+        Assert.Contains("\"description\":\"Updated\"", handler.LastRequestBody!, StringComparison.Ordinal);
+        Assert.True(result.Success);
+        Assert.Equal("test", Assert.Single(result.Items).Kind);
+    }
+
     [Fact]
     public async System.Threading.Tasks.Task UpdateTestAsync_PutsBody()
     {

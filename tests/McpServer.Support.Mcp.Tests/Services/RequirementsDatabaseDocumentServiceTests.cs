@@ -116,6 +116,47 @@ public sealed class RequirementsDatabaseDocumentServiceTests
         Assert.Equal("reviewed", test.Notes);
     }
 
+    /// <summary>Atomic batch creation persists all FR/TR/TEST rows when every record is valid.</summary>
+    [Fact]
+    public async Task AddBatchAsync_ValidMixedRecords_PersistsAllRows()
+    {
+        using var fixture = new RequirementsDbFixture();
+        fixture.SetWorkspace(fixture.CreateWorkspace("batch-create"));
+        var service = fixture.CreateService();
+
+        var result = await service.AddBatchAsync(new RequirementsBatchEntries(
+            [new FrEntry("FR-MCP-903", "Batch FR", "FR body", Priority: "high")],
+            [new TrEntry("TR-MCP-BATCH-903", "Batch TR", "TR body", Priority: "high")],
+            [new TestEntry("TEST-MCP-903", "TEST body", Title: "Batch TEST", Priority: "high")])).ConfigureAwait(true);
+
+        Assert.Equal(3, result.Count);
+        Assert.Equal("high", Assert.Single(result.Functional).Priority);
+        Assert.Equal("FR-MCP-903", (await service.GetFrAsync("FR-MCP-903").ConfigureAwait(true))?.Id);
+        Assert.Equal("TR-MCP-BATCH-903", (await service.GetTrAsync("TR-MCP-BATCH-903").ConfigureAwait(true))?.Id);
+        Assert.Equal("TEST-MCP-903", (await service.GetTestAsync("TEST-MCP-903").ConfigureAwait(true))?.Id);
+    }
+
+    /// <summary>Atomic batch creation rejects conflicts before committing any later record.</summary>
+    [Fact]
+    public async Task AddBatchAsync_ExistingConflict_RollsBackWholeBatch()
+    {
+        using var fixture = new RequirementsDbFixture();
+        fixture.SetWorkspace(fixture.CreateWorkspace("batch-conflict"));
+        var service = fixture.CreateService();
+        await service.AddFrAsync(new FrEntry("FR-MCP-904", "Existing", "Existing body")).ConfigureAwait(true);
+
+        await Assert.ThrowsAsync<RequirementsConflictException>(() =>
+            service.AddBatchAsync(new RequirementsBatchEntries(
+                [
+                    new FrEntry("FR-MCP-904", "Conflict", "Conflict body"),
+                    new FrEntry("FR-MCP-905", "Should not persist", "Should not persist body")
+                ],
+                [],
+                []))).ConfigureAwait(true);
+
+        Assert.Null(await service.GetFrAsync("FR-MCP-905").ConfigureAwait(true));
+    }
+
     /// <summary>Bootstrap accepts bold legacy headings and does not treat notes columns as TEST links.</summary>
     [Fact]
     public async Task Bootstrap_LegacyBoldHeadingsAndNotesMapping_GeneratesWikiWithoutDbErrors()

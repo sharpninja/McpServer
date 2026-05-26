@@ -729,6 +729,10 @@ MCP Server must support an audited consolidation plan that inventories outstandi
 
 TODO create, update, read, audit, and projection paths shall preserve description Markdown formatting and whitespace instead of normalizing or stripping meaningful content.
 
+## FR-MCP-109 Batch requirements mutation
+
+The MCP Server shall allow agents and API clients to create or update multiple functional, technical, and test requirements in one atomic request by submitting a records array.
+
 ## FR-MCP-REPL-001 YAML Protocol STDIO REPL Host
 
 The server shall provide a YAML-envelope STDIO REPL host that accepts structured commands over standard input, executes operations against workspace services, and returns structured YAML responses over standard output. The REPL host shall support the same trust bootstrap, authentication, and workspace resolution semantics as the HTTP and MCP STDIO transports.
@@ -819,4 +823,8 @@ Session log POST shall return RFC 7807 ProblemDetails on body-binding or validat
 Session log REST shall expose `GET /mcpserver/sessionlog/{agent}/{sessionId}` (single-record fetch under tenancy) and `POST /mcpserver/sessionlog/{agent}/{sessionId}/turn` (turn-append by RequestId). Unsupported verbs on either route return 405 Method Not Allowed with an `Allow` header.
 
 **Covered by:** `SessionLogController.GetByIdAsync`, `SessionLogController.UpsertTurnAsync`, `SessionLogService.GetAsync`, `SessionLogService.UpsertTurnAsync`
+
+## FR-TEST-002 FR-TEST-002
+
+Placeholder requirement backfilled for TODO link FR-TEST-002.
 

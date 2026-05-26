@@ -201,6 +201,106 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     }
 
     /// <inheritdoc />
+    public async Task<RequirementsBatchEntries> AddBatchAsync(RequirementsBatchEntries entries, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(entries);
+        ValidateBatchEntries(entries);
+        ValidateBatchUniqueIds(entries);
+
+        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            await using var scope = CreateScope();
+            var ctx = scope.Context;
+            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
+            await using var transaction = await ctx.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
+
+            foreach (var value in EnumerateBatch(entries))
+            {
+                if (await ctx.Requirements.AnyAsync(x => x.Kind == value.Kind && x.Id == value.Id, ct).ConfigureAwait(false))
+                    throw new RequirementsConflictException($"{value.Kind.ToUpperInvariant()} '{value.Id}' already exists.");
+            }
+
+            var workspaceId = RequireWorkspaceId(ctx);
+            var now = Now();
+            foreach (var value in EnumerateBatch(entries))
+            {
+                ctx.Requirements.Add(new RequirementEntity
+                {
+                    WorkspaceId = workspaceId,
+                    Kind = value.Kind,
+                    Id = value.Id,
+                    Title = value.Title,
+                    Body = value.Body,
+                    Priority = NormalizePriority(value.Priority),
+                    Status = NormalizeStatus(value.Status),
+                    Notes = value.Notes,
+                    CreatedAtUtc = now,
+                    UpdatedAtUtc = now
+                });
+            }
+
+            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
+            await transaction.CommitAsync(ct).ConfigureAwait(false);
+
+            var result = NormalizeBatchResult(entries, workspaceId);
+            await PublishBatchRequirementsChangeSafeAsync(ChangeEventActions.Created, result, ct).ConfigureAwait(false);
+            return result;
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchEntries> UpdateBatchAsync(RequirementsBatchEntries entries, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(entries);
+        ValidateBatchEntries(entries);
+        ValidateBatchUniqueIds(entries);
+
+        await _writeLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            await using var scope = CreateScope();
+            var ctx = scope.Context;
+            await EnsureBootstrappedAsync(ctx, ct).ConfigureAwait(false);
+            await using var transaction = await ctx.Database.BeginTransactionAsync(ct).ConfigureAwait(false);
+
+            var updates = new List<(RequirementEntity Row, RequirementBatchValue Value)>();
+            foreach (var value in EnumerateBatch(entries))
+            {
+                var row = await FindRequirementAsync(ctx, value.Kind, value.Id, asTracking: true, ct).ConfigureAwait(false)
+                    ?? throw new RequirementsNotFoundException($"{value.Kind.ToUpperInvariant()} '{value.Id}' was not found.");
+                updates.Add((row, value));
+            }
+
+            var now = Now();
+            foreach (var (row, value) in updates)
+            {
+                row.Title = value.Title;
+                row.Body = value.Body;
+                row.Priority = NormalizePriority(value.Priority);
+                row.Status = NormalizeStatus(value.Status);
+                row.Notes = value.Notes;
+                row.UpdatedAtUtc = now;
+            }
+
+            await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
+            await transaction.CommitAsync(ct).ConfigureAwait(false);
+
+            var result = NormalizeBatchResult(entries, RequireWorkspaceId(ctx));
+            await PublishBatchRequirementsChangeSafeAsync(ChangeEventActions.Updated, result, ct).ConfigureAwait(false);
+            return result;
+        }
+        finally
+        {
+            _writeLock.Release();
+        }
+    }
+
+    /// <inheritdoc />
     public async Task<IReadOnlyList<FrTrMapping>> GetAllMappingsAsync(CancellationToken ct = default)
     {
         await using var scope = CreateScope();
@@ -452,6 +552,85 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         {
             _writeLock.Release();
         }
+    }
+
+    private static IEnumerable<RequirementBatchValue> EnumerateBatch(RequirementsBatchEntries entries)
+    {
+        foreach (var entry in entries.Functional)
+            yield return new RequirementBatchValue(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes);
+        foreach (var entry in entries.Technical)
+            yield return new RequirementBatchValue(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes);
+        foreach (var entry in entries.Testing)
+            yield return new RequirementBatchValue(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes);
+    }
+
+    private static RequirementsBatchEntries NormalizeBatchResult(RequirementsBatchEntries entries, string workspaceId) =>
+        new(
+            entries.Functional
+                .Select(entry => entry with
+                {
+                    WorkspaceId = workspaceId,
+                    Priority = NormalizePriority(entry.Priority),
+                    Status = NormalizeStatus(entry.Status)
+                })
+                .ToArray(),
+            entries.Technical
+                .Select(entry => entry with
+                {
+                    WorkspaceId = workspaceId,
+                    Priority = NormalizePriority(entry.Priority),
+                    Status = NormalizeStatus(entry.Status)
+                })
+                .ToArray(),
+            entries.Testing
+                .Select(entry => entry with
+                {
+                    WorkspaceId = workspaceId,
+                    Priority = NormalizePriority(entry.Priority),
+                    Status = NormalizeStatus(entry.Status)
+                })
+                .ToArray());
+
+    private static void ValidateBatchEntries(RequirementsBatchEntries entries)
+    {
+        ArgumentNullException.ThrowIfNull(entries.Functional);
+        ArgumentNullException.ThrowIfNull(entries.Technical);
+        ArgumentNullException.ThrowIfNull(entries.Testing);
+
+        foreach (var entry in entries.Functional)
+            ValidateFr(entry);
+        foreach (var entry in entries.Technical)
+            ValidateTr(entry);
+        foreach (var entry in entries.Testing)
+            ValidateTest(entry);
+    }
+
+    private static void ValidateBatchUniqueIds(RequirementsBatchEntries entries)
+    {
+        ValidateUniqueIds(entries.Functional, static item => item.Id, "FR");
+        ValidateUniqueIds(entries.Technical, static item => item.Id, "TR");
+        ValidateUniqueIds(entries.Testing, static item => item.Id, "TEST");
+    }
+
+    private static void ValidateUniqueIds<T>(IReadOnlyList<T> items, Func<T, string> getId, string label)
+    {
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var item in items)
+        {
+            var id = getId(item);
+            if (!seen.Add(id.Trim()))
+                throw new ArgumentException($"Duplicate {label} ID '{id}' in batch.", nameof(items));
+        }
+    }
+
+    private async Task PublishBatchRequirementsChangeSafeAsync(string action, RequirementsBatchEntries entries, CancellationToken ct)
+    {
+        foreach (var entry in entries.Functional)
+            await PublishRequirementsChangeSafeAsync(action, entry.Id, ct).ConfigureAwait(false);
+        foreach (var entry in entries.Technical)
+            await PublishRequirementsChangeSafeAsync(action, entry.Id, ct).ConfigureAwait(false);
+        foreach (var entry in entries.Testing)
+            await PublishRequirementsChangeSafeAsync(action, entry.Id, ct).ConfigureAwait(false);
     }
 
     private async Task DeleteRequirementAndTargetLinksAsync(string kind, string id, CancellationToken ct)
@@ -790,6 +969,8 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             _logger.LogWarning(ex, "Failed publishing requirements change event for {EntityId}", entityId);
         }
     }
+
+    private readonly record struct RequirementBatchValue(string Kind, string Id, string Title, string Body, string Priority, string Status, string? Notes);
 
     private readonly record struct RequirementDocumentPaths(string Functional, string Technical, string Testing, string Mapping, string Matrix);
 

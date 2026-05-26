@@ -51,6 +51,24 @@ public sealed record TestEntry(
     string Status = "pending",
     string? Notes = null);
 
+/// <summary>
+/// FR-MCP-026: Grouped FR/TR/TEST requirement entries used by atomic batch mutations.
+/// </summary>
+/// <param name="Functional">Functional requirement entries in the batch.</param>
+/// <param name="Technical">Technical requirement entries in the batch.</param>
+/// <param name="Testing">Testing requirement entries in the batch.</param>
+public sealed record RequirementsBatchEntries(
+    IReadOnlyList<FrEntry> Functional,
+    IReadOnlyList<TrEntry> Technical,
+    IReadOnlyList<TestEntry> Testing)
+{
+    /// <summary>An empty requirements batch.</summary>
+    public static RequirementsBatchEntries Empty { get; } = new([], [], []);
+
+    /// <summary>Total number of entries across all requirement kinds.</summary>
+    public int Count => Functional.Count + Technical.Count + Testing.Count;
+}
+
 /// <summary>FR-MCP-026: FR-to-TR mapping row from TR-per-FR-Mapping.md.</summary>
 public sealed record FrTrMapping
 {

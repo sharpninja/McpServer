@@ -48,6 +48,18 @@ public sealed class RequirementsClient : McpClientBase
         return await PutAsync<FrEntry>($"mcpserver/requirements/fr/{Uri.EscapeDataString(id)}", request, cancellationToken);
     }
 
+    /// <summary>Creates multiple functional requirements atomically.</summary>
+    public async Task<RequirementsBatchResult> CreateFrBatchAsync(CreateFrBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<RequirementsBatchResult>("mcpserver/requirements/fr/batch", request, cancellationToken);
+    }
+
+    /// <summary>Updates multiple functional requirements atomically.</summary>
+    public async Task<RequirementsBatchResult> UpdateFrBatchAsync(UpdateFrBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PutAsync<RequirementsBatchResult>("mcpserver/requirements/fr/batch", request, cancellationToken);
+    }
+
     /// <summary>Deletes a functional requirement by ID.</summary>
     public async Task<RequirementsMutationResult> DeleteFrAsync(string id, CancellationToken cancellationToken = default)
     {
@@ -78,6 +90,18 @@ public sealed class RequirementsClient : McpClientBase
         return await PutAsync<TrEntry>($"mcpserver/requirements/tr/{Uri.EscapeDataString(id)}", request, cancellationToken);
     }
 
+    /// <summary>Creates multiple technical requirements atomically.</summary>
+    public async Task<RequirementsBatchResult> CreateTrBatchAsync(CreateTrBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<RequirementsBatchResult>("mcpserver/requirements/tr/batch", request, cancellationToken);
+    }
+
+    /// <summary>Updates multiple technical requirements atomically.</summary>
+    public async Task<RequirementsBatchResult> UpdateTrBatchAsync(UpdateTrBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PutAsync<RequirementsBatchResult>("mcpserver/requirements/tr/batch", request, cancellationToken);
+    }
+
     /// <summary>Deletes a technical requirement by ID.</summary>
     public async Task<RequirementsMutationResult> DeleteTrAsync(string id, CancellationToken cancellationToken = default)
     {
@@ -106,6 +130,30 @@ public sealed class RequirementsClient : McpClientBase
     public async Task<TestEntry> UpdateTestAsync(string id, UpdateTestRequest request, CancellationToken cancellationToken = default)
     {
         return await PutAsync<TestEntry>($"mcpserver/requirements/test/{Uri.EscapeDataString(id)}", request, cancellationToken);
+    }
+
+    /// <summary>Creates multiple testing requirements atomically.</summary>
+    public async Task<RequirementsBatchResult> CreateTestBatchAsync(CreateTestBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<RequirementsBatchResult>("mcpserver/requirements/test/batch", request, cancellationToken);
+    }
+
+    /// <summary>Updates multiple testing requirements atomically.</summary>
+    public async Task<RequirementsBatchResult> UpdateTestBatchAsync(UpdateTestBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PutAsync<RequirementsBatchResult>("mcpserver/requirements/test/batch", request, cancellationToken);
+    }
+
+    /// <summary>Creates mixed functional, technical, and testing requirements atomically.</summary>
+    public async Task<RequirementsBatchResult> CreateBatchAsync(CreateRequirementsBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PostAsync<RequirementsBatchResult>("mcpserver/requirements/batch", request, cancellationToken);
+    }
+
+    /// <summary>Updates mixed functional, technical, and testing requirements atomically.</summary>
+    public async Task<RequirementsBatchResult> UpdateBatchAsync(UpdateRequirementsBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        return await PutAsync<RequirementsBatchResult>("mcpserver/requirements/batch", request, cancellationToken);
     }
 
     /// <summary>Deletes a testing requirement by ID.</summary>

@@ -1,0 +1,842 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sharpninja.github.io/mcpserver/schemas/repl-yaml-message.schema.json",
+  "title": "McpServer REPL YAML/JSON request envelope",
+  "description": "JSON Schema for request envelopes submitted to mcpserver-repl. Direct stdio callers should send single-line JSON. YAML callers should validate the parsed document against this schema before submitting to the REPL or endpoint fallbacks.",
+  "type": "object",
+  "required": ["type", "payload"],
+  "additionalProperties": false,
+  "properties": {
+    "type": { "const": "request" },
+    "payload": {
+      "type": "object",
+      "required": ["requestId", "method"],
+      "additionalProperties": false,
+      "properties": {
+        "requestId": { "type": "string", "minLength": 1 },
+        "method": {
+          "type": "string",
+          "pattern": "^(client\\.[A-Za-z][A-Za-z0-9]*\\.[A-Za-z][A-Za-z0-9]*|workflow\\.(sessionlog|todo|requirements|graphrag)\\..+)$"
+        },
+        "params": { "type": "object", "additionalProperties": true }
+      }
+    }
+  },
+  "allOf": [
+    { "$ref": "#/$defs/sessionlogRules" },
+    { "$ref": "#/$defs/todoRules" },
+    { "$ref": "#/$defs/requirementsRules" },
+    { "$ref": "#/$defs/graphRagRules" }
+  ],
+  "$defs": {
+    "stringArray": {
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        { "type": "array", "items": { "type": "string" } }
+      ]
+    },
+    "priority": { "type": "string", "enum": ["critical", "high", "medium", "low"] },
+    "status": { "type": "string", "enum": ["pending", "in_progress", "completed", "deferred"] },
+    "emptyParams": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "todoSubtask": {
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        {
+          "type": "object",
+          "required": ["task"],
+          "properties": {
+            "task": { "type": "string", "minLength": 1 },
+            "done": { "type": "boolean" }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "todoPatch": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "priority": { "$ref": "#/$defs/priority" },
+        "section": { "type": "string" },
+        "estimate": { "type": "string" },
+        "note": { "type": "string" },
+        "completedDate": { "type": "string" },
+        "doneSummary": { "type": "string" },
+        "remaining": { "type": "string" },
+        "reference": { "type": "string" },
+        "phase": { "type": "string" },
+        "done": { "type": "boolean" },
+        "description": { "$ref": "#/$defs/stringArray" },
+        "technicalDetails": { "$ref": "#/$defs/stringArray" },
+        "implementationTasks": {
+          "oneOf": [
+            { "type": "string", "minLength": 1 },
+            { "type": "array", "items": { "$ref": "#/$defs/todoSubtask" } }
+          ]
+        },
+        "dependsOn": { "$ref": "#/$defs/stringArray" },
+        "functionalRequirements": { "$ref": "#/$defs/stringArray" },
+        "technicalRequirements": { "$ref": "#/$defs/stringArray" }
+      },
+      "additionalProperties": true
+    },
+    "requirementPatch": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": { "type": "string", "enum": ["fr", "tr", "test"] },
+        "title": { "type": "string" },
+        "body": { "type": "string" },
+        "description": { "type": "string" },
+        "condition": { "type": "string" },
+        "area": { "type": "string" },
+        "subarea": { "type": "string" },
+        "testType": { "type": "string" },
+        "priority": { "$ref": "#/$defs/priority" },
+        "status": { "$ref": "#/$defs/status" },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "frCreateRecord": {
+      "allOf": [
+        { "$ref": "#/$defs/requirementPatch" },
+        {
+          "required": ["id", "title"],
+          "anyOf": [
+            { "required": ["body"] },
+            { "required": ["description"] }
+          ]
+        }
+      ]
+    },
+    "trCreateRecord": {
+      "allOf": [
+        { "$ref": "#/$defs/requirementPatch" },
+        {
+          "required": ["id"],
+          "anyOf": [
+            { "required": ["body"] },
+            { "required": ["description"] }
+          ]
+        }
+      ]
+    },
+    "testCreateRecord": {
+      "allOf": [
+        { "$ref": "#/$defs/requirementPatch" },
+        {
+          "required": ["id"],
+          "anyOf": [
+            { "required": ["condition"] },
+            { "required": ["description"] },
+            { "required": ["body"] }
+          ]
+        }
+      ]
+    },
+    "batchParams": {
+      "type": "object",
+      "required": ["records"],
+      "properties": {
+        "records": { "type": "array", "minItems": 1 }
+      },
+      "additionalProperties": true
+    },
+    "sessionlogRules": {
+      "allOf": [
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.sessionlog.openSession" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["sessionId", "title"],
+                    "properties": {
+                      "agent": { "type": "string" },
+                      "sourceType": { "type": "string" },
+                      "sessionId": { "type": "string", "minLength": 1 },
+                      "title": { "type": "string", "minLength": 1 },
+                      "model": { "type": "string" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.sessionlog.beginTurn" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["requestId", "queryTitle", "queryText"],
+                    "properties": {
+                      "requestId": { "type": "string", "minLength": 1 },
+                      "queryTitle": { "type": "string", "minLength": 1 },
+                      "queryText": { "type": "string", "minLength": 1 }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "enum": ["workflow.sessionlog.completeTurn", "workflow.sessionlog.closeSession"] } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "properties": {
+                      "response": { "type": "string" },
+                      "agent": { "type": "string" },
+                      "sessionId": { "type": "string" },
+                      "status": { "type": "string", "enum": ["completed", "failed"] }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.sessionlog.failTurn" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["errorMessage"],
+                    "properties": {
+                      "errorMessage": { "type": "string", "minLength": 1 },
+                      "errorCode": { "type": "string" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.sessionlog.appendDialog" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["dialogItems"],
+                    "properties": {
+                      "dialogItems": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "required": ["role", "content", "category"],
+                          "properties": {
+                            "timestamp": { "type": "string" },
+                            "role": { "type": "string" },
+                            "content": { "type": "string", "minLength": 1 },
+                            "category": { "type": "string" }
+                          },
+                          "additionalProperties": true
+                        }
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.sessionlog.appendActions" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["actions"],
+                    "properties": {
+                      "actions": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "required": ["description", "type", "status"],
+                          "properties": {
+                            "order": { "type": "integer" },
+                            "description": { "type": "string", "minLength": 1 },
+                            "type": { "type": "string", "minLength": 1 },
+                            "status": { "type": "string", "minLength": 1 },
+                            "filePath": { "type": "string" }
+                          },
+                          "additionalProperties": true
+                        }
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.sessionlog.importRecovery" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "anyOf": [
+                      { "required": ["sessionLog"] },
+                      { "required": ["sessionId", "title"], "anyOf": [{ "required": ["sourceType"] }, { "required": ["agent"] }] }
+                    ],
+                    "properties": {
+                      "sessionLog": { "type": "object", "additionalProperties": true },
+                      "sourceType": { "type": "string" },
+                      "agent": { "type": "string" },
+                      "sessionId": { "type": "string" },
+                      "title": { "type": "string" },
+                      "model": { "type": "string" },
+                      "started": { "type": "string" },
+                      "lastUpdated": { "type": "string" },
+                      "status": { "type": "string" },
+                      "turns": {
+                        "type": "array",
+                        "items": { "type": "object", "additionalProperties": true }
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "todoRules": {
+      "allOf": [
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "enum": ["workflow.todo.get", "workflow.todo.select", "workflow.todo.delete", "workflow.todo.analyzeRequirements", "workflow.todo.streamStatus", "workflow.todo.streamPlan", "workflow.todo.streamImplement", "workflow.todo.getProjectionStatus", "workflow.todo.repairProjection"] } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["id"],
+                    "properties": { "id": { "type": "string", "minLength": 1 } },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.todo.create" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "allOf": [
+                      { "$ref": "#/$defs/todoPatch" },
+                      { "required": ["id", "title", "section", "priority"] }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.todo.update" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "allOf": [
+                      { "$ref": "#/$defs/todoPatch" },
+                      { "required": ["id"] }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.todo.updateSelected" } } } } },
+          "then": { "properties": { "payload": { "properties": { "params": { "$ref": "#/$defs/todoPatch" } } } } }
+        }
+      ]
+    },
+    "requirementsRules": {
+      "allOf": [
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "enum": ["workflow.requirements.getFr", "workflow.requirements.deleteFr", "workflow.requirements.getTr", "workflow.requirements.deleteTr", "workflow.requirements.getTest", "workflow.requirements.deleteTest"] } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["id"],
+                    "properties": { "id": { "type": "string", "minLength": 1 } },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.requirements.createFr" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "allOf": [
+                      { "$ref": "#/$defs/requirementPatch" },
+                      { "required": ["id", "title", "description", "priority", "area"] }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.requirements.createTr" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "allOf": [
+                      { "$ref": "#/$defs/requirementPatch" },
+                      { "required": ["id", "title", "description", "priority", "area", "subarea"] }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.requirements.createTest" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "allOf": [
+                      { "$ref": "#/$defs/requirementPatch" },
+                      { "required": ["id", "title", "description", "priority", "area"] }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "enum": ["workflow.requirements.createFrBatch", "workflow.requirements.updateFrBatch", "workflow.requirements.createTrBatch", "workflow.requirements.updateTrBatch", "workflow.requirements.createTestBatch", "workflow.requirements.updateTestBatch", "workflow.requirements.createBatch", "workflow.requirements.updateBatch"] } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": { "params": { "$ref": "#/$defs/batchParams" } }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.requirements.createFrBatch" } } } } },
+          "then": { "properties": { "payload": { "properties": { "params": { "properties": { "records": { "items": { "$ref": "#/$defs/frCreateRecord" } } } } } } } }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.requirements.createTrBatch" } } } } },
+          "then": { "properties": { "payload": { "properties": { "params": { "properties": { "records": { "items": { "$ref": "#/$defs/trCreateRecord" } } } } } } } }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.requirements.createTestBatch" } } } } },
+          "then": { "properties": { "payload": { "properties": { "params": { "properties": { "records": { "items": { "$ref": "#/$defs/testCreateRecord" } } } } } } } }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "enum": ["workflow.requirements.updateFrBatch", "workflow.requirements.updateTrBatch", "workflow.requirements.updateTestBatch"] } } } } },
+          "then": { "properties": { "payload": { "properties": { "params": { "properties": { "records": { "items": { "allOf": [{ "$ref": "#/$defs/requirementPatch" }, { "required": ["id"] }] } } } } } } } }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.requirements.createBatch" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "properties": {
+                  "params": {
+                    "properties": {
+                      "records": {
+                        "items": {
+                          "oneOf": [
+                            { "allOf": [{ "$ref": "#/$defs/frCreateRecord" }, { "required": ["kind"], "properties": { "kind": { "const": "fr" } } }] },
+                            { "allOf": [{ "$ref": "#/$defs/trCreateRecord" }, { "required": ["kind"], "properties": { "kind": { "const": "tr" } } }] },
+                            { "allOf": [{ "$ref": "#/$defs/testCreateRecord" }, { "required": ["kind"], "properties": { "kind": { "const": "test" } } }] }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.requirements.updateBatch" } } } } },
+          "then": { "properties": { "payload": { "properties": { "params": { "properties": { "records": { "items": { "allOf": [{ "$ref": "#/$defs/requirementPatch" }, { "required": ["kind", "id"] }] } } } } } } } }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.requirements.createMapping" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["frId"],
+                    "anyOf": [
+                      { "required": ["trId"] },
+                      { "required": ["trIds"] },
+                      { "required": ["testId"] },
+                      { "required": ["testIds"] }
+                    ],
+                    "properties": {
+                      "frId": { "type": "string", "minLength": 1 },
+                      "trId": { "type": "string" },
+                      "trIds": { "$ref": "#/$defs/stringArray" },
+                      "testId": { "type": "string" },
+                      "testIds": { "$ref": "#/$defs/stringArray" },
+                      "notes": { "type": "string" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.requirements.deleteMapping" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "anyOf": [
+                      { "required": ["frId"] },
+                      { "required": ["trId"] },
+                      { "required": ["testId"] }
+                    ],
+                    "properties": {
+                      "frId": { "type": "string" },
+                      "trId": { "type": "string" },
+                      "testId": { "type": "string" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.requirements.generateDocument" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "properties": {
+                      "format": { "type": "string", "enum": ["markdown", "yaml", "wiki"] },
+                      "docType": { "type": "string", "enum": ["fr", "tr", "test", "matrix", "all", "functional", "technical", "testing", "mapping"] }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.requirements.ingestDocument" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "anyOf": [
+                      { "required": ["content"] },
+                      { "required": ["documents"] }
+                    ],
+                    "properties": {
+                      "content": { "type": "string" },
+                      "format": { "type": "string", "enum": ["markdown", "yaml", "wiki"] },
+                      "mergeStrategy": { "type": "string" },
+                      "sourceFormat": { "type": "string" },
+                      "preferredWikiFormat": { "type": "string" },
+                      "documents": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "oneOf": [
+                            { "type": "string" },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "content": { "type": "string" },
+                                "contentBase64": { "type": "string" },
+                                "lastModifiedUtc": { "type": "string" }
+                              },
+                              "additionalProperties": true
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "graphRagRules": {
+      "allOf": [
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.graphrag.query" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["query"],
+                    "properties": {
+                      "query": { "type": "string", "minLength": 1 },
+                      "mode": { "type": "string", "enum": ["local", "global", "drift"] },
+                      "maxChunks": { "type": "integer" },
+                      "includeContextChunks": { "type": "boolean" },
+                      "maxEntities": { "type": "integer" },
+                      "maxRelationships": { "type": "integer" },
+                      "communityDepth": { "type": "integer" },
+                      "responseTokenBudget": { "type": "integer" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.graphrag.ingest" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["content"],
+                    "properties": {
+                      "content": { "type": "string", "minLength": 1 },
+                      "title": { "type": "string" },
+                      "sourceType": { "type": "string" },
+                      "sourceKey": { "type": "string" },
+                      "triggerReindex": { "type": "boolean" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "enum": ["workflow.graphrag.documents.chunks", "workflow.graphrag.documents.delete"] } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["documentId"],
+                    "properties": { "documentId": { "type": "string", "minLength": 1 } },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "enum": ["workflow.graphrag.entities.get", "workflow.graphrag.entities.delete"] } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["entityId"],
+                    "properties": { "entityId": { "type": "string", "minLength": 1 } },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.graphrag.entities.create" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["name", "entityType"],
+                    "properties": {
+                      "name": { "type": "string", "minLength": 1 },
+                      "entityType": { "type": "string", "minLength": 1 },
+                      "description": { "type": "string" },
+                      "metadata": { "type": "string" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "const": "workflow.graphrag.entities.update" } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["entityId", "name", "entityType"],
+                    "properties": {
+                      "entityId": { "type": "string", "minLength": 1 },
+                      "name": { "type": "string", "minLength": 1 },
+                      "entityType": { "type": "string", "minLength": 1 },
+                      "description": { "type": "string" },
+                      "metadata": { "type": "string" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "enum": ["workflow.graphrag.relationships.get", "workflow.graphrag.relationships.delete"] } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["relationshipId"],
+                    "properties": { "relationshipId": { "type": "string", "minLength": 1 } },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "payload": { "properties": { "method": { "enum": ["workflow.graphrag.relationships.create", "workflow.graphrag.relationships.update"] } } } } },
+          "then": {
+            "properties": {
+              "payload": {
+                "required": ["params"],
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "required": ["sourceEntityId", "targetEntityId", "relationshipType"],
+                    "properties": {
+                      "relationshipId": { "type": "string" },
+                      "sourceEntityId": { "type": "string", "minLength": 1 },
+                      "targetEntityId": { "type": "string", "minLength": 1 },
+                      "relationshipType": { "type": "string", "minLength": 1 },
+                      "description": { "type": "string" },
+                      "weight": { "type": "number" },
+                      "metadata": { "type": "string" }
+                    },
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

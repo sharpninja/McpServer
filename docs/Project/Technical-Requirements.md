@@ -56,10 +56,6 @@
 
 **TR-14** — Placeholder requirement backfilled by DB-FK-001.
 
-## TR-GEN-YAML-001
-
-**YAML Generation Test** — TR for YAML document generation test
-
 ## TR-GRAPHRAG-ADHOC-001
 
 **Ad-hoc text ingestion pipeline** — GraphRagService.IngestTextAsync shall accept raw text, chunk via Chunker (512 tokens), generate embeddings via IEmbeddingService (all-MiniLM-L6-v2, 384-dim), persist ContextDocumentEntity and ContextChunkEntity rows with workspace scoping, register vectors in IVectorIndexService, and optionally trigger IndexAsync. Document ID format: "adhoc-{Guid:N}". Content hash: SHA256.
@@ -614,6 +610,14 @@ Pluggable ingestors for repo/session/external/github/issues.
 
 Operational scripts for startup, health checks, packaging, config validation, and migration.
 
+## TR-MCP-BATCH-109
+
+**Requirements batch endpoint and workflow support** — REST controllers, `RequirementsClient`, repository implementations, and REPL workflow dispatch shall expose atomic per-kind and mixed requirements batch create/update operations with all-or-nothing validation and structured batch result errors.
+
+**Status:** ✅ Complete
+
+**Covered by:** `RequirementsController`, `RequirementsClient`, `RequirementsDocumentService`, `RequirementsDatabaseDocumentService`, `RequirementsWorkflow`
+
 ## TR-MCP-PLAN-001
 
 **Safe session wrap-up and deploy sequencing** — Wrap-up plans must inventory dirty state across affected workspaces, preserve unrelated work, require Nuke or repo-supported deployment paths, and block publish or service updates until the intended slice is cleanly isolated and validated with zero failures and zero skips.
@@ -621,6 +625,22 @@ Operational scripts for startup, health checks, packaging, config validation, an
 ## TR-MCP-PLUGIN-008
 
 **Codex requirements update command fallback parity** — The Codex plugin requirements fallback must pass updateFr, updateTr, and updateTest payloads to the REPL/client without dropping fields or invoking unsupported command aliases.
+
+## TR-MCP-SCHEMA-109
+
+**REPL request schema enforcement** — Every YAML or JSON request message exposed through the REPL shall have a published JSON Schema and shall be validated by the REPL before endpoint-backed workflow calls are invoked.
+
+**Status:** ✅ Complete
+
+**Covered by:** `docs/context/repl-yaml-message.schema.json`, `ReplYamlMessageValidator`, `ReplCommandDispatcher`, plugin `schemas/repl-yaml-message.schema.json` copies
+
+## TR-MCP-STDIO-109
+
+**Plugin stdio JSON request envelopes** — Codex, Claude, Copilot, and Cline plugins shall instruct direct stdio callers to send one single-line JSON request envelope per message, and plugin bridges that write stdio shall emit that shape.
+
+**Status:** ✅ Complete
+
+**Covered by:** Codex/Claude/Copilot requirement skill docs and `repl-invoke.sh`, Cline `repl-bridge.ts`, Cline schema preflight validation
 
 ## TR-MCP-POL-001
 

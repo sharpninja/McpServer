@@ -51,6 +51,331 @@ public sealed record CreateTestRequest(string Id, string Condition, string? Titl
 /// <param name="Notes">Optional requirement notes.</param>
 public sealed record UpdateTestRequest(string? Condition = null, string? Title = null, string? Priority = null, string? Status = null, string? Notes = null);
 
+/// <summary>Request payload for creating multiple Functional Requirement entries atomically.</summary>
+public sealed class CreateFrBatchRequest
+{
+    /// <summary>FR records to create.</summary>
+    public IReadOnlyList<CreateFrBatchRecord> Records { get; init; } = [];
+}
+
+/// <summary>One Functional Requirement create record in a batch payload.</summary>
+public sealed class CreateFrBatchRecord
+{
+    /// <summary>Requirement identifier (e.g. FR-MCP-040).</summary>
+    public string? Id { get; init; }
+
+    /// <summary>Requirement title.</summary>
+    public string? Title { get; init; }
+
+    /// <summary>Requirement body text.</summary>
+    public string? Body { get; init; }
+
+    /// <summary>Requirement body alias used by REPL and plugin YAML commands.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>Optional requirement priority.</summary>
+    public string? Priority { get; init; }
+
+    /// <summary>Optional requirement status.</summary>
+    public string? Status { get; init; }
+
+    /// <summary>Optional requirement notes.</summary>
+    public string? Notes { get; init; }
+}
+
+/// <summary>Request payload for updating multiple Functional Requirement entries atomically.</summary>
+public sealed class UpdateFrBatchRequest
+{
+    /// <summary>FR records to update.</summary>
+    public IReadOnlyList<UpdateFrBatchRecord> Records { get; init; } = [];
+}
+
+/// <summary>One Functional Requirement update record in a batch payload.</summary>
+public sealed class UpdateFrBatchRecord
+{
+    /// <summary>Requirement identifier (e.g. FR-MCP-040).</summary>
+    public string? Id { get; init; }
+
+    /// <summary>Requirement title. Null preserves the current value.</summary>
+    public string? Title { get; init; }
+
+    /// <summary>Requirement body text. Null preserves the current value.</summary>
+    public string? Body { get; init; }
+
+    /// <summary>Requirement body alias used by REPL and plugin YAML commands. Null preserves the current value.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>Optional requirement priority. Null preserves the current value.</summary>
+    public string? Priority { get; init; }
+
+    /// <summary>Optional requirement status. Null preserves the current value.</summary>
+    public string? Status { get; init; }
+
+    /// <summary>Optional requirement notes. Null preserves the current value.</summary>
+    public string? Notes { get; init; }
+}
+
+/// <summary>Request payload for creating multiple Technical Requirement entries atomically.</summary>
+public sealed class CreateTrBatchRequest
+{
+    /// <summary>TR records to create.</summary>
+    public IReadOnlyList<CreateTrBatchRecord> Records { get; init; } = [];
+}
+
+/// <summary>One Technical Requirement create record in a batch payload.</summary>
+public sealed class CreateTrBatchRecord
+{
+    /// <summary>Requirement identifier (e.g. TR-MCP-REQ-002).</summary>
+    public string? Id { get; init; }
+
+    /// <summary>Optional title rendered before the body.</summary>
+    public string? Title { get; init; }
+
+    /// <summary>Requirement body text.</summary>
+    public string? Body { get; init; }
+
+    /// <summary>Requirement body alias used by REPL and plugin YAML commands.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>Optional requirement priority.</summary>
+    public string? Priority { get; init; }
+
+    /// <summary>Optional requirement status.</summary>
+    public string? Status { get; init; }
+
+    /// <summary>Optional requirement notes.</summary>
+    public string? Notes { get; init; }
+}
+
+/// <summary>Request payload for updating multiple Technical Requirement entries atomically.</summary>
+public sealed class UpdateTrBatchRequest
+{
+    /// <summary>TR records to update.</summary>
+    public IReadOnlyList<UpdateTrBatchRecord> Records { get; init; } = [];
+}
+
+/// <summary>One Technical Requirement update record in a batch payload.</summary>
+public sealed class UpdateTrBatchRecord
+{
+    /// <summary>Requirement identifier (e.g. TR-MCP-REQ-002).</summary>
+    public string? Id { get; init; }
+
+    /// <summary>Optional title rendered before the body. Null preserves the current value.</summary>
+    public string? Title { get; init; }
+
+    /// <summary>Requirement body text. Null preserves the current value.</summary>
+    public string? Body { get; init; }
+
+    /// <summary>Requirement body alias used by REPL and plugin YAML commands. Null preserves the current value.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>Optional requirement priority. Null preserves the current value.</summary>
+    public string? Priority { get; init; }
+
+    /// <summary>Optional requirement status. Null preserves the current value.</summary>
+    public string? Status { get; init; }
+
+    /// <summary>Optional requirement notes. Null preserves the current value.</summary>
+    public string? Notes { get; init; }
+}
+
+/// <summary>Request payload for creating multiple Testing Requirement entries atomically.</summary>
+public sealed class CreateTestBatchRequest
+{
+    /// <summary>TEST records to create.</summary>
+    public IReadOnlyList<CreateTestBatchRecord> Records { get; init; } = [];
+}
+
+/// <summary>One Testing Requirement create record in a batch payload.</summary>
+public sealed class CreateTestBatchRecord
+{
+    /// <summary>Requirement identifier (e.g. TEST-MCP-039).</summary>
+    public string? Id { get; init; }
+
+    /// <summary>Test condition text.</summary>
+    public string? Condition { get; init; }
+
+    /// <summary>Test condition alias used by REPL and plugin YAML commands.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>Optional test title.</summary>
+    public string? Title { get; init; }
+
+    /// <summary>Optional requirement priority.</summary>
+    public string? Priority { get; init; }
+
+    /// <summary>Optional requirement status.</summary>
+    public string? Status { get; init; }
+
+    /// <summary>Optional requirement notes.</summary>
+    public string? Notes { get; init; }
+}
+
+/// <summary>Request payload for updating multiple Testing Requirement entries atomically.</summary>
+public sealed class UpdateTestBatchRequest
+{
+    /// <summary>TEST records to update.</summary>
+    public IReadOnlyList<UpdateTestBatchRecord> Records { get; init; } = [];
+}
+
+/// <summary>One Testing Requirement update record in a batch payload.</summary>
+public sealed class UpdateTestBatchRecord
+{
+    /// <summary>Requirement identifier (e.g. TEST-MCP-039).</summary>
+    public string? Id { get; init; }
+
+    /// <summary>Test condition text. Null preserves the current value.</summary>
+    public string? Condition { get; init; }
+
+    /// <summary>Test condition alias used by REPL and plugin YAML commands. Null preserves the current value.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>Optional test title. Null preserves the current value.</summary>
+    public string? Title { get; init; }
+
+    /// <summary>Optional requirement priority. Null preserves the current value.</summary>
+    public string? Priority { get; init; }
+
+    /// <summary>Optional requirement status. Null preserves the current value.</summary>
+    public string? Status { get; init; }
+
+    /// <summary>Optional requirement notes. Null preserves the current value.</summary>
+    public string? Notes { get; init; }
+}
+
+/// <summary>Request payload for creating mixed FR/TR/TEST entries atomically.</summary>
+public sealed class CreateRequirementsBatchRequest
+{
+    /// <summary>Mixed requirement records to create.</summary>
+    public IReadOnlyList<CreateRequirementBatchRecord> Records { get; init; } = [];
+}
+
+/// <summary>One mixed requirement create record in a batch payload.</summary>
+public sealed class CreateRequirementBatchRecord
+{
+    /// <summary>Requirement kind: fr, tr, or test.</summary>
+    public string? Kind { get; init; }
+
+    /// <summary>Requirement identifier.</summary>
+    public string? Id { get; init; }
+
+    /// <summary>Requirement title.</summary>
+    public string? Title { get; init; }
+
+    /// <summary>FR/TR body text.</summary>
+    public string? Body { get; init; }
+
+    /// <summary>TEST condition text.</summary>
+    public string? Condition { get; init; }
+
+    /// <summary>Body/condition alias used by REPL and plugin YAML commands.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>Optional requirement priority.</summary>
+    public string? Priority { get; init; }
+
+    /// <summary>Optional requirement status.</summary>
+    public string? Status { get; init; }
+
+    /// <summary>Optional requirement notes.</summary>
+    public string? Notes { get; init; }
+}
+
+/// <summary>Request payload for updating mixed FR/TR/TEST entries atomically.</summary>
+public sealed class UpdateRequirementsBatchRequest
+{
+    /// <summary>Mixed requirement records to update.</summary>
+    public IReadOnlyList<UpdateRequirementBatchRecord> Records { get; init; } = [];
+}
+
+/// <summary>One mixed requirement update record in a batch payload.</summary>
+public sealed class UpdateRequirementBatchRecord
+{
+    /// <summary>Requirement kind: fr, tr, or test.</summary>
+    public string? Kind { get; init; }
+
+    /// <summary>Requirement identifier.</summary>
+    public string? Id { get; init; }
+
+    /// <summary>Requirement title. Null preserves the current value.</summary>
+    public string? Title { get; init; }
+
+    /// <summary>FR/TR body text. Null preserves the current value.</summary>
+    public string? Body { get; init; }
+
+    /// <summary>TEST condition text. Null preserves the current value.</summary>
+    public string? Condition { get; init; }
+
+    /// <summary>Body/condition alias used by REPL and plugin YAML commands. Null preserves the current value.</summary>
+    public string? Description { get; init; }
+
+    /// <summary>Optional requirement priority. Null preserves the current value.</summary>
+    public string? Priority { get; init; }
+
+    /// <summary>Optional requirement status. Null preserves the current value.</summary>
+    public string? Status { get; init; }
+
+    /// <summary>Optional requirement notes. Null preserves the current value.</summary>
+    public string? Notes { get; init; }
+}
+
+/// <summary>Structured response returned by requirements batch create and update endpoints.</summary>
+public sealed class RequirementsBatchResult
+{
+    /// <summary>Whether the batch operation completed successfully.</summary>
+    public bool Success { get; init; }
+
+    /// <summary>Batch operation name: create or update.</summary>
+    public string Operation { get; init; } = string.Empty;
+
+    /// <summary>Requirement kind for per-kind batches, or null for mixed batches.</summary>
+    public string? Kind { get; init; }
+
+    /// <summary>Total number of records applied.</summary>
+    public int Total { get; init; }
+
+    /// <summary>Applied records returned by the server.</summary>
+    public IReadOnlyList<RequirementsBatchItem> Items { get; init; } = [];
+
+    /// <summary>Validation or persistence errors. Successful batches return an empty collection.</summary>
+    public IReadOnlyList<RequirementsBatchError> Errors { get; init; } = [];
+}
+
+/// <summary>One applied item in a requirements batch response.</summary>
+public sealed class RequirementsBatchItem
+{
+    /// <summary>Requirement kind: fr, tr, or test.</summary>
+    public string Kind { get; init; } = string.Empty;
+
+    /// <summary>Requirement identifier.</summary>
+    public string Id { get; init; } = string.Empty;
+
+    /// <summary>Functional requirement payload when <see cref="Kind"/> is fr.</summary>
+    public FrEntry? Fr { get; init; }
+
+    /// <summary>Technical requirement payload when <see cref="Kind"/> is tr.</summary>
+    public TrEntry? Tr { get; init; }
+
+    /// <summary>Testing requirement payload when <see cref="Kind"/> is test.</summary>
+    public TestEntry? Test { get; init; }
+}
+
+/// <summary>One validation or persistence error in a requirements batch response.</summary>
+public sealed class RequirementsBatchError
+{
+    /// <summary>Zero-based record index, or -1 when the error applies to the whole batch.</summary>
+    public int Index { get; init; } = -1;
+
+    /// <summary>Requirement kind when known.</summary>
+    public string? Kind { get; init; }
+
+    /// <summary>Requirement identifier when known.</summary>
+    public string? Id { get; init; }
+
+    /// <summary>Error message.</summary>
+    public string Error { get; init; } = string.Empty;
+}
+
 /// <summary>Request payload for creating or updating an FR-to-TR/TEST mapping row.</summary>
 /// <param name="TrIds">List of TR identifiers mapped to the FR row.</param>
 /// <param name="TestIds">List of TEST identifiers mapped to the FR row.</param>

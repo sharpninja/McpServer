@@ -133,6 +133,19 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         CancellationToken cancellationToken)
     {
         var method = request.Method ?? "";
+        var schemaValidation = ReplYamlMessageValidator.ValidateRequest(request);
+        if (!schemaValidation.IsValid)
+        {
+            return BuildError(
+                requestId: string.IsNullOrWhiteSpace(request.RequestId) ? "unknown" : request.RequestId,
+                code: "schema_validation_failed",
+                message: "YAML request failed schema validation.",
+                details: new Dictionary<string, object?>
+                {
+                    ["methodName"] = method,
+                    ["errors"] = schemaValidation.Errors,
+                });
+        }
 
         if (method.StartsWith("client.", StringComparison.Ordinal))
         {
@@ -502,6 +515,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Area = RequireString(args, "area"),
                         Notes = GetString(args, "notes"),
                     }, cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.CreateFrBatchMethod =>
+                    await _requirementsWorkflow.CreateFrBatchAsync(RequireParams<CreateFrBatchRequest>(args), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.UpdateFrMethod =>
                     await _requirementsWorkflow.UpdateFrAsync(new FrUpdateRequestModel
                     {
@@ -512,6 +527,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Priority = GetString(args, "priority"),
                         Notes = GetString(args, "notes"),
                     }, cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.UpdateFrBatchMethod =>
+                    await _requirementsWorkflow.UpdateFrBatchAsync(RequireParams<UpdateFrBatchRequest>(args), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.DeleteFrMethod =>
                     await DeleteAndReturnAsync(() => _requirementsWorkflow.DeleteFrAsync(RequireString(args, "id"), cancellationToken), RequireString(args, "id")).ConfigureAwait(false),
                 RequirementsCommandShapes.ListTrMethod =>
@@ -529,6 +546,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Subarea = RequireString(args, "subarea"),
                         Notes = GetString(args, "notes"),
                     }, cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.CreateTrBatchMethod =>
+                    await _requirementsWorkflow.CreateTrBatchAsync(RequireParams<CreateTrBatchRequest>(args), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.UpdateTrMethod =>
                     await _requirementsWorkflow.UpdateTrAsync(new TrUpdateRequestModel
                     {
@@ -539,6 +558,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Priority = GetString(args, "priority"),
                         Notes = GetString(args, "notes"),
                     }, cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.UpdateTrBatchMethod =>
+                    await _requirementsWorkflow.UpdateTrBatchAsync(RequireParams<UpdateTrBatchRequest>(args), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.DeleteTrMethod =>
                     await DeleteAndReturnAsync(() => _requirementsWorkflow.DeleteTrAsync(RequireString(args, "id"), cancellationToken), RequireString(args, "id")).ConfigureAwait(false),
                 RequirementsCommandShapes.ListTestMethod =>
@@ -556,6 +577,8 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         TestType = GetString(args, "testType") ?? "unit",
                         Notes = GetString(args, "notes"),
                     }, cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.CreateTestBatchMethod =>
+                    await _requirementsWorkflow.CreateTestBatchAsync(RequireParams<CreateTestBatchRequest>(args), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.UpdateTestMethod =>
                     await _requirementsWorkflow.UpdateTestAsync(new TestUpdateRequestModel
                     {
@@ -566,8 +589,14 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
                         Priority = GetString(args, "priority"),
                         Notes = GetString(args, "notes"),
                     }, cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.UpdateTestBatchMethod =>
+                    await _requirementsWorkflow.UpdateTestBatchAsync(RequireParams<UpdateTestBatchRequest>(args), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.DeleteTestMethod =>
                     await DeleteAndReturnAsync(() => _requirementsWorkflow.DeleteTestAsync(RequireString(args, "id"), cancellationToken), RequireString(args, "id")).ConfigureAwait(false),
+                RequirementsCommandShapes.CreateBatchMethod =>
+                    await _requirementsWorkflow.CreateBatchAsync(RequireParams<CreateRequirementsBatchRequest>(args), cancellationToken).ConfigureAwait(false),
+                RequirementsCommandShapes.UpdateBatchMethod =>
+                    await _requirementsWorkflow.UpdateBatchAsync(RequireParams<UpdateRequirementsBatchRequest>(args), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.ListMappingsMethod =>
                     await _requirementsWorkflow.ListMappingsAsync(GetString(args, "frId"), GetString(args, "trId"), GetString(args, "testId"), cancellationToken).ConfigureAwait(false),
                 RequirementsCommandShapes.CreateMappingMethod =>
@@ -752,6 +781,18 @@ public sealed class ReplCommandDispatcher : IStreamingReplCommandDispatcher
         var normalized = NormalizeJsonElement(value);
         var json = JsonSerializer.Serialize(normalized, JsonOptions);
         return JsonSerializer.Deserialize<T>(json, JsonOptions);
+    }
+
+    private static T RequireParams<T>(IReadOnlyDictionary<string, object?> args)
+        where T : class
+    {
+        var value = ConvertValue<T>(args);
+        if (value is null)
+        {
+            throw new ArgumentException("Request params could not be converted to the expected batch payload.");
+        }
+
+        return value;
     }
 
     private static string? FirstNonEmpty(params string?[] values)

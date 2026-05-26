@@ -265,6 +265,77 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     }
 
     /// <inheritdoc />
+    public async Task<RequirementsBatchEntries> AddBatchAsync(RequirementsBatchEntries entries, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(entries);
+        ValidateBatchEntries(entries);
+        ValidateBatchUniqueIds(entries);
+
+        await _gate.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            ThrowIfAnyExists(_frEntries, entries.Functional, static item => item.Id, static item => item.Id, "FR");
+            ThrowIfAnyExists(_trEntries, entries.Technical, static item => item.Id, static item => item.Id, "TR");
+            ThrowIfAnyExists(_testEntries, entries.Testing, static item => item.Id, static item => item.Id, "TEST");
+
+            _frEntries.AddRange(entries.Functional);
+            _trEntries.AddRange(entries.Technical);
+            _testEntries.AddRange(entries.Testing);
+
+            if (entries.Functional.Count > 0)
+                await PersistFunctionalAsync(ct).ConfigureAwait(false);
+            if (entries.Technical.Count > 0)
+                await PersistTechnicalAsync(ct).ConfigureAwait(false);
+            if (entries.Testing.Count > 0)
+                await PersistTestingAsync(ct).ConfigureAwait(false);
+
+            await PublishBatchRequirementsChangeSafeAsync(ChangeEventActions.Created, entries, ct).ConfigureAwait(false);
+            return entries;
+        }
+        finally
+        {
+            _gate.Release();
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchEntries> UpdateBatchAsync(RequirementsBatchEntries entries, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(entries);
+        ValidateBatchEntries(entries);
+        ValidateBatchUniqueIds(entries);
+
+        await _gate.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            var frIndices = FindBatchIndicesOrThrow(_frEntries, entries.Functional, static item => item.Id, static item => item.Id, "FR");
+            var trIndices = FindBatchIndicesOrThrow(_trEntries, entries.Technical, static item => item.Id, static item => item.Id, "TR");
+            var testIndices = FindBatchIndicesOrThrow(_testEntries, entries.Testing, static item => item.Id, static item => item.Id, "TEST");
+
+            for (var i = 0; i < entries.Functional.Count; i++)
+                _frEntries[frIndices[i]] = entries.Functional[i];
+            for (var i = 0; i < entries.Technical.Count; i++)
+                _trEntries[trIndices[i]] = entries.Technical[i];
+            for (var i = 0; i < entries.Testing.Count; i++)
+                _testEntries[testIndices[i]] = entries.Testing[i];
+
+            if (entries.Functional.Count > 0)
+                await PersistFunctionalAsync(ct).ConfigureAwait(false);
+            if (entries.Technical.Count > 0)
+                await PersistTechnicalAsync(ct).ConfigureAwait(false);
+            if (entries.Testing.Count > 0)
+                await PersistTestingAsync(ct).ConfigureAwait(false);
+
+            await PublishBatchRequirementsChangeSafeAsync(ChangeEventActions.Updated, entries, ct).ConfigureAwait(false);
+            return entries;
+        }
+        finally
+        {
+            _gate.Release();
+        }
+    }
+
+    /// <inheritdoc />
     public Task<IReadOnlyList<FrTrMapping>> GetAllMappingsAsync(CancellationToken ct = default)
     {
         ct.ThrowIfCancellationRequested();
@@ -527,6 +598,73 @@ public sealed class RequirementsDocumentService : IRequirementsDocumentService
     {
         if (items.Any(item => IdEquals(getId(item), id)))
             throw new RequirementsConflictException($"{label} '{id}' already exists.");
+    }
+
+    private static void ThrowIfAnyExists<TExisting, TIncoming>(
+        IEnumerable<TExisting> existingItems,
+        IReadOnlyList<TIncoming> incomingItems,
+        Func<TExisting, string> getExistingId,
+        Func<TIncoming, string> getIncomingId,
+        string label)
+    {
+        foreach (var incoming in incomingItems)
+            ThrowIfExists(existingItems, getIncomingId(incoming), getExistingId, label);
+    }
+
+    private static int[] FindBatchIndicesOrThrow<TExisting, TIncoming>(
+        IReadOnlyList<TExisting> existingItems,
+        IReadOnlyList<TIncoming> incomingItems,
+        Func<TExisting, string> getExistingId,
+        Func<TIncoming, string> getIncomingId,
+        string label)
+    {
+        var indices = new int[incomingItems.Count];
+        for (var i = 0; i < incomingItems.Count; i++)
+            indices[i] = FindIndexOrThrow(existingItems, getIncomingId(incomingItems[i]), getExistingId, label);
+
+        return indices;
+    }
+
+    private static void ValidateBatchEntries(RequirementsBatchEntries entries)
+    {
+        ArgumentNullException.ThrowIfNull(entries.Functional);
+        ArgumentNullException.ThrowIfNull(entries.Technical);
+        ArgumentNullException.ThrowIfNull(entries.Testing);
+
+        foreach (var entry in entries.Functional)
+            ValidateFr(entry);
+        foreach (var entry in entries.Technical)
+            ValidateTr(entry);
+        foreach (var entry in entries.Testing)
+            ValidateTest(entry);
+    }
+
+    private static void ValidateBatchUniqueIds(RequirementsBatchEntries entries)
+    {
+        ValidateUniqueIds(entries.Functional, static item => item.Id, "FR");
+        ValidateUniqueIds(entries.Technical, static item => item.Id, "TR");
+        ValidateUniqueIds(entries.Testing, static item => item.Id, "TEST");
+    }
+
+    private static void ValidateUniqueIds<T>(IReadOnlyList<T> items, Func<T, string> getId, string label)
+    {
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var item in items)
+        {
+            var id = getId(item);
+            if (!seen.Add(id.Trim()))
+                throw new ArgumentException($"Duplicate {label} ID '{id}' in batch.", nameof(items));
+        }
+    }
+
+    private async Task PublishBatchRequirementsChangeSafeAsync(string action, RequirementsBatchEntries entries, CancellationToken ct)
+    {
+        foreach (var entry in entries.Functional)
+            await PublishRequirementsChangeSafeAsync(action, entry.Id, ct).ConfigureAwait(false);
+        foreach (var entry in entries.Technical)
+            await PublishRequirementsChangeSafeAsync(action, entry.Id, ct).ConfigureAwait(false);
+        foreach (var entry in entries.Testing)
+            await PublishRequirementsChangeSafeAsync(action, entry.Id, ct).ConfigureAwait(false);
     }
 
     private async Task PublishRequirementsChangeSafeAsync(string action, string entityId, CancellationToken ct)

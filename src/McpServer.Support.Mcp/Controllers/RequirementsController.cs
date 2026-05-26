@@ -332,6 +332,154 @@ public sealed class RequirementsController : ControllerBase
         return Ok(new { success = true });
     }
 
+    /// <summary>Creates multiple Functional Requirement entries atomically.</summary>
+    [HttpPost("fr/batch")]
+    public async Task<ActionResult<RequirementsBatchResult>> CreateFrBatchAsync([FromBody] CreateFrBatchRequest? request, CancellationToken cancellationToken)
+    {
+        if (request?.Records is not { Count: > 0 } records)
+            return BadRequest(BuildBatchErrorResult("create", "fr", "Records array is required."));
+
+        var entries = new RequirementsBatchEntries(records.Select(ToFrEntry).ToArray(), [], []);
+        return await ExecuteBatchAsync("create", "fr", entries, _requirements.AddBatchAsync, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>Updates multiple Functional Requirement entries atomically.</summary>
+    [HttpPut("fr/batch")]
+    public async Task<ActionResult<RequirementsBatchResult>> UpdateFrBatchAsync([FromBody] UpdateFrBatchRequest? request, CancellationToken cancellationToken)
+    {
+        if (request?.Records is not { Count: > 0 } records)
+            return BadRequest(BuildBatchErrorResult("update", "fr", "Records array is required."));
+
+        try
+        {
+            var entries = new RequirementsBatchEntries(await ResolveFrUpdatesAsync(records, cancellationToken).ConfigureAwait(false), [], []);
+            return await ExecuteBatchAsync("update", "fr", entries, _requirements.UpdateBatchAsync, cancellationToken).ConfigureAwait(false);
+        }
+        catch (RequirementsNotFoundException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return NotFound(BuildBatchErrorResult("update", "fr", ex.Message));
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return BadRequest(BuildBatchErrorResult("update", "fr", ex.Message));
+        }
+    }
+
+    /// <summary>Creates multiple Technical Requirement entries atomically.</summary>
+    [HttpPost("tr/batch")]
+    public async Task<ActionResult<RequirementsBatchResult>> CreateTrBatchAsync([FromBody] CreateTrBatchRequest? request, CancellationToken cancellationToken)
+    {
+        if (request?.Records is not { Count: > 0 } records)
+            return BadRequest(BuildBatchErrorResult("create", "tr", "Records array is required."));
+
+        var entries = new RequirementsBatchEntries([], records.Select(ToTrEntry).ToArray(), []);
+        return await ExecuteBatchAsync("create", "tr", entries, _requirements.AddBatchAsync, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>Updates multiple Technical Requirement entries atomically.</summary>
+    [HttpPut("tr/batch")]
+    public async Task<ActionResult<RequirementsBatchResult>> UpdateTrBatchAsync([FromBody] UpdateTrBatchRequest? request, CancellationToken cancellationToken)
+    {
+        if (request?.Records is not { Count: > 0 } records)
+            return BadRequest(BuildBatchErrorResult("update", "tr", "Records array is required."));
+
+        try
+        {
+            var entries = new RequirementsBatchEntries([], await ResolveTrUpdatesAsync(records, cancellationToken).ConfigureAwait(false), []);
+            return await ExecuteBatchAsync("update", "tr", entries, _requirements.UpdateBatchAsync, cancellationToken).ConfigureAwait(false);
+        }
+        catch (RequirementsNotFoundException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return NotFound(BuildBatchErrorResult("update", "tr", ex.Message));
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return BadRequest(BuildBatchErrorResult("update", "tr", ex.Message));
+        }
+    }
+
+    /// <summary>Creates multiple Testing Requirement entries atomically.</summary>
+    [HttpPost("test/batch")]
+    public async Task<ActionResult<RequirementsBatchResult>> CreateTestBatchAsync([FromBody] CreateTestBatchRequest? request, CancellationToken cancellationToken)
+    {
+        if (request?.Records is not { Count: > 0 } records)
+            return BadRequest(BuildBatchErrorResult("create", "test", "Records array is required."));
+
+        var entries = new RequirementsBatchEntries([], [], records.Select(ToTestEntry).ToArray());
+        return await ExecuteBatchAsync("create", "test", entries, _requirements.AddBatchAsync, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>Updates multiple Testing Requirement entries atomically.</summary>
+    [HttpPut("test/batch")]
+    public async Task<ActionResult<RequirementsBatchResult>> UpdateTestBatchAsync([FromBody] UpdateTestBatchRequest? request, CancellationToken cancellationToken)
+    {
+        if (request?.Records is not { Count: > 0 } records)
+            return BadRequest(BuildBatchErrorResult("update", "test", "Records array is required."));
+
+        try
+        {
+            var entries = new RequirementsBatchEntries([], [], await ResolveTestUpdatesAsync(records, cancellationToken).ConfigureAwait(false));
+            return await ExecuteBatchAsync("update", "test", entries, _requirements.UpdateBatchAsync, cancellationToken).ConfigureAwait(false);
+        }
+        catch (RequirementsNotFoundException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return NotFound(BuildBatchErrorResult("update", "test", ex.Message));
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return BadRequest(BuildBatchErrorResult("update", "test", ex.Message));
+        }
+    }
+
+    /// <summary>Creates mixed FR/TR/TEST requirement entries atomically.</summary>
+    [HttpPost("batch")]
+    public async Task<ActionResult<RequirementsBatchResult>> CreateRequirementsBatchAsync([FromBody] CreateRequirementsBatchRequest? request, CancellationToken cancellationToken)
+    {
+        if (request?.Records is not { Count: > 0 } records)
+            return BadRequest(BuildBatchErrorResult("create", null, "Records array is required."));
+
+        try
+        {
+            var entries = ToCreateBatchEntries(records);
+            return await ExecuteBatchAsync("create", null, entries, _requirements.AddBatchAsync, cancellationToken).ConfigureAwait(false);
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return BadRequest(BuildBatchErrorResult("create", null, ex.Message));
+        }
+    }
+
+    /// <summary>Updates mixed FR/TR/TEST requirement entries atomically.</summary>
+    [HttpPut("batch")]
+    public async Task<ActionResult<RequirementsBatchResult>> UpdateRequirementsBatchAsync([FromBody] UpdateRequirementsBatchRequest? request, CancellationToken cancellationToken)
+    {
+        if (request?.Records is not { Count: > 0 } records)
+            return BadRequest(BuildBatchErrorResult("update", null, "Records array is required."));
+
+        try
+        {
+            var entries = await ResolveMixedUpdatesAsync(records, cancellationToken).ConfigureAwait(false);
+            return await ExecuteBatchAsync("update", null, entries, _requirements.UpdateBatchAsync, cancellationToken).ConfigureAwait(false);
+        }
+        catch (RequirementsNotFoundException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return NotFound(BuildBatchErrorResult("update", null, ex.Message));
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return BadRequest(BuildBatchErrorResult("update", null, ex.Message));
+        }
+    }
+
     /// <summary>Gets the full FR-to-TR mapping table.</summary>
     [HttpGet("mapping")]
     public async Task<ActionResult<IReadOnlyList<FrTrMapping>>> GetMappingsAsync(CancellationToken cancellationToken)
@@ -579,6 +727,282 @@ public sealed class RequirementsController : ControllerBase
         }
 
         return stream.ToArray();
+    }
+
+    private async Task<ActionResult<RequirementsBatchResult>> ExecuteBatchAsync(
+        string operation,
+        string? kind,
+        RequirementsBatchEntries entries,
+        Func<RequirementsBatchEntries, CancellationToken, Task<RequirementsBatchEntries>> executeAsync,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var result = await executeAsync(entries, cancellationToken).ConfigureAwait(false);
+            return Ok(BuildBatchResult(operation, kind, result));
+        }
+        catch (RequirementsConflictException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return Conflict(BuildBatchErrorResult(operation, kind, ex.Message));
+        }
+        catch (RequirementsNotFoundException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return NotFound(BuildBatchErrorResult(operation, kind, ex.Message));
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return BadRequest(BuildBatchErrorResult(operation, kind, ex.Message));
+        }
+    }
+
+    private static RequirementsBatchResult BuildBatchResult(string operation, string? kind, RequirementsBatchEntries entries)
+    {
+        var items = new List<RequirementsBatchItem>();
+        items.AddRange(entries.Functional.Select(entry => new RequirementsBatchItem { Kind = "fr", Id = entry.Id, Fr = entry }));
+        items.AddRange(entries.Technical.Select(entry => new RequirementsBatchItem { Kind = "tr", Id = entry.Id, Tr = entry }));
+        items.AddRange(entries.Testing.Select(entry => new RequirementsBatchItem { Kind = "test", Id = entry.Id, Test = entry }));
+
+        return new RequirementsBatchResult
+        {
+            Success = true,
+            Operation = operation,
+            Kind = kind,
+            Total = items.Count,
+            Items = items
+        };
+    }
+
+    private static RequirementsBatchResult BuildBatchErrorResult(string operation, string? kind, string error, int index = -1, string? id = null) =>
+        new()
+        {
+            Success = false,
+            Operation = operation,
+            Kind = kind,
+            Total = 0,
+            Errors =
+            [
+                new RequirementsBatchError
+                {
+                    Index = index,
+                    Kind = kind,
+                    Id = id,
+                    Error = error
+                }
+            ]
+        };
+
+    private static FrEntry ToFrEntry(CreateFrBatchRecord record) =>
+        new(
+            record.Id ?? string.Empty,
+            record.Title ?? string.Empty,
+            record.Body ?? record.Description ?? string.Empty,
+            Priority: record.Priority ?? "medium",
+            Status: record.Status ?? "pending",
+            Notes: record.Notes);
+
+    private static TrEntry ToTrEntry(CreateTrBatchRecord record) =>
+        new(
+            record.Id ?? string.Empty,
+            record.Title ?? string.Empty,
+            record.Body ?? record.Description ?? string.Empty,
+            Priority: record.Priority ?? "medium",
+            Status: record.Status ?? "pending",
+            Notes: record.Notes);
+
+    private static TestEntry ToTestEntry(CreateTestBatchRecord record) =>
+        new(
+            record.Id ?? string.Empty,
+            record.Condition ?? record.Description ?? string.Empty,
+            Title: record.Title ?? string.Empty,
+            Priority: record.Priority ?? "medium",
+            Status: record.Status ?? "pending",
+            Notes: record.Notes);
+
+    private static RequirementsBatchEntries ToCreateBatchEntries(IReadOnlyList<CreateRequirementBatchRecord> records)
+    {
+        var fr = new List<FrEntry>();
+        var tr = new List<TrEntry>();
+        var test = new List<TestEntry>();
+
+        for (var i = 0; i < records.Count; i++)
+        {
+            var record = records[i];
+            switch (NormalizeRequirementKind(record.Kind, i))
+            {
+                case "fr":
+                    fr.Add(new FrEntry(
+                        record.Id ?? string.Empty,
+                        record.Title ?? string.Empty,
+                        record.Body ?? record.Description ?? string.Empty,
+                        Priority: record.Priority ?? "medium",
+                        Status: record.Status ?? "pending",
+                        Notes: record.Notes));
+                    break;
+                case "tr":
+                    tr.Add(new TrEntry(
+                        record.Id ?? string.Empty,
+                        record.Title ?? string.Empty,
+                        record.Body ?? record.Description ?? string.Empty,
+                        Priority: record.Priority ?? "medium",
+                        Status: record.Status ?? "pending",
+                        Notes: record.Notes));
+                    break;
+                case "test":
+                    test.Add(new TestEntry(
+                        record.Id ?? string.Empty,
+                        record.Condition ?? record.Body ?? record.Description ?? string.Empty,
+                        Title: record.Title ?? string.Empty,
+                        Priority: record.Priority ?? "medium",
+                        Status: record.Status ?? "pending",
+                        Notes: record.Notes));
+                    break;
+            }
+        }
+
+        return new RequirementsBatchEntries(fr, tr, test);
+    }
+
+    private async Task<IReadOnlyList<FrEntry>> ResolveFrUpdatesAsync(IReadOnlyList<UpdateFrBatchRecord> records, CancellationToken cancellationToken)
+    {
+        var entries = new List<FrEntry>(records.Count);
+        for (var i = 0; i < records.Count; i++)
+        {
+            var record = records[i];
+            var id = RequireBatchId(record.Id, "FR", i);
+            var existing = await _requirements.GetFrAsync(id, cancellationToken).ConfigureAwait(false)
+                ?? throw new RequirementsNotFoundException($"FR '{id}' was not found.");
+            entries.Add(existing with
+            {
+                Title = record.Title ?? existing.Title,
+                Body = record.Body ?? record.Description ?? existing.Body,
+                Priority = record.Priority ?? existing.Priority,
+                Status = record.Status ?? existing.Status,
+                Notes = record.Notes ?? existing.Notes
+            });
+        }
+
+        return entries;
+    }
+
+    private async Task<IReadOnlyList<TrEntry>> ResolveTrUpdatesAsync(IReadOnlyList<UpdateTrBatchRecord> records, CancellationToken cancellationToken)
+    {
+        var entries = new List<TrEntry>(records.Count);
+        for (var i = 0; i < records.Count; i++)
+        {
+            var record = records[i];
+            var id = RequireBatchId(record.Id, "TR", i);
+            var existing = await _requirements.GetTrAsync(id, cancellationToken).ConfigureAwait(false)
+                ?? throw new RequirementsNotFoundException($"TR '{id}' was not found.");
+            entries.Add(existing with
+            {
+                Title = record.Title ?? existing.Title,
+                Body = record.Body ?? record.Description ?? existing.Body,
+                Priority = record.Priority ?? existing.Priority,
+                Status = record.Status ?? existing.Status,
+                Notes = record.Notes ?? existing.Notes
+            });
+        }
+
+        return entries;
+    }
+
+    private async Task<IReadOnlyList<TestEntry>> ResolveTestUpdatesAsync(IReadOnlyList<UpdateTestBatchRecord> records, CancellationToken cancellationToken)
+    {
+        var entries = new List<TestEntry>(records.Count);
+        for (var i = 0; i < records.Count; i++)
+        {
+            var record = records[i];
+            var id = RequireBatchId(record.Id, "TEST", i);
+            var existing = await _requirements.GetTestAsync(id, cancellationToken).ConfigureAwait(false)
+                ?? throw new RequirementsNotFoundException($"TEST '{id}' was not found.");
+            entries.Add(existing with
+            {
+                Title = record.Title ?? existing.Title,
+                Condition = record.Condition ?? record.Description ?? existing.Condition,
+                Priority = record.Priority ?? existing.Priority,
+                Status = record.Status ?? existing.Status,
+                Notes = record.Notes ?? existing.Notes
+            });
+        }
+
+        return entries;
+    }
+
+    private async Task<RequirementsBatchEntries> ResolveMixedUpdatesAsync(IReadOnlyList<UpdateRequirementBatchRecord> records, CancellationToken cancellationToken)
+    {
+        var fr = new List<FrEntry>();
+        var tr = new List<TrEntry>();
+        var test = new List<TestEntry>();
+
+        for (var i = 0; i < records.Count; i++)
+        {
+            var record = records[i];
+            var id = RequireBatchId(record.Id, "requirement", i);
+            switch (NormalizeRequirementKind(record.Kind, i))
+            {
+                case "fr":
+                    var existingFr = await _requirements.GetFrAsync(id, cancellationToken).ConfigureAwait(false)
+                        ?? throw new RequirementsNotFoundException($"FR '{id}' was not found.");
+                    fr.Add(existingFr with
+                    {
+                        Title = record.Title ?? existingFr.Title,
+                        Body = record.Body ?? record.Description ?? existingFr.Body,
+                        Priority = record.Priority ?? existingFr.Priority,
+                        Status = record.Status ?? existingFr.Status,
+                        Notes = record.Notes ?? existingFr.Notes
+                    });
+                    break;
+                case "tr":
+                    var existingTr = await _requirements.GetTrAsync(id, cancellationToken).ConfigureAwait(false)
+                        ?? throw new RequirementsNotFoundException($"TR '{id}' was not found.");
+                    tr.Add(existingTr with
+                    {
+                        Title = record.Title ?? existingTr.Title,
+                        Body = record.Body ?? record.Description ?? existingTr.Body,
+                        Priority = record.Priority ?? existingTr.Priority,
+                        Status = record.Status ?? existingTr.Status,
+                        Notes = record.Notes ?? existingTr.Notes
+                    });
+                    break;
+                case "test":
+                    var existingTest = await _requirements.GetTestAsync(id, cancellationToken).ConfigureAwait(false)
+                        ?? throw new RequirementsNotFoundException($"TEST '{id}' was not found.");
+                    test.Add(existingTest with
+                    {
+                        Title = record.Title ?? existingTest.Title,
+                        Condition = record.Condition ?? record.Body ?? record.Description ?? existingTest.Condition,
+                        Priority = record.Priority ?? existingTest.Priority,
+                        Status = record.Status ?? existingTest.Status,
+                        Notes = record.Notes ?? existingTest.Notes
+                    });
+                    break;
+            }
+        }
+
+        return new RequirementsBatchEntries(fr, tr, test);
+    }
+
+    private static string NormalizeRequirementKind(string? kind, int index)
+    {
+        var normalized = (kind ?? string.Empty).Trim().ToLowerInvariant();
+        return normalized switch
+        {
+            "fr" or "functional" => "fr",
+            "tr" or "technical" => "tr",
+            "test" or "testing" => "test",
+            _ => throw new ArgumentException($"Record {index} has unsupported kind '{kind}'. Expected fr|tr|test.", nameof(kind))
+        };
+    }
+
+    private static string RequireBatchId(string? id, string label, int index)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            throw new ArgumentException($"Record {index} is missing a {label} ID.", nameof(id));
+
+        return id.Trim();
     }
 
     internal static bool TryParseDocType(string? raw, out RequirementsDocType docType)

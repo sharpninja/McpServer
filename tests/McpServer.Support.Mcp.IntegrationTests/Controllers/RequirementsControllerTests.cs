@@ -74,6 +74,90 @@ public sealed class RequirementsControllerTests : IDisposable
         Assert.Equal(HttpStatusCode.NotFound, getDeletedResponse.StatusCode);
     }
 
+    /// <summary>Batch creation accepts a YAML-equivalent records array shape and persists mixed requirement kinds atomically.</summary>
+    [Fact]
+    public async Task BatchCreateEndpoint_AcceptsMixedRecordsArray()
+    {
+        var payload = new
+        {
+            records = new object[]
+            {
+                new
+                {
+                    kind = "fr",
+                    id = "FR-MCP-910",
+                    title = "Batch FR",
+                    description = "The server shall create FR records from a batch payload.",
+                    priority = "high"
+                },
+                new
+                {
+                    kind = "tr",
+                    id = "TR-MCP-BATCH-910",
+                    title = "Batch TR",
+                    description = "The server shall create TR records from a batch payload.",
+                    priority = "high"
+                },
+                new
+                {
+                    kind = "test",
+                    id = "TEST-MCP-910",
+                    title = "Batch TEST",
+                    description = "The server shall create TEST records from a batch payload.",
+                    priority = "high"
+                }
+            }
+        };
+
+        var response = await _client.PostAsJsonAsync("/mcpserver/requirements/batch", payload).ConfigureAwait(true);
+        var body = await response.Content.ReadAsStringAsync().ConfigureAwait(true);
+
+        Assert.True(response.StatusCode == HttpStatusCode.OK, $"Batch create failed ({response.StatusCode}): {body}");
+        using var result = JsonDocument.Parse(body);
+        Assert.True(result.RootElement.GetProperty("success").GetBoolean());
+        Assert.Equal(3, result.RootElement.GetProperty("total").GetInt32());
+
+        Assert.Equal(HttpStatusCode.OK, (await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-910").ConfigureAwait(true)).StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await _client.GetAsync("/mcpserver/requirements/tr/TR-MCP-BATCH-910").ConfigureAwait(true)).StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await _client.GetAsync("/mcpserver/requirements/test/TEST-MCP-910").ConfigureAwait(true)).StatusCode);
+    }
+
+    /// <summary>Batch creation rejects duplicate incoming IDs before writing any record.</summary>
+    [Fact]
+    public async Task BatchCreateEndpoint_DuplicateIncomingIdsRejectsWholeBatch()
+    {
+        var payload = new
+        {
+            records = new object[]
+            {
+                new
+                {
+                    id = "FR-MCP-911",
+                    title = "First duplicate",
+                    description = "This record must not be committed.",
+                    priority = "high"
+                },
+                new
+                {
+                    id = "FR-MCP-911",
+                    title = "Second duplicate",
+                    description = "This record makes the batch invalid.",
+                    priority = "high"
+                }
+            }
+        };
+
+        var response = await _client.PostAsJsonAsync("/mcpserver/requirements/fr/batch", payload).ConfigureAwait(true);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        using var result = JsonDocument.Parse(await response.Content.ReadAsStringAsync().ConfigureAwait(true));
+        Assert.False(result.RootElement.GetProperty("success").GetBoolean());
+        Assert.Contains("Duplicate FR ID", result.RootElement.GetProperty("errors")[0].GetProperty("error").GetString(), StringComparison.Ordinal);
+
+        var getResponse = await _client.GetAsync("/mcpserver/requirements/fr/FR-MCP-911").ConfigureAwait(true);
+        Assert.Equal(HttpStatusCode.NotFound, getResponse.StatusCode);
+    }
+
     [Fact]
     public async Task GenerateAll_WritesCanonicalDocumentsToWorkspace()
     {

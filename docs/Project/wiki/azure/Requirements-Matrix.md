@@ -406,6 +406,12 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-103 | 🟡 Partial | Hub-and-spoke federation |
 | TR-MCP-FED-001 | 🟡 Partial | Hub proxy federation contract |
 | TEST-MCP-136 | 🟡 Partial | Hub-and-spoke federation tests |
+| FR-MCP-109 | ✅ Complete | Requirements batch mutation |
+| TR-MCP-BATCH-109 | ✅ Complete | Requirements batch endpoint and workflow support |
+| TR-MCP-SCHEMA-109 | ✅ Complete | REPL request schema enforcement |
+| TR-MCP-STDIO-109 | ✅ Complete | Plugin stdio JSON request envelopes |
+| TEST-MCP-145 | ✅ Complete | Requirements batch validation coverage |
+| TEST-MCP-146 | ✅ Complete | Plugin stdio and schema validation coverage |
 | FR-01 | Tracked | Functional-Requirements.md |
 | FR-02 | Tracked | Functional-Requirements.md |
 | FR-03 | Tracked | Functional-Requirements.md |
@@ -421,6 +427,8 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-106 | Tracked | Functional-Requirements.md |
 | FR-MCP-107 | Tracked | Functional-Requirements.md |
 | FR-MCP-108 | Tracked | Functional-Requirements.md |
+| FR-MCP-109 | Tracked | Functional-Requirements.md |
+| FR-WFL-001 | Tracked | Functional-Requirements.md |
 | TR-01 | Tracked | Technical-Requirements.md |
 | TR-02 | Tracked | Technical-Requirements.md |
 | TR-03 | Tracked | Technical-Requirements.md |
@@ -449,6 +457,8 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-WEB-002 | Tracked | Technical-Requirements.md |
 | TR-MCP-WEB-003 | Tracked | Technical-Requirements.md |
 | TR-MCP-WEB-004 | Tracked | Technical-Requirements.md |
+| TR-TEST-INTEG-001 | Tracked | Technical-Requirements.md |
+| TR-WFL-FULL-001 | Tracked | Technical-Requirements.md |
 | TEST-GRAPHRAG-ADHOC-001 | Tracked | Testing-Requirements.md |
 | TEST-GRAPHRAG-ADHOC-002 | Tracked | Testing-Requirements.md |
 | TEST-GRAPHRAG-ADHOC-003 | Tracked | Testing-Requirements.md |
@@ -464,6 +474,8 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-142 | Tracked | Testing-Requirements.md |
 | TEST-MCP-143 | Tracked | Testing-Requirements.md |
 | TEST-MCP-144 | Tracked | Testing-Requirements.md |
+| TEST-MCP-145 | Tracked | Testing-Requirements.md |
+| TEST-MCP-146 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-1 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-2 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-3 | Tracked | Testing-Requirements.md |
@@ -475,3 +487,10 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-SUPPORT-010C-1 | Tracked | Testing-Requirements.md |
 | TEST-SUPPORT-010C-2 | Tracked | Testing-Requirements.md |
 | TEST-SUPPORT-010C-3 | Tracked | Testing-Requirements.md |
+| TEST-SUPPORT-010C-4 | ✅ Complete | SessionLogControllerTests, SessionLogServiceTests |
+| TEST-WFL-001 | Tracked | Testing-Requirements.md |
+| FR-GEN-001 | Tracked | Functional-Requirements.md |
+| FR-TEST-002 | Tracked | Functional-Requirements.md |
+| TR-GEN-YAML-001 | Tracked | Technical-Requirements.md |
+| TR-TEST-001 | Tracked | Technical-Requirements.md |
+| FR-TEST-001 | Tracked | Functional-Requirements.md |

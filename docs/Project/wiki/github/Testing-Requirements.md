@@ -150,6 +150,8 @@
 | TEST-MCP-142 | Bats coverage must prove workflow.requirements.updateFr, updateTr, and updateTest accept priority changes and do not fail inside the Codex plugin wrapper. |
 | TEST-MCP-143 | Validate that outstanding-session consolidation creates MCP-backed requirements and TODO traceability, inventories dirty workspaces, preserves unrelated changes, blocks unsafe deploys, and records zero-failure zero-skip validation gates before completion. |
 | TEST-MCP-144 | Given a TODO description containing Markdown headings, lists, code fences, blank lines, leading indentation, and trailing content, create, update, read, audit, and projection paths preserve the exact meaningful formatting with zero failures and zero skips. |
+| TEST-MCP-145 | Automated tests shall verify client request serialization, controller mixed-batch acceptance and whole-batch rejection, repository transaction rollback, and REPL schema validation for requirements batch commands. |
+| TEST-MCP-146 | Plugin validation shall include shell syntax checks, Cline bridge JSON-stdio tests, Cline schema preflight tests, and JSON Schema parse checks for the published REPL request schema. |
 
 ## TEST-MCP-REPL
 

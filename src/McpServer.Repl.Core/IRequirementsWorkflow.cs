@@ -241,6 +241,70 @@ public interface IRequirementsWorkflow
     Task DeleteTestAsync(string id, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Creates multiple functional requirements atomically from a YAML records array.
+    /// </summary>
+    /// <param name="request">Batch request containing FR records.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task containing the batch mutation result.</returns>
+    Task<RequirementsBatchResult> CreateFrBatchAsync(CreateFrBatchRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates multiple functional requirements atomically from a YAML records array.
+    /// </summary>
+    /// <param name="request">Batch request containing FR records.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task containing the batch mutation result.</returns>
+    Task<RequirementsBatchResult> UpdateFrBatchAsync(UpdateFrBatchRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Creates multiple technical requirements atomically from a YAML records array.
+    /// </summary>
+    /// <param name="request">Batch request containing TR records.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task containing the batch mutation result.</returns>
+    Task<RequirementsBatchResult> CreateTrBatchAsync(CreateTrBatchRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates multiple technical requirements atomically from a YAML records array.
+    /// </summary>
+    /// <param name="request">Batch request containing TR records.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task containing the batch mutation result.</returns>
+    Task<RequirementsBatchResult> UpdateTrBatchAsync(UpdateTrBatchRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Creates multiple testing requirements atomically from a YAML records array.
+    /// </summary>
+    /// <param name="request">Batch request containing TEST records.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task containing the batch mutation result.</returns>
+    Task<RequirementsBatchResult> CreateTestBatchAsync(CreateTestBatchRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates multiple testing requirements atomically from a YAML records array.
+    /// </summary>
+    /// <param name="request">Batch request containing TEST records.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task containing the batch mutation result.</returns>
+    Task<RequirementsBatchResult> UpdateTestBatchAsync(UpdateTestBatchRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Creates mixed FR/TR/TEST requirements atomically from a YAML records array.
+    /// </summary>
+    /// <param name="request">Batch request containing mixed requirement records.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task containing the batch mutation result.</returns>
+    Task<RequirementsBatchResult> CreateBatchAsync(CreateRequirementsBatchRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates mixed FR/TR/TEST requirements atomically from a YAML records array.
+    /// </summary>
+    /// <param name="request">Batch request containing mixed requirement records.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>A task containing the batch mutation result.</returns>
+    Task<RequirementsBatchResult> UpdateBatchAsync(UpdateRequirementsBatchRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Lists all requirement mappings with optional filtering.
     /// Returns mappings linking FR, TR, and TEST items.
     /// </summary>

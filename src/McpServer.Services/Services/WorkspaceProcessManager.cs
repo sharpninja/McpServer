@@ -184,6 +184,12 @@ public sealed class WorkspaceProcessManager : IWorkspaceProcessManager, IDisposa
                     continue;
                 }
 
+                if (string.IsNullOrWhiteSpace(ws.WorkspacePath))
+                {
+                    _logger.LogInformation("  ⊘ {Name} skipped (no workspace path)", ws.Name);
+                    continue;
+                }
+
                 var status = await StartAsync(ws, cancellationToken).ConfigureAwait(false);
                 if (status.IsRunning)
                     _logger.LogInformation("  ✓ {Name}{Primary}", ws.Name,

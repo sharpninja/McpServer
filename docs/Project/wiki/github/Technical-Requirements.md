@@ -226,6 +226,10 @@ ASP.NET Core 9 server with HTTP and STDIO MCP transport.
 **Device Authorization Flow for CLI Clients** — OIDC `mcp-director` client configured as public with OAuth 2.0 Device Authorization Grant enabled. Director CLI initiates device flow, displays user code and verification URI, polls for token completion. Provider claim mapping ensures `mcp-server-api` appears in token audience and includes `realm_roles`.
 **Covered by:** `Setup-McpKeycloak.ps1`, `setup-mcp-keycloak.sh`, `McpServer.Director`
 
+## TR-MCP-BATCH-109
+
+**Requirements batch endpoint and workflow support** — REST controllers, RequirementsClient, repository implementations, and REPL workflow dispatch shall expose atomic per-kind and mixed requirements batch create/update operations with all-or-nothing validation and structured batch result errors.
+
 ## TR-MCP-BYRD-001
 
 **Workspace-Scoped Byrd Execution Store** — The server SHALL persist Byrd iteration phases, execution TODOs, and TODO checkpoints in a workspace-scoped durable store under `.mcpServer`, with stable IDs for phases, TODOs, and checkpoints. The execution store SHALL coexist with the existing TODO providers without breaking legacy TODO CRUD behavior.
@@ -835,6 +839,10 @@ Operational scripts for startup, health checks, packaging, config validation, an
 
 **Wiki Import Selection and Authoritative Sync** — Requirements ingest SHALL accept sourceFormat=auto|canonical|wiki, preferredWikiFormat=azure|github, path-keyed documents, and optional per-document lastModifiedUtc. Wiki import SHALL compare both platform manifest generatedAtUtc values and latest file modified UTC values, fail on disagreement unless a preferred wiki format is supplied, and authoritatively create, update, delete, or ignore FR/TR/TEST/mapping records from the selected folder.
 
+## TR-MCP-SCHEMA-109
+
+**REPL request schema enforcement** — Every YAML or JSON request message exposed through the REPL shall have a published JSON Schema and shall be validated by the REPL before endpoint-backed workflow calls are invoked.
+
 ## TR-MCP-SEC-001
 
 **Per-Workspace Auth Tokens** — `WorkspaceResolutionMiddleware` resolves workspace identity per-request using a three-tier chain: (1) `X-Workspace-Path` header, (2) API key reverse lookup via `WorkspaceTokenService`, (3) default workspace from config. `WorkspaceAuthMiddleware` then validates the token against the resolved workspace. `WorkspaceTokenService` generates per-workspace cryptographic tokens (32-byte base64url) on startup and maintains reverse-lookup maps for API key → workspace resolution.
@@ -856,6 +864,10 @@ Operational scripts for startup, health checks, packaging, config validation, an
 **Status:** ✅ In Progress
 
 **Covered by:** `src/McpServer.Storage/Database/McpDatabaseProviderFactory.cs`, `src/McpServer.Storage/McpDbContextFactory.cs`, `src/McpServer.Storage/Database/SqliteMcpDatabaseProviderStrategy.cs`, `src/McpServer.Storage/Database/PostgreSqlMcpDatabaseProviderStrategy.cs`, `src/McpServer.Storage/Database/SqlServerMcpDatabaseProviderStrategy.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionCommand.cs`, `src/McpServer.Support.Mcp/DatabaseMaintenance/McpDatabaseEncryptionTransitionRunner.cs`, `scripts/Invoke-McpDatabaseEncryptionTransition.ps1`, `src/McpServer.Storage.SqliteMigrations`, `src/McpServer.Storage.PostgreSqlMigrations`, `src/McpServer.Storage.SqlServerMigrations`
+
+## TR-MCP-STDIO-109
+
+**Plugin stdio JSON request envelopes** — Codex, Claude, Copilot, and Cline plugins shall instruct direct stdio callers to send one single-line JSON request envelope per message, and plugin bridges that write stdio shall emit that shape.
 
 ## TR-MCP-SVC-001
 
@@ -1076,4 +1088,8 @@ Presence signaling SHALL be excluded from one-shot sessions.
 ## TR-PLANNED-013A
 
 `AddControllers().ConfigureApiBehaviorOptions` installs an `InvalidModelStateResponseFactory` that produces `application/problem+json` responses for body-binding failures on `/mcpserver/*` endpoints. The factory strips the action parameter name (`dto`, `body`, `turn`) from the `errors` keys, replacing them with `$` so callers see the canonical JSON root marker instead of a misleading wrapper field name. `SessionLogController.SubmitAsync` and `GetByIdAsync` use `ValidationProblem` for domain validation to keep the response shape uniform.
+
+## TR-TEST-001
+
+**TR-TEST-001** — Placeholder requirement backfilled for TODO link TR-TEST-001.
 

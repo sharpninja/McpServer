@@ -306,6 +306,86 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     }
 
     /// <inheritdoc />
+    public async Task<RequirementsBatchResult> CreateFrBatchAsync(CreateFrBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        foreach (var record in RequireRecords(request.Records))
+            ValidateFrId(record.Id ?? string.Empty);
+
+        return await _client.CreateFrBatchAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchResult> UpdateFrBatchAsync(UpdateFrBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        foreach (var record in RequireRecords(request.Records))
+            ValidateFrId(record.Id ?? string.Empty);
+
+        return await _client.UpdateFrBatchAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchResult> CreateTrBatchAsync(CreateTrBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        foreach (var record in RequireRecords(request.Records))
+            ValidateTrId(record.Id ?? string.Empty);
+
+        return await _client.CreateTrBatchAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchResult> UpdateTrBatchAsync(UpdateTrBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        foreach (var record in RequireRecords(request.Records))
+            ValidateTrId(record.Id ?? string.Empty);
+
+        return await _client.UpdateTrBatchAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchResult> CreateTestBatchAsync(CreateTestBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        foreach (var record in RequireRecords(request.Records))
+            ValidateTestId(record.Id ?? string.Empty);
+
+        return await _client.CreateTestBatchAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchResult> UpdateTestBatchAsync(UpdateTestBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        foreach (var record in RequireRecords(request.Records))
+            ValidateTestId(record.Id ?? string.Empty);
+
+        return await _client.UpdateTestBatchAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchResult> CreateBatchAsync(CreateRequirementsBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        foreach (var record in RequireRecords(request.Records))
+            ValidateBatchRecordId(record.Kind, record.Id);
+
+        return await _client.CreateBatchAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<RequirementsBatchResult> UpdateBatchAsync(UpdateRequirementsBatchRequest request, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        foreach (var record in RequireRecords(request.Records))
+            ValidateBatchRecordId(record.Kind, record.Id);
+
+        return await _client.UpdateBatchAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
     public async Task<IMappingQueryResult> ListMappingsAsync(string? frId = null, string? trId = null, string? testId = null, CancellationToken cancellationToken = default)
     {
         var mappings = await _client.ListMappingsAsync(cancellationToken);
@@ -605,6 +685,37 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
     public IRequirementsSelectionState? CurrentSelection()
     {
         return _selection;
+    }
+
+    private static IReadOnlyList<T> RequireRecords<T>(IReadOnlyList<T>? records)
+    {
+        if (records is null || records.Count == 0)
+        {
+            throw new ArgumentException("Batch records array cannot be null or empty", nameof(records));
+        }
+
+        return records;
+    }
+
+    private static void ValidateBatchRecordId(string? kind, string? id)
+    {
+        switch ((kind ?? string.Empty).Trim().ToLowerInvariant())
+        {
+            case "fr":
+            case "functional":
+                ValidateFrId(id ?? string.Empty);
+                return;
+            case "tr":
+            case "technical":
+                ValidateTrId(id ?? string.Empty);
+                return;
+            case "test":
+            case "testing":
+                ValidateTestId(id ?? string.Empty);
+                return;
+            default:
+                throw new ArgumentException($"Invalid requirement kind: {kind}. Valid values: fr, tr, test");
+        }
     }
 
     private static void ValidateFrId(string id)

@@ -40,10 +40,6 @@ Placeholder requirement backfilled by DB-FK-001.
 
 Placeholder requirement backfilled by DB-FK-001.
 
-## FR-GEN-001 Generate Document Test
-
-FR for document generation test
-
 ## FR-LOC-001 Localization Support
 
 Localization and internationalization support for the MCP server. *(Planned - implementation scope TBD.)*
@@ -732,6 +728,16 @@ MCP Server must support an audited consolidation plan that inventories outstandi
 ## FR-MCP-108 TODO Markdown description preservation
 
 TODO create, update, read, audit, and projection paths shall preserve description Markdown formatting and whitespace instead of normalizing or stripping meaningful content.
+
+## FR-MCP-109 Batch requirements mutation
+
+The MCP Server shall allow agents and API clients to create or update multiple functional, technical, and test requirements in one atomic request by submitting a records array.
+
+**Status:** ✅ Complete
+
+**Technical Implementation:** [TR-MCP-BATCH-109](./Technical-Requirements.md#tr-mcp-batch-109) | [TR-MCP-SCHEMA-109](./Technical-Requirements.md#tr-mcp-schema-109) | [TR-MCP-STDIO-109](./Technical-Requirements.md#tr-mcp-stdio-109) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `RequirementsController`, `RequirementsClient`, `RequirementsWorkflow`, `ReplCommandDispatcher`, `ReplYamlMessageValidator`, plugin REPL bridges and schema copies
 
 ## FR-MCP-REPL-001 YAML Protocol STDIO REPL Host
 

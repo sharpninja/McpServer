@@ -276,6 +276,414 @@ public sealed class UpdateTestRequest
     public string? Notes { get; set; }
 }
 
+/// <summary>Request payload for creating multiple functional requirements atomically.</summary>
+public sealed class CreateFrBatchRequest
+{
+    /// <summary>FR records to create.</summary>
+    [JsonPropertyName("records")]
+    public IReadOnlyList<CreateFrBatchRecord> Records { get; set; } = [];
+}
+
+/// <summary>One functional requirement create record in a batch request.</summary>
+public sealed class CreateFrBatchRecord
+{
+    /// <summary>Requirement identifier.</summary>
+    [JsonPropertyName("id")]
+    public string? Id { get; set; }
+
+    /// <summary>Requirement title.</summary>
+    [JsonPropertyName("title")]
+    public string? Title { get; set; }
+
+    /// <summary>Requirement body.</summary>
+    [JsonPropertyName("body")]
+    public string? Body { get; set; }
+
+    /// <summary>Requirement body alias for YAML commands.</summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>Requirement priority.</summary>
+    [JsonPropertyName("priority")]
+    public string? Priority { get; set; }
+
+    /// <summary>Requirement status.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Optional operator notes.</summary>
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
+}
+
+/// <summary>Request payload for updating multiple functional requirements atomically.</summary>
+public sealed class UpdateFrBatchRequest
+{
+    /// <summary>FR records to update.</summary>
+    [JsonPropertyName("records")]
+    public IReadOnlyList<UpdateFrBatchRecord> Records { get; set; } = [];
+}
+
+/// <summary>One functional requirement update record in a batch request.</summary>
+public sealed class UpdateFrBatchRecord
+{
+    /// <summary>Requirement identifier.</summary>
+    [JsonPropertyName("id")]
+    public string? Id { get; set; }
+
+    /// <summary>Requirement title. Null preserves the current value.</summary>
+    [JsonPropertyName("title")]
+    public string? Title { get; set; }
+
+    /// <summary>Requirement body. Null preserves the current value.</summary>
+    [JsonPropertyName("body")]
+    public string? Body { get; set; }
+
+    /// <summary>Requirement body alias for YAML commands. Null preserves the current value.</summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>Requirement priority. Null preserves the current value.</summary>
+    [JsonPropertyName("priority")]
+    public string? Priority { get; set; }
+
+    /// <summary>Requirement status. Null preserves the current value.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Optional operator notes. Null preserves the current value.</summary>
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
+}
+
+/// <summary>Request payload for creating multiple technical requirements atomically.</summary>
+public sealed class CreateTrBatchRequest
+{
+    /// <summary>TR records to create.</summary>
+    [JsonPropertyName("records")]
+    public IReadOnlyList<CreateTrBatchRecord> Records { get; set; } = [];
+}
+
+/// <summary>One technical requirement create record in a batch request.</summary>
+public sealed class CreateTrBatchRecord
+{
+    /// <summary>Requirement identifier.</summary>
+    [JsonPropertyName("id")]
+    public string? Id { get; set; }
+
+    /// <summary>Requirement title.</summary>
+    [JsonPropertyName("title")]
+    public string? Title { get; set; }
+
+    /// <summary>Requirement body.</summary>
+    [JsonPropertyName("body")]
+    public string? Body { get; set; }
+
+    /// <summary>Requirement body alias for YAML commands.</summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>Requirement priority.</summary>
+    [JsonPropertyName("priority")]
+    public string? Priority { get; set; }
+
+    /// <summary>Requirement status.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Optional operator notes.</summary>
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
+}
+
+/// <summary>Request payload for updating multiple technical requirements atomically.</summary>
+public sealed class UpdateTrBatchRequest
+{
+    /// <summary>TR records to update.</summary>
+    [JsonPropertyName("records")]
+    public IReadOnlyList<UpdateTrBatchRecord> Records { get; set; } = [];
+}
+
+/// <summary>One technical requirement update record in a batch request.</summary>
+public sealed class UpdateTrBatchRecord
+{
+    /// <summary>Requirement identifier.</summary>
+    [JsonPropertyName("id")]
+    public string? Id { get; set; }
+
+    /// <summary>Requirement title. Null preserves the current value.</summary>
+    [JsonPropertyName("title")]
+    public string? Title { get; set; }
+
+    /// <summary>Requirement body. Null preserves the current value.</summary>
+    [JsonPropertyName("body")]
+    public string? Body { get; set; }
+
+    /// <summary>Requirement body alias for YAML commands. Null preserves the current value.</summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>Requirement priority. Null preserves the current value.</summary>
+    [JsonPropertyName("priority")]
+    public string? Priority { get; set; }
+
+    /// <summary>Requirement status. Null preserves the current value.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Optional operator notes. Null preserves the current value.</summary>
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
+}
+
+/// <summary>Request payload for creating multiple testing requirements atomically.</summary>
+public sealed class CreateTestBatchRequest
+{
+    /// <summary>TEST records to create.</summary>
+    [JsonPropertyName("records")]
+    public IReadOnlyList<CreateTestBatchRecord> Records { get; set; } = [];
+}
+
+/// <summary>One testing requirement create record in a batch request.</summary>
+public sealed class CreateTestBatchRecord
+{
+    /// <summary>Requirement identifier.</summary>
+    [JsonPropertyName("id")]
+    public string? Id { get; set; }
+
+    /// <summary>Testing condition text.</summary>
+    [JsonPropertyName("condition")]
+    public string? Condition { get; set; }
+
+    /// <summary>Testing condition alias for YAML commands.</summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>Requirement title.</summary>
+    [JsonPropertyName("title")]
+    public string? Title { get; set; }
+
+    /// <summary>Requirement priority.</summary>
+    [JsonPropertyName("priority")]
+    public string? Priority { get; set; }
+
+    /// <summary>Requirement status.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Optional operator notes.</summary>
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
+}
+
+/// <summary>Request payload for updating multiple testing requirements atomically.</summary>
+public sealed class UpdateTestBatchRequest
+{
+    /// <summary>TEST records to update.</summary>
+    [JsonPropertyName("records")]
+    public IReadOnlyList<UpdateTestBatchRecord> Records { get; set; } = [];
+}
+
+/// <summary>One testing requirement update record in a batch request.</summary>
+public sealed class UpdateTestBatchRecord
+{
+    /// <summary>Requirement identifier.</summary>
+    [JsonPropertyName("id")]
+    public string? Id { get; set; }
+
+    /// <summary>Testing condition text. Null preserves the current value.</summary>
+    [JsonPropertyName("condition")]
+    public string? Condition { get; set; }
+
+    /// <summary>Testing condition alias for YAML commands. Null preserves the current value.</summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>Requirement title. Null preserves the current value.</summary>
+    [JsonPropertyName("title")]
+    public string? Title { get; set; }
+
+    /// <summary>Requirement priority. Null preserves the current value.</summary>
+    [JsonPropertyName("priority")]
+    public string? Priority { get; set; }
+
+    /// <summary>Requirement status. Null preserves the current value.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Optional operator notes. Null preserves the current value.</summary>
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
+}
+
+/// <summary>Request payload for creating mixed FR/TR/TEST requirements atomically.</summary>
+public sealed class CreateRequirementsBatchRequest
+{
+    /// <summary>Mixed records to create.</summary>
+    [JsonPropertyName("records")]
+    public IReadOnlyList<CreateRequirementBatchRecord> Records { get; set; } = [];
+}
+
+/// <summary>One mixed requirement create record in a batch request.</summary>
+public sealed class CreateRequirementBatchRecord
+{
+    /// <summary>Requirement kind: fr, tr, or test.</summary>
+    [JsonPropertyName("kind")]
+    public string? Kind { get; set; }
+
+    /// <summary>Requirement identifier.</summary>
+    [JsonPropertyName("id")]
+    public string? Id { get; set; }
+
+    /// <summary>Requirement title.</summary>
+    [JsonPropertyName("title")]
+    public string? Title { get; set; }
+
+    /// <summary>FR/TR body text.</summary>
+    [JsonPropertyName("body")]
+    public string? Body { get; set; }
+
+    /// <summary>TEST condition text.</summary>
+    [JsonPropertyName("condition")]
+    public string? Condition { get; set; }
+
+    /// <summary>Body/condition alias for YAML commands.</summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>Requirement priority.</summary>
+    [JsonPropertyName("priority")]
+    public string? Priority { get; set; }
+
+    /// <summary>Requirement status.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Optional operator notes.</summary>
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
+}
+
+/// <summary>Request payload for updating mixed FR/TR/TEST requirements atomically.</summary>
+public sealed class UpdateRequirementsBatchRequest
+{
+    /// <summary>Mixed records to update.</summary>
+    [JsonPropertyName("records")]
+    public IReadOnlyList<UpdateRequirementBatchRecord> Records { get; set; } = [];
+}
+
+/// <summary>One mixed requirement update record in a batch request.</summary>
+public sealed class UpdateRequirementBatchRecord
+{
+    /// <summary>Requirement kind: fr, tr, or test.</summary>
+    [JsonPropertyName("kind")]
+    public string? Kind { get; set; }
+
+    /// <summary>Requirement identifier.</summary>
+    [JsonPropertyName("id")]
+    public string? Id { get; set; }
+
+    /// <summary>Requirement title. Null preserves the current value.</summary>
+    [JsonPropertyName("title")]
+    public string? Title { get; set; }
+
+    /// <summary>FR/TR body text. Null preserves the current value.</summary>
+    [JsonPropertyName("body")]
+    public string? Body { get; set; }
+
+    /// <summary>TEST condition text. Null preserves the current value.</summary>
+    [JsonPropertyName("condition")]
+    public string? Condition { get; set; }
+
+    /// <summary>Body/condition alias for YAML commands. Null preserves the current value.</summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>Requirement priority. Null preserves the current value.</summary>
+    [JsonPropertyName("priority")]
+    public string? Priority { get; set; }
+
+    /// <summary>Requirement status. Null preserves the current value.</summary>
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    /// <summary>Optional operator notes. Null preserves the current value.</summary>
+    [JsonPropertyName("notes")]
+    public string? Notes { get; set; }
+}
+
+/// <summary>Structured response returned by requirements batch endpoints.</summary>
+public sealed class RequirementsBatchResult
+{
+    /// <summary>Whether the batch operation completed successfully.</summary>
+    [JsonPropertyName("success")]
+    public bool Success { get; set; }
+
+    /// <summary>Batch operation name: create or update.</summary>
+    [JsonPropertyName("operation")]
+    public string Operation { get; set; } = string.Empty;
+
+    /// <summary>Requirement kind for per-kind batches, or null for mixed batches.</summary>
+    [JsonPropertyName("kind")]
+    public string? Kind { get; set; }
+
+    /// <summary>Total number of applied records.</summary>
+    [JsonPropertyName("total")]
+    public int Total { get; set; }
+
+    /// <summary>Applied records returned by the server.</summary>
+    [JsonPropertyName("items")]
+    public IReadOnlyList<RequirementsBatchItem> Items { get; set; } = [];
+
+    /// <summary>Validation or persistence errors.</summary>
+    [JsonPropertyName("errors")]
+    public IReadOnlyList<RequirementsBatchError> Errors { get; set; } = [];
+}
+
+/// <summary>One applied item in a requirements batch response.</summary>
+public sealed class RequirementsBatchItem
+{
+    /// <summary>Requirement kind: fr, tr, or test.</summary>
+    [JsonPropertyName("kind")]
+    public string Kind { get; set; } = string.Empty;
+
+    /// <summary>Requirement identifier.</summary>
+    [JsonPropertyName("id")]
+    public string Id { get; set; } = string.Empty;
+
+    /// <summary>Functional requirement payload when kind is fr.</summary>
+    [JsonPropertyName("fr")]
+    public FrEntry? Fr { get; set; }
+
+    /// <summary>Technical requirement payload when kind is tr.</summary>
+    [JsonPropertyName("tr")]
+    public TrEntry? Tr { get; set; }
+
+    /// <summary>Testing requirement payload when kind is test.</summary>
+    [JsonPropertyName("test")]
+    public TestEntry? Test { get; set; }
+}
+
+/// <summary>One validation or persistence error in a requirements batch response.</summary>
+public sealed class RequirementsBatchError
+{
+    /// <summary>Zero-based record index, or -1 when the error applies to the whole batch.</summary>
+    [JsonPropertyName("index")]
+    public int Index { get; set; } = -1;
+
+    /// <summary>Requirement kind when known.</summary>
+    [JsonPropertyName("kind")]
+    public string? Kind { get; set; }
+
+    /// <summary>Requirement identifier when known.</summary>
+    [JsonPropertyName("id")]
+    public string? Id { get; set; }
+
+    /// <summary>Error message.</summary>
+    [JsonPropertyName("error")]
+    public string Error { get; set; } = string.Empty;
+}
+
 /// <summary>Request payload for creating or updating a mapping row.</summary>
 public sealed class UpsertFrTrMappingRequest
 {
