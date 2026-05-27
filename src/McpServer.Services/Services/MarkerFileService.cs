@@ -394,6 +394,19 @@ public static class MarkerFileService
                     ToolExpectations = ["session_*", "req_*"],
                     RootHints = [Sibling("mcpserver-cline-plugin"), "$CLINE_PLUGIN_ROOT"],
                 },
+                ["Grok"] = new()
+                {
+                    SourceType = "GrokCode",
+                    PluginName = "mcpserver-grok-plugin",
+                    PluginVersion = "0.1.0",
+                    Activation = "Grok 4.3 TUI/CLI loads skills/*.md from the plugin into ~/.grok/skills. Strong pwsh integration via McpSession.psm1 / McpTodo.psm1. Optional hooks/ for compatibility.",
+                    StartupCommand = "",
+                    UnavailableFailure = "MCP_PLUGIN_UNAVAILABLE:GrokCode",
+                    RequiredEnvVars = ["GROK_PLUGIN_ROOT", "PLUGIN_AGENT_NAME=GrokCode"],
+                    HookExpectations = ["SessionStart", "UserPromptSubmit", "PostToolUse", "Stop", "PlanMode"],
+                    ToolExpectations = ["mcp_session_*", "mcp_todo_*", "mcp_requirements_*", "workflow.sessionlog.*", "workflow.todo.*", "workflow.requirements.*"],
+                    RootHints = [Sibling("mcpserver-grok-plugin"), "$GROK_PLUGIN_ROOT"],
+                },
             },
         };
     }

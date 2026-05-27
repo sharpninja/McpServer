@@ -283,7 +283,7 @@ templates:
 
       1. Read this marker file for connection details and API key.
 
-      2. Bootstrap the required plugin named for your agent in the top-level `agent_plugins` contract. Codex must use `mcpserver-codex-plugin`; Claude must use `mcpserver-claude-code-plugin`; Copilot must use `mcpserver-copilot-plugin`; Cline must use `mcpserver-cline-plugin`.
+      2. Bootstrap the required plugin named for your agent in the top-level `agent_plugins` contract. Codex must use `mcpserver-codex-plugin`; Claude must use `mcpserver-claude-code-plugin`; Copilot must use `mcpserver-copilot-plugin`; Cline must use `mcpserver-cline-plugin`; Grok must use `mcpserver-grok-plugin`.
 
       3. Verify the marker signature using the workspace API key in this file before contacting the server.
 
@@ -303,7 +303,7 @@ templates:
       - Do not substitute raw REST, generic `mcpserver-repl`, helper modules, or another agent''s plugin for normal session, TODO, requirements, import/export, or traceability operations.
       - Another agent''s plugin may be inspected only for read-only diagnosis of plugin installation or contract drift.
       - Normal workspace shell commands use `pwsh.exe`. Plugin-owned hooks may use the runner declared by that plugin contract.
-      - Codex plugin tools/hooks must satisfy `agent_plugins.agents.Codex`; Claude plugin tools/hooks must satisfy `agent_plugins.agents.Claude`; Copilot plugin tools/hooks must satisfy `agent_plugins.agents.Copilot`; Cline MCP tools must satisfy `agent_plugins.agents.Cline`.
+      - Codex plugin tools/hooks must satisfy `agent_plugins.agents.Codex`; Claude plugin tools/hooks must satisfy `agent_plugins.agents.Claude`; Copilot plugin tools/hooks must satisfy `agent_plugins.agents.Copilot`; Cline MCP tools must satisfy `agent_plugins.agents.Cline`; Grok plugin skills/hooks must satisfy `agent_plugins.agents.Grok`.
 
 
       ## Codex MCP Quickstart
