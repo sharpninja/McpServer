@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http.Json;
 using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
@@ -347,6 +348,80 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         Assert.Contains("POST", response.Content.Headers.Allow ?? response.Headers.GetValues("Allow"));
     }
 
+    /// <summary>
+    /// BUG-APPVISIBILITY-001: API callers switching workspaces must see only the
+    /// session logs for the requested workspace on list and get routes.
+    /// </summary>
+    [Fact]
+    public async Task WhenTwoWorkspacesQuerySessionLogsThenEachWorkspaceSeesOnlyItsOwnRows()
+    {
+        var secondaryWorkspacePath = Path.Combine(
+            Path.GetTempPath(),
+            $"mcp-support-integration-secondary-{Guid.NewGuid():N}",
+            "workspace");
+        var secondaryDataPath = Path.Combine(Path.GetTempPath(), $"mcp-support-integration-secondary-data-{Guid.NewGuid():N}");
+        SeedMinimalWorkspaceFiles(secondaryWorkspacePath);
+        Directory.CreateDirectory(secondaryDataPath);
+
+        try
+        {
+            var overrides = new Dictionary<string, string?>
+            {
+                { "Mcp:Workspaces:1:WorkspacePath", secondaryWorkspacePath },
+                { "Mcp:Workspaces:1:Name", "support-integration-secondary" },
+                { "Mcp:Workspaces:1:TodoPath", Path.Combine(secondaryWorkspacePath, "docs", "Project", "TODO.yaml") },
+                { "Mcp:Workspaces:1:DataDirectory", secondaryDataPath },
+                { "Mcp:Workspaces:1:IsPrimary", "false" },
+                { "Mcp:Workspaces:1:IsEnabled", "true" },
+            };
+
+            using var factory = new CustomWebApplicationFactory(null, overrides);
+            using var primaryClient = factory.CreateClient();
+            using var secondaryClient = factory.CreateClient();
+            AddWorkspaceAuth(primaryClient, factory.Services, factory.WorkspacePath);
+            AddWorkspaceAuth(secondaryClient, factory.Services, secondaryWorkspacePath);
+
+            var primarySessionId = BuildSessionId("Codex", $"primary-visible-{Guid.NewGuid():N}");
+            var secondarySessionId = BuildSessionId("Cursor", $"secondary-visible-{Guid.NewGuid():N}");
+
+            var primaryPost = await primaryClient.PostAsJsonAsync(
+                new Uri("/mcpserver/sessionlog", UriKind.Relative),
+                CreateTestDto("Codex", primarySessionId)).ConfigureAwait(true);
+            var secondaryPost = await secondaryClient.PostAsJsonAsync(
+                new Uri("/mcpserver/sessionlog", UriKind.Relative),
+                CreateTestDto("Cursor", secondarySessionId)).ConfigureAwait(true);
+
+            Assert.Equal(HttpStatusCode.Created, primaryPost.StatusCode);
+            Assert.Equal(HttpStatusCode.Created, secondaryPost.StatusCode);
+
+            var primaryList = await primaryClient.GetFromJsonAsync<SessionLogQueryResult>(
+                new Uri("/mcpserver/sessionlog?limit=20", UriKind.Relative)).ConfigureAwait(true);
+            var secondaryList = await secondaryClient.GetFromJsonAsync<SessionLogQueryResult>(
+                new Uri("/mcpserver/sessionlog?limit=20", UriKind.Relative)).ConfigureAwait(true);
+
+            Assert.NotNull(primaryList);
+            Assert.Contains(primaryList!.Items, item => item.SessionId == primarySessionId);
+            Assert.DoesNotContain(primaryList.Items, item => item.SessionId == secondarySessionId);
+            Assert.NotNull(secondaryList);
+            Assert.Contains(secondaryList!.Items, item => item.SessionId == secondarySessionId);
+            Assert.DoesNotContain(secondaryList.Items, item => item.SessionId == primarySessionId);
+
+            var secondaryFromPrimary = await primaryClient.GetAsync(
+                new Uri($"/mcpserver/sessionlog/Cursor/{secondarySessionId}", UriKind.Relative)).ConfigureAwait(true);
+            var primaryFromSecondary = await secondaryClient.GetAsync(
+                new Uri($"/mcpserver/sessionlog/Codex/{primarySessionId}", UriKind.Relative)).ConfigureAwait(true);
+
+            Assert.Equal(HttpStatusCode.NotFound, secondaryFromPrimary.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, primaryFromSecondary.StatusCode);
+        }
+        finally
+        {
+            TryDeleteDirectory(secondaryWorkspacePath);
+            TryDeleteDirectory(secondaryDataPath);
+            TryDeleteDirectory(Path.GetDirectoryName(secondaryWorkspacePath));
+        }
+    }
+
     private static UnifiedSessionLogDto CreateTestDto(string sourceType, string sessionId)
     {
         return new UnifiedSessionLogDto
@@ -383,5 +458,43 @@ public sealed class SessionLogControllerTests : IClassFixture<CustomWebApplicati
         if (string.IsNullOrWhiteSpace(normalized))
             normalized = "session";
         return $"{agent}-20260304T113901Z-{normalized}";
+    }
+
+    private static void AddWorkspaceAuth(HttpClient client, IServiceProvider services, string workspacePath)
+    {
+        using var scope = services.CreateScope();
+        var tokenService = scope.ServiceProvider.GetRequiredService<WorkspaceTokenService>();
+        var token = tokenService.GetToken(workspacePath) ?? tokenService.GenerateToken(workspacePath);
+
+        client.DefaultRequestHeaders.Remove("X-Api-Key");
+        client.DefaultRequestHeaders.Add("X-Api-Key", token);
+        client.DefaultRequestHeaders.Remove("X-Workspace-Path");
+        client.DefaultRequestHeaders.Add("X-Workspace-Path", workspacePath);
+    }
+
+    private static void SeedMinimalWorkspaceFiles(string workspacePath)
+    {
+        var projectPath = Path.Combine(workspacePath, "docs", "Project");
+        Directory.CreateDirectory(projectPath);
+        File.WriteAllText(Path.Combine(projectPath, "TODO.yaml"), """
+            mvp-app:
+              high-priority: []
+            """);
+    }
+
+    private static void TryDeleteDirectory(string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return;
+
+        try
+        {
+            if (Directory.Exists(path))
+                Directory.Delete(path, recursive: true);
+        }
+        catch
+        {
+            // Best-effort cleanup only.
+        }
     }
 }

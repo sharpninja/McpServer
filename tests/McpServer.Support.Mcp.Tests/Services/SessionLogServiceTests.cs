@@ -648,6 +648,142 @@ public sealed class SessionLogServiceTests : IDisposable
     }
 
     /// <summary>
+    /// BUG-APPVISIBILITY-001: Session-log reads must honor the request workspace
+    /// even when <see cref="McpDbContext"/> was constructed before the scoped
+    /// <see cref="WorkspaceContext"/> was populated by middleware or stdio wiring.
+    /// </summary>
+    [Fact]
+    public async Task QueryGetAndHashCheckAsync_UseWorkspaceContextWhenDbContextWasConstructedBeforeWorkspaceResolved()
+    {
+        var options = new DbContextOptionsBuilder<McpDbContext>()
+            .UseInMemoryDatabase($"SessionLogTests_StaleCtx_Reads_{Guid.NewGuid()}")
+            .Options;
+        var workspaceContext = new WorkspaceContext();
+        using var db = new McpDbContext(options, workspaceContext);
+        db.Database.EnsureCreated();
+        var sut = new SessionLogService(db, NullLogger<SessionLogService>.Instance, _eventBus, workspaceContext);
+
+        workspaceContext.WorkspacePath = WorkspacePath;
+        var sessionId = BuildSessionId("Codex", "stale-query");
+        await sut.SubmitAsync(CreateTestDto("Codex", sessionId), contentHash: "hash-stale-query").ConfigureAwait(true);
+
+        db.OverrideWorkspaceId(string.Empty);
+        var query = await sut.QueryAsync(new SessionLogQueryRequest { Agent = "Codex" }).ConfigureAwait(true);
+
+        var item = Assert.Single(query.Items);
+        Assert.Equal(sessionId, item.SessionId);
+        Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
+
+        db.OverrideWorkspaceId(string.Empty);
+        var fetched = await sut.GetAsync("Codex", sessionId).ConfigureAwait(true);
+
+        Assert.NotNull(fetched);
+        Assert.Equal(sessionId, fetched!.SessionId);
+        Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
+
+        db.OverrideWorkspaceId(string.Empty);
+        var unchanged = await sut.IsUnchangedAsync("Codex", sessionId, "hash-stale-query").ConfigureAwait(true);
+
+        Assert.True(unchanged);
+        Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
+    }
+
+    /// <summary>
+    /// BUG-APPVISIBILITY-001: Incremental turn and dialog mutation paths must
+    /// re-synchronize the DbContext discriminator before locating existing rows.
+    /// </summary>
+    [Fact]
+    public async Task UpsertTurnAndAppendDialogAsync_UseWorkspaceContextWhenDbContextWasConstructedBeforeWorkspaceResolved()
+    {
+        var options = new DbContextOptionsBuilder<McpDbContext>()
+            .UseInMemoryDatabase($"SessionLogTests_StaleCtx_Mutations_{Guid.NewGuid()}")
+            .Options;
+        var workspaceContext = new WorkspaceContext();
+        using var db = new McpDbContext(options, workspaceContext);
+        db.Database.EnsureCreated();
+        var sut = new SessionLogService(db, NullLogger<SessionLogService>.Instance, _eventBus, workspaceContext);
+
+        workspaceContext.WorkspacePath = WorkspacePath;
+        var sessionId = BuildSessionId("Cursor", "stale-turn");
+        await sut.SubmitAsync(CreateTestDto("Cursor", sessionId)).ConfigureAwait(true);
+
+        db.OverrideWorkspaceId(string.Empty);
+        var turn = new UnifiedRequestEntryDto
+        {
+            RequestId = "req-20260527T014000Z-stale-turn",
+            Timestamp = "2026-05-27T01:40:00Z",
+            QueryText = "append through stale db context",
+            Status = "completed",
+            Actions =
+            [
+                new UnifiedActionDto
+                {
+                    Description = "Recorded stale context turn append regression",
+                    Type = "session_turn",
+                    Status = "completed",
+                    FilePath = "tests/McpServer.Support.Mcp.Tests/Services/SessionLogServiceTests.cs"
+                }
+            ]
+        };
+
+        var turnId = await sut.UpsertTurnAsync("Cursor", sessionId, turn).ConfigureAwait(true);
+
+        Assert.True(turnId > 0);
+        Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
+
+        db.OverrideWorkspaceId(string.Empty);
+        var dialogCount = await sut.AppendProcessingDialogAsync(
+            "Cursor",
+            sessionId,
+            "req-20260527T014000Z-stale-turn",
+            [new ProcessingDialogItemDto { Role = "model", Content = "visible after workspace sync", Category = "reasoning" }])
+            .ConfigureAwait(true);
+
+        Assert.Equal(1, dialogCount);
+        Assert.Equal(WorkspacePath, db.CurrentWorkspaceId);
+    }
+
+    /// <summary>
+    /// BUG-APPVISIBILITY-001: A long-lived service instance must return records
+    /// for the current workspace after the scoped workspace context changes, and
+    /// must not leak records from a different workspace.
+    /// </summary>
+    [Fact]
+    public async Task QueryAsync_WhenWorkspaceContextChanges_ReturnsOnlyCurrentWorkspaceRows()
+    {
+        var options = new DbContextOptionsBuilder<McpDbContext>()
+            .UseInMemoryDatabase($"SessionLogTests_TwoWorkspace_{Guid.NewGuid()}")
+            .Options;
+        var workspaceContext = new WorkspaceContext();
+        using var db = new McpDbContext(options, workspaceContext);
+        db.Database.EnsureCreated();
+        var sut = new SessionLogService(db, NullLogger<SessionLogService>.Instance, _eventBus, workspaceContext);
+
+        var primarySessionId = BuildSessionId("Codex", "primary-visible");
+        workspaceContext.WorkspacePath = WorkspacePath;
+        await sut.SubmitAsync(CreateTestDto("Codex", primarySessionId)).ConfigureAwait(true);
+
+        var otherWorkspacePath = @"E:\tests\sessionlog-service-other";
+        var otherSessionId = BuildSessionId("Cursor", "other-visible");
+        workspaceContext.WorkspacePath = otherWorkspacePath;
+        await sut.SubmitAsync(CreateTestDto("Cursor", otherSessionId)).ConfigureAwait(true);
+
+        workspaceContext.WorkspacePath = WorkspacePath;
+        var primaryResult = await sut.QueryAsync(new SessionLogQueryRequest { Limit = 10 }).ConfigureAwait(true);
+
+        var primaryItem = Assert.Single(primaryResult.Items);
+        Assert.Equal(primarySessionId, primaryItem.SessionId);
+        Assert.DoesNotContain(primaryResult.Items, item => item.SessionId == otherSessionId);
+
+        workspaceContext.WorkspacePath = otherWorkspacePath;
+        var otherResult = await sut.QueryAsync(new SessionLogQueryRequest { Limit = 10 }).ConfigureAwait(true);
+
+        var otherItem = Assert.Single(otherResult.Items);
+        Assert.Equal(otherSessionId, otherItem.SessionId);
+        Assert.DoesNotContain(otherResult.Items, item => item.SessionId == primarySessionId);
+    }
+
+    /// <summary>
     /// FR-SUPPORT-010C: <c>UpsertTurnAsync</c> creates a new turn on an existing
     /// session without deleting any sibling turns. Guards the per-turn helper
     /// against the delete-stale behavior of the full-session upsert.

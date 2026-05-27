@@ -1,7 +1,13 @@
 using System.Net;
+using McpServer.Support.Mcp.IntegrationTests;
+using McpServer.Support.Mcp.Options;
+using McpServer.Support.Mcp.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 
 namespace McpServer.Support.Mcp.IntegrationTests.Controllers;
@@ -154,9 +160,21 @@ public sealed class PairingNotConfiguredTests : IClassFixture<CustomWebApplicati
 /// <summary>Factory that configures PairingUsers and ApiKey for pairing tests.</summary>
 public sealed class PairingWebApplicationFactory : WebApplicationFactory<McpApiEntryPoint>
 {
+    private readonly string _tempDir = Path.Combine(
+        Path.GetTempPath(),
+        "mcp-pairing-tests-" + Guid.NewGuid().ToString("N")[..8]);
+
     /// <inheritdoc />
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        var projectPath = Path.Combine(_tempDir, "docs", "Project");
+        var databasePath = Path.Combine(_tempDir, "mcp.db");
+        Directory.CreateDirectory(projectPath);
+        File.WriteAllText(Path.Combine(projectPath, "TODO.yaml"), """
+            mvp-app:
+              high-priority: []
+            """);
+
         builder.UseEnvironment("Test");
         builder.UseContentRoot(CustomWebApplicationFactory.ResolveContentRoot());
         builder.ConfigureAppConfiguration(config =>
@@ -168,11 +186,52 @@ public sealed class PairingWebApplicationFactory : WebApplicationFactory<McpApiE
 
             config.AddInMemoryCollection(new Dictionary<string, string?>
             {
-                { "Mcp:DataSource", ":memory:" },
+                { "DataFolder", _tempDir },
+                { "Mcp:DataSource", databasePath },
+                { "Mcp:DataDirectory", _tempDir },
+                { "Mcp:Database:Provider", "sqlite" },
+                { "Mcp:Database:Sqlite:DataSource", databasePath },
+                { "Mcp:UseInMemoryDatabaseForTests", "false" },
+                { "Mcp:RepoRoot", _tempDir },
+                { "Mcp:TodoFilePath", "docs/Project/TODO.yaml" },
+                { "Mcp:TodoStorage:Provider", "database" },
+                { "Mcp:TodoStorage:SqliteDataSource", Path.Combine(_tempDir, "todo-legacy.db") },
                 { "Mcp:ApiKey", "test-api-key-12345" },
+                { "Mcp:Workspaces:0:WorkspacePath", _tempDir },
+                { "Mcp:Workspaces:0:Name", Path.GetFileName(_tempDir) },
+                { "Mcp:Workspaces:0:TodoPath", "docs/Project/TODO.yaml" },
+                { "Mcp:Workspaces:0:DataDirectory", _tempDir },
+                { "Mcp:Workspaces:0:IsPrimary", "true" },
+                { "Mcp:Workspaces:0:IsEnabled", "true" },
                 { "Mcp:PairingUsers:0:Username", "admin" },
                 { "Mcp:PairingUsers:0:PasswordHash", hash },
             });
         });
+        builder.ConfigureTestServices(services =>
+        {
+            IntegrationTestDatabase.ConfigureSqlite(services, databasePath);
+            services.RemoveAll<IWorkspaceProjectionWriter>();
+            services.AddSingleton<IWorkspaceProjectionWriter, NoOpWorkspaceProjectionWriter>();
+            services.PostConfigure<TodoPromptOptions>(options => options.BaseUrl = "http://localhost");
+            services.AddHostedService<IntegrationTestDatabase.Initializer>();
+        });
+    }
+
+    /// <inheritdoc />
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        if (!disposing)
+            return;
+
+        try
+        {
+            if (Directory.Exists(_tempDir))
+                Directory.Delete(_tempDir, recursive: true);
+        }
+        catch
+        {
+            // Best-effort cleanup only.
+        }
     }
 }

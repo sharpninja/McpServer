@@ -45,6 +45,16 @@ public sealed class SessionLogService : ISessionLogService
 
     private string ResolveWorkspaceId() => _workspaceContext?.WorkspacePath ?? string.Empty;
 
+    private void SyncDbWorkspaceFromContext()
+    {
+        var workspaceId = ResolveWorkspaceId();
+        if (string.IsNullOrWhiteSpace(workspaceId))
+            return;
+
+        if (!string.Equals(_db.CurrentWorkspaceId, workspaceId, StringComparison.OrdinalIgnoreCase))
+            _db.OverrideWorkspaceId(workspaceId);
+    }
+
     private void StampWorkspaceId(SessionLogEntity session)
     {
         var workspaceId = ResolveWorkspaceId();
@@ -73,6 +83,7 @@ public sealed class SessionLogService : ISessionLogService
     public async Task<long> SubmitAsync(UnifiedSessionLogDto dto, string? sourceFilePath = null, string? contentHash = null, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(dto);
+        SyncDbWorkspaceFromContext();
 
         if (string.IsNullOrWhiteSpace(dto.SourceType))
             throw new ArgumentException("SourceType is required.", nameof(dto));
@@ -180,6 +191,7 @@ public sealed class SessionLogService : ISessionLogService
         ArgumentNullException.ThrowIfNull(sourceType);
         ArgumentNullException.ThrowIfNull(sessionId);
         ArgumentNullException.ThrowIfNull(contentHash);
+        SyncDbWorkspaceFromContext();
 
         return await _db.SessionLogs
             .AnyAsync(s => s.SourceType == sourceType
@@ -200,6 +212,8 @@ public sealed class SessionLogService : ISessionLogService
         ArgumentNullException.ThrowIfNull(sessionId);
         ArgumentNullException.ThrowIfNull(requestId);
         ArgumentNullException.ThrowIfNull(items);
+        SyncDbWorkspaceFromContext();
+
         var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);
         if (sessionIdError is not null)
             throw new ArgumentException(sessionIdError, nameof(sessionId));
@@ -251,6 +265,7 @@ public sealed class SessionLogService : ISessionLogService
     public async Task<SessionLogQueryResult> QueryAsync(SessionLogQueryRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
+        SyncDbWorkspaceFromContext();
 
         var limit = Math.Clamp(request.Limit, 1, MaxLimit);
         var offset = Math.Max(request.Offset, 0);
@@ -326,6 +341,7 @@ public sealed class SessionLogService : ISessionLogService
     {
         ArgumentNullException.ThrowIfNull(sourceType);
         ArgumentNullException.ThrowIfNull(sessionId);
+        SyncDbWorkspaceFromContext();
 
         var entity = await _db.SessionLogs
             .Include(s => s.Turns.OrderBy(e => e.Id))
@@ -354,6 +370,7 @@ public sealed class SessionLogService : ISessionLogService
         ArgumentNullException.ThrowIfNull(sourceType);
         ArgumentNullException.ThrowIfNull(sessionId);
         ArgumentNullException.ThrowIfNull(turn);
+        SyncDbWorkspaceFromContext();
 
         var sessionIdError = SessionLogIdentifierValidator.ValidateSessionId(sessionId, sourceType);
         if (sessionIdError is not null)
