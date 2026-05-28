@@ -152,8 +152,11 @@ When `AGENTS-README-FIRST.yaml` contains `agent_plugins.policy: required`, each 
 - Claude Code uses `mcpserver-claude-code-plugin`.
 - GitHub Copilot uses `mcpserver-copilot-plugin`.
 - Cline uses `mcpserver-cline-plugin`.
+- Grok uses `mcpserver-grok-plugin`.
 
-The plugin wrapper is required for session log, TODO, requirements, import/export, and traceability workflows. Direct `mcpserver-repl --agent-stdio` use is reserved for plugin implementation, plugin troubleshooting, and fallback diagnosis after plugin verification fails. If the matching plugin is unavailable, record `MCP_PLUGIN_UNAVAILABLE:<Agent>` when a trusted logging path exists and continue only with non-MCP local diagnosis.
+Acquire the matching plugin through the MCP Server tool registry before relying on local root hints: search `/mcpserver/tools/search?keyword=<plugin_name>` for an exact `name` match, install it from `/mcpserver/tools/buckets/official/install?toolName=<plugin_name>` if it is missing, then execute the returned `commandTemplate` with the target parent directory.
+
+The plugin wrapper is required for session log, TODO, requirements, import/export, and traceability workflows. Direct `mcpserver-repl --agent-stdio` use is reserved for plugin implementation, plugin troubleshooting, and fallback diagnosis after plugin verification fails. If the matching plugin is unavailable after registry acquisition, record `MCP_PLUGIN_UNAVAILABLE:<Agent>` when a trusted logging path exists and continue only with non-MCP local diagnosis.
 
 ### Step 4: Store Connection State
 
@@ -180,89 +183,44 @@ mcpserver-repl --agent-stdio
 
 **Client → Server (hello request):**
 
-```yaml
-type: hello
-payload:
-  protocolVersion: 1.0
-  clientName: Copilot
-  clientVersion: 2.0.0
-  capabilities:
-    - sessionlog
-    - todo
-    - requirements
-    - streaming
-  metadata:
-    workspacePath: C:\workspace\project
+```json
+{"type":"hello","payload":{"protocolVersion":"1.0","clientName":"Copilot","clientVersion":"2.0.0","capabilities":["sessionlog","todo","requirements","streaming"],"metadata":{"workspacePath":"C:\\workspace\\project"}}}
 ```
 
 **Server → Client (hello response):**
 
-```yaml
-type: hello
-payload:
-  protocolVersion: 1.0
-  serverVersion: 1.5.0
-  capabilities:
-    - sessionlog
-    - todo
-    - requirements
-    - streaming
-    - client-passthrough
-  supportedNamespaces:
-    - workflow.sessionlog
-    - workflow.todo
-    - workflow.requirements
-    - client
+```json
+{"type":"hello","payload":{"protocolVersion":"1.0","serverVersion":"1.5.0","capabilities":["sessionlog","todo","requirements","streaming","client-passthrough"],"supportedNamespaces":["workflow.sessionlog","workflow.todo","workflow.requirements","client"]}}
 ```
 
 ### Command Dispatch
 
-After handshake, send request envelopes over stdin, receive result/error/event envelopes on stdout.
+After handshake, send one single-line JSON request envelope per stdin line and receive result, error, or event envelopes on stdout.
 
-Send one request envelope per YAML document. Multiple requests may be streamed by separating YAML documents with `---`. Do not send a single `type: batch` envelope; unsupported batch envelopes are rejected with `unsupported_batch_envelope`.
+Do not send formatted YAML or a single `type: batch` envelope; unsupported batch envelopes are rejected with `unsupported_batch_envelope`.
 
 **Request Format:**
 
-```yaml
-type: request
-payload:
-  requestId: <unique-request-id>
-  method: <namespace>.<command>
-  params:
-    <param-name>: <param-value>
-    ...
+```json
+{"type":"request","payload":{"requestId":"req-20260304T113901Z-example","method":"workflow.todo.query","params":{"done":false}}}
 ```
 
 **Result Format:**
 
-```yaml
-type: result
-payload:
-  requestId: <matching-request-id>
-  result:
-    <result-data>
+```json
+{"type":"result","payload":{"requestId":"req-20260304T113901Z-example","result":{"items":[],"totalCount":0}}}
 ```
 
 **Error Format:**
 
-```yaml
-type: error
-payload:
-  requestId: <matching-request-id>
-  code: <error-code>
-  message: <human-readable-message>
-  details:
-    <context-specific-details>
+```json
+{"type":"error","payload":{"requestId":"req-20260304T113901Z-example","code":"invalid_request","message":"Request envelope failed validation","details":{"field":"payload.method"}}}
 ```
 
 **Event Format (streaming):**
 
-```yaml
-type: event
-payload:
-  event: <event-name>
-  data:
-    <event-data>
+```json
+{"type":"event","payload":{"event":"workflow.todo.streamStatus","data":{"eventType":"status.progress","sequence":1,"message":"Checking requirement references"}}}
 ```
 
 ## Session Log Workflow

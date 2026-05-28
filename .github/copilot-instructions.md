@@ -45,7 +45,7 @@ dotnet test tests\McpServer.Support.Mcp.Tests -c Debug --filter "FullyQualifiedN
 
 # Validate appsettings config (via Nuke)
 ./build.ps1 ValidateConfig
-# or: pwsh.exe ./scripts/Validate-McpConfig.ps1
+# or: pwsh.exe -NoLogo -NoProfile -NonInteractive -File ./scripts/Validate-McpConfig.ps1
 
 # Validate requirements traceability
 ./build.ps1 ValidateTraceability

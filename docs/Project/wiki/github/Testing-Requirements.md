@@ -152,6 +152,8 @@
 | TEST-MCP-144 | Given a TODO description containing Markdown headings, lists, code fences, blank lines, leading indentation, and trailing content, create, update, read, audit, and projection paths preserve the exact meaningful formatting with zero failures and zero skips. |
 | TEST-MCP-145 | Automated tests shall verify client request serialization, controller mixed-batch acceptance and whole-batch rejection, repository transaction rollback, and REPL schema validation for requirements batch commands. |
 | TEST-MCP-146 | Plugin validation shall include shell syntax checks, Cline bridge JSON-stdio tests, Cline schema preflight tests, and JSON Schema parse checks for the published REPL request schema. |
+| TEST-MCP-147 | Given agent-facing documentation, marker templates, pipeline references, and generated requirements wiki outputs, automated tests shall verify single-line JSON stdio guidance, current plugin registry guidance, existing pipeline file references, and Azure/GitHub wiki output file parity. |
+| TEST-MCP-148 | Build.Tests SHALL verify build.ps1 relaunches through a PowerShell host with -NoLogo, -NoProfile, and -NonInteractive, Build.Tests pwsh.exe helpers include those flags, and live deployment guidance examples include those flags. |
 
 ## TEST-MCP-REPL
 

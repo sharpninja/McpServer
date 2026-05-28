@@ -9,11 +9,13 @@ namespace McpServer.Support.Mcp.Services;
 
 /// <summary>
 /// Manages tool buckets — GitHub repositories containing JSON tool manifests.
-/// Uses <c>gh api</c> to read manifest files from the repo, then installs
+/// Reads manifest files from GitHub-backed bucket repositories, then installs
 /// tool definitions into the local database (global or workspace-scoped).
 /// </summary>
 public sealed class ToolBucketService : IToolBucketService
 {
+    private static readonly HttpClient s_defaultHttpClient = CreateDefaultHttpClient();
+
     private static readonly JsonSerializerOptions s_jsonOpts = new()
     {
         PropertyNameCaseInsensitive = true,
@@ -26,6 +28,7 @@ public sealed class ToolBucketService : IToolBucketService
     private readonly IProcessRunner _processRunner;
     private readonly IToolRegistryService _toolRegistry;
     private readonly ILogger<ToolBucketService> _logger;
+    private readonly HttpClient _httpClient;
 
     /// <summary>Initializes a new instance of the <see cref="ToolBucketService"/> class.</summary>
     public ToolBucketService(
@@ -33,13 +36,16 @@ public sealed class ToolBucketService : IToolBucketService
         IProcessRunner processRunner,
         IToolRegistryService toolRegistry,
         ILogger<ToolBucketService> logger,
-        IChangeEventBus? eventBus = null)
+        IChangeEventBus? eventBus = null,
+        HttpClient? httpClient = null)
     {
         _db = db;
         _eventBus = eventBus;
         _processRunner = processRunner;
         _toolRegistry = toolRegistry;
         _logger = logger;
+        _httpClient = httpClient ?? s_defaultHttpClient;
+        EnsureGitHubHeaders(_httpClient);
     }
 
     /// <inheritdoc />
@@ -234,8 +240,18 @@ public sealed class ToolBucketService : IToolBucketService
         return new BucketSyncResult(true, Updated: updated, Unchanged: unchanged);
     }
 
-    /// <summary>Fetches all .json manifests from the bucket repo using <c>gh api</c>.</summary>
+    /// <summary>Fetches all .json manifests from the bucket repo.</summary>
     private async Task<IReadOnlyList<ToolManifest>?> FetchManifestsAsync(ToolBucketEntity bucket, CancellationToken ct)
+    {
+        var cliManifests = await FetchManifestsWithGitHubCliAsync(bucket, ct).ConfigureAwait(false);
+        if (cliManifests is not null)
+            return cliManifests;
+
+        return await FetchManifestsWithHttpAsync(bucket, ct).ConfigureAwait(false);
+    }
+
+    /// <summary>Fetches all .json manifests from the bucket repo using <c>gh api</c>.</summary>
+    private async Task<IReadOnlyList<ToolManifest>?> FetchManifestsWithGitHubCliAsync(ToolBucketEntity bucket, CancellationToken ct)
     {
         // List directory contents via GitHub REST API.
         var apiPath = $"/repos/{bucket.Owner}/{bucket.Repo}/contents{NormApiPath(bucket.ManifestPath)}?ref={bucket.Branch}";
@@ -257,6 +273,70 @@ public sealed class ToolBucketService : IToolBucketService
             return null;
         }
 
+        return await BuildManifestsAsync(
+            files,
+            async (downloadUrl, fileName) =>
+            {
+                // Fetch individual manifest via raw download URL.
+                var fileResult = await _processRunner.RunAsync("gh", $"api \"{downloadUrl}\"", ct).ConfigureAwait(false);
+                if (fileResult.ExitCode != 0 || string.IsNullOrWhiteSpace(fileResult.Stdout))
+                {
+                    _logger.LogWarning("Failed to fetch bucket manifest {File}: {Stderr}", fileName, fileResult.Stderr);
+                    return null;
+                }
+
+                return fileResult.Stdout;
+            }).ConfigureAwait(false);
+    }
+
+    /// <summary>Fetches all .json manifests from the bucket repo using unauthenticated GitHub HTTP APIs.</summary>
+    private async Task<IReadOnlyList<ToolManifest>?> FetchManifestsWithHttpAsync(ToolBucketEntity bucket, CancellationToken ct)
+    {
+        var apiPath = $"https://api.github.com/repos/{Uri.EscapeDataString(bucket.Owner)}/{Uri.EscapeDataString(bucket.Repo)}/contents{NormApiPath(bucket.ManifestPath)}?ref={Uri.EscapeDataString(bucket.Branch)}";
+        using var response = await _httpClient.GetAsync(apiPath, ct).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+        {
+            var body = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
+            _logger.LogWarning(
+                "Failed to list bucket contents via GitHub HTTP: {StatusCode}; {Body}",
+                (int)response.StatusCode,
+                Truncate(body));
+            return null;
+        }
+
+        var json = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
+
+        JsonElement[] files;
+        try
+        {
+            files = JsonSerializer.Deserialize<JsonElement[]>(json, s_jsonOpts) ?? [];
+        }
+        catch (JsonException ex)
+        {
+            _logger.LogWarning(ex, "Failed to parse HTTP directory listing for bucket {Name}", bucket.Name);
+            return null;
+        }
+
+        return await BuildManifestsAsync(
+            files,
+            async (downloadUrl, fileName) =>
+            {
+                try
+                {
+                    return await _httpClient.GetStringAsync(downloadUrl, ct).ConfigureAwait(false);
+                }
+                catch (HttpRequestException ex)
+                {
+                    _logger.LogWarning(ex, "Failed to fetch bucket manifest {File} via HTTP", fileName);
+                    return null;
+                }
+            }).ConfigureAwait(false);
+    }
+
+    private async Task<IReadOnlyList<ToolManifest>> BuildManifestsAsync(
+        JsonElement[] files,
+        Func<string, string, Task<string?>> fetchContentAsync)
+    {
         var manifests = new List<ToolManifest>();
         foreach (var file in files)
         {
@@ -268,14 +348,13 @@ public sealed class ToolBucketService : IToolBucketService
             if (string.IsNullOrEmpty(downloadUrl))
                 continue;
 
-            // Fetch individual manifest via raw download URL.
-            var fileResult = await _processRunner.RunAsync("gh", $"api \"{downloadUrl}\"", ct).ConfigureAwait(false);
-            if (fileResult.ExitCode != 0 || string.IsNullOrWhiteSpace(fileResult.Stdout))
+            var manifestJson = await fetchContentAsync(downloadUrl, fileName).ConfigureAwait(false);
+            if (string.IsNullOrWhiteSpace(manifestJson))
                 continue;
 
             try
             {
-                var manifest = JsonSerializer.Deserialize<ToolManifestFile>(fileResult.Stdout, s_jsonOpts);
+                var manifest = JsonSerializer.Deserialize<ToolManifestFile>(manifestJson, s_jsonOpts);
                 if (manifest is not null && !string.IsNullOrWhiteSpace(manifest.Name))
                 {
                     manifests.Add(new ToolManifest(
@@ -294,6 +373,30 @@ public sealed class ToolBucketService : IToolBucketService
         }
 
         return manifests;
+    }
+
+    private static HttpClient CreateDefaultHttpClient()
+    {
+        var client = new HttpClient();
+        EnsureGitHubHeaders(client);
+        return client;
+    }
+
+    private static void EnsureGitHubHeaders(HttpClient client)
+    {
+        if (!client.DefaultRequestHeaders.UserAgent.Any())
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("McpServer-ToolBucketService/1.0");
+
+        if (!client.DefaultRequestHeaders.Accept.Any())
+            client.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
+    }
+
+    private static string Truncate(string? value)
+    {
+        if (string.IsNullOrEmpty(value))
+            return string.Empty;
+
+        return value.Length <= 500 ? value : value[..500];
     }
 
     private IQueryable<ToolBucketEntity> GetVisibleBucketsQuery()

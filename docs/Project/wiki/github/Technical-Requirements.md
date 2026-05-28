@@ -445,12 +445,7 @@ SQLite FTS5 full-text search support and hybrid ranking.
 
 ## TR-MCP-DOC-001
 
-### Marketing Documentation Coverage
-- Define a marketing-focused McpServer narrative that explains platform purpose, problem/need, and adopter value proposition.
-- Document key capabilities and differentiators in concise adoption-oriented language aligned with existing FR feature areas.
-- Maintain a supported UI tooling section covering available user surfaces (including VS extension, Web UI, and Director/TUI where applicable) with current support status.
-- Keep the documentation in version control under `docs/` so updates are reviewed and traceable with product changes.
-**Status:** 🔴 Planned
+**Marketing documentation coverage** — Marketing and agent-facing documentation shall explain McpServer purpose, supported UI and agent surfaces, plugin acquisition through the MCP tool registry, single-line JSON stdio guidance, current pipeline references, and generated requirements wiki parity.
 
 ## TR-MCP-DOC-002
 
@@ -609,6 +604,10 @@ Pluggable ingestors for repo/session/external/github/issues.
 ## TR-MCP-MT-003A
 
 `SessionLogService` injects an optional `WorkspaceContext` and stamps `WorkspaceId` on every entity it persists. When the context is null (ingestion / batch import path), the service skips stamping and relies on `McpDbContext.SaveChangesAsync` to auto-fill `WorkspaceId` for Added entities from the DbContext's resolved `_workspaceId`. This ensures POST/GET round-trips work under the same workspace context AND existing rows with empty WorkspaceId remain visible when no workspace header is set.
+
+## TR-MCP-NUKE-001
+
+**Non-interactive PowerShell hosts for Nuke automation** — The root Nuke PowerShell bootstrap and any build-owned pwsh.exe or powershell.exe child process SHALL include -NoLogo, -NoProfile, and -NonInteractive unless an invocation is explicitly documented as interactive. Live deployment guidance SHALL use the same flags.
 
 ## TR-MCP-OPS-001
 

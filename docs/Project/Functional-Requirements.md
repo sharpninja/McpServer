@@ -739,6 +739,16 @@ The MCP Server shall allow agents and API clients to create or update multiple f
 
 **Covered by:** `RequirementsController`, `RequirementsClient`, `RequirementsWorkflow`, `ReplCommandDispatcher`, `ReplYamlMessageValidator`, plugin REPL bridges and schema copies
 
+## FR-MCP-110 Deterministic Nuke PowerShell execution
+
+Nuke build and deployment automation shall run PowerShell child hosts with non-interactive, no-profile flags so user profiles, prompts, aliases, and interactive host behavior cannot alter scripted execution.
+
+**Status:** ✅ Complete
+
+**Technical Implementation:** [TR-MCP-NUKE-001](./Technical-Requirements.md#tr-mcp-nuke-001) | [Mapping](./TR-per-FR-Mapping.md)
+
+**Covered by:** `build.ps1`, `PowerShellInvocationTests`, `RequirementsWikiPublishScriptTests`, live deployment guidance in `docs/` and `scripts/Manage-McpService.ps1`
+
 ## FR-MCP-REPL-001 YAML Protocol STDIO REPL Host
 
 The server shall provide a YAML-envelope STDIO REPL host that accepts structured commands over standard input, executes operations against workspace services, and returns structured YAML responses over standard output. The REPL host shall support the same trust bootstrap, authentication, and workspace resolution semantics as the HTTP and MCP STDIO transports.

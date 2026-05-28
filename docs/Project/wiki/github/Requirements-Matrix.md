@@ -252,7 +252,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-GRAPHRAG-ADHOC-001 | ✅ Complete | src/McpServer.GraphRag, src/McpServer.Support.Mcp/Controllers/GraphRagController.cs |
 | TR-GRAPHRAG-ADHOC-002 | ✅ Complete | src/McpServer.GraphRag |
 | TR-GRAPHRAG-ADHOC-003 | ✅ Complete | src/McpServer.GraphRag |
-| TR-MCP-DOC-001 | ✅ Complete | docs/ folder structure, docs/MCP-SERVER.md, docs/USER-GUIDE.md |
+| TR-MCP-DOC-001 | ✅ Complete | docs/ folder structure, docs/MCP-SERVER.md, docs/USER-GUIDE.md, tests/Build.Tests/DocumentationGuidanceTests.cs |
 | TR-MCP-TODO-007 | ✅ Complete | src/McpServer.Support.Mcp/Services/TodoCreationService.cs |
 | TR-MCP-TODO-008 | ✅ Complete | src/McpServer.Support.Mcp/Services/SqliteTodoService.cs |
 | TEST-MCP-001 | ✅ Complete | tests/McpServer.Support.Mcp.Tests/Configuration |
@@ -412,6 +412,10 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-STDIO-109 | ✅ Complete | Plugin stdio JSON request envelopes |
 | TEST-MCP-145 | ✅ Complete | Requirements batch validation coverage |
 | TEST-MCP-146 | ✅ Complete | Plugin stdio and schema validation coverage |
+| TEST-MCP-147 | ✅ Complete | Documentation guidance contract tests |
+| FR-MCP-110 | ✅ Complete | Deterministic Nuke PowerShell execution |
+| TR-MCP-NUKE-001 | ✅ Complete | Non-interactive PowerShell hosts for Nuke automation |
+| TEST-MCP-148 | ✅ Complete | Nuke PowerShell non-interactive guard tests |
 | FR-01 | Tracked | Functional-Requirements.md |
 | FR-02 | Tracked | Functional-Requirements.md |
 | FR-03 | Tracked | Functional-Requirements.md |
@@ -428,6 +432,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | FR-MCP-107 | Tracked | Functional-Requirements.md |
 | FR-MCP-108 | Tracked | Functional-Requirements.md |
 | FR-MCP-109 | Tracked | Functional-Requirements.md |
+| FR-MCP-110 | Tracked | Functional-Requirements.md |
 | FR-WFL-001 | Tracked | Functional-Requirements.md |
 | TR-01 | Tracked | Technical-Requirements.md |
 | TR-02 | Tracked | Technical-Requirements.md |
@@ -451,6 +456,7 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-MCP-DB-005 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLAN-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-PLUGIN-008 | Tracked | Technical-Requirements.md |
+| TR-MCP-NUKE-001 | Tracked | Technical-Requirements.md |
 | TR-MCP-TODO-009 | Tracked | Technical-Requirements.md |
 | TR-MCP-TPL-007 | Tracked | Technical-Requirements.md |
 | TR-MCP-WEB-001 | Tracked | Technical-Requirements.md |
@@ -476,6 +482,8 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TEST-MCP-144 | Tracked | Testing-Requirements.md |
 | TEST-MCP-145 | Tracked | Testing-Requirements.md |
 | TEST-MCP-146 | Tracked | Testing-Requirements.md |
+| TEST-MCP-147 | Tracked | Testing-Requirements.md |
+| TEST-MCP-148 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-1 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-2 | Tracked | Testing-Requirements.md |
 | TEST-MCP-REPL-007-3 | Tracked | Testing-Requirements.md |

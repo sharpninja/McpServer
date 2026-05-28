@@ -38,7 +38,7 @@ dotnet run --project src\McpServer.Support.Mcp -- --transport stdio --instance d
 #### Windows service deployment
 
 ```powershell
-gsudo pwsh.exe -NoLogo -NoProfile -File .\build.ps1 UpdateService --skip-version-bump
+gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService --skip-version-bump
 Get-Service McpServer
 ```
 
@@ -205,9 +205,9 @@ these transitions automatically during normal startup.
 Built-in maintenance command:
 
 ```powershell
-pwsh.exe ./scripts/Invoke-McpDatabaseEncryptionTransition.ps1 -Operation Verify
-pwsh.exe ./scripts/Invoke-McpDatabaseEncryptionTransition.ps1 -Operation Enable
-pwsh.exe ./scripts/Invoke-McpDatabaseEncryptionTransition.ps1 -Operation Disable
+pwsh.exe -NoLogo -NoProfile -NonInteractive -File ./scripts/Invoke-McpDatabaseEncryptionTransition.ps1 -Operation Verify
+pwsh.exe -NoLogo -NoProfile -NonInteractive -File ./scripts/Invoke-McpDatabaseEncryptionTransition.ps1 -Operation Enable
+pwsh.exe -NoLogo -NoProfile -NonInteractive -File ./scripts/Invoke-McpDatabaseEncryptionTransition.ps1 -Operation Disable
 ```
 
 Execution notes:
@@ -224,12 +224,12 @@ Execution notes:
 Example executions:
 
 ```powershell
-pwsh.exe ./scripts/Invoke-McpDatabaseEncryptionTransition.ps1 `
+pwsh.exe -NoLogo -NoProfile -NonInteractive -File ./scripts/Invoke-McpDatabaseEncryptionTransition.ps1 `
   -Operation Enable `
   -BackupPath E:\backups\mcp-before-tde.bak `
   -Execute
 
-pwsh.exe ./scripts/Invoke-McpDatabaseEncryptionTransition.ps1 `
+pwsh.exe -NoLogo -NoProfile -NonInteractive -File ./scripts/Invoke-McpDatabaseEncryptionTransition.ps1 `
   -Operation Disable `
   -CurrentKey "old-sqlite-passphrase" `
   -Execute
@@ -858,7 +858,7 @@ Queue one-shot example:
 
 ### Windows service deployment concerns
 
-- always use the Nuke target: `pwsh.exe -NoLogo -NoProfile -File .\build.ps1 UpdateService`
+- always use the Nuke target: `pwsh.exe -NoLogo -NoProfile -NonInteractive -File .\build.ps1 UpdateService`
 - do not run `scripts\Update-McpService.ps1` directly for service redeployments
 - do not manually overwrite `C:\ProgramData\McpServer`
 

@@ -10,7 +10,7 @@ Workspace-scoped AI agent infrastructure for .NET — context retrieval, TODO or
 - **Semantic search** — ONNX-based vector embeddings with HNSW indexing, optional GraphRAG enhancement
 - **Requirements traceability** — FR/TR/TEST document management with validation and Markdown/ZIP export
 - **Multi-provider storage** — SQLite, SQL Server, and PostgreSQL with automatic migrations
-- **REPL CLI tool** — `mcpserver-repl` for interactive and agent-STDIO access via YAML envelope protocol
+- **REPL CLI tool** — `mcpserver-repl` for interactive use and agent STDIO access via single-line JSON request envelopes
 - **Typed .NET client** — `SharpNinja.McpServer.Client` NuGet package covering all API endpoints
 
 ## Quick Start
@@ -35,7 +35,7 @@ src/
   McpServer.Support.Mcp     ASP.NET Core server (controllers, STDIO host, auth)
   McpServer.Client           Typed REST client library (NuGet)
   McpServer.McpAgent         Microsoft Agent Framework integration
-  McpServer.Repl.Core        REPL protocol, YAML envelope, trust bootstrap
+  McpServer.Repl.Core        REPL protocol, request envelopes, trust bootstrap
   McpServer.Repl.Host        mcpserver-repl CLI tool
   McpServer.Services         Business logic (ingestion, indexing, TODO, GitHub, agents)
   McpServer.Storage          EF Core abstraction + vector indexing
@@ -68,6 +68,8 @@ dotnet run --project src/McpServer.Support.Mcp -- --transport stdio --instance d
 mcpserver-repl --interactive              # interactive mode
 mcpserver-repl --agent-stdio              # STDIO mode for agent integration
 ```
+
+Direct `--agent-stdio` callers send one single-line JSON request envelope per stdin line. Do not send formatted YAML or a `type: batch` envelope.
 
 ## API Surface
 

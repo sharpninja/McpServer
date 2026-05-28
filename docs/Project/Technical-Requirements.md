@@ -446,7 +446,11 @@ SQLite FTS5 full-text search support and hybrid ranking.
 - Document key capabilities and differentiators in concise adoption-oriented language aligned with existing FR feature areas.
 - Maintain a supported UI tooling section covering available user surfaces (including VS extension, Web UI, and Director/TUI where applicable) with current support status.
 - Keep the documentation in version control under `docs/` so updates are reviewed and traceable with product changes.
-**Status:** 🔴 Planned
+- Maintain an executable documentation guidance guard that verifies agent STDIO, plugin acquisition, pipeline, and generated requirements wiki guidance stays aligned with current workspace contracts.
+
+**Status:** ✅ Complete
+
+**Covered by:** `docs/`, `docs/AGENT-PLUGIN-AVAILABILITY.md`, `docs/REPL-AGENT-GUIDE.md`, `templates/prompt-templates.yaml`, `tests/Build.Tests/DocumentationGuidanceTests.cs`
 
 ## TR-MCP-DOC-002
 
@@ -641,6 +645,14 @@ Operational scripts for startup, health checks, packaging, config validation, an
 **Status:** ✅ Complete
 
 **Covered by:** Codex/Claude/Copilot requirement skill docs and `repl-invoke.sh`, Cline `repl-bridge.ts`, Cline schema preflight validation
+
+## TR-MCP-NUKE-001
+
+**Non-interactive PowerShell hosts for Nuke automation** — The root Nuke PowerShell bootstrap and any build-owned `pwsh.exe` or `powershell.exe` child process shall include `-NoLogo`, `-NoProfile`, and `-NonInteractive` unless an invocation is explicitly documented as interactive. Live deployment guidance shall use the same flags.
+
+**Status:** ✅ Complete
+
+**Covered by:** `build.ps1`, `PowerShellInvocationTests`, `RequirementsWikiPublishScriptTests`, `scripts/Manage-McpService.ps1`, `docs/USER-GUIDE.md`, `docs/FAQ.md`, `docs/MCP-SERVER.md`, `docs/AGENT-PLUGIN-AVAILABILITY.md`
 
 ## TR-MCP-POL-001
 

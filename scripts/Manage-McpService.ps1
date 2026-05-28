@@ -77,7 +77,7 @@ function Get-ServiceExePath {
 }
 
 function Publish-App {
-    Write-Error "Direct service publishing is disabled. Use: gsudo pwsh.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Update-McpService.ps1"
+    Write-Error "Direct service publishing is disabled. Use: gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .\scripts\Update-McpService.ps1"
 }
 
 # ---------------------------------------------------------------------------
@@ -85,7 +85,7 @@ function Publish-App {
 # ---------------------------------------------------------------------------
 
 function Install-McpService {
-    Write-Error "Direct service installation is disabled. Use: gsudo pwsh.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Update-McpService.ps1"
+    Write-Error "Direct service installation is disabled. Use: gsudo pwsh.exe -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .\scripts\Update-McpService.ps1"
 }
 
 function Uninstall-McpService {

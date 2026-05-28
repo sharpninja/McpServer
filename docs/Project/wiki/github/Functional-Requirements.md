@@ -733,6 +733,10 @@ TODO create, update, read, audit, and projection paths shall preserve descriptio
 
 The MCP Server shall allow agents and API clients to create or update multiple functional, technical, and test requirements in one atomic request by submitting a records array.
 
+## FR-MCP-110 Deterministic Nuke PowerShell execution
+
+Nuke build and deployment automation SHALL run PowerShell child hosts with non-interactive, no-profile flags so user profiles, prompts, aliases, and interactive host behavior cannot alter scripted execution.
+
 ## FR-MCP-REPL-001 YAML Protocol STDIO REPL Host
 
 The server shall provide a YAML-envelope STDIO REPL host that accepts structured commands over standard input, executes operations against workspace services, and returns structured YAML responses over standard output. The REPL host shall support the same trust bootstrap, authentication, and workspace resolution semantics as the HTTP and MCP STDIO transports.

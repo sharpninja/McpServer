@@ -283,7 +283,7 @@ templates:
 
       1. Read this marker file for connection details and API key.
 
-      2. Bootstrap the required plugin named for your agent in the top-level `agent_plugins` contract. Codex must use `mcpserver-codex-plugin`; Claude must use `mcpserver-claude-code-plugin`; Copilot must use `mcpserver-copilot-plugin`; Cline must use `mcpserver-cline-plugin`; Grok must use `mcpserver-grok-plugin`.
+      2. Bootstrap the required plugin named for your agent in the top-level `agent_plugins` contract. Get the plugin through the MCP Server tool registry before relying on local root hints: search `/mcpserver/tools/search?keyword=<plugin_name>` for the installed tool definition and select the result whose `name` exactly equals `<plugin_name>`; if that exact tool definition is missing, install the definition from `/mcpserver/tools/buckets/official/install?toolName=<plugin_name>`, then search again. Execute the exact tool definition''s returned `commandTemplate` with `targetParent` set to the plugin parent directory to clone or update the plugin repository. Codex must use `mcpserver-codex-plugin`; Claude must use `mcpserver-claude-code-plugin`; Copilot must use `mcpserver-copilot-plugin`; Cline must use `mcpserver-cline-plugin`; Grok must use `mcpserver-grok-plugin`.
 
       3. Verify the marker signature using the workspace API key in this file before contacting the server.
 
@@ -299,11 +299,13 @@ templates:
       ## Required Agent Plugins
 
       - `agent_plugins.policy` is `required`. The plugin contract or deterministic digest is covered by marker signature verification.
-      - If your matching plugin is unavailable, stop MCP usage, record `MCP_PLUGIN_UNAVAILABLE:<Agent>`, and continue only with non-MCP local diagnosis.
+      - Plugin acquisition is the bootstrap exception to the normal plugin-only rule: if the matching plugin is not already available locally, use the authenticated tool registry endpoints in this marker to locate/install the matching `mcpserver-*-plugin` tool definition from the `official` bucket and run its clone/update command. After acquisition, bootstrap and use the matching plugin for normal MCP work.
+      - If your matching plugin cannot be acquired through the tool registry or remains unavailable after acquisition, stop MCP usage, record `MCP_PLUGIN_UNAVAILABLE:<Agent>`, and continue only with non-MCP local diagnosis.
       - Do not substitute raw REST, generic `mcpserver-repl`, helper modules, or another agent''s plugin for normal session, TODO, requirements, import/export, or traceability operations.
       - Another agent''s plugin may be inspected only for read-only diagnosis of plugin installation or contract drift.
       - Normal workspace shell commands use `pwsh.exe`. Plugin-owned hooks may use the runner declared by that plugin contract.
       - Codex plugin tools/hooks must satisfy `agent_plugins.agents.Codex`; Claude plugin tools/hooks must satisfy `agent_plugins.agents.Claude`; Copilot plugin tools/hooks must satisfy `agent_plugins.agents.Copilot`; Cline MCP tools must satisfy `agent_plugins.agents.Cline`; Grok plugin skills/hooks must satisfy `agent_plugins.agents.Grok`.
+      - Local plugin root hints in `agent_plugins.agents.<Agent>.root_hints` are fallback verification hints after tool-registry acquisition, not the primary install source.
 
 
       ## Codex MCP Quickstart
@@ -316,7 +318,7 @@ templates:
 
       3. Complete the session-log turn intentionally with `Invoke-CodexMcpPlugin.ps1 -Command CompleteTurn -Response <final response>` before the final answer when the stop gate cannot infer completion.
 
-      4. For `mcpserver-repl --agent-stdio`, send one YAML envelope per document separated by `---`. Do not send a single `type: batch` envelope; batch envelopes are rejected with `unsupported_batch_envelope`.
+      4. For `mcpserver-repl --agent-stdio`, send one single-line JSON request envelope per stdin line. Do not send formatted YAML or a single `type: batch` envelope; batch envelopes are rejected with `unsupported_batch_envelope`.
 
 
       ## Federation Topology
