@@ -34,6 +34,9 @@
          Enables focused tests for IParityCoreAdapter + RealCoreAdapter (stub + real paths) to run in AgentPluginCore suite.
          This is the documented "temp inclusion validation" path. Removed post-wave or when dedicated parity test proj added. -->
     <Compile Include="..\AgentPluginParity\harness-stub.cs" />
+    <!-- Phase 3: ClaudeCode plugin adoption parity tests (TR-MCP-AGENT-PARITY-020) -->
+    <Compile Include="..\AgentPluginParity\Plugins\ClaudeCode_GapTests.cs" />
+    <Compile Include="..\AgentPluginParity\Plugins\ClaudeCode_V4ParityTests.cs" />
   </ItemGroup>
 
   <ItemGroup>
