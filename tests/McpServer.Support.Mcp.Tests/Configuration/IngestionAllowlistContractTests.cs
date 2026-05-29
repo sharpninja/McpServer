@@ -55,19 +55,19 @@ public sealed class IngestionAllowlistContractTests
     /// Verifies that the marker prompt template carries the Byrd V3 validation gate.
     /// </summary>
     /// <remarks>
-    /// Requirement coverage: Byrd Development Process V3 validation discipline.
+    /// Requirement coverage: Byrd Development Process V4 validation discipline.
     /// Test data: <c>templates\prompt-templates.yaml</c>.
     /// This data is used to ensure generated marker prompts tell agents that the
     /// iteration cannot advance unless the executed test gate has no failures
     /// and no skips.
     /// </remarks>
     [Fact]
-    public void MarkerPromptTemplate_ContainsByrdV3HundredPercentTestGate()
+    public void MarkerPromptTemplate_ContainsByrdV4HundredPercentTestGate()
     {
         var path = FindFileFromRepoRoot("templates", "prompt-templates.yaml");
         var content = File.ReadAllText(path);
 
-        Assert.Contains("Byrd Development Process V3", content);
+        Assert.Contains("Byrd Development Process V4", content);
         Assert.Contains("100% test success", content);
         Assert.Contains("zero failed tests and zero skipped tests", content);
         Assert.Contains("Tests are the progress ledger", content);
@@ -172,7 +172,7 @@ public sealed class IngestionAllowlistContractTests
     /// Verifies active test source files do not hide incomplete work with xUnit skip mechanics.
     /// </summary>
     /// <remarks>
-    /// Requirement coverage: Byrd Development Process V3 validation discipline.
+    /// Requirement coverage: Byrd Development Process V4 validation discipline.
     /// Test data: all C# source files under the repository <c>tests</c> folder.
     /// This data is used to make progress visible: active validation suites must
     /// pass or fail directly instead of silently skipping unfinished behavior.
@@ -201,7 +201,7 @@ public sealed class IngestionAllowlistContractTests
 
         Assert.True(
             offenders.Count == 0,
-            "Byrd V3 requires test gates to show direct progress; remove skip mechanics or move deferred work to MCP TODO state. Offenders: " + string.Join(", ", offenders));
+            "Byrd V4 requires test gates to show direct progress; remove skip mechanics or move deferred work to MCP TODO state. Offenders: " + string.Join(", ", offenders));
     }
 
     /// <summary>

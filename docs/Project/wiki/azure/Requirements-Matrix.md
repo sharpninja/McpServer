@@ -502,3 +502,13 @@ Traceability policy: see `Requirements-Traceability-Policy.md`.
 | TR-GEN-YAML-001 | Tracked | Technical-Requirements.md |
 | TR-TEST-001 | Tracked | Technical-Requirements.md |
 | FR-TEST-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-AGENT-PARITY-001 | Tracked | Functional-Requirements.md |
+| FR-MCP-AGENT-PARITY-002 | Tracked | Functional-Requirements.md |
+| TR-MCP-AGENT-PARITY-010 | Tracked | Technical-Requirements.md |
+| TR-MCP-AGENT-PARITY-011 | Tracked | Technical-Requirements.md |
+| TR-MCP-AGENT-PARITY-012 | Tracked | Technical-Requirements.md |
+| TR-MCP-AGENT-PARITY-013 | Tracked | Technical-Requirements.md |
+| TR-MCP-AGENT-PARITY-020 | Tracked | Technical-Requirements.md |
+| TR-MCP-AGENT-PARITY-020..027 | Tracked | Technical-Requirements.md |
+| TR-MCP-AGENT-PARITY-020-027 | Tracked | Technical-Requirements.md |
+| TR-MCP-AGENT-PARITY-030 | Tracked | Technical-Requirements.md |

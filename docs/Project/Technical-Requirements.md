@@ -256,7 +256,7 @@ ASP.NET Core 9 server with HTTP and STDIO MCP transport.
 
 ## TR-MCP-BYRD-005
 
-**Byrd process plan creation requirements** — The Byrd Development Process V3 document must define plan creation requirements for decision-complete frontier-model handoff plans, including required FR/TR/TEST capture, TDD tests, expected red state, green criteria, validation scope, and acceptance criteria before implementation begins.
+**Byrd process plan creation requirements** — The Byrd Development Process V4 document must define plan creation requirements for decision-complete frontier-model handoff plans, including required FR/TR/TEST capture, TDD tests, expected red state, green criteria, validation scope, and acceptance criteria before implementation begins.
 
 ## TR-MCP-CFG-001
 

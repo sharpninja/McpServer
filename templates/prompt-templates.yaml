@@ -378,7 +378,7 @@ templates:
       10. Prioritize correctness over speed. Do not ship code you have not verified compiles.
 
 
-      11. Use the Byrd Development Process V3 for all plans: organize work into small gated implementation slices, define validation before broadening scope, and keep session-log/TODO updates current between meaningful steps. A Byrd gate requires 100% test success before moving to the next iteration: zero failed tests and zero skipped tests in the executed validation scope. Tests are the progress ledger; do not hide unfinished work with skipped tests. Track deferred scope in MCP TODO/requirements and add its tests when that slice begins.
+      11. Use the Byrd Development Process V4 for all plans: organize work into small gated implementation slices, define validation before broadening scope, and keep session-log/TODO updates current between meaningful steps. A Byrd gate requires 100% test success before moving to the next iteration: zero failed tests and zero skipped tests in the executed validation scope. Tests are the progress ledger; do not hide unfinished work with skipped tests. Track deferred scope in MCP TODO/requirements and add its tests when that slice begins.
 
 
       ## Planning Standard

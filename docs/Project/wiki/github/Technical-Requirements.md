@@ -157,6 +157,38 @@ When a session is completed, the module SHALL remove both the legacy wrapper cac
 
 **Covered by:** `tools/powershell/McpSession.psm1`, `tools/powershell/McpTodo.psm1`, `tools/powershell/McpContext.psm1`, `docs/context/module-bootstrap.md`, `docs/USER-GUIDE.md`
 
+## TR-MCP-AGENT-PARITY-010
+
+**TR-MCP-AGENT-PARITY-010** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-010.
+
+## TR-MCP-AGENT-PARITY-011
+
+**TR-MCP-AGENT-PARITY-011** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-011.
+
+## TR-MCP-AGENT-PARITY-012
+
+**TR-MCP-AGENT-PARITY-012** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-012.
+
+## TR-MCP-AGENT-PARITY-013
+
+**TR-MCP-AGENT-PARITY-013** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-013.
+
+## TR-MCP-AGENT-PARITY-020
+
+**TR-MCP-AGENT-PARITY-020** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-020.
+
+## TR-MCP-AGENT-PARITY-020..027
+
+**TR-MCP-AGENT-PARITY-020..027** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-020..027.
+
+## TR-MCP-AGENT-PARITY-020-027
+
+**TR-MCP-AGENT-PARITY-020-027** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-020-027.
+
+## TR-MCP-AGENT-PARITY-030
+
+**TR-MCP-AGENT-PARITY-030** — Placeholder requirement backfilled for TODO link TR-MCP-AGENT-PARITY-030.
+
 ## TR-MCP-API-001
 
 REST routes for todo/session/context/repo/github with OpenAPI.
