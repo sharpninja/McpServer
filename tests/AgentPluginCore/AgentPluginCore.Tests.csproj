@@ -39,6 +39,9 @@
     <Compile Include="..\AgentPluginParity\Plugins\ClaudeCode_V4ParityTests.cs" />
     <!-- Phase 4: Grok plugin adoption parity tests (TR-MCP-AGENT-PARITY-020) -->
     <Compile Include="..\AgentPluginParity\Plugins\Grok_V4ParityTests.cs" />
+    <!-- Phase 5: Codex plugin adoption parity tests (TR-MCP-AGENT-PARITY-020) -->
+    <Compile Include="..\AgentPluginParity\Plugins\Codex_GapTests.cs" />
+    <Compile Include="..\AgentPluginParity\Plugins\Codex_V4ParityTests.cs" />
   </ItemGroup>
 
   <ItemGroup>
