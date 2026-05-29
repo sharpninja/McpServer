@@ -206,6 +206,9 @@ PublishScripts/
 **/[Pp]ackages/*
 # except build/, which is used as an MSBuild target.
 !**/[Pp]ackages/build/
+# except packages/mcpserver-agent-core - TS shared agent-core package (not NuGet)
+!packages/mcpserver-agent-core/
+!packages/mcpserver-agent-core/**
 # Uncomment if necessary however generally it will be regenerated when needed
 #!**/[Pp]ackages/repositories.config
 # NuGet v3's project.json files produces more ignorable files

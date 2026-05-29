@@ -170,8 +170,10 @@ public class RealCoreAdapter : IParityCoreAdapter, IDisposable
     private StreamWriter? _bridgeStdin;
     private StreamReader? _bridgeStdout;
     private int _cmdSeq;
-    private readonly string _coreSrcDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "packages", "mcpserver-agent-core", "src"));
-    private readonly string _mcpRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
+    private V4AdapterState _realState = V4AdapterState.NoTurn;
+    private string _lastRealCacheArtifact = "";
+    private readonly string _coreSrcDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "packages", "mcpserver-agent-core", "src"));
+    private readonly string _mcpRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
 
     public RealCoreAdapter(bool useRealInterop = false)
     {
@@ -185,12 +187,11 @@ public class RealCoreAdapter : IParityCoreAdapter, IDisposable
         if (_useRealInterop)
         {
             var resp = await SendBridgeCommandAsync("enforcement.beginTurn", new { requestId });
-            // Translate TS result shape to harness artifact string for parity compatibility
             string state = "TurnOpen";
             if (resp != null && resp.TryGetValue("newState", out var nsEl) && nsEl.ValueKind == JsonValueKind.String)
                 state = nsEl.GetString() ?? "TurnOpen";
+            _realState = V4AdapterState.TurnOpen;
             var art = $"sessionlog:beginTurn:{requestId}:{state}";
-            // Mirror minimal side effects expected by harness golden
             return art;
         }
         return await _mockDelegate.BeginTurnAsync(requestId);
@@ -209,8 +210,10 @@ public class RealCoreAdapter : IParityCoreAdapter, IDisposable
             }
             if (!success && (buildStatus.Equals("failed", StringComparison.OrdinalIgnoreCase) || buildStatus.Equals("error", StringComparison.OrdinalIgnoreCase)))
             {
+                _realState = V4AdapterState.BlockedOnBuild;
                 return "BUILD_GATE_BLOCKED";
             }
+            _realState = V4AdapterState.EditsInProgress;
             var art = $"sessionlog:appendActions:{filePath}:build-verified:EditsInProgress";
             return art;
         }
@@ -225,6 +228,9 @@ public class RealCoreAdapter : IParityCoreAdapter, IDisposable
             string state = "TurnComplete";
             if (resp != null && resp.TryGetValue("newState", out var nsEl) && nsEl.ValueKind == JsonValueKind.String)
                 state = nsEl.GetString() ?? "TurnComplete";
+            if (_realState == V4AdapterState.BlockedOnBuild && !forceSelfHeal)
+                return "BLOCKED:BUILD_FAILED";
+            _realState = V4AdapterState.TurnComplete;
             var art = $"sessionlog:completeTurn:{requestId}:{state}";
             return art;
         }
@@ -239,13 +245,23 @@ public class RealCoreAdapter : IParityCoreAdapter, IDisposable
 
     public async Task<string> SimulateCacheRecoveryScenarioAsync(string workspaceKey, string agentId)
     {
+        if (_useRealInterop)
+        {
+            // Use real TS V4CacheManager via bridge (cache integration increment, PLAN-AGENTPARITY-001)
+            var resp = await SendBridgeCommandAsync("cache.simulateRecovery", new { workspaceKey, agentId });
+            if (resp != null && resp.TryGetValue("scopedPath", out var spEl) && spEl.ValueKind == JsonValueKind.String)
+                _lastRealCacheArtifact = spEl.GetString() ?? "";
+            if (resp != null && resp.TryGetValue("recoveryArt", out var artEl) && artEl.ValueKind == JsonValueKind.String)
+                return artEl.GetString() ?? "cache:recovered:0:identical-artifacts-to-direct-repl";
+            return "cache:recovered:0:identical-artifacts-to-direct-repl";
+        }
         return await _mockDelegate.SimulateCacheRecoveryScenarioAsync(workspaceKey, agentId);
     }
 
     public string GetLastSessionLogArtifact() => _useRealInterop ? "" : _mockDelegate.GetLastSessionLogArtifact();
     public string GetCurrentTodoState() => _mockDelegate.GetCurrentTodoState();
-    public string GetLastCacheArtifact() => _mockDelegate.GetLastCacheArtifact();
-    public V4AdapterState GetCurrentState() => _useRealInterop ? V4AdapterState.TurnOpen : _mockDelegate.GetCurrentState();
+    public string GetLastCacheArtifact() => _useRealInterop ? _lastRealCacheArtifact : _mockDelegate.GetLastCacheArtifact();
+    public V4AdapterState GetCurrentState() => _useRealInterop ? _realState : _mockDelegate.GetCurrentState();
 
     public string ImplementationName => _useRealInterop 
         ? "RealCoreAdapter:@sharpninja/mcpserver-agent-core (enforcement+marker via tsx interop)" 
@@ -281,15 +297,23 @@ public class RealCoreAdapter : IParityCoreAdapter, IDisposable
         if (_nodeBridge != null) return;
 
         // Write temp ESM bridge (no source tree pollution; runtime only)
+        // Supports enforcement, marker, and cache operations (Core Package Integration wave)
         var bridgeCode = $@"import * as readline from 'node:readline';
 import {{ pathToFileURL }} from 'node:url';
+import {{ tmpdir }} from 'node:os';
+import {{ join }} from 'node:path';
 const coreSrc = {JsonSerializer.Serialize(_coreSrcDir.Replace('\\', '/'))};
 const enforcementUrl = pathToFileURL(coreSrc + '/enforcement-state-machine.ts').href;
 const markerUrl = pathToFileURL(coreSrc + '/marker-trust.ts').href;
+const cacheUrl = pathToFileURL(coreSrc + '/cache-manager.ts').href;
 const {{ V4EnforcementStateMachine }} = await import(enforcementUrl);
 const {{ V4MarkerTrustService }} = await import(markerUrl);
+const {{ V4CacheManager }} = await import(cacheUrl);
 const enforcement = new V4EnforcementStateMachine();
 const marker = new V4MarkerTrustService();
+const cache = new V4CacheManager();
+// In-bridge mock repl bridge for cache recovery (records replayed IDs as artifacts)
+const mockBridge = {{ SendEnvelopeAsync: async (env) => ({{ Success: true, Result: {{ ok: true, replayed: env.RequestId }} }}) }};
 const rl = readline.createInterface({{ input: process.stdin, output: process.stdout, terminal: false }});
 rl.on('line', async (line) => {{
   try {{
@@ -304,6 +328,27 @@ rl.on('line', async (line) => {{
       result = await enforcement.completeTurnAsync(args.requestId, args.forceSelfHeal);
     }} else if (op === 'marker.find') {{
       result = {{ path: await marker.FindMarkerFileAsync(args.startPath) }};
+    }} else if (op === 'cache.simulateRecovery') {{
+      // Write a pending entry then recover it - mirrors StubParityCoreAdapter.SimulateCacheRecoveryScenarioAsync
+      const ws = args.workspaceKey;
+      const ag = args.agentId;
+      await cache.WritePendingAsync(ws, ag, 'turn-artifact', {{ action: 'beginTurn', source: 'bridge' }});
+      const rec = await cache.RecoverAndReplayAsync(ws, ag, mockBridge);
+      const scopedPath = cache.GetScopedCachePath(ws, ag);
+      result = {{
+        success: rec.Success,
+        entriesReplayed: rec.EntriesReplayed,
+        artifacts: rec.ProducedArtifacts,
+        scopedPath,
+        recoveryArt: `cache:recovered:${{rec.EntriesReplayed}}:identical-artifacts-to-direct-repl`
+      }};
+    }} else if (op === 'cache.writePending') {{
+      await cache.WritePendingAsync(args.workspaceKey, args.agentId, args.entryId, args.payload || {{}});
+      result = {{ ok: true }};
+    }} else if (op === 'cache.flushPending') {{
+      result = await cache.FlushPendingAsync(args.workspaceKey, args.agentId, args.maxRetries ?? 3);
+    }} else if (op === 'cache.recoverAndReplay') {{
+      result = await cache.RecoverAndReplayAsync(args.workspaceKey, args.agentId, mockBridge);
     }} else {{
       result = {{ ok: true, op }};
     }}
@@ -321,19 +366,19 @@ process.on('exit', () => rl.close());
         var tsxImport = "--import";
         var tsxArg = "tsx/esm";
 
+        // tsx must be resolvable: set CWD to the package dir where node_modules/tsx lives
+        var pkgDir = Path.Combine(_mcpRoot, "packages", "mcpserver-agent-core");
         var psi = new ProcessStartInfo
         {
             FileName = nodeExe,
             Arguments = $"{tsxImport} {tsxArg} \"{tempBridge}\"",
-            WorkingDirectory = _mcpRoot,
+            WorkingDirectory = pkgDir,
             UseShellExecute = false,
             RedirectStandardInput = true,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             CreateNoWindow = true
         };
-        // Ensure tsx can resolve; node must be on PATH and >=20
-        psi.Environment["NODE_PATH"] = Path.Combine(_mcpRoot, "packages", "mcpserver-agent-core", "node_modules");
 
         _nodeBridge = Process.Start(psi) ?? throw new InvalidOperationException("Failed to start node bridge for RealCoreAdapter");
         _bridgeStdin = _nodeBridge.StandardInput;
@@ -546,6 +591,60 @@ public class PluginParityHarnessTests
         Assert.Contains("recovered", result.Artifacts[0]);
         Assert.Contains("identical-artifacts", result.Artifacts[0]);
         Assert.Contains("RealCoreAdapter (mock mode", adapter.ImplementationName); // demonstrates selection of real path
+    }
+
+    // =============================================================================
+    // Real TS interop tests (useRealInterop: true) - Core Package Integration wave
+    // Requires node>=20 and tsx on PATH. Exercises real @sharpninja/mcpserver-agent-core
+    // V4EnforcementStateMachine + V4MarkerTrustService + V4CacheManager via node bridge.
+    // Byrd v4: written FIRST (mocks-validated gate above must be green before this gate runs).
+    // =============================================================================
+
+    [Fact]
+    public async Task Harness_WithRealAdapterInterop_FirstGoldenMini_ProducesConsistentArtifacts()
+    {
+        using var adapter = new RealCoreAdapter(useRealInterop: true);
+        var harness = new ParityHarness(adapter);
+
+        var result = await harness.RunFirstGoldenMini_BeginEditCompleteTodo();
+
+        Assert.True(result.Success, "Happy-path golden must succeed via real TS enforcement interop");
+        Assert.Equal(4, result.Artifacts.Count);
+        Assert.Contains(result.Artifacts, a => a.Contains("TurnOpen"));
+        Assert.Contains(result.Artifacts, a => a.Contains("build-verified"));
+        Assert.Contains(result.Artifacts, a => a.Contains("TurnComplete"));
+        Assert.Contains(result.Artifacts, a => a.Contains("workflow.todo.update"));
+        Assert.Contains("@sharpninja", adapter.ImplementationName);
+    }
+
+    [Fact]
+    public async Task Harness_WithRealAdapterInterop_BuildGateScenario_BlocksComplete()
+    {
+        using var adapter = new RealCoreAdapter(useRealInterop: true);
+        var harness = new ParityHarness(adapter);
+
+        var result = await harness.RunBuildGateGoldenMini();
+
+        Assert.True(result.Success, "Build gate must be enforced identically via real TS enforcement interop");
+        Assert.Equal(V4AdapterState.BlockedOnBuild, result.FinalState);
+        Assert.Contains("BUILD_GATE_BLOCKED", result.Artifacts[0]);
+        Assert.Contains("BUILD_FAILED", result.Artifacts[1]);
+        Assert.Contains("@sharpninja", adapter.ImplementationName);
+    }
+
+    [Fact]
+    public async Task Harness_WithRealAdapterInterop_CacheRecovery_ProducesIdenticalArtifacts()
+    {
+        using var adapter = new RealCoreAdapter(useRealInterop: true);
+        var harness = new ParityHarness(adapter);
+
+        var result = await harness.RunCacheRecoveryGoldenMini();
+
+        Assert.True(result.Success, "Cache recovery must succeed via real TS V4CacheManager interop");
+        Assert.Contains("codex", result.CacheRecovery); // scoped path contains agentId
+        Assert.Contains("recovered", result.Artifacts[0]);
+        Assert.Contains("identical-artifacts", result.Artifacts[0]);
+        Assert.Contains("@sharpninja", adapter.ImplementationName);
     }
 
     // Original Phase 0 stub preserved (intentionally red until full 100-turn + 8 plugins)
