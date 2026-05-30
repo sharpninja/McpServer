@@ -1,12 +1,29 @@
-// Phase 0 "parity gap" test for ClaudeCowork (per plan pattern)
-// Must fail until the plugin adoption PR closes the gap per v4 process.
+// Phase 9 gap closure: ClaudeCowork plugin v4 parity adoption (PLAN-AGENTPARITY-001).
+// Replaces Phase 0 always-false stub with real assertions against the plugin repo.
+// TR-MCP-AGENT-PARITY-020 (ClaudeCowork plugin adoption).
+using System.IO;
 using Xunit;
+
 namespace McpServer.AgentPluginParity.Tests.Plugins;
+
+/// <summary>TR-MCP-AGENT-PARITY-020: ClaudeCowork plugin phase 9 parity gap sentinel.</summary>
 public class ClaudeCowork_GapTests
 {
+    private static readonly string PluginRoot = ClaudeCowork_V4ParityTests.ResolvePluginRoot();
+
+    /// <summary>Sentinel: ENFORCEMENT.md must exist with v4 reference (Phase 9 primary gap).</summary>
     [Fact]
     public void ClaudeCowork_MustCloseV4ParityGaps_ForV4Compliance()
     {
-        Assert.True(false, "Phase 0 gap stub - failing until adoption");
+        var possible = new[]
+        {
+            Path.Combine(PluginRoot, "ENFORCEMENT.md"),
+            Path.Combine(PluginRoot, "lib", "ENFORCEMENT.md"),
+            Path.Combine(PluginRoot, "docs", "ENFORCEMENT.md"),
+        };
+        var found = System.Array.Find(possible, File.Exists);
+        Assert.True(found != null,
+            "ENFORCEMENT.md missing - required for Phase 9 v4 parity (TR-MCP-AGENT-PARITY-020)");
+        Assert.Contains("v4", File.ReadAllText(found!), System.StringComparison.OrdinalIgnoreCase);
     }
 }

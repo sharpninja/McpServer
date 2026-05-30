@@ -51,6 +51,12 @@
     <!-- Phase 8: Copilot plugin adoption parity tests (TR-MCP-AGENT-PARITY-020) -->
     <Compile Include="..\AgentPluginParity\Plugins\Copilot_GapTests.cs" />
     <Compile Include="..\AgentPluginParity\Plugins\Copilot_V4ParityTests.cs" />
+    <!-- Phase 9: ClaudeCowork plugin adoption parity tests (TR-MCP-AGENT-PARITY-020) -->
+    <Compile Include="..\AgentPluginParity\Plugins\ClaudeCowork_GapTests.cs" />
+    <Compile Include="..\AgentPluginParity\Plugins\ClaudeCowork_V4ParityTests.cs" />
+    <!-- Phase 10: OpenCode plugin adoption parity tests (TR-MCP-AGENT-PARITY-020) -->
+    <Compile Include="..\AgentPluginParity\Plugins\OpenCode_GapTests.cs" />
+    <Compile Include="..\AgentPluginParity\Plugins\OpenCode_V4ParityTests.cs" />
   </ItemGroup>
 
   <ItemGroup>
