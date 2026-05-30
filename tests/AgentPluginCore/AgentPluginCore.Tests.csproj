@@ -45,6 +45,9 @@
     <!-- Phase 6: Cline plugin adoption parity tests (TR-MCP-AGENT-PARITY-020) -->
     <Compile Include="..\AgentPluginParity\Plugins\Cline_GapTests.cs" />
     <Compile Include="..\AgentPluginParity\Plugins\Cline_V4ParityTests.cs" />
+    <!-- Phase 7: ClineV2 plugin adoption parity tests (TR-MCP-AGENT-PARITY-020) -->
+    <Compile Include="..\AgentPluginParity\Plugins\ClineV2_GapTests.cs" />
+    <Compile Include="..\AgentPluginParity\Plugins\ClineV2_V4ParityTests.cs" />
   </ItemGroup>
 
   <ItemGroup>
