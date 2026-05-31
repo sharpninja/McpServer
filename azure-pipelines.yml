@@ -75,10 +75,8 @@ pr:
       - tools/**
 
 variables:
+  - group: 'McpSharedModules'   # <-- IMPORTANT: Replace with the actual name of your variable group that contains PSGalleryApiKey and NPM_API_KEY
   AgentPoolName: Default
-  # Secrets required for shared module publishing (set these in the pipeline or variable group):
-  #   - PSGalleryApiKey   (PowerShell Gallery API key)
-  #   - NPM_API_KEY       (npm automation token for @sharpninja scope)
   BuildConfiguration: Release
   TestProject: tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj
   ServerProject: src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj
