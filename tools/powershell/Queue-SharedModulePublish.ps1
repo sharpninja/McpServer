@@ -11,9 +11,9 @@
 #   - The values are passed only to the az CLI at queue time.
 #
 # Usage:
-#   1. Set the secrets once in your local environment (PowerShell session, user profile, etc.):
-#        $env:PSGALLERY_API_KEY = "your-psgallery-key-here"
-#        $env:NPM_API_KEY       = "your-npm-token-here"
+#   1. Set the secrets once in your local environment using these exact names:
+#        $env:PSGalleryApiKey = "your-psgallery-key-here"
+#        $env:NPM_API_KEY     = "your-npm-token-here"
 #
 #   2. Run this script:
 #        pwsh -File tools/powershell/Queue-SharedModulePublish.ps1
