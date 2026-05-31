@@ -395,7 +395,7 @@ jobs:
       # Publish PowerShell module (McpRepl) to PowerShell Gallery
       - task: PowerShell@2
         displayName: Publish McpRepl to PowerShell Gallery
-        condition: succeeded()
+        condition: always()
         continueOnError: true
         env:
           # Refresh: PSGalleryApiKey secret mapped here so Publish-Module can see it via $env:
@@ -438,7 +438,7 @@ jobs:
 
       - task: PowerShell@2
         displayName: Publish @sharpninja/mcp-repl to npm
-        condition: succeeded()
+        condition: always()
         continueOnError: true
         env:
           # Refresh: NPM_API_KEY secret mapped to the conventional NODE_AUTH_TOKEN that npm tooling uses
