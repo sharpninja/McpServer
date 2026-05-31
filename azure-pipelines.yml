@@ -477,10 +477,9 @@ jobs:
         condition: always()
         continueOnError: true
         env:
-          # Refresh: NPM_API_KEY secret mapped to the conventional NODE_AUTH_TOKEN that npm tooling uses
+          # Both mappings for convenience in the script
           NODE_AUTH_TOKEN: $(NPM_API_KEY)
-        env:
-          NPM_API_KEY: $(NPM_API_KEY)   # Map secret into the process environment
+          NPM_API_KEY: $(NPM_API_KEY)
         inputs:
           pwsh: true
           targetType: inline
