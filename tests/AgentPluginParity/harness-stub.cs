@@ -647,11 +647,12 @@ public class PluginParityHarnessTests
         Assert.Contains("@sharpninja", adapter.ImplementationName);
     }
 
-    // Original Phase 0 stub preserved (intentionally red until full 100-turn + 8 plugins)
-    // NOTE: Skip here only for temp inclusion validation in AgentPluginCore.Tests (avoids xUnit2020 + fail during Byrd green gate run). Source intent remains red doc stub.
-    [Fact(Skip = "Phase 0/Phase 2 doc stub - red until 100-turn matrix (TR-030 Phase 11)")]
+    // Original Phase 0 stub preserved (intentionally red until full 100-turn + 8 plugins).
+    // Per Byrd V4: this is a deliberate failing red test (not skipped) so progress remains visible.
+    // The contract test TestSources_DoNotDeclareSkippedXunitTests forbids Skip attributes.
+    [Fact]
     public void AllPlugins_ProduceIdenticalV4Artifacts_OnGoldenWorkload()
     {
-        Assert.Fail("Phase 0 stub - failing as required (full 100-turn + matrix in Phase 11)"); // never reached due to Skip
+        Assert.Fail("Phase 0 stub - failing as required (full 100-turn + matrix in Phase 11 / TR-030)");
     }
 }
