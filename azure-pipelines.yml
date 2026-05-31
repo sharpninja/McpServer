@@ -91,20 +91,15 @@ variables:
   AzureArtifactsFeedUrl: ''
 
   # === Shared Module Publishing Secrets (PSGallery + npm) ===
-  # Declared here as empty placeholders so that $(PSGalleryApiKey) and $(NPM_API_KEY)
-  # references inside the publish_shared_modules job are valid to the YAML parser
-  # and queue-time validator. Real values must NEVER live in this file.
+  # Empty placeholders so $(PSGalleryApiKey) / $(NPM_API_KEY) are valid in the
+  # publish_shared_modules job. Real values are supplied at queue time only.
   #
-  # Supply values at queue time only (two supported ways):
-  # 1. Preferred: Run tools/powershell/Queue-SharedModulePublish.ps1 after setting
-  #    $env:PSGalleryApiKey and $env:NPM_API_KEY in your local shell. The script
-  #    passes them via `az pipelines build queue --variables`.
-  # 2. Web UI: Pipeline → Run pipeline → expand "Variables" → add/edit the two names,
-  #    paste the values, mark both as Secret, and ensure "Allow at queue time" is on.
+  # The script tools/powershell/Queue-SharedModulePublish.ps1 now automatically
+  # registers the two variables as secrets in the pipeline definition (via az CLI)
+  # before queuing. No manual UI Variables tab work is required.
   #
-  # The job contains a loud "Validate publish secrets" step (always runs) plus
-  # runtime guards and version checks so missing/invalid keys produce clear messages
-  # instead of mysterious failures. Publishing failures are non-blocking (continueOnError).
+  # The job has a loud "Validate publish secrets" step + guards so you always
+  # see exactly what happened. Publishing failures are non-blocking.
   PSGalleryApiKey: ''
   NPM_API_KEY: ''
 
@@ -403,9 +398,9 @@ jobs:
   #           az storage blob upload-batch --account-name "$(DocsStorageAccount)" --destination '$web' --source $source --overwrite true
 
   # Shared module publishing (McpRepl to PSGallery, @sharpninja/mcp-repl to npm).
-  # Secrets are declared as queue-time variables at the top of this file and supplied
-  # only at queue time (via Queue-SharedModulePublish.ps1 or Run pipeline UI).
-  # The job is deliberately decoupled and non-blocking.
+  # The Queue-SharedModulePublish.ps1 script handles variable registration + value
+  # injection. The job is deliberately decoupled (no dependsOn) and non-blocking
+  # (continueOnError + always() guards).
   - job: publish_shared_modules
     displayName: publish-shared-modules
     # No hard dependsOn so this job can run independently (especially for manual publishes)

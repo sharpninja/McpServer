@@ -18,6 +18,10 @@
 #   2. Run this script:
 #        pwsh -File tools/powershell/Queue-SharedModulePublish.ps1
 #
+#   The script will automatically ensure the two secret variables are registered
+#   in the pipeline definition (idempotent). You no longer need to click in the
+#   UI Variables tab.
+#
 #   The actual secret values will NEVER appear in the script, git history,
 #   pipeline logs (unless you explicitly log them), or this repo.
 
@@ -85,6 +89,48 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 Write-Host "  Azure login token appears valid (expires: $loginCheck)" -ForegroundColor Green
+
+# One-time / idempotent setup (the thing you asked me to "just do"):
+# Register the two secret variables in the pipeline definition so that
+# $(PSGalleryApiKey) / $(NPM_API_KEY) expand correctly when we pass real
+# values via --variables on the queue command.
+# This eliminates the previous manual "go click in the Variables tab" step.
+Write-Host "Ensuring pipeline secret variables are registered..." -ForegroundColor Cyan
+
+$org        = "https://dev.azure.com/McpServer"
+$project    = "McpServer"
+$pipelineId = 1
+
+foreach ($varName in @('PSGalleryApiKey', 'NPM_API_KEY')) {
+    # Check whether it already exists in this pipeline definition
+    $existing = az pipelines variable list `
+        --org $org `
+        --project $project `
+        --pipeline-id $pipelineId `
+        --query "$varName" -o tsv 2>$null
+
+    if ($LASTEXITCODE -eq 0 -and $existing) {
+        Write-Host "  $varName : already present (secret)" -ForegroundColor DarkGray
+        continue
+    }
+
+    Write-Host "  $varName : creating as secret variable in pipeline definition..." -ForegroundColor Yellow
+    $createOut = az pipelines variable create `
+        --org $org `
+        --project $project `
+        --pipeline-id $pipelineId `
+        --name $varName `
+        --value "" `
+        --secret true `
+        --only-show-errors 2>&1
+
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "  $varName : created successfully (will accept queue-time override)" -ForegroundColor Green
+    } else {
+        Write-Host "  $varName : create returned non-zero (may already exist or needs manual UI step once)." -ForegroundColor Yellow
+        Write-Host "    Output: $createOut" -ForegroundColor DarkGray
+    }
+}
 
 Write-Host "Queueing manual build on main with publish secrets..." -ForegroundColor Cyan
 Write-Host "Secrets will be passed at queue time and will not be echoed." -ForegroundColor DarkGray
