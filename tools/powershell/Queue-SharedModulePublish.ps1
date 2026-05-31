@@ -53,11 +53,35 @@ Write-Host "  (If this hangs, run 'az login' or 'az login --use-device-code' in 
 # Use get-access-token instead of account show - it's lighter and less likely to trigger interactive login
 $loginCheck = az account get-access-token --query "expiresOn" -o tsv 2>&1
 if ($LASTEXITCODE -ne 0) {
-    Write-Error "You are not logged in to Azure CLI (or token expired)."
-    Write-Error "Please run one of these in another terminal and try again:"
-    Write-Error "   az login"
-    Write-Error "   az login --use-device-code   (good for headless/remote sessions)"
-    Write-Error $loginCheck
+    Write-Host ""
+    Write-Host "Azure CLI login check failed." -ForegroundColor Red
+    Write-Host "The script is hanging or failing at login." -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "=== How to fix az login hanging ===" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "1. In a SEPARATE terminal window, run:" -ForegroundColor White
+    Write-Host "      az login --use-device-code" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "   This is the non-interactive way. It will give you a code like 'ABCD-EFGH' and a URL." -ForegroundColor White
+    Write-Host "   Open the URL on your phone or another computer, enter the code, and complete login." -ForegroundColor White
+    Write-Host ""
+    Write-Host "2. If you have multiple Azure tenants, specify it:" -ForegroundColor White
+    Write-Host "      az login --use-device-code --tenant yourtenant.onmicrosoft.com" -ForegroundColor Green
+    Write-Host "      (or use the tenant ID)" -ForegroundColor White
+    Write-Host ""
+    Write-Host "3. After successful login in the other window, come back here and re-run this script." -ForegroundColor White
+    Write-Host ""
+    Write-Host "4. If it still hangs, try clearing cache first:" -ForegroundColor White
+    Write-Host "      az account clear" -ForegroundColor Green
+    Write-Host "      az login --use-device-code" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "5. Corporate / proxy environments:" -ForegroundColor White
+    Write-Host "   Sometimes you need:" -ForegroundColor White
+    Write-Host "      az login --use-device-code --tenant <tenant> --allow-no-subscriptions" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "Once logged in successfully, re-run this script." -ForegroundColor Yellow
+    Write-Host ""
+    Write-Error "Login required. Exiting."
     exit 1
 }
 Write-Host "  Azure login token appears valid (expires: $loginCheck)" -ForegroundColor Green
