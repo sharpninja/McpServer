@@ -454,7 +454,13 @@ jobs:
             # Ensure the token is configured for the @sharpninja scope / npm registry
             npm config set //registry.npmjs.org/:_authToken=$env:NODE_AUTH_TOKEN
 
-            npm ci
+            # Use npm ci if lockfile exists, otherwise npm install (resilient for first publish)
+            if (Test-Path package-lock.json) {
+              npm ci
+            } else {
+              Write-Host "No package-lock.json found — using npm install instead of ci"
+              npm install
+            }
             npm run build --if-present
 
             # Check if this exact version is already published
