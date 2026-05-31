@@ -6,14 +6,19 @@
 #   can actually publish.
 #
 # Security:
-#   - Read secrets ONLY from local environment variables.
-#   - Never hardcode, echo, or store the actual values.
+#   - Read secrets from the current session OR the persistent environment
+#     on this computer (registry). Never from the repo or hardcoded.
+#   - Never echo or store the actual secret values.
 #   - The values are passed only to the az CLI at queue time.
 #
 # Usage:
-#   1. Set the secrets once in your local environment using these exact names:
-#        $env:PSGalleryApiKey = "your-psgallery-key-here"
-#        $env:NPM_API_KEY     = "your-npm-token-here"
+#   1. Set the two secrets **once** on this computer using the exact names below
+#      (System Properties > Environment Variables, or `setx` / GUI).
+#      They only need to be set once — the script will read them from the
+#      persistent environment even if they are not in the current session.
+#
+#        PSGalleryApiKey
+#        NPM_API_KEY
 #
 #   2. Run this script:
 #        pwsh -File tools/powershell/Queue-SharedModulePublish.ps1
@@ -30,16 +35,42 @@ param()
 
 $ErrorActionPreference = 'Stop'
 
-$psGalleryKey = $env:PSGalleryApiKey
-$npmKey       = $env:NPM_API_KEY
+function Get-PersistentEnvironmentVariable {
+    param([Parameter(Mandatory)][string]$Name)
+
+    # 1. Prefer the current session (allows easy override for testing)
+    $value = [Environment]::GetEnvironmentVariable($Name, 'Process')
+    if (-not [string]::IsNullOrWhiteSpace($value)) {
+        return $value
+    }
+
+    # 2. Fall back to persistent user environment (most common case)
+    $value = [Environment]::GetEnvironmentVariable($Name, 'User')
+    if (-not [string]::IsNullOrWhiteSpace($value)) {
+        Write-Host "  Loaded $Name from persistent user environment (this computer)." -ForegroundColor DarkGray
+        return $value
+    }
+
+    # 3. Fall back to machine environment (if set at system level)
+    $value = [Environment]::GetEnvironmentVariable($Name, 'Machine')
+    if (-not [string]::IsNullOrWhiteSpace($value)) {
+        Write-Host "  Loaded $Name from persistent machine environment (this computer)." -ForegroundColor DarkGray
+        return $value
+    }
+
+    return $null
+}
+
+$psGalleryKey = Get-PersistentEnvironmentVariable -Name 'PSGalleryApiKey'
+$npmKey       = Get-PersistentEnvironmentVariable -Name 'NPM_API_KEY'
 
 if ([string]::IsNullOrWhiteSpace($psGalleryKey)) {
-    Write-Error "Environment variable PSGalleryApiKey is not set. Aborting."
+    Write-Error "Environment variable PSGalleryApiKey is not set on this computer (checked session + registry). Aborting."
     exit 1
 }
 
 if ([string]::IsNullOrWhiteSpace($npmKey)) {
-    Write-Error "Environment variable NPM_API_KEY is not set. Aborting."
+    Write-Error "Environment variable NPM_API_KEY is not set on this computer (checked session + registry). Aborting."
     exit 1
 }
 
