@@ -472,11 +472,13 @@ jobs:
         env:
           # Refresh: NPM_API_KEY secret mapped to the conventional NODE_AUTH_TOKEN that npm tooling uses
           NODE_AUTH_TOKEN: $(NPM_API_KEY)
+        env:
+          NPM_API_KEY: $(NPM_API_KEY)   # Map secret into the process environment
         inputs:
           pwsh: true
           targetType: inline
           script: |
-            $token = "$(NPM_API_KEY)"
+            $token = $env:NPM_API_KEY
             if ([string]::IsNullOrWhiteSpace($token) -or $token.StartsWith('$(')) {
               Write-Host "NPM_API_KEY not configured — skipping npm publish."
               exit 0
@@ -484,9 +486,9 @@ jobs:
 
             Set-Location "$(Build.SourcesDirectory)/tools/typescript/mcp-repl-ts"
 
-            # Create temporary .npmrc with auth for reliable publishing (better than npm config set in some agents)
+            # Create temporary .npmrc with auth for reliable publishing
             $npmrcPath = ".npmrc"
-            "//registry.npmjs.org/:_authToken=$env:NODE_AUTH_TOKEN" | Out-File -FilePath $npmrcPath -Encoding ascii -Force
+            "//registry.npmjs.org/:_authToken=$env:NPM_API_KEY" | Out-File -FilePath $npmrcPath -Encoding ascii -Force
 
             # Use npm ci if lockfile exists, otherwise npm install (resilient for first publish)
             if (Test-Path package-lock.json) {
