@@ -392,6 +392,34 @@ jobs:
     steps:
       - checkout: self
 
+      # Loud secret validation step (critical for manual runs)
+      - task: PowerShell@2
+        displayName: Validate publish secrets
+        condition: always()
+        continueOnError: true
+        inputs:
+          pwsh: true
+          targetType: inline
+          script: |
+            Write-Host "=== Secret Validation for publish_shared_modules ===" -ForegroundColor Cyan
+            $psKey = $env:PSGALLERYAPIKEY
+            $npmKey = $env:NPM_API_KEY
+
+            if ([string]::IsNullOrWhiteSpace($psKey) -or $psKey.StartsWith('$(')) {
+                Write-Host "PSGalleryApiKey: MISSING or not resolved in this run" -ForegroundColor Red
+            } else {
+                Write-Host "PSGalleryApiKey: PRESENT (length $($psKey.Length))" -ForegroundColor Green
+            }
+
+            if ([string]::IsNullOrWhiteSpace($npmKey) -or $npmKey.StartsWith('$(')) {
+                Write-Host "NPM_API_KEY: MISSING or not resolved in this run" -ForegroundColor Red
+            } else {
+                Write-Host "NPM_API_KEY: PRESENT (length $($npmKey.Length))" -ForegroundColor Green
+            }
+
+            Write-Host "=== End Secret Validation ===" -ForegroundColor Cyan
+
+
       # Publish PowerShell module (McpRepl) to PowerShell Gallery
       - task: PowerShell@2
         displayName: Publish McpRepl to PowerShell Gallery
