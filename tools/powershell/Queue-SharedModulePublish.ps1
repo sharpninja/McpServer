@@ -26,11 +26,11 @@ param()
 
 $ErrorActionPreference = 'Stop'
 
-$psGalleryKey = $env:PSGALLERY_API_KEY
+$psGalleryKey = $env:PSGalleryApiKey
 $npmKey       = $env:NPM_API_KEY
 
 if ([string]::IsNullOrWhiteSpace($psGalleryKey)) {
-    Write-Error "Environment variable PSGALLERY_API_KEY is not set. Aborting."
+    Write-Error "Environment variable PSGalleryApiKey is not set. Aborting."
     exit 1
 }
 
