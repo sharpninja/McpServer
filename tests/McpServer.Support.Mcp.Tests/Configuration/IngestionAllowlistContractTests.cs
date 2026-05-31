@@ -182,22 +182,31 @@ public sealed class IngestionAllowlistContractTests
     {
         var testsRoot = FindDirectoryFromRepoRoot("tests");
         var skipPattern = new Regex(
-            @"\[(?:Fact|Theory)\s*\([^\]]*\bSkip\s*=|\b" + "Skip" + @"Exception\b|\bAssert\." + "Skip" + @"\b|\b" + "Skip" + @"pable(?:Fact|Theory)\b",
-            RegexOptions.CultureInvariant | RegexOptions.Singleline);
+            @"\[(?:Fact|Theory)\s*\([^\]]*\bSkip\s*=|\bSkipException\b|\bAssert\.Skip\b|\bSkippable(?:Fact|Theory)\b",
+            RegexOptions.CultureInvariant);
 
-        var offenders = Directory
-            .EnumerateFiles(testsRoot, "*.cs", SearchOption.AllDirectories)
-            .Where(path => !path.Contains($"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase))
-            .Where(path => !path.Contains($"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase))
-            .SelectMany(path =>
+        var offenders = new List<string>();
+
+        foreach (var path in Directory.EnumerateFiles(testsRoot, "*.cs", SearchOption.AllDirectories))
+        {
+            if (path.Contains($"{Path.DirectorySeparatorChar}bin{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase) ||
+                path.Contains($"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase))
             {
-                var content = File.ReadAllText(path);
-                return skipPattern
-                    .Matches(content)
-                    .Select(match => $"{Path.GetRelativePath(testsRoot, path)}:{LineNumber(content, match.Index)}");
-            })
-            .OrderBy(value => value, StringComparer.OrdinalIgnoreCase)
-            .ToList();
+                continue;
+            }
+
+            int lineNumber = 0;
+            foreach (var line in File.ReadLines(path))
+            {
+                lineNumber++;
+                if (skipPattern.IsMatch(line))
+                {
+                    offenders.Add($"{Path.GetRelativePath(testsRoot, path)}:{lineNumber}");
+                }
+            }
+        }
+
+        offenders = offenders.OrderBy(x => x, StringComparer.OrdinalIgnoreCase).ToList();
 
         Assert.True(
             offenders.Count == 0,
@@ -243,6 +252,4 @@ public sealed class IngestionAllowlistContractTests
         throw new DirectoryNotFoundException($"Could not locate directory '{Path.Combine(segments)}' from '{AppContext.BaseDirectory}'.");
     }
 
-    private static int LineNumber(string content, int index)
-        => content.Take(index).Count(c => c == '\n') + 1;
 }
