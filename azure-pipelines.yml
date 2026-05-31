@@ -411,7 +411,17 @@ jobs:
             }
 
             $moduleRoot = "$(Build.SourcesDirectory)/tools/powershell/McpRepl"
-            Write-Host "Publishing McpRepl from $moduleRoot"
+            $manifest = Import-PowerShellDataFile -Path (Join-Path $moduleRoot 'McpRepl.psd1')
+            $version = $manifest.ModuleVersion
+
+            # Check if this exact version is already published
+            $existing = Find-Module -Name McpRepl -RequiredVersion $version -ErrorAction SilentlyContinue
+            if ($existing) {
+              Write-Host "McpRepl version $version already published to PSGallery — skipping."
+              exit 0
+            }
+
+            Write-Host "Publishing McpRepl version $version from $moduleRoot"
             Publish-Module -Path $moduleRoot -NuGetApiKey $apiKey -Verbose
 
       # Publish TypeScript shared package to npm
@@ -444,6 +454,19 @@ jobs:
 
             npm ci
             npm run build --if-present
+
+            # Check if this exact version is already published
+            $pkg = Get-Content package.json | ConvertFrom-Json
+            $pkgName = $pkg.name
+            $pkgVersion = $pkg.version
+
+            $existing = npm view "${pkgName}@${pkgVersion}" version 2>$null
+            if ($existing) {
+              Write-Host "${pkgName} version ${pkgVersion} already published to npm — skipping."
+              exit 0
+            }
+
+            Write-Host "Publishing ${pkgName} version ${pkgVersion}"
             npm publish --access public
 
 
