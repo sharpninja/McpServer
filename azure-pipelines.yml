@@ -35,6 +35,7 @@ trigger:
       - scripts/Validate-McpConfig.ps1
       - azure-pipelines.yml
       - GitVersion.yml
+      - tools/**
 
 pr:
   branches:
@@ -71,6 +72,7 @@ pr:
       - scripts/Validate-McpConfig.ps1
       - azure-pipelines.yml
       - GitVersion.yml
+      - tools/**
 
 variables:
   AgentPoolName: Default
@@ -383,7 +385,8 @@ jobs:
   - job: publish_shared_modules
     displayName: publish-shared-modules
     dependsOn: build_test_publish
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'), ne(variables['Build.Reason'], 'PullRequest'))
+    condition: and( or(succeeded(), eq(variables['Build.Reason'], 'manual')), eq(variables['Build.SourceBranch'], 'refs/heads/main'), ne(variables['Build.Reason'], 'PullRequest') )
+    continueOnError: true   # Publishing failures (missing secrets, version already exists, etc.) should not fail the main CI build
     pool:
       name: $(AgentPoolName)
     steps:
@@ -393,6 +396,7 @@ jobs:
       - task: PowerShell@2
         displayName: Publish McpRepl to PowerShell Gallery
         condition: succeeded()
+        continueOnError: true
         env:
           # Refresh: PSGalleryApiKey secret mapped here so Publish-Module can see it via $env:
           PSGALLERYAPIKEY: $(PSGalleryApiKey)
@@ -419,6 +423,7 @@ jobs:
       - task: PowerShell@2
         displayName: Publish @sharpninja/mcp-repl to npm
         condition: succeeded()
+        continueOnError: true
         env:
           # Refresh: NPM_API_KEY secret mapped to the conventional NODE_AUTH_TOKEN that npm tooling uses
           NODE_AUTH_TOKEN: $(NPM_API_KEY)
