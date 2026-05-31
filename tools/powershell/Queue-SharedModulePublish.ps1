@@ -39,38 +39,64 @@ if ([string]::IsNullOrWhiteSpace($npmKey)) {
     exit 1
 }
 
+# Pre-flight checks
+if (-not (Get-Command az -ErrorAction SilentlyContinue)) {
+    Write-Error "Azure CLI ('az') not found in PATH. Please install the Azure CLI first."
+    exit 1
+}
+
+$loginCheck = az account show 2>&1
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "You are not logged in to Azure CLI. Please run 'az login' first."
+    Write-Error $loginCheck
+    exit 1
+}
+
 Write-Host "Queueing manual build on main with publish secrets..." -ForegroundColor Cyan
 Write-Host "Secrets will be passed at queue time and will not be echoed." -ForegroundColor DarkGray
 
-try {
-    $result = az pipelines build queue `
-        --org https://dev.azure.com/McpServer `
-        --project McpServer `
-        --definition-id 1 `
-        --branch main `
-        --variables "PSGalleryApiKey=$psGalleryKey" "NPM_API_KEY=$npmKey" `
-        --output json 2>&1 | ConvertFrom-Json
+$queueOutput = az pipelines build queue `
+    --org https://dev.azure.com/McpServer `
+    --project McpServer `
+    --definition-id 1 `
+    --branch main `
+    --variables "PSGalleryApiKey=$psGalleryKey" "NPM_API_KEY=$npmKey" `
+    --output json 2>&1
 
-    if ($result) {
-        Write-Host "`nBuild queued successfully!" -ForegroundColor Green
-        Write-Host "Build ID     : $($result.id)"
-        Write-Host "Build Number : $($result.buildNumber)"
-        Write-Host "Status       : $($result.status)"
-        Write-Host ""
-        Write-Host "Direct link  :" -ForegroundColor Green
-        Write-Host "https://dev.azure.com/McpServer/McpServer/_build/results?buildId=$($result.id)" -ForegroundColor Cyan
-        Write-Host ""
-        Write-Host "In the new build, look for the 'Validate publish secrets' step first." -ForegroundColor Yellow
-        Write-Host "It should now show both keys as PRESENT." -ForegroundColor Yellow
-        Write-Host ""
-        Write-Host "After the build completes, verify with:" -ForegroundColor Cyan
-        Write-Host "  Find-Module McpRepl -AllVersions" -ForegroundColor White
-        Write-Host "  npm view @sharpninja/mcp-repl versions" -ForegroundColor White
-    } else {
-        Write-Error "Failed to queue build. az pipelines returned no result."
-    }
+$exitCode = $LASTEXITCODE
+
+if ($exitCode -ne 0) {
+    Write-Error "Failed to queue build (az exit code $exitCode)."
+    Write-Error "Raw output from Azure CLI:"
+    Write-Error $queueOutput
+    exit 1
 }
-catch {
-    Write-Error "Failed to queue build: $_"
+
+try {
+    $result = $queueOutput | ConvertFrom-Json -ErrorAction Stop
+} catch {
+    Write-Error "Azure CLI returned output that could not be parsed as JSON."
+    Write-Error "Raw output:"
+    Write-Error $queueOutput
+    exit 1
+}
+
+if ($result) {
+    Write-Host "`nBuild queued successfully!" -ForegroundColor Green
+    Write-Host "Build ID     : $($result.id)"
+    Write-Host "Build Number : $($result.buildNumber)"
+    Write-Host "Status       : $($result.status)"
+    Write-Host ""
+    Write-Host "Direct link  :" -ForegroundColor Green
+    Write-Host "https://dev.azure.com/McpServer/McpServer/_build/results?buildId=$($result.id)" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "In the new build, look for the 'Validate publish secrets' step first." -ForegroundColor Yellow
+    Write-Host "It should now show both keys as PRESENT." -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "After the build completes, verify with:" -ForegroundColor Cyan
+    Write-Host "  Find-Module McpRepl -AllVersions" -ForegroundColor White
+    Write-Host "  npm view @sharpninja/mcp-repl versions" -ForegroundColor White
+} else {
+    Write-Error "Failed to queue build. az pipelines returned no result."
     exit 1
 }
