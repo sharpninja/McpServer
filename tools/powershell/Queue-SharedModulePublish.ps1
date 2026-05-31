@@ -120,15 +120,15 @@ foreach ($varName in @('PSGalleryApiKey', 'NPM_API_KEY')) {
         --project $project `
         --pipeline-id $pipelineId `
         --name $varName `
-        --value "" `
+        --value "SET_AT_QUEUE_TIME" `
         --secret true `
         --only-show-errors 2>&1
 
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "  $varName : created successfully (will accept queue-time override)" -ForegroundColor Green
+        Write-Host "  $varName : created successfully as secret (queue-time override enabled)" -ForegroundColor Green
     } else {
-        Write-Host "  $varName : create returned non-zero (may already exist or needs manual UI step once)." -ForegroundColor Yellow
-        Write-Host "    Output: $createOut" -ForegroundColor DarkGray
+        Write-Host "  $varName : create returned non-zero (may already exist or needs one manual UI step)." -ForegroundColor Yellow
+        if ($createOut) { Write-Host "    az output: $createOut" -ForegroundColor DarkGray }
     }
 }
 
