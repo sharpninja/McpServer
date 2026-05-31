@@ -406,6 +406,10 @@ jobs:
           script: |
             [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
+            # Ensure latest PowerShellGet for reliable Find-Module / Publish-Module
+            Write-Host "Ensuring PowerShellGet is up to date..."
+            Install-Module -Name PowerShellGet -Force -AllowClobber -Scope CurrentUser -ErrorAction SilentlyContinue | Out-Null
+
             $apiKey = $env:PSGALLERYAPIKEY
             if ([string]::IsNullOrWhiteSpace($apiKey) -or $apiKey.StartsWith('$(')) {
               Write-Host "PSGalleryApiKey not configured — skipping PowerShell Gallery publish."
@@ -451,8 +455,9 @@ jobs:
 
             Set-Location "$(Build.SourcesDirectory)/tools/typescript/mcp-repl-ts"
 
-            # Ensure the token is configured for the @sharpninja scope / npm registry
-            npm config set //registry.npmjs.org/:_authToken=$env:NODE_AUTH_TOKEN
+            # Create temporary .npmrc with auth for reliable publishing (better than npm config set in some agents)
+            $npmrcPath = ".npmrc"
+            "//registry.npmjs.org/:_authToken=$env:NODE_AUTH_TOKEN" | Out-File -FilePath $npmrcPath -Encoding ascii -Force
 
             # Use npm ci if lockfile exists, otherwise npm install (resilient for first publish)
             if (Test-Path package-lock.json) {
@@ -471,10 +476,13 @@ jobs:
             $existing = npm view "${pkgName}@${pkgVersion}" version 2>$null
             if ($existing) {
               Write-Host "${pkgName} version ${pkgVersion} already published to npm — skipping."
+              Remove-Item $npmrcPath -ErrorAction SilentlyContinue
               exit 0
             }
 
             Write-Host "Publishing ${pkgName} version ${pkgVersion}"
             npm publish --access public
+
+            Remove-Item $npmrcPath -ErrorAction SilentlyContinue
 
 
