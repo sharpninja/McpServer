@@ -367,25 +367,32 @@ jobs:
           targetPath: $(Build.SourcesDirectory)/artifacts/nupkg
           artifact: $(PackageArtifactName)
 
-  - job: docs_deploy
-    displayName: docs-deploy
-    dependsOn: docs_build
-    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main'), ne(variables['DocsAzureServiceConnection'], ''), ne(variables['DocsStorageAccount'], ''))
-    pool:
-      name: $(AgentPoolName)
-    steps:
-      - download: current
-        artifact: $(DocsArtifactName)
-
-      - task: AzureCLI@2
-        displayName: Deploy docs to Azure static website
-        inputs:
-          azureSubscription: $(DocsAzureServiceConnection)
-          scriptType: pscore
-          scriptLocation: inlineScript
-          inlineScript: |
-            $source = "$(Pipeline.Workspace)/$(DocsArtifactName)"
-            az storage blob upload-batch --account-name "$(DocsStorageAccount)" --destination '$web' --source $source --overwrite true
+  # === docs_deploy DISABLED (keeps pipeline YAML valid) ===
+  # This job referenced $(DocsAzureServiceConnection) which is empty or points to a
+  # service connection that Azure DevOps cannot resolve/ authorize during YAML parsing
+  # (error: "Job docs_deploy: Step input azureSubscription references service connection which could not be found").
+  # docs_quality was already commented; this completes the docs-deploy disable so manual
+  # and CI queues pass validation. docs_build still produces the artifact for future restore.
+  # To re-enable: restore the job, populate the variable + authorize the service connection.
+  # - job: docs_deploy
+  #   displayName: docs-deploy
+  #   dependsOn: docs_build
+  #   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main'), ne(variables['DocsAzureServiceConnection'], ''), ne(variables['DocsStorageAccount'], ''))
+  #   pool:
+  #     name: $(AgentPoolName)
+  #   steps:
+  #     - download: current
+  #       artifact: $(DocsArtifactName)
+  #
+  #     - task: AzureCLI@2
+  #       displayName: Deploy docs to Azure static website
+  #       inputs:
+  #         azureSubscription: $(DocsAzureServiceConnection)
+  #         scriptType: pscore
+  #         scriptLocation: inlineScript
+  #         inlineScript: |
+  #           $source = "$(Pipeline.Workspace)/$(DocsArtifactName)"
+  #           az storage blob upload-batch --account-name "$(DocsStorageAccount)" --destination '$web' --source $source --overwrite true
 
   # Shared module publishing (McpRepl to PSGallery, @sharpninja/mcp-repl to npm).
   # Requires secrets PSGalleryApiKey and NPM_API_KEY configured in pipeline / variable group.
