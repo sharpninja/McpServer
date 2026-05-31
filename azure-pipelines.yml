@@ -404,6 +404,8 @@ jobs:
           pwsh: true
           targetType: inline
           script: |
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
             $apiKey = $env:PSGALLERYAPIKEY
             if ([string]::IsNullOrWhiteSpace($apiKey) -or $apiKey.StartsWith('$(')) {
               Write-Host "PSGalleryApiKey not configured — skipping PowerShell Gallery publish."
