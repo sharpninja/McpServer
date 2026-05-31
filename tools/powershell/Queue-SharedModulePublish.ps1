@@ -40,20 +40,31 @@ if ([string]::IsNullOrWhiteSpace($npmKey)) {
 }
 
 # Pre-flight checks
+Write-Host "Checking for Azure CLI..." -ForegroundColor Cyan
 if (-not (Get-Command az -ErrorAction SilentlyContinue)) {
     Write-Error "Azure CLI ('az') not found in PATH. Please install the Azure CLI first."
     exit 1
 }
+Write-Host "  Azure CLI found." -ForegroundColor Green
 
-$loginCheck = az account show 2>&1
+Write-Host "Checking Azure login status..." -ForegroundColor Cyan
+Write-Host "  (If this hangs, run 'az login' or 'az login --use-device-code' in another terminal first.)" -ForegroundColor DarkYellow
+
+# Use get-access-token instead of account show - it's lighter and less likely to trigger interactive login
+$loginCheck = az account get-access-token --query "expiresOn" -o tsv 2>&1
 if ($LASTEXITCODE -ne 0) {
-    Write-Error "You are not logged in to Azure CLI. Please run 'az login' first."
+    Write-Error "You are not logged in to Azure CLI (or token expired)."
+    Write-Error "Please run one of these in another terminal and try again:"
+    Write-Error "   az login"
+    Write-Error "   az login --use-device-code   (good for headless/remote sessions)"
     Write-Error $loginCheck
     exit 1
 }
+Write-Host "  Azure login token appears valid (expires: $loginCheck)" -ForegroundColor Green
 
 Write-Host "Queueing manual build on main with publish secrets..." -ForegroundColor Cyan
 Write-Host "Secrets will be passed at queue time and will not be echoed." -ForegroundColor DarkGray
+Write-Host "Calling 'az pipelines build queue' (this can take 10-30 seconds or hang if login is required)..." -ForegroundColor Cyan
 
 $queueOutput = az pipelines build queue `
     --org https://dev.azure.com/McpServer `
@@ -64,11 +75,18 @@ $queueOutput = az pipelines build queue `
     --output json 2>&1
 
 $exitCode = $LASTEXITCODE
+Write-Host "  az command completed with exit code $exitCode." -ForegroundColor $(if ($exitCode -eq 0) { 'Green' } else { 'Red' })
 
 if ($exitCode -ne 0) {
-    Write-Error "Failed to queue build (az exit code $exitCode)."
-    Write-Error "Raw output from Azure CLI:"
-    Write-Error $queueOutput
+    Write-Host "`n=== Azure CLI Error ===" -ForegroundColor Red
+    Write-Host $queueOutput -ForegroundColor Red
+    Write-Host "=======================`n" -ForegroundColor Red
+
+    $errorFile = Join-Path $env:TEMP "az-queue-error.txt"
+    $queueOutput | Out-File -FilePath $errorFile -Encoding UTF8
+    Write-Host "Full error also saved to: $errorFile" -ForegroundColor Yellow
+
+    Write-Error "Failed to queue build (az exit code $exitCode). See the output above."
     exit 1
 }
 
