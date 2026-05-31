@@ -90,15 +90,23 @@ variables:
   DocsStorageAccount: ''
   AzureArtifactsFeedUrl: ''
 
-  # === Shared Module Publishing Secrets ===
-  # To make PSGalleryApiKey and NPM_API_KEY available in ALL runs (including manual queues):
-  # 1. Create a Variable Group in Azure DevOps (Library > Variable groups) containing:
-  #      - PSGalleryApiKey  (secret)
-  #      - NPM_API_KEY      (secret)
-  # 2. In the pipeline settings (Edit pipeline > Variables > Variable groups), link that group
-  #    and check "Allow access to all pipelines".
-  # This ensures the publish job can see the secrets without you having to manually select
-  # the group every time you queue a manual build.
+  # === Shared Module Publishing Secrets (PSGallery + npm) ===
+  # Declared here as empty placeholders so that $(PSGalleryApiKey) and $(NPM_API_KEY)
+  # references inside the publish_shared_modules job are valid to the YAML parser
+  # and queue-time validator. Real values must NEVER live in this file.
+  #
+  # Supply values at queue time only (two supported ways):
+  # 1. Preferred: Run tools/powershell/Queue-SharedModulePublish.ps1 after setting
+  #    $env:PSGalleryApiKey and $env:NPM_API_KEY in your local shell. The script
+  #    passes them via `az pipelines build queue --variables`.
+  # 2. Web UI: Pipeline → Run pipeline → expand "Variables" → add/edit the two names,
+  #    paste the values, mark both as Secret, and ensure "Allow at queue time" is on.
+  #
+  # The job contains a loud "Validate publish secrets" step (always runs) plus
+  # runtime guards and version checks so missing/invalid keys produce clear messages
+  # instead of mysterious failures. Publishing failures are non-blocking (continueOnError).
+  PSGalleryApiKey: ''
+  NPM_API_KEY: ''
 
 jobs:
   - job: build_test_publish
@@ -395,8 +403,9 @@ jobs:
   #           az storage blob upload-batch --account-name "$(DocsStorageAccount)" --destination '$web' --source $source --overwrite true
 
   # Shared module publishing (McpRepl to PSGallery, @sharpninja/mcp-repl to npm).
-  # Requires secrets PSGalleryApiKey and NPM_API_KEY configured in pipeline / variable group.
-  # Env var mapping below makes the secret available inside the pwsh process (ADO secret handling).
+  # Secrets are declared as queue-time variables at the top of this file and supplied
+  # only at queue time (via Queue-SharedModulePublish.ps1 or Run pipeline UI).
+  # The job is deliberately decoupled and non-blocking.
   - job: publish_shared_modules
     displayName: publish-shared-modules
     # No hard dependsOn so this job can run independently (especially for manual publishes)
