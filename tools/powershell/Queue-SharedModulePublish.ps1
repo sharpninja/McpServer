@@ -62,6 +62,10 @@ try {
         Write-Host ""
         Write-Host "In the new build, look for the 'Validate publish secrets' step first." -ForegroundColor Yellow
         Write-Host "It should now show both keys as PRESENT." -ForegroundColor Yellow
+        Write-Host ""
+        Write-Host "After the build completes, verify with:" -ForegroundColor Cyan
+        Write-Host "  Find-Module McpRepl -AllVersions" -ForegroundColor White
+        Write-Host "  npm view @sharpninja/mcp-repl versions" -ForegroundColor White
     } else {
         Write-Error "Failed to queue build. az pipelines returned no result."
     }
