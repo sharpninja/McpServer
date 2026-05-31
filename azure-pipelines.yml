@@ -384,8 +384,8 @@ jobs:
   # Env var mapping below makes the secret available inside the pwsh process (ADO secret handling).
   - job: publish_shared_modules
     displayName: publish-shared-modules
-    dependsOn: build_test_publish
-    condition: and( or(succeeded(), eq(variables['Build.Reason'], 'manual')), eq(variables['Build.SourceBranch'], 'refs/heads/main'), ne(variables['Build.Reason'], 'PullRequest') )
+    # No hard dependsOn so this job can run independently (especially for manual publishes)
+    condition: and( eq(variables['Build.SourceBranch'], 'refs/heads/main'), ne(variables['Build.Reason'], 'PullRequest') )
     continueOnError: true   # Publishing failures (missing secrets, version already exists, etc.) should not fail the main CI build
     pool:
       name: $(AgentPoolName)
