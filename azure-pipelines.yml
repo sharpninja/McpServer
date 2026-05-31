@@ -74,6 +74,9 @@ pr:
 
 variables:
   AgentPoolName: Default
+  # Secrets required for shared module publishing (set these in the pipeline or variable group):
+  #   - PSGalleryApiKey   (PowerShell Gallery API key)
+  #   - NPM_API_KEY       (npm automation token for @sharpninja scope)
   BuildConfiguration: Release
   TestProject: tests/McpServer.Support.Mcp.Tests/McpServer.Support.Mcp.Tests.csproj
   ServerProject: src/McpServer.Support.Mcp/McpServer.Support.Mcp.csproj
@@ -374,36 +377,68 @@ jobs:
             $source = "$(Pipeline.Workspace)/$(DocsArtifactName)"
             az storage blob upload-batch --account-name "$(DocsStorageAccount)" --destination '$web' --source $source --overwrite true
 
-  - job: publish_azure_wiki
-    displayName: publish-azure-wiki
-    dependsOn: docs_build
-    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main'), ne(variables['AzureWikiRepositoryUrl'], ''))
+  # Shared module publishing (McpRepl to PSGallery, @sharpninja/mcp-repl to npm).
+  # Requires secrets PSGalleryApiKey and NPM_API_KEY configured in pipeline / variable group.
+  # Env var mapping below makes the secret available inside the pwsh process (ADO secret handling).
+  - job: publish_shared_modules
+    displayName: publish-shared-modules
+    dependsOn: build_test_publish
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'), ne(variables['Build.Reason'], 'PullRequest'))
     pool:
       name: $(AgentPoolName)
     steps:
       - checkout: self
 
+      # Publish PowerShell module (McpRepl) to PowerShell Gallery
       - task: PowerShell@2
-        displayName: Publish Azure requirements wiki
+        displayName: Publish McpRepl to PowerShell Gallery
+        condition: succeeded()
         env:
-          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+          # Refresh: PSGalleryApiKey secret mapped here so Publish-Module can see it via $env:
+          PSGALLERYAPIKEY: $(PSGalleryApiKey)
         inputs:
           pwsh: true
           targetType: inline
           script: |
-            if ([string]::IsNullOrWhiteSpace($env:SYSTEM_ACCESSTOKEN)) {
-              throw "System.AccessToken is not available. Enable 'Allow scripts to access the OAuth token' for this pipeline."
+            $apiKey = $env:PSGALLERYAPIKEY
+            if ([string]::IsNullOrWhiteSpace($apiKey) -or $apiKey.StartsWith('$(')) {
+              Write-Host "PSGalleryApiKey not configured — skipping PowerShell Gallery publish."
+              exit 0
             }
 
-            $repo = "$(AzureWikiRepositoryUrl)"
-            $zip = "$(Build.SourcesDirectory)/$(RequirementsWikiZip)"
-            $output = "$(Build.ArtifactStagingDirectory)/requirements-wiki/azure"
-            ./scripts/Publish-RequirementsWiki.ps1 `
-              -Target Azure `
-              -ExportZip $zip `
-              -OutputPath $output `
-              -RepositoryUrl $repo `
-              -AuthToken $env:SYSTEM_ACCESSTOKEN `
-              -UserDocsBranch "$(Build.SourceBranchName)" `
-              -CommitMessage "Sync Azure requirements wiki from $(Build.SourceVersion)" `
-              -Push
+            $moduleRoot = "$(Build.SourcesDirectory)/tools/powershell/McpRepl"
+            Write-Host "Publishing McpRepl from $moduleRoot"
+            Publish-Module -Path $moduleRoot -NuGetApiKey $apiKey -Verbose
+
+      # Publish TypeScript shared package to npm
+      - task: NodeTool@0
+        displayName: Use Node.js 20.x
+        inputs:
+          versionSpec: '20.x'
+
+      - task: PowerShell@2
+        displayName: Publish @sharpninja/mcp-repl to npm
+        condition: succeeded()
+        env:
+          # Refresh: NPM_API_KEY secret mapped to the conventional NODE_AUTH_TOKEN that npm tooling uses
+          NODE_AUTH_TOKEN: $(NPM_API_KEY)
+        inputs:
+          pwsh: true
+          targetType: inline
+          script: |
+            $token = "$(NPM_API_KEY)"
+            if ([string]::IsNullOrWhiteSpace($token) -or $token.StartsWith('$(')) {
+              Write-Host "NPM_API_KEY not configured — skipping npm publish."
+              exit 0
+            }
+
+            Set-Location "$(Build.SourcesDirectory)/tools/typescript/mcp-repl-ts"
+
+            # Ensure the token is configured for the @sharpninja scope / npm registry
+            npm config set //registry.npmjs.org/:_authToken=$env:NODE_AUTH_TOKEN
+
+            npm ci
+            npm run build --if-present
+            npm publish --access public
+
+

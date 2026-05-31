@@ -245,3 +245,12 @@ Sample host: `src/McpServer.McpAgent.SampleHost/`
 ## License
 
 See [LICENSE](LICENSE) for details.
+
+## Shared Plugin Surfaces
+
+This repository is the canonical home for the shared client surfaces used by all McpServer agent plugins:
+
+- **PowerShell**: `tools/powershell/McpRepl` (published to PS Gallery as `McpRepl`)
+- **TypeScript**: `tools/typescript/mcp-repl-ts` (published to npm as `@sharpninja/mcp-repl`)
+
+See the respective READMEs in those directories and `GROK-USAGE.md` in the grok-plugin for usage details.
