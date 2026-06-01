@@ -153,6 +153,7 @@ foreach ($varName in @('PSGalleryApiKey', 'NPM_API_KEY')) {
         --name $varName `
         --value "SET_AT_QUEUE_TIME" `
         --secret true `
+        --allow-override true `
         --only-show-errors 2>&1
 
     if ($LASTEXITCODE -eq 0) {

@@ -90,18 +90,9 @@ variables:
   DocsStorageAccount: ''
   AzureArtifactsFeedUrl: ''
 
-  # === Shared Module Publishing Secrets (PSGallery + npm) ===
-  # Empty placeholders so $(PSGalleryApiKey) / $(NPM_API_KEY) are valid in the
-  # publish_shared_modules job. Real values are supplied at queue time only.
-  #
-  # The script tools/powershell/Queue-SharedModulePublish.ps1 now automatically
-  # registers the two variables as secrets in the pipeline definition (via az CLI)
-  # before queuing. No manual UI Variables tab work is required.
-  #
-  # The job has a loud "Validate publish secrets" step + guards so you always
-  # see exactly what happened. Publishing failures are non-blocking.
-  PSGalleryApiKey: ''
-  NPM_API_KEY: ''
+  # Shared module publishing secrets PSGalleryApiKey and NPM_API_KEY must be
+  # supplied as Azure DevOps secret variables or queue-time variables. Do not
+  # add empty YAML placeholders here; they shadow pipeline secret values.
 
 jobs:
   - job: build_test_publish
@@ -416,6 +407,9 @@ jobs:
         displayName: Validate publish secrets
         condition: always()
         continueOnError: true
+        env:
+          PSGALLERYAPIKEY: $(PSGalleryApiKey)
+          NPM_API_KEY: $(NPM_API_KEY)
         inputs:
           pwsh: true
           targetType: inline
@@ -532,5 +526,4 @@ jobs:
             npm publish --access public
 
             Remove-Item $npmrcPath -ErrorAction SilentlyContinue
-
 
