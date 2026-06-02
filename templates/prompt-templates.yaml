@@ -321,6 +321,21 @@ templates:
       4. For `mcpserver-repl --agent-stdio`, send one single-line JSON request envelope per stdin line. Do not send formatted YAML or a single `type: batch` envelope; batch envelopes are rejected with `unsupported_batch_envelope`.
 
 
+      ## PowerShell Command Quoting
+
+      For every Windows PowerShell Core command:
+
+      - Invoke `pwsh.exe` with `-NoProfile -NonInteractive`. Do not use `powershell.exe`.
+
+      - The PowerShell escape character is the backtick `` ` ``, not the backslash. Never use C or bash-style `\"` escaping inside PowerShell command strings.
+
+      - Prefer single-quoted PowerShell strings for literal regex, paths, JSON/YAML snippets, and text containing pipeline characters such as `|`.
+
+      - When a command needs nested quoting, choose one of these patterns before improvising: `-File` with explicit arguments; piping stdin to the called tool or script; single-quoted or double-quoted here-strings; `-EncodedCommand` for complex inline PowerShell; or correct backtick escaping for embedded PowerShell quotes.
+
+      - If a regex or literal argument contains `|`, `&`, `;`, parentheses, braces, or quotes, verify it is inside a single PowerShell argument before running.
+
+
       ## Federation Topology
 
       - To identify hub/proxy topology, call the supported federation status surface, preferably through your required plugin or client wrapper: `/mcpserver/federation/status`.
