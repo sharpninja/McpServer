@@ -291,6 +291,17 @@ internal sealed class TodoStringListYamlConverter : IYamlTypeConverter
         {
             while (!parser.TryConsume<SequenceEnd>(out _))
             {
+                // ISS-TODO-001 (FR-MCP-108): a scalar list entry is one Markdown line and must be
+                // preserved verbatim - including blank lines, indentation, and trailing whitespace -
+                // so formatted descriptions survive the YAML projection/import round-trip. Only the
+                // structured legacy forms (nested sequence/mapping) are collapsed and whitespace-filtered.
+                if (parser.Current is Scalar)
+                {
+                    parser.TryConsume<Scalar>(out var scalar);
+                    values.Add(scalar?.Value ?? string.Empty);
+                    continue;
+                }
+
                 var value = ReadNodeAsText(parser);
                 if (!string.IsNullOrWhiteSpace(value))
                 {
@@ -298,6 +309,13 @@ internal sealed class TodoStringListYamlConverter : IYamlTypeConverter
                 }
             }
 
+            return values;
+        }
+
+        if (parser.Current is Scalar)
+        {
+            parser.TryConsume<Scalar>(out var singleScalar);
+            values.Add(singleScalar?.Value ?? string.Empty);
             return values;
         }
 
@@ -320,7 +338,25 @@ internal sealed class TodoStringListYamlConverter : IYamlTypeConverter
         emitter.Emit(new SequenceStart(null, null, false, SequenceStyle.Block));
         foreach (var item in values)
         {
-            serializer(item ?? string.Empty, typeof(string));
+            var text = item ?? string.Empty;
+
+            // ISS-TODO-001 (FR-MCP-108): plain YAML scalars drop trailing whitespace and cannot
+            // represent an empty or leading-whitespace line. Force a double-quoted scalar whenever
+            // the line is empty or its edges carry whitespace so blank lines, indentation, and
+            // trailing content are preserved exactly through the projection. Normal lines stay plain.
+            if (text.Length == 0 || char.IsWhiteSpace(text[0]) || char.IsWhiteSpace(text[^1]))
+            {
+                emitter.Emit(new Scalar(
+                    anchor: null,
+                    tag: null,
+                    value: text,
+                    style: ScalarStyle.DoubleQuoted,
+                    isPlainImplicit: false,
+                    isQuotedImplicit: true));
+                continue;
+            }
+
+            serializer(text, typeof(string));
         }
 
         emitter.Emit(new SequenceEnd());
