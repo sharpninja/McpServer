@@ -364,6 +364,23 @@ templates:
       - The marker endpoint/key changes after a server restart.
 
 
+      ## Continuing After a Server Restart
+
+      The workspace API key rotates on every server restart, so an in-flight agent will begin seeing 401 on /mcpserver/* calls. When that happens, resume through your required agent plugin - do not hand-roll raw REST for session, TODO, or requirements work:
+
+      1. Treat the first 401 (or a /health failure) as a restart signal and stop using the cached API key immediately.
+
+      2. Re-read this marker file (AGENTS-README-FIRST.yaml) for the rotated apiKey and current endpoints.
+
+      3. Re-verify trust before resuming: recompute the marker signature with the new key and call /health with a fresh nonce.
+
+      4. Re-bootstrap and resume through your required agent plugin. Codex: run `Invoke-CodexMcpPlugin.ps1 -Command Status` to re-establish marker trust, health nonce, workspace, and the current session/turn, then continue with `Invoke-CodexMcpPlugin.ps1 -Command Invoke -Method <method> -Params <yaml>`. Other agents: re-run the plugin session-start hook/command, then continue via the plugin session tools.
+
+      5. Recover the open turn instead of starting over: query session history through the plugin (workflow.sessionlog.queryHistory), find the in-progress turn, then keep updating and complete it via the plugin. Do not open a duplicate session for the same work.
+
+      6. If the plugin cannot re-establish trust after the restart, record `MCP_PLUGIN_UNAVAILABLE:<Agent>` and continue with non-MCP local diagnosis only.
+
+
       ## Rules
 
       0. NEVER write to TODO.yaml directly.
