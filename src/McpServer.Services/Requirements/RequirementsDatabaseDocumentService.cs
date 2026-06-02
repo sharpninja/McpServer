@@ -1,3 +1,5 @@
+using System.Text.Json;
+using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Notifications;
 using McpServer.Support.Mcp.Options;
 using McpServer.Support.Mcp.Requirements.Models;
@@ -23,6 +25,32 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     private const string TrKind = "tr";
     private const string TestKind = "test";
     private static readonly string[] SoftDeleteQueryFilter = ["SoftDelete"];
+
+    // TR-MCP-REQAC-001: AcceptanceCriterion carries [JsonPropertyName] attributes, so default
+    // options already emit/read the canonical {id,text,isSatisfied,evidence} shape used by TODOs.
+    private static readonly JsonSerializerOptions s_criteriaJson = new(JsonSerializerDefaults.Web);
+
+    /// <summary>Serializes acceptance criteria to the JSON column value (null when empty).</summary>
+    private static string? SerializeCriteria(IReadOnlyList<AcceptanceCriterion>? criteria) =>
+        criteria is null || criteria.Count == 0 ? null : JsonSerializer.Serialize(criteria, s_criteriaJson);
+
+    /// <summary>Deserializes the JSON column value to acceptance criteria (empty list when null/blank).</summary>
+    private static IReadOnlyList<AcceptanceCriterion> DeserializeCriteria(string? json) =>
+        string.IsNullOrWhiteSpace(json)
+            ? []
+            : JsonSerializer.Deserialize<List<AcceptanceCriterion>>(json, s_criteriaJson) ?? [];
+
+    /// <summary>Maps a stored requirement row to an <see cref="FrEntry"/> including acceptance criteria.</summary>
+    private static FrEntry MapFr(RequirementEntity x) =>
+        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, DeserializeCriteria(x.AcceptanceCriteriaJson));
+
+    /// <summary>Maps a stored requirement row to a <see cref="TrEntry"/> including acceptance criteria.</summary>
+    private static TrEntry MapTr(RequirementEntity x) =>
+        new(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes, DeserializeCriteria(x.AcceptanceCriteriaJson));
+
+    /// <summary>Maps a stored requirement row to a <see cref="TestEntry"/> including acceptance criteria.</summary>
+    private static TestEntry MapTest(RequirementEntity x) =>
+        new(x.Id, x.Body, x.WorkspaceId, x.Title, x.Priority, x.Status, x.Notes, DeserializeCriteria(x.AcceptanceCriteriaJson));
 
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly RequirementsOptions _options;
@@ -54,13 +82,13 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     {
         await using var scope = CreateScope();
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
-        return await scope.Context.Requirements
+        var rows = await scope.Context.Requirements
             .AsNoTracking()
             .Where(x => x.Kind == FrKind)
             .OrderBy(x => x.Id)
-            .Select(x => new FrEntry(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes))
             .ToListAsync(ct)
             .ConfigureAwait(false);
+        return rows.Select(MapFr).ToArray();
     }
 
     /// <inheritdoc />
@@ -70,21 +98,21 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await using var scope = CreateScope();
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var row = await FindRequirementAsync(scope.Context, FrKind, id, asTracking: false, ct).ConfigureAwait(false);
-        return row is null ? null : new FrEntry(row.Id, row.Title, row.Body, row.WorkspaceId, row.Priority, row.Status, row.Notes);
+        return row is null ? null : MapFr(row);
     }
 
     /// <inheritdoc />
     public async Task AddFrAsync(FrEntry entry, CancellationToken ct = default)
     {
         ValidateFr(entry);
-        await AddRequirementAsync(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
+        await AddRequirementAsync(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task UpdateFrAsync(FrEntry entry, CancellationToken ct = default)
     {
         ValidateFr(entry);
-        await UpdateRequirementAsync(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
+        await UpdateRequirementAsync(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -115,13 +143,13 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     {
         await using var scope = CreateScope();
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
-        return await scope.Context.Requirements
+        var rows = await scope.Context.Requirements
             .AsNoTracking()
             .Where(x => x.Kind == TrKind)
             .OrderBy(x => x.Id)
-            .Select(x => new TrEntry(x.Id, x.Title, x.Body, x.WorkspaceId, x.Priority, x.Status, x.Notes))
             .ToListAsync(ct)
             .ConfigureAwait(false);
+        return rows.Select(MapTr).ToArray();
     }
 
     /// <inheritdoc />
@@ -131,21 +159,21 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await using var scope = CreateScope();
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var row = await FindRequirementAsync(scope.Context, TrKind, id, asTracking: false, ct).ConfigureAwait(false);
-        return row is null ? null : new TrEntry(row.Id, row.Title, row.Body, row.WorkspaceId, row.Priority, row.Status, row.Notes);
+        return row is null ? null : MapTr(row);
     }
 
     /// <inheritdoc />
     public async Task AddTrAsync(TrEntry entry, CancellationToken ct = default)
     {
         ValidateTr(entry);
-        await AddRequirementAsync(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
+        await AddRequirementAsync(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task UpdateTrAsync(TrEntry entry, CancellationToken ct = default)
     {
         ValidateTr(entry);
-        await UpdateRequirementAsync(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
+        await UpdateRequirementAsync(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -160,13 +188,13 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     {
         await using var scope = CreateScope();
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
-        return await scope.Context.Requirements
+        var rows = await scope.Context.Requirements
             .AsNoTracking()
             .Where(x => x.Kind == TestKind)
             .OrderBy(x => x.Id)
-            .Select(x => new TestEntry(x.Id, x.Body, x.WorkspaceId, x.Title, x.Priority, x.Status, x.Notes))
             .ToListAsync(ct)
             .ConfigureAwait(false);
+        return rows.Select(MapTest).ToArray();
     }
 
     /// <inheritdoc />
@@ -176,21 +204,21 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         await using var scope = CreateScope();
         await EnsureBootstrappedAsync(scope.Context, ct).ConfigureAwait(false);
         var row = await FindRequirementAsync(scope.Context, TestKind, id, asTracking: false, ct).ConfigureAwait(false);
-        return row is null ? null : new TestEntry(row.Id, row.Body, row.WorkspaceId, row.Title, row.Priority, row.Status, row.Notes);
+        return row is null ? null : MapTest(row);
     }
 
     /// <inheritdoc />
     public async Task AddTestAsync(TestEntry entry, CancellationToken ct = default)
     {
         ValidateTest(entry);
-        await AddRequirementAsync(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
+        await AddRequirementAsync(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async Task UpdateTestAsync(TestEntry entry, CancellationToken ct = default)
     {
         ValidateTest(entry);
-        await UpdateRequirementAsync(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, ct).ConfigureAwait(false);
+        await UpdateRequirementAsync(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria, ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -235,6 +263,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                     Priority = NormalizePriority(value.Priority),
                     Status = NormalizeStatus(value.Status),
                     Notes = value.Notes,
+                    AcceptanceCriteriaJson = SerializeCriteria(value.AcceptanceCriteria),
                     CreatedAtUtc = now,
                     UpdatedAtUtc = now
                 });
@@ -284,6 +313,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                 row.Priority = NormalizePriority(value.Priority);
                 row.Status = NormalizeStatus(value.Status);
                 row.Notes = value.Notes;
+                row.AcceptanceCriteriaJson = SerializeCriteria(value.AcceptanceCriteria);
                 row.UpdatedAtUtc = now;
             }
 
@@ -495,7 +525,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             ct).ConfigureAwait(false);
     }
 
-    private async Task AddRequirementAsync(string kind, string id, string title, string body, string priority, string status, string? notes, CancellationToken ct)
+    private async Task AddRequirementAsync(string kind, string id, string title, string body, string priority, string status, string? notes, IReadOnlyList<AcceptanceCriterion>? acceptanceCriteria, CancellationToken ct)
     {
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
@@ -517,6 +547,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
                 Priority = NormalizePriority(priority),
                 Status = NormalizeStatus(status),
                 Notes = notes,
+                AcceptanceCriteriaJson = SerializeCriteria(acceptanceCriteria),
                 CreatedAtUtc = now,
                 UpdatedAtUtc = now
             });
@@ -529,7 +560,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         }
     }
 
-    private async Task UpdateRequirementAsync(string kind, string id, string title, string body, string priority, string status, string? notes, CancellationToken ct)
+    private async Task UpdateRequirementAsync(string kind, string id, string title, string body, string priority, string status, string? notes, IReadOnlyList<AcceptanceCriterion>? acceptanceCriteria, CancellationToken ct)
     {
         await _writeLock.WaitAsync(ct).ConfigureAwait(false);
         try
@@ -544,6 +575,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
             row.Priority = NormalizePriority(priority);
             row.Status = NormalizeStatus(status);
             row.Notes = notes;
+            row.AcceptanceCriteriaJson = SerializeCriteria(acceptanceCriteria);
             row.UpdatedAtUtc = Now();
             await ctx.SaveChangesAsync(ct).ConfigureAwait(false);
             await PublishRequirementsChangeSafeAsync(ChangeEventActions.Updated, id, ct).ConfigureAwait(false);
@@ -557,11 +589,11 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
     private static IEnumerable<RequirementBatchValue> EnumerateBatch(RequirementsBatchEntries entries)
     {
         foreach (var entry in entries.Functional)
-            yield return new RequirementBatchValue(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes);
+            yield return new RequirementBatchValue(FrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria);
         foreach (var entry in entries.Technical)
-            yield return new RequirementBatchValue(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes);
+            yield return new RequirementBatchValue(TrKind, entry.Id, entry.Title, entry.Body, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria);
         foreach (var entry in entries.Testing)
-            yield return new RequirementBatchValue(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes);
+            yield return new RequirementBatchValue(TestKind, entry.Id, entry.Title, entry.Condition, entry.Priority, entry.Status, entry.Notes, entry.AcceptanceCriteria);
     }
 
     private static RequirementsBatchEntries NormalizeBatchResult(RequirementsBatchEntries entries, string workspaceId) =>
@@ -970,7 +1002,7 @@ public sealed class RequirementsDatabaseDocumentService : IRequirementsDocumentS
         }
     }
 
-    private readonly record struct RequirementBatchValue(string Kind, string Id, string Title, string Body, string Priority, string Status, string? Notes);
+    private readonly record struct RequirementBatchValue(string Kind, string Id, string Title, string Body, string Priority, string Status, string? Notes, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria);
 
     private readonly record struct RequirementDocumentPaths(string Functional, string Technical, string Testing, string Mapping, string Matrix);
 

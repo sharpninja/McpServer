@@ -228,6 +228,16 @@ public sealed class TodoExecutionService : ITodoExecutionService
         => await GetNextReadyTodoAsync(workspacePath, cancellationToken).ConfigureAwait(false);
 
     /// <inheritdoc />
+    public async Task<TodoExecutionRecord?> GetTodoAsync(string workspacePath, string todoId, CancellationToken cancellationToken = default)
+    {
+        var normalizedWorkspacePath = NormalizeWorkspacePath(workspacePath);
+        ValidateRequired(todoId, nameof(todoId));
+
+        var state = await LoadWorkspaceStateAsync(normalizedWorkspacePath, cancellationToken).ConfigureAwait(false);
+        return FindTodo(state, normalizedWorkspacePath, todoId);
+    }
+
+    /// <inheritdoc />
     public async Task<ActiveTodoResult?> GetNextReadyTodoAsync(string workspacePath, CancellationToken cancellationToken = default)
     {
         var normalizedWorkspacePath = NormalizeWorkspacePath(workspacePath);

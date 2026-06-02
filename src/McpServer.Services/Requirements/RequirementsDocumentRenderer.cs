@@ -1,4 +1,5 @@
 using System.Text;
+using McpServer.Support.Mcp.Models;
 using McpServer.Support.Mcp.Requirements.Models;
 
 namespace McpServer.Support.Mcp.Requirements;
@@ -23,6 +24,7 @@ internal static class RequirementsDocumentRenderer
             sb.AppendLine();
             if (!string.IsNullOrWhiteSpace(entry.Body))
                 sb.AppendLine(entry.Body.Trim());
+            AppendAcceptanceCriteria(sb, entry.AcceptanceCriteria);
             sb.AppendLine();
         }
 
@@ -52,6 +54,8 @@ internal static class RequirementsDocumentRenderer
                 sb.AppendLine(entry.Body.Trim());
             }
 
+            AppendAcceptanceCriteria(sb, entry.AcceptanceCriteria);
+
             sb.AppendLine();
         }
 
@@ -65,12 +69,39 @@ internal static class RequirementsDocumentRenderer
         sb.AppendLine();
 
         foreach (var entry in entries)
+        {
             sb.Append("- ").Append(entry.Id).Append(": ").AppendLine(entry.Condition.Trim());
+            AppendAcceptanceCriteria(sb, entry.AcceptanceCriteria, listItemIndent: "  ");
+        }
 
         if (sb.Length > 0 && sb[^1] != '\n')
             sb.AppendLine();
 
         return sb.ToString();
+    }
+
+    /// <summary>
+    /// FR-MCP-REQAC-001 / TR-MCP-REQAC-002: renders a deterministic "Acceptance Criteria"
+    /// block under a requirement entry. Each criterion becomes a checklist-style bullet with
+    /// optional evidence appended in parentheses. Emits nothing for null/empty lists.
+    /// </summary>
+    /// <param name="sb">Target builder.</param>
+    /// <param name="criteria">Criteria to render; null or empty produces no output.</param>
+    /// <param name="listItemIndent">Optional indent applied to nested lists (e.g. "  " when the parent entry is a list item).</param>
+    private static void AppendAcceptanceCriteria(StringBuilder sb, IReadOnlyList<AcceptanceCriterion>? criteria, string listItemIndent = "")
+    {
+        if (criteria is null || criteria.Count == 0)
+            return;
+
+        sb.Append(listItemIndent).AppendLine("**Acceptance Criteria:**");
+        foreach (var criterion in criteria)
+        {
+            var marker = criterion.IsSatisfied ? "[x]" : "[ ]";
+            sb.Append(listItemIndent).Append("- ").Append(marker).Append(' ').Append(criterion.Text);
+            if (!string.IsNullOrWhiteSpace(criterion.Evidence))
+                sb.Append(" (evidence: ").Append(criterion.Evidence.Trim()).Append(')');
+            sb.AppendLine();
+        }
     }
 
     public static string RenderMapping(IEnumerable<FrTrMapping> mappings)

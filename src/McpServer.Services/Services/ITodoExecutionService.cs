@@ -16,6 +16,9 @@ public interface ITodoExecutionService
     /// <summary>Return the active TODO the agent should work on.</summary>
     Task<ActiveTodoResult?> GetActiveTodoAsync(string workspacePath, CancellationToken cancellationToken = default);
 
+    /// <summary>FR-MCP-REQAC-002: return the raw execution TODO record so callers can copy structured fields (e.g. acceptance criteria) verbatim.</summary>
+    Task<TodoExecutionRecord?> GetTodoAsync(string workspacePath, string todoId, CancellationToken cancellationToken = default);
+
     /// <summary>Return the next ready TODO the agent should work on.</summary>
     Task<ActiveTodoResult?> GetNextReadyTodoAsync(string workspacePath, CancellationToken cancellationToken = default);
 

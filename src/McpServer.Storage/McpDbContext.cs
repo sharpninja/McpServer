@@ -127,6 +127,22 @@ public sealed class McpDbContext : DbContext
     public DbSet<FederationConflictEntity> FederationConflicts => Set<FederationConflictEntity>();
 
     /// <inheritdoc />
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        ArgumentNullException.ThrowIfNull(optionsBuilder);
+        base.OnConfiguring(optionsBuilder);
+
+        // EF Core 10 throws PendingModelChangesWarning by default when the runtime model
+        // differs from the resolved snapshot. The production database strategy already
+        // suppresses this warning (see SqliteMcpDatabaseProviderStrategy and friends).
+        // Mirror that here so tests and ad-hoc consumers that construct the context with
+        // a bare provider (e.g. UseSqlite without MigrationsAssembly) do not throw when
+        // the snapshot lives in one of the per-provider migrations assemblies.
+        optionsBuilder.ConfigureWarnings(warnings =>
+            warnings.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
+    }
+
+    /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         ArgumentNullException.ThrowIfNull(modelBuilder);

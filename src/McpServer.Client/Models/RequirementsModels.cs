@@ -34,6 +34,10 @@ public sealed class FrEntry
     /// <summary>Optional operator notes.</summary>
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
+    [JsonPropertyName("acceptanceCriteria")]
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <summary>A technical requirement entry.</summary>
@@ -66,6 +70,10 @@ public sealed class TrEntry
     /// <summary>Optional operator notes.</summary>
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
+    [JsonPropertyName("acceptanceCriteria")]
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <summary>A testing requirement entry.</summary>
@@ -98,6 +106,10 @@ public sealed class TestEntry
     /// <summary>Optional operator notes.</summary>
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
+    [JsonPropertyName("acceptanceCriteria")]
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <summary>A functional-to-technical requirement mapping row.</summary>
@@ -146,6 +158,10 @@ public sealed class CreateFrRequest
     /// <summary>Optional operator notes.</summary>
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
+    [JsonPropertyName("acceptanceCriteria")]
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <summary>Request payload for updating a functional requirement entry.</summary>
@@ -170,6 +186,10 @@ public sealed class UpdateFrRequest
     /// <summary>Optional operator notes.</summary>
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
+    [JsonPropertyName("acceptanceCriteria")]
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <summary>Request payload for creating a technical requirement entry.</summary>
@@ -198,6 +218,10 @@ public sealed class CreateTrRequest
     /// <summary>Optional operator notes.</summary>
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
+    [JsonPropertyName("acceptanceCriteria")]
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <summary>Request payload for updating a technical requirement entry.</summary>
@@ -222,6 +246,10 @@ public sealed class UpdateTrRequest
     /// <summary>Optional operator notes.</summary>
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
+    [JsonPropertyName("acceptanceCriteria")]
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <summary>Request payload for creating a testing requirement entry.</summary>
@@ -250,6 +278,10 @@ public sealed class CreateTestRequest
     /// <summary>Optional operator notes.</summary>
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
+    [JsonPropertyName("acceptanceCriteria")]
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <summary>Request payload for updating a testing requirement entry.</summary>
@@ -274,6 +306,10 @@ public sealed class UpdateTestRequest
     /// <summary>Optional operator notes.</summary>
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
+    [JsonPropertyName("acceptanceCriteria")]
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <summary>Request payload for creating multiple functional requirements atomically.</summary>
@@ -314,6 +350,10 @@ public sealed class CreateFrBatchRecord
     /// <summary>Optional operator notes.</summary>
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
+    [JsonPropertyName("acceptanceCriteria")]
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <summary>Request payload for updating multiple functional requirements atomically.</summary>
@@ -394,6 +434,10 @@ public sealed class CreateTrBatchRecord
     /// <summary>Optional operator notes.</summary>
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
+    [JsonPropertyName("acceptanceCriteria")]
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <summary>Request payload for updating multiple technical requirements atomically.</summary>
@@ -474,6 +518,10 @@ public sealed class CreateTestBatchRecord
     /// <summary>Optional operator notes.</summary>
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
+    [JsonPropertyName("acceptanceCriteria")]
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <summary>Request payload for updating multiple testing requirements atomically.</summary>
@@ -562,6 +610,10 @@ public sealed class CreateRequirementBatchRecord
     /// <summary>Optional operator notes.</summary>
     [JsonPropertyName("notes")]
     public string? Notes { get; set; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
+    [JsonPropertyName("acceptanceCriteria")]
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <summary>Request payload for updating mixed FR/TR/TEST requirements atomically.</summary>

@@ -1,3 +1,5 @@
+using McpServer.Support.Mcp.Models;
+
 namespace McpServer.Support.Mcp.Requirements.Models;
 
 /// <summary>Request payload for creating a Functional Requirement entry.</summary>
@@ -7,7 +9,8 @@ namespace McpServer.Support.Mcp.Requirements.Models;
 /// <param name="Priority">Optional requirement priority.</param>
 /// <param name="Status">Optional requirement status.</param>
 /// <param name="Notes">Optional requirement notes.</param>
-public sealed record CreateFrRequest(string Id, string Title, string Body, string? Priority = null, string? Status = null, string? Notes = null);
+/// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria.</param>
+public sealed record CreateFrRequest(string Id, string Title, string Body, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
 
 /// <summary>Request payload for updating a Functional Requirement entry.</summary>
 /// <param name="Title">Requirement title.</param>
@@ -15,7 +18,8 @@ public sealed record CreateFrRequest(string Id, string Title, string Body, strin
 /// <param name="Priority">Optional requirement priority.</param>
 /// <param name="Status">Optional requirement status.</param>
 /// <param name="Notes">Optional requirement notes.</param>
-public sealed record UpdateFrRequest(string? Title = null, string? Body = null, string? Priority = null, string? Status = null, string? Notes = null);
+/// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria. Null preserves existing.</param>
+public sealed record UpdateFrRequest(string? Title = null, string? Body = null, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
 
 /// <summary>Request payload for creating a Technical Requirement entry.</summary>
 /// <param name="Id">Requirement identifier (e.g. TR-MCP-REQ-002).</param>
@@ -24,7 +28,8 @@ public sealed record UpdateFrRequest(string? Title = null, string? Body = null, 
 /// <param name="Priority">Optional requirement priority.</param>
 /// <param name="Status">Optional requirement status.</param>
 /// <param name="Notes">Optional requirement notes.</param>
-public sealed record CreateTrRequest(string Id, string? Title, string Body, string? Priority = null, string? Status = null, string? Notes = null);
+/// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria.</param>
+public sealed record CreateTrRequest(string Id, string? Title, string Body, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
 
 /// <summary>Request payload for updating a Technical Requirement entry.</summary>
 /// <param name="Title">Optional title rendered as bold text before the em dash.</param>
@@ -32,7 +37,8 @@ public sealed record CreateTrRequest(string Id, string? Title, string Body, stri
 /// <param name="Priority">Optional requirement priority.</param>
 /// <param name="Status">Optional requirement status.</param>
 /// <param name="Notes">Optional requirement notes.</param>
-public sealed record UpdateTrRequest(string? Title = null, string? Body = null, string? Priority = null, string? Status = null, string? Notes = null);
+/// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria. Null preserves existing.</param>
+public sealed record UpdateTrRequest(string? Title = null, string? Body = null, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
 
 /// <summary>Request payload for creating a Testing Requirement entry.</summary>
 /// <param name="Id">Requirement identifier (e.g. TEST-MCP-039).</param>
@@ -41,7 +47,8 @@ public sealed record UpdateTrRequest(string? Title = null, string? Body = null, 
 /// <param name="Priority">Optional requirement priority.</param>
 /// <param name="Status">Optional requirement status.</param>
 /// <param name="Notes">Optional requirement notes.</param>
-public sealed record CreateTestRequest(string Id, string Condition, string? Title = null, string? Priority = null, string? Status = null, string? Notes = null);
+/// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria.</param>
+public sealed record CreateTestRequest(string Id, string Condition, string? Title = null, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
 
 /// <summary>Request payload for updating a Testing Requirement entry.</summary>
 /// <param name="Condition">Test condition text.</param>
@@ -49,7 +56,8 @@ public sealed record CreateTestRequest(string Id, string Condition, string? Titl
 /// <param name="Priority">Optional requirement priority.</param>
 /// <param name="Status">Optional requirement status.</param>
 /// <param name="Notes">Optional requirement notes.</param>
-public sealed record UpdateTestRequest(string? Condition = null, string? Title = null, string? Priority = null, string? Status = null, string? Notes = null);
+/// <param name="AcceptanceCriteria">FR-MCP-REQAC-001: structured acceptance criteria. Null preserves existing.</param>
+public sealed record UpdateTestRequest(string? Condition = null, string? Title = null, string? Priority = null, string? Status = null, string? Notes = null, IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria = null);
 
 /// <summary>Request payload for creating multiple Functional Requirement entries atomically.</summary>
 public sealed class CreateFrBatchRequest
@@ -81,6 +89,9 @@ public sealed class CreateFrBatchRecord
 
     /// <summary>Optional requirement notes.</summary>
     public string? Notes { get; init; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; init; }
 }
 
 /// <summary>Request payload for updating multiple Functional Requirement entries atomically.</summary>
@@ -113,6 +124,9 @@ public sealed class UpdateFrBatchRecord
 
     /// <summary>Optional requirement notes. Null preserves the current value.</summary>
     public string? Notes { get; init; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves the current value.</summary>
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; init; }
 }
 
 /// <summary>Request payload for creating multiple Technical Requirement entries atomically.</summary>
@@ -145,6 +159,9 @@ public sealed class CreateTrBatchRecord
 
     /// <summary>Optional requirement notes.</summary>
     public string? Notes { get; init; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; init; }
 }
 
 /// <summary>Request payload for updating multiple Technical Requirement entries atomically.</summary>
@@ -177,6 +194,9 @@ public sealed class UpdateTrBatchRecord
 
     /// <summary>Optional requirement notes. Null preserves the current value.</summary>
     public string? Notes { get; init; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves the current value.</summary>
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; init; }
 }
 
 /// <summary>Request payload for creating multiple Testing Requirement entries atomically.</summary>
@@ -209,6 +229,9 @@ public sealed class CreateTestBatchRecord
 
     /// <summary>Optional requirement notes.</summary>
     public string? Notes { get; init; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; init; }
 }
 
 /// <summary>Request payload for updating multiple Testing Requirement entries atomically.</summary>
@@ -241,6 +264,9 @@ public sealed class UpdateTestBatchRecord
 
     /// <summary>Optional requirement notes. Null preserves the current value.</summary>
     public string? Notes { get; init; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves the current value.</summary>
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; init; }
 }
 
 /// <summary>Request payload for creating mixed FR/TR/TEST entries atomically.</summary>
@@ -279,6 +305,9 @@ public sealed class CreateRequirementBatchRecord
 
     /// <summary>Optional requirement notes.</summary>
     public string? Notes { get; init; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria (same shape as TODO criteria).</summary>
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; init; }
 }
 
 /// <summary>Request payload for updating mixed FR/TR/TEST entries atomically.</summary>
@@ -317,6 +346,9 @@ public sealed class UpdateRequirementBatchRecord
 
     /// <summary>Optional requirement notes. Null preserves the current value.</summary>
     public string? Notes { get; init; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves the current value.</summary>
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; init; }
 }
 
 /// <summary>Structured response returned by requirements batch create and update endpoints.</summary>
@@ -541,3 +573,7 @@ public sealed class RequirementsIngestResult
     /// <summary>Non-fatal warnings produced while selecting or ingesting wiki documents.</summary>
     public IReadOnlyList<string> Warnings { get; init; } = [];
 }
+
+/// <summary>FR-MCP-REQAC-002: request payload for copying acceptance criteria from a TODO onto a requirement.</summary>
+/// <param name="TodoId">The source TODO identifier whose acceptance criteria will be copied verbatim.</param>
+public sealed record CopyAcceptanceCriteriaFromTodoRequest(string TodoId);

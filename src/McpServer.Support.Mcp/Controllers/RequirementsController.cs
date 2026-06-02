@@ -20,6 +20,7 @@ public sealed class RequirementsController : ControllerBase
     private readonly IRequirementsDocumentService _requirements;
     private readonly RequirementsOptions _requirementsOptions;
     private readonly WorkspaceContext _workspaceContext;
+    private readonly ITodoExecutionService _todoExecution;
     private readonly ILogger<RequirementsController> _logger;
 
 
@@ -27,12 +28,14 @@ public sealed class RequirementsController : ControllerBase
     public RequirementsController(IRequirementsDocumentService requirements,
         IOptions<RequirementsOptions> requirementsOptions,
         WorkspaceContext workspaceContext,
+        ITodoExecutionService todoExecution,
         ILogger<RequirementsController> logger)
     {
         _logger = logger;
         _requirements = requirements;
         _requirementsOptions = requirementsOptions?.Value ?? throw new ArgumentNullException(nameof(requirementsOptions));
         _workspaceContext = workspaceContext ?? throw new ArgumentNullException(nameof(workspaceContext));
+        _todoExecution = todoExecution ?? throw new ArgumentNullException(nameof(todoExecution));
     }
 
     /// <summary>Gets all Functional Requirement entries.</summary>
@@ -61,7 +64,8 @@ public sealed class RequirementsController : ControllerBase
             request.Body,
             Priority: request.Priority ?? "medium",
             Status: request.Status ?? "pending",
-            Notes: request.Notes);
+            Notes: request.Notes,
+            AcceptanceCriteria: request.AcceptanceCriteria);
         try
         {
             await _requirements.AddFrAsync(entry, cancellationToken).ConfigureAwait(false);
@@ -97,7 +101,8 @@ public sealed class RequirementsController : ControllerBase
             Body = request.Body ?? existing.Body,
             Priority = request.Priority ?? existing.Priority,
             Status = request.Status ?? existing.Status,
-            Notes = request.Notes ?? existing.Notes
+            Notes = request.Notes ?? existing.Notes,
+            AcceptanceCriteria = request.AcceptanceCriteria ?? existing.AcceptanceCriteria
         };
         try
         {
@@ -160,7 +165,8 @@ public sealed class RequirementsController : ControllerBase
             request.Body,
             Priority: request.Priority ?? "medium",
             Status: request.Status ?? "pending",
-            Notes: request.Notes);
+            Notes: request.Notes,
+            AcceptanceCriteria: request.AcceptanceCriteria);
         try
         {
             await _requirements.AddTrAsync(entry, cancellationToken).ConfigureAwait(false);
@@ -196,7 +202,8 @@ public sealed class RequirementsController : ControllerBase
             Body = request.Body ?? existing.Body,
             Priority = request.Priority ?? existing.Priority,
             Status = request.Status ?? existing.Status,
-            Notes = request.Notes ?? existing.Notes
+            Notes = request.Notes ?? existing.Notes,
+            AcceptanceCriteria = request.AcceptanceCriteria ?? existing.AcceptanceCriteria
         };
         try
         {
@@ -259,7 +266,8 @@ public sealed class RequirementsController : ControllerBase
             Title: request.Title ?? string.Empty,
             Priority: request.Priority ?? "medium",
             Status: request.Status ?? "pending",
-            Notes: request.Notes);
+            Notes: request.Notes,
+            AcceptanceCriteria: request.AcceptanceCriteria);
         try
         {
             await _requirements.AddTestAsync(entry, cancellationToken).ConfigureAwait(false);
@@ -295,7 +303,8 @@ public sealed class RequirementsController : ControllerBase
             Condition = request.Condition ?? existing.Condition,
             Priority = request.Priority ?? existing.Priority,
             Status = request.Status ?? existing.Status,
-            Notes = request.Notes ?? existing.Notes
+            Notes = request.Notes ?? existing.Notes,
+            AcceptanceCriteria = request.AcceptanceCriteria ?? existing.AcceptanceCriteria
         };
         try
         {
@@ -313,6 +322,74 @@ public sealed class RequirementsController : ControllerBase
         }
 
         return Ok(entry);
+    }
+
+    /// <summary>
+    /// FR-MCP-REQAC-002: copies a TODO's acceptance criteria onto a requirement (FR/TR/TEST) verbatim.
+    /// The TODO is resolved via the execution-state store keyed by workspace + todoId.
+    /// </summary>
+    [HttpPost("{kind}/{id}/acceptance-criteria/copy-from-todo")]
+    public async Task<IActionResult> CopyAcceptanceCriteriaFromTodoAsync(
+        string kind,
+        string id,
+        [FromBody] CopyAcceptanceCriteriaFromTodoRequest? request,
+        CancellationToken cancellationToken)
+    {
+        if (request is null || string.IsNullOrWhiteSpace(request.TodoId))
+            return BadRequest(new { error = "todoId is required." });
+
+        var normalizedKind = NormalizeRequirementKind(kind, 0);
+        var workspacePath = _workspaceContext.WorkspacePath;
+        if (string.IsNullOrWhiteSpace(workspacePath))
+            return BadRequest(new { error = "Workspace path is required." });
+
+        var todo = await _todoExecution.GetTodoAsync(workspacePath, request.TodoId, cancellationToken).ConfigureAwait(false);
+        if (todo is null)
+            return NotFound(new { error = $"TODO '{request.TodoId}' was not found in workspace '{workspacePath}'." });
+
+        var criteria = todo.AcceptanceCriteria; // verbatim - same AcceptanceCriterion type used by requirements.
+        try
+        {
+            switch (normalizedKind)
+            {
+                case "fr":
+                {
+                    var existing = await _requirements.GetFrAsync(id, cancellationToken).ConfigureAwait(false);
+                    if (existing is null) return NotFound(new { error = $"FR '{id}' not found." });
+                    var updated = existing with { AcceptanceCriteria = criteria };
+                    await _requirements.UpdateFrAsync(updated, cancellationToken).ConfigureAwait(false);
+                    return Ok(updated);
+                }
+                case "tr":
+                {
+                    var existing = await _requirements.GetTrAsync(id, cancellationToken).ConfigureAwait(false);
+                    if (existing is null) return NotFound(new { error = $"TR '{id}' not found." });
+                    var updated = existing with { AcceptanceCriteria = criteria };
+                    await _requirements.UpdateTrAsync(updated, cancellationToken).ConfigureAwait(false);
+                    return Ok(updated);
+                }
+                case "test":
+                {
+                    var existing = await _requirements.GetTestAsync(id, cancellationToken).ConfigureAwait(false);
+                    if (existing is null) return NotFound(new { error = $"TEST '{id}' not found." });
+                    var updated = existing with { AcceptanceCriteria = criteria };
+                    await _requirements.UpdateTestAsync(updated, cancellationToken).ConfigureAwait(false);
+                    return Ok(updated);
+                }
+                default:
+                    return BadRequest(new { error = $"Unknown requirement kind '{kind}'." });
+            }
+        }
+        catch (RequirementsNotFoundException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return NotFound(new { error = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogError("{ExceptionDetail}", ex.ToString());
+            return BadRequest(new { error = ex.Message });
+        }
     }
 
     /// <summary>Deletes a Testing Requirement entry by id.</summary>
@@ -801,7 +878,8 @@ public sealed class RequirementsController : ControllerBase
             record.Body ?? record.Description ?? string.Empty,
             Priority: record.Priority ?? "medium",
             Status: record.Status ?? "pending",
-            Notes: record.Notes);
+            Notes: record.Notes,
+            AcceptanceCriteria: record.AcceptanceCriteria);
 
     private static TrEntry ToTrEntry(CreateTrBatchRecord record) =>
         new(
@@ -810,7 +888,8 @@ public sealed class RequirementsController : ControllerBase
             record.Body ?? record.Description ?? string.Empty,
             Priority: record.Priority ?? "medium",
             Status: record.Status ?? "pending",
-            Notes: record.Notes);
+            Notes: record.Notes,
+            AcceptanceCriteria: record.AcceptanceCriteria);
 
     private static TestEntry ToTestEntry(CreateTestBatchRecord record) =>
         new(
@@ -819,7 +898,8 @@ public sealed class RequirementsController : ControllerBase
             Title: record.Title ?? string.Empty,
             Priority: record.Priority ?? "medium",
             Status: record.Status ?? "pending",
-            Notes: record.Notes);
+            Notes: record.Notes,
+            AcceptanceCriteria: record.AcceptanceCriteria);
 
     private static RequirementsBatchEntries ToCreateBatchEntries(IReadOnlyList<CreateRequirementBatchRecord> records)
     {
@@ -839,7 +919,8 @@ public sealed class RequirementsController : ControllerBase
                         record.Body ?? record.Description ?? string.Empty,
                         Priority: record.Priority ?? "medium",
                         Status: record.Status ?? "pending",
-                        Notes: record.Notes));
+                        Notes: record.Notes,
+                        AcceptanceCriteria: record.AcceptanceCriteria));
                     break;
                 case "tr":
                     tr.Add(new TrEntry(
@@ -848,7 +929,8 @@ public sealed class RequirementsController : ControllerBase
                         record.Body ?? record.Description ?? string.Empty,
                         Priority: record.Priority ?? "medium",
                         Status: record.Status ?? "pending",
-                        Notes: record.Notes));
+                        Notes: record.Notes,
+                        AcceptanceCriteria: record.AcceptanceCriteria));
                     break;
                 case "test":
                     test.Add(new TestEntry(
@@ -857,7 +939,8 @@ public sealed class RequirementsController : ControllerBase
                         Title: record.Title ?? string.Empty,
                         Priority: record.Priority ?? "medium",
                         Status: record.Status ?? "pending",
-                        Notes: record.Notes));
+                        Notes: record.Notes,
+                        AcceptanceCriteria: record.AcceptanceCriteria));
                     break;
             }
         }
@@ -880,7 +963,8 @@ public sealed class RequirementsController : ControllerBase
                 Body = record.Body ?? record.Description ?? existing.Body,
                 Priority = record.Priority ?? existing.Priority,
                 Status = record.Status ?? existing.Status,
-                Notes = record.Notes ?? existing.Notes
+                Notes = record.Notes ?? existing.Notes,
+                AcceptanceCriteria = record.AcceptanceCriteria ?? existing.AcceptanceCriteria
             });
         }
 
@@ -902,7 +986,8 @@ public sealed class RequirementsController : ControllerBase
                 Body = record.Body ?? record.Description ?? existing.Body,
                 Priority = record.Priority ?? existing.Priority,
                 Status = record.Status ?? existing.Status,
-                Notes = record.Notes ?? existing.Notes
+                Notes = record.Notes ?? existing.Notes,
+                AcceptanceCriteria = record.AcceptanceCriteria ?? existing.AcceptanceCriteria
             });
         }
 
@@ -924,7 +1009,8 @@ public sealed class RequirementsController : ControllerBase
                 Condition = record.Condition ?? record.Description ?? existing.Condition,
                 Priority = record.Priority ?? existing.Priority,
                 Status = record.Status ?? existing.Status,
-                Notes = record.Notes ?? existing.Notes
+                Notes = record.Notes ?? existing.Notes,
+                AcceptanceCriteria = record.AcceptanceCriteria ?? existing.AcceptanceCriteria
             });
         }
 
@@ -952,7 +1038,8 @@ public sealed class RequirementsController : ControllerBase
                         Body = record.Body ?? record.Description ?? existingFr.Body,
                         Priority = record.Priority ?? existingFr.Priority,
                         Status = record.Status ?? existingFr.Status,
-                        Notes = record.Notes ?? existingFr.Notes
+                        Notes = record.Notes ?? existingFr.Notes,
+                        AcceptanceCriteria = record.AcceptanceCriteria ?? existingFr.AcceptanceCriteria
                     });
                     break;
                 case "tr":
@@ -964,7 +1051,8 @@ public sealed class RequirementsController : ControllerBase
                         Body = record.Body ?? record.Description ?? existingTr.Body,
                         Priority = record.Priority ?? existingTr.Priority,
                         Status = record.Status ?? existingTr.Status,
-                        Notes = record.Notes ?? existingTr.Notes
+                        Notes = record.Notes ?? existingTr.Notes,
+                        AcceptanceCriteria = record.AcceptanceCriteria ?? existingTr.AcceptanceCriteria
                     });
                     break;
                 case "test":
@@ -976,7 +1064,8 @@ public sealed class RequirementsController : ControllerBase
                         Condition = record.Condition ?? record.Body ?? record.Description ?? existingTest.Condition,
                         Priority = record.Priority ?? existingTest.Priority,
                         Status = record.Status ?? existingTest.Status,
-                        Notes = record.Notes ?? existingTest.Notes
+                        Notes = record.Notes ?? existingTest.Notes,
+                        AcceptanceCriteria = record.AcceptanceCriteria ?? existingTest.AcceptanceCriteria
                     });
                     break;
             }
