@@ -28,6 +28,8 @@ public sealed class FrCreateRequestModel : IFrCreateRequest
     public string Area { get; set; } = string.Empty;
     /// <inheritdoc />
     public string? Notes { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <inheritdoc />
@@ -45,6 +47,8 @@ public sealed class FrUpdateRequestModel : IFrUpdateRequest
     public string? Priority { get; set; }
     /// <inheritdoc />
     public string? Notes { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <inheritdoc />
@@ -64,6 +68,8 @@ public sealed class TrCreateRequestModel : ITrCreateRequest
     public string Subarea { get; set; } = string.Empty;
     /// <inheritdoc />
     public string? Notes { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <inheritdoc />
@@ -81,6 +87,8 @@ public sealed class TrUpdateRequestModel : ITrUpdateRequest
     public string? Priority { get; set; }
     /// <inheritdoc />
     public string? Notes { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <inheritdoc />
@@ -100,6 +108,8 @@ public sealed class TestCreateRequestModel : ITestCreateRequest
     public string TestType { get; set; } = string.Empty;
     /// <inheritdoc />
     public string? Notes { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <inheritdoc />
@@ -117,6 +127,8 @@ public sealed class TestUpdateRequestModel : ITestUpdateRequest
     public string? Priority { get; set; }
     /// <inheritdoc />
     public string? Notes { get; set; }
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; set; }
 }
 
 /// <inheritdoc />

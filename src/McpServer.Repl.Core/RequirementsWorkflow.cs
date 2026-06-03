@@ -82,7 +82,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Title = request.Title,
             Body = request.Description,
             Priority = request.Priority,
-            Notes = request.Notes
+            Notes = request.Notes,
+            AcceptanceCriteria = request.AcceptanceCriteria,
         };
 
         try
@@ -114,7 +115,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Body = request.Description,
             Priority = request.Priority,
             Status = request.Status,
-            Notes = request.Notes
+            Notes = request.Notes,
+            AcceptanceCriteria = request.AcceptanceCriteria,
         };
 
         var entry = await _client.UpdateFrAsync(frId, clientRequest, cancellationToken);
@@ -173,7 +175,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Title = request.Title,
             Body = request.Description,
             Priority = request.Priority,
-            Notes = request.Notes
+            Notes = request.Notes,
+            AcceptanceCriteria = request.AcceptanceCriteria,
         };
 
         try
@@ -205,7 +208,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Body = request.Description,
             Priority = request.Priority,
             Status = request.Status,
-            Notes = request.Notes
+            Notes = request.Notes,
+            AcceptanceCriteria = request.AcceptanceCriteria,
         };
 
         var entry = await _client.UpdateTrAsync(trId, clientRequest, cancellationToken);
@@ -259,7 +263,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Title = request.Title,
             Condition = request.Description,
             Priority = request.Priority,
-            Notes = request.Notes
+            Notes = request.Notes,
+            AcceptanceCriteria = request.AcceptanceCriteria,
         };
 
         try
@@ -291,7 +296,8 @@ public sealed class RequirementsWorkflow : IRequirementsWorkflow
             Condition = request.Description,
             Priority = request.Priority,
             Status = request.Status,
-            Notes = request.Notes
+            Notes = request.Notes,
+            AcceptanceCriteria = request.AcceptanceCriteria,
         };
 
         var entry = await _client.UpdateTestAsync(testId, clientRequest, cancellationToken);
@@ -849,6 +855,8 @@ internal sealed class FrItemAdapter : IFrItem
     public string Priority => _entry.Priority;
     public string Area => ExtractArea(_entry.Id);
     public string? Notes => _entry.Notes;
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria => _entry.AcceptanceCriteria;
     public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
     public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
 
@@ -901,6 +909,8 @@ internal sealed class TrItemAdapter : ITrItem
     public string Area => ExtractArea(_entry.Id);
     public string Subarea => ExtractSubarea(_entry.Id);
     public string? Notes => _entry.Notes;
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria => _entry.AcceptanceCriteria;
     public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
     public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
 
@@ -959,6 +969,8 @@ internal sealed class TestItemAdapter : ITestItem
     public string Area => ExtractArea(_entry.Id);
     public string TestType => "unit";
     public string? Notes => _entry.Notes;
+    /// <inheritdoc />
+    public IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria => _entry.AcceptanceCriteria;
     public string CreatedAt => DateTimeOffset.UtcNow.ToString("o");
     public string UpdatedAt => DateTimeOffset.UtcNow.ToString("o");
 

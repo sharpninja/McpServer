@@ -539,6 +539,13 @@ public interface IFrItem
     string? Notes { get; }
 
     /// <summary>
+    /// FR-MCP-REQAC-001: gets the structured acceptance criteria attached to this requirement.
+    /// Null when the requirement has no criteria; never used to signal "absent" - callers should
+    /// treat null and empty list identically.
+    /// </summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
+    /// <summary>
     /// Gets the creation timestamp (ISO 8601).
     /// </summary>
     string CreatedAt { get; }
@@ -584,6 +591,9 @@ public interface IFrCreateRequest
     /// Gets additional notes or context.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria attached to this create request.</summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
 }
 
 /// <summary>
@@ -623,6 +633,9 @@ public interface IFrUpdateRequest
     /// Gets the updated notes. Null preserves existing value.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves existing value.</summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
 }
 
 /// <summary>
@@ -704,6 +717,9 @@ public interface ITrItem
     /// </summary>
     string? Notes { get; }
 
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria attached to this requirement.</summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
     /// <summary>
     /// Gets the creation timestamp (ISO 8601).
     /// </summary>
@@ -755,6 +771,9 @@ public interface ITrCreateRequest
     /// Gets additional notes or context.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria attached to this create request.</summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
 }
 
 /// <summary>
@@ -794,6 +813,9 @@ public interface ITrUpdateRequest
     /// Gets the updated notes. Null preserves existing value.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves existing value.</summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
 }
 
 /// <summary>
@@ -875,6 +897,9 @@ public interface ITestItem
     /// </summary>
     string? Notes { get; }
 
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria attached to this requirement.</summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
+
     /// <summary>
     /// Gets the creation timestamp (ISO 8601).
     /// </summary>
@@ -927,6 +952,9 @@ public interface ITestCreateRequest
     /// Gets additional notes or context.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria attached to this create request.</summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
 }
 
 /// <summary>
@@ -966,6 +994,9 @@ public interface ITestUpdateRequest
     /// Gets the updated notes. Null preserves existing value.
     /// </summary>
     string? Notes { get; }
+
+    /// <summary>FR-MCP-REQAC-001: structured acceptance criteria. Null preserves existing value.</summary>
+    IReadOnlyList<AcceptanceCriterion>? AcceptanceCriteria { get; }
 }
 
 /// <summary>
